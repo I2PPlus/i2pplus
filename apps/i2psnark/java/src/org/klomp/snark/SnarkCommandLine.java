@@ -27,7 +27,7 @@ public class SnarkCommandLine extends net.i2p.util.CommandLine {
 
     protected SnarkCommandLine() {}
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         List<String> classes = new ArrayList<>(SCLASSES.size() + CLASSES.size());
         classes.addAll(SCLASSES);
         classes.addAll(CLASSES);

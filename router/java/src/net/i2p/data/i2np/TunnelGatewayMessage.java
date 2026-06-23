@@ -21,7 +21,7 @@ import net.i2p.util.Log;
 public class TunnelGatewayMessage extends FastI2NPMessageImpl {
     private TunnelId _tunnelId;
     private I2NPMessage _msg;
-    private byte _msgData[];
+    private byte[] _msgData;
 
     public final static int MESSAGE_TYPE = 19;
     /** if we can't deliver a tunnel message in 10s, forget it */
@@ -74,7 +74,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
     }
 
     /** write the message body to the output array, starting at the given index */
-    protected int writeMessageBody(byte out[], int curIndex) throws I2NPMessageException {
+    protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         if ((_tunnelId == null) || ((_msg == null) && (_msgData == null)) ) {
             _log.log(Log.CRIT, "failing to write out gateway message");
             throw new I2NPMessageException("Not enough data to write out (id=" + _tunnelId + " data=" + _msg + ")");
@@ -102,7 +102,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
     }
 
 
-    public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
+    public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         //I2NPMessageHandler h = new I2NPMessageHandler(_context);
         //readMessage(data, offset, dataSize, type, h);
         readMessage(data, offset, dataSize, type, null);
@@ -115,7 +115,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
      *  @param handler unused, may be null
      */
     @Override
-    public void readMessage(byte data[], int offset, int dataSize, int type, I2NPMessageHandler handler) throws I2NPMessageException {
+    public void readMessage(byte[] data, int offset, int dataSize, int type, I2NPMessageHandler handler) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
 

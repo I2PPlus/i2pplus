@@ -78,7 +78,7 @@ final class SSU2Header {
      *  @throws IndexOutOfBoundsException if too short
      */
     public static long decryptDestConnID(DatagramPacket pkt, byte[] key1) {
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         int off = pkt.getOffset();
         int len = pkt.getLength();
         byte[] xor = new byte[HEADER_PROT_DATA_LEN];
@@ -96,7 +96,7 @@ final class SSU2Header {
     public static void acceptTrialDecrypt(UDPPacket packet, Header header) {
         DatagramPacket pkt = packet.getPacket();
         int off = pkt.getOffset();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         System.arraycopy(header.data, 0, data, off, header.data.length);
     }
 
@@ -107,7 +107,7 @@ final class SSU2Header {
      *  Packet is unmodified.
      */
     private static void decryptHandshakeHeader(DatagramPacket pkt, byte[] key1, byte[] key2, Header header) {
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         int off = pkt.getOffset();
         decryptShortHeader(pkt, key1, key2, header);
         ChaCha20.decrypt(key2, CHACHA_IV_0, data, off + SHORT_HEADER_SIZE, header.data, SHORT_HEADER_SIZE, KEY_LEN + LONG_HEADER_SIZE - SHORT_HEADER_SIZE);
@@ -119,7 +119,7 @@ final class SSU2Header {
      *  Packet is unmodified.
      */
     private static void decryptLongHeader(DatagramPacket pkt, byte[] key1, byte[] key2, Header header) {
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         int off = pkt.getOffset();
         decryptShortHeader(pkt, key1, key2, header);
         ChaCha20.decrypt(key2, CHACHA_IV_0, data, off + SHORT_HEADER_SIZE, header.data, SHORT_HEADER_SIZE, LONG_HEADER_SIZE - SHORT_HEADER_SIZE);
@@ -133,7 +133,7 @@ final class SSU2Header {
      *  Next 8 bytes uses key2 and the last 12 bytes as the IV.
      */
     private static void decryptShortHeader(DatagramPacket pkt, byte[] key1, byte[] key2, Header header) {
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         int off = pkt.getOffset();
         int len = pkt.getLength();
         byte[] xor = new byte[HEADER_PROT_DATA_LEN];
@@ -208,7 +208,7 @@ final class SSU2Header {
      */
     public static void encryptHandshakeHeader(UDPPacket packet, byte[] key1, byte[] key2) {
         DatagramPacket pkt = packet.getPacket();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         int off = pkt.getOffset();
         encryptShortHeader(packet, key1, key2);
         ChaCha20.encrypt(key2, CHACHA_IV_0, data, off + SHORT_HEADER_SIZE, data, off + SHORT_HEADER_SIZE, KEY_LEN + LONG_HEADER_SIZE - SHORT_HEADER_SIZE);
@@ -219,7 +219,7 @@ final class SSU2Header {
      */
     public static void encryptLongHeader(UDPPacket packet, byte[] key1, byte[] key2) {
         DatagramPacket pkt = packet.getPacket();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         int off = pkt.getOffset();
         encryptShortHeader(packet, key1, key2);
         ChaCha20.encrypt(key2, CHACHA_IV_0, data, off + SHORT_HEADER_SIZE, data, off + SHORT_HEADER_SIZE, LONG_HEADER_SIZE - SHORT_HEADER_SIZE);
@@ -233,7 +233,7 @@ final class SSU2Header {
      */
     public static void encryptShortHeader(UDPPacket packet, byte[] key1, byte[] key2) {
         DatagramPacket pkt = packet.getPacket();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         int off = pkt.getOffset();
         int len = pkt.getLength();
         byte[] xor = new byte[HEADER_PROT_DATA_LEN];

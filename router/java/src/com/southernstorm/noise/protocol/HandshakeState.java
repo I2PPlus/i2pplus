@@ -95,7 +95,7 @@ public class HandshakeState implements Destroyable, Cloneable {
     public static final int COMPLETE = 5;
 
     /** I2P for debugging */
-    private static final String STATE_NAMES[] = { "NO_ACTION", "WRITE_MESSAGE", "READ_MESSAGE", "FAILED", "SPLIT", "COMPLETE" };
+    private static final String[] STATE_NAMES = { "NO_ACTION", "WRITE_MESSAGE", "READ_MESSAGE", "FAILED", "SPLIT", "COMPLETE" };
 
     /**
      * Local static keypair is required for the handshake.

@@ -57,8 +57,8 @@ class NodeInfoComparator implements Comparator<NodeInfo>, Serializable {
      *     distance
      */
     public int compare(NodeInfo lhs, NodeInfo rhs) {
-        byte lhsDelta[] = DataHelper.xor(lhs.getNID().getData(), _base);
-        byte rhsDelta[] = DataHelper.xor(rhs.getNID().getData(), _base);
+        byte[] lhsDelta = DataHelper.xor(lhs.getNID().getData(), _base);
+        byte[] rhsDelta = DataHelper.xor(rhs.getNID().getData(), _base);
         return DataHelper.compareTo(lhsDelta, rhsDelta);
     }
 }

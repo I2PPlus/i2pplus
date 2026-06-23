@@ -655,7 +655,7 @@ public class MessageHistory {
     }
 
 /****
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         RouterContext ctx = new RouterContext(null);
         MessageHistory hist = new MessageHistory(ctx);
         //, new Hash(new byte[32]), "messageHistory.txt");

@@ -29,7 +29,7 @@ public class TestSwarm {
     private String _samHost;
     private String _samPort;
     private String _destFile;
-    private String _peerDestFiles[];
+    private String[] _peerDestFiles;
     private String _conOptions;
     private Socket _samSocket;
     private OutputStream _samOut;
@@ -40,19 +40,19 @@ public class TestSwarm {
     /** Connection id (Integer) to peer (Flooder) */
     private Map _remotePeers;
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         if (args.length < 3) {
             System.err.println("Usage: TestSwarm samHost samPort myDestFile [peerDestFile ]*");
             return;
         }
         I2PAppContext ctx = new I2PAppContext();
-        String files[] = new String[args.length - 3];
+        String[] files = new String[args.length - 3];
         System.arraycopy(args, 3, files, 0, files.length);
         TestSwarm swarm = new TestSwarm(ctx, args[0], args[1], args[2], files);
         swarm.startup();
     }
 
-    public TestSwarm(I2PAppContext ctx, String samHost, String samPort, String destFile, String peerDestFiles[]) {
+    public TestSwarm(I2PAppContext ctx, String samHost, String samPort, String destFile, String[] peerDestFiles) {
         _context = ctx;
         _log = ctx.logManager().getLog(TestSwarm.class);
         _dead = false;
@@ -100,7 +100,7 @@ public class TestSwarm {
                 _log.error("Not connected to " + id + " but we were just closed?");
             }
         }
-        public void streamDataReceived(int id, byte data[], int offset, int length) {
+        public void streamDataReceived(int id, byte[] data, int offset, int length) {
             Flooder flooder = null;
             synchronized (_remotePeers) {
                 flooder = (Flooder)_remotePeers.get(Integer.valueOf(id));
@@ -191,7 +191,7 @@ public class TestSwarm {
             for (int i = 0; i < _peerDestFiles.length; i++) {
                 try {
                     FileInputStream fin = new FileInputStream(_peerDestFiles[i]);
-                    byte dest[] = new byte[1024];
+                    byte[] dest = new byte[1024];
                     int read = DataHelper.read(fin, dest);
 
                     String remDest = new String(dest, 0, read);
@@ -203,7 +203,7 @@ public class TestSwarm {
                         _remotePeers.put(Integer.valueOf(con), flooder);
                     }
 
-                    byte msg[] = (DataHelper.getUTF8("STREAM CONNECT ID=" + con + " DESTINATION=" + remDest + "\n"));
+                    byte[] msg = (DataHelper.getUTF8("STREAM CONNECT ID=" + con + " DESTINATION=" + remDest + "\n"));
                     synchronized (_samOut) {
                         _samOut.write(msg);
                         _samOut.flush();
@@ -253,11 +253,11 @@ public class TestSwarm {
         public void run() {
             _started = _context.clock().now();
             _context.statManager().addRateData("swarm." + _connectionId + ".started", 1, 0);
-            byte data[] = new byte[32*1024];
+            byte[] data = new byte[32*1024];
             long value = 0;
             long lastSend = _context.clock().now();
             while (!_closed) {
-                byte msg[] = (DataHelper.getASCII("STREAM SEND ID=" + _connectionId + " SIZE=" + data.length + "\n"));
+                byte[] msg = (DataHelper.getASCII("STREAM SEND ID=" + _connectionId + " SIZE=" + data.length + "\n"));
                 DataHelper.toLong(data, 0, 4, value);
                 try {
                     synchronized (_samOut) {

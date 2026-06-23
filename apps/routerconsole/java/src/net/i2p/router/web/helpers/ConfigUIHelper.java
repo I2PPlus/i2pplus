@@ -163,7 +163,7 @@ public class ConfigUIHelper extends HelperBase {
      *  As of 0.9.12, ISO 639-2 three-letter codes are supported also.
      *  Note: To avoid truncation, ensure language name is no longer than 17 chars.
      */
-    private static final String langs[][] = {
+    private static final String[][] langs = {
         /*
          * Note: any additions, also add to:
          * - apps/i2psnark/java/src/org/klomp/snark/standalone/ConfigUIHelper.java

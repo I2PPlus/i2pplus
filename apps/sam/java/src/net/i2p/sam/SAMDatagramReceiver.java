@@ -26,7 +26,7 @@ interface SAMDatagramReceiver {
      * @param toPort I2CP to port
      * @throws IOException
      */
-    public void receiveDatagramBytes(Destination sender, byte data[], int proto, int fromPort, int toPort) throws IOException;
+    public void receiveDatagramBytes(Destination sender, byte[] data, int proto, int fromPort, int toPort) throws IOException;
 
     /**
      * Stop receiving data.

@@ -23,12 +23,12 @@ class OutboundEstablishState {
     protected final RouterContext _context;
     protected final Log _log;
     // SessionRequest message
-    private byte _sentX[];
-    protected byte _bobIP[];
+    private byte[] _sentX;
+    protected byte[] _bobIP;
     protected int _bobPort;
     // SessionCreated message
-    private byte _receivedY[];
-    protected byte _aliceIP[];
+    private byte[] _receivedY;
+    protected byte[] _aliceIP;
     protected int _alicePort;
     protected long _receivedRelayTag;
     private long _receivedSignedOnTime;
@@ -382,7 +382,7 @@ class OutboundEstablishState {
      *  incorrect IP/port to what the introducer told us.
      *  All params are for the remote end (NOT the introducer) and must have been validated already.
      */
-    public synchronized void introduced(byte bobIP[], int bobPort) {
+    public synchronized void introduced(byte[] bobIP, int bobPort) {
         if (_currentState != OutboundState.OB_STATE_PENDING_INTRO)
             return; // we've already successfully been introduced, so don't overwrite old settings
         _nextSend = _context.clock().now() + WAIT_FOR_HOLE_PUNCH_DELAY; // wait briefly for the hole punching

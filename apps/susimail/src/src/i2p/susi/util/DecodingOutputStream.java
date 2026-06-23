@@ -53,7 +53,7 @@ public class DecodingOutputStream extends OutputStream {
     }
 
     @Override
-    public void write(byte buf[], int off, int len) throws IOException {
+    public void write(byte[] buf, int off, int len) throws IOException {
 	while (len > 0) {
             if (_bb.hasRemaining()) {
 	        int toWrite = Math.min(len, _bb.remaining());

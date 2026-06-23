@@ -87,7 +87,7 @@ class BloomFilterIVValidator implements IVValidator {
     }
 
     @Override
-    public boolean receiveIV(byte ivData[], int ivOffset, byte payload[], int payloadOffset) {
+    public boolean receiveIV(byte[] ivData, int ivOffset, byte[] payload, int payloadOffset) {
         if (_filter == null)  // testing only
             return true;
         byte[] buf = SimpleByteCache.acquire(HopProcessor.IV_LENGTH);

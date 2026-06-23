@@ -110,7 +110,7 @@ final class YKGenerator {
     }
 
     /** @return true if successful, false if full */
-    private final boolean addValues(BigInteger yk[]) {
+    private final boolean addValues(BigInteger[] yk) {
         return _values.offer(yk);
     }
 
@@ -153,7 +153,7 @@ final class YKGenerator {
         }
         y = CryptoConstants.elgg.modPowCT(k, CryptoConstants.elgp);
 
-        BigInteger yk[] = new BigInteger[2];
+        BigInteger[] yk = new BigInteger[2];
         yk[0] = y;
         yk[1] = k;
         return yk;

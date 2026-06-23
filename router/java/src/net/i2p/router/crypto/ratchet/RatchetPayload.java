@@ -481,7 +481,7 @@ class RatchetPayload {
      * @throws ArrayIndexOutOfBoundsException
      * @since 0.9.46
      */
-    private static void toInt4(byte target[], int offset, int value) {
+    private static void toInt4(byte[] target, int offset, int value) {
         for (int i = offset + 3; i >= offset; i--) {
             target[i] = (byte) value;
             value >>= 8;

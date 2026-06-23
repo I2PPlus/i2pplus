@@ -58,7 +58,7 @@ public class HeaderLine extends Encoding {
 	 *
 	 *  @throws UnsupportedOperationException always
 	 */
-	public String encode(byte in[]) throws EncodingException {
+	public String encode(byte[] in) throws EncodingException {
 		throw new UnsupportedOperationException("use encode(String)");
 	}
 

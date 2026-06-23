@@ -63,7 +63,7 @@ public class TestHello {
         }
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
             TestUtil.startupBridge(6000);
             runTest("localhost", 6000);

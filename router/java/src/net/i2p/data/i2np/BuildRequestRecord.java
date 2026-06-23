@@ -292,7 +292,7 @@ public class BuildRequestRecord {
     public SessionKey readLayerKey() {
         if (_data.length == LENGTH_EC_SHORT)
             return _derivedLayerKey;
-        byte key[] = new byte[SessionKey.KEYSIZE_BYTES];
+        byte[] key = new byte[SessionKey.KEYSIZE_BYTES];
         int off = _isEC ? OFF_LAYER_KEY_EC : OFF_LAYER_KEY;
         System.arraycopy(_data, off, key, 0, SessionKey.KEYSIZE_BYTES);
         return new SessionKey(key);
@@ -306,7 +306,7 @@ public class BuildRequestRecord {
     public SessionKey readIVKey() {
         if (_data.length == LENGTH_EC_SHORT)
             return _derivedIVKey;
-        byte key[] = new byte[SessionKey.KEYSIZE_BYTES];
+        byte[] key = new byte[SessionKey.KEYSIZE_BYTES];
         int off = _isEC ? OFF_IV_KEY_EC : OFF_IV_KEY;
         System.arraycopy(_data, off, key, 0, SessionKey.KEYSIZE_BYTES);
         return new SessionKey(key);
@@ -322,7 +322,7 @@ public class BuildRequestRecord {
     public SessionKey readReplyKey() {
         if (_isEC && _data.length == LENGTH_EC_SHORT)
             throw new IllegalStateException();
-        byte key[] = new byte[SessionKey.KEYSIZE_BYTES];
+        byte[] key = new byte[SessionKey.KEYSIZE_BYTES];
         int off = _isEC ? OFF_REPLY_KEY_EC : OFF_REPLY_KEY;
         System.arraycopy(_data, off, key, 0, SessionKey.KEYSIZE_BYTES);
         return new SessionKey(key);
@@ -338,7 +338,7 @@ public class BuildRequestRecord {
     public byte[] readReplyIV() {
         if (_isEC && _data.length == LENGTH_EC_SHORT)
             throw new IllegalStateException();
-        byte iv[] = new byte[IV_SIZE];
+        byte[] iv = new byte[IV_SIZE];
         int off = _isEC ? OFF_REPLY_IV_EC : OFF_REPLY_IV;
         System.arraycopy(_data, off, iv, 0, IV_SIZE);
         return iv;
@@ -472,7 +472,7 @@ public class BuildRequestRecord {
             throw new IllegalArgumentException();
         byte[] out = new byte[EncryptedBuildRecord.LENGTH];
         System.arraycopy(toPeer.getData(), 0, out, 0, PEER_SIZE);
-        byte encrypted[] = ctx.elGamalEngine().encrypt(_data, toKey);
+        byte[] encrypted = ctx.elGamalEngine().encrypt(_data, toKey);
         // the elg engine formats it kind of weird, giving 257 bytes for each part rather than 256, so
         // we want to strip out that excess byte and store it in the record
         System.arraycopy(encrypted, 1, out, PEER_SIZE, 256);
@@ -592,10 +592,10 @@ public class BuildRequestRecord {
     public BuildRequestRecord(RouterContext ctx, PrivateKey ourKey,
                               EncryptedBuildRecord encryptedRecord) throws DataFormatException {
         byte[] encrypted = encryptedRecord.getData();
-        byte decrypted[];
+        byte[] decrypted;
         EncType type = ourKey.getType();
         if (type == EncType.ELGAMAL_2048) {
-            byte preDecrypt[] = new byte[514];
+            byte[] preDecrypt = new byte[514];
             System.arraycopy(encrypted, PEER_SIZE, preDecrypt, 1, 256);
             System.arraycopy(encrypted, PEER_SIZE + 256, preDecrypt, 258, 256);
             decrypted = ctx.elGamalEngine().decrypt(preDecrypt, ourKey);
@@ -703,9 +703,9 @@ public class BuildRequestRecord {
      * @since 0.9.18, was createRecord()
      */
     public BuildRequestRecord(I2PAppContext ctx, long receiveTunnelId, Hash peer, long nextTunnelId, Hash nextHop, long nextMsgId,
-                             SessionKey layerKey, SessionKey ivKey, SessionKey replyKey, byte iv[], boolean isInGateway,
+                             SessionKey layerKey, SessionKey ivKey, SessionKey replyKey, byte[] iv, boolean isInGateway,
                              boolean isOutEndpoint) {
-        byte buf[] = new byte[LENGTH];
+        byte[] buf = new byte[LENGTH];
         _data = buf;
         _isEC = false;
 
@@ -767,9 +767,9 @@ public class BuildRequestRecord {
      * @since 0.9.48
      */
     public BuildRequestRecord(I2PAppContext ctx, long receiveTunnelId, long nextTunnelId, Hash nextHop, long nextMsgId,
-                             SessionKey layerKey, SessionKey ivKey, SessionKey replyKey, byte iv[], boolean isInGateway,
+                             SessionKey layerKey, SessionKey ivKey, SessionKey replyKey, byte[] iv, boolean isInGateway,
                              boolean isOutEndpoint, Properties options) {
-        byte buf[] = new byte[LENGTH_EC];
+        byte[] buf = new byte[LENGTH_EC];
         _data = buf;
         _isEC = true;
 
@@ -822,7 +822,7 @@ public class BuildRequestRecord {
      */
     public BuildRequestRecord(I2PAppContext ctx, long receiveTunnelId, long nextTunnelId, Hash nextHop, long nextMsgId,
                               boolean isInGateway, boolean isOutEndpoint, Properties options) {
-        byte buf[] = new byte[LENGTH_EC_SHORT];
+        byte[] buf = new byte[LENGTH_EC_SHORT];
         _data = buf;
         _isEC = true;
 

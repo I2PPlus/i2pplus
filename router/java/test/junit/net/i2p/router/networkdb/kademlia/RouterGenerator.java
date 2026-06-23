@@ -28,7 +28,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class RouterGenerator {
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         RouterGenerator gen = new RouterGenerator();
         switch (args.length) {
             case 0: gen.createRouters(10000, "dummyRouters");
@@ -81,8 +81,8 @@ public class RouterGenerator {
     private static PrivateKey privkey = null;
     private static SigningPublicKey signingPubKey = null;
     private static SigningPrivateKey signingPrivKey = null;
-    private static Object keypair[] = KeyGenerator.getInstance().generatePKIKeypair();
-    private static Object signingKeypair[] = KeyGenerator.getInstance().generateSigningKeypair();
+    private static Object[] keypair = KeyGenerator.getInstance().generatePKIKeypair();
+    private static Object[] signingKeypair = KeyGenerator.getInstance().generateSigningKeypair();
 
     static {
         pubkey = (PublicKey) keypair[0];

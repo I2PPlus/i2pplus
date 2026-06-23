@@ -108,7 +108,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
      */
     public void setReceivedAsReply() {_receivedAsReply = true;}
 
-    public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
+    public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
 
@@ -162,7 +162,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
                 // DSMs at the OBEP are generally garlic wrapped, so the OBEP won't see it.
                 // If we do delay it, getEntry() will have to check if _dbEntry is null and _byteCache
                 // is non-null, and then decompress.
-                byte decompressed[] = DataHelper.decompress(data, curIndex, compressedSize);
+                byte[] decompressed = DataHelper.decompress(data, curIndex, compressedSize);
                 if (decompressed.length > RouterInfo.MAX_UNCOMPRESSED_SIZE) {
                     throw new I2NPMessageException("RouterInfo too big: " + decompressed.length);
                 }
@@ -188,7 +188,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
         } else if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
             // only decompress once
             if (_byteCache == null) {
-                byte uncompressed[] = _dbEntry.toByteArray();
+                byte[] uncompressed = _dbEntry.toByteArray();
                 _byteCache = DataHelper.compress(uncompressed);
             }
             len += 2;
@@ -198,7 +198,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     }
 
     /** write the message body to the output array, starting at the given index */
-    protected int writeMessageBody(byte out[], int curIndex) throws I2NPMessageException {
+    protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         if (_dbEntry == null) {throw new I2NPMessageException("Missing entry");}
         int type = _dbEntry.getType();
         if (type != DatabaseEntry.KEY_TYPE_ROUTERINFO && !_dbEntry.isLeaseSet()) {

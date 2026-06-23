@@ -1178,7 +1178,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     private HashMap<String, byte[]> iconBytesMap = new HashMap<>();
 
     public boolean isIconBytesURI(String uri) {
-        byte iconBytes[] = iconBytesMap.get(uri);
+        byte[] iconBytes = iconBytesMap.get(uri);
         if (iconBytes == null) return false;
         return true;
     }
@@ -1230,7 +1230,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
             Icon icon = new Icon(node);
             if (icon.hasURL()) {
                 String iconURL = icon.getURL();
-                byte iconBytes[] = iconBytesMap.get(iconURL);
+                byte[] iconBytes = iconBytesMap.get(iconURL);
                 if (iconBytes != null) {
                     icon.setBytes(iconBytes);
                 }
@@ -1627,7 +1627,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
         Device embDev;
         Service embService;
 
-        byte fileByte[] = new byte[0];
+        byte[] fileByte = new byte[0];
         String contentType = null;
         String contentLanguage = null;
 

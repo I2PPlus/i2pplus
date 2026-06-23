@@ -174,7 +174,7 @@ public class TestStreamTransfer {
                     return;
                 }
                 // i know, its bytes, but this test uses chars
-                char payload[] = new char[payloadSize];
+                char[] payload = new char[payloadSize];
                 int read = _reader.read(payload);
                 if (read != payloadSize) {
                     _log.error("Incorrect size read - expected " + payloadSize + " got " + read);
@@ -288,7 +288,7 @@ public class TestStreamTransfer {
         }
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         // "i2cp.tcp.host=www.i2p.net i2cp.tcp.port=7765 tunnels.inboundDepth=0";
         // "i2cp.tcp.host=localhost i2cp.tcp.port=7654 tunnels.inboundDepth=0";
         String conOptions = "i2cp.tcp.host=localhost i2cp.tcp.port=10001 tunnels.inboundDepth=0";

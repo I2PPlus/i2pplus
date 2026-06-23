@@ -143,7 +143,7 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
     }
 
     @Override
-    public int read(byte buf[], int off, int len) throws IOException {
+    public int read(byte[] buf, int off, int len) throws IOException {
         for (int i = 0; i < len; i++) {
             int c = read();
             if (c == -1) {

@@ -380,7 +380,7 @@ public class AddressbookBean extends BaseBean {
                 loadPropertiesFromFile(bean, name);
                 list.addLast(bean);
             }
-            AddressBean array[] = list.toArray(new AddressBean[list.size()]);
+            AddressBean[] array = list.toArray(new AddressBean[list.size()]);
             // Apply pagination - only apply manual pagination when NOT filtering by category
             int fromIndex, toIndex;
             if (category == null) {

@@ -125,7 +125,7 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
     }
 
   /** Unused, see AsyncFortunaStandalone */
-    public void seed(byte val[]) {
+    public void seed(byte[] val) {
         throw new UnsupportedOperationException("use override");
     }
 

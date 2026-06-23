@@ -68,7 +68,7 @@ public class RouterInfo extends DatabaseEntry {
     private volatile boolean _validated;
     private volatile boolean _isValid;
     //private volatile String _stringified;
-    private volatile byte _byteified[];
+    private volatile byte[] _byteified;
     private volatile int _hashCode;
     private volatile boolean _hashCodeInitialized;
     /** should we cache the byte and string versions _byteified ? **/
@@ -317,7 +317,7 @@ public class RouterInfo extends DatabaseEntry {
         ByteArrayOutputStream out = new ByteArrayOutputStream(2*1024);
         try {writeDataBytes(out);}
         catch (IOException ioe) {throw new DataFormatException("IO Error getting bytes", ioe);}
-        byte data[] = out.toByteArray();
+        byte[] data = out.toByteArray();
         if (CACHE_ALL || _shouldCache) {_byteified = data;}
         return data;
     }

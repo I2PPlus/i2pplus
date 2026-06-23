@@ -50,7 +50,7 @@ public abstract class RFC3339Date {
      *  This only supports parsing of the dates specified by Atom, RFC 4287,
      *  together with the date only.
      */
-    private static final SimpleDateFormat rfc3339DateFormats[] = new SimpleDateFormat[] {
+    private static final SimpleDateFormat[] rfc3339DateFormats = new SimpleDateFormat[] {
                  OUTPUT_FORMAT,
                  // .S or .SS will get the milliseconds wrong,
                  // e.g. .1 will become 1 ms, .11 will become 11 ms

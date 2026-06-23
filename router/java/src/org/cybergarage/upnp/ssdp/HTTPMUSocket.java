@@ -230,7 +230,7 @@ public class HTTPMUSocket {
     ////////////////////////////////////////////////
 
     public SSDPPacket receive() throws IOException {
-        byte ssdvRecvBuf[] = new byte[SSDP.RECV_MESSAGE_BUFSIZE];
+        byte[] ssdvRecvBuf = new byte[SSDP.RECV_MESSAGE_BUFSIZE];
         SSDPPacket recvPacket = new SSDPPacket(ssdvRecvBuf, ssdvRecvBuf.length);
         recvPacket.setLocalAddress(getLocalAddress());
 

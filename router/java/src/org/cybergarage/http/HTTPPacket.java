@@ -109,7 +109,7 @@ public class HTTPPacket {
      */
     private String readLine(BufferedInputStream in) {
         ByteArrayOutputStream lineBuf = new ByteArrayOutputStream();
-        byte readBuf[] = new byte[1];
+        byte[] readBuf = new byte[1];
 
         try {
             int readLen = in.read(readBuf);
@@ -212,7 +212,7 @@ public class HTTPPacket {
                 int chunkSize = HTTP.getChunkSize();
 
                 /* Thanks for Stephan Mehlhase (2010-10-26) */
-                byte readBuf[] = new byte[(int) (contentLen > chunkSize ? chunkSize : contentLen)];
+                byte[] readBuf = new byte[(int) (contentLen > chunkSize ? chunkSize : contentLen)];
 
                 long readCnt = 0;
                 while (readCnt < contentLen) {
@@ -521,7 +521,7 @@ public class HTTPPacket {
     //	Contents
     ////////////////////////////////////////////////
 
-    private byte content[] = new byte[0];
+    private byte[] content = new byte[0];
 
     /**
      * Sets the content of this HTTP packet.
@@ -529,12 +529,12 @@ public class HTTPPacket {
      * @param data content data as byte array
      * @param updateWithContentLength whether to update Content-Length header automatically
      */
-    public void setContent(byte data[], boolean updateWithContentLength) {
+    public void setContent(byte[] data, boolean updateWithContentLength) {
         content = data;
         if (updateWithContentLength == true) setContentLength(data.length);
     }
 
-    public void setContent(byte data[]) {
+    public void setContent(byte[] data) {
         setContent(data, true);
     }
 
@@ -715,7 +715,7 @@ public class HTTPPacket {
     }
 
     public long[] getContentRange() {
-        long range[] = new long[3];
+        long[] range = new long[3];
         range[0] = range[1] = range[2] = 0;
         if (hasContentRange() == false) return range;
         String rangeLine = getHeaderValue(HTTP.CONTENT_RANGE);
@@ -753,17 +753,17 @@ public class HTTPPacket {
     }
 
     public long getContentRangeFirstPosition() {
-        long range[] = getContentRange();
+        long[] range = getContentRange();
         return range[0];
     }
 
     public long getContentRangeLastPosition() {
-        long range[] = getContentRange();
+        long[] range = getContentRange();
         return range[1];
     }
 
     public long getContentRangeInstanceLength() {
-        long range[] = getContentRange();
+        long[] range = getContentRange();
         return range[2];
     }
 

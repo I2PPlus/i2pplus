@@ -108,7 +108,7 @@ public class LeaseSet extends DatabaseEntry {
     private boolean _decrypted;
     protected boolean _checked;
     // cached byte version
-    protected volatile byte _byteified[];
+    protected volatile byte[] _byteified;
 
     /**
      *  Unlimited before 0.6.3;
@@ -369,7 +369,7 @@ public class LeaseSet extends DatabaseEntry {
         } catch (DataFormatException dfe) {
             return new byte[0];
         }
-        byte rv[] = out.toByteArray();
+        byte[] rv = out.toByteArray();
         if (getReceivedAsPublished()) {
             _byteified = rv;
         } // if we are floodfill and this was published to us

@@ -19,7 +19,7 @@ import java.util.Set;
 public class UDPEndpointTestStandalone {
     private final RouterContext _context;
     private final Log _log;
-    private UDPEndpoint _endpoints[];
+    private UDPEndpoint[] _endpoints;
     private volatile boolean _beginTest;
     private final Set<ByteArray> _sentNotReceived;
 
@@ -119,7 +119,7 @@ public class UDPEndpointTestStandalone {
                         _log.debug("Beginning to write");
                         for (int curPacket = 0; curPacket < 2000; curPacket++) {
                             int sz = MIN + _context.random().nextInt(MAX - MIN - 1);
-                            byte data[] = new byte[sz];
+                            byte[] data = new byte[sz];
                             _context.random().nextBytes(data);
                             int curPeer = (curPacket % _endpoints.length);
                             if (_endpoints[curPeer] == _endpoint) curPeer++;
@@ -157,7 +157,7 @@ public class UDPEndpointTestStandalone {
         }
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
             System.out.println("Current dir: " + new java.io.File(".").getCanonicalPath());
         } catch (Exception e) {

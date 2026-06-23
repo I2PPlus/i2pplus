@@ -379,7 +379,7 @@ public class ControlPoint implements HTTPRequestListener {
     public void removeExpiredDevices() {
         DeviceList devList = getDeviceList();
         int devCnt = devList.size();
-        Device dev[] = new Device[devCnt];
+        Device[] dev = new Device[devCnt];
         for (int n = 0; n < devCnt; n++) dev[n] = devList.getDevice(n);
         for (int n = 0; n < devCnt; n++) {
             if (dev[n].isExpired() == true) {

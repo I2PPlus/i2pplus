@@ -40,7 +40,7 @@ public class LimitInputStream extends CountingInputStream {
     }
 
     @Override
-    public int read(byte buf[], int off, int len) throws IOException {
+    public int read(byte[] buf, int off, int len) throws IOException {
         if (count >= maxx)
             return -1;
         return super.read(buf, off, (int) Math.min(maxx - count, len));

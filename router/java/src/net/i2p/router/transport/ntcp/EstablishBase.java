@@ -27,9 +27,9 @@ abstract class EstablishBase implements EstablishState {
     protected final Log _log;
 
     // bob receives (and alice sends)
-    protected final byte _X[];
+    protected final byte[] _X;
     // alice receives (and bob sends)
-    protected final byte _Y[];
+    protected final byte[] _Y;
     /**
      *  OUR clock minus HIS clock, in seconds
      *
@@ -39,7 +39,7 @@ abstract class EstablishBase implements EstablishState {
     protected transient long _peerSkew;
 
     /** previously received encrypted block (or the IV) */
-    protected byte _prevEncrypted[];
+    protected byte[] _prevEncrypted;
 
     /** bytes received so far */
     protected int _received;

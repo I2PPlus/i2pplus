@@ -50,13 +50,13 @@ class UDPAddress {
     private InetAddress _hostAddress;
     private final int _port;
     private final byte[] _introKey;
-    private final String _introHosts[];
-    private final InetAddress _introAddresses[];
-    private final int _introPorts[];
+    private final String[] _introHosts;
+    private final InetAddress[] _introAddresses;
+    private final int[] _introPorts;
     private final byte[] _introKeys[];
-    private final long _introTags[];
-    private final long _introExps[];
-    private final Hash _introHashes[];
+    private final long[] _introTags;
+    private final long[] _introExps;
+    private final Hash[] _introHashes;
     private final int _mtu;
     // could be both
     private final boolean _isIPv4, _isIPv6;

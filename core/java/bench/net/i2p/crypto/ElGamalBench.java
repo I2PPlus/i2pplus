@@ -36,7 +36,7 @@ public class ElGamalBench {
 
     @Setup
     public void prepare() {
-        Object pair[] = KeyGenerator.getInstance().generatePKIKeypair();
+        Object[] pair = KeyGenerator.getInstance().generatePKIKeypair();
         pubkey = (PublicKey) pair[0];
         privkey = (PrivateKey) pair[1];
         origPT = new byte[222];
@@ -59,7 +59,7 @@ public class ElGamalBench {
         return ctx.elGamalEngine().decrypt(origCT, privkey);
     }
 
-    public static void main(String args[]) throws RunnerException {
+    public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder().include(ElGamalBench.class.getSimpleName()).build();
 
         new Runner(opt).run();

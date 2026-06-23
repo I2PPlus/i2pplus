@@ -132,7 +132,7 @@ public class SigningPublicKey extends SimpleDataStructure {
         _type = type;
     }
 
-    public SigningPublicKey(byte data[]) {
+    public SigningPublicKey(byte[] data) {
         this(DEF_TYPE, data);
     }
 
@@ -140,7 +140,7 @@ public class SigningPublicKey extends SimpleDataStructure {
      *  @param type if null, type is unknown
      *  @since 0.9.8
      */
-    public SigningPublicKey(SigType type, byte data[]) {
+    public SigningPublicKey(SigType type, byte[] data) {
         super();
         _type = type;
         if (type != null || data == null) {

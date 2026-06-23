@@ -75,7 +75,7 @@ public class ReceiveMessageEndMessage extends I2CPMessageImpl {
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         if ((_sessionId < 0) || (_messageId < 0)) throw new I2CPMessageException("Unable to write out the message as there is not enough data");
-        byte rv[] = new byte[2 + 4];
+        byte[] rv = new byte[2 + 4];
         DataHelper.toLong(rv, 0, 2, _sessionId);
         DataHelper.toLong(rv, 2, 4, _messageId);
         return rv;

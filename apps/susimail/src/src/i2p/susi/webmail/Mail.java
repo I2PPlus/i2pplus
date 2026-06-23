@@ -51,7 +51,7 @@ class Mail {
     *  Also used by MailPart
     *  See MailPart for why we don't do \r\n\r\n
     */
-    static final byte HEADER_MATCH[] = DataHelper.getASCII("\r\n\r");
+    static final byte[] HEADER_MATCH = DataHelper.getASCII("\r\n\r");
 
     private long size;
     public String sender,    // as received, trimmed only, not HTML escaped

@@ -75,7 +75,7 @@ class Packet {
     private long _receiveStreamId;
     private long _sequenceNum;
     private long _ackThrough;
-    protected long _nacks[];
+    protected long[] _nacks;
     private int _resendDelay;
     private int _flags;
     private ByteArray _payload;
@@ -256,7 +256,7 @@ class Packet {
      * @return List of packet sequence numbers not ACKed, or null if there are none.
      */
     public long[] getNacks() {return _nacks;}
-    public void setNacks(long nacks[]) {_nacks = nacks;}
+    public void setNacks(long[] nacks) {_nacks = nacks;}
 
     /**
      * How long is the creator of this packet going to wait before
@@ -427,7 +427,7 @@ class Packet {
      * @return Count actually written
      * @throws IllegalStateException if there is data missing or otherwise b0rked
      */
-    public int writePacket(byte buffer[], int offset) throws IllegalStateException {
+    public int writePacket(byte[] buffer, int offset) throws IllegalStateException {
         return writePacket(buffer, offset, 0);
     }
 
@@ -435,7 +435,7 @@ class Packet {
      * @param fakeSigLen if 0, include the real signature in _optionSignature;
      *                   if nonzero, leave space for that many bytes
      */
-    protected int writePacket(byte buffer[], int offset, int fakeSigLen) throws IllegalStateException {
+    protected int writePacket(byte[] buffer, int offset, int fakeSigLen) throws IllegalStateException {
         int cur = offset;
         DataHelper.toLong(buffer, cur, 4, (_sendStreamId >= 0 ? _sendStreamId : STREAM_ID_UNKNOWN));
         cur += 4;
@@ -574,7 +574,7 @@ class Packet {
      * @throws IllegalArgumentException if the data is b0rked
      * @throws IndexOutOfBoundsException if the data is b0rked
      */
-    public void readPacket(byte buffer[], int offset, int length) throws IllegalArgumentException {
+    public void readPacket(byte[] buffer, int offset, int length) throws IllegalArgumentException {
         if (buffer.length - offset < length)
             throw new IllegalArgumentException("len=" + buffer.length + " off=" + offset + " length=" + length);
         if (length < 22) // min header size
@@ -593,7 +593,7 @@ class Packet {
         if (length < 22 + numNacks*4)
             throw new IllegalArgumentException("Too small with " + numNacks + " NACKS: " + length);
         if (numNacks > 0) {
-            long nacks[] = new long[numNacks];
+            long[] nacks = new long[numNacks];
             for (int i = 0; i < numNacks; i++) {
                 nacks[i] = DataHelper.fromLong(buffer, cur, 4);
                 cur += 4;
@@ -702,7 +702,7 @@ class Packet {
                 }
                 optionSignature = new Signature(type);
             }
-            byte buf[] = new byte[optionSignature.length()];
+            byte[] buf = new byte[optionSignature.length()];
             System.arraycopy(buffer, cur, buf, 0, buf.length);
             optionSignature.setData(buf);
             setOptionalSignature(optionSignature);
@@ -720,7 +720,7 @@ class Packet {
      *         false otherwise.
      * @since 0.9.39
      */
-    public boolean verifySignature(I2PAppContext ctx, byte buffer[]) {
+    public boolean verifySignature(I2PAppContext ctx, byte[] buffer) {
         return verifySignature(ctx, null, buffer);
     }
 
@@ -736,7 +736,7 @@ class Packet {
      * @return true if the signature exists and validates against the data,
      *         false otherwise.
      */
-    public boolean verifySignature(I2PAppContext ctx, SigningPublicKey altSPK, byte buffer[]) {
+    public boolean verifySignature(I2PAppContext ctx, SigningPublicKey altSPK, byte[] buffer) {
         if (_sigVerified) {return true;}
         if (!isFlagSet(FLAG_SIGNATURE_INCLUDED)) {return false;}
         if (_optionSignature == null) {return false;}

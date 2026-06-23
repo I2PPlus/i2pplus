@@ -714,7 +714,7 @@ public class Router implements RouterClock.ClockShiftListener {
             // These will be replaced in CreateRouterInfoJob if we rekey
             if (!_config.containsKey(PROP_IB_RANDOM_KEY) ||
                 getEstimatedDowntime() > 12*60*60*1000L) {
-                byte rk[] = new byte[32];
+                byte[] rk = new byte[32];
                 _context.random().nextBytes(rk);
                 _config.put(PROP_IB_RANDOM_KEY, Base64.encode(rk));
                 _context.random().nextBytes(rk);
@@ -1272,7 +1272,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * Ugly list of files that we need to kill if we are building a new identity
      *
      */
-    private static final String _rebuildFiles[] = new String[] {
+    private static final String[] _rebuildFiles = new String[] {
         CreateRouterInfoJob.INFO_FILENAME,
         CreateRouterInfoJob.KEYS_FILENAME,
         CreateRouterInfoJob.KEYS2_FILENAME,
@@ -1876,7 +1876,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  @param args null ok
      *  @throws IllegalArgumentException
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         boolean rebuild = false;
         if (args != null) {
             boolean error = false;

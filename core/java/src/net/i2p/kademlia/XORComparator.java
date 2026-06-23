@@ -24,11 +24,11 @@ public class XORComparator<T extends SimpleDataStructure> implements Comparator<
     @Override
     public int compare(T lhs, T rhs) {
         // same as the following but byte-by-byte for efficiency
-        // byte lhsDelta[] = DataHelper.xor(lhs.getData(), _base);
-        // byte rhsDelta[] = DataHelper.xor(rhs.getData(), _base);
+        // byte[] lhsDelta = DataHelper.xor(lhs.getData(), _base);
+        // byte[] rhsDelta = DataHelper.xor(rhs.getData(), _base);
         // return DataHelper.compareTo(lhsDelta, rhsDelta);
-        byte lhsb[] = lhs.getData();
-        byte rhsb[] = rhs.getData();
+        byte[] lhsb = lhs.getData();
+        byte[] rhsb = rhs.getData();
         for (int i = 0; i < _base.length; i++) {
             int ld = (lhsb[i] ^ _base[i]) & 0xff;
             int rd = (rhsb[i] ^ _base[i]) & 0xff;

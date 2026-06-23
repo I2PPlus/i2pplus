@@ -89,7 +89,7 @@ public class NtpClient {
      * @throws IllegalArgumentException if none of the servers are reachable
      * @since 0.7.12
      */
-    static long[] currentTimeAndStratum(String serverNames[], int perServerTimeout, boolean preferIPv6, Log log) {
+    static long[] currentTimeAndStratum(String[] serverNames, int perServerTimeout, boolean preferIPv6, Log log) {
         if (serverNames == null) {
             throw new IllegalArgumentException("No NTP servers specified");
         }

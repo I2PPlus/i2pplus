@@ -71,7 +71,7 @@ public class EchoLargeIT extends StreamingITBase {
                     InputStream in = socket.getInputStream();
                     OutputStream out = socket.getOutputStream();
                     _log.debug("Server streams built");
-                    byte buf[] = new byte[128 * 1024];
+                    byte[] buf = new byte[128 * 1024];
                     while (buf != null) {
                         for (int i = 0; i < buf.length; i++) {
                             int c = in.read();
@@ -112,16 +112,16 @@ public class EchoLargeIT extends StreamingITBase {
                 InputStream in = socket.getInputStream();
                 OutputStream out = socket.getOutputStream();
                 for (int i = 0; i < 3; i++) {
-                    byte buf[] = new byte[128 * 1024];
+                    byte[] buf = new byte[128 * 1024];
                     _context.random().nextBytes(buf);
-                    byte orig[] = new byte[buf.length];
+                    byte[] orig = new byte[buf.length];
                     System.arraycopy(buf, 0, orig, 0, buf.length);
                     out.write(buf);
                     _log.debug("Client wrote a buffer");
                     out.flush();
                     _log.debug("Client flushed");
 
-                    byte rbuf[] = new byte[buf.length];
+                    byte[] rbuf = new byte[buf.length];
                     for (int j = 0; j < buf.length; j++) {
                         int c = in.read();
                         if (c == -1) {

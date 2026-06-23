@@ -237,7 +237,7 @@ public class Certificate extends DataStructureImpl {
      *
      *  @return the written length (NOT the new offset)
      */
-    public int writeBytes(byte target[], int offset) {
+    public int writeBytes(byte[] target, int offset) {
         int cur = offset;
         DataHelper.toLong(target, cur, 1, _type);
         cur++;
@@ -258,7 +258,7 @@ public class Certificate extends DataStructureImpl {
      *
      *  @throws IllegalStateException if already set
      */
-    public int readBytes(byte source[], int offset) throws DataFormatException {
+    public int readBytes(byte[] source, int offset) throws DataFormatException {
         if (_type != 0 || _payload != null) throw new IllegalStateException("already set");
         if (source == null) throw new DataFormatException("Cert is null");
         if (source.length < offset + 3)
@@ -377,14 +377,14 @@ public class Certificate extends DataStructureImpl {
 
         /** Overridden for efficiency */
         @Override
-        public int writeBytes(byte target[], int offset) {
+        public int writeBytes(byte[] target, int offset) {
             System.arraycopy(NULL_DATA, 0, target, offset, NULL_LENGTH);
             return NULL_LENGTH;
         }
 
         /** @throws RuntimeException always */
         @Override
-        public int readBytes(byte source[], int offset) throws DataFormatException {
+        public int readBytes(byte[] source, int offset) throws DataFormatException {
             throw new RuntimeException("Data already set");
         }
 

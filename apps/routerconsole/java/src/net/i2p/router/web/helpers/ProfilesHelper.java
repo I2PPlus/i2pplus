@@ -11,14 +11,14 @@ public class ProfilesHelper extends HelperBase {
     private int _full;
     private boolean _graphical;
 
-    private static final String titles[] = {
+    private static final String[] titles = {
                                             _x("All"),             // 0
                                             _x("High Capacity"),   // 1
                                             _x("Floodfill"),       // 2
                                             _x("Banned")          // 3
                                            };
 
-    private static final String links[] =  {
+    private static final String[] links =  {
                                             "",                    // 0
                                             "?f=1",                // 1
                                             "?f=2",                // 2

@@ -370,14 +370,14 @@ public class KeyCertificate extends Certificate {
 
         /** Overridden for efficiency */
         @Override
-        public int writeBytes(byte target[], int offset) {
+        public int writeBytes(byte[] target, int offset) {
             System.arraycopy(ECDSA256_DATA, 0, target, offset, ECDSA256_LENGTH);
             return ECDSA256_LENGTH;
         }
 
         /** @throws RuntimeException always */
         @Override
-        public int readBytes(byte source[], int offset) throws DataFormatException {
+        public int readBytes(byte[] source, int offset) throws DataFormatException {
             throw new RuntimeException("Data already set");
         }
 
@@ -435,14 +435,14 @@ public class KeyCertificate extends Certificate {
 
         /** Overridden for efficiency */
         @Override
-        public int writeBytes(byte target[], int offset) {
+        public int writeBytes(byte[] target, int offset) {
             System.arraycopy(ED_DATA, 0, target, offset, ED_LENGTH);
             return ED_LENGTH;
         }
 
         /** @throws RuntimeException always */
         @Override
-        public int readBytes(byte source[], int offset) throws DataFormatException {
+        public int readBytes(byte[] source, int offset) throws DataFormatException {
             throw new RuntimeException("Data already set");
         }
 
@@ -500,14 +500,14 @@ public class KeyCertificate extends Certificate {
 
         /** Overridden for efficiency */
         @Override
-        public int writeBytes(byte target[], int offset) {
+        public int writeBytes(byte[] target, int offset) {
             System.arraycopy(ED_DATA, 0, target, offset, ED_LENGTH);
             return ED_LENGTH;
         }
 
         /** @throws RuntimeException always */
         @Override
-        public int readBytes(byte source[], int offset) throws DataFormatException {
+        public int readBytes(byte[] source, int offset) throws DataFormatException {
             throw new RuntimeException("Data already set");
         }
 

@@ -56,12 +56,12 @@ public class BandwidthLimitedInputStream extends FilterInputStream {
     }
 
     @Override
-    public int read(byte dest[]) throws IOException {
+    public int read(byte[] dest) throws IOException {
         return read(dest, 0, dest.length);
     }
 
     @Override
-    public int read(byte dest[], int off, int len) throws IOException {
+    public int read(byte[] dest, int off, int len) throws IOException {
         int read = in.read(dest, off, len);
         if (read == -1) return -1;
 

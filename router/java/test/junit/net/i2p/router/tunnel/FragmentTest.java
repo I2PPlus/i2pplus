@@ -157,7 +157,7 @@ public class FragmentTest {
 
     protected PendingGatewayMessage createPending(int size, boolean includeRouter, boolean includeTunnel) {
         DataMessage m = new DataMessage(_context);
-        byte data[] = new byte[size];
+        byte[] data = new byte[size];
         _context.random().nextBytes(data);
         m.setData(data);
         m.setUniqueId(_context.random().nextLong(I2NPMessage.MAX_ID_VALUE));
@@ -208,20 +208,20 @@ public class FragmentTest {
     }
 
     protected class DefragmentedReceiverImpl implements FragmentHandler.DefragmentedReceiver {
-        private byte _expected[];
-        private byte _expected2[];
-        private byte _expected3[];
+        private byte[] _expected;
+        private byte[] _expected2;
+        private byte[] _expected3;
         private int _received;
 
-        public DefragmentedReceiverImpl(byte expected[]) {
+        public DefragmentedReceiverImpl(byte[] expected) {
             this(expected, null);
         }
 
-        public DefragmentedReceiverImpl(byte expected[], byte expected2[]) {
+        public DefragmentedReceiverImpl(byte[] expected, byte[] expected2) {
             this(expected, expected2, null);
         }
 
-        public DefragmentedReceiverImpl(byte expected[], byte expected2[], byte expected3[]) {
+        public DefragmentedReceiverImpl(byte[] expected, byte[] expected2, byte[] expected3) {
             _expected = expected;
             _expected2 = expected2;
             _expected3 = expected3;
@@ -230,7 +230,7 @@ public class FragmentTest {
 
         public void receiveComplete(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
             boolean ok = false;
-            byte m[] = msg.toByteArray();
+            byte[] m = msg.toByteArray();
             if (_expected != null && DataHelper.eq(_expected, m)) {
                 ok = true;
             }

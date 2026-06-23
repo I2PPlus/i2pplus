@@ -162,7 +162,7 @@ public class HTTPSocket {
      */
     private boolean post(
             HTTPResponse httpRes,
-            byte content[],
+            byte[] content,
             long contentOffset,
             long contentLength,
             boolean isOnlyHeader) {
@@ -250,7 +250,7 @@ public class HTTPSocket {
             if (0 < contentOffset) in.skip(contentOffset);
 
             int chunkSize = HTTP.getChunkSize();
-            byte readBuf[] = new byte[chunkSize];
+            byte[] readBuf = new byte[chunkSize];
             long readCnt = 0;
             long readSize = (chunkSize < contentLength) ? chunkSize : contentLength;
             int readLen = in.read(readBuf, 0, (int) readSize);

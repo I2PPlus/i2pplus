@@ -126,12 +126,12 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
     }
 
     @Override
-    public void write(byte buf[]) throws IOException {
+    public void write(byte[] buf) throws IOException {
         write(buf, 0, buf.length);
     }
 
     @Override
-    public void write(byte buf[], int off, int len) throws IOException {
+    public void write(byte[] buf, int off, int len) throws IOException {
         ensureHeaderIsWritten();
         _crc32.update(buf, off, len);
         _writtenSize += len;
@@ -139,19 +139,19 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
     }
 
     /******
-     * public static void main(String args[]) {
+     * public static void main(String[] args) {
      * for (int i = 0; i < 2; i++)
      * test();
      * }
      * private static void test() {
-     * byte b[] = "hi, how are you today?".getBytes();
+     * byte[] b = "hi, how are you today?".getBytes();
      * try {
      * ByteArrayOutputStream baos = new ByteArrayOutputStream(64);
      * ResettableGZIPOutputStream o = new ResettableGZIPOutputStream(baos);
      * o.write(b);
      * o.finish();
      * o.flush();
-     * byte compressed[] = baos.toByteArray();
+     * byte[] compressed = baos.toByteArray();
      *
      * ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
      * SnoopGZIPOutputStream gzo = new SnoopGZIPOutputStream(baos2);
@@ -159,7 +159,7 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
      * gzo.finish();
      * gzo.flush();
      * long value = gzo.getCRC().getValue();
-     * byte compressed2[] = baos2.toByteArray();
+     * byte[] compressed2 = baos2.toByteArray();
      * System.out.println("CRC32 values: Resettable = " + o._crc32.getValue()
      * + " GZIP = " + value);
      *
@@ -173,7 +173,7 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
      * System.out.println();
      *
      * GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(compressed));
-     * byte rv[] = new byte[128];
+     * byte[] rv = new byte[128];
      * int read = in.read(rv);
      * if (!DataHelper.eq(rv, 0, b, 0, b.length))
      * throw new RuntimeException("foo, read=" + read);

@@ -267,8 +267,8 @@ public class RouterTimestamper extends Timestamper {
     /**
      * True if the time was queried successfully, false if it couldn't be
      */
-    private boolean queryTime(String serverList[], int perServerTimeout, boolean preferIPv6) throws IllegalArgumentException {
-        long found[] = new long[_concurringServers];
+    private boolean queryTime(String[] serverList, int perServerTimeout, boolean preferIPv6) throws IllegalArgumentException {
+        long[] found = new long[_concurringServers];
         long now = -1;
         int stratum = -1;
         long expectedDelta = 0;
@@ -392,7 +392,7 @@ public class RouterTimestamper extends Timestamper {
     }
 
 /****
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         System.setProperty(PROP_DISABLED, "false");
         System.setProperty(PROP_QUERY_FREQUENCY, "30000");
         I2PAppContext.getGlobalContext();

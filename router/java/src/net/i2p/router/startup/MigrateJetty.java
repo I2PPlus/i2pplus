@@ -115,7 +115,7 @@ abstract class MigrateJetty {
             if (app.args == null)
                 continue;
             // remove quotes
-            String args[] = LoadClientAppsJob.parseArgs(app.args);
+            String[] args = LoadClientAppsJob.parseArgs(app.args);
             if (args.length == 0)
                 continue;
             if (!migrated1) {

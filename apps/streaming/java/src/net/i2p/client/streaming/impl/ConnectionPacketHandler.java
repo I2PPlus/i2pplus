@@ -320,7 +320,7 @@ class ConnectionPacketHandler {
      * @param choke did we get a choke in the packet?
      * @return are we congested?
      */
-    private boolean ack(Connection con, long ackThrough, long nacks[], Packet packet, boolean isNew, boolean choke) {
+    private boolean ack(Connection con, long ackThrough, long[] nacks, Packet packet, boolean isNew, boolean choke) {
         if (ackThrough < 0) return false;
 
         boolean firstAck = isNew && con.getHighestAckedThrough() < 0;

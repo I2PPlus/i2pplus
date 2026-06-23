@@ -289,7 +289,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
     @Override
     public byte[] engineDigest() {
         try {
-            final byte hashvalue[] = new byte[HASH_LENGTH];
+            final byte[] hashvalue = new byte[HASH_LENGTH];
             engineDigest(hashvalue, 0, HASH_LENGTH);
             return hashvalue;
         } catch (DigestException e) {
@@ -769,7 +769,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      *  @since 0.8.7
      */
 /****
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         if (args.length <= 0) {
             System.err.println("Usage: SHA1 string");
             return;

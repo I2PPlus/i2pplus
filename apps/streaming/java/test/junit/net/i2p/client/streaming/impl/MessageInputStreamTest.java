@@ -96,15 +96,15 @@ public class MessageInputStreamTest {
     public void testCanAccept_allMaxSize() {
         // Fill the buffer to one message under limit with max-size msgs
         int numMsgs = _options.getInboundBufferSize() / _options.getMaxMessageSize();
-        byte orig[] = new byte[_options.getInboundBufferSize()];
+        byte[] orig = new byte[_options.getInboundBufferSize()];
         _context.random().nextBytes(orig);
         for (int i = 0; i < numMsgs - 1; i++) {
-            byte msg[] = new byte[_options.getMaxMessageSize()];
+            byte[] msg = new byte[_options.getMaxMessageSize()];
             System.arraycopy(orig, i * _options.getMaxMessageSize(), msg, 0, _options.getMaxMessageSize());
             in.messageReceived(i, new ByteArray(msg));
         }
         assertTrue(in.canAccept(numMsgs, 1));
-        byte msg[] = new byte[_options.getMaxMessageSize()];
+        byte[] msg = new byte[_options.getMaxMessageSize()];
         System.arraycopy(orig, (numMsgs - 1) * _options.getMaxMessageSize(), msg, 0, _options.getMaxMessageSize());
         in.messageReceived(numMsgs - 1, new ByteArray(msg));
         assertFalse(in.canAccept(numMsgs, 1));
@@ -114,15 +114,15 @@ public class MessageInputStreamTest {
     public void testCanAccept_smallerMsgsWithMaxSizeCount() {
         // Fill the buffer to one message under count that would reach limit with max-size msgs
         int numMsgs = _options.getInboundBufferSize() / _options.getMaxMessageSize();
-        byte orig[] = new byte[numMsgs * 1024];
+        byte[] orig = new byte[numMsgs * 1024];
         _context.random().nextBytes(orig);
         for (int i = 0; i < numMsgs - 1; i++) {
-            byte msg[] = new byte[1024];
+            byte[] msg = new byte[1024];
             System.arraycopy(orig, i * 1024, msg, 0, 1024);
             in.messageReceived(i, new ByteArray(msg));
         }
         assertTrue(in.canAccept(numMsgs, 1));
-        byte msg[] = new byte[1024];
+        byte[] msg = new byte[1024];
         System.arraycopy(orig, (numMsgs - 1) * 1024, msg, 0, 1024);
         in.messageReceived(numMsgs - 1, new ByteArray(msg));
         assertTrue(in.canAccept(numMsgs, 1));
@@ -132,10 +132,10 @@ public class MessageInputStreamTest {
     public void testCanAccept_readyDup() {
         // Fill the buffer
         int numMsgs = _options.getInboundBufferSize() / _options.getMaxMessageSize();
-        byte orig[] = new byte[_options.getInboundBufferSize()];
+        byte[] orig = new byte[_options.getInboundBufferSize()];
         _context.random().nextBytes(orig);
         for (int i = 0; i < numMsgs; i++) {
-            byte msg[] = new byte[_options.getMaxMessageSize()];
+            byte[] msg = new byte[_options.getMaxMessageSize()];
             System.arraycopy(orig, i * _options.getMaxMessageSize(), msg, 0, _options.getMaxMessageSize());
             in.messageReceived(i, new ByteArray(msg));
         }
@@ -149,10 +149,10 @@ public class MessageInputStreamTest {
     public void testCanAccept_notReadyDup() {
         // Fill the buffer
         int numMsgs = _options.getInboundBufferSize() / _options.getMaxMessageSize();
-        byte orig[] = new byte[_options.getInboundBufferSize()];
+        byte[] orig = new byte[_options.getInboundBufferSize()];
         _context.random().nextBytes(orig);
         for (int i = 0; i < numMsgs; i++) {
-            byte msg[] = new byte[_options.getMaxMessageSize()];
+            byte[] msg = new byte[_options.getMaxMessageSize()];
             System.arraycopy(orig, i * _options.getMaxMessageSize(), msg, 0, _options.getMaxMessageSize());
             if (i == numMsgs - 1) in.messageReceived(numMsgs, new ByteArray(msg));
             else in.messageReceived(i, new ByteArray(msg));
@@ -165,15 +165,15 @@ public class MessageInputStreamTest {
     public void testCanAccept_msgIdExceedsBuffer() {
         // Fill the buffer to one message under limit with max-size msgs
         int numMsgs = _options.getInboundBufferSize() / _options.getMaxMessageSize();
-        byte orig[] = new byte[_options.getInboundBufferSize()];
+        byte[] orig = new byte[_options.getInboundBufferSize()];
         _context.random().nextBytes(orig);
         for (int i = 0; i < numMsgs - 2; i++) {
-            byte msg[] = new byte[_options.getMaxMessageSize()];
+            byte[] msg = new byte[_options.getMaxMessageSize()];
             System.arraycopy(orig, i * _options.getMaxMessageSize(), msg, 0, _options.getMaxMessageSize());
             in.messageReceived(i, new ByteArray(msg));
         }
         // Add two half-size messages (to get past shortcut)
-        byte msg[] = new byte[_options.getMaxMessageSize() / 2];
+        byte[] msg = new byte[_options.getMaxMessageSize() / 2];
         System.arraycopy(orig, (numMsgs - 1) * _options.getMaxMessageSize(), msg, 0, _options.getMaxMessageSize() / 2);
         in.messageReceived(numMsgs - 2, new ByteArray(msg));
         in.messageReceived(numMsgs - 1, new ByteArray(msg));
@@ -186,16 +186,16 @@ public class MessageInputStreamTest {
     public void testCanAccept_inOrderSmallMsgsDoS() {
         // Fill the buffer to one message under count that would trip DoS protection
         int numMsgs = 4 * _options.getMaxWindowSize();
-        byte orig[] = new byte[numMsgs];
+        byte[] orig = new byte[numMsgs];
         _context.random().nextBytes(orig);
         for (int i = 0; i < numMsgs - 1; i++) {
-            byte msg[] = new byte[1];
+            byte[] msg = new byte[1];
             System.arraycopy(orig, i, msg, 0, 1);
             in.messageReceived(i, new ByteArray(msg));
         }
         assertTrue(in.canAccept(numMsgs, 1));
         // Trip DoS protection
-        byte msg[] = new byte[1];
+        byte[] msg = new byte[1];
         System.arraycopy(orig, (numMsgs - 1), msg, 0, 1);
         in.messageReceived(numMsgs - 1, new ByteArray(msg));
         assertFalse(in.canAccept(numMsgs, 1));
@@ -251,16 +251,16 @@ public class MessageInputStreamTest {
 
     @Test
     public void testInOrder() throws IOException {
-        byte orig[] = new byte[256 * 1024];
+        byte[] orig = new byte[256 * 1024];
         _context.random().nextBytes(orig);
 
         for (int i = 0; i < orig.length / 1024; i++) {
-            byte msg[] = new byte[1024];
+            byte[] msg = new byte[1024];
             System.arraycopy(orig, i * 1024, msg, 0, 1024);
             in.messageReceived(i, new ByteArray(msg));
         }
 
-        byte read[] = new byte[orig.length];
+        byte[] read = new byte[orig.length];
         int howMany = DataHelper.read(in, read);
         if (howMany != orig.length) fail("not enough bytes read [" + howMany + "]");
         if (!DataHelper.eq(orig, read)) fail("data read is not equal");
@@ -270,21 +270,21 @@ public class MessageInputStreamTest {
 
     @Test
     public void testRandomOrder() throws IOException {
-        byte orig[] = new byte[256 * 1024];
+        byte[] orig = new byte[256 * 1024];
         _context.random().nextBytes(orig);
 
         ArrayList<Integer> order = new ArrayList<Integer>(32);
         for (int i = 0; i < orig.length / 1024; i++) order.add(Integer.valueOf(i));
         Collections.shuffle(order);
         for (int i = 0; i < orig.length / 1024; i++) {
-            byte msg[] = new byte[1024];
+            byte[] msg = new byte[1024];
             Integer cur = (Integer) order.get(i);
             System.arraycopy(orig, cur.intValue() * 1024, msg, 0, 1024);
             in.messageReceived(cur.intValue(), new ByteArray(msg));
             _log.debug("Injecting " + cur);
         }
 
-        byte read[] = new byte[orig.length];
+        byte[] read = new byte[orig.length];
         int howMany = DataHelper.read(in, read);
         if (howMany != orig.length) fail("not enough bytes read [" + howMany + "]");
         if (!DataHelper.eq(orig, read)) fail("data read is not equal");
@@ -294,7 +294,7 @@ public class MessageInputStreamTest {
 
     @Test
     public void testRandomDups() throws IOException {
-        byte orig[] = new byte[256 * 1024];
+        byte[] orig = new byte[256 * 1024];
         _context.random().nextBytes(orig);
 
         for (int n = 0; n < 3; n++) {
@@ -302,7 +302,7 @@ public class MessageInputStreamTest {
             for (int i = 0; i < orig.length / 1024; i++) order.add(Integer.valueOf(i));
             Collections.shuffle(order);
             for (int i = 0; i < orig.length / 1024; i++) {
-                byte msg[] = new byte[1024];
+                byte[] msg = new byte[1024];
                 Integer cur = (Integer) order.get(i);
                 System.arraycopy(orig, cur.intValue() * 1024, msg, 0, 1024);
                 in.messageReceived(cur.intValue(), new ByteArray(msg));
@@ -310,7 +310,7 @@ public class MessageInputStreamTest {
             }
         }
 
-        byte read[] = new byte[orig.length];
+        byte[] read = new byte[orig.length];
         int howMany = DataHelper.read(in, read);
         if (howMany != orig.length) fail("not enough bytes read [" + howMany + "]");
         if (!DataHelper.eq(orig, read)) fail("data read is not equal");
@@ -320,8 +320,8 @@ public class MessageInputStreamTest {
 
     @Test
     public void testStaggered() throws IOException {
-        byte orig[] = new byte[256 * 1024];
-        byte read[] = new byte[orig.length];
+        byte[] orig = new byte[256 * 1024];
+        byte[] read = new byte[orig.length];
         _context.random().nextBytes(orig);
 
         ArrayList<Integer> order = new ArrayList<Integer>(32);
@@ -330,7 +330,7 @@ public class MessageInputStreamTest {
 
         int offset = 0;
         for (int i = 0; i < orig.length / 1024; i++) {
-            byte msg[] = new byte[1024];
+            byte[] msg = new byte[1024];
             Integer cur = (Integer) order.get(i);
             System.arraycopy(orig, cur.intValue() * 1024, msg, 0, 1024);
             in.messageReceived(cur.intValue(), new ByteArray(msg));

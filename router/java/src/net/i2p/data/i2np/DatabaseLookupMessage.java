@@ -340,7 +340,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         }
     }
 
-    public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
+    public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
         // Validate we have enough data for minimum required fields
@@ -349,13 +349,13 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
             throw new I2NPMessageException("Data too short for DatabaseLookupMessage");
         int endIndex = offset + dataSize;
 
-        //byte keyData[] = new byte[Hash.HASH_LENGTH];
+        //byte[] keyData = new byte[Hash.HASH_LENGTH];
         //System.arraycopy(data, curIndex, keyData, 0, Hash.HASH_LENGTH);
         _key = Hash.create(data, curIndex);
         curIndex += Hash.HASH_LENGTH;
         //_key = new Hash(keyData);
 
-        //byte fromData[] = new byte[Hash.HASH_LENGTH];
+        //byte[] fromData = new byte[Hash.HASH_LENGTH];
         //System.arraycopy(data, curIndex, fromData, 0, Hash.HASH_LENGTH);
         _fromHash = Hash.create(data, curIndex);
         curIndex += Hash.HASH_LENGTH;
@@ -402,7 +402,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
             throw new I2NPMessageException("Data too short for peer list");
         List<Hash> peers = numPeers > 0 ? new ArrayList<>(numPeers) : null;
         for (int i = 0; i < numPeers; i++) {
-            //byte peer[] = new byte[Hash.HASH_LENGTH];
+            //byte[] peer = new byte[Hash.HASH_LENGTH];
             //System.arraycopy(data, curIndex, peer, 0, Hash.HASH_LENGTH);
             Hash p = Hash.create(data, curIndex);
             curIndex += Hash.HASH_LENGTH;
@@ -466,7 +466,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         return totalLength;
     }
 
-    protected int writeMessageBody(byte out[], int curIndex) throws I2NPMessageException {
+    protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         if (_key == null) throw new I2NPMessageException("Key being searched for not specified");
         if (_fromHash == null) throw new I2NPMessageException("From address not specified");
 

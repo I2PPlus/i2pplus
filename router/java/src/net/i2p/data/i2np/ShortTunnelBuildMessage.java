@@ -50,7 +50,7 @@ public class ShortTunnelBuildMessage extends TunnelBuildMessage {
         _records = new EncryptedBuildRecord[RECORD_COUNT];
         offset++;
         for (int i = 0; i < RECORD_COUNT; i++) {
-            byte rec[] = new byte[SHORT_RECORD_SIZE];
+            byte[] rec = new byte[SHORT_RECORD_SIZE];
             System.arraycopy(data, offset, rec, 0, SHORT_RECORD_SIZE);
             setRecord(i, new ShortEncryptedBuildRecord(rec));
             offset += SHORT_RECORD_SIZE;

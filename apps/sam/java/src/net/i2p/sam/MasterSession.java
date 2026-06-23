@@ -300,7 +300,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
         public void messageAvailable(I2PSession session, int msgId, long size,
                                      int proto, int fromPort, int toPort) {
             try {
-                byte msg[] = session.receiveMessage(msgId);
+                byte[] msg = session.receiveMessage(msgId);
                 if (msg == null)
                     return;
                 messageReceived(msg, proto, fromPort, toPort);

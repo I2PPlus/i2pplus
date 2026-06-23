@@ -28,7 +28,7 @@ final class MuxedEngine {
      * @param ecKey must be EC, non-null
      * @return decrypted data or null on failure
      */
-    public CloveSet decrypt(byte data[], PrivateKey elgKey, PrivateKey ecKey, MuxedSKM keyManager) throws DataFormatException {
+    public CloveSet decrypt(byte[] data, PrivateKey elgKey, PrivateKey ecKey, MuxedSKM keyManager) throws DataFormatException {
         if (elgKey.getType() != EncType.ELGAMAL_2048 ||
             ecKey.getType() != EncType.ECIES_X25519)
             throw new IllegalArgumentException();

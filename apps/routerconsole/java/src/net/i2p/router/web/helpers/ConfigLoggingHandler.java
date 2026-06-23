@@ -148,7 +148,7 @@ public class ConfigLoggingHandler extends FormHandler {
             if (_recordFormat.equalsIgnoreCase(old)) {
                 // noop - no change
             } else {
-                char fmt[] = new char[_recordFormat.length()];
+                char[] fmt = new char[_recordFormat.length()];
                 for (int i = 0; i < fmt.length; i++) {fmt[i] = _recordFormat.charAt(i);}
                 mgr.setFormat(fmt);
                 shouldSave = true;

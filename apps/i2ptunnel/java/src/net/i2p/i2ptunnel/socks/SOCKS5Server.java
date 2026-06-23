@@ -286,7 +286,7 @@ class SOCKS5Server extends SOCKSServer {
                         _log.debug("0-sized address length?");
                     throw new SOCKSException("Illegal DOMAINNAME length");
                 }
-                byte addr[] = new byte[addrLen];
+                byte[] addr = new byte[addrLen];
                 in.readFully(addr);
                 String host = DataHelper.getUTF8(addr);
                 if (command == Command.TOR_RESOLVE) {

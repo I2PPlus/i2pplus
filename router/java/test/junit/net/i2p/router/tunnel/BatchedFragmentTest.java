@@ -53,7 +53,7 @@ public class BatchedFragmentTest extends FragmentTest {
         DefragmentedReceiverImpl handleReceiver = new DefragmentedReceiverImpl(pending1.getData(), pending2.getData());
         FragmentHandler handler = new FragmentHandler(_context, handleReceiver);
         ReceiverImpl receiver = new ReceiverImpl(handler, 0);
-        byte msg[] = pending1.getData();
+        byte[] msg = pending1.getData();
 
         boolean keepGoing = true;
         boolean alreadyAdded = false;
@@ -90,7 +90,7 @@ public class BatchedFragmentTest extends FragmentTest {
         DefragmentedReceiverImpl handleReceiver = new DefragmentedReceiverImpl(pending.getData());
         FragmentHandler handler = new FragmentHandler(_context, handleReceiver);
         ReceiverImpl receiver = new ReceiverImpl(handler, 0);
-        byte msg[] = pending.getData();
+        byte[] msg = pending.getData();
 
         boolean keepGoing = true;
         while (keepGoing) {
@@ -118,7 +118,7 @@ public class BatchedFragmentTest extends FragmentTest {
         DefragmentedReceiverImpl handleReceiver = new DefragmentedReceiverImpl(pending.getData());
         FragmentHandler handler = new FragmentHandler(_context, handleReceiver);
         ReceiverImpl receiver = new ReceiverImpl(handler, 0);
-        byte msg[] = pending.getData();
+        byte[] msg = pending.getData();
 
         boolean keepGoing = true;
         while (keepGoing) {
@@ -190,7 +190,7 @@ public class BatchedFragmentTest extends FragmentTest {
         DefragmentedReceiverImpl handleReceiver = new DefragmentedReceiverImpl(pending1.getData(), pending2.getData(), pending3.getData());
         FragmentHandler handler = new FragmentHandler(_context, handleReceiver);
         ReceiverImpl receiver = new ReceiverImpl(handler, 0);
-        byte msg[] = pending1.getData();
+        byte[] msg = pending1.getData();
 
         boolean keepGoing = true;
         int added = 0;

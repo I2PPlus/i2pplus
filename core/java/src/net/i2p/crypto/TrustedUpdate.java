@@ -223,7 +223,7 @@ public class TrustedUpdate {
         FileOutputStream fileOutputStream = null;
         I2PAppContext context = I2PAppContext.getGlobalContext();
         try {
-            Object signingKeypair[] = context.keyGenerator().generateSigningKeypair();
+            Object[] signingKeypair = context.keyGenerator().generateSigningKeypair();
             SigningPublicKey signingPublicKey = (SigningPublicKey) signingKeypair[0];
             SigningPrivateKey signingPrivateKey = (SigningPrivateKey) signingKeypair[1];
 

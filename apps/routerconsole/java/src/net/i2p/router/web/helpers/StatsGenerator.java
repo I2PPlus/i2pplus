@@ -97,7 +97,7 @@ public class StatsGenerator {
             return;
         }
         long uptime = _context.router().getUptime();
-        long periods[] = freq.getPeriods();
+        long[] periods = freq.getPeriods();
         Arrays.sort(periods);
         buf.append("<ul>");
         for (int i = 0; i < periods.length; i++) {
@@ -131,7 +131,7 @@ public class StatsGenerator {
             return;
         }
         long now = _context.clock().now();
-        long periods[] = rate.getPeriods();
+        long[] periods = rate.getPeriods();
         Arrays.sort(periods);
         buf.append("<ul>");
         for (int i = 0; i < periods.length; i++) {

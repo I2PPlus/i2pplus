@@ -69,7 +69,7 @@ class HopProcessor {
      * @param prev previous hop in the tunnel, or null if we are the gateway
      * @return true if the message was updated and valid, false if it was not.
      */
-    public boolean process(byte orig[], int offset, int length, Hash prev) {
+    public boolean process(byte[] orig, int offset, int length, Hash prev) {
         // prev is null on gateways
         if (prev != null) {
             if (_config.getReceiveFrom() == null) {

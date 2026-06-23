@@ -44,7 +44,7 @@ public class QuotedPrintable extends Encoding {
 
 	private static int BUFSIZE = 2;
 
-	public String encode( byte in[] ) throws EncodingException {
+	public String encode( byte[] in ) throws EncodingException {
 		try {
 			Writer strBuf = new StringBuilderWriter();
 			encode(new ByteArrayInputStream(in), strBuf);

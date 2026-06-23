@@ -31,7 +31,7 @@ public class ExternalMain implements ClientApp, NotificationService {
 
     private static final String PROP_SWING = "desktopgui.swing";
 
-    public ExternalMain(I2PAppContext ctx, ClientAppManager mgr, String args[]) {
+    public ExternalMain(I2PAppContext ctx, ClientAppManager mgr, String[] args) {
         _appContext = ctx;
         _mgr = mgr;
         log = _appContext.logManager().getLog(ExternalMain.class);
@@ -125,7 +125,7 @@ public class ExternalMain implements ClientApp, NotificationService {
             Class util = Class.forName("com.apple.eawt.Application");
             Method getApplication = util.getMethod("getApplication", new Class[0]);
             Object application = getApplication.invoke(util);
-            Class params[] = new Class[1];
+            Class[] params = new Class[1];
             params[0] = Image.class;
             Method setDockIconImage = util.getMethod("setDockIconImage", params);
             URL url = f.toURI().toURL();

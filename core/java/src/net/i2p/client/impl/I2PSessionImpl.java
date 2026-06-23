@@ -868,7 +868,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         Long mid = Long.valueOf(msg.getMessageId());
         _availableMessages.put(mid, msg);
         long id = msg.getMessageId();
-        byte data[] = msg.getPayload().getUnencryptedData();
+        byte[] data = msg.getPayload().getUnencryptedData();
         if ((data == null) || (data.length <= 0)) {
             if (_log.shouldLog(Log.CRIT))
                 _log.log(Log.CRIT, getPrefix() + "addNewMessage of a message with no unencrypted data",

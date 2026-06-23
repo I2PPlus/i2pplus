@@ -55,7 +55,7 @@ public class EepHead extends EepGet {
      * out the ones we have methods for.
      * Turn on logging to use it for a decent test.
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         String proxyHost = "127.0.0.1";
         int proxyPort = 4444;
         int numRetries = 1;

@@ -835,7 +835,7 @@ public class MetaInfo {
         byte[] infoBytes = BEncoder.bencode(info);
         // _log.debug("info bencoded: [" + Base64.encode(infoBytes, true) + "]");
         MessageDigest digest = SHA1.getInstance();
-        byte hash[] = digest.digest(infoBytes);
+        byte[] hash = digest.digest(infoBytes);
         if (_log.shouldDebug()) {
             _log.debug("[InfoHash " + I2PSnarkUtil.toHex(hash) + "]");
         }

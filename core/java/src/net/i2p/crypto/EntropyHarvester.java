@@ -16,7 +16,7 @@ public interface EntropyHarvester {
      * @param offset index into the data array to start
      * @param len how many bytes to use
      */
-    void feedEntropy(String source, byte data[], int offset, int len);
+    void feedEntropy(String source, byte[] data, int offset, int len);
 
     /**
      * Feed the entropy pools with the bits in the data

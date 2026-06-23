@@ -50,7 +50,7 @@ class InboundEndpointProcessor {
      * @return true if the data was recovered (and written in place to orig), false
      *         if it was a duplicate or from the wrong peer.
      */
-    public boolean retrievePreprocessedData(byte orig[], int offset, int length, Hash prev) {
+    public boolean retrievePreprocessedData(byte[] orig, int offset, int length, Hash prev) {
         Hash last = _config.getPeer(_config.getLength()-2);
         if (!last.equals(prev)) {
             // shouldn't happen now that we have good dup ID detection in BuildHandler
@@ -98,7 +98,7 @@ class InboundEndpointProcessor {
      * @param length how much of orig can we write to (must be a multiple of 16).
      *               Should always be 1024 bytes.
      */
-    private void decrypt(RouterContext ctx, TunnelCreatorConfig cfg, byte orig[], int offset, int length) {
+    private void decrypt(RouterContext ctx, TunnelCreatorConfig cfg, byte[] orig, int offset, int length) {
         // Don't include the endpoint, since that is the creator
         for (int i = cfg.getLength() - 2; i >= 0; i--) {
             OutboundGatewayProcessor.decrypt(ctx, orig, offset, length, cfg.getConfig(i));

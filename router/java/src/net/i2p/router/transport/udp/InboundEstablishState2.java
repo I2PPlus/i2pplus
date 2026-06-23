@@ -90,7 +90,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         //_rcvHeaderEncryptKey2 set below
         int off = pkt.getOffset();
         int len = pkt.getLength();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         _rcvConnID = DataHelper.fromLong8(data, off);
         _sendConnID = DataHelper.fromLong8(data, off + SRC_CONN_ID_OFFSET);
         if (_rcvConnID == _sendConnID) {throw new GeneralSecurityException("Identical Connection IDs");}
@@ -722,7 +722,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         }
         int off = pkt.getOffset();
         int len = pkt.getLength();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         long rid = DataHelper.fromLong8(data, off);
         if (rid != _rcvConnID) {
             throw new GeneralSecurityException("Connection ID mismatch -> 1: " + _rcvConnID + " 2: " + rid);
@@ -869,7 +869,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
         int off = pkt.getOffset();
         int len = pkt.getLength();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         long rid = DataHelper.fromLong8(data, off);
         if (rid != _rcvConnID) {
             throw new GeneralSecurityException("Connection ID mismatch -> Request: " + _rcvConnID + " Conf: " + rid);
@@ -1062,7 +1062,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     public synchronized void createdPacketSent(DatagramPacket pkt) {
         if (_sessCrForReTX == null) {
             // store pkt for retx
-            byte data[] = pkt.getData();
+            byte[] data = pkt.getData();
             int off = pkt.getOffset();
             int len = pkt.getLength();
             _sessCrForReTX = new byte[len];
@@ -1081,7 +1081,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             _log.info("[SSU] RETRANSMIT SessionCreated on " + this);
         UDPPacket packet = UDPPacket.acquire(_context, false);
         DatagramPacket pkt = packet.getPacket();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         int off = pkt.getOffset();
         System.arraycopy(_sessCrForReTX, 0, data, off, _sessCrForReTX.length);
         pkt.setLength(_sessCrForReTX.length);

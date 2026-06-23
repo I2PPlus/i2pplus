@@ -21,7 +21,7 @@ import net.i2p.data.DataHelper;
  */
 public class DataMessage extends FastI2NPMessageImpl {
     public final static int MESSAGE_TYPE = 20;
-    private byte _data[];
+    private byte[] _data;
 
     public DataMessage(I2PAppContext context) {
         super(context);
@@ -44,7 +44,7 @@ public class DataMessage extends FastI2NPMessageImpl {
         return _data.length;
     }
 
-    public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
+    public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
         long size = DataHelper.fromLong(data, curIndex, 4);
@@ -64,7 +64,7 @@ public class DataMessage extends FastI2NPMessageImpl {
     }
 
     /** write the message body to the output array, starting at the given index */
-    protected int writeMessageBody(byte out[], int curIndex) {
+    protected int writeMessageBody(byte[] out, int curIndex) {
         if (_data == null) {
             out[curIndex++] = 0x0;
             out[curIndex++] = 0x0;

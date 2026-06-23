@@ -36,7 +36,7 @@ import net.i2p.data.SigningPublicKey;
 import java.io.ByteArrayInputStream;
 
 public class DSABench {
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         int times = 100;
         long keygentime = 0;
         long signtime = 0;

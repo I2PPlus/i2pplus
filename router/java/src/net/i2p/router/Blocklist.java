@@ -74,9 +74,9 @@ public class Blocklist {
     private final Log _log;
     private final RouterContext _context;
     private final BanLogger _banLogger;
-    private long _blocklist[];
+    private long[] _blocklist;
     private volatile int _blocklistSize;
-    private long _countryBlocklist[];
+    private long[] _countryBlocklist;
     private int _countryBlocklistSize;
     private final Object _lock = new Object();
     private Entry _wrapSave;
@@ -644,9 +644,9 @@ public class Blocklist {
         /** the comment extracted from the line */
         final String comment;
         /** the starting IP address */
-        final byte ip1[];
+        final byte[] ip1;
         /** the ending IP address */
-        final byte ip2[];
+        final byte[] ip2;
         /** the router hash, if this is a hash entry */
         final Hash peer;
 
@@ -684,7 +684,7 @@ public class Blocklist {
             start1 = index + 1;
         }
         if (end1 - start1 == 44 && buf.substring(start1).indexOf('.') < 0) {
-            byte b[] = Base64.decode(buf.substring(start1));
+            byte[] b = Base64.decode(buf.substring(start1));
             if (b != null) {return new Entry(comment, Hash.create(b), null, null);}
         }
         index = buf.indexOf('-', start1);
@@ -778,7 +778,7 @@ public class Blocklist {
      *  @param count the number of valid entries in the array
      *  @return the number of overlapping entries removed
      */
-    private int removeOverlap(long blist[], int count) {
+    private int removeOverlap(long[] blist, int count) {
         if (count <= 0) {return 0;}
         int lines = 0;
         for (int i = 0; i < count - 1; ) {
@@ -837,7 +837,7 @@ public class Blocklist {
      *
      * @param ip IPv4 or IPv6
      */
-    public void add(byte ip[]) {add(ip, null);}
+    public void add(byte[] ip) {add(ip, null);}
 
     /**
      * Maintain a simple in-memory single-IP blocklist
@@ -848,7 +848,7 @@ public class Blocklist {
      * @param source for logging only, may be null
      * @since 0.9.57
      */
-    public void add(byte ip[], String source) {
+    public void add(byte[] ip, String source) {
         boolean rv;
         if (ip.length == 4) {
             // don't ever block ourselves
@@ -896,7 +896,7 @@ public class Blocklist {
      * @param ip IPv4 or IPv6
      * @since 0.9.28
      */
-    public void remove(byte ip[]) {
+    public void remove(byte[] ip) {
         if (ip.length == 4) {remove(toInt(ip));}
         else if (ip.length == 16) {
             if (!_haveIPv6) {return;}
@@ -1047,7 +1047,7 @@ public class Blocklist {
      *  @param ip the IP address as a byte array (IPv4 or IPv6)
      *  @return true if the IP is blocklisted
      */
-    public boolean isBlocklisted(byte ip[]) {
+    public boolean isBlocklisted(byte[] ip) {
         if (ip.length == 4) {return isBlocklisted(toInt(ip));}
         if (ip.length == 16) {
             if (!_haveIPv6) {return false;}
@@ -1151,7 +1151,7 @@ public class Blocklist {
      * So the size is (cough) almost 2MB for the 240,000 line splist.txt.
      *
      */
-    private static long toEntry(byte ip1[], byte ip2[]) {
+    private static long toEntry(byte[] ip1, byte[] ip2) {
         long entry = 0;
         for (int i = 0; i < 4; i++) {entry |= ((long) (ip2[i] & 0xff)) << ((3-i)*8);}
         for (int i = 0; i < 4; i++) {entry |= ((long) (ip1[i] & 0xff)) << (32 + ((3-i)*8));}
@@ -1165,7 +1165,7 @@ public class Blocklist {
      *  @param blocklist the blocklist array to store in
      *  @param idx the index to store at
      */
-    private static void store(byte ip1[], byte ip2[], long[] blocklist, int idx) {
+    private static void store(byte[] ip1, byte[] ip2, long[] blocklist, int idx) {
         blocklist[idx] = toEntry(ip1, ip2);
     }
 
@@ -1187,7 +1187,7 @@ public class Blocklist {
      *  @param ip the IP address as a byte array
      *  @return the IP address as an integer
      */
-    private static int toInt(byte ip[]) {
+    private static int toInt(byte[] ip) {
         int rv = 0;
         for (int i = 0; i < 4; i++) {rv |= (ip[i] & 0xff) << ((3-i)*8);}
         return rv;
@@ -1313,7 +1313,7 @@ public class Blocklist {
 
         // Look through the file for each address to find which one was the cause
         for (Iterator<byte[]> iter = ips.iterator(); iter.hasNext();) {
-            byte ip[] = iter.next();
+            byte[] ip = iter.next();
             int ipint = toInt(ip);
             String sip = Addresses.toString(ip);
             BufferedReader br = null;

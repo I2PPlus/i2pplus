@@ -51,12 +51,12 @@ public class BandwidthLimitedOutputStream extends FilterOutputStream {
     }
 
     @Override
-    public void write(byte src[]) throws IOException {
+    public void write(byte[] src) throws IOException {
         write(src, 0, src.length);
     }
 
     @Override
-    public void write(byte src[], int off, int len) throws IOException {
+    public void write(byte[] src, int off, int len) throws IOException {
         if (_log.shouldDebug()) _log.debug("Writing " + len + " bytes");
         if (src == null) return;
         if (len <= 0) return;

@@ -31,7 +31,7 @@ public class NewsCommandLine extends net.i2p.router.RouterCommandLine {
 
     protected NewsCommandLine() {}
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         List<String> classes = new ArrayList<>(NCLASSES.size() + RouterCommandLine.RCLASSES.size() + RouterCommandLine.CLASSES.size());
         classes.addAll(NCLASSES);
         classes.addAll(RouterCommandLine.RCLASSES);

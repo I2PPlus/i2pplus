@@ -111,7 +111,7 @@ public class CreateRouterInfoJob extends JobImpl {
             KeyPair keypair = ctx.keyGenerator().generatePKIKeys(etype);
             PublicKey pubkey = keypair.getPublic();
             PrivateKey privkey = keypair.getPrivate();
-            SimpleDataStructure signingKeypair[] = ctx.keyGenerator().generateSigningKeys(type);
+            SimpleDataStructure[] signingKeypair = ctx.keyGenerator().generateSigningKeys(type);
             SigningPublicKey signingPubKey = (SigningPublicKey)signingKeypair[0];
             SigningPrivateKey signingPrivKey = (SigningPrivateKey)signingKeypair[1];
             RouterIdentity ident = new RouterIdentity();
@@ -161,7 +161,7 @@ public class CreateRouterInfoJob extends JobImpl {
 
             // set or overwrite old random keys
             Map<String, String> map = new HashMap<>(2);
-            byte rk[] = new byte[32];
+            byte[] rk = new byte[32];
             ctx.random().nextBytes(rk);
             map.put(Router.PROP_IB_RANDOM_KEY, Base64.encode(rk));
             ctx.random().nextBytes(rk);

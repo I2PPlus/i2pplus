@@ -1569,7 +1569,7 @@ public class ProfileOrganizer {
     private final static DecimalFormat _fmt = new DecimalFormat("###,##0.00", new DecimalFormatSymbols(Locale.UK));
     private final static String num(double num) {synchronized (_fmt) {return _fmt.format(num);} }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         if (args.length <= 0) {
             System.err.println("Usage: profileorganizer file.txt.gz [file2.txt.gz] ...");
             System.exit(1);

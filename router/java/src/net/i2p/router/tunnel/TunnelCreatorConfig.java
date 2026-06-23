@@ -26,9 +26,9 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /** only necessary for client tunnels */
     private final Hash _destination;
     /** gateway first */
-    private final HopConfig _config[];
+    private final HopConfig[] _config;
     /** gateway first */
-    private final Hash _peers[];
+    private final Hash[] _peers;
     private volatile long _expiration;
     private List<Integer> _order;
     private long _replyMessageId;
@@ -43,7 +43,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private volatile int _priority;
     //private static final int THROUGHPUT_COUNT = 3;
     // Fastest 1 minute throughput, in bytes per minute, ordered with fastest first.
-    //private final double _peakThroughput[] = new double[THROUGHPUT_COUNT];
+    //private final double[] _peakThroughput = new double[THROUGHPUT_COUNT];
     private long _peakThroughputCurrentTotal;
     private long _peakThroughputLastCoallesce = System.currentTimeMillis();
     private Hash _blankHash;

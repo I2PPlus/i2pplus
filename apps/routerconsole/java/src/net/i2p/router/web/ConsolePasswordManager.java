@@ -277,7 +277,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     }
 
 /****
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         RouterContext ctx = (new Router()).getContext();
         ConsolePasswordManager pm = new ConsolePasswordManager(ctx);
         if (!pm.migrate())

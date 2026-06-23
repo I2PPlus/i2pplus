@@ -55,7 +55,7 @@ public class MultiRouter {
     private static ArrayList<Router> _routers = new ArrayList<>(8);
     private static I2PAppContext _defaultContext;
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         if ( (args == null) || (args.length < 1) ) {
             usage();
             return;

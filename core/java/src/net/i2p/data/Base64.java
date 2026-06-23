@@ -216,7 +216,7 @@ public class Base64 {
         runApp(args);
     }
 
-    private static void runApp(String args[]) {
+    private static void runApp(String[] args) {
         String cmd = args[0].toLowerCase(Locale.US);
         if ("encodestring".equals(cmd)) {
             if (args.length != 2)
@@ -284,7 +284,7 @@ public class Base64 {
     }
 
     private static void decode(InputStream in, OutputStream out) throws IOException {
-        byte decoded[] = decode(DataHelper.getUTF8(read(in)));
+        byte[] decoded = decode(DataHelper.getUTF8(read(in)));
         if (decoded == null)
             throw new IOException("Invalid base 64 string");
         out.write(decoded);
@@ -309,13 +309,13 @@ public class Base64 {
         String orig = "you smell";
         String encoded = Base64.encode(orig.getBytes());
         System.out.println("Encoded: [" + encoded + "]");
-        byte decoded[] = Base64.decode(encoded);
+        byte[] decoded = Base64.decode(encoded);
         String transformed = new String(decoded);
         if (orig.equals(transformed))
             System.out.println("D(E('you smell')) == 'you smell'");
         else
             throw new RuntimeException("D(E('you smell')) != 'you smell'!!! transformed = [" + transformed + "]");
-        byte all[] = new byte[256];
+        byte[] all = new byte[256];
         for (int i = 0; i < all.length; i++)
             all[i] = (byte) (0xFF & i);
         encoded = Base64.encode(all);
@@ -434,7 +434,7 @@ public class Base64 {
     /**
      *  @param alpha alphabet
      */
-    private static void encode3to4(byte[] source, int srcOffset, int numSigBytes, StringBuilder buf, byte alpha[]) {
+    private static void encode3to4(byte[] source, int srcOffset, int numSigBytes, StringBuilder buf, byte[] alpha) {
         //           1         2         3
         // 01234567890123456789012345678901 Bit position
         // --------000000001111111122222222 Array position from threeBytes
@@ -569,7 +569,7 @@ public class Base64 {
      * @param breakLines Break lines at 80 characters or less.
      * @since 1.4
      */
-    private static void encodeBytes(byte[] source, int off, int len, boolean breakLines, StringBuilder out, byte alpha[]) {
+    private static void encodeBytes(byte[] source, int off, int len, boolean breakLines, StringBuilder out, byte[] alpha) {
         //int len43 = len * 4 / 3;
         //byte[] outBuff = new byte[(len43) // Main 4:3
         //                          + ((len % 3) > 0 ? 4 : 0) // Account for padding

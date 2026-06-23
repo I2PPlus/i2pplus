@@ -701,7 +701,7 @@ public class NTCPTransport extends TransportImpl {
      * @param addr may be null, returns false
      * @since 0.9.8
      */
-    private boolean isValid(byte addr[]) {
+    private boolean isValid(byte[] addr) {
         if (addr == null) return false;
         if (isPubliclyRoutable(addr) &&
             (addr.length != 16 || _haveIPv6Address))

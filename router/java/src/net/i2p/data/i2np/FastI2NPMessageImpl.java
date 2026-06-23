@@ -53,7 +53,7 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
      *  @throws IllegalStateException if called twice, to protect saved checksum
      */
     @Override
-    public int readBytes(byte data[], int type, int offset, int maxLen) throws I2NPMessageException {
+    public int readBytes(byte[] data, int type, int offset, int maxLen) throws I2NPMessageException {
         if (_hasChecksum)
             throw new IllegalStateException(getClass().getSimpleName() + " read twice");
         int headerSize = HEADER_LENGTH;
@@ -105,7 +105,7 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
      *  If available, use the previously-computed or previously-read checksum for speed
      */
     @Override
-    public int toByteArray(byte buffer[]) {
+    public int toByteArray(byte[] buffer) {
         if (_hasChecksum)
             return toByteArrayWithSavedChecksum(buffer);
         if (VERIFY_TEST && _log.shouldInfo())
@@ -116,7 +116,7 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
     /**
      *  Use a previously-computed checksum for speed
      */
-    protected int toByteArrayWithSavedChecksum(byte buffer[]) {
+    protected int toByteArrayWithSavedChecksum(byte[] buffer) {
         try {
             int writtenLen = writeMessageBody(buffer, HEADER_LENGTH);
             if (VERIFY_TEST) {

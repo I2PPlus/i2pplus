@@ -135,7 +135,7 @@ public final class MLKEM {
      *  Usage: MLKEM [enctype...]
      */
 /*
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
              main2(args);
         } catch (RuntimeException e) {
@@ -148,7 +148,7 @@ public final class MLKEM {
      *  Usage: MLKEM [enctype...]
      */
 /*
-    private static void main2(String args[]) {
+    private static void main2(String[] args) {
         RandomSource.getInstance().nextBoolean();
         try { Thread.sleep(1000); } catch (InterruptedException ie) {}
         int runs = 200; // warmup

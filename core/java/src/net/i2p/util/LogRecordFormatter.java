@@ -40,7 +40,7 @@ class LogRecordFormatter {
         int size = 128 + rec.getMessage().length();
         if (rec.getThrowable() != null) size += 512;
         StringBuilder buf = new StringBuilder(size);
-        char format[] = manager.getFormat();
+        char[] format = manager.getFormat();
         for (int i = 0; i < format.length; ++i) {
             switch (format[i]) {
                 case LogManager.DATE: if (showDate) buf.append(getWhen(manager, rec));

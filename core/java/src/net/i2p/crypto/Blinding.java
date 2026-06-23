@@ -299,7 +299,7 @@ public final class Blinding {
      * @param args command-line arguments
      * @throws Exception on error
      */
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) throws Exception {
         if (args.length != 1) {
             System.out.println("Usage: blinding {56 chars}.b32.i2p");
             System.exit(1);
@@ -309,7 +309,7 @@ public final class Blinding {
     }
 
     /******
-     * public static void main(String args[]) throws Exception {
+     * public static void main(String[] args) throws Exception {
      * net.i2p.data.SimpleDataStructure[] keys = KeyGenerator.getInstance().generateSigningKeys(TYPE);
      * SigningPublicKey pub = (SigningPublicKey) keys[0];
      * SigningPrivateKey priv = (SigningPrivateKey) keys[1];

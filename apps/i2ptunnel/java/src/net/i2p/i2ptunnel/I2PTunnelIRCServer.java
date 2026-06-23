@@ -267,7 +267,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
             //if (_log.shouldDebug())
             //    _log.debug("Received line: " + s);
 
-            String field[] = DataHelper.split(s, " ", 5);
+            String[] field = DataHelper.split(s, " ", 5);
             String command;
             int idx=0;
 

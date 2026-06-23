@@ -33,7 +33,7 @@ public class Hash512 extends SimpleDataStructure {
     }
 
     /** @throws IllegalArgumentException if data is not correct length (null is ok) */
-    public Hash512(byte data[]) {
+    public Hash512(byte[] data) {
         super(data);
     }
 

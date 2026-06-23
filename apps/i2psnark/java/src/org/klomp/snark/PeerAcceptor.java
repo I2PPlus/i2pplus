@@ -48,7 +48,7 @@ class PeerAcceptor {
         // support, but because of how the protocol works, we can get away with just reading
         // ahead the first $LOOKAHEAD_SIZE bytes to figure out which infohash they want to
         // talk about, and we can just look for that in our list of active torrents.
-        byte peerInfoHash[] = null;
+        byte[] peerInfoHash = null;
         if (in instanceof BufferedInputStream) {
             // multitorrent
             in.mark(LOOKAHEAD_SIZE);
@@ -166,7 +166,7 @@ class PeerAcceptor {
                 throw new IOException("Bad protocol 0x" + Integer.toHexString(b) + " at byte " + i);
         }
         DataHelper.skip(in, 8);
-        byte buf[] = new byte[20];
+        byte[] buf = new byte[20];
         int read = DataHelper.read(in, buf);
         if (read != buf.length)
             throw new IOException("Unable to read the hash (read " + read + ")");

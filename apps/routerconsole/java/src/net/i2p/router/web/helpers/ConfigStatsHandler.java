@@ -27,7 +27,7 @@ public class ConfigStatsHandler extends FormHandler {
         }
     }
 
-    public void setGraphList(String stats[]) {
+    public void setGraphList(String[] stats) {
         if (stats != null) {
             StringBuilder s = new StringBuilder(128);
             for (int i = 0; i < stats.length; i++) {

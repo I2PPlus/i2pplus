@@ -74,7 +74,7 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
     private class ReceiveJob extends JobImpl {
         private final byte[] _encrypted;
 
-        public ReceiveJob(RouterContext ctx, byte data[]) {
+        public ReceiveJob(RouterContext ctx, byte[] data) {
             super(ctx);
             _encrypted = data;
         }

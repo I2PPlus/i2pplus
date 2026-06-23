@@ -35,11 +35,11 @@ public class DataHelperTest {
     private static void checkLong(int numBytes, long value) throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream(numBytes);
         DataHelper.writeLong(baos, numBytes, value);
-        byte written[] = baos.toByteArray();
-        byte extract[] = DataHelper.toLong(numBytes, value);
+        byte[] written = baos.toByteArray();
+        byte[] extract = DataHelper.toLong(numBytes, value);
         assertTrue(extract.length == numBytes);
         assertTrue(DataHelper.eq(written, extract));
-        byte extract2[] = new byte[numBytes];
+        byte[] extract2 = new byte[numBytes];
         DataHelper.toLong(extract2, 0, numBytes, value);
         assertTrue(DataHelper.eq(extract, extract2));
 
@@ -107,9 +107,9 @@ public class DataHelperTest {
 
     @SuppressWarnings("deprecation")
     private void checkDate(Date when) throws Exception {
-        byte buf[] = new byte[DataHelper.DATE_LENGTH];
+        byte[] buf = new byte[DataHelper.DATE_LENGTH];
         DataHelper.toDate(buf, 0, when.getTime());
-        byte tbuf[] = DataHelper.toDate(when);
+        byte[] tbuf = DataHelper.toDate(when);
         assertTrue(DataHelper.eq(tbuf, buf));
         Date time = DataHelper.fromDate(buf, 0);
         assertEquals(when.getTime(), time.getTime());
@@ -120,10 +120,10 @@ public class DataHelperTest {
         Random r = new Random();
         for (int size = 0; size < 32 * 1024; size += 32) { // Original had size++, changed value because
             // speed was a problem. -Comwiz
-            byte data[] = new byte[size];
+            byte[] data = new byte[size];
             r.nextBytes(data);
-            byte compressed[] = DataHelper.compress(data);
-            byte decompressed[] = DataHelper.decompress(compressed);
+            byte[] compressed = DataHelper.compress(data);
+            byte[] decompressed = DataHelper.decompress(compressed);
             assertTrue(DataHelper.eq(data, decompressed));
         }
     }

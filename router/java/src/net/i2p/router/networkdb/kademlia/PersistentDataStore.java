@@ -548,7 +548,7 @@ public class PersistentDataStore extends TransientDataStore {
         private void readFiles() {
             int routerCount = 0;
 
-            File routerInfoFiles[] = _dbDir.listFiles(RI_FILTER);
+            File[] routerInfoFiles = _dbDir.listFiles(RI_FILTER);
             if (_flat) {
                 if (routerInfoFiles != null) {
                     routerCount = routerInfoFiles.length;
@@ -919,7 +919,7 @@ public class PersistentDataStore extends TransientDataStore {
                 File subdir = new SecureDirectory(f, DIR_PREFIX + B64.charAt(j));
                 if (!subdir.exists()) {subdir.mkdir();}
             }
-            File routerInfoFiles[] = f.listFiles(RI_FILTER);
+            File[] routerInfoFiles = f.listFiles(RI_FILTER);
             if (routerInfoFiles != null) {migrate(f, routerInfoFiles);}
         }
         return f;

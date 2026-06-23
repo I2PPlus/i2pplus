@@ -279,7 +279,7 @@ class ProfilePersistenceHelper {
 
     private List<File> selectFiles() {
         FilenameFilter filter = new ProfileFilter();
-        File files[] = _profileDir.listFiles(filter);
+        File[] files = _profileDir.listFiles(filter);
         if (files != null && files.length > 0) {migrate(files);}
         List<File> rv = new ArrayList<>(1024);
         for (int j = 0; j < B64.length(); j++) {

@@ -10,7 +10,7 @@ import net.i2p.util.FileUtil;
  * @since 0.4.1.4, moved to {@link net.i2p.installer} in 0.9.5
  */
 public class Copy {
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         FileUtil.copy(args[0], args[1], true);
     }
 }

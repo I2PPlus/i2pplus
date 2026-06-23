@@ -54,7 +54,7 @@ public final class FileUtil {
      * @return the stream contents as a byte array, or empty array if an error occurs
      */
     public static final byte[] load(FileInputStream fin) {
-        byte readBuf[] = new byte[512 * 1024];
+        byte[] readBuf = new byte[512 * 1024];
 
         try {
             ByteArrayOutputStream bout = new ByteArrayOutputStream();

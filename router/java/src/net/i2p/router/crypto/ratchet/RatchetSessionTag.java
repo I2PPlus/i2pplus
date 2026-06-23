@@ -21,7 +21,7 @@ public class RatchetSessionTag {
     /**
      *  @param val will copy the first 8 bytes. Reference will not be kept.
      */
-    public RatchetSessionTag(byte val[]) {
+    public RatchetSessionTag(byte[] val) {
         if (val.length < LENGTH)
             throw new IllegalArgumentException();
         _data = DataHelper.fromLong8(val, 0);

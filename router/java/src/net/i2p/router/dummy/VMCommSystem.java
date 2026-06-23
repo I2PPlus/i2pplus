@@ -108,7 +108,7 @@ public class VMCommSystem extends CommSystemFacade {
         } else {
             _context.jobQueue().addJob(msg.getOnSendJob());
             _context.profileManager().messageSent(msg.getTarget().getIdentity().getHash(), "vm", sendTime, msg.getMessageSize());
-            byte data[] = new byte[msg.getMessageSize()];
+            byte[] data = new byte[msg.getMessageSize()];
             msg.getMessageData(data);
             _context.statManager().addRateData("transport.sendMessageSize", data.length, sendTime);
 
@@ -137,9 +137,9 @@ public class VMCommSystem extends CommSystemFacade {
 
     private class ReceiveJob extends JobImpl {
         private Hash _from;
-        private byte _msg[];
+        private byte[] _msg;
         private RouterContext _ctx;
-        public ReceiveJob(Hash from, byte msg[], RouterContext us) {
+        public ReceiveJob(Hash from, byte[] msg, RouterContext us) {
             super(us);
             _ctx = us;
             _from = from;
@@ -176,7 +176,7 @@ public class VMCommSystem extends CommSystemFacade {
      * leaseSet, what type of tunnel a tunnelId is bound to, etc.
      *
      */
-    public void receive(byte message[], Hash fromPeer) {
+    public void receive(byte[] message, Hash fromPeer) {
         _context.jobQueue().addJob(new ReceiveJob(fromPeer, message, _context));
     }
 

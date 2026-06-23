@@ -205,7 +205,7 @@ public class OutNetMessage implements CDPQEntry {
      *  Used only by VM Comm System.
      *  @return the length, or -1 if message is null
      */
-    public int getMessageData(byte outBuffer[]) {
+    public int getMessageData(byte[] outBuffer) {
         if (_message == null) {
             return -1;
         } else {

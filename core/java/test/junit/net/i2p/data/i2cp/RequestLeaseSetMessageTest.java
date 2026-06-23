@@ -27,7 +27,7 @@ public class RequestLeaseSetMessageTest extends I2CPTstBase {
         RequestLeaseSetMessage msg = new RequestLeaseSetMessage();
         msg.setSessionId((SessionId) (new SessionIdTest()).createDataStructure());
         msg.setEndDate(new Date(1000 * 60 * 60 * 12));
-        byte h[] = new byte[Hash.HASH_LENGTH];
+        byte[] h = new byte[Hash.HASH_LENGTH];
         msg.addEndpoint(new Hash(h), (TunnelId) (new TunnelIdTest()).createDataStructure());
         return msg;
     }

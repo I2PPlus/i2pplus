@@ -516,7 +516,7 @@ class SymmetricState implements Destroyable, Cloneable {
 /****
     private static final int LENGTH = 33;
 
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) throws Exception {
         net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
         byte[] rand = new byte[32];
         byte[] data = new byte[LENGTH];

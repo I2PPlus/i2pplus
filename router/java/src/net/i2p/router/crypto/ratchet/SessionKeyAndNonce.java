@@ -20,7 +20,7 @@ class SessionKeyAndNonce extends SessionKey {
     /**
      *  For outbound Existing Session
      */
-    public SessionKeyAndNonce(byte data[], int nonce) {
+    public SessionKeyAndNonce(byte[] data, int nonce) {
         this(data, 0, nonce, null);
     }
 
@@ -28,7 +28,7 @@ class SessionKeyAndNonce extends SessionKey {
      *  For inbound Existing Session
      *  @since 0.9.46
      */
-    public SessionKeyAndNonce(byte data[], int id, int nonce, PublicKey remoteKey) {
+    public SessionKeyAndNonce(byte[] data, int id, int nonce, PublicKey remoteKey) {
         super(data);
         _id = id;
         _nonce = nonce;

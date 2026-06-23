@@ -54,7 +54,7 @@ public class CommandLine {
 
     protected CommandLine() {}
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         if (args.length > 0) {
             exec(args, CLASSES);
         }
@@ -67,7 +67,7 @@ public class CommandLine {
      * @param args command arguments
      * @param classes list of classes to search
      */
-    protected static void exec(String args[], List<String> classes) {
+    protected static void exec(String[] args, List<String> classes) {
         boolean help = false;
         String cmd = args[0].toLowerCase(Locale.US);
         if (cmd.equals("help")) {

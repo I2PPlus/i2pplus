@@ -104,7 +104,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
         _type = type;
     }
 
-    public PrivateKey(byte data[]) {
+    public PrivateKey(byte[] data) {
         this(DEF_TYPE, data);
     }
 
@@ -113,7 +113,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
      *  @param data must be non-null
      *  @since 0.9.38
      */
-    public PrivateKey(EncType type, byte data[]) {
+    public PrivateKey(EncType type, byte[] data) {
         this(type);
         if (data == null) throw new IllegalArgumentException("Data must be specified");
         setData(data);
@@ -125,7 +125,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
      *  @param pubKey corresponding pubKey to be cached
      *  @since 0.9.44
      */
-    public PrivateKey(EncType type, byte data[], PublicKey pubKey) {
+    public PrivateKey(EncType type, byte[] data, PublicKey pubKey) {
         this(type, data);
         if (type != pubKey.getType()) throw new IllegalArgumentException("Pubkey mismatch");
         _pubKey = pubKey;

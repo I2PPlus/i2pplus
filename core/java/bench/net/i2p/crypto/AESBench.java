@@ -57,7 +57,7 @@ public class AESBench {
         ctx.aes().decrypt(origCT, 0, decrypted, 0, key, iv, len);
     }
 
-    public static void main(String args[]) throws RunnerException {
+    public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder().include(AESBench.class.getSimpleName()).build();
 
         new Runner(opt).run();

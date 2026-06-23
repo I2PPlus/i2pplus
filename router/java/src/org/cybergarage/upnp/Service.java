@@ -825,7 +825,7 @@ public class Service {
     public void notify(StateVariable stateVar) {
         SubscriberList subList = getSubscriberList();
         int subListCnt;
-        Subscriber subs[];
+        Subscriber[] subs;
 
         // Remove expired subscribers.
         subListCnt = subList.size();

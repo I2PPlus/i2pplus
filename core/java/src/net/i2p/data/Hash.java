@@ -130,7 +130,7 @@ public class Hash extends SimpleDataStructure {
     }
 
     /** @throws IllegalArgumentException if data is not 32 bytes (null is ok) */
-    public Hash(byte data[]) {
+    public Hash(byte[] data) {
         super();
         setData(data);
     }

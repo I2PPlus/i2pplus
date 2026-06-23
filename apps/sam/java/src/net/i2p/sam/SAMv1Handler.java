@@ -782,7 +782,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
     }
 
     // SAMRawReceiver implementation
-    public void receiveRawBytes(byte data[], int proto, int fromPort, int toPort) throws IOException {
+    public void receiveRawBytes(byte[] data, int proto, int fromPort, int toPort) throws IOException {
         if (rawSession == null) {
             _log.error("BUG! Received raw bytes, but session is null!");
             return;
@@ -823,7 +823,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
     }
 
     // SAMDatagramReceiver implementation
-    public void receiveDatagramBytes(Destination sender, byte data[], int proto,
+    public void receiveDatagramBytes(Destination sender, byte[] data, int proto,
                                      int fromPort, int toPort) throws IOException {
         if (datagramSession == null) {
             _log.error("BUG! Received datagram bytes, but session is null!");

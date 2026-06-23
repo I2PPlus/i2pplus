@@ -256,9 +256,9 @@ public class UDPTransport extends TransportImpl {
     public static final int PUBLIC_RELAY_COUNT = 3;
 
     /** Configure the priority queue with the given split points */
-    private static final int PRIORITY_LIMITS[] = new int[] { 100, 200, 300, 400, 500, 1000 };
+    private static final int[] PRIORITY_LIMITS = new int[] { 100, 200, 300, 400, 500, 1000 };
     /** Configure the priority queue with the given weighting per priority group */
-    private static final int PRIORITY_WEIGHT[] = new int[] { 1, 1, 1, 1, 1, 2 };
+    private static final int[] PRIORITY_WEIGHT = new int[] { 1, 1, 1, 1, 1, 2 };
     private static final int MAX_CONSECUTIVE_FAILED = 5;
 
     public static final int DEFAULT_COST = 5;
@@ -1383,7 +1383,7 @@ public class UDPTransport extends TransportImpl {
      * @param ourIP publicly routable IPv4 or IPv6 only, non-null
      * @param ourPort &gt;= 1024
      */
-    void externalAddressReceived(Hash from, byte[] hisIP, byte ourIP[], int ourPort) {
+    void externalAddressReceived(Hash from, byte[] hisIP, byte[] ourIP, int ourPort) {
         boolean isValid = isValid(ourIP) &&
                           TransportUtil.isValidPort(ourPort);
         boolean explicitSpecified = explicitAddressSpecified();
@@ -1491,7 +1491,7 @@ public class UDPTransport extends TransportImpl {
      * @param port the new port number, or 0 to keep the current port
      * @return true if the address was successfully updated
      */
-    private boolean changeAddress(byte ourIP[], int ourPort) {
+    private boolean changeAddress(byte[] ourIP, int ourPort) {
         boolean updated = false;
         boolean fireTest = false;
 
@@ -1661,7 +1661,7 @@ public class UDPTransport extends TransportImpl {
     /**
      *  @param laddr and raddr may be null
      */
-    private static final boolean eq(byte laddr[], int lport, byte raddr[], int rport) {
+    private static final boolean eq(byte[] laddr, int lport, byte[] raddr, int rport) {
         return (rport == lport) && DataHelper.eq(laddr, raddr);
     }
 
@@ -1671,7 +1671,7 @@ public class UDPTransport extends TransportImpl {
      *
      * @param addr may be null, returns false
      */
-    public final boolean isValid(byte addr[]) {
+    public final boolean isValid(byte[] addr) {
         if (addr == null) return false;
         if (isPubliclyRoutable(addr) &&
             (addr.length != 16 || _haveIPv6Address))

@@ -132,7 +132,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         throw new UnsupportedOperationException();
     }
 
-    public int readBytes(byte data[], int offset) throws DataFormatException {
+    public int readBytes(byte[] data, int offset) throws DataFormatException {
         int cur = offset;
         int flags = data[cur] & 0xff;
         cur++;
@@ -142,21 +142,21 @@ public class DeliveryInstructions extends DataStructureImpl {
             case FLAG_MODE_LOCAL:
                 break;
             case FLAG_MODE_DESTINATION:
-                //byte destHash[] = new byte[Hash.HASH_LENGTH];
+                //byte[] destHash = new byte[Hash.HASH_LENGTH];
                 //System.arraycopy(data, cur, destHash, 0, Hash.HASH_LENGTH);
                 Hash dh = Hash.create(data, cur);
                 cur += Hash.HASH_LENGTH;
                 setDestination(dh);
                 break;
             case FLAG_MODE_ROUTER:
-                //byte routerHash[] = new byte[Hash.HASH_LENGTH];
+                //byte[] routerHash = new byte[Hash.HASH_LENGTH];
                 //System.arraycopy(data, cur, routerHash, 0, Hash.HASH_LENGTH);
                 Hash rh = Hash.create(data, cur);
                 cur += Hash.HASH_LENGTH;
                 setRouter(rh);
                 break;
             case FLAG_MODE_TUNNEL:
-                //byte tunnelRouterHash[] = new byte[Hash.HASH_LENGTH];
+                //byte[] tunnelRouterHash = new byte[Hash.HASH_LENGTH];
                 //System.arraycopy(data, cur, tunnelRouterHash, 0, Hash.HASH_LENGTH);
                 Hash trh = Hash.create(data, cur);
                 cur += Hash.HASH_LENGTH;
@@ -237,7 +237,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         return additionalSize;
     }
 
-    private int getAdditionalInfo(byte rv[], int offset) {
+    private int getAdditionalInfo(byte[] rv, int offset) {
         int origOffset = offset;
 
         switch (getDeliveryMode()) {
@@ -279,7 +279,7 @@ public class DeliveryInstructions extends DataStructureImpl {
     /**
      * @return the number of bytes written to the target
      */
-    public int writeBytes(byte target[], int offset) {
+    public int writeBytes(byte[] target, int offset) {
         if ( (_deliveryMode < 0) || (_deliveryMode > FLAG_MODE_TUNNEL) ) throw new IllegalStateException("Invalid data: mode = " + _deliveryMode);
         int flags = getFlags();
         int origOffset = offset;
@@ -385,12 +385,12 @@ public class DeliveryInstructions extends DataStructureImpl {
         }
 
         @Override
-        public int readBytes(byte data[], int offset) throws DataFormatException {
+        public int readBytes(byte[] data, int offset) throws DataFormatException {
             throw new RuntimeException("immutable");
         }
 
         @Override
-        public int writeBytes(byte target[], int offset) {
+        public int writeBytes(byte[] target, int offset) {
             target[offset] = 0;
             return 1;
         }

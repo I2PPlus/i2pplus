@@ -55,7 +55,7 @@ class MessageHandler implements I2PSessionMuxedListener {
      * @param size size of the message
      */
     public void messageAvailable(I2PSession session, int msgId, long size, int proto, int fromPort, int toPort) {
-        byte data[];
+        byte[] data;
         try {
             data = session.receiveMessage(msgId);
         } catch (I2PSessionException ise) {

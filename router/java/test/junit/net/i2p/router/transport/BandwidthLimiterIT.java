@@ -62,7 +62,7 @@ public class BandwidthLimiterIT {
      *
      */
     private long testOutboundThrottle(int numBytes, int numBytesPerWrite) {
-        byte source[] = new byte[numBytesPerWrite];
+        byte[] source = new byte[numBytesPerWrite];
         new Random().nextBytes(source);
         NullOutputStream target = new NullOutputStream();
         BandwidthLimitedOutputStream out = new BandwidthLimitedOutputStream(_context, target, null);
@@ -91,7 +91,7 @@ public class BandwidthLimiterIT {
         BandwidthLimitedInputStream in = new BandwidthLimitedInputStream(_context, source, null);
         long before = System.currentTimeMillis();
         try {
-            byte buf[] = new byte[numBytesPerRead];
+            byte[] buf = new byte[numBytesPerRead];
             int read = 0;
             while ((read = in.read(buf)) != -1) {
                 // _log.info("** Read " + read + " bytes");
@@ -183,7 +183,7 @@ public class BandwidthLimiterIT {
 
         prepareLimiter(-1, -1, -1, -1);
         start = System.currentTimeMillis();
-        // long runningTimes[] = testOutboundContention(10, NUM_KB*1024);
+        // long[] runningTimes = testOutboundContention(10, NUM_KB*1024);
         end = System.currentTimeMillis();
 
         // prepareLimiter(-1, 4, -1, 5*1024*1024);
@@ -208,7 +208,7 @@ public class BandwidthLimiterIT {
     }
 
     private long[] testOutboundContention(int numConcurrent, int numBytes) {
-        OutboundRunner threads[] = new OutboundRunner[numConcurrent];
+        OutboundRunner[] threads = new OutboundRunner[numConcurrent];
         for (int i = 0; i < numConcurrent; i++) {
             threads[i] = new OutboundRunner(numBytes);
         }
@@ -220,7 +220,7 @@ public class BandwidthLimiterIT {
             } catch (InterruptedException ie) {
             }
         }
-        long rv[] = new long[numConcurrent];
+        long[] rv = new long[numConcurrent];
         for (int i = 0; i < numConcurrent; i++) rv[i] = threads[i].getRunningTime();
         return rv;
     }

@@ -126,7 +126,7 @@ public final class ElGamalEngine {
      *         cleartext is smaller than 222 bytes, it is recommended that the caller pad
      *         the cleartext to 222 bytes with random data.
      */
-    public byte[] encrypt(byte data[], PublicKey publicKey) {
+    public byte[] encrypt(byte[] data, PublicKey publicKey) {
         if ((data == null) || (data.length > ELG_CLEARTEXT_LENGTH)) throw new IllegalArgumentException("Data to encrypt must be <= 222 bytes");
         if (publicKey == null) throw new IllegalArgumentException("Null public key specified");
         EncType type = publicKey.getType();
@@ -134,7 +134,7 @@ public final class ElGamalEngine {
 
         long start = _context.clock().now();
 
-        byte d2[] = new byte[1 + Hash.HASH_LENGTH + data.length];
+        byte[] d2 = new byte[1 + Hash.HASH_LENGTH + data.length];
         // random nonzero byte
         do {
             _context.random().nextBytes(d2, 0, 1);
@@ -149,7 +149,7 @@ public final class ElGamalEngine {
         // long t2 = _context.clock().now();
         BigInteger aalpha = new NativeBigInteger(1, publicKey.getData());
         // long t3 = _context.clock().now();
-        BigInteger yk[] = getNextYK();
+        BigInteger[] yk = getNextYK();
         BigInteger k = yk[1];
         BigInteger y = yk[0];
 
@@ -200,7 +200,7 @@ public final class ElGamalEngine {
      * @param privateKey private key to decrypt with
      * @return unencrypted data or null on failure
      */
-    public byte[] decrypt(byte encrypted[], PrivateKey privateKey) {
+    public byte[] decrypt(byte[] encrypted, PrivateKey privateKey) {
         EncType type = privateKey.getType();
         if (type != EncType.ELGAMAL_2048) throw new IllegalArgumentException("Bad private key type " + type);
         if ((encrypted == null) || (encrypted.length != ELG_ENCRYPTED_LENGTH)) throw new IllegalArgumentException("Data to decrypt must be exactly ELG_ENCRYPTED_LENGTH bytes");
@@ -217,7 +217,7 @@ public final class ElGamalEngine {
         BigInteger d = new NativeBigInteger(1, buf);
         BigInteger m = ya.multiply(d);
         m = m.mod(CryptoConstants.elgp);
-        byte val[] = m.toByteArray();
+        byte[] val = m.toByteArray();
         int i;
         for (i = 0; i < val.length; i++) {
             if (val[i] != (byte) 0x00) break;
@@ -230,11 +230,11 @@ public final class ElGamalEngine {
         }
 
         // ByteArrayInputStream bais = new ByteArrayInputStream(val, i, val.length - i);
-        // byte hashData[] = new byte[Hash.HASH_LENGTH];
+        // byte[] hashData = new byte[Hash.HASH_LENGTH];
         // System.arraycopy(val, i + 1, hashData, 0, Hash.HASH_LENGTH);
         // Hash hash = new Hash(hashData);
         // Hash hash = Hash.create(val, i + 1);
-        byte rv[] = new byte[payloadLen];
+        byte[] rv = new byte[payloadLen];
         System.arraycopy(val, i + 1 + Hash.HASH_LENGTH, rv, 0, rv.length);
 
         // we reuse buf here for the calculated hash

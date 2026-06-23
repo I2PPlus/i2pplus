@@ -41,7 +41,7 @@ public class SessionEncryptionTest extends TestCase {
     }
 
     public void testNoSessions1() throws Exception {
-        Object keys[] = KeyGenerator.getInstance().generatePKIKeypair();
+        Object[] keys = KeyGenerator.getInstance().generatePKIKeypair();
         PublicKey pubKey = (PublicKey) keys[0];
         PrivateKey privKey = (PrivateKey) keys[1];
         SessionKeyManager skm = new TransientSessionKeyManager(_context);
@@ -50,13 +50,13 @@ public class SessionEncryptionTest extends TestCase {
         byte[] msg = DataHelper.getASCII("msg 1");
 
         ElGamalAESEngine e = new ElGamalAESEngine(_context);
-        byte emsg[] = e.encrypt(msg, pubKey, curKey, null, null, 64);
-        byte dmsg[] = e.decrypt(emsg, privKey, skm);
+        byte[] emsg = e.encrypt(msg, pubKey, curKey, null, null, 64);
+        byte[] dmsg = e.decrypt(emsg, privKey, skm);
         assertTrue(DataHelper.eq(dmsg, msg));
     }
 
     public void testNoSessions2() throws Exception {
-        Object keys[] = KeyGenerator.getInstance().generatePKIKeypair();
+        Object[] keys = KeyGenerator.getInstance().generatePKIKeypair();
         PublicKey pubKey = (PublicKey) keys[0];
         PrivateKey privKey = (PrivateKey) keys[1];
         SessionKeyManager skm = new TransientSessionKeyManager(_context);
@@ -65,8 +65,8 @@ public class SessionEncryptionTest extends TestCase {
         byte[] msg = DataHelper.getASCII("msg 2");
 
         ElGamalAESEngine e = new ElGamalAESEngine(_context);
-        byte emsg[] = e.encrypt(msg, pubKey, curKey, null, null, 64);
-        byte dmsg[] = e.decrypt(emsg, privKey, skm);
+        byte[] emsg = e.encrypt(msg, pubKey, curKey, null, null, 64);
+        byte[] dmsg = e.decrypt(emsg, privKey, skm);
         assertTrue(DataHelper.eq(dmsg, msg));
     }
 
@@ -79,7 +79,7 @@ public class SessionEncryptionTest extends TestCase {
      *  5       no              yes     no
      */
     public void testSessions() throws Exception {
-        Object keys[] = KeyGenerator.getInstance().generatePKIKeypair();
+        Object[] keys = KeyGenerator.getInstance().generatePKIKeypair();
         PublicKey pubKey = (PublicKey) keys[0];
         PrivateKey privKey = (PrivateKey) keys[1];
         SessionKeyManager skm = new TransientSessionKeyManager(_context);
@@ -105,9 +105,9 @@ public class SessionEncryptionTest extends TestCase {
         byte[] msg5 = DataHelper.getASCII("msg 5");
 
         ElGamalAESEngine e = new ElGamalAESEngine(_context);
-        byte emsg1[] = e.encrypt(msg1, pubKey, curKey, firstTags, null, 64);
+        byte[] emsg1 = e.encrypt(msg1, pubKey, curKey, firstTags, null, 64);
 
-        byte dmsg1[] = e.decrypt(emsg1, privKey, skm);
+        byte[] dmsg1 = e.decrypt(emsg1, privKey, skm);
         assertTrue(DataHelper.eq(dmsg1, msg1));
 
         TagSetHandle tsh = skm.tagsDelivered(pubKey, curKey, firstTags);
@@ -118,9 +118,9 @@ public class SessionEncryptionTest extends TestCase {
 
         assertNotNull(curTag);
 
-        byte emsg2[] = e.encrypt(msg2, pubKey, curKey, null, curTag, 64);
+        byte[] emsg2 = e.encrypt(msg2, pubKey, curKey, null, curTag, 64);
 
-        byte dmsg2[] = e.decrypt(emsg2, privKey, skm);
+        byte[] dmsg2 = e.decrypt(emsg2, privKey, skm);
         assertTrue(DataHelper.eq(dmsg2, msg2));
 
         curKey = skm.getCurrentKey(pubKey);
@@ -129,9 +129,9 @@ public class SessionEncryptionTest extends TestCase {
         assertNotNull(curTag);
         assertNotNull(curKey);
 
-        byte emsg3[] = e.encrypt(msg3, pubKey, curKey, secondTags, curTag, 64);
+        byte[] emsg3 = e.encrypt(msg3, pubKey, curKey, secondTags, curTag, 64);
 
-        byte dmsg3[] = e.decrypt(emsg3, privKey, skm);
+        byte[] dmsg3 = e.decrypt(emsg3, privKey, skm);
         assertTrue(DataHelper.eq(dmsg3, msg3));
 
         tsh = skm.tagsDelivered(pubKey, curKey, secondTags);
@@ -143,9 +143,9 @@ public class SessionEncryptionTest extends TestCase {
         assertNotNull(curTag);
         assertNotNull(curKey);
 
-        byte emsg4[] = e.encrypt(msg4, pubKey, curKey, null, curTag, 64);
+        byte[] emsg4 = e.encrypt(msg4, pubKey, curKey, null, curTag, 64);
 
-        byte dmsg4[] = e.decrypt(emsg4, privKey, skm);
+        byte[] dmsg4 = e.decrypt(emsg4, privKey, skm);
         assertTrue(DataHelper.eq(dmsg4, msg4));
 
         curKey = skm.getCurrentKey(pubKey);
@@ -154,9 +154,9 @@ public class SessionEncryptionTest extends TestCase {
         assertNotNull(curTag);
         assertNotNull(curKey);
 
-        byte emsg5[] = e.encrypt(msg5, pubKey, curKey, null, curTag, 64);
+        byte[] emsg5 = e.encrypt(msg5, pubKey, curKey, null, curTag, 64);
 
-        byte dmsg5[] = e.decrypt(emsg5, privKey, skm);
+        byte[] dmsg5 = e.decrypt(emsg5, privKey, skm);
         assertTrue(DataHelper.eq(dmsg5, msg5));
     }
 
@@ -169,7 +169,7 @@ public class SessionEncryptionTest extends TestCase {
      *  5   no              yes     no
      */
     public void testRekeying() throws Exception {
-        Object keys[] = KeyGenerator.getInstance().generatePKIKeypair();
+        Object[] keys = KeyGenerator.getInstance().generatePKIKeypair();
         PublicKey pubKey = (PublicKey) keys[0];
         PrivateKey privKey = (PrivateKey) keys[1];
         SessionKeyManager skm = new TransientSessionKeyManager(_context);
@@ -196,9 +196,9 @@ public class SessionEncryptionTest extends TestCase {
         byte[] msg5 = DataHelper.getASCII("msg 5");
 
         ElGamalAESEngine e = new ElGamalAESEngine(_context);
-        byte emsg1[] = e.encrypt(msg1, pubKey, curKey, firstTags, null, 64);
+        byte[] emsg1 = e.encrypt(msg1, pubKey, curKey, firstTags, null, 64);
 
-        byte dmsg1[] = e.decrypt(emsg1, privKey, skm);
+        byte[] dmsg1 = e.decrypt(emsg1, privKey, skm);
         assertTrue(DataHelper.eq(dmsg1, msg1));
 
         TagSetHandle tsh = skm.tagsDelivered(pubKey, curKey, firstTags);
@@ -209,9 +209,9 @@ public class SessionEncryptionTest extends TestCase {
 
         assertNotNull(curTag);
 
-        byte emsg2[] = e.encrypt(msg2, pubKey, curKey, null, curTag, 64);
+        byte[] emsg2 = e.encrypt(msg2, pubKey, curKey, null, curTag, 64);
 
-        byte dmsg2[] = e.decrypt(emsg2, privKey, skm);
+        byte[] dmsg2 = e.decrypt(emsg2, privKey, skm);
         assertTrue(DataHelper.eq(dmsg2, msg2));
 
         curKey = skm.getCurrentKey(pubKey);
@@ -220,9 +220,9 @@ public class SessionEncryptionTest extends TestCase {
         assertNotNull(curTag);
         assertNotNull(curKey);
 
-        byte emsg3[] = e.encrypt(msg3, pubKey, curKey, secondTags, curTag, nextKey, 64);
+        byte[] emsg3 = e.encrypt(msg3, pubKey, curKey, secondTags, curTag, nextKey, 64);
 
-        byte dmsg3[] = e.decrypt(emsg3, privKey, skm);
+        byte[] dmsg3 = e.decrypt(emsg3, privKey, skm);
         assertTrue(DataHelper.eq(dmsg3, msg3));
 
         tsh = skm.tagsDelivered(pubKey, nextKey, secondTags); // note nextKey not curKey
@@ -234,9 +234,9 @@ public class SessionEncryptionTest extends TestCase {
         assertNotNull(curTag);
         assertNotNull(curKey);
 
-        byte emsg4[] = e.encrypt(msg4, pubKey, curKey, null, curTag, 64);
+        byte[] emsg4 = e.encrypt(msg4, pubKey, curKey, null, curTag, 64);
 
-        byte dmsg4[] = e.decrypt(emsg4, privKey, skm);
+        byte[] dmsg4 = e.decrypt(emsg4, privKey, skm);
         assertTrue(DataHelper.eq(dmsg4, msg4));
 
         curKey = skm.getCurrentKey(pubKey);
@@ -245,9 +245,9 @@ public class SessionEncryptionTest extends TestCase {
         assertNotNull(curTag);
         assertNotNull(curKey);
 
-        byte emsg5[] = e.encrypt(msg5, pubKey, curKey, null, curTag, 64);
+        byte[] emsg5 = e.encrypt(msg5, pubKey, curKey, null, curTag, 64);
 
-        byte dmsg5[] = e.decrypt(emsg5, privKey, skm);
+        byte[] dmsg5 = e.decrypt(emsg5, privKey, skm);
         assertTrue(DataHelper.eq(dmsg5, msg5));
     }
 
@@ -255,7 +255,7 @@ public class SessionEncryptionTest extends TestCase {
      *  20 tags every 10 messages, rekey every 50
      */
     public void testLongSession() throws Exception {
-        Object keys[] = KeyGenerator.getInstance().generatePKIKeypair();
+        Object[] keys = KeyGenerator.getInstance().generatePKIKeypair();
         PublicKey pubKey = (PublicKey) keys[0];
         PrivateKey privKey = (PrivateKey) keys[1];
         SessionKeyManager skm = new TransientSessionKeyManager(_context);
@@ -276,9 +276,9 @@ public class SessionEncryptionTest extends TestCase {
 
             byte[] msg = DataHelper.getASCII("msg " + i);
 
-            byte emsg[] = e.encrypt(msg, pubKey, curKey, tags, curTag, nextKey, 64);
+            byte[] emsg = e.encrypt(msg, pubKey, curKey, tags, curTag, nextKey, 64);
 
-            byte dmsg[] = e.decrypt(emsg, privKey, skm);
+            byte[] dmsg = e.decrypt(emsg, privKey, skm);
             assertTrue(DataHelper.eq(dmsg, msg));
 
             if ((tags != null) && (tags.size() > 0)) {

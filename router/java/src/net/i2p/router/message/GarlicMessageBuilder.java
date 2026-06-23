@@ -223,10 +223,10 @@ public class GarlicMessageBuilder {
 
         //noteWrap(ctx, msg, config);
 
-        byte cloveSet[] = buildCloveSet(ctx, config);
+        byte[] cloveSet = buildCloveSet(ctx, config);
 
         // TODO - 128 is the minimum padded size - should it be more? less? random?
-        byte encData[] = ctx.elGamalAESEngine().encrypt(cloveSet, target, encryptKey, wrappedTags, encryptTag, 128);
+        byte[] encData = ctx.elGamalAESEngine().encrypt(cloveSet, target, encryptKey, wrappedTags, encryptTag, 128);
         if (encData == null) {
             if (log.shouldWarn())
                 log.warn("ElGamal encrypt fail");
@@ -261,7 +261,7 @@ public class GarlicMessageBuilder {
                                              SessionKey encryptKey, RatchetSessionTag encryptTag) {
         GarlicMessage msg = new GarlicMessage(ctx);
         CloveSet cloveSet = buildECIESCloveSet(ctx, config);
-        byte encData[] = ctx.eciesEngine().encrypt(cloveSet, encryptKey, encryptTag);
+        byte[] encData = ctx.eciesEngine().encrypt(cloveSet, encryptKey, encryptTag);
         if (encData == null)
             return null;
         msg.setData(encData);
@@ -319,7 +319,7 @@ public class GarlicMessageBuilder {
                 log.warn("No SKM for " + from.toBase32());
             return null;
         }
-        byte encData[] = ctx.eciesEngine().encrypt(cloveSet, key, to, priv, rskm, callback);
+        byte[] encData = ctx.eciesEngine().encrypt(cloveSet, key, to, priv, rskm, callback);
         if (encData == null) {
             if (log.shouldWarn())
                 log.warn("Encrypt fail for " + from.toBase32());
@@ -355,7 +355,7 @@ public class GarlicMessageBuilder {
         Log log = ctx.logManager().getLog(GarlicMessageBuilder.class);
         GarlicMessage msg = new GarlicMessage(ctx);
         CloveSet cloveSet = buildECIESCloveSet(ctx, config);
-        byte encData[] = ctx.eciesEngine().encrypt(cloveSet, key);
+        byte[] encData = ctx.eciesEngine().encrypt(cloveSet, key);
         if (encData == null) {
             if (log.shouldWarn())
                 log.warn("Encrypt fail for " + config);
@@ -398,12 +398,12 @@ public class GarlicMessageBuilder {
         ByteArrayStream baos;
         try {
             if (config instanceof PayloadGarlicConfig) {
-                byte clove[] = buildClove(ctx, (PayloadGarlicConfig)config);
+                byte[] clove = buildClove(ctx, (PayloadGarlicConfig)config);
                 baos = new ByteArrayStream(1 + clove.length + 3 + 4 + 8);
                 baos.write((byte) 1);
                 baos.write(clove);
             } else {
-                byte cloves[][] = new byte[config.getCloveCount()][];
+                byte[][] cloves = new byte[config.getCloveCount()][];
                 for (int i = 0; i < config.getCloveCount(); i++) {
                     GarlicConfig c = config.getClove(i);
                     if (c instanceof PayloadGarlicConfig) {

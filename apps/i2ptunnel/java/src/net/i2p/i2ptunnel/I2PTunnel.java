@@ -116,7 +116,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     public String filterDefinition;
 
-    private static final String nocli_args[] = { "-nocli", "-die"};
+    private static final String[] nocli_args = { "-nocli", "-die"};
 
     private final List<I2PTunnelTask> tasks = new CopyOnWriteArrayList<>();
     private int next_task_id = 1;
@@ -409,7 +409,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     private static String[] split(String src, String delim) {
         StringTokenizer tok = new StringTokenizer(src, delim);
-        String vals[] = new String[tok.countTokens()];
+        String[] vals = new String[tok.countTokens()];
         for (int i = 0; i < vals.length; i++) {vals[i] = tok.nextToken();}
         return vals;
     }
@@ -528,7 +528,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param args each args[i] is a key=value pair to add to the options
      * @param l logger to receive events and output
      */
-    public void runClientOptions(String args[], Logging l) {
+    public void runClientOptions(String[] args, Logging l) {
         if (args != null && args.length > 0) {
             int i = 0;
             if (args[0].equals("-a")) {i++;}
@@ -599,7 +599,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param l logger to receive events and output
      * @throws IllegalArgumentException on config problem
      */
-    public void runServer(String args[], Logging l) {
+    public void runServer(String[] args, Logging l) {
         if (args.length == 3) {
             InetAddress serverHost = null;
             int portNum = -1;
@@ -649,7 +649,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * (we should stop duplicating all this code...)
      * @throws IllegalArgumentException on config problem
      */
-    public void runIrcServer(String args[], Logging l) {
+    public void runIrcServer(String[] args, Logging l) {
         if (args.length == 3) {
             InetAddress serverHost = null;
             int portNum = -1;
@@ -707,7 +707,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param l logger to receive events and output
      * @throws IllegalArgumentException on config problem
      */
-    public void runHttpServer(String args[], Logging l) {
+    public void runHttpServer(String[] args, Logging l) {
         if (args.length == 4) {
             InetAddress serverHost = null;
             int portNum = -1;
@@ -769,7 +769,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param l logger to receive events and output
      * @throws IllegalArgumentException on config problem
      */
-    public void runHttpBidirServer(String args[], Logging l) {
+    public void runHttpBidirServer(String[] args, Logging l) {
         if (args.length == 5) {
             InetAddress serverHost = null;
             int portNum = -1;
@@ -845,7 +845,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param l logger to receive events and output
      * @throws IllegalArgumentException on config problem
      */
-    public void runTextServer(String args[], Logging l) {
+    public void runTextServer(String[] args, Logging l) {
         if (args.length == 3) {
             InetAddress serverHost = null;
             int portNum = -1;
@@ -894,7 +894,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param l logger to receive events and output
      * @throws IllegalArgumentException on config problem
      */
-    public void runClient(String args[], Logging l) {
+    public void runClient(String[] args, Logging l) {
         boolean isShared = true;
         if (args.length >= 3)
             isShared = Boolean.parseBoolean(args[2].trim());
@@ -951,7 +951,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param l logger to receive events and output
      * @throws IllegalArgumentException on config problem
      */
-    public void runHttpClient(String args[], Logging l) {
+    public void runHttpClient(String[] args, Logging l) {
         if (args.length >= 1 && args.length <= 3) {
             int clientPort = -1;
             try {
@@ -1020,7 +1020,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param l logger to receive events and output
      * @throws IllegalArgumentException on config problem
      */
-    public void runConnectClient(String args[], Logging l) {
+    public void runConnectClient(String[] args, Logging l) {
         if (args.length >= 1 && args.length <= 3) {
             int _port = -1;
             try {
@@ -1088,7 +1088,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param l logger to receive events and output
      * @throws IllegalArgumentException on config problem
      */
-    public void runIrcClient(String args[], Logging l) {
+    public void runIrcClient(String[] args, Logging l) {
         if (args.length >= 2) {
             int _port = -1;
             try {
@@ -1154,7 +1154,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param l logger to receive events and output
      * @throws IllegalArgumentException on config problem
      */
-    public void runSOCKSTunnel(String args[], Logging l) {
+    public void runSOCKSTunnel(String[] args, Logging l) {
         if (args.length >= 1 && args.length <= 3) {
             int _port = -1;
             try {
@@ -1202,7 +1202,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @throws IllegalArgumentException on config problem
      * @since 0.7.12
      */
-    public void runSOCKSIRCTunnel(String args[], Logging l) {
+    public void runSOCKSIRCTunnel(String[] args, Logging l) {
         if (args.length >= 1 && args.length <= 3) {
             int _port = -1;
             try {
@@ -1250,7 +1250,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param l logger to receive events and output
      * @throws IllegalArgumentException on config problem
      */
-    public void runStreamrClient(String args[], Logging l) {
+    public void runStreamrClient(String[] args, Logging l) {
         if (args.length == 3) {
             InetAddress _host;
             try {
@@ -1300,7 +1300,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param l logger to receive events and output
      * @throws IllegalArgumentException on config problem
      */
-    public void runStreamrServer(String args[], Logging l) {
+    public void runStreamrServer(String[] args, Logging l) {
         if (args.length == 2) {
             int _port = -1;
             try {
@@ -1343,7 +1343,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param args {hostname, portNumber}
      * @param l logger to receive events and output
      */
-    private void runConfig(String args[], Logging l) {
+    private void runConfig(String[] args, Logging l) {
         if (args.length >= 1) {
             int i = 0;
             boolean ssl = args[0].equals("-s");
@@ -1378,7 +1378,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param l logger to receive events and output
      * @since 0.9.11
      */
-    private void runAuth(String args[], Logging l) {
+    private void runAuth(String[] args, Logging l) {
         if (args.length == 2) {
             _clientOptions.setProperty(I2PClient.PROP_USER, args[0]);
             _clientOptions.setProperty(I2PClient.PROP_PW, args[1]);
@@ -1398,7 +1398,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param args {yes or no}
      * @param l logger to receive events and output
      */
-    private void runOwnDest(String args[], Logging l) {
+    private void runOwnDest(String[] args, Logging l) {
         if (args.length == 1 && (args[0].equalsIgnoreCase("yes") || args[0].equalsIgnoreCase("no"))) {
             ownDest = args[0].equalsIgnoreCase("yes");
             notifyEvent("owndestResult", "ok");
@@ -1418,7 +1418,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param args {hostname}
      * @param l logger to receive events and output
      */
-    public void runListenOn(String args[], Logging l) {
+    public void runListenOn(String[] args, Logging l) {
         if (args.length == 1) {
             listenHost = args[0];
             notifyEvent("listen_onResult", "ok");
@@ -1437,7 +1437,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param args {hostname}
      * @param l logger to receive events and output
      */
-    public void runReadTimeout(String args[], Logging l) {
+    public void runReadTimeout(String[] args, Logging l) {
         if (args.length == 1) {
             try {
                 readTimeout = Long.parseLong(args[0]);
@@ -1463,7 +1463,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param args {privateKeyFilename, publicKeyFilename} or {privateKeyFilename}
      * @param l logger to receive events and output
      */
-    private static void runGenKeys(String args[], Logging l) {
+    private static void runGenKeys(String[] args, Logging l) {
         OutputStream pubdest = null;
         if (args.length == 2) {
             try {
@@ -1563,7 +1563,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param args {jobNumber}, {"forced", jobNumber}, {"forced", "all"}, {"destroy", jobNumber}, {"destroy", "all"}
      * @param l logger to receive events and output
      */
-    public void runClose(String args[], Logging l) {
+    public void runClose(String[] args, Logging l) {
         if (args.length == 0 || args.length > 2) {
             l.log("close [forced|destroy] <jobnumber>|all\n" +
                   "   Stop running tasks. either only one or all.\n"
@@ -1618,7 +1618,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param args {filename}
      * @param l logger to receive events and output
      */
-    private void runRun(String args[], Logging l) {
+    private void runRun(String[] args, Logging l) {
         if (args.length == 1) {
             BufferedReader br = null;
             try {
@@ -1655,7 +1655,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param args {name}
      * @param l logger to receive events and output
      */
-    private void runLookup(String args[], Logging l) {
+    private void runLookup(String[] args, Logging l) {
         if (args.length != 1) {
             l.log("lookup <name>\n" +
                   "   Try to resolve the name into a destination key");
@@ -1963,11 +1963,11 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
         if (name.startsWith("file:")) {
             Destination result = new Destination();
-            byte content[] = null;
+            byte[] content = null;
             FileInputStream in = null;
             try {
                 in = new FileInputStream(name.substring("file:".length()));
-                byte buf[] = new byte[1024];
+                byte[] buf = new byte[1024];
                 int read = DataHelper.read(in, buf);
                 content = new byte[read];
                 System.arraycopy(buf, 0, content, 0, read);
@@ -1987,7 +1987,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                 if (log.shouldInfo())
                     log.info("File is not a binary destination - trying base64");
                 try {
-                    byte decoded[] = Base64.decode(new String(content, StandardCharsets.UTF_8));
+                    byte[] decoded = Base64.decode(new String(content, StandardCharsets.UTF_8));
                     result.fromByteArray(decoded);
                     return result;
                 } catch (DataFormatException dfe) {

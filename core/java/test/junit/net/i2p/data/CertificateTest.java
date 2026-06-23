@@ -18,7 +18,7 @@ public class CertificateTest extends StructureTest {
     @Override
     public DataStructure createDataStructure() throws DataFormatException {
         Certificate cert = new Certificate();
-        byte data[] = new byte[32];
+        byte[] data = new byte[32];
         for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 16);
         cert.setPayload(data);
         cert.setCertificateType(Certificate.CERTIFICATE_TYPE_NULL);

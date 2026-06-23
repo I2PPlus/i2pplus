@@ -125,9 +125,9 @@ class Zones {
     }
 
 /****
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         Zones z = new Zones(I2PAppContext.getGlobalContext());
-        String tests[] = {"us", "US", "nz", "fr", "vU", "br", "cn", "ao", "A1", "foo" };
+        String[] tests = {"us", "US", "nz", "fr", "vU", "br", "cn", "ao", "A1", "foo" };
         for (int i = 0; i < tests.length; i++) {
             System.out.println(tests[i] + " : " + z.getZone(tests[i]));
         }

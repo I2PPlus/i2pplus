@@ -28,7 +28,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     private final LookaheadInputStream _lookaheadStream;
 
     private final CRC32 _crc32;
-    private final byte _buf1[] = new byte[1];
+    private final byte[] _buf1 = new byte[1];
     private boolean _complete;
 
     /**
@@ -84,7 +84,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     }
 
     @Override
-    public int read(byte buf[]) throws IOException {
+    public int read(byte[] buf) throws IOException {
         return read(buf, 0, buf.length);
     }
 
@@ -92,7 +92,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
      *
      */
     @Override
-    public int read(byte buf[], int off, int len) throws IOException {
+    public int read(byte[] buf, int off, int len) throws IOException {
         if (_complete) {
             // shortcircuit so the inflater doesn't try to refill
             // with the footer's data (which would fail, causing ZLIB err)
@@ -203,7 +203,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     }
 
     private void verifyFooter() throws IOException {
-        byte footer[] = _lookaheadStream.getFooter();
+        byte[] footer = _lookaheadStream.getFooter();
 
         long actualSize = inf.getTotalOut();
         long expectedSize = DataHelper.fromLongLE(footer, 4, 4);
@@ -347,7 +347,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
         }
 
         @Override
-        public int read(byte buf[], int off, int len) throws IOException {
+        public int read(byte[] buf, int off, int len) throws IOException {
             if (len == 0) return 0;
             if (_extraSent) return -1;
             int rv = in.read(buf, off, len);
@@ -375,7 +375,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     }
 
     /******
-     * public static void main(String args[]) {
+     * public static void main(String[] args) {
      *
      * java.util.Random r = new java.util.Random();
      * for (int i = 129; i < 64*1024; i+= 17) {
@@ -387,7 +387,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
      * try {
      * ResettableGZIPInputStream i = new ResettableGZIPInputStream();
      * for (int k = 1; k < 1599; k++) {
-     * byte orig[] = new byte[k];
+     * byte[] orig = new byte[k];
      * r.nextBytes(orig);
      * java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(k+100);
      * java.util.zip.GZIPOutputStream o = new java.util.zip.GZIPOutputStream(baos);
@@ -395,10 +395,10 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
      * o.finish();
      * o.flush();
      * o.close();
-     * byte compressed[] = baos.toByteArray();
+     * byte[] compressed = baos.toByteArray();
      *
      * i.initialize(new java.io.ByteArrayInputStream(compressed));
-     * byte readBuf[] = new byte[k];
+     * byte[] readBuf = new byte[k];
      * int read = DataHelper.read(i, readBuf);
      * if (read != orig.length)
      * throw new RuntimeException("read=" + read + " expected " + orig.length);
@@ -427,18 +427,18 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
      * o.write(b);
      * o.finish();
      * o.flush();
-     * byte compressed[] = baos.toByteArray();
+     * byte[] compressed = baos.toByteArray();
      *
      * ResettableGZIPInputStream in = new ResettableGZIPInputStream(new java.io.ByteArrayInputStream(compressed));
      * java.io.ByteArrayOutputStream baos2 = new java.io.ByteArrayOutputStream(size);
-     * byte rbuf[] = new byte[512];
+     * byte[] rbuf = new byte[512];
      * while (true) {
      * int read = in.read(rbuf);
      * if (read == -1)
      * break;
      * baos2.write(rbuf, 0, read);
      * }
-     * byte rv[] = baos2.toByteArray();
+     * byte[] rv = baos2.toByteArray();
      * if (rv.length != b.length)
      * throw new RuntimeException("read length: " + rv.length + " expected: " + b.length);
      *

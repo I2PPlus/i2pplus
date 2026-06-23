@@ -76,7 +76,7 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
 
     /** the seed is only propogated once the prng is started with startup() */
     @Override
-    public void seed(byte val[]) {
+    public void seed(byte[] val) {
         Map<String, byte[]> props = Collections.singletonMap(SEED, val);
         init(props);
     }
@@ -140,7 +140,7 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
     @Override
     public void fillBlock() {rotateBuffer();}
 
-    private void doFill(byte buf[]) {
+    private void doFill(byte[] buf) {
         if (pools != null) {
             if (pool0Count >= MIN_POOL_SIZE && System.currentTimeMillis() - lastReseed > 100) {
                 reseedCount++;

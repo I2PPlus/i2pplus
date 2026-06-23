@@ -81,7 +81,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
      * @return true if the entry added is a duplicate
      */
     @Override
-    public boolean add(byte entry[], int off, int len) {
+    public boolean add(byte[] entry, int off, int len) {
         if (entry == null)
             throw new IllegalArgumentException("Null entry");
         if (len != _entryBytes)
@@ -228,7 +228,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
      *  vs. DBF, this measures 1.93x faster for testByLong and 2.46x faster for testByBytes.
      */
 /*****
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         // KBytes per sec, 1 message per KByte
         int kbps = 256;
         int iterations = 10;
@@ -242,7 +242,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
 /*****
     private static void testSize() {
         int qty = 256*1024;
-        byte b[] = new byte[8];
+        byte[] b = new byte[8];
         Random r = new Random();
         long old = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         ConcurrentHashSet foo = new ConcurrentHashSet(qty);
@@ -286,7 +286,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
     /** 16 bytes, simulate the tunnel IV validator */
 /*****
     private static void testByBytes(int kbps, int numRuns) {
-        byte iv[][] = new byte[60*10*kbps][16];
+        byte[][] iv = new byte[60*10*kbps][16];
         Random r = new Random();
         for (int i = 0; i < iv.length; i++)
             r.nextBytes(iv[i]);

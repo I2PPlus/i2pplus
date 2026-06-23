@@ -533,7 +533,7 @@ public class SAMBridge implements Runnable, ClientApp {
      *
      * @param args [ keyfile [ listenHost ] listenPort [ name=val ]* ]
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
             Options options = getOptions(args);
             SAMBridge bridge = new SAMBridge(options.host, options.port, options.isSSL, options.opts,
@@ -612,7 +612,7 @@ public class SAMBridge implements Runnable, ClientApp {
      * @throws IOException if specified config file cannot be read, or on SSL keystore problems
      * @since 0.9.6
      */
-    private static Options getOptions(String args[]) throws Exception {
+    private static Options getOptions(String[] args) throws Exception {
         String keyfile = null;
         int port = -1;
         String host = null;
@@ -722,7 +722,7 @@ public class SAMBridge implements Runnable, ClientApp {
      * @param props out parameter, any options found are added
      * @throws HelpRequestedException on any item not of the form key=value.
      */
-    private static void parseOptions(String args[], int startArgs, Properties props) throws HelpRequestedException {
+    private static void parseOptions(String[] args, int startArgs, Properties props) throws HelpRequestedException {
         for (int i = startArgs; i < args.length; i++) {
             int eq = args[i].indexOf('=');
             if (eq <= 0)

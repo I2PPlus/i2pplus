@@ -283,7 +283,7 @@ public class SSLEepGet extends EepGet {
      *   or to save cert chain:
      * SSLEepGet -s https://foo/bar
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         int saveCerts = 0;
         boolean noVerify = false;
         String proxyHost = "127.0.0.1";
@@ -669,7 +669,7 @@ public class SSLEepGet extends EepGet {
         }
 
         int remaining = (int) _bytesRemaining;
-        byte buf[] = new byte[16 * 1024];
+        byte[] buf = new byte[16 * 1024];
         while (_keepFetching && ((remaining > 0) || !strictSize) && !_aborted) {
             int toRead = buf.length;
             if (strictSize && toRead > remaining) toRead = remaining;

@@ -28,7 +28,7 @@ import net.i2p.data.i2cp.SetDateMessage;
  */
 class I2PClientMessageHandlerMap {
     /** map of message type id--&gt; I2CPMessageHandler */
-    protected final I2CPMessageHandler _handlers[];
+    protected final I2CPMessageHandler[] _handlers;
 
     /** for extension */
     protected I2PClientMessageHandlerMap(int highest) {

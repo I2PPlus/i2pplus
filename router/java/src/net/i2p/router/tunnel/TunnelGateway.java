@@ -157,7 +157,7 @@ abstract class TunnelGateway {
          * @param preprocessed IV + (rand padding) + 0x0 + Hash[0:3] + {instruction+fragment}*
          * @return message ID it was sent in, or -1 if it was deferred
          */
-        public long sendPreprocessed(byte preprocessed[], Receiver receiver);
+        public long sendPreprocessed(byte[] preprocessed, Receiver receiver);
     }
 
     /**
@@ -192,7 +192,7 @@ abstract class TunnelGateway {
          * Take the encrypted data and send it off to the next hop
          * @return message ID it was sent in, or -1 if it had to be deferred
          */
-        public long receiveEncrypted(byte encrypted[]);
+        public long receiveEncrypted(byte[] encrypted);
 
         /**
          * The next hop

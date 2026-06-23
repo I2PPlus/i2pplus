@@ -80,7 +80,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
          if (con != null) {con.getInputStream().updateAcks(packet);} // this updates the ack/nack fields
 
          ByteArray ba = _cache.acquire();
-         byte buf[] = ba.getData();
+         byte[] buf = ba.getData();
 
          long begin = 0;
          long end = 0;

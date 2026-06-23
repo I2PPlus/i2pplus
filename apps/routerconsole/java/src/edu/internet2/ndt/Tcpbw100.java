@@ -917,8 +917,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      * @see Protocol#send_json_msg(byte bParamType, byte[] baParamTab)
      */
     public boolean test_s2c(Protocol paramProtoObj, Socket paramSocketObj) throws IOException {
-        // byte buff[] = new byte[8192];
-        byte buff[] = new byte[NDTConstants.PREDEFINED_BUFFER_SIZE];
+        // byte[] buff = new byte[8192];
+        byte[] buff = new byte[NDTConstants.PREDEFINED_BUFFER_SIZE];
         Message msg = new Message();
         // start S2C tests
         if ((_yTests & NDTConstants.TEST_S2C) == NDTConstants.TEST_S2C) {

@@ -23,21 +23,21 @@ import net.i2p.util.RandomSource;
 public class KeyGeneratorTest extends TestCase {
     public void testKeyGen() {
         RandomSource.getInstance().nextBoolean();
-        byte src[] = new byte[200];
+        byte[] src = new byte[200];
         RandomSource.getInstance().nextBytes(src);
 
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         for (int i = 0; i < 10; i++) {
-            Object keys[] = KeyGenerator.getInstance().generatePKIKeypair();
-            byte ctext[] = ctx.elGamalEngine().encrypt(src, (PublicKey) keys[0]);
-            byte ptext[] = ctx.elGamalEngine().decrypt(ctext, (PrivateKey) keys[1]);
+            Object[] keys = KeyGenerator.getInstance().generatePKIKeypair();
+            byte[] ctext = ctx.elGamalEngine().encrypt(src, (PublicKey) keys[0]);
+            byte[] ptext = ctx.elGamalEngine().decrypt(ctext, (PrivateKey) keys[1]);
             assertTrue(DataHelper.eq(ptext, src));
         }
 
-        Object obj[] = KeyGenerator.getInstance().generateSigningKeypair();
+        Object[] obj = KeyGenerator.getInstance().generateSigningKeypair();
         SigningPublicKey fake = (SigningPublicKey) obj[0];
         for (int i = 0; i < 10; i++) {
-            Object keys[] = KeyGenerator.getInstance().generateSigningKeypair();
+            Object[] keys = KeyGenerator.getInstance().generateSigningKeypair();
 
             Signature sig = DSAEngine.getInstance().sign(src, (SigningPrivateKey) keys[1]);
             assertTrue(DSAEngine.getInstance().verifySignature(sig, src, (SigningPublicKey) keys[0]));

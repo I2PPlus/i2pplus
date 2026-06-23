@@ -32,7 +32,7 @@ class OutboundGatewayProcessor {
      * @param length how much of orig can we write to (must be a multiple of 16).
      *               Should always be 1024 bytes.
      */
-    public void process(byte orig[], int offset, int length) {
+    public void process(byte[] orig, int offset, int length) {
         //if (_log.shouldDebug()) {
         //    _log.debug("Original random IV: " + Base64.encode(orig, offset, IV_LENGTH));
         //    _log.debug("data:  " + Base64.encode(orig, IV_LENGTH, length - IV_LENGTH));
@@ -51,7 +51,7 @@ class OutboundGatewayProcessor {
      * @param length how much of orig can we write to (must be a multiple of 16).
      *               Should always be 1024 bytes.
      */
-    private void decrypt(TunnelCreatorConfig cfg, byte orig[], int offset, int length) {
+    private void decrypt(TunnelCreatorConfig cfg, byte[] orig, int offset, int length) {
         // Don't include hop 0, since that is the creator
         for (int i = cfg.getLength() - 1; i >= 1; i--) {
             decrypt(_context, orig, offset, length, cfg.getConfig(i));
@@ -72,7 +72,7 @@ class OutboundGatewayProcessor {
      * @param length how much of orig can we write to (must be a multiple of 16).
      *               Should always be 1024 bytes.
      */
-    static void decrypt(I2PAppContext ctx, byte orig[], int offset, int length, HopConfig config) {
+    static void decrypt(I2PAppContext ctx, byte[] orig, int offset, int length, HopConfig config) {
         SessionKey ivkey = config.getIVKey();
         AESEngine aes = ctx.aes();
         // update the IV for the previous (next?) hop

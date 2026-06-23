@@ -97,7 +97,7 @@ public class PrivateKeyFile {
      *
      *  Copied and expanded from that in Destination.java
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         String stype = null;
         String etype = null;
         String ttype = null;
@@ -307,7 +307,7 @@ public class PrivateKeyFile {
                         tstype = SigType.parseSigType(ttype);
                         if (tstype == null) throw new I2PException("Bad or unsupported -r option: " + ttype);
                     }
-                    SimpleDataStructure signingKeys[];
+                    SimpleDataStructure[] signingKeys;
                     try {
                         signingKeys = KeyGenerator.getInstance().generateSigningKeys(tstype);
                     } catch (GeneralSecurityException gse) {
@@ -603,7 +603,7 @@ public class PrivateKeyFile {
                         pub = keypair.getPublic();
                         priv = keypair.getPrivate();
                     }
-                    SimpleDataStructure signingKeypair[] = ctx.keyGenerator().generateSigningKeys(type);
+                    SimpleDataStructure[] signingKeypair = ctx.keyGenerator().generateSigningKeys(type);
                     SigningPublicKey spub = (SigningPublicKey) signingKeypair[0];
                     SigningPrivateKey spriv = (SigningPrivateKey) signingKeypair[1];
                     Certificate cert;
@@ -704,7 +704,7 @@ public class PrivateKeyFile {
         if (type == SigType.DSA_SHA1) return setCertType(Certificate.CERTIFICATE_TYPE_NULL);
         if (dest == null) throw new IllegalArgumentException("Dest is null");
         KeyCertificate c = new KeyCertificate(type);
-        SimpleDataStructure signingKeys[];
+        SimpleDataStructure[] signingKeys;
         try {
             signingKeys = KeyGenerator.getInstance().generateSigningKeys(type);
         } catch (GeneralSecurityException gse) {

@@ -17,7 +17,7 @@ import net.i2p.I2PAppContext;
  *  @since 0.8.8
  */
 public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
-    protected EncryptedBuildRecord _records[];
+    protected EncryptedBuildRecord[] _records;
     protected int RECORD_COUNT;
     public static final int MAX_RECORD_COUNT = 8;
 
@@ -58,7 +58,7 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
 
         for (int i = 0; i < RECORD_COUNT; i++) {
             int off = offset + (i * RECORD_SIZE);
-            byte rec[] = new byte[RECORD_SIZE];
+            byte[] rec = new byte[RECORD_SIZE];
             System.arraycopy(data, off, rec, 0, RECORD_SIZE);
             setRecord(i, new EncryptedBuildRecord(rec));
         }

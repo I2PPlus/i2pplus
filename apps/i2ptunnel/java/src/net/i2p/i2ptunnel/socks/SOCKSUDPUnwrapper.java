@@ -72,7 +72,7 @@ public class SOCKSUDPUnwrapper implements Source, Sink {
         cache.put(new I2PSocketAddress(dest, toPort), h);
 
         int headerlen = h.getBytes().length;
-        byte unwrapped[] = new byte[data.length - headerlen];
+        byte[] unwrapped = new byte[data.length - headerlen];
         System.arraycopy(data, headerlen, unwrapped, 0, unwrapped.length);
         // We pass the local DatagramSocket's port through as the I2CP from port,
         // so that it will come back as the toPort in the reply,

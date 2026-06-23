@@ -15,13 +15,13 @@ import java.io.ByteArrayInputStream;
 
 public class LookAheadInputStreamTest extends TestCase {
     public void testLookAheadInputStream() throws Exception {
-        byte buf[] = new byte[32];
+        byte[] buf = new byte[32];
         for (int i = 0; i < 32; i++) buf[i] = (byte) i;
         ByteArrayInputStream bais = new ByteArrayInputStream(buf);
 
         LookaheadInputStream lis = new LookaheadInputStream(8);
         lis.initialize(bais);
-        byte rbuf[] = new byte[32];
+        byte[] rbuf = new byte[32];
         int read = lis.read(rbuf);
         assertEquals(read, 24);
         for (int i = 0; i < 24; i++) assertEquals(rbuf[i], (byte) i);

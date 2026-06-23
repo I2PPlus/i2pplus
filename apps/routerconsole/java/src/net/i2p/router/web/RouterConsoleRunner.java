@@ -167,7 +167,7 @@ public class RouterConsoleRunner implements RouterApp {
      *              to both, we can't connect to [::1]:7657 for some reason.
      *              So the wise choice is ::1,127.0.0.1
      */
-    public RouterConsoleRunner(RouterContext ctx, ClientAppManager mgr, String args[]) {
+    public RouterConsoleRunner(RouterContext ctx, ClientAppManager mgr, String[] args) {
         _context = ctx;
         _mgr = mgr;
         _navHelper = new NavHelper();
@@ -209,7 +209,7 @@ public class RouterConsoleRunner implements RouterApp {
         _state = INITIALIZED;
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         List<RouterContext> contexts = RouterContext.listContexts();
         if (contexts == null || contexts.isEmpty())
             throw new IllegalStateException("no router context");
@@ -769,7 +769,7 @@ public class RouterConsoleRunner implements RouterApp {
             if (_mgr != null)
                 _mgr.register(_navHelper);
             File dir = new File(_webAppsDir);
-            File files[] = dir.listFiles(WAR_FILTER);
+            File[] files = dir.listFiles(WAR_FILTER);
             if (files != null) {
                 for (int i = 0; i < files.length; i++) {
                     String appName = files[i].getName();
@@ -1013,7 +1013,7 @@ public class RouterConsoleRunner implements RouterApp {
         cm.setPathSpec("/");
         constraints.add(cm);
 
-        ConstraintMapping cmarr[] = constraints.toArray(new ConstraintMapping[constraints.size()]);
+        ConstraintMapping[] cmarr = constraints.toArray(new ConstraintMapping[constraints.size()]);
         sec.setConstraintMappings(cmarr);
 
         context.setSecurityHandler(sec);

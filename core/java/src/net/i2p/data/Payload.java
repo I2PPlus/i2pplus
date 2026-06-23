@@ -156,7 +156,7 @@ public class Payload extends DataStructureImpl {
      *
      *  @return the written length (NOT the new offset)
      */
-    public int writeBytes(byte target[], int offset) {
+    public int writeBytes(byte[] target, int offset) {
         if (_encryptedData == null) throw new IllegalStateException("Not yet encrypted.  Please set the encrypted data");
         DataHelper.toLong(target, offset, 4, _encryptedData.length);
         offset += 4;

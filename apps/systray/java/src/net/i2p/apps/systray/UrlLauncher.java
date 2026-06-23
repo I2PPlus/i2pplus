@@ -582,7 +582,7 @@ public class UrlLauncher implements ClientApp {
     /**
      *  Obsolete, now uses ClientApp interface
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         UrlLauncher launcher = new UrlLauncher();
         try {
             if (args.length > 0)

@@ -25,11 +25,11 @@ public class MessageOutputStreamTest extends TestCase {
     public void test() throws Exception {
         Receiver receiver = new Receiver();
         MessageOutputStream out = new MessageOutputStream(_context, _st2, receiver, 100, 64);
-        byte buf[] = new byte[128 * 1024];
+        byte[] buf = new byte[128 * 1024];
         _context.random().nextBytes(buf);
         out.write(buf);
         out.flush();
-        byte read[] = receiver.getData();
+        byte[] read = receiver.getData();
         int firstOff = -1;
         for (int k = 0; k < buf.length; k++) {
             if (buf[k] != read[k]) {

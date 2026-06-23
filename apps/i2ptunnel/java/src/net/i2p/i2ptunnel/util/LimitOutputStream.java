@@ -20,7 +20,7 @@ import java.io.OutputStream;
  */
 public abstract class LimitOutputStream extends FilterOutputStream {
 
-    private final byte _buf1[];
+    private final byte[] _buf1;
     protected final DoneCallback _callback;
     protected boolean _isDone;
 
@@ -48,7 +48,7 @@ public abstract class LimitOutputStream extends FilterOutputStream {
      * and throws EOFException if called again
      */
     @Override
-    public void write(byte buf[], int off, int len) throws IOException {
+    public void write(byte[] buf, int off, int len) throws IOException {
         out.write(buf, off, len);
     }
 

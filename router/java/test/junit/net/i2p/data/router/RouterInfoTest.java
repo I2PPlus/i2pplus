@@ -46,7 +46,7 @@ public class RouterInfoTest extends StructureTest {
         PrivateKey privKey = null;
         SigningPrivateKey signingPrivKey = null;
 
-        Object obj[] = KeyGenerator.getInstance().generatePKIKeypair();
+        Object[] obj = KeyGenerator.getInstance().generatePKIKeypair();
         pubKey = (PublicKey) obj[0];
         privKey = (PrivateKey) obj[1];
         obj = KeyGenerator.getInstance().generateSigningKeypair();

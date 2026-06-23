@@ -240,7 +240,7 @@ public class SessionConfig extends DataStructureImpl {
      * @throws DataFormatException if the data cannot be signed
      */
     public void signSessionConfig(SigningPrivateKey signingKey) throws DataFormatException {
-        byte data[] = getBytes();
+        byte[] data = getBytes();
         if (data == null) throw new DataFormatException("Unable to retrieve bytes for signing");
         if (signingKey == null) {
             throw new DataFormatException("No Signing Key");
@@ -265,7 +265,7 @@ public class SessionConfig extends DataStructureImpl {
         if (getSignature() == null || getDestination() == null || getCreationDate() == null || tooOld()) {
             return false;
         }
-        byte data[] = getBytes();
+        byte[] data = getBytes();
         if (data == null) {
             return false;
         }

@@ -385,7 +385,7 @@ public class LeaseSet2 extends LeaseSet {
             dfe.printStackTrace();
             return new byte[0];
         }
-        byte rv[] = out.toByteArray();
+        byte[] rv = out.toByteArray();
         // if we are floodfill and this was published to us
         if (getReceivedAsPublished()) {_byteified = rv;}
         return rv;

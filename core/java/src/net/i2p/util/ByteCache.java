@@ -159,7 +159,7 @@ public final class ByteCache extends TryCache<ByteArray> {
 
         @Override
         public ByteArray newInstance() {
-            byte data[] = new byte[sz];
+            byte[] data = new byte[sz];
             ByteArray rv = new ByteArray(data);
             rv.setValid(0);
             return rv;

@@ -520,7 +520,7 @@ public final class SigUtil {
 
     /** 16 KB max */
     private static byte[] getData(File file) throws IOException {
-        byte buf[] = new byte[1024];
+        byte[] buf = new byte[1024];
         InputStream in = null;
         ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
         try {

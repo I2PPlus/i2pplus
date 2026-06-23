@@ -20,7 +20,7 @@ public class StreamSinkTestStandalone {
     private static String PORT2 = "11001";
   /* */
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         int hops = 0;
         int kb = 32*1024;
         if (args.length > 0) {

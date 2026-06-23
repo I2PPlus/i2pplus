@@ -42,7 +42,7 @@ public abstract class HMACGenerator {
      *  @param targetOffset offset into target to put the hmac
      *  @throws IllegalArgumentException for bad key or target too small
      */
-    public abstract void calculate(SessionKey key, byte data[], int offset, int length, byte target[], int targetOffset);
+    public abstract void calculate(SessionKey key, byte[] data, int offset, int length, byte[] target, int targetOffset);
 
     /**
      * Verify the MAC inline, reducing some unnecessary memory churn.
@@ -56,18 +56,18 @@ public abstract class HMACGenerator {
      * @param origMACLength how much of the MAC do we want to verify
      * @throws IllegalArgumentException for bad key
      */
-    public abstract boolean verify(SessionKey key, byte curData[], int curOffset, int curLength, byte origMAC[], int origMACOffset, int origMACLength);
+    public abstract boolean verify(SessionKey key, byte[] curData, int curOffset, int curLength, byte[] origMAC, int origMACOffset, int origMACLength);
 
     /**
      * 32 bytes from the byte array cache.
      * Does NOT zero.
      */
     protected byte[] acquireTmp() {
-        byte rv[] = SimpleByteCache.acquire(Hash.HASH_LENGTH);
+        byte[] rv = SimpleByteCache.acquire(Hash.HASH_LENGTH);
         return rv;
     }
 
-    protected void releaseTmp(byte tmp[]) {
+    protected void releaseTmp(byte[] tmp) {
         SimpleByteCache.release(tmp);
     }
 }

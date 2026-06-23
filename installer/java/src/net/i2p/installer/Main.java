@@ -15,7 +15,7 @@ public class Main {
 
     private static final String USAGE = "Usage: {copy|delete|exec|fixwinpaths} [args...]";
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         if (args.length == 0) {throw new IllegalArgumentException(USAGE);}
         String cmd = args[0];
         String[] shift = new String[args.length - 1];

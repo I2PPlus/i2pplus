@@ -70,7 +70,7 @@ public class SAMStreamSink {
     private static final int V3FORWARDPORT=9998;
     private static final int V3DGPORT=9999;
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         Getopt g = new Getopt("SAM", args, "sxhb:m:p:u:v:w:");
         boolean isSSL = false;
         boolean isMaster = false;
@@ -413,7 +413,7 @@ public class SAMStreamSink {
         }
 
         @Override
-        public void streamDataReceived(String id, byte data[], int offset, int length) {
+        public void streamDataReceived(String id, byte[] data, int offset, int length) {
             Sink sink;
             synchronized (_remotePeers) {
                 sink = _remotePeers.get(id);
@@ -516,7 +516,7 @@ public class SAMStreamSink {
                 boolean gotDest = false;
                 byte[] dest = new byte[1024];
                 int dlen = 0;
-                byte buf[] = new byte[4096];
+                byte[] buf = new byte[4096];
                 int len;
                 while((len = _in.read(buf)) >= 0) {
                     if (!gotDest) {
@@ -831,7 +831,7 @@ public class SAMStreamSink {
                 _log.info("Error closing", ioe);
             }
         }
-        public void received(byte data[], int offset, int len) {
+        public void received(byte[] data, int offset, int len) {
             if (_closed) return;
             try {
                 _out.write(data, offset, len);

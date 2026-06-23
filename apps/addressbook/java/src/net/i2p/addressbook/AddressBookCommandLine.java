@@ -32,7 +32,7 @@ public class AddressBookCommandLine extends net.i2p.util.CommandLine {
      * Main entry point for address book command line interface.
      * @param args command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         List<String> classes = new ArrayList<>(ACLASSES.size() + CLASSES.size());
         classes.addAll(ACLASSES);
         classes.addAll(CLASSES);

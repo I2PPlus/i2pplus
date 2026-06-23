@@ -167,7 +167,7 @@ public final class ECIESAEADEngine {
      * @param ecKey must be EC, non-null
      * @return decrypted data or null on failure
      */
-    public CloveSet decrypt(byte data[], PrivateKey elgKey, PrivateKey ecKey, MuxedSKM keyManager) throws DataFormatException {
+    public CloveSet decrypt(byte[] data, PrivateKey elgKey, PrivateKey ecKey, MuxedSKM keyManager) throws DataFormatException {
         return _muxedEngine.decrypt(data, elgKey, ecKey, keyManager);
     }
 
@@ -179,7 +179,7 @@ public final class ECIESAEADEngine {
      * @return decrypted data or null on failure
      * @since 0.9.67
      */
-    public CloveSet decrypt(byte data[], PrivateKey ecKey, PrivateKey pqKey, MuxedPQSKM keyManager) throws DataFormatException {
+    public CloveSet decrypt(byte[] data, PrivateKey ecKey, PrivateKey pqKey, MuxedPQSKM keyManager) throws DataFormatException {
         return _muxedPQEngine.decrypt(data, ecKey, pqKey, keyManager);
     }
 
@@ -195,7 +195,7 @@ public final class ECIESAEADEngine {
      *
      * @return decrypted data or null on failure
      */
-    public CloveSet decrypt(byte data[], PrivateKey targetPrivateKey,
+    public CloveSet decrypt(byte[] data, PrivateKey targetPrivateKey,
                             RatchetSKM keyManager) throws DataFormatException {
         try {
             return x_decrypt(data, targetPrivateKey, keyManager);
@@ -209,7 +209,7 @@ public final class ECIESAEADEngine {
         }
     }
 
-    private CloveSet x_decrypt(byte data[], PrivateKey targetPrivateKey,
+    private CloveSet x_decrypt(byte[] data, PrivateKey targetPrivateKey,
                                RatchetSKM keyManager) throws DataFormatException {
         checkType(targetPrivateKey.getType());
         if (data == null) {
@@ -222,7 +222,7 @@ public final class ECIESAEADEngine {
             return null;
         }
 
-        byte tag[] = new byte[TAGLEN];
+        byte[] tag = new byte[TAGLEN];
         System.arraycopy(data, 0, tag, 0, TAGLEN);
         RatchetSessionTag st = new RatchetSessionTag(tag);
         SessionKeyAndNonce key = keyManager.consumeTag(st);
@@ -244,7 +244,7 @@ public final class ECIESAEADEngine {
      * @return decrypted data or null on failure
      * @since 0.9.46
      */
-    CloveSet decryptFast(byte data[], PrivateKey targetPrivateKey,
+    CloveSet decryptFast(byte[] data, PrivateKey targetPrivateKey,
                          RatchetSKM keyManager) throws DataFormatException {
         try {
             return x_decryptFast(data, targetPrivateKey, keyManager);
@@ -264,14 +264,14 @@ public final class ECIESAEADEngine {
      * @return decrypted data or null on failure
      * @since 0.9.46
      */
-    private CloveSet x_decryptFast(byte data[], PrivateKey targetPrivateKey,
+    private CloveSet x_decryptFast(byte[] data, PrivateKey targetPrivateKey,
                                    RatchetSKM keyManager) throws DataFormatException {
         if (data.length < MIN_ENCRYPTED_SIZE) {
             if (_log.shouldDebug())
                 _log.debug("Data is less than the minimum size (" + data.length + " < " + MIN_ENCRYPTED_SIZE + ")");
             return null;
         }
-        byte tag[] = new byte[TAGLEN];
+        byte[] tag = new byte[TAGLEN];
         System.arraycopy(data, 0, tag, 0, TAGLEN);
         RatchetSessionTag st = new RatchetSessionTag(tag);
         SessionKeyAndNonce key = keyManager.consumeTag(st);
@@ -293,7 +293,7 @@ public final class ECIESAEADEngine {
      * @since 0.9.46
      */
     private CloveSet xx_decryptFast(byte[] tag, RatchetSessionTag st, SessionKeyAndNonce key,
-                                    byte data[], PrivateKey targetPrivateKey,
+                                    byte[] data, PrivateKey targetPrivateKey,
                                     RatchetSKM keyManager) throws DataFormatException {
         CloveSet decrypted;
         final boolean shouldDebug = _log.shouldDebug();
@@ -340,7 +340,7 @@ public final class ECIESAEADEngine {
      * @return decrypted data or null on failure
      * @since 0.9.46
      */
-    CloveSet decryptSlow(byte data[], PrivateKey targetPrivateKey,
+    CloveSet decryptSlow(byte[] data, PrivateKey targetPrivateKey,
                             RatchetSKM keyManager) throws DataFormatException {
         try {
             return x_decryptSlow(data, targetPrivateKey, keyManager);
@@ -360,7 +360,7 @@ public final class ECIESAEADEngine {
      * @return decrypted data or null on failure
      * @since 0.9.46
      */
-    private CloveSet x_decryptSlow(byte data[], PrivateKey targetPrivateKey,
+    private CloveSet x_decryptSlow(byte[] data, PrivateKey targetPrivateKey,
                                    RatchetSKM keyManager) throws DataFormatException {
         CloveSet decrypted;
         EncType type = targetPrivateKey.getType();
@@ -520,7 +520,7 @@ public final class ECIESAEADEngine {
      * @param data 96 bytes minimum
      * @return null if decryption fails
      */
-    private CloveSet decryptNewSession(byte data[], PrivateKey targetPrivateKey, RatchetSKM keyManager)
+    private CloveSet decryptNewSession(byte[] data, PrivateKey targetPrivateKey, RatchetSKM keyManager)
                                      throws DataFormatException {
         // Elg2
         byte[] xx = new byte[KEYLEN];
@@ -685,7 +685,7 @@ public final class ECIESAEADEngine {
      * @return null if decryption fails
      * @since 0.9.49
      */
-    private CloveSet decryptNewSession_N(byte data[], PrivateKey targetPrivateKey, RatchetSKM keyManager)
+    private CloveSet decryptNewSession_N(byte[] data, PrivateKey targetPrivateKey, RatchetSKM keyManager)
                                      throws DataFormatException {
         // fast MSB check for key < 2^255
         if ((data[KEYLEN - 1] & 0x80) != 0) {
@@ -1020,7 +1020,7 @@ public final class ECIESAEADEngine {
      * @param ad may be null
      * @return success
      */
-    private boolean decryptAEADBlock(byte[] ad, byte encrypted[], int offset, int encryptedLen, SessionKey key,
+    private boolean decryptAEADBlock(byte[] ad, byte[] encrypted, int offset, int encryptedLen, SessionKey key,
                                     long n) throws DataFormatException {
         ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
         chacha.initializeKey(key.getData(), 0);
@@ -1130,7 +1130,7 @@ public final class ECIESAEADEngine {
         }
         if (_log.shouldDebug())
             _log.debug("Encrypting as ExistingSession \n* Target: " + target + "\n* Key: " + re.key + "\n* Tag: " + re.tag.toBase64());
-        byte rv[] = encryptExistingSession(cloves, target, re, callback, keyManager);
+        byte[] rv = encryptExistingSession(cloves, target, re, callback, keyManager);
         if (rv == null) {
             if (_log.shouldWarn())
                 _log.warn("ECIES ExistingSession encryption failure");
@@ -1369,11 +1369,11 @@ public final class ECIESAEADEngine {
                                           ReplyCallback callback,
                                           RatchetSKM keyManager) {
         boolean ackreq = callback != null || ACKREQ_IN_ES;
-        byte rawTag[] = re.tag.getData();
+        byte[] rawTag = re.tag.getData();
         byte[] payload = createPayload(cloves, 0, ackreq, re.nextForwardKey, re.nextReverseKey, re.acksToSend, ES_OVERHEAD);
         SessionKeyAndNonce key = re.key;
         int nonce = key.getNonce();
-        byte encr[] = encryptAEADBlock(rawTag, payload, key, nonce);
+        byte[] encr = encryptAEADBlock(rawTag, payload, key, nonce);
         if (encr != null) {
             System.arraycopy(rawTag, 0, encr, 0, TAGLEN);
             if (callback != null)
@@ -1400,9 +1400,9 @@ public final class ECIESAEADEngine {
      * @since 0.9.46
      */
     public byte[] encrypt(CloveSet cloves, SessionKey key, RatchetSessionTag tag) {
-        byte rawTag[] = tag.getData();
+        byte[] rawTag = tag.getData();
         byte[] payload = createPayload(cloves, 0, ES_OVERHEAD);
-        byte encr[] = encryptAEADBlock(rawTag, payload, key, 0);
+        byte[] encr = encryptAEADBlock(rawTag, payload, key, 0);
         if (encr != null) {
         System.arraycopy(rawTag, 0, encr, 0, TAGLEN);
         } else if (_log.shouldWarn()) {
@@ -1428,7 +1428,7 @@ public final class ECIESAEADEngine {
      * No ad
      */
 /*
-    private final byte[] encryptAEADBlock(byte data[], SessionKey key, long n) {
+    private final byte[] encryptAEADBlock(byte[] data, SessionKey key, long n) {
         return encryptAEADBlock(null, data, key, n);
     }
 */
@@ -1438,12 +1438,12 @@ public final class ECIESAEADEngine {
      * @param ad may be null
      * @return space will be left at beginning for ad (tag), null on error
      */
-    private final byte[] encryptAEADBlock(byte[] ad, byte data[], SessionKey key, long n) {
+    private final byte[] encryptAEADBlock(byte[] ad, byte[] data, SessionKey key, long n) {
         ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
         chacha.initializeKey(key.getData(), 0);
         chacha.setNonce(n);
         int adsz = ad != null ? ad.length : 0;
-        byte enc[] = new byte[adsz + data.length + MACLEN];
+        byte[] enc = new byte[adsz + data.length + MACLEN];
         try {
             chacha.encryptWithAd(ad, data, 0, enc, adsz, data.length);
         } catch (GeneralSecurityException e) {

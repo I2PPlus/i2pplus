@@ -287,7 +287,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     /**
      * @since 0.9.2
      */
-    private void sendNoEffort(Destination dest, byte payload[], SendMessageOptions options) throws I2PSessionException {
+    private void sendNoEffort(Destination dest, byte[] payload, SendMessageOptions options) throws I2PSessionException {
         // nonce always 0
         _producer.sendMessage(this, dest, 0, payload, options);
     }
@@ -300,7 +300,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         Long mid = Long.valueOf(msg.getMessageId());
         _availableMessages.put(mid, msg);
         long id = msg.getMessageId();
-        byte data[] = msg.getPayload().getUnencryptedData();
+        byte[] data = msg.getPayload().getUnencryptedData();
         if ((data == null) || (data.length <= 0)) {
             if (_log.shouldLog(Log.CRIT)) _log.log(Log.CRIT, getPrefix() + "addNewMessage of a message with no unencrypted data", new Exception("Empty message"));
             return;

@@ -57,7 +57,7 @@ public class AESEngine {
      * @param iv IV for CBC, must be 16 bytes
      * @param length how much data to encrypt
      */
-    public void encrypt(byte payload[], int payloadIndex, byte out[], int outIndex, SessionKey sessionKey, byte iv[], int length) {
+    public void encrypt(byte[] payload, int payloadIndex, byte[] out, int outIndex, SessionKey sessionKey, byte[] iv, int length) {
         encrypt(payload, payloadIndex, out, outIndex, sessionKey, iv, 0, length);
     }
 
@@ -74,7 +74,7 @@ public class AESEngine {
      * @param ivOffset offset into IV
      * @param length how much data to encrypt
      */
-    public void encrypt(byte payload[], int payloadIndex, byte out[], int outIndex, SessionKey sessionKey, byte iv[], int ivOffset, int length) {
+    public void encrypt(byte[] payload, int payloadIndex, byte[] out, int outIndex, SessionKey sessionKey, byte[] iv, int ivOffset, int length) {
         System.arraycopy(payload, payloadIndex, out, outIndex, length);
         _log.logAlways(Log.WARN, "AES is disabled");
     }
@@ -90,14 +90,14 @@ public class AESEngine {
      * @return encrypted data or null on error
      * Obsolete — prefer encrypt(byte[], int, byte[], int, SessionKey, byte[], int).
      */
-    public byte[] safeEncrypt(byte payload[], SessionKey sessionKey, byte iv[], int paddedSize) {
+    public byte[] safeEncrypt(byte[] payload, SessionKey sessionKey, byte[] iv, int paddedSize) {
         if ((iv == null) || (payload == null) || (sessionKey == null) || (iv.length != 16)) return null;
 
         int size = Hash.HASH_LENGTH + 4 // sizeof(payload)
                         + payload.length;
         int padding = getPaddingSize(size, paddedSize);
 
-        byte data[] = new byte[size + padding];
+        byte[] data = new byte[size + padding];
         _context.sha().calculateHash(iv, 0, 16, data, 0);
         int cur = Hash.HASH_LENGTH;
 
@@ -105,7 +105,7 @@ public class AESEngine {
         cur += 4;
         System.arraycopy(payload, 0, data, cur, payload.length);
         cur += payload.length;
-        byte paddingData[] = getPadding(_context, size, paddedSize);
+        byte[] paddingData = getPadding(_context, size, paddedSize);
         System.arraycopy(paddingData, 0, data, cur, paddingData.length);
 
         encrypt(data, 0, data, 0, sessionKey, iv, data.length);
@@ -122,13 +122,13 @@ public class AESEngine {
      * @return decrypted data or null on error
      * Obsolete — prefer decrypt(byte[], int, byte[], int, SessionKey, byte[], int).
      */
-    public byte[] safeDecrypt(byte payload[], SessionKey sessionKey, byte iv[]) {
+    public byte[] safeDecrypt(byte[] payload, SessionKey sessionKey, byte[] iv) {
         if ((iv == null) || (payload == null) || (sessionKey == null) || (iv.length != 16)) return null;
 
-        byte decr[] = new byte[payload.length];
+        byte[] decr = new byte[payload.length];
         decrypt(payload, 0, decr, 0, sessionKey, iv, payload.length);
 
-        byte h[] = SimpleByteCache.acquire(Hash.HASH_LENGTH);
+        byte[] h = SimpleByteCache.acquire(Hash.HASH_LENGTH);
         _context.sha().calculateHash(iv, 0, 16, h, 0);
         boolean eq = DataHelper.eq(decr, 0, h, 0, Hash.HASH_LENGTH);
         SimpleByteCache.release(h);
@@ -146,7 +146,7 @@ public class AESEngine {
             return null;
         }
 
-        byte data[] = new byte[(int) len];
+        byte[] data = new byte[(int) len];
         System.arraycopy(decr, cur, data, 0, (int) len);
         return data;
     }
@@ -160,7 +160,7 @@ public class AESEngine {
      * @param iv IV for CBC
      * @param length how much data to decrypt
      */
-    public void decrypt(byte payload[], int payloadIndex, byte out[], int outIndex, SessionKey sessionKey, byte iv[], int length) {
+    public void decrypt(byte[] payload, int payloadIndex, byte[] out, int outIndex, SessionKey sessionKey, byte[] iv, int length) {
         decrypt(payload, payloadIndex, out, outIndex, sessionKey, iv, 0, length);
     }
 
@@ -177,7 +177,7 @@ public class AESEngine {
      * @param ivOffset offset into IV
      * @param length how much data to decrypt
      */
-    public void decrypt(byte payload[], int payloadIndex, byte out[], int outIndex, SessionKey sessionKey, byte iv[], int ivOffset, int length) {
+    public void decrypt(byte[] payload, int payloadIndex, byte[] out, int outIndex, SessionKey sessionKey, byte[] iv, int ivOffset, int length) {
         System.arraycopy(payload, payloadIndex, out, outIndex, length);
         _log.logAlways(Log.WARN, "AES is disabled");
     }
@@ -191,7 +191,7 @@ public class AESEngine {
      * @param out output buffer
      * @param outIndex starting index in output
      */
-    public void encryptBlock(byte payload[], int inIndex, SessionKey sessionKey, byte out[], int outIndex) {
+    public void encryptBlock(byte[] payload, int inIndex, SessionKey sessionKey, byte[] out, int outIndex) {
         System.arraycopy(payload, inIndex, out, outIndex, out.length - outIndex);
     }
 
@@ -204,7 +204,7 @@ public class AESEngine {
      * @param rv output buffer
      * @param outIndex starting index in output
      */
-    public void decryptBlock(byte payload[], int inIndex, SessionKey sessionKey, byte rv[], int outIndex) {
+    public void decryptBlock(byte[] payload, int inIndex, SessionKey sessionKey, byte[] rv, int outIndex) {
         System.arraycopy(payload, inIndex, rv, outIndex, rv.length - outIndex);
     }
 
@@ -223,7 +223,7 @@ public class AESEngine {
      */
     public static final byte[] getPadding(I2PAppContext context, int curSize, long minPaddedSize) {
         int size = getPaddingSize(curSize, minPaddedSize);
-        byte rv[] = new byte[size];
+        byte[] rv = new byte[size];
         context.random().nextBytes(rv);
         return rv;
     }
@@ -254,24 +254,24 @@ public class AESEngine {
     /*
          * Test code
          *
-        public static void main(String args[]) {
+        public static void main(String[] args) {
             I2PAppContext ctx = new I2PAppContext();
             SessionKey key = ctx.keyGenerator().generateSessionKey();
-            byte iv[] = new byte[16];
+            byte[] iv = new byte[16];
             RandomSource.getInstance().nextBytes(iv);
 
-            byte sbuf[] = new byte[16];
+            byte[] sbuf = new byte[16];
             RandomSource.getInstance().nextBytes(sbuf);
-            byte se[] = new byte[16];
+            byte[] se = new byte[16];
             ctx.aes().encrypt(sbuf, 0, se, 0, key, iv, sbuf.length);
-            byte sd[] = new byte[16];
+            byte[] sd = new byte[16];
             ctx.aes().decrypt(se, 0, sd, 0, key, iv, se.length);
             ctx.logManager().getLog(AESEngine.class).debug("Short test: " + DataHelper.eq(sd, sbuf));
 
-            byte lbuf[] = new byte[1024];
+            byte[] lbuf = new byte[1024];
             RandomSource.getInstance().nextBytes(sbuf);
-            byte le[] = ctx.aes().safeEncrypt(lbuf, key, iv, 2048);
-            byte ld[] = ctx.aes().safeDecrypt(le, key, iv);
+            byte[] le = ctx.aes().safeEncrypt(lbuf, key, iv, 2048);
+            byte[] ld = ctx.aes().safeDecrypt(le, key, iv);
             ctx.logManager().getLog(AESEngine.class).debug("Long test: " + DataHelper.eq(ld, lbuf));
         }
     ******/

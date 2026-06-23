@@ -304,7 +304,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      */
     @Override
     public byte[] receiveMessage(int msgId) throws I2PSessionException {
-        byte compressed[] = super.receiveMessage(msgId);
+        byte[] compressed = super.receiveMessage(msgId);
         if (compressed == null) {
             if (_log.shouldWarn()) {_log.warn("Error: [MsgID " + msgId + "] already received!");}
             return null;
@@ -323,7 +323,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
      */
-    protected boolean sendBestEffort(Destination dest, byte payload[], SessionKey keyUsed, Set<SessionTag> tagsSent, long expires) throws I2PSessionException {
+    protected boolean sendBestEffort(Destination dest, byte[] payload, SessionKey keyUsed, Set<SessionTag> tagsSent, long expires) throws I2PSessionException {
         return sendBestEffort(dest, payload, expires, 0);
     }
 
@@ -334,7 +334,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * @param flags to be passed to the router
      * @since 0.8.4
      */
-    protected boolean sendBestEffort(Destination dest, byte payload[], long expires, int flags) throws I2PSessionException {
+    protected boolean sendBestEffort(Destination dest, byte[] payload, long expires, int flags) throws I2PSessionException {
 
         long nonce = _sendMessageNonce.incrementAndGet();
         MessageState state = new MessageState(_context, nonce, getPrefix());
@@ -379,7 +379,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * @return true always
      * @since 0.8.1
      */
-    protected boolean sendNoEffort(Destination dest, byte payload[], long expires, int flags) throws I2PSessionException {
+    protected boolean sendNoEffort(Destination dest, byte[] payload, long expires, int flags) throws I2PSessionException {
         _producer.sendMessage(this, dest, 0, payload, expires, flags); // nonce always 0
         return true;
     }

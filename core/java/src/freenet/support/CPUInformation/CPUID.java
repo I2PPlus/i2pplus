@@ -287,7 +287,7 @@ public class CPUID {
         throw new UnknownCPUException("Unknown CPU type: '" + id + '\'');
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         _doLog = true; // this is too late to log anything from above
         String path = System.getProperty("java.library.path");
         String name = getLibraryPrefix() + "jcpuid" + getLibrarySuffix();

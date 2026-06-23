@@ -1029,7 +1029,7 @@ public abstract class TransportImpl implements Transport {
      *  Caller must check if we actually have a public IPv6 address.
      *  @param addr non-null
      */
-    protected boolean isPubliclyRoutable(byte addr[]) {
+    protected boolean isPubliclyRoutable(byte[] addr) {
         TransportUtil.IPv6Config cfg = getIPv6Config();
         return TransportUtil.isPubliclyRoutable(addr,
                                                 cfg != TransportUtil.IPv6Config.IPV6_ONLY,

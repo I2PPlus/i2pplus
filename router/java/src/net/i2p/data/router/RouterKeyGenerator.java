@@ -52,8 +52,8 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
         generateDateBasedModData();
     }
 
-    private volatile byte _currentModData[];
-    private volatile byte _nextModData[];
+    private volatile byte[] _currentModData;
+    private volatile byte[] _nextModData;
     private volatile long _nextMidnight;
     private volatile long _lastChanged;
 
@@ -205,7 +205,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
      */
     private static Hash getKey(Hash origKey, byte[] modData) {
         if (origKey == null) throw new IllegalArgumentException("Original key is null");
-        byte modVal[] = new byte[Hash.HASH_LENGTH + LENGTH];
+        byte[] modVal = new byte[Hash.HASH_LENGTH + LENGTH];
         System.arraycopy(origKey.getData(), 0, modVal, 0, Hash.HASH_LENGTH);
         System.arraycopy(modData, 0, modVal, Hash.HASH_LENGTH, LENGTH);
         return SHA256Generator.getInstance().calculateHash(modVal);
@@ -214,7 +214,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     /**
      * @since 0.9.29
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         if (args.length <= 0) {
             System.err.println("Usage: RouterKeyGenerator [-days] [+days] hash|hostname|destination...");
             System.exit(1);

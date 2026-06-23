@@ -217,7 +217,7 @@ public class EepGet {
      *
      * As of 0.9.45, supports https and redirect to https
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         String proxyHost = "127.0.0.1";
         int proxyPort = 4444;
         int numRetries = (int) I2PAppContext.getGlobalContext().getProperty(PROP_DEFAULT_RETRIES, DEFAULT_NUM_RETRIES);
@@ -1063,7 +1063,7 @@ public class EepGet {
         }
 
         int remaining = (int)_bytesRemaining;
-        byte buf[] = new byte[16*1024];
+        byte[] buf = new byte[16*1024];
         while (_keepFetching && ((remaining > 0) || !strictSize) && !_aborted) {
             int toRead = buf.length;
             if (strictSize && toRead > remaining)
@@ -1346,7 +1346,7 @@ public class EepGet {
         _lastModified = null;
 
         buf.setLength(0);
-        byte lookahead[] = new byte[3];
+        byte[] lookahead = new byte[3];
         // "prime" the lookahead buffer with a '\n',
         // so it works if there's no header lines at all, like a HTTPS proxy
         increment(lookahead, '\n');
@@ -1547,7 +1547,7 @@ public class EepGet {
         lookahead[2] = (byte)cur;
     }
 
-    private static boolean isEndOfHeaders(byte lookahead[]) {
+    private static boolean isEndOfHeaders(byte[] lookahead) {
         return lookahead[2] == NL &&
                (lookahead[0] == NL || lookahead[1] == NL);    // \n\n or \n\r\n
     }
@@ -2151,7 +2151,7 @@ public class EepGet {
      */
     public static Map<String, String> parseAuthArgs(String args) {
         Map<String, String> rv = new HashMap<>(8);
-        char data[] = args.toCharArray();
+        char[] data = args.toCharArray();
         StringBuilder buf = new StringBuilder(32);
         boolean isQuoted = false;
         String key = null;

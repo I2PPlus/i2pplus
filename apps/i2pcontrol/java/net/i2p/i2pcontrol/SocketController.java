@@ -69,7 +69,7 @@ public class SocketController implements RouterApp {
     /**
      *  RouterApp (new way)
      */
-    public SocketController(RouterContext ctx, ClientAppManager mgr, String args[]) throws IOException {
+    public SocketController(RouterContext ctx, ClientAppManager mgr, String[] args) throws IOException {
         _context = ctx;
         _mgr = mgr;
         _log = _context.logManager().getLog(SocketController.class);
@@ -134,7 +134,7 @@ public class SocketController implements RouterApp {
         }
     }
 
-    private synchronized void start(String args[]) throws Exception {
+    private synchronized void start(String[] args) throws Exception {
         _context.logManager().getLog(JSONRPC2Servlet.class).setMinimumPriority(Log.DEBUG);
         _server = buildServer();
         _context.portMapper().register(SVC_SKT_I2PCONTROL,

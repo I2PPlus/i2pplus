@@ -73,7 +73,7 @@ public final class CryptixAESEngine extends AESEngine {
      *  @param length must be a multiple of 16
      */
     @Override
-    public void encrypt(byte payload[], int payloadIndex, byte out[], int outIndex, SessionKey sessionKey, byte iv[], int length) {
+    public void encrypt(byte[] payload, int payloadIndex, byte[] out, int outIndex, SessionKey sessionKey, byte[] iv, int length) {
         encrypt(payload, payloadIndex, out, outIndex, sessionKey, iv, 0, length);
     }
 
@@ -82,7 +82,7 @@ public final class CryptixAESEngine extends AESEngine {
      *  @param length must be a multiple of 16
      */
     @Override
-    public void encrypt(byte payload[], int payloadIndex, byte out[], int outIndex, SessionKey sessionKey, byte iv[], int ivOffset, int length) {
+    public void encrypt(byte[] payload, int payloadIndex, byte[] out, int outIndex, SessionKey sessionKey, byte[] iv, int ivOffset, int length) {
         if (payload == null) throw new NullPointerException("invalid args to aes - payload");
         if (out == null) throw new NullPointerException("invalid args to aes - out");
         if (sessionKey == null) throw new NullPointerException("invalid args to aes - sessionKey");
@@ -120,7 +120,7 @@ public final class CryptixAESEngine extends AESEngine {
      *  @param length must be a multiple of 16 (will overrun to next mod 16 if not)
      */
     @Override
-    public void decrypt(byte payload[], int payloadIndex, byte out[], int outIndex, SessionKey sessionKey, byte iv[], int length) {
+    public void decrypt(byte[] payload, int payloadIndex, byte[] out, int outIndex, SessionKey sessionKey, byte[] iv, int length) {
         decrypt(payload, payloadIndex, out, outIndex, sessionKey, iv, 0, length);
     }
 
@@ -129,7 +129,7 @@ public final class CryptixAESEngine extends AESEngine {
      *  @param length must be a multiple of 16 (will overrun to next mod 16 if not)
      */
     @Override
-    public void decrypt(byte payload[], int payloadIndex, byte out[], int outIndex, SessionKey sessionKey, byte iv[], int ivOffset, int length) {
+    public void decrypt(byte[] payload, int payloadIndex, byte[] out, int outIndex, SessionKey sessionKey, byte[] iv, int ivOffset, int length) {
         if ((iv == null) || (payload == null) || (payload.length <= 0) || (sessionKey == null)) throw new IllegalArgumentException("Bad setup");
         else if (out == null) throw new IllegalArgumentException("Out is null");
         else if (out.length - outIndex < length) throw new IllegalArgumentException("Out is too small (out.length=" + out.length + " outIndex=" + outIndex + " length=" + length);
@@ -155,8 +155,8 @@ public final class CryptixAESEngine extends AESEngine {
             if (_log.shouldWarn()) _log.warn("Not %16 " + length, new Exception());
         }
 
-        byte prev[] = SimpleByteCache.acquire(16);
-        byte cur[] = SimpleByteCache.acquire(16);
+        byte[] prev = SimpleByteCache.acquire(16);
+        byte[] cur = SimpleByteCache.acquire(16);
         System.arraycopy(iv, ivOffset, prev, 0, 16);
 
         for (int x = 0; x < numblock; x++) {
@@ -191,7 +191,7 @@ public final class CryptixAESEngine extends AESEngine {
      * @param out out parameter, 16 bytes starting at outIndex
      */
     @Override
-    public final void encryptBlock(byte payload[], int inIndex, SessionKey sessionKey, byte out[], int outIndex) {
+    public final void encryptBlock(byte[] payload, int inIndex, SessionKey sessionKey, byte[] out, int outIndex) {
         Object pkey = sessionKey.getPreparedKey();
         if (pkey == null) {
             try {
@@ -212,7 +212,7 @@ public final class CryptixAESEngine extends AESEngine {
      * @param rv out parameter, 16 bytes starting at outIndex
      */
     @Override
-    public final void decryptBlock(byte payload[], int inIndex, SessionKey sessionKey, byte rv[], int outIndex) {
+    public final void decryptBlock(byte[] payload, int inIndex, SessionKey sessionKey, byte[] rv, int outIndex) {
         // just let it throw NPE or IAE later for speed, you'll figure it out
         // if ((payload == null) || (rv == null))
         //    throw new IllegalArgumentException("null block args");
@@ -296,7 +296,7 @@ public final class CryptixAESEngine extends AESEngine {
      * Cryptix is faster for data smaller than 704 bytes.
      */
     /*******
-     * public static void main(String args[]) {
+     * public static void main(String[] args) {
      * final int MATCH_RUNS = 11000;
      * final int TIMING_RUNS = 100000;
      * I2PAppContext ctx = I2PAppContext.getGlobalContext();
@@ -367,9 +367,9 @@ public final class CryptixAESEngine extends AESEngine {
      * // this verifies decryption in-place
      * private static void testED2(I2PAppContext ctx) {
      * SessionKey key = ctx.keyGenerator().generateSessionKey();
-     * byte iv[] = new byte[16];
-     * byte orig[] = new byte[128];
-     * byte data[] = new byte[128];
+     * byte[] iv = new byte[16];
+     * byte[] orig = new byte[128];
+     * byte[] data = new byte[128];
      * ctx.random().nextBytes(iv);
      * ctx.random().nextBytes(orig);
      * CryptixAESEngine aes = new CryptixAESEngine(ctx);
@@ -384,10 +384,10 @@ public final class CryptixAESEngine extends AESEngine {
      * private static void testFake(I2PAppContext ctx) {
      * SessionKey key = ctx.keyGenerator().generateSessionKey();
      * SessionKey wrongKey = ctx.keyGenerator().generateSessionKey();
-     * byte iv[] = new byte[16];
-     * byte orig[] = new byte[128];
-     * byte encrypted[] = new byte[128];
-     * byte decrypted[] = new byte[128];
+     * byte[] iv = new byte[16];
+     * byte[] orig = new byte[128];
+     * byte[] encrypted = new byte[128];
+     * byte[] decrypted = new byte[128];
      * ctx.random().nextBytes(iv);
      * ctx.random().nextBytes(orig);
      * CryptixAESEngine aes = new CryptixAESEngine(ctx);
@@ -402,10 +402,10 @@ public final class CryptixAESEngine extends AESEngine {
      * private static void testNull(I2PAppContext ctx) {
      * SessionKey key = ctx.keyGenerator().generateSessionKey();
      * SessionKey wrongKey = ctx.keyGenerator().generateSessionKey();
-     * byte iv[] = new byte[16];
-     * byte orig[] = new byte[128];
-     * byte encrypted[] = new byte[128];
-     * byte decrypted[] = new byte[128];
+     * byte[] iv = new byte[16];
+     * byte[] orig = new byte[128];
+     * byte[] encrypted = new byte[128];
+     * byte[] decrypted = new byte[128];
      * ctx.random().nextBytes(iv);
      * ctx.random().nextBytes(orig);
      * CryptixAESEngine aes = new CryptixAESEngine(ctx);
@@ -421,10 +421,10 @@ public final class CryptixAESEngine extends AESEngine {
      *
      * private static void testEDBlock(I2PAppContext ctx) {
      * SessionKey key = ctx.keyGenerator().generateSessionKey();
-     * byte iv[] = new byte[16];
-     * byte orig[] = new byte[16];
-     * byte encrypted[] = new byte[16];
-     * byte decrypted[] = new byte[16];
+     * byte[] iv = new byte[16];
+     * byte[] orig = new byte[16];
+     * byte[] encrypted = new byte[16];
+     * byte[] decrypted = new byte[16];
      * ctx.random().nextBytes(iv);
      * ctx.random().nextBytes(orig);
      * CryptixAESEngine aes = new CryptixAESEngine(ctx);
@@ -438,9 +438,9 @@ public final class CryptixAESEngine extends AESEngine {
      *
      * private static void testEDBlock2(I2PAppContext ctx) {
      * SessionKey key = ctx.keyGenerator().generateSessionKey();
-     * byte iv[] = new byte[16];
-     * byte orig[] = new byte[16];
-     * byte data[] = new byte[16];
+     * byte[] iv = new byte[16];
+     * byte[] orig = new byte[16];
+     * byte[] data = new byte[16];
      * ctx.random().nextBytes(iv);
      * ctx.random().nextBytes(orig);
      * CryptixAESEngine aes = new CryptixAESEngine(ctx);

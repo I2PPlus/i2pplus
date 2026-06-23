@@ -27,7 +27,7 @@ public class LeaseTest extends StructureTest {
     public DataStructure createDataStructure() throws DataFormatException {
         Lease lease = new Lease();
         lease.setEndDate(new Date(1000 * 60 * 2));
-        byte h[] = new byte[Hash.HASH_LENGTH];
+        byte[] h = new byte[Hash.HASH_LENGTH];
         lease.setGateway(new Hash(h));
         StructureTest tst = new TunnelIdTest();
         lease.setTunnelId((TunnelId) tst.createDataStructure());
@@ -44,7 +44,7 @@ public class LeaseTest extends StructureTest {
     public void testNumSuccessFail() throws Exception{
         Lease lease = new Lease();
         lease.setEndDate(new Date(1000*60*2));
-        byte h[] = new byte[Hash.HASH_LENGTH];
+        byte[] h = new byte[Hash.HASH_LENGTH];
         lease.setGateway(new Hash(h));
         StructureTest tst = new TunnelIdTest();
         lease.setTunnelId((TunnelId)tst.createDataStructure());
@@ -60,7 +60,7 @@ public class LeaseTest extends StructureTest {
         assertTrue(lease.isExpired());
 
         lease.setEndDate(new Date(1000 * 60 * 2));
-        byte h[] = new byte[Hash.HASH_LENGTH];
+        byte[] h = new byte[Hash.HASH_LENGTH];
         lease.setGateway(new Hash(h));
         StructureTest tst = new TunnelIdTest();
         lease.setTunnelId((TunnelId) tst.createDataStructure());
@@ -72,7 +72,7 @@ public class LeaseTest extends StructureTest {
     public void failsWriteWithNullTunnelId() throws Exception {
         Lease lease = new Lease();
         lease.setEndDate(new Date(1000 * 60 * 2));
-        byte h[] = new byte[Hash.HASH_LENGTH];
+        byte[] h = new byte[Hash.HASH_LENGTH];
         lease.setGateway(new Hash(h));
         lease.setTunnelId(null);
 
@@ -88,7 +88,7 @@ public class LeaseTest extends StructureTest {
     public void failsWriteWithNullGateway() throws Exception {
         Lease lease = new Lease();
         lease.setEndDate(new Date(1000 * 60 * 2));
-        byte h[] = new byte[Hash.HASH_LENGTH];
+        byte[] h = new byte[Hash.HASH_LENGTH];
         lease.setGateway(null);
         StructureTest tst = new TunnelIdTest();
         lease.setTunnelId((TunnelId) tst.createDataStructure());
@@ -105,7 +105,7 @@ public class LeaseTest extends StructureTest {
     public void testNullEquals() throws Exception {
         Lease lease = new Lease();
         lease.setEndDate(new Date(1000 * 60 * 2));
-        byte h[] = new byte[Hash.HASH_LENGTH];
+        byte[] h = new byte[Hash.HASH_LENGTH];
         lease.setGateway(new Hash(h));
         lease.setTunnelId(null);
         assertFalse(lease.equals(null));

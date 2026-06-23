@@ -18,7 +18,7 @@ public class SignatureTest extends StructureTest {
     @Override
     public DataStructure createDataStructure() throws DataFormatException {
         Signature sig = new Signature();
-        byte data[] = new byte[Signature.SIGNATURE_BYTES];
+        byte[] data = new byte[Signature.SIGNATURE_BYTES];
         for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 16);
         sig.setData(data);
         return sig;

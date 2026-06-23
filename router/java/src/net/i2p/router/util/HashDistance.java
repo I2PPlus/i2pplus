@@ -31,7 +31,7 @@ public class HashDistance {
 
     public static BigInteger getDistance(Hash targetKey, Hash routerInQuestion) {
         // plain XOR of the key and router
-        byte diff[] = DataHelper.xor(routerInQuestion.getData(), targetKey.getData());
+        byte[] diff = DataHelper.xor(routerInQuestion.getData(), targetKey.getData());
         return new BigInteger(1, diff);
     }
 }

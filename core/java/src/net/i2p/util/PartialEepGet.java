@@ -63,7 +63,7 @@ public class PartialEepGet extends EepGet {
      * PartialEepGet [-p 127.0.0.1:4444] [-l #bytes] url
      *
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         String proxyHost = "127.0.0.1";
         int proxyPort = 4444;
         // 40 sig + 16 version for .suds

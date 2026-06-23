@@ -504,7 +504,7 @@ class GraphRenderer {
                 def.setTitle(title);
             }
             String path = _listener.getData().getPath();
-            String dsNames[] = _listener.getData().getDsNames();
+            String[] dsNames = _listener.getData().getDsNames();
             String plotName;
             String descr;
             if (showEvents) {
@@ -557,7 +557,7 @@ class GraphRenderer {
             }
             String plotName2 = null;
             if (lsnr2 != null) {
-                String dsNames2[] = lsnr2.getData().getDsNames();
+                String[] dsNames2 = lsnr2.getData().getDsNames();
                 plotName2 = dsNames2[0];
                 String path2 = lsnr2.getData().getPath();
                 String descr2 = _t(lsnr2.getRate().getRateStat().getDescription());

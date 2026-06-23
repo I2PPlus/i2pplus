@@ -11,13 +11,13 @@ import net.i2p.util.Addresses;
  *
  */
 final class RemoteHostId {
-    private final byte _ip[];
+    private final byte[] _ip;
     private final int _port;
     private final Hash _peerHash;
     private final int _hashCode;
 
     /** direct */
-    public RemoteHostId(byte ip[], int port) {
+    public RemoteHostId(byte[] ip, int port) {
         this(ip, port, null);
     }
 
@@ -26,7 +26,7 @@ final class RemoteHostId {
         this(null, 0, peerHash);
     }
 
-    private RemoteHostId(byte ip[], int port, Hash peerHash) {
+    private RemoteHostId(byte[] ip, int port, Hash peerHash) {
         _ip = ip;
         _port = port;
         _peerHash = peerHash;

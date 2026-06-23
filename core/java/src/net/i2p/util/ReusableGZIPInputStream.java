@@ -63,7 +63,7 @@ public class ReusableGZIPInputStream extends ResettableGZIPInputStream {
     }
 
     /*******
-     * public static void main(String args[]) {
+     * public static void main(String[] args) {
      * for (int i = 0; i < 2; i++)
      * test();
      * for (int i = 0; i < 64*1024; i++) {
@@ -71,18 +71,18 @@ public class ReusableGZIPInputStream extends ResettableGZIPInputStream {
      * }
      * }
      * private static void test() {
-     * byte b[] = "hi, how are you today?".getBytes();
+     * byte[] b = "hi, how are you today?".getBytes();
      * try {
      * java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(64);
      * ResettableGZIPOutputStream o = new ResettableGZIPOutputStream(baos);
      * o.write(b);
      * o.finish();
      * o.flush();
-     * byte compressed[] = baos.toByteArray();
+     * byte[] compressed = baos.toByteArray();
      *
      * ReusableGZIPInputStream in = ReusableGZIPInputStream.acquire();
      * in.initialize(new java.io.ByteArrayInputStream(compressed));
-     * byte rv[] = new byte[128];
+     * byte[] rv = new byte[128];
      * int read = in.read(rv);
      * if (!net.i2p.data.DataHelper.eq(rv, 0, b, 0, b.length))
      * throw new RuntimeException("foo, read=" + read);
@@ -93,7 +93,7 @@ public class ReusableGZIPInputStream extends ResettableGZIPInputStream {
      * }
      *
      * private static boolean test(int size) {
-     * byte b[] = new byte[size];
+     * byte[] b = new byte[size];
      * RandomSource.getInstance().nextBytes(b);
      * try {
      * java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(size);
@@ -101,12 +101,12 @@ public class ReusableGZIPInputStream extends ResettableGZIPInputStream {
      * o.write(b);
      * o.finish();
      * o.flush();
-     * byte compressed[] = baos.toByteArray();
+     * byte[] compressed = baos.toByteArray();
      *
      * ReusableGZIPInputStream in = ReusableGZIPInputStream.acquire();
      * in.initialize(new java.io.ByteArrayInputStream(compressed));
      * java.io.ByteArrayOutputStream baos2 = new java.io.ByteArrayOutputStream(size);
-     * byte rbuf[] = new byte[128];
+     * byte[] rbuf = new byte[128];
      * try {
      * while (true) {
      * int read = in.read(rbuf);
@@ -126,7 +126,7 @@ public class ReusableGZIPInputStream extends ResettableGZIPInputStream {
      * throw re;
      * }
      * ReusableGZIPInputStream.release(in);
-     * byte rv[] = baos2.toByteArray();
+     * byte[] rv = baos2.toByteArray();
      * if (rv.length != b.length)
      * throw new RuntimeException("read length: " + rv.length + " expected: " + b.length);
      *

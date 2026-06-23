@@ -25,7 +25,7 @@ public class ByteLimitOutputStream extends LimitOutputStream {
     }
 
     @Override
-    public void write(byte src[], int off, int len) throws IOException {
+    public void write(byte[] src, int off, int len) throws IOException {
         if (len == 0)
             return;
         if (_isDone)
@@ -56,7 +56,7 @@ public class ByteLimitOutputStream extends LimitOutputStream {
 
         public void test(long limit) throws Exception {
             LimitOutputStream lout = new ByteLimitOutputStream(System.out, this, limit);
-            final byte buf[] = new byte[4096];
+            final byte[] buf = new byte[4096];
             try {
                 int read;
                 while (run && (read = System.in.read(buf)) != -1) {

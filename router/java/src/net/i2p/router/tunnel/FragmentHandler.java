@@ -134,7 +134,7 @@ class FragmentHandler {
      *
      * @return ok (false if corrupt)
      */
-    public boolean receiveTunnelMessage(byte preprocessed[], int offset, int length) {
+    public boolean receiveTunnelMessage(byte[] preprocessed, int offset, int length) {
         boolean ok = verifyPreprocessed(preprocessed, offset, length);
         if (!ok) {
             if (_log.shouldWarn())
@@ -232,7 +232,7 @@ class FragmentHandler {
      * payload are mixed up).  Later it may be worthwhile to explore optimizing
      * this.
      */
-    private boolean verifyPreprocessed(byte preprocessed[], int offset, int length) {
+    private boolean verifyPreprocessed(byte[] preprocessed, int offset, int length) {
         // ByteCache/ByteArray corruption detection
         //byte[] orig = new byte[length];
         //System.arraycopy(preprocessed, 0, orig, 0, length);
@@ -256,7 +256,7 @@ class FragmentHandler {
         paddingEnd++; // skip the last
 
         ByteArray ba = _validateCache.acquire(); // larger than necessary, but always sufficient
-        byte preV[] = ba.getData();
+        byte[] preV = ba.getData();
         int validLength = length - offset - paddingEnd + HopProcessor.IV_LENGTH;
         System.arraycopy(preprocessed, offset + paddingEnd, preV, 0, validLength - HopProcessor.IV_LENGTH);
         System.arraycopy(preprocessed, 0, preV, validLength - HopProcessor.IV_LENGTH, HopProcessor.IV_LENGTH);
@@ -317,7 +317,7 @@ class FragmentHandler {
      * @return the offset for the next byte after the received fragment or -1 on error
      * @throws RuntimeException
      */
-    private int receiveFragment(byte preprocessed[], int offset, int length) {
+    private int receiveFragment(byte[] preprocessed, int offset, int length) {
         //if (_log.shouldDebug())
         //    _log.debug("CONTROL: 0x" + Integer.toHexString(preprocessed[offset] & 0xff) +
         //               " at offset: " + offset);
@@ -333,7 +333,7 @@ class FragmentHandler {
      * @return offset after reading the full fragment or -1 on error
      * @throws RuntimeException
      */
-    private int receiveInitialFragment(byte preprocessed[], int offset, int length) {
+    private int receiveInitialFragment(byte[] preprocessed, int offset, int length) {
         if (_log.shouldDebug())
             _log.debug("Initial fragment begins at " + offset + " for " + length + " bytes");
         int type = (preprocessed[offset] & MASK_TYPE) >>> 5;
@@ -359,7 +359,7 @@ class FragmentHandler {
         if ( (type == TYPE_ROUTER) || (type == TYPE_TUNNEL) ) {
             if (offset + Hash.HASH_LENGTH >= preprocessed.length)
                 return -1;
-            //byte h[] = new byte[Hash.HASH_LENGTH];
+            //byte[] h = new byte[Hash.HASH_LENGTH];
             //System.arraycopy(preprocessed, offset, h, 0, Hash.HASH_LENGTH);
             //router = new Hash(h);
             router = Hash.create(preprocessed, offset);
@@ -458,7 +458,7 @@ class FragmentHandler {
      * @return offset after reading the full fragment or -1 on error
      * @throws RuntimeException
      */
-    private int receiveSubsequentFragment(byte preprocessed[], int offset, int length) {
+    private int receiveSubsequentFragment(byte[] preprocessed, int offset, int length) {
         if (_log.shouldDebug())
             _log.debug("Subsequent fragment begins at " + offset + " for " + length + " bytes");
         int fragmentNum = ((preprocessed[offset] & MASK_FRAGMENT_NUM) >>> 1);
@@ -517,7 +517,7 @@ class FragmentHandler {
         if (msg == null)
             return;
         _completed.incrementAndGet();
-        byte data[] = null;
+        byte[] data = null;
         try {
             // toByteArray destroys the contents of the message completely
             data = msg.toByteArray();

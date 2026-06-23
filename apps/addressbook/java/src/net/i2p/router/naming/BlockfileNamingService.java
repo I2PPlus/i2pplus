@@ -2165,7 +2165,7 @@ public class BlockfileNamingService extends DummyNamingService {
         }
         if (size == 0)
             return "";
-        byte raw[] = new byte[size];
+        byte[] raw = new byte[size];
         int read = DataHelper.read(in, raw);
         if (read != size)
             throw new EOFException("EOF reading string");

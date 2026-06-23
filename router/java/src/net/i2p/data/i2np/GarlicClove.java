@@ -63,7 +63,7 @@ public class GarlicClove extends DataStructureImpl {
     /**
      *  @return length read
      */
-    public int readBytes(byte source[], int offset) throws DataFormatException {
+    public int readBytes(byte[] source, int offset) throws DataFormatException {
         int cur = offset;
         _instructions = DeliveryInstructions.create(source, offset);
         cur += _instructions.getSize();
@@ -89,7 +89,7 @@ public class GarlicClove extends DataStructureImpl {
      *
      *  @since 0.9.44
      */
-    public void readBytesRatchet(byte source[], int offset, int len) throws DataFormatException {
+    public void readBytesRatchet(byte[] source, int offset, int len) throws DataFormatException {
         _instructions = DeliveryInstructions.create(source, offset);
         int isz = _instructions.getSize();
         try {
@@ -117,7 +117,7 @@ public class GarlicClove extends DataStructureImpl {
      */
     @Override
     public byte[] toByteArray() {
-        byte rv[] = new byte[estimateSize()];
+        byte[] rv = new byte[estimateSize()];
         int offset = _instructions.writeBytes(rv, 0);
         offset = _msg.toByteArray(rv, offset);
         DataHelper.toLong(rv, offset, 4, _cloveId);

@@ -1008,7 +1008,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @throws IOException if an I/O error occurs while writing to the output stream
      */
     private boolean writeTorrents(PrintWriter out, HttpServletRequest req, boolean canWrite) throws IOException {
-        final long stats[] = new long[6];
+        final long[] stats = new long[6];
         String filter = req.getParameter("filter") != null ? req.getParameter("filter") : "";
         String peerParam = req.getParameter("p");
         String search = req.getParameter("search");
@@ -2909,7 +2909,7 @@ public class I2PSnarkServlet extends BasicServlet {
         } else {_manager.addMessage("Unknown POST action: \"" + action + '\"');}
     }
 
-    private static final String iopts[] = {"inbound.length", "inbound.quantity", "outbound.length", "outbound.quantity" };
+    private static final String[] iopts = {"inbound.length", "inbound.quantity", "outbound.length", "outbound.quantity" };
 
     /** put the individual i2cp selections into the option string */
     private static String buildI2CPOpts(HttpServletRequest req) {
@@ -3007,7 +3007,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param buf StringBuilder buffer to append the generated HTML output for this snark
      * @throws IOException if an I/O error occurs during output operations
      */
-    private void displaySnark(PrintWriter out, HttpServletRequest req, Snark snark, String uri, int row, long stats[],
+    private void displaySnark(PrintWriter out, HttpServletRequest req, Snark snark, String uri, int row, long[] stats,
                               boolean showPeers, boolean isDegraded, boolean noThinsp, boolean showDebug, boolean statsOnly,
                               boolean showRatios, boolean canWrite,
                               String filterParam, boolean filterEnabled, String sortParam, boolean sortEnabled,
@@ -4588,8 +4588,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 .replace("[", "%5B").replace("]", "%5D");
     }
 
-    private static final String escapeChars[] = {"\"", "<", ">", "'"};
-    private static final String escapeCodes[] = {"&quot;", "&lt;", "&gt;", "&apos;"};
+    private static final String[] escapeChars = {"\"", "<", ">", "'"};
+    private static final String[] escapeCodes = {"&quot;", "&lt;", "&gt;", "&apos;"};
 
     /**
      * Modded from DataHelper.

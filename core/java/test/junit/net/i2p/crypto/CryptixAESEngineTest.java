@@ -19,10 +19,10 @@ public class CryptixAESEngineTest extends TestCase {
     public void testED() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         SessionKey key = ctx.keyGenerator().generateSessionKey();
-        byte iv[] = new byte[16];
-        byte orig[] = new byte[128];
-        byte encrypted[] = new byte[128];
-        byte decrypted[] = new byte[128];
+        byte[] iv = new byte[16];
+        byte[] orig = new byte[128];
+        byte[] encrypted = new byte[128];
+        byte[] decrypted = new byte[128];
         ctx.random().nextBytes(iv);
         ctx.random().nextBytes(orig);
         CryptixAESEngine aes = new CryptixAESEngine(ctx);
@@ -34,9 +34,9 @@ public class CryptixAESEngineTest extends TestCase {
     public static void testED2() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         SessionKey key = ctx.keyGenerator().generateSessionKey();
-        byte iv[] = new byte[16];
-        byte orig[] = new byte[128];
-        byte data[] = new byte[128];
+        byte[] iv = new byte[16];
+        byte[] orig = new byte[128];
+        byte[] data = new byte[128];
         ctx.random().nextBytes(iv);
         ctx.random().nextBytes(orig);
         CryptixAESEngine aes = new CryptixAESEngine(ctx);
@@ -49,10 +49,10 @@ public class CryptixAESEngineTest extends TestCase {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         SessionKey key = ctx.keyGenerator().generateSessionKey();
         SessionKey wrongKey = ctx.keyGenerator().generateSessionKey();
-        byte iv[] = new byte[16];
-        byte orig[] = new byte[128];
-        byte encrypted[] = new byte[128];
-        byte decrypted[] = new byte[128];
+        byte[] iv = new byte[16];
+        byte[] orig = new byte[128];
+        byte[] encrypted = new byte[128];
+        byte[] decrypted = new byte[128];
         ctx.random().nextBytes(iv);
         ctx.random().nextBytes(orig);
         CryptixAESEngine aes = new CryptixAESEngine(ctx);
@@ -65,10 +65,10 @@ public class CryptixAESEngineTest extends TestCase {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         SessionKey key = ctx.keyGenerator().generateSessionKey();
         SessionKey wrongKey = ctx.keyGenerator().generateSessionKey();
-        byte iv[] = new byte[16];
-        byte orig[] = new byte[128];
-        byte encrypted[] = new byte[128];
-        byte decrypted[] = new byte[128];
+        byte[] iv = new byte[16];
+        byte[] orig = new byte[128];
+        byte[] encrypted = new byte[128];
+        byte[] decrypted = new byte[128];
         ctx.random().nextBytes(iv);
         ctx.random().nextBytes(orig);
         CryptixAESEngine aes = new CryptixAESEngine(ctx);
@@ -86,10 +86,10 @@ public class CryptixAESEngineTest extends TestCase {
     public static void testEDBlock() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         SessionKey key = ctx.keyGenerator().generateSessionKey();
-        byte iv[] = new byte[16];
-        byte orig[] = new byte[16];
-        byte encrypted[] = new byte[16];
-        byte decrypted[] = new byte[16];
+        byte[] iv = new byte[16];
+        byte[] orig = new byte[16];
+        byte[] encrypted = new byte[16];
+        byte[] decrypted = new byte[16];
         ctx.random().nextBytes(iv);
         ctx.random().nextBytes(orig);
         CryptixAESEngine aes = new CryptixAESEngine(ctx);
@@ -101,9 +101,9 @@ public class CryptixAESEngineTest extends TestCase {
     public static void testEDBlock2() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         SessionKey key = ctx.keyGenerator().generateSessionKey();
-        byte iv[] = new byte[16];
-        byte orig[] = new byte[16];
-        byte data[] = new byte[16];
+        byte[] iv = new byte[16];
+        byte[] orig = new byte[16];
+        byte[] data = new byte[16];
         ctx.random().nextBytes(iv);
         ctx.random().nextBytes(orig);
         CryptixAESEngine aes = new CryptixAESEngine(ctx);

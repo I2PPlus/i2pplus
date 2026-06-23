@@ -155,7 +155,7 @@ public class PcapWriter implements Closeable, Flushable {
         if (pkt.getNacks() != null)
             opts.add(OPTION_NACK, 1, pkt.getNacks().length);
         int optLen = opts.size();
-        byte options[] = opts.getData();
+        byte[] options = opts.getData();
 
         // PCAP Header
         long now;
@@ -317,7 +317,7 @@ public class PcapWriter implements Closeable, Flushable {
      *  To do: Add the SACK option to the TCP header.
      */
     private static long getLowestAckedThrough(Packet pkt, Connection con) {
-        long nacks[] = pkt.getNacks();
+        long[] nacks = pkt.getNacks();
         long lowest = pkt.getAckThrough(); // can return -1 but we increment below
         if (nacks != null) {
             for (int i = 0; i < nacks.length; i++) {

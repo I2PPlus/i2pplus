@@ -56,7 +56,7 @@ public class OutboundTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
             throw new I2NPMessageException("Wrong length (expects " + calculateWrittenLength() + ", recv " + dataSize + ")");
         _records = new EncryptedBuildRecord[RECORD_COUNT];
         for (int i = 0; i < RECORD_COUNT; i++) {
-            byte rec[] = new byte[SHORT_RECORD_SIZE];
+            byte[] rec = new byte[SHORT_RECORD_SIZE];
             System.arraycopy(data, offset, rec, 0, SHORT_RECORD_SIZE);
             setRecord(i, new ShortEncryptedBuildRecord(rec));
             offset += SHORT_RECORD_SIZE;

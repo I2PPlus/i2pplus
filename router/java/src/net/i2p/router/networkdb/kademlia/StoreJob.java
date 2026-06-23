@@ -596,8 +596,8 @@ abstract class StoreJob extends JobImpl {
          * @return negative if lhs is closer, positive if rhs is closer, 0 if equal
          */
         public int compare(Lease lhs, Lease rhs) {
-            byte lhsb[] = lhs.getGateway().getData();
-            byte rhsb[] = rhs.getGateway().getData();
+            byte[] lhsb = lhs.getGateway().getData();
+            byte[] rhsb = rhs.getGateway().getData();
             for (int i = 0; i < _base.length; i++) {
                 int ld = (lhsb[i] ^ _base[i]) & 0xff;
                 int rd = (rhsb[i] ^ _base[i]) & 0xff;

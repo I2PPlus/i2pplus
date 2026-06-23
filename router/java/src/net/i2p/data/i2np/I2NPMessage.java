@@ -42,7 +42,7 @@ public interface I2NPMessage {
      * @return size of the message read (including headers)
      * @throws I2NPMessageException if there is no valid message
      */
-    public int readBytes(byte data[], int type, int offset) throws I2NPMessageException;
+    public int readBytes(byte[] data, int type, int offset) throws I2NPMessageException;
 
     /**
      * Read the body into the data structures, after the initial type byte, using
@@ -59,7 +59,7 @@ public interface I2NPMessage {
      * @throws I2NPMessageException if there is no valid message
      * @since 0.8.12
      */
-    public int readBytes(byte data[], int type, int offset, int maxLen) throws I2NPMessageException;
+    public int readBytes(byte[] data, int type, int offset, int maxLen) throws I2NPMessageException;
 
     /**
      * Read the body into the data structures, after the initial type byte and
@@ -73,8 +73,8 @@ public interface I2NPMessage {
      * @throws I2NPMessageException if the stream doesn't contain a valid message
      *          that this class can read.
      */
-    public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException;
-    public void readMessage(byte data[], int offset, int dataSize, int type, I2NPMessageHandler handler) throws I2NPMessageException;
+    public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException;
+    public void readMessage(byte[] data, int offset, int dataSize, int type, I2NPMessageHandler handler) throws I2NPMessageException;
 
     /**
      * Return the unique identifier for this type of I2NP message, as defined in
@@ -120,7 +120,7 @@ public interface I2NPMessage {
      *
      * @return the new offset (NOT the length)
      */
-    public int toByteArray(byte buffer[]);
+    public int toByteArray(byte[] buffer);
 
     /**
      * Write the message to the buffer, returning the new offset (NOT the length).
@@ -132,7 +132,7 @@ public interface I2NPMessage {
      * @return the new offset (NOT the length)
      * @since 0.9.36
      */
-    public int toByteArray(byte buffer[], int off);
+    public int toByteArray(byte[] buffer, int off);
 
     /**
      * Write the message to the buffer, returning the new offset (NOT the length).
@@ -142,7 +142,7 @@ public interface I2NPMessage {
      *
      * @return the length written
      */
-    public int toRawByteArray(byte buffer[]);
+    public int toRawByteArray(byte[] buffer);
 
     /**
      * Write the message to the buffer, returning the new offset (NOT the length).
@@ -154,5 +154,5 @@ public interface I2NPMessage {
      * @return the new offset (NOT the length)
      * @since 0.9.36
      */
-    public int toRawByteArrayNTCP2(byte buffer[], int off);
+    public int toRawByteArrayNTCP2(byte[] buffer, int off);
 }

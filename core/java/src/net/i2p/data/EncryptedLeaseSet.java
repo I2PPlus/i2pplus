@@ -815,7 +815,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         } catch (IOException ioe) {
             throw new DataFormatException("Signature failed", ioe);
         }
-        byte data[] = out.toByteArray();
+        byte[] data = out.toByteArray();
         // now sign outer with the blinded key
         _signature = DSAEngine.getInstance().sign(data, bkey);
         if (_signature == null) throw new DataFormatException("Signature failed with " + key.getType() + " key");

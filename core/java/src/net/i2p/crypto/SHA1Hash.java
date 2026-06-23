@@ -44,7 +44,7 @@ public class SHA1Hash extends SimpleDataStructure {
     }
 
     /** @throws IllegalArgumentException if data is not 20 bytes (null is ok) */
-    public SHA1Hash(byte data[]) {
+    public SHA1Hash(byte[] data) {
         super(data);
     }
 

@@ -779,7 +779,7 @@ public class LogManager implements Flushable {
         return _format;
     }
 
-    public void setFormat(char fmt[]) {
+    public void setFormat(char[] fmt) {
         _format = fmt;
     }
 

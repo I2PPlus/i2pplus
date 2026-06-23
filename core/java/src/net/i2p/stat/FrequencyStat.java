@@ -17,9 +17,9 @@ public class FrequencyStat {
     private final String _description;
 
     /** actual frequency objects for this statistic */
-    private final Frequency _frequencies[];
+    private final Frequency[] _frequencies;
 
-    public FrequencyStat(String name, String description, String group, long periods[]) {
+    public FrequencyStat(String name, String description, String group, long[] periods) {
         _statName = name;
         _description = description;
         _groupName = group;
@@ -52,7 +52,7 @@ public class FrequencyStat {
     }
 
     public long[] getPeriods() {
-        long rv[] = new long[_frequencies.length];
+        long[] rv = new long[_frequencies.length];
         for (int i = 0; i < _frequencies.length; i++) rv[i] = _frequencies[i].getPeriod();
         return rv;
     }

@@ -634,7 +634,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
         if (_log.shouldDebug()) {
             _log.debug("SB(" + obegin + ',' + oend + ") KB(" + begin + ',' + end + ") fixed=" + fixed + " fixedBits=" + fixedBits + " numNonZ=" + numNonZero);
         }
-        byte data[] = variance.toByteArray();
+        byte[] data = variance.toByteArray();
         T key = makeKey(data);
         byte[] hash = DataHelper.xor(key.getData(), _us.getData());
         T rv = makeKey(hash);

@@ -71,7 +71,7 @@ public class EchoIT extends StreamingITBase {
                     InputStream in = socket.getInputStream();
                     OutputStream out = socket.getOutputStream();
                     _log.debug("Server streams built");
-                    byte buf[] = new byte[5];
+                    byte[] buf = new byte[5];
                     while (buf != null) {
                         for (int i = 0; i < buf.length; i++) {
                             int c = in.read();
@@ -116,7 +116,7 @@ public class EchoIT extends StreamingITBase {
                     _log.debug("Client wrote a line");
                     out.flush();
                     _log.debug("Client flushed");
-                    byte buf[] = new byte[5];
+                    byte[] buf = new byte[5];
 
                     for (int j = 0; j < buf.length; j++) {
                         int c = in.read();

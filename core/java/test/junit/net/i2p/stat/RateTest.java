@@ -22,7 +22,7 @@ public class RateTest extends TestCase {
         StringBuilder buf = new StringBuilder(1024);
 
         rate.store("rate.test", buf);
-        byte data[] = DataHelper.getUTF8(buf.toString());
+        byte[] data = DataHelper.getUTF8(buf.toString());
 
         Properties props = new Properties();
         props.load(new ByteArrayInputStream(data));

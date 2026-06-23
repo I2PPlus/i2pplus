@@ -147,7 +147,7 @@ public class BlockFile implements Closeable {
 	 *
 	 *  @param args command line arguments (file path)
 	 */
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 		if (args.length != 1) {
 			System.err.println("Usage: BlockFile file");
 			return;

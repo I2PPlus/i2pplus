@@ -21,7 +21,7 @@ public class PayloadTest extends StructureTest {
         Payload payload = new Payload();
         SessionKey key = (SessionKey) (new SessionKeyTest()).createDataStructure();
 
-        byte data[] = DataHelper.getASCII("Hello, I2P");
+        byte[] data = DataHelper.getASCII("Hello, I2P");
         // This causes equals() to fail unless we override the test
         // to set the unencrypted data after reading.
         // Unencrypted data is deprecated, just use encrypted data for the test.

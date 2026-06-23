@@ -102,7 +102,7 @@ public class ConfigUpdateHelper extends HelperBase {
                getChecked(ConfigUpdateHandler.PROP_UPDATE_DEV_SU3) + '>';
     }
 
-    private static final long PERIODS[] = new long[] { 4*60*60*1000L, 8*60*60*1000L, 12*60*60*1000L,
+    private static final long[] PERIODS = new long[] { 4*60*60*1000L, 8*60*60*1000L, 12*60*60*1000L,
                                                        24*60*60*1000L, 36*60*60*1000L, 48*60*60*1000L,
                                                        3*24*60*60*1000L, 7*24*60*60*1000L, -1L };
 

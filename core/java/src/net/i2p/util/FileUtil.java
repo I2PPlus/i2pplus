@@ -61,7 +61,7 @@ public class FileUtil {
             // System.out.println("info: target is not a directory [" + target.getPath() + "]");
             return target.delete();
         } else {
-            File children[] = target.listFiles();
+            File[] children = target.listFiles();
             if (children == null) {
                 // System.out.println("info: target null children [" + target.getPath() + "]");
                 return false;
@@ -100,7 +100,7 @@ public class FileUtil {
         int files = 0;
         ZipFile zip = null;
         try {
-            final byte buf[] = new byte[8192];
+            final byte[] buf = new byte[8192];
             zip = new ZipFile(zipfile);
             Enumeration<? extends ZipEntry> entries = zip.entries();
             while (entries.hasMoreElements()) {
@@ -222,7 +222,7 @@ public class FileUtil {
     public static boolean verifyZip(File zipfile) {
         ZipFile zip = null;
         try {
-            byte buf[] = new byte[16 * 1024];
+            byte[] buf = new byte[16 * 1024];
             zip = new ZipFile(zipfile);
             Enumeration<? extends ZipEntry> entries = zip.entries();
             boolean p200TestRequired = true;
@@ -499,7 +499,7 @@ public class FileUtil {
             // which does not contain DataHelper
             // DataHelper.copy(in, out);
             int read;
-            byte buf[] = new byte[4096];
+            byte[] buf = new byte[4096];
             while ((read = in.read(buf)) != -1) {
                 out.write(buf, 0, read);
             }
@@ -549,7 +549,7 @@ public class FileUtil {
      * Usage: FileUtil (delete path | copy source dest | rename from to | unzip path.zip)
      *
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         if ((args == null) || (args.length < 2)) {
             System.err.println("Usage: delete path | copy source dest | rename from to | unzip path.zip");
             // testRmdir();

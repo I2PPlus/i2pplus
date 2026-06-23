@@ -147,7 +147,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
      * @param size how many bytes of the buffer to write (may be 0)
      * @return the packet sent
      */
-    public PacketLocal send(byte buf[], int off, int size) {
+    public PacketLocal send(byte[] buf, int off, int size) {
         return send(buf, off, size, false);
     }
 
@@ -161,7 +161,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
      *                       so we get an ACK back
      * @return the packet sent
      */
-    public PacketLocal send(byte buf[], int off, int size, boolean forceIncrement) {
+    public PacketLocal send(byte[] buf, int off, int size, boolean forceIncrement) {
         PacketLocal packet = buildPacket(buf, off, size, forceIncrement);
         _connection.sendPacket(packet);
         return packet;
@@ -188,7 +188,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
      *                       so we get an ACK back
      * @return the packet to be sent
      */
-    private PacketLocal buildPacket(byte buf[], int off, int size, boolean forceIncrement) {
+    private PacketLocal buildPacket(byte[] buf, int off, int size, boolean forceIncrement) {
         if (size > Packet.MAX_PAYLOAD_SIZE) throw new IllegalArgumentException("size is too large (" + size + ")");
         boolean ackOnly = isAckOnly(size);
         boolean isFirst = (_connection.getAckedPackets() <= 0) && (_connection.getUnackedPacketsSent() <= 0);

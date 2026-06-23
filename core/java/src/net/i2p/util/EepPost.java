@@ -238,7 +238,7 @@ public class EepPost extends EepGet {
      *  Adapted from old jrandom EepPost
      */
     private String getSeparator() {
-        byte separator[] = new byte[32];
+        byte[] separator = new byte[32];
         _context.random().nextBytes(separator);
         return Base32.encode(separator);
     }
@@ -246,7 +246,7 @@ public class EepPost extends EepGet {
     /**
      * EepPost [-p 127.0.0.1:4444] [-n #retries] url
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         String proxyHost = "127.0.0.1";
         int proxyPort = 4444;
         int numRetries = 0;

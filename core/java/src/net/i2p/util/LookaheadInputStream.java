@@ -69,7 +69,7 @@ public class LookaheadInputStream extends FilterInputStream {
     }
 
     @Override
-    public int read(byte buf[], int off, int len) throws IOException {
+    public int read(byte[] buf, int off, int len) throws IOException {
         if (_eofReached) return -1;
         for (int i = 0; i < len; i++) {
             int c = read();
@@ -110,15 +110,15 @@ public class LookaheadInputStream extends FilterInputStream {
     }
 
     /*******
-     * public static void main(String args[]) {
-     * byte buf[] = new byte[32];
+     * public static void main(String[] args) {
+     * byte[] buf = new byte[32];
      * for (int i = 0; i < 32; i++)
      * buf[i] = (byte)i;
      * ByteArrayInputStream bais = new ByteArrayInputStream(buf);
      * try {
      * LookaheadInputStream lis = new LookaheadInputStream(8);
      * lis.initialize(bais);
-     * byte rbuf[] = new byte[32];
+     * byte[] rbuf = new byte[32];
      * int read = lis.read(rbuf);
      * if (read != 24) throw new RuntimeException("Should have stopped (read=" + read + ")");
      * for (int i = 0; i < 24; i++)
@@ -141,13 +141,13 @@ public class LookaheadInputStream extends FilterInputStream {
      * }
      *
      * private static boolean test(int size) {
-     * byte buf[] = new byte[size];
+     * byte[] buf = new byte[size];
      * new java.util.Random().nextBytes(buf);
      * ByteArrayInputStream bais = new ByteArrayInputStream(buf);
      * try {
      * LookaheadInputStream lis = new LookaheadInputStream(8);
      * lis.initialize(bais);
-     * byte rbuf[] = new byte[size];
+     * byte[] rbuf = new byte[size];
      * int read = lis.read(rbuf);
      * if (read != (size-8)) throw new RuntimeException("Should have stopped (read=" + read + ")");
      * for (int i = 0; i < (size-8); i++)

@@ -242,7 +242,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * @throws IllegalStateException if there is data missing or otherwise b0rked
      * @since 0.9.20 moved from Packet
      */
-    public int writeSignedPacket(byte buffer[], int offset) throws IllegalStateException {
+    public int writeSignedPacket(byte[] buffer, int offset) throws IllegalStateException {
         if (isFlagSet(FLAG_SIGNATURE_OFFLINE)) {
             if (_transientExpires < _context.clock().now())
                 throw new IllegalStateException("Offline signature expired " + DataHelper.formatTime(_transientExpires));

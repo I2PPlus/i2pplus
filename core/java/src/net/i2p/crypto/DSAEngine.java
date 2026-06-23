@@ -83,14 +83,14 @@ public final class DSAEngine {
      * @param verifyingKey the public key to verify with
      * @return true if the signature is valid, false otherwise
      */
-    public boolean verifySignature(Signature signature, byte signedData[], SigningPublicKey verifyingKey) {
+    public boolean verifySignature(Signature signature, byte[] signedData, SigningPublicKey verifyingKey) {
         return verifySignature(signature, signedData, 0, signedData.length, verifyingKey);
     }
 
     /**
      *  Verify using any sig type as of 0.9.12 (DSA only prior to that)
      */
-    public boolean verifySignature(Signature signature, byte signedData[], int offset, int size, SigningPublicKey verifyingKey) {
+    public boolean verifySignature(Signature signature, byte[] signedData, int offset, int size, SigningPublicKey verifyingKey) {
         boolean rv;
         SigType type = signature.getType();
         if (type != verifyingKey.getType()) throw new IllegalArgumentException("type mismatch sig=" + signature.getType() + " key=" + verifyingKey.getType());
@@ -197,8 +197,8 @@ public final class DSAEngine {
 
         try {
             byte[] sigbytes = signature.getData();
-            byte rbytes[] = new byte[20];
-            byte sbytes[] = new byte[20];
+            byte[] rbytes = new byte[20];
+            byte[] sbytes = new byte[20];
             // System.arraycopy(sigbytes, 0, rbytes, 0, 20);
             // System.arraycopy(sigbytes, 20, sbytes, 0, 20);
             for (int x = 0; x < 40; x++) {
@@ -219,7 +219,7 @@ public final class DSAEngine {
                 _log.warn("modInverse() error", ae);
                 return false;
             }
-            byte data[] = hash.getData();
+            byte[] data = hash.getData();
             NativeBigInteger bi = new NativeBigInteger(1, data);
             BigInteger u1 = bi.multiply(w).mod(CryptoConstants.dsaq);
             BigInteger u2 = r.multiply(w).mod(CryptoConstants.dsaq);
@@ -246,7 +246,7 @@ public final class DSAEngine {
      *
      *  @return null on error
      */
-    public Signature sign(byte data[], SigningPrivateKey signingKey) {
+    public Signature sign(byte[] data, SigningPrivateKey signingKey) {
         return sign(data, 0, data.length, signingKey);
     }
 
@@ -255,7 +255,7 @@ public final class DSAEngine {
      *
      *  @return null on error
      */
-    public Signature sign(byte data[], int offset, int length, SigningPrivateKey signingKey) {
+    public Signature sign(byte[] data, int offset, int length, SigningPrivateKey signingKey) {
         if ((signingKey == null) || (data == null) || (data.length <= 0)) return null;
         SigType type = signingKey.getType();
         if (type != SigType.DSA_SHA1) {
@@ -446,7 +446,7 @@ public final class DSAEngine {
      */
     public SHA1Hash calculateHash(InputStream in) {
         MessageDigest digest = SHA1.getInstance();
-        byte buf[] = new byte[64];
+        byte[] buf = new byte[64];
         int read = 0;
         try {
             while ((read = in.read(buf)) != -1) {
@@ -469,7 +469,7 @@ public final class DSAEngine {
     public static SHA1Hash calculateHash(byte[] source, int offset, int len) {
         MessageDigest h = SHA1.getInstance();
         h.update(source, offset, len);
-        byte digested[] = h.digest();
+        byte[] digested = h.digest();
         return new SHA1Hash(digested);
     }
 

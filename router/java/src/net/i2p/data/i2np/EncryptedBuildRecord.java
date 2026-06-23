@@ -22,7 +22,7 @@ public class EncryptedBuildRecord extends SimpleDataStructure {
     public final static int LENGTH = TunnelBuildMessageBase.RECORD_SIZE;
 
     /** @throws IllegalArgumentException if data is not correct length (null is ok) */
-    public EncryptedBuildRecord(byte data[]) {
+    public EncryptedBuildRecord(byte[] data) {
         super(data);
     }
 

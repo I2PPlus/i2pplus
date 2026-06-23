@@ -95,7 +95,7 @@ public abstract class ZipFileComment {
         throw new ZipException("No comment block found");
     }
 
-    public static void main(String args[]) throws IOException {
+    public static void main(String[] args) throws IOException {
         if (args.length != 1) {
             System.err.println("Usage: ZipFileComment file");
             return;

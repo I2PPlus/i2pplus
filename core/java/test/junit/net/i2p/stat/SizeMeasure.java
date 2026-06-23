@@ -1,7 +1,7 @@
 package net.i2p.stat;
 
 public class SizeMeasure {
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         testRateSize(100); // 117KB
         testRateSize(100000); // 4.5MB
         testRateSize(440000); // 44MB
@@ -12,7 +12,7 @@ public class SizeMeasure {
 
     private static void testRateSize(int num) {
         Runtime.getRuntime().gc();
-        Rate rate[] = new Rate[num];
+        Rate[] rate = new Rate[num];
         long used = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         long usedPer = used / num;
         System.out.println(num + ": create array - Used: " + used + " bytes (or " + usedPer + " bytes per array entry)");
@@ -36,7 +36,7 @@ public class SizeMeasure {
 
     private static void testFrequencySize(int num) {
         Runtime.getRuntime().gc();
-        Frequency freq[] = new Frequency[num];
+        Frequency[] freq = new Frequency[num];
         long used = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         long usedPer = used / num;
         System.out.println(num + ": create array - Used: " + used + " bytes (or " + usedPer + " bytes per array entry)");

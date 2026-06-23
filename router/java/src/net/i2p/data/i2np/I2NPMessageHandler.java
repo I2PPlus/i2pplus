@@ -39,7 +39,7 @@ public class I2NPMessageHandler {
      * @throws I2NPMessageException if there is a problem handling the particular
      *          message - if it is an unknown type or has improper formatting, etc.
      */
-    public I2NPMessage readMessage(byte data[]) throws I2NPMessageException {
+    public I2NPMessage readMessage(byte[] data) throws I2NPMessageException {
         readMessage(data, 0, data.length);
         return lastRead();
     }
@@ -47,7 +47,7 @@ public class I2NPMessageHandler {
     /**
      *  Result is retreived with lastRead()
      */
-    public int readMessage(byte data[], int offset) throws I2NPMessageException {
+    public int readMessage(byte[] data, int offset) throws I2NPMessageException {
         return readMessage(data, offset, data.length - offset);
     }
 
@@ -61,7 +61,7 @@ public class I2NPMessageHandler {
      *                must be at least 16
      *  @since 0.8.12
      */
-    public int readMessage(byte data[], int offset, int maxLen) throws I2NPMessageException {
+    public int readMessage(byte[] data, int offset, int maxLen) throws I2NPMessageException {
         int cur = offset;
         // we will assume that maxLen is >= 1 here. It's checked to be >= 16 in readBytes()
         int type = data[cur] & 0xff;

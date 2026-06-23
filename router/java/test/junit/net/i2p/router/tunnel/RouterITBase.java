@@ -34,8 +34,8 @@ public abstract class RouterITBase {
     }
 
     private static TunnelCreatorConfig prepareConfig(int numHops) {
-        Hash peers[] = new Hash[numHops];
-        long tunnelIds[] = new long[numHops];
+        Hash[] peers = new Hash[numHops];
+        long[] tunnelIds = new long[numHops];
         for (int i = 0; i < numHops; i++) {
             peers[i] = new Hash();
             peers[i].setData(new byte[Hash.HASH_LENGTH]);

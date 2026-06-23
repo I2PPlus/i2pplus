@@ -290,7 +290,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * <p>Please use host name, not b32 or full dest, in announce URL. Ensure in default hosts.txt.
      * Please use host name, not b32 or full dest, in website URL. Ensure in default hosts.txt.
      */
-    private static final String DEFAULT_TRACKERS[] = {
+    private static final String[] DEFAULT_TRACKERS = {
         "Postman", "http://tracker2.postman.i2p/announce.php=http://tracker2.postman.i2p/",
         "BT", "http://opentracker.bt.i2p/a=http://opentracker.bt.i2p/stats",
         "DgTrack", "http://opentracker.dg2.i2p/a=http://opentracker.dg2.i2p/",
@@ -326,7 +326,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         "sigmatracker.i2p", "qimlze77z7w32lx2ntnwkuqslrzlsqy7774v3urueuarafyqik5a.b32.i2p",
     }));
 
-    private static final String DEFAULT_TORRENT_CREATE_FILTERS[] = {
+    private static final String[] DEFAULT_TORRENT_CREATE_FILTERS = {
         ".backup files", ".backup", "ends_with",
         ".bak files", ".bak", "ends_with",
         ".nfo files", ".nfo", "ends_with",
@@ -344,7 +344,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     && !SigType.ECDSA_SHA256_P256.isAvailable()) {
                 continue;
             }
-            String urls[] = DataHelper.split(DEFAULT_TRACKERS[i], "=", 2);
+            String[] urls = DataHelper.split(DEFAULT_TRACKERS[i], "=", 2);
             ann.add(urls[0]);
         }
         DEFAULT_TRACKER_ANNOUNCES = Collections.unmodifiableSet(ann);
@@ -4074,7 +4074,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private boolean monitorTorrents(File dir, boolean shouldStart) {
         boolean rv = true;
-        File files[] = dir.listFiles(new FileSuffixFilter(".torrent"));
+        File[] files = dir.listFiles(new FileSuffixFilter(".torrent"));
         List<String> foundNames = new ArrayList<>(0);
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
@@ -4267,7 +4267,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 String name = toks[i].trim().replace("&#44;", ",");
                 String url = toks[i + 1].trim().replace("&#44;", ",");
                 if ((name.length() > 0) && (url.length() > 0)) {
-                    String urls[] = DataHelper.split(url, "=", 2);
+                    String[] urls = DataHelper.split(url, "=", 2);
                     String url2 = urls.length > 1 ? urls[1] : "";
                     _trackerMap.put(name, new Tracker(name, urls[0], url2));
                 }
@@ -4288,7 +4288,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             String name = toks[i].trim().replace("&#44;", ",");
             String filterPattern = toks[i + 1].trim().replace("&#44;", ",");
             if ((name.length() > 0) && (filterPattern.length() > 0)) {
-                String data[] = DataHelper.split(filterPattern, "=", 2);
+                String[] data = DataHelper.split(filterPattern, "=", 2);
                 boolean isDefault = data.length > 1 ? true : false;
                 _torrentCreateFilterMap.put(
                         name, new TorrentCreateFilter(name, data[0], "contains", isDefault));
@@ -4366,7 +4366,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if (name.equals("TheBland") && !SigType.ECDSA_SHA256_P256.isAvailable()) {
                 continue;
             }
-            String urls[] = DataHelper.split(DEFAULT_TRACKERS[i + 1], "=", 2);
+            String[] urls = DataHelper.split(DEFAULT_TRACKERS[i + 1], "=", 2);
             String url2 = urls.length > 1 ? urls[1] : null;
             _trackerMap.put(name, new Tracker(name, urls[0], url2));
         }

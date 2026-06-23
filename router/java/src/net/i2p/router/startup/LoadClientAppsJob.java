@@ -55,7 +55,7 @@ public class LoadClientAppsJob extends JobImpl {
                 }
                 continue;
             }
-            String argVal[] = parseArgs(app.args);
+            String[] argVal = parseArgs(app.args);
             if (app.delay == 0) {
                 // run this guy now
                 runClient(app.className, app.clientName, argVal, ctx, _log);
@@ -79,20 +79,20 @@ public class LoadClientAppsJob extends JobImpl {
         protected final RouterContext _ctx;
         private final String _className;
         private final String _clientName;
-        private final String _args[];
+        private final String[] _args;
         private final Log _log;
         private final ThreadGroup _threadGroup;
         private final ClassLoader _cl;
 
         /** caller MUST call schedule() */
         public DelayedRunClient(SimpleTimer2 pool, RouterContext enclosingContext, String className,
-                                String clientName, String args[]) {
+                                String clientName, String[] args) {
             this(pool, enclosingContext, className, clientName, args, null, null);
         }
 
         /** caller MUST call schedule() */
         public DelayedRunClient(SimpleTimer2 pool, RouterContext enclosingContext, String className, String clientName,
-                                String args[], ThreadGroup threadGroup, ClassLoader cl) {
+                                String[] args, ThreadGroup threadGroup, ClassLoader cl) {
             super(pool);
             _ctx = enclosingContext;
             _className = className;
@@ -110,7 +110,7 @@ public class LoadClientAppsJob extends JobImpl {
 
     private static class WaitForRunningClient extends DelayedRunClient {
         WaitForRunningClient(SimpleTimer2 pool, RouterContext enclosingContext, String className, String clientName,
-                             String args[]) {
+                             String[] args) {
             super(pool, enclosingContext, className, clientName, args, null, null);
         }
 
@@ -175,7 +175,7 @@ public class LoadClientAppsJob extends JobImpl {
                     argList.add(str);
             }
         }
-        String rv[] = new String[argList.size()];
+        String[] rv = new String[argList.size()];
         for (int i = 0; i < argList.size(); i++) {
             rv[i] = argList.get(i);
         }
@@ -205,7 +205,7 @@ public class LoadClientAppsJob extends JobImpl {
      *  @throws Exception just about anything, caller would be wise to catch Throwable
      *  @since 0.7.13
      */
-    public static void runClientInline(String className, String clientName, String args[], Log log) throws Exception {
+    public static void runClientInline(String className, String clientName, String[] args, Log log) throws Exception {
         runClientInline(className, clientName, args, log, null);
     }
 
@@ -219,7 +219,7 @@ public class LoadClientAppsJob extends JobImpl {
      *  @throws Exception just about anything, caller would be wise to catch Throwable
      *  @since 0.7.14
      */
-    public static void runClientInline(String className, String clientName, String args[],
+    public static void runClientInline(String className, String clientName, String[] args,
                                        Log log, ClassLoader cl) throws Exception {
         if (log.shouldInfo())
             log.info("Loading up the client application " + clientName + ": " + className + " " + Arrays.toString(args));
@@ -236,7 +236,7 @@ public class LoadClientAppsJob extends JobImpl {
      *  @param clientName can be null
      *  @param args can be null
      */
-    public static void runClient(String className, String clientName, String args[], RouterContext ctx, Log log) {
+    public static void runClient(String className, String clientName, String[] args, RouterContext ctx, Log log) {
         runClient(className, clientName, args, ctx, log, null, null);
     }
 
@@ -249,7 +249,7 @@ public class LoadClientAppsJob extends JobImpl {
      *  @param cl can be null
      *  @since 0.7.13
      */
-    public static void runClient(String className, String clientName, String args[], RouterContext ctx, Log log,
+    public static void runClient(String className, String clientName, String[] args, RouterContext ctx, Log log,
                                  ThreadGroup threadGroup, ClassLoader cl) {
         if (log.shouldInfo())
             log.info("Loading up the client application " + clientName + ": " + className + " " + Arrays.toString(args));
@@ -270,12 +270,12 @@ public class LoadClientAppsJob extends JobImpl {
     private final static class RunApp implements Runnable {
         private final String _className;
         private final String _appName;
-        private final String _args[];
+        private final String[] _args;
         private final RouterContext _ctx;
         private final Log _log;
         private final ClassLoader _cl;
 
-        public RunApp(String className, String appName, String args[], RouterContext ctx, Log log, ClassLoader cl) {
+        public RunApp(String className, String appName, String[] args, RouterContext ctx, Log log, ClassLoader cl) {
             _className = className;
             _appName = appName;
             if (args == null)
@@ -345,7 +345,7 @@ public class LoadClientAppsJob extends JobImpl {
     public String getName() { return "Load Client Applications"; }
 
 /****
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         test(null);
         test("hi how are you?");
         test("hi how are you? ");
@@ -355,7 +355,7 @@ public class LoadClientAppsJob extends JobImpl {
         test("-nogui -e 'config localhost 17654' -e 'httpclient 4544'");
     }
     private static void test(String args) {
-        String parsed[] = parseArgs(args);
+        String[] parsed = parseArgs(args);
         System.out.print("Parsed [" + args + "] into " + parsed.length + " elements: ");
         for (int i = 0; i < parsed.length; i++)
             System.out.print("[" + parsed[i] + "] ");

@@ -113,7 +113,7 @@ class LocalClientManager extends ClientManager {
         }
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         int dropX1000 = 0, jitter = 0, latency = 0;
         int port = ClientManagerFacadeImpl.DEFAULT_PORT;
         boolean error = false;

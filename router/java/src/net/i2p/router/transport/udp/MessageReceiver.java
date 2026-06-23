@@ -141,7 +141,7 @@ class MessageReceiver {
             I2NPMessage m;
             int numFragments = state.getFragmentCount();
             if (numFragments > 1) {
-                ByteArray fragments[] = state.getFragments();
+                ByteArray[] fragments = state.getFragments();
                 int off = 0;
                 byte[] data = buf.getData();
                 for (int i = 0; i < numFragments; i++) {

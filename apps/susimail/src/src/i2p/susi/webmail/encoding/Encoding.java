@@ -52,7 +52,7 @@ public abstract class Encoding {
     * @return the encoded string, SMTP-safe
     * @throws EncodingException if encoding fails
     */
-   public abstract String encode( byte in[] ) throws EncodingException;
+   public abstract String encode( byte[] in ) throws EncodingException;
 
    /**
     * Encode a (UTF-8) String to a ASCII or ISO-8859-1 String.
@@ -108,7 +108,7 @@ public abstract class Encoding {
     * @throws DecodingException if decoding fails
     * @since 0.9.33 implementation moved from subclasses
     */
-   public Buffer decode(byte in[]) throws DecodingException {return decode(in, 0, in.length);}
+   public Buffer decode(byte[] in) throws DecodingException {return decode(in, 0, in.length);}
 
    /**
     * Decode a portion of a byte array.
@@ -119,7 +119,7 @@ public abstract class Encoding {
     * @return a buffer containing the decoded data as a String
     * @throws DecodingException if decoding fails
     */
-   public Buffer decode(byte in[], int offset, int length) throws DecodingException {
+   public Buffer decode(byte[] in, int offset, int length) throws DecodingException {
      try {
        ReadBuffer rb = new ReadBuffer(in, offset, length);
        return decode(rb);

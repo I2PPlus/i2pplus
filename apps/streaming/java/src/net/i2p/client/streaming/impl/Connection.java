@@ -526,7 +526,7 @@ class Connection {
      *  Process the acks and nacks received in a packet
      *  @return List of packets acked for the first time, or null if none
      */
-    public List<PacketLocal> ackPackets(long ackThrough, long nacks[]) {
+    public List<PacketLocal> ackPackets(long ackThrough, long[] nacks) {
         if (nacks == null) {
             _highestAckedThrough.updateAndGet(cur -> Math.max(cur, ackThrough));
         } else {
@@ -1460,7 +1460,7 @@ class Connection {
             buf.append("; UnACKed out: ").append(_outboundPackets.size()).append("; ");
             buf.append("UnACKed in: ").append(getUnackedPacketsReceived());
             int missing = 0;
-            long nacks[] = _inputStream.getNacks();
+            long[] nacks = _inputStream.getNacks();
             if (nacks != null) {
                 missing = nacks.length;
                 buf.append(" [").append(missing).append(" missing]");

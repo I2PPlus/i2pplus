@@ -389,7 +389,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
                            + "; size: " + size + ")");
             }
             try {
-                byte msg[] = session.receiveMessage(msgId);
+                byte[] msg = session.receiveMessage(msgId);
                 if (msg == null)
                     return;
                 //if (_log.shouldDebug()) {

@@ -99,7 +99,7 @@ public class NTCPConnection implements Closeable {
      */
     private final List<OutNetMessage> _currentOutbound;
     private SessionKey _sessionKey;
-    private byte _prevWriteEnd[];
+    private byte[] _prevWriteEnd;
     /** current partially read I2NP message */
     private ReadState _curReadState;
     private final AtomicInteger _messagesRead = new AtomicInteger();
@@ -705,9 +705,9 @@ public class NTCPConnection implements Closeable {
      * Contains unencrypted data that will be encrypted before transmission.
      */
     static class PrepBuffer {
-        final byte unencrypted[];
+        final byte[] unencrypted;
         //int unencryptedLength;
-        //byte encrypted[];
+        //byte[] encrypted;
 
         public PrepBuffer() {
             unencrypted = new byte[BUFFER_SIZE];
@@ -1102,7 +1102,7 @@ public class NTCPConnection implements Closeable {
      *
      *  @since moved from EventPumper in 0.9.52
      */
-    void wantsWrite(byte data[]) {
+    void wantsWrite(byte[] data) {
         wantsWrite(data, 0, data.length);
     }
 
@@ -1113,7 +1113,7 @@ public class NTCPConnection implements Closeable {
      *
      *  @since 0.9.35 off/len version, moved from EventPumper in 0.9.52
      */
-    void wantsWrite(byte data[], int off, int len) {
+    void wantsWrite(byte[] data, int off, int len) {
         ByteBuffer buf = ByteBuffer.wrap(data, off, len);
         FIFOBandwidthLimiter.Request req = _context.bandwidthLimiter().requestOutbound(len, 0, "NTCP write");
         if (req.getPendingRequested() > 0) {
@@ -1975,7 +1975,7 @@ public class NTCPConnection implements Closeable {
      * @throws ArrayIndexOutOfBoundsException
      * @since 0.9.36
      */
-    private static long fromLong8LE(byte src[], int offset) {
+    private static long fromLong8LE(byte[] src, int offset) {
         long rv = 0;
         for (int i = offset + 7; i >= offset; i--) {
             rv <<= 8;
@@ -1989,7 +1989,7 @@ public class NTCPConnection implements Closeable {
      * Same as DataHelper.fromlongLE(target, offset, 8, value) but allows negative value
      *
      */
-    private static void toLong8LE(byte target[], int offset, long value) {
+    private static void toLong8LE(byte[] target, int offset, long value) {
         int limit = offset + 8;
         for (int i = offset; i < limit; i++) {
             target[i] = (byte) value;

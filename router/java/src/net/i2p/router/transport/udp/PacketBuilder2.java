@@ -189,7 +189,7 @@ class PacketBuilder2 {
         long pktNum = peer.getNextPacketNumber();
         UDPPacket packet = buildShortPacketHeader(peer.getSendConnID(), pktNum, DATA_FLAG_BYTE);
         DatagramPacket pkt = packet.getPacket();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         int off = SHORT_HEADER_SIZE;
 
         // ok, now for the body...
@@ -337,7 +337,7 @@ class PacketBuilder2 {
         long pktNum = peer.getNextPacketNumber();
         UDPPacket packet = buildShortPacketHeader(peer.getSendConnID(), pktNum, DATA_FLAG_BYTE);
         DatagramPacket pkt = packet.getPacket();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         int off = SHORT_HEADER_SIZE;
         // plenty of room
         Block block = getPadding(0, 1280);
@@ -446,7 +446,7 @@ class PacketBuilder2 {
                                                  state.getRcvConnID(), 0, state.getVersion());
         DatagramPacket pkt = packet.getPacket();
 
-        byte sentIP[] = state.getSentIP();
+        byte[] sentIP = state.getSentIP();
         pkt.setLength(LONG_HEADER_SIZE);
         int port = state.getSentPort();
         encryptSessionCreated(packet, state.getHandshakeState(), state.getSendHeaderEncryptKey1(),
@@ -474,7 +474,7 @@ class PacketBuilder2 {
                                                  state.getRcvConnID(), token, state.getVersion());
         DatagramPacket pkt = packet.getPacket();
 
-        byte sentIP[] = state.getSentIP();
+        byte[] sentIP = state.getSentIP();
         pkt.setLength(LONG_HEADER_SIZE);
         int port = state.getSentPort();
         byte[] introKey = state.getSendHeaderEncryptKey1();
@@ -523,9 +523,9 @@ class PacketBuilder2 {
      */
     public UDPPacket[] buildSessionConfirmedPackets(OutboundEstablishState2 state, RouterInfo ourInfo) {
         boolean gzip = false;
-        byte info[] = ourInfo.toByteArray();
+        byte[] info = ourInfo.toByteArray();
         int mtu = state.getMTU();
-        byte toIP[] = state.getSentIP();
+        byte[] toIP = state.getSentIP();
         // 20 + 8 + 16 + 32 + 16 + 16 + 3 + 2 = 113
         // 40 + 8 + 16 + 32 + 16 + 16 + 3 + 2 = 133
         int overhead = (toIP.length == 16 ? IPV6_HEADER_SIZE : IP_HEADER_SIZE) +
@@ -566,7 +566,7 @@ class PacketBuilder2 {
         // one big block
         SSU2Payload.RIBlock block = new SSU2Payload.RIBlock(info,  0, info.length,
                                                             false, gzip, 0, 1);
-        UDPPacket packets[];
+        UDPPacket[] packets;
         if (numFragments > 1) {
             packets = buildSessionConfirmedPackets(state, block);
         } else {
@@ -915,7 +915,7 @@ class PacketBuilder2 {
      */
     private UDPPacket buildLongPacketHeader(long destID, long pktNum, byte type, long srcID, long token, int version) {
         UDPPacket packet = buildShortPacketHeader(destID, pktNum, type);
-        byte data[] = packet.getPacket().getData();
+        byte[] data = packet.getPacket().getData();
         data[13] = (byte) version;
         data[14] = (byte) _context.router().getNetworkID();
         DataHelper.toLong8(data, 16, srcID);
@@ -929,7 +929,7 @@ class PacketBuilder2 {
      */
     private UDPPacket buildShortPacketHeader(long destID, long pktNum, byte type) {
         UDPPacket packet = UDPPacket.acquire(_context, false);
-        byte data[] = packet.getPacket().getData();
+        byte[] data = packet.getPacket().getData();
         Arrays.fill(data, 0, data.length, (byte) 0);
         DataHelper.toLong8(data, 0, destID);
         DataHelper.toLong(data, 8, 4, pktNum);
@@ -949,7 +949,7 @@ class PacketBuilder2 {
     private void encryptSessionRequest(UDPPacket packet, HandshakeState state,
                                        byte[] hdrKey1, byte[] hdrKey2, boolean needIntro) {
         DatagramPacket pkt = packet.getPacket();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         int off = pkt.getOffset();
         try {
             if (_log.shouldDebug())
@@ -1003,7 +1003,7 @@ class PacketBuilder2 {
                                        byte[] hdrKey1, byte[] hdrKey2, long relayTag,
                                        EstablishmentManager.Token token, byte[] ip, int port) {
         DatagramPacket pkt = packet.getPacket();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         int off = pkt.getOffset();
         try {
             List<Block> blocks = new ArrayList<>(4);
@@ -1078,7 +1078,7 @@ class PacketBuilder2 {
                                  byte[] hdrKey1, byte[] hdrKey2, byte[] ip, int port,
                                  Block ptBlock) {
         DatagramPacket pkt = packet.getPacket();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         int off = pkt.getOffset();
         try {
             List<Block> blocks = new ArrayList<>(4);
@@ -1123,7 +1123,7 @@ class PacketBuilder2 {
     private void encryptTokenRequest(UDPPacket packet, byte[] chachaKey, long n,
                                      byte[] hdrKey1, byte[] hdrKey2) {
         DatagramPacket pkt = packet.getPacket();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         int off = pkt.getOffset();
         try {
             List<Block> blocks = new ArrayList<>(2);
@@ -1167,7 +1167,7 @@ class PacketBuilder2 {
                                          boolean isIPv6, byte[] hdrKey1, byte[] hdrKey2,
                                          SSU2Payload.RIBlock riblock, EstablishmentManager.Token token) {
         DatagramPacket pkt = packet.getPacket();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         int off = pkt.getOffset();
         data[off + SHORT_HEADER_FLAGS_OFFSET] = (byte) numFragments;  // fragment 0 of numFragments
         mtu -= UDP_HEADER_SIZE;
@@ -1228,7 +1228,7 @@ class PacketBuilder2 {
     private void encryptDataPacket(UDPPacket packet, CipherState chacha, long n,
                                     byte[] hdrKey1, byte[] hdrKey2) {
         DatagramPacket pkt = packet.getPacket();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         int off = pkt.getOffset();
         int len = pkt.getLength();
         synchronized(chacha) {

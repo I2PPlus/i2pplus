@@ -177,7 +177,7 @@ public class Destination extends KeysAndCert {
      *  Broken for sig types P521 and RSA before 0.9.15
      *  @return the written length (NOT the new offset)
      */
-    public int writeBytes(byte target[], int offset) {
+    public int writeBytes(byte[] target, int offset) {
         int cur = offset;
         System.arraycopy(_publicKey.getData(), 0, target, cur, PublicKey.KEYSIZE_BYTES);
         cur += PublicKey.KEYSIZE_BYTES;

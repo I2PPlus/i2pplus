@@ -550,7 +550,7 @@ public class NativeBigInteger extends BigInteger {
      * @throws ArithmeticException if modulus &lt;= 0 (since libjbigi version 3)
      * @return big endian twos complement representation of (base ^ exponent) % modulus
      */
-    private static native byte[] nativeModPow(byte base[], byte exponent[], byte modulus[]);
+    private static native byte[] nativeModPow(byte[] base, byte[] exponent, byte[] modulus);
 
     /**
      * calculate (base ^ exponent) % modulus.
@@ -566,13 +566,13 @@ public class NativeBigInteger extends BigInteger {
      * @throws ArithmeticException if modulus &lt;= 0
      * @since 0.9.26 and libjbigi version 3
      */
-    private static native byte[] nativeModPowCT(byte base[], byte exponent[], byte modulus[]);
+    private static native byte[] nativeModPowCT(byte[] base, byte[] exponent, byte[] modulus);
 
     /**
      *  @since 0.9.26 and libjbigi version 3
      *  @throws ArithmeticException
      */
-    private static native byte[] nativeModInverse(byte base[], byte d[]);
+    private static native byte[] nativeModInverse(byte[] base, byte[] d);
 
     /**
      *  Get the jbigi version, only available since jbigi version 3
@@ -793,7 +793,7 @@ public class NativeBigInteger extends BigInteger {
      * @param args -n Disable native test
      *
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         _doLog = true;
         boolean nativeOnly = args.length > 0 && args[0].equals("-n");
         int errors = 0;

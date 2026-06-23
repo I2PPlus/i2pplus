@@ -170,7 +170,7 @@ public class WebAppConfiguration implements Configuration {
         if (loader instanceof URLClassLoader) {
             // through Java 8, not available in Java 9
             URLClassLoader urlClassLoader = (URLClassLoader) loader;
-            URL urls[] = urlClassLoader.getURLs();
+            URL[] urls = urlClassLoader.getURLs();
             for (int i = 0; i < urls.length; i++) {
                 try {
                     rv.add(urls[i].toURI());

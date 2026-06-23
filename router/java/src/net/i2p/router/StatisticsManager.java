@@ -147,11 +147,11 @@ public class StatisticsManager {
      *                      publish, so we're kludge the quantity (allowing the fairly safe
      *                      publication of the average values
      */
-    private void includeRate(String rateName, Properties stats, long selectedPeriods[],
+    private void includeRate(String rateName, Properties stats, long[] selectedPeriods,
                              boolean fudgeQuantity) {
         RateStat rate = _context.statManager().getRate(rateName);
         if (rate == null) return;
-        long periods[] = rate.getPeriods();
+        long[] periods = rate.getPeriods();
         for (int i = 0; i < periods.length; i++) {
             if (periods[i] > _context.router().getUptime()) continue;
             if (selectedPeriods != null) {

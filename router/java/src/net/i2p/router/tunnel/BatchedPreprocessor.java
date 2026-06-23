@@ -384,7 +384,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
         // However it will never be returned to the cache.
         // (TunnelDataMessage will not wrap the buffer in a new ByteArray and release() it)
         // See also TDM for more discussion.
-        byte preprocessed[] = _dataCache.acquire().getData();
+        byte[] preprocessed = _dataCache.acquire().getData();
 
         int offset = 0;
         offset = writeFragments(pending, startAt, sendThrough, preprocessed, offset);
@@ -431,7 +431,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
      *
      * @return new offset into the target for further bytes to be written
      */
-    private int writeFragments(List<PendingGatewayMessage> pending, int startAt, int sendThrough, byte target[], int offset) {
+    private int writeFragments(List<PendingGatewayMessage> pending, int startAt, int sendThrough, byte[] target, int offset) {
         for (int i = startAt; i <= sendThrough; i++) {
             PendingGatewayMessage msg = pending.get(i);
             int prevOffset = offset;

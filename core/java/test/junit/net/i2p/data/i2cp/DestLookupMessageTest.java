@@ -21,7 +21,7 @@ import net.i2p.util.RandomSource;
 public class DestLookupMessageTest extends I2CPTstBase {
     @Override
     public I2CPMessageImpl createDataStructure() throws DataFormatException {
-        byte h[] = new byte[Hash.HASH_LENGTH];
+        byte[] h = new byte[Hash.HASH_LENGTH];
         RandomSource.getInstance().nextBytes(h);
         Hash hash = new Hash(h);
         DestLookupMessage msg = new DestLookupMessage(hash);

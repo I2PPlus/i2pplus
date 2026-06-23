@@ -22,7 +22,7 @@ public abstract class RFC822Date {
      * Apparently public domain
      * Probably don't need all of these...
      */
-    private static final SimpleDateFormat rfc822DateFormats[] = new SimpleDateFormat[] {new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US), new SimpleDateFormat("d MMM yy HH:mm:ss z", Locale.US), new SimpleDateFormat("EEE, d MMM yy HH:mm z", Locale.US), new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US), new SimpleDateFormat("EEE, d MMM yyyy HH:mm z", Locale.US), new SimpleDateFormat("d MMM yy HH:mm z", Locale.US), new SimpleDateFormat("d MMM yy HH:mm:ss z", Locale.US), new SimpleDateFormat("d MMM yyyy HH:mm z", Locale.US)};
+    private static final SimpleDateFormat[] rfc822DateFormats = new SimpleDateFormat[] {new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US), new SimpleDateFormat("d MMM yy HH:mm:ss z", Locale.US), new SimpleDateFormat("EEE, d MMM yy HH:mm z", Locale.US), new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US), new SimpleDateFormat("EEE, d MMM yyyy HH:mm z", Locale.US), new SimpleDateFormat("d MMM yy HH:mm z", Locale.US), new SimpleDateFormat("d MMM yy HH:mm:ss z", Locale.US), new SimpleDateFormat("d MMM yyyy HH:mm z", Locale.US)};
 
     //
     // The router JVM is forced to UTC but do this just in case

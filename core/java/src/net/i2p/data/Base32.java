@@ -133,7 +133,7 @@ public class Base32 {
         runApp(args);
     }
 
-    private static void runApp(String args[]) {
+    private static void runApp(String[] args) {
         String cmd = args[0].toLowerCase(Locale.US);
         if ("encodestring".equals(cmd)) {
             System.out.println(encode(DataHelper.getUTF8(args[1])));
@@ -182,7 +182,7 @@ public class Base32 {
     }
 
     private static void decode(InputStream in, OutputStream out) throws IOException {
-        byte decoded[] = decode(DataHelper.getUTF8(read(in)));
+        byte[] decoded = decode(DataHelper.getUTF8(read(in)));
         if (decoded == null) {
             System.err.println("FAIL");
             return;

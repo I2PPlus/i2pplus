@@ -312,14 +312,14 @@ public class Icon {
     //	Bytes
     ////////////////////////////////////////////////
 
-    private byte bytes[] = null;
+    private byte[] bytes = null;
 
     /**
      * Sets the raw image data for this icon.
      *
      * @param data the byte array containing the icon image data
      */
-    public void setBytes(byte data[]) {
+    public void setBytes(byte[] data) {
         bytes = data;
     }
 

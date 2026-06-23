@@ -203,7 +203,7 @@ public class MTU {
         return Math.max(PeerState.MIN_MTU, Math.min(PeerState.LARGE_MTU, rv));
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         if (args.length > 0) {
             System.out.println("Cmd line interfaces:");
             for (int i = 0; i < args.length; i++) {

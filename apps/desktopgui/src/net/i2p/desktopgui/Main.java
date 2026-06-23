@@ -45,7 +45,7 @@ public class Main implements RouterApp, NotificationService {
     /**
      *  @since 0.9.26
      */
-    public Main(RouterContext ctx, ClientAppManager mgr, String args[]) {
+    public Main(RouterContext ctx, ClientAppManager mgr, String[] args) {
         _appContext = _context = ctx;
         _mgr = mgr;
         log = _appContext.logManager().getLog(Main.class);
@@ -173,7 +173,7 @@ public class Main implements RouterApp, NotificationService {
             Class util = Class.forName("com.apple.eawt.Application");
             Method getApplication = util.getMethod("getApplication", new Class[0]);
             Object application = getApplication.invoke(util);
-            Class params[] = new Class[1];
+            Class[] params = new Class[1];
             params[0] = Image.class;
             Method setDockIconImage = util.getMethod("setDockIconImage", params);
             URL url = f.toURI().toURL();

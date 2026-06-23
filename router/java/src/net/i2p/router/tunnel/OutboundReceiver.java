@@ -38,7 +38,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         // all createRateStat() in TunnelDispatcher
     }
 
-    public long receiveEncrypted(byte encrypted[]) {
+    public long receiveEncrypted(byte[] encrypted) {
         TunnelDataMessage msg = new TunnelDataMessage(_context);
         msg.setData(encrypted);
         msg.setTunnelId(_config.getConfig(0).getSendTunnel());

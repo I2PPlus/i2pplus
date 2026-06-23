@@ -558,7 +558,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             throw new GeneralSecurityException("Address mismatch -> Request: " + _bobSocketAddress + " Configured: " + from);
         int off = pkt.getOffset();
         int len = pkt.getLength();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         long rid = DataHelper.fromLong8(data, off);
         if (rid != _rcvConnID)
             throw new GeneralSecurityException("Connection ID mismatch -> 1: " + _rcvConnID + " 2: " + rid);
@@ -629,7 +629,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         } catch (GeneralSecurityException gse) {
             if (_log.shouldDebug()) {
                 DatagramPacket pkt = packet.getPacket();
-                byte data[] = pkt.getData();
+                byte[] data = pkt.getData();
                 int off = pkt.getOffset();
                 int len = pkt.getLength();
                 _log.debug("SessionCreate error -> State at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
@@ -658,7 +658,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             throw new GeneralSecurityException("Address mismatch -> Request: " + _bobSocketAddress + " Created: " + from);
         int off = pkt.getOffset();
         int len = pkt.getLength();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         long rid = DataHelper.fromLong8(data, off);
         if (rid != _rcvConnID)
             throw new GeneralSecurityException("Connection ID mismatch -> 1: " + _rcvConnID + " 2: " + rid);
@@ -746,7 +746,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         requestSent();
         if (_sessReqForReTX == null) {
             // store pkt for retx
-            byte data[] = pkt.getData();
+            byte[] data = pkt.getData();
             int off = pkt.getOffset();
             int len = pkt.getLength();
             _sessReqForReTX = new byte[len];
@@ -776,7 +776,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             _sessConfForReTX = new byte[packets.length][];
             for (int i = 0; i < packets.length; i++) {
                 DatagramPacket pkt = packets[i].getPacket();
-                byte data[] = pkt.getData();
+                byte[] data = pkt.getData();
                 int off = pkt.getOffset();
                 int len = pkt.getLength();
                 byte[] save = new byte[len];
@@ -851,7 +851,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         if (_sessReqForReTX == null) {return null;}
         UDPPacket packet = UDPPacket.acquire(_context, false);
         DatagramPacket pkt = packet.getPacket();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         int off = pkt.getOffset();
         System.arraycopy(_sessReqForReTX, 0, data, off, _sessReqForReTX.length);
         pkt.setLength(_sessReqForReTX.length);

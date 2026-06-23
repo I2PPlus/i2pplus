@@ -40,7 +40,7 @@ public class CountingInputStream extends FilterInputStream implements ReadCounte
     }
 
     @Override
-    public int read(byte buf[], int off, int len) throws IOException {
+    public int read(byte[] buf, int off, int len) throws IOException {
         int rv = in.read(buf, off, len);
         if (rv > 0)
             count += rv;

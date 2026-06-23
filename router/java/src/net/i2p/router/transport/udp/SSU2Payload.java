@@ -202,7 +202,7 @@ class SSU2Payload {
                     if (fnum == 0 && ftot == 1) {
                         ByteArrayInputStream bais;
                         if (gz) {
-                            byte decompressed[] = DataHelper.decompress(payload, i + 2, len - 2);
+                            byte[] decompressed = DataHelper.decompress(payload, i + 2, len - 2);
                             if (decompressed.length > RouterInfo.MAX_UNCOMPRESSED_SIZE)
                                 throw new DataFormatException("RouterInfo too big: " + decompressed.length);
                             bais = new ByteArrayInputStream(decompressed);

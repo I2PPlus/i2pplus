@@ -821,7 +821,7 @@ public class GeoIP {
      *
      * @param ip IPv4 or IPv6
      */
-    public void add(byte ip[]) {
+    public void add(byte[] ip) {
         // skip he.net tunnel 2001:470:: so we will get correct geoip from IPv4
         // ditto route48
         if (ip.length == 16 &&
@@ -861,7 +861,7 @@ public class GeoIP {
      * @param ip IPv4 or IPv6
      * @return lower-case code, generally two letters, or null.
      */
-    String get(byte ip[]) {
+    String get(byte[] ip) {
         if (ip == null) {return null;}
         // skip he.net tunnel 2001:470:: so we will get correct geoip from IPv4
         if (ip.length == 16 && ip[0] == 0x20 && ip[1] == 0x01 && ip[2] == 0x04 && ip[3] == 0x70) {return null;}
@@ -872,7 +872,7 @@ public class GeoIP {
     private String get(long ip) {return _IPToCountry.get(Long.valueOf(ip));}
 
     /** see above for ip-to-long mapping */
-    private static long toLong(byte ip[]) {
+    private static long toLong(byte[] ip) {
         long rv = 0;
         if (ip.length == 16) {
             for (int i = 0; i < 8; i++) {rv |= (ip[i] & 0xffL) << ((7-i)*8);}
@@ -933,7 +933,7 @@ public class GeoIP {
         return Collections.unmodifiableMap(_codeToName);
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         if (args.length <= 0) {
             System.out.print("Usage: GeoIP {IP ADDRESS}...\n" +
                               "      GeoIP -c {2 letter country code} Dump all subnets for a country to " +

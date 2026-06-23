@@ -37,7 +37,7 @@ public class GarlicMessage extends FastI2NPMessageImpl {
         _data = data;
     }
 
-    public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
+    public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
         if (dataSize < 4)
@@ -57,7 +57,7 @@ public class GarlicMessage extends FastI2NPMessageImpl {
         return 4 + _data.length;
     }
     /** write the message body to the output array, starting at the given index */
-    protected int writeMessageBody(byte out[], int curIndex) throws I2NPMessageException {
+    protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         DataHelper.toLong(out, curIndex, 4, _data.length);
         curIndex += 4;
         System.arraycopy(_data, 0, out, curIndex, _data.length);

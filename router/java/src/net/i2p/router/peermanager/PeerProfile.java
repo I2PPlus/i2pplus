@@ -99,11 +99,11 @@ public class PeerProfile {
      * first.  this is not synchronized, as we don't *need* perfection, and we only
      * reorder/insert values on coalesce
      */
-    private final float _peakThroughput[] = new float[THROUGHPUT_COUNT];
+    private final float[] _peakThroughput = new float[THROUGHPUT_COUNT];
     private volatile long _peakThroughputCurrentTotal;
-    private final float _peakTunnelThroughput[] = new float[THROUGHPUT_COUNT];
+    private final float[] _peakTunnelThroughput = new float[THROUGHPUT_COUNT];
     /** total number of bytes pushed through a single tunnel in a 1 minute period */
-    private final float _peakTunnel1mThroughput[] = new float[THROUGHPUT_COUNT];
+    private final float[] _peakTunnel1mThroughput = new float[THROUGHPUT_COUNT];
     private long _lastTestStarted;
     private long _lastThroughputUpdate;
     /** periodically cut the measured throughput values */

@@ -73,7 +73,7 @@ import net.i2p.util.VersionComparator;
 class InboundEstablishState extends EstablishBase implements NTCP2Payload.PayloadCallback {
 
     /** Current encrypted block we are reading (IB only) or an IV buf used at the end for OB */
-    private byte _curEncrypted[];
+    private byte[] _curEncrypted;
     /** Size of Alice's RouterIdentity in bytes */
     private int _aliceIdentSize;
     /** Alice's RouterIdentity, set after gotRI() validation succeeds */
@@ -521,7 +521,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             _received = 0;
             _handshakeState.getLocalKeyPair().setKeys(_transport.getNTCP2StaticPrivkey(), 0,
                                                       _transport.getNTCP2StaticPubkey(), 0);
-            byte options[] = new byte[OPTIONS1_SIZE];
+            byte[] options = new byte[OPTIONS1_SIZE];
             try {
                 _handshakeState.start();
                 if (_log.shouldDebug())

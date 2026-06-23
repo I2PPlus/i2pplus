@@ -20,7 +20,7 @@ import java.io.OutputStreamWriter;
  * @since 0.9.5
  */
 public class FixWinPaths{
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         if (args.length != 1) {
             System.err.println("Usage: FixWinPaths [wrapper.conf]\r\n");
             System.exit(1);

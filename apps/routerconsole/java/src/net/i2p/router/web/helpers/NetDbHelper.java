@@ -48,7 +48,7 @@ public class NetDbHelper extends FormHandler {
     private static final int DEFAULT_PAGE = 0;
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
 
-    private static final String titles[] =
+    private static final String[] titles =
                                           {_x("Summary"),                       // 0  -
                                            _x("Local Router"),                  // 1  - r=.
                                            _x("Router Lookup"),                 // 2  -
@@ -64,7 +64,7 @@ public class NetDbHelper extends FormHandler {
                                            _x("Sybil Analysis"),                // 12 - f=3
                                           };
 
-    private static final String links[] =
+    private static final String[] links =
                                           {"",                                  // 0
                                            "?r=.",                              // 1
                                            "",                                  // 2

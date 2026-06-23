@@ -140,7 +140,7 @@ public interface DataStructure /* extends Serializable */ {
      * @param data byte array to load from
      * @throws DataFormatException if the data format is invalid
      */
-    public void fromByteArray(byte data[]) throws DataFormatException;
+    public void fromByteArray(byte[] data) throws DataFormatException;
 
     /**
      * Calculate the SHA256 value of this object (useful for a few scenarios)

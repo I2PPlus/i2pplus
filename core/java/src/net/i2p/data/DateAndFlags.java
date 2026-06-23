@@ -117,7 +117,7 @@ public class DateAndFlags extends DataStructureImpl {
      * @throws DataFormatException if null or wrong length
      */
     @Override
-    public void fromByteArray(byte data[]) throws DataFormatException {
+    public void fromByteArray(byte[] data) throws DataFormatException {
         if (data == null) throw new DataFormatException("Null data passed in");
         if (data.length != 8) throw new DataFormatException("Bad data length");
         _flags = (int) DataHelper.fromLong(data, 0, 2);

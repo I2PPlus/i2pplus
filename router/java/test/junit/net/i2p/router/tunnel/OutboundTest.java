@@ -33,8 +33,8 @@ public class OutboundTest extends TestCase {
         int numHops = 8;
         TunnelCreatorConfig config = prepareConfig(numHops);
 
-        byte orig[] = new byte[1024];
-        byte message[] = new byte[1024];
+        byte[] orig = new byte[1024];
+        byte[] message = new byte[1024];
         _context.random().nextBytes(orig); // might as well fill the IV
         System.arraycopy(orig, 0, message, 0, message.length);
 
@@ -56,8 +56,8 @@ public class OutboundTest extends TestCase {
     }
 
     private TunnelCreatorConfig prepareConfig(int numHops) {
-        Hash peers[] = new Hash[numHops];
-        long tunnelIds[] = new long[numHops];
+        Hash[] peers = new Hash[numHops];
+        long[] tunnelIds = new long[numHops];
         for (int i = 0; i < numHops; i++) {
             peers[i] = new Hash();
             peers[i].setData(new byte[Hash.HASH_LENGTH]);

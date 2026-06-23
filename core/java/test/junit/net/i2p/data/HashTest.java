@@ -18,7 +18,7 @@ public class HashTest extends StructureTest {
     @Override
     public DataStructure createDataStructure() throws DataFormatException {
         Hash hash = new Hash();
-        byte data[] = new byte[32];
+        byte[] data = new byte[32];
         for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 16);
         hash.setData(data);
         return hash;

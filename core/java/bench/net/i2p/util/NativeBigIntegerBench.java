@@ -75,7 +75,7 @@ public class NativeBigIntegerBench {
         return s.k.modInverse(s.p);
     }
 
-    public static void main(String args[]) throws RunnerException {
+    public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder().include(NativeBigIntegerBench.class.getSimpleName()).build();
 
         new Runner(opt).run();

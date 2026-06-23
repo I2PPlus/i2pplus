@@ -39,14 +39,14 @@ public class PeerHelper extends HelperBase {
     private String _transport;
     private boolean _graphical;
 
-    private static final String titles[] = {
+    private static final String[] titles = {
                                             _x("Summary"),
                                              "NTCP",
                                              "SSU"
                                              //"SSU (Advanced)"
                                            };
 
-    private static final String links[] = {
+    private static final String[] links = {
                                              "",
                                              "?transport=ntcp",
                                              "?transport=ssu",

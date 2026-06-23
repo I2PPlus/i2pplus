@@ -143,7 +143,7 @@ public class DataHelper {
     private static final Map<String, String> _propertiesKeyCache;
 
     static {
-        String keys[] = {
+        String[] keys = {
             // NTCP/SSU RouterAddress options
             "cost",
             "host",
@@ -296,7 +296,7 @@ public class DataHelper {
         if (props == null) {
             props = new OrderedProperties();
         }
-        byte data[] = new byte[size];
+        byte[] data = new byte[size];
         // full read guaranteed
         read(rawStream, data);
         ByteArrayInputStream in = new ByteArrayInputStream(data);
@@ -446,7 +446,7 @@ public class DataHelper {
      *                             (not including the two length bytes) is greater than 65535 bytes.
      * @since un-deprecated in 0.9.48
      */
-    public static int toProperties(byte target[], int offset, Properties props) throws DataFormatException, IOException {
+    public static int toProperties(byte[] target, int offset, Properties props) throws DataFormatException, IOException {
         if (props != null && !props.isEmpty()) {
             Properties p;
             if (props instanceof OrderedProperties) {
@@ -491,7 +491,7 @@ public class DataHelper {
      * @return new offset
      * @throws DataFormatException if the data is malformed
      */
-    public static int fromProperties(byte source[], int offset, Properties target) throws DataFormatException {
+    public static int fromProperties(byte[] source, int offset, Properties target) throws DataFormatException {
         int size = (int) fromLong(source, offset, 2);
         offset += 2;
         ByteArrayInputStream in = new ByteArrayInputStream(source, offset, size);
@@ -755,7 +755,7 @@ public class DataHelper {
      *  @param buf may be null (returns "")
      *  @return String of length 2*buf.length
      */
-    public static String toString(byte buf[]) {
+    public static String toString(byte[] buf) {
         if (buf == null) {
             return "";
         }
@@ -771,7 +771,7 @@ public class DataHelper {
      *  @param len number of bytes. If greater than buf.length, additional zeros will be prepended
      *  @return String of length 2*len
      */
-    public static String toString(byte buf[], int len) {
+    public static String toString(byte[] buf, int len) {
         if (buf == null) {
             buf = EMPTY_BUFFER;
         }
@@ -797,7 +797,7 @@ public class DataHelper {
      *  Use toString(byte[]) to get leading zeros
      *  @param data may be null (returns "00")
      */
-    public static final String toHexString(byte data[]) {
+    public static final String toHexString(byte[] data) {
         if ((data == null) || (data.length <= 0)) {
             return "00";
         }
@@ -891,7 +891,7 @@ public class DataHelper {
      * @throws IllegalArgumentException if numBytes is out of range or value is negative
      */
     public static byte[] toLong(int numBytes, long value) throws IllegalArgumentException {
-        byte val[] = new byte[numBytes];
+        byte[] val = new byte[numBytes];
         toLong(val, 0, numBytes, value);
         return val;
     }
@@ -903,7 +903,7 @@ public class DataHelper {
      * @param value non-negative
      * @throws IllegalArgumentException if numBytes is out of range or value is negative
      */
-    public static void toLong(byte target[], int offset, int numBytes, long value) throws IllegalArgumentException {
+    public static void toLong(byte[] target, int offset, int numBytes, long value) throws IllegalArgumentException {
         if (numBytes <= 0 || numBytes > 8) throw new IllegalArgumentException("Invalid number of bytes");
         if (value < 0) throw new IllegalArgumentException("Negative value not allowed");
 
@@ -920,7 +920,7 @@ public class DataHelper {
      * @param value non-negative
      * @since 0.8.12
      */
-    public static void toLongLE(byte target[], int offset, int numBytes, long value) {
+    public static void toLongLE(byte[] target, int offset, int numBytes, long value) {
         if (numBytes <= 0 || numBytes > 8) {
             throw new IllegalArgumentException("Invalid number of bytes");
         }
@@ -943,7 +943,7 @@ public class DataHelper {
      * @throws ArrayIndexOutOfBoundsException
      * @throws IllegalArgumentException if negative (only possible if numBytes = 8)
      */
-    public static long fromLong(byte src[], int offset, int numBytes) {
+    public static long fromLong(byte[] src, int offset, int numBytes) {
         if (numBytes <= 0 || numBytes > 8) throw new IllegalArgumentException("Invalid number of bytes");
         if ((src == null) || (src.length == 0)) {
             return 0;
@@ -970,7 +970,7 @@ public class DataHelper {
      * @throws IllegalArgumentException if negative (only possible if numBytes = 8)
      * @since 0.8.12
      */
-    public static long fromLongLE(byte src[], int offset, int numBytes) {
+    public static long fromLongLE(byte[] src, int offset, int numBytes) {
         if (numBytes <= 0 || numBytes > 8) {
             throw new IllegalArgumentException("Invalid number of bytes");
         }
@@ -992,7 +992,7 @@ public class DataHelper {
      * @throws ArrayIndexOutOfBoundsException
      * @since 0.9.47 moved from NTCP2Payload
      */
-    public static long fromLong8(byte src[], int offset) {
+    public static long fromLong8(byte[] src, int offset) {
         long rv = 0;
         int limit = offset + 8;
         for (int i = offset; i < limit; i++) {
@@ -1009,7 +1009,7 @@ public class DataHelper {
      * @throws ArrayIndexOutOfBoundsException
      * @since 0.9.47 moved from NTCP2Payload
      */
-    public static void toLong8(byte target[], int offset, long value) {
+    public static void toLong8(byte[] target, int offset, long value) {
         for (int i = offset + 7; i >= offset; i--) {
             target[i] = (byte) value;
             value >>= 8;
@@ -1068,7 +1068,7 @@ public class DataHelper {
      * @param when the time in milliseconds since epoch
      * @throws IllegalArgumentException if the offset is invalid
      */
-    public static void toDate(byte target[], int offset, long when) throws IllegalArgumentException {
+    public static void toDate(byte[] target, int offset, long when) throws IllegalArgumentException {
         toLong(target, offset, DATE_LENGTH, when);
     }
 
@@ -1078,7 +1078,7 @@ public class DataHelper {
      * @return the date, or null if the time is zero or negative
      * @throws DataFormatException if there is not enough data
      */
-    public static Date fromDate(byte src[], int offset) throws DataFormatException {
+    public static Date fromDate(byte[] src, int offset) throws DataFormatException {
         if ((src == null) || (offset + DATE_LENGTH > src.length)) {
             throw new DataFormatException("Not enough data to read a date");
         }
@@ -1115,7 +1115,7 @@ public class DataHelper {
             return "";
         } // reduce object proliferation
         size &= 0xff;
-        byte raw[] = new byte[size];
+        byte[] raw = new byte[size];
         read(in, raw); // full read guaranteed
         // The following constructor throws an UnsupportedEncodingException which is an IOException,
         // but that's only if UTF-8 is not supported. Other encoding errors are not thrown.
@@ -1233,7 +1233,7 @@ public class DataHelper {
      *
      * @return Arrays.equals(lhs, rhs)
      */
-    public static final boolean eq(byte lhs[], byte rhs[]) {
+    public static final boolean eq(byte[] lhs, byte[] rhs) {
         return Arrays.equals(lhs, rhs);
     }
 
@@ -1243,7 +1243,7 @@ public class DataHelper {
      *
      *  @throws ArrayIndexOutOfBoundsException if either array isn't long enough
      */
-    public static final boolean eq(byte lhs[], int offsetLeft, byte rhs[], int offsetRight, int length) {
+    public static final boolean eq(byte[] lhs, int offsetLeft, byte[] rhs, int offsetRight, int length) {
         if ((lhs == null) || (rhs == null)) {
             return false;
         }
@@ -1263,7 +1263,7 @@ public class DataHelper {
      *  @throws ArrayIndexOutOfBoundsException if either array isn't long enough
      *  @since 0.9.13
      */
-    public static final boolean eqCT(byte lhs[], int offsetLeft, byte rhs[], int offsetRight, int length) {
+    public static final boolean eqCT(byte[] lhs, int offsetLeft, byte[] rhs, int offsetRight, int length) {
         int r = 0;
         for (int i = 0; i < length; i++) {
             r |= lhs[offsetLeft + i] ^ rhs[offsetRight + i];
@@ -1298,7 +1298,7 @@ public class DataHelper {
      *  Args may be null, null is less than non-null.
      *  Variable time.
      */
-    public static final int compareTo(byte lhs[], byte rhs[]) {
+    public static final int compareTo(byte[] lhs, byte[] rhs) {
         if ((rhs == null) && (lhs == null)) return 0;
         if (lhs == null) return -1;
         if (rhs == null) return 1;
@@ -1317,9 +1317,9 @@ public class DataHelper {
     /**
      *  @return null if either arg is null or the args are not equal length
      */
-    public static final byte[] xor(byte lhs[], byte rhs[]) {
+    public static final byte[] xor(byte[] lhs, byte[] rhs) {
         if ((lhs == null) || (rhs == null) || (lhs.length != rhs.length)) return new byte[0];
-        byte diff[] = new byte[lhs.length];
+        byte[] diff = new byte[lhs.length];
         xor(lhs, 0, rhs, 0, diff, 0, lhs.length);
         return diff;
     }
@@ -1335,7 +1335,7 @@ public class DataHelper {
      * @param startOut starting index in the out array to store the result
      * @param len how many bytes into the various arrays to xor
      */
-    public static final void xor(byte lhs[], int startLeft, byte rhs[], int startRight, byte out[], int startOut, int len) {
+    public static final void xor(byte[] lhs, int startLeft, byte[] rhs, int startRight, byte[] out, int startOut, int len) {
         if ((lhs == null) || (rhs == null) || (out == null)) {
             throw new NullPointerException("Null params to xor");
         }
@@ -1385,7 +1385,7 @@ public class DataHelper {
      * Calculate the hashcode of the byte array, using 0 for null
      *
      */
-    public static int hashCode(byte b[]) {
+    public static int hashCode(byte[] b) {
         // Java 5 now has its own method, and the old way
         // was horrible for arrays much smaller than 32.
         // otoh, for sizes >> 32, Java's method may be too slow
@@ -1475,7 +1475,7 @@ public class DataHelper {
      *  @return target.length
      *  @throws EOFException if the full length is not read (since 0.9.27)
      */
-    public static int read(InputStream in, byte target[]) throws IOException {
+    public static int read(InputStream in, byte[] target) throws IOException {
         return read(in, target, 0, target.length);
     }
 
@@ -1491,7 +1491,7 @@ public class DataHelper {
      *  @return the new offset (== old offset + length)
      *  @throws EOFException if the full length is not read (since 0.9.27)
      */
-    public static int read(InputStream in, byte target[], int offset, int length) throws IOException {
+    public static int read(InputStream in, byte[] target, int offset, int length) throws IOException {
         int cur = 0;
         while (cur < length) {
             int numRead = in.read(target, offset + cur, length - cur);
@@ -1583,7 +1583,7 @@ public class DataHelper {
      *  update the hash along the way
      *  @since 0.8.8
      */
-    public static void write(OutputStream out, byte data[], MessageDigest hash) throws IOException {
+    public static void write(OutputStream out, byte[] data, MessageDigest hash) throws IOException {
         hash.update(data);
         out.write(data);
     }
@@ -1948,8 +1948,8 @@ public class DataHelper {
         return rv;
     }
 
-    private static final String escapeChars[] = {"&", "\"", "<", ">", "'"};
-    private static final String escapeCodes[] = {"&amp;", "&quot;", "&lt;", "&gt;", "&apos;"};
+    private static final String[] escapeChars = {"&", "\"", "<", ">", "'"};
+    private static final String[] escapeCodes = {"&amp;", "&quot;", "&lt;", "&gt;", "&apos;"};
 
     /**
      * Escape a string for inclusion in HTML
@@ -2006,7 +2006,7 @@ public class DataHelper {
      *  @throws IllegalStateException on compression failure, as of 0.9.29
      *  @return null if orig is null
      */
-    public static byte[] compress(byte orig[]) {
+    public static byte[] compress(byte[] orig) {
         return compress(orig, 0, orig.length);
     }
 
@@ -2027,7 +2027,7 @@ public class DataHelper {
      *  @throws IllegalStateException on compression failure, as of 0.9.29
      *  @return null if orig is null
      */
-    public static byte[] compress(byte orig[], int offset, int size) {
+    public static byte[] compress(byte[] orig, int offset, int size) {
         return compress(orig, offset, size, MEDIUM_COMPRESSION);
     }
 
@@ -2045,7 +2045,7 @@ public class DataHelper {
      *  @param level the compression level, 0 to 9
      *  @return null if orig is null
      */
-    public static byte[] compress(byte orig[], int offset, int size, int level) {
+    public static byte[] compress(byte[] orig, int offset, int size, int level) {
         if (orig == null) return orig;
         if (level == NO_COMPRESSION && size <= 32767) return zeroCompress(orig, offset, size);
         if (size > MAX_UNCOMPRESSED) throw new IllegalArgumentException("tell jrandom size=" + size);
@@ -2055,7 +2055,7 @@ public class DataHelper {
             out.write(orig, offset, size);
             out.finish();
             out.flush();
-            byte rv[] = out.getData();
+            byte[] rv = out.getData();
 
             // ticket 1915
             // If we have a bug where the deflator didn't flush, this will catch it.
@@ -2118,7 +2118,7 @@ public class DataHelper {
      *                      or on a decompression error
      *  @return null if orig is null
      */
-    public static byte[] decompress(byte orig[]) throws IOException {
+    public static byte[] decompress(byte[] orig) throws IOException {
         return (orig != null ? decompress(orig, 0, orig.length) : null);
     }
 
@@ -2128,7 +2128,7 @@ public class DataHelper {
      *                      or on a decompression error
      *  @return null if orig is null
      */
-    public static byte[] decompress(byte orig[], int offset, int length) throws IOException {
+    public static byte[] decompress(byte[] orig, int offset, int length) throws IOException {
         if (orig == null) return orig;
         // normal overhead is 23 bytes, but a compress of zero bytes is 20 bytes
         if (length < 20) throw new IOException("length");
@@ -2156,7 +2156,7 @@ public class DataHelper {
                     break;
                 }
             }
-            byte rv[] = new byte[written];
+            byte[] rv = new byte[written];
             System.arraycopy(outBuf.getData(), 0, rv, 0, written);
             return rv;
         } finally {
@@ -2237,7 +2237,7 @@ public class DataHelper {
      *  @return null if orig is null
      *  @throws RuntimeException
      */
-    public static String getUTF8(byte orig[]) {
+    public static String getUTF8(byte[] orig) {
         if (orig == null) {
             return null;
         }
@@ -2255,7 +2255,7 @@ public class DataHelper {
      *  @return null if orig is null
      *  @throws RuntimeException
      */
-    public static String getUTF8(byte orig[], int offset, int len) {
+    public static String getUTF8(byte[] orig, int offset, int len) {
         if (orig == null) {
             return null;
         }
@@ -2357,7 +2357,7 @@ public class DataHelper {
         final ByteCache cache = ByteCache.getInstance(8, 8 * 1024);
         final ByteArray ba = cache.acquire();
         try {
-            final byte buf[] = ba.getData();
+            final byte[] buf = ba.getData();
             int read;
             while ((read = in.read(buf)) != -1) {
                 out.write(buf, 0, read);

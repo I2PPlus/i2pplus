@@ -47,7 +47,7 @@ public class SessionTag {
     /**
      *  @param val as of 0.9.44, non-null
      */
-    public SessionTag(byte val[]) {
+    public SessionTag(byte[] val) {
         if (val.length != BYTE_LENGTH) {
             throw new IllegalArgumentException();
         }

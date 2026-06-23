@@ -17,7 +17,7 @@ class InboundGatewayProcessor extends HopProcessor {
      * other participant.
      *
      */
-    public void process(byte orig[], int offset, int length) {
+    public void process(byte[] orig, int offset, int length) {
         boolean ok = super.process(orig, offset, length, null);
         if (!ok)
             throw new RuntimeException("we are the gateway, how did it fail?");

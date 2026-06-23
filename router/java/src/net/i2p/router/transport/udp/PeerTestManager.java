@@ -670,7 +670,7 @@ class PeerTestManager {
         DatagramPacket pkt = packet.getPacket();
         int off = pkt.getOffset();
         int len = pkt.getLength();
-        byte data[] = pkt.getData();
+        byte[] data = pkt.getData();
         long rcvConnID = DataHelper.fromLong8(data, off);
         long sendConnID = DataHelper.fromLong8(data, off + SRC_CONN_ID_OFFSET);
         int type = data[off + TYPE_OFFSET] & 0xff;

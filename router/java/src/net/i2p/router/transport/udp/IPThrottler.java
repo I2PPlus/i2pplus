@@ -35,7 +35,7 @@ class IPThrottler {
         return _counter.increment(key) > _max;
     }
 
-    private static Integer toInt(byte ip[]) {
+    private static Integer toInt(byte[] ip) {
         int rv = 0;
         for (int i = 0; i < 4; i++)
             rv |= (ip[i] & 0xff) << ((3-i)*8);
@@ -43,7 +43,7 @@ class IPThrottler {
     }
 
     /** @since 0.9.55 */
-    private static Integer hashCode(byte ip[]) {
+    private static Integer hashCode(byte[] ip) {
         int rv = 0;
         for (int i = 0; i < 8; i++) {
             rv ^= (ip[i] & 0xff) << (i * 4);

@@ -50,7 +50,7 @@ public final class SHA256Generator {
     public final Hash calculateHash(byte[] source, int start, int len) {
         MessageDigest digest = acquire();
         digest.update(source, start, len);
-        byte rv[] = digest.digest();
+        byte[] rv = digest.digest();
         releaseit(digest);
         return Hash.create(rv);
     }
@@ -60,7 +60,7 @@ public final class SHA256Generator {
      * Does not cache.
      * @param out needs 32 bytes starting at outOffset
      */
-    public final void calculateHash(byte[] source, int start, int len, byte out[], int outOffset) {
+    public final void calculateHash(byte[] source, int start, int len, byte[] out, int outOffset) {
         MessageDigest digest = acquire();
         digest.update(source, start, len);
         try {

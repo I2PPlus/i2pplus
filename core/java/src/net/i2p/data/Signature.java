@@ -91,7 +91,7 @@ public class Signature extends SimpleDataStructure {
         _type = type;
     }
 
-    public Signature(byte data[]) {
+    public Signature(byte[] data) {
         this(DEF_TYPE, data);
     }
 
@@ -101,7 +101,7 @@ public class Signature extends SimpleDataStructure {
      *  @param type non-null
      *  @since 0.9.8
      */
-    public Signature(SigType type, byte data[]) {
+    public Signature(SigType type, byte[] data) {
         super();
         if (type == null) {
             throw new IllegalArgumentException("Unknown type");

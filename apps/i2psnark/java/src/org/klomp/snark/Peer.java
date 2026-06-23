@@ -86,8 +86,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     static final long CHECK_PERIOD = PeerCoordinator.CHECK_PERIOD; // 40 seconds
     static final int RATE_DEPTH =
             PeerCoordinator.RATE_DEPTH; // make following arrays RATE_DEPTH long
-    private final long uploaded_old[] = {-1, -1, -1};
-    private final long downloaded_old[] = {-1, -1, -1};
+    private final long[] uploaded_old = {-1, -1, -1};
+    private final long[] downloaded_old = {-1, -1, -1};
 
     private static final byte[] HANDSHAKE = DataHelper.getASCII("BitTorrent protocol");
     // See BEP 4 for definitions

@@ -97,7 +97,7 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
     }
 
     /******
-     * public static void main(String args[]) {
+     * public static void main(String[] args) {
      * try {
      * for (int i = 0; i < 2; i++)
      * test();
@@ -109,17 +109,17 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
      * System.out.println("After all tests are complete...");
      * }
      * private static void test() {
-     * byte b[] = "hi, how are you today?".getBytes();
+     * byte[] b = "hi, how are you today?".getBytes();
      * try {
      * ReusableGZIPOutputStream o = ReusableGZIPOutputStream.acquire();
      * o.write(b);
      * o.finish();
      * o.flush();
-     * byte compressed[] = o.getData();
+     * byte[] compressed = o.getData();
      * ReusableGZIPOutputStream.release(o);
      *
      * ResettableGZIPInputStream in = new ResettableGZIPInputStream(new java.io.ByteArrayInputStream(compressed));
-     * byte rv[] = new byte[128];
+     * byte[] rv = new byte[128];
      * int read = in.read(rv);
      * if (!DataHelper.eq(rv, 0, b, 0, b.length))
      * throw new RuntimeException("foo, read=" + read);
@@ -129,26 +129,26 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
      * }
      *
      * private static boolean test(int size) {
-     * byte b[] = new byte[size];
+     * byte[] b = new byte[size];
      * RandomSource.getInstance().nextBytes(b);
      * try {
      * ReusableGZIPOutputStream o = ReusableGZIPOutputStream.acquire();
      * o.write(b);
      * o.finish();
      * o.flush();
-     * byte compressed[] = o.getData();
+     * byte[] compressed = o.getData();
      * ReusableGZIPOutputStream.release(o);
      *
      * ResettableGZIPInputStream in = new ResettableGZIPInputStream(new java.io.ByteArrayInputStream(compressed));
      * ByteArrayOutputStream baos2 = new ByteArrayOutputStream(size);
-     * byte rbuf[] = new byte[128];
+     * byte[] rbuf = new byte[128];
      * while (true) {
      * int read = in.read(rbuf);
      * if (read == -1)
      * break;
      * baos2.write(rbuf, 0, read);
      * }
-     * byte rv[] = baos2.toByteArray();
+     * byte[] rv = baos2.toByteArray();
      * if (!DataHelper.eq(rv, 0, b, 0, b.length)) {
      * throw new RuntimeException("foo, read=" + rv.length);
      * } else {

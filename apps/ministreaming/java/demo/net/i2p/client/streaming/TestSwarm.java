@@ -23,24 +23,24 @@ public class TestSwarm {
     private I2PAppContext _context;
     private Log _log;
     private String _destFile;
-    private String _peerDestFiles[];
+    private String[] _peerDestFiles;
     private I2PSocketManager _manager;
     private String _conOptions; // unused? used elsewhere?
     private boolean _dead; // unused? used elsewhere?
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         if (args.length < 1) {
             System.err.println("Usage: TestSwarm myDestFile [peerDestFile ]*");
             return;
         }
         I2PAppContext ctx = new I2PAppContext();
-        String files[] = new String[args.length - 1];
+        String[] files = new String[args.length - 1];
         System.arraycopy(args, 1, files, 0, files.length);
         TestSwarm swarm = new TestSwarm(ctx, args[0], files);
         swarm.startup();
     }
 
-    public TestSwarm(I2PAppContext ctx, String destFile, String peerDestFiles[]) {
+    public TestSwarm(I2PAppContext ctx, String destFile, String[] peerDestFiles) {
         _context = ctx;
         _log = ctx.logManager().getLog(TestSwarm.class);
         _dead = false;
@@ -152,7 +152,7 @@ public class TestSwarm {
         public void run() {
             _started = _context.clock().now();
             _context.statManager().addRateData("swarm." + _connectionId + ".started", 1, 0);
-            byte data[] = new byte[4*1024];
+            byte[] data = new byte[4*1024];
             _context.random().nextBytes(data);
             long value = 0;
             long lastSend = _context.clock().now();
@@ -196,7 +196,7 @@ public class TestSwarm {
                 long now = lastRead;
                 try {
                     InputStream in = _socket.getInputStream();
-                    byte buf[] = new byte[8*1024];
+                    byte[] buf = new byte[8*1024];
                     int read = 0;
                     while ( (read = in.read(buf)) != -1) {
                         now = System.currentTimeMillis();

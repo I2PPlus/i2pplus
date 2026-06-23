@@ -20,7 +20,7 @@ public class RouterLaunch {
      *  @param args null ok
      *  @throws IllegalArgumentException
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
 	Router.main(args);
     }
 }

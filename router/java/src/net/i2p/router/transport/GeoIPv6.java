@@ -323,7 +323,7 @@ public class GeoIPv6 {
         }
     }
 
-    private static long toLong(byte ip[]) {
+    private static long toLong(byte[] ip) {
         long rv = 0;
         for (int i = 0; i < 8; i++)
             rv |= (ip[i] & 0xffL) << ((7-i)*8);
@@ -356,7 +356,7 @@ public class GeoIPv6 {
      *
      *  Used to create the file for distribution, do not comment out
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         if (args.length < 2) {
             System.err.println("Usage: GeoIPv6 infile1.csv [infile2.csv...] outfile.dat.gz");
             System.exit(1);

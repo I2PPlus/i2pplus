@@ -32,7 +32,7 @@ import java.util.Properties;
 public class SSUDemo {
     RouterContext _us;
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         boolean testNTCP = args.length > 0 && args[0].equals("ntcp");
         System.out.println("Testing " + (testNTCP ? "NTCP" : "SSU"));
         SSUDemo demo = new SSUDemo();
@@ -164,7 +164,7 @@ public class SSUDemo {
         File infoDir = getInfoDir();
         if (!infoDir.exists()) infoDir.mkdirs();
         while (true) {
-            File peerFiles[] = infoDir.listFiles();
+            File[] peerFiles = infoDir.listFiles();
             if ((peerFiles != null) && (peerFiles.length > 0)) {
                 for (int i = 0; i < peerFiles.length; i++) {
                     if (peerFiles[i].isFile() && !peerFiles[i].isHidden()) {
@@ -285,7 +285,7 @@ public class SSUDemo {
         private byte[] _data;
         public static final int MESSAGE_TYPE = 17;
 
-        public FooMessage(I2PAppContext ctx, byte data[]) {
+        public FooMessage(I2PAppContext ctx, byte[] data) {
             super(ctx);
             _data = data;
         }
@@ -296,7 +296,7 @@ public class SSUDemo {
         }
 
         /** specify the payload to be sent */
-        public void setData(byte data[]) {
+        public void setData(byte[] data) {
             _data = data;
         }
 

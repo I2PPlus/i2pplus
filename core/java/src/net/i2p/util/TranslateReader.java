@@ -230,7 +230,7 @@ public class TranslateReader extends FilterReader {
     }
 
     @Override
-    public int read(char cbuf[], int off, int len) throws IOException {
+    public int read(char[] cbuf, int off, int len) throws IOException {
         for (int i = 0; i < len; i++) {
             int c = read();
             if (c < 0) {

@@ -28,7 +28,7 @@ public class CountingOutputStream extends FilterOutputStream {
     }
 
     @Override
-    public void write(byte src[], int off, int len) throws IOException {
+    public void write(byte[] src, int off, int len) throws IOException {
         out.write(src, off, len);
         count += len;
     }

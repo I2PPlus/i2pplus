@@ -96,13 +96,13 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     /**
      *  @throws IllegalStateException if data previously set, to protect saved checksum
      */
-    public void setData(byte data[]) {
+    public void setData(byte[] data) {
         if (_data != null) {throw new IllegalStateException();}
         if ((data == null) || (data.length <= 0)) {throw new IllegalArgumentException("Empty tunnel payload?");}
         _data = data;
     }
 
-    public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
+    public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
         _tunnelId = DataHelper.fromLong(data, curIndex, 4);
@@ -125,7 +125,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     /** calculate the message body's length (not including the header and footer */
     protected int calculateWrittenLength() {return 4 + DATA_SIZE;}
     /** write the message body to the output array, starting at the given index */
-    protected int writeMessageBody(byte out[], int curIndex) throws I2NPMessageException {
+    protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         if ((_tunnelId <= 0) || (_data == null)) {
             throw new I2NPMessageException("Not enough data to write out (id=" + _tunnelId + ")");
         }
@@ -164,7 +164,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
 
     @Override
     public byte[] toByteArray() {
-        byte rv[] = super.toByteArray();
+        byte[] rv = super.toByteArray();
         if (rv == null) {throw new RuntimeException("unable to toByteArray(): " + toString());}
         return rv;
     }

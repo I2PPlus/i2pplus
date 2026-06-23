@@ -46,7 +46,7 @@ public class Base64 extends Encoding {
 	 * @return Base64-encoded String.
 	 * @throws EncodingException 
 	 */
-	public String encode( byte in[] ) throws EncodingException
+	public String encode( byte[] in ) throws EncodingException
 	{
 		try {
 			Writer strBuf = new StringBuilderWriter();
@@ -67,8 +67,8 @@ public class Base64 extends Encoding {
 	@Override
 	public void encode(InputStream in, Writer strBuf) throws IOException
 	{
-		int buf[] = new int[3];
-		int out[] = new int[4];
+		int[] buf = new int[3];
+		int[] out = new int[4];
 		int l = 0;
 		while( true ) {
 			int read = in.available();

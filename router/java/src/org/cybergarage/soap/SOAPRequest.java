@@ -83,7 +83,7 @@ public class SOAPRequest extends HTTPRequest {
 
         SOAPResponse soapRes = new SOAPResponse(httpRes);
 
-        byte content[] = soapRes.getContent();
+        byte[] content = soapRes.getContent();
         if (content.length <= 0) return soapRes;
 
         try {
@@ -112,7 +112,7 @@ public class SOAPRequest extends HTTPRequest {
         if (rootNode != null) return rootNode;
 
         try {
-            byte content[] = getContent();
+            byte[] content = getContent();
             ByteArrayInputStream contentIn = new ByteArrayInputStream(content);
             Parser parser = SOAP.getXMLParser();
             rootNode = parser.parse(contentIn);

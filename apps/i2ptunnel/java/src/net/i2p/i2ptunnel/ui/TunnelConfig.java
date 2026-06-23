@@ -986,7 +986,7 @@ public class TunnelConfig {
                     }
                     if (type != null) {
                         try {
-                            SimpleDataStructure keys[] = KeyGenerator.getInstance().generateSigningKeys(type);
+                            SimpleDataStructure[] keys = KeyGenerator.getInstance().generateSigningKeys(type);
                             config.setProperty(p, type.name() + ':' + keys[1].toBase64());
                         } catch (GeneralSecurityException gse) {
                             // so much for that
@@ -1202,17 +1202,17 @@ public class TunnelConfig {
         }
     }
 
-    private static final String _noShowOpts[] = {
+    private static final String[] _noShowOpts = {
         "inbound.length", "outbound.length", "inbound.lengthVariance", "outbound.lengthVariance",
         "inbound.backupQuantity", "outbound.backupQuantity", "inbound.quantity", "outbound.quantity",
         "inbound.nickname", "outbound.nickname", "i2p.streaming.connectDelay", "i2p.streaming.maxWindowSize",
         I2PTunnelIRCClient.PROP_DCC
         };
-    private static final String _booleanClientOpts[] = {
+    private static final String[] _booleanClientOpts = {
         "i2cp.reduceOnIdle", "i2cp.closeOnIdle", "i2cp.newDestOnResume", "persistentClientKey", "i2cp.delayOpen",
         I2PTunnelClientBase.PROP_USE_SSL,
         };
-    private static final String _booleanProxyOpts[] = {
+    private static final String[] _booleanProxyOpts = {
         I2PTunnelHTTPClientBase.PROP_OUTPROXY_AUTH,
         I2PTunnelHTTPClientBase.PROP_USE_OUTPROXY_PLUGIN,
         I2PTunnelHTTPClient.PROP_USER_AGENT,
@@ -1221,7 +1221,7 @@ public class TunnelConfig {
         I2PTunnelHTTPClient.PROP_INTERNAL_SSL,
         I2PTunnelHTTPClient.PROP_SSL_SET
         };
-    private static final String _booleanServerOpts[] = {
+    private static final String[] _booleanServerOpts = {
         "i2cp.reduceOnIdle", "i2cp.encryptLeaseSet", PROP_ENABLE_ACCESS_LIST, PROP_ENABLE_BLACKLIST,
         I2PTunnelServer.PROP_USE_SSL,
         I2PTunnelHTTPServer.OPT_REJECT_INPROXY,
@@ -1231,7 +1231,7 @@ public class TunnelConfig {
         "shouldBundleReplyInfo",
         TunnelController.PROP_LIMITS_SET
         };
-    private static final String _otherClientOpts[] = {
+    private static final String[] _otherClientOpts = {
         "i2cp.reduceIdleTime", "i2cp.reduceQuantity", "i2cp.closeIdleTime",
         "outproxyUsername", "outproxyPassword",
         I2PSOCKSTunnel.PROP_OUTPROXY_TYPE,
@@ -1243,7 +1243,7 @@ public class TunnelConfig {
         "inbound.randomKey", "outbound.randomKey", "i2cp.leaseSetSigningPrivateKey", "i2cp.leaseSetPrivateKey",
         "i2cp.leaseSetEncType"
         };
-    private static final String _otherServerOpts[] = {
+    private static final String[] _otherServerOpts = {
         "i2cp.reduceIdleTime", "i2cp.reduceQuantity", "i2cp.leaseSetKey", "i2cp.accessList",
          PROP_MAX_CONNS_MIN, PROP_MAX_CONNS_HOUR, PROP_MAX_CONNS_DAY,
          PROP_MAX_TOTAL_CONNS_MIN, PROP_MAX_TOTAL_CONNS_HOUR, PROP_MAX_TOTAL_CONNS_DAY,
@@ -1253,7 +1253,7 @@ public class TunnelConfig {
          "i2cp.leaseSetSecret", "i2cp.leaseSetType", "i2cp.leaseSetAuthType", "i2cp.leaseSetPrivKey",
         "i2cp.leaseSetEncType"
         };
-    private static final String _httpServerOpts[] = {
+    private static final String[] _httpServerOpts = {
         I2PTunnelHTTPServer.OPT_POST_WINDOW,
         I2PTunnelHTTPServer.OPT_POST_BAN_TIME,
         I2PTunnelHTTPServer.OPT_POST_TOTAL_BAN_TIME,
@@ -1267,7 +1267,7 @@ public class TunnelConfig {
      *  so they will get migrated to MD5
      *  TODO migrate socks to MD5
      */
-    private static final String _otherProxyOpts[] = {
+    private static final String[] _otherProxyOpts = {
         "proxyUsername", "proxyPassword"
         };
 

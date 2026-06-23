@@ -51,8 +51,8 @@ public class GarlicMessageParser {
      *  @return null on error
      */
     CloveSet getGarlicCloves(GarlicMessage message, PrivateKey encryptionKey, SessionKeyManager skm) {
-        byte encData[] = message.getData();
-        byte decrData[];
+        byte[] encData = message.getData();
+        byte[] decrData;
         boolean debug = _log.shouldDebug();
         boolean warn = _log.shouldWarn();
         try {
@@ -183,7 +183,7 @@ public class GarlicMessageParser {
      *  @since 0.9.44
      */
     CloveSet getGarlicCloves(GarlicMessage message, PrivateKey elgKey, PrivateKey ecKey, SessionKeyManager skm) {
-        byte encData[] = message.getData();
+        byte[] encData = message.getData();
         CloveSet rv;
         try {
             if (skm instanceof MuxedSKM) {
@@ -214,7 +214,7 @@ public class GarlicMessageParser {
      *  @return non-null, throws on all errors
      *  @since public since 0.9.44
      */
-    public CloveSet readCloveSet(byte data[], int offset) throws DataFormatException {
+    public CloveSet readCloveSet(byte[] data, int offset) throws DataFormatException {
         int numCloves = data[offset] & 0xff;
         offset++;
         if (numCloves <= 0 || numCloves > MAX_CLOVES) {throw new DataFormatException("Bad clove count " + numCloves);}

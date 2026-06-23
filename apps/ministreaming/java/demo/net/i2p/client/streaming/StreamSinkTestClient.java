@@ -4,7 +4,7 @@ package net.i2p.client.streaming;
  *
  */
 public class StreamSinkTestClient {
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         //System.setProperty(I2PClient.PROP_TCP_HOST, "dev.i2p.net");
         //System.setProperty(I2PClient.PROP_TCP_PORT, "4501");
         System.setProperty("tunnels.depthInbound", "0");

@@ -88,7 +88,7 @@ public final class KeyGenerator {
     public SessionKey generateSessionKey() {
         // 256bit random # as a session key
         SessionKey key = new SessionKey();
-        byte data[] = new byte[SessionKey.KEYSIZE_BYTES];
+        byte[] data = new byte[SessionKey.KEYSIZE_BYTES];
         _context.random().nextBytes(data);
         key.setData(data);
         return key;
@@ -104,7 +104,7 @@ public final class KeyGenerator {
      *  Warning - SLOW
      *  @since 0.7.1
      */
-    public SessionKey generateSessionKey(byte salt[], byte passphrase[]) {
+    public SessionKey generateSessionKey(byte[] salt, byte[] passphrase) {
         return generateSessionKey(salt, passphrase, PBE_ROUNDS);
     }
 
@@ -118,11 +118,11 @@ public final class KeyGenerator {
      *  @return derived key
      *  @since 2.x.x
      */
-    public SessionKey generateSessionKey(byte salt[], byte passphrase[], int rounds) {
-        byte salted[] = new byte[16 + passphrase.length];
+    public SessionKey generateSessionKey(byte[] salt, byte[] passphrase, int rounds) {
+        byte[] salted = new byte[16 + passphrase.length];
         System.arraycopy(salt, 0, salted, 0, Math.min(salt.length, 16));
         System.arraycopy(passphrase, 0, salted, 16, passphrase.length);
-        byte h[] = _context.sha().calculateHash(salted).getData();
+        byte[] h = _context.sha().calculateHash(salted).getData();
         for (int i = 1; i < rounds; i++) _context.sha().calculateHash(h, 0, Hash.HASH_LENGTH, h, 0);
         return new SessionKey(h);
     }
@@ -432,7 +432,7 @@ public final class KeyGenerator {
     /**
      *  Usage: KeyGenerator [sigtype...]
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
             main2(args);
         } catch (RuntimeException e) {
@@ -443,7 +443,7 @@ public final class KeyGenerator {
     /**
      *  Usage: KeyGenerator [sigtype...]
      */
-    private static void main2(String args[]) {
+    private static void main2(String[] args) {
         RandomSource.getInstance().nextBoolean();
         try {
             Thread.sleep(1000);
@@ -485,11 +485,11 @@ public final class KeyGenerator {
     }
 
     private static void testSig(SigType type, int runs) throws GeneralSecurityException {
-        byte src[] = new byte[512];
+        byte[] src = new byte[512];
         double gtime = 0;
         long stime = 0;
         long vtime = 0;
-        SimpleDataStructure keys[] = null;
+        SimpleDataStructure[] keys = null;
         long st = System.nanoTime();
         // RSA super slow, limit to 5
         int genruns = (type.getBaseAlgorithm() == SigAlgo.RSA) ? Math.min(runs, 5) : runs;

@@ -132,7 +132,7 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /** @param data must be non-null */
-    public PublicKey(byte data[]) {
+    public PublicKey(byte[] data) {
         this(DEF_TYPE, data);
     }
 
@@ -141,7 +141,7 @@ public class PublicKey extends SimpleDataStructure {
      *  @param data must be non-null
      *  @since 0.9.38
      */
-    public PublicKey(EncType type, byte data[]) {
+    public PublicKey(EncType type, byte[] data) {
         this(type);
         if (data == null) {
             throw new IllegalArgumentException("Data must be specified");
@@ -155,7 +155,7 @@ public class PublicKey extends SimpleDataStructure {
      *  @param data must be non-null
      *  @since 0.9.38
      */
-    public PublicKey(int typeCode, byte data[]) {
+    public PublicKey(int typeCode, byte[] data) {
         _type = null;
         if (data == null) {
             throw new IllegalArgumentException("Data must be specified");

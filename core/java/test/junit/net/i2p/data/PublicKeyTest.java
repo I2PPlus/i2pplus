@@ -27,7 +27,7 @@ public class PublicKeyTest extends StructureTest {
     @Override
     public DataStructure createDataStructure() throws DataFormatException {
         PublicKey publicKey = new PublicKey();
-        byte data[] = new byte[PublicKey.KEYSIZE_BYTES];
+        byte[] data = new byte[PublicKey.KEYSIZE_BYTES];
         for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 16);
         publicKey.setData(data);
         return publicKey;
@@ -41,7 +41,7 @@ public class PublicKeyTest extends StructureTest {
     @Test
     public void testBase64Constructor() throws Exception {
         PublicKey publicKey = new PublicKey();
-        byte data[] = new byte[PublicKey.KEYSIZE_BYTES];
+        byte[] data = new byte[PublicKey.KEYSIZE_BYTES];
         for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 56);
         publicKey.setData(data);
 
@@ -52,7 +52,7 @@ public class PublicKeyTest extends StructureTest {
     @Test
     public void testNullEquals() {
         PublicKey publicKey = new PublicKey();
-        byte data[] = new byte[PublicKey.KEYSIZE_BYTES];
+        byte[] data = new byte[PublicKey.KEYSIZE_BYTES];
         for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 56);
         publicKey.setData(data);
 
@@ -75,7 +75,7 @@ public class PublicKeyTest extends StructureTest {
     @Test
     public void testShortData() throws Exception {
         PublicKey publicKey = new PublicKey();
-        byte data[] = new byte[56];
+        byte[] data = new byte[56];
         for (int i = 0; i < data.length; i++) data[i] = (byte) (i);
 
         try {

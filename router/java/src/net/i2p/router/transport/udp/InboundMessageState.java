@@ -15,7 +15,7 @@ class InboundMessageState implements CDQEntry {
     private final Log _log;
     private final long _messageId;
     private final Hash _from;
-    private ByteArray _fragments[];
+    private ByteArray[] _fragments;
     private int _lastFragment;
     private final long _receiveBegin;
     private long _enqueueTime;
@@ -233,7 +233,7 @@ class InboundMessageState implements CDQEntry {
         private final int _highestReceived;
         private final long _fragmentAcks;
 
-        public PartialBitfield(long messageId, Object data[], int size) {
+        public PartialBitfield(long messageId, Object[] data, int size) {
             if (size > MAX_FRAGMENTS)
                 throw new IllegalArgumentException();
             _bitfieldMessageId = messageId;

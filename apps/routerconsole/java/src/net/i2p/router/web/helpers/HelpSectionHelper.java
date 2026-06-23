@@ -19,11 +19,11 @@ import net.i2p.router.web.PluginStarter;
 public class HelpSectionHelper extends HelperBase {
 
     /** help-X.jsp */
-    private static final String pages[] =
+    private static final String[] pages =
                                           {"", "configuration", "sidebar", "reseeding", "advancedsettings",
                                            "faq", "reachability", "reseed", "jsonrpc", "legal" };
 
-    private static final String titles[] =
+    private static final String[] titles =
                                           {_x("Overview"),
                                            _x("Configuration"),
                                            _x("Sidebar"),

@@ -19,5 +19,5 @@ public interface IVValidator {
      * @param iv data will not be modified
      * @param payload will not be modified
      */
-    public boolean receiveIV(byte iv[], int ivOffset, byte payload[], int payloadOffset);
+    public boolean receiveIV(byte[] iv, int ivOffset, byte[] payload, int payloadOffset);
 }

@@ -35,7 +35,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     public FortunaRandomSource(I2PAppContext context) {
         super(context);
         _fortuna = new AsyncFortunaStandalone(context);
-        byte seed[] = new byte[1024];
+        byte[] seed = new byte[1024];
         // may block for 10 seconds
         if (initSeed(seed)) {
             _fortuna.seed(seed);
@@ -75,7 +75,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     }
 
     @Override
-    public void setSeed(byte buf[]) {
+    public void setSeed(byte[] buf) {
         synchronized (_fortuna) {
             _fortuna.addRandomBytes(buf);
         }
@@ -178,7 +178,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     }
 
     @Override
-    public void nextBytes(byte buf[]) {
+    public void nextBytes(byte[] buf) {
         synchronized (_fortuna) {
             _fortuna.nextBytes(buf);
         }
@@ -190,7 +190,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
      * @since 0.8.12
      */
     @Override
-    public void nextBytes(byte buf[], int offset, int length) {
+    public void nextBytes(byte[] buf, int offset, int length) {
         synchronized (_fortuna) {
             _fortuna.nextBytes(buf, offset, length);
         }
@@ -299,7 +299,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
      *  java -cp build/i2p.jar net.i2p.util.FortunaRandomSource | dieharder -a -g 200
      *  </code>
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
             java.util.Properties props = new java.util.Properties();
             props.setProperty("prng.buffers", "12");

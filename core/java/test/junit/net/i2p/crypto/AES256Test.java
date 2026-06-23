@@ -52,27 +52,27 @@ public class AES256Test extends TestCase {
     public void testLong() {
         I2PAppContext ctx = new I2PAppContext();
         SessionKey key = ctx.keyGenerator().generateSessionKey();
-        byte iv[] = new byte[16];
+        byte[] iv = new byte[16];
         RandomSource.getInstance().nextBytes(iv);
 
-        byte lbuf[] = new byte[1024];
+        byte[] lbuf = new byte[1024];
         RandomSource.getInstance().nextBytes(lbuf);
-        byte le[] = ctx.aes().safeEncrypt(lbuf, key, iv, 2048);
-        byte ld[] = ctx.aes().safeDecrypt(le, key, iv);
+        byte[] le = ctx.aes().safeEncrypt(lbuf, key, iv, 2048);
+        byte[] ld = ctx.aes().safeDecrypt(le, key, iv);
         assertTrue(DataHelper.eq(ld, lbuf));
     }
 
     public void testShort() {
         I2PAppContext ctx = new I2PAppContext();
         SessionKey key = ctx.keyGenerator().generateSessionKey();
-        byte iv[] = new byte[16];
+        byte[] iv = new byte[16];
         RandomSource.getInstance().nextBytes(iv);
 
-        byte sbuf[] = new byte[16];
+        byte[] sbuf = new byte[16];
         RandomSource.getInstance().nextBytes(sbuf);
-        byte se[] = new byte[16];
+        byte[] se = new byte[16];
         ctx.aes().encrypt(sbuf, 0, se, 0, key, iv, sbuf.length);
-        byte sd[] = new byte[16];
+        byte[] sd = new byte[16];
         ctx.aes().decrypt(se, 0, sd, 0, key, iv, se.length);
         assertTrue(DataHelper.eq(sd, sbuf));
     }

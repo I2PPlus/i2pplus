@@ -63,7 +63,7 @@ public class SAMStreamSend {
                                         "       -x: use master session (forces -v 3.3)\n" +
                                         "       multiple -o session options are allowed";
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         Getopt g = new Getopt("SAM", args, "sxhb:m:o:p:u:v:w:");
         boolean isSSL = false;
         boolean isMaster = false;
@@ -409,7 +409,7 @@ public class SAMStreamSend {
             FileInputStream fin = null;
             try {
                 fin = new FileInputStream(_destFile);
-                byte dest[] = new byte[1024];
+                byte[] dest = new byte[1024];
                 int read = DataHelper.read(fin, dest);
 
                 _remoteDestination = DataHelper.getUTF8(dest, 0, read);
@@ -465,7 +465,7 @@ public class SAMStreamSend {
             _started = _context.clock().now();
             _context.statManager().addRateData("send." + _connectionId + ".started", 1, 0);
             final long toSend = (new File(_dataFile)).length();
-            byte data[] = new byte[8192];
+            byte[] data = new byte[8192];
             long lastSend = _context.clock().now();
             while (!_closed) {
                 try {
@@ -493,7 +493,7 @@ public class SAMStreamSend {
                                     } else {
                                         throw new IOException("unsupported mode " + _mode);
                                     }
-                                    byte msg[] = DataHelper.getUTF8(m);
+                                    byte[] msg = DataHelper.getUTF8(m);
                                     _samOut.write(msg);
                                 }
                                 _samOut.write(data, 0, read);
@@ -540,7 +540,7 @@ public class SAMStreamSend {
                     }
                 } else {
                     try {
-                        byte msg[] = ("STREAM CLOSE ID=" + _connectionId + "\n").getBytes("UTF-8");
+                        byte[] msg = ("STREAM CLOSE ID=" + _connectionId + "\n").getBytes("UTF-8");
                         synchronized (_samOut) {
                             _samOut.write(msg);
                             _samOut.flush();

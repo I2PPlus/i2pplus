@@ -60,7 +60,7 @@ final class MuxedPQEngine {
      * @param pqKey must be PQ, non-null
      * @return decrypted data or null on failure
      */
-    public CloveSet decrypt(byte data[], PrivateKey ecKey, PrivateKey pqKey, MuxedPQSKM keyManager) throws DataFormatException {
+    public CloveSet decrypt(byte[] data, PrivateKey ecKey, PrivateKey pqKey, MuxedPQSKM keyManager) throws DataFormatException {
         if (ecKey.getType() != EncType.ECIES_X25519 ||
             pqKey.getType().getBaseAlgorithm() != EncAlgo.ECIES_MLKEM) {
             if (_log.shouldWarn()) {

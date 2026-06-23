@@ -456,7 +456,7 @@ public class PluginStarter implements Runnable {
             File consoleDir = new File(pluginDir, "console");
             Properties wprops = RouterConsoleRunner.webAppProperties(consoleDir.getAbsolutePath());
             File webappDir = new File(consoleDir, "webapps");
-            File files[] = webappDir.listFiles(RouterConsoleRunner.WAR_FILTER);
+            File[] files = webappDir.listFiles(RouterConsoleRunner.WAR_FILTER);
             if (files != null) {
                 if(!pluginWars.containsKey(appName))
                     pluginWars.put(appName, new ConcurrentHashSet<>());
@@ -602,7 +602,7 @@ public class PluginStarter implements Runnable {
             File consoleDir = new File(pluginDir, "console");
             Properties props = RouterConsoleRunner.webAppProperties(consoleDir.getAbsolutePath());
             File webappDir = new File(consoleDir, "webapps");
-            String fileNames[] = webappDir.list(RouterConsoleRunner.WarFilenameFilter.instance());
+            String[] fileNames = webappDir.list(RouterConsoleRunner.WarFilenameFilter.instance());
             if (fileNames != null) {
                 for (int i = 0; i < fileNames.length; i++) {
                     String warName = fileNames[i].substring(0, fileNames[i].lastIndexOf(".war"));
@@ -888,7 +888,7 @@ public class PluginStarter implements Runnable {
 
             if (action.equals("start") && app.disabled)
                 continue;
-            String argVal[];
+            String[] argVal;
             if (action.equals("start")) {
                 // start
                 argVal = LoadClientAppsJob.parseArgs(app.args);
@@ -998,7 +998,7 @@ public class PluginStarter implements Runnable {
 
         public TrackedDelayedClient(String pluginName,
                                     SimpleTimer2 pool, RouterContext enclosingContext, String className, String clientName,
-                                    String args[], ThreadGroup threadGroup, ClassLoader cl) {
+                                    String[] args, ThreadGroup threadGroup, ClassLoader cl) {
             super(pool, enclosingContext, className, clientName, args, threadGroup, cl);
             _pluginName = pluginName;
             _pendingPluginClients.get(pluginName).add(this);

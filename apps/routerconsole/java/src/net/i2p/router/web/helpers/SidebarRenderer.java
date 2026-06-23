@@ -37,7 +37,7 @@ import net.i2p.util.SystemVersion;
  */
 class SidebarRenderer {
 
-    static final String ALL_SECTIONS[] =
+    static final String[] ALL_SECTIONS =
         {"Advanced", "AdvancedRouterInfo", "Bandwidth", "BandwidthGraph", "Clock", "Congestion", "CPUBar",
          "Destinations", "FirewallAndReseedStatus", "HelpAndFAQ", "I2PInternals", "I2PServices", "MemoryBar",
          "NetworkReachability", "NewsHeadings", "Peers", "RestartStatus", "RouterInfo", "ShortRouterInfo",

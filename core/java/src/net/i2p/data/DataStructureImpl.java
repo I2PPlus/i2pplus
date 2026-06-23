@@ -28,7 +28,7 @@ public abstract class DataStructureImpl implements DataStructure, Serializable {
 
     @Override
     public String toBase64() {
-        byte data[] = toByteArray();
+        byte[] data = toByteArray();
         if (data == null) return null;
 
         return Base64.encode(data);
@@ -37,14 +37,14 @@ public abstract class DataStructureImpl implements DataStructure, Serializable {
     @Override
     public void fromBase64(String data) throws DataFormatException {
         if (data == null) throw new DataFormatException("Null data passed in");
-        byte bytes[] = Base64.decode(data);
+        byte[] bytes = Base64.decode(data);
         if (bytes == null) throw new DataFormatException("Invalid Base64: " + data);
         fromByteArray(bytes);
     }
 
     @Override
     public Hash calculateHash() {
-        byte data[] = toByteArray();
+        byte[] data = toByteArray();
         if (data != null) return SHA256Generator.getInstance().calculateHash(data);
         return null;
     }
@@ -67,7 +67,7 @@ public abstract class DataStructureImpl implements DataStructure, Serializable {
     }
 
     @Override
-    public void fromByteArray(byte data[]) throws DataFormatException {
+    public void fromByteArray(byte[] data) throws DataFormatException {
         if (data == null) throw new DataFormatException("Null data passed in");
         try {
             ByteArrayInputStream bais = new ByteArrayInputStream(data);
@@ -85,7 +85,7 @@ public abstract class DataStructureImpl implements DataStructure, Serializable {
      * @return number of bytes read (should always equal target.length)
      * @throws IOException if an I/O error occurs
      */
-    protected int read(InputStream in, byte target[]) throws IOException {
+    protected int read(InputStream in, byte[] target) throws IOException {
         return DataHelper.read(in, target);
     }
 }

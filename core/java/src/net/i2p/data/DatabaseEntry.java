@@ -314,7 +314,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      */
     public boolean verifySignature() {
         if (_signature == null) return false;
-        byte data[];
+        byte[] data;
         try {
             data = getBytes();
         } catch (DataFormatException dfe) {

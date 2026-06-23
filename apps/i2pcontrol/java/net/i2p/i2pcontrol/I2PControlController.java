@@ -78,7 +78,7 @@ public class I2PControlController implements RouterApp {
     /**
      *  RouterApp (new way)
      */
-    public I2PControlController(RouterContext ctx, ClientAppManager mgr, String args[]) {
+    public I2PControlController(RouterContext ctx, ClientAppManager mgr, String[] args) {
         _appContext = _context = ctx;
         _mgr = mgr;
         _log = _appContext.logManager().getLog(I2PControlController.class);
@@ -166,7 +166,7 @@ public class I2PControlController implements RouterApp {
     /**
      *  Deprecated, use constructor
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         if (args.length != 3 || (!"-d".equals(args[0])))
             throw new IllegalArgumentException("Usage: PluginController -d $PLUGINDIR [start|stop]");
 
@@ -198,7 +198,7 @@ public class I2PControlController implements RouterApp {
     }
 
 
-    private synchronized void start(String args[]) throws Exception {
+    private synchronized void start(String[] args) throws Exception {
         _appContext.logManager().getLog(JSONRPC2Servlet.class).setMinimumPriority(Log.DEBUG);
         _server.start();
         _context.portMapper().register(SVC_HTTPS_I2PCONTROL,

@@ -64,7 +64,7 @@ public class HexDump {
      * @param data Data to be dumped
      * @param out  Output stream
      */
-    public static void dump(byte data[], OutputStream out) throws IOException {
+    public static void dump(byte[] data, OutputStream out) throws IOException {
         dump(data, 0, data.length, out);
     }
 

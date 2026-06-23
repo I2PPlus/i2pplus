@@ -36,7 +36,7 @@ public class RouterCommandLine extends net.i2p.util.CommandLine {
 
     protected RouterCommandLine() {}
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         List<String> classes = new ArrayList<>(RCLASSES.size() + CLASSES.size());
         classes.addAll(RCLASSES);
         classes.addAll(CLASSES);

@@ -29,10 +29,10 @@ import net.i2p.util.Log;
  */
 public class GunzipOutputStream extends InflaterOutputStream {
     private static final int FOOTER_SIZE = 8; // CRC32 + ISIZE
-    private final byte _buf1[] = new byte[1];
+    private final byte[] _buf1 = new byte[1];
     private boolean _complete;
     private boolean _validated;
-    private final byte _footer[] = new byte[FOOTER_SIZE];
+    private final byte[] _footer = new byte[FOOTER_SIZE];
     private long _bytesReceived;
     private long _bytesReceivedAtCompletion;
 
@@ -72,7 +72,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
     }
 
     @Override
-    public void write(byte buf[], int off, int len) throws IOException {
+    public void write(byte[] buf, int off, int len) throws IOException {
         if (_complete) {
             // shortcircuit so the inflater doesn't try to refill
             // with the footer's data (which would fail, causing ZLIB err)
@@ -371,7 +371,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
         }
 
         @Override
-        public void write(byte buf[], int off, int len) throws IOException {
+        public void write(byte[] buf, int off, int len) throws IOException {
             _crc32.update(buf, off, len);
             out.write(buf, off, len);
         }
@@ -382,7 +382,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
     }
 
 /****
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         java.util.Random r = new java.util.Random();
         for (int i = 0; i < 1050; i++) {
             byte[] b = new byte[i];
@@ -404,12 +404,12 @@ public class GunzipOutputStream extends InflaterOutputStream {
             o.write(b);
             o.finish();
             o.flush();
-            byte compressed[] = baos.toByteArray();
+            byte[] compressed = baos.toByteArray();
 
             java.io.ByteArrayOutputStream baos2 = new java.io.ByteArrayOutputStream(size);
             GunzipOutputStream out = new GunzipOutputStream(baos2);
             out.write(compressed);
-            byte rv[] = baos2.toByteArray();
+            byte[] rv = baos2.toByteArray();
             if (rv.length != b.length)
                 throw new RuntimeException("read length: " + rv.length + " expected: " + b.length);
 

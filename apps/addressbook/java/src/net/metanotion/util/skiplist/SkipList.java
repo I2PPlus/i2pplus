@@ -209,7 +209,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 		Repeat, with splits induced, and collapse induced.
 */
 /*****
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 		SkipList sl = new SkipList(3);
 		sl.put(".1", "1");
 		sl.remove("2");

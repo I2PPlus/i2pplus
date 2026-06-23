@@ -290,7 +290,7 @@ public class NamingServiceBean extends AddressbookBean {
                 if (d != null) {bean.setProperties(p);}
                 list.addLast(bean);
             }
-            AddressBean array[] = list.toArray(new AddressBean[list.size()]);
+            AddressBean[] array = list.toArray(new AddressBean[list.size()]);
             filteredCount = array.length;
             // Store the full filtered list BEFORE pagination for accurate count
             fullFilteredEntries = array;

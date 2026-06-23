@@ -133,7 +133,7 @@ public class StreamSinkServer {
             long start = System.currentTimeMillis();
             try {
                 InputStream in = sock.getInputStream();
-                byte buf[] = new byte[4096];
+                byte[] buf = new byte[4096];
                 long written = 0;
                 int read = 0;
                 while ( (read = in.read(buf)) != -1) {
@@ -164,7 +164,7 @@ public class StreamSinkServer {
      * </ul>
      * @param args [i2cpHost i2cpPort] sinkDir ourDestFile [numHandlers]
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         StreamSinkServer server = null;
         switch (args.length) {
             case 0:

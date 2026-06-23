@@ -101,8 +101,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     private final AtomicLong uploaded = new AtomicLong();
     private final AtomicLong downloaded = new AtomicLong();
     static final int RATE_DEPTH = 3; // make following arrays RATE_DEPTH long
-    private final long uploaded_old[] = {-1, -1, -1};
-    private final long downloaded_old[] = {-1, -1, -1};
+    private final long[] uploaded_old = {-1, -1, -1};
+    private final long[] downloaded_old = {-1, -1, -1};
 
     /**
      * synchronize on this when changing peers or downloaders. This is a Queue, not a Set, because
@@ -471,7 +471,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         setRate(down, downloaded_old);
     }
 
-    static void setRate(long val, long array[]) {
+    static void setRate(long val, long[] array) {
         synchronized (array) {
             for (int i = RATE_DEPTH - 1; i > 0; i--) {
                 array[i] = array[i - 1];
@@ -509,7 +509,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         return (r * 1000) / CHECK_PERIOD;
     }
 
-    static long getRate(long array[]) {
+    static long getRate(long[] array) {
         long rate = 0;
         int i = 0;
         int factor = 0;

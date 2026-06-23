@@ -11,9 +11,9 @@ import java.io.IOException;
  * @since 0.4.1.4, moved to {@link net.i2p.installer} in 0.9.5
  */
 public class Exec {
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
-            String cmd[] = new String[args.length - 1];
+            String[] cmd = new String[args.length - 1];
             System.arraycopy(args, 1, cmd, 0, cmd.length);
             Process proc = Runtime.getRuntime().exec(cmd, (String[])null, new File(args[0]));
 

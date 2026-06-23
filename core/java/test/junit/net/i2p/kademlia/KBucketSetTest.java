@@ -50,7 +50,7 @@ public class KBucketSetTest extends TestCase {
 
     private void addRandom(int count) {
         for (int i = 0; i < count; i++) {
-            byte val[] = new byte[Hash.HASH_LENGTH];
+            byte[] val = new byte[Hash.HASH_LENGTH];
             context.random().nextBytes(val);
             Hash h = new Hash(val);
             // in the highly unlikely chance we randomly generate a hash equal to us
@@ -154,7 +154,7 @@ public class KBucketSetTest extends TestCase {
 
     /** @since 0.9.10 */
     public void testClosest() {
-        byte val[] = new byte[Hash.HASH_LENGTH];
+        byte[] val = new byte[Hash.HASH_LENGTH];
         for (int i = 0; i < 23; i++) {
             context.random().nextBytes(val);
             Hash h = new Hash(val);

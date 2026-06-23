@@ -225,7 +225,7 @@ public abstract class TransportUtil {
      *  @param addr non-null
      *  @since IPv6 moved from TransportImpl
      */
-    public static boolean isPubliclyRoutable(byte addr[], boolean allowIPv6) {
+    public static boolean isPubliclyRoutable(byte[] addr, boolean allowIPv6) {
         return isPubliclyRoutable(addr, true, allowIPv6);
     }
 
@@ -235,7 +235,7 @@ public abstract class TransportUtil {
      *  @param addr non-null
      *  @since IPv6
      */
-    public static boolean isPubliclyRoutable(byte addr[], boolean allowIPv4, boolean allowIPv6) {
+    public static boolean isPubliclyRoutable(byte[] addr, boolean allowIPv4, boolean allowIPv6) {
         if (I2PAppContext.getGlobalContext().getBooleanProperty("i2np.allowLocal"))
             return true;
         if (addr.length == 4) {

@@ -97,7 +97,7 @@ public class ConvertToHash {
     /**
      * @since 0.9.28
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         if (args.length == 0) {
             System.err.println("Usage: converttohash [hostname|b32|destination]...");
             return;

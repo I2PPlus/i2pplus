@@ -982,7 +982,7 @@ public class Reseeder {
 
             URI url = new URI(seedURL + (seedURL.endsWith("/") ? "" : "/") + ROUTERINFO_PREFIX + peer + ROUTERINFO_SUFFIX);
 
-            byte data[] = readURL(url);
+            byte[] data = readURL(url);
             if (data == null || data.length <= 0) {throw new IOException("Failed fetch of " + url);}
             return writeSeed(b64, data);
         }
@@ -1095,7 +1095,7 @@ public class Reseeder {
          *  @param name valid Base64 hash
          *  @return true on success, false if skipped
          */
-        private boolean writeSeed(String name, byte data[]) throws IOException {
+        private boolean writeSeed(String name, byte[] data) throws IOException {
             String dirName = "netDb"; // _context.getProperty("router.networkDatabase.dbDir", "netDb");
             File netDbDir = new SecureDirectory(_context.getRouterDir(), dirName);
             if (!netDbDir.exists()) {netDbDir.mkdirs();}
@@ -1221,7 +1221,7 @@ public class Reseeder {
     /**
      *  @since 0.9.58
      */
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) throws Exception {
         if (args.length == 1 && args[0].equals("help")) {
             System.out.println("Usage: reseeder [-6] [https://hostname/ ...]");
             System.exit(0);

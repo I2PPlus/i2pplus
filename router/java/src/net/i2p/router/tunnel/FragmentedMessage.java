@@ -22,7 +22,7 @@ class FragmentedMessage {
     private final long _messageId;
     private Hash _toRouter;
     private TunnelId _toTunnel;
-    private final ByteArray _fragments[];
+    private final ByteArray[] _fragments;
     private volatile boolean _lastReceived;
     private volatile int _highFragmentNum;
     private final long _createdOn;
@@ -55,7 +55,7 @@ class FragmentedMessage {
      * @param length how much past the offset should we snag?
      * @param isLast is this the last fragment in the message?
      */
-    public boolean receive(int fragmentNum, byte payload[], int offset, int length, boolean isLast) {
+    public boolean receive(int fragmentNum, byte[] payload, int offset, int length, boolean isLast) {
         if (fragmentNum <= 0 || fragmentNum >= MAX_FRAGMENTS) {
             if (_log.shouldWarn())
                 _log.warn("Bad followon fragment # == " + fragmentNum + " for messageId " + _messageId);
@@ -96,7 +96,7 @@ class FragmentedMessage {
      * @param toRouter what router is this destined for (may be null)
      * @param toTunnel what tunnel is this destined for (may be null)
      */
-    public boolean receive(byte payload[], int offset, int length, boolean isLast, Hash toRouter, TunnelId toTunnel) {
+    public boolean receive(byte[] payload, int offset, int length, boolean isLast, Hash toRouter, TunnelId toTunnel) {
         if (length <= 0 || length > MAX_FRAGMENT_SIZE) {
             if (_log.shouldWarn())
                 _log.warn("Invalid length (" + length + ") for [MsgID " + _messageId + "]");
@@ -173,7 +173,7 @@ class FragmentedMessage {
     public long getLifetime() { return _context.clock().now() - _createdOn; }
     public boolean getReleased() { return _completed; }
 
-    private void writeComplete(byte target[], int offset) {
+    private void writeComplete(byte[] target, int offset) {
         if (_releasedAfter > 0) {
              RuntimeException e = new RuntimeException("use after free in FragmentedMessage");
              _log.error("FM writeComplete() 2", e);
@@ -190,7 +190,7 @@ class FragmentedMessage {
     public byte[] toByteArray() {
         synchronized (this) {
             if (_releasedAfter > 0) return null;
-            byte rv[] = new byte[getCompleteSize()];
+            byte[] rv = new byte[getCompleteSize()];
             writeComplete(rv, 0);
             releaseFragments();
             return rv;

@@ -344,7 +344,7 @@ public class CSSHelper extends HelperBase {
      */
     public static class StringFormatter {
         public static String capitalizeWord(String str) {
-            String words[] = str.split("\\s");
+            String[] words = str.split("\\s");
             StringBuilder capitalizeWord = new StringBuilder("");
             for (String w:words) {
                 String first = w.substring(0,1);

@@ -214,7 +214,7 @@ public class SimpleTimer {
     private long _occurredEventCount;
 
     // not used
-    //  private TimedEvent _recentEvents[] = new TimedEvent[5];
+    //  private TimedEvent[] _recentEvents = new TimedEvent[5];
     private class SimpleTimerRunner implements Runnable {
         @Override
         public void run() {

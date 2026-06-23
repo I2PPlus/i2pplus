@@ -18,7 +18,7 @@ public class SessionKeyTest extends StructureTest {
     @Override
     public DataStructure createDataStructure() throws DataFormatException {
         SessionKey key = new SessionKey();
-        byte data[] = new byte[SessionKey.KEYSIZE_BYTES];
+        byte[] data = new byte[SessionKey.KEYSIZE_BYTES];
         for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 16);
         key.setData(data);
         return key;

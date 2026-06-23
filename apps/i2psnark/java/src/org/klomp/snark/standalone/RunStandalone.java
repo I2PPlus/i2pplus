@@ -33,7 +33,7 @@ public class RunStandalone {
     private static RunStandalone _instance;
     static final File APP_CONFIG_FILE = new File("i2psnark-appctx.config");
 
-    private RunStandalone(String args[]) throws Exception {
+    private RunStandalone(String[] args) throws Exception {
         Properties p = new Properties();
 
         if (APP_CONFIG_FILE.exists()) {
@@ -66,7 +66,7 @@ public class RunStandalone {
     }
 
     /** Usage: RunStandalone [host [port]] (but must match what's in the jetty-i2psnark.xml file) */
-    public static synchronized void main(String args[]) {
+    public static synchronized void main(String[] args) {
         try {
             RunStandalone runner = new RunStandalone(args);
             runner.start();

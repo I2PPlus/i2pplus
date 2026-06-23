@@ -60,7 +60,7 @@ public class TestRawTransfer {
                 return;
             }
 
-            char buf[] = new char[3];
+            char[] buf = new char[3];
             int read = reader.read(buf);
             if (read != 3) {
                 _log.error("Unable to read the full datagram");
@@ -79,7 +79,7 @@ public class TestRawTransfer {
         }
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         // "i2cp.tcp.host=www.i2p.net i2cp.tcp.port=7765";
         // "i2cp.tcp.host=localhost i2cp.tcp.port=7654 tunnels.inboundDepth=0";
         String conOptions = "i2cp.tcp.host=dev.i2p.net i2cp.tcp.port=7002 tunnels.inboundDepth=0";

@@ -18,16 +18,16 @@ import net.i2p.util.SystemVersion;
 class InboundEstablishState {  // TODO do all these methods need to be synchronized?
     protected final RouterContext _context;
     protected final Log _log;
-    private byte _receivedX[]; // SessionRequest message
-    protected byte _bobIP[];
+    private byte[] _receivedX; // SessionRequest message
+    protected byte[] _bobIP;
     protected final int _bobPort;
-    protected final byte _aliceIP[]; // SessionCreated message
+    protected final byte[] _aliceIP; // SessionCreated message
     protected final int _alicePort;
     protected long _sentRelayTag;
     private long _sentSignedOnTime;
-    private byte _receivedIdentity[][]; // SessionConfirmed messages - fragmented in theory but not in practice - see below
+    private byte[][] _receivedIdentity; // SessionConfirmed messages - fragmented in theory but not in practice - see below
     private long _receivedSignedOnTime;
-    private byte _receivedSignature[];
+    private byte[] _receivedSignature;
     protected RouterIdentity _receivedUnconfirmedIdentity; // sig not verified
     protected RouterIdentity _receivedConfirmedIdentity; // identical to uncomfirmed, but sig now verified
     protected final long _establishBegin; // general status

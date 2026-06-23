@@ -85,7 +85,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *  @param type the message type or -1 if we should read it here
      *  @return total length of the message
      */
-    public int readBytes(byte data[], int type, int offset) throws I2NPMessageException {
+    public int readBytes(byte[] data, int type, int offset) throws I2NPMessageException {
         return readBytes(data, type, offset, data.length - offset);
     }
 
@@ -99,7 +99,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *                This includes the type byte only if type &lt; 0
      *  @since 0.8.12
      */
-    public int readBytes(byte data[], int type, int offset, int maxLen) throws I2NPMessageException {
+    public int readBytes(byte[] data, int type, int offset, int maxLen) throws I2NPMessageException {
         int headerSize = HEADER_LENGTH;
         if (type >= 0)
             headerSize--;
@@ -200,7 +200,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     }
 
     public byte[] toByteArray() {
-        byte data[] = new byte[getMessageSize()];
+        byte[] data = new byte[getMessageSize()];
         int written = toByteArray(data);
         if (written != data.length) {
             _log.log(Log.CRIT, "Error writing out " + data.length + " (written: " + written + ", msgSize: " + getMessageSize() +
@@ -218,7 +218,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *
      * @return the length written
      */
-    public int toByteArray(byte buffer[]) {
+    public int toByteArray(byte[] buffer) {
         return toByteArray(buffer, 0);
     }
 
@@ -232,7 +232,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      * @return the new offset (NOT the length)
      * @since 0.9.36 with off param
      */
-    public int toByteArray(byte buffer[], int off) {
+    public int toByteArray(byte[] buffer, int off) {
         int start = off;
         try {
             int rv = writeMessageBody(buffer, off + HEADER_LENGTH);
@@ -265,7 +265,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      * write the message body to the output array, starting at the given index.
      * @return the index into the array after the last byte written (NOT the length)
      */
-    protected abstract int writeMessageBody(byte out[], int curIndex) throws I2NPMessageException;
+    protected abstract int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException;
 
     /**
      *  Write the message with a short 5-byte header.
@@ -274,7 +274,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *
      *  @return the new offset (NOT the length)
      */
-    public int toRawByteArray(byte buffer[]) {
+    public int toRawByteArray(byte[] buffer) {
         try {
             int off = 0;
             buffer[off++] = (byte) getType();
@@ -299,7 +299,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      * @return the new offset (NOT the length)
      * @since 0.9.36
      */
-    public int toRawByteArrayNTCP2(byte buffer[], int off) {
+    public int toRawByteArrayNTCP2(byte[] buffer, int off) {
         try {
             buffer[off++] = (byte) getType();
             DataHelper.toLong(buffer, off, 4, getUniqueId());
@@ -315,7 +315,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         }
     }
 
-    public void readMessage(byte data[], int offset, int dataSize, int type, I2NPMessageHandler handler) throws I2NPMessageException {
+    public void readMessage(byte[] data, int offset, int dataSize, int type, I2NPMessageHandler handler) throws I2NPMessageException {
         // ignore the handler (overridden in subclasses if necessary
         try {
             readMessage(data, offset, dataSize, type);
@@ -326,7 +326,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
 
 
 /*****
-    public static I2NPMessage fromRawByteArray(I2PAppContext ctx, byte buffer[], int offset, int len) throws I2NPMessageException {
+    public static I2NPMessage fromRawByteArray(I2PAppContext ctx, byte[] buffer, int offset, int len) throws I2NPMessageException {
         return fromRawByteArray(ctx, buffer, offset, len, new I2NPMessageHandler(ctx));
     }
 *****/
@@ -337,7 +337,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *  Caller MUST call setUniqueId() on the returned value.
      *  Used by SSU2 only!
      */
-    public static I2NPMessage fromRawByteArray(I2PAppContext ctx, byte buffer[], int offset,
+    public static I2NPMessage fromRawByteArray(I2PAppContext ctx, byte[] buffer, int offset,
                                                int len, I2NPMessageHandler handler) throws I2NPMessageException {
         if (len < 5)
             throw new I2NPMessageException("Payload is too short " + len);
@@ -367,7 +367,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *  @param handler ignored, may be null
      *  @since 0.9.35
      */
-    public static I2NPMessage fromRawByteArrayNTCP2(I2PAppContext ctx, byte buffer[], int offset,
+    public static I2NPMessage fromRawByteArrayNTCP2(I2PAppContext ctx, byte[] buffer, int offset,
                                                     int len, I2NPMessageHandler handler) throws I2NPMessageException {
         if (len < 9)
             throw new I2NPMessageException("Payload is too short " + len);

@@ -55,7 +55,7 @@ public class CoreVersion {
         return VERSION;
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         System.out.println("I2P+ Core version: " + VERSION);
         System.out.println("I2P+ API version: " + PUBLISHED_VERSION);
     }

@@ -58,7 +58,7 @@ public final class HMAC256Generator extends HMACGenerator {
      *  @since 0.9.12 overrides HMACGenerator
      */
     @Override
-    public void calculate(SessionKey key, byte data[], int offset, int length, byte target[], int targetOffset) {
+    public void calculate(SessionKey key, byte[] data, int offset, int length, byte[] target, int targetOffset) {
         calculate(key.getData(), data, offset, length, target, targetOffset);
     }
 
@@ -71,7 +71,7 @@ public final class HMAC256Generator extends HMACGenerator {
      *  @throws IllegalArgumentException for bad key or target too small
      *  @since 0.9.38
      */
-    public void calculate(byte[] key, byte data[], int offset, int length, byte target[], int targetOffset) {
+    public void calculate(byte[] key, byte[] data, int offset, int length, byte[] target, int targetOffset) {
         try {
             Mac mac = acquire();
             SecretKey keyObj = new HMACKey(key);
@@ -97,8 +97,8 @@ public final class HMAC256Generator extends HMACGenerator {
      *  @since 0.9.12 overrides HMACGenerator
      */
     @Override
-    public boolean verify(SessionKey key, byte curData[], int curOffset, int curLength, byte origMAC[], int origMACOffset, int origMACLength) {
-        byte calc[] = acquireTmp();
+    public boolean verify(SessionKey key, byte[] curData, int curOffset, int curLength, byte[] origMAC, int origMACOffset, int origMACLength) {
+        byte[] calc = acquireTmp();
         calculate(key, curData, curOffset, curLength, calc, 0);
         boolean eq = DataHelper.eqCT(calc, 0, origMAC, origMACOffset, origMACLength);
         releaseTmp(calc);

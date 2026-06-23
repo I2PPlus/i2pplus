@@ -331,7 +331,7 @@ public class WebAppStarter {
      *  @since 0.9.41
      */
     private static ContextHandler getWebApp(ContextHandlerCollection server, String appName) {
-        Handler handlers[] = server.getHandlers();
+        Handler[] handlers = server.getHandlers();
         if (handlers == null)
             return null;
         String path = '/'+ appName;

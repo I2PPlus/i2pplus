@@ -1027,7 +1027,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         DataMessage msg = new DataMessage(getContext());
         Payload p = _clientMessage.getPayload();
         if (p == null) {return null;}
-        byte d[] = p.getEncryptedData();
+        byte[] d = p.getEncryptedData();
         if (d == null) {return null;}
         msg.setData(d);
         long expires = OVERALL_TIMEOUT_MS_DEFAULT + getContext().clock().now();

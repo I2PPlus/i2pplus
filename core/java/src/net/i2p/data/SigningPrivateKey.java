@@ -109,14 +109,14 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
         _type = type;
     }
 
-    public SigningPrivateKey(byte data[]) {
+    public SigningPrivateKey(byte[] data) {
         this(DEF_TYPE, data);
     }
 
     /**
      *  @since 0.9.8
      */
-    public SigningPrivateKey(SigType type, byte data[]) {
+    public SigningPrivateKey(SigType type, byte[] data) {
         super();
         _type = type;
         setData(data);

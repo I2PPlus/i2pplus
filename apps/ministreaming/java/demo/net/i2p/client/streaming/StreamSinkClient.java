@@ -79,7 +79,7 @@ public class StreamSinkClient {
         while (true) {
             try {
                 I2PSocket sock = mgr.connect(peer);
-                byte buf[] = new byte[Math.min(32*1024, _sendSize*1024)];
+                byte[] buf = new byte[Math.min(32*1024, _sendSize*1024)];
                 Random rand = new Random();
                 OutputStream out = sock.getOutputStream();
                 long beforeSending = System.currentTimeMillis();
@@ -125,7 +125,7 @@ public class StreamSinkClient {
      * </ul>
      * @param args [i2cpHost i2cpPort] sendSizeKB writeDelayMs serverDestFile [concurrentSends]
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         StreamSinkClient client = null;
         int sendSizeKB = -1;
         int writeDelayMs = -1;

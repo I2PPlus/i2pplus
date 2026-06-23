@@ -57,11 +57,11 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     public Hash getFromHash() { return _from; }
     public void setFromHash(Hash from) { _from = from; }
 
-    public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
+    public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
 
-        //byte keyData[] = new byte[Hash.HASH_LENGTH];
+        //byte[] keyData = new byte[Hash.HASH_LENGTH];
         //System.arraycopy(data, curIndex, keyData, 0, Hash.HASH_LENGTH);
         _key = Hash.create(data, curIndex);
         curIndex += Hash.HASH_LENGTH;
@@ -72,14 +72,14 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
 
         _peerHashes.clear();
         for (int i = 0; i < num; i++) {
-            //byte peer[] = new byte[Hash.HASH_LENGTH];
+            //byte[] peer = new byte[Hash.HASH_LENGTH];
             //System.arraycopy(data, curIndex, peer, 0, Hash.HASH_LENGTH);
             Hash p = Hash.create(data, curIndex);
             curIndex += Hash.HASH_LENGTH;
             addReply(p);
         }
 
-        //byte from[] = new byte[Hash.HASH_LENGTH];
+        //byte[] from = new byte[Hash.HASH_LENGTH];
         //System.arraycopy(data, curIndex, from, 0, Hash.HASH_LENGTH);
         _from = Hash.create(data, curIndex);
         curIndex += Hash.HASH_LENGTH;
@@ -94,7 +94,7 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     }
 
     /** write the message body to the output array, starting at the given index */
-    protected int writeMessageBody(byte out[], int curIndex) throws I2NPMessageException {
+    protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         if (_key == null)
             throw new I2NPMessageException("Key in reply to not specified");
         if (_from == null)

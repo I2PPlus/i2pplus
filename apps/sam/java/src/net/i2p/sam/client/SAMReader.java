@@ -79,7 +79,7 @@ public class SAMReader {
         public void streamStatusReceived(String result, String id, String message);
         public void streamConnectedReceived(String remoteDestination, String id);
         public void streamClosedReceived(String result, String id, String message);
-        public void streamDataReceived(String id, byte data[], int offset, int length);
+        public void streamDataReceived(String id, byte[] data, int offset, int length);
         public void namingReplyReceived(String name, String result, String value, String message);
         public void destReplyReceived(String publicKey, String privateKey);
         public void datagramReceived(String dest, byte[] data, int offset, int length, int fromPort, int toPort);
@@ -217,7 +217,7 @@ public class SAMReader {
                     try {
                         int sizeVal = Integer.parseInt(size);
 
-                        byte data[] = new byte[sizeVal];
+                        byte[] data = new byte[sizeVal];
                         int read = DataHelper.read(_inRaw, data);
                         if (read != sizeVal) {
                             _listener.unknownMessageReceived(major, minor, params);
@@ -251,7 +251,7 @@ public class SAMReader {
                       if (tp != null)
                           toPort = Integer.parseInt(tp);
                         int sizeVal = Integer.parseInt(size);
-                        byte data[] = new byte[sizeVal];
+                        byte[] data = new byte[sizeVal];
                         int read = DataHelper.read(_inRaw, data);
                         if (read != sizeVal) {
                             _listener.unknownMessageReceived(major, minor, params);
@@ -287,7 +287,7 @@ public class SAMReader {
                     if (pr != null)
                         protocol = Integer.parseInt(pr);
                     int sizeVal = Integer.parseInt(size);
-                    byte data[] = new byte[sizeVal];
+                    byte[] data = new byte[sizeVal];
                     int read = DataHelper.read(_inRaw, data);
                     if (read != sizeVal) {
                         _listener.unknownMessageReceived(major, minor, params);

@@ -219,7 +219,7 @@ public class TunnelControllerGroup implements ClientApp {
      * @return an array of exactly 2 strings, where [0] is the the value for
      * _configFile and [1] is the value for _configDirectory
     */
-    private String[] setupArguments(String args[]){
+    private String[] setupArguments(String[] args){
         String configFile = DEFAULT_CONFIG_FILE;
         String configDirectory = CONFIG_DIR;
         File check = new File(args[0]);
@@ -238,7 +238,7 @@ public class TunnelControllerGroup implements ClientApp {
      *              if no args, the default is i2ptunnel.config
      *  @throws IllegalArgumentException if unable to load from config from file
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         synchronized (TunnelControllerGroup.class) {
             if (_instance != null) return; // already loaded through the web
             _instance = new TunnelControllerGroup(I2PAppContext.getGlobalContext(), null, args);

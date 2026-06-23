@@ -88,7 +88,7 @@ public class SessionKey extends SimpleDataStructure {
         super();
     }
 
-    public SessionKey(byte data[]) {
+    public SessionKey(byte[] data) {
         super(data);
     }
 

@@ -15,7 +15,7 @@ public class ShortEncryptedBuildRecord extends EncryptedBuildRecord {
     public final static int LENGTH = ShortTunnelBuildMessage.SHORT_RECORD_SIZE;
 
     /** @throws IllegalArgumentException if data is not correct length (null is ok) */
-    public ShortEncryptedBuildRecord(byte data[]) {
+    public ShortEncryptedBuildRecord(byte[] data) {
         super(data);
     }
 

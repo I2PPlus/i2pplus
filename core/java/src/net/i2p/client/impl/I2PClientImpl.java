@@ -112,7 +112,7 @@ public class I2PClientImpl implements I2PClient {
         RandomSource.getInstance().nextBytes(prk);
         PrivateKey privateKey = new PrivateKey(prk);
 
-        SimpleDataStructure signingKeys[];
+        SimpleDataStructure[] signingKeys;
         if (cert.getCertificateType() == Certificate.CERTIFICATE_TYPE_KEY) {
             KeyCertificate kcert = cert.toKeyCertificate();
             SigType type = kcert.getSigType();

@@ -22,7 +22,7 @@ public class RateStat {
     /** actual rate objects for this statistic */
     protected final Rate[] _rates;
 
-    public RateStat(String name, String description, String group, long periods[]) {
+    public RateStat(String name, String description, String group, long[] periods) {
         _statName = name;
         _description = description;
         _groupName = group;
@@ -123,7 +123,7 @@ public class RateStat {
     public String toString() {
         StringBuilder buf = new StringBuilder(4096);
         buf.append(getGroupName()).append('.').append(getName()).append(": ").append(getDescription()).append('\n');
-        long periods[] = getPeriods();
+        long[] periods = getPeriods();
         sort(periods);
         for (int i = 0; i < periods.length; i++) {
             buf.append('\t').append(periods[i]).append(':');
@@ -207,7 +207,7 @@ public class RateStat {
     }
 
     /*********
-     * public static void main(String args[]) {
+     * public static void main(String[] args) {
      * RateStat rs = new RateStat("moo", "moo moo moo", "cow trueisms", new long[] { 60 * 1000, 60 * 60 * 1000,
      * 24 * 60 * 60 * 1000});
      *
@@ -224,7 +224,7 @@ public class RateStat {
      * java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(2048);
      * try {
      * rs.store(baos, "rateStat.test");
-     * byte data[] = baos.toByteArray();
+     * byte[] data = baos.toByteArray();
      * _log.error("Stored rateStat: size = " + data.length + "\n" + new String(data));
      *
      * Properties props = new Properties();

@@ -99,7 +99,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
      *
      * @since 0.8.12
      */
-    public void nextBytes(byte buf[], int offset, int length) {
+    public void nextBytes(byte[] buf, int offset, int length) {
         // inefficient, just in case anybody actually instantiates this
         if (offset == 0 && buf.length == length) {
             nextBytes(buf);
@@ -132,19 +132,19 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
      *  May block up to 10 seconds
      */
     public void loadSeed() {
-        byte buf[] = new byte[1024];
+        byte[] buf = new byte[1024];
         if (initSeed(buf)) setSeed(buf);
     }
 
     public void saveSeed() {
-        byte buf[] = new byte[1024];
+        byte[] buf = new byte[1024];
         nextBytes(buf);
         writeSeed(buf);
     }
 
     private static final String SEEDFILE = "prngseed.rnd";
 
-    public static final void writeSeed(byte buf[]) {
+    public static final void writeSeed(byte[] buf) {
         File f = new File(I2PAppContext.getGlobalContext().getConfigDir(), SEEDFILE);
         FileOutputStream fos = null;
         try {
@@ -163,7 +163,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     /**
      *  May block up to 10 seconds
      */
-    public final boolean initSeed(byte buf[]) {
+    public final boolean initSeed(byte[] buf) {
         boolean ok = false;
 
         final byte[] tbuf = new byte[buf.length];
@@ -233,13 +233,13 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
      *  @param f absolute path
      *  @return success
      */
-    private static final boolean seedFromFile(File f, byte buf[]) {
+    private static final boolean seedFromFile(File f, byte[] buf) {
         if (f.exists()) {
             FileInputStream fis = null;
             try {
                 fis = new FileInputStream(f);
                 int read = 0;
-                byte tbuf[] = new byte[buf.length];
+                byte[] tbuf = new byte[buf.length];
                 while (read < buf.length) {
                     int curRead = fis.read(tbuf, read, tbuf.length - read);
                     if (curRead < 0) break;

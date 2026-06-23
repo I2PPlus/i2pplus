@@ -70,7 +70,7 @@ public class StatManager {
      * @param group used to group statistics together
      * @param periods array of period lengths (in milliseconds)
      */
-    public void createFrequencyStat(String name, String description, String group, long periods[]) {
+    public void createFrequencyStat(String name, String description, String group, long[] periods) {
         if (ignoreStat(name)) return;
         createRequiredFrequencyStat(name, description, group, periods);
     }
@@ -85,7 +85,7 @@ public class StatManager {
      * @param periods array of period lengths (in milliseconds)
      * @since 0.8.7
      */
-    public void createRequiredFrequencyStat(String name, String description, String group, long periods[]) {
+    public void createRequiredFrequencyStat(String name, String description, String group, long[] periods) {
         if (_frequencyStats.containsKey(name)) return;
         _frequencyStats.putIfAbsent(name, new FrequencyStat(name, description, group, periods));
     }
@@ -99,7 +99,7 @@ public class StatManager {
      * @param group used to group statistics together
      * @param periods array of period lengths (in milliseconds)
      */
-    public void createRateStat(String name, String description, String group, long periods[]) {
+    public void createRateStat(String name, String description, String group, long[] periods) {
         if (ignoreStat(name)) return;
         createRequiredRateStat(name, description, group, periods);
     }
@@ -114,7 +114,7 @@ public class StatManager {
      * @param periods array of period lengths (in milliseconds)
      * @since 0.8.7
      */
-    public void createRequiredRateStat(String name, String description, String group, long periods[]) {
+    public void createRequiredRateStat(String name, String description, String group, long[] periods) {
         if (_rateStats.containsKey(name)) return;
         RateStat rs = new RateStat(name, description, group, periods);
         _rateStats.putIfAbsent(name, rs);

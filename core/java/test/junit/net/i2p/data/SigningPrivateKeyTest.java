@@ -27,7 +27,7 @@ public class SigningPrivateKeyTest extends StructureTest {
     @Override
     public DataStructure createDataStructure() throws DataFormatException {
         SigningPrivateKey signingPrivateKey = new SigningPrivateKey();
-        byte data[] = new byte[SigningPrivateKey.KEYSIZE_BYTES];
+        byte[] data = new byte[SigningPrivateKey.KEYSIZE_BYTES];
         for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 16);
         signingPrivateKey.setData(data);
         return signingPrivateKey;
@@ -41,7 +41,7 @@ public class SigningPrivateKeyTest extends StructureTest {
     @Test
     public void testBase64Constructor() throws Exception {
         SigningPrivateKey signingPrivateKey = new SigningPrivateKey();
-        byte data[] = new byte[SigningPrivateKey.KEYSIZE_BYTES];
+        byte[] data = new byte[SigningPrivateKey.KEYSIZE_BYTES];
         for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 56);
         signingPrivateKey.setData(data);
 
@@ -52,7 +52,7 @@ public class SigningPrivateKeyTest extends StructureTest {
     @Test
     public void testNullEquals() {
         SigningPrivateKey signingPrivateKey = new SigningPrivateKey();
-        byte data[] = new byte[SigningPrivateKey.KEYSIZE_BYTES];
+        byte[] data = new byte[SigningPrivateKey.KEYSIZE_BYTES];
         for (int i = 0; i < data.length; i++) data[i] = (byte) (i % 56);
         signingPrivateKey.setData(data);
 
@@ -75,7 +75,7 @@ public class SigningPrivateKeyTest extends StructureTest {
     @Test
     public void testShortData() throws Exception {
         SigningPrivateKey signingPrivateKey = new SigningPrivateKey();
-        byte data[] = new byte[56];
+        byte[] data = new byte[56];
         for (int i = 0; i < data.length; i++) data[i] = (byte) (i);
 
         try {

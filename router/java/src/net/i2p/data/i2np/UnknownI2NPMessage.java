@@ -31,7 +31,7 @@ import net.i2p.util.SimpleByteCache;
  * @since 0.7.12 but broken before 0.8.12
  */
 public class UnknownI2NPMessage extends FastI2NPMessageImpl {
-    private byte _data[];
+    private byte[] _data;
     private final int _type;
 
     /** @param type 0-255 */
@@ -43,7 +43,7 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
     /**
      *  @throws IllegalStateException if data previously set, to protect saved checksum
      */
-    public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
+    public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (_data != null) {throw new IllegalStateException();}
         if (type != _type) throw new I2NPMessageException("Message type is incorrect for this message");
         if (dataSize > MAX_SIZE) {
@@ -60,7 +60,7 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
     }
 
     /** write the message body to the output array, starting at the given index */
-    protected int writeMessageBody(byte out[], int curIndex) {
+    protected int writeMessageBody(byte[] out, int curIndex) {
         if (_data != null) {
             System.arraycopy(_data, 0, out, curIndex, _data.length);
             curIndex += _data.length;

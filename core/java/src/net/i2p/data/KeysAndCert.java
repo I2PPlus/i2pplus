@@ -388,7 +388,7 @@ public class KeysAndCert extends DataStructureImpl {
      */
     public Hash getHash() {
         if (__calculatedHash != null) return __calculatedHash;
-        byte identBytes[];
+        byte[] identBytes;
         try {
             if (_certificate == null) throw new IllegalStateException("KAC hash error");
             ByteArrayStream baos = new ByteArrayStream(384 + _certificate.size());

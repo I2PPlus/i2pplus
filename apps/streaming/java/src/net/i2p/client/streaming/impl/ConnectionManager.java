@@ -935,7 +935,7 @@ class ConnectionManager {
             _context.statManager().addRateData("stream.con.lifetimeMessagesSent", 1+con.getLastSendId(), con.getLifetime());
             MessageInputStream stream = con.getInputStream();
                 long rcvd = 1 + stream.getHighestBlockId();
-                long nacks[] = stream.getNacks();
+                long[] nacks = stream.getNacks();
                 if (nacks != null)
                     rcvd -= nacks.length;
                 _context.statManager().addRateData("stream.con.lifetimeMessagesReceived", rcvd, con.getLifetime());

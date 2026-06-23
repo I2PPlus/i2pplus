@@ -276,7 +276,7 @@ public class WorkingDir {
             String[] files = dir.list();
             if (files == null)
                 return false;
-            String migrated[] = DataHelper.split(MIGRATE_BASE, ",");
+            String[] migrated = DataHelper.split(MIGRATE_BASE, ",");
             for (String file: files) {
                 for (int i = 0; i < migrated.length; i++) {
                     if (file.equals(migrated[i]))
@@ -350,7 +350,7 @@ public class WorkingDir {
 
     private static boolean migrate(String list, File olddir, File todir) {
         boolean rv = true;
-        String files[] = DataHelper.split(list, ",");
+        String[] files = DataHelper.split(list, ",");
         for (int i = 0; i < files.length; i++) {
             File from = new File(olddir, files[i]);
             if (!copy(from, todir)) {
@@ -488,7 +488,7 @@ public class WorkingDir {
         File targetFile = new SecureDirectory(targetDir, src.getName());
         if (!src.isDirectory())
             return copyFile(src, targetFile);
-        File children[] = src.listFiles();
+        File[] children = src.listFiles();
         if (children == null) {
             System.err.println("FAILED copy " + src.getPath());
             return false;
@@ -552,7 +552,7 @@ public class WorkingDir {
         }
         if (!target.isDirectory())
             return;
-        File children[] = target.listFiles();
+        File[] children = target.listFiles();
         if (children == null)
             return;
         for (int i = 0; i < children.length; i++) {

@@ -97,7 +97,7 @@ public abstract class SimpleDataStructure implements DataStructure {
     public SimpleDataStructure() {}
 
     /** @throws IllegalArgumentException if data is not the legal number of bytes (but null is ok) */
-    public SimpleDataStructure(byte data[]) {
+    public SimpleDataStructure(byte[] data) {
         setData(data);
     }
 
@@ -147,7 +147,7 @@ public abstract class SimpleDataStructure implements DataStructure {
      * @return number of bytes read (should always equal target.length)
      * @since 0.9.48, copied from former superclass DataStructureImpl
      */
-    protected int read(InputStream in, byte target[]) throws IOException {
+    protected int read(InputStream in, byte[] target) throws IOException {
         return DataHelper.read(in, target);
     }
 
@@ -200,7 +200,7 @@ public abstract class SimpleDataStructure implements DataStructure {
      * @throws RuntimeException if data already set.
      */
     @Override
-    public void fromByteArray(byte data[]) throws DataFormatException {
+    public void fromByteArray(byte[] data) throws DataFormatException {
         if (data == null) throw new DataFormatException("Null data passed in");
         if (data.length != length()) throw new DataFormatException("Bad data length: " + data.length + "; required: " + length());
         // call setData() instead of _data = data in case overridden

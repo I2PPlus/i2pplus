@@ -44,7 +44,7 @@ public class DecayingBloomFilter {
     private BloomSHA1 _previous;
     protected final int _durationMs;
     protected final int _entryBytes;
-    private final byte _extenders[][];
+    private final byte[][] _extenders;
     private final long _longToEntryMask;
     protected long _currentDuplicates;
     protected volatile boolean _keepDecaying;
@@ -188,14 +188,14 @@ public class DecayingBloomFilter {
     /**
      * @return true if the entry added is a duplicate
      */
-    public boolean add(byte entry[]) {
+    public boolean add(byte[] entry) {
         return add(entry, 0, entry.length);
     }
 
     /**
      * @return true if the entry added is a duplicate
      */
-    public boolean add(byte entry[], int off, int len) {
+    public boolean add(byte[] entry, int off, int len) {
         if (ALWAYS_MISS) return false;
         if (entry == null)
             throw new IllegalArgumentException("Null entry");
@@ -254,7 +254,7 @@ public class DecayingBloomFilter {
         } finally { releaseReadLock(); }
     }
 
-    private boolean locked_add(byte entry[], int offset, int len, boolean addIfNew) {
+    private boolean locked_add(byte[] entry, int offset, int len, boolean addIfNew) {
         if (_extenders != null) {
             // extend the entry to 32 bytes
             byte[] extended = new byte[32];
@@ -462,7 +462,7 @@ public class DecayingBloomFilter {
      *</pre>
      */
 /*****
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         System.out.println("Usage: DecayingBloomFilter [kbps [m [iterations]]] (default 256 23 10)");
         int kbps = 256;
         if (args.length >= 1) {
@@ -522,7 +522,7 @@ public class DecayingBloomFilter {
 
     private static void testByBytes(int kbps, int m, int numRuns) {
         System.out.println("Starting 16 byte test");
-        byte iv[][] = new byte[60*10*kbps][16];
+        byte[][] iv = new byte[60*10*kbps][16];
         java.util.Random r = new java.util.Random();
         for (int i = 0; i < iv.length; i++)
             r.nextBytes(iv[i]);

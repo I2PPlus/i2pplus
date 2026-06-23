@@ -33,7 +33,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     private final Log _log;
     protected ByteArray _headerBuffer;
     private volatile boolean _headerWritten;
-    private final byte _buf1[];
+    private final byte[] _buf1;
     protected volatile boolean _gzip;
     protected volatile long _dataExpected = -1;
     protected volatile boolean _keepAliveIn, _keepAliveOut;
@@ -122,7 +122,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     }
 
     @Override
-    public void write(byte buf[], int off, int len) throws IOException {
+    public void write(byte[] buf, int off, int len) throws IOException {
         if (_headerWritten) {
             out.write(buf, off, len);
             return;
@@ -399,7 +399,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     }
 
 /*******
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         String simple   = "HTTP/1.1 200 OK\n" +
                           "foo: bar\n" +
                           "baz: bat\n" +

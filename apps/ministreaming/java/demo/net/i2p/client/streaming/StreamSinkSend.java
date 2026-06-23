@@ -63,7 +63,7 @@ public class StreamSinkSend {
 
         try {
             I2PSocket sock = mgr.connect(peer);
-            byte buf[] = new byte[32*1024];
+            byte[] buf = new byte[32*1024];
             OutputStream out = sock.getOutputStream();
             long beforeSending = System.currentTimeMillis();
             fis = new FileInputStream(_sendFile);
@@ -111,7 +111,7 @@ public class StreamSinkSend {
      * </ul>
      * @param args sendFile writeDelayMs serverDestFile
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         if (args.length != 3) {
             System.out.println("Usage: StreamSinkClient sendFile writeDelayMs serverDestFile");
         } else {

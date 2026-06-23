@@ -1008,10 +1008,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     private void receiveMessage(InboundMessageState state) {
         int sz = state.getCompleteSize();
         try {
-            byte buf[] = new byte[sz];
+            byte[] buf = new byte[sz];
             I2NPMessage m;
             int numFragments = state.getFragmentCount();
-            ByteArray fragments[] = state.getFragments();
+            ByteArray[] fragments = state.getFragments();
             int off = 0;
             for (int i = 0; i < numFragments; i++) {
                 ByteArray ba = fragments[i];
@@ -1120,7 +1120,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             UDPPacket packet = UDPPacket.acquire(_context, false);
             rv[i] = packet;
             DatagramPacket pkt = packet.getPacket();
-            byte data[] = pkt.getData();
+            byte[] data = pkt.getData();
             int off = pkt.getOffset();
             System.arraycopy(_sessConfForReTX[i], 0, data, off, _sessConfForReTX[i].length);
             pkt.setLength(_sessConfForReTX[i].length);

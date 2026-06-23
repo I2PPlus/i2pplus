@@ -285,7 +285,7 @@ public class I2PSocketEepGet extends EepGet {
      * which has more options, and you don't have to wait for tunnels to be built.
      */
 /****
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         int numRetries = 0;
         long inactivityTimeout = INACTIVITY_TIMEOUT;
         String url = null;

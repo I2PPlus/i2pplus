@@ -117,7 +117,7 @@ public class LookupDest {
      *  Supports hostnames and extended b32.
      *  TODO: does not support I2CP options.
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         if (args.length != 1) {
             System.err.println("Usage: LookupDest hostname|b32");
             System.exit(1);

@@ -579,7 +579,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 _signingPrivKey = null;
             } else {
                 // must be same type as the Destination's signing key
-                SimpleDataStructure signKeys[];
+                SimpleDataStructure[] signKeys;
                 try {
                     signKeys = KeyGenerator.getInstance().generateSigningKeys(dest.getSigningPublicKey().getType());
                 } catch (GeneralSecurityException gse) {
@@ -614,7 +614,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
          *  @since 0.9.21
          */
         public LeaseInfo(List<PrivateKey> privKeys, Destination dest) {
-            SimpleDataStructure signKeys[];
+            SimpleDataStructure[] signKeys;
             try {
                 signKeys = KeyGenerator.getInstance().generateSigningKeys(dest.getSigningPublicKey().getType());
             } catch (GeneralSecurityException gse) {

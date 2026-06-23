@@ -59,7 +59,7 @@ abstract class IRCFilter {
      */
     public static String inboundFilter(String s, StringBuffer expectedPong, DCCHelper helper) {
 
-        String field[] = DataHelper.split(s, " ", 5);
+        String[] field = DataHelper.split(s, " ", 5);
         String command;
         int idx=0;
 
@@ -285,7 +285,7 @@ abstract class IRCFilter {
      */
     public static String outboundFilter(String s, StringBuffer expectedPong, DCCHelper helper) {
 
-        String field[] = DataHelper.split(s, " ", 4);
+        String[] field = DataHelper.split(s, " ", 4);
 
         if(field[0].length()==0)
             return null; // W T F?

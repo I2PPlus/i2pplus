@@ -61,8 +61,8 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
      *
      * @param fragmentLength fragments[0:fragmentLength] is used
      */
-    protected void preprocess(byte fragments[], int fragmentLength) {
-        byte iv[] = SimpleByteCache.acquire(IV_SIZE);
+    protected void preprocess(byte[] fragments, int fragmentLength) {
+        byte[] iv = SimpleByteCache.acquire(IV_SIZE);
         _context.random().nextBytes(iv);
 
         // payload ready, now H(instructions+payload+IV)
@@ -154,7 +154,7 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
     private static final byte MASK_TUNNEL = (byte)(FragmentHandler.TYPE_TUNNEL << 5);
     private static final byte MASK_ROUTER = (byte)(FragmentHandler.TYPE_ROUTER << 5);
 
-    protected int writeFirstFragment(PendingGatewayMessage msg, byte target[], int offset) {
+    protected int writeFirstFragment(PendingGatewayMessage msg, byte[] target, int offset) {
         boolean fragmented = false;
         int instructionsLength = getInstructionsSize(msg);
         int payloadLength = msg.getData().length - msg.getOffset();
@@ -220,7 +220,7 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
         return offset;
     }
 
-    protected int writeSubsequentFragment(PendingGatewayMessage msg, byte target[], int offset) {
+    protected int writeSubsequentFragment(PendingGatewayMessage msg, byte[] target, int offset) {
         boolean isLast = true;
 
         int instructionsLength = getInstructionsSize(msg);

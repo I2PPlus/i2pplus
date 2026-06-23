@@ -36,7 +36,7 @@ import net.i2p.data.DataHelper;
  */
 public class ReadBuffer implements Buffer {
 
-	public final byte content[];
+	public final byte[] content;
 	public final int length, offset;
 	
 	public ReadBuffer(byte[] content, int offset, int length) {

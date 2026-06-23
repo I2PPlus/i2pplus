@@ -31,7 +31,7 @@ class OutboundMessageState implements CDPQEntry {
     private long _fragmentAcks;
     private final int _numFragments;
     /** sends for each fragment, or null if only one fragment */
-    private final byte _fragmentSends[];
+    private final byte[] _fragmentSends;
     private final long _startedOn;
     private int _pushCount;
     private int _maxSends;
@@ -463,7 +463,7 @@ class OutboundMessageState implements CDPQEntry {
      * @param fragmentNum fragment to write (0 indexed)
      * @return bytesWritten, NOT including packet overhead
      */
-    public int writeFragment(byte out[], int outOffset, int fragmentNum) {
+    public int writeFragment(byte[] out, int outOffset, int fragmentNum) {
         int start = _fragmentSize * fragmentNum;
         // SSU2 first frag is 5 bytes bigger
         if (fragmentNum > 0)

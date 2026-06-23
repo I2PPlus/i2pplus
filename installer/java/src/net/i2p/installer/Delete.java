@@ -11,7 +11,7 @@ import net.i2p.util.FileUtil;
  */
 
 public class Delete {
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         for(int file=0; file < args.length; file++)
             FileUtil.rmdir(args[file], false);
     }

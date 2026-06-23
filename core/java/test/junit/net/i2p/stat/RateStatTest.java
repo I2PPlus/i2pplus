@@ -10,7 +10,7 @@ public class RateStatTest extends TestCase {
 
     @Test
     public void testNoRates() throws Exception {
-        final long emptyArray[] = new long[0];
+        final long[] emptyArray = new long[0];
         try {
             new RateStat("test", "test RateStat getters etc", "tests", emptyArray);
             fail("created a rate stat with no periods");
@@ -20,7 +20,7 @@ public class RateStatTest extends TestCase {
 
     @Test
     public void testGettersEtc() throws Exception {
-        final long periods[] = new long[] {10};
+        final long[] periods = new long[] {10};
         RateStat rs = new RateStat("test", "test RateStat getters etc", "tests", periods);
 
         // Test basic getters
@@ -48,7 +48,7 @@ public class RateStatTest extends TestCase {
         java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(2048);
 
         rs.store(baos, "rateStat.test");
-        byte data[] = baos.toByteArray();
+        byte[] data = baos.toByteArray();
 
         Properties props = new Properties();
         props.load(new java.io.ByteArrayInputStream(data));

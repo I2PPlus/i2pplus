@@ -27,7 +27,7 @@ public class DechunkedOutputStream extends LimitOutputStream {
     }
 
     @Override
-    public void write(byte buf[], int off, int len) throws IOException {
+    public void write(byte[] buf, int off, int len) throws IOException {
         if (len <= 0)
             return;
 
@@ -189,7 +189,7 @@ public class DechunkedOutputStream extends LimitOutputStream {
 
         public void test(boolean strip) throws Exception {
             LimitOutputStream cout = new DechunkedOutputStream(System.out, this, strip);
-            final byte buf[] = new byte[4096];
+            final byte[] buf = new byte[4096];
             try {
                 int read;
                 while (run && (read = System.in.read(buf)) != -1) {

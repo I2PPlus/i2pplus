@@ -362,7 +362,7 @@ class NewsFetcher extends UpdateRunner {
      */
     private static Map<String, String> parseArgs(String args) {
         Map<String, String> rv = new HashMap<>(8);
-        char data[] = args.toCharArray();
+        char[] data = args.toCharArray();
         StringBuilder buf = new StringBuilder(32);
         boolean isQuoted = false;
         String key = null;
