@@ -137,10 +137,12 @@
           <fileset dir="${build.dir}/js" includes="*.js"/>
         </length>
         <math result="js.saved" operand1="${js.size.before}" operand2="${js.size.after}" operation="-" datatype="int"/>
+        <math result="js.pct" operand1="${js.saved}" operand2="100" operation="*" datatype="int"/>
+        <math result="js.pct" operand1="${js.pct}" operand2="${js.size.before}" operation="/" datatype="int"/>
         <if>
           <not><equals arg1="${js.saved}" arg2="0"/></not>
           <then>
-            <echo message="SusiMail: Javascript compression -> ${js.size.before} / ${js.size.after} (saved ${js.saved} bytes)"/>
+            <echo message="SusiMail: Javascript compression -> ${js.size.before} / ${js.size.after} (${js.pct}% smaller)"/>
           </then>
         </if>
           </then>
