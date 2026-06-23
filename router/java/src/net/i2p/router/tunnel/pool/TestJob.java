@@ -346,8 +346,11 @@ public class TestJob extends JobImpl {
         if (!isCritical && (readyCount > activeRunners || maxLag > expeditedLagLimit || currentTestJobs >= expeditedJobLimit)) {
             Log log = ctx.logManager().getLog(TestJob.class);
             if (log.shouldInfo()) {
-                log.info("Job queue lagging or too many test jobs (" + readyCount + " ready jobs, maxLag=" + maxLag +
-                         "ms, testJobs=" + currentTestJobs + "/" + maxTestJobs + ", expedited=" + isExpedited + ") -> Not scheduling test for " + cfg);
+                if (maxLag > expeditedLagLimit) {
+                    log.info("High max Job queue lag (" + maxLag + "ms) -> Not scheduling test for " + cfg);
+                } else {
+                    log.info("Too many test jobs scheduled or running -> Not scheduling test for " + cfg);
+                }
             }
             return false;
         }
@@ -364,7 +367,7 @@ public class TestJob extends JobImpl {
         if (!TOTAL_TEST_JOBS.compareAndSet(current, current + 1)) {
             Log log = ctx.logManager().getLog(TestJob.class);
             if (log.shouldDebug()) {
-                log.debug("Concurrent limit reached -> Not scheduling test for " + cfg);
+                log.debug("Concurrent test limit reached -> Not scheduling test for " + cfg);
             }
             return false;
         }
@@ -719,7 +722,7 @@ public class TestJob extends JobImpl {
                 // Drop exploratory tests to free capacity; reschedule client tunnels.
                 if (isExploratory) {
                     if (_log.shouldInfo()) {
-                        _log.info("TestJob queue saturated -> Dropping exploratory tunnel test (" + totalCount + " >= " + currentLimit + ")");
+                        _log.info("TestJob queue saturated -> Dropping exploratory tunnel test...");
                     }
                     ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
                     cleanupTunnelTracking();
@@ -734,9 +737,7 @@ public class TestJob extends JobImpl {
                 // eventually gets through when capacity frees up, and the backoff
                 // prevents tight polling loops.
                 if (_log.shouldInfo()) {
-                    _log.info("TestJob queue saturated -> Rescheduling " +
-                              (_cfg.needsExpeditedTest() ? "expedited" : "") +
-                              " test (" + totalCount + " >= " + currentLimit + ") for " + _cfg);
+                    _log.info("TestJob queue saturated -> Rescheduling test for " + _cfg);
                 }
                 if (!scheduleRetest(_cfg.needsExpeditedTest())) {
                     cleanupTunnelTracking();
@@ -767,8 +768,7 @@ public class TestJob extends JobImpl {
             current = CONCURRENT_TESTS.get();
             if (current >= maxTests) {
                 if (_log.shouldInfo()) {
-                    _log.info("Max " + maxTests + " concurrent tunnel tests reached \n* Rescheduling test for " + _cfg +
-                              " (Queued: " + totalCount + ")");
+                    _log.info("Max concurrent tunnel tests (" + maxTests + ") reached \n* Rescheduling test for " + _cfg);
                 }
                 ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
                 if (!scheduleRetest(_cfg.needsExpeditedTest())) {
@@ -791,8 +791,9 @@ public class TestJob extends JobImpl {
             // they're obviously working and testing risks false failures on
             // high-bandwidth tunnels.
             if (ctx.clock().now() - _cfg.getLastTransferred() < getMaxTestDelay(ctx)) {
-                if (_log.shouldInfo())
+                if (_log.shouldInfo()) {
                     _log.info("Skipping test on " + _cfg + " -> Data recently received");
+                }
                 CONCURRENT_TESTS.decrementAndGet();
                 if (!scheduleRetest(false)) {
                     cleanupTunnelTracking();
@@ -868,8 +869,9 @@ public class TestJob extends JobImpl {
             // so every tunnel gets an initial latency reading.
             if (_cfg.getTestStatus() != net.i2p.router.TunnelTestStatus.UNTESTED &&
                 ctx.clock().now() - _cfg.getLastTransferred() < getMaxTestDelay(ctx)) {
-                if (_log.shouldInfo())
+                if (_log.shouldInfo()) {
                     _log.info("Skipping test on " + _cfg + " -> Data recently received");
+                }
                 CONCURRENT_TESTS.decrementAndGet();
                 if (!scheduleRetest(false)) {
                     cleanupTunnelTracking();
@@ -898,8 +900,9 @@ public class TestJob extends JobImpl {
                         // Fall back to exploratory inbound tunnel so tests can
                         // still proceed when the paired pool is empty.
                         _replyTunnel = ctx.tunnelManager().selectInboundTunnel();
-                        if (_replyTunnel != null && _log.shouldWarn())
+                        if (_replyTunnel != null && _log.shouldWarn()) {
                             _log.warn("Falling back to exploratory inbound tunnel for test of " + _cfg);
+                        }
                     }
                 }
                 if (_replyTunnel == null) {
@@ -919,9 +922,10 @@ public class TestJob extends JobImpl {
                         decrementTotalJobs();
                         return;
                     }
-                    if (_log.shouldWarn())
-                        _log.warn("No inbound tunnel for test of " + _cfg +
-                                  " -> Deferring (" + _deferredCount + "/" + MAX_DEFERRED + ", pool may be recovering)");
+                    if (_log.shouldWarn()) {
+                        _log.warn("No inbound tunnel for test of " + _cfg + " -> Deferring (" +
+                                  _deferredCount + "/" + MAX_DEFERRED + ", pool may be recovering)");
+                    }
                     ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
                     CONCURRENT_TESTS.decrementAndGet();
                     if (!scheduleRetest(false)) {
@@ -940,8 +944,9 @@ public class TestJob extends JobImpl {
                 : null;
 
         if (_replyTunnel == null || _outTunnel == null) {
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("Insufficient tunnels to test " + _cfg + " with: " + _replyTunnel + " / " + _outTunnel);
+            }
             ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
             CONCURRENT_TESTS.decrementAndGet();
             if (!scheduleRetest(false)) {

@@ -2436,7 +2436,7 @@ public class TunnelPool {
                             }
                             // Record cooldown for reused peers so selectPeers respects them
                             for (Hash p : peers) {
-                                if (!p.equals(_context.routerHash()) && 
+                                if (!p.equals(_context.routerHash()) &&
                                     !TunnelPeerSelector.hasRecoveredFromFailure(_context, p)) {
                                     TunnelPeerSelector._peerCooldowns.put(p, now);
                                 }
@@ -2494,7 +2494,7 @@ public class TunnelPool {
                 !_context.commSystem().isConnecting(tbrTarget)) {
                 if (_log.shouldInfo()) {
                     _log.info("configureNewTunnel: TBR target [" + tbrTarget.toBase64().substring(0,6) +
-                              "] not connected, pre-connecting for next attempt -> " + cfg);
+                              "] not connected, pre-connecting for next attempt \n* " + cfg);
                 }
                 TunnelPeerSelector.preConnectTo(_context, tbrTarget);
                 return null;
