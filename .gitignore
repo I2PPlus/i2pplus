@@ -134,6 +134,7 @@ core/c/jbigi/*.tar.bz2
 
 # Static analysis tools (downloaded at runtime)
 tools/
+!apps/**/tools/
 !tools/sonarqube/*.sh
 !tools/sonarqube/*.py
 !tools/sonarqube/*.properties
