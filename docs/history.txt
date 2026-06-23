@@ -1,3 +1,16 @@
+2026-06-23 dr|z3d
+  * Router: Fix tunnel pool collapse — reduce aggressive peer filtering;
+    remove UNTESTED tunnel skipping; increase test throughput (shorter
+    periods, higher caps)
+  * Console:
+    - Add /streams page showing live streaming connections
+    - Fix hide/show news nonce mismatch on /home
+
+2026-06-18 dr|z3d
+  * Router: Tunnel build timeout 20s, first-hop peer filtering, FAILING cap
+    exclusion; latency-based tier demotion; SSU2, NTCP, streaming fixes;
+    netdb probe/republish fixes; addressbook HostChecker fix
+
 2026-06-09 dr|z3d
   * Router:
     - Peer Manager: Freshness proof-of-life check in isSelectable() —
@@ -15,7 +28,6 @@
   * Streaming: Make resend delay, disconnect timeout, and RTO
     configurable via PROPs
   * EepGet: Make timeouts and retries configurable via PROPs
-  * Build: Restructure Windows wrapper binary layout to subdirectories
 
 2026-06-06 dr|z3d
   * Router:
