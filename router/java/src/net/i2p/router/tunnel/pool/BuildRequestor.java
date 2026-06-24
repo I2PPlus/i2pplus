@@ -92,19 +92,19 @@ abstract class BuildRequestor {
      * How long we wait for a reply before trying a different pool/peers.
      * Adaptive mechanism in BuildExecutor adjusts this upward when
      * success rates are low or timeout rates are high.
-     * Default: 20s (normal), 25s (slow systems).
+     * Default: 13s (normal), 18s (slow systems).
      */
     static int getRequestTimeout(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.build.requestTimeout", SystemVersion.isSlow() ? 25*1000 : 20*1000);
+        return ctx.getProperty("i2p.tunnel.build.requestTimeout", 15*1000);
     }
 
     /**
      * How long the OutNetMessage for the first hop gets before
-     * TunnelBuildFirstHopFailJob fires. Matches request timeout
-     * so pre-connect has time to finish (avg 8.5s, can spike to 90s).
+     * TunnelBuildFirstHopFailJob fires. Shorter than request timeout
+     * so first-hop failure is detected before the full build timeout.
      */
     public static int getFirstHopTimeout(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.build.firstHopTimeout", 20*1000);
+        return ctx.getProperty("i2p.tunnel.build.firstHopTimeout", 10*1000);
     }
 
     /**
@@ -239,126 +239,74 @@ abstract class BuildRequestor {
 
     /**
      * Selects an appropriate tunnel for sending the build reply.
-     * Prefers paired client tunnels; falls back to exploratory if needed.
+     * Exploratory pools use exploratory tunnels; client pools try their
+     * own tunnels first, then any client tunnel, then exploratory as a
+     * last-resort bootstrap when zero client tunnels exist system-wide.
      */
     private static TunnelInfo selectPairedTunnel(RouterContext ctx, TunnelPool pool,
-                                                 PooledTunnelCreatorConfig cfg,
-                                                 BuildExecutor exec, Log log) {
+                                                  PooledTunnelCreatorConfig cfg,
+                                                  BuildExecutor exec, Log log) {
         TunnelPoolSettings settings = pool.getSettings();
         boolean isInbound = settings.isInbound();
         Hash farEnd = cfg.getFarEnd();
         TunnelManagerFacade mgr = ctx.tunnelManager();
-        long uptime = ctx.router().getUptime();
 
-        // Use exploratory tunnels for exploratory pools or if paired disabled (never)
         if (settings.isExploratory() || !usePairedTunnels()) {
+            // Exploratory pools: use exploratory tunnels for replies.
+            // Client pools with usePairedTunnels=false (never): ditto.
             TunnelInfo expl = isInbound
                 ? mgr.selectOutboundExploratoryTunnel(farEnd)
                 : mgr.selectInboundExploratoryTunnel(farEnd);
 
-            // If no exploratory tunnels exist yet, allow zero-hop as fallback
-            if (expl == null) {
-                if (log.shouldInfo()) {
-                    log.info("No existing exploratory tunnels for " + cfg + " -> allowing zero-hop build");
-                }
-                // Return null to allow zero-hop tunnel build
-                return null;
+            if (expl == null && log.shouldInfo()) {
+                log.info("No existing exploratory tunnels for " + cfg + " -> allowing zero-hop build");
             }
-            return expl;
+            return expl; // null => zero-hop fallback
         }
 
-        // Client tunnel: try paired first
-        int fails = pool.getConsecutiveBuildTimeouts();
+        // Client tunnel: try matching pool first, then any pool, then
+        // exploratory as last resort (cold-start bootstrap only).
+        // Using exploratory for replies congests the exploratory path
+        // and causes OB builds to timeout at 2x the rate of IB builds
+        // (54% vs 80%), so it's strictly a last resort.
         Hash from = settings.getDestination();
+        int fails = pool.getConsecutiveBuildTimeouts();
+        TunnelInfo paired;
 
+        // Step 1: try this pool's own tunnels (preferred).
+        // Skip when the pool itself has too many consecutive failures
+        // (its tunnels are likely stale/dropping replies).
         if (fails < getMaxConsecutiveClientBuildFails(ctx)) {
-            TunnelInfo paired = isInbound
+            paired = isInbound
                 ? mgr.selectOutboundTunnel(from, farEnd)
                 : mgr.selectInboundTunnel(from, farEnd);
 
             if (paired != null) {
-                // Skip paired tunnel with 3+ consecutive failures — it's very likely
-                // to drop the reply, causing a build timeout and unnecessary churn.
-                // Fall through to exploratory which is more reliable.
-                if (paired.getConsecutiveFailures() >= 2) {
-                    if (log.shouldWarn()) {
-                        log.warn("Paired tunnel has " + paired.getConsecutiveFailures() +
-                                 " consecutive failures, falling back to exploratory for reply: " + cfg);
-                    }
-                } else {
-                    SessionKeyManager skm = ctx.clientManager().getClientSessionKeyManager(from);
-                    if (skm != null || cfg.getGarlicReplyKeys() == null) {
-                        return paired;
-                    }
-                    // Client SKM missing but garlic reply expected → fall through to expl
-                    if (log.shouldInfo()) {
-                        log.info("Client SKM unavailable for garlic reply -> Falling back to exploratory for " + cfg);
-                    }
+                SessionKeyManager skm = ctx.clientManager().getClientSessionKeyManager(from);
+                if (skm != null || cfg.getGarlicReplyKeys() == null) {
+                    return paired;
                 }
-            }
-        } else {
-            if (log.shouldWarn() && uptime > 5*60*1000 && fails > 2) {
-                log.warn(fails + " consecutive build timeouts for " + cfg + " → Forcing exploratory tunnel...");
-            }
-        }
-
-        // Fallback to exploratory
-        TunnelInfo expl = isInbound
-            ? selectFallbackOutboundTunnel(ctx, mgr, log)
-            : selectFallbackInboundTunnel(ctx, mgr, log);
-
-        if (expl != null && log.shouldInfo()) {
-            log.info("Using exploratory tunnel as fallback for: " + cfg);
-        }
-        return expl;
-    }
-
-    private static TunnelInfo selectFallbackOutboundTunnel(RouterContext ctx, TunnelManagerFacade mgr, Log log) {
-        TunnelInfo tunnel = mgr.selectOutboundTunnel();
-        if (tunnel != null &&
-            tunnel.getLength() <= 1 &&
-            mgr.getOutboundSettings().getLength() > 0 &&
-            mgr.getOutboundSettings().getLength() + mgr.getOutboundSettings().getLengthVariance() > 0) {
-            // Allow zero/1-hop for initial exploratory tunnels, but avoid for normal operation
-            TunnelInfo anyOutbound = mgr.selectOutboundTunnel();
-            if (anyOutbound == null) {
                 if (log.shouldInfo()) {
-                    log.info("Allowing zero-hop outbound tunnel for initial exploratory build");
+                    log.info("Client SKM unavailable for garlic reply, cannot build: " + cfg);
                 }
-                return tunnel;
+                return null;
             }
-            // If there's a longer tunnel, prefer it over the 0/1-hop one
-            if (anyOutbound.getLength() > 1) {
-                return anyOutbound;
-            }
-            // No longer tunnel available - accept the 0/1-hop one
-            return tunnel;
         }
-        return tunnel;
-    }
 
-    private static TunnelInfo selectFallbackInboundTunnel(RouterContext ctx, TunnelManagerFacade mgr, Log log) {
-        TunnelInfo tunnel = mgr.selectInboundTunnel();
-        if (tunnel != null &&
-            tunnel.getLength() <= 1 &&
-            mgr.getInboundSettings().getLength() > 0 &&
-            mgr.getInboundSettings().getLength() + mgr.getInboundSettings().getLengthVariance() > 0) {
-            // Allow zero/1-hop for initial exploratory tunnels, but avoid for normal operation
-            TunnelInfo anyInbound = mgr.selectInboundTunnel();
-            if (anyInbound == null) {
-                if (log.shouldInfo()) {
-                    log.info("Allowing zero-hop inbound tunnel for initial exploratory build");
-                }
-                return tunnel;
+        // Step 2: try any client tunnel (cross-pool — the reply just
+        // needs to reach the gateway, any tunnel of the right type works).
+        // Client pools are tried first; exploratory is the last resort.
+        paired = isInbound
+            ? mgr.selectAnyOutboundTunnel()
+            : mgr.selectAnyInboundTunnel();
+        if (paired != null) {
+            if (log.shouldInfo()) {
+                log.info("Cross-pool reply tunnel for " + cfg + ": " + paired);
             }
-            // If there's a longer tunnel, prefer it over the 0/1-hop one
-            if (anyInbound.getLength() > 1) {
-                return anyInbound;
-            }
-            // No longer tunnel available - accept the 0/1-hop one
-            return tunnel;
+            return paired;
         }
-        return tunnel;
+
+        return null;
     }
 
     private static void handleInboundBuild(RouterContext ctx, PooledTunnelCreatorConfig cfg,

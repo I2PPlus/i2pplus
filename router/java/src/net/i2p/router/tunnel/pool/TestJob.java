@@ -293,15 +293,26 @@ public class TestJob extends JobImpl {
             return false;
         }
 
-        // First-ever test — always schedule immediately.  An untested tunnel
-        // is useless; the CONCURRENT_TESTS limit in runJob() will throttle
-        // execution across the job queue.  Only skip for validity reasons
-        // (ping tunnel, bad IDs, early expiry, or duplicate).
+        // First-ever test — schedule immediately for critical pools, but
+        // respect the adaptive queue cap for non-critical ones.  Without a
+        // cap here, newly built untested tunnels keep adding test jobs past
+        // the limit, which prevents retests from running and causes tunnels
+        // to stay UNTESTED indefinitely (a death spiral: UNTESTED tunnels
+        // inflate the addTunnel() total, block new GOOD builds, and the pool
+        // can never recover enough active tunnels to become non-critical).
         boolean isFirstTest = (cfg.getTestStatus() == net.i2p.router.TunnelTestStatus.UNTESTED);
         if (isFirstTest) {
-            // Still reserve a TOTAL_TEST_JOBS slot so the constructor and
-            // test-completion cleanup balance correctly.
             int current = TOTAL_TEST_JOBS.get();
+            // Check capacity: critical pools (0 GOOD) always get through,
+            // non-critical ones wait until queue headroom frees up.
+            if (current >= maxQueuedTests) {
+                if (pool != null && !pool.getSettings().isExploratory() &&
+                    pool.getActiveTunnelCount() == 0) {
+                    // critical — bypass the cap
+                } else {
+                    return false;
+                }
+            }
             if (!TOTAL_TEST_JOBS.compareAndSet(current, current + 1)) {
                 return false;
             }
@@ -1393,7 +1404,15 @@ public class TestJob extends JobImpl {
         int totalCount = getTotalTestJobCount();
         boolean isExpedited = _cfg.needsExpeditedTest();
         long rescheduleLagLimit = isExpedited ? MAX_LAG_RESCHEDULE * 3 : MAX_LAG_RESCHEDULE;
-        int rescheduleJobLimit = isExpedited ? maxTestJobs * 2 : maxTestJobs + Math.max(4, maxTestJobs / 4);
+        // Retest limit uses maxQueuedTests (the adaptive system-load cap), not
+        // maxTestJobs (which is also gated by numPools*10).  Retests maintain
+        // existing tunnels and must not be as tightly capped as new test
+        // scheduling.  The old formula (maxTestJobs + maxTestJobs/4) with 22
+        // pools gave maxTestJobs=220, rescheduleJobLimit=275 — exactly the
+        // saturation point in the log.  Bumping to maxQueuedTests gives the
+        // adaptive cap (352+ on a healthy system) room to drain retests.
+        int retestBase = Math.max(maxQueuedTests, maxTestJobs);
+        int rescheduleJobLimit = isExpedited ? retestBase * 2 : retestBase + Math.max(4, retestBase / 4);
         if (readyCount > MAX_LAG_RESCHEDULE || maxLag > rescheduleLagLimit || totalCount >= rescheduleJobLimit) {
             if (_log.shouldInfo()) {
                 _log.info("Job queue lagging or too many test jobs (" + readyCount + " ready jobs, maxLag=" + maxLag +

@@ -53,6 +53,22 @@ public interface TunnelManagerFacade extends Service {
     TunnelInfo selectOutboundTunnel(Hash destination);
 
     /**
+     * Pick a random outbound tunnel from any pool — client pools first,
+     * then exploratory.
+     *
+     * @return null if none
+     */
+    TunnelInfo selectAnyOutboundTunnel();
+
+    /**
+     * Pick a random inbound tunnel from any pool — client pools first,
+     * then exploratory.
+     *
+     * @return null if none
+     */
+    TunnelInfo selectAnyInboundTunnel();
+
+    /**
      * Pick the inbound exploratory tunnel with the gateway closest to the given hash.
      * By using this instead of the random selectTunnel(),
      * we force some locality in OBEP-IBGW connections to minimize

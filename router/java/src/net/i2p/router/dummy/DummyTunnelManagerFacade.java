@@ -41,6 +41,10 @@ public class DummyTunnelManagerFacade implements TunnelManagerFacade {
     @Override
     public TunnelInfo selectOutboundExploratoryTunnel(Hash closestTo) { return null; }
     public TunnelInfo selectOutboundTunnel(Hash destination, Hash closestTo) { return null; }
+    @Override
+    public TunnelInfo selectAnyOutboundTunnel() { return null; }
+    @Override
+    public TunnelInfo selectAnyInboundTunnel() { return null; }
 
     @Override
     public boolean isValidTunnel(Hash client, TunnelInfo tunnel) { return false; }

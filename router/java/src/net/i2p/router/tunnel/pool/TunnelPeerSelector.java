@@ -653,6 +653,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // connectivity.  A peer that has never been tested, hasn't been heard
         // from in hours, and isn't currently connected is very likely to fail
         // as a first-hop, wasting the build attempt.
+        // When there are plenty of fast peers, still allow ~10% of untested
+        // peers through so struggling pools can discover new performant routes.
         Hash peerHash = ident.calculateHash();
         PeerProfile profile = ctx.profileOrganizer().getProfile(peerHash);
         if (profile != null && !ctx.commSystem().isBacklogged(peerHash)) {
@@ -662,7 +664,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             boolean recentlyHeard = lastHeardFrom > heardCutoff;
             boolean isConnected = ctx.commSystem().isEstablished(peerHash);
             if (!hasRecentTest && !recentlyHeard && !isConnected && fastPeerCount >= 20) {
-                return true;
+                if (ctx.random().nextInt(10) > 0) {
+                    return true;
+                }
             }
         }
 

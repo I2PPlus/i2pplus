@@ -66,7 +66,7 @@ class BuildExecutor implements Runnable {
      * Maps: TunnelPool -> [consecutiveFailures, backoffUntilMs]
      */
     private static final int CONSECUTIVE_FAILURE_THRESHOLD = 3;
-    private static final long POOL_BACKOFF_MS = 30 * 1000;
+    private static final long POOL_BACKOFF_MS = 3 * 1000;
     private final ConcurrentHashMap<TunnelPool, long[]> _poolFailureState = new ConcurrentHashMap<>(64);
     private int _keepAliveCounter;
     private volatile long _adaptiveTimeout;
@@ -220,13 +220,12 @@ class BuildExecutor implements Runnable {
 
     /**
      * Calculate adaptive timeouts based on recorded build outcomes.
-     * Starts from the mainline base values and adjusts upward when
-     * success rates drop or timeout rates rise. Also incorporates
-     * RateStat trend data for longer-term stability.
+     * Starts from mainline's base values (13s/10s) and adjusts
+     * marginally in either direction based on success rate.
      *
-     * Adaptive ranges (after all adjustments):
-     *   REQUEST_TIMEOUT:  20s base → up to 45s (capped)
-     *   FIRST_HOP_TIMEOUT: 20s base → up to 45s (capped)
+     * Adaptive ranges:
+     *   REQUEST_TIMEOUT:   13s base, 10-18s range
+     *   FIRST_HOP_TIMEOUT: 10s base, 8-15s range
      */
     private void calculateAdaptiveTimeoutFromSuccess() {
         int successCount = _buildSuccessCount.get();
@@ -237,58 +236,52 @@ class BuildExecutor implements Runnable {
 
         double successRate = (double) successCount / total;
 
-        // Base timeout from mainline value (20s normal, 25s slow)
+        // Base timeout from mainline (13s normal, 15s slow)
         long baseTimeout = BuildRequestor.getRequestTimeout(_context);
 
-        /* The adaptive timeout NEVER increases above base.
-         * Previously, low success rates drove the timeout from 20s up to 45s.
-         * This was counterproductive: a longer timeout doesn't help unreachable
-         * peers (the build just waits longer before failing), and it slows
-         * recovery for ALL pools because each build→fail→retry cycle takes
-         * longer.  A collapsed pool at 45s timeout needs 45s per retry attempt
-         * vs 20s — more than 2x slower recovery.
-         * The adaptive timeout can only SHRINK: when success is very high and
-         * the 1-min trend confirms, we reduce timeout so fast networks don't
-         * wait unnecessarily.  This prevents waste without creating death
-         * spirals.
-         * Cap at base timeout — never inflate.
-         */
-        _adaptiveTimeout = Math.min(baseTimeout, 45 * 1000);
+        // Start at base, then adjust marginally based on success rate
+        _adaptiveTimeout = baseTimeout;
 
-        // If success rate is very high, allow a modest reduction for fast
-        // networks (down to 15s minimum).
-        if (successRate > 0.90) {
-            RateStat trendStat = _context.statManager().getRate("tunnel.buildSuccessRate");
-            if (trendStat != null) {
-                trendStat.coalesceStats();
-                Rate oneMin = trendStat.getRate(RateConstants.ONE_MINUTE);
-                if (oneMin != null && oneMin.getLastEventCount() >= 10) {
-                    double minTotal = oneMin.getLastTotalValue();
-                    double minSuccessRate = minTotal / (oneMin.getLastEventCount() * 100.0);
-                    if (minSuccessRate > 0.85) {
-                        // Both short-term and 1-min trend show high success.
-                        // Reduce timeout to 15s for fast networks.
-                        _adaptiveTimeout = Math.max(15 * 1000, baseTimeout - 5 * 1000);
-                    }
-                }
-            }
+        if (successRate > 0.85) {
+            // High success — network is fast. Reduce slightly.
+            _adaptiveTimeout += -3 * 1000;  // -3s
+        } else if (successRate > 0.70) {
+            // Good success — keep near base.
+            _adaptiveTimeout += 0;
+        } else if (successRate > 0.50) {
+            // Moderate success — modest increase.
+            _adaptiveTimeout += 2 * 1000;  // +2s
+        } else {
+            // Low success — increase to give slow builds more time.
+            _adaptiveTimeout += 5 * 1000;  // +5s
         }
+
+        // Clamp: never below 10s regardless of rate; allow adaptive increase up to 30s
+        if (_adaptiveTimeout < 10*1000) { _adaptiveTimeout = 10*1000; }
+        if (_adaptiveTimeout > 25*1000) { _adaptiveTimeout = 25*1000; }
 
         // Also calculate adaptive first-hop timeout based on first-hop success rate
         int firstHopTotal = _firstHopSuccessCount.get() + _firstHopFailureCount.get();
         if (firstHopTotal >= 10) {
             double firstHopSuccessRate = (double) _firstHopSuccessCount.get() / firstHopTotal;
 
-            // Base first-hop timeout from mainline value (20s)
+            // Base first-hop timeout from mainline (10s)
             long baseFirstHop = BuildRequestor.getFirstHopTimeout(_context);
+            _adaptiveFirstHopTimeout = baseFirstHop;
 
-            // Same principle: never inflate above base.  Only shrink when
-            // first-hop success is very high.
-            _adaptiveFirstHopTimeout = Math.min(baseFirstHop, 45 * 1000);
-
-            if (firstHopSuccessRate > 0.90) {
-                _adaptiveFirstHopTimeout = Math.max(15 * 1000, baseFirstHop - 5 * 1000);
+            if (firstHopSuccessRate > 0.85) {
+                _adaptiveFirstHopTimeout += -2 * 1000;
+            } else if (firstHopSuccessRate > 0.70) {
+                _adaptiveFirstHopTimeout += 0;
+            } else if (firstHopSuccessRate > 0.50) {
+                _adaptiveFirstHopTimeout += 2 * 1000;
+            } else {
+                _adaptiveFirstHopTimeout += 3 * 1000;
             }
+
+            // Clamp: 8-15s
+            if (_adaptiveFirstHopTimeout < 8*1000) { _adaptiveFirstHopTimeout = 8*1000; }
+            if (_adaptiveFirstHopTimeout > 15*1000) { _adaptiveFirstHopTimeout = 15*1000; }
 
             if (_log.shouldDebug()) {
                 _log.debug("Adaptive first-hop timeout: " + (_adaptiveFirstHopTimeout / 1000) +
@@ -314,33 +307,37 @@ class BuildExecutor implements Runnable {
     private long calculateAdaptiveTimeout(PooledTunnelCreatorConfig cfg) {
         long baseTimeout = _adaptiveTimeout;
 
-        /* For collapsed pools (0 active tunnels), use the base timeout
-         * instead of the inflated adaptive timeout.  Collapsed pools need
-         * fast build→fail→retry cycles to recover; waiting 34s+ per build
-         * starves the pool and prevents recovery.
-         */
-        TunnelPool pool = cfg.getTunnelPool();
-        if (pool != null && pool.getActiveTunnelCount() <= 0) {
-            baseTimeout = BuildRequestor.getRequestTimeout(_context);
-        }
-
         // Adjust timeout based on tunnel length
         int length = cfg.getLength();
         if (length > 3) {
-            baseTimeout += (length - 3) * 5*1000; // Add 5s per additional hop
+            baseTimeout += (length - 3) * 5*1000;
         }
 
         // Adjust based on system load
         int cpuLoad = SystemVersion.getCPULoadAvg();
         if (cpuLoad > 90) {
-            baseTimeout += 5*1000; // Add 5s under high CPU load
+            baseTimeout += 3*1000;
         } else if (cpuLoad > 80) {
-            baseTimeout += 3*1000; // Add 3s under moderate CPU load
+            baseTimeout += 2*1000;
         }
 
-        // Cap at 45s to match stats-based adaptive ceiling
+        // Outbound builds have a longer reply path: the build reply comes back
+        // through an IB exploratory tunnel.  If exploratory tunnels are congested
+        // (2 tunnels handling 18+ concurrent build replies), OB builds timeout
+        // at 2x the rate of IB builds (54% vs 80% success).  Adding extra time
+        // for OB builds compensates for this reply-path latency.
+        if (!cfg.isInbound()) {
+            baseTimeout += 5 * 1000;
+        }
+
+        // Cap at 45s safety ceiling
         return Math.min(baseTimeout, 45*1000);
     }
+
+    /**
+     * Determine if a tunnel config is for an outbound (non-inbound) tunnel.
+     * Uses the parent class isInbound() to avoid importing TunnelPoolSettings.
+     */
 
     /**
      * Determines allowed number of concurrent tunnel builds based on system status,
@@ -471,6 +468,20 @@ class BuildExecutor implements Runnable {
                 if (pool != null) {
                     pool.buildComplete(cfg, Result.TIMEOUT);
                 }
+                // Update per-pool failure tracking so pool backoff engages on
+                // consecutive timeouts (same as BuildExecutor.buildComplete()
+                // does for REJECT/BAD_RESPONSE/DUP_ID).
+                if (pool != null) {
+                    long[] state = _poolFailureState.get(pool);
+                    if (state == null) {
+                        state = new long[]{0, 0};
+                        _poolFailureState.put(pool, state);
+                    }
+                    state[0]++;
+                    if (state[0] >= CONSECUTIVE_FAILURE_THRESHOLD) {
+                        state[1] = System.currentTimeMillis() + POOL_BACKOFF_MS;
+                    }
+                }
                 updateBuildStats(Result.TIMEOUT);
                 if (cfg.getDestination() == null) {
                     _context.statManager().addRateData("tunnel.buildExploratoryExpire", 1);
@@ -592,8 +603,28 @@ class BuildExecutor implements Runnable {
                     }
                 } else {
                     if (allowed > 0 && !wanted.isEmpty()) {
-                        // Shuffle for randomness
-                        Collections.shuffle(wanted, _context.random());
+                        // Sort by build priority: collapsed pools first, then by deficit (largest first)
+                        // For paired destinations, prioritize the direction further behind its pair
+                        wanted.sort((a, b) -> {
+                            int aActive = a.getActiveTunnelCount();
+                            int bActive = b.getActiveTunnelCount();
+                            if (aActive == 0 && bActive > 0) return -1;
+                            if (bActive == 0 && aActive > 0) return 1;
+                            int aTarget = Math.max(2, a.getSettings().getTotalQuantity());
+                            int bTarget = Math.max(2, b.getSettings().getTotalQuantity());
+                            int aDeficit = aTarget - aActive;
+                            int bDeficit = bTarget - bActive;
+                            if (aDeficit != bDeficit) return Integer.compare(bDeficit, aDeficit);
+                            // IB/OB balance: prioritize direction further behind its paired pool
+                            TunnelPool aPaired = getPairedPool(a);
+                            TunnelPool bPaired = getPairedPool(b);
+                            if (aPaired != null && bPaired != null && aPaired == bPaired) {
+                                int aDiff = aPaired.getActiveTunnelCount() - aActive;
+                                int bDiff = bPaired.getActiveTunnelCount() - bActive;
+                                if (aDiff != bDiff) return Integer.compare(bDiff, aDiff);
+                            }
+                            return 0;
+                        });
 
                         for (int i = 0; i < allowed && !wanted.isEmpty(); i++) {
                             TunnelPool pool = wanted.remove(0);
@@ -754,6 +785,21 @@ class BuildExecutor implements Runnable {
     boolean isPoolInBackoff(TunnelPool pool) {
         long[] state = _poolFailureState.get(pool);
         return state != null && state[1] > System.currentTimeMillis();
+    }
+
+    /**
+     *  Get the paired pool (opposite direction) for IB/OB balance comparison.
+     *  Handles both client pools (by destination) and exploratory pools (by pool reference).
+     */
+    private static TunnelPool getPairedPool(TunnelPool pool) {
+        if (pool == null) return null;
+        Hash dest = pool.getSettings().getDestination();
+        if (dest != null) {
+            TunnelPoolManager mgr = pool.getTunnelPoolManager();
+            return pool.getSettings().isInbound() ? mgr.getOutboundPool(dest) : mgr.getInboundPool(dest);
+        }
+        // Null destination → exploratory pool, use the paired field directly
+        return pool.getPairedPool();
     }
 
     /**
@@ -1057,12 +1103,8 @@ class BuildExecutor implements Runnable {
 
                 /* Skip completely dead tunnels — they'll be removed by ExpireJob
                  * and must NOT fill the deficit or they'll block replacement builds.
-                 * Also skip UNTESTED — they can't route traffic and inflating the
-                 * expiry buckets pushes the pool into the low-urgency build path,
-                 * suppressing the replacement builds it actually needs.
                  */
                 if (info.getTunnelFailed() || info.getConsecutiveFailures() > 3) {continue;}
-                if (info.getTestStatus() == net.i2p.router.TunnelTestStatus.UNTESTED) {continue;}
                 boolean isGood = info.getTestStatus() == net.i2p.router.TunnelTestStatus.GOOD &&
                                  info.getConsecutiveFailures() <= 1;
                 if (isGood) {

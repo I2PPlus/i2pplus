@@ -10,6 +10,7 @@ package net.i2p.router;
 
 import java.util.Set;
 import net.i2p.data.Hash;
+import net.i2p.router.peermanager.PeerTestJob;
 
 /**
  * Manage peer references and keep them up to date so that when asked for peers,
@@ -22,4 +23,5 @@ public interface PeerManagerFacade extends Service {
     public int countPeersByCapability(char capability);
     public void setCapabilities(Hash peer, String caps);
     public void removeCapabilities(Hash peer);
+    public PeerTestJob getPeerTestJob();
 }

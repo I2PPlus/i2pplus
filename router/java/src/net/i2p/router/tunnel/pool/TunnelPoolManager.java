@@ -3,6 +3,7 @@ package net.i2p.router.tunnel.pool;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -181,6 +182,41 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (pool != null) {return pool.selectTunnel();}
         if (_log.shouldWarn()) {_log.warn("No pool available for Outbound tunnel for " + destination.toBase32());}
         return null;
+    }
+
+    /**
+     * Pick a random outbound tunnel from any pool — client pools first,
+     * then exploratory.  Used by BuildRequestor for cross-pool build
+     * replies when the requesting pool's own tunnels are unavailable.
+     * Client tunnels provide a lower-latency reply path than exploratory.
+     *
+     * @return null if none
+     */
+    public TunnelInfo selectAnyOutboundTunnel() {
+        List<TunnelPool> pools = new ArrayList<TunnelPool>(_clientOutboundPools.values());
+        Collections.shuffle(pools);
+        for (TunnelPool pool : pools) {
+            TunnelInfo info = pool.selectTunnel();
+            if (info != null) return info;
+        }
+        return selectOutboundTunnel();
+    }
+
+    /**
+     * Pick a random inbound tunnel from any pool — client pools first,
+     * then exploratory.  Used by BuildRequestor for cross-pool build
+     * replies when the requesting pool's own tunnels are unavailable.
+     *
+     * @return null if none
+     */
+    public TunnelInfo selectAnyInboundTunnel() {
+        List<TunnelPool> pools = new ArrayList<TunnelPool>(_clientInboundPools.values());
+        Collections.shuffle(pools);
+        for (TunnelPool pool : pools) {
+            TunnelInfo info = pool.selectTunnel();
+            if (info != null) return info;
+        }
+        return selectInboundTunnel();
     }
 
     /**
