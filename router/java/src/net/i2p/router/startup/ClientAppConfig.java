@@ -68,10 +68,8 @@ import net.i2p.util.SystemVersion;
  * </pre>
  */
 public class ClientAppConfig {
-    /** wait 20s before starting up client apps */
-    private final static long DEFAULT_STARTUP_DELAY = 20*1000;
-    /** speed up i2ptunnel without rewriting clients.config */
-    private final static long I2PTUNNEL_STARTUP_DELAY = -1000;
+    /** wait 15s before starting up non-boot client apps */
+    private final static long DEFAULT_STARTUP_DELAY = 15*1000;
 
     private static final String PROP_CLIENT_CONFIG_FILENAME = "router.clientConfigFile";
     private static final String DEFAULT_CLIENT_CONFIG_FILENAME = "clients.config";
@@ -300,14 +298,11 @@ public class ClientAppConfig {
             long delay;
             if (onStartup) {
                 delay = 0;
-            } else if (className.equals("net.i2p.i2ptunnel.TunnelControllerGroup")) {
-                // speed up the start of i2ptunnel for everybody without rewriting clients.config
-                delay = I2PTUNNEL_STARTUP_DELAY;
             } else {
                 delay = DEFAULT_STARTUP_DELAY;
-                if (delayStr != null)
-                    try { delay = 1000*Integer.parseInt(delayStr); } catch (NumberFormatException nfe) { /* ignored */ }
             }
+            if (delayStr != null)
+                try { delay = 1000*Integer.parseInt(delayStr); } catch (NumberFormatException nfe) { /* ignored */ }
             return new ClientAppConfig(className, clientName, args, delay, dis,
                                        classpath, stopargs, uninstallargs);
     }
