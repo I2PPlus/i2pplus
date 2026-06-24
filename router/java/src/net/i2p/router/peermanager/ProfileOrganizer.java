@@ -1127,6 +1127,11 @@ public class ProfileOrganizer {
         if (netDb == null) return true;
         if (_context.router() == null) return true;
         if (_context.banlist() != null && _context.banlist().isBanlisted(peer)) return false;
+        // Exclude peers that recently failed as first hop during tunnel builds.
+        // Without this, the 5-min cooldown in TunnelPeerSelector is bypassed —
+        // peers are selected by the tier system, fail as first hop, cooldown
+        // expires, and they're selected again immediately.
+        if (TunnelPeerSelector.isFirstHopFailing(_context, peer)) return false;
 
         RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
         if (info != null) {
@@ -1416,15 +1421,13 @@ public class ProfileOrganizer {
             if (profile != null) {
                 profile.getTunnelHistory().incrementFailed(100);
             }
-            // Evict stale strike entries (>10 min old) to keep map bounded
+            // Evict stale demotion cooldowns (entries >10 min old)
             long cooldownCutoff = _context.clock().now() - TUNNEL_DEMOTION_COOLDOWN_MS;
-            _demoteStrikes.entrySet().removeIf(e -> e.getValue() == null || e.getValue() <= 0);
             _demotedPeers.entrySet().removeIf(e -> e.getValue() < cooldownCutoff);
             // Strike tracking: only demote after threshold consecutive failures
-            Integer strikes = _demoteStrikes.get(peer);
-            int newStrikes = (strikes != null ? strikes : 0) + 1;
-            if (newStrikes < DEMOTE_STRIKE_THRESHOLD) {
-                _demoteStrikes.put(peer, newStrikes);
+            _demoteStrikes.merge(peer, 1, Integer::sum);
+            int strikes = _demoteStrikes.get(peer);
+            if (strikes < DEMOTE_STRIKE_THRESHOLD) {
                 return;
             }
             // Reset strikes and proceed with demotion
