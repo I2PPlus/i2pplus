@@ -66,7 +66,7 @@ class BuildExecutor implements Runnable {
      * Maps: TunnelPool -> [consecutiveFailures, backoffUntilMs]
      */
     private static final int CONSECUTIVE_FAILURE_THRESHOLD = 3;
-    private static final long POOL_BACKOFF_MS = 3 * 1000;
+    private static final long POOL_BACKOFF_MS = 1 * 1000;
     private final ConcurrentHashMap<TunnelPool, long[]> _poolFailureState = new ConcurrentHashMap<>(64);
     private int _keepAliveCounter;
     private volatile long _adaptiveTimeout;
@@ -470,16 +470,18 @@ class BuildExecutor implements Runnable {
                 }
                 // Update per-pool failure tracking so pool backoff engages on
                 // consecutive timeouts (same as BuildExecutor.buildComplete()
-                // does for REJECT/BAD_RESPONSE/DUP_ID).
+                // does for BAD_RESPONSE/OTHER_FAILURE).
                 if (pool != null) {
                     long[] state = _poolFailureState.get(pool);
                     if (state == null) {
                         state = new long[]{0, 0};
                         _poolFailureState.put(pool, state);
                     }
-                    state[0]++;
-                    if (state[0] >= CONSECUTIVE_FAILURE_THRESHOLD) {
-                        state[1] = System.currentTimeMillis() + POOL_BACKOFF_MS;
+                    synchronized (state) {
+                        state[0]++;
+                        if (state[0] >= CONSECUTIVE_FAILURE_THRESHOLD) {
+                            state[1] = System.currentTimeMillis() + POOL_BACKOFF_MS;
+                        }
                     }
                 }
                 updateBuildStats(Result.TIMEOUT);
@@ -603,13 +605,18 @@ class BuildExecutor implements Runnable {
                     }
                 } else {
                     if (allowed > 0 && !wanted.isEmpty()) {
-                        // Sort by build priority: collapsed pools first, then by deficit (largest first)
+                        // Sort by build priority: collapsed pools first, then near-collapse,
+                        // then by deficit (largest first).
                         // For paired destinations, prioritize the direction further behind its pair
                         wanted.sort((a, b) -> {
                             int aActive = a.getActiveTunnelCount();
                             int bActive = b.getActiveTunnelCount();
                             if (aActive == 0 && bActive > 0) return -1;
                             if (bActive == 0 && aActive > 0) return 1;
+                            boolean aNear = aActive > 0 && aActive <= 2;
+                            boolean bNear = bActive > 0 && bActive <= 2;
+                            if (aNear && !bNear) return -1;
+                            if (bNear && !aNear) return 1;
                             int aTarget = Math.max(2, a.getSettings().getTotalQuantity());
                             int bTarget = Math.max(2, b.getSettings().getTotalQuantity());
                             int aDeficit = aTarget - aActive;
@@ -860,21 +867,28 @@ class BuildExecutor implements Runnable {
          * On SUCCESS: reset the counter so future failures start fresh.
          * On failure: increment counter; if threshold exceeded, set backoff
          * timestamp so calculatePairedBuilds() skips this pool temporarily.
+         * REJECT is excluded — a peer that responds "no" (overloaded, no
+         * capacity) is fundamentally different from a peer that doesn't
+         * respond at all (TIMEOUT).  Backoff doesn't fix capacity issues
+         * and prevents builds for pools that could succeed with a different
+         * peer selection.
          */
         if (result == Result.SUCCESS) {
             _poolFailureState.remove(pool);
-        } else if (result != Result.DUP_ID) {
+        } else if (result != Result.DUP_ID && result != Result.REJECT) {
             long[] state = _poolFailureState.get(pool);
             if (state == null) {
                 state = new long[]{0, 0};
                 _poolFailureState.put(pool, state);
             }
-            state[0]++;
-            if (state[0] >= CONSECUTIVE_FAILURE_THRESHOLD) {
-                state[1] = System.currentTimeMillis() + POOL_BACKOFF_MS;
-                if (_log.shouldDebug()) {
-                    _log.debug("Pool backoff engaged after " + (int) state[0] +
-                               " consecutive failures for " + pool);
+            synchronized (state) {
+                state[0]++;
+                if (state[0] >= CONSECUTIVE_FAILURE_THRESHOLD) {
+                    state[1] = System.currentTimeMillis() + POOL_BACKOFF_MS;
+                    if (_log.shouldDebug()) {
+                        _log.debug("Pool backoff engaged after " + (int) state[0] +
+                                   " consecutive failures for " + pool);
+                    }
                 }
             }
         }
@@ -1067,17 +1081,49 @@ class BuildExecutor implements Runnable {
         // Track per-direction builds requested in this iteration for capping
         Map<Hash, int[]> pairRequested = new HashMap<>(pools.size());
 
-        for (TunnelPool pool : pools) {
+        // Sort pools by urgency: collapsed (0 usable) first, then near-collapse
+        // (1-2 usable), then the rest.  Without this, a healthy pool early in the
+        // list consumes build slots (or triggers the proportional cap) before a
+        // collapsed pool later in the list gets any.
+        List<TunnelPool> sorted = new ArrayList<>(pools);
+        sorted.sort((a, b) -> {
+            int aUsable = a.getUsableTunnelCount();
+            int bUsable = b.getUsableTunnelCount();
+            // Collapsed pools (0 usable) always first
+            if (aUsable == 0 && bUsable > 0) return -1;
+            if (bUsable == 0 && aUsable > 0) return 1;
+            // Near-collapse (1-2 usable) next
+            boolean aNear = aUsable <= 2;
+            boolean bNear = bUsable <= 2;
+            if (aNear && !bNear) return -1;
+            if (bNear && !aNear) return 1;
+            // Then by deficit (largest first)
+            int aTarget = Math.max(2, a.getSettings().getTotalQuantity());
+            int bTarget = Math.max(2, b.getSettings().getTotalQuantity());
+            int aDeficit = aTarget - aUsable;
+            int bDeficit = bTarget - bUsable;
+            return Integer.compare(bDeficit, aDeficit);
+        });
+
+        for (TunnelPool pool : sorted) {
             if (!pool.isAlive()) {continue;}
 
             /* Per-pool backoff: skip pools that have exceeded consecutive failure
-             * threshold. This prevents build storms when a pool's peers are all
-             * unreachable — instead of queuing 4 builds per loop iteration
+             * threshold. This prevents build storms when a pool's selected peers
+             * are unreachable — instead of queuing 4 builds per loop iteration
              * indefinitely, we pause for POOL_BACKOFF_MS and retry later.
+             * Exception: pools at 0 usable tunnels must rebuild immediately —
+             * backoff should never block recovery from total collapse.
              */
             long[] failureState = _poolFailureState.get(pool);
             if (failureState != null && failureState[1] > System.currentTimeMillis()) {
-                continue;
+                if (pool.getUsableTunnelCount() > 1) {
+                    continue;
+                }
+                // Pool at 0 or 1 usable tunnels — fall through to rebuild
+                // despite backoff.  A pool with 1 usable tunnel is one
+                // failure from collapse; rebuild proactively rather than
+                // wait for the last tunnel to die.
             }
 
             int wantedCount = pool.getSettings().getTotalQuantity();
@@ -1263,9 +1309,12 @@ class BuildExecutor implements Runnable {
              * per-iteration budget is maxBuilds (the per-pool cap). Each direction
              * gets its proportional share by target ratio, preventing one direction
              * from cannibalizing the build pool and starving the other.
+             * Exception: collapsed pools (0 active) bypass the cap — a dead pool
+             * needs all the builds it can get regardless of what the healthy
+             * direction has.
              */
             Hash dest = pool.getSettings().getDestination();
-            if (dest != null) {
+            if (dest != null && activeCount > 0) {
                 int[] pt = pairTargets.get(dest);
                 if (pt != null && pt[0] > 0 && pt[1] > 0) {
                     int totalTarget = pt[0] + pt[1];
