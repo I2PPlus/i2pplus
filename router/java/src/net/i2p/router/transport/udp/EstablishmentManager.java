@@ -806,9 +806,9 @@ class EstablishmentManager {
                 boolean gseNotNull = gse.getMessage() != null && !gse.getMessage().equals("null");
                 if (state != null && !isPeerBanned(state)) {
                     if (_log.shouldDebug())
-                        _log.warn("[SSU] Received CORRUPT Session or Token Request after retry -> Router: " + state, gse);
+                        _log.warn("[SSU] Received CORRUPT Session or Token Request after retry \n* Router: " + state, gse);
                     else if (_log.shouldWarn())
-                        _log.warn("[SSU] Received CORRUPT Session or Token Request after retry -> Router: " + state +
+                        _log.warn("[SSU] Received CORRUPT Session or Token Request after retry \n* Router: " + state +
                         (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
                 }
                 // state called fail()
@@ -819,9 +819,9 @@ class EstablishmentManager {
 
         if (_log.shouldDebug()) {
             if (isNew)
-                _log.debug("[SSU] Received NEW Session/Token Request " + state);
+                _log.debug("[SSU] Received NEW Session/Token Request \n* Router: " + state);
             else
-                _log.debug("[SSU] Received DUPLICATE Session/Token Request -> Router: " + state);
+                _log.debug("[SSU] Received DUPLICATE Session/Token Request \n* Router: " + state);
         }
         notifyActivity();
     }
