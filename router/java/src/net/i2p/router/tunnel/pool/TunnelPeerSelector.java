@@ -67,7 +67,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     protected static final Object _cooldownLock = new Object();
 
     /** Peers that failed as first hop (first hop unreachable) excluded for this long */
-    protected static final long FIRST_HOP_FAIL_COOLDOWN_MS = 60 * 1000;
+    protected static final long FIRST_HOP_FAIL_COOLDOWN_MS = 5 * 60 * 1000;
 
     /** Tracks when a peer last failed as first hop */
     protected static final Map<Hash, Long> _firstHopFails = new ConcurrentHashMap<>();
@@ -81,7 +81,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      *  Check if a peer recently failed as first hop and should be excluded.
      */
-    protected static boolean isFirstHopFailing(RouterContext ctx, Hash peer) {
+    public static boolean isFirstHopFailing(RouterContext ctx, Hash peer) {
         Long when = _firstHopFails.get(peer);
         if (when == null)
             return false;
@@ -100,7 +100,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     * Record that a peer failed (for recovery tracking).
+     * Record that a peer failed during peer selection (first-hop or adjacent).
+     * Used by ClientPeerSelector and ExploratoryPeerSelector to mark peers
+     * that failed selection criteria, preventing re-selection for the cooldown.
      */
     protected static void recordPeerFailure(RouterContext ctx, Hash peer) {
         _firstHopFails.put(peer, ctx.clock().now());
