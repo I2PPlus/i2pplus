@@ -116,15 +116,19 @@ echo "Starting SonarQube server..."
 STARTED_BY_US=false
 if curl -m 2 -s -o /dev/null -w "%{http_code}" "${SONAR_HOST}/api/system/health" 2>/dev/null | grep -qE '200|403|401'; then
     echo "Stopping existing SonarQube (restarting with known password)..."
-    LD_PRELOAD="" "$SONAR_SH" stop 2>/dev/null || true
+    timeout 5 LD_PRELOAD="" "$SONAR_SH" stop 2>/dev/null || true
     sleep 3
 fi
 
 # Clean up stale PID regardless
 if [ -f "${SERVER_DIR}/bin/linux-x86-64/SonarQube.pid" ]; then
     echo "Removing leftover PID file..."
-    LD_PRELOAD="" "$SONAR_SH" force-stop 2>/dev/null || true
-    sleep 2
+    if ! timeout 5 LD_PRELOAD="" "$SONAR_SH" force-stop 2>/dev/null; then
+        echo "Force-stop timed out, killing remaining SonarQube processes..."
+        pkill -f "sonar-application" 2>/dev/null || true
+        pkill -f "org.elasticsearch" 2>/dev/null || true
+        sleep 2
+    fi
     rm -rf "${SERVER_DIR}/data/es8"
     rm -f "${SERVER_DIR}/bin/linux-x86-64/SonarQube.pid"
 fi
@@ -350,7 +354,13 @@ fi
 # ---- Stop server if we started it ----
 if [ "$STARTED_BY_US" = true ] && [ "$NO_STOP" = false ]; then
     echo "Stopping SonarQube Server..."
-    LD_PRELOAD="" "$SONAR_SH" stop
+    if ! timeout 5 LD_PRELOAD="" "$SONAR_SH" stop 2>/dev/null; then
+        echo "Stop timed out after 30s, force-stopping..."
+        LD_PRELOAD="" "$SONAR_SH" force-stop 2>/dev/null || true
+        sleep 2
+        rm -rf "${SERVER_DIR}/data/es8"
+        rm -f "${SERVER_DIR}/bin/linux-x86-64/SonarQube.pid"
+    fi
 fi
 
 exit $SCAN_EXIT
