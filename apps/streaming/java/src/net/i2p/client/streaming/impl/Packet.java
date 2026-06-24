@@ -847,7 +847,6 @@ class Packet {
                 buf.append(" NACK");
                 for (int i = 0; i < _nacks.length; i++) {buf.append(' ').append(_nacks[i]);}
             }
-            buf.append("\n*");
             if (isFlagSet(FLAG_DELAY_REQUESTED)) buf.append(" DELAY ").append(_optionDelay).append("ms;");
             if (isFlagSet(FLAG_MAX_PACKET_SIZE_INCLUDED)) buf.append(" MAXSIZE ").append(_optionMaxSize).append(" bytes;");
             if (isFlagSet(FLAG_PROFILE_INTERACTIVE)) buf.append(" INTERACTIVE");

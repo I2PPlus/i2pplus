@@ -163,7 +163,8 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
             notifyAll();
         }
        cancelResend();
-        if (_log.shouldDebug())            _log.debug("Resend cancelled! " + toString());
+        if (_log.shouldDebug())
+            _log.debug("Resend cancelled! " + toString());
     }
 
     /** how long after packet creation was it acked?
@@ -251,12 +252,6 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
         _optionSignature = _context.dsa().sign(buffer, offset, size, key);
         if (_optionSignature == null)
             throw new IllegalStateException("Signature failed");
-        //if (false) {
-        //    Log l = ctx.logManager().getLog(Packet.class);
-        //    l.error("Signing: " + toString());
-        //    l.error(Base64.encode(buffer, 0, size));
-        //    l.error("Signature: " + Base64.encode(_optionSignature.getData()));
-        //}
         // jump into the signed data and inject the signature where we
         // previously placed a bunch of zeroes
         int signatureOffset = offset
@@ -290,8 +285,6 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     public StringBuilder formatAsString() {
         StringBuilder buf = super.formatAsString();
 
-        //if ( (_tagsSent != null) && (!_tagsSent.isEmpty()) )
-        //    buf.append(" with tags");
         final int nackCount = _nackCount.get();
         if (nackCount > 0)
             buf.append(" NACKed ").append(nackCount).append(" times");
@@ -317,7 +310,6 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
                     buf.append("[").append(local.calculateHash().toBase32().substring(0,8)).append("]");
                 else
                     buf.append("[unknown]");
-
                 buf.append(" to ");
                 Destination remote = con.getRemotePeer();
                 if (remote != null)
@@ -363,7 +355,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
         }
     }
 
-    /** block until the packet is acked from the far end */
+    /** Block until the packet is acked from the far end */
     public void waitForCompletion(int maxWaitMs) throws IOException, InterruptedException {
         long expiration = _context.clock().now()+maxWaitMs;
         try {
