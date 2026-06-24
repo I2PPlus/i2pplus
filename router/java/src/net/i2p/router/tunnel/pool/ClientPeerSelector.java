@@ -886,7 +886,6 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     if (!peer.equals(ctx.routerHash())) {
                         if (!TunnelPeerSelector.hasRecoveredFromFailure(ctx, peer)) {
                             _clientCooldowns.put(peer, now);
-                            TunnelPeerSelector.recordPeerFailure(ctx, peer);
                         }
                     }
                 }
@@ -899,7 +898,6 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     if (!adjPeer.equals(ctx.routerHash())) {
                         if (!TunnelPeerSelector.hasRecoveredFromFailure(ctx, adjPeer)) {
                             TunnelPeerSelector._peerCooldowns.put(adjPeer, now);
-                            TunnelPeerSelector.recordPeerFailure(ctx, adjPeer);
                         }
                     }
                 }

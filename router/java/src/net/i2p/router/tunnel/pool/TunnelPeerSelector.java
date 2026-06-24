@@ -97,6 +97,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     protected static void recordFirstHopFail(RouterContext ctx, Hash peer) {
         _firstHopFails.put(peer, ctx.clock().now());
+        // Periodically prune expired entries to prevent unbounded growth
+        if (_firstHopFails.size() > 64) {
+            long cutoff = ctx.clock().now() - FIRST_HOP_FAIL_COOLDOWN_MS;
+            _firstHopFails.entrySet().removeIf(e -> e.getValue() < cutoff);
+        }
     }
 
     /**

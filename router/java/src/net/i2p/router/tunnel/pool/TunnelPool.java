@@ -2299,16 +2299,18 @@ public class TunnelPool {
             }
         } finally {_tunnelsLock.unlock();}
         if (toRemove.isEmpty()) return;
-        // Collapse guard: never prune if it would leave the pool with fewer
-        // tunnels than the published LeaseSet gateways.  The pool needs at
-        // least as many tunnels as the LS advertises, otherwise clients
-        // receive a LeaseSet referencing tunnels that no longer exist.
+        // Collapse guard: never prune if it would leave the pool below target.
+        // Non-published tunnels are valid backups — they carry data and can be
+        // included in the next LeaseSet.  Pruning them creates churn: build 3
+        // → publish 1 gateway → prune 2 → pool drops to 0-1 → EMERGENCY → repeat.
         int currentSize = getTunnelCount();
-        if (currentSize - toRemove.size() < publishedGateways.size()) {
-            if (_log.shouldWarn()) {
-                _log.warn(toString() + " -> Skipping non-published prune — would collapse pool " +
+        int target = _settings.getQuantity();
+        int afterPrune = currentSize - toRemove.size();
+        if (afterPrune < target) {
+            if (_log.shouldInfo()) {
+                _log.info(toString() + " -> Skipping non-published prune — would drop below target " +
                           "(" + currentSize + " total, " + toRemove.size() + " candidates, " +
-                          publishedGateways.size() + " published gateways)");
+                          "target " + target + ", after prune " + afterPrune + ")");
             }
             return;
         }
@@ -2339,7 +2341,7 @@ public class TunnelPool {
         }
         // Batch removal bypasses removeTunnel() which normally triggers
         // ensureSufficientTunnels().  Without this, the pool stays short
-        // until the next periodic check cycle (90s), extending the window
+        // until the next periodic check cycle, extending the window
         // where the pool has fewer tunnels than needed.
         if (_alive) {
             _cachedLeaseSet = null;
@@ -2530,7 +2532,17 @@ public class TunnelPool {
         // keep the inProgress counter above zero, starving the pool.
         int inProgress = getInProgressCount();
         if (safeActive < target && (nearExpiry > 0 || safeActive == 0)) {
-            int deficit = target - safeActive - inProgress;
+            int deficit;
+            if (safeActive == 0 && nearExpiry > 0 && inProgress > 0) {
+                // When safeActive is 0 and tunnels are expiring, in-progress
+                // builds haven't produced GOOD tunnels yet (~40s build+test).
+                // The expiring tunnels will die before in-progress builds
+                // become usable, leaving the pool at 0 safe forever.
+                // Ignore inProgress — build for the full target.
+                deficit = target;
+            } else {
+                deficit = target - safeActive - inProgress;
+            }
             if (deficit > 0) {
                 int needed = Math.min(deficit, target);
                 // When tunnels are expiring (nearExpiry > 0), always build
@@ -2833,6 +2845,11 @@ public class TunnelPool {
                         _context.profileOrganizer().demoteIfUnreachable(firstHop);
                     }
                 }
+                // A failed build leaves the pool below target with no
+                // replacement queued.  Trigger an immediate rebuild so
+                // the pool doesn't sit empty until the next periodic
+                // check cycle.
+                if (_alive) { ensureSufficientTunnels(); }
                 break;
 
             case OTHER_FAILURE:

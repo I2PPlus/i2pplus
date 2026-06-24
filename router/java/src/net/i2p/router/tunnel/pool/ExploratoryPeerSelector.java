@@ -313,11 +313,6 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
 
         if (rv.size() > 1) {
             if (!checkTunnel(isInbound, true, rv)) {
-                for (Hash peer : rv) {
-                    if (!peer.equals(ctx.routerHash())) {
-                        TunnelPeerSelector.recordPeerFailure(ctx, peer);
-                    }
-                }
                 rv = null;
             }
         }
