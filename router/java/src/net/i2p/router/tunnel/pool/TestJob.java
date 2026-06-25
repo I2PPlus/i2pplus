@@ -313,6 +313,19 @@ public class TestJob extends JobImpl {
                     return false;
                 }
             }
+            // Per-pool cap applies to first tests too — without this,
+            // multiple UNTESTED tunnels in the same pool all bypass the
+            // cap and saturate the queue.
+            if (pool != null && !pool.getSettings().isExploratory()) {
+                String poolId = getPoolId(pool);
+                int poolTestBudget = 1;
+                AtomicInteger poolCount = POOL_TEST_COUNTS.computeIfAbsent(poolId, k -> new AtomicInteger(0));
+                int prev = poolCount.getAndIncrement();
+                if (prev >= poolTestBudget) {
+                    poolCount.decrementAndGet();
+                    return false;
+                }
+            }
             if (!TOTAL_TEST_JOBS.compareAndSet(current, current + 1)) {
                 return false;
             }
@@ -394,27 +407,31 @@ public class TestJob extends JobImpl {
 
         if (pool != null) {
             String poolId = getPoolId(pool);
-            AtomicInteger poolCount = POOL_TEST_COUNTS.get(poolId);
-            if (poolCount != null && poolCount.get() > 0) {
-                int poolTestBudget;
-                if (pool.getSettings().isExploratory()) {
-                    poolTestBudget = getMaxExploratoryPerPool(ctx);
-                } else {
-                    // Per-pool concurrent test cap: we only need at most target+1
-                    // tunnels tested at any time (target operational + 1 replacement).
-                    // Testing more than needed oversaturates the queue and starves
-                    // other pools. Untested tunnels are picked up next scan cycle.
-                    int poolTarget = pool.getSettings().getTotalQuantity();
-                    poolTestBudget = Math.max(1, poolTarget + 1);
+            int poolTestBudget;
+            if (pool.getSettings().isExploratory()) {
+                poolTestBudget = getMaxExploratoryPerPool(ctx);
+            } else {
+                // One test at a time per pool — IB and OB are separate
+                // pools so this gives 1 inbound + 1 outbound per destination.
+                // With 8 client pools that's 16 concurrent tests max,
+                // well under the global queue limit and preventing the
+                // test-queue-saturated death spiral where builds succeed
+                // but tunnels pile up as UNTESTED faster than tests complete.
+                poolTestBudget = 1;
+            }
+            // Atomically check-and-increment: claim a slot now so concurrent
+            // calls for the same pool don't both pass.  The constructor will
+            // NOT re-increment; cleanupTunnelTracking handles decrement.
+            AtomicInteger poolCount = POOL_TEST_COUNTS.computeIfAbsent(poolId, k -> new AtomicInteger(0));
+            int prev = poolCount.getAndIncrement();
+            if (prev >= poolTestBudget) {
+                poolCount.decrementAndGet(); // undo — we didn't actually claim
+                Log log = ctx.logManager().getLog(TestJob.class);
+                if (log.shouldDebug()) {
+                    log.debug("Pool " + poolId + " has " + prev +
+                              " tests (budget " + poolTestBudget + ") -> Deferring");
                 }
-                if (poolCount.get() >= poolTestBudget) {
-                    Log log = ctx.logManager().getLog(TestJob.class);
-                    if (log.shouldDebug()) {
-                        log.debug("Pool " + poolId + " has " + poolCount.get() +
-                                  " tests (budget " + poolTestBudget + ") -> Deferring");
-                    }
-                    return false;
-                }
+                return false;
             }
         }
 
@@ -485,11 +502,9 @@ public class TestJob extends JobImpl {
             _valid = false;
             return;
         }
-        // Track pool test count for coverage management
-        if (_pool != null) {
-            String poolId = getPoolId(_pool);
-            POOL_TEST_COUNTS.computeIfAbsent(poolId, k -> new AtomicInteger(0)).incrementAndGet();
-        }
+        // Pool test count was already claimed by shouldSchedule() —
+        // don't double-increment here.  Cleanup paths below handle
+        // the decrement if this TestJob is later invalidated.
 
         // Register this test as running for the tunnel
         Long tunnelKey = getTunnelKey(cfg);
@@ -800,8 +815,14 @@ public class TestJob extends JobImpl {
         if (_cfg.isInbound()) {
             // Skip testing inbound tunnels that recently received data —
             // they're obviously working and testing risks false failures on
-            // high-bandwidth tunnels.
-            if (ctx.clock().now() - _cfg.getLastTransferred() < getMaxTestDelay(ctx)) {
+            // high-bandwidth tunnels.  BUT only for tunnels already marked
+            // GOOD — UNTESTED tunnels must be tested regardless.  Otherwise
+            // active clients (e.g. I2PSnark) receive data on every new tunnel
+            // before the test runs, the test is perpetually skipped, the
+            // tunnel stays UNTESTED forever, and the pool never accumulates
+            // GOOD tunnels → EMERGENCY build storm.
+            if (_cfg.getTestStatus() == net.i2p.router.TunnelTestStatus.GOOD &&
+                ctx.clock().now() - _cfg.getLastTransferred() < getMaxTestDelay(ctx)) {
                 if (_log.shouldInfo()) {
                     _log.info("Skipping test on " + _cfg + " -> Data recently received");
                 }
@@ -959,6 +980,22 @@ public class TestJob extends JobImpl {
                 _log.warn("Insufficient tunnels to test " + _cfg + " with: " + _replyTunnel + " / " + _outTunnel);
             }
             ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
+            CONCURRENT_TESTS.decrementAndGet();
+            if (!scheduleRetest(false)) {
+                cleanupTunnelTracking();
+                decrementTotalJobs();
+            }
+            return;
+        }
+
+        // Skip tests through known-slow peers (>10s avg test time).
+        // Don't waste the single per-pool test slot on a peer that will
+        // block it for 15-30s.  The tunnel carries data and will fail
+        // or get replaced naturally.
+        if (_replyTunnel != null && isPeerTooSlow()) {
+            if (_log.shouldInfo()) {
+                _log.info("Skipping test on " + _cfg + " -> Reply tunnel has known-slow peer");
+            }
             CONCURRENT_TESTS.decrementAndGet();
             if (!scheduleRetest(false)) {
                 cleanupTunnelTracking();
@@ -1332,33 +1369,101 @@ public class TestJob extends JobImpl {
         final RouterContext ctx = getContext();
         if (_outTunnel == null || _replyTunnel == null) return getMaxTestPeriod();
 
-        RateStat tspt = ctx.statManager().getRate("transport.sendProcessingTime");
-        int base = 0;
-        if (tspt != null) {
-            Rate r = tspt.getRate(RateConstants.ONE_MINUTE);
-            if (r != null) {
-                base = 3 * (int) r.getAverageValue();
-            }
-        }
-
-        // If the pool has observed successful test latencies, allow more time
-        // so that tests that complete on the upper edge of the distribution
-        // are not spuriously timed out.
-        RateStat testTimeStat = ctx.statManager().getRate("tunnel.testSuccessTime");
-        if (testTimeStat != null) {
-            Rate oneMin = testTimeStat.getRate(RateConstants.ONE_MINUTE);
-            if (oneMin != null) {
-                // 3x the average observed test time as a generous timeout
-                base = Math.max(base, 3 * (int) oneMin.getAverageValue());
-            }
-        }
-
+        // Use per-peer latency data to set a tighter, peer-aware timeout.
+        // Sum up the worst-case known latency for each hop in both tunnels,
+        // then use 2x as the round-trip estimate.  This gives fast peers a
+        // short timeout (releasing the test slot quickly) while still
+        // allowing slow peers enough time.
+        float peerLatencyMs = 0;
         int totalHops = _outTunnel.getLength() + _replyTunnel.getLength();
-        int calculated = base + (1000 * totalHops);
-        int clamped = Math.max(getMinTestPeriod()
+        boolean allPeersKnown = true;
+        float worstPeerMs = 0;
 
-, calculated);
+        for (int i = 0; i < _replyTunnel.getLength(); i++) {
+            Hash peer = _replyTunnel.getPeer(i);
+            if (peer == null) continue;
+            net.i2p.router.peermanager.PeerProfile prof =
+                ctx.profileOrganizer().getProfile(peer);
+            if (prof != null) {
+                float tunnelAvg = prof.getTunnelTestTimeAverage();
+                float peerAvg = prof.getPeerTestTimeAverage();
+                float avg = Math.max(tunnelAvg, peerAvg);
+                if (avg > 0) {
+                    peerLatencyMs += avg;
+                    if (avg > worstPeerMs) worstPeerMs = avg;
+                } else {
+                    allPeersKnown = false;
+                }
+            } else {
+                allPeersKnown = false;
+            }
+        }
+        for (int i = 0; i < _outTunnel.getLength(); i++) {
+            Hash peer = _outTunnel.getPeer(i);
+            if (peer == null) continue;
+            net.i2p.router.peermanager.PeerProfile prof =
+                ctx.profileOrganizer().getProfile(peer);
+            if (prof != null) {
+                float tunnelAvg = prof.getTunnelTestTimeAverage();
+                float peerAvg = prof.getPeerTestTimeAverage();
+                float avg = Math.max(tunnelAvg, peerAvg);
+                if (avg > 0) {
+                    peerLatencyMs += avg;
+                    if (avg > worstPeerMs) worstPeerMs = avg;
+                } else {
+                    allPeersKnown = false;
+                }
+            } else {
+                allPeersKnown = false;
+            }
+        }
+
+        int calculated;
+        if (allPeersKnown && peerLatencyMs > 0) {
+            // Peer-aware: 2x total known latency + 1s per hop for crypto
+            calculated = (int) (2 * peerLatencyMs) + (1000 * totalHops);
+        } else {
+            // Fall back to global averages when peer data is incomplete
+            RateStat tspt = ctx.statManager().getRate("transport.sendProcessingTime");
+            int base = 0;
+            if (tspt != null) {
+                Rate r = tspt.getRate(RateConstants.ONE_MINUTE);
+                if (r != null) {
+                    base = 3 * (int) r.getAverageValue();
+                }
+            }
+            RateStat testTimeStat = ctx.statManager().getRate("tunnel.testSuccessTime");
+            if (testTimeStat != null) {
+                Rate oneMin = testTimeStat.getRate(RateConstants.ONE_MINUTE);
+                if (oneMin != null) {
+                    base = Math.max(base, 3 * (int) oneMin.getAverageValue());
+                }
+            }
+            calculated = base + (1000 * totalHops);
+        }
+
+        int clamped = Math.max(getMinTestPeriod(), calculated);
         return Math.min(clamped, getMaxTestPeriod());
+    }
+
+    /**
+     * Check if the tunnel being tested has any known-slow peers.
+     * Uses peer test response time — it's the most sensitive indicator.
+     * If a peer takes &gt;3s to respond directly, it'll be worse in a
+     * multi-hop tunnel.  Don't waste the single per-pool test slot.
+     */
+    private boolean isPeerTooSlow() {
+        final RouterContext ctx = getContext();
+        for (int i = 0; i < _replyTunnel.getLength(); i++) {
+            Hash peer = _replyTunnel.getPeer(i);
+            if (peer == null) continue;
+            net.i2p.router.peermanager.PeerProfile prof =
+                ctx.profileOrganizer().getProfile(peer);
+            if (prof != null && prof.getPeerTestTimeAverage() > 3000) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean scheduleRetest() {
