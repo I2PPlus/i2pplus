@@ -1046,7 +1046,7 @@ public class TunnelPool {
                             case TOO_SLOW: return 1;
                             case OVER_BUDGET: return 2;
                             case FAILING: return 3;
-                            case UNTESTED: return 4;
+                            case UNTESTED: return 99; // Don't prune untested — let them be tested first
                             case TESTING: return 5;
                             default: return 6; // GOOD last
                         }
@@ -2490,6 +2490,7 @@ public class TunnelPool {
         int safeActive = 0;  // tunnels with > 5min remaining
         int nearExpiry = 0;  // tunnels with <= 5min remaining but not yet expired
         int expiredZombies = 0;  // tunnels past expiration still in pool
+        int untestedCount = 0;  // tunnels awaiting first test — in pool, just unproven
 
         _tunnelsLock.lock();
         try {
@@ -2506,6 +2507,11 @@ public class TunnelPool {
                         ExpireJob.removeFromExpiration((PooledTunnelCreatorConfig) t);
                     }
                     expiredZombies++;
+                    continue;
+                }
+                // Count UNTESTED — they're in the pool awaiting test.
+                if (t.getTestStatus() == net.i2p.router.TunnelTestStatus.UNTESTED) {
+                    untestedCount++;
                     continue;
                 }
                 // Skip FAILING/FAILED tunnels — they can't route traffic.
@@ -2531,6 +2537,8 @@ public class TunnelPool {
         // ~10 min intervals, and pending-but-timing-out builds (20s each)
         // keep the inProgress counter above zero, starving the pool.
         int inProgress = getInProgressCount();
+        // Count UNTESTED tunnels — they're in the pool and just need time
+        // to be tested.  Don't count them as deficit.
         if (safeActive < target && (nearExpiry > 0 || safeActive == 0)) {
             int deficit;
             if (safeActive == 0 && nearExpiry > 0 && inProgress > 0) {
@@ -2541,7 +2549,7 @@ public class TunnelPool {
                 // Ignore inProgress — build for the full target.
                 deficit = target;
             } else {
-                deficit = target - safeActive - inProgress;
+                deficit = target - safeActive - inProgress - untestedCount;
             }
             if (deficit > 0) {
                 int needed = Math.min(deficit, target);
@@ -2581,7 +2589,11 @@ public class TunnelPool {
         // on struggling pools, not block recovery from total collapse.
         boolean isPing = _settings.getDestinationNickname() != null &&
                          _settings.getDestinationNickname().startsWith("Ping");
-        if (safeActive == 0 && nearExpiry == 0 && !isPing) {
+        // Count UNTESTED tunnels — the pool has capacity, just waiting for
+        // test results.  Firing EMERGENCY here creates a death spiral:
+        // build → UNTESTED → test queue saturated → can't test → EMERGENCY →
+        // build more → Too many UNTESTED → prune untested → pool drops → repeat.
+        if (safeActive == 0 && nearExpiry == 0 && untestedCount == 0 && !isPing) {
             int needed = Math.max(target, 2);
             // If builds are already queued, don't stack more — let the
             // existing builds resolve first.  Without this cap, repeated
