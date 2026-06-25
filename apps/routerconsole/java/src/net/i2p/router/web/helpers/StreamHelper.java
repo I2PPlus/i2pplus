@@ -19,7 +19,7 @@ import net.i2p.router.web.HelperBase;
 
 /**
  * Helper for the /streams page - shows active I2P streaming connections.
- * @since 0.9.63
+ * @since 0.9.70+
  */
 public class StreamHelper extends HelperBase {
 
@@ -28,7 +28,12 @@ public class StreamHelper extends HelperBase {
     private static final String TD_OPEN = "<td>";
     private static final String TD_CLOSE = "</td>";
 
+    private String _direction;
+
     public StreamHelper() {}
+
+    public String getDirection() { return _direction != null ? _direction : ""; }
+    public void setDirection(String d) { _direction = d; }
 
     /**
      * Render the streaming connections table.
@@ -94,8 +99,13 @@ public class StreamHelper extends HelperBase {
                 Set<I2PSocket> sockets = mgr.listSockets();
                 if (sockets == null || sockets.isEmpty())
                     continue;
-                String taskType = (task instanceof I2PTunnelServer) ? "Server" : "Client";
-                for (I2PSocket sock : sockets) {
+                    String taskType = (task instanceof I2PTunnelServer) ? "Server" : "Client";
+                    boolean inbound = (task instanceof I2PTunnelServer);
+                    if (_direction != null) {
+                        if ("inbound".equals(_direction) && !inbound) continue;
+                        if ("outbound".equals(_direction) && inbound) continue;
+                    }
+                    for (I2PSocket sock : sockets) {
                     if (sock == null || sock.isClosed())
                         continue;
                     totalSockets++;
@@ -104,9 +114,8 @@ public class StreamHelper extends HelperBase {
                     out.write(esc(tunnelName));
                     out.write(TD_CLOSE);
                     out.write(TD_OPEN);
-                    out.write(taskType);
+                    out.write("<span class=" + taskType.toLowerCase() + ">" + taskType + "</span>");
                     out.write(TD_CLOSE);
-                    boolean inbound = (task instanceof I2PTunnelServer);
                     if (inbound) {
                         out.write("<td class=direction data-sort=in><span class=inbound title=Inbound>" +
                                   "<img src=/themes/console/images/inbound.svg alt=Inbound></span></td>");

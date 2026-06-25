@@ -2371,11 +2371,15 @@ html.hasCollapsedElement #plugmanage{display:none}
 
 /* streams */
 #streamsContainer{margin: 14px auto 12px; width: calc(100% - 4px);box-shadow:var(--border_table)}
-#streamsContainer th:nth-child(n+2),#streamsContainer td:nth-child(n+2){text-align: center}
-#streamsContainer th{font-size:90%}
-#streamsContainer th:first-child{text-align:left}
+#streams th:nth-child(n+2),#streamsContainer td:nth-child(n+2){text-align:center}
+#streams th{font-size:90%}
+#streams th:first-child{text-align:left}
+#streams td{padding:6px 8px}
+#streams td:nth-child(2),#streams td:nth-child(3){width:1%}
 #streamsContainer img {display:none}
 #streams+.infohelp{margin:0}
+#streams .inbound,#streams .outbound{margin:-1px 0 0;display:inline-block;vertical-align:middle}
+#streams .client,#streams .server{display:inline-block;width:18px;height:18px;vertical-align:middle;font-size:0;background:var(--client)}
 
 /* update */
 #checkforupdates{text-align:center}
