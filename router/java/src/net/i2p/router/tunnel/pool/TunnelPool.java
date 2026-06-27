@@ -62,6 +62,14 @@ public class TunnelPool {
     private long _lastTimeoutWarningTime;
     private long _lastNoTunnelsWarningTime;
     private long _lastLastResortLogTime;
+    /**
+     *  Dynamic pool scaling: when a pool repeatedly collapses (EMERGENCY fires),
+     *  increase the effective tunnel count. More parallel tunnels = more
+     *  resilience against individual tunnel failures. LeaseSet publication
+     *  picks the best tunnels, so excess is fine.
+     */
+    private volatile int _consecutiveEmergencies = 0;
+    private static final int MAX_EMERGENCY_BOOST = 6;
     private volatile boolean _leaseSetRepublishPending;
     private static final int REMOVAL_QUEUE_CAPACITY = 2000;
     private final BlockingQueue<TunnelInfo> _removalQueue = new LinkedBlockingQueue<TunnelInfo>(REMOVAL_QUEUE_CAPACITY);
@@ -1019,6 +1027,9 @@ public class TunnelPool {
             }
 
             int target = _settings.getTotalQuantity();
+            // Dynamic scaling: keep extra tunnels when pool keeps collapsing
+            int effectiveTarget = Math.min(target + _consecutiveEmergencies * 2,
+                                           target + MAX_EMERGENCY_BOOST * 2);
             int currentSize = _tunnels.size();
             boolean isServerPool = _settings.isInbound() && !_settings.isExploratory();
 
@@ -1256,17 +1267,19 @@ public class TunnelPool {
                 // haven't been verified yet.  GOOD tunnels can accumulate
                 // freely so the pool never starves while tests run.
                 int target = _settings.getQuantity();
+                int effectiveTarget = Math.min(target + _consecutiveEmergencies,
+                                               target + MAX_EMERGENCY_BOOST);
                 int untestedNow = 0;
                 for (TunnelInfo t : _tunnels) {
                     if (t.getTestStatus() == net.i2p.router.TunnelTestStatus.UNTESTED) {
                         untestedNow++;
                     }
                 }
-                int maxUntested = Math.max(target * 2, 4);
+                int maxUntested = Math.max(effectiveTarget * 2, 4);
                 if (untestedNow >= maxUntested) {
                     if (_log.shouldWarn()) {
                         _log.warn(toString() + " -> Too many UNTESTED tunnels (" + untestedNow +
-                                  " >= max " + maxUntested + ", target=" + target + ") \n* " + info);
+                                  " >= max " + maxUntested + ", target=" + effectiveTarget + ") \n* " + info);
                     }
                     return;
                 }
@@ -1573,12 +1586,12 @@ public class TunnelPool {
 
     private void fail(TunnelInfo cfg) {
         if (cfg.getConsecutiveFailures() > 1) {
-            // Hard ceiling: a zombie with 20+ consecutive failures is useless
+            // Hard ceiling: a zombie with 10+ consecutive failures is useless
             // and blocks pool recovery by keeping size() inflated.
             // The collapse guard only applies below this threshold.
             int failures = cfg.getConsecutiveFailures();
             int remaining = size();
-            boolean isZombie = failures > 20;
+            boolean isZombie = failures > 10;
             if (remaining <= 1 && !isZombie) {
                 // Collapse guard: don't remove if this would leave the pool
                 // with zero usable tunnels.  A degraded tunnel is better than
@@ -2177,10 +2190,22 @@ public class TunnelPool {
     private void pruneNonGoodTunnels() {
         List<TunnelInfo> toRemove = new ArrayList<TunnelInfo>();
         int goodCount = 0;
+        boolean isServerPool = _settings.isInbound() && !_settings.isExploratory();
         _tunnelsLock.lock();
         try {
             for (int i = 0; i < _tunnels.size(); i++) {
                 TunnelInfo t = _tunnels.get(i);
+                // For server pools: never prune GOOD or FAILING tunnels.
+                // GOOD tunnels are published in the LeaseSet and removing them
+                // breaks client connections.  FAILING tunnels were recently GOOD
+                // and the old LeaseSet (propagated to peers) still references
+                // them — pruning during the propagation window causes unreachable
+                // destinations.  Let them expire naturally (10 min).
+                if (isServerPool && (t.getTestStatus() == net.i2p.router.TunnelTestStatus.GOOD ||
+                                     t.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILING)) {
+                    goodCount++;
+                    continue;
+                }
                 if (t.getTunnelFailed() ||
                     (t.getTestStatus() != net.i2p.router.TunnelTestStatus.GOOD &&
                      t.getTestStatus() != net.i2p.router.TunnelTestStatus.UNTESTED)) {
@@ -2191,16 +2216,38 @@ public class TunnelPool {
             }
         } finally {_tunnelsLock.unlock();}
         if (toRemove.isEmpty()) {return;}
-        boolean isServerPool = _settings.isInbound() && !_settings.isExploratory();
-        int minGoodRequired = isServerPool ? 2 : 1;
 
         // Always prune FAILED/FAILING tunnels down to a small reserve.
         // Without this, the pool fills with FAILED tunnels and
         // ensureSufficientTunnels() rejects new builds (totalNow >= target + 8),
         // locking the pool into a permanently degraded state.
-        // Reserve keeps the best non-GOOD tunnels as LS fallback so the
-        // LeaseSet never goes empty.
-        int reserve = Math.max(minGoodRequired - goodCount, 0);
+        // Reserve keeps the best (lowest-failure) non-GOOD tunnels as LS
+        // fallback so the LeaseSet never goes empty.
+        // Cap: never keep zombies (>5 failures) as LS fallback — they're
+        // useless and block pool recovery by inflating size().
+        int target = _settings.getQuantity();
+        // Use base target for reserve, NOT effectiveTarget — dynamic scaling
+        // must not inflate the LS fallback reserve or pools full of broken
+        // tunnels can never recover (reserve = effectiveTarget - 0 = huge).
+        int reserve = Math.max(target - goodCount, 0);
+        // When pool has zero good tunnels, cap reserve aggressively —
+        // keeping broken tunnels as LS fallback is counterproductive
+        // when there's nothing good to fall back to.
+        if (goodCount == 0) {
+            reserve = Math.min(reserve, 1);
+        }
+        if (reserve > 0) {
+            // Only count low-failure non-zombie tunnels toward the reserve.
+            // Tunnels with >5 consecutive failures are effectively dead —
+            // keeping them blocks pool recovery.
+            int nonZombieCount = 0;
+            for (TunnelInfo t : toRemove) {
+                if (t.getConsecutiveFailures() <= 5) {
+                    nonZombieCount++;
+                }
+            }
+            reserve = Math.min(reserve, nonZombieCount);
+        }
         int toPrune = toRemove.size() - reserve;
         if (toPrune <= 0) {
             if (_log.shouldInfo()) {
@@ -2219,8 +2266,10 @@ public class TunnelPool {
             toRemove = new ArrayList<TunnelInfo>(toRemove.subList(toPrune, toRemove.size()));
         }
         if (_log.shouldInfo()) {
+            String boost = _consecutiveEmergencies > 0 ?
+                " (dynamic target " + Math.min(target + _consecutiveEmergencies, target + MAX_EMERGENCY_BOOST) + ")" : "";
             _log.info("Pruning " + toRemove.size() + " non-GOOD tunnels from " + toString() +
-                      " (good=" + goodCount + ", remaining=" + (goodCount + reserve) + ")");
+                      " (good=" + goodCount + ", remaining=" + (goodCount + reserve) + ")" + boost);
         }
         // Batch removal: remove all at once under the lock, then do stats/cleanup
         // outside.  Calling removeTunnel() per-tunnel triggers ensureSufficientTunnels()
@@ -2305,12 +2354,15 @@ public class TunnelPool {
         // → publish 1 gateway → prune 2 → pool drops to 0-1 → EMERGENCY → repeat.
         int currentSize = getTunnelCount();
         int target = _settings.getQuantity();
+        // Dynamic scaling: keep extra tunnels when pool keeps collapsing
+        int effectiveTarget = Math.min(target + _consecutiveEmergencies,
+                                       target + MAX_EMERGENCY_BOOST);
         int afterPrune = currentSize - toRemove.size();
-        if (afterPrune < target) {
+        if (afterPrune < effectiveTarget) {
             if (_log.shouldInfo()) {
                 _log.info(toString() + " -> Skipping non-published prune — would drop below target " +
                           "(" + currentSize + " total, " + toRemove.size() + " candidates, " +
-                          "target " + target + ", after prune " + afterPrune + ")");
+                          "target " + effectiveTarget + ", after prune " + afterPrune + ")");
             }
             return;
         }
@@ -2484,6 +2536,10 @@ public class TunnelPool {
         // don't inflate the count and block replacement builds.
         pruneNonGoodTunnels();
         int target = _settings.getQuantity();
+        // Dynamic scaling: boost target when pool keeps collapsing.
+        // More tunnels = more resilience. LeaseSet picks the best.
+        int effectiveTarget = Math.min(target + _consecutiveEmergencies,
+                                       target + MAX_EMERGENCY_BOOST);
         long now = _context.clock().now();
         long preBuildThreshold = now + 5 * 60 * 1000;
 
@@ -2537,27 +2593,53 @@ public class TunnelPool {
         // ~10 min intervals, and pending-but-timing-out builds (20s each)
         // keep the inProgress counter above zero, starving the pool.
         int inProgress = getInProgressCount();
+
+        // Reset collapse counter when pool is stable (safeActive >= effectiveTarget).
+        // Slow decay: also reduce by 1 each cycle when safeActive >= base target,
+        // so pools gradually return to normal even without full stability.
+        // Force reset when pool is empty (safeActive == 0) — keeping the counter
+        // high inflates effectiveTarget, causing the pool to hoard broken tunnels
+        // as LS fallback instead of recovering.
+        if (safeActive >= effectiveTarget) {
+            _consecutiveEmergencies = 0;
+        } else if (safeActive == 0) {
+            _consecutiveEmergencies = 0;
+        } else if (safeActive >= target && _consecutiveEmergencies > 0) {
+            _consecutiveEmergencies--;
+        }
+
         // Count UNTESTED tunnels — they're in the pool and just need time
-        // to be tested.  Don't count them as deficit.
-        if (safeActive < target && (nearExpiry > 0 || safeActive == 0)) {
+        // to be tested.  Don't count them as deficit UNLESS the pool has
+        // zero GOOD tunnels, in which case they're likely stuck failing
+        // tests and blocking replacement builds.
+        if (safeActive < effectiveTarget && (nearExpiry > 0 || safeActive == 0)) {
             int deficit;
             if (safeActive == 0 && nearExpiry > 0 && inProgress > 0) {
                 // When safeActive is 0 and tunnels are expiring, in-progress
                 // builds haven't produced GOOD tunnels yet (~40s build+test).
                 // The expiring tunnels will die before in-progress builds
                 // become usable, leaving the pool at 0 safe forever.
-                // Ignore inProgress — build for the full target.
-                deficit = target;
+                // However, don't ignore inProgress entirely — queuing more
+                // builds when inProgress >= effectiveTarget creates a build storm:
+                // timeout → ensureSufficientTunnels → deficit=target → build
+                // more → timeout → repeat.  Only build the gap.
+                deficit = Math.max(0, effectiveTarget - inProgress);
+            } else if (safeActive == 0) {
+                // Pool has zero GOOD tunnels — UNTESTED tunnels are likely
+                // stuck failing tests and blocking new builds.  Don't count
+                // them toward the deficit so replacement builds proceed.
+                deficit = effectiveTarget - inProgress;
             } else {
-                deficit = target - safeActive - inProgress - untestedCount;
+                deficit = effectiveTarget - safeActive - inProgress - untestedCount;
             }
             if (deficit > 0) {
+                // Cap per-cycle builds at base target — scale up gradually
                 int needed = Math.min(deficit, target);
                 // When tunnels are expiring (nearExpiry > 0), always build
                 // replacements regardless of backoff — waiting allows expiry
                 // to drain the pool to zero, forcing EMERGENCY recovery.
                 // Only skip proactive builds when the pool is merely below
-                // target with no imminent expiry (safeActive < target,
+                // target with no imminent expiry (safeActive < effectiveTarget,
                 // nearExpiry == 0) — that's a capacity issue where backoff
                 // is appropriate.
                 if (nearExpiry == 0 && _manager.getExecutor().isPoolInBackoff(this)) {
@@ -2567,9 +2649,11 @@ public class TunnelPool {
                     }
                 } else {
                     if (_log.shouldInfo()) {
+                        String boost = _consecutiveEmergencies > 0 ?
+                            " [boosted +" + _consecutiveEmergencies + "]" : "";
                         _log.info(toString() + " -> Proactive: " + safeActive +
                                   " safe + " + nearExpiry + " expiring, building " + needed +
-                                  " replacements (deficit=" + deficit + ", ip=" + inProgress + ")");
+                                  " replacements (deficit=" + deficit + ", ip=" + inProgress + ")" + boost);
                     }
                     for (int i = 0; i < needed; i++) {
                         PooledTunnelCreatorConfig cfg = configureNewTunnel(false);
@@ -2594,12 +2678,19 @@ public class TunnelPool {
         // build → UNTESTED → test queue saturated → can't test → EMERGENCY →
         // build more → Too many UNTESTED → prune untested → pool drops → repeat.
         if (safeActive == 0 && nearExpiry == 0 && untestedCount == 0 && !isPing) {
+            // Dynamic scaling: boost target on repeated collapses.
+            _consecutiveEmergencies = Math.min(_consecutiveEmergencies + 1,
+                                               MAX_EMERGENCY_BOOST);
+            effectiveTarget = Math.min(target + _consecutiveEmergencies,
+                                       target + MAX_EMERGENCY_BOOST);
+            // Cap per-cycle builds at base target — pool scales up gradually
+            // over multiple EMERGENCY cycles, not all at once.  Flooding the
+            // build queue with 5+ concurrent builds wastes build slots that
+            // other pools need, and most will timeout anyway.
             int needed = Math.max(target, 2);
             // If builds are already queued, don't stack more — let the
-            // existing builds resolve first.  Without this cap, repeated
-            // EMERGENCY calls queue 4 builds each, inflating inProgress
-            // to 9+ and creating a build storm where builds pile up
-            // faster than they can timeout/complete.
+            // existing builds resolve first.  Use base target for the cap,
+            // not effectiveTarget — we don't need all slots filled instantly.
             if (inProgress >= target) {
                 if (_log.shouldDebug()) {
                     _log.debug(toString() + " -> Skipping EMERGENCY: " +
@@ -2628,8 +2719,11 @@ public class TunnelPool {
                 }
             }
             if (_log.shouldWarn()) {
+                String boost = _consecutiveEmergencies > 0 ?
+                    " (dynamic target " + effectiveTarget + ", collapse #" + _consecutiveEmergencies + ")" : "";
                 _log.warn(toString() + " -> EMERGENCY: Zero usable tunnels, " +
-                          inProgress + " in-progress, forcing " + needed + " replacement builds");
+                          inProgress + " in-progress, forcing " + needed +
+                          " replacement builds" + boost);
             }
             for (int i = 0; i < needed; i++) {
                 PooledTunnelCreatorConfig cfg = configureNewTunnel(false);
