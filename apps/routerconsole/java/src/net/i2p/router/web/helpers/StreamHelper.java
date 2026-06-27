@@ -57,7 +57,7 @@ public class StreamHelper extends HelperBase {
     private void renderStreamsHTML(Writer out) throws IOException {
         TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
         if (tcg == null) {
-            out.write("<p class=infohelp>Streaming subsystem not available.</p>\n");
+            out.write("<p class=infohelp>Streaming connections will appear here once the router has finished starting up.</p>\n");
             return;
         }
 
