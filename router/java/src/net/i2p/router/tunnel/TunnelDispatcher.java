@@ -250,12 +250,16 @@ public class TunnelDispatcher implements Service {
             }
         }
 
-        // Clean up _participants - remove participants with expired tunnels
+        // Clean up _participants - remove participants with expired tunnels.
+        // NOTE: IB endpoints (added by joinInbound()) are in _participants but
+        // NOT in _participatingConfig.  We must NOT remove them when hopCfg is
+        // null — they are valid tunnel endpoints, not orphans.  Only remove
+        // entries whose HopConfig exists AND has expired.
         Iterator<Map.Entry<TunnelId, TunnelParticipant>> partit = _participants.entrySet().iterator();
         while (partit.hasNext()) {
             Map.Entry<TunnelId, TunnelParticipant> entry = partit.next();
             HopConfig hopCfg = _participatingConfig.get(entry.getKey());
-            if (hopCfg == null || hopCfg.getExpiration() < cutoff) {
+            if (hopCfg != null && hopCfg.getExpiration() < cutoff) {
                 partit.remove();
                 cleaned++;
             }
@@ -820,7 +824,15 @@ public class TunnelDispatcher implements Service {
                 return;
             }
 
-            msg.setMessageExpiration(now + 20_000); // reset expiry to 20s from now
+            // Ensure at least 20s expiration for tunnel transit, but don't
+            // shorten a longer expiration set by the caller (e.g. TestJob
+            // sets testExpiration = now + testPeriod, which may be > 20s).
+            // Shortening it causes the ReplySelector to expire before the
+            // message arrives, resulting in 100% test failure.
+            long curExp = msg.getMessageExpiration();
+            if (curExp < now + 20_000) {
+                msg.setMessageExpiration(now + 20_000);
+            }
             long tid1 = outboundTunnel.getTunnelId();
             long tid2 = (targetTunnel != null ? targetTunnel.getTunnelId() : -1);
             _context.messageHistory().tunnelDispatched(msg.getUniqueId(), tid1, tid2, targetPeer, "Outbound gateway");
