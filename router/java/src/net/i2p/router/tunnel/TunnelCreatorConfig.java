@@ -69,6 +69,15 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private int _latencyIdx = 0;
     private int _latencyCount = 0;
     private volatile boolean _needsExpeditedTest = false;
+    /**
+     *  Recent-traffic test exemptions used.
+     *  A tunnel with recent verified data gets a few free passes on test
+     *  failures (reply-path false negatives), but not unlimited — after
+     *  {@link TestJob#MAX_RECENT_EXEMPTIONS} exemptions, failures count
+     *  normally so the tunnel doesn't become immortal.
+     *  @since 0.9.69+
+     */
+    private volatile int _recentTestExemptions;
     /** optional pool nickname for log display */
     private String _destinationNickname;
 
@@ -269,6 +278,18 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         _failures.set(0);
         _testStatus = TunnelTestStatus.GOOD;
     }
+
+    /**
+     *  Get the number of recent-traffic test exemptions used.
+     *  @since 0.9.69+
+     */
+    public int getRecentTestExemptions() {return _recentTestExemptions;}
+
+    /**
+     *  Increment the recent-traffic test exemption counter.
+     *  @since 0.9.69+
+     */
+    public void incrementRecentTestExemptions() {_recentTestExemptions++;}
 
     public void testSuccessful(int ms) {
         _failures.set(0);
