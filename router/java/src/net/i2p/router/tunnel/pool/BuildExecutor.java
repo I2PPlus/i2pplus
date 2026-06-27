@@ -103,16 +103,10 @@ class BuildExecutor implements Runnable {
      * @return maximum concurrent builds allowed
      */
     private int getMaxConcurrentBuilds() {
-        int multiplier = _context.getProperty("router.buildConcurrencyMultiplier", 6);
         int cores = SystemVersion.getCores();
-        int result = Math.max(cores * multiplier, 48);
-        int maxCap = _context.getProperty("router.maxConcurrentBuilds", Math.max(cores * 16, 128));
-        if (result > maxCap) {
-            result = maxCap;
-        }
+        int result = _context.getProperty("router.maxConcurrentBuilds", Math.min(cores * 4, 32));
         if (_log.shouldDebug()) {
-            _log.debug("Max concurrent tunnel builds: " + result +
-                       " (cores=" + cores + " * multiplier=" + multiplier + ")");
+            _log.debug("Max concurrent tunnel builds: " + result + " (cores=" + cores + ")");
         }
         return result;
     }
@@ -387,12 +381,8 @@ class BuildExecutor implements Runnable {
             }
         }
 
-        // Cap: when builds are fast, allow up to the hard maxCap
-        if (avg > 0 && avg < 100) {
-            int cores = SystemVersion.getCores();
-            int hardCap = Math.max(cores * 16, 128);
-            if (allowed > hardCap) allowed = hardCap;
-        } else if (allowed > maxConcurrentBuilds) {
+        // Cap: never exceed maxConcurrentBuilds
+        if (allowed > maxConcurrentBuilds) {
             allowed = maxConcurrentBuilds;
         }
 
@@ -575,6 +565,8 @@ class BuildExecutor implements Runnable {
                 // Determine how many tunnels are allowed to build concurrently
                 int allowed = allowed(); // also expires timed out requests
                 allowed = buildZeroHopTunnels(wanted, allowed); // zero-hop tunnels build inline
+                // Cap per-iteration builds to prevent flooding the network
+                if (allowed > 4) allowed = 4;
 
                 TunnelManagerFacade mgr = _context.tunnelManager();
                 boolean noInboundOrOutbound = (mgr == null) || (mgr.getFreeTunnelCount() <= 0) || (mgr.getOutboundTunnelCount() <= 0);
