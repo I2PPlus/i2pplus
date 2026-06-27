@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.i2p.router.JobImpl;
+import net.i2p.router.TunnelTestStatus;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
@@ -210,6 +211,7 @@ class ExpireJob extends JobImpl {
         }
 
         Set<TunnelPool> poolsToRefresh = new HashSet<>();
+        int extendedCount = 0;
         for (TunnelExpiration te : readyToExpire) {
             PooledTunnelCreatorConfig cfg = te.config;
             if (cfg == null) {
@@ -221,6 +223,22 @@ class ExpireJob extends JobImpl {
                 te.phase1Complete = true;
                 continue;
             }
+
+            // Don't remove UNTESTED tunnels — they haven't been tested yet.
+            // Removing them before testing creates a death spiral where every
+            // new build is removed before it can prove itself, resulting in 0
+            // safe tunnels and perpetual EMERGENCY builds.
+            if (cfg.getTestStatus() == TunnelTestStatus.UNTESTED
+                    && te.untestedExtensions < MAX_UNTESTED_EXTENSIONS) {
+                te.untestedExtensions++;
+                te.expirationTime = now + UNTESTED_EXTENSION_MS;
+                log.info("Extending UNTESTED tunnel " + te.tunnelKey +
+                    " (+" + UNTESTED_EXTENSION_MS + "ms, extension " +
+                    te.untestedExtensions + "/" + MAX_UNTESTED_EXTENSIONS + ")");
+                extendedCount++;
+                continue;
+            }
+
             pool.removeTunnel(cfg);
             poolsToRefresh.add(pool);
             te.phase1Complete = true;
@@ -231,6 +249,9 @@ class ExpireJob extends JobImpl {
             // Never allow immediate phase 2 - always enforce grace period
             // even if the job runs late, to give clients with cached LeaseSets
             // time to transition to the new tunnels
+        }
+        if (extendedCount > 0) {
+            log.info("Extended " + extendedCount + " UNTESTED tunnels to allow testing");
         }
 
         // Refresh all affected pools so the LeaseSet is updated.
@@ -270,13 +291,26 @@ class ExpireJob extends JobImpl {
         }
     }
 
+    /**
+     *  Maximum number of times an UNTESTED tunnel's expiry can be extended
+     *  to give tests time to complete.  Each extension is {@link #UNTESTED_EXTENSION_MS}.
+     */
+    static final int MAX_UNTESTED_EXTENSIONS = 6;
+
+    /**
+     *  How long to extend an UNTESTED tunnel's expiry each time.
+     *  30s gives the test pipeline enough time for one full test cycle.
+     */
+    static final long UNTESTED_EXTENSION_MS = 30 * 1000;
+
     private static class TunnelExpiration {
         final PooledTunnelCreatorConfig config;
         final Long tunnelKey;
-        final long expirationTime;
+        volatile long expirationTime;
         final long dropTime;
         final long createdAt;
         volatile boolean phase1Complete = false;
+        int untestedExtensions = 0;
 
         TunnelExpiration(PooledTunnelCreatorConfig cfg, Long key, long expire, long drop, long created) {
             this.config = cfg;
