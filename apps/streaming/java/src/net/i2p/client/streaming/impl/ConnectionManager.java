@@ -661,10 +661,13 @@ class ConnectionManager {
            if (opts.getConnectDelay() <= 0) {
                con.waitForConnect();
            } else {
-               // The SYN send is delayed by connectDelay ms (SchedulerPreconnect).
-               // Wait for the connection to establish with enough margin for the
-               // SYN delay plus a round trip.  Returns early on connect or error.
-               int boundedTimeout = opts.getConnectDelay() + 8000;
+                 // The SYN send is delayed by connectDelay ms (SchedulerPreconnect).
+                 // Wait for the connection to establish with enough margin for the
+                 // SYN delay plus one resend cycle plus a full round trip.
+                 // INITIAL_RTO is 10s; we need at least 2x for one retry + RTT.
+                 // Real I2P RTTs are 4-14s with asymmetric transport.
+                 // Sets _connectionError on timeout.
+                int boundedTimeout = opts.getConnectDelay() + 20_000;
                con.waitForConnect(boundedTimeout);
            }
            long connectElapsed = _context.clock().now() - connectStart;

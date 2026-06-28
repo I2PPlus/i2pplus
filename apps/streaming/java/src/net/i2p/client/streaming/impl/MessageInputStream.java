@@ -299,7 +299,9 @@ class MessageInputStream extends InputStream {
         if (packet.getSendStreamId() > 0 || !packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
             synchronized (_dataLock) {
                 packet.setAckThrough(_highestBlockId);
-                packet.setNacks(getNacks());
+                long[] nacks = getNacks();
+                if (nacks.length > 0)
+                    packet.setNacks(nacks);
             }
         } else {
             packet.setAckThrough(-1); // Don't send ACK 0 for retransmitted SYN packets

@@ -258,7 +258,10 @@ class PacketHandler {
             log.info("Received packet on unknown stream (not ECHO/SYN) -> " + packet);
         }
 
-        if (sendId <= 0) {
+        // SYN packets with sendId <= 0 are initial connection requests.
+        // They must NOT be intercepted by stale connections from previous attempts.
+        // Always route SYN packets to receiveNewSyn() to create a fresh connection.
+        if (sendId <= 0 && !packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
             Connection con = manager.getConnectionByOutboundId(packet.getReceiveStreamId());
             if (con != null) {
                 if ((con.getHighestAckedThrough() <= 5) && (packet.getSequenceNum() <= 5)) {
@@ -270,7 +273,7 @@ class PacketHandler {
                 receiveKnownConnection(con, packet);
                 return;
             }
-        } else {
+        } else if (sendId > 0) {
             if (log.shouldDebug()) {
                 boolean recent = manager.wasRecentlyClosed(packet.getSendStreamId());
                 log.debug("Dropping packet with SendStreamID but no connection" + (recent ? " - Recently disconnected" : ""));

@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -27,10 +26,6 @@ import net.i2p.util.SystemVersion;
  * Maintain the state controlling a streaming connection between two destinations.
  */
 class Connection {
-    /** Track last LeaseSet purge time per destination to prevent redundant purges. */
-    private static final ConcurrentHashMap<Hash, Long> _lastLeaseSetPurgeTime = new ConcurrentHashMap<>();
-    /** Cooldown period between LeaseSet purges for the same destination (1 second). */
-    private static final long LEASESET_PURGE_COOLDOWN = 1 * 1000;
 
     private final I2PAppContext _context;
     private final Log _log;
@@ -286,40 +281,43 @@ class Connection {
      *         will return false after 5 minutes even if timeoutMs is &lt;= 0.
      */
     public boolean packetSendChoke(long timeoutMs) throws IOException, InterruptedException {
-        final long MAX_BLOCKING_TIME_MS = 5 * 60 * 1000;  // 5 minutes
-        final int WAIT_TIME_MS = 250;
-
         long start = _context.clock().now();
+        long now = start;
         long writeExpire = start + timeoutMs;
         boolean started = false;
-
-        synchronized (_outboundPackets) {
-            while (true) {
-                long timeLeft = writeExpire - _context.clock().now();
+        while (true) {
+            long timeLeft = writeExpire - now;
+            synchronized (_outboundPackets) {
                 if (!started) {_context.statManager().addRateData("stream.chokeSizeBegin", _outboundPackets.size());}
-                if (hasBlockedTooLong(start, MAX_BLOCKING_TIME_MS)) {return false;}
+                if (start + 5*60*1000 < now) {return false;}
 
-                if (!isConnectedOrError()) {return false;}  // Throws IOException or I2PSocketException
+                if (!isConnectedOrError()) {return false;}
                 started = true;
 
                 int unacked = _outboundPackets.size();
                 int wsz = _options.getWindowSize();
-
                 if (shouldWait(unacked, wsz)) {
-                    if (timeoutMs > 0 && timeLeft <= 0) {
-                        if (!handleTimeout(timeLeft, timeoutMs)) {return false;}
+                    if (timeoutMs > 0) {
+                        if (timeLeft <= 0) {
+                            if (_log.shouldInfo()) {
+                                _log.info("Outbound window is full (choked? " + _isChoked + ' ' + unacked
+                                          + " unacked with " + _activeResends + " active resends"
+                                          + " and we've waited too long (" + (0-(timeLeft - timeoutMs)) + "ms): "
+                                          + toString());
+                            }
+                            return false;
+                        }
+                        _outboundPackets.wait(Math.min(timeLeft, 250));
+                    } else {
+                        _outboundPackets.wait(250);
                     }
-                    _outboundPackets.wait(WAIT_TIME_MS);
+                    now = _context.clock().now();
                 } else {
                     _context.statManager().addRateData("stream.chokeSizeEnd", _outboundPackets.size());
                     return true;
                 }
             }
         }
-    }
-
-    private boolean hasBlockedTooLong(long start, long maxBlockingTime) {
-        return (start + maxBlockingTime < _context.clock().now());
     }
 
     private boolean isConnectedOrError() throws IOException {
@@ -335,17 +333,6 @@ class Connection {
         return _isChoked || unacked >= wsz ||
                _activeResends.get() >= (wsz + 1) / 2 ||
                _lastSendId.get() - _highestAckedThrough.get() >= Math.min(MAX_WINDOW_SIZE, 2 * wsz);
-    }
-
-    private boolean handleTimeout(long timeLeft, long timeoutMs) {
-        int unacked = _outboundPackets.size();
-        int wsz = _options.getWindowSize();
-        if (_log.shouldDebug()) {
-            _log.debug("Outbound window is full " + (_isChoked ? "(choked)" : "") + "\n* " +
-                        "UnACKed: " + unacked + " Window Size: " + wsz + " Active resends: " + _activeResends +
-                        " Time left: " + timeLeft + "ms");
-        }
-        return (timeLeft > 0);
     }
 
     /**
@@ -527,7 +514,7 @@ class Connection {
      *  @return List of packets acked for the first time, or null if none
      */
     public List<PacketLocal> ackPackets(long ackThrough, long[] nacks) {
-        if (nacks == null) {
+        if (nacks == null || nacks.length == 0) {
             _highestAckedThrough.updateAndGet(cur -> Math.max(cur, ackThrough));
         } else {
             long lowest = -1;
@@ -550,7 +537,7 @@ class Connection {
                     long id = e.getKey().longValue();
                     if (id <= ackThrough) {
                         boolean nacked = false;
-                        if (nacks != null) {
+                        if (nacks != null && nacks.length > 0) {
                             // linear search since its probably really tiny
                             for (int i = 0; i < nacks.length; i++) {
                                 if (nacks[i] == id) {
@@ -1273,9 +1260,8 @@ class Connection {
 
      /**
       * Wait for the connection to be established, but no longer than timeoutMs.
-      * Unlike waitForConnect(), this will NOT set the error on timeout; the
-      * caller acknowledges that the connection may not be fully established
-      * after this returns.  The connection may still complete asynchronously.
+      * If the connection is not established within timeoutMs, sets
+      * _connectionError so callers detect the failure.
       *
       * @param timeoutMs max milliseconds to wait (<= 0 delegates to waitForConnect())
       */
@@ -1297,13 +1283,24 @@ class Connection {
              }
              if (_connectionError != null)
                  return;
-             if (!_connected.get())
+             if (!_connected.get()) {
+                 long elapsed = _context.clock().now() - connectStart;
+                 if (_connectionError == null) {
+                     _connectionError = "Connection failed";
+                 }
+                 if (_log.shouldInfo())
+                     _log.info("waitForConnect() bounded failed after " + elapsed + "ms: " + _remotePeer);
                  return;
+             }
              long timeLeft = expiration - _context.clock().now();
              if (timeLeft <= 0) {
+                 long elapsed = _context.clock().now() - connectStart;
+                 if (_connectionError == null) {
+                     _connectionError = "Connection timed out";
+                     disconnect(false);
+                 }
                  if (_log.shouldInfo())
-                     _log.info("waitForConnect() bounded timeout after " +
-                               (_context.clock().now() - connectStart) + "ms for " + _remotePeer);
+                     _log.info("waitForConnect() bounded timeout after " + elapsed + "ms for " + _remotePeer);
                  return;
              }
              try {
@@ -1489,57 +1486,6 @@ class Connection {
     }
 
     /**
-     * Invalidate the cached LeaseSet for the remote peer when SYN retransmissions fail.
-     * This handles the case where the server's tunnels have changed but our cached
-     * LeaseSet is still "current" (not expired by time), causing SYNs to be sent
-     * into dead tunnels.
-     *
-     * Called when SYN packets have been retransmitted 3+ times with no ACK response.
-     * After invalidation, the next message send will trigger a fresh LeaseSet lookup
-     * from floodfills, which should return the server's current tunnel IDs.
-     */
-    private void invalidateStaleLeaseSet() {
-        if (_remotePeer == null) {return;}
-        final Hash destHash = _remotePeer.calculateHash();
-        // Check cooldown - prevent redundant purges for the same destination
-        Long lastPurge = _lastLeaseSetPurgeTime.get(destHash);
-        long now = _context.clock().now();
-        if (lastPurge != null && (now - lastPurge) < LEASESET_PURGE_COOLDOWN) {
-            if (_log.shouldDebug()) {
-                _log.debug("Skipping LeaseSet purge for [" +
-                    destHash.toBase32().substring(0, 8) + "] - cooldown active (" +
-                    ((now - lastPurge) / 1000) + "s elapsed)");
-            }
-            return;
-        }
-        _lastLeaseSetPurgeTime.put(destHash, Long.valueOf(now));
-        // Check if we're running embedded (RouterContext available)
-        // Use reflection to avoid compile-time dependency on router classes
-        try {
-            Class<?> routerCtxClass = Class.forName("net.i2p.router.RouterContext");
-            if (!routerCtxClass.isInstance(_context)) {return;}
-            Object rctx = routerCtxClass.cast(_context);
-            java.lang.reflect.Method clientNetDbMethod = routerCtxClass.getMethod("clientNetDb", Hash.class);
-            Object netDb = clientNetDbMethod.invoke(rctx, destHash);
-            if (netDb != null) {
-                java.lang.reflect.Method failMethod = netDb.getClass().getMethod("fail", Hash.class);
-                failMethod.invoke(netDb, destHash);
-                if (_log.shouldWarn()) {
-                    _log.warn("Invalidated stale LeaseSet for [" +
-                        destHash.toBase32().substring(0, 8) + "] after 3 SYN retransmits");
-                }
-            }
-        } catch (ClassNotFoundException e) {
-            // Not running embedded - ignore
-        } catch (Exception e) {
-            if (_log.shouldWarn()) {
-                _log.warn("Failed to invalidate LeaseSet for [" +
-                    destHash.toBase32().substring(0, 8) + "]: " + e.getMessage());
-            }
-        }
-    }
-
-    /**
      *  A single retransmit timer for all packets.
      *  See RFCs 5681 and 6298.
      *
@@ -1658,11 +1604,6 @@ class Connection {
                     packet.cancelled();
                     disconnect(false);
                     return;
-                } else if (nResends == 1 && _highestAckedThrough.get() < 0 && _remotePeer != null) {
-                    // SYN has been retransmitted once with no response - likely stale LeaseSet.
-                    // Invalidate early so the fresh lookup completes before the next RTO retransmit,
-                    // allowing the retransmit to use the updated tunnels via PacketQueue re-resolution.
-                    invalidateStaleLeaseSet();
                 } else if (packet.getNumSends() >= 3 &&
                            packet.isFlagSet(Packet.FLAG_CLOSE) &&
                            packet.getPayloadSize() <= 0 &&

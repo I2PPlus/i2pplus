@@ -217,10 +217,14 @@ class ConnectionHandler {
                     Connection oldcon = _manager.getConnectionByOutboundId(syn.getReceiveStreamId());
                     if (oldcon != null) {
                         // His ID not guaranteed to be unique to us, but probably is...
-                        // only drop it on a destination match too
+                        // only act on it on a destination match too
                         if (from.equals(oldcon.getRemotePeer())) {
-                            if (_log.shouldInfo() && syn != null) {_log.warn("Dropping duplicate SYN packet: " + syn);}
-                            continue;
+                            // The old connection is likely stale (client timed out and is retrying).
+                            // Close it to free the stream ID, then proceed to create a new connection.
+                            if (_log.shouldWarn() && syn != null) {
+                                _log.warn("Received SYN for existing connection, closing old: " + oldcon + "\n* New SYN: " + syn);
+                            }
+                            oldcon.disconnect(false, true);
                         }
                     }
                     Connection con = _manager.receiveConnection(syn);

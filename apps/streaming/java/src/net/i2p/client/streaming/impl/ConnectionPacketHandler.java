@@ -330,12 +330,18 @@ class ConnectionPacketHandler {
         // could actually be acking data (this fixes the buggered up ack of packet 0 problem).
         // this is called after packet verification, which places the stream IDs as necessary if
         // the SYN verifies (so if we're acking w/out stream IDs, no SYN has been received yet)
-        if ((packet != null) && (packet.getSendStreamId() > 0) && (packet.getReceiveStreamId() > 0) &&
-             (con != null) && (con.getSendStreamId() > 0) && (con.getReceiveStreamId() > 0) &&
+        //
+        // For SYN-ACK packets on outbound connections, packet.getReceiveStreamId() is 0
+        // (echoed from the client's SYN sendStreamId=0), so the full guard would block
+        // ackPackets(). Allow it when we have at least one valid ID pair (sendStreamId > 0
+        // on the packet and receiveStreamId > 0 on the connection).
+        if ((packet != null) && (con != null) && (packet.getSendStreamId() > 0) &&
+             (con.getReceiveStreamId() > 0) &&
              (packet.getSendStreamId() != Packet.STREAM_ID_UNKNOWN) &&
-             (packet.getReceiveStreamId() != Packet.STREAM_ID_UNKNOWN) &&
-             (con.getSendStreamId() != Packet.STREAM_ID_UNKNOWN) &&
-             (con.getReceiveStreamId() != Packet.STREAM_ID_UNKNOWN))
+             (con.getReceiveStreamId() != Packet.STREAM_ID_UNKNOWN) &&
+             ((packet.getReceiveStreamId() > 0 && packet.getReceiveStreamId() != Packet.STREAM_ID_UNKNOWN &&
+               con.getSendStreamId() > 0 && con.getSendStreamId() != Packet.STREAM_ID_UNKNOWN) ||
+              packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)))
             acked = con.ackPackets(ackThrough, nacks);
         else
             return false;
