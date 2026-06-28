@@ -276,13 +276,23 @@ class RatchetTagSet implements TagSetHandle {
     /**
      *  For inbound and outbound: Expiration.
      *  Expiration is getDate() + getTimeout() if acked.
-     *  May be shorter if not acked.
+     *  Before acked, uses _created + _timeout (full lifetime).
+     *
+     *  Previously this used Math.min(_timeout, SESSION_PENDING_DURATION_MS)
+     *  which capped unacked ES tagsets at 3 minutes instead of their designed
+     *  10-minute SESSION_LIFETIME_MAX_MS. With i2cp.disableLoopback=true,
+     *  the NSR round-trip through the full tunnel path could exceed 3 minutes,
+     *  causing tags to expire before the first ES message arrived.
+     *
+     *  NSR tagsets are unaffected — they have _timeout = SESSION_PENDING_DURATION_MS
+     *  (3 min), so the min() was a no-op for them.
+     *
      *  @since 0.9.46
      */
     public synchronized long getExpiration() {
         if (_acked)
             return _date + _timeout;
-        return _created + Math.min(_timeout, RatchetSKM.SESSION_PENDING_DURATION_MS);
+        return _created + _timeout;
     }
 
     /**

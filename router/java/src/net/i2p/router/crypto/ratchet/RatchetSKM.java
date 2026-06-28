@@ -1343,7 +1343,14 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         /**
          * First tag was received for this inbound (ES) tagset.
          * Find the corresponding outbound (ES) tagset in _unackedTagSets,
-         * move it to _tagSets, and remove all others.
+         * move it to _tagSets, and remove all others from _unackedTagSets.
+         *
+         * Note: We do NOT remove remaining inbound tags from _inboundTagSets here.
+         * The addTags() sliding window in consume() already handles tag lifecycle —
+         * generating new tags ahead and trimming old ones via expireTag(). Purging
+         * all tags on first consumption broke subsequent ES decryptions because
+         * Alice's retransmitted SYNs (using pre-generated tags 1-N) could no longer
+         * be found in _inboundTagSets.
          *
          * @param set the inbound tagset
          */
@@ -1365,12 +1372,6 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                             _NSRcallback = null;
                         }
                         _lastUsed = _context.clock().now();
-                        for (Iterator<RatchetSessionTag> iter = _inboundTagSets.keySet().iterator(); iter.hasNext(); ) {
-                            RatchetSessionTag t = iter.next();
-                            if (_inboundTagSets.get(t) == set) {
-                                iter.remove();
-                            }
-                        }
                         return;
                     }
                 }
