@@ -57,10 +57,9 @@ public class PeerTestJob extends JobImpl {
     private PeerManager _manager;
     private boolean _keepTesting;
     private final List<Hash> _priorityPeers = new ArrayList<Hash>();
-    private final int DEFAULT_PEER_TEST_DELAY = SystemVersion.isSlow() ? 8*1000 : 5*1000;
+    private static final long DEFAULT_PEER_TEST_DELAY = 5*60*1000;
     public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
-    private static final int DEFAULT_PEER_TEST_CONCURRENCY = SystemVersion.isSlow() ? 2 :
-                                                              SystemVersion.getCores() <= 2 ? 3 : 4;
+    private static final int DEFAULT_PEER_TEST_CONCURRENCY = 1;
     public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
     private static final int DEFAULT_PEER_TEST_TIMEOUT = 10000;
     public static final String PROP_PEER_TEST_TIMEOUT = "router.peerTestTimeout";
@@ -125,7 +124,7 @@ public class PeerTestJob extends JobImpl {
      */
     private long getPeerTestDelay() {
         long uptime = getContext().router().getUptime();
-        int testDelay = getContext().getProperty(PROP_PEER_TEST_DELAY, DEFAULT_PEER_TEST_DELAY);
+        long testDelay = getContext().getProperty(PROP_PEER_TEST_DELAY, DEFAULT_PEER_TEST_DELAY);
         if (uptime > 3*60*60*1000 || SystemVersion.getCPULoadAvg() > 80)
             return testDelay + 1000;
         else if (uptime >= 3*60*1000)
@@ -145,17 +144,11 @@ public class PeerTestJob extends JobImpl {
     private int getTestTimeout() {
         int testTimeout = getContext().getProperty(PROP_PEER_TEST_TIMEOUT, DEFAULT_PEER_TEST_TIMEOUT);
         int avgTestTime = getAvgPeerTestTime();
-        if (testTimeout < avgTestTime) {
-            if (_log.shouldWarn())
-                _log.warn("Peer test timeout set below successful test average, setting to: " + getAvgPeerTestTime() + "ms");
-            return getAvgPeerTestTime();
-        } else {
-            int minTimeout = Math.max(testTimeout, 2000);
-            if (avgTestTime > 400)
-                return Math.min(minTimeout, avgTestTime * 3 / 2);
-            else
-                return minTimeout;
-        }
+        // Never reduce below the configured default — only auto-increase
+        // if the average successful test time exceeds it
+        if (avgTestTime > testTimeout)
+            return avgTestTime + 5000;
+        return testTimeout;
     }
 
     /**
