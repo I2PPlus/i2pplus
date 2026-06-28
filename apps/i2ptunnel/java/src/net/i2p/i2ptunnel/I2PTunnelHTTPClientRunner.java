@@ -75,6 +75,26 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
     }
 
     /**
+     * Should we keep the local browser socket open when done?
+     * Checks the HTTPResponseOutputStream's keep-alive decision based on actual response headers.
+     * @since 0.9.62
+     */
+    @Override
+    boolean getKeepAliveSocket() {
+        return _hout != null && _hout.getKeepAliveOut() && super.getKeepAliveSocket();
+    }
+
+    /**
+     * Should we keep the I2P socket open when done?
+     * Checks the HTTPResponseOutputStream's keep-alive decision based on actual response headers.
+     * @since 0.9.62
+     */
+    @Override
+    boolean getKeepAliveI2P() {
+        return _hout != null && _hout.getKeepAliveIn() && super.getKeepAliveI2P();
+    }
+
+    /**
      * Helper method to close resources quietly.
      */
     private void closeQuietly(AutoCloseable resource) {
