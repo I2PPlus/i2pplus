@@ -832,7 +832,40 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
             // Note we do not have a first hop fail job, or a success job, here, as we do in e.g. build handler.
             // Nor do we ever send a STATUS_SEND_BEST_EFFORT_SUCCESS (when no selector)
-            getContext().tunnelDispatcher().dispatchOutbound(_msg, _outTunnel.getSendTunnelId(0), _lease.getTunnelId(), _lease.getGateway());
+            boolean dispatched = getContext().tunnelDispatcher().dispatchOutbound(_msg, _outTunnel.getSendTunnelId(0), _lease.getTunnelId(), _lease.getGateway());
+
+            // Explicit tunnel failover: if the gateway was missing or dropped the message,
+            // try selecting a different outbound tunnel once before giving up.
+            if (!dispatched) {
+                if (_log.shouldWarn()) {
+                    _log.warn("[Job " + OutboundClientMessageOneShotJob.this.getJobId()
+                              + "] Dispatch failed (gateway missing/expired), attempting failover for " + _toString);
+                }
+                if (_log.shouldDebug()) {
+                    _log.debug("[Job " + OutboundClientMessageOneShotJob.this.getJobId()
+                              + "] Dispatch details: outTunnel=" + _outTunnel
+                              + " sendTunnelId=" + (_outTunnel != null ? _outTunnel.getSendTunnelId(0) : "null")
+                              + " lease=" + _lease
+                              + " leaseGateway=" + (_lease != null ? _lease.getGateway() : "null")
+                              + " leaseTunnelId=" + (_lease != null ? _lease.getTunnelId() : "null")
+                              + " msgSize=" + (_msg != null ? _msg.getMessageSize() : 0));
+                }
+                TunnelInfo failover = selectOutboundTunnel(_to);
+                if (failover != null && !failover.equals(_outTunnel)) {
+                    _outTunnel = failover;
+                    _wantACK = true;
+                    dispatched = getContext().tunnelDispatcher().dispatchOutbound(_msg, _outTunnel.getSendTunnelId(0), _lease.getTunnelId(), _lease.getGateway());
+                    if (dispatched && _log.shouldInfo()) {
+                        _log.info("[Job " + OutboundClientMessageOneShotJob.this.getJobId()
+                                  + "] Failover dispatch succeeded via " + _outTunnel + " for " + _toString);
+                    }
+                }
+            }
+
+            if (!dispatched) {
+                dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_LOCAL);
+            }
+
             long dispatchSendTime = getContext().clock().now() - before;
             // avg. 6 ms on a 2005-era PC
             getContext().statManager().addRateData("client.dispatchTime", getContext().clock().now() - _start);
