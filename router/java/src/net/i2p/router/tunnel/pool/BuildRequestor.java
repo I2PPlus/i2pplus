@@ -295,7 +295,6 @@ abstract class BuildRequestor {
 
         // Step 2: try any client tunnel (cross-pool — the reply just
         // needs to reach the gateway, any tunnel of the right type works).
-        // Client pools are tried first; exploratory is the last resort.
         paired = isInbound
             ? mgr.selectAnyOutboundTunnel()
             : mgr.selectAnyInboundTunnel();
@@ -304,6 +303,18 @@ abstract class BuildRequestor {
                 log.info("Cross-pool reply tunnel for " + cfg + ": " + paired);
             }
             return paired;
+        }
+
+        // Step 3: fall back to exploratory tunnels for cold-start bootstrap.
+        // Only when zero client tunnels exist system-wide.
+        TunnelInfo expl = isInbound
+            ? mgr.selectOutboundExploratoryTunnel(farEnd)
+            : mgr.selectInboundExploratoryTunnel(farEnd);
+        if (expl != null) {
+            if (log.shouldInfo()) {
+                log.info("Exploratory reply tunnel for " + cfg + ": " + expl);
+            }
+            return expl;
         }
 
         return null;
@@ -607,10 +618,9 @@ abstract class BuildRequestor {
             boolean connecting = ctx.commSystem().isConnecting(hopPeer);
             boolean backlogged = ctx.commSystem().isBacklogged(hopPeer);
             if (connected) {
-                // Peer accepted the build message but never replied — this is a
-                // genuine failure. Give it a first-hop fail cooldown to prevent
-                // immediate retry, which would also fail with "no reply" and
-                // waste build slots.
+                // Peer accepted the build message but never replied.
+                // Don't nuke the profile — the peer is connected, so the
+                // failure is likely transient (congestion, build queue overflow).
                 Log log = ctx.logManager().getLog(BuildRequestor.class);
                 if (log.shouldInfo()) {
                     int estCount = ctx.commSystem().getEstablished() != null ?
@@ -620,11 +630,8 @@ abstract class BuildRequestor {
                              " | fast=" + ctx.profileOrganizer().isFast(hopPeer) +
                              " | hc=" + ctx.profileOrganizer().isHighCapacity(hopPeer));
                 }
-                TunnelPeerSelector.recordFirstHopFail(ctx, hopPeer);
                 _exec.buildComplete(_cfg, OTHER_FAILURE, "No reply from first hop");
-                ctx.profileManager().tunnelFailed(hopPeer, 500);
                 ctx.profileManager().tunnelTimedOut(hopPeer);
-                ctx.profileOrganizer().demoteIfNoTunnel(hopPeer);
                 ctx.statManager().addRateData("tunnel.buildFailFirstHop", 1);
                 return;
             } else if (connecting) {
@@ -639,14 +646,7 @@ abstract class BuildRequestor {
                 return;
             } else {
                 // No connection: the peer isn't established and the build
-                // message couldn't be delivered.  Record a first-hop fail
-                // cooldown so the peer selector doesn't immediately re-select
-                // the same unreachable peer.  Without this, the pool retries
-                // the same peer 150+ times in a row (151 consecutive timeouts
-                // observed for whois pool).  The 3-minute cooldown gives
-                // KeepAlive time to establish a session; if it does, the peer
-                // will be eligible again after the cooldown expires.
-                TunnelPeerSelector.recordFirstHopFail(ctx, hopPeer);
+                // message couldn't be delivered.
                 Log log = ctx.logManager().getLog(BuildRequestor.class);
                 if (log.shouldInfo()) {
                     int estCount = ctx.commSystem().getEstablished() != null ?

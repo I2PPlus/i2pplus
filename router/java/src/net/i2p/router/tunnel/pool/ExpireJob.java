@@ -36,7 +36,11 @@ class ExpireJob extends JobImpl {
     /** Keep tunnels alive for 10 minutes after LeaseSet refresh so clients
      *  with cached (stale) LeaseSets can still connect using old tunnel IDs. */
     private static final long LEASESET_GRACE_PERIOD = 10 * 60 * 1000;
-    private static final long MAX_ENTRY_LIFETIME = 15 * 60 * 1000L;
+    // Must be greater than tunnel lifetime (10 min) + LEASESET_GRACE_PERIOD (10 min)
+    // to allow Phase 2 (dispatcher removal) to fire.  With early expiration,
+    // entries live up to ~19 min total; 25 min provides safety margin for
+    // clock skew and slow job execution.
+    private static final long MAX_ENTRY_LIFETIME = 25 * 60 * 1000L;
     private static final int MAX_ITERATE_PER_RUN = 2000;
     private static final int MAX_ITERATE_BACKED_UP = 5000;
     private static final int BACKED_UP_THRESHOLD = 100;
@@ -127,8 +131,16 @@ class ExpireJob extends JobImpl {
     public static Long getTunnelKey(PooledTunnelCreatorConfig cfg) {
         if (cfg == null) return null;
         try {
-            long recvId = cfg.getReceiveTunnelId(0).getTunnelId();
-            long sendId = cfg.getSendTunnelId(0).getTunnelId();
+            net.i2p.data.TunnelId recvIdObj = cfg.getReceiveTunnelId(0);
+            net.i2p.data.TunnelId sendIdObj = cfg.getSendTunnelId(0);
+            if (recvIdObj == null || sendIdObj == null) {
+                // Tunnel partially cleaned up — use identity hash fallback
+                TunnelPool pool = cfg.getTunnelPool();
+                int poolHash = (pool != null) ? System.identityHashCode(pool) : 0;
+                return Long.valueOf(((long)poolHash << 32) | (System.identityHashCode(cfg) & 0xFFFFFFFFL));
+            }
+            long recvId = recvIdObj.getTunnelId();
+            long sendId = sendIdObj.getTunnelId();
             if (recvId != 0 && sendId != 0) {
                 return Long.valueOf((recvId << 32) | (sendId & 0xFFFFFFFFL));
             }
@@ -160,10 +172,31 @@ class ExpireJob extends JobImpl {
         int startSize = _expirations.size();
         Log log = getContext().logManager().getLog(ExpireJob.class);
 
+        try {
+            runPhase(log, now);
+        } catch (Exception e) {
+            log.error("ExpireJob crashed — rescheduling anyway to keep lifecycle alive", e);
+        }
+
+        int remaining = _expirations.size();
+        // Reschedule if there are remaining entries to process
+        if (remaining > 0) {
+            synchronized (ExpireJob.class) {
+                if (!_isScheduled) {
+                    _isScheduled = true;
+                    ExpireJob nextJob = new ExpireJob(getContext());
+                    nextJob.getTiming().setStartAfter(now + BATCH_WINDOW);
+                    getContext().jobQueue().addJob(nextJob);
+                }
+            }
+        }
+    }
+
+    private void runPhase(Log log, long now) {
         List<TunnelExpiration> readyToExpire = new ArrayList<>();
         List<TunnelExpiration> readyToDrop = new ArrayList<>();
 
-        boolean isBackedUp = startSize > BACKED_UP_THRESHOLD;
+        boolean isBackedUp = _expirations.size() > BACKED_UP_THRESHOLD;
         int maxIterate = isBackedUp ? MAX_ITERATE_BACKED_UP : MAX_ITERATE_PER_RUN;
 
         int iterated = 0;
@@ -185,6 +218,10 @@ class ExpireJob extends JobImpl {
                 continue;
             }
             if (now - te.createdAt > MAX_ENTRY_LIFETIME) {
+                if (log.shouldWarn()) {
+                    log.warn("Evicting orphaned ExpireJob entry " + te.tunnelKey +
+                        " (age=" + ((now - te.createdAt) / 1000) + "s, phase1=" + te.phase1Complete + ")");
+                }
                 it.remove();
                 continue;
             }
@@ -239,7 +276,13 @@ class ExpireJob extends JobImpl {
                 continue;
             }
 
-            pool.removeTunnel(cfg);
+            try {
+                pool.removeTunnel(cfg);
+            } catch (Exception e) {
+                log.warn("Failed to remove tunnel " + te.tunnelKey + " from pool, marking Phase 1 done", e);
+                te.phase1Complete = true;
+                continue;
+            }
             poolsToRefresh.add(pool);
             te.phase1Complete = true;
             if (log.shouldInfo()) {
@@ -258,13 +301,21 @@ class ExpireJob extends JobImpl {
         // Uses non-forced refresh so the 5-minute REFRESH_THROTTLE
         // prevents cascading republishes on staggered tunnel expiries.
         for (TunnelPool pool : poolsToRefresh) {
-            pool.refreshLeaseSet(false);
+            try {
+                pool.refreshLeaseSet(false);
+            } catch (Exception e) {
+                log.warn("Failed to refresh LeaseSet", e);
+            }
         }
 
         for (TunnelExpiration te : readyToDrop) {
             PooledTunnelCreatorConfig cfg = te.config;
             if (cfg != null) {
-                getContext().tunnelDispatcher().remove(cfg);
+                try {
+                    getContext().tunnelDispatcher().remove(cfg);
+                } catch (Exception e) {
+                    log.warn("Failed to remove tunnel " + te.tunnelKey + " from dispatcher", e);
+                }
                 if (log.shouldInfo()) {
                     log.info("Phase 2 complete for tunnel " + te.tunnelKey +
                         " (removed from dispatcher)");
@@ -273,21 +324,9 @@ class ExpireJob extends JobImpl {
             _expirations.remove(te.tunnelKey);
         }
 
-        int remaining = _expirations.size();
         if (log.shouldInfo() && (readyToExpire.size() > 0 || readyToDrop.size() > 0)) {
             log.info("ExpireJob processed " + readyToExpire.size() + " phase 1, " +
-                readyToDrop.size() + " phase 2, " + remaining + " remaining");
-        }
-        // Reschedule if there are remaining entries to process
-        if (remaining > 0) {
-            synchronized (ExpireJob.class) {
-                if (!_isScheduled) {
-                    _isScheduled = true;
-                    ExpireJob nextJob = new ExpireJob(getContext());
-                    nextJob.getTiming().setStartAfter(now + BATCH_WINDOW);
-                    getContext().jobQueue().addJob(nextJob);
-                }
-            }
+                readyToDrop.size() + " phase 2, " + _expirations.size() + " remaining");
         }
     }
 

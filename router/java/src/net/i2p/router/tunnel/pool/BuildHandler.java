@@ -330,7 +330,8 @@ class BuildHandler implements Runnable {
      * Blocking call to handle a single inbound reply
      */
     private void handleReply(TunnelBuildReplyMessage msg, PooledTunnelCreatorConfig cfg, long delay) {
-        long rtt = System.currentTimeMillis() - cfg.getConfig(0).getCreation();
+        long requestedOn = cfg.getExpiration() - 10*60*1000;
+        long rtt = _context.clock().now() - requestedOn;
         if (rtt < 0) {rtt = 0;}
         if (_log.shouldInfo()) {
             _log.info("Handled reply [MsgID " + msg.getUniqueId() + "] in " + rtt + "ms -> " +
@@ -352,19 +353,12 @@ class BuildHandler implements Runnable {
                     return;
                 }
                 int howBad = statuses[record].code;
-                RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer); // Look up routerInfo
-                String bwTier = "Unknown"; // Default and detect bandwidth tier
+                RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
+                String bwTier = "Unknown";
                 if (ri != null) {
-                    bwTier = ri.getBandwidthTier(); // Returns "Unknown" if none recognized
-                    if (bwTier.equals("Unknown")) {
-                        if (_log.shouldWarn()) {
-                            _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for 4h -> No Bandwidth Tier in RouterInfo");
-                        }
-                        String reason = "No Bandwidth Tier in RouterInfo";
-                        _context.commSystem().mayDisconnect(peer);
-                        _banLogger.logBan(peer, getIPPortFromHash(peer), "No Bandwidth Tier in RouterInfo", 4*60*60*1000);
-                        _context.banlist().banlistRouter(peer, reason, null, null, 4*60*60*1000);
-                    }
+                    bwTier = ri.getBandwidthTier();
+                } else if (_log.shouldLog(Log.WARN)) {
+                    _log.warn("Failed detecting bwTier, null routerInfo for: " + peer);
                 }
                 if (howBad == 0) {
                     // Record that a peer of the given tier agreed or rejected
@@ -373,10 +367,8 @@ class BuildHandler implements Runnable {
                     Properties props = statuses[record].props;
                     if (props != null) {
                         String avail = props.getProperty(BuildRequestor.PROP_AVAIL_BW);
-                        if (avail != null) {
-                            if (_log.shouldWarn())
-                                _log.warn(msg.getUniqueId() + ": peer replied available: " + avail + "KBps");
-                            // TODO
+                        if (avail != null && _log.shouldWarn()) {
+                            _log.warn(msg.getUniqueId() + ": peer replied available: " + avail + "KBps");
                         }
                     }
                 } else {
@@ -564,47 +556,10 @@ class BuildHandler implements Runnable {
             state.setLookupStartTime(lookupStartTime);
             int numTunnels = _context.tunnelManager().getParticipatingCount();
             int limit = Math.max(getMinLookupLimit(_context), Math.min(getMaxLookupLimit(_context), numTunnels * getPercentLookupLimit(_context) / 100));
-            long uptime = _context.router().getUptime();
-            long maxQueueLag = _context.jobQueue().getMaxLag();
-
-            // Check bandwidth usage instead of tunnel count - don't throttle until 95% of shared bandwidth used
-            int maxKBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond();
-            int share = (int) (maxKBps * _context.router().getSharePercentage());
-            int used = _context.router().get15sRate(true);
-            int shareBytes = share * 1024;
-            int bwUsagePercent = (shareBytes > 0) ? (used * 100 / shareBytes) : 0;
-            double cpuLoad = SystemVersion.getCPULoadAvg();
-            boolean highLoad = bwUsagePercent > 95 || cpuLoad > 90 || maxQueueLag > 1000;
-            boolean moderateLoad = bwUsagePercent > 85;
-            boolean isSlow = SystemVersion.isSlow();
-            if (isSlow) {highLoad = bwUsagePercent > 90 || cpuLoad > 85 || maxQueueLag > 1000;}
-
-            boolean lucky;
-            int dropPercent;
-            if (highLoad) {
-                lucky = false;
-                dropPercent = 100;
-                if (_log.shouldInfo()) {
-                    String reason = "";
-                    if (bwUsagePercent > 95) reason += "BW:" + bwUsagePercent + "% (" + (maxKBps) + "KB/s configured, " + used + "B/s used) ";
-                    if (cpuLoad > (isSlow ? 40 : 60)) reason += "CPU:" + String.format("%.1f", cpuLoad) + "% ";
-                    if (maxQueueLag > (isSlow ? 800 : 500)) reason += "Lag:" + maxQueueLag + "ms ";
-                    _log.info("High load detection -> " + reason + req);
-                }
-            } else if (moderateLoad) {
-                lucky = _context.random().nextInt(3) < 2;
-                dropPercent = 33;
-            } else if (!moderateLoad) {
-                lucky = true; // No drop when bandwidth comfortable
-                dropPercent = 0;
-            } else {
-                lucky = _context.random().nextInt(2) == 0;
-                dropPercent = 0;
-            }
 
             AtomicBoolean decremented = new AtomicBoolean(false);
             int currentLookups = _currentLookups.get();
-            if (currentLookups < limit && !highLoad && lucky) {
+            if (currentLookups < limit) {
                 _currentLookups.incrementAndGet();
                 if (_log.shouldInfo()) {
                     _log.info("Looking up next hop [" + nextPeer.toBase64().substring(0,6) +
@@ -613,15 +568,6 @@ class BuildHandler implements Runnable {
                 _context.netDb().lookupRouterInfo(nextPeer, new HandleReq(_context, state, req, nextPeer, decremented),
                                                   new TimeoutReq(_context, state, req, nextPeer, decremented), getNextHopLookupTimeout(_context));
             } else {
-                // Drop without ever incrementing
-                String status = "...\n* From: " + from + " [MsgID: " + state.msg.getUniqueId() + "]" + req;
-                if (highLoad) {
-                    _log.info("Dropping next hop lookup -> System is under load" + status);
-                } else if (!lucky) {
-                    if (_log.shouldInfo()) {
-                        _log.info("Dropping next hop lookup -> " + dropPercent + "% chance of drop" + status);
-                    }
-                }
                 _context.statManager().addRateData("tunnel.dropLookupThrottle", 1);
                 return -1;
             }
@@ -930,8 +876,8 @@ class BuildHandler implements Runnable {
             else {
                 char bw = ri.getBandwidthTier().charAt(0);
                 if (bw != 'N' && bw != 'O' && bw != 'P' && bw != 'X' &&
-                    ((isInGW && !_context.commSystem().haveInboundCapacity(87)) ||
-                    (isOutEnd && !_context.commSystem().haveOutboundCapacity(87)))) {
+                    ((isInGW && !_context.commSystem().haveInboundCapacity(93)) ||
+                    (isOutEnd && !_context.commSystem().haveOutboundCapacity(97)))) {
                     _context.statManager().addRateData("tunnel.rejectConnLimits", 1);
                     _context.throttle().setTunnelStatus("[rejecting/max]" + _x("Declining Tunnel Requests" + ":<br>" + _x("Connection limit reached")));
                     response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
@@ -1094,9 +1040,9 @@ class BuildHandler implements Runnable {
             // Connection congestion control:
             // If we rejected the request, are near our conn limits, and aren't connected to the next hop,
             // just drop it.
-            // 81% = between 75% control measures in Transports and 87% rejection above
+            // 96% = between control measures in Transports and 97% rejection above
             if ((!_context.routerHash().equals(nextPeer)) &&
-                (!_context.commSystem().haveOutboundCapacity(90)) &&
+                (!_context.commSystem().haveOutboundCapacity(96)) &&
                 (!_context.commSystem().isEstablished(nextPeer))) {
                 _context.statManager().addRateData("tunnel.dropConnLimits", 1);
                 if (shouldLog) {_log.warn("Dropping Tunnel Request -> Congestion control enabled (close to our limit) " + (_log.shouldInfo() ? req : ""));}

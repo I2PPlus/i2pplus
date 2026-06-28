@@ -1275,7 +1275,7 @@ public class TunnelPool {
                         untestedNow++;
                     }
                 }
-                int maxUntested = Math.max(effectiveTarget * 2, 4);
+                int maxUntested = Math.max(effectiveTarget * 2, 2);
                 if (untestedNow >= maxUntested) {
                     if (_log.shouldWarn()) {
                         _log.warn(toString() + " -> Too many UNTESTED tunnels (" + untestedNow +
@@ -1343,10 +1343,14 @@ public class TunnelPool {
 
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Removing tunnel " + info);}
 
-        // Clean up ExpireJob entry to avoid stale entries in the expiry map
-        if (info instanceof PooledTunnelCreatorConfig) {
-            ExpireJob.removeFromExpiration((PooledTunnelCreatorConfig) info);
-        }
+        // Do NOT cancel the ExpireJob here.  The 2-phase ExpireJob lifecycle
+        // must complete: Phase 1 (pool removal + LS refresh) has already run
+        // or will run, and Phase 2 (dispatcher removal) fires 10 min later
+        // (LEASESET_GRACE_PERIOD).  Canceling the ExpireJob here would leave
+        // the tunnel orphaned in the dispatcher without proper lifecycle
+        // management, and would yank the tunnel from the LS before clients
+        // with cached LSes have had time to transition.  The ExpireJob entry
+        // is cleaned up naturally when Phase 2 fires.
 
         _manager.tunnelFailed();
         _lifetimeProcessed += info.getProcessedMessagesCount();
@@ -1586,17 +1590,15 @@ public class TunnelPool {
 
     private void fail(TunnelInfo cfg) {
         if (cfg.getConsecutiveFailures() > 1) {
-            // Hard ceiling: a zombie with 10+ consecutive failures is useless
-            // and blocks pool recovery by keeping size() inflated.
-            // The collapse guard only applies below this threshold.
             int failures = cfg.getConsecutiveFailures();
             int remaining = size();
-            boolean isZombie = failures > 10;
-            if (remaining <= 1 && !isZombie) {
+            // A tunnel with 5+ consecutive test failures cannot route traffic.
+            // Remove it immediately — it wastes build slots and test cycles.
+            // The collapse guard only protects tunnels with <= 4 failures.
+            boolean isDead = failures > 4;
+            if (remaining <= 1 && !isDead) {
                 // Collapse guard: don't remove if this would leave the pool
-                // with zero usable tunnels.  A degraded tunnel is better than
-                // no tunnel — it can still route some traffic and prevents the
-                // EMERGENCY build storm that follows a pool collapse.
+                // with zero usable tunnels and the tunnel isn't conclusively dead.
                 if (_log.shouldWarn()) {
                     _log.warn("Keeping " + (cfg.isInbound() ? "inbound" : "outbound") +
                               " tunnel despite " + failures +
@@ -1609,7 +1611,7 @@ public class TunnelPool {
                 _log.warn("Removing " + (cfg.isInbound() ? "inbound" : "outbound") +
                           " tunnel via fail() -> " + failures +
                           " failures (remaining=" + remaining +
-                          (isZombie ? ", zombie" : "") + ") \n* " + cfg);
+                          (isDead ? ", dead" : "") + ") \n* " + cfg);
             }
             removeTunnel(cfg);
         }
@@ -1683,8 +1685,8 @@ public class TunnelPool {
             // Collect peers for priority testing — the sooner we retest,
             // the sooner bad peers drop from fast/high cap tiers
             if (peer != null && _context.clock().now() > getStartupTime(_context)) {
-                if (peersToTest == null) {peersToTest = new ArrayList<Hash>(end - start);}
-                if (!peersToTest.contains(peer)) {peersToTest.add(peer);}
+                if (peersToTest == null) {peersToTest = new ArrayList<Hash>(Math.min(end - start, 3));}
+                if (peersToTest.size() < 3 && !peersToTest.contains(peer)) {peersToTest.add(peer);}
             }
         }
         if (peersToTest != null && !peersToTest.isEmpty()) {
@@ -2274,13 +2276,14 @@ public class TunnelPool {
         // Batch removal: remove all at once under the lock, then do stats/cleanup
         // outside.  Calling removeTunnel() per-tunnel triggers ensureSufficientTunnels()
         // for each one, creating recursive build storms.
+        // Do NOT cancel ExpireJobs — the 2-phase lifecycle must complete so the
+        // tunnel stays in the dispatcher for the full LEASESET_GRACE_PERIOD
+        // after pool removal, giving clients with cached LeaseSets time to
+        // transition to new tunnels.
         _tunnelsLock.lock();
         try {
             for (TunnelInfo t : toRemove) {
                 _tunnels.remove(t);
-                if (t instanceof PooledTunnelCreatorConfig) {
-                    ExpireJob.removeFromExpiration((PooledTunnelCreatorConfig) t);
-                }
             }
         } finally {_tunnelsLock.unlock();}
         for (TunnelInfo t : toRemove) {
@@ -2373,13 +2376,12 @@ public class TunnelPool {
                       "pool total " + getTunnelCount() + ")");
         }
         // Batch removal under lock
+        // Do NOT cancel ExpireJobs — same reason as pruneNonGoodTunnels():
+        // the 2-phase lifecycle must complete for proper dispatcher cleanup.
         _tunnelsLock.lock();
         try {
             for (TunnelInfo t : toRemove) {
                 _tunnels.remove(t);
-                if (t instanceof PooledTunnelCreatorConfig) {
-                    ExpireJob.removeFromExpiration((PooledTunnelCreatorConfig) t);
-                }
             }
         } finally {_tunnelsLock.unlock();}
         for (TunnelInfo t : toRemove) {
@@ -2635,14 +2637,12 @@ public class TunnelPool {
             if (deficit > 0) {
                 // Cap per-cycle builds at base target — scale up gradually
                 int needed = Math.min(deficit, target);
-                // When tunnels are expiring (nearExpiry > 0), always build
-                // replacements regardless of backoff — waiting allows expiry
-                // to drain the pool to zero, forcing EMERGENCY recovery.
-                // Only skip proactive builds when the pool is merely below
-                // target with no imminent expiry (safeActive < effectiveTarget,
-                // nearExpiry == 0) — that's a capacity issue where backoff
-                // is appropriate.
-                if (nearExpiry == 0 && _manager.getExecutor().isPoolInBackoff(this)) {
+                // Respect pool backoff to prevent build storms.
+                // When tunnels are expiring (nearExpiry > 0), still allow
+                // builds if the pool is truly collapsed (safeActive == 0)
+                // but otherwise respect the backoff to avoid churning.
+                boolean collapsed = safeActive == 0 && nearExpiry > 0;
+                if (_manager.getExecutor().isPoolInBackoff(this) && !collapsed) {
                     if (_log.shouldDebug()) {
                         _log.debug(toString() + " -> Skipping " + needed +
                                   " proactive builds, pool in backoff");
@@ -2917,45 +2917,6 @@ public class TunnelPool {
             case TIMEOUT:
                 _consecutiveBuildTimeouts.incrementAndGet();
                 updatePairedProfile(cfg, false);
-                // For outbound non-exploratory tunnels, record the first-hop peer
-                // (cfg.getPeer(1)) as a first-hop failure. When a peer is established
-                // but doesn't respond to TBMs, the TunnelBuildFirstHopFailJob never
-                // fires (message was sent successfully) — only the build TIMEOUT
-                // detects the failure. Without this cooldown, the peer selector
-                // keeps re-selecting the same unresponsive peer, causing dozens of
-                // consecutive timeouts.
-                // Record only when consecutive timeouts are 2-6. A single isolated
-                // timeout (1) after a success is likely a fluke — don't penalize.
-                // At >= 7, selectPairedTunnel() uses exploratory tunnels for the
-                // reply, and TIMEOUTs are more likely from the unreliable reply
-                // path than the first-hop peer.
-                // Skip during startup (first 15 min) — transient transport failures
-                // aren't permanent peer problems.
-                int consec = _consecutiveBuildTimeouts.get();
-                if (!_settings.isExploratory() && !_settings.isInbound() &&
-                    cfg.getLength() > 1 && consec >= 2 &&
-                    _context.router().getUptime() >= 15*60*1000) {
-                    Hash firstHop = cfg.getPeer(1);
-                    if (firstHop != null && !firstHop.equals(_context.routerHash())) {
-                        if (_log.shouldWarn()) {
-                            _log.warn("Recording first-hop failure for [" +
-                                      firstHop.toBase64().substring(0,6) + "] after TIMEOUT on " + cfg);
-                        }
-                        TunnelPeerSelector.recordFirstHopFail(_context, firstHop);
-                        _context.profileManager().tunnelFailed(firstHop, 500);
-                        _context.profileManager().tunnelTimedOut(firstHop);
-                        // Demote from fast/high-cap tiers so the peer selector
-                        // doesn't keep re-selecting it.  Uses a 5-strike
-                        // threshold to avoid premature demotion on transient
-                        // failures.
-                        _context.profileOrganizer().demoteIfUnreachable(firstHop);
-                    }
-                }
-                // A failed build leaves the pool below target with no
-                // replacement queued.  Trigger an immediate rebuild so
-                // the pool doesn't sit empty until the next periodic
-                // check cycle.
-                if (_alive) { ensureSufficientTunnels(); }
                 break;
 
             case OTHER_FAILURE:

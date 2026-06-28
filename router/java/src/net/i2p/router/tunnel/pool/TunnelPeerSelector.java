@@ -50,9 +50,10 @@ import net.i2p.router.peermanager.ProfileOrganizer;
 public abstract class TunnelPeerSelector extends ConnectChecker {
 
     private static final String DEFAULT_EXCLUDE_CAPS = String.valueOf(Router.CAPABILITY_BW12) +
-                                                        String.valueOf(Router.CAPABILITY_BW32) +
                                                         String.valueOf(Router.CAPABILITY_CONGESTION_SEVERE) +
                                                         String.valueOf(Router.CAPABILITY_NO_TUNNELS);
+    private static final String ALT_EXCLUDE_CAPS = String.valueOf(Router.CAPABILITY_BW12) +
+                                                   String.valueOf(Router.CAPABILITY_NO_TUNNELS);
 
     protected static final double ATTACK_THRESHOLD = ProfileOrganizer.ATTACK_THRESHOLD;
     protected static final long STARTUP_WARNING_SUPPRESS_MS = 5 * 60 * 1000;
@@ -330,7 +331,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  Used by Excluder to classify exclusion reasons for diagnostics.
      */
     private String getExclusionReason(Hash peerHash, boolean isInbound, boolean isExploratory) {
-        final long BANDWIDTH_REJECTION_CUTOFF_MS = 60_000L;
+        final long BANDWIDTH_REJECTION_CUTOFF_MS = 20_000L;
 
         PeerProfile profile = ctx.profileOrganizer().getProfileNonblocking(peerHash);
         if (profile != null && wasRecentlyRejected(profile, BANDWIDTH_REJECTION_CUTOFF_MS)) {
@@ -362,6 +363,40 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             String excludeCaps = getEffectiveExcludeCaps(ctx);
             if (shouldExclude(ctx, routerInfo, excludeCaps, isExploratory)) {
                 return "slow/capped";
+            }
+        }
+
+        // Pre-qualification: reject peers with zero connectivity signal.
+        // Peers that have never been tested, heard from, or connected to
+        // will waste tunnel builds and test cycles.  This is always active
+        // for client pools (skipped for exploratory and during startup).
+        // The filter is gentle — it only requires ANY evidence of life —
+        // so it won't starve pools with 900+ fast/high-cap peers.
+        if (!isExploratory && !isInStartupGracePeriod(ctx)) {
+            boolean hasSignal = false;
+            // Connected peers always pass
+            if (ctx.commSystem().isEstablished(peerHash)) {
+                hasSignal = true;
+            }
+            // Recently heard from or successfully sent to
+            if (!hasSignal && profile != null) {
+                long now = ctx.clock().now();
+                if (profile.getLastHeardFrom() > 0 &&
+                    now - profile.getLastHeardFrom() < 10 * 60 * 1000) {
+                    hasSignal = true;
+                }
+                if (profile.getLastSendSuccessful() > 0 &&
+                    now - profile.getLastSendSuccessful() < 10 * 60 * 1000) {
+                    hasSignal = true;
+                }
+            }
+            // Has a successful tunnel test
+            if (!hasSignal && profile != null &&
+                profile.getTunnelHistory().getLastTestedSuccessfully() > 0) {
+                hasSignal = true;
+            }
+            if (!hasSignal) {
+                return "no-signal";
             }
         }
 
@@ -481,7 +516,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     protected boolean allowAsOBEP(Hash h) {
         RouterInfo ri = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(h);
         if (ri == null)
-            return false;
+            return true;
         return canConnect(ri, ANY_V4);
     }
 
@@ -498,7 +533,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     protected boolean allowAsIBGW(Hash h) {
         RouterInfo ri = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(h);
         if (ri == null)
-            return false;
+            return true;
         if (ri.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0)
             return false;
         return canConnect(ANY_V4, ri);
@@ -552,7 +587,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @return non-null, possibly empty
      */
     private static String getExcludeCaps(RouterContext ctx) {
-        return ctx.getProperty("router.excludePeerCaps", DEFAULT_EXCLUDE_CAPS);
+        String dflt = (ctx.random().nextInt(4) != 0) ? DEFAULT_EXCLUDE_CAPS : ALT_EXCLUDE_CAPS;
+        return ctx.getProperty("router.excludePeerCaps", dflt);
     }
 
     /** SSU2 fixes (2.1.0), Congestion fixes (2.2.0) */
@@ -656,27 +692,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             return false;
         }
 
-        // Client pool pre-qualification: reject peers with ZERO evidence of
-        // connectivity.  A peer that has never been tested, hasn't been heard
-        // from in hours, and isn't currently connected is very likely to fail
-        // as a first-hop, wasting the build attempt.
-        // When there are plenty of fast peers, still allow ~10% of untested
-        // peers through so struggling pools can discover new performant routes.
-        Hash peerHash = ident.calculateHash();
-        PeerProfile profile = ctx.profileOrganizer().getProfile(peerHash);
-        if (profile != null && !ctx.commSystem().isBacklogged(peerHash)) {
-            boolean hasRecentTest = profile.getTunnelTestTimeAverage() > 0;
-            long lastHeardFrom = profile.getLastHeardFrom();
-            long heardCutoff = ctx.clock().now() - 2 * 60 * 60 * 1000;
-            boolean recentlyHeard = lastHeardFrom > heardCutoff;
-            boolean isConnected = ctx.commSystem().isEstablished(peerHash);
-            if (!hasRecentTest && !recentlyHeard && !isConnected && fastPeerCount >= 20) {
-                if (ctx.random().nextInt(10) > 0) {
-                    return true;
-                }
-            }
-        }
-
         // Peer is acceptable
         return false;
     }
@@ -685,11 +700,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     private static final String PROP_OUTBOUND_CLIENT_EXCLUDE_UNREACHABLE = "router.outboundClientExcludeUnreachable";
     private static final String PROP_INBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE = "router.inboundExploratoryExcludeUnreachable";
     private static final String PROP_INBOUND_CLIENT_EXCLUDE_UNREACHABLE = "router.inboundClientExcludeUnreachable";
-    private static final boolean DEFAULT_OUTBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE = true;
-    private static final boolean DEFAULT_OUTBOUND_CLIENT_EXCLUDE_UNREACHABLE = true;
+    private static final boolean DEFAULT_OUTBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE = false;
+    private static final boolean DEFAULT_OUTBOUND_CLIENT_EXCLUDE_UNREACHABLE = false;
     // see comments at getExclude() above
-    private static final boolean DEFAULT_INBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE = true;
-    private static final boolean DEFAULT_INBOUND_CLIENT_EXCLUDE_UNREACHABLE = true;
+    private static final boolean DEFAULT_INBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE = false;
+    private static final boolean DEFAULT_INBOUND_CLIENT_EXCLUDE_UNREACHABLE = false;
 
     /**
      * do we want to skip unreachable peers?

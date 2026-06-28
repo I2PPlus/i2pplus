@@ -123,7 +123,7 @@ public class TestJob extends JobImpl {
      *  test failure is treated as a false negative (reply-path issue).
      *  @since 0.9.69+
      */
-    private static final long RECENT_TRAFFIC_MS = 60 * 1000;
+    private static final long RECENT_TRAFFIC_MS = 30 * 1000;
 
     /**
      * Maximum number of TestJob instances that should be queued before deferring new ones.
@@ -1100,14 +1100,17 @@ public class TestJob extends JobImpl {
             long staleMs = nowMs - lastTransfer;
             if (staleMs < RECENT_TRAFFIC_MS) {
                 // Recently carried data — likely a reply-path false negative.
-                // Allow up to 2 recent-traffic exemptions; after that, treat
+                // Allow up to 1 recent-traffic exemption; after that, treat
                 // as a normal failure so the tunnel doesn't become immortal.
+                // Reduced from 2 to 1 to prevent broken tunnels from being kept
+                // alive too long when they're failing tests but recently carried
+                // data — this blocks replacement with working tunnels.
                 int recentExemptions = _cfg.getRecentTestExemptions();
-                if (recentExemptions < 2) {
+                if (recentExemptions < 1) {
                     _cfg.incrementRecentTestExemptions();
                     if (_log.shouldWarn()) {
                         _log.warn("Tunnel Test failed -> Keeping data-carrying tunnel (recent traffic, exemption " +
-                                  (recentExemptions + 1) + "/2): " + _cfg +
+                                  (recentExemptions + 1) + "/1): " + _cfg +
                                   " (verified=" + _cfg.getVerifiedBytesTransferred() +
                                   " bytes, last transfer " + staleMs + "ms ago)");
                     }
@@ -1178,13 +1181,16 @@ public class TestJob extends JobImpl {
             // zombie ceiling in fail() can trigger — otherwise
             // failures accumulate indefinitely via incrementalTestFailures()
             // without ever being checked, creating zombie tunnels.
-            // At >2 failures the tunnel is clearly broken — route through
+            // At >1 failures the tunnel is clearly broken — route through
             // fail() promptly so the zombie ceiling can trigger and prevent
             // pool collapse from accumulating dead tunnels.
+            // Reduced from >2 to >1 to prevent broken tunnels from being kept
+            // alive too long when they're failing tests — this blocks
+            // replacement with working tunnels.
             _cfg.incrementTestFailures();
             _cfg.setTestFailed();
             _pool.notifyServerPoolTestFailed();
-            if (_cfg.getTunnelFailures() > 2) {
+            if (_cfg.getTunnelFailures() > 1) {
                 // Route through fail() so zombie ceiling can trigger
                 _pool.tunnelFailed(_cfg);
             }

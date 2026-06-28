@@ -66,7 +66,7 @@ class BuildExecutor implements Runnable {
      * Maps: TunnelPool -> [consecutiveFailures, backoffUntilMs]
      */
     private static final int CONSECUTIVE_FAILURE_THRESHOLD = 3;
-    private static final long POOL_BACKOFF_MS = 1 * 1000;
+    private static final long POOL_BACKOFF_MS = 8 * 1000;
     private final ConcurrentHashMap<TunnelPool, long[]> _poolFailureState = new ConcurrentHashMap<>(64);
     private int _keepAliveCounter;
     private volatile long _adaptiveTimeout;
@@ -103,15 +103,10 @@ class BuildExecutor implements Runnable {
      * @return maximum concurrent builds allowed
      */
     private int getMaxConcurrentBuilds() {
-        int cores = SystemVersion.getCores();
-        int result = _context.getProperty("router.maxConcurrentBuilds", Math.min(cores * 4, 32));
-        if (_log.shouldDebug()) {
-            _log.debug("Max concurrent tunnel builds: " + result + " (cores=" + cores + ")");
-        }
-        return result;
+        return Math.max(SystemVersion.getCores() * 2, 16);
     }
     private static final int LOOP_TIME = 1000; // calculate required tunnels to build every 1s
-    private static final int TUNNEL_POOLS = SystemVersion.isSlow() ? 24 : 48;
+    private static final int TUNNEL_POOLS = 8;
     private static long getGracePeriod(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.build.gracePeriod", 60*1000);
     }
@@ -485,17 +480,6 @@ class BuildExecutor implements Runnable {
 
         _context.statManager().addRateData("tunnel.concurrentBuilds", concurrent);
 
-        long lag = _context.jobQueue().getMaxLag();
-        int cpuloadavg = SystemVersion.getCPULoadAvg();
-        boolean highLoad = (lag > 1000 && cpuloadavg > 98);
-        if (_context.router().getUptime() > 5 * 60 * 1000 && highLoad) {
-            if (_log.shouldWarn()) {
-                _log.warn("System is under load -> Slowing down new tunnel builds...");
-            }
-            _context.statManager().addRateData("tunnel.concurrentBuildsLagged", concurrent, lag);
-            return 1;
-        }
-
         return allowed;
     }
 
@@ -691,13 +675,6 @@ class BuildExecutor implements Runnable {
             }
             wanted.clear();
             pools.clear();
-
-            // Always delay between iterations to prevent rapid spinning
-            try {
-                Thread.sleep(LOOP_TIME);
-            } catch (InterruptedException ie) {
-                // ignore
-            }
         }
 
         if (_log.shouldInfo()) {
@@ -777,13 +754,15 @@ class BuildExecutor implements Runnable {
 
     /**
      *  Check if a pool is in backoff due to consecutive build failures.
-     *  Called by ensureSufficientTunnels() to avoid spawning builds that
-     *  will just timeout again.
-     *  @return true if the pool is in backoff and builds should be suppressed
+     *  Uses a short (8s) backoff to prevent build storms while avoiding
+     *  the starvation caused by the original 30s backoff.
+     *  Failure tracking is retained for stats only.
      */
     boolean isPoolInBackoff(TunnelPool pool) {
         long[] state = _poolFailureState.get(pool);
-        return state != null && state[1] > System.currentTimeMillis();
+        if (state == null) return false;
+        long backoffUntil = state[1];
+        return backoffUntil > 0 && _context.clock().now() < backoffUntil;
     }
 
     /**
@@ -902,16 +881,15 @@ class BuildExecutor implements Runnable {
          * - First-hop failures (OTHER_FAILURE, buildTime >= 1000): unreachable peers
          *   via TunnelBuildFirstHopFailJob
          * - TIMEOUT results: the build waited the full adaptive timeout with no
-         *   reply.  Counting TIMEOUTs is circular — they set the timeout, then
-         *   timeout at that value, then drive it higher.  A TIMEOUT means the
-         *   peer was unreachable or the message was dropped, NOT that the
-         *   network is slow.  Including them inflates the global adaptive
-         *   timeout to 45s, slowing recovery for ALL pools.
-         * Only SUCCESS and active FAILURE (active rejection, buildTime < timeout)
-         * reflect actual network conditions and should influence adaptive timing.
+         *   reply.  Including TIMEOUTs in the adaptive calculation ensures
+         *   the timeout doesn't decrease below what the network can actually
+         *   support.  Excluding them inflates the apparent success rate,
+         *   driving the timeout DOWN and causing MORE timeouts (positive
+         *   feedback loop).  The adaptive clamp (10-25s) prevents TIMEOUTs
+         *   from inflating the timeout beyond reason.
          */
         if (result == Result.SUCCESS ||
-            (buildTime >= 50 && !firstHopFailure && result != Result.TIMEOUT)) {
+            (buildTime >= 50 && !firstHopFailure)) {
             updateBuildStats(result);
         }
         StatManager smFH = _context.statManager();
@@ -1100,24 +1078,6 @@ class BuildExecutor implements Runnable {
         for (TunnelPool pool : sorted) {
             if (!pool.isAlive()) {continue;}
 
-            /* Per-pool backoff: skip pools that have exceeded consecutive failure
-             * threshold. This prevents build storms when a pool's selected peers
-             * are unreachable — instead of queuing 4 builds per loop iteration
-             * indefinitely, we pause for POOL_BACKOFF_MS and retry later.
-             * Exception: pools at 0 usable tunnels must rebuild immediately —
-             * backoff should never block recovery from total collapse.
-             */
-            long[] failureState = _poolFailureState.get(pool);
-            if (failureState != null && failureState[1] > System.currentTimeMillis()) {
-                if (pool.getUsableTunnelCount() > 1) {
-                    continue;
-                }
-                // Pool at 0 or 1 usable tunnels — fall through to rebuild
-                // despite backoff.  A pool with 1 usable tunnel is one
-                // failure from collapse; rebuild proactively rather than
-                // wait for the last tunnel to die.
-            }
-
             int wantedCount = pool.getSettings().getTotalQuantity();
             String nickname = pool.getSettings().getDestinationNickname();
             boolean isPing = nickname != null && nickname.startsWith("Ping");
@@ -1235,14 +1195,27 @@ class BuildExecutor implements Runnable {
                 builds = goodExpire330s + goodExpire270s + goodExpire210s;
                 int goodDeficit = target - goodExpireLater;
                 if (goodDeficit > 0) {
-                    if (isCritical) {
-                        builds += goodDeficit;
-                    } else {
-                        long nowMs = System.currentTimeMillis();
-                        Long lastRebuild = _lastRebuildTime.get(pool);
-                        if (lastRebuild == null || nowMs - lastRebuild >= getGoodDeficitThrottle(_context)) {
+                    /* Don't build when untested tunnels can cover the deficit.
+                     * UNTESTED tunnels are recently built and awaiting testing —
+                     * building more just piles up untested tunnels faster than
+                     * the test queue can process them.
+                     */
+                    int untestedCount = 0;
+                    for (TunnelInfo ti : tunnels) {
+                        if (ti.getTestStatus() == net.i2p.router.TunnelTestStatus.UNTESTED) {
+                            untestedCount++;
+                        }
+                    }
+                    if (untestedCount < goodDeficit) {
+                        if (isCritical) {
                             builds += goodDeficit;
-                            _lastRebuildTime.put(pool, nowMs);
+                        } else {
+                            long nowMs = System.currentTimeMillis();
+                            Long lastRebuild = _lastRebuildTime.get(pool);
+                            if (lastRebuild == null || nowMs - lastRebuild >= getGoodDeficitThrottle(_context)) {
+                                builds += goodDeficit;
+                                _lastRebuildTime.put(pool, nowMs);
+                            }
                         }
                     }
                 }
@@ -1284,7 +1257,7 @@ class BuildExecutor implements Runnable {
              * builds regardless. Emergency test priority in TestJob.shouldSchedule()
              * ensures new tunnels get tested ASAP.
              */
-            int maxBuilds = Math.max(target * 2, 4);
+            int maxBuilds = Math.max(target * 2, 2);
             if (builds > maxBuilds) builds = maxBuilds;
             if (!isCritical) {
                 int testJobs = TestJob.getCurrentTestJobCount();
