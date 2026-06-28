@@ -75,9 +75,10 @@ class ThrottledPumpedTunnelGateway extends PumpedTunnelGateway {
      * @param msg the I2NP message to add
      * @param toRouter optional target router after the endpoint
      * @param toTunnel optional target tunnel after the endpoint
+     * @return true if the message was accepted, false if dropped for bandwidth or queue full
      */
     @Override
-    public void add(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
+    public boolean add(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
         // Estimate size with overheads to better match actual transmitted size
         int size = msg.getMessageSize() + 60;
         if (size > 1024) {
@@ -93,10 +94,10 @@ class ThrottledPumpedTunnelGateway extends PumpedTunnelGateway {
             for (int i = 0; i < kb; i++) {
                 _config.incrementProcessedMessages();
             }
-            return;  // Drop the message without queuing
+            return false;  // Drop the message without queuing
         }
 
-        add(new PendingGatewayMessage(msg, toRouter, toTunnel));
+        return add(new PendingGatewayMessage(msg, toRouter, toTunnel));
     }
 
     /**

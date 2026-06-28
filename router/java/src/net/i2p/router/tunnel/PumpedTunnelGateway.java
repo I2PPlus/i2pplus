@@ -106,34 +106,38 @@ class PumpedTunnelGateway extends TunnelGateway {
 
     /**
      * Adds a message to be sent down the tunnel.
-     * If the prequeue is full, the message is dropped silently and a statistic is updated.
+     * If the prequeue is full, the message is dropped and a statistic is updated.
      *
      * This method is optimized for outbound gateways and called by TPTG for inbound.
      *
      * @param msg the message to send
      * @param toRouter optional target router
      * @param toTunnel optional target tunnel
+     * @return true if the message was accepted, false if the prequeue is full
      */
     @Override
-    public void add(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
+    public boolean add(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
         OutboundGatewayMessage cur = new OutboundGatewayMessage(msg, toRouter, toTunnel);
         if (_log.shouldDebug()) {
             _log.debug("Outbound PumpedTunnelGateway added [Type " + msg.getType() + "] at priority: " + cur.getPriority());
         }
-        add(cur);
+        return add(cur);
     }
 
     /**
      * Adds a PendingGatewayMessage to the prequeue and notifies the pumper to process it.
      *
      * @param cur the PendingGatewayMessage to add
+     * @return true if the message was accepted, false if the prequeue is full
      */
-    protected void add(PendingGatewayMessage cur) {
+    protected boolean add(PendingGatewayMessage cur) {
         _messagesSent++;
         if (_prequeue.offer(cur)) {
             _pumper.wantsPumping(this);
+            return true;
         } else {
             _context.statManager().addRateData("tunnel.dropGatewayOverflow", 1);
+            return false;
         }
     }
 

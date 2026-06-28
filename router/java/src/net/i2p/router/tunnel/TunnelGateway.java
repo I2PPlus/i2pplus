@@ -70,23 +70,25 @@ abstract class TunnelGateway {
      * Add a message to be sent down the tunnel, where we are the inbound gateway.
      *
      * @param msg message received to be sent through the tunnel
+     * @return true if the message was accepted, false if dropped
      */
-    public void add(TunnelGatewayMessage msg) {
-        add(msg.getMessage(), null, null);
+    public boolean add(TunnelGatewayMessage msg) {
+        return add(msg.getMessage(), null, null);
     }
 
     /**
      * Add a message to be sent down the tunnel, either sending it now (perhaps
      * coalesced with other pending messages) or after a brief pause (_flushFrequency).
-     * If it is queued up past its expiration, it is silently dropped
+     * If it is queued up past its expiration, it is silently dropped.
      *
      * UNUSED - see overrides
      *
      * @param msg message to be sent through the tunnel
      * @param toRouter router to send to after the endpoint (or null for endpoint processing)
      * @param toTunnel tunnel to send to after the endpoint (or null for endpoint or router processing)
+     * @return true if the message was accepted, false if dropped
      */
-    public void add(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
+    public boolean add(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
         throw new UnsupportedOperationException("unused, right?");
 /****
         _messagesSent++;

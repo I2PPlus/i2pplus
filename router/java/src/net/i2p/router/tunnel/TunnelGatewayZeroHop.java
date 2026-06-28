@@ -37,9 +37,10 @@ class TunnelGatewayZeroHop extends TunnelGateway {
      * See TunnelGatewayMessage for details.
      *
      * @param msg message received to be sent through the tunnel
+     * @return true if the message was accepted, false on conversion failure
      */
     @Override
-    public void add(TunnelGatewayMessage msg) {
+    public boolean add(TunnelGatewayMessage msg) {
         I2NPMessage imsg = msg.getMessage();
         if (_config.isInbound()) {
             if (imsg instanceof UnknownI2NPMessage) {
@@ -52,11 +53,11 @@ class TunnelGatewayZeroHop extends TunnelGateway {
                         _log.debug("Unable to convert to standard message class at zero-hop IBGW", ime);
                     else if (_log.shouldInfo())
                         _log.info("Unable to convert to standard message class at zero-hop IBGW \n* Reason: " + ime.getMessage());
-                    return;
+                    return false;
                 }
             }
         }
-        add(imsg, null, null);
+        return add(imsg, null, null);
     }
 
     /**
@@ -67,9 +68,10 @@ class TunnelGatewayZeroHop extends TunnelGateway {
      * @param msg message to be sent through the tunnel
      * @param toRouter router to send to after the endpoint (or null for endpoint processing)
      * @param toTunnel tunnel to send to after the endpoint (or null for endpoint or router processing)
+     * @return true always, as zero-hop gateways forward immediately
      */
     @Override
-    public void add(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
+    public boolean add(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
         if (_log.shouldDebug())
             _log.debug("Zero hop gateway: distribute" + (_config.isInbound() ? "Inbound" : " Outbound")
                        + " to [" + (toRouter != null ? toRouter.toBase64().substring(0,6) + "]" : "" )
@@ -81,5 +83,6 @@ class TunnelGatewayZeroHop extends TunnelGateway {
             _outDistributor.distribute(msg, toRouter, toTunnel);
         }
        _config.incrementProcessedMessages();
+       return true;
     }
 }

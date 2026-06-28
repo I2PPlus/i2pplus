@@ -788,13 +788,18 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Dispatch an outbound message through a tunnel
+     * Dispatch an outbound message through a tunnel.
+     * @return true if the message was accepted by the tunnel gateway, false if dropped
      */
-    public void dispatchOutbound(I2NPMessage msg, TunnelId outboundTunnel, Hash targetPeer) {
-        dispatchOutbound(msg, outboundTunnel, null, targetPeer);
+    public boolean dispatchOutbound(I2NPMessage msg, TunnelId outboundTunnel, Hash targetPeer) {
+        return dispatchOutbound(msg, outboundTunnel, null, targetPeer);
     }
 
-    public void dispatchOutbound(I2NPMessage msg, TunnelId outboundTunnel, TunnelId targetTunnel, Hash targetPeer) {
+    /**
+     * Dispatch an outbound message through a tunnel.
+     * @return true if the message was accepted by the tunnel gateway, false if dropped
+     */
+    public boolean dispatchOutbound(I2NPMessage msg, TunnelId outboundTunnel, TunnelId targetTunnel, Hash targetPeer) {
         if (outboundTunnel == null) throw new IllegalArgumentException("null outbound tunnel?");
         long now = _context.clock().now();
         long age = now - msg.getMessageExpiration();
@@ -811,7 +816,7 @@ public class TunnelDispatcher implements Service {
                     _log.warn("Dropping tunnel message that expired " +
                                (now - msg.getMessageExpiration()) + "ms ago -> " + msg);
                 }
-                return;
+                return false;
             } else if (msg.getMessageExpiration() < now) {
                 if (_log.shouldWarn()) {
                     _log.warn("Dropping stale tunnel message  -> Expired " + age + "ms ago (Cutoff: 60s)" + (hasMsg ? msg : ""));
@@ -821,7 +826,7 @@ public class TunnelDispatcher implements Service {
                     _log.warn("Dropping tunnel message that expires " + age + "ms in the future [!] (Cutoff: " +
                                MAX_FUTURE_EXPIRATION / 1000 + "s)" + (hasMsg ? msg : ""));
                 }
-                return;
+                return false;
             }
 
             // Ensure at least 20s expiration for tunnel transit, but don't
@@ -836,19 +841,35 @@ public class TunnelDispatcher implements Service {
             long tid1 = outboundTunnel.getTunnelId();
             long tid2 = (targetTunnel != null ? targetTunnel.getTunnelId() : -1);
             _context.messageHistory().tunnelDispatched(msg.getUniqueId(), tid1, tid2, targetPeer, "Outbound gateway");
-            gw.add(msg, targetPeer, targetTunnel);
+            boolean accepted = gw.add(msg, targetPeer, targetTunnel);
+
+            if (!accepted) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Tunnel gateway rejected message (queue full or throttled) for [TunnelId " + outboundTunnel + "]");
+                }
+                return false;
+            }
 
             if (targetTunnel == null) {
                 _context.statManager().addRateData("tunnel.dispatchOutboundPeer", 1);
             } else {
                 _context.statManager().addRateData("tunnel.dispatchOutboundTunnel", 1);
             }
+            return true;
         } else {
             _context.messageHistory().droppedTunnelGatewayMessageUnknown(msg.getUniqueId(), outboundTunnel.getTunnelId());
             if (_log.shouldWarn()) {
-                _log.warn("No matching Outbound tunnel for [TunnelId " + outboundTunnel +
-                          "] from " + _outboundGateways.size() + " Outbound gateways"); //, new Exception("src"));
+                StringBuilder sb = new StringBuilder("No matching Outbound tunnel for [TunnelId ");
+                sb.append(outboundTunnel).append("] from ").append(_outboundGateways.size()).append(" gateways");
+                if (_log.shouldDebug()) {
+                    sb.append(" available=");
+                    for (TunnelId tid : _outboundGateways.keySet()) {
+                        sb.append(tid.getTunnelId()).append(' ');
+                    }
+                }
+                _log.warn(sb.toString());
             }
+            return false;
         }
     }
 
