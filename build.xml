@@ -5396,7 +5396,7 @@
     <echo message="Updating Tor blocklist..."/>
     <exec executable="/bin/sh" outputproperty="shell.output">
       <arg value="-c"/>
-      <arg value="cd installer/resources/ &amp;&amp; ./maketorblocklist.sh"/>
+      <arg value="cd installer/resources/blocklist/ &amp;&amp; ./maketorblocklist-ipv4+ipv6.sh"/>
     </exec>
     <condition property="download.success">
       <contains string="${shell.output}" substring="consolidated IP ranges saved to: "/>

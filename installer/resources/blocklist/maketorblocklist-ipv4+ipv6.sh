@@ -7,8 +7,8 @@
 # downloaded source files
 
 # Specify input, output, and proxy variables
-input_file="torbulkexitlist"
-second_list_input_file="torlist_exit"
+input_file="/tmp/torbulkexitlist"
+second_list_input_file="/tmp/torlist_exit"
 output_file="blocklist_tor.txt"
 http_proxy=${http_proxy:-"http://127.0.0.1:4444"}
 backup_http_proxy=${http_backup_proxy:-"http://127.0.0.1:4001"}
@@ -41,42 +41,18 @@ if [ -z "$(which curl)" ]; then
   exit 1
 fi
 
-# Check if input files already exist
+# Remove existing input files
 if [ -f $input_file ]; then
-  read -p "The file $input_file already exists. Do you want to delete it? [y/N] " choice
-  case "$choice" in
-    y|Y )
-      rm $input_file
-      echo " > Deleted existing local copy of $input_file"
-      ;;
-    * )
-      echo " > Keeping existing local copy of $input_file"
-      # Skip the download process for this file
-      download_torbulkexitlist=false
-      ;;
-  esac
-else
-  # Set default value for download
-  download_torbulkexitlist=true
+  rm $input_file
+  echo " > Deleted existing local copy of $input_file"
 fi
+download_torbulkexitlist=true
 
 if [ -f $second_list_input_file ]; then
-  read -p "The file $second_list_input_file already exists. Do you want to delete it? [y/N] " choice
-  case "$choice" in
-    y|Y )
-      rm $second_list_input_file
-      echo " > Deleted existing local copy of $second_list_input_file"
-      ;;
-    * )
-      echo " > Keeping existing local copy of $second_list_input_file"
-      # Skip the download process for this file
-      download_second_list=false
-      ;;
-  esac
-else
-  # Set default value for download
-  download_second_list=true
+  rm $second_list_input_file
+  echo " > Deleted existing local copy of $second_list_input_file"
 fi
+download_second_list=true
 
 # Download the latest list from Tor Project if needed
 if $download_torbulkexitlist; then
@@ -173,16 +149,8 @@ output_count=$(wc -l < "$output_file")
 ips_count=$((output_count - 2))
 echo " > $ips_count consolidated IP ranges and transformed IPv6 addresses saved to: $output_file"
 
-# Clean up: Offer to remove downloaded input files
+# Clean up: Remove downloaded input files
 if [ -f $input_file ] || [ -f $second_list_input_file ]; then
-  read -p "Do you want to delete the downloaded source files ($input_file and $second_list_input_file)? [y/N] " choice
-  case "$choice" in
-    y|Y )
-      rm $input_file $second_list_input_file
-      echo " > Deleted $input_file and $second_list_input_file"
-      ;;
-    * )
-      echo " > Keeping $input_file and $second_list_input_file"
-      ;;
-  esac
+  rm -f $input_file $second_list_input_file
+  echo " > Deleted $input_file and $second_list_input_file"
 fi

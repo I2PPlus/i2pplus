@@ -1,3 +1,61 @@
+2026-06-28 dr|z3d
+  * Router: Reduce peer test frequency to 5 min (was 5s); limit concurrency
+    to 1; simplify timeout to never reduce below configured default
+  * Tunnel:
+    - Fix ExpireJob lifecycle — increase MAX_ENTRY_LIFETIME 15→25 min;
+      null-safe getTunnelKey(); try-catch in runJob/runPhase; per-tunnel
+      exception handling in removeTunnel/refreshLeaseSet/dispatcher.remove
+    - Remove ExpireJob.removeFromExpiration() from pool removal paths to
+      complete 2-phase lifecycle; lower zombie ceiling >10→>4
+    - Build backoff 1→8s; maxConcurrent cores*2 min 16; TUNNEL_POOLS
+      48→8; re-include TIMEOUT in adaptive stats; skip builds when
+      untested tunnels cover deficit
+    - BuildHandler: fix RTT calc; remove "No BW Tier" ban; raise inbound
+      conn limit 87→93%, outbound 87→97%; congestion threshold 90→96%
+    - Peer selection: centralize no-signal pre-qualification; randomize
+      BW32 exclusion; default unreachable-exclude to false
+    - TestJob: recent-traffic window 60→30s; exemptions 2→1; failure
+      threshold >2→>1 for faster dead tunnel removal
+  * Streaming: Route SYN packets to receiveNewSyn regardless of sendId;
+    close stale connections on duplicate SYN; relax ack guard for SYN-ACK;
+    handle empty nacks array; set _connectionError on bounded connect
+    timeout; simplify packetSendChoke; remove invalidateStaleLeaseSet
+  * I2PTunnel: Restore HTTP keep-alive socket overrides
+
+2026-06-27 dr|z3d
+  * Tunnel:
+    - Extend UNTESTED tunnel lifetime up to 6×30s before expiry to prevent
+      death spiral from premature removal
+    - Preserve IB endpoint participants in cleanup; don't shorten outbound
+      dispatch expiry
+    - Reduce max concurrent builds to cores×4, cap per-iteration at 4;
+      simplify TestJob scheduling; remove adaptive queue logic
+    - Dynamic pool scaling; server-pool prune guard; LS fallback reserve;
+      zombie ceiling fixes
+  * Console: Improve streaming connections unavailable message; add
+    auto-refresh
+
+2026-06-25 dr|z3d
+  * Tunnel: Atomic per-pool test cap; peer-aware test timeouts; skip
+    slow peers; don't prune UNTESTED tunnels or fire EMERGENCY when
+    untested capacity exists
+  * Console: Add auto-refresh, tablesort, and direction filtering to
+    /streams page
+
+2026-06-24 dr|z3d
+  * Tunnel:
+    - Fix pool collapse and churn from aggressive pruning, slow rebuilds,
+      and stale peer failures
+    - Fix EMERGENCY build storm, zombie threshold, LS cache invalidation,
+      reduce churn
+    - Stabilize pool collapse; fix EMERGENCY deadlock; cap test scheduling
+  * ProfileOrganizer: Filter first-hop-failing peers in isSelectable;
+    atomic strike tracking
+  * TunnelPeerSelector: Extend first-hop cooldown to 5 min
+  * BuildExecutor: Synchronize pool failure tracking; prioritize collapsed
+    pools in build queue
+  * ClientAppConfig: Consolidate non-boot startup delay to 15s
+
 2026-06-23 dr|z3d
   * Router: Fix tunnel pool collapse — reduce aggressive peer filtering;
     remove UNTESTED tunnel skipping; increase test throughput (shorter
