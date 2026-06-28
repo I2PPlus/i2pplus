@@ -219,12 +219,16 @@ class ConnectionHandler {
                         // His ID not guaranteed to be unique to us, but probably is...
                         // only act on it on a destination match too
                         if (from.equals(oldcon.getRemotePeer())) {
-                            // The old connection is likely stale (client timed out and is retrying).
-                            // Close it to free the stream ID, then proceed to create a new connection.
+                            // This is a retransmitted SYN - the client hasn't received our
+                            // SYN-ACK yet (or it was lost). Re-send the SYN-ACK for the
+                            // existing connection rather than destroying it and breaking
+                            // any data the client may have already sent using the old
+                            // stream IDs.
                             if (_log.shouldWarn() && syn != null) {
-                                _log.warn("Received SYN for existing connection, closing old: " + oldcon + "\n* New SYN: " + syn);
+                                _log.warn("Received retransmitted SYN for existing connection, re-sending SYN-ACK: " + oldcon + "\n* SYN: " + syn);
                             }
-                            oldcon.disconnect(false, true);
+                            resendSynAck(oldcon, syn);
+                            continue;
                         }
                     }
                     Connection con = _manager.receiveConnection(syn);
@@ -293,6 +297,36 @@ class ConnectionHandler {
         //reply.setOptionalFrom();
         if (_log.shouldDebug()) {_log.debug("Sending RESET: " + reply + " because of " + packet);}
         _manager.getPacketQueue().enqueue(reply); // this just sends the packet - no retries or whatnot
+    }
+
+    /**
+     *  Re-send a SYN-ACK in response to a retransmitted SYN for an existing connection.
+     *  This prevents the race condition where:
+     *  1. Client sends SYN, server creates connection, sends SYN-ACK
+     *  2. Client retransmits SYN before receiving SYN-ACK (RTT > RTO)
+     *  3. Server destroys the old connection (which the client already completed handshake on)
+     *  4. Client's data arrives on dead stream IDs - dropped forever
+     *
+     *  Instead, we just re-send the SYN-ACK for the existing connection, which is
+     *  the standard TCP behavior for retransmitted SYNs.
+     *
+     *  @param con the existing connection to re-send the SYN-ACK for
+     *  @param syn the retransmitted SYN packet
+     */
+    private void resendSynAck(Connection con, Packet syn) {
+        PacketLocal reply = new PacketLocal(_context, con.getRemotePeer(), syn.getSession());
+        reply.setFlag(Packet.FLAG_SYNCHRONIZE | Packet.FLAG_SIGNATURE_INCLUDED);
+        reply.setSequenceNum(0);
+        reply.setAckThrough(syn.getSequenceNum());
+        reply.setSendStreamId(con.getReceiveStreamId());
+        reply.setReceiveStreamId(con.getSendStreamId());
+        reply.setLocalPort(syn.getLocalPort());
+        reply.setRemotePort(syn.getRemotePort());
+        int mtu = con.getOptions().getMaxMessageSize();
+        reply.setFlag(Packet.FLAG_MAX_PACKET_SIZE_INCLUDED);
+        reply.setOptionalMaxSize(mtu);
+        if (_log.shouldDebug()) {_log.debug("Re-sending SYN-ACK: " + reply + " for existing " + con);}
+        _manager.getPacketQueue().enqueue(reply);
     }
 
     private class TimeoutSyn implements SimpleTimer.TimedEvent {
