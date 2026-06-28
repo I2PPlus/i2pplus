@@ -412,13 +412,12 @@ abstract class BuildRequestor {
         long effectiveTimeout = firstHopTimeout;
         if (!connected) {
             // preConnectTo() was called in configureNewTunnel(), which starts
-            // transport establishment (the DatabaseLookupMessage has a 30s
-            // lifetime).  Give the build message the full adaptive timeout
-            // so it survives transport establishment (~8.5s SSU2 handshake)
-            // plus the build request propagation and TBR reply (~6-10s).
-            // A blanket 5s cap was too short and caused all outbound builds
-            // on connecting peers to deterministically fail.
-            effectiveTimeout = firstHopTimeout;
+            // transport establishment (~8.5s SSU2 handshake).  Use the full
+            // request timeout so the message survives handshake + propagation
+            // + reply.  Using firstHopTimeout here caused "First hop connection
+            // still in progress" failures because the handshake consumes most
+            // of the timeout before the message can even be sent.
+            effectiveTimeout = getRequestTimeout(ctx);
         }
 
         if (log.shouldInfo()) {

@@ -2625,12 +2625,24 @@ public class TunnelPool {
                 // builds when inProgress >= effectiveTarget creates a build storm:
                 // timeout → ensureSufficientTunnels → deficit=target → build
                 // more → timeout → repeat.  Only build the gap.
-                deficit = Math.max(0, effectiveTarget - inProgress);
+                // Also count untestedCount — these tunnels are waiting to be
+                // tested, not stuck.  Excluding them causes a churn cycle:
+                // build → prune excess (120s) → nearExpiry → build more → repeat.
+                // With untestedCount included, once enough tunnels are queued,
+                // no more builds are triggered until they're tested.
+                deficit = Math.max(0, effectiveTarget - inProgress - untestedCount);
             } else if (safeActive == 0) {
-                // Pool has zero GOOD tunnels — UNTESTED tunnels are likely
+                // Pool has zero GOOD tunnels — UNTESTED tunnels may be
                 // stuck failing tests and blocking new builds.  Don't count
                 // them toward the deficit so replacement builds proceed.
-                deficit = effectiveTarget - inProgress;
+                // But when inProgress > 0, builds are actively happening and
+                // untested tunnels are fresh (waiting for test), not stuck.
+                // Count them to prevent build storms.
+                if (inProgress > 0) {
+                    deficit = Math.max(0, effectiveTarget - inProgress - untestedCount);
+                } else {
+                    deficit = effectiveTarget - inProgress;
+                }
             } else {
                 deficit = effectiveTarget - safeActive - inProgress - untestedCount;
             }

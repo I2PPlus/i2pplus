@@ -64,9 +64,19 @@ class BuildExecutor implements Runnable {
      * When a pool exceeds CONSECUTIVE_FAILURE_THRESHOLD, builds are
      * paused for POOL_BACKOFF_MS to prevent build storms.
      * Maps: TunnelPool -> [consecutiveFailures, backoffUntilMs]
+     *
+     * Threshold of 5 allows transient failures (network hiccups, slow peers)
+     * without triggering premature backoff.  Previous threshold of 3 caused
+     * cascading pool collapses: 3 failures → backoff → tunnels expire →
+     * EMERGENCY → more failures → higher backoff counter → death spiral.
+     *
+     * Backoff of 12s is long enough to avoid build storms but short enough
+     * that tunnels expiring during backoff can be rebuilt before the pool
+     * fully collapses.  Previous 8s was too short to prevent repeated storms
+     * when the underlying issue was transient.
      */
-    private static final int CONSECUTIVE_FAILURE_THRESHOLD = 3;
-    private static final long POOL_BACKOFF_MS = 8 * 1000;
+    private static final int CONSECUTIVE_FAILURE_THRESHOLD = 5;
+    private static final long POOL_BACKOFF_MS = 12 * 1000;
     private final ConcurrentHashMap<TunnelPool, long[]> _poolFailureState = new ConcurrentHashMap<>(64);
     private int _keepAliveCounter;
     private volatile long _adaptiveTimeout;
