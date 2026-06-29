@@ -175,10 +175,13 @@ public class CreateRouterInfoJob extends JobImpl {
             ctx.router().eventLog().addEvent(EventLog.REKEYED, ident.calculateHash().toBase64());
         } catch (GeneralSecurityException gse) {
             _log.log(Log.CRIT, "Error building the new router information", gse);
+            info = null;
         } catch (DataFormatException dfe) {
             _log.log(Log.CRIT, "Error building the new router information", dfe);
+            info = null;
         } catch (IOException ioe) {
             _log.log(Log.CRIT, "Error writing out the new router information", ioe);
+            info = null;
         } finally {
             if (fos1 != null) try { fos1.close(); } catch (IOException ioe) { /* ignored */ }
         }

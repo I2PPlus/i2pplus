@@ -124,13 +124,18 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
                     // Add message to inbound pool for this router with router XOR mask
                     getContext().inNetMessagePool().add(data, null, null, _msgIDBloomXorRouter);
                 } else {
+                    Hash routerHash = instructions.getRouter();
+                    if (routerHash == null) {
+                        _log.error("Router delivery instructions with null router hash: " + instructions);
+                        return;
+                    }
                     if (_log.shouldDebug()) {
                         _log.debug("Router delivery instructions targeting ["
-                                + instructions.getRouter().toBase64().substring(0, 6) + "] for " + data);
+                                + routerHash.toBase64().substring(0, 6) + "] for " + data);
                     }
                     // Forward message directly to target router with a 10 second timeout and low priority
                     SendMessageDirectJob job = new SendMessageDirectJob(getContext(), data,
-                            instructions.getRouter(),
+                            routerHash,
                             10_000, ROUTER_PRIORITY, _msgIDBloomXorRouter);
                     job.runJob();
                 }
@@ -141,13 +146,18 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
                 gwMessage.setMessage(data);
                 gwMessage.setTunnelId(instructions.getTunnelId());
                 gwMessage.setMessageExpiration(data.getMessageExpiration());
+                Hash tunnelRouterHash = instructions.getRouter();
+                if (tunnelRouterHash == null) {
+                    _log.error("Tunnel delivery instructions with null router hash: " + instructions);
+                    return;
+                }
                 if (_log.shouldDebug()) {
                     _log.debug("Tunnel delivery instructions targeting ["
-                            + instructions.getRouter().toBase64().substring(0, 6) + "] for " + data);
+                            + tunnelRouterHash.toBase64().substring(0, 6) + "] for " + data);
                 }
                 // Forward message wrapped in tunnel gateway message to target router with a 10 second timeout and low priority
                 SendMessageDirectJob tunnelJob = new SendMessageDirectJob(getContext(), gwMessage,
-                        instructions.getRouter(),
+                        tunnelRouterHash,
                         10_000, TUNNEL_PRIORITY, _msgIDBloomXorTunnel);
                 tunnelJob.runJob();
                 return;
