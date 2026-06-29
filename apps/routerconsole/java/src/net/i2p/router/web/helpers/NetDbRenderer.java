@@ -2003,7 +2003,7 @@ class NetDbRenderer {
                 }
                 if (canonicalHostname != null && !canonicalHostname.equals(primaryAddress) && !canonicalHostname.equals("unknown")) {
                     buf.append("<span class=netdb_info><b>").append(_t("Host"));
-                    buf.append(":</b> <span class=rdns>").append(canonicalHostname).append("</span></span>&nbsp;&nbsp;");
+                    buf.append(":</b> <span class=rdns>").append(DataHelper.escapeHTML(canonicalHostname)).append("</span></span>&nbsp;&nbsp;");
                 }
             } else if (_context.router().getUptime() > 30 * 1000 && (isUnreachableFlag || primaryAddress == null)) {
                 byte[] ipAddress = TransportImpl.getIP(routerHash);
@@ -2011,13 +2011,13 @@ class NetDbRenderer {
                     _context.commSystem().queueLookup(ipAddress);
                     String directAddressString = Addresses.toString(ipAddress);
                     buf.append("<span class=netdb_info><b>").append(_t("IP Address")).append(" (")
-                       .append(_t("direct")).append("):</b> <span class=rdns>").append(directAddressString)
+                       .append(_t("direct")).append("):</b> <span class=rdns>").append(DataHelper.escapeHTML(directAddressString))
                        .append("</span></span>&nbsp;&nbsp;");
                     String canonicalHostname = _context.commSystem().getCanonicalHostNameSync(directAddressString);
                     if (canonicalHostname != null && !canonicalHostname.equals(directAddressString) && !_t("unknown").equals(canonicalHostname)) {
                         putCachedReverseDNS(directAddressString, canonicalHostname);
                         buf.append("<span class=netdb_info><b>").append(_t("Host"));
-                        buf.append(":</b> <span class=rdns>").append(canonicalHostname).append("</span></span>&nbsp;&nbsp;");
+                        buf.append(":</b> <span class=rdns>").append(DataHelper.escapeHTML(canonicalHostname)).append("</span></span>&nbsp;&nbsp;");
                     }
                 }
             }

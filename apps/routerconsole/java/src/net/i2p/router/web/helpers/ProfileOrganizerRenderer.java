@@ -173,7 +173,7 @@ class ProfileOrganizerRenderer {
                                            .replace(" llc", "")
                                            .replace("administered by ", "")
                                            .trim();
-                    buf.append("<span hidden>[XHost]</span><span class=rlookup title=\"").append(whois).append("\">").append(whoisShort);
+                    buf.append("<span hidden>[XHost]</span><span class=rlookup title=\"").append(DataHelper.escapeHTML(whois)).append("\">").append(DataHelper.escapeHTML(whoisShort));
                 } else if (ip == null || ip.isEmpty() || ip.equals("null")) {buf.append("<span>").append(_t("unknown"));}
                 else {
                     if (ip != null && ip.contains(":")) {buf.append("<span hidden>[IPv6]</span>");}

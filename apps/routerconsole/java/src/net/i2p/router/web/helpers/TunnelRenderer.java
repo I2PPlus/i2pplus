@@ -463,15 +463,17 @@ class TunnelRenderer {
                 } else {sb.append("&ndash;");}
                 sb.append("</span></td>");
 
+                sb.append("<td>");
                 if (rlResult != null && rlResult.canonicalHostName != null &&
                     !rlResult.canonicalHostName.isEmpty() && !rlResult.ip.equals(rlResult.canonicalHostName)) {
                     String display = (rlResult.whois != null) ? rlResult.whois : rlResult.domain;
                     if (display == null) display = _t("unknown");
-                    sb.append("<span class=rlookup title=\"").append(rlResult.canonicalHostName).append("\">")
-                      .append(display).append("</span>");
+                    sb.append("<span class=rlookup title=\"").append(DataHelper.escapeHTML(rlResult.canonicalHostName)).append("\">")
+                      .append(DataHelper.escapeHTML(display)).append("</span>");
                 } else {
                     sb.append("<span>").append(_t("unknown")).append("</span>");
                 }
+                sb.append("</td>");
 
                 sb.append("<td class=tcount>").append(count).append("</td>");
 
@@ -618,8 +620,8 @@ class TunnelRenderer {
                         !rlResult.canonicalHostName.isEmpty() && !rlResult.ip.equals(rlResult.canonicalHostName)) {
                         String display = (rlResult.whois != null) ? rlResult.whois : rlResult.domain;
                         if (display == null) display = _t("unknown");
-                        chunkSb.append("<span class=rlookup title=\"").append(rlResult.canonicalHostName).append("\">")
-                               .append(display).append("</span>");
+                        chunkSb.append("<span class=rlookup title=\"").append(DataHelper.escapeHTML(rlResult.canonicalHostName)).append("\">")
+                               .append(DataHelper.escapeHTML(display)).append("</span>");
                     } else {
                         chunkSb.append("&ndash;");
                     }
