@@ -61,7 +61,7 @@ public final class ECIESAEADEngine {
     private final Elg2KeyFactory _edhThread;
     // For now, started on demand, see getHybridKeyFactory()
     private MLKEMKeyFactory _mlkem768Thread;
-    private boolean _isRunning;
+    private volatile boolean _isRunning;
 
     private static final byte[] ZEROLEN = new byte[0];
     private static final int TAGLEN = 8;

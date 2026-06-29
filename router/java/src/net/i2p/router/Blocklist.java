@@ -82,15 +82,15 @@ public class Blocklist {
     private Entry _wrapSave;
     private final Set<Hash> _inProcess = new HashSet<>(4);
     private final File _blocklistFeedFile;
-    private boolean _haveIPv6;
-    private boolean _started;
+    private volatile boolean _haveIPv6;
+    private volatile boolean _started;
     private long _lastExpired = 0;
     // temp
     private final Map<Hash, String> _peerBlocklist = new HashMap<>(4);
     // Configurable properties
-    private boolean _blocklistEnabled;
-    private boolean _blocklistTorEnabled;
-    private boolean _blocklistCountryEnabled;
+    private volatile boolean _blocklistEnabled;
+    private volatile boolean _blocklistTorEnabled;
+    private volatile boolean _blocklistCountryEnabled;
 
     private static final String PROP_BLOCKLIST_ENABLED = "router.blocklist.enable";
     private static final String PROP_BLOCKLIST_FEEDLIST_ENABLED = "router.blocklistFeed.enable";

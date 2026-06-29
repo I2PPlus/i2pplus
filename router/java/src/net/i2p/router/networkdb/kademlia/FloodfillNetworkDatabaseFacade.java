@@ -52,7 +52,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     public static final char CAPABILITY_CONGESTION_SEVERE = 'E';
     public static final char CAPABILITY_NO_TUNNELS = 'G';
     private final ConcurrentHashMap<Hash, FloodSearchJob> _activeFloodQueries;
-    private boolean _floodfillEnabled;
+    private volatile boolean _floodfillEnabled;
     private final Set<Hash> _verifiesInProgress;
     private FloodThrottler _floodThrottler;
     private LookupThrottler _lookupThrottler;

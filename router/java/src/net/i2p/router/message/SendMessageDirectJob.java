@@ -38,8 +38,8 @@ public class SendMessageDirectJob extends JobImpl {
     private final ReplyJob _onSuccess;
     private final Job _onFail;
     private final MessageSelector _selector;
-    private boolean _alreadySearched;
-    private boolean _sent;
+    private volatile boolean _alreadySearched;
+    private volatile boolean _sent;
     private long _searchOn;
     private final long _msgIDBloomXor;
 
