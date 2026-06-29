@@ -310,15 +310,15 @@ class ClientManager {
         synchronized (_pendingRunners) {_pendingRunners.remove(runner);}
         int rv;
         synchronized (_runners) {
-            boolean fail = _runnersByHash.containsKey(dest.calculateHash());
+            Hash destHash = dest.calculateHash();
+            boolean fail = _runnersByHash.containsKey(destHash);
             if (fail) {rv = SessionStatusMessage.STATUS_DUP_DEST;}
             else {
                 SessionId id = locked_getNextSessionId();
                 if (id != null) {
-                    Hash h = dest.calculateHash();
-                    runner.setSessionId(h, id);
+                    runner.setSessionId(destHash, id);
                     _runners.put(dest, runner);
-                    _runnersByHash.put(h, runner);
+                    _runnersByHash.put(destHash, runner);
                     rv = SessionStatusMessage.STATUS_CREATED;
                 } else {rv = SessionStatusMessage.STATUS_REFUSED;}
             }
