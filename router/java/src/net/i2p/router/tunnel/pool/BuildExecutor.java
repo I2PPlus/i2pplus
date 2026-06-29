@@ -473,7 +473,9 @@ class BuildExecutor implements Runnable {
                         _poolFailureState.put(pool, state);
                     }
                     synchronized (state) {
-                        state[0]++;
+                        if (state[0] < CONSECUTIVE_FAILURE_THRESHOLD) {
+                            state[0]++;
+                        }
                         if (state[0] >= CONSECUTIVE_FAILURE_THRESHOLD) {
                             state[1] = System.currentTimeMillis() + POOL_BACKOFF_MS;
                         }
@@ -764,15 +766,30 @@ class BuildExecutor implements Runnable {
 
     /**
      *  Check if a pool is in backoff due to consecutive build failures.
-     *  Uses a short (8s) backoff to prevent build storms while avoiding
-     *  the starvation caused by the original 30s backoff.
-     *  Failure tracking is retained for stats only.
+     *  Uses a 12s backoff to prevent build storms while allowing recovery
+     *  before expiring tunnels deplete the pool.
+     *  On backoff expiry, resets the failure counter so the pool gets a
+     *  fresh window of attempts.
      */
     boolean isPoolInBackoff(TunnelPool pool) {
         long[] state = _poolFailureState.get(pool);
         if (state == null) return false;
         long backoffUntil = state[1];
-        return backoffUntil > 0 && _context.clock().now() < backoffUntil;
+        if (backoffUntil > 0 && _context.clock().now() < backoffUntil) {
+            return true;
+        }
+        // Backoff period expired — reset the counter so the pool gets a fresh
+        // window of attempts.  Without this, the counter grows unboundedly
+        // (timeout handler increments but success never resets because
+        // pool.buildComplete(TIMEOUT) already removed the build config,
+        // so BuildExecutor.buildComplete(SUCCESS) is never called).
+        if (backoffUntil > 0) {
+            synchronized (state) {
+                state[0] = 0;
+                state[1] = 0;
+            }
+        }
+        return false;
     }
 
     /**
@@ -863,7 +880,9 @@ class BuildExecutor implements Runnable {
                 _poolFailureState.put(pool, state);
             }
             synchronized (state) {
-                state[0]++;
+                if (state[0] < CONSECUTIVE_FAILURE_THRESHOLD) {
+                    state[0]++;
+                }
                 if (state[0] >= CONSECUTIVE_FAILURE_THRESHOLD) {
                     state[1] = System.currentTimeMillis() + POOL_BACKOFF_MS;
                     if (_log.shouldDebug()) {
