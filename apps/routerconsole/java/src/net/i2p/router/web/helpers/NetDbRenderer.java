@@ -34,12 +34,9 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 import net.i2p.util.LHMCache;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import net.i2p.crypto.EncType;
@@ -792,13 +789,29 @@ class NetDbRenderer {
     }
 
     /**
-     * Precache reverse DNS lookups for a collection of RouterInfo entries.
-     *
-     * @param routers Collection of RouterInfo objects to resolve
-     * @return Map of IP address to canonical hostname (may be empty)
+     *  Interval between background reverse DNS lookups.
+     *  100ms = 10 lookups/second. Gentle on the system, no burst.
      */
+    private static final long LOOKUP_INTERVAL_MS = 100;
+
+    /**
+     *  Pause after this many lookups to let the system breathe.
+     *  500 lookups at 10/sec = 50 seconds, then 1 second pause.
+     */
+    private static final int LOOKUPS_BEFORE_PAUSE = 500;
+
+    private static final long PAUSE_AFTER_BATCH_MS = 1000;
+
+    /** Pending IPs for background reverse DNS resolution. */
+    private static final java.util.Queue<String> _rdnsQueue = new java.util.concurrent.ConcurrentLinkedQueue<>();
+
+    /** Dedup set — prevents the same IP from being queued multiple times. */
+    private static final java.util.Set<String> _rdnsQueued = java.util.concurrent.ConcurrentHashMap.newKeySet();
+
+    /** Guards against multiple concurrent background workers. */
+    private static final java.util.concurrent.atomic.AtomicBoolean _rdnsWorkerRunning = new java.util.concurrent.atomic.AtomicBoolean(false);
+
     public Map<String, String> precacheReverseDNSLookups(Collection<RouterInfo> routers) {
-        final int MAX_CACHED_ENTRIES = 5000;
         if (!enableReverseLookups() || _context.router().isHidden()) {
             return Collections.emptyMap();
         }
@@ -808,13 +821,6 @@ class NetDbRenderer {
             String ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri));
             if (ip != null && !ip.isEmpty()) {
                 ipSet.add(ip);
-                if (ipSet.size() > MAX_CACHED_ENTRIES) {
-                    Iterator<String> it = ipSet.iterator();
-                    if (it.hasNext()) {
-                      it.next();
-                      it.remove();
-                    }
-                }
             }
         }
 
@@ -823,42 +829,77 @@ class NetDbRenderer {
         }
 
         Map<String, String> rdnsLookups = new HashMap<>();
-        int cores = Math.max(1, SystemVersion.getCores());
-        int poolSize = Math.max(1, Math.min(Math.max(cores/2, 4), Math.max(1, ipSet.size())));
-        ExecutorService dnsExecutor = Executors.newFixedThreadPool(poolSize);
-        List<Future<String>> dnsFutures = new ArrayList<>();
+        List<String> uncachedIps = new ArrayList<>();
 
         for (String ip : ipSet) {
-            dnsFutures.add(dnsExecutor.submit(() -> {
-                String hostname = _context.commSystem().getCanonicalHostNameSync(ip);
-                return hostname;
-            }));
-        }
-
-        long start = System.currentTimeMillis();
-        long timeout = 2500;
-        for (int i = 0; i < dnsFutures.size(); i++) {
-            Future<String> future = dnsFutures.get(i);
-            String ip = ipSet.toArray(new String[0])[i];
-            try {
-                long remaining = timeout - (System.currentTimeMillis() - start);
-                if (remaining <= 0) break;
-                String hostname = future.get(remaining, TimeUnit.MILLISECONDS);
-                if (hostname != null && !hostname.equals(ip) && !hostname.equals("unknown")) {
-                    rdnsLookups.put(ip, hostname);
-                    putCachedReverseDNS(ip, hostname);
-                }
-            } catch (TimeoutException e) {
-                break;
-            } catch (InterruptedException | ExecutionException e) {
-                if (e instanceof InterruptedException) Thread.currentThread().interrupt();
+            String cached = getCachedReverseDNS(ip);
+            if (cached != null) {
+                rdnsLookups.put(ip, cached);
+            } else {
+                uncachedIps.add(ip);
             }
         }
 
-        dnsExecutor.shutdownNow();
-        try {dnsExecutor.awaitTermination(1, TimeUnit.SECONDS);} catch (InterruptedException e) {Thread.currentThread().interrupt();}
+        if (!uncachedIps.isEmpty()) {
+            enqueueRdnsLookups(uncachedIps);
+        }
 
         return rdnsLookups;
+    }
+
+    /**
+     *  Queue uncached IPs for background staggered reverse DNS lookup.
+     *  The background worker processes one lookup every {@link #LOOKUP_INTERVAL_MS},
+     *  with a pause after every {@link #LOOKUPS_BEFORE_PAUSE} lookups.
+     *  Results accumulate in rdnsCache for future page loads.
+     */
+    private void enqueueRdnsLookups(List<String> ips) {
+        for (String ip : ips) {
+            if (_rdnsQueued.add(ip)) {
+                _rdnsQueue.add(ip);
+            }
+        }
+        startRdnsWorker();
+    }
+
+    /**
+     *  Start the background staggered rdns worker if not already running.
+     *  Uses the async getCanonicalHostName() to avoid blocking on DNS/WHOIS.
+     *  DNS + WHOIS work happens on the shared reverseDnsExecutor pool.
+     *  Results accumulate in rdnsCache for future page loads.
+     */
+    private void startRdnsWorker() {
+        if (!_rdnsWorkerRunning.compareAndSet(false, true)) {
+            return; // already running
+        }
+        Thread worker = new Thread(() -> {
+            int count = 0;
+            try {
+                while (true) {
+                    String ip = _rdnsQueue.poll();
+                    if (ip == null) break;
+                    try {
+                        String result = _context.commSystem().getCanonicalHostName(ip);
+                        if (!result.equals(ip)) {
+                            putCachedReverseDNS(ip, result);
+                        }
+                    } catch (Exception e) { /* ignore individual lookup failures */ }
+                    _rdnsQueued.remove(ip);
+                    count++;
+                    if (count % LOOKUPS_BEFORE_PAUSE == 0) {
+                        Thread.sleep(PAUSE_AFTER_BATCH_MS);
+                    } else {
+                        Thread.sleep(LOOKUP_INTERVAL_MS);
+                    }
+                }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            } finally {
+                _rdnsWorkerRunning.set(false);
+            }
+        }, "Rdns-Staggered");
+        worker.setDaemon(true);
+        worker.start();
     }
 
     /**
