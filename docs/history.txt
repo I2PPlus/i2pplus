@@ -1,7 +1,20 @@
+2026-06-29 dr|z3d
+  * Router:
+    - Replace network whois with local ASN MMDB for instant hostname
+      lookups; RDNS remains optional fallback
+    - Fix stale RDNS cache entries; skip unknown/IP for re-lookup
+  * Console:
+    - Always show hostname/domain column in tunnel, banlist, and
+      profile tables; use sync lookup for instant results
+    - Stagger netdb RDNS lookups in background worker; remove broken
+      per-instance caches; consolidate sessionbans.txt reads
+    - Add ASN Db info row on /info page
+  * Core: Add 18 unit tests
+
 2026-06-28 dr|z3d
-  * Router: Reduce peer test frequency to 5 min (was 5s); limit concurrency
-    to 1; simplify timeout to never reduce below configured default
-  * Tunnel:
+  * Router:
+    - Reduce peer test frequency to 5 min (was 5s); limit concurrency
+      to 1; simplify timeout to never reduce below configured default
     - Fix ExpireJob lifecycle — increase MAX_ENTRY_LIFETIME 15→25 min;
       null-safe getTunnelKey(); try-catch in runJob/runPhase; per-tunnel
       exception handling in removeTunnel/refreshLeaseSet/dispatcher.remove
@@ -23,7 +36,7 @@
   * I2PTunnel: Restore HTTP keep-alive socket overrides
 
 2026-06-27 dr|z3d
-  * Tunnel:
+  * Router:
     - Extend UNTESTED tunnel lifetime up to 6×30s before expiry to prevent
       death spiral from premature removal
     - Preserve IB endpoint participants in cleanup; don't shorten outbound
@@ -36,14 +49,14 @@
     auto-refresh
 
 2026-06-25 dr|z3d
-  * Tunnel: Atomic per-pool test cap; peer-aware test timeouts; skip
+  * Router: Atomic per-pool test cap; peer-aware test timeouts; skip
     slow peers; don't prune UNTESTED tunnels or fire EMERGENCY when
     untested capacity exists
   * Console: Add auto-refresh, tablesort, and direction filtering to
     /streams page
 
 2026-06-24 dr|z3d
-  * Tunnel:
+  * Router:
     - Fix pool collapse and churn from aggressive pruning, slow rebuilds,
       and stale peer failures
     - Fix EMERGENCY build storm, zombie threshold, LS cache invalidation,

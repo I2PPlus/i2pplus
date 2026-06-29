@@ -86,6 +86,7 @@ The following components are in the public domain:
 ## GEOIP DATABASE
 
 - **GeoLite2 Country (db-ip)** — CC BY-SA 4.0 - https://db-ip.com/db/
+- **db-ip ASN Lite (db-ip)** — CC BY-SA 4.0 - https://db-ip.com/db/
 - **countries.txt** — CC BY-SA 3.0 (MaxMind GeoLite Country, discontinued)
 
 ## JETTY
