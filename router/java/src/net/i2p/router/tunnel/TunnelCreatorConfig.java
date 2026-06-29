@@ -66,8 +66,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private static final int LATENCY_SAMPLE_SIZE = 3;
     private volatile int _lastLatency = -1;
     private final int[] _latencyHistory = new int[LATENCY_SAMPLE_SIZE];
-    private int _latencyIdx = 0;
-    private int _latencyCount = 0;
+    private volatile int _latencyIdx = 0;
+    private volatile int _latencyCount = 0;
     private volatile boolean _needsExpeditedTest = false;
     /**
      *  Recent-traffic test exemptions used.
@@ -209,13 +209,21 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
             int normalized = (int) (tot * 60d*1000d / timeSince);
             _peakThroughputLastCoallesce = now;
             _peakThroughputCurrentTotal = 0;
-            if (_context != null) {
-                // skip ourselves
+            // Capture peers and context for iteration outside the lock
+            if (_context != null && _peers.length > 0) {
                 int start = _isInbound ? 0 : 1;
                 int end = _isInbound ? _peers.length - 1 : _peers.length;
-                for (int i = start; i < end; i++) {
-                    _context.profileManager().tunnelDataPushed1m(_peers[i], normalized);
-                }
+                Hash[] peersCopy = java.util.Arrays.copyOfRange(_peers, start, end);
+                _context.jobQueue().addJob(new net.i2p.router.JobImpl(_context) {
+                    @Override
+                    public void runJob() {
+                        for (Hash peer : peersCopy) {
+                            _context.profileManager().tunnelDataPushed1m(peer, normalized);
+                        }
+                    }
+                    @Override
+                    public String getName() { return "TunnelCreatorConfig profile update"; }
+                });
             }
         }
     }
@@ -294,7 +302,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public void testSuccessful(int ms) {
         _failures.set(0);
         _testStatus = TunnelTestStatus.GOOD;
-        _lastLatency = ms;
+        addLatencySample(ms);
     }
 
     /**
@@ -550,7 +558,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     @Override
     public String toString() {
         // H0:1235 -> H1:2345 -> H2:2345
-        _log = _context.logManager().getLog(TunnelCreatorConfig.class);
+        if (_log == null) {_log = _context.logManager().getLog(TunnelCreatorConfig.class);}
         StringBuilder buf = new StringBuilder(128);
         if (_isInbound) {buf.append("Inbound");}
         else {buf.append("Outbound");}
@@ -583,7 +591,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
             }
             if (_lastTransferredTime > 0)
                 buf.append("\n* Last traffic: ").append(DataHelper.formatTime(_lastTransferredTime));
-            buf.append("\n* Expires: ").append(new Date(_expiration));
+            buf.append("\n* Expires: ").append(DataHelper.formatTime(_expiration));
             if (_replyMessageId > 0) {buf.append("; [ReplyMsgID ").append(_replyMessageId).append("]");}
             if (_messagesProcessed > 0) {
                 buf.append(" with ").append(_messagesProcessed).append(" messages (")
