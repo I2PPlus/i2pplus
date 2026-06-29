@@ -1005,8 +1005,16 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         String reason = "";
 
         if (isInvalidVersion) {
+            String flag;
+            if (unreachable) {
+                flag = "U";
+            } else if (reachable) {
+                flag = "R";
+            } else {
+                flag = "";
+            }
             reason = "Invalid Router version (" + version + " / " + bw +
-                      (unreachable ? "U" : reachable ? "R" : "") + ")";
+                      flag + ")";
             _banLogger.logBan(h, ipPort, reason, now + 24*60*60*1000L);
             _context.banlist().banlistRouter(h, reason, null, null, now + 24*60*60*1000L);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;

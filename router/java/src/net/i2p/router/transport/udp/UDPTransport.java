@@ -3490,8 +3490,18 @@ public class UDPTransport extends TransportImpl {
         if (ps != null) {
             if (_log.shouldWarn()) {
                 String reasonStr = reason != null ? " -> " + reason : "";
+                String banStatus;
+                if (isBannedHard) {
+                    banStatus = "permanently banned ";
+                } else if (isBanned) {
+                    banStatus = "temp banned ";
+                } else if (isBlocklisted) {
+                    banStatus = "blocklisted ";
+                } else {
+                    banStatus = "";
+                }
                 _log.warn("[SSU2] Forcing immediate disconnection of " +
-                          (isBannedHard ? "permanently banned " : isBanned ? "temp banned " : isBlocklisted ? "blocklisted " : "") +
+                          banStatus +
                           "Router [" + peer.toBase64().substring(0,6) + "]" + reasonStr);
             }
             dropPeer(ps, true, "router");

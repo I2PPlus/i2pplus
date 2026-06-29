@@ -118,7 +118,16 @@ class OutboundClientMessageJobHelper {
         if (isECIES) {msg = GarlicMessageBuilder.buildECIESMessage(ctx, config, from, dest, skm, callback);}
         else {
             // no use sending tags unless we have a reply token set up already
-            int tagsToSend = replyToken >= 0 ? (tagsToSendOverride > 0 ? tagsToSendOverride : skm.getTagsToSend()) : 0;
+            int tagsToSend;
+            if (replyToken >= 0) {
+                if (tagsToSendOverride > 0) {
+                    tagsToSend = tagsToSendOverride;
+                } else {
+                    tagsToSend = skm.getTagsToSend();
+                }
+            } else {
+                tagsToSend = 0;
+            }
             int lowThreshold = lowTagsOverride > 0 ? lowTagsOverride : skm.getLowThreshold();
             msg = GarlicMessageBuilder.buildMessage(ctx, config, wrappedKey, wrappedTags,
                                                     tagsToSend, lowThreshold, skm);

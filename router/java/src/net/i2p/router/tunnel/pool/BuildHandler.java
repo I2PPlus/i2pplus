@@ -1214,8 +1214,16 @@ class BuildHandler implements Runnable {
         @Override
         public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {
             if (_log.shouldDebug()) {
+                String fromName;
+                if (fromHash != null) {
+                    fromName = fromHash.toString();
+                } else if (from != null) {
+                    fromName = from.calculateHash().toString();
+                } else {
+                    fromName = "a tunnel";
+                }
                 _log.debug("Received TunnelBuildReplyMessage " + receivedMessage.getUniqueId() + " from " +
-                           (fromHash != null ? fromHash : from != null ? from.calculateHash() : "a tunnel"));
+                           fromName);
             }
             handleReply(new BuildReplyMessageState(receivedMessage));
             return _buildReplyMessageHandlerJob;

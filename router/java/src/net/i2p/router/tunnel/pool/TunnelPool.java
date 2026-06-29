@@ -2816,8 +2816,16 @@ public class TunnelPool {
                 if (_log.shouldWarn() && uptime > 3L * 60 * 1000) {
                     String nick = settings.getDestinationNickname();
                     Hash dest = settings.getDestination();
+                    String destName;
+                    if (nick != null) {
+                        destName = nick;
+                    } else if (dest != null) {
+                        destName = dest.toBase32();
+                    } else {
+                        destName = "null";
+                    }
                     _log.warn("TPool cfgNewTunnel: selectPeers returned " + (peers == null ? "null" : "empty") +
-                              " for " + (nick != null ? nick : dest != null ? dest.toBase32() : "null") +
+                              " for " + destName +
                               " (" + (settings.isInbound() ? "in" : "out") + ")");
                 }
                 return null;

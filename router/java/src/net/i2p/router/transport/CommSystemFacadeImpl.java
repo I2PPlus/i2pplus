@@ -796,10 +796,30 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static final int RDNS_WRITE_INTERVAL = 15 * 60 * 1000 + 30;
     private static final boolean has512MB = SystemVersion.getMaxMemory() >= 512 * 1024 * 1024;
     private static final boolean has1GB = SystemVersion.getMaxMemory() >= 1024 * 1024 * 1024;
-    private static final long EXPIRE_TIME = (!has512MB ? 24 : (has1GB ? 48 : 36)) * 60L * 60 * 1000; // 1/1.5/2 day expiration
+    private static final long EXPIRE_TIME = computeExpireTime() * 60L * 60 * 1000; // 1/1.5/2 day expiration
     private static final long EVICT_THRESHOLD = 3L * 24 * 60 * 60 * 1000; // 3 day for eviction from file cache
-    private static final int MAX_RDNS_CACHE_SIZE = !has512MB ? 8000 : (has1GB ? 24000 : 16000);
+    private static final int MAX_RDNS_CACHE_SIZE = computeMaxRdnsCacheSize();
     private static final Object rdnslock = new Object();
+
+    private static long computeExpireTime() {
+        if (!has512MB) {
+            return 24;
+        } else if (has1GB) {
+            return 48;
+        } else {
+            return 36;
+        }
+    }
+
+    private static int computeMaxRdnsCacheSize() {
+        if (!has512MB) {
+            return 8000;
+        } else if (has1GB) {
+            return 24000;
+        } else {
+            return 16000;
+        }
+    }
 
     /**
      * Cache entry for IP address and hostname mappings.

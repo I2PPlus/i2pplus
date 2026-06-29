@@ -319,10 +319,16 @@ public class PersistentDataStore extends TransientDataStore {
         boolean isOld = VersionComparator.comp(version, MIN_VERSION) < 0;
         boolean isInvalidVersion = VersionComparator.comp(version, "2.5.0") >= 0;
         boolean isLTier = "L".equals(bw);
-        boolean isSlow = stored < 500 ? "K".equals(bw) || isLTier :
-                         stored < 1000 ? "K".equals(bw) || isLTier || "M".equals(bw) :
-                         stored < 2000 ? "K".equals(bw) || isLTier || "M".equals(bw) || "N".equals(bw) :
-                         "K".equals(bw) || isLTier || "M".equals(bw) || "N".equals(bw) || "O".equals(bw);
+        boolean isSlow;
+        if (stored < 500) {
+            isSlow = "K".equals(bw) || isLTier;
+        } else if (stored < 1000) {
+            isSlow = "K".equals(bw) || isLTier || "M".equals(bw);
+        } else if (stored < 2000) {
+            isSlow = "K".equals(bw) || isLTier || "M".equals(bw) || "N".equals(bw);
+        } else {
+            isSlow = "K".equals(bw) || isLTier || "M".equals(bw) || "N".equals(bw) || "O".equals(bw);
+        }
         boolean isDegraded = caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
                              caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0 ||
                              caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
@@ -387,8 +393,16 @@ public class PersistentDataStore extends TransientDataStore {
                             _log.warn("Banning for 24h and disconnecting from Router [" + key.toBase64().substring(0,6) + "]" +
                                       " -> Invalid version " + version + " / " + bw + (unreachable ? "U" : ""));
                             _banLogger.logBan(key, ip != null ? ip : "UNKNOWN", "Invalid Router version (" + version + " / " + bw + ")", 24*60*60*1000);
+                            String flag;
+                            if (unreachable) {
+                                flag = "U";
+                            } else if (reachable) {
+                                flag = "R";
+                            } else {
+                                flag = "";
+                            }
                             _context.banlist().banlistRouter(key, "Invalid Router version (" + version + " / " + bw +
-                                                             (unreachable ? "U" : reachable ? "R" : "") + ")", null,
+                                                             flag + ")", null,
                                                               null, _context.clock().now() + 24*60*60*1000);
                         }
                         _context.simpleTimer2().addEvent(new Disconnector(key, "Invalid version"), 11*60*1000);
@@ -863,9 +877,14 @@ public class PersistentDataStore extends TransientDataStore {
                 // Determine if this is a slow router
                 String bw = ri.getBandwidthTier();
                 String caps = ri.getCapabilities();
-                boolean isSlow = totalStored < 1000 ? "K".equals(bw) || "L".equals(bw) || "M".equals(bw) :
-                                 totalStored < 2000 ? "K".equals(bw) || "L".equals(bw) || "M".equals(bw) || "N".equals(bw) :
-                                 "K".equals(bw) || "L".equals(bw) || "M".equals(bw) || "N".equals(bw) || "O".equals(bw);
+                boolean isSlow;
+                if (totalStored < 1000) {
+                    isSlow = "K".equals(bw) || "L".equals(bw) || "M".equals(bw);
+                } else if (totalStored < 2000) {
+                    isSlow = "K".equals(bw) || "L".equals(bw) || "M".equals(bw) || "N".equals(bw);
+                } else {
+                    isSlow = "K".equals(bw) || "L".equals(bw) || "M".equals(bw) || "N".equals(bw) || "O".equals(bw);
+                }
                 boolean isDegraded = caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
                                      caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0 ||
                                      caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;

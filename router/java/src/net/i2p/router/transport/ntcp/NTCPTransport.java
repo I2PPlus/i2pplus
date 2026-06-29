@@ -774,8 +774,18 @@ public class NTCPTransport extends TransportImpl {
             // Only log if not already banlisted (blocklisted may result in new ban)
             if (!isBanned && !isBannedHard && _log.shouldWarn()) {
                 String reasonStr = reason != null ? " -> " + reason : "";
+                String banStatus;
+                if (isBannedHard) {
+                    banStatus = "permanently banned ";
+                } else if (isBanned) {
+                    banStatus = "temp banned ";
+                } else if (isBlocklisted) {
+                    banStatus = "blocklisted ";
+                } else {
+                    banStatus = "";
+                }
                 _log.warn("[NTCP] Forcing immediate disconnection of " +
-                          (isBannedHard ? "permanently banned " : isBanned ? "temp banned " : isBlocklisted ? "blocklisted " : "") +
+                          banStatus +
                           "Router [" + peer.toBase64().substring(0,6) + "]" + reasonStr);
             }
             con.close();
@@ -945,7 +955,14 @@ public class NTCPTransport extends TransportImpl {
         boolean ssuDisabled = !_context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP);
         boolean isFixedOrForceFirewalled = !"false".equalsIgnoreCase(_context.getProperty(PROP_I2NP_NTCP_AUTO_IP, "true"));
 
-        int port = (addr != null) ? addr.getPort() : (ssuDisabled ? setupPort() : _ssuPort);
+        int port;
+        if (addr != null) {
+            port = addr.getPort();
+        } else if (ssuDisabled) {
+            port = setupPort();
+        } else {
+            port = _ssuPort;
+        }
         RouterAddress myAddress = bindAddress(port);
 
         if (myAddress != null) {

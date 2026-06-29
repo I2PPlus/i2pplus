@@ -690,7 +690,13 @@ public class PeerState {
         // window and SST set in highestSeqNumAcked()
         if (_fastRetransmit.get()) {bwe = -1;} // for log below
         else {
-            _sendWindowBytes = (getVersion() >= 2 && getVersion() <= 4) ? PeerState2.MAX_MTU : (isIPv6() ? MAX_IPV6_MTU : LARGE_MTU);
+            if (getVersion() >= 2 && getVersion() <= 4) {
+                _sendWindowBytes = PeerState2.MAX_MTU;
+            } else if (isIPv6()) {
+                _sendWindowBytes = MAX_IPV6_MTU;
+            } else {
+                _sendWindowBytes = LARGE_MTU;
+            }
             bwe = _bwEstimator.getBandwidthEstimate(now);
             _slowStartThreshold = Math.max( (int)(bwe * _rtt), 2 * _mtu);
         }

@@ -186,7 +186,14 @@ public class InstallUpdate {
         File jbigiJar = new File(context.getLibDir(), "jbigi.jar");
         if (goodOS && jbigiJar.exists()) {
             String libPrefix = (isWin ? "" : "lib");
-            String libSuffix = (isWin ? ".dll" : isMac ? ".jnilib" : ".so");
+            String libSuffix;
+            if (isWin) {
+                libSuffix = ".dll";
+            } else if (isMac) {
+                libSuffix = ".jnilib";
+            } else {
+                libSuffix = ".so";
+            }
 
             if (isX86) {
                 File jcpuidLib = new File(context.getBaseDir(), libPrefix + "jcpuid" + libSuffix);

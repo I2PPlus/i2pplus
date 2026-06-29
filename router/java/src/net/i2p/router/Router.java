@@ -1377,7 +1377,14 @@ public class Router implements RouterClock.ClockShiftListener {
                     File jbigiJar = new File(_context.getLibDir(), "jbigi.jar");
                     if (goodOS && jbigiJar.exists() && _context.getBaseDir().canWrite()) {
                         String libPrefix = isWin ? "" : "lib";
-                        String libSuffix = isWin ? ".dll" : isMac ? ".jnilib" : ".so";
+                        String libSuffix;
+                        if (isWin) {
+                            libSuffix = ".dll";
+                        } else if (isMac) {
+                            libSuffix = ".jnilib";
+                        } else {
+                            libSuffix = ".so";
+                        }
                         File jbigiLib = new File(_context.getBaseDir(), libPrefix + "jbigi" + libSuffix);
                         if (jbigiLib.canWrite()) {
                             String path = jbigiLib.getAbsolutePath();

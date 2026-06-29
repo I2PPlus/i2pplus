@@ -210,7 +210,14 @@ class TransientDataStore implements DataStore {
             }
         } else if (DatabaseEntry.isLeaseSet(type)) {
             LeaseSet ls = (LeaseSet)data;
-            String receivedAs = ls.getReceivedAsPublished() ? " -> Published via peer" : ls.getReceivedAsReply() ? " -> In response to query" : "";
+            String receivedAs;
+            if (ls.getReceivedAsPublished()) {
+                receivedAs = " -> Published via peer";
+            } else if (ls.getReceivedAsReply()) {
+                receivedAs = " -> In response to query";
+            } else {
+                receivedAs = "";
+            }
 
             if (old != null) {
                 LeaseSet ols = (LeaseSet) old;
