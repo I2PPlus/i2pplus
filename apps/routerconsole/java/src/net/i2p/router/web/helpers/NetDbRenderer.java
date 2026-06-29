@@ -1991,7 +1991,6 @@ class NetDbRenderer {
             String primaryAddress = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(routerInfo));
             String capsStr = processedCapsStr;
             boolean isUnreachableFlag = capsStr.contains("U") || capsStr.contains("H");
-            boolean enableWhoisLookups = _context.getBooleanProperty("routerconsole.enableWhoisLookups");
             if (enableReverseLookups() && _context.router().getUptime() > 30 * 1000 && !isUnreachableFlag && primaryAddress != null) {
                 String canonicalHostname = null;
                 if (rdnsLookups != null) {
@@ -2001,16 +2000,13 @@ class NetDbRenderer {
                     canonicalHostname = getCachedReverseDNS(primaryAddress);
                 }
                 if (canonicalHostname == null) {
-                    canonicalHostname = _context.commSystem().getCanonicalHostName(primaryAddress);
+                    canonicalHostname = _context.commSystem().getCanonicalHostNameSync(primaryAddress);
                     if (canonicalHostname != null && !canonicalHostname.equals(primaryAddress) && !canonicalHostname.equals("unknown")) {
                         putCachedReverseDNS(primaryAddress, canonicalHostname);
                     }
                 }
                 if (canonicalHostname != null && !canonicalHostname.equals(primaryAddress) && !canonicalHostname.equals("unknown")) {
                     buf.append("<span class=netdb_info><b>").append(_t("Hostname"));
-                    if (enableWhoisLookups) {
-                        buf.append(" / ").append(_t("Whois"));
-                    }
                     buf.append(":</b> <span class=rdns>").append(canonicalHostname).append("</span></span>&nbsp;&nbsp;");
                 }
             } else if (_context.router().getUptime() > 30 * 1000 && (isUnreachableFlag || primaryAddress == null)) {
@@ -2027,16 +2023,13 @@ class NetDbRenderer {
                             canonicalHostname = getCachedReverseDNS(primaryAddress);
                         }
                         if (canonicalHostname == null) {
-                            canonicalHostname = _context.commSystem().getCanonicalHostName(primaryAddress);
+                            canonicalHostname = _context.commSystem().getCanonicalHostNameSync(primaryAddress);
                             if (canonicalHostname != null && !canonicalHostname.equals(primaryAddress) && !canonicalHostname.equals("unknown")) {
                                 putCachedReverseDNS(primaryAddress, canonicalHostname);
                             }
                         }
                         if (canonicalHostname != null && !canonicalHostname.equals(directAddressString) && !canonicalHostname.equals("unknown")) {
                             buf.append("<span class=netdb_info><b>").append(_t("Hostname"));
-                            if (enableWhoisLookups) {
-                                buf.append(" / ").append(_t("Whois"));
-                            }
                             buf.append(" (").append(_t("direct")).append("):</b> <span class=rdns>")
                                .append(canonicalHostname).append(" (").append(directAddressString).append(")</span></span>&nbsp;&nbsp;");
                         } else {

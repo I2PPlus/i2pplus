@@ -145,6 +145,11 @@ public class InfoHelper extends HelperBase {
       return db.getGeoIPBuildInfo();
     }
 
+    public String getASNBuildInfo() {
+      GeoIP db = new GeoIP(_context);
+      return db.getASNBuildInfo();
+    }
+
     private void renderStatusHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(4*1024);
         RouterInfo ri = _context.router().getRouterInfo();
@@ -206,6 +211,7 @@ public class InfoHelper extends HelperBase {
         else {buf.append(" <span class=\"no\">").append(_t("No")).append("</span>");}
         buf.append("</td></tr>\n");
         buf.append("<tr><td><b>").append(_t("GeoIP Db")).append(":</b></td><td>").append(getGeoIPBuildInfo()).append("</td></tr>");
+        buf.append("<tr><td><b>").append(_t("ASN Db")).append(":</b></td><td>").append(getASNBuildInfo()).append("</td></tr>");
         if (isAdvanced) {
             buf.append("<tr><td><b>CoDel:</b></td><td><b>").append(_t("Target")).append(":</b> ").append(codelTarget())
                .append("ms &ensp;<b>").append(_t("Interval")).append(":</b> ").append(codelInterval()).append("ms</td></tr>\n");
