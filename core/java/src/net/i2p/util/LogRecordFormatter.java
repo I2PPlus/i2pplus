@@ -14,7 +14,6 @@ import net.i2p.I2PAppContext;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Date;
 
 /**
@@ -76,7 +75,7 @@ class LogRecordFormatter {
 
     public static String getWhen(LogManager manager, LogRecord logRecord) {
         SimpleDateFormat fmt = manager.getDateFormat();
-        Date d = Date.from(Instant.ofEpochMilli(logRecord.getDate()));
+        Date d = new Date(logRecord.getDate());
         synchronized (fmt) {
             return fmt.format(d);
         }
