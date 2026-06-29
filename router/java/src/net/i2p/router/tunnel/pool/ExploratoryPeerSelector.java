@@ -288,7 +288,6 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 rv.add(furthestHop);
             else
                 rv.add(0, furthestHop);
-            length++;
         }
         if (rv.size() > 1)
             orderPeers(rv, settings.getRandomKey());

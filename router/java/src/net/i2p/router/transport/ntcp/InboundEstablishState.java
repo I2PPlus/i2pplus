@@ -528,7 +528,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                     _log.debug("After start: " + _handshakeState.toString());
                 _handshakeState.readMessage(_X, 0, MSG1_SIZE + extralen, options, 0);
             } catch (GeneralSecurityException gse) {
-                 String gseMsg = gse.getMessage();
                  // Read a random number of bytes, store wanted in _padlen1
                  _padlen1 = _context.random().nextInt(PADDING1_FAIL_MAX) - src.remaining();
                  if (_padlen1 > 0) {
@@ -779,7 +778,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             _handshakeState.writeMessage(tmp, 0, tmp, off, OPTIONS2_SIZE);
         } catch (GeneralSecurityException gse) {
             // buffer length error
-            boolean gseNotNull = gse.getMessage() != null && !gse.getMessage().equals("null");
             if (!_log.shouldWarn()) {
                 _log.error("[NTCP] BAD Outbound Establishment handshake message #2 -> " + gse.getMessage());
             }

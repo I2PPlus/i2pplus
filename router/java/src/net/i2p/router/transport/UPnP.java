@@ -1206,7 +1206,6 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 
 		Device router;
 		Service service;
-		Service service6;
 		synchronized(lock) {
 			if (!_otherUDNs.isEmpty()) {
 				sb.append("<b>");
@@ -1249,7 +1248,6 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			}
 			router = _router;
 			service = _service;
-			service6 = _service6;
 		}
 		listSubDev(null, router, sb);
 		String addr = getNATAddress(service);
@@ -1692,7 +1690,6 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 
 		int level = retval ? Log.INFO : Log.WARN;
 		if (!noLog && _log.shouldLog(level)) {
-			String ip = fp.getIP();
 			if (retval) {
 				_log.log(level, "UPnP: Removed IPv6 mapping for " + fp);
 			} else {

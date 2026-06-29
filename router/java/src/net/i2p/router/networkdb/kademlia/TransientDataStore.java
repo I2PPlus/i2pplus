@@ -205,7 +205,7 @@ class TransientDataStore implements DataStore {
                 long uptime = _context.router().getUptime();
                 if (enableReverseLookups() && uptime > 30*1000) {
                     String ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri));
-                    String rl = ip != null ? _context.commSystem().getCanonicalHostName(ip) : null;
+                    if (ip != null) {_context.commSystem().getCanonicalHostName(ip);}
                 }
             }
         } else if (DatabaseEntry.isLeaseSet(type)) {

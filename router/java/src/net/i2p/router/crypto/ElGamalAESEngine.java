@@ -480,7 +480,6 @@ public final class ElGamalAESEngine {
             }
             byte[] unencrData = new byte[(int) len];
             System.arraycopy(decrypted, cur, unencrData, 0, (int)len);
-            cur += (int) len;
             // use alternate calculateHash() method to avoid object churn and caching
             //Hash calcHash = _context.sha().calculateHash(unencrData);
             //boolean eq = calcHash.equals(readHash);
@@ -820,7 +819,6 @@ public final class ElGamalAESEngine {
         byte[] padding = AESEngine.getPadding(_context, size, paddedSize);
         //_log.debug("padding length: " + padding.length);
         System.arraycopy(padding, 0, aesData, cur, padding.length);
-        cur += padding.length;
 
         //Hash h = _context.sha().calculateHash(data);
         //_log.debug("Hash of entire aes block before encryption: (len=" + data.length + ")\n" + DataHelper.toString(h.getData(), 32));

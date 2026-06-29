@@ -140,20 +140,10 @@ class RequestThrottler {
         boolean isUnreachable = isUnreachable(ri);
         boolean isLowShare = isLowShare(ri);
         boolean isFast = isFast(ri);
-        boolean isLTier = isLTier(ri);
         boolean weAreFirewalled = isFirewalled();
         updateCachedProperties();
         boolean shouldBlockOldRouters = weAreFirewalled ? false : cachedShouldBlockOldRouters;
         int numTunnels = this.context.tunnelManager().getParticipatingCount();
-
-        /*
-         * Calculate limit based on router capabilities for fair resource allocation
-         * Uses percentage-based scaling with multipliers:
-         *  - Slow/Unreachable: 4% (conservative)
-         *  - Regular: 8% (balanced)
-         *  - Fast: 15% (rewards capability)
-         * All bounds are clamped by MIN_LIMIT (200) and MAX_LIMIT (400)
-         */
         int limit;
         if (isUnreachable || isLowShare) {
             // 4% for unreachable/low-share routers - conservative limit to protect network
@@ -166,7 +156,6 @@ class RequestThrottler {
             limit = Math.min(getMaxLimit(context), Math.max(getMinLimit(context), numTunnels * 8 / 100));
         }
         int count = counter.increment(h);
-        int burstCount = _burstCounter.increment(h);
         boolean rv = count > limit;
         boolean enableThrottle = cachedShouldThrottle;
 
@@ -219,17 +208,11 @@ class RequestThrottler {
             }
         }
 
-        boolean shouldDisconnect = cachedShouldDisconnect;
-        boolean isFF = false;
         String v = "unknown";
-        String country = "unknown";
-        long uptime = context.router().getUptime();
         long lag = context.jobQueue().getMaxLag();
         boolean highload = lag > 1000 && SystemVersion.getCPULoadAvg() > 95;
         if (ri != null) {
-            isFF = ri.getCapabilities().contains("f");
             v = ri.getVersion();
-            country = context.commSystem().getCountry(h);
         }
 
         // Early return: High system load

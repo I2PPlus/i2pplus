@@ -266,7 +266,6 @@ class PacketBuilder2 {
             blocks.add(block);
             int sz = block.getTotalLength();
             off += sz;
-            sizeWritten += sz;
         }
         SSU2Payload.writePayload(data, SHORT_HEADER_SIZE, blocks);
         pkt.setLength(off);
@@ -289,7 +288,6 @@ class PacketBuilder2 {
         // compare to LARGE_MTU
         // Also happens on switch between IPv4 and IPv6
         if (_log.shouldDebug() || _log.shouldInfo()) {
-            int maxMTU = PeerState2.MAX_MTU;
             off += MAC_LEN;
             if (_log.shouldDebug()) {
                 if (off + ipHeaderSize > currentMTU) {
@@ -550,15 +548,11 @@ class PacketBuilder2 {
             }
         }
 
-        int len;
         if (numFragments > 1) {
             if (numFragments > 15)
                 throw new IllegalArgumentException();
             if (_log.shouldInfo())
                 _log.info("[SSU] RouterInfo size " + info.length + " bytes requires " + numFragments + " packets");
-            len = max;
-        } else {
-            len = info.length;
         }
 
         // one big block

@@ -463,7 +463,6 @@ class EstablishmentManager {
                         Hash h = addr.getIntroducerHash(i);
                         long exp = addr.getIntroducerExpiration(i);
                         if (h != null && (exp > now || exp == 0)) {
-                            v2intros = true;
                             break;
                         }
                         if (!v2intros) {
@@ -636,7 +635,6 @@ class EstablishmentManager {
             return true;
         // getLastEventCount() is normalized to the rate, so we use the canonical period
         long lastPeriod = 60*1000L;
-        double avg = ra.getAverage();
         int currentTime = (int) (_context.clock().now() - periodStart);
         if (currentTime <= 5*1000) {return true;}
         // compare incoming conns per ms
@@ -687,7 +685,6 @@ class EstablishmentManager {
         long now = _context.clock().now();
         byte[] fromIP = from.getIP();
         int fromPort = from.getPort();
-        String ipAddress = Addresses.toString(fromIP);
         RemoteHostId host = new RemoteHostId(fromIP, fromPort);
         Hash fromHash = host.getPeerHash();
         boolean hasIP = fromIP != null;
@@ -1638,7 +1635,6 @@ class EstablishmentManager {
         } else {token = 0;}
         Hash bobHash = bob.getRemotePeer();
         Hash charlieHash = charlie.getRemoteIdentity().getHash();
-        RouterInfo bobRI = _context.netDb().lookupRouterInfoLocally(bobHash);
         RouterInfo charlieRI = _context.netDb().lookupRouterInfoLocally(charlieHash);
         Hash signer;
         OutboundEstablishState2.IntroState istate;

@@ -157,7 +157,6 @@ public class HashPatternDetector implements Serializable {
 
         PrefixStats stats = _prefixStats.computeIfAbsent(prefix, k -> new PrefixStats(prefix));
         double oldConfidence = stats.getConfidence();
-        int oldTotal = stats.getTotalBans();
         stats.recordBan(reason);
         double newConfidence = stats.getConfidence();
         int newTotal = stats.getTotalBans();

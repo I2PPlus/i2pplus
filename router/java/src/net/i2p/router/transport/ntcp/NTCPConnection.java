@@ -636,11 +636,9 @@ public class NTCPConnection implements Closeable {
         if (_log.shouldWarn()) {
             int writeBufs = _writeBufs.size();
             boolean currentOutboundSet;
-            long seq;
 
             synchronized (_writeLock) {
                 currentOutboundSet = !_currentOutbound.isEmpty();
-                seq = currentOutboundSet ? _currentOutbound.get(0).getSeqNum() : -1;
             }
 
             try {

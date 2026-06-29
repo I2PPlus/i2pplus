@@ -1072,7 +1072,6 @@ public class NTCPTransport extends TransportImpl {
         _finisher.start();
         _pumper.startPumping();
         int threads = SystemVersion.isSlow() ? 3 : 6;
-        long maxMemory = SystemVersion.getMaxMemory();
         _reader.startReading(threads);
         _writer.startWriting(threads);
     }
@@ -1383,10 +1382,9 @@ public class NTCPTransport extends TransportImpl {
      * @since 0.9.35
      */
     private static int getNTCPVersion(RouterAddress addr) {
-        int rv;
         String style = addr.getTransportStyle();
-        if (style.equals(STYLE)) {rv = 1;}
-        else if (style.equals(STYLE2)) {rv = NTCP2_INT_VERSION;}
+        if (style.equals(STYLE)) {}
+        else if (style.equals(STYLE2)) {}
         else {return 0;}
         // check version == "2" || version starts with "2,"
         // and static key, and iv

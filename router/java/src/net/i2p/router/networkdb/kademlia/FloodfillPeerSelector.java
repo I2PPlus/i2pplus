@@ -233,7 +233,6 @@ class FloodfillPeerSelector extends PeerSelector {
         long installed = _context.getProperty("router.firstInstalled", 0L);
         long uptime = _context.router().getUptime();
         boolean enforceHeard = installed > 0 && (now - installed) > INSTALL_AGE;
-        boolean shouldDisconnect = _context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
 
         double maxFailRate = 0.95;
         if (_context.router().getUptime() > 2*60*60*1000L) {
@@ -261,10 +260,7 @@ class FloodfillPeerSelector extends PeerSelector {
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(entry);
             MaskedIPSet entryIPs = new MaskedIPSet(_context, entry, info, 2); // put anybody in the same /16 at the end
             boolean sameIP = false;
-            boolean noSSU = true;
-            boolean noCountry = true;
             boolean isUnreachable = true;
-            String country = "unknown";
             String caps = null;
             if (info != null) {
                 caps = DataHelper.stripHTML(info.getCapabilities());

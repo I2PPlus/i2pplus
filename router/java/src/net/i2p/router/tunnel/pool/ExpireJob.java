@@ -169,7 +169,6 @@ class ExpireJob extends JobImpl {
             _isScheduled = false;
         }
         long now = getContext().clock().now();
-        int startSize = _expirations.size();
         Log log = getContext().logManager().getLog(ExpireJob.class);
 
         try {

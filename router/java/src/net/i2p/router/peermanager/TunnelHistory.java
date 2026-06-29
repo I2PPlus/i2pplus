@@ -140,7 +140,6 @@ public class TunnelHistory {
         long now = System.currentTimeMillis();
         long elapsed = now - _lastCoalesce;
         if (elapsed >= 60 * 60 * 1000) {
-            long agreed = _lifetimeAgreedTo.get();
             long rejected = _lifetimeRejected.get();
             if (rejected > 0) {
                 long newRejected = Math.max(0, rejected / 3);

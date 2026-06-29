@@ -78,7 +78,6 @@ class PacketHandler {
         StringBuilder rv = new StringBuilder();
         rv.append("Handlers: ").append(_handlers.length);
         for (int i = 0; i < _handlers.length; i++) {
-            Handler handler = _handlers[i];
             rv.append(" handler ").append(i);
         }
         return rv.toString();

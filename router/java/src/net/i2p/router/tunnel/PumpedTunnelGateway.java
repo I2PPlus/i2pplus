@@ -156,7 +156,6 @@ class PumpedTunnelGateway extends TunnelGateway {
         // Adjust max messages per pump based on backlog and system load
         int max;
         boolean backlogged = _context.commSystem().isBacklogged(_nextHop);
-        long lag = _context.jobQueue().getMaxLag();
 
         if (backlogged && _log.shouldInfo()) {
             _log.info("PumpedTunnelGateway backlogged, queued to " + _nextHop + " : "
@@ -186,7 +185,7 @@ class PumpedTunnelGateway extends TunnelGateway {
             if (debug) {
                 _log.debug("Added before direct flush preprocessing for " + toString() + ":\n* " + _queue);
             }
-            boolean delayedFlush = _preprocessor.preprocessQueue(_queue, _sender, _receiver);
+            _preprocessor.preprocessQueue(_queue, _sender, _receiver);
             if (debug) {
                 long afterPreprocess = _context.clock().now();
                 if (afterPreprocess - startTime > 0) {

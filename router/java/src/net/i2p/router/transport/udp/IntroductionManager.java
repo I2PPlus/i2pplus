@@ -98,7 +98,6 @@ class IntroductionManager {
             _outbound.put(Long.valueOf(id), peer);
         long id2 = peer.getTheyRelayToUsAs();
         if (id2 > 0 && _inbound.size() < MAX_INBOUND) {
-            added = true;
             _inbound.put(Long.valueOf(id2), peer);
         }
         //if (added &&_log.shouldDebug())
@@ -734,7 +733,6 @@ class IntroductionManager {
      */
     private boolean receiveRelayIntro(PeerState2 bob, Hash alice, byte[] data, RouterInfo aliceRI) {
         long nonce = DataHelper.fromLong(data, 0, 4);
-        long tag = DataHelper.fromLong(data, 4, 4);
         long time = DataHelper.fromLong(data, 8, 4) * 1000;
         long now = _context.clock().now();
         long skew = time - now;

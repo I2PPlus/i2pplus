@@ -374,7 +374,7 @@ class BuildHandler implements Runnable {
                 } else {
                     _context.statManager().addRateData("tunnel.tierReject" + bwTier, 1);
                     allAgree = false;
-                    String reason = "Unknown";
+                    String reason;
                     switch (howBad) {
                         case TunnelHistory.TUNNEL_REJECT_BANDWIDTH:
                             _context.statManager().addRateData("tunnel.receiveRejectionBandwidth", 1);
@@ -681,7 +681,6 @@ class BuildHandler implements Runnable {
         @Override
         public void runJob() {
             long now = System.currentTimeMillis();
-            long lookupTime = Math.max(1, now - _state.getLookupStartTime());
             getContext().statManager().addRateData("tunnel.rejectTimeout", 1);
             getContext().statManager().addRateData("tunnel.buildLookupSuccess", 0);
             Hash from = _state.fromHash;

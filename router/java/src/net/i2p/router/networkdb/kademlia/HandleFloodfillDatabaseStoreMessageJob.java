@@ -241,9 +241,6 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     String v = ri.getVersion();
                     boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
                     boolean isInvalidVersion = VersionComparator.comp(v, "2.5.0") >= 0;
-                    String country = "unknown";
-                    boolean noCountry = true;
-                    long uptime = getContext().router().getUptime();
                     boolean notFrom = !key.equals(_fromHash);
                     boolean logged = false;
                     boolean bypassThrottle = false;

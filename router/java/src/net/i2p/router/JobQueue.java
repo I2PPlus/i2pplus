@@ -413,7 +413,6 @@ public class JobQueue {
         if (numReady > _context.getProperty(PROP_MAX_WAITING_JOBS, DEFAULT_MAX_WAITING_JOBS)) {
             Class<? extends Job> cls = job.getClass();
             String jobName = cls.getName();
-            boolean disableTunnelTests = _context.getBooleanProperty("router.disableTunnelTesting");
             boolean shouldDrop = getMaxLag() >= MIN_LAG_TO_DROP;
             if (shouldDrop) {
                 if (cls == RepublishLeaseSetJob.class) {return false;}
@@ -748,7 +747,6 @@ public class JobQueue {
                                 _context.statManager().addRateData("jobQueue.testJobCount", testJobCount);
                             }
                             boolean highLoad = SystemVersion.getCPULoadAvg() > 98 || SystemVersion.getCPULoad() > 98;
-                            boolean isSlow = SystemVersion.isSlow();
                             // More aggressive checking - don't wait long when jobs are close to ready
                             if (timeToWait < 0) {
                                 timeToWait = highLoad ? 50 : 10;

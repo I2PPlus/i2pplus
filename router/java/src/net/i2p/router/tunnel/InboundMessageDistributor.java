@@ -308,8 +308,6 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                     // a data message targeting the local router is how we send load tests
                     // (real data messages target destinations)
                     _context.statManager().addRateData("tunnel.handleLoadClove", 1);
-                    data = null;
-                    //_context.inNetMessagePool().add(data, null, null);
                     break;
 
                   case DeliveryStatusMessage.MESSAGE_TYPE:

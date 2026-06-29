@@ -730,7 +730,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     private class QueueAll implements SimpleTimer.TimedEvent {
         public void timeReached() {
-            long uptime = _context.router().getUptime();
             for (Hash h : _context.netDb().getAllRouters()) {
                 //RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
                 RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(h);
@@ -1344,7 +1343,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public String getCountry(Hash peer) {
         String cachedCountry = countryCache.get(peer);
         long now = System.currentTimeMillis();
-        long uptime = _context.router().getUptime();
 
         // Periodic cleanup of stale entries (8 hour expiry)
         if (now - lastCacheCleanup > 5*60*1000) { // Check every 5 minutes

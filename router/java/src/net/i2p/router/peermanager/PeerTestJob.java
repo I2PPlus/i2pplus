@@ -160,8 +160,6 @@ public class PeerTestJob extends JobImpl {
      * @return number of peers to test in parallel
      */
     private int getTestConcurrency() {
-        int cores = SystemVersion.getCores();
-        long memory = SystemVersion.getMaxMemory();
         int testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, DEFAULT_PEER_TEST_CONCURRENCY);
         if (SystemVersion.getCPULoadAvg() > 95) {testConcurrent = 1;}
         // Double concurrency during first 5 minutes to quickly profile untested peers
@@ -253,10 +251,8 @@ public class PeerTestJob extends JobImpl {
     public void runJob() {
         long lag = getContext().jobQueue().getMaxLag();
         boolean keepTesting;
-        PeerManager manager;
         synchronized(this) {
             keepTesting = _keepTesting;
-            manager = _manager;
         }
         if (!keepTesting) return;
 

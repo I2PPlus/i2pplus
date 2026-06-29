@@ -408,7 +408,6 @@ class BuildExecutor implements Runnable {
         // Constants for expiration calculations
         final long TEN_MINUTES_MS = 10 * 60 * 1000L;
         final long expireRecentlyBefore = now + TEN_MINUTES_MS - BuildRequestor.getRequestTimeout(_context) + getGracePeriod(_context);
-        final long expireBefore = now + TEN_MINUTES_MS - BuildRequestor.getRequestTimeout(_context);
 
         // Expire really old build requests from recentlyBuilding map
         for (Iterator<PooledTunnelCreatorConfig> iter = _recentlyBuildingMap.values().iterator(); iter.hasNext(); ) {

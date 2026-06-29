@@ -785,7 +785,6 @@ public class TunnelPool {
      */
     int getUsableTunnelCount() {
         long now = _context.clock().now();
-        long preBuildThreshold = now + 5L * 60 * 1000;
         int count = 0;
         _tunnelsLock.lock();
         try {
@@ -1028,9 +1027,6 @@ public class TunnelPool {
             }
 
             int target = _settings.getTotalQuantity();
-            // Dynamic scaling: keep extra tunnels when pool keeps collapsing
-            int effectiveTarget = Math.min(target + _consecutiveEmergencies * 2,
-                                           target + MAX_EMERGENCY_BOOST * 2);
             int currentSize = _tunnels.size();
             boolean isServerPool = _settings.isInbound() && !_settings.isExploratory();
 
@@ -1334,12 +1330,10 @@ public class TunnelPool {
      *  @param info the tunnel to remove
      */
     void removeTunnel(TunnelInfo info) {
-        int remaining = 0;
         _tunnelsLock.lock();
         try {
             boolean removed = _tunnels.remove(info);
             if (!removed) {return;}
-            remaining = _tunnels.size();
         } finally {_tunnelsLock.unlock();}
 
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Removing tunnel " + info);}
@@ -1451,7 +1445,6 @@ public class TunnelPool {
      */
     private LeaseSet buildNewLeaseSetFromCopy(List<TunnelInfo> tunnelsCopy, boolean isServerPool) {
         long now = _context.clock().now();
-        long expireAfter = now + 10L * 1000;
         int wanted = Math.min(_settings.getQuantity(), LeaseSet.MAX_LEASES);
 
         TunnelInfo zeroHopTunnel = null;
@@ -1493,9 +1486,6 @@ public class TunnelPool {
             lease.setTunnelId(inId);
             lease.setGateway(gw);
             leases.add(lease);
-            if (tunnel.getLength() <= 1) {
-                zeroHopLease = lease;
-            }
         }
 
         if (leases.isEmpty()) {
@@ -2116,7 +2106,6 @@ public class TunnelPool {
             Lease lease = buildLeaseFromTunnel(zeroHopTunnel);
             if (lease != null) {
                 leases.add(lease);
-                zeroHopLease = lease;
             }
         }
 

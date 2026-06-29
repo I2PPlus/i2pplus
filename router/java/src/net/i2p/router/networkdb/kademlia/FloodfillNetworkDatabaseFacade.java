@@ -538,7 +538,6 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 if (i >= MAX_TO_FLOOD) {break;}
             }
             if (i > 0) {
-                max += i;
                 if (_log.shouldDebug()) {
                     _log.debug("Flooding the entry for [" + key.toBase32().substring(0,8) + "] to " + i + " more, just before midnight");
                 }
@@ -864,21 +863,15 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         String MIN_VERSION = "0.9.64";
         String v = info.getVersion();
         boolean isHidden = _context.router().isHidden();
-        boolean slow = info != null && !isUs && (info.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                       info.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                       info.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                       info.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0);
         boolean fast = info != null && !isUs && (info.getCapabilities().indexOf(Router.CAPABILITY_BW256) >= 0 ||
                        info.getCapabilities().indexOf(Router.CAPABILITY_BW512) >= 0 ||
                        info.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
         boolean uninteresting = info != null && !isHidden && (VersionComparator.comp(v, MIN_VERSION) < 0 && !fast) &&
                                 _context.netDb().getKnownRouters() > 2000 && !isUs;
-        boolean isFF = false;
         //boolean noSSU = true;
         String caps = "unknown";
         if (info != null) {
             caps = info.getCapabilities();
-            if (caps.contains("f")) {isFF = true;}
 /**
             for (RouterAddress ra : info.getAddresses()) {
                 if (ra.getTransportStyle().contains("SSU")) {

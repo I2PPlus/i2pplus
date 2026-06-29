@@ -1010,7 +1010,6 @@ int pct = Math.max(0, (int)((1.0f - factor) * 100));
          * Scales with allocation: higher share = higher per-tunnel cap.
          */
         int getMaxPerTunnelBandwidth(Location loc) {
-            final int MAX_TUNNELS_THRESHOLD = 4000;
             int maxTunnels = _context.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS,
                                                   RouterThrottleImpl.DEFAULT_MAX_TUNNELS);
             int max = _context.bandwidthLimiter().getMaxShareBandwidth();
@@ -1115,7 +1114,7 @@ int pct = Math.max(0, (int)((1.0f - factor) * 100));
 
         public void runJob() {
             long now = getContext().clock().now() + 1000;
-            long nextTime = now + 10 * 60 * 1000L;
+            long nextTime;
 
             // Scale expiration more gradually with tunnel count to reduce churn
             // High tunnel counts expire faster to maintain pool health

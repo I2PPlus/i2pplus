@@ -1163,7 +1163,6 @@ public class PeerState {
         List<OutboundMessageState> rv = allocateSend2(canSendOld, now);
         if (rv != null && !rv.isEmpty()) {
             synchronized(this) {
-                long old = _retransmitTimer;
                 if (_retransmitTimer == 0) {_retransmitTimer = now + getRTO();}
                 else if (_fastRetransmit.get()) {_retransmitTimer = now + getRTO();} // right?
             }

@@ -91,7 +91,6 @@ class ExpireLeasesJob extends JobImpl {
                 }
             }
         }
-        int origsz = sz;
         int limit = isFFDB ? LIMIT_LEASES_FF : LIMIT_LEASES_CLIENT;
         if (sz > limit) {
             // aggressive drop strategy

@@ -203,7 +203,6 @@ abstract class BuildRequestor {
         TunnelPool pool = cfg.getTunnelPool();
         TunnelPoolSettings settings = pool.getSettings();
         boolean isInbound = settings.isInbound();
-        TunnelManagerFacade mgr = ctx.tunnelManager();
 
         TunnelInfo pairedTunnel = selectPairedTunnel(ctx, pool, cfg, exec, log);
         if (pairedTunnel == null) {

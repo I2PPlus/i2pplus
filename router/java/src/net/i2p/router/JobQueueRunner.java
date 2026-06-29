@@ -37,7 +37,7 @@ class JobQueueRunner extends I2PThread {
     public long getLastEnd() {return _lastEnd;}
 
     public void run() {
-        long lastActive = _context.clock().now();
+        long lastActive;
         while (_keepRunning && _context.jobQueue().isAlive()) {
             try {
                 Job job = _context.jobQueue().getNext();

@@ -373,11 +373,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     public void queueForExploration(Collection<Hash> keys) {
-        boolean upLongEnough = _context.router().getUptime() > 15*60*1000;
-        if (!upLongEnough) {
-            long down = _context.router().getEstimatedDowntime();
-            upLongEnough = down > 0 && down < 10*60*60*1000L;
-        }
         if (!_initialized || isClientDb()) {
             if (_log.shouldInfo() && !_initialized) {_log.info("Datastore not initialized -> Cannot queue keys for exploration...");}
             return;
@@ -456,19 +451,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public void startup() {
         RouterInfo ri = _context.router().getRouterInfo();
         String dbDir = _context.getProperty(PROP_DB_DIR, DEFAULT_DB_DIR);
-        boolean initMessage = false;
         if (isClientDb()) {_kb = ((FloodfillNetworkDatabaseFacade) _context.netDb()).getKBuckets();}
         else {
             synchronized (kbInitLock) {
                 _kb = new KBucketSet<>(_context, ri.getIdentity().getHash(),
                                            BUCKET_SIZE, KAD_B, new RejectTrimmer<>());
             }
-        }
-
-        if (_log.shouldInfo() && _context.router().getUptime() < 60*1000 && !initMessage) {
-            _log.info("Initializing the Kademlia Network Database...\n" +
-                      "BucketSize: " + BUCKET_SIZE + "; B Value: " + KAD_B);
-            initMessage = true;
         }
 
         try {
@@ -501,7 +489,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // expire some routers
         // Don't run until after RefreshRoutersJob has run, and after validate() will return invalid for old routers.
         if (!isClientDb() && !_context.commSystem().isDummy()) {
-            boolean isFF = _context.getBooleanProperty(FloodfillNetworkDatabaseFacade.PROP_FLOODFILL_PARTICIPANT);
             long down = _context.router().getEstimatedDowntime();
             long delay = 20*60*1000L;
             if (down > 24*60*60*1000) {delay = 60*60*1000;}
@@ -1916,7 +1903,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             try {return Integer.parseInt(expireRI)*60*60*1000L;}
             catch (NumberFormatException ignored) { /* ignored */ }
         }
-        long calculatedExpiry = ROUTER_INFO_EXPIRATION;
+        long calculatedExpiry;
         if (floodfillEnabled() && existingRouters > 3000) {calculatedExpiry = ROUTER_INFO_EXPIRATION_FLOODFILL / 3 * 2;}
         else if (floodfillEnabled() && existingRouters > 2000) {calculatedExpiry = ROUTER_INFO_EXPIRATION_FLOODFILL;}
         else if (floodfillEnabled()) {calculatedExpiry = ROUTER_INFO_EXPIRATION_FLOODFILL * 3 / 2;}
@@ -2470,8 +2457,7 @@ return false;
     boolean dropAfterLookupFailed(Hash peer) {
         if (isClientDb()) {return false;}
         boolean loggedFailure = false;
-        int count = 0;
-        if (count == 0) {
+        {
             _context.peerManager().removeCapabilities(peer);
             _negativeCache.cache(peer);
             _kb.remove(peer);
@@ -2482,7 +2468,6 @@ return false;
                     loggedFailure = true;
                 }
             }
-            count++;
         }
         return loggedFailure;
     }

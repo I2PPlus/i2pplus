@@ -997,12 +997,9 @@ public class UDPTransport extends TransportImpl {
      * @since 0.9.54
      */
     int getSSUVersion(RouterAddress addr) {
-        int rv;
         String style = addr.getTransportStyle();
         if (style.equals(STYLE)) {
-            rv = 1;
         } else if (style.equals(STYLE2)) {
-            rv = SSU2_INT_VERSION;
         } else {
             return 0;
         }
@@ -2872,12 +2869,6 @@ public class UDPTransport extends TransportImpl {
         boolean isIPv6 = host != null && host.contains(":");
         if (isIPv6 && host.equals(":"))
             host = null;
-        boolean weAreFirewalled = _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
-                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
-                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
-                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
-                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
-                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
         OrderedProperties options = new OrderedProperties();
         if (_context.router().isHidden()) {
             // save the external address, since we didn't publish it

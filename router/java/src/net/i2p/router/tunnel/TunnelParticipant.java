@@ -170,7 +170,6 @@ class TunnelParticipant {
                                _config.getSendTo().toBase64().substring(0, 6) + "]");
                 }
             } else {
-                ri = _context.netDb().lookupRouterInfoLocally(_config.getSendTo());
                 _context.netDb().lookupRouterInfo(
                     _config.getSendTo(),
                     new SendJob(_context, msg),

@@ -1986,7 +1986,6 @@ public class Router implements RouterClock.ClockShiftListener {
     public long getEstimatedDowntime() {
         synchronized(_configFileLock) {
             if (_downtime >= 0) {return _downtime;}
-            long begin = System.currentTimeMillis();
             long stopped = _eventLog.getLastEvent(EventLog.STOPPED, _context.clock().now() - 365*24*60*60*1000L);
             long downtime = stopped > 0 ? _started - stopped : 0;
             if (downtime < 0) {downtime = 0;}
