@@ -188,7 +188,17 @@ class BuildExecutor implements Runnable {
      */
     public synchronized void shutdown() {
         _isRunning = false;
+        _poolFailureState.clear();
         restart();
+    }
+
+    /**
+     *  Remove failure state for a pool that is being removed.
+     *  Prevents unbounded growth of _poolFailureState across pool lifecycles.
+     *  @since 0.9.70
+     */
+    void removePoolState(TunnelPool pool) {
+        _poolFailureState.remove(pool);
     }
 
     /**
@@ -211,9 +221,9 @@ class BuildExecutor implements Runnable {
         if (total >= 50) {
             calculateAdaptiveTimeoutFromSuccess();
             // Reset counters periodically to favor recent behavior
-            _buildSuccessCount.set(_buildSuccessCount.get() / 2);
-            _buildFailureCount.set(_buildFailureCount.get() / 2);
-            _buildTimeoutCount.set(_buildTimeoutCount.get() / 2);
+            _buildSuccessCount.set(_buildSuccessCount.getAndSet(0) / 2);
+            _buildFailureCount.set(_buildFailureCount.getAndSet(0) / 2);
+            _buildTimeoutCount.set(_buildTimeoutCount.getAndSet(0) / 2);
         }
     }
 

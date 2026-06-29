@@ -106,12 +106,33 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
+     *  Prune expired entries from static peer maps.
+     *  Called periodically from peer selection to prevent unbounded growth.
+     *  @since 0.9.70
+     */
+    protected static void prunePeerMaps(RouterContext ctx) {
+        long now = ctx.clock().now();
+        if (_peerCooldowns.size() > 128) {
+            long cutoff = now - PEER_SELECTION_COOLDOWN_MS;
+            _peerCooldowns.entrySet().removeIf(e -> e.getValue() < cutoff);
+        }
+        if (_lastKeepAlive.size() > 256) {
+            long cutoff = now - KEEPALIVE_INTERVAL_MS * 4;
+            _lastKeepAlive.entrySet().removeIf(e -> e.getValue() < cutoff);
+        }
+    }
+
+    /**
      * Record that a peer failed during peer selection (first-hop or adjacent).
      * Used by ClientPeerSelector and ExploratoryPeerSelector to mark peers
      * that failed selection criteria, preventing re-selection for the cooldown.
      */
     protected static void recordPeerFailure(RouterContext ctx, Hash peer) {
         _firstHopFails.put(peer, ctx.clock().now());
+        // Periodically prune all static peer maps
+        if (_peerCooldowns.size() > 128 || _lastKeepAlive.size() > 256) {
+            prunePeerMaps(ctx);
+        }
     }
 
     /**

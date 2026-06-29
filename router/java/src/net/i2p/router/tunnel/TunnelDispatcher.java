@@ -129,8 +129,8 @@ public class TunnelDispatcher implements Service {
     /** Fudge factor for tunnel expiration check - simplifies complex calculation */
     private static final long TUNNEL_EXPIRY_FUDGE = (3 * Router.CLOCK_FUDGE_FACTOR / 2) + 1000;
 
-    /** Config identity codes currently being removed - prevents duplicate removal calls */
-    private final Set<Integer> _configsBeingRemoved = ConcurrentHashMap.newKeySet();
+    /** Configs currently being removed - prevents duplicate removal calls */
+    private final Set<HopConfig> _configsBeingRemoved = ConcurrentHashMap.newKeySet();
 
     /** Location in the tunnel for RED logic */
     public enum Location { OBEP, PARTICIPANT, IBGW }
@@ -204,20 +204,18 @@ public class TunnelDispatcher implements Service {
                 // Remove if expiration + fudge has passed
                 if (cfg.getExpiration() + TUNNEL_EXPIRY_FUDGE < cutoff) {
                     // Check if already being removed
-                    int cfgKey = System.identityHashCode(cfg);
-                    if (_configsBeingRemoved.contains(cfgKey)) {
+                    if (_configsBeingRemoved.contains(cfg)) {
                         continue;
                     }
-                    _configsBeingRemoved.add(cfgKey);
+                    _configsBeingRemoved.add(cfg);
                     pcit.remove();
                     _participants.remove(entry.getKey());
-                    _allocatedBW.addAndGet(0 - cfg.getAllocatedBW());
                     _leaveJob.remove(cfg);
                     cleaned++;
                     if (_log.shouldDebug()) {
                         _log.debug("Periodic cleanup removed expired participating tunnel: " + entry.getKey());
                     }
-                    _configsBeingRemoved.remove(cfgKey);
+                    _configsBeingRemoved.remove(cfg);
                 }
             }
         }
@@ -646,14 +644,13 @@ public class TunnelDispatcher implements Service {
         if (cfg == null) return;
 
         // Check if already being removed - prevent duplicate calls
-        int cfgKey = System.identityHashCode(cfg);
-        if (_configsBeingRemoved.contains(cfgKey)) {
+        if (_configsBeingRemoved.contains(cfg)) {
             if (_log.shouldDebug()) {
                 _log.debug("Skipping duplicate remove for config: " + cfg);
             }
             return;
         }
-        _configsBeingRemoved.add(cfgKey);
+        _configsBeingRemoved.add(cfg);
 
         try {
             TunnelId recvId = cfg.getReceiveTunnel();
@@ -663,6 +660,12 @@ public class TunnelDispatcher implements Service {
             TunnelParticipant participant = _participants.remove(recvId);
             _inboundGateways.remove(recvId);
             _outboundEndpoints.remove(recvId);
+
+            // Decrement allocated bandwidth (single owner of this accounting)
+            int bw = cfg.getAllocatedBW();
+            if (bw > 0) {
+                _allocatedBW.addAndGet(-bw);
+            }
 
             if (_leaveJob != null) {
                 _leaveJob.remove(cfg);
@@ -674,7 +677,7 @@ public class TunnelDispatcher implements Service {
                 _log.debug("Removed participating tunnel: " + recvId);
             }
         } finally {
-            _configsBeingRemoved.remove(cfgKey);
+            _configsBeingRemoved.remove(cfg);
         }
     }
 
@@ -1140,7 +1143,6 @@ int pct = Math.max(0, (int)((1.0f - factor) * 100));
                     if (_log.shouldInfo())
                         _log.info("Expiring Participating tunnel... " + cur);
                     TunnelDispatcher.this.remove(cur);
-                    _allocatedBW.addAndGet(0 - cur.getAllocatedBW());
                     processed++;
                 } else {
                     // Tunnel not expired - since queue is sorted by expiration, all remaining are also not expired

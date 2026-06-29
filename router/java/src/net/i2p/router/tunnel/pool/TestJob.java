@@ -1060,9 +1060,9 @@ public class TestJob extends JobImpl {
     }
 
 
-    private boolean _successHistory[] = new boolean[SUCCESS_HISTORY_SIZE];
-    private int _successHistoryIndex = 0;
-    private int _successCount = 0;
+    private volatile boolean _successHistory[] = new boolean[SUCCESS_HISTORY_SIZE];
+    private volatile int _successHistoryIndex = 0;
+    private volatile int _successCount = 0;
 
     /**
      * Called when the tunnel test fails.

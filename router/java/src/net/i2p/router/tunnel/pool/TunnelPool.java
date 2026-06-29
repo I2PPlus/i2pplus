@@ -14,6 +14,7 @@ import java.util.TreeSet;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 import net.i2p.data.DataHelper;
@@ -1204,11 +1205,11 @@ public class TunnelPool {
     /** Minimum interval between LeaseSet builds (matches getRefreshThrottle(_context)).
      *  Prevents rapid LeaseSet object churn on every tunnel add/remove. */
     /** Cached LeaseSet returned during rate-limit window */
-    private LeaseSet _cachedLeaseSet;
+    private volatile LeaseSet _cachedLeaseSet;
     /** Timestamp of the last successful LeaseSet build */
     private long _lastLeaseSetBuildTime;
     /** Track if a deferred refresh is already scheduled */
-    private volatile boolean _pendingRefreshScheduled;
+    private final AtomicBoolean _pendingRefreshScheduled = new AtomicBoolean();
     private final Map<TunnelId, Long> _recentlyAddedTunnels = new ConcurrentHashMap<>();
 
     /**
@@ -1833,10 +1834,9 @@ public class TunnelPool {
      * Prevents dropping refresh requests during rapid tunnel changes.
      */
     private void scheduleDeferredRefresh() {
-        if (_pendingRefreshScheduled) {
+        if (!_pendingRefreshScheduled.compareAndSet(false, true)) {
             return;
         }
-        _pendingRefreshScheduled = true;
         long delay = getRefreshThrottle(_context) - (_context.clock().now() - _lastRefreshTime);
         if (delay <= 0) {
             delay = getRefreshThrottle(_context);
@@ -1852,7 +1852,7 @@ public class TunnelPool {
      */
     private class DeferredRefreshEvent implements net.i2p.util.SimpleTimer.TimedEvent {
         public void timeReached() {
-            _pendingRefreshScheduled = false;
+            _pendingRefreshScheduled.set(false);
             refreshLeaseSet(false);
         }
     }

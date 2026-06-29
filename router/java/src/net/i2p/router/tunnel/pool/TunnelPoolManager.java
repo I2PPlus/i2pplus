@@ -727,8 +727,14 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
         TunnelPool inbound = _clientInboundPools.remove(destination);
         TunnelPool outbound = _clientOutboundPools.remove(destination);
-        if (inbound != null) {inbound.shutdown();}
-        if (outbound != null) {outbound.shutdown();}
+        if (inbound != null) {
+            inbound.shutdown();
+            _executor.removePoolState(inbound);
+        }
+        if (outbound != null) {
+            outbound.shutdown();
+            _executor.removePoolState(outbound);
+        }
         if (_log.shouldInfo()) {
             _log.info("Tunnel pools removed for [" + destination.toBase32().substring(0,8) + "]");
         }
