@@ -66,7 +66,9 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
      */
 
     public boolean messageReceived(long messageID) {
-        return _recentlyCompletedMessages.add(messageID);
+        DecayingBloomFilter filter = _recentlyCompletedMessages;
+        if (filter == null) return false;
+        return filter.add(messageID);
     }
 
     /**
@@ -78,7 +80,9 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
      */
 
     public boolean wasRecentlyReceived(long messageID) {
-        return _recentlyCompletedMessages.isKnown(messageID);
+        DecayingBloomFilter filter = _recentlyCompletedMessages;
+        if (filter == null) return false;
+        return filter.isKnown(messageID);
     }
 
     /**

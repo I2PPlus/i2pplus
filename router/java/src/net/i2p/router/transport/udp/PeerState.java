@@ -153,7 +153,7 @@ public class PeerState {
     private final PriBlockingQueue<OutboundMessageState> _outboundQueue;
 
     /** when the retransmit timer is about to trigger */
-    private long _retransmitTimer;
+    private volatile long _retransmitTimer;
 
     protected final UDPTransport _transport;
 
