@@ -121,6 +121,13 @@ class ClientConnectionRunner {
     private static final int BUF_SIZE = 32*1024;
     private static final int MAX_SESSIONS = 4;
 
+    /**
+     *  Maximum number of unclaimed messages to buffer per client connection.
+     *  Prevents unbounded memory growth if the client is slow to consume.
+     *  @since 0.9.70
+     */
+    private static final int MAX_BUFFERED_MESSAGES = 1024;
+
     /** @since 0.9.2 */
     private static final String PROP_TAGS = "crypto.tagsToSend";
     private static final String PROP_THRESH = "crypto.lowTagThreshold";
@@ -524,8 +531,23 @@ class ClientConnectionRunner {
      *  Only call if _dontSendMSMOnReceive is false
      */
     void setPayload(MessageId id, Payload payload) {
-        if (!_dontSendMSMOnReceive)
+        if (!_dontSendMSMOnReceive) {
+            if (_messages.size() >= MAX_BUFFERED_MESSAGES) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Buffered message limit reached (" + MAX_BUFFERED_MESSAGES
+                              + "), dropping oldest entries for client");
+                }
+                // Evict oldest entries (ConcurrentHashMap has no ordering,
+                // so we clear a batch to make room)
+                int toEvict = _messages.size() / 4;
+                Iterator<MessageId> iter = _messages.keySet().iterator();
+                for (int i = 0; i < toEvict && iter.hasNext(); i++) {
+                    iter.next();
+                    iter.remove();
+                }
+            }
             _messages.put(id, payload);
+        }
     }
 
     /**
