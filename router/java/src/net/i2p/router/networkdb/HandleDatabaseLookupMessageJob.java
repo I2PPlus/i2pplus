@@ -121,7 +121,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
              *    - false for received over a client tunnel(if associated with a client, goes to client subDB)
              *    - true for received in a DatabaseStoreMessage unsolicited(goes to main Db)
              */
-            if (ls.getReceivedAsPublished()) {
+            if (ls != null && ls.getReceivedAsPublished()) {
                 /**
                  *  Answer anything that was stored to us directly.
                  *  (i.e. "received as published" - not the result of a query).
@@ -139,6 +139,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
             }
         } else if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO && lookupType != DatabaseLookupMessage.Type.LS) {
             RouterInfo info = (RouterInfo) dbe;
+            if (info == null) return;
             String cap = info.getCapabilities();
             String bw = info.getBandwidthTier();
             boolean isReachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;

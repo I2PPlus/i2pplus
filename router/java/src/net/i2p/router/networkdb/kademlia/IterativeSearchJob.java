@@ -616,7 +616,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                     return;
                 }
                 if (_log.shouldDebug()) {
-                    _log.debug("Encrypted DbLookupMsg for [" + _key.toBase64().substring(0,6) +
+                    _log.debug("Encrypted DbLookupMsg for [" + (_key != null ? _key.toBase64().substring(0,6) : "null") +
                                "] sent to [" + peer.toBase64().substring(0,6) + "]");
                 }
             }

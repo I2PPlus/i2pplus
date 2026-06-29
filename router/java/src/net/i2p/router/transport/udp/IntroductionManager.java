@@ -503,6 +503,7 @@ class IntroductionManager {
             }
         }
         if (rcode == SSU2Util.RELAY_ACCEPT) {
+            if (charlie == null || aliceRI == null) {return;}
             // Send Alice RI and forward data in a Relay Intro to Charlie
             if (_log.shouldInfo())
                 _log.info("Received relay request from " + alice

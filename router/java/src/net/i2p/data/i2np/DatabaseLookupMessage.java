@@ -406,7 +406,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
             //System.arraycopy(data, curIndex, peer, 0, Hash.HASH_LENGTH);
             Hash p = Hash.create(data, curIndex);
             curIndex += Hash.HASH_LENGTH;
-            peers.add(p);
+            if (peers != null) peers.add(p);
         }
         _dontIncludePeers = peers;
         if (replyKeySpecified || ratchetSpecified) {
@@ -529,7 +529,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
             if (_replyTag != null) {
                 System.arraycopy(_replyTag.getData(), 0, out, curIndex, SessionTag.BYTE_LENGTH);
                 curIndex += SessionTag.BYTE_LENGTH;
-            } else {
+            } else if (_ratchetReplyTag != null) {
                 System.arraycopy(_ratchetReplyTag.getData(), 0, out, curIndex, RatchetSessionTag.LENGTH);
                 curIndex += RatchetSessionTag.LENGTH;
             }

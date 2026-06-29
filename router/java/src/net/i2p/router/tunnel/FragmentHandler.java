@@ -233,13 +233,6 @@ class FragmentHandler {
      * this.
      */
     private boolean verifyPreprocessed(byte[] preprocessed, int offset, int length) {
-        // ByteCache/ByteArray corruption detection
-        //byte[] orig = new byte[length];
-        //System.arraycopy(preprocessed, 0, orig, 0, length);
-        //try {
-        //    Thread.sleep(75);
-        //} catch (InterruptedException ie) {}
-
         // now we need to verify that the message was received correctly
         int paddingEnd = HopProcessor.IV_LENGTH + 4;
         while (preprocessed[offset+paddingEnd] != (byte)0x00) {
@@ -260,9 +253,6 @@ class FragmentHandler {
         int validLength = length - offset - paddingEnd + HopProcessor.IV_LENGTH;
         System.arraycopy(preprocessed, offset + paddingEnd, preV, 0, validLength - HopProcessor.IV_LENGTH);
         System.arraycopy(preprocessed, 0, preV, validLength - HopProcessor.IV_LENGTH, HopProcessor.IV_LENGTH);
-        //if (_log.shouldDebug())
-        //    _log.debug("Endpoint IV: " + Base64.encode(preV, validLength - HopProcessor.IV_LENGTH, HopProcessor.IV_LENGTH));
-
         byte[] v = SimpleByteCache.acquire(Hash.HASH_LENGTH);
         _context.sha().calculateHash(preV, 0, validLength, v, 0);
         _validateCache.release(ba);
@@ -286,13 +276,6 @@ class FragmentHandler {
             else
                 _context.statManager().addRateData("tunnel.fullFragments", 1);
         }
-
-        // ByteCache/ByteArray corruption detection
-        //if (!DataHelper.eq(preprocessed, 0, orig, 0, length)) {
-        //    _log.log(Log.CRIT, "Not equal! orig =\n" + Base64.encode(orig, 0, length) +
-        //             "\nprep =\n" + Base64.encode(preprocessed, 0, length),
-        //             new Exception("hosed"));
-        //}
 
         return eq;
     }
@@ -359,9 +342,6 @@ class FragmentHandler {
         if ( (type == TYPE_ROUTER) || (type == TYPE_TUNNEL) ) {
             if (offset + Hash.HASH_LENGTH >= preprocessed.length)
                 return -1;
-            //byte[] h = new byte[Hash.HASH_LENGTH];
-            //System.arraycopy(preprocessed, offset, h, 0, Hash.HASH_LENGTH);
-            //router = new Hash(h);
             router = Hash.create(preprocessed, offset);
             offset += Hash.HASH_LENGTH;
         }

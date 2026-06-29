@@ -375,7 +375,7 @@ public class NTCPTransport extends TransportImpl {
             if (last <= 0)
                 oldStatus = getReachabilityStatus();
             _lastInboundIPv6 = created;
-            if (last <= 0)
+            if (last <= 0 && oldStatus != null)
                 addressChanged(oldStatus);
             _context.statManager().addRateData("ntcp.inboundIPv6Conn", 1);
         } else {
@@ -383,7 +383,7 @@ public class NTCPTransport extends TransportImpl {
             if (last <= 0)
                 oldStatus = getReachabilityStatus();
             _lastInboundIPv4 = created;
-            if (last <= 0)
+            if (last <= 0 && oldStatus != null)
                 addressChanged(oldStatus);
             _context.statManager().addRateData("ntcp.inboundIPv4Conn", 1);
         }

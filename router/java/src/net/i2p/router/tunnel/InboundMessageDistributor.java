@@ -198,7 +198,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
             TunnelInfo out = _context.tunnelManager().selectOutboundTunnel(_client, target);
             if (out == null) {
                 if (_log.shouldWarn()) {
-                    _log.warn("No Outbound tunnel to send the client message for [" + _client.toBase64().substring(0,6) + "] \n* Message: " + msg);
+                    _log.warn("No Outbound tunnel to send the client message for [" + (_client != null ? _client.toBase64().substring(0,6) : "null") + "] \n* Message: " + msg);
                 }
                 return;
             }

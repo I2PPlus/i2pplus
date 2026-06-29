@@ -1388,6 +1388,7 @@ public class UDPTransport extends TransportImpl {
                           TransportUtil.isValidPort(ourPort);
         boolean explicitSpecified = explicitAddressSpecified();
         boolean inboundRecent;
+        if (ourIP == null) return;
         boolean isIPv6 = ourIP.length == 16;
         if (!isIPv6)
             inboundRecent = _lastInboundReceivedOn + ALLOW_IP_CHANGE_INTERVAL > System.currentTimeMillis();

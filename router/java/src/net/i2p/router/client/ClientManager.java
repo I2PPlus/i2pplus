@@ -531,7 +531,7 @@ class ClientManager {
         if (runner != null)  {runner.requestLeaseSet(dest, ls, REQUEST_LEASESET_TIMEOUT, null, null);}
         else {
             if (_log.shouldWarn()) {
-                _log.warn("Cannot request LeaseSet -> No ClientRunner found for [" + dest.toBase32().substring(0,8) +
+                _log.warn("Cannot request LeaseSet -> No ClientRunner found for [" + (dest != null ? dest.toBase32().substring(0,8) : "null") +
                           "] - disconnected?");
             }
         }
@@ -720,7 +720,7 @@ class ClientManager {
                 else {runner.receiveMessage(_msg.getDestinationHash(), null, _msg.getPayload());}
             } else if (_log.shouldWarn()) {
                 // no client connection... we should pool these somewhere...
-                _log.warn("Message received but no current connection to [" + dest.toBase32().substring(0,8) + " / " +
+                _log.warn("Message received but no current connection to [" + (dest != null ? dest.toBase32().substring(0,8) : "null") + " / " +
                           _msg.getDestinationHash().toBase32().substring(0,8) + "] -> DROPPED", new Exception());
             }
         }

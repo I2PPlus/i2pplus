@@ -290,8 +290,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 				String pktIP = pkt.getRemoteAddress();
 				if (!stringEquals(ip, pktIP)) {
 					// IPv6 location received over IPv4 is ok, or vice versa
-					boolean v61 = ip.contains(":");
-					boolean v62 = pktIP.contains(":");
+					boolean v61 = ip != null && ip.contains(":");
+					boolean v62 = pktIP != null && pktIP.contains(":");
 					if (v61 == v62) {
 						// canonicalize
 						byte[] b1 = Addresses.getIP(ip);

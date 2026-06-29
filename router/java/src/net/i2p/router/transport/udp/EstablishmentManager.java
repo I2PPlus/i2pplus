@@ -843,6 +843,7 @@ class EstablishmentManager {
      */
     private void sendTerminationPacket(RemoteHostId to, UDPPacket fromPacket, int terminationCode) {
         if (to != null && isPeerBanned(to)) {return;}
+        if (to == null) {return;}
 
         int count = _terminationCounter.increment(to);
         if (count > MAX_TERMINATIONS) {
@@ -896,6 +897,7 @@ class EstablishmentManager {
      * @since 0.9.54
      */
     void receiveSessionConfirmed(InboundEstablishState2 state, UDPPacket packet) {
+        if (state == null) return;
         if (state != null && isPeerBanned(state)) {
             _inboundStates.remove(state.getRemoteHostId());
             return;
@@ -935,6 +937,7 @@ class EstablishmentManager {
      * @since 0.9.54
      */
     void receiveSessionCreated(OutboundEstablishState2 state, UDPPacket packet) {
+        if (state == null) return;
         if (state != null && isPeerBanned(state)) {
             _inboundStates.remove(state.getRemoteHostId());
             return;
@@ -967,6 +970,7 @@ class EstablishmentManager {
      * @since 0.9.54
      */
     void receiveRetry(OutboundEstablishState2 state, UDPPacket packet) {
+        if (state == null) return;
         if (state != null && isPeerBanned(state)) {
             _inboundStates.remove(state.getRemoteHostId());
             return;

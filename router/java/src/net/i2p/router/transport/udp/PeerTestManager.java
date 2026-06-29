@@ -968,6 +968,7 @@ class PeerTestManager {
                 }
                 // IP/port checks
                 if (testIP == null ||
+                    fromPeer == null ||
                     isIPv6 != fromPeer.isIPv6() ||
                     !TransportUtil.isValidPort(testPort) ||
                     !_transport.isValid(testIP) ||
@@ -1090,7 +1091,7 @@ class PeerTestManager {
                     if (aliceRI != null) {
                         // validate signed data
                         SigningPublicKey spk = aliceRI.getIdentity().getSigningPublicKey();
-                        if (SSU2Util.validateSig(_context, SSU2Util.PEER_TEST_PROLOGUE,
+                        if (fromPeer != null && SSU2Util.validateSig(_context, SSU2Util.PEER_TEST_PROLOGUE,
                                                  fromPeer.getRemotePeer(), null, data, spk)) {
                             aliceIntroKey = getIntroKey(getAddress(aliceRI, isIPv6));
                             if (aliceIntroKey != null)
@@ -1120,6 +1121,7 @@ class PeerTestManager {
                 // generate our signed data
                 // we sign it even if rejecting, not required though
                 SigningPrivateKey spk = _context.keyManager().getSigningPrivateKey();
+                if (fromPeer == null) return;
                 data = SSU2Util.createPeerTestData(_context, fromPeer.getRemotePeer(), h,
                                                    CHARLIE, nonce, testIP, testPort, spk);
                 if (data == null) {
@@ -1161,6 +1163,7 @@ class PeerTestManager {
 
             // charlie to bob, in-session
             case 3: {
+                if (state == null) return;
                 state.setReceiveCharlieTime(now);
                 if (status != SSU2Util.TEST_ACCEPT &&
                     now - state.getBeginTime() < MAX_BOB_LIFETIME /  2) {
@@ -1189,6 +1192,7 @@ class PeerTestManager {
                     _log.warn("Charlie response " + status + " no more to choose from on " + state);
                 state.setLastSendTime(now);
                 PeerState2 alice = state.getAlice();
+                if (fromPeer == null) return;
                 Hash charlie = fromPeer.getRemotePeer();
                 RouterInfo charlieRI = (status == SSU2Util.TEST_ACCEPT) ? _context.netDb().lookupRouterInfoLocally(charlie) : null;
                 if (charlieRI != null) {
@@ -1266,7 +1270,7 @@ class PeerTestManager {
                         // validate signed data
                         SigningPublicKey spk = charlieRI.getIdentity().getSigningPublicKey();
                         if (SSU2Util.validateSig(_context, SSU2Util.PEER_TEST_PROLOGUE,
-                                                 fromPeer.getRemotePeer(), _context.routerHash(), data, spk)) {
+                                                 fromPeer != null ? fromPeer.getRemotePeer() : null, _context.routerHash(), data, spk)) {
                             RouterAddress ra = getAddress(charlieRI, isIPv6);
                             if (ra != null) {
                                 charlieIntroKey = getIntroKey(ra);
@@ -1478,6 +1482,7 @@ class PeerTestManager {
 
             // alice to charlie, out-of-session
             case 6: {
+                if (state == null) return;
                 state.setReceiveAliceTime(now);
                 state.setLastSendTime(now);
                 // send msg 7

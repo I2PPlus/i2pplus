@@ -340,6 +340,7 @@ class PacketBuilder2 {
         int off = SHORT_HEADER_SIZE;
         // plenty of room
         Block block = getPadding(0, 1280);
+        if (block == null) {return null;}
         List<Block> blocks = Collections.singletonList(block);
         off += block.getTotalLength();
         SSU2Payload.writePayload(data, SHORT_HEADER_SIZE, blocks);
@@ -960,6 +961,7 @@ class PacketBuilder2 {
             }
             // plenty of room
             block = getPadding(len, 1280, PADDING_MAX_SESSION_REQUEST);
+            if (block == null) {return;}
             len += block.getTotalLength();
             blocks.add(block);
 
@@ -1020,6 +1022,7 @@ class PacketBuilder2 {
             }
             // plenty of room
             block = getPadding(len, 1280, PADDING_MAX_SESSION_CREATED);
+            if (block == null) {return;}
             len += block.getTotalLength();
             blocks.add(block);
 
@@ -1089,6 +1092,7 @@ class PacketBuilder2 {
             }
             // plenty of room
             block = getPadding(len, 1280);
+            if (block == null) {return;}
             len += block.getTotalLength();
             blocks.add(block);
             SSU2Payload.writePayload(data, off + LONG_HEADER_SIZE, blocks);
@@ -1127,6 +1131,7 @@ class PacketBuilder2 {
             blocks.add(block);
             // plenty of room
             block = getPadding(len, 1280);
+            if (block == null) {return;}
             len += block.getTotalLength();
             blocks.add(block);
             SSU2Payload.writePayload(data, off + LONG_HEADER_SIZE, blocks);

@@ -1234,9 +1234,9 @@ public class Blocklist {
         if (!_haveIPv6 && ip.length == 16) {return;} // Don't bother unless we have IPv6
         String sip = Addresses.toString(ip); // Temporary reason, until the job finishes
         String reason = "" + _x("Blocklist") + ": " + sip;
-        if (sip != null && sip.startsWith("127.") || "0:0:0:0:0:0:0:1".equals(sip) ||
+        if (sip != null && (sip.startsWith("127.") || "0:0:0:0:0:0:0:1".equals(sip) ||
             sip.startsWith("192.168.") || sip.startsWith("10.") ||
-            (ip != null && ip.length == 4 && (ip[0] * 0xff) == 172 && ip[1] >= 16 && ip[1] <= 31)) {
+            (ip != null && ip.length == 4 && (ip[0] * 0xff) == 172 && ip[1] >= 16 && ip[1] <= 31))) {
             // i2pd bug, possibly at startup, don't ban forever
             if (_banLogger != null) _banLogger.logBan(peer, _context, reason, Banlist.BANLIST_DURATION_PRIVATE);
             _context.banlist().banlistRouter(peer, reason, sip, null, _context.clock().now() + Banlist.BANLIST_DURATION_PRIVATE);

@@ -404,6 +404,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             if (_log.shouldWarn())
                 _log.warn("No session for delivered TagSet to target: " + toString(target));
             sess = createAndReturnSession(target, key);
+            if (sess == null) return null;
         } else {
             sess.setCurrentKey(key);
         }

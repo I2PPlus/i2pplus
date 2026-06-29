@@ -510,7 +510,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 synchronized(_migrationLock) {
                     switch(_migrationState) {
                         case MIGRATION_STATE_NONE:
-                            if (!from.equals(_remoteHostId)) {
+                            if (from != null && !from.equals(_remoteHostId)) {
                                 // QUIC: Must be highest set to protect against reordered packets
                                 if (from.getIP().length == _remoteHostId.getIP().length &&
                                     n == _receivedMessages.getHighestSet() &&
@@ -538,7 +538,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                             break;
 
                         case MIGRATION_STATE_PENDING:
-                            if (from.equals(_remoteHostId)) {
+                            if (from != null && from.equals(_remoteHostId)) {
                                 // cancel
                                 _migrationState = MigrationState.MIGRATION_STATE_NONE;
                                 if (shouldLogDebug) {_log.debug("[SSU] Cancelling connection migration" + this);}
