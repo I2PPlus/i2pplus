@@ -91,9 +91,6 @@ class ProfileOrganizerRenderer {
         boolean isAdvanced = _context.getBooleanProperty("routerconsole.advanced");
         StringBuilder buf = new StringBuilder(32*1024);
 
-        // Cache for reverse DNS lookups
-        LHMCache<String, String> reverseLookupCache = new LHMCache<>(50);
-
         if (mode < 2) {
             buf.append("<p id=profiles_overview class=infohelp>")
                .append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.", order.size())).append('\n');
@@ -166,12 +163,7 @@ class ProfileOrganizerRenderer {
                 String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getCompatibleIP(info)) : null;
                 String rl = null;
                 if (ip != null && enableReverseLookups() && uptime > 30*1000) {
-                    if (reverseLookupCache.containsKey(ip)) {
-                        rl = reverseLookupCache.get(ip);
-                    } else {
-                        rl = _context.commSystem().getCanonicalHostName(ip);
-                        reverseLookupCache.put(ip, rl);
-                    }
+                    rl = _context.commSystem().getCanonicalHostName(ip);
                 }
                 if (rl != null && rl.equals("unknown")) {rl = ip;}
                 if (enableReverseLookups()) {
