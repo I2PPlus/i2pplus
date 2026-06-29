@@ -36,6 +36,7 @@ import net.i2p.util.LHMCache;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -2284,8 +2285,7 @@ class NetDbRenderer {
             return sb.toString();
         }
 
-        int numCores = Math.max(SystemVersion.getCores(), 8);
-        ExecutorService executor = Executors.newFixedThreadPool(numCores);
+        ExecutorService executor = ForkJoinPool.commonPool();
         int chunkSize = BATCH_SIZE;
         List<RouterInfo> list = new ArrayList<>(routerInfos);
         StringBuilder fullHtml = new StringBuilder();
@@ -2305,7 +2305,6 @@ class NetDbRenderer {
             }
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
         }
-        executor.shutdown();
         return fullHtml.toString();
     }
 
