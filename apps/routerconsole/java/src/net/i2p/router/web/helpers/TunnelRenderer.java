@@ -349,8 +349,6 @@ class TunnelRenderer {
         sb.setLength(0);
     }
 
-    private final BoundedCache<String, String> reverseLookupCache = new BoundedCache<>(1000);
-
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized void renderTransitSummary(Writer out) throws IOException {
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
@@ -743,7 +741,7 @@ class TunnelRenderer {
         result.ip = ip;
 
         if (ip != null && enableReverseLookups() && uptime > 30 * 1000) {
-            String rl = reverseLookupCache.computeIfAbsent(ip, k -> _context.commSystem().getCanonicalHostName(k));
+            String rl = _context.commSystem().getCanonicalHostName(ip);
             result.canonicalHostName = rl;
 
             if (rl != null && rl.contains(" ")) {
