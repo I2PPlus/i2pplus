@@ -80,7 +80,7 @@ public class MarkLiveliness implements SimpleTimer.TimedEvent {
         if (_router.isAlive())
             ping();
         else
-            _pingFile.delete();
+            _pingFile.delete(); // NOSONAR false positive S899
     }
 
     private void ping() {

@@ -1140,7 +1140,7 @@ public class GeoIP {
             } else {
                 // remove country blocklist, won't take effect until restart
                 File bc = new File(_context.getConfigDir(), Blocklist.BLOCKLIST_COUNTRY_FILE);
-                bc.delete();
+                bc.delete(); // NOSONAR false positive S899
                 if (_log.shouldWarn()) {
                     _log.warn("Removing global ban for all routers from our country (" + country + ") -> " +
                               "Restart required");

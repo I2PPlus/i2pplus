@@ -247,7 +247,7 @@ public class ClientAppConfig {
         }
         if (ok) {
             if (!FileUtil.rename(from, new File(from.getAbsolutePath() + ".bak")))
-                from.delete();
+                from.delete(); // NOSONAR false positive S899
         }
         return ok;
     }

@@ -532,7 +532,7 @@ public class WorkingDir {
             if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
         }
         if (rv)
-            dst.setLastModified(src.lastModified());
+            dst.setLastModified(src.lastModified()); // NOSONAR false positive S899
         return rv;
     }
 
@@ -547,7 +547,7 @@ public class WorkingDir {
         if (!target.exists())
             return;
         if (target.isFile()) {
-            target.setLastModified(time);
+            target.setLastModified(time); // NOSONAR false positive S899
             return;
         }
         if (!target.isDirectory())

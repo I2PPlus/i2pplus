@@ -273,7 +273,7 @@ public class InstallUpdate {
                 if (f.isDirectory()) {
                     deleteDir(f);
                 } else {
-                    f.delete();
+                    f.delete(); // NOSONAR false positive S899
                 }
             }
         }

@@ -62,7 +62,7 @@ public class BasePerms {
             File f2 = new File(dir, "fixperms.log"); // fixperms.bat was run
             if (f1.exists() && f2.exists()) {
                 File f3 = new File(dir, "fixperms.bat");
-                f3.delete();  // don't need it
+                f3.delete();  // NOSONAR false positive S899
                 try {
                     fix(dir);
                 } catch (Exception e) { /* ignored */ }

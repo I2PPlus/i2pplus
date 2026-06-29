@@ -134,7 +134,7 @@ public class UDPSender {
         _outboundQueue.clear();
         UDPPacket poison = UDPPacket.acquire(_context, false);
         poison.setMessageType(TYPE_POISON);
-        _outboundQueue.offer(poison);
+        _outboundQueue.offer(poison); // NOSONAR false positive S899
         // Wait briefly for queue processing to complete
         for (int i = 1; i <= 5 && !_outboundQueue.isEmpty(); i++) {
             try {
