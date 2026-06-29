@@ -269,7 +269,7 @@ public class LeaseSet extends DatabaseEntry {
      */
     public int getLeaseCount() {
         if (isEncrypted()) {
-            return _leases.size() - 1;
+            return Math.max(0, _leases.size() - 1);
         } else {
             return _leases.size();
         }
@@ -324,14 +324,23 @@ public class LeaseSet extends DatabaseEntry {
     } // Revocation unused (see above)
 
     /**
-     * Verify that the signature matches the leaseset's destination's signing public key.
+     * Verify that the signature matches the provided signing key.
      * As of 0.9.47, revocation is not checked.
      *
+     * @param signingKey the key to verify against (if null, falls back to internal key)
      * @return true only if the signature matches
+     * @deprecated Use verifySignature() instead; this method previously ignored the parameter
      */
+    @Deprecated
     public boolean verifySignature(SigningPublicKey signingKey) {
-        return super.verifySignature();
-    } // Revocation unused (see above)
+        if (signingKey == null) return verifySignature();
+        if (_signature == null) return false;
+        byte[] data = getBytes();
+        if (data == null || data.length == 0) return false;
+        SigType type = signingKey.getType();
+        if (type == null || type.getBaseAlgorithm() == net.i2p.crypto.SigAlgo.RSA) return false;
+        return net.i2p.crypto.DSAEngine.getInstance().verifySignature(_signature, data, signingKey);
+    }
 
     /**
      * Determine whether ANY lease is currently valid, at least within a given

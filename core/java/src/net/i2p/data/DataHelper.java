@@ -53,6 +53,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import java.util.zip.CRC32;
 import java.util.zip.Deflater;
@@ -2297,20 +2298,7 @@ public class DataHelper {
         return split(s, regex, 0);
     }
 
-    private static final class PatternCache extends LinkedHashMap<String, Pattern> {
-        private static final int MAX_ENTRIES = 500;
-
-        PatternCache() {
-            super(64, 0.75f, true);
-        }
-
-        @Override
-        protected boolean removeEldestEntry(Map.Entry<String, Pattern> eldest) {
-            return size() > MAX_ENTRIES;
-        }
-    }
-
-    private static final PatternCache patterns = new PatternCache();
+    private static final ConcurrentHashMap<String, Pattern> patterns = new ConcurrentHashMap<>(64);
 
     /**
      *  Same as s.split(regex, limit) but caches the compiled pattern for speed.
@@ -2328,18 +2316,7 @@ public class DataHelper {
     public static String[] split(String s, String regex, int limit) {
         Pattern p = patterns.get(regex);
         if (p == null) {
-            // Double-checked locking pattern
-            synchronized (DataHelper.class) {
-                p = patterns.get(regex);
-                if (p == null) {
-                    // catches easy mistake, and also swapping the args by mistake
-                    if (regex.length() > 1 && !regex.startsWith("[") && !regex.equals("\r\n") && !regex.startsWith("\\")) {
-                        System.out.println("Warning: Split on regex: \"" + regex + "\" should probably be enclosed with []");
-                    }
-                    p = Pattern.compile(regex);
-                    patterns.put(regex, p);
-                }
-            }
+            p = patterns.computeIfAbsent(regex, Pattern::compile);
         }
         return p.split(s, limit);
     }
