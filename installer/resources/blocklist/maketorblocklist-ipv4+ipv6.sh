@@ -12,14 +12,15 @@ second_list_input_file="/tmp/torlist_exit"
 output_file="blocklist_tor.txt"
 http_proxy=${http_proxy:-"http://127.0.0.1:4444"}
 backup_http_proxy=${http_backup_proxy:-"http://127.0.0.1:4001"}
+UA="Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0"
 
 # Check the availability of the primary proxy
 echo "Verifying primary proxy ${http_proxy}..."
-if ! curl --silent --head --fail --proxy "${http_proxy}" https://check.torproject.org/ > /dev/null; then
+if ! curl --silent --head --fail -A "$UA" --proxy "${http_proxy}" https://check.torproject.org/ > /dev/null; then
   echo "Connection to primary proxy ${http_proxy} failed, attempting to use backup proxy ${backup_http_proxy}..."
 
   # Check the availability of the backup proxy
-  if ! curl --silent --head --fail --proxy "${backup_http_proxy}" https://check.torproject.org/ > /dev/null; then
+  if ! curl --silent --head --fail -A "$UA" --proxy "${backup_http_proxy}" https://check.torproject.org/ > /dev/null; then
     echo "Connection to backup proxy ${backup_http_proxy} also failed - both proxies are unavailable."
     exit 1
   else
@@ -57,7 +58,7 @@ download_second_list=true
 # Download the latest list from Tor Project if needed
 if $download_torbulkexitlist; then
   echo " > Downloading the latest list from Tor Project via specified proxy $http_proxy..."
-  curl -s -o $input_file -x $http_proxy $url
+  curl -s -A "$UA" -o $input_file -x $http_proxy $url
   if [ $? -ne 0 ]; then
     echo " > Failed to download the latest list using proxy ${http_proxy}. Please check your proxy settings and try again."
     exit 1
@@ -67,7 +68,7 @@ fi
 # Download the second list from Dan.me.uk if needed
 if $download_second_list; then
   echo " > Downloading the second list from Dan.me.uk via specified proxy $http_proxy..."
-  curl -s -o $second_list_input_file -x $http_proxy $second_list_url
+  curl -s -A "$UA" -o $second_list_input_file -x $http_proxy $second_list_url
   if [ $? -ne 0 ]; then
     echo " > Failed to download the second list using proxy ${http_proxy}. Please check your proxy settings and try again."
     exit 1

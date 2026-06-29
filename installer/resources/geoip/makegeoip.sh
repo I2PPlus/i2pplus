@@ -13,6 +13,7 @@ ASN_DL=dbip-asn-lite-${VER}.mmdb.gz
 ASN_FILE=db-ip-asn.mmdb.gz
 UPDATE_SCRIPT=makegeoip.sh
 export HTTP_PROXY=http://127.0.0.1:4444
+UA="Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0"
 
 # Check for the presence of the update script in the current directory
 if [ ! -f "$UPDATE_SCRIPT" ]; then
@@ -21,7 +22,7 @@ if [ ! -f "$UPDATE_SCRIPT" ]; then
 fi
 
 # Use curl to perform a test request and extract the IP address
-IP=$(curl -sS --proxy $HTTP_PROXY https://icanhazip.com/)
+IP=$(curl -sS -A "$UA" --proxy $HTTP_PROXY https://icanhazip.com/)
 echo " > GeoIP database retrieval from db.ip.com"
 echo " > The IP address of the configured http proxy server is: $IP"
 
@@ -42,7 +43,7 @@ fi
 
 if [ -x "$(command -v curl)" ]; then
     echo " > Attempting to download https://download.db-ip.com/free/$DL using curl..."
-    curl -s -x $HTTP_PROXY https://download.db-ip.com/free/$DL -o $FILE
+    curl -s -A "$UA" -x $HTTP_PROXY https://download.db-ip.com/free/$DL -o $FILE
 else
     echo " ! Error: Please install curl before running this command."
     exit 1
@@ -117,7 +118,7 @@ fi
 
 if [ -x "$(command -v curl)" ]; then
     echo " > Attempting to download https://download.db-ip.com/free/$ASN_DL using curl..."
-    curl -s -x $HTTP_PROXY https://download.db-ip.com/free/$ASN_DL -o $ASN_FILE
+    curl -s -A "$UA" -x $HTTP_PROXY https://download.db-ip.com/free/$ASN_DL -o $ASN_FILE
 else
     echo " ! Error: Please install curl before running this command."
     exit 1

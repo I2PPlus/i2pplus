@@ -8,6 +8,7 @@
 input_file="torbulkexitlist"
 output_file="blocklist_tor.txt"
 http_proxy=${http_proxy:-"http://127.0.0.1:4444"}
+UA="Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0"
 
 # Variables
 url="https://check.torproject.org/$input_file"
@@ -26,7 +27,7 @@ fi
 
 # Download the latest list from Tor Project
 echo " > Downloading the latest list from Tor Project via specified proxy $http_proxy..."
-curl -s -o $input_file -x $http_proxy $url
+curl -s -A "$UA" -o $input_file -x $http_proxy $url
 if [ $? -ne 0 ]; then
   echo " > Failed to download the latest list using proxy ${http_proxy}. Please check your proxy settings and try again."
   exit 1
