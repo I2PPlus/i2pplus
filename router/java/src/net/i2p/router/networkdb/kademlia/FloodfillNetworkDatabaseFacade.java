@@ -265,8 +265,12 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             if (local != null && _context.router().getUptime() > PUBLISH_JOB_DELAY) {
                 flood(local);
                 // let the messages get out...
-                try {Thread.sleep(5000);}
-                catch (InterruptedException ie) { /* ignored */ }
+                new SimpleTimer2.TimedEvent(_context.simpleTimer2()) {
+                    @Override
+                    public void timeReached() {
+                        // Messages should have been sent by now
+                    }
+                }.schedule(5000);
             }
         }
         if (_ffMonitor != null) {_context.jobQueue().removeJob(_ffMonitor);}
@@ -347,15 +351,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *        unused if we are ff and ds is an RI
      */
 
-    private int concurrent = 2;
-    private int failCount = 0;
-    private int successCount = 0;
+    private static final int INITIAL_CONCURRENT = 2;
 
     @Override
     void sendStore(Hash key, DatabaseEntry ds, Job onSuccess, Job onFailure, long sendTimeout, Set<Hash> toIgnore) {
-        concurrent = 2;
-        failCount = 0;
-        successCount = 0;
+        int concurrent = INITIAL_CONCURRENT;
         // If we are a part of the floodfill netDb, don't send out our own leaseSets as part
         // of the flooding - instead, send them to random floodfill peers so they can flood 'em out.
         Set<Hash> floodfillParticipants = selectFloodfillParticipants(toIgnore, getKBuckets(), concurrent);
@@ -366,18 +366,25 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             Collections.shuffle(participantList);
             floodfillParticipants = new HashSet<>(participantList);
 
+            int idx = 0;
             for (Hash peer : floodfillParticipants) {
                 if (onSuccess != null) {
                     _context.jobQueue().addJob(onSuccess);
-                    successCount++;
                 }
-                else if (successCount == 0) {
-                    try {Thread.sleep(1000);}
-                    catch (InterruptedException ie) { /* ignored */ }
-                    _context.jobQueue().addJob(new FloodfillStoreJob(_context, this, key, ds, onSuccess, onFailure, sendTimeout, toIgnore));
-                    failCount++;
-                    if (failCount > 9) {concurrent = 3;}
-                    else if (failCount > 4) {concurrent = 2;}
+                else {
+                    // Schedule with delay instead of blocking with Thread.sleep
+                    final int delay = Math.min(idx * 1000, 10_000);
+                    final int concurrentForLog = concurrent;
+                    new SimpleTimer2.TimedEvent(_context.simpleTimer2()) {
+                        @Override
+                        public void timeReached() {
+                            _context.jobQueue().addJob(new FloodfillStoreJob(
+                                _context, FloodfillNetworkDatabaseFacade.this,
+                                key, ds, onSuccess, onFailure, sendTimeout, toIgnore));
+                        }
+                    }.schedule(delay);
+                    if (idx > 9) {concurrent = 3;}
+                    else if (idx > 4) {concurrent = 2;}
                     if (_log.shouldInfo()) {
                         String name;
                         if (ds instanceof LeaseSet) {
@@ -387,9 +394,10 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                             name = "key for [" + key.toBase32().substring(0,8) + "]";
                         }
                         _log.info("Flood of " + name + " to [" + peer.toBase64().substring(0,6) + "] failed -> " +
-                                  "Resending to " + (concurrent > 1 ? concurrent + " new floodfills" : "a different floodfill") + "...");
+                                  "Resending to " + (concurrentForLog > 1 ? concurrentForLog + " new floodfills" : "a different floodfill") + "...");
                     }
                 }
+                idx++;
             }
         }
     }
