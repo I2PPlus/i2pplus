@@ -103,18 +103,20 @@ class FloodfillPeerSelector extends PeerSelector {
         if (kbuckets == null) {return new ArrayList<>();}
         kbuckets.getAll(matches);
         List<Hash> rv = matches.get(maxNumRouters, preferConnected);
-        StringBuilder buf = new StringBuilder();
-        buf.append("Searching for ").append(maxNumRouters).append(" peers close to [").append(key.toBase64().substring(0,6)).append("]");
-        buf.append("\n* All Hashes: ").append(matches.size());
-        buf.append("\n* Ignoring: ");
-        for (Hash h : peersToIgnore) {
-            buf.append("[").append(h.toBase64().substring(0,6)).append("]").append(" ");
+        if (_log.shouldDebug()) {
+            StringBuilder buf = new StringBuilder();
+            buf.append("Searching for ").append(maxNumRouters).append(" peers close to [").append(key.toBase64().substring(0,6)).append("]");
+            buf.append("\n* All Hashes: ").append(matches.size());
+            buf.append("\n* Ignoring: ");
+            for (Hash h : peersToIgnore) {
+                buf.append("[").append(h.toBase64().substring(0,6)).append("]").append(" ");
+            }
+            buf.append("\n* Matched: ");
+            for (Hash h : rv) {
+                buf.append("[").append(h.toBase64().substring(0,6)).append("]").append(" ");
+            }
+            _log.debug(buf.toString());
         }
-        buf.append("\n* Matched: ");
-        for (Hash h : rv) {
-            buf.append("[").append(h.toBase64().substring(0,6)).append("]").append(" ");
-        }
-        if (_log.shouldDebug()) {_log.debug(buf.toString());}
         return rv;
     }
 
@@ -205,13 +207,10 @@ class FloodfillPeerSelector extends PeerSelector {
         if (toIgnore == null) {toIgnore = Collections.singleton(_context.routerHash());}
         else if (!toIgnore.contains(_context.routerHash())) {
             // copy the Set so we don't confuse StoreJob
-            // Use synchronized set to prevent ConcurrentModificationException during copy
-            Set<Hash> syncSet = Collections.synchronizedSet(new HashSet<>(8));
-            synchronized(toIgnore) {
-                syncSet.addAll(toIgnore);
-            }
-            syncSet.add(_context.routerHash());
-            toIgnore = syncSet;
+            Set<Hash> newIgnore = new HashSet<>(toIgnore.size() + 1);
+            newIgnore.addAll(toIgnore);
+            newIgnore.add(_context.routerHash());
+            toIgnore = newIgnore;
         }
         return selectFloodfillParticipantsIncludingUs(key, howMany, toIgnore, kbuckets);
     }
@@ -365,28 +364,29 @@ class FloodfillPeerSelector extends PeerSelector {
                 }
             }
         }
-        StringBuilder buf = new StringBuilder();
-        buf.append("Floodfill sort results:");
-        if (!rv.isEmpty()) {
-            buf.append("\n* Good: ");
-            for (Hash h : rv) {
-                buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
+        if (_log.shouldDebug()) {
+            StringBuilder buf = new StringBuilder();
+            buf.append("Floodfill sort results:");
+            if (!rv.isEmpty()) {
+                buf.append("\n* Good: ");
+                for (Hash h : rv) {
+                    buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
+                }
             }
-        }
-        if (!okff.isEmpty()) {
-            buf.append("\n* OK: ");
-            for (Hash h : okff) {
-                buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
+            if (!okff.isEmpty()) {
+                buf.append("\n* OK: ");
+                for (Hash h : okff) {
+                    buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
+                }
             }
-        }
-        if (!badff.isEmpty()) {
-            buf.append("\n* Bad: ");
-            for (Hash h : badff) {
-                buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
+            if (!badff.isEmpty()) {
+                buf.append("\n* Bad: ");
+                for (Hash h : badff) {
+                    buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
+                }
             }
+            _log.debug(buf.toString());
         }
-
-        // Put the ok floodfills after the good floodfills
         for (int i = 0; found < howMany && i < okff.size(); i++) {
             rv.add(okff.get(i));
             found++;
