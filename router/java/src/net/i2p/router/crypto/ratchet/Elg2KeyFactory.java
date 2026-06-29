@@ -103,13 +103,17 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
                     // for some relief...
                     if (!interrupted()) {
                         try {Thread.sleep(Math.min(200, Math.max(10, _calcDelay + (curCalc * 3))));}
-                        catch (InterruptedException ie) { /* ignored */ }
+                        catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt();
+                        }
                     }
                 }
             }
             if (!_isRunning) {break;}
             try {Thread.sleep(_checkDelay);}
-            catch (InterruptedException ie) { /* ignored */ } // no-op
+            catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
         }
     }
 

@@ -556,7 +556,7 @@ public class TransportManager implements TransportEventListener {
 
     synchronized void restart() {
         stopListening();
-        try { Thread.sleep(5*1000); } catch (InterruptedException ie) { /* ignored */ }
+        try { Thread.sleep(5*1000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
         startListening();
     }
 

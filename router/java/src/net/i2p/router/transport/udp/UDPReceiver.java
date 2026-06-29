@@ -92,6 +92,7 @@ class UDPReceiver {
 
         try {_handler.queueReceived(packet);}
         catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
             packet.release();
             _keepRunning = false;
         }
@@ -112,7 +113,9 @@ class UDPReceiver {
 
                 while (!_context.throttle().acceptNetworkMessage()) {
                     try {Thread.sleep(10);}
-                    catch (InterruptedException ie) { /* ignored */ }
+                    catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
 
                 try {
@@ -160,7 +163,9 @@ class UDPReceiver {
                     } else if (_keepRunning) {
                         // TODO count consecutive errors, give up after too many?
                         try {Thread.sleep(100);}
-                        catch (InterruptedException ie) { /* ignored */ }
+                        catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt();
+                        }
                     }
                 }
             }

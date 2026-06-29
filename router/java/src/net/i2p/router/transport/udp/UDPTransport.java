@@ -2314,14 +2314,18 @@ public class UDPTransport extends TransportImpl {
             if ((++count) % burst == 0) {
                 try {
                     Thread.sleep(toSleep);
-                } catch (InterruptedException ie) { /* ignored */ }
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
         toSleep = Math.min(howMany / 3, 750);
         if (toSleep > 0) {
             try {
                 Thread.sleep(toSleep);
-            } catch (InterruptedException ie) { /* ignored */ }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
         }
     }
 

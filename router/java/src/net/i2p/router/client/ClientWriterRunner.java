@@ -40,14 +40,16 @@ class ClientWriterRunner implements Runnable {
     public void stopWriting() {
         _messagesToWrite.clear();
         try {_messagesToWrite.put(new PoisonI2CPMessage());}
-        catch (InterruptedException ie) { /* ignored */ }
+        catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     public void run() {
         I2CPMessage msg;
         while (!_runner.getIsDead()) {
             try {msg = _messagesToWrite.take();}
-            catch (InterruptedException ie) {continue;}
+            catch (InterruptedException ie) { Thread.currentThread().interrupt(); continue; }
             if (msg.getType() == PoisonI2CPMessage.MESSAGE_TYPE) {break;}
             _runner.writeMessage(msg);
         }

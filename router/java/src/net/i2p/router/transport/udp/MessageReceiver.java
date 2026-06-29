@@ -73,7 +73,9 @@ class MessageReceiver {
         }
         for (int i = 1; i <= 5 && !_completeMessages.isEmpty(); i++) {
             try {Thread.sleep(i * 10);}
-            catch (InterruptedException ie) { /* ignored */ }
+            catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
         }
         _completeMessages.clear();
     }
@@ -86,7 +88,7 @@ class MessageReceiver {
     public void receiveMessage(InboundMessageState state) {
         if (_alive) {
             try {_completeMessages.put(state);}
-            catch (InterruptedException ie) {_alive = false;}
+            catch (InterruptedException ie) { Thread.currentThread().interrupt(); _alive = false; }
         }
     }
 
@@ -109,7 +111,9 @@ class MessageReceiver {
                         expired++;
                     }
                 }
-            } catch (InterruptedException ie) { /* ignored */ }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
 
             if (expired > 0) {_context.statManager().addRateData("udp.inboundExpired", expired, expiredLifetime);}
 

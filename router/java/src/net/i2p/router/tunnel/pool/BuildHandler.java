@@ -265,7 +265,7 @@ class BuildHandler implements Runnable {
     private void handleInboundRequest() {
         BuildMessageState state = null;
         try {state = _inboundBuildMessages.take();}
-        catch (InterruptedException ie) {return;}
+        catch (InterruptedException ie) { Thread.currentThread().interrupt(); return; }
         // check for poison
         if (state.msg == null) {_isRunning = false; return;}
         long now = System.currentTimeMillis();

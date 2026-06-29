@@ -109,7 +109,9 @@ class PacketHandler {
         }
         for (int i = 1; i <= 5 && !_inboundQueue.isEmpty(); i++) {
             try {Thread.sleep(i * 50);}
-            catch (InterruptedException ie) { /* ignored */ }
+            catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
         }
         _inboundQueue.clear();
     }
@@ -125,7 +127,9 @@ class PacketHandler {
         //int remaining = 0;
         while (_keepReading && rv == null) {
             try {rv = _inboundQueue.take();}
-            catch (InterruptedException ie) { /* ignored */ }
+            catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
             if (rv != null && rv.getMessageType() == TYPE_POISON) {return null;}
         }
         //_context.statManager().addRateData("udp.receiveRemaining", remaining, 0);

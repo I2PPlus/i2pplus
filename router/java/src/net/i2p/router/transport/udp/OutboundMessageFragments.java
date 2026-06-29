@@ -385,6 +385,7 @@ private void waitForMessages() {
         try {
             _waitLock.wait(MAX_WAIT);
         } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
             if (_log.shouldDebug()) {
                 _log.debug("Woken up while waiting");
             }
@@ -397,6 +398,7 @@ private void waitForMessages(int timeout) {
         try {
             _waitLock.wait(timeout);
         } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
             if (_log.shouldDebug()) {
                 _log.debug("Woken up while waiting");
             }

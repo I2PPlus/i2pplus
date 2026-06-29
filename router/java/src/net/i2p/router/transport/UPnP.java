@@ -170,7 +170,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		while (i++ < 20 && !portsForwarded.isEmpty()) {
 			try {
 				Thread.sleep(100);
-			} catch (InterruptedException ie) { /* ignored */ }
+			} catch (InterruptedException ie) {
+			    Thread.currentThread().interrupt();
+			}
 		}
 		// stop() does unsubscribe()
 		super.stop();
@@ -530,7 +532,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 				break;
 			try {
 				Thread.sleep(5000);
-			} catch (InterruptedException e) { /* ignored */ }
+			} catch (InterruptedException e) {
+			    Thread.currentThread().interrupt();
+			}
 		}
 		if (_log.shouldWarn())
 			_log.warn((isPortForwarded ? "Mapping is successful!" : "Mapping has failed!") + " ("+ nbOfTries + " tries)");

@@ -409,7 +409,9 @@ public class InNetMessagePool implements Service {
         }
         try {
             Thread.sleep(100);
-        } catch (InterruptedException ignored) { /* ignored */ }
+        } catch (InterruptedException ignored) {
+            Thread.currentThread().interrupt();
+        }
         synchronized (this) {
             startup();
         }

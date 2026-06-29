@@ -2798,7 +2798,7 @@ class EstablishmentManager {
                        }
                     } else {_log.error("Error in the establisher", re);}
                     // don't loop too fast
-                    try {Thread.sleep(500);} catch (InterruptedException ie) { /* ignored */ }
+                    try {Thread.sleep(500);} catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
                 }
             }
             _inboundStates.clear();
@@ -2845,7 +2845,9 @@ class EstablishmentManager {
                         if (_activity > 0) {return;}
                         _activityLock.wait(delay);
                     }
-                } catch (InterruptedException ie) { /* ignored */ }
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
 

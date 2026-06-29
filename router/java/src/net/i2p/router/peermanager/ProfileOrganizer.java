@@ -147,6 +147,7 @@ public class ProfileOrganizer {
             }
             return rv;
         } catch (InterruptedException ignored) {
+            Thread.currentThread().interrupt();
             return false;
         }
     }

@@ -341,7 +341,9 @@ public class Router implements RouterClock.ClockShiftListener {
                     if (i == 0) {System.err.println("WARN: There may be another router already running... waiting a while to be sure...");}
                     // yes this is ugly to sleep in the constructor.
                     try {Thread.sleep(5000);}
-                    catch (InterruptedException ie) { /* ignored */ }
+                    catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
                 } else {
                     _eventLog.addEvent(EventLog.ABORTED, "Another router running");
                     System.err.println("ERROR: There appears to be another router already running!");
@@ -1503,7 +1505,9 @@ public class Router implements RouterClock.ClockShiftListener {
                 break;
             }
             try {th.join(toWait);}
-            catch (InterruptedException ie) { /* ignored */ }
+            catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
             if (th.isAlive()) {
                 _log.logAlways(Log.WARN, "Shutdown Task [" + th.getName() + "] took more than " + waitSecs + "s to run");
                 tasks.clear();
@@ -1531,7 +1535,7 @@ public class Router implements RouterClock.ClockShiftListener {
         if (waitForClients) {
             // Give time for the disconnect messages to get to them
             // so they can shut down correctly before the JVM goes away
-            try {Thread.sleep(delay);} catch (InterruptedException ie) { /* ignored */ }
+            try {Thread.sleep(delay);} catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
             if (_log.shouldWarn()) {
                 _log.warn("Done waiting " + delay + "ms for clients to disconnect, terminating subsystems...");
             }
@@ -1668,7 +1672,9 @@ public class Router implements RouterClock.ClockShiftListener {
         if (_killVMOnEnd) {
             try {Thread.sleep(1000);}
             //Runtime.getRuntime().halt(exitCode);
-            catch (InterruptedException ie) { /* ignored */ }
+            catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
             // allow the Runtime shutdown hooks to execute
             Runtime.getRuntime().exit(exitCode);
         }

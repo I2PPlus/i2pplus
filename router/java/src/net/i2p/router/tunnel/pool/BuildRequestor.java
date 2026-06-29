@@ -209,7 +209,7 @@ abstract class BuildRequestor {
         if (pairedTunnel == null) {
             log.warn("Tunnel build failed -> No paired or exploratory tunnel available for " + cfg);
             int ms = settings.isExploratory() ? getExploratoryBackoff(ctx) : getClientBackoff(ctx);
-            try {Thread.sleep(ms);} catch (InterruptedException ie) { /* ignored */ }
+            try {Thread.sleep(ms);} catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
             exec.buildComplete(cfg, OTHER_FAILURE, "No paired tunnel");
             return false;
         }

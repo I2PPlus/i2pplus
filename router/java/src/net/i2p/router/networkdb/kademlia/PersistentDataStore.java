@@ -273,7 +273,9 @@ public class PersistentDataStore extends TransientDataStore {
                 }
                 synchronized (_waitLock) {
                     try { _waitLock.wait(WRITE_DELAY); }
-                    catch (InterruptedException ie) { /* ignored */ }
+                    catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
             }
         }

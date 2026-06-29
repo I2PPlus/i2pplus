@@ -560,7 +560,9 @@ public class JobQueue {
                     _jobsInFlight.add(j);
                     return j;
                 }
-            } catch (InterruptedException ie) { /* ignored */ }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
         }
         if (_log.shouldWarn()) {_log.warn("Job no longer alive; returning null");}
         return null;
@@ -765,7 +767,9 @@ public class JobQueue {
                             _nextPumperRun = _context.clock().now() + timeToWait;
                             _jobLock.wait(timeToWait);
                         }
-                    } catch (InterruptedException ie) { /* ignored */ }
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
             } catch (Throwable t) {
                 if (_log.shouldError()) {_log.error("Pumper killed?!", t);}

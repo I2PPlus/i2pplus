@@ -494,6 +494,7 @@ public abstract class TransportImpl implements Transport {
                 return;
             }
         } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
             if (_log.shouldError()) {_log.error("Interrupted during send " + msg);}
             return;
         }

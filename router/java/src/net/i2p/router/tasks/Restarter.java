@@ -59,7 +59,7 @@ public class Restarter implements Runnable {
         catch (Throwable t) {log.log(Log.CRIT, "Error restarting the Tunnel Manager -> " + t.getMessage());}
         log.logAlways(Log.WARN, "Restarted the tunnel manager");
 
-        try {Thread.sleep(10*1000);} catch (InterruptedException ie) { /* ignored */ }
+        try {Thread.sleep(10*1000);} catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
         _context.router().setEstimatedDowntime(System.currentTimeMillis() - start);
 
         log.logAlways(Log.WARN, "Restarting the Client Manager...");

@@ -165,7 +165,7 @@ class ClientManager {
         shutdown("Router restart");
 
         // to let the old listener die
-        try { Thread.sleep(2*1000); } catch (InterruptedException ie) { /* ignored */ }
+        try { Thread.sleep(2*1000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
 
         startListeners();
     }
@@ -206,6 +206,7 @@ class ClientManager {
             do {
                 try {Thread.sleep(200);}
                 catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
                     throw new I2PSessionException("Router ClientManager interrupted", ie);
                 }
             } while (!_isStarted && i++ < 300);

@@ -120,7 +120,9 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
                     if (!interrupted()) {
                         try {
                             Thread.sleep(Math.min(200, Math.max(10, _calcDelay + (curCalc * 3))));
-                        } catch (InterruptedException ie) { /* ignored */ }
+                        } catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt();
+                        }
                     }
                 }
             }
@@ -128,7 +130,9 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
                 break;
             try {
                 Thread.sleep(_checkDelay);
-            } catch (InterruptedException ie) { /* ignored */ }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
         }
     }
 

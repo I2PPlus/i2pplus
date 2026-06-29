@@ -417,7 +417,7 @@ public class GeoIP {
      */
     private void countryToIP(String country) {
         while (_lock.getAndSet(true)) {
-            try { Thread.sleep(1000); } catch (InterruptedException ie) { return; }
+            try { Thread.sleep(1000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); return; }
         }
         File geoip2 = getGeoIP2();
         DatabaseReader dbr = null;

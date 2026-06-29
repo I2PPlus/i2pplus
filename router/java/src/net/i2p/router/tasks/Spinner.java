@@ -51,7 +51,9 @@ public class Spinner extends Thread {
     public void run() {
         try {
             sleep(5*60*1000);
-        } catch (InterruptedException ie) { /* ignored */ }
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
     }
 }
 

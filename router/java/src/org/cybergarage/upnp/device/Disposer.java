@@ -67,7 +67,9 @@ public class Disposer extends ThreadCore {
         while (isRunnable() == true) {
             try {
                 Thread.sleep(monitorInterval);
-            } catch (InterruptedException e) { /* ignored */ }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             ctrlp.removeExpiredDevices();
             // ctrlp.print();
         }

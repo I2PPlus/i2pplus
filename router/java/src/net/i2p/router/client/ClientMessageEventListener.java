@@ -389,7 +389,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             if (!mgr.checkHash(PROP_AUTH, user, pw)) {
                 String msg = "I2CP authentication failed -> User: " + user + " on " + _runner.getAddress();
                 _log.logAlways(Log.WARN, msg);
-                try { Thread.sleep(3000); } catch (InterruptedException ie) { /* ignored */ }
+                try { Thread.sleep(3000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
                 _runner.disconnectClient(msg);
                 _authorized = false;
                 return false;

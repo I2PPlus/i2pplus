@@ -144,7 +144,7 @@ class ClientListenerRunner implements Runnable {
                 _log.error("Error listening, waiting " + (curDelay/1000) + "s before we try again");
             else
                 _log.log(Log.CRIT, "I2CP error listening to port " + _port + " - is another I2P instance running? Resolve conflicts and restart");
-            try { Thread.sleep(curDelay); } catch (InterruptedException ie) { /* ignored */ }
+            try { Thread.sleep(curDelay); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
             curDelay = Math.min(curDelay*3, 60*1000);
         }
 

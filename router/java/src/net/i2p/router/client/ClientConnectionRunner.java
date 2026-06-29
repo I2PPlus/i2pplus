@@ -787,7 +787,9 @@ class ClientConnectionRunner {
         // give it a little time to get sent out...
         // even better would be to have stopRunning() flush it?
         try {Thread.sleep(50);}
-        catch (InterruptedException ie) { /* ignored */ }
+        catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
         stopRunning();
     }
 

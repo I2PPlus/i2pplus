@@ -1195,7 +1195,9 @@ public class NTCPTransport extends TransportImpl {
         // Wait for NTCP Pumper to stop so we don't end up with two...
         while (isAlive()) {
             try {Thread.sleep(5*1000);}
-            catch (InterruptedException ie) { /* ignored */ }
+            catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
         }
         if (_log.shouldWarn()) {_log.warn("Restarting NTCP transport listener...");}
         startIt();

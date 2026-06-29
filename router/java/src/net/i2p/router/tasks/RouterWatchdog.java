@@ -164,7 +164,9 @@ public class RouterWatchdog implements Runnable {
             // Check how close leases are to expiration and adjust sleep time
             long sleepTime = getSleepTimeForLeaseExpiry();
             try {Thread.sleep(sleepTime);}
-            catch (InterruptedException ie) { /* ignored */ }
+            catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
             monitorRouter();
         }
     }
@@ -236,7 +238,7 @@ public class RouterWatchdog implements Runnable {
             dumpStatus();
             if (shutdownOnHang()) {
                 _log.log(Log.CRIT, "Router hung! Restart forced by Watchdog!");
-                try { Thread.sleep(30*1000); } catch (InterruptedException ie) { /* ignored */ }
+                try { Thread.sleep(30*1000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
                 // halt and not system.exit, since some of the shutdown hooks might be misbehaving
                 Runtime.getRuntime().halt(Router.EXIT_HARD_RESTART);
             }

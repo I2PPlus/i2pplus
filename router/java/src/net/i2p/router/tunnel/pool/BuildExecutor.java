@@ -594,7 +594,7 @@ class BuildExecutor implements Runnable {
                                 int noTunnelWait = 250 + _context.random().nextInt(250);
                                 _currentlyBuilding.wait(noTunnelWait);
                             } catch (InterruptedException ie) {
-                                // interrupted wait, proceed
+                                Thread.currentThread().interrupt();
                             }
                         }
                     }
@@ -679,7 +679,7 @@ class BuildExecutor implements Runnable {
                             try {
                                 _currentlyBuilding.wait(delay);
                             } catch (InterruptedException ie) {
-                                // interrupted, loop continues
+                                Thread.currentThread().interrupt();
                             }
                         }
                     }
@@ -689,7 +689,7 @@ class BuildExecutor implements Runnable {
                 try {
                     Thread.sleep(LOOP_TIME);
                 } catch (InterruptedException ie) {
-                    // ignore interrupt during sleep
+                    Thread.currentThread().interrupt();
                 }
             }
             wanted.clear();

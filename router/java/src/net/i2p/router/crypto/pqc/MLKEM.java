@@ -150,7 +150,7 @@ public final class MLKEM {
 /*
     private static void main2(String[] args) {
         RandomSource.getInstance().nextBoolean();
-        try { Thread.sleep(1000); } catch (InterruptedException ie) {}
+        try { Thread.sleep(1000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
         int runs = 200; // warmup
         java.util.Collection<EncType> toTest;
         if (args.length > 0) {

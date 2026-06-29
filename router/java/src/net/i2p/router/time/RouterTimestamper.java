@@ -145,7 +145,9 @@ public class RouterTimestamper extends Timestamper {
                 if (!_initialized)
                     wait(MAX_WAIT_INITIALIZATION);
             }
-        } catch (InterruptedException ie) { /* ignored */ }
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     /**
@@ -216,7 +218,7 @@ public class RouterTimestamper extends Timestamper {
                 }
                 if (!wasInitialized) {
                     // let the log manager get initialized
-                    try { Thread.sleep(10*1000); } catch (InterruptedException ie) { /* ignored */ }
+                    try { Thread.sleep(10*1000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
                     // NOW we set up logging
                     _log = _context.logManager().getLog(RouterTimestamper.class);
                     if (lastFailed) {
@@ -397,7 +399,7 @@ public class RouterTimestamper extends Timestamper {
         System.setProperty(PROP_QUERY_FREQUENCY, "30000");
         I2PAppContext.getGlobalContext();
         for (int i = 0; i < 5*60*1000; i += 61*1000) {
-            try { Thread.sleep(61*1000); } catch (InterruptedException ie) {}
+            try { Thread.sleep(61*1000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
         }
     }
 ****/
