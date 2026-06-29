@@ -210,7 +210,6 @@ public class Reseeder {
         int len = Math.max(su3Magic.length, zipMagic.length);
         byte[] magic = new byte[len];
         File tmp =  null;
-        OutputStream out = null;
         try {
             DataHelper.read(in, magic);
             boolean isSU3;
@@ -218,10 +217,10 @@ public class Reseeder {
             else if (DataHelper.eq(magic, 0, zipMagic, 0, zipMagic.length)) {isSU3 = false;}
             else {throw new IOException("Not a zip or su3 file");}
             tmp =  new File(_context.getTempDir(), "manualreseeds-" + _context.random().nextInt() + (isSU3 ? ".su3" : ".zip"));
-            out = new BufferedOutputStream(new SecureFileOutputStream(tmp));
-            out.write(magic);
-            DataHelper.copy(in, out);
-            out.close();
+            try (OutputStream out = new BufferedOutputStream(new SecureFileOutputStream(tmp))) {
+                out.write(magic);
+                DataHelper.copy(in, out);
+            }
             int[] stats;
             ReseedRunner reseedRunner = new ReseedRunner();
             // inline
@@ -238,10 +237,6 @@ public class Reseeder {
         } finally {
             try {in.close();}
             catch (IOException ioe) { /* ignored */ }
-            if (out != null) {
-                try {out.close();}
-                catch (IOException ioe) { /* ignored */ }
-            }
             if (tmp != null && !tmp.delete()) {_log.warn("Failed to delete temp file " + tmp.getName());}
         }
     }
@@ -1113,17 +1108,11 @@ public class Reseeder {
                 }
                 return false;
             }
-            FileOutputStream fos = null;
-            try {
-                fos = new SecureFileOutputStream(file);
+            try (FileOutputStream fos = new SecureFileOutputStream(file)) {
                 fos.write(data);
                 if (_log.shouldInfo()) {
                     _log.info("Saved RouterInfo (" + data.length + " bytes) to " + file);
                 }
-            } finally {
-                try {
-                    if (fos != null) {fos.close();}
-                } catch (IOException ioe) { /* ignored */ }
             }
             return true;
         }

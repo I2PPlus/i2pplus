@@ -291,9 +291,7 @@ class LoadRouterInfoJob extends JobImpl {
             privkey = pkf.getPrivKey();
             signingPrivKey = pkf.getSigningPrivKey();
         } else {
-            InputStream fis = null;
-            try {
-                fis = new BufferedInputStream(new FileInputStream(rkf1));
+            try (InputStream fis = new BufferedInputStream(new FileInputStream(rkf1))) {
                 privkey = new PrivateKey();
                 privkey.readBytes(fis);
                 signingPrivKey = new SigningPrivateKey();
@@ -317,8 +315,6 @@ class LoadRouterInfoJob extends JobImpl {
                 ri.setPublicKey(pubkey);
                 ri.setSigningPublicKey(signingPubKey);
                 ri.setCertificate(Certificate.NULL_CERT);
-            } finally {
-                if (fis != null) try { fis.close(); } catch (IOException ioe) { /* ignored */ }
             }
         }
         return new KeyData(ri, privkey, signingPrivKey);

@@ -266,17 +266,17 @@ public class KeyManager {
          *  @return structure or null on read error
          */
         private DataStructure syncKey(File keyFile, DataStructure structure, boolean exists) {
-            OutputStream out = null;
-            InputStream in = null;
             try {
                 if (exists) {
-                    out = new BufferedOutputStream(new SecureFileOutputStream(keyFile));
-                    structure.writeBytes(out);
+                    try (OutputStream out = new BufferedOutputStream(new SecureFileOutputStream(keyFile))) {
+                        structure.writeBytes(out);
+                    }
                     return structure;
                 } else {
                     if (keyFile.exists()) {
-                        in = new BufferedInputStream(new FileInputStream(keyFile));
-                        structure.readBytes(in);
+                        try (InputStream in = new BufferedInputStream(new FileInputStream(keyFile))) {
+                            structure.readBytes(in);
+                        }
                         return structure;
                     } else {
                         // we don't have it, and its not on disk.  oh well.
@@ -287,9 +287,6 @@ public class KeyManager {
                 _log.error("Error syncing the structure to " + keyFile.getAbsolutePath(), ioe);
             } catch (DataFormatException dfe) {
                 _log.error("Error syncing the structure with " + keyFile.getAbsolutePath(), dfe);
-            } finally {
-                if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
-                if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
             }
 
             if (exists)

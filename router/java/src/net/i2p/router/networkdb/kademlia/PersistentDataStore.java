@@ -299,7 +299,6 @@ public class PersistentDataStore extends TransientDataStore {
 
         RouterInfo ri = (RouterInfo) data;
         boolean isUs = key.equals(_context.routerHash());
-        OutputStream fos = null;
         File dbFile = null;
         String filename = null;
 
@@ -353,11 +352,8 @@ public class PersistentDataStore extends TransientDataStore {
 
             if (dbFile.lastModified() < dataPublishDate && (shouldStore || isUs)) {
                 // Our filesystem is out of date, let's replace it
-                fos = new SecureFileOutputStream(dbFile);
-                fos = new BufferedOutputStream(fos);
-                try {
+                try (OutputStream fos = new BufferedOutputStream(new SecureFileOutputStream(dbFile))) {
                     data.writeBytes(fos);
-                    fos.close();
                     dbFile.setLastModified(dataPublishDate);
                     if (_log.shouldDebug()) {
                         _log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
@@ -437,8 +433,6 @@ public class PersistentDataStore extends TransientDataStore {
             } else {
                 _log.error("Error writing to disk (" + ioe.getMessage() + ")");
             }
-        } finally {
-            if (fos != null) try {fos.close();} catch (IOException ioe) { /* ignored */ }
         }
         if (shouldDelete && dbFile != null) {dbFile.delete();}
     }
@@ -713,11 +707,8 @@ public class PersistentDataStore extends TransientDataStore {
             if (_log.shouldDebug())
                 _log.debug("Reading " + _routerFile);
 
-                InputStream fis = null;
                 boolean corrupt = false;
-                try {
-                    fis = new FileInputStream(_routerFile);
-                    fis = new BufferedInputStream(fis);
+                try (InputStream fis = new BufferedInputStream(new FileInputStream(_routerFile))) {
                     RouterInfo ri = new RouterInfo();
                     ri.readBytes(fis, true);  // true = verify sig on read
                     Hash h = ri.getIdentity().calculateHash();
@@ -808,8 +799,6 @@ public class PersistentDataStore extends TransientDataStore {
                     corrupt = true;
                     if (_log.shouldInfo())
                         _log.info("Deleted " + _routerFile.getName() + " -> Unable to read Router reference \n* " + e.getMessage());
-                } finally {
-                    if (fis != null) try {fis.close();} catch (IOException ioe) { /* ignored */ }
                 }
                 if (corrupt) _routerFile.delete();
                 return !corrupt;

@@ -134,11 +134,9 @@ class SSLClientListenerRunner extends ClientListenerRunner {
                        " in " + (new File(_context.getConfigDir(), "router.config")).getAbsolutePath());
             return false;
         }
-        InputStream fis = null;
-        try {
+        try (InputStream fis = new FileInputStream(ks)) {
             SSLContext sslc = SSLContext.getInstance("TLS");
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            fis = new FileInputStream(ks);
             keyStore.load(fis, ksPass.toCharArray());
             KeyStoreUtil.logCertExpiration(keyStore, ks.getAbsolutePath(), 180*24*60*60*1000L);
             KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
@@ -150,8 +148,6 @@ class SSLClientListenerRunner extends ClientListenerRunner {
             _log.error("Error loading SSL keys", gse);
         } catch (IOException ioe) {
             _log.error("Error loading SSL keys", ioe);
-        } finally {
-            if (fis != null) try { fis.close(); } catch (IOException ioe) { /* ignored */ }
         }
         return false;
     }

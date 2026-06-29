@@ -137,9 +137,7 @@ public class ReseedBundler {
                                   " but only found " + toWrite.size() + " valid RouterInfos. Please try again later.");
 
         File rv = new File(_context.getTempDir(), "genreseed-" + _context.random().nextInt() + ".zip");
-        ZipOutputStream zip = null;
-        try {
-            zip = new ZipOutputStream(new FileOutputStream(rv) );
+        try (ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(rv))) {
             for (RouterInfo ri : toWrite) {
                 String name = getRouterInfoName(ri.getIdentity().calculateHash());
                 ZipEntry entry = new ZipEntry(name);
@@ -158,17 +156,6 @@ public class ReseedBundler {
             if (!rv.delete())
                 System.err.println("Failed to delete temp zip file " + rv.getName());
             throw ioe;
-        } finally {
-            if ( zip != null) {
-                try {
-                    zip.finish();
-                    zip.close();
-                } catch (IOException ioe) {
-                    if (!rv.delete())
-                        System.err.println("Failed to delete temp zip file " + rv.getName());
-                    throw ioe;
-                }
-            }
         }
         return rv;
     }

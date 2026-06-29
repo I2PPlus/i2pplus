@@ -60,9 +60,7 @@ public class MultiRouter {
             usage();
             return;
         }
-        Scanner scan = null;
-        try {
-            scan = new Scanner(args[0]);
+        try (Scanner scan = new Scanner(args[0])) {
             if (!scan.hasNextInt()) {
                 usage();
                 return;
@@ -72,8 +70,6 @@ public class MultiRouter {
                 usage();
                 return;
             }
-        } finally {
-            if (scan != null) scan.close();
         }
 
         _out = System.out;

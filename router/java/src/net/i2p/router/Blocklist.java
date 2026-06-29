@@ -548,9 +548,7 @@ public class Blocklist {
         int feedcount = 0;
         long ipcount = 0;
         final boolean isFeedFile = blFile.equals(_blocklistFeedFile);
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(blFile), "UTF-8"));
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(blFile), "UTF-8"))) {
             String source = blFile.toString();
             String buf = null;
             while ((buf = br.readLine()) != null) {
@@ -578,8 +576,6 @@ public class Blocklist {
             disable();
             _log.log(Log.CRIT, "OOM reading the blocklist");
             return 0;
-        } finally {
-            if (br != null) try {br.close();} catch (IOException ioe) { /* ignored */ }
         }
 
         if (_wrapSave != null) {
@@ -752,9 +748,7 @@ public class Blocklist {
     private int getSize(File blFile) {
         if ( (!blFile.exists()) || (blFile.length() <= 0) ) return 0;
         int lines = 0;
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(blFile), "ISO-8859-1"));
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(blFile), "ISO-8859-1"))) {
             String s;
             while ((s = br.readLine()) != null) {
                 if (s.length() > 0 && !s.startsWith("#")) {lines++;}
@@ -762,11 +756,6 @@ public class Blocklist {
         } catch (IOException ioe) {
             if (_log.shouldWarn()) {_log.warn("Error reading the blocklist file", ioe);}
             return 0;
-        } finally {
-            if (br != null) {
-                try {br.close();}
-                catch (IOException ioe) { /* ignored */ }
-            }
         }
         return lines;
     }
@@ -1316,16 +1305,13 @@ public class Blocklist {
             byte[] ip = iter.next();
             int ipint = toInt(ip);
             String sip = Addresses.toString(ip);
-            BufferedReader br = null;
-            try {
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(blFile), "UTF-8"));
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(blFile), "UTF-8"))) {
                 String buf = null;
                 // Assume the file is unsorted, so go through the whole thing
                 while ((buf = br.readLine()) != null) {
                     Entry e = parse(buf, false);
                     if (e == null || e.peer != null) {continue;}
                     if (match(ipint, toEntry(e.ip1, e.ip2))) {
-                        try {br.close();} catch (IOException ioe) { /* ignored */ }
                         String reason = "" + _x("Blocklist") + ": " + sip;
                         if (_log.shouldWarn()) {
                             _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for duration of session -> Blocklist entry");
@@ -1337,8 +1323,6 @@ public class Blocklist {
             } catch (IOException ioe) {
                 if (_log.shouldWarn())
                     _log.warn("Error reading the blocklist file", ioe);
-            } finally {
-                if (br != null) try {br.close();} catch (IOException ioe) { /* ignored */ }
             }
         }
         // We already banlisted in banlist(peer), that's good enough

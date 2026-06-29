@@ -626,9 +626,7 @@ public class MessageHistory {
         File f = new File(_historyFile);
         if (!f.isAbsolute())
             f = new File(_context.getLogDir(), _historyFile);
-        FileOutputStream fos = null;
-        try {
-            fos = new SecureFileOutputStream(f, true);
+        try (FileOutputStream fos = new SecureFileOutputStream(f, true)) {
             String entry;
             while ((entry = _unwrittenEntries.poll()) != null) {
                 fos.write(DataHelper.getUTF8(entry));
@@ -636,8 +634,6 @@ public class MessageHistory {
             }
         } catch (IOException ioe) {
             _log.error("Error writing trace entries", ioe);
-        } finally {
-            if (fos != null) try { fos.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 

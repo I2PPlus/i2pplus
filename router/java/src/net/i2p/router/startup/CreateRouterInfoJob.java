@@ -102,7 +102,6 @@ public class CreateRouterInfoJob extends JobImpl {
         RouterContext ctx = getContext();
         SigType type = getSigTypeConfig(ctx);
         RouterInfo info = new RouterInfo();
-        OutputStream fos1 = null;
         try {
             info.setAddresses(ctx.commSystem().createAddresses());
             // not necessary, in constructor
@@ -151,8 +150,9 @@ public class CreateRouterInfoJob extends JobImpl {
 
             // write router.info
             File ifile = new File(ctx.getRouterDir(), INFO_FILENAME);
-            fos1 = new BufferedOutputStream(new SecureFileOutputStream(ifile));
-            info.writeBytes(fos1);
+            try (OutputStream fos1 = new BufferedOutputStream(new SecureFileOutputStream(ifile))) {
+                info.writeBytes(fos1);
+            }
 
             // write router.keys.dat
             File kfile = new File(ctx.getRouterDir(), KEYS2_FILENAME);
@@ -183,8 +183,6 @@ public class CreateRouterInfoJob extends JobImpl {
         } catch (IOException ioe) {
             _log.log(Log.CRIT, "Error writing out the new router information", ioe);
             info = null;
-        } finally {
-            if (fos1 != null) try { fos1.close(); } catch (IOException ioe) { /* ignored */ }
         }
         return info;
     }

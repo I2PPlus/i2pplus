@@ -76,18 +76,11 @@ class ProfilePersistenceHelper {
      */
     public boolean writeProfile(PeerProfile profile) {
         File f = pickFile(profile);
-        OutputStream fos = null;
-        try {
-            fos = new BufferedOutputStream(new GZIPOutputStream(new SecureFileOutputStream(f)));
+        try (OutputStream fos = new BufferedOutputStream(new GZIPOutputStream(new SecureFileOutputStream(f)))) {
             writeProfile(profile, fos, false);
         } catch (IOException ioe) {
             _log.error("Error writing profile to " + f);
             return false;
-        } finally {
-            if (fos != null) {
-                try {fos.close();}
-                catch (IOException ioe) { /* ignored */ }
-            }
         }
         return true;
     }
@@ -502,9 +495,7 @@ class ProfilePersistenceHelper {
     }
 
     private void loadProps(Properties props, File file) throws IOException {
-        InputStream fin = null;
-        try {
-            fin = new BufferedInputStream(new FileInputStream(file), 1);
+        try (InputStream fin = new BufferedInputStream(new FileInputStream(file), 1)) {
             fin.mark(1);
             int c = fin.read();
             fin.reset();
@@ -519,10 +510,6 @@ class ProfilePersistenceHelper {
                     _log.debug("Loading " + file.getName());
                 DataHelper.loadProps(props, new GZIPInputStream(fin));
             }
-        } finally {
-            try {
-                if (fin != null) fin.close();
-            } catch (IOException e) { /* ignored */ }
         }
     }
 

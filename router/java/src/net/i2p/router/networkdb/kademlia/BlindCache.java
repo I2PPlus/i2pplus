@@ -314,10 +314,8 @@ class BlindCache {
         Log log = _context.logManager().getLog(BlindCache.class);
         long now = _context.clock().now();
         int count = 0;
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(
-            		new FileInputStream(file), "ISO-8859-1"));
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+            		new FileInputStream(file), "ISO-8859-1"))) {
             String line = null;
             while ( (line = br.readLine()) != null) {
                 if (line.startsWith("#"))
@@ -344,8 +342,6 @@ class BlindCache {
         } catch (IOException ioe) {
             if (log.shouldWarn() && file.exists())
                 log.warn("Error reading the blinding cache file", ioe);
-        } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) { /* ignored */ }
         }
         if (log.shouldInfo())
             log.info("Loaded " + count + " entries from " + file);
@@ -357,9 +353,7 @@ class BlindCache {
         Log log = _context.logManager().getLog(BlindCache.class);
         int count = 0;
         File file = new File(_context.getConfigDir(), PERSIST_FILE);
-        PrintWriter out = null;
-        try {
-            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "ISO-8859-1")));
+        try (PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "ISO-8859-1")))) {
             out.println("# Blinding cache entries. Format is: sigtype,bsigtype,authtype,time,key,[secret],[privkey],[dest]");
             for (BlindData bd : _cache.values()) {
                  out.println(toPersistentString(bd));
@@ -371,8 +365,6 @@ class BlindCache {
         } catch (IOException ioe) {
             if (log.shouldWarn())
                 log.warn("Error writing the blinding cache File", ioe);
-        } finally {
-            if (out != null) out.close();
         }
         if (log.shouldInfo())
             log.info("Stored " + count + " entries to " + file);
