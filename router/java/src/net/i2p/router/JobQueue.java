@@ -209,11 +209,6 @@ public class JobQueue {
         _context.statManager().addRateData("jobQueue.readyJobs", numReady);
         _context.statManager().addRateData("jobQueue.queuedJobs", _timedJobs.size());
 
-        // Track TestJob queue count for monitoring
-        int testJobCount = getTestJobCount();
-        if (testJobCount > 0) {
-            _context.statManager().addRateData("jobQueue.testJobCount", testJobCount);
-        }
         if (dropped) {
             _context.statManager().addRateData("jobQueue.droppedJobs", 1);
             _droppedJobsCount.incrementAndGet();
@@ -744,6 +739,11 @@ public class JobQueue {
                             }
                             if (movedJobs > 0) {
                                 _log.info("Pumper moved " + movedJobs + " jobs to timed ready queue, next wait: " + timeToWait + "ms, _timedJobs size: " + _timedJobs.size());
+                            }
+                            // Track TestJob queue count periodically from the pumper (was in addJob)
+                            int testJobCount = getTestJobCount();
+                            if (testJobCount > 0) {
+                                _context.statManager().addRateData("jobQueue.testJobCount", testJobCount);
                             }
                             boolean highLoad = SystemVersion.getCPULoadAvg() > 98 || SystemVersion.getCPULoad() > 98;
                             boolean isSlow = SystemVersion.isSlow();
