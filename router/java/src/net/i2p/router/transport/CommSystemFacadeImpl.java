@@ -542,6 +542,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @since 0.9.50
      */
     private static class AddrComparator implements Comparator<RouterAddress>, Serializable {
+        @Override
         public int compare(RouterAddress l, RouterAddress r) {
             int rv = l.getCost() - r.getCost();
             if (rv != 0) {return rv;}
@@ -729,6 +730,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  As of 0.9.32, works only for literal IPs, ignores host names.
      */
     private class QueueAll implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {
             for (Hash h : _context.netDb().getAllRouters()) {
                 //RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
@@ -744,6 +746,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     private class Lookup implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {
             (new LookupThread()).start();
         }
@@ -760,6 +763,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             setDaemon(true);
         }
 
+        @Override
         public void run() {
             long start = System.currentTimeMillis();
             _geoIP.blockingLookup();
@@ -1842,6 +1846,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @since 0.7.12
      */
     private class Timestamper implements SimpleTimer.TimedEvent {
+        @Override
         public void timeReached() {
              // use the same % as in RouterClock so that check will never fail
              // This is their our offset w.r.t. them...
@@ -1867,6 +1872,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         public NetMonitor() {super(_context.simpleTimer2(), 0);}
 
+        @Override
         public void timeReached() {
             Set<AddressType> addrs = Addresses.getConnectedAddressTypes();
             boolean good = addrs.contains(AddressType.IPV4) || addrs.contains(AddressType.IPV6);

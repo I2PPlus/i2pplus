@@ -53,8 +53,10 @@ class LoadRouterInfoJob extends JobImpl {
         _banLogger.initialize(ctx);
     }
 
+    @Override
     public String getName() { return "Load Local RouterInfo"; }
 
+    @Override
     public void runJob() {
         synchronized (getContext().router().routerInfoFileLock) {
             loadRouterInfo();

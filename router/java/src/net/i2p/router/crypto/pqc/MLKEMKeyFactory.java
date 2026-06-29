@@ -87,6 +87,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
         _keys.clear();
     }
 
+    @Override
     public void run() {
         try {
             run2();
@@ -140,6 +141,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
      * Pulls a prebuilt keypair from the queue,
      * or if not available, construct a new one.
      */
+    @Override
     public KeyPair getKeys() {
         _context.statManager().addRateData("crypto.MLKEMUsed", 1);
         KeyPair rv = _keys.poll();

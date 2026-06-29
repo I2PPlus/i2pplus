@@ -249,6 +249,7 @@ class BuildHandler implements Runnable {
      * Thread to handle inbound requests
      * @since 0.8.11
      */
+    @Override
     public void run() {
         _isRunning = true;
         while (_isRunning && !_manager.isShutdown()) {
@@ -626,8 +627,10 @@ class BuildHandler implements Runnable {
             this.lookupStartTime = _state.getLookupStartTime();
         }
 
+        @Override
         public String getName() {return "Defer Tunnel Join Processing";}
 
+        @Override
         public void runJob() {
             long now = System.currentTimeMillis();
 
@@ -676,6 +679,7 @@ class BuildHandler implements Runnable {
             _decremented = decremented;
         }
 
+        @Override
         public String getName() {return "Timeout Locating Peer for Tunnel Join";}
 
         @Override
@@ -1144,6 +1148,7 @@ class BuildHandler implements Runnable {
          *  Either from or fromHash may be null, but both should be null only if
          *  we're to be a IBGW and it came from us as a OBEP.
          */
+        @Override
         public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {
             // need to figure out if this is a reply to an inbound Tunnel Request (where we are the
             // endpoint, receiving the request at the last hop)
@@ -1206,6 +1211,7 @@ class BuildHandler implements Runnable {
     }
 
     private class TunnelBuildReplyMessageHandlerJobBuilder implements HandlerJobBuilder {
+        @Override
         public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {
             if (_log.shouldDebug()) {
                 _log.debug("Received TunnelBuildReplyMessage " + receivedMessage.getUniqueId() + " from " +
@@ -1235,10 +1241,13 @@ class BuildHandler implements Runnable {
             fromHash = h;
             recvTime = System.currentTimeMillis();
         }
+        @Override
         public void setEnqueueTime(long time) {} // set at instantiation, which is just before enqueueing
+        @Override
         public long getEnqueueTime() {return recvTime;}
         public void setLookupStartTime(long time) {this.lookupStartTime = time;}
         public long getLookupStartTime() {return lookupStartTime;}
+        @Override
         public void drop() {
             _ctx.throttle().setTunnelStatus("[rejecting/overload]" + _x("Dropping Tunnel Requests: Queue time"));
             _ctx.statManager().addRateData("tunnel.dropLoadProactive", System.currentTimeMillis() - recvTime);
@@ -1272,6 +1281,7 @@ class BuildHandler implements Runnable {
         private TunnelBuildMessageHandlerJob(RouterContext ctx) {super(ctx);}
         @Override
         public void runJob() {}
+        @Override
         public String getName() {return "Receive Tunnel Build Message";}
     }
 
@@ -1280,6 +1290,7 @@ class BuildHandler implements Runnable {
         private TunnelBuildReplyMessageHandlerJob(RouterContext ctx) {super(ctx);}
         @Override
         public void runJob() {}
+        @Override
         public String getName() {return "Receive Tunnel Build Reply Message";}
     }
 
@@ -1294,6 +1305,7 @@ class BuildHandler implements Runnable {
             super(ctx);
             _cfg = cfg;
         }
+        @Override
         public String getName() {return "Timeout Building Tunnel Hop";}
         @Override
         public void runJob() {

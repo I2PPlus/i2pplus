@@ -387,8 +387,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      *  Cannot be restarted.
      */
+    @Override
     public synchronized void shutdown() {
-        if (_log.shouldInfo()) {_log.info("NetDb shutdown: " + this);}
         _initialized = false;
         if (!_context.commSystem().isDummy() && !isClientDb() &&
             _context.router().getUptime() > ROUTER_INFO_EXPIRATION_FLOODFILL + 11*60*1000) {
@@ -414,6 +414,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @deprecated
      */
     @Deprecated
+    @Override
     public synchronized void restart() {throw new UnsupportedOperationException();}
 
     @Override
@@ -448,6 +449,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return true;
     }
 
+    @Override
     public void startup() {
         RouterInfo ri = _context.router().getRouterInfo();
         String dbDir = _context.getProperty(PROP_DB_DIR, DEFAULT_DB_DIR);
@@ -532,13 +534,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @param key the real key, NOT the routing key
      * @param peersToIgnore can be null
      */
+    @Override
     public Set<Hash> findNearestRouters(Hash key, int maxNumRouters, Set<Hash> peersToIgnore) {
-        if (isClientDb()) {return Collections.emptySet();}
         if (!_initialized) {return Collections.emptySet();}
         return new HashSet<>(_peerSelector.selectNearest(key, maxNumRouters, peersToIgnore, _kb));
     }
 
     /** get the hashes for all known routers */
+    @Override
     public Set<Hash> getAllRouters() {
         if (isClientDb() || !_initialized) {return Collections.emptySet();}
         Set<Hash> result = new HashSet<>();
@@ -638,6 +641,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @return RouterInfo, LeaseSet, or null, validated
      *  @since 0.8.3
      */
+    @Override
     public DatabaseEntry lookupLocally(Hash key) {
         if (!_initialized) {return null;}
         DatabaseEntry rv = _ds.get(key);
@@ -664,6 +668,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @return RouterInfo, LeaseSet, or null, NOT validated
      *  @since 0.9.9, public since 0.9.38
      */
+    @Override
     public DatabaseEntry lookupLocallyWithoutValidation(Hash key) {
         if (!_initialized) {return null;}
         return _ds.get(key);
@@ -673,6 +678,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  Lookup using exploratory tunnels.
      *  Use lookupDestination() if you don't need the LS or don't need it validated.
      */
+    @Override
     public void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {
         lookupLeaseSet(key, onFindJob, onFailedLookupJob, timeoutMs, null);
     }
@@ -684,6 +690,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      *  @since 0.9.10
      */
+    @Override
     public void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob,
                                long timeoutMs, Hash fromLocalDest) {
         if (!_initialized) return;
@@ -710,6 +717,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      *  @since 0.9.25
      */
+    @Override
     public void lookupLeaseSetRemotely(Hash key, Hash fromLocalDest) {
         if (!_initialized) return;
         key = blindCache().getHash(key);
@@ -725,6 +733,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @param onFailedLookupJob may be null
      *  @since 0.9.47
      */
+    @Override
     public void lookupLeaseSetRemotely(Hash key, Job onFindJob, Job onFailedLookupJob,
                                        long timeoutMs, Hash fromLocalDest) {
         if (!_initialized) {return;}
@@ -736,6 +745,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      *  Use lookupDestination() if you don't need the LS or don't need it validated.
      */
+    @Override
     public LeaseSet lookupLeaseSetLocally(Hash key) {
         if (!_initialized) {return null;}
         DatabaseEntry ds = _ds.get(key);
@@ -757,6 +767,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Do NOT call for HostChecker lookups.
      * @since 0.9.67
      */
+    @Override
     public void accessLeaseSet(Hash key) {
         if (!isClientDb() || key == null) return;
         // Only track if we have tunnels built to this destination
@@ -782,6 +793,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Call this after HostChecker completes to avoid unnecessary refreshes.
      * @since 0.9.67
      */
+    @Override
     public void removeLeaseSetFromTracking(Hash key) {
         if (key == null) return;
         _clientLeaseSetAccessTime.remove(key);
@@ -800,6 +812,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      *  @since 0.9.16
      */
+    @Override
     public void lookupDestination(Hash key, Job onFinishedJob, long timeoutMs, Hash fromLocalDest) {
         if (!_initialized) return;
         Destination d = lookupDestinationLocally(key);
@@ -821,6 +834,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      *  @since 0.9.16
      */
+    @Override
     public Destination lookupDestinationLocally(Hash key) {
         if (!_initialized) {return null;}
         DatabaseEntry ds = _ds.get(key);
@@ -838,6 +852,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return caps != null && caps.indexOf(capability) >= 0;
     }
 
+    @Override
     public void lookupRouterInfo(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {
         if (!_initialized) return;
         RouterInfo ri = lookupRouterInfoLocally(key);
@@ -985,8 +1000,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _purged = 0;
         }
 
+        @Override
         public String getName() { return "NetDb capability purge"; }
 
+        @Override
         public void runJob() {
             if (!_initialized) return;
             while (_iter.hasNext()) {
@@ -1080,6 +1097,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      * @return null always for client dbs
      */
+    @Override
     public RouterInfo lookupRouterInfoLocally(Hash key) {
         if (!_initialized || isClientDb()) {return null;}
         DatabaseEntry ds = _ds.get(key);
@@ -1098,6 +1116,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private final MovingAverage _lookupTimeAvg = new MovingAverage(LOOKUP_SAMPLE_SIZE);
 
     /** {@inheritDoc} */
+    @Override
     public RouterInfo lookupRouterInfoWithTimeout(Hash key, long defaultTimeout) {
         RouterInfo ri = lookupRouterInfoLocally(key);
         if (ri != null) {return ri;}
@@ -1195,6 +1214,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @param localLeaseSet the LeaseSet to publish
      * @throws IllegalArgumentException if LeaseSet is invalid or expired
      */
+    @Override
     public void publish(LeaseSet localLeaseSet) throws IllegalArgumentException {
         if (!_initialized) {
             if (_log.shouldWarn()) {
@@ -1334,6 +1354,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             super(ctx);
         }
 
+        @Override
         public String getName() { return "Republish LeaseSets (batch)"; }
 
         @Override
@@ -1424,8 +1445,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @throws IllegalArgumentException if the local router info is invalid
      *         or if this is a client DB
      */
+    @Override
     public void publish(RouterInfo localRouterInfo) throws IllegalArgumentException {
-        if (isClientDb()) {throw new IllegalArgumentException("RouterInfo publication to ClientDb attempted");}
         if (!_initialized) {return;}
         if (_context.router().gracefulShutdownInProgress()) {return;}
         if (_context.router().isHidden()) {return;} // don't store RouterInfos with hidden cap
@@ -1561,6 +1582,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return null;
     }
 
+    @Override
     public LeaseSet store(Hash key, LeaseSet leaseSet) throws IllegalArgumentException {
         return store(key, leaseSet, false);
     }
@@ -2295,6 +2317,7 @@ return false;
      * @throws UnsupportedCryptoException if that's why it failed.
      * @return previous entry or null
      */
+    @Override
     public RouterInfo store(Hash key, RouterInfo routerInfo) throws IllegalArgumentException {
         return store(key, routerInfo, true);
     }
@@ -2412,6 +2435,7 @@ return false;
      *  Final remove for a leaseset.
      *  For a router info, will look up in the network before dropping.
      */
+    @Override
     public void fail(Hash dbEntry) {
         if (!_initialized) {return;}
         DatabaseEntry o = _ds.get(dbEntry);
@@ -2472,6 +2496,7 @@ return false;
         return loggedFailure;
     }
 
+    @Override
     public void unpublish(LeaseSet localLeaseSet) {
         if (!_initialized) return;
         Hash h = localLeaseSet.getHash();
@@ -2724,6 +2749,7 @@ return false;
      *  @param key only for Destinations; for RouterIdentities, see Banlist
      *  @since 0.9.16
      */
+    @Override
     public boolean isNegativeCachedForever(Hash key) {return key != null && _negativeCache.getBadDest(key) != null;}
 
     /**
@@ -2987,8 +3013,10 @@ return false;
             _log = ctx.logManager().getLog(RefreshClientLeaseSetsJob.class);
         }
 
+        @Override
         public String getName() { return "Refresh client LeaseSets"; }
 
+        @Override
         public void runJob() {
             _facade.refreshClientLeaseSets();
             requeue(LOCAL_LEASESET_REFRESH_INTERVAL);

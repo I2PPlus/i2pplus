@@ -61,6 +61,7 @@ class MessageReceiver {
     private class Runner implements Runnable {
         private final I2NPMessageHandler _handler;
         public Runner() { _handler = new I2NPMessageHandler(_context); }
+        @Override
         public void run() { loop(_handler); }
     }
 

@@ -2641,6 +2641,7 @@ class EstablishmentManager {
      * @since 0.9.57
      */
     private static class TokenComparator implements Comparator<Map.Entry<RemoteHostId, Token>> {
+        @Override
         public int compare(Map.Entry<RemoteHostId, Token> l, Map.Entry<RemoteHostId, Token> r) {
              long le = l.getValue().expires;
              long re = r.getValue().expires;
@@ -2788,6 +2789,7 @@ class EstablishmentManager {
      *
      */
     private class Establisher implements Runnable {
+        @Override
         public void run() {
             while (_alive) {
                 try {doPass();}

@@ -733,6 +733,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      *
      *  @return true if added, false if dup
      */
+    @Override
     public boolean addTag(RatchetSessionTag tag, RatchetTagSet ts) {
         return _inboundTagSets.putIfAbsent(tag, ts) == null;
     }
@@ -740,6 +741,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /**
      *  Remove the tag associated with this tagset.
      */
+    @Override
     public void expireTag(RatchetSessionTag tag, RatchetTagSet ts) {
         _inboundTagSets.remove(tag, ts);
     }

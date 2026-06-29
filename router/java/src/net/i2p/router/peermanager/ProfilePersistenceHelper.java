@@ -243,6 +243,7 @@ class ProfilePersistenceHelper {
 
         // Sort profiles by modification time (most recent first) to prioritize active peers
         Collections.sort(freshFiles, new Comparator<File>() {
+            @Override
             public int compare(File f1, File f2) {
                 return Long.compare(f2.lastModified(), f1.lastModified());
             }

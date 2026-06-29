@@ -702,6 +702,7 @@ public class JobQueue {
             ((RouterClock) _context.clock()).addShiftListener(this);
         }
 
+        @Override
         public void run() {
             try {
                 while (_alive) {
@@ -853,14 +854,20 @@ public class JobQueue {
     private static final int POISON_ID = -99999;
 
     private static class PoisonJob implements Job {
+        @Override
         public String getName() {return null;}
+        @Override
         public long getJobId() {return POISON_ID;}
+        @Override
         public JobTiming getTiming() {return null;}
+        @Override
         public void runJob() {}
+        @Override
         public void dropped() {}
     }
 
     private static class JobComparator implements Comparator<Job>, Serializable {
+          @Override
           public int compare(Job l, Job r) {
               if (l.equals(r)) return 0;
               long ld = l.getTiming().getStartAfter() - r.getTiming().getStartAfter();

@@ -497,6 +497,7 @@ public class NTCPConnection implements Closeable {
 
     public boolean isClosed() { return _closed.get(); }
 
+    @Override
     public void close() { close(false); }
 
     public void close(boolean allowRequeue) {
@@ -1044,6 +1045,7 @@ public class NTCPConnection implements Closeable {
      *  Does the delayed read.
      */
     private class InboundListener implements FIFOBandwidthLimiter.CompleteListener {
+        @Override
         public void complete(FIFOBandwidthLimiter.Request req) {
             removeIBRequest(req);
             ByteBuffer buf = (ByteBuffer)req.attachment();
@@ -1065,6 +1067,7 @@ public class NTCPConnection implements Closeable {
      *  Does the delayed write.
      */
     private class OutboundListener implements FIFOBandwidthLimiter.CompleteListener {
+        @Override
         public void complete(FIFOBandwidthLimiter.Request req) {
             removeOBRequest(req);
             ByteBuffer buf = (ByteBuffer)req.attachment();
@@ -1589,6 +1592,7 @@ public class NTCPConnection implements Closeable {
                 _log.debug("Recv SipHash keys: " + _sipk1 + ' ' + _sipk2 + ' ' + Base64.encode(_sipIV));
         }
 
+        @Override
         public void receive(ByteBuffer buf) {
             if (_terminated) {
                 if (_log.shouldWarn())
@@ -1731,6 +1735,7 @@ public class NTCPConnection implements Closeable {
             return true;
         }
 
+        @Override
         public void destroy() {
             if (_log.shouldInfo())
                 _log.info("NTCP2 read state destroy() on " + NTCPConnection.this);
@@ -1741,10 +1746,12 @@ public class NTCPConnection implements Closeable {
             _terminated = true;
         }
 
+        @Override
         public int getFramesReceived() { return _frameCount; }
 
         //// PayloadCallbacks
 
+        @Override
         public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException {
             if (_log.shouldDebug())
                 _log.debug("Received updated RouterInfo");
@@ -1782,6 +1789,7 @@ public class NTCPConnection implements Closeable {
             }
         }
 
+        @Override
         public void gotDateTime(long time) {
             if (_log.shouldDebug())
                 _log.debug("Received updated datetime block");
@@ -1789,6 +1797,7 @@ public class NTCPConnection implements Closeable {
             // update skew
         }
 
+        @Override
         public void gotI2NP(I2NPMessage msg) {
             if (_log.shouldDebug())
                 _log.debug("Received I2NP message: " + msg);
@@ -1799,6 +1808,7 @@ public class NTCPConnection implements Closeable {
             _messagesRead.incrementAndGet();
         }
 
+        @Override
         public void gotOptions(byte[] options, boolean isHandshake) {
             NTCP2Options hisPadding = NTCP2Options.fromByteArray(options);
             if (hisPadding == null) {
@@ -1814,6 +1824,7 @@ public class NTCPConnection implements Closeable {
                           "\n* Merged config: " + _paddingConfig);
         }
 
+        @Override
         public void gotTermination(int reason, long lastReceived) {
             if (_log.shouldInfo())
                 _log.info("Received Termination: " + reason +
@@ -1831,11 +1842,13 @@ public class NTCPConnection implements Closeable {
             }
         }
 
+        @Override
         public void gotUnknown(int type, int len) {
             if (_log.shouldWarn())
                 _log.warn("Received unknown block type " + type + " length " + len + " on " + NTCPConnection.this);
         }
 
+        @Override
         public void gotPadding(int paddingLength, int frameLength) {
             if (_log.shouldDebug())
                 _log.debug("Received " + paddingLength +
@@ -1899,6 +1912,7 @@ public class NTCPConnection implements Closeable {
             schedule(NTCP2_FAIL_TIMEOUT);
         }
 
+        @Override
         public void receive(ByteBuffer buf) {
             _read += buf.remaining();
             if (_read >= _toRead) {
@@ -1911,10 +1925,12 @@ public class NTCPConnection implements Closeable {
             }
         }
 
+        @Override
         public void destroy() {
             cancel();
         }
 
+        @Override
         public void timeReached() {
             // only do this once
             _read = Integer.MIN_VALUE;
@@ -1923,6 +1939,7 @@ public class NTCPConnection implements Closeable {
             sendTermination(REASON_AEAD, _validFramesRcvd);
         }
 
+        @Override
         public int getFramesReceived() { return 0; }
     }
 
@@ -1940,6 +1957,7 @@ public class NTCPConnection implements Closeable {
             schedule(NTCP2_TERMINATION_CLOSE_DELAY);
         }
 
+        @Override
         public void timeReached() {
             close();
         }

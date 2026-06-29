@@ -236,6 +236,7 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
+        @Override
         public void run() {
             if (isShuttingDown(_context)) return;
             _quit = false;
@@ -508,8 +509,10 @@ public class PersistentDataStore extends TransientDataStore {
 
         public ReadJob() {super(PersistentDataStore.this._context);}
 
+        @Override
         public String getName() {return "Read NetDb";}
 
+        @Override
         public void runJob() {
             if (getContext().router().gracefulShutdownInProgress()) {
                 return;
@@ -671,6 +674,7 @@ public class PersistentDataStore extends TransientDataStore {
             _key = key;
         }
 
+        @Override
         public String getName() {return "Read RouterInfo";}
 
         private boolean shouldRead() {
@@ -689,6 +693,7 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
+        @Override
         public void runJob() {
             read();
         }
