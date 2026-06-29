@@ -139,7 +139,7 @@ public class TransportManager implements TransportEventListener {
      *  Periodically checks whether we have enough outbound connections
      *  to Fast peers and proactively establishes new ones.
      */
-    private static final long MAINTAINER_INTERVAL = 60*1000;
+    private static final long MAINTAINER_INTERVAL = 60*1000L;
     /** Maximum per-cycle establishments to avoid flooding the network */
     private static final int MAINTAINER_MAX_PER_CYCLE = 10;
     /** Minimum outbound Fast connections to maintain (below this, we establish more) */
@@ -556,7 +556,7 @@ public class TransportManager implements TransportEventListener {
 
     synchronized void restart() {
         stopListening();
-        try { Thread.sleep(5*1000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+        try { Thread.sleep(5*1000L); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
         startListening();
     }
 
@@ -1299,7 +1299,7 @@ public class TransportManager implements TransportEventListener {
         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
         if (ri == null)
             return;
-        long lifetime = _context.clock().now() + 30*1000;
+        long lifetime = _context.clock().now() + 30*1000L;
         DatabaseLookupMessage dlm = new DatabaseLookupMessage(_context, true);
         dlm.setFrom(_context.routerHash());
         dlm.setSearchKey(peer);

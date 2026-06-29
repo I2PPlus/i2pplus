@@ -69,8 +69,8 @@ public class ProfileOrganizer {
 
     public static final String PROP_MAX_ROUTERINFO_AGE_HOURS = "profileOrganizer.maxRouterInfoAgeHours";
     public static final int DEFAULT_MAX_ROUTERINFO_AGE_HOURS = 2;
-    private static final long STARTUP_GRACE_PERIOD_MS = 10 * 60 * 1000;
-    private static final long PROOF_OF_LIFE_WINDOW_MS = 60 * 60 * 1000;
+    private static final long STARTUP_GRACE_PERIOD_MS = 10 * 60 * 1000L;
+    private static final long PROOF_OF_LIFE_WINDOW_MS = 60 * 60 * 1000L;
     private static final int DEFAULT_MAXIMUM_FAST_PEERS = 500;
     private static final int ABSOLUTE_MAX_FAST_PEERS = 600;
 
@@ -85,7 +85,7 @@ public class ProfileOrganizer {
     /** Maximum tunnel test RTT (ms) to be eligible for fast tier */
     private static final long MAX_RTT_FOR_FAST_TIER = 8000;
     /** Cooldown period (ms) after demotion before peer can be re-promoted */
-    private static final long TUNNEL_DEMOTION_COOLDOWN_MS = 10 * 60 * 1000; // 10 minutes
+    private static final long TUNNEL_DEMOTION_COOLDOWN_MS = 10 * 60 * 1000L; // 10 minutes
 
     public static final String PROP_MAX_PROFILES = "profileOrganizer.maxProfiles";
     public static final int DEFAULT_MAX_PROFILES = getDefaultMaxProfiles();
@@ -244,7 +244,7 @@ public class ProfileOrganizer {
 
     public int countActivePeers() {
         int activePeers = 0;
-        long hideBefore = _context.clock().now() - 4*60*60*1000;
+        long hideBefore = _context.clock().now() - 4*60*60*1000L;
 
         getReadLock();
         try {
@@ -259,12 +259,12 @@ public class ProfileOrganizer {
 
     public int countActivePeersInLastHour() {
         int activePeers = 0;
-        long hideBefore = _context.clock().now() - 60*60*1000;
+        long hideBefore = _context.clock().now() - 60*60*1000L;
 
         getReadLock();
         try {
             for (PeerProfile profile : _notFailingPeers.values()) {
-                if (profile.getIsActive(60*60*1000) ||
+                if (profile.getIsActive(60*60*1000L) ||
                     profile.getLastSendSuccessful() >= hideBefore ||
                     profile.getLastSendFailed() >= hideBefore ||
                     profile.getLastHeardFrom() >= hideBefore) {
@@ -565,8 +565,8 @@ public class ProfileOrganizer {
         } finally {releaseReadLock();}
     }
 
-    private static final long MIN_EXPIRE_TIME = 3 * 24 * 60 * 60 * 1000;
-    private static final long MAX_EXPIRE_TIME = 4 * 7 * 24 * 60 * 60 * 1000;
+    private static final long MIN_EXPIRE_TIME = 3 * 24 * 60 * 60 * 1000L;
+    private static final long MAX_EXPIRE_TIME = 4 * 7 * 24 * 60 * 60 * 1000L;
     private static final int ENOUGH_PROFILES = getEnoughProfiles();
 
     private static int getEnoughProfiles() {
@@ -618,7 +618,7 @@ public class ProfileOrganizer {
 
          // Optional coalescing (read-only, safe to skip if lock fails)
          if (shouldCoalesce && _context.router() != null &&
-             _context.router().getUptime() > 30 * 60 * 1000 &&
+              _context.router().getUptime() > 30 * 60 * 1000L &&
              countNotFailingPeers() > (ENOUGH_PROFILES / 2)) {
              getReadLock();
              try {

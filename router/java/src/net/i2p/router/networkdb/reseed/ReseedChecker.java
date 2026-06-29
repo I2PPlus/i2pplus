@@ -36,7 +36,7 @@ public class ReseedChecker {
     public static final int MINIMUM = 50;
 
     /** Sidebar notification persistence (3 minutes) */
-    private static final long STATUS_CLEAN_TIME = 3*60*1000;
+    private static final long STATUS_CLEAN_TIME = 3*60*1000L;
 
     /** Downtime threshold for forced reseed at startup (7 days) */
     private static final long RESEED_MIN_DOWNTIME = 7*24*60*60*1000L;

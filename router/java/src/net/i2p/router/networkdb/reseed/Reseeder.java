@@ -57,8 +57,8 @@ public class Reseeder {
     private final ReseedChecker _checker;
 
     // Reject unreasonably big files, because we download into a ByteArrayOutputStream.
-    private static final long MAX_RESEED_RESPONSE_SIZE = 2 * 1024 * 1024;
-    private static final long MAX_SU3_RESPONSE_SIZE = 1024 * 1024;
+    private static final long MAX_RESEED_RESPONSE_SIZE = 2 * 1024 * 1024L;
+    private static final long MAX_SU3_RESPONSE_SIZE = 1024 * 1024L;
     /** limit to spend on a single host, to avoid getting stuck on one that is seriously overloaded */
     private static final int MAX_TIME_PER_HOST = 10 * 1000;
     private static final long MAX_FILE_AGE = 3*24*60*60*1000L;
@@ -1107,7 +1107,7 @@ public class Reseeder {
             File file = new File(netDbDir, ROUTERINFO_PREFIX + name + ROUTERINFO_SUFFIX);
             // Don't overwrite recent file
             // TODO: even better would be to compare to last-mod date from eepget
-            if (file.exists() && file.lastModified() > _context.clock().now() - 60*60*1000) {
+            if (file.exists() && file.lastModified() > _context.clock().now() - 60*60*1000L) {
                 if (_log.shouldDebug()) {
                     _log.debug("Skipping RouterInfo; local copy is more recent: " + file);
                 }
@@ -1305,7 +1305,7 @@ public class Reseeder {
                             System.out.println("Success:  " + ri + " RouterInfos returned");
                             pass++;
                             long time = System.currentTimeMillis() - start;
-                            if (time > 30*1000) {
+                            if (time > 30*1000L) {
                                 System.out.println("Test very slow for " + host + ", took " + DataHelper.formatDuration(time));
                                 warn++;
                             }

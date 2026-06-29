@@ -75,7 +75,7 @@ class SearchJob extends JobImpl {
      * this'll help heal the network so subsequent searches will find the data.
      *
      */
-    private static final long RESEND_TIMEOUT = 5*1000;
+    private static final long RESEND_TIMEOUT = 5*1000L;
 
     /**
      * When we're just waiting for something to change, requeue the search status test
@@ -143,7 +143,7 @@ class SearchJob extends JobImpl {
         return ctx.getProperty("netDb.floodfillOnly", DEFAULT_FLOODFILL_ONLY);
     }
     static final int PER_FLOODFILL_PEER_TIMEOUT = 8*1000;
-    static final long MIN_TIMEOUT = 2*1000;
+    static final long MIN_TIMEOUT = 2*1000L;
 
     protected int getPerPeerTimeoutMs(Hash peer) {
         int timeout = 0;

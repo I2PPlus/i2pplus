@@ -69,7 +69,7 @@ import net.i2p.util.SystemVersion;
  */
 public class ClientAppConfig {
     /** wait 15s before starting up non-boot client apps */
-    private final static long DEFAULT_STARTUP_DELAY = 15*1000;
+    private final static long DEFAULT_STARTUP_DELAY = 15*1000L;
 
     private static final String PROP_CLIENT_CONFIG_FILENAME = "router.clientConfigFile";
     private static final String DEFAULT_CLIENT_CONFIG_FILENAME = "clients.config";

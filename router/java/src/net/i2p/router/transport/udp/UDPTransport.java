@@ -3399,7 +3399,7 @@ public class UDPTransport extends TransportImpl {
      */
     public int[] getPeerCounts() {
         int[] rv = new int[8];
-        long old = _context.clock().now() - 60*1000;
+        long old = _context.clock().now() - 60*1000L;
         for (PeerState peer : _peersByIdent.values()) {
             if ((peer.getMessagesReceived() > 0 && peer.getLastReceiveTime() >= old) ||
                 (peer.getMessagesSent() > 0 && peer.getLastSendTime() >= old)) {
@@ -3417,7 +3417,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     public int countActivePeers() {
-        long old = _context.clock().now() - 60*1000;
+        long old = _context.clock().now() - 60*1000L;
         int active = 0;
         for (PeerState peer : _peersByIdent.values()) {
             // PeerState initializes times at construction, so check message count also
@@ -3430,7 +3430,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     public int countActiveSendPeers() {
-        long old = _context.clock().now() - 60*1000;
+        long old = _context.clock().now() - 60*1000L;
         int active = 0;
         for (PeerState peer : _peersByIdent.values()) {
                 if (peer.getLastSendFullyTime() >= old)
@@ -3469,7 +3469,7 @@ public class UDPTransport extends TransportImpl {
         final PeerState ps =  _peersByIdent.get(peer);
         if (ps != null &&
             ps.getWeRelayToThemAs() <= 0 &&
-            (ps.getTheyRelayToUsAs() <= 0 || ps.getIntroducerTime() < _context.clock().now() - 2*60*60*1000) &&
+            (ps.getTheyRelayToUsAs() <= 0 || ps.getIntroducerTime() < _context.clock().now() - 2*60*60*1000L) &&
             ps.getMessagesReceived() <= 2 && ps.getMessagesSent() <= 2) {
             ps.setMayDisconnect();
         }
@@ -3605,16 +3605,16 @@ public class UDPTransport extends TransportImpl {
         private int _runCount;
         private boolean _lastLoopShort;
         // we've seen firewalls change ports after 40 seconds
-        private static final long PING_FIREWALL_TIME = 30*1000;
+        private static final long PING_FIREWALL_TIME = 30*1000L;
         private static final long PING_FIREWALL_CUTOFF = PING_FIREWALL_TIME / 2;
         // ping 1/4 of the peers every loop
         private static final int SLICES = 4;
         private static final long SHORT_LOOP_TIME = PING_FIREWALL_CUTOFF / (SLICES + 1);
-        private static final long LONG_LOOP_TIME = 25*1000;
-        private static final long EXPIRE_INCREMENT = 15*1000;
-        private static final long EXPIRE_DECREMENT = 45*1000;
-        private static final long MAY_DISCON_TIMEOUT = 15*1000;
-        private static final long RI_STORE_INTERVAL = 29*60*1000;
+        private static final long LONG_LOOP_TIME = 25*1000L;
+        private static final long EXPIRE_INCREMENT = 15*1000L;
+        private static final long EXPIRE_DECREMENT = 45*1000L;
+        private static final long MAY_DISCON_TIMEOUT = 15*1000L;
+        private static final long RI_STORE_INTERVAL = 29*60*1000L;
 
         public ExpirePeerEvent() {
             super(_context.simpleTimer2());
@@ -3663,7 +3663,7 @@ public class UDPTransport extends TransportImpl {
             }
 
             final long mayDisconCutoff = now - MAY_DISCON_TIMEOUT;
-            long pingCutoff = now - (2 * 60*60*1000);
+            long pingCutoff = now - (2 * 60*60*1000L);
             long pingFirewallCutoff = now - PING_FIREWALL_CUTOFF;
             boolean shouldPingFirewall = !STATUS_OK.contains(_reachabilityStatus);
             int currentListenPort = getListenPort(false);

@@ -85,9 +85,9 @@ class BuildHandler implements Runnable {
     private static final int MIN_LOOKUP_LIMIT = isSlow ? 4 : 10; // limits on concurrent next-hop RI lookup
     private static final int MAX_LOOKUP_LIMIT = isSlow ? 10 : Math.max(SystemVersion.getCores() / 2, 16);
     private static final int PERCENT_LOOKUP_LIMIT = isSlow ? 15 : 40; // limit lookups to this % of current participating tunnels
-    private static final long MAX_REQUEST_FUTURE = 5*60*1000;
-    private static final long MAX_REQUEST_AGE = 65*60*1000; /** must be > 1 hour due to rounding down */
-    private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000;
+    private static final long MAX_REQUEST_FUTURE = 5*60*1000L;
+    private static final long MAX_REQUEST_AGE = 65*60*1000L; /** must be > 1 hour due to rounding down */
+    private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000L;
 
     private static int getNextHopLookupTimeout(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.build.nextHopLookupTimeout", NEXT_HOP_LOOKUP_TIMEOUT);
@@ -102,13 +102,13 @@ class BuildHandler implements Runnable {
         return ctx.getProperty("i2p.tunnel.build.percentLookupLimit", SystemVersion.isSlow() ? 15 : 40);
     }
     private static long getMaxRequestFuture(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.build.maxRequestFuture", 5*60*1000);
+        return ctx.getProperty("i2p.tunnel.build.maxRequestFuture", 5*60*1000L);
     }
     private static long getMaxRequestAge(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.build.maxRequestAge", 65*60*1000);
+        return ctx.getProperty("i2p.tunnel.build.maxRequestAge", 65*60*1000L);
     }
     private static long getMaxRequestAgeEcies(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.build.maxRequestAgeEcies", 8*60*1000);
+        return ctx.getProperty("i2p.tunnel.build.maxRequestAgeEcies", 8*60*1000L);
     }
 
     private static long getJobLagLimitTunnel(RouterContext ctx) {
@@ -277,7 +277,7 @@ class BuildHandler implements Runnable {
         if (PROP_MAX_TUNNELS != null) {maxTunnels = Integer.parseInt(PROP_MAX_TUNNELS);}
         else {maxTunnels = DEFAULT_MAX_TUNNELS;}
         long lag = _context.jobQueue().getMaxLag();
-        boolean isLagged = lag > getJobLagLimitTunnel(_context) && maxTunnels > 0 && uptime > 5*60*1000;
+        boolean isLagged = lag > getJobLagLimitTunnel(_context) && maxTunnels > 0 && uptime > 5*60*1000L;
         boolean highLoad = SystemVersion.getCPULoadAvg() > 98 && isLagged;
         if (state.recvTime <= dropBefore) {
             if (_log.shouldWarn()) {
@@ -330,7 +330,7 @@ class BuildHandler implements Runnable {
      * Blocking call to handle a single inbound reply
      */
     private void handleReply(TunnelBuildReplyMessage msg, PooledTunnelCreatorConfig cfg, long delay) {
-        long requestedOn = cfg.getExpiration() - 10*60*1000;
+        long requestedOn = cfg.getExpiration() - 10*60*1000L;
         long rtt = _context.clock().now() - requestedOn;
         if (rtt < 0) {rtt = 0;}
         if (_log.shouldInfo()) {
@@ -799,14 +799,14 @@ class BuildHandler implements Runnable {
         long maxAge;
         if (isEC) {
             // time is in minutes, rounded down.
-            long roundedNow = (now / (60*1000L)) * (60*1000);
+            long roundedNow = (now / (60*1000L)) * (60*1000L);
             timeDiff = roundedNow - time;
             maxAge = getMaxRequestAgeEcies(_context);
         } else {
             // time is in hours, rounded down.
             // tunnel-alt-creation.html specifies that this is enforced +/- 1 hour but it was not.
             // As of 0.9.16, allow + 5 minutes to - 65 minutes.
-            long roundedNow = (now / (60*60*1000L)) * (60*60*1000);
+            long roundedNow = (now / (60*60*1000L)) * (60*60*1000L);
             timeDiff = roundedNow - time;
             maxAge = getMaxRequestAge(_context);
         }
@@ -997,7 +997,7 @@ class BuildHandler implements Runnable {
         if (response == 0) {
             cfg = new HopConfig();
             cfg.setCreation(now);
-            cfg.setExpiration(now + 10*60*1000);
+            cfg.setExpiration(now + 10*60*1000L);
             cfg.setIVKey(req.readIVKey());
             cfg.setLayerKey(req.readLayerKey());
             if (isInGW) {

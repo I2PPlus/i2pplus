@@ -24,16 +24,16 @@ public class RouterThrottleImpl implements RouterThrottle {
     private final long _rejectStartupTime;
 
     /** Arbitrary hard limit - if it's taking this long to get to a job, we're congested. */
-    private static final long JOB_LAG_LIMIT_NETWORK = 3*1000;
-    private static final long JOB_LAG_LIMIT_NETDB = 3*1000;
+    private static final long JOB_LAG_LIMIT_NETWORK = 3*1000L;
+    private static final long JOB_LAG_LIMIT_NETDB = 3*1000L;
     private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 3000 : 2000;
     public static final String PROP_MAX_TUNNELS = "router.maxParticipatingTunnels";
     public static final int DEFAULT_MAX_TUNNELS = SystemVersion.isSlow() ? 3*1000 :
-                                                  SystemVersion.getMaxMemory() < 512*1024*1024 ? 5*1000 :
+                                                  SystemVersion.getMaxMemory() < 512*1024*1024L ? 5*1000 :
                                                   SystemVersion.getCores() >= 8 ? 12*1000 : 8*1000;
     private static final String PROP_MAX_PROCESSINGTIME = "router.defaultProcessingTimeThrottle";
-    private static final long DEFAULT_REJECT_STARTUP_TIME = 3*60*1000;
-    private static final long MIN_REJECT_STARTUP_TIME = 90*1000;
+    private static final long DEFAULT_REJECT_STARTUP_TIME = 3*60*1000L;
+    private static final long MIN_REJECT_STARTUP_TIME = 90*1000L;
     private static final String PROP_REJECT_STARTUP_TIME = "router.rejectStartupTime";
     private static final int DEFAULT_MIN_THROTTLE_TUNNELS = SystemVersion.isSlow() ? 2000 : 6000;
     private static final String PROP_MIN_THROTTLE_TUNNELS = "router.minThrottleTunnels";
@@ -54,7 +54,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         _log = context.logManager().getLog(RouterThrottleImpl.class);
         setTunnelStatus();
         _rejectStartupTime = Math.max(MIN_REJECT_STARTUP_TIME, _context.getProperty(PROP_REJECT_STARTUP_TIME, DEFAULT_REJECT_STARTUP_TIME));
-        _context.simpleTimer2().addEvent(new ResetStatus(), 5*1000 + _rejectStartupTime);
+        _context.simpleTimer2().addEvent(new ResetStatus(), 5*1000L + _rejectStartupTime);
         _context.statManager().createRateStat("router.throttleNetworkCause", "JobQueue lag when an I2NP event was throttled", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelBandwidthExceeded", "Bandwidth allocated when we refuse to build tunnel (bandwidth exceeded)", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelBytesAllowed", "Bytes permitted to be sent when we get a tunnel request", "Router [Throttle]", RATES);
@@ -87,7 +87,7 @@ public class RouterThrottleImpl implements RouterThrottle {
      */
     public boolean acceptNetworkMessage() {
         long lag = _context.jobQueue().getMaxLag();
-        if ((lag > JOB_LAG_LIMIT_NETWORK) && (_context.router().getUptime() > 60*1000)) {
+        if ((lag > JOB_LAG_LIMIT_NETWORK) && (_context.router().getUptime() > 60*1000L)) {
             if (_log.shouldWarn()) {_log.warn("Throttling Network Reader -> Job lag is " + lag + "ms");}
             _context.statManager().addRateData("router.throttleNetworkCause", lag);
             return false;
@@ -282,7 +282,7 @@ public class RouterThrottleImpl implements RouterThrottle {
             //setTunnelStatus("[rejecting/max]" + _x("Declining tunnel requests" + ":<br>" + _x("Bandwidth Limit")));
             return TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
         }
-        _context.statManager().addRateData("tunnel.bytesAllocatedAtAccept", (long)bytesAllocated, 60*10*1000);
+        _context.statManager().addRateData("tunnel.bytesAllocatedAtAccept", (long)bytesAllocated, 60*10*1000L);
         return TUNNEL_ACCEPT;
     }
 
@@ -307,10 +307,10 @@ public class RouterThrottleImpl implements RouterThrottle {
      */
     public static int getMinBandwidthFloorPerTunnel(RouterContext ctx) {
         int maxKBps = ctx.bandwidthLimiter().getOutboundKBytesPerSecond();
-        int share = (int) (maxKBps * 1024 * ctx.router().getSharePercentage());
+        int share = (int) (maxKBps * 1024L * ctx.router().getSharePercentage());
         int numTunnels = ctx.tunnelManager().getParticipatingCount();
         if (numTunnels <= 0 || share <= 0) {
-            return DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE * 4096 / (10*60);
+            return (int) ((long) DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE * 4096 / (10*60));
         }
         // Floor: either 10% of share / tunnel count, or 4KB/s minimum
         int floor = Math.max(share / Math.max(numTunnels, 10), 4 * 1024);
@@ -341,7 +341,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         // This gives reasonable growth room for existing tunnels on both low and high
         // bandwidth routers. We want to be rejecting tunnels more aggressively than
         // dropping packets with WRED
-        int availBps = Math.min((maxKBpsIn*1024*9/10) - usedIn, (maxKBpsOut*1024*9/10) - usedOut);
+        int availBps = Math.min((int)(maxKBpsIn*1024L*9/10) - usedIn, (int)(maxKBpsOut*1024L*9/10) - usedOut);
         if (availBps < MIN_AVAILABLE_BPS) {
             if (_log.shouldWarn()) {
             _log.warn("Rejecting participating tunnel requests \n* Available bandwidth (" + availBps +
@@ -356,8 +356,8 @@ public class RouterThrottleImpl implements RouterThrottle {
         // (if lower than the total bw, which it should be),
         // since some of the total used bandwidth may be for local clients
         double share = _context.router().getSharePercentage();
-        used = Math.min(used, (int) (bytesAllocated / (10*60)));
-        availBps = Math.min(availBps, (int)(((maxKBps*1024)*share) - used));
+        used = Math.min(used, (int) (bytesAllocated / (10*60L)));
+        availBps = Math.min(availBps, (int)(((maxKBps*1024L)*share) - used));
 
         // Write stats before making decisions
         _context.statManager().addRateData("router.throttleTunnelBytesUsed", used, maxKBps);
@@ -366,7 +366,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         // Now see if 1m rates are too high
         int used1mIn = _context.router().get1mRateIn();
         int used1mOut = _context.router().get1mRate(true);
-        long overage = Math.max(used1mIn - (maxKBpsIn*1024), used1mOut - (maxKBpsOut*1024));
+        long overage = Math.max(used1mIn - (maxKBpsIn*1024L), used1mOut - (maxKBpsOut*1024L));
         if ((overage > 0) && ((overage/(maxKBps*1024f)) > _context.random().nextFloat())) {
             _log.warn("Rejecting participating Tunnel Request \n* 1 minute rate (" + overage + " over) indicates overload.");
             setTunnelStatus("[rejecting/overload]" + LIMIT_STR);

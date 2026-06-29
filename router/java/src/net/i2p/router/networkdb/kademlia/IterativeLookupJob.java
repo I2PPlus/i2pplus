@@ -27,7 +27,7 @@ import net.i2p.util.Log;
  */
 
 class IterativeLookupJob extends JobImpl {
-    private static final long ONE_HOUR_MS = 60 * 60 * 1000;
+    private static final long ONE_HOUR_MS = 60 * 60 * 1000L;
     private final Log _log;
     private final DatabaseSearchReplyMessage _dsrm;
     private final IterativeSearchJob _search;

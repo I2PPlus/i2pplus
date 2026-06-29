@@ -30,11 +30,11 @@ public class JobStats {
         "Direct Lookup Match",
         "Verify NetDb Lookup for Failing Peer"
     ));
-    private static final long RECENT_WINDOW_MS = 10 * 1000;
+    private static final long RECENT_WINDOW_MS = 10 * 1000L;
 
     private static volatile boolean _recentTrackingEnabled;
     private static volatile long _lastTrackingEnableTime;
-    private static final long TRACKING_TIMEOUT_MS = 60 * 1000;  // Keep tracking for 60s after last view
+    private static final long TRACKING_TIMEOUT_MS = 60 * 1000L;  // Keep tracking for 60s after last view
 
     private final int _maxRecentEntries;
     private final RecentExecution[] _recentExecutions;

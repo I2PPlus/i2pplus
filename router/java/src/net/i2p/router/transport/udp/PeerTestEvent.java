@@ -139,7 +139,7 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
      *  @since 0.9.13
      */
     public synchronized void forceRunImmediately(boolean isIPv6) {
-        forceRunSoon(isIPv6, 5*1000);
+        forceRunSoon(isIPv6, 5*1000L);
     }
 
     /**

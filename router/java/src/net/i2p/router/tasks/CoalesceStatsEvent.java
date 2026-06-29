@@ -54,7 +54,7 @@ import net.i2p.util.SystemVersion;
 public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
     private final RouterContext _ctx;
     private final long _maxMemory;
-    private static final long LOW_MEMORY_THRESHOLD = 5 * 1024 * 1024;
+    private static final long LOW_MEMORY_THRESHOLD = 5 * 1024 * 1024L;
 
     /**
      * Create a new stats coalescence event.

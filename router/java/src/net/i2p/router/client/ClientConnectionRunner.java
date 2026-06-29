@@ -1002,7 +1002,7 @@ class ClientConnectionRunner {
                     }
                     Rerequest timer = new Rerequest(set, expirationTime, onCreateJob, onFailedJob);
                     sp.rerequestTimer = timer;
-                    timer.schedule(3*1000);
+                    timer.schedule(3*1000L);
                     if (_log.shouldDebug())
                         _log.debug("Already requesting, ours is newer -> Waiting for 3 sec... " + state);
                 }

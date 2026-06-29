@@ -80,8 +80,8 @@ public final class ECIESAEADEngine {
     private static final int MIN_ENCRYPTED_SIZE = MIN_ES_SIZE;
     private static final byte[] NULLPK = new byte[KEYLEN];
     private static final int MAXPAD = 16;
-    static final long MAX_NS_AGE = 5*60*1000;
-    private static final long MAX_NS_FUTURE = 2*60*1000;
+    static final long MAX_NS_AGE = 5*60*1000L;
+    private static final long MAX_NS_FUTURE = 2*60*1000L;
     // debug, send ACKREQ in every ES
     private static final boolean ACKREQ_IN_ES = false;
     // return value for a payload failure after a successful decrypt,
@@ -92,7 +92,7 @@ public final class ECIESAEADEngine {
     private static final String INFO_0 = "SessionReplyTags";
     private static final String INFO_6 = "AttachPayloadKDF";
 
-    private static final long[] RATES = new long[] { 60*1000 };
+    private static final long[] RATES = new long[] { 60*1000L };
 
     // These are the min sizes for the MLKEM New Session Message.
     // It contains an extra MLKEM key and MAC.

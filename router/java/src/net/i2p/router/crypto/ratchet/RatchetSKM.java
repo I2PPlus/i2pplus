@@ -56,7 +56,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * Let outbound session tags sit around for this long before expiring them.
      * Inbound tag expiration is set by SESSION_LIFETIME_MAX_MS
      */
-    final static long SESSION_TAG_DURATION_MS = 8 * 60 * 1000;
+    final static long SESSION_TAG_DURATION_MS = 8 * 60 * 1000L;
 
     /**
      * Keep unused inbound session tags around for this long (a few minutes longer than
@@ -65,11 +65,11 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      *
      * This is also the max idle time for an outbound session.
      */
-    final static long SESSION_LIFETIME_MAX_MS = SESSION_TAG_DURATION_MS + 2 * 60 * 1000;
+    final static long SESSION_LIFETIME_MAX_MS = SESSION_TAG_DURATION_MS + 2 * 60 * 1000L;
 
-    final static long SESSION_PENDING_DURATION_MS = 3 * 60 * 1000;
+    final static long SESSION_PENDING_DURATION_MS = 3 * 60 * 1000L;
     // replace an old session created before this if we get a new NS
-    private static final long SESSION_REPLACE_AGE = 2*60*1000;
+    private static final long SESSION_REPLACE_AGE = 2*60*1000L;
 
     private static final byte[] ZEROLEN = new byte[0];
 
@@ -143,7 +143,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             if (!_alive)
                 return;
             aggressiveExpire();
-            schedule(60*1000);
+            schedule(60*1000L);
         }
     }
 

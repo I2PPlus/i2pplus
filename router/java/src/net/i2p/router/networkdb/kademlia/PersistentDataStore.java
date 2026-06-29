@@ -179,7 +179,7 @@ public class PersistentDataStore extends TransientDataStore {
      *  they just back up in the queue hogging memory.
      */
     private static final int WRITE_LIMIT = 10000;
-    private static final long WRITE_DELAY = 10*60*1000;
+    private static final long WRITE_DELAY = 10*60*1000L;
 
     /*
      * Queue up writes, write unlimited files every 10 minutes.
@@ -503,7 +503,7 @@ public class PersistentDataStore extends TransientDataStore {
         private volatile long _lastReseed;
         private volatile boolean _setNetDbReady;
         private static final int MIN_ROUTERS = KademliaNetworkDatabaseFacade.MIN_RESEED;
-        private static final long MIN_RESEED_INTERVAL = 90*60*1000;
+        private static final long MIN_RESEED_INTERVAL = 90*60*1000L;
         private volatile boolean hasRun = false;
 
         public ReadJob() {super(PersistentDataStore.this._context);}

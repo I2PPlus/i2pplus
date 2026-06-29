@@ -20,7 +20,7 @@ class CapacityCalculator {
     static final long GROWTH_FACTOR = 5;
 
     /** the calculator estimates over a 1 hour period */
-    private static long ESTIMATE_PERIOD = 60*60*1000;
+    private static long ESTIMATE_PERIOD = 60*60*1000L;
 
     // total of all possible bonuses should be less than 4, since
     // crappy peers start at 1 and the base is 5.
@@ -54,7 +54,7 @@ class CapacityCalculator {
         TunnelHistory history = profile.getTunnelHistory();
         long down = context.router().getEstimatedDowntime();
         long up = context.router().getUptime();
-        boolean enableAgeChecks = (down > 0 && down < 45*60*1000) || up > 60*60*1000;
+        boolean enableAgeChecks = (down > 0 && down < 45*60*1000L) || up > 60*60*1000L;
         if (enableAgeChecks && tooOld(profile, now)) {
             capacity = 1;
         } else {
@@ -89,8 +89,8 @@ class CapacityCalculator {
         if (enableAgeChecks) {
             long firstHeard = profile.getFirstHeardAbout();
             long ago = now - firstHeard;
-            if (ago < 2*60*60*1000)
-                capacity -= PENALTY_NEW * (2*60*60*1000 - ago) / 2*60*60*1000;
+            if (ago < 2*60*60*1000L)
+                capacity -= PENALTY_NEW * (2*60*60*1000L - ago) / 2*60*60*1000L;
         }
         // boost connected peers
         if (profile.isEstablished())
@@ -154,7 +154,7 @@ class CapacityCalculator {
                     } else {
                         // treat older than a few minutes as D, as recommended in proposal 162
                         long age = context.clock().now() - ri.getPublished();
-                        if (age < 30*60*1000)
+                        if (age < 30*60*1000L)
                             capacity -= PENALTY_CAP_E;
                         else
                             capacity -= PENALTY_CAP_D;
@@ -171,11 +171,11 @@ class CapacityCalculator {
         long lastBad = profile.getLastSendFailed();
         if (lastBad > lastGood) {
             capacity -= PENALTY_LAST_SEND_FAIL;
-            if (lastGood > now - 30*60*1000)
+            if (lastGood > now - 30*60*1000L)
                 capacity += PENALTY_RECENT_SEND_FAIL;
         } else if (lastGood > 0) {
             capacity += BONUS_LAST_SEND_SUCCESS;
-            if (lastGood > now - 30*60*1000)
+            if (lastGood > now - 30*60*1000L)
                 capacity += BONUS_RECENT_SEND_SUCCESS;
         }
 
@@ -194,7 +194,7 @@ class CapacityCalculator {
      *
      */
     private static boolean tooOld(PeerProfile profile, long now) {
-        return !profile.getIsActive(60*60*1000, now);
+        return !profile.getIsActive(60*60*1000L, now);
     }
 
     /**

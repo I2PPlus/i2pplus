@@ -9,8 +9,8 @@ class CleanupLURoutersJob extends JobImpl {
     private final KademliaNetworkDatabaseFacade _facade;
     private final RouterContext _ctx;
 
-    private static final long INITIAL_DELAY_MS = 60*1000;
-    private static final long RERUN_DELAY_MS = 10*60*1000;
+    private static final long INITIAL_DELAY_MS = 60*1000L;
+    private static final long RERUN_DELAY_MS = 10*60*1000L;
 
     public CleanupLURoutersJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {
         super(ctx);

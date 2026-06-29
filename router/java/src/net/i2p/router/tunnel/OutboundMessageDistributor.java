@@ -31,11 +31,11 @@ class OutboundMessageDistributor {
     private int _newRouterCount;
     private long _newRouterTime;
 
-    private static final long MAX_DISTRIBUTE_TIME = 15*1000;
+    private static final long MAX_DISTRIBUTE_TIME = 15*1000L;
     // This is probably too high, to be reduced later
     private static final int coreCount = SystemVersion.getCores();
     private static final int MAX_ROUTERS_PER_PERIOD = SystemVersion.isSlow() ? 32 : 64;
-    private static final long NEW_ROUTER_PERIOD = SystemVersion.isSlow() ? 30*1000 : 15*1000;
+    private static final long NEW_ROUTER_PERIOD = SystemVersion.isSlow() ? 30*1000L : 15*1000L;
 
     /**
      *  @param priority OutNetMessage.PRIORITY_PARTICIPATING for somebody else's OBEP, or

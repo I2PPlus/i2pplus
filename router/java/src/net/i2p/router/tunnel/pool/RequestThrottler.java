@@ -41,14 +41,14 @@ class RequestThrottler {
     private volatile Set<String> cachedBlockedCountries;
     private volatile long lastFirewallCheckTime;
     private volatile boolean cachedFirewalledStatus;
-    private static final long FIREWALL_CHECK_INTERVAL = 10*60*1000; // Check every 10 minutes
+    private static final long FIREWALL_CHECK_INTERVAL = 10*60*1000L; // Check every 10 minutes
 
     // Cached properties
     private volatile long lastPropertyCheckTime;
     private volatile Boolean cachedShouldThrottle;
     private volatile Boolean cachedShouldDisconnect;
     private volatile Boolean cachedShouldBlockOldRouters;
-    private static final long PROPERTY_CHECK_INTERVAL = 30*1000; // Check every 30 seconds
+    private static final long PROPERTY_CHECK_INTERVAL = 30*1000L; // Check every 30 seconds
 
     private static int getMinLimit(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.requestThrottle.minLimit", 10);
@@ -61,10 +61,10 @@ class RequestThrottler {
     private static int getPercentLimit(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.requestThrottle.percentLimit", 20);
     }
-    private static final long CLEAN_TIME = 90 * 1000; // Reset limits every 90 seconds
+    private static final long CLEAN_TIME = 90 * 1000L; // Reset limits every 90 seconds
 
     // Burst detection configuration
-    private static final long BURST_WINDOW_MS = 10 * 1000; // 10 second sliding window
+    private static final long BURST_WINDOW_MS = 10 * 1000L; // 10 second sliding window
     private static final int BURST_BUCKET_COUNT = 10; // 1 second per bucket
     private static final int BURST_THRESHOLD_MIN = 50; // Minimum burst threshold
     private static final int BURST_THRESHOLD_MAX = 200; // Maximum burst threshold
@@ -72,7 +72,7 @@ class RequestThrottler {
         return ctx.getProperty("i2p.tunnel.requestThrottle.burst1sThreshold", 10);
     }
     private static final double BURST_THRESHOLD_PERCENT = 0.50; // 50% of 90s limit scaled to 10s window
-    private static final long BURST_OFFENSE_RESET = 60 * 60 * 1000; // Reset after 1 hour clean
+    private static final long BURST_OFFENSE_RESET = 60 * 60 * 1000L; // Reset after 1 hour clean
 
     private final BurstWindowCounter _burstCounter;
     private final Map<Hash, BurstOffenseRecord> _burstOffenses = new java.util.concurrent.ConcurrentHashMap<>();

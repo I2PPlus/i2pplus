@@ -42,7 +42,7 @@ class OutboundMessageState implements CDPQEntry {
     private int _allowedSendBytes;
     private final AtomicInteger _nacks = new AtomicInteger();
     public static final int MAX_MSG_SIZE = 32 * 1024;
-    private static final long EXPIRATION = 60*1000;
+    private static final long EXPIRATION = 60*1000L;
 
     /**
      *  "injected" message from the establisher.

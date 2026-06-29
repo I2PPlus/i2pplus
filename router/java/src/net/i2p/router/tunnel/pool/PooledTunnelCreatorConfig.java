@@ -15,7 +15,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     private TunnelId _pairedGW;
     private volatile long _lastActivity;
     private volatile boolean _lastResort;
-    private static final long ACTIVITY_TIMEOUT = 30*1000;
+    private static final long ACTIVITY_TIMEOUT = 30*1000L;
 
     /**
      *  Creates a new instance of PooledTunnelCreatorConfig

@@ -182,7 +182,7 @@ public class PeerProfile {
      * 10 minutes)
      */
     public boolean getIsActive() {
-        return getIsActive(10*60*1000, _context.clock().now());
+        return getIsActive(10*60*1000L, _context.clock().now());
     }
 
     /**
@@ -191,7 +191,7 @@ public class PeerProfile {
      * @since 0.9.58
      */
     public boolean getIsActive(long now) {
-        return getIsActive(10*60*1000, now);
+        return getIsActive(10*60*1000L, now);
     }
 
     /** @since 0.8.11 */
@@ -482,7 +482,7 @@ public class PeerProfile {
     public float getPeakThroughputKBps() {
         float rv = 0;
         for (int i = 0; i < THROUGHPUT_COUNT; i++) {rv += _peakThroughput[i];}
-        rv /= (60 * 1024 * THROUGHPUT_COUNT);
+        rv /= (60 * 1024L * THROUGHPUT_COUNT);
         return rv;
     }
 
@@ -517,7 +517,7 @@ public class PeerProfile {
     public float getPeakTunnelThroughputKBps() {
         float rv = 0;
         for (int i = 0; i < THROUGHPUT_COUNT; i++) {rv += _peakTunnelThroughput[i];}
-        rv /= (10 * 60 * 1024 * THROUGHPUT_COUNT);
+        rv /= (10 * 60 * 1024L * THROUGHPUT_COUNT);
         return rv;
     }
 
@@ -569,7 +569,7 @@ public class PeerProfile {
     public float getPeakTunnel1mThroughputKBps() {
         float rv = 0;
         for (int i = 0; i < THROUGHPUT_COUNT; i++) {rv += _peakTunnel1mThroughput[i];}
-        rv /= (60 * 1024 * THROUGHPUT_COUNT);
+        rv /= (60 * 1024L * THROUGHPUT_COUNT);
         return rv;
     }
 
@@ -628,7 +628,7 @@ public class PeerProfile {
     private void coalesceThroughput(boolean decay) {
         long now = System.currentTimeMillis();
         long measuredPeriod = now - _lastCoalesceDate;
-        if (measuredPeriod >= 60*1000) {
+        if (measuredPeriod >= 60*1000L) {
             // so we don't call random() twice
             boolean shouldDecay =  decay && _context.random().nextInt(DEGRADE_PROBABILITY) <= 0;
             long tot = _peakThroughputCurrentTotal;

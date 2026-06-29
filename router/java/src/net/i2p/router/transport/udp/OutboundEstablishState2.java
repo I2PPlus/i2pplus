@@ -400,12 +400,12 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         Hash bob = _remotePeer.calculateHash();
         String ipPort = _remoteHostId != null ? _remoteHostId.toString() : "UNKNOWN";
         if (reason == REASON_BANNED) {
-            _context.banlist().banlistRouter(bob, "They banned us", null, null, _context.clock().now() + 2*60*60*1000);
-            _banLogger.logBan(bob, ipPort, "They banned us", 2*60*60*1000);
+            _context.banlist().banlistRouter(bob, "They banned us", null, null, _context.clock().now() + 2*60*60*1000L);
+            _banLogger.logBan(bob, ipPort, "They banned us", 2*60*60*1000L);
         } else if (reason == REASON_MSG1) {
             // this is like a short ban
-            _context.banlist().banlistRouter(bob, "They banned us", null, null, _context.clock().now() + 20*60*1000);
-            _banLogger.logBan(bob, ipPort, "They banned us", 20*60*1000);
+            _context.banlist().banlistRouter(bob, "They banned us", null, null, _context.clock().now() + 20*60*1000L);
+            _banLogger.logBan(bob, ipPort, "They banned us", 20*60*1000L);
         } else if (reason == REASON_SKEW) {
             long sendOn = _timeReceived;
             long recvOn = _establishBegin;
@@ -432,8 +432,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
                         // clock update was either rejected or is pending.
                         // ban the router briefly so the other transport does not try it,
                         // and we will get a 2nd opinion.
-                        _context.banlist().banlistRouter(bob, _x("Excessive clock skew ({0})"), skewString, null, _context.clock().now() + 5*60*1000);
-                        _banLogger.logBan(bob, ipPort, "Excessive clock skew: " + skewString, 5*60*1000);
+                        _context.banlist().banlistRouter(bob, _x("Excessive clock skew ({0})"), skewString, null, _context.clock().now() + 5*60*1000L);
+                        _banLogger.logBan(bob, ipPort, "Excessive clock skew: " + skewString, 5*60*1000L);
                     }
                 } else {
                     _context.banlist().banlistRouter(skewString, bob, "" + _x("Excessive clock skew ({0})"));

@@ -50,8 +50,8 @@ public class RouterWatchdog implements Runnable {
     private volatile boolean _isRunning;
     private long _lastDump;
 
-    private static final long MAX_JOB_RUN_LAG = 60*1000;
-    private static final long MIN_DUMP_INTERVAL= 6*60*60*1000;
+    private static final long MAX_JOB_RUN_LAG = 60*1000L;
+    private static final long MIN_DUMP_INTERVAL= 6*60*60*1000L;
 
     /**
      * Create a new router watchdog.
@@ -177,7 +177,7 @@ public class RouterWatchdog implements Runnable {
      */
     private long getSleepTimeForLeaseExpiry() {
         // Default sleep time: 60 seconds
-        long sleepTime = 60 * 1000;
+        long sleepTime = 60 * 1000L;
         
         // Check client managers for lease expiry proximity
         try {

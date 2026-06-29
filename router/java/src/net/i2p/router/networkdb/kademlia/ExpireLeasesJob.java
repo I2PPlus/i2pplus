@@ -36,7 +36,7 @@ import net.i2p.util.SystemVersion;
 class ExpireLeasesJob extends JobImpl {
     private final Log _log;
     private final KademliaNetworkDatabaseFacade _facade;
-    private final static long RERUN_DELAY_MS = 45*1000;
+    private final static long RERUN_DELAY_MS = 45*1000L;
     private static final int LIMIT_LEASES_FF = 1250;
     private static final int LIMIT_LEASES_CLIENT = SystemVersion.isSlow() ? 300 : 750;
 
@@ -51,7 +51,7 @@ class ExpireLeasesJob extends JobImpl {
     public void runJob() {
         long uptime = getContext().router().getUptime();
         List<Hash> toExpire = selectKeysToExpire();
-        if (!toExpire.isEmpty() && uptime >= 90*1000) {
+        if (!toExpire.isEmpty() && uptime >= 90*1000L) {
             for (Hash key : toExpire) {_facade.fail(key);}
             if (_log.shouldInfo()) {_log.info("Leases expired: " + toExpire.size());}
         }

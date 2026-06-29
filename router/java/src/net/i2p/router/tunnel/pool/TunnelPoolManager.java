@@ -59,11 +59,11 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private static final String PROP_SLOW_TUNNEL_MIN = "router.tunnel.slowThresholdMin";
     private static final String PROP_SLOW_TUNNEL_INTERVAL = "router.tunnel.slowTunnelInterval";
     private static final String PROP_PRUNE_EARLY_EXPIRY = "router.tunnel.pruneEarlyExpiryDelay";
-    private static final long DEFAULT_PRUNE_EARLY_EXPIRY = 30*1000; // 30 seconds
+    private static final long DEFAULT_PRUNE_EARLY_EXPIRY = 30*1000L; // 30 seconds
     private static final int DEFAULT_SLOW_THRESHOLD_MS = 0; // 0 means use avg latency with min
     private static final int DEFAULT_MIN_SLOW_THRESHOLD = 10000; // 10s minimum threshold if not configured
-    private static final int DEFAULT_RUN_INTERVAL_MS = 15*1000; // 15s — fast rebuild after failures
-    private static final long REFRESH_DELAY_AFTER_REMOVAL = 15*1000; // wait for new tunnels to build
+    private static final int DEFAULT_RUN_INTERVAL_MS = (int) ((long) 15 * 1000); // 15s — fast rebuild after failures
+    private static final long REFRESH_DELAY_AFTER_REMOVAL = 15*1000L; // wait for new tunnels to build
     private static final double MAX_SHARE_RATIO = 100000d;
 
     /**
@@ -71,7 +71,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * Allows tunnels to naturally expire rather than collapsing.
      * @since 0.9.69+
      */
-    private static final long POOL_CLEANUP_DELAY_MS = 30 * 1000; // 30 seconds
+    private static final long POOL_CLEANUP_DELAY_MS = 30 * 1000L; // 30 seconds
 
     /**
      * Pending delayed cleanups for pool removal.
@@ -850,7 +850,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     private static class RemoveSlowTunnelsJob extends JobImpl {
         private final TunnelPoolManager _mgr;
-        private static final long STARTUP_DELAY = 90*1000; // 90s after startup
+        private static final long STARTUP_DELAY = 90*1000L; // 90s after startup
         private static final AtomicInteger _runCount = new AtomicInteger(0);
 
         public RemoveSlowTunnelsJob(RouterContext ctx, TunnelPoolManager mgr) {
@@ -1349,7 +1349,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public Set<Hash> selectPeersInTooManyTunnels() {
         Set<Hash> rv = new HashSet<>();
         long uptime = _context.router().getUptime();
-        int max = uptime > 30*60*1000 ? DEFAULT_MAX_PCT_TUNNELS : STARTUP_MAX_PCT_TUNNELS;
+        long max = uptime > 30*60*1000L ? DEFAULT_MAX_PCT_TUNNELS : STARTUP_MAX_PCT_TUNNELS;
 
         // Increase threshold under low tunnel build success
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();

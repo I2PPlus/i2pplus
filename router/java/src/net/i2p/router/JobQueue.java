@@ -79,19 +79,19 @@ public class JobQueue {
     /** router.config parameter to override the max runners */
     final static String PROP_MAX_RUNNERS = "router.maxJobRunners";
     /** If a job is this lagged, spit out a warning, but keep going */
-    private final static long DEFAULT_LAG_WARNING = 5*1000;
+    private final static long DEFAULT_LAG_WARNING = 5*1000L;
     private long _lagWarning = DEFAULT_LAG_WARNING;
     /** If a job is this lagged, the router is hosed, so spit out a warning (don't shut it down) */
-    private final static long DEFAULT_LAG_FATAL = 30*1000;
+    private final static long DEFAULT_LAG_FATAL = 30*1000L;
     private long _lagFatal = DEFAULT_LAG_FATAL;
     /** If a job takes this long to run, spit out a warning, but keep going */
-    private final static long DEFAULT_RUN_WARNING = 5*1000;
+    private final static long DEFAULT_RUN_WARNING = 5*1000L;
     private long _runWarning = DEFAULT_RUN_WARNING;
     /** If a job takes this long to run, the router is hosed, so spit out a warning (don't shut it down) */
-    private final static long DEFAULT_RUN_FATAL = 30*1000;
+    private final static long DEFAULT_RUN_FATAL = 30*1000L;
     private long _runFatal = DEFAULT_RUN_FATAL;
     /** Don't enforce fatal limits until the router has been up for this long */
-    private final static long DEFAULT_WARMUP_TIME = 15*60*1000;
+    private final static long DEFAULT_WARMUP_TIME = 15*60*1000L;
     private long _warmupTime = DEFAULT_WARMUP_TIME;
     /** Max ready and waiting jobs before we start dropping 'em - scale with runner count */
     private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 24 : 48;
@@ -758,7 +758,7 @@ public class JobQueue {
                                 timeToWait = highLoad ? 50 : 25;
                             } else if (timeToWait < 1000) {
                                 timeToWait = highLoad ? 200 : 100;
-                            } else if (timeToWait < 5*1000) {
+                            } else if (timeToWait < 5*1000L) {
                                 timeToWait = highLoad ? 500 : 250;
                             } else {
                                 // For jobs > 5s away, check more frequently to prevent large queues

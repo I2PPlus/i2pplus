@@ -63,7 +63,7 @@ class JobQueueScaler implements Runnable {
     private static final double READY_JOBS_INCREASE_THRESHOLD = 1.5; // Allow 50% increase before rollback (was 2.0 = 100%)
 
     // RAM-based limits
-    private static final long MB = 1024 * 1024;
+    private static final long MB = 1024 * 1024L;
     private static final long RUNNER_MEMORY_ESTIMATE = 2 * MB; // ~2MB per thread (stack + overhead)
     private static final double MAX_MEMORY_PERCENTAGE = 0.10; // Use max 10% of heap for runners
 
@@ -278,7 +278,7 @@ class JobQueueScaler implements Runnable {
         int baseMin = Math.max(1, _context.getProperty(PROP_MIN_RUNNERS, 4));
         // On startup (first 3 minutes), use more runners to handle startup load
         long uptime = _context.router().getUptime();
-        if (uptime < 3 * 60 * 1000) {
+        if (uptime < 3 * 60 * 1000L) {
             return Math.max(baseMin, 8);  // At least 8 runners during startup
         }
         return baseMin;

@@ -43,8 +43,8 @@ class TunnelParticipant {
 
     private volatile RouterInfo _nextHopCache;
 
-    private static final long MAX_LOOKUP_TIME = 15 * 1000;
-    private static final long LONG_MAX_LOOKUP_TIME = 25 * 1000;
+    private static final long MAX_LOOKUP_TIME = 15 * 1000L;
+    private static final long LONG_MAX_LOOKUP_TIME = 25 * 1000L;
     private static final int PRIORITY = OutNetMessage.PRIORITY_PARTICIPATING;
     // 200 messages * 2KB in 10 minutes = 340 Bps - optimized for high bandwidth contexts
     static final int DEFAULT_BW_PER_TUNNEL_ESTIMATE = RouterThrottleImpl.DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE * 2048 / (10 * 60);

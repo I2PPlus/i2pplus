@@ -36,13 +36,13 @@ class ProbeStalePeerJob extends JobImpl {
     private final Map<Hash, Long> _lastProbed;
     private int _runCount;
 
-    private static final long CYCLE_INTERVAL = 60 * 1000;
+    private static final long CYCLE_INTERVAL = 60L * 1000;
     private static final int MAX_PROBES_PER_CYCLE = 20;
     /** More aggressive during startup to establish transport connections faster */
     private static final int STARTUP_MAX_PROBES_PER_CYCLE = 50;
-    private static final long PROBE_COOLDOWN = 10 * 60 * 1000;
-    private static final long PROOF_OF_LIFE_WINDOW_MS = 60 * 60 * 1000;
-    private static final long STARTUP_BURST_PERIOD = 5 * 60 * 1000;
+    private static final long PROBE_COOLDOWN = 10L * 60 * 1000;
+    private static final long PROOF_OF_LIFE_WINDOW_MS = 60L * 60 * 1000;
+    private static final long STARTUP_BURST_PERIOD = 5L * 60 * 1000;
     private static final int STARTUP_BURST_CYCLES = 3;
 
     public ProbeStalePeerJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade) {
@@ -138,9 +138,9 @@ class ProbeStalePeerJob extends JobImpl {
             if (isStartupBurst && ri != null) {
                 DatabaseStoreMessage warm = new DatabaseStoreMessage(ctx);
                 warm.setEntry(ri);
-                warm.setMessageExpiration(ctx.clock().now() + 30*1000);
+                warm.setMessageExpiration(ctx.clock().now() + 30L * 1000);
                 OutNetMessage onm = new OutNetMessage(ctx, warm,
-                    ctx.clock().now() + 30*1000,
+                    ctx.clock().now() + 30L * 1000,
                     OutNetMessage.PRIORITY_MY_NETDB_STORE, ri);
                 // Check if peer supports NTCP — if so, send directly through NTCP
                 // to bypass the transport selector that always prefers SSU.

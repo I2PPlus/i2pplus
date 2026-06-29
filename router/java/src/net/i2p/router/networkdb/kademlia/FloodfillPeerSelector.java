@@ -236,7 +236,7 @@ class FloodfillPeerSelector extends PeerSelector {
         boolean shouldDisconnect = _context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
 
         double maxFailRate = 0.95;
-        if (_context.router().getUptime() > 2*60*60*1000) {
+        if (_context.router().getUptime() > 2*60*60*1000L) {
             RateStat rs = _context.statManager().getRate("peer.failedLookupRate");
             if (rs != null) {
                 Rate r = rs.getRate(RateConstants.ONE_HOUR);
@@ -257,7 +257,7 @@ class FloodfillPeerSelector extends PeerSelector {
         List<Hash> badff = new ArrayList<>(limit);
         for (int i = 0; found < howMany && i < limit; i++) {
             Hash entry = sorted.get(i);
-            if (entry == null || uptime < 45*1000) {break;} // shouldn't happen
+            if (entry == null || uptime < 45*1000L) {break;} // shouldn't happen
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(entry);
             MaskedIPSet entryIPs = new MaskedIPSet(_context, entry, info, 2); // put anybody in the same /16 at the end
             boolean sameIP = false;
@@ -292,7 +292,7 @@ class FloodfillPeerSelector extends PeerSelector {
                     badff.add(entry);
                     if (_log.shouldDebug())
                         _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Same /16, family, or port");
-                } else if (info != null && now - info.getPublished() > 3*60*60*1000) {
+                } else if (info != null && now - info.getPublished() > 3*60*60*1000L) {
                     badff.add(entry);
                     if (_log.shouldDebug())
                         _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: RouterInfo published over 3 hours ago");
@@ -306,8 +306,8 @@ class FloodfillPeerSelector extends PeerSelector {
                         _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is slow (L or M tier)");
                     if (info.getBandwidthTier().equals("L")) {
                         String ipPort = getIPFromRouterInfo(info);
-                        _context.banlist().banlistRouter(entry, "L tier Floodfill", null, null, now + 4*60*60*1000);
-                        _banLogger.logBan(entry, ipPort != null ? ipPort : "UNKNOWN", "L tier Floodfill", 4*60*60*1000);
+                        _context.banlist().banlistRouter(entry, "L tier Floodfill", null, null, now + 4*60*60*1000L);
+                        _banLogger.logBan(entry, ipPort != null ? ipPort : "UNKNOWN", "L tier Floodfill", 4*60*60*1000L);
                         _context.commSystem().forceDisconnect(entry, "L tier Floodfill");
                         if (_log.shouldWarn()) {
                             _log.warn("Banning for 4h and disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] -> L tier");
@@ -466,13 +466,13 @@ class FloodfillPeerSelector extends PeerSelector {
             for (Iterator<Hash> iter = new RandomIterator<>(_floodfillMatches); (found < howMany) && iter.hasNext(); ) {
                 Hash entry = iter.next();
                 RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(entry);
-                if (info != null && now - info.getPublished() > 3*60*60*1000) {
+                if (info != null && now - info.getPublished() > 3*60*60*1000L) {
                     badff.add(entry);
                     if (_log.shouldDebug())
                         _log.debug("Floodfill sort: Skipping [" + entry.toBase64().substring(0,6) + "] -> RouterInfo published over 3h ago");
                 } else {
                     PeerProfile prof = _context.profileOrganizer().getProfile(entry);
-                    if (prof != null && now - prof.getLastSendFailed() < 5*60*1000) {
+                    if (prof != null && now - prof.getLastSendFailed() < 5*60*1000L) {
                         badff.add(entry);
                         if (_log.shouldDebug())
                             _log.debug("Floodfill sort: Skipping [" + entry.toBase64().substring(0,6) + "] -> Poor send success rate for the last 5m");

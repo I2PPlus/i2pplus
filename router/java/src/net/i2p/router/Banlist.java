@@ -42,7 +42,7 @@ public class Banlist {
     // Threshold for unsolicited DbSearchReply messages
     private static final int MAX_UNSOLICITED_DBSEARCH = 3;
     // Time window for unsolicited replies (ms): 15 minutes
-    private static final long UNSOLICITED_DBSEARCH_WINDOW = 15*60*1000;
+    private static final long UNSOLICITED_DBSEARCH_WINDOW = 15*60*1000L;
 
     // IP-based bad packet offender tracking
     // Key: IP address (String), Value: {timestamp, count}
@@ -57,15 +57,15 @@ public class Banlist {
     private int _maxOffenses;
     // Time window: offenses within this period count toward threshold (ms): 15 minutes (configurable)
     private static final String PROP_OFFENSE_WINDOW = "router.banlist.offenseWindow";
-    private static final long OFFENSE_WINDOW_DEFAULT = 15*60*1000;
+    private static final long OFFENSE_WINDOW_DEFAULT = 15*60*1000L;
     private long _offenseWindow;
     // Startup grace period: don't track offenses in first 3 minutes after startup (configurable)
     private static final String PROP_STARTUP_GRACE = "router.banlist.startupGrace";
-    private static final long STARTUP_GRACE_DEFAULT = 3*60*1000;
+    private static final long STARTUP_GRACE_DEFAULT = 3*60*1000L;
     private long _startupGrace;
     // Default ban duration for bad packet offenders (configurable)
     private static final String PROP_BAD_PACKET_DURATION = "router.banlist.badPacketDuration";
-    private static final long BANLIST_DURATION_BAD_PACKETS_DEFAULT = 60*60*1000;
+    private static final long BANLIST_DURATION_BAD_PACKETS_DEFAULT = 60*60*1000L;
     private long _badPacketDuration;
     // Enable/disable auto-banning features (configurable)
     private static final String PROP_ENABLE_BAD_PACKET_BAN = "router.banlist.enableBadPacketBan";
@@ -132,19 +132,19 @@ public class Banlist {
     /**
      * Default ban duration for transient bans.
      */
-    public final static long BANLIST_DURATION_MS = 7*60*1000; // Don't make this too long as the failure may be transient due to connection limits.
+    public final static long BANLIST_DURATION_MS = 7*60*1000L; // Don't make this too long as the failure may be transient due to connection limits.
     /**
      * Maximum ban duration for transient bans.
      */
-    public final static long BANLIST_DURATION_MAX = 30*60*1000;
+    public final static long BANLIST_DURATION_MAX = 30*60*1000L;
     /**
      * Default ban duration for transport-specific bans.
      */
-    public final static long BANLIST_DURATION_PARTIAL = 10*60*1000;
+    public final static long BANLIST_DURATION_PARTIAL = 10*60*1000L;
     /**
      * Permanent ban duration (will be rounded down to 180 days on console).
      */
-    public final static long BANLIST_DURATION_FOREVER = 181L*24*60*60*1000; // will get rounded down to 180d on console
+    public final static long BANLIST_DURATION_FOREVER = 181L*24*60*60*1000L; // will get rounded down to 180d on console
 
     /**
      *  Buggy i2pd fork
@@ -158,11 +158,11 @@ public class Banlist {
     /**
      * Ban duration for private IP addresses.
      */
-    public final static long BANLIST_DURATION_PRIVATE = 2*60*60*1000;
+    public final static long BANLIST_DURATION_PRIVATE = 2*60*60*1000L;
     /**
      * Ban duration for repeat bad packet offenders.
      */
-    public final static long BANLIST_DURATION_BAD_PACKETS = 60*60*1000; // 1 hour
+    public final static long BANLIST_DURATION_BAD_PACKETS = 60*60*1000L; // 1 hour
     private final static long BANLIST_CLEANER_START_DELAY = BANLIST_DURATION_PARTIAL;
 
     /**

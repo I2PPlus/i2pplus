@@ -39,7 +39,7 @@ class LookupDestJob extends JobImpl {
     private final Hash _fromLocalDest;
     private final BlindData _blindData;
 
-    private static final long DEFAULT_TIMEOUT = 15*1000;
+    private static final long DEFAULT_TIMEOUT = 15*1000L;
 
     public LookupDestJob(RouterContext context, ClientConnectionRunner runner, Hash h, Hash fromLocalDest) {
         this(context, runner, -1, DEFAULT_TIMEOUT, null, h, null, fromLocalDest);

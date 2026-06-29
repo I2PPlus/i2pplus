@@ -94,7 +94,7 @@ public class MessageHistory {
         }
 
         if (router.getRouterInfo() == null) {
-            _reinitializeJob.getTiming().setStartAfter(_context.clock().now() + 15*1000);
+            _reinitializeJob.getTiming().setStartAfter(_context.clock().now() + 15*1000L);
             _context.jobQueue().addJob(_reinitializeJob);
         } else {
             _localIdent = getName(_context.routerHash());
@@ -642,7 +642,7 @@ public class MessageHistory {
     }
 
     /** write out the message history once per minute, if not sooner */
-    private final static long WRITE_DELAY = 60*1000;
+    private final static long WRITE_DELAY = 60*1000L;
     private class WriteJob extends JobImpl {
         public WriteJob() {
             super(MessageHistory.this._context);

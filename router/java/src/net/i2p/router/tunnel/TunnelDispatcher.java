@@ -117,10 +117,10 @@ public class TunnelDispatcher implements Service {
     private static final long RECENT_EXPIRY_WINDOW_MS = 5_000;
 
     /** Base interval for periodic cleanup of expired tunnels */
-    private static final long CLEANUP_INTERVAL_MIN = 5 * 60 * 1000;
+    private static final long CLEANUP_INTERVAL_MIN = 5 * 60 * 1000L;
 
     /** Max interval for cleanup when few tunnels */
-    private static final long CLEANUP_INTERVAL_MAX = 10 * 60 * 1000;
+    private static final long CLEANUP_INTERVAL_MAX = 10 * 60 * 1000L;
 
     /** Tunnel count thresholds for scaling cleanup interval */
     private static final int CLEANUP_THRESHOLD_HIGH = 2000;
@@ -144,7 +144,7 @@ public class TunnelDispatcher implements Service {
     private final AtomicInteger _allocatedBW = new AtomicInteger();
 
     /** High for now, just to prevent long-lived-message attacks */
-    private static final long MAX_FUTURE_EXPIRATION = 3 * 60 * 1000 + Router.CLOCK_FUDGE_FACTOR;
+    private static final long MAX_FUTURE_EXPIRATION = 3 * 60 * 1000L + Router.CLOCK_FUDGE_FACTOR;
 
     /**
      * Creates a new instance of TunnelDispatcher
@@ -883,7 +883,7 @@ public class TunnelDispatcher implements Service {
     public List<HopConfig> listParticipatingTunnels() {
         List<HopConfig> tunnels = new ArrayList<>();
         long now = _context.clock().now();
-        long staleCutoff = now - 30 * 1000;
+        long staleCutoff = now - 30 * 1000L;
         for (HopConfig cfg : _participatingConfig.values()) {
             // Only include tunnels that haven't expired + 30s
             if (cfg.getExpiration() > staleCutoff) {
@@ -902,8 +902,8 @@ public class TunnelDispatcher implements Service {
         long bw = 0;
         long tcount = 0;
         long now = _context.clock().now();
-        long tooYoung = now - 60 * 1000;
-        long tooOld = tooYoung - 9 * 60 * 1000;
+        long tooYoung = now - 60 * 1000L;
+        long tooOld = tooYoung - 9 * 60 * 1000L;
 
         for (HopConfig cfg : _participatingConfig.values()) {
             long c = cfg.getAndResetRecentMessagesCount();
@@ -916,7 +916,7 @@ public class TunnelDispatcher implements Service {
         }
 
         if (tcount > 0)
-            count = count * (10 * 60 * 1000 / ms) / tcount;
+            count = count * (10 * 60 * 1000L / ms) / tcount;
 
         _context.statManager().addRateData("tunnel.participatingMessageCountAvgPerTunnel", count, ms);
         _context.statManager().addRateData("tunnel.participatingMessageCount", bw, ms);
@@ -1018,7 +1018,7 @@ int pct = Math.max(0, (int)((1.0f - factor) * 100));
             // Per-tunnel cap: use share / min(maxTunnels, 100)
             // Only apply floor if share is generous (> 256 KB/s)
             int calculated = max / Math.min(maxTunnels, 100);
-            if (max > 256 * 1024) {
+            if (max > 256 * 1024L) {
                 // Scale floor based on allocation
                 int floor = 10 * 1024; // 10 KB/s default
                 if (max > 10 * 1024 * 1024) floor = 50 * 1024;
@@ -1089,7 +1089,7 @@ int pct = Math.max(0, (int)((1.0f - factor) * 100));
 
         public LeaveTunnel(RouterContext ctx) {
             super(ctx);
-            getTiming().setStartAfter(ctx.clock().now() + 10 * 60 * 1000);
+            getTiming().setStartAfter(ctx.clock().now() + 10 * 60 * 1000L);
             ctx.jobQueue().addJob(this);
         }
 
@@ -1115,18 +1115,18 @@ int pct = Math.max(0, (int)((1.0f - factor) * 100));
 
         public void runJob() {
             long now = getContext().clock().now() + 1000;
-            long nextTime = now + 10 * 60 * 1000;
+            long nextTime = now + 10 * 60 * 1000L;
 
             // Scale expiration more gradually with tunnel count to reduce churn
             // High tunnel counts expire faster to maintain pool health
             int count = getParticipatingCount();
-            if (count > 4000) {nextTime = now + 60 * 1000;}          // 4000+: 1 min
-            else if (count > 2500) {nextTime = now + 90 * 1000;}     // 2500-4000: 1.5 min
-            else if (count > 1500) {nextTime = now + 120 * 1000;}    // 1500-2500: 2 min
-            else if (count > 1000) {nextTime = now + 180 * 1000;}    // 1000-1500: 3 min
-            else if (count > 750) {nextTime = now + 240 * 1000;}     // 750-1000: 4 min
-            else if (count > 500) {nextTime = now + 300 * 1000;}     // 500-750: 5 min
-            else {nextTime = now + 600 * 1000;}                      // 0-500: 10 min
+            if (count > 4000) {nextTime = now + 60 * 1000L;}          // 4000+: 1 min
+            else if (count > 2500) {nextTime = now + 90 * 1000L;}     // 2500-4000: 1.5 min
+            else if (count > 1500) {nextTime = now + 120 * 1000L;}    // 1500-2500: 2 min
+            else if (count > 1000) {nextTime = now + 180 * 1000L;}    // 1000-1500: 3 min
+            else if (count > 750) {nextTime = now + 240 * 1000L;}     // 750-1000: 4 min
+            else if (count > 500) {nextTime = now + 300 * 1000L;}     // 500-750: 5 min
+            else {nextTime = now + 600 * 1000L;}                      // 0-500: 10 min
 
             // Process tunnels in expiration order - peek first (earliest expiring)
             int processed = 0;

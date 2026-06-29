@@ -29,7 +29,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
     protected final Job _onTimeout;
 
     private static final int MIN_FOR_NO_DSRM = 4;
-    private static final long SINGLE_SEARCH_MSG_TIME = 10*1000;
+    private static final long SINGLE_SEARCH_MSG_TIME = 10*1000L;
 
     public FloodOnlySearchJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade, Hash key, Job onFind, Job onFailed, int timeoutMs, boolean isLease) {
         super(ctx, facade, key, onFind, onFailed, timeoutMs, isLease);

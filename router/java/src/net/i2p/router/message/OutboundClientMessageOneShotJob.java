@@ -136,14 +136,14 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * (the client's session config takes precedence)
      */
     public final static String OVERALL_TIMEOUT_MS_PARAM = "clientMessageTimeout";
-    private final static long OVERALL_TIMEOUT_MS_DEFAULT = 60*1000;
-    private final static long OVERALL_TIMEOUT_MS_MIN = 8*1000;
-    private final static long OVERALL_TIMEOUT_MS_MAX = 90*1000;
-    private final static long LS_LOOKUP_TIMEOUT = 25*1000;
+    private final static long OVERALL_TIMEOUT_MS_DEFAULT = 60*1000L;
+    private final static long OVERALL_TIMEOUT_MS_MIN = 8*1000L;
+    private final static long OVERALL_TIMEOUT_MS_MAX = 90*1000L;
+    private final static long LS_LOOKUP_TIMEOUT = 25*1000L;
     private final static long OVERALL_TIMEOUT_NOLS_MIN = OVERALL_TIMEOUT_MS_MIN + LS_LOOKUP_TIMEOUT;
-    private final static long REPLY_TIMEOUT_MS_MIN = OVERALL_TIMEOUT_MS_DEFAULT - 5*1000;
+    private final static long REPLY_TIMEOUT_MS_MIN = OVERALL_TIMEOUT_MS_DEFAULT - 5*1000L;
     // callback timeout. Longer so we can have success-after-failure
-    private final static long RATCHET_REPLY_TIMEOUT_MS_MIN = 30*1000;
+    private final static long RATCHET_REPLY_TIMEOUT_MS_MIN = 30*1000L;
 
     /**
      * NOTE: Changed as of 0.9.2.
@@ -1206,7 +1206,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             getContext().statManager().addRateData("client.sendAckTime", sendTime);
             getContext().statManager().addRateData("client.sendMessageSize", _clientMessageSize, sendTime);
             if (_outTunnel != null) {
-                if (_outTunnel.getLength() > 0) {size = ((size + 1023) / 1024) * 1024;} // messages are in ~1KB blocks
+                if (_outTunnel.getLength() > 0) {size = (int) (((size + 1023) / 1024) * 1024L);} // messages are in ~1KB blocks
 
                 // skip ourselves at first hop
                 for (int i = 1; i < _outTunnel.getLength(); i++) {

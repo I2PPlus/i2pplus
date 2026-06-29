@@ -55,7 +55,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
      * If a routerInfo structure isn't this recent, don't send it out.
      * Equal to KNDF.ROUTER_INFO_EXPIRATION_FLOODFILL.
      */
-    public final static long EXPIRE_DELAY = 60*60*1000;
+    public final static long EXPIRE_DELAY = 60*60*1000L;
 
     public HandleDatabaseLookupMessageJob(RouterContext ctx, DatabaseLookupMessage receivedMessage, RouterIdentity from, Hash fromHash, long msgIDBloomXor) {
         super(ctx);
@@ -161,7 +161,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                     }
                     sendData(searchKey, info, fromKey, toTunnel);
                 }
-            } else if (info.isCurrent(10*60*1000)) {
+            } else if (info.isCurrent(10*60*1000L)) {
                 if (info.isHidden()) {
                     if (_log.shouldWarn()) {
                         _log.warn("Ignoring NetDb Lookup for a hidden peer from [" + fromKey.toBase64().substring(0,6) + "]");

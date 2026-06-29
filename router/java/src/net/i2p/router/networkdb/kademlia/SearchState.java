@@ -46,7 +46,7 @@ class SearchState {
     private final AtomicInteger _initialResponseCount = new AtomicInteger();
     private volatile long _initialResponseStart;
     private static final int INITIAL_RESPONSE_TARGET = 3;
-    private static final long INITIAL_RESPONSE_TIMEOUT = 3 * 1000;
+    private static final long INITIAL_RESPONSE_TIMEOUT = 3 * 1000L;
     private volatile long _storedLeaseDate;
 
     public SearchState(RouterContext context, Hash key) {

@@ -120,7 +120,7 @@ class OutboundEstablishState {
      *  max delay including backoff
      *  This should be a little longer than for inbound.
      */
-    private static final long MAX_DELAY = 15*1000;
+    private static final long MAX_DELAY = 15*1000L;
 
     private static final long WAIT_FOR_HOLE_PUNCH_DELAY = 500;
 

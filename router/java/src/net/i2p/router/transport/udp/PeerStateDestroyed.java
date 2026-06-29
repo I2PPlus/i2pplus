@@ -56,9 +56,9 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     // Otherwise, this is the original reason we sent, and may possibly retransmit.
     private volatile int _destroyReason;
 
-    private static final long MAX_LIFETIME = 2*60*1000;
+    private static final long MAX_LIFETIME = 2*60*1000L;
     // retx at 7, 21, 49, 105
-    private static final long TERMINATION_RETX_TIME = 7*1000;
+    private static final long TERMINATION_RETX_TIME = 7*1000L;
 
     /**
      *  This must be called after the first termination or termination ack
@@ -327,7 +327,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
             _wantACKSendSince = _context.clock().now() + 9999999;
             // cancel termination retx, fire kill timer sooner
             _ackTimer.cancel();
-            _killTimer.reschedule(15*1000);
+            _killTimer.reschedule(15*1000L);
 
         } else {
             // If we received a destroy besides reason_termination, send reason_termination

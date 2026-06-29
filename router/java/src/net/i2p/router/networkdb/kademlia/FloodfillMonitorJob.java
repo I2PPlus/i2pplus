@@ -35,8 +35,8 @@ class FloodfillMonitorJob extends JobImpl {
     private boolean _deferredFlood;
 
     private static final int REQUEUE_DELAY = 15*60*1000;
-    private static final long MIN_UPTIME = 2*60*60*1000;
-    private static final long MIN_CHANGE_DELAY = 3*60*60*1000;
+    private static final long MIN_UPTIME = 2*60*60*1000L;
+    private static final long MIN_CHANGE_DELAY = 3*60*60*1000L;
 
     private static final int MIN_FF = 2000;
     private static final int MAX_FF = 999999;
@@ -66,18 +66,18 @@ class FloodfillMonitorJob extends JobImpl {
         if (ff != wasFF) {
             if (ff) {
                 if (!(getContext().getBooleanProperty(FloodfillNetworkDatabaseFacade.PROP_FLOODFILL_PARTICIPANT) &&
-                      getContext().router().getUptime() < 3*60*1000)) {
+                      getContext().router().getUptime() < 3*60*1000L)) {
                     getContext().router().eventLog().addEvent(EventLog.BECAME_FLOODFILL);
                 }
             } else {getContext().router().eventLog().addEvent(EventLog.NOT_FLOODFILL);}
             getContext().router().rebuildRouterInfo(true);
             Job routerInfoFlood = new FloodfillRouterInfoFloodJob(getContext(), _facade);
-            if (getContext().router().getUptime() < 5*60*1000) {
+            if (getContext().router().getUptime() < 5*60*1000L) {
                 if (!_deferredFlood) {
                     // Needed to prevent race if router.floodfillParticipant=true (not auto)
                     // Don't queue multiples
                     _deferredFlood = true;
-                    routerInfoFlood.getTiming().setStartAfter(getContext().clock().now() + 5*60*1000);
+                    routerInfoFlood.getTiming().setStartAfter(getContext().clock().now() + 5*60*1000L);
                     getContext().jobQueue().addJob(routerInfoFlood);
                     if (_log.shouldDebug()) {
                         _log.logAlways(Log.DEBUG, "Deferred our FloodfillRouterInfoFloodJob run because of low uptime.");
@@ -173,7 +173,7 @@ class FloodfillMonitorJob extends JobImpl {
             // remove the config
             getContext().router().saveConfig(FloodfillNetworkDatabaseFacade.PROP_FLOODFILL_AT_RESTART, null);
             long down = getContext().router().getEstimatedDowntime();
-            if (down == 0 || down > 20*60*1000) {return false;}
+            if (down == 0 || down > 20*60*1000L) {return false;}
             afterRestart = true;
         }
 
@@ -234,7 +234,7 @@ class FloodfillMonitorJob extends JobImpl {
          */
         int ffcount = floodfillPeers.size();
         int failcount = 0;
-        long before = now - 60*60*1000;
+        long before = now - 60*60*1000L;
         for (Hash peer : floodfillPeers) {
             PeerProfile profile = getContext().profileOrganizer().getProfile(peer);
             if (profile == null || profile.getLastHeardFrom() < before ||
@@ -265,7 +265,7 @@ class FloodfillMonitorJob extends JobImpl {
             happy = happy && _facade.getKnownRouters() >= 500; // Only if we're pretty well integrated...
             happy = happy && getContext().commSystem().countActivePeers() >= 50;
             happy = happy && getContext().tunnelManager().getParticipatingCount() >= 250;
-            happy = happy && Math.abs(getContext().clock().getOffset()) < 10*1000;
+            happy = happy && Math.abs(getContext().clock().getOffset()) < 10*1000L;
         }
 
         // We need an address and no introducers

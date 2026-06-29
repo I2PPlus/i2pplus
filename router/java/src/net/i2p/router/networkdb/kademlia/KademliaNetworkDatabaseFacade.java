@@ -132,10 +132,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Batched LeaseSet republishing constants.
      */
-    private static final long BATCH_WINDOW_MS = 15 * 1000;
-    private static final long BATCH_PROCESS_DELAY = 5 * 1000;
+    private static final long BATCH_WINDOW_MS = 15 * 1000L;
+    private static final long BATCH_PROCESS_DELAY = 5 * 1000L;
 
-    private static final long LOCAL_LEASESET_REFRESH_INTERVAL = 150*1000;  // 2.5 minutes
+    private static final long LOCAL_LEASESET_REFRESH_INTERVAL = 150*1000L;  // 2.5 minutes
 
     /** Singleton job to refresh client LeaseSets - only one instance exists */
     private volatile RefreshClientLeaseSetsJob _refreshClientLeaseSetsJob;
@@ -175,7 +175,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * offline for a while, we'll have a chance of finding some live peers with the
      * previous references
      */
-    public static long DONT_FAIL_PERIOD = 15*60*1000;
+    public static long DONT_FAIL_PERIOD = 15*60*1000L;
 
     /** Don't probe or broadcast data, just respond and search when explicitly needed */
     private static final boolean QUIET = false;
@@ -213,8 +213,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Don't let leaseSets go too far into the future
      */
-    private static final long MAX_LEASE_FUTURE = 15*60*1000;
-    private static final long MAX_META_LEASE_FUTURE = 65535*1000;
+    private static final long MAX_LEASE_FUTURE = 15*60*1000L;
+    private static final long MAX_META_LEASE_FUTURE = 65535*1000L;
 
     /**
      *  This needs to be long enough to give us time to start up, but less than 20m
@@ -503,7 +503,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (!isClientDb() && !_context.commSystem().isDummy()) {
             boolean isFF = _context.getBooleanProperty(FloodfillNetworkDatabaseFacade.PROP_FLOODFILL_PARTICIPANT);
             long down = _context.router().getEstimatedDowntime();
-            long delay = 20*60*1000;
+            long delay = 20*60*1000L;
             if (down > 24*60*60*1000) {delay = 60*60*1000;}
             _erj.getTiming().setStartAfter(now + delay);
             _context.jobQueue().addJob(_erj);
@@ -1248,7 +1248,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Validates that the LeaseSet has not expired before current publication time.
      * Throws IllegalArgumentException if LeaseSet is already expired.
      */
-    private static final long EXPIRY_GRACE_PERIOD = 90*1000;
+    private static final long EXPIRY_GRACE_PERIOD = 90*1000L;
 
     private void validateLeaseSetExpiry(LeaseSet leaseSet) {
         long now = _context.clock().now();
@@ -2865,7 +2865,7 @@ return false;
      * 2. Re-fetch every tracked LeaseSet each cycle (unconditional)
      * 3. If LeaseSet expires in < 60s, refresh proactively (early-out)
      */
-    private static final long PROACTIVE_REFRESH_THRESHOLD = 60 * 1000;  // Refresh if < 60s to expiry
+    private static final long PROACTIVE_REFRESH_THRESHOLD = 60 * 1000L;  // Refresh if < 60s to expiry
 
     private void refreshClientLeaseSets() {
         long now = _context.clock().now();

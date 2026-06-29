@@ -85,8 +85,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     private RemoteHostId _pendingRemoteHostId;
     private RemoteHostId _previousRemoteHostId;
     private static final int MAX_PATH_CHALLENGE_SENDS = 4;
-    private static final long MAX_PATH_CHALLENGE_TIME = 30*1000;
-    private static final long PATH_CHALLENGE_DELAY = 5*1000;
+    private static final long MAX_PATH_CHALLENGE_TIME = 30*1000L;
+    private static final long PATH_CHALLENGE_DELAY = 5*1000L;
 
     // As SSU
     public static final int MIN_SSU_IPV4_MTU = 1292;
@@ -104,7 +104,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     private static final int BITFIELD_SIZE = 512;
     private static final int MAX_SESS_CONF_RETX = 5;
-    private static final long SENT_MESSAGES_CLEAN_TIME = 60*1000;
+    private static final long SENT_MESSAGES_CLEAN_TIME = 60*1000L;
     private final boolean shouldLogDebug = _log.shouldDebug();
 
     /**

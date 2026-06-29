@@ -57,7 +57,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
     private final RouterIdentity _from;
     private Hash _fromHash;
     private final FloodfillNetworkDatabaseFacade _facade;
-    private final static int REPLY_TIMEOUT = 60*1000;
+    private final static int REPLY_TIMEOUT = (int) (60L * 1000);
     private final static int MESSAGE_PRIORITY = OutNetMessage.PRIORITY_NETDB_REPLY;
     // Must be lower than LIMIT_ROUTERS in StartExplorersJob because exploration does not register a reply job
     private static final int LIMIT_ROUTERS = SystemVersion.isSlow() ? 1000 : 4000;
@@ -263,8 +263,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             logged = true;
                             _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
                                       " [" + key.toBase64().substring(0,6) + "] and banning for 24h -> Invalid Router version: " + v);
-                            getContext().banlist().banlistRouter(key, "Invalid Router version (" + v + ")", null, null, now + 24*60*60*1000);
-                            _banLogger.logBan(key, getContext(), "Invalid Router version (" + v + ")", 24*60*60*1000);
+                            getContext().banlist().banlistRouter(key, "Invalid Router version (" + v + ")", null, null, now + 24L * 60 * 60 * 1000);
+                            _banLogger.logBan(key, getContext(), "Invalid Router version (" + v + ")", 24L * 60 * 60 * 1000);
                         }
                     } else if (isFast && !isOld && prevNetDb == null) {
                         shouldStore = true;
@@ -408,16 +408,16 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                 _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
                                           " [" + key.toBase64().substring(0,6) + "] and banning for 8h -> Inconsistent public keys");
                             }
-                            getContext().banlist().banlistRouter(key, "Inconsistent public keys", null, null, now + 8*60*60*1000);
-                            _banLogger.logBan(key, getContext(), "Inconsistent public keys", 8*60*60*1000);
+                            getContext().banlist().banlistRouter(key, "Inconsistent public keys", null, null, now + 8L * 60 * 60 * 1000);
+                            _banLogger.logBan(key, getContext(), "Inconsistent public keys", 8L * 60 * 60 * 1000);
                             shouldStore = false;
                         } else if (!ri.getIdentity().getSigningPublicKey().equals(prevNetDb.getIdentity().getSigningPublicKey())) {
                             if (_log.shouldWarn()) {
                                 _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
                                           " [" + key.toBase64().substring(0,6) + "] and banning for 8h -> Inconsistent signing keys");
                             }
-                            getContext().banlist().banlistRouter(key, "Inconsistent signing keys", null, null, now + 8*60*60*1000);
-                            _banLogger.logBan(key, getContext(), "Inconsistent signing keys", 8*60*60*1000);
+                            getContext().banlist().banlistRouter(key, "Inconsistent signing keys", null, null, now + 8L * 60 * 60 * 1000);
+                            _banLogger.logBan(key, getContext(), "Inconsistent signing keys", 8L * 60 * 60 * 1000);
                             shouldStore = false;
                         }
                     }
@@ -526,7 +526,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         long floodBegin = System.currentTimeMillis();
                         _facade.flood(entry);
                         long floodEnd = System.currentTimeMillis();
-                        getContext().statManager().addRateData("netDb.storeFloodNew", floodEnd-floodBegin, 60*1000);
+                        getContext().statManager().addRateData("netDb.storeFloodNew", floodEnd-floodBegin, 60L * 1000);
                     }
                 };
                 new I2PThread(floodTask, "Flood Worker", true).start();

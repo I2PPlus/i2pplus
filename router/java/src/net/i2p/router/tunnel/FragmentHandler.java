@@ -101,7 +101,7 @@ class FragmentHandler {
     private final boolean _isInbound;
 
     /** don't wait more than this long to completely receive a fragmented message */
-    static long MAX_DEFRAGMENT_TIME = 45*1000;
+    static long MAX_DEFRAGMENT_TIME = 45*1000L;
     private static final ByteCache _cache = ByteCache.getInstance(512, TrivialPreprocessor.PREPROCESSED_SIZE);
 
     /**

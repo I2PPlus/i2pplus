@@ -25,7 +25,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
     // same job used for all messages
     private final JobImpl _sendFailJob;
 
-    private static final long MAX_LOOKUP_TIME = 15*1000;
+    private static final long MAX_LOOKUP_TIME = 15*1000L;
     private static final int PRIORITY = OutNetMessage.PRIORITY_MY_DATA;
 
     public OutboundReceiver(RouterContext ctx, PooledTunnelCreatorConfig cfg) {

@@ -157,28 +157,28 @@ class EstablishmentManager {
      * Note: could be shorter for fast routers with better connectivity.
      * But it's important to not fail an establishment too soon and waste it.
      */
-    private static final int MAX_OB_ESTABLISH_TIME = SystemVersion.isSlow() ? 60*1000 : 45*1000;
+    private static final long MAX_OB_ESTABLISH_TIME = SystemVersion.isSlow() ? 60*1000L : 45*1000L;
 
     /**
      * Kill any inbound that takes more than this
      * One round trip (Created-Confirmed)
      * Note: could be two round trips for SSU2 with retry
      */
-    public static final int MAX_IB_ESTABLISH_TIME = SystemVersion.isSlow() ? 60*1000 : 45*1000;
+    public static final long MAX_IB_ESTABLISH_TIME = SystemVersion.isSlow() ? 60*1000L : 45*1000L;
 
     /** Max wait before receiving a response to a single message during outbound establishment */
-    public static final int OB_MESSAGE_TIMEOUT = 30*1000;
+    public static final long OB_MESSAGE_TIMEOUT = 30*1000L;
 
     /** for the DSM and or netdb store */
-    private static final int DATA_MESSAGE_TIMEOUT = 15*1000;
+    private static final long DATA_MESSAGE_TIMEOUT = 15*1000L;
 
-    private static final int IB_BAN_TIME = 30*60*1000;
+    private static final long IB_BAN_TIME = 30*60L*1000L;
 
     // SSU 2
     private static final int MIN_TOKENS = SystemVersion.isSlow() ? 64 : 128;
     private static final int MAX_TOKENS = SystemVersion.isSlow() ? 1024 : 2048;
-    public static final long IB_TOKEN_EXPIRATION = 60*60*1000L;
-    private static final long MAX_SKEW = 2*60*1000;
+    public static final long IB_TOKEN_EXPIRATION = 60*60L*1000L;
+    private static final long MAX_SKEW = 2*60L*1000L;
     private static final String TOKEN_FILE = "ssu2tokens.txt";
     /** Max immediate terminations to send to a peer every FAILSAFE_INTERVAL */
     private static final int MAX_TERMINATIONS = 2;
@@ -361,8 +361,8 @@ class EstablishmentManager {
                 //_context.banlist().banlistRouter(toHash, "Invalid SSU address", UDPTransport.STYLE);
                  if (toHash != null) {
                       if (!isBanned) {
-                        _banLogger.logBan(toHash, ipAddress + ":" + port, "Invalid SSU address", 4*60*60*1000);
-                        _context.banlist().banlistRouter(toHash, "Invalid SSU address", null, null, now + 4*60*60*1000);
+                        _banLogger.logBan(toHash, ipAddress + ":" + port, "Invalid SSU address", 4*60*60*1000L);
+                        _context.banlist().banlistRouter(toHash, "Invalid SSU address", null, null, now + 4*60*60*1000L);
                         if (_log.shouldWarn()) {
                           _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Invalid SSU address");
                        }
@@ -483,8 +483,8 @@ class EstablishmentManager {
                         _transport.failed(msg, "MTU too small");
                         if (toHash != null) {
                             if (!isBanned) {
-                                _banLogger.logBan(toHash, ipAddress + ":" + maybePort, "Invalid MTU", 4*60*60*1000);
-                                _context.banlist().banlistRouter(toHash, "Invalid MTU", null, null, now + 4*60*60*1000);
+                                _banLogger.logBan(toHash, ipAddress + ":" + maybePort, "Invalid MTU", 4*60*60*1000L);
+                                _context.banlist().banlistRouter(toHash, "Invalid MTU", null, null, now + 4*60*60*1000L);
                                 if (_log.shouldWarn()) {
                                     _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Invalid MTU");
                                 }
@@ -529,8 +529,8 @@ class EstablishmentManager {
                     _transport.failed(msg, "Peer has BAD key, cannot establish connection -> Marking unreachable");
                     if (toHash != null) {
                         if (!isBanned) {
-                            _banLogger.logBan(toHash, ipAddress + ":" + maybePort, "Bad Introduction key", 4*60*60*1000);
-                            _context.banlist().banlistRouter(toHash, "Bad Introduction key", null, null, now + 4*60*60*1000);
+                            _banLogger.logBan(toHash, ipAddress + ":" + maybePort, "Bad Introduction key", 4*60*60*1000L);
+                            _context.banlist().banlistRouter(toHash, "Bad Introduction key", null, null, now + 4*60*60*1000L);
                             if (_log.shouldWarn()) {
                                 _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Bad Introduction key");
                             }
@@ -635,7 +635,7 @@ class EstablishmentManager {
         if (current <= 0)
             return true;
         // getLastEventCount() is normalized to the rate, so we use the canonical period
-        int lastPeriod = 60*1000;
+        long lastPeriod = 60*1000L;
         double avg = ra.getAverage();
         int currentTime = (int) (_context.clock().now() - periodStart);
         if (currentTime <= 5*1000) {return true;}
@@ -1896,10 +1896,10 @@ class EstablishmentManager {
             if (iplen != 6 && iplen != 18) {
                 if (_log.shouldWarn()) {_log.warn("[SSU] BAD IP address length " + iplen + " from " + state);}
                 _context.statManager().addRateData("udp.relayBadIP", 1);
-                _banLogger.logBan(state.getRemoteIdentity().getHash(), _context, "Bad Introduction data", 4*60*60*1000);
+                _banLogger.logBan(state.getRemoteIdentity().getHash(), _context, "Bad Introduction data", 4*60*60*1000L);
                 _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(),
                                                  "Bad Introduction data", null, null,
-                                                 _context.clock().now() + 4*60*60*1000);
+                                                 _context.clock().now() + 4*60*60*1000L);
                 state.fail();
                 return;
             }
@@ -1914,10 +1914,10 @@ class EstablishmentManager {
                     _log.warn("[SSU] BAD HolePunch from " + state + " for " + Addresses.toString(ip, port) + " via " + id);
                 }
                 _context.statManager().addRateData("udp.relayBadIP", 1);
-                _banLogger.logBan(state.getRemoteIdentity().getHash(), _context, "Bad Introduction data", 4*60*60*1000);
+                _banLogger.logBan(state.getRemoteIdentity().getHash(), _context, "Bad Introduction data", 4*60*60*1000L);
                 _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(),
                                                  "Bad Introduction data", null, null,
-                                                 _context.clock().now() + 4*60*60*1000);
+                                                 _context.clock().now() + 4*60*60*1000L);
                 state.fail();
                 return;
             }
@@ -2813,11 +2813,11 @@ class EstablishmentManager {
         }
 
         private long _lastFailsafe;
-        private static final long FAILSAFE_INTERVAL = 3*60*1000;
+        private static final long FAILSAFE_INTERVAL = 3*60*1000L;
 
         // Debugging
         private long _lastPrinted;
-        private static final long PRINT_INTERVAL = 5*1000;
+        private static final long PRINT_INTERVAL = 5*1000L;
 
         private void doPass() {
             long now = _context.clock().now();

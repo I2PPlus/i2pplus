@@ -72,8 +72,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     public static final int MAX_TO_FLOOD = 3;
     private static final int FLOOD_PRIORITY = OutNetMessage.PRIORITY_NETDB_FLOOD;
     private static final int FLOOD_TIMEOUT = 10*1000;
-    static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
-    private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
+    static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000L;
+    private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000L;
     private static final int NEXT_FLOOD_QTY = 2;
     private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 1000 : 500;
     private static final int PUBLISH_JOB_DELAY = 15*1000;
@@ -145,10 +145,10 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
         long down = _context.router().getEstimatedDowntime();
         if (!_context.commSystem().isDummy() && !isClientDb() &&
-            (down == 0 || (!isFF && down > 30*60*1000) || (isFF && down > 24*60*60*1000))) {
+            (down == 0 || (!isFF && down > 30*60*1000L) || (isFF && down > 24*60*60*1000L))) {
             // refresh old routers
             Job rrj = new RefreshRoutersJob(_context, this);
-            rrj.getTiming().setStartAfter(_context.clock().now() + 5*60*1000);
+            rrj.getTiming().setStartAfter(_context.clock().now() + 5*60*1000L);
             _context.jobQueue().addJob(rrj);
         }
     }
@@ -281,7 +281,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  This maybe could be shorter than RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT,
      *  because we are sending direct, but unresponsive floodfills may take a while due to timeouts.
      */
-    static final long PUBLISH_TIMEOUT = 45*1000;
+    static final long PUBLISH_TIMEOUT = 45*1000L;
 
     /**
      * Send our RI to the closest floodfill.
@@ -308,7 +308,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             // peers, and peer testing so "debounce" them by delaying slightly
             _log.info("Delaying slightly before publishing our RouterInfo...");
             DelayedPublish dp = new DelayedPublish(localRouterInfo);
-            dp.schedule(3*1000);
+            dp.schedule(3*1000L);
         }
     }
 
@@ -373,7 +373,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 }
                 else {
                     // Schedule with delay instead of blocking with Thread.sleep
-                    final int delay = Math.min(idx * 1000, 10_000);
+                    final int delay = (int) Math.min(idx * 1000L, 10_000);
                     final int concurrentForLog = concurrent;
                     new SimpleTimer2.TimedEvent(_context.simpleTimer2()) {
                         @Override
@@ -835,7 +835,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 if (_log.shouldDebug()) {
                     _log.debug("Pending Direct RouterInfo lookup for [" + peer.toBase64().substring(0,6) + "]");
                 }
-                searchJob.addDeferred(onFindJob, onFailedLookupJob, 10*1000, false);
+                searchJob.addDeferred(onFindJob, onFailedLookupJob, 10*1000L, false);
             }
             return;
         }
@@ -843,7 +843,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // following are some special situations, we don't want to drop the peer in these cases
         long uptime = _context.router().getUptime();
         String nofail = _context.getProperty("router.noFailGracePeriod");
-        if (nofail != null) {DONT_FAIL_PERIOD = Long.parseLong(nofail)*60*1000;}
+        if (nofail != null) {DONT_FAIL_PERIOD = Long.parseLong(nofail)*60*1000L;}
         int knownRouters = getKBucketSetSize();
         if (info.getNetworkId() == _networkID && (knownRouters < MIN_REMAINING_ROUTERS || (uptime < DONT_FAIL_PERIOD && knownRouters < 2000) ||
             _context.commSystem().countActivePeers() <= MIN_ACTIVE_PEERS) || _context.commSystem().getStatus() == Status.DISCONNECTED) {
@@ -951,8 +951,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             // classification similar to that in FloodfillPeerSelector
             long now = _context.clock().now();
             long installed = _context.getProperty("router.firstInstalled", 0L);
-            boolean enforceHeard = installed > 0 && (now - installed) > 2*60*60*1000;
-            if (enforceHeard && prof.getFirstHeardAbout() > now - 3*60*60*1000) {
+            boolean enforceHeard = installed > 0 && (now - installed) > 2*60*60*1000L;
+            if (enforceHeard && prof.getFirstHeardAbout() > now - 3*60*60*1000L) {
                 //_log.warn("skip lookup new " + DataHelper.formatTime(prof.getFirstHeardAbout()) + ' ' + peer.toBase64());
                 super.lookupBeforeDropping(peer, info);
                 return;
@@ -963,15 +963,15 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 super.lookupBeforeDropping(peer, info);
                 return;
             }
-            long cutoff = now - 30*60*1000;
+            long cutoff = now - 30*60*1000L;
             long lastLookupSuccess = hist.getLastLookupSuccessful();
             long lastStoreSuccess = hist.getLastStoreSuccessful();
-            if (uptime > 30*60*1000 && lastLookupSuccess < cutoff && lastStoreSuccess < cutoff) {
+            if (uptime > 30*60*1000L && lastLookupSuccess < cutoff && lastStoreSuccess < cutoff) {
                 //_log.warn("skip lookup no db success " + peer.toBase64());
                 super.lookupBeforeDropping(peer, info);
                 return;
             }
-            cutoff = now - 2*60*60*1000;
+            cutoff = now - 2*60*60*1000L;
             long lastLookupFailed = hist.getLastLookupFailed();
             long lastStoreFailed = hist.getLastStoreFailed();
             if (lastLookupFailed > cutoff || lastStoreFailed > cutoff ||
@@ -982,7 +982,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 return;
             }
             double maxFailRate = 0.95;
-            if (_context.router().getUptime() > 60*60*1000) {
+            if (_context.router().getUptime() > 60*60*1000L) {
                 RateStat rs = _context.statManager().getRate("peer.failedLookupRate");
                 if (rs != null) {
                     Rate r = rs.getRate(RateConstants.ONE_HOUR);
@@ -1010,7 +1010,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             _log.debug("Initiating Floodfill Lookup of [" + peer.toBase64().substring(0,6) + "] before dropping..." +
                        "\n* Published: " + new java.util.Date(info.getPublished()));
         }
-        search(peer, new DropLookupFoundJob(_context, peer, info), new DropLookupFailedJob(_context, peer, info), 8*1000, false);
+        search(peer, new DropLookupFoundJob(_context, peer, info), new DropLookupFailedJob(_context, peer, info), 8*1000L, false);
     }
 
     private class DropLookupFailedJob extends JobImpl {

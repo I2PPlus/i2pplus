@@ -27,8 +27,8 @@ class ExploreKeySelectorJob extends JobImpl {
     private Log _log;
     private KademliaNetworkDatabaseFacade _facade;
 
-    private final static long RERUN_DELAY_MS = 60*1000;
-    private final static long OLD_BUCKET_TIME = 15*60*1000;
+    private final static long RERUN_DELAY_MS = 60*1000L;
+    private final static long OLD_BUCKET_TIME = 15*60*1000L;
 
     public ExploreKeySelectorJob(RouterContext context, KademliaNetworkDatabaseFacade facade) {
         super(context);

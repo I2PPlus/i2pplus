@@ -56,7 +56,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                                                    String.valueOf(Router.CAPABILITY_NO_TUNNELS);
 
     protected static final double ATTACK_THRESHOLD = ProfileOrganizer.ATTACK_THRESHOLD;
-    protected static final long STARTUP_WARNING_SUPPRESS_MS = 5 * 60 * 1000;
+    protected static final long STARTUP_WARNING_SUPPRESS_MS = 5 * 60 * 1000L;
 
     /** Peers selected within this window are excluded from further selection to ensure diversity */
     protected static final long PEER_SELECTION_COOLDOWN_MS = 60_000;
@@ -68,7 +68,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     protected static final Object _cooldownLock = new Object();
 
     /** Peers that failed as first hop (first hop unreachable) excluded for this long */
-    protected static final long FIRST_HOP_FAIL_COOLDOWN_MS = 5 * 60 * 1000;
+    protected static final long FIRST_HOP_FAIL_COOLDOWN_MS = 5 * 60 * 1000L;
 
     /** Tracks when a peer last failed as first hop */
     protected static final Map<Hash, Long> _firstHopFails = new ConcurrentHashMap<>();
@@ -143,7 +143,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         Long failTime = _firstHopFails.get(peer);
         if (failTime == null)
             return true;
-        long recoveryTime = ctx.clock().now() - 60 * 1000; // 60 seconds recovery window
+        long recoveryTime = ctx.clock().now() - 60 * 1000L; // 60 seconds recovery window
         if (failTime < recoveryTime) {
             _firstHopFails.remove(peer);
             return true;
@@ -403,11 +403,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             if (!hasSignal && profile != null) {
                 long now = ctx.clock().now();
                 if (profile.getLastHeardFrom() > 0 &&
-                    now - profile.getLastHeardFrom() < 10 * 60 * 1000) {
+                    now - profile.getLastHeardFrom() < 10 * 60 * 1000L) {
                     hasSignal = true;
                 }
                 if (profile.getLastSendSuccessful() > 0 &&
-                    now - profile.getLastSendSuccessful() < 10 * 60 * 1000) {
+                    now - profile.getLastSendSuccessful() < 10 * 60 * 1000L) {
                     hasSignal = true;
                 }
             }
@@ -732,7 +732,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @return true if yes
      */
     private boolean filterUnreachable(boolean isInbound, boolean isExploratory) {
-        if (SystemVersion.isSlow() || ctx.router().getUptime() < 65*60*1000)
+        if (SystemVersion.isSlow() || ctx.router().getUptime() < 65*60*1000L)
             return true;
         if (isExploratory) {
             if (isInbound) {
@@ -1193,7 +1193,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                          " — no valid SSU or NTCP address");
             return;
         }
-        long lifetime = ctx.clock().now() + 30*1000;
+        long lifetime = ctx.clock().now() + 30*1000L;
         // Use a DatabaseLookupMessage (peer looks up its own RouterInfo and replies)
         // This triggers a real transport connection + request/response cycle,
         // keeping the session alive for the upcoming tunnel build message.
@@ -1229,13 +1229,13 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @return true if the peer hasn't been heard from or about in the last 4 hours
      */
     static boolean isStalePeer(RouterContext ctx, Hash peer) {
-        if (ctx.router() != null && ctx.router().getUptime() < 15*60*1000)
+        if (ctx.router() != null && ctx.router().getUptime() < 15*60*1000L)
             return false;
         PeerProfile profile = ctx.profileOrganizer().getProfileNonblocking(peer);
         if (profile == null)
             return true;
         long now = ctx.clock().now();
-        long cutoff = now - 4*60*60*1000;
+        long cutoff = now - 4*60*60*1000L;
         return profile.getLastHeardFrom() < cutoff && profile.getLastHeardAbout() < cutoff;
     }
 
@@ -1295,7 +1295,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 // no establishment overhead.
                 RouterInfo ri = rctx.netDb().lookupRouterInfoLocally(peer);
                 if (ri == null) continue;
-                long lifetime = now + 30*1000;
+                long lifetime = now + 30*1000L;
                 DatabaseLookupMessage dlm = new DatabaseLookupMessage(rctx, true);
                 dlm.setFrom(rctx.routerHash());
                 dlm.setSearchKey(peer);

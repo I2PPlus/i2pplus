@@ -77,7 +77,7 @@ class BuildExecutor implements Runnable {
      * when the underlying issue was transient.
      */
     private static final int CONSECUTIVE_FAILURE_THRESHOLD = 5;
-    private static final long POOL_BACKOFF_MS = 12 * 1000;
+    private static final long POOL_BACKOFF_MS = 12 * 1000L;
     private final ConcurrentHashMap<TunnelPool, long[]> _poolFailureState = new ConcurrentHashMap<>(64);
     private int _keepAliveCounter;
     private volatile long _adaptiveTimeout;
@@ -406,7 +406,7 @@ class BuildExecutor implements Runnable {
         allowed = _context.getProperty("router.tunnelConcurrentBuilds", allowed);
 
         // Constants for expiration calculations
-        final long TEN_MINUTES_MS = 10 * 60 * 1000;
+        final long TEN_MINUTES_MS = 10 * 60 * 1000L;
         final long expireRecentlyBefore = now + TEN_MINUTES_MS - BuildRequestor.getRequestTimeout(_context) + getGracePeriod(_context);
         final long expireBefore = now + TEN_MINUTES_MS - BuildRequestor.getRequestTimeout(_context);
 
@@ -940,7 +940,7 @@ class BuildExecutor implements Runnable {
         } else if (cfg.getLength() > 1 && _log.shouldInfo() && buildTime < 50) {
             _log.info("Build completed fast (" + buildTime + "ms) -> " + cfg);
         }
-        long expireBefore = now + 10*60*1000 - BuildRequestor.getRequestTimeout(_context);
+        long expireBefore = now + 10*60*1000L - BuildRequestor.getRequestTimeout(_context);
         if (cfg.getExpiration() <= expireBefore && _log.shouldDebug()) {
             _log.debug("Build completed for expired tunnel -> " + cfg);
         }

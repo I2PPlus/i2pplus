@@ -23,7 +23,7 @@ import net.i2p.util.Log;
 public class UpdateRoutingKeyModifierJob extends JobImpl {
     private final Log _log;
     // Run every 15 minutes in case of time zone change, clock skew, etc.
-    private static final long MAX_DELAY_FAILSAFE = 15*60*1000;
+    private static final long MAX_DELAY_FAILSAFE = 15*60*1000L;
 
     /**
      * Create a new routing key modifier update job.

@@ -57,7 +57,7 @@ public class PeerTestJob extends JobImpl {
     private PeerManager _manager;
     private boolean _keepTesting;
     private final List<Hash> _priorityPeers = new ArrayList<Hash>();
-    private static final long DEFAULT_PEER_TEST_DELAY = 5*60*1000;
+    private static final long DEFAULT_PEER_TEST_DELAY = 5*60*1000L;
     public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
     private static final int DEFAULT_PEER_TEST_CONCURRENCY = 1;
     public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
@@ -125,12 +125,12 @@ public class PeerTestJob extends JobImpl {
     private long getPeerTestDelay() {
         long uptime = getContext().router().getUptime();
         long testDelay = getContext().getProperty(PROP_PEER_TEST_DELAY, DEFAULT_PEER_TEST_DELAY);
-        if (uptime > 3*60*60*1000 || SystemVersion.getCPULoadAvg() > 80)
+        if (uptime > 3*60*60*1000L || SystemVersion.getCPULoadAvg() > 80)
             return testDelay + 1000;
-        else if (uptime >= 3*60*1000)
+        else if (uptime >= 3*60*1000L)
             return testDelay;
         else
-            return testDelay + Math.min(30*1000, 3*60*1000 - uptime);
+            return testDelay + Math.min(30*1000L, 3*60*1000L - uptime);
     }
 
     /**
@@ -166,7 +166,7 @@ public class PeerTestJob extends JobImpl {
         if (SystemVersion.getCPULoadAvg() > 95) {testConcurrent = 1;}
         // Double concurrency during first 5 minutes to quickly profile untested peers
         long uptime = getContext().router().getUptime();
-        if (uptime > 0 && uptime < 5 * 60 * 1000) {
+        if (uptime > 0 && uptime < 5 * 60 * 1000L) {
             testConcurrent = Math.max(testConcurrent, DEFAULT_PEER_TEST_CONCURRENCY * 2);
         }
         return testConcurrent;
@@ -191,7 +191,7 @@ public class PeerTestJob extends JobImpl {
         this.getTiming().setStartAfter(getContext().clock().now() + getPeerTestDelay());
         getContext().jobQueue().addJob(this);
         long uptime = getContext().router().getUptime();
-        if (uptime < 3*60*100) {
+        if (uptime < 3*60*100L) {
             if (_log.shouldInfo()) {_log.info("Peer testing will commence in 3 minutes...");}
         } else if (_log.shouldInfo()) {
             _log.info("Initialising peer tests -> Timeout: " + getTestTimeout() + "ms per peer");

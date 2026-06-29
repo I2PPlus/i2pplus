@@ -163,9 +163,9 @@ public class PeerState {
     /** The minimum number of outstanding messages (NOT fragments/packets) */
     private static final int MIN_CONCURRENT_MSGS = SystemVersion.isSlow() ? 16 : 64;
     /** Maximum lifetime before a message is considered stuck and expired (60 seconds) */
-    private static final long MAX_MESSAGE_LIFETIME = 60 * 1000;
+    private static final long MAX_MESSAGE_LIFETIME = 60 * 1000L;
     /** After this time, we start adding backoff delay (5 seconds) */
-    private static final long BACKOFF_START_LIFETIME = 5 * 1000;
+    private static final long BACKOFF_START_LIFETIME = 5 * 1000L;
     /** @since 0.9.42 */
     private static final int INIT_CONCURRENT_MSGS = SystemVersion.isSlow() ? 64 : 512;
     /** how many concurrent outbound messages do we allow OutboundMessageFragments to send
@@ -270,7 +270,7 @@ public class PeerState {
     /** for small MTU */
     private static final int MAX_RESEND_ACKS_SMALL = MAX_RESEND_ACKS * 2 / 5;
 
-    private static final long RESEND_ACK_TIMEOUT = 60*1000;
+    private static final long RESEND_ACK_TIMEOUT = 60*1000L;
 
     /** If this many acks arrive out of order, fast rtx */
     private static final int FAST_RTX_ACKS = 3;
@@ -313,7 +313,7 @@ public class PeerState {
         else {_rttDeviation = _rtt;}
 
         long maxMemory = SystemVersion.getMaxMemory();
-        int outboundQueueSize = Math.max(16, Math.min(64, (int)(maxMemory / (256 * 1024 * 1024))));
+        int outboundQueueSize = Math.max(16, Math.min(64, (int)(maxMemory / (256 * 1024 * 1024L))));
 
         _inboundMessages = new ConcurrentHashMap<>(16);
         _outboundMessages = new CachedIteratorCollection<>();

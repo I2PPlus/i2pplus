@@ -57,7 +57,7 @@ import net.i2p.util.Log;
  */
 class OutboundClientMessageJobHelper {
 
-    private static final long ACK_EXTRA_EXPIRATION = 60*1000;
+    private static final long ACK_EXTRA_EXPIRATION = 60*1000L;
 
     /**
      * Build a garlic message that will be delivered to the router on which the target is located.

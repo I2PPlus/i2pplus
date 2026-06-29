@@ -34,7 +34,7 @@ class ExpireRoutersJob extends JobImpl {
     private final KademliaNetworkDatabaseFacade _facade;
 
     /** rerun fairly often, so the fails don't queue up too many netdb searches at once */
-    private final static long RERUN_DELAY_MS = 15*60*1000;
+    private final static long RERUN_DELAY_MS = 15*60*1000L;
     private static final int LIMIT_ROUTERS = SystemVersion.isSlow() ? 4000 : 8000;
 
     public ExpireRoutersJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {
@@ -90,8 +90,8 @@ class ExpireRoutersJob extends JobImpl {
             return 0;
         RouterKeyGenerator gen = getContext().routerKeyGenerator();
         long now = getContext().clock().now();
-        long cutoff = now - 30*60*1000;
-        boolean almostMidnight = gen.getTimeTillMidnight() < FloodfillNetworkDatabaseFacade.NEXT_RKEY_RI_ADVANCE_TIME - 30*60*1000;
+        long cutoff = now - 30*60*1000L;
+        boolean almostMidnight = gen.getTimeTillMidnight() < FloodfillNetworkDatabaseFacade.NEXT_RKEY_RI_ADVANCE_TIME - 30*60*1000L;
         Hash us = getContext().routerHash();
         boolean isFF = _facade.floodfillEnabled();
         byte[] ourRKey = isFF ? us.getData() : null;

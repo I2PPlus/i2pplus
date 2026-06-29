@@ -88,7 +88,7 @@ class EventPumper implements Runnable {
     /** Max consecutive failures before giving up on a peer entirely (until map clearance) */
     private static final int MAX_OUTBOUND_RETRY_COUNT = 3;
     private long _lastRetryMapClear = System.currentTimeMillis();
-    private static final long RETRY_MAP_CLEAR_INTERVAL = 5 * 60 * 1000; // 5 minutes
+    private static final long RETRY_MAP_CLEAR_INTERVAL = 5 * 60 * 1000L; // 5 minutes
 
     /**
      * This probably doesn't need to be bigger than the largest typical
@@ -121,12 +121,12 @@ class EventPumper implements Runnable {
     private static final long SELECTOR_LOOP_DELAY = isSlow ? 100 : 5;
     private static final long SELECTOR_MAX_DELAY = 200;  // Max delay when under load
     private long _currentDelay = SELECTOR_LOOP_DELAY;
-    private static final long BLOCKED_IP_FREQ = 43 * 60 * 1000;
+    private static final long BLOCKED_IP_FREQ = 43 * 60 * 1000L;
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
     private static final long MIN_EXPIRE_IDLE_TIME = 120 * 1000L;
     private static final long MAX_EXPIRE_IDLE_TIME = 11 * 60 * 1000L;
-    private static final long MAY_DISCON_TIMEOUT = 10 * 1000;
-    private static final long RI_STORE_INTERVAL = 29 * 60 * 1000;
+    private static final long MAY_DISCON_TIMEOUT = 10 * 1000L;
+    private static final long RI_STORE_INTERVAL = 29 * 60 * 1000L;
 
     /**
      * Do we use direct buffers for reading? Default false.
@@ -142,12 +142,12 @@ class EventPumper implements Runnable {
     private static final int MIN_BUFS;
     static {
         long maxMemory = SystemVersion.getMaxMemory();
-        MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (16 * 1024 * 1024))));
+        MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (16 * 1024 * 1024L))));
     }
 
     private static final TryCache<ByteBuffer> _bufferCache = new TryCache<>(new BufferFactory(), MIN_BUFS);
     private static final Set<Status> STATUS_OK = EnumSet.of(Status.OK, Status.IPV4_OK_IPV6_UNKNOWN, Status.IPV4_OK_IPV6_FIREWALLED);
-    private static final long[] RATES = { 60*1000, 10*60*1000L };
+    private static final long[] RATES = { 60*1000L, 10*60*1000L };
 
     public EventPumper(RouterContext ctx, NTCPTransport transport) {
         _context = ctx;
@@ -619,8 +619,8 @@ class EventPumper implements Runnable {
         int maxConnections = _transport.getMaxConnections();
         int currentConnections = _transport.countPeers();
         if (currentRate > minThresh * 5 / 3 && (currentConnections > (maxConnections * 2 / 3))) {
-            int probAccept = Math.max(1, ((int) (4 * 128 * currentRate / minThresh)) - 512);
-            int percent = probAccept > 128 ? 100 : (probAccept / 128) * 100;
+            long probAccept = Math.max(1, ((int) (4 * 128L * currentRate / minThresh)) - 512);
+            int percent = probAccept > 128 ? 100 : (int) ((probAccept / 128) * 100);
             if (probAccept >= 128 || _context.random().nextInt(128) < probAccept) {
                 if (_log.shouldWarn()) {
                     _log.warn("Dropping incoming TCP connection (" + (percent >= 1 ? Math.min(percent, 100) + "%" : "1%") + " chance)" +
@@ -1062,7 +1062,7 @@ class EventPumper implements Runnable {
         if (count == 4) {
             BanLogger bl = BanLogger.getInstance();
             if (bl != null) {
-                bl.logBan(hash, ba, "Handshake timeout", 60 * 60 * 1000);
+                bl.logBan(hash, ba, "Handshake timeout", 60 * 60 * 1000L);
             }
         }
     }
@@ -1080,7 +1080,7 @@ class EventPumper implements Runnable {
         if (count == 4) {
             BanLogger bl = BanLogger.getInstance();
             if (bl != null) {
-                bl.logBan(hash, ba, "Invalid encryption", 60 * 60 * 1000);
+                bl.logBan(hash, ba, "Invalid encryption", 60 * 60 * 1000L);
             }
         }
     }

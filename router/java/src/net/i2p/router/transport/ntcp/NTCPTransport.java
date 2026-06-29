@@ -814,8 +814,8 @@ public class NTCPTransport extends TransportImpl {
         int[] rv = new int[8];
         final long now = _context.clock().now();
         for (NTCPConnection con : _conByIdent.values()) {
-            if ((con.getMessagesSent() > 0 && con.getTimeSinceSend(now) <= 60*1000) ||
-                (con.getMessagesReceived() > 0 && con.getTimeSinceReceive(now) <= 60*1000)) {
+            if ((con.getMessagesSent() > 0 && con.getTimeSinceSend(now) <= 60*1000L) ||
+                (con.getMessagesReceived() > 0 && con.getTimeSinceReceive(now) <= 60*1000L)) {
                 int idx = 4;
                 if (con.isIPv6())
                     idx += 2;
@@ -862,8 +862,8 @@ public class NTCPTransport extends TransportImpl {
         int active = 0;
         for (NTCPConnection con : _conByIdent.values()) {
             // con initializes times at construction, so check message count also
-            if ((con.getMessagesSent() > 0 && con.getTimeSinceSend(now) <= 60*1000) ||
-                (con.getMessagesReceived() > 0 && con.getTimeSinceReceive(now) <= 60*1000)) {
+            if ((con.getMessagesSent() > 0 && con.getTimeSinceSend(now) <= 60*1000L) ||
+                (con.getMessagesReceived() > 0 && con.getTimeSinceReceive(now) <= 60*1000L)) {
                 active++;
             }
         }
@@ -878,7 +878,7 @@ public class NTCPTransport extends TransportImpl {
         int active = 0;
         for (NTCPConnection con : _conByIdent.values()) {
             // con initializes times at construction, so check message count also
-            if (con.getMessagesSent() > 0 && con.getTimeSinceSend(now) <= 60*1000) {active++;}
+            if (con.getMessagesSent() > 0 && con.getTimeSinceSend(now) <= 60*1000L) {active++;}
         }
         return active;
     }
@@ -901,7 +901,7 @@ public class NTCPTransport extends TransportImpl {
         // Omit ones established too long ago,
         // since the skew is only set at startup (or after a meta message)
         // and won't include effects of later offset adjustments
-        long tooOld = _context.clock().now() - 10*60*1000;
+        long tooOld = _context.clock().now() - 10*60*1000L;
 
         for (NTCPConnection con : _conByIdent.values()) {
             // TODO skip isEstablished() check?
@@ -1194,7 +1194,7 @@ public class NTCPTransport extends TransportImpl {
         stopListening();
         // Wait for NTCP Pumper to stop so we don't end up with two...
         while (isAlive()) {
-            try {Thread.sleep(5*1000);}
+            try {Thread.sleep(5*1000L);}
             catch (InterruptedException ie) {
                 Thread.currentThread().interrupt();
             }
@@ -1314,7 +1314,7 @@ public class NTCPTransport extends TransportImpl {
      */
     private RouterAddress createNTCPAddress() {
         int p = _context.getProperty(PROP_I2NP_NTCP_PORT, -1);
-        if (p <= 0 || p >= 64*1024) {return null;}
+        if (p <= 0 || p >= 64*1024L) {return null;}
 
         String name = getConfiguredIP();
         if (name == null) {return null;}
@@ -1589,7 +1589,7 @@ public class NTCPTransport extends TransportImpl {
                 _log.warn("[NTCP] Old status: " + old + " New status: " + status +
                           " from: ", new Exception("traceback"));
             }
-            if (old != Status.UNKNOWN && _context.router().getUptime() > 5*60*1000) {
+            if (old != Status.UNKNOWN && _context.router().getUptime() > 5*60*1000L) {
                 _context.router().eventLog().addEvent(EventLog.REACHABILITY,
                 _t(old.toStatusString()) + " ➜ " +  _t(status.toStatusString()));
             }
@@ -1858,13 +1858,13 @@ public class NTCPTransport extends TransportImpl {
         boolean hasV4 = !fwV4 && getCurrentAddress(false) != null;
         boolean hasV6 = !fwV6 && getCurrentAddress(true) != null;
         boolean showFirewalled = !_context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP) &&
-                                 _context.router().getUptime() > 10*60*1000;
+                                 _context.router().getUptime() > 10*60*1000L;
         if (!hasV4 && !hasV6) {
             return showFirewalled ? Status.REJECT_UNSOLICITED : Status.UNKNOWN;
         }
         long now = _context.clock().now();
-        boolean v4OK = hasV4 && !v4Disabled && now - _lastInboundIPv4 < 10*60*1000;
-        boolean v6OK = hasV6 && !v6Disabled && now - _lastInboundIPv6 < 30*60*1000;
+        boolean v4OK = hasV4 && !v4Disabled && now - _lastInboundIPv4 < 10*60*1000L;
+        boolean v6OK = hasV6 && !v6Disabled && now - _lastInboundIPv6 < 30*60*1000L;
         if (v4OK) {
             if (v6OK)
                 return Status.OK;

@@ -981,9 +981,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             byte[] ip = _con.getRemoteIP();
             int port = _con.getRemotePort();
             String ipPort = ip != null ? formatIPPort(ip, port) : "UNKNOWN";
-            _banLogger.logBan(h, ipPort, "Invalid NTCP address", 4*60*60*1000);
+            _banLogger.logBan(h, ipPort, "Invalid NTCP address", 4*60*60*1000L);
             _context.banlist().banlistRouter(h, "Invalid NTCP address",
-                                             null, null, _context.clock().now() + 4*60*60*1000);
+                                             null, null, _context.clock().now() + 4*60*60*1000L);
             _context.commSystem().forceDisconnect(h, "Invalid NTCP address");
             if (_log.shouldWarn() && !isBanned) {
                 _log.warn("[NTCP] Banning for 4h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
@@ -1009,8 +1009,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         if (isInvalidVersion) {
             reason = "Invalid Router version (" + version + " / " + bw +
                       (unreachable ? "U" : reachable ? "R" : "") + ")";
-            _banLogger.logBan(h, ipPort, reason, now + 24*60*60*1000);
-            _context.banlist().banlistRouter(h, reason, null, null, now + 24*60*60*1000);
+            _banLogger.logBan(h, ipPort, reason, now + 24*60*60*1000L);
+            _context.banlist().banlistRouter(h, reason, null, null, now + 24*60*60*1000L);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             if (_log.shouldWarn() && !isBanned)
                 _log.warn("[NTCP] Banning for 24h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
@@ -1021,8 +1021,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
         if (!reachable && isSlow && isOld) {
             reason = "Old and slow (" + version + " / " + bw + "U)";
-            _banLogger.logBan(h, ipPort, reason, now + 60*60*1000);
-            _context.banlist().banlistRouter(h, reason, null, null, now + 60*60*1000);
+            _banLogger.logBan(h, ipPort, reason, now + 60*60*1000L);
+            _context.banlist().banlistRouter(h, reason, null, null, now + 60*60*1000L);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             if (_log.shouldInfo() && !isBanned)
                 _log.info("[NTCP] Banning for 1h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
@@ -1033,8 +1033,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
         if (reachable && unreachable) {
             reason = "Invalid published capabilities (RU)";
-            _banLogger.logBan(h, ipPort, reason, now + 24*60*60*1000);
-            _context.banlist().banlistRouter(h, reason, null, null, now + 24*60*60*1000);
+            _banLogger.logBan(h, ipPort, reason, now + 24*60*60*1000L);
+            _context.banlist().banlistRouter(h, reason, null, null, now + 24*60*60*1000L);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             if (_log.shouldWarn() && !isBanned) {
                 _log.warn("[NTCP] Banning for 24h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +

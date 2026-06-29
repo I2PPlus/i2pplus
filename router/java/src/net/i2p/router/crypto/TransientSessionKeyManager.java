@@ -91,7 +91,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * Let outbound session tags sit around for this long before expiring them.
      * Inbound tag expiration is set by SESSION_LIFETIME_MAX_MS
      */
-    private final static long SESSION_TAG_DURATION_MS = 12 * 60 * 1000;
+    private final static long SESSION_TAG_DURATION_MS = 12 * 60 * 1000L;
 
     /**
      * Keep unused inbound session tags around for this long (a few minutes longer than
@@ -100,12 +100,12 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      *
      * This is also the max idle time for an outbound session.
      */
-    private final static long SESSION_LIFETIME_MAX_MS = SESSION_TAG_DURATION_MS + 2 * 60 * 1000;
+    private final static long SESSION_LIFETIME_MAX_MS = SESSION_TAG_DURATION_MS + 2 * 60 * 1000L;
 
     /**
      * Time to send more if we are this close to expiration
      */
-    private static final long SESSION_TAG_EXPIRATION_WINDOW = 90 * 1000;
+    private static final long SESSION_TAG_EXPIRATION_WINDOW = 90 * 1000L;
 
     /**
      * a few MB? how about 24 MB!
@@ -675,7 +675,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                        // remove all tagsets larger than 8 tags that haven't been used and
                         // are old. The more the tagsets, the more aggressively we expire.
                         // From 9 minutes at 10 down to one minute at 50
-                        long age = Math.min(5*60*1000, Math.max(60*1000, 9*60*1000 - ((count - 10) * 8*60*1000/40)));
+                        long age = Math.min(5*60*1000L, Math.max(60*1000L, 9*60*1000L - ((count - 10) * 8*60*1000L/40)));
                         for (TagSet ts : sets) {
                             Set<SessionTag> tags = ts.getTags();
                             int curSize = tags.size();

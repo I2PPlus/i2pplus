@@ -24,7 +24,7 @@ class RouterDoSThrottle extends RouterThrottleImpl {
     private volatile long _currentLookupPeriod;
     private final AtomicInteger _currentLookupCount = new AtomicInteger();
     // if we receive over 20 netDb lookups in 10 seconds, someone is acting up
-    private static final long LOOKUP_THROTTLE_PERIOD = 20*1000;
+    private static final long LOOKUP_THROTTLE_PERIOD = 20*1000L;
     private static final long LOOKUP_THROTTLE_MAX = 50;
     private final Log _log;
 
@@ -42,7 +42,7 @@ class RouterDoSThrottle extends RouterThrottleImpl {
             if (cnt >= LOOKUP_THROTTLE_MAX) {
                 _context.statManager().addRateData("router.throttleNetDbDoS", cnt);
                 if (cnt >= LOOKUP_THROTTLE_MAX*2) {
-                    _context.banlist().banlistRouter(key, "Excessive NetDb lookups", null, null, now + 5*60*1000);
+                    _context.banlist().banlistRouter(key, "Excessive NetDb lookups", null, null, now + 5*60*1000L);
                     if (_log.shouldWarn()) {
                         _log.warn("Banning [" + key.toBase64().substring(0,6) + "] for 5m for excessive NetDB lookups " +
                                   "(Limit (over 20s period): " + LOOKUP_THROTTLE_MAX + " -> Requests: " + cnt + ")");

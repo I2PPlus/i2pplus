@@ -16,7 +16,7 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
     private final HopConfig _config;
     private RouterInfo _target;
 
-    private static final long MAX_LOOKUP_TIME = 15*1000;
+    private static final long MAX_LOOKUP_TIME = 15*1000L;
     private static final int PRIORITY = OutNetMessage.PRIORITY_PARTICIPATING;
 
     public InboundGatewayReceiver(RouterContext ctx, HopConfig cfg) {

@@ -33,7 +33,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     private final LinkedBlockingQueue<KeyPair> _keys;
     private final EncType _type;
     private volatile boolean _isRunning;
-    private long _checkDelay = 10 * 1000;
+    private long _checkDelay = 10 * 1000L;
 
     private final static String PROP_MLKEM_PRECALC_MIN = "crypto.mlkem.precalc.min";
     private final static String PROP_MLKEM_PRECALC_MAX = "crypto.mlkem.precalc.max";
@@ -52,10 +52,10 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
         _context = ctx;
         _type = type;
         _log = ctx.logManager().getLog(MLKEMKeyFactory.class);
-        ctx.statManager().createRateStat("crypto.MLKEMGenerateTime", "How long it takes to create keys", "Encryption", new long[] { 60*60*1000 });
-        ctx.statManager().createRateStat("crypto.MLKEMUsed", "Take keys from the queue", "Encryption", new long[] { 60*60*1000 });
+        ctx.statManager().createRateStat("crypto.MLKEMGenerateTime", "How long it takes to create keys", "Encryption", new long[] { 60*60*1000L });
+        ctx.statManager().createRateStat("crypto.MLKEMUsed", "Take keys from the queue", "Encryption", new long[] { 60*60*1000L });
         //ctx.statManager().createRateStat("crypto.MLKEMReused", "Unused requeued", "Encryption", new long[] { 60*60*1000 });
-        ctx.statManager().createRateStat("crypto.MLKEMEmpty", "Queue empty", "Encryption", new long[] { 60*60*1000 });
+        ctx.statManager().createRateStat("crypto.MLKEMEmpty", "Queue empty", "Encryption", new long[] { 60*60*1000L });
 
         // add to the defaults for every 128MB of RAM, up to 512MB
         long maxMemory = SystemVersion.getMaxMemory();
@@ -106,7 +106,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
             // Adjust delay
             if (startSize <= (_minSize * 2 / 3) && _checkDelay > 1000)
                 _checkDelay -= 1000;
-            else if (startSize > (_minSize * 3 / 2) && _checkDelay < 60*1000)
+            else if (startSize > (_minSize * 3 / 2) && _checkDelay < 60*1000L)
                 _checkDelay += 1000;
             if (startSize < _minSize) {
                 // fill all the way up, do the check here so we don't

@@ -136,7 +136,7 @@ public class NTCPConnection implements Closeable {
     /*
      *  Update frequency for send/recv rates in console peers page
      */
-    private static final long STAT_UPDATE_TIME_MS = 60*1000;
+    private static final long STAT_UPDATE_TIME_MS = 60*1000L;
 
     /*
      *  Should be longer than 2 * EventPumper.MAX_EXPIRE_IDLE_TIME so it doesn't
@@ -173,7 +173,7 @@ public class NTCPConnection implements Closeable {
     private static final int PADDING_MAX = 64;
     private static final int SIP_IV_LENGTH = 8;
     private static final int NTCP2_FAIL_READ = 1024;
-    private static final long NTCP2_FAIL_TIMEOUT = 8*1000;
+    private static final long NTCP2_FAIL_TIMEOUT = 8*1000L;
     private static final long NTCP2_TERMINATION_CLOSE_DELAY = 50;
     // don't make combined messages too big, to minimize latency
     // Tunnel data msgs are 1024 + 4 + 9 + 3 = 1040, allow 5
@@ -625,7 +625,7 @@ public class NTCPConnection implements Closeable {
      */
     public boolean tooBacklogged() {
         // Allow some slack just after connection establishment
-        if (getUptime() < 15*1000)
+        if (getUptime() < 15*1000L)
             return false;
 
         if (!_outbound.isBacklogged())
@@ -1759,7 +1759,7 @@ public class NTCPConnection implements Closeable {
                 // make a fake DBSM message and send it to the InNetMessagePool
                 DatabaseStoreMessage dbsm = new DatabaseStoreMessage(_context);
                 dbsm.setEntry(ri);
-                dbsm.setMessageExpiration(_context.clock().now() + 10*1000);
+                dbsm.setMessageExpiration(_context.clock().now() + 10*1000L);
                 _transport.messageReceived(dbsm, null, ph, 0, 1000); // fake size
                 return;
             }
@@ -1828,8 +1828,8 @@ public class NTCPConnection implements Closeable {
                 String ipPort = (ip != null && ip.length == 4) ?
                     (ip[0] & 0xff) + "." + (ip[1] & 0xff) + "." + (ip[2] & 0xff) + "." + (ip[3] & 0xff) + ":" + port :
                     "UNKNOWN";
-                _banLogger.logBan(_remotePeer.calculateHash(), ipPort, "They banned us", 2*60*60*1000);
-                _context.banlist().banlistRouter(_remotePeer.calculateHash(), "They banned us", null, null, _context.clock().now() + 2*60*60*1000);
+                _banLogger.logBan(_remotePeer.calculateHash(), ipPort, "They banned us", 2*60*60*1000L);
+                _context.banlist().banlistRouter(_remotePeer.calculateHash(), "They banned us", null, null, _context.clock().now() + 2*60*60*1000L);
             }
         }
 

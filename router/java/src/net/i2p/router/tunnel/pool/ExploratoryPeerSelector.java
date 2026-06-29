@@ -354,10 +354,10 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
 
         // no need to explore too wildly at first (if we have enough connected peers)
         long uptime = ctx.router().getUptime();
-        if (uptime <= (SystemVersion.isAndroid() ? 15*60*1000 : 5*60*1000))
+        if (uptime <= (SystemVersion.isAndroid() ? 15*60*1000L : 5*60*1000L))
             return true;
         // wait for first expiration of old RIs, if we had a long downtime
-        if (uptime <= 61*60*1000 && ctx.router().getEstimatedDowntime() > 3*24*60*60*1000L)
+        if (uptime <= 61*60*1000L && ctx.router().getEstimatedDowntime() > 3*24*60*60*1000L)
             return true;
         // or at the end
         if (ctx.router().gracefulShutdownInProgress())
@@ -373,7 +373,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         // high capacity peers, at least for a little bit.
         int failPct;
         // getEvents() will be 0 for first 10 minutes
-        if (uptime <= 11*60*1000) {
+        if (uptime <= 11*60*1000L) {
             failPct = 100 - getMinNonfailingPct(ctx);
         } else {
             // If well connected or ff, don't pick from high cap
@@ -417,9 +417,9 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
 
     private int getFailPercentage(String t) {
         String pfx = "tunnel.build" + t;
-        int timeout = getEvents(pfx + "Expire", 10*60*1000);
-        int reject = getEvents(pfx + "Reject", 10*60*1000);
-        int accept = getEvents(pfx + "Success", 10*60*1000);
+        int timeout = getEvents(pfx + "Expire", 10*60*1000L);
+        int reject = getEvents(pfx + "Reject", 10*60*1000L);
+        int accept = getEvents(pfx + "Success", 10*60*1000L);
         if (accept + reject + timeout <= 0)
             return 0;
         double pct = (double)(reject + timeout) / (accept + reject + timeout);

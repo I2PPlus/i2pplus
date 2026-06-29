@@ -35,7 +35,7 @@ class RefreshRoutersJob extends JobImpl {
 
     private static final long EXPIRE = 7 * 24 * 60 * 60 * 1000L; // 7 days
     private static final long OLDER = 2 * 60 * 60 * 1000L;       // 2 hours
-    private static long RESTART_DELAY_MS = 60 * 1000;            // Default restart delay 1 min
+    private static long RESTART_DELAY_MS = 60 * 1000L;            // Default restart delay 1 min
 
     private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
     private static final boolean DEFAULT_SHOULD_DISCONNECT = false;
@@ -88,7 +88,7 @@ class RefreshRoutersJob extends JobImpl {
         return _facade.isInitialized()
             && ctx.jobQueue().getMaxLag() < 500
             && ctx.commSystem().getStatus() != Status.DISCONNECTED
-            && ctx.router().getUptime() > 60 * 1000;
+            && ctx.router().getUptime() > 60 * 1000L;
     }
 
     /**
@@ -128,8 +128,8 @@ class RefreshRoutersJob extends JobImpl {
     private void adjustRestartDelayBasedOnNetDbCount() {
         int netDbCount = getContext().netDb().getKnownRouters();
         long uptime = getContext().router().getUptime();
-        if (uptime < 60 * 60 * 1000) {
-            RESTART_DELAY_MS = 30 * 1000;
+        if (uptime < 60 * 60 * 1000L) {
+            RESTART_DELAY_MS = 30 * 1000L;
         } else if (netDbCount > 10000) {
             RESTART_DELAY_MS *= 3;
         } else if (netDbCount > 6000) {
@@ -201,7 +201,7 @@ class RefreshRoutersJob extends JobImpl {
                                 || ri.getCapabilities().contains(Character.toString(Router.CAPABILITY_BW32))
                                 || VersionComparator.comp(version, "0.9.64") < 0)
                                 && netDbCount > 5000
-                                && uptime > 15 * 60 * 1000
+                                && uptime > 15 * 60 * 1000L
                                 && !isHidden
                                 && !isUs;
 
@@ -247,13 +247,13 @@ class RefreshRoutersJob extends JobImpl {
         if (refreshTimeoutProp != null) {
             refreshTimeoutSeconds = Integer.parseInt(refreshTimeoutProp);
         } else {
-            if (uptime < 60 * 60 * 1000) {refreshTimeoutSeconds = 20;}
-            else if (uptime < 8 * 60 * 60 * 1000) {refreshTimeoutSeconds = 15;}
+            if (uptime < 60 * 60 * 1000L) {refreshTimeoutSeconds = 20;}
+            else if (uptime < 8 * 60 * 60 * 1000L) {refreshTimeoutSeconds = 15;}
             else {refreshTimeoutSeconds = 10;}
         }
 
         // Reverse DNS lookup leveraging CommSystemFacadeImpl cache
-        if (enableReverseLookups && uptime > 30 * 1000) {
+        if (enableReverseLookups && uptime > 30 * 1000L) {
             RouterAddress address = null;
             for (RouterAddress ra : ri.getAddresses()) {
                 if (ra.getTransportStyle().contains("SSU")) {
@@ -309,7 +309,7 @@ class RefreshRoutersJob extends JobImpl {
             // Adjust delay based on load and netDb count
             if (ctx.jobQueue().getMaxLag() > 150 || ctx.throttle().getMessageDelay() > 750) {
                 baseDelay *= (_random.nextInt(3) + 1);
-            } else if (netDbCount < 500 || ctx.router().getUptime() < 30 * 60 * 1000) {
+            } else if (netDbCount < 500 || ctx.router().getUptime() < 30 * 60 * 1000L) {
                 baseDelay = Math.max(Math.min(baseDelay - 6000, baseDelay - _random.nextInt(7000)),
                                      300 + _random.nextInt(150));
             } else if (netDbCount < 1000) {

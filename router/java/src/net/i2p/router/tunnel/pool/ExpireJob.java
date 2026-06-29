@@ -30,12 +30,12 @@ class ExpireJob extends JobImpl {
     private final long _dropAfter;
     private volatile boolean _phase1Complete = false;
 
-    private static final long BATCH_WINDOW = 5 * 1000;
-    private static final long OB_EARLY_EXPIRE = 30*1000;
+    private static final long BATCH_WINDOW = 5 * 1000L;
+    private static final long OB_EARLY_EXPIRE = 30*1000L;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
     /** Keep tunnels alive for 10 minutes after LeaseSet refresh so clients
      *  with cached (stale) LeaseSets can still connect using old tunnel IDs. */
-    private static final long LEASESET_GRACE_PERIOD = 10 * 60 * 1000;
+    private static final long LEASESET_GRACE_PERIOD = 10 * 60 * 1000L;
     // Must be greater than tunnel lifetime (10 min) + LEASESET_GRACE_PERIOD (10 min)
     // to allow Phase 2 (dispatcher removal) to fire.  With early expiration,
     // entries live up to ~19 min total; 25 min provides safety margin for
@@ -76,13 +76,13 @@ class ExpireJob extends JobImpl {
                 // instead of the old 45s, preventing synchronized mass expiry.
                 // Replacement builds are triggered in ExpireJob.phase1 BEFORE
                 // tunnels are removed, so this is safe.
-                expire -= 60*1000 + ctx.random().nextLong(60*1000);
+                expire -= 60*1000L + ctx.random().nextLong(60*1000L);
             }
         } else {
             if (pool.getSettings().isExploratory()) {
                 expire -= OB_EARLY_EXPIRE + ctx.random().nextLong(OB_EARLY_EXPIRE);
             } else {
-                expire -= 60*1000 + ctx.random().nextLong(60*1000);
+                expire -= 60*1000L + ctx.random().nextLong(60*1000L);
             }
         }
         cfg.setExpiration(expire);
@@ -340,7 +340,7 @@ class ExpireJob extends JobImpl {
      *  How long to extend an UNTESTED tunnel's expiry each time.
      *  30s gives the test pipeline enough time for one full test cycle.
      */
-    static final long UNTESTED_EXTENSION_MS = 30 * 1000;
+    static final long UNTESTED_EXTENSION_MS = 30 * 1000L;
 
     private static class TunnelExpiration {
         final PooledTunnelCreatorConfig config;

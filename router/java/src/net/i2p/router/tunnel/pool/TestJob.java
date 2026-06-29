@@ -123,7 +123,7 @@ public class TestJob extends JobImpl {
      *  test failure is treated as a false negative (reply-path issue).
      *  @since 0.9.69+
      */
-    private static final long RECENT_TRAFFIC_MS = 30 * 1000;
+    private static final long RECENT_TRAFFIC_MS = 30 * 1000L;
 
     /**
      * Maximum number of TestJob instances that should be queued before deferring new ones.
@@ -1239,7 +1239,7 @@ public class TestJob extends JobImpl {
         // false test failures that trigger unnecessary pool churn.
         RateStat tspt = ctx.statManager().getRate("transport.sendProcessingTime");
         if (tspt != null) {
-            Rate r = tspt.getRate(60*1000);
+            Rate r = tspt.getRate(60*1000L);
             if (r != null) {
                 int delay = 3 * (int) r.getAverageValue();
                 return delay + (2500 * (_outTunnel.getLength() + _replyTunnel.getLength()));
@@ -1277,7 +1277,7 @@ public class TestJob extends JobImpl {
 
         if (asap) {
             // As soon as possible: only skip if tunnel is about to expire
-            if (_cfg.getExpiration() > ctx.clock().now() + (60 * 1000)) {
+            if (_cfg.getExpiration() > ctx.clock().now() + (60 * 1000L)) {
                 getTiming().setStartAfter(ctx.clock().now() + delay / 4);
                 ctx.jobQueue().addJob(this);
                 return true;

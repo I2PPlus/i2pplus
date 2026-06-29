@@ -49,10 +49,10 @@ class PacketHandler {
         long maxMemory = SystemVersion.getMaxMemory();
         int cores = SystemVersion.getCores();
         boolean isSlow = SystemVersion.isSlow();
-        int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (2*1024*1024)));
+        int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (2*1024*1024L)));
         _inboundQueue = new CoDelBlockingQueue<>(ctx, "UDP-Receiver", qsize);
         int num_handlers;
-        if (maxMemory < 128*1024*1024) {num_handlers = 1;}
+        if (maxMemory < 128*1024*1024L) {num_handlers = 1;}
         else {num_handlers = MAX_NUM_HANDLERS;}
         _handlers = new Handler[num_handlers];
         for (int i = 0; i < num_handlers; i++) {_handlers[i] = new Handler();}

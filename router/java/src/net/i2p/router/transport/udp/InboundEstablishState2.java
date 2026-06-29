@@ -380,7 +380,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             long now = _context.clock().now();
             long published = ri.getPublished();
             int reason;
-            if (published > now + 2*60*1000 || published < now - 60*60*1000) {reason = REASON_SKEW;}
+            if (published > now + 2*60*1000L || published < now - 60*60*1000L) {reason = REASON_SKEW;}
             else {reason = REASON_MSG3;}
             throw new RIException("RouterInfo store fail: " + ri, reason, iae);
         }
@@ -453,7 +453,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _context.blocklist().add(_aliceIP);
             }
             // These really hammer the floodfills, so reduce the time on floodfills
-            long banDuration = _context.netDb().floodfillEnabled() ? 36*60*60*1000 : 4*24*60*60*1000;
+            long banDuration = _context.netDb().floodfillEnabled() ? 36*60*60*1000L : 4*24*60*60*1000L;
             _context.banlist().banlistRouter(h, "Invalid publication date",
                                              null, null, _context.clock().now() + banDuration);
             _banLogger.logBan(h, ipPort, "Invalid publication date", banDuration);
@@ -466,8 +466,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
         if (mismatchMessage != null) {
             _context.banlist().banlistRouter(h, "Invalid SSU address",
-                                             null, null, _context.clock().now() + 4 * 60 * 60 * 1000);
-            _banLogger.logBan(h, ipPort, "Invalid SSU address", 4 * 60 * 60 * 1000);
+                                             null, null, _context.clock().now() + 4 * 60 * 60 * 1000L);
+            _banLogger.logBan(h, ipPort, "Invalid SSU address", 4 * 60 * 60 * 1000L);
             _context.commSystem().forceDisconnect(h, "Invalid SSU address");
             if (_log.shouldWarn() && !isBanned) {
                 _log.warn("Banning for 4h and disconnecting from Router [" +
@@ -493,8 +493,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
         if (!reachable && isSlow && isOld) {
             _context.banlist().banlistRouter(h, "Old and slow (" + version + " / " + bw + "U)",
-                                             null, null, _context.clock().now() + 60 * 60 * 1000);
-            _banLogger.logBan(h, ipPort, "Old and slow (" + version + " / " + bw + "U)", 60 * 60 * 1000);
+                                             null, null, _context.clock().now() + 60 * 60 * 1000L);
+            _banLogger.logBan(h, ipPort, "Old and slow (" + version + " / " + bw + "U)", 60 * 60 * 1000L);
             if (ri.verifySignature()) {
                 _context.blocklist().add(_aliceIP);
             }
@@ -892,7 +892,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _currentState = InboundState.IB_STATE_CONFIRMED_PARTIALLY;
                 _sessCrForReTX = null;
                 // force past expiration, we don't have anything to send until we have everything
-                _nextSend = _lastSend + 60*1000;
+                _nextSend = _lastSend + 60*1000L;
             } else {
                 if (_sessConfFragments.length != totalfrag) // total frag changed
                     throw new GeneralSecurityException("BAD SessionConfirmed fragment [" + frag + " / " + totalfrag + "]");

@@ -65,8 +65,8 @@ class IntroductionManager {
 
     private static final long INTRODUCER_EXPIRATION = 80*60*1000L;
     private static final String MIN_IPV6_INTRODUCER_VERSION = "0.9.50";
-    private static final long MAX_SKEW = 2*60*1000;
-    private static final long PUNCH_CLEAN_TIME = 5*1000;
+    private static final long MAX_SKEW = 2*60*1000L;
+    private static final long PUNCH_CLEAN_TIME = 5*1000L;
     private static final int MAX_PUNCHES = 20;
 
     public IntroductionManager(RouterContext ctx, UDPTransport transport) {
@@ -206,7 +206,7 @@ class IntroductionManager {
                 DatabaseLookupMessage dlm = new DatabaseLookupMessage(_context);
                 dlm.setSearchKey(hash);
                 dlm.setSearchType(DatabaseLookupMessage.Type.RI);
-                dlm.setMessageExpiration(now + 10*1000);
+                dlm.setMessageExpiration(now + 10*1000L);
                 dlm.setFrom(_context.routerHash());
                 _transport.send(dlm, cur);
                 cur.setLastSendTime(now);
@@ -371,7 +371,7 @@ class IntroductionManager {
     public void pingIntroducers() {
         // Try to keep the connection up for two hours after we made anybody an introducer
         long now = _context.clock().now();
-        long pingCutoff = now - (105 * 60 * 1000);
+        long pingCutoff = now - (105 * 60 * 1000L);
         long inactivityCutoff = now - (UDPTransport.MIN_EXPIRE_TIMEOUT / 2);
         for (Iterator<PeerState> iter = _inbound.values().iterator(); iter.hasNext(); ) {
             PeerState cur = iter.next();
@@ -545,7 +545,7 @@ class IntroductionManager {
                 } else {
                     DatabaseStoreMessage dbsm = new DatabaseStoreMessage(_context);
                     dbsm.setEntry(aliceRI);
-                    dbsm.setMessageExpiration(now + 10*1000);
+                    dbsm.setMessageExpiration(now + 10*1000L);
                     _transport.send(dbsm, charlie);
                     UDPPacket packet = _builder2.buildRelayIntro(idata, null, (PeerState2) charlie);
                     // delay because dbsm is queued, we want it to get there first
@@ -811,7 +811,7 @@ class IntroductionManager {
         long token;
         if (rcode == SSU2Util.RELAY_ACCEPT) {
             RemoteHostId aliceID = new RemoteHostId(testIP, testPort);
-            EstablishmentManager.Token tok = _transport.getEstablisher().getInboundToken(aliceID, 60*1000);
+            EstablishmentManager.Token tok = _transport.getEstablisher().getInboundToken(aliceID, 60*1000L);
             token = tok.getToken();
         } else {token = 0;}
         SigningPrivateKey spk = _context.keyManager().getSigningPrivateKey();

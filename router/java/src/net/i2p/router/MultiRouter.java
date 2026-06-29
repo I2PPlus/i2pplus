@@ -246,7 +246,7 @@ public class MultiRouter {
                 }
             }
             if (alive > 0) {
-                try { Thread.sleep(30*1000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+                try { Thread.sleep(30*1000L); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
             } else {
                 break;
             }

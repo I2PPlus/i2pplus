@@ -23,7 +23,7 @@ class ACKTimer extends SimpleTimer2.TimedEvent {
     private final Log _log;
     private final Destination _from, _to;
 
-    private static final long EXPIRATION = 60*1000;
+    private static final long EXPIRATION = 60*1000L;
     // ClientMessageOptions.LS_MASK, don't send LS
     // Never bundle our LS with a ratchet-layer ACK, because we don't need to,
     // and because it will be the wrong LS for subsessions

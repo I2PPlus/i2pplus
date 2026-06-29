@@ -28,7 +28,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
     private final int _calcDelay;
     private final LinkedBlockingQueue<Elg2KeyPair> _keys;
     private volatile boolean _isRunning;
-    private long _checkDelay = 10 * 1000;
+    private long _checkDelay = 10 * 1000L;
 
     private final static String PROP_DH_PRECALC_MIN = "crypto.edh.precalc.min";
     private final static String PROP_DH_PRECALC_MAX = "crypto.edh.precalc.max";
@@ -93,7 +93,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
             int startSize = getSize();
             // Adjust delay
             if (startSize <= (_minSize * 2 / 3) && _checkDelay > 1000) {_checkDelay -= 1000;}
-            else if (startSize > (_minSize * 3 / 2) && _checkDelay < 60*1000) {_checkDelay += 1000;}
+            else if (startSize > (_minSize * 3 / 2) && _checkDelay < 60*1000L) {_checkDelay += 1000;}
             if (startSize < _minSize) {
                 // fill all the way up, do the check here so we don't throw away one when full in addValues()
                 while (getSize() < _maxSize && _isRunning) {

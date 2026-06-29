@@ -43,21 +43,21 @@ class PeerManager {
     private final AtomicBoolean _storeLock = new AtomicBoolean();
     private volatile long _lastStore;
 
-    private static final long REORGANIZE_TIME = 30*1000;
-    private static final long REORGANIZE_TIME_MEDIUM = 90*1000;
+    private static final long REORGANIZE_TIME = 30*1000L;
+    private static final long REORGANIZE_TIME_MEDIUM = 90*1000L;
     /**
      *  We don't want this much longer than the average connect time,
      *  as the CapacityCalculator now includes connection as a factor.
      *  This must also be less than 10 minutes, which is the shortest
      *  Rate contained in the profile, as the Rates must be coalesced.
      */
-    static final long REORGANIZE_TIME_LONG = 250*1000;
+    static final long REORGANIZE_TIME_LONG = 250*1000L;
     /** After first two hours of uptime ~= 246 */
-    //static final int REORGANIZES_PER_DAY = (int) (24*60*60*1000L / REORGANIZE_TIME_LONG);
+    //static final long REORGANIZES_PER_DAY = (int) (24*60*60*1000L / REORGANIZE_TIME_LONG);
     static final int REORGANIZES_PER_DAY = 256;
-    private static final long STORE_TIME = 15*60*1000; // how frequently we write profiles to disk
+    private static final long STORE_TIME = 15*60*1000L; // how frequently we write profiles to disk
     // for profiles stored to disk
-    private static final long EXPIRE_AGE = 7*24*60*60*1000;
+    private static final long EXPIRE_AGE = 7*24*60*60*1000L;
 
     public static final String TRACKED_CAPS = "" +
         FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL +
@@ -117,7 +117,7 @@ class PeerManager {
         public void run() {
             long start = System.currentTimeMillis();
             long uptime = _context.router().getUptime();
-            boolean shouldDecay = uptime > 4*60*60*1000;
+            boolean shouldDecay = uptime > 4*60*60*1000L;
             try {_organizer.reorganize(true, shouldDecay);}
             catch (Throwable t) {_log.log(Log.CRIT, "Error evaluating profiles", t);}
             long orgtime = System.currentTimeMillis() - start;
@@ -138,8 +138,8 @@ class PeerManager {
                 } catch (Throwable t) {_log.log(Log.CRIT, "Error storing profiles", t);}
             }
             long delay;
-            if (orgtime > 1000 || uptime > 2*60*60*1000) {delay = REORGANIZE_TIME_LONG;}
-            else if (uptime > 10*60*1000) {delay = REORGANIZE_TIME_MEDIUM;}
+            if (orgtime > 1000 || uptime > 2*60*60*1000L) {delay = REORGANIZE_TIME_LONG;}
+            else if (uptime > 10*60*1000L) {delay = REORGANIZE_TIME_MEDIUM;}
             else {delay = REORGANIZE_TIME;}
             _event.schedule(delay);
         }
@@ -219,8 +219,8 @@ class PeerManager {
 
         @Override
         public void run() {
-            if (uptime < 60 * 1000) {
-                try {Thread.sleep(60 * 1000 - uptime);}
+            if (uptime < 60 * 1000L) {
+                try {Thread.sleep(60 * 1000L - uptime);}
                 catch (InterruptedException e) {Thread.currentThread().interrupt();}
             }
             loadProfiles();

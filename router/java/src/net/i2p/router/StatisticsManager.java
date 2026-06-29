@@ -81,20 +81,20 @@ public class StatisticsManager {
 
         if (_context.getBooleanPropertyDefaultTrue(PROP_PUBLISH_RANKINGS) &&
             _context.random().nextInt(RANDOM_INCLUDE_STATS) == 0 &&
-            _context.router().getUptime() > 62*60*1000) {
-            includeRate("tunnel.participatingTunnels", stats, new long[] { 60*60*1000 }, true);
-            long rate = 60*60*1000;
+            _context.router().getUptime() > 62*60*1000L) {
+            includeRate("tunnel.participatingTunnels", stats, new long[] { 60*60*1000L }, true);
+            long rate = 60*60*1000L;
             includeTunnelRates("Exploratory", stats, rate);
         }
 
         if (isFF) {
             long uptime = _context.router().getUptime();
-            int ri = uptime > 30*60*1000 ?
+            int ri = uptime > 30*60*1000L ?
                      _context.netDb().getKnownRouters() :
                      3000 + _context.random().nextInt(1000); // so it isn't obvious we restarted
             stats.setProperty("netdb.knownRouters", String.valueOf(ri));
-            int ls = uptime > 4*60*60*1000 ? (250 + _context.random().nextInt(100)) :
-                     uptime > 30*60*1000 ? (200 + _context.random().nextInt(150)) :
+            int ls = uptime > 4*60*60*1000L ? (250 + _context.random().nextInt(100)) :
+                     uptime > 30*60*1000L ? (200 + _context.random().nextInt(150)) :
                      (250 + _context.random().nextInt(100));
             stats.setProperty("netdb.knownLeaseSets", String.valueOf(ls));
         }

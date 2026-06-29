@@ -71,7 +71,7 @@ public class FIFOBandwidthRefiller implements Runnable {
     /** when did we last check the config for updates? */
     private volatile long _lastCheckConfigTime;
     /** how frequently do we check the config for updates? */
-    private volatile long _configCheckPeriodMs = 60*1000;
+    private volatile long _configCheckPeriodMs = 60*1000L;
     private volatile boolean _isRunning;
 
     public static final String PROP_INBOUND_BANDWIDTH = "i2np.bandwidth.inboundKBytesPerSecond";
@@ -120,9 +120,9 @@ public class FIFOBandwidthRefiller implements Runnable {
 //    public static final int MAX_OUTBOUND_BANDWIDTH = 16384;
     //public static final int MAX_OUTBOUND_BANDWIDTH = 32768;
     public static final int MAX_OUTBOUND_BANDWIDTH = SystemVersion.isSlow() || SystemVersion.getCores() == 1 ? 16384 :
-                                                     SystemVersion.getCores() < 3 || SystemVersion.getMaxMemory() < 1024*1024*1024 ? 32768 :
-                                                     SystemVersion.getCores() < 6 || SystemVersion.getMaxMemory() < 3072*1024*1024 ? 65536 :
-                                                     SystemVersion.getCores() >= 8 && SystemVersion.getMaxMemory() >= 4096*1024*1024 ? 262144 :
+                                                     SystemVersion.getCores() < 3 || SystemVersion.getMaxMemory() < 1024*1024*1024L ? 32768 :
+                                                     SystemVersion.getCores() < 6 || SystemVersion.getMaxMemory() < 3072*1024*1024L ? 65536 :
+                                                     SystemVersion.getCores() >= 8 && SystemVersion.getMaxMemory() >= 4096*1024*1024L ? 262144 :
                                                      131072;
 
     private static final float MAX_SHARE_PERCENTAGE = 0.90f;

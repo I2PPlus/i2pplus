@@ -32,7 +32,7 @@ class LookupThrottler {
     /** this seems like plenty */
     private static final int DEFAULT_MAX_LOOKUPS = 30;
     private static final int DEFAULT_MAX_NON_FF_LOOKUPS = 10;
-    private static final long DEFAULT_CLEAN_TIME = 3*60*1000;
+    private static final long DEFAULT_CLEAN_TIME = 3*60*1000L;
     // Max requests allowed in 1-second burst window
     private static final int BURST_THRESHOLD = 5;
     private static final long BURST_WINDOW_MS = 1000L;

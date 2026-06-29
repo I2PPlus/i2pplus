@@ -43,7 +43,7 @@ public class ExploreJob extends SearchJob {
      * Maximum duration for each exploration in milliseconds.
      * Explorations run relatively long since they seek multiple peers without expecting a quick success.
      */
-    private static final long MAX_EXPLORE_TIME = 40 * 1000;
+    private static final long MAX_EXPLORE_TIME = 40 * 1000L;
 
     /** Configuration property key for controlling the maximum concurrent exploratory searches. */
     static final String PROP_EXPLORE_BREDTH = "router.exploreBredth";
