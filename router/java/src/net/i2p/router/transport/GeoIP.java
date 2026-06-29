@@ -713,6 +713,9 @@ public class GeoIP {
     private static final Pattern ASN_EMBEDDED = Pattern.compile("\\bAS\\d+\\b\\s*", Pattern.CASE_INSENSITIVE);
     private static final Pattern ASN_TRAILING = Pattern.compile("\\s*\\bAS\\d+\\b$", Pattern.CASE_INSENSITIVE);
 
+    /** Paired single quotes around text (e.g. 'TIMEWEB') — keeps internal apostrophes like O'Brien */
+    private static final Pattern PAIRED_SINGLE_QUOTES = Pattern.compile("'([^']{2,})'");
+
     /** Trailing parentheticals to strip */
     private static final Pattern PAREN_TRAILING = Pattern.compile("\\s*\\([^)]{0,50}\\)\\s*$");
 
@@ -794,6 +797,8 @@ public class GeoIP {
         // Clean punctuation
         name = LEADING_JUNK.matcher(name).replaceAll("");
         name = TRAILING_JUNK.matcher(name).replaceAll("");
+        name = name.replace("\"", "");
+        name = PAIRED_SINGLE_QUOTES.matcher(name).replaceAll("$1");
         name = DOUBLE_COMMA.matcher(name).replaceAll(",");
         name = DOUBLE_SPACE.matcher(name).replaceAll(" ");
         name = name.replaceAll("^[ ,.]+|[ ,.]+$", "");
