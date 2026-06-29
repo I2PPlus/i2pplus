@@ -148,6 +148,66 @@ public class DataHelperTest {
         }
     }
 
+    @Test
+    public void testSplitBasic() {
+        String[] result = DataHelper.split("a:b:c", ":");
+        assertEquals(3, result.length);
+        assertEquals("a", result[0]);
+        assertEquals("b", result[1]);
+        assertEquals("c", result[2]);
+    }
+
+    @Test
+    public void testSplitWithLimit() {
+        String[] result = DataHelper.split("a:b:c:d", ":", 2);
+        assertEquals(2, result.length);
+        assertEquals("a", result[0]);
+        assertEquals("b:c:d", result[1]);
+    }
+
+    @Test
+    public void testSplitEmptyString() {
+        String[] result = DataHelper.split("", ",");
+        assertEquals(1, result.length);
+        assertEquals("", result[0]);
+    }
+
+    @Test
+    public void testSplitPatternCaching() {
+        String[] r1 = DataHelper.split("a,b,c", ",");
+        String[] r2 = DataHelper.split("x,y,z", ",");
+        assertEquals(3, r1.length);
+        assertEquals(3, r2.length);
+    }
+
+    @Test
+    public void testSplitConcurrentAccess() throws Exception {
+        final String regex = "[,;]";
+        final int threads = 8;
+        final int iterations = 500;
+        final java.util.concurrent.atomic.AtomicInteger failures = new java.util.concurrent.atomic.AtomicInteger(0);
+        final java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(threads);
+
+        for (int t = 0; t < threads; t++) {
+            final int threadNum = t;
+            new Thread(() -> {
+                try {
+                    for (int i = 0; i < iterations; i++) {
+                        String input = "a" + threadNum + "," + "b" + threadNum + ";" + "c" + threadNum;
+                        String[] result = DataHelper.split(input, regex);
+                        if (result.length != 3) {
+                            failures.incrementAndGet();
+                        }
+                    }
+                } finally {
+                    latch.countDown();
+                }
+            }).start();
+        }
+        latch.await();
+        assertEquals(0, failures.get());
+    }
+
     private static class TestInputStream extends ByteArrayInputStream {
         private final Random r = new Random();
 

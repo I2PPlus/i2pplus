@@ -89,4 +89,35 @@ public class LeaseSetTest extends StructureTest {
             assertEquals("Error: Lease has no gateway!", expected.getMessage());
         }
     }
+
+    @Test
+    public void testGetLeaseCountEmpty() {
+        LeaseSet subj = new LeaseSet();
+        assertEquals(0, subj.getLeaseCount());
+    }
+
+    @Test
+    public void testVerifySignatureWithNullKey() {
+        // verifySignature(null) should delegate to no-arg verifySignature()
+        LeaseSet subj = new LeaseSet();
+        // No signature set, so should return false
+        assertFalse(subj.verifySignature(null));
+    }
+
+    @Test
+    public void testVerifySignatureWithNoSignature() {
+        LeaseSet subj = new LeaseSet();
+        // Create an EdDSA signing key
+        SigningPublicKey spk = new SigningPublicKey(net.i2p.crypto.SigType.EdDSA_SHA512_Ed25519);
+        // No signature set on the LeaseSet, should return false
+        assertFalse(subj.verifySignature(spk));
+    }
+
+    @Test
+    public void testVerifySignatureWithRSAKey() {
+        LeaseSet subj = new LeaseSet();
+        // RSA keys should always return false (not supported)
+        SigningPublicKey spk = new SigningPublicKey(net.i2p.crypto.SigType.RSA_SHA256_2048);
+        assertFalse(subj.verifySignature(spk));
+    }
 }
