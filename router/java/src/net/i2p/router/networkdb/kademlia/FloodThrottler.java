@@ -36,7 +36,7 @@ class FloodThrottler {
 
     private class Cleaner implements SimpleTimer.TimedEvent {
         public void timeReached() {
-            FloodThrottler.this.counter.clear();
+            FloodThrottler.this.counter.decay(2);
         }
     }
 }
