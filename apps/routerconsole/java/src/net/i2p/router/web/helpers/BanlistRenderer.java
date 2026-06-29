@@ -61,7 +61,7 @@ class BanlistRenderer {
 
     private String reverseLookup(String ip) {
         if (ip == null || ip.isEmpty()) return null;
-        String hostname = _context.commSystem().getCanonicalHostName(ip);
+        String hostname = _context.commSystem().getCanonicalHostNameSync(ip);
         // If result is null, "unknown", or still looks like an IP, return null
         if (hostname == null || hostname.isEmpty() || "unknown".equals(hostname)) {
             return null;
@@ -275,13 +275,11 @@ class BanlistRenderer {
            .append("</th><th class=routerversion>")
            .append(_t("Version"))
            .append("</th><th class=ip>")
-           .append(_t("IP Address"))
+            .append(_t("IP Address"))
            .append("</th><th class=port data-sort-method=number>")
            .append(_t("Port"))
-           .append("</th>");
-        if (enableReverseLookups()) {
-            buf.append("<th class=hostname>").append(_t("Hostname")).append("</th>");
-        }
+           .append("</th>")
+           .append("<th class=hostname>").append(_t("Hostname")).append("</th>");
         buf.append("<th class=reason>")
            .append(_t("Reason"))
            .append("</th><th class=expires data-sort-method=number data-sort-direction=ascending>")
@@ -356,7 +354,7 @@ class BanlistRenderer {
             }
             // First try to get hostname from log (already includes IP and rdns), fallback to reverse lookup
             String hostname = hostnameMap.get(key.toBase64());
-            if (hostname == null && ip != null && !ip.isEmpty() && enableReverseLookups()) {
+            if (hostname == null && ip != null && !ip.isEmpty()) {
                 hostname = reverseLookup(ip);
             }
             // GeoIP lookup for country flag - try hash first, then IP
@@ -409,12 +407,10 @@ class BanlistRenderer {
                .append(ip != null ? ip : "")
                .append("</td><td class=port data-sort=").append(port != null ? port : "0").append(">")
                .append(port != null ? port : "")
+               .append("</td>")
+               .append("<td class=hostname>")
+               .append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? hostname : "")
                .append("</td>");
-              if (enableReverseLookups()) {
-                buf.append("<td class=hostname>")
-                   .append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? hostname : "")
-                   .append("</td>");
-            }
             buf.append("<td class=reason>")
                .append(cleanedReason)
                .append("</td><td class=expires data-sort=").append(expires).append(">")
@@ -431,7 +427,7 @@ class BanlistRenderer {
             String port = extractPort(ipBan.ip);
             // Use hostname from log if available, fallback to reverse lookup
             String hostname = ipBan.hostname;
-            if (hostname == null && enableReverseLookups()) {
+            if (hostname == null) {
                 hostname = reverseLookup(ip);
             }
              // GeoIP lookup for country flag - IP only (no hash available for IP-only bans)
@@ -461,12 +457,10 @@ class BanlistRenderer {
                .append(ip != null ? ip : "")
                .append("</td><td class=port data-sort=").append(port != null ? port : "0").append(">")
                .append(port != null ? port : "")
+               .append("</td>")
+               .append("<td class=hostname>")
+               .append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? hostname : "")
                .append("</td>");
-            if (enableReverseLookups()) {
-                buf.append("<td class=hostname>")
-                   .append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? hostname : "")
-                   .append("</td>");
-            }
             buf.append("<td class=reason>")
                .append(ipBan.reason.isEmpty() ? "IP Ban" : ipBan.reason)
                .append("</td><td class=expires data-sort=").append(ipBan.expires).append(">")
@@ -476,7 +470,7 @@ class BanlistRenderer {
         }
 
         buf.append("</tbody>\n<tfoot id=sessionBanlistFooter><tr><th colspan=")
-           .append(enableReverseLookups() ? "9" : "8")
+           .append("9")
            .append(">")
            .append(_t("Total session-only bans"))
            .append(": ").append(tempBanned)

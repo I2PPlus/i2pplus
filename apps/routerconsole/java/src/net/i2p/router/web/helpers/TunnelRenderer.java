@@ -383,10 +383,8 @@ class TunnelRenderer {
                 .append(_t("Tier"))
                 .append("</th><th id=address>")
                 .append(_t("Address"))
-                .append("</th>");
-            if (enableReverseLookups()) {
-                tbuf.append("<th id=domain>").append(_t("Domain")).append("</th>");
-            }
+                .append("</th>")
+                .append("<th id=domain>").append(_t("Domain")).append("</th>");
             tbuf.append("<th class=tcount data-sort-method=number data-sort-default>")
                 .append(_t("Tunnels"))
                 .append("</th><th id=data data-sort-method=number>")
@@ -465,18 +463,14 @@ class TunnelRenderer {
                 } else {sb.append("&ndash;");}
                 sb.append("</span></td>");
 
-                if (enableReverseLookups()) {
-                    sb.append("<td>");
-                    if (rlResult != null && rlResult.canonicalHostName != null &&
-                        !rlResult.canonicalHostName.isEmpty() && !rlResult.ip.equals(rlResult.canonicalHostName)) {
-                        String display = (rlResult.whois != null) ? rlResult.whois : rlResult.domain;
-                        if (display == null) display = _t("unknown");
-                        sb.append("<span class=rlookup title=\"").append(rlResult.canonicalHostName).append("\">")
-                          .append(display).append("</span>");
-                    } else {
-                        sb.append("<span>").append(_t("unknown")).append("</span>");
-                    }
-                    sb.append("</td>");
+                if (rlResult != null && rlResult.canonicalHostName != null &&
+                    !rlResult.canonicalHostName.isEmpty() && !rlResult.ip.equals(rlResult.canonicalHostName)) {
+                    String display = (rlResult.whois != null) ? rlResult.whois : rlResult.domain;
+                    if (display == null) display = _t("unknown");
+                    sb.append("<span class=rlookup title=\"").append(rlResult.canonicalHostName).append("\">")
+                      .append(display).append("</span>");
+                } else {
+                    sb.append("<span>").append(_t("unknown")).append("</span>");
                 }
 
                 sb.append("<td class=tcount>").append(count).append("</td>");
@@ -525,7 +519,6 @@ class TunnelRenderer {
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized void renderPeers(Writer out) throws IOException {
         long uptime = _context.router().getUptime();
-        final boolean doReverseLookups = enableReverseLookups();
 
         // Count tunnels per peer local and transit
         ObjectCounter<Hash> localCount = new ObjectCounter<>();
@@ -552,9 +545,7 @@ class TunnelRenderer {
                   .append(_t("Tier")).append("</th><th id=address title=\"")
                   .append(_t("Primary IP address"))
                   .append("\">").append(_t("Address")).append("</th>");
-            if (doReverseLookups) {
-                headerSb.append("<th id=domain>").append(_t("Domain")).append("</th>");
-            }
+            headerSb.append("<th id=domain>").append(_t("Domain")).append("</th>");
             headerSb.append("<th class=tcount colspan=2 title=\"Client and Exploratory Tunnels\" data-sort-method=number data-sort-column-key=localCount>")
                     .append(_t("Local"))
                     .append("</th><th class=tcount colspan=2 data-sort-method=number data-sort-column-key=transitCount>")
@@ -575,10 +566,8 @@ class TunnelRenderer {
                 String ip = !directIP.isEmpty() ? directIP : Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
                 peerToIP.put(h, ip);
 
-                if (doReverseLookups) {
-                    ReverseLookupResult rlr = getReverseLookupInfo(h, info, uptime);
-                    reverseLookupResults.put(h, rlr);
-                }
+                ReverseLookupResult rlr = getReverseLookupInfo(h, info, uptime);
+                reverseLookupResults.put(h, rlr);
             }
 
             final int chunkSize = 50;
@@ -595,7 +584,7 @@ class TunnelRenderer {
                     String ip = peerToIP.get(h);
                     String version = info.getOption("router.version");
                     String truncHash = h.toBase64().substring(0,4);
-                    ReverseLookupResult rlResult = doReverseLookups ? reverseLookupResults.get(h) : null;
+                    ReverseLookupResult rlResult = reverseLookupResults.get(h);
 
                     chunkSb.append("<tr class=lazy><td>")
                            .append(peerFlag(h))
@@ -624,19 +613,17 @@ class TunnelRenderer {
                     } else {chunkSb.append("&ndash;");}
                     chunkSb.append("</span>");
 
-                    if (doReverseLookups) {
-                        chunkSb.append("<td>");
-                        if (rlResult != null && rlResult.canonicalHostName != null &&
-                            !rlResult.canonicalHostName.isEmpty() && !rlResult.ip.equals(rlResult.canonicalHostName)) {
-                            String display = (rlResult.whois != null) ? rlResult.whois : rlResult.domain;
-                            if (display == null) display = _t("unknown");
-                            chunkSb.append("<span class=rlookup title=\"").append(rlResult.canonicalHostName).append("\">")
-                                   .append(display).append("</span>");
-                        } else {
-                            chunkSb.append("&ndash;");
-                        }
-                        chunkSb.append("</td>");
+                    chunkSb.append("<td>");
+                    if (rlResult != null && rlResult.canonicalHostName != null &&
+                        !rlResult.canonicalHostName.isEmpty() && !rlResult.ip.equals(rlResult.canonicalHostName)) {
+                        String display = (rlResult.whois != null) ? rlResult.whois : rlResult.domain;
+                        if (display == null) display = _t("unknown");
+                        chunkSb.append("<span class=rlookup title=\"").append(rlResult.canonicalHostName).append("\">")
+                               .append(display).append("</span>");
+                    } else {
+                        chunkSb.append("&ndash;");
                     }
+                    chunkSb.append("</td>");
 
                     if (localTunnelCount > 0) {
                         chunkSb.append(String.format(
@@ -680,9 +667,7 @@ class TunnelRenderer {
                   .append(" ")
                   .append(_t("unique peers"))
                   .append("</b></td><td></td>");
-            if (doReverseLookups) {
-                footerSb.append("<td></td>");
-            }
+            footerSb.append("<td></td>");
             footerSb.append("<td colspan=2><b>")
                   .append(tunnelCount)
                   .append(" ")
@@ -740,8 +725,8 @@ class TunnelRenderer {
         String ip = !directIP.isEmpty() ? directIP : (info != null ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null);
         result.ip = ip;
 
-        if (ip != null && enableReverseLookups() && uptime > 30 * 1000) {
-            String rl = _context.commSystem().getCanonicalHostName(ip);
+        if (ip != null && uptime > 30 * 1000) {
+            String rl = _context.commSystem().getCanonicalHostNameSync(ip);
             result.canonicalHostName = rl;
 
             if (rl != null && rl.contains(" ")) {

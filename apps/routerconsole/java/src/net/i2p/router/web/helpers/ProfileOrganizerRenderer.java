@@ -111,11 +111,7 @@ class ProfileOrganizerRenderer {
                .append("<th>").append(_t("Peer")).append("</th>")
                .append("<th>").append(_t("Caps")).append("</th>")
                .append("<th>").append(_t("Version")).append("</th>");
-            if (enableReverseLookups()) {
-                buf.append("<th class=host>").append(_t("Host")).append(" / ").append(_t("Domain")).append("</th>");
-            } else {
-                buf.append("<th class=host>").append(_t("Host")).append("</th>");
-            }
+            buf.append("<th class=host>").append(_t("Host")).append(" / ").append(_t("Domain")).append("</th>");
             buf.append("<th class=status>").append(_t("Status")).append("</th>")
                .append("<th class=groups>").append(_t("Groups")).append("</th>")
                .append("<th data-sort-method=number>").append(_t("Speed")).append("</th>")
@@ -162,30 +158,28 @@ class ProfileOrganizerRenderer {
                 long uptime = _context.router().getUptime();
                 String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getCompatibleIP(info)) : null;
                 String rl = null;
-                if (ip != null && enableReverseLookups() && uptime > 30*1000) {
-                    rl = _context.commSystem().getCanonicalHostName(ip);
+                if (ip != null && uptime > 30*1000) {
+                    rl = _context.commSystem().getCanonicalHostNameSync(ip);
                 }
                 if (rl != null && rl.equals("unknown")) {rl = ip;}
-                if (enableReverseLookups()) {
-                    if (rl != null && !rl.equals("null") && !rl.isEmpty() && rl.length() != 0 && !ip.toString().equals(rl)) {
-                        String whois = CommSystemFacadeImpl.getDomain(rl);
-                        String whoisShort = WHOIS_PAREN.matcher(whois).replaceAll("").toLowerCase().trim();
-                        whoisShort = whoisShort.replace("latin american and caribbean ip address regional registry", "lacnic")
-                                               .replace("asia pacific network information centre", "apnic")
-                                               .replace("mediacom communications corp", "mediacom")
-                                               .replace(", inc", "")
-                                               .replace(" inc", "")
-                                               .replace(" llc", "")
-                                               .replace("administered by ", "")
-                                               .trim();
-                        buf.append("<span hidden>[XHost]</span><span class=rlookup title=\"").append(whois).append("\">").append(whoisShort);
-                    } else if (ip == null || ip.isEmpty() || ip.equals("null")) {buf.append("<span>").append(_t("unknown"));}
-                    else {
-                        if (ip != null && ip.contains(":")) {buf.append("<span hidden>[IPv6]</span>");}
-                        buf.append("<span class=host_ipv6>").append(ip);
-                    }
-                    buf.append("</span>");
-                } else {buf.append(ip != null ? ip : _t("unknown"));}
+                if (rl != null && !rl.equals("null") && !rl.isEmpty() && rl.length() != 0 && !ip.toString().equals(rl)) {
+                    String whois = CommSystemFacadeImpl.getDomain(rl);
+                    String whoisShort = WHOIS_PAREN.matcher(whois).replaceAll("").toLowerCase().trim();
+                    whoisShort = whoisShort.replace("latin american and caribbean ip address regional registry", "lacnic")
+                                           .replace("asia pacific network information centre", "apnic")
+                                           .replace("mediacom communications corp", "mediacom")
+                                           .replace(", inc", "")
+                                           .replace(" inc", "")
+                                           .replace(" llc", "")
+                                           .replace("administered by ", "")
+                                           .trim();
+                    buf.append("<span hidden>[XHost]</span><span class=rlookup title=\"").append(whois).append("\">").append(whoisShort);
+                } else if (ip == null || ip.isEmpty() || ip.equals("null")) {buf.append("<span>").append(_t("unknown"));}
+                else {
+                    if (ip != null && ip.contains(":")) {buf.append("<span hidden>[IPv6]</span>");}
+                    buf.append("<span class=host_ipv6>").append(ip);
+                }
+                buf.append("</span>");
                 buf.append("</td><td class=status>");
                 boolean ok = true;
                 boolean isBanned = false;
