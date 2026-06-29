@@ -837,8 +837,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         getContext().statManager().addRateData("netDb.lateReplyCacheSize", _recentlyCompleted.size());
         int added = 0;
         for (Hash h : _failedPeers) {
-            if (_recentlyCompleted.size() > COMPLETED_CACHE_SIZE * 2) {
-                // Clean old entries if cache too large
+            if (_recentlyCompleted.size() > COMPLETED_CACHE_SIZE) {
+                // Clean expired entries if cache approaching capacity
                 long now = getContext().clock().now();
                 _recentlyCompleted.entrySet().removeIf(e -> e.getValue() < now);
             }
