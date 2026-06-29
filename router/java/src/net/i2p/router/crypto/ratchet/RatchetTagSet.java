@@ -2,6 +2,8 @@ package net.i2p.router.crypto.ratchet;
 
 import com.southernstorm.noise.protocol.DHState;
 import com.southernstorm.noise.protocol.HandshakeState;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
@@ -82,6 +84,14 @@ class RatchetTagSet implements TagSetHandle {
     static final int DEBUG_SINGLE_ES = 0x10003;
     // Start empty (no allocations), we only use storage for gaps
     private static final int INITIAL_KEY_CAPACITY = 0;
+    /**
+     *  Tags registered in the SKM's _inboundTagSets map.
+     *  Used for O(tags_in_set) removal in RatchetSKM.consumeTag() instead of
+     *  O(total_tags) scan of the entire _inboundTagSets map.
+     *  Only populated for inbound tagsets (where _lsnr != null).
+     *  @since 0.9.70
+     */
+    private final Set<RatchetSessionTag> _registeredTags = ConcurrentHashMap.newKeySet();
 
     /**
      *  Outbound NSR Tagset
@@ -476,8 +486,19 @@ class RatchetTagSet implements TagSetHandle {
         if (tag == null)
             return;
         _sessionTags.append(_lastTag, tag);
-        if (_lsnr != null)
+        if (_lsnr != null) {
+            _registeredTags.add(tag);
             _lsnr.addTag(tag, this);
+        }
+    }
+
+    /**
+     *  Return the set of tags registered in the SKM's _inboundTagSets map.
+     *  Used for O(tags_in_set) removal in RatchetSKM.consumeTag().
+     *  @since 0.9.70
+     */
+    Set<RatchetSessionTag> getRegisteredTags() {
+        return _registeredTags;
     }
 
     /**

@@ -46,6 +46,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     private final ConcurrentHashMap<RatchetSessionTag, RatchetTagSet> _inboundTagSets;
     protected final RouterContext _context;
     private volatile boolean _alive;
+    private CleanupEvent _cleanupEvent;
     private final HKDF _hkdf;
     private final DecayingHashSet _replayFilter;
     private final Destination _destination;
@@ -114,7 +115,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         // start the precalc of Elg2 keys if it wasn't already started
         context.eciesEngine().startup();
          _alive = true;
-        new CleanupEvent();
+        _cleanupEvent = new CleanupEvent();
     }
 
     /**
@@ -123,6 +124,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     @Override
     public void shutdown() {
          _alive = false;
+        if (_cleanupEvent != null) _cleanupEvent.cancel();
         _inboundTagSets.clear();
         _outboundSessions.clear();
         synchronized (_pendingOutboundSessions) {
@@ -323,9 +325,15 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     _pendingOutboundSessions.remove(target);
                     if (!pending.isEmpty()) {
                         for (OutboundSession sess : pending) {
-                            //sess.getHandshakeState().destroy();
-                            // TODO remove its inbound tags?
+                            sess.getHandshakeState().destroy();
+                            for (RatchetTagSet ts : sess.getTagSets()) {
+                                for (RatchetSessionTag tag : ts.getRegisteredTags()) {
+                                    _inboundTagSets.remove(tag);
+                                }
+                            }
                         }
+                        if (_log.shouldDebug())
+                            _log.debug("Cleaned up " + pending.size() + " stale pending sessions for " + target);
                     }
                 } else {
                     if (_log.shouldDebug())
@@ -449,7 +457,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     public int getAvailableTags(PublicKey target, SessionKey key) {
         OutboundSession sess = getSession(target);
         if (sess == null) { return 0; }
-        if (sess.getCurrentKey().equals(key)) {
+        SessionKey currentKey = sess.getCurrentKey();
+        if (currentKey != null && currentKey.equals(key)) {
             return sess.availableTags();
         }
         return 0;
@@ -463,7 +472,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     public long getAvailableTimeLeft(PublicKey target, SessionKey key) {
         OutboundSession sess = getSession(target);
         if (sess == null) { return 0; }
-        if (sess.getCurrentKey().equals(key)) {
+        SessionKey currentKey = sess.getCurrentKey();
+        if (currentKey != null && currentKey.equals(key)) {
             long end = sess.getLastExpirationDate();
             if (end <= 0)
                 return 0;
@@ -606,11 +616,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     _log.debug("Inbound ES Tag " + key.getNonce() + " consumed: " + tag.toBase64() + "\n* " + tagSet);
             }
             if (state != null) {
-                for (Iterator<RatchetSessionTag> iter = _inboundTagSets.keySet().iterator(); iter.hasNext(); ) {
-                    RatchetSessionTag t = iter.next();
-                    if (_inboundTagSets.get(t) == tagSet) {
-                        iter.remove();
-                    }
+                // O(tags_in_set) removal using the tagset's registered tags,
+                // instead of O(total_tags) scan of the entire _inboundTagSets map.
+                for (RatchetSessionTag t : tagSet.getRegisteredTags()) {
+                    _inboundTagSets.remove(t);
                 }
             }
         } else {
