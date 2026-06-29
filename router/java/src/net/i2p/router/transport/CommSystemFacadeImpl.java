@@ -20,9 +20,6 @@ import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.io.Writer;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -44,20 +41,15 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import javax.net.SocketFactory;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
@@ -79,7 +71,6 @@ import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
-import org.apache.commons.net.whois.WhoisClient;
 
 /**
  * Primary implementation of the communication system facade for I2P network operations.
@@ -152,8 +143,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
     private static final String COUNTRY_BUNDLE_NAME = "net.i2p.router.countries.messages";
     private static final Object DUMMY = Integer.valueOf(0);
-    private static final Pattern NEWLINE_SPLIT = Pattern.compile("\\r?\\n");
-    private static final Pattern WHOIS_PAREN = Pattern.compile("\\([^)]*\\)");
     private static final Pattern CAPACITY_PATTERN = Pattern.compile("[DEG]");
 
     public CommSystemFacadeImpl(RouterContext context) {
@@ -167,17 +156,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     private void initExecutors() {
-        synchronized (whoisExecutorLock) {
-            if (whoisQueryExecutor == null || whoisQueryExecutor.isShutdown()) {
-                whoisQueryExecutor = new ThreadPoolExecutor(
-                    Math.max(4, cores - 4), // core pool size
-                    Math.min(cores * 2, 20), // max pool size
-                    60L, TimeUnit.SECONDS,
-                    new LinkedBlockingQueue<>(1000), // Bounded queue
-                    new ThreadPoolExecutor.CallerRunsPolicy() // Apply backpressure
-                );
-            }
-        }
         synchronized (reverseDnsExecutorLock) {
             if (reverseDnsExecutor == null || reverseDnsExecutor.isShutdown()) {
                 reverseDnsExecutor = new ThreadPoolExecutor(
@@ -187,24 +165,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     new ThreadPoolExecutor.CallerRunsPolicy()
                 );
             }
-        }
-    }
-
-    /**
-     * Get the WHOIS query executor, initializing it if necessary.
-     */
-    private ExecutorService getWhoisQueryExecutor() {
-        synchronized (whoisExecutorLock) {
-            if (whoisQueryExecutor == null || whoisQueryExecutor.isShutdown()) {
-                whoisQueryExecutor = new ThreadPoolExecutor(
-                    Math.max(4, cores - 4), // core pool size
-                    Math.min(cores * 2, 20), // max pool size
-                    60L, TimeUnit.SECONDS,
-                    new LinkedBlockingQueue<>(1000), // Bounded queue
-                    new ThreadPoolExecutor.CallerRunsPolicy() // Apply backpressure
-                );
-            }
-            return whoisQueryExecutor;
         }
     }
 
@@ -291,20 +251,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * Shutdown instance executors.
      */
     private void shutdownExecutors() {
-        synchronized (whoisExecutorLock) {
-            if (whoisQueryExecutor != null && !whoisQueryExecutor.isShutdown()) {
-                whoisQueryExecutor.shutdown();
-                try {
-                    if (!whoisQueryExecutor.awaitTermination(5, TimeUnit.SECONDS)) {
-                        whoisQueryExecutor.shutdownNow();
-                    }
-                } catch (InterruptedException e) {
-                    whoisQueryExecutor.shutdownNow();
-                    Thread.currentThread().interrupt();
-                }
-            }
-        }
-
         synchronized (reverseDnsExecutorLock) {
             if (reverseDnsExecutor != null && !reverseDnsExecutor.isShutdown()) {
                 reverseDnsExecutor.shutdown();
@@ -325,13 +271,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * This should be called when the router is shutting down to prevent memory leaks.
      */
     private static synchronized void shutdownStatic() {
-        // Clean up expired entries from downServers
-        long now = System.currentTimeMillis();
-        for (Map.Entry<String, Long> entry : downServers.entrySet()) {
-            if (now - entry.getValue() >= SERVER_DOWN_TIMEOUT_MS) {
-                downServers.remove(entry.getKey());
-            }
-        }
         pendingLookups.clear();
     }
 
@@ -774,9 +713,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static final int START_DELAY = SystemVersion.isSlow() ? 60*1000 : 5*1000;
     private static final int LOOKUP_TIME = 75*1000;
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
-    private static final String PROP_ENABLE_WHOIS_LOOKUPS = "routerconsole.enableWhoisLookups";
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
-    public boolean enableWhoisLookups() {return _context.getBooleanProperty(PROP_ENABLE_WHOIS_LOOKUPS);}
     private static final Charset ENCODING = StandardCharsets.UTF_8;
     private static final String NEWLINE = "\n";
 
@@ -1160,11 +1097,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Returns the canonical hostname for the given IP address from cache or DNS.
-     * Falls back to a WHOIS lookup if DNS fails, returning "ip (whois info)" if available,
-     * or just the IP if WHOIS data is missing.
+     * If RDNS is enabled, performs a reverse DNS lookup first.
+     * Falls back to local ASN database if DNS fails, returning the org name.
      *
      * @param ipAddress IP address to resolve, or null/"null" to return null
-     * @return hostname, IP with WHOIS info, just IP if no WHOIS, or null for invalid input
+     * @return hostname, org name from ASN database, or null for invalid input
      * @since 0.9.58+
      */
     @Override
@@ -1176,34 +1113,31 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         CacheEntry existingEntry = rdnsCache.get(ipAddress);
         if (existingEntry != null && (now - existingEntry.getTimestamp() <= EXPIRE_TIME)) {
-            return existingEntry.getHostname();
+            String cached = existingEntry.getHostname();
+            if (cached != null && !cached.equals(ipAddress) && !_t("unknown").equals(cached)) {
+                return cached;
+            }
+            // Stale "unknown" or raw IP — queue background re-lookup
         }
 
         if (pendingLookups.add(ipAddress)) {
             getReverseDnsExecutor().submit(() -> {
                 try {
                     String hostName = ipAddress;
-                    try {
-                        hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
-                        // Update cache immediately with DNS result
-                        rdnsCache.put(ipAddress, new CacheEntry(ipAddress, hostName, System.currentTimeMillis()));
-
-                        // Check if we should do WHOIS lookup (non-blocking)
-                        if ((hostName.equals(ipAddress) || _t("unknown").equals(hostName)) && enableWhoisLookups()) {
-                            String countryCode = getCountryFromIPAddress(ipAddress);
-                            // Submit WHOIS lookup asynchronously, update cache when done
-                            queryWhoisServers(ipAddress, countryCode).thenAccept(whoisData -> {
-                                if (whoisData != null && !whoisData.isEmpty()) {
-                                    String whoisHost = parseWhois(whoisData);
-                                    if (whoisHost != null && !whoisHost.isEmpty()) {
-                                        rdnsCache.put(ipAddress, new CacheEntry(ipAddress, whoisHost, System.currentTimeMillis()));
-                                    }
-                                }
-                            });
+                    if (enableReverseLookups()) {
+                        try {
+                            hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
+                            rdnsCache.put(ipAddress, new CacheEntry(ipAddress, hostName, System.currentTimeMillis()));
+                        } catch (UnknownHostException e) {
+                            // RDNS failed, will fall through to ASN lookup
                         }
-                    } catch (UnknownHostException e) {
-                        hostName = _t("unknown");
-                        rdnsCache.put(ipAddress, new CacheEntry(ipAddress, hostName, System.currentTimeMillis()));
+                    }
+                    // Fall back to local ASN database if RDNS returned the IP or failed
+                    if (hostName.equals(ipAddress) || _t("unknown").equals(hostName)) {
+                        String orgName = _geoIP.getOrgName(ipAddress);
+                        if (orgName != null && !orgName.isEmpty()) {
+                            rdnsCache.put(ipAddress, new CacheEntry(ipAddress, orgName, System.currentTimeMillis()));
+                        }
                     }
                 } finally {
                     pendingLookups.remove(ipAddress);
@@ -1223,32 +1157,27 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         CacheEntry existingEntry = rdnsCache.get(ipAddress);
         if (existingEntry != null && (now - existingEntry.getTimestamp() <= EXPIRE_TIME)) {
-            return existingEntry.getHostname();
+            String cached = existingEntry.getHostname();
+            // Return useful cached results immediately
+            if (cached != null && !cached.equals(ipAddress) && !_t("unknown").equals(cached)) {
+                return cached;
+            }
+            // Stale "unknown" or raw IP — fall through to re-lookup
         }
 
         String hostName = ipAddress;
-        try {
-            hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
-            if ((hostName.equals(ipAddress) || _t("unknown").equals(hostName)) && enableWhoisLookups()) {
-                String countryCode = getCountryFromIPAddress(ipAddress);
-                String whoisData = null;
-                try {
-                    whoisData = queryWhoisServers(ipAddress, countryCode).get(10, TimeUnit.SECONDS);
-                } catch (InterruptedException | ExecutionException | java.util.concurrent.TimeoutException e) {
-                    if (e instanceof InterruptedException) {
-                        Thread.currentThread().interrupt();
-                    }
-                    // WHOIS lookup timed out or failed, continue without it
-                }
-                if (whoisData != null && !whoisData.isEmpty()) {
-                    String whoisHost = parseWhois(whoisData);
-                    if (whoisHost != null && !whoisHost.isEmpty()) {
-                        hostName = whoisHost;
-                    }
-                }
+        if (enableReverseLookups()) {
+            try {
+                hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
+            } catch (UnknownHostException e) {
+                // RDNS failed, will fall through to ASN lookup
             }
-        } catch (UnknownHostException e) {
-            hostName = _t("unknown");
+        }
+        if (hostName.equals(ipAddress) || _t("unknown").equals(hostName)) {
+            String orgName = _geoIP.getOrgName(ipAddress);
+            if (orgName != null && !orgName.isEmpty()) {
+                hostName = orgName;
+            }
         }
 
         rdnsCache.put(ipAddress, new CacheEntry(ipAddress, hostName, now));
@@ -1268,463 +1197,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     private static final int cores = SystemVersion.getCores();
 
-    private ExecutorService whoisQueryExecutor;
-    private final Object whoisExecutorLock = new Object();
-
-    private static final int SOCKET_TIMEOUT_MS = 5000; // 5 seconds timeout
-    private static final int MAX_RETRIES = 1;
-
-    /**
-     * Query WHOIS server(s) based on country code fallback logic asynchronously.
-     * Returns WHOIS response or null if all fail.
-     */
-    private CompletableFuture<String> queryWhoisServers(String ipAddress, String countryCode) {
-        return CompletableFuture.supplyAsync(() -> {
-            List<String> countryServers = (countryCode == null || countryCode.trim().isEmpty())
-                ? Collections.emptyList()
-                : WHOIS_SERVERS_BY_COUNTRY.getOrDefault(countryCode.toLowerCase(), Collections.emptyList());
-
-            String result = tryWhoisServers(ipAddress, countryServers);
-            if (result == null || result.trim().isEmpty() || "unknown".equalsIgnoreCase(result)) {
-                // Fall back to generic WHOIS servers
-                String genericResult = tryWhoisServers(ipAddress, GENERIC_WHOIS_SERVERS);
-                return genericResult != null ? genericResult : "unknown";
-            }
-            return result;
-        }, getWhoisQueryExecutor());
-    }
-
-    private String tryWhoisServers(String query, List<String> servers) {
-        if (servers == null || servers.isEmpty()) {
-            return "unknown";
-        }
-
-        List<Callable<String>> tasks = servers.stream()
-            .map(server -> (Callable<String>) () -> {
-                for (int i = 0; i < MAX_RETRIES; i++) {
-                    String result = queryWhoisServerWithFallback(query, server);
-                    if (result != null && !result.trim().isEmpty() && !"unknown".equalsIgnoreCase(result.trim())) {
-                        return result;
-                    }
-                }
-                return null;
-            })
-            .collect(Collectors.toList());
-
-        try {
-            List<Future<String>> futures = getWhoisQueryExecutor().invokeAll(tasks, 5, TimeUnit.SECONDS);
-            for (Future<String> future : futures) {
-                if (future.isDone()) {
-                    try {
-                        String result = future.get();
-                        if (result != null && !result.isEmpty()) {
-                            return result;
-                        }
-                    } catch (ExecutionException e) {
-                        // ignore
-                    }
-                }
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-
-        return "unknown";
-    }
-
-    private static final long SERVER_DOWN_TIMEOUT_MS = 60 * 60 * 1000L;
-
-    private static final ConcurrentMap<String, Long> downServers = new ConcurrentHashMap<>();
-
     private ExecutorService reverseDnsExecutor;
     private final Object reverseDnsExecutorLock = new Object();
 
     private static final Set<String> pendingLookups = ConcurrentHashMap.newKeySet();
 
     private static Timer _rdnsTimer;
-
-    private String queryWhoisServerWithFallback(String query, String whoisServer) {
-        // Skip server if marked down and timeout not expired
-        Long downSince = downServers.get(whoisServer);
-        if (downSince != null && (System.currentTimeMillis() - downSince) < SERVER_DOWN_TIMEOUT_MS) {
-            return null; // skip querying this server
-        }
-
-        int port = 43;
-        boolean useTor = false;
-
-        if ("23.184.48.6".equals(whoisServer) ||
-            "23.128.248.249".equals(whoisServer) ||
-            "104.36.80.11".equals(whoisServer) ||
-            "23.171.8.170".equals(whoisServer) ||
-            "74.48.163.73".equals(whoisServer) ||
-            "23.137.249.9".equals(whoisServer)) {
-            port = 38444;
-            useTor = true;
-        } else if ("127.0.0.1".equals(whoisServer)) {
-            port = 4043;
-        }
-
-        int maxAttempts = 2;
-        for (int attempt = 1; attempt <= maxAttempts; attempt++) {
-            try {
-                String result = useTor
-                        ? queryWhoisServerOverTor(query, whoisServer, port)
-                        : queryWhoisServer(query, whoisServer, port);
-
-                if (result == null || result.trim().isEmpty()) {
-                    continue; // Retry on empty/null result
-                }
-
-                String lower = result.toLowerCase();
-                if (lower.contains("denied") || lower.contains("refused") || lower.contains("is not registered") ||
-                    lower.contains("not managed by") || lower.contains("have been further assigned") ||
-                    lower.contains("non-ripe-ncc-managed-address-block")) {
-                    // Mark server as down and stop retries
-                    downServers.put(whoisServer, System.currentTimeMillis());
-                    return null;
-                }
-
-                return result; // Valid result, return immediately
-
-            } catch (IOException e) { /* ignored */ }
-        }
-
-        return null; // All attempts failed without valid response
-    }
-
-    /**
-     * WHOIS query with socket timeout support.
-     */
-    private String queryWhoisServer(String query, String whoisServer, int port) throws IOException {
-        WhoisClient whois = new WhoisClient();
-        try {
-            whois.setDefaultTimeout(SOCKET_TIMEOUT_MS);
-            whois.connect(whoisServer, port);
-            String result = whois.query(query);
-            return result;
-        } finally {
-            if (whois.isConnected()) {
-                whois.disconnect();
-            }
-        }
-    }
-
-    /**
-     * Get whois server for a country or TLD, or default if unknown
-     */
-    private static final Map<String, List<String>> WHOIS_SERVERS_BY_COUNTRY;
-    static {
-        Map<String, List<String>> map = new HashMap<>();
-
-        // Africa region (including Indian Ocean islands)
-        map.put("bi", Arrays.asList("whois.nic.bi", "whois.afrinic.net"));
-        map.put("bj", Arrays.asList("whois.nic.bj", "whois.afrinic.net"));
-        map.put("bw", Arrays.asList("whois.nic.net.bw", "whois.afrinic.net"));
-        map.put("cm", Arrays.asList("whois.netcom.cm", "whois.afrinic.net"));
-        map.put("ci", Arrays.asList("whois.nic.ci", "whois.afrinic.net"));
-        map.put("dj", Arrays.asList("whois.nic.dj", "whois.afrinic.net"));
-        map.put("dz", Arrays.asList("whois.nic.dz", "whois.afrinic.net"));
-        map.put("eg", Arrays.asList("whois.ripe.net")); // Egypt uses RIPE NCC
-        map.put("et", Arrays.asList("whois.nic.et", "whois.afrinic.net"));
-        map.put("ga", Arrays.asList("whois.accra.ga", "whois.afrinic.net"));
-        map.put("gh", Arrays.asList("whois.nic.gh", "whois.afrinic.net"));
-        map.put("gn", Arrays.asList("whois.nic.gn", "whois.afrinic.net"));
-        map.put("gq", Arrays.asList("whois.nic.gq", "whois.afrinic.net"));
-        map.put("gw", Arrays.asList("whois.nic.gw", "whois.afrinic.net"));
-        map.put("ke", Arrays.asList("whois.kenic.or.ke", "whois.afrinic.net"));
-        map.put("km", Arrays.asList("whois.nic.km", "whois.afrinic.net"));
-        map.put("lr", Arrays.asList("whois.nic.lr", "whois.afrinic.net"));
-        map.put("ly", Arrays.asList("whois.nic.ly", "whois.afrinic.net"));
-        map.put("ma", Arrays.asList("whois.iam.net.ma", "whois.afrinic.net"));
-        map.put("mg", Arrays.asList("whois.nic.mg", "whois.afrinic.net"));
-        map.put("ml", Arrays.asList("whois.dot.ml", "whois.afrinic.net"));
-        map.put("mr", Arrays.asList("whois.nic.mr", "whois.afrinic.net"));
-        map.put("mu", Arrays.asList("whois.nic.mu", "whois.afrinic.net"));
-        map.put("mw", Arrays.asList("whois.nic.mw", "whois.afrinic.net"));
-        map.put("mz", Arrays.asList("whois.nic.mz", "whois.afrinic.net"));
-        map.put("na", Arrays.asList("whois.na-nic.com.na", "whois.afrinic.net"));
-        map.put("ne", Arrays.asList("whois.nic.ne", "whois.afrinic.net"));
-        map.put("ng", Arrays.asList("whois.nic.net.ng", "whois.afrinic.net"));
-        map.put("rw", Arrays.asList("whois.nic.rw", "whois.afrinic.net"));
-        map.put("sd", Arrays.asList("whois.nic.sd", "whois.afrinic.net"));
-        map.put("sn", Arrays.asList("whois.nic.sn", "whois.afrinic.net"));
-        map.put("sl", Arrays.asList("whois.nic.sl", "whois.afrinic.net"));
-        map.put("so", Arrays.asList("whois.nic.so", "whois.afrinic.net"));
-        map.put("ss", Arrays.asList("whois.nic.ss", "whois.afrinic.net"));
-        map.put("sz", Arrays.asList("whois.sz", "whois.afrinic.net"));
-        map.put("td", Arrays.asList("whois.nic.td", "whois.afrinic.net"));
-        map.put("tg", Arrays.asList("whois.nic.tg", "whois.afrinic.net"));
-        map.put("tn", Arrays.asList("whois.ati.tn", "whois.afrinic.net"));
-        map.put("tz", Arrays.asList("whois.tznic.or.tz", "whois.afrinic.net"));
-        map.put("ug", Arrays.asList("whois.co.ug", "whois.afrinic.net"));
-        map.put("za", Arrays.asList("whois.registry.net.za", "whois.afrinic.net"));
-        map.put("zm", Arrays.asList("whois.nic.zm", "whois.afrinic.net"));
-        map.put("zw", Arrays.asList("whois.nic.zw", "whois.afrinic.net"));
-
-        // Asia-Pacific region
-        map.put("as", Arrays.asList("whois.nic.as"));
-        map.put("au", Arrays.asList("whois.auda.org.au", "whois.aunic.net"));
-        map.put("fj", Arrays.asList("whois.nic.fj", "whois.apnic.net"));
-        map.put("fm", Arrays.asList("whois.nic.fm"));
-        map.put("gu", Arrays.asList("whois.nic.gu"));
-        map.put("hk", Arrays.asList("whois.hknic.net.hk", "whois.apnic.net"));
-        map.put("id", Arrays.asList("whois.pandi.or.id"));
-        map.put("jp", Arrays.asList("whois.jprs.jp"));
-        map.put("kh", Arrays.asList("whois.nic.kh"));
-        map.put("ki", Arrays.asList("whois.nic.ki"));
-        map.put("la", Arrays.asList("whois2.afilias-grs.net"));
-        map.put("lk", Arrays.asList("whois.nic.lk"));
-        map.put("mh", Arrays.asList("whois.nic.mh"));
-        map.put("mm", Arrays.asList("whois.nic.mm"));
-        map.put("mp", Arrays.asList("whois.nic.mp"));
-        map.put("mq", Arrays.asList("whois.nic.mq"));
-        map.put("mv", Arrays.asList("whois.nic.mv"));
-        map.put("nc", Arrays.asList("whois.nc"));
-        map.put("nf", Arrays.asList("whois.nic.cx"));
-        map.put("np", Arrays.asList("whois.nic.np"));
-        map.put("nr", Arrays.asList("whois.nic.nr"));
-        map.put("nu", Arrays.asList("whois.nic.nu"));
-        map.put("nz", Arrays.asList("whois.srs.net.nz"));
-        map.put("pf", Arrays.asList("whois.registry.pf", "whois.apnic.net"));
-        map.put("pg", Arrays.asList("whois.nic.pg", "whois.apnic.net"));
-        map.put("ph", Arrays.asList("whois.nic.ph"));
-        map.put("pk", Arrays.asList("whois.pknic.net.pk"));
-        map.put("pw", Arrays.asList("whois.nic.pw"));
-        map.put("sb", Arrays.asList("whois.nic.net.sb"));
-        map.put("sg", Arrays.asList("whois.nic.net.sg", "whois.apnic.net"));
-        map.put("sh", Arrays.asList("whois.nic.sh"));
-        map.put("tj", Arrays.asList("whois.nic.tj"));
-        map.put("tl", Arrays.asList("whois.domains.tl"));
-        map.put("to", Arrays.asList("whois.tonic.to"));
-        map.put("tp", Arrays.asList("whois.domains.tl"));
-        map.put("tv", Arrays.asList("whois.nic.tv"));
-        map.put("tw", Arrays.asList("whois.twnic.net.tw", "whois.apnic.net"));
-        map.put("vu", Arrays.asList("vunic.vu"));
-
-        // Europe region
-        map.put("at", Arrays.asList("whois.nic.at"));
-        map.put("be", Arrays.asList("whois.dns.be"));
-        map.put("bg", Arrays.asList("whois.register.bg"));
-        map.put("ch", Arrays.asList("whois.nic.ch"));
-        map.put("cz", Arrays.asList("whois.nic.cz"));
-        map.put("de", Arrays.asList("whois.denic.de"));
-        map.put("dk", Arrays.asList("whois.dk-hostmaster.dk"));
-        map.put("ee", Arrays.asList("whois.tld.ee"));
-        map.put("es", Arrays.asList("whois.nic.es"));
-        map.put("fi", Arrays.asList("whois.fi"));
-        map.put("fo", Arrays.asList("whois.nic.fo"));
-        map.put("fr", Arrays.asList("whois.nic.fr"));
-        map.put("gi", Arrays.asList("whois.gg"));
-        map.put("gl", Arrays.asList("whois.nic.gl"));
-        map.put("hr", Arrays.asList("whois.dns.hr"));
-        map.put("hu", Arrays.asList("whois.nic.hu"));
-        map.put("ie", Arrays.asList("whois.domainregistry.ie"));
-        map.put("il", Arrays.asList("whois.isoc.org.il"));
-        map.put("im", Arrays.asList("whois.nic.im"));
-        map.put("is", Arrays.asList("whois.isnic.is"));
-        map.put("it", Arrays.asList("whois.nic.it"));
-        map.put("je", Arrays.asList("whois.je"));
-        map.put("li", Arrays.asList("whois.nic.li"));
-        map.put("lt", Arrays.asList("whois.domreg.lt"));
-        map.put("lu", Arrays.asList("whois.restena.lu"));
-        map.put("lv", Arrays.asList("whois.nic.lv"));
-        map.put("me", Arrays.asList("whois.nic.me"));
-        map.put("md", Arrays.asList("whois.nic.md"));
-        map.put("nl", Arrays.asList("whois.domain-registry.nl"));
-        map.put("no", Arrays.asList("whois.norid.no"));
-        map.put("pl", Arrays.asList("whois.dns.pl"));
-        map.put("pt", Arrays.asList("whois.dns.pt"));
-        map.put("ro", Arrays.asList("whois.rotld.ro"));
-        map.put("rs", Arrays.asList("whois.rnids.rs"));
-        map.put("ru", Arrays.asList("whois.tcinet.ru"));
-        map.put("se", Arrays.asList("whois.nic-se.se"));
-        map.put("si", Arrays.asList("whois.arnes.si"));
-        map.put("sk", Arrays.asList("whois.sk-nic.sk"));
-        map.put("sm", Arrays.asList("whois.nic.sm"));
-        map.put("ua", Arrays.asList("whois.ua"));
-        map.put("uk", Arrays.asList("whois.nic.uk"));
-        map.put("yt", Arrays.asList("whois.nic.yt"));
-
-        // North America region
-        map.put("ca", Arrays.asList("whois.cira.ca", "whois.arin.net"));
-        map.put("us", Arrays.asList("whois.nic.us", "whois.arin.net"));
-        map.put("mx", Arrays.asList("whois.nic.mx"));
-        map.put("pa", Arrays.asList("whois.nic.pa"));
-        map.put("pr", Arrays.asList("whois.nic.pr"));
-        map.put("tt", Arrays.asList("whois.nic.tt"));
-
-        // Latin America and Caribbean region
-        map.put("ar", Arrays.asList("whois.nic.ar", "whois.lacnic.net"));
-        map.put("bo", Arrays.asList("whois.nic.bo"));
-        map.put("cl", Arrays.asList("whois.nic.cl", "whois.lacnic.net"));
-        map.put("co", Arrays.asList("whois.nic.co"));
-        map.put("cr", Arrays.asList("whois.nic.cr"));
-        map.put("cu", Arrays.asList("whois.nic.cu"));
-        map.put("do", Arrays.asList("whois.nic.do"));
-        map.put("ec", Arrays.asList("whois.nic.ec"));
-        map.put("gf", Arrays.asList("whois.nic.gf"));
-        map.put("gt", Arrays.asList("whois.gt"));
-        map.put("gy", Arrays.asList("whois.registry.gy"));
-        map.put("hn", Arrays.asList("whois2.afilias-grs.net"));
-        map.put("jm", Arrays.asList("whois.nic.jm"));
-        map.put("ni", Arrays.asList("whois.nic.ni"));
-        map.put("py", Arrays.asList("whois.nic.py", "whois.lacnic.net"));
-        map.put("sr", Arrays.asList("whois.registry.sr"));
-        map.put("sv", Arrays.asList("whois.svnet.org"));
-        map.put("uy", Arrays.asList("nic.uy", "whois.lacnic.net"));
-        map.put("ve", Arrays.asList("whois.nic.ve"));
-        map.put("vg", Arrays.asList("ccwhois.ksregistry.net"));
-        map.put("vi", Arrays.asList("whois.nic.vi"));
-
-        // Other / Miscellaneous entries without clear regional grouping or single countries
-        map.put("ac", Arrays.asList("whois.nic.ac"));
-        map.put("aw", Arrays.asList("whois.nic.aw"));
-        map.put("ax", Arrays.asList("whois.ax"));
-        map.put("cc", Arrays.asList("whois.nic.cc"));
-        map.put("cw", Arrays.asList("whois.cw"));
-        map.put("cx", Arrays.asList("whois.nic.cx"));
-        map.put("hm", Arrays.asList("whois.registry.hm"));
-        map.put("lc", Arrays.asList("whois2.afilias-grs.net"));
-        map.put("pm", Arrays.asList("whois.nic.pm"));
-        map.put("pn", Arrays.asList("whois.nic.pn"));
-        map.put("re", Arrays.asList("whois.nic.re"));
-        map.put("sc", Arrays.asList("whois2.afilias-grs.net"));
-        map.put("tc", Arrays.asList("whois.adamsnames.tc"));
-        map.put("tf", Arrays.asList("whois.nic.tf"));
-        map.put("wf", Arrays.asList("whois.nic.wf"));
-        map.put("ws", Arrays.asList("whois.website.ws"));
-        map.put("ye", Arrays.asList("whois.registry.ye"));
-
-        WHOIS_SERVERS_BY_COUNTRY = Collections.unmodifiableMap(map);
-    }
-
-    private static final List<String> GENERIC_WHOIS_SERVERS = Arrays.asList(
-        "23.171.8.170",  /* outproxy-1a.stormycloud.org */
-        "74.48.163.73",  /* outproxy-1b.stormycloud.org */
-        "23.137.249.9", /* outproxy-1c.stormycloud.org */
-        "whois.arin.net",
-        "whois.iana.org",
-        "whois.ripe.net",
-        "104.36.80.11",
-        "23.128.248.249",
-        "127.0.0.1"
-    );
-
-    /**
-     * WHOIS query over Tor with socket timeout support
-     */
-    private String queryWhoisServerOverTor(String query, String whoisServer, int port) throws IOException {
-        WhoisClient whois = new WhoisClient();
-        try {
-            whois.setSocketFactory(createTorSocketFactory("127.0.0.1", 9050));
-            whois.setDefaultTimeout(SOCKET_TIMEOUT_MS);
-            whois.connect(whoisServer, port);
-            String result = whois.query(query);
-            whois.disconnect();
-            return result;
-        } catch (IOException e) {
-            if (whois.isConnected()) { whois.disconnect(); }
-            throw e;
-        }
-    }
-
-    private SocketFactory createTorSocketFactory(String host, int port) {
-        Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(host, port));
-        return new SocketFactory() {
-            @Override public Socket createSocket() throws IOException { return new Socket(proxy); }
-            @Override public Socket createSocket(String host, int port) throws IOException {
-                Socket s = new Socket(proxy);
-                s.connect(new InetSocketAddress(host, port));
-                return s;
-            }
-            @Override public Socket createSocket(InetAddress host, int port) throws IOException {
-                Socket s = new Socket(proxy);
-                s.connect(new InetSocketAddress(host, port));
-                return s;
-            }
-            @Override public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException {
-                Socket s = new Socket(proxy);
-                s.bind(new InetSocketAddress(localHost, localPort));
-                s.connect(new InetSocketAddress(host, port));
-                return s;
-            }
-            @Override public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
-                Socket s = new Socket(proxy);
-                s.bind(new InetSocketAddress(localAddress, localPort));
-                s.connect(new InetSocketAddress(address, port));
-                return s;
-            }
-        };
-    }
-
-    /**
-     * Parse WHOIS response to extract a single organization or network name.
-     *
-     * This implementation performs a single pass over the WHOIS lines.
-     * It prefers keys in priority order:
-     *   - orgname:, organization:, organisation:, org-name:
-     *   - If none found, fallback to netname:, net-name:, descr:
-     *
-     * Returns the first matching value found in preferred order, else "unknown".
-     */
-    private String parseWhois(String whoisData) {
-        if (whoisData.contains("ORG-IANA1-AFRINIC")) {
-            return _t("unknown");
-        }
-
-        String fallback = null; // For netname, descr, etc.
-
-        for (String line : NEWLINE_SPLIT.split(whoisData)) {
-            line = line.trim();
-            String lower = line.toLowerCase();
-
-            if (lower.startsWith("orgname:") || lower.startsWith("organization:") ||
-                lower.startsWith("organisation:") || lower.startsWith("org-name:")) {
-                return line.split(":", 2)[1].trim();
-            }
-
-            if (fallback == null &&
-                (lower.startsWith("netname:") || lower.startsWith("net-name:") || lower.startsWith("descr:"))) {
-                fallback = line.split(":", 2)[1].trim();
-            }
-        }
-
-        if (fallback != null) {
-            String lc = fallback.toLowerCase();
-            if (lc.contains("latin american and caribbean")) {
-                fallback = "LACNIC";
-            } else if (lc.contains("asia pacific network") || lc.contains("administered by apnic")) {
-               fallback = "APNIC";
-            } else if (lc.contains("african network information center")) {
-               fallback = "AFRINIC";
-            } else if (lc.contains("ripe network coordination")) {
-                fallback = "RIPE";
-            } else if (lc.contains("centurylink communications, llc")) {
-                fallback = "CENTURYLINK";
-            } else if (lc.contains("google fiber inc")) {
-                fallback = "GOOGLE FIBER";
-            } else if (lc.contains("charter communications inc")) {
-                fallback = "CHARTER";
-            } else if (lc.contains("oracle corporation")) {
-                fallback = "ORACLE";
-            } else if (lc.contains("fibernetics corporation")) {
-                fallback = "FIBERNETICS CORP";
-            } else if (lc.contains("frantech solutions")) {
-                fallback = "FRANTECH";
-            } else if (lc.contains("stormycloud inc")) {
-                fallback = "STORMYCLOUD";
-            } else if (lc.contains("t-mobile usa, inc")) {
-                fallback = "T-MOBILE USA";
-            } else if (lc.contains("data bridge limited")) {
-                fallback = "DATA BRIDGE LTD";
-            } else if (lc.contains("root")) {
-                fallback = "PRIVATE IP ADDRESS";
-            }
-        }
-
-        return (fallback != null) ? WHOIS_PAREN.matcher(fallback).replaceAll("").trim() : _t("unknown");
-    }
 
     /**
      *  @return domain name only from reverse dns hostname lookups

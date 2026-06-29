@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -92,11 +93,16 @@ public class GeoIP {
     private int _lookupRunCount;
     private static final Map<String, List<String>> _associatedCountries;
 
+    // ASN database for IP → org name lookups
+    private volatile com.maxmind.db.Reader _asnReader;
+    private final ConcurrentHashMap<String, String> _orgNameCache = new ConcurrentHashMap<>(1024);
+
     static final String PROP_GEOIP_ENABLED = "routerconsole.geoip.enable";
     public static final String PROP_GEOIP_DIR = "geoip.dir";
     public static final String GEOIP_DIR_DEFAULT = "geoip";
     static final String GEOIP_FILE_DEFAULT = "geoip.txt";
     public static final String GEOIP2_FILE_DEFAULT = "GeoLite2-Country.mmdb";
+    public static final String ASN_FILE_DEFAULT = "db-ip-asn.mmdb";
     static final String COUNTRY_FILE_DEFAULT = "countries.txt";
     public static final String PROP_IP_COUNTRY = "i2np.lastCountry";
     public static final String PROP_DEBIAN_GEOIP = "geoip.dat";
@@ -158,6 +164,12 @@ public class GeoIP {
         _pendingSearch.clear();
         _pendingIPv6Search.clear();
         _notFound.clear();
+        _orgNameCache.clear();
+        com.maxmind.db.Reader reader = _asnReader;
+        if (reader != null) {
+            try { reader.close(); } catch (IOException e) { /* ignore */ }
+            _asnReader = null;
+        }
     }
 
     /**
@@ -492,6 +504,79 @@ public class GeoIP {
     }
 
    /**
+    * Get the ASN database file
+    *
+    * @return null if not found
+    * @since 0.9.65+
+    */
+    private File getASN() {
+        String geoDir = _context.getProperty(PROP_GEOIP_DIR, GEOIP_DIR_DEFAULT);
+        File geoFile = new File(geoDir);
+        if (!geoFile.isAbsolute())
+            geoFile = new File(_context.getBaseDir(), geoDir);
+        geoFile = new File(geoFile, ASN_FILE_DEFAULT);
+        if (!geoFile.exists()) {
+            if (_log.shouldDebug())
+                _log.debug("ASN database not found: " + geoFile.getAbsolutePath());
+            return null;
+        }
+        return geoFile;
+    }
+
+   /**
+    * Open the ASN database reader (lazy, cached)
+    */
+    private com.maxmind.db.Reader openASN() throws IOException {
+        File asnFile = getASN();
+        if (asnFile == null) {return null;}
+        com.maxmind.db.Reader rv = new com.maxmind.db.Reader(asnFile);
+        if (_log.shouldDebug()) {_log.debug("Opened ASN Database, Metadata: " + rv.getMetadata());}
+        return rv;
+    }
+
+    /**
+     * Get the organization name for an IP from the local ASN database.
+     * Returns the AS organization (e.g. "Google LLC") or null if not found.
+     *
+     * @param ipAddress IPv4 or IPv6 address string
+     * @return org name or null
+     * @since 0.9.65+
+     */
+    public String getOrgName(String ipAddress) {
+        if (ipAddress == null || ipAddress.isEmpty()) {return null;}
+        String cached = _orgNameCache.get(ipAddress);
+        if (cached != null) {return cached;}
+        try {
+            com.maxmind.db.Reader reader = _asnReader;
+            if (reader == null) {
+                synchronized (this) {
+                    reader = _asnReader;
+                    if (reader == null) {
+                        reader = openASN();
+                        _asnReader = reader;
+                    }
+                }
+            }
+            if (reader == null) {return null;}
+            InetAddress ia = InetAddress.getByName(ipAddress);
+            Object result = reader.get(ia);
+            if (result instanceof Map) {
+                Map map = (Map) result;
+                Object org = map.get("autonomous_system_organization");
+                if (org instanceof String) {
+                    String orgName = (String) org;
+                    _orgNameCache.put(ipAddress, orgName);
+                    return orgName;
+                }
+            }
+        } catch (Exception e) {
+            if (_log.shouldWarn())
+                _log.warn("ASN lookup failed for " + ipAddress, e);
+        }
+        return null;
+    }
+
+    /**
     * Open a GeoIP2 database
     * @since 0.9.38
     */
@@ -525,6 +610,29 @@ public class GeoIP {
             SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy");
             return "<b>Built:</b> " + sdf.format(buildDate) + "&ensp;<b>Size:</b> " + formattedFileSize + "MB&ensp;<b>Location:</b> " + filePath;
         } catch (Exception e) {return "Unknown GeoIP Db version";}
+    }
+
+   /**
+    * Return the current ASN database version
+    * @since 0.9.65+
+    */
+    public String getASNBuildInfo() {
+        File asnFile = getASN();
+        if (asnFile == null) {return "ASN Db not found";}
+
+        long fileSize = asnFile.length();
+        double fileSizeMB = fileSize / (1024.0 * 1024.0);
+        DecimalFormat df = new DecimalFormat("#.0");
+        String formattedFileSize = df.format(fileSizeMB);
+        String filePath = asnFile.getAbsolutePath();
+
+        try (com.maxmind.db.Reader reader = openASN()) {
+            if (reader == null) {return "ASN Db not found";}
+            long buildTime = reader.getMetadata().getBuildDate().getTime();
+            Date buildDate = new Date(buildTime);
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy");
+            return "<b>Built:</b> " + sdf.format(buildDate) + "&ensp;<b>Size:</b> " + formattedFileSize + "MB&ensp;<b>Location:</b> " + filePath;
+        } catch (Exception e) {return "Unknown ASN Db version";}
     }
 
    /**
