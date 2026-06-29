@@ -2,7 +2,6 @@ package net.i2p.data;
 
 import net.i2p.I2PAppContext;
 import net.i2p.stat.RateConstants;
-import net.i2p.util.LHMCache;
 import net.i2p.util.SimpleByteCache;
 import net.i2p.util.SystemVersion;
 
@@ -14,6 +13,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *  A least recently used cache with a max size, for SimpleDataStructures.
@@ -57,8 +57,8 @@ public class SDSCache<V extends SimpleDataStructure> {
         FACTOR = Math.max(MIN_FACTOR, Math.min(MAX_FACTOR, maxMemory / (128 * 1024 * 1024d)));
     }
 
-    /** the LRU cache */
-    private final Map<Integer, WeakReference<V>> _cache;
+    /** the cache */
+    private final ConcurrentHashMap<Integer, WeakReference<V>> _cache;
 
     /** the byte array length for the class we are caching */
     private final int _datalen;
@@ -76,7 +76,7 @@ public class SDSCache<V extends SimpleDataStructure> {
      */
     public SDSCache(Class<V> rvClass, int len, int max) {
         int size = (int) (max * FACTOR);
-        _cache = new LHMCache<>(size);
+        _cache = new ConcurrentHashMap<>(size);
         _datalen = len;
         try {
             _rvCon = rvClass.getConstructor(byte[].class);
@@ -106,9 +106,7 @@ public class SDSCache<V extends SimpleDataStructure> {
      * @since 0.9.17
      */
     public void clear() {
-        synchronized (_cache) {
-            _cache.clear();
-        }
+        _cache.clear();
     }
 
     /**
@@ -128,28 +126,26 @@ public class SDSCache<V extends SimpleDataStructure> {
         int found;
         V rv;
         Integer key = hashCodeOf(data);
-        synchronized (_cache) {
-            WeakReference<V> ref = _cache.get(key);
-            if (ref != null) rv = ref.get();
-            else rv = null;
-            if (rv != null && Arrays.equals(data, rv.getData())) {
-                // found it, we don't need the data passed in any more
-                SimpleByteCache.release(data);
-                found = 1;
-            } else {
-                // make a new one
-                try {
-                    rv = _rvCon.newInstance(new Object[] {data});
-                } catch (InstantiationException e) {
-                    throw new RuntimeException("SDSCache error", e);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException("SDSCache error", e);
-                } catch (InvocationTargetException e) {
-                    throw new RuntimeException("SDSCache error", e);
-                }
-                _cache.put(key, new WeakReference<>(rv));
-                found = 0;
+        WeakReference<V> ref = _cache.get(key);
+        if (ref != null) rv = ref.get();
+        else rv = null;
+        if (rv != null && Arrays.equals(data, rv.getData())) {
+            // found it, we don't need the data passed in any more
+            SimpleByteCache.release(data);
+            found = 1;
+        } else {
+            // make a new one
+            try {
+                rv = _rvCon.newInstance(new Object[] {data});
+            } catch (InstantiationException e) {
+                throw new RuntimeException("SDSCache error", e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("SDSCache error", e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException("SDSCache error", e);
             }
+            _cache.put(key, new WeakReference<>(rv));
+            found = 0;
         }
         I2PAppContext.getGlobalContext().statManager().addRateData(_statName, found);
         return rv;
