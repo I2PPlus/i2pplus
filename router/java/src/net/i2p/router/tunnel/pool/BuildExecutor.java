@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.DataHelper;
@@ -43,7 +44,7 @@ class BuildExecutor implements Runnable {
     private static int getTunnelTargetMin(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.build.targetMin", 2);
     }
-    private final ArrayList<Long> _recentBuildIds = new ArrayList<>(256);
+    private final Set<Long> _recentBuildIds = ConcurrentHashMap.newKeySet();
     private final RouterContext _context;
     private final Log _log;
     private final TunnelPoolManager _manager;
@@ -477,11 +478,7 @@ class BuildExecutor implements Runnable {
                 // consecutive timeouts (same as BuildExecutor.buildComplete()
                 // does for BAD_RESPONSE/OTHER_FAILURE).
                 if (pool != null) {
-                    long[] state = _poolFailureState.get(pool);
-                    if (state == null) {
-                        state = new long[]{0, 0};
-                        _poolFailureState.put(pool, state);
-                    }
+                    long[] state = _poolFailureState.computeIfAbsent(pool, k -> new long[]{0, 0});
                     synchronized (state) {
                         if (state[0] < CONSECUTIVE_FAILURE_THRESHOLD) {
                             state[0]++;
@@ -836,12 +833,10 @@ class BuildExecutor implements Runnable {
         }
         long id = cfg.getReplyMessageId();
         if (id > 0) {
-            synchronized (_recentBuildIds) {
-                // every so often, shrink the list semi-efficiently
-                if (_recentBuildIds.size() > 98) {
-                    for (int i = 0; i < 32; i++) {_recentBuildIds.remove(0);}
-                }
-                _recentBuildIds.add(Long.valueOf(id));
+            _recentBuildIds.add(id);
+            // ConcurrentHashMap.newKeySet() has no ordering, so just clear excess
+            if (_recentBuildIds.size() > 128) {
+                _recentBuildIds.clear();
             }
         }
     }
@@ -884,11 +879,7 @@ class BuildExecutor implements Runnable {
         if (result == Result.SUCCESS) {
             _poolFailureState.remove(pool);
         } else if (result != Result.DUP_ID && result != Result.REJECT) {
-            long[] state = _poolFailureState.get(pool);
-            if (state == null) {
-                state = new long[]{0, 0};
-                _poolFailureState.put(pool, state);
-            }
+            long[] state = _poolFailureState.computeIfAbsent(pool, k -> new long[]{0, 0});
             synchronized (state) {
                 if (state[0] < CONSECUTIVE_FAILURE_THRESHOLD) {
                     state[0]++;
@@ -994,7 +985,7 @@ class BuildExecutor implements Runnable {
      * @return true if the build was recently attempted, false otherwise
      */
     public boolean wasRecentlyBuilding(long replyId) {
-        synchronized (_recentBuildIds) {return _recentBuildIds.contains(Long.valueOf(replyId));}
+        return _recentBuildIds.contains(replyId);
     }
 
     /**

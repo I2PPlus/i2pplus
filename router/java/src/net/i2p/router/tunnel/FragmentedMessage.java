@@ -26,8 +26,8 @@ class FragmentedMessage {
     private volatile boolean _lastReceived;
     private volatile int _highFragmentNum;
     private final long _createdOn;
-    private boolean _completed;
-    private long _releasedAfter;
+    private volatile boolean _completed;
+    private volatile long _releasedAfter;
     private SimpleTimer2.TimedEvent _expireEvent;
 
     private static final ByteCache _cache = ByteCache.getInstance(512, TrivialPreprocessor.PREPROCESSED_SIZE);

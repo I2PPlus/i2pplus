@@ -940,14 +940,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             // order is backwards!
             Hash hf = tunnel.get(i+1);
             Hash ht = tunnel.get(i);
-            StringBuilder buf = new StringBuilder();
-            for (Hash h : tunnel) {
-                buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
-            }
             if (!canConnect(hf, ht)) {
-                if (log.shouldWarn())
+                if (log.shouldWarn()) {
+                    StringBuilder buf = new StringBuilder();
+                    for (Hash h : tunnel) {
+                        buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
+                    }
                     log.warn("Connection check failed at hop [" + (i+1) + " -> " + i +
                              "] in tunnel (Gateway -> Endpoint)\n* Tunnel: " + buf.toString());
+                }
                 // Blame them both
                 // treat as a timeout in the profile
                 // tunnelRejected() would set the last heard from time
