@@ -88,7 +88,7 @@ public class PeerProfile {
     private boolean _expanded;
     private boolean _expandedDB;
     /** low latency flag, set when peer responds quickly to tunnel builds, persisted */
-    private boolean _lowLatency;
+    private volatile boolean _lowLatency;
     //private int _consecutiveBanlists;
     private final int _distance;
 

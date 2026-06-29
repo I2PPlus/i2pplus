@@ -1424,6 +1424,10 @@ public class ProfileOrganizer {
             // Evict stale demotion cooldowns (entries >10 min old)
             long cooldownCutoff = _context.clock().now() - TUNNEL_DEMOTION_COOLDOWN_MS;
             _demotedPeers.entrySet().removeIf(e -> e.getValue() < cooldownCutoff);
+            // Prune stale strikes for peers that never reached the threshold
+            if (_demoteStrikes.size() > 128) {
+                _demoteStrikes.clear();
+            }
             // Strike tracking: only demote after threshold consecutive failures
             _demoteStrikes.merge(peer, 1, Integer::sum);
             int strikes = _demoteStrikes.get(peer);

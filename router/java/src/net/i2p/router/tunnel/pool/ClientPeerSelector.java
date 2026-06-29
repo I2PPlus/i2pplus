@@ -57,9 +57,6 @@ class ClientPeerSelector extends TunnelPeerSelector {
     /** Per-pool cooldown map so one pool's selections don't starve another's. */
     private static final Map<Hash, Long> _clientCooldowns = new ConcurrentHashMap<>();
 
-    /** Track when peers last failed to allow recovery */
-    private static final Map<Hash, Long> _peerFailureTimes = new ConcurrentHashMap<>();
-
     private static String formatExcludedPeers(Set<Hash> peers) {
         if (peers == null || peers.isEmpty()) {return "[no exclusions]";}
         StringBuilder sb = new StringBuilder(peers.size() * 10);
