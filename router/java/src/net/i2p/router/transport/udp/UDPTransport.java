@@ -156,7 +156,7 @@ public class UDPTransport extends TransportImpl {
      *  Flag indicating whether the router's external address needs to be rebuilt.
      *  This is typically set after significant network changes or reachability updates.
      */
-    private boolean _needsRebuild;
+    private volatile boolean _needsRebuild;
     private final Object _rebuildLock = new Object();
 
     /** Introduction key */

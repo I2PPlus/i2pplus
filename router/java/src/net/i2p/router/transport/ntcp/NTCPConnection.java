@@ -124,11 +124,11 @@ public class NTCPConnection implements Closeable {
     private static final int BLOCK_SIZE = 16;
     private static final int META_SIZE = BLOCK_SIZE;
 
-    private boolean _sendingMeta;
+    private volatile boolean _sendingMeta;
     /** how many consecutive sends were failed due to (estimated) send queue time */
     //private int _consecutiveBacklog;
     private long _nextInfoTime;
-    private boolean _mayDisconnect;
+    private volatile boolean _mayDisconnect;
     private final AtomicBoolean _writeInterestPending = new AtomicBoolean(false);
     private volatile long _lastActiveTime = System.currentTimeMillis();
     private volatile long _lastZeroReadTime = 0;

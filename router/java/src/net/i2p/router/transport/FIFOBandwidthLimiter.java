@@ -863,7 +863,7 @@ public class FIFOBandwidthLimiter {
         private final long _requestId;
         private final long _requestTime;
         private int _allocationsSinceWait;
-        private boolean _aborted;
+        private volatile boolean _aborted;
         private boolean _waited;
         final List<Request> satisfiedBuffer;
         private CompleteListener _lsnr;

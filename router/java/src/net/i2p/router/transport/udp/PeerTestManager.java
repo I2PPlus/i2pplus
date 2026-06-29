@@ -140,7 +140,7 @@ class PeerTestManager {
     private final Map<Long, PeerTestState> _activeTests;
     /** current test we are running (as Alice), or null */
     private PeerTestState _currentTest;
-    private boolean _currentTestComplete;
+    private volatile boolean _currentTestComplete;
     /** as Alice */
     private final Queue<Long> _recentTests;
     private final IPThrottler _throttle;
