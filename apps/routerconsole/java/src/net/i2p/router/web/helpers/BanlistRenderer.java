@@ -279,7 +279,7 @@ class BanlistRenderer {
            .append("</th><th class=port data-sort-method=number>")
            .append(_t("Port"))
            .append("</th>")
-           .append("<th class=hostname>").append(_t("Hostname")).append("</th>");
+           .append("<th class=hostname>").append(_t("Host")).append("</th>");
         buf.append("<th class=reason>")
            .append(_t("Reason"))
            .append("</th><th class=expires data-sort-method=number data-sort-direction=ascending>")

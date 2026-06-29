@@ -317,9 +317,7 @@ class NetDbRenderer {
         List<RouterInfo> routersToRender = allRouters.subList(fromIndex, toIndex);
 
         // Reverse DNS lookups
-        Map<String, String> rdnsLookups = enableReverseLookups()
-            ? precacheReverseDNSLookups(routersToRender)
-            : Collections.emptyMap();
+        Map<String, String> rdnsLookups = precacheReverseDNSLookups(routersToRender);
 
         renderRoutersToWriter(routersToRender, out, false, page, pageSize, false);
 
@@ -813,7 +811,7 @@ class NetDbRenderer {
     private static final java.util.concurrent.atomic.AtomicBoolean _rdnsWorkerRunning = new java.util.concurrent.atomic.AtomicBoolean(false);
 
     public Map<String, String> precacheReverseDNSLookups(Collection<RouterInfo> routers) {
-        if (!enableReverseLookups() || _context.router().isHidden()) {
+        if (_context.router().isHidden()) {
             return Collections.emptyMap();
         }
 
@@ -1468,14 +1466,12 @@ class NetDbRenderer {
             pageList = list;
         }
 
-        int maxBeforeStreaming = enableReverseLookups() ? 100 : 200;
+        int maxBeforeStreaming = 100;
 
         if (pageList.size() <= maxBeforeStreaming) {
             out.write(renderRouterInfosInParallel(pageList, isLocal));
         } else {
-            Map<String, String> rdnsLookups = enableReverseLookups()
-                ? precacheReverseDNSLookups(pageList)
-                : Collections.emptyMap();
+            Map<String, String> rdnsLookups = precacheReverseDNSLookups(pageList);
 
             for (RouterInfo ri : pageList) {
                 StringBuilder sb = new StringBuilder();
@@ -1991,7 +1987,7 @@ class NetDbRenderer {
             String primaryAddress = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(routerInfo));
             String capsStr = processedCapsStr;
             boolean isUnreachableFlag = capsStr.contains("U") || capsStr.contains("H");
-            if (enableReverseLookups() && _context.router().getUptime() > 30 * 1000 && !isUnreachableFlag && primaryAddress != null) {
+            if (_context.router().getUptime() > 30 * 1000 && !isUnreachableFlag && primaryAddress != null) {
                 String canonicalHostname = null;
                 if (rdnsLookups != null) {
                     canonicalHostname = rdnsLookups.get(primaryAddress);
@@ -2006,7 +2002,7 @@ class NetDbRenderer {
                     }
                 }
                 if (canonicalHostname != null && !canonicalHostname.equals(primaryAddress) && !canonicalHostname.equals("unknown")) {
-                    buf.append("<span class=netdb_info><b>").append(_t("Hostname"));
+                    buf.append("<span class=netdb_info><b>").append(_t("Host"));
                     buf.append(":</b> <span class=rdns>").append(canonicalHostname).append("</span></span>&nbsp;&nbsp;");
                 }
             } else if (_context.router().getUptime() > 30 * 1000 && (isUnreachableFlag || primaryAddress == null)) {
@@ -2014,33 +2010,14 @@ class NetDbRenderer {
                 if (ipAddress != null) {
                     _context.commSystem().queueLookup(ipAddress);
                     String directAddressString = Addresses.toString(ipAddress);
-                    if (enableReverseLookups()) {
-                        String canonicalHostname = null;
-                        if (rdnsLookups != null) {
-                            canonicalHostname = rdnsLookups.get(primaryAddress);
-                        }
-                        if (canonicalHostname == null) {
-                            canonicalHostname = getCachedReverseDNS(primaryAddress);
-                        }
-                        if (canonicalHostname == null) {
-                            canonicalHostname = _context.commSystem().getCanonicalHostNameSync(primaryAddress);
-                            if (canonicalHostname != null && !canonicalHostname.equals(primaryAddress) && !canonicalHostname.equals("unknown")) {
-                                putCachedReverseDNS(primaryAddress, canonicalHostname);
-                            }
-                        }
-                        if (canonicalHostname != null && !canonicalHostname.equals(directAddressString) && !canonicalHostname.equals("unknown")) {
-                            buf.append("<span class=netdb_info><b>").append(_t("Hostname"));
-                            buf.append(" (").append(_t("direct")).append("):</b> <span class=rdns>")
-                               .append(canonicalHostname).append(" (").append(directAddressString).append(")</span></span>&nbsp;&nbsp;");
-                        } else {
-                            buf.append("<span class=netdb_info><b>").append(_t("IP Address")).append(" (")
-                               .append(_t("direct")).append("):</b> <span class=rdns>").append(directAddressString)
-                               .append("</span></span>&nbsp;&nbsp;");
-                        }
-                    } else {
-                        buf.append("<span class=netdb_info><b>").append(_t("IP Address")).append(" (")
-                           .append(_t("direct")).append("):</b> <span class=rdns>").append(directAddressString)
-                           .append("</span></span>&nbsp;&nbsp;");
+                    buf.append("<span class=netdb_info><b>").append(_t("IP Address")).append(" (")
+                       .append(_t("direct")).append("):</b> <span class=rdns>").append(directAddressString)
+                       .append("</span></span>&nbsp;&nbsp;");
+                    String canonicalHostname = _context.commSystem().getCanonicalHostNameSync(directAddressString);
+                    if (canonicalHostname != null && !canonicalHostname.equals(directAddressString) && !_t("unknown").equals(canonicalHostname)) {
+                        putCachedReverseDNS(directAddressString, canonicalHostname);
+                        buf.append("<span class=netdb_info><b>").append(_t("Host"));
+                        buf.append(":</b> <span class=rdns>").append(canonicalHostname).append("</span></span>&nbsp;&nbsp;");
                     }
                 }
             }
