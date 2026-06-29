@@ -76,82 +76,20 @@ class BanlistRenderer {
     }
 
     /**
-     * Read sessionbans.txt and build a map of router hash to IP:PORT.
-     * Handles format: "IP:PORT (hostname)" or just "IP:PORT"
+     * Read sessionbans.txt once and build all three data structures in a single pass.
+     * Replaces the three separate readSessionBans* methods that each opened the file independently.
+     *
+     * @return array of [Map<String,String> ipMap, Map<String,String> hostnameMap, List<IPBanEntry> ipOnlyBans]
      */
-    private Map<String, String> readSessionBansIPMap() {
+    private Object[] readSessionBans() {
         Map<String, String> ipMap = new HashMap<>();
-        File logDir = new File(_context.getRouterDir(), "sessionbans");
-        File logFile = new File(logDir, "sessionbans.txt");
-            if (!logFile.exists()) {
-            return ipMap;
-        }
-try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.startsWith("#")) continue;
-                String[] parts = PIPE_SPLIT.split(line);
-                if (parts.length >= 3) {
-                    String hash = parts[1].trim();
-                    String ipField = parts[2].trim();
-                    // Extract the IP:PORT portion, removing hostname if present
-                    String ipPort = ipField;
-                    if (!ipPort.isEmpty() && ipField.contains(" (")) {
-                        ipPort = ipField.substring(0, ipField.indexOf(" ("));
-                    }
-                    if (!hash.isEmpty() && !ipPort.isEmpty() && ipMap.get(hash) == null) {
-                        ipMap.put(hash, ipPort);
-                    }
-                }
-            }
-        } catch (IOException e) { /* ignored */ }
-        return ipMap;
-    }
-
-    /**
-     * Read sessionbans.txt and build a map of router hash to hostname.
-     * Returns hostname if present in "IP (hostname)" format, null otherwise.
-     */
-    private Map<String, String> readSessionBansHostnameMap() {
         Map<String, String> hostnameMap = new HashMap<>();
-        File logDir = new File(_context.getRouterDir(), "sessionbans");
-        File logFile = new File(logDir, "sessionbans.txt");
-        if (!logFile.exists()) {
-            return hostnameMap;
-        }
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.startsWith("#")) continue;
-                String[] parts = PIPE_SPLIT.split(line);
-                if (parts.length >= 3) {
-                    String hash = parts[1].trim();
-                    String ipField = parts[2].trim();
-                    // Extract hostname from "IP (hostname)" format
-                    String hostname = null;
-                    if (!ipField.isEmpty() && ipField.contains(" (") && ipField.endsWith(")")) {
-                        hostname = ipField.substring(ipField.indexOf(" (") + 2, ipField.length() - 1);
-                    }
-                    if (!hash.isEmpty() && hostname != null && !hostname.isEmpty() && hostnameMap.get(hash) == null) {
-                        hostnameMap.put(hash, hostname);
-                    }
-                }
-            }
-        } catch (IOException e) { /* ignored */ }
-        return hostnameMap;
-    }
-
-    /**
-     * Read sessionbans.txt and build a list of IP-only bans.
-     * Handles format: "IP:PORT (hostname)" or just "IP:PORT"
-     */
-    private List<IPBanEntry> readSessionBansIPOnly() {
         List<IPBanEntry> ipBans = new ArrayList<>();
         Set<String> seenIPs = new HashSet<>();
         File logDir = new File(_context.getRouterDir(), "sessionbans");
         File logFile = new File(logDir, "sessionbans.txt");
         if (!logFile.exists()) {
-            return ipBans;
+            return new Object[] { ipMap, hostnameMap, ipBans };
         }
         long now = _context.clock().now();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), StandardCharsets.UTF_8))) {
@@ -159,32 +97,41 @@ try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileIn
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("#")) continue;
                 String[] parts = PIPE_SPLIT.split(line);
-                if (parts.length >= 4) {
-                    String hash = parts[1].trim();
-                    String ipField = parts[2].trim();
+                if (parts.length < 3) continue;
+                String hash = parts[1].trim();
+                String ipField = parts[2].trim();
+                // Extract IP:PORT and hostname from "IP:PORT (hostname)" format
+                String ipPort = ipField;
+                String hostname = null;
+                if (!ipPort.isEmpty() && ipField.contains(" (") && ipField.endsWith(")")) {
+                    ipPort = ipField.substring(0, ipField.indexOf(" ("));
+                    hostname = ipField.substring(ipField.indexOf(" (") + 2, ipField.length() - 1);
+                }
+                // Build ipMap and hostnameMap for hash-based entries
+                if (!hash.isEmpty() && !hash.equals("UNKNOWN")) {
+                    if (!ipPort.isEmpty() && ipMap.get(hash) == null) {
+                        ipMap.put(hash, ipPort);
+                    }
+                    if (hostname != null && !hostname.isEmpty() && hostnameMap.get(hash) == null) {
+                        hostnameMap.put(hash, hostname);
+                    }
+                }
+                // Build ipOnlyBans for entries with no hash
+                if (parts.length >= 4 && (hash.isEmpty() || hash.equals("UNKNOWN")) && !ipPort.isEmpty()) {
                     String reason = parts[3].trim();
                     String durationStr = parts.length >= 5 ? parts[4].trim() : "";
-                    // Extract IP:PORT and hostname from "IP:PORT (hostname)" format
-                    String ipPort = ipField;
-                    String hostname = null;
-                    if (!ipPort.isEmpty() && ipField.contains(" (") && ipField.endsWith(")")) {
-                        ipPort = ipField.substring(0, ipField.indexOf(" ("));
-                        hostname = ipField.substring(ipField.indexOf(" (") + 2, ipField.length() - 1);
-                    }
-                    if ((hash.isEmpty() || hash.equals("UNKNOWN")) && !ipPort.isEmpty()) {
-                        long expires = parseDuration(durationStr, now);
-                        if (expires > now) {
-                            String ipOnly = extractIP(ipPort);
-                            if (!seenIPs.contains(ipOnly)) {
-                                seenIPs.add(ipOnly);
-                                ipBans.add(new IPBanEntry(ipPort, hostname, reason, expires, durationStr));
-                            }
+                    long expires = parseDuration(durationStr, now);
+                    if (expires > now) {
+                        String ipOnly = extractIP(ipPort);
+                        if (!seenIPs.contains(ipOnly)) {
+                            seenIPs.add(ipOnly);
+                            ipBans.add(new IPBanEntry(ipPort, hostname, reason, expires, durationStr));
                         }
                     }
                 }
             }
         } catch (IOException e) { /* ignored */ }
-        return ipBans;
+        return new Object[] { ipMap, hostnameMap, ipBans };
     }
 
     /**
@@ -305,9 +252,13 @@ try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileIn
     public void renderBanlistCompact(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
         Map<Hash, Banlist.Entry> entries = new TreeMap<>(new HashComparator());
-        Map<String, String> ipMap = readSessionBansIPMap();
-        Map<String, String> hostnameMap = readSessionBansHostnameMap();
-        List<IPBanEntry> ipOnlyBans = readSessionBansIPOnly();
+        Object[] sessionBans = readSessionBans();
+        @SuppressWarnings("unchecked")
+        Map<String, String> ipMap = (Map<String, String>) sessionBans[0];
+        @SuppressWarnings("unchecked")
+        Map<String, String> hostnameMap = (Map<String, String>) sessionBans[1];
+        @SuppressWarnings("unchecked")
+        List<IPBanEntry> ipOnlyBans = (List<IPBanEntry>) sessionBans[2];
 
         entries.putAll(_context.banlist().getEntries());
         if (entries.isEmpty() && ipOnlyBans.isEmpty()) {
