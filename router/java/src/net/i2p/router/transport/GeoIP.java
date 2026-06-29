@@ -34,6 +34,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientAppManager;
 import net.i2p.data.DataHelper;
@@ -95,9 +97,10 @@ public class GeoIP {
 
     // ASN database for IP → org name lookups
     private volatile com.maxmind.db.Reader _asnReader;
-    private final ConcurrentHashMap<String, String> _orgNameCache = new ConcurrentHashMap<>(1024);
 
     static final String PROP_GEOIP_ENABLED = "routerconsole.geoip.enable";
+    /** Normalize ISP/org names from ASN database (strip suffixes, abbreviate, title-case) */
+    static final String PROP_NORMALIZE_ISP = "routerconsole.enableISPNameNormalization";
     public static final String PROP_GEOIP_DIR = "geoip.dir";
     public static final String GEOIP_DIR_DEFAULT = "geoip";
     static final String GEOIP_FILE_DEFAULT = "geoip.txt";
@@ -164,7 +167,6 @@ public class GeoIP {
         _pendingSearch.clear();
         _pendingIPv6Search.clear();
         _notFound.clear();
-        _orgNameCache.clear();
         com.maxmind.db.Reader reader = _asnReader;
         if (reader != null) {
             try { reader.close(); } catch (IOException e) { /* ignore */ }
@@ -544,8 +546,6 @@ public class GeoIP {
      */
     public String getOrgName(String ipAddress) {
         if (ipAddress == null || ipAddress.isEmpty()) {return null;}
-        String cached = _orgNameCache.get(ipAddress);
-        if (cached != null) {return cached;}
         try {
             com.maxmind.db.Reader reader = _asnReader;
             if (reader == null) {
@@ -564,9 +564,11 @@ public class GeoIP {
                 Map map = (Map) result;
                 Object org = map.get("autonomous_system_organization");
                 if (org instanceof String) {
-                    String orgName = (String) org;
-                    _orgNameCache.put(ipAddress, orgName);
-                    return orgName;
+                    String raw = (String) org;
+                    if (_context.getProperty(PROP_NORMALIZE_ISP, true)) {
+                        return normalizeOrgName(raw);
+                    }
+                    return raw;
                 }
             }
         } catch (Exception e) {
@@ -574,6 +576,288 @@ public class GeoIP {
                 _log.warn("ASN lookup failed for " + ipAddress, e);
         }
         return null;
+    }
+
+    // --- ISP Name Normalization (ported from Python normalize-asn.py) ---
+
+    /** Suffixes to strip from org names (longer patterns first) */
+    private static final String[] SUFFIX_PATTERNS = {
+        ",?\\s+Pty\\.?\\s+Ltd\\.?$",
+        ",?\\s+PTY\\s+LTD\\.?$",
+        ",?\\s+Limited\\s+Liability\\s+Partnership\\.?$",
+        ",?\\s+Limited\\.?$",
+        ",?\\s+LIMITED\\.?$",
+        ",?\\s+Ltd\\.?\\s+Co\\.?$",
+        ",?\\s+LTD\\.?\\s+CO\\.?$",
+        ",?\\s+Ltd\\.?$",
+        ",?\\s+LTD\\.?$",
+        ",?\\s+Inc\\.?$",
+        ",?\\s+INC\\.?$",
+        ",?\\s+Incorporated\\.?$",
+        ",?\\s+LLC\\.?$",
+        ",?\\s+LLP\\.?$",
+        ",?\\s+Corporation\\.?$",
+        ",?\\s+CORPORATION\\.?$",
+        ",?\\s+Corp\\.?\\s+Co\\.?$",
+        ",?\\s+Corp\\.?$",
+        ",?\\s+CORP\\.?$",
+        ",?\\s+Company\\.?$",
+        ",?\\s+COMPANY\\.?$",
+        ",?\\s+Co\\.?\\s+Ltd\\.?$",
+        ",?\\s+CO\\.?\\s+LTD\\.?$",
+        ",?\\s+Co\\.?$",
+        ",?\\s+CO\\.?$",
+        ",?\\s+S\\.?\\s+A\\.?\\s+R\\.?\\s+L\\.?$",
+        ",?\\s+S\\.?\\s+A\\.?$",
+        ",?\\s+SA\\.?$",
+        ",?\\s+GmbH\\s*&\\s+Co\\.?\\s+KG\\.?$",
+        ",?\\s+GmbH\\s*&\\s+Co\\.?$",
+        ",?\\s+GmbH\\.?$",
+        ",?\\s+B\\.?\\s+V\\.?$",
+        ",?\\s+BV\\.?$",
+        ",?\\s+N\\.?\\s+V\\.?$",
+        ",?\\s+NV\\.?$",
+        ",?\\s+PLC\\.?$",
+        ",?\\s+Group\\.?$",
+        ",?\\s+GROUP\\.?$",
+        ",?\\s+SpA\\.?$",
+        ",?\\s+Sp\\.?\\s+Z\\s+o\\.?\\s+o\\.?\\s+L\\.?$",
+        ",?\\s+Pvt\\.?\\s*(Ltd\\.?)?$",
+        ",?\\s+PVT\\.?\\s*(LTD\\.?)?$",
+    };
+    private static final Pattern[] SUFFIX_COMPILED;
+    static {
+        SUFFIX_COMPILED = new Pattern[SUFFIX_PATTERNS.length];
+        for (int i = 0; i < SUFFIX_PATTERNS.length; i++) {
+            SUFFIX_COMPILED[i] = Pattern.compile(SUFFIX_PATTERNS[i], Pattern.CASE_INSENSITIVE);
+        }
+    }
+
+    /** Words to keep uppercase */
+    private static final Set<String> KEEP_UPPER = new java.util.HashSet<>(java.util.Arrays.asList(
+        "IP", "IPv4", "IPv6", "ATM", "TV", "DNS", "IPTV", "AS",
+        "USA", "UK", "EU", "APAC", "EMEA", "LAN", "WAN", "DSL",
+        "ISDN", "GSM", "CDMA", "UMTS", "LTE", "WiFi", "WiMAX",
+        "LLC", "LTD", "INC", "CORP", "GMBH", "PLC", "AG", "SE", "AB", "KK",
+        "JSC", "OAO", "ZAO", "OOO", "CN",
+        "IMS", "TOT", "ISPS",
+        "ABSA", "MTN", "VOD", "TELKOM", "SBC", "BT", "AT&T", "NTL",
+        "RCN", "MCI"
+    ));
+
+    /** Brand names that should keep their exact casing */
+    private static final Map<String, String> BRAND_NAMES = new java.util.HashMap<>();
+    static {
+        String[][] brands = {
+            {"SoftBank", "SoftBank"}, {"T-Mobile", "T-Mobile"}, {"Telia", "Telia"},
+            {"KPN", "KPN"}, {"IIJ", "IIJ"}, {"NTT", "NTT"}, {"KDDI", "KDDI"},
+            {"SK", "SK"}, {"LG", "LG"}, {"Qwest", "Qwest"}, {"Sprint", "Sprint"},
+            {"Verizon", "Verizon"}, {"Comcast", "Comcast"}, {"Charter", "Charter"},
+            {"Cogent", "Cogent"}, {"Hurricane", "Hurricane"}, {"Telenor", "Telenor"},
+            {"Tele2", "Tele2"}, {"Swisscom", "Swisscom"}, {"Deutsche", "Deutsche"},
+            {"Orange", "Orange"}, {"Telefonica", "Telefonica"},
+        };
+        for (String[] b : brands) {BRAND_NAMES.put(b[0], b[1]);}
+    }
+
+    /** Abbreviation map for verbose Spanish/Portuguese/etc words */
+    private static final String[][] ABBREV_ENTRIES = {
+        {"Telecomunicaciones", "Telecom"}, {"Telecomunicacoes", "Telecom"},
+        {"Telecomunicacoes", "Telecom"}, {"Companhia", "Co"}, {"Compania", "Co"},
+        {"Servicios", "Svc"}, {"Servicio", "Svc"}, {"Servicos", "Svc"},
+        {"Redes", "Net"}, {"Cooperativa", "Coop"}, {"Sociedad", "SA"},
+        {"Comunicacao", "Comms"}, {"Informatica", "IT"}, {"Tecnologia", "Tech"},
+        {"Multimidia", "Multi"}, {"Equipamentos", "Equip"},
+        {"Provedores", "Prov"}, {"Provedor", "Prov"},
+        {"Solucoes", "Sols"}, {"Associacao", "Assoc"}, {"Comercio", "Comm"},
+        {"Desenvolvimento", "Dev"}, {"Economico", "Econ"},
+        {"Nacional", "Natl"}, {"Internacional", "Intl"},
+        {"University", "Univ"}, {"Company", "Co"},
+        {"Telekomunikasyon", "Telecom"}, {"Komunikasi", "Comms"},
+        {"Informatika", "IT"}, {"Sirketi", "Co"}, {"Ticaret", "Trade"},
+        {"Limited", "Ltd"}, {"Mbh", "GmbH"}, {"Information", "Info"},
+        {"Centre", "Center"}, {"Department", "Dept"}, {"Agricultural", "Agri"},
+        {"Technical", "Tech"}, {"Metropolitan", "Metro"}, {"Headquarters", "HQ"},
+        {"Corporation", "Corp"}, {"Organization", "Org"}, {"Institution", "Inst"},
+        {"Administration", "Admin"}, {"Commission", "Comm"}, {"Authority", "Auth"},
+        {"Institute", "Inst"}, {"Foundation", "Fdn"}, {"Association", "Assoc"},
+        {"Committee", "Comm"}, {"Division", "Div"}, {"Directorate", "Dir"},
+        {"Ministry", "Min"}, {"National", "Natl"}, {"Federal", "Fed"},
+        {"Telecommunications", "Telecom"}, {"Infrastructure", "Infra"},
+        {"Industries", "Ind"}, {"Industrial", "Ind"},
+        {"Multimedia", "Multi"}, {"Negocios", "Biz"},
+        {"Ingenieria", "Eng"}, {"Ingenieur", "Eng"},
+        {"Kommunale", "Muni"}, {"Regionalis", "Regional"},
+        {"Autonomous", "Auto"}, {"Non-profit", "Nonprofit"},
+    };
+    private static final Pattern[][] ABBREV_COMPILED;
+    static {
+        ABBREV_COMPILED = new Pattern[ABBREV_ENTRIES.length][];
+        for (int i = 0; i < ABBREV_ENTRIES.length; i++) {
+            ABBREV_COMPILED[i] = new Pattern[]{
+                Pattern.compile("\\b" + Pattern.quote(ABBREV_ENTRIES[i][0]) + "\\b", Pattern.CASE_INSENSITIVE),
+                null
+            };
+        }
+    }
+
+    /** Filler prepositions/articles to drop */
+    private static final Pattern FILLER_DROP = Pattern.compile(
+        "\\b(?:de|do|da|dos|das|em|para|por|com|e|y|o|a|os|as|dan|serta|untuk|dari|ke|pada|" +
+        "im|am|von|der|den|del|della|delle|dello|alla|alle|il|le|la|i|gli|un|una|sul|negli|nel|" +
+        "ve|fuer|and|of|the|for|in|on|at|to|by|with|from|as|is|or)\\b",
+        Pattern.CASE_INSENSITIVE
+    );
+
+    /** Embedded ASN numbers (e.g. AS12345) */
+    private static final Pattern ASN_EMBEDDED = Pattern.compile("\\bAS\\d+\\b\\s*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern ASN_TRAILING = Pattern.compile("\\s*\\bAS\\d+\\b$", Pattern.CASE_INSENSITIVE);
+
+    /** Trailing parentheticals to strip */
+    private static final Pattern PAREN_TRAILING = Pattern.compile("\\s*\\([^)]{0,50}\\)\\s*$");
+
+    /** Leading/trailing junk */
+    private static final Pattern LEADING_JUNK = Pattern.compile("^[-\u2013\u2014\\s\"']+");
+    private static final Pattern TRAILING_JUNK = Pattern.compile("[-\u2013\u2014\\s\"']+$");
+    private static final Pattern DOUBLE_COMMA = Pattern.compile(",\\s*,");
+    private static final Pattern DOUBLE_SPACE = Pattern.compile("  +");
+
+    /** Verbose prefixes to strip */
+    private static final Pattern[] STRIP_PREFIXES = {
+        Pattern.compile("^(Internet Domain Name System)\\s+", Pattern.CASE_INSENSITIVE),
+        Pattern.compile("^(Internet (?:Backbone|Network|Service|Provider|Telecom|Communications))\\s+", Pattern.CASE_INSENSITIVE),
+        Pattern.compile("^(Autonomous System(?:\\s+Number)?)\\s+(?:of|for)\\s+", Pattern.CASE_INSENSITIVE),
+    };
+
+    /** Filler words that can be trimmed from long names */
+    private static final Pattern FILLER_WORDS = Pattern.compile(
+        "\\b(?:Center|Centre|Engineering|Development|Technical|Technology|Information|" +
+        "Communications?|Telecommunications?|Network(?:s)?|Services?|Solutions?|Systems?|" +
+        "Global|International)\\b",
+        Pattern.CASE_INSENSITIVE
+    );
+
+    /** Names that should be returned as-is */
+    private static final Pattern[] SKIP_PATTERNS = {
+        Pattern.compile("^Reserved\\s+AS", Pattern.CASE_INSENSITIVE),
+        Pattern.compile("^Autonomous\\s+System\\s+number", Pattern.CASE_INSENSITIVE),
+        Pattern.compile("^N/?A$", Pattern.CASE_INSENSITIVE),
+    };
+
+    /**
+     * Normalize an ISP/org name from the ASN database.
+     * Strips suffixes, abbreviates verbose words, title-cases with acronym preservation.
+     *
+     * @param raw original org name from MMDB
+     * @return normalized name
+     * @since 0.9.65+
+     */
+    public static String normalizeOrgName(String raw) {
+        if (raw == null || raw.isEmpty()) {return raw;}
+
+        String name = raw.trim();
+
+        // Skip reserved / non-org names
+        for (Pattern pat : SKIP_PATTERNS) {
+            if (pat.matcher(name).find()) {return name;}
+        }
+
+        // Strip embedded ASN numbers
+        name = ASN_EMBEDDED.matcher(name).replaceAll("");
+        name = ASN_TRAILING.matcher(name).replaceAll("");
+        name = name.trim();
+
+        // Strip verbose prefixes
+        for (Pattern pat : STRIP_PREFIXES) {
+            name = pat.matcher(name).replaceAll("");
+        }
+
+        // Abbreviate verbose words
+        for (int i = 0; i < ABBREV_ENTRIES.length; i++) {
+            name = ABBREV_COMPILED[i][0].matcher(name).replaceAll(ABBREV_ENTRIES[i][1]);
+        }
+
+        // Drop filler prepositions/articles
+        name = FILLER_DROP.matcher(name).replaceAll(" ");
+        name = DOUBLE_SPACE.matcher(name).replaceAll(" ");
+        name = name.trim();
+
+        // Strip corporate suffixes (longer patterns first via sorted array)
+        for (Pattern pat : SUFFIX_COMPILED) {
+            name = pat.matcher(name).replaceAll("");
+        }
+        name = name.trim();
+
+        // Strip trailing parentheticals
+        name = PAREN_TRAILING.matcher(name).replaceAll("");
+
+        // Clean punctuation
+        name = LEADING_JUNK.matcher(name).replaceAll("");
+        name = TRAILING_JUNK.matcher(name).replaceAll("");
+        name = DOUBLE_COMMA.matcher(name).replaceAll(",");
+        name = DOUBLE_SPACE.matcher(name).replaceAll(" ");
+        name = name.replaceAll("^[ ,.]+|[ ,.]+$", "");
+
+        // Title case with acronym preservation
+        name = titleCasePreserve(name);
+
+        // Final trim
+        name = name.replaceAll("^[ ,.]+|[ ,.]+$", "");
+
+        // If still too long, trim trailing filler words
+        if (name.length() > 40) {
+            String[] words = name.split("\\s+");
+            StringBuilder trimmed = new StringBuilder();
+            for (int i = words.length - 1; i >= 0; i--) {
+                if (trimmed.length() > 0 && trimmed.length() + words[i].length() + 1 > 40
+                    && FILLER_WORDS.matcher(words[i]).matches()) {
+                    continue;
+                }
+                if (trimmed.length() > 0) {trimmed.insert(0, ' ');}
+                trimmed.insert(0, words[i]);
+            }
+            if (trimmed.length() > 5) {name = trimmed.toString();}
+        }
+
+        // Absolute cap
+        if (name.length() > 50) {
+            name = name.substring(0, 47);
+            int lastSpace = name.lastIndexOf(' ');
+            if (lastSpace > 10) {name = name.substring(0, lastSpace);}
+            name += "...";
+        }
+
+        return name;
+    }
+
+    /**
+     * Title-case a name while preserving acronyms and brand names.
+     */
+    private static String titleCasePreserve(String name) {
+        String[] words = name.split("\\s+");
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < words.length; i++) {
+            String w = words[i];
+            String clean = w.endsWith(".") ? w.substring(0, w.length() - 1) : w;
+            // Check brand names (exact match)
+            String brand = BRAND_NAMES.get(clean);
+            if (brand != null) {
+                if (result.length() > 0) {result.append(' ');}
+                result.append(brand);
+            } else if (KEEP_UPPER.contains(clean.toUpperCase(Locale.ROOT))) {
+                if (result.length() > 0) {result.append(' ');}
+                result.append(w.toUpperCase(Locale.ROOT));
+            } else if (w.length() <= 4 && w.equals(w.toUpperCase(Locale.ROOT)) && w.matches("[A-Z]+")) {
+                // Short all-caps in source — likely acronym
+                if (result.length() > 0) {result.append(' ');}
+                result.append(w);
+            } else {
+                if (result.length() > 0) {result.append(' ');}
+                result.append(Character.toUpperCase(w.charAt(0)));
+                if (w.length() > 1) {result.append(w.substring(1).toLowerCase(Locale.ROOT));}
+            }
+        }
+        return result.toString();
     }
 
     /**
