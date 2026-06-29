@@ -369,11 +369,8 @@ public class WorkingDir {
         if (!oldFile.exists())
             return true;
         File newFile = new File(todir, "clients.config");
-        FileInputStream in = null;
-        PrintWriter out = null;
-        try {
-            in = new FileInputStream(oldFile);
-            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(newFile), "UTF-8")));
+        try (FileInputStream in = new FileInputStream(oldFile);
+             PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(newFile), "UTF-8")))) {
             out.println("# Modified by I2P User dir migration script");
             String s = null;
             boolean isDaemon = SystemVersion.isLinuxService();
@@ -398,9 +395,6 @@ public class WorkingDir {
         } catch (IOException ioe) {
             System.err.println("FAILED copy of: " + oldFile + ": " + ioe);
             return false;
-        } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
-            if (out != null) out.close();
         }
     }
 
@@ -441,11 +435,8 @@ public class WorkingDir {
      */
     static void migrateFileXML(File oldFile, File newFile, String oldString, String newString,
                                String oldString2, String newString2) throws IOException {
-        FileInputStream in = null;
-        PrintWriter out = null;
-        try {
-            in = new FileInputStream(oldFile);
-            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(newFile), "UTF-8")));
+        try (FileInputStream in = new FileInputStream(oldFile);
+             PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(newFile), "UTF-8")))) {
             String s = null;
             while ((s = DataHelper.readLine(in)) != null) {
                 // readLine() doesn't strip \r
@@ -461,9 +452,6 @@ public class WorkingDir {
             }
             out.println("<!-- Modified by I2P User dir migration script -->");
             System.err.println("Copied file: " + oldFile + " with modifications");
-        } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
-            if (out != null) out.close();
         }
     }
 
@@ -517,19 +505,13 @@ public class WorkingDir {
         if (!src.exists()) return false;
         boolean rv = true;
 
-        FileInputStream in = null;
-        FileOutputStream out = null;
-        try {
-            in = new FileInputStream(src);
-            out = new SecureFileOutputStream(dst);
+        try (FileInputStream in = new FileInputStream(src);
+             FileOutputStream out = new SecureFileOutputStream(dst)) {
             DataHelper.copy(in, out);
             System.err.println("Copied file: " + src.getPath());
         } catch (IOException ioe) {
             System.err.println("FAILED copy " + src.getPath() + ": " + ioe);
             rv = false;
-        } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
-            if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
         }
         if (rv)
             dst.setLastModified(src.lastModified()); // NOSONAR false positive S899

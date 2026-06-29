@@ -127,9 +127,7 @@ public class EventLog {
             throw new IllegalArgumentException();
         _cache.remove(event);
         _cacheTime.remove(event);
-        OutputStream out = null;
-        try {
-            out = new SecureFileOutputStream(_file, true);
+        try (OutputStream out = new SecureFileOutputStream(_file, true)) {
             StringBuilder buf = new StringBuilder(128);
             buf.append(_context.clock().now()).append(' ').append(event);
             if (info != null && info.length() > 0)
@@ -138,9 +136,7 @@ public class EventLog {
                 buf.append('\r');
             buf.append('\n');
             out.write(buf.toString().getBytes("UTF-8"));
-        } catch (IOException ioe) { /* ignored */ } finally {
-            if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
-        }
+        } catch (IOException ioe) { /* ignored */ }
     }
 
     /**
@@ -160,10 +156,8 @@ public class EventLog {
             }
         }
         rv = new TreeMap<>();
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(_file), "UTF-8"));
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(_file), "UTF-8"))) {
             String line = null;
             while ( (line = br.readLine()) != null) {
                 try {
@@ -182,9 +176,7 @@ public class EventLog {
             _cache.put(event, rv);
             _cacheTime.put(event, Long.valueOf(since));
             evictIfNeeded();
-        } catch (IOException ioe) { /* ignored */ } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) { /* ignored */ }
-        }
+        } catch (IOException ioe) { /* ignored */ }
         return rv;
     }
 
@@ -200,10 +192,8 @@ public class EventLog {
      */
     public synchronized SortedMap<Long, String> getEvents(long since) {
         SortedMap<Long, String> rv = new TreeMap<>();
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(_file), "UTF-8"));
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(_file), "UTF-8"))) {
             String line = null;
             while ( (line = br.readLine()) != null) {
                 try {
@@ -218,9 +208,7 @@ public class EventLog {
                 } catch (IndexOutOfBoundsException ioobe) { /* ignored */ } catch (NumberFormatException nfe) { /* ignored */ }
             }
             rv = Collections.unmodifiableSortedMap(rv);
-        } catch (IOException ioe) { /* ignored */ } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) { /* ignored */ }
-        }
+        } catch (IOException ioe) { /* ignored */ }
         return rv;
     }
 
@@ -234,10 +222,8 @@ public class EventLog {
      */
     public synchronized long getLastEvent(String event, long since) {
         long rv = 0;
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(_file), "UTF-8"));
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(_file), "UTF-8"))) {
             String line = null;
             while ( (line = br.readLine()) != null) {
                 try {
@@ -252,9 +238,7 @@ public class EventLog {
                     rv = time;
                 } catch (NumberFormatException nfe) { /* ignored */ }
             }
-        } catch (IOException ioe) { /* ignored */ } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) { /* ignored */ }
-        }
+        } catch (IOException ioe) { /* ignored */ }
         return rv;
     }
 }

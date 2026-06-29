@@ -98,17 +98,13 @@ public class PersistRouterInfoJob extends JobImpl {
 
         RouterInfo info = getContext().router().getRouterInfo();
 
-        FileOutputStream fos = null;
         synchronized (getContext().router().routerInfoFileLock) {
-            try {
-                fos = new SecureFileOutputStream(infoFile);
+            try (FileOutputStream fos = new SecureFileOutputStream(infoFile)) {
                 info.writeBytes(fos);
             } catch (DataFormatException dfe) {
                 _log.error("Error rebuilding our RouterInfo", dfe);
             } catch (IOException ioe) {
                 _log.error("Error saving our updated RouterInfo file", ioe);
-            } finally {
-                if (fos != null) try { fos.close(); } catch (IOException ioe) { /* ignored */ }
             }
         }
     }

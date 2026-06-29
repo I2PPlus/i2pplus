@@ -63,9 +63,7 @@ public class PersistSybil {
             dir.mkdirs();
         File file = new File(dir, PFX + date + SFX);
         StringBuilder buf = new StringBuilder(128);
-        Writer out = null;
-        try {
-            out = new OutputStreamWriter(new GZIPOutputStream(new SecureFileOutputStream(file)), "UTF-8");
+        try (Writer out = new OutputStreamWriter(new GZIPOutputStream(new SecureFileOutputStream(file)), "UTF-8")) {
             out.write("# Format (one per line)\n");
             out.write("# Base64 router hash:total points%points:reason%points:reason ...\n");
             for (Map.Entry<Hash, Points> entry : entries.entrySet()) {
@@ -77,8 +75,6 @@ public class PersistSybil {
                 out.append(buf);
                 buf.setLength(0);
             }
-        } finally {
-            if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -113,9 +109,7 @@ public class PersistSybil {
         File dir = new File(_context.getConfigDir(), DIR);
         File file = new File(dir, PFX + date + SFX);
         Map<Hash, Points> rv = new HashMap<>();
-        BufferedReader in = null;
-        try {
-                in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), "UTF-8"));
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), "UTF-8"))) {
             String line;
             while ((line = in.readLine()) != null) {
                 if (line.startsWith("#"))
@@ -136,8 +130,6 @@ public class PersistSybil {
                     continue;
                 rv.put(h, p);
             }
-        } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
         }
         return rv;
     }
@@ -154,9 +146,7 @@ public class PersistSybil {
         List<Long> dates = load();
         for (Long date : dates) {
             File file = new File(dir, PFX + date + SFX);
-            BufferedReader in = null;
-            try {
-            in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), "UTF-8"));
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), "UTF-8"))) {
                 String line;
                 while ((line = in.readLine()) != null) {
                     if (!line.startsWith(bh))
@@ -168,8 +158,6 @@ public class PersistSybil {
                         continue;
                     rv.put(date, p);
                 }
-            } finally {
-                if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
             }
         }
         return rv;
@@ -286,10 +274,8 @@ public class PersistSybil {
     private synchronized Map<String, Long> readBlocklist(File blFile) {
         Map<String, Long> rv = null;
         if (blFile.exists()) {
-            BufferedReader br = null;
-            try {
-                br = new BufferedReader(new InputStreamReader(
-                        new FileInputStream(blFile), "UTF-8"));
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(
+                        new FileInputStream(blFile), "UTF-8"))) {
                 rv = new HashMap<>();
                 String buf = null;
                 long now = _context.clock().now() + 5*60*1000L;
@@ -310,8 +296,6 @@ public class PersistSybil {
             } catch (IOException ioe) {
                 if (_log.shouldWarn())
                     _log.warn("Error reading the blocklist file", ioe);
-            } finally {
-                if (br != null) try { br.close(); } catch (IOException ioe) { /* ignored */ }
             }
         }
         return rv;
@@ -341,9 +325,7 @@ public class PersistSybil {
                 map.put(s, old);
             }
         }
-        Writer out = null;
-        try {
-            out = new OutputStreamWriter(new SecureFileOutputStream(blFile), "UTF-8");
+        try (Writer out = new OutputStreamWriter(new SecureFileOutputStream(blFile), "UTF-8")) {
             out.write("# Format (one per line)\n");
             out.write("# IP or Base64 router hash,expiration (ms)\n");
             for (Map.Entry<String, Long> e : map.entrySet()) {
@@ -356,8 +338,6 @@ public class PersistSybil {
         } catch (IOException ioe) {
             if (_log.shouldWarn())
                 _log.warn("Error writing the blocklist file", ioe);
-        } finally {
-            if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 

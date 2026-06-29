@@ -97,10 +97,8 @@ class Zones {
             //    _log.warn("Continent file not found: " + geoFile.getAbsolutePath());
             return;
         }
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(geoFile), "UTF-8"));
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(geoFile), "UTF-8"))) {
             String line = null;
             while ((line = br.readLine()) != null) {
                 try {
@@ -119,8 +117,6 @@ class Zones {
             }
         } catch (IOException ioe) {
             System.out.println("Error reading the continent file " + geoFile.getAbsolutePath());
-        } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 

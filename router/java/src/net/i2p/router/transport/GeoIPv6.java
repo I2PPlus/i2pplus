@@ -84,9 +84,7 @@ public class GeoIPv6 {
         String[] rv = new String[search.length];
         int idx = 0;
         long start = System.currentTimeMillis();
-        InputStream in = null;
-        try {
-            in = new GZIPInputStream(new BufferedInputStream(new FileInputStream(geoFile)));
+        try (InputStream in = new GZIPInputStream(new BufferedInputStream(new FileInputStream(geoFile)))) {
             GeoIP.notifyVersion(context, "I2Pv6", geoFile.lastModified());
             byte[] magic = new byte[MAGIC.length()];
             DataHelper.read(in, magic);
@@ -121,8 +119,6 @@ public class GeoIPv6 {
         } catch (IOException ioe) {
             if (log.shouldError())
                 log.error("Error reading the geoFile", ioe);
-        } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
         }
 
         if (log.shouldInfo())
@@ -174,42 +170,38 @@ public class GeoIPv6 {
         List<V6Entry> entries = new ArrayList<>(20000);
         for (File geoFile : inFiles) {
             int count = 0;
-            InputStream in = null;
-            BufferedReader br = null;
             try {
-                in = new BufferedInputStream(new FileInputStream(geoFile));
+                InputStream rawIn = new BufferedInputStream(new FileInputStream(geoFile));
                 if (geoFile.getName().endsWith(".gz"))
-                    in = new GZIPInputStream(in);
-                String buf = null;
-                br = new BufferedReader(new InputStreamReader(in, "ISO-8859-1"));
-                while ((buf = br.readLine()) != null) {
-                    try {
-                        if (buf.charAt(0) == '#') {
-                            continue;
+                    rawIn = new GZIPInputStream(rawIn);
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(rawIn, "ISO-8859-1"))) {
+                    String buf = null;
+                    while ((buf = br.readLine()) != null) {
+                        try {
+                            if (buf.charAt(0) == '#') {
+                                continue;
+                            }
+                            String[] s = DataHelper.split(buf, ",");
+                            String ips1 = s[0].replace("\"", "").trim();
+                            String ips2 = s[1].replace("\"", "").trim();
+                            byte[] ip1 = InetAddress.getByName(ips1).getAddress();
+                            byte[] ip2 = InetAddress.getByName(ips2).getAddress();
+                            String country = s[4].replace("\"", "").trim().toLowerCase(Locale.US);
+                            entries.add(new V6Entry(ip1, ip2, country));
+                            count++;
+                        } catch (UnknownHostException uhe) {
+                            uhe.printStackTrace();
+                        } catch (RuntimeException re) {
+                            re.printStackTrace();
                         }
-                        String[] s = DataHelper.split(buf, ",");
-                        String ips1 = s[0].replace("\"", "").trim();
-                        String ips2 = s[1].replace("\"", "").trim();
-                        byte[] ip1 = InetAddress.getByName(ips1).getAddress();
-                        byte[] ip2 = InetAddress.getByName(ips2).getAddress();
-                        String country = s[4].replace("\"", "").trim().toLowerCase(Locale.US);
-                        entries.add(new V6Entry(ip1, ip2, country));
-                        count++;
-                    } catch (UnknownHostException uhe) {
-                        uhe.printStackTrace();
-                    } catch (RuntimeException re) {
-                        re.printStackTrace();
                     }
+                    System.err.println("Read " + count + " entries from " + geoFile);
                 }
-                System.err.println("Read " + count + " entries from " + geoFile);
             } catch (IOException ioe) {
                 ioe.printStackTrace();
                 //if (_log.shouldError())
                 //    _log.error("Error reading the geoFile", ioe);
                 return false;
-            } finally {
-                if (in != null) try { in.close(); } catch (IOException ioe) { /* ignored */ }
-                if (br != null) try { br.close(); } catch (IOException ioe) { /* ignored */ }
             }
         }
         Collections.sort(entries);
@@ -252,9 +244,7 @@ public class GeoIPv6 {
             }
             old = e;
         }
-        OutputStream out = null;
-        try {
-            out = new GZIPOutputStream(new BufferedOutputStream(new FileOutputStream(outFile)));
+        try (OutputStream out = new GZIPOutputStream(new BufferedOutputStream(new FileOutputStream(outFile)))) {
             out.write(DataHelper.getASCII(MAGIC));
             writeLong(out, System.currentTimeMillis());
             byte[] comment = DataHelper.getUTF8(COMMENT);
@@ -271,8 +261,6 @@ public class GeoIPv6 {
             //if (_log.shouldError())
             //    _log.error("Error reading the geoFile", ioe);
             return false;
-        } finally {
-            if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
         }
         return true;
     }

@@ -952,10 +952,8 @@ public class GeoIP {
                 _log.error("Country file not found: " + geoFile.getAbsolutePath());
             return;
         }
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(geoFile), "UTF-8"));
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+                    new FileInputStream(geoFile), "UTF-8"))) {
             String line = null;
             while ( (line = br.readLine()) != null) {
                 try {
@@ -971,8 +969,6 @@ public class GeoIP {
         } catch (IOException ioe) {
             if (_log.shouldError())
                 _log.error("Error reading the Country File", ioe);
-        } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -1013,10 +1009,8 @@ public class GeoIP {
         }
         String[] rv = new String[search.length];
         int idx = 0;
-        BufferedReader br = null;
-        try {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(geoFile), "ISO-8859-1"))) {
             String buf = null;
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(geoFile), "ISO-8859-1"));
             notifyVersion("Torv4", geoFile.lastModified());
             while ((buf = br.readLine()) != null && idx < search.length) {
                 try {
@@ -1037,11 +1031,6 @@ public class GeoIP {
             }
         } catch (IOException ioe) {
             if (_log.shouldError()) {_log.error("Error reading the GeoIP file", ioe);}
-        } finally {
-            if (br != null) {
-                try {br.close();}
-                catch (IOException ioe) { /* ignored */ }
-            }
         }
 
         return rv;

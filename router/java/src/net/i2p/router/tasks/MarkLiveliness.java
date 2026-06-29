@@ -84,9 +84,7 @@ public class MarkLiveliness implements SimpleTimer.TimedEvent {
     }
 
     private void ping() {
-        FileOutputStream fos = null;
-        try {
-            fos = new SecureFileOutputStream(_pingFile);
+        try (FileOutputStream fos = new SecureFileOutputStream(_pingFile)) {
             fos.write(DataHelper.getASCII(Long.toString(System.currentTimeMillis())));
         } catch (IOException ioe) {
             if (!_errorLogged) {
@@ -94,8 +92,6 @@ public class MarkLiveliness implements SimpleTimer.TimedEvent {
                 log.logAlways(Log.WARN, "Error writing to ping file " + _pingFile + ": " + ioe);
                 _errorLogged = true;
             }
-        } finally {
-            if (fos != null) try { fos.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 }

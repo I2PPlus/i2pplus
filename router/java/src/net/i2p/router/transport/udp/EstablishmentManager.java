@@ -2527,9 +2527,7 @@ class EstablishmentManager {
         if (_log.shouldDebug()) {
             _log.debug("[SSU] Loading tokens for " + ourV4Addr + ' ' + ourV4Port + ' ' + ourV6Addr + ' ' + ourV6Port);
         }
-        InputStream in = null;
-        try {
-            in = new BufferedInputStream(new FileInputStream(f));
+        try (InputStream in = new BufferedInputStream(new FileInputStream(f))) {
             boolean v4Match = false;
             boolean v6Match = false;
             long now = _context.clock().now();
@@ -2570,13 +2568,8 @@ class EstablishmentManager {
             if (_log.shouldDebug()) {_log.debug("[SSU] Loaded " + count + " tokens");}
         } catch (IOException ioe) {
             if (_log.shouldWarn()) {_log.warn("[SSU] Failed to load tokens", ioe);}
-        } finally {
-            if (in != null) {
-                try {in.close();}
-                catch (IOException ioe) { /* ignored */ }
-                f.delete();
-            }
         }
+        f.delete();
     }
 
     /**
@@ -2584,9 +2577,7 @@ class EstablishmentManager {
      */
     private void saveTokens() {
         File f = new File(_context.getConfigDir(), TOKEN_FILE);
-        PrintWriter out = null;
-        try {
-            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(f), "UTF-8")));
+        try (PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(f), "UTF-8")))) {
             out.println("# SSU2 tokens, format: IPv4/IPv6/In/Out Address Port Token Expiration");
             RouterAddress addr = _transport.getCurrentExternalAddress(false);
             if (addr != null) {
@@ -2631,8 +2622,6 @@ class EstablishmentManager {
             if (_log.shouldDebug()) {_log.debug("[SSU] Stored " + count + " tokens to " + f);}
         } catch (IOException ioe) {
             if (_log.shouldWarn()) {_log.warn("[SSU] Error writing the tokens file", ioe);}
-        } finally {
-            if (out != null) {out.close();}
         }
     }
 

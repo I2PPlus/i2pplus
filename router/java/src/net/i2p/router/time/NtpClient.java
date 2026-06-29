@@ -113,10 +113,9 @@ public class NtpClient {
      * @since 0.7.12
      */
     private static long[] currentTimeAndStratum(String serverName, int timeout, boolean preferIPv6, Log log) {
-        DatagramSocket socket = null;
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         boolean useDNSOverHTTPS = ctx.getProperty(PROP_USE_DNS_OVER_HTTPS, DEFAULT_USE_DNS_OVER_HTTPS);
-        try {
+        try (DatagramSocket socket = new DatagramSocket()) {
             InetAddress address;
             if (preferIPv6) {
                 String ip = null;
@@ -163,7 +162,6 @@ public class NtpClient {
             byte[] buf = new NtpMessage().toByteArray();
             DatagramPacket packet = new DatagramPacket(buf, buf.length, address, NTP_PORT);
             byte[] transmitTimestampBytes = new byte[8];
-            socket = new DatagramSocket();
             // Set transmit timestamp just before sending for accuracy
             NtpMessage.encodeTimestamp(packet.getData(), OFF_TXTIME,
                     (System.currentTimeMillis() / 1000.0) + SECONDS_1900_TO_EPOCH);
@@ -248,10 +246,6 @@ public class NtpClient {
                 log.warn("IOException during NTP query to server " + serverName + ": " + ioe);
             }
             return null;
-        } finally {
-            if (socket != null) {
-                socket.close();
-            }
         }
     }
 
