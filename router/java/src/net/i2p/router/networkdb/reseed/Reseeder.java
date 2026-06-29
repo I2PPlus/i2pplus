@@ -242,7 +242,7 @@ public class Reseeder {
                 try {out.close();}
                 catch (IOException ioe) { /* ignored */ }
             }
-            if (tmp != null) {tmp.delete();}
+            if (tmp != null && !tmp.delete()) {_log.warn("Failed to delete temp file " + tmp.getName());}
         }
     }
 
@@ -842,7 +842,7 @@ public class Reseeder {
                 _log.error("Error reseeding " + trimmed + " -> " + t.getMessage());
                 errors++;
             } finally {
-                if (contentRaw != null) {contentRaw.delete();}
+                if (contentRaw != null && !contentRaw.delete()) {_log.warn("Failed to delete temp file " + contentRaw.getName());}
             }
             if (errors <= 0) {
                 _checker.setStatus(_t("Acquired {0} router infos from reseed hosts", fetched));
@@ -892,8 +892,10 @@ public class Reseeder {
                 _log.error(msg);
                 errors++;
             } finally {
-                contentRaw.delete();
-                if (zip != null) {zip.delete();}
+                if (!contentRaw.delete())
+                    _log.warn("Failed to delete temp file " + contentRaw.getName());
+                if (zip != null && !zip.delete())
+                    _log.warn("Failed to delete temp zip file " + zip.getName());
             }
 
             int[] rv = new int[2];
@@ -937,14 +939,16 @@ public class Reseeder {
                         !name.endsWith(ROUTERINFO_SUFFIX) ||
                         !f.isFile()) {
                         if (_log.shouldWarn()) {_log.warn("Skipping " + f);}
-                        f.delete();
+                        if (!f.delete())
+                            _log.warn("Failed to delete unwanted RouterInfo " + f.getName());
                         errors++;
                         continue;
                     }
                     File to = new File(netDbDir, name);
                     if (FileUtil.rename(f, to)) {fetched++;}
                     else {
-                        f.delete();
+                        if (!f.delete())
+                            _log.warn("Failed to delete RouterInfo " + f.getName());
                         errors++;
                     }
                     // Give up on this host after lots of errors
@@ -1087,7 +1091,8 @@ public class Reseeder {
             }
             get.addStatusListener(ReseedRunner.this);
             if (get.fetch() && get.getStatusCode() == 200) {return out;}
-            out.delete();
+            if (!out.delete())
+                _log.warn("Failed to delete temp file " + out.getName());
             return null;
         }
 
@@ -1248,7 +1253,8 @@ public class Reseeder {
             String host = uri.getHost();
             System.out.println("Host:     " + host);
             File su3 = new File(host + ".su3");
-            su3.delete();
+            if (!su3.delete())
+                System.err.println("Failed to delete " + su3.getName());
             try {
                 SSLEepGet get;
                 if (sslState == null) {
@@ -1263,7 +1269,8 @@ public class Reseeder {
                     if (rc == 200) {
                         SU3File su3f = new SU3File(su3);
                         File zip = new File(host + ".zip");
-                        zip.delete();
+                        if (!zip.delete())
+                            System.err.println("Failed to delete " + zip.getName());
                         su3f.verifyAndMigrate(zip);
                         SU3File.main(new String[] {"showversion", su3.getPath()});
                         String version = su3f.getVersionString();
@@ -1309,13 +1316,15 @@ public class Reseeder {
                         System.out.println("Router infos included " + oldver + " with versions older than " + MIN_VERSION + " and " + unreach + " unreachable");
                     } else {
                         System.out.println("Failure:  Status code " + rc);
-                        su3.delete();
+                        if (!su3.delete())
+                            System.err.println("Failed to delete " + su3.getName());
                         fail++;
                     }
                 } else {
                     int rc = get.getStatusCode();
                     System.out.println("Failure:  Status code " + rc);
-                    su3.delete();
+                    if (!su3.delete())
+                        System.err.println("Failed to delete " + su3.getName());
                     fail++;
                 }
             } catch (Exception ioe) {
@@ -1323,7 +1332,8 @@ public class Reseeder {
                 if (su3.exists()) {
                     try {SU3File.main(new String[] {"showversion", su3.getPath()});}
                     catch (Exception e) { /* ignored */ }
-                    su3.delete();
+                    if (!su3.delete())
+                        System.err.println("Failed to delete " + su3.getName());
                 }
                 fail++;
             }

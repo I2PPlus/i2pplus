@@ -105,7 +105,8 @@ public class MessageHistory {
                 File f = new File(_historyFile);
                 if (!f.isAbsolute())
                     f = new File(_context.getLogDir(), _historyFile);
-                f.delete();
+                if (!f.delete())
+                    _log.warn("Failed to delete history file " + f.getName());
                 _writeJob.getTiming().setStartAfter(_context.clock().now() + WRITE_DELAY);
                 _context.jobQueue().addJob(_writeJob);
                 _firstPass = false;

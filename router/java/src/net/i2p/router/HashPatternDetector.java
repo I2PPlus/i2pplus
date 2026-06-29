@@ -304,7 +304,8 @@ public class HashPatternDetector implements Serializable {
         if (_log.shouldWarn()) {
             _log.warn("Deleting legacy hash-patterns.dat file");
         }
-        file.delete();
+        if (!file.delete())
+            _log.warn("Failed to delete legacy hash-patterns.dat");
     }
 
     /**

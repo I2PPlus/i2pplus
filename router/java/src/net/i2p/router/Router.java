@@ -1652,7 +1652,8 @@ public class Router implements RouterClock.ClockShiftListener {
 
         if (!SystemVersion.isAndroid()) {
             File f = getPingFile();
-            f.delete();
+            if (!f.delete())
+                _log.warn("Failed to delete ping file " + f.getName());
         }
 
         // Only do this on Android. On desktop, rogue threads
@@ -1949,7 +1950,8 @@ public class Router implements RouterClock.ClockShiftListener {
             }
             if (downtime > LIVELINESS_DELAY) {
                 System.err.println("WARN: Old router was not shut down gracefully -> Deleting " + f + "...");
-                f.delete();
+                if (!f.delete())
+                    _log.warn("Failed to delete liveness file " + f.getName());
                 if (lastWritten > 0) {
                     _eventLog.addEvent(EventLog.CRASHED, Translate.getString("{0} ago",
                                        DataHelper.formatDuration2(downtime), _context, BUNDLE_NAME));
