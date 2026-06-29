@@ -45,8 +45,7 @@
      -->
   <property name="jetty.ver" value="9.3.30.v20211001"/>
   <property name="tomcat.ver" value="9.0.107"/>
-  <property name="apache-commons-io.ver" value="2.20.0"/>
-  <property name="apache-commons-net.ver" value="3.12.0"/>
+ 
 
   <!-- You probably don't want to change anything from here down -->
   <target name="help" depends="all"/>
@@ -1594,7 +1593,7 @@
       doctitle="I2P Unit Test Javadocs for Release ${release.number} Build ${i2p.build.number}${build.extra}"
       windowtitle="I2P Anonymous Network - Java Documentation - Version ${release.number}">
       <group title="Core" packages="net.i2p:net.i2p.*:net.i2p.client:net.i2p.client.*:net.i2p.internal:net.i2p.internal.*:freenet.support.CPUInformation:gnu.crypto.*:gnu.gettext:org:com.nettgryppa.security:net.metanotion:net.metanotion.*"/>
-      <group title="Router" packages="net.i2p.router:net.i2p.router.*:net.i2p.data.i2np:org.cybergarage.*:org.freenetproject:org.xlattice.crypto.filters:org.apache.commons.net:org.apache.commons.net.*"/>
+      <group title="Router" packages="net.i2p.router:net.i2p.router.*:net.i2p.data.i2np:org.cybergarage.*:org.freenetproject:org.xlattice.crypto.filters"/>
       <sourcepath>
         <pathelement location="core/java/test/junit"/>
         <pathelement location="router/java/test/junit"/>
@@ -3087,6 +3086,7 @@
   <target name="prepgeoupdate-unlesspkg" unless="${with-geoip-database}">
     <mkdir dir="${pkg.temp.dir}/geoip"/>
     <gunzip src="installer/resources/geoip/GeoLite2-Country.mmdb.gz" dest="${pkg.temp.dir}/geoip/GeoLite2-Country.mmdb"/>
+    <gunzip src="installer/resources/geoip/db-ip-asn.mmdb.gz" dest="${pkg.temp.dir}/geoip/db-ip-asn.mmdb"/>
   </target>
 
   <!-- All jetty jars required for update. (TODO do we need to bother updating jasper?) -->
