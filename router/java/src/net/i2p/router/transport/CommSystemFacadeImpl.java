@@ -36,7 +36,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -171,8 +170,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         synchronized (whoisExecutorLock) {
             if (whoisQueryExecutor == null || whoisQueryExecutor.isShutdown()) {
                 whoisQueryExecutor = new ThreadPoolExecutor(
-                    Math.max(8, cores - 4), // core pool size
-                    Math.max(20, cores*8), // max pool size
+                    Math.max(4, cores - 4), // core pool size
+                    Math.min(cores * 2, 20), // max pool size
                     60L, TimeUnit.SECONDS,
                     new LinkedBlockingQueue<>(1000), // Bounded queue
                     new ThreadPoolExecutor.CallerRunsPolicy() // Apply backpressure
@@ -182,7 +181,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         synchronized (reverseDnsExecutorLock) {
             if (reverseDnsExecutor == null || reverseDnsExecutor.isShutdown()) {
                 reverseDnsExecutor = new ThreadPoolExecutor(
-                    10, 20,
+                    2, 10,
                     60L, TimeUnit.SECONDS,
                     new LinkedBlockingQueue<>(500),
                     new ThreadPoolExecutor.CallerRunsPolicy()
@@ -198,8 +197,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         synchronized (whoisExecutorLock) {
             if (whoisQueryExecutor == null || whoisQueryExecutor.isShutdown()) {
                 whoisQueryExecutor = new ThreadPoolExecutor(
-                    Math.max(8, cores - 4), // core pool size
-                    Math.max(20, cores*8), // max pool size
+                    Math.max(4, cores - 4), // core pool size
+                    Math.min(cores * 2, 20), // max pool size
                     60L, TimeUnit.SECONDS,
                     new LinkedBlockingQueue<>(1000), // Bounded queue
                     new ThreadPoolExecutor.CallerRunsPolicy() // Apply backpressure
@@ -216,7 +215,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         synchronized (reverseDnsExecutorLock) {
             if (reverseDnsExecutor == null || reverseDnsExecutor.isShutdown()) {
                 reverseDnsExecutor = new ThreadPoolExecutor(
-                    10, 20,
+                    2, 10,
                     60L, TimeUnit.SECONDS,
                     new LinkedBlockingQueue<>(500),
                     new ThreadPoolExecutor.CallerRunsPolicy()
@@ -897,35 +896,17 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
     }
 
-    // LRU Cache implemented with LinkedHashMap with access order
-    @SuppressWarnings("java:S2975")
-    private static class LRUCache<K, V> extends LinkedHashMap<K, V> {
-        private final int maxEntries;
-
-        public LRUCache(int maxEntries) {
-            super(maxEntries + 1, 0.75f, true); // access order set to true
-            this.maxEntries = maxEntries;
-        }
-
-        @Override
-        protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
-            return size() > maxEntries;
-        }
-    }
-
     /**
      * In-memory reverse DNS cache storing IP-to-hostname mappings.
-     *
-     * This cache is a size-bounded LRU cache that automatically evicts
-     * least recently used entries when the maximum size is exceeded.
-     * The cache is wrapped in Collections.synchronizedMap() for thread safety.
+     * Backed by ConcurrentHashMap for lock-free reads. Entries are
+     * periodically flushed to disk and expired entries are cleaned up.
      *
      * Keys are IP addresses as Strings. Values are CacheEntry objects
      * containing hostname and timestamp.
      */
-    private static final Map<String, CacheEntry> rdnsCache = Collections.synchronizedMap(new LRUCache<>(MAX_RDNS_CACHE_SIZE));
+    private static final ConcurrentHashMap<String, CacheEntry> rdnsCache = new ConcurrentHashMap<>(MAX_RDNS_CACHE_SIZE);
 
-    private static Map<String, CacheEntry> getRDNSCache() {
+    private static ConcurrentHashMap<String, CacheEntry> getRDNSCache() {
         return rdnsCache;
     }
 
@@ -1012,10 +993,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         @Override
         public void run() {
-            Map<String, CacheEntry> liveCacheSnapshot;
-            synchronized (rdnsCache) {
-                liveCacheSnapshot = new HashMap<>(rdnsCache);
-            }
+            Map<String, CacheEntry> liveCacheSnapshot = new HashMap<>(rdnsCache);
             File cacheFile = new File(RDNS_CACHE_FILE);
             try (BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(cacheFile))) {
                 long now = System.currentTimeMillis();
@@ -1062,71 +1040,69 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 try (BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(new FileOutputStream(tmpFile), ENCODING))) {
 
-                    synchronized (rdnsCache) {
-                        // Convert to list to allow traditional loop
-                        List<CacheEntry> entries = rdnsCache.values().stream()
-                            .filter(entry -> now - entry.getTimestamp() <= EVICT_THRESHOLD)
-                            .sorted((a, b) -> Long.compare(b.getTimestamp(), a.getTimestamp()))
-                            .collect(Collectors.toList());
-                        for (CacheEntry cacheEntry : entries) {
-                            try {
-                                String line = rdnsEntryToString(cacheEntry);
-                                if (line == null || line.trim().isEmpty()) {continue;}
+                    // Convert to list to allow traditional loop
+                    List<CacheEntry> entries = rdnsCache.values().stream()
+                        .filter(entry -> now - entry.getTimestamp() <= EVICT_THRESHOLD)
+                        .sorted((a, b) -> Long.compare(b.getTimestamp(), a.getTimestamp()))
+                        .collect(Collectors.toList());
+                    for (CacheEntry cacheEntry : entries) {
+                        try {
+                            String line = rdnsEntryToString(cacheEntry);
+                            if (line == null || line.trim().isEmpty()) {continue;}
 
-                                int firstComma = line.indexOf(',');
-                                int lastComma = line.lastIndexOf(',');
+                            int firstComma = line.indexOf(',');
+                            int lastComma = line.lastIndexOf(',');
 
-                                if (firstComma >= 0 && lastComma > firstComma) {
-                                    String ip = line.substring(0, firstComma).trim();
-                                    String name = line.substring(firstComma + 1, lastComma).trim();
-                                    String timestamp = line.substring(lastComma + 1).trim();
-                                    String lc = name.toLowerCase();
+                            if (firstComma >= 0 && lastComma > firstComma) {
+                                String ip = line.substring(0, firstComma).trim();
+                                String name = line.substring(firstComma + 1, lastComma).trim();
+                                String timestamp = line.substring(lastComma + 1).trim();
+                                String lc = name.toLowerCase();
 
-                                    // Early skip based on original name
-                                    if (lc.contains("unknown") ||
-                                        lc.contains("root") ||
-                                        lc.contains("administered by")) {
-                                        continue;
-                                    }
-
-                                    // Normalize the name
-                                    if (lc.contains("latin american and caribbean")) {
-                                        name = "LACNIC";
-                                    } else if (lc.contains("asia pacific network") || lc.contains("administered by apnic")) {
-                                        name = "APNIC";
-                                    } else if (lc.contains("ripe network coordination")) {
-                                        name = "RIPE NCC";
-                                    } else if (lc.contains("african network information center")) {
-                                        name = "AFRINIC";
-                                    } else if (lc.contains("centurylink communications")) {
-                                        name = "CenturyLink";
-                                    } else if (lc.contains("cloudflare, inc")) {
-                                        name = "CLOUDFLARE";
-                                    } else if (lc.contains("t-mobile usa")) {
-                                        name = "T-MOBILE USA";
-                                    } else if (lc.equals("mediacom communications corp (mcc-244)")) {
-                                        name = "MEDIACOM";
-                                    } else if (lc.equals("root")) {
-                                        name = "PRIVATE";
-                                    } else if (lc.equals("non-ripe-ncc-managed-address-block")) {
-                                        name = "unknown";
-                                    }
-
-                                    line = ip + "," + name + "," + timestamp;
-
-                                    // Final skip based on modified line
-                                    boolean skipWrite = line.toLowerCase().contains("unknown") ||
-                                                        line.toLowerCase().contains("private");
-
-                                    if (!skipWrite) {
-                                        writer.write(line);
-                                        writer.newLine();
-                                        writtenCount.incrementAndGet();
-                                    }
+                                // Early skip based on original name
+                                if (lc.contains("unknown") ||
+                                    lc.contains("root") ||
+                                    lc.contains("administered by")) {
+                                    continue;
                                 }
-                            } catch (IOException e) {
-                                e.printStackTrace();
+
+                                // Normalize the name
+                                if (lc.contains("latin american and caribbean")) {
+                                    name = "LACNIC";
+                                } else if (lc.contains("asia pacific network") || lc.contains("administered by apnic")) {
+                                    name = "APNIC";
+                                } else if (lc.contains("ripe network coordination")) {
+                                    name = "RIPE NCC";
+                                } else if (lc.contains("african network information center")) {
+                                    name = "AFRINIC";
+                                } else if (lc.contains("centurylink communications")) {
+                                    name = "CenturyLink";
+                                } else if (lc.contains("cloudflare, inc")) {
+                                    name = "CLOUDFLARE";
+                                } else if (lc.contains("t-mobile usa")) {
+                                    name = "T-MOBILE USA";
+                                } else if (lc.equals("mediacom communications corp (mcc-244)")) {
+                                    name = "MEDIACOM";
+                                } else if (lc.equals("root")) {
+                                    name = "PRIVATE";
+                                } else if (lc.equals("non-ripe-ncc-managed-address-block")) {
+                                    name = "unknown";
+                                }
+
+                                line = ip + "," + name + "," + timestamp;
+
+                                // Final skip based on modified line
+                                boolean skipWrite = line.toLowerCase().contains("unknown") ||
+                                                    line.toLowerCase().contains("private");
+
+                                if (!skipWrite) {
+                                    writer.write(line);
+                                    writer.newLine();
+                                    writtenCount.incrementAndGet();
+                                }
                             }
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -1145,27 +1121,25 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         long now = System.currentTimeMillis();
         int removed = 0;
         long unknownExpireTimeMillis = 15 * 60 * 1000; // 15 minutes
-        synchronized (rdnsCache) {
-            Iterator<Map.Entry<String, CacheEntry>> it = rdnsCache.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry<String, CacheEntry> entry = it.next();
-                CacheEntry ce = entry.getValue();
-                long age = now - ce.getTimestamp();
-                long expireTime = EXPIRE_TIME;
+        Iterator<Map.Entry<String, CacheEntry>> it = rdnsCache.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, CacheEntry> entry = it.next();
+            CacheEntry ce = entry.getValue();
+            long age = now - ce.getTimestamp();
+            long expireTime = EXPIRE_TIME;
 
-                // Convert cacheEntry to string line and check for "unknown"
-                String cacheEntryStr = rdnsEntryToString(ce);
-                if (cacheEntryStr.contains("unknown")) {
-                    expireTime = unknownExpireTimeMillis;
-                }
-                if (age > expireTime) {
-                    it.remove();
-                    removed++;
-                }
+            // Convert cacheEntry to string line and check for "unknown"
+            String cacheEntryStr = rdnsEntryToString(ce);
+            if (cacheEntryStr.contains("unknown")) {
+                expireTime = unknownExpireTimeMillis;
             }
-            if (removed > 0) {
-                System.out.println("[RDNSCache] Removed " + removed + " stale entries from the cache");
+            if (age > expireTime) {
+                it.remove();
+                removed++;
             }
+        }
+        if (removed > 0) {
+            System.out.println("[RDNSCache] Removed " + removed + " stale entries from the cache");
         }
     }
 
@@ -1205,7 +1179,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             return existingEntry.getHostname();
         }
 
-        if (pendingLookups.putIfAbsent(ipAddress, true) == null) {
+        if (pendingLookups.add(ipAddress)) {
             getReverseDnsExecutor().submit(() -> {
                 try {
                     String hostName = ipAddress;
@@ -1365,7 +1339,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private ExecutorService reverseDnsExecutor;
     private final Object reverseDnsExecutorLock = new Object();
 
-    private static final ConcurrentMap<String, Boolean> pendingLookups = new ConcurrentHashMap<>();
+    private static final Set<String> pendingLookups = ConcurrentHashMap.newKeySet();
 
     private static Timer _rdnsTimer;
 
@@ -1875,10 +1849,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private long lastLookupTime = 0;
     private long lastUnknownPurge = 0;
     private long lastCacheCleanup = 0;
-    private LinkedHashMap<Hash, String> countryCache = new LinkedHashMap<Hash, String>(MAX_COUNTRY_CACHE_SIZE, 0.75f, true) {
-        @Override
-        protected boolean removeEldestEntry(Map.Entry<Hash, String> eldest) {return size() > MAX_COUNTRY_CACHE_SIZE;}
-    };
+    private final ConcurrentHashMap<Hash, String> countryCache = new ConcurrentHashMap<>(MAX_COUNTRY_CACHE_SIZE);
+    private final ConcurrentHashMap<Hash, Long> countryCacheTimestamps = new ConcurrentHashMap<>(MAX_COUNTRY_CACHE_SIZE);
 
     /**
      *  Uses the transport IP first because that lookup is fast, then the IP from the netDb.
@@ -1905,6 +1877,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         if (cachedCountry != null && !cachedCountry.equals("xx")) {return cachedCountry;}
         else if (cachedCountry != null && cachedCountry.equals("xx") && now - lastUnknownPurge > 5*60*1000) {
             countryCache.remove(peer);
+            countryCacheTimestamps.remove(peer);
             lastUnknownPurge = now;
         }
 
@@ -1935,16 +1908,30 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         } else if (country == null && ri == null) {return "xx";}
 
         if (countryCache.size() >= MAX_COUNTRY_CACHE_SIZE) {
-            // Fetch keys, synchronize to avoid ConcurrentModificationException
-            Set<Hash> keySet = Collections.synchronizedSet(new HashSet<>(countryCache.keySet()));
-            Iterator<Hash> iterator = keySet.iterator();
-            while (iterator.hasNext()) {
-                Hash eldestKey = iterator.next();
-                iterator.remove(); // Remove the oldest key
+            // Evict oldest entries by timestamp
+            long now2 = System.currentTimeMillis();
+            countryCacheTimestamps.entrySet().removeIf(e -> {
+                if (now2 - e.getValue() > COUNTRY_CACHE_EXPIRY) {
+                    countryCache.remove(e.getKey());
+                    return true;
+                }
+                return false;
+            });
+            // If still over capacity, remove oldest remaining
+            if (countryCache.size() >= MAX_COUNTRY_CACHE_SIZE) {
+                countryCacheTimestamps.entrySet().stream()
+                    .sorted((a, b) -> Long.compare(a.getValue(), b.getValue()))
+                    .limit(MAX_COUNTRY_CACHE_SIZE / 4)
+                    .forEach(e -> {
+                        countryCache.remove(e.getKey());
+                        countryCacheTimestamps.remove(e.getKey());
+                    });
             }
         }
 
         lastLookupTime = now;
+        countryCache.put(peer, country);
+        countryCacheTimestamps.put(peer, now);
 
         boolean blockMyCountry = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
         boolean isStrict = _context.commSystem().isInStrictCountry();
@@ -1997,20 +1984,19 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private void cleanupCountryCache() {
         long now = System.currentTimeMillis();
         int removed = 0;
-        synchronized (countryCache) {
-            Iterator<Map.Entry<Hash, String>> it = countryCache.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry<Hash, String> entry = it.next();
-                // For country cache, we need to track timestamps separately since LinkedHashMap doesn't store them
-                // For now, we'll remove unknown entries and rely on LRU for size management
-                if (entry.getValue() != null && entry.getValue().equals("xx")) {
-                    it.remove();
-                    removed++;
-                }
+        Iterator<Map.Entry<Hash, String>> it = countryCache.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<Hash, String> entry = it.next();
+            Long ts = countryCacheTimestamps.get(entry.getKey());
+            boolean expired = ts != null && (now - ts > COUNTRY_CACHE_EXPIRY);
+            if (expired || (entry.getValue() != null && entry.getValue().equals("xx"))) {
+                it.remove();
+                countryCacheTimestamps.remove(entry.getKey());
+                removed++;
             }
         }
         if (removed > 0 && _log.shouldInfo()) {
-            _log.info("Cleaned up " + removed + " unknown country entries from cache");
+            _log.info("Cleaned up " + removed + " stale country entries from cache");
         }
     }
 
