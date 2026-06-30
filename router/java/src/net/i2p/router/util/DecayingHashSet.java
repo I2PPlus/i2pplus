@@ -218,7 +218,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
         }
 
         public boolean equals(Object o) {
-             if (o == null || !(o instanceof ArrayWrapper))
+             if (!(o instanceof ArrayWrapper))
                  return false;
              return ((ArrayWrapper) o).longHashCode() == _longhashcode;
         }

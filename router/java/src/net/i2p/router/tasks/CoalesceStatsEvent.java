@@ -142,9 +142,9 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
         sm.addRateData("router.memoryUsed", used);
         if (_maxMemory - used < LOW_MEMORY_THRESHOLD) {Router.clearCaches();}
 
-        sm.addRateData("router.cpuLoad", (long) SystemVersion.getCPULoad());
-        sm.addRateData("tunnel.tunnelBuildSuccessAvg", (long) SystemVersion.getTunnelBuildSuccess());
-        sm.addRateData("router.activeThreads", (int) SystemVersion.getActiveThreads());
+        sm.addRateData("router.cpuLoad", SystemVersion.getCPULoad());
+        sm.addRateData("tunnel.tunnelBuildSuccessAvg", SystemVersion.getTunnelBuildSuccess());
+        sm.addRateData("router.activeThreads", SystemVersion.getActiveThreads());
 
         _ctx.tunnelDispatcher().updateParticipatingStats(Router.COALESCE_TIME);
 

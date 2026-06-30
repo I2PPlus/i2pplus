@@ -968,9 +968,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
         // next key
         private int _myOBKeyID = -1;
-        private int _currentOBTagSetID;
         private int _myIBKeyID = -1;
-        private int _currentIBTagSetID;
         private int _myIBKeySendCount;
         private KeyPair _myIBKeys;
         private KeyPair _myOBKeys;
@@ -1197,7 +1195,6 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     RatchetTagSet ts = new RatchetTagSet(_hkdf, oldts.getNextRootKey(), ssk,
                                                          _context.clock().now(), newtsID, _myOBKeyID);
                     _tagSet = ts;
-                    _currentOBTagSetID = newtsID;
                     if (_log.shouldInfo())
                         _log.info("Received nextkey " + key +
                                   "\n* From " + (_destination != null ? _destination.toBase32() : "???") +
@@ -1285,7 +1282,6 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
                     PrivateKey sharedSecret = ECIESAEADEngine.doDH(_myIBKeys.getPrivate(), key);
                     int newtsID = oldtsID + 1;
-                    _currentIBTagSetID = newtsID;
                     _myIBKeySendCount = 0;
                     // create new IB TS
                     byte[] sk = new byte[32];

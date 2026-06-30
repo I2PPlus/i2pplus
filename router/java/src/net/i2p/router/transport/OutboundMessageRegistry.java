@@ -237,7 +237,7 @@ public class OutboundMessageRegistry {
         boolean stillActive = false;
         synchronized (_selectorToMessage) {
             Object old = _selectorToMessage.remove(sel);
-            if (old != null && old instanceof List) {
+            if (old instanceof List) {
                     List<OutNetMessage> l = (List<OutNetMessage>)old;
                     l.remove(msg);
                     if (!l.isEmpty()) {

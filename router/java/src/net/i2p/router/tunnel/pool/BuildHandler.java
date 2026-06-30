@@ -22,6 +22,7 @@ import net.i2p.data.i2np.OutboundTunnelBuildReplyMessage;
 import net.i2p.data.i2np.ShortTunnelBuildMessage;
 import net.i2p.data.i2np.ShortTunnelBuildReplyMessage;
 import net.i2p.data.i2np.TunnelBuildMessage;
+import net.i2p.data.i2np.TunnelBuildMessageBase;
 import net.i2p.data.i2np.TunnelBuildReplyMessage;
 import net.i2p.data.i2np.TunnelGatewayMessage;
 import net.i2p.data.i2np.VariableTunnelBuildMessage;
@@ -69,7 +70,7 @@ class BuildHandler implements Runnable {
     private final AtomicInteger _currentLookups = new AtomicInteger();
     private volatile boolean _isRunning;
     private final Object _startupLock = new Object();
-    private ExplState _explState = ExplState.NONE;
+    private ExplState _explState = ExplState.NONE; // NOSONAR S1170
     private final String MIN_VERSION_HONOR_CAPS = "0.9.58";
     private static final boolean DEFAULT_SHOULD_THROTTLE = true;
     private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
@@ -546,7 +547,7 @@ class BuildHandler implements Runnable {
             return -1;
         }
 
-        RouterInfo nextPeerInfo = (RouterInfo) _context.netDb().lookupRouterInfoLocally(nextPeer);
+        RouterInfo nextPeerInfo = _context.netDb().lookupRouterInfoLocally(nextPeer);
         if (nextPeerInfo == null) {
             long lookupStartTime = System.currentTimeMillis();
             state.setLookupStartTime(lookupStartTime);
@@ -579,11 +580,11 @@ class BuildHandler implements Runnable {
                 String fromHash = from != null ? from.toString() : "Unknown";
                 if (handleTime > 0) {
                     _log.debug(String.format(
-                        "Build tunnel request [MsgID: %s] handled in %dms %s \n* Decrypted in: %dms; Elapsed time since received: %dms\n* From: %s %s",
+                        "Build tunnel request [MsgID: %s] handled in %dms %s %n* Decrypted in: %dms; Elapsed time since received: %dms%n* From: %s %s",
                         msgId, handleTime, nextHop, decryptTime, timeSinceReceived, fromHash, req));
                 } else {
                     _log.debug(String.format(
-                        "Build tunnel request [MsgID: %s] handled %s \n* From: %s %s",
+                        "Build tunnel request [MsgID: %s] handled %s %n* From: %s %s",
                         msgId, nextHop, fromHash, req));
 
                 }
@@ -599,7 +600,7 @@ class BuildHandler implements Runnable {
         int records = state.msg.getRecordCount();
         TunnelBuildReplyMessage msg;
         if (state.msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE) {msg = new ShortTunnelBuildReplyMessage(_context, records);}
-        else if (records == TunnelBuildMessage.MAX_RECORD_COUNT) {msg = new TunnelBuildReplyMessage(_context);}
+        else if (records == TunnelBuildMessageBase.MAX_RECORD_COUNT) {msg = new TunnelBuildReplyMessage(_context);}
         else {msg = new VariableTunnelBuildReplyMessage(_context, records);}
         for (int i = 0; i < records; i++) {msg.setRecord(i, state.msg.getRecord(i));}
         msg.setUniqueId(state.msg.getUniqueId());
@@ -1099,7 +1100,7 @@ class BuildHandler implements Runnable {
             if (state.msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE) {
                 OutboundTunnelBuildReplyMessage otbrm  = new OutboundTunnelBuildReplyMessage(_context, records);
                 replyMsg = otbrm;
-            } else if (records == TunnelBuildMessage.MAX_RECORD_COUNT) {replyMsg = new TunnelBuildReplyMessage(_context);}
+            } else if (records == TunnelBuildMessageBase.MAX_RECORD_COUNT) {replyMsg = new TunnelBuildReplyMessage(_context);}
             else {replyMsg = new VariableTunnelBuildReplyMessage(_context, records);}
             for (int i = 0; i < records; i++) {replyMsg.setRecord(i, state.msg.getRecord(i));}
             replyMsg.setUniqueId(req.readReplyMessageId());
@@ -1245,7 +1246,9 @@ class BuildHandler implements Runnable {
             recvTime = System.currentTimeMillis();
         }
         @Override
-        public void setEnqueueTime(long time) {} // set at instantiation, which is just before enqueueing
+        public void setEnqueueTime(long time) {
+            // intentionally empty - enqueue time is set at construction, no need to update
+        }
         @Override
         public long getEnqueueTime() {return recvTime;}
         public void setLookupStartTime(long time) {this.lookupStartTime = time;}

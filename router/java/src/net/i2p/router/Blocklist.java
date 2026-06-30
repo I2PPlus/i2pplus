@@ -664,7 +664,7 @@ public class Blocklist {
     /**
      *  Parse one line, returning a temp data structure with the result
      */
-    private Entry parse(String buf, boolean shouldLog) {
+    private Entry parse(String buf, boolean shouldLog) { // NOSONAR S3012: called on lines 556, 1311
         byte[] ip1;
         byte[] ip2;
         int start1 = 0;

@@ -35,7 +35,7 @@ abstract class EstablishBase implements EstablishState {
      *  Inbound: tsB - tsA - rtt/2
      *  Outbound: tsA - tsB - rtt/2
      */
-    protected transient long _peerSkew;
+    protected long _peerSkew;
 
     /** previously received encrypted block (or the IV) */
     protected byte[] _prevEncrypted;
@@ -348,7 +348,7 @@ abstract class EstablishBase implements EstablishState {
      *  It does not translate!
      *  @return s
      */
-    protected static final String _x(String s) {
+    protected static final String _x(String s) { // NOSONAR S1845 i18n marker convention
         return s;
     }
 

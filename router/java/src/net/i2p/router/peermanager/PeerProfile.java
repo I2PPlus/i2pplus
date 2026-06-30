@@ -722,7 +722,7 @@ public class PeerProfile {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof PeerProfile)) {return false;}
+        if (!(obj instanceof PeerProfile)) {return false;}
         PeerProfile prof = (PeerProfile)obj;
         return _peer.equals(prof._peer);
     }

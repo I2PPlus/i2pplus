@@ -121,7 +121,7 @@ class LookupThrottler {
 
         @Override
         public boolean equals(Object obj) {
-            if (obj == null || !(obj instanceof ReplyTunnel)) {
+            if (!(obj instanceof ReplyTunnel)) {
                 return false;
             }
             ReplyTunnel other = (ReplyTunnel) obj;

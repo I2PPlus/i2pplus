@@ -140,7 +140,7 @@ class RequestThrottler {
         boolean isFast = isFast(ri);
         boolean weAreFirewalled = isFirewalled();
         updateCachedProperties();
-        boolean shouldBlockOldRouters = weAreFirewalled ? false : cachedShouldBlockOldRouters;
+        boolean shouldBlockOldRouters = weAreFirewalled ? false : cachedShouldBlockOldRouters; // NOSONAR S1125
         int numTunnels = this.context.tunnelManager().getParticipatingCount();
         int limit;
         if (isUnreachable || isLowShare) {

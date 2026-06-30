@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.CancelledKeyException;
 import java.nio.channels.ClosedChannelException;
@@ -770,7 +769,7 @@ class EventPumper implements Runnable {
                     break;
                 }
                 con.clearZeroRead();
-                ((Buffer) buf).flip();
+                buf.flip();
                 FIFOBandwidthLimiter.Request req = _context.bandwidthLimiter().requestInbound(totalRead, "NTCP read");
                 if (req.getPendingRequested() > 0) {
                     clearInterest(key, SelectionKey.OP_READ);

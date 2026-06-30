@@ -15,6 +15,7 @@ import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.i2np.ShortTunnelBuildMessage;
 import net.i2p.data.i2np.TunnelBuildMessage;
+import net.i2p.data.i2np.TunnelBuildMessageBase;
 import net.i2p.data.i2np.VariableTunnelBuildMessage;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
@@ -68,8 +69,8 @@ abstract class BuildRequestor {
 
     static {
         // Now SAFE to reference SHORT_RECORDS and MEDIUM_RECORDS
-        List<Integer> order = new ArrayList<>(TunnelBuildMessage.MAX_RECORD_COUNT);
-        for (int i = 0; i < TunnelBuildMessage.MAX_RECORD_COUNT; i++) {
+        List<Integer> order = new ArrayList<>(TunnelBuildMessageBase.MAX_RECORD_COUNT);
+        for (int i = 0; i < TunnelBuildMessageBase.MAX_RECORD_COUNT; i++) {
             order.add(i);
         }
         ORDER = Collections.unmodifiableList(order);
@@ -497,7 +498,7 @@ abstract class BuildRequestor {
                 recordCount = MEDIUM_RECORDS;
                 order = new ArrayList<>(MEDIUM_ORDER);
             } else {
-                recordCount = TunnelBuildMessage.MAX_RECORD_COUNT;
+                recordCount = TunnelBuildMessageBase.MAX_RECORD_COUNT;
                 order = new ArrayList<>(ORDER);
             }
             msg = new ShortTunnelBuildMessage(ctx, recordCount);

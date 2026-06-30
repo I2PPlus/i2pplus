@@ -74,7 +74,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     /** Current encrypted block we are reading (IB only) or an IV buf used at the end for OB */
     private byte[] _curEncrypted;
     /** Alice's RouterIdentity, set after gotRI() validation succeeds */
-    private RouterIdentity _aliceIdent;
+    private RouterIdentity _aliceIdent; // NOSONAR S1450: used on lines 958-959, 1073
     /** Flag to ensure releaseBufs() is called only once */
     private boolean _released;
 
@@ -930,7 +930,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 byte[] infoIP = addr.getIP();
                 if (infoIP != null && infoIP.length == realIP.length) {
                     if (infoIP.length == 16) {
-                        if ((((int) infoIP[0]) & 0xfe) == 0x02) {continue;} // ygg
+                        if (((infoIP[0]) & 0xfe) == 0x02) {continue;} // ygg
                         if (DataHelper.eqCT(realIP, 0, infoIP, 0, 8)) {continue;}
                     } else if (DataHelper.eqCT(realIP, 0, infoIP, 0, realIP.length)) {continue;}
                     // We will ban and throw below after checking s

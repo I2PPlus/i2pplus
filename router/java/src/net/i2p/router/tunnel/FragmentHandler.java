@@ -336,7 +336,7 @@ class FragmentHandler {
             // message checked and discarded below.
             // don't throw so we can process the other fragments if any, if they're from a different message
             if (id != 0)
-            tunnelId = new TunnelId(id);
+                tunnelId = new TunnelId(id);
             offset += 4;
         }
         if ( (type == TYPE_ROUTER) || (type == TYPE_TUNNEL) ) {

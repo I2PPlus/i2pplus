@@ -763,9 +763,9 @@ public class PersistentDataStore extends TransientDataStore {
                         corrupt = true;
                         if (_log.shouldWarn())
                             _log.warn("RouterInfo [" + truncHash + "] does not match [" + _key.toBase64().substring(0,6) + "] from " + _routerFile);
-                            _log.warn("Banning: [" + truncHash + "] for 1h -> Corrupt RouterInfo");
-                            _banLogger.logBan(_key, _context, "Corrupt RouterInfo", 60L*60*1000);
-                            _context.banlist().banlistRouter(_key, "Corrupt RouterInfo", null, null, now + 60L*60*1000);
+                        _log.warn("Banning: [" + truncHash + "] for 1h -> Corrupt RouterInfo");
+                        _banLogger.logBan(_key, _context, "Corrupt RouterInfo", 60L*60*1000);
+                        _context.banlist().banlistRouter(_key, "Corrupt RouterInfo", null, null, now + 60L*60*1000);
                         _routerFile.delete();
                     } else if (ri.getPublished() <= _knownDate) {
                         // Don't store but don't delete

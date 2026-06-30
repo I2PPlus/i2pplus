@@ -79,7 +79,7 @@ public class LoadClientAppsJob extends JobImpl {
         private final String _clientName;
         private final String[] _args;
         private final Log _log;
-        private final ThreadGroup _threadGroup;
+        private final ThreadGroup _threadGroup; // NOSONAR S3014 ThreadGroup used for thread naming, not pool management
         private final ClassLoader _cl;
 
         /** caller MUST call schedule() */
@@ -90,7 +90,7 @@ public class LoadClientAppsJob extends JobImpl {
 
         /** caller MUST call schedule() */
         public DelayedRunClient(SimpleTimer2 pool, RouterContext enclosingContext, String className, String clientName,
-                                String[] args, ThreadGroup threadGroup, ClassLoader cl) {
+                                String[] args, ThreadGroup threadGroup, ClassLoader cl) { // NOSONAR S3014
             super(pool);
             _ctx = enclosingContext;
             _className = className;
@@ -225,7 +225,7 @@ public class LoadClientAppsJob extends JobImpl {
             args = new String[0];
         Class<?> cls = Class.forName(className, true, cl);
         Method method = cls.getMethod("main", String[].class);
-        method.invoke(cls, new Object[] { args });
+        method.invoke(cls, new Object[] { args }); // NOSONAR S3878
     }
 
     /**
@@ -248,7 +248,7 @@ public class LoadClientAppsJob extends JobImpl {
      *  @since 0.7.13
      */
     public static void runClient(String className, String clientName, String[] args, RouterContext ctx, Log log,
-                                 ThreadGroup threadGroup, ClassLoader cl) {
+                                 ThreadGroup threadGroup, ClassLoader cl) { // NOSONAR S3014
         if (log.shouldInfo())
             log.info("Loading up the client application " + clientName + ": " + className + " " + Arrays.toString(args));
         I2PThread t;
@@ -306,7 +306,7 @@ public class LoadClientAppsJob extends JobImpl {
                     ok = mgr.addAndStart(app, _args);
                 } else {
                     Method method = cls.getMethod("main", String[].class);
-                    method.invoke(cls, new Object[] { _args });
+                    method.invoke(cls, new Object[] { _args }); // NOSONAR S3878
                     ok = true;
                 }
             } catch (Exception t) {

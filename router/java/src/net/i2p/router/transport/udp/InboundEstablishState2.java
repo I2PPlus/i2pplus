@@ -305,7 +305,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             byte[] infoIP = ra.getIP();
             if (infoIP != null && infoIP.length == _aliceIP.length) {
                 if (isIPv6) {
-                    if ((((int) infoIP[0]) & 0xfe) == 0x02) {continue;} // ygg
+                    if (((infoIP[0]) & 0xfe) == 0x02) {continue;} // ygg
                     if (DataHelper.eq(_aliceIP, 0, infoIP, 0, 8)) {continue;}
                 } else {
                     if (DataHelper.eq(_aliceIP, infoIP)) {continue;}
@@ -531,7 +531,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     @Override
-    public void gotRelayTag(long tag) {} // shouldn't happen for inbound
+    public void gotRelayTag(long tag) {
+        // intentionally empty - relay tags are not applicable to inbound connections
+    }
 
     public void gotRelayRequest(byte[] data) {
         if (_receivedConfirmedIdentity == null) {

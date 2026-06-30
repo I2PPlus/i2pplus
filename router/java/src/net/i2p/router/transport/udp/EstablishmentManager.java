@@ -1441,7 +1441,9 @@ class EstablishmentManager {
                             }
                             break;
 
-                    }
+                    default:
+                        break;
+                }
                     if (bob != null && istate == INTRO_STATE_CONNECTED) {
                         if (_log.shouldDebug())
                             _log.debug("[SSU] Found connected Introducer " + bob + " for " + state);
@@ -1471,6 +1473,8 @@ class EstablishmentManager {
                             bob = _context.netDb().lookupRouterInfoLocally(h);
                             if (bob != null)
                                 istate = INTRO_STATE_HAS_RI;
+                            break;
+                        default:
                             break;
                     }
                     if (bob != null && istate == INTRO_STATE_HAS_RI) {

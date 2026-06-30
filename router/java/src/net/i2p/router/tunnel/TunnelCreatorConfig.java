@@ -36,7 +36,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private long _lastTransferredTime;
     private final AtomicInteger _failures = new AtomicInteger();
     private volatile TunnelTestStatus _testStatus = TunnelTestStatus.UNTESTED;
-    private volatile long _lastTestStartTime;
+
     private volatile boolean _reused;
     private volatile int _priority;
     //private static final int THROUGHPUT_COUNT = 3;
@@ -454,7 +454,6 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      */
     public void setTestStarted() {
         _testStatus = TunnelTestStatus.TESTING;
-        _lastTestStartTime = System.currentTimeMillis();
     }
 
     /**

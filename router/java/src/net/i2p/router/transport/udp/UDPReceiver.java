@@ -70,7 +70,7 @@ class UDPReceiver {
      *
      * @return zero (was queue size)
      */
-    private final int doReceive(UDPPacket packet) {
+    private final int doReceive(UDPPacket packet) { // NOSONAR S3516 returns 0 by design
         if (!_keepRunning) {return 0;}
         if (_log.shouldInfo()) {_log.info("Received UDP packet from " + packet);}
 

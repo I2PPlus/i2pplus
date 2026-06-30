@@ -56,7 +56,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     private final ThreadLocal<CachedIterator> _iterator = ThreadLocal.withInitial(() -> new CachedIterator());
 
     // Size of the AbstractCollectionTest object
-    private transient int size = 0;
+    private int size = 0;
 
     /**
      * Node object that contains:
@@ -77,10 +77,10 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     }
 
     // First Node in the AbstractCollectionTest object
-    private transient Node<E> first = null;
+    private Node<E> first = null;
 
     // Last Node in the AbstractCollectionTest object
-    private transient Node<E> last = null;
+    private Node<E> last = null;
 
     /**
      * Default constructor
@@ -143,10 +143,10 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     @SuppressWarnings("ReferenceEquality")
     public class CachedIterator implements Iterator<E> {
 
-        private transient boolean nextCalled;
+        private boolean nextCalled;
 
         // Iteration Index
-        private transient Node<E> itrIndexNode = first;
+        private Node<E> itrIndexNode = first;
 
         // Methods to support iteration
 

@@ -112,8 +112,7 @@ public class RouterWatchdog implements Runnable {
 
         // Client manager starts complaining after 10 minutes, and we run every minute,
         // so this will restart 30 minutes after we lose a lease, if the wrapper is present.
-        if (_consecutiveErrors >= 20 && SystemVersion.hasWrapper()) {return true;}
-        return false;
+        return _consecutiveErrors >= 20 && SystemVersion.hasWrapper();
     }
 
     private void dumpStatus() {

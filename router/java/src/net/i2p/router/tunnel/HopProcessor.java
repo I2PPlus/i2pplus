@@ -76,7 +76,7 @@ class HopProcessor {
                 _config.setReceiveFrom(prev);
             } else if (!_config.getReceiveFrom().equals(prev)) {
                 // shouldn't happen now that we have good dup ID detection in BuildHandler
-                RouterContext ctx = (RouterContext) RouterContext.getGlobalContext();
+                RouterContext ctx = (RouterContext) I2PAppContext.getGlobalContext();
                 long now = ctx.clock().now();
                 if (_log.shouldWarn()) {
                     //_log.warn("Attempted mid-tunnel injection from: " + prev + "\n* Expected: " + _config.getReceiveFrom());

@@ -16,6 +16,7 @@ import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.i2np.ShortEncryptedBuildRecord;
 import net.i2p.data.i2np.ShortTunnelBuildMessage;
 import net.i2p.data.i2np.TunnelBuildMessage;
+import net.i2p.data.i2np.TunnelBuildMessageBase;
 import net.i2p.router.RouterContext;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
@@ -75,7 +76,7 @@ abstract class BuildMessageGenerator {
                 erec = req.encryptRecord(ctx, peerKey, peer);
             }
         } else {
-            int len = isShort ? ShortTunnelBuildMessage.SHORT_RECORD_SIZE : TunnelBuildMessage.RECORD_SIZE;
+            int len = isShort ? ShortTunnelBuildMessage.SHORT_RECORD_SIZE : TunnelBuildMessageBase.RECORD_SIZE;
             byte encrypted[] = new byte[len];
             if (cfg.isInbound() && hop + 1 == cfg.getLength()) { // IBEP
                 System.arraycopy(cfg.getPeer(hop).getData(), 0, encrypted, 0, BuildRequestRecord.PEER_SIZE);
@@ -200,7 +201,7 @@ abstract class BuildMessageGenerator {
                                       TunnelCreatorConfig cfg, List<Integer> order) {
         int mtype = msg.getType();
         boolean isShort = mtype == ShortTunnelBuildMessage.MESSAGE_TYPE;
-        int size = isShort ? ShortTunnelBuildMessage.SHORT_RECORD_SIZE : TunnelBuildMessage.RECORD_SIZE;
+        int size = isShort ? ShortTunnelBuildMessage.SHORT_RECORD_SIZE : TunnelBuildMessageBase.RECORD_SIZE;
         byte[] chachaIV = isShort ? new byte[12] : null;
         // encrypt the records so that the right elements will be visible at the right time
         for (int i = 0; i < msg.getRecordCount(); i++) {

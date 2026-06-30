@@ -112,7 +112,7 @@ class OutboundClientMessageJobHelper {
         SessionKeyManager skm = ctx.clientManager().getClientSessionKeyManager(from);
         if (skm == null) {return null;}
         boolean isECIES = recipientPK.getType() != EncType.ELGAMAL_2048;
-        boolean ackInGarlic = isECIES ? false : requireAck; // force ack off if ECIES
+        boolean ackInGarlic = isECIES ? false : requireAck; // force ack off if ECIES // NOSONAR S1125
         GarlicConfig config = createGarlicConfig(ctx, replyToken, expiration, recipientPK, dataClove,
                                                  from, dest, replyTunnel, ackInGarlic, bundledReplyLeaseSet, skm);
         if (config == null) {return null;}

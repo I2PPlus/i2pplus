@@ -588,8 +588,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
            !StoreJob.shouldStoreEncLS2To(target)) {
            return false;
        }
-       if (!StoreJob.shouldStoreTo(target)) {return false;}
-       return true;
+        return StoreJob.shouldStoreTo(target);
     }
 
     /** note in the profile that the store failed */
@@ -700,7 +699,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     // ToDo: With repect to segmented netDb clients, this framework needs refinement.
     // A client with a segmented netDb can not use exploratory tunnels.
     // The return messages will not have sufficient information to be directed back to the client making the query.
-    SearchJob search(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, boolean isLease, Hash fromLocalDest) {
+    SearchJob search(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, boolean isLease, Hash fromLocalDest) { // NOSONAR S3516 returns null by design, callers use callbacks
         if (key == null) {
             if (_log.shouldWarn()) {_log.warn("NULL key search requested -> Dropping...");}
             return null;

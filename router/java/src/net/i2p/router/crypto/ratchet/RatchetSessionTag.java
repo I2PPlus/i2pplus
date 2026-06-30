@@ -44,7 +44,7 @@ public class RatchetSessionTag {
         return _data;
     }
 
-    public int length() {
+    public int length() { // NOSONAR S1845 length() is standard Java naming
         return LENGTH;
     }
 
@@ -72,7 +72,7 @@ public class RatchetSessionTag {
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
-        if ((obj == null) || !(obj instanceof RatchetSessionTag)) return false;
+        if (!(obj instanceof RatchetSessionTag)) return false;
         return _data == ((RatchetSessionTag) obj)._data;
     }
 

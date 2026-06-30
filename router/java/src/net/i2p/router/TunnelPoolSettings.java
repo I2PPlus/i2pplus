@@ -35,10 +35,10 @@ public class TunnelPoolSettings {
     private int _priority;
     private final Set<Hash> _aliases;
     private Hash _aliasOf;
-    /** @since 0.9.68+ transient first peer exclusions for diversity */
-    private transient Set<Hash> _firstPeerExclusions;
-    /** @since 0.9.68+ transient last peer exclusions for diversity */
-    private transient Set<Hash> _lastPeerExclusions;
+    /** @since 0.9.68+ first peer exclusions for diversity */
+    private Set<Hash> _firstPeerExclusions;
+    /** @since 0.9.68+ last peer exclusions for diversity */
+    private Set<Hash> _lastPeerExclusions;
     /** prefix used to configure the inbound exploratory pool */
     public static final String      PREFIX_INBOUND_EXPLORATORY = "router.inboundPool.";
     /** prefix used to configure the outbound exploratory pool */

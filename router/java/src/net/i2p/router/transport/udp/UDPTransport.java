@@ -3154,6 +3154,8 @@ public class UDPTransport extends TransportImpl {
                     if (_log.shouldDebug())
                         _log.debug("Require IPv6 introducers, status is " + status);
                     return true;
+                default:
+                    break;
             }
         } else {
             if (config == IPV6_ONLY)
@@ -3170,6 +3172,8 @@ public class UDPTransport extends TransportImpl {
                 if (_log.shouldDebug())
                     _log.debug("IPv4 Introducers required because our status is [" + status + "]");
                 return true;
+                default:
+                    break;
             }
         }
         if (!allowDirectUDP()) {
@@ -3209,6 +3213,8 @@ public class UDPTransport extends TransportImpl {
                 case IPV4_FIREWALLED_IPV6_UNKNOWN:
                 case UNKNOWN:
                     return _introManager.introducerCount(true) < 3 * MIN_INTRODUCER_POOL;
+                default:
+                    break;
             }
         } else {
             if (config == IPV6_ONLY)
@@ -3224,7 +3230,8 @@ public class UDPTransport extends TransportImpl {
                 case IPV4_UNKNOWN_IPV6_FIREWALLED:
                 case UNKNOWN:
                 return _introManager.introducerCount(false) < 3 * MIN_INTRODUCER_POOL;
-
+                default:
+                    break;
             }
         }
         return !allowDirectUDP();
@@ -3743,7 +3750,7 @@ public class UDPTransport extends TransportImpl {
 
                 case IPV4_UNKNOWN_IPV6_OK:
                 case IPV4_UNKNOWN_IPV6_FIREWALLED:
-                    if (!isIPv6)
+                    if (isIPv6)
                         runtest = true;
                     break;
 
@@ -3753,6 +3760,9 @@ public class UDPTransport extends TransportImpl {
                 case IPV4_SNAT_IPV6_UNKNOWN:
                     if (isIPv6)
                         runtest = true;
+                    break;
+
+                default:
                     break;
             }
             if (runtest || old != _reachabilityStatusPending) {

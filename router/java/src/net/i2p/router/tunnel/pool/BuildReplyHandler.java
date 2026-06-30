@@ -15,6 +15,7 @@ import net.i2p.data.i2np.OutboundTunnelBuildReplyMessage;
 import net.i2p.data.i2np.ShortEncryptedBuildRecord;
 import net.i2p.data.i2np.ShortTunnelBuildReplyMessage;
 import net.i2p.data.i2np.TunnelBuildReplyMessage;
+import net.i2p.data.i2np.TunnelBuildMessageBase;
 import net.i2p.router.peermanager.TunnelHistory;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 import net.i2p.util.Log;
@@ -229,18 +230,18 @@ class BuildReplyHandler {
         } else {
             // don't cache the result
             byte[] h = SimpleByteCache.acquire(Hash.HASH_LENGTH);
-            ctx.sha().calculateHash(data, Hash.HASH_LENGTH, TunnelBuildReplyMessage.RECORD_SIZE-Hash.HASH_LENGTH, h, 0);
+            ctx.sha().calculateHash(data, Hash.HASH_LENGTH, TunnelBuildMessageBase.RECORD_SIZE-Hash.HASH_LENGTH, h, 0);
             boolean ok = DataHelper.eq(h, 0, data, 0, Hash.HASH_LENGTH);
             if (!ok) {
                 if (log.shouldWarn())
                     log.warn(reply.getUniqueId() + ": sha256 reply verify fail on " + recordNum + "/" + hop + ": " + Base64.encode(h) + " calculated, " +
                              Base64.encode(data, 0, Hash.HASH_LENGTH) + " expected\n" +
-                             "Record: " + Base64.encode(data, Hash.HASH_LENGTH, TunnelBuildReplyMessage.RECORD_SIZE-Hash.HASH_LENGTH));
+                             "Record: " + Base64.encode(data, Hash.HASH_LENGTH, TunnelBuildMessageBase.RECORD_SIZE-Hash.HASH_LENGTH));
                 SimpleByteCache.release(h);
                 return RESULT_NG;
             }
             SimpleByteCache.release(h);
-            rv = data[TunnelBuildReplyMessage.RECORD_SIZE - 1] & 0xff;
+            rv = data[TunnelBuildMessageBase.RECORD_SIZE - 1] & 0xff;
         }
         if (log.shouldDebug())
             log.debug(reply.getUniqueId() + ": Verified: " + rv + " for record " + recordNum + "/" + hop);

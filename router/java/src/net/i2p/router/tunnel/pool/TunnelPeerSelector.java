@@ -236,9 +236,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         if (peers == null)
             peers = ctx.getProperty("explicitPeers");
         // only one out of 4 times so we don't break completely if peer doesn't build one
-        if (peers != null && ctx.random().nextInt(4) == 0)
-            return true;
-        return false;
+        return peers != null && ctx.random().nextInt(4) == 0;
     }
 
     /**
@@ -655,10 +653,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             }
             // During attacks, allow E cap with 1/6 chance
             if (cap.contains("E") && buildSuccess < ATTACK_THRESHOLD) {
-                if (ctx.random().nextInt(6) != 0) {
-                    return true;  // Exclude (5/6 chance)
-                }
-                return false;  // Allow (1/6 chance)
+                return ctx.random().nextInt(6) != 0;  // 5/6 chance: Exclude, 1/6: Allow
             }
             return true;
         }
@@ -708,9 +703,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // unknown peers to build connectivity profiles.
         // Client pools also skip during stress (< 40% build success) when few
         // peers have recent connectivity, to avoid starving the candidate pool.
-        if (isExploratory || buildSuccess < ATTACK_THRESHOLD) {
-            return false;
-        }
 
         // Peer is acceptable
         return false;
