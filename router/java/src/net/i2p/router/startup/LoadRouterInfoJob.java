@@ -87,7 +87,7 @@ class LoadRouterInfoJob extends JobImpl {
         File rkf2 = new File(getContext().getRouterDir(), CreateRouterInfoJob.KEYS2_FILENAME);
         boolean keys2Exist = rkf2.exists();
 
-        InputStream fis1 = null;
+        InputStream fis1 = null; // NOSONAR S2093: conditionally created/closed in complex flow
         try {
             // if we have a routerinfo but no keys, things go bad in a hurry:
             // CRIT   ...rkdb.PublishLocalRouterInfoJob: Internal error - signing private key not known?  rescheduling publish for 30s

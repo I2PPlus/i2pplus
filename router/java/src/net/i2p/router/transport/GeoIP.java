@@ -437,7 +437,7 @@ public class GeoIP {
             if (ENABLE_DEBIAN && f.exists() &&
                 (geoip2 == null || f.lastModified() > geoip2.lastModified())) {
                 // Maxmind v1 database
-                LookupService ls = null;
+                LookupService ls = null; // NOSONAR S2093: LookupService doesn't implement AutoCloseable
                 try {
                     out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(fout), StandardCharsets.UTF_8));
                     ls = new LookupService(f, LookupService.GEOIP_STANDARD);
