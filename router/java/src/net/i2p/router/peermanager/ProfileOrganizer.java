@@ -83,6 +83,11 @@ public class ProfileOrganizer {
     private static final int MIN_TUNNEL_REQUESTS = 50;
     /** Cooldown period (ms) after demotion before peer can be re-promoted */
     private static final long TUNNEL_DEMOTION_COOLDOWN_MS = 10 * 60 * 1000L; // 10 minutes
+    /** Exclude peers from tunnel selection after this many cumulative failures.
+     *  Without this, the blame system (tunnelFailed) only increments counters —
+     *  peers with 200+ failures keep getting selected because ghost peer clears
+     *  on any success and first-hop cooldown is only 5 minutes. */
+    private static final long MAX_LIFETIME_TUNNEL_FAILURES = 20;
 
     public static final String PROP_MAX_PROFILES = "profileOrganizer.maxProfiles";
     public static final int DEFAULT_MAX_PROFILES = getDefaultMaxProfiles();
@@ -1088,6 +1093,16 @@ public class ProfileOrganizer {
         // peers are selected by the tier system, fail as first hop, cooldown
         // expires, and they're selected again immediately.
         if (TunnelPeerSelector.isFirstHopFailing(_context, peer)) return false;
+        // Exclude peers with excessive cumulative tunnel failures.
+        // The blame system (tunnelFailed()) only increments statistics — it never
+        // bans.  Without this check, peers with 200+ failures keep getting selected
+        // because the ghost peer system clears on any success and the first-hop
+        // cooldown is only 5 minutes.
+        PeerProfile prof = locked_getProfile(peer);
+        if (prof != null) {
+            long lifetimeFailed = prof.getTunnelHistory().getLifetimeFailed();
+            if (lifetimeFailed > MAX_LIFETIME_TUNNEL_FAILURES) return false;
+        }
 
         RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
         if (info != null) {
