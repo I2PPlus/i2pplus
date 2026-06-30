@@ -165,7 +165,6 @@ public class TransportManager implements TransportEventListener {
         _upnpManager = enableUPnP ? new UPnPManager(context, this) : null;
         _upnpRefresher = enableUPnP ? new UPnPRefresher() : null;
         _enableUDP = _context.getBooleanPropertyDefaultTrue(PROP_ENABLE_UDP);
-        boolean enableNTCP2 = isNTCPEnabled(context);
         // always created, even if NTCP2 is not enabled, because ratchet needs it
         _xdhThread = new X25519KeyFactory(context);
         _msgIDBloomXor = _context.random().nextLong(I2NPMessage.MAX_ID_VALUE);

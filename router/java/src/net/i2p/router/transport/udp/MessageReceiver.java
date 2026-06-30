@@ -40,7 +40,6 @@ class MessageReceiver {
         _banLogger = new BanLogger();
         _banLogger.initialize(ctx);
         long maxMemory = SystemVersion.getMaxMemory();
-        boolean isSlow = SystemVersion.isSlow();
         _threadCount = MAX_THREADS;
         int qsize = Math.max(64, Math.min(512, (int)(maxMemory / (32 * 1024 * 1024L))));
         _completeMessages = new CoDelBlockingQueue<>(ctx, "UDP-MessageReceiver", qsize);

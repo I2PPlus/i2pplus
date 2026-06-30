@@ -162,9 +162,6 @@ public abstract class TransportImpl implements Transport {
             WAS_UNREACHABLE_PERIOD = 5*60*1000L;
         }
         _context.simpleTimer2().addPeriodicEvent(new CleanupUnreachable(), 2 * UNREACHABLE_PERIOD, UNREACHABLE_PERIOD / 2);
-        // if the router is slow, or we have the i2prouter script on linux that bumps the ulimit,
-        // allow more NTCP2 and less SSU. See getMaxConnections() below.
-        String installed = _context.getProperty("router.firstVersion");
     }
 
     /**

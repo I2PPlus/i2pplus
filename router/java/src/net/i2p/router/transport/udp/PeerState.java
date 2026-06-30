@@ -1576,7 +1576,6 @@ public class PeerState {
             msgs.clear();
 
             List<OutboundMessageState> tmp2 = new ArrayList<>();
-            OutboundMessageState retransmitter = null;
             synchronized (oldPeer._outboundLock) {
                 tmp2.addAll(oldPeer._outboundMessages);
                 oldPeer._outboundMessages.clear();

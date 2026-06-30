@@ -1750,7 +1750,6 @@ class EstablishmentManager {
         int len = pkt.getLength();
         byte[] data = pkt.getData();
         long rcvConnID = DataHelper.fromLong8(data, off);
-        long sendConnID = DataHelper.fromLong8(data, off + SRC_CONN_ID_OFFSET);
         int type = data[off + TYPE_OFFSET] & 0xff;
         if (type != HOLE_PUNCH_FLAG_BYTE) {return;}
         byte[] introKey = _transport.getSSU2StaticIntroKey();

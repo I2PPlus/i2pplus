@@ -46,8 +46,6 @@ class PacketHandler {
         _networkID = ctx.router().getNetworkID();
 
         long maxMemory = SystemVersion.getMaxMemory();
-        int cores = SystemVersion.getCores();
-        boolean isSlow = SystemVersion.isSlow();
         int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (2*1024*1024L)));
         _inboundQueue = new CoDelBlockingQueue<>(ctx, "UDP-Receiver", qsize);
         int num_handlers;

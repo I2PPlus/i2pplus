@@ -680,7 +680,6 @@ class BuildHandler implements Runnable {
 
         @Override
         public void runJob() {
-            long now = System.currentTimeMillis();
             getContext().statManager().addRateData("tunnel.rejectTimeout", 1);
             getContext().statManager().addRateData("tunnel.buildLookupSuccess", 0);
             Hash from = _state.fromHash;
