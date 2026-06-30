@@ -459,8 +459,10 @@ public class HashPatternDetector implements Serializable {
             }
 
             int totalRouters = routers.size();
+            StringBuilder sb = new StringBuilder();
             if (_log.shouldInfo())
-                _log.info("Starting NetDB hash pattern scan of " + totalRouters + " routers");
+                _log.info(sb.append("Starting NetDB hash pattern scan of ").append(totalRouters).append(" routers").toString());
+            sb.setLength(0);
 
             int processed = 0;
             for (RouterInfo router : routers) {
@@ -493,20 +495,25 @@ public class HashPatternDetector implements Serializable {
 
                     // Progress logging every 500 routers
                     if (_log.shouldDebug() && processed % 500 == 0) {
-                        _log.debug("HashPatternDetector scan progress: " + processed + "/" + totalRouters);
+                        _log.debug(sb.append("HashPatternDetector scan progress: ").append(processed).append("/").append(totalRouters).toString());
+                        sb.setLength(0);
                     }
 
                 } catch (Exception e) {
                     errorCount++;
-                    if (_log.shouldError())
-                        _log.error("Error scanning router #" + processed + " in netDB", e);
+                    if (_log.shouldError()) {
+                        _log.error(sb.append("Error scanning router #").append(processed).append(" in netDB").toString(), e);
+                        sb.setLength(0);
+                    }
                 }
             }
 
             long duration = _context.clock().now() - startTime;
             if (_log.shouldInfo() || bannedCount > 0 || errorCount > 0) {
-                _log.info("HashPatternDetector: NetDB scan complete in " + (duration / 1000) + "s - " +
-                          "banned: " + bannedCount + ", errors: " + errorCount + ", skipped: " + skippedCount);
+                _log.info(sb.append("HashPatternDetector: NetDB scan complete in ").append(duration / 1000).append("s - ")
+                          .append("banned: ").append(bannedCount).append(", errors: ").append(errorCount)
+                          .append(", skipped: ").append(skippedCount).toString());
+                sb.setLength(0);
             }
 
         } finally {
@@ -613,9 +620,9 @@ public class HashPatternDetector implements Serializable {
                     int port = addr.getPort();
                     if (port > 0) {
                         if (ipAddr.contains(":") && !ipAddr.startsWith("[")) {
-                            return "[" + ipAddr + "]:" + port;
+                            return new StringBuilder(32).append('[').append(ipAddr).append("]:").append(port).toString();
                         } else {
-                            return ipAddr + ":" + port;
+                            return new StringBuilder(32).append(ipAddr).append(':').append(port).toString();
                         }
                     } else {
                         return ipAddr;

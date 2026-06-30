@@ -231,9 +231,11 @@ public class ClientAppConfig {
         boolean ok = true;
         for (int i = 0; i < apps.size(); i++) {
             ClientAppConfig cac = apps.get(i);
-            String name = i + "-" + cac.className + "-clients.config";
+            StringBuilder sb = new StringBuilder();
+            sb.append(i).append('-').append(cac.className).append("-clients.config");
             if (i < 10)
-                name = '0' + name;
+                sb.insert(0, '0');
+            String name = sb.toString();
             File f = new File(dir, name);
             cac.configFile = f;
             try {
@@ -324,9 +326,11 @@ public class ClientAppConfig {
                 i = files.length;
             File f;
             do {
-                String name = i + "-" + app.className + "-clients.config";
+                StringBuilder sb = new StringBuilder();
+                sb.append(i).append('-').append(app.className).append("-clients.config");
                 if (i < 10)
-                    name = '0' + name;
+                    sb.insert(0, '0');
+                String name = sb.toString();
                 f = new File(dir, name);
                 i++;
             } while (f.exists());
@@ -386,7 +390,7 @@ public class ClientAppConfig {
         Properties props = new OrderedProperties();
         for(int i = 0; i < apps.size(); i++) {
             ClientAppConfig app = apps.get(i);
-            String pfx = PREFIX + i;
+            String pfx = new StringBuilder(PREFIX).append(i).toString();
             props.setProperty(pfx + ".main", app.className);
             props.setProperty(pfx + ".name", app.clientName);
             if (app.args != null)

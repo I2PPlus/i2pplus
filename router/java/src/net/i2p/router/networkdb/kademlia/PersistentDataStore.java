@@ -221,6 +221,7 @@ public class PersistentDataStore extends TransientDataStore {
 
             if (_keysToRemove.isEmpty()) {return;}
             int toRemove = 0;
+            StringBuilder sb = new StringBuilder();
             for (Iterator<Hash> iter = _keysToRemove.iterator(); iter.hasNext(); ) {
                 Hash key = iter.next();
                 iter.remove();
@@ -229,7 +230,8 @@ public class PersistentDataStore extends TransientDataStore {
                     try {removeFile(key, _dbDir);}
                     catch (IOException ioe) {
                         if (_log.shouldWarn()) {
-                            _log.warn("Error removing key " + key, ioe);
+                            _log.warn(sb.append("Error removing key ").append(key).toString(), ioe);
+                            sb.setLength(0);
                         }
                     }
                 }
@@ -890,13 +892,13 @@ public class PersistentDataStore extends TransientDataStore {
 
                 if (isSlow) {
                     if (_log.shouldInfo()) {
-                        _log.info("Deleting slow (" + bw + ") RouterInfo: " + key.toBase64().substring(0, 6) + "...");
+                        _log.info(new StringBuilder(64).append("Deleting slow (").append(bw).append(") RouterInfo: ").append(key.toBase64().substring(0, 6)).append("...").toString());
                     }
                     file.delete();
                     deletedCount++;
                 } else if (isDegraded) {
                     if (_log.shouldInfo()) {
-                        _log.info("Deleting degraded (" + bw + ") RouterInfo: " + key.toBase64().substring(0, 6) + "...");
+                        _log.info(new StringBuilder(64).append("Deleting degraded (").append(bw).append(") RouterInfo: ").append(key.toBase64().substring(0, 6)).append("...").toString());
                     }
                     file.delete();
                     deletedCount++;
@@ -904,13 +906,13 @@ public class PersistentDataStore extends TransientDataStore {
 
             } catch (Exception e) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Error reading RouterInfo from file: " + file.getName(), e);
+                    _log.warn(new StringBuilder(48).append("Error reading RouterInfo from file: ").append(file.getName()).toString(), e);
                 }
             }
         }
 
         if (_log.shouldInfo()) {
-            _log.info("Deleted " + deletedCount + " slow/degraded RouterInfo files");
+            _log.info(new StringBuilder(64).append("Deleted ").append(deletedCount).append(" slow/degraded RouterInfo files").toString());
         }
     }
 

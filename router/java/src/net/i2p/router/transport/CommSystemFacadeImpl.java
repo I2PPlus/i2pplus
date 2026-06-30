@@ -960,7 +960,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 int writtenCount = 0;
                 for (CacheEntry cacheEntry : liveCacheSnapshot.values()) {
                     if (now - cacheEntry.getTimestamp() <= EVICT_THRESHOLD) {
-                        String line = rdnsEntryToString(cacheEntry) + "\n";
+                        String line = new StringBuilder(rdnsEntryToString(cacheEntry)).append('\n').toString();
                         byte[] bytes = line.getBytes(ENCODING);
                         fos.write(bytes);
                         writtenCount++;
@@ -1049,7 +1049,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                                     name = "unknown";
                                 }
 
-                                line = ip + "," + name + "," + timestamp;
+                                line = new StringBuilder(ip).append(',').append(name).append(',').append(timestamp).toString();
 
                                 // Final skip based on modified line
                                 boolean skipWrite = line.toLowerCase().contains("unknown") ||

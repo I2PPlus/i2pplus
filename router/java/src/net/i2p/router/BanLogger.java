@@ -264,13 +264,18 @@ public class BanLogger {
 
         Arrays.sort(archives, (a, b) -> Long.compare(b.lastModified(), a.lastModified()));
 
+        StringBuilder sb = new StringBuilder();
         for (int i = maxArchives; i < archives.length; i++) {
             if (!archives[i].delete()) {
-                if (_log != null && _log.shouldLog(Log.WARN))
-                    _log.warn("Failed to delete old ban log archive: " + archives[i].getName());
+                if (_log != null && _log.shouldLog(Log.WARN)) {
+                    sb.setLength(0);
+                    _log.warn(sb.append("Failed to delete old ban log archive: ").append(archives[i].getName()).toString());
+                }
             } else {
-                if (_log != null && _log.shouldLog(Log.DEBUG))
-                    _log.debug("Deleted old ban log archive: " + archives[i].getName());
+                if (_log != null && _log.shouldLog(Log.DEBUG)) {
+                    sb.setLength(0);
+                    _log.debug(sb.append("Deleted old ban log archive: ").append(archives[i].getName()).toString());
+                }
             }
         }
     }
@@ -425,9 +430,9 @@ public class BanLogger {
                         // Check if it's IPv6 address
                         if (ip.contains(":") && !ip.startsWith("[")) {
                             // IPv6 address needs brackets
-                            return "[" + ip + "]:" + port;
+                            return new StringBuilder(32).append('[').append(ip).append("]:").append(port).toString();
                         } else {
-                            return ip + ":" + port;
+                            return new StringBuilder(32).append(ip).append(':').append(port).toString();
                         }
                     } else {
                         return ip;

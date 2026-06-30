@@ -1291,14 +1291,16 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     public void killKeys() {
         //new Exception("Clearing identity files").printStackTrace();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < _rebuildFiles.length; i++) {
             File f = new File(_context.getRouterDir(),_rebuildFiles[i]);
             if (f.exists()) {
                 boolean removed = f.delete();
+                sb.setLength(0);
                 if (removed) {
-                    _log.info("INFO: Removing old identity file: " + _rebuildFiles[i]);
+                    _log.info(sb.append("INFO: Removing old identity file: ").append(_rebuildFiles[i]).toString());
                 } else {
-                    _log.warn("ERROR: Could not remove old identity file: " + _rebuildFiles[i]);
+                    _log.warn(sb.append("ERROR: Could not remove old identity file: ").append(_rebuildFiles[i]).toString());
                 }
             }
         }
@@ -1336,7 +1338,7 @@ public class Router implements RouterClock.ClockShiftListener {
         }
         killKeys();
         for (Runnable task : _context.getShutdownTasks()) {
-            if (_log.shouldWarn()) {_log.warn("Running shutdown task " + task.getClass());}
+            if (_log.shouldWarn()) {_log.warn(new StringBuilder(48).append("Running shutdown task ").append(task.getClass()).toString());}
             try {task.run();}
             catch (Throwable t) {_log.log(Log.CRIT, "Error running Shutdown Task", t);} // NOSONAR shutdown path
         }
@@ -1489,12 +1491,14 @@ public class Router implements RouterClock.ClockShiftListener {
         // Run the shutdown hooks first in case they want to send some goodbye messages
         // Maybe we need a delay after this too?
         LinkedList<Thread> tasks = new LinkedList<>();
+        StringBuilder sb = new StringBuilder();
         for (Runnable task : _context.getShutdownTasks()) {
             //System.err.println("Running shutdown task " + task.getClass());
-            if (_log.shouldWarn()) {_log.warn("Running Shutdown Task " + task.getClass());}
+            if (_log.shouldWarn()) {_log.warn(sb.append("Running Shutdown Task ").append(task.getClass()).toString()); sb.setLength(0);}
             try {
                 //task.run();
-                Thread t = new I2PAppThread(task, "ShutdownTask " + task.getClass().getName());
+                Thread t = new I2PAppThread(task, sb.append("ShutdownTask ").append(task.getClass().getName()).toString());
+                sb.setLength(0);
                 t.setDaemon(true);
                 t.start();
                 tasks.add(t);
@@ -1504,10 +1508,12 @@ public class Router implements RouterClock.ClockShiftListener {
         if (SystemVersion.isSlow()) {waitSecs *= 2;}
         final long maxWait = System.currentTimeMillis() + (waitSecs *1000);
         Thread th;
+        StringBuilder sb2 = new StringBuilder();
         while ((th = tasks.poll()) != null) {
             long toWait = maxWait - System.currentTimeMillis();
             if (toWait <= 0) {
-                _log.logAlways(Log.WARN, "Shutdown tasks took more than " + waitSecs + "s to run");
+                _log.logAlways(Log.WARN, sb2.append("Shutdown tasks took more than ").append(waitSecs).append("s to run").toString());
+                sb2.setLength(0);
                 tasks.clear();
                 break;
             }
@@ -1516,10 +1522,11 @@ public class Router implements RouterClock.ClockShiftListener {
                 Thread.currentThread().interrupt();
             }
             if (th.isAlive()) {
-                _log.logAlways(Log.WARN, "Shutdown Task [" + th.getName() + "] took more than " + waitSecs + "s to run");
+                _log.logAlways(Log.WARN, sb2.append("Shutdown Task [").append(th.getName()).append("] took more than ").append(waitSecs).append("s to run").toString());
+                sb2.setLength(0);
                 tasks.clear();
                 break;
-            } else if (_log.shouldInfo()) {_log.info("Shutdown Task [ " + th.getName() + "] complete");}
+            } else if (_log.shouldInfo()) {_log.info(sb2.append("Shutdown Task [ ").append(th.getName()).append("] complete").toString()); sb2.setLength(0);}
         }
 
         // Set the last version to the current version, since 0.8.13
@@ -1672,7 +1679,7 @@ public class Router implements RouterClock.ClockShiftListener {
         for (Runnable task : _context.getFinalShutdownTasks()) {
             //System.err.println("Running final shutdown task " + task.getClass());
             try {task.run();}
-            catch (Throwable t) {_log.warn("Running final shutdown task " + t);}
+            catch (Throwable t) {_log.warn(new StringBuilder(48).append("Running final shutdown task ").append(t).toString());}
         }
         _context.getFinalShutdownTasks().clear();
 

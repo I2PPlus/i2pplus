@@ -529,7 +529,7 @@ public class Reseeder {
 
                 for (String u : URL_SPLIT_PATTERN.split(urls)) {
                     u = u.trim();
-                    if (!u.endsWith("/")) u += "/";
+                    if (!u.endsWith("/")) u = new StringBuilder(u).append('/').toString();
                     URI uri = safeUri(u);
                     if (uri == null) continue;
                     if (u.startsWith("https")) sslList.add(uri);
@@ -562,7 +562,7 @@ public class Reseeder {
             List<URI> list = new ArrayList<>();
             for (String u : URL_SPLIT_PATTERN.split(urls)) {
                 u = u.trim();
-                if (!u.endsWith("/")) u += "/";
+                if (!u.endsWith("/")) u = new StringBuilder(u).append('/').toString();
                 URI uri = safeUri(u);
                 if (uri != null) list.add(uri);
             }
@@ -680,11 +680,14 @@ public class Reseeder {
 
                 int cur = 0;
                 int total = 0;
+                StringBuilder sb = new StringBuilder();
                 while (total++ < 1000) {
-                    int start = indexOfIgnoreCase(content, "href=\"" + ROUTERINFO_PREFIX, cur);
+                    int start = indexOfIgnoreCase(content, sb.append("href=\"").append(ROUTERINFO_PREFIX).toString(), cur);
+                    sb.setLength(0);
                     if (start < 0) break;
 
-                    int end = content.indexOf(ROUTERINFO_SUFFIX + "\">", start);
+                    int end = content.indexOf(sb.append(ROUTERINFO_SUFFIX).append("\">").toString(), start);
+                    sb.setLength(0);
                     if (end < 0) break;
 
                     if (start - end > 200) {
@@ -692,7 +695,8 @@ public class Reseeder {
                         continue;
                     }
 
-                    String name = content.substring(start + ("href=\"" + ROUTERINFO_PREFIX).length(), end);
+                    String name = content.substring(start + sb.append("href=\"").append(ROUTERINFO_PREFIX).toString().length(), end);
+                    sb.setLength(0);
 
                     if (ourB64 == null || !name.contains(ourB64)) {
                         urls.add(name);
@@ -920,6 +924,7 @@ public class Reseeder {
                 if (!netDbDir.exists()) {netDbDir.mkdirs();}
 
                 // 1000 max from one reseed file
+                StringBuilder sb = new StringBuilder();
                 for (Iterator<File> iter = fList.iterator(); iter.hasNext() && fetched < 1000; ) {
                     File f = iter.next();
                     String name = f.getName();
@@ -930,9 +935,10 @@ public class Reseeder {
                         !name.startsWith(ROUTERINFO_PREFIX) ||
                         !name.endsWith(ROUTERINFO_SUFFIX) ||
                         !f.isFile()) {
-                        if (_log.shouldWarn()) {_log.warn("Skipping " + f);}
+                        if (_log.shouldWarn()) {_log.warn(sb.append("Skipping ").append(f).toString()); sb.setLength(0);}
                         if (!f.delete())
-                            _log.warn("Failed to delete unwanted RouterInfo " + f.getName());
+                            _log.warn(sb.append("Failed to delete unwanted RouterInfo ").append(f.getName()).toString());
+                        sb.setLength(0);
                         errors++;
                         continue;
                     }
@@ -940,7 +946,8 @@ public class Reseeder {
                     if (FileUtil.rename(f, to)) {fetched++;}
                     else {
                         if (!f.delete())
-                            _log.warn("Failed to delete RouterInfo " + f.getName());
+                            _log.warn(sb.append("Failed to delete RouterInfo ").append(f.getName()).toString());
+                        sb.setLength(0);
                         errors++;
                     }
                     // Give up on this host after lots of errors
@@ -1233,14 +1240,16 @@ public class Reseeder {
         SSLEepGet.SSLState sslState = null;
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         System.out.println("Initiating reseed hosts test...\n"); // NOSONAR S106 CLI output
+        StringBuilder sb = new StringBuilder();
         for (String url : urls) {
-            url += SU3_FILENAME + NETID_PARAM + '2';
+            url = sb.append(url).append(SU3_FILENAME).append(NETID_PARAM).append('2').toString();
+            sb.setLength(0);
             URI uri = new URI(url);
             String host = uri.getHost();
-            System.out.println("Host:     " + host); // NOSONAR S106 CLI output
-            File su3 = new File(host + ".su3");
+            System.out.println(sb.append("Host:     ").append(host).toString()); sb.setLength(0); // NOSONAR S106 CLI output
+            File su3 = new File(sb.append(host).append(".su3").toString()); sb.setLength(0);
             if (!su3.delete())
-                System.err.println("Failed to delete " + su3.getName()); // NOSONAR S106 CLI output
+                System.err.println(sb.append("Failed to delete ").append(su3.getName()).toString()); sb.setLength(0); // NOSONAR S106 CLI output
             try {
                 SSLEepGet get;
                 if (sslState == null) {
@@ -1254,9 +1263,9 @@ public class Reseeder {
                     int rc = get.getStatusCode();
                     if (rc == 200) {
                         SU3File su3f = new SU3File(su3);
-                        File zip = new File(host + ".zip");
+                        File zip = new File(sb.append(host).append(".zip").toString()); sb.setLength(0);
                         if (!zip.delete())
-                            System.err.println("Failed to delete " + zip.getName()); // NOSONAR S106 CLI output
+                            System.err.println(sb.append("Failed to delete ").append(zip.getName()).toString()); sb.setLength(0); // NOSONAR S106 CLI output
                         su3f.verifyAndMigrate(zip);
                         SU3File.main(new String[] {"showversion", su3.getPath()});
                         String version = su3f.getVersionString();
@@ -1273,7 +1282,7 @@ public class Reseeder {
                             InputStream in = zipf.getInputStream(entry);
                             try {r.readBytes(in);}
                             catch (DataFormatException dfe) {
-                                System.out.println("Bad entry " + entry.getName() + ": " + dfe); // NOSONAR S106 CLI output
+                                System.out.println(sb.append("Bad entry ").append(entry.getName()).append(": ").append(dfe).toString()); sb.setLength(0); // NOSONAR S106 CLI output
                                 bad++;
                                 continue;
                             } finally {in.close();}
@@ -1283,43 +1292,43 @@ public class Reseeder {
                             if (r.getCapabilities().indexOf('U') >= 0) {unreach++;}
                         }
                         zipf.close();
-                        if (bad > 0) {System.out.println(bad + " bad entries");} // NOSONAR S106 CLI output
+                        if (bad > 0) {System.out.println(sb.append(bad).append(" bad entries").toString()); sb.setLength(0);} // NOSONAR S106 CLI output
                         if (old > 0) {
-                            System.out.println("Failure:  " + old + " old RouterInfos returned"); // NOSONAR S106 CLI output
+                            System.out.println(sb.append("Failure:  ").append(old).append(" old RouterInfos returned").toString()); sb.setLength(0); // NOSONAR S106 CLI output
                             fail++;
                         } else if (ri >= 50) {
-                            System.out.println("Success:  " + ri + " RouterInfos returned"); // NOSONAR S106 CLI output
+                            System.out.println(sb.append("Success:  ").append(ri).append(" RouterInfos returned").toString()); sb.setLength(0); // NOSONAR S106 CLI output
                             pass++;
                             long time = System.currentTimeMillis() - start;
                             if (time > 30*1000L) {
-                                System.out.println("Test very slow for " + host + ", took " + DataHelper.formatDuration(time)); // NOSONAR S106 CLI output
+                                System.out.println(sb.append("Test very slow for ").append(host).append(", took ").append(DataHelper.formatDuration(time)).toString()); sb.setLength(0); // NOSONAR S106 CLI output
                                 warn++;
                             }
                         } else {
-                            System.out.println("Failure:  Only " + ri + " RouterInfos returned (less than 50)"); // NOSONAR S106 CLI output
+                            System.out.println(sb.append("Failure:  Only ").append(ri).append(" RouterInfos returned (less than 50)").toString()); sb.setLength(0); // NOSONAR S106 CLI output
                             fail++;
                         }
-                        System.out.println("Router infos included " + oldver + " with versions older than " + MIN_VERSION + " and " + unreach + " unreachable"); // NOSONAR S106 CLI output
+                        System.out.println(sb.append("Router infos included ").append(oldver).append(" with versions older than ").append(MIN_VERSION).append(" and ").append(unreach).append(" unreachable").toString()); sb.setLength(0); // NOSONAR S106 CLI output
                     } else {
-                        System.out.println("Failure:  Status code " + rc); // NOSONAR S106 CLI output
+                        System.out.println(sb.append("Failure:  Status code ").append(rc).toString()); sb.setLength(0); // NOSONAR S106 CLI output
                         if (!su3.delete())
-                System.err.println("Failed to delete " + su3.getName()); // NOSONAR S106 CLI output
+                System.err.println(sb.append("Failed to delete ").append(su3.getName()).toString()); sb.setLength(0); // NOSONAR S106 CLI output
                         fail++;
                     }
                 } else {
                     int rc = get.getStatusCode();
-                    System.out.println("Failure:  Status code " + rc); // NOSONAR S106 CLI output
+                    System.out.println(sb.append("Failure:  Status code ").append(rc).toString()); sb.setLength(0); // NOSONAR S106 CLI output
                     if (!su3.delete())
-                        System.err.println("Failed to delete " + su3.getName()); // NOSONAR S106 CLI output
+                        System.err.println(sb.append("Failed to delete ").append(su3.getName()).toString()); sb.setLength(0); // NOSONAR S106 CLI output
                     fail++;
                 }
             } catch (Exception ioe) {
-                System.out.println("Failure:  " + ioe.getMessage() + "\n"); // NOSONAR S106 CLI output
+                System.out.println(sb.append("Failure:  ").append(ioe.getMessage()).append("\n").toString()); sb.setLength(0); // NOSONAR S106 CLI output
                 if (su3.exists()) {
                     try {SU3File.main(new String[] {"showversion", su3.getPath()});}
                     catch (Exception e) { /* ignored */ }
                     if (!su3.delete())
-                        System.err.println("Failed to delete " + su3.getName()); // NOSONAR S106 CLI output
+                        System.err.println(sb.append("Failed to delete ").append(su3.getName()).toString()); sb.setLength(0); // NOSONAR S106 CLI output
                 }
                 fail++;
             }
