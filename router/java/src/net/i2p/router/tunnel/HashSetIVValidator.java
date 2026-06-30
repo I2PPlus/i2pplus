@@ -24,7 +24,6 @@ class HashSetIVValidator implements IVValidator {
         byte[] iv = new byte[HopProcessor.IV_LENGTH];
         DataHelper.xor(ivData, ivOffset, payload, payloadOffset, iv, 0, HopProcessor.IV_LENGTH);
         ByteArray ba = new ByteArray(iv);
-        boolean isNew = _received.add(ba);
-        return isNew;
+        return _received.add(ba);
     }
 }
