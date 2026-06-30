@@ -94,6 +94,11 @@ public class TestJob extends JobImpl {
     }
     private static final int SUCCESS_HISTORY_SIZE = 3; // Track last 3 results
     private static final int MAX_LAG_FOR_SCHEDULE = 150;
+    /** Hard ceiling on consecutive test failures for server pool tunnels.
+     *  Without this, dead server pool tunnels accumulate indefinitely because
+     *  incrementTestFailures() keeps them alive for the LS republish cycle.
+     *  At 10+ failures the tunnel is clearly dead — force removal. */
+    private static final int MAX_SERVER_POOL_TEST_FAILURES = 10;
     private static double getPoolCoverageThreshold(RouterContext ctx) {
         String val = ctx.getProperty("i2p.tunnel.testJob.poolCoverageThreshold");
         if (val != null) {
@@ -1179,13 +1184,26 @@ public class TestJob extends JobImpl {
             _cfg.incrementTestFailures();
             _cfg.setTestFailed();
             _pool.notifyServerPoolTestFailed();
-            if (_cfg.getTunnelFailures() > 1) {
+            int failures = _cfg.getTunnelFailures();
+            if (failures > MAX_SERVER_POOL_TEST_FAILURES) {
+                // Hard ceiling: too many consecutive failures — force removal.
+                // Without this, dead server pool tunnels accumulate indefinitely
+                // because incrementTestFailures() keeps them alive for the
+                // LeaseSet republish cycle.  Peer lREgvu had 210 failures
+                // in 10 seconds and was never excluded from selection.
+                if (_log.shouldWarn()) {
+                    _log.warn("Tunnel Test failed -> Removing server pool tunnel after " +
+                              failures + " consecutive failures: " + _cfg);
+                }
+                _cfg.tunnelFailedCompletely();
+                _pool.tunnelFailed(_cfg);
+            } else if (failures > 1) {
                 // Route through fail() so zombie ceiling can trigger
                 _pool.tunnelFailed(_cfg);
             }
             if (_log.shouldWarn()) {
                 _log.warn("Tunnel Test failed -> " + _cfg +
-                          " (" + _cfg.getTunnelFailures() + " consecutive) — kept for LS cycle");
+                          " (" + failures + " consecutive) — kept for LS cycle");
             }
         } else {
             // Client/exploratory: count failures with adaptive thresholds.
