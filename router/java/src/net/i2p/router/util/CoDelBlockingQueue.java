@@ -34,8 +34,8 @@ import net.i2p.util.SystemVersion;
 public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<E> {
 
     private static final long serialVersionUID = 1L;
-    private transient final I2PAppContext _context;
-    private transient final Log _log;
+    private final transient I2PAppContext _context;
+    private final transient Log _log;
     private final String _name;
     private final int _capacity;
 

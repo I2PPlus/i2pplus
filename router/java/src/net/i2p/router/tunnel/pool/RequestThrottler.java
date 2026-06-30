@@ -77,14 +77,14 @@ class RequestThrottler {
     private final BurstWindowCounter _burstCounter;
     private final Map<Hash, BurstOffenseRecord> _burstOffenses = new java.util.concurrent.ConcurrentHashMap<>();
 
-    private final static boolean DEFAULT_SHOULD_THROTTLE = true;
-    private final static String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
-    private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
-    private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
-    private final static boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
-    private final static String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
-    private final static String PROP_BLOCK_COUNTRIES = "router.blockCountries";
-    private final static String DEFAULT_BLOCK_COUNTRIES = "";
+    private static final boolean DEFAULT_SHOULD_THROTTLE = true;
+    private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
+    private static final boolean DEFAULT_SHOULD_DISCONNECT = false;
+    private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
+    private static final boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
+    private static final String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
+    private static final String PROP_BLOCK_COUNTRIES = "router.blockCountries";
+    private static final String DEFAULT_BLOCK_COUNTRIES = "";
 
      RequestThrottler(RouterContext ctx) {
         this.context = ctx;

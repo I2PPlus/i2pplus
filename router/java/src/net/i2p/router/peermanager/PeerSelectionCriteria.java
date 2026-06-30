@@ -24,7 +24,7 @@ class PeerSelectionCriteria {
     /** The peers will be used for a source routed reply block message */
     //public final static int PURPOSE_SOURCE_ROUTE = 3;
     /** The peers will be used for a test message */
-    public final static int PURPOSE_TEST = 4;
+    public static final int PURPOSE_TEST = 4;
 
     private int _minReq;
     private int _maxReq;

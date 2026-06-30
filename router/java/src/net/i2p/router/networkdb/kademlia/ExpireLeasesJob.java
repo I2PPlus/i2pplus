@@ -36,7 +36,7 @@ import net.i2p.util.SystemVersion;
 class ExpireLeasesJob extends JobImpl {
     private final Log _log;
     private final KademliaNetworkDatabaseFacade _facade;
-    private final static long RERUN_DELAY_MS = 45*1000L;
+    private static final long RERUN_DELAY_MS = 45*1000L;
     private static final int LIMIT_LEASES_FF = 1250;
     private static final int LIMIT_LEASES_CLIENT = SystemVersion.isSlow() ? 300 : 750;
 

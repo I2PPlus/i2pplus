@@ -114,10 +114,10 @@ public class Router implements RouterClock.ClockShiftListener {
     private char _lastCongestionCap = 0;
 
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
-    public final static String PROP_CONFIG_FILE = "router.configLocation";
+    public static final String PROP_CONFIG_FILE = "router.configLocation";
 
     /** let clocks be off by 30 seconds (reduced from 60s to improve lease renewal timing) */
-    public final static long CLOCK_FUDGE_FACTOR = 30*1000;
+    public static final long CLOCK_FUDGE_FACTOR = 30*1000;
 
     /** used to differentiate routerInfo files on different networks */
     private static final int DEFAULT_NETWORK_ID = 2;
@@ -128,18 +128,18 @@ public class Router implements RouterClock.ClockShiftListener {
     public static final int COALESCE_TIME = 50*1000;
 
     /** this puts an 'H' in your routerInfo **/
-    public final static String PROP_HIDDEN = "router.hiddenMode";
+    public static final String PROP_HIDDEN = "router.hiddenMode";
     /** this does not put an 'H' in your routerInfo **/
-    public final static String PROP_HIDDEN_HIDDEN = "router.isHidden";
+    public static final String PROP_HIDDEN_HIDDEN = "router.isHidden";
     /** New router keys at every restart. Disabled. */
-    public final static String PROP_DYNAMIC_KEYS = "router.dynamicKeys";
+    public static final String PROP_DYNAMIC_KEYS = "router.dynamicKeys";
     /**
      *  New router keys once only.
      *  @since 0.9.34
      */
-    public final static String PROP_REBUILD_KEYS = "router.rebuildKeys";
+    public static final String PROP_REBUILD_KEYS = "router.rebuildKeys";
     /** deprecated, use gracefulShutdownInProgress() */
-    private final static String PROP_SHUTDOWN_IN_PROGRESS = "__shutdownInProgress";
+    private static final String PROP_SHUTDOWN_IN_PROGRESS = "__shutdownInProgress";
     public static final String PROP_IB_RANDOM_KEY = TunnelPoolSettings.PREFIX_INBOUND_EXPLORATORY + TunnelPoolSettings.PROP_RANDOM_KEY;
     public static final String PROP_OB_RANDOM_KEY = TunnelPoolSettings.PREFIX_OUTBOUND_EXPLORATORY + TunnelPoolSettings.PROP_RANDOM_KEY;
     private static final String EVENTLOG = "eventlog.txt";

@@ -37,14 +37,14 @@ public class MessageHistory {
     //private SubmitMessageHistoryJob _submitMessageHistoryJob;
     private volatile boolean _firstPass;
 
-    private final static byte[] NL = DataHelper.getUTF8(System.getProperty("line.separator"));
-    private final static int FLUSH_SIZE = 1000; // write out at least once every 1000 entries
+    private static final byte[] NL = DataHelper.getUTF8(System.getProperty("line.separator"));
+    private static final int FLUSH_SIZE = 1000; // write out at least once every 1000 entries
 
     /** config property determining whether we want to debug with the message history - default false */
-    public final static String PROP_KEEP_MESSAGE_HISTORY = "router.keepHistory";
+    public static final String PROP_KEEP_MESSAGE_HISTORY = "router.keepHistory";
     /** config property determining where we want to log the message history, if we're keeping one */
-    public final static String PROP_MESSAGE_HISTORY_FILENAME = "router.historyFilename";
-    public final static String DEFAULT_MESSAGE_HISTORY_FILENAME = "messageHistory.txt";
+    public static final String PROP_MESSAGE_HISTORY_FILENAME = "router.historyFilename";
+    public static final String DEFAULT_MESSAGE_HISTORY_FILENAME = "messageHistory.txt";
 
     public MessageHistory(RouterContext context) {
         _context = context;
@@ -577,7 +577,7 @@ public class MessageHistory {
      * Prettify the hash by doing a base64 and returning the first 6 characters
      *
      */
-    private final static String getName(Hash router) {
+    private static final String getName(Hash router) {
         if (router == null) return "UNKNOWN";
         String str = router.toBase64();
         if ( (str == null) || (str.length() < 6) ) return "INVALID";
@@ -638,7 +638,7 @@ public class MessageHistory {
     }
 
     /** write out the message history once per minute, if not sooner */
-    private final static long WRITE_DELAY = 60*1000L;
+    private static final long WRITE_DELAY = 60*1000L;
     private class WriteJob extends JobImpl {
         public WriteJob() {
             super(MessageHistory.this._context);

@@ -163,7 +163,7 @@ class ClientListenerRunner implements Runnable {
     }
 
     /** give the i2cp client 5 seconds to show that they're really i2cp clients */
-    protected final static int CONNECT_TIMEOUT = 5*1000;
+    protected static final int CONNECT_TIMEOUT = 5*1000;
 
     /**
      *  Verify the first byte.

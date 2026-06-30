@@ -57,8 +57,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
     private final RouterIdentity _from;
     private Hash _fromHash;
     private final FloodfillNetworkDatabaseFacade _facade;
-    private final static int REPLY_TIMEOUT = (int) (60L * 1000);
-    private final static int MESSAGE_PRIORITY = OutNetMessage.PRIORITY_NETDB_REPLY;
+    private static final int REPLY_TIMEOUT = (int) (60L * 1000);
+    private static final int MESSAGE_PRIORITY = OutNetMessage.PRIORITY_NETDB_REPLY;
     // Must be lower than LIMIT_ROUTERS in StartExplorersJob because exploration does not register a reply job
     private static final int LIMIT_ROUTERS = SystemVersion.isSlow() ? 1000 : 4000;
     private final long _msgIDBloomXor;

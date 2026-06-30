@@ -102,8 +102,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     static final String PROP_MIN_ROUTER_VERSION = "router.minVersionAllowed";
     public static final String PROP_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
     public static final String PROP_IP_COUNTRY = "i2np.lastCountry";
-    private final static String PROP_BLOCK_COUNTRIES = "router.blockCountries";
-    private final static String DEFAULT_BLOCK_COUNTRIES = "";
+    private static final String PROP_BLOCK_COUNTRIES = "router.blockCountries";
+    private static final String DEFAULT_BLOCK_COUNTRIES = "";
     public static final String minRouterVersion = "0.9.20";
     public static final String MIN_VERSION = "0.9.66";
     public static String CURRENT_VERSION = "0.9.67";
@@ -179,8 +179,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /** Don't probe or broadcast data, just respond and search when explicitly needed */
     private static final boolean QUIET = false;
 
-    public final static String PROP_DB_DIR = "router.networkDatabase.dbDir";
-    public final static String DEFAULT_DB_DIR = "netDb";
+    public static final String PROP_DB_DIR = "router.networkDatabase.dbDir";
+    public static final String DEFAULT_DB_DIR = "netDb";
 
     /**
      * Reseed if below this.
@@ -194,20 +194,20 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * As of 0.9.4, we make this LOWER than the min for reseeding, so
      * a reseed will be forced if necessary.
      */
-    protected final static int MIN_REMAINING_ROUTERS = MIN_RESEED;
+    protected static final int MIN_REMAINING_ROUTERS = MIN_RESEED;
 
     /**
      * Limits for accepting a dbStore of a router (unless we don't
      * know anyone or just started up) -- see validate() below
      */
-    private final static long ROUTER_INFO_EXPIRATION = 36*60*60*1000L;
-    private final static long ROUTER_INFO_EXPIRATION_MIN = 8*60*60*1000L;
-    private final static long ROUTER_INFO_EXPIRATION_SHORT = 15*60*1000L;
-    private final static long ROUTER_INFO_EXPIRATION_FLOODFILL = 16*60*60*1000L;
-    private final static long ROUTER_INFO_EXPIRATION_INTRODUCED = 54*60*1000L;
+    private static final long ROUTER_INFO_EXPIRATION = 36*60*60*1000L;
+    private static final long ROUTER_INFO_EXPIRATION_MIN = 8*60*60*1000L;
+    private static final long ROUTER_INFO_EXPIRATION_SHORT = 15*60*1000L;
+    private static final long ROUTER_INFO_EXPIRATION_FLOODFILL = 16*60*60*1000L;
+    private static final long ROUTER_INFO_EXPIRATION_INTRODUCED = 54*60*1000L;
     static final String PROP_ROUTER_INFO_EXPIRATION_ADJUSTED = "router.expireRouterInfo";
     static final String PROP_VALIDATE_ROUTERS_AFTER = "router.validateRoutersAfter";
-    private final static long EXPLORE_JOB_DELAY = 5*60*1000L;
+    private static final long EXPLORE_JOB_DELAY = 5*60*1000L;
 
     /**
      * Don't let leaseSets go too far into the future
@@ -222,7 +222,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  forgotten about us, else we can't build IB exploratory tunnels.
      *  Unused.
      */
-    protected final static long PUBLISH_JOB_DELAY = 15*1000L;
+    protected static final long PUBLISH_JOB_DELAY = 15*1000L;
 
     /** Maximum number of peers to place in the queue to explore */
     static final int MAX_EXPLORE_QUEUE = 64;

@@ -191,8 +191,8 @@ class FloodfillPeerSelector extends PeerSelector {
     // before we can do this. Old profiles get deleted.
     private static final long HEARD_AGE = 45*60*1000L;
     private static final long INSTALL_AGE = HEARD_AGE + (60*60*1000L);
-    private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
-    private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
+    private static final boolean DEFAULT_SHOULD_DISCONNECT = false;
+    private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
 
     /**
      *  See above for description

@@ -66,8 +66,8 @@ public class PersistentDataStore extends TransientDataStore {
     private final boolean _flat;
     private final int _networkID;
 
-    private final static int READ_DELAY = 3*1000;
-    private final static int READ_INTERVAL = 5*60*1000;
+    private static final int READ_DELAY = 3*1000;
+    private static final int READ_INTERVAL = 5*60*1000;
     private static final String PROP_FLAT = "router.networkDatabase.flat";
     static final String DIR_PREFIX = "r";
     private static final String B64 = Base64.ALPHABET_I2P;
@@ -75,8 +75,8 @@ public class PersistentDataStore extends TransientDataStore {
 
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
-    private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
-    private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
+    private static final boolean DEFAULT_SHOULD_DISCONNECT = false;
+    private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
 
     private static final long[] RATES = RateConstants.BASIC_RATES;
 
@@ -970,8 +970,8 @@ public class PersistentDataStore extends TransientDataStore {
         }
     }
 
-    private final static String ROUTERINFO_PREFIX = "routerInfo-";
-    private final static String ROUTERINFO_SUFFIX = ".dat";
+    private static final String ROUTERINFO_PREFIX = "routerInfo-";
+    private static final String ROUTERINFO_SUFFIX = ".dat";
 
     /** @since 0.9.34 */
     public static final FileFilter RI_FILTER = new FileSuffixFilter(ROUTERINFO_PREFIX, ROUTERINFO_SUFFIX);

@@ -1356,9 +1356,9 @@ public class NTCPConnection implements Closeable {
     /**
      *  FIXME static queue mixes handlers from different contexts in multirouter JVM
      */
-    private final static LinkedBlockingQueue<I2NPMessageHandler> _i2npHandlers = new LinkedBlockingQueue<>(MAX_HANDLERS);
+    private static final LinkedBlockingQueue<I2NPMessageHandler> _i2npHandlers = new LinkedBlockingQueue<>(MAX_HANDLERS);
 
-    private final static I2NPMessageHandler acquireHandler(RouterContext ctx) {
+    private static final I2NPMessageHandler acquireHandler(RouterContext ctx) {
         I2NPMessageHandler rv = _i2npHandlers.poll();
         if (rv == null)
             rv = new I2NPMessageHandler(ctx);

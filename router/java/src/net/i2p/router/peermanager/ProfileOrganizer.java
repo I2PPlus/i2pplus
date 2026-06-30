@@ -1569,8 +1569,8 @@ public class ProfileOrganizer {
         return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, known > 3000 ? Math.max(known / 15, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS) : DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS);
     }
 
-    private final static DecimalFormat _fmt = new DecimalFormat("###,##0.00", new DecimalFormatSymbols(Locale.UK));
-    private final static String num(double num) {synchronized (_fmt) {return _fmt.format(num);} }
+    private static final DecimalFormat _fmt = new DecimalFormat("###,##0.00", new DecimalFormatSymbols(Locale.UK));
+    private static final String num(double num) {synchronized (_fmt) {return _fmt.format(num);} }
 
     public static void main(String[] args) {
         if (args.length <= 0) {

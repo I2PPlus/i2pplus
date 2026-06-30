@@ -206,7 +206,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      * @param ctx the router context
      * @return non-null, creates new if not already registered
      */
-    public synchronized static Analysis getInstance(RouterContext ctx) {
+    public static synchronized Analysis getInstance(RouterContext ctx) {
         ClientAppManager cmgr = ctx.clientAppManager();
         if (cmgr == null)
             return null;

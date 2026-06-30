@@ -72,8 +72,8 @@ class BuildHandler implements Runnable {
     private final Object _startupLock = new Object();
     private ExplState _explState = ExplState.NONE;
     private final String MIN_VERSION_HONOR_CAPS = "0.9.58";
-    private final static boolean DEFAULT_SHOULD_THROTTLE = true;
-    private final static String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
+    private static final boolean DEFAULT_SHOULD_THROTTLE = true;
+    private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
     private enum ExplState {NONE, IB, OB, BOTH}
     private static final boolean isSlow = SystemVersion.isSlow();
     /** TODO these may be too high, review and adjust */

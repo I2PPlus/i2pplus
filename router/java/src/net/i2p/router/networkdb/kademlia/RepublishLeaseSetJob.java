@@ -44,10 +44,10 @@ public class RepublishLeaseSetJob extends JobImpl {
     private static final String PROP_TIMEOUT = "router.leaseSetPublishTimeout";
     private static final String PROP_RETRY_DELAY = "router.leaseSetPublishRetryDelay";
     private static final String PROP_MAX_RETRY_DELAY = "router.leaseSetPublishMaxRetryDelay";
-    public final static long REPUBLISH_LEASESET_TIMEOUT_DEFAULT = 60L * 1000;
-    public final static int RETRY_DELAY_DEFAULT = (int) (20L * 1000);
-    public final static int RETRY_MAX_DELAY_DEFAULT = (int) (30L * 1000);
-    private final static long EXPIRY_WINDOW = 3L * 60 * 1000;
+    public static final long REPUBLISH_LEASESET_TIMEOUT_DEFAULT = 60L * 1000;
+    public static final int RETRY_DELAY_DEFAULT = (int) (20L * 1000);
+    public static final int RETRY_MAX_DELAY_DEFAULT = (int) (30L * 1000);
+    private static final long EXPIRY_WINDOW = 3L * 60 * 1000;
     private static final long CACHE_CLEANUP_THRESHOLD = 15L * 60 * 1000;
     private static final ConcurrentHashMap<Hash, Boolean> _retryInProgress = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<Hash, Long> _lastPublishLogTime = new ConcurrentHashMap<>();

@@ -43,11 +43,11 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     private static final long LOG_THROTTLE = 10 * 60 * 1000; // 10 minutes
     private final ConcurrentHashMap<Hash, Long> _lastExpiredLogTime = new ConcurrentHashMap<>();
     /** Note that this is different than the property the client side uses, i2cp.tcp.port */
-    public final static String PROP_CLIENT_PORT = "i2cp.port";
-    public final static int DEFAULT_PORT = I2PClient.DEFAULT_LISTEN_PORT;
+    public static final String PROP_CLIENT_PORT = "i2cp.port";
+    public static final int DEFAULT_PORT = I2PClient.DEFAULT_LISTEN_PORT;
     /** Note that this is different than the property the client side uses, i2cp.tcp.host */
-    public final static String PROP_CLIENT_HOST = "i2cp.hostname";
-    public final static String DEFAULT_HOST = "127.0.0.1";
+    public static final String PROP_CLIENT_HOST = "i2cp.hostname";
+    public static final String DEFAULT_HOST = "127.0.0.1";
 
     public ClientManagerFacadeImpl(RouterContext context) {
         _context = context;

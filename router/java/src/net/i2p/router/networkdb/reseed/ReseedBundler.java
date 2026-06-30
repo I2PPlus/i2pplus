@@ -42,8 +42,8 @@ import net.i2p.util.VersionComparator;
 public class ReseedBundler {
 
     private final RouterContext _context;
-    private final static String ROUTERINFO_PREFIX = "routerInfo-";
-    private final static String ROUTERINFO_SUFFIX = ".dat";
+    private static final String ROUTERINFO_PREFIX = "routerInfo-";
+    private static final String ROUTERINFO_SUFFIX = ".dat";
     private static final int MINIMUM = 200;
     private static final String MIN_VERSION = "0.9.64";
 

@@ -35,13 +35,13 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     private volatile boolean _isRunning;
     private long _checkDelay = 10 * 1000L;
 
-    private final static String PROP_MLKEM_PRECALC_MIN = "crypto.mlkem.precalc.min";
-    private final static String PROP_MLKEM_PRECALC_MAX = "crypto.mlkem.precalc.max";
-    private final static String PROP_MLKEM_PRECALC_DELAY = "crypto.mlkem.precalc.delay";
+    private static final String PROP_MLKEM_PRECALC_MIN = "crypto.mlkem.precalc.min";
+    private static final String PROP_MLKEM_PRECALC_MAX = "crypto.mlkem.precalc.max";
+    private static final String PROP_MLKEM_PRECALC_DELAY = "crypto.mlkem.precalc.delay";
     // MLKEM-768 pair is 1184 + 2400 = 3584 byte so keep the queue relatively small
-    private final static int DEFAULT_MLKEM_PRECALC_MIN = 4;
-    private final static int DEFAULT_MLKEM_PRECALC_MAX = 12;
-    private final static int DEFAULT_MLKEM_PRECALC_DELAY = 25;
+    private static final int DEFAULT_MLKEM_PRECALC_MIN = 4;
+    private static final int DEFAULT_MLKEM_PRECALC_MAX = 12;
+    private static final int DEFAULT_MLKEM_PRECALC_DELAY = 25;
 
     /**
      *  Alice side only

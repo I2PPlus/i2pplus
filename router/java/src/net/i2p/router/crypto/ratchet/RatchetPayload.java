@@ -220,7 +220,7 @@ class RatchetPayload {
      *  Base class for blocks to be transmitted.
      *  Not used for receive; we use callbacks instead.
      */
-    public static abstract class Block {
+    public abstract static class Block {
         private final int type;
 
         public Block(int ttype) {

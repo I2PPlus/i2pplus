@@ -34,7 +34,7 @@ class ExpireRoutersJob extends JobImpl {
     private final KademliaNetworkDatabaseFacade _facade;
 
     /** rerun fairly often, so the fails don't queue up too many netdb searches at once */
-    private final static long RERUN_DELAY_MS = 15*60*1000L;
+    private static final long RERUN_DELAY_MS = 15*60*1000L;
     private static final int LIMIT_ROUTERS = SystemVersion.isSlow() ? 4000 : 8000;
 
     public ExpireRoutersJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {

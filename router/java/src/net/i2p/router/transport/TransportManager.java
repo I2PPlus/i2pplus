@@ -113,12 +113,12 @@ public class TransportManager implements TransportEventListener {
     private boolean _upnpUpdateQueued;
 
     /** default true */
-    public final static String PROP_ENABLE_UDP = "i2np.udp.enable";
+    public static final String PROP_ENABLE_UDP = "i2np.udp.enable";
     /** default true */
-    public final static String PROP_ENABLE_NTCP = "i2np.ntcp.enable";
+    public static final String PROP_ENABLE_NTCP = "i2np.ntcp.enable";
     /** default true */
-    public final static String PROP_ENABLE_UPNP = "i2np.upnp.enable";
-    public final static String PROP_ENABLE_UPNP_IPV6 = "i2np.upnp.ipv6.enable";
+    public static final String PROP_ENABLE_UPNP = "i2np.upnp.enable";
+    public static final String PROP_ENABLE_UPNP_IPV6 = "i2np.upnp.ipv6.enable";
     public static final boolean DEFAULT_ENABLE_UPNP_IPV6 = true;
     private static final String PROP_JAVA_PROXY1 = "socksProxyHost";
     private static final String PROP_JAVA_PROXY2 = "java.net.useSystemProxies";

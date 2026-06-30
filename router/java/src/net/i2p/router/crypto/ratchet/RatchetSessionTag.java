@@ -10,7 +10,7 @@ import net.i2p.data.DataHelper;
  *  @since 0.9.44
  */
 public class RatchetSessionTag {
-    public final static int LENGTH = 8;
+    public static final int LENGTH = 8;
 
     private final long _data;
 

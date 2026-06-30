@@ -14,7 +14,7 @@ import net.i2p.util.KeyRing;
 public class PersistentKeyRing extends KeyRing {
 
     private static final long serialVersionUID = 1L;
-    private transient final RouterContext _ctx;
+    private final transient RouterContext _ctx;
     private static final String PROP_PFX = "router.keyring.key.";
 
     public PersistentKeyRing(RouterContext ctx) {

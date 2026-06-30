@@ -43,12 +43,12 @@ import net.i2p.util.SystemVersion;
  */
 public class WorkingDir {
 
-    private final static String PROP_BASE_DIR = "i2p.dir.base";
-    private final static String PROP_WORKING_DIR = "i2p.dir.config";
-    private final static String WORKING_DIR_DEFAULT_WINDOWS = "I2P";
-    private final static String WORKING_DIR_DEFAULT_MAC = "i2p";
-    private final static String WORKING_DIR_DEFAULT = ".i2p";
-    private final static String WORKING_DIR_DEFAULT_DAEMON = "i2p-config";
+    private static final String PROP_BASE_DIR = "i2p.dir.base";
+    private static final String PROP_WORKING_DIR = "i2p.dir.config";
+    private static final String WORKING_DIR_DEFAULT_WINDOWS = "I2P";
+    private static final String WORKING_DIR_DEFAULT_MAC = "i2p";
+    private static final String WORKING_DIR_DEFAULT = ".i2p";
+    private static final String WORKING_DIR_DEFAULT_DAEMON = "i2p-config";
     /** we do a couple of things differently if this is the username */
     private static final String PROP_WRAPPER_LOG = "wrapper.logfile";
     private static final String DEFAULT_WRAPPER_LOG = "wrapper.log";

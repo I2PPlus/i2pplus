@@ -91,7 +91,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * Let outbound session tags sit around for this long before expiring them.
      * Inbound tag expiration is set by SESSION_LIFETIME_MAX_MS
      */
-    private final static long SESSION_TAG_DURATION_MS = 12 * 60 * 1000L;
+    private static final long SESSION_TAG_DURATION_MS = 12 * 60 * 1000L;
 
     /**
      * Keep unused inbound session tags around for this long (a few minutes longer than
@@ -100,7 +100,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      *
      * This is also the max idle time for an outbound session.
      */
-    private final static long SESSION_LIFETIME_MAX_MS = SESSION_TAG_DURATION_MS + 2 * 60 * 1000L;
+    private static final long SESSION_LIFETIME_MAX_MS = SESSION_TAG_DURATION_MS + 2 * 60 * 1000L;
 
     /**
      * Time to send more if we are this close to expiration
@@ -111,7 +111,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * a few MB? how about 24 MB!
      * This is the max size of _inboundTagSets.
      */
-    public final static int MAX_INBOUND_SESSION_TAGS = 800 * 1000;
+    public static final int MAX_INBOUND_SESSION_TAGS = 800 * 1000;
 
     /**
      *  This was 100 since 0.6.1.10 (50 before that). It's important because:

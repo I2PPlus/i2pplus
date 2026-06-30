@@ -133,10 +133,10 @@ public class NTCPTransport extends TransportImpl {
     private long _lastInboundIPv6;
 
     // note: SSU version is i2np.udp.host, not hostname
-    public final static String PROP_I2NP_NTCP_HOSTNAME = "i2np.ntcp.hostname";
-    public final static String PROP_I2NP_NTCP_PORT = "i2np.ntcp.port";
-    public final static String PROP_I2NP_NTCP_AUTO_PORT = "i2np.ntcp.autoport";
-    public final static String PROP_I2NP_NTCP_AUTO_IP = "i2np.ntcp.autoip";
+    public static final String PROP_I2NP_NTCP_HOSTNAME = "i2np.ntcp.hostname";
+    public static final String PROP_I2NP_NTCP_PORT = "i2np.ntcp.port";
+    public static final String PROP_I2NP_NTCP_AUTO_PORT = "i2np.ntcp.autoport";
+    public static final String PROP_I2NP_NTCP_AUTO_IP = "i2np.ntcp.autoip";
     private static final int DEFAULT_COST = 10;
     private static final int NTCP2_OUTBOUND_COST = 14;
 

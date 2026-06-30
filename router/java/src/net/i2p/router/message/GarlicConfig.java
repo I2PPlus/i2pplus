@@ -167,7 +167,7 @@ class GarlicConfig {
 
     protected String getSubData() { return ""; }
 
-    private final static String NL = System.getProperty("line.separator");
+    private static final String NL = System.getProperty("line.separator");
 
     @Override
     public String toString() {

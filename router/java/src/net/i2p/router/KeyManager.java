@@ -45,12 +45,12 @@ public class KeyManager {
     private SigningPublicKey _signingPublicKey;
     private final Map<Hash, LeaseSetKeys> _leaseSetKeys; // Destination --> LeaseSetKeys
 
-    public final static String PROP_KEYDIR = "router.keyBackupDir";
-    public final static String DEFAULT_KEYDIR = "keyBackup";
-    public final static String KEYFILE_PRIVATE_ENC = "privateEncryption.key";
-    public final static String KEYFILE_PUBLIC_ENC = "publicEncryption.key";
-    public final static String KEYFILE_PRIVATE_SIGNING = "privateSigning.key";
-    public final static String KEYFILE_PUBLIC_SIGNING = "publicSigning.key";
+    public static final String PROP_KEYDIR = "router.keyBackupDir";
+    public static final String DEFAULT_KEYDIR = "keyBackup";
+    public static final String KEYFILE_PRIVATE_ENC = "privateEncryption.key";
+    public static final String KEYFILE_PUBLIC_ENC = "publicEncryption.key";
+    public static final String KEYFILE_PRIVATE_SIGNING = "privateSigning.key";
+    public static final String KEYFILE_PUBLIC_SIGNING = "publicSigning.key";
 
     public KeyManager(RouterContext context) {
         _context = context;

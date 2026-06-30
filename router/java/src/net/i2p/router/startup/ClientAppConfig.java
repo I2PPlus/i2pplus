@@ -69,7 +69,7 @@ import net.i2p.util.SystemVersion;
  */
 public class ClientAppConfig {
     /** wait 15s before starting up non-boot client apps */
-    private final static long DEFAULT_STARTUP_DELAY = 15*1000L;
+    private static final long DEFAULT_STARTUP_DELAY = 15*1000L;
 
     private static final String PROP_CLIENT_CONFIG_FILENAME = "router.clientConfigFile";
     private static final String DEFAULT_CLIENT_CONFIG_FILENAME = "clients.config";
@@ -113,7 +113,7 @@ public class ClientAppConfig {
      * Only valid after getClientApps(ctx) has been called.
      * @since 0.9.42
      */
-    public synchronized static boolean isSplitConfig(I2PAppContext ctx) {
+    public static synchronized boolean isSplitConfig(I2PAppContext ctx) {
         File dir = new File(ctx.getConfigDir(), CLIENT_CONFIG_DIR);
         return dir.exists() && !configFile(ctx).exists();
     }
@@ -141,7 +141,7 @@ public class ClientAppConfig {
      * Go through the files, and return a List of ClientAppConfig structures
      * This is for the router.
      */
-    public synchronized static List<ClientAppConfig> getClientApps(RouterContext ctx) {
+    public static synchronized List<ClientAppConfig> getClientApps(RouterContext ctx) {
         File dir = new SecureDirectory(ctx.getConfigDir(), CLIENT_CONFIG_DIR);
         // clients.config
         List<ClientAppConfig> rv = new ArrayList<>(8);
@@ -199,7 +199,7 @@ public class ClientAppConfig {
      *
      * @since 0.7.12
      */
-    public synchronized static List<ClientAppConfig> getClientApps(File cfgFile) throws IOException {
+    public static synchronized List<ClientAppConfig> getClientApps(File cfgFile) throws IOException {
         if (!cfgFile.isFile())
             return new ArrayList<>();
         Properties clientApps = new Properties();
@@ -315,7 +315,7 @@ public class ClientAppConfig {
      *
      * @since 0.9.42
      */
-    public synchronized static void writeClientAppConfig(I2PAppContext ctx, ClientAppConfig app) throws IOException {
+    public static synchronized void writeClientAppConfig(I2PAppContext ctx, ClientAppConfig app) throws IOException {
         if (app.configFile == null) {
             File dir = new SecureDirectory(ctx.getConfigDir(), CLIENT_CONFIG_DIR);
             if (!dir.isDirectory() && !dir.mkdirs())
@@ -345,7 +345,7 @@ public class ClientAppConfig {
      *
      * @since 0.9.42 split out from above
      */
-    public synchronized static void writeClientAppConfig(I2PAppContext ctx, List<ClientAppConfig> apps) throws IOException {
+    public static synchronized void writeClientAppConfig(I2PAppContext ctx, List<ClientAppConfig> apps) throws IOException {
         // Gather the set of config files
         ObjectCounterUnsafe<File> counter = new ObjectCounterUnsafe<>();
         for (ClientAppConfig cac : apps) {
@@ -408,7 +408,7 @@ public class ClientAppConfig {
      * @throws IllegalArgumentException if cac has a null configfile
      * @since 0.9.42
      */
-    public synchronized static boolean deleteClientAppConfig(ClientAppConfig cac) throws IOException {
+    public static synchronized boolean deleteClientAppConfig(ClientAppConfig cac) throws IOException {
         File f = cac.configFile;
         if (f == null)
             throw new IllegalArgumentException("No file for " + cac.className);

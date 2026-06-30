@@ -132,19 +132,19 @@ public class Banlist {
     /**
      * Default ban duration for transient bans.
      */
-    public final static long BANLIST_DURATION_MS = 7*60*1000L; // Don't make this too long as the failure may be transient due to connection limits.
+    public static final long BANLIST_DURATION_MS = 7*60*1000L; // Don't make this too long as the failure may be transient due to connection limits.
     /**
      * Maximum ban duration for transient bans.
      */
-    public final static long BANLIST_DURATION_MAX = 30*60*1000L;
+    public static final long BANLIST_DURATION_MAX = 30*60*1000L;
     /**
      * Default ban duration for transport-specific bans.
      */
-    public final static long BANLIST_DURATION_PARTIAL = 10*60*1000L;
+    public static final long BANLIST_DURATION_PARTIAL = 10*60*1000L;
     /**
      * Permanent ban duration (will be rounded down to 180 days on console).
      */
-    public final static long BANLIST_DURATION_FOREVER = 181L*24*60*60*1000L; // will get rounded down to 180d on console
+    public static final long BANLIST_DURATION_FOREVER = 181L*24*60*60*1000L; // will get rounded down to 180d on console
 
     /**
      *  Buggy i2pd fork
@@ -154,16 +154,16 @@ public class Banlist {
      *  Buggy i2pd fork
      *  @since 0.9.52
      */
-    public final static long BANLIST_DURATION_NO_NETWORK = 30*24*60*60*1000L;
+    public static final long BANLIST_DURATION_NO_NETWORK = 30*24*60*60*1000L;
     /**
      * Ban duration for private IP addresses.
      */
-    public final static long BANLIST_DURATION_PRIVATE = 2*60*60*1000L;
+    public static final long BANLIST_DURATION_PRIVATE = 2*60*60*1000L;
     /**
      * Ban duration for repeat bad packet offenders.
      */
-    public final static long BANLIST_DURATION_BAD_PACKETS = 60*60*1000L; // 1 hour
-    private final static long BANLIST_CLEANER_START_DELAY = BANLIST_DURATION_PARTIAL;
+    public static final long BANLIST_DURATION_BAD_PACKETS = 60*60*1000L; // 1 hour
+    private static final long BANLIST_CLEANER_START_DELAY = BANLIST_DURATION_PARTIAL;
 
     /**
      *  A ban that expires after this will return true in isBanlistedForever().

@@ -29,12 +29,12 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     private volatile boolean _isRunning;
     private long _checkDelay = 10 * 1000L;
 
-    private final static String PROP_DH_PRECALC_MIN = "crypto.xdh.precalc.min";
-    private final static String PROP_DH_PRECALC_MAX = "crypto.xdh.precalc.max";
-    private final static String PROP_DH_PRECALC_DELAY = "crypto.xdh.precalc.delay";
-    private final static int DEFAULT_DH_PRECALC_MIN = 20;
-    private final static int DEFAULT_DH_PRECALC_MAX = 60;
-    private final static int DEFAULT_DH_PRECALC_DELAY = 25;
+    private static final String PROP_DH_PRECALC_MIN = "crypto.xdh.precalc.min";
+    private static final String PROP_DH_PRECALC_MAX = "crypto.xdh.precalc.max";
+    private static final String PROP_DH_PRECALC_DELAY = "crypto.xdh.precalc.delay";
+    private static final int DEFAULT_DH_PRECALC_MIN = 20;
+    private static final int DEFAULT_DH_PRECALC_MAX = 60;
+    private static final int DEFAULT_DH_PRECALC_DELAY = 25;
 
     public X25519KeyFactory(I2PAppContext ctx) {
         super("XDH Precalc");

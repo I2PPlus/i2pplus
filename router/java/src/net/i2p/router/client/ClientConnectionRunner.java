@@ -1142,7 +1142,7 @@ class ClientConnectionRunner {
      * So, we just wait REQUEUE_DELAY ms before trying again.
      *
      */
-    private final static long REQUEUE_DELAY = 500;
+    private static final long REQUEUE_DELAY = 500;
     private static final int MAX_REQUEUE = 60;  // retries
 
     /**

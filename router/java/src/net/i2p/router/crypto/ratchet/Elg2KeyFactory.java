@@ -30,12 +30,12 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
     private volatile boolean _isRunning;
     private long _checkDelay = 10 * 1000L;
 
-    private final static String PROP_DH_PRECALC_MIN = "crypto.edh.precalc.min";
-    private final static String PROP_DH_PRECALC_MAX = "crypto.edh.precalc.max";
-    private final static String PROP_DH_PRECALC_DELAY = "crypto.edh.precalc.delay";
-    private final static int DEFAULT_DH_PRECALC_MIN = SystemVersion.isSlow() ? 20 : 50;
-    private final static int DEFAULT_DH_PRECALC_MAX = SystemVersion.isSlow() ? 100 : 200;
-    private final static int DEFAULT_DH_PRECALC_DELAY = 25;
+    private static final String PROP_DH_PRECALC_MIN = "crypto.edh.precalc.min";
+    private static final String PROP_DH_PRECALC_MAX = "crypto.edh.precalc.max";
+    private static final String PROP_DH_PRECALC_DELAY = "crypto.edh.precalc.delay";
+    private static final int DEFAULT_DH_PRECALC_MIN = SystemVersion.isSlow() ? 20 : 50;
+    private static final int DEFAULT_DH_PRECALC_MAX = SystemVersion.isSlow() ? 100 : 200;
+    private static final int DEFAULT_DH_PRECALC_DELAY = 25;
     private final boolean RETURN_UNUSED_TO_XDH;
 
     public Elg2KeyFactory(RouterContext ctx) {

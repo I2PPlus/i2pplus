@@ -46,15 +46,15 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
     private final Hash _us;
     private final long _msgIDBloomXor;
 
-    private final static int MAX_ROUTERS_RETURNED = 3;
-    private final static int REPLY_TIMEOUT = 60*1000;
-    private final static int MESSAGE_PRIORITY = OutNetMessage.PRIORITY_NETDB_REPLY;
+    private static final int MAX_ROUTERS_RETURNED = 3;
+    private static final int REPLY_TIMEOUT = 60*1000;
+    private static final int MESSAGE_PRIORITY = OutNetMessage.PRIORITY_NETDB_REPLY;
 
     /**
      * If a routerInfo structure isn't this recent, don't send it out.
      * Equal to KNDF.ROUTER_INFO_EXPIRATION_FLOODFILL.
      */
-    public final static long EXPIRE_DELAY = 60*60*1000L;
+    public static final long EXPIRE_DELAY = 60*60*1000L;
 
     public HandleDatabaseLookupMessageJob(RouterContext ctx, DatabaseLookupMessage receivedMessage, RouterIdentity _from, Hash _fromHash, long msgIDBloomXor) {
         super(ctx);

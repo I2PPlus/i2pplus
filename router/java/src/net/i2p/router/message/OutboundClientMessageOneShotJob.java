@@ -135,15 +135,15 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * This can be overridden in the router.config or the client's session config
      * (the client's session config takes precedence)
      */
-    public final static String OVERALL_TIMEOUT_MS_PARAM = "clientMessageTimeout";
-    private final static long OVERALL_TIMEOUT_MS_DEFAULT = 60*1000L;
-    private final static long OVERALL_TIMEOUT_MS_MIN = 8*1000L;
-    private final static long OVERALL_TIMEOUT_MS_MAX = 90*1000L;
-    private final static long LS_LOOKUP_TIMEOUT = 25*1000L;
-    private final static long OVERALL_TIMEOUT_NOLS_MIN = OVERALL_TIMEOUT_MS_MIN + LS_LOOKUP_TIMEOUT;
-    private final static long REPLY_TIMEOUT_MS_MIN = OVERALL_TIMEOUT_MS_DEFAULT - 5*1000L;
+    public static final String OVERALL_TIMEOUT_MS_PARAM = "clientMessageTimeout";
+    private static final long OVERALL_TIMEOUT_MS_DEFAULT = 60*1000L;
+    private static final long OVERALL_TIMEOUT_MS_MIN = 8*1000L;
+    private static final long OVERALL_TIMEOUT_MS_MAX = 90*1000L;
+    private static final long LS_LOOKUP_TIMEOUT = 25*1000L;
+    private static final long OVERALL_TIMEOUT_NOLS_MIN = OVERALL_TIMEOUT_MS_MIN + LS_LOOKUP_TIMEOUT;
+    private static final long REPLY_TIMEOUT_MS_MIN = OVERALL_TIMEOUT_MS_DEFAULT - 5*1000L;
     // callback timeout. Longer so we can have success-after-failure
-    private final static long RATCHET_REPLY_TIMEOUT_MS_MIN = 30*1000L;
+    private static final long RATCHET_REPLY_TIMEOUT_MS_MIN = 30*1000L;
 
     /**
      * NOTE: Changed as of 0.9.2.

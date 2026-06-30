@@ -16,16 +16,16 @@ import net.i2p.CoreVersion;
  */
 public class RouterVersion {
     /** deprecated */
-    public final static String ID = "Git";
-    public final static String VERSION = CoreVersion.VERSION;
+    public static final String ID = "Git";
+    public static final String VERSION = CoreVersion.VERSION;
     /** for example: "beta", "alpha", "rc" */
-    public final static String STATUS = "";
-    public final static long BUILD = 9;
+    public static final String STATUS = "";
+    public static final long BUILD = 9;
 
     /** for example "-test" */
-    public final static String EXTRA = "+";
+    public static final String EXTRA = "+";
     //public final static String FULL_VERSION = VERSION + "-" + BUILD + QUALIFIER + EXTRA;
-    public final static String FULL_VERSION = VERSION + "-" + BUILD + EXTRA;
+    public static final String FULL_VERSION = VERSION + "-" + BUILD + EXTRA;
 
     public static void main(String[] args) {
         System.out.println("I2P+ Router version: " + FULL_VERSION); // NOSONAR CLI tool

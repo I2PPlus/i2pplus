@@ -181,7 +181,7 @@ class NTCP2Payload {
     /**
      * Base class for NTCP 2 payload blocks.
      */
-    public static abstract class Block {
+    public abstract static class Block {
         private final int type;
 
         public Block(int ttype) {

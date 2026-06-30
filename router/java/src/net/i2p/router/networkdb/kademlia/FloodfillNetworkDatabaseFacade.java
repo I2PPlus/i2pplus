@@ -789,7 +789,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     /** NTCP cons drop quickly but SSU takes a while, so it's prudent to keep this
      *  a little higher than 1 or 2. */
-    protected final static int MIN_ACTIVE_PEERS = SystemVersion.isSlow() ? 16 : 32;
+    protected static final int MIN_ACTIVE_PEERS = SystemVersion.isSlow() ? 16 : 32;
 
     /** @since 0.8.7 */
     private static final int MAX_DB_BEFORE_SKIPPING_SEARCH;

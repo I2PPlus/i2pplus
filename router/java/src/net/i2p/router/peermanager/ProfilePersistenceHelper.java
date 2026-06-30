@@ -38,10 +38,10 @@ class ProfilePersistenceHelper {
     private final Log _log;
     private final RouterContext _context;
 
-    public final static String PROP_PEER_PROFILE_DIR = "router.profileDir";
-    public final static String DEFAULT_PEER_PROFILE_DIR = "peerProfiles";
-    private final static String NL = System.getProperty("line.separator");
-    private final static String HR = "# ----------------------------------------------------------------------------------------";
+    public static final String PROP_PEER_PROFILE_DIR = "router.profileDir";
+    public static final String DEFAULT_PEER_PROFILE_DIR = "peerProfiles";
+    private static final String NL = System.getProperty("line.separator");
+    private static final String HR = "# ----------------------------------------------------------------------------------------";
     private static final String PREFIX = "profile-";
     private static final String SUFFIX = ".txt.gz";
     private static final String UNCOMPRESSED_SUFFIX = ".txt";
@@ -483,7 +483,7 @@ class ProfilePersistenceHelper {
         return 0;
     }
 
-    private final static float getFloat(Properties props, String key) {
+    private static final float getFloat(Properties props, String key) {
         String val = props.getProperty(key);
         if (val != null) {
             try {

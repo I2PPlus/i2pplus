@@ -32,8 +32,8 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
 
     private static final long serialVersionUID = 1L;
 
-    protected transient final I2PAppContext _context;
-    protected transient final Log _log;
+    protected final transient I2PAppContext _context;
+    protected final transient Log _log;
     protected final String _name;
 
     /**

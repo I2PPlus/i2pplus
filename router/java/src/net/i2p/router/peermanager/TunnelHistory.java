@@ -152,8 +152,8 @@ public class TunnelHistory {
         }
     }
 
-    private final static String NL = System.getProperty("line.separator");
-    private final static String HR = "# ----------------------------------------------------------------------------------------";
+    private static final String NL = System.getProperty("line.separator");
+    private static final String HR = "# ----------------------------------------------------------------------------------------";
 
     public void store(OutputStream out) throws IOException {
         store(out, true);
@@ -220,7 +220,7 @@ public class TunnelHistory {
 **/
     }
 
-    private final static long getLong(Properties props, String key) {
+    private static final long getLong(Properties props, String key) {
         return ProfilePersistenceHelper.getLong(props, key);
     }
 }

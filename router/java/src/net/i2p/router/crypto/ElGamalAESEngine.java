@@ -38,7 +38,7 @@ import net.i2p.util.SimpleByteCache;
  */
 public final class ElGamalAESEngine {
     private final Log _log;
-    private final static int MIN_ENCRYPTED_SIZE = 80; // smallest possible resulting size
+    private static final int MIN_ENCRYPTED_SIZE = 80; // smallest possible resulting size
     private final I2PAppContext _context;
     /** enforced since release 0.6 */
     public static final int MAX_TAGS_RECEIVED = 200;

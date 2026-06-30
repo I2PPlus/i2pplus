@@ -146,8 +146,8 @@ public class DBHistory {
         _invalidReplyRate.coalesceStats();
     }
 
-    private final static String NL = System.getProperty("line.separator");
-    private final static String HR = "# ----------------------------------------------------------------------------------------";
+    private static final String NL = System.getProperty("line.separator");
+    private static final String HR = "# ----------------------------------------------------------------------------------------";
     /** write out the data from the profile to the stream including comments */
     public void store(OutputStream out) throws IOException {store(out, true);}
 
@@ -203,7 +203,7 @@ public class DBHistory {
         catch (IllegalArgumentException iae) {_log.warn("Db History Invalid Reply rate is corrupt -> " + iae.getMessage());}
     }
 
-    private final static long getLong(Properties props, String key) {
+    private static final long getLong(Properties props, String key) {
         return ProfilePersistenceHelper.getLong(props, key);
     }
 }

@@ -265,7 +265,7 @@ public class LoadClientAppsJob extends JobImpl {
         t.start();
     }
 
-    private final static class RunApp implements Runnable {
+    private static final class RunApp implements Runnable {
         private final String _className;
         private final String _appName;
         private final String[] _args;
