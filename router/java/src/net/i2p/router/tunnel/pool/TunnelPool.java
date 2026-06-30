@@ -69,6 +69,11 @@ public class TunnelPool {
      */
     private volatile int _consecutiveEmergencies = 0;
     private static final int MAX_EMERGENCY_BOOST = 6;
+    /** Minimum interval between EMERGENCY builds per pool (30s).
+     *  Prevents death spirals where EMERGENCY fires every 15s cycle,
+     *  queuing builds that timeout, triggering more EMERGENCYs. */
+    private static final long EMERGENCY_COOLDOWN_MS = 30_000;
+    private volatile long _lastEmergencyBuildTime;
     private volatile boolean _leaseSetRepublishPending;
     private static final int REMOVAL_QUEUE_CAPACITY = 2000;
     private final BlockingQueue<TunnelInfo> _removalQueue = new LinkedBlockingQueue<>(REMOVAL_QUEUE_CAPACITY);
@@ -2590,6 +2595,20 @@ public class TunnelPool {
             _consecutiveEmergencies--;
         }
 
+        // Early exit: if untested + in-progress already covers the target,
+        // don't queue more builds.  This prevents the race condition where
+        // ensureSufficientTunnels() and calculatePairedBuilds() both see
+        // inProgress=0 and double-queue builds that pile up as UNTESTED.
+        int untestedPlusIP = untestedCount + inProgress;
+        if (untestedPlusIP >= effectiveTarget) {
+            if (_log.shouldDebug()) {
+                _log.debug(toString() + " -> Skipping build: untested(" +
+                          untestedCount + ") + inProgress(" + inProgress +
+                          ") >= effectiveTarget(" + effectiveTarget + ")");
+            }
+            return;
+        }
+
         // Count UNTESTED tunnels — they're in the pool and just need time
         // to be tested.  Don't count them as deficit UNLESS the pool has
         // zero GOOD tunnels, in which case they're likely stuck failing
@@ -2669,6 +2688,19 @@ public class TunnelPool {
         // build → UNTESTED → test queue saturated → can't test → EMERGENCY →
         // build more → Too many UNTESTED → prune untested → pool drops → repeat.
         if (safeActive == 0 && nearExpiry == 0 && untestedCount == 0 && !isPing) {
+            // EMERGENCY cooldown: prevent death spirals by spacing out
+            // emergency builds.  Without this, EMERGENCY fires every 15s,
+            // queues builds that timeout, triggering more EMERGENCYs.
+            long nowMs = _context.clock().now();
+            if (nowMs - _lastEmergencyBuildTime < EMERGENCY_COOLDOWN_MS) {
+                if (_log.shouldDebug()) {
+                    _log.debug(toString() + " -> Skipping EMERGENCY: cooldown (" +
+                              (nowMs - _lastEmergencyBuildTime) + "ms < " +
+                              EMERGENCY_COOLDOWN_MS + "ms)");
+                }
+                return;
+            }
+            _lastEmergencyBuildTime = nowMs;
             // Dynamic scaling: boost target on repeated collapses.
             _consecutiveEmergencies = Math.min(_consecutiveEmergencies + 1,
                                                MAX_EMERGENCY_BOOST);
