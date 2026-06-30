@@ -4,7 +4,6 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 import net.i2p.data.DataHelper;
 import net.i2p.data.SessionKey;
-import net.i2p.data.Signature;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterIdentity;

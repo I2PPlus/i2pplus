@@ -16,7 +16,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.transport.Transport;
 import net.i2p.util.Log;
-import net.i2p.util.VersionComparator;
+
 
 /**
  * Probes peers to verify they are still alive, using DirectLookupJob to ask

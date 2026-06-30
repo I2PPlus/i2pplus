@@ -25,7 +25,6 @@ import net.i2p.router.peermanager.PeerManagerFacadeImpl;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
-import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;

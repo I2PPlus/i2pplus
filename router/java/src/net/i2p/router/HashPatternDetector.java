@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.io.ObjectInputStream;
+
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
+
 import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;

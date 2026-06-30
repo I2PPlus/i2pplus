@@ -13,7 +13,7 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelPoolSettings;
-import net.i2p.router.peermanager.ProfileOrganizer;
+
 import net.i2p.util.Log;
 
 /**

@@ -34,7 +34,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Matcher;
+
 import java.util.regex.Pattern;
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientAppManager;

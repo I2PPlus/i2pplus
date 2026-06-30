@@ -22,10 +22,10 @@ import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.time.BuildTime;
-import net.i2p.util.Addresses;
+
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
-import net.i2p.router.BanLogger;
+
 
 /**
  * Manages router banlist entries with configurable expiration times and transport-specific bans.

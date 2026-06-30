@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
-import java.util.Arrays;
+
 import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
@@ -24,7 +24,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.BanLogger;
 import net.i2p.router.RouterContext;
-import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
+
 import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.util.Log;
 

@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
@@ -18,7 +17,6 @@ import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.peermanager.PeerProfile;
-import net.i2p.router.peermanager.TunnelHistory;
 import net.i2p.router.util.MaskedIPSet;
 import net.i2p.util.ArraySet;
 

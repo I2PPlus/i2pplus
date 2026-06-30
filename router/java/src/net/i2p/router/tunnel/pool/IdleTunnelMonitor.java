@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
@@ -12,7 +11,6 @@ import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
-import net.i2p.util.SystemVersion;
 
 /**
  * Monitors transit tunnels for idle behavior.

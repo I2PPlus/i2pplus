@@ -1,7 +1,5 @@
 package net.i2p.router.transport.ntcp;
 
-import java.io.IOException;
-import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -17,16 +15,13 @@ import net.i2p.crypto.EncType;
 import net.i2p.crypto.HKDF;
 import net.i2p.crypto.KeyFactory;
 import net.i2p.data.Base64;
-import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
-import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
 import net.i2p.router.BanLogger;
 import net.i2p.router.transport.ntcp.NTCP2Payload.Block;
-import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 
 /**

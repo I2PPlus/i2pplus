@@ -4,7 +4,6 @@ package net.i2p.router.transport.udp;
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.DecayingBloomFilter;
 import net.i2p.router.util.DecayingHashSet;
-import net.i2p.util.Log;
 
 /**
  * Organize the received data message fragments, feeding completed messages

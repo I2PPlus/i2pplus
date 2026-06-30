@@ -12,7 +12,6 @@ import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.BanLogger;
-import net.i2p.router.HashPatternDetector;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.CommSystemFacadeImpl;
@@ -20,7 +19,6 @@ import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
-import net.i2p.util.VersionComparator;
 
 /**
  * Throttles incoming tunnel requests earlier than ParticipatingThrottler,

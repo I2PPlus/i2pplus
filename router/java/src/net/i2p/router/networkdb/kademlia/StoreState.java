@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
-import net.i2p.router.networkdb.kademlia.MessageWrapper.WrappedMessage;
+
 
 /**
  * Manages state for network database store operations.

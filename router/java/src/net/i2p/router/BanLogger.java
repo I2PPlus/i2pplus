@@ -4,8 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -15,19 +14,18 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
+
 import java.util.Locale;
-import java.util.Set;
+
 import java.util.TimeZone;
 import java.util.Map;
-import java.util.Collections;
-import java.util.concurrent.ConcurrentHashMap;
+
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.router.HashPatternDetector;
+
 import net.i2p.util.Log;
 import net.i2p.util.LHMCache;
 

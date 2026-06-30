@@ -23,7 +23,6 @@ import net.i2p.data.Lease;
 import net.i2p.stat.RateConstants;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.TunnelId;
-import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelPoolSettings;

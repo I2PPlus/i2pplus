@@ -25,7 +25,7 @@ import net.i2p.internal.InternalClientManager;
 import net.i2p.router.ClientManagerFacade;
 import net.i2p.router.ClientMessage;
 import net.i2p.router.Job;
-import net.i2p.router.Router;
+
 import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.util.Log;

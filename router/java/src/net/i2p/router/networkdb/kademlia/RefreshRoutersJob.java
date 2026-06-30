@@ -2,12 +2,12 @@ package net.i2p.router.networkdb.kademlia;
 
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
-import java.util.Collections;
+
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;

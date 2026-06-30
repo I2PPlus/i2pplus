@@ -32,7 +32,6 @@ import net.i2p.router.networkdb.kademlia.MessageWrapper.OneTimeSession;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 import net.i2p.util.Log;
-import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**

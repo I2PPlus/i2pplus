@@ -48,7 +48,7 @@ import net.i2p.kademlia.KBucketSet;
 import net.i2p.kademlia.RejectTrimmer;
 import net.i2p.router.BanLogger;
 import net.i2p.router.Banlist;
-import net.i2p.router.HashPatternDetector;
+
 import net.i2p.client.naming.NamingService;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
@@ -66,7 +66,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.VersionComparator;
 
-import java.util.Comparator;
+
 
 /**
  * Kademlia based version of network database.

@@ -3,7 +3,7 @@ package net.i2p.router.transport;
 import java.util.ArrayList;
 import java.util.List;
 import net.i2p.router.RouterContext;
-import net.i2p.router.transport.FIFOBandwidthLimiter.Request;
+
 import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SyntheticREDQueue;

@@ -11,7 +11,7 @@ package net.i2p.router.tasks;
 import net.i2p.data.router.RouterKeyGenerator;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
-import net.i2p.util.Log;
+
 
 /**
  * Update the routing Key modifier every day at midnight (plus on startup).
