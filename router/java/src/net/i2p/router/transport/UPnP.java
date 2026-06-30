@@ -1168,10 +1168,11 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 	}
 
 	private void listSubDev(String prefix, Device dev, StringBuilder sb){
-                if (prefix == null)
-			sb.append("<p><b>").append(_t("Found Device")).append(":</b> ");
-		else
-			sb.append("<li>").append(_t("Subdevice")).append(": ");
+                if (prefix == null) {
+		    sb.append("<p><b>").append(_t("Found Device")).append(":</b> ");
+		} else {
+		    sb.append("<li>").append(_t("Subdevice")).append(": ");
+		}
 		sb.append(DataHelper.escapeHTML(dev.getFriendlyName()));
                 if (prefix == null) {
 			String ip = getIP(dev);
@@ -1610,8 +1611,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		Service service;
 		synchronized(lock) {
 			if(!isNATPresent()) {
-                                if (_log.shouldWarn())
+                                if (_log.shouldWarn()) {
 				    _log.warn("Can't removeMapping: " + isNATPresent() + " " + _router);
+				}
 				return false;
 			}
 			service = fp.isIP6 ? _service6 : _service;
@@ -1635,8 +1637,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 	private boolean removeMappingV4(Service service, String protocol, int port, ForwardPort fp, boolean noLog) {
 		Action remove = service.getAction("DeletePortMapping");
 		if(remove == null) {
-		    if (_log.shouldWarn())
+		    if (_log.shouldWarn()) {
 			_log.warn("Couldn't find DeletePortMapping action!");
+		    }
 		    return false;
 		}
 
@@ -1670,8 +1673,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		    return false;
 		Action remove = service.getAction("DeletePinhole");
 		if (remove == null) {
-		    if (_log.shouldWarn())
+		    if (_log.shouldWarn()) {
 			_log.warn("Couldn't find DeletePinhole action!");
+		    }
 		    return false;
 		}
 		remove.setArgumentValue("UniqueID", uid);
@@ -1838,8 +1842,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
          */
 	private void registerPorts(Set<ForwardPort> portsToForwardNow) {
 		if (_serviceLacksAPM && portsToForwardNow != null) {
-                    if (_log.shouldWarn())
+                    if (_log.shouldWarn()) {
 			_log.warn("UPnP device does not support port forwarding");
+		    }
 		    Map<ForwardPort, ForwardPortStatus> map =
 			new HashMap<>(portsToForwardNow.size());
 		    for (ForwardPort port : portsToForwardNow) {

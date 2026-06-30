@@ -96,8 +96,9 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      *
      */
     public synchronized void startup() {
-            if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Startup called from FNDS, starting up main and multihome db");
+            if (_log.shouldLog(Log.DEBUG)) {
+                _log.debug("Startup called from FNDS, starting up main and multihome db");
+            }
         _mainDbid.startup();
     }
 

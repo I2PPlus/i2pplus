@@ -1312,8 +1312,9 @@ public class Reseeder {
                         System.out.println(sb.append("Router infos included ").append(oldver).append(" with versions older than ").append(MIN_VERSION).append(" and ").append(unreach).append(" unreachable").toString()); sb.setLength(0); // NOSONAR S106 CLI output
                     } else {
                         System.out.println(sb.append("Failure:  Status code ").append(rc).toString()); sb.setLength(0); // NOSONAR S106 CLI output
-                        if (!su3.delete())
-                System.err.println(sb.append("Failed to delete ").append(su3.getName()).toString()); sb.setLength(0); // NOSONAR S106 CLI output
+                        if (!su3.delete()) {
+                            System.err.println(sb.append("Failed to delete ").append(su3.getName()).toString()); sb.setLength(0); // NOSONAR S106 CLI output
+                        }
                         fail++;
                     }
                 } else {

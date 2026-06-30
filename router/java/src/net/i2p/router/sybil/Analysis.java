@@ -445,8 +445,9 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         Set<RouterInfo> set = _context.netDb().getRouters();
         List<RouterInfo> ris = new ArrayList<>(set.size());
         for (RouterInfo ri : set) {
-            if (!ri.getIdentity().getHash().equals(us))
-            ris.add(ri);
+            if (!ri.getIdentity().getHash().equals(us)) {
+                ris.add(ri);
+            }
         }
         return ris;
     }

@@ -55,12 +55,14 @@ public class CloveSet {
 	   .append(" {");
 	for (int i = 0; i < _cloves.length; i++) {
 	    GarlicClove clove = _cloves[i];
-	    if (clove.getData() != null)
+	    if (clove.getData() != null) {
 		buf.append(clove.getData().getClass().getSimpleName());
-	    else
+	    } else {
 		buf.append("[null clove]");
-            if (i < _cloves.length - 1)
+	    }
+            if (i < _cloves.length - 1) {
 		buf.append(", ");
+	    }
 	}
 	buf.append('}');
 	return buf.toString();

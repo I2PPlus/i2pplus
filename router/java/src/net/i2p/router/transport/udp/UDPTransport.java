@@ -1394,9 +1394,10 @@ public class UDPTransport extends TransportImpl {
             // ticket #2467 natted to an invalid port
             // if the port is the only issue, don't call markUnreachable()
             if (ourPort < 1024 || ourPort > 65535 || !isValid(ourIP)) {
-                if (_log.shouldWarn())
-                _log.warn("[" + from.toBase64().substring(0,6) + "] told us we have an invalid IP - "
-                           + Addresses.toString(ourIP, ourPort) + ". Let's throw tomatoes at them!");
+                if (_log.shouldWarn()) {
+                    _log.warn("[" + from.toBase64().substring(0,6) + "] told us we have an invalid IP - "
+                               + Addresses.toString(ourIP, ourPort) + ". Let's throw tomatoes at them!");
+                }
             markUnreachable(from);
             } else {
                 _log.logAlways(Log.WARN, "[" + from.toBase64().substring(0,6) + "] told us we have an invalid port "
@@ -1489,11 +1490,12 @@ public class UDPTransport extends TransportImpl {
             byte[] externalListenHost = current != null ? current.getIP() : null;
             int externalListenPort = current != null ? current.getPort() : getRequestedPort(isIPv6);
 
-            if (_log.shouldDebug())
-            _log.debug("Change address? Status: " + _reachabilityStatus +
-                      "; Last updated: " + (_context.clock().now() - _reachabilityStatusLastUpdated) +
-                      "ms ago; Old: " + Addresses.toString(externalListenHost, externalListenPort) +
-                      "; New: " + Addresses.toString(ourIP, ourPort));
+            if (_log.shouldDebug()) {
+                _log.debug("Change address? Status: " + _reachabilityStatus +
+                          "; Last updated: " + (_context.clock().now() - _reachabilityStatusLastUpdated) +
+                          "ms ago; Old: " + Addresses.toString(externalListenHost, externalListenPort) +
+                          "; New: " + Addresses.toString(ourIP, ourPort));
+            }
 
             if ((fixedPort && externalListenPort > 0) || ourPort <= 0)
                 ourPort = externalListenPort;
