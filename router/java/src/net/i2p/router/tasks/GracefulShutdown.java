@@ -12,6 +12,15 @@ import net.i2p.util.Log;
 public class GracefulShutdown implements Runnable {
     private final RouterContext _context;
     private volatile boolean running = true;
+    private final Object _wakeLock = new Object();
+
+    /**
+     * Get the lock object for wake/sleep coordination with the shutdown detector.
+     * @return the shared lock object
+     */
+    public Object getWakeLock() {
+        return _wakeLock;
+    }
 
     /** Delay before finalizing a restart/shutdown after a signaling condition is met (ms) */
     private static final int RESTART_DELAY_MS = 20_000;
@@ -52,8 +61,8 @@ public class GracefulShutdown implements Runnable {
 
                     // Brief pause for UI/state cleanup, then finalize shutdown/restart
                     try {
-                        synchronized (Thread.currentThread()) {
-                            Thread.currentThread().wait(RESTART_DELAY_MS);
+                        synchronized (_wakeLock) {
+                            _wakeLock.wait(RESTART_DELAY_MS);
                         }
                     } catch (InterruptedException ie) {
                         Thread.currentThread().interrupt();
@@ -71,9 +80,9 @@ public class GracefulShutdown implements Runnable {
                 }
             } else {
                 // Idle: wait indefinitely until signaled to re-check
-                synchronized (Thread.currentThread()) {
+                synchronized (_wakeLock) {
                     try {
-                        Thread.currentThread().wait();
+                        _wakeLock.wait();
                     } catch (InterruptedException ie) {
                         Thread.currentThread().interrupt();
                     }
@@ -88,8 +97,8 @@ public class GracefulShutdown implements Runnable {
      * to prompt the graceful shutdown thread to re-evaluate the current situation.
      */
     public void wakeUp() {
-        synchronized (Thread.currentThread()) {
-            Thread.currentThread().notifyAll();
+        synchronized (_wakeLock) {
+            _wakeLock.notifyAll();
         }
     }
 

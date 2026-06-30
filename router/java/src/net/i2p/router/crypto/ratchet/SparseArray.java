@@ -103,18 +103,20 @@ class SparseArray<E> implements Cloneable {
         mSize = 0;
     }
 
+    /**
+     * Copy constructor.
+     */
+    private SparseArray(SparseArray<E> source) {
+        mKeys = source.mKeys.clone();
+        mValues = source.mValues.clone();
+        mSize = source.mSize;
+        mGarbage = source.mGarbage;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public SparseArray<E> clone() {
-        SparseArray<E> clone = null;
-        try {
-            clone = (SparseArray<E>) super.clone();
-            clone.mKeys = mKeys.clone();
-            clone.mValues = mValues.clone();
-        } catch (CloneNotSupportedException cnse) {
-            /* ignore */
-        }
-        return clone;
+        return new SparseArray<E>(this);
     }
 
     /**

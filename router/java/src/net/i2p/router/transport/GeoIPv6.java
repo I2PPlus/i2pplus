@@ -171,11 +171,11 @@ public class GeoIPv6 {
         List<V6Entry> entries = new ArrayList<>(20000);
         for (File geoFile : inFiles) {
             int count = 0;
-            try {
-                InputStream rawIn = new BufferedInputStream(new FileInputStream(geoFile));
+            try (InputStream rawIn = new BufferedInputStream(new FileInputStream(geoFile))) {
+                InputStream gzIn = rawIn;
                 if (geoFile.getName().endsWith(".gz"))
-                    rawIn = new GZIPInputStream(rawIn);
-                try (BufferedReader br = new BufferedReader(new InputStreamReader(rawIn, StandardCharsets.ISO_8859_1))) {
+                    gzIn = new GZIPInputStream(rawIn);
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(gzIn, StandardCharsets.ISO_8859_1))) {
                     String buf = null;
                     while ((buf = br.readLine()) != null) {
                         try {

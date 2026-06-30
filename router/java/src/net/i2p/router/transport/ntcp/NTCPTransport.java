@@ -698,10 +698,8 @@ public class NTCPTransport extends TransportImpl {
      */
     private boolean isValid(byte[] addr) {
         if (addr == null) return false;
-        if (isPubliclyRoutable(addr) &&
-            (addr.length != 16 || _haveIPv6Address))
-            return true;
-        return false;
+        return isPubliclyRoutable(addr) &&
+            (addr.length != 16 || _haveIPv6Address);
     }
 
     public boolean allowConnection() {
@@ -1159,12 +1157,17 @@ public class NTCPTransport extends TransportImpl {
                     _log.error("[NTCP] Specified port is " + port + ", ports lower than 1024 not recommended");
                 }
                 ServerSocketChannel chan = ServerSocketChannel.open();
+                try {
                 chan.configureBlocking(false);
                 // TODO retry
                 chan.socket().bind(addr);
                 _endpoints.add(addr);
                 if (_log.shouldInfo()) {_log.info("[NTCP] Listening on " + addr);}
                 _pumper.register(chan);
+                } catch (IOException ioe2) {
+                    try {chan.close();} catch (IOException ignore) {}
+                    throw ioe2;
+                }
             } catch (IOException ioe) {
                 _log.error("[NTCP] Error listening", ioe);
                 myAddress = null;

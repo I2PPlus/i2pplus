@@ -44,7 +44,7 @@ public class TestJob extends JobImpl {
     private SessionTag _encryptTag;
     private RatchetSessionTag _ratchetEncryptTag;
     private static final AtomicInteger __id = new AtomicInteger();
-    private int _id;
+    private int _testId;
 
     /**
      * Maximum number of times a test can be deferred (no partner tunnel available)
@@ -832,7 +832,7 @@ public class TestJob extends JobImpl {
      */
     private boolean sendTest(I2NPMessage m, int testPeriod) {
         final RouterContext ctx = getContext();
-        _id = __id.getAndIncrement();
+        _testId = __id.getAndIncrement();
 
         // Prefer secure paths but still allow unencrypted as cover
         boolean useEncryption = ctx.random().nextInt(4) != 0;
@@ -870,7 +870,7 @@ public class TestJob extends JobImpl {
         }
 
         if (_log.shouldDebug()) {
-            _log.debug("Sending " + (useEncryption ? "" : "unencrypted ") + "garlic test [#" + _id +
+            _log.debug("Sending " + (useEncryption ? "" : "unencrypted ") + "garlic test [#" + _testId +
                        "] exp=" + DataHelper.formatDuration(m.getMessageExpiration() - ctx.clock().now()) +
                        " testPeriod=" + testPeriod + "ms \n* " +
                        _outTunnel + " / " + _replyTunnel);
@@ -937,7 +937,7 @@ public class TestJob extends JobImpl {
         _cfg.clearExpeditedTest();
 
         if (_log.shouldDebug()) {
-            _log.debug("Tunnel Test [#" + _id + "] succeeded in " + ms + "ms → " + _cfg + " (Success rate: " +
+            _log.debug("Tunnel Test [#" + _testId + "] succeeded in " + ms + "ms → " + _cfg + " (Success rate: " +
                        String.format("%.1f%%", getSuccessRate() * 100) + ")");
         }
 
@@ -1099,9 +1099,9 @@ public class TestJob extends JobImpl {
                     _cfg.incrementRecentTestExemptions();
                     if (_log.shouldWarn()) {
                         _log.warn("Tunnel Test failed -> Keeping data-carrying tunnel (recent traffic, exemption " +
-                                  (recentExemptions + 1) + "/1): " + _cfg +
-                                  " (verified=" + _cfg.getVerifiedBytesTransferred() +
-                                  " bytes, last transfer " + staleMs + "ms ago)");
+                                  (recentExemptions + 1) + "/1) \n* " + _cfg +
+                                  " -> Verified: " + _cfg.getVerifiedBytesTransferred() +
+                                  " bytes, last transfer " + staleMs + "ms ago");
                     }
                     if (!scheduleRetest(false)) {
                         cleanupTunnelTracking();
@@ -1111,9 +1111,9 @@ public class TestJob extends JobImpl {
                 }
                 // Exceeded recent-traffic exemption limit — count as failure
                 if (_log.shouldWarn()) {
-                    _log.warn("Tunnel Test failed -> Recent traffic exemption exhausted for " + _cfg +
-                              " (verified=" + _cfg.getVerifiedBytesTransferred() +
-                              " bytes, last transfer " + staleMs + "ms ago) — counting failure");
+                    _log.warn("Tunnel Test failed -> Recent traffic exemption exhausted \n* " + _cfg +
+                              " -> Verified: " + _cfg.getVerifiedBytesTransferred() +
+                              " bytes, last transfer " + staleMs + "ms ago — counting failure");
                 }
             }
             // Stale data or exhausted exemptions — count failure toward removal.
@@ -1124,9 +1124,9 @@ public class TestJob extends JobImpl {
             if (currentFailures > maxFailures) {
                 if (_log.shouldWarn()) {
                     _log.warn("Tunnel Test failed -> Removing data-carrying tunnel after " +
-                              currentFailures + " consecutive failures: " + _cfg +
-                              " (verified=" + _cfg.getVerifiedBytesTransferred() +
-                              " bytes, last transfer " + staleMs + "ms ago)");
+                              currentFailures + " consecutive failures \n* " + _cfg +
+                              " -> Verified: " + _cfg.getVerifiedBytesTransferred() +
+                              " bytes, last transfer " + staleMs + "ms ago");
                 }
                 getContext().statManager().addRateData(
                     isExploratory ? "tunnel.testExploratoryFailedCompletelyTime" : "tunnel.testFailedCompletelyTime",
@@ -1138,10 +1138,10 @@ public class TestJob extends JobImpl {
                 return;
             }
             if (_log.shouldWarn()) {
-                _log.warn("Tunnel Test failed -> Keeping data-carrying tunnel: " + _cfg +
-                          " (verified=" + _cfg.getVerifiedBytesTransferred() +
+                _log.warn("Tunnel Test failed -> Keeping data-carrying tunnel \n* " + _cfg +
+                          " -> Verified: " + _cfg.getVerifiedBytesTransferred() +
                           " bytes, failures=" + currentFailures + "/" + maxFailures +
-                          ", last transfer " + staleMs + "ms ago)");
+                          ", last transfer " + staleMs + "ms ago");
             }
             // Normal delay — don't monopolize the test slot with ASAP retries
             if (!scheduleRetest(false)) {

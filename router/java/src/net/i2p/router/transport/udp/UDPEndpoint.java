@@ -101,22 +101,23 @@ class UDPEndpoint implements SocketListener {
                  // so we stay out of the way of other I2P stuff
                  port = TransportUtil.selectRandomPort(_context, UDPTransport.STYLE);
              }
-             try {
-                 if (_bindAddress == null)
-                     socket = new DatagramSocket(port);
-                 else
-                     socket = new DatagramSocket(port, _bindAddress);
-                 if (!SystemVersion.isAndroid()) {
-                     if (socket.getSendBufferSize() < MIN_SOCKET_BUFFER)
-                         socket.setSendBufferSize(MIN_SOCKET_BUFFER);
-                     if (socket.getReceiveBufferSize() < MIN_SOCKET_BUFFER)
-                         socket.setReceiveBufferSize(MIN_SOCKET_BUFFER);
-                 }
-                 break;
-             } catch (SocketException se) {
-                 if (_log.shouldWarn())
-                     _log.warn("Binding to port " + port + " failed", se);
-             }
+              try {
+                  if (_bindAddress == null)
+                      socket = new DatagramSocket(port);
+                  else
+                      socket = new DatagramSocket(port, _bindAddress);
+                  if (!SystemVersion.isAndroid()) {
+                      if (socket.getSendBufferSize() < MIN_SOCKET_BUFFER)
+                          socket.setSendBufferSize(MIN_SOCKET_BUFFER);
+                      if (socket.getReceiveBufferSize() < MIN_SOCKET_BUFFER)
+                          socket.setReceiveBufferSize(MIN_SOCKET_BUFFER);
+                  }
+                  break;
+              } catch (SocketException se) {
+                  if (socket != null) {socket.close(); socket = null;}
+                  if (_log.shouldWarn())
+                      _log.warn("Binding to port " + port + " failed", se);
+              }
              port = -1;
         }
         if (socket == null) {

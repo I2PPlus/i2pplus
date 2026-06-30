@@ -38,7 +38,7 @@ public class HashPatternDetector implements Serializable {
     private final Log _log;
 
     // Static BanLogger for sessionbans.txt - initialized lazily
-    private static BanLogger _banLogger;
+    private static volatile BanLogger _banLogger;
 
     // Pattern tracking: prefix (hex string) -> statistics
     private final Map<String, PrefixStats> _prefixStats = new ConcurrentHashMap<>();

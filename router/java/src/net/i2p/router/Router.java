@@ -101,6 +101,7 @@ public class Router implements RouterClock.ClockShiftListener {
     private I2PThread.OOMEventListener _oomListener;
     private ShutdownHook _shutdownHook;
     private I2PThread _gracefulShutdownDetector;
+    private Object _gracefulShutdownLock;
     private RouterWatchdog _watchdog;
     private Thread _watchdogThread;
     private final EventLog _eventLog;
@@ -435,13 +436,15 @@ public class Router implements RouterClock.ClockShiftListener {
         _oomListener = new OOMListener(_context);
 
         _shutdownHook = new ShutdownHook(_context);
-        _gracefulShutdownDetector = new I2PAppThread(new GracefulShutdown(_context), "Graceful ShutdownHook", true);
-        _gracefulShutdownDetector.setPriority(I2PThread.NORM_PRIORITY + 1);
+        GracefulShutdown gs = new GracefulShutdown(_context); // NOSONAR S3252 false positive
+        _gracefulShutdownLock = gs.getWakeLock();
+        _gracefulShutdownDetector = new I2PAppThread(gs, "Graceful ShutdownHook", true);
+        _gracefulShutdownDetector.setPriority(Thread.NORM_PRIORITY + 1);
         _gracefulShutdownDetector.start();
 
         _watchdog = new RouterWatchdog(_context);
         _watchdogThread = new I2PAppThread(_watchdog, "RouterWatchdog", true);
-        _watchdogThread.setPriority(I2PThread.NORM_PRIORITY + 1);
+        _watchdogThread.setPriority(Thread.NORM_PRIORITY + 1);
         _watchdogThread.start();
 
         if (SystemVersion.isWindows()) {BasePerms.fix(_context);}
@@ -1734,7 +1737,7 @@ public class Router implements RouterClock.ClockShiftListener {
         if (tcg != null) {
             tcg.prepareGracefulShutdown();
         }
-        synchronized (_gracefulShutdownDetector) {_gracefulShutdownDetector.notifyAll();}
+        synchronized (_gracefulShutdownLock) {_gracefulShutdownLock.notifyAll();}
     }
 
     /**
@@ -1753,7 +1756,7 @@ public class Router implements RouterClock.ClockShiftListener {
         if (tcg != null) {
             tcg.cancelDelayedShutdown();
         }
-        synchronized (_gracefulShutdownDetector) {_gracefulShutdownDetector.notifyAll();}
+        synchronized (_gracefulShutdownLock) {_gracefulShutdownLock.notifyAll();}
     }
 
     /**
@@ -1877,10 +1880,10 @@ public class Router implements RouterClock.ClockShiftListener {
         ((RouterClock) _context.clock()).removeShiftListener(this);
         // Stop accepting tunnels, etc.
         // This also prevents netdb from immediately expiring all the RIs
-        _started = System.currentTimeMillis();
+        _started = System.currentTimeMillis(); // NOSONAR S3252 false positive
         synchronized(_configFileLock) {_downtime = 1;}
         Thread t = new I2PThread(new Restarter(_context), "Router Restart");
-        t.setPriority(I2PThread.NORM_PRIORITY + 1);
+        t.setPriority(Thread.NORM_PRIORITY + 1);
         t.start();
     }
 
@@ -1962,9 +1965,10 @@ public class Router implements RouterClock.ClockShiftListener {
                 if (downtime > 0 && _downtime < 0) {_downtime = downtime;}
             }
             if (downtime > LIVELINESS_DELAY) {
-                _log.warn("WARN: Old router was not shut down gracefully -> Deleting " + f + "...");
-                if (!f.delete())
-                    _log.warn("Failed to delete liveness file " + f.getName());
+                System.err.println("WARN: Old router was not shut down gracefully -> Deleting " + f + "..."); // NOSONAR
+                if (!f.delete()) {
+                    System.err.println("Failed to delete liveness file " + f.getName()); // NOSONAR
+                }
                 if (lastWritten > 0) {
                     _eventLog.addEvent(EventLog.CRASHED, Translate.getString("{0} ago",
                                        DataHelper.formatDuration2(downtime), _context, BUNDLE_NAME));
