@@ -428,9 +428,9 @@ public class Reseeder {
         }
 
         @Override
-        public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {}
-        public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {}
-        public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {}
+        public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) { /* No-op - progress not tracked */ }
+        public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) { /* No-op - completion handled elsewhere */ }
+        public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) { /* No-op - failure handled in error callback */ }
 
         /**
          *  Use the Date header as a backup time source

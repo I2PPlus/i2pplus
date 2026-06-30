@@ -282,5 +282,5 @@ public class StatisticsManager {
         synchronized (_pct) { return _pct.format(num); }
     }
 
-    public void renderStatusHTML(Writer out) { }
+    public void renderStatusHTML(Writer out) { /* No-op - intentionally empty */ }
 }

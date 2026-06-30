@@ -60,34 +60,34 @@ public class DummyTunnelManagerFacade implements TunnelManagerFacade {
     public int getOutboundClientTunnelCount(Hash destination) { return 0; }
     public int getInboundClientTunnelCount(Hash destination) { return 0; }
     public long getLastParticipatingExpiration() { return -1; }
-    public void buildTunnels(Destination client, ClientTunnelSettings settings) {}
+    public void buildTunnels(Destination client, ClientTunnelSettings settings) { /* Intentionally empty - dummy implementation */ }
     @Override
-    public void removeTunnels(Destination client) {}
+    public void removeTunnels(Destination client) { /* Intentionally empty - dummy implementation */ }
     public boolean addAlias(Destination dest, ClientTunnelSettings settings, Destination existingClient) { return false; }
     @Override
-    public void removeAlias(Destination dest) {}
+    public void removeAlias(Destination dest) { /* Intentionally empty - dummy implementation */ }
     public TunnelPoolSettings getInboundSettings() { return null; }
     public TunnelPoolSettings getOutboundSettings() { return null; }
     public TunnelPoolSettings getInboundSettings(Hash client) { return null; }
     public TunnelPoolSettings getOutboundSettings(Hash client) { return null; }
-    public void setInboundSettings(TunnelPoolSettings settings) {}
-    public void setOutboundSettings(TunnelPoolSettings settings) {}
-    public void setInboundSettings(Hash client, TunnelPoolSettings settings) {}
-    public void setOutboundSettings(Hash client, TunnelPoolSettings settings) {}
+    public void setInboundSettings(TunnelPoolSettings settings) { /* Intentionally empty - dummy implementation */ }
+    public void setOutboundSettings(TunnelPoolSettings settings) { /* Intentionally empty - dummy implementation */ }
+    public void setInboundSettings(Hash client, TunnelPoolSettings settings) { /* Intentionally empty - dummy implementation */ }
+    public void setOutboundSettings(Hash client, TunnelPoolSettings settings) { /* Intentionally empty - dummy implementation */ }
     public int getInboundBuildQueueSize() { return 0; }
     public Set<Hash> selectPeersInTooManyTunnels() { return null; }
 
-    public void renderStatusHTML(Writer out) throws IOException {}
-    public void restart() {}
-    public void shutdown() {}
-    public void startup() {}
+    public void renderStatusHTML(Writer out) throws IOException { /* Intentionally empty - dummy implementation */ }
+    public void restart() { /* Intentionally empty - dummy implementation */ }
+    public void shutdown() { /* Intentionally empty - dummy implementation */ }
+    public void startup() { /* Intentionally empty - dummy implementation */ }
 
-    public void listPools(List<TunnelPool> out) {}
+    public void listPools(List<TunnelPool> out) { /* Intentionally empty - dummy implementation */ }
     public Map<Hash, TunnelPool> getInboundClientPools() { return null; }
     public Map<Hash, TunnelPool> getOutboundClientPools() { return null; }
     public TunnelPool getInboundExploratoryPool() { return null; }
     public TunnelPool getOutboundExploratoryPool() { return null; }
-    public void fail(Hash peer) {}
+    public void fail(Hash peer) { /* Intentionally empty - dummy implementation */ }
 
     public TunnelPool getInboundPool(Hash client) {
         return null;

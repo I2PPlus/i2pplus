@@ -35,27 +35,27 @@ public class DummyClientManagerFacade extends ClientManagerFacade {
     @Override
     public boolean isLocal(Hash destHash) { return true; }
     public boolean isLocal(Destination dest) { return true; }
-    public void reportAbuse(Destination dest, String reason, int severity) { }
+    public void reportAbuse(Destination dest, String reason, int severity) { /* Intentionally empty - dummy implementation */ }
     @Override
-    public void messageReceived(ClientMessage msg) {}
+    public void messageReceived(ClientMessage msg) { /* Intentionally empty - dummy implementation */ }
     public void requestLeaseSet(Destination dest, LeaseSet set, long timeout,
                                 Job onCreateJob, Job onFailedJob) {
         _context.jobQueue().addJob(onFailedJob);
     }
     @Override
-    public void startup() {}
-    public void stopAcceptingClients() { }
-    public void shutdown() {}
+    public void startup() { /* Intentionally empty - dummy implementation */ }
+    public void stopAcceptingClients() { /* Intentionally empty - dummy implementation */ }
+    public void shutdown() { /* Intentionally empty - dummy implementation */ }
     @Override
-    public void shutdown(String msg) {}
-    public void restart() {}
+    public void shutdown(String msg) { /* Intentionally empty - dummy implementation */ }
+    public void restart() { /* Intentionally empty - dummy implementation */ }
 
-    public void messageDeliveryStatusUpdate(Destination fromDest, MessageId id, long msgNonce, int status) {}
+    public void messageDeliveryStatusUpdate(Destination fromDest, MessageId id, long msgNonce, int status) { /* Intentionally empty - dummy implementation */ }
 
     public SessionConfig getClientSessionConfig(Destination _dest) { return null; }
     public SessionKeyManager getClientSessionKeyManager(Hash _dest) { return null; }
 
-    public void requestLeaseSet(Hash dest, LeaseSet set) {}
+    public void requestLeaseSet(Hash dest, LeaseSet set) { /* Intentionally empty - dummy implementation */ }
 
     /**
      *  @since 0.9.61

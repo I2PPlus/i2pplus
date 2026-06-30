@@ -53,7 +53,9 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
         throw new UnsupportedOperationException("unused, right?");
     }
 
-    protected void notePreprocessing(long messageId, int numFragments, int totalLength, List<Long> messageIds, String msg) {}
+    protected void notePreprocessing(long messageId, int numFragments, int totalLength, List<Long> messageIds, String msg) {
+        // No-op - intentionally empty
+    }
 
     /**
      * Wrap the preprocessed fragments with the necessary padding / checksums

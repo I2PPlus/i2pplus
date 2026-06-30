@@ -1223,7 +1223,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             }
         }
 
-        public void setMessage(I2NPMessage msg) {}
+        public void setMessage(I2NPMessage msg) { /* No-op - already have the reply */ }
     }
 
     /**

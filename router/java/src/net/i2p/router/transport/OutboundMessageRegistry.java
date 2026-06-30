@@ -253,7 +253,9 @@ public class OutboundMessageRegistry {
 
     /** @deprecated unused */
     @Deprecated
-    public void renderStatusHTML(Writer out) throws IOException {}
+    public void renderStatusHTML(Writer out) throws IOException {
+        // Deprecated - unused
+    }
 
     private class CleanupTask extends SimpleTimer2.TimedEvent {
         /** LOCKING: _selectors */

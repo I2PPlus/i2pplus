@@ -1923,7 +1923,9 @@ class PeerTestManager {
             _timeReceived = time;
         }
 
-        public void gotOptions(byte[] options, boolean isHandshake) {}
+        public void gotOptions(byte[] options, boolean isHandshake) {
+            // No-op - intentionally empty
+        }
 
         public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) {
             if (ri.getPublished() < 0) {

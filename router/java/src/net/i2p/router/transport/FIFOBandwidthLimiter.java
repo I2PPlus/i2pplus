@@ -1023,14 +1023,18 @@ public class FIFOBandwidthLimiter {
     private static final NoopRequest _noop = new NoopRequest();
 
     private static class NoopRequest implements Request {
-        public void abort() {}
+        public void abort() {
+            // No-op - intentionally empty
+        }
         public boolean getAborted() { return false; }
         public int getPendingRequested() { return 0; }
         @Override
         public String toString() { return "noop"; }
         public long getRequestTime() { return 0; }
         public int getTotalRequested() { return 0; }
-        public void waitForNextAllocation() {}
+        public void waitForNextAllocation() {
+            // No-op - intentionally empty
+        }
         public CompleteListener getCompleteListener() { return null; }
         public void setCompleteListener(CompleteListener lsnr) {
             lsnr.complete(NoopRequest.this);
@@ -1041,7 +1045,9 @@ public class FIFOBandwidthLimiter {
         public Object attachment() { return null; }
         // PQEntry methods
         public int getPriority() { return 0; };
-        public void setSeqNum(long num) {};
+        public void setSeqNum(long num) {
+            // No-op - intentionally empty
+        }
         public long getSeqNum() { return 0; };
     }
 }

@@ -1273,6 +1273,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     /** @deprecated moved to routerconsole */
     @Deprecated
     public void renderStatusHTML(Writer out) throws IOException {
+        // Deprecated - moved to routerconsole
     }
 
     /** @return total number of non-fallback expl. + client tunnels */

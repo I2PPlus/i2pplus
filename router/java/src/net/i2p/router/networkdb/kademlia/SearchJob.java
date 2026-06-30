@@ -483,7 +483,7 @@ class SearchJob extends JobImpl {
      * number of peers that we didn't know about before.
      *
      */
-    protected void newPeersFound(int numNewPeers) {} // noop
+    protected void newPeersFound(int numNewPeers) { /* No-op - intentionally empty */ }
 
     /**
      * Called when a particular peer failed to respond before the timeout was

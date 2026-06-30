@@ -620,7 +620,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         adjustClockSkew((_context.clock().now() - time) - CLOCK_SKEW_FUDGE);
     }
 
-    public void gotOptions(byte[] options, boolean isHandshake) {}
+    public void gotOptions(byte[] options, boolean isHandshake) {
+        // No-op - intentionally empty
+    }
 
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException {
         if (shouldLogDebug) {

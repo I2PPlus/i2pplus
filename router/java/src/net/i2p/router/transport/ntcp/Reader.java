@@ -81,7 +81,9 @@ class Reader {
     private class Runner implements Runnable {
         private volatile boolean _stop;
 
-        public Runner() {}
+        public Runner() {
+            // Intentionally empty - default constructor
+        }
 
         public void stop() { _stop = true; }
 

@@ -1068,7 +1068,9 @@ int pct = Math.max(0, (int)((1.0f - factor) * 100));
      * Render status HTML (deprecated)
      */
     @Deprecated
-    public void renderStatusHTML(Writer out) throws IOException {}
+    public void renderStatusHTML(Writer out) throws IOException {
+        // Deprecated - moved to routerconsole
+    }
 
     /**
      * Get the current bandwidth share in KBps

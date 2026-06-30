@@ -933,6 +933,7 @@ class IntroductionManager {
      *  @since 0.9.55
      */
     void receiveHolePunch(RemoteHostId charlie, byte[] data) {
+        // TODO: implement when needed
     }
 
     /**

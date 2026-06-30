@@ -62,7 +62,7 @@ class TransientDataStore implements DataStore {
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
     public void stop() {_data.clear();}
-    public void rescan() {}
+    public void rescan() { /* No-op - in-memory store has no external state to rescan */ }
 
     /**
      *  @return total size (RI and LS)

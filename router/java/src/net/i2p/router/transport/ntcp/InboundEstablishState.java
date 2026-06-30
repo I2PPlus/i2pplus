@@ -1108,7 +1108,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * @since 0.9.36
      */
     @Override
-    public void gotPadding(int paddingLength, int frameLength) {}
+    public void gotPadding(int paddingLength, int frameLength) {
+        // Illegal during handshake - no-op
+    }
 
     // These payload types are illegal during the NTCP 2 handshake
     // and will never be received. Stub implementations are required
@@ -1122,7 +1124,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * @since 0.9.36
      */
     @Override
-    public void gotTermination(int reason, long lastReceived) {}
+    public void gotTermination(int reason, long lastReceived) {
+        // Illegal during handshake - no-op
+    }
     /**
      * Illegal during handshake - unknown payload types should not appear.
      *
@@ -1130,21 +1134,27 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * @param len the payload length
      * @since 0.9.36
      */
-    public void gotUnknown(int type, int len) {}
+    public void gotUnknown(int type, int len) {
+        // Illegal during handshake - no-op
+    }
     /**
      * Illegal during handshake - date/time is only in the options, not a separate payload.
      *
      * @param time the timestamp
      * @since 0.9.36
      */
-    public void gotDateTime(long time) {}
+    public void gotDateTime(long time) {
+        // Illegal during handshake - no-op
+    }
     /**
      * Illegal during handshake - I2NP messages are only in the data phase.
      *
      * @param msg the I2NP message
      * @since 0.9.36
      */
-    public void gotI2NP(I2NPMessage msg) {}
+    public void gotI2NP(I2NPMessage msg) {
+        // Illegal during handshake - no-op
+    }
 
     /**
      * Handles handshake failure by transitioning to CORRUPT state and cleaning up.

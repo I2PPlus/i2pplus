@@ -352,7 +352,7 @@ public class OutNetMessage implements CDPQEntry {
      * We've done what we need to do with the data from this message, though
      * we may keep the object around for a while to use its ID, jobs, etc.
      */
-    public void discardData() {}
+    public void discardData() { /* No-op - data is not held separately in this implementation */ }
 
     @Override
     public String toString() {

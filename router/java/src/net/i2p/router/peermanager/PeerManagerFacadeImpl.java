@@ -102,6 +102,8 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
 
     /** @deprecated moved to routerconsole */
     @Deprecated
-    public void renderStatusHTML(Writer out) throws IOException {}
+    public void renderStatusHTML(Writer out) throws IOException {
+        // Deprecated - moved to routerconsole
+    }
 
 }

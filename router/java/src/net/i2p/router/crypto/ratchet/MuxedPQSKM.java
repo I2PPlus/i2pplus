@@ -118,6 +118,7 @@ public class MuxedPQSKM extends SessionKeyManager {
      */
     @Override
     public void createSession(PublicKey target, SessionKey key) {
+        // ElG only - no-op in ECIES/PQ mux
     }
 
     /**
@@ -200,6 +201,7 @@ public class MuxedPQSKM extends SessionKeyManager {
      */
     @Override
     public void tagsReceived(SessionKey key, Set<SessionTag> sessionTags) {
+        // ElG only - no-op in ECIES/PQ mux
     }
 
     /**
@@ -207,6 +209,7 @@ public class MuxedPQSKM extends SessionKeyManager {
      */
     @Override
     public void tagsReceived(SessionKey key, Set<SessionTag> sessionTags, long expire) {
+        // ElG only - no-op in ECIES/PQ mux
     }
 
     /**
@@ -247,6 +250,7 @@ public class MuxedPQSKM extends SessionKeyManager {
      */
     @Override
     public void failTags(PublicKey target, SessionKey key, TagSetHandle ts) {
+        // ElG only - no-op in ECIES/PQ mux
     }
 
     /**
@@ -254,5 +258,6 @@ public class MuxedPQSKM extends SessionKeyManager {
      */
     @Override
     public void tagsAcked(PublicKey target, SessionKey key, TagSetHandle ts) {
+        // ElG only - no-op in ECIES/PQ mux
     }
 }

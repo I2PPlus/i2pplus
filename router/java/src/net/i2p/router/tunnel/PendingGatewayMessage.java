@@ -106,6 +106,7 @@ class PendingGatewayMessage implements CDQEntry {
      *  @since 0.9.3
      */
     public void drop() {
+        // No-op - intentionally empty
     }
 
     @Override

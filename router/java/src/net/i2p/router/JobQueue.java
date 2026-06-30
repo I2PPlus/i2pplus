@@ -859,9 +859,9 @@ public class JobQueue {
         @Override
         public JobTiming getTiming() {return null;}
         @Override
-        public void runJob() {}
+        public void runJob() { /* No-op - poison sentinel, not a real job */ }
         @Override
-        public void dropped() {}
+        public void dropped() { /* No-op - poison sentinel, not a real job */ }
     }
 
     private static class JobComparator implements Comparator<Job>, Serializable {

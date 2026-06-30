@@ -1284,7 +1284,9 @@ class BuildHandler implements Runnable {
     private static class TunnelBuildMessageHandlerJob extends JobImpl {
         private TunnelBuildMessageHandlerJob(RouterContext ctx) {super(ctx);}
         @Override
-        public void runJob() {}
+        public void runJob() {
+            // No-op - intentionally empty
+        }
         @Override
         public String getName() {return "Receive Tunnel Build Message";}
     }
@@ -1293,7 +1295,9 @@ class BuildHandler implements Runnable {
     private static class TunnelBuildReplyMessageHandlerJob extends JobImpl {
         private TunnelBuildReplyMessageHandlerJob(RouterContext ctx) {super(ctx);}
         @Override
-        public void runJob() {}
+        public void runJob() {
+            // No-op - intentionally empty
+        }
         @Override
         public String getName() {return "Receive Tunnel Build Reply Message";}
     }

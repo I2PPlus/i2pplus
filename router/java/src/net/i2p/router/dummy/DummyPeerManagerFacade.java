@@ -22,13 +22,13 @@ import net.i2p.router.peermanager.PeerTestJob;
  */
 public class DummyPeerManagerFacade implements PeerManagerFacade {
     @Override
-    public void shutdown() {}
-    public void startup() {}
-    public void restart() {}
-    public void renderStatusHTML(Writer out) {}
+    public void shutdown() { /* Intentionally empty - dummy implementation */ }
+    public void startup() { /* Intentionally empty - dummy implementation */ }
+    public void restart() { /* Intentionally empty - dummy implementation */ }
+    public void renderStatusHTML(Writer out) { /* Intentionally empty - dummy implementation */ }
     public Set<Hash> getPeersByCapability(char capability) {return null;}
     public int countPeersByCapability(char capability) {return 0;}
-    public void setCapabilities(Hash peer, String caps) {}
-    public void removeCapabilities(Hash peer) {}
+    public void setCapabilities(Hash peer, String caps) { /* Intentionally empty - dummy implementation */ }
+    public void removeCapabilities(Hash peer) { /* Intentionally empty - dummy implementation */ }
     public PeerTestJob getPeerTestJob() {return null;}
 }

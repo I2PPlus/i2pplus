@@ -113,7 +113,9 @@ public class AliasedTunnelPool extends TunnelPool {
     }
 
     @Override
-    void refreshLeaseSet() {}
+    void refreshLeaseSet() {
+        // No-op - aliased pool refreshes via primary pool
+    }
 
     @Override
     boolean buildFallback() {
@@ -154,7 +156,9 @@ public class AliasedTunnelPool extends TunnelPool {
     }
 
     @Override
-    void buildComplete(PooledTunnelCreatorConfig cfg, BuildExecutor.Result result) {}
+    void buildComplete(PooledTunnelCreatorConfig cfg, BuildExecutor.Result result) {
+        // No-op - aliased pool does not build tunnels
+    }
 
     @Override
     public String toString() {

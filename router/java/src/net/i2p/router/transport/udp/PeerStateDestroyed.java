@@ -153,13 +153,17 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     public CipherState getSendCipher() { return _sendCha; }
     public byte[] getSendHeaderEncryptKey1() { return _sendHeaderEncryptKey1; }
     public byte[] getSendHeaderEncryptKey2() { return _sendHeaderEncryptKey2; }
-    public void setDestroyReason(int reason) {}
+    public void setDestroyReason(int reason) {
+        // No-op - intentionally empty
+    }
     public SSU2Bitfield getReceivedMessages() { return _receivedMessages; }
     /**
      *  @return null always, we don't care what was acked
      */
     public SSU2Bitfield getAckedMessages() { return null; }
-    public void fragmentsSent(long pktNum, int length, List<PacketBuilder.Fragment> fragments) {}
+    public void fragmentsSent(long pktNum, int length, List<PacketBuilder.Fragment> fragments) {
+        // No-op - intentionally empty
+    }
     public byte getFlags() { return 0; }
 
     /// end SSU2Sender interface ///
@@ -251,8 +255,12 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     // begin payload callbacks
     /////////////////////////////////////////////////////////
 
-    public void gotDateTime(long time) {}
-    public void gotOptions(byte[] options, boolean isHandshake) {}
+    public void gotDateTime(long time) {
+        // No-op - intentionally empty
+    }
+    public void gotOptions(byte[] options, boolean isHandshake) {
+        // No-op - intentionally empty
+    }
 
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) {
         if (_log.shouldDebug())
@@ -266,9 +274,15 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         messagePartiallyReceived();
     }
 
-    public void gotAddress(byte[] ip, int port) {}
-    public void gotRelayTagRequest() {}
-    public void gotRelayTag(long tag) {}
+    public void gotAddress(byte[] ip, int port) {
+        // No-op - intentionally empty
+    }
+    public void gotRelayTagRequest() {
+        // No-op - intentionally empty
+    }
+    public void gotRelayTag(long tag) {
+        // No-op - intentionally empty
+    }
 
     public void gotRelayRequest(byte[] data) {
         if (_log.shouldDebug())
@@ -314,7 +328,9 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         messagePartiallyReceived();
     }
 
-    public void gotACK(long ackThru, int acks, byte[] ranges) {}
+    public void gotACK(long ackThru, int acks, byte[] ranges) {
+        // No-op - intentionally empty
+    }
 
     public void gotTermination(int reason, long count) {
         if (_log.shouldInfo()) {
@@ -337,8 +353,12 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         }
     }
 
-    public void gotPathChallenge(RemoteHostId from, byte[] data) {}
-    public void gotPathResponse(RemoteHostId from, byte[] data) {}
+    public void gotPathChallenge(RemoteHostId from, byte[] data) {
+        // No-op - intentionally empty
+    }
+    public void gotPathResponse(RemoteHostId from, byte[] data) {
+        // No-op - intentionally empty
+    }
 
     /////////////////////////////////////////////////////////
     // end payload callbacks

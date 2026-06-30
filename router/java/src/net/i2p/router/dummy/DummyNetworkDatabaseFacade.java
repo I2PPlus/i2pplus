@@ -36,8 +36,8 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
     }
 
     @Override
-    public void restart() {}
-    public void shutdown() {}
+    public void restart() { /* Intentionally empty - dummy implementation */ }
+    public void shutdown() { /* Intentionally empty - dummy implementation */ }
     @Override
     public void startup() {
         RouterInfo info = _context.router().getRouterInfo();
@@ -47,16 +47,16 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
     public DatabaseEntry lookupLocally(Hash key) { return null; }
     public DatabaseEntry lookupLocallyWithoutValidation(Hash key) { return null; }
     @Override
-    public void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {}
-    public void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, Hash fromLocalDest) {}
+    public void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) { /* Intentionally empty - dummy implementation */ }
+    public void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, Hash fromLocalDest) { /* Intentionally empty - dummy implementation */ }
     public LeaseSet lookupLeaseSetLocally(Hash key) { return null; }
-    public void lookupLeaseSetRemotely(Hash key, Hash fromLocalDest) {}
+    public void lookupLeaseSetRemotely(Hash key, Hash fromLocalDest) { /* Intentionally empty - dummy implementation */ }
     @Override
     public void lookupLeaseSetRemotely(Hash key, Job onFindJob, Job onFailedLookupJob,
-                                       long timeoutMs, Hash fromLocalDest) {}
+                                       long timeoutMs, Hash fromLocalDest) { /* Intentionally empty - dummy implementation */ }
 
     @Override
-    public void lookupDestination(Hash key, Job onFinishedJob, long timeoutMs, Hash fromLocalDest) {}
+    public void lookupDestination(Hash key, Job onFinishedJob, long timeoutMs, Hash fromLocalDest) { /* Intentionally empty - dummy implementation */ }
 
     @Override
     public Destination lookupDestinationLocally(Hash key) { return null; }
@@ -76,8 +76,8 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
         return lookupRouterInfoLocally(key);
     }
 
-    public void publish(LeaseSet localLeaseSet) {}
-    public void publish(RouterInfo localRouterInfo) {}
+    public void publish(LeaseSet localLeaseSet) { /* Intentionally empty - dummy implementation */ }
+    public void publish(RouterInfo localRouterInfo) { /* Intentionally empty - dummy implementation */ }
 
     public LeaseSet store(Hash key, LeaseSet leaseSet) { return leaseSet; }
     public RouterInfo store(Hash key, RouterInfo routerInfo) {
@@ -85,9 +85,9 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
         return rv;
     }
 
-    public void unpublish(LeaseSet localLeaseSet) {}
-    public void accessLeaseSet(Hash key) {}
-    public void removeLeaseSetFromTracking(Hash key) {}
+    public void unpublish(LeaseSet localLeaseSet) { /* Intentionally empty - dummy implementation */ }
+    public void accessLeaseSet(Hash key) { /* Intentionally empty - dummy implementation */ }
+    public void removeLeaseSetFromTracking(Hash key) { /* Intentionally empty - dummy implementation */ }
 
     public void fail(Hash dbEntry) {
         _routers.remove(dbEntry);

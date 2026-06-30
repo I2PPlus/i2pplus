@@ -3568,6 +3568,7 @@ public class UDPTransport extends TransportImpl {
     @Override
     @Deprecated
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {
+        // Deprecated - moved to routerconsole
     }
 
     /*

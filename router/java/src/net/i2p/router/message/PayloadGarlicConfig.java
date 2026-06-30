@@ -69,5 +69,5 @@ public class PayloadGarlicConfig extends GarlicConfig {
      *  @since 0.9.12
      */
     @Override
-    public void clearCloves() { }
+    public void clearCloves() { /* Intentionally empty - single-clove config */ }
 }

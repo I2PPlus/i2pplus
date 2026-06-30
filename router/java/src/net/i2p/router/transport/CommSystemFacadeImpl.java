@@ -947,7 +947,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     private static class RDNSCacheFileWriter extends TimerTask {
-        public RDNSCacheFileWriter() {}
+        public RDNSCacheFileWriter() {
+            // Intentionally empty - default constructor
+        }
 
         @Override
         public void run() {

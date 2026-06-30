@@ -86,6 +86,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
      * Default constructor
      */
     public CachedIteratorCollection() {
+        // Intentionally empty - default constructor
     }
 
     /**
