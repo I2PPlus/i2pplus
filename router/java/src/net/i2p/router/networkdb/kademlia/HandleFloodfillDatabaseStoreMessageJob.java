@@ -518,13 +518,11 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     return;
                 }
                 // Flood in separate thread to avoid blocking main thread
-                Runnable floodTask = new Runnable() {
-                    public void run() {
-                        long floodBegin = System.currentTimeMillis();
-                        _facade.flood(entry);
-                        long floodEnd = System.currentTimeMillis();
-                        getContext().statManager().addRateData("netDb.storeFloodNew", floodEnd-floodBegin, 60L * 1000);
-                    }
+                Runnable floodTask = () -> {
+                    long floodBegin = System.currentTimeMillis();
+                    _facade.flood(entry);
+                    long floodEnd = System.currentTimeMillis();
+                    getContext().statManager().addRateData("netDb.storeFloodNew", floodEnd-floodBegin, 60L * 1000);
                 };
                 new I2PThread(floodTask, "Flood Worker", true).start();
             } else {

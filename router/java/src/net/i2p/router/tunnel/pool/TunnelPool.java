@@ -2079,15 +2079,13 @@ public class TunnelPool {
 
         // Sort by latency ascending — prefer fast tunnels for the LeaseSet.
         // Tunnels with no latency data sort after tested ones.
-        Collections.sort(goodTunnels, new Comparator<TunnelInfo>() {
-            public int compare(TunnelInfo a, TunnelInfo b) {
-                int la = getTunnelAvgLatency(a);
-                int lb = getTunnelAvgLatency(b);
-                if (la < 0 && lb < 0) return 0;
-                if (la < 0) return 1;
-                if (lb < 0) return -1;
-                return Integer.compare(la, lb);
-            }
+        Collections.sort(goodTunnels, (a, b) -> {
+            int la = getTunnelAvgLatency(a);
+            int lb = getTunnelAvgLatency(b);
+            if (la < 0 && lb < 0) return 0;
+            if (la < 0) return 1;
+            if (lb < 0) return -1;
+            return Integer.compare(la, lb);
         });
 
         // Take only the best latency tunnels up to wanted count
@@ -2246,11 +2244,7 @@ public class TunnelPool {
         }
         // Keep the best reserve tunnels (fewest failures), remove the rest
         if (toRemove.size() > toPrune) {
-            Collections.sort(toRemove, new Comparator<TunnelInfo>() {
-                public int compare(TunnelInfo a, TunnelInfo b) {
-                    return Integer.compare(a.getConsecutiveFailures(), b.getConsecutiveFailures());
-                }
-            });
+            Collections.sort(toRemove, (a, b) -> Integer.compare(a.getConsecutiveFailures(), b.getConsecutiveFailures()));
             toRemove = new ArrayList<>(toRemove.subList(toPrune, toRemove.size()));
         }
         if (_log.shouldInfo()) {

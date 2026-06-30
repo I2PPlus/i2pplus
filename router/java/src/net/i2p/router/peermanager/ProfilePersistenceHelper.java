@@ -11,7 +11,6 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -235,12 +234,7 @@ class ProfilePersistenceHelper {
         }
 
         // Sort profiles by modification time (most recent first) to prioritize active peers
-        Collections.sort(freshFiles, new Comparator<File>() {
-            @Override
-            public int compare(File f1, File f2) {
-                return Long.compare(f2.lastModified(), f1.lastModified());
-            }
-        });
+        Collections.sort(freshFiles, (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
 
         List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles.size()));
         int count = 0;
@@ -289,7 +283,7 @@ class ProfilePersistenceHelper {
      *  Migrate from one-level to two-level directory structure
      *  @since 0.9.4
      */
-    private void migrate(File[] files) {
+    private void migrate(File[] files) { // NOSONAR S3012: called on line 271
         for (int i = 0; i < files.length; i++) {
             File from = files[i];
             if (!from.isFile()) {continue;}

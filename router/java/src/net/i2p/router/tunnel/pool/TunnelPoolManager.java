@@ -806,9 +806,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         // to receive the reply message. Starting outbound before inbound guarantees
         // initial outbound builds will fail (no reply path exists yet).
         _inboundExploratory.startup();
-        _context.simpleTimer2().addEvent(new SimpleTimer.TimedEvent() {
-            public void timeReached() {_outboundExploratory.startup();}
-        }, 2*1000L);
+        _context.simpleTimer2().addEvent(() -> _outboundExploratory.startup(), 2*1000L);
 
         // try to build up longer tunnels
         _context.jobQueue().addJob(new BootstrapPool(_context, _outboundExploratory));

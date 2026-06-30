@@ -2,7 +2,6 @@ package net.i2p.router.networkdb.kademlia;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -105,11 +104,7 @@ class ProbeStalePeerJob extends JobImpl {
 
         // During startup burst, prioritize high-bandwidth reachable peers first
         if (isStartupBurst && candidates.size() > 1) {
-            Collections.sort(candidates, new Comparator<Hash>() {
-                public int compare(Hash a, Hash b) {
-                    return scorePeer(ctx, b) - scorePeer(ctx, a);
-                }
-            });
+            Collections.sort(candidates, (a, b) -> scorePeer(ctx, b) - scorePeer(ctx, a));
         }
 
         int maxProbes = isStartupBurst ? STARTUP_MAX_PROBES_PER_CYCLE : MAX_PROBES_PER_CYCLE;
