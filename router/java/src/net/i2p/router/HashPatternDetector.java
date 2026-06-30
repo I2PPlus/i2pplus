@@ -34,8 +34,8 @@ import net.i2p.util.SimpleTimer;
 public class HashPatternDetector implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final RouterContext _context;
-    private final Log _log;
+    private final RouterContext _context; // NOSONAR S1948: never serialized
+    private final Log _log; // NOSONAR S1948: never serialized
 
     // Static BanLogger for sessionbans.txt - initialized lazily
     private static volatile BanLogger _banLogger;
@@ -657,7 +657,7 @@ public class HashPatternDetector implements Serializable {
         final String prefix;
         int totalBans;
         int suspiciousBans; // Bans for algorithmic/scripted behavior
-        final Map<String, Integer> reasonCounts = new HashMap<>();
+        final Map<String, Integer> reasonCounts = new HashMap<>(); // NOSONAR S1948: never serialized
 
         PrefixStats(String prefix) {
             this.prefix = prefix;
