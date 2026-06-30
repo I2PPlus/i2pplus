@@ -158,8 +158,8 @@ public class HashPatternDetector implements Serializable {
         PrefixStats stats = _prefixStats.computeIfAbsent(prefix, k -> new PrefixStats(prefix));
         double oldConfidence = stats.getConfidence();
         stats.recordBan(reason);
-        double newConfidence = stats.getConfidence();
         int newTotal = stats.getTotalBans();
+        double newConfidence = stats.getConfidence();
 
         // Log when we first cross the pattern detection threshold
         if (oldConfidence < BAN_THRESHOLD && newConfidence >= BAN_THRESHOLD && newTotal >= MIN_SAMPLES) {

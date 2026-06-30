@@ -23,19 +23,14 @@ class OutboundEstablishState {
     protected final RouterContext _context;
     protected final Log _log;
     // SessionRequest message
-    private byte[] _sentX;
     protected byte[] _bobIP;
     protected int _bobPort;
     // SessionCreated message
-    private byte[] _receivedY;
     protected byte[] _aliceIP;
     protected int _alicePort;
     protected long _receivedRelayTag;
     private long _receivedSignedOnTime;
-    private Signature _receivedSignature;
     // includes trailing padding to mod 16
-    private byte[] _receivedEncryptedSignature;
-    private byte[] _receivedIV;
     // SessionConfirmed messages
     private long _sentSignedOnTime;
     // general status
@@ -120,7 +115,6 @@ class OutboundEstablishState {
      *  max delay including backoff
      *  This should be a little longer than for inbound.
      */
-    private static final long MAX_DELAY = 15*1000L;
 
     private static final long WAIT_FOR_HOLE_PUNCH_DELAY = 500;
 
@@ -272,13 +266,9 @@ class OutboundEstablishState {
      *  The SessionCreated validation failed
      */
     public synchronized void fail() {
-        _receivedY = null;
         _aliceIP = null;
         _receivedRelayTag = 0;
         _receivedSignedOnTime = -1;
-        _receivedEncryptedSignature = null;
-        _receivedIV = null;
-        _receivedSignature = null;
         // sure, there's a chance the packet was corrupted, but in practice
         // this means that Bob doesn't know his external port, so give up.
         _currentState = OutboundState.OB_STATE_VALIDATION_FAILED;

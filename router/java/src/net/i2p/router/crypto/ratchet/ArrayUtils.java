@@ -32,7 +32,7 @@ class ArrayUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T[] newUnpaddedArray(Class<T> clazz, int minLen) {
+    public static <T> T[] newUnpaddedArray(Class<T> _clazz, int minLen) {
         return (T[]) new Object[minLen];
     }
 }

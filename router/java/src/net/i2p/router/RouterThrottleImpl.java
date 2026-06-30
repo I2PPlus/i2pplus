@@ -26,7 +26,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     /** Arbitrary hard limit - if it's taking this long to get to a job, we're congested. */
     private static final long JOB_LAG_LIMIT_NETWORK = 3*1000L;
     private static final long JOB_LAG_LIMIT_NETDB = 3*1000L;
-    private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 3000 : 2000;
+
     public static final String PROP_MAX_TUNNELS = "router.maxParticipatingTunnels";
     public static final int DEFAULT_MAX_TUNNELS = SystemVersion.isSlow() ? 3*1000 :
                                                   SystemVersion.getMaxMemory() < 512*1024*1024L ? 5*1000 :
@@ -35,7 +35,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     private static final long DEFAULT_REJECT_STARTUP_TIME = 3*60*1000L;
     private static final long MIN_REJECT_STARTUP_TIME = 90*1000L;
     private static final String PROP_REJECT_STARTUP_TIME = "router.rejectStartupTime";
-    private static final int DEFAULT_MIN_THROTTLE_TUNNELS = SystemVersion.isSlow() ? 2000 : 6000;
+
     private static final String PROP_MIN_THROTTLE_TUNNELS = "router.minThrottleTunnels";
 
     /* TO BE FIXED - SEE COMMENTS BELOW */

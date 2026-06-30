@@ -58,8 +58,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private static final String PROP_SLOW_TUNNEL_THRESHOLD = "router.tunnel.slowThreshold";
     private static final String PROP_SLOW_TUNNEL_MIN = "router.tunnel.slowThresholdMin";
     private static final String PROP_SLOW_TUNNEL_INTERVAL = "router.tunnel.slowTunnelInterval";
-    private static final String PROP_PRUNE_EARLY_EXPIRY = "router.tunnel.pruneEarlyExpiryDelay";
-    private static final long DEFAULT_PRUNE_EARLY_EXPIRY = 30*1000L; // 30 seconds
     private static final int DEFAULT_SLOW_THRESHOLD_MS = 0; // 0 means use avg latency with min
     private static final int DEFAULT_MIN_SLOW_THRESHOLD = 10000; // 10s minimum threshold if not configured
     private static final int DEFAULT_RUN_INTERVAL_MS = (int) ((long) 15 * 1000); // 15s — fast rebuild after failures

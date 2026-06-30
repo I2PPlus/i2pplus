@@ -52,7 +52,6 @@ public class TunnelPool {
     private TunnelPool _pairedPool;  // Inbound or outbound pool for same destination
     protected volatile boolean _alive;
     private long _lifetimeProcessed;
-    private int _lastSelectedIdx;
     private final int _expireSkew;
     private long _started;
     private long _lastRateUpdate;
@@ -74,7 +73,6 @@ public class TunnelPool {
     private volatile boolean _leaseSetRepublishPending;
     private static final int REMOVAL_QUEUE_CAPACITY = 2000;
     private final BlockingQueue<TunnelInfo> _removalQueue = new LinkedBlockingQueue<TunnelInfo>(REMOVAL_QUEUE_CAPACITY);
-    private volatile boolean _removalJobScheduled = false;
     /**
      *  Reentrancy guard for ensureSufficientTunnels().
      *  pruneNonGoodTunnels() calls removeTunnel() per-tunnel, and removeTunnel()
@@ -82,8 +80,6 @@ public class TunnelPool {
      *  inflate _inProgress and trigger 800+ "Cancelling excess" per session.
      */
     private final java.util.concurrent.atomic.AtomicBoolean _ensuringTunnels = new java.util.concurrent.atomic.AtomicBoolean(false);
-    private static final AtomicInteger GLOBAL_CONCURRENT_INBOUND_BUILDS = new AtomicInteger();
-    private static final AtomicInteger GLOBAL_CONCURRENT_OUTBOUND_BUILDS = new AtomicInteger();
 
     /** Default early expiration time for pruned tunnels (30 seconds) */
     static final long DEFAULT_PRUNE_EARLY_EXPIRY = 120L * 1000;

@@ -89,7 +89,7 @@ public final class ECIESAEADEngine {
     private static final GarlicClove[] NO_GARLIC = new GarlicClove[] {};
     private static final CloveSet NO_CLOVES = new CloveSet(NO_GARLIC, Certificate.NULL_CERT, 0, 0);
 
-    private static final String INFO_0 = "SessionReplyTags";
+
     private static final String INFO_6 = "AttachPayloadKDF";
 
     private static final long[] RATES = new long[] { 60*1000L };
@@ -958,7 +958,7 @@ public final class ECIESAEADEngine {
      *
      */
     private CloveSet decryptExistingSession(byte[] tag, byte[] data, SessionKeyAndNonce key,
-                                            PrivateKey targetPrivateKey, RatchetSKM keyManager)
+                                            PrivateKey _targetPrivateKey, RatchetSKM keyManager)
                                           throws DataFormatException {
         int nonce = key.getNonce();
         // this decrypts in-place

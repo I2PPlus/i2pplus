@@ -74,8 +74,7 @@ public class JobQueue {
         if (RUNNERS > maxRunners) {RUNNERS = maxRunners;}
     }
 
-    /** Default max # job queue runners operating */
-    private static int DEFAULT_MAX_RUNNERS = RUNNERS;
+
     /** router.config parameter to override the max runners */
     final static String PROP_MAX_RUNNERS = "router.maxJobRunners";
     /** If a job is this lagged, spit out a warning, but keep going */
@@ -413,8 +412,7 @@ public class JobQueue {
         if (numReady > _context.getProperty(PROP_MAX_WAITING_JOBS, DEFAULT_MAX_WAITING_JOBS)) {
             Class<? extends Job> cls = job.getClass();
             String jobName = cls.getName();
-            boolean shouldDrop = getMaxLag() >= MIN_LAG_TO_DROP;
-            if (shouldDrop) {
+            if (getMaxLag() >= MIN_LAG_TO_DROP) {
                 if (cls == RepublishLeaseSetJob.class) {return false;}
                 // Don't drop critical tunnel management jobs
                 if (jobName.equals("net.i2p.router.tunnel.pool.TunnelPoolManager$RemoveSlowTunnelsJob")) {return false;}
@@ -805,7 +803,7 @@ public class JobQueue {
         }
     }
 
-    void updateStats(Job job, long doStart, long origStartAfter, long duration) {
+    void updateStats(Job job, long doStart, long _origStartAfter, long duration) {
         // Remove from in-flight tracking when job completes
         _jobsInFlight.remove(job);
         if (_context.router() == null) return;

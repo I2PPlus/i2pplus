@@ -71,7 +71,6 @@ public class ProfileOrganizer {
     public static final int DEFAULT_MAX_ROUTERINFO_AGE_HOURS = 2;
     private static final long STARTUP_GRACE_PERIOD_MS = 10 * 60 * 1000L;
     private static final long PROOF_OF_LIFE_WINDOW_MS = 60 * 60 * 1000L;
-    private static final int DEFAULT_MAXIMUM_FAST_PEERS = 500;
     private static final int ABSOLUTE_MAX_FAST_PEERS = 600;
 
     public static final String PROP_MINIMUM_HIGH_CAPACITY_PEERS = "profileOrganizer.minHighCapacityPeers";
@@ -82,8 +81,6 @@ public class ProfileOrganizer {
     private static final double MIN_TUNNEL_ACCEPTANCE_RATIO = 0.4;
     /** Minimum tunnel requests for statistical confidence */
     private static final int MIN_TUNNEL_REQUESTS = 50;
-    /** Maximum tunnel test RTT (ms) to be eligible for fast tier */
-    private static final long MAX_RTT_FOR_FAST_TIER = 8000;
     /** Cooldown period (ms) after demotion before peer can be re-promoted */
     private static final long TUNNEL_DEMOTION_COOLDOWN_MS = 10 * 60 * 1000L; // 10 minutes
 
@@ -565,8 +562,6 @@ public class ProfileOrganizer {
         } finally {releaseReadLock();}
     }
 
-    private static final long MIN_EXPIRE_TIME = 3 * 24 * 60 * 60 * 1000L;
-    private static final long MAX_EXPIRE_TIME = 4 * 7 * 24 * 60 * 60 * 1000L;
     private static final int ENOUGH_PROFILES = getEnoughProfiles();
 
     private static int getEnoughProfiles() {

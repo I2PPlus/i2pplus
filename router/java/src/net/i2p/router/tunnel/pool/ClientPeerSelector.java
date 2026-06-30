@@ -29,12 +29,7 @@ import net.i2p.util.ArraySet;
  */
 class ClientPeerSelector extends TunnelPeerSelector {
 
-    private static final long WARNING_THROTTLE_MS = 60_000;
-    private static final AtomicLong _lastFallbackWarn = new AtomicLong(0);
-
     private static final double SEVERE_ATTACK_THRESHOLD = 0.30;
-
-    private static final double SEVERE_STRESS_THRESHOLD = 0.30;
 
 
     /** Cooldown duration for client peer selections — shorter than exploratory

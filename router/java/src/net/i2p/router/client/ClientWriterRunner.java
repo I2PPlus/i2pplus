@@ -18,7 +18,7 @@ class ClientWriterRunner implements Runnable {
     private final BlockingQueue<I2CPMessage> _messagesToWrite;
     private final ClientConnectionRunner _runner;
     private static final int QUEUE_SIZE = 256;
-    public ClientWriterRunner(RouterContext context, ClientConnectionRunner runner) {
+    public ClientWriterRunner(RouterContext _context, ClientConnectionRunner runner) {
         _messagesToWrite = new LinkedBlockingQueue<>(QUEUE_SIZE);
         _runner = runner;
     }

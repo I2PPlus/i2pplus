@@ -119,7 +119,6 @@ public class GeoIP {
     private static final String UNKNOWN_COUNTRY_CODE = "--";
     /** db-ip.com https://db-ip.com/faq.php */
     private static final String UNKNOWN_COUNTRY_CODE2 = "ZZ";
-    private static final String UNKNOWN_COUNTRY_CODE3 = "XX";
 
     static {
         // To block additional countries b,c,d when blocking country a,

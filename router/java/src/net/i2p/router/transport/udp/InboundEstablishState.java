@@ -26,8 +26,6 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
     protected long _sentRelayTag;
     private long _sentSignedOnTime;
     private byte[][] _receivedIdentity; // SessionConfirmed messages - fragmented in theory but not in practice - see below
-    private long _receivedSignedOnTime;
-    private byte[] _receivedSignature;
     protected RouterIdentity _receivedUnconfirmedIdentity; // sig not verified
     protected RouterIdentity _receivedConfirmedIdentity; // identical to uncomfirmed, but sig now verified
     protected final long _establishBegin; // general status

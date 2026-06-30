@@ -23,7 +23,7 @@ final class MuxedPQEngine {
     }
 
     // Constants for minimum new session sizes (copied from ECIESAEADEngine)
-    private static final int TAGLEN = 8;
+
     private static final int MACLEN = 16;
     private static final int KEYLEN = 32;
     private static final int BHLEN = 3; // RatchetPayload.BLOCK_HEADER_SIZE

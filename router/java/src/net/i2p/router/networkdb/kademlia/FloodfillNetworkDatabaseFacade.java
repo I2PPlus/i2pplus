@@ -414,7 +414,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * @param concurrent the maximum number of peers to select
      * @return a set of floodfill participant Hashes; never null but possibly empty if no suitable peers found
      */
-    private Set<Hash> selectFloodfillParticipants(Set<Hash> toIgnore, KBucketSet<Hash> kbuckets, int concurrent) {
+    private Set<Hash> selectFloodfillParticipants(Set<Hash> toIgnore, KBucketSet<Hash> _kbuckets, int concurrent) {
         Set<Hash> set = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL);
         if (set == null || set.isEmpty()) {
             // Return early if no floodfill peers available
@@ -793,10 +793,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     /** @since 0.8.7 */
     private static final int MAX_DB_BEFORE_SKIPPING_SEARCH;
-    static {
-        long maxMemory = SystemVersion.getMaxMemory();
-        MAX_DB_BEFORE_SKIPPING_SEARCH = SystemVersion.isSlow() ? 3000 : 5000;
-    }
+        static {
+            MAX_DB_BEFORE_SKIPPING_SEARCH = SystemVersion.isSlow() ? 3000 : 5000;
+        }
 
     /**
       * Search for a newer router info, drop it from the db if the search fails,
@@ -868,18 +867,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                        info.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
         boolean uninteresting = info != null && !isHidden && (VersionComparator.comp(v, MIN_VERSION) < 0 && !fast) &&
                                 _context.netDb().getKnownRouters() > 2000 && !isUs;
-        //boolean noSSU = true;
         String caps = "unknown";
         if (info != null) {
             caps = info.getCapabilities();
-/**
-            for (RouterAddress ra : info.getAddresses()) {
-                if (ra.getTransportStyle().contains("SSU")) {
-                    noSSU = false;
-                    break;
-                }
-            }
-**/
         }
         //boolean isBadFF = isFF && noSSU;
         boolean floodfillEnabled;
@@ -1009,7 +999,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private class DropLookupFailedJob extends JobImpl {
         private final Hash _peer;
 
-        public DropLookupFailedJob(RouterContext ctx, Hash peer, RouterInfo info) {
+        public DropLookupFailedJob(RouterContext ctx, Hash peer, RouterInfo _info) {
             super(ctx);
             _peer = peer;
         }

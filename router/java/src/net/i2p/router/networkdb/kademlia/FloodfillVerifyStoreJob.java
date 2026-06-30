@@ -352,7 +352,6 @@ class FloodfillVerifyStoreJob extends JobImpl {
                     return;
                 }
 
-                long newDate;
                 boolean success;
 
                 if (_isLS2 &&

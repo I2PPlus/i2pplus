@@ -33,12 +33,7 @@ class RefreshRoutersJob extends JobImpl {
     private final FloodfillNetworkDatabaseFacade _facade;
     private List<Hash> _routers;
 
-    private static final long EXPIRE = 7 * 24 * 60 * 60 * 1000L; // 7 days
-    private static final long OLDER = 2 * 60 * 60 * 1000L;       // 2 hours
     private static long RESTART_DELAY_MS = 60 * 1000L;            // Default restart delay 1 min
-
-    private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
-    private static final boolean DEFAULT_SHOULD_DISCONNECT = false;
 
     // Shared Random instance for efficient random number generation
     private static final Random _random = new Random();
@@ -181,7 +176,7 @@ class RefreshRoutersJob extends JobImpl {
      * Determines whether to refresh the given router info.
      * Includes checks for age, version, capabilities, and context properties.
      */
-    private boolean shouldRefreshRouter(RouterInfo ri, Hash routerHash) {
+    private boolean shouldRefreshRouter(RouterInfo ri, Hash _routerHash) {
         RouterContext ctx = getContext();
         long now = ctx.clock().now();
         long age = now - ri.getPublished();
@@ -215,7 +210,7 @@ class RefreshRoutersJob extends JobImpl {
      * Returns the router age threshold in milliseconds for refresh decision.
      */
     private int getRouterAgeThreshold(boolean uninteresting, boolean refreshUninteresting, int netDbCount,
-                                      long uptime, boolean isFloodfill) {
+                                      long _uptime, boolean isFloodfill) {
         final int FIFTEEN_MINUTES = 15 * 60 * 1000;
         final int RAPID_SCAN = 10 * 60 * 1000;
 

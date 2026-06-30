@@ -25,7 +25,6 @@ import net.i2p.util.Log;
  */
 public class RouterAppManager extends ClientAppManagerImpl {
 
-    private final RouterContext _context;
     private final Log _log;
     // client to args
     // this assumes clients do not override equals()
@@ -33,7 +32,6 @@ public class RouterAppManager extends ClientAppManagerImpl {
 
     public RouterAppManager(RouterContext ctx) {
         super(ctx);
-        _context = ctx;
         _log = ctx.logManager().getLog(RouterAppManager.class);
         _clients = new ConcurrentHashMap<>(16);
         ctx.addShutdownTask(new Shutdown());

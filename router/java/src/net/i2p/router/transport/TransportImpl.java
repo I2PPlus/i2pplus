@@ -128,7 +128,6 @@ public abstract class TransportImpl implements Transport {
     /** 50/100/150/250/450/550/700 for BW Tiers K/L/M/N/O/P/X */
     private static final int MAX_CONNECTION_FACTOR = 100;
     // see constructor
-    private final boolean REBALANCE_NTCP;
     private static final int SEND_POOL_CAPACITY = SystemVersion.isSlow() ? 64 : 128;
 
     /**
@@ -167,8 +166,6 @@ public abstract class TransportImpl implements Transport {
         // if the router is slow, or we have the i2prouter script on linux that bumps the ulimit,
         // allow more NTCP2 and less SSU. See getMaxConnections() below.
         String installed = _context.getProperty("router.firstVersion");
-        REBALANCE_NTCP = SystemVersion.isSlow() || (!SystemVersion.isMac() && !SystemVersion.isWindows() &&
-                         SystemVersion.hasWrapper() && installed != null && VersionComparator.comp(installed, "0.9.33") >= 0);
     }
 
     /**

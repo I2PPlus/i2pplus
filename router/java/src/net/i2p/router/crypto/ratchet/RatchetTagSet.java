@@ -62,7 +62,6 @@ class RatchetTagSet implements TagSetHandle {
     private int _lastKey = -1;
     private KeyPair _nextKeys;
     private NextSessionKey _nextKey;
-    private boolean _nextKeyAcked;
     /** for debugging */
     private static final AtomicInteger __tagSetID = new AtomicInteger();
     private final int _tagSetID = __tagSetID.incrementAndGet();
@@ -73,7 +72,6 @@ class RatchetTagSet implements TagSetHandle {
     private static final String INFO_4 = "SessionTagKeyGen";
     private static final String INFO_5 = "SymmetricRatchet";
     private static final byte[] ZEROLEN = new byte[0];
-    private static final int TAGLEN = RatchetSessionTag.LENGTH;
     private static final int MAX = 65535;
     private static final boolean DEBUG = false;
     private static final boolean TEST_RATCHET = false;

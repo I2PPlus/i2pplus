@@ -137,7 +137,6 @@ public class NTCPTransport extends TransportImpl {
     public final static String PROP_I2NP_NTCP_PORT = "i2np.ntcp.port";
     public final static String PROP_I2NP_NTCP_AUTO_PORT = "i2np.ntcp.autoport";
     public final static String PROP_I2NP_NTCP_AUTO_IP = "i2np.ntcp.autoip";
-    private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final int DEFAULT_COST = 10;
     private static final int NTCP2_OUTBOUND_COST = 14;
 
@@ -150,9 +149,6 @@ public class NTCPTransport extends TransportImpl {
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     private static final int MIN_CONCURRENT_READERS = SystemVersion.isSlow() ? 3 : 6;  // unless < 32MB
-    private static final int MIN_CONCURRENT_WRITERS = MIN_CONCURRENT_READERS;
-    private static final int MAX_CONCURRENT_READERS = MIN_CONCURRENT_READERS;
-    private static final int MAX_CONCURRENT_WRITERS = MIN_CONCURRENT_READERS;
 
     /**
      *  RI sigtypes supported in 0.9.16

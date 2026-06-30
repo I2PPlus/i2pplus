@@ -30,7 +30,6 @@ public class TunnelHistory {
     private long _lastCoalesce = System.currentTimeMillis();
     private final RateStat _rejectRate;
     private final RateStat _failRate;
-    private final String _statGroup;
     static final long[] RATES = new long[] {RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
 
     /** probabalistic tunnel rejection due to a flood of requests - infrequent */
@@ -47,7 +46,6 @@ public class TunnelHistory {
     public TunnelHistory(RouterContext context, String statGroup) {
         _context = context;
         _log = context.logManager().getLog(TunnelHistory.class);
-        _statGroup = statGroup;
         _rejectRate = new RateStat("tunnelHistory.rejectRate", "How often peer rejects a tunnel request?", statGroup, RATES);
         _failRate = new RateStat("tunnelHistory.failRate", "How often do tunnels this peer accepts fail?", statGroup, RATES);
     }

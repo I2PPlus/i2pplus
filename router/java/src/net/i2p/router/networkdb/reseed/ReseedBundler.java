@@ -63,7 +63,6 @@ public class ReseedBundler {
     @SuppressWarnings("PMD.AvoidThrowingNewInstanceOfSameException")
     public File createZip(int count) throws IOException {
         Hash me = _context.routerHash();
-        int routerCount = 0;
         int copied = 0;
         long tooOld = System.currentTimeMillis() - 8*60*60*1000L; // 8 hours
         List<RouterInfo> infos = new ArrayList<>(_context.netDb().getRouters());
@@ -97,7 +96,6 @@ public class ReseedBundler {
             if (addrs.isEmpty())
                 continue;
 
-            String name = getRouterInfoName(key);
             boolean hasIntro = false;
             boolean hasIPv4 = false;
             boolean dupIP = false;

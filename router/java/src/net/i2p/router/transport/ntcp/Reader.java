@@ -20,7 +20,6 @@ import net.i2p.util.Log;
  * @since 0.9.16
  */
 class Reader {
-    private final RouterContext _context;
     private final Log _log;
     // TODO change to LBQ ??
     private final Set<NTCPConnection> _pendingConnections;
@@ -29,7 +28,6 @@ class Reader {
     private final List<Runner> _runners;
 
     public Reader(RouterContext ctx) {
-        _context = ctx;
         _log = ctx.logManager().getLog(getClass());
         _pendingConnections = new LinkedHashSet<>(16);
         _runners = new ArrayList<>(16);

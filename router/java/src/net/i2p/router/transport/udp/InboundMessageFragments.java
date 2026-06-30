@@ -17,10 +17,8 @@ import net.i2p.util.Log;
  */
 class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
     private final RouterContext _context;
-    private final Log _log;
     /** list of message IDs recently received, so we can ignore in flight dups */
     private DecayingBloomFilter _recentlyCompletedMessages;
-    private final OutboundMessageFragments _outbound;
     private final UDPTransport _transport;
     private final MessageReceiver _messageReceiver;
     private volatile boolean _alive;
@@ -30,9 +28,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
 
     public InboundMessageFragments(RouterContext ctx, OutboundMessageFragments outbound, UDPTransport transport) {
         _context = ctx;
-        _log = ctx.logManager().getLog(InboundMessageFragments.class);
         //_inboundMessages = new HashMap(64);
-        _outbound = outbound;
         _transport = transport;
         _messageReceiver = new MessageReceiver(_context, _transport);
         _context.statManager().createRateStat("udp.ignoreRecentDuplicate", "Take note that we received a packet for a recently completed message", "Transport [UDP]", UDPTransport.RATES);

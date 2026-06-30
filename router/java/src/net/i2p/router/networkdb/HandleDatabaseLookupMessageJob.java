@@ -47,7 +47,6 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
     private final long _msgIDBloomXor;
 
     private final static int MAX_ROUTERS_RETURNED = 3;
-    private final static int CLOSENESS_THRESHOLD = 8; // FNDF.MAX_TO_FLOOD + 1
     private final static int REPLY_TIMEOUT = 60*1000;
     private final static int MESSAGE_PRIORITY = OutNetMessage.PRIORITY_NETDB_REPLY;
 
@@ -57,7 +56,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
      */
     public final static long EXPIRE_DELAY = 60*60*1000L;
 
-    public HandleDatabaseLookupMessageJob(RouterContext ctx, DatabaseLookupMessage receivedMessage, RouterIdentity from, Hash fromHash, long msgIDBloomXor) {
+    public HandleDatabaseLookupMessageJob(RouterContext ctx, DatabaseLookupMessage receivedMessage, RouterIdentity _from, Hash _fromHash, long msgIDBloomXor) {
         super(ctx);
         _log = ctx.logManager().getLog(HandleDatabaseLookupMessageJob.class);
         _message = receivedMessage;

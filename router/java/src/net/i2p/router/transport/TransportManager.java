@@ -110,7 +110,6 @@ public class TransportManager implements TransportEventListener {
     private final SimpleTimer2.TimedEvent _upnpRefresher;
     private final X25519KeyFactory _xdhThread;
     private final boolean _enableUDP;
-    private final boolean _enableNTCP1;
     private boolean _upnpUpdateQueued;
 
     /** default true */
@@ -126,7 +125,6 @@ public class TransportManager implements TransportEventListener {
     private static final String PROP_JAVA_PROXY3 = "http.proxyHost";
     private static final String PROP_JAVA_PROXY4 = "https.proxyHost";
 
-    private static final String PROP_ADVANCED = "routerconsole.advanced";
 
     /** not forever, since they may update */
     private static final long SIGTYPE_BANLIST_DURATION = 36*60*60*1000L;
@@ -167,7 +165,6 @@ public class TransportManager implements TransportEventListener {
         _upnpManager = enableUPnP ? new UPnPManager(context, this) : null;
         _upnpRefresher = enableUPnP ? new UPnPRefresher() : null;
         _enableUDP = _context.getBooleanPropertyDefaultTrue(PROP_ENABLE_UDP);
-        _enableNTCP1 = false;
         boolean enableNTCP2 = isNTCPEnabled(context);
         // always created, even if NTCP2 is not enabled, because ratchet needs it
         _xdhThread = new X25519KeyFactory(context);

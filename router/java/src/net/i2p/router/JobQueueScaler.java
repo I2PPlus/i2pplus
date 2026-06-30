@@ -68,7 +68,7 @@ class JobQueueScaler implements Runnable {
     private static final double MAX_MEMORY_PERCENTAGE = 0.10; // Use max 10% of heap for runners
 
     // Configuration defaults - Optimized for SUB-MICROSECOND lag targets
-    private static final boolean DEFAULT_DYNAMIC_SCALING = true;
+
     private static final long DEFAULT_SCALE_CHECK_INTERVAL = 1000; // 1 second (very responsive for sub-μs targets)
     private static final long DEFAULT_SCALE_COOLDOWN = 5000; // 5 seconds (quick recovery)
     private static final int DEFAULT_SCALE_UP_LAG_THRESHOLD = 1; // 1ms = 1000μs (scale up if job lag exceeds 1ms)
@@ -539,7 +539,7 @@ class JobQueueScaler implements Runnable {
      * If lag increased or ready jobs increased (worse performance), roll back.
      */
     private void evaluateScalingFeedback(int currentRunners, int currentReadyJobs,
-                                        long currentMaxLag, long currentAvgLag) {
+                                        long _currentMaxLag, long currentAvgLag) {
         if (_preScaleSnapshot == null) return;
 
         PreScaleSnapshot snapshot = _preScaleSnapshot;

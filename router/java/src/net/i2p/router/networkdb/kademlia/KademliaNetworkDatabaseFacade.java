@@ -87,7 +87,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private final Set<Hash> _exploreKeys;
     private boolean _initialized;
     /** Clock independent time of when we started up */
-    private long _started;
     private StartExplorersJob _exploreJob;
     /** When was the last time an exploration found something new? */
     private long _lastExploreNew;
@@ -475,7 +474,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (!isClientDb()) {blindCache().startup();}
         createHandlers();
         _initialized = true;
-        _started = System.currentTimeMillis();
         long now = _context.clock().now();
         _elj.getTiming().setStartAfter(now + 30*1000);
         _context.jobQueue().addJob(_elj); // expire old leases
@@ -877,7 +875,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      * @since 0.9.67+
      */
-    private boolean shouldBanlistBasedOnCountry(RouterInfo ri, Hash key) {
+    private boolean shouldBanlistBasedOnCountry(RouterInfo _ri, Hash key) {
         boolean isStrict = _context.commSystem().isInStrictCountry(key);
         return isStrict || _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
     }
@@ -892,7 +890,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      * @since 0.9.67+
      */
-    private boolean shouldBanlistXG(RouterInfo ri, Hash key) {
+    private boolean shouldBanlistXG(RouterInfo ri, Hash _key) {
         boolean isG = containsCapability(ri, Router.CAPABILITY_NO_TUNNELS);
         boolean isXTier = containsCapability(ri, Router.CAPABILITY_BW_UNLIMITED);
         boolean isUs = _context.routerHash().equals(ri.getIdentity().getHash());
@@ -912,7 +910,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      * @since 0.9.69+
      */
-    private boolean shouldBanlistLU(RouterInfo ri, Hash key) {
+    private boolean shouldBanlistLU(RouterInfo ri, Hash _key) {
         boolean isLTier = containsCapability(ri, Router.CAPABILITY_BW12);
         boolean isUs = _context.routerHash().equals(ri.getIdentity().getHash());
         boolean isUnreachable = containsCapability(ri, Router.CAPABILITY_UNREACHABLE) ||
@@ -1053,7 +1051,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
     }
 
-    private void handlePermanentBlocklist(RouterInfo ri, Hash key, Job onFailedLookupJob) {
+    private void handlePermanentBlocklist(RouterInfo _ri, Hash key, Job onFailedLookupJob) {
         if (_log.shouldInfo()) {
             _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Permanently blocklisted");
         }
@@ -1065,7 +1063,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
     }
 
-    private void handleHostileBlocklist(RouterInfo ri, Hash key, Job onFailedLookupJob) {
+    private void handleHostileBlocklist(RouterInfo _ri, Hash key, Job onFailedLookupJob) {
         if (_log.shouldInfo()) {
             _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Blocklisted (tagged as hostile)");
         }
@@ -1078,7 +1076,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
     }
 
-    private void handleNegativeCache(RouterInfo ri, Hash key, Job onFailedLookupJob) {
+    private void handleNegativeCache(RouterInfo _ri, Hash key, Job onFailedLookupJob) {
         if (_log.shouldInfo()) {
             _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Negatively cached");
         }
@@ -2202,7 +2200,7 @@ return false;
      * @return a descriptive string if the router should be dropped, null otherwise
      * @since 0.9.67+
      */
-    private String checkAddressesAndIntroducers(RouterInfo routerInfo, long now, String caps, String routerId, boolean isUs, boolean dontFail) {
+    private String checkAddressesAndIntroducers(RouterInfo routerInfo, long _now, String caps, String routerId, boolean isUs, boolean dontFail) {
         if (routerInfo == null) {return null;}
         if (!dontFail && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED) && !isUs) {
             if (routerInfo.getAddresses().isEmpty()) {
@@ -2290,7 +2288,7 @@ return false;
      * @return a descriptive string if the router should be dropped, null otherwise
      * @since 0.9.67+
      */
-    private String checkStaleRouterInfo(RouterInfo routerInfo, boolean upLongEnough, int existing, String caps, String routerId, boolean isUs) {
+    private String checkStaleRouterInfo(RouterInfo routerInfo, boolean upLongEnough, int existing, String _caps, String routerId, boolean isUs) {
         if (routerInfo == null) {return null;}
         if (upLongEnough && !isUs && !routerInfo.isCurrent(computeAdjustedExpiration(existing))) {
             long age = _context.clock().now() - routerInfo.getPublished();

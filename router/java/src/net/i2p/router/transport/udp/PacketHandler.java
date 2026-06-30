@@ -32,7 +32,6 @@ class PacketHandler {
     private static final int TYPE_POISON = -99999;
     private static final int MIN_QUEUE_SIZE = SystemVersion.isSlow() ? 16 : 64;
     private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 64 : 512;
-    private static final int MIN_NUM_HANDLERS = 1;  // if < 128MB
     private static final int MAX_NUM_HANDLERS = SystemVersion.isSlow() ? 3 : 6;
     private static final int MIN_VERSION = 2;
     private static final int MAX_VERSION = 4;

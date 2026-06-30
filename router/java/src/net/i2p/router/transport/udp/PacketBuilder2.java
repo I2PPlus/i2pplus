@@ -77,7 +77,6 @@ class PacketBuilder2 {
      */
     static final int PRIORITY_HIGH = 550;
     private static final int PRIORITY_MEDIUM = OutNetMessage.PRIORITY_MEDIUM;
-    private static final int PRIORITY_LOW = OutNetMessage.PRIORITY_LOWEST;
 
     // every this many packets
     private static final int DATETIME_SEND_FREQUENCY = 256;

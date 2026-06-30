@@ -338,7 +338,6 @@ public class PersistentDataStore extends TransientDataStore {
 
         // Our own IP for spoof detection
         String ourIP = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(_context.router().getRouterInfo()));
-        long uptime = _context.router().getUptime();
         boolean shouldDisconnect = _context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
 
         boolean shouldDelete = false;

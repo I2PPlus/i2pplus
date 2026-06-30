@@ -98,8 +98,6 @@ public class NTCPConnection implements Closeable {
      *  current prepared OutNetMessages, or empty - synchronize on _writeLock
      */
     private final List<OutNetMessage> _currentOutbound;
-    private SessionKey _sessionKey;
-    private byte[] _prevWriteEnd;
     /** current partially read I2NP message */
     private ReadState _curReadState;
     private final AtomicInteger _messagesRead = new AtomicInteger();
@@ -156,8 +154,6 @@ public class NTCPConnection implements Closeable {
     static final int BUFFER_SIZE = 16*1024;
     private static final int MAX_DATA_READ_BUFS = SystemVersion.isSlow() ? 4 : 16;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
-    private static final int INFO_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE_LOW;
-    private static final String FIXED_RI_VERSION = "0.9.12";
     private static final AtomicLong __connID = new AtomicLong();
     private final long _connID = __connID.incrementAndGet();
     private static final int MAX_HANDLERS = SystemVersion.isSlow() ? 2 : 3;
@@ -169,7 +165,6 @@ public class NTCPConnection implements Closeable {
      *  Includes 9-byte I2NP header.
      */
     static final int NTCP2_MAX_MSG_SIZE = 65516;
-    private static final int PADDING_RAND_MIN = 16;
     private static final int PADDING_MAX = 64;
     private static final int SIP_IV_LENGTH = 8;
     private static final int NTCP2_FAIL_READ = 1024;

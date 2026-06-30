@@ -66,7 +66,6 @@ class UDPPacket implements CDPQEntry {
     private volatile boolean _released;
     private long _enqueueTime;
     private volatile long _receivedTime;
-    private int _validateCount;
     private final AtomicReference<FIFOBandwidthLimiter.Request> _bandwidthRequest = new AtomicReference<>();
     private long _seqNum;
     private int _messageType;
@@ -172,7 +171,6 @@ class UDPPacket implements CDPQEntry {
         _packet.setData(_data);
         _initializeTime = _context.clock().now();
         _markedType = -1;
-        _validateCount = 0;
         _remoteHost = null;
         _released = false;
         _messageType = -1;

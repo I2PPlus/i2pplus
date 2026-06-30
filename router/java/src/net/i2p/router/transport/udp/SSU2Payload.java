@@ -29,13 +29,11 @@ class SSU2Payload {
 
     private static final int BLOCK_ACK = 12;
     private static final int BLOCK_ADDRESS = 13;
-    private static final int BLOCK_CONGESTION = 21;
     private static final int BLOCK_DATETIME = 0;
     private static final int BLOCK_FIRSTFRAG = 4;
     private static final int BLOCK_FOLLOWONFRAG = 5;
     private static final int BLOCK_I2NP = 3;
     private static final int BLOCK_NEWTOKEN = 17;
-    private static final int BLOCK_NEXTNONCE = 11;
     private static final int BLOCK_OPTIONS = 1;
     private static final int BLOCK_PADDING = 254;
     private static final int BLOCK_PATHCHALLENGE = 18;

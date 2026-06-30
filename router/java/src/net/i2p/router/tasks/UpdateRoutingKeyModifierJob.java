@@ -21,7 +21,6 @@ import net.i2p.util.Log;
  * @since 0.8.12 moved from Router.java
  */
 public class UpdateRoutingKeyModifierJob extends JobImpl {
-    private final Log _log;
     // Run every 15 minutes in case of time zone change, clock skew, etc.
     private static final long MAX_DELAY_FAILSAFE = 15*60*1000L;
 
@@ -33,7 +32,6 @@ public class UpdateRoutingKeyModifierJob extends JobImpl {
      */
     public UpdateRoutingKeyModifierJob(RouterContext ctx) {
         super(ctx);
-        _log = ctx.logManager().getLog(getClass());
     }
 
     /**

@@ -1280,7 +1280,7 @@ public class Blocklist {
         }
     }
 
-    private synchronized void banlistRouter(Hash peer, List<byte[]> ips, long duration) {
+    private synchronized void banlistRouter(Hash peer, List<byte[]> ips, long _duration) {
         // This only checks one file for now, pick the best one
         File blFile = null; // user specified
         String file = _context.getProperty(PROP_BLOCKLIST_FILE);

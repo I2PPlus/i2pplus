@@ -159,7 +159,6 @@ public class Reseeder {
     private static final Pattern PAREN_PATTERN = Pattern.compile("\\([^)]*\\)");
     private static final Pattern VERIFY_FAIL_PATTERN = Pattern.compile("verification failed for .*");
     private static final Pattern URL_SPLIT_PATTERN = Pattern.compile("[ ,]+");
-    private static final Pattern QUESTION_PATTERN = Pattern.compile("\\?");
 
     Reseeder(RouterContext ctx, ReseedChecker rc) {
         _context = ctx;

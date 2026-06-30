@@ -72,7 +72,6 @@ class ExpireLeasesJob extends JobImpl {
         List<LeaseSet> current = new ArrayList<>(isFFDB ? 512 : (isClient ? entries.size() : 128)); // clientdb only has leasesets
         List<Hash> toExpire = new ArrayList<>(Math.min(entries.size(), 128));
         int sz = 0;
-        String tunnelName = "";
         for (Map.Entry<Hash, DatabaseEntry> entry : entries) {
             DatabaseEntry obj = entry.getValue();
             if (obj != null && obj.isLeaseSet()) {

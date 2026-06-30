@@ -55,8 +55,6 @@ public class PublishLocalRouterInfoJob extends JobImpl {
      *  First publish after netdb ready is now done via state machine
      *  in Router.setNetDbReady(), so we probably don't need this anymore
      */
-    private static final long FIRST_TIME_DELAY = 90*1000;
-    private volatile boolean _notFirstTime;
     private final AtomicInteger _runCount = new AtomicInteger();
 
     public PublishLocalRouterInfoJob(RouterContext ctx) {

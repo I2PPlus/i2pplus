@@ -26,10 +26,6 @@ class ExpireJob extends JobImpl {
     private static final ConcurrentHashMap<Long, TunnelExpiration> _expirations = new ConcurrentHashMap<>();
     private static volatile boolean _isScheduled = false;
 
-    private final PooledTunnelCreatorConfig _cfg;
-    private final long _dropAfter;
-    private volatile boolean _phase1Complete = false;
-
     private static final long BATCH_WINDOW = 5 * 1000L;
     private static final long OB_EARLY_EXPIRE = 30*1000L;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
@@ -160,8 +156,6 @@ class ExpireJob extends JobImpl {
      */
     private ExpireJob(RouterContext ctx) {
         super(ctx);
-        _cfg = null;
-        _dropAfter = 0;
     }
 
     public void runJob() {

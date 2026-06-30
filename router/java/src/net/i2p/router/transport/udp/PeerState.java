@@ -186,7 +186,6 @@ public class PeerState {
      *  we would just drop our own msgs right away during slow start.
      *  May need to adjust based on memory.
      */
-    private static final int MAX_SEND_MSGS_PENDING = SystemVersion.isSlow() ? 96 : 128;
 
     /**
      * IPv4 Min MTU
@@ -215,7 +214,6 @@ public class PeerState {
      */
     public static final int MIN_IPV6_MTU = 1280;
     public static final int MAX_IPV6_MTU = 1488;
-    private static final int DEFAULT_MTU = MIN_MTU;
 
     /**
      * IPv4 Max MTU
@@ -261,16 +259,6 @@ public class PeerState {
      *  The max number of acks we save to send as duplicates
      */
     private static final int MAX_RESEND_ACKS = 32;
-    /**
-     *  The max number of duplicate acks sent in each ack-only messge.
-     *  Doesn't really matter, we have plenty of room...
-     *  @since 0.7.13
-     */
-    private static final int MAX_RESEND_ACKS_LARGE = MAX_RESEND_ACKS * 2 / 3;
-    /** for small MTU */
-    private static final int MAX_RESEND_ACKS_SMALL = MAX_RESEND_ACKS * 2 / 5;
-
-    private static final long RESEND_ACK_TIMEOUT = 60*1000L;
 
     /** If this many acks arrive out of order, fast rtx */
     private static final int FAST_RTX_ACKS = 3;

@@ -48,7 +48,6 @@ class TunnelGatewayPumper implements Runnable {
     // Volatile stop flag visible to all threads
     private volatile boolean _stop;
 
-    private static final int MIN_PUMPERS = 1;
     private static final int MAX_PUMPERS;
     private static final int QUEUE_BUFFER;
 

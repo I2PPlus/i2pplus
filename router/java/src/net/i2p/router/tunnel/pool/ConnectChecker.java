@@ -25,7 +25,6 @@ public class ConnectChecker {
     private static final int SSU2_V4 = 0x10;
     private static final int SSU2_V6 = 0x20;
     public static final int ANY_V4 = NTCP_V4 | SSU_V4 | SSU2_V4;
-    private static final int ANY_V6 = NTCP_V6 | SSU_V6 | SSU2_V6;
 
     public ConnectChecker(RouterContext context) {
         ctx = context;

@@ -28,7 +28,6 @@ import net.i2p.util.Log;
  *
  */
 class GetBidsJob extends JobImpl {
-    private final Log _log;
     private final TransportManager _tmgr;
     private final OutNetMessage _msg;
     private static BanLogger _banLogger;
@@ -39,7 +38,6 @@ class GetBidsJob extends JobImpl {
     @Deprecated
     public GetBidsJob(RouterContext ctx, TransportManager tmgr, OutNetMessage msg) {
         super(ctx);
-        _log = ctx.logManager().getLog(GetBidsJob.class);
         _tmgr = tmgr;
         _msg = msg;
     }

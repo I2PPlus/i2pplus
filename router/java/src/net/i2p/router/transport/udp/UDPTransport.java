@@ -243,7 +243,6 @@ public class UDPTransport extends TransportImpl {
     public static final String PROP_BIND_INTERFACE = "i2np.udp.bindInterface";
     /** Override the "large" (max) MTU, default is PeerState.LARGE_MTU */
     private static final String PROP_DEFAULT_MTU = "i2np.udp.mtu";
-    private static final String PROP_ADVANCED = "routerconsole.advanced";
     /** @since 0.9.48 */
     public static final String PROP_INTRO_KEY = "i2np.udp.introKey";
 
@@ -256,9 +255,6 @@ public class UDPTransport extends TransportImpl {
     public static final int PUBLIC_RELAY_COUNT = 3;
 
     /** Configure the priority queue with the given split points */
-    private static final int[] PRIORITY_LIMITS = new int[] { 100, 200, 300, 400, 500, 1000 };
-    /** Configure the priority queue with the given weighting per priority group */
-    private static final int[] PRIORITY_WEIGHT = new int[] { 1, 1, 1, 1, 1, 2 };
     private static final int MAX_CONSECUTIVE_FAILED = 5;
 
     public static final int DEFAULT_COST = 5;
@@ -284,7 +280,6 @@ public class UDPTransport extends TransportImpl {
     private static final int TRANSIENT_FAIL_BID = 8;
     private final TransportBid[] _cachedBid;
 
-    private static final String THINSP = " / ";
 
     /**
      *  RI sigtypes supported in 0.9.16, but due to a bug in InboundEstablishState
@@ -344,13 +339,6 @@ public class UDPTransport extends TransportImpl {
                                                                     Status.IPV4_DISABLED_IPV6_OK,
                                                                     Status.IPV4_SNAT_IPV6_OK);
 
-    private static final Set<Status> STATUS_NO_RETEST =  EnumSet.of(Status.OK,
-                                                                    Status.IPV4_OK_IPV6_UNKNOWN,
-                                                                    Status.IPV4_OK_IPV6_FIREWALLED,
-                                                                    Status.IPV4_DISABLED_IPV6_OK,
-                                                                    Status.IPV4_DISABLED_IPV6_UNKNOWN,
-                                                                    Status.IPV4_DISABLED_IPV6_FIREWALLED,
-                                                                    Status.DISCONNECTED);
 
     private static final Set<Status> STATUS_OK =         EnumSet.of(Status.OK,
                                                                     Status.IPV4_DISABLED_IPV6_OK);

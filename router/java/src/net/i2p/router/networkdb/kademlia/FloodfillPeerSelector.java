@@ -142,7 +142,7 @@ class FloodfillPeerSelector extends PeerSelector {
      *  @param toIgnore can be null
      *  @return all floodfills not banlisted forever.
      */
-    private List<Hash> selectFloodfillParticipants(Set<Hash> toIgnore, KBucketSet<Hash> kbuckets) {
+    private List<Hash> selectFloodfillParticipants(Set<Hash> toIgnore, KBucketSet<Hash> _kbuckets) {
         Set<Hash> set = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL);
         List<Hash> rv = new ArrayList<>(set.size());
         for (Hash h : set) {
@@ -261,9 +261,8 @@ class FloodfillPeerSelector extends PeerSelector {
             MaskedIPSet entryIPs = new MaskedIPSet(_context, entry, info, 2); // put anybody in the same /16 at the end
             boolean sameIP = false;
             boolean isUnreachable = true;
-            String caps = null;
             if (info != null) {
-                caps = DataHelper.stripHTML(info.getCapabilities());
+                String caps = DataHelper.stripHTML(info.getCapabilities());
                 isUnreachable = caps != null && !caps.contains("R");
                 for (String ip : entryIPs) {
                     if (!maskedIPs.add(ip)) {sameIP = true;}

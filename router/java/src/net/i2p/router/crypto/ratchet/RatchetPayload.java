@@ -20,7 +20,7 @@ class RatchetPayload {
     public static final int BLOCK_HEADER_SIZE = 3;
 
     private static final int BLOCK_DATETIME = 0;
-    private static final int BLOCK_SESSIONID = 1;
+
     private static final int BLOCK_TERMINATION = 4;
     private static final int BLOCK_OPTIONS = 5;
     private static final int BLOCK_MSGNUM = 6;

@@ -716,7 +716,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
     private static final Charset ENCODING = StandardCharsets.UTF_8;
-    private static final String NEWLINE = "\n";
 
     private void startGeoIP() {
         _context.simpleTimer2().addEvent(new QueueAll(), START_DELAY);
@@ -733,7 +732,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         @Override
         public void timeReached() {
             for (Hash h : _context.netDb().getAllRouters()) {
-                //RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
                 RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(h);
                 if (ri == null) {continue;}
                 byte[] ip = getIP(ri);

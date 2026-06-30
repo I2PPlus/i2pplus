@@ -67,10 +67,7 @@ class OutboundNTCP2State implements EstablishState {
     public static final long MAX_SKEW = 60;
     // SipHash KDF things
     private static final byte[] ZEROLEN = new byte[0];
-    private static final byte[] ONE = new byte[] { 1 };
     public static final byte[] ZEROKEY = new byte[KEY_SIZE];
-    /** for SipHash keygen */
-    private static final byte[] ASK = new byte[] { (byte) 'a', (byte) 's', (byte) 'k', 1 };
     /** for SipHash keygen */
     private static final byte[] SIPHASH = DataHelper.getASCII("siphash");
 

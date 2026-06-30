@@ -65,7 +65,6 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     private long _skew;
     private PeerState2 _pstate;
 
-    private static final boolean SET_TOKEN = false;
     private static final long MAX_SKEW = 2*60*1000L;
 
     /**

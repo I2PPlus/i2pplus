@@ -410,8 +410,6 @@ public class WorkingDir {
         if (!oldFile.exists())
             return true;
         File newFile = new File(todir, filename);
-        FileInputStream in = null;
-        PrintWriter out = null;
         try {
             migrateFileXML(oldFile, newFile, oldString, newString, null, null);
             System.err.println("Copied " + oldFile + " with modifications");

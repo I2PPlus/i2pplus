@@ -41,7 +41,6 @@ class ProfilePersistenceHelper {
     public final static String PROP_PEER_PROFILE_DIR = "router.profileDir";
     public final static String DEFAULT_PEER_PROFILE_DIR = "peerProfiles";
     private final static String NL = System.getProperty("line.separator");
-    private final static String TAB = "\t";
     private final static String HR = "# ----------------------------------------------------------------------------------------";
     private static final String PREFIX = "profile-";
     private static final String SUFFIX = ".txt.gz";

@@ -43,7 +43,6 @@ public class TestJob extends JobImpl {
     private boolean _found;
     private TunnelInfo _outTunnel;
     private TunnelInfo _replyTunnel;
-    private PooledTunnelCreatorConfig _otherTunnel;
     private SessionTag _encryptTag;
     private RatchetSessionTag _ratchetEncryptTag;
     private static final AtomicInteger __id = new AtomicInteger();
@@ -96,7 +95,6 @@ public class TestJob extends JobImpl {
         return ctx.getProperty("i2p.tunnel.testJob.maxTestDelay", 90*1000);
     }
     private static final int SUCCESS_HISTORY_SIZE = 3; // Track last 3 results
-    private static final int MIN_TEST_JOBS_PER_RUNNER = 20;
     private static final int MAX_LAG_FOR_SCHEDULE = 150;
     private static double getPoolCoverageThreshold(RouterContext ctx) {
         String val = ctx.getProperty("i2p.tunnel.testJob.poolCoverageThreshold");
@@ -791,12 +789,6 @@ public class TestJob extends JobImpl {
                 }
             }
         }
-
-        _otherTunnel = (_outTunnel instanceof PooledTunnelCreatorConfig)
-            ? (PooledTunnelCreatorConfig) _outTunnel
-            : (_replyTunnel instanceof PooledTunnelCreatorConfig)
-                ? (PooledTunnelCreatorConfig) _replyTunnel
-                : null;
 
         if (_replyTunnel == null || _outTunnel == null) {
             if (_log.shouldWarn()) {

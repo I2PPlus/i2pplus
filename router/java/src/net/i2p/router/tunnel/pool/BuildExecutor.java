@@ -40,7 +40,6 @@ import net.i2p.util.SystemVersion;
  * As of 0.8.11, inbound request handling is done in a separate thread.
  */
 class BuildExecutor implements Runnable {
-    private static final int TUNNEL_MIN_EXPIRY_MS = 5*60*1000;
     private static int getTunnelTargetMin(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.build.targetMin", 2);
     }

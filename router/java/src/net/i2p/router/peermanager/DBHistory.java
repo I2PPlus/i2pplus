@@ -25,12 +25,10 @@ public class DBHistory {
     private long _lastStoreFailed;
     private long _unpromptedDbStoreNew;
     private long _unpromptedDbStoreOld;
-    private final String _statGroup;
 
     public DBHistory(RouterContext context, String statGroup) {
         _context = context;
         _log = context.logManager().getLog(DBHistory.class);
-        _statGroup = statGroup;
         _failedLookupRate = new RateStat("dbHistory.failedLookupRate", "How often peer responds to a lookup",
                                          statGroup, new long[] {RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _invalidReplyRate = new RateStat("dbHistory.invalidReplyRate", "How often peer sends us a bad RouterInfo?",

@@ -58,10 +58,6 @@ abstract class MigrateJetty {
     private static final String BACKUP_SUFFIX = ".jetty6";
     private static final String BACKUP_SUFFIX_8 = ".jetty8";
     private static final String BACKUP_SUFFIX_9 = ".jetty9-id";
-    private static final String JETTY_TEMPLATE_DIR = "eepsite-jetty9";
-    private static final String JETTY_TEMPLATE_PKGDIR = "eepsite";
-    private static final String BASE_CONTEXT = "contexts/base-context.xml";
-    private static final String CGI_CONTEXT = "contexts/cgi-context.xml";
     private static final String PROP_JETTY9_MIGRATED = "router.startup.jetty9.migrated";
     private static final String PROP_JETTY9_MIGRATED_2 = "router.startup.jetty-ids.migrated";
 

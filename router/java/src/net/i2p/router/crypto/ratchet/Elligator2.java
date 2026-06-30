@@ -32,7 +32,7 @@ class Elligator2 {
     private static final BigInteger u, inverted_u;
     private static final BigInteger TWO = new NativeBigInteger("2");
 
-    private static final int POINT_LENGTH = 32;
+
     private static final int REPRESENTATIVE_LENGTH = 32;
 
     private static final EdDSANamedCurveSpec SPEC = EdDSANamedCurveTable.getByName("ed25519-sha-512");

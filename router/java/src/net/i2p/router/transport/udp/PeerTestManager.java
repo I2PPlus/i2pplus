@@ -146,8 +146,6 @@ class PeerTestManager {
     private final IPThrottler _throttle;
 
     private static final int MAX_RELAYED_PER_TEST_ALICE = 9;
-    private static final int MAX_RELAYED_PER_TEST_BOB = 6;
-    private static final int MAX_RELAYED_PER_TEST_CHARLIE = 6;
 
     /** longest we will keep track of a Charlie nonce for */
     private static final int MAX_CHARLIE_LIFETIME = 15*1000;
@@ -468,7 +466,6 @@ class PeerTestManager {
      * Maybe a router should need two consecutive OK results before believing it?
      *
      */
-    private static final long CHARLIE_RECENT_PERIOD = 10*60*1000;
 
     /**
      *  Reset all state and call testComplete(). We are Alice.

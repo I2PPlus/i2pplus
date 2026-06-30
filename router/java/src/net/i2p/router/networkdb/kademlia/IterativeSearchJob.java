@@ -169,9 +169,6 @@ public class IterativeSearchJob extends FloodSearchJob {
         int known = ctx.netDb().getKnownRouters();
         int totalSearchLimit = (facade.floodfillEnabled() && ctx.router().getUptime() > 30*60*1000) ?
                                 TOTAL_SEARCH_LIMIT_WHEN_FF : TOTAL_SEARCH_LIMIT;
-        boolean isHidden = ctx.router().isHidden();
-        boolean isSlow = SystemVersion.isSlow();
-        long lag = ctx.jobQueue().getMaxLag();
         _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
         _expiration = _timeoutMs + ctx.clock().now();
         _rkey = ctx.routingKeyGenerator().getRoutingKey(key);

@@ -553,7 +553,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * using too many session tags in the future
      *
      */
-    private void clearExcess(int overage) {}
+    private void clearExcess(int _overage) {}
 
     /**
      * @throws UnsupportedOperationException always

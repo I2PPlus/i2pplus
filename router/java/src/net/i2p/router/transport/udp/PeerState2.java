@@ -83,7 +83,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     private byte[] _pathChallengeData;
     private long _pathChallengeSendCount;
     private RemoteHostId _pendingRemoteHostId;
-    private RemoteHostId _previousRemoteHostId;
     private static final int MAX_PATH_CHALLENGE_SENDS = 4;
     private static final long MAX_PATH_CHALLENGE_TIME = 30*1000L;
     private static final long PATH_CHALLENGE_DELAY = 5*1000L;
@@ -996,7 +995,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      *  @since 0.9.56
      */
     void changeAddress(RemoteHostId id) {
-        _previousRemoteHostId = _remoteHostId;
         _remoteHostId = id;
         _remotePort = id.getPort();
     }
