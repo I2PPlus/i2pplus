@@ -202,7 +202,6 @@ public abstract class TransportImpl implements Transport {
             case Router.CAPABILITY_BW12:
             case Router.CAPABILITY_BW32:
             case 'u': // unknown
-            default:
                 break;
             case Router.CAPABILITY_BW64:
                 def *= 2;
@@ -218,6 +217,8 @@ public abstract class TransportImpl implements Transport {
                 break;
             case Router.CAPABILITY_BW_UNLIMITED:
                 def *= 10;
+                break;
+            default:
                 break;
         }
 
@@ -251,7 +252,6 @@ public abstract class TransportImpl implements Transport {
             case Router.CAPABILITY_BW12:
             case Router.CAPABILITY_BW32:
             case 'u': // unknown
-            default:
                 break;
             case Router.CAPABILITY_BW64:
                 def *= 2;
@@ -267,6 +267,8 @@ public abstract class TransportImpl implements Transport {
                 break;
             case Router.CAPABILITY_BW_UNLIMITED:
                 def *= 10;
+                break;
+            default:
                 break;
         }
 
@@ -381,20 +383,20 @@ public abstract class TransportImpl implements Transport {
 
         if (msToSend > 1500 && debug) {
             _log.debug("[" + style + "] afterSend slow: " + (sendSuccessful ? "Success! " : "FAIL! ") +
-                       String.format("\n* %d byte %s[MsgID %d] to [%s] took %d ms", msg.getMessageSize(),
+                       String.format("%n* %d byte %s[MsgID %d] to [%s] took %d ms", msg.getMessageSize(),
                        msg.getMessageType(), msg.getMessageId(), peerHash, msToSend));
         }
 
         long lifetime = msg.getLifetime();
         if (lifetime > 3000) {
             if (_log.shouldLog(Log.DEBUG)) {
-                _log.log(Log.DEBUG, String.format("[%s] afterSend slow: %s(Lifetime: %dms / Time taken: %dms)\n* %d byte %s [MsgID %d] from [%s] to [%s]: %s",
+                _log.log(Log.DEBUG, String.format("[%s] afterSend slow: %s(Lifetime: %dms / Time taken: %dms)%n* %d byte %s [MsgID %d] from [%s] to [%s]: %s",
                                                  style, (sendSuccessful ? "Success! " : "FAIL! "), lifetime, msToSend,
                                                  msg.getMessageSize(), msg.getMessageType(), msg.getMessageId(),
                                                  routerHash, peerHash, msg));
             }
         } else if (debug) {
-            _log.debug(String.format("[%s] afterSend: %s\n* %d byte %s [MsgID %d] from [%s] to [%s] %s",
+            _log.debug(String.format("[%s] afterSend: %s%n* %d byte %s [MsgID %d] from [%s] to [%s] %s",
                       style, (sendSuccessful ? "Success! " : "FAIL! "), msg.getMessageSize(), msg.getMessageType(),
                       msg.getMessageId(), routerHash, peerHash, msg));
         }
@@ -428,12 +430,12 @@ public abstract class TransportImpl implements Transport {
         long sendTime = now - msg.getSendBegin();
         long allTime = now - msg.getCreated();
         if (allTime > 5000 && debug) {
-            _log.debug(String.format("Took too long (%d ms) from preparation to afterSend (ok? %b)\n* Sent: %s after failing on %s%s",
+            _log.debug(String.format("Took too long (%d ms) from preparation to afterSend (ok? %b)%n* Sent: %s after failing on %s%s",
                       allTime, sendSuccessful, new Date(sendTime), msg.getFailedTransports(),
                       (sendSuccessful ? " and succeeding on " + style : "")));
         }
         if (allTime > 60000 && sendSuccessful && _log.shouldWarn()) {
-            _log.warn(String.format("Severe latency? More than a minute slow?\n* %s of [MsgID %d]\n* Send began: %s\n* Message created: %s%s",
+            _log.warn(String.format("Severe latency? More than a minute slow?%n* %s of [MsgID %d]%n* Send began: %s%n* Message created: %s%s",
                     msg.getMessageType(), msg.getMessageId(), new Date(msg.getSendBegin()), new Date(msg.getCreated()), msg));
             _context.messageHistory().messageProcessingError(msg.getMessageId(), msg.getMessageType(),
                                                              "Took too long to send [" + allTime + "ms]");

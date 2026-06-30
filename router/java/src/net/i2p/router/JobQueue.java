@@ -451,7 +451,7 @@ public class JobQueue {
     public void startup() {
         _alive = true;
         I2PThread pumperThread = new I2PThread(_pumper, "JobQueuePumper", true);
-        pumperThread.setPriority(I2PThread.NORM_PRIORITY + 1);
+        pumperThread.setPriority(Thread.NORM_PRIORITY + 1);
         pumperThread.start();
         _scaler.startup();
     }
@@ -676,9 +676,9 @@ public class JobQueue {
      */
     synchronized int removeIdleRunners(int maxToRemove) {
         if (!_alive) return 0;
-         int removed = 0;
+        int removed = 0;
         Iterator<Map.Entry<Integer, JobQueueRunner>> iter = _queueRunners.entrySet().iterator();
-         while (iter.hasNext() && removed < maxToRemove) {
+        while (iter.hasNext() && removed < maxToRemove) {
             Map.Entry<Integer, JobQueueRunner> entry = iter.next();
             JobQueueRunner runner = entry.getValue();
              // Only remove if runner is idle (not processing a job)

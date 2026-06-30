@@ -126,7 +126,9 @@ public class Banlist {
         /**
          *  Default constructor.
          */
-        public Entry() {}
+        public Entry() {
+            // intentionally empty - default constructor
+        }
     }
 
     /**
@@ -883,6 +885,8 @@ public class Banlist {
 
     /** @deprecated moved to router console */
     @Deprecated
-    public void renderStatusHTML(Writer out) throws IOException {}
+    public void renderStatusHTML(Writer out) throws IOException {
+        // intentionally empty - deprecated, moved to router console
+    }
 
 }

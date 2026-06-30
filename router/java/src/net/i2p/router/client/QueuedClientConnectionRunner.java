@@ -68,7 +68,9 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
      *  @since 0.9.7
      */
     @Override
-    public void setClientVersion(String version) {}
+    public void setClientVersion(String version) {
+        // intentionally empty - client version is the core version, not configurable
+    }
 
     /**
      *  The client version.

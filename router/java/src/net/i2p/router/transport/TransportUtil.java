@@ -194,7 +194,7 @@ public abstract class TransportUtil {
     public static AddressType getType(String host) {
         if (host == null)
             return null;
-        if (host.indexOf('.') > 0)
+        if (host.indexOf('.') >= 0)
             return AddressType.IPV4;
         if (host.indexOf(':') >= 0) {
             if (YGGDRASIL_PATTERN.matcher(host).matches())
@@ -276,8 +276,7 @@ public abstract class TransportUtil {
             }
             // test
             if (a0 == 203 && a1 == 0 && (addr[2] & 0xff) == 113) return false;
-            if (a0 >= 224) return false; // no multicast
-            return true; // or at least possible to be true
+            return a0 < 224; // or at least possible to be true
         } else if (addr.length == 16) {
             if (allowIPv6) {
                 int a0 = addr[0] & 0xFF;
@@ -296,9 +295,7 @@ public abstract class TransportUtil {
                     return true;
                 } else if (a0 == 0x26) {
                     // Hamachi IPv6
-                    if (addr[1] == 0x20 && addr[2] == 0x00 && (addr[3] & 0xff) == 0x9b)
-                        return false;
-                    return true;
+                    return addr[1] != 0x20 || addr[2] != 0x00 || (addr[3] & 0xff) != 0x9b;
                 } else {
                     // https://www.iana.org/assignments/ipv6-address-space/ipv6-address-space.xhtml
                     // Global unicast

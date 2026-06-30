@@ -132,7 +132,7 @@ public class RouterTimestamper extends Timestamper {
         if (_disabled || _initialized)
             return;
         _timestamperThread = new I2PThread(this, "Timestamper", _daemon);
-        _timestamperThread.setPriority(I2PThread.MIN_PRIORITY);
+        _timestamperThread.setPriority(Thread.MIN_PRIORITY);
         _isRunning = true;
         _timestamperThread.start();
         _context.addShutdownTask(new Shutdown());

@@ -95,7 +95,9 @@ public class TunnelHistory {
         return (double) agreed / total;
     }
 
-    public void incrementProcessed(int processedSuccessfully, int failedProcessing) {} // old strict speed calculator
+    public void incrementProcessed(int processedSuccessfully, int failedProcessing) {
+        // intentionally empty - legacy method from strict speed calculator, no longer tracked
+    }
 
     public void incrementAgreedTo() {
         _lifetimeAgreedTo.incrementAndGet();

@@ -238,7 +238,7 @@ class JobQueueScaler implements Runnable {
         _isRunning = true;
         _isAlive = true;
         I2PThread scalerThread = new I2PThread(this, "JobQueueScaler", true);
-        scalerThread.setPriority(I2PThread.NORM_PRIORITY);
+        scalerThread.setPriority(Thread.NORM_PRIORITY);
         scalerThread.start();
 
         if (_log.shouldInfo()) {

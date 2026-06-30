@@ -653,7 +653,9 @@ class ClientManager {
 
     /** @deprecated unused */
     @Deprecated
-    public void renderStatusHTML(Writer out) throws IOException {}
+    public void renderStatusHTML(Writer out) throws IOException {
+        // intentionally empty - deprecated, rendering moved to router console
+    }
 
     public void messageReceived(ClientMessage msg) {
         (new HandleJob(msg)).runJob(); // This is fast and non-blocking, run in-line

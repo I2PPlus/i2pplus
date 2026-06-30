@@ -226,6 +226,8 @@ public class LeaseSetKeys {
                     return SET_EC_PQ2;
                   case MLKEM1024_X25519:
                     return SET_EC_PQ3;
+                  default:
+                    break;
                 }
             } else {
                 switch (_decryptionKeyPQ.getType()) {
@@ -235,6 +237,8 @@ public class LeaseSetKeys {
                     return SET_PQ2;
                   case MLKEM1024_X25519:
                     return SET_PQ3;
+                  default:
+                    break;
                 }
             }
         }

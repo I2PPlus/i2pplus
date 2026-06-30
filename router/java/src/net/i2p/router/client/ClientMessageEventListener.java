@@ -203,7 +203,9 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     /**
      *  As of 0.8.7, does nothing. Do not allow a client to set the router's clock.
      */
-    private void handleSetDate(SetDateMessage _message) {}
+    private void handleSetDate(SetDateMessage _message) {
+        // intentionally empty - do not allow clients to set the router clock
+    }
 
     /**
      * Handle a CreateSessionMessage.

@@ -840,7 +840,9 @@ abstract class StoreJob extends JobImpl {
          *
          * @param message the received message (ignored)
          */
-        public void setMessage(I2NPMessage message) {} // ignored, since if the selector matched it, its fine by us
+        public void setMessage(I2NPMessage message) {
+            // intentionally empty - message already verified by selector match
+        }
     }
 
     /**

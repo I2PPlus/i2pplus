@@ -137,7 +137,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static final long LOCAL_LEASESET_REFRESH_INTERVAL = 150*1000L;  // 2.5 minutes
 
     /** Singleton job to refresh client LeaseSets - only one instance exists */
-    private volatile RefreshClientLeaseSetsJob _refreshClientLeaseSetsJob;
+    private volatile RefreshClientLeaseSetsJob _refreshClientLeaseSetsJob; // NOSONAR S1450: used on lines 483-485
 
     /**
      * Map of remote destination Hash to last access time for LeaseSets we're using as a client.
@@ -444,8 +444,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public boolean isClientDb() {
         // This is a null check in disguise, don't use .equals() here.
         // FNDS.MAIN_DBID is always null. and if _dbid is also null it is not a client Db
-        if (_dbid == FloodfillNetworkDatabaseSegmentor.MAIN_DBID) {return false;}
-        return true;
+        return _dbid != FloodfillNetworkDatabaseSegmentor.MAIN_DBID;
     }
 
     @Override
@@ -1298,7 +1297,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 }
                 job.getTiming().setStartAfter(now + PUBLISH_DELAY);
                 if (job instanceof JobImpl) {
-                    ((JobImpl) job).madeReady(now);
+                    job.madeReady(now);
                 }
                 _context.jobQueue().addJobToTop(job);
                 return;
@@ -1773,6 +1772,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
                 case BAD_SIG:
                     // To be investigated
+                    break;
+
+                default:
                     break;
             }
         }

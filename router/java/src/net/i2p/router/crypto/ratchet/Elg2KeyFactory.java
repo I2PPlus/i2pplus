@@ -157,7 +157,9 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
      * Return an unused DH key builder
      * to be put back onto the queue for reuse.
      */
-    public void returnUnused(Elg2KeyPair kp) {}
+    public void returnUnused(Elg2KeyPair kp) {
+        // intentionally empty - unused keys are discarded, not pooled
+    }
 
     /** @return true if successful, false if full */
     private final boolean addKeys(Elg2KeyPair kp) {return _keys.offer(kp);}
