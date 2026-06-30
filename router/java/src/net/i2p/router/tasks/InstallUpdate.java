@@ -96,11 +96,11 @@ public class InstallUpdate {
             File test = new File(context.getBaseDir(), "history.txt");
             if ((test.exists() && !test.canWrite()) || (!context.getBaseDir().canWrite())) {
                 System.out.println("ERROR: No write permissions on " + context.getBaseDir() +
-                                   " to extract software update file");
+                                   " to extract software update file"); // NOSONAR post-update NCDFE risk
                 // carry on
                 return;
             }
-            System.out.println("INFO: Update file exists: " + updateFile + " -> Installing...");
+            System.out.println("INFO: Update file exists: " + updateFile + " -> Installing..."); // NOSONAR post-update NCDFE risk
             // verify the whole thing first
             // we could remember this fails, and not bother restarting, but who cares...
             boolean ok = FileUtil.verifyZip(updateFile);
@@ -124,33 +124,33 @@ public class InstallUpdate {
                 if (ok) {
                     // We do this here so we may delete old jars before we restart
                     deleteListedFiles(context);
-                    System.out.println("INFO: Update installed successfully!");
+                    System.out.println("INFO: Update installed successfully!"); // NOSONAR post-update NCDFE risk
                 } else {
-                    System.out.println("ERROR: Update failed!");
+                    System.out.println("ERROR: Update failed!"); // NOSONAR post-update NCDFE risk
                 }
                 if (!ok) {
                     // we can't leave the file in place or we'll continually restart, so rename it
                     File bad = new File(context.getRouterDir(), "BAD-" + Router.UPDATE_FILE);
                     boolean renamed = updateFile.renameTo(bad);
                     if (renamed) {
-                        System.out.println("Moved update file to " + bad.getAbsolutePath());
+                        System.out.println("Moved update file to " + bad.getAbsolutePath()); // NOSONAR post-update NCDFE risk
                     } else {
-                        System.out.println("Deleting file " + updateFile.getAbsolutePath());
+                        System.out.println("Deleting file " + updateFile.getAbsolutePath()); // NOSONAR post-update NCDFE risk
                         ok = true;  // so it will be deleted
                     }
                 }
                 if (ok) {
                     boolean deleted = updateFile.delete();
                     if (!deleted) {
-                        System.out.println("ERROR: Unable to delete the update file!");
+                        System.out.println("ERROR: Unable to delete the update file!"); // NOSONAR post-update NCDFE risk
                         updateFile.deleteOnExit();
                     }
                 }
                 // exit whether ok or not
                 if (context.hasWrapper())
-                    System.out.println("INFO: Restarting after update...");
+                    System.out.println("INFO: Restarting after update..."); // NOSONAR post-update NCDFE risk
                 else
-                    System.out.println("WARNING: Exiting after update (no service manager) -> Restart I2P+ manually!");
+                    System.out.println("WARNING: Exiting after update (no service manager) -> Restart I2P+ manually!"); // NOSONAR post-update NCDFE risk
             } catch (Throwable t) {
                 // hide the NCDFE
                 // hopefully the update file got deleted or we will loop
@@ -203,8 +203,8 @@ public class InstallUpdate {
                     if (success) {
                         boolean success2 = jcpuidLib.delete();
                         if (success2) {
-                            System.out.println("New jbigi.jar detected -> Moved jcpuid library to " + path + ".bak");
-                            System.out.println("Check logs for successful installation of new library");
+                            System.out.println("New jbigi.jar detected -> Moved jcpuid library to " + path + ".bak"); // NOSONAR post-update
+                            System.out.println("Check logs for successful installation of new library"); // NOSONAR post-update
                         }
                     }
                 }
@@ -218,8 +218,8 @@ public class InstallUpdate {
                     if (success) {
                         boolean success2 = jbigiLib.delete();
                         if (success2) {
-                            System.out.println("New jbigi.jar detected -> Moved jbigi library to " + path + ".bak");
-                            System.out.println("Check logs for successful installation of new library");
+                            System.out.println("New jbigi.jar detected -> Moved jbigi library to " + path + ".bak"); // NOSONAR post-update
+                            System.out.println("Check logs for successful installation of new library"); // NOSONAR post-update
                         }
                     }
                 }
@@ -248,7 +248,7 @@ public class InstallUpdate {
                 String fl = line.trim();
                 if (fl.length() == 0 || fl.startsWith("#")) continue;
                 if (fl.contains("..")) continue;
-                System.out.println("INFO: Processing delete list entry: " + fl);
+                System.out.println("INFO: Processing delete list entry: " + fl); // NOSONAR post-update NCDFE risk
                 File df = new File(context.getBaseDir(), fl);
                 if (df.exists()) {
                     boolean deleted = false;
@@ -258,7 +258,7 @@ public class InstallUpdate {
                         deleted = deleteDir(df);
                     }
                     if (deleted)
-                        System.out.println("INFO: " + (df.isDirectory() ? "Directory [" : "File [") + fl + "] deleted");
+                        System.out.println("INFO: " + (df.isDirectory() ? "Directory [" : "File [") + fl + "] deleted"); // NOSONAR post-update NCDFE risk
                 }
             }
         } catch (IOException ioe) { /* ignored */ }

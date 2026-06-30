@@ -276,14 +276,14 @@ public class NtpClient {
         if (args.length <= 0) {
             args = new String[] { "pool.ntp.org" };
         }
-        System.out.println("Querying " + Arrays.toString(args));
+        System.out.println("Querying " + Arrays.toString(args)); // NOSONAR S106 CLI output
         Log log = new Log(NtpClient.class);
         try {
             long[] rv = currentTimeAndStratum(args, DEFAULT_TIMEOUT, ipv6, log);
             System.out.println("Current time: " + new java.util.Date(rv[0]) + " (stratum " + rv[1] +
-                               ") offset " + (rv[0] - System.currentTimeMillis()) + "ms");
+                               ") offset " + (rv[0] - System.currentTimeMillis()) + "ms"); // NOSONAR S106 CLI output
         } catch (IllegalArgumentException iae) {
-            System.out.println("Failed: " + iae.getMessage());
+            System.out.println("Failed: " + iae.getMessage()); // NOSONAR S106 CLI output
         }
     }
 

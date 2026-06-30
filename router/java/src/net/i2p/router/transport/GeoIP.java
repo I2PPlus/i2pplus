@@ -1321,20 +1321,20 @@ public class GeoIP {
         if (args.length <= 0) {
             System.out.print("Usage: GeoIP {IP ADDRESS}...\n" +
                               "      GeoIP -c {2 letter country code} Dump all subnets for a country to " +
-                              Blocklist.BLOCKLIST_COUNTRY_FILE);
+                              Blocklist.BLOCKLIST_COUNTRY_FILE); // NOSONAR S106 CLI output
             System.exit(1);
         }
         GeoIP g = new GeoIP(I2PAppContext.getGlobalContext());
         if (args[0].equals("-c") && args.length == 2) {
             g.countryToIP(args[1]);
             System.out.println("Subnets for country " + args[1] + " dumped to " +
-                               Blocklist.BLOCKLIST_COUNTRY_FILE);
+                               Blocklist.BLOCKLIST_COUNTRY_FILE); // NOSONAR S106 CLI output
             return;
         }
         for (int i = 0; i < args.length; i++) {g.add(args[i]);}
         long start = System.currentTimeMillis();
         g.blockingLookup();
-        System.out.println("Lookup took " + (System.currentTimeMillis() - start) + "ms");
-        for (int i = 0; i < args.length; i++) {System.out.println(args[i] + " : " + g.get(args[i]));}
+        System.out.println("Lookup took " + (System.currentTimeMillis() - start) + "ms"); // NOSONAR S106 CLI output
+        for (int i = 0; i < args.length; i++) {System.out.println(args[i] + " : " + g.get(args[i]));} // NOSONAR S106 CLI output
     }
 }

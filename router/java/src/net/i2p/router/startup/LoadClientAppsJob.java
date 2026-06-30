@@ -39,7 +39,6 @@ public class LoadClientAppsJob extends JobImpl {
         List<ClientAppConfig> apps = ClientAppConfig.getClientApps(ctx);
         if (apps.isEmpty()) {
             _log.logAlways(Log.WARN, "Warning - No client apps or router console configured - we are just a router");
-            System.err.println("Warning - No client apps or router console configured - we are just a router");
             return;
         }
         for(int i = 0; i < apps.size(); i++) {
@@ -51,7 +50,6 @@ public class LoadClientAppsJob extends JobImpl {
                                ",\n change the line \"clientApp." + i + ".startOnLoad=false\"" +
                                " to \"clientApp." + i + ".startOnLoad=true\",\n and restart.";
                     _log.logAlways(Log.WARN, s);
-                    System.err.println(s);
                 }
                 continue;
             }

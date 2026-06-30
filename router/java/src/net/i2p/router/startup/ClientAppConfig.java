@@ -159,7 +159,7 @@ public class ClientAppConfig {
             }
         } catch (IOException ioe) {
             ctx.logManager().getLog(ClientAppConfig.class).error("Error loading the client app properties from " + cf, ioe);
-            System.out.println("Error loading the client app properties from " + cf + ' ' + ioe);
+            System.out.println("Error loading the client app properties from " + cf + ' ' + ioe); // NOSONAR
         }
         // clients.config.d
         if (dir.isDirectory()) {
@@ -178,11 +178,11 @@ public class ClientAppConfig {
                             rv.addAll(cacs);
                         } else {
                             ctx.logManager().getLog(ClientAppConfig.class).error("Error loading the client app properties from " + f);
-                            System.out.println("Error loading the client app properties from " + f);
+                            System.out.println("Error loading the client app properties from " + f); // NOSONAR
                         }
                     } catch (IOException ioe) {
                         ctx.logManager().getLog(ClientAppConfig.class).error("Error loading the client app properties from " + f, ioe);
-                        System.out.println("Error loading the client app properties from " + f + ' ' + ioe);
+                        System.out.println("Error loading the client app properties from " + f + ' ' + ioe); // NOSONAR
                     }
                 }
                 // Jetty id to refid migration
@@ -240,7 +240,7 @@ public class ClientAppConfig {
                 writeClientAppConfig(ctx, cac);
             } catch (IOException ioe) {
                 ctx.logManager().getLog(ClientAppConfig.class).error("Error migrating the client app properties to " + f, ioe);
-                System.out.println("Error migrating the client app properties to " + f + ' ' + ioe);
+                System.out.println("Error migrating the client app properties to " + f + ' ' + ioe); // NOSONAR
                 cac.configFile = from;
                 ok = false;
             }

@@ -1574,7 +1574,7 @@ public class ProfileOrganizer {
 
     public static void main(String[] args) {
         if (args.length <= 0) {
-            System.err.println("Usage: profileorganizer file.txt.gz [file2.txt.gz] ...");
+            System.err.println("Usage: profileorganizer file.txt.gz [file2.txt.gz] ..."); // NOSONAR CLI tool
             System.exit(1);
         }
 
@@ -1586,7 +1586,7 @@ public class ProfileOrganizer {
         for (int i = 0; i < args.length; i++) {
             PeerProfile profile = helper.readProfile(new java.io.File(args[i]), 0);
             if (profile == null) {
-                System.err.println("Could not load profile " + args[i]);
+                System.err.println("Could not load profile " + args[i]); // NOSONAR CLI tool
                 continue;
             }
             organizer.addProfile(profile);

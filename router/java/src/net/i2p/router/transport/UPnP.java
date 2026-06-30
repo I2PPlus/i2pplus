@@ -2028,22 +2028,22 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		long start = System.currentTimeMillis();
 		cp.start();
 		long s2 = System.currentTimeMillis();
-		System.err.println("Start took " + (s2 - start) + "ms");
-		System.err.println("Searching for UPnP devices");
+		System.err.println("Start took " + (s2 - start) + "ms"); // NOSONAR S106 CLI output
+		System.err.println("Searching for UPnP devices"); // NOSONAR S106 CLI output
 		start = System.currentTimeMillis();
 		cp.search();
 		s2 = System.currentTimeMillis();
-		System.err.println("Search kickoff took " + (s2 - start) + "ms");
-		System.err.println("Waiting 10 seconds for responses");
+		System.err.println("Search kickoff took " + (s2 - start) + "ms"); // NOSONAR S106 CLI output
+		System.err.println("Waiting 10 seconds for responses"); // NOSONAR S106 CLI output
 		Thread.sleep(10000);
 
 			DeviceList list = cp.getDeviceList();
 			if (list.isEmpty()) {
-				System.err.println("No UPnP devices found");
+				System.err.println("No UPnP devices found"); // NOSONAR S106 CLI output
 				System.exit(1);
 			}
-			System.err.println("Found " + list.size() + " devices.");
-			System.err.println("Redirect the following output to an html file and view in a browser.");
+			System.err.println("Found " + list.size() + " devices."); // NOSONAR S106 CLI output
+			System.err.println("Redirect the following output to an html file and view in a browser."); // NOSONAR S106 CLI output
 			StringBuilder sb = new StringBuilder();
 			Iterator<Device> it = list.iterator();
 			int i = 0;
@@ -2051,13 +2051,13 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 				Device device = it.next();
 				cp.listSubDev(device.toString(), device, sb);
 				System.out.println("<h3>Device " + (++i) +
-				                   ": " + DataHelper.escapeHTML(device.getFriendlyName()) + "</h3>");
-				System.out.println("<p>UDN: " + DataHelper.escapeHTML(device.getUDN()));
-				System.out.println("<br>IP: " + getIP(device));
+				                   ": " + DataHelper.escapeHTML(device.getFriendlyName()) + "</h3>"); // NOSONAR S106 CLI output
+				System.out.println("<p>UDN: " + DataHelper.escapeHTML(device.getUDN())); // NOSONAR S106 CLI output
+				System.out.println("<br>IP: " + getIP(device)); // NOSONAR S106 CLI output
 				String loc = device.getLocation();
 				if (loc != null && loc.length() > 0)
-					System.out.println("<br>URL: <a href=\"" + loc + "\">" + loc + "</a>");
-				System.out.println(sb.toString());
+					System.out.println("<br>URL: <a href=\"" + loc + "\">" + loc + "</a>"); // NOSONAR S106 CLI output
+				System.out.println(sb.toString()); // NOSONAR S106 CLI output
 				sb.setLength(0);
 			}
 

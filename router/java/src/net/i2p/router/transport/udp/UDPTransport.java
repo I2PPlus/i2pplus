@@ -1613,7 +1613,6 @@ public class UDPTransport extends TransportImpl {
                     _context.getBooleanProperty(PROP_LAPTOP_MODE) &&
                     now - lastChanged > 10*60*1000 &&
                     _context.router().getUptime() < 10*60*1000) {
-                    System.out.println("WARN: IP changed; restarting with a new identity and port.");
                     _log.logAlways(Log.WARN, "IP changed; restarting with a new identity and port.");
                     // this removes the UDP port config
                     _context.router().killKeys();

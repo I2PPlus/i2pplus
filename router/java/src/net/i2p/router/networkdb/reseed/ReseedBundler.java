@@ -146,13 +146,13 @@ public class ReseedBundler {
             }
         } catch (DataFormatException dfe) {
             if (!rv.delete())
-                System.err.println("Failed to delete temp zip file " + rv.getName());
+                _context.logManager().getLog(ReseedBundler.class).warn("Failed to delete temp zip file " + rv.getName());
             IOException ioe = new IOException(dfe.getMessage());
             ioe.initCause(dfe);
             throw ioe;
         } catch (IOException ioe) {
             if (!rv.delete())
-                System.err.println("Failed to delete temp zip file " + rv.getName());
+                _context.logManager().getLog(ReseedBundler.class).warn("Failed to delete temp zip file " + rv.getName());
             throw ioe;
         }
         return rv;

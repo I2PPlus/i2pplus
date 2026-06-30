@@ -205,19 +205,19 @@ public class MTU {
 
     public static void main(String[] args) {
         if (args.length > 0) {
-            System.out.println("Cmd line interfaces:");
+            System.out.println("Cmd line interfaces:"); // NOSONAR S106 CLI output
             for (int i = 0; i < args.length; i++) {
                 try {
                     InetAddress test = InetAddress.getByName(args[i]);
                     System.out.println("I2P MTU of " + args[i] + " is " + getMTU(test, false) +
-                                       "; SSU2 MTU is " + getMTU(test, true));
+                                       "; SSU2 MTU is " + getMTU(test, true)); // NOSONAR S106 CLI output
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
 
-        System.out.println("All interfaces:");
+        System.out.println("All interfaces:"); // NOSONAR S106 CLI output
         try {
             Enumeration<NetworkInterface> ifcs = NetworkInterface.getNetworkInterfaces();
             if (ifcs != null) {
@@ -247,11 +247,11 @@ public class MTU {
                     Integer mtu = e.getValue();
                     System.out.println("MTU for " + addr.getHostAddress() + " is " + mtu +
                                            "; I2P MTU is " + getMTU(addr, false) +
-                                           "; SSU2 MTU is " + getMTU(addr, true));
+                                           "; SSU2 MTU is " + getMTU(addr, true)); // NOSONAR S106 CLI output
                 }
             }
         } catch (SocketException se) {
-             System.out.println("no interfaces");
+             System.out.println("no interfaces"); // NOSONAR S106 CLI output
         }
     }
 

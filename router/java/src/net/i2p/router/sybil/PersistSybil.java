@@ -244,10 +244,10 @@ public class PersistSybil {
             if (deleted) {
                 System.out.println("Successfully deleted sybil blocklist file: " + blocklistFile);
             } else {
-                System.err.println("Failed to delete sybil blocklist file:  " + blocklistFile);
+                _log.warn("Failed to delete sybil blocklist file:  " + blocklistFile);
             }
         } else {
-            System.err.println("Cannot delete non-existent sybil blocklist file: " + blocklistFile);
+            _log.warn("Cannot delete non-existent sybil blocklist file: " + blocklistFile);
         }
     }
 

@@ -126,7 +126,6 @@ class BloomFilterIVValidator implements IVValidator {
         msg += " to at least " + (recMaxMem * 11 / 10 / (1024*1024)) + " (MB)" +
                " if the actual share bandwidth exceeds " +
                DataHelper.formatSize(threshKBps * 1024L) + "Bps.";
-        System.out.println("WARN: " + msg);
         _context.logManager().getLog(BloomFilterIVValidator.class).logAlways(Log.WARN, msg);
     }
 }

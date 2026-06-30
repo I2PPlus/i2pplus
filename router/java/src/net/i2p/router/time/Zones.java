@@ -116,7 +116,7 @@ class Zones {
                 } catch (IndexOutOfBoundsException ioobe) { /* ignored */ }
             }
         } catch (IOException ioe) {
-            System.out.println("Error reading the continent file " + geoFile.getAbsolutePath());
+            System.out.println("Error reading the continent file " + geoFile.getAbsolutePath()); // NOSONAR S106 _log disabled to prevent stack overflow
         }
     }
 

@@ -117,7 +117,7 @@ public class RouterContext extends I2PAppContext {
         // Sorry, this breaks some main() unit tests out there.
         //initAll();
         if (!_contexts.isEmpty())
-            System.err.println("Warning - More than one router in this JVM");
+            logManager().getLog(RouterContext.class).warn("Warning - More than one router in this JVM");
         _finalShutdownTasks = new CopyOnWriteArraySet<>();
         if (doInit) {
             // Bad practice, adding this to static List in constructor.

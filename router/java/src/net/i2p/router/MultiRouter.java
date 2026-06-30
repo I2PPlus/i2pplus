@@ -251,7 +251,7 @@ public class MultiRouter {
     }
 
     private static void usage() {
-        System.err.println("Usage: MultiRouter nbr_routers");
-        System.err.println("       Where nbr_routers > 0");
+        System.err.println("Usage: MultiRouter nbr_routers"); // NOSONAR CLI tool
+        System.err.println("       Where nbr_routers > 0"); // NOSONAR CLI tool
     }
 }

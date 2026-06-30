@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.List;
 import net.i2p.router.RouterContext;
 import net.i2p.util.FileUtil;
+import net.i2p.util.Log;
 import net.i2p.util.VersionComparator;
 
 /**
@@ -66,6 +67,7 @@ abstract class MigrateJetty {
      *  migrate it to the new Jetty class, and update the Jetty config files.
      */
     public static void migrate(RouterContext ctx, List<ClientAppConfig> apps) {
+        Log log = ctx.logManager().getLog(MigrateJetty.class);
         if (ctx.getBooleanProperty(PROP_JETTY9_MIGRATED_2)) {return;}
         String installed = ctx.getProperty("router.firstVersion");
         if (installed != null && VersionComparator.comp(installed, "2.9.0") >= 0) {
@@ -105,7 +107,7 @@ abstract class MigrateJetty {
                 }
             }
             if (!hasLatestJetty()) {
-                System.err.println("WARNING: Jetty 7 unavailable, cannot migrate " + client);
+                log.warn("WARNING: Jetty 7 unavailable, cannot migrate " + client);
                 continue;
             }
             if (app.args == null)
@@ -116,12 +118,12 @@ abstract class MigrateJetty {
                 continue;
             if (!migrated1) {
                 // migration from 0.9.29 or earlier (2017-02-27) straight to 2.9.0 or later
-                System.err.println("WARNING: Unable to migrate " + client +
+                log.warn("WARNING: Unable to migrate " + client +
                                    ", delete client or uninstall and reinstall I2P+");
                 app.disabled = true;
                 continue;
             }
-            System.err.println("Migrating " + client);
+            log.warn("Migrating " + client);
             // migration 2 below here
             // Note that JettyStart automatically copies and adds jetty-gzip.xml
             // to the command line, not in the arg list here,
@@ -133,12 +135,12 @@ abstract class MigrateJetty {
                 if (!xmlFile.isAbsolute())
                     xmlFile = new File(ctx.getAppDir(), xml);
                 if (!xmlFile.exists()) {
-                    System.err.println("WARNING: XML file " + xmlFile + " not found, cannot migrate " + client);
+                    log.warn("WARNING: XML file " + xmlFile + " not found, cannot migrate " + client);
                     continue;
                 }
                 boolean ok = backupFile(xmlFile, backupSuffix);
                 if (!ok) {
-                    System.err.println("WARNING: Failed to backup up XML file " + xmlFile + ", cannot migrate " + client);
+                    log.warn("WARNING: Failed to backup up XML file " + xmlFile + ", cannot migrate " + client);
                     continue;
                 }
                 File tmpFile = new File(xmlFile + ".tmp");
@@ -150,13 +152,13 @@ abstract class MigrateJetty {
                     if (!ok)
                         throw new IOException();
                 } catch (IOException ioe) {
-                    System.err.println("WARNING: Failed to migrate XML file " + xmlFile +
+                    log.warn("WARNING: Failed to migrate XML file " + xmlFile +
                                        ", cannot migrate " + client);
                     continue;
                 }
                 migration2success = true;
             }
-            System.err.println("Migrated " + client);
+            log.warn("Migrated " + client);
         }
         if (migration2success)
             ctx.router().saveConfig(PROP_JETTY9_MIGRATED_2, "true");
@@ -196,9 +198,9 @@ abstract class MigrateJetty {
             to = new File(to.getAbsolutePath() + "." + System.currentTimeMillis());
         boolean rv = WorkingDir.copyFile(from, to);
         if (rv)
-            System.err.println("Backed up file " + from + " to " + to);
+            System.err.println("Backed up file " + from + " to " + to); // NOSONAR migration code
         else
-            System.err.println("WARNING: Failed to back up file " + from + " to " + to);
+            System.err.println("WARNING: Failed to back up file " + from + " to " + to); // NOSONAR migration code
         return rv;
     }
 

@@ -91,7 +91,7 @@ public class RouterTimestamper extends Timestamper {
         if (_disabled) {
             _initialized = true;
             _zones = null;
-            System.out.println("Warning: NTP is disabled");
+            System.out.println("Warning: NTP is disabled"); // NOSONAR S106 _log not yet available
             return;
         }
         if (lsnr != null)
@@ -232,7 +232,6 @@ public class RouterTimestamper extends Timestamper {
                         String msg = "Unable to reach any of the NTP servers " + all +
                                      " - network disconnected? Or set time.sntpServerList=myserver1.com,myserver2.com in advanced configuration.";
                         _log.logAlways(Log.WARN, msg);
-                        System.out.println("Warning: " + msg);
                     } else if (_log.shouldDebug()) {
                         _log.debug("NTP initialization successful");
                         int i = 1;

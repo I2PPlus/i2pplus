@@ -579,12 +579,12 @@ public class FamilyKeyCrypto {
     /** @since 0.9.36 */
     public static void main(String[] args) {
         if (args.length != 2) {
-            System.err.println("Usage: FamilyKeyCrypto keystore.ks familyname");
+            System.err.println("Usage: FamilyKeyCrypto keystore.ks familyname"); // NOSONAR CLI tool
             System.exit(1);
         }
         File ks = new File(args[0]);
         if (ks.exists()) {
-            System.err.println("Keystore already exists: " + ks);
+            System.err.println("Keystore already exists: " + ks); // NOSONAR CLI tool
             System.exit(1);
         }
         String fname = args[1];
@@ -601,7 +601,7 @@ public class FamilyKeyCrypto {
                                PROP_KEYSTORE_PASSWORD + '=' + KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD + '\n' +
                                PROP_KEY_PASSWORD + '=' + keyPassword);
         } catch (Exception e) {
-            System.err.println("Failed");
+            System.err.println("Failed"); // NOSONAR CLI tool
             e.printStackTrace();
             System.exit(1);
         }

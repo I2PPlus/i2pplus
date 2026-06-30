@@ -517,7 +517,6 @@ class BuildExecutor implements Runnable {
                        "\nUpdate to Java 8 or contact packager." +
                        "\nStop I2P+ now, it will not build tunnels!";
             _log.log(Log.CRIT, s, nsme);
-            System.out.println(s);
             throw nsme;
         } finally {
             _isRunning = false;

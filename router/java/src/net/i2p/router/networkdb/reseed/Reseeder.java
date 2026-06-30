@@ -230,7 +230,7 @@ public class Reseeder {
             if (fetched <= 0) {throw new IOException("No seeds extracted");}
             if (errors <= 0) {_checker.setStatus(_t("Imported {0} router infos.", fetched));}
             else {_checker.setStatus(_t("Imported {0} router infos ({1} errors).", fetched, errors));}
-            System.err.println("Reseed acquired " + fetched + " router infos from file with " + errors + " errors");
+            _log.warn("Reseed acquired " + fetched + " router infos from file with " + errors + " errors");
             if (fetched > 0) {_context.router().eventLog().addEvent(EventLog.RESEED, "imported " + fetched + " router infos from file");}
             return fetched;
         } finally {
@@ -335,7 +335,7 @@ public class Reseeder {
             _isRunning = true;
             _checker.setError("");
             _checker.setStatus(_t("Initiating Reseed") + "&hellip;");
-            System.out.println("Starting Reseed process...");
+            _log.info("Starting Reseed process...");
             int total;
             if (_url != null) {
                 String lc = _url.getPath().toLowerCase(Locale.US);
@@ -351,31 +351,31 @@ public class Reseeder {
             if (total >= 20) {
                 String s = ngettext("Acquired {0} router info from reseed hosts",
                                     "Acquired {0} router infos from reseed hosts", total);
-                System.out.println(s + getDisplayString(_url));
+                _log.info(s + getDisplayString(_url));
                 _checker.setStatus(s);
                 _checker.setError("");
             } else if (total > 0) {
                 String s = ngettext("Acquired only 1 router info from reseed hosts",
                                     "Acquired only {0} router infos from reseed hosts", total);
-                System.out.println(s + getDisplayString(_url));
+                _log.warn(s + getDisplayString(_url));
                 _checker.setError(s);
                 _checker.setStatus("");
             } else {
                 if (total == 0 && !_context.router().gracefulShutdownInProgress()) {
-                    System.out.println("Reseed failed " + getDisplayString(_url) + " -> Check network connection!");
-                    System.out.println("Ensure that nothing blocks outbound HTTP or HTTPS, check the logs, " +
+                    _log.warn("Reseed failed " + getDisplayString(_url) + " -> Check network connection!");
+                    _log.warn("Ensure that nothing blocks outbound HTTP or HTTPS, check the logs, " +
                                        "and if nothing helps, read the FAQ about reseeding manually.");
                     if (_url == null || "https".equals(_url.getScheme())) {
                         if (_sproxyHost != null && _sproxyPort > 0)
-                            System.out.println("Check current proxy setting! Type: " + getDisplayString(_sproxyType) +
+                            _log.warn("Check current proxy setting! Type: " + getDisplayString(_sproxyType) +
                                                " Host: " + _sproxyHost + " Port: " + _sproxyPort);
                         else
-                            System.out.println("Consider enabling a proxy for https on the reseed configuration page");
+                            _log.warn("Consider enabling a proxy for https on the reseed configuration page");
                     } else {
                         if (_proxyHost != null && _proxyPort > 0)
-                            System.out.println("Check HTTP proxy setting - host: " + _proxyHost + " port: " + _proxyPort);
+                            _log.warn("Check HTTP proxy setting - host: " + _proxyHost + " port: " + _proxyPort);
                         else
-                            System.out.println("Consider enabling an HTTP proxy on the reseed configuration page");
+                            _log.warn("Consider enabling an HTTP proxy on the reseed configuration page");
                     }
                 } // else < 0, no valid URLs
                 String old = _checker.getError();
@@ -490,7 +490,7 @@ public class Reseeder {
         private int reseed(boolean echoStatus) {
             List<URI> urlList = buildUrlList();
             if (urlList.isEmpty()) {
-                System.out.println("No valid reseed URLs");
+                _log.warn("No valid reseed URLs");
                 _checker.setError("No valid reseed URLs");
                 return -1;
             }
@@ -617,7 +617,7 @@ public class Reseeder {
 
             for (int i = 0; i < urlList.size() && _isRunning; i++) {
                 if (_context.router().gracefulShutdownInProgress()) {
-                    System.out.println("Reseed aborted, shutdown in progress...");
+                    _log.info("Reseed aborted, shutdown in progress...");
                     return total;
                 }
                 URI url = urlList.get(i);
@@ -665,11 +665,11 @@ public class Reseeder {
             try {
                 final long timeLimit = System.currentTimeMillis() + MAX_TIME_PER_HOST;
                 _checker.setStatus(_t("Contacting reseed host") + ":<br>" + trimmed);
-                System.err.println("Reseeding from " + display);
+                _log.info("Reseeding from " + display);
 
                 byte[] contentRaw = readURL(seedURL);
                 if (contentRaw == null) {
-                    System.err.println("No RouterInfos received from: " + trimmed);
+                    _log.warn("No RouterInfos received from: " + trimmed);
                     return 0;
                 }
 
@@ -706,7 +706,7 @@ public class Reseeder {
                     if (_log.shouldWarn()) {
                         _log.warn("Read " + contentRaw.length + " bytes from reseed server " + trimmed + " but found no RouterInfo URLs");
                     }
-                    System.err.println("No RouterInfos received from: " + trimmed);
+                    _log.warn("No RouterInfos received from: " + trimmed);
                     return 0;
                 }
 
@@ -725,8 +725,8 @@ public class Reseeder {
                         }
                         fetched++;
                         if (echoStatus) {
-                            System.out.print(".");
-                            if (fetched % 60 == 0) System.out.println();
+                            _log.debug(".");
+                            if (fetched % 60 == 0) _log.debug("");
                         }
                     } catch (RuntimeException e) {
                         if (_log.shouldInfo()) _log.info("Failed fetch", e);
@@ -735,13 +735,13 @@ public class Reseeder {
                     if (errors >= 50 || (errors >= 10 && fetched <= 1)) break;
                 }
 
-                System.err.println("Reseed acquired " + fetched + " router infos with " + errors + " errors [" + trimmed + "]");
+                _log.warn("Reseed acquired " + fetched + " router infos with " + errors + " errors [" + trimmed + "]");
                 if (fetched > 0) _context.netDb().rescan();
                 return fetched;
 
             } catch (Throwable t) {
                 if (_log.shouldWarn()) _log.warn("Error reseeding -> " + t.getMessage());
-                System.err.println("No router infos " + display);
+                _log.warn("No router infos " + display);
                 return 0;
             }
         }
@@ -812,7 +812,7 @@ public class Reseeder {
                               .replace("from ","").replace("netid=2", "").replaceAll(PAREN_PATTERN.pattern(), "").replace("?", "");
             try {
                 _checker.setStatus(_t("Contacting reseed host") + ":<br>" + trimmed);
-                System.err.println("Reseeding " + s);
+                _log.info("Reseeding " + s);
                 // don't use context time, as we may be step-changing it
                 // from the server header
                 long startTime = System.currentTimeMillis();
@@ -832,7 +832,6 @@ public class Reseeder {
                 fetched = stats[0];
                 errors = stats[1];
             } catch (Throwable t) {
-                System.err.println("Error reseeding " + trimmed + " -> " + t.getMessage());
                 _log.error("Error reseeding " + trimmed + " -> " + t.getMessage());
                 errors++;
             } finally {
@@ -840,11 +839,11 @@ public class Reseeder {
             }
             if (errors <= 0) {
                 _checker.setStatus(_t("Acquired {0} router infos from reseed hosts", fetched));
-                System.out.println("Acquired " + fetched + " router infos from " + trimmed);
+                _log.info("Acquired " + fetched + " router infos from " + trimmed);
 
             } else {
                 _checker.setStatus(_t("Acquired {0} router infos from reseed hosts ({1} errors)", fetched, errors));
-                System.err.println("Acquired " + fetched + " router infos from " + trimmed + "-> " + errors + (errors > 1 ? " errors" : " error"));
+                _log.warn("Acquired " + fetched + " router infos from " + trimmed + "-> " + errors + (errors > 1 ? " errors" : " error"));
             }
             return fetched;
         }
@@ -882,7 +881,6 @@ public class Reseeder {
                 errors = stats[1];
             } catch (Throwable t) {
                 String msg = "Error with downloaded reseed bundle -> " + t.getMessage();
-                System.err.println(msg);
                 _log.error(msg);
                 errors++;
             } finally {
@@ -1216,7 +1214,7 @@ public class Reseeder {
      */
     public static void main(String[] args) throws Exception {
         if (args.length == 1 && args[0].equals("help")) {
-            System.out.println("Usage: reseeder [-6] [https://hostname/ ...]");
+            System.out.println("Usage: reseeder [-6] [https://hostname/ ...]"); // NOSONAR S106 CLI output
             System.exit(0);
         }
         boolean ipV6 = false;
@@ -1226,7 +1224,7 @@ public class Reseeder {
         }
         File f = new File("certificates");
         if (!f.exists()) {
-            System.out.println("Must be run from $I2P or have symlink to $I2P/certificates in this directory");
+            System.out.println("Must be run from $I2P or have symlink to $I2P/certificates in this directory"); // NOSONAR S106 CLI output
             System.exit(0);
         }
         String[] urls = (args.length > 0) ? args : DataHelper.split(DEFAULT_SSL_SEED_URL, ",");
@@ -1234,15 +1232,15 @@ public class Reseeder {
         int pass = 0, warn = 0, fail = 0;
         SSLEepGet.SSLState sslState = null;
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        System.out.println("Initiating reseed hosts test...\n");
+        System.out.println("Initiating reseed hosts test...\n"); // NOSONAR S106 CLI output
         for (String url : urls) {
             url += SU3_FILENAME + NETID_PARAM + '2';
             URI uri = new URI(url);
             String host = uri.getHost();
-            System.out.println("Host:     " + host);
+            System.out.println("Host:     " + host); // NOSONAR S106 CLI output
             File su3 = new File(host + ".su3");
             if (!su3.delete())
-                System.err.println("Failed to delete " + su3.getName());
+                System.err.println("Failed to delete " + su3.getName()); // NOSONAR S106 CLI output
             try {
                 SSLEepGet get;
                 if (sslState == null) {
@@ -1258,7 +1256,7 @@ public class Reseeder {
                         SU3File su3f = new SU3File(su3);
                         File zip = new File(host + ".zip");
                         if (!zip.delete())
-                            System.err.println("Failed to delete " + zip.getName());
+                            System.err.println("Failed to delete " + zip.getName()); // NOSONAR S106 CLI output
                         su3f.verifyAndMigrate(zip);
                         SU3File.main(new String[] {"showversion", su3.getPath()});
                         String version = su3f.getVersionString();
@@ -1275,7 +1273,7 @@ public class Reseeder {
                             InputStream in = zipf.getInputStream(entry);
                             try {r.readBytes(in);}
                             catch (DataFormatException dfe) {
-                                System.out.println("Bad entry " + entry.getName() + ": " + dfe);
+                                System.out.println("Bad entry " + entry.getName() + ": " + dfe); // NOSONAR S106 CLI output
                                 bad++;
                                 continue;
                             } finally {in.close();}
@@ -1285,49 +1283,49 @@ public class Reseeder {
                             if (r.getCapabilities().indexOf('U') >= 0) {unreach++;}
                         }
                         zipf.close();
-                        if (bad > 0) {System.out.println(bad + " bad entries");}
+                        if (bad > 0) {System.out.println(bad + " bad entries");} // NOSONAR S106 CLI output
                         if (old > 0) {
-                            System.out.println("Failure:  " + old + " old RouterInfos returned");
+                            System.out.println("Failure:  " + old + " old RouterInfos returned"); // NOSONAR S106 CLI output
                             fail++;
                         } else if (ri >= 50) {
-                            System.out.println("Success:  " + ri + " RouterInfos returned");
+                            System.out.println("Success:  " + ri + " RouterInfos returned"); // NOSONAR S106 CLI output
                             pass++;
                             long time = System.currentTimeMillis() - start;
                             if (time > 30*1000L) {
-                                System.out.println("Test very slow for " + host + ", took " + DataHelper.formatDuration(time));
+                                System.out.println("Test very slow for " + host + ", took " + DataHelper.formatDuration(time)); // NOSONAR S106 CLI output
                                 warn++;
                             }
                         } else {
-                            System.out.println("Failure:  Only " + ri + " RouterInfos returned (less than 50)");
+                            System.out.println("Failure:  Only " + ri + " RouterInfos returned (less than 50)"); // NOSONAR S106 CLI output
                             fail++;
                         }
-                        System.out.println("Router infos included " + oldver + " with versions older than " + MIN_VERSION + " and " + unreach + " unreachable");
+                        System.out.println("Router infos included " + oldver + " with versions older than " + MIN_VERSION + " and " + unreach + " unreachable"); // NOSONAR S106 CLI output
                     } else {
-                        System.out.println("Failure:  Status code " + rc);
+                        System.out.println("Failure:  Status code " + rc); // NOSONAR S106 CLI output
                         if (!su3.delete())
-                            System.err.println("Failed to delete " + su3.getName());
+                System.err.println("Failed to delete " + su3.getName()); // NOSONAR S106 CLI output
                         fail++;
                     }
                 } else {
                     int rc = get.getStatusCode();
-                    System.out.println("Failure:  Status code " + rc);
+                    System.out.println("Failure:  Status code " + rc); // NOSONAR S106 CLI output
                     if (!su3.delete())
-                        System.err.println("Failed to delete " + su3.getName());
+                        System.err.println("Failed to delete " + su3.getName()); // NOSONAR S106 CLI output
                     fail++;
                 }
             } catch (Exception ioe) {
-                System.out.println("Failure:  " + ioe.getMessage() + "\n");
+                System.out.println("Failure:  " + ioe.getMessage() + "\n"); // NOSONAR S106 CLI output
                 if (su3.exists()) {
                     try {SU3File.main(new String[] {"showversion", su3.getPath()});}
                     catch (Exception e) { /* ignored */ }
                     if (!su3.delete())
-                        System.err.println("Failed to delete " + su3.getName());
+                        System.err.println("Failed to delete " + su3.getName()); // NOSONAR S106 CLI output
                 }
                 fail++;
             }
-            System.out.println();
+            System.out.println(); // NOSONAR S106 CLI output
         }
-        System.out.println("Test complete: " + (pass + fail) + " reseed hosts tested - " + pass + " passed, " + warn + " slow, " + fail + " failed");
+        System.out.println("Test complete: " + (pass + fail) + " reseed hosts tested - " + pass + " passed, " + warn + " slow, " + fail + " failed"); // NOSONAR S106 CLI output
         if (fail > 0) {System.exit(0);}
     }
 

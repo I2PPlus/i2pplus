@@ -187,17 +187,17 @@ public class RandomIterator<E> implements Iterator<E> {
      *  @since 0.9.2
      */
     private static void testAndroid() {
-        System.out.println("Checking for Android BitSet bug");
+        System.out.println("Checking for Android BitSet bug"); // NOSONAR S106 test CLI output
         BitSet theBitSet = new BitSet(864);
         for (int exp =0; exp < 864; exp++) {
             int act = theBitSet.nextClearBit(0);
             if (exp != act) {
-                System.err.println(String.format("Test failed for: exp=%d, act=%d", exp, act));
-                System.err.println("Android BitSet bug detected, workaround implemented!");
+                System.err.println(String.format("Test failed for: exp=%d, act=%d", exp, act)); // NOSONAR S106 test CLI output
+                System.err.println("Android BitSet bug detected, workaround implemented!"); // NOSONAR S106 test CLI output
                 return;
             }
             theBitSet.set(exp);
         }
-        System.err.println("Android BitSet bug NOT detected, no workaround needed!");
+        System.err.println("Android BitSet bug NOT detected, no workaround needed!"); // NOSONAR S106 test CLI output
     }
 }

@@ -49,7 +49,7 @@ public class RouterCommandLine extends net.i2p.util.CommandLine {
 
     public static void usage(List<String> classes) {
         System.err.println("I2P Router version " + RouterVersion.FULL_VERSION + '\n' +
-                           "USAGE: java -jar /path/to/router.jar command [args]");
+                           "USAGE: java -jar /path/to/router.jar command [args]"); // NOSONAR CLI tool
         printCommands(classes);
     }
 }

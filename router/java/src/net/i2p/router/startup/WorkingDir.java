@@ -105,7 +105,7 @@ public class WorkingDir {
                             if (routerConfig.exists() && clientAppsConfig.exists())
                                 home = appdata;
                         }
-                        System.err.println("System is Windows: " + home);
+                        System.err.println("System is Windows: " + home); // NOSONAR S106 setup tool output
                     }
                 }
                 dirf = new SecureDirectory(home, WORKING_DIR_DEFAULT_WINDOWS);
@@ -178,7 +178,7 @@ public class WorkingDir {
         if (!test.exists()) {
             setupSystemOut(cwd);
             System.err.println("ERROR - Cannot find I2P installation in " + cwd +
-                  " - Will probably be just a router with no apps or console at all!");
+                  " - Will probably be just a router with no apps or console at all!"); // NOSONAR S106 setup tool output
             // we are probably doomed...
             return cwd;
         }
@@ -199,13 +199,13 @@ public class WorkingDir {
                     setupSystemOut(rv);
                     // see above for why
                     if (gentooWarning != null)
-                        System.err.println(gentooWarning);
+                        System.err.println(gentooWarning); // NOSONAR S106 setup tool output
                     return rv; // all is good, we found the user directory
                 }
             }
             else {
                 setupSystemOut(null);
-                System.err.println("Wanted to use " + rv + " for a working directory but it is not a directory");
+                System.err.println("Wanted to use " + rv + " for a working directory but it is not a directory"); // NOSONAR S106 setup tool output
                 return cwd;
             }
         }
@@ -227,16 +227,16 @@ public class WorkingDir {
 
         if (!dirf.exists() && !dirf.mkdir()) {
             setupSystemOut(null);
-            System.err.println("Wanted to use " + rv + " for a working directory but could not create it");
+            System.err.println("Wanted to use " + rv + " for a working directory but could not create it"); // NOSONAR S106 setup tool output
             return cwd;
         }
 
         setupSystemOut(dirf.getAbsolutePath());
         // Do the copying
         if (migrateOldData)
-            System.err.println("Migrating data files to new user directory " + rv);
+            System.err.println("Migrating data files to new user directory " + rv); // NOSONAR S106 setup tool output
         else
-            System.err.println("Setting up new user directory " + rv);
+            System.err.println("Setting up new user directory " + rv); // NOSONAR S106 setup tool output
         boolean success = migrate(MIGRATE_BASE, oldDirf, dirf);
         // this one must be after MIGRATE_BASE
         File oldEep = new File(oldDirf, "eepsite");
@@ -254,12 +254,12 @@ public class WorkingDir {
 
         // Report success or failure
         if (success) {
-            System.err.println("Successfully copied data files to new user directory " + rv);
+            System.err.println("Successfully copied data files to new user directory " + rv); // NOSONAR S106 setup tool output
             return rv;
         } else {
-            System.err.println("FAILED copy of some or all data files to new directory " + rv);
-            System.err.println("Check logs for details");
-            System.err.println("Continung to use data files in old directory " + cwd);
+            System.err.println("FAILED copy of some or all data files to new directory " + rv); // NOSONAR S106 setup tool output
+            System.err.println("Check logs for details"); // NOSONAR S106 setup tool output
+            System.err.println("Continung to use data files in old directory " + cwd); // NOSONAR S106 setup tool output
             return cwd;
         }
     }
@@ -354,7 +354,7 @@ public class WorkingDir {
         for (int i = 0; i < files.length; i++) {
             File from = new File(olddir, files[i]);
             if (!copy(from, todir)) {
-                System.err.println("Error copying file: " + from.getAbsolutePath());
+                System.err.println("Error copying file: " + from.getAbsolutePath()); // NOSONAR S106 setup tool output
                 rv = false;
             }
         }
@@ -388,12 +388,12 @@ public class WorkingDir {
                 }
                 out.println(s);
             }
-            System.err.println("Copied file: " + oldFile + " with modifications");
+            System.err.println("Copied file: " + oldFile + " with modifications"); // NOSONAR S106 setup tool output
             if (out.checkError())
                 throw new IOException("Failed write to " + newFile);
             return true;
         } catch (IOException ioe) {
-            System.err.println("FAILED copy of: " + oldFile + ": " + ioe);
+            System.err.println("FAILED copy of: " + oldFile + ": " + ioe); // NOSONAR S106 setup tool output
             return false;
         }
     }
@@ -412,10 +412,10 @@ public class WorkingDir {
         File newFile = new File(todir, filename);
         try {
             migrateFileXML(oldFile, newFile, oldString, newString, null, null);
-            System.err.println("Copied " + oldFile + " with modifications");
+            System.err.println("Copied " + oldFile + " with modifications"); // NOSONAR S106 setup tool output
             return true;
         } catch (IOException ioe) {
-            System.err.println("FAILED copy " + oldFile + ": " + ioe);
+            System.err.println("FAILED copy " + oldFile + ": " + ioe); // NOSONAR S106 setup tool output
             return false;
         }
     }
@@ -449,7 +449,7 @@ public class WorkingDir {
                 out.println(s);
             }
             out.println("<!-- Modified by I2P User dir migration script -->");
-            System.err.println("Copied file: " + oldFile + " with modifications");
+            System.err.println("Copied file: " + oldFile + " with modifications"); // NOSONAR S106 setup tool output
         }
     }
 
@@ -465,10 +465,10 @@ public class WorkingDir {
             return true;
         if (!targetDir.exists()) {
             if (!targetDir.mkdir()) {
-                System.err.println("FAILED copy " + src.getPath());
+                System.err.println("FAILED copy " + src.getPath()); // NOSONAR S106 setup tool output
                 return false;
             }
-            System.err.println("Created directory: " + targetDir.getPath());
+            System.err.println("Created directory: " + targetDir.getPath()); // NOSONAR S106 setup tool output
         }
         // SecureDirectory is a File so this works for non-directories too
         File targetFile = new SecureDirectory(targetDir, src.getName());
@@ -476,16 +476,16 @@ public class WorkingDir {
             return copyFile(src, targetFile);
         File[] children = src.listFiles();
         if (children == null) {
-            System.err.println("FAILED copy " + src.getPath());
+            System.err.println("FAILED copy " + src.getPath()); // NOSONAR S106 setup tool output
             return false;
         }
         // make it here so even empty dirs get copied
         if (!targetFile.exists()) {
             if (!targetFile.mkdir()) {
-                System.err.println("FAILED copy " + src.getPath());
+                System.err.println("FAILED copy " + src.getPath()); // NOSONAR S106 setup tool output
                 return false;
             }
-            System.err.println("Created file: " + targetFile.getPath());
+            System.err.println("Created file: " + targetFile.getPath()); // NOSONAR S106 setup tool output
         }
         boolean rv = true;
         for (int i = 0; i < children.length; i++) {
@@ -506,9 +506,9 @@ public class WorkingDir {
         try (FileInputStream in = new FileInputStream(src);
              FileOutputStream out = new SecureFileOutputStream(dst)) {
             DataHelper.copy(in, out);
-            System.err.println("Copied file: " + src.getPath());
+            System.err.println("Copied file: " + src.getPath()); // NOSONAR S106 setup tool output
         } catch (IOException ioe) {
-            System.err.println("FAILED copy " + src.getPath() + ": " + ioe);
+            System.err.println("FAILED copy " + src.getPath() + ": " + ioe); // NOSONAR S106 setup tool output
             rv = false;
         }
         if (rv)

@@ -195,7 +195,7 @@ public class GeoIPv6 {
                             re.printStackTrace();
                         }
                     }
-                    System.err.println("Read " + count + " entries from " + geoFile);
+                    System.err.println("Read " + count + " entries from " + geoFile); // NOSONAR S106 CLI tool
                 }
             } catch (IOException ioe) {
                 ioe.printStackTrace();
@@ -210,12 +210,12 @@ public class GeoIPv6 {
         for (int i = 0; i < entries.size(); i++) {
             V6Entry e = entries.get(i);
             if (DEBUG)
-                System.out.println("proc " + e.toString());
+                System.out.println("proc " + e.toString()); // NOSONAR S106 CLI debug output
             if (old != null) {
                 if (e.from == old.from && e.to == old.to) {
                     // dup
                     if (DEBUG)
-                        System.out.println("remove dup " + e);
+                        System.out.println("remove dup " + e); // NOSONAR S106 CLI debug output
                     entries.remove(i);
                     i--;
                     continue;
@@ -226,14 +226,14 @@ public class GeoIPv6 {
                     if (e.from < old.to) {
                         V6Entry rewrite = new V6Entry(old.from, e.from - 1, old.cc);
                         if (DEBUG)
-                            System.out.println("rewrite old to " + rewrite);
+                            System.out.println("rewrite old to " + rewrite); // NOSONAR S106 CLI debug output
                         entries.set(i - 1, rewrite);
                     }
                     if (e.to < old.to) {
                         // e inside old, add new after e
                         V6Entry insert = new V6Entry(e.to + 1, old.to, old.cc);
                         if (DEBUG)
-                            System.out.println("insert " + insert);
+                            System.out.println("insert " + insert); // NOSONAR S106 CLI debug output
                         int j = i + 1;
                         while (j < entries.size() && insert.compareTo(entries.get(j)) > 0) {
                             j++;
@@ -255,7 +255,7 @@ public class GeoIPv6 {
                 writeLong(out, e.to);
                 out.write(DataHelper.getASCII(e.cc));
             }
-            System.err.println("Wrote " + entries.size() + " entries to " + outFile);
+            System.err.println("Wrote " + entries.size() + " entries to " + outFile); // NOSONAR S106 CLI tool
         } catch (IOException ioe) {
             ioe.printStackTrace();
             //if (_log.shouldError())
@@ -346,7 +346,7 @@ public class GeoIPv6 {
      */
     public static void main(String[] args) {
         if (args.length < 2) {
-            System.err.println("Usage: GeoIPv6 infile1.csv [infile2.csv...] outfile.dat.gz");
+            System.err.println("Usage: GeoIPv6 infile1.csv [infile2.csv...] outfile.dat.gz"); // NOSONAR S106 CLI output
             System.exit(1);
         }
         List<File> infiles = new ArrayList<>();
@@ -356,7 +356,7 @@ public class GeoIPv6 {
         File outfile = new File(args[args.length - 1]);
         boolean success = compressGeoIPv6CSVFiles(infiles, outfile);
         if (!success) {
-            System.err.println("Failed");
+            System.err.println("Failed"); // NOSONAR S106 CLI output
             System.exit(1);
         }
         // readback for testing

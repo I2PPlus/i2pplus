@@ -86,7 +86,7 @@ public class PortableWorkingDir {
         if (!test.exists()) {
             setupSystemOut(cwd);
             System.err.println("ERROR - Cannot find I2P installation in " + cwd +
-                  " - Will probably be just a router with no apps or console at all!");
+                  " - Will probably be just a router with no apps or console at all!"); // NOSONAR bootstrap
             // we are probably doomed...
             return cwd;
         }
@@ -97,7 +97,7 @@ public class PortableWorkingDir {
 
         if (!dirf.exists() && !dirf.mkdir()) {
             setupSystemOut(null);
-            System.err.println("Wanted to use " + dirf.toString() + " for a working directory but could not create it");
+            System.err.println("Wanted to use " + dirf.toString() + " for a working directory but could not create it"); // NOSONAR bootstrap
             return cwd;
         }
 

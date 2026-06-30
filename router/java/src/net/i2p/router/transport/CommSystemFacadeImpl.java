@@ -893,7 +893,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             }
             //System.out.println("[RDNSCache] Imported " + rdnsCache.size() + " entries from cache file");
         } catch (IOException ex) {
-            System.err.println("[RDNSCache] Error reading RDNS cache file. Creating new file...");
+            System.err.println("[RDNSCache] Error reading RDNS cache file. Creating new file..."); // NOSONAR S106 static utility
             createRdnsCacheFile();
             ex.printStackTrace();
         }
@@ -939,7 +939,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             try {
                 cacheFile.createNewFile();
             } catch (IOException ex) {
-                System.err.println("[RDNSCache] Error creating cache file: " + ex.getMessage());
+                System.err.println("[RDNSCache] Error creating cache file: " + ex.getMessage()); // NOSONAR S106 static utility
             }
         } else {
             readRDNSCacheFromFile();
@@ -966,7 +966,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 }
                 //System.out.println("[RDNSCache] Entries written to file: " + writtenCount);
             } catch (IOException ex) {
-                System.err.println("[RDNSCache] Error updating reverse DNS cache file: " + ex.getMessage());
+                System.err.println("[RDNSCache] Error updating reverse DNS cache file: " + ex.getMessage()); // NOSONAR S106 static utility
                 ex.printStackTrace();
             }
         }
@@ -988,7 +988,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 File cacheFile = new File(RDNS_CACHE_FILE);
                 if (!cacheFile.exists()) {
                     cacheFile.createNewFile();
-                    System.out.println("[RDNSCache] No existing cache file found, new file created: " + RDNS_CACHE_FILE);
+                    System.out.println("[RDNSCache] No existing cache file found, new file created: " + RDNS_CACHE_FILE); // NOSONAR S106 static utility
                 }
 
                 File tmpFile = new File(RDNS_CACHE_FILE + ".tmp");
@@ -1068,7 +1068,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 Files.copy(tmpFile.toPath(), cacheFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 tmpFile.delete();
             } catch (IOException ex) {
-                System.err.println("[RDNSCache] Error updating reverse DNS cache file: " + ex.getMessage());
+                System.err.println("[RDNSCache] Error updating reverse DNS cache file: " + ex.getMessage()); // NOSONAR S106 static utility
                 ex.printStackTrace();
             }
         }
@@ -1097,7 +1097,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             }
         }
         if (removed > 0) {
-            System.out.println("[RDNSCache] Removed " + removed + " stale entries from the cache");
+            System.out.println("[RDNSCache] Removed " + removed + " stale entries from the cache"); // NOSONAR S106 static utility
         }
     }
 

@@ -186,7 +186,6 @@ public class TransportManager implements TransportEventListener {
             String msg = "UPnP disabled by system property " + PROP_JAVA_PROXY1 + '=' + proxy +
                          "\nI2P connections will not be proxied." +
                          "\nReseeding will be proxied.";
-            System.out.println(msg);
             _log.logAlways(Log.WARN, msg);
             rv = true;
         } else if (!SystemVersion.isMac() && Boolean.parseBoolean(System.getProperty(PROP_JAVA_PROXY2))) {
@@ -200,12 +199,10 @@ public class TransportManager implements TransportEventListener {
                     String msg = "UPnP disabled by system property " + PROP_JAVA_PROXY2 + "=true" +
                                  "\nI2P connections will not be proxied." +
                                  "\nReseeding will be proxied.";
-                    System.out.println(msg);
                     _log.logAlways(Log.WARN, msg);
                     rv = true;
                 } else {
                     String msg = "System property " + PROP_JAVA_PROXY2 + "=true but no system proxy is enabled";
-                    System.out.println(msg);
                     _log.logAlways(Log.WARN, msg);
                 }
             } catch (URISyntaxException use) { /* ignored */ }
@@ -214,13 +211,11 @@ public class TransportManager implements TransportEventListener {
         proxy = System.getProperty(PROP_JAVA_PROXY3);
         if (proxy != null && proxy.length() > 0) {
             String msg = "Ignoring proxy setting " + PROP_JAVA_PROXY3 + '=' + proxy;
-            System.out.println(msg);
             _log.logAlways(Log.WARN, msg);
         }
         proxy = System.getProperty(PROP_JAVA_PROXY4);
         if (proxy != null && proxy.length() > 0) {
             String msg = "Ignoring proxy setting " + PROP_JAVA_PROXY4 + '=' + proxy;
-            System.out.println(msg);
             _log.logAlways(Log.WARN, msg);
         }
         return rv;

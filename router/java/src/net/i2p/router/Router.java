@@ -311,7 +311,7 @@ public class Router implements RouterClock.ClockShiftListener {
         List<RouterContext> contexts = RouterContext.getContexts();
         if (contexts.isEmpty()) {RouterContext.killGlobalContext();}
         else if (SystemVersion.isAndroid()) {
-            System.err.println("Warning: Killing " + contexts.size() + " other routers in this JVM");
+            System.err.println("Warning: Killing " + contexts.size() + " other routers in this JVM"); // NOSONAR
             contexts.clear();
             RouterContext.killGlobalContext();
         } else {System.err.println("Warning: " + contexts.size() + " other routers in this JVM");}
@@ -334,11 +334,11 @@ public class Router implements RouterClock.ClockShiftListener {
                 // may still be less than LIVELINESS_DELAY (60s) old.
                 // So wait at least 60s to be sure.
                 if (isOnlyRouterRunning()) {
-                    if (i > 0) {System.err.println("INFO: No other router running, proceeding with startup...");}
+                    if (i > 0) {System.err.println("INFO: No other router running, proceeding with startup...");} // NOSONAR
                     break;
                 }
                 if (i < 13) {
-                    if (i == 0) {System.err.println("WARN: There may be another router already running... waiting a while to be sure...");}
+                    if (i == 0) {System.err.println("WARN: There may be another router already running... waiting a while to be sure...");} // NOSONAR
                     // yes this is ugly to sleep in the constructor.
                     try {Thread.sleep(5000);}
                     catch (InterruptedException ie) {
@@ -346,9 +346,9 @@ public class Router implements RouterClock.ClockShiftListener {
                     }
                 } else {
                     _eventLog.addEvent(EventLog.ABORTED, "Another router running");
-                    System.err.println("ERROR: There appears to be another router already running!");
-                    System.err.println("       Make sure old instances are shut down before starting up a new one.");
-                    System.err.println("       If no other instance is running, delete: " + getPingFile().getAbsolutePath());
+                    System.err.println("ERROR: There appears to be another router already running!"); // NOSONAR
+                    System.err.println("       Make sure old instances are shut down before starting up a new one."); // NOSONAR
+                    System.err.println("       If no other instance is running, delete: " + getPingFile().getAbsolutePath()); // NOSONAR
                     //System.exit(-1);
                     // throw exception instead, for embedded
                     throw new IllegalStateException(
@@ -774,11 +774,11 @@ public class Router implements RouterClock.ClockShiftListener {
             } else {
                 // normal not to exist at first install
                 if (log != null) {log.warn("Configuration file " + filename + " does not exist");}
-                else {System.err.println("Configuration file " + filename + " does not exist");}
+                else {System.err.println("Configuration file " + filename + " does not exist");} // NOSONAR
             }
         } catch (IOException ioe) {
             if (log != null) {log.error("Error loading the router configuration from " + filename, ioe);}
-            else {System.err.println("Error loading the router configuration from " + filename + ": " + ioe);}
+            else {System.err.println("Error loading the router configuration from " + filename + ": " + ioe);} // NOSONAR
         }
         return props;
     }
@@ -1298,9 +1298,9 @@ public class Router implements RouterClock.ClockShiftListener {
             if (f.exists()) {
                 boolean removed = f.delete();
                 if (removed) {
-                    System.out.println("INFO: Removing old identity file: " + _rebuildFiles[i]);
+                    _log.info("INFO: Removing old identity file: " + _rebuildFiles[i]);
                 } else {
-                    System.out.println("ERROR: Could not remove old identity file: " + _rebuildFiles[i]);
+                    _log.warn("ERROR: Could not remove old identity file: " + _rebuildFiles[i]);
                 }
             }
         }
@@ -1392,9 +1392,9 @@ public class Router implements RouterClock.ClockShiftListener {
                             if (success) {
                                 success = jbigiLib.delete();
                                 if (success) {
-                                    System.out.println("Processor change detected, moved jbigi library to " +
+                                    _log.info("Processor change detected, moved jbigi library to " +
                                                        path + ".bak");
-                                    System.out.println("Check logs for successful installation of new library");
+                                    _log.info("Check logs for successful installation of new library");
                                 }
                             }
                         }
@@ -1673,7 +1673,7 @@ public class Router implements RouterClock.ClockShiftListener {
         for (Runnable task : _context.getFinalShutdownTasks()) {
             //System.err.println("Running final shutdown task " + task.getClass());
             try {task.run();}
-            catch (Throwable t) {System.err.println("Running final shutdown task " + t);}
+            catch (Throwable t) {_log.warn("Running final shutdown task " + t);}
         }
         _context.getFinalShutdownTasks().clear();
 
@@ -1789,7 +1789,7 @@ public class Router implements RouterClock.ClockShiftListener {
         } catch (IOException ioe) {
                 // warning, _log will be null when called from constructor
                 if (_log != null) {_log.error("Error saving the config to " + _configFilename, ioe);}
-                else {System.err.println("Error saving the config to " + _configFilename + ": " + ioe);}
+                else {System.err.println("Error saving the config to " + _configFilename + ": " + ioe);} // NOSONAR
                 return false;
         }
         return true;
@@ -1911,7 +1911,7 @@ public class Router implements RouterClock.ClockShiftListener {
             if (error) {throw new IllegalArgumentException();}
         }
 
-        System.out.println("Starting I2P+ " + RouterVersion.FULL_VERSION + "...");
+        System.out.println("Starting I2P+ " + RouterVersion.FULL_VERSION + "..."); // NOSONAR CLI startup
         //verifyWrapperConfig();
         Router r;
         try {r = new Router();}
@@ -1956,7 +1956,7 @@ public class Router implements RouterClock.ClockShiftListener {
                 if (downtime > 0 && _downtime < 0) {_downtime = downtime;}
             }
             if (downtime > LIVELINESS_DELAY) {
-                System.err.println("WARN: Old router was not shut down gracefully -> Deleting " + f + "...");
+                _log.warn("WARN: Old router was not shut down gracefully -> Deleting " + f + "...");
                 if (!f.delete())
                     _log.warn("Failed to delete liveness file " + f.getName());
                 if (lastWritten > 0) {

@@ -73,7 +73,7 @@ public class CryptoChecker {
                 String s = "Crypto " + t + " is not available";
                 if (log != null)
                     log.logAlways(Log.WARN, s);
-                System.out.println("Warning: " + s);
+                System.out.println("Warning: " + s); // NOSONAR startup visibility
             }
         }
         if (unavail) {
@@ -83,12 +83,12 @@ public class CryptoChecker {
                        System.getProperty("os.version");
             if (log != null)
                 log.logAlways(Log.WARN, s);
-            System.out.println("Warning: " + s);
+            System.out.println("Warning: " + s); // NOSONAR startup visibility
             if (!SystemVersion.isJava7()) {
                 s = "Please consider upgrading to Java 7";
                 if (log != null)
                     log.logAlways(Log.WARN, s);
-                System.out.println(s);
+                System.out.println(s); // NOSONAR startup visibility
             //} else if (SystemVersion.isJava9()) {
             //    s = "Java 9 support is beta, check for Java updates";
             //    if (log != null)
@@ -105,15 +105,15 @@ public class CryptoChecker {
                     s  += JRE6;
                 if (log != null)
                     log.logAlways(Log.WARN, s);
-                System.out.println(s);
+                System.out.println(s); // NOSONAR startup visibility
             }
             s = "This crypto will be required in a future release";
             if (log != null)
                 log.logAlways(Log.WARN, s);
-            System.out.println("Warning: " + s);
+            System.out.println("Warning: " + s); // NOSONAR startup visibility
         } else if (ctx == null) {
             // called from main()
-            System.out.println("All crypto available");
+            System.out.println("All crypto available"); // NOSONAR CLI tool
         }
     }
 
