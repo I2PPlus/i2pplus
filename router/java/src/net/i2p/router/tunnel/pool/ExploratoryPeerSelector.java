@@ -75,6 +75,15 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         }
         log.info("EPS cooldown: peers=" + _peerCooldowns.size() + " excluded=" + cooldownExcluded + " from=" + Thread.currentThread().getName());
 
+        // Per-pool diversity: exclude peers already in an active tunnel of this pool.
+        // No peer should appear in more than 1 tunnel of the same pool.
+        TunnelPool pool = isInbound ? ctx.tunnelManager().getInboundExploratoryPool()
+                                    : ctx.tunnelManager().getOutboundExploratoryPool();
+        Set<Hash> poolPeers = getPeersInPool(ctx, pool);
+        exclude.addAll(poolPeers);
+        if (log.shouldInfo() && !poolPeers.isEmpty())
+            log.info("EPS per-pool exclusion: " + poolPeers.size() + " peers in active tunnels from=" + Thread.currentThread().getName());
+
         // Special cases
         boolean nonzero = length > 0;
         boolean exploreHighCap = nonzero && shouldPickHighCap();
@@ -302,8 +311,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         // Record selection time for all selected peers (excluding self) to enforce cooldown
         int recorded = 0;
         for (Hash peer : rv) {
-            if (!peer.equals(ctx.routerHash()) &&
-                !TunnelPeerSelector.hasRecoveredFromFailure(ctx, peer)) {
+            if (!peer.equals(ctx.routerHash())) {
                 _peerCooldowns.put(peer, now);
                 recorded++;
             }

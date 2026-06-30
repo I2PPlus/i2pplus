@@ -122,6 +122,31 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
+     * Get all non-self peers in active tunnels of the given pool.
+     * Used to enforce per-pool diversity: no peer in more than 1 tunnel per pool.
+     *
+     * @param ctx the router context
+     * @param pool the tunnel pool to scan
+     * @return set of peer hashes already in active tunnels of this pool
+     * @since 0.9.70
+     */
+    protected static Set<Hash> getPeersInPool(RouterContext ctx, TunnelPool pool) {
+        Set<Hash> rv = new HashSet<>();
+        if (pool == null) return rv;
+        for (TunnelInfo ti : pool.listTunnels()) {
+            if (ti.getLength() > 1) {
+                for (int j = 0; j < ti.getLength(); j++) {
+                    Hash peer = ti.getPeer(j);
+                    if (peer != null && !peer.equals(ctx.routerHash())) {
+                        rv.add(peer);
+                    }
+                }
+            }
+        }
+        return rv;
+    }
+
+    /**
      * Record that a peer failed during peer selection (first-hop or adjacent).
      * Used by ClientPeerSelector and ExploratoryPeerSelector to mark peers
      * that failed selection criteria, preventing re-selection for the cooldown.

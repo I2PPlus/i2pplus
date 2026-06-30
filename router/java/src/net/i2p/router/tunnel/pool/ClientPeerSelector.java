@@ -194,6 +194,16 @@ class ClientPeerSelector extends TunnelPeerSelector {
             if (lastPeerExclusions != null && !lastPeerExclusions.isEmpty()) {
                 exclude.addAll(lastPeerExclusions);
             }
+            // Per-pool diversity: exclude peers already in an active tunnel of this pool.
+            // No peer should appear in more than 1 tunnel of the same pool.
+            Hash dest = settings.getDestination();
+            if (dest != null) {
+                TunnelManagerFacade tmf = ctx.tunnelManager();
+                TunnelPool pool = isInbound ? tmf.getInboundPool(dest)
+                                            : tmf.getOutboundPool(dest);
+                Set<Hash> poolPeers = getPeersInPool(ctx, pool);
+                exclude.addAll(poolPeers);
+            }
             ArraySet<Hash> matches = new ArraySet<>(length);
             if (length == 1) {
                 // closest-hop restrictions
@@ -869,14 +879,11 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     log.warn("CPS checkTunnel failed for " + settings.getDestinationNickname() +
                              " (" + (settings.isInbound() ? "in" : "out") + ") rv=" + formatPeerList(rv));
                 }
-                // Only add failed peers to cooldown, not all peers
-                // Use the new recovery mechanism to allow peers to be reconsidered
+                // Add all selected peers to cooldown (excluding self)
                 long now = ctx.clock().now();
                 for (Hash peer : rv) {
                     if (!peer.equals(ctx.routerHash())) {
-                        if (!TunnelPeerSelector.hasRecoveredFromFailure(ctx, peer)) {
-                            _clientCooldowns.put(peer, now);
-                        }
+                        _clientCooldowns.put(peer, now);
                     }
                 }
                 // The peer adjacent to us (IBGW for inbound, OBEP for outbound) gets shared
@@ -886,9 +893,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 if (adjIdx >= 0 && adjIdx < rv.size()) {
                     Hash adjPeer = rv.get(adjIdx);
                     if (!adjPeer.equals(ctx.routerHash())) {
-                        if (!TunnelPeerSelector.hasRecoveredFromFailure(ctx, adjPeer)) {
-                            TunnelPeerSelector._peerCooldowns.put(adjPeer, now);
-                        }
+                        TunnelPeerSelector._peerCooldowns.put(adjPeer, now);
                     }
                 }
                 rv = null;
@@ -899,9 +904,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             long now = ctx.clock().now();
             for (Hash peer : rv) {
                 if (!peer.equals(ctx.routerHash())) {
-                    if (!TunnelPeerSelector.hasRecoveredFromFailure(ctx, peer)) {
-                        _clientCooldowns.put(peer, now);
-                    }
+                    _clientCooldowns.put(peer, now);
                 }
             }
         }
