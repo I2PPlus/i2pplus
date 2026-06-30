@@ -378,9 +378,9 @@ public class PersistentDataStore extends TransientDataStore {
                             if (_log.shouldWarn()) {
                                 _log.warn("Banning and disconnecting from [" + key.toBase64().substring(0,6) + "] for 72h -> Router is spoofing our IP address!");
                             }
-                            _banLogger.logBan(key, ip, "Spoofed IP address (ours)", 72*60*60*1000);
-                            _context.banlist().banlistRouter(key, "Spoofed IP address (ours)", null, null, _context.clock().now() + 72*60*60*1000);
-                            _context.simpleTimer2().addEvent(new Disconnector(key, "Spoofed IP address"), 3*1000);
+                            _banLogger.logBan(key, ip, "Spoofed IP address (ours)", 72L*60*60*1000);
+                            _context.banlist().banlistRouter(key, "Spoofed IP address (ours)", null, null, _context.clock().now() + 72L*60*60*1000);
+                            _context.simpleTimer2().addEvent(new Disconnector(key, "Spoofed IP address"), 3L*1000);
                             shouldDelete = true;
                         }
                     }
@@ -391,7 +391,7 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldWarn() && !isBanned) {
                             _log.warn("Banning for 24h and disconnecting from Router [" + key.toBase64().substring(0,6) + "]" +
                                       " -> Invalid version " + version + " / " + bw + (unreachable ? "U" : ""));
-                            _banLogger.logBan(key, ip != null ? ip : "UNKNOWN", "Invalid Router version (" + version + " / " + bw + ")", 24*60*60*1000);
+                            _banLogger.logBan(key, ip != null ? ip : "UNKNOWN", "Invalid Router version (" + version + " / " + bw + ")", 24L*60*60*1000);
                             String flag;
                             if (unreachable) {
                                 flag = "U";
@@ -402,9 +402,9 @@ public class PersistentDataStore extends TransientDataStore {
                             }
                             _context.banlist().banlistRouter(key, "Invalid Router version (" + version + " / " + bw +
                                                              flag + ")", null,
-                                                              null, _context.clock().now() + 24*60*60*1000);
+                                                               null, _context.clock().now() + 24L*60*60*1000);
                         }
-                        _context.simpleTimer2().addEvent(new Disconnector(key, "Invalid version"), 11*60*1000);
+                        _context.simpleTimer2().addEvent(new Disconnector(key, "Invalid version"), 11L*60*1000);
                         shouldDelete = true;
                     } else if (isLTier && unreachable) {
                         if (_log.shouldDebug()) {
@@ -412,10 +412,10 @@ public class PersistentDataStore extends TransientDataStore {
                         }
                         if (_log.shouldInfo() && !isBanned) {
                             _log.info("Banning [" + key.toBase64().substring(0,6) + "] for 1h -> LU Router");
-                            _banLogger.logBan(key, ip != null ? ip : "UNKNOWN", "LU Router", 60*60*1000);
-                            _context.banlist().banlistRouter(key, "LU Router", null, null, _context.clock().now() + 60*60*1000);
+                            _banLogger.logBan(key, ip != null ? ip : "UNKNOWN", "LU Router", 60L*60*1000);
+                            _context.banlist().banlistRouter(key, "LU Router", null, null, _context.clock().now() + 60L*60*1000);
                         }
-                        _context.simpleTimer2().addEvent(new Disconnector(key, "Invalid version"), 11*60*1000);
+                        _context.simpleTimer2().addEvent(new Disconnector(key, "Invalid version"), 11L*60*1000);
                         shouldDelete = true;
                     } else if (unreachable) {
                         if (_log.shouldDebug()) {
@@ -763,8 +763,8 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldWarn())
                             _log.warn("RouterInfo [" + truncHash + "] does not match [" + _key.toBase64().substring(0,6) + "] from " + _routerFile);
                             _log.warn("Banning: [" + truncHash + "] for 1h -> Corrupt RouterInfo");
-                            _banLogger.logBan(_key, _context, "Corrupt RouterInfo", 60*60*1000);
-                            _context.banlist().banlistRouter(_key, "Corrupt RouterInfo", null, null, now + 60*60*1000);
+                            _banLogger.logBan(_key, _context, "Corrupt RouterInfo", 60L*60*1000);
+                            _context.banlist().banlistRouter(_key, "Corrupt RouterInfo", null, null, now + 60L*60*1000);
                         _routerFile.delete();
                     } else if (ri.getPublished() <= _knownDate) {
                         // Don't store but don't delete

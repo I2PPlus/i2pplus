@@ -402,7 +402,7 @@ public class Banlist {
                 }
             } catch (IllegalStateException ise) { /* ignored */ } // next time...
 
-            requeue(5*60*1000);
+            requeue(5L*60*1000);
         }
     }
 

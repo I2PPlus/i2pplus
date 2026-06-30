@@ -97,7 +97,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static final int COMPLETED_CACHE_SIZE = 8192;
     private static final String PROP_LATE_REPLY_GRACE = "netDb.lateReplyGracePeriod";
     /** Default grace period for late replies (5 min) */
-    private static final long LATE_REPLY_GRACE_PERIOD_DEFAULT = 5*60*1000;
+    private static final long LATE_REPLY_GRACE_PERIOD_DEFAULT = 5L*60*1000;
     /** Grace period for late replies - dynamically loadable */
     private static volatile long _lateReplyGracePeriod = LATE_REPLY_GRACE_PERIOD_DEFAULT;
 
@@ -126,11 +126,11 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * The default single search time
      */
-    private static final long SINGLE_SEARCH_TIME = 4*1000;
+    private static final long SINGLE_SEARCH_TIME = 4L*1000;
     private static final long MIN_SINGLE_SEARCH_TIME = 1000;
 
     /** The actual expire time for a search message */
-    private static final long SINGLE_SEARCH_MSG_TIME = 15*1000;
+    private static final long SINGLE_SEARCH_MSG_TIME = 15L*1000;
 
     /**
      *  Use instead of CONCURRENT_SEARCHES in super() which is final.

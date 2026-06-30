@@ -94,12 +94,12 @@ class UPnPManager {
     /** this is the UDP SSDP Search reply listener */
     private static final String PROP_SSDP_PORT = "i2np.upnp.SSDPPort";
     private static final int DEFAULT_SSDP_PORT = 7653;
-    private static final long RESCAN_MIN_DELAY = 60*1000;
-    private static final long RESCAN_SHORT_DELAY = 2*60*1000;
+    private static final long RESCAN_MIN_DELAY = 60*1000L;
+    private static final long RESCAN_SHORT_DELAY = 2*60*1000L;
     // minimum UPnP announce interval is 30 minutes. Let's be faster
     // 30 minutes is also the default "lease time" in cybergarage.
     // It expires after 31 minutes.
-    private static final long RESCAN_LONG_DELAY = 14*60*1000;
+    private static final long RESCAN_LONG_DELAY = 14*60*1000L;
     // make these generic so we don't advertise we're running I2P
     private static final String TCP_PORT_NAME = "TCP";
     private static final String UDP_PORT_NAME = "UDP";
@@ -284,7 +284,7 @@ class UPnPManager {
          */
         void reschedule() {
             // false == use latest time
-            reschedule((_upnp.getSearchMx() * 1000) + 500, false);
+            reschedule((_upnp.getSearchMx() * 1000L) + 500, false);
         }
     }
 

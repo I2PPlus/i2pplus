@@ -37,14 +37,14 @@ public class PublishLocalRouterInfoJob extends JobImpl {
      *  Don't store if somebody else stored it recently.
      *  Must be less than PUBLISH_DELAY * 3 / 16 (see getDelay())
      */
-    private static final long MIN_PUBLISH_DELAY = 9*60*1000;
+    private static final long MIN_PUBLISH_DELAY = 9L*60*1000;
 
     /**
      *  Too short and the network puts a big connection load on the
      *  floodfills since we store directly.
      *  Too long and the floodfill will drop us - timeout is 60 minutes.
      */
-    private static final long PUBLISH_DELAY = 43*60*1000;
+    private static final long PUBLISH_DELAY = 43L*60*1000;
 
     /** this needs to be long enough to give us time to start up,
      *  but less than 20m (when we start accepting tunnels and could be a IBGW)
@@ -126,7 +126,7 @@ public class PublishLocalRouterInfoJob extends JobImpl {
             SigningPrivateKey key = getContext().keyManager().getSigningPrivateKey();
             if (key == null) {
                 _log.log(Log.CRIT, "Internal error - signing private key not known; rescheduling publish for 30s");
-                requeue(30*1000);
+                requeue(30L*1000);
                 return;
             }
             ri.sign(key);

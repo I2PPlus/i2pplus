@@ -111,33 +111,33 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
     public void timeReached() {
         StatManager sm = _ctx.statManager();
         int known = _ctx.netDb().getKnownRouters() - 1;
-        sm.addRateData("router.knownPeers", known, 60*1000);
+        sm.addRateData("router.knownPeers", known, 60L*1000);
 
         int active = _ctx.commSystem().countActivePeers();
-        sm.addRateData("router.activePeers", active, 60*1000);
+        sm.addRateData("router.activePeers", active, 60L*1000);
 
         int activeSend = _ctx.commSystem().countActiveSendPeers();
-        sm.addRateData("router.activeSendPeers", activeSend, 60*1000);
+        sm.addRateData("router.activeSendPeers", activeSend, 60L*1000);
 
         int fast = _ctx.profileOrganizer().countFastPeers();
-        sm.addRateData("router.fastPeers", fast, 60*1000);
+        sm.addRateData("router.fastPeers", fast, 60L*1000);
 
         int highCap = _ctx.profileOrganizer().countHighCapacityPeers();
-        sm.addRateData("router.highCapacityPeers", highCap, 60*1000);
+        sm.addRateData("router.highCapacityPeers", highCap, 60L*1000);
 
         int integrated = _ctx.peerManager().getPeersByCapability('f').size();
-        sm.addRateData("router.integratedPeers", integrated, 60*1000);
+        sm.addRateData("router.integratedPeers", integrated, 60L*1000);
 
         int banned = _ctx.banlist().getRouterCount();
-        sm.addRateData("router.bannedPeers", banned, 60*1000);
+        sm.addRateData("router.bannedPeers", banned, 60L*1000);
 
         int unreachable = _ctx.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_UNREACHABLE).size();
-        sm.addRateData("router.unreachablePeers", unreachable, 60*1000);
+        sm.addRateData("router.unreachablePeers", unreachable, 60L*1000);
 
         sm.addRateData("bw.sendRate", (long)_ctx.bandwidthLimiter().getSendBps());
         sm.addRateData("bw.recvRate", (long)_ctx.bandwidthLimiter().getReceiveBps());
 
-        sm.addRateData("router.tunnelBacklog", _ctx.tunnelManager().getInboundBuildQueueSize(), 60*1000);
+        sm.addRateData("router.tunnelBacklog", _ctx.tunnelManager().getInboundBuildQueueSize(), 60L*1000);
         long used = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         sm.addRateData("router.memoryUsed", used);
         if (_maxMemory - used < LOW_MEMORY_THRESHOLD) {Router.clearCaches();}

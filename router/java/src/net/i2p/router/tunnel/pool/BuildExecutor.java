@@ -251,21 +251,21 @@ class BuildExecutor implements Runnable {
 
         if (successRate > 0.85) {
             // High success — network is fast. Reduce slightly.
-            _adaptiveTimeout += -3 * 1000;  // -3s
+            _adaptiveTimeout += -3 * 1000L;  // -3s
         } else if (successRate > 0.70) {
             // Good success — keep near base.
             _adaptiveTimeout += 0;
         } else if (successRate > 0.50) {
             // Moderate success — modest increase.
-            _adaptiveTimeout += 2 * 1000;  // +2s
+            _adaptiveTimeout += 2 * 1000L;  // +2s
         } else {
             // Low success — increase to give slow builds more time.
-            _adaptiveTimeout += 5 * 1000;  // +5s
+            _adaptiveTimeout += 5 * 1000L;  // +5s
         }
 
         // Clamp: never below 10s regardless of rate; allow adaptive increase up to 30s
-        if (_adaptiveTimeout < 10*1000) { _adaptiveTimeout = 10*1000; }
-        if (_adaptiveTimeout > 25*1000) { _adaptiveTimeout = 25*1000; }
+        if (_adaptiveTimeout < 10*1000L) { _adaptiveTimeout = 10*1000L; }
+        if (_adaptiveTimeout > 25*1000L) { _adaptiveTimeout = 25*1000L; }
 
         // Also calculate adaptive first-hop timeout based on first-hop success rate
         int firstHopTotal = _firstHopSuccessCount.get() + _firstHopFailureCount.get();
@@ -277,18 +277,18 @@ class BuildExecutor implements Runnable {
             _adaptiveFirstHopTimeout = baseFirstHop;
 
             if (firstHopSuccessRate > 0.85) {
-                _adaptiveFirstHopTimeout += -2 * 1000;
+                _adaptiveFirstHopTimeout += -2 * 1000L;
             } else if (firstHopSuccessRate > 0.70) {
                 _adaptiveFirstHopTimeout += 0;
             } else if (firstHopSuccessRate > 0.50) {
-                _adaptiveFirstHopTimeout += 2 * 1000;
+                _adaptiveFirstHopTimeout += 2 * 1000L;
             } else {
-                _adaptiveFirstHopTimeout += 3 * 1000;
+                _adaptiveFirstHopTimeout += 3 * 1000L;
             }
 
             // Clamp: 8-15s
-            if (_adaptiveFirstHopTimeout < 8*1000) { _adaptiveFirstHopTimeout = 8*1000; }
-            if (_adaptiveFirstHopTimeout > 15*1000) { _adaptiveFirstHopTimeout = 15*1000; }
+            if (_adaptiveFirstHopTimeout < 8*1000L) { _adaptiveFirstHopTimeout = 8*1000L; }
+            if (_adaptiveFirstHopTimeout > 15*1000L) { _adaptiveFirstHopTimeout = 15*1000L; }
 
             if (_log.shouldDebug()) {
                 _log.debug("Adaptive first-hop timeout: " + (_adaptiveFirstHopTimeout / 1000) +
@@ -317,7 +317,7 @@ class BuildExecutor implements Runnable {
         // Adjust timeout based on tunnel length
         int length = cfg.getLength();
         if (length > 3) {
-            baseTimeout += (length - 3) * 5*1000;
+            baseTimeout += (length - 3) * 5*1000L;
         }
 
         // Adjust based on system load
@@ -334,11 +334,11 @@ class BuildExecutor implements Runnable {
         // at 2x the rate of IB builds (54% vs 80% success).  Adding extra time
         // for OB builds compensates for this reply-path latency.
         if (!cfg.isInbound()) {
-            baseTimeout += 5 * 1000;
+            baseTimeout += 5 * 1000L;
         }
 
         // Cap at 45s safety ceiling
-        return Math.min(baseTimeout, 45*1000);
+        return Math.min(baseTimeout, 45*1000L);
     }
 
     /**

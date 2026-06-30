@@ -179,7 +179,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         context.statManager().createRateStat("crypto.sessionTagsExpired", "Number of expired tags/sessions", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
         context.statManager().createRateStat("crypto.sessionTagsRemaining", "Number of remaining tags/sessions after a cleanup", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
          _alive = true;
-        _context.simpleTimer2().addEvent(new CleanupEvent(), 60*1000);
+        _context.simpleTimer2().addEvent(new CleanupEvent(), 60L*1000);
     }
 
     @Override
@@ -198,7 +198,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             if (overage > 0) {clearExcess(overage);}
             long expireTime = _context.clock().now() - beforeExpire;
             _context.statManager().addRateData("crypto.sessionTagsExpired", expired, expireTime);
-            _context.simpleTimer2().addEvent(this, 60*1000);
+            _context.simpleTimer2().addEvent(this, 60L*1000);
         }
     }
 
@@ -772,7 +772,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             buf.setLength(0);
         }
         buf.append("<tr>\n<th colspan=2>Total inbound tags: ").append(total).append(" (")
-           .append(DataHelper.formatSize2(32*total)).append("B); sets: ").append(totalSets)
+           .append(DataHelper.formatSize2(32*(long)total)).append("B); sets: ").append(totalSets)
            .append("; sessions: ").append(inboundSets.size())
            .append("</th>\n</tr>\n" +
                    "</table>\n" +
@@ -807,7 +807,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             buf.setLength(0);
         }
         buf.append("<tr>\n<th colspan=2>Total Outbound tags: ").append(total).append(" (")
-           .append(DataHelper.formatSize2(32*total)).append("B); sets: ").append(totalSets)
+           .append(DataHelper.formatSize2(32*(long)total)).append("B); sets: ").append(totalSets)
            .append("; sessions: ").append(outbound.size())
            .append("</th>\n</tr>\n</table>\n");
 

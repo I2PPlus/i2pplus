@@ -228,7 +228,7 @@ class RequestThrottler {
                 if (_log.shouldInfo()) {
                     _log.info("Dropping all connections from [" + routerId + "] -> Low share / " + v + " (load=" + lag + ")");
                 }
-                context.simpleTimer2().addEvent(new Disconnector(h, v), 11*60*1000);
+                context.simpleTimer2().addEvent(new Disconnector(h, v), 11*60*1000L);
                 return true;
             }
         }
@@ -242,7 +242,7 @@ class RequestThrottler {
                 String banReason = "Excessive tunnel requests";
                 _banLogger.logBan(h, ipPort, banReason, bantime);
                 context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + bantime);
-                context.simpleTimer2().addEvent(new Disconnector(h, v), 11*60*1000);
+                context.simpleTimer2().addEvent(new Disconnector(h, v), 11*60*1000L);
                 if (_log.shouldWarn()) {
                     _log.warn("Banning " + (isLowShare || isUnreachable ? "slow or unreachable" : "") +
                               " Router [" + routerId + "] for " + period + "m" +
@@ -262,9 +262,9 @@ class RequestThrottler {
             String ipPort = getRouterIPPort(ri);
             String banReason = "Excessive tunnel requests";
             _banLogger.logBan(h, ipPort, banReason, 30*60*1000L);
-            context.banlist().banlistRouter(h, banReason, null, null, context.clock().now() + 30*60*1000);
+            context.banlist().banlistRouter(h, banReason, null, null, context.clock().now() + 30*60*1000L);
             // drop after any accepted tunnels have expired
-            context.simpleTimer2().addEvent(new Disconnector(h, v), 11*60*1000);
+            context.simpleTimer2().addEvent(new Disconnector(h, v), 11*60*1000L);
             if (_log.shouldWarn())
                 _log.warn("Banning Router [" + routerId + "] for 30m -> " +
                           "Excessive tunnel requests (Requested: " + count + " / Hard limit: " + limit + ")");

@@ -138,7 +138,7 @@ public class UDPSender {
         // Wait briefly for queue processing to complete
         for (int i = 1; i <= 5 && !_outboundQueue.isEmpty(); i++) {
             try {
-                Thread.sleep(i * 10);
+                Thread.sleep(i * 10L);
             } catch (InterruptedException ie) {
                 Thread.currentThread().interrupt();
             }

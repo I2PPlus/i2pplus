@@ -72,7 +72,7 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
                 // we still have the other once v4/v6 to test
                 delay = MIN_TEST_FREQUENCY;
             } else {
-                delay = (TEST_FREQUENCY * 3 / 4) + _context.random().nextInt(TEST_FREQUENCY / 4);
+                delay = (TEST_FREQUENCY * 3L / 4) + _context.random().nextInt(TEST_FREQUENCY / 4);
                 // if we have 2 addresses, give IPv6 a chance also
                 if (_transport.hasIPv6Address() && _transport.getIPv6Config() != IPV6_ONLY)
                     delay /= 2;

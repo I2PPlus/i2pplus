@@ -610,7 +610,7 @@ public class PeerTestJob extends JobImpl {
             float responseMs = getTestTimeout() - timeLeft;
             data.profile.updatePeerTestTimeAverage(responseMs);
 
-            if (testAvg > (timeout * 2) && isHighBandwidthTier(data)) {
+            if (testAvg > (timeout * 2L) && isHighBandwidthTier(data)) {
                 try {
                     data.profile.setCapacityBonus(-30);
                     getContext().profileOrganizer().demoteIfHighLatency(_peer);

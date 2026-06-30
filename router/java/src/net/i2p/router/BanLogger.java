@@ -557,13 +557,13 @@ public class BanLogger {
         }
         long multiplier = 1;
         if (durationStr.endsWith("D")) {
-            multiplier = 24 * 60 * 60 * 1000;
+            multiplier = 24L * 60 * 60 * 1000;
             durationStr = durationStr.substring(0, durationStr.length() - 1);
         } else if (durationStr.endsWith("H")) {
-            multiplier = 60 * 60 * 1000;
+            multiplier = 60L * 60 * 1000;
             durationStr = durationStr.substring(0, durationStr.length() - 1);
         } else if (durationStr.endsWith("M")) {
-            multiplier = 60 * 1000;
+            multiplier = 60L * 1000;
             durationStr = durationStr.substring(0, durationStr.length() - 1);
         } else if (durationStr.endsWith("MS")) {
             durationStr = durationStr.substring(0, durationStr.length() - 2);

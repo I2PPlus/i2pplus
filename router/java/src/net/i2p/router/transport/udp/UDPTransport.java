@@ -1404,7 +1404,7 @@ public class UDPTransport extends TransportImpl {
                                          + "\n* Check NAT/firewall configuration, the IANA recommended dynamic outside port range is 49152-65535");
             }
             _context.banlist().banlistRouter(from, "Reported our IP address or port as invalid", STYLE);
-            _banLogger.logBan(from, _context, "Reported our IP/port as invalid", 4*60*60*1000);
+            _banLogger.logBan(from, _context, "Reported our IP/port as invalid", 4*60*60*1000L);
             return;
         }
 
@@ -3638,8 +3638,8 @@ public class UDPTransport extends TransportImpl {
 
             if (weAreFirewalled) {
                // Use much more lenient timeouts for firewalled routers to retain peers
-               shortInactivityCutoff = now - Math.max(_expireTimeout, 25*60*1000);  // Min 25 minutes
-               longInactivityCutoff = now - Math.max(EXPIRE_TIMEOUT, 45*60*1000); // Min 45 minutes
+               shortInactivityCutoff = now - Math.max(_expireTimeout, 25*60*1000L);  // Min 25 minutes
+               longInactivityCutoff = now - Math.max(EXPIRE_TIMEOUT, 45*60*1000L); // Min 45 minutes
             } else {
                shortInactivityCutoff = now - _expireTimeout;
                longInactivityCutoff = now - EXPIRE_TIMEOUT;
@@ -3791,7 +3791,7 @@ public class UDPTransport extends TransportImpl {
                 _testEvent.forceRunSoon(isIPv6, RateConstants.ONE_MINUTE);
             } else {
                 // run a little sooner than usual
-                _testEvent.forceRunSoon(isIPv6, 5*60*1000);
+                _testEvent.forceRunSoon(isIPv6, 5*60*1000L);
             }
             return;
         }

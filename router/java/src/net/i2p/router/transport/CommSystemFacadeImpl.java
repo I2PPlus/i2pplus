@@ -1080,7 +1080,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static void cleanupRDNSCache() {
         long now = System.currentTimeMillis();
         int removed = 0;
-        long unknownExpireTimeMillis = 15 * 60 * 1000; // 15 minutes
+        long unknownExpireTimeMillis = 15 * 60 * 1000L; // 15 minutes
         Iterator<Map.Entry<String, CacheEntry>> it = rdnsCache.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<String, CacheEntry> entry = it.next();
@@ -1345,7 +1345,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
 
     private static final int MAX_COUNTRY_CACHE_SIZE = 20000;
-    private static final long COUNTRY_CACHE_EXPIRY = 60*60*1000; // 1 hour
+    private static final long COUNTRY_CACHE_EXPIRY = 60*60*1000L; // 1 hour
     private static final Random random = new Random();
     private long lastLookupTime = 0;
     private long lastUnknownPurge = 0;
@@ -1887,8 +1887,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @since 0.9.4
      */
     private class NetMonitor extends SimpleTimer2.TimedEvent {
-        private static final long SHORT_DELAY = 15*1000;
-        private static final long LONG_DELAY = 90*1000;
+        private static final long SHORT_DELAY = 15*1000L;
+        private static final long LONG_DELAY = 90*1000L;
 
         public NetMonitor() {super(_context.simpleTimer2(), 0);}
 

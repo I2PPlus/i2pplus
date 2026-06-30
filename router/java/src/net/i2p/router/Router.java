@@ -117,7 +117,7 @@ public class Router implements RouterClock.ClockShiftListener {
     public static final String PROP_CONFIG_FILE = "router.configLocation";
 
     /** let clocks be off by 30 seconds (reduced from 60s to improve lease renewal timing) */
-    public static final long CLOCK_FUDGE_FACTOR = 30*1000;
+    public static final long CLOCK_FUDGE_FACTOR = 30L*1000;
 
     /** used to differentiate routerInfo files on different networks */
     private static final int DEFAULT_NETWORK_ID = 2;
@@ -1936,7 +1936,7 @@ public class Router implements RouterClock.ClockShiftListener {
         return f;
     }
 
-    private static final long LIVELINESS_DELAY = 60*1000;
+    private static final long LIVELINESS_DELAY = 60L*1000;
 
     /**
      * Check the file "router.ping", but if

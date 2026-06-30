@@ -409,7 +409,7 @@ class NtpMessage {
         double r = 0.0;
 
         for(int i=0; i<8; i++) {
-            r += unsignedByteToShort(array[pointer+i]) * Math.pow(2, (3-i)*8);
+            r += unsignedByteToShort(array[pointer+i]) * Math.pow(2, (3-i) * 8L);
         }
         // 2036-compliance
         if (r < SECONDS_PIVOT && r > 0d)
@@ -454,7 +454,7 @@ class NtpMessage {
         // 6 bytes of real data
         for(int i=0; i<7; i++) {
             // 2^24, 2^16, 2^8, .. 2^-32
-            double base = Math.pow(2, (3-i)*8);
+            double base = Math.pow(2, (3-i) * 8L);
 
             // Capture byte value
             array[pointer+i] = (byte) (timestamp / base);

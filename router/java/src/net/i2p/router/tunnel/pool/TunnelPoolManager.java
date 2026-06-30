@@ -808,7 +808,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         _inboundExploratory.startup();
         _context.simpleTimer2().addEvent(new SimpleTimer.TimedEvent() {
             public void timeReached() {_outboundExploratory.startup();}
-        }, 2*1000);
+        }, 2*1000L);
 
         // try to build up longer tunnels
         _context.jobQueue().addJob(new BootstrapPool(_context, _outboundExploratory));
@@ -917,7 +917,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             long avgLag = _mgr._context.jobQueue().getAvgLag();
             // If queue overloaded, increase interval to reduce load (check both max and avg lag)
             if (readyCount > maxWaiting || maxLag >= 10 || avgLag >= 10) {
-                interval = 2 * 60 * 1000; // 2m
+                interval = 2 * 60 * 1000L; // 2m
                 if (_mgr._log.shouldWarn()) {
                     _mgr._log.warn("Job queue overloaded (Ready jobs: " + readyCount + ", Max lag: " + maxLag +
                                    "ms, Avg lag: " + avgLag + "ms) -> Increasing interval to 90s...");

@@ -158,12 +158,12 @@ class PeerTestManager {
 
     /** for the throttler */
     private static final int MAX_PER_IP = 12;
-    private static final long THROTTLE_CLEAN_TIME = 10*60*1000;
+    private static final long THROTTLE_CLEAN_TIME = 10*60*1000L;
 
     /** initial - ContinueTest adds backoff */
     private static final int RESEND_TIMEOUT = 4*1000;
     private static final int MAX_TEST_TIME = 20*1000;
-    private static final long MAX_SKEW = 2*60*1000;
+    private static final long MAX_SKEW = 2*60*1000L;
     private static final long MAX_NONCE = (1L << 32) - 1L;
 
     // special markers for SSU2 when Charlie is firewalled
@@ -354,10 +354,10 @@ class PeerTestManager {
                         }
                         // earlier because charlie will go away at 15 sec
                         // retx at 4, 6, 9, 13 elapsed time
-                        reschedule(sent*1000);
+                        reschedule(sent*1000L);
                     } else {
                     // retx at 4, 10, 17, 25 elapsed time
-                    reschedule(RESEND_TIMEOUT + (sent*1000));
+                    reschedule(RESEND_TIMEOUT + (sent*1000L));
                     }
                 } else {
                     reschedule(RESEND_TIMEOUT - timeSinceSend);

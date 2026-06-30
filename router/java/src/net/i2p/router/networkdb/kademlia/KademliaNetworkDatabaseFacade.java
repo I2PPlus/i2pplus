@@ -491,7 +491,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (!isClientDb() && !_context.commSystem().isDummy()) {
             long down = _context.router().getEstimatedDowntime();
             long delay = 20*60*1000L;
-            if (down > 24*60*60*1000) {delay = 60*60*1000;}
+            if (down > 24L*60*60*1000) {delay = 60L*60*1000;}
             _erj.getTiming().setStartAfter(now + delay);
             _context.jobQueue().addJob(_erj);
         }
@@ -720,7 +720,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (!_initialized) return;
         key = blindCache().getHash(key);
         if (isNegativeCached(key)) {return;}
-        search(key, null, null, 30*1000, true, fromLocalDest);
+        search(key, null, null, 30L*1000, true, fromLocalDest);
     }
 
     /**
@@ -2113,7 +2113,7 @@ return false;
                 _log.warn("Banning [" + routerId + "] for 4h -> RouterInfo from the future!\n* Published: " + new Date(routerInfo.getPublished()));
                 String ipPort = getRouterIPPort(routerInfo);
                 _banLogger.logBan(h, ipPort, "RouterInfo from the future (" + new Date(routerInfo.getPublished()) + ")", 4*60*60*1000L);
-                _context.banlist().banlistRouter(h, "RouterInfo from the future (" + new Date(routerInfo.getPublished()) + ")", null, null, 4*60*60*1000);
+                _context.banlist().banlistRouter(h, "RouterInfo from the future (" + new Date(routerInfo.getPublished()) + ")", null, null, 4L*60*60*1000);
             }
             return caps + " Router [" + routerId + "] -> Published " + DataHelper.formatDuration(age) + " in the future";
         }

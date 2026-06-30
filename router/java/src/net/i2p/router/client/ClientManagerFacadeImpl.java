@@ -40,7 +40,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     private ClientManager _manager;
     private final RouterContext _context;
     /** Throttle lease expiration logging - only log once per client per interval */
-    private static final long LOG_THROTTLE = 10 * 60 * 1000; // 10 minutes
+    private static final long LOG_THROTTLE = 10L * 60 * 1000; // 10 minutes
     private final ConcurrentHashMap<Hash, Long> _lastExpiredLogTime = new ConcurrentHashMap<>();
     /** Note that this is different than the property the client side uses, i2cp.tcp.port */
     public static final String PROP_CLIENT_PORT = "i2cp.port";
@@ -81,7 +81,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     @Override
     public boolean isAlive() {return _manager != null && _manager.isAlive();}
 
-    private static final long MAX_TIME_TO_REBUILD = 10*60*1000;
+    private static final long MAX_TIME_TO_REBUILD = 10L*60*1000;
 
     /**
      * Get the minimum time to lease expiry across all clients.
@@ -114,8 +114,8 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
         if (_manager == null) return true;
         boolean lively = true;
         long now = _context.clock().now();
-        long renewalWindow = 90 * 1000; // 90s before expiration
-        long warningWindow = 5 * 60 * 1000; // 5 minutes before expiration
+        long renewalWindow = 90L * 1000; // 90s before expiration
+        long warningWindow = 5L * 60 * 1000; // 5 minutes before expiration
 
         for (Destination dest : _manager.getRunnerDestinations()) {
             ClientConnectionRunner runner = _manager.getRunner(dest);

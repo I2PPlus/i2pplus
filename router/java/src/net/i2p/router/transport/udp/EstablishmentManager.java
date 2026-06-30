@@ -505,8 +505,8 @@ class EstablishmentManager {
                     _transport.failed(msg, "Peer has no key, cannot establish connection -> Marking unreachable");
                     if (toHash != null) {
                         if (!isBanned) {
-                            _banLogger.logBan(toHash, ipAddress + ":" + maybePort, "No Introduction key", 60*60*1000);
-                            _context.banlist().banlistRouter(toHash, "No Introduction key", null, null, now + 60*60*1000);
+                        _banLogger.logBan(toHash, ipAddress + ":" + maybePort, "No Introduction key", 60*60*1000L);
+                        _context.banlist().banlistRouter(toHash, "No Introduction key", null, null, now + 60*60*1000L);
                             if (_log.shouldWarn()) {
                                 _log.warn("[SSU] Banning [" + truncHash + "] for 1h -> No Introduction key");
                             }
@@ -698,8 +698,8 @@ class EstablishmentManager {
             }
             if (fromHash != null) {
                 if (!isBanned) {
-                   _banLogger.logBan(fromHash, from.toString(), "Invalid address/port in Session Request", 15*60*1000);
-                   _context.banlist().banlistRouter(fromHash, "Invalid address/port in Session Request", null, null, now + 15*60*1000);
+                   _banLogger.logBan(fromHash, from.toString(), "Invalid address/port in Session Request", 15*60*1000L);
+                   _context.banlist().banlistRouter(fromHash, "Invalid address/port in Session Request", null, null, now + 15*60*1000L);
                    if (_log.shouldWarn()) {
                       _log.warn("[SSU] Banning [" + truncHash + "] for 15m -> Invalid address/port in Session Request" + " (" + from + ")");
                    }
@@ -1547,7 +1547,7 @@ class EstablishmentManager {
                         istate = INTRO_STATE_LOOKUP_SENT;
                         state2.setIntroState(h, istate);
                         // TODO on success job
-                        _context.netDb().lookupRouterInfo(h, null, null, 10*1000);
+                        _context.netDb().lookupRouterInfo(h, null, null, 10*1000L);
                         sent = true;
                     }
                 }
@@ -1686,8 +1686,8 @@ class EstablishmentManager {
                 istate = INTRO_STATE_FAILED;
                 charlie2.setIntroState(bobHash, istate);
                 _context.statManager().addRateData("udp.relayBadIP", 1);
-                _banLogger.logBan(charlieHash, Addresses.toString(ip, port), "Bad Introduction data", 60*60*1000);
-                _context.banlist().banlistRouter(charlieHash, "Bad Introduction data", null, null, _context.clock().now() + 60*60*1000);
+                _banLogger.logBan(charlieHash, Addresses.toString(ip, port), "Bad Introduction data", 60*60*1000L);
+                _context.banlist().banlistRouter(charlieHash, "Bad Introduction data", null, null, _context.clock().now() + 60*60*1000L);
                 charlie.fail();
                 return;
             }
@@ -1732,8 +1732,8 @@ class EstablishmentManager {
             }
             charlie2.setIntroState(bobHash, istate);
             if (code == RELAY_REJECT_CHARLIE_BANNED) {
-                _banLogger.logBan(charlieHash, _context, "They banned us", 60*60*1000);
-                _context.banlist().banlistRouter(charlieHash, "They banned us", null, null, _context.clock().now() + 60*60*1000);
+                _banLogger.logBan(charlieHash, _context, "They banned us", 60*60*1000L);
+                _context.banlist().banlistRouter(charlieHash, "They banned us", null, null, _context.clock().now() + 60*60*1000L);
             }
             charlie.fail();
             _liveIntroductions.remove(lnonce);
@@ -1924,9 +1924,9 @@ class EstablishmentManager {
                 }
                 if (!TransportUtil.isValidPort(fromPort)) {
                     _context.statManager().addRateData("udp.relayBadIP", 1);
-                    _banLogger.logBan(state.getRemoteIdentity().getHash(), _context, "Bad Introduction data", 6*60*60*1000);
+                    _banLogger.logBan(state.getRemoteIdentity().getHash(), _context, "Bad Introduction data", 6*60*60*1000L);
                     _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), "Bad Introduction data", null, null,
-                                                     _context.clock().now() + 6*60*60*1000);
+                                                     _context.clock().now() + 6*60*60*1000L);
                     state.fail();
                     return;
                 }
@@ -2417,8 +2417,8 @@ class EstablishmentManager {
             if (r != null) {
                 long lifetime = (long) (r.getAverageValue() * 0.9d); // margin
                 if (lifetime > 0) {
-                    if (lifetime < 2*60*1000)
-                        lifetime = 2*60*1000;
+                    if (lifetime < 2*60*1000L)
+                        lifetime = 2*60*1000L;
                     if (lifetime < expiration)
                         expiration = lifetime;
                 }
@@ -2428,7 +2428,7 @@ class EstablishmentManager {
         Token tok = new Token(token, expires, now);
         synchronized(_inboundTokens) {
             Token old = _inboundTokens.put(peer, tok);
-            if (old != null && old.getExpiration() > expires - 2*60*1000) {
+            if (old != null && old.getExpiration() > expires - 2*60*1000L) {
                 // reuse for the case where we're retransmitting terminations
                 // and it expires no sooner than 2 minutes earlier
                 if (_log.shouldDebug()) {_log.debug("[SSU] Resending Inbound " + old + " for " + peer);}

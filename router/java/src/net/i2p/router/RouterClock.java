@@ -35,7 +35,7 @@ public class RouterClock extends Clock {
     private static final int WORST_STRATUM = 16;
 
     /** the max NTP Timestamper delay is 30m right now, make this longer than that */
-    private static final long MIN_DELAY_FOR_WORSE_STRATUM = 45*60*1000;
+    private static final long MIN_DELAY_FOR_WORSE_STRATUM = 45L*60*1000;
     private volatile long _desiredOffset;
     private volatile long _lastSlewed;
     /** use system time for this */
@@ -49,8 +49,8 @@ public class RouterClock extends Clock {
      *  call the callback, we probably need a soft restart.
      *  @since 0.8.8
      */
-    private static final long MASSIVE_SHIFT_FORWARD = 360*1000;
-    private static final long MASSIVE_SHIFT_BACKWARD = 61*1000;
+    private static final long MASSIVE_SHIFT_FORWARD = 360L*1000;
+    private static final long MASSIVE_SHIFT_BACKWARD = 61L*1000;
 
     /** testing only */
     private static final String PROP_DISABLE_ADJUSTMENT = "time.disableOffset";

@@ -106,7 +106,7 @@ class PacketHandler {
             _inboundQueue.offer(poison);
         }
         for (int i = 1; i <= 5 && !_inboundQueue.isEmpty(); i++) {
-            try {Thread.sleep(i * 50);}
+            try {Thread.sleep(i * 50L);}
             catch (InterruptedException ie) {
                 Thread.currentThread().interrupt();
             }

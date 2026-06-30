@@ -350,7 +350,7 @@ abstract class BuildRequestor {
         Hash nextHop = cfg.getPeer(1);
 
         // Add fuzz to expiration to obscure tunnel structure
-        msg.setMessageExpiration(ctx.clock().now() + BUILD_MSG_TIMEOUT + ctx.random().nextLong(20*1000));
+        msg.setMessageExpiration(ctx.clock().now() + BUILD_MSG_TIMEOUT + ctx.random().nextLong(20*1000L));
 
         RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(nextHop);
         if (peer == null) {
@@ -372,11 +372,11 @@ abstract class BuildRequestor {
                 return;
             }
             if (replySKM instanceof RatchetSKM) {
-                ((RatchetSKM) replySKM).tagsReceived(ots.key, ots.rtag, 2 * BUILD_MSG_TIMEOUT);
+                ((RatchetSKM) replySKM).tagsReceived(ots.key, ots.rtag, 2L * BUILD_MSG_TIMEOUT);
             } else if (replySKM instanceof MuxedSKM) {
-                ((MuxedSKM) replySKM).tagsReceived(ots.key, ots.rtag, 2 * BUILD_MSG_TIMEOUT);
+                ((MuxedSKM) replySKM).tagsReceived(ots.key, ots.rtag, 2L * BUILD_MSG_TIMEOUT);
             } else if (replySKM instanceof MuxedPQSKM) {
-                ((MuxedPQSKM) replySKM).tagsReceived(ots.key, ots.rtag, 2 * BUILD_MSG_TIMEOUT);
+                ((MuxedPQSKM) replySKM).tagsReceived(ots.key, ots.rtag, 2L * BUILD_MSG_TIMEOUT);
             }
             cfg.setGarlicReplyKeys(null);
         }

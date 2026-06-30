@@ -45,7 +45,7 @@ public class RouterTimestamper extends Timestamper {
     private static final int MAX_CONSECUTIVE_FAILS = 10;
     private static final int DEFAULT_TIMEOUT = 10*1000;
     private static final int SHORT_TIMEOUT = 5*1000;
-    private static final long MAX_WAIT_INITIALIZATION = 45*1000;
+    private static final long MAX_WAIT_INITIALIZATION = 45*1000L;
 
     public static final String PROP_QUERY_FREQUENCY = "time.queryFrequencyMs";
     public static final String PROP_SERVER_LIST = "time.sntpServerList";
@@ -218,7 +218,7 @@ public class RouterTimestamper extends Timestamper {
                 }
                 if (!wasInitialized) {
                     // let the log manager get initialized
-                    try { Thread.sleep(10*1000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+                    try { Thread.sleep(10*1000L); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
                     // NOW we set up logging
                     _log = _context.logManager().getLog(RouterTimestamper.class);
                     if (lastFailed) {
@@ -246,9 +246,9 @@ public class RouterTimestamper extends Timestamper {
                 long sleepTime;
                 if (lastFailed) {
                     if (++_consecutiveFails >= MAX_CONSECUTIVE_FAILS)
-                        sleepTime = 30*60*1000;
+                        sleepTime = 30*60*1000L;
                     else
-                        sleepTime = 30*1000;
+                        sleepTime = 30*1000L;
                 } else {
                     _consecutiveFails = 0;
                     sleepTime = _context.random().nextInt(_queryFrequency / 2) + _queryFrequency;

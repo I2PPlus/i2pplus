@@ -53,7 +53,7 @@ class ParticipatingThrottler {
         return ctx.getProperty("i2p.tunnel.participatingThrottle.percentLimit", 10);
     }
     // Cleanup interval in ms - 90 seconds
-    private static final long CLEAN_TIME = 90 * 1000;
+    private static final long CLEAN_TIME = 90 * 1000L;
     private static final String MIN_VERSION = "0.9.66";
 
     /**
@@ -217,7 +217,7 @@ class ParticipatingThrottler {
      * @param bantime duration of the ban in milliseconds
      */
     private void handleNoVersion(boolean shouldDisconnect, Hash h, boolean isBanned, String caps, int bantime, RouterInfo ri, String version) {
-        if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h, version), 11*60*1000);}
+        if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h, version), 11*60*1000L);}
         if (!isBanned && _log.shouldWarn()) {
             _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " + (bantime / 60000) + "m -> No router version in RouterInfo");
         }
@@ -240,7 +240,7 @@ class ParticipatingThrottler {
      */
     private boolean checkVersionAndCompressibility(String version, boolean isCompressible, boolean shouldDisconnect, Hash h, boolean isBanned, String caps, RouterInfo ri) {
         if (VersionComparator.comp(version, "0.9.57") < 0 && isCompressible) {
-            if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h, version), 11*60*1000);}
+            if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h, version), 11*60*1000L);}
             if (!isBanned && _log.shouldWarn()) {
                 _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for 24h -> Compressible RouterInfo / " + version);
             }
@@ -301,7 +301,7 @@ class ParticipatingThrottler {
     private boolean checkUnreachableAndOld(String version, boolean isUnreachable, boolean isFast, boolean shouldBlockOldRouters, Hash h,
                                            boolean shouldDisconnect, boolean isBanned, String caps) {
         if (VersionComparator.comp(version, MIN_VERSION) < 0 && isUnreachable && shouldBlockOldRouters && !isFast) {
-            if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h, version), 11*60*1000);}
+            if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h, version), 11*60*1000L);}
             if (_log.shouldWarn()) {
                 _log.warn("Ignoring Tunnel Request from Router [" + h.toBase64().substring(0,6) + "] -> " + version + (caps.isEmpty() ? "" : " / " + caps));
             }
@@ -364,7 +364,7 @@ class ParticipatingThrottler {
         String banReason = "Excessive tunnel requests";
         _banLogger.logBan(h, ipPort, banReason, bantime);
         context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + bantime);
-        context.simpleTimer2().addEvent(new Disconnector(h, banReason), 11 * 60 * 1000);
+        context.simpleTimer2().addEvent(new Disconnector(h, banReason), 11 * 60 * 1000L);
         if (_log.shouldWarn()) {
             _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " + (bantime / 60000) +
                       "m -> Excessive tunnel requests -> Count / Limit: " +

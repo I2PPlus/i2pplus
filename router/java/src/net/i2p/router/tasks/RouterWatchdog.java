@@ -187,18 +187,18 @@ public class RouterWatchdog implements Runnable {
                 // Get the minimum time to lease expiration across all clients
                 long minTimeToExpiry = impl.getMinTimeToLeaseExpiry();
                 
-                if (minTimeToExpiry < 30 * 1000) {
+                if (minTimeToExpiry < 30L * 1000) {
                     // Less than 30 seconds to expiry: check every 2 seconds (critical)
-                    sleepTime = 2 * 1000;
-                } else if (minTimeToExpiry < 60 * 1000) {
+                    sleepTime = 2L * 1000;
+                } else if (minTimeToExpiry < 60L * 1000) {
                     // Less than 1 minute to expiry: check every 3 seconds
-                    sleepTime = 3 * 1000;
-                } else if (minTimeToExpiry < 2 * 60 * 1000) {
+                    sleepTime = 3L * 1000;
+                } else if (minTimeToExpiry < 2L * 60 * 1000) {
                     // Less than 2 minutes to expiry: check every 5 seconds
-                    sleepTime = 5 * 1000;
-                } else if (minTimeToExpiry < 5 * 60 * 1000) {
+                    sleepTime = 5L * 1000;
+                } else if (minTimeToExpiry < 5L * 60 * 1000) {
                     // Less than 5 minutes to expiry: check every 15 seconds
-                    sleepTime = 15 * 1000;
+                    sleepTime = 15L * 1000;
                 }
             }
         } catch (Exception e) {
@@ -238,7 +238,7 @@ public class RouterWatchdog implements Runnable {
             dumpStatus();
             if (shutdownOnHang()) {
                 _log.log(Log.CRIT, "Router hung! Restart forced by Watchdog!");
-                try { Thread.sleep(30*1000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+                try { Thread.sleep(30L*1000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
                 // halt and not system.exit, since some of the shutdown hooks might be misbehaving
                 Runtime.getRuntime().halt(Router.EXIT_HARD_RESTART);
             }

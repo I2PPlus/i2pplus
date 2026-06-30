@@ -288,7 +288,7 @@ class StartExplorersJob extends JobImpl {
             } else if (isFloodfill
                     && (exploreWhenFloodfill == null || "false".equals(exploreWhenFloodfill))
                     && uptime > STARTUP_TIME || netDbSize > MAX_ROUTERS) {
-                return MAX_RERUN_DELAY_MS * 2; // 30 minutes
+                return MAX_RERUN_DELAY_MS * 2L; // 30 minutes
             } else if ((uptime < STARTUP_TIME && netDbSize < MIN_ROUTERS) || isHidden || isSlow) {
                 return MIN_RERUN_DELAY_MS;
             } else {

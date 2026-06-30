@@ -36,12 +36,12 @@ class RequestLeaseSetJob extends JobImpl {
     private final ClientConnectionRunner _runner;
     private final LeaseRequestState _requestState;
 
-    private static final long DEFAULT_MAX_FUDGE = 5*1000;
+    private static final long DEFAULT_MAX_FUDGE = 5L*1000;
     private static final String PROP_MAX_FUDGE = "router.requestLeaseSetMaxFudge";
-    private static final long TEN_MINUTES_MS = 10 * 60 * 1000;
+    private static final long TEN_MINUTES_MS = 10L * 60 * 1000;
     // Maximum future time for lease expiration (must match KademliaNetworkDatabaseFacade.MAX_LEASE_FUDGE)
-    private static final long MAX_LEASE_FUTURE = 10 * 60 * 1000;
-    private static final long CLOCK_FUDGE_FACTOR = 30 * 1000;
+    private static final long MAX_LEASE_FUTURE = 10L * 60 * 1000;
+    private static final long CLOCK_FUDGE_FACTOR = 30L * 1000;
 
     public RequestLeaseSetJob(RouterContext ctx, ClientConnectionRunner runner, LeaseRequestState state) {
         super(ctx);
