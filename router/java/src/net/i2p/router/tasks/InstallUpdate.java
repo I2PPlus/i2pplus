@@ -151,8 +151,7 @@ public class InstallUpdate {
                     System.out.println("INFO: Restarting after update..."); // NOSONAR post-update NCDFE risk
                 else
                     System.out.println("WARNING: Exiting after update (no service manager) -> Restart I2P+ manually!"); // NOSONAR post-update NCDFE risk
-            } catch (Throwable t) {
-                // hide the NCDFE
+            } catch (Throwable t) { // NOSONAR catches NoClassDefFoundError
                 // hopefully the update file got deleted or we will loop
             }
             System.exit(Router.EXIT_HARD_RESTART);

@@ -162,7 +162,7 @@ public class ReseedChecker {
             try {
                 new Reseeder(_context, this).requestReseed();
                 return true;
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 _log.error("Reseed failed to start", t);
                 done();
                 return false;
@@ -192,7 +192,7 @@ public class ReseedChecker {
                     setError(DataHelper.escapeHTML(iae.getMessage()));
                 done();
                 throw iae;
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 _log.error("Reseed failed to start", t);
                 done();
                 return false;

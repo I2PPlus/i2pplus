@@ -257,7 +257,7 @@ public class RouterTimestamper extends Timestamper {
                 }
                 try { Thread.sleep(sleepTime); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
             }
-        } catch (Throwable t) {
+        } catch (Throwable t) { // NOSONAR top-level thread handler
             synchronized (this) { notifyAll(); }
             if (_log != null)
                 _log.log(Log.CRIT, "Timestamper died!", t);

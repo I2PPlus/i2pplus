@@ -1105,7 +1105,7 @@ class ClientConnectionRunner {
             if (_log.shouldWarn())
                 _log.warn("Error sending I2CP message to client -> " + ioe.getMessage());
             stopRunning();
-        } catch (Throwable t) {
+        } catch (Exception t) {
             _log.log(Log.CRIT, "Unhandled exception sending I2CP message to client", t);
             stopRunning();
         }

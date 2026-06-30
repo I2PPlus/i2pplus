@@ -768,7 +768,7 @@ public class JobQueue {
                         Thread.currentThread().interrupt();
                     }
                 }
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 if (_log.shouldError()) {_log.error("Pumper killed?!", t);}
             } finally {
                 _context.clock().removeUpdateListener(this);

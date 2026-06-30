@@ -81,7 +81,7 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
         }
         try {
             scanAndCleanup();
-        } catch (Throwable t) {
+        } catch (Exception t) {
             if (_log.shouldError()) {
                 _log.error("Error in IdleTunnelMonitor scan", t);
             }

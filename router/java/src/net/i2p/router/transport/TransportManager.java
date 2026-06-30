@@ -1235,7 +1235,7 @@ public class TransportManager implements TransportEventListener {
         public void timeReached() {
             try {
                 maintainOutboundConnections();
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 _log.log(Log.WARN, "Error in outbound connection maintainer", t);
             }
             reschedule(MAINTAINER_INTERVAL);

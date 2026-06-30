@@ -96,7 +96,7 @@ class JobQueueRunner extends I2PThread {
                 _lastJob = _currentJob;
                 _currentJob = null;
                 _lastEnd = lastActive;
-            } catch (Throwable t) {_log.log(Log.CRIT, "Error running?", t);}
+            } catch (Exception t) {_log.log(Log.CRIT, "Error running?", t);}
         }
         if (_context.router().isAlive()) {_log.log(Log.WARN, "Queue runner " + _id + " removed (idle)");}
         _context.jobQueue().removeRunner(_id);
@@ -111,7 +111,7 @@ class JobQueueRunner extends I2PThread {
                 if (SystemVersion.isAndroid()) {_context.router().shutdown(Router.EXIT_OOM);}
                 else {fireOOM(oom);}
             } catch (Throwable t) { /* ignored */ }
-        } catch (Throwable t) {
+        } catch (Exception t) {
             _log.log(Log.CRIT, "Error processing job [" + _currentJob.getName() + "] on thread " + _id, t);
         }
     }

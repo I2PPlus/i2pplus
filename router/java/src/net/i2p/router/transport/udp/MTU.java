@@ -119,7 +119,7 @@ public class MTU {
                             return rectify(isIPv6, mtu);
                         } catch (SocketException se) {
                             // ignore
-                        } catch (Throwable t) {
+                        } catch (Throwable t) { // NOSONAR catches NoSuchMethodError
                             // NoSuchMethodException or NoSuchMethodError if we somehow got the
                             // version detection wrong or the JVM doesn't support it
                             return 0;
@@ -153,7 +153,7 @@ public class MTU {
                     int mtu;
                     try {
                         mtu = ifc.getMTU();
-                    } catch (Throwable t) {
+                    } catch (Exception t) {
                         continue outer;
                     }
                     if (mtu < 0)

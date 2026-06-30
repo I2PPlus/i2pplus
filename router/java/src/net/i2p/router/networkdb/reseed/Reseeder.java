@@ -739,7 +739,7 @@ public class Reseeder {
                 if (fetched > 0) _context.netDb().rescan();
                 return fetched;
 
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 if (_log.shouldWarn()) _log.warn("Error reseeding -> " + t.getMessage());
                 _log.warn("No router infos " + display);
                 return 0;
@@ -831,7 +831,7 @@ public class Reseeder {
                 else {stats = extractZip(contentRaw);}
                 fetched = stats[0];
                 errors = stats[1];
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 _log.error("Error reseeding " + trimmed + " -> " + t.getMessage());
                 errors++;
             } finally {
@@ -879,7 +879,7 @@ public class Reseeder {
                 int[] stats = extractZip(zip);
                 fetched = stats[0];
                 errors = stats[1];
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 String msg = "Error with downloaded reseed bundle -> " + t.getMessage();
                 _log.error(msg);
                 errors++;

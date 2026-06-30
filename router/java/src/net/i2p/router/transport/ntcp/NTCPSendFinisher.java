@@ -116,7 +116,7 @@ class NTCPSendFinisher {
         public void run() {
             try {
                 _transport.afterSend(_msg, true, false, _msg.getSendTime());
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 _log.log(Log.CRIT, "afterSend failed", t);
             }
         }

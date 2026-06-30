@@ -1328,6 +1328,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *
      *  Not for external use.
      */
+    @SuppressWarnings("java:S1181")
     public synchronized void rebuildNewIdentity() {
         if (_shutdownHook != null) {
             try {Runtime.getRuntime().removeShutdownHook(_shutdownHook);}
@@ -1337,7 +1338,7 @@ public class Router implements RouterClock.ClockShiftListener {
         for (Runnable task : _context.getShutdownTasks()) {
             if (_log.shouldWarn()) {_log.warn("Running shutdown task " + task.getClass());}
             try {task.run();}
-            catch (Throwable t) {_log.log(Log.CRIT, "Error running Shutdown Task", t);}
+            catch (Throwable t) {_log.log(Log.CRIT, "Error running Shutdown Task", t);} // NOSONAR shutdown path
         }
         _context.removeShutdownTasks();
         // hard and ugly
@@ -1462,6 +1463,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  @param exitCode one of the EXIT_* values, non-negative
      *  @throws IllegalArgumentException if exitCode negative
      */
+    @SuppressWarnings("java:S1181")
     public synchronized void shutdown2(int exitCode) {
         if (exitCode < 0) {throw new IllegalArgumentException();}
         changeState(State.FINAL_SHUTDOWN_2);
@@ -1479,7 +1481,7 @@ public class Router implements RouterClock.ClockShiftListener {
         // No, you can't do Thread.currentThread.setDaemon(false)
         if (_killVMOnEnd) {
             try {(new Spinner()).start();}
-            catch (Throwable t) { /* ignored */ }
+            catch (Throwable t) { /* ignored */ } // NOSONAR shutdown path
         }
         ((RouterClock) _context.clock()).removeShiftListener(this);
         _context.random().saveSeed();
@@ -1496,7 +1498,7 @@ public class Router implements RouterClock.ClockShiftListener {
                 t.setDaemon(true);
                 t.start();
                 tasks.add(t);
-            } catch (Throwable t) {_log.log(Log.CRIT, "Error running Shutdown Task", t);}
+            } catch (Throwable t) {_log.log(Log.CRIT, "Error running Shutdown Task", t);} // NOSONAR shutdown path
         }
         long waitSecs = SHUTDOWN_WAIT_SECS;
         if (SystemVersion.isSlow()) {waitSecs *= 2;}
@@ -1536,7 +1538,7 @@ public class Router implements RouterClock.ClockShiftListener {
         int delay = 2000;
         if (_log.shouldWarn()) {_log.warn("Stopping ClientManager...");}
         try {_context.clientManager().shutdown();}
-        catch (Throwable t) {_log.error("[ClientManager] " + t.getMessage());}
+        catch (Throwable t) {_log.error("[ClientManager] " + t.getMessage());} // NOSONAR shutdown path
         if (waitForClients) {
             // Give time for the disconnect messages to get to them
             // so they can shut down correctly before the JVM goes away
@@ -1637,6 +1639,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *
      *  @param exitCode one of the EXIT_* values, non-negative
      */
+    @SuppressWarnings("java:S1181")
     private synchronized void finalShutdown(int exitCode) {
         changeState(State.FINAL_SHUTDOWN_3);
         clearCaches();

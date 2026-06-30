@@ -115,7 +115,7 @@ class ClientListenerRunner implements Runnable {
                     } catch (IOException ioe) {
                         if (isAlive())
                             _log.error("Server error accepting", ioe);
-                    } catch (Throwable t) {
+                    } catch (Exception t) {
                         if (isAlive())
                             _log.error("Fatal error running client listener - killing the thread!", t);
                         _listening = false;

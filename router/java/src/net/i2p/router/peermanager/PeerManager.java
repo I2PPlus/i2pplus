@@ -119,7 +119,7 @@ class PeerManager {
             long uptime = _context.router().getUptime();
             boolean shouldDecay = uptime > 4*60*60*1000L;
             try {_organizer.reorganize(true, shouldDecay);}
-            catch (Throwable t) {_log.log(Log.CRIT, "Error evaluating profiles", t);}
+            catch (Exception t) {_log.log(Log.CRIT, "Error evaluating profiles", t);}
             long orgtime = System.currentTimeMillis() - start;
             if (_lastStore == 0) {_lastStore = start;}
             else if (start - _lastStore > STORE_TIME) {
@@ -135,7 +135,7 @@ class PeerManager {
                     }
 
                     _log.info("Finished writing peer profiles to disk, took " + (finished - start) + "ms");
-                } catch (Throwable t) {_log.log(Log.CRIT, "Error storing profiles", t);}
+                } catch (Exception t) {_log.log(Log.CRIT, "Error storing profiles", t);}
             }
             long delay;
             if (orgtime > 1000 || uptime > 2*60*60*1000L) {delay = REORGANIZE_TIME_LONG;}

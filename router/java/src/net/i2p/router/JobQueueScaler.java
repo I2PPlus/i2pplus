@@ -370,7 +370,7 @@ class JobQueueScaler implements Runnable {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 break;
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 if (_log.shouldError()) {
                     _log.error("Error in JobQueueScaler", t);
                 }

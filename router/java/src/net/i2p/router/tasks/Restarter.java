@@ -47,16 +47,16 @@ public class Restarter implements Runnable {
         log.logAlways(Log.WARN, "Stopping the Client Manager...");
         // NOTE: DisconnectMessageHandler keys off "restart"
         try {_context.clientManager().shutdown("Router restart");}
-        catch (Throwable t) {log.log(Log.CRIT, "Error stopping the Client Manager -> " + t.getMessage());}
+        catch (Throwable t) {log.log(Log.CRIT, "Error stopping the Client Manager -> " + t.getMessage());} // NOSONAR restart path
         log.logAlways(Log.WARN, "Stopping the Comm system...");
         _context.bandwidthLimiter().reinitialize();
         try {_context.messageRegistry().restart();}
-        catch (Throwable t) {log.log(Log.CRIT, "Error restarting the Message Registry -> " + t.getMessage());}
+        catch (Throwable t) {log.log(Log.CRIT, "Error restarting the Message Registry -> " + t.getMessage());} // NOSONAR restart path
         try {_context.commSystem().restart();}
-        catch (Throwable t) {log.log(Log.CRIT, "Error restarting the Comm System -> " + t.getMessage());}
+        catch (Throwable t) {log.log(Log.CRIT, "Error restarting the Comm System -> " + t.getMessage());} // NOSONAR restart path
         log.logAlways(Log.WARN, "Stopping the Tunnel Manager...");
         try {_context.tunnelManager().restart();}
-        catch (Throwable t) {log.log(Log.CRIT, "Error restarting the Tunnel Manager -> " + t.getMessage());}
+        catch (Throwable t) {log.log(Log.CRIT, "Error restarting the Tunnel Manager -> " + t.getMessage());} // NOSONAR restart path
         log.logAlways(Log.WARN, "Restarted the tunnel manager");
 
         try {Thread.sleep(10*1000L);} catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
@@ -64,9 +64,9 @@ public class Restarter implements Runnable {
 
         log.logAlways(Log.WARN, "Restarting the Client Manager...");
         try {_context.clientMessagePool().restart();}
-        catch (Throwable t) {log.log(Log.CRIT, "Error restarting the ClientMessagePool -> " + t.getMessage());}
+        catch (Throwable t) {log.log(Log.CRIT, "Error restarting the ClientMessagePool -> " + t.getMessage());} // NOSONAR restart path
         try {_context.clientManager().startup();}
-        catch (Throwable t) {log.log(Log.CRIT, "Error starting the Client Manager -> " + t.getMessage());}
+        catch (Throwable t) {log.log(Log.CRIT, "Error starting the Client Manager -> " + t.getMessage());} // NOSONAR restart path
 
         _context.router().setIsAlive();
         _context.router().rebuildRouterInfo();

@@ -309,7 +309,7 @@ public class LoadClientAppsJob extends JobImpl {
                     method.invoke(cls, new Object[] { _args });
                     ok = true;
                 }
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 _log.log(Log.CRIT, "Error starting up the client class " + _className, t);
             }
             if (ok) {
@@ -335,7 +335,7 @@ public class LoadClientAppsJob extends JobImpl {
                     if (intfcs[i] == intfc)
                         return true;
                 }
-            } catch (Throwable t) { /* ignored */ }
+            } catch (Exception t) { /* ignored */ }
             return false;
         }
     }
