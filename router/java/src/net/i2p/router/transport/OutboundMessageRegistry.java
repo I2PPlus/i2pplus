@@ -237,15 +237,13 @@ public class OutboundMessageRegistry {
         boolean stillActive = false;
         synchronized (_selectorToMessage) {
             Object old = _selectorToMessage.remove(sel);
-            if (old != null) {
-                if (old instanceof List) {
+            if (old != null && old instanceof List) {
                     List<OutNetMessage> l = (List<OutNetMessage>)old;
                     l.remove(msg);
                     if (!l.isEmpty()) {
                         _selectorToMessage.put(sel, l);
                         stillActive = true;
                     }
-                }
             }
         }
         if (!stillActive)

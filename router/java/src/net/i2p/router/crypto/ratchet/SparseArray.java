@@ -154,11 +154,9 @@ class SparseArray<E> implements Cloneable {
             return;
         int i = ContainerHelpers.binarySearch(mKeys, mSize, (char) key);
 
-        if (i >= 0) {
-            if (mValues[i] != DELETED) {
-                mValues[i] = DELETED;
-                mGarbage = true;
-            }
+        if (i >= 0 && mValues[i] != DELETED) {
+            mValues[i] = DELETED;
+            mGarbage = true;
         }
     }
 
@@ -173,13 +171,11 @@ class SparseArray<E> implements Cloneable {
             return null;
         int i = ContainerHelpers.binarySearch(mKeys, mSize, (char) key);
 
-        if (i >= 0) {
-            if (mValues[i] != DELETED) {
-                final E old = (E) mValues[i];
-                mValues[i] = DELETED;
-                mGarbage = true;
-                return old;
-            }
+        if (i >= 0 && mValues[i] != DELETED) {
+            final E old = (E) mValues[i];
+            mValues[i] = DELETED;
+            mGarbage = true;
+            return old;
         }
         return null;
     }

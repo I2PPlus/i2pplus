@@ -86,13 +86,11 @@ class SearchMessageSelector implements MessageSelector {
             }
         } else if (type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
             DatabaseSearchReplyMessage msg = (DatabaseSearchReplyMessage)message;
-            if (_peer.equals(msg.getFromHash())) {
-                if (msg.getSearchKey().equals(_state.getTarget())) {
+            if (_peer.equals(msg.getFromHash()) && msg.getSearchKey().equals(_state.getTarget())) {
                     if (_log.shouldDebug())
                         _log.debug("[ID " + _id + "] Received DbSearchReply from queried peer for a key we're looking for");
                     _found = true;
                     return true;
-                }
             }
         }
         return false;

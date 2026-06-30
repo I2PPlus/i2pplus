@@ -162,13 +162,12 @@ public class HashPatternDetector implements Serializable {
         double newConfidence = stats.getConfidence();
 
         // Log when we first cross the pattern detection threshold
-        if (oldConfidence < BAN_THRESHOLD && newConfidence >= BAN_THRESHOLD && newTotal >= MIN_SAMPLES) {
-            if (_log.shouldWarn()) {
-                _log.warn("WARNING! Router hash prefix '" + prefix +
-                         "' has reached " + String.format("%.1f%%", newConfidence * 100) +
-                         " confidence (" + newTotal + " samples) " +
-                         "\n* Automatic predictive banning is now ENABLED for this pattern");
-            }
+        if ((oldConfidence < BAN_THRESHOLD && newConfidence >= BAN_THRESHOLD && newTotal >= MIN_SAMPLES) &&
+            _log.shouldWarn()) {
+            _log.warn("WARNING! Router hash prefix '" + prefix +
+                     "' has reached " + String.format("%.1f%%", newConfidence * 100) +
+                     " confidence (" + newTotal + " samples) " +
+                     "\n* Automatic predictive banning is now ENABLED for this pattern");
         }
 
         if (_log.shouldDebug()) {
@@ -487,10 +486,9 @@ public class HashPatternDetector implements Serializable {
                     }
 
                     // Analyze for suspicious patterns
-                    if (isPatternSuspicious(routerHash)) {
-                        if (banRouter(router, identityHash, routerHash)) {
-                            bannedCount++;
-                        }
+                    if (isPatternSuspicious(routerHash) &&
+                        banRouter(router, identityHash, routerHash)) {
+                        bannedCount++;
                     }
 
                     // Progress logging every 500 routers

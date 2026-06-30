@@ -254,11 +254,9 @@ public class RouterThrottleImpl implements RouterThrottle {
                 double probAccept = (avg1h*tunnelTestTimeGrowthFactor)/avg1m;
                 probAccept = probAccept * probAccept; // square the decelerator for test times
                 int v = _context.random().nextInt(100);
-                if (v < probAccept*100) { // ok
-                    if (_log.shouldInfo()) {
-                        _log.info("Probabalistically accepting Tunnel Request (p=" + probAccept
-                                  + " v=" + v + " test time avg 1m=" + avg1m + " 1h=" + avg1h + ")");
-                    }
+                if (v < probAccept*100 && _log.shouldInfo()) { // ok
+                    _log.info("Probabalistically accepting Tunnel Request (p=" + probAccept
+                              + " v=" + v + " test time avg 1m=" + avg1m + " 1h=" + avg1h + ")");
                 }
             }
         }

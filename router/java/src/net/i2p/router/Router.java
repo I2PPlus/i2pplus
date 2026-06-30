@@ -1037,14 +1037,12 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     public FamilyKeyCrypto getFamilyKeyCrypto() {
         synchronized (_familyKeyLock) {
-            if (_familyKeyCrypto == null) {
-                if (!_familyKeyCryptoFail) {
-                    try {_familyKeyCrypto = new FamilyKeyCrypto(_context);}
-                    catch (Exception e) {
-                        // Could be IllegalArgumentException from key problems
-                        _log.error("Failed to initialize family key crypto", e);
-                        _familyKeyCryptoFail = true;
-                    }
+            if (_familyKeyCrypto == null && !_familyKeyCryptoFail) {
+                try {_familyKeyCrypto = new FamilyKeyCrypto(_context);}
+                catch (Exception e) {
+                    // Could be IllegalArgumentException from key problems
+                    _log.error("Failed to initialize family key crypto", e);
+                    _familyKeyCryptoFail = true;
                 }
             }
         }
@@ -1653,9 +1651,7 @@ public class Router implements RouterClock.ClockShiftListener {
             _log.log(Log.CRIT, "Completed forced restart, now restarting...");
 */
         try {_context.logManager().shutdown();} catch (Throwable t) { /* ignored */ }
-        if (ALLOW_DYNAMIC_KEYS) {
-            if (_context.getBooleanProperty(PROP_DYNAMIC_KEYS)) {killKeys();}
-        }
+        if (ALLOW_DYNAMIC_KEYS && _context.getBooleanProperty(PROP_DYNAMIC_KEYS)) {killKeys();}
 
         if (!SystemVersion.isAndroid()) {
             File f = getPingFile();

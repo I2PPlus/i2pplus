@@ -190,9 +190,7 @@ class PeerManager {
         // Gossip-only profiles (Tier 3) are kept in memory briefly but never written to disk.
         if (prof.getLastSendSuccessful() > 0 || prof.getLastHeardFrom() > 0) {
             long latestActivity = Math.max(prof.getLastSendSuccessful(), prof.getLastHeardFrom());
-            if (latestActivity > cutoff) {
-                if (_persistenceHelper.writeProfile(prof)) {return true;}
-            }
+            if (latestActivity > cutoff && _persistenceHelper.writeProfile(prof)) {return true;}
         }
         return false;
     }

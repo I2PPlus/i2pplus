@@ -88,12 +88,10 @@ public class BanLogger {
             _log = context.logManager().getLog(BanLogger.class);
             File dataDir = context.getRouterDir();
             File logDir = new File(dataDir, LOG_DIR);
-            if (!logDir.exists()) {
-                if (!logDir.mkdirs()) {
-                    if (_log.shouldLog(Log.WARN))
-                        _log.warn("Failed to create ban log directory: " + logDir);
-                    return;
-                }
+            if (!logDir.exists() && !logDir.mkdirs()) {
+                if (_log.shouldLog(Log.WARN))
+                    _log.warn("Failed to create ban log directory: " + logDir);
+                return;
             }
             _logFile = new File(logDir, LOG_FILENAME);
             _startTime = System.currentTimeMillis();

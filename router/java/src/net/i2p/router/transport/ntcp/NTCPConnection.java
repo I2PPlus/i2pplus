@@ -1405,14 +1405,12 @@ public class NTCPConnection implements Closeable {
         if (peerHash == null) {return false;}
 
         byte[] ip = getRemoteIP();
-        if (ip != null) {
-            if (_context.blocklist().isBlocklisted(ip)) {
+        if (ip != null && _context.blocklist().isBlocklisted(ip)) {
                 if (_log.shouldInfo()) {
                     _log.info("IP address " + Addresses.toString(ip) + " is blocklisted -> Closing connection...");
                 }
                 close();
                 return true;
-            }
         }
 
         if (_context.banlist().isBanlisted(peerHash)) {

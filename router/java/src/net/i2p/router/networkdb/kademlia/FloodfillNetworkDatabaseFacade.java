@@ -537,10 +537,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 }
                 if (i >= MAX_TO_FLOOD) {break;}
             }
-            if (i > 0) {
-                if (_log.shouldDebug()) {
-                    _log.debug("Flooding the entry for [" + key.toBase32().substring(0,8) + "] to " + i + " more, just before midnight");
-                }
+            if (i > 0 && _log.shouldDebug()) {
+                _log.debug("Flooding the entry for [" + key.toBase32().substring(0,8) + "] to " + i + " more, just before midnight");
             }
         }
         int flooded = 0;
@@ -1033,11 +1031,10 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 return;
             }
             RouterInfo updated = lookupRouterInfoLocally(_peer);
-            if (updated == null || updated.getPublished() <= _info.getPublished()) {
+            if ((updated == null || updated.getPublished() <= _info.getPublished()) &&
+                !dropAfterLookupFailed(_peer)) {
                 // they just sent us what we already had
-                if (!dropAfterLookupFailed(_peer)) {
-                    dropAfterLookupFailed(_peer);
-                }
+                dropAfterLookupFailed(_peer);
             }
         }
     }

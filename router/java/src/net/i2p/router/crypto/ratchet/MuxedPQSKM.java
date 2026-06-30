@@ -75,26 +75,25 @@ public class MuxedPQSKM extends SessionKeyManager {
         int total = ec + pq;
         
         // Log every 25th decrypt attempt or when ratios are interesting
-        if ((total % 25) == 0 || (total > 0 && (pq == 0 || ec == 0))) {
-            if (_log.shouldInfo()) {
-                double ecRatio = total > 0 ? (double) ec / total * 100.0 : 0.0;
-                double pqRatio = total > 0 ? (double) pq / total * 100.0 : 0.0;
-                String status = String.format("PQ vs EC decrypt ratios after %d attempts - EC: %d (%.1f%%) PQ: %d (%.1f%%) - Prefer ratchet: %s", 
-                                              total, ec, ecRatio, pq, pqRatio, preferRatchet());
-                
-                // Add warnings for concerning patterns
-                if (pq == 0 && total >= 50) {
-                    status += " [WARNING: No PQ successes detected]";
-                } else if (ec == 0 && total >= 50) {
-                    status += " [INFO: Only PQ successes detected]";
-                } else if (pqRatio > 90.0 && total >= 25) {
-                    status += " [INFO: PQ heavily preferred]";
-                } else if (ecRatio > 90.0 && total >= 25) {
-                    status += " [INFO: EC heavily preferred]";
-                }
-                
-                _log.info(status);
+        if (((total % 25) == 0 || (total > 0 && (pq == 0 || ec == 0))) &&
+            _log.shouldInfo()) {
+            double ecRatio = total > 0 ? (double) ec / total * 100.0 : 0.0;
+            double pqRatio = total > 0 ? (double) pq / total * 100.0 : 0.0;
+            String status = String.format("PQ vs EC decrypt ratios after %d attempts - EC: %d (%.1f%%) PQ: %d (%.1f%%) - Prefer ratchet: %s", 
+                                          total, ec, ecRatio, pq, pqRatio, preferRatchet());
+            
+            // Add warnings for concerning patterns
+            if (pq == 0 && total >= 50) {
+                status += " [WARNING: No PQ successes detected]";
+            } else if (ec == 0 && total >= 50) {
+                status += " [INFO: Only PQ successes detected]";
+            } else if (pqRatio > 90.0 && total >= 25) {
+                status += " [INFO: PQ heavily preferred]";
+            } else if (ecRatio > 90.0 && total >= 25) {
+                status += " [INFO: EC heavily preferred]";
             }
+            
+            _log.info(status);
         }
     }
 

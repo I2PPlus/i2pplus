@@ -150,10 +150,8 @@ public class EventLog {
         SortedMap<Long, String> rv = _cache.get(event);
         if (rv != null) {
             Long cacheTime = _cacheTime.get(event);
-            if (cacheTime != null) {
-                if (since >= cacheTime.longValue())
-                    return rv.tailMap(Long.valueOf(since));
-            }
+            if (cacheTime != null && since >= cacheTime.longValue())
+                return rv.tailMap(Long.valueOf(since));
         }
         rv = new TreeMap<>();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(

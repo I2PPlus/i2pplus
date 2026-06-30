@@ -676,12 +676,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     private static byte[] getIPv6(RouterInfo ri) {
         for (RouterAddress ra : ri.getAddresses()) {
             byte[] rv = ra.getIP();
-            if (rv != null && rv.length == 16) {
-                // i2pd bugs
-                if (!DataHelper.eq(rv, IPV6_LOCALHOST) && !DataHelper.eq(rv, 0, IPV6_NAT64, 0, 12)) {
+                if (rv != null && rv.length == 16 &&
+                    // i2pd bugs
+                    !DataHelper.eq(rv, IPV6_LOCALHOST) && !DataHelper.eq(rv, 0, IPV6_NAT64, 0, 12)) {
                     return rv;
                 }
-            }
         }
         return null;
     }
@@ -1199,13 +1198,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
             if (_context.banlist().isBanlisted(h)) {
                 StringBuilder buf = new StringBuilder("Banlist");
                 Banlist.Entry entry = banEntries.get(h);
-                if (entry != null) {
-                    if (entry.cause != null) {
+                if (entry != null && entry.cause != null) {
                         if (entry.causeCode != null)
                             buf.append(_t(entry.cause, entry.causeCode));
                         else
                             buf.append(_t(entry.cause));
-                    }
                 }
                 addPoints(points, h, POINTS_BANLIST, buf.toString());
             }

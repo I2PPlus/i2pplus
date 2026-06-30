@@ -267,11 +267,9 @@ public class IterativeSearchJob extends FloodSearchJob {
          * Warning - experts only!
          */
         String alwaysQuery = getContext().getProperty("netDb.alwaysQuery");
-        if (alwaysQuery != null) {
-            if (_alwaysQueryHash == null) {
-                byte[] b = Base64.decode(alwaysQuery);
-                if (b != null && b.length == Hash.HASH_LENGTH) {_alwaysQueryHash = Hash.create(b);}
-            }
+        if (alwaysQuery != null && _alwaysQueryHash == null) {
+            byte[] b = Base64.decode(alwaysQuery);
+            if (b != null && b.length == Hash.HASH_LENGTH) {_alwaysQueryHash = Hash.create(b);}
         }
 
         if (floodfillPeers.isEmpty()) {

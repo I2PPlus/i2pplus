@@ -488,11 +488,9 @@ class EstablishmentManager {
                                     _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Invalid MTU");
                                 }
                             }
-                        } else if (!ipAddress.isEmpty()) {
-                            if (_log.shouldWarn()) {
-                                _log.warn("[SSU] Router has invalid MTU (too small): " + ipAddress + ":" + maybePort);
-                            }
-                        }
+                         } else if (!ipAddress.isEmpty() && _log.shouldWarn()) {
+                             _log.warn("[SSU] Router has invalid MTU (too small): " + ipAddress + ":" + maybePort);
+                         }
                         return;
                     }
                 }

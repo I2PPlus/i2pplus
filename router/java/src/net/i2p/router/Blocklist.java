@@ -1052,9 +1052,7 @@ public class Blocklist {
      */
     private synchronized boolean isBlocklisted(int ip) {
         if (isOnSingleList(ip)) {return true;}
-        if (_countryBlocklist != null) {
-            if (isPermanentlyBlocklisted(ip, _countryBlocklist, _countryBlocklistSize)) {return true;}
-        }
+        if (_countryBlocklist != null && isPermanentlyBlocklisted(ip, _countryBlocklist, _countryBlocklistSize)) {return true;}
         return isPermanentlyBlocklisted(ip);
     }
 

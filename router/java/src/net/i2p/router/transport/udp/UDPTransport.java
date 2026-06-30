@@ -1090,9 +1090,8 @@ public class UDPTransport extends TransportImpl {
         if (ip.length == 4) {
             if (DataHelper.eq(ip, 0, myip, 0, 2))
                 return true;
-        } else if (ip.length == 16) {
-            if (DataHelper.eq(ip, 0, myip, 0, 4))
-                return true;
+        } else if (ip.length == 16 && DataHelper.eq(ip, 0, myip, 0, 4)) {
+            return true;
         }
         return false;
     }
@@ -2220,11 +2219,8 @@ public class UDPTransport extends TransportImpl {
             byte[] externalListenHost = addr != null ? addr.getIP() : null;
             int externalListenPort = addr != null ? addr.getPort() : -1;
             boolean rv = (externalListenHost == null) || (externalListenPort <= 0);
-            if (!rv) {
-                // shortcut to determine if introducers are present
-                if (addr.getOption("itag0") != null)
+            if (!rv && addr.getOption("itag0") != null)
                     rv = true;  // status == ok and we don't actually need introducers, so rebuild
-            }
             if (rv) {
                 if (_log.shouldInfo())
                     _log.info((ipv6 ? "IPv6" : "IPv4") + " Need to initialize our direct SSU info (" + Addresses.toString(externalListenHost, externalListenPort) + ')');
@@ -2382,12 +2378,10 @@ public class UDPTransport extends TransportImpl {
                     markUnreachable(to);
                     return null;
                 }
-            } else if (cost == 9) {
+            } else if (cost == 9 && toAddress.getVersion().equals("0.9.52")) {
                 // c++ bug in 2.40.0/0.9.52, drops SSU messages
-                if (toAddress.getVersion().equals("0.9.52")) {
-                    markUnreachable(to);
-                    return null;
-                }
+                markUnreachable(to);
+                return null;
             }
 
             // Check for supported sig type

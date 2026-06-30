@@ -848,17 +848,15 @@ class PeerTestManager {
         byte[] fromIP = from.getIP();
         int fromPort = from.getPort();
         // no need to do these checks if we received it in-session
-        if (fromPeer == null) {
-            if (!TransportUtil.isValidPort(fromPort) ||
-                (!_transport.isValid(fromIP)) ||
-                _transport.isTooClose(fromIP) ||
-                _context.blocklist().isBlocklisted(fromIP)) {
+        if (fromPeer == null && (!TransportUtil.isValidPort(fromPort) ||
+            (!_transport.isValid(fromIP)) ||
+            _transport.isTooClose(fromIP) ||
+            _context.blocklist().isBlocklisted(fromIP))) {
                 // spoof check, and don't respond to privileged ports
                 if (_log.shouldWarn())
                     _log.warn("Invalid PeerTest address: " + Addresses.toString(fromIP, fromPort));
                 _context.statManager().addRateData("udp.testBadIP", 1);
                 return;
-            }
         }
 
         // common checks
@@ -1202,10 +1200,9 @@ class PeerTestManager {
                         // we forward it to alice even on failure
                         SigningPublicKey spk = charlieRI.getIdentity().getSigningPublicKey();
                         if (!SSU2Util.validateSig(_context, SSU2Util.PEER_TEST_PROLOGUE,
-                                                  _context.routerHash(), alice.getRemotePeer(), data, spk)) {
-                            if (_log.shouldWarn())
-                                _log.warn("Signature failed on message #3\n" + charlieRI);
-                        }
+                                                  _context.routerHash(), alice.getRemotePeer(), data, spk) &&
+                            _log.shouldWarn())
+                            _log.warn("Signature failed on message #3\n" + charlieRI);
                     }
                 } else  {
                     // oh well, maybe alice has it

@@ -245,10 +245,8 @@ public class ClientAppConfig {
                 ok = false;
             }
         }
-        if (ok) {
-            if (!FileUtil.rename(from, new File(from.getAbsolutePath() + ".bak")))
-                from.delete(); // NOSONAR false positive S899
-        }
+        if (ok && !FileUtil.rename(from, new File(from.getAbsolutePath() + ".bak")))
+            from.delete(); // NOSONAR false positive S899
         return ok;
     }
 

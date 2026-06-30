@@ -351,8 +351,7 @@ public class PeerTestJob extends JobImpl {
                     if (_log.shouldInfo())
                         _log.info("Setting capacity bonus to -30 and skipping test for [" + data.shortHash + "] -> K, L, M, N or unreachable");
                 // Missing RouterInfo: cannot test
-                } else if (data.routerInfo == null) {
-                    if (_log.shouldInfo())
+                } else if (data.routerInfo == null && _log.shouldInfo()) {
                         _log.info("Test of [" + data.shortHash + "] failed: No local RouterInfo");
                 }
             }
@@ -370,10 +369,8 @@ public class PeerTestJob extends JobImpl {
             }
         }
 
-        if (getTestConcurrency() != 1 && !peers.isEmpty()) {
-            if (_log.shouldInfo())
-                _log.info("Running " + peers.size() + " concurrent peer tests (" + priorityPeers.size() + " priority)");
-        }
+        if (getTestConcurrency() != 1 && !peers.isEmpty() && _log.shouldInfo())
+            _log.info("Running " + peers.size() + " concurrent peer tests (" + priorityPeers.size() + " priority)");
         return peers;
     }
 

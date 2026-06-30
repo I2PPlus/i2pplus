@@ -1219,12 +1219,11 @@ public class ProfileOrganizer {
         double effectiveSpeedThreshold = _thresholdSpeedValue;
 
         // High-capacity tier
-        if (!_highCapacityPeers.containsKey(peer)) {
-            if (profile.getCapacityValue() >= effectiveCapThreshold ||
-                _highCapacityPeers.size() < minHighCap ||
-                _highCapacityPeers.size() < getMaximumHighCapPeers()) {
-                _highCapacityPeers.put(peer, profile);
-            }
+        if (!_highCapacityPeers.containsKey(peer) &&
+            (profile.getCapacityValue() >= effectiveCapThreshold ||
+            _highCapacityPeers.size() < minHighCap ||
+            _highCapacityPeers.size() < getMaximumHighCapPeers())) {
+            _highCapacityPeers.put(peer, profile);
         }
 
         // Fast tier

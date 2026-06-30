@@ -485,8 +485,7 @@ class BuildHandler implements Runnable {
         RouterInfo myRI = _context.router().getRouterInfo();
         if (myRI != null) {
             String caps = myRI.getCapabilities();
-            if (caps != null) {
-                if (caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0) {
+            if (caps != null && caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0) {
                     _context.statManager().addRateData("tunnel.dropTunnelFromCongestionCapability", 1);
                     if (_log.shouldWarn() && from != null) {
                         _log.warn("Dropped request from [" + from.toBase64().substring(0,6) + "] -> Local congestion");
@@ -496,15 +495,12 @@ class BuildHandler implements Runnable {
                         String fromVersion = fromRI.getVersion();
                         // If fromVersion is greater than 0.9.58, then then ban the router due to it
                         // disrespecting our congestion flags
-                        if (fromVersion != null) {
-                            if (VersionComparator.comp(fromVersion, MIN_VERSION_HONOR_CAPS) >= 0) {
-                                _context.statManager().addRateData("tunnel.dropTunnelFromCongestionCapability" + from, 1);
-                                _context.statManager().addRateData("tunnel.dropTunnelFromCongestionCapability" + fromVersion, 1);
-                            }
+                        if (fromVersion != null && VersionComparator.comp(fromVersion, MIN_VERSION_HONOR_CAPS) >= 0) {
+                            _context.statManager().addRateData("tunnel.dropTunnelFromCongestionCapability" + from, 1);
+                            _context.statManager().addRateData("tunnel.dropTunnelFromCongestionCapability" + fromVersion, 1);
                         }
                     }
                     return -1;
-                }
             }
         }
         if (timeSinceReceived > (BuildRequestor.getRequestTimeout(_context)*3)) {

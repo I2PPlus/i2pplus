@@ -165,11 +165,9 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
                 }
             }
             // Check if we should warn (5 minutes before expiration)
-            else if (timeToExpiration < warningWindow) {
-                if (_log.shouldInfo()) {
-                    _log.info("Client [" + dest.toBase32().substring(0,8) + "] leases expiring soon (" +
-                              DataHelper.formatDuration(timeToExpiration) + ") -> Renewal recommended");
-                }
+            else if (timeToExpiration < warningWindow && _log.shouldInfo()) {
+                _log.info("Client [" + dest.toBase32().substring(0,8) + "] leases expiring soon (" +
+                          DataHelper.formatDuration(timeToExpiration) + ") -> Renewal recommended");
             }
         }
         return lively;

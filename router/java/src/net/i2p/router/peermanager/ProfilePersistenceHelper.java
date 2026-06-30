@@ -315,11 +315,9 @@ class ProfilePersistenceHelper {
                 //_log.warn("Not deleting " + f + " (debugging active)");
             }
         }
-        if (_log.shouldWarn()) {
-            if (i > 0) {
-                _log.warn("Deleted " + i + " STALE peer profiles");
-                //_log.warn("Not deleting " + i + " (stale?) peer profiles -> Will expire when read at startup");
-            }
+        if (_log.shouldWarn() && i > 0) {
+            _log.warn("Deleted " + i + " STALE peer profiles");
+            //_log.warn("Not deleting " + i + " (stale?) peer profiles -> Will expire when read at startup");
         }
         return i;
     }

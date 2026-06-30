@@ -2484,11 +2484,9 @@ return false;
             _negativeCache.cache(peer);
             _kb.remove(peer);
             _ds.remove(peer);
-            if (_log.shouldInfo()) {
-                if (!loggedFailure) {
-                    _log.info("Dropping RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Lookup failure");
-                    loggedFailure = true;
-                }
+            if (_log.shouldInfo() && !loggedFailure) {
+                _log.info("Dropping RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Lookup failure");
+                loggedFailure = true;
             }
         }
         return loggedFailure;

@@ -88,10 +88,8 @@ class JobQueueRunner extends I2PThread {
                     }
                 }
 
-                if (diff > 1000) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Updating stats for '" + job.getName() + "' took too long (" + diff + "ms)");
-                    }
+                if (diff > 1000 && _log.shouldWarn()) {
+                    _log.warn("Updating stats for '" + job.getName() + "' took too long (" + diff + "ms)");
                 }
 
                 lastActive = _context.clock().now();

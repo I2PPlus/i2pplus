@@ -918,9 +918,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                     _tagSets.add(set);
                     if (_log.shouldWarn())
                         _log.warn("ACK of unknown (previously failed?) TagSet\n* " + set);
-                } else if (set.getAcked()) {
-                    if (_log.shouldWarn())
-                        _log.warn("Duplicate ACK of TagSet\n* " + set);
+                } else if (set.getAcked() && _log.shouldWarn()) {
+                    _log.warn("Duplicate ACK of TagSet\n* " + set);
                 }
                 _acked = true;
                 _consecutiveFailures = 0;
@@ -932,28 +931,26 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         void failTags(TagSet set) {
             synchronized (_tagSets) {
                 _unackedTagSets.remove(set);
-                if (_tagSets.remove(set)) {
-                    if (++_consecutiveFailures >= MAX_FAILS) {
-                        // revert back to non-speculative ack mode,
-                        // and force full ElG next time by reclassifying all tagsets that weren't really acked
-                        _acked = false;
-                        int acked = 0;
-                        int unacked = 0;
-                        for (Iterator<TagSet> iter = _tagSets.iterator(); iter.hasNext(); ) {
-                            TagSet ts = iter.next();
-                            if (!ts.getAcked()) {
-                                iter.remove();
-                                _unackedTagSets.add(ts);
-                                unacked++;
-                            } else {
-                                acked++;
-                            }
+                if (_tagSets.remove(set) && ++_consecutiveFailures >= MAX_FAILS) {
+                    // revert back to non-speculative ack mode,
+                    // and force full ElG next time by reclassifying all tagsets that weren't really acked
+                    _acked = false;
+                    int acked = 0;
+                    int unacked = 0;
+                    for (Iterator<TagSet> iter = _tagSets.iterator(); iter.hasNext(); ) {
+                        TagSet ts = iter.next();
+                        if (!ts.getAcked()) {
+                            iter.remove();
+                            _unackedTagSets.add(ts);
+                            unacked++;
+                        } else {
+                            acked++;
                         }
-                        if (_log.shouldWarn())
-                            _log.warn(_consecutiveFailures + " consecutive failed TagSet deliveries to [" + _currentKey.toBase64().substring(0,6) + "]"
-                                      + "\n* Reverting to full ElG and un-ACKing " + unacked + " UnACKed tag sets, with "
-                                      + acked + " remaining ACKed TagSets");
                     }
+                    if (_log.shouldWarn())
+                        _log.warn(_consecutiveFailures + " consecutive failed TagSet deliveries to [" + _currentKey.toBase64().substring(0,6) + "]"
+                                  + "\n* Reverting to full ElG and un-ACKing " + unacked + " UnACKed tag sets, with "
+                                  + acked + " remaining ACKed TagSets");
                 }
             }
         }
@@ -968,20 +965,18 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
         public void setCurrentKey(SessionKey key) {
             _lastUsed = _context.clock().now();
-            if (_currentKey != null) {
-                if (!_currentKey.equals(key)) {
-                    synchronized (_tagSets) {
-                        if (_log.shouldWarn()) {
-                            int dropped = 0;
-                            for (TagSet set : _tagSets) {
-                                dropped += set.getTags().size();
-                            }
-                            _log.warn("Rekeyed from " + _currentKey + " to " + key
-                                      + ": dropping " + dropped + " session tags", new Exception());
+            if (_currentKey != null && !_currentKey.equals(key)) {
+                synchronized (_tagSets) {
+                    if (_log.shouldWarn()) {
+                        int dropped = 0;
+                        for (TagSet set : _tagSets) {
+                            dropped += set.getTags().size();
                         }
-                        _acked = false;
-                        _tagSets.clear();
+                        _log.warn("Rekeyed from " + _currentKey + " to " + key
+                                  + ": dropping " + dropped + " session tags", new Exception());
                     }
+                    _acked = false;
+                    _tagSets.clear();
                 }
             }
             _currentKey = key;

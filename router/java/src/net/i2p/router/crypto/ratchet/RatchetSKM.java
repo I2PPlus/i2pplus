@@ -1183,10 +1183,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     else
                         oldtsID = 1 + _myOBKeyID + hisLastIBKeyID;
                     RatchetTagSet oldts = null;
-                    if (_tagSet != null) {
-                        if (_tagSet.getID() == oldtsID)
-                            oldts = _tagSet;
-                    }
+                    if (_tagSet != null && _tagSet.getID() == oldtsID)
+                        oldts = _tagSet;
                     if (oldts == null) {
                         if (_log.shouldWarn())
                             _log.warn("Received nextkey for Outbound " + key + " but can't find existing OB tagset " + oldtsID);
@@ -1448,11 +1446,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         public int expireTags(long now) {
             int removed = 0;
             synchronized (_unackedTagSets) {
-                if (_tagSet != null) {
-                    if (_tagSet.getExpiration() <= now) {
-                        _tagSet = null;
-                        removed++;
-                    }
+                if (_tagSet != null && _tagSet.getExpiration() <= now) {
+                    _tagSet = null;
+                    removed++;
                 }
                 for (Iterator<RatchetTagSet> iter = _unackedTagSets.iterator(); iter.hasNext(); ) {
                     RatchetTagSet set = iter.next();

@@ -218,10 +218,8 @@ class SearchState {
                     newest = ls;
                 }
             }
-            if (newest != null && newestDate > _firstLeaseSetTime) {
-                if (_log.shouldInfo()) {
-                    _log.info("Found newer LeaseSet, updating from " + _firstLeaseSetTime + " to " + newestDate);
-                }
+            if (newest != null && newestDate > _firstLeaseSetTime && _log.shouldInfo()) {
+                _log.info("Found newer LeaseSet, updating from " + _firstLeaseSetTime + " to " + newestDate);
             }
             return newest;
         }

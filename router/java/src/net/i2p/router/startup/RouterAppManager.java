@@ -163,11 +163,10 @@ public class RouterAppManager extends ClientAppManagerImpl {
      */
     @Override
     public boolean register(ClientApp app) {
-        if (!_clients.containsKey(app)) {
+        if (!_clients.containsKey(app) && _log.shouldInfo()) {
             // Allow registration even if we didn't start it,
             // useful for plugins
-            if (_log.shouldInfo())
-                _log.info("Registering untracked client " + app.getName());
+            _log.info("Registering untracked client " + app.getName());
             //return false;
         }
         if (_log.shouldInfo())
@@ -185,10 +184,8 @@ public class RouterAppManager extends ClientAppManagerImpl {
      */
     @Override
     public void unregister(ClientApp app) {
-        if (_log.shouldInfo()) {
-            if (getRegisteredApp(app.getName()) != null)
-                _log.info("Client " + app.getDisplayName() + " UNREGISTERED AS " + app.getName());
-        }
+        if (_log.shouldInfo() && getRegisteredApp(app.getName()) != null)
+            _log.info("Client " + app.getDisplayName() + " UNREGISTERED AS " + app.getName());
         super.unregister(app);
     }
 

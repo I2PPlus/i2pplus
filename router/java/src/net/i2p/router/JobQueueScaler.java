@@ -473,15 +473,13 @@ class JobQueueScaler implements Runnable {
                 _consecutiveScaleUpChecks++;
                 if (_consecutiveScaleUpChecks >= SUSTAINED_CHECKS_REQUIRED || criticalLag || criticalSlowJobs) {
                     shouldScaleUp = true;
-                    if (criticalLag || criticalSlowJobs) {
-                        if (_log.shouldInfo()) {
-                            String delayInfo = (maxLag > lagThreshold || messageDelay > lagThreshold) ?
-                                " (lag=" + maxLag + ", msgDelay=" + messageDelay + ")" : "";
-                            _log.info((criticalLag ? "Effective delay=" + effectiveDelay + delayInfo : "") +
-                                      (criticalSlowJobs ? " Active job duration=" + activeJobMaxDuration + "ms" : "") +
-                                      " > threshold=" + lagThreshold + "ms. Scaling immediately. Runners: " +
-                                      activeRunners + "/" + maxRunners + ", Ready jobs: " + readyJobs);
-                        }
+                    if ((criticalLag || criticalSlowJobs) && _log.shouldInfo()) {
+                        String delayInfo = (maxLag > lagThreshold || messageDelay > lagThreshold) ?
+                            " (lag=" + maxLag + ", msgDelay=" + messageDelay + ")" : "";
+                        _log.info((criticalLag ? "Effective delay=" + effectiveDelay + delayInfo : "") +
+                                  (criticalSlowJobs ? " Active job duration=" + activeJobMaxDuration + "ms" : "") +
+                                  " > threshold=" + lagThreshold + "ms. Scaling immediately. Runners: " +
+                                  activeRunners + "/" + maxRunners + ", Ready jobs: " + readyJobs);
                     }
                 }
             } else {
