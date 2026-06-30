@@ -2612,17 +2612,16 @@ public class TunnelPool {
                 // no more builds are triggered until they're tested.
                 deficit = Math.max(0, effectiveTarget - inProgress - untestedCount);
             } else if (safeActive == 0) {
-                // Pool has zero GOOD tunnels — UNTESTED tunnels may be
-                // stuck failing tests and blocking new builds.  Don't count
-                // them toward the deficit so replacement builds proceed.
-                // But when inProgress > 0, builds are actively happening and
-                // untested tunnels are fresh (waiting for test), not stuck.
-                // Count them to prevent build storms.
-                if (inProgress > 0) {
-                    deficit = Math.max(0, effectiveTarget - inProgress - untestedCount);
-                } else {
-                    deficit = effectiveTarget - inProgress;
-                }
+                // Pool has zero GOOD tunnels — count untested toward
+                // available capacity to prevent build storms.  Without
+                // this, ensureSufficientTunnels() queues builds that
+                // complete as UNTESTED, but the next 15s cycle queues
+                // MORE builds (ignoring the untested pileup), causing
+                // "Too many UNTESTED" warnings and wasted build slots.
+                // If untested tunnels are truly stuck (failing tests),
+                // they'll be marked FAILED and removed by pruneExcessTunnels(),
+                // at which point the deficit will correctly increase.
+                deficit = Math.max(0, effectiveTarget - inProgress - untestedCount);
             } else {
                 deficit = effectiveTarget - safeActive - inProgress - untestedCount;
             }
