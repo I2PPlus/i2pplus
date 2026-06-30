@@ -75,7 +75,7 @@ class EventPumper implements Runnable {
     private final ObjectCounter<String> _blockedIPs;
     private final ObjectCounter<String> _failedInboundHandshake;
     private long _expireIdleWriteTime;
-    private static final boolean _useDirect = false;
+    private static final boolean USE_DIRECT = false;
     private final boolean _nodelay;
 
     // Outbound retry throttling (non-hot path, kept for robustness)
@@ -99,7 +99,7 @@ class EventPumper implements Runnable {
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
         @Override
         public ByteBuffer newInstance() {
-            if (_useDirect) {
+            if (USE_DIRECT) {
                 return ByteBuffer.allocateDirect(BUF_SIZE);
             } else {
                 return ByteBuffer.allocate(BUF_SIZE);
@@ -114,10 +114,10 @@ class EventPumper implements Runnable {
      * less frequently (or not at all), but while the connection count is small,
      * the time to iterate across them to check a few flags shouldn't be a problem.
      */
-    private static final boolean isSlow = SystemVersion.isSlow();
+    private static final boolean IS_SLOW = SystemVersion.isSlow();
     private static final long FAILSAFE_ITERATION_FREQ = 2 * 1000L;
-    private static final int FAILSAFE_LOOP_COUNT = isSlow ? 512 : 2048;
-    private static final long SELECTOR_LOOP_DELAY = isSlow ? 100 : 5;
+    private static final int FAILSAFE_LOOP_COUNT = IS_SLOW ? 512 : 2048;
+    private static final long SELECTOR_LOOP_DELAY = IS_SLOW ? 100 : 5;
     private static final long SELECTOR_MAX_DELAY = 200;  // Max delay when under load
     private long _currentDelay = SELECTOR_LOOP_DELAY;
     private static final long BLOCKED_IP_FREQ = 43 * 60 * 1000L;
@@ -131,7 +131,7 @@ class EventPumper implements Runnable {
      * Do we use direct buffers for reading? Default false.
      * NOT recommended as we don't keep good track of them so they will leak.
      *
-     * Unsupported, set _useDirect above.
+     * Unsupported, set USE_DIRECT above.
      *
      * @see java.nio.ByteBuffer
      */
@@ -495,7 +495,7 @@ class EventPumper implements Runnable {
     public static ByteBuffer acquireBuf() {
         ByteBuffer buf = _bufferCache.acquire();
         if (buf == null)
-            return _useDirect ? ByteBuffer.allocateDirect(BUF_SIZE) : ByteBuffer.allocate(BUF_SIZE);
+            return USE_DIRECT ? ByteBuffer.allocateDirect(BUF_SIZE) : ByteBuffer.allocate(BUF_SIZE);
         buf.clear();
         return buf;
     }

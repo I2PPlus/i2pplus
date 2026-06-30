@@ -152,7 +152,7 @@ public class Router implements RouterClock.ClockShiftListener {
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final String PROP_RELAX_CONGESTION_CAP = "router.relaxCongestionCap";
     public boolean isAdvanced() {return getContext().getBooleanProperty(PROP_ADVANCED);}
-    private static final String originalTimeZoneID;
+    private static final String ORIGINAL_TIMEZONE_ID;
     static {
         //
         // If embedding I2P you may wish to disable one or more of the following
@@ -175,7 +175,7 @@ public class Router implements RouterClock.ClockShiftListener {
             System.setProperty("http.keepAlive", "false");
         }
         // Save it for LogManager
-        originalTimeZoneID = TimeZone.getDefault().getID();
+        ORIGINAL_TIMEZONE_ID = TimeZone.getDefault().getID();
         if (System.getProperty("I2P_DISABLE_TIMEZONE_OVERRIDE") == null) {
             System.setProperty("user.timezone", "GMT");
             // just in case, let's make it explicit...
@@ -305,7 +305,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
         if (envProps.getProperty("i2p.dir.config") == null) {envProps.setProperty("i2p.dir.config", userDir);}
         // Save this in the context for the logger and apps that need it
-        envProps.setProperty("i2p.systemTimeZone", originalTimeZoneID);
+        envProps.setProperty("i2p.systemTimeZone", ORIGINAL_TIMEZONE_ID);
 
         // Make darn sure we don't have a leftover I2PAppContext in the same JVM
         // e.g. on Android - see finalShutdown() also

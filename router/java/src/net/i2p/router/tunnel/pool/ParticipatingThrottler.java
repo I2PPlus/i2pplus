@@ -32,7 +32,7 @@ class ParticipatingThrottler {
     private final ObjectCounter<Hash> counter;
     private final Log _log;
     private BanLogger _banLogger;
-    private static final boolean isSlow = SystemVersion.isSlow();
+    private static final boolean IS_SLOW = SystemVersion.isSlow();
     private static final boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
     private static final boolean DEFAULT_SHOULD_DISCONNECT = false;
     private static final boolean DEFAULT_SHOULD_THROTTLE = true;
@@ -203,7 +203,7 @@ class ParticipatingThrottler {
      */
     private int calculateLimit(int numTunnels, boolean isUnreachable, boolean isLowShare, boolean isFast) {
         if (isUnreachable || isLowShare) {return Math.min(getMinLimit(context), Math.max(getMaxLimit(context) / 20, numTunnels * (getPercentLimit(context) / 5) / 100));}
-        else if (isSlow) {return Math.min(getMinLimit(context), Math.max(getMaxLimit(context) / 10, numTunnels * (getPercentLimit(context) / 3) / 100));}
+        else if (IS_SLOW) {return Math.min(getMinLimit(context), Math.max(getMaxLimit(context) / 10, numTunnels * (getPercentLimit(context) / 3) / 100));}
         return Math.min((getMinLimit(context) * 3), Math.max(getMaxLimit(context) / 2, numTunnels * getPercentLimit(context) / 100));
     }
 

@@ -69,16 +69,16 @@ public class RandomIterator<E> implements Iterator<E> {
     /** Used to narrow the range to take random indexes from */
     private int lower, upper;
 
-    private static final boolean hasAndroidBug;
+    private static final boolean HAS_ANDROID_BUG;
     static {
         if (SystemVersion.isAndroid()) {
             // only present on Gingerbread (API 11), but set if version check failed also
             int ver = SystemVersion.getAndroidVersion();
-            hasAndroidBug = ver == 11 || ver == 0;
-            if (hasAndroidBug)
+            HAS_ANDROID_BUG = ver == 11 || ver == 0;
+            if (HAS_ANDROID_BUG)
                 testAndroid();
         } else {
-            hasAndroidBug = false;
+            HAS_ANDROID_BUG = false;
         }
     }
 
@@ -123,7 +123,7 @@ public class RandomIterator<E> implements Iterator<E> {
         if (hasNext()) {
             if (index == lower)
                 // workaround for Android ICS bug - see below
-                lower = hasAndroidBug ? nextClearBit(index) : served.nextClearBit(index);
+                lower = HAS_ANDROID_BUG ? nextClearBit(index) : served.nextClearBit(index);
             else if (index == upper)
                 upper = previousClearBit(index - 1);
         }

@@ -75,16 +75,16 @@ class BuildHandler implements Runnable {
     private static final boolean DEFAULT_SHOULD_THROTTLE = true;
     private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
     private enum ExplState {NONE, IB, OB, BOTH}
-    private static final boolean isSlow = SystemVersion.isSlow();
+    private static final boolean IS_SLOW = SystemVersion.isSlow();
     /** TODO these may be too high, review and adjust */
-    private static final int MIN_QUEUE = isSlow ? 16 : 32;
-    private static final int MAX_QUEUE = isSlow ? 64 : 512;
+    private static final int MIN_QUEUE = IS_SLOW ? 16 : 32;
+    private static final int MAX_QUEUE = IS_SLOW ? 64 : 512;
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
     private static final int NEXT_HOP_LOOKUP_TIMEOUT = 8*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
-    private static final int MIN_LOOKUP_LIMIT = isSlow ? 4 : 10; // limits on concurrent next-hop RI lookup
-    private static final int MAX_LOOKUP_LIMIT = isSlow ? 10 : Math.max(SystemVersion.getCores() / 2, 16);
-    private static final int PERCENT_LOOKUP_LIMIT = isSlow ? 15 : 40; // limit lookups to this % of current participating tunnels
+    private static final int MIN_LOOKUP_LIMIT = IS_SLOW ? 4 : 10; // limits on concurrent next-hop RI lookup
+    private static final int MAX_LOOKUP_LIMIT = IS_SLOW ? 10 : Math.max(SystemVersion.getCores() / 2, 16);
+    private static final int PERCENT_LOOKUP_LIMIT = IS_SLOW ? 15 : 40; // limit lookups to this % of current participating tunnels
     private static final long MAX_REQUEST_FUTURE = 5*60*1000L;
     private static final long MAX_REQUEST_AGE = 65*60*1000L; /** must be > 1 hour due to rounding down */
     private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000L;
@@ -273,7 +273,7 @@ class BuildHandler implements Runnable {
         long uptime = _context.router().getUptime();
         long dropBefore = now - (BuildRequestor.getRequestTimeout(_context) / 4);
         String PROP_MAX_TUNNELS = _context.getProperty("router.maxParticipatingTunnels");
-        int DEFAULT_MAX_TUNNELS = isSlow ? 4000 : 10000;
+        int DEFAULT_MAX_TUNNELS = IS_SLOW ? 4000 : 10000;
         int maxTunnels;
         if (PROP_MAX_TUNNELS != null) {maxTunnels = Integer.parseInt(PROP_MAX_TUNNELS);}
         else {maxTunnels = DEFAULT_MAX_TUNNELS;}

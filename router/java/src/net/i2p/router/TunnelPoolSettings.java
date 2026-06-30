@@ -59,16 +59,16 @@ public class TunnelPoolSettings {
     public static final int         DEFAULT_QUANTITY = 2;
     public static final int         DEFAULT_BACKUP_QUANTITY = 0;
     public static final int         DEFAULT_DURATION = 10*60*1000;
-    private static final boolean    isSlow = SystemVersion.isSlow();
+    private static final boolean    IS_SLOW = SystemVersion.isSlow();
     /** client only */
     private static final int        DEFAULT_IB_LENGTH = 3;
     private static final int        DEFAULT_OB_LENGTH = 3;
     private static final int        DEFAULT_LENGTH_VARIANCE = 0;
     /** expl only */
-    private static final int        DEFAULT_IB_EXPL_LENGTH = isSlow ? 2 : 3;
-    private static final int        DEFAULT_OB_EXPL_LENGTH = isSlow ? 2 : 3;
-    private static final int        DEFAULT_IB_EXPL_LENGTH_VARIANCE = isSlow ? 0 : 1;
-    private static final int        DEFAULT_OB_EXPL_LENGTH_VARIANCE = isSlow ? 0 : 1;
+    private static final int        DEFAULT_IB_EXPL_LENGTH = IS_SLOW ? 2 : 3;
+    private static final int        DEFAULT_OB_EXPL_LENGTH = IS_SLOW ? 2 : 3;
+    private static final int        DEFAULT_IB_EXPL_LENGTH_VARIANCE = IS_SLOW ? 0 : 1;
+    private static final int        DEFAULT_OB_EXPL_LENGTH_VARIANCE = IS_SLOW ? 0 : 1;
     public static final boolean     DEFAULT_ALLOW_ZERO_HOP = false;
     public static final int         DEFAULT_IP_RESTRICTION = 2;    // class B (/16)
     private static final int        MIN_PRIORITY = -25;

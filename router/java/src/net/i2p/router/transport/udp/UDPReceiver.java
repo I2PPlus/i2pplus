@@ -30,7 +30,7 @@ class UDPReceiver {
     private final PacketHandler _handler;
     private final SocketListener _endpoint;
 
-    private static final boolean _isAndroid = SystemVersion.isAndroid();
+    private static final boolean IS_ANDROID = SystemVersion.isAndroid();
 
     public UDPReceiver(RouterContext ctx, UDPTransport transport, DatagramSocket socket, String name,
                        SocketListener lsnr) {
@@ -108,7 +108,7 @@ class UDPReceiver {
                 DatagramPacket dpacket = packet.getPacket();
 
                 // Android ICS bug - http://code.google.com/p/android/issues/detail?id=24748
-                if (_isAndroid) {dpacket.setLength(UDPPacket.MAX_PACKET_SIZE);}
+                if (IS_ANDROID) {dpacket.setLength(UDPPacket.MAX_PACKET_SIZE);}
 
                 while (!_context.throttle().acceptNetworkMessage()) {
                     try {Thread.sleep(10);}

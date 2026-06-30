@@ -25,7 +25,7 @@ import net.i2p.util.SystemVersion;
  */
 public class MTU {
 
-    private static final boolean hasMTU = SystemVersion.isJava6();
+    private static final boolean HAS_MTU = SystemVersion.isJava6();
 
     private MTU() {}
 
@@ -47,7 +47,7 @@ public class MTU {
      *         limited to range MIN_MTU to LARGE_MTU for SSU 1.
      */
     public static int getMTU(InetAddress ia, boolean isSSU2) {
-        if (ia == null || !hasMTU)
+        if (ia == null || !HAS_MTU)
             return 0;
         Enumeration<NetworkInterface> ifcs;
         try {

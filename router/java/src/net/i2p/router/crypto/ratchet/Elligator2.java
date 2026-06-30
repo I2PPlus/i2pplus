@@ -26,8 +26,8 @@ class Elligator2 {
     private final I2PAppContext _context;
 
     private static final BigInteger p, divide_plus_p_3_8, divide_minus_p_1_2, divide_minus_p_1_4, square_root_negative_1;
-    private static final long Aint = 486662;
-    private static final BigInteger A = new BigInteger(Long.toString(Aint));
+    private static final long A_INT = 486662;
+    private static final BigInteger A = new BigInteger(Long.toString(A_INT));
     private static final BigInteger negative_A;
     private static final BigInteger u, inverted_u;
     private static final BigInteger TWO = new NativeBigInteger("2");

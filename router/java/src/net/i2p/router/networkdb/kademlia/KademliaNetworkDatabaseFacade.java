@@ -104,7 +104,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public static final String PROP_IP_COUNTRY = "i2np.lastCountry";
     private static final String PROP_BLOCK_COUNTRIES = "router.blockCountries";
     private static final String DEFAULT_BLOCK_COUNTRIES = "";
-    public static final String minRouterVersion = "0.9.20";
+    public static final String MIN_ROUTER_VERSION = "0.9.20";
     public static final String MIN_VERSION = "0.9.66";
     public static String CURRENT_VERSION = "0.9.67";
     private final Object kbInitLock = new Object();
@@ -2146,7 +2146,7 @@ return false;
                 return caps + " Router [" + routerId + "] -> Too old (" + v + ") - banned until restart";
             }
         } else {
-            if (VersionComparator.comp(v, minRouterVersion) < 0) {
+            if (VersionComparator.comp(v, MIN_ROUTER_VERSION) < 0) {
                 _banLogger.logBanForever(h, ipPort, "Router too old (" + v + ")");
                 _context.banlist().banlistRouterForever(h, "Router too old (" + v + ")");
                 return caps + " Router [" + routerId + "] -> Too old (" + v + ") - banned until restart";
