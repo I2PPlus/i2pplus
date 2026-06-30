@@ -425,9 +425,8 @@ public class TunnelPoolSettings {
 
     private static final boolean getBoolean(String str, boolean defaultValue) {
         if (str == null) return defaultValue;
-        boolean v = Boolean.parseBoolean(str) ||
+        return Boolean.parseBoolean(str) ||
                     "YES".equals(str.toUpperCase(Locale.US));
-        return v;
     }
 
     private static final int getInt(String str, int defaultValue) { return (int)getLong(str, defaultValue); }
@@ -435,8 +434,7 @@ public class TunnelPoolSettings {
     private static final long getLong(String str, long defaultValue) {
         if (str == null) return defaultValue;
         try {
-            long val = Long.parseLong(str);
-            return val;
+            return Long.parseLong(str);
         } catch (NumberFormatException nfe) {
             return defaultValue;
         }

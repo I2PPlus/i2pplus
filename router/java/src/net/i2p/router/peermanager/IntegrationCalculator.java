@@ -9,6 +9,8 @@ import net.i2p.stat.RateConstants;
  */
 class IntegrationCalculator {
 
+    private IntegrationCalculator() {}
+
     public static double calc(PeerProfile profile) {
         long val = 0;
         if (profile.getIsExpandedDB()) {

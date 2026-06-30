@@ -347,7 +347,7 @@ public class TestJob extends JobImpl {
         int activeRunners = ctx.jobQueue().getActiveRunnerCount();
         int numPools;
         if (pool != null) {
-            List<TunnelPool> poolList = new ArrayList<TunnelPool>();
+            List<TunnelPool> poolList = new ArrayList<>();
             ctx.tunnelManager().listPools(poolList);
             numPools = poolList.size();
         } else {
@@ -821,7 +821,6 @@ public class TestJob extends JobImpl {
                 cleanupTunnelTracking();
                 decrementTotalJobs();
             }
-            return;
         }
     }
 

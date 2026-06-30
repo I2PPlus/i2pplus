@@ -432,13 +432,13 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      *  @return the configured value (not adjusted for current available)
      */
     @Override
-    public int getTagsToSend() { return 0; };
+    public int getTagsToSend() { return 0; }
 
     /**
      *  @return the configured value
      */
     @Override
-    public int getLowThreshold() { return 999999; };
+    public int getLowThreshold() { return 999999; }
 
     /**
      *  @return false always
@@ -546,16 +546,6 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * remove a bunch of arbitrarily selected tags, then drop all of
-     * the associated tag sets.  this is very time consuming - iterating
-     * across the entire _inboundTagSets map, but it should be very rare,
-     * and the stats we can gather can hopefully reduce the frequency of
-     * using too many session tags in the future
-     *
-     */
-    private void clearExcess(int _overage) {}
-
-    /**
      * @throws UnsupportedOperationException always
      */
     @Override
@@ -658,15 +648,6 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             }
             return rv;
         }
-    }
-
-    private void removeSession(PublicKey target) {
-        if (target == null) return;
-        OutboundSession session = _outboundSessions.remove(target);
-        if ( (session != null) && (_log.shouldWarn()) )
-            _log.warn("Removing session tags with " + session.availableTags() + " available for "
-                       + (session.getLastExpirationDate()-_context.clock().now())
-                       + "ms more", new Exception("Removed by"));
     }
 
     /**

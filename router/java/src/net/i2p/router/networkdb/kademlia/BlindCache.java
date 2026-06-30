@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -315,7 +316,7 @@ class BlindCache {
         long now = _context.clock().now();
         int count = 0;
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
-            		new FileInputStream(file), "ISO-8859-1"))) {
+            		new FileInputStream(file), StandardCharsets.ISO_8859_1))) {
             String line = null;
             while ( (line = br.readLine()) != null) {
                 if (line.startsWith("#"))
@@ -353,7 +354,7 @@ class BlindCache {
         Log log = _context.logManager().getLog(BlindCache.class);
         int count = 0;
         File file = new File(_context.getConfigDir(), PERSIST_FILE);
-        try (PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "ISO-8859-1")))) {
+        try (PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(file), StandardCharsets.ISO_8859_1)))) {
             out.println("# Blinding cache entries. Format is: sigtype,bsigtype,authtype,time,key,[secret],[privkey],[dest]");
             for (BlindData bd : _cache.values()) {
                  out.println(toPersistentString(bd));

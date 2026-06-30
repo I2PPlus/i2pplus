@@ -149,10 +149,10 @@ public class MuxedPQSKM extends SessionKeyManager {
     }
 
     @Override
-    public int getTagsToSend() { return 0; };
+    public int getTagsToSend() { return 0; }
 
     @Override
-    public int getLowThreshold() { return 0; };
+    public int getLowThreshold() { return 0; }
 
     /**
      *  ElG only

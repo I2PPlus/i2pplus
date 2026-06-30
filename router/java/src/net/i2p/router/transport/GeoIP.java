@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -438,7 +439,7 @@ public class GeoIP {
                 // Maxmind v1 database
                 LookupService ls = null;
                 try {
-                    out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(fout), "UTF-8"));
+                    out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(fout), StandardCharsets.UTF_8));
                     ls = new LookupService(f, LookupService.GEOIP_STANDARD);
                     for (String c : countries) {
                         ls.countryToIP(c, out);
@@ -457,7 +458,7 @@ public class GeoIP {
             } else if (geoip2 != null) {
                 // Maxmind v2 database
                 try {
-                    out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(fout), "UTF-8"));
+                    out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(fout), StandardCharsets.UTF_8));
                     dbr = openGeoIP2(geoip2);
                     for (String c : countries) {
                         dbr.countryToIP(c, out);
@@ -952,7 +953,7 @@ public class GeoIP {
             return;
         }
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(geoFile), "UTF-8"))) {
+                    new FileInputStream(geoFile), StandardCharsets.UTF_8))) {
             String line = null;
             while ( (line = br.readLine()) != null) {
                 try {
@@ -1008,7 +1009,7 @@ public class GeoIP {
         }
         String[] rv = new String[search.length];
         int idx = 0;
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(geoFile), "ISO-8859-1"))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(geoFile), StandardCharsets.ISO_8859_1))) {
             String buf = null;
             notifyVersion("Torv4", geoFile.lastModified());
             while ((buf = br.readLine()) != null && idx < search.length) {

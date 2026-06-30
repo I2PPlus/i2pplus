@@ -8,6 +8,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -166,7 +167,7 @@ class ProfilePersistenceHelper {
             add(buf, addComments, "lastThroughputUpdate", profile.getLastThroughputUpdate(), "Last time throughput was recorded:");
         }
         if (addComments) {buf.append(HR).append(NL).append(NL);}
-        out.write(buf.toString().getBytes("UTF-8"));
+        out.write(buf.toString().getBytes(StandardCharsets.UTF_8));
 
         if (profile.getIsExpanded()) { // only write out expanded data if, uh, we've got it
             profile.getTunnelHistory().store(out, addComments);
@@ -521,8 +522,7 @@ class ProfilePersistenceHelper {
             byte[] b = Base64.decode(key);
             if (b == null)
                 return null;
-            Hash h = Hash.create(b);
-            return h;
+            return Hash.create(b);
         } catch (RuntimeException dfe) {
             _log.warn("Invalid Base64 [" + key + "]", dfe);
             return null;

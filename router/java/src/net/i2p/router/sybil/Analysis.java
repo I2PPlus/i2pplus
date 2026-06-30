@@ -468,8 +468,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
             double d = closestDistance(h, ris);
             tot += d;
         }
-        double avgMinDist = tot / count;
-        return avgMinDist;
+        return tot / count;
     }
 
     /**

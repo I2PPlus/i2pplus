@@ -26,6 +26,8 @@ import org.bouncycastle.pqc.crypto.mlkem.MLKEMPublicKeyParameters;
  */
 public final class MLKEM {
 
+    private MLKEM() {}
+
     /** all non-threaded for now */
     public static final KeyFactory MLKEM512KeyFactory = new MLKEMFactory(EncType.MLKEM512_X25519_INT);
     public static final KeyFactory MLKEM768KeyFactory = new MLKEMFactory(EncType.MLKEM768_X25519_INT);

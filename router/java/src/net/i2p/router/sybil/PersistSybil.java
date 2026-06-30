@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -63,7 +64,7 @@ public class PersistSybil {
             dir.mkdirs();
         File file = new File(dir, PFX + date + SFX);
         StringBuilder buf = new StringBuilder(128);
-        try (Writer out = new OutputStreamWriter(new GZIPOutputStream(new SecureFileOutputStream(file)), "UTF-8")) {
+        try (Writer out = new OutputStreamWriter(new GZIPOutputStream(new SecureFileOutputStream(file)), StandardCharsets.UTF_8)) {
             out.write("# Format (one per line)\n");
             out.write("# Base64 router hash:total points%points:reason%points:reason ...\n");
             for (Map.Entry<Hash, Points> entry : entries.entrySet()) {
@@ -109,7 +110,7 @@ public class PersistSybil {
         File dir = new File(_context.getConfigDir(), DIR);
         File file = new File(dir, PFX + date + SFX);
         Map<Hash, Points> rv = new HashMap<>();
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), "UTF-8"))) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), StandardCharsets.UTF_8))) {
             String line;
             while ((line = in.readLine()) != null) {
                 if (line.startsWith("#"))
@@ -146,7 +147,7 @@ public class PersistSybil {
         List<Long> dates = load();
         for (Long date : dates) {
             File file = new File(dir, PFX + date + SFX);
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), "UTF-8"))) {
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = in.readLine()) != null) {
                     if (!line.startsWith(bh))
@@ -275,7 +276,7 @@ public class PersistSybil {
         Map<String, Long> rv = null;
         if (blFile.exists()) {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(
-                        new FileInputStream(blFile), "UTF-8"))) {
+                        new FileInputStream(blFile), StandardCharsets.UTF_8))) {
                 rv = new HashMap<>();
                 String buf = null;
                 long now = _context.clock().now() + 5*60*1000L;
@@ -325,7 +326,7 @@ public class PersistSybil {
                 map.put(s, old);
             }
         }
-        try (Writer out = new OutputStreamWriter(new SecureFileOutputStream(blFile), "UTF-8")) {
+        try (Writer out = new OutputStreamWriter(new SecureFileOutputStream(blFile), StandardCharsets.UTF_8)) {
             out.write("# Format (one per line)\n");
             out.write("# IP or Base64 router hash,expiration (ms)\n");
             for (Map.Entry<String, Long> e : map.entrySet()) {

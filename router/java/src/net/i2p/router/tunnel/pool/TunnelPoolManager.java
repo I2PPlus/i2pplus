@@ -190,7 +190,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * @return null if none
      */
     public TunnelInfo selectAnyOutboundTunnel() {
-        List<TunnelPool> pools = new ArrayList<TunnelPool>(_clientOutboundPools.values());
+        List<TunnelPool> pools = new ArrayList<>(_clientOutboundPools.values());
         Collections.shuffle(pools);
         for (TunnelPool pool : pools) {
             TunnelInfo info = pool.selectTunnel();
@@ -207,7 +207,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * @return null if none
      */
     public TunnelInfo selectAnyInboundTunnel() {
-        List<TunnelPool> pools = new ArrayList<TunnelPool>(_clientInboundPools.values());
+        List<TunnelPool> pools = new ArrayList<>(_clientInboundPools.values());
         Collections.shuffle(pools);
         for (TunnelPool pool : pools) {
             TunnelInfo info = pool.selectTunnel();

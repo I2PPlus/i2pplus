@@ -105,7 +105,6 @@ class OutboundMessageDistributor {
             // TODO - should we set the search timeout based on the message timeout,
             // or is that a bad idea due to clock skews?
             _context.netDb().lookupRouterInfo(target, new DistributeJob(_context, msg, target, tunnel), null, MAX_DISTRIBUTE_TIME);
-            return;
         } else {distribute(msg, info, tunnel);}
     }
 
@@ -166,7 +165,6 @@ class OutboundMessageDistributor {
             if (_log.shouldDebug())
                 _log.debug("Queueing Inbound message to ourselves: " + msg);
             _context.inNetMessagePool().add(msg, null, null, 0);
-            return;
         } else {
             OutNetMessage out = new OutNetMessage(_context, msg, _context.clock().now() + MAX_DISTRIBUTE_TIME, _priority, target);
 

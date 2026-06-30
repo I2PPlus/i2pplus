@@ -56,7 +56,7 @@ public class PeerTestJob extends JobImpl {
     private final Log _log;
     private PeerManager _manager;
     private boolean _keepTesting;
-    private final List<Hash> _priorityPeers = new ArrayList<Hash>();
+    private final List<Hash> _priorityPeers = new ArrayList<>();
     private static final long DEFAULT_PEER_TEST_DELAY = 5*60*1000L;
     public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
     private static final int DEFAULT_PEER_TEST_CONCURRENCY = 1;
@@ -88,8 +88,7 @@ public class PeerTestJob extends JobImpl {
             return 0;
         RateStat rs = getContext().statManager().getRate("peer.testOK");
         Rate r = rs.getRate(RateConstants.ONE_MINUTE);
-        int avgTestTime = (int) r.getLifetimeAverageValue();
-        return avgTestTime;
+        return (int) r.getLifetimeAverageValue();
     }
 
     /**
@@ -105,8 +104,7 @@ public class PeerTestJob extends JobImpl {
         Rate rok = ok.getRate(RateConstants.ONE_HOUR);
         RateStat tooslow = getContext().statManager().getRate("peer.testTooSlow");
         Rate rtooslow = tooslow.getRate(RateConstants.ONE_HOUR);
-        int totalAvgTestTime = (int) rok.getLifetimeAverageValue() + (int) rtooslow.getLifetimeAverageValue();
-        return totalAvgTestTime;
+        return (int) rok.getLifetimeAverageValue() + (int) rtooslow.getLifetimeAverageValue();
     }
 
     /**
@@ -302,12 +300,12 @@ public class PeerTestJob extends JobImpl {
         synchronized(this) {
             manager = _manager;
         }
-        Set<RouterInfo> peers = new HashSet<RouterInfo>();
+        Set<RouterInfo> peers = new HashSet<>();
 
         // First, test priority peers (from slow tunnels)
         List<Hash> priorityPeers;
         synchronized (_priorityPeers) {
-            priorityPeers = new ArrayList<Hash>(_priorityPeers);
+            priorityPeers = new ArrayList<>(_priorityPeers);
             _priorityPeers.clear();
         }
         if (!priorityPeers.isEmpty()) {
@@ -704,8 +702,7 @@ public class PeerTestJob extends JobImpl {
                             _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
                                       "] Setting low latency flag for fast tier router");
                     }
-                    if (prof != null && prof.getCapacityBonus() == -30 && cap != null && reachable &&
-                        (!bw.equals("L") || !bw.equals("M"))) {
+                    if (prof != null && prof.getCapacityBonus() == -30 && cap != null && reachable) {
                         try {
                             prof.setCapacityBonus(0);
                             if (_log.shouldInfo())
@@ -773,7 +770,7 @@ public class PeerTestJob extends JobImpl {
                 return;
 
             String shortHash = _peer.getIdentity().getHash().toBase64().substring(0, 6);
-            if (getShouldFailPeer()) {getContext().profileManager().dbLookupFailed(_peer.getIdentity().getHash());}
+            if (getShouldFailPeer()) {getContext().profileManager().dbLookupFailed(_peer.getIdentity().getHash());} // NOSONAR S2589 always true
 
             if (_log.shouldDebug()) {
                 _log.debug("Test failed (timeout reached) for [" + shortHash + "]" +

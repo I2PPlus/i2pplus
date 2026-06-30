@@ -40,7 +40,7 @@ import net.i2p.util.SystemVersion;
  *  Public only for TunnelRenderer in router console.
  */
 public class TunnelPool {
-    private final List<PooledTunnelCreatorConfig> _inProgress = new ArrayList<PooledTunnelCreatorConfig>();
+    private final List<PooledTunnelCreatorConfig> _inProgress = new ArrayList<>();
     protected final RouterContext _context;
     protected final Log _log;
     private TunnelPoolSettings _settings;
@@ -71,7 +71,7 @@ public class TunnelPool {
     private static final int MAX_EMERGENCY_BOOST = 6;
     private volatile boolean _leaseSetRepublishPending;
     private static final int REMOVAL_QUEUE_CAPACITY = 2000;
-    private final BlockingQueue<TunnelInfo> _removalQueue = new LinkedBlockingQueue<TunnelInfo>(REMOVAL_QUEUE_CAPACITY);
+    private final BlockingQueue<TunnelInfo> _removalQueue = new LinkedBlockingQueue<>(REMOVAL_QUEUE_CAPACITY);
     /**
      *  Reentrancy guard for ensureSufficientTunnels().
      *  pruneNonGoodTunnels() calls removeTunnel() per-tunnel, and removeTunnel()
@@ -155,7 +155,7 @@ public class TunnelPool {
         _log = ctx.logManager().getLog(TunnelPool.class);
         _manager = mgr;
         _settings = settings;
-        _tunnels = new ArrayList<TunnelInfo>(settings.getTotalQuantity());
+        _tunnels = new ArrayList<>(settings.getTotalQuantity());
         _peerSelector = sel;
         _expireSkew = _context.random().nextInt((int) (90L * 1000));
         _started = System.currentTimeMillis();
@@ -557,7 +557,7 @@ public class TunnelPool {
      */
     public List<TunnelInfo> listTunnels() {
         _tunnelsLock.lock();
-        try {return new ArrayList<TunnelInfo>(_tunnels);} finally {_tunnelsLock.unlock();}
+        try {return new ArrayList<>(_tunnels);} finally {_tunnelsLock.unlock();}
     }
 
     /**
@@ -765,7 +765,7 @@ public class TunnelPool {
     /** list of tunnelInfo instances of tunnels currently being built
      *  @return the list of tunnels currently being built
      */
-    public List<PooledTunnelCreatorConfig> listPending() {synchronized (_inProgress) {return new ArrayList<PooledTunnelCreatorConfig>(_inProgress);}}
+    public List<PooledTunnelCreatorConfig> listPending() {synchronized (_inProgress) {return new ArrayList<>(_inProgress);}}
 
     /** duplicate of size(), let's pick one
      *  @return the number of tunnels in the pool
@@ -949,7 +949,7 @@ public class TunnelPool {
      *  @since 0.9.68
      */
     public List<PooledTunnelCreatorConfig> cancelExcessInProgress(int maxAllowed) {
-        List<PooledTunnelCreatorConfig> cancelled = new ArrayList<PooledTunnelCreatorConfig>();
+        List<PooledTunnelCreatorConfig> cancelled = new ArrayList<>();
         synchronized (_inProgress) {
             while (_inProgress.size() > maxAllowed && !_inProgress.isEmpty()) {
                 PooledTunnelCreatorConfig cfg = _inProgress.remove(_inProgress.size() - 1);
@@ -1331,6 +1331,8 @@ public class TunnelPool {
             if (!removed) {return;}
         } finally {_tunnelsLock.unlock();}
 
+
+
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Removing tunnel " + info);}
 
         // Do NOT cancel the ExpireJob here.  The 2-phase ExpireJob lifecycle
@@ -1398,7 +1400,7 @@ public class TunnelPool {
             remaining = _tunnels.size();
 
             if (_settings.isInbound() && !_settings.isExploratory()) {
-                List<TunnelInfo> tunnelsCopy = new ArrayList<TunnelInfo>(_tunnels);
+                List<TunnelInfo> tunnelsCopy = new ArrayList<>(_tunnels);
                 ls = buildNewLeaseSetFromCopy(tunnelsCopy, true);
             }
         } finally {_tunnelsLock.unlock();}
@@ -1444,7 +1446,7 @@ public class TunnelPool {
 
         TunnelInfo zeroHopTunnel = null;
         Lease zeroHopLease = null;
-        TreeSet<Lease> leases = new TreeSet<Lease>(new LeaseComparator());
+        TreeSet<Lease> leases = new TreeSet<>(new LeaseComparator());
 
         boolean hasGoodTunnel = false;
         for (TunnelInfo tunnel : tunnelsCopy) {
@@ -1671,7 +1673,7 @@ public class TunnelPool {
             // Collect peers for priority testing — the sooner we retest,
             // the sooner bad peers drop from fast/high cap tiers
             if (peer != null && _context.clock().now() > getStartupTime(_context)) {
-                if (peersToTest == null) {peersToTest = new ArrayList<Hash>(Math.min(end - start, 3));}
+                if (peersToTest == null) {peersToTest = new ArrayList<>(Math.min(end - start, 3));}
                 if (peersToTest.size() < 3 && !peersToTest.contains(peer)) {peersToTest.add(peer);}
             }
         }
@@ -2043,7 +2045,7 @@ public class TunnelPool {
 
         TunnelInfo zeroHopTunnel = null;
         Lease zeroHopLease = null;
-        List<TunnelInfo> goodTunnels = new ArrayList<TunnelInfo>();
+        List<TunnelInfo> goodTunnels = new ArrayList<>();
         for (int i = 0; i < _tunnels.size(); i++) {
             TunnelInfo tunnel = _tunnels.get(i);
             if (tunnel.getTunnelFailed()) continue;
@@ -2091,10 +2093,10 @@ public class TunnelPool {
         // Take only the best latency tunnels up to wanted count
         int wantedLeases = wanted - (zeroHopTunnel != null ? 1 : 0);
         if (goodTunnels.size() > wantedLeases) {
-            goodTunnels = new ArrayList<TunnelInfo>(goodTunnels.subList(0, wantedLeases));
+            goodTunnels = new ArrayList<>(goodTunnels.subList(0, wantedLeases));
         }
 
-        TreeSet<Lease> leases = new TreeSet<Lease>(new LeaseComparator());
+        TreeSet<Lease> leases = new TreeSet<>(new LeaseComparator());
 
         // Add zero-hop lease if present
         if (zeroHopTunnel != null) {
@@ -2174,7 +2176,7 @@ public class TunnelPool {
      *  and prevents the pool from building replacements via ensureSufficientTunnels().
      */
     private void pruneNonGoodTunnels() {
-        List<TunnelInfo> toRemove = new ArrayList<TunnelInfo>();
+        List<TunnelInfo> toRemove = new ArrayList<>();
         int goodCount = 0;
         boolean isServerPool = _settings.isInbound() && !_settings.isExploratory();
         _tunnelsLock.lock();
@@ -2249,7 +2251,7 @@ public class TunnelPool {
                     return Integer.compare(a.getConsecutiveFailures(), b.getConsecutiveFailures());
                 }
             });
-            toRemove = new ArrayList<TunnelInfo>(toRemove.subList(toPrune, toRemove.size()));
+            toRemove = new ArrayList<>(toRemove.subList(toPrune, toRemove.size()));
         }
         if (_log.shouldInfo()) {
             String boost = _consecutiveEmergencies > 0 ?
@@ -2301,13 +2303,13 @@ public class TunnelPool {
         // Collect set of published gateway hashes from the LeaseSet
         int numLeases = publishedLS.getLeaseCount();
         if (numLeases <= 0) return;
-        Set<Hash> publishedGateways = new HashSet<Hash>(numLeases);
+        Set<Hash> publishedGateways = new HashSet<>(numLeases);
         for (int i = 0; i < numLeases; i++) {
             publishedGateways.add(publishedLS.getLease(i).getGateway());
         }
         if (publishedGateways.isEmpty()) return;
         long now = _context.clock().now();
-        List<TunnelInfo> toRemove = new ArrayList<TunnelInfo>();
+        List<TunnelInfo> toRemove = new ArrayList<>();
         _tunnelsLock.lock();
         try {
             for (int i = 0; i < _tunnels.size(); i++) {
@@ -2772,7 +2774,7 @@ public class TunnelPool {
                         if (ti.getLength() >= len && ti.getExpiration() < now + 3L * 60 * 1000 && !ti.wasReused()) {
                             ti.setReused();
                             len = ti.getLength();
-                            peers = new ArrayList<Hash>(len);
+                            peers = new ArrayList<>(len);
                             // Peers list is ordered endpoint first, but cfg.getPeer() is ordered gateway first
                             for (int i = len - 1; i >= 0; i--) {peers.add(ti.getPeer(i));}
                             // Skip reuse if any non-self peer is on cooldown

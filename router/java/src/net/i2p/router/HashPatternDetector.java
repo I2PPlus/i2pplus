@@ -576,23 +576,6 @@ public class HashPatternDetector implements Serializable {
     }
 
     /**
-     * Extract IP address from RouterInfo if available.
-     */
-    private String getRouterIP(RouterInfo router) {
-        if (router == null) { return ""; }
-        try {
-            for (RouterAddress addr : router.getAddresses()) {
-                if (addr != null && addr.getHost() != null) {
-                    return addr.getHost();
-                }
-            }
-        } catch (Exception e) {
-            // Ignore extraction errors
-        }
-        return "";
-    }
-
-    /**
      * Extract IP address and port from RouterInfo for logging to sessionbans.txt.
      *
      * @param router the RouterInfo to extract from

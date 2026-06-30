@@ -14,6 +14,8 @@ import net.i2p.stat.RateStat;
  */
 class CapacityCalculator {
 
+    private CapacityCalculator() {}
+
     public static final String PROP_COUNTRY_BONUS = "profileOrganizer.sameCountryBonus";
 
     /** used to adjust each period so that we keep trying to expand the peer's capacity */

@@ -52,6 +52,8 @@ import net.i2p.util.VersionComparator;
  */
 abstract class BuildRequestor {
 
+    private BuildRequestor() {}
+
     // Configuration constants
     private static final String MIN_NEWTBM_VERSION = "0.9.51";
     private static final boolean SEND_VARIABLE = true;
@@ -630,7 +632,6 @@ abstract class BuildRequestor {
                 _exec.buildComplete(_cfg, OTHER_FAILURE, "No reply from first hop");
                 ctx.profileManager().tunnelTimedOut(hopPeer);
                 ctx.statManager().addRateData("tunnel.buildFailFirstHop", 1);
-                return;
             } else if (connecting) {
                 // Transport has accepted the message and is still establishing
                 // the handshake — the connection just needs more time.
@@ -640,7 +641,6 @@ abstract class BuildRequestor {
                         .info("Build failed -> First hop connection still in progress for " + _cfg);
                 _exec.buildComplete(_cfg, OTHER_FAILURE, "First hop connection still in progress");
                 ctx.statManager().addRateData("tunnel.buildFailFirstHop", 1);
-                return;
             } else {
                 // No connection: the peer isn't established and the build
                 // message couldn't be delivered.

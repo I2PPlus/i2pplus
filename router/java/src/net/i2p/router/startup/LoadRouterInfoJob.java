@@ -66,7 +66,6 @@ class LoadRouterInfoJob extends JobImpl {
             r.rebuildRouterInfo(false);
             // run a second time
             getContext().jobQueue().addJob(this);
-            return;
         } else {
             getContext().router().setRouterInfo(_us);
             getContext().messageHistory().initialize(true);

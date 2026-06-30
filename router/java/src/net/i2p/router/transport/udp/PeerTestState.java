@@ -50,7 +50,7 @@ class PeerTestState {
      * Roles for peer testing scenarios.
      * Defines the participant's role in connectivity testing.
      */
-    public enum Role {ALICE, BOB, CHARLIE};
+    public enum Role {ALICE, BOB, CHARLIE}
 
     /**
      * @param bob null if role is BOB

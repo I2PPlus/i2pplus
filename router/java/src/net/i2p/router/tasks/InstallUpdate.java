@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -55,6 +56,8 @@ import net.i2p.util.SystemVersion;
  * @since 0.9.20 moved from Router.java
  */
 public class InstallUpdate {
+
+    private InstallUpdate() {}
 
     private static final String DELETE_FILE = "deletelist.txt";
 
@@ -241,7 +244,7 @@ public class InstallUpdate {
             return;
         // this is similar to FileUtil.readTextFile() but we can't use any I2P classes here
         try (FileInputStream fis = new FileInputStream(deleteFile);
-             BufferedReader in = new BufferedReader(new InputStreamReader(fis, "UTF-8"))) {
+             BufferedReader in = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8))) {
             String line;
             while ( (line = in.readLine()) != null) {
                 String fl = line.trim();

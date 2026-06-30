@@ -2127,17 +2127,6 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Rebuild the IPv4 or IPv6 external address if required
-     */
-    private void rebuildIfNecessary() {
-        synchronized (_rebuildLock) {
-            int code = locked_needsRebuild();
-            if (code != 0)
-                rebuildExternalAddress(code == 2);
-        }
-    }
-
-    /**
      *  @return 1 for ipv4, 2 for ipv6, 0 for neither
      */
     private int locked_needsRebuild() {
@@ -3067,24 +3056,6 @@ public class UDPTransport extends TransportImpl {
             InetAddress ia = InetAddress.getByName(ra.getHost());
             setMTU(ia);
         } catch (UnknownHostException uhe) { /* ignored */ }
-    }
-
-    /**
-     *  @since 0.9.43 pulled out of locked_rebuildExternalAddress
-     */
-    private void removeExternalAddress(boolean isIPv6, boolean allowRebuildRouterInfo) {
-        synchronized (_rebuildLock) {
-            if (getCurrentAddress(isIPv6) != null) {
-                // We must remove current address, otherwise the user will see
-                // "firewalled with inbound NTCP enabled" warning in console.
-                // Remove the v4/v6 address only
-                removeAddress(isIPv6);
-                // warning, this calls back into us with allowRebuildRouterInfo = false,
-                // via CSFI.createAddresses->TM.getAddresses()->updateAddress()->REA
-                if (allowRebuildRouterInfo)
-                    rebuildRouterInfo();
-            }
-        }
     }
 
     /**

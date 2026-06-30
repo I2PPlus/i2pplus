@@ -74,7 +74,7 @@ public class ReseedChecker {
         boolean shouldReseed = (peers < MINIMUM && networkConnected && !shuttingDown && !disabled) || !vmCommSystem;
 
         if (!shouldReseed) {
-            if (disabled || vmCommSystem) {logOnceWarning(peers, "disabled by configuration");}
+            if (disabled || vmCommSystem) {logOnceWarning(peers, "disabled by configuration");} // NOSONAR S2589 vmCommSystem always true here
             else if (shuttingDown) {logOnceWarning(peers, "prevented by router shutdown");}
             else if (!networkConnected) {
                 if (!_networkLogged) {

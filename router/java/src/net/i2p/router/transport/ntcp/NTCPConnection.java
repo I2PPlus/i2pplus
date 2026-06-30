@@ -1357,17 +1357,6 @@ public class NTCPConnection implements Closeable {
      */
     private static final LinkedBlockingQueue<I2NPMessageHandler> _i2npHandlers = new LinkedBlockingQueue<>(MAX_HANDLERS);
 
-    private static final I2NPMessageHandler acquireHandler(RouterContext ctx) {
-        I2NPMessageHandler rv = _i2npHandlers.poll();
-        if (rv == null)
-            rv = new I2NPMessageHandler(ctx);
-        return rv;
-    }
-
-    private static void releaseHandler(I2NPMessageHandler handler) {
-        _i2npHandlers.offer(handler);
-    }
-
     private static ByteArray acquireReadBuf() {
         return _dataReadBufs.acquire();
     }
@@ -1956,18 +1945,6 @@ public class NTCPConnection implements Closeable {
     }
 
     //// Utils
-
-    /**
-     *  XOR a into b. Modifies b. a is unmodified.
-     *  @param a 16 bytes
-     *  @param b 16 bytes
-     *  @since 0.9.36
-     */
-    private static void xor16(byte[] a, byte[] b) {
-        for (int i = 0; i < BLOCK_SIZE; i++) {
-            b[i] ^= a[i];
-        }
-    }
 
     /**
      * Little endian.

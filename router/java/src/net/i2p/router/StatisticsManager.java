@@ -124,7 +124,7 @@ public class StatisticsManager {
                     }
                 }
             }
-            if (sig == null || key == null) {
+            if (sig == null) { // key is always null when sig is null
                 FamilyKeyCrypto fkc = _context.router().getFamilyKeyCrypto();
                 if (fkc != null) {
                     try {

@@ -58,7 +58,7 @@ public class PersistentKeyRing extends KeyRing {
                 dest.fromBase64(hb);
                 sk.fromBase64(key);
                 super.put(dest, sk);
-            } catch (DataFormatException dfe) { continue; }
+            } catch (DataFormatException dfe) { /* ignored */ }
         }
     }
 }

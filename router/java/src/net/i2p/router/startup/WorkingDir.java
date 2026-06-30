@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import net.i2p.data.DataHelper;
 import net.i2p.util.SecureDirectory;
@@ -42,6 +43,8 @@ import net.i2p.util.SystemVersion;
  * it will continue to write to wrapper.log* in the old directory.
  */
 public class WorkingDir {
+
+    private WorkingDir() {}
 
     private static final String PROP_BASE_DIR = "i2p.dir.base";
     private static final String PROP_WORKING_DIR = "i2p.dir.config";
@@ -370,7 +373,7 @@ public class WorkingDir {
             return true;
         File newFile = new File(todir, "clients.config");
         try (FileInputStream in = new FileInputStream(oldFile);
-             PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(newFile), "UTF-8")))) {
+             PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(newFile), StandardCharsets.UTF_8)))) {
             out.println("# Modified by I2P User dir migration script");
             String s = null;
             boolean isDaemon = SystemVersion.isLinuxService();
@@ -434,7 +437,7 @@ public class WorkingDir {
     static void migrateFileXML(File oldFile, File newFile, String oldString, String newString,
                                String oldString2, String newString2) throws IOException {
         try (FileInputStream in = new FileInputStream(oldFile);
-             PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(newFile), "UTF-8")))) {
+             PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(newFile), StandardCharsets.UTF_8)))) {
             String s = null;
             while ((s = DataHelper.readLine(in)) != null) {
                 // readLine() doesn't strip \r

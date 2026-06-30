@@ -315,11 +315,10 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             return null;
         }
         if (sess.getCurrentKey().equals(key)) {
-            SessionTag nxt = sess.consumeNext();
             // logged in OutboundSession
             //if (nxt != null && _log.shouldDebug())
             //    _log.debug("OB Tag consumed: " + nxt + " with: " + key);
-            return nxt;
+            return sess.consumeNext();
         }
         if (_log.shouldWarn())
             _log.warn("Key does not match existing key, no tag");
@@ -332,14 +331,14 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      *  @since 0.9.2
      */
     @Override
-    public int getTagsToSend() { return _tagsToSend; };
+    public int getTagsToSend() { return _tagsToSend; }
 
     /**
      *  @return the configured value
      *  @since 0.9.2
      */
     @Override
-    public int getLowThreshold() { return _lowThreshold; };
+    public int getLowThreshold() { return _lowThreshold; }
 
     /**
      *  @return true if we have less than the threshold or what we have is about to expire

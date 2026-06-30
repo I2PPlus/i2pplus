@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -108,7 +109,7 @@ public class GeoIPv6 {
                 }
                 while (idx < search.length && search[idx].longValue() >= ip1 && search[idx].longValue() <= ip2) {
                     // written in lower case
-                    String lc = new String(buf, 16, 2, "ISO-8859-1");
+                    String lc = new String(buf, 16, 2, StandardCharsets.ISO_8859_1);
                     // replace the new string with the identical one from the cache
                     String cached = codeCache.get(lc);
                     if (cached == null)
@@ -174,7 +175,7 @@ public class GeoIPv6 {
                 InputStream rawIn = new BufferedInputStream(new FileInputStream(geoFile));
                 if (geoFile.getName().endsWith(".gz"))
                     rawIn = new GZIPInputStream(rawIn);
-                try (BufferedReader br = new BufferedReader(new InputStreamReader(rawIn, "ISO-8859-1"))) {
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(rawIn, StandardCharsets.ISO_8859_1))) {
                     String buf = null;
                     while ((buf = br.readLine()) != null) {
                         try {

@@ -1977,7 +1977,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             } else if (isHidden) {
                 _banLogger.logBanForever(h, ipPort, "In our country (we are in Hidden mode)");
                 _context.banlist().banlistRouterForever(h, "In our country (we are in Hidden mode)");
-            } else if (isStrict) {
+            } else {
                 _banLogger.logBanForever(h, ipPort, "In our country (we are in a strict country)");
                 _context.banlist().banlistRouterForever(h, "In our country (we are in a strict country)");
             }
@@ -2484,7 +2484,7 @@ return false;
             _negativeCache.cache(peer);
             _kb.remove(peer);
             _ds.remove(peer);
-            if (_log.shouldInfo() && !loggedFailure) {
+            if (_log.shouldInfo()) {
                 _log.info("Dropping RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Lookup failure");
                 loggedFailure = true;
             }

@@ -2,6 +2,7 @@ package net.i2p.router.peermanager;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicLong;
@@ -180,7 +181,7 @@ public class TunnelHistory {
         if (_lifetimeAgreedTo.get() > 0) {add(buf, addComments, "lifetimeAgreedTo", _lifetimeAgreedTo.get(), "Total tunnels peer agreed to participate in: " + _lifetimeAgreedTo.get());}
         if (_lifetimeRejected.get() > 0) {add(buf, addComments, "lifetimeRejected", _lifetimeRejected.get(), "Total tunnels peer refused to participate in: " + _lifetimeRejected.get());}
         if (_lifetimeFailed.get() > 0) {add(buf, addComments, "lifetimeFailed", _lifetimeFailed.get(), "Total failed tunnels peer agreed to participate in: " + _lifetimeFailed.get());}
-        out.write(buf.toString().getBytes("UTF-8"));
+        out.write(buf.toString().getBytes(StandardCharsets.UTF_8));
         _rejectRate.store(out, "tunnelHistory.rejectRate", addComments);
         _failRate.store(out, "tunnelHistory.failRate", addComments);
     }

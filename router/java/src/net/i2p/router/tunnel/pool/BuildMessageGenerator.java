@@ -27,6 +27,8 @@ import net.i2p.router.tunnel.TunnelCreatorConfig;
  */
 abstract class BuildMessageGenerator {
 
+    private BuildMessageGenerator() {}
+
     /**
      * Place the asymmetrically encrypted record in the specified record slot,
      * containing the hop's configuration (as well as the reply info, if it is an outbound endpoint)

@@ -168,7 +168,6 @@ class BuildMessageProcessor {
                                  dfe.getMessage());
                     // on the microscopic chance that there's another router
                     // out there with the same first 16 bytes, go around again
-                    continue;
                 }
             }
         }

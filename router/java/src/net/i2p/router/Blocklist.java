@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -548,7 +549,7 @@ public class Blocklist {
         int feedcount = 0;
         long ipcount = 0;
         final boolean isFeedFile = blFile.equals(_blocklistFeedFile);
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(blFile), "UTF-8"))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(blFile), StandardCharsets.UTF_8))) {
             String source = blFile.toString();
             String buf = null;
             while ((buf = br.readLine()) != null) {
@@ -748,7 +749,7 @@ public class Blocklist {
     private int getSize(File blFile) {
         if ( (!blFile.exists()) || (blFile.length() <= 0) ) return 0;
         int lines = 0;
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(blFile), "ISO-8859-1"))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(blFile), StandardCharsets.ISO_8859_1))) {
             String s;
             while ((s = br.readLine()) != null) {
                 if (s.length() > 0 && !s.startsWith("#")) {lines++;}
@@ -1303,7 +1304,7 @@ public class Blocklist {
             byte[] ip = iter.next();
             int ipint = toInt(ip);
             String sip = Addresses.toString(ip);
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(blFile), "UTF-8"))) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(blFile), StandardCharsets.UTF_8))) {
                 String buf = null;
                 // Assume the file is unsorted, so go through the whole thing
                 while ((buf = br.readLine()) != null) {

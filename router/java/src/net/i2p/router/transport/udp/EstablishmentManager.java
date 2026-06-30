@@ -19,6 +19,7 @@ import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -252,10 +253,7 @@ class EstablishmentManager {
      * @return null if none
      */
     InboundEstablishState getInboundState(RemoteHostId from) {
-            InboundEstablishState state = _inboundStates.get(from);
-            // if ( (state == null) && (_log.shouldDebug()) )
-            //     _log.debug("No inbound states for " + from + ", with remaining: " + _inboundStates);
-            return state;
+            return _inboundStates.get(from);
     }
 
     /**
@@ -1074,23 +1072,7 @@ class EstablishmentManager {
      * Is the peer on the blocklist or banlist?
      * @since 0.9.68+
      */
-    private boolean isPeerBanned(InboundEstablishState state) {
-        return isPeerBanned(state.getRemoteHostId());
-    }
-
-    /**
-     * Is the peer on the blocklist or banlist?
-     * @since 0.9.68+
-     */
     private boolean isPeerBanned(InboundEstablishState2 state) {
-        return isPeerBanned(state.getRemoteHostId());
-    }
-
-    /**
-     * Is the peer on the blocklist or banlist?
-     * @since 0.9.68+
-     */
-    private boolean isPeerBanned(OutboundEstablishState state) {
         return isPeerBanned(state.getRemoteHostId());
     }
 
@@ -1967,7 +1949,6 @@ class EstablishmentManager {
             }
         } else {
             if (_log.shouldWarn()) {_log.warn("[SSU] Charlie's RouterInfo not found " + state);}
-            return;
         }
     }
 
@@ -2575,7 +2556,7 @@ class EstablishmentManager {
      */
     private void saveTokens() {
         File f = new File(_context.getConfigDir(), TOKEN_FILE);
-        try (PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(f), "UTF-8")))) {
+        try (PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(f), StandardCharsets.UTF_8)))) {
             out.println("# SSU2 tokens, format: IPv4/IPv6/In/Out Address Port Token Expiration");
             RouterAddress addr = _transport.getCurrentExternalAddress(false);
             if (addr != null) {

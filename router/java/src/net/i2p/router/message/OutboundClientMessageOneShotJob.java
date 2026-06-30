@@ -1067,15 +1067,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         msg.setMessageExpiration(expires);
         // need random CloveSet ID as it's checked in receiver GMR.isValid() MessageValidator pre-0.9.44
         // See GarlicMessageReceiver
-        PayloadGarlicConfig clove = new PayloadGarlicConfig(Certificate.NULL_CERT,
-                                                            getContext().random().nextLong(I2NPMessage.MAX_ID_VALUE),
-                                                            expires,
-                                                            instructions, msg);
-
         // defaults
         //clove.setRecipientPublicKey(null);
         //clove.setRequestAck(false);
-        return clove;
+        return new PayloadGarlicConfig(Certificate.NULL_CERT,
+                                                            getContext().random().nextLong(I2NPMessage.MAX_ID_VALUE),
+                                                            expires,
+                                                            instructions, msg);
     }
 
     /**

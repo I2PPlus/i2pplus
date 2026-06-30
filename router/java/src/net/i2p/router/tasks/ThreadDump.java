@@ -31,6 +31,8 @@ import net.i2p.util.SystemVersion;
  */
 abstract class ThreadDump {
 
+    private ThreadDump() {}
+
     /**
      * Signal the wrapper to asynchronously dump threads to wrapper.log.
      * 

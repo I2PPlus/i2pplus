@@ -209,8 +209,7 @@ public class OutNetMessage implements CDPQEntry {
         if (_message == null) {
             return -1;
         } else {
-            int len = _message.toByteArray(outBuffer);
-            return len;
+            return _message.toByteArray(outBuffer);
         }
     }
 

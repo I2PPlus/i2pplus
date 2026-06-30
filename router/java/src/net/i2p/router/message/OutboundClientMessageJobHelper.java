@@ -57,6 +57,8 @@ import net.i2p.util.Log;
  */
 class OutboundClientMessageJobHelper {
 
+    private OutboundClientMessageJobHelper() {}
+
     private static final long ACK_EXTRA_EXPIRATION = 60*1000L;
 
     /**
@@ -241,10 +243,9 @@ class OutboundClientMessageJobHelper {
         }
         // need random CloveSet ID as it's checked in receiver GMR.isValid() MessageValidator pre-0.9.44
         // See GarlicMessageReceiver
-        PayloadGarlicConfig ackClove = new PayloadGarlicConfig(Certificate.NULL_CERT,
+        return new PayloadGarlicConfig(Certificate.NULL_CERT,
                                                                ctx.random().nextLong(I2NPMessage.MAX_ID_VALUE),
                                                                expiration, ackInstructions, msg);
-        return ackClove;
     }
 
     /**
@@ -274,8 +275,7 @@ class OutboundClientMessageJobHelper {
         // garlic encryption without any ElGamal (yay)
         long fromNow = expiration - ctx.clock().now();
         MessageWrapper.OneTimeSession sess = MessageWrapper.generateSession(ctx, skm, fromNow, true);
-        GarlicMessage msg = MessageWrapper.wrap(ctx, dsm, sess);
-        return msg;
+        return MessageWrapper.wrap(ctx, dsm, sess);
     }
 
     /**
@@ -287,9 +287,8 @@ class OutboundClientMessageJobHelper {
         msg.setMessageExpiration(expiration);
         // need random CloveSet ID as it's checked in receiver GMR.isValid() MessageValidator pre-0.9.44
         // See GarlicMessageReceiver
-        PayloadGarlicConfig clove = new PayloadGarlicConfig(Certificate.NULL_CERT,
+        return new PayloadGarlicConfig(Certificate.NULL_CERT,
                                                             ctx.random().nextLong(I2NPMessage.MAX_ID_VALUE),
                                                             expiration, DeliveryInstructions.LOCAL, msg);
-        return clove;
     }
 }

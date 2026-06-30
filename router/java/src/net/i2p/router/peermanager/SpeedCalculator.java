@@ -17,6 +17,8 @@ import net.i2p.router.RouterContext;
  */
 class SpeedCalculator {
 
+    private SpeedCalculator() {}
+
     /** Base scores for profiled bandwidth tiers */
     private static final double BASE_X = 10000;
     private static final double BASE_P = 5000;

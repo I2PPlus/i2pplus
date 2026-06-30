@@ -472,9 +472,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     @Override
     public synchronized boolean validateSessionCreated() {
         // All validation is in receiveSessionCreated()
-        boolean rv = _currentState == OutboundState.OB_STATE_CREATED_RECEIVED ||
-                     _currentState == OutboundState.OB_STATE_CONFIRMED_COMPLETELY;
-        return rv;
+        return _currentState == OutboundState.OB_STATE_CREATED_RECEIVED ||
+               _currentState == OutboundState.OB_STATE_CONFIRMED_COMPLETELY;
     }
 
     /**
@@ -919,8 +918,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     public int countIntroducers() {
-        int count = _introducers != null ? _introducers.size() : 0;
-        return count;
+        return _introducers != null ? _introducers.size() : 0;
     }
 
     /**

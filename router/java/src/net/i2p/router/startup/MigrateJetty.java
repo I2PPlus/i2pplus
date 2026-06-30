@@ -49,6 +49,8 @@ import net.i2p.util.VersionComparator;
  *  @since Jetty 6
  */
 abstract class MigrateJetty {
+    private MigrateJetty() {}
+
     private static boolean _wasChecked;
     private static boolean _hasLatestJetty;
 
@@ -202,30 +204,5 @@ abstract class MigrateJetty {
         else
             System.err.println("WARNING: Failed to back up file " + from + " to " + to); // NOSONAR migration code
         return rv;
-    }
-
-    /**
-     *  Backup a file and migrate new XML
-     *  @return success
-     *  @since Jetty 7
-     */
-    private static boolean backupAndMigrateFile(File templateDir, File toDir, String filename, String fromString, String toString) {
-        File to = new File(toDir, filename);
-        boolean rv = backupFile(to);
-        boolean rv2 = WorkingDir.migrateJettyXml(templateDir, toDir, filename, fromString, toString);
-        return rv && rv2;
-    }
-
-    /**
-     *  Backup a file and copy new
-     *  @return success
-     *  @since Jetty 7
-     */
-    private static boolean backupAndCopyFile(File templateDir, File toDir, String filename) {
-        File to = new File(toDir, filename);
-        boolean rv = backupFile(to);
-        File from = new File(templateDir, filename);
-        boolean rv2 = WorkingDir.copyFile(from, to);
-        return rv && rv2;
     }
 }

@@ -27,7 +27,7 @@ public class MTU {
 
     private static final boolean hasMTU = SystemVersion.isJava6();
 
-    private MTU() {};
+    private MTU() {}
 
     /**
      * The MTU for the socket interface, if available.

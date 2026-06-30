@@ -29,9 +29,6 @@ class OutboundSender implements TunnelGateway.Sender {
             _processor.process(preprocessed, 0, preprocessed.length);
         //if (_log.shouldDebug())
         //    _log.debug("after wrapping up the preprocessed data on " + _config);
-        long rv = receiver.receiveEncrypted(preprocessed);
-        //if (_log.shouldDebug())
-        //    _log.debug("after receiving on " + _config + ": receiver = " + receiver);
-        return rv;
+        return receiver.receiveEncrypted(preprocessed);
     }
 }

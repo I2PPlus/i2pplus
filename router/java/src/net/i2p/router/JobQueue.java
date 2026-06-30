@@ -845,7 +845,6 @@ public class JobQueue {
             if (_log.shouldWarn()) {
                 _log.log(Log.WARN, "Router is incredibly overloaded (slow cpu?) or there's an error.");
             }
-            return;
         }
     }
 

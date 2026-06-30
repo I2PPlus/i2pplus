@@ -427,7 +427,6 @@ class JobQueueScaler implements Runnable {
 
             if (_checksSinceLastScale >= FEEDBACK_CHECKS_AFTER_SCALE) {
                 evaluateScalingFeedback(activeRunners, readyJobs, maxLag, avgLag);
-                return; // Skip this cycle's scaling decisions
             }
             // Still in feedback period - skip scaling decisions
             return;

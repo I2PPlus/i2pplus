@@ -81,8 +81,7 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
 
     public LeaseSet store(Hash key, LeaseSet leaseSet) { return leaseSet; }
     public RouterInfo store(Hash key, RouterInfo routerInfo) {
-        RouterInfo rv = _routers.put(key, routerInfo);
-        return rv;
+        return _routers.put(key, routerInfo);
     }
 
     public void unpublish(LeaseSet localLeaseSet) { /* Intentionally empty - dummy implementation */ }

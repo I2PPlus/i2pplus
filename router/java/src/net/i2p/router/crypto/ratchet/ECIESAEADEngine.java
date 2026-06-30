@@ -667,8 +667,7 @@ public final class ECIESAEADEngine {
         int num = pc.cloveSet.size();
         GarlicClove[] arr = new GarlicClove[num];
         // msg id and expiration not checked in GarlicMessageReceiver
-        CloveSet rv = new CloveSet(pc.cloveSet.toArray(arr), Certificate.NULL_CERT, 0, pc.datetime);
-        return rv;
+        return new CloveSet(pc.cloveSet.toArray(arr), Certificate.NULL_CERT, 0, pc.datetime);
     }
 
     /**
@@ -774,8 +773,7 @@ public final class ECIESAEADEngine {
         int num = pc.cloveSet.size();
         GarlicClove[] arr = new GarlicClove[num];
         // msg id and expiration not checked in GarlicMessageReceiver
-        CloveSet rv = new CloveSet(pc.cloveSet.toArray(arr), Certificate.NULL_CERT, 0, pc.datetime);
-        return rv;
+        return new CloveSet(pc.cloveSet.toArray(arr), Certificate.NULL_CERT, 0, pc.datetime);
     }
 
     /**
@@ -1008,8 +1006,7 @@ public final class ECIESAEADEngine {
         int num = pc.cloveSet.size();
         GarlicClove[] arr = new GarlicClove[num];
         // msg id and expiration not checked in GarlicMessageReceiver
-        CloveSet rv = new CloveSet(pc.cloveSet.toArray(arr), Certificate.NULL_CERT, 0, pc.datetime);
-        return rv;
+        return new CloveSet(pc.cloveSet.toArray(arr), Certificate.NULL_CERT, 0, pc.datetime);
     }
 
     /*

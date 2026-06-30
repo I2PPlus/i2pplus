@@ -529,7 +529,6 @@ public class NTCPTransport extends TransportImpl {
                             _log.debug("Ignoring IllegalStateException for connection already in progress: " + con + " - " + ise.getMessage());
                         }
                         // Don't log as warning since this is expected behavior
-                        return;
                     }
                 }
             }
@@ -1336,8 +1335,7 @@ public class NTCPTransport extends TransportImpl {
         props.setProperty(RouterAddress.PROP_PORT, Integer.toString(p));
         addNTCP2Options(props);
         int cost = getDefaultCost(false);
-        RouterAddress addr = new RouterAddress(getPublishStyle(), props, cost);
-        return addr;
+        return new RouterAddress(getPublishStyle(), props, cost);
     }
 
     /**
@@ -1351,8 +1349,7 @@ public class NTCPTransport extends TransportImpl {
         if (props.containsKey("host")) {
             props.setProperty("i", _b64Ntcp2StaticIV);
             // only needed for inbound
-            if (PQ_INT_VERSION != 0)
-                props.setProperty("pq", PQ_VERSION);
+            props.setProperty("pq", PQ_VERSION);
             props.remove("caps");
         } else {
             String caps;
@@ -1409,7 +1406,7 @@ public class NTCPTransport extends TransportImpl {
             // his address is NTCP1 or is outbound NTCP2 only
             return 0;
         }
-        if (PQ_INT_VERSION != 0) {
+        {
             String pq = addr.getOption("pq");
             if (pq != null) {
                 if (pq.equals(PQ_VERSION))
@@ -1489,7 +1486,6 @@ public class NTCPTransport extends TransportImpl {
                     }
                 }
                 if (valid == 0) {_log.error("[NTCP] No valid IPs for configured hostname " + h);}
-                continue;
             }
         }
 

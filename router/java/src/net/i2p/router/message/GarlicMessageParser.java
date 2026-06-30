@@ -229,8 +229,7 @@ public class GarlicMessageParser {
         long msgId = DataHelper.fromLong(data, offset, 4);
         offset += 4;
         long expiration = DataHelper.fromLong(data, offset, 8);
-        CloveSet set = new CloveSet(cloves, cert, msgId, expiration);
-        return set;
+        return new CloveSet(cloves, cert, msgId, expiration);
     }
 
 }

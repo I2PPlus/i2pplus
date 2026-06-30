@@ -29,6 +29,8 @@ import net.i2p.util.VersionComparator;
  */
 public class BasePerms {
 
+    private BasePerms() {}
+
     private static final String FIXED_VER = "0.9.46";
     private static final String PROP_FIXED = "router.fixedBasePerms";
 

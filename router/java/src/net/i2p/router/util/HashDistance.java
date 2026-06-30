@@ -29,6 +29,8 @@ import net.i2p.data.Hash;
  */
 public class HashDistance {
 
+    private HashDistance() {}
+
     public static BigInteger getDistance(Hash targetKey, Hash routerInQuestion) {
         // plain XOR of the key and router
         byte[] diff = DataHelper.xor(routerInQuestion.getData(), targetKey.getData());

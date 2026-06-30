@@ -201,7 +201,6 @@ class RequestLeaseSetJob extends JobImpl {
             }
             if (_requestState.getIsSuccessful()) {
                 RequestLeaseSetJob.this.getContext().statManager().addRateData("client.requestLeaseSetSuccess", 1);
-                return;
             } else {
                 RequestLeaseSetJob.this.getContext().statManager().addRateData("client.requestLeaseSetTimeout", 1);
                 if (_log.shouldError()) {

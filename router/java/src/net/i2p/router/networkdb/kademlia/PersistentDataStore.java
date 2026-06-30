@@ -126,8 +126,7 @@ public class PersistentDataStore extends TransientDataStore {
      */
     @Override
     public DatabaseEntry get(Hash key, boolean persist) {
-        DatabaseEntry rv =  super.get(key);
-        return rv;
+        return super.get(key);
     }
 
     @Override
@@ -1013,8 +1012,7 @@ public class PersistentDataStore extends TransientDataStore {
             key = key.substring(0, key.length() - suffix.length());
             byte[] b = Base64.decode(key);
             if (b == null) {return null;}
-            Hash h = Hash.create(b);
-            return h;
+            return Hash.create(b);
         } catch (RuntimeException e) {return null;}
     }
 
@@ -1026,7 +1024,6 @@ public class PersistentDataStore extends TransientDataStore {
             if (!removed && f.exists()) {
                 if (_log.shouldDebug()) {_log.debug("Unable to delete " + f.getAbsolutePath() + " -> Previously deleted?");}
             } else if (_log.shouldDebug()) {_log.debug("Deleted " + f.getAbsolutePath());}
-            return;
         }
     }
 

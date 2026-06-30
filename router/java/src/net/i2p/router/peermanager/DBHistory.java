@@ -2,6 +2,7 @@ package net.i2p.router.peermanager;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import net.i2p.router.RouterContext;
 import net.i2p.stat.RateConstants;
@@ -173,7 +174,7 @@ public class DBHistory {
         add(buf, addComments, "failedLookups", _failedLookups, "Number of times peer never responded to a lookup request");
         add(buf, addComments, "successfulLookups", _successfulLookups, "Number of times peer sent a valid response to a lookup request");
 
-        out.write(buf.toString().getBytes("UTF-8"));
+        out.write(buf.toString().getBytes(StandardCharsets.UTF_8));
         _failedLookupRate.store(out, "dbHistory.failedLookupRate", addComments);
         _invalidReplyRate.store(out, "dbHistory.invalidReplyRate", addComments);
     }

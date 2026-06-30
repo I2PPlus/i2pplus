@@ -864,10 +864,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     private static final ConcurrentHashMap<String, CacheEntry> rdnsCache = new ConcurrentHashMap<>(MAX_RDNS_CACHE_SIZE);
 
-    private static ConcurrentHashMap<String, CacheEntry> getRDNSCache() {
-        return rdnsCache;
-    }
-
     public static String rdnsCacheSize() {
         File cache = new File(RDNS_CACHE_FILE);
         return String.valueOf(cache.length() / 1024) + "KB";
@@ -972,109 +968,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 ex.printStackTrace();
             }
         }
-    }
-
-    /**
-     * Writes the current reverse DNS cache to a file, sorted by
-     * timestamp with newest entries first. Only entries within
-     * the eviction threshold are written. The cache is safely
-     * synchronized during file writing and updated atomically
-     * using a temporary file.
-     *
-     * This method also triggers cleanup of expired cache entries
-     * after writing.
-     */
-    private static void writeRDNSCacheToFile() {
-        synchronized (rdnslock) {
-            try {
-                File cacheFile = new File(RDNS_CACHE_FILE);
-                if (!cacheFile.exists()) {
-                    cacheFile.createNewFile();
-                    System.out.println("[RDNSCache] No existing cache file found, new file created: " + RDNS_CACHE_FILE); // NOSONAR S106 static utility
-                }
-
-                File tmpFile = new File(RDNS_CACHE_FILE + ".tmp");
-                long now = System.currentTimeMillis();
-                AtomicInteger writtenCount = new AtomicInteger(0);
-
-                try (BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(new FileOutputStream(tmpFile), ENCODING))) {
-
-                    // Convert to list to allow traditional loop
-                    List<CacheEntry> entries = rdnsCache.values().stream()
-                        .filter(entry -> now - entry.getTimestamp() <= EVICT_THRESHOLD)
-                        .sorted((a, b) -> Long.compare(b.getTimestamp(), a.getTimestamp()))
-                        .collect(Collectors.toList());
-                    for (CacheEntry cacheEntry : entries) {
-                        try {
-                            String line = rdnsEntryToString(cacheEntry);
-                            if (line == null || line.trim().isEmpty()) {continue;}
-
-                            int firstComma = line.indexOf(',');
-                            int lastComma = line.lastIndexOf(',');
-
-                            if (firstComma >= 0 && lastComma > firstComma) {
-                                String ip = line.substring(0, firstComma).trim();
-                                String name = line.substring(firstComma + 1, lastComma).trim();
-                                String timestamp = line.substring(lastComma + 1).trim();
-                                String lc = name.toLowerCase();
-
-                                // Early skip based on original name
-                                if (lc.contains("unknown") ||
-                                    lc.contains("root") ||
-                                    lc.contains("administered by")) {
-                                    continue;
-                                }
-
-                                // Normalize the name
-                                if (lc.contains("latin american and caribbean")) {
-                                    name = "LACNIC";
-                                } else if (lc.contains("asia pacific network") || lc.contains("administered by apnic")) {
-                                    name = "APNIC";
-                                } else if (lc.contains("ripe network coordination")) {
-                                    name = "RIPE NCC";
-                                } else if (lc.contains("african network information center")) {
-                                    name = "AFRINIC";
-                                } else if (lc.contains("centurylink communications")) {
-                                    name = "CenturyLink";
-                                } else if (lc.contains("cloudflare, inc")) {
-                                    name = "CLOUDFLARE";
-                                } else if (lc.contains("t-mobile usa")) {
-                                    name = "T-MOBILE USA";
-                                } else if (lc.equals("mediacom communications corp (mcc-244)")) {
-                                    name = "MEDIACOM";
-                                } else if (lc.equals("root")) {
-                                    name = "PRIVATE";
-                                } else if (lc.equals("non-ripe-ncc-managed-address-block")) {
-                                    name = "unknown";
-                                }
-
-                                line = new StringBuilder(ip).append(',').append(name).append(',').append(timestamp).toString();
-
-                                // Final skip based on modified line
-                                boolean skipWrite = line.toLowerCase().contains("unknown") ||
-                                                    line.toLowerCase().contains("private");
-
-                                if (!skipWrite) {
-                                    writer.write(line);
-                                    writer.newLine();
-                                    writtenCount.incrementAndGet();
-                                }
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                Files.copy(tmpFile.toPath(), cacheFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                tmpFile.delete();
-            } catch (IOException ex) {
-                System.err.println("[RDNSCache] Error updating reverse DNS cache file: " + ex.getMessage()); // NOSONAR S106 static utility
-                ex.printStackTrace();
-            }
-        }
-        cleanupRDNSCache();
     }
 
     private static void cleanupRDNSCache() {
@@ -1393,8 +1286,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
 
         String country = _geoIP.get(ip);
-        if (ri == null || country == null) {return "xx";}
-        if (ri != null && country.equals("xx")) {
+        if (country == null) {return "xx";}
+        if (country.equals("xx")) {
             if (_log.shouldDebug()) {
                 try {
                     InetAddress address = InetAddress.getByAddress(ip);
@@ -1772,24 +1665,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         } else {buf.append("<td class=rbw>?</td>");}
         if (!inline) {buf.append("</tr></table>\n");}
         return buf.toString();
-    }
-
-    /**
-     * Returns the capacity character for the peer, or '?' if unknown.
-     *
-     * @param peer Peer Hash
-     * @return Capacity character or '?'
-     */
-    private char getCapacity(Hash peer) {
-        RouterInfo info = getRouterInfoCached(peer);
-        if (info != null) {
-            String caps = info.getCapabilities();
-            for (int i = 0; i < RouterInfo.BW_CAPABILITY_CHARS.length(); i++) {
-                char c = RouterInfo.BW_CAPABILITY_CHARS.charAt(i);
-                if (caps.indexOf(c) >= 0) {return c;}
-            }
-        }
-        return '?';
     }
 
     /** Cache for reverse DNS lookups - small since we rely on file-backed rdnsCache */

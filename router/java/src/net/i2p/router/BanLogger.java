@@ -187,16 +187,6 @@ public class BanLogger {
     }
 
     /**
-     * Get router uptime in milliseconds.
-     */
-    private long getUptime() {
-        if (_startTime > 0) {
-            return System.currentTimeMillis() - _startTime;
-        }
-        return 0;
-    }
-
-    /**
      * Archive an existing log file from a previous session.
      * Called during initialization before opening a new writer.
      */

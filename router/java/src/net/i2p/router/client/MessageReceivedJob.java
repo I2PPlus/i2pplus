@@ -76,7 +76,7 @@ class MessageReceivedJob extends JobImpl {
                 _log.warn(msg, ime);
             else
                 _log.logAlways(Log.WARN, msg);
-            if (id != null && !_sendDirect)
+            if (id != null)
                 _runner.removePayload(id);
             return false;
         }

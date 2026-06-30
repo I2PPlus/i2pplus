@@ -93,7 +93,6 @@ class OutboundMessageFragments {
             add(peer, state.getMinSendSize());
         } catch (IllegalArgumentException iae) {
             _transport.failed(msg, "Peer disconnected quickly");
-            return;
         }
     }
 
@@ -372,13 +371,6 @@ class OutboundMessageFragments {
 
         return rv;
     }
-
-private void removePeer(PeerState peer) {
-    _activePeers.remove(peer);
-    if (_log.shouldDebug()) {
-        _log.debug("No more pending messages for [" + peer.getRemotePeer().toBase64().substring(0,6) + "]");
-    }
-}
 
 private void waitForMessages() {
     synchronized (_waitLock) {

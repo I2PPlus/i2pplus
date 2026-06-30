@@ -155,8 +155,7 @@ public class ConnectChecker {
         // assume nothing if hidden
         if (ra.isEmpty()) {return false;}
         int ct = getConnectMask(ra);
-        boolean rv = (ourMask & ct) != 0;
-        return rv;
+        return (ourMask & ct) != 0;
     }
 
     /**
@@ -176,8 +175,7 @@ public class ConnectChecker {
         int cf;
         if (ra.isEmpty()) {cf = NTCP_V4 | SSU_V4;} // assume v4 if hidden
         else {cf = getConnectMask(ra);}
-        boolean rv = (cf & ourMask) != 0;
-        return rv;
+        return (cf & ourMask) != 0;
     }
 
     /**

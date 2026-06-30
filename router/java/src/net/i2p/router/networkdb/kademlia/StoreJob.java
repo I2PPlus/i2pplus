@@ -204,7 +204,6 @@ abstract class StoreJob extends JobImpl {
                 if (_log.shouldInfo()) {
                     _log.info("[" + _facade + "] No more peers left but some are pending, waiting...");
                 }
-                return;
             }
         } else {
             int queued = 0;
@@ -271,8 +270,7 @@ abstract class StoreJob extends JobImpl {
         Hash rkey = getContext().routingKeyGenerator().getRoutingKey(key);
         KBucketSet<Hash> ks = _facade.getKBuckets();
         if (ks == null) return new ArrayList<>();
-        List<Hash> rv = ((FloodfillPeerSelector)_peerSelector).selectFloodfillParticipants(rkey, numClosest, alreadyChecked, ks);
-        return rv;
+        return ((FloodfillPeerSelector)_peerSelector).selectFloodfillParticipants(rkey, numClosest, alreadyChecked, ks);
     }
 
     /** limit expiration for direct sends */

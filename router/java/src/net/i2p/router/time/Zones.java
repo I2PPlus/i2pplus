@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -98,7 +99,7 @@ class Zones {
             return;
         }
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(geoFile), "UTF-8"))) {
+                    new FileInputStream(geoFile), StandardCharsets.UTF_8))) {
             String line = null;
             while ((line = br.readLine()) != null) {
                 try {

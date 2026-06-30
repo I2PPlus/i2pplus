@@ -55,7 +55,6 @@ public class FloodfillDatabaseStoreMessageHandler implements HandlerJobBuilder {
             netdb = (FloodfillNetworkDatabaseFacade) _context.clientNetDb(by);
         else
             netdb = _facade;
-        Job j = new HandleFloodfillDatabaseStoreMessageJob(_context, dsm, from, fromHash, netdb, _msgIDBloomXor);
-        return j;
+        return new HandleFloodfillDatabaseStoreMessageJob(_context, dsm, from, fromHash, netdb, _msgIDBloomXor);
     }
 }

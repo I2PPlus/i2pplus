@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -134,7 +135,7 @@ public class EventLog {
             if (SystemVersion.isWindows())
                 buf.append('\r');
             buf.append('\n');
-            out.write(buf.toString().getBytes("UTF-8"));
+            out.write(buf.toString().getBytes(StandardCharsets.UTF_8));
         } catch (IOException ioe) { /* ignored */ }
     }
 
@@ -154,7 +155,7 @@ public class EventLog {
         }
         rv = new TreeMap<>();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(_file), "UTF-8"))) {
+                    new FileInputStream(_file), StandardCharsets.UTF_8))) {
             String line = null;
             while ( (line = br.readLine()) != null) {
                 try {
@@ -190,7 +191,7 @@ public class EventLog {
     public synchronized SortedMap<Long, String> getEvents(long since) {
         SortedMap<Long, String> rv = new TreeMap<>();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(_file), "UTF-8"))) {
+                    new FileInputStream(_file), StandardCharsets.UTF_8))) {
             String line = null;
             while ( (line = br.readLine()) != null) {
                 try {
@@ -220,7 +221,7 @@ public class EventLog {
     public synchronized long getLastEvent(String event, long since) {
         long rv = 0;
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(_file), "UTF-8"))) {
+                    new FileInputStream(_file), StandardCharsets.UTF_8))) {
             String line = null;
             while ( (line = br.readLine()) != null) {
                 try {

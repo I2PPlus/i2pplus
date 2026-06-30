@@ -266,9 +266,9 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
            .append(" for [").append(searchKeyBase64, 0, keyLength).append("]");
         if (!floodfillMode) {msg.append(" -> We are not a floodfill");}
         else if (!isFF) {msg.append(" -> Max ").append(maxLookups).append(" requests in 3m or 5/s exceeded");}
-        else if (isFF && !isDirect) {
+        else if (!isDirect) {
             msg.append(" -> Max ").append(maxLookups).append(" requests in 3m or 5/s exceeded");
-        } else if (isFF && isDirect && (searchType.equals("ANY") || searchType.equals("EXPL"))) {
+        } else if (isDirect && (searchType.equals("ANY") || searchType.equals("EXPL"))) {
             msg.append(" -> Direct search for Exploratory or Any from floodfill");
         }
         _log.info(msg.toString());

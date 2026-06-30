@@ -62,7 +62,6 @@ class BootCommSystemJob extends JobImpl {
         if (useTrusted) {
             _log.debug("Using trusted links...");
             getContext().jobQueue().addJob(new BuildTrustedLinksJob(getContext(), bootDb));
-            return;
         } else {
             _log.debug("Not using trusted links - boot db");
             getContext().jobQueue().addJob(bootDb);

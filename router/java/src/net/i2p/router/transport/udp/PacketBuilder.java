@@ -6,6 +6,8 @@ package net.i2p.router.transport.udp;
  */
 class PacketBuilder {
 
+    private PacketBuilder() {}
+
     /** if no extended options or rekey data, which we don't support  = 37 */
     public static final int HEADER_SIZE = UDPPacket.MAC_SIZE + UDPPacket.IV_SIZE + 1 + 4;
 

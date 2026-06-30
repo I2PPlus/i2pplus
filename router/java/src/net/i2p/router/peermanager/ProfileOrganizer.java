@@ -439,23 +439,6 @@ public class ProfileOrganizer {
         }
     }
 
-    private void selectActiveNotFailingPeers2(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
-        if (matches.size() < howMany) {
-            List<Hash> connected = _context.commSystem().getEstablished();
-            if (connected != null && !connected.isEmpty()) {
-                getReadLock();
-                try {locked_selectActive(connected, howMany, exclude, matches, mask, ipSet);}
-                finally {releaseReadLock();}
-            }
-        }
-        if (matches.size() < howMany) {
-            if (_log.shouldDebug())
-                _log.debug("Need " + howMany + " active, not failing peers -> " + matches.size() +
-                           " found, selecting remainder from non-failing peers...");
-            selectNotFailingPeers(howMany, exclude, matches, mask, ipSet);
-        }
-    }
-
     /**
      *  Select up to howMany peers from O/P/X bandwidth tiers (high shared bandwidth)
      *  that are not failing.  Falls through to selectAllNotFailingPeers on shortfall.
@@ -1015,18 +998,6 @@ public class ProfileOrganizer {
                caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0;
     }
 
-    /**
-     *  Check if a peer has the G cap (no tunnels).
-     *  @return true if the peer does not accept tunnel builds
-     *  @since 0.9.70+
-     */
-    private boolean isNoTunnelPeer(Hash peer) {
-        RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
-        if (peerInfo == null) return false;
-        String caps = peerInfo.getCapabilities();
-        return caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
-    }
-
     private PeerProfile locked_getProfile(Hash peer) {
         return _notFailingPeers.get(peer);
     }
@@ -1093,17 +1064,6 @@ public class ProfileOrganizer {
             }
 
             if (ok) matches.add(peer);
-        }
-    }
-
-    private String getSubnetDescription(int mask) {
-        switch (mask) {
-            case 0: return "none";
-            case 1: return "/8";
-            case 2: return "/16";
-            case 3: return "/24";
-            case 4: return "/32";
-            default: return "/unknown";
         }
     }
 

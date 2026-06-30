@@ -294,8 +294,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
         // full message and optional padding
         if (STATES_NTCP2.contains(_state)) {
-            receiveInboundNTCP2(src);
-            return; // releaseBufs() will return the unused DH
+            receiveInboundNTCP2(src); // releaseBufs() will return the unused DH
 }
      }
 

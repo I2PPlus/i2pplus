@@ -43,6 +43,8 @@ import net.i2p.util.Log;
  */
 public class GarlicMessageBuilder {
 
+    private GarlicMessageBuilder() {}
+
     /**
      *  ELGAMAL_2048 only; returns false for others
      *
@@ -502,8 +504,7 @@ public class GarlicMessageBuilder {
             }
         }
         // GarlicConfig cert, ID, and expiration all ignored here
-        CloveSet rv = new CloveSet(arr, Certificate.NULL_CERT, config.getId(), config.getExpiration());
-        return rv;
+        return new CloveSet(arr, Certificate.NULL_CERT, config.getId(), config.getExpiration());
     }
 
     /**

@@ -127,10 +127,6 @@ class IntroductionManager {
         return _inbound.containsKey(Long.valueOf(tag));
     }
 
-    private PeerState get(long id) {
-        return _outbound.get(Long.valueOf(id));
-    }
-
     /**
      * Grab a bunch of peers who are willing to be introducers for us that
      * are locally known (duh) and have published their own SSU address (duh^2).

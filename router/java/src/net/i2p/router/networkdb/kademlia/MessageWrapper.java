@@ -33,6 +33,8 @@ import net.i2p.router.util.RemovableSingletonSet;
  */
 public class MessageWrapper {
 
+    private MessageWrapper() {}
+
     //private static final Log _log = RouterContext.getGlobalContext().logManager().getLog(MessageWrapper.class);
 
     private static final int NETDB_TAGS_TO_DELIVER = 6;
@@ -288,9 +290,8 @@ public class MessageWrapper {
                                                               ctx.random().nextLong(I2NPMessage.MAX_ID_VALUE),
                                                               m.getMessageExpiration(),
                                                               DeliveryInstructions.LOCAL, m);
-        GarlicMessage msg = GarlicMessageBuilder.buildMessage(ctx, payload, null,
+        return GarlicMessageBuilder.buildMessage(ctx, payload, null,
                                                               null, encryptKey, encryptTag);
-        return msg;
     }
 
     /**
@@ -311,7 +312,6 @@ public class MessageWrapper {
                                                               ctx.random().nextLong(I2NPMessage.MAX_ID_VALUE),
                                                               m.getMessageExpiration(),
                                                               DeliveryInstructions.LOCAL, m);
-        GarlicMessage msg = GarlicMessageBuilder.buildMessage(ctx, payload, encryptKey, encryptTag);
-        return msg;
+        return GarlicMessageBuilder.buildMessage(ctx, payload, encryptKey, encryptTag);
     }
 }

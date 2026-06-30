@@ -21,6 +21,8 @@ package net.i2p.router.crypto.ratchet;
  */
 class ContainerHelpers {
 
+    private ContainerHelpers() {}
+
     // This is Arrays.binarySearch(), but doesn't do any argument validation.
     static int binarySearch(char[] array, int size, char value) {
         int lo = 0;

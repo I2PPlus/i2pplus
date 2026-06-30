@@ -196,12 +196,12 @@ class Reader {
             try {
                 con.recvEncryptedI2NP(buf);
             } catch (NullPointerException npe) {
-                if (_log.shouldWarn()) {_log.error("NPE in recvEncryptedI2NP() for connection: " + con, npe);}
+                _log.error("NPE in recvEncryptedI2NP() for connection: " + con, npe);
                 con.close();
                 if (buf != null) EventPumper.releaseBuf(buf);
                 return;
             } catch (IllegalStateException ise) {
-                if (_log.shouldWarn()) {_log.warn("IllegalState in recvEncryptedI2NP() for connection: " + con, ise);}
+                _log.warn("IllegalState in recvEncryptedI2NP() for connection: " + con, ise);
                 con.close();
                 if (buf != null) EventPumper.releaseBuf(buf);
                 return;

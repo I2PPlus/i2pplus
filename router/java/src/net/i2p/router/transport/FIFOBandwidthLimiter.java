@@ -974,10 +974,10 @@ public class FIFOBandwidthLimiter {
         public Object attachment() { return _attachment; }
 
         // PQEntry methods
-        public int getPriority() { return _priority; };
+        public int getPriority() { return _priority; }
         // uncomment for switch to PBQ
-        public void setSeqNum(long num) { /** _requestId = num; */ };
-        public long getSeqNum() { return _requestId; };
+        public void setSeqNum(long num) { /** _requestId = num; */ }
+        public long getSeqNum() { return _requestId; }
 
         @Override
         public String toString() {
@@ -1044,10 +1044,10 @@ public class FIFOBandwidthLimiter {
         }
         public Object attachment() { return null; }
         // PQEntry methods
-        public int getPriority() { return 0; };
+        public int getPriority() { return 0; }
         public void setSeqNum(long num) {
             // No-op - intentionally empty
         }
-        public long getSeqNum() { return 0; };
+        public long getSeqNum() { return 0; }
     }
 }

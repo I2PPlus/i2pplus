@@ -46,7 +46,6 @@ public class OutNetMessagePool {
             _context.messageRegistry().registerPending(msg);
         }
         _context.commSystem().processMessage(msg);
-        return;
     }
 
     /**

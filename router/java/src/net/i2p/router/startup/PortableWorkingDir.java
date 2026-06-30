@@ -49,6 +49,8 @@ import net.i2p.util.SystemVersion;
  */
 public class PortableWorkingDir {
 
+    private PortableWorkingDir() {}
+
     private static final String PROP_BASE_DIR = "i2p.dir.base";
     private static final String PROP_WORKING_DIR = "i2p.dir.config";
     /** we do a couple of things differently if this is the username */

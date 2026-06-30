@@ -145,7 +145,7 @@ final class MuxedPQEngine {
             }
             if (warn) {
                 _log.warn(msg + " after all tag attempts failed");
-            } else if (debug) {
+            } else {
                 _log.debug(msg);
             }
         }

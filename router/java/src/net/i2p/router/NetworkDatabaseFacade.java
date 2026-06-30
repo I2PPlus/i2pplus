@@ -194,7 +194,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     /* @since 0.9.64+ */
     public Set<LeaseSet> getFloodfillLeases() {return Collections.emptySet();}
     /** @since 0.9 */
-    public ReseedChecker reseedChecker() {return null;};
+    public ReseedChecker reseedChecker() {return null;}
 
     /**
      *  For convenience, so users don't have to cast to FNDF, and unit tests using
@@ -203,7 +203,7 @@ public abstract class NetworkDatabaseFacade implements Service {
      *  @return false; FNDF overrides to return actual setting
      *  @since IPv6
      */
-    public boolean floodfillEnabled() {return false;};
+    public boolean floodfillEnabled() {return false;}
 
     /**
      *  Is it permanently negative cached?

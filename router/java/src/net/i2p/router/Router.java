@@ -601,7 +601,7 @@ public class Router implements RouterClock.ClockShiftListener {
         } finally {_routerInfoLock.writeLock().unlock();}
         log = _log;
         if (log != null && log.shouldInfo()) {log.info("setRouterInfo() : " + info);}
-        if (info != null) {_context.jobQueue().addJob(new PersistRouterInfoJob(_context));}
+        _context.jobQueue().addJob(new PersistRouterInfoJob(_context));
     }
 
     /**
@@ -2121,26 +2121,6 @@ public class Router implements RouterClock.ClockShiftListener {
         int recv = 0;
         if (rs != null) {recv = (int)rs.getRate(RateConstants.ONE_MINUTE).getAverageValue();}
         return recv;
-    }
-
-    /**
-     *  Max of inbound and outbound rate in bytes per second
-     */
-    public int get5mRate() {return get5mRate(false);}
-
-    /**
-     *  When outboundOnly is false, outbound rate in bytes per second.
-     *  When true, max of inbound and outbound rate in bytes per second.
-     */
-    public int get5mRate(boolean outboundOnly) {
-        int send = 0;
-        RateStat rs = _context.statManager().getRate("bw.sendRate");
-        if (rs != null) {send = (int)rs.getRate(RateConstants.FIVE_MINUTES).getAverageValue();}
-        if (outboundOnly) {return send;}
-        int recv = 0;
-        rs = _context.statManager().getRate("bw.recvRate");
-        if (rs != null) {recv = (int)rs.getRate(RateConstants.FIVE_MINUTES).getAverageValue();}
-        return Math.max(send, recv);
     }
 
     /**
