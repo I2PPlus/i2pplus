@@ -1756,7 +1756,7 @@
     <loadfile srcfile="router/java/src/net/i2p/router/RouterVersion.java" property="i2p.build.number">
       <filterchain>
         <linecontains>
-          <contains value="public final static long BUILD"/>
+          <contains value="public static final long BUILD"/>
         </linecontains>
         <tokenfilter>
           <replaceregex pattern=".*=\s+([0-9]+);" replace="\1" flags="gi"/>
@@ -1768,7 +1768,7 @@
     <loadfile srcfile="router/java/src/net/i2p/router/RouterVersion.java" property="build.extra">
       <filterchain>
         <linecontains>
-          <contains value="public final static String EXTRA"/>
+          <contains value="public static final String EXTRA"/>
         </linecontains>
         <tokenfilter>
           <replaceregex pattern='.*"(.*)";' replace="\1" flags="gi"/>
