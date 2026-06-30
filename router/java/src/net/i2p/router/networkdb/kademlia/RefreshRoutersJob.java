@@ -124,11 +124,11 @@ class RefreshRoutersJob extends JobImpl {
         int netDbCount = getContext().netDb().getKnownRouters();
         long uptime = getContext().router().getUptime();
         if (uptime < 60 * 60 * 1000L) {
-            RESTART_DELAY_MS = 30 * 1000L;
+            RefreshRoutersJob.RESTART_DELAY_MS = 30 * 1000L;
         } else if (netDbCount > 10000) {
-            RESTART_DELAY_MS *= 3;
+            RefreshRoutersJob.RESTART_DELAY_MS *= 3;
         } else if (netDbCount > 6000) {
-            RESTART_DELAY_MS *= 2;
+            RefreshRoutersJob.RESTART_DELAY_MS *= 2;
         }
     }
 
