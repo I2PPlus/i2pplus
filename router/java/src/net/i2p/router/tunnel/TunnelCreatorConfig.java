@@ -39,9 +39,6 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     private volatile boolean _reused;
     private volatile int _priority;
-    //private static final int THROUGHPUT_COUNT = 3;
-    // Fastest 1 minute throughput, in bytes per minute, ordered with fastest first.
-    //private final double[] _peakThroughput = new double[THROUGHPUT_COUNT];
     private long _peakThroughputCurrentTotal;
     private long _peakThroughputLastCoallesce = System.currentTimeMillis();
     private Hash _blankHash;

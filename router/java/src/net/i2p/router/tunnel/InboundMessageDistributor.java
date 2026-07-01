@@ -182,8 +182,6 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
             if (type == GarlicMessage.MESSAGE_TYPE) {
                     // in case we're looking for replies to a garlic message (cough load tests cough)
                     _context.inNetMessagePool().handleReplies(msg);
-                    //if (_log.shouldLog(Log.DEBUG))
-                    //    _log.debug("received garlic message in the tunnel, parse it out");
                     _receiver.receive((GarlicMessage)msg);
             } else {
                 if (_log.shouldLog(Log.INFO)) {

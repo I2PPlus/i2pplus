@@ -22,10 +22,8 @@ class HopProcessor {
     protected final HopConfig _config;
     private final IVValidator _validator;
 
-    /** helpful flag for debugging */
-    //static final boolean USE_ENCRYPTION = true;
     /**
-     * as of i2p 0.6, the tunnel crypto changed  to encrypt the IV both before
+     * as of i2p 0.6, the tunnel crypto changed to encrypt the IV both before
      * and after using it at each hop so as to prevent a certain type of replay/confirmation
      * attack.
      *
@@ -53,7 +51,6 @@ class HopProcessor {
      */
     @Deprecated
     private static IVValidator createValidator() {
-        // yeah, we'll use an O(1) validator later (e.g. bloom filter)
         return new HashSetIVValidator();
     }
 
@@ -96,11 +93,6 @@ class HopProcessor {
             return false;
         }
 
-        //if (_log.shouldDebug()) {
-        //    _log.debug("IV received before decrypt: " + Base64.encode(orig, offset, IV_LENGTH));
-        //    _log.debug("Data before processing:\n" + Base64.encode(orig, IV_LENGTH, orig.length - IV_LENGTH));
-        //}
-
         SessionKey ivkey = _config.getIVKey();
         AESEngine aes = _context.aes();
         // double IV encryption
@@ -109,10 +101,6 @@ class HopProcessor {
                     orig, offset, length - IV_LENGTH);
         aes.encryptBlock(orig, offset, ivkey, orig, offset);
 
-        //if (_log.shouldDebug()) {
-        //    _log.debug("IV sent: " + Base64.encode(orig, offset, IV_LENGTH));
-        //    _log.debug("Data after processing:\n" + Base64.encode(orig, IV_LENGTH, orig.length - IV_LENGTH));
-        //}
         return true;
     }
 

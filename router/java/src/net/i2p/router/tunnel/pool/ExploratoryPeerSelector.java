@@ -300,9 +300,6 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         }
         if (rv.size() > 1)
             orderPeers(rv, settings.getRandomKey());
-        //    log.warn("EPS requested " + length + " got " + rv.size() + ": " + DataHelper.toString(rv));
-        //else if (log.shouldDebug())
-        //    log.debug("EPS result: " + DataHelper.toString(rv));
         if (isInbound)
             rv.add(0, ctx.routerHash());
         else
@@ -389,8 +386,6 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 return false;
 
             failPct = getExploratoryFailPercentage();
-            //if (l.shouldLog(Log.DEBUG))
-            //    l.debug("Normalized Fail pct: " + failPct);
             // always try a little, this helps keep the failPct stat accurate too
             if (failPct > 100 - getMinNonfailingPct(ctx))
                 failPct = 100 - getMinNonfailingPct(ctx);
@@ -412,8 +407,6 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
     private int getExploratoryFailPercentage() {
         int c = getFailPercentage("Client");
         int e = getFailPercentage("Exploratory");
-        //if (l.shouldDebug())
-        //    l.debug("Client, Expl. Fail pct: " + c + ", " + e);
         if (e <= c || e <= 25) // doing very well (unlikely)
             return 0;
         // Doing very badly? This is important to prevent network congestion collapse

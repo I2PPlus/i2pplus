@@ -182,10 +182,8 @@ class BuildReplyHandler {
                 if (log.shouldDebug()) {
                     log.debug(reply.getUniqueId() + ": Decrypting AES record for " + cfg + " [" + recordNum + " / " + hop + " / " + j +
                               "]\n* Reply Key: " + replyKey.toBase64() + "/" + Base64.encode(replyIV));
-                    //log.debug(reply.getRawUniqueId() + ": Full reply rec: sz=" + data.length + " data=" + Base64.encode(data));
                 }
                 ctx.aes().decrypt(data, 0, data, 0, replyKey, replyIV, 0, data.length);
-                //    log.debug(reply.getRawUniqueId() + ": after decrypt: " + Base64.encode(data));
             }
         }
         // ok, all of the layered encryption is stripped, so let's verify it

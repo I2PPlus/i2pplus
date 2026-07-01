@@ -19,8 +19,6 @@ class InboundEndpointProcessor {
     private final TunnelCreatorConfig _config;
     private final IVValidator _validator;
 
-    //static final boolean USE_ENCRYPTION = HopProcessor.USE_ENCRYPTION;
-
     /**
      *  @deprecated used only by unit tests
      */
@@ -60,9 +58,6 @@ class InboundEndpointProcessor {
             return false;
         }
 
-        //if (_config.getLength() > 1)
-        //    _log.debug("IV at inbound endpoint before decrypt: " + Base64.encode(iv));
-
         boolean ok = _validator.receiveIV(orig, offset, orig, offset + HopProcessor.IV_LENGTH);
         if (!ok) {
             if (_log.shouldInfo())
@@ -75,8 +70,6 @@ class InboundEndpointProcessor {
 
         if (_config.getLength() > 0) {
             int rtt = 0; // dunno... may not be related to an rtt
-            //if (_log.shouldDebug())
-            //    _log.debug("Received " + length + " byte message through: " + _config);
             ProfileManager pm = _context.profileManager();
             // null for unit tests
             if (pm != null) {
@@ -102,10 +95,6 @@ class InboundEndpointProcessor {
         // Don't include the endpoint, since that is the creator
         for (int i = cfg.getLength() - 2; i >= 0; i--) {
             OutboundGatewayProcessor.decrypt(ctx, orig, offset, length, cfg.getConfig(i));
-            //if (_log.shouldDebug()) {
-                //_log.debug("IV at hop " + i + ": " + Base64.encode(orig, offset, HopProcessor.IV_LENGTH));
-                //_log.debug("hop " + i + ": " + Base64.encode(orig, offset + HopProcessor.IV_LENGTH, length - HopProcessor.IV_LENGTH));
-            //}
         }
     }
 
