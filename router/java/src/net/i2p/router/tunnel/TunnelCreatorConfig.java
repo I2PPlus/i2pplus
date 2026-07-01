@@ -31,7 +31,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private List<Integer> _order;
     private long _replyMessageId;
     private final boolean _isInbound;
-    private int _messagesProcessed;
+    private final AtomicInteger _messagesProcessed = new AtomicInteger();
     private long _verifiedBytesTransferred;
     private long _lastTransferredTime;
     private final AtomicInteger _failures = new AtomicInteger();
@@ -187,8 +187,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public void setReplyMessageId(long id) {_replyMessageId = id;}
 
     /** take note of a message being pumped through this tunnel */
-    public synchronized void incrementProcessedMessages() {_messagesProcessed++;}
-    public synchronized int getProcessedMessagesCount() {return _messagesProcessed;}
+    public void incrementProcessedMessages() {_messagesProcessed.incrementAndGet();}
+    public int getProcessedMessagesCount() {return _messagesProcessed.get();}
 
     /**
      *  This calls profile manager tunnelDataPushed1m() for each peer
@@ -587,8 +587,9 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
                 buf.append("\n* Last traffic: ").append(DataHelper.formatTime(_lastTransferredTime));
             buf.append("\n* Expires: ").append(DataHelper.formatTime(_expiration));
             if (_replyMessageId > 0) {buf.append("; [ReplyMsgID ").append(_replyMessageId).append("]");}
-            if (_messagesProcessed > 0) {
-                buf.append(" with ").append(_messagesProcessed).append(" messages (")
+            int msgs = _messagesProcessed.get();
+            if (msgs > 0) {
+                buf.append(" with ").append(msgs).append(" messages (")
                    .append(_verifiedBytesTransferred).append(" bytes)");
             }
         }
