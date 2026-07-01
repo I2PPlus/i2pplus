@@ -34,7 +34,7 @@ public class GhostPeerManager {
     }
 
     private static long getAttackCooldownMs(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.ghostPeer.attackCooldownMs", 300*1000);
+        return ctx.getProperty("i2p.tunnel.ghostPeer.attackCooldownMs", 180*1000);
     }
 
     private static final int MAX_TRACKED_PEERS = 1024;
@@ -67,8 +67,9 @@ public class GhostPeerManager {
             Long existingTime = _ghostSince.putIfAbsent(peer, _context.clock().now());
             if (existingTime == null && _log.shouldWarn()) {
                 _log.warn("Peer [" + peer.toBase64().substring(0,6) + "] marked as ghost for " +
-                          (underAttack ? getAttackCooldownMs(_context)/1000 : getCooldownMs(_context)/1000) + "s -> " +
-                           newCount + " consecutive tunnel build timeouts");
+                          getCooldownMs(_context)/1000 + "s -> " +
+                           newCount + " consecutive tunnel build timeouts" +
+                           (underAttack ? " (network under stress, shortened threshold " + getThreshold() + ")" : ""));
             }
         }
     }
@@ -104,8 +105,10 @@ public class GhostPeerManager {
         Long since = _ghostSince.get(peer);
         if (since != null) {
             long elapsed = _context.clock().now() - since;
-            double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-            long cooldown = buildSuccess < ProfileOrganizer.ATTACK_THRESHOLD ? getAttackCooldownMs(_context) : getCooldownMs(_context);
+            // Under attack: use shorter cooldown to rehabilitate peers faster.
+            // During network-wide events, peers get ghosted through no fault of their
+            // own — the network is slow, not the peer.
+            long cooldown = getCooldownMs(_context);
             if (elapsed >= cooldown) {
                 _timeoutCounts.remove(peer);
                 _ghostSince.remove(peer);

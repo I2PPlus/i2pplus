@@ -566,6 +566,19 @@ class BuildExecutor implements Runnable {
                 // Cap per-iteration builds to prevent flooding the network
                 if (allowed > 4) allowed = 4;
 
+                // Transport congestion backpressure: when the send pipeline is
+                // backed up (>2s processing time), reduce builds so data messages
+                // aren't queued behind build messages.  Without this, our own
+                // tunnel builds flood the transport while RouterThrottleImpl only
+                // blocks participating requests from OTHER routers.
+                RateStat sendRS = _context.statManager().getRate("transport.sendProcessingTime");
+                if (sendRS != null) {
+                    Rate sendRate = sendRS.getRate(RateConstants.ONE_MINUTE);
+                    if (sendRate != null && sendRate.getAverageValue() > 2000) {
+                        allowed = Math.min(allowed, 2);
+                    }
+                }
+
                 TunnelManagerFacade mgr = _context.tunnelManager();
                 boolean noInboundOrOutbound = (mgr == null) || (mgr.getFreeTunnelCount() <= 0) || (mgr.getOutboundTunnelCount() <= 0);
 
@@ -772,12 +785,20 @@ class BuildExecutor implements Runnable {
      *  before expiring tunnels deplete the pool.
      *  On backoff expiry, resets the failure counter so the pool gets a
      *  fresh window of attempts.
+     *  During collapse (0 usable tunnels), backoff is shortened to 4s
+     *  to allow faster recovery while still preventing build storms.
      */
     boolean isPoolInBackoff(TunnelPool pool) {
         long[] state = _poolFailureState.get(pool);
         if (state == null) return false;
         long backoffUntil = state[1];
         if (backoffUntil > 0 && _context.clock().now() < backoffUntil) {
+            // During collapse (0 usable tunnels), shorten backoff to 4s
+            // to allow faster recovery while still preventing build storms.
+            if (pool.getUsableTunnelCount() == 0) {
+                long shortBackoff = backoffUntil - POOL_BACKOFF_MS + 4 * 1000L;
+                return _context.clock().now() < shortBackoff;
+            }
             return true;
         }
         // Backoff period expired — reset the counter so the pool gets a fresh

@@ -80,16 +80,41 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      *  Check if a peer recently failed as first hop and should be excluded.
+     *  During ghost cascades (high ghost count), the cooldown is shortened
+     *  from 5 min to 60s to rehabilitate peers faster when the network
+     *  is stressed — many peers are ghosted through no fault of their own.
      */
     public static boolean isFirstHopFailing(RouterContext ctx, Hash peer) {
         Long when = _firstHopFails.get(peer);
         if (when == null)
             return false;
-        if (ctx.clock().now() - when > FIRST_HOP_FAIL_COOLDOWN_MS) {
+        long cooldown = getEffectiveFirstHopCooldown(ctx);
+        if (ctx.clock().now() - when > cooldown) {
             _firstHopFails.remove(peer);
             return false;
         }
         return true;
+    }
+
+    /**
+     *  Get the effective first-hop fail cooldown.
+     *  During ghost cascades (>50 ghosts), shorten from 5 min to 60s
+     *  to rehabilitate peers faster when the network is stressed.
+     *  @since 0.9.70
+     */
+    private static long getEffectiveFirstHopCooldown(RouterContext ctx) {
+        try {
+            TunnelManagerFacade tmf = ctx.tunnelManager();
+            if (tmf != null) {
+                GhostPeerManager gpm = tmf.getGhostPeerManager();
+                if (gpm != null && gpm.getGhostCount() > 50) {
+                    return 60 * 1000L;
+                }
+            }
+        } catch (Exception e) {
+            // ignore — fall through to default
+        }
+        return FIRST_HOP_FAIL_COOLDOWN_MS;
     }
 
     /**
@@ -161,13 +186,14 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Check if a peer has recovered from failure and can be reconsidered.
-     * This is used to prevent permanent exclusion of peers that may recover.
+     * Uses the effective first-hop cooldown (shortened during ghost cascades).
      */
     protected static boolean hasRecoveredFromFailure(RouterContext ctx, Hash peer) {
         Long failTime = _firstHopFails.get(peer);
         if (failTime == null)
             return true;
-        long recoveryTime = ctx.clock().now() - 60 * 1000L; // 60 seconds recovery window
+        long cooldown = getEffectiveFirstHopCooldown(ctx);
+        long recoveryTime = ctx.clock().now() - cooldown;
         if (failTime < recoveryTime) {
             _firstHopFails.remove(peer);
             return true;

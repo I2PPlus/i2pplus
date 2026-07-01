@@ -68,12 +68,21 @@ public class TunnelPool {
      *  picks the best tunnels, so excess is fine.
      */
     private volatile int _consecutiveEmergencies = 0;
-    private static final int MAX_EMERGENCY_BOOST = 6;
-    /** Minimum interval between EMERGENCY builds per pool (30s).
-     *  Prevents death spirals where EMERGENCY fires every 15s cycle,
-     *  queuing builds that timeout, triggering more EMERGENCYs. */
-    private static final long EMERGENCY_COOLDOWN_MS = 30_000;
+    private static final int MAX_EMERGENCY_BOOST = 10;
+    /**
+     *  Minimum interval between pre-build triggers per pool.
+     *  pruneExcessTunnels() fires this on every ~15s cycle for every IB pool
+     *  whose OB pair is depleted.  Without throttling, this generates ~32
+     *  unnecessary BuildExecutor wakeups per minute, each queuing builds into
+     *  an already-congested transport pipeline.  The build loop's
+     *  calculatePairedBuilds() already handles OB pool depletion, so
+     *  the pre-build trigger is redundant — throttle it to once per 60s.
+     *  @since 0.9.70
+     */
+    private long _lastPreBuildTime;
+    private static final long PRE_BUILD_THROTTLE_MS = 60_000;
     private volatile long _lastEmergencyBuildTime;
+    private static final long EMERGENCY_COOLDOWN_MS = 30_000;
     private volatile boolean _leaseSetRepublishPending;
     private static final int REMOVAL_QUEUE_CAPACITY = 2000;
     private final BlockingQueue<TunnelInfo> _removalQueue = new LinkedBlockingQueue<>(REMOVAL_QUEUE_CAPACITY);
@@ -988,9 +997,13 @@ public class TunnelPool {
             }
         }
         if (needsReplacement && poolSize > 1) {
-            if (_log.shouldWarn())
-                _log.warn(toString() + " -> Pre-building tunnel replacement before slow/failed cleanup");
-            _manager.tunnelFailed();
+            long nowMs = _context.clock().now();
+            if (nowMs - _lastPreBuildTime >= PRE_BUILD_THROTTLE_MS) {
+                _lastPreBuildTime = nowMs;
+                if (_log.shouldWarn())
+                    _log.warn(toString() + " -> Pre-building tunnel replacement before slow/failed cleanup");
+                _manager.tunnelFailed();
+            }
         }
 
         int removed = 0;
