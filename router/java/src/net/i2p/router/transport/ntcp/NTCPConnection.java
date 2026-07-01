@@ -1785,7 +1785,7 @@ public class NTCPConnection implements Closeable {
             if (_log.shouldDebug())
                 _log.debug("Received I2NP message: " + msg);
             long timeToRecv = 0; // _context.clock().now() - _stateBegin;
-            int size = 100; // FIXME
+            int size = msg.getMessageSize();
             _transport.messageReceived(msg, _remotePeer, null, timeToRecv, size);
             _lastReceiveTime = _context.clock().now();
             _messagesRead.incrementAndGet();
@@ -2014,10 +2014,11 @@ public class NTCPConnection implements Closeable {
         String fromIP;
         int port = 0;
         if (_isInbound) {
-            if (_chan != null) {
-                InetAddress addr = _chan.socket().getInetAddress();
+            SocketChannel ch = _chan;
+            if (ch != null) {
+                InetAddress addr = ch.socket().getInetAddress();
                 fromIP = addr != null ? addr.getHostAddress() : "Unknown";
-                port = _chan.socket().getPort();
+                port = ch.socket().getPort();
             } else {
                 fromIP = "null_channel";
             }

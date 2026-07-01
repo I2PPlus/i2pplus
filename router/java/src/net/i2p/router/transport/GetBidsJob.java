@@ -30,7 +30,7 @@ import net.i2p.util.Log;
 class GetBidsJob extends JobImpl {
     private final TransportManager _tmgr;
     private final OutNetMessage _msg;
-    private static BanLogger _banLogger;
+    private static volatile BanLogger _banLogger;
 
     /**
      *  @deprecated unused, see static getBids()
@@ -49,9 +49,16 @@ class GetBidsJob extends JobImpl {
 
     static void getBids(RouterContext context, TransportManager tmgr, OutNetMessage msg) {
         // Ensure BanLogger is initialized
-        if (_banLogger == null) {
-            _banLogger = new BanLogger();
-            _banLogger.initialize(context);
+        BanLogger bl = _banLogger;
+        if (bl == null) {
+            synchronized (GetBidsJob.class) {
+                bl = _banLogger;
+                if (bl == null) {
+                    bl = new BanLogger();
+                    bl.initialize(context);
+                    _banLogger = bl;
+                }
+            }
         }
 
         if (msg.getFailedTransportCount() > 1) {

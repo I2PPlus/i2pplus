@@ -88,6 +88,8 @@ class EventPumper implements Runnable {
     private static final int MAX_OUTBOUND_RETRY_COUNT = 3;
     private long _lastRetryMapClear = System.currentTimeMillis();
     private static final long RETRY_MAP_CLEAR_INTERVAL = 5 * 60 * 1000L; // 5 minutes
+    /** Max entries before clearing retry maps to prevent unbounded growth under DoS */
+    private static final int MAX_RETRY_MAP_SIZE = 1024;
 
     /**
      * This probably doesn't need to be bigger than the largest typical
@@ -674,6 +676,10 @@ class EventPumper implements Runnable {
             RouterIdentity remote = con.getRemotePeer();
             if (remote != null) {
                 Hash peerHash = remote.calculateHash();
+                if (_failedOutboundAttempts.size() >= MAX_RETRY_MAP_SIZE) {
+                    _failedOutboundAttempts.clear();
+                    _failedOutboundCount.clear();
+                }
                 _failedOutboundAttempts.put(peerHash, System.currentTimeMillis());
                 _failedOutboundCount.merge(peerHash, 1, Integer::sum);
             }
@@ -1010,6 +1016,10 @@ class EventPumper implements Runnable {
                 RouterIdentity remote = con.getRemotePeer();
                 if (remote != null) {
                     Hash peerHash = remote.calculateHash();
+                    if (_failedOutboundAttempts.size() >= MAX_RETRY_MAP_SIZE) {
+                        _failedOutboundAttempts.clear();
+                        _failedOutboundCount.clear();
+                    }
                     _failedOutboundAttempts.put(peerHash, System.currentTimeMillis());
                     _failedOutboundCount.merge(peerHash, 1, Integer::sum);
                 }
