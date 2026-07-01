@@ -94,7 +94,7 @@ The total size, including the tunnel ID and IV, is 1028 bytes.
 class FragmentHandler {
     protected final RouterContext _context;
     protected final Log _log;
-    private final Map<Long, FragmentedMessage> _fragmentedMessages;
+    private final Map<Integer, FragmentedMessage> _fragmentedMessages;
     private final DefragmentedReceiver _receiver;
     private final AtomicInteger _completed = new AtomicInteger();
     private final AtomicInteger _failed = new AtomicInteger();
@@ -390,10 +390,10 @@ class FragmentHandler {
         } else if (fragmented) {
             FragmentedMessage msg;
             synchronized (_fragmentedMessages) {
-                msg = _fragmentedMessages.get(Long.valueOf(messageId));
+                msg = _fragmentedMessages.get((int) messageId);
                 if (msg == null) {
                     msg = new FragmentedMessage(_context, messageId);
-                    _fragmentedMessages.put(Long.valueOf(messageId), msg);
+                    _fragmentedMessages.put((int) messageId, msg);
                 }
             }
 
@@ -403,7 +403,7 @@ class FragmentHandler {
                 if (!ok) return -1;
                 if (msg.isComplete()) {
                     synchronized (_fragmentedMessages) {
-                        _fragmentedMessages.remove(Long.valueOf(messageId));
+                        _fragmentedMessages.remove((int) messageId);
                     }
                     if (msg.getExpireEvent() != null)
                         msg.getExpireEvent().cancel();
@@ -457,10 +457,10 @@ class FragmentHandler {
 
         FragmentedMessage msg = null;
         synchronized (_fragmentedMessages) {
-            msg = _fragmentedMessages.get(Long.valueOf(messageId));
+            msg = _fragmentedMessages.get((int) messageId);
             if (msg == null) {
                 msg = new FragmentedMessage(_context, messageId);
-                _fragmentedMessages.put(Long.valueOf(messageId), msg);
+                _fragmentedMessages.put((int) messageId, msg);
             }
         }
 
@@ -471,7 +471,7 @@ class FragmentHandler {
 
             if (msg.isComplete()) {
                 synchronized (_fragmentedMessages) {
-                    _fragmentedMessages.remove(Long.valueOf(messageId));
+                    _fragmentedMessages.remove((int) messageId);
                 }
                 if (msg.getExpireEvent() != null)
                     msg.getExpireEvent().cancel();
@@ -599,7 +599,7 @@ class FragmentHandler {
         public void timeReached() {
             boolean removed;
             synchronized (_fragmentedMessages) {
-                removed = (null != _fragmentedMessages.remove(Long.valueOf(_msg.getMessageId())));
+                removed = (null != _fragmentedMessages.remove((int) _msg.getMessageId()));
             }
             synchronized (_msg) {
                 if (removed && !_msg.getReleased()) {
