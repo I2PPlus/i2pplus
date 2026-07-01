@@ -366,8 +366,8 @@ public abstract class TransportImpl implements Transport {
         if (msg.getTarget() == null) return; // early exit if no target
 
         final boolean debug = _log.shouldDebug();
-        String peerHash = msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6);
-        String routerHash = _context.routerHash().toBase64().substring(0,6);
+        String peerHash = debug ? msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6) : null;
+        String routerHash = debug ? _context.routerHash().toBase64().substring(0,6) : null;
         String style = getStyle();
         long now = _context.clock().now();
 
@@ -952,7 +952,7 @@ public abstract class TransportImpl implements Transport {
         if (when != null) {
             long now = _context.clock().now();
             if (when.longValue() + WAS_UNREACHABLE_PERIOD < now) {
-                _unreachableEntries.remove(peer);
+                _wasUnreachableEntries.remove(peer);
                 return false;
             } else {return true;}
         }
@@ -966,10 +966,10 @@ public abstract class TransportImpl implements Transport {
         if (yes) {
             Long now = Long.valueOf(_context.clock().now());
             _wasUnreachableEntries.put(peer, now);
+            if (_log.shouldDebug()) {
+                _log.debug("[" +  this.getStyle() + "] Adding [" + peer.toBase64().substring(0,6) +  "] to Unreachable list");
+            }
         } else {_wasUnreachableEntries.remove(peer);}
-        if (_log.shouldDebug()) {
-            _log.debug("[" +  this.getStyle() + "] Adding [" + peer.toBase64().substring(0,6) +  "] to Unreachable list");
-        }
     }
 
     /**
