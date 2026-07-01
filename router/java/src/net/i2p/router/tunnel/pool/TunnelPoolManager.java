@@ -1104,8 +1104,11 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             } // Lock released
 
             // PHASE B: Schedule early expiry for slow tunnels OUTSIDE the lock
+            // Stagger expiry to prevent synchronized pool collapse — all slow
+            // tunnels expiring at once drops the pool to 0, triggering EMERGENCY.
             long now = _context.clock().now();
             long pruneDelay = _context.getProperty("router.tunnel.pruneEarlyExpiryDelay", 30000L);
+            int staggerIdx = 0;
             for (TunnelInfo info : toRemove) {
                 // Re-verify tunnel is still valid (another thread may have removed it)
                 if (info.getTunnelFailed() || info.getExpiration() <= now) {
@@ -1118,9 +1121,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 // Use early expiry via ExpireJob for graceful removal
                 if (info instanceof PooledTunnelCreatorConfig) {
                     PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
-                    cfg.setExpiration(now + pruneDelay);
+                    // Stagger: 30s base + 10s per tunnel to spread removals
+                    long staggeredDelay = pruneDelay + (staggerIdx * 10000L);
+                    cfg.setExpiration(now + staggeredDelay);
                     cfg.setTestTooSlow();
                     ExpireJob.scheduleExpiration(_context, cfg);
+                    staggerIdx++;
                     // Schedule all peers in this tunnel for priority testing
                     List<Hash> tunnelPeers = new ArrayList<>();
                     for (int i = 0; i < cfg.getLength(); i++) {
