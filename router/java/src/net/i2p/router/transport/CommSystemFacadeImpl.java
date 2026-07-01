@@ -152,20 +152,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         _geoIP = new GeoIP(_context);
         _manager = new TransportManager(_context);
         _exemptIncoming = new LHMCache<>(128);
-        initExecutors();
-    }
-
-    private void initExecutors() {
-        synchronized (reverseDnsExecutorLock) {
-            if (reverseDnsExecutor == null || reverseDnsExecutor.isShutdown()) {
-                reverseDnsExecutor = new ThreadPoolExecutor(
-                    2, 10,
-                    60L, TimeUnit.SECONDS,
-                    new LinkedBlockingQueue<>(500),
-                    new ThreadPoolExecutor.CallerRunsPolicy()
-                );
-            }
-        }
+        getReverseDnsExecutor();
     }
 
     /**
