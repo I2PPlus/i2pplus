@@ -106,6 +106,7 @@
     <echo message=" === Updaters ==="/>
     <echo message="  updater                                      Build updater for existing installs &#10140; ./dist/i2pupdate.zip"/>
     <echo message="  updaterWithGeoIP                             Updater + GeoIP database"/>
+    <echo message="  updaterWithASN                               Updater + ASN database only"/>
     <echo message="  updaterWithJavadocAndJetty                   Updater + javadocs (linked in console) + Jetty "/>
     <echo message="  updaterWithJavadoc                           Updater + javadocs (linked in console)"/>
     <echo message="  updaterWithJbigi                             Updater + jBigi library"/>
@@ -126,6 +127,7 @@
     <echo message="  updater200WithGeoIPAndJavadoc                Updater (pack200) + GeoIP database + javadocs"/>
     <echo message="  updater200WithGeoIPAndJbigi                  Updater (pack200) + GeoIP database + Jbigi"/>
     <echo message="  updater200WithGeoIP                          Updater (pack200) + GeoIP database"/>
+    <echo message="  updater200WithASN                            Updater (pack200) + ASN database only"/>
     <echo message="  updater200WithJavadocAndJbigi                Updater (pack200) + javadocs + jBigi library"/>
     <echo message="  updater200WithJavadocAndJetty                Updater (pack200) + javadocs (with console link) + Jetty"/>
     <echo message="  updater200WithJavadoc                        Updater (pack200) + javadocs (with console link)"/>
@@ -2740,6 +2742,7 @@
   <target name="updaterRouter" depends="timestamp.started, prepupdateRouter, zipit, timestamp.stopped"/>
   <target name="updaterSmall" depends="timestamp.started, prepupdateSmall, zipit, timestamp.stopped"/>
   <target name="updaterWithGeoIP" depends="timestamp.started, prepupdate, prepgeoupdate, zipit, timestamp.stopped"/>
+  <target name="updaterWithASN" depends="timestamp.started, prepupdate, prepasnupdate, zipit, timestamp.stopped"/>
   <target name="updaterWithGeoIPAndJbigi" depends="timestamp.started, prepupdate, prepjbigiupdate, prepgeoupdate, zipit, timestamp.stopped"/>
   <target name="updaterWithJavadocAndJetty" depends="timestamp.started, prepjupdate, copyJavadoc, zipit, timestamp.stopped"/>
   <target name="updaterWithJavadoc" depends="timestamp.started, prepupdate, copyJavadoc, zipit, timestamp.stopped"/>
@@ -2801,6 +2804,7 @@
   <target name="updater200Small" depends="timestamp.started, prepupdateSmall, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200Router" depends="timestamp.started, prepupdateRouter, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithGeoIP" depends="timestamp.started, prepupdate, prepgeoupdate, pack200, zipit200, timestamp.stopped"/>
+  <target name="updater200WithASN" depends="timestamp.started, prepupdate, prepasnupdate, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithGeoIPAndJavadoc" depends="timestamp.started, prepupdate, prepgeoupdate, copyJavadoc, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithGeoIPAndJbigi" depends="timestamp.started, prepupdate, prepjbigiupdate, prepgeoupdate, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJavadocAndJetty" depends="timestamp.started, prepjupdate, copyJavadoc, pack200, zipit200, timestamp.stopped"/>
@@ -3086,6 +3090,12 @@
   <target name="prepgeoupdate-unlesspkg" unless="${with-geoip-database}">
     <mkdir dir="${pkg.temp.dir}/geoip"/>
     <gunzip src="installer/resources/geoip/GeoLite2-Country.mmdb.gz" dest="${pkg.temp.dir}/geoip/GeoLite2-Country.mmdb"/>
+    <gunzip src="installer/resources/geoip/db-ip-asn.mmdb.gz" dest="${pkg.temp.dir}/geoip/db-ip-asn.mmdb"/>
+  </target>
+
+  <!-- ASN database only (no GeoIP country/continent data) -->
+  <target name="prepasnupdate">
+    <mkdir dir="${pkg.temp.dir}/geoip"/>
     <gunzip src="installer/resources/geoip/db-ip-asn.mmdb.gz" dest="${pkg.temp.dir}/geoip/db-ip-asn.mmdb"/>
   </target>
 
