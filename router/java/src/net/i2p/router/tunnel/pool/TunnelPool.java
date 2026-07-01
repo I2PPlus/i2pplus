@@ -1314,6 +1314,22 @@ public class TunnelPool {
                         return;
                     }
                 }
+                // For client pools, cap total tunnels to prevent unbounded accumulation.
+                // pruneExcessTunnels() skips recently-active (30s) and about-to-expire
+                // (120s) tunnels, so pools carrying traffic can accumulate indefinitely.
+                // Cap at 3x target to allow headroom for testing and LeaseSet rotation.
+                if (!_settings.isExploratory()) {
+                    int totalNow = _tunnels.size();
+                    int maxTotal = Math.max(target * 3, 6);
+                    if (totalNow >= maxTotal) {
+                        if (_log.shouldWarn()) {
+                            _log.warn(toString() + " -> Pool at capacity (" + totalNow +
+                                      " >= max " + maxTotal + ", target=" + target +
+                                      ") — rejecting build \n* " + info);
+                        }
+                        return;
+                    }
+                }
                 _tunnels.add(info);
                 // Track this tunnel ID as recently added
                 _recentlyAddedTunnels.put(gatewayId, now);
