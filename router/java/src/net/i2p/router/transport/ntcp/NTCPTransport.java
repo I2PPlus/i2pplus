@@ -767,16 +767,7 @@ public class NTCPTransport extends TransportImpl {
             // Only log if not already banlisted (blocklisted may result in new ban)
             if (!isBanned && !isBannedHard && _log.shouldWarn()) {
                 String reasonStr = reason != null ? " -> " + reason : "";
-                String banStatus;
-                if (isBannedHard) {
-                    banStatus = "permanently banned ";
-                } else if (isBanned) {
-                    banStatus = "temp banned ";
-                } else if (isBlocklisted) {
-                    banStatus = "blocklisted ";
-                } else {
-                    banStatus = "";
-                }
+                String banStatus = isBlocklisted ? "blocklisted " : "";
                 _log.warn("[NTCP] Forcing immediate disconnection of " +
                           banStatus +
                           "Router [" + peer.toBase64().substring(0,6) + "]" + reasonStr);

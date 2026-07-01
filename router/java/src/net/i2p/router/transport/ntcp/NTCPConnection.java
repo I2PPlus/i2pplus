@@ -1065,10 +1065,12 @@ public class NTCPConnection implements Closeable {
         public void complete(FIFOBandwidthLimiter.Request req) {
             removeOBRequest(req);
             ByteBuffer buf = (ByteBuffer)req.attachment();
-            if (!_closed.get()) {
-                _context.statManager().addRateData("ntcp.throttledWriteComplete", (_context.clock().now()-req.getRequestTime()));
-                write(buf);
+            if (_closed.get()) {
+                EventPumper.releaseBuf(buf);
+                return;
             }
+            _context.statManager().addRateData("ntcp.throttledWriteComplete", (_context.clock().now()-req.getRequestTime()));
+            write(buf);
         }
     }
 
