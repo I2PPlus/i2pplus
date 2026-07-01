@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -64,7 +65,7 @@ public class PeerState {
     /** when did we decide we need to ACK to this peer? */
     protected volatile long _wantACKSendSince;
     /** how many bytes should we send to the peer in a second */
-    private volatile int _sendWindowBytes;
+    private final AtomicInteger _sendWindowBytes = new AtomicInteger();
     /** how many bytes can we send to the peer in the current second */
     private volatile int _sendWindowBytesRemaining;
     private final Object _sendWindowBytesRemainingLock = new Object();
@@ -153,7 +154,7 @@ public class PeerState {
     private final PriBlockingQueue<OutboundMessageState> _outboundQueue;
 
     /** when the retransmit timer is about to trigger */
-    private volatile long _retransmitTimer;
+    private final AtomicLong _retransmitTimer = new AtomicLong();
 
     protected final UDPTransport _transport;
 
@@ -293,8 +294,8 @@ public class PeerState {
         else {_largeMTU = transport.getSSU2MTU(true);}
         _minMTU = PeerState2.MIN_MTU;
         // RFC 5681 sec. 3.1
-        _sendWindowBytes = 3 * _mtu;
-        _sendWindowBytesRemaining = _sendWindowBytes;
+        _sendWindowBytes.set(3 * _mtu);
+        _sendWindowBytesRemaining = _sendWindowBytes.get();
         _rto = INIT_RTO;
         _rtt = INIT_RTT;
         if (rtt > 0) {recalculateTimeouts(rtt);}
@@ -369,7 +370,7 @@ public class PeerState {
      *  candidate for removal
      */
     public int getSendWindowBytes() {
-        synchronized(_sendWindowBytesRemainingLock) {return _sendWindowBytes;}
+        synchronized(_sendWindowBytesRemainingLock) {return _sendWindowBytes.get();}
     }
 
     /** how many bytes can we send to the peer in the current second */
@@ -669,7 +670,7 @@ public class PeerState {
         // 1. Double RTO and backoff (RFC 6298 section 5.5 & 5.6)
         // 2. cut ssthresh to bandwidth estimate, window to 1 MTU
         // 3. Retransmit up to half of the packets in flight (RFC 6298 section 5.4 and RFC 5681 section 4.3)
-        int congestionAt = _sendWindowBytes;
+        int congestionAt = _sendWindowBytes.get();
         // If we reduced the MTU, then we won't be able to send any previously-fragmented messages,
         // so set to the max MTU. This is the easiest fix, although it violates the RFC.
         //_sendWindowBytes = _mtu;
@@ -679,25 +680,25 @@ public class PeerState {
         if (_fastRetransmit.get()) {bwe = -1;} // for log below
         else {
             if (getVersion() >= 2 && getVersion() <= 4) {
-                _sendWindowBytes = PeerState2.MAX_MTU;
+                _sendWindowBytes.set(PeerState2.MAX_MTU);
             } else if (isIPv6()) {
-                _sendWindowBytes = MAX_IPV6_MTU;
+                _sendWindowBytes.set(MAX_IPV6_MTU);
             } else {
-                _sendWindowBytes = LARGE_MTU;
+                _sendWindowBytes.set(LARGE_MTU);
             }
             bwe = _bwEstimator.getBandwidthEstimate(now);
             _slowStartThreshold = Math.max( (int)(bwe * _rtt), 2 * _mtu);
         }
 
         int oldRto = _rto;
-        long oldTimer = _retransmitTimer - now;
+        long oldTimer = _retransmitTimer.get() - now;
         _rto = Math.min(MAX_RTO, Math.max(MIN_RTO, _rto << 1 ));
-        _retransmitTimer = now + _rto;
+        _retransmitTimer.set(now + _rto);
         if (_log.shouldInfo()) {
             _log.info("[" + _remotePeer.toBase64().substring(0,6) + "] Estimated bandwidth: " +
                       DataHelper.formatSize2Decimal((long) (bwe * 1000), false) + "b/s \n* " +
                       "Congestion, RTO: " + oldRto + "ms -> " + _rto + "ms; Timer: " + oldTimer + "ms -> " + _rto +
-                      "ms; Window: " + congestionAt + " bytes -> " + _sendWindowBytes +
+                      "ms; Window: " + congestionAt + " bytes -> " + _sendWindowBytes.get() +
                       " bytes; SST: " + oldsst + " -> " + _slowStartThreshold +
                       "; FastRetransmit? " + _fastRetransmit);
         }
@@ -712,15 +713,15 @@ public class PeerState {
         if (numSends < 2) {
             if (_context.random().nextInt(_concurrentMessagesAllowed) <= 0) {_concurrentMessagesAllowed++;}
 
-            if (_sendWindowBytes <= _slowStartThreshold) {
-                _sendWindowBytes += bytesACKed;
+            if (_sendWindowBytes.get() <= _slowStartThreshold) {
+                _sendWindowBytes.addAndGet(bytesACKed);
                 synchronized(_sendWindowBytesRemainingLock) {_sendWindowBytesRemaining += bytesACKed;}
             } else {
-                    float prob = ((float)bytesACKed) / ((float)(_sendWindowBytes<<1));
+                    float prob = ((float)bytesACKed) / ((float)(_sendWindowBytes.get()<<1));
                     float v = _context.random().nextFloat();
                     if (v < 0) {v = 0-v;}
                     if (v <= prob) {
-                        _sendWindowBytes += bytesACKed;
+                        _sendWindowBytes.addAndGet(bytesACKed);
                         synchronized(_sendWindowBytesRemainingLock) {_sendWindowBytesRemaining += bytesACKed;}
                     }
             }
@@ -729,13 +730,13 @@ public class PeerState {
             if (allow < MIN_CONCURRENT_MSGS) {allow = MIN_CONCURRENT_MSGS;}
             _concurrentMessagesAllowed = allow;
         }
-        if (_sendWindowBytes > MAX_SEND_WINDOW_BYTES) {_sendWindowBytes = MAX_SEND_WINDOW_BYTES;}
+        _sendWindowBytes.updateAndGet(v -> Math.min(v, MAX_SEND_WINDOW_BYTES));
         long now = _context.clock().now();
         _lastSendFullyTime = now;
 
         synchronized(_sendWindowBytesRemainingLock) {
             _sendWindowBytesRemaining += bytesACKed;
-            if (_sendWindowBytesRemaining > _sendWindowBytes) {_sendWindowBytesRemaining = _sendWindowBytes;}
+            if (_sendWindowBytesRemaining > _sendWindowBytes.get()) {_sendWindowBytesRemaining = _sendWindowBytes.get();}
         }
 
         if (numSends < 2) {
@@ -745,14 +746,14 @@ public class PeerState {
         }
 
         if (!anyPending) {
-            _retransmitTimer = 0;
+            _retransmitTimer.set(0);
             exitFastRetransmit();
         } else {
             // any time new data gets acked, push out the timer
-            long oldTimer = _retransmitTimer - now;
-            _retransmitTimer = now + getRTO();
+            long oldTimer = _retransmitTimer.get() - now;
+            _retransmitTimer.set(now + getRTO());
             if (_log.shouldDebug()) {
-                _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] ACK, timer: " + oldTimer + " -> " + (_retransmitTimer - now));
+                _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] ACK, timer: " + oldTimer + " -> " + (_retransmitTimer.get() - now));
             }
         }
         if (anyPending || anyQueued) {_transport.getOMF().nudge();}
@@ -847,7 +848,7 @@ public class PeerState {
     /** we are resending a packet, so let's jack up the rto */
     void messageRetransmitted(int packets, int maxPktSz) {
         synchronized(_outboundLock) {
-            _context.statManager().addRateData("udp.congestionOccurred", _sendWindowBytes);
+            _context.statManager().addRateData("udp.congestionOccurred", _sendWindowBytes.get());
             _context.statManager().addRateData("udp.congestedRTO", _rto, _rttDeviation);
             _packetsRetransmitted += packets;
             congestionOccurred();
@@ -933,7 +934,7 @@ public class PeerState {
      */
     void ECNReceived() {
         synchronized(this) {congestionOccurred();}
-        _context.statManager().addRateData("udp.congestionOccurred", _sendWindowBytes);
+        _context.statManager().addRateData("udp.congestionOccurred", _sendWindowBytes.get());
     }
 
     /**
@@ -1124,15 +1125,15 @@ public class PeerState {
                 synchronized (_sendWindowBytesRemainingLock) {
                     _sendWindowBytesRemaining += failedSize;
                     _sendWindowBytesRemaining += failedCount * fragmentOverhead();
-                    if (_sendWindowBytesRemaining > _sendWindowBytes) {
-                        _sendWindowBytesRemaining = _sendWindowBytes;
+                    if (_sendWindowBytesRemaining > _sendWindowBytes.get()) {
+                        _sendWindowBytesRemaining = _sendWindowBytes.get();
                     }
                 }
             }
 
             if (rv <= 0) {
                 synchronized (this) {
-                    _retransmitTimer = 0;
+                    _retransmitTimer.set(0);
                     exitFastRetransmit();
                 }
             }
@@ -1152,13 +1153,13 @@ public class PeerState {
      */
     List<OutboundMessageState> allocateSend(long now) {
         long retransmitTimer;
-        synchronized(this) {retransmitTimer = _retransmitTimer;}
+        synchronized(this) {retransmitTimer = _retransmitTimer.get();}
         boolean canSendOld = retransmitTimer > 0 && now >= retransmitTimer;
         List<OutboundMessageState> rv = allocateSend2(canSendOld, now);
         if (rv != null && !rv.isEmpty()) {
             synchronized(this) {
-                if (_retransmitTimer == 0) {_retransmitTimer = now + getRTO();}
-                else if (_fastRetransmit.get()) {_retransmitTimer = now + getRTO();} // right?
+                if (_retransmitTimer.get() == 0) {_retransmitTimer.set(now + getRTO());}
+                else if (_fastRetransmit.get()) {_retransmitTimer.set(now + getRTO());} // right?
             }
         } else if (canSendOld) {
             // failsafe - push out or cancel timer to prevent looping
@@ -1166,9 +1167,9 @@ public class PeerState {
             synchronized (_outboundLock) {isEmpty = _outboundMessages.isEmpty();}
             synchronized(this) {
                 if (isEmpty) {
-                    _retransmitTimer = 0;
+                    _retransmitTimer.set(0);
                     exitFastRetransmit();
-                } else {_retransmitTimer = now + 250;}
+                } else {_retransmitTimer.set(now + 250);}
             }
         }
         return rv;
@@ -1282,8 +1283,8 @@ public class PeerState {
     int getNextDelay(long now) {
         synchronized (_sendWindowBytesRemainingLock) {
             if (_dead) return Integer.MAX_VALUE;
-            if (_retransmitTimer > 0) {
-                return Math.max(0, (int)(_retransmitTimer - now));
+            if (_retransmitTimer.get() > 0) {
+                return Math.max(0, (int)(_retransmitTimer.get() - now));
             }
             long oldestLifetime = getOldestMessageLifetime(now);
             if (oldestLifetime > MAX_MESSAGE_LIFETIME) {
@@ -1500,7 +1501,7 @@ public class PeerState {
                 // Caller (IMF) will wakeup OMF
                 if (continueFast) {
                   // RFC 5681 sec. 3.2 #4 increase cwnd
-                   _sendWindowBytes += _mtu;
+                   _sendWindowBytes.addAndGet(_mtu);
                     synchronized(_sendWindowBytesRemainingLock) {_sendWindowBytesRemaining += _mtu;}
                    if (_log.shouldDebug()) {_log.debug("Continue FAST RTX, inflated window: " + this);}
                 } else if (startFast) {
@@ -1509,14 +1510,14 @@ public class PeerState {
                    float bwe = _bwEstimator.getBandwidthEstimate();
                    _slowStartThreshold = Math.max((int)(bwe * _rtt), 2 * _mtu);
                    // RFC 5681 sec. 3.2 #3 set cwnd
-                   _sendWindowBytes = _slowStartThreshold + (3 * _mtu);
-                    synchronized(_sendWindowBytesRemainingLock) {_sendWindowBytesRemaining = _sendWindowBytes;}
-                   if (_log.shouldDebug()) {_log.debug("Start of FAST RTX, inflated window: " + this);}
+                   _sendWindowBytes.set(_slowStartThreshold + (3 * _mtu));
+                     synchronized(_sendWindowBytesRemainingLock) {_sendWindowBytesRemaining = _sendWindowBytes.get();}
+                    if (_log.shouldDebug()) {_log.debug("Start of FAST RTX, inflated window: " + this);}
                 }
             } else {exitFastRetransmit();}
         }
         if (rv) {
-            synchronized(this) {_retransmitTimer = _context.clock().now();}
+            synchronized(this) {_retransmitTimer.set(_context.clock().now());}
         }
         return rv;
     }
@@ -1531,8 +1532,8 @@ public class PeerState {
         if (_fastRetransmit.compareAndSet(true, false)) {
             // RFC 5681 sec. 2.4 #6 deflate the window
             synchronized (_sendWindowBytesRemainingLock) {
-                _sendWindowBytes = _slowStartThreshold;
-                _sendWindowBytesRemaining = _sendWindowBytes;
+                _sendWindowBytes.set(_slowStartThreshold);
+                _sendWindowBytesRemaining = _sendWindowBytes.get();
             }
             if (_log.shouldDebug()) {
                 _log.debug("End of FAST RTX, deflated window: " + this);
@@ -1547,7 +1548,7 @@ public class PeerState {
      */
     protected boolean shouldRequestImmediateAck() {
         synchronized(_sendWindowBytesRemainingLock) {
-            return _sendWindowBytesRemaining < _sendWindowBytes / 3;
+            return _sendWindowBytesRemaining < _sendWindowBytes.get() / 3;
         }
     }
 
@@ -1563,7 +1564,7 @@ public class PeerState {
         _rtt = oldPeer._rtt;
         _rttDeviation = oldPeer._rttDeviation;
         _slowStartThreshold = oldPeer._slowStartThreshold;
-        _sendWindowBytes = oldPeer._sendWindowBytes;
+        _sendWindowBytes.set(oldPeer._sendWindowBytes.get());
         oldPeer._dead = true;
 
         if (getVersion() == oldPeer.getVersion()) {
@@ -1612,7 +1613,7 @@ public class PeerState {
                .append("; RTO: ").append(_rto).append("ms")
                .append("; MTU: ").append(_mtu).append(" bytes")
                .append("; Large MTU: ").append(_largeMTU).append(" bytes")
-               .append("\n* Congestion window: ").append(_sendWindowBytes).append(" bytes")
+               .append("\n* Congestion window: ").append(_sendWindowBytes.get()).append(" bytes")
                .append("; Active window: ").append(_sendWindowBytesRemaining).append(" bytes")
                .append("; SST: ").append(_slowStartThreshold).append(" bytes")
                .append("; FastRetransmit? ").append(_fastRetransmit)
