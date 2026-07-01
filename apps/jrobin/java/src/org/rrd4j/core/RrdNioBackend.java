@@ -27,33 +27,45 @@ import java.util.concurrent.TimeUnit;
  */
 public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
 
-    // The java 8- methods
+    // Path 1: DirectBuffer.cleaner() -> clean() (no Unsafe, preferred on Java 8)
     private static final Method cleanerMethod;
     private static final Method cleanMethod;
-    // The java 9+ methods
+    // Path 2: sun.misc.Unsafe.invokeCleaner(ByteBuffer) (Java 9-25 fallback)
     private static final Method invokeCleaner;
     private static final Object unsafe;
 
     static {
-        Method cleanerMethodTemp;
-        Method cleanMethodTemp;
-        Method invokeCleanerTemp;
-        Object unsafeTemp;
+        Method cleanerMethodTemp = null;
+        Method cleanMethodTemp = null;
+        Method invokeCleanerTemp = null;
+        Object unsafeTemp = null;
+
+        // Try DirectBuffer.cleaner() path (works on Java 8, may fail on Java 25
+        // if sun.nio.ch is not exported)
         try {
             Class<?> directBufferClass =
                     RrdRandomAccessFileBackend.class
                             .getClassLoader()
                             .loadClass("sun.nio.ch.DirectBuffer");
-            Class<?> cleanerClass =
-                    RrdNioBackend.class.getClassLoader().loadClass("sun.misc.Cleaner");
             cleanerMethodTemp = directBufferClass.getMethod("cleaner");
             cleanerMethodTemp.setAccessible(true);
-            cleanMethodTemp = cleanerClass.getMethod("clean");
-            cleanMethodTemp.setAccessible(true);
-        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException e) {
+            // Try sun.misc.Cleaner.clean() (Java 8)
+            try {
+                Class<?> cleanerClass =
+                        RrdNioBackend.class.getClassLoader().loadClass("sun.misc.Cleaner");
+                cleanMethodTemp = cleanerClass.getMethod("clean");
+                cleanMethodTemp.setAccessible(true);
+            } catch (ClassNotFoundException | NoSuchMethodException | SecurityException e) {
+                // Java 9+: sun.misc.Cleaner removed; clean() resolved lazily
+                cleanMethodTemp = null;
+            }
+        } catch (Exception e) {
+            // Java 25: sun.nio.ch not exported, or DirectBuffer.cleaner() removed
             cleanerMethodTemp = null;
             cleanMethodTemp = null;
         }
+
+        // Try Unsafe.invokeCleaner path (works on Java 9-25, warns on Java 25)
         try {
             Field singletonInstanceField =
                     RrdRandomAccessFileBackend.class
@@ -72,6 +84,7 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
             invokeCleanerTemp = null;
             unsafeTemp = null;
         }
+
         cleanerMethod = cleanerMethodTemp;
         cleanMethod = cleanMethodTemp;
         invokeCleaner = invokeCleanerTemp;
@@ -180,16 +193,27 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
     private void unmapFile() {
         if (byteBuffer != null && byteBuffer.isDirect()) {
             try {
-                if (cleanMethod != null) {
+                // Path 1: DirectBuffer.cleaner() -> clean() (no Unsafe)
+                if (cleanerMethod != null) {
                     Object cleaner = cleanerMethod.invoke(byteBuffer);
-                    cleanMethod.invoke(cleaner);
-                } else {
+                    if (cleaner != null) {
+                        Method clean = cleanMethod;
+                        if (clean == null) {
+                            // Java 9+: resolve clean() from actual class
+                            clean = cleaner.getClass().getMethod("clean");
+                            clean.setAccessible(true);
+                        }
+                        clean.invoke(cleaner);
+                        byteBuffer = null;
+                        return;
+                    }
+                }
+                // Path 2: Unsafe.invokeCleaner (Java 9-25 fallback)
+                if (invokeCleaner != null) {
                     invokeCleaner.invoke(unsafe, byteBuffer);
                 }
-            } catch (IllegalAccessException
-                    | IllegalArgumentException
-                    | InvocationTargetException ex) {
-                throw new RuntimeException(ex);
+            } catch (Exception ex) {
+                // Buffer will be unmapped when GC collects the MappedByteBuffer
             }
         }
         byteBuffer = null;
