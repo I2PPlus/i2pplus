@@ -1,13 +1,51 @@
 package freenet.support.CPUInformation;
 
 /**
- *  Moved out of CPUID.java
+ * Identifies Intel CPUs via CPUID and exposes instruction set support flags.
  *
- *  Ref: https://software.intel.com/en-us/articles/intel-architecture-and-processor-identification-with-cpuid-model-and-family-numbers
- *  Ref: https://en.wikipedia.org/wiki/List_of_Intel_CPU_microarchitectures
- *  Ref: https://gmplib.org/repo/gmp/file/tip/config.guess
+ * <h2>Identification Strategy</h2>
+ * <p>Two identification paths are used, in order of priority:</p>
+ * <ol>
+ *   <li><b>Brand string</b> (CPUID leaf {@code 0x80000002}–{@code 0x80000004}): Returns the exact
+ *       marketing name (e.g. "Intel(R) Core(TM) i9-14900K") and is always accurate when the
+ *       CPU supports extended CPUID leaves.</li>
+ *   <li><b>Model number fallback</b>: For very old CPUs without brand string support, the
+ *       processor identifier is computed from CPUID family/model/extended-model/extended-family
+ *       values and matched against a table of known Intel microarchitectures.</li>
+ * </ol>
  *
- *  @since 0.8.7
+ * <h2>Instruction Set Flags</h2>
+ * <p>Regardless of the identification path, the {@code switch(family)} block always runs to
+ * set the instruction set compatibility flags ({@link #isSandyCompatible},
+ * {@link #isHaswellCompatible}, etc.), which are queried by callers to determine feature
+ * availability (AVX, AVX2, AVX-512, BMI, FMA, etc.).</p>
+ *
+ * <h2>Intel Family 6 Model Numbers</h2>
+ * <p>Intel uses family 6 for all modern Core processors. The model number (base model +
+ * extended model) distinguishes microarchitectures:</p>
+ * <pre>
+ *   0x0e-0x0f  Core (Merom/Conroe)       0x1a-0x1f  Nehalem
+ *   0x25-0x2f  Westmere                  0x25-0x2f  Sandy Bridge
+ *   0x3a-0x3f  Ivy Bridge                0x3c-0x3f  Haswell
+ *   0x45-0x47  Haswell (ULT)             0x3d-0x4f  Broadwell
+ *   0x4e-0x5e  Skylake                   0x55        Skylake-X / Cascade Lake / Cooper Lake
+ *   0x5c-0x5f  Goldmont (Atom)           0x66-0x67  Cannon Lake
+ *   0x7a        Gemini Lake               0x7c        Lakefield
+ *   0x7d-0x7e  Ice Lake client           0x6a-0x6c  Ice Lake server
+ *   0x82-0x9e  Kaby Lake / Coffee Lake   0xa5-0xa6  Comet Lake
+ *   0x8c-0x8d  Tiger Lake                0xa7        Rocket Lake
+ *   0x97-0x9a  Alder Lake                0xb7-0xbf  Raptor Lake
+ *   0xaa-0xac  Meteor Lake               0xb5-0xc6  Arrow Lake
+ *   0xbd        Lunar Lake                0xcc        Panther Lake
+ *   0xd5        Wildcat Lake              0x8f        Sapphire Rapids
+ *   0xcf        Emerald Rapids            0xad-0xae  Granite Rapids
+ *   0xaf        Sierra Forest             0xdd        Clearwater Forest
+ *   0xb6        Grand Ridge               0xbe        Gracemont (E-core only)
+ * </pre>
+ *
+ * @see CPUID
+ * @see IntelCPUInfo
+ * @since 0.8.7
  */
 class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
 {
@@ -26,36 +64,78 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
     private static boolean isBroadwellCompatible;
     private static boolean isSkylakeCompatible;
 
-    // If modelString != null, the cpu is considered correctly identified.
+    /** Identified processor name from {@link #identifyCPU()}, or {@code null} if unrecognized. */
     private static final String smodel = identifyCPU();
+
+    /** {@code true} if the CPU supports Pentium (P5) instructions. */
     public boolean IsPentiumCompatible(){ return isPentiumCompatible; }
+    /** {@code true} if the CPU supports Pentium MMX instructions. */
     public boolean IsPentiumMMXCompatible(){ return isPentiumMMXCompatible; }
+    /** {@code true} if the CPU supports Pentium II (P6) instructions. */
     public boolean IsPentium2Compatible(){ return isPentium2Compatible; }
+    /** {@code true} if the CPU supports Pentium III instructions (SSE). */
     public boolean IsPentium3Compatible(){ return isPentium3Compatible; }
+    /** {@code true} if the CPU supports Pentium 4 instructions (SSE2). */
     public boolean IsPentium4Compatible(){ return isPentium4Compatible; }
+    /** {@code true} if the CPU supports Pentium M (Dothan/Core) instructions. */
     public boolean IsPentiumMCompatible(){ return isPentiumMCompatible; }
+    /** {@code true} if the CPU is an Intel Atom (Silvermont/Goldmont/etc.). */
     public boolean IsAtomCompatible(){ return isAtomCompatible; }
+    /** {@code true} if the CPU supports Core 2 (SSSE3) instructions. */
     public boolean IsCore2Compatible(){ return isCore2Compatible; }
+    /** {@code true} if the CPU supports Core i-series (SSE4.2) instructions. */
     public boolean IsCoreiCompatible(){ return isCoreiCompatible; }
+    /** {@code true} if the CPU supports Sandy Bridge (AVX) instructions. */
     public boolean IsSandyCompatible(){ return isSandyCompatible; }
+    /** {@code true} if the CPU supports Ivy Bridge (AVX, PCMPGTQ) instructions. */
     public boolean IsIvyCompatible(){ return isIvyCompatible; }
+    /** {@code true} if the CPU supports Haswell (AVX2, BMI1/2, FMA) instructions. */
     public boolean IsHaswellCompatible(){ return isHaswellCompatible; }
+    /** {@code true} if the CPU supports Broadwell (ADX, AVX-512PF/ER) instructions. */
     public boolean IsBroadwellCompatible(){ return isBroadwellCompatible; }
     /**
-     * Supports the AVX-512 instrutions.
+     * {@code true} if the CPU supports Skylake (AVX-512F/DQ/BW/VL) instructions.
      * @since 0.9.41
      */
     public boolean IsSkylakeCompatible() { return isSkylakeCompatible; }
 
+    /**
+     * Returns the identified processor name, or throws if unrecognized.
+     *
+     * @return the CPU model string (e.g. "Intel(R) Core(TM) i9-14900K" or "Skylake Core i3/i5/i7")
+     * @throws UnknownCPUException if the CPU could not be identified
+     */
     public String getCPUModelString() throws UnknownCPUException
     {
         if (smodel != null)
             return smodel;
         throw new UnknownCPUException("Unknown Intel CPU; Family="+CPUID.getCPUFamily() + '/' + CPUID.getCPUExtendedFamily()+
-                                      ", Model="+CPUID.getCPUModel() + '/' + CPUID.getCPUExtendedModel());    	//
-
+                                      ", Model="+CPUID.getCPUModel() + '/' + CPUID.getCPUExtendedModel());
     }
 
+    /**
+     * Identifies the Intel CPU and sets instruction set compatibility flags.
+     *
+     * <p>Strategy:</p>
+     * <ol>
+     *   <li>Capture the CPUID brand string (leaf {@code 0x80000002}–{@code 0x80000004}),
+     *       which gives the exact marketing name when available.</li>
+     *   <li>Compute the processor family and model from CPUID leaf 1, handling Intel's
+     *       extended model and extended family fields.</li>
+     *   <li>Walk a {@code switch(family)} block that matches known model numbers to
+     *       microarchitecture codenames and sets the appropriate instruction set
+     *       compatibility flags ({@code isSandyCompatible}, {@code isHaswellCompatible},
+     *       etc.).</li>
+     *   <li>Override the model-based name with the brand string if one was captured,
+     *       providing a more accurate and user-friendly display string.</li>
+     * </ol>
+     *
+     * <p>The brand string override at the end ensures that modern CPUs (family 6) always
+     * display the correct marketing name, while the model-based switch still runs to set
+     * the instruction set flags needed by callers.</p>
+     *
+     * @return the identified processor name, or {@code null} if unrecognized
+     */
     private static String identifyCPU()
     {
         // http://en.wikipedia.org/wiki/Cpuid
@@ -63,6 +143,10 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
         // http://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-manual-325462.pdf
     	// #include "llvm/Support/Host.h", http://llvm.org/docs/doxygen/html/Host_8cpp_source.html
         String modelString = null;
+
+        // Capture brand string (CPUID 0x80000002-4) — used as primary identifier when available
+        String brand = CPUID.getCPUModelName();
+
         int family = CPUID.getCPUFamily();
         int model = CPUID.getCPUModel();
         if (family == 15 || family == 6) {
@@ -320,7 +404,7 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
                         break;
                     // Westmere 32 nm
                     case 0x2f:
-                        modelString = "Westemere";
+                        modelString = "Westmere";
                         break;
 
                 // following are for extended model == 3
@@ -353,9 +437,12 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
                     // case 0x3c: See below
 
                     // Broadwell 14 nm
-                    // See Haswell notes below
+                    // ref: https://en.wikipedia.org/wiki/Broadwell_(microarchitecture)
+                    case 0x3d:
                     case 0x47:
-                    case 0x3d: {
+                    case 0x4f: // Broadwell-EP/EX
+                    case 0x56: // Broadwell-DE
+                    {
                         CPUIDCPUInfo c = new CPUIDCPUInfo();
                         if (c.hasAVX2() && c.hasBMI1()  && c.hasBMI2() &&
                             c.hasFMA3() && c.hasMOVBE() && c.hasABM()) {
@@ -446,16 +533,10 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
                 // isCoreiCompatible = true is the default
 
                     // Skylake 14 nm
-                    // See reference link errata #SKD052 re: BMI
                     // ref: http://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/desktop-6th-gen-core-family-spec-update.pdf
                     // See Haswell notes above
-                    case 0x4e:
-                    case 0x55:
-                    case 0x5c: // Apollo Lake
-                    case 0x5e:
-                    case 0x66: // Cannon Lake
-                    case 0x67: // Cannon Lake
-                    case 0x6c: // Apollo Lake
+                    case 0x4e: // Skylake mobile
+                    case 0x5e: // Skylake desktop
                     {
                         CPUIDCPUInfo c = new CPUIDCPUInfo();
                         if (c.hasAVX2() && c.hasBMI1()  && c.hasBMI2() &&
@@ -470,8 +551,6 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
                             }
                             modelString = "Skylake Core i3/i5/i7";
                         } else {
-                            // This processor is "corei" compatible, as we define it,
-                            // i.e. SSE4.2 but not necessarily AVX.
                             if (c.hasAVX()) {
                                 isSandyCompatible = true;
                                 isIvyCompatible = true;
@@ -483,9 +562,101 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
                         break;
                     }
 
+                    // Skylake-X / Cascade Lake / Cooper Lake 14 nm
+                    // ref: https://en.wikipedia.org/wiki/Cascade_Lake_(microprocessor)
+                    // AVX-512 support distinguishes this from mainstream Skylake
+                    case 0x55:
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX2() && c.hasBMI1() && c.hasBMI2() &&
+                            c.hasFMA3() && c.hasMOVBE() && c.hasABM()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            if (c.hasADX()) {
+                                isBroadwellCompatible = true;
+                                if (c.hasAVX512()) {
+                                    isSkylakeCompatible = true;
+                                    modelString = "Skylake-X / Cascade Lake / Cooper Lake";
+                                } else {
+                                    modelString = "Skylake-X Core i9";
+                                }
+                            } else {
+                                modelString = "Skylake-X";
+                            }
+                        } else {
+                            modelString = "Intel model " + model;
+                        }
+                        break;
+                    }
 
+                    // Cannon Lake 14 nm (mobile, limited release)
+                    // ref: https://en.wikipedia.org/wiki/Cannon_Lake_(microarchitecture)
+                    case 0x66:
+                    case 0x67:
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX2()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            modelString = "Cannon Lake";
+                        } else {
+                            modelString = "Cannon Lake";
+                        }
+                        break;
+                    }
+
+                    // Ice Lake 10 nm (client)
+                    // ref: https://en.wikipedia.org/wiki/Ice_Lake_(microprocessor)
+                    case 0x7d:
+                    case 0x7e:
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX2()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            isSkylakeCompatible = true;
+                            modelString = "Ice Lake Core i3/i5/i7";
+                        } else {
+                            modelString = "Ice Lake";
+                        }
+                        break;
+                    }
+
+                    // Ice Lake 10 nm (server)
+                    case 0x6a:
+                    case 0x6c:
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX512()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            isSkylakeCompatible = true;
+                            modelString = "Ice Lake Xeon";
+                        } else if (c.hasAVX2()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            isSkylakeCompatible = true;
+                            modelString = "Ice Lake";
+                        } else {
+                            modelString = "Ice Lake";
+                        }
+                        break;
+                    }
+
+
+                    case 0x5c: // Apollo Lake (Goldmont)
                     case 0x5f: // Goldmont / Atom
                     case 0x7a: // Gemini Lake (Goldmont Plus)
+                    case 0x7c: // Lakefield (Tremont + Sunny Cove hybrid)
                     case 0x9c: // Jasper Lake (Tremont)
                     {
                         // This processor is "corei" compatible, as we define it,
@@ -506,26 +677,18 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
                 // most flags are set above
                 // isCoreiCompatible = true is the default
 
-                    // Kaby Lake
-                    // ref: https://github.com/InstLatx64/InstLatx64/commit/9d2ea1a9eb727868dc514900da9e2f175710f9bf
-                    // ref: https://github.com/InstLatx64/InstLatx64/blob/master/ChangeLog.htm
-                    // ref: https://github.com/coreboot/coreboot/blob/master/src/soc/intel/common/block/include/intelblocks/mp_init.h
-                    // ref: https://github.com/intel/thermal_daemon/blob/master/src/thd_engine.cpp
-                    // See Haswell notes above
-                    case 0x8e: // also Whiskey Lake, Coffee Lake
-                    case 0x9e: // also Whiskey Lake, Coffee Lake
+                    // Kaby Lake / Coffee Lake / Comet Lake 14 nm
+                    // ref: https://en.wikipedia.org/wiki/Kaby_Lake
+                    // ref: https://en.wikipedia.org/wiki/Coffee_Lake
+                    // ref: https://en.wikipedia.org/wiki/Comet_Lake_(microprocessor)
+                    case 0x82: // Kaby Lake mobile (early)
+                    case 0x8e: // Kaby Lake mobile (also Whiskey Lake, Coffee Lake mobile)
+                    case 0x9e: // Kaby Lake desktop (also Coffee Lake)
                     case 0xa5: // Comet Lake
                     case 0xa6: // Comet Lake
-                    case 0x7e: // Ice Lake
-                    case 0x8c: // Tiger Lake
-                    case 0x8d: // Tiger Lake
-                    case 0xa7: // Rocket Lake
-                    case 0x97: // Alder Lake
-                    case 0x9a: // Alder Lake
-                    case 0xba: // Raptor Lake
-                    case 0xb7: // Raptor Lake
                     {
                         CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        String suffix = "";
                         if (c.hasAVX2() && c.hasBMI1()  && c.hasBMI2() &&
                             c.hasFMA3() && c.hasMOVBE() && c.hasABM()) {
                             isSandyCompatible = true;
@@ -536,17 +699,311 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
                                 if (c.hasAVX512())
                                     isSkylakeCompatible = true;
                             }
-                            modelString = "Kaby Lake Core i3/i5/i7";
+                            suffix = "Core i3/i5/i7";
                         } else {
-                            // This processor is "corei" compatible, as we define it,
-                            // i.e. SSE4.2 but not necessarily AVX.
                             if (c.hasAVX()) {
                                 isSandyCompatible = true;
                                 isIvyCompatible = true;
-                                modelString = "Kaby Lake Celeron/Pentium w/ AVX";
+                                suffix = "Celeron/Pentium w/ AVX";
                             } else {
-                                modelString = "Kaby Lake Celeron/Pentium";
+                                suffix = "Celeron/Pentium";
                             }
+                        }
+                        if (model == 0xa5 || model == 0xa6)
+                            modelString = "Comet Lake " + suffix;
+                        else
+                            modelString = "Kaby Lake " + suffix;
+                        break;
+                    }
+
+                    // Tiger Lake 10 nm
+                    // ref: https://en.wikipedia.org/wiki/Tiger_Lake_(microprocessor)
+                    case 0x8c:
+                    case 0x8d:
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX2()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            isSkylakeCompatible = true;
+                            modelString = "Tiger Lake Core i3/i5/i7";
+                        } else {
+                            modelString = "Tiger Lake";
+                        }
+                        break;
+                    }
+
+                    // Rocket Lake 14 nm
+                    // ref: https://en.wikipedia.org/wiki/Rocket_Lake
+                    case 0xa7:
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX512()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            isSkylakeCompatible = true;
+                            modelString = "Rocket Lake Core i5/i7/i9";
+                        } else if (c.hasAVX2()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            modelString = "Rocket Lake";
+                        } else {
+                            modelString = "Rocket Lake";
+                        }
+                        break;
+                    }
+
+                    // Alder Lake 10 nm (Intel 7)
+                    // ref: https://en.wikipedia.org/wiki/Alder_Lake
+                    case 0x97:
+                    case 0x9a:
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX2()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            isSkylakeCompatible = true;
+                            modelString = "Alder Lake Core i5/i7/i9";
+                        } else {
+                            modelString = "Alder Lake";
+                        }
+                        break;
+                    }
+
+                    // Raptor Lake 10 nm (Intel 7)
+                    // ref: https://en.wikipedia.org/wiki/Raptor_Lake
+                    case 0xb7: // Raptor Lake
+                    case 0xba: // Raptor Lake
+                    case 0xbf: // Raptor Lake refresh
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX2()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            isSkylakeCompatible = true;
+                            modelString = "Raptor Lake Core i5/i7/i9";
+                        } else {
+                            modelString = "Raptor Lake";
+                        }
+                        break;
+                    }
+
+                    // Meteor Lake 7 nm (Intel 4)
+                    // ref: https://en.wikipedia.org/wiki/Meteor_Lake
+                    case 0xaa: // Meteor Lake mobile
+                    case 0xac: // Meteor Lake desktop
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX2()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            isSkylakeCompatible = true;
+                            modelString = "Meteor Lake Core Ultra";
+                        } else {
+                            modelString = "Meteor Lake";
+                        }
+                        break;
+                    }
+
+                    // Arrow Lake 7 nm (Intel 20A / TSMC N3B)
+                    // ref: https://en.wikipedia.org/wiki/Arrow_Lake_(microprocessor)
+                    case 0xb5: // Arrow Lake mobile
+                    case 0xc5: // Arrow Lake
+                    case 0xc6: // Arrow Lake-S
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX2()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            isSkylakeCompatible = true;
+                            modelString = "Arrow Lake Core Ultra";
+                        } else {
+                            modelString = "Arrow Lake";
+                        }
+                        break;
+                    }
+
+                    // Lunar Lake 3 nm
+                    // ref: https://en.wikipedia.org/wiki/Lunar_Lake
+                    case 0xbd:
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX2()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            isSkylakeCompatible = true;
+                            modelString = "Lunar Lake Core Ultra";
+                        } else {
+                            modelString = "Lunar Lake";
+                        }
+                        break;
+                    }
+
+                    // Panther Lake
+                    case 0xcc:
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX2()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            isSkylakeCompatible = true;
+                            modelString = "Panther Lake";
+                        } else {
+                            modelString = "Panther Lake";
+                        }
+                        break;
+                    }
+
+                    // Wildcat Lake
+                    case 0xd5:
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX2()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            modelString = "Wildcat Lake";
+                        } else {
+                            modelString = "Wildcat Lake";
+                        }
+                        break;
+                    }
+
+                    // Granite Rapids 5 nm
+                    // ref: https://en.wikipedia.org/wiki/Granite_Rapids
+                    case 0xad: // Granite Rapids-D
+                    case 0xae: // Granite Rapids
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX512()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            isSkylakeCompatible = true;
+                            modelString = "Granite Rapids Xeon";
+                        } else {
+                            modelString = "Granite Rapids";
+                        }
+                        break;
+                    }
+
+                    // Sierra Forest
+                    // ref: https://en.wikipedia.org/wiki/Sierra_Forest
+                    case 0xaf:
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX2()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            modelString = "Sierra Forest Xeon";
+                        } else {
+                            modelString = "Sierra Forest";
+                        }
+                        break;
+                    }
+
+                    // Clearwater Forest
+                    case 0xdd:
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX2()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            isSkylakeCompatible = true;
+                            modelString = "Clearwater Forest Xeon";
+                        } else {
+                            modelString = "Clearwater Forest";
+                        }
+                        break;
+                    }
+
+                    // Grand Ridge
+                    case 0xb6:
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX2()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            isSkylakeCompatible = true;
+                            modelString = "Grand Ridge";
+                        } else {
+                            modelString = "Grand Ridge";
+                        }
+                        break;
+                    }
+
+                    // Emerald Rapids
+                    case 0xcf:
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX512()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            isSkylakeCompatible = true;
+                            modelString = "Emerald Rapids Xeon";
+                        } else {
+                            modelString = "Emerald Rapids";
+                        }
+                        break;
+                    }
+
+                    // Sapphire Rapids
+                    case 0x8f:
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX512()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            isSkylakeCompatible = true;
+                            modelString = "Sapphire Rapids Xeon";
+                        } else {
+                            modelString = "Sapphire Rapids";
+                        }
+                        break;
+                    }
+
+                    // Gracemont (Atom, E-core only)
+                    case 0xbe:
+                    {
+                        CPUIDCPUInfo c = new CPUIDCPUInfo();
+                        if (c.hasAVX2()) {
+                            isSandyCompatible = true;
+                            isIvyCompatible = true;
+                            isHaswellCompatible = true;
+                            isBroadwellCompatible = true;
+                            modelString = "Gracemont";
+                        } else {
+                            modelString = "Gracemont";
                         }
                         break;
                     }
@@ -599,6 +1056,12 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
                 modelString = "Intel Itanium II model " + model;
             }
         }
+
+        // Override model-based string with brand string if available
+        if (brand != null && !brand.isEmpty()) {
+            modelString = brand;
+        }
+
         return modelString;
     }
 }

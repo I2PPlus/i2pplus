@@ -4,27 +4,74 @@
 </head>
 <body>
 <p>
-    CPUID implementation, borrowed from freenet, updated and heavily modified.
+    CPU identification and instruction set detection via the CPUID instruction.
+    Originally from Freenet, heavily modified for I2P+.
 </p>
 
+<h2>Architecture</h2>
+<pre>
+    CPUInfo (interface)
+        ├── IntelCPUInfo (interface)
+        │       └── IntelInfoImpl (implementation)
+        ├── AMDCPUInfo (interface)
+        │       └── AMDInfoImpl (implementation)
+        └── VIACPUInfo (interface)
+                └── VIAInfoImpl (implementation)
+
+    CPUIDCPUInfo — base class implementing CPUInfo feature-flag methods
+    CPUID — static JNI bridge to native CPUID calls + brand string helpers
+    UnknownCPUException — thrown when the CPU cannot be identified
+</pre>
+
+<h2>Identification Strategy</h2>
 <p>
-    This package provides CPU detection and identification capabilities using the CPUID instruction, allowing I2P to:
+    Each vendor-specific implementation (IntelInfoImpl, AMDInfoImpl, VIAInfoImpl) uses a
+    two-tier identification approach:
+</p>
+<ol>
+    <li><b>Brand string</b> (CPUID leaves 0x80000002–0x80000004): Returns the exact marketing
+        name (e.g. "AMD Ryzen 9 9900X 12-Core Processor" or "Intel Core i9-14900K").
+        Always accurate when available on modern CPUs.</li>
+    <li><b>Model number fallback</b>: For very old CPUs without brand string support,
+        the processor is identified from CPUID family/model/extended-model/extended-family
+        values and matched against a table of known microarchitectures.</li>
+</ol>
+<p>
+    The brand string, when present, overrides the model-based name for display purposes.
+    The model-based switch always runs to set the internal instruction set compatibility
+    flags (IsSandyCompatible, IsHaswellCompatible, IsZen4Compatible, etc.).
 </p>
 
+<h2>Instruction Set Flags</h2>
+<p>
+    The compatibility flags (e.g. <code>IsHaswellCompatible</code>,
+    <code>IsZen4Compatible</code>) are checked by callers to select optimized code paths.
+    The primary consumer is <code>NativeBigInteger</code>, which loads vendor-specific
+    GMP native binaries (coreiwl, coreibwl, etc.) based on these flags.
+</p>
+<p>
+    Detected instruction sets include: MMX, SSE/2/3/4.1/4.2/4a, AVX/AVX2/AVX-512,
+    AES-NI, BMI1/2, FMA3, ADX, TBM, MOVBE, ABM (LZCNT), and x86-64.
+</p>
+
+<h2>Supported Vendors</h2>
+<table border="1" cellpadding="4" cellspacing="0">
+    <tr><th>Vendor</th><th>Family Range</th><th>Implementation</th></tr>
+    <tr><td>Intel</td><td>Family 4, 6, 7, 15</td><td>IntelInfoImpl</td></tr>
+    <tr><td>AMD</td><td>Family 5–26</td><td>AMDInfoImpl</td></tr>
+    <tr><td>VIA/Centaur</td><td>Family 6 (C3/Nano)</td><td>VIAInfoImpl</td></tr>
+</table>
+
+<h2>Callers Within I2P</h2>
 <ul>
-<li>Detect CPU manufacturer and model information</li>
-<li>Identify available CPU features and instruction sets</li>
-<li>Optimize cryptographic operations based on CPU capabilities</li>
-<li>Determine the number of available processor cores</li>
-<li>Detect hardware acceleration support (AES-NI, etc.)</li>
+    <li><code>NativeBigInteger</code> — selects GMP native binary (coreihwl, coreibwl, coreisbr, zen, zen2, etc.)</li>
+    <li><code>CryptixAESEngine</code> — uses CPUID for AES-NI detection</li>
+    <li><code>Router</code> — logs CPU info at startup</li>
 </ul>
 
 <p>
-    The information gathered is used to optimize I2P's performance by selecting the most appropriate algorithms and threading strategies for the detected hardware. This is particularly important for cryptographic operations where hardware acceleration can provide significant performance improvements.
-</p>
-
-<p>
-    <strong>Warning:</strong> Not recommended for external use, not maintained as a public API. The implementation may change between I2P versions without notice.
+    <strong>Warning:</strong> Not recommended for external use, not maintained as a public API.
+    The implementation may change between I2P versions without notice.
 </p>
 </body>
 </html>

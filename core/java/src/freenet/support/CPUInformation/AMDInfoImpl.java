@@ -92,6 +92,19 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
     }
 
     private String identifyCPU() {
+        // Use the CPUID brand string (Fn8000_0002-4) as primary identifier.
+        // This is what AMD programmed into the CPU and is always correct.
+        // Model number ranges are unreliable — AMD reuses them across product lines
+        // (e.g. model 0x44 is both Granite Ridge and appears in Strix ranges).
+        String brand = CPUID.getCPUModelName();
+        if (brand != null && brand.length() > 0) {
+            return brand;
+        }
+        // Fallback: model-based detection when brand string is unavailable
+        return identifyCPUByModel();
+    }
+
+    private String identifyCPUByModel() {
         // http://en.wikipedia.org/wiki/Cpuid
         // #include "llvm/Support/Host.h", http://llvm.org/docs/doxygen/html/Host_8cpp_source.html
         String modelString = null;
@@ -484,14 +497,8 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
             }
             break;
 
-            // Zen / Zen+ / Zen2 / Zen3 / Zen4 / Ryzen 3/5/7/9/Threadripper / EPYC
-            // untested
-            case 23:
-            case 25: {
-                // Quote wikipedia:
-                // Zen is a clean sheet design that differs from the long-standing Bulldozer architecture.
-                // All models support: x87, MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2, AES, CLMUL,
-                // AVX, AVX2, FMA, CVT16/F16C, ABM, BMI1, BMI2, SHA.
+            // Family 17h (0x17) = Zen / Zen+ / Zen2
+            case 23: {
                 isK6Compatible = true;
                 isK6_2_Compatible = true;
                 isK6_3_Compatible = true;
@@ -502,24 +509,81 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
                 isExcavatorCompatible = true;
                 isBulldozerCompatible = true;
                 isZenCompatible = true;
-                /*
-                 * Family 25 is zen2 and zen3 (NOT zen4 - that's family 26).
-                 * All are backward compatible, so isZen2Compatible = true.
-                 * isZen3Compatible = true for zen3 and later.
-                 */
+                isZen2Compatible = true;
+                // https://en.wikichip.org/wiki/amd/codenames
+                // https://wikiidevi.wi-cat.ru/AMD/CPU
+                if (model <= 0x0F) {
+                    modelString = "AMD Epyc 7001 / Ryzen (Naples/Summit Ridge/Whitehaven, Zen)";
+                } else if (model <= 0x1F) {
+                    modelString = "AMD Ryzen 2000 APU (Raven Ridge, Zen)";
+                } else if (model <= 0x2F) {
+                    modelString = "AMD Ryzen (Bristol Ridge/Picasso, Zen/Zen+)";
+                } else if (model <= 0x3F) {
+                    modelString = "AMD Epyc 7002 / Threadripper 3000 (Rome/Castle Peak, Zen2)";
+                } else if (model <= 0x4F) {
+                    modelString = "AMD Ryzen (Cardinal, Zen2)";
+                } else if (model <= 0x6F) {
+                    modelString = "AMD Ryzen 4000 APU (Renoir, Zen2)";
+                } else if (model <= 0x7F) {
+                    modelString = "AMD Ryzen 3000 (Matisse, Zen2)";
+                } else if (model <= 0x8F) {
+                    modelString = "AMD Ryzen (Project X, Zen2)";
+                } else if (model <= 0x9F) {
+                    modelString = "AMD Ryzen (Van Gogh, Zen2)";
+                } else if (model <= 0xAF) {
+                    modelString = "AMD Ryzen (Mendocino, Zen2)";
+                } else {
+                    modelString = "AMD Ryzen / Epyc Zen 1/2 model " + model;
+                }
+            }
+                break;
+
+            // Family 19h (0x19) = Zen3 / Zen4
+            // https://en.wikichip.org/wiki/amd/codenames
+            // https://github.com/llvm/llvm-project/blob/main/llvm/lib/Support/Host.cpp
+            case 25: {
+                isK6Compatible = true;
+                isK6_2_Compatible = true;
+                isK6_3_Compatible = true;
+                isAthlonCompatible = true;
+                isAthlon64Compatible = true;
+                isPiledriverCompatible = true;
+                isSteamrollerCompatible = true;
+                isExcavatorCompatible = true;
+                isBulldozerCompatible = true;
+                isZenCompatible = true;
                 isZen2Compatible = true;
                 isZen3Compatible = true;
-                isZen4Compatible = false;
-                if (model == 0) {modelString = "AMD Epyc (Summit Ridge/Naples)";}
-                else if (model == 1) {modelString = "AMD Ryzen 7";}
-                else if (model == 17) {modelString = "AMD Ryzen 2000 APU series";}
-                else if (model == 24) {modelString = "AMD Ryzen Zen+ 3000 APU series";}
-                else if (model == 32) {modelString = "AMD Ryzen 3000 APU series";}
-                else if (model == 49) {modelString = "AMD Ryzen Threadripper 3000 series / Epyc 7002 series";}
-                else if (model == 96) {modelString = "AMD Ryzen 4000 APU series";}
-                else if (model == 104) {modelString = "AMD Ryzen 5000 APU series";}
-                else if (model == 113) {modelString = "AMD Ryzen 3000 series";}
-                else {modelString = "AMD Ryzen / Epyc Zen 2/3 model " + model;}
+                if (model <= 0x0F) {
+                    modelString = "AMD Epyc 7003 / Threadripper 5000 (Milan/Chagall, Zen3)";
+                } else if (model <= 0x1F) {
+                    isZen4Compatible = true;
+                    modelString = "AMD Epyc 9004 / Threadripper 7000 (Genoa/Storm Peak, Zen4)";
+                } else if (model <= 0x2F) {
+                    modelString = "AMD Ryzen 5000 (Vermeer, Zen3)";
+                } else if (model <= 0x3F) {
+                    modelString = "AMD Epyc (Badami, Zen3)";
+                } else if (model <= 0x4F) {
+                    modelString = "AMD Ryzen 6000 APU (Rembrandt, Zen3+)";
+                } else if (model <= 0x5F) {
+                    modelString = "AMD Ryzen 5000 APU (Cezanne, Zen3)";
+                } else if (model <= 0x6F) {
+                    isZen4Compatible = true;
+                    modelString = "AMD Ryzen 7000 (Raphael, Zen4)";
+                } else if (model <= 0x77) {
+                    isZen4Compatible = true;
+                    modelString = "AMD Ryzen 7040/8040 APU (Phoenix, Zen4)";
+                } else if (model <= 0x7F) {
+                    isZen4Compatible = true;
+                    modelString = "AMD Ryzen 8040 APU (Hawk Point, Zen4)";
+                } else if (model <= 0x9F) {
+                    modelString = "AMD Epyc (unknown model " + model + ", Zen3/4)";
+                } else if (model <= 0xAF) {
+                    isZen4Compatible = true;
+                    modelString = "AMD Epyc 4004 / Siena (Genoa-X, Zen4)";
+                } else {
+                    modelString = "AMD Ryzen / Epyc Zen 3/4 model " + model;
+                }
             }
                 break;
 
@@ -540,7 +604,12 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
             }
             break;
 
-            // zen5
+            // Family 1Ah (0x1A) = Zen5 / Zen5c
+            // Brand string (CPUID 0x80000002-4) is the primary identifier in identifyCPU().
+            // This fallback only runs when the brand string is unavailable (very rare).
+            // Model ranges from LLVM Host.cpp + Linux kernel amd.c + InstLatx64 CPUID dumps.
+            // Only show specific codenames for ranges confirmed by multiple sources;
+            // use generic microarchitecture name for uncertain ranges.
             case 26: {
                 isK6Compatible = true;
                 isK6_2_Compatible = true;
@@ -556,13 +625,41 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
                 isZen3Compatible = true;
                 isZen4Compatible = true;
                 isZen5Compatible = true;
-                if (model <= 31) {modelString = "AMD Epyc 9005 Series (Zen5 / Turin)";}
-                else if (model == 32) {modelString = "AMD Ryzen 8000 Series (Zen5 / Strix Point)";}
-                else if (model == 36) {modelString = "AMD Ryzen AI 9 Series (Zen5)";}
-                else if (model >= 64) {modelString = "AMD Ryzen 9000 Series (Zen5 / Granite Ridge)";}
-                else {modelString = "AMD Ryzen model " + model + " (Zen5)";}
+                // Confirmed by LLVM + InstLatx64 B40F00 + Linux kernel + user's 9900X
+                if (model <= 0x0F) {
+                    modelString = "AMD Epyc 9005 (Turin, Zen5)";
+                } else if (model <= 0x1F) {
+                    modelString = "AMD Epyc 9005 (Turin Dense, Zen5)";
+                } else if (model <= 0x2F) {
+                    modelString = "AMD Ryzen AI 300 (Strix Point, Zen5)";
+                } else if (model <= 0x3F) {
+                    // LLVM: Strix 2/3; Linux kernel omits this range from Zen 5
+                    modelString = "AMD Ryzen AI 300 (Zen5)";
+                } else if (model <= 0x4F) {
+                    modelString = "AMD Ryzen 9000 (Granite Ridge, Zen5)";
+                } else if (model <= 0x5F) {
+                    // Confirmed by InstLatx64 B50F00 — this is Zen 6, NOT Zen 5
+                    modelString = "AMD Ryzen (Zen6)";
+                } else if (model <= 0x6F) {
+                    modelString = "AMD Ryzen AI 300 (Krackan Point, Zen5)";
+                } else if (model <= 0x77) {
+                    modelString = "AMD Ryzen AI Max 300 (Strix Halo, Zen5)";
+                } else if (model <= 0x7F) {
+                    // Linux kernel includes 0x70-0x7F as Zen 5; LLVM only 0x70-0x77
+                    modelString = "AMD Ryzen (Zen5)";
+                } else if (model <= 0xCF) {
+                    // LLVM: Zen 6 range (Weisshorn and beyond)
+                    modelString = "AMD Ryzen (Zen6)";
+                } else if (model <= 0xD7) {
+                    // LLVM: Annapurna; Linux kernel doesn't mention this range
+                    modelString = "AMD Epyc (Zen5)";
+                } else if (model <= 0xE7) {
+                    modelString = "AMD Ryzen (Zen6)";
+                } else {
+                    modelString = "AMD Ryzen / Epyc Zen5 model " + model;
+                }
             }
-            break;
+                break;
         }
         return modelString;
     }
