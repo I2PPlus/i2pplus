@@ -33,7 +33,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import java.util.regex.Pattern;
@@ -73,7 +72,7 @@ import net.i2p.util.SystemVersion;
 public class GeoIP {
     private final Log _log;
     private final I2PAppContext _context;
-    private static BanLogger _banLogger;
+    private static volatile BanLogger _banLogger;
     private final Map<String, String> _codeToName;
     /** code to itself to prevent String proliferation */
     private final Map<String, String> _codeCache;
@@ -81,6 +80,8 @@ public class GeoIP {
     // In the following structures, an IPv4 IP is stored as a non-negative long, 0 to 2**32 - 1,
     // and the first 8 bytes of an IPv6 IP are stored as a signed long.
     private final Map<Long, String> _IPToCountry;
+    /** Cap for _IPToCountry to prevent unbounded growth */
+    private static final int MAX_IP_CACHE_SIZE = 32768;
 
 /**
     private final Set<Long> _pendingSearch;
@@ -88,9 +89,9 @@ public class GeoIP {
     private final Set<Long> _notFound;
 **/
 
-    private final CopyOnWriteArraySet<Long> _pendingSearch;
-    private final CopyOnWriteArraySet<Long> _pendingIPv6Search;
-    private final CopyOnWriteArraySet<Long> _notFound;
+    private final Set<Long> _pendingSearch;
+    private final Set<Long> _pendingIPv6Search;
+    private final Set<Long> _notFound;
 
     private final AtomicBoolean _lock;
     private int _lookupRunCount;
@@ -129,9 +130,9 @@ public class GeoIP {
         c.add("cn");
         c.add("hk");
         c.add("mo");
-        _associatedCountries.put("cn", c);
-        _associatedCountries.put("hk", c);
-        _associatedCountries.put("mo", c);
+        _associatedCountries.put("cn", Collections.unmodifiableList(c));
+        _associatedCountries.put("hk", Collections.unmodifiableList(c));
+        _associatedCountries.put("mo", Collections.unmodifiableList(c));
     }
 
     /**
@@ -142,16 +143,16 @@ public class GeoIP {
         _log = context.logManager().getLog(GeoIP.class);
         _codeToName = new ConcurrentHashMap<>(512);
         _codeCache = new ConcurrentHashMap<>(512);
-        _IPToCountry = new ConcurrentHashMap<>();
+        _IPToCountry = new ConcurrentHashMap<>(32768);
 /**
         _pendingSearch = new ConcurrentHashSet<>();
         _pendingIPv6Search = new ConcurrentHashSet<>();
         _notFound = new ConcurrentHashSet<>();
 **/
 
-        _pendingSearch = new CopyOnWriteArraySet<>();
-        _pendingIPv6Search = new CopyOnWriteArraySet<>();
-        _notFound = new CopyOnWriteArraySet<>();
+        _pendingSearch = ConcurrentHashMap.newKeySet();
+        _pendingIPv6Search = ConcurrentHashMap.newKeySet();
+        _notFound = ConcurrentHashMap.newKeySet();
 
         _lock = new AtomicBoolean();
         readCountryFile();
@@ -201,9 +202,7 @@ public class GeoIP {
 
         @Override
         public void run() {
-            synchronized(this) {
-                runit();
-            }
+            runit();
         }
 
         /**
@@ -250,11 +249,13 @@ public class GeoIP {
                                 notifyVersion("GeoIPv4", time);
                                 rv = time;
                             }
+                            if (_IPToCountry.size() >= MAX_IP_CACHE_SIZE) {_IPToCountry.clear();}
                             for (int i = 0; i < search.length; i++) {
                                 Long ipl = search[i];
                                 long ip = ipl.longValue();
                                 // returns upper case or "--"
-                                String uc = ls.getCountry(ip).getCode();
+                                com.maxmind.geoip.Country cn = ls.getCountry(ip);
+                                String uc = cn != null ? cn.getCode() : UNKNOWN_COUNTRY_CODE;
                                 if (!uc.equals(UNKNOWN_COUNTRY_CODE)) {
                                     String lc = uc.toLowerCase(Locale.US);
                                     String cached = _codeCache.get(lc);
@@ -275,11 +276,15 @@ public class GeoIP {
                         // Maxmind v2 database
                         try {
                             dbr = openGeoIP2(geoip2);
-                            long time = dbr.getMetadata().getBuildDate().getTime();
-                            if (time > 0) {
-                                notifyVersion("GeoIP2", time);
-                                rv = time;
+                            Date buildDate = dbr.getMetadata().getBuildDate();
+                            if (buildDate != null) {
+                                long time = buildDate.getTime();
+                                if (time > 0) {
+                                    notifyVersion("GeoIP2", time);
+                                    rv = time;
+                                }
                             }
+                            if (_IPToCountry.size() >= MAX_IP_CACHE_SIZE) {_IPToCountry.clear();}
                             for (int i = 0; i < search.length; i++) {
                                 Long ipl = search[i];
                                 String ipv4 = toV4(ipl);
@@ -310,6 +315,7 @@ public class GeoIP {
                             geoFile = new File(geoFile, GEOIP_FILE_DEFAULT);
                             rv = geoFile.lastModified();
                         }
+                        if (_IPToCountry.size() >= MAX_IP_CACHE_SIZE) {_IPToCountry.clear();}
                         for (int i = 0; i < countries.length; i++) {
                             if (countries[i] != null) {
                                 _IPToCountry.put(search[i], countries[i]);
@@ -336,12 +342,14 @@ public class GeoIP {
                             Date date = ls.getDatabaseInfo().getDate();
                             if (date != null)
                                 notifyVersion("GeoIPv6", date.getTime());
+                            if (_IPToCountry.size() >= MAX_IP_CACHE_SIZE) {_IPToCountry.clear();}
                             for (int i = 0; i < search.length; i++) {
                                 Long ipl = search[i];
                                 long ip = ipl.longValue();
                                 String ipv6 = toV6(ip);
                                 // returns upper case or "--"
-                                String uc = ls.getCountryV6(ipv6).getCode();
+                                com.maxmind.geoip.Country cn6 = ls.getCountryV6(ipv6);
+                                String uc = cn6 != null ? cn6.getCode() : UNKNOWN_COUNTRY_CODE;
                                 if (!uc.equals(UNKNOWN_COUNTRY_CODE)) {
                                     String lc = uc.toLowerCase(Locale.US);
                                     String cached = _codeCache.get(lc);
@@ -365,6 +373,7 @@ public class GeoIP {
                         try {
                             if (dbr == null)
                                 dbr = openGeoIP2(geoip2);
+                            if (_IPToCountry.size() >= MAX_IP_CACHE_SIZE) {_IPToCountry.clear();}
                             for (int i = 0; i < search.length; i++) {
                                 Long ipl = search[i];
                                 String ipv6 = toV6(ipl);
@@ -387,6 +396,7 @@ public class GeoIP {
                      } else {
                         // I2P format IPv6 database
                         String[] countries = GeoIPv6.readGeoIPFile(_context, search, _codeCache);
+                        if (_IPToCountry.size() >= MAX_IP_CACHE_SIZE) {_IPToCountry.clear();}
                         for (int i = 0; i < countries.length; i++) {
                             if (countries[i] != null) {
                                 _IPToCountry.put(search[i], countries[i]);
@@ -446,8 +456,11 @@ public class GeoIP {
                     }
                     out.close();
                     out = null;
-                    RouterContext ctx = (RouterContext) _context;
-                    ctx.blocklist().addCountryFile();
+                    // App context for unit tests / CLI
+                    if (_context.isRouterContext()) {
+                        RouterContext ctx = (RouterContext) _context;
+                        ctx.blocklist().addCountryFile();
+                    }
                 } catch (IOException ioe) {
                     _log.error("GeoIP failure", ioe);
                 } catch (InvalidDatabaseException ide) {
@@ -561,7 +574,8 @@ public class GeoIP {
             InetAddress ia = InetAddress.getByName(ipAddress);
             Object result = reader.get(ia);
             if (result instanceof Map) {
-                Map map = (Map) result;
+                @SuppressWarnings("unchecked")
+                Map<String, Object> map = (Map<String, Object>) result;
                 Object org = map.get("autonomous_system_organization");
                 if (org instanceof String) {
                     String raw = (String) org;
@@ -740,6 +754,9 @@ public class GeoIP {
         Pattern.CASE_INSENSITIVE
     );
 
+    /** Precompiled pattern for short all-caps acronym detection */
+    private static final Pattern ACRONYM_PATTERN = Pattern.compile("[A-Z]+");
+
     /** Names that should be returned as-is */
     private static final Pattern[] SKIP_PATTERNS = {
         Pattern.compile("^Reserved\\s+AS", Pattern.CASE_INSENSITIVE),
@@ -818,10 +835,12 @@ public class GeoIP {
                     && FILLER_WORDS.matcher(words[i]).matches()) {
                     continue;
                 }
-                if (trimmed.length() > 0) {trimmed.insert(0, ' ');}
-                trimmed.insert(0, words[i]);
+                if (trimmed.length() > 0) {trimmed.append(' ');}
+                trimmed.append(words[i]);
             }
-            if (trimmed.length() > 5) {name = trimmed.toString();}
+            if (trimmed.length() > 5) {
+                name = trimmed.reverse().toString();
+            }
         }
 
         // Absolute cap
@@ -852,7 +871,7 @@ public class GeoIP {
             } else if (KEEP_UPPER.contains(clean.toUpperCase(Locale.ROOT))) {
                 if (result.length() > 0) {result.append(' ');}
                 result.append(w.toUpperCase(Locale.ROOT));
-            } else if (w.length() <= 4 && w.equals(w.toUpperCase(Locale.ROOT)) && w.matches("[A-Z]+")) {
+            } else if (w.length() <= 4 && w.equals(w.toUpperCase(Locale.ROOT)) && ACRONYM_PATTERN.matcher(w).matches()) {
                 // Short all-caps in source — likely acronym
                 if (result.length() > 0) {result.append(' ');}
                 result.append(w);
@@ -957,10 +976,11 @@ public class GeoIP {
             String line = null;
             while ( (line = br.readLine()) != null) {
                 try {
-                    if (line.charAt(0) == '#') {
+                    if (line.isEmpty() || line.charAt(0) == '#') {
                         continue;
                     }
                     String[] s = DataHelper.split(line, ",");
+                    if (s.length < 2) {continue;}
                     String lc = s[0].toLowerCase(Locale.US);
                     _codeToName.put(lc, s[1]);
                     _codeCache.put(lc, lc);
@@ -1014,8 +1034,9 @@ public class GeoIP {
             notifyVersion("Torv4", geoFile.lastModified());
             while ((buf = br.readLine()) != null && idx < search.length) {
                 try {
-                    if (buf.charAt(0) == '#') {continue;}
+                    if (buf.isEmpty() || buf.charAt(0) == '#') {continue;}
                     String[] s = DataHelper.split(buf, ",");
+                    if (s.length < 3) {continue;}
                     long ip1 = Long.parseLong(s[0]);
                     long ip2 = Long.parseLong(s[1]);
                     while (idx < search.length && search[idx].longValue() < ip1) {idx++;}
@@ -1111,10 +1132,10 @@ public class GeoIP {
                 _log.debug("Our router's previously identified country was " + oldCountry + " -> New country is " + country);
             }
             boolean wasStrict = ctx.commSystem().isInStrictCountry();
-            boolean isStrict = ctx.commSystem().isInStrictCountry();
-            String isStrictCountry = isStrict ? "strict" : "non-strict";
             String wasStrictCountry = wasStrict ? "strict" : "non-strict";
             ctx.router().saveConfig(PROP_IP_COUNTRY, country);
+            boolean isStrict = ctx.commSystem().isInStrictCountry();
+            String isStrictCountry = isStrict ? "strict" : "non-strict";
             if (_log.shouldInfo() && isStrict != wasStrict) {
                 _log.info("Our router's previously identified country (" + oldCountry + ") was " + wasStrictCountry +
                           " -> New country (" + country + ") is designated as " + isStrictCountry);
@@ -1122,7 +1143,7 @@ public class GeoIP {
             if (isStrict || isHidden || blockMyCountry) {
                 countryToIP(country); // generate country blocklist
                 banCountry(ctx, country); // go thru the netdb
-                if (blockMyCountry || isHidden && _log.shouldWarn()) {
+                if ((blockMyCountry || isHidden) && _log.shouldWarn()) {
                     _log.warn("Banning all routers from our country (" + country + ") -> " +
                               (isHidden ? "Hidden Mode is active" : "Enabled via configuration"));
                 }
@@ -1169,9 +1190,16 @@ public class GeoIP {
      * @since 0.9.48 Introduced method for banning routers by country
      */
     public static void banCountry(RouterContext ctx, String country) {
-        if (_banLogger == null) {
-            _banLogger = new BanLogger();
-            _banLogger.initialize(ctx);
+        BanLogger bl = _banLogger;
+        if (bl == null) {
+            synchronized (GeoIP.class) {
+                bl = _banLogger;
+                if (bl == null) {
+                    bl = new BanLogger();
+                    bl.initialize(ctx);
+                    _banLogger = bl;
+                }
+            }
         }
         boolean blockMyCountry = ctx.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
         for (Hash h : ctx.netDb().getAllRouters()) {
