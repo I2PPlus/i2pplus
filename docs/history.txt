@@ -4,6 +4,16 @@
       reduce first-hop delay; deprioritize untested peers
     - Dynamic concurrent message limit based on peer RTT; halve
       window when RTT > 200ms, increase when < 100ms
+    - Fix CapacityCalculator new-peer penalty (integer division);
+      refactor severe congestion age logic
+    - Fix ProfileOrganizer fast-tier fallback selectability gaps
+      and demoted peers unbounded growth cap
+    - Fix PeerTestJob uptime constant 5min → 3min
+    - Fix DBHistory and PeerProfile data races (AtomicLong counters,
+      volatile timestamps); remove dead code, update class javadocs
+    - Add periodic cleanup guard for RepublishLeaseSetJob static maps
+    - Fix ant bump regex for JLS-standard modifier order (public static
+      final); remove dead NTCPConnection _i2npHandlers queue
 
 2026-06-29 dr|z3d
   * Router:
