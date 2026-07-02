@@ -10,21 +10,15 @@ package net.i2p.router.peermanager;
 
 /**
  * Defines the criteria for selecting a set of peers for use when searching the
- * PeerManager
+ * PeerManager.
  *
- * Only used by PeerTestJob, which may not have a point.
+ * Only used by PeerTestJob (PURPOSE_TEST).
  *
  * @since moved from router to peermanager in 0.9.40
  */
 class PeerSelectionCriteria {
-    /** The peers will be used in a tunnel */
-    //public final static int PURPOSE_TUNNEL = 1;
-    /** The peers will be used for garlic routed messages */
-    //public final static int PURPOSE_GARLIC = 2;
-    /** The peers will be used for a source routed reply block message */
-    //public final static int PURPOSE_SOURCE_ROUTE = 3;
     /** The peers will be used for a test message */
-    public static final int PURPOSE_TEST = 4;
+    public static final int PURPOSE_TEST = 1;
 
     private int _minReq;
     private int _maxReq;

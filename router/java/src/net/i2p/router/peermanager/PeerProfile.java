@@ -3,6 +3,7 @@ package net.i2p.router.peermanager;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.data.Hash;
 import net.i2p.router.CommSystemFacade;
 import net.i2p.router.RouterContext;
@@ -92,6 +93,7 @@ public class PeerProfile {
     //private int _consecutiveBanlists;
     private final int _distance;
 
+
     /** keep track of the fastest 8 throughputs unless slow, then 4 */
     private static final int THROUGHPUT_COUNT = SystemVersion.isSlow() ? 4 : 8;
     /**
@@ -100,12 +102,12 @@ public class PeerProfile {
      * reorder/insert values on coalesce
      */
     private final float[] _peakThroughput = new float[THROUGHPUT_COUNT];
-    private volatile long _peakThroughputCurrentTotal;
+    private final AtomicLong _peakThroughputCurrentTotal = new AtomicLong();
     private final float[] _peakTunnelThroughput = new float[THROUGHPUT_COUNT];
     /** total number of bytes pushed through a single tunnel in a 1 minute period */
     private final float[] _peakTunnel1mThroughput = new float[THROUGHPUT_COUNT];
     private long _lastTestStarted;
-    private long _lastThroughputUpdate;
+    private volatile long _lastThroughputUpdate;
     /** periodically cut the measured throughput values */
     private static final int DEGRADES_PER_DAY = 4;
     // one in this many times, ~= 61
@@ -161,10 +163,10 @@ public class PeerProfile {
     public Hash getPeer() {return _peer;}
 
     /**
-     * are we keeping an expanded profile on the peer, or just the bare minimum.
-     * If we aren't keeping the expanded profile, all of the rates as well as the
-     * TunnelHistory and DBHistory will not be available.
-     *
+     * Whether we keep an expanded profile on this peer.
+     * Currently always true — the constructor always calls expandProfile().
+     * The non-expanded code path is dead (would NPE from missing RateStat/TunnelHistory),
+     * retained only for potential future use.
      */
     public boolean getIsExpanded() {return _expanded;}
     public boolean getIsExpandedDB() {return _expandedDB;}
@@ -495,7 +497,7 @@ public class PeerProfile {
         for (int i = 0; i < THROUGHPUT_COUNT; i++) {_peakThroughput[i] = speed;}
     }
 
-    void dataPushed(int size) {_peakThroughputCurrentTotal += size;}
+    void dataPushed(int size) {_peakThroughputCurrentTotal.addAndGet(size);}
 
     /** the tunnel pushed that much data in its lifetime */
     void tunnelDataTransferred(long tunnelByteLifetime) {
@@ -631,7 +633,7 @@ public class PeerProfile {
         if (measuredPeriod >= 60*1000L) {
             // so we don't call random() twice
             boolean shouldDecay =  decay && _context.random().nextInt(DEGRADE_PROBABILITY) <= 0;
-            long tot = _peakThroughputCurrentTotal;
+            long tot = _peakThroughputCurrentTotal.getAndSet(0);
             float lowPeak = _peakThroughput[THROUGHPUT_COUNT-1];
             if (tot > lowPeak) {
                 for (int i = 0; i < THROUGHPUT_COUNT; i++) {
@@ -655,7 +657,6 @@ public class PeerProfile {
                     _peakTunnel1mThroughput[i] *= DEGRADE_FACTOR;
                 }
             }
-            _peakThroughputCurrentTotal = 0;
             _lastCoalesceDate = now;
         }
     }

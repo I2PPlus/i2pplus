@@ -4,28 +4,37 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.router.RouterContext;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 
 /**
- * History of NetDb related activities (lookups, replies, stores, etc)
+ * History of NetDb related activities (lookups, replies, stores, etc).
  *
+ * Tracks per-peer database interaction counters and timestamps:
+ * - Successful/failed lookups
+ * - Unprompted store messages (new vs known peers)
+ * - Lookup reply quality (new/invalid/duplicate peers)
+ * - Store verification success/failure
+ *
+ * All counters use AtomicLong and timestamps use volatile for
+ * thread-safe access from NetDB message handlers and transport threads.
  */
 public class DBHistory {
     private final Log _log;
     private final RouterContext _context;
-    private long _successfulLookups;
-    private long _failedLookups;
+    private final AtomicLong _successfulLookups = new AtomicLong();
+    private final AtomicLong _failedLookups = new AtomicLong();
     private final RateStat _failedLookupRate;
     private final RateStat _invalidReplyRate;
-    private long _lastLookupSuccessful;
-    private long _lastLookupFailed;
-    private long _lastStoreSuccessful;
-    private long _lastStoreFailed;
-    private long _unpromptedDbStoreNew;
-    private long _unpromptedDbStoreOld;
+    private volatile long _lastLookupSuccessful;
+    private volatile long _lastLookupFailed;
+    private volatile long _lastStoreSuccessful;
+    private volatile long _lastStoreFailed;
+    private final AtomicLong _unpromptedDbStoreNew = new AtomicLong();
+    private final AtomicLong _unpromptedDbStoreOld = new AtomicLong();
 
     public DBHistory(RouterContext context, String statGroup) {
         _context = context;
@@ -37,9 +46,9 @@ public class DBHistory {
     }
 
     /** how many times we have sent them a db lookup and received the value back from them */
-    public long getSuccessfulLookups() {return _successfulLookups;}
+    public long getSuccessfulLookups() {return _successfulLookups.get();}
     /** how many times we have sent them a db lookup and not received the value or a lookup reply */
-    public long getFailedLookups() {return _failedLookups;}
+    public long getFailedLookups() {return _failedLookups.get();}
 
     /**
      *  Not persisted until 0.9.24
@@ -66,9 +75,9 @@ public class DBHistory {
     public long getLastStoreFailed() {return _lastStoreFailed;}
 
     /** how many times have they sent us data we didn't ask for and that we've never seen? */
-    public long getUnpromptedDbStoreNew() {return _unpromptedDbStoreNew;}
+    public long getUnpromptedDbStoreNew() {return _unpromptedDbStoreNew.get();}
     /** how many times have they sent us data we didn't ask for but that we have seen? */
-    public long getUnpromptedDbStoreOld() {return _unpromptedDbStoreOld;}
+    public long getUnpromptedDbStoreOld() {return _unpromptedDbStoreOld.get();}
     /** how often does the peer fail to reply to a lookup request, broken into 1 hour and 1 day periods */
     public RateStat getFailedLookupRate() {return _failedLookupRate;}
     /** not sure how much this is used, to be investigated */
@@ -76,7 +85,7 @@ public class DBHistory {
 
     /** Note that the peer was not only able to respond to the lookup, but sent us the data we wanted! */
     public void lookupSuccessful() {
-        _successfulLookups++;
+        _successfulLookups.incrementAndGet();
         _failedLookupRate.addData(0);
         _context.statManager().addRateData("peer.failedLookupRate", 0);
         _lastLookupSuccessful = _context.clock().now();
@@ -84,7 +93,7 @@ public class DBHistory {
 
     /** Note that the peer failed to respond to the db lookup in any way */
     public void lookupFailed() {
-        _failedLookups++;
+        _failedLookups.incrementAndGet();
         _failedLookupRate.addData(1);
         _context.statManager().addRateData("peer.failedLookupRate", 1);
         _lastLookupFailed = _context.clock().now();
@@ -132,14 +141,14 @@ public class DBHistory {
      * @param wasNew whether we already knew about this data point or not
      */
     public void unpromptedStoreReceived(boolean wasNew) {
-        if (wasNew) {_unpromptedDbStoreNew++;}
-        else {_unpromptedDbStoreOld++;}
+        if (wasNew) {_unpromptedDbStoreNew.incrementAndGet();}
+        else {_unpromptedDbStoreOld.incrementAndGet();}
     }
 
-    public void setSuccessfulLookups(long num) {_successfulLookups = num;}
-    public void setFailedLookups(long num) {_failedLookups = num;}
-    public void setUnpromptedDbStoreNew(long num) {_unpromptedDbStoreNew = num;}
-    public void setUnpromptedDbStoreOld(long num) {_unpromptedDbStoreOld = num;}
+    public void setSuccessfulLookups(long num) {_successfulLookups.set(num);}
+    public void setFailedLookups(long num) {_failedLookups.set(num);}
+    public void setUnpromptedDbStoreNew(long num) {_unpromptedDbStoreNew.set(num);}
+    public void setUnpromptedDbStoreOld(long num) {_unpromptedDbStoreOld.set(num);}
 
     public void coalesceStats() {
         if (_log.shouldDebug()) {_log.debug("Coalescing Profile Manager stats");}
@@ -169,10 +178,10 @@ public class DBHistory {
         add(buf, addComments, "lastLookupSuccessful", _lastLookupSuccessful, "Time of last successful lookup from peer (ms since the epoch)");
         add(buf, addComments, "lastStoreFailed", _lastStoreFailed, "Time of last failed store to peer (ms since the epoch)");
         add(buf, addComments, "lastStoreSuccessful", _lastStoreSuccessful, "Time of last successful store to peer (ms since the epoch)");
-        add(buf, addComments, "unpromptedDbStoreNew", _unpromptedDbStoreNew, "Number of times peer sent us something unrequested and not seen before");
-        add(buf, addComments, "unpromptedDbStoreOld", _unpromptedDbStoreOld, "Number of times peer sent us something unrequested but seen before");
-        add(buf, addComments, "failedLookups", _failedLookups, "Number of times peer never responded to a lookup request");
-        add(buf, addComments, "successfulLookups", _successfulLookups, "Number of times peer sent a valid response to a lookup request");
+        add(buf, addComments, "unpromptedDbStoreNew", _unpromptedDbStoreNew.get(), "Number of times peer sent us something unrequested and not seen before");
+        add(buf, addComments, "unpromptedDbStoreOld", _unpromptedDbStoreOld.get(), "Number of times peer sent us something unrequested but seen before");
+        add(buf, addComments, "failedLookups", _failedLookups.get(), "Number of times peer never responded to a lookup request");
+        add(buf, addComments, "successfulLookups", _successfulLookups.get(), "Number of times peer sent a valid response to a lookup request");
 
         out.write(buf.toString().getBytes(StandardCharsets.UTF_8));
         _failedLookupRate.store(out, "dbHistory.failedLookupRate", addComments);
@@ -184,15 +193,15 @@ public class DBHistory {
     }
 
     public void load(Properties props) {
-        _failedLookups = getLong(props, "dbHistory.failedLookups");
-        _unpromptedDbStoreNew = getLong(props, "dbHistory.unpromptedDbStoreNew");
-        _unpromptedDbStoreOld = getLong(props, "dbHistory.unpromptedDbStoreOld");
+        _failedLookups.set(getLong(props, "dbHistory.failedLookups"));
+        _unpromptedDbStoreNew.set(getLong(props, "dbHistory.unpromptedDbStoreNew"));
+        _unpromptedDbStoreOld.set(getLong(props, "dbHistory.unpromptedDbStoreOld"));
         // following 4 weren't persisted until 0.9.24
         _lastLookupSuccessful = getLong(props, "dbHistory.lastLookupSuccessful");
         _lastLookupFailed = getLong(props, "dbHistory.lastLookupFailed");
         _lastStoreSuccessful = getLong(props, "dbHistory.lastStoreSuccessful");
         _lastStoreFailed = getLong(props, "dbHistory.lastStoreFailed");
-        _successfulLookups = getLong(props, "dbHistory.successfulLookups");
+        _successfulLookups.set(getLong(props, "dbHistory.successfulLookups"));
         try {
             _failedLookupRate.load(props, "dbHistory.failedLookupRate", true);
             _log.debug("Loading dbHistory.failedLookupRate");

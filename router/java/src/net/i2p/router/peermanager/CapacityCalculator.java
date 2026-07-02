@@ -11,6 +11,13 @@ import net.i2p.stat.RateStat;
 
 /**
  * Estimate how many of our tunnels the peer can join per hour.
+ *
+ * Combines measured tunnel accept/reject/fail rates across three time windows
+ * (10 min, 1 hour, 1 day) with capability-based penalties and bonuses
+ * (congestion caps, unreachable, established connection, XOR distance).
+ * Peers with no recent activity (tooOld) default to 1 tunnel/hour.
+ * New peers receive a time-based penalty that ramps from PENALTY_NEW down to 0
+ * over the first 2 hours of observed lifetime.
  */
 class CapacityCalculator {
 
@@ -92,7 +99,7 @@ class CapacityCalculator {
             long firstHeard = profile.getFirstHeardAbout();
             long ago = now - firstHeard;
             if (ago < 2*60*60*1000L)
-                capacity -= PENALTY_NEW * (2*60*60*1000L - ago) / 2*60*60*1000L;
+                capacity -= PENALTY_NEW * (2*60*60*1000L - ago) / (double) (2*60*60*1000L);
         }
         // boost connected peers
         if (profile.isEstablished())
@@ -145,22 +152,20 @@ class CapacityCalculator {
                         capacity -= PENALTY_CAP_D;
                     }
                 } else if (caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0){
+                    // Use E-cap penalty for recent RouterInfos (younger than 30 min).
+                    // For older RouterInfos, the congestion report may be stale,
+                    // so fall back to the milder D-cap penalty per proposal 162.
+                    long riAge = context.clock().now() - ri.getPublished();
+                    double sevPenalty = riAge < 30*60*1000L ? PENALTY_CAP_E : PENALTY_CAP_D;
                     String ecapPenalty = context.getProperty(PROP_E_CAP);
                     if (ecapPenalty != null) {
                         try {
-                            double ecap = Double.parseDouble(ecapPenalty);
-                            capacity -= ecap;
+                            sevPenalty = Double.parseDouble(ecapPenalty);
                         } catch (NumberFormatException nfe) {
-                            capacity -= PENALTY_CAP_E;
+                            // keep default
                         }
-                    } else {
-                        // treat older than a few minutes as D, as recommended in proposal 162
-                        long age = context.clock().now() - ri.getPublished();
-                        if (age < 30*60*1000L)
-                            capacity -= PENALTY_CAP_E;
-                        else
-                            capacity -= PENALTY_CAP_D;
                     }
+                    capacity -= sevPenalty;
                 } else if (caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0) {
                     capacity = 0;
                 }

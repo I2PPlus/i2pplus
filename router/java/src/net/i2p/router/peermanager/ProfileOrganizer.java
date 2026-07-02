@@ -37,7 +37,21 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- * Categorizes peers into performance tiers based on historical metrics. Requires periodic reorganize() calls to update peer classifications for optimal tunnel selection.
+ * Categorizes peers into performance tiers (fast, high-capacity, well-integrated)
+ * based on historical metrics from PeerProfile. Requires periodic reorganize() calls
+ * to update peer classifications for optimal tunnel selection.
+ *
+ * Tier assignment during reorganize():
+ * 1. All profiles are iterated in capacity order (via InverseCapacityComparator)
+ * 2. Expired/unreachable/low-bandwidth peers are filtered out
+ * 3. Speed, capacity, and integration thresholds are recalculated from the active set
+ * 4. Each surviving profile is evaluated via locked_promoteProfileToTiers()
+ * 5. If fast/high-cap tiers fall below minimum thresholds, fallback passes fill gaps
+ *    (with selectability checks to prevent selecting unusable peers)
+ *
+ * Concurrency: ReentrantReadWriteLock protects all tier maps.
+ * reorganize() acquires the write lock; selection methods use the read lock.
+ * getOrCreateProfileNonblocking() uses try-lock escalation for lock-free reads.
  */
 public class ProfileOrganizer {
     /** Threshold below which the network is considered under attack */
@@ -55,6 +69,7 @@ public class ProfileOrganizer {
     /** Strike count per peer for demoteIfUnreachable — only demote after DEMOTE_STRIKE_THRESHOLD strikes */
     private final ConcurrentHashMap<Hash, Integer> _demoteStrikes = new ConcurrentHashMap<>(64);
     private static final int DEMOTE_STRIKE_THRESHOLD = 5;
+    private static final int MAX_DEMOTED_PEERS = 1024;
 
     private Hash _us;
     private final ProfilePersistenceHelper _persistenceHelper;
@@ -720,7 +735,7 @@ public class ProfileOrganizer {
                 // First pass: low-latency peers (proven fast via tunnel builds or peer tests)
                 for (PeerProfile profile : candidates) {
                     if (_fastPeers.size() >= target) break;
-                    if (profile.isLowLatency()) {
+                    if (profile.isLowLatency() && isSelectable(profile.getPeer())) {
                         _fastPeers.put(profile.getPeer(), profile);
                         added++;
                     }
@@ -732,20 +747,20 @@ public class ProfileOrganizer {
                     if (_fastPeers.size() >= target) break;
                     for (PeerProfile profile : candidates) {
                         if (_fastPeers.size() >= target) break;
-                        if (profile.getIsActive() && profile.getSpeedValue() >= threshold) {
+                        if (profile.getIsActive() && profile.getSpeedValue() >= threshold &&
+                            isSelectable(profile.getPeer())) {
                             _fastPeers.put(profile.getPeer(), profile);
                             added++;
                         }
                     }
                 }
 
-                // Fourth pass: accept any peer from capacity order to fill gaps
+                // Third pass: accept any selectable peer from capacity order to fill gaps
                 if (_fastPeers.size() < target) {
                     for (PeerProfile profile : newStrictCapacityOrder) {
                         if (_fastPeers.size() >= target) break;
                         if (profile.getPeer().equals(_us)) continue;
-                        if (profile.wasUnreachable()) continue;
-                        if (isLowBandwidthTier(profile.getPeer())) continue;
+                        if (!isSelectable(profile.getPeer())) continue;
                         _fastPeers.put(profile.getPeer(), profile);
                         added++;
                     }
@@ -759,15 +774,13 @@ public class ProfileOrganizer {
                 for (PeerProfile profile : newStrictCapacityOrder) {
                     if (_highCapacityPeers.size() >= minHighCap) break;
                     if (profile.getPeer().equals(_us)) continue;
-                    if (profile.wasUnreachable()) continue;
-                    if (isLowBandwidthTier(profile.getPeer())) continue;
-                    if (isCongestedPeer(profile.getPeer())) continue;
+                    if (!isSelectable(profile.getPeer())) continue;
                     _highCapacityPeers.put(profile.getPeer(), profile);
                     highCapAdded++;
                 }
             }
 
-            // Step 8: Update global thresholds
+            // Step 7: Update global thresholds
             _strictCapacityOrder = newStrictCapacityOrder;
             _thresholdCapacityValue = newCapacityThreshold;
             _thresholdIntegrationValue = newIntegrationThreshold;
@@ -1424,6 +1437,10 @@ public class ProfileOrganizer {
             // Evict stale demotion cooldowns (entries >10 min old)
             long cooldownCutoff = _context.clock().now() - TUNNEL_DEMOTION_COOLDOWN_MS;
             _demotedPeers.entrySet().removeIf(e -> e.getValue() < cooldownCutoff);
+            // Cap size to prevent unbounded growth under pathological conditions
+            if (_demotedPeers.size() > MAX_DEMOTED_PEERS) {
+                _demotedPeers.clear();
+            }
             // Prune stale strikes for peers that never reached the threshold
             if (_demoteStrikes.size() > 128) {
                 _demoteStrikes.clear();

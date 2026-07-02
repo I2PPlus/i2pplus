@@ -187,7 +187,7 @@ public class PeerTestJob extends JobImpl {
         this.getTiming().setStartAfter(getContext().clock().now() + getPeerTestDelay());
         getContext().jobQueue().addJob(this);
         long uptime = getContext().router().getUptime();
-        if (uptime < 3*60*100L) {
+        if (uptime < 3*60*1000L) {
             if (_log.shouldInfo()) {_log.info("Peer testing will commence in 3 minutes...");}
         } else if (_log.shouldInfo()) {
             _log.info("Initialising peer tests -> Timeout: " + getTestTimeout() + "ms per peer");

@@ -29,8 +29,20 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- * Tracks peer capabilities and maintains performance statistics for router peers. Organizes peers by capability sets and manages peer state information for tunnel building and routing decisions.
+ * Tracks peer capabilities and manages the periodic profile reorganization cycle.
  *
+ * Responsibilities:
+ * - Maintains `_peersByCapability` index (character → Set of Hash) for quick capability lookups
+ * - Runs Reorg on SimpleTimer2 which calls ProfileOrganizer.reorganize() at adaptive intervals
+ *   (30s early uptime → 90s medium → 250s steady state)
+ * - Periodically stores profiles to disk via ProfilePersistenceHelper (every 15 min)
+ * - Loads stored profiles from disk on startup in a background thread
+ * - Selects peers for PeerTestJob via selectPeers(criteria) — PURPOSE_TEST only
+ *
+ * Profile persistence:
+ * - Only Tier 1 (Active) and Tier 2 (Passive) profiles are written to disk
+ * - Gossip-only (Tier 3) profiles are kept in memory but never persisted
+ * - Profiles older than EXPIRE_AGE (7 days) are deleted after store
  */
 class PeerManager {
     private final Log _log;
@@ -238,7 +250,8 @@ class PeerManager {
      * Find some peers that meet the criteria and we have the netDb info for locally.
      * Returned list will not include ourselves.
      *
-     * Only used by PeerTestJob (PURPOSE_TEST)
+     * Only supports PURPOSE_TEST — used exclusively by PeerTestJob.
+     * Other purpose constants were removed; add new purposes as needed.
      */
     List<Hash> selectPeers(PeerSelectionCriteria criteria) {
         Set<Hash> peers = new HashSet<>(criteria.getMinimumRequired());

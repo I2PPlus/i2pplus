@@ -10,10 +10,12 @@ import net.i2p.router.RouterContext;
  * measured latency, congestion capability, and actual tunnel throughput.
  *
  * Scoring:
- * - Base score from bandwidth tier (X=10000, P=5000, O=2500)
- * - RTT penalty reduces score for high-latency peers
- * - Congestion caps (D/E) reduce effective speed
- * - Actual peak throughput adds to bandwidth tier estimate
+ * - Base score from bandwidth tier (X=10000, P=5000, O=2500, N=1250, M=625, L=312, K=125)
+ * - RTT penalty reduces score for high-latency peers (linear: factor = max(0.1, 1 - RTT/16s))
+ * - Congestion caps (D=0.75x, E=0.50x) multiply down the effective speed
+ * - Actual peak 1-min tunnel throughput adds to bandwidth tier estimate when available
+ * - When no throughput data exists, estimatedSpeed decays by 50% per 30 minutes
+ *   to gradually deprioritize idle-but-capable peers
  */
 class SpeedCalculator {
 
