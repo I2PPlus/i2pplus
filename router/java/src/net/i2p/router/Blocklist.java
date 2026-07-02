@@ -159,8 +159,6 @@ public class Blocklist {
         _blocklistFeedFile = new File(context.getConfigDir(), BLOCKLIST_FEED_FILE);
         _haveIPv6 = TransportUtil.getIPv6Config(_context, "SSU") != TransportUtil.IPv6Config.IPV6_DISABLED &&
                     Addresses.isConnectedIPv6();
-        _haveIPv6 = TransportUtil.getIPv6Config(_context, "SSU") != TransportUtil.IPv6Config.IPV6_DISABLED &&
-                    Addresses.isConnectedIPv6();
         _singleIPv6Blocklist = _haveIPv6 ? new LHMCache<>(MAX_IPV6_SINGLES) : null;
         initConfig();
     }

@@ -1558,62 +1558,7 @@ public class Router implements RouterClock.ClockShiftListener {
             }
         }
 
-        if (_log.shouldDebug()) {
-            try {_context.namingService().shutdown();} catch (Throwable t) {_log.error("[NamingService] ", t);}
-            try {_context.jobQueue().shutdown();} catch (Throwable t) {_log.error("[JobQueue] ", t);}
-            try {_context.tunnelManager().shutdown();} catch (Throwable t) {_log.error("[TunnelManager] ", t);}
-            try {_context.tunnelDispatcher().shutdown();} catch (Throwable t) {_log.error("[TunnelDispatcher] ", t);}
-            try {_context.netDbSegmentor().shutdown();} catch (Throwable t) {_log.error("[NetworkDb] ", t);}
-            try {_context.commSystem().shutdown();} catch (Throwable t) {_log.error("[CommSystem] ", t);}
-            try {_context.bandwidthLimiter().shutdown();} catch (Throwable t) {_log.error("[BandwidthLimiter]", t);}
-            try {_context.peerManager().shutdown();} catch (Throwable t) {_log.error("[PeerManager] ",  t);}
-            try {_context.messageRegistry().shutdown();} catch (Throwable t) {_log.error("[MessageRegistry] ",  t);}
-            try {_context.messageValidator().shutdown();} catch (Throwable t) {_log.error("[MessageValidator] ",  t);}
-            try {_context.inNetMessagePool().shutdown();} catch (Throwable t) {_log.error("[InboundNetPool] ",  t);}
-            try {_context.clientMessagePool().shutdown();} catch (Throwable t) {_log.error("[ClientMessagePool] ",  t);}
-            try {_context.sessionKeyManager().shutdown();} catch (Throwable t) {_log.error("[SessionKeyManager] ",  t);}
-            try {_context.eciesEngine().shutdown();} catch (Throwable t) {_log.error("[ECIES engine] ",  t);}
-            try {_context.messageHistory().shutdown();} catch (Throwable t) {_log.error("[MessageHistoryLogger] ",  t);}
-            // do stat manager last to reduce chance of NPEs in other threads
-            try {_context.statManager().shutdown();} catch (Throwable t) {_log.error("[StatsManager] ",  t);}
-        } else if (isAdvanced()) {
-            try {_context.namingService().shutdown();} catch (Throwable t) {_log.error("[Naming service] " + t.getMessage());}
-            try {_context.jobQueue().shutdown();} catch (Throwable t) {_log.error("[JobQueue] " + t.getMessage());}
-            try {_context.tunnelManager().shutdown();} catch (Throwable t) {_log.error("[TunnelManager] " + t.getMessage());}
-            try {_context.tunnelDispatcher().shutdown();} catch (Throwable t) {_log.error("[TunnelDispatcher] " + t.getMessage()
-                 .replace("Cannot invoke \"net.i2p.router.tunnel.TunnelGateway$Receiver.getSendTo()\"", "Cannot send to TunnelGateway"));}
-            try {_context.netDbSegmentor().shutdown();} catch (Throwable t) {_log.error("[networkDb] " + t.getMessage());}
-            try {_context.commSystem().shutdown();} catch (Throwable t) {_log.error("[CommSystem] " + t.getMessage());}
-            try {_context.bandwidthLimiter().shutdown();} catch (Throwable t) {_log.error("[BandwidthLimiter] " + t.getMessage());}
-            try {_context.peerManager().shutdown();} catch (Throwable t) {_log.error("[PeerManager] " + t.getMessage());}
-            try {_context.messageRegistry().shutdown();} catch (Throwable t) {_log.error("[MessageRegistry] " + t.getMessage());}
-            try {_context.messageValidator().shutdown();} catch (Throwable t) {_log.error("[MessageValidator] " + t.getMessage());}
-            try {_context.inNetMessagePool().shutdown();} catch (Throwable t) {_log.error("[InboundNetPool] " + t.getMessage());}
-            try {_context.clientMessagePool().shutdown();} catch (Throwable t) {_log.error("[ClientMesssagePool] " + t.getMessage());}
-            try {_context.sessionKeyManager().shutdown();} catch (Throwable t) {_log.error("[SessionKeyManager] " + t.getMessage());}
-            try {_context.eciesEngine().shutdown();} catch (Throwable t) {_log.error("[ECIES engine] " + t.getMessage());}
-            try {_context.messageHistory().shutdown();} catch (Throwable t) {_log.error("[MessageHistoryLogger] " + t.getMessage());}
-            // do stat manager last to reduce chance of NPEs in other threads
-            try {_context.statManager().shutdown();} catch (Throwable t) {_log.error("[StatsManager] " + t.getMessage());}
-        } else {
-            try {_context.namingService().shutdown();} catch (Throwable t) { /* ignored */ }
-            try {_context.jobQueue().shutdown();} catch (Throwable t) { /* ignored */ }
-            try {_context.tunnelManager().shutdown();} catch (Throwable t) { /* ignored */ }
-            try {_context.tunnelDispatcher().shutdown();} catch (Throwable t) { /* ignored */ }
-            try {_context.netDbSegmentor().shutdown();} catch (Throwable t) { /* ignored */ }
-            try {_context.commSystem().shutdown();} catch (Throwable t) { /* ignored */ }
-            try {_context.bandwidthLimiter().shutdown();} catch (Throwable t) { /* ignored */ }
-            try {_context.peerManager().shutdown();} catch (Throwable t) { /* ignored */ }
-            try {_context.messageRegistry().shutdown();} catch (Throwable t) { /* ignored */ }
-            try {_context.messageValidator().shutdown();} catch (Throwable t) { /* ignored */ }
-            try {_context.inNetMessagePool().shutdown();} catch (Throwable t) { /* ignored */ }
-            try {_context.clientMessagePool().shutdown();} catch (Throwable t) { /* ignored */ }
-            try {_context.sessionKeyManager().shutdown();} catch (Throwable t) { /* ignored */ }
-            try {_context.eciesEngine().shutdown();} catch (Throwable t) { /* ignored */ }
-            try {_context.messageHistory().shutdown();} catch (Throwable t) { /* ignored */ }
-            // do stat manager last to reduce chance of NPEs in other threads
-            try {_context.statManager().shutdown();} catch (Throwable t) { /* ignored */ }
-        }
+        shutdownSubsystems();
 
         //_context.deleteTempDir();
         List<RouterContext> contexts = RouterContext.getContexts();
@@ -1636,6 +1581,58 @@ public class Router implements RouterClock.ClockShiftListener {
         _watchdogThread.interrupt();
         _eventLog.addEvent(EventLog.STOPPED, exitString);
         finalShutdown(exitCode);
+    }
+
+    /**
+     *  Shut down all router subsystems.
+     *  Error handling level depends on log verbosity:
+     *  debug → full stack trace, advanced → message only, else → silent.
+     *  @since 0.9.71
+     */
+    private void shutdownSubsystems() {
+        boolean debug = _log.shouldDebug();
+        boolean advanced = isAdvanced();
+        shutdownOne("NamingService", debug, advanced, () -> _context.namingService().shutdown());
+        shutdownOne("JobQueue", debug, advanced, () -> _context.jobQueue().shutdown());
+        shutdownOne("TunnelManager", debug, advanced, () -> _context.tunnelManager().shutdown());
+        shutdownOne("TunnelDispatcher", debug, advanced, () -> _context.tunnelDispatcher().shutdown());
+        shutdownOne("NetworkDb", debug, advanced, () -> _context.netDbSegmentor().shutdown());
+        shutdownOne("CommSystem", debug, advanced, () -> _context.commSystem().shutdown());
+        shutdownOne("BandwidthLimiter", debug, advanced, () -> _context.bandwidthLimiter().shutdown());
+        shutdownOne("PeerManager", debug, advanced, () -> _context.peerManager().shutdown());
+        shutdownOne("MessageRegistry", debug, advanced, () -> _context.messageRegistry().shutdown());
+        shutdownOne("MessageValidator", debug, advanced, () -> _context.messageValidator().shutdown());
+        shutdownOne("InboundNetPool", debug, advanced, () -> _context.inNetMessagePool().shutdown());
+        shutdownOne("ClientMessagePool", debug, advanced, () -> _context.clientMessagePool().shutdown());
+        shutdownOne("SessionKeyManager", debug, advanced, () -> _context.sessionKeyManager().shutdown());
+        shutdownOne("ECIES engine", debug, advanced, () -> _context.eciesEngine().shutdown());
+        shutdownOne("MessageHistoryLogger", debug, advanced, () -> _context.messageHistory().shutdown());
+        shutdownOne("StatsManager", debug, advanced, () -> _context.statManager().shutdown());
+    }
+
+    /**
+     *  Shut down a single subsystem, with error logging appropriate to verbosity.
+     *  @param name subsystem name for logging
+     *  @param debug if true, log full stack trace on error
+     *  @param advanced if true, log message-only on error
+     *  @param task the shutdown operation
+     *  @since 0.9.71
+     */
+    private void shutdownOne(String name, boolean debug, boolean advanced, Runnable task) {
+        try {
+            task.run();
+        } catch (Throwable t) {
+            if (debug) {
+                _log.error("[" + name + "] ", t);
+            } else if (advanced) {
+                String msg = t.getMessage();
+                if ("TunnelDispatcher".equals(name) && msg != null) {
+                    msg = msg.replace("Cannot invoke \"net.i2p.router.tunnel.TunnelGateway$Receiver.getSendTo()\"",
+                                      "Cannot send to TunnelGateway");
+                }
+                _log.error("[" + name + "] " + (msg != null ? msg : ""));
+            }
+        }
     }
 
     /**
