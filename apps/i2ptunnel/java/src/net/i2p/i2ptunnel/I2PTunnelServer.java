@@ -113,13 +113,13 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     protected final Object slock = new Object();
     protected final Object sslLock = new Object();
 
-    protected InetAddress remoteHost;
-    protected int remotePort;
+    protected volatile InetAddress remoteHost;
+    protected volatile int remotePort;
     protected final Logging l;
     private I2PSSLSocketFactory _sslFactory;
     private static final long DEFAULT_READ_TIMEOUT = -1;
     /** default timeout - override if desired */
-    protected long readTimeout = DEFAULT_READ_TIMEOUT;
+    protected volatile long readTimeout = DEFAULT_READ_TIMEOUT;
     public static final String PROP_USE_SSL = "useSSL";
     public static final String PROP_UNIQUE_LOCAL = "enableUniqueLocal";
     /** @since 0.9.30 */

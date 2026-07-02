@@ -81,15 +81,15 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     private final FailCallback _onFail;
     private SuccessCallback _onSuccess;
     // does not include initialI2PData
-    private long totalSent;
+    private volatile long totalSent;
     // does not include initialSocketData
-    private long totalReceived;
+    private volatile long totalReceived;
     // not final, may be changed by extending classes
     protected volatile boolean _keepAliveI2P, _keepAliveSocket;
     // Track socket streams for cleanup
     private InputStream _socketIn;
-    private StreamForwarder toI2P;
-    private StreamForwarder fromI2P;
+    private volatile StreamForwarder toI2P;
+    private volatile StreamForwarder fromI2P;
 
     /**
      *  For use in new constructor
