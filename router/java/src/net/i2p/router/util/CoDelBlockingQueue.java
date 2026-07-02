@@ -188,8 +188,9 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     public int drainTo(Collection<? super E> c, int maxElements) {
         int rv = 0;
         E e;
-        while ((e = poll()) != null && rv++ < maxElements) {
+        while (rv < maxElements && (e = poll()) != null) {
             c.add(e);
+            rv++;
         }
         return rv;
     }

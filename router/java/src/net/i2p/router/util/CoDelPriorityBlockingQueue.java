@@ -39,7 +39,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     private boolean _dropping;
 
     /** following is a per-request global for ease of use, locked by this */
-    private long _now;
+    private volatile long _now;
 
     private int _lastDroppedPriority;
 
@@ -74,7 +74,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     private final String STAT_DROP;
     private final String STAT_DELAY;
     public static final int MIN_PRIORITY = 100;
-    private static final int[] PRIORITIES = {MIN_PRIORITY, 200, 300, 400, 500};
+    private static final int[] PRIORITIES = {0, MIN_PRIORITY, 200, 300, 400, 500};
     /** if priority is &gt;= this, never drop */
     public static final int DONT_DROP_PRIORITY = 1000;
     private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 1000 : 500;
@@ -147,7 +147,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     public int drainTo(Collection<? super E> c, int maxElements) {
         int rv = 0;
         E e;
-        while ((e = poll()) != null && rv++ < maxElements) {c.add(e);}
+        while (rv < maxElements && (e = poll()) != null) {c.add(e); rv++;}
         return rv;
     }
 
@@ -227,7 +227,6 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      */
 
     private E codel(E rv) {
-        getCurrentTime();
         synchronized (this) {
             // non-blocking inside this synchronized block
             boolean ok_to_drop = updateVars(rv);
