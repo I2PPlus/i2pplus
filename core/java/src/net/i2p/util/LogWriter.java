@@ -82,6 +82,17 @@ abstract class LogWriter implements Runnable {
         _flushInterval = Math.min(MAX_FLUSH_INTERVAL, Math.max(MIN_FLUSH_INTERVAL, interval));
     }
 
+    /**
+     *  Wake up the writer to immediately re-read config and flush pending records.
+     *  @since 2.12.0
+     */
+    public void wakeup() {
+        _lastReadConfig = 0;
+        synchronized (this) {
+            this.notifyAll();
+        }
+    }
+
     @Override
     public void run() {
         _write = true;

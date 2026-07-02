@@ -715,6 +715,7 @@ public class DataHelper {
             if (!FileUtil.rename(tmpFile, file)) {
                 throw new IOException("Failed rename from " + tmpFile + " to " + file);
             }
+            SecureFileOutputStream.setGroupPerms(file);
         } finally {
             if (out != null) {
                 out.close();

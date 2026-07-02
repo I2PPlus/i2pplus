@@ -725,6 +725,10 @@ public class LogManager implements Flushable {
         Properties props = createConfig();
         try {
             DataHelper.storeProps(props, _locationFile);
+            _configLastRead = 0;
+            if (_writer != null) {
+                _writer.wakeup();
+            }
             return true;
         } catch (IOException ioe) {
             getLog(LogManager.class).error("Error saving the config", ioe);

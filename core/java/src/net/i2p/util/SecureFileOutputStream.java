@@ -5,6 +5,11 @@ import net.i2p.I2PAppContext;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Same as FileOutputStream but sets the file mode so it can only
@@ -74,6 +79,25 @@ public class SecureFileOutputStream extends FileOutputStream {
         } catch (Throwable t) {
             // NoSuchMethodException or NoSuchMethodError if we somehow got the
             // version detection wrong or the JVM doesn't support it
+        }
+    }
+
+    /**
+     *  Tries to set the permissions to 660 (owner+group rw),
+     *  ignores errors. Uses PosixFilePermission API.
+     *
+     *  @since 2.12.0
+     */
+    public static void setGroupPerms(File f) {
+        try {
+            Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
+            perms.add(PosixFilePermission.OWNER_READ);
+            perms.add(PosixFilePermission.OWNER_WRITE);
+            perms.add(PosixFilePermission.GROUP_READ);
+            perms.add(PosixFilePermission.GROUP_WRITE);
+            Files.setPosixFilePermissions(f.toPath(), perms);
+        } catch (IOException e) {
+            // not a POSIX filesystem or other error, ignore
         }
     }
 }
