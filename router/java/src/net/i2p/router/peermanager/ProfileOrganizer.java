@@ -1009,10 +1009,10 @@ public class ProfileOrganizer {
 
     private void locked_selectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude,
                                     Set<Hash> matches, int mask, MaskedIPSet ipSet) {
-        List<Hash> all = new ArrayList<>(peers.keySet());
-
-        for (Iterator<Hash> iter = new RandomIterator<>(all); matches.size() < howMany && iter.hasNext(); ) {
-            Hash peer = iter.next();
+        // Build candidate list, filtering exclusions and checking selectability
+        List<Map.Entry<Hash, PeerProfile>> candidates = new ArrayList<>(peers.size());
+        for (Map.Entry<Hash, PeerProfile> entry : peers.entrySet()) {
+            Hash peer = entry.getKey();
             if (toExclude != null && toExclude.contains(peer)) continue;
             if (matches.contains(peer)) continue;
             if (_us != null && _us.equals(peer)) continue;
@@ -1022,20 +1022,37 @@ public class ProfileOrganizer {
             } else {
                 if (toExclude != null) toExclude.add(peer);
             }
-            if (ok) matches.add(peer);
+            if (ok) candidates.add(entry);
+        }
+
+        // Sort by peer test response time (lower latency preferred)
+        // Peers with no test data get a high default to deprioritize them
+        candidates.sort((a, b) -> {
+            float latA = a.getValue().getPeerTestTimeAverage();
+            float latB = b.getValue().getPeerTestTimeAverage();
+            // No test data: treat as high latency (5000ms)
+            if (latA <= 0) latA = 5000f;
+            if (latB <= 0) latB = 5000f;
+            return Float.compare(latA, latB);
+        });
+
+        // Select the lowest-latency candidates
+        for (int i = 0; i < candidates.size() && matches.size() < howMany; i++) {
+            matches.add(candidates.get(i).getKey());
         }
     }
 
     private void locked_selectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude,
                                     Set<Hash> matches, SessionKey randomKey, Slice subTierMode,
                                     int mask, MaskedIPSet ipSet) {
-        List<Hash> all = new ArrayList<>(peers.keySet());
         byte[] rk = randomKey.getData();
         long k0 = DataHelper.fromLong8(rk, 0);
         long k1 = DataHelper.fromLong8(rk, 8);
 
-        for (Iterator<Hash> iter = new RandomIterator<>(all); matches.size() < howMany && iter.hasNext(); ) {
-            Hash peer = iter.next();
+        // Build candidate list with subTier filtering
+        List<Map.Entry<Hash, PeerProfile>> candidates = new ArrayList<>(peers.size());
+        for (Map.Entry<Hash, PeerProfile> entry : peers.entrySet()) {
+            Hash peer = entry.getKey();
             if (toExclude != null && toExclude.contains(peer)) continue;
             if (matches.contains(peer)) continue;
             if (_us != null && _us.equals(peer)) continue;
@@ -1050,7 +1067,20 @@ public class ProfileOrganizer {
                 toExclude.add(peer);
             }
 
-            if (ok) matches.add(peer);
+            if (ok) candidates.add(entry);
+        }
+
+        // Sort by peer test response time (lower latency preferred)
+        candidates.sort((a, b) -> {
+            float latA = a.getValue().getPeerTestTimeAverage();
+            float latB = b.getValue().getPeerTestTimeAverage();
+            if (latA <= 0) latA = 5000f;
+            if (latB <= 0) latB = 5000f;
+            return Float.compare(latA, latB);
+        });
+
+        for (int i = 0; i < candidates.size() && matches.size() < howMany; i++) {
+            matches.add(candidates.get(i).getKey());
         }
     }
 
