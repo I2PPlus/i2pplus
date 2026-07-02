@@ -176,7 +176,7 @@ public class Datagram2 {
                 int itype = (int) DataHelper.readLong(in, 2);
                 SigType ttype = SigType.getByCode(itype);
                 if (ttype == null || !ttype.isAvailable()) throw new I2PInvalidDatagramException("Unsupported transient sig type: " + itype);
-                SigningPublicKey transientSigningPublicKey = new SigningPublicKey(type);
+                SigningPublicKey transientSigningPublicKey = new SigningPublicKey(ttype);
                 byte[] buf = new byte[transientSigningPublicKey.length()];
                 offlinelen += buf.length;
                 in.read(buf);
