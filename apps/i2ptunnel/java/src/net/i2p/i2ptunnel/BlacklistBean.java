@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
+import net.i2p.util.Log;
 
 /**
  * Simple blacklist checker for HTTP proxy.
@@ -20,6 +21,8 @@ import java.util.regex.Pattern;
  * Standalone implementation to avoid susidns dependencies.
  */
 public class BlacklistBean {
+
+    private static final Log _log = new Log(BlacklistBean.class);
     private String content;
     private static final Pattern I2P_ADDRESS_PATTERN = Pattern.compile(
         "^[a-zA-Z0-9.-]+\\.i2p$|" +                    // hostname.i2p
@@ -56,9 +59,7 @@ public class BlacklistBean {
         File file = blacklistFile();
         if (file.isFile()) {
             StringBuilder buf = new StringBuilder();
-            BufferedReader br = null;
-            try {
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
                 String line;
                 while((line = br.readLine()) != null) {
                     buf.append(line);
@@ -66,27 +67,21 @@ public class BlacklistBean {
                 }
                 content = buf.toString();
             } catch (IOException e) {
-                System.err.println("[BlacklistBean] Error loading blacklist: " + e.getMessage());
+                if (_log.shouldLog(Log.WARN))
+                    _log.warn("Error loading blacklist", e);
                 content = "";
-            }
-            finally {
-                if (br != null) {
-                    try {br.close();}
-                    catch (IOException ioe) { /* ignored */ }
-                }
             }
         } else {
             content = "";
-            try {
-                // Create parent directories if they don't exist
-                File parentDir = file.getParentFile();
-                if (parentDir != null && !parentDir.exists()) {
-                    parentDir.mkdirs();
-                }
+            File parentDir = file.getParentFile();
+            if (parentDir != null && !parentDir.exists()) {
+                parentDir.mkdirs();
+            }
+            try (FileOutputStream fos = new FileOutputStream(file)) {
                 // Create empty blacklist file
-                new FileOutputStream(file).close();
             } catch (IOException e) {
-                System.err.println("[BlacklistBean] Could not create blacklist file: " + file.getAbsolutePath() + " - " + e.getMessage());
+                if (_log.shouldLog(Log.WARN))
+                    _log.warn("Cannot create blacklist file: " + file.getAbsolutePath(), e);
             }
         }
     }
