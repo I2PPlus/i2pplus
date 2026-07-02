@@ -704,22 +704,20 @@ public class TrustedUpdate {
      */
     public boolean verify(String signedFile, String publicKeyFile) {
         SigningPublicKey signingPublicKey = new SigningPublicKey();
-        FileInputStream fileInputStream = null;
+        FileInputStream keyStream = null;
 
         try {
-            fileInputStream = new FileInputStream(signedFile);
-            signingPublicKey.readBytes(fileInputStream);
+            keyStream = new FileInputStream(publicKeyFile);
+            signingPublicKey.readBytes(keyStream);
         } catch (IOException ioe) {
-            if (_log.shouldWarn()) _log.warn("Unable to load the signature", ioe);
-
+            if (_log.shouldWarn()) _log.warn("Unable to load the public key from " + publicKeyFile, ioe);
             return false;
         } catch (DataFormatException dfe) {
-            if (_log.shouldWarn()) _log.warn("Unable to load the signature", dfe);
-
+            if (_log.shouldWarn()) _log.warn("Unable to load the public key from " + publicKeyFile, dfe);
             return false;
         } finally {
-            if (fileInputStream != null) try {
-                    fileInputStream.close();
+            if (keyStream != null) try {
+                    keyStream.close();
                 } catch (IOException ioe) { /* ignored */ }
         }
 
