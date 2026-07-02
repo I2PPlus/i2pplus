@@ -84,14 +84,19 @@ public class SessionKey extends SimpleDataStructure {
     /** A key with all zeroes in the data */
     public static final SessionKey INVALID_KEY = new SessionKey(new byte[KEYSIZE_BYTES]);
 
+    /** */
     public SessionKey() {
         super();
     }
 
+    /**
+     *  @param data the key data
+     */
     public SessionKey(byte[] data) {
         super(data);
     }
 
+    /** {@inheritDoc} */
     @Override
     public int length() {
         return KEYSIZE_BYTES;
@@ -116,6 +121,11 @@ public class SessionKey extends SimpleDataStructure {
         return _preparedKey;
     }
 
+    /**
+     *  Set the internal prepared AES key representation.
+     *
+     *  @param obj the prepared key object
+     */
     public void setPreparedKey(Object obj) {
         _preparedKey = obj;
     }

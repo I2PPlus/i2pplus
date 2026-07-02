@@ -441,14 +441,24 @@ public class PrivateKeyFile {
         System.out.println(buf.toString());
     }
 
+    /**
+     *  @param fileName the key file name
+     */
     public PrivateKeyFile(String file) {
         this(new File(file), I2PClientFactory.createClient());
     }
 
+    /**
+     *  @param file the key file
+     */
     public PrivateKeyFile(File file) {
         this(file, I2PClientFactory.createClient());
     }
 
+    /**
+     *  @param file the key file
+     *  @param client the I2P client
+     */
     public PrivateKeyFile(File file, I2PClient client) {
         this.file = file;
         this.client = client;
@@ -671,6 +681,11 @@ public class PrivateKeyFile {
         return this.dest;
     }
 
+    /**
+     *  Set the destination.
+     *
+     *  @param d the destination
+     */
     public void setDestination(Destination d) {
         this.dest = d;
     }
@@ -871,10 +886,25 @@ public class PrivateKeyFile {
 
     //// end offline methods
 
+    /**
+     *  Open an I2P session.
+     *
+     *  @return the I2P session
+     *  @throws I2PSessionException if session creation fails
+     *  @throws IOException if there is an error reading the key file
+     */
     public I2PSession open() throws I2PSessionException, IOException {
         return this.open(new Properties());
     }
 
+    /**
+     *  Open a session with the given options.
+     *
+     *  @param opts the options for the session
+     *  @return the I2P session
+     *  @throws I2PSessionException if session creation fails
+     *  @throws IOException if there is an error reading the key file
+     */
     public I2PSession open(Properties opts) throws I2PSessionException, IOException {
         InputStream in = null;
         try {
@@ -934,6 +964,7 @@ public class PrivateKeyFile {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder(1024);
@@ -1055,6 +1086,14 @@ public class PrivateKeyFile {
         return false;
     }
 
+    /**
+     *  Check a signature against data with a public key.
+     *
+     *  @param s the signature to verify
+     *  @param data the data that was signed
+     *  @param spk the signing public key
+     *  @return true if the signature is valid
+     */
     public static boolean checkSignature(Signature s, byte[] data, SigningPublicKey spk) {
         return DSAEngine.getInstance().verifySignature(s, data, spk);
     }

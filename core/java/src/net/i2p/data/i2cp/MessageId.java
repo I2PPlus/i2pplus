@@ -27,31 +27,58 @@ import java.io.OutputStream;
 public class MessageId {
     private long _messageId;
 
+    /** */
     public MessageId() {
         _messageId = -1;
     }
 
+    /**
+     *  @param id the message ID
+     */
     public MessageId(long id) {
         _messageId = id;
     }
 
+    /**
+     *  @return the message ID
+     */
     public long getMessageId() {
         return _messageId;
     }
 
+    /**
+     *  Set the message ID.
+     *
+     *  @param id the message ID
+     */
     public void setMessageId(long id) {
         _messageId = id;
     }
 
+    /**
+     *  Read the message ID from a stream.
+     *
+     *  @param in the input stream to read from
+     *  @throws DataFormatException if the data is invalid
+     *  @throws IOException if there is an error reading
+     */
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         _messageId = DataHelper.readLong(in, 4);
     }
 
+    /**
+     *  Write the message ID to a stream.
+     *
+     *  @param out the output stream to write to
+     *  @throws DataFormatException if the message ID is invalid
+     *  @throws IOException if there is an error writing
+     */
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_messageId < 0) throw new DataFormatException("Invalid message ID: " + _messageId);
         DataHelper.writeLong(out, 4, _messageId);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object object) {
         if ((object == null) || !(object instanceof MessageId)) {
@@ -60,11 +87,13 @@ public class MessageId {
         return _messageId == ((MessageId) object).getMessageId();
     }
 
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return (int) _messageId;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "[MsgID " + _messageId + "]";

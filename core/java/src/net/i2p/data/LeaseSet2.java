@@ -63,6 +63,7 @@ public class LeaseSet2 extends LeaseSet {
     private static final int MAX_KEYS = 8;
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(LeaseSet2.class);
 
+    /** */
     public LeaseSet2() {
         super();
         _checked = true; // prevents decryption in super
@@ -100,6 +101,9 @@ public class LeaseSet2 extends LeaseSet {
      */
     public long getExpires() {return _expires;}
 
+    /**
+     *  @return true if unpublished
+     */
     public boolean isUnpublished() {return (_flags & FLAG_UNPUBLISHED) != 0;}
 
     /**
@@ -144,6 +148,12 @@ public class LeaseSet2 extends LeaseSet {
         return super.getReceivedAsPublished() && !isUnpublished();
     }
 
+    /**
+     *  Get an option value by key.
+     *
+     *  @param opt the option key
+     *  @return the option value, or null if not found
+     */
     public String getOption(String opt) {
         if (_options == null) {return null;}
         return _options.getProperty(opt);
@@ -305,10 +315,22 @@ public class LeaseSet2 extends LeaseSet {
         return baos.sign(priv);
     }
 
+    /**
+     *  Verify the offline signature.
+     *
+     *  @return true if valid
+     */
     public boolean verifyOfflineSignature() {
         return verifyOfflineSignature(_destination.getSigningPublicKey());
     }
 
+    /**
+     *  Verify the offline signature with the given key.
+     *
+     *  @param spk the key to verify against
+     *  @return true if valid
+     *  @throws GeneralSecurityException if verification fails
+     */
     protected boolean verifyOfflineSignature(SigningPublicKey spk) {
         if (!isOffline()) {return false;}
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
@@ -338,6 +360,7 @@ public class LeaseSet2 extends LeaseSet {
 
     ///// overrides below here
 
+    /** {@inheritDoc} */
     @Override
     public int getType() {return KEY_TYPE_LS2;}
 
@@ -481,6 +504,13 @@ public class LeaseSet2 extends LeaseSet {
         for (Lease lease : _leases) {lease.writeBytes(out);}
     }
 
+    /**
+     *  Read the LeaseSet2 header from a stream.
+     *
+     *  @param in the input stream
+     *  @throws DataFormatException if the data is invalid
+     *  @throws IOException if there is an error reading
+     */
     protected void readHeader(InputStream in) throws DataFormatException, IOException {
         _destination = Destination.create(in);
         _published = DataHelper.readLong(in, 4) * 1000;
@@ -489,6 +519,13 @@ public class LeaseSet2 extends LeaseSet {
         if (isOffline()) {readOfflineBytes(in);}
     }
 
+    /**
+     *  Write the LeaseSet2 header to a stream.
+     *
+     *  @param out the output stream
+     *  @throws DataFormatException if the data is invalid
+     *  @throws IOException if there is an error writing
+     */
     protected void writeHeader(OutputStream out) throws DataFormatException, IOException {
         _destination.writeBytes(out);
         if (_published <= 0) {setPublished(Clock.getInstance().now());}
@@ -503,6 +540,13 @@ public class LeaseSet2 extends LeaseSet {
         if (isOffline()) {writeOfflineBytes(out);}
     }
 
+    /**
+     *  Read the offline signing section from a stream.
+     *
+     *  @param in the input stream
+     *  @throws DataFormatException if the data is invalid
+     *  @throws IOException if there is an error reading
+     */
     protected void readOfflineBytes(InputStream in) throws DataFormatException, IOException {
         _transientExpires = DataHelper.readLong(in, 4) * 1000;
         int itype = (int) DataHelper.readLong(in, 2);
@@ -515,6 +559,13 @@ public class LeaseSet2 extends LeaseSet {
         _offlineSignature.readBytes(in);
     }
 
+    /**
+     *  Write the offline signing section to a stream.
+     *
+     *  @param out the output stream
+     *  @throws DataFormatException if the data is invalid
+     *  @throws IOException if there is an error writing
+     */
     protected void writeOfflineBytes(OutputStream out) throws DataFormatException, IOException {
         if (_transientSigningPublicKey == null || _offlineSignature == null) {
             throw new DataFormatException("No offline key/sig");
@@ -617,6 +668,7 @@ public class LeaseSet2 extends LeaseSet {
         return out.verifySignature(_signature, spk);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
@@ -635,6 +687,7 @@ public class LeaseSet2 extends LeaseSet {
         return _destination.hashCode();
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
@@ -670,6 +723,7 @@ public class LeaseSet2 extends LeaseSet {
         return buf.toString();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void encrypt(SessionKey key) {throw new UnsupportedOperationException();}
 

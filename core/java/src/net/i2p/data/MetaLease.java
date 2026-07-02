@@ -57,18 +57,34 @@ public class MetaLease extends Lease {
     private int _cost;
     private int _type;
 
+    /**
+     *  @return the cost
+     */
     public int getCost() {
         return _cost;
     }
 
+    /**
+     *  Set the cost of this lease.
+     *
+     *  @param cost the cost value
+     */
     public void setCost(int cost) {
         _cost = cost;
     }
 
+    /**
+     *  @return the type
+     */
     public int getType() {
         return _type;
     }
 
+    /**
+     *  Set the type of this lease.
+     *
+     *  @param type the type value
+     */
     public void setType(int type) {
         _type = type;
     }
@@ -89,6 +105,7 @@ public class MetaLease extends Lease {
         throw new UnsupportedOperationException();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         _gateway = Hash.create(in);
@@ -99,6 +116,7 @@ public class MetaLease extends Lease {
         _end = DataHelper.readLong(in, 4) * 1000;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_gateway == null) throw new DataFormatException("Not enough data to write out a Lease");
@@ -110,6 +128,7 @@ public class MetaLease extends Lease {
         DataHelper.writeLong(out, 4, _end / 1000);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
@@ -118,11 +137,13 @@ public class MetaLease extends Lease {
         return _end == lse.getEndTime() && _type == lse._type && _cost == lse._cost && DataHelper.eq(_gateway, lse.getGateway());
     }
 
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return (int) _end ^ DataHelper.hashCode(_gateway) ^ _cost;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation

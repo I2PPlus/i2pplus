@@ -27,6 +27,9 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
     private final CRC32 _crc32;
     private static final boolean DEBUG = false;
 
+    /**
+     * @param o the underlying output stream
+     */
     public ResettableGZIPOutputStream(OutputStream o) {
         super(o, new Deflater(9, true));
         _crc32 = new CRC32();
@@ -104,12 +107,18 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
         super.close();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void close() throws IOException {
         finish();
         super.close();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void finish() throws IOException {
         ensureHeaderIsWritten();
@@ -117,6 +126,9 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
         writeFooter();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void write(int b) throws IOException {
         ensureHeaderIsWritten();
@@ -125,11 +137,17 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
         super.write(b);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void write(byte[] buf) throws IOException {
         write(buf, 0, buf.length);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void write(byte[] buf, int off, int len) throws IOException {
         ensureHeaderIsWritten();

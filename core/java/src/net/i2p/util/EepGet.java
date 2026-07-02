@@ -134,37 +134,109 @@ public class EepGet {
     /** @deprecated use DEFAULT_INACTIVITY_TIMEOUT */
     protected static final int INACTIVITY_TIMEOUT = DEFAULT_INACTIVITY_TIMEOUT;
 
+    /**
+     * @param ctx I2P app context
+     * @param proxyHost proxy hostname
+     * @param proxyPort proxy port
+     * @param numRetries number of retries
+     * @param outputFile output file path
+     * @param url URL to fetch
+     */
     public EepGet(I2PAppContext ctx, String proxyHost, int proxyPort, int numRetries, String outputFile, String url) {
         this(ctx, true, proxyHost, proxyPort, numRetries, outputFile, url);
     }
 
+    /**
+     * @param ctx I2P app context
+     * @param proxyHost proxy hostname
+     * @param proxyPort proxy port
+     * @param numRetries number of retries
+     * @param outputFile output file path
+     * @param url URL to fetch
+     * @param allowCaching whether to allow caching
+     */
     public EepGet(I2PAppContext ctx, String proxyHost, int proxyPort, int numRetries, String outputFile, String url, boolean allowCaching) {
         this(ctx, true, proxyHost, proxyPort, numRetries, outputFile, url, allowCaching, null);
     }
 
+    /**
+     * @param ctx I2P app context
+     * @param numRetries number of retries
+     * @param outputFile output file path
+     * @param url URL to fetch
+     */
     public EepGet(I2PAppContext ctx, int numRetries, String outputFile, String url) {
         this(ctx, false, null, -1, numRetries, outputFile, url);
     }
 
+    /**
+     * @param ctx I2P app context
+     * @param numRetries number of retries
+     * @param outputFile output file path
+     * @param url URL to fetch
+     * @param allowCaching whether to allow caching
+     */
     public EepGet(I2PAppContext ctx, int numRetries, String outputFile, String url, boolean allowCaching) {
         this(ctx, false, null, -1, numRetries, outputFile, url, allowCaching, null);
     }
 
+    /**
+     * @param ctx I2P app context
+     * @param shouldProxy whether to use a proxy
+     * @param proxyHost proxy hostname
+     * @param proxyPort proxy port
+     * @param numRetries number of retries
+     * @param outputFile output file path
+     * @param url URL to fetch
+     */
     public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort,
                   int numRetries, String outputFile, String url) {
         this(ctx, shouldProxy, proxyHost, proxyPort, numRetries, outputFile, url, true, null);
     }
 
+    /**
+     * @param ctx I2P app context
+     * @param shouldProxy whether to use a proxy
+     * @param proxyHost proxy hostname
+     * @param proxyPort proxy port
+     * @param numRetries number of retries
+     * @param outputFile output file path
+     * @param url URL to fetch
+     * @param postData POST data string
+     */
     public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort,
                   int numRetries, String outputFile, String url, String postData) {
         this(ctx, shouldProxy, proxyHost, proxyPort, numRetries, -1, -1, outputFile, null, url, true, null, postData);
     }
 
+    /**
+     * @param ctx I2P app context
+     * @param shouldProxy whether to use a proxy
+     * @param proxyHost proxy hostname
+     * @param proxyPort proxy port
+     * @param numRetries number of retries
+     * @param outputFile output file path
+     * @param url URL to fetch
+     * @param allowCaching whether to allow caching
+     * @param etag ETag for conditional fetch
+     */
     public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort,
                   int numRetries, String outputFile, String url, boolean allowCaching, String etag) {
         this(ctx, shouldProxy, proxyHost, proxyPort, numRetries, -1, -1, outputFile, null, url, allowCaching, etag, null);
     }
 
+    /**
+     * @param ctx I2P app context
+     * @param shouldProxy whether to use a proxy
+     * @param proxyHost proxy hostname
+     * @param proxyPort proxy port
+     * @param numRetries number of retries
+     * @param outputFile output file path
+     * @param url URL to fetch
+     * @param allowCaching whether to allow caching
+     * @param etag ETag for conditional fetch
+     * @param lastModified last-modified for conditional fetch
+     */
     public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort,
                   int numRetries, String outputFile, String url, boolean allowCaching, String etag, String lastModified) {
         this(ctx, shouldProxy, proxyHost, proxyPort, numRetries, -1, -1, outputFile, null, url, allowCaching, etag, lastModified, null);
@@ -709,10 +781,16 @@ public class EepGet {
         public void headerReceived(String url, int currentAttempt, String key, String val) {}
     }
 
+    /**
+     * @param lsnr the listener to add
+     */
     public void addStatusListener(StatusListener lsnr) {
         synchronized (_listeners) { _listeners.add(lsnr); }
     }
 
+    /**
+     * Stop the fetch in progress.
+     */
     public void stopFetching() { _keepFetching = false; }
 
     /**
@@ -1175,6 +1253,9 @@ public class EepGet {
         }
     }
 
+    /**
+     * Read and parse the HTTP response headers.
+     */
     protected void readHeaders() throws IOException {
         String key = null;
         StringBuilder buf = new StringBuilder(32);
@@ -1647,6 +1728,9 @@ public class EepGet {
             _log.debug("Request flushed");
     }
 
+    /**
+     * @return the HTTP request string
+     */
     protected String getRequest() throws IOException {
         StringBuilder buf = new StringBuilder(2048);
         boolean post = false;

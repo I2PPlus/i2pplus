@@ -66,11 +66,21 @@ public final class DSAEngine {
     // private static final boolean _isAndroid = System.getProperty("java.vendor").contains("Android");
     private static final boolean _useJavaLibs = false; // = _isAndroid;
 
+    /**
+     *  Create a DSA engine for the given context.
+     *
+     *  @param context the context
+     */
     public DSAEngine(I2PAppContext context) {
         _log = context.logManager().getLog(DSAEngine.class);
         _context = context;
     }
 
+    /**
+     *  Get the DSA engine instance from the global context.
+     *
+     *  @return the DSA engine
+     */
     public static DSAEngine getInstance() {
         return I2PAppContext.getGlobalContext().dsa();
     }

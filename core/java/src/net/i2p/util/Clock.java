@@ -35,6 +35,9 @@ public class Clock implements Timestamper.UpdateListener {
     private AtomicInteger _frequency = new AtomicInteger(0);
     private AtomicLong _savedTime = new AtomicLong(0);
 
+    /**
+     * @param context the I2P app context
+     */
     public Clock(I2PAppContext context) {
         _context = context;
         _listeners = new CopyOnWriteArraySet<>();
@@ -62,6 +65,9 @@ public class Clock implements Timestamper.UpdateListener {
         _startedOn = now;
     }
 
+    /**
+     * @return the global clock instance
+     */
     public static Clock getInstance() {
         return I2PAppContext.getGlobalContext().clock();
     }
@@ -148,17 +154,24 @@ public class Clock implements Timestamper.UpdateListener {
         fireOffsetChanged(delta);
     }
 
-    /*
+    /**
      * @return the current delta from System.currentTimeMillis() in milliseconds
      */
     public synchronized long getOffset() {
         return _offset;
     }
 
+    /**
+     * @return whether the offset has been updated at least once
+     */
     public boolean getUpdatedSuccessfully() {
         return _alreadyChanged;
     }
 
+    /**
+     * Set the clock to the given real time, computing the offset.
+     * @param realTime the real time in milliseconds
+     */
     public void setNow(long realTime) {
         if (realTime < BuildTime.getEarliestTime() || realTime > BuildTime.getLatestTime()) {
             Log log = getLog();
@@ -202,14 +215,23 @@ public class Clock implements Timestamper.UpdateListener {
         return newTime;
     }
 
+    /**
+     * @param lsnr the listener to add
+     */
     public void addUpdateListener(ClockUpdateListener lsnr) {
         _listeners.add(lsnr);
     }
 
+    /**
+     * @param lsnr the listener to remove
+     */
     public void removeUpdateListener(ClockUpdateListener lsnr) {
         _listeners.remove(lsnr);
     }
 
+    /**
+     * @param delta the offset change in milliseconds
+     */
     protected void fireOffsetChanged(long delta) {
         for (ClockUpdateListener lsnr : _listeners) {
             lsnr.offsetChanged(delta);

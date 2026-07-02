@@ -66,6 +66,8 @@ public final class CertUtil {
     /**
      *  Write a certificate to a file in base64 format.
      *
+     *  @param cert the certificate to save
+     *  @param file the file to write to
      *  @return success
      *  @since 0.8.2, moved from SSLEepGet in 0.9.9
      */
@@ -457,6 +459,8 @@ public final class CertUtil {
      *  This loads the CRLs from disk.
      *  For efficiency, call loadCRLs() and then pass to isRevoked().
      *
+     *  @param cert the certificate to check
+     *  @return true if revoked
      *  @since 0.9.25
      */
     public static boolean isRevoked(Certificate cert) {
@@ -468,6 +472,9 @@ public final class CertUtil {
      *  This loads the CRLs from disk.
      *  For efficiency, call loadCRLs() and then pass to isRevoked().
      *
+     *  @param ctx the context
+     *  @param cert the certificate to check
+     *  @return true if revoked
      *  @since 0.9.25
      */
     public static boolean isRevoked(I2PAppContext ctx, Certificate cert) {

@@ -34,6 +34,7 @@ public class DateAndFlags extends DataStructureImpl {
     protected int _flags;
     private long _date;
 
+    /** */
     public DateAndFlags() {}
 
     /**
@@ -54,6 +55,9 @@ public class DateAndFlags extends DataStructureImpl {
         _date = date.getTime();
     }
 
+    /**
+     *  @return 0 - 65535
+     */
     public int getFlags() {
         return _flags;
     }
@@ -76,24 +80,39 @@ public class DateAndFlags extends DataStructureImpl {
         return Date.from(Instant.ofEpochMilli(_date));
     }
 
+    /**
+     *  @return the date in milliseconds since epoch
+     */
     public long getTime() {
         return (_date);
     }
 
+    /**
+     *  Set the date from a long timestamp.
+     *
+     *  @param date the date in milliseconds since epoch
+     */
     public void setDate(long date) {
         _date = date;
     }
 
+    /**
+     *  Set the date from a Date object.
+     *
+     *  @param date the date
+     */
     public void setDate(Date date) {
         _date = date.getTime();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         _flags = (int) DataHelper.readLong(in, 2);
         _date = DataHelper.readLong(in, 6);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         DataHelper.writeLong(out, 2, _flags);
@@ -124,6 +143,7 @@ public class DateAndFlags extends DataStructureImpl {
         _date = DataHelper.fromLong(data, 2, 6);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
@@ -132,11 +152,13 @@ public class DateAndFlags extends DataStructureImpl {
         return _date == daf._date && _flags == daf._flags;
     }
 
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return _flags + (int) _date;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64); // NOPMD - AvoidUnnecessaryStringBuilderCreation

@@ -50,6 +50,9 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
         }
     }
 
+    /**
+     *  @return the session ID
+     */
     public synchronized long getSessionId() {
         return _sessionId;
     }
@@ -73,11 +76,15 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
         _sessionId = (int) id;
     }
 
+    /**
+     *  @return the message ID
+     */
     public synchronized long getMessageId() {
         return _messageId;
     }
 
     /**
+     *  @param id the message ID
      *  @deprecated use 3-arg constructor
      */
     @Deprecated
@@ -85,11 +92,15 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
         _messageId = id;
     }
 
+    /**
+     *  @return the payload
+     */
     public synchronized Payload getPayload() {
         return _payload;
     }
 
     /**
+     *  @param payload the payload
      *  @deprecated use 3-arg constructor
      */
     @Deprecated
@@ -97,6 +108,7 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
         _payload = payload;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected synchronized void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
@@ -142,11 +154,13 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public int getType() {
         return MESSAGE_TYPE;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation

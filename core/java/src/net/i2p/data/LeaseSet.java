@@ -127,6 +127,7 @@ public class LeaseSet extends DatabaseEntry {
      */
     public static final int MAX_LEASES = 16;
 
+    /** */
     public LeaseSet() {
         _leases = new ArrayList<>(2);
         _firstExpiration = Long.MAX_VALUE;
@@ -171,6 +172,9 @@ public class LeaseSet extends DatabaseEntry {
         _destination = dest;
     }
 
+    /**
+     *  @return the encryption public key
+     */
     public PublicKey getEncryptionKey() {
         return _encryptionKey;
     }
@@ -275,6 +279,12 @@ public class LeaseSet extends DatabaseEntry {
         }
     }
 
+    /**
+     *  Get the lease at the given index.
+     *
+     *  @param index the lease index
+     *  @return the lease
+     */
     public Lease getLease(int index) {
         if (isEncrypted()) {
             return _decryptedLeases.get(index);
@@ -450,6 +460,7 @@ public class LeaseSet extends DatabaseEntry {
                 + _leases.size() * 44;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object object) {
         if (object == this) {
@@ -471,6 +482,7 @@ public class LeaseSet extends DatabaseEntry {
         return _destination.hashCode();
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);

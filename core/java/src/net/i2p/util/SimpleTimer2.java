@@ -454,6 +454,9 @@ public class SimpleTimer2 {
 
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void run() {
             try {

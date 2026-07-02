@@ -149,6 +149,9 @@ public class TrustedUpdate {
 
     /**
      *  Do we know about the following key?
+     *
+     *  @param key the key as a base-64 string
+     *  @return true if the key is trusted
      *  @since 0.7.12
      */
     public boolean haveKey(String key) {
@@ -417,7 +420,11 @@ public class TrustedUpdate {
         }
     }
 
-    /** version in the .sud file, valid only after calling migrateVerified() */
+    /**
+     *  Version in the .sud file, valid only after calling migrateVerified().
+     *
+     *  @return the new version string
+     */
     public String newVersion() {
         return _newVersion;
     }

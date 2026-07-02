@@ -77,6 +77,7 @@ public class TunnelId {
 
     public static final long MAX_ID_VALUE = 0xffffffffL;
 
+    /** */
     public TunnelId() {
         _tunnelId = -1;
     }
@@ -89,6 +90,9 @@ public class TunnelId {
         setTunnelId(id);
     }
 
+    /**
+     *  @return the tunnel ID
+     */
     public long getTunnelId() {
         return _tunnelId;
     }
@@ -104,16 +108,31 @@ public class TunnelId {
         _tunnelId = id;
     }
 
+    /**
+     *  Read the tunnel ID from a stream.
+     *
+     *  @param in the input stream to read from
+     *  @throws DataFormatException if the data is invalid
+     *  @throws IOException if there is an error reading
+     */
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         _tunnelId = DataHelper.readLong(in, 4);
     }
 
+    /**
+     *  Write the tunnel ID to a stream.
+     *
+     *  @param out the output stream to write to
+     *  @throws DataFormatException if the data is invalid
+     *  @throws IOException if there is an error writing
+     */
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         // writeLong() will throw DFE on negative value
         // if (_tunnelId < 0) throw new DataFormatException("Invalid tunnel ID: " + _tunnelId);
         DataHelper.writeLong(out, 4, _tunnelId);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
@@ -121,11 +140,13 @@ public class TunnelId {
         return _tunnelId == ((TunnelId) obj)._tunnelId;
     }
 
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return (int) _tunnelId;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return String.valueOf(_tunnelId);

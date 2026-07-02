@@ -171,6 +171,9 @@ public class LogManager implements Flushable {
 
     private boolean _alreadyNoticedMissingConfig;
 
+    /**
+     * @param context the I2P app context
+     */
     public LogManager(I2PAppContext context) {
         _displayOnScreen = true;
         _alreadyNoticedMissingConfig = false;
@@ -236,14 +239,27 @@ public class LogManager implements Flushable {
         t.start();
     }
 
+    /**
+     * @param cls the class to get the log for
+     * @return the log
+     */
     public final Log getLog(Class<?> cls) {
         return getLog(cls, null);
     }
 
+    /**
+     * @param name the name to get the log for
+     * @return the log
+     */
     public final Log getLog(String name) {
         return getLog(null, name);
     }
 
+    /**
+     * @param cls the class (may be null)
+     * @param name the name (may be null)
+     * @return the log
+     */
     public final Log getLog(Class<?> cls, String name) {
         String scope = Log.getScope(name, cls);
         boolean isNew = false;
@@ -281,22 +297,37 @@ public class LogManager implements Flushable {
         }
     }
 
+    /**
+     * @return the console buffer
+     */
     public LogConsoleBuffer getBuffer() {
         return _consoleBuffer;
     }
 
+    /**
+     * @return whether to display log on screen
+     */
     public boolean displayOnScreen() {
         return _displayOnScreen;
     }
 
+    /**
+     * @return the minimum level for on-screen display
+     */
     public int getDisplayOnScreenLevel() {
         return _onScreenLimit;
     }
 
+    /**
+     * @return the console buffer size
+     */
     public int getConsoleBufferSize() {
         return _consoleBufferSize;
     }
 
+    /**
+     * @param filename the config file path
+     */
     public final void setConfig(String filename) {
         _locationFile = new File(filename);
         if (!_locationFile.isAbsolute()) _locationFile = new File(_context.getConfigDir(), filename);
@@ -566,10 +597,16 @@ public class LogManager implements Flushable {
         }
     }
 
+    /**
+     * @return the default log limit as a string
+     */
     public String getDefaultLimit() {
         return Log.toLevelString(_defaultLimit);
     }
 
+    /**
+     * @param lim the default log limit string
+     */
     public void setDefaultLimit(String lim) {
         _defaultLimit = Log.getLevel(lim);
         updateLimits();
@@ -671,22 +708,31 @@ public class LogManager implements Flushable {
         return limits;
     }
 
-    ///
-    /// would be friend methods for LogWriter...
-    ///
+    /**
+     * @return the base log filename pattern
+     */
     public String getBaseLogfilename() {
         return _baseLogfilename;
     }
 
+    /**
+     * @param filenamePattern the base log filename pattern
+     */
     public void setBaseLogfilename(String filenamePattern) {
         // '#' is a comment character in loadProps/storeProps
         _baseLogfilename = filenamePattern.replace('#', '@');
     }
 
+    /**
+     * @return the maximum log file size in bytes
+     */
     public int getFileSize() {
         return _fileSize;
     }
 
+    /**
+     * @return the rotation limit (number of log files to keep)
+     */
     public int getRotationLimit() {
         return _rotationLimit;
     }
@@ -779,10 +825,16 @@ public class LogManager implements Flushable {
         return _records;
     }
 
+    /**
+     * @return the log format characters
+     */
     public char[] getFormat() {
         return _format;
     }
 
+    /**
+     * @param fmt the log format characters
+     */
     public void setFormat(char[] fmt) {
         _format = fmt;
     }
@@ -794,6 +846,9 @@ public class LogManager implements Flushable {
         return _dateFormat;
     }
 
+    /**
+     * @return the date format pattern string
+     */
     public String getDateFormatPattern() {
         return _dateFormatPattern;
     }
@@ -820,6 +875,9 @@ public class LogManager implements Flushable {
         }
     }
 
+    /**
+     * Shut down the log manager, flushing and stopping the writer.
+     */
     public synchronized void shutdown() {
         _shutdown = true;
         if (_writer != null) {

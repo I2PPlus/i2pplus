@@ -606,6 +606,13 @@ public class DataHelper {
         loadProps(props, new FileInputStream(file), forceLowerCase);
     }
 
+    /**
+     *  Load properties from a stream.
+     *
+     *  @param props the properties object to load into
+     *  @param inStr the input stream to read from
+     *  @throws IOException if there is an error reading
+     */
     public static void loadProps(Properties props, InputStream inStr) throws IOException {
         loadProps(props, inStr, false);
     }
