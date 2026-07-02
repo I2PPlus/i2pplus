@@ -112,7 +112,7 @@ public class RandomIterator<E> implements Iterator<E> {
             index = served.nextClearBit(start);
         else
             index = previousClearBit(start);
-        if (index < 0)
+        if (index < 0 || index >= LIST_SIZE)
             throw new NoSuchElementException("shouldn't happen");
         servedCount++;
         served.set(index);
@@ -125,19 +125,13 @@ public class RandomIterator<E> implements Iterator<E> {
                 // workaround for Android ICS bug - see below
                 lower = HAS_ANDROID_BUG ? nextClearBit(index) : served.nextClearBit(index);
             else if (index == upper)
-                upper = previousClearBit(index - 1);
+                upper = served.previousClearBit(index - 1);
         }
         return list.get(index);
     }
 
-    /** just like nextClearBit() */
     private int previousClearBit(int n) {
-        for (int i = n; i >= lower; i--) {
-            if (!served.get(i)) {
-                return i;
-            }
-        }
-        return -1;
+        return served.previousClearBit(n);
     }
 
     /**

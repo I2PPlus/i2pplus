@@ -84,16 +84,13 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
 
         public E next() {
             checkForComodification();
-            try {
-                int i = cursor;
-                E next = get(i);
-                lastRet = i;
-                cursor = i + 1;
-                return next;
-            } catch (IndexOutOfBoundsException e) {
-                checkForComodification();
+            int i = cursor;
+            if (i >= size())
                 throw new NoSuchElementException();
-            }
+            E next = get(i);
+            lastRet = i;
+            cursor = i + 1;
+            return next;
         }
 
         public void remove() {

@@ -11,7 +11,6 @@ import java.util.NoSuchElementException;
  * remove the single element and clear the set. Iterator supports
  * remove() operations while maintaining singleton behavior.
  * <p>
- * Thread-safe implementation without synchronization overhead.
  * Does not support add() or addAll() operations as they would
  * violate the singleton contract. Item may not be null.
  * <p>
@@ -22,7 +21,7 @@ import java.util.NoSuchElementException;
  * @since 0.9.7
  */
 public class RemovableSingletonSet<E> extends AbstractSet<E> {
-    private E _elem;
+    private volatile E _elem;
 
     public RemovableSingletonSet(E element) {
         if (element == null)
