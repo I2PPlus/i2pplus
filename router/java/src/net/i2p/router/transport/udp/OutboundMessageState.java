@@ -79,7 +79,6 @@ class OutboundMessageState implements CDPQEntry {
         _peer = peer;
         _startedOn = _context.clock().now();
         _expiration = _startedOn + EXPIRATION;
-        //_expiration = msg.getExpiration();
 
         // now "fragment" it
         int totalSize = _i2npMessage.getMessageSize() - 7;  // NTCP2 style, 9 byte header

@@ -35,13 +35,10 @@ class NTCP2Options {
     public int getSendDelay() { return _sendDelay; }
     public int getRecvDelay() { return _recvDelay; }
 
-/**
- * NTCP2 Padding/Dummy/Delay configuration for data phase.
- * Contains timing and padding parameters for NTCP2 data transmission.
- * Provides methods to merge configurations and validate compatibility.
- *
- * @since 0.9.36
- */
+    /**
+     *  Merge our options with the peer's options.
+     *  @return new merged options
+     */
     public NTCP2Options merge(NTCP2Options his) {
         float xsMin = Math.max(_sendMin, his.getRecvMin());
         float xsMax = Math.min(_sendMax, his.getRecvMax());

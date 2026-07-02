@@ -34,7 +34,6 @@ class OutboundEstablishState {
     private long _sentSignedOnTime;
     // general status
     protected final long _establishBegin;
-    //private long _lastReceive;
     protected long _lastSend;
     protected long _nextSend;
     protected RemoteHostId _remoteHostId;

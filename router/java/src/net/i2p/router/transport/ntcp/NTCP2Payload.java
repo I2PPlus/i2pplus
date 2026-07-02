@@ -175,11 +175,8 @@ class NTCP2Payload {
     }
 
     /**
-     *  Base class for blocks to be transmitted.
+     *  Base class for NTCP 2 payload blocks to be transmitted.
      *  Not used for receive; we use callbacks instead.
-     */
-    /**
-     * Base class for NTCP 2 payload blocks.
      */
     public abstract static class Block {
         private final int type;

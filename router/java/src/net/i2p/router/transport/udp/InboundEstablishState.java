@@ -29,7 +29,6 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
     protected RouterIdentity _receivedUnconfirmedIdentity; // sig not verified
     protected RouterIdentity _receivedConfirmedIdentity; // identical to uncomfirmed, but sig now verified
     protected final long _establishBegin; // general status
-    //private long _lastReceive;
     protected long _lastSend;
     protected long _nextSend;
     protected final RemoteHostId _remoteHostId;

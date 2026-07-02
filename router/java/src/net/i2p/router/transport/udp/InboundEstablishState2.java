@@ -521,7 +521,6 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (_log.shouldDebug()) {_log.debug("[SSU] Received IP address: " + Addresses.toString(ip, port));}
         _bobIP = ip;
         // final, see super
-        //_bobPort = port;
     }
 
     @Override

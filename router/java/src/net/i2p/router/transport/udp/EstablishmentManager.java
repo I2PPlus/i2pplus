@@ -356,7 +356,6 @@ class EstablishmentManager {
                  _transport.failed(msg, "Peer's IP address isn't valid");
                 _transport.markUnreachable(toHash);
                 _context.statManager().addRateData("udp.establishBadIP", 1);
-                //_context.banlist().banlistRouter(toHash, "Invalid SSU address", UDPTransport.STYLE);
                  if (toHash != null) {
                       if (!isBanned) {
                         _banLogger.logBan(toHash, ipAddress + ":" + port, "Invalid SSU address", 4*60*60*1000L);
@@ -2262,10 +2261,8 @@ class EstablishmentManager {
             }
             String err = "Took too long to establish Outbound connection, state is " + outboundState.getState();
             Hash peer = outboundState.getRemoteIdentity().calculateHash();
-            //_context.banlist().banlistRouter(peer, err, UDPTransport.STYLE);
             _transport.markUnreachable(peer);
             _transport.dropPeer(peer, false, err);
-            //_context.profileManager().commErrorOccurred(peer);
             outboundState.fail();
         } else {
             OutNetMessage msg;

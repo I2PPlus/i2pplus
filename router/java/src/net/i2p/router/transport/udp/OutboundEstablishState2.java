@@ -613,8 +613,6 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         if (_skew > MAX_SKEW || _skew < 0 - MAX_SKEW)
             throw new GeneralSecurityException("Max skew of 2m exceeded (" + _skew + "ms) in Retry");
         // required, but we don't really need it until Session Created, just check there
-        //if (_aliceIP == null)
-        //    throw new GeneralSecurityException("No Address block in Retry");
         createNewState(_routerAddress);
         if (_log.shouldDebug())
             _log.debug("[SSU] Received a RetryToken " + token + "\n* " + this);
@@ -908,7 +906,6 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     @Override
     public String toString() {
         int count = _introducers != null ? _introducers.size() : 0;
-        //return "[SSU] OutboundEstablishState [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " + _remoteHostId +
         return "OutboundEstablishState [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " +
                "\n* Lifetime: " + DataHelper.formatDuration(getLifetime()) +
                "; Receive ID: " + _rcvConnID + "; Send ID: " + _sendConnID +

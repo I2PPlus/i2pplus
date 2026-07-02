@@ -664,7 +664,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *
      *  Following transport methods will be called:
      *    setListener(null)
-     *    stoptListening();
+     *    stopListening();
      *
      *  @since 0.9.16
      */

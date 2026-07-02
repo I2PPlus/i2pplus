@@ -473,7 +473,6 @@ public abstract class TransportImpl implements Transport {
      * Note that this adds to the queue and then takes it back off in the same thread,
      * so it actually blocks, and we don't need a big queue.
      *
-     * TODO: Override in NTCP also and get rid of queue?
      */
     public void send(OutNetMessage msg) {
         if (msg.getTarget() == null) {

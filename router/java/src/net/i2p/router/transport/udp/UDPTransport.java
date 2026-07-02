@@ -1639,7 +1639,6 @@ public class UDPTransport extends TransportImpl {
             }
             // deadlock thru here ticket #1699
             // this causes duplicate publish, REA() call above calls rebuildRouterInfo
-            //_context.router().rebuildRouterInfo();
             _testEvent.forceRunImmediately(isIPv6);
         }
         return updated;
@@ -2093,7 +2092,6 @@ public class UDPTransport extends TransportImpl {
         if (peer.getRemotePeer() != null) {
             if (shouldBanlist) {
                 markUnreachable(peer.getRemotePeer());
-                //_context.banlist().banlistRouter(peer.getRemotePeer(), "dropped after too many retries", STYLE);
             }
             long now = _context.clock().now();
             _context.statManager().addRateData("udp.droppedPeer", now - peer.getLastReceiveTime(), now - peer.getKeyEstablishedTime());

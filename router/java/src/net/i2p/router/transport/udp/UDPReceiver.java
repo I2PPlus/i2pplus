@@ -100,7 +100,6 @@ class UDPReceiver {
             packet.release();
             _keepRunning = false;
         }
-        //return queueSize + 1;
         return 0;
     }
 

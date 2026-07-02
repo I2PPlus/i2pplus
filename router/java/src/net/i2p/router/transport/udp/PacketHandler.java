@@ -120,7 +120,6 @@ class PacketHandler {
      */
     public UDPPacket receiveNext() {
         UDPPacket rv = null;
-        //int remaining = 0;
         while (_keepReading && rv == null) {
             try {rv = _inboundQueue.take();}
             catch (InterruptedException ie) {
@@ -131,7 +130,6 @@ class PacketHandler {
                 return null;
             }
         }
-        //_context.statManager().addRateData("udp.receiveRemaining", remaining, 0);
         return rv;
     }
 

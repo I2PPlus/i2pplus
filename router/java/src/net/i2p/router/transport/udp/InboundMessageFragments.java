@@ -27,7 +27,6 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
 
     public InboundMessageFragments(RouterContext ctx, OutboundMessageFragments outbound, UDPTransport transport) {
         _context = ctx;
-        //_inboundMessages = new HashMap(64);
         _transport = transport;
         _messageReceiver = new MessageReceiver(_context, _transport);
         _context.statManager().createRateStat("udp.ignoreRecentDuplicate", "Take note that we received a packet for a recently completed message", "Transport [UDP]", UDPTransport.RATES);
