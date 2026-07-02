@@ -328,13 +328,11 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
             if (!stopping.getAndSet(true)) {
                 _msgs.clear();
                 if (_alive) {
-                    // System.out.println("I2PSessionMuxedImpl.stopNotifying()");
                     boolean again = true;
                     while (again) {
                         try {
                             _msgs.put(new MsgData(0, POISON_SIZE, 0, 0, 0));
                             again = false;
-                            // System.out.println("I2PSessionMuxedImpl.stopNotifying() success.");
                         } catch (InterruptedException ie) {
                             continue;
                         }
@@ -372,7 +370,6 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
                     continue;
                 }
                 if (msg.size == POISON_SIZE) {
-                    // System.out.println("I2PSessionMuxedImpl.run() POISONED");
                     break;
                 }
                 try {
