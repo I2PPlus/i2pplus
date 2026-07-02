@@ -201,14 +201,14 @@
 <script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src=/js/autologout.js></script>
-<script src="/js/textareaResize.js"></script>
+<script src=/js/textareaResize.js></script>
 <script nonce="<%=cspNonce%>">
-window.jdenticon_config = { padding: 0, saturation: {color: 1, grayscale: 0} };
-document.addEventListener("DOMContentLoaded", function() {
-  const myTextarea = document.getElementById("addNotes");
-  addResizeListener(addNotes);
-});
+  window.jdenticon_config = { padding: 0, saturation: {color: 1, grayscale: 0} };
+  document.addEventListener("DOMContentLoaded", function() {
+    const myTextarea = document.getElementById("addNotes");
+    addResizeListener(addNotes);
+  });
 </script>
-<script src="/js/jdenticon.js"></script>
+<script src=/js/jdenticon.js></script>
 </body>
 </html>

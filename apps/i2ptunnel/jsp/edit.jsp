@@ -38,10 +38,12 @@
 <link href="<%=editBean.getTheme()%>override.css" rel=stylesheet>
 <script src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/selectAll.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script nonce="<%=cspNonce%>">var deleteMessage = "<%=intl._t("Are you sure you want to delete?")%>";</script>
 <script src="js/delete.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style>body{display:none;pointer-events:none}input.default{width:1px;height:1px;visibility:hidden}</style>
-<script nonce="<%=cspNonce%>">const theme = "<%=themeName%>";</script>
+<script nonce="<%=cspNonce%>">
+  var deleteMessage = "<%=intl._t("Are you sure you want to delete?")%>";
+  const theme = "<%=themeName%>";
+</script>
 </head>
 <body id=tunnelEditPage>
 <%  if (__invalid) { %><div id=notReady>Invalid tunnel parameter</div><% } %>

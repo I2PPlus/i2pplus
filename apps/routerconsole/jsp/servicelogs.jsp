@@ -48,7 +48,7 @@
 <table id=wrapperlogs class="logtable single"><tbody><tr><td><% out.append(buf);%></td></tr></tbody></table>
 </div>
 </div>
-<script nonce=<%=cspNonce%> type=module src=/js/refreshLogs.js></script>
+<script type=module src=/js/refreshLogs.js></script>
 <noscript><style>#toggleRefresh,#refreshPeriod,#logFilter{display:none!important}</style></noscript>
 </body>
 </html>
