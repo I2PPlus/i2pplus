@@ -39,9 +39,6 @@ import net.i2p.util.SystemVersion;
 public class CryptoChecker {
 
     private static String JRE6 = "http://www.oracle.com/technetwork/java/javase/downloads/index.html";
-    // these two are US-only and can change?
-    //private static String JRE7 = "http://www.oracle.com/technetwork/java/javase/documentation/java-se-7-doc-download-435117.html";
-    //private static String JRE8 = "http://www.oracle.com/technetwork/java/javase/documentation/jdk8-doc-downloads-2133158.html";
 
     /**
      * Check and warn about unavailable cryptographic algorithms.
@@ -85,24 +82,14 @@ public class CryptoChecker {
                 log.logAlways(Log.WARN, s);
             System.out.println("Warning: " + s); // NOSONAR startup visibility
             if (!SystemVersion.isJava7()) {
-                s = "Please consider upgrading to Java 7";
+                s = "Please consider upgrading to a newer version of Java";
                 if (log != null)
                     log.logAlways(Log.WARN, s);
                 System.out.println(s); // NOSONAR startup visibility
-            //} else if (SystemVersion.isJava9()) {
-            //    s = "Java 9 support is beta, check for Java updates";
-            //    if (log != null)
-            //        log.logAlways(Log.WARN, s);
-            //    System.out.println("Warning: " + s);
             }
             if (!CryptoCheck.isUnlimited() && !SystemVersion.isJava9()) {
                 s = "Please consider installing the Java Cryptography Unlimited Strength Jurisdiction Policy Files from ";
-                //if (SystemVersion.isJava8())
-                //    s  += JRE8;
-                //else if (SystemVersion.isJava7())
-                //    s  += JRE7;
-                //else
-                    s  += JRE6;
+                s  += JRE6;
                 if (log != null)
                     log.logAlways(Log.WARN, s);
                 System.out.println(s); // NOSONAR startup visibility

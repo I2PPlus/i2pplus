@@ -13,27 +13,31 @@
 
 <p><b>Key Components:</b></p>
 <ul>
-<li>PeerTestJob - Tests peer connectivity and performance</li>
-<li>ExploreJob - Explores the network for new peers</li>
 <li>CoalesceStatsEvent - Aggregates and processes statistics</li>
+<li>CryptoChecker - Checks cryptographic algorithm availability</li>
+<li>GracefulShutdown - Coordinates clean router shutdown</li>
+<li>InstallUpdate - Handles software update installation</li>
+<li>MarkLiveliness - Periodic liveliness marker for multi-instance detection</li>
+<li>OOMListener - Handles out-of-memory conditions</li>
 <li>ReadConfigJob - Reloads router configuration</li>
-<li>CommSystemStatusChecker - Monitors transport system health</li>
-<li>ProfileOrganizer - Organizes and maintains peer profiles</li>
-<li>TunnelPoolManager - Manages tunnel pool operations</li>
-<li>NetDbResearcher - Performs network database research</li>
+<li>Republish - Periodically publishes router info</li>
+<li>Restarter - Performs soft router restart</li>
 <li>RouterWatchdog - Monitors router health and performance</li>
+<li>ThreadDump - Generates thread dumps for diagnostics</li>
 </ul>
 
 <p><b>Main Functionality:</b></p>
 <ul>
-<li>Periodic network exploration and peer discovery</li>
-<li>Performance monitoring and statistics collection</li>
-<li>System health checks and maintenance</li>
+<li>Periodic statistics aggregation and coalescing</li>
+<li>Router health monitoring and watchdog recovery</li>
+<li>Cryptographic algorithm availability verification</li>
 <li>Configuration reloading and updates</li>
-<li>Peer testing and validation</li>
-<li>Database cleanup and optimization</li>
-<li>Tunnel pool management and maintenance</li>
-<li>Resource cleanup and garbage collection</li>
+<li>Graceful shutdown and restart coordination</li>
+<li>Software update installation</li>
+<li>Router info persistence and publication</li>
+<li>Thread dump generation for diagnostics</li>
+<li>Memory and out-of-memory condition handling</li>
+<li>Permission fixer for Windows</li>
 </ul>
 
 <p><b>Task Types:</b></p>
