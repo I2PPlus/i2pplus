@@ -53,8 +53,9 @@ import net.i2p.util.TryCache;
  * <p>Key performance characteristics:
  * <ul>
  *   <li>Fixed 200ms selector timeout for consistent latency</li>
- *   <li>Immediate {@code wakeup()} on pending I/O (no cooldown)</li>
+ *   <li>Immediate {@code wakeup()} on pending I/O</li>
  *   <li>Duplicate-free write request tracking via {@code ConcurrentHashSet}</li>
+ *   <li>Spin detection: yields briefly when select() returns repeatedly without blocking</li>
  *   <li>Failsafe iteration every 2 seconds to clean stale connections</li>
  *   <li>Efficient buffer pooling with bounded size</li>
  * </ul>
@@ -75,6 +76,10 @@ class EventPumper implements Runnable {
     private final ObjectCounter<String> _blockedIPs;
     private final ObjectCounter<String> _failedInboundHandshake;
     private long _expireIdleWriteTime;
+    /** Tracks consecutive select() calls that returned immediately (tight loop guard) */
+    private int _consecutiveFastSelects;
+    /** After this many consecutive immediate select returns, yield briefly */
+    private static final int MAX_CONSECUTIVE_FAST_SELECTS = 100;
     private static final boolean USE_DIRECT = false;
     private final boolean _nodelay;
 
@@ -279,6 +284,13 @@ class EventPumper implements Runnable {
                     Set<SelectionKey> selected = _selector.selectedKeys();
                     processKeys(selected);
                     selected.clear();
+                    _consecutiveFastSelects++;
+                    if (_consecutiveFastSelects > MAX_CONSECUTIVE_FAST_SELECTS) {
+                        Thread.yield();
+                        _consecutiveFastSelects = _consecutiveFastSelects / 2;
+                    }
+                } else {
+                    _consecutiveFastSelects = 0;
                 }
 
                 runDelayedEvents();
