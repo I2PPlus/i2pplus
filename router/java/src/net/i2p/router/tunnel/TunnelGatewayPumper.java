@@ -39,6 +39,9 @@ class TunnelGatewayPumper implements Runnable {
     // Queue of gateways awaiting pumping (bounded capacity)
     private final BlockingQueue<PumpedTunnelGateway> _wantsPumping;
 
+    // Concurrent set of gateways already in the queue, prevents duplicate offers
+    private final Set<PumpedTunnelGateway> _inQueue;
+
     // Concurrent set of backlogged gateways waiting to be requeued
     private final Set<PumpedTunnelGateway> _backlogged;
 
@@ -103,6 +106,7 @@ class TunnelGatewayPumper implements Runnable {
         _context = ctx;
         _log = ctx.logManager().getLog(TunnelGatewayPumper.class);
         _wantsPumping = new LinkedBlockingQueue<>(QUEUE_BUFFER);
+        _inQueue = ConcurrentHashMap.newKeySet();
         _backlogged = ConcurrentHashMap.newKeySet();
         _threads = new CopyOnWriteArrayList<>();
         _pumpers = ctx.getBooleanProperty("i2p.dummyTunnelManager") ? 1 : MAX_PUMPERS;
@@ -149,6 +153,7 @@ class TunnelGatewayPumper implements Runnable {
         }
 
         _threads.clear();
+        _inQueue.clear();
         _backlogged.clear();
     }
 
@@ -161,13 +166,18 @@ class TunnelGatewayPumper implements Runnable {
         if (_stop) {
             return;
         }
+        if (!_inQueue.add(gw)) {
+            return; // already in queue, skip duplicate offer
+        }
         try {
             if (!_wantsPumping.offer(gw, OFFER_TIMEOUT_MS, java.util.concurrent.TimeUnit.MILLISECONDS)) {
+                _inQueue.remove(gw);
                 _context.statManager().addRateData("tunnel.pumperQueueFull", 1);
                 if (_log.shouldWarn())
                     _log.warn("Pumper queue full after " + OFFER_TIMEOUT_MS + "ms, gateway dropped: " + gw);
             }
         } catch (InterruptedException ie) {
+            _inQueue.remove(gw);
             Thread.currentThread().interrupt();
             // Offer interrupted — gateway lost, but flag is restored for upstream handling
         }
@@ -194,6 +204,7 @@ class TunnelGatewayPumper implements Runnable {
         while (!_stop) {
             try {
                 gw = _wantsPumping.take(); // Blocks until an item is available
+                _inQueue.remove(gw);
                 if (gw.getMessagesSent() == POISON_PTG) {
                     break; // poison pill detected, exit thread
                 }

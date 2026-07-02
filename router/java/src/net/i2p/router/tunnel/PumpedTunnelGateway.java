@@ -195,10 +195,26 @@ class PumpedTunnelGateway extends TunnelGateway {
                 }
             }
             _lastFlush = _context.clock().now();
+            // Prune expired messages while holding the lock — only the pumper
+            // thread accesses _queue, so there is no contention and the separate
+            // synchronized block in pruneExpiredMessages() is pure overhead.
+            if (!_queue.isEmpty()) {
+                long now = _context.clock().now();
+                long expirationCutoff = now - Router.CLOCK_FUDGE_FACTOR;
+                Iterator<PendingGatewayMessage> it = _queue.iterator();
+                while (it.hasNext()) {
+                    PendingGatewayMessage m = it.next();
+                    if (m.getExpiration() < expirationCutoff) {
+                        if (debug) {
+                            _log.debug("Expiring message from queue: " + m);
+                        }
+                        it.remove();
+                    }
+                }
+            }
         }
 
         queueBuf.clear();
-        pruneExpiredMessages();
 
         if (debug) {
             long endTime = _context.clock().now();
@@ -213,25 +229,4 @@ class PumpedTunnelGateway extends TunnelGateway {
         return moreMessagesExist;
     }
 
-    /**
-     * Removes messages from the internal processing queue that have expired.
-     * This method is called outside synchronized blocks to minimize contention.
-     */
-    private void pruneExpiredMessages() {
-        long now = _context.clock().now();
-        long expirationCutoff = now - Router.CLOCK_FUDGE_FACTOR;
-
-        synchronized (_queue) {
-            Iterator<PendingGatewayMessage> it = _queue.iterator();
-            while (it.hasNext()) {
-                PendingGatewayMessage m = it.next();
-                if (m.getExpiration() < expirationCutoff) {
-                    if (_log.shouldDebug()) {
-                        _log.debug("Expiring message from queue: " + m);
-                    }
-                    it.remove();
-                }
-            }
-        }
-    }
 }
