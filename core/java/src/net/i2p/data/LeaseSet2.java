@@ -61,6 +61,7 @@ public class LeaseSet2 extends LeaseSet {
      */
     private static final int FLAG_BLINDED = 0x04;
     private static final int MAX_KEYS = 8;
+    private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(LeaseSet2.class);
 
     public LeaseSet2() {
         super();
@@ -378,11 +379,11 @@ public class LeaseSet2 extends LeaseSet {
         ByteArrayStream out = new ByteArrayStream(len);
         try {writeBytesWithoutSig(out);}
         catch (IOException ioe) {
-            ioe.printStackTrace();
+            _log.error("Error writing LeaseSet2 bytes", ioe);
             return new byte[0];
         }
         catch (DataFormatException dfe) {
-            dfe.printStackTrace();
+            _log.error("Error writing LeaseSet2 bytes", dfe);
             return new byte[0];
         }
         byte[] rv = out.toByteArray();
@@ -607,10 +608,10 @@ public class LeaseSet2 extends LeaseSet {
             out.write(getType()); // unlike LS1, sig covers type
             writeBytesWithoutSig(out);
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            _log.error("Error verifying LeaseSet2 signature", ioe);
             return false;
         } catch (DataFormatException dfe) {
-            dfe.printStackTrace();
+            _log.error("Error verifying LeaseSet2 signature", dfe);
             return false;
         }
         return out.verifySignature(_signature, spk);
