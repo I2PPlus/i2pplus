@@ -78,7 +78,8 @@ public class RouterPasswordManager extends PasswordManager {
             String user = _context.getProperty(PROP_I2CP_OLD_USER);
             String pw = _context.getProperty(PROP_I2CP_OLD_PW);
             if (pw != null && user != null && pw.length() > 0 && user.length() > 0) {
-                    saveHash(PROP_I2CP_NEW, user, pw);
+                if (!saveHash(PROP_I2CP_NEW, user, pw))
+                    return false;
             }
             // obfuscation of plaintext passwords
             Map<String, String> toAdd = new HashMap<>(5);
