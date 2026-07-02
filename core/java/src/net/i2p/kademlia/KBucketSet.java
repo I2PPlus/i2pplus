@@ -128,7 +128,9 @@ public class KBucketSet<T extends SimpleDataStructure> {
                 _log.warn("No lock, size is: " + _bucketsLock.getQueueLength(), new Exception("rats!"));
             }
             return rv;
-        } catch (InterruptedException ie) { /* ignored */ }
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
         return false;
     }
 
