@@ -47,6 +47,7 @@ public class DecayingBloomFilter {
     protected final int _entryBytes;
     private final byte[][] _extenders;
     private final long _longToEntryMask;
+    private final ThreadLocal<byte[]> _extendedBuf;
     protected final AtomicLong _currentDuplicates = new AtomicLong();
     protected volatile boolean _keepDecaying;
     protected final SimpleTimer2.TimedEvent _decayEvent;
@@ -70,6 +71,7 @@ public class DecayingBloomFilter {
         // all final
         _extenders = null;
         _longToEntryMask = 0;
+        _extendedBuf = null;
         context.addShutdownTask(new Shutdown());
         _keepDecaying = true;
         if (_durationMs == 60*60*1000) {
@@ -136,10 +138,12 @@ public class DecayingBloomFilter {
             for (int i = 0; i < numExtenders; i++) {
                 _context.random().nextBytes(_extenders[i]);
             }
-            _longToEntryMask = (1L << (_entryBytes * 8L)) -1;
+            _extendedBuf = ThreadLocal.withInitial(() -> new byte[32]);
+            _longToEntryMask = (_entryBytes < 8) ? (1L << (_entryBytes * 8L)) -1 : 0;
         } else {
             // final
             _extenders = null;
+            _extendedBuf = null;
             _longToEntryMask = 0;
         }
         _keepDecaying = true;
@@ -258,7 +262,7 @@ public class DecayingBloomFilter {
     private boolean locked_add(byte[] entry, int offset, int len, boolean addIfNew) {
         if (_extenders != null) {
             // extend the entry to 32 bytes
-            byte[] extended = new byte[32];
+            byte[] extended = _extendedBuf.get();
             System.arraycopy(entry, offset, extended, 0, len);
             for (int i = 0; i < _extenders.length; i++) {
                 DataHelper.xor(entry, offset, _extenders[i], 0, extended, _entryBytes * (i+1), _entryBytes);

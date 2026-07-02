@@ -8,20 +8,17 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * ArrayList with cached iterator for reduced object allocation overhead.
+ * ArrayList with per-thread cached iterators for reduced object allocation overhead.
  * <p>
- * Extends ArrayList to provide a single reusable iterator instance,
+ * Extends ArrayList to provide per-thread reusable iterator instances,
  * avoiding the creation of new iterator objects during repeated
  * iteration operations. This reduces garbage collection pressure
  * and improves performance for frequently traversed collections.
  * <p>
- * Maintains iterator state between iterations to support the
+ * Each thread gets its own cached iterator to allow safe concurrent
+ * iteration. Iterator state is maintained between iterations to support the
  * standard iterator contract while allowing remove() operations
  * with proper fail-fast behavior on concurrent modifications.
- * <p>
- * Particularly useful in scenarios where the same collection is
- * iterated over multiple times, providing both the convenience
- * of an iterator interface and the performance benefits of object reuse.
  *
  * @param <E>  type of elements in this list
  * @since 0.9.4 moved from net.i2p.util in 0.9.24
@@ -32,7 +29,7 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
 
     private static final long serialVersionUID = 4863212596318574111L;
 
-    private final CachedIterator iterator = new CachedIterator();
+    private final ThreadLocal<CachedIterator> iterator = ThreadLocal.withInitial(() -> new CachedIterator());
 
     public CachedIteratorArrayList() {
         super();
@@ -48,8 +45,9 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
 
     @Override
     public Iterator<E> iterator() {
-        iterator.reset();
-        return iterator;
+        CachedIterator it = iterator.get();
+        it.reset();
+        return it;
     }
 
     private class CachedIterator implements Iterator<E>, Serializable {

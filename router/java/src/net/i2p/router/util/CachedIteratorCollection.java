@@ -31,17 +31,16 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Thread-safe collection with cached iterator for efficient element iteration.
+ * Synchronized collection with per-thread cached iterators for efficient
+ * element iteration.
  * <p>
  * Extends AbstractCollection to provide a collection that can be iterated
- * over without creating new iterator objects. Uses a linked list
- * structure with a single cached iterator instance to minimize object
+ * without creating new iterator objects per call. Uses a linked list
+ * structure with per-thread cached iterator instances to minimize object
  * churn during frequent iteration operations.
  * <p>
- * Provides efficient iteration for scenarios where the same collection
- * is traversed multiple times, avoiding the overhead of creating
- * multiple iterator instances. Thread-safe for concurrent access
- * with proper synchronization on iterator state management.
+ * All mutation and iteration methods are synchronized for thread safety.
+ * Nested iteration from the same thread allocates a new iterator.
  *
  * @param <E>  type of elements in this collection
  * @since 0.9.36
@@ -94,7 +93,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
      *
      */
     @Override
-    public boolean add(E element) {
+    public synchronized boolean add(E element) {
         final Node<E> newNode = new Node<>(last, element);
         if (this.size == 0) {
             this.first = newNode;
@@ -103,37 +102,40 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
         }
         this.last = newNode;
         this.size++;
-        //log.debug("CachedIteratorAbstractCollection: Element added");
         return true;
     }
 
     /**
-     *  Clears the AbstractCollectionTest object, all pointers reset to 'null'
+     *  Clears the collection, all pointers reset to 'null'
      *
      */
     @Override
-    public void clear() {
+    public synchronized void clear() {
         this.first = null;
         this.last = null;
         this.size = 0;
-        // Reset all thread-local iterators
         _iterator.remove();
-        //log.debug("CachedIteratorAbstractCollection: Cleared");
     }
 
     /**
-     * Returns a thread-local cached iterator over the elements in this collection.
+     * Returns a cached iterator over the elements in this collection.
      *
      * Each thread gets its own iterator instance that is reused and reset on each call.
-     * This allows safe concurrent iteration from multiple threads without creating
-     * new iterator objects.
+     * If the current thread's cached iterator is still in use (hasNext() not yet exhausted),
+     * a new iterator is allocated to allow safe nested iteration.
      *
-     * @return a thread-local {@link CachedIterator} instance, reset to the beginning
+     * @return a {@link CachedIterator} instance, reset to the beginning
      */
     @Override
-    public Iterator<E> iterator() {
-        _iterator.get().reset();
-        return _iterator.get();
+    public synchronized Iterator<E> iterator() {
+        CachedIterator it = _iterator.get();
+        if (it.inUse()) {
+            CachedIterator nested = new CachedIterator();
+            nested.reset();
+            return nested;
+        }
+        it.reset();
+        return it;
     }
 
     /**
@@ -146,7 +148,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
         private boolean nextCalled;
 
         // Iteration Index
-        private Node<E> itrIndexNode = first;
+        private Node<E> itrIndexNode;
 
         // Methods to support iteration
 
@@ -156,6 +158,13 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
         private void reset() {
             itrIndexNode = first;
             nextCalled = false;
+        }
+
+        /**
+         * @return true if this iterator is in the middle of an iteration
+         */
+        private boolean inUse() {
+            return nextCalled || (itrIndexNode != null && itrIndexNode != first);
         }
 
         /**
@@ -233,9 +242,10 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     }
 
     /**
-     * Return size of current LinkedListTest object
+     * Return size of current collection
      */
-    public int size() {
+    @Override
+    public synchronized int size() {
         return this.size;
     }
 }

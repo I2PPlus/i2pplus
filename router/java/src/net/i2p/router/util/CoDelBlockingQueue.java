@@ -143,8 +143,8 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
 
     @Override
     public void clear() {
-        super.clear();
         synchronized(this) {
+            super.clear();
             _first_above_time = 0;
             _drop_next = 0;
             _count = 0;
@@ -169,6 +169,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
 
     /**
      *  Updates stats and possibly drops while draining.
+     *  May exit early if a CoDel drop occurs (poll() returns null for a dropped item).
      */
     @Override
     public int drainTo(Collection<? super E> c) {
@@ -183,6 +184,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
 
     /**
      *  Updates stats and possibly drops while draining.
+     *  May exit early if a CoDel drop occurs (poll() returns null for a dropped item).
      */
     @Override
     public int drainTo(Collection<? super E> c, int maxElements) {
@@ -258,6 +260,8 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     }
 
 
+    private static final int MAX_DROPS_PER_CALL = 8;
+
     /**
      *  @param rv may be null
      *  @return rv or a subequent entry or null if dropped
@@ -280,10 +284,12 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
                     // It's time for the next drop. Drop the current packet and dequeue the next.
                     // The dequeue might take us out of dropping state. If not, schedule the next drop.
                     // A large backlog might result in drop rates so high that the next drop should happen now;
-                    // hence, the while loop.
-                    while (_now >= _drop_next && _dropping) {
+                    // hence, the while loop. Cap iterations to bound lock hold time.
+                    int dropCount = 0;
+                    while (_now >= _drop_next && _dropping && dropCount < MAX_DROPS_PER_CALL) {
                         drop(rv);
                         _count++;
+                        dropCount++;
                         // I2P - we poll here instead of lock so we don't get stuck
                         // inside the lock. If empty, deque() will be called again.
                         rv = super.poll();

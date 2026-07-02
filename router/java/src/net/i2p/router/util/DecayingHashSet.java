@@ -146,9 +146,13 @@ public class DecayingHashSet extends DecayingBloomFilter {
 
     @Override
     public void clear() {
-        _current.clear();
-        _previous.clear();
-        _currentDuplicates.set(0);
+        if (!getWriteLock())
+            return;
+        try {
+            _current.clear();
+            _previous.clear();
+            _currentDuplicates.set(0);
+        } finally { releaseWriteLock(); }
     }
 
     /** super doesn't call clear, but neither do the users, so it seems like we should here */
