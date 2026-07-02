@@ -58,6 +58,12 @@ class TunnelGatewayPumper implements Runnable {
      */
     private static final long REQUEUE_TIME;
 
+    /**
+     * Max time to wait for pumper queue space before dropping the request.
+     * Prevents blocking the I2CP reader thread indefinitely.
+     */
+    private static final long OFFER_TIMEOUT_MS = 50;
+
     static {
         int cores = SystemVersion.getCores();
         long maxMem = SystemVersion.getMaxMemory();
@@ -153,24 +159,22 @@ class TunnelGatewayPumper implements Runnable {
     }
 
     /**
-     * Adds a PumpedTunnelGateway to be pumped, blocking if queue is full.
-     * No new requests are accepted after stopPumping() is called.
+     * Requests pumping for a gateway. Uses a short timeout to avoid blocking
+     * the I2CP reader thread when the pumper queue is full.
      * @param gw the gateway to pump
      */
     public void wantsPumping(PumpedTunnelGateway gw) {
         if (_stop) {
             return;
         }
-        // Retry putting into queue until success or stopped
-        boolean offered = false;
-        while (!offered && !_stop) {
-            try {
-                _wantsPumping.put(gw);
-                offered = true;
-            } catch (InterruptedException ie) {
-                Thread.currentThread().interrupt();
-                if (_stop) break;
+        try {
+            if (!_wantsPumping.offer(gw, OFFER_TIMEOUT_MS, java.util.concurrent.TimeUnit.MILLISECONDS)) {
+                _context.statManager().addRateData("tunnel.pumperQueueFull", 1);
+                if (_log.shouldWarn())
+                    _log.warn("Pumper queue full after " + OFFER_TIMEOUT_MS + "ms, gateway dropped: " + gw);
             }
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -242,7 +246,6 @@ class TunnelGatewayPumper implements Runnable {
         public void timeReached() {
             _backlogged.remove(_ptg);
             if (!_stop) {
-                // Use put with retry in wantsPumping ensures requeue returns
                 wantsPumping(_ptg);
             }
         }
