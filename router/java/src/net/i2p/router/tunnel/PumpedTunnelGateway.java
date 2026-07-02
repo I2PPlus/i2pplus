@@ -131,8 +131,8 @@ class PumpedTunnelGateway extends TunnelGateway {
      * @return true if the message was accepted, false if the prequeue is full
      */
     protected boolean add(PendingGatewayMessage cur) {
-        _messagesSent++;
         if (_prequeue.offer(cur)) {
+            _messagesSent++;
             _pumper.wantsPumping(this);
             return true;
         } else {
@@ -163,7 +163,9 @@ class PumpedTunnelGateway extends TunnelGateway {
         }
 
         if (backlogged) {
-            max = _isInbound ? 1 : 2;
+            // Scale with queue depth: minimum 2, up to 1/10 of pending messages
+            int pending = _prequeue.size();
+            max = _isInbound ? Math.max(1, pending / 20) : Math.max(2, pending / 10);
         } else {
             max = _isInbound
                     ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, MAX_IB_MSGS_PER_PUMP)

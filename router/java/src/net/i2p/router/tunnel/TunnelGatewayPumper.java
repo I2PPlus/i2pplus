@@ -29,8 +29,8 @@ import net.i2p.util.SystemVersion;
  * Thread safety notes:
  *   - Uses a LinkedBlockingQueue with bounded capacity for backpressure.
  *   - Uses a concurrent Set to track backlogged gateways for requeueing.
- *   - Retry with blocking put() ensures no pump request is silently dropped.
- *   - Synchronization around stop flag prevents race conditions with producing new tasks.
+ *   - Non-blocking offer() with timeout prevents I2CP reader stalls.
+ *   - Gateway drops are tracked via tunnel.pumperQueueFull stat.
  */
 class TunnelGatewayPumper implements Runnable {
     private final RouterContext _context;
@@ -133,12 +133,6 @@ class TunnelGatewayPumper implements Runnable {
             }
         }
 
-        long adjusted = (SystemVersion.getCPULoadAvg() > 95) ? REQUEUE_TIME * 3 / 2 : REQUEUE_TIME;
-        if (_log.shouldWarn() && adjusted != REQUEUE_TIME) {
-            _log.warn("Router JVM under sustained high CPU load, increasing pump interval from " + REQUEUE_TIME + " to "
-                    + adjusted + "ms");
-        }
-
         // Interrupt threads to promptly unblock and finish
         for (Thread t : _threads) {
             t.interrupt();
@@ -175,6 +169,7 @@ class TunnelGatewayPumper implements Runnable {
             }
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
+            // Offer interrupted — gateway lost, but flag is restored for upstream handling
         }
     }
 
@@ -194,6 +189,7 @@ class TunnelGatewayPumper implements Runnable {
         PumpedTunnelGateway gw = null;
         List<PendingGatewayMessage> queueBuf = new ArrayList<>(QUEUE_BUFFER);
         boolean requeue;
+        int pumpCount = 0;
 
         while (!_stop) {
             try {
@@ -204,6 +200,10 @@ class TunnelGatewayPumper implements Runnable {
                 requeue = gw.pump(queueBuf);
                 if (requeue) {
                     handleRequeue(gw);
+                }
+                // Report queue depth every 100 pumps
+                if (++pumpCount % 100 == 0) {
+                    _context.statManager().addRateData("tunnel.pumperQueueDepth", _wantsPumping.size());
                 }
             } catch (InterruptedException ie) {
                 Thread.currentThread().interrupt(); // Restore interrupted status
