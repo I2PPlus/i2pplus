@@ -86,7 +86,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final String PROXY_CONN_HEADER = "proxy-connection";
     private static final String PRIORITY_HEADER = "Priority";
     private static final String SEC_GPC_HEADER = "Sec-GPC";
-    private static final String X_FORWARDED_HEADER = "X-Forwarded-For";
     private static final String X_REAL_IP_HEADER = "X-Real-Ip";
 
     /** MUST ALL BE LOWER CASE */
@@ -117,7 +116,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final String X_RUNTIME_HEADER = "x-runtime"; // Rails
     private static final String X_SERVED_BY_HEADER = "x-served-by"; // possible anonymity implications, informational
     private static final String X_STYX_REQ_ID_HEADER = "x-styx-req-id"; // possible anonymity implications, informational
-    private static final String X_TIMER_HEADER = "x-timer"; // possible anonymity implications, informational
 
     // https://httpoxy.org
     private static final String PROXY_HEADER = "proxy";
@@ -130,7 +128,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         CLIENT_SKIPHEADERS.add(PRIORITY_HEADER.toLowerCase(Locale.US));
         CLIENT_SKIPHEADERS.add(PROXY_CONN_HEADER);
         CLIENT_SKIPHEADERS.add(SEC_GPC_HEADER.toLowerCase(Locale.US));
-        //CLIENT_SKIPHEADERS.add(X_FORWARDED_HEADER.toLowerCase(Locale.US));
         CLIENT_SKIPHEADERS.add(X_REAL_IP_HEADER.toLowerCase(Locale.US));
 
         SERVER_SKIPHEADERS.add(AGE_HEADER);
@@ -183,6 +180,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     private long _startedOn = 0L;
     private ConnThrottler _postThrottler;
+    /** @since 0.9.62+ */
+    private static final int HTTP_BLOCKLIST_CLIENT_LIMIT = 512;
+    private BlocklistManager _blocklistManager;
 
     final static String ERR_NOT_FOUND =
          "HTTP/1.1 404 Not Found\r\n" +
@@ -247,20 +247,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "</body>\n" +
          "</html>";
 
-/*
-    private final static String ERR_SSL =
-         "HTTP/1.1 503 Service Unavailable\r\n" +
-         "Content-Type: text/html; charset=utf-8\r\n" +
-         "Cache-Control: no-cache\r\n" +
-         "Connection: close\r\n" +
-         "\r\n" +
-         "<html>\n<head><title>503 Service Unavailable</title></head>\n" +
-         "<center><h1>503 Service Unavailable (SSL not configured)</h1></center>\n" +
-         "<hr>\n" +
-         "</body>\n" +
-         "</html>";
-*/
-
     private final static String ERR_REQUEST_URI_TOO_LONG =
          "HTTP/1.1 414 Request URI too long\r\n" +
          "Content-Type: text/html; charset=utf-8\r\n" +
@@ -271,7 +257,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "<html>\n<head><title>414 Request URI Too Long</title><meta name=color-scheme content=\"light dark\"></head>\n" +
          "<center><h1>414 Request URI too long</h1></center>\n" +
          "<hr>\n" +
-         //"<p>The requested URL contains too many characters and cannot be processed.</p>\n" +
          "</body>" +
          "\n</html>";
 
@@ -285,11 +270,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "<html>\n<head><title>431 Request Header Fields Too Large</title><meta name=color-scheme content=\"light dark\"></head>\n" +
          "<center><h1>431 Request header fields too large</h1></center>\n" +
          "<hr>\n" +
-         //"<p>The request headers submitted by your client are too large and cannot be processed.</p>\n" +
          "</body>\n" +
          "</html>";
 
-    /** @since protected since 0.9.33 for I2PTunnelHTTPClientBase, was private */
+    /** @since 0.9.33 made protected for I2PTunnelHTTPClientBase, was private */
     protected final static String ERR_REQUEST_TIMEOUT =
          "HTTP/1.1 408 Request timeout\r\n" +
          "Content-Type: text/html; charset=utf-8\r\n" +
@@ -314,16 +298,51 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "</body>\n" +
          "</html>";
 
+    /**
+     *  Create an HTTP tunnel server with a private key string.
+     *
+     *  @param host the local address to bind to
+     *  @param port the local port
+     *  @param privData the private key data as a Base64 string
+     *  @param spoofHost the hostname to spoof in the Host header, or null
+     *  @param l the logging instance
+     *  @param notifyThis the event dispatcher for notifications
+     *  @param tunnel the parent tunnel configuration
+     */
     public I2PTunnelHTTPServer(InetAddress host, int port, String privData, String spoofHost, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
         super(host, port, privData, l, notifyThis, tunnel);
         setupI2PTunnelHTTPServer(spoofHost);
     }
 
+    /**
+     *  Create an HTTP tunnel server from a private key file.
+     *
+     *  @param host the local address to bind to
+     *  @param port the local port
+     *  @param privkey the private key file
+     *  @param privkeyname the name for the private key
+     *  @param spoofHost the hostname to spoof in the Host header, or null
+     *  @param l the logging instance
+     *  @param notifyThis the event dispatcher for notifications
+     *  @param tunnel the parent tunnel configuration
+     */
     public I2PTunnelHTTPServer(InetAddress host, int port, File privkey, String privkeyname, String spoofHost, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
         super(host, port, privkey, privkeyname, l, notifyThis, tunnel);
         setupI2PTunnelHTTPServer(spoofHost);
     }
 
+    /**
+     *  Create an HTTP tunnel server from a private key stream.
+     *
+     *  @param host the local address to bind to
+     *  @param port the local port
+     *  @param privData the input stream containing the private key data
+     *  @param privkeyname the name for the private key
+     *  @param spoofHost the hostname to spoof in the Host header, or null
+     *  @param l the logging instance
+     *  @param notifyThis the event dispatcher for notifications
+     *  @param tunnel the parent tunnel configuration
+     */
     public I2PTunnelHTTPServer(InetAddress host, int port, InputStream privData, String privkeyname, String spoofHost, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
         super(host, port, privData, privkeyname, l, notifyThis, tunnel);
         setupI2PTunnelHTTPServer(spoofHost);
@@ -376,25 +395,25 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /** @since 0.9.61+ */
-    private final boolean shouldAddResponseHeaderAllow() {
+    private boolean shouldAddResponseHeaderAllow() {
         Properties opts = getTunnel().getClientOptions();
         return Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_ALLOW));
     }
 
     /** @since 0.9.61+ */
-    private final boolean shouldAddResponseHeaderCacheControl() {
+    private boolean shouldAddResponseHeaderCacheControl() {
         Properties opts = getTunnel().getClientOptions();
         return Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_CACHE_CONTROL));
     }
 
     /** @since 0.9.61+ */
-    private final boolean shouldAddResponseHeaderReferrerPolicy() {
+    private boolean shouldAddResponseHeaderReferrerPolicy() {
         Properties opts = getTunnel().getClientOptions();
         return Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_REFERRER_POLICY));
     }
 
     /** @since 0.9.61+ */
-    private final boolean shouldAddResponseHeaderNoSniff() {
+    private boolean shouldAddResponseHeaderNoSniff() {
         Properties opts = getTunnel().getClientOptions();
         return Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_NOSNIFF));
     }
@@ -572,43 +591,33 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (_log.shouldDebug()) {_log.debug("[HTTPServer] Incoming request for: " + hostname + "\n* Client: " + peerB32);}
                 if (hostname != null && !hostname.endsWith(".i2p") && !hostname.endsWith(".onion")) {
                     InetAddress address = InetAddress.getByName(hostname);
-                    if (address != null) {
-                        if (address.isLinkLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress()) {
+                    if (address.isLinkLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress()) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("[HTTPServer] WARNING! Attempt to access localhost or loopback address via [" + hostname + "]" +
+                                      " -> Adding dest to clients blocklist file \n* Client: " + peerB32);
+                        }
+                        _blocklistManager.logBlockedDestination(peerB32);
+                        isValidRequest = false;
+                        isPossibleExploit = true;
+                    } else if (address.isAnyLocalAddress()) { // check for 0.0.0.0 response (DNS blocking)
+                        if (!hostname.equals("::") || !hostname.equals("0.0.0.0")) {
                             if (_log.shouldWarn()) {
-                                _log.warn("[HTTPServer] WARNING! Attempt to access localhost or loopback address via [" + hostname + "]" +
-                                          " -> Adding dest to clients blocklist file \n* Client: " + peerB32);
+                                _log.warn("[HTTPServer] DNS server appears to be blocking requests to " + hostname +
+                                          " -> Sending Error 403 \n* Client: " + peerB32);
                             }
-                            _blocklistManager.logBlockedDestination(peerB32);
+                            sendError(socket, ERR_FORBIDDEN);
+                            isValidRequest = false;
+                            isPossibleExploit = false;
+                        } else {
+                            sendError(socket, ERR_FORBIDDEN);
                             isValidRequest = false;
                             isPossibleExploit = true;
-                        } else if (address.isAnyLocalAddress()) { // check for 0.0.0.0 response (DNS blocking)
-                            if (!hostname.equals("::") || !hostname.equals("0.0.0.0")) {
-                                if (_log.shouldWarn()) {
-                                    _log.warn("[HTTPServer] DNS server appears to be blocking requests to " + hostname +
-                                              " -> Sending Error 403 \n* Client: " + peerB32);
-                                }
-                                sendError(socket, ERR_FORBIDDEN);
-                                isValidRequest = false;
-                                isPossibleExploit = false;
-                            } else {
-                                sendError(socket, ERR_FORBIDDEN);
-                                isValidRequest = false;
-                                isPossibleExploit = true;
-                            }
-                        } else {
-                            if (_log.shouldInfo() && !hostname.equals(address.getHostAddress())) {
-                                _log.info("[HTTPServer] Hostname " + hostname + " validated" +
-                                          " -> Resolves to: " + address.getHostAddress());
-                            }
-                            isPossibleExploit = false;
                         }
                     } else {
-                        if (_log.shouldWarn()) {
-                            _log.warn("[HTTPServer] Could not resolve " + hostname + " to IP address" +
-                                      " -> Sending Error 404 \n* Client: " + peerB32);
+                        if (_log.shouldInfo() && !hostname.equals(address.getHostAddress())) {
+                            _log.info("[HTTPServer] Hostname " + hostname + " validated" +
+                                      " -> Resolves to: " + address.getHostAddress());
                         }
-                        sendError(socket, ERR_NOT_FOUND);
-                        isValidRequest = false;
                         isPossibleExploit = false;
                     }
                     if (isPossibleExploit) {
@@ -618,7 +627,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                       " -> Sending Error 403 and adding to blocklist \n* Client: " + peerB32);
                         }
                     }
-                    if (!isValidRequest && socket != null) {
+                    if (!isValidRequest) {
                         try {socket.close();}
                         catch (IOException e) { /* ignored */ }
                     }
@@ -832,7 +841,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
 
                 boolean compress = allowGZIP && useGZIP;
-                //boolean addHeaders = shouldAddResponseHeaders();
                 // waiter is set to the return value when the CompressedRequestor is done
                 AtomicInteger waiter = keepalive ? new AtomicInteger() : null;
                 Runnable t = new CompressedRequestor(s, socket, modifiedHeader, getTunnel().getContext(),
@@ -937,7 +945,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         private final ThreadPoolExecutor _tpe;
         private boolean _keepalive;
         private final AtomicInteger _waiter;
-        //private final boolean _addHeaders;
         private static final int BUF_SIZE = 16*1024;
 
         /**
@@ -957,7 +964,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             _tpe = tpe;
             _keepalive = keepalive;
             _waiter = waiter;
-            //_addHeaders = addHeaders;
         }
 
         /**
@@ -1222,6 +1228,15 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             } else {close();}
         }
 
+        /** content types that are already compressed; skip re-compression */
+        private static final Set<String> COMPRESSED_TYPES = new HashSet<>(
+            Arrays.asList("image/gif", "image/jpeg", "image/jpg", "image/png",
+                          "image/tiff", "image/webp", "font/woff2",
+                          "application/compress", "application/bzip2",
+                          "application/gzip", "application/x-bzip",
+                          "application/x-bzip2", "application/x-gzip",
+                          "application/zip"));
+
         /**
          *  Don't compress small responses or images.
          *  Don't compress things that are already compressed.
@@ -1234,22 +1249,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                    // must be null as we write the header in finishHeaders(), can't have two
                    (_contentEncoding == null) &&
                    (_contentType == null ||
-                    ((!_contentType.startsWith("audio/")) &&
-                     (!_contentType.equals("image/gif")) &&
-                     (!_contentType.equals("image/jpeg")) &&
-                     (!_contentType.equals("image/jpg")) &&
-                     (!_contentType.equals("image/png")) &&
-                     (!_contentType.equals("image/tiff")) &&
-                     (!_contentType.equals("image/webp")) &&
-                     (!_contentType.equals("font/woff2")) &&
-                     (!_contentType.startsWith("video/")) &&
-                     (!_contentType.equals("application/compress")) &&
-                     (!_contentType.equals("application/bzip2")) &&
-                     (!_contentType.equals("application/gzip")) &&
-                     (!_contentType.equals("application/x-bzip")) &&
-                     (!_contentType.equals("application/x-bzip2")) &&
-                     (!_contentType.equals("application/x-gzip")) &&
-                     (!_contentType.equals("application/zip"))));
+                    (!_contentType.startsWith("audio/") &&
+                     !_contentType.startsWith("video/") &&
+                     !COMPRESSED_TYPES.contains(_contentType)));
         }
 
         @Override
@@ -1262,9 +1264,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
         @Override
         protected void beginProcessing() throws IOException {
-            //if (_log.shouldInfo())
-            //    _log.info("Beginning compression processing");
-            //out.flush();
             if (shouldCompress()) {
                 _gzipOut = new InternalGZIPOutputStream(out);
                 out = _gzipOut;
@@ -1396,9 +1395,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                  throw new EOFException("EOF reached before the end of the headers");
         }
 
-        //if (_log.shouldDebug())
-        //    _log.debug("Read the http command [" + command.toString() + "]");
-
         int totalSize = command.length();
         int i = 0;
         while (true) {
@@ -1456,10 +1452,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (skip) {continue;}
 
                 addEntry(headers, name, value);
-                //if (_log.shouldDebug()) {
-                //    _log.debug("Reading headers sent by client [" + peerB32.substring(0,6) + "]" +
-                //    "\n* " + name + ": " + value);
-                //}
             }
         }
     }
@@ -1505,23 +1497,15 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
-    /** @since 0.9.62+ */
-    private static final int HTTP_BLOCKLIST_CLIENT_LIMIT = 512;
-    private BlocklistManager _blocklistManager;
-
     private void processBlocklist(I2PSocket socket, StringBuilder command) throws BadRequestException, IOException {
         if (_blocklistManager == null) {return;}
         if (_blocklistManager.shouldBlockRequest(command)) {
             String matchedString = _blocklistManager.getMatchedBlocklistString(command);
             String peerB32 = socket.getPeerDestination().toBase32();
             _blocklistManager.logBlockedDestination(peerB32);
-            try {
-                if (socket != null) {
-                    try {socket.close();}
-                    catch (IOException ioe) {_log.error("[HTTPServer] Error closing socket (" + ioe.getMessage() + ")");}
-                    throw new BadRequestException(command.toString() + "-> Matches blocklist entry \"" + matchedString + "\"");
-                }
-            } catch (BadRequestException bre) {throw bre;}
+            try {socket.close();}
+            catch (IOException ioe) {_log.error("[HTTPServer] Error closing socket (" + ioe.getMessage() + ")");}
+            throw new BadRequestException(command.toString() + "-> Matches blocklist entry \"" + matchedString + "\"");
         }
     }
 
