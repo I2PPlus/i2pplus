@@ -202,7 +202,6 @@ public class EepHead extends EepGet {
             if (x != null) System.out.println(" • Content-Security-Policy: " + x);
             x = get.getXSSProtection();
             if (x != null) System.out.println(" • X-XSS-Protection: " + x);
-            //            System.out.println("Response time: " + "ms"); // TODO response time from request start ->
             // request end
         } else {
             System.out.println(" ✖ No response from: " + url);

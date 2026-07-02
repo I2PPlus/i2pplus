@@ -232,7 +232,6 @@ public abstract class Addresses {
                         // This is super-important on Windows which has 40+ down interfaces
                         // and will also deliver IP addresses for down interfaces,
                         // for example recently disconnected wifi.
-                        //System.out.println("Skipping, down: " + ifc.getDisplayName());
                         continue;
                     }
                     try {

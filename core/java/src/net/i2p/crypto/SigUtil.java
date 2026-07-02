@@ -683,7 +683,6 @@ public final class SigUtil {
         idx = intToASN1(rv, idx, sb.length);
         System.arraycopy(sb, 0, rv, idx, sb.length);
 
-        // System.out.println("post TO asn1\n" + net.i2p.util.HexDump.dump(rv));
         return rv;
     }
 
@@ -718,7 +717,6 @@ public final class SigUtil {
      *  @since 0.8.7, moved to SigUtil in 0.9.9
      */
     private static byte[] aSN1ToSigBytes(byte[] asn, int len) throws SignatureException {
-        // System.out.println("pre from asn1 len=" + len + "\n" + net.i2p.util.HexDump.dump(asn));
         if (asn[0] != 0x30) throw new SignatureException("asn[0] = " + (asn[0] & 0xff));
         // handles total len > 127
         int idx = 2;
@@ -761,7 +759,6 @@ public final class SigUtil {
         if (slen > sublen + 1) throw new SignatureException("S too big " + slen);
         if (slen == sublen + 1) System.arraycopy(asn, idx + 1, rv, sublen, sublen);
         else System.arraycopy(asn, idx, rv, len - slen, slen);
-        // System.out.println("post from asn1\n" + net.i2p.util.HexDump.dump(rv));
         return rv;
     }
 

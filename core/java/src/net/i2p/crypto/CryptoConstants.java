@@ -80,14 +80,10 @@ public final class CryptoConstants {
                 Class<?> cls = Class.forName("org.bouncycastle.jce.spec.ElGamalParameterSpec");
                 Constructor<?> con = cls.getConstructor(BigInteger.class, BigInteger.class);
                 spec = (AlgorithmParameterSpec) con.newInstance(elgp, elgg);
-                // System.out.println("BC ElG spec loaded");
             } catch (Exception e) {
-                // System.out.println("BC ElG spec failed");
-                // e.printStackTrace();
                 spec = I2P_ELGAMAL_2048_SPEC;
             }
         } else {
-            // System.out.println("BC not available");
             spec = I2P_ELGAMAL_2048_SPEC;
         }
         ELGAMAL_2048_SPEC = spec;

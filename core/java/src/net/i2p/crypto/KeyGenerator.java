@@ -505,7 +505,6 @@ public final class KeyGenerator {
         if (pubkey.equals(pubkey2)) System.out.println(type + " private-to-public test PASSED");
         else System.out.println(type + " private-to-public test FAILED");
 
-        // System.out.println("privkey " + keys[1]);
         MessageDigest md = type.getDigestInstance();
         for (int i = 0; i < runs; i++) {
             RandomSource.getInstance().nextBytes(src);

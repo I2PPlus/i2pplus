@@ -54,26 +54,21 @@ public class FileUtil {
      */
     public static final boolean rmdir(File target, boolean failIfNotEmpty) {
         if (!target.exists()) {
-            // System.out.println("info: target does not exist [" + target.getPath() + "]");
             return true;
         }
         if (!target.isDirectory()) {
-            // System.out.println("info: target is not a directory [" + target.getPath() + "]");
             return target.delete();
         } else {
             File[] children = target.listFiles();
             if (children == null) {
-                // System.out.println("info: target null children [" + target.getPath() + "]");
                 return false;
             }
             if ((failIfNotEmpty) && (children.length > 0)) {
-                // System.out.println("info: target is not emtpy[" + target.getPath() + "]");
                 return false;
             }
             for (int i = 0; i < children.length; i++) {
                 if (!rmdir(children[i], failIfNotEmpty)) return false;
 
-                // System.out.println("info: target removed recursively [" + children[i].getPath() + "]");
             }
             return target.delete();
         }
@@ -198,7 +193,6 @@ public class FileUtil {
                 } catch (IOException ioe) { /* ignored */ }
             }
             // if (files > 0 && logLevel <= Log.WARN)
-            //    System.err.println("INFO: " + files + " files extracted to " + targetDir);
         }
     }
 
@@ -243,7 +237,6 @@ public class FileUtil {
                         while ((in.read(buf)) != -1) {
                             // throw the data away
                         }
-                        // System.err.println("INFO: File [" + entry.getName() + "] extracted");
                         in.close();
                     } catch (IOException ioe) {
                         System.err.println("ERROR: Error extracting the zip entry (" + entry.getName() + "]");

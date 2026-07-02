@@ -329,7 +329,6 @@ public class I2PAppContext {
             boolean isPortable = Boolean.parseBoolean(isPortableStr);
             if (isPortable) {
             // In portable we like debug information :)
-            //(new Exception("Initialized by")).printStackTrace();
                 System.err.println("Base directory:   " + _baseDir.getAbsolutePath());
                 System.err.println("Lib directory:    " + _libDir.getAbsolutePath());
                 System.err.println("Config directory: " + _configDir.getAbsolutePath());

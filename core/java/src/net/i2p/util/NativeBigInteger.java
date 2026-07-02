@@ -417,11 +417,9 @@ public class NativeBigInteger extends BigInteger {
     private static String resolveCPUType() {
         if (_isX86) {
             try {
-                // System.out.println("resolveType() x86");
                 CPUInfo c = CPUID.getInfo();
                 try {
                     _cpuModel = c.getCPUModelString();
-                    // System.out.println("CPUModel: " + _cpuModel.toString());
                 } catch (UnknownCPUException e) { /* ignored */ }
                 if (c instanceof VIACPUInfo) {
                     VIACPUInfo viacpu = (VIACPUInfo) c;
@@ -1288,8 +1286,6 @@ public class NativeBigInteger extends BigInteger {
             }
         }
 
-        // System.out.println("Primary: " + primary);
-        // System.out.println("ResourceList: " + rv.toString());
         return rv;
     }
 

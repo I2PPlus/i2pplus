@@ -355,10 +355,8 @@ public final class KeyStoreUtil {
                             count++;
                             X509Certificate cert = (X509Certificate) c;
                             try {
-                                // System.out.println("checking " + alias + " in " + location);
                                 cert.checkValidity();
                                 long expiresIn = cert.getNotAfter().getTime() - System.currentTimeMillis();
-                                // System.out.println("expiration of " + alias + " is in " +
                                 // DataHelper.formatDuration(expiresIn));
                                 if (expiresIn < expiresWithin) {
                                     Log l = I2PAppContext.getGlobalContext()
@@ -1500,7 +1498,6 @@ public final class KeyStoreUtil {
         System.out.println("EdDSA genkey ok? " + ok);
         // ok = createKeys(ksf, DEFAULT_KEYSTORE_PASSWORD, alias + "-ElG", "test cname", "test ou",
         //                        DEFAULT_KEY_VALID_DAYS, "ElGamal", 2048, pw);
-        // System.out.println("ElG genkey ok? " + ok);
     }
 
     private static void testKeygen2(String[] args) throws Exception {

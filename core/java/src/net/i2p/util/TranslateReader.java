@@ -101,7 +101,6 @@ public class TranslateReader extends FilterReader {
         while (true) {
             int c = in.read();
             if (c >= 0) pushit((char) c);
-            // System.err.println("State: " + _state + " char: '" + ((char)c) + "'");
 
             switch (c) {
                 case -1:
@@ -318,7 +317,6 @@ public class TranslateReader extends FilterReader {
      *  reset state
      */
     private void translate() {
-        // System.err.println("Translating: " + _args.toString());
         int argCount = _args.size();
         if (argCount <= 0 || argCount > MAX_ARGS) {
             flushit();

@@ -441,7 +441,6 @@ public final class SelfSignedGenerator {
         // ProviderException thrown here
         byte[] pubbytes = jpub.getEncoded();
         byte[] extbytes = getExtensions(pubbytes, cname, altNames);
-        // System.out.println("Extensions:\n" + HexDump.dump(extbytes));
 
         int len = version.length
                 + serial.length

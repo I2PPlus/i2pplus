@@ -524,7 +524,6 @@ public final class CertUtil {
             dir2 = new File(dir2, REVOCATION_DIR);
             loadCRLs(crls, dir2);
         }
-        // System.out.println("Loaded " + crls.size() + " CRLs");
         CollectionCertStoreParameters ccsp = new CollectionCertStoreParameters(crls);
         try {
             CertStore store = CertStore.getInstance("Collection", ccsp);
@@ -651,7 +650,6 @@ public final class CertUtil {
         Set<X509CRL> crls = new HashSet<>(8);
         File rdir = new File(dir, REVOCATION_DIR);
         loadCRLs(crls, rdir);
-        // System.out.println("Loaded " + crls.size() + " CRLs");
         CollectionCertStoreParameters ccsp = new CollectionCertStoreParameters(crls);
         CertStore store;
         try {

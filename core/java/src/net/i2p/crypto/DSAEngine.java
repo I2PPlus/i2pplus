@@ -376,7 +376,6 @@ public final class DSAEngine {
             k = new NativeBigInteger(160, _context.random());
             ok = k.compareTo(CryptoConstants.dsaq) < 0;
             ok = ok && !k.equals(BigInteger.ZERO);
-            // System.out.println("K picked (ok? " + ok + "): " + k.bitLength() + ": " + k.toString());
         } while (!ok);
 
         BigInteger r = CryptoConstants.dsag.modPowCT(k, CryptoConstants.dsap).mod(CryptoConstants.dsaq);
@@ -564,8 +563,6 @@ public final class DSAEngine {
         jsig.update(data, offset, len);
         boolean rv = jsig.verify(SigUtil.toJavaSig(signature));
         // if (!rv) {
-        //    System.out.println("BAD SIG\n" + net.i2p.util.HexDump.dump(signature.getData()));
-        //    System.out.println("BAD SIG\n" + net.i2p.util.HexDump.dump(sigBytesToASN1(signature.getData())));
         // }
         return rv;
     }

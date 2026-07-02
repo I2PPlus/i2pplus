@@ -442,8 +442,6 @@ public class SU3File {
                 if (avail > 0) throw new IOException(avail + " bytes data after sig");
                 SimpleDataStructure hash = _sigType.getHashInstance();
                 hash.setData(sha);
-                // System.out.println("hash\n" + HexDump.dump(sha));
-                // System.out.println("sig\n" + HexDump.dump(signature.getData()));
                 rv = _context.dsa().verifySignature(signature, hash, _signerPubkey);
             } else {
                 rv = true;
@@ -544,8 +542,6 @@ public class SU3File {
             hash.setData(sha);
             Signature signature = _context.dsa().sign(hash, privkey, sigType);
             if (signature == null) throw new IOException("sig fail");
-            // System.out.println("hash\n" + HexDump.dump(sha));
-            // System.out.println("sig\n" + HexDump.dump(signature.getData()));
             signature.writeBytes(out);
             ok = true;
         } catch (DataFormatException dfe) {
