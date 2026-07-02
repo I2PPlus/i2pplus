@@ -84,10 +84,6 @@ class SearchJob extends JobImpl {
      */
     private static final long REQUEUE_DELAY = 1000;
 
-    // TODO pass to the tunnel dispatcher
-    //private final static int LOOKUP_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_LOOKUP;
-    //private final static int STORE_PRIORITY = OutNetMessage.PRIORITY_HIS_NETDB_STORE;
-
     /**
      * Create a new search for the routingKey specified
      *
@@ -130,7 +126,6 @@ class SearchJob extends JobImpl {
     /** this is now misnamed, as it is only used to determine whether to return floodfill peers only */
     static boolean onlyQueryFloodfillPeers(RouterContext ctx) {
         String forceExplore = ctx.getProperty("router.exploreWhenFloodfill");
-        //if (isCongested(ctx)) {return true;}
         // If we are floodfill, we want the FloodfillPeerSelector (in add()) to include
         // non-ff peers (if required) in DatabaseSearchReplyMessage responses
         // so that Exploration works.
@@ -189,7 +184,7 @@ class SearchJob extends JobImpl {
             if (_log.shouldDebug()) {_log.debug("Search for [" + _state.getTarget().toBase64().substring(0,6) + "] expired");}
             _state.complete();
             fail();
-        } else if (_state.getAttempted().size() > MAX_PEERS_QUERIED) {
+        } else if (_state.getAttemptedSize() > MAX_PEERS_QUERIED) {
             if (_log.shouldInfo()) {_log.info("Too many peers queried (more than " + MAX_PEERS_QUERIED + ")");}
             _state.complete();
             fail();
@@ -226,12 +221,12 @@ class SearchJob extends JobImpl {
             if (_log.shouldDebug()) {_log.debug("Search already completed", new Exception("already completed"));}
             return;
         }
-        int toCheck = getBredth() - _state.getPending().size();
+        int toCheck = getBredth() - _state.getPendingSize();
         if (toCheck <= 0) {
             // too many already pending
             if (_log.shouldInfo()) {
                 _log.info("Too many searches pending -> Throttling (Pending: " +
-                          _state.getPending().size() + ", max: " + getBredth() + ")");
+                          _state.getPendingSize() + ", max: " + getBredth() + ")");
             }
             requeuePending();
             return;
@@ -239,12 +234,11 @@ class SearchJob extends JobImpl {
         int sent = 0;
         Set<Hash> attempted = _state.getAttempted();
         while (sent <= 0) {
-            //boolean onlyFloodfill = onlyQueryFloodfillPeers(getContext());
             boolean onlyFloodfill = true;
             if (_floodfillPeersExhausted && onlyFloodfill && _state.getPending().isEmpty()) {
                 if (_log.shouldWarn()) {
                     _log.warn("No non-Floodfill peers left, and no more search queries pending -> Searched: " +
-                              _state.getAttempted().size() + " (Failed: " + _state.getFailed().size() + ")");
+                              _state.getAttemptedSize() + " (Failed: " + _state.getFailedSize() + ")");
                 }
                 fail();
                 return;
@@ -255,15 +249,15 @@ class SearchJob extends JobImpl {
                     // we tried to find some peers, but there weren't any and no one else is going to answer
                     if (_log.shouldInfo()) {
                         _log.info("No peers left, and no search queries pending! -> Already searched: " +
-                                  _state.getAttempted().size() + " (Failed: " + _state.getFailed().size() + ")");
+                                  _state.getAttemptedSize() + " (Failed: " + _state.getFailedSize() + ")");
                     }
                     fail();
                 } else {
                     // no more to try, but we might get data or close peers from some outstanding requests
                     if (_log.shouldInfo()) {
                         _log.info("No peers left, but search queries still pending!\n* Pending: " +
-                                  _state.getPending().size() + "\n* Queried: " + _state.getAttempted().size() +
-                                  "\n* Failed: " + _state.getFailed().size());
+                                  _state.getPendingSize() + "\n* Queried: " + _state.getAttemptedSize() +
+                                  "\n* Failed: " + _state.getFailedSize());
                     }
                     requeuePending();
                 }
@@ -537,14 +531,14 @@ class SearchJob extends JobImpl {
     private void succeed() {
         if (_log.shouldInfo()) {
             _log.info("Successful search for [" + _state.getTarget().toBase64().substring(0,6) +
-                      "] after " + _state.getAttempted().size() + " peers queried");
+                      "] after " + _state.getAttemptedSize() + " peers queried");
         }
         if (_log.shouldDebug()) {_log.debug("" + _state);}
 
         if (_keepStats) {
             long time = getContext().clock().now() - _state.getWhenStarted();
             getContext().statManager().addRateData("netDb.successTime", time);
-            getContext().statManager().addRateData("netDb.successPeers", _state.getAttempted().size(), time);
+            getContext().statManager().addRateData("netDb.successPeers", _state.getAttemptedSize(), time);
         }
 
         if (_isLease) {
@@ -595,7 +589,6 @@ class SearchJob extends JobImpl {
         if (ds == null) {
             if (SHOULD_RESEND_ROUTERINFO) {
                 ds = _facade.lookupRouterInfoLocally(_state.getTarget());
-                //ds = getContext().netDb().lookupRouterInfoLocally(_state.getTarget());
                 if (ds != null) {
                     _facade.sendStore(_state.getTarget(), ds, null, null, RESEND_TIMEOUT, _state.getSuccessful());
                 }
@@ -606,7 +599,6 @@ class SearchJob extends JobImpl {
             int numSent = 0;
             for (Hash peer : sendTo) {
                 RouterInfo peerInfo = _facade.lookupRouterInfoLocally(peer);
-                //RouterInfo peerInfo = getContext().netDb().lookupRouterInfoLocally(peer);
                 if (peerInfo == null) {continue;}
                 if (resend(peerInfo, (LeaseSet)ds)) {numSent++;}
                 if (numSent >= MAX_LEASE_RESEND) {break;}
@@ -658,12 +650,11 @@ class SearchJob extends JobImpl {
         }
 
         long time = getContext().clock().now() - _state.getWhenStarted();
-        int attempted = _state.getAttempted().size();
+        int attempted = _state.getAttemptedSize();
         getContext().statManager().addRateData("netDb.failedAttemptedPeers", attempted, time);
 
         if (_keepStats) {
             getContext().statManager().addRateData("netDb.failedTime", time);
-            //_facade.fail(_state.getTarget());
         }
         if (_onFailure != null) {getContext().jobQueue().addJob(_onFailure);}
         _facade.searchComplete(_state.getTarget());

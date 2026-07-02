@@ -66,6 +66,11 @@ class SearchState {
     }
 
     public Hash getTarget() {return _searchKey;}
+    public int getPendingSize() {
+        synchronized (_pendingPeers) {
+            return _pendingPeers.size();
+        }
+    }
     public Set<Hash> getPending() {
         synchronized (_pendingPeers) {
             return new HashSet<>(_pendingPeers);
@@ -74,6 +79,11 @@ class SearchState {
     public Set<Hash> getAttempted() {
         synchronized (_attemptedPeers) {
             return new HashSet<>(_attemptedPeers);
+        }
+    }
+    public int getAttemptedSize() {
+        synchronized (_attemptedPeers) {
+            return _attemptedPeers.size();
         }
     }
     public Set<Hash> getClosestAttempted(int max) {
@@ -107,6 +117,16 @@ class SearchState {
     public Set<Hash> getFailed() {
         synchronized (_failedPeers) {
             return new HashSet<>(_failedPeers);
+        }
+    }
+    public int getFailedSize() {
+        synchronized (_failedPeers) {
+            return _failedPeers.size();
+        }
+    }
+    public int getSuccessfulSize() {
+        synchronized (_successfulPeers) {
+            return _successfulPeers.size();
         }
     }
 
@@ -293,7 +313,7 @@ class SearchState {
 
     @Override
     public String toString() {
-        Boolean debug = _log.shouldDebug();
+        boolean debug = _log.shouldDebug();
         StringBuilder buf = new StringBuilder(256);
         buf.append(" Search for [").append(_searchKey.toBase64().substring(0,6)).append("]");
         if (_successfulPeers.size() <= 0) {buf.append(" in progress...");}

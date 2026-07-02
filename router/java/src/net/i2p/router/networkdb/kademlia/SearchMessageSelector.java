@@ -56,7 +56,7 @@ class SearchMessageSelector implements MessageSelector {
 
         // So we don't drop outstanding replies after receiving the value
         // > 1 to account for the 'current' match
-        if (_state.getPending().size() > 1)
+        if (_state.getPendingSize() > 1)
             return true;
 
         if (_found) {

@@ -68,7 +68,7 @@ class StoreState {
     public Hash getTarget() { return _key; }
     public DatabaseEntry getData() { return _data; }
 
-public int getPendingCount() {
+    public int getPendingCount() {
         synchronized (_pendingPeers) {
             return _pendingPeers.size();
         }
@@ -126,7 +126,7 @@ public int getPendingCount() {
     public long getWhenStarted() { return _started; }
     public long getWhenCompleted() { return _completed; }
 
-    /*
+    /**
      * @since 0.7.10
      */
     public void addPending(Hash peer, MessageWrapper.WrappedMessage msg) {
@@ -134,7 +134,7 @@ public int getPendingCount() {
         _pendingMessages.put(peer, msg);
     }
 
-    /*
+    /**
      * @return the message or null; will only return the message once, so
      * tags are only acked or failed once.
      * @since 0.7.10
@@ -176,7 +176,9 @@ public int getPendingCount() {
         synchronized (_successfulPeers) {
             _successfulPeers.add(peer);
         }
-        _completeCount++;
+        synchronized (this) {
+            _completeCount++;
+        }
         return rv;
     }
 

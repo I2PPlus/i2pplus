@@ -25,8 +25,7 @@ import net.i2p.data.Hash;
  * @author moved from Hash.java by zzz
  */
 class LocalHash extends Hash {
-    //private final static Log _log = new Log(LocalHash.class);
-    private /* FIXME final FIXME */ Map<Hash, byte[]> _xorCache;
+    private Map<Hash, byte[]> _xorCache;
 
     private static final int MAX_CACHED_XOR = 1024;
 

@@ -257,7 +257,8 @@ class FloodfillVerifyStoreJob extends JobImpl {
             }
         }
         if (keyCert != null) {
-            while (true) {
+            int limit = 0;
+            while (limit++ < 100) {
                 List<Hash> peers = sel.selectFloodfillParticipants(rkey, 1, _ignore, _facade.getKBuckets());
                 if (peers.isEmpty()) {break;}
                 Hash peer = peers.get(0);

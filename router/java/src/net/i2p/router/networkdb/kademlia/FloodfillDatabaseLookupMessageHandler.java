@@ -133,7 +133,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             if (_log.shouldWarn() && dlm.getFrom() != null && _loggedBans.add(dlm.getFrom())) {
                 StringBuilder message = new StringBuilder(128);
                 message.append("Dropping ").append(isDirect ? "direct " : "").append(searchType).append(" lookup from ")
-                       .append(isFF ? "floodfill ": "").append("[").append(fromBase64.substring(0,6)).append("]");
+                       .append(isFF ? "floodfill " : "").append("[").append(fromBase64.substring(0,6)).append("]");
 
                 if (!isDirect && _log.shouldInfo()) {message.append(" via [TunnelId ").append(dlm.getReplyTunnel()).append("]");}
                 message.append(" and banning for 10m -> Max 60 requests in 30s or 10/s exceeded");

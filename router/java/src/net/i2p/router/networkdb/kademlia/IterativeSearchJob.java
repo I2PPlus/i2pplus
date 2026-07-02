@@ -338,7 +338,7 @@ public class IterativeSearchJob extends FloodSearchJob {
           cancelJob();
           return;
         }
-        if (_expiration - 1500 < now)  {_expiration = 1500;}
+        if (_expiration - 1500 < now)  {_expiration = now + 1500;}
         while (true) {
             Hash peer = null;
             final int done, pend;

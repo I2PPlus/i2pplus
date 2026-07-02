@@ -33,7 +33,7 @@ class RefreshRoutersJob extends JobImpl {
     private final FloodfillNetworkDatabaseFacade _facade;
     private List<Hash> _routers;
 
-    private static long RESTART_DELAY_MS = 60 * 1000L;            // Default restart delay 1 min
+    private long _restartDelayMs = 60 * 1000L;            // Default restart delay 1 min
 
     // Shared Random instance for efficient random number generation
     private static final Random _random = new Random();
@@ -66,7 +66,7 @@ class RefreshRoutersJob extends JobImpl {
         if (_routers == null || _routers.isEmpty()) {
             adjustRestartDelayBasedOnNetDbCount();
             logRefreshCompletion();
-            requeue(RESTART_DELAY_MS);
+            requeue(_restartDelayMs);
             _routers = null;
             return;
         }
@@ -118,17 +118,17 @@ class RefreshRoutersJob extends JobImpl {
     }
 
     /**
-     * Adjust RESTART_DELAY_MS based on known router count and uptime.
+     * Adjust _restartDelayMs based on known router count and uptime.
      */
     private void adjustRestartDelayBasedOnNetDbCount() {
         int netDbCount = getContext().netDb().getKnownRouters();
         long uptime = getContext().router().getUptime();
         if (uptime < 60 * 60 * 1000L) {
-            RefreshRoutersJob.RESTART_DELAY_MS = 30 * 1000L;
+            _restartDelayMs = 30 * 1000L;
         } else if (netDbCount > 10000) {
-            RefreshRoutersJob.RESTART_DELAY_MS *= 3;
+            _restartDelayMs *= 3;
         } else if (netDbCount > 6000) {
-            RefreshRoutersJob.RESTART_DELAY_MS *= 2;
+            _restartDelayMs *= 2;
         }
     }
 
@@ -139,10 +139,10 @@ class RefreshRoutersJob extends JobImpl {
         int netDbCount = getContext().netDb().getKnownRouters();
         if (netDbCount > 10000) {
             _log.info(String.format("Finished refreshing NetDb; over 5000 known routers, job will rerun in %dm",
-                (RESTART_DELAY_MS / 1000 / 60)));
+                (_restartDelayMs / 1000 / 60)));
         } else {
             _log.info(String.format("Finished refreshing NetDb routers; job will rerun in %ds",
-                (RESTART_DELAY_MS / 1000)));
+                (_restartDelayMs / 1000)));
         }
     }
 

@@ -35,8 +35,6 @@ public class MessageWrapper {
 
     private MessageWrapper() {}
 
-    //private static final Log _log = RouterContext.getGlobalContext().logManager().getLog(MessageWrapper.class);
-
     private static final int NETDB_TAGS_TO_DELIVER = 6;
     private static final int NETDB_LOW_THRESHOLD = 3;
 
@@ -80,8 +78,6 @@ public class MessageWrapper {
         TagSetHandle tsh = null;
         if (!sentTags.isEmpty())
             tsh = skm.tagsDelivered(sentTo, sentKey, sentTags);
-        //if (_log.shouldDebug())
-        //    _log.debug("Sent to: " + to.getIdentity().getHash() + " with key: " + sentKey + " and tags: " + sentTags.size());
         return new WrappedMessage(msg, skm, sentTo, sentKey, tsh);
     }
 
@@ -112,8 +108,6 @@ public class MessageWrapper {
         void acked() {
             if (this.tsh != null) {
                 this.skm.tagsAcked(this.sentTo, this.sessionKey, this.tsh);
-                //if (_log.shouldDebug())
-                //    _log.debug("Tags acked for key: " + this.sessionKey);
             }
         }
 
@@ -121,8 +115,6 @@ public class MessageWrapper {
         void fail() {
             if (this.tsh != null) {
                 this.skm.failTags(this.sentTo, this.sessionKey, this.tsh);
-                //if (_log.shouldDebug())
-                //    _log.debug("Tags NOT acked for key: " + this.sessionKey);
             }
         }
     }

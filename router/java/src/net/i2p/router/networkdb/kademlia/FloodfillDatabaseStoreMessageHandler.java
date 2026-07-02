@@ -47,7 +47,7 @@ public class FloodfillDatabaseStoreMessageHandler implements HandlerJobBuilder {
     }
 
     public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {
-        DatabaseStoreMessage dsm = (DatabaseStoreMessage)receivedMessage;
+        DatabaseStoreMessage dsm = (DatabaseStoreMessage) receivedMessage;
         // store to client db if received by that client
         Hash by = dsm.getEntry().getReceivedBy();
         FloodfillNetworkDatabaseFacade netdb;

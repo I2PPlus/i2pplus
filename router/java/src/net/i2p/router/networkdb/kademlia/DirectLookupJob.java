@@ -68,7 +68,6 @@ class DirectLookupJob extends FloodOnlySearchJob {
     @Override
     void success() {
         // don't give him any credit
-        //getContext().profileManager().dbLookupSuccessful(_to, System.currentTimeMillis()-_created);
         _facade.complete(_key);
         RouterContext ctx = getContext();
         for (Job j : _onFind) {

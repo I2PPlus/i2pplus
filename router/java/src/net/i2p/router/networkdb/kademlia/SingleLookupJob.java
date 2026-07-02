@@ -23,7 +23,6 @@ import net.i2p.util.SystemVersion;
  * to prevent resource exhaustion during high-volume search responses.
  */
 class SingleLookupJob extends JobImpl {
-    //private final Log _log;
     private final DatabaseSearchReplyMessage _dsrm;
 
     /**
@@ -34,7 +33,6 @@ class SingleLookupJob extends JobImpl {
 
     public SingleLookupJob(RouterContext ctx, DatabaseSearchReplyMessage dsrm) {
         super(ctx);
-        //_log = ctx.logManager().getLog(getClass());
         _dsrm = dsrm;
     }
 

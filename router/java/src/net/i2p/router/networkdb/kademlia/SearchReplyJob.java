@@ -84,12 +84,7 @@ class SearchReplyJob extends JobImpl {
                     //       the floodfill's behavior
                     // This keeps us from continually chasing blocklisted floodfills
                     if (getContext().banlist().isBanlisted(peer)) {
-                    //    if (_log.shouldInfo())
-                    //        _log.info("Not looking for a banlisted peer...");
-                    //    getContext().statManager().addRateData("netDb.searchReplyValidationSkipped", 1, 0);
                     } else {
-                        //getContext().netDb().lookupRouterInfo(peer, new ReplyVerifiedJob(getContext(), peer), new ReplyNotVerifiedJob(getContext(), peer), _timeoutMs);
-                        //_repliesPendingVerification++;
                         shouldAdd = true;
                     }
                 } else {

@@ -41,7 +41,7 @@ class LookupThrottler {
     private final int MAX_NON_FF_LOOKUPS;
     private final long CLEAN_TIME;
     private final FloodfillNetworkDatabaseFacade _facade;
-    private int _max;
+    private volatile int _max;
 
     LookupThrottler(FloodfillNetworkDatabaseFacade facade) {
         this(facade, DEFAULT_MAX_LOOKUPS, DEFAULT_MAX_NON_FF_LOOKUPS, DEFAULT_CLEAN_TIME);

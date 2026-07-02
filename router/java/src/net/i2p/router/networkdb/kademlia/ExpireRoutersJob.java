@@ -49,13 +49,6 @@ class ExpireRoutersJob extends JobImpl {
         if (getContext().commSystem().getStatus() != Status.DISCONNECTED &&
             _facade.getAllRouters().size() > 1000) {
             int removed = expireKeys();
-/**
-            if (_log.shouldLog(Log.INFO))
-                _log.info("(dbid: " + _facade
-                          + "; db size: " + _facade.getKnownRouters()
-                          + ") Routers expired: " + removed);
-            }
-**/
             if (_log.shouldInfo())
                 if (removed == 1)
                     _log.info("Deleted " + removed + " expired RouterInfo file from NetDb");

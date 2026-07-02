@@ -648,7 +648,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     @Override
     public boolean floodfillEnabled() {
-        synchronized(this) {return _floodfillEnabled;}
+        return _floodfillEnabled;
     }
 
     /**

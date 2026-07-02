@@ -40,7 +40,7 @@ class FloodfillMonitorJob extends JobImpl {
 
     private static final int MIN_FF = 2000;
     private static final int MAX_FF = 999999;
-    private Boolean autoff = true;
+    private boolean autoff = true;
 
     public FloodfillMonitorJob(RouterContext context, FloodfillNetworkDatabaseFacade facade) {
         super(context);
