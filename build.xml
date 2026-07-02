@@ -932,7 +932,7 @@
     </exec>
     <echo message="Build number is now: ${new.i2p.build.number}${build.extra}"/>
     <replaceregexp byline="true" file="router/java/src/net/i2p/router/RouterVersion.java"
-      match='(^\s+public\s+final\s+static\s+long\s+BUILD\s+=\s+)[0-9]+;' replace='\1${new.i2p.build.number};'/>
+      match='(^\s+public\s+static\s+final\s+long\s+BUILD\s+=\s+)[0-9]+;' replace='\1${new.i2p.build.number};'/>
   </target>
 
   <target name="bumpBuildTime">
