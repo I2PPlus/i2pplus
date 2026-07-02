@@ -21,7 +21,7 @@ import net.i2p.util.ConcurrentHashSet;
  * <p>
  * Performance characteristics:
  * <ul>
- *   <li>Zero false positive rate for ≤8 byte keys</li>
+ *   <li>Zero false positive rate for ≤8 byte keys (lossy hash for larger keys)</li>
  *   <li>5.4E-20 false positive rate for larger keys</li>
  *   <li>Twice as fast as DBF in benchmarks</li>
  *   <li>Space-proportional traffic handling</li>
@@ -139,7 +139,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
         }
         if (seen) {
             // why increment if addIfNew == false? Only used for stats...
-            _currentDuplicates++;
+            _currentDuplicates.incrementAndGet();
         }
         return seen;
     }
@@ -148,7 +148,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
     public void clear() {
         _current.clear();
         _previous.clear();
-        _currentDuplicates = 0;
+        _currentDuplicates.set(0);
     }
 
     /** super doesn't call clear, but neither do the users, so it seems like we should here */
@@ -170,8 +170,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
             _previous = _current;
             _current = tmp;
             _current.clear();
-            dups = _currentDuplicates;
-            _currentDuplicates = 0;
+            dups = _currentDuplicates.getAndSet(0);
         } finally { releaseWriteLock(); }
 
         if (_log.shouldDebug())

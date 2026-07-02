@@ -1,6 +1,7 @@
 package net.i2p.router.util;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
@@ -46,7 +47,7 @@ public class DecayingBloomFilter {
     protected final int _entryBytes;
     private final byte[][] _extenders;
     private final long _longToEntryMask;
-    protected long _currentDuplicates;
+    protected final AtomicLong _currentDuplicates = new AtomicLong();
     protected volatile boolean _keepDecaying;
     protected final SimpleTimer2.TimedEvent _decayEvent;
     /** just for logging */
@@ -173,7 +174,7 @@ public class DecayingBloomFilter {
         }
     }
 
-    public long getCurrentDuplicateCount() { return _currentDuplicates; }
+    public long getCurrentDuplicateCount() { return _currentDuplicates.get(); }
 
     /** unsynchronized but only used for logging elsewhere */
     public int getInsertedCount() {
@@ -267,7 +268,7 @@ public class DecayingBloomFilter {
             if (!seen)
                 seen = _previous.locked_member(key);
             if (seen) {
-                _currentDuplicates++;
+                _currentDuplicates.incrementAndGet();
                 _current.release(key);
                 return true;
             } else {
@@ -283,7 +284,7 @@ public class DecayingBloomFilter {
             if (!seen)
                 seen = _previous.locked_member(key);
             if (seen) {
-                _currentDuplicates++;
+                _currentDuplicates.incrementAndGet();
                 _current.release(key);
                 return true;
             } else {
@@ -302,7 +303,7 @@ public class DecayingBloomFilter {
         try {
             _current.clear();
             _previous.clear();
-            _currentDuplicates = 0;
+            _currentDuplicates.set(0);
         } finally { releaseWriteLock(); }
     }
 
@@ -325,8 +326,7 @@ public class DecayingBloomFilter {
             _previous = _current;
             _current = tmp;
             _current.clear();
-            dups = _currentDuplicates;
-            _currentDuplicates = 0;
+            dups = _currentDuplicates.getAndSet(0);
         } finally { releaseWriteLock(); }
         if (_log.shouldDebug())
             _log.debug("Decaying the " + _name + " filter after inserting " + currentCount
