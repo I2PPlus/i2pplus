@@ -36,7 +36,7 @@ class OutboundMessageState implements CDPQEntry {
     private int _pushCount;
     private int _maxSends;
     // we can't use the ones in _message since it is null for injections
-    private long _enqueueTime;
+    private volatile long _enqueueTime;
     private volatile long _seqNum;
     /** how many bytes push() is allowed to send */
     private int _allowedSendBytes;
@@ -333,6 +333,7 @@ class OutboundMessageState implements CDPQEntry {
      * @since 0.9.54
      */
     public synchronized boolean acked(int fragmentNum) {
+        if (fragmentNum < 0 || fragmentNum >= _numFragments) {return isComplete();}
         _fragmentAcks &= ~mask(fragmentNum);
         return isComplete();
     }
@@ -449,7 +450,7 @@ class OutboundMessageState implements CDPQEntry {
         } else if (fragmentNum + 1 == _numFragments) {
             int last = _messageBuf.length - (fragmentNum * _fragmentSize);
             last -= SSU2Util.DATA_FOLLOWON_EXTRA_SIZE;
-            return last;
+            return Math.max(0, last);
         } else {
             return _fragmentSize;
         }

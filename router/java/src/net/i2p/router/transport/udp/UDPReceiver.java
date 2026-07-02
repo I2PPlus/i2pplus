@@ -75,6 +75,11 @@ class UDPReceiver {
         if (_log.shouldInfo()) {_log.info("Received UDP packet from " + packet);}
 
         RemoteHostId from = packet.getRemoteHost();
+        if (from == null) {
+            if (_log.shouldWarn()) {_log.warn("Dropping UDP packet with null RemoteHostId");}
+            packet.release();
+            return 0;
+        }
         if (_transport.isInDropList(from)) {
             if (_log.shouldInfo()) {_log.info("Ignoring UDP packet from the drop-listed peer: " + from);}
             _context.statManager().addRateData("udp.ignorePacketFromDroplist", packet.getLifetime());
@@ -111,9 +116,11 @@ class UDPReceiver {
                 if (IS_ANDROID) {dpacket.setLength(UDPPacket.MAX_PACKET_SIZE);}
 
                 while (!_context.throttle().acceptNetworkMessage()) {
-                    try {Thread.sleep(10);}
+                    try {Thread.sleep(Math.min(100, 10));}
                     catch (InterruptedException ie) {
                         Thread.currentThread().interrupt();
+                        _keepRunning = false;
+                        break;
                     }
                 }
 

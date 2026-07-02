@@ -53,13 +53,13 @@ public class PeerState {
     /** when did we last send them a packet? */
     private long _lastSendTime;
     /** when did we last send them a message that was ACKed */
-    private long _lastSendFullyTime;
+    private volatile long _lastSendFullyTime;
     /** when did we last send them a ping? */
     private long _lastPingTime;
     /** when did we last receive a packet from them? */
-    private long _lastReceiveTime;
+    private volatile long _lastReceiveTime;
     /** how many consecutive messages have we sent and not received an ACK to */
-    private int _consecutiveFailedSends;
+    private volatile int _consecutiveFailedSends;
     /** when did we last send ACKs to the peer? */
     protected volatile long _lastACKSend;
     /** when did we decide we need to ACK to this peer? */
@@ -102,7 +102,7 @@ public class PeerState {
      */
     private long _theyRelayToUsAs;
     /** what is the largest packet we can currently send to the peer? */
-    protected int _mtu;
+    protected volatile int _mtu;
     private int _mtuReceive;
     /** what is the largest packet we will ever send to the peer? */
     private int _largeMTU;
@@ -133,7 +133,7 @@ public class PeerState {
     private final AtomicBoolean _fastRetransmit = new AtomicBoolean();
 
     /** how many dup packets were received within the last RETRANSMISSION_PERIOD_WIDTH packets */
-    protected int _packetsReceivedDuplicate;
+    protected volatile int _packetsReceivedDuplicate;
     private int _packetsReceived;
     private volatile boolean _mayDisconnect;
 
@@ -964,7 +964,7 @@ public class PeerState {
      *  NOTE: ECN sending is unimplemented, this is never called.
      */
     void ECNReceived() {
-        synchronized(this) {congestionOccurred();}
+        synchronized(_outboundLock) {congestionOccurred();}
         _context.statManager().addRateData("udp.congestionOccurred", _sendWindowBytes.get());
     }
 

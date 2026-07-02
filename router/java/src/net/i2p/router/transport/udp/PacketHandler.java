@@ -126,7 +126,10 @@ class PacketHandler {
             catch (InterruptedException ie) {
                 Thread.currentThread().interrupt();
             }
-            if (rv != null && rv.getMessageType() == TYPE_POISON) {return null;}
+            if (rv != null && rv.getMessageType() == TYPE_POISON) {
+                rv.release();
+                return null;
+            }
         }
         //_context.statManager().addRateData("udp.receiveRemaining", remaining, 0);
         return rv;
@@ -314,6 +317,7 @@ class PacketHandler {
                         _log.warn("Received BAD Destination Connection ID \n* " + header +
                                   " (" + packet.getPacket().getLength() + " bytes) on " + state);
                     }
+                    return false;
                 }
                 type = header.getType();
             } else {

@@ -932,7 +932,7 @@ class EstablishmentManager {
     void receiveSessionCreated(OutboundEstablishState2 state, UDPPacket packet) {
         if (state == null) return;
         if (state != null && isPeerBanned(state)) {
-            _inboundStates.remove(state.getRemoteHostId());
+            _outboundStates.remove(state.getRemoteHostId());
             return;
         }
 
@@ -965,7 +965,7 @@ class EstablishmentManager {
     void receiveRetry(OutboundEstablishState2 state, UDPPacket packet) {
         if (state == null) return;
         if (state != null && isPeerBanned(state)) {
-            _inboundStates.remove(state.getRemoteHostId());
+            _outboundStates.remove(state.getRemoteHostId());
             return;
         }
 
@@ -1174,6 +1174,10 @@ class EstablishmentManager {
         PeerState peer;
         InboundEstablishState2 state2 = (InboundEstablishState2) state;
         peer = state2.getPeerState();
+        if (peer == null) {
+            if (_log.shouldWarn()) {_log.warn("[SSU] Inbound established but no PeerState for " + state);}
+            return;
+        }
 
         if (_log.shouldDebug())
             _log.debug("Inbound SSU handle successfully established to [" + peer.getRemotePeer().toBase64().substring(0,6) + "] \n* " + state);
@@ -1227,6 +1231,10 @@ class EstablishmentManager {
 
         long now = _context.clock().now();
         RouterIdentity remote = state.getRemoteIdentity();
+        if (remote == null) {
+            if (_log.shouldWarn()) {_log.warn("[SSU] Outbound established but no remote identity for " + state);}
+            return null;
+        }
         // only if == state
         RemoteHostId claimed = state.getClaimedAddress();
         if (claimed != null) {_outboundByClaimedAddress.remove(claimed, state);}

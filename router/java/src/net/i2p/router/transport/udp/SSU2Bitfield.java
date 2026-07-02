@@ -93,7 +93,7 @@ class SSU2Bitfield {
      *
      * @throws IndexOutOfBoundsException if bit is smaller then zero
      */
-    public boolean get(long bit) {
+    public synchronized boolean get(long bit) {
         if (bit < 0) {throw new IndexOutOfBoundsException(Long.toString(bit));}
         bit -= offset;
         if (bit < 0 || bit >= size) {return false;}

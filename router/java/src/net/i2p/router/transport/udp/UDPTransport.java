@@ -128,14 +128,14 @@ public class UDPTransport extends TransportImpl {
     private final IntroductionManager _introManager;
     private final ExpirePeerEvent _expireEvent;
     private final PeerTestEvent _testEvent;
-    private Status _reachabilityStatus;
-    private Status _reachabilityStatusPending;
+    private volatile Status _reachabilityStatus;
+    private volatile Status _reachabilityStatusPending;
     // only for logging, to be removed
-    private long _reachabilityStatusLastUpdated;
-    private int _reachabilityStatusUnchanged;
+    private volatile long _reachabilityStatusLastUpdated;
+    private volatile int _reachabilityStatusUnchanged;
     private long _v4IntroducersSelectedOn;
     private long _v6IntroducersSelectedOn;
-    private long _lastInboundReceivedOn;
+    private volatile long _lastInboundReceivedOn;
     private int _mtu = PeerState.MIN_MTU;
     private int _mtu_ipv6 = PeerState.MIN_IPV6_MTU;
     private int _mtu_ssu2;
@@ -148,7 +148,7 @@ public class UDPTransport extends TransportImpl {
      *  Do we have a public IPv6 address?
      */
     private volatile boolean _haveIPv6Address;
-    private long _lastInboundIPv6;
+    private volatile long _lastInboundIPv6;
     private final int _min_peers;
     private final int _min_v6_peers;
 
@@ -887,9 +887,8 @@ public class UDPTransport extends TransportImpl {
         destroyAll();
         for (UDPEndpoint endpoint : _endpoints) {
             endpoint.shutdown();
-            // should we remove?
-            _endpoints.remove(endpoint);
         }
+        _endpoints.clear();
         if (_handler != null)
             _handler.shutdown();
         if (_pusher != null)
@@ -1038,7 +1037,9 @@ public class UDPTransport extends TransportImpl {
     private void addSSU2Options(Properties props) {
         // Unlike in NTCP2, we need the intro key whether firewalled or not
         props.setProperty("i", _ssu2B64StaticIntroKey);
-        props.setProperty("s", _ssu2B64StaticPubKey);
+        if (_ssu2B64StaticPubKey != null) {
+            props.setProperty("s", _ssu2B64StaticPubKey);
+        }
         props.setProperty("v", SSU2_VERSION);
     }
 
@@ -2249,6 +2250,7 @@ public class UDPTransport extends TransportImpl {
      *  @since 0.8.9
      */
     void sendDestroy(PeerState peer, int reasonCode) {
+        if (!(peer instanceof PeerState2)) {return;}
         UDPPacket pkt;
             try {
                 pkt = _packetBuilder2.buildSessionDestroyPacket(reasonCode, (PeerState2) peer);

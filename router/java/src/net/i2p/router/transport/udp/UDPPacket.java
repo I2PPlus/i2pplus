@@ -76,7 +76,7 @@ class UDPPacket implements CDPQEntry {
      * Provides new instances for the {@link TryCache}.
      */
     private static class PacketFactory implements TryCache.ObjectFactory<UDPPacket> {
-        static RouterContext context;
+        static volatile RouterContext context;
 
         @Override
         public UDPPacket newInstance() {

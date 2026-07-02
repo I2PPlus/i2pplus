@@ -69,7 +69,7 @@ class OutboundMessageFragments {
     public synchronized void shutdown() {
         _alive = false;
         _activePeers.clear();
-        synchronized (_activePeers) {_activePeers.notify();}
+        nudge();
     }
 
     void dropPeer(PeerState peer) {
@@ -155,7 +155,7 @@ class OutboundMessageFragments {
         // Avoid sync if possible ... no, this doesn't always work.
         // Also note that the iterator in getNextVolley may have alreay passed us, or not reflected the addition.
         if (added || size <= 0 || peer.getSendWindowBytesRemaining() >= size) {
-            synchronized (_activePeers) {_activePeers.notify();}
+            nudge();
         }
     }
 
@@ -186,7 +186,14 @@ class OutboundMessageFragments {
             }
 
             // Get the next peer in the round-robin list
-            PeerState p = _activePeers.get(_peerIndex++);
+            PeerState p;
+            try {
+                p = _activePeers.get(_peerIndex++);
+            } catch (IndexOutOfBoundsException e) {
+                // Concurrent dropPeer() shrank the list
+                _peerIndex = 0;
+                continue;
+            }
             peersProcessed++;
 
             // Clean up completed messages
@@ -317,7 +324,7 @@ class OutboundMessageFragments {
                 if (sendNext.isEmpty()) {
                     nextDataSize += SSU2Util.FIRST_FRAGMENT_HEADER_SIZE;
                 } else {
-                    nextDataSize += SSU2Util.DATA_FOLLOWON_EXTRA_SIZE;
+                    nextDataSize += SSU2Payload.BLOCK_HEADER_SIZE;
                 }
 
                 // Check if it fits
@@ -329,11 +336,13 @@ class OutboundMessageFragments {
             }
 
             if (!sendNext.isEmpty()) {
-                UDPPacket pkt;
-                try {
-                    pkt = _builder2.buildPacket(sendNext, (PeerState2) peer);
-                } catch (IOException ioe) {
-                    pkt = null;
+                UDPPacket pkt = null;
+                if (peer instanceof PeerState2) {
+                    try {
+                        pkt = _builder2.buildPacket(sendNext, (PeerState2) peer);
+                    } catch (IOException ioe) {
+                        pkt = null;
+                    }
                 }
 
                 if (pkt != null) {
@@ -344,8 +353,10 @@ class OutboundMessageFragments {
                     _context.statManager().addRateData("udp.sendFragmentsPerPacket", sendNext.size());
                 } else {
                     if (_log.shouldWarn()) {
-                        _log.info("Building UDP packet FAIL for " + DataHelper.toString(sendNext) + " to: " + peer);
+                        _log.warn("Building UDP packet FAIL for " + DataHelper.toString(sendNext) + " to: " + peer);
                     }
+                    // Requeue fragments so they aren't permanently lost
+                    remaining.addAll(sendNext);
                     continue;
                 }
 

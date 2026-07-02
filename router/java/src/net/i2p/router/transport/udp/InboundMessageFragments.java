@@ -17,7 +17,7 @@ import net.i2p.router.util.DecayingHashSet;
 class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
     private final RouterContext _context;
     /** list of message IDs recently received, so we can ignore in flight dups */
-    private DecayingBloomFilter _recentlyCompletedMessages;
+    private volatile DecayingBloomFilter _recentlyCompletedMessages;
     private final UDPTransport _transport;
     private final MessageReceiver _messageReceiver;
     private volatile boolean _alive;

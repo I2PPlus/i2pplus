@@ -670,8 +670,8 @@ class PacketBuilder2 {
             pkt.setLength(len + SHORT_HEADER_SIZE);
             SSU2Header.encryptShortHeader(packet, hdrKey1, hdrKey2);
             pkt.setSocketAddress(state.getSentAddress());
-            packet0.setMessageType(TYPE_CONF);
-            packet0.setPriority(PRIORITY_HIGH);
+            packet.setMessageType(TYPE_CONF);
+            packet.setPriority(PRIORITY_HIGH);
             rv.add(packet);
         }
         if (_log.shouldInfo()) {
@@ -971,12 +971,12 @@ class PacketBuilder2 {
             state.writeMessage(data, off + LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE + KEY_LEN, len);
             pkt.setLength(pkt.getLength() + KEY_LEN + len + MAC_LEN);
         } catch (RuntimeException re) {
-            if (!_log.shouldWarn())
-                _log.error("[SSU] BAD message 1 out", re);
+            if (_log.shouldWarn())
+                _log.warn("[SSU] BAD message 1 out", re);
             throw re;
         } catch (GeneralSecurityException gse) {
-            if (!_log.shouldWarn())
-                _log.error("[SSU] BAD message 1 out", gse);
+            if (_log.shouldWarn())
+                _log.warn("[SSU] BAD message 1 out", gse);
             throw new RuntimeException("Bad msg 1 out", gse);
         }
         if (_log.shouldDebug())
@@ -1030,12 +1030,12 @@ class PacketBuilder2 {
             state.writeMessage(data, off + LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE + KEY_LEN, len);
             pkt.setLength(pkt.getLength() + KEY_LEN + len + MAC_LEN);
         } catch (RuntimeException re) {
-            if (!_log.shouldWarn())
-                _log.error("[SSU] BAD message 2 out", re);
+            if (_log.shouldWarn())
+                _log.warn("[SSU] BAD message 2 out", re);
             throw re;
         } catch (GeneralSecurityException gse) {
-            if (!_log.shouldWarn())
-                _log.error("[SSU] BAD message 2 out", gse);
+            if (_log.shouldWarn())
+                _log.warn("[SSU] BAD message 2 out", gse);
             throw new RuntimeException("Bad msg 2 out", gse);
         }
         if (_log.shouldDebug())
@@ -1099,12 +1099,12 @@ class PacketBuilder2 {
 
             pkt.setLength(pkt.getLength() + len + MAC_LEN);
         } catch (RuntimeException re) {
-            if (!_log.shouldWarn())
-                _log.error("[SSU] Bad retry/test/holepunch message out", re);
+            if (_log.shouldWarn())
+                _log.warn("[SSU] Bad retry/test/holepunch message out", re);
             throw re;
         } catch (GeneralSecurityException gse) {
-            if (!_log.shouldWarn())
-                _log.error("[SSU] Bad retry/test/holepunch message out", gse);
+            if (_log.shouldWarn())
+                _log.warn("[SSU] Bad retry/test/holepunch message out", gse);
             throw new RuntimeException("Bad retry/test/holepunch msg out", gse);
         }
         SSU2Header.encryptLongHeader(packet, hdrKey1, hdrKey2);
@@ -1138,12 +1138,12 @@ class PacketBuilder2 {
 
             pkt.setLength(pkt.getLength() + len + MAC_LEN);
         } catch (RuntimeException re) {
-            if (!_log.shouldWarn())
-                _log.error("[SSU] BAD Token Request message out", re);
+            if (_log.shouldWarn())
+                _log.warn("[SSU] BAD Token Request message out", re);
             throw re;
         } catch (GeneralSecurityException gse) {
-            if (!_log.shouldWarn())
-                _log.error("[SSU] BAD Token Request message out", gse);
+            if (_log.shouldWarn())
+                _log.warn("[SSU] BAD Token Request message out", gse);
             throw new RuntimeException("BAD Token Request message out", gse);
         }
         SSU2Header.encryptLongHeader(packet, hdrKey1, hdrKey2);
@@ -1200,13 +1200,13 @@ class PacketBuilder2 {
             if (_log.shouldDebug())
                 _log.debug("[SSU] SessionConfirmed packet length is: " + pkt.getLength() + " bytes");
         } catch (RuntimeException re) {
-            if (!_log.shouldWarn())
-                _log.error("[SSU] BAD message 3 out", re);
+            if (_log.shouldWarn())
+                _log.warn("[SSU] BAD message 3 out", re);
             throw re;
         } catch (GeneralSecurityException gse) {
-            if (!_log.shouldWarn())
-                _log.error("[SSU] BAD message 3 out", gse);
-            throw new RuntimeException("Bad msg 1 out", gse);
+            if (_log.shouldWarn())
+                _log.warn("[SSU] BAD message 3 out", gse);
+            throw new RuntimeException("Bad msg 3 out", gse);
         }
         if (_log.shouldDebug())
             _log.debug("[SSU] After message 3: " + state);
