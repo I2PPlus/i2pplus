@@ -1191,8 +1191,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                            + " ACKed by DbStoreMsg after " + sendTime + "ms");
             }
 
-            //long dataMsgId = _cloveId;   // fake ID 99999
-            getContext().messageHistory().sendPayloadMessage(99999, true, sendTime);
+            getContext().messageHistory().sendPayloadMessage(_clientMessageId.getMessageId(), true, sendTime);
             long nonce = _clientMessage.getMessageNonce();
             if (nonce > 0) {
                 getContext().clientManager().messageDeliveryStatusUpdate(_from, _clientMessageId, nonce,

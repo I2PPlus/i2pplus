@@ -21,11 +21,15 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
 /**
- *  Send a message directly to another router, i.e. not through a tunnel.
- *  This is safe to run inline via runJob().
- *  If the RouterInfo for the Hash is not found locally, it will
- *  queue a lookup and register itself to be run again when the lookup
- *  succeeds or times out.
+ *  Send a message directly to another router (not through a tunnel).
+ *
+ *  Used by HandleGarlicMessageJob to forward decrypted cloves to their
+ *  target router or tunnel gateway. Also used by netdb for database
+ *  store/lookup replies.
+ *
+ *  Safe to run inline via runJob(). If the RouterInfo for the Hash is not
+ *  found locally, it will queue a lookup and register itself to be run
+ *  again when the lookup succeeds or times out.
  */
 public class SendMessageDirectJob extends JobImpl {
     private final Log _log;

@@ -13,7 +13,12 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.i2np.GarlicClove;
 
 /**
- * Wrap up the data contained in a GarlicMessage after being decrypted
+ * The unwrapped result of decrypting a GarlicMessage: an array of GarlicCloves
+ * plus the outer certificate, message ID, and expiration.
+ *
+ * For ElGamal-encrypted messages the certificate/ID/expiration are serialized
+ * inside the clove set; for ECIES-encrypted messages they are synthesized with
+ * Certificate.NULL_CERT at construction time.
  *
  * @since public since 0.9.44, was package private
  */

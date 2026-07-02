@@ -17,11 +17,14 @@ import net.i2p.data.i2np.DeliveryInstructions;
 import net.i2p.data.router.RouterInfo;
 
 /**
- * Define the contents of a garlic chunk that contains 1 or more sub garlics.
+ * Configuration and content for a garlic message containing one or more cloves.
  *
- * This is the top-level config for a Garlic Message that contains cloves.
- * For cloves themselves, see PayloadGarlicConfig.
- * Note that this is somewhat misnamed as it contains the actual cloves, not just the config.
+ * This is the top-level container for a GarlicMessage's cloves, their delivery
+ * instructions, and the recipient's encryption key. Individual clove payloads
+ * are represented by PayloadGarlicConfig.
+ *
+ * Despite the name, instances of this class hold the actual clove references,
+ * not just configuration metadata.
  */
 class GarlicConfig {
     private RouterInfo _recipient;
@@ -31,14 +34,6 @@ class GarlicConfig {
     private final long _expiration;
     private final List<GarlicConfig> _cloveConfigs;
     private final DeliveryInstructions _instructions;
-    // unused
-    //private boolean _requestAck;
-    //private RouterInfo _replyThroughRouter; // router through which any replies will be sent before delivery to us
-    //private DeliveryInstructions _replyInstructions; // how the message will be sent from the replyThroughRouter to us
-    // unused and undocumented
-    //private Certificate _replyBlockCertificate;
-    //private long _replyBlockMessageId;
-    //private long _replyBlockExpiration;
 
     public GarlicConfig(Certificate cert, long id, long expiration, DeliveryInstructions di) {
 	this(new ArrayList<>(4), cert, id, expiration, di);
@@ -51,8 +46,6 @@ class GarlicConfig {
 	_expiration = expiration;
         _cloveConfigs = cloveConfigs;
         _instructions = di;
-	//_replyBlockMessageId = -1;
-	//_replyBlockExpiration = -1;
     }
 
     /**
@@ -102,52 +95,6 @@ class GarlicConfig {
     public DeliveryInstructions getDeliveryInstructions() { return _instructions; }
 
     /**
-     * If true, the recipient of this clove is requested to send a DeliveryStatusMessage
-     * back via the replyThroughRouter using the getId() value for the status' message Id.
-     * Since those reply blocks are good for one use only, this flag should only be set if
-     * no reply is expected.
-     *
-     */
-  /****
-    public void setRequestAck(boolean request) { _requestAck = request; }
-    public boolean getRequestAck() { return _requestAck; }
-  ****/
-
-    /**
-     * Specify the router through which a reply to this clove can be sent.  The
-     * getReplyInstructions() are passed to this router during the reply process
-     * and it them uses those to send the reply to this router.
-     *
-     */
-  /****
-    public void setReplyThroughRouter(RouterInfo replyThroughRouter) { _replyThroughRouter = replyThroughRouter; }
-    public RouterInfo getReplyThroughRouter() { return _replyThroughRouter; }
-  ****/
-
-    /**
-     * Specify how any reply will be routed so that it reaches this router after being
-     * delivered to the getReplyThroughRouter.  These instructions are not exposed to the
-     * router who receives this garlic message in cleartext - they are instead encrypted to
-     * the replyThrough router
-     *
-     */
-  /****
-    public void setReplyInstructions(DeliveryInstructions instructions) { _replyInstructions = instructions; }
-    public DeliveryInstructions getReplyInstructions() { return _replyInstructions; }
-  ****/
-
-  /****
-    public long getReplyBlockMessageId() { return _replyBlockMessageId; }
-    public void setReplyBlockMessageId(long id) { _replyBlockMessageId = id; }
-
-    public Certificate getReplyBlockCertificate() { return _replyBlockCertificate; }
-    public void setReplyBlockCertificate(Certificate cert) { _replyBlockCertificate = cert; }
-
-    public long getReplyBlockExpiration() { return _replyBlockExpiration; }
-    public void setReplyBlockExpiration(long expiration) { _replyBlockExpiration = expiration; }
-   ****/
-
-    /**
      * Add a clove to the current message - if any cloves are added, an I2NP message
      * cannot be specified via setPayload.  This means that the resulting GarlicClove
      * represented by this GarlicConfig must be a GarlicMessage itself
@@ -179,12 +126,6 @@ class GarlicConfig {
 	buf.append("<garlicId>").append(getId()).append("</garlicId>").append(NL);
 	buf.append("<recipient>").append(getRecipient()).append("</recipient>").append(NL);
 	buf.append("<recipientPublicKey>").append(getRecipientPublicKey()).append("</recipientPublicKey>").append(NL);
-	//buf.append("<replyBlockCertificate>").append(getReplyBlockCertificate()).append("</replyBlockCertificate>").append(NL);
-	//buf.append("<replyBlockExpiration>").append(new Date(getReplyBlockExpiration())).append("</replyBlockExpiration>").append(NL);
-	//buf.append("<replyBlockMessageId>").append(getReplyBlockMessageId()).append("</replyBlockMessageId>").append(NL);
-	//buf.append("<replyInstructions>").append(getReplyInstructions()).append("</replyInstructions>").append(NL);
-	//buf.append("<replyThroughRouter>").append(getReplyThroughRouter()).append("</replyThroughRouter>").append(NL);
-	//buf.append("<requestAck>").append(getRequestAck()).append("</requestAck>").append(NL);
 	buf.append(getSubData());
 	buf.append("<subcloves>").append(NL);
 	for (int i = 0; i < getCloveCount(); i++)
