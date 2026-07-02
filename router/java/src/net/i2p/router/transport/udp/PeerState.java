@@ -687,15 +687,17 @@ public class PeerState {
         // window and SST set in highestSeqNumAcked()
         if (_fastRetransmit.get()) {bwe = -1;} // for log below
         else {
-            if (getVersion() >= 2 && getVersion() <= 4) {
-                _sendWindowBytes.set(PeerState2.MAX_MTU);
-            } else if (isIPv6()) {
-                _sendWindowBytes.set(MAX_IPV6_MTU);
-            } else {
-                _sendWindowBytes.set(LARGE_MTU);
+            synchronized(_sendWindowBytesRemainingLock) {
+                if (getVersion() >= 2 && getVersion() <= 4) {
+                    _sendWindowBytes.set(PeerState2.MAX_MTU);
+                } else if (isIPv6()) {
+                    _sendWindowBytes.set(MAX_IPV6_MTU);
+                } else {
+                    _sendWindowBytes.set(LARGE_MTU);
+                }
+                bwe = _bwEstimator.getBandwidthEstimate(now);
+                _slowStartThreshold = Math.max( (int)(bwe * _rtt), 2 * _mtu);
             }
-            bwe = _bwEstimator.getBandwidthEstimate(now);
-            _slowStartThreshold = Math.max( (int)(bwe * _rtt), 2 * _mtu);
         }
 
         int oldRto = _rto;
@@ -1532,17 +1534,21 @@ public class PeerState {
                 // Caller (IMF) will wakeup OMF
                 if (continueFast) {
                   // RFC 5681 sec. 3.2 #4 increase cwnd
-                   _sendWindowBytes.addAndGet(_mtu);
-                    synchronized(_sendWindowBytesRemainingLock) {_sendWindowBytesRemaining += _mtu;}
-                   if (_log.shouldDebug()) {_log.debug("Continue FAST RTX, inflated window: " + this);}
+                    synchronized(_sendWindowBytesRemainingLock) {
+                        _sendWindowBytes.addAndGet(_mtu);
+                        _sendWindowBytesRemaining += _mtu;
+                    }
+                    if (_log.shouldDebug()) {_log.debug("Continue FAST RTX, inflated window: " + this);}
                 } else if (startFast) {
                    // RFC 5681 sec. 3.2 #2 set SST (equation 4)
                    // But use W+ BWE instead
-                   float bwe = _bwEstimator.getBandwidthEstimate();
-                   _slowStartThreshold = Math.max((int)(bwe * _rtt), 2 * _mtu);
-                   // RFC 5681 sec. 3.2 #3 set cwnd
-                   _sendWindowBytes.set(_slowStartThreshold + (3 * _mtu));
-                     synchronized(_sendWindowBytesRemainingLock) {_sendWindowBytesRemaining = _sendWindowBytes.get();}
+                    synchronized(_sendWindowBytesRemainingLock) {
+                        float bwe = _bwEstimator.getBandwidthEstimate();
+                        _slowStartThreshold = Math.max((int)(bwe * _rtt), 2 * _mtu);
+                        // RFC 5681 sec. 3.2 #3 set cwnd
+                        _sendWindowBytes.set(_slowStartThreshold + (3 * _mtu));
+                        _sendWindowBytesRemaining = _sendWindowBytes.get();
+                    }
                     if (_log.shouldDebug()) {_log.debug("Start of FAST RTX, inflated window: " + this);}
                 }
             } else {exitFastRetransmit();}
