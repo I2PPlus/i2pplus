@@ -104,7 +104,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /** configuration options */
     private final Properties _options;
     /** this session's Id */
-    private SessionId _sessionId;
+    private volatile SessionId _sessionId;
     /** currently granted lease set, or null */
     protected volatile LeaseSet _leaseSet;
     private long _offlineExpiration;
@@ -126,11 +126,11 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /** port num to router - will be 0 if in RouterContext */
     protected final int _portNum;
     /** socket for comm */
-    protected Socket _socket;
+    protected volatile Socket _socket;
     /** reader that always searches for messages */
-    protected I2CPMessageReader _reader;
+    protected volatile I2CPMessageReader _reader;
     /** writer message queue */
-    protected ClientWriterRunner _writer;
+    protected volatile ClientWriterRunner _writer;
 
     /**
      *  Used for internal connections to the router.
@@ -140,7 +140,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     protected I2CPMessageQueue _queue;
 
     /** who we send events to */
-    protected I2PSessionListener _sessionListener;
+    protected volatile I2PSessionListener _sessionListener;
 
     /** class that generates new messages */
     protected final I2CPMessageProducer _producer;
@@ -1002,8 +1002,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         int type = message.getType();
         SessionId id = message.sessionId();
         SessionId currId = _sessionId;
-        if (id == null || id.equals(currId) || (currId == null && id != null && type == SessionStatusMessage.MESSAGE_TYPE) ||
-            ((id == null || id.getSessionId() == 65535) && (type == HostReplyMessage.MESSAGE_TYPE || type == DestReplyMessage.MESSAGE_TYPE))) {
+        if (id == null || (currId != null && id.equals(currId)) || (currId == null && type == SessionStatusMessage.MESSAGE_TYPE) ||
+            (id.getSessionId() == 65535 && (type == HostReplyMessage.MESSAGE_TYPE || type == DestReplyMessage.MESSAGE_TYPE))) {
             // it's for us
             I2CPMessageHandler handler = _handlerMap.getHandler(type);
             if (handler != null) {
