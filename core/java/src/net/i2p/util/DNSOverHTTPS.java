@@ -582,7 +582,6 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
         try {
             InputStream is = DNSOverHTTPS.class.getResourceAsStream("/net/i2p/util/resources/dohservers.txt");
             if (is == null) {
-                System.out.println("Warning: dohservers.txt resource not found, contact packager");
                 return;
             }
             in = new BufferedReader(new InputStreamReader(is, "ISO-8859-1"), 4096);
@@ -803,7 +802,6 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
         } catch (IndexOutOfBoundsException ioobe) {
             if (log) {
                 System.out.println("Failed: " + ioobe);
-                // ioobe.printStackTrace();
                 System.out.println(HexDump.dump(d));
             }
             return null;
