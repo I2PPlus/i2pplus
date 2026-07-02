@@ -1047,6 +1047,7 @@ public class EepGet {
 
         Thread pusher = null;
         _decompressException = null;
+        OutputStream pipeSink = null;
         if (_isGzippedResponse) {
             if (_log.shouldInfo())
                 _log.info("Gzipped response, starting decompressor");
@@ -1054,62 +1055,68 @@ public class EepGet {
             PipedOutputStream po = new PipedOutputStream(pi);
             pusher = new I2PAppThread(new Gunzipper(pi, _out), "EepGet Decompressor");
             _out = po;
+            pipeSink = po;
             pusher.start();
         }
 
         int remaining = (int)_bytesRemaining;
         byte[] buf = new byte[16*1024];
-        while (_keepFetching && ((remaining > 0) || !strictSize) && !_aborted) {
-            int toRead = buf.length;
-            if (strictSize && toRead > remaining)
-                toRead = remaining;
-            int read = _proxyIn.read(buf, 0, toRead);
-            if (read == -1)
-                break;
-            if (timeout != null)
-                timeout.resetTimer();
-            _out.write(buf, 0, read);
-            _bytesTransferred += read;
-            if ((_maxSize > -1) && (_alreadyTransferred + read > _maxSize)) // could transfer a little over maxSize
-                throw new IOException("Bytes transferred " + (_alreadyTransferred + read) + " violates maximum of " + _maxSize + " bytes");
-            remaining -= read;
-            if (remaining==0 && _encodingChunked) {
-                int char1 = _proxyIn.read();
-                if (char1 == '\r') {
-                    int char2 = _proxyIn.read();
-                    if (char2 == '\n') {
-                        remaining = (int) readChunkLength();
+        try {
+            while (_keepFetching && ((remaining > 0) || !strictSize) && !_aborted) {
+                int toRead = buf.length;
+                if (strictSize && toRead > remaining)
+                    toRead = remaining;
+                int read = _proxyIn.read(buf, 0, toRead);
+                if (read == -1)
+                    break;
+                if (timeout != null)
+                    timeout.resetTimer();
+                _out.write(buf, 0, read);
+                _bytesTransferred += read;
+                if ((_maxSize > -1) && (_alreadyTransferred + read > _maxSize))
+                    throw new IOException("Bytes transferred " + (_alreadyTransferred + read) + " violates maximum of " + _maxSize + " bytes");
+                remaining -= read;
+                if (remaining==0 && _encodingChunked) {
+                    int char1 = _proxyIn.read();
+                    if (char1 == '\r') {
+                        int char2 = _proxyIn.read();
+                        if (char2 == '\n') {
+                            remaining = (int) readChunkLength();
+                        } else {
+                            _out.write(char1);
+                            _out.write(char2);
+                            _bytesTransferred += 2;
+                            remaining -= 2;
+                            read += 2;
+                        }
                     } else {
                         _out.write(char1);
-                        _out.write(char2);
-                        _bytesTransferred += 2;
-                        remaining -= 2;
-                        read += 2;
+                        _bytesTransferred++;
+                        remaining--;
+                        read++;
                     }
-                } else {
-                    _out.write(char1);
-                    _bytesTransferred++;
-                    remaining--;
-                    read++;
+                }
+                if (timeout != null)
+                    timeout.resetTimer();
+                if (_bytesRemaining >= read)
+                    _bytesRemaining -= read;
+                if (read > 0) {
+                    for (int i = 0; i < _listeners.size(); i++)
+                        _listeners.get(i).bytesTransferred(
+                                _alreadyTransferred,
+                                read,
+                                _bytesTransferred,
+                                _encodingChunked?-1:_bytesRemaining,
+                                _url);
+                    _alreadyTransferred += read;
                 }
             }
-            if (timeout != null)
-                timeout.resetTimer();
-            if (_bytesRemaining >= read) // else chunked?
-                _bytesRemaining -= read;
-            if (read > 0) {
-                for (int i = 0; i < _listeners.size(); i++)
-                    _listeners.get(i).bytesTransferred(
-                            _alreadyTransferred,
-                            read,
-                            _bytesTransferred,
-                            _encodingChunked?-1:_bytesRemaining,
-                            _url);
-                // This seems necessary to properly resume a partial download into a stream,
-                // as nothing else increments _alreadyTransferred, and there's no file length to check.
-                // Do this after calling the listeners to keep the total correct
-                _alreadyTransferred += read;
+        } catch (RuntimeException | IOException e) {
+            if (pipeSink != null) {
+                try { pipeSink.close(); } catch (IOException ioe) {}
             }
+            _out = null;
+            throw e;
         }
 
         if (_out != null)
@@ -1480,7 +1487,7 @@ public class EepGet {
             try {
                 _bytesRemaining = Long.parseLong(val);
             } catch (NumberFormatException nfe) {
-                nfe.printStackTrace();
+                _log.error("Bad Content-Length header: [" + val + "]", nfe);
             }
         } else if (key.equals("etag")) {
             _etag = val;
