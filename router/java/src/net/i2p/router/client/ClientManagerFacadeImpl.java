@@ -115,7 +115,6 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
         boolean lively = true;
         long now = _context.clock().now();
         long renewalWindow = 90L * 1000; // 90s before expiration
-        long warningWindow = 5L * 60 * 1000; // 5 minutes before expiration
 
         for (Destination dest : _manager.getRunnerDestinations()) {
             ClientConnectionRunner runner = _manager.getRunner(dest);
@@ -163,11 +162,6 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
                 if (_manager != null) {
                     _manager.requestLeaseSet(dest.calculateHash(), null);
                 }
-            }
-            // Check if we should warn (5 minutes before expiration)
-            else if (timeToExpiration < warningWindow && _log.shouldInfo()) {
-                _log.info("Client [" + dest.toBase32().substring(0,8) + "] leases expiring soon (" +
-                          DataHelper.formatDuration(timeToExpiration) + ") -> Renewal recommended");
             }
         }
         return lively;

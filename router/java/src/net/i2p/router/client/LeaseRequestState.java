@@ -17,7 +17,6 @@ import net.i2p.router.Job;
  *
  */
 class LeaseRequestState {
-    private LeaseSet _grantedLeaseSet;
     private final LeaseSet _requestedLeaseSet;
     private final Job _onGranted;
     private final Job _onFailed;
@@ -41,12 +40,6 @@ class LeaseRequestState {
         _expiration = expiration;
         _requestedLeaseSet = requested;
     }
-
-    /** created lease set from client - FIXME always null */
-    public LeaseSet getGranted() {return _grantedLeaseSet;}
-
-    /** FIXME unused - why? */
-    public void setGranted(LeaseSet ls) {_grantedLeaseSet = ls;}
 
     /** lease set that is being requested */
     public LeaseSet getRequested() {return _requestedLeaseSet;}
@@ -75,7 +68,6 @@ class LeaseRequestState {
     @Override
     public String toString() {
         return "LeaseSet request " + _requestedLeaseSet
-               + " having received " + _grantedLeaseSet
                + " succeeding? " + _successful
                + " expiring on " + _expiration;
     }

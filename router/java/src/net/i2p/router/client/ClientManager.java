@@ -178,10 +178,8 @@ class ClientManager {
         _log.info("Shutting down the ClientManager...");
         for (ClientListenerRunner listener : _listeners) {listener.stopListening();}
         _listeners.clear();
-        Set<ClientConnectionRunner> runners = new HashSet<>();
-        synchronized (_runners) {
-            for (ClientConnectionRunner runner : _runners.values()) {runners.add(runner);}
-        }
+        // CHM values() iterator is thread-safe, no external sync needed
+        Set<ClientConnectionRunner> runners = new HashSet<>(_runners.values());
         synchronized (_pendingRunners) {
             for (ClientConnectionRunner runner : _pendingRunners) {runners.add(runner);}
         }
@@ -260,15 +258,6 @@ class ClientManager {
                 _runnersByHash.remove(dest.calculateHash());
                 // Clean up orphaned LeaseSets to prevent expiration errors
                 _ctx.netDb().fail(dest.calculateHash());
-            }
-            // just in case
-            for (Iterator<ClientConnectionRunner> iter = _runners.values().iterator(); iter.hasNext(); ) {
-                ClientConnectionRunner r = iter.next();
-                if (r.equals(runner)) {iter.remove();}
-            }
-            for (Iterator<ClientConnectionRunner> iter = _runnersByHash.values().iterator(); iter.hasNext(); ) {
-                ClientConnectionRunner r = iter.next();
-                if (r.equals(runner)) {iter.remove();}
             }
         }
     }

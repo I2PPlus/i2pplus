@@ -535,15 +535,16 @@ class ClientConnectionRunner {
             if (_messages.size() >= MAX_BUFFERED_MESSAGES) {
                 if (_log.shouldWarn()) {
                     _log.warn("Buffered message limit reached (" + MAX_BUFFERED_MESSAGES
-                              + "), dropping oldest entries for client");
+                              + "), dropping entries for client");
                 }
-                // Evict oldest entries (ConcurrentHashMap has no ordering,
-                // so we clear a batch to make room)
-                int toEvict = _messages.size() / 4;
-                Iterator<MessageId> iter = _messages.keySet().iterator();
-                for (int i = 0; i < toEvict && iter.hasNext(); i++) {
-                    iter.next();
-                    iter.remove();
+                // CHM keySet iterator is weakly consistent, so retry until enough room.
+                while (_messages.size() >= MAX_BUFFERED_MESSAGES) {
+                    int toEvict = Math.max(1, _messages.size() / 4);
+                    for (Iterator<MessageId> iter = _messages.keySet().iterator();
+                         iter.hasNext() && toEvict > 0; toEvict--) {
+                        iter.next();
+                        iter.remove();
+                    }
                 }
             }
             _messages.put(id, payload);
@@ -985,10 +986,8 @@ class ClientConnectionRunner {
             state = sp.leaseRequest;
             if (state != null) {
                 LeaseSet requested = state.getRequested();
-                LeaseSet granted = state.getGranted();
                 long ours = set.getEarliestLeaseDate();
-                if (((requested != null) && (requested.getEarliestLeaseDate() > ours)) ||
-                     ((granted != null) && (granted.getEarliestLeaseDate() > ours))) {
+                if ((requested != null) && (requested.getEarliestLeaseDate() > ours)) {
                     // theirs is newer
                     if (_log.shouldDebug())
                         _log.debug("Already requesting, theirs is newer -> Doing nothing... " + state);

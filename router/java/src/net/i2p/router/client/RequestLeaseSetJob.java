@@ -189,7 +189,7 @@ class RequestLeaseSetJob extends JobImpl {
 
         public CheckLeaseRequestStatus() {
             super(RequestLeaseSetJob.this.getContext());
-            _start = System.currentTimeMillis();
+            _start = RequestLeaseSetJob.this.getContext().clock().now();
             getTiming().setStartAfter(_requestState.getExpiration());
         }
 
@@ -204,7 +204,7 @@ class RequestLeaseSetJob extends JobImpl {
             } else {
                 RequestLeaseSetJob.this.getContext().statManager().addRateData("client.requestLeaseSetTimeout", 1);
                 if (_log.shouldError()) {
-                    long waited = System.currentTimeMillis() - _start;
+                    long waited = RequestLeaseSetJob.this.getContext().clock().now() - _start;
                     _log.error("Failed to receive a leaseSet in the time allotted (" + waited + "): " + _requestState);
                 }
                 if (_requestState.getOnFailed() != null)
