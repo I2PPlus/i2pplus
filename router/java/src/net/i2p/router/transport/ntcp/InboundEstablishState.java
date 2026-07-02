@@ -76,7 +76,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     /** Alice's RouterIdentity, set after gotRI() validation succeeds */
     private RouterIdentity _aliceIdent; // NOSONAR S1450: used on lines 958-959, 1073
     /** Flag to ensure releaseBufs() is called only once */
-    private boolean _released;
+    private volatile boolean _released;
 
     //// NTCP2 things
     /** Noise protocol handshake state for XK pattern */

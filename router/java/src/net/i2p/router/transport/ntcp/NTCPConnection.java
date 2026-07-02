@@ -76,6 +76,7 @@ public class NTCPConnection implements Closeable {
      * and already cleared through the bandwidth limiter.
      * unbounded and lockless
      */
+    private static final int MAX_WRITE_BUFS = 512;
     private final Queue<ByteBuffer> _writeBufs;
     /** Requests that were not granted immediately */
     private final Set<FIFOBandwidthLimiter.Request> _bwInRequests;
@@ -1174,6 +1175,10 @@ public class NTCPConnection implements Closeable {
      * been fully allocated for the bandwidth limiter.
      */
     private void write(ByteBuffer buf) {
+        if (_writeBufs.size() >= MAX_WRITE_BUFS) {
+            _log.warn("Write queue full (" + _writeBufs.size() + "), dropping buffer on " + this);
+            return;
+        }
         _writeBufs.offer(buf);
         EventPumper pumper = _transport.getPumper();
         if (_isInbound || isEstablished()) {

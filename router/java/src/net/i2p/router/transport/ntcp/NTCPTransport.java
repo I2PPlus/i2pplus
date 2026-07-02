@@ -13,6 +13,7 @@ import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -148,6 +149,11 @@ public class NTCPTransport extends TransportImpl {
     private long _lastBadSkew;
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
+    private static final Set<String> SUPPRESSION_PATTERNS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+        "Old and slow",
+        "RouterInfo store fail"
+    )));
+
     private static final int MIN_CONCURRENT_READERS = SystemVersion.isSlow() ? 3 : 6;  // unless < 32MB
 
     /**
@@ -228,6 +234,7 @@ public class NTCPTransport extends TransportImpl {
         _context.statManager().createRateStat("ntcp.throttledWriteComplete", "Throttled NTCP WriteComplete events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.wantsQueuedWrite", "Number of wanted NTCP QueuedWrite events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.writeError", "Number of NTCP write errors", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.writeQueueFull", "NTCP write queue full (frames dropped)", "Transport [NTCP]", RATES);
 
         _endpoints = new HashSet<>(4);
         _establishing = new ConcurrentHashSet<>(64);
@@ -1961,15 +1968,10 @@ public class NTCPTransport extends TransportImpl {
      * @since 0.9.68+
      */
     private boolean shouldSuppressException(Throwable t) {
-        Set<String> suppressionPatterns = new HashSet<>(Arrays.asList(
-            "Old and slow",
-            "RouterInfo store fail"
-        ));
-
         while (t != null) {
             String message = t.getMessage();
             if (message != null) {
-                for (String pattern : suppressionPatterns) {
+                for (String pattern : SUPPRESSION_PATTERNS) {
                     if (message.contains(pattern)) {
                         return true;
                     }

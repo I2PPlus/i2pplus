@@ -578,10 +578,6 @@ class OutboundNTCP2State implements EstablishState {
     @Override
     public String getFailReason() {
         if (_failReason != null) { return _failReason; }
-        if (_state == State.CORRUPT || _state == State.VERIFIED) {
-            return "State: " + _state;
-        }
-        // If we're closing but not done, return state
         return "State: " + _state;
     }
 
