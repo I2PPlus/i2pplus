@@ -61,7 +61,7 @@ public class EepGetAndAddNamingService extends EepGetNamingService {
                             String line = hostname + '=' + rv.toBase64() + System.getProperty("line.separator");
                             fos.write(DataHelper.getASCII(line));
                         } catch (IOException ioe) {
-                            System.err.println("Error appending: " + ioe);
+                            _log.error("Error appending to hosts.txt", ioe);
                         } finally {
                             if (fos != null) try {
                                     fos.close();

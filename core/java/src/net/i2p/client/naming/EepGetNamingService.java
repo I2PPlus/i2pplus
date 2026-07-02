@@ -75,7 +75,7 @@ public class EepGetNamingService extends DummyNamingService {
         for (int i = 0; i < URLs.size(); i++) {
             String url = URLs.get(i);
             if (url.startsWith("http://" + hostname + "/")) {
-                _log.error("Lookup loop: " + hostname);
+                _log.warn("Lookup loop: " + hostname);
                 return null;
             }
         }
@@ -85,7 +85,7 @@ public class EepGetNamingService extends DummyNamingService {
             String url = URLs.get(i);
             String key = fetchAddr(url, hostname);
             if (key != null) {
-                _log.error("Success: " + url + hostname);
+                _log.info("Success: " + url + hostname);
                 d = lookupBase64(key);
                 putCache(hostname, d);
                 return d;
@@ -119,28 +119,28 @@ public class EepGetNamingService extends DummyNamingService {
             // 10s header timeout, 15s total timeout, unlimited inactivity timeout
             if (get.fetch(10 * 1000L, 15 * 1000L, -1L)) {
                 if (baos.size() < DEST_SIZE) {
-                    _log.error("Short response: " + url + hostname);
+                    _log.warn("Short response: " + url + hostname);
                     return null;
                 }
                 String key = baos.toString("UTF-8");
-                if (key.startsWith(hostname + "=")) key = key.substring(hostname.length() + 1); // strip hostname=
-                key = key.substring(0, DEST_SIZE); // catch IndexOutOfBounds exception below
+                if (key.startsWith(hostname + "=")) key = key.substring(hostname.length() + 1);
+                key = key.substring(0, DEST_SIZE);
                 if (!key.endsWith("AA")) {
-                    _log.error("Invalid key: " + url + hostname);
+                    _log.warn("Invalid key: " + url + hostname);
                     return null;
                 }
                 if (!VALID_DEST_CHARS.matcher(key).replaceAll("").isEmpty()) {
-                    _log.error("Invalid chars: " + url + hostname);
+                    _log.warn("Invalid chars: " + url + hostname);
                     return null;
                 }
                 return key;
             }
-            _log.error("Transfer failed: " + url + hostname);
+            _log.warn("Transfer failed: " + url + hostname);
             return null;
         } catch (Throwable t) {
             _log.error("Error fetching the addr", t);
         }
-        _log.error("Caught from: " + url + hostname);
+        _log.warn("Caught from: " + url + hostname);
         return null;
     }
 }
