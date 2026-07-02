@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -29,7 +28,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.i2np.I2NPMessageException;
-import net.i2p.data.i2np.I2NPMessageHandler;
+
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
@@ -156,8 +155,6 @@ public class NTCPConnection implements Closeable {
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
     private static final AtomicLong __connID = new AtomicLong();
     private final long _connID = __connID.incrementAndGet();
-    private static final int MAX_HANDLERS = SystemVersion.isSlow() ? 2 : 3;
-
     //// NTCP2 things
 
     /** See spec. Max Noise payload 65535,
@@ -1359,25 +1356,12 @@ public class NTCPConnection implements Closeable {
         _clockSkew = newSkew;
     }
 
-    /**
-     *  FIXME static queue mixes handlers from different contexts in multirouter JVM
-     */
-    private static final LinkedBlockingQueue<I2NPMessageHandler> _i2npHandlers = new LinkedBlockingQueue<>(MAX_HANDLERS);
-
     private static ByteArray acquireReadBuf() {
         return _dataReadBufs.acquire();
     }
 
     private static void releaseReadBuf(ByteArray buf) {
         _dataReadBufs.release(buf, false);
-    }
-
-    /**
-     *  Call at transport shutdown
-     *  @since 0.8.8
-     */
-    static void releaseResources() {
-        _i2npHandlers.clear();
     }
 
     private interface ReadState {

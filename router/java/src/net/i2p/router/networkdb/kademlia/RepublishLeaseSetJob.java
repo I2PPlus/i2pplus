@@ -49,6 +49,8 @@ public class RepublishLeaseSetJob extends JobImpl {
     public static final int RETRY_MAX_DELAY_DEFAULT = (int) (30L * 1000);
     private static final long EXPIRY_WINDOW = 3L * 60 * 1000;
     private static final long CACHE_CLEANUP_THRESHOLD = 15L * 60 * 1000;
+    /** Last time cleanupStaleEntries() ran — guards against redundant sweeps */
+    private static volatile long _lastCleanupTime;
     private static final ConcurrentHashMap<Hash, Boolean> _retryInProgress = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<Hash, Long> _lastPublishLogTime = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<Hash, Long> _lastVerifyLogTime = new ConcurrentHashMap<>();
@@ -84,6 +86,7 @@ public class RepublishLeaseSetJob extends JobImpl {
 
     @Override
     public void runJob() {
+        cleanupStaleEntries();
         // Check if this job was successfully registered
         if (!_registered) {
             if (_log.shouldWarn()) {
@@ -147,7 +150,6 @@ public class RepublishLeaseSetJob extends JobImpl {
                         // immediately makes the destination reachable.  Waiting
                         // for a full test cycle just delays the first usable
                         // LeaseSet by 30+ seconds.
-                        cleanupStaleEntries();
                         getContext().statManager().addRateData("netDb.republishLeaseSetCount", 1);
                         failCount.set(0);
                         _facade.sendStore(_dest, ls, null, new OnRepublishFailure(ls), getPublishTimeout(), null);
@@ -281,6 +283,9 @@ public class RepublishLeaseSetJob extends JobImpl {
 
     private static void cleanupStaleEntries() {
         long now = System.currentTimeMillis();
+        if (now - _lastCleanupTime <= CACHE_CLEANUP_THRESHOLD)
+            return;
+        _lastCleanupTime = now;
         cleanupMap(_lastPublishLogTime, now);
         cleanupMap(_lastVerifyLogTime, now);
         cleanupMap(_lastNotRequeueLogTime, now);

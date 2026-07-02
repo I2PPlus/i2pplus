@@ -113,7 +113,13 @@ public class NTCPTransport extends TransportImpl {
     private final Reader _reader;
     private net.i2p.router.transport.ntcp.Writer _writer;
     private int _ssuPort;
-    /** synch on this */
+    /**
+     *  Bound listening endpoints. All entries MUST be resolved InetSocketAddress
+     *  instances (created via port-only or InetAddress constructors), NOT unresolved
+     *  hostname-based addresses. InetSocketAddress.equals() returns false when
+     *  comparing resolved vs. unresolved, so contains() checks would silently fail
+     *  on unresolved entries.
+     */
     private final Set<InetSocketAddress> _endpoints;
     private final int _networkID;
 
@@ -1952,7 +1958,6 @@ public class NTCPTransport extends TransportImpl {
         for (NTCPConnection con : cons) {
             con.close();
         }
-        NTCPConnection.releaseResources();
         replaceAddress(null);
         _endpoints.clear();
         _lastInboundIPv4 = 0;
