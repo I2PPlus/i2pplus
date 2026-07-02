@@ -375,7 +375,7 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      *  Convenience method - calls shutdown(true) to wait for.
-     *  @since 0 delayed tunnels.9.68+
+     *  @since 0.9.68+
      */
     public synchronized void shutdown() {
         shutdown(true);

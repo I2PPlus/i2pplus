@@ -28,6 +28,7 @@ import net.i2p.data.PublicKey;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.i2ptunnel.I2PTunnelHTTPClientBase;
 import net.i2p.util.FileUtil;
+import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
 import net.i2p.util.Translate;
 
@@ -45,6 +46,7 @@ import net.i2p.util.Translate;
  */
 public abstract class LocalHTTPServer {
 
+    private static final Log _log = new Log(LocalHTTPServer.class);
     private final static String ERR_404 =
          "HTTP/1.1 404 Not Found\r\n"+
          "Content-Type: text/plain\r\n"+
@@ -114,7 +116,6 @@ public abstract class LocalHTTPServer {
     public static void serveLocalFile(I2PAppContext context, I2PSocketManager sockMgr,
                                       OutputStream out, String method, String targetRequest,
                                       String query, String proxyNonce, boolean allowGzip) throws IOException {
-        //System.err.println("targetRequest: \"" + targetRequest + "\"");
         // a home page message for the curious...
         if (targetRequest.equals("/")) {
             out.write(OK.getBytes("UTF-8"));
@@ -217,14 +218,10 @@ public abstract class LocalHTTPServer {
                 try {
                     dest = new Destination(b64Dest);
                 } catch (DataFormatException dfe) {
-                    System.err.println("Bad dest to save?" + b64Dest);
+                    if (_log.shouldLog(Log.WARN))
+                        _log.warn("Bad dest to save?" + b64Dest);
                 }
             }
-            //System.err.println("url          : \"" + url           + "\"");
-            //System.err.println("host         : \"" + host          + "\"");
-            //System.err.println("b64dest      : \"" + b64Dest       + "\"");
-            //System.err.println("book         : \"" + book          + "\"");
-            //System.err.println("nonce        : \"" + nonce         + "\"");
             if (DataHelper.eqCT(proxyNonce, nonce) && url != null && host != null && dest != null) {
                 NamingService ns = context.namingService();
                 Properties nsOptions = new Properties();

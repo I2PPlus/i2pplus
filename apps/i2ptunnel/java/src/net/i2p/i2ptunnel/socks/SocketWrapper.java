@@ -86,6 +86,7 @@ class SocketWrapper implements I2PSocket {
 
     /**
      *  @return null always
+     *  @deprecated unused
      */
     @Deprecated
     @Override

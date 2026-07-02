@@ -1863,14 +1863,15 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     * Log the given message (using both the logging subsystem and standard output...)
+     * Log the given message using the logging subsystem and standard output.
      *
+     * @param s message to log
      */
     @Override
     public void log(String s) {
         System.out.println(s);
-        //if (_log.shouldInfo())
-        //    _log.info(getPrefix() + "Display: " + s);
+        if (_log.shouldInfo())
+            _log.info(getPrefix() + "Display: " + s);
     }
 
     /**
@@ -1970,7 +1971,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                 content = new byte[read];
                 System.arraycopy(buf, 0, content, 0, read);
             } catch (IOException ioe) {
-                System.out.println(ioe.getMessage());
+                if (log.shouldLog(Log.WARN))
+                    log.warn("Error reading destination from " + name, ioe);
                 return null;
             } finally {
                 if (in != null) try {
