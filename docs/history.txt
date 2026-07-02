@@ -1,8 +1,19 @@
+2026-07-02 dr|z3d
+  * Router:
+    - Sort peers by measured latency in tunnel peer selection to
+      reduce first-hop delay; deprioritize untested peers
+    - Dynamic concurrent message limit based on peer RTT; halve
+      window when RTT > 200ms, increase when < 100ms
+
 2026-06-29 dr|z3d
   * Router:
     - Replace network whois with local ASN MMDB for instant hostname
       lookups; RDNS remains optional fallback
     - Fix stale RDNS cache entries; skip unknown/IP for re-lookup
+    - Fix NTCP buffer leak, BanLogger race, wasUnreachable map removal;
+      non-blocking pumper offer timeout; staggered pool expiry
+    - Cap client pool tunnels at 3x target; hard ceiling on consecutive
+      test failures; per-pool peer diversity enforcement
   * Console:
     - Always show hostname/domain column in tunnel, banlist, and
       profile tables; use sync lookup for instant results
