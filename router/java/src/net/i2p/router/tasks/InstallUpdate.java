@@ -38,7 +38,7 @@ import net.i2p.util.SystemVersion;
  * <p><strong>Error Handling:</strong></p>
  * <ul>
  *   <li>Renames failed updates to "BAD-i2pupdate.zip"</li>
- *   <li>Provides detailed logging throughout process</li>
+ *   <li>Summarizes file deletions at end of process</li>
  *   <li>Handles permission issues gracefully</li>
  *   <li>Performs cleanup even on partial failures</li>
  * </ul>
@@ -64,26 +64,7 @@ public class InstallUpdate {
     /**
      * Install updates from i2pupdate.zip file if present.
      *
-     * This method searches for an update file in the router directory or base directory,
-     * verifies its integrity, extracts it to the base directory, and performs cleanup operations.
-     * If successful, the JVM will exit with a restart code and never return.
-     *
-     * The method performs the following steps:
-     * <ul>
-     *   <li>Search for i2pupdate.zip in router dir or base dir</li>
-     *   <li>Check write permissions to base directory</li>
-     *   <li>Verify ZIP file integrity</li>
-     *   <li>Update router configuration with version info</li>
-     *   <li>Extract update to base directory</li>
-     *   <li>Delete files listed in deletelist.txt</li>
-     *   <li>Cleanup update file and restart JVM</li>
-     * </ul>
-     *
-     * If no update file is found, the method performs cleanup of old native libraries
-     * and processes any pending file deletions.
-     *
      * @param r the router instance, must have a valid context
-     * @throws RuntimeException if critical errors occur during update process
      * @since 0.9.20 moved from Router.java
      */
     public static void installUpdates(Router r) {
@@ -100,19 +81,14 @@ public class InstallUpdate {
             if ((test.exists() && !test.canWrite()) || (!context.getBaseDir().canWrite())) {
                 System.out.println("ERROR: No write permissions on " + context.getBaseDir() +
                                    " to extract software update file"); // NOSONAR post-update NCDFE risk
-                // carry on
                 return;
             }
             System.out.println("INFO: Update file exists: " + updateFile + " -> Installing..."); // NOSONAR post-update NCDFE risk
             // verify the whole thing first
-            // we could remember this fails, and not bother restarting, but who cares...
             boolean ok = FileUtil.verifyZip(updateFile);
             if (ok) {
-                // This may be useful someday. First added in 0.8.2
-                // Moved above the extract so we don't NCDFE
                 Map<String, String> config = new HashMap<>(4);
                 config.put("router.updateLastInstalled", "" + System.currentTimeMillis());
-                // Set the last version to the current version, since 0.8.13
                 config.put("router.previousVersion", RouterVersion.VERSION);
                 config.put("router.previousFullVersion", RouterVersion.FULL_VERSION);
                 r.saveConfig(config, null);
@@ -122,7 +98,6 @@ public class InstallUpdate {
             // Very important - we have now trashed our jars.
             // After this point, do not use any new I2P classes, or they will fail to load
             // and we will die with NCDFE.
-            // Ideally, do not use I2P classes at all, new or not.
             try {
                 if (ok) {
                     // We do this here so we may delete old jars before we restart
@@ -130,26 +105,20 @@ public class InstallUpdate {
                     System.out.println("INFO: Update installed successfully!"); // NOSONAR post-update NCDFE risk
                 } else {
                     System.out.println("ERROR: Update failed!"); // NOSONAR post-update NCDFE risk
-                }
-                if (!ok) {
                     // we can't leave the file in place or we'll continually restart, so rename it
                     File bad = new File(context.getRouterDir(), "BAD-" + Router.UPDATE_FILE);
-                    boolean renamed = updateFile.renameTo(bad);
-                    if (renamed) {
-                        System.out.println("Moved update file to " + bad.getAbsolutePath()); // NOSONAR post-update NCDFE risk
+                    if (updateFile.renameTo(bad)) {
+                        System.out.println("INFO: Moved update file to " + bad); // NOSONAR post-update NCDFE risk
                     } else {
-                        System.out.println("Deleting file " + updateFile.getAbsolutePath()); // NOSONAR post-update NCDFE risk
-                        ok = true;  // so it will be deleted
+                        System.out.println("WARNING: Could not rename update file to " + bad); // NOSONAR post-update NCDFE risk
                     }
                 }
                 if (ok) {
-                    boolean deleted = updateFile.delete();
-                    if (!deleted) {
-                        System.out.println("ERROR: Unable to delete the update file!"); // NOSONAR post-update NCDFE risk
+                    if (!updateFile.delete()) {
+                        System.out.println("WARNING: Unable to delete " + updateFile); // NOSONAR post-update NCDFE risk
                         updateFile.deleteOnExit();
                     }
                 }
-                // exit whether ok or not
                 if (context.hasWrapper())
                     System.out.println("INFO: Restarting after update..."); // NOSONAR post-update NCDFE risk
                 else
@@ -160,10 +129,6 @@ public class InstallUpdate {
             System.exit(Router.EXIT_HARD_RESTART);
         } else {
             deleteJbigiFiles(context);
-            // It was here starting in 0.8.12 so it could be used the very first time
-            // Now moved up so it is usually run only after an update
-            // But the first time before jetty 6 it will run here...
-            // Here we can't remove jars
             deleteListedFiles(context);
         }
     }
@@ -182,7 +147,6 @@ public class InstallUpdate {
         String osName = System.getProperty("os.name").toLowerCase(Locale.US);
         boolean isWin = SystemVersion.isWindows();
         boolean isMac = SystemVersion.isMac();
-        // only do this on these OSes
         boolean goodOS = isWin || isMac || osName.contains("linux") || osName.contains("freebsd");
 
         File jbigiJar = new File(context.getLibDir(), "jbigi.jar");
@@ -198,32 +162,26 @@ public class InstallUpdate {
             }
 
             if (isX86) {
-                File jcpuidLib = new File(context.getBaseDir(), libPrefix + "jcpuid" + libSuffix);
-                if (jcpuidLib.canWrite() && jbigiJar.lastModified() > jcpuidLib.lastModified()) {
-                    String path = jcpuidLib.getAbsolutePath();
-                    boolean success = FileUtil.copy(path, path + ".bak", true, true);
-                    if (success) {
-                        boolean success2 = jcpuidLib.delete();
-                        if (success2) {
-                            System.out.println("New jbigi.jar detected -> Moved jcpuid library to " + path + ".bak"); // NOSONAR post-update
-                            System.out.println("Check logs for successful installation of new library"); // NOSONAR post-update
-                        }
-                    }
-                }
+                deleteNativeLib(jbigiJar, new File(context.getBaseDir(), libPrefix + "jcpuid" + libSuffix));
             }
-
             if (isX86 || SystemVersion.isARM()) {
-                File jbigiLib = new File(context.getBaseDir(), libPrefix + "jbigi" + libSuffix);
-                if (jbigiLib.canWrite() && jbigiJar.lastModified() > jbigiLib.lastModified()) {
-                    String path = jbigiLib.getAbsolutePath();
-                    boolean success = FileUtil.copy(path, path + ".bak", true, true);
-                    if (success) {
-                        boolean success2 = jbigiLib.delete();
-                        if (success2) {
-                            System.out.println("New jbigi.jar detected -> Moved jbigi library to " + path + ".bak"); // NOSONAR post-update
-                            System.out.println("Check logs for successful installation of new library"); // NOSONAR post-update
-                        }
-                    }
+                deleteNativeLib(jbigiJar, new File(context.getBaseDir(), libPrefix + "jbigi" + libSuffix));
+            }
+        }
+    }
+
+    /**
+     *  Delete a native library if the jbigi.jar is newer.
+     *  Copies to .bak first, then deletes.
+     */
+    private static void deleteNativeLib(File jbigiJar, File lib) {
+        if (lib.canWrite() && jbigiJar.lastModified() > lib.lastModified()) {
+            String path = lib.getAbsolutePath();
+            if (FileUtil.copy(path, path + ".bak", true, true)) {
+                if (lib.delete()) {
+                    System.out.println("INFO: New jbigi.jar detected -> Moved " + lib.getName() + " to " + path + ".bak"); // NOSONAR post-update
+                } else {
+                    System.out.println("WARNING: New jbigi.jar detected but could not delete " + lib.getName()); // NOSONAR post-update
                 }
             }
         }
@@ -233,8 +191,7 @@ public class InstallUpdate {
      *  Delete all files listed in the delete file.
      *  Format: One file name per line, comment lines start with '#'.
      *  All file names must be relative to $I2P, absolute file names not allowed.
-     *  We probably can't remove old jars this way.
-     *  Fails silently.
+     *  Summarizes deletions at the end.
      *  Use no new I2P classes here so it may be called after zip extraction.
      *  @since 0.8.12
      */
@@ -242,6 +199,8 @@ public class InstallUpdate {
         File deleteFile = new File(context.getBaseDir(), DELETE_FILE);
         if (!deleteFile.exists())
             return;
+        int deleted = 0;
+        int failed = 0;
         // this is similar to FileUtil.readTextFile() but we can't use any I2P classes here
         try (FileInputStream fis = new FileInputStream(deleteFile);
              BufferedReader in = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8))) {
@@ -250,26 +209,37 @@ public class InstallUpdate {
                 String fl = line.trim();
                 if (fl.length() == 0 || fl.startsWith("#")) continue;
                 if (fl.contains("..")) continue;
-                System.out.println("INFO: Processing delete list entry: " + fl); // NOSONAR post-update NCDFE risk
+                if (fl.startsWith("/") || fl.startsWith("\\")) continue;
                 File df = new File(context.getBaseDir(), fl);
-                if (df.exists()) {
-                    boolean deleted = false;
-                    if (df.isFile()) {
-                        deleted = df.delete();
-                    } else if (df.isDirectory()) {
-                        deleted = deleteDir(df);
-                    }
-                    if (deleted)
-                        System.out.println("INFO: " + (df.isDirectory() ? "Directory [" : "File [") + fl + "] deleted"); // NOSONAR post-update NCDFE risk
+                if (!df.exists()) continue;
+                boolean ok;
+                if (df.isDirectory()) {
+                    ok = deleteDir(df);
+                } else {
+                    ok = df.delete();
+                }
+                if (ok) {
+                    deleted++;
+                } else {
+                    failed++;
                 }
             }
         } catch (IOException ioe) { /* ignored */ }
-        if (deleteFile.delete()) {
-            //System.out.println("INFO: File [" + DELETE_FILE + "] deleted");
+        deleteFile.delete();
+        if (deleted > 0 || failed > 0) {
+            StringBuilder sb = new StringBuilder("INFO: Deletion summary: ");
+            sb.append(deleted).append(" items deleted");
+            if (failed > 0) {
+                sb.append(", ").append(failed).append(" FAILED");
+            }
+            System.out.println(sb.toString()); // NOSONAR post-update NCDFE risk
         }
     }
 
-    /** recursive directory delete */
+    /**
+     *  Recursive directory delete.
+     *  @return true if the directory was deleted
+     */
     private static boolean deleteDir(File dir) {
         File[] files = dir.listFiles();
         if (files != null) {
@@ -284,4 +254,3 @@ public class InstallUpdate {
         return dir.delete();
     }
 }
-
