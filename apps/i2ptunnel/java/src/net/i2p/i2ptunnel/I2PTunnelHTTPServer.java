@@ -19,6 +19,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -455,25 +456,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
         // local is fast, so synchronously. Does not need that many threads.
         try {
-            if (socket.getLocalPort() == 443) {
-                if (getTunnel().getClientOptions().getProperty("targetForPort.443") == null) {
-                    // can't write non-ssl error message
-                    // client side already sent 200 to browser
-                    try {socket.reset();}
-                    catch (IOException ioe) { /* ignored */ }
-                    return;
-                }
-
-                /**
-                 * We don't know if this is GET or POST or what, so set a huge timeout
-                 * and rely on the server to do the actual timeout
-                 */
-                socket.setReadTimeout(SERVER_READ_TIMEOUT_POST);
-                Socket s = getSocket(socket.getPeerDestination().calculateHash(), 443);
-                Runnable t = new I2PTunnelRunner(s, socket, slock, null, null, null, (I2PTunnelRunner.FailCallback) null);
-                _clientExecutor.execute(t);
+            if (handlePort443(socket))
                 return;
-            }
 
             long afterAccept = getTunnel().getContext().clock().now();
             int requestCount = 0;
@@ -564,211 +548,28 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     return;
                 }
 
-                /**
-                 *  Block requests to localhost or loopback addresses via hostname,
-                 *  attempt to validate non-i2p hostnames, and send client a suitable
-                 *  error response where applicable
-                 *
-                 *  @since 0.9.63+
-                 */
-                String hostname = null;
-                boolean isValidRequest = true;
-                boolean isPossibleExploit = false;
-                List<String> host = headers.get("Host");
-
-                if (peerB32.length() != 60) {
-                    _log.warn("[HTTPServer] Invalid B32 (expected 60 characters, got " + peerB32.length() + ") -> Denying request to [" + hostname + "]" +
-                    "\n* Client: " + peerB32);
-                    isValidRequest = false;
-                    isPossibleExploit = false;
-                }
-
-                if (host != null) {
-                    hostname = host.get(0);
-                    int port = hostname.indexOf(":");
-                    if (port != -1) {hostname = hostname.substring(0, port);}
-                }
-                if (_log.shouldDebug()) {_log.debug("[HTTPServer] Incoming request for: " + hostname + "\n* Client: " + peerB32);}
-                if (hostname != null && !hostname.endsWith(".i2p") && !hostname.endsWith(".onion")) {
-                    InetAddress address = InetAddress.getByName(hostname);
-                    if (address.isLinkLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress()) {
-                        if (_log.shouldWarn()) {
-                            _log.warn("[HTTPServer] WARNING! Attempt to access localhost or loopback address via [" + hostname + "]" +
-                                      " -> Adding dest to clients blocklist file \n* Client: " + peerB32);
-                        }
-                        _blocklistManager.logBlockedDestination(peerB32);
-                        isValidRequest = false;
-                        isPossibleExploit = true;
-                    } else if (address.isAnyLocalAddress()) { // check for 0.0.0.0 response (DNS blocking)
-                        if (!hostname.equals("::") || !hostname.equals("0.0.0.0")) {
-                            if (_log.shouldWarn()) {
-                                _log.warn("[HTTPServer] DNS server appears to be blocking requests to " + hostname +
-                                          " -> Sending Error 403 \n* Client: " + peerB32);
-                            }
-                            sendError(socket, ERR_FORBIDDEN);
-                            isValidRequest = false;
-                            isPossibleExploit = false;
-                        } else {
-                            sendError(socket, ERR_FORBIDDEN);
-                            isValidRequest = false;
-                            isPossibleExploit = true;
-                        }
-                    } else {
-                        if (_log.shouldInfo() && !hostname.equals(address.getHostAddress())) {
-                            _log.info("[HTTPServer] Hostname " + hostname + " validated" +
-                                      " -> Resolves to: " + address.getHostAddress());
-                        }
-                        isPossibleExploit = false;
-                    }
-                    if (isPossibleExploit) {
-                        _blocklistManager.logBlockedDestination(peerB32);
-                        if (_log.shouldWarn()) {
-                            _log.warn("[HTTPServer] Client attempted to access private or wildcard address " + hostname +
-                                      " -> Sending Error 403 and adding to blocklist \n* Client: " + peerB32);
-                        }
-                    }
-                    if (!isValidRequest) {
-                        try {socket.close();}
-                        catch (IOException e) { /* ignored */ }
-                    }
-                }
+                validateRequestHost(headers, socket, peerB32);
 
                 long afterHeaders = getTunnel().getContext().clock().now();
                 Properties opts = getTunnel().getClientOptions();
 
-                if (Boolean.parseBoolean(opts.getProperty(OPT_REJECT_INPROXY)) &&
-                    (headers.containsKey("X-Forwarded-For") ||
-                     headers.containsKey("X-Forwarded-Server") ||
-                     headers.containsKey("Forwarded") ||  // RFC 7239
-                     headers.containsKey("X-Forwarded-Host"))) {
-                    if (_log.shouldWarn()) {
-                        StringBuilder buf = new StringBuilder();
-                        buf.append("[HTTPServer] Refusing Inproxy access \n* Client: ").append(peerB32);
-                        List<String> h = headers.get("X-Forwarded-For");
-                        if (h != null)
-                            buf.append("\n* X-Forwarded-For: ").append(h.get(0));
-                        h = headers.get("X-Forwarded-Server");
-                        if (h != null)
-                            buf.append("\n* X-Forwarded-Server: ").append(h.get(0));
-                        h = headers.get("X-Forwarded-Host");
-                        if (h != null)
-                            buf.append("\n* X-Forwarded-Host: ").append(h.get(0));
-                        h = headers.get("Forwarded");
-                        if (h != null)
-                            buf.append("\n* Forwarded: ").append(h.get(0));
-                        _log.warn(buf.toString());
-                    }
-                    // Send a 403, so the user doesn't get an HTTP Proxy error message
-                    // and blame his router or the network.
-                    try {sendError(socket, ERR_FORBIDDEN);}
-                    catch (IOException ioe) { /* ignored */ }
-                    try {socket.close();}
-                    catch (IOException ioe) { /* ignored */ }
+                if (isInproxyRejection(headers, socket, peerB32, opts))
                     return;
-                }
 
-                if (Boolean.parseBoolean(opts.getProperty(OPT_REJECT_REFERER))) {
-                    // reject absolute URIs only
-                    List<String> h = headers.get("Referer");
-                    if (h != null) {
-                        String referer = h.get(0);
-                        if (referer.length() > 9) {
-                            // "Referer: "
-                            referer = referer.substring(9);
-                            if (referer.startsWith("http://") || referer.startsWith("https://")) {
-                                if (_log.shouldWarn()) {
-                                    _log.warn("[HTTPServer] Refusing access (Bad referer) \n* Client: " + peerB32 +
-                                              "\n* Referer: " + referer);
-                                }
-                                try {sendError(socket, ERR_FORBIDDEN);}
-                                catch (IOException ioe) { /* ignored */ }
-                                try {socket.close();}
-                                catch (IOException ioe) { /* ignored */ }
-                                return;
-                            }
-                        }
-                    }
-                }
+                if (isRefererRejection(headers, socket, peerB32, opts))
+                    return;
 
-                if (Boolean.parseBoolean(opts.getProperty(OPT_REJECT_USER_AGENTS))) {
-                    if (headers != null && headers.containsKey("User-Agent")) {
-                        String ua = headers.get("User-Agent").get(0);
-                        if (!ua.startsWith("MYOB")) {
-                            String blockAgents = opts.getProperty(OPT_USER_AGENTS);
-                            if (blockAgents != null) {
-                                String[] agents = DataHelper.split(blockAgents, ",");
-                                for (int i = 0; i < agents.length; i++) {
-                                    String ag = agents[i].trim();
-                                    if (ag.equals("none")) {continue;}
-                                    if (ag.length() > 0 && ua.contains(ag)) {
-                                        if (_log.shouldWarn()) {
-                                            _log.warn("[HTTPServer] Refusing access: Blacklisted User Agent (" + ua + ") \n* Client: " + peerB32);
-                                        }
-                                        try {sendError(socket, ERR_FORBIDDEN);}
-                                        catch (IOException ioe) { /* ignored */ }
-                                        try {socket.close();}
-                                        catch (IOException ioe) { /* ignored */ }
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        // no user-agent, block if blocklist contains "none"
-                        String blockAgents = opts.getProperty(OPT_USER_AGENTS);
-                        if (blockAgents != null) {
-                            String[] agents = DataHelper.split(blockAgents, ",");
-                            for (int i = 0; i < agents.length; i++) {
-                                String ag = agents[i].trim();
-                                if (ag.equals("none")) {
-                                    if (_log.shouldWarn()) {
-                                        _log.warn("[HTTPServer] Refusing access: User Agent header is blank \n* Client: " + peerB32);
-                                    }
-                                    try {sendError(socket, ERR_FORBIDDEN);}
-                                    catch (IOException ioe) { /* ignored */ }
-                                    try {socket.close();}
-                                    catch (IOException ioe) { /* ignored */ }
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                }
+                if (isUserAgentRejection(headers, socket, peerB32, opts))
+                    return;
 
-                ConnThrottler postThrottler;
-                synchronized(this) {
-                    postThrottler = _postThrottler;
-                }
-                if (postThrottler != null && command.length() >= 5 &&
-                    (command.substring(0, 5).toUpperCase(Locale.US).equals("POST ") ||
-                     command.substring(0, 4).toUpperCase(Locale.US).equals("PUT "))) {
-                    if (postThrottler.shouldThrottle(peerHash)) {
-                        if (_log.shouldWarn()) {
-                            _log.warn("[HTTPServer] Refusing POST/PUT since peer is throttled \n* Client: " + peerB32);
-                        }
-                        // Send a 429, so the user doesn't get an HTTP Proxy error message
-                        // and blame his router or the network.
-                        try {sendError(socket, ERR_DENIED);}
-                        catch (IOException ioe) { /* ignored */ }
-                        try {socket.close();}
-                        catch (IOException ioe) { /* ignored */ }
-                        return;
-                    }
-                }
+                if (isPostThrottled(command, peerHash, socket, peerB32))
+                    return;
 
                 addEntry(headers, HASH_HEADER, peerHash.toBase64());
                 addEntry(headers, DEST32_HEADER, peerB32);
                 addEntry(headers, DEST64_HEADER, socket.getPeerDestination().toBase64());
 
-                // Port-specific spoofhost
-                String spoofHost;
-                int ourPort = socket.getLocalPort();
-                if (ourPort != 80 && ourPort > 0 && ourPort <= 65535) {
-                    String portSpoof = opts.getProperty("spoofedHost." + ourPort);
-                    if (portSpoof != null) {spoofHost = portSpoof.trim();}
-                    else {spoofHost = _spoofHost;}
-                } else {spoofHost = _spoofHost;}
-                if (spoofHost != null) {setEntry(headers, "Host", spoofHost);}
+                applySpoofedHost(socket, headers, opts);
 
                 // Force Connection: close, unless websocket
                 boolean upgrade = false;
@@ -813,7 +614,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                  */
 
                 socket.setReadTimeout(readTimeout);
-                Socket s = getSocket(socket.getPeerDestination().calculateHash(), socket.getLocalPort());
+                Socket s = getSocket(peerHash, socket.getLocalPort());
                 long afterSocket = getTunnel().getContext().clock().now();
 
                 /**
@@ -850,33 +651,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
 
                 long afterHandle = getTunnel().getContext().clock().now();
-                if (requestCount == 0) {
-                    long timeToHandle = afterHandle - afterAccept;
-                    getTunnel().getContext().statManager().addRateData("i2ptunnel.httpserver.blockingHandleTime", timeToHandle);
-                    if ((timeToHandle > 1500) && (_log.shouldDebug())) {
-                        _log.info("[HTTPServer] Took a while (" + timeToHandle + "ms) to handle the request for " + remoteHost + ':' + remotePort +
-                                  "\n* Client: " + peerB32 +
-                                  "\n* Tasks: Read headers: " + (afterHeaders-afterAccept) + "ms; " +
-                                  "Socket create: " + (afterSocket-afterHeaders) + "ms; " +
-                                  "Start runners: " + (afterHandle-afterSocket) + "ms");
-                     }
-                }
-                if (keepalive) { // Since we are now running the CompressedRequestor inline, if keepalive is true, we don't need to wait.
-                    if (_log.shouldDebug()) {
-                        long timeToWait = getTunnel().getContext().clock().now() - afterAccept;
-                        // 0: not done; 1: not keepalive-able response; 2: keepalive
-                        String code;
-                        switch (waiter.get()) {
-                            case 0: code = "Not complete"; break;
-                            case 1: code = "Not KeepAlive"; break;
-                            case 2: code = "KeepAlive"; break;
-                            default: code = "Unknown";
-                       }
-                       _log.debug("[HTTPServer] Waited " + timeToWait + "ms for response [#" + requestCount + "] to complete -> " + code);
-                   }
-                    if (waiter.get() != 2)
-                        break;
-                }
+                recordInitialTiming(afterAccept, afterHeaders, afterSocket, afterHandle, requestCount, peerB32);
+                if (keepalive && !shouldKeepalive(waiter, afterAccept, requestCount))
+                    break;
 
                 // go around again
                 requestCount++;
@@ -922,6 +699,336 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             if (_log.shouldError())
                 _log.error("[HTTPServer] Out of Memory error (" + oom.getMessage() + ")");
         }
+    }
+
+    /**
+     *  Handle port 443 (SSL passthrough).
+     *  If no target is configured for port 443, reset the socket.
+     *  Otherwise, set a long timeout and forward directly to the server
+     *  via I2PTunnelRunner.
+     *
+     *  @param socket the incoming I2P socket
+     *  @return true if the socket was handled (port 443), false otherwise
+     *  @throws IOException if socket operations fail
+     */
+    private boolean handlePort443(I2PSocket socket) throws IOException {
+        if (socket.getLocalPort() != 443)
+            return false;
+        if (getTunnel().getClientOptions().getProperty("targetForPort.443") == null) {
+            // can't write non-ssl error message
+            // client side already sent 200 to browser
+            try {socket.reset();}
+            catch (IOException ioe) { /* ignored */ }
+            return true;
+        }
+        // We don't know if this is GET or POST or what, so set a huge timeout
+        // and rely on the server to do the actual timeout
+        socket.setReadTimeout(SERVER_READ_TIMEOUT_POST);
+        Socket s = getSocket(socket.getPeerDestination().calculateHash(), 443);
+        Runnable t = new I2PTunnelRunner(s, socket, slock, null, null, null, (I2PTunnelRunner.FailCallback) null);
+        _clientExecutor.execute(t);
+        return true;
+    }
+
+    /**
+     *  Validate the request hostname against local/loopback/private addresses.
+     *  If the hostname resolves to a private or loopback address, the peer is
+     *  blocklisted and the socket is closed. If DNS resolves to 0.0.0.0 (blocked DNS),
+     *  a 403 is sent.
+     *  UnknownHostException propagates to the caller for handling.
+     *
+     *  @param headers the request headers map (to extract Host header)
+     *  @param socket the incoming I2P socket
+     *  @param peerB32 the peer's base32 address for logging/blocklisting
+     *  @throws UnknownHostException if the hostname cannot be resolved
+     *  @throws IOException if blocklist writing fails
+     */
+    private void validateRequestHost(Map<String, List<String>> headers, I2PSocket socket, String peerB32) throws IOException {
+        String hostname = null;
+        boolean isValidRequest = true;
+        boolean isPossibleExploit = false;
+        List<String> host = headers.get("Host");
+
+        if (peerB32.length() != 60) {
+            _log.warn("[HTTPServer] Invalid B32 (expected 60 characters, got " + peerB32.length() + ") -> Denying request to [" + hostname + "]" +
+            "\n* Client: " + peerB32);
+            isValidRequest = false;
+            isPossibleExploit = false;
+        }
+
+        if (host != null) {
+            hostname = host.get(0);
+            int port = hostname.indexOf(":");
+            if (port != -1) {hostname = hostname.substring(0, port);}
+        }
+        if (_log.shouldDebug()) {_log.debug("[HTTPServer] Incoming request for: " + hostname + "\n* Client: " + peerB32);}
+        if (hostname != null && !hostname.endsWith(".i2p") && !hostname.endsWith(".onion")) {
+            InetAddress address = InetAddress.getByName(hostname);
+            if (address.isLinkLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress()) {
+                if (_log.shouldWarn()) {
+                    _log.warn("[HTTPServer] WARNING! Attempt to access localhost or loopback address via [" + hostname + "]" +
+                              " -> Adding dest to clients blocklist file \n* Client: " + peerB32);
+                }
+                _blocklistManager.logBlockedDestination(peerB32);
+                isValidRequest = false;
+                isPossibleExploit = true;
+            } else if (address.isAnyLocalAddress()) { // check for 0.0.0.0 response (DNS blocking)
+                if (!hostname.equals("::") && !hostname.equals("0.0.0.0")) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("[HTTPServer] DNS server appears to be blocking requests to " + hostname +
+                                  " -> Sending Error 403 \n* Client: " + peerB32);
+                    }
+                    try {sendError(socket, ERR_FORBIDDEN);}
+                    catch (IOException ioe) { /* ignored */ }
+                    isValidRequest = false;
+                    isPossibleExploit = false;
+                } else {
+                    try {sendError(socket, ERR_FORBIDDEN);}
+                    catch (IOException ioe) { /* ignored */ }
+                    isValidRequest = false;
+                    isPossibleExploit = true;
+                }
+            } else {
+                if (_log.shouldInfo() && !hostname.equals(address.getHostAddress())) {
+                    _log.info("[HTTPServer] Hostname " + hostname + " validated" +
+                              " -> Resolves to: " + address.getHostAddress());
+                }
+                isPossibleExploit = false;
+            }
+            if (isPossibleExploit) {
+                _blocklistManager.logBlockedDestination(peerB32);
+                if (_log.shouldWarn()) {
+                    _log.warn("[HTTPServer] Client attempted to access private or wildcard address " + hostname +
+                              " -> Sending Error 403 and adding to blocklist \n* Client: " + peerB32);
+                }
+            }
+            if (!isValidRequest) {
+                try {socket.close();}
+                catch (IOException e) { /* ignored */ }
+            }
+        }
+    }
+
+    /**
+     *  Reject requests that contain forwarded-for headers (inproxy detection).
+     *
+     *  @param headers the request headers
+     *  @param socket the incoming I2P socket
+     *  @param peerB32 the peer's base32 address for logging
+     *  @param opts the tunnel client options
+     *  @return true if the request was rejected and the socket closed
+     */
+    private boolean isInproxyRejection(Map<String, List<String>> headers, I2PSocket socket, String peerB32, Properties opts) {
+        if (!Boolean.parseBoolean(opts.getProperty(OPT_REJECT_INPROXY)))
+            return false;
+        if (!headers.containsKey("X-Forwarded-For") &&
+            !headers.containsKey("X-Forwarded-Server") &&
+            !headers.containsKey("Forwarded") &&
+            !headers.containsKey("X-Forwarded-Host"))
+            return false;
+        if (_log.shouldWarn()) {
+            StringBuilder buf = new StringBuilder();
+            buf.append("[HTTPServer] Refusing Inproxy access \n* Client: ").append(peerB32);
+            List<String> h = headers.get("X-Forwarded-For");
+            if (h != null)
+                buf.append("\n* X-Forwarded-For: ").append(h.get(0));
+            h = headers.get("X-Forwarded-Server");
+            if (h != null)
+                buf.append("\n* X-Forwarded-Server: ").append(h.get(0));
+            h = headers.get("X-Forwarded-Host");
+            if (h != null)
+                buf.append("\n* X-Forwarded-Host: ").append(h.get(0));
+            h = headers.get("Forwarded");
+            if (h != null)
+                buf.append("\n* Forwarded: ").append(h.get(0));
+            _log.warn(buf.toString());
+        }
+        try {sendError(socket, ERR_FORBIDDEN);}
+        catch (IOException ioe) { /* ignored */ }
+        try {socket.close();}
+        catch (IOException ioe) { /* ignored */ }
+        return true;
+    }
+
+    /**
+     *  Reject requests with absolute Referer URIs.
+     *
+     *  @param headers the request headers
+     *  @param socket the incoming I2P socket
+     *  @param peerB32 the peer's base32 address for logging
+     *  @param opts the tunnel client options
+     *  @return true if the request was rejected and the socket closed
+     */
+    private boolean isRefererRejection(Map<String, List<String>> headers, I2PSocket socket, String peerB32, Properties opts) {
+        if (!Boolean.parseBoolean(opts.getProperty(OPT_REJECT_REFERER)))
+            return false;
+        List<String> h = headers.get("Referer");
+        if (h == null)
+            return false;
+        String referer = h.get(0);
+        if (referer.length() <= 9)
+            return false;
+        referer = referer.substring(9);
+        if (!referer.startsWith("http://") && !referer.startsWith("https://"))
+            return false;
+        if (_log.shouldWarn()) {
+            _log.warn("[HTTPServer] Refusing access (Bad referer) \n* Client: " + peerB32 +
+                      "\n* Referer: " + referer);
+        }
+        try {sendError(socket, ERR_FORBIDDEN);}
+        catch (IOException ioe) { /* ignored */ }
+        try {socket.close();}
+        catch (IOException ioe) { /* ignored */ }
+        return true;
+    }
+
+    /**
+     *  Reject requests with blacklisted User-Agent strings.
+     *
+     *  @param headers the request headers
+     *  @param socket the incoming I2P socket
+     *  @param peerB32 the peer's base32 address for logging
+     *  @param opts the tunnel client options
+     *  @return true if the request was rejected and the socket closed
+     */
+    private boolean isUserAgentRejection(Map<String, List<String>> headers, I2PSocket socket, String peerB32, Properties opts) {
+        if (!Boolean.parseBoolean(opts.getProperty(OPT_REJECT_USER_AGENTS)))
+            return false;
+        String blockAgents = opts.getProperty(OPT_USER_AGENTS);
+        if (blockAgents == null)
+            return false;
+        String[] agents = DataHelper.split(blockAgents, ",");
+        if (headers != null && headers.containsKey("User-Agent")) {
+            String ua = headers.get("User-Agent").get(0);
+            if (ua.startsWith("MYOB"))
+                return false;
+            for (int i = 0; i < agents.length; i++) {
+                String ag = agents[i].trim();
+                if (ag.equals("none")) {continue;}
+                if (ag.length() > 0 && ua.contains(ag)) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("[HTTPServer] Refusing access: Blacklisted User Agent (" + ua + ") \n* Client: " + peerB32);
+                    }
+                    try {sendError(socket, ERR_FORBIDDEN);}
+                    catch (IOException ioe) { /* ignored */ }
+                    try {socket.close();}
+                    catch (IOException ioe) { /* ignored */ }
+                    return true;
+                }
+            }
+        } else {
+            // no user-agent, block if blocklist contains "none"
+            for (int i = 0; i < agents.length; i++) {
+                String ag = agents[i].trim();
+                if (ag.equals("none")) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("[HTTPServer] Refusing access: User Agent header is blank \n* Client: " + peerB32);
+                    }
+                    try {sendError(socket, ERR_FORBIDDEN);}
+                    catch (IOException ioe) { /* ignored */ }
+                    try {socket.close();}
+                    catch (IOException ioe) { /* ignored */ }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     *  Check POST/PUT throttling for this peer.
+     *
+     *  @param command the request command string (first line)
+     *  @param peerHash the peer's hash for throttling lookup
+     *  @param socket the incoming I2P socket
+     *  @return true if the request was throttled and the socket closed
+     */
+    private boolean isPostThrottled(StringBuilder command, Hash peerHash, I2PSocket socket, String peerB32) {
+        ConnThrottler postThrottler;
+        synchronized(this) {
+            postThrottler = _postThrottler;
+        }
+        if (postThrottler == null || command.length() < 4)
+            return false;
+        boolean isPost = command.length() >= 5 && command.substring(0, 5).toUpperCase(Locale.US).equals("POST ");
+        boolean isPut = command.length() >= 4 && command.substring(0, 4).toUpperCase(Locale.US).equals("PUT ");
+        if (!isPost && !isPut)
+            return false;
+        if (postThrottler.shouldThrottle(peerHash)) {
+            if (_log.shouldWarn()) {
+                _log.warn("[HTTPServer] Refusing POST/PUT since peer is throttled \n* Client: " + peerB32);
+            }
+            try {sendError(socket, ERR_DENIED);}
+            catch (IOException ioe) { /* ignored */ }
+            try {socket.close();}
+            catch (IOException ioe) { /* ignored */ }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *  Record timing stats for the first request in a keepalive cycle.
+     *
+     *  @param afterAccept clock time right after accept
+     *  @param afterHeaders clock time after reading headers
+     *  @param afterSocket clock time after creating the server socket
+     *  @param afterHandle clock time after dispatching the request
+     *  @param requestCount the request number (only logs for 0)
+     *  @param peerB32 the peer's base32 address for logging
+     */
+    private void recordInitialTiming(long afterAccept, long afterHeaders, long afterSocket,
+                                     long afterHandle, int requestCount, String peerB32) {
+        if (requestCount != 0)
+            return;
+        long timeToHandle = afterHandle - afterAccept;
+        getTunnel().getContext().statManager().addRateData("i2ptunnel.httpserver.blockingHandleTime", timeToHandle);
+        if ((timeToHandle > 1500) && (_log.shouldDebug())) {
+            _log.info("[HTTPServer] Took a while (" + timeToHandle + "ms) to handle the request for " + remoteHost + ':' + remotePort +
+                      "\n* Client: " + peerB32 +
+                      "\n* Tasks: Read headers: " + (afterHeaders-afterAccept) + "ms; " +
+                      "Socket create: " + (afterSocket-afterHeaders) + "ms; " +
+                      "Start runners: " + (afterHandle-afterSocket) + "ms");
+         }
+    }
+
+    /**
+     *  Apply port-specific spoofed host header.
+     *  If no port-specific spoof is configured for the socket's port,
+     *  falls back to the default _spoofHost.
+     */
+    private void applySpoofedHost(I2PSocket socket, Map<String, List<String>> headers, Properties opts) {
+        String spoofHost;
+        int ourPort = socket.getLocalPort();
+        if (ourPort != 80 && ourPort > 0 && ourPort <= 65535) {
+            String portSpoof = opts.getProperty("spoofedHost." + ourPort);
+            if (portSpoof != null) {spoofHost = portSpoof.trim();}
+            else {spoofHost = _spoofHost;}
+        } else {spoofHost = _spoofHost;}
+        if (spoofHost != null) {setEntry(headers, "Host", spoofHost);}
+    }
+
+    /**
+     *  Check whether the keepalive waiter indicates we should stay alive.
+     *  @param waiter the AtomicInteger set by CompressedRequestor
+     *  @param afterAccept clock time right after accept (for debug logging)
+     *  @param requestCount the request number (for debug logging)
+     *  @return true if the waiter returned keepalive-eligible (value 2)
+     */
+    private boolean shouldKeepalive(AtomicInteger waiter, long afterAccept, int requestCount) {
+        if (_log.shouldDebug()) {
+            long timeToWait = getTunnel().getContext().clock().now() - afterAccept;
+            // 0: not done; 1: not keepalive-able response; 2: keepalive
+            String code;
+            switch (waiter.get()) {
+                case 0: code = "Not complete"; break;
+                case 1: code = "Not KeepAlive"; break;
+                case 2: code = "KeepAlive"; break;
+                default: code = "Unknown";
+           }
+           _log.debug("[HTTPServer] Waited " + timeToWait + "ms for response [#" + requestCount + "] to complete -> " + code);
+        }
+        return waiter.get() == 2;
     }
 
     /**
@@ -981,8 +1088,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             Sender s = null;
             Sender sender = null;
             IOException ioex = null;
-            String host = null;
-            String url = null;
             String req = null;
             try {
                 serverout = _webserver.getOutputStream();
@@ -991,35 +1096,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // Don't spin off a thread for this except for POSTs and PUTs and Connection: Upgrade
                 // beware interference with Shoutcast, etc.?
 
-                if (_headers != null && !_headers.isEmpty()) {
-                    String[] requestLines = NEWLINE_SPLIT.split(_headers);
-                    if (requestLines.length > 0) {
-                        String requestLine = requestLines[0];
-                        String[] requestParts = requestLine.split(" ");
-                        url = requestParts.length > 1 ? requestParts[1] : null;
-                        if (url != null) {
-                            if (url.startsWith("http://")) {url = url.replace("http://", "");}
-
-                            // Truncate long URLs
-                            if (url.length() > 100) {
-                                url = url.substring(0, 48) + "..." + url.substring(url.length() - 48);
-                            }
-
-                            String[] urlParts = url.split("/");
-                            if (urlParts.length > 0) {
-                                host = urlParts[0];
-                                for (int i = 1; i < urlParts.length; i++) {
-                                    if (!urlParts[i].trim().isEmpty()) {
-                                        host += "/" + urlParts[i];
-                                     }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (host != null && host.contains("b32.i2p")) {host = host.substring(0, 12) + "...b32.i2p";}
-                req = host != null ? host : "Unknown request";
+                req = extractRequestUrl(_headers);
 
                 boolean isHead = _headers != null && _headers.startsWith("HEAD ");
                 boolean isGet = _headers != null && _headers.startsWith("GET ");
@@ -1148,6 +1225,41 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                 }
             }
+        }
+
+        /**
+         *  Extract the request URL from headers for logging.
+         *  @return a human-readable request description, never null
+         */
+        private static String extractRequestUrl(String headers) {
+            if (headers == null || headers.isEmpty())
+                return "Unknown request";
+            String[] requestLines = NEWLINE_SPLIT.split(headers);
+            if (requestLines.length == 0)
+                return "Unknown request";
+            String requestLine = requestLines[0];
+            String[] requestParts = requestLine.split(" ");
+            String url = requestParts.length > 1 ? requestParts[1] : null;
+            if (url == null)
+                return "Unknown request";
+            if (url.startsWith("http://"))
+                url = url.replace("http://", "");
+            if (url.length() > 100)
+                url = url.substring(0, 48) + "..." + url.substring(url.length() - 48);
+            String[] urlParts = url.split("/");
+            String host;
+            if (urlParts.length > 0) {
+                host = urlParts[0];
+                for (int i = 1; i < urlParts.length; i++) {
+                    if (!urlParts[i].trim().isEmpty())
+                        host += "/" + urlParts[i];
+                }
+            } else {
+                host = url;
+            }
+            if (host != null && host.contains("b32.i2p"))
+                host = host.substring(0, 12) + "...b32.i2p";
+            return host != null ? host : "Unknown request";
         }
     }
 
