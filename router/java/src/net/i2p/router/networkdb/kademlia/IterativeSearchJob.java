@@ -104,6 +104,7 @@ public class IterativeSearchJob extends FloodSearchJob {
 /**
      * Reload grace period from properties (for dynamic tuning).
      * Console may call this.
+     * @param ctx router context for property lookup
      * @return current grace period in ms
      */
     public static long reloadGracePeriod(RouterContext ctx) {
@@ -141,7 +142,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * The default _maxConcurrent
      */
-    private static final int MAX_CONCURRENT = SystemVersion.isSlow() ? 2 : 8;
+    private static final int MAX_CONCURRENT = SystemVersion.isSlow() ? 4 : 16;
 
     public static final String PROP_ENCRYPT_RI = "router.encryptRouterLookups";
 
@@ -190,6 +191,11 @@ public class IterativeSearchJob extends FloodSearchJob {
         // All createRateStat in FNDF
     }
 
+    /**
+     *  Execute the iterative search, selecting floodfill peers from the
+     *  k-buckets and sending DatabaseLookupMessages to each. Continues
+     *  until a reply is received or the search time expires.
+     */
     @Override
     public void runJob() {
         if (_facade.isNegativeCached(_key)) {
@@ -662,6 +668,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      *  Note that the peer did not respond with a DSM (either a DSRM, timeout, or failure).
      *  This is not necessarily a total failure of the search.
+     *  @param peer the peer that failed
      *  @param timedOut if true, will blame the peer's profile
      */
     void failed(Hash peer, boolean timedOut) {
@@ -725,6 +732,8 @@ public class IterativeSearchJob extends FloodSearchJob {
 
     /**
      *  Did we send a request to this peer?
+     *  @param peer the peer to check
+     *  @return true if a query was sent to this peer
      *  @since 0.9.13
      */
     public boolean wasQueried(Hash peer) {
@@ -734,6 +743,8 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * Was this peer recently queried (within grace period)?
      * Used to avoid false positive bans for late but legitimate replies.
+     * @param peer the peer to check
+     * @return true if the peer was queried recently and is in the grace period
      * @since 0.9.67
      */
     public static boolean wasRecentlyQueried(Hash peer) {
@@ -743,6 +754,7 @@ public class IterativeSearchJob extends FloodSearchJob {
 
     /**
      * Clear peer from grace period cache (received their response).
+     * @param peer the peer to clear from the cache
      * @since 0.9.67
      */
     public static void clearRecentlyQueried(Hash peer) {
@@ -751,6 +763,7 @@ public class IterativeSearchJob extends FloodSearchJob {
 
     /**
      *  When did we send the query to the peer?
+     *  @param peer the peer to check
      *  @return context time, or -1 if never sent
      */
     long timeSent(Hash peer) {
@@ -812,6 +825,11 @@ public class IterativeSearchJob extends FloodSearchJob {
         _onFailed.clear();
     }
 
+    /**
+     *  Called when the search completes successfully.
+     *  Credits the responding peer in the profile manager,
+     *  records timing stats, and queues any follow-up jobs.
+     */
     @Override
     void success() {
         /*
