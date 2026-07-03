@@ -103,16 +103,16 @@ class OutboundEstablishState {
         OB_STATE_REQUEST_SENT_NEW_TOKEN
     }
 
-    /** basic delay before backoff
-     *  Transmissions at 0, 1.25, 3.75, 8.75 sec
-     *  This should be a little longer than for inbound.
-     */
-    protected static final long RETRANSMIT_DELAY = SystemVersion.isSlow() ? 1250 : 1000;
-
     /**
-     *  max delay including backoff
-     *  This should be a little longer than for inbound.
+     *  Flat delay between all retransmits (no exponential backoff).
+     *  Handshake packets are tiny (~200B) and infrequent per-peer,
+     *  so the bandwidth cost of flat retransmission is negligible.
+     *  The 30s OB_MESSAGE_TIMEOUT bounds total retransmits to ~60 packets.
+     *
+     *  Was 1000ms with exponential doubling (max gap 16s).
+     *  Reduced to 500ms, now 200ms for sub-100ms message delivery.
      */
+    protected static final long RETRANSMIT_DELAY = SystemVersion.isSlow() ? 300 : 200;
 
     private static final long WAIT_FOR_HOLE_PUNCH_DELAY = 500;
 
@@ -288,7 +288,7 @@ class OutboundEstablishState {
             delay = RETRANSMIT_DELAY;
             _confirmedSentTime = _lastSend;
         } else {
-            delay = Math.min(RETRANSMIT_DELAY << _confirmedSentCount,
+            delay = Math.min(RETRANSMIT_DELAY,
                              _confirmedSentTime + EstablishmentManager.OB_MESSAGE_TIMEOUT - _lastSend);
         }
         _confirmedSentCount++;
@@ -317,7 +317,7 @@ class OutboundEstablishState {
             delay = RETRANSMIT_DELAY;
             _requestSentTime = _lastSend;
         } else {
-            delay = Math.min(RETRANSMIT_DELAY << _requestSentCount,
+            delay = Math.min(RETRANSMIT_DELAY,
                              _requestSentTime + EstablishmentManager.OB_MESSAGE_TIMEOUT - _lastSend);
         }
         _requestSentCount++;
@@ -344,7 +344,7 @@ class OutboundEstablishState {
             delay = RETRANSMIT_DELAY;
             _introSentTime = _lastSend;
         } else {
-            delay = Math.min(RETRANSMIT_DELAY << _introSentCount,
+            delay = Math.min(RETRANSMIT_DELAY,
                              _introSentTime + EstablishmentManager.OB_MESSAGE_TIMEOUT - _lastSend);
         }
         _introSentCount++;
