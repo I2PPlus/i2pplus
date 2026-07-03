@@ -89,7 +89,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static final String PROP_MAX_RTO = "i2p.streaming.maxRTO";
     private static final String PROP_MIN_RESEND_DELAY = "i2p.streaming.minResendDelay";
     private static final String PROP_MAX_RESEND_DELAY = "i2p.streaming.maxResendDelay";
-    private static final int INITIAL_RTO = 10000;
+    private static final int INITIAL_RTO = 6000;
 
     /** @since I2P+ */
     private int getMaxRTO() {
@@ -148,14 +148,14 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * RFC 6928 recommends 10 segments for better initial throughput.
      * Increased to 16 for I2P's high-latency environment to improve initial bandwidth utilization.
      */
-    static final int INITIAL_WINDOW_SIZE = 8;
+    static final int INITIAL_WINDOW_SIZE = 16;
     static final int DEFAULT_MAX_SENDS = 30;
     /**
      *  Initial RTT estimate for new connections before first measurement.
      *  I2P typically has 2-10 second RTT, so 8 seconds provides a conservative
      *  starting point that adapts quickly via updateRTT().
      */
-    public static final int DEFAULT_INITIAL_RTT = 8*1000;
+    public static final int DEFAULT_INITIAL_RTT = 4*1000;
     /**
      *  Maximum RTT to prevent pathological cases from breaking RTO calculations.
      *  I2P typically has 2-10 second RTT.
@@ -169,7 +169,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * 500ms provides a reasonable delayed-ACK window for I2P's high-latency environment,
      * allowing data piggybacking and reducing ACK-only packet floods.
      */
-    private static final int DEFAULT_INITIAL_ACK_DELAY = 30;
+    private static final int DEFAULT_INITIAL_ACK_DELAY = 20;
     static final int MIN_WINDOW_SIZE = 1;
     private static final boolean DEFAULT_ANSWER_PINGS = true;
     private static final int DEFAULT_INACTIVITY_TIMEOUT = 180*1000;

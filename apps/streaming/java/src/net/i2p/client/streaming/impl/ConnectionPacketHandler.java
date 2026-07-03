@@ -34,7 +34,7 @@ class ConnectionPacketHandler {
      * Tunable via i2p.streaming.maxSlowStartWindow (default: 64).
      */
     public static int getMaxSlowStartWindow(I2PAppContext ctx) {
-        return ctx.getProperty("i2p.streaming.maxSlowStartWindow", 64);
+        return ctx.getProperty("i2p.streaming.maxSlowStartWindow", 32);
     }
 
     // see tickets 1939 and 2584
