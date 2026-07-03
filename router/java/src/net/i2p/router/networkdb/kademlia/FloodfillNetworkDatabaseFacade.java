@@ -70,6 +70,38 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     public static final int MAX_TO_FLOOD = 3;
     private static final int FLOOD_PRIORITY = OutNetMessage.PRIORITY_NETDB_FLOOD;
+
+    /**
+     *  Tracks recently-queried floodfill peers across all concurrent searches
+     *  to avoid hammering the same floodfill. Entries expire after 60s.
+     *  @since 2.12.0
+     */
+    static final ConcurrentHashMap<Hash, Long> _recentlyQueriedFloodfills = new ConcurrentHashMap<>(1024);
+    static final long RECENTLY_QUERIED_COOLDOWN = 60*1000L;
+
+    /**
+     *  Check if a floodfill peer was queried recently (within cooldown period).
+     *  @return true if the peer was queried within the last 60s
+     *  @since 2.12.0
+     */
+    static boolean isRecentlyQueried(Hash peer) {
+        Long expiration = _recentlyQueriedFloodfills.get(peer);
+        if (expiration == null)
+            return false;
+        if (expiration > System.currentTimeMillis())
+            return true;
+        _recentlyQueriedFloodfills.remove(peer, expiration);
+        return false;
+    }
+
+    /**
+     *  Mark a floodfill peer as recently queried. Other searches will avoid
+     *  this peer for the cooldown period.
+     *  @since 2.12.0
+     */
+    static void markQueried(Hash peer) {
+        _recentlyQueriedFloodfills.put(peer, System.currentTimeMillis() + RECENTLY_QUERIED_COOLDOWN);
+    }
     private static final int FLOOD_TIMEOUT = 10*1000;
     static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000L;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000L;

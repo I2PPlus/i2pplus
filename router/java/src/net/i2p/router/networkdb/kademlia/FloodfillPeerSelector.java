@@ -235,17 +235,18 @@ class FloodfillPeerSelector extends PeerSelector {
         boolean enforceHeard = installed > 0 && (now - installed) > INSTALL_AGE;
         double maxFailRate = computeMaxFailRate(uptime);
 
-        // 5 == FNDF.MAX_TO_FLOOD + 1
-        int limit = Math.max(5, howMany + 2);
-        limit = Math.min(limit, sorted.size());
-        MaskedIPSet maskedIPs = new MaskedIPSet(limit * 3);
-        // split sorted list into 3 sorted lists
+        MaskedIPSet maskedIPs = new MaskedIPSet(Math.min(sorted.size(), 128) * 3);
+        // split sorted list into 3 unsorted lists
         List<Hash> rv = new ArrayList<>(howMany);
-        List<Hash> okff = new ArrayList<>(limit);
-        List<Hash> badff = new ArrayList<>(limit);
-        for (int i = 0; found < howMany && i < limit; i++) {
+        List<Hash> okff = new ArrayList<>(howMany);
+        List<Hash> badff = new ArrayList<>(howMany);
+        for (int i = 0; found < howMany && i < sorted.size(); i++) {
             Hash entry = sorted.get(i);
             if (entry == null || uptime < 45*1000L) {break;} // shouldn't happen
+            // Skip recently-queried floodfills to spread load across concurrent searches
+            if (FloodfillNetworkDatabaseFacade.isRecentlyQueried(entry)) {
+                continue;
+            }
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(entry);
             MaskedIPSet entryIPs = new MaskedIPSet(_context, entry, info, 2); // put anybody in the same /16 at the end
             boolean sameIP = false;
@@ -262,6 +263,11 @@ class FloodfillPeerSelector extends PeerSelector {
             }
         }
         logSelectionResults(rv, okff, badff);
+        // Shuffle within each tier so concurrent searches don't all pick
+        // the same XOR-closest peers, distributing load across floodfills
+        Collections.shuffle(rv, _context.random());
+        Collections.shuffle(okff, _context.random());
+        Collections.shuffle(badff, _context.random());
         for (int i = 0; found < howMany && i < okff.size(); i++) {
             rv.add(okff.get(i));
             found++;
@@ -270,6 +276,16 @@ class FloodfillPeerSelector extends PeerSelector {
         for (int i = 0; found < howMany && i < badff.size(); i++) {
             rv.add(badff.get(i));
             found++;
+        }
+        // Reserve up to 2 slots for random BAD peers to profile their performance;
+        // this lets us detect and ban unresponsive floodfills that we'd otherwise never query
+        int profiled = 0;
+        for (Hash bad : badff) {
+            if (profiled >= 2) break;
+            if (!rv.contains(bad)) {
+                rv.add(bad);
+                profiled++;
+            }
         }
 
         return rv;
@@ -386,6 +402,25 @@ class FloodfillPeerSelector extends PeerSelector {
             if (_log.shouldDebug())
                 _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> OK");
             return PeerClass.OK;
+        }
+        // Ban floodfills with >95% failure rate on >=15 failed queries and no recent success
+        Rate failRate = prof.getDBHistory().getFailedLookupRate().getRate(RateConstants.ONE_HOUR);
+        if (failRate != null &&
+            failRate.getLifetimeEventCount() >= 15 &&
+            failRate.getAverageValue() > 0.95d &&
+            now - Math.max(prof.getDBHistory().getLastLookupSuccessful(), prof.getDBHistory().getLastStoreSuccessful()) > 15*60*1000L &&
+            Math.max(prof.getDBHistory().getLastLookupFailed(), prof.getDBHistory().getLastStoreFailed()) > now - 15*60*1000L) {
+            String ipPort = getIPFromRouterInfo(info);
+            _context.banlist().banlistRouter(entry, "Unresponsive Floodfill", null, null, now + 60*60*1000L);
+            _banLogger.logBan(entry, ipPort != null ? ipPort : "UNKNOWN", "Unresponsive Floodfill", 60*60*1000L);
+            _context.commSystem().forceDisconnect(entry, "Unresponsive Floodfill");
+            if (_log.shouldWarn()) {
+                _log.warn("Banning for 1h and disconnecting from unresponsive Floodfill [" + entry.toBase64().substring(0,6) + "] -> " +
+                          "Fail rate: " + String.format("%.2f", failRate.getAverageValue()) +
+                          ", Failures: " + failRate.getLifetimeEventCount() +
+                          ", IP: " + (ipPort != null ? ipPort : "UNKNOWN"));
+            }
+            return PeerClass.BAD;
         }
         if (_log.shouldDebug())
             _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Poor profile history for this router");

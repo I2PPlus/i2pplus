@@ -368,6 +368,11 @@ public class IterativeSearchJob extends FloodSearchJob {
                     for (Iterator<Hash> iter = _toTry.iterator(); iter.hasNext(); ) {
                         Hash h = iter.next();
                         iter.remove();
+                        // Skip if recently queried by another concurrent search
+                        if (FloodfillNetworkDatabaseFacade.isRecentlyQueried(h)) {
+                            _skippedPeers.add(h);
+                            continue;
+                        }
                         Set<String> peerIPs = new MaskedIPSet(getContext(), h, IP_CLOSE_BYTES);
                         if (!_ipSet.containsAny(peerIPs)) {
                             _ipSet.addAll(peerIPs);
@@ -625,6 +630,9 @@ public class IterativeSearchJob extends FloodSearchJob {
                                                 OutNetMessage.PRIORITY_MY_NETDB_LOOKUP, ri);
             ctx.commSystem().processMessage(m);
         } else {ctx.tunnelDispatcher().dispatchOutbound(outMsg, outTunnel.getSendTunnelId(0), peer);}
+
+        // Mark as recently queried so other concurrent searches avoid this peer
+        _facade.markQueried(peer);
 
         // Set timeout based on resp. time from profile
         PeerProfile prof = getContext().profileOrganizer().getProfileNonblocking(peer);
