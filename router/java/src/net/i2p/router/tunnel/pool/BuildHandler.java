@@ -80,10 +80,10 @@ class BuildHandler implements Runnable {
     private static final int MIN_QUEUE = IS_SLOW ? 16 : 32;
     private static final int MAX_QUEUE = IS_SLOW ? 64 : 512;
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
-    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 8*1000;
+    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 5*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
     private static final int MIN_LOOKUP_LIMIT = IS_SLOW ? 4 : 10; // limits on concurrent next-hop RI lookup
-    private static final int MAX_LOOKUP_LIMIT = IS_SLOW ? 10 : Math.max(SystemVersion.getCores() / 2, 16);
+    private static final int MAX_LOOKUP_LIMIT = IS_SLOW ? 10 : Math.max(SystemVersion.getCores() / 2, 32);
     private static final int PERCENT_LOOKUP_LIMIT = IS_SLOW ? 15 : 40; // limit lookups to this % of current participating tunnels
     private static final long MAX_REQUEST_FUTURE = 5*60*1000L;
     private static final long MAX_REQUEST_AGE = 65*60*1000L; /** must be > 1 hour due to rounding down */
