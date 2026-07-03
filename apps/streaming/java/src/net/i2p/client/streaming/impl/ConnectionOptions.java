@@ -152,10 +152,10 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static final int DEFAULT_MAX_SENDS = 30;
     /**
      *  Initial RTT estimate for new connections before first measurement.
-     *  I2P typically has 2-10 second RTT, so 8 seconds provides a conservative
+     *  I2P typically has 2-10 second RTT, so 3 seconds provides a conservative
      *  starting point that adapts quickly via updateRTT().
      */
-    public static final int DEFAULT_INITIAL_RTT = 4*1000;
+    public static final int DEFAULT_INITIAL_RTT = 3*1000;
     /**
      *  Maximum RTT to prevent pathological cases from breaking RTO calculations.
      *  I2P typically has 2-10 second RTT.
