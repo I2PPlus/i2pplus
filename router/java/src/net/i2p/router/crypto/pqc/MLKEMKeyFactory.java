@@ -56,9 +56,16 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
         //ctx.statManager().createRateStat("crypto.MLKEMReused", "Unused requeued", "Encryption", new long[] { 60*60*1000 });
         ctx.statManager().createRateStat("crypto.MLKEMEmpty", "Queue empty", "Encryption", new long[] { 60*60*1000L });
 
-        // add to the defaults for every 128MB of RAM, up to 512MB
+        // Scale precomputation with available memory and cores.
+        // MLKEM-768 keypair is ~3.5KB so even 1000 keys is <4MB.
         long maxMemory = SystemVersion.getMaxMemory();
-        int factor = (int) Math.max(1L, Math.min(4L, 1 + (maxMemory / (128*1024*1024L))));
+        int cores = SystemVersion.getCores();
+        // Memory factor: +1 per 128MB
+        int memFactor = Math.max(1, (int)(maxMemory / (128L * 1024 * 1024)));
+        // Core factor: +1 per core
+        int coreFactor = cores;
+        // Use the larger — memory cost is negligible, no cap
+        int factor = Math.max(memFactor, coreFactor);
         if (SystemVersion.isSlow())
             factor *= 2;
         int defaultMin = DEFAULT_MLKEM_PRECALC_MIN * factor;
@@ -117,9 +124,11 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
                         break;
                     long curCalc = System.currentTimeMillis() - curStart;
                     // for some relief...
+                    // On multi-core systems, spend less time sleeping between keygens
                     if (!interrupted()) {
                         try {
-                            Thread.sleep(Math.min(200, Math.max(10, _calcDelay + (curCalc * 3))));
+                            int minSleep = Math.max(1, 10 / Math.max(1, SystemVersion.getCores() / 4));
+                            Thread.sleep(Math.min(200, Math.max(minSleep, _calcDelay + (curCalc * 3))));
                         } catch (InterruptedException ie) {
                             Thread.currentThread().interrupt();
                         }

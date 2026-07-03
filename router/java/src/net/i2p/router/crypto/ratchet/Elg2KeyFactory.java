@@ -48,9 +48,12 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         ctx.statManager().createRateStat("crypto.EDHReused", "Unused DH requeued", "Encryption", new long[] { RateConstants.ONE_MINUTE });
         ctx.statManager().createRateStat("crypto.EDHEmpty", "DH queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE });
 
-        // add to the defaults for every 128MB of RAM, up to 512MB
+        // Scale precomputation with available memory and cores.
         long maxMemory = SystemVersion.getMaxMemory();
-        int factor = (int) Math.max(1L, Math.min(4L, 1 + (maxMemory / (128*1024*1024L))));
+        int cores = SystemVersion.getCores();
+        int memFactor = Math.max(1, (int)(maxMemory / (128L * 1024 * 1024)));
+        int coreFactor = cores;
+        int factor = Math.max(memFactor, coreFactor);
         boolean slow = SystemVersion.isSlow();
         RETURN_UNUSED_TO_XDH = slow;
         if (slow) {factor *= 2;}
@@ -100,9 +103,10 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
                     long curStart = System.currentTimeMillis();
                     if (!addKeys(precalc())) {break;}
                     long curCalc = System.currentTimeMillis() - curStart;
-                    // for some relief...
+                    // for some relief... on multi-core systems sleep less between keygens
                     if (!interrupted()) {
-                        try {Thread.sleep(Math.min(200, Math.max(10, _calcDelay + (curCalc * 3))));}
+                        int minSleep = Math.max(1, 10 / Math.max(1, SystemVersion.getCores() / 4));
+                        try {Thread.sleep(Math.min(200, Math.max(minSleep, _calcDelay + (curCalc * 3))));}
                         catch (InterruptedException ie) {
                             Thread.currentThread().interrupt();
                         }

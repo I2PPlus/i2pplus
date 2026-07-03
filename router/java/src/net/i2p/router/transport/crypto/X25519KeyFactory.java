@@ -45,9 +45,13 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         ctx.statManager().createRateStat("crypto.XDHReused", "Unused DH requeued", "Encryption", new long[] { RateConstants.ONE_MINUTE });
         ctx.statManager().createRateStat("crypto.XDHEmpty", "DH queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE });
 
-        // add to the defaults for every 128MB of RAM, up to 512MB
+        // Scale precomputation with available memory and cores.
+        // X25519 keypair is ~64 bytes so even 5000 keys is ~320KB.
         long maxMemory = SystemVersion.getMaxMemory();
-        int factor = (int) Math.max(1L, Math.min(4L, 1 + (maxMemory / (128*1024*1024L))));
+        int cores = SystemVersion.getCores();
+        int memFactor = Math.max(1, (int)(maxMemory / (128L * 1024 * 1024)));
+        int coreFactor = cores;
+        int factor = Math.max(memFactor, coreFactor);
         if (SystemVersion.isSlow()) {factor *= 2;}
         int defaultMin = DEFAULT_DH_PRECALC_MIN * factor;
         int defaultMax = DEFAULT_DH_PRECALC_MAX * factor;
@@ -96,9 +100,10 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
                     long curStart = System.currentTimeMillis();
                     if (!addKeys(precalc())) {break;}
                     long curCalc = System.currentTimeMillis() - curStart;
-                    // for some relief...
+                    // for some relief... on multi-core systems sleep less between keygens
                     if (!interrupted()) {
-                        try {Thread.sleep(Math.min(200, Math.max(10, _calcDelay + (curCalc * 3))));}
+                        int minSleep = Math.max(1, 10 / Math.max(1, SystemVersion.getCores() / 4));
+                        try {Thread.sleep(Math.min(200, Math.max(minSleep, _calcDelay + (curCalc * 3))));}
                         catch (InterruptedException ie) {
                             Thread.currentThread().interrupt();
                         }
