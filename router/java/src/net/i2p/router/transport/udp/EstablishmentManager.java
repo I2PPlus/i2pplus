@@ -168,7 +168,7 @@ class EstablishmentManager {
     public static final long MAX_IB_ESTABLISH_TIME = SystemVersion.isSlow() ? 60*1000L : 45*1000L;
 
     /** Max wait before receiving a response to a single message during outbound establishment */
-    public static final long OB_MESSAGE_TIMEOUT = 30*1000L;
+    public static final long OB_MESSAGE_TIMEOUT = 5*1000L;
 
     /** for the DSM and or netdb store */
     private static final long DATA_MESSAGE_TIMEOUT = 15*1000L;
