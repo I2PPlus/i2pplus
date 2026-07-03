@@ -31,7 +31,7 @@ class NegativeLookupCache {
     private final SimpleTimer2.TimedEvent cleaner;
     private final long cleanTime;
 
-    static final int MAX_FAILS = 3;
+    static final int MAX_FAILS = 6;
     private static final int MAX_BAD_DESTS = 128;
     private static final long CLEAN_TIME = 2*60*1000L;
 

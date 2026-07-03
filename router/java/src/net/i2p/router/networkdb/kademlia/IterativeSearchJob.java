@@ -85,7 +85,7 @@ public class IterativeSearchJob extends FloodSearchJob {
 
     private static final int MAX_NON_FF = 5;
     /** Max number of peers to query */
-    private static final int TOTAL_SEARCH_LIMIT = 14;
+    private static final int TOTAL_SEARCH_LIMIT = 24;
     /** Max number of peers to query if we are ff */
     private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 10;
     /** Extra peers to get from peer selector, as we may discard some before querying */
@@ -126,7 +126,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * The default single search time
      */
-    private static final long SINGLE_SEARCH_TIME = 4L*1000;
+    private static final long SINGLE_SEARCH_TIME = 6L*1000;
     private static final long MIN_SINGLE_SEARCH_TIME = 1000;
 
     /** The actual expire time for a search message */
@@ -141,7 +141,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * The default _maxConcurrent
      */
-    private static final int MAX_CONCURRENT = SystemVersion.isSlow() ? 2 : 4;
+    private static final int MAX_CONCURRENT = SystemVersion.isSlow() ? 2 : 8;
 
     public static final String PROP_ENCRYPT_RI = "router.encryptRouterLookups";
 

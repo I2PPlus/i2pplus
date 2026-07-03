@@ -1108,7 +1108,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     private static final long MIN_LOOKUP_TIMEOUT = 2000;
-    private static final long MAX_LOOKUP_TIMEOUT = 5000;
+    private static final long MAX_LOOKUP_TIMEOUT = 8000;
     private static final int LOOKUP_SAMPLE_SIZE = 20;
     private final MovingAverage _lookupTimeAvg = new MovingAverage(LOOKUP_SAMPLE_SIZE);
 
