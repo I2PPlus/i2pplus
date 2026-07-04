@@ -111,6 +111,18 @@ class PumpedTunnelGateway extends TunnelGateway {
                     context.statManager().createRequiredRateStat("tunnel.dropGatewayOverflowIB",
                         "Inbound gateway queue overflow drops", "Tunnels [Participating]",
                         new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+                    context.statManager().createRequiredRateStat("tunnel.obgw.queueSize",
+                        "Outbound gateway queue depth", "Tunnels [Participating]",
+                        new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+                    context.statManager().createRequiredRateStat("tunnel.ibgw.queueSize",
+                        "Inbound gateway queue depth", "Tunnels [Participating]",
+                        new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+                    context.statManager().createRequiredRateStat("codel.OBGW.delay",
+                        "Average queue delay (ms)", "Tunnels [Participating]",
+                        new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+                    context.statManager().createRequiredRateStat("codel.IBGW.delay",
+                        "Average queue delay (ms)", "Tunnels [Participating]",
+                        new long[] { 60*1000, 10*60*1000, 60*60*1000 });
                     _statsCreated = true;
                 }
             }
@@ -160,6 +172,11 @@ class PumpedTunnelGateway extends TunnelGateway {
         if (_prequeue.offer(cur)) {
             _messagesSent++;
             _pumper.wantsPumping(this);
+            int qSize = _prequeue.size();
+            if (_isInbound)
+                _context.statManager().addRateData("tunnel.ibgw.queueSize", qSize);
+            else
+                _context.statManager().addRateData("tunnel.obgw.queueSize", qSize);
             return true;
         } else {
             _context.statManager().addRateData("tunnel.dropGatewayOverflow", 1);
