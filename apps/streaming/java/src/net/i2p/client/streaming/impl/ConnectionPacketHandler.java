@@ -48,13 +48,13 @@ class ConnectionPacketHandler {
         _log = context.logManager().getLog(ConnectionPacketHandler.class);
         _context.statManager().createFrequencyStat("stream.ack.dup.immediate", "How often duplicate packets get ACKed immediately", "Stream", RATES);
         _context.statManager().createRateStat("stream.ack.dup.sent", "Was the ACK for a duplicate packet sent as scheduled?", "Stream", RATES);
-        _context.statManager().createRateStat("stream.con.initialRTT.in", "RTT for the first packet of an inbound connection", "Stream", RATES);
-        _context.statManager().createRateStat("stream.con.initialRTT.out", "RTT for the first packet of an outbound connection", "Stream", RATES);
-        _context.statManager().createRateStat("stream.con.packetsAckedPerMessageReceived", "Avg number of ACKs in a message", "Stream", RATES);
+        _context.statManager().createRequiredRateStat("stream.con.initialRTT.in", "RTT for the first packet of an inbound connection", "Stream", RATES);
+        _context.statManager().createRequiredRateStat("stream.con.initialRTT.out", "RTT for the first packet of an outbound connection", "Stream", RATES);
+        _context.statManager().createRequiredRateStat("stream.con.packetsAckedPerMessageReceived", "Avg number of ACKs in a message", "Stream", RATES);
         _context.statManager().createRateStat("stream.con.receiveDuplicateSize", "Size of a duplicate message received on a connection", "Stream", RATES);
         _context.statManager().createRateStat("stream.con.receiveMessageSize", "Size of a message received on a connection", "Stream", RATES);
         _context.statManager().createRateStat("stream.resetReceived", "Number of successful sent messages before receiving a RESET", "Stream", RATES);
-        _context.statManager().createRateStat("stream.sendsBeforeAck", "Number of times a message was sent before it was ACKed", "Stream", RATES);
+        _context.statManager().createRequiredRateStat("stream.sendsBeforeAck", "Number of times a message was sent before it was ACKed", "Stream", RATES);
         //_context.statManager().createRateStat("stream.trend", "What direction the RTT is trending in (with period = windowsize)", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
     }
 

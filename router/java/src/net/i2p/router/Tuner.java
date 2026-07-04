@@ -975,24 +975,26 @@ public class Tuner implements SimpleTimer.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.outboundEstablishTime (ms)
-            // Cross-refs: sendFailed (establish failures), sendConfirmTime (general RTT)
+            // Cross-refs: sendFailed (establish failures), udp.sendConfirmTime (actual RTT),
+            //             sendMessageFailureLifetime (congestion)
             double sendFailed = getAdditionalStat(_context, "udp.sendFailed");
-            double confirmTime = getAdditionalStat(_context, "transport.sendProcessingTime");
+            double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
 
             boolean hasEstablishFailures = !Double.isNaN(sendFailed) && sendFailed > 0;
-            boolean networkSlow = !Double.isNaN(confirmTime) && confirmTime > 200;
+            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 200;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 15000;
 
-            // Target: 3x observed, but floor at 3000ms
-            int target = Math.max(3000, (int) (observed * 3));
+            // Target: 3x observed, but floor at 3000ms; if actual RTT is high, raise floor
+            int floor = !Double.isNaN(confirmTime) ? Math.max(3000, (int) (confirmTime * 4)) : 3000;
+            int target = Math.max(floor, (int) (observed * 3));
 
             // Dead zone: if current is already within 50% of target and no failures, hold
             if (current >= target * 0.5 && current <= target * 1.5 && !hasEstablishFailures)
                 return current;
 
             // Never decrease when there are establish failures or network is slow
-            if (target < current && (hasEstablishFailures || networkSlow || congested))
+            if (target < current && (hasEstablishFailures || highRTT || congested))
                 return current;
 
             return clamp(current, target, _step);
@@ -1032,20 +1034,24 @@ public class Tuner implements SimpleTimer.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.inboundEstablishTime (ms)
+            // Cross-refs: sendFailed (establish failures), udp.sendConfirmTime (actual RTT),
+            //             sendMessageFailureLifetime (congestion)
             double sendFailed = getAdditionalStat(_context, "udp.sendFailed");
-            double confirmTime = getAdditionalStat(_context, "transport.sendProcessingTime");
+            double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
 
             boolean hasEstablishFailures = !Double.isNaN(sendFailed) && sendFailed > 0;
-            boolean networkSlow = !Double.isNaN(confirmTime) && confirmTime > 200;
+            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 200;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 15000;
 
-            int target = Math.max(3000, (int) (observed * 3));
+            // Target: 3x observed, but floor at 3000ms; if actual RTT is high, raise floor
+            int floor = !Double.isNaN(confirmTime) ? Math.max(3000, (int) (confirmTime * 4)) : 3000;
+            int target = Math.max(floor, (int) (observed * 3));
 
             if (current >= target * 0.5 && current <= target * 1.5 && !hasEstablishFailures)
                 return current;
 
-            if (target < current && (hasEstablishFailures || networkSlow || congested))
+            if (target < current && (hasEstablishFailures || highRTT || congested))
                 return current;
 
             return clamp(current, target, _step);
@@ -1390,26 +1396,33 @@ public class Tuner implements SimpleTimer.TimedEvent {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.in (inbound RTT, ms)
             // Cross-refs: sendMessageFailureLifetime (congestion), buildSuccessRate (network health),
-            //             sendConfirmTime (transport latency), sendDuplicateSize (drops!)
+            //             sendDuplicateSize (drops!), lifetimeRTT (completed stream RTT),
+            //             lifetimeSendWindowSize (final window size at stream close),
+            //             chokeSizeBegin (choke pressure)
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
-            double confirmTime = getAdditionalStat(_context, "transport.sendProcessingTime");
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double lifetimeRTT = getAdditionalStat(_context, "stream.con.lifetimeRTT");
+            double lifetimeWindowSize = getAdditionalStat(_context, "stream.con.lifetimeSendWindowSize");
+            double chokeSize = getAdditionalStat(_context, "stream.chokeSizeBegin");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 15000;
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
             boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
+            boolean streamsSlow = !Double.isNaN(lifetimeRTT) && lifetimeRTT > 5000;
+            boolean windowsSmall = !Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize < 4;
+            boolean choking = !Double.isNaN(chokeSize) && chokeSize > 5;
 
             // FAST PATH: latency + drops = congestion-driven shrink
             // High latency alone is not a reason to shrink streaming windows —
             // it's often transit load or warm-up. Only shrink when drops confirm
             // the window is too aggressive for the path.
-            if (!Double.isNaN(confirmTime) && confirmTime > 200 && dropping) {
-                int aggression = confirmTime > 500 ? _step * 2 : _step;
+            if (!Double.isNaN(dupSize) && dupSize > 500) {
+                int aggression = dupSize > 1000 ? _step * 2 : _step;
                 return Math.max(_min, current - aggression);
             }
 
-            // Drops without high latency = shrink (loss minimization)
+            // Drops or congestion = shrink (loss minimization)
             if (dropping || congested)
                 return Math.max(_min, current - _step);
 
@@ -1420,9 +1433,13 @@ public class Tuner implements SimpleTimer.TimedEvent {
                 return current;
             }
 
-            // Latency high but no drops = hold current (don't worsen death spiral)
-            if (!Double.isNaN(confirmTime) && confirmTime > 200)
-                return current;
+            // Completed streams slow + windows small = increase (pipe can handle larger windows)
+            if (streamsSlow && windowsSmall && !dropping && !congested)
+                return Math.min(_max, current + _step);
+
+            // Choking = decrease (window too aggressive for path)
+            if (choking)
+                return Math.max(_min, current - _step);
 
             // Low RTT (fast pipe) + no drops + no congestion = increase window
             if (observed < 2000 && !dropping && !congested)
@@ -1472,21 +1489,22 @@ public class Tuner implements SimpleTimer.TimedEvent {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.out (outbound RTT in ms)
             // Cross-refs: sendMessageFailureLifetime (congestion), buildSuccessRate (network health),
-            //             sendConfirmTime (transport latency), sendDuplicateSize (drops!)
+            //             udp.sendConfirmTime (actual RTT), sendDuplicateSize (drops!)
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
-            double confirmTime = getAdditionalStat(_context, "transport.sendProcessingTime");
+            double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 15000;
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
             boolean spuriousRetransmits = !Double.isNaN(dupSize) && dupSize > 1000;
+            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 200;
 
             // Target: 2x RTT as baseline (standard TCP-like behavior)
             int target = Math.max(2000, Math.min(10000, (int) (observed * 2)));
 
             // FAST PATH: latency target violated — raise RTO (faster loss detection helps latency)
-            if (!Double.isNaN(confirmTime) && confirmTime > 200 && target < current)
+            if (highRTT && target < current)
                 return Math.min(_max, current + _step);
 
             // Spurious retransmits = raise RTO (stop wasting bandwidth)
@@ -1540,18 +1558,19 @@ public class Tuner implements SimpleTimer.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.sendsBeforeAck (avg sends before standalone ACK)
-            // Cross-refs: sendMessageSize (message size), sendProcessingTime (message delay),
+            // Cross-refs: sendMessageSize (message size), udp.sendConfirmTime (actual RTT),
             //             sendDuplicateSize (drops!)
             double msgSize = getAdditionalStat(_context, "stream.con.sendMessageSize");
-            double delay = getAdditionalStat(_context, "transport.sendProcessingTime");
+            double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
 
             boolean largeMessages = !Double.isNaN(msgSize) && msgSize > 1000;
             boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
+            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 200;
 
             // FAST PATH: latency + drops = sender needs fast feedback
-            if (!Double.isNaN(delay) && delay > 200 && dropping) {
-                int aggression = delay > 500 ? _step * 2 : _step;
+            if (highRTT && dropping) {
+                int aggression = confirmTime > 500 ? _step * 2 : _step;
                 return Math.max(_min, current - aggression);
             }
 
@@ -1606,18 +1625,19 @@ public class Tuner implements SimpleTimer.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.sendMessageSize (avg outgoing message size)
-            // Cross-refs: sendsBeforeAck, sendProcessingTime (message delay),
+            // Cross-refs: sendsBeforeAck, udp.sendConfirmTime (actual RTT),
             //             sendDuplicateSize (drops!)
             double sendsBeforeAck = getAdditionalStat(_context, "stream.sendsBeforeAck");
-            double delay = getAdditionalStat(_context, "transport.sendProcessingTime");
+            double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
 
             boolean manySends = !Double.isNaN(sendsBeforeAck) && sendsBeforeAck > 3;
             boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
+            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 200;
 
             // FAST PATH: latency + drops = flush immediately (clear HOL blocking)
-            if (!Double.isNaN(delay) && delay > 200 && dropping) {
-                int aggression = delay > 500 ? _step * 2 : _step;
+            if (highRTT && dropping) {
+                int aggression = confirmTime > 500 ? _step * 2 : _step;
                 return Math.max(_min, current - aggression);
             }
 
@@ -2471,24 +2491,31 @@ public class Tuner implements SimpleTimer.TimedEvent {
             if (maxBps <= 0) return current;
             double usagePct = observed / maxBps;
 
-            // Cross-refs: buildSuccessRate (network health), sendMessageFailureLifetime (congestion)
+            // Cross-refs: buildSuccessRate (network health), sendMessageFailureLifetime (congestion),
+            //             participatingMessageCountAvgPerTunnel (per-tunnel load)
             // Hourly trend: confirm bandwidth usage trend isn't just a short-term spike
             double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double hourlyBps = getAdditionalStatHourly(_context, _statName);
+            double msgsPerTunnel = getAdditionalStat(_context, "tunnel.participatingMessageCountAvgPerTunnel");
 
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 15000;
             // Confirm high usage is a sustained trend, not just a spike
             boolean sustainedHighUsage = !Double.isNaN(hourlyBps) && hourlyBps / maxBps > 0.6;
+            boolean perTunnelHigh = !Double.isNaN(msgsPerTunnel) && msgsPerTunnel > 50;
 
             // High bandwidth usage + network healthy = increase throttle (manage load proactively)
             // Require sustained trend to avoid over-reacting to brief spikes
             if (usagePct > 0.7 && networkHealthy && sustainedHighUsage)
                 return Math.min(_max, current + _step);
 
+            // Per-tunnel load high + congestion = increase throttle (each tunnel is overloaded)
+            if (perTunnelHigh && congested)
+                return Math.min(_max, current + _step);
+
             // Low bandwidth usage = decrease throttle (we have room, accept more transit)
-            if (usagePct < 0.3 && !congested)
+            if (usagePct < 0.3 && !congested && !perTunnelHigh)
                 return Math.max(_min, current - _step);
 
             // Congested but low usage = don't change (something else is wrong)
@@ -2857,14 +2884,17 @@ public class Tuner implements SimpleTimer.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.buildSuccessRate (0.0-1.0)
-            // Cross-refs: concurrentBuilds (storm), participating InBps (load)
+            // Cross-refs: concurrentBuilds (storm), participating InBps (load),
+            //             participatingMessageCountAvgPerTunnel (per-tunnel load)
             // Hourly trend: confirm build success trend isn't just a short-term dip
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
             double transitBps = getAdditionalStat(_context, "tunnel.participating InBps");
             double hourlySuccess = getAdditionalStatHourly(_context, _statName);
+            double msgsPerTunnel = getAdditionalStat(_context, "tunnel.participatingMessageCountAvgPerTunnel");
 
             boolean buildStorm = !Double.isNaN(concurrentBuilds) && concurrentBuilds > 15;
             boolean heavyLoad = !Double.isNaN(transitBps) && transitBps > 80000;
+            boolean perTunnelHigh = !Double.isNaN(msgsPerTunnel) && msgsPerTunnel > 50;
             // Confirm sustained good health before relaxing throttle
             boolean sustainedGoodHealth = !Double.isNaN(hourlySuccess) && hourlySuccess > 0.9;
 
@@ -2876,12 +2906,12 @@ public class Tuner implements SimpleTimer.TimedEvent {
             if (buildStorm) return current;
 
             // Low success + light load = decrease throttle (rebuild faster to fix pools)
-            if (observed < 0.7 && !heavyLoad)
+            if (observed < 0.7 && !heavyLoad && !perTunnelHigh)
                 return Math.max(_min, current - _step);
 
             // High success + low load = increase throttle (no need to rebuild often)
             // Require sustained good health to avoid relaxing during brief good periods
-            if (observed > 0.95 && !heavyLoad && sustainedGoodHealth)
+            if (observed > 0.95 && !heavyLoad && !perTunnelHigh && sustainedGoodHealth)
                 return Math.min(_max, current + _step);
 
             return current;
@@ -2924,15 +2954,15 @@ public class Tuner implements SimpleTimer.TimedEvent {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.out (RTT, ms)
             // Cross-refs: sendDuplicateSize (spurious retransmit rate),
-            //             sendMessageFailureLifetime (congestion), sendConfirmTime (network latency)
+            //             sendMessageFailureLifetime (congestion), udp.sendConfirmTime (actual RTT)
             // Hourly trend: confirm RTT trend isn't just a short-term spike
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
-            double confirmTime = getAdditionalStat(_context, "transport.sendProcessingTime");
+            double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
             double hourlyRTT = getAdditionalStatHourly(_context, _statName);
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 15000;
-            boolean networkSlow = !Double.isNaN(confirmTime) && confirmTime > 200;
+            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 200;
             boolean sustainedHighRTT = !Double.isNaN(hourlyRTT) && hourlyRTT > 4000;
             // High dup rate = many spurious retransmits = RTO ceiling too low
             boolean highDups = !Double.isNaN(dupSize) && dupSize > 1000;
@@ -2942,11 +2972,11 @@ public class Tuner implements SimpleTimer.TimedEvent {
                 return Math.min(_max, current + _step);
 
             // High RTT + network slow + sustained = raise RTO ceiling
-            if (observed > 5000 && networkSlow && !congested && sustainedHighRTT)
+            if (observed > 5000 && highRTT && !congested && sustainedHighRTT)
                 return Math.min(_max, current + _step);
 
             // Low RTT + no dups + no congestion = tighten loss detection
-            if (observed < 2000 && !congested && !networkSlow && !highDups)
+            if (observed < 2000 && !congested && !highRTT && !highDups)
                 return Math.max(_min, current - _step);
 
             return current;
@@ -3170,15 +3200,22 @@ public class Tuner implements SimpleTimer.TimedEvent {
             int current = getRuntimeValue();
             // observed = stream.con.windowSizeAtCongestion (window size when dup sent)
             // Cross-refs: sendMessageFailureLifetime (congestion), buildSuccessRate (network health),
-            //             sendDuplicateSize (drops!)
-            // NOTE: sendProcessingTime is NOT used — transport metric, creates feedback loop.
+            //             sendDuplicateSize (drops!), lifetimeRTT (completed stream RTT),
+            //             lifetimeSendWindowSize (final window size at stream close),
+            //             chokeSizeBegin (choke pressure)
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double lifetimeRTT = getAdditionalStat(_context, "stream.con.lifetimeRTT");
+            double lifetimeWindowSize = getAdditionalStat(_context, "stream.con.lifetimeSendWindowSize");
+            double chokeSize = getAdditionalStat(_context, "stream.chokeSizeBegin");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 15000;
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
             boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
+            boolean streamsSlow = !Double.isNaN(lifetimeRTT) && lifetimeRTT > 5000;
+            boolean windowsSmall = !Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize < 4;
+            boolean choking = !Double.isNaN(chokeSize) && chokeSize > 5;
 
             // Recovery floor: if below 50% of default, always increase back toward default
             int recoveryFloor = Math.max(_min, _defaultValue / 2);
@@ -3193,9 +3230,17 @@ public class Tuner implements SimpleTimer.TimedEvent {
             if (!networkHealthy)
                 return Math.max(recoveryFloor, current - _step);
 
+            // Choking = decrease growth (too aggressive)
+            if (choking)
+                return Math.max(recoveryFloor, current - _step);
+
             // Dead zone: hold within 50% of default unless signal is strong
             if (current >= recoveryFloor && current <= _defaultValue * 2 && !dropping && !congested && networkHealthy)
                 return current;
+
+            // Completed streams slow + windows small = increase growth (need faster ramp)
+            if (streamsSlow && windowsSmall && !dropping && !congested)
+                return Math.min(_max, current + _step);
 
             // Large window at congestion + healthy network + no drops = increase growth
             if (observed > 20 && networkHealthy && !dropping && !congested)
@@ -3239,15 +3284,22 @@ public class Tuner implements SimpleTimer.TimedEvent {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.out (RTT, ms)
             // Cross-refs: buildSuccessRate (network health), sendMessageFailureLifetime (congestion),
-            //             sendDuplicateSize (drops!)
-            // NOTE: sendProcessingTime is NOT used — transport metric, creates feedback loop.
+            //             sendDuplicateSize (drops!), lifetimeRTT (completed stream RTT),
+            //             lifetimeSendWindowSize (final window size at stream close),
+            //             chokeSizeBegin (choke pressure)
             double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double lifetimeRTT = getAdditionalStat(_context, "stream.con.lifetimeRTT");
+            double lifetimeWindowSize = getAdditionalStat(_context, "stream.con.lifetimeSendWindowSize");
+            double chokeSize = getAdditionalStat(_context, "stream.chokeSizeBegin");
 
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 15000;
             boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
+            boolean streamsSlow = !Double.isNaN(lifetimeRTT) && lifetimeRTT > 5000;
+            boolean windowsSmall = !Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize < 4;
+            boolean choking = !Double.isNaN(chokeSize) && chokeSize > 5;
 
             // Recovery floor: if below 50% of default, always increase back toward default
             int recoveryFloor = Math.max(_min, _defaultValue / 2);
@@ -3262,9 +3314,17 @@ public class Tuner implements SimpleTimer.TimedEvent {
             if (!networkHealthy)
                 return Math.max(recoveryFloor, current - _step);
 
+            // Choking = decrease ramp (too aggressive)
+            if (choking)
+                return Math.max(recoveryFloor, current - _step);
+
             // Dead zone: hold within 50% of default unless signal is strong
             if (current >= recoveryFloor && current <= _defaultValue * 2 && !dropping && !congested && networkHealthy)
                 return current;
+
+            // Completed streams slow + windows small = increase ramp (need faster ramp)
+            if (streamsSlow && windowsSmall && !dropping && !congested)
+                return Math.min(_max, current + _step);
 
             // Below default: increase if healthy
             if (current < _defaultValue && networkHealthy && !dropping && !congested)
@@ -3311,13 +3371,13 @@ public class Tuner implements SimpleTimer.TimedEvent {
             // observed = stream.con.initialRTT.out (RTT, ms)
             // Cross-refs: sendDuplicateSize (retransmit pressure),
             //             sendMessageFailureLifetime (congestion),
-            //             sendConfirmTime (transport latency)
+            //             udp.sendConfirmTime (actual RTT)
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
-            double confirmTime = getAdditionalStat(_context, "transport.sendProcessingTime");
+            double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 15000;
-            boolean transportSlow = !Double.isNaN(confirmTime) && confirmTime > 200;
+            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 200;
             boolean highDups = !Double.isNaN(dupSize) && dupSize > 1000;
 
             // Spurious retransmits + congestion = raise cap (RTT spikes are real, not pathological)
@@ -3325,11 +3385,11 @@ public class Tuner implements SimpleTimer.TimedEvent {
                 return Math.min(_max, current + _step);
 
             // Transport degraded = raise cap (need headroom for real RTT spikes)
-            if (transportSlow)
+            if (highRTT)
                 return Math.min(_max, current + _step);
 
             // Consistently low RTT + no dups + no congestion = tighten cap (RTT is stable)
-            if (observed < 2000 && !highDups && !congested && !transportSlow)
+            if (observed < 2000 && !highDups && !congested && !highRTT)
                 return Math.max(_min, current - _step);
 
             return current;
@@ -4027,12 +4087,15 @@ public class Tuner implements SimpleTimer.TimedEvent {
             // Primary signal: direct count of builds that expired waiting for a reply.
             // If builds are timing out, we need MORE time (not less).
             // Cross-refs: concurrentBuilds (storm detection),
-            //             buildSuccessRate (overall health)
+            //             buildSuccessRate (overall health),
+            //             testSuccessTime (actual tunnel latency)
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
             double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
+            double testTime = getAdditionalStat(_context, "tunnel.testSuccessTime");
 
             boolean buildStorm = !Double.isNaN(concurrentBuilds) && concurrentBuilds > 15;
             boolean successLow = !Double.isNaN(buildSuccess) && buildSuccess < 0.5;
+            boolean tunnelSlow = !Double.isNaN(testTime) && testTime > 5000;
 
             // Build storm: DON'T increase timeout (storm = too many concurrent builds, not timeout issue)
             // Only decrease or hold during storms
@@ -4046,6 +4109,10 @@ public class Tuner implements SimpleTimer.TimedEvent {
             // Builds expiring + low success = increase timeout (peers need more time to respond)
             if (observed > 5 && successLow)
                 return Math.min(_max, current + _step * 2);
+
+            // Tunnel tests slow = increase timeout (network latency is high)
+            if (tunnelSlow && observed > 2)
+                return Math.min(_max, current + _step);
 
             // Builds expiring but success ok = increase slightly (edge case)
             if (observed > 10)
@@ -4095,16 +4162,23 @@ public class Tuner implements SimpleTimer.TimedEvent {
             int current = getRuntimeValue();
             // observed = tunnel.buildFailFirstHop (count of first-hop delivery failures)
             // Primary signal: if first hops are failing, we need MORE delivery time.
-            // Cross-refs: concurrentBuilds (storm detection)
+            // Cross-refs: concurrentBuilds (storm detection),
+            //             testSuccessTime (actual tunnel latency)
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
+            double testTime = getAdditionalStat(_context, "tunnel.testSuccessTime");
 
             boolean buildStorm = !Double.isNaN(concurrentBuilds) && concurrentBuilds > 15;
+            boolean tunnelSlow = !Double.isNaN(testTime) && testTime > 5000;
 
             // Build storm: DON'T increase (storm = too many concurrent, not timeout issue)
             if (buildStorm) return current;
 
             // First-hop failures = increase timeout (OB delivery needs more time)
             if (observed > 5)
+                return Math.min(_max, current + _step * 2);
+
+            // Tunnel tests slow + first-hop failures = increase more aggressively
+            if (tunnelSlow && observed > 1)
                 return Math.min(_max, current + _step * 2);
 
             if (observed > 2)
