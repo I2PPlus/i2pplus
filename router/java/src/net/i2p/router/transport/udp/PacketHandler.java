@@ -1,6 +1,8 @@
 package net.i2p.router.transport.udp;
 
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.CoDelBlockingQueue;
 import net.i2p.util.I2PThread;
@@ -17,6 +19,8 @@ import net.i2p.util.SystemVersion;
  * an actual pool of packet handler threads, each pulling off the inbound
  * receiver's queue and pushing them as necessary.
  *
+ * Supports dynamic thread count adjustment via {@link #adjustThreads()}.
+ * @since 0.9.14 (dynamic resizing since 0.9.70+)
  */
 class PacketHandler {
     private final RouterContext _context;
@@ -25,7 +29,8 @@ class PacketHandler {
     private final EstablishmentManager _establisher;
     private final PeerTestManager _testManager;
     private volatile boolean _keepReading;
-    private final Handler[] _handlers;
+    private final CopyOnWriteArrayList<Handler> _handlers;
+    private final AtomicInteger _activeHandlers = new AtomicInteger();
     private final BlockingQueue<UDPPacket> _inboundQueue;
     private final int _networkID;
 
@@ -48,11 +53,7 @@ class PacketHandler {
         long maxMemory = SystemVersion.getMaxMemory();
         int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (2*1024*1024L)));
         _inboundQueue = new CoDelBlockingQueue<>(ctx, "UDP-Receiver", qsize);
-        int num_handlers;
-        if (maxMemory < 128*1024*1024L) {num_handlers = 1;}
-        else {num_handlers = _maxHandlers;}
-        _handlers = new Handler[num_handlers];
-        for (int i = 0; i < num_handlers; i++) {_handlers[i] = new Handler();}
+        _handlers = new CopyOnWriteArrayList<>();
 
         _context.statManager().createRateStat("udp.destroyedInvalidSkew", "Session destroyed (bad skew)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.blockedPacketBytes", "Inbound packets blocked (bytes)", "Transport [UDP]", UDPTransport.RATES);
@@ -65,19 +66,23 @@ class PacketHandler {
     public static int getMaxHandlers() { return _maxHandlers; }
 
     /**
-     * Sets the max packet handler threads for new instances.
+     * Sets the target max packet handler threads.
+     * Takes effect immediately via {@link #adjustThreads()}.
      * @since 0.9.70+
      */
     public static void setMaxHandlers(int handlers) {
         _maxHandlers = Math.max(1, Math.min(16, handlers));
     }
 
+    /**
+     * Returns the current number of active handler threads.
+     * @since 0.9.70+
+     */
+    public int getActiveHandlers() { return _activeHandlers.get(); }
+
     public synchronized void startup() {
         _keepReading = true;
-        for (int i = 0; i < _handlers.length; i++) {
-            I2PThread t = new I2PThread(_handlers[i], "UDPPktHandler " + (i+1) + '/' + _handlers.length, true);
-            t.start();
-        }
+        adjustThreads();
     }
 
     public synchronized void shutdown() {
@@ -85,10 +90,45 @@ class PacketHandler {
         stopQueue();
     }
 
+    /**
+     * Dynamically adjust handler thread count to match the target.
+     * Handlers are added or removed one at a time. Excess handlers
+     * receive a poison packet and exit cleanly.
+     * @since 0.9.70+
+     */
+    void adjustThreads() {
+        if (!_keepReading) return;
+        int target = _maxHandlers;
+        long maxMemory = SystemVersion.getMaxMemory();
+        if (maxMemory < 128*1024*1024L) target = 1;
+        int current = _activeHandlers.get();
+        while (current < target) {
+            if (_activeHandlers.compareAndSet(current, current + 1)) {
+                Handler h = new Handler();
+                _handlers.add(h);
+                I2PThread t = new I2PThread(h, "UDPPktHandler " + (current + 1) + '/' + target, true);
+                t.start();
+                current = _activeHandlers.get();
+            } else {
+                current = _activeHandlers.get();
+            }
+        }
+        while (current > target) {
+            if (_activeHandlers.compareAndSet(current, current - 1)) {
+                UDPPacket poison = UDPPacket.acquire(_context, false);
+                poison.setMessageType(TYPE_POISON);
+                _inboundQueue.offer(poison);
+                current = _activeHandlers.get();
+            } else {
+                current = _activeHandlers.get();
+            }
+        }
+    }
+
     String getHandlerStatus() {
         StringBuilder rv = new StringBuilder();
-        rv.append("Handlers: ").append(_handlers.length);
-        for (int i = 0; i < _handlers.length; i++) {
+        rv.append("Handlers: ").append(_activeHandlers.get());
+        for (int i = 0; i < _handlers.size(); i++) {
             rv.append(" handler ").append(i);
         }
         return rv.toString();
@@ -112,7 +152,7 @@ class PacketHandler {
      */
     private void stopQueue() {
         _inboundQueue.clear();
-        for (int i = 0; i < _handlers.length; i++) {
+        for (int i = 0; i < _activeHandlers.get(); i++) {
             UDPPacket poison = UDPPacket.acquire(_context, false);
             poison.setMessageType(TYPE_POISON);
             _inboundQueue.offer(poison);
@@ -124,6 +164,8 @@ class PacketHandler {
             }
         }
         _inboundQueue.clear();
+        _handlers.clear();
+        _activeHandlers.set(0);
     }
 
     /**
@@ -151,20 +193,24 @@ class PacketHandler {
 
         @Override
         public void run() {
-            while (_keepReading) {
-                UDPPacket packet = receiveNext();
-                if (packet == null) {break;} // keepReading is probably false, or bind failed...
+            try {
+                while (_keepReading) {
+                    UDPPacket packet = receiveNext();
+                    if (packet == null) {break;}
 
-                packet.received();
-                if (_log.shouldDebug()) {_log.debug("Received packet from " + packet);}
-                try {handlePacket(packet);}
-                catch (RuntimeException e) {
-                    if (_log.shouldError()) {
-                        _log.error("Internal error handling a UDP packet from " + packet, e);
+                    packet.received();
+                    if (_log.shouldDebug()) {_log.debug("Received packet from " + packet);}
+                    try {handlePacket(packet);}
+                    catch (RuntimeException e) {
+                        if (_log.shouldError()) {
+                            _log.error("Internal error handling a UDP packet from " + packet, e);
+                        }
                     }
+                    // back to the cache with thee!
+                    packet.release();
                 }
-                // back to the cache with thee!
-                packet.release();
+            } finally {
+                _handlers.remove(this);
             }
         }
 
