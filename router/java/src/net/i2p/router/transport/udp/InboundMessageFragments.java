@@ -52,6 +52,26 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
     public boolean isAlive() {return _alive;}
 
     /**
+     * Dynamically adjust MessageReceiver thread count to match the target.
+     * @since 0.9.70+
+     */
+    void adjustMessageReceiverThreads() {
+        _messageReceiver.adjustThreads();
+    }
+
+    /**
+     * Returns the current queue depth of the message receiver.
+     * @since 0.9.70+
+     */
+    int getReceiverQueueSize() { return _messageReceiver.getQueueSize(); }
+
+    /**
+     * Returns the maximum capacity of the message receiver queue.
+     * @since 0.9.70+
+     */
+    int getReceiverQueueCapacity() { return _messageReceiver.getQueueCapacity(); }
+
+    /**
      * This message was received - SSU 2 only.
      * No stats updated here, caller should handle stats.
      *
