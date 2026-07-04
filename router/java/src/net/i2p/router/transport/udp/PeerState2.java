@@ -626,7 +626,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     public void gotDateTime(long time) {
         // super adds CLOCK_SKEW_FUDGE that doesn't apply here
-        adjustClockSkew((_context.clock().now() - time) - CLOCK_SKEW_FUDGE);
+        adjustClockSkew((_context.clock().now() - time) - getClockSkewFudge());
     }
 
     public void gotOptions(byte[] options, boolean isHandshake) {
@@ -1179,7 +1179,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
          *  @since 0.9.56
          */
         public void schedule() {
-            long delta = Math.max(10, Math.min(_rtt/6, ACK_FREQUENCY));
+            long delta = Math.max(10, Math.min(_rtt/6, getAckFrequency()));
             if (shouldLogDebug) {
                 _log.debug("[SSU] Sending delayed ACK in " + delta + "ms" + PeerState2.this);
             }

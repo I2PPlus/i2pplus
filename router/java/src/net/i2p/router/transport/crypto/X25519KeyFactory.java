@@ -20,11 +20,12 @@ import net.i2p.util.SystemVersion;
  */
 public class X25519KeyFactory extends I2PThread implements KeyFactory {
 
+    private static volatile X25519KeyFactory _lastInstance;
     private final I2PAppContext _context;
     private final Log _log;
-    private final int _minSize;
-    private final int _maxSize;
-    private final int _calcDelay;
+    private volatile int _minSize;
+    private volatile int _maxSize;
+    private volatile int _calcDelay;
     private final LinkedBlockingQueue<KeyPair> _keys;
     private volatile boolean _isRunning;
     private long _checkDelay = 10 * 1000L;
@@ -43,7 +44,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         ctx.statManager().createRateStat("crypto.XDHGenerateTime", "Time to create x and X", "Encryption", new long[] { RateConstants.ONE_MINUTE });
         ctx.statManager().createRateStat("crypto.XDHUsed", "Need a DH from the queue", "Encryption", new long[] { RateConstants.ONE_MINUTE });
         ctx.statManager().createRateStat("crypto.XDHReused", "Unused DH requeued", "Encryption", new long[] { RateConstants.ONE_MINUTE });
-        ctx.statManager().createRateStat("crypto.XDHEmpty", "DH queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE });
+        ctx.statManager().createRequiredRateStat("crypto.XDHEmpty", "DH queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
 
         // Scale precomputation with available memory and cores.
         // X25519 keypair is ~64 bytes so even 5000 keys is ~320KB.
@@ -64,7 +65,44 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         }
         _keys = new LinkedBlockingQueue<>(_maxSize);
         if (!SystemVersion.isWindows()) {setPriority(Thread.NORM_PRIORITY - 1);}
+        _lastInstance = this;
     }
+
+    /**
+     * Returns the last created instance.
+     * @since 0.9.70+
+     */
+    public static X25519KeyFactory getInstance() { return _lastInstance; }
+
+    /**
+     * Returns the current minimum precalc queue size.
+     * @since 0.9.70+
+     */
+    public int getMinSize() { return _minSize; }
+
+    /**
+     * Sets the minimum precalc queue size.
+     * @since 0.9.70+
+     */
+    public void setMinSize(int min) { _minSize = Math.max(1, min); }
+
+    /**
+     * Returns the current maximum precalc queue size.
+     * @since 0.9.70+
+     */
+    public int getMaxSize() { return _maxSize; }
+
+    /**
+     * Sets the maximum precalc queue size.
+     * @since 0.9.70+
+     */
+    public void setMaxSize(int max) { _maxSize = Math.max(_minSize, max); }
+
+    /**
+     * Returns the current number of precalc keys queued.
+     * @since 0.9.70+
+     */
+    public int getSize() { return _keys.size(); }
 
     /**
      *  Note that this stops the singleton precalc thread.
@@ -156,7 +194,5 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
 
     /** @return true if successful, false if full */
     private final boolean addKeys(KeyPair kp) {return _keys.offer(kp);}
-
-    private final int getSize() {return _keys.size();}
 
 }

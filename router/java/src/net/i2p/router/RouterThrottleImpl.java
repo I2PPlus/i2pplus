@@ -28,9 +28,13 @@ public class RouterThrottleImpl implements RouterThrottle {
     private static final long JOB_LAG_LIMIT_NETDB = 3*1000L;
 
     public static final String PROP_MAX_TUNNELS = "router.maxParticipatingTunnels";
-    public static final int DEFAULT_MAX_TUNNELS = SystemVersion.isSlow() ? 3*1000 :
+    public static volatile int _defaultMaxTunnels = SystemVersion.isSlow() ? 3*1000 :
                                                   SystemVersion.getMaxMemory() < 512*1024*1024L ? 5*1000 :
                                                   SystemVersion.getCores() >= 8 ? 12*1000 : 8*1000;
+    /** @since 0.9.70+ */
+    public static int getDefaultMaxTunnels() { return _defaultMaxTunnels; }
+    /** @since 0.9.70+ */
+    public static void setDefaultMaxTunnels(int val) { _defaultMaxTunnels = Math.max(500, Math.min(20000, val)); }
     private static final String PROP_MAX_PROCESSINGTIME = "router.defaultProcessingTimeThrottle";
     private static final long DEFAULT_REJECT_STARTUP_TIME = 3*60*1000L;
     private static final long MIN_REJECT_STARTUP_TIME = 90*1000L;
@@ -137,7 +141,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         // (SSU acks may be delayed so it is much more than just RTT... and the delay may
         // counterintuitively be more when there is low traffic)
         // Change the stat or pick a better stat.
-        int maxTunnels = _context.getProperty(PROP_MAX_TUNNELS, DEFAULT_MAX_TUNNELS);
+        int maxTunnels = _context.getProperty(PROP_MAX_TUNNELS, _defaultMaxTunnels);
         RateStat rs = _context.statManager().getRate("transport.sendProcessingTime");
         Rate r = null;
         if (rs != null) {r = rs.getRate(RateConstants.ONE_MINUTE);}
@@ -198,7 +202,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         double tgf = getTunnelGrowthFactor();
         if (highload) {
             setTunnelStatus("[rejecting/overload]" + _x("Rejecting all tunnel requests" + ":<br>" + _x("High system load")));
-        } else if (numTunnels > minToThrottle && DEFAULT_MAX_TUNNELS >= maxTunnels) {
+        } else if (numTunnels > minToThrottle && _defaultMaxTunnels >= maxTunnels) {
             Rate avgTunnels = _context.statManager().getRate("tunnel.participatingTunnels").getRate(RateConstants.TEN_MINUTES);
             if (avgTunnels != null) {
                 double avg = avgTunnels.getAvgOrLifetimeAvg();
@@ -427,7 +431,7 @@ public class RouterThrottleImpl implements RouterThrottle {
             return configured;
         }
         // Calculate default on first access
-        int maxTunnels = _context.getProperty(PROP_MAX_TUNNELS, DEFAULT_MAX_TUNNELS);
+        int maxTunnels = _context.getProperty(PROP_MAX_TUNNELS, _defaultMaxTunnels);
         return (maxTunnels / 3) * 2;
     }
 
@@ -490,7 +494,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     /** @since 0.8.12 */
     public void cancelShutdownStatus() {
         // try hard to guess the state, before we actually get a request
-        int maxTunnels = _context.getProperty(PROP_MAX_TUNNELS, DEFAULT_MAX_TUNNELS);
+        int maxTunnels = _context.getProperty(PROP_MAX_TUNNELS, _defaultMaxTunnels);
         RouterInfo ri = _context.router().getRouterInfo();
         if (maxTunnels > 0 && !_context.router().isHidden() && ri != null && !ri.getBandwidthTier().equals("K")) {
             setTunnelStatus("[accepting]" + _x("Accepting tunnel requests"));

@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -67,7 +68,7 @@ import net.i2p.util.SystemVersion;
  * as well as to drop any failed establishment attempts.
  *
  */
-class EstablishmentManager {
+public class EstablishmentManager {
     private final RouterContext _context;
     private final Log _log;
     private final UDPTransport _transport;
@@ -137,17 +138,23 @@ class EstablishmentManager {
 
     /** Max outbound in progress - max inbound is half of this */
     private final int DEFAULT_MAX_CONCURRENT_ESTABLISH;
-    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 64 : 1024;
-    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 256 : 2048;
+    private static volatile int _defaultLowMaxConcurrentEstablish = SystemVersion.isSlow() ? 128 : 512;
+    private static volatile int _defaultHighMaxConcurrentEstablish = SystemVersion.isSlow() ? 256 : 2048;
+    /** @since 0.9.70+ */
+    public static int getDefaultLowMaxConcurrentEstablish() { return _defaultLowMaxConcurrentEstablish; }
+    /** @since 0.9.70+ */
+    public static void setDefaultLowMaxConcurrentEstablish(int val) { _defaultLowMaxConcurrentEstablish = Math.max(32, Math.min(4096, val)); }
+    /** @since 0.9.70+ */
+    public static int getDefaultHighMaxConcurrentEstablish() { return _defaultHighMaxConcurrentEstablish; }
+    /** @since 0.9.70+ */
+    public static void setDefaultHighMaxConcurrentEstablish(int val) { _defaultHighMaxConcurrentEstablish = Math.max(64, Math.min(8192, val)); }
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
-    private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 2.0f : 8.0f;
-    private static final String PROP_THROTTLE_FACTOR = "router.throttleFactor";
 
     /** Max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH) */
-    private static final int MAX_QUEUED_OUTBOUND = SystemVersion.isSlow() ? 128 : 512;
+    private static final int MAX_QUEUED_OUTBOUND = 128;
 
     /** Max queued msgs per peer while peer connection is queued */
-    private static final int MAX_QUEUED_PER_PEER = SystemVersion.isSlow() ? 64 : 256;
+    private static final int MAX_QUEUED_PER_PEER = 32;
 
     private static final long MAX_NONCE = 0xFFFFFFFFL;
 
@@ -158,20 +165,20 @@ class EstablishmentManager {
      * Note: could be shorter for fast routers with better connectivity.
      * But it's important to not fail an establishment too soon and waste it.
      */
-    private static final long MAX_OB_ESTABLISH_TIME = SystemVersion.isSlow() ? 60*1000L : 45*1000L;
+    static final AtomicLong MAX_OB_ESTABLISH_TIME = new AtomicLong(30*1000L);
 
     /**
      * Kill any inbound that takes more than this
      * One round trip (Created-Confirmed)
      * Note: could be two round trips for SSU2 with retry
      */
-    public static final long MAX_IB_ESTABLISH_TIME = SystemVersion.isSlow() ? 60*1000L : 45*1000L;
+    static final AtomicLong MAX_IB_ESTABLISH_TIME = new AtomicLong(20*1000L);
 
     /** Max wait before receiving a response to a single message during outbound establishment */
     public static final long OB_MESSAGE_TIMEOUT = 5*1000L;
 
     /** for the DSM and or netdb store */
-    private static final long DATA_MESSAGE_TIMEOUT = 15*1000L;
+    static final AtomicLong DATA_MESSAGE_TIMEOUT = new AtomicLong(10*1000L);
 
     private static final long IB_BAN_TIME = 30*60L*1000L;
 
@@ -208,11 +215,11 @@ class EstablishmentManager {
         _terminationCounter = new ObjectCounter<>();
 
         _activityLock = new Object();
-        DEFAULT_MAX_CONCURRENT_ESTABLISH = Math.max(DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH,
-                                                    Math.min(DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH,
+        DEFAULT_MAX_CONCURRENT_ESTABLISH = Math.max(_defaultLowMaxConcurrentEstablish,
+                                                    Math.min(_defaultHighMaxConcurrentEstablish,
                                                              ctx.bandwidthLimiter().getOutboundKBytesPerSecond() / 2));
-        _context.statManager().createRateStat("udp.inboundEstablishTime", "Time to establish new inbound session (ms)", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.outboundEstablishTime", "Time to establish new outbound session (ms)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRequiredRateStat("udp.inboundEstablishTime", "Time to establish new inbound session (ms)", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        _context.statManager().createRequiredRateStat("udp.outboundEstablishTime", "Time to establish new outbound session (ms)", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("udp.sendIntroRelayTimeout", "Relay request timeouts before response (target or intro peer offline)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.establishDropped", "Dropped an inbound establish message", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.establishRejected", "Pending outbound connections when we refuse to add any more", "Transport [UDP]", UDPTransport.RATES);
@@ -223,7 +230,7 @@ class EstablishmentManager {
         _context.statManager().createRateStat("udp.congestedRTO", "RTO after congestion (duration = RTT dev)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.mtuIncrease", "Number of resends to peer when MTU was increased", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.mtuDecrease", "Number of resends to peer when MTU was decreased", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.rejectConcurrentActive", "Messages in transit to peer when we reject it", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRequiredRateStat("udp.rejectConcurrentActive", "Messages in transit to peer when we reject it", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("udp.allowConcurrentActive", "Messages in transit to peer when we accept it", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.rejectConcurrentSequence", "Consecutive concurrency rejections when we stop rejecting", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRequiredRateStat("udp.inboundTokenLifetime", "SSU2 Token lifetime (ms)", "Transport [UDP]", UDPTransport.RATES);
@@ -278,15 +285,6 @@ class EstablishmentManager {
      */
     private int getMaxConcurrentEstablish() {
         return _context.getProperty(PROP_MAX_CONCURRENT_ESTABLISH, DEFAULT_MAX_CONCURRENT_ESTABLISH);
-    }
-
-    /**
-     * Ratio of current connections/min vs previous before throttler activates
-     *
-     * @since 0.9.58+
-     */
-    private float getThrottleFactor() {
-        return _context.getProperty(PROP_THROTTLE_FACTOR, DEFAULT_THROTTLE_FACTOR);
     }
 
     /**
@@ -639,7 +637,7 @@ class EstablishmentManager {
 
         // Optimized for fast routers - don't penalize high-performance systems
         boolean isFastRouter = !SystemVersion.isSlow();
-        float factor = _transport.haveCapacity(95) ? getThrottleFactor() : 0.95f;
+        float factor = _transport.haveCapacity(95) ? 4.0f : 0.95f;
         float minThresh = factor * lastRate;
         int maxConnections = _transport.getMaxConnections();
         int currentConnections = _transport.countPeers();
@@ -1277,7 +1275,7 @@ class EstablishmentManager {
     public DatabaseStoreMessage getOurInfo() {
         DatabaseStoreMessage m = new DatabaseStoreMessage(_context);
         m.setEntry(_context.router().getRouterInfo());
-        m.setMessageExpiration(_context.clock().now() + DATA_MESSAGE_TIMEOUT);
+        m.setMessageExpiration(_context.clock().now() + DATA_MESSAGE_TIMEOUT.get());
         return m;
     }
 
@@ -2041,7 +2039,7 @@ class EstablishmentManager {
                 iter.remove();
                 inboundState = cur;
                 break;
-            } else if (cur.getLifetime(now) > MAX_IB_ESTABLISH_TIME ||
+            } else if (cur.getLifetime(now) > MAX_IB_ESTABLISH_TIME.get() ||
                        (istate == IB_STATE_RETRY_SENT && // limit time to get sess. req after retry
                         cur.getLifetime(now) >= 5 * InboundEstablishState.RETRANSMIT_DELAY)) {
                 iter.remove(); // took too long
@@ -2145,7 +2143,7 @@ class EstablishmentManager {
                 iter.remove();
                 outboundState = cur;
                 break;
-            } else if (cur.getLifetime(now) >= MAX_OB_ESTABLISH_TIME) {
+            } else if (cur.getLifetime(now) >= MAX_OB_ESTABLISH_TIME.get()) {
                 // took too long
                 iter.remove();
                 outboundState = cur;
@@ -2167,7 +2165,7 @@ class EstablishmentManager {
 
         if (outboundState != null) {
             synchronized (outboundState) {
-                boolean expired = outboundState.getLifetime(now) >= MAX_OB_ESTABLISH_TIME;
+                boolean expired = outboundState.getLifetime(now) >= MAX_OB_ESTABLISH_TIME.get();
                 switch (outboundState.getState()) {
                     case OB_STATE_UNKNOWN:  // fall thru
                     case OB_STATE_INTRODUCED:
@@ -2833,21 +2831,21 @@ class EstablishmentManager {
         private void doFailsafe(long now) {
             for (Iterator<OutboundEstablishState> iter = _liveIntroductions.values().iterator(); iter.hasNext(); ) {
                 OutboundEstablishState state = iter.next();
-                if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME) {
+                if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME.get()) {
                     iter.remove();
                     if (_log.shouldWarn()) {_log.warn("Failsafe removal of LiveIntroduction: " + state);}
                 }
             }
             for (Iterator<OutboundEstablishState> iter = _outboundByClaimedAddress.values().iterator(); iter.hasNext(); ) {
                 OutboundEstablishState state = iter.next();
-                if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME) {
+                if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME.get()) {
                     iter.remove();
                     if (_log.shouldWarn()) {_log.warn("Failsafe removal of OutboundByClaimedAddress: " + state);}
                 }
             }
             for (Iterator<OutboundEstablishState> iter = _outboundByHash.values().iterator(); iter.hasNext(); ) {
                 OutboundEstablishState state = iter.next();
-                if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME) {
+                if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME.get()) {
                     iter.remove();
                     if (_log.shouldWarn()) {_log.warn("Failsafe removal of OutboundByHash: " + state);}
                 }

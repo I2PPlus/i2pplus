@@ -45,6 +45,7 @@ import net.i2p.router.BanLogger;
 import net.i2p.router.transport.crypto.X25519KeyFactory;
 import net.i2p.router.transport.ntcp.NTCPTransport;
 import net.i2p.router.transport.udp.UDPTransport;
+import net.i2p.router.Tuner;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
@@ -594,6 +595,17 @@ public class TransportManager implements TransportEventListener {
         // TODO (also synch)
         //rv.putAll(_pluggableTransports);
         return rv;
+    }
+
+    /**
+     * @return the adaptive tuner, or null if not available
+     * @since 0.9.70+
+     */
+    public Tuner getTuner() {
+        Transport udp = _transports.get(UDPTransport.STYLE);
+        if (udp instanceof UDPTransport)
+            return ((UDPTransport) udp).getTuner();
+        return null;
     }
 
     /**

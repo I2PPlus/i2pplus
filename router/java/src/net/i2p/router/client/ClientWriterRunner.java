@@ -17,10 +17,23 @@ import net.i2p.router.RouterContext;
 class ClientWriterRunner implements Runnable {
     private final BlockingQueue<I2CPMessage> _messagesToWrite;
     private final ClientConnectionRunner _runner;
-    private static final int QUEUE_SIZE = 256;
-    public ClientWriterRunner(RouterContext _context, ClientConnectionRunner runner) {
-        _messagesToWrite = new LinkedBlockingQueue<>(QUEUE_SIZE);
+    private final RouterContext _context;
+    /** @since 0.9.70+ mutable for adaptive tuning */
+    private static volatile int _queueSize = 256;
+
+    /** @since 0.9.70+ */
+    public static int getQueueSize() { return _queueSize; }
+
+    /** @since 0.9.70+ */
+    public static void setQueueSize(int val) { _queueSize = Math.max(32, Math.min(2048, val)); }
+
+    public ClientWriterRunner(RouterContext ctx, ClientConnectionRunner runner) {
+        _context = ctx;
+        _messagesToWrite = new LinkedBlockingQueue<>(_queueSize);
         _runner = runner;
+        ctx.statManager().createRequiredRateStat("client.writerQueueFull",
+                                          "I2CP writer queue overflow drops", "ClientMessages",
+                                          new long[] { 60*1000L, 10*60*1000L, 60*60*1000L });
     }
 
     /**
@@ -30,7 +43,10 @@ class ClientWriterRunner implements Runnable {
      */
     public void addMessage(I2CPMessage msg) throws I2CPMessageException {
         boolean success = _messagesToWrite.offer(msg);
-        if (!success) {throw new I2CPMessageException("I2CP write to queue failed");}
+        if (!success) {
+            _context.statManager().addRateData("client.writerQueueFull", 1);
+            throw new I2CPMessageException("I2CP write to queue failed");
+        }
     }
 
     /**

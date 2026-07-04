@@ -53,7 +53,7 @@ import net.i2p.util.VersionComparator;
  * Handle the received tunnel build message requests and replies,
  * including sending responses and updating tunnel lists.
  */
-class BuildHandler implements Runnable {
+public class BuildHandler implements Runnable {
     private final RouterContext _context;
     private final Log _log;
     private final TunnelPoolManager _manager;
@@ -78,7 +78,7 @@ class BuildHandler implements Runnable {
     private static final boolean IS_SLOW = SystemVersion.isSlow();
     /** TODO these may be too high, review and adjust */
     private static final int MIN_QUEUE = IS_SLOW ? 16 : 32;
-    private static final int MAX_QUEUE = IS_SLOW ? 64 : 512;
+    private static volatile int _maxQueue = IS_SLOW ? 64 : 512;
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
     private static final int NEXT_HOP_LOOKUP_TIMEOUT = 3*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
@@ -135,6 +135,11 @@ class BuildHandler implements Runnable {
         }
     }
 
+    /** @since 0.9.70+ */
+    public static int getMaxQueue() { return _maxQueue; }
+    /** @since 0.9.70+ */
+    public static void setMaxQueue(int val) { _maxQueue = Math.max(16, Math.min(2048, val)); }
+
     public BuildHandler(RouterContext ctx, TunnelPoolManager manager, BuildExecutor exec) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
@@ -143,7 +148,7 @@ class BuildHandler implements Runnable {
         _banLogger = new BanLogger();
         _banLogger.initialize(ctx);
         // Queue size = 12 * share BW / 48K
-        int sz = ctx.getProperty(PROP_MAX_QUEUE, MAX_QUEUE);
+        int sz = ctx.getProperty(PROP_MAX_QUEUE, _maxQueue);
         _inboundBuildMessages = new LinkedBlockingQueue<>(sz);
         ctx.statManager().createRequiredRateStat("tunnel.buildLookupSuccess", "Confirmation of successful deferred lookup", "Tunnels", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.buildReplyTooSlow", "Received a tunnel build reply after timeout", "Tunnels", RATES);

@@ -70,7 +70,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *
      */
     private static final int DEFAULT_CODEL_TARGET = 5;
-    private final long _target;
+    private volatile long _target;
 
     /**
      *  Quote:
@@ -80,7 +80,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *
      */
     private static final int DEFAULT_CODEL_INTERVAL = 50;
-    private final long _interval;
+    private volatile long _interval;
     private final String STAT_DROP;
     private final String STAT_DELAY;
     private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 1000 : 500;
@@ -116,6 +116,18 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
         ctx.statManager().createRateStat(STAT_DELAY, "Average queue delay (ms)", "Router [CoDel]", CODEL_RATES);
         _id = __id.incrementAndGet();
     }
+
+    /**
+     * Returns the current CoDel target delay in ms.
+     * @since 0.9.70+
+     */
+    public long getTarget() { return _target; }
+
+    /**
+     * Returns the current CoDel interval in ms.
+     * @since 0.9.70+
+     */
+    public long getInterval() { return _interval; }
 
     @Override
     public boolean add(E o) {

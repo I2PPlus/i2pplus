@@ -55,7 +55,7 @@ class IntroductionManager {
      * Limit since we ping to keep the conn open
      * @since 0.8.11
      */
-    private static final int MAX_INBOUND = 200;
+    private static final int MAX_INBOUND = 100;
 
     /**
      * This is enforced in EstablishmentManager

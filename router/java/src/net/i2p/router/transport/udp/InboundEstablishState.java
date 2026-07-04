@@ -78,7 +78,7 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
      *  Max delay including backoff.
      *  This should be a little shorter than for outbound.
      */
-    protected static final long MAX_DELAY = EstablishmentManager.MAX_IB_ESTABLISH_TIME;
+    protected static long getMaxDelay() { return EstablishmentManager.MAX_IB_ESTABLISH_TIME.get(); }
 
     /**
      *  For SSU2
@@ -159,7 +159,7 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
         _lastSend = _context.clock().now();
         long delay;
         if (_createdSentCount == 0) {delay = RETRANSMIT_DELAY;}
-        else {delay = Math.min(RETRANSMIT_DELAY << _createdSentCount, MAX_DELAY);}
+        else {delay = Math.min(RETRANSMIT_DELAY << _createdSentCount, getMaxDelay());}
         _createdSentCount++;
         _nextSend = _lastSend + delay;
         if ((_currentState == InboundState.IB_STATE_UNKNOWN) ||

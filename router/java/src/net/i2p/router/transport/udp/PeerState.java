@@ -196,6 +196,9 @@ public class PeerState {
      *  May need to adjust based on memory.
      */
 
+    /** Default MTU */
+    public static final int DEFAULT_MTU = 1484;
+
     /**
      * IPv4 Min MTU
      *
@@ -260,9 +263,25 @@ public class PeerState {
     private static final int INIT_RTO = 1000;
     private static final int INIT_RTT = 0;
     private static final int MAX_RTO = 60*1000;
-    /** How frequently do we want to send ACKs to a peer? */
-    protected static final int ACK_FREQUENCY = 300;
-    protected static final int CLOCK_SKEW_FUDGE = (ACK_FREQUENCY * 2) / 3;
+    /** How frequently do we want to send ACKs to a peer? (dynamically tuned) */
+    private static final AtomicInteger ACK_FREQUENCY = new AtomicInteger(300);
+    /**
+     * @return current ACK frequency
+     * @since 0.9.70+
+     */
+    public static int getAckFrequency() { return ACK_FREQUENCY.get(); }
+    /**
+     * @param freq new ACK frequency (bounded 50-300)
+     * @since 0.9.70+
+     */
+    public static void setAckFrequency(int freq) {
+        ACK_FREQUENCY.set(Math.max(50, Math.min(300, freq)));
+    }
+    /**
+     * @return clock skew fudge derived from current ACK frequency
+     * @since 0.9.70+
+     */
+    public static int getClockSkewFudge() { return (getAckFrequency() * 2) / 3; }
 
     /**
      *  The max number of acks we save to send as duplicates
@@ -310,7 +329,8 @@ public class PeerState {
         else {_rttDeviation = _rtt;}
 
         long maxMemory = SystemVersion.getMaxMemory();
-        int outboundQueueSize = Math.max(16, Math.min(64, (int)(maxMemory / (256 * 1024 * 1024L))));
+        int defaultQueueSize = Math.max(16, Math.min(64, (int)(maxMemory / (256 * 1024 * 1024L))));
+        int outboundQueueSize = ctx.getProperty("router.peerOutboundQueueSize", defaultQueueSize);
 
         _inboundMessages = new ConcurrentHashMap<>(16);
         _outboundMessages = new CachedIteratorCollection<>();
@@ -442,7 +462,7 @@ public class PeerState {
     void adjustClockSkew(long skew) {
         // the real one-way delay is much less than RTT / 2, due to ack delays,
         // so add a fudge factor
-        long actualSkew = skew + CLOCK_SKEW_FUDGE - (_rtt / 2);
+        long actualSkew = skew + getClockSkewFudge() - (_rtt / 2);
         // First time...
         // This is important because we need accurate
         // skews right from the beginning, since the median is taken

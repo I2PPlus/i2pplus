@@ -832,7 +832,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             _currentState = OutboundState.OB_STATE_CONFIRMED_COMPLETELY;
             _pstate.confirmedPacketsSent(_sessConfForReTX);
             // PS2.super adds CLOCK_SKEW_FUDGE that doesn't apply here
-            _pstate.adjustClockSkew(_skew - (_rtt / 2) - PeerState.CLOCK_SKEW_FUDGE);
+            _pstate.adjustClockSkew(_skew - (_rtt / 2) - PeerState.getClockSkewFudge());
             _pstate.setHisMTU(_mtu);
             _pstate.setOurAddress(_aliceIP, _alicePort);
         }

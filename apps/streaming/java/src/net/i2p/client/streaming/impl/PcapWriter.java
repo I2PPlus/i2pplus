@@ -260,7 +260,7 @@ public class PcapWriter implements Closeable, Flushable {
         DataHelper.writeLong(_fos, 1, flags);
 
         // window size 2 bytes
-        long window = ConnectionOptions.INITIAL_WINDOW_SIZE;
+        long window = ConnectionOptions.getInitialWindowSize();
         long msgSize = ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE;
         if (con != null) {
             // calculate the receive window, which doesn't have an exact streaming equivalent

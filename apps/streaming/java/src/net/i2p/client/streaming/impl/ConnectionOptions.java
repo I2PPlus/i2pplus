@@ -29,7 +29,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private int _rtt;
     private int _minRtt = Integer.MAX_VALUE;
     private int _rttDev;
-    private int _rto = INITIAL_RTO;
+    private int _rto = _initialRTO;
     private int _resendDelay;
     private int _sendAckDelay;
     private int _maxMessageSize;
@@ -89,19 +89,47 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static final String PROP_MAX_RTO = "i2p.streaming.maxRTO";
     private static final String PROP_MIN_RESEND_DELAY = "i2p.streaming.minResendDelay";
     private static final String PROP_MAX_RESEND_DELAY = "i2p.streaming.maxResendDelay";
-    private static final int INITIAL_RTO = 6000;
+    /** @since 0.9.70+ mutable for adaptive tuning */
+    private static volatile int _initialRTO = 6000;
+
+    /** @since 0.9.70+ */
+    static int getInitialRTO() { return _initialRTO; }
+
+    /** @since 0.9.70+ */
+    static void setInitialRTO(int val) { _initialRTO = Math.max(500, Math.min(30000, val)); }
+
+    /** @since 0.9.70+ */
+    private static volatile int _maxRTO = 30000;
+    /** @since 0.9.70+ */
+    static int getMaxRTOStatic() { return _maxRTO; }
+    /** @since 0.9.70+ */
+    static void setMaxRTO(int val) { _maxRTO = Math.max(1000, Math.min(60000, val)); }
+
+    /** @since 0.9.70+ */
+    private static volatile int _minResendDelay = 100;
+    /** @since 0.9.70+ */
+    static int getMinResendDelayStatic() { return _minResendDelay; }
+    /** @since 0.9.70+ */
+    static void setMinResendDelay(int val) { _minResendDelay = Math.max(50, Math.min(5000, val)); }
+
+    /** @since 0.9.70+ */
+    private static volatile int _maxResendDelay = 30000;
+    /** @since 0.9.70+ */
+    static int getMaxResendDelayStatic() { return _maxResendDelay; }
+    /** @since 0.9.70+ */
+    static void setMaxResendDelay(int val) { _maxResendDelay = Math.max(1000, Math.min(60000, val)); }
 
     /** @since I2P+ */
     private int getMaxRTO() {
-        return I2PAppContext.getGlobalContext().getProperty(PROP_MAX_RTO, 30000);
+        return _maxRTO;
     }
     /** @since I2P+ */
     private int getMinResendDelay() {
-        return I2PAppContext.getGlobalContext().getProperty(PROP_MIN_RESEND_DELAY, 100);
+        return _minResendDelay;
     }
     /** @since I2P+ */
     private int getMaxResendDelay() {
-        return I2PAppContext.getGlobalContext().getProperty(PROP_MAX_RESEND_DELAY, 30*1000);
+        return _maxResendDelay;
     }
 
     public static final String PROP_CONNECT_DELAY = "i2p.streaming.connectDelay";
@@ -147,9 +175,16 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /**
      * RFC 6928 recommends 10 segments for better initial throughput.
      * Increased to 16 for I2P's high-latency environment to improve initial bandwidth utilization.
+     * @since 0.9.70+ mutable for adaptive tuning
      */
-    static final int INITIAL_WINDOW_SIZE = 16;
+    static volatile int _initialWindowSize = 16;
     static final int DEFAULT_MAX_SENDS = 30;
+
+    /** @since 0.9.70+ */
+    static int getInitialWindowSize() { return _initialWindowSize; }
+
+    /** @since 0.9.70+ */
+    static void setInitialWindowSize(int val) { _initialWindowSize = Math.max(1, Math.min(128, val)); }
     /**
      *  Initial RTT estimate for new connections before first measurement.
      *  I2P typically has 2-10 second RTT, so 3 seconds provides a conservative
@@ -168,8 +203,15 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706
      * 500ms provides a reasonable delayed-ACK window for I2P's high-latency environment,
      * allowing data piggybacking and reducing ACK-only packet floods.
+     * @since 0.9.70+ mutable for adaptive tuning
      */
-    private static final int DEFAULT_INITIAL_ACK_DELAY = 20;
+    private static volatile int _defaultInitialAckDelay = 20;
+
+    /** @since 0.9.70+ */
+    static int getDefaultInitialAckDelay() { return _defaultInitialAckDelay; }
+
+    /** @since 0.9.70+ */
+    static void setDefaultInitialAckDelay(int val) { _defaultInitialAckDelay = Math.max(5, Math.min(200, val)); }
     static final int MIN_WINDOW_SIZE = 1;
     private static final boolean DEFAULT_ANSWER_PINGS = true;
     private static final int DEFAULT_INACTIVITY_TIMEOUT = 180*1000;
@@ -443,8 +485,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         setMaxMessageSize(getInt(opts, PROP_MAX_MESSAGE_SIZE, DEFAULT_MAX_MESSAGE_SIZE));
         setReceiveWindow(getInt(opts, PROP_INITIAL_RECEIVE_WINDOW, 1));
         setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 1000));
-        setSendAckDelay(getInt(opts, PROP_INITIAL_ACK_DELAY, DEFAULT_INITIAL_ACK_DELAY));
-        setWindowSize(getInt(opts, PROP_INITIAL_WINDOW_SIZE, INITIAL_WINDOW_SIZE));
+        setSendAckDelay(getInt(opts, PROP_INITIAL_ACK_DELAY, _defaultInitialAckDelay));
+        setWindowSize(getInt(opts, PROP_INITIAL_WINDOW_SIZE, _initialWindowSize));
         setMaxResends(getInt(opts, PROP_MAX_RESENDS, DEFAULT_MAX_SENDS));
         setInactivityTimeout(getInt(opts, PROP_INACTIVITY_TIMEOUT, DEFAULT_INACTIVITY_TIMEOUT));
         setInactivityAction(getInt(opts, PROP_INACTIVITY_ACTION, DEFAULT_INACTIVITY_ACTION));
@@ -471,7 +513,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         else {_limitAction = DEFAULT_LIMIT_ACTION;}
 
         synchronized(this) {
-            _rto = getInt(opts, PROP_INITIAL_RTO, INITIAL_RTO);
+            _rto = getInt(opts, PROP_INITIAL_RTO, _initialRTO);
         }
         _tagsToSend = getInt(opts, PROP_TAGS_TO_SEND, DEFAULT_TAGS_TO_SEND);
         _tagThreshold = getInt(opts, PROP_TAG_THRESHOLD, DEFAULT_TAG_THRESHOLD);
@@ -505,10 +547,10 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
         }
         if (opts.getProperty(PROP_INITIAL_ACK_DELAY) != null) {
-            setSendAckDelay(getInt(opts, PROP_INITIAL_ACK_DELAY, DEFAULT_INITIAL_ACK_DELAY));
+            setSendAckDelay(getInt(opts, PROP_INITIAL_ACK_DELAY, _defaultInitialAckDelay));
         }
         if (opts.getProperty(PROP_INITIAL_WINDOW_SIZE) != null) {
-            setWindowSize(getInt(opts, PROP_INITIAL_WINDOW_SIZE, INITIAL_WINDOW_SIZE));
+            setWindowSize(getInt(opts, PROP_INITIAL_WINDOW_SIZE, _initialWindowSize));
         }
         if (opts.getProperty(PROP_MAX_RESENDS) != null) {
             setMaxResends(getInt(opts, PROP_MAX_RESENDS, DEFAULT_MAX_SENDS));
@@ -577,7 +619,7 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
         }
 
         synchronized(this) {
-            _rto = getInt(opts, PROP_INITIAL_RTO, INITIAL_RTO);
+            _rto = getInt(opts, PROP_INITIAL_RTO, _initialRTO);
         }
     }
 

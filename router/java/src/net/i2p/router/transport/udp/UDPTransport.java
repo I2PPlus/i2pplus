@@ -45,6 +45,7 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.peermanager.PeerProfile;
+import net.i2p.router.Tuner;
 import net.i2p.router.transport.Transport;
 import net.i2p.router.transport.TransportBid;
 import net.i2p.router.transport.TransportImpl;
@@ -180,6 +181,15 @@ public class UDPTransport extends TransportImpl {
     private RouterAddress _currentOurV4Address;
     private RouterAddress _currentOurV6Address;
 
+    /** Adaptive tuner */
+    private final Tuner _tuner;
+
+    /**
+     * @return the transport tuner
+     * @since 0.9.70+
+     */
+    public Tuner getTuner() { return _tuner; }
+
     // SSU2
     public static final String STYLE2 = "SSU2";
     static final int SSU2_INT_VERSION = 2;
@@ -254,8 +264,29 @@ public class UDPTransport extends TransportImpl {
     /** How many relays offered to us will we use at a time? */
     public static final int PUBLIC_RELAY_COUNT = 3;
 
-    /** Configure the priority queue with the given split points */
-    private static final int MAX_CONSECUTIVE_FAILED = 5;
+    /** Consecutive send failures before considering a peer for drop (requires inactivity too) */
+    private static final int MAX_CONSECUTIVE_FAILED = 3;
+
+    /** @return current outbound establish timeout in ms */
+    public static long getMaxObEstablishTime() { return EstablishmentManager.MAX_OB_ESTABLISH_TIME.get(); }
+    /** @param ms new timeout (bounded 1000-5000) */
+    public static void setMaxObEstablishTime(long ms) {
+        EstablishmentManager.MAX_OB_ESTABLISH_TIME.set(Math.max(1000, Math.min(5000, ms)));
+    }
+
+    /** @return current inbound establish timeout in ms */
+    public static long getMaxIbEstablishTime() { return EstablishmentManager.MAX_IB_ESTABLISH_TIME.get(); }
+    /** @param ms new timeout (bounded 1000-8000) */
+    public static void setMaxIbEstablishTime(long ms) {
+        EstablishmentManager.MAX_IB_ESTABLISH_TIME.set(Math.max(1000, Math.min(8000, ms)));
+    }
+
+    /** @return current data message timeout in ms */
+    public static long getDataMessageTimeout() { return EstablishmentManager.DATA_MESSAGE_TIMEOUT.get(); }
+    /** @param ms new timeout (bounded 1000-10000) */
+    public static void setDataMessageTimeout(long ms) {
+        EstablishmentManager.DATA_MESSAGE_TIMEOUT.set(Math.max(1000, Math.min(10000, ms)));
+    }
 
     public static final int DEFAULT_COST = 5;
     private static final int SSU_OUTBOUND_COST = 14;
@@ -266,7 +297,7 @@ public class UDPTransport extends TransportImpl {
     /** Minimum peers volunteering to be introducers if we need that */
     private static final int MIN_INTRODUCER_POOL = 30;
     static final long INTRODUCER_EXPIRATION_MARGIN = 20*60*1000L;
-    private static final long MIN_DOWNTIME_TO_REKEY = 30*24*60*60*1000L;
+    private static final long MIN_DOWNTIME_TO_REKEY = 7*24*60*60*1000L;
 
     private static final int[] BID_VALUES = { 15, 20, 50, 65, 80, 95, 100, 115, TransportBid.TRANSIENT_FAIL };
     private static final int FAST_PREFERRED_BID = 0;
@@ -425,6 +456,9 @@ public class UDPTransport extends TransportImpl {
         _context.statManager().createRateStat("udp.proactiveReestablish", "Time session was idle for when we proactively reestablished it", "Transport [UDP]", RATES);
 
         _context.simpleTimer2().addPeriodicEvent(new PingIntroducers(), MIN_EXPIRE_TIMEOUT * 3 / 4);
+
+        _tuner = new Tuner(_context);
+        _context.simpleTimer2().addPeriodicEvent(_tuner, 30*1000L);
 
         // SSU2 key and IV generation if required
         _defaultMTU = PeerState2.DEFAULT_MTU;
@@ -4055,5 +4089,11 @@ public class UDPTransport extends TransportImpl {
             return rv;
         }
     }
+
+    /** @since 0.9.70+ */
+    public static int getPacketHandlerMaxThreads() { return PacketHandler.getMaxHandlers(); }
+
+    /** @since 0.9.70+ */
+    public static void setPacketHandlerMaxThreads(int handlers) { PacketHandler.setMaxHandlers(handlers); }
 
 }

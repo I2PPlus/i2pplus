@@ -133,7 +133,13 @@ public class FIFOBandwidthRefiller implements Runnable {
      * the bandwidth limiter will get an update this often (ms)
      */
 //    private static final long REPLENISH_FREQUENCY = 40;
-    private static final long REPLENISH_FREQUENCY = SystemVersion.isSlow() || SystemVersion.getCPULoadAvg() > 80 ? 100 : 20;
+    private static volatile long _replenishFrequency = SystemVersion.isSlow() || SystemVersion.getCPULoadAvg() > 80 ? 100 : 20;
+
+    /** @since 0.9.70+ */
+    public static long getReplenishFrequency() { return _replenishFrequency; }
+
+    /** @since 0.9.70+ */
+    public static void setReplenishFrequency(long ms) { _replenishFrequency = Math.max(5, Math.min(200, ms)); }
 
     FIFOBandwidthRefiller(RouterContext context, FIFOBandwidthLimiter limiter) {
         _limiter = limiter;
@@ -172,7 +178,7 @@ public class FIFOBandwidthRefiller implements Runnable {
                 _lastRefillTime = now;
             }
 
-            try { Thread.sleep(REPLENISH_FREQUENCY); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+            try { Thread.sleep(_replenishFrequency); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
         }
     }
 
@@ -190,9 +196,9 @@ public class FIFOBandwidthRefiller implements Runnable {
                        + " Rate in: " + _inboundKBytesPerSecond + "KB/s;"
                        + " Rate out: " + _outboundKBytesPerSecond + "KB/s");
         // clock skew
-        if (numMs >= REPLENISH_FREQUENCY * 50 || numMs <= 0)
-            numMs = REPLENISH_FREQUENCY;
-        if (numMs >= REPLENISH_FREQUENCY) {
+        if (numMs >= _replenishFrequency * 50 || numMs <= 0)
+            numMs = _replenishFrequency;
+        if (numMs >= _replenishFrequency) {
             long inboundToAdd = (1024*_inboundKBytesPerSecond * numMs)/1000;
             long outboundToAdd = (1024*_outboundKBytesPerSecond * numMs)/1000;
 

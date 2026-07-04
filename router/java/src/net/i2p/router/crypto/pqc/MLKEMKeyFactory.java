@@ -24,11 +24,12 @@ import net.i2p.util.SystemVersion;
  */
 public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
 
+    private static volatile MLKEMKeyFactory _lastInstance;
     private final I2PAppContext _context;
     private final Log _log;
-    private final int _minSize;
-    private final int _maxSize;
-    private final int _calcDelay;
+    private volatile int _minSize;
+    private volatile int _maxSize;
+    private volatile int _calcDelay;
     private final LinkedBlockingQueue<KeyPair> _keys;
     private final EncType _type;
     private volatile boolean _isRunning;
@@ -54,7 +55,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
         ctx.statManager().createRateStat("crypto.MLKEMGenerateTime", "How long it takes to create keys", "Encryption", new long[] { 60*60*1000L });
         ctx.statManager().createRateStat("crypto.MLKEMUsed", "Take keys from the queue", "Encryption", new long[] { 60*60*1000L });
         //ctx.statManager().createRateStat("crypto.MLKEMReused", "Unused requeued", "Encryption", new long[] { 60*60*1000 });
-        ctx.statManager().createRateStat("crypto.MLKEMEmpty", "Queue empty", "Encryption", new long[] { 60*60*1000L });
+        ctx.statManager().createRequiredRateStat("crypto.MLKEMEmpty", "Queue empty", "Encryption", new long[] { 60*1000L, 10*60*1000L, 60*60*1000L });
 
         // Scale precomputation with available memory and cores.
         // MLKEM-768 keypair is ~3.5KB so even 1000 keys is <4MB.
@@ -80,7 +81,44 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
         _keys = new LinkedBlockingQueue<>(_maxSize);
         if (!SystemVersion.isWindows())
             setPriority(Thread.NORM_PRIORITY - 1);
+        _lastInstance = this;
     }
+
+    /**
+     * Returns the last created instance.
+     * @since 0.9.70+
+     */
+    public static MLKEMKeyFactory getInstance() { return _lastInstance; }
+
+    /**
+     * Returns the current minimum precalc queue size.
+     * @since 0.9.70+
+     */
+    public int getMinSize() { return _minSize; }
+
+    /**
+     * Sets the minimum precalc queue size.
+     * @since 0.9.70+
+     */
+    public void setMinSize(int min) { _minSize = Math.max(1, min); }
+
+    /**
+     * Returns the current maximum precalc queue size.
+     * @since 0.9.70+
+     */
+    public int getMaxSize() { return _maxSize; }
+
+    /**
+     * Sets the maximum precalc queue size.
+     * @since 0.9.70+
+     */
+    public void setMaxSize(int max) { _maxSize = Math.max(_minSize, max); }
+
+    /**
+     * Returns the current number of precalc keys queued.
+     * @since 0.9.70+
+     */
+    public int getSize() { return _keys.size(); }
 
     /**
      *  Note that this stops the singleton precalc thread.
@@ -187,9 +225,5 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     /** @return true if successful, false if full */
     private final boolean addKeys(KeyPair kp) {
         return _keys.offer(kp);
-    }
-
-    private final int getSize() {
-        return _keys.size();
     }
 }

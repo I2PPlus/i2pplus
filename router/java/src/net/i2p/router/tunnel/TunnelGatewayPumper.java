@@ -59,7 +59,7 @@ class TunnelGatewayPumper implements Runnable {
     /**
      * Wait time to requeue a backlogged gateway to allow task processing to catch up.
      */
-    private static final long REQUEUE_TIME;
+    private static volatile long _requeueTime;
 
     /**
      * Max time to wait for pumper queue space before dropping the request.
@@ -90,8 +90,14 @@ class TunnelGatewayPumper implements Runnable {
         }
 
         // Scale requeue time inversely with cores: faster requeue with more cores
-        REQUEUE_TIME = Math.max(25, 100 - (cores * 5));
+        _requeueTime = Math.max(25, 100 - (cores * 5));
     }
+
+    /** @since 0.9.70+ */
+    public static long getRequeueTime() { return _requeueTime; }
+
+    /** @since 0.9.70+ */
+    public static void setRequeueTime(long ms) { _requeueTime = Math.max(10, Math.min(200, ms)); }
 
     /**
      * Special poison pill constant used to signal termination.
@@ -239,7 +245,7 @@ class TunnelGatewayPumper implements Runnable {
             return;
         }
         if (_backlogged.add(gw)) {
-            _context.simpleTimer2().addEvent(new Requeue(gw), REQUEUE_TIME);
+            _context.simpleTimer2().addEvent(new Requeue(gw), _requeueTime);
         }
     }
 

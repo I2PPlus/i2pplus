@@ -142,12 +142,19 @@ class Connection {
      * Maximum number of packets to retransmit when the timer hits.
      * Increased from 16 to 32 for faster loss recovery.
      */
+    /** @since 0.9.70+ */
+    private static volatile int _maxRetransmissions = 64;
+    /** @since 0.9.70+ */
+    public static int getMaxRetransmissionsStatic() { return _maxRetransmissions; }
+    /** @since 0.9.70+ */
+    public static void setMaxRetransmissions(int val) { _maxRetransmissions = Math.max(8, Math.min(256, val)); }
+
     /**
      * Maximum number of retransmissions before giving up.
      * Tunable via i2p.streaming.maxRetransmissions (default: 64).
      */
     private int getMaxRtx() {
-        return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.maxRetransmissions", 64);
+        return _maxRetransmissions;
     }
 
     /**

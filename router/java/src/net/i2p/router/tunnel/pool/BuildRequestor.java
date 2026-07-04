@@ -51,7 +51,7 @@ import net.i2p.util.VersionComparator;
  * <p>Paired tunnels are always used (as of 0.9.50+) to improve client
  * isolation and prevent correlation across tunnel pools.
  */
-abstract class BuildRequestor {
+public abstract class BuildRequestor {
 
     private BuildRequestor() {}
 
@@ -96,7 +96,7 @@ abstract class BuildRequestor {
      * success rates are low or timeout rates are high.
      * Default: 13s (normal), 18s (slow systems).
      */
-    static int getRequestTimeout(RouterContext ctx) {
+    public static int getRequestTimeout(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.build.requestTimeout", 15*1000);
     }
 

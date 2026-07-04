@@ -663,7 +663,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         _lastSend = _context.clock().now();
         long delay;
         if (_createdSentCount == 0) {delay = RETRANSMIT_DELAY;}
-        else {delay = Math.min(RETRANSMIT_DELAY << _createdSentCount, MAX_DELAY);}
+        else {delay = Math.min(RETRANSMIT_DELAY << _createdSentCount, getMaxDelay());}
         _createdSentCount++;
         _nextSend = _lastSend + delay;
         _currentState = InboundState.IB_STATE_CREATED_SENT;
@@ -1013,7 +1013,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                                  _sendConnID, _rcvConnID,
                                  _sendHeaderEncryptKey1, h_ba, h_ab);
         // PS2.super adds CLOCK_SKEW_FUDGE that doesn't apply here
-        _pstate.adjustClockSkew(_skew - (_rtt / 2) - PeerState.CLOCK_SKEW_FUDGE);
+        _pstate.adjustClockSkew(_skew - (_rtt / 2) - PeerState.getClockSkewFudge());
         _pstate.setHisMTU(_mtu);
         // set our address. _bobIP and _bobPort in super are not set for SSU2
         boolean isIPv6 = _aliceIP.length == 16;

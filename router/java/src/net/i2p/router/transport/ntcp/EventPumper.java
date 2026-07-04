@@ -124,9 +124,9 @@ class EventPumper implements Runnable {
     private static final boolean IS_SLOW = SystemVersion.isSlow();
     private static final long FAILSAFE_ITERATION_FREQ = 2 * 1000L;
     private static final int FAILSAFE_LOOP_COUNT = IS_SLOW ? 512 : 2048;
-    private static final long SELECTOR_LOOP_DELAY = IS_SLOW ? 100 : 5;
+    private static volatile long _selectorLoopDelay = IS_SLOW ? 100 : 5;
     private static final long SELECTOR_MAX_DELAY = 200;  // Max delay when under load
-    private long _currentDelay = SELECTOR_LOOP_DELAY;
+    private long _currentDelay = _selectorLoopDelay;
     private static final long BLOCKED_IP_FREQ = 43 * 60 * 1000L;
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
     private static final long MIN_EXPIRE_IDLE_TIME = 120 * 1000L;
@@ -164,7 +164,7 @@ class EventPumper implements Runnable {
         _blockedIPs = new ObjectCounter<>();
         _failedInboundHandshake = new ObjectCounter<>();
         _context.statManager().createRateStat("ntcp.pumperKeySetSize", "Number of NTCP Pumper KeySetSize events", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.pumperLoopsPerSecond", "Number of NTCP Pumper loops/s", "Transport [NTCP]", RATES);
+        _context.statManager().createRequiredRateStat("ntcp.pumperLoopsPerSecond", "Number of NTCP Pumper loops/s", "Transport [NTCP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("ntcp.zeroRead", "Number of NTCP zero length read events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.zeroReadDrop", "Number of NTCP zero length read events dropped", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.dropInboundNoMessage", "Number of NTCP Inbound empty message drop events", "Transport [NTCP]", RATES);
@@ -307,8 +307,8 @@ class EventPumper implements Runnable {
                     // Scale delay based on loop rate - increase delay if >1K/s to reduce CPU
                     if (loopsPerSecond > 1000 && _currentDelay < SELECTOR_MAX_DELAY) {
                         _currentDelay = Math.min(_currentDelay + 5, SELECTOR_MAX_DELAY);
-                    } else if (loopsPerSecond < 500 && _currentDelay > SELECTOR_LOOP_DELAY) {
-                        _currentDelay = Math.max(_currentDelay - 5, SELECTOR_LOOP_DELAY);
+                    } else if (loopsPerSecond < 500 && _currentDelay > _selectorLoopDelay) {
+                        _currentDelay = Math.max(_currentDelay - 5, _selectorLoopDelay);
                     }
                     loopCountSinceLastRate = 0;
                     lastLoopRateUpdate = now;
@@ -1121,6 +1121,12 @@ class EventPumper implements Runnable {
     public long getIdleTimeout() {
         return _expireIdleWriteTime;
     }
+
+    /** @since 0.9.70+ */
+    public static long getSelectorLoopDelay() { return _selectorLoopDelay; }
+
+    /** @since 0.9.70+ */
+    public static void setSelectorLoopDelay(long ms) { _selectorLoopDelay = Math.max(1, Math.min(100, ms)); }
 
     public static void setInterest(SelectionKey key, int op) throws CancelledKeyException {
         if (key == null || !key.isValid()) return;

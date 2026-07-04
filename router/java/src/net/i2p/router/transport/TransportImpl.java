@@ -140,7 +140,7 @@ public abstract class TransportImpl implements Transport {
         _context.statManager().createRateStat("transport.expiredOnQueueLifetime", "Time to process message expired in outbound queue (ms)", "Transport", RATES );
         _context.statManager().createRateStat("transport.receiveMessageTimeSlow", "Time to read a received message (over 1s)", "Transport", RATES);
         _context.statManager().createRateStat("transport.receiveMessageTime", "Time to read a received message (ms)", "Transport", RATES);
-        _context.statManager().createRateStat("transport.sendMessageFailureLifetime", "Lifetime of failed sent messages", "Transport", RATES);
+        _context.statManager().createRequiredRateStat("transport.sendMessageFailureLifetime", "Lifetime of failed sent messages", "Transport", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("transport.receiveMessageSize", "Size of received messages (bytes)", "Transport", RATES);
         _context.statManager().createRequiredRateStat("transport.sendMessageSize", "Size of sent messages (bytes)", "Transport", RATES);
         _context.statManager().createRequiredRateStat("transport.sendProcessingTime", "Time to process and send a message (ms)", "Transport", RATES);

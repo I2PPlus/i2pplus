@@ -142,7 +142,12 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * The default _maxConcurrent
      */
-    private static final int MAX_CONCURRENT = SystemVersion.isSlow() ? 4 : 16;
+    private static volatile int _maxConcurrentDefault = SystemVersion.isSlow() ? 4 : 16;
+
+    /** @since 0.9.70+ */
+    public static int getMaxConcurrentDefault() { return _maxConcurrentDefault; }
+    /** @since 0.9.70+ */
+    public static void setMaxConcurrentDefault(int val) { _maxConcurrentDefault = Math.max(1, Math.min(64, val)); }
 
     public static final String PROP_ENCRYPT_RI = "router.encryptRouterLookups";
 
@@ -183,8 +188,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         _sentTime = new ConcurrentHashMap<>(_totalSearchLimit);
         _fromLocalDest = fromLocalDest;
         _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME);
-        _maxConcurrent = (ctx.router().getUptime() > 30*60*1000 || known > 1000) ? ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT) :
-                          ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 1);
+        _maxConcurrent = (ctx.router().getUptime() > 30*60*1000 || known > 1000) ? ctx.getProperty("netdb.maxConcurrent", _maxConcurrentDefault) :
+                          ctx.getProperty("netdb.maxConcurrent", _maxConcurrentDefault + 1);
         if (fromLocalDest != null && !isLease && _log.shouldWarn()) {
             _log.warn("IterativeSearch for RouterInfo [" + key.toBase64().substring(0,6) + "] down client tunnel " + fromLocalDest, new Exception());
         }

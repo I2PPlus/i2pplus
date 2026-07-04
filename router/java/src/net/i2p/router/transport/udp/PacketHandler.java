@@ -32,7 +32,7 @@ class PacketHandler {
     private static final int TYPE_POISON = -99999;
     private static final int MIN_QUEUE_SIZE = SystemVersion.isSlow() ? 16 : 64;
     private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 64 : 512;
-    private static final int MAX_NUM_HANDLERS = SystemVersion.isSlow() ? 3 : 6;
+    private static volatile int _maxHandlers = Math.max(SystemVersion.getCores() / 2, 4);
     private static final int MIN_VERSION = 2;
     private static final int MAX_VERSION = 4;
 
@@ -50,12 +50,26 @@ class PacketHandler {
         _inboundQueue = new CoDelBlockingQueue<>(ctx, "UDP-Receiver", qsize);
         int num_handlers;
         if (maxMemory < 128*1024*1024L) {num_handlers = 1;}
-        else {num_handlers = MAX_NUM_HANDLERS;}
+        else {num_handlers = _maxHandlers;}
         _handlers = new Handler[num_handlers];
         for (int i = 0; i < num_handlers; i++) {_handlers[i] = new Handler();}
 
         _context.statManager().createRateStat("udp.destroyedInvalidSkew", "Session destroyed (bad skew)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.blockedPacketBytes", "Inbound packets blocked (bytes)", "Transport [UDP]", UDPTransport.RATES);
+    }
+
+    /**
+     * Returns the current max packet handler threads.
+     * @since 0.9.70+
+     */
+    public static int getMaxHandlers() { return _maxHandlers; }
+
+    /**
+     * Sets the max packet handler threads for new instances.
+     * @since 0.9.70+
+     */
+    public static void setMaxHandlers(int handlers) {
+        _maxHandlers = Math.max(1, Math.min(16, handlers));
     }
 
     public synchronized void startup() {

@@ -42,10 +42,11 @@ class PumpedTunnelGateway extends TunnelGateway {
     public final boolean _isInbound;
     private final Hash _nextHop;
 
-    private static final int MAX_OB_MSGS_PER_PUMP;
-    private static final int MAX_IB_MSGS_PER_PUMP;
+    private static volatile int _maxObMsgsPerPump;
+    private static volatile int _maxIbMsgsPerPump;
     private static final int INITIAL_OB_QUEUE;
     private static final int MAX_IB_QUEUE;
+    private static volatile boolean _statsCreated;
 
     public static final String PROP_MAX_OB_MSGS_PER_PUMP = "router.pumpMaxOutboundMsgs";
     public static final String PROP_MAX_IB_MSGS_PER_PUMP = "router.pumpMaxInboundMsgs";
@@ -57,8 +58,8 @@ class PumpedTunnelGateway extends TunnelGateway {
         long maxMem = SystemVersion.getMaxMemory();
 
         // Scale max messages per pump based on cores
-        MAX_OB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 64 : Math.max(256, cores * 32);
-        MAX_IB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 32 : Math.max(128, cores * 16);
+        _maxObMsgsPerPump = SystemVersion.isSlow() ? 64 : Math.max(256, cores * 32);
+        _maxIbMsgsPerPump = SystemVersion.isSlow() ? 32 : Math.max(128, cores * 16);
 
         // Scale queues based on memory
         if (maxMem < 256 * 1024 * 1024L) {
@@ -72,6 +73,18 @@ class PumpedTunnelGateway extends TunnelGateway {
             MAX_IB_QUEUE = 4096;
         }
     }
+
+    /** @since 0.9.70+ */
+    public static int getMaxObMsgsPerPump() { return _maxObMsgsPerPump; }
+
+    /** @since 0.9.70+ */
+    public static void setMaxObMsgsPerPump(int val) { _maxObMsgsPerPump = Math.max(8, Math.min(1024, val)); }
+
+    /** @since 0.9.70+ */
+    public static int getMaxIbMsgsPerPump() { return _maxIbMsgsPerPump; }
+
+    /** @since 0.9.70+ */
+    public static void setMaxIbMsgsPerPump(int val) { _maxIbMsgsPerPump = Math.max(8, Math.min(512, val)); }
 
     /**
      * Constructs a PumpedTunnelGateway instance.
@@ -89,6 +102,19 @@ class PumpedTunnelGateway extends TunnelGateway {
     public PumpedTunnelGateway(RouterContext context, QueuePreprocessor preprocessor,
                                Sender sender, Receiver receiver, TunnelGatewayPumper pumper) {
         super(context, preprocessor, sender, receiver);
+        if (!_statsCreated) {
+            synchronized (PumpedTunnelGateway.class) {
+                if (!_statsCreated) {
+                    context.statManager().createRequiredRateStat("tunnel.dropGatewayOverflowOB",
+                        "Outbound gateway queue overflow drops", "Tunnels [Participating]",
+                        new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+                    context.statManager().createRequiredRateStat("tunnel.dropGatewayOverflowIB",
+                        "Inbound gateway queue overflow drops", "Tunnels [Participating]",
+                        new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+                    _statsCreated = true;
+                }
+            }
+        }
         if (getClass() == PumpedTunnelGateway.class) {
             // Outbound gateway uses priority queue
             _prequeue = new CoDelPriorityBlockingQueue(context, "OBGW",
@@ -137,6 +163,10 @@ class PumpedTunnelGateway extends TunnelGateway {
             return true;
         } else {
             _context.statManager().addRateData("tunnel.dropGatewayOverflow", 1);
+            if (_isInbound)
+                _context.statManager().addRateData("tunnel.dropGatewayOverflowIB", 1);
+            else
+                _context.statManager().addRateData("tunnel.dropGatewayOverflowOB", 1);
             return false;
         }
     }
@@ -168,8 +198,8 @@ class PumpedTunnelGateway extends TunnelGateway {
             max = _isInbound ? Math.max(1, pending / 20) : Math.max(2, pending / 10);
         } else {
             max = _isInbound
-                    ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, MAX_IB_MSGS_PER_PUMP)
-                    : _context.getProperty(PROP_MAX_OB_MSGS_PER_PUMP, MAX_OB_MSGS_PER_PUMP);
+                    ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, _maxIbMsgsPerPump)
+                    : _context.getProperty(PROP_MAX_OB_MSGS_PER_PUMP, _maxObMsgsPerPump);
         }
 
         _prequeue.drainTo(queueBuf, max);

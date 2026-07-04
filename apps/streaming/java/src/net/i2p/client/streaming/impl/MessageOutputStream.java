@@ -85,9 +85,16 @@ class MessageOutputStream extends OutputStream {
 
     /**
      * Default passive flush delay optimized for lower latency while maintaining stability.
+     * @since 0.9.70+ mutable for adaptive tuning
      */
-    private static final int DEFAULT_PASSIVE_FLUSH_DELAY = SystemVersion.isSlow() ? 200 : 100;
+    private static volatile int _defaultPassiveFlushDelay = SystemVersion.isSlow() ? 200 : 100;
     private static final String PROP_PASSIVE_FLUSH_DELAY = "router.passiveFlushDelay";
+
+    /** @since 0.9.70+ */
+    public static int getDefaultPassiveFlushDelay() { return _defaultPassiveFlushDelay; }
+
+    /** @since 0.9.70+ */
+    public static void setDefaultPassiveFlushDelay(int val) { _defaultPassiveFlushDelay = Math.max(10, Math.min(500, val)); }
 
     /**
      * Constructs the stream with default passive flush delay.
@@ -100,7 +107,7 @@ class MessageOutputStream extends OutputStream {
      */
     public MessageOutputStream(I2PAppContext ctx, SimpleTimer2 timer,
                                DataReceiver receiver, int bufSize, int initBufSize) {
-        this(ctx, timer, receiver, bufSize, initBufSize, DEFAULT_PASSIVE_FLUSH_DELAY);
+        this(ctx, timer, receiver, bufSize, initBufSize, _defaultPassiveFlushDelay);
     }
 
     /**
@@ -669,7 +676,7 @@ class MessageOutputStream extends OutputStream {
          * Avoids scheduling duplicate flush events.
          */
         public void enqueue() {
-            int pfd = _context.getProperty(PROP_PASSIVE_FLUSH_DELAY, DEFAULT_PASSIVE_FLUSH_DELAY);
+            int pfd = _context.getProperty(PROP_PASSIVE_FLUSH_DELAY, _defaultPassiveFlushDelay);
             if (!_enqueued) {
                 forceReschedule(pfd);
                 if (_log.shouldDebug()) {

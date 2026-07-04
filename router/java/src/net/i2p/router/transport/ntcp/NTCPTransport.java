@@ -160,7 +160,7 @@ public class NTCPTransport extends TransportImpl {
         "RouterInfo store fail"
     )));
 
-    private static final int MIN_CONCURRENT_READERS = SystemVersion.isSlow() ? 3 : 6;  // unless < 32MB
+    private static final int MIN_CONCURRENT_READERS = 2;  // unless < 32MB
 
     /**
      *  RI sigtypes supported in 0.9.16
@@ -184,7 +184,7 @@ public class NTCPTransport extends TransportImpl {
     public static final String PROP_NTCP2_IV = "i2np.ntcp2.iv";
     private static final int NTCP2_IV_LEN = OutboundNTCP2State.IV_SIZE;
     private static final int NTCP2_KEY_LEN = OutboundNTCP2State.KEY_SIZE;
-    private static final long MIN_DOWNTIME_TO_REKEY = 30*24*60*60*1000L;
+    private static final long MIN_DOWNTIME_TO_REKEY = 7*24*60*60*1000L;
     private static final long MIN_DOWNTIME_TO_REKEY_HIDDEN = 24*60*60*1000L;
     private final byte[] _ntcp2StaticPubkey;
     private final byte[] _ntcp2StaticPrivkey;
@@ -234,13 +234,13 @@ public class NTCPTransport extends TransportImpl {
         _context.statManager().createRateStat("ntcp.registerConnect", "Number of NTCP registerConnect events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.replayHXxorBIH", "Number of NTCP replayHXxorBIH events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.sendBacklogTime", "Send queue latency when adding new message fails (ms)", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.sendQueueSize", "Messages in queue when new message added", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.sendTime", "Total message lifetime when send complete", "Transport [NTCP]", RATES);
+        _context.statManager().createRequiredRateStat("ntcp.sendQueueSize", "Messages in queue when new message added", "Transport [NTCP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        _context.statManager().createRequiredRateStat("ntcp.sendTime", "Total message lifetime when send complete", "Transport [NTCP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("ntcp.throttledReadComplete", "Throttled NTCP ReadComplete events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.throttledWriteComplete", "Throttled NTCP WriteComplete events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.wantsQueuedWrite", "Number of wanted NTCP QueuedWrite events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.writeError", "Number of NTCP write errors", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.writeQueueFull", "NTCP write queue full (frames dropped)", "Transport [NTCP]", RATES);
+        _context.statManager().createRequiredRateStat("ntcp.writeQueueFull", "NTCP write queue full (frames dropped)", "Transport [NTCP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
 
         _endpoints = new HashSet<>(4);
         _establishing = new ConcurrentHashSet<>(64);
@@ -1085,7 +1085,7 @@ public class NTCPTransport extends TransportImpl {
     private void startIt() {
         _finisher.start();
         _pumper.startPumping();
-        int threads = SystemVersion.isSlow() ? 3 : 6;
+        int threads = Math.max(SystemVersion.getCores() / 2, 3);
         _reader.startReading(threads);
         _writer.startWriting(threads);
     }
@@ -1997,4 +1997,24 @@ public class NTCPTransport extends TransportImpl {
         @Override
         public String toString() {return "NTCP bid @ " + getLatencyMs();}
     }
+
+    // ==================== Tuner delegation ====================
+
+    /** @since 0.9.70+ */
+    public static long getSelectorLoopDelay() { return EventPumper.getSelectorLoopDelay(); }
+
+    /** @since 0.9.70+ */
+    public static void setSelectorLoopDelay(long ms) { EventPumper.setSelectorLoopDelay(ms); }
+
+    /** @since 0.9.70+ */
+    public static int getSendFinisherMaxThreads() { return NTCPSendFinisher.getMaxThreads(); }
+
+    /** @since 0.9.70+ */
+    public static void setSendFinisherMaxThreads(int threads) { NTCPSendFinisher.setMaxThreads(threads); }
+
+    /** @since 0.9.70+ */
+    public static int getSendFinisherQueueCapacity() { return NTCPSendFinisher.getQueueCapacity(); }
+
+    /** @since 0.9.70+ */
+    public static void setSendFinisherQueueCapacity(int capacity) { NTCPSendFinisher.setQueueCapacity(capacity); }
 }

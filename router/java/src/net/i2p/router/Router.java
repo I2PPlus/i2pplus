@@ -1185,7 +1185,7 @@ public class Router implements RouterClock.ClockShiftListener {
         }
 
         char cong = 0;
-        int maxTunnels = _context.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS);
+        int maxTunnels = _context.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl._defaultMaxTunnels);
         boolean disableCongestionCaps = isAdvanced() && _context.getBooleanProperty(PROP_RELAX_CONGESTION_CAP);
         boolean capsEnabled = false;
         if (forceG || maxTunnels <= 0) {cong = CAPABILITY_NO_TUNNELS;}

@@ -59,7 +59,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      */
     private static final int DEFAULT_CODEL_TARGET = 5;
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
-    private final long _target;
+    private volatile long _target;
 
     /**
      *  Quote:
@@ -70,7 +70,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      */
     private static final int DEFAULT_CODEL_INTERVAL = 50;
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
-    private final long _interval;
+    private volatile long _interval;
     private final String STAT_DROP;
     private final String STAT_DELAY;
     public static final int MIN_PRIORITY = 100;
@@ -100,6 +100,18 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         ctx.statManager().createRateStat(STAT_DELAY, "Average queue delay (ms)", "Router [CoDel]", CODEL_RATES);
         _id = __id.incrementAndGet();
     }
+
+    /**
+     * Returns the current CoDel target delay in ms.
+     * @since 0.9.70+
+     */
+    public long getTarget() { return _target; }
+
+    /**
+     * Returns the current CoDel interval in ms.
+     * @since 0.9.70+
+     */
+    public long getInterval() { return _interval; }
 
     @Override
     public void clear() {

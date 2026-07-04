@@ -8,6 +8,8 @@ import net.i2p.router.BanLogger;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.CommSystemFacadeImpl;
+import net.i2p.stat.Rate;
+import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer;
@@ -194,6 +196,7 @@ class ParticipatingThrottler {
     /**
      * Calculates the participation limit for tunnels based on the number of tunnels
      * and router capabilities such as reachability and bandwidth share.
+     * Relaxes limits when we have spare capacity (bandwidth headroom + available transit slots).
      *
      * @param numTunnels the current count of participating tunnels
      * @param isUnreachable true if the router is unreachable
@@ -202,9 +205,39 @@ class ParticipatingThrottler {
      * @return the maximum allowed tunnel participation limit for the router
      */
     private int calculateLimit(int numTunnels, boolean isUnreachable, boolean isLowShare, boolean isFast) {
-        if (isUnreachable || isLowShare) {return Math.min(getMinLimit(context), Math.max(getMaxLimit(context) / 20, numTunnels * (getPercentLimit(context) / 5) / 100));}
-        else if (IS_SLOW) {return Math.min(getMinLimit(context), Math.max(getMaxLimit(context) / 10, numTunnels * (getPercentLimit(context) / 3) / 100));}
-        return Math.min((getMinLimit(context) * 3), Math.max(getMaxLimit(context) / 2, numTunnels * getPercentLimit(context) / 100));
+        int baseLimit;
+        if (isUnreachable || isLowShare) {
+            baseLimit = Math.min(getMinLimit(context), Math.max(getMaxLimit(context) / 20, numTunnels * (getPercentLimit(context) / 5) / 100));
+        } else if (IS_SLOW) {
+            baseLimit = Math.min(getMinLimit(context), Math.max(getMaxLimit(context) / 10, numTunnels * (getPercentLimit(context) / 3) / 100));
+        } else {
+            baseLimit = Math.min((getMinLimit(context) * 3), Math.max(getMaxLimit(context) / 2, numTunnels * getPercentLimit(context) / 100));
+        }
+
+        // Capacity-based relaxation: if we have plenty of headroom, allow more tunnels per peer
+        int maxTunnels = context.getProperty("router.maxParticipatingTunnels", 7500);
+        double usagePct = (double) numTunnels / maxTunnels;
+        int maxBps = context.bandwidthLimiter().getOutboundKBytesPerSecond() * 1024;
+        double bwUsage = 0;
+        if (maxBps > 0) {
+            RateStat rs = context.statManager().getRate("tunnel.participating InBps");
+            if (rs != null) {
+                Rate rate = rs.getRate(60 * 1000L);
+                if (rate != null && rate.getLastEventCount() > 0)
+                    bwUsage = rate.getAverageValue() / maxBps;
+            }
+        }
+
+        // Plenty of capacity: < 50% tunnel slots used AND < 60% bandwidth used
+        if (usagePct < 0.5 && bwUsage < 0.6) {
+            // Relax by up to 50% based on spare capacity
+            double spareSlots = 1.0 - usagePct * 2; // 0-1, higher = more spare
+            double spareBw = 1.0 - bwUsage * 1.67;  // 0-1, higher = more spare
+            double relaxation = Math.min(spareSlots, spareBw);
+            baseLimit = (int) (baseLimit * (1.0 + relaxation * 0.5));
+        }
+
+        return baseLimit;
     }
 
     /**

@@ -37,7 +37,7 @@ import net.i2p.util.SystemVersion;
  *
  * As of 0.8.11, inbound request handling is done in a separate thread.
  */
-class BuildExecutor implements Runnable {
+public class BuildExecutor implements Runnable {
     private static int getTunnelTargetMin(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.build.targetMin", 2);
     }
@@ -101,7 +101,7 @@ class BuildExecutor implements Runnable {
      * Minimum time between GOOD-tunnel deficit rebuilds for non-critical pools.
      * Tunable via i2p.tunnel.goodDeficitThrottle (default: 30000).
      */
-    static long getGoodDeficitThrottle(RouterContext ctx) {
+    public static long getGoodDeficitThrottle(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.goodDeficitThrottle", 30000);
     }
     /**

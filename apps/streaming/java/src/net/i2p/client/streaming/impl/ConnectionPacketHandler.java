@@ -41,7 +41,7 @@ class ConnectionPacketHandler {
     private static final int IMMEDIATE_ACK_DELAY = SystemVersion.isSlow() ? 100 : 80;
     static final String PROP_IMMEDIATE_ACK_DELAY = "i2p.streaming.immediateAckDelay";
 
-    private static final long[] RATES = new long[] { RateConstants.ONE_MINUTE };
+    private static final long[] RATES = new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
 
     public ConnectionPacketHandler(I2PAppContext context) {
         _context = context;
@@ -512,7 +512,7 @@ class ConnectionPacketHandler {
      * If we don't know the send stream id yet (we're just creating a connection), allow
      * the first three packets to come in.  The first of those should be the SYN, of course...
      */
-    private static final int MAX_INITIAL_PACKETS = ConnectionOptions.INITIAL_WINDOW_SIZE;
+
 
     /**
      * Make sure this packet is ok and that we can continue processing its data.
@@ -553,7 +553,7 @@ class ConnectionPacketHandler {
                     return true;
                 } else {
                     // neither RST nor SYN and we don't have the stream id yet?
-                    if (packet.getSequenceNum() < MAX_INITIAL_PACKETS) {
+                    if (packet.getSequenceNum() < ConnectionOptions.getInitialWindowSize()) {
                         packet.releasePayload();
                         return true;
                     } else {

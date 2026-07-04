@@ -1009,16 +1009,20 @@ int pct = Math.max(0, (int)((1.0f - factor) * 100));
          * Scales with allocation: higher share = higher per-tunnel cap.
          */
         int getMaxPerTunnelBandwidth(Location loc) {
-            int maxTunnels = _context.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS,
-                                                  RouterThrottleImpl.DEFAULT_MAX_TUNNELS);
             int max = _context.bandwidthLimiter().getMaxShareBandwidth();
+            // Dynamic divisor: configurable via router.tunnel.perTunnelBweDivisor
+            // Falls back to min(maxTunnels, 100) if not set
+            int divisor = _context.getProperty("router.tunnel.perTunnelBweDivisor", 0);
+            if (divisor <= 0) {
+                int maxTunnels = _context.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS,
+                                                      RouterThrottleImpl._defaultMaxTunnels);
+                divisor = Math.min(maxTunnels, 100);
+            }
+            divisor = Math.max(1, divisor);
 
-            // Per-tunnel cap: use share / min(maxTunnels, 100)
-            // Only apply floor if share is generous (> 256 KB/s)
-            int calculated = max / Math.min(maxTunnels, 100);
+            int calculated = max / divisor;
             if (max > 256 * 1024L) {
-                // Scale floor based on allocation
-                int floor = 10 * 1024; // 10 KB/s default
+                int floor = 10 * 1024;
                 if (max > 10 * 1024 * 1024) floor = 50 * 1024;
                 else if (max > 1024 * 1024) floor = 30 * 1024;
                 return Math.max(calculated, floor);
@@ -1162,4 +1166,24 @@ int pct = Math.max(0, (int)((1.0f - factor) * 100));
             getContext().jobQueue().addJob(this);
         }
     }
+
+    // ==================== Tuner delegation ====================
+
+    /** @since 0.9.70+ */
+    public static long getRequeueTime() { return TunnelGatewayPumper.getRequeueTime(); }
+
+    /** @since 0.9.70+ */
+    public static void setRequeueTime(long ms) { TunnelGatewayPumper.setRequeueTime(ms); }
+
+    /** @since 0.9.70+ */
+    public static int getMaxObMsgsPerPump() { return PumpedTunnelGateway.getMaxObMsgsPerPump(); }
+
+    /** @since 0.9.70+ */
+    public static void setMaxObMsgsPerPump(int val) { PumpedTunnelGateway.setMaxObMsgsPerPump(val); }
+
+    /** @since 0.9.70+ */
+    public static int getMaxIbMsgsPerPump() { return PumpedTunnelGateway.getMaxIbMsgsPerPump(); }
+
+    /** @since 0.9.70+ */
+    public static void setMaxIbMsgsPerPump(int val) { PumpedTunnelGateway.setMaxIbMsgsPerPump(val); }
 }

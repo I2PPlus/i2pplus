@@ -14,6 +14,7 @@
 --isD:linear-gradient(135deg,#993 18%,#0000 18%);
 --isE:linear-gradient(135deg,#717 18%,#0000 18%);
 --isG:linear-gradient(135deg,#711 18%,#0000 18%);
+--graphbar:#f60;
 }
 
 /* global */
@@ -2882,6 +2883,9 @@ h2#jsonrpc{padding-left:38px;background:url(../images/i2cp.svg) no-repeat 10px c
 .lazy.lazyshow,.lazy.lazyshow td,#peers .lazy:not(.lazyhide){opacity:1}
 .leasesets_container .lazy.lazyhide{opacity:0}
 #tunnelPeerCount .lazy{contain:none}
+
+/* tuning */
+svg.spark{background:#000}
 
 /* iframes */
 #dns{padding:0;min-width:650px}

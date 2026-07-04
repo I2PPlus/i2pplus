@@ -350,4 +350,12 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
         else {return Collections.emptySet();}
     }
 
+    // ==================== Tuner delegation ====================
+
+    /** @since 0.9.70+ */
+    public static int getWriterQueueSize() { return ClientWriterRunner.getQueueSize(); }
+
+    /** @since 0.9.70+ */
+    public static void setWriterQueueSize(int val) { ClientWriterRunner.setQueueSize(val); }
+
 }

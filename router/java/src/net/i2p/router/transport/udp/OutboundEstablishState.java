@@ -114,6 +114,9 @@ class OutboundEstablishState {
      */
     protected static final long RETRANSMIT_DELAY = SystemVersion.isSlow() ? 300 : 200;
 
+    /** Max delay including backoff (15 seconds) */
+    protected static final long MAX_DELAY = 15*1000L;
+
     private static final long WAIT_FOR_HOLE_PUNCH_DELAY = 500;
 
     /**

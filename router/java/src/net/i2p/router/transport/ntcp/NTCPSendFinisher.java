@@ -20,14 +20,13 @@ import net.i2p.util.SystemVersion;
  * @since 0.9.16
  */
 class NTCPSendFinisher {
-    private static final int MAX_THREADS = SystemVersion.isSlow() ? 2 : 3;
-    private static final int QUEUE_CAPACITY = SystemVersion.isSlow() ? 1000 : 4096;
+    private static volatile int _maxThreads = SystemVersion.isSlow() ? 2 : 3;
+    private static volatile int _queueCapacity = SystemVersion.isSlow() ? 1000 : 4096;
     private final I2PAppContext _context;
     private final NTCPTransport _transport;
     private final Log _log;
     private static final AtomicInteger _count = new AtomicInteger();
     private ThreadPoolExecutor _executor;
-    private static final int THREADS = MAX_THREADS;
 
     public NTCPSendFinisher(I2PAppContext context, NTCPTransport transport) {
         _context = context;
@@ -36,11 +35,39 @@ class NTCPSendFinisher {
     }
 
     /**
+     * Returns the current max send finisher threads.
+     * @since 0.9.70+
+     */
+    public static int getMaxThreads() { return _maxThreads; }
+
+    /**
+     * Sets the max send finisher threads for new instances.
+     * @since 0.9.70+
+     */
+    public static void setMaxThreads(int threads) {
+        _maxThreads = Math.max(1, Math.min(8, threads));
+    }
+
+    /**
+     * Returns the current send finisher queue capacity.
+     * @since 0.9.70+
+     */
+    public static int getQueueCapacity() { return _queueCapacity; }
+
+    /**
+     * Sets the send finisher queue capacity for new instances.
+     * @since 0.9.70+
+     */
+    public static void setQueueCapacity(int capacity) {
+        _queueCapacity = Math.max(256, Math.min(16384, capacity));
+    }
+
+    /**
      * Starts the thread pool executor for processing send finish tasks.
      */
     public synchronized void start() {
         if (_executor == null || _executor.isShutdown() || _executor.isTerminated()) {
-            _executor = new CustomThreadPoolExecutor(THREADS);
+            _executor = new CustomThreadPoolExecutor(_maxThreads);
         }
     }
 
@@ -88,7 +115,7 @@ class NTCPSendFinisher {
     private static class CustomThreadPoolExecutor extends ThreadPoolExecutor {
         public CustomThreadPoolExecutor(int num) {
             super(num, num, 10_000, TimeUnit.MILLISECONDS,
-                  new LinkedBlockingQueue<>(QUEUE_CAPACITY),
+                  new LinkedBlockingQueue<>(_queueCapacity),
                   new CustomThreadFactory(),
                   new ThreadPoolExecutor.CallerRunsPolicy());
         }
@@ -97,7 +124,7 @@ class NTCPSendFinisher {
     private static class CustomThreadFactory implements ThreadFactory {
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
-            rv.setName("NTCPTXFinis " + _count.incrementAndGet() + '/' + THREADS);
+            rv.setName("NTCPTXFinis " + _count.incrementAndGet() + '/' + _maxThreads);
             rv.setDaemon(true);
             return rv;
         }

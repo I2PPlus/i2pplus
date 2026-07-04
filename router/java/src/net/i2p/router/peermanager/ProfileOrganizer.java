@@ -80,7 +80,11 @@ public class ProfileOrganizer {
     private final InverseCapacityComparator _comp;
 
     public static final String PROP_MINIMUM_FAST_PEERS = "profileOrganizer.minFastPeers";
-    public static final int DEFAULT_MINIMUM_FAST_PEERS = 400;
+    public static volatile int _defaultMinFastPeers = 400;
+    /** @since 0.9.70+ */
+    public static int getDefaultMinFastPeers() { return _defaultMinFastPeers; }
+    /** @since 0.9.70+ */
+    public static void setDefaultMinFastPeers(int val) { _defaultMinFastPeers = Math.max(50, Math.min(2000, val)); }
 
     public static final String PROP_MAX_ROUTERINFO_AGE_HOURS = "profileOrganizer.maxRouterInfoAgeHours";
     public static final int DEFAULT_MAX_ROUTERINFO_AGE_HOURS = 2;
@@ -105,7 +109,11 @@ public class ProfileOrganizer {
     private static final long MAX_LIFETIME_TUNNEL_FAILURES = 20;
 
     public static final String PROP_MAX_PROFILES = "profileOrganizer.maxProfiles";
-    public static final int DEFAULT_MAX_PROFILES = getDefaultMaxProfiles();
+    public static volatile int _defaultMaxProfiles = getDefaultMaxProfiles();
+    /** @since 0.9.70+ */
+    public static int getDefaultMaxProfilesValue() { return _defaultMaxProfiles; }
+    /** @since 0.9.70+ */
+    public static void setDefaultMaxProfiles(int val) { _defaultMaxProfiles = Math.max(MIN_MAX_PROFILES, Math.min(ABSOLUTE_MAX_PROFILES, val)); }
     public static final int ABSOLUTE_MAX_PROFILES = 8000;
     public static final int MIN_MAX_PROFILES = 800;
 
@@ -141,6 +149,9 @@ public class ProfileOrganizer {
         _context.statManager().createRateStat("peer.profileThresholdTime", "Time to determine tier thresholds (ms)", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.failedLookupRate", "NetDb Lookup failure rate", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.profileSortTime", "Time to sort peers (ms)", "Peers", RATES);
+        _context.statManager().createRequiredRateStat("peer.profileCount", "Number of peer profiles in memory", "Peers", RATES);
+        _context.statManager().createRequiredRateStat("peer.activeProfileCount", "Number of active peer profiles", "Peers", RATES);
+        _context.statManager().createRequiredRateStat("peer.fastPeerCount", "Number of fast-tier peers", "Peers", RATES);
     }
 
     /**
@@ -800,6 +811,7 @@ public class ProfileOrganizer {
             long total = System.currentTimeMillis() - start;
             _context.statManager().addRateData("peer.profileReorgTime", total, profileCount);
             _context.statManager().addRateData("peer.activeProfileCount", profileCount, 0);
+            _context.statManager().addRateData("peer.fastPeerCount", _fastPeers.size(), 0);
             _context.statManager().addRateData("peer.expiredProfileCount", expiredCount, 0);
 
             // Step 10: Enforce memory cap
@@ -870,7 +882,7 @@ public class ProfileOrganizer {
      * This method assumes the write lock is held.
      */
     private void enforceProfileCap() {
-        int maxProfiles = _context.getProperty(PROP_MAX_PROFILES, DEFAULT_MAX_PROFILES);
+        int maxProfiles = _context.getProperty(PROP_MAX_PROFILES, _defaultMaxProfiles);
         if (maxProfiles < 100) maxProfiles = 100;
         if (maxProfiles > ABSOLUTE_MAX_PROFILES) maxProfiles = ABSOLUTE_MAX_PROFILES;
 
@@ -1567,9 +1579,9 @@ public class ProfileOrganizer {
     }
 
     protected int getMinimumFastPeers() {
-        if (_context.router() == null) return DEFAULT_MINIMUM_FAST_PEERS;
+        if (_context.router() == null) return _defaultMinFastPeers;
         int known = _context.netDb().getKnownRouters();
-        return _context.getProperty(PROP_MINIMUM_FAST_PEERS, known > 3000 ? Math.max(known / 15, DEFAULT_MINIMUM_FAST_PEERS) : DEFAULT_MINIMUM_FAST_PEERS);
+        return _context.getProperty(PROP_MINIMUM_FAST_PEERS, known > 3000 ? Math.max(known / 15, _defaultMinFastPeers) : _defaultMinFastPeers);
     }
 
     protected int getMaximumFastPeers() {

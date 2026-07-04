@@ -801,8 +801,34 @@ public class I2PSocketManagerFull implements I2PSocketManager {
                 } catch (java.io.IOException ioe) {
                      System.err.println("pcap init ioe: " + ioe);
                 }
-                _pcapInitialized = true;
+                 _pcapInitialized = true;
             }
         }
     }
+
+    // ==================== Tuner delegation ====================
+
+    /** @since 0.9.70+ */
+    public static int getInitialWindowSize() { return ConnectionOptions.getInitialWindowSize(); }
+
+    /** @since 0.9.70+ */
+    public static void setInitialWindowSize(int val) { ConnectionOptions.setInitialWindowSize(val); }
+
+    /** @since 0.9.70+ */
+    public static int getInitialRTO() { return ConnectionOptions.getInitialRTO(); }
+
+    /** @since 0.9.70+ */
+    public static void setInitialRTO(int val) { ConnectionOptions.setInitialRTO(val); }
+
+    /** @since 0.9.70+ */
+    public static int getDefaultInitialAckDelay() { return ConnectionOptions.getDefaultInitialAckDelay(); }
+
+    /** @since 0.9.70+ */
+    public static void setDefaultInitialAckDelay(int val) { ConnectionOptions.setDefaultInitialAckDelay(val); }
+
+    /** @since 0.9.70+ */
+    public static int getDefaultPassiveFlushDelay() { return MessageOutputStream.getDefaultPassiveFlushDelay(); }
+
+    /** @since 0.9.70+ */
+    public static void setDefaultPassiveFlushDelay(int val) { MessageOutputStream.setDefaultPassiveFlushDelay(val); }
 }

@@ -1,6 +1,7 @@
 /* I2P+ shared css rules for Router Console themes */
 /* Author: dr|z3d */
 
+:root{--graphbar:#292}
 .expanded #ffstatus,#ffconf:hover #ffstatus{opacity:0}
 .hasExpandedElement #floodfillconfig{margin-bottom:-1px;display:table!important}
 .jobsCounter {margin:0 0 0 1px;padding:3px 8px;display:inline-block;vertical-align:baseline;line-height:1;font-weight:700;border-radius:3px;box-shadow:var(--bevel);background:var(--badge)}
@@ -79,6 +80,22 @@
 #totaljobstats a{float:right}
 #tunnelconfig .tunnelName{margin-right:6px;min-width:240px;display:inline-block}
 #jobstats #statCount #init td{padding:24px;display:table-cell;font-size:0;box-shadow:none;background:var(--update) no-repeat center center/20px;transform:rotate(0);animation:linear spin 3s forwards infinite}
+svg.spark{padding:6px 4px;width:100%;max-width:140px;vertical-align:middle;border-radius:4px;box-shadow:var(--bevel);transform:scaleY(0.8)}
+#healthbar{display:none}
+#tuning input{margin:0}
+#tuning input[type=number]{margin:5px 0;text-align:right}
+html:not([".advmode"]) #tuning input[type=number]{min-width:0!important;text-align:center;font-weight:400;border:0;box-shadow:none;background:none;pointer-events:none}
+#tuning table{margin:10px auto}
+#tuning th{font-size:80%}
+#tuning th.section{text-align:left}
+#tuning th,#tuning td:not(.optionsave){text-align:center}
+#tuning td:not(.optionsave){padding:0 6px}
+#tuning td.auto{width:1%}
+#tuning td.history{padding-right:6px}
+#tuning td.optionsave{padding:10px 8px}
+#tuning th.parameter,#tuning td.parameter{padding-left:8px;text-align:left}
+#tuning td.parameter{width:1%;white-space:nowrap;font-weight:500}
+#nav_tuning{display:none!important}
 
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1.1)}50%{opacity:.7;transform:scale(.9)}}
 

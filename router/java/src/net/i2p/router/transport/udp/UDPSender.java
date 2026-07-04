@@ -91,7 +91,7 @@ public class UDPSender {
         _name = name;
         _endpoint = lsnr;
 
-        _context.statManager().createRateStat("udp.pushTime", "Time taken for a UDP packet get pushed out", "Transport [UDP]", RATES);
+        _context.statManager().createRequiredRateStat("udp.pushTime", "Time taken for a UDP packet get pushed out", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("udp.sendQueueSize", "Number of packets queued on the UDP sender", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.sendQueueFailed", "Failed to add a new packet to the queue", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.sendQueueTrimmed", "Stale packets removed from queue", "Transport [UDP]", RATES);
