@@ -1,5 +1,10 @@
-2026-07-02 dr|z3d
+2026-07-04 dr|z3d
+  * Console: Add /config/tuning page with sparkline history, parameter
+    descriptions, and per-row auto-tuning toggle
   * Router:
+    - Add auto-tuning framework (46 params across 10 subsystems)
+      with live-editable ranges, system health scoring, and per-tunnel
+      BWE divisor / tunnel growth factor configuration
     - Sort peers by measured latency in tunnel peer selection to
       reduce first-hop delay; deprioritize untested peers
     - Dynamic concurrent message limit based on peer RTT; halve
