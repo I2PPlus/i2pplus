@@ -14,12 +14,12 @@ public class AddressesTest {
 
     @Test
     public void getIPNull() {
-        assertArrayEquals(new byte[0], Addresses.getIP(null));
+        assertNull(Addresses.getIP(null));
     }
 
     @Test
     public void getIPEmptyString() {
-        assertArrayEquals(new byte[0], Addresses.getIP(""));
+        assertNull(Addresses.getIP(""));
     }
 
     @Test

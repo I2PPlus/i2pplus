@@ -121,7 +121,7 @@
 
   <target name="prepareTest" depends="prepareClover, prepareCobertura"/>
 
-  <target name="junit.test" depends="clean, junit.compileTest, prepareTest">
+  <target name="junit.test" depends="junit.compileTest, prepareTest">
     <mkdir dir="../../../reports/streaming/junit/"/>
     <delete>
       <fileset dir="../../../reports/streaming/junit">

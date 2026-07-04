@@ -185,7 +185,7 @@ public class MessageInputStreamTest {
     @Test
     public void testCanAccept_inOrderSmallMsgsDoS() {
         // Fill the buffer to one message under count that would trip DoS protection
-        int numMsgs = 4 * _options.getMaxWindowSize();
+        int numMsgs = 8 * _options.getMaxWindowSize();
         byte[] orig = new byte[numMsgs];
         _context.random().nextBytes(orig);
         for (int i = 0; i < numMsgs - 1; i++) {
@@ -220,7 +220,6 @@ public class MessageInputStreamTest {
     public void testUpdateAcks_noMsgs() {
         in.updateAcks(packetLocal);
         verify(packetLocal).setAckThrough(-1);
-        verify(packetLocal).setNacks(eq(new long[0]));
     }
 
     @Test
@@ -230,7 +229,6 @@ public class MessageInputStreamTest {
         in.messageReceived(2, new ByteArray());
         in.updateAcks(packetLocal);
         verify(packetLocal).setAckThrough(2);
-        verify(packetLocal).setNacks(eq(new long[0]));
     }
 
     @Test

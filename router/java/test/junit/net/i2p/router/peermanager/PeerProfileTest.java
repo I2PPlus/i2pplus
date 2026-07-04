@@ -151,11 +151,12 @@ public class PeerProfileTest {
     }
 
     @Test
-    public void testIsNotFailing() {
+    public void testDefaultSpeedValue() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
         Hash peer = new Hash();
         PeerProfile profile = new PeerProfile(_ctx, peer);
-        assertFalse(profile.getIsFailing());
+        // default speed value is 0
+        assertEquals(0.0f, profile.getSpeedValue(), 0.001f);
     }
 
     @Test

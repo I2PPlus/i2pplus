@@ -448,7 +448,7 @@
       <fileset dir="../../reports/router/scalatest/"/>
     </replaceregexp>
   </target>
-  <target name="junit.test" depends="clean, junit.compileTest, prepareTest">
+  <target name="junit.test" depends="junit.compileTest, prepareTest">
     <mkdir dir="../../reports/router/junit/"/>
     <delete>
       <fileset dir="../../reports/router/junit">

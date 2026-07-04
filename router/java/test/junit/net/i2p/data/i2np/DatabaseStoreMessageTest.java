@@ -51,7 +51,6 @@ public class DatabaseStoreMessageTest extends StructureTest {
         } catch (UnsupportedOperationException expected) {
         }
     }
-
     private static class DSMStructure extends DatabaseStoreMessage implements DataStructure {
         public DSMStructure(I2PAppContext ctx) {
             super(ctx);
@@ -68,5 +67,15 @@ public class DatabaseStoreMessageTest extends StructureTest {
         public String toBase64() {
             return null;
         }
+
+        public byte[] toByteArray() {
+            throw new UnsupportedOperationException();
+        }
+
+        public void writeBytes(java.io.OutputStream out) throws DataFormatException, java.io.IOException {
+            throw new UnsupportedOperationException();
+        }
+
+        public void readBytes(java.io.InputStream in) throws DataFormatException, java.io.IOException {}
     }
 }

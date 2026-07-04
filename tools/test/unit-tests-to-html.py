@@ -484,10 +484,11 @@ def main():
     if slowest:
         o('<section id="slowest-tests" class="module-section">')
         o('<h2>Slowest Tests (Top 10)</h2>')
-        o('<table><thead><tr><th>Test</th><th>Status</th><th>Time</th></tr></thead><tbody>')
+        o('<table><thead><tr><th>Test</th><th>Class</th><th>Status</th><th>Time</th></tr></thead><tbody>')
         for c in slowest:
             status_cls = "pass" if c["status"] == "pass" else "fail"
             o(f'<tr class="test-row"><td>{escape(c["method"])}</td>')
+            o(f'<td class="trace-class">{escape(c["classname"])}</td>')
             o(f'<td><span class="{status_cls}"></span></td>')
             o(f'<td class="time">{c["time"]:.3f}s</td></tr>')
         o('</tbody></table>')

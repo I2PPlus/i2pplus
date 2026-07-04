@@ -484,7 +484,7 @@
       <fileset dir="../../reports/core/scalatest/"/>
     </replaceregexp>
   </target>
-  <target name="junit.test" depends="clean, junit.compileTest, prepareTest">
+  <target name="junit.test" depends="junit.compileTest, prepareTest">
     <property name="hamcrest.home" value="../../tools/test/hamcrest"/>
     <property name="junit.home" value="../../tools/test/junit"/>
     <property name="mockito.home" value="../../tools/test/mockito"/>

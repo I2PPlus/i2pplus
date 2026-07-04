@@ -3473,7 +3473,11 @@
   </target>
 
   <!-- both junit and scala -->
-  <target name="test" depends="testCore, testRouter, testMinistreaming, testStreaming, testI2PTunnel"/>
+ <target name="test" description="Build all, then run all tests in parallel with consolidated HTML report">
+    <exec executable="tools/scripts/run-tests.sh" failonerror="true" dir="${basedir}">
+      <arg value="all"/>
+    </exec>
+  </target>
 
 
 

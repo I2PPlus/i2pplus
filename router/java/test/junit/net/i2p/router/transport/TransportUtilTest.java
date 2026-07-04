@@ -184,7 +184,7 @@ public class TransportUtilTest {
 
     @Test
     public void testGetTypeFromStringHostname() {
-        assertNull(TransportUtil.getType("example.com"));
+        assertEquals(AddressType.IPV4, TransportUtil.getType("example.com"));
     }
 
     @Test

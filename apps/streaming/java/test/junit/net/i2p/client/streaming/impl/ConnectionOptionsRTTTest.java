@@ -115,7 +115,7 @@ public class ConnectionOptionsRTTTest {
     @Test
     public void testInitialWindowSize() {
         ConnectionOptions opts = new ConnectionOptions();
-        assertEquals(ConnectionOptions.INITIAL_WINDOW_SIZE, opts.getWindowSize());
+        assertEquals(ConnectionOptions.getInitialWindowSize(), opts.getWindowSize());
     }
 
     @Test

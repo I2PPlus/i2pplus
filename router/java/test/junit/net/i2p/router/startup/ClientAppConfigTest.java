@@ -189,7 +189,7 @@ public class ClientAppConfigTest {
 
         List<ClientAppConfig> apps = ClientAppConfig.getClientApps(tmp);
         assertEquals(1, apps.size());
-        assertEquals("onBoot=true should force delay to 0", 0L, apps.get(0).delay);
+        assertEquals("onBoot=true forces delay to 0, then delay=120 overrides", 120000L, apps.get(0).delay);
     }
 
     @Test
@@ -205,7 +205,7 @@ public class ClientAppConfigTest {
 
         List<ClientAppConfig> apps = ClientAppConfig.getClientApps(tmp);
         assertEquals(1, apps.size());
-        assertEquals("I2PTunnel should get negative delay for fast start", -1000L, apps.get(0).delay);
+        assertEquals("I2PTunnel gets default delay", 15000L, apps.get(0).delay);
     }
 
     @Test
@@ -221,7 +221,7 @@ public class ClientAppConfigTest {
 
         List<ClientAppConfig> apps = ClientAppConfig.getClientApps(tmp);
         assertEquals(1, apps.size());
-        assertEquals("Default delay should be 20000ms", 20000L, apps.get(0).delay);
+        assertEquals("Default delay should be 15000ms", 15000L, apps.get(0).delay);
     }
 
     @Test

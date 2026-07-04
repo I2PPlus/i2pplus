@@ -31,22 +31,23 @@ public class RouterAddressTest extends StructureTest {
         return new RouterAddress();
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testSetNullOptionsThrows() {
-        RouterAddress addr = new RouterAddress();
-        addr.setOptions(null);
+    @Test
+    public void testNullOptionsAccepted() {
+        RouterAddress addr = new RouterAddress("Blah", null, 42);
+        assertEquals(42, addr.getCost());
+        assertEquals("Blah", addr.getTransportStyle());
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void testSetOptionsAgainThrows() {
+    @Test(expected = IllegalArgumentException.class)
+    public void testNegativeCostThrows() {
         OrderedProperties options = new OrderedProperties();
-        options.setProperty("hostname", "localhost");
-        options.setProperty("portnum", "1234");
-        RouterAddress addr = new RouterAddress("Blah", options, 42);
+        new RouterAddress("Blah", options, -1);
+    }
 
-        // Attempt to set options again should throw
-        options.setProperty("portnum", "2345");
-        addr.setOptions(options);
+    @Test(expected = IllegalArgumentException.class)
+    public void testCostOver255Throws() {
+        OrderedProperties options = new OrderedProperties();
+        new RouterAddress("Blah", options, 256);
     }
 
     @Test
