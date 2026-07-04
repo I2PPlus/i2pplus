@@ -526,6 +526,16 @@ public class Tuner implements SimpleTimer.TimedEvent {
                 _min = _defaultMin;
                 _max = _defaultMax;
             }
+            // Clamp persisted value to new range — prevents stale autotune.config
+            // values from exceeding caps after code changes (e.g., max lowered)
+            int val = _autotune.getInt(_name + ".value", _defaultValue);
+            if (val < _min || val > _max) {
+                int clamped = Math.max(_min, Math.min(_max, val));
+                if (_log.shouldInfo())
+                    _log.info(_name + " persisted value " + val + " clamped to " + clamped +
+                              " (range " + _min + "-" + _max + ")");
+                _autotune.setProperty(_name + ".value", String.valueOf(clamped));
+            }
         }
 
         /** Re-read the default value from autotune.config — live update after form save */
@@ -655,6 +665,10 @@ public class Tuner implements SimpleTimer.TimedEvent {
                     dampened = current + (rawDelta > 0 ? Math.min(_step, rawDelta) : Math.max(-_step, rawDelta));
                 target = dampened;
             }
+            // Hard clamp to [min, max] BEFORE comparison — prevents stale persisted values
+            // from exceeding caps after code changes, even when computeTarget() returns
+            // unclamped current or dampening pushes target outside range
+            target = Math.max(_min, Math.min(_max, target));
             // Fast rollback: when current has diverged from _defaultValue and the stat
             // has moved against the divergence, snap back faster (2x step)
             int current = getRuntimeValue();
