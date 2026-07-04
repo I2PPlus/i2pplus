@@ -1669,40 +1669,37 @@ public class Tuner implements SimpleTimer.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.out (outbound RTT, ms)
-            // Cross-refs: sendMessageFailureLifetime (congestion), sendProcessingTime (message delay),
+            // Cross-refs: sendMessageFailureLifetime (congestion),
             //             sendDuplicateSize (drops!)
+            // NOTE: sendProcessingTime is NOT used — it's a transport metric, not streaming.
+            // Using it creates a feedback loop: high delay → slower streaming → more queuing → higher delay.
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
-            double delay = getAdditionalStat(_context, "transport.sendProcessingTime");
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 15000;
             boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
 
-            // FAST PATH: latency + drops = cap window aggressively
-            if (!Double.isNaN(delay) && delay > 200 && dropping) {
-                int aggression = delay > 500 ? _step * 2 : _step;
-                return Math.max(_min, current - aggression);
-            }
+            // Recovery floor: if below 50% of default, always increase back toward default
+            // unless severe drops or congestion. Prevents params from getting stuck at minimums.
+            int recoveryFloor = Math.max(_min, _defaultValue / 2);
+            if (current < recoveryFloor && !congested)
+                return Math.min(_defaultValue, current + _step);
 
-            // Drops or congestion = shrink window cap (loss minimization)
+            // Severe drops or congestion = shrink window cap (loss minimization)
             if (dropping || congested)
-                return Math.max(_min, current - _step);
+                return Math.max(recoveryFloor, current - _step);
 
-            // Dead zone: hold at default unless signal is strong
-            if (current == _defaultValue && !dropping && !congested)
+            // Dead zone: hold within 50% of default unless signal is strong
+            if (current >= recoveryFloor && current <= _defaultValue * 2 && !dropping && !congested)
                 return current;
 
-            // Below default: increase only if RTT is clearly low AND no drops/congestion
-            if (current < _defaultValue && observed < 2000 && !dropping && !congested)
+            // Below default: increase if no drops/congestion
+            if (current < _defaultValue && !dropping && !congested)
                 return Math.min(_max, current + _step);
 
             // Above default: decrease if RTT is high
             if (current > _defaultValue && observed > 5000)
-                return Math.max(_min, current - _step);
-
-            // High RTT = shrink cap (slow pipe can't handle large windows)
-            if (observed > 8000)
-                return Math.max(_min, current - _step);
+                return Math.max(recoveryFloor, current - _step);
 
             return current;
         }
@@ -3173,32 +3170,31 @@ public class Tuner implements SimpleTimer.TimedEvent {
             int current = getRuntimeValue();
             // observed = stream.con.windowSizeAtCongestion (window size when dup sent)
             // Cross-refs: sendMessageFailureLifetime (congestion), buildSuccessRate (network health),
-            //             sendDuplicateSize (drops!), sendProcessingTime (message delay)
+            //             sendDuplicateSize (drops!)
+            // NOTE: sendProcessingTime is NOT used — transport metric, creates feedback loop.
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
-            double delay = getAdditionalStat(_context, "transport.sendProcessingTime");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 15000;
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
             boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
 
-            // FAST PATH: latency + drops = slow growth immediately
-            if (!Double.isNaN(delay) && delay > 200 && dropping) {
-                int aggression = delay > 500 ? _step * 2 : _step;
-                return Math.max(_min, current - aggression);
-            }
+            // Recovery floor: if below 50% of default, always increase back toward default
+            int recoveryFloor = Math.max(_min, _defaultValue / 2);
+            if (current < recoveryFloor && !congested)
+                return Math.min(_defaultValue, current + _step);
 
-            // Drops = slow growth (loss minimization)
+            // Drops or congestion = slow growth (loss minimization)
             if (dropping || congested)
-                return Math.max(_min, current - _step);
+                return Math.max(recoveryFloor, current - _step);
 
             // Network unhealthy = slow growth
             if (!networkHealthy)
-                return Math.max(_min, current - _step);
+                return Math.max(recoveryFloor, current - _step);
 
-            // Dead zone: hold at default unless signal is strong
-            if (current == _defaultValue && !dropping && !congested && networkHealthy)
+            // Dead zone: hold within 50% of default unless signal is strong
+            if (current >= recoveryFloor && current <= _defaultValue * 2 && !dropping && !congested && networkHealthy)
                 return current;
 
             // Large window at congestion + healthy network + no drops = increase growth
@@ -3243,45 +3239,40 @@ public class Tuner implements SimpleTimer.TimedEvent {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.out (RTT, ms)
             // Cross-refs: buildSuccessRate (network health), sendMessageFailureLifetime (congestion),
-            //             sendDuplicateSize (drops!), sendProcessingTime (message delay)
+            //             sendDuplicateSize (drops!)
+            // NOTE: sendProcessingTime is NOT used — transport metric, creates feedback loop.
             double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
-            double delay = getAdditionalStat(_context, "transport.sendProcessingTime");
 
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 15000;
             boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
 
-            // FAST PATH: latency + drops = slow ramp immediately
-            if (!Double.isNaN(delay) && delay > 200 && dropping) {
-                int aggression = delay > 500 ? _step * 2 : _step;
-                return Math.max(_min, current - aggression);
-            }
+            // Recovery floor: if below 50% of default, always increase back toward default
+            int recoveryFloor = Math.max(_min, _defaultValue / 2);
+            if (current < recoveryFloor && !congested)
+                return Math.min(_defaultValue, current + _step);
 
             // Drops or congestion = slow ramp (loss minimization)
             if (dropping || congested)
-                return Math.max(_min, current - _step);
+                return Math.max(recoveryFloor, current - _step);
 
             // Network unhealthy = slow ramp
             if (!networkHealthy)
-                return Math.max(_min, current - _step);
+                return Math.max(recoveryFloor, current - _step);
 
-            // Dead zone: if current == default and no strong signal, hold
-            if (current == _defaultValue && !dropping && !congested && networkHealthy)
+            // Dead zone: hold within 50% of default unless signal is strong
+            if (current >= recoveryFloor && current <= _defaultValue * 2 && !dropping && !congested && networkHealthy)
                 return current;
 
-            // Below default: increase only if RTT is clearly low AND healthy
-            if (current < _defaultValue && observed < 3000 && networkHealthy && !dropping && !congested)
+            // Below default: increase if healthy
+            if (current < _defaultValue && networkHealthy && !dropping && !congested)
                 return Math.min(_max, current + _step);
 
             // Above default: decrease if RTT is high OR network unhealthy
             if (current > _defaultValue && (observed > 8000 || !networkHealthy))
-                return Math.max(_min, current - _step);
-
-            // High RTT = slower ramp (regardless of position)
-            if (observed > 8000)
-                return Math.max(_min, current - _step);
+                return Math.max(recoveryFloor, current - _step);
 
             return current;
         }

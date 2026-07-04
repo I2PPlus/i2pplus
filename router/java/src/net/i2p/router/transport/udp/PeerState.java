@@ -168,11 +168,11 @@ public class PeerState {
     /** After this time, we start adding backoff delay (5 seconds) */
     private static final long BACKOFF_START_LIFETIME = 5 * 1000L;
     /** @since 0.9.42 */
-    private static final int INIT_CONCURRENT_MSGS = SystemVersion.isSlow() ? 16 : 32;
+    private static final int INIT_CONCURRENT_MSGS = SystemVersion.isSlow() ? 16 : 64;
     /** Hard cap on concurrent messages per peer */
-    private static final int MAX_CONCURRENT_MSGS = SystemVersion.isSlow() ? 64 : 128;
+    private static final int MAX_CONCURRENT_MSGS = SystemVersion.isSlow() ? 64 : 256;
     /** Target RTT in ms — below this, increase concurrency; above this, decrease */
-    private static final int TARGET_RTT = 100;
+    private static final int TARGET_RTT = 150;
     /** RTT multiplier above which we multiplicative-decrease concurrency */
     private static final int RTT_DECREASE_FACTOR = 2;
     /** how many concurrent outbound messages do we allow OutboundMessageFragments to send
@@ -749,9 +749,12 @@ public class PeerState {
                     _concurrentMessagesAllowed++;
                 }
             } else if (_rtt < TARGET_RTT) {
-                // RTT below target — additive increase (fast ramp-up when healthy)
+                // RTT below target — proportional additive increase
+                // Ramp faster when far from max, slower near max (avoids oscillation)
                 if (_concurrentMessagesAllowed < MAX_CONCURRENT_MSGS) {
-                    _concurrentMessagesAllowed++;
+                    int headroom = MAX_CONCURRENT_MSGS - _concurrentMessagesAllowed;
+                    int increase = Math.max(1, headroom / 16);
+                    _concurrentMessagesAllowed = Math.min(MAX_CONCURRENT_MSGS, _concurrentMessagesAllowed + increase);
                 }
             } else if (_rtt >= TARGET_RTT * RTT_DECREASE_FACTOR) {
                 // RTT well above target — multiplicative decrease (back off under congestion)
