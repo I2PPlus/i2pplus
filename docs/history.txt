@@ -1,5 +1,5 @@
 2026-07-04 dr|z3d
-  * Console: Add /config/tuning page with sparkline history, parameter
+  * Console: Add /tuning page with sparkline history, parameter
     descriptions, and per-row auto-tuning toggle
   * Router:
     - Add auto-tuning framework (46 params across 10 subsystems)
