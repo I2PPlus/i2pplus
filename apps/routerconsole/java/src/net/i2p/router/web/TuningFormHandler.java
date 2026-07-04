@@ -783,7 +783,7 @@ public class TuningFormHandler extends FormHandler {
             for (Map.Entry<String, String> entry : changes.entrySet()) {
                 autotune.setProperty(entry.getKey(), entry.getValue());
             }
-            autotune.save();
+            autotune.forceSave();
             addFormNotice(_t("Tuning ranges saved — changes take effect immediately"));
         } else if (tuner != null) {
             addFormNotice(_t("Tuning overrides applied"));

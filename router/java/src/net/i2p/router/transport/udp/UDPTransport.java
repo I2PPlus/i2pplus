@@ -950,6 +950,8 @@ public class UDPTransport extends TransportImpl {
         UDPPacket.clearCache();
         UDPAddress.clearCache();
         _lastInboundIPv6 = 0;
+        if (_tuner != null)
+            _tuner.shutdown();
     }
 
     /**
