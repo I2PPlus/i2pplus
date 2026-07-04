@@ -7,40 +7,81 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.router.RouterContext;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
 /**
  * Pool of running threads which will process any read bytes on any of the
  * NTCPConnections, including decryption of the data read, connection
  * handshaking, parsing bytes into I2NP messages, etc.
  * Provides efficient buffer management and connection lifecycle coordination.
+ * Supports dynamic thread count adjustment via {@link #adjustThreads()}.
  *
- * @since 0.9.16
+ * @since 0.9.16 (dynamic resizing since 0.9.70+)
  */
-class Reader {
+public class Reader {
     private final Log _log;
     // TODO change to LBQ ??
     private final Set<NTCPConnection> _pendingConnections;
     private final Set<NTCPConnection> _liveReads;
     private final Set<NTCPConnection> _readAfterLive;
-    private final List<Runner> _runners;
+    private final CopyOnWriteArrayList<Runner> _runners;
+    private static volatile int _threadCount = SystemVersion.isSlow() ? 2 : Math.max(SystemVersion.getCores() / 2, 3);
+    private static final int MIN_THREADS = 1;
+    private static final int MAX_THREADS = 32;
 
     public Reader(RouterContext ctx) {
         _log = ctx.logManager().getLog(getClass());
         _pendingConnections = new LinkedHashSet<>(16);
-        _runners = new ArrayList<>(16);
+        _runners = new CopyOnWriteArrayList<>();
         _liveReads = new HashSet<>(16);
         _readAfterLive = new HashSet<>(16);
     }
 
+    /** @since 0.9.70+ */
+    public static int getThreadCount() { return _threadCount; }
+
+    /** @since 0.9.70+ */
+    public static void setThreadCount(int count) { _threadCount = Math.max(MIN_THREADS, Math.min(MAX_THREADS, count)); }
+
     public synchronized void startReading(int numReaders) {
         for (int i = 1; i <= numReaders; i++) {
-            Runner r = new Runner();
-            I2PThread t = new I2PThread(r, "NTCPReader " + i + '/' + numReaders, true);
-            _runners.add(r);
-            t.start();
+            startRunner();
+        }
+    }
+
+    private void startRunner() {
+        Runner r = new Runner();
+        _runners.add(r);
+        I2PThread t = new I2PThread(r, "NTCPReader " + _runners.size() + '/' + _threadCount, true);
+        t.start();
+    }
+
+    /**
+     * Dynamically adjust thread count to match the target.
+     * @since 0.9.70+
+     */
+    public void adjustThreads() {
+        int target = _threadCount;
+        int current = _runners.size();
+        if (target > current) {
+            for (int i = current; i < target; i++) {
+                startRunner();
+            }
+        } else if (target < current) {
+            // stop excess runners (last N)
+            for (int i = current - 1; i >= target; i--) {
+                Runner r = _runners.remove(i);
+                r.stop();
+            }
+            synchronized (_pendingConnections) {
+                _readAfterLive.clear();
+                _pendingConnections.notifyAll();
+            }
         }
     }
 
