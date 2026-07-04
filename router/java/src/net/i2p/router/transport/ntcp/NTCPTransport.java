@@ -233,7 +233,7 @@ public class NTCPTransport extends TransportImpl {
         _context.statManager().createRateStat("ntcp.receiveMeta", "Number of NTCP receiveMeta events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.registerConnect", "Number of NTCP registerConnect events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.replayHXxorBIH", "Number of NTCP replayHXxorBIH events", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.sendBacklogTime", "Send queue latency when adding new message fails (ms)", "Transport [NTCP]", RATES);
+        _context.statManager().createRequiredRateStat("ntcp.sendBacklogTime", "Send queue latency when adding new message fails (ms)", "Transport [NTCP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("ntcp.sendQueueSize", "Messages in queue when new message added", "Transport [NTCP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("ntcp.sendTime", "Total message lifetime when send complete", "Transport [NTCP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("ntcp.throttledReadComplete", "Throttled NTCP ReadComplete events", "Transport [NTCP]", RATES);
@@ -1085,12 +1085,18 @@ public class NTCPTransport extends TransportImpl {
     private void startIt() {
         _finisher.start();
         _pumper.startPumping();
-        int threads = Math.max(SystemVersion.getCores() / 2, 3);
+        int threads = Reader.getThreadCount();
         _reader.startReading(threads);
         _writer.startWriting(threads);
     }
 
     public boolean isAlive() {return _pumper.isAlive();}
+
+    /** @since 0.9.70+ */
+    public void adjustReaderThreads() { _reader.adjustThreads(); }
+
+    /** @since 0.9.70+ */
+    public void adjustWriterThreads() { _writer.adjustThreads(); }
 
     /**
      *  Only does something if myPort > 0 and myPort != current bound port
