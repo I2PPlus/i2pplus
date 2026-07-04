@@ -1,45 +1,83 @@
 package net.i2p.router.transport.ntcp;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 import net.i2p.router.RouterContext;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
 /**
  * Pool of running threads which will transform the next I2NP message into
  * something ready to be transferred over an NTCP connection, including encryption of the data read.
  * Provides efficient message serialization and connection lifecycle coordination.
+ * Supports dynamic thread count adjustment via {@link #adjustThreads()}.
  *
- * @since 0.9.16
+ * @since 0.9.16 (dynamic resizing since 0.9.70+)
  */
-class Writer {
+public class Writer {
     private final Log _log;
     private final Set<NTCPConnection> _pendingConnections;
     private final Set<NTCPConnection> _liveWrites;
     private final Set<NTCPConnection> _writeAfterLive;
-    private final List<Runner> _runners;
+    private final CopyOnWriteArrayList<Runner> _runners;
+    private static volatile int _threadCount = SystemVersion.isSlow() ? 2 : Math.max(SystemVersion.getCores() / 2, 3);
+    private static final int MIN_THREADS = 1;
+    private static final int MAX_THREADS = 32;
 
     public Writer(RouterContext ctx) {
         _log = ctx.logManager().getLog(getClass());
         _pendingConnections = new LinkedHashSet<>(128);
-        _runners = new ArrayList<>(16);
+        _runners = new CopyOnWriteArrayList<>();
         _liveWrites = new HashSet<>(16);
         _writeAfterLive = new HashSet<>(16);
     }
 
+    /** @since 0.9.70+ */
+    public static int getThreadCount() { return _threadCount; }
+
+    /** @since 0.9.70+ */
+    public static void setThreadCount(int count) { _threadCount = Math.max(MIN_THREADS, Math.min(MAX_THREADS, count)); }
+
     public synchronized void startWriting(int numWriters) {
-        for (int i = 1; i <=numWriters; i++) {
-            Runner r = new Runner();
-            I2PThread t = new I2PThread(r, "NTCPWriter " + i + '/' + numWriters, true);
-            _runners.add(r);
-            t.start();
+        for (int i = 1; i <= numWriters; i++) {
+            startRunner();
         }
     }
+
+    private void startRunner() {
+        Runner r = new Runner();
+        _runners.add(r);
+        I2PThread t = new I2PThread(r, "NTCPWriter " + _runners.size() + '/' + _threadCount, true);
+        t.start();
+    }
+
+    /**
+     * Dynamically adjust thread count to match the target.
+     * @since 0.9.70+
+     */
+    public void adjustThreads() {
+        int target = _threadCount;
+        int current = _runners.size();
+        if (target > current) {
+            for (int i = current; i < target; i++) {
+                startRunner();
+            }
+        } else if (target < current) {
+            for (int i = current - 1; i >= target; i--) {
+                Runner r = _runners.remove(i);
+                r.stop();
+            }
+            synchronized (_pendingConnections) {
+                _writeAfterLive.clear();
+                _pendingConnections.notifyAll();
+            }
+        }
+    }
+
     public synchronized void stopWriting() {
         while (!_runners.isEmpty()) {
             Runner r = _runners.remove(0);
