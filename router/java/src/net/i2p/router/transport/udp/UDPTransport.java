@@ -454,6 +454,10 @@ public class UDPTransport extends TransportImpl {
         _context.statManager().createRateStat("udp.inboundIPv4Conn", "Inbound IPv4 UDP Connection", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.inboundIPv6Conn", "Inbound IPv6 UDP Connection", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.proactiveReestablish", "Time session was idle for when we proactively reestablished it", "Transport [UDP]", RATES);
+        // Required rate stats for tuner cross-refs (CoDel queue delay/drop stats)
+        _context.statManager().createRequiredRateStat("codel.UDP-Receiver.delay", "Average queue delay (ms)", "Transport [UDP]", RATES);
+        _context.statManager().createRequiredRateStat("codel.UDP-Sender.delay", "Average queue delay (ms)", "Transport [UDP]", RATES);
+        _context.statManager().createRequiredRateStat("codel.UDP-Sender.drop", "Queue delay of dropped items (ms)", "Transport [UDP]", RATES);
 
         _context.simpleTimer2().addPeriodicEvent(new PingIntroducers(), MIN_EXPIRE_TIMEOUT * 3 / 4);
 
@@ -4097,5 +4101,49 @@ public class UDPTransport extends TransportImpl {
 
     /** @since 0.9.70+ */
     public static void setPacketHandlerMaxThreads(int handlers) { PacketHandler.setMaxHandlers(handlers); }
+
+    /**
+     * Dynamically adjusts PacketHandler thread count to match the target.
+     * @since 0.9.70+
+     */
+    public void adjustPacketHandlerThreads() {
+        if (_handler != null) _handler.adjustThreads();
+    }
+
+    /**
+     * Returns the current target MessageReceiver thread count.
+     * @since 0.9.70+
+     */
+    public static int getMessageReceiverThreads() { return MessageReceiver.getThreadCount(); }
+
+    /**
+     * Sets the target MessageReceiver thread count.
+     * @since 0.9.70+
+     */
+    public static void setMessageReceiverThreads(int threads) { MessageReceiver.setThreadCount(threads); }
+
+    /**
+     * Dynamically adjusts MessageReceiver thread count to match the target.
+     * @since 0.9.70+
+     */
+    public void adjustMessageReceiverThreads() {
+        if (_inboundFragments != null) _inboundFragments.adjustMessageReceiverThreads();
+    }
+
+    /**
+     * Returns the current queue depth of the MessageReceiver.
+     * @since 0.9.70+
+     */
+    public int getReceiverQueueSize() {
+        return _inboundFragments != null ? _inboundFragments.getReceiverQueueSize() : 0;
+    }
+
+    /**
+     * Returns the maximum capacity of the MessageReceiver queue.
+     * @since 0.9.70+
+     */
+    public int getReceiverQueueCapacity() {
+        return _inboundFragments != null ? _inboundFragments.getReceiverQueueCapacity() : 0;
+    }
 
 }
