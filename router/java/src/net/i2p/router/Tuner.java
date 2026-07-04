@@ -1,7 +1,12 @@
 package net.i2p.router;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import net.i2p.router.transport.udp.PeerState;
 import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.transport.udp.SimpleBandwidthEstimator;
@@ -37,6 +42,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private final RouterContext _context;
     private final Log _log;
     private final List<TunableParam> _params;
+    private final AutotuneConfig _autotune;
 
     static final long STAT_PERIOD = 60 * 1000L;
     /** Max history samples for sparklines (30 samples @ 30s = 15min) */
@@ -84,9 +90,76 @@ public class Tuner implements SimpleTimer.TimedEvent {
         return Math.min(1.0, Math.max(0.0, (double) used / max));
     }
 
+    /**
+     * Manages the autotune.config file — separate from router.config.
+     * Stores tuner metadata (value, default, min, max, step) for each param.
+     * Actual config props that the router reads still go to router.config
+     * via each param's applyValue().
+     *
+     * @since 0.9.70+
+     */
+    public static class AutotuneConfig {
+        private static final String FILENAME = "autotune.config";
+        private final File _file;
+        private final Properties _props;
+        private final Log _log;
+
+        public AutotuneConfig(RouterContext ctx) {
+            _file = new File(ctx.getRouterDir(), FILENAME);
+            _props = new Properties();
+            _log = ctx.logManager().getLog(Tuner.class);
+            load();
+        }
+
+        private void load() {
+            if (!_file.exists()) return;
+            FileInputStream fis = null;
+            try {
+                fis = new FileInputStream(_file);
+                _props.load(fis);
+            } catch (IOException ioe) {
+                _log.warn("Error loading " + _file, ioe);
+            } finally {
+                if (fis != null) { try { fis.close(); } catch (IOException ig) {} }
+            }
+        }
+
+        public void save() {
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(_file);
+                _props.store(fos, "Auto-tuner persisted state — do not edit manually");
+            } catch (IOException ioe) {
+                _log.warn("Error saving " + _file, ioe);
+            } finally {
+                if (fos != null) { try { fos.close(); } catch (IOException ig) {} }
+            }
+        }
+
+        String getProperty(String key) {
+            return _props.getProperty(key);
+        }
+
+        int getInt(String key, int defaultVal) {
+            String val = _props.getProperty(key);
+            if (val != null) {
+                try { return Integer.parseInt(val); }
+                catch (NumberFormatException nfe) {}
+            }
+            return defaultVal;
+        }
+
+        public void setProperty(String key, String value) {
+            _props.setProperty(key, value);
+        }
+
+        File getFile() { return _file; }
+    }
+
     public Tuner(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(Tuner.class);
+        _autotune = new AutotuneConfig(ctx);
         _params = new ArrayList<TunableParam>(24);
 
         // Transport params
@@ -226,8 +299,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
             if (param instanceof BaseParam) {
                 BaseParam bp = (BaseParam) param;
                 bp._defaultValue = bp.getRuntimeValue();
-                bp._ctx.router().saveConfig(bp._propPrefix + "default", String.valueOf(bp._defaultValue));
-                bp._ctx.router().saveConfig(bp._propPrefix + "value", String.valueOf(bp._defaultValue));
+                bp._autotune.setProperty(bp._name + ".default", String.valueOf(bp._defaultValue));
+                bp._autotune.setProperty(bp._name + ".value", String.valueOf(bp._defaultValue));
+                bp._autotune.save();
                 bp.applyValue(bp._defaultValue);
                 bp._autoTuning = true;
                 bp._override = -1;
@@ -322,6 +396,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         protected int _historyCount;
         protected final Log _log;
         protected final RouterContext _ctx;
+        protected final AutotuneConfig _autotune;
 
         protected BaseParam(String name, String description, String subsystem,
                             int defaultMin, int defaultMax,
@@ -339,19 +414,38 @@ public class Tuner implements SimpleTimer.TimedEvent {
             _step = defaultStep;
             _log = ctx.logManager().getLog(Tuner.class);
             _ctx = ctx;
-            // Capture factory default on first run, persist for auto-revert
+            _autotune = new AutotuneConfig(ctx);
+            // Capture factory default on first run, persist to autotune.config
             int runtimeDefault = getRuntimeValue();
-            String defaultProp = _propPrefix + "default";
-            String valueProp = _propPrefix + "value";
-            String existingDefault = ctx.getProperty(defaultProp, null);
+            String defaultKey = name + ".default";
+            String valueKey = name + ".value";
+            String existingDefault = _autotune.getProperty(defaultKey);
             if (existingDefault == null) {
                 _defaultValue = runtimeDefault;
-                ctx.router().saveConfig(defaultProp, String.valueOf(runtimeDefault));
+                _autotune.setProperty(defaultKey, String.valueOf(runtimeDefault));
             } else {
                 _defaultValue = Integer.parseInt(existingDefault);
             }
             // Read persisted tuned value, or use factory default
-            _initialValue = ctx.getProperty(valueProp, _defaultValue);
+            int initialValue = _autotune.getInt(valueKey, _defaultValue);
+            // Migrate: if autotune.config is empty but router.config has old values, migrate them
+            if (existingDefault == null) {
+                String oldValue = ctx.getProperty(_propPrefix + "value", null);
+                if (oldValue != null) {
+                    try {
+                        initialValue = Integer.parseInt(oldValue);
+                        _autotune.setProperty(valueKey, oldValue);
+                    } catch (NumberFormatException nfe) {}
+                }
+                String oldMin = ctx.getProperty(_propPrefix + "min", null);
+                if (oldMin != null) _autotune.setProperty(name + ".min", oldMin);
+                String oldMax = ctx.getProperty(_propPrefix + "max", null);
+                if (oldMax != null) _autotune.setProperty(name + ".max", oldMax);
+                String oldStep = ctx.getProperty(_propPrefix + "step", null);
+                if (oldStep != null) _autotune.setProperty(name + ".step", oldStep);
+                _autotune.save();
+            }
+            _initialValue = initialValue;
             _override = -1;
             _autoTuning = true;
             _valueHistory = new int[MAX_HISTORY];
@@ -368,16 +462,17 @@ public class Tuner implements SimpleTimer.TimedEvent {
         public int getDefaultValue() { return _defaultValue; }
         public boolean isAutoTuning() { return _autoTuning; }
 
-        /** Re-read min/max/step from router properties — live update, no restart */
+        /** Re-read min/max/step from autotune.config — live update, no restart */
         public void refreshRanges(RouterContext ctx) {
-            _min = ctx.getProperty(_propPrefix + "min", _defaultMin);
-            _max = ctx.getProperty(_propPrefix + "max", _defaultMax);
-            _step = ctx.getProperty(_propPrefix + "step", _defaultStep);
+            String name = _name;
+            _min = _autotune.getInt(name + ".min", _defaultMin);
+            _max = _autotune.getInt(name + ".max", _defaultMax);
+            _step = _autotune.getInt(name + ".step", _defaultStep);
         }
 
-        /** Re-read the default value from router properties — live update after form save */
+        /** Re-read the default value from autotune.config — live update after form save */
         public void refreshDefault(RouterContext ctx) {
-            int newDefault = ctx.getProperty(_propPrefix + "default", _defaultValue);
+            int newDefault = _autotune.getInt(_name + ".default", _defaultValue);
             if (newDefault != _defaultValue) {
                 if (_log.shouldInfo())
                     _log.info(_name + " default changed from " + _defaultValue + " to " + newDefault);
@@ -385,9 +480,10 @@ public class Tuner implements SimpleTimer.TimedEvent {
             }
         }
 
-        /** Persist a tuned value so it survives router restarts */
+        /** Persist a tuned value to autotune.config so it survives router restarts */
         protected void persistValue(RouterContext ctx, int value) {
-            ctx.router().saveConfig(_propPrefix + "value", String.valueOf(value));
+            _autotune.setProperty(_name + ".value", String.valueOf(value));
+            _autotune.save();
         }
 
         public void setOverride(int value) {
@@ -653,7 +749,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         AckFrequencyParam() {
             super("ACK_FREQUENCY", SUB_TRANSPORT,
                   "Packets between ACKs (lower = more ACKs, less loss)",
-                  50, 150, 10, "udp.sendConfirmVolley", _context);
+                  50, 300, 10, "udp.sendConfirmVolley", _context);
         }
 
         protected void applyValue(int value) {
@@ -700,7 +796,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
             // But only if network isn't slow AND system isn't overloaded
             if (observed > highThresh) {
                 if (systemBusy) return current;
-                return Math.max(_min, current / 2);
+                return Math.max(_min, current - _step);
             }
 
             // Low volley (ACKs flowing fine): increase frequency (fewer ACKs, less overhead)

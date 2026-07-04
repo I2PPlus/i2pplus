@@ -2,10 +2,11 @@ package net.i2p.router.web;
 
 import java.util.HashMap;
 import java.util.Map;
+import net.i2p.router.Tuner;
 
 /**
  * Form handler for the transport tuning page.
- * Persists min/max/step ranges to router.config without restart.
+ * Persists min/max/step ranges to autotune.config without restart.
  *
  * @since 0.9.70+
  */
@@ -482,7 +483,6 @@ public class TuningFormHandler extends FormHandler {
             net.i2p.router.Tuner tuner = getTuner();
             if (tuner != null) {
                 tuner.restoreDefaults();
-                _context.router().saveConfig(getResetChanges(), null);
                 addFormNotice(_t("All parameters restored to factory defaults"));
             } else {
                 addFormNotice(_t("Auto-Tuning is not available"));
@@ -779,7 +779,11 @@ public class TuningFormHandler extends FormHandler {
         }
 
         if (!changes.isEmpty()) {
-            _context.router().saveConfig(changes, null);
+            Tuner.AutotuneConfig autotune = new Tuner.AutotuneConfig(_context);
+            for (Map.Entry<String, String> entry : changes.entrySet()) {
+                autotune.setProperty(entry.getKey(), entry.getValue());
+            }
+            autotune.save();
             addFormNotice(_t("Tuning ranges saved — changes take effect immediately"));
         } else if (tuner != null) {
             addFormNotice(_t("Tuning overrides applied"));
@@ -803,11 +807,8 @@ public class TuningFormHandler extends FormHandler {
             addFormError(_t("Invalid value") + ": " + param + "." + field + " = " + value);
             return;
         }
-        String key = PREFIX + param + "." + field.toLowerCase();
-        String oldVal = _context.getProperty(key, String.valueOf(defaultVal));
-        if (!String.valueOf(parsed).equals(oldVal)) {
-            changes.put(key, String.valueOf(parsed));
-        }
+        String key = param + "." + field.toLowerCase();
+        changes.put(key, String.valueOf(parsed));
     }
 
     /**

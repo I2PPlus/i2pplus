@@ -95,6 +95,7 @@ html:not([".advmode"]) #tuning input[type=number]{min-width:0!important;text-ali
 #tuning td.optionsave{padding:10px 8px}
 #tuning th.parameter,#tuning td.parameter{padding-left:8px;text-align:left}
 #tuning td.parameter{width:1%;white-space:nowrap;font-weight:500}
+#tuning .delta{font-style:italic;opacity:.6}
 #nav_tuning{display:none!important}
 
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1.1)}50%{opacity:.7;transform:scale(.9)}}

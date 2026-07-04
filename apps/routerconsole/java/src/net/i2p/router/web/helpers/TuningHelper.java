@@ -239,15 +239,17 @@ public class TuningHelper extends HelperBase {
                 buf.append("<tr data-prefix=\"").append(prefix).append("\" data-current=\"").append(s.currentValue).append("\">")
                    .append("<td class=parameter title=\"").append(esc(s.name)).append("\">").append(esc(getDisplayName(s.name)));
                 String desc = PARAM_DESCRIPTIONS.get(s.name);
-                if (desc != null)
+                if (desc != null) {
                     buf.append("<br><span class=paramdesc>").append(esc(_t(desc))).append("</span>");
+                }
                 buf.append("</td>");
 
                 // col2: value (with parenthesized delta when different from default)
                 buf.append("<td class=value>").append(s.currentValue);
-                if (s.currentValue != s.defaultValue)
-                    buf.append(" <span class=delta>(").append(s.currentValue - s.defaultValue >= 0 ? "+" : "")
-                       .append(s.currentValue - s.defaultValue).append(")</span>");
+                if (s.currentValue != s.defaultValue) {
+                    buf.append("<br><span class=delta>").append(s.currentValue - s.defaultValue >= 0 ? "+" : "")
+                       .append(s.currentValue - s.defaultValue).append("</span>");
+                }
                 buf.append("</td>");
 
                 // col3: editable default value
