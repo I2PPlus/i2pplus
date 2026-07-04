@@ -101,23 +101,23 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** @since 0.9.70+ */
     private static volatile int _maxRTO = 30000;
     /** @since 0.9.70+ */
-    static int getMaxRTOStatic() { return _maxRTO; }
+    public static int getMaxRTOStatic() { return _maxRTO; }
     /** @since 0.9.70+ */
-    static void setMaxRTO(int val) { _maxRTO = Math.max(1000, Math.min(60000, val)); }
+    public static void setMaxRTO(int val) { _maxRTO = Math.max(1000, Math.min(60000, val)); }
 
     /** @since 0.9.70+ */
     private static volatile int _minResendDelay = 100;
     /** @since 0.9.70+ */
-    static int getMinResendDelayStatic() { return _minResendDelay; }
+    public static int getMinResendDelayStatic() { return _minResendDelay; }
     /** @since 0.9.70+ */
-    static void setMinResendDelay(int val) { _minResendDelay = Math.max(50, Math.min(5000, val)); }
+    public static void setMinResendDelay(int val) { _minResendDelay = Math.max(50, Math.min(5000, val)); }
 
     /** @since 0.9.70+ */
     private static volatile int _maxResendDelay = 30000;
     /** @since 0.9.70+ */
-    static int getMaxResendDelayStatic() { return _maxResendDelay; }
+    public static int getMaxResendDelayStatic() { return _maxResendDelay; }
     /** @since 0.9.70+ */
-    static void setMaxResendDelay(int val) { _maxResendDelay = Math.max(1000, Math.min(60000, val)); }
+    public static void setMaxResendDelay(int val) { _maxResendDelay = Math.max(1000, Math.min(60000, val)); }
 
     /** @since I2P+ */
     private int getMaxRTO() {
@@ -208,10 +208,10 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private static volatile int _defaultInitialAckDelay = 20;
 
     /** @since 0.9.70+ */
-    static int getDefaultInitialAckDelay() { return _defaultInitialAckDelay; }
+    public static int getDefaultInitialAckDelay() { return _defaultInitialAckDelay; }
 
     /** @since 0.9.70+ */
-    static void setDefaultInitialAckDelay(int val) { _defaultInitialAckDelay = Math.max(5, Math.min(200, val)); }
+    public static void setDefaultInitialAckDelay(int val) { _defaultInitialAckDelay = Math.max(1, Math.min(200, val)); }
     static final int MIN_WINDOW_SIZE = 1;
     private static final boolean DEFAULT_ANSWER_PINGS = true;
     private static final int DEFAULT_INACTIVITY_TIMEOUT = 180*1000;
