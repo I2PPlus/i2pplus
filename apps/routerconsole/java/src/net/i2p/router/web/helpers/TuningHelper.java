@@ -73,6 +73,9 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("profileOrganizer.maxHighCapacityPeers", "Maximum High Capacity Peers");
         DISPLAY_NAMES.put("i2p.tunnel.build.requestTimeout", "Tunnel Build Request Timeout");
         DISPLAY_NAMES.put("i2p.tunnel.build.firstHopTimeout", "Tunnel Build First Hop Timeout");
+        DISPLAY_NAMES.put("tunnel.build.maxConcurrent", "Max Concurrent Tunnel Builds");
+        DISPLAY_NAMES.put("ntcp.reader.threads", "NTCP Reader Threads");
+        DISPLAY_NAMES.put("ntcp.writer.threads", "NTCP Writer Threads");
         DISPLAY_NAMES.put("i2p.streaming.minResendDelay", "Streaming Minimum Resend Delay");
         DISPLAY_NAMES.put("i2p.streaming.congestionAvoidanceGrowthRateFactor", "Congestion Avoidance Growth Rate");
         DISPLAY_NAMES.put("i2p.streaming.slowStartGrowthRateFactor", "Slow Start Growth Rate");
@@ -130,6 +133,9 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("profileOrganizer.maxHighCapacityPeers", "Max high-capacity peers allowed.");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.build.requestTimeout", "Build reply timeout in ms.");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.build.firstHopTimeout", "First-hop build forward timeout in ms.");
+        PARAM_DESCRIPTIONS.put("tunnel.build.maxConcurrent", "Max simultaneous tunnel builds.");
+        PARAM_DESCRIPTIONS.put("ntcp.reader.threads", "NTCP reader threads.");
+        PARAM_DESCRIPTIONS.put("ntcp.writer.threads", "NTCP writer threads.");
         PARAM_DESCRIPTIONS.put("i2p.streaming.minResendDelay", "Min time between retransmissions in ms.");
         PARAM_DESCRIPTIONS.put("i2p.streaming.congestionAvoidanceGrowthRateFactor", "Congestion avoidance growth rate.");
         PARAM_DESCRIPTIONS.put("i2p.streaming.slowStartGrowthRateFactor", "Window multiplier per RTT during slow start.");
