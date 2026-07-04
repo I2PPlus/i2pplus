@@ -2886,6 +2886,7 @@ h2#jsonrpc{padding-left:38px;background:url(../images/i2cp.svg) no-repeat 10px c
 
 /* tuning */
 svg.spark{background:#000}
+#tuning .infohelp{margin-top:10px;box-shadow:var(--border_table)}
 
 /* iframes */
 #dns{padding:0;min-width:650px}

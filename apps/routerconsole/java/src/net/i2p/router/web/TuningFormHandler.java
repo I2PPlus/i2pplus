@@ -72,6 +72,12 @@ public class TuningFormHandler extends FormHandler {
     private String _xdhPreCalcMinMin;
     private String _xdhPreCalcMinMax;
     private String _xdhPreCalcMinStep;
+    private String _edhPrecalcMinMin;
+    private String _edhPrecalcMinMax;
+    private String _edhPrecalcMinStep;
+    private String _mlkemPrecalcMinMin;
+    private String _mlkemPrecalcMinMax;
+    private String _mlkemPrecalcMinStep;
     private String _ntcpThreadsMin;
     private String _ntcpThreadsMax;
     private String _ntcpThreadsStep;
@@ -114,6 +120,15 @@ public class TuningFormHandler extends FormHandler {
     private String _maxRetransmissionsMin;
     private String _maxRetransmissionsMax;
     private String _maxRetransmissionsStep;
+    private String _maxRttMin;
+    private String _maxRttMax;
+    private String _maxRttStep;
+    private String _initialResendDelayMin;
+    private String _initialResendDelayMax;
+    private String _initialResendDelayStep;
+    private String _immediateAckDelayMin;
+    private String _immediateAckDelayMax;
+    private String _immediateAckDelayStep;
     private String _netDBSearchLimitMin;
     private String _netDBSearchLimitMax;
     private String _netDBSearchLimitStep;
@@ -132,12 +147,75 @@ public class TuningFormHandler extends FormHandler {
     private String _minFastPeersMin;
     private String _minFastPeersMax;
     private String _minFastPeersStep;
+    private String _maxFastPeersMin;
+    private String _maxFastPeersMax;
+    private String _maxFastPeersStep;
+    private String _minHighCapPeersMin;
+    private String _minHighCapPeersMax;
+    private String _minHighCapPeersStep;
+    private String _maxHighCapPeersMin;
+    private String _maxHighCapPeersMax;
+    private String _maxHighCapPeersStep;
     private String _buildRequestTimeoutMin;
     private String _buildRequestTimeoutMax;
     private String _buildRequestTimeoutStep;
     private String _buildFirstHopTimeoutMin;
     private String _buildFirstHopTimeoutMax;
     private String _buildFirstHopTimeoutStep;
+
+    // Default value fields (editable factory defaults)
+    private String _ackFrequencyDefault;
+    private String _dataMessageTimeoutDefault;
+    private String _obEstablishTimeDefault;
+    private String _ibEstablishTimeDefault;
+    private String _requeueTimeDefault;
+    private String _replenishFrequencyDefault;
+    private String _selectorLoopDelayDefault;
+    private String _obMsgsPerPumpDefault;
+    private String _ibMsgsPerPumpDefault;
+    private String _initialWindowSizeDefault;
+    private String _initialRTODefault;
+    private String _initialAckDelayDefault;
+    private String _passiveFlushDelayDefault;
+    private String _writerQueueSizeDefault;
+    private String _codelTargetDefault;
+    private String _codelIntervalDefault;
+    private String _westwoodDecayFactorDefault;
+    private String _maxSlowStartWindowDefault;
+    private String _xdhPreCalcMinDefault;
+    private String _ntcpThreadsDefault;
+    private String _ntcpQueueCapacityDefault;
+    private String _udpHandlerThreadsDefault;
+    private String _peerOutboundQueueDefault;
+    private String _transitThrottleFactorDefault;
+    private String _throttleRejectExponentDefault;
+    private String _maxParticipatingTunnelsDefault;
+    private String _buildHandlerMaxQueueDefault;
+    private String _goodDeficitThrottleDefault;
+    private String _perTunnelBweDivisorDefault;
+    private String _tunnelGrowthFactorDefault;
+    private String _maxRTODefault;
+    private String _maxResendDelayDefault;
+    private String _maxRetransmissionsDefault;
+    private String _netDBSearchLimitDefault;
+    private String _netDBMaxConcurrentDefault;
+    private String _netDBSingleSearchTimeDefault;
+    private String _maxConcurrentEstablishDefault;
+    private String _maxProfilesDefault;
+    private String _minFastPeersDefault;
+    private String _maxFastPeersDefault;
+    private String _minHighCapPeersDefault;
+    private String _maxHighCapPeersDefault;
+    private String _buildRequestTimeoutDefault;
+    private String _buildFirstHopTimeoutDefault;
+    private String _minResendDelayDefault;
+    private String _congestionAvoidanceGrowthDefault;
+    private String _slowStartGrowthDefault;
+    private String _maxRttDefault;
+    private String _initialResendDelayDefault;
+    private String _immediateAckDelayDefault;
+    private String _edhPrecalcMinDefault;
+    private String _mlkemPrecalcMinDefault;
 
     // setters - called by jsp:setProperty
     public void setAckFrequencyMin(String v) { _ackFrequencyMin = v; }
@@ -197,6 +275,12 @@ public class TuningFormHandler extends FormHandler {
     public void setXdhPreCalcMinMin(String v) { _xdhPreCalcMinMin = v; }
     public void setXdhPreCalcMinMax(String v) { _xdhPreCalcMinMax = v; }
     public void setXdhPreCalcMinStep(String v) { _xdhPreCalcMinStep = v; }
+    public void setEdhPrecalcMinMin(String v) { _edhPrecalcMinMin = v; }
+    public void setEdhPrecalcMinMax(String v) { _edhPrecalcMinMax = v; }
+    public void setEdhPrecalcMinStep(String v) { _edhPrecalcMinStep = v; }
+    public void setMlkemPrecalcMinMin(String v) { _mlkemPrecalcMinMin = v; }
+    public void setMlkemPrecalcMinMax(String v) { _mlkemPrecalcMinMax = v; }
+    public void setMlkemPrecalcMinStep(String v) { _mlkemPrecalcMinStep = v; }
     public void setNtcpThreadsMin(String v) { _ntcpThreadsMin = v; }
     public void setNtcpThreadsMax(String v) { _ntcpThreadsMax = v; }
     public void setNtcpThreadsStep(String v) { _ntcpThreadsStep = v; }
@@ -239,6 +323,15 @@ public class TuningFormHandler extends FormHandler {
     public void setMaxRetransmissionsMin(String v) { _maxRetransmissionsMin = v; }
     public void setMaxRetransmissionsMax(String v) { _maxRetransmissionsMax = v; }
     public void setMaxRetransmissionsStep(String v) { _maxRetransmissionsStep = v; }
+    public void setMaxRttMin(String v) { _maxRttMin = v; }
+    public void setMaxRttMax(String v) { _maxRttMax = v; }
+    public void setMaxRttStep(String v) { _maxRttStep = v; }
+    public void setInitialResendDelayMin(String v) { _initialResendDelayMin = v; }
+    public void setInitialResendDelayMax(String v) { _initialResendDelayMax = v; }
+    public void setInitialResendDelayStep(String v) { _initialResendDelayStep = v; }
+    public void setImmediateAckDelayMin(String v) { _immediateAckDelayMin = v; }
+    public void setImmediateAckDelayMax(String v) { _immediateAckDelayMax = v; }
+    public void setImmediateAckDelayStep(String v) { _immediateAckDelayStep = v; }
     public void setNetDBSearchLimitMin(String v) { _netDBSearchLimitMin = v; }
     public void setNetDBSearchLimitMax(String v) { _netDBSearchLimitMax = v; }
     public void setNetDBSearchLimitStep(String v) { _netDBSearchLimitStep = v; }
@@ -257,12 +350,75 @@ public class TuningFormHandler extends FormHandler {
     public void setMinFastPeersMin(String v) { _minFastPeersMin = v; }
     public void setMinFastPeersMax(String v) { _minFastPeersMax = v; }
     public void setMinFastPeersStep(String v) { _minFastPeersStep = v; }
+    public void setMaxFastPeersMin(String v) { _maxFastPeersMin = v; }
+    public void setMaxFastPeersMax(String v) { _maxFastPeersMax = v; }
+    public void setMaxFastPeersStep(String v) { _maxFastPeersStep = v; }
+    public void setMinHighCapPeersMin(String v) { _minHighCapPeersMin = v; }
+    public void setMinHighCapPeersMax(String v) { _minHighCapPeersMax = v; }
+    public void setMinHighCapPeersStep(String v) { _minHighCapPeersStep = v; }
+    public void setMaxHighCapPeersMin(String v) { _maxHighCapPeersMin = v; }
+    public void setMaxHighCapPeersMax(String v) { _maxHighCapPeersMax = v; }
+    public void setMaxHighCapPeersStep(String v) { _maxHighCapPeersStep = v; }
     public void setBuildRequestTimeoutMin(String v) { _buildRequestTimeoutMin = v; }
     public void setBuildRequestTimeoutMax(String v) { _buildRequestTimeoutMax = v; }
     public void setBuildRequestTimeoutStep(String v) { _buildRequestTimeoutStep = v; }
     public void setBuildFirstHopTimeoutMin(String v) { _buildFirstHopTimeoutMin = v; }
     public void setBuildFirstHopTimeoutMax(String v) { _buildFirstHopTimeoutMax = v; }
     public void setBuildFirstHopTimeoutStep(String v) { _buildFirstHopTimeoutStep = v; }
+
+    // Default value setters
+    public void setAckFrequencyDefault(String v) { _ackFrequencyDefault = v; }
+    public void setDataMessageTimeoutDefault(String v) { _dataMessageTimeoutDefault = v; }
+    public void setObEstablishTimeDefault(String v) { _obEstablishTimeDefault = v; }
+    public void setIbEstablishTimeDefault(String v) { _ibEstablishTimeDefault = v; }
+    public void setRequeueTimeDefault(String v) { _requeueTimeDefault = v; }
+    public void setReplenishFrequencyDefault(String v) { _replenishFrequencyDefault = v; }
+    public void setSelectorLoopDelayDefault(String v) { _selectorLoopDelayDefault = v; }
+    public void setObMsgsPerPumpDefault(String v) { _obMsgsPerPumpDefault = v; }
+    public void setIbMsgsPerPumpDefault(String v) { _ibMsgsPerPumpDefault = v; }
+    public void setInitialWindowSizeDefault(String v) { _initialWindowSizeDefault = v; }
+    public void setInitialRTODefault(String v) { _initialRTODefault = v; }
+    public void setInitialAckDelayDefault(String v) { _initialAckDelayDefault = v; }
+    public void setPassiveFlushDelayDefault(String v) { _passiveFlushDelayDefault = v; }
+    public void setWriterQueueSizeDefault(String v) { _writerQueueSizeDefault = v; }
+    public void setCodelTargetDefault(String v) { _codelTargetDefault = v; }
+    public void setCodelIntervalDefault(String v) { _codelIntervalDefault = v; }
+    public void setWestwoodDecayFactorDefault(String v) { _westwoodDecayFactorDefault = v; }
+    public void setMaxSlowStartWindowDefault(String v) { _maxSlowStartWindowDefault = v; }
+    public void setXdhPreCalcMinDefault(String v) { _xdhPreCalcMinDefault = v; }
+    public void setNtcpThreadsDefault(String v) { _ntcpThreadsDefault = v; }
+    public void setNtcpQueueCapacityDefault(String v) { _ntcpQueueCapacityDefault = v; }
+    public void setUdpHandlerThreadsDefault(String v) { _udpHandlerThreadsDefault = v; }
+    public void setPeerOutboundQueueDefault(String v) { _peerOutboundQueueDefault = v; }
+    public void setTransitThrottleFactorDefault(String v) { _transitThrottleFactorDefault = v; }
+    public void setThrottleRejectExponentDefault(String v) { _throttleRejectExponentDefault = v; }
+    public void setMaxParticipatingTunnelsDefault(String v) { _maxParticipatingTunnelsDefault = v; }
+    public void setBuildHandlerMaxQueueDefault(String v) { _buildHandlerMaxQueueDefault = v; }
+    public void setGoodDeficitThrottleDefault(String v) { _goodDeficitThrottleDefault = v; }
+    public void setPerTunnelBweDivisorDefault(String v) { _perTunnelBweDivisorDefault = v; }
+    public void setTunnelGrowthFactorDefault(String v) { _tunnelGrowthFactorDefault = v; }
+    public void setMaxRTODefault(String v) { _maxRTODefault = v; }
+    public void setMaxResendDelayDefault(String v) { _maxResendDelayDefault = v; }
+    public void setMaxRetransmissionsDefault(String v) { _maxRetransmissionsDefault = v; }
+    public void setNetDBSearchLimitDefault(String v) { _netDBSearchLimitDefault = v; }
+    public void setNetDBMaxConcurrentDefault(String v) { _netDBMaxConcurrentDefault = v; }
+    public void setNetDBSingleSearchTimeDefault(String v) { _netDBSingleSearchTimeDefault = v; }
+    public void setMaxConcurrentEstablishDefault(String v) { _maxConcurrentEstablishDefault = v; }
+    public void setMaxProfilesDefault(String v) { _maxProfilesDefault = v; }
+    public void setMinFastPeersDefault(String v) { _minFastPeersDefault = v; }
+    public void setMaxFastPeersDefault(String v) { _maxFastPeersDefault = v; }
+    public void setMinHighCapPeersDefault(String v) { _minHighCapPeersDefault = v; }
+    public void setMaxHighCapPeersDefault(String v) { _maxHighCapPeersDefault = v; }
+    public void setBuildRequestTimeoutDefault(String v) { _buildRequestTimeoutDefault = v; }
+    public void setBuildFirstHopTimeoutDefault(String v) { _buildFirstHopTimeoutDefault = v; }
+    public void setMinResendDelayDefault(String v) { _minResendDelayDefault = v; }
+    public void setCongestionAvoidanceGrowthDefault(String v) { _congestionAvoidanceGrowthDefault = v; }
+    public void setSlowStartGrowthDefault(String v) { _slowStartGrowthDefault = v; }
+    public void setMaxRttDefault(String v) { _maxRttDefault = v; }
+    public void setInitialResendDelayDefault(String v) { _initialResendDelayDefault = v; }
+    public void setImmediateAckDelayDefault(String v) { _immediateAckDelayDefault = v; }
+    public void setEdhPrecalcMinDefault(String v) { _edhPrecalcMinDefault = v; }
+    public void setMlkemPrecalcMinDefault(String v) { _mlkemPrecalcMinDefault = v; }
 
     // Auto-tuning override setters (checkbox: -1 = auto, >= 0 = manual lock)
     public void setAckFrequencyOverride(String v) { _ackFrequencyOverride = v; }
@@ -298,18 +454,43 @@ public class TuningFormHandler extends FormHandler {
     public void setMaxRTOOverride(String v) { _maxRTOOverride = v; }
     public void setMaxResendDelayOverride(String v) { _maxResendDelayOverride = v; }
     public void setMaxRetransmissionsOverride(String v) { _maxRetransmissionsOverride = v; }
+    public void setMaxRttOverride(String v) { _maxRttOverride = v; }
+    public void setInitialResendDelayOverride(String v) { _initialResendDelayOverride = v; }
+    public void setImmediateAckDelayOverride(String v) { _immediateAckDelayOverride = v; }
+    public void setMinResendDelayOverride(String v) { _minResendDelayOverride = v; }
+    public void setCongestionAvoidanceGrowthOverride(String v) { _congestionAvoidanceGrowthOverride = v; }
+    public void setSlowStartGrowthOverride(String v) { _slowStartGrowthOverride = v; }
     public void setNetDBSearchLimitOverride(String v) { _netDBSearchLimitOverride = v; }
     public void setNetDBMaxConcurrentOverride(String v) { _netDBMaxConcurrentOverride = v; }
     public void setNetDBSingleSearchTimeOverride(String v) { _netDBSingleSearchTimeOverride = v; }
     public void setMaxConcurrentEstablishOverride(String v) { _maxConcurrentEstablishOverride = v; }
     public void setMaxProfilesOverride(String v) { _maxProfilesOverride = v; }
     public void setMinFastPeersOverride(String v) { _minFastPeersOverride = v; }
+    public void setMaxFastPeersOverride(String v) { _maxFastPeersOverride = v; }
+    public void setMinHighCapPeersOverride(String v) { _minHighCapPeersOverride = v; }
+    public void setMaxHighCapPeersOverride(String v) { _maxHighCapPeersOverride = v; }
     public void setBuildRequestTimeoutOverride(String v) { _buildRequestTimeoutOverride = v; }
     public void setBuildFirstHopTimeoutOverride(String v) { _buildFirstHopTimeoutOverride = v; }
 
     @Override
     protected void processForm() {
-        if (_action == null || !_action.equals(_t("Save")))
+        if (_action == null)
+            return;
+
+        // Restore Defaults: reset all params to factory defaults
+        if (_action.equals(_t("Restore Defaults"))) {
+            net.i2p.router.Tuner tuner = getTuner();
+            if (tuner != null) {
+                tuner.restoreDefaults();
+                _context.router().saveConfig(getResetChanges(), null);
+                addFormNotice(_t("All parameters restored to factory defaults"));
+            } else {
+                addFormNotice(_t("Auto-Tuning is not available"));
+            }
+            return;
+        }
+
+        if (!_action.equals(_t("Save")))
             return;
 
         Map<String, String> changes = new HashMap<String, String>();
@@ -383,9 +564,15 @@ public class TuningFormHandler extends FormHandler {
         saveField(changes, "i2p.streaming.maxSlowStartWindow", "Step", _maxSlowStartWindowStep, 4);
 
         // Buffers & Threads
-        saveField(changes, "crypto.x25519.precalcMin", "Min", _xdhPreCalcMinMin, 2);
-        saveField(changes, "crypto.x25519.precalcMin", "Max", _xdhPreCalcMinMax, 128);
-        saveField(changes, "crypto.x25519.precalcMin", "Step", _xdhPreCalcMinStep, 2);
+        saveField(changes, "crypto.x25519.precalcMin", "Min", _xdhPreCalcMinMin, 8);
+        saveField(changes, "crypto.x25519.precalcMin", "Max", _xdhPreCalcMinMax, 1024);
+        saveField(changes, "crypto.x25519.precalcMin", "Step", _xdhPreCalcMinStep, 8);
+        saveField(changes, "crypto.edh.precalcMin", "Min", _edhPrecalcMinMin, 8);
+        saveField(changes, "crypto.edh.precalcMin", "Max", _edhPrecalcMinMax, 1024);
+        saveField(changes, "crypto.edh.precalcMin", "Step", _edhPrecalcMinStep, 8);
+        saveField(changes, "crypto.mlkem.precalcMin", "Min", _mlkemPrecalcMinMin, 2);
+        saveField(changes, "crypto.mlkem.precalcMin", "Max", _mlkemPrecalcMinMax, 512);
+        saveField(changes, "crypto.mlkem.precalcMin", "Step", _mlkemPrecalcMinStep, 4);
         saveField(changes, "ntcp.sendFinisher.maxThreads", "Min", _ntcpThreadsMin, 1);
         saveField(changes, "ntcp.sendFinisher.maxThreads", "Max", _ntcpThreadsMax, 8);
         saveField(changes, "ntcp.sendFinisher.maxThreads", "Step", _ntcpThreadsStep, 1);
@@ -432,6 +619,15 @@ public class TuningFormHandler extends FormHandler {
         saveField(changes, "i2p.streaming.maxRetransmissions", "Min", _maxRetransmissionsMin, 8);
         saveField(changes, "i2p.streaming.maxRetransmissions", "Max", _maxRetransmissionsMax, 256);
         saveField(changes, "i2p.streaming.maxRetransmissions", "Step", _maxRetransmissionsStep, 8);
+        saveField(changes, "i2p.streaming.maxRtt", "Min", _maxRttMin, 10000);
+        saveField(changes, "i2p.streaming.maxRtt", "Max", _maxRttMax, 120000);
+        saveField(changes, "i2p.streaming.maxRtt", "Step", _maxRttStep, 5000);
+        saveField(changes, "i2p.streaming.initialResendDelay", "Min", _initialResendDelayMin, 50);
+        saveField(changes, "i2p.streaming.initialResendDelay", "Max", _initialResendDelayMax, 5000);
+        saveField(changes, "i2p.streaming.initialResendDelay", "Step", _initialResendDelayStep, 50);
+        saveField(changes, "i2p.streaming.immediateAckDelay", "Min", _immediateAckDelayMin, 10);
+        saveField(changes, "i2p.streaming.immediateAckDelay", "Max", _immediateAckDelayMax, 500);
+        saveField(changes, "i2p.streaming.immediateAckDelay", "Step", _immediateAckDelayStep, 10);
 
         // NetDB
         saveField(changes, "netdb.searchLimit", "Min", _netDBSearchLimitMin, 4);
@@ -456,6 +652,15 @@ public class TuningFormHandler extends FormHandler {
         saveField(changes, "profileOrganizer.minFastPeers", "Min", _minFastPeersMin, 50);
         saveField(changes, "profileOrganizer.minFastPeers", "Max", _minFastPeersMax, 2000);
         saveField(changes, "profileOrganizer.minFastPeers", "Step", _minFastPeersStep, 50);
+        saveField(changes, "profileOrganizer.maxFastPeers", "Min", _maxFastPeersMin, 200);
+        saveField(changes, "profileOrganizer.maxFastPeers", "Max", _maxFastPeersMax, 3000);
+        saveField(changes, "profileOrganizer.maxFastPeers", "Step", _maxFastPeersStep, 50);
+        saveField(changes, "profileOrganizer.minHighCapacityPeers", "Min", _minHighCapPeersMin, 50);
+        saveField(changes, "profileOrganizer.minHighCapacityPeers", "Max", _minHighCapPeersMax, 2000);
+        saveField(changes, "profileOrganizer.minHighCapacityPeers", "Step", _minHighCapPeersStep, 50);
+        saveField(changes, "profileOrganizer.maxHighCapacityPeers", "Min", _maxHighCapPeersMin, 200);
+        saveField(changes, "profileOrganizer.maxHighCapacityPeers", "Max", _maxHighCapPeersMax, 4000);
+        saveField(changes, "profileOrganizer.maxHighCapacityPeers", "Step", _maxHighCapPeersStep, 50);
 
         // Build timeouts
         saveField(changes, "i2p.tunnel.build.requestTimeout", "Min", _buildRequestTimeoutMin, 3000);
@@ -464,6 +669,60 @@ public class TuningFormHandler extends FormHandler {
         saveField(changes, "i2p.tunnel.build.firstHopTimeout", "Min", _buildFirstHopTimeoutMin, 2000);
         saveField(changes, "i2p.tunnel.build.firstHopTimeout", "Max", _buildFirstHopTimeoutMax, 20000);
         saveField(changes, "i2p.tunnel.build.firstHopTimeout", "Step", _buildFirstHopTimeoutStep, 1000);
+
+        // Factory defaults (persisted for auto-revert baseline)
+        saveField(changes, "ACK_FREQUENCY", "Default", _ackFrequencyDefault, 30);
+        saveField(changes, "DATA_MESSAGE_TIMEOUT", "Default", _dataMessageTimeoutDefault, 5000);
+        saveField(changes, "MAX_OB_ESTABLISH_TIME", "Default", _obEstablishTimeDefault, 2000);
+        saveField(changes, "MAX_IB_ESTABLISH_TIME", "Default", _ibEstablishTimeDefault, 5000);
+        saveField(changes, "REQUEUE_TIME", "Default", _requeueTimeDefault, 30);
+        saveField(changes, "REPLENISH_FREQUENCY", "Default", _replenishFrequencyDefault, 30);
+        saveField(changes, "SELECTOR_LOOP_DELAY", "Default", _selectorLoopDelayDefault, 5);
+        saveField(changes, "MAX_OB_MSGS_PER_PUMP", "Default", _obMsgsPerPumpDefault, 256);
+        saveField(changes, "MAX_IB_MSGS_PER_PUMP", "Default", _ibMsgsPerPumpDefault, 128);
+        saveField(changes, "INITIAL_WINDOW_SIZE", "Default", _initialWindowSizeDefault, 16);
+        saveField(changes, "INITIAL_RTO", "Default", _initialRTODefault, 6000);
+        saveField(changes, "INITIAL_ACK_DELAY", "Default", _initialAckDelayDefault, 40);
+        saveField(changes, "PASSIVE_FLUSH_DELAY", "Default", _passiveFlushDelayDefault, 100);
+        saveField(changes, "CLIENT_WRITER_QUEUE_SIZE", "Default", _writerQueueSizeDefault, 256);
+        saveField(changes, "CODEL_TARGET", "Default", _codelTargetDefault, 5);
+        saveField(changes, "CODEL_INTERVAL", "Default", _codelIntervalDefault, 100);
+        saveField(changes, "WESTWOOD_DECAY_FACTOR", "Default", _westwoodDecayFactorDefault, 8);
+        saveField(changes, "i2p.streaming.maxSlowStartWindow", "Default", _maxSlowStartWindowDefault, 32);
+        saveField(changes, "crypto.x25519.precalcMin", "Default", _xdhPreCalcMinDefault, 20);
+        saveField(changes, "ntcp.sendFinisher.maxThreads", "Default", _ntcpThreadsDefault, 2);
+        saveField(changes, "ntcp.sendFinisher.queueCapacity", "Default", _ntcpQueueCapacityDefault, 4096);
+        saveField(changes, "udp.packetHandler.maxThreads", "Default", _udpHandlerThreadsDefault, 4);
+        saveField(changes, "router.peerOutboundQueueSize", "Default", _peerOutboundQueueDefault, 150);
+        saveField(changes, "router.transitThrottleFactor", "Default", _transitThrottleFactorDefault, 50);
+        saveField(changes, "router.throttleRejectExponent", "Default", _throttleRejectExponentDefault, 10);
+        saveField(changes, "router.maxParticipatingTunnels", "Default", _maxParticipatingTunnelsDefault, 5000);
+        saveField(changes, "router.buildHandlerMaxQueue", "Default", _buildHandlerMaxQueueDefault, 600);
+        saveField(changes, "i2p.tunnel.goodDeficitThrottle", "Default", _goodDeficitThrottleDefault, 30000);
+        saveField(changes, "router.tunnel.perTunnelBweDivisor", "Default", _perTunnelBweDivisorDefault, 100);
+        saveField(changes, "router.tunnelGrowthFactor", "Default", _tunnelGrowthFactorDefault, 30);
+        saveField(changes, "i2p.streaming.maxRTO", "Default", _maxRTODefault, 30000);
+        saveField(changes, "i2p.streaming.maxResendDelay", "Default", _maxResendDelayDefault, 15000);
+        saveField(changes, "i2p.streaming.maxRetransmissions", "Default", _maxRetransmissionsDefault, 64);
+        saveField(changes, "netdb.searchLimit", "Default", _netDBSearchLimitDefault, 24);
+        saveField(changes, "netdb.maxConcurrent", "Default", _netDBMaxConcurrentDefault, 8);
+        saveField(changes, "netdb.singleSearchTime", "Default", _netDBSingleSearchTimeDefault, 8000);
+        saveField(changes, "i2np.udp.maxConcurrentEstablish", "Default", _maxConcurrentEstablishDefault, 512);
+        saveField(changes, "profileOrganizer.maxProfiles", "Default", _maxProfilesDefault, 4000);
+        saveField(changes, "profileOrganizer.minFastPeers", "Default", _minFastPeersDefault, 400);
+        saveField(changes, "profileOrganizer.maxFastPeers", "Default", _maxFastPeersDefault, 600);
+        saveField(changes, "profileOrganizer.minHighCapacityPeers", "Default", _minHighCapPeersDefault, 500);
+        saveField(changes, "profileOrganizer.maxHighCapacityPeers", "Default", _maxHighCapPeersDefault, 800);
+        saveField(changes, "i2p.tunnel.build.requestTimeout", "Default", _buildRequestTimeoutDefault, 10000);
+        saveField(changes, "i2p.tunnel.build.firstHopTimeout", "Default", _buildFirstHopTimeoutDefault, 10000);
+        saveField(changes, "i2p.streaming.minResendDelay", "Default", _minResendDelayDefault, 2000);
+        saveField(changes, "i2p.streaming.congestionAvoidanceGrowthRateFactor", "Default", _congestionAvoidanceGrowthDefault, 10);
+        saveField(changes, "i2p.streaming.slowStartGrowthRateFactor", "Default", _slowStartGrowthDefault, 10);
+        saveField(changes, "i2p.streaming.maxRtt", "Default", _maxRttDefault, 60000);
+        saveField(changes, "i2p.streaming.initialResendDelay", "Default", _initialResendDelayDefault, 1000);
+        saveField(changes, "i2p.streaming.immediateAckDelay", "Default", _immediateAckDelayDefault, 80);
+        saveField(changes, "crypto.edh.precalcMin", "Default", _edhPrecalcMinDefault, 8);
+        saveField(changes, "crypto.mlkem.precalcMin", "Default", _mlkemPrecalcMinDefault, 8);
 
         // Process auto-tuning overrides (checkbox toggle)
         net.i2p.router.Tuner tuner = getTuner();
@@ -504,6 +763,9 @@ public class TuningFormHandler extends FormHandler {
             applyOverride(tuner, "i2p.streaming.minResendDelay", _minResendDelayOverride);
             applyOverride(tuner, "i2p.streaming.congestionAvoidanceGrowthRateFactor", _congestionAvoidanceGrowthOverride);
             applyOverride(tuner, "i2p.streaming.slowStartGrowthRateFactor", _slowStartGrowthOverride);
+            applyOverride(tuner, "i2p.streaming.maxRtt", _maxRttOverride);
+            applyOverride(tuner, "i2p.streaming.initialResendDelay", _initialResendDelayOverride);
+            applyOverride(tuner, "i2p.streaming.immediateAckDelay", _immediateAckDelayOverride);
             applyOverride(tuner, "netdb.searchLimit", _netDBSearchLimitOverride);
             applyOverride(tuner, "netdb.maxConcurrent", _netDBMaxConcurrentOverride);
             applyOverride(tuner, "netdb.singleSearchTime", _netDBSingleSearchTimeOverride);
@@ -546,6 +808,42 @@ public class TuningFormHandler extends FormHandler {
         if (!String.valueOf(parsed).equals(oldVal)) {
             changes.put(key, String.valueOf(parsed));
         }
+    }
+
+    /**
+     * Build a map of property deletions to reset all tuner ranges to defaults.
+     */
+    private java.util.Map<String, String> getResetChanges() {
+        java.util.Map<String, String> deletions = new java.util.HashMap<String, String>();
+        String[] params = {
+            "ACK_FREQUENCY", "DATA_MESSAGE_TIMEOUT", "MAX_OB_ESTABLISH_TIME", "MAX_IB_ESTABLISH_TIME",
+            "REQUEUE_TIME", "REPLENISH_FREQUENCY", "SELECTOR_LOOP_DELAY",
+            "MAX_OB_MSGS_PER_PUMP", "MAX_IB_MSGS_PER_PUMP",
+            "INITIAL_WINDOW_SIZE", "INITIAL_RTO", "INITIAL_ACK_DELAY", "PASSIVE_FLUSH_DELAY",
+            "CLIENT_WRITER_QUEUE_SIZE",
+            "CODEL_TARGET", "CODEL_INTERVAL", "WESTWOOD_DECAY_FACTOR",
+            "crypto.x25519.precalcMin", "crypto.edh.precalcMin", "crypto.mlkem.precalcMin",
+            "ntcp.sendFinisher.maxThreads", "ntcp.sendFinisher.queueCapacity",
+            "udp.packetHandler.maxThreads",
+            "router.peerOutboundQueueSize", "router.transitThrottleFactor", "router.throttleRejectExponent",
+            "router.maxParticipatingTunnels", "router.buildHandlerMaxQueue",
+            "i2p.tunnel.goodDeficitThrottle", "router.tunnel.perTunnelBweDivisor", "router.tunnelGrowthFactor",
+            "i2p.streaming.maxSlowStartWindow", "i2p.streaming.maxRTO", "i2p.streaming.maxResendDelay",
+            "i2p.streaming.maxRetransmissions", "i2p.streaming.minResendDelay",
+            "i2p.streaming.congestionAvoidanceGrowthRateFactor", "i2p.streaming.slowStartGrowthRateFactor",
+            "netdb.searchLimit", "netdb.maxConcurrent", "netdb.singleSearchTime",
+            "i2np.udp.maxConcurrentEstablish",
+            "profileOrganizer.maxProfiles", "profileOrganizer.minFastPeers",
+            "i2p.tunnel.build.requestTimeout", "i2p.tunnel.build.firstHopTimeout"
+        };
+        for (String param : params) {
+            deletions.put(PREFIX + param + ".min", null);
+            deletions.put(PREFIX + param + ".max", null);
+            deletions.put(PREFIX + param + ".step", null);
+            deletions.put(PREFIX + param + ".default", null);
+            deletions.put(PREFIX + param + ".value", null);
+        }
+        return deletions;
     }
 
     /**
@@ -626,12 +924,18 @@ public class TuningFormHandler extends FormHandler {
     private String _minResendDelayOverride;
     private String _congestionAvoidanceGrowthOverride;
     private String _slowStartGrowthOverride;
+    private String _maxRttOverride;
+    private String _initialResendDelayOverride;
+    private String _immediateAckDelayOverride;
     private String _netDBSearchLimitOverride;
     private String _netDBMaxConcurrentOverride;
     private String _netDBSingleSearchTimeOverride;
     private String _maxConcurrentEstablishOverride;
     private String _maxProfilesOverride;
     private String _minFastPeersOverride;
+    private String _maxFastPeersOverride;
+    private String _minHighCapPeersOverride;
+    private String _maxHighCapPeersOverride;
     private String _buildRequestTimeoutOverride;
     private String _buildFirstHopTimeoutOverride;
     private String _edhPrecalcMinOverride;

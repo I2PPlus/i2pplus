@@ -68,11 +68,17 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("i2np.udp.maxConcurrentEstablish", "UDP Maximum Concurrent Establish");
         DISPLAY_NAMES.put("profileOrganizer.maxProfiles", "Maximum Peer Profiles");
         DISPLAY_NAMES.put("profileOrganizer.minFastPeers", "Minimum Fast Peers");
+        DISPLAY_NAMES.put("profileOrganizer.maxFastPeers", "Maximum Fast Peers");
+        DISPLAY_NAMES.put("profileOrganizer.minHighCapacityPeers", "Minimum High Capacity Peers");
+        DISPLAY_NAMES.put("profileOrganizer.maxHighCapacityPeers", "Maximum High Capacity Peers");
         DISPLAY_NAMES.put("i2p.tunnel.build.requestTimeout", "Tunnel Build Request Timeout");
         DISPLAY_NAMES.put("i2p.tunnel.build.firstHopTimeout", "Tunnel Build First Hop Timeout");
         DISPLAY_NAMES.put("i2p.streaming.minResendDelay", "Streaming Minimum Resend Delay");
         DISPLAY_NAMES.put("i2p.streaming.congestionAvoidanceGrowthRateFactor", "Congestion Avoidance Growth Rate");
         DISPLAY_NAMES.put("i2p.streaming.slowStartGrowthRateFactor", "Slow Start Growth Rate");
+        DISPLAY_NAMES.put("i2p.streaming.maxRtt", "RTT Estimate Cap");
+        DISPLAY_NAMES.put("i2p.streaming.initialResendDelay", "First Retransmit Delay");
+        DISPLAY_NAMES.put("i2p.streaming.immediateAckDelay", "Duplicate ACK Delay");
     }
 
     // brief purpose descriptions (<=120 chars)
@@ -119,11 +125,17 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2np.udp.maxConcurrentEstablish", "Simultaneous SSU handshakes.");
         PARAM_DESCRIPTIONS.put("profileOrganizer.maxProfiles", "Max peer profiles in memory.");
         PARAM_DESCRIPTIONS.put("profileOrganizer.minFastPeers", "Min fast-tier peers to maintain.");
+        PARAM_DESCRIPTIONS.put("profileOrganizer.maxFastPeers", "Max fast-tier peers allowed.");
+        PARAM_DESCRIPTIONS.put("profileOrganizer.minHighCapacityPeers", "Min high-capacity peers to maintain.");
+        PARAM_DESCRIPTIONS.put("profileOrganizer.maxHighCapacityPeers", "Max high-capacity peers allowed.");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.build.requestTimeout", "Build reply timeout in ms.");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.build.firstHopTimeout", "First-hop build forward timeout in ms.");
         PARAM_DESCRIPTIONS.put("i2p.streaming.minResendDelay", "Min time between retransmissions in ms.");
         PARAM_DESCRIPTIONS.put("i2p.streaming.congestionAvoidanceGrowthRateFactor", "Congestion avoidance growth rate.");
-        PARAM_DESCRIPTIONS.put("i2p.streaming.slowStartGrowthRateFactor", "Slow start growth rate.");
+        PARAM_DESCRIPTIONS.put("i2p.streaming.slowStartGrowthRateFactor", "Window multiplier per RTT during slow start.");
+        PARAM_DESCRIPTIONS.put("i2p.streaming.maxRtt", "Upper bound on RTT estimate in ms.");
+        PARAM_DESCRIPTIONS.put("i2p.streaming.initialResendDelay", "Delay before first retransmit in ms.");
+        PARAM_DESCRIPTIONS.put("i2p.streaming.immediateAckDelay", "Delay for dup or OOO packet ACKs in ms.");
     }
 
     // display order for subsystems
@@ -206,14 +218,15 @@ public class TuningHelper extends HelperBase {
            .append("<input type=hidden name=nonce value=\"\">")
            .append("<div class=tablewrap><table id=tuningtable>")
            .append("<tr>")
-           .append("<th class=parameter>").append(_t("Parameter")).append("</th>")
-           .append("<th class=value>").append(_t("Observed / Default")).append("</th>")
-           .append("<th class=min>").append(_t("Min")).append("</th>")
-           .append("<th class=max>").append(_t("Max")).append("</th>")
-           .append("<th class=step>").append(_t("Step")).append("</th>")
-           .append("<th class=history>").append(_t("History")).append("</th>")
-           .append("<th class=auto>").append(_t("Auto")).append("</th>")
-           .append("</tr>");
+            .append("<th class=parameter>").append(_t("Parameter")).append("</th>")
+            .append("<th class=value>").append(_t("Current")).append("</th>")
+            .append("<th class=default>").append(_t("Default")).append("</th>")
+            .append("<th class=min>").append(_t("Min")).append("</th>")
+            .append("<th class=max>").append(_t("Max")).append("</th>")
+            .append("<th class=step>").append(_t("Step")).append("</th>")
+            .append("<th class=history>").append(_t("History")).append("</th>")
+            .append("<th class=auto>").append(_t("Auto")).append("</th>")
+            .append("</tr>");
 
         for (Map.Entry<String, List<ParamSnapshot>> entry : groups.entrySet()) {
             List<ParamSnapshot> params = entry.getValue();
@@ -222,16 +235,25 @@ public class TuningHelper extends HelperBase {
             for (ParamSnapshot s : params) {
                 String prefix = toFormPrefix(s.name);
                 String sparkSvg = renderSparkline(s.valueHistory, s.defaultValue, s.currentValue);
-                String currentDisplay = formatCurrentStat(s.observedStat, s.observedStatValue);
 
                 buf.append("<tr data-prefix=\"").append(prefix).append("\" data-current=\"").append(s.currentValue).append("\">")
                    .append("<td class=parameter title=\"").append(esc(s.name)).append("\">").append(esc(getDisplayName(s.name)));
                 String desc = PARAM_DESCRIPTIONS.get(s.name);
                 if (desc != null)
                     buf.append("<br><span class=paramdesc>").append(esc(_t(desc))).append("</span>");
-                buf.append("</td>")
-                   .append("<td class=value>").append(s.currentValue).append(" / " ).append(s.defaultValue).append("</td>")
-                   .append("<td class=min><input type=number size=6 name=\"").append(prefix).append("Min\" value=\"").append(s.min).append("\"></td>")
+                buf.append("</td>");
+
+                // col2: value (with parenthesized delta when different from default)
+                buf.append("<td class=value>").append(s.currentValue);
+                if (s.currentValue != s.defaultValue)
+                    buf.append(" <span class=delta>(").append(s.currentValue - s.defaultValue >= 0 ? "+" : "")
+                       .append(s.currentValue - s.defaultValue).append(")</span>");
+                buf.append("</td>");
+
+                // col3: editable default value
+                buf.append("<td class=default><input type=number size=6 name=\"").append(prefix).append("Default\" value=\"").append(s.defaultValue).append("\"></td>");
+
+                buf.append("<td class=min><input type=number size=6 name=\"").append(prefix).append("Min\" value=\"").append(s.min).append("\"></td>")
                    .append("<td class=max><input type=number size=6 name=\"").append(prefix).append("Max\" value=\"").append(s.max).append("\"></td>")
                    .append("<td class=step><input type=number size=4 name=\"").append(prefix).append("Step\" value=\"").append(s.step).append("\"></td>")
                    .append("<td class=history>").append(sparkSvg).append("</td>")
@@ -245,54 +267,12 @@ public class TuningHelper extends HelperBase {
             }
         }
 
-        buf.append("<tr><td class=optionsave colspan=8><input type=submit name=action class=accept value=\"").append(_t("Save")).append("\"></td></tr>");
+        buf.append("<tr><td class=optionsave colspan=8>")
+           .append("<input type=submit name=action class=accept style=float:left value=\"").append(_t("Restore Defaults")).append("\">")
+           .append(' ')
+           .append("<input type=submit name=action class=accept value=\"").append(_t("Save")).append("\"></td></tr>");
         buf.append("</table></form></div>");
         return buf.toString();
-    }
-
-    /**
-     * Format the observed stat as a compact current value with unit.
-     * e.g. "23ms", "1.2K", "98%".
-     */
-    private static String formatCurrentStat(String statName, double value) {
-        if (statName == null || Double.isNaN(value))
-            return "&mdash;";
-        boolean isTime = statName.contains("Time") || statName.contains("Lag")
-                         || statName.contains("Delay") || statName.contains("RTT")
-                         || statName.contains("RTO") || statName.contains("Establish");
-        String formatted;
-        String unit = "";
-        if (isTime) {
-            // time stats are in ms; show as seconds when >= 1000ms
-            if (value >= 1000000)
-                formatted = String.format("%.1fKs", value / 1000000.0);
-            else if (value >= 1000)
-                formatted = String.format("%.1fs", value / 1000.0);
-            else if (value == (long) value)
-                formatted = String.valueOf((long) value) + "ms";
-            else
-                formatted = String.format("%.1fms", value);
-        } else if (statName.contains("Ratio") || statName.contains("Rate") || statName.contains("Percent")) {
-            formatted = String.format("%.1f%%", value * 100);
-        } else if (statName.contains("Bps") || statName.contains("bps")) {
-            if (value >= 1000000)
-                formatted = String.format("%.1fMB/s", value / 1000000.0);
-            else if (value >= 1000)
-                formatted = String.format("%.1fKB/s", value / 1000.0);
-            else
-                formatted = String.format("%.0fB/s", value);
-        } else {
-            // dimensionless counts, sizes, etc.
-            if (value >= 1000000)
-                formatted = String.format("%.1fM", value / 1000000.0);
-            else if (value >= 1000)
-                formatted = String.format("%.1fK", value / 1000.0);
-            else if (value == (long) value)
-                formatted = String.valueOf((long) value);
-            else
-                formatted = String.format("%.1f", value);
-        }
-        return formatted + unit;
     }
 
     /**

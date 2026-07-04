@@ -90,11 +90,26 @@ public class ProfileOrganizer {
     public static final int DEFAULT_MAX_ROUTERINFO_AGE_HOURS = 2;
     private static final long STARTUP_GRACE_PERIOD_MS = 10 * 60 * 1000L;
     private static final long PROOF_OF_LIFE_WINDOW_MS = 60 * 60 * 1000L;
-    private static final int ABSOLUTE_MAX_FAST_PEERS = 600;
+    public static final String PROP_MAXIMUM_FAST_PEERS = "profileOrganizer.maxFastPeers";
+    public static volatile int _defaultMaxFastPeers = 600;
+    /** @since 0.9.70+ */
+    public static int getDefaultMaxFastPeers() { return _defaultMaxFastPeers; }
+    /** @since 0.9.70+ */
+    public static void setDefaultMaxFastPeers(int val) { _defaultMaxFastPeers = Math.max(200, Math.min(3000, val)); }
 
     public static final String PROP_MINIMUM_HIGH_CAPACITY_PEERS = "profileOrganizer.minHighCapacityPeers";
     public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 500;
-    private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 800;
+    public static volatile int _defaultMinHighCapPeers = DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS;
+    /** @since 0.9.70+ */
+    public static int getMinHighCapacityPeers() { return _defaultMinHighCapPeers; }
+    /** @since 0.9.70+ */
+    public static void setMinHighCapacityPeers(int val) { _defaultMinHighCapPeers = Math.max(50, Math.min(2000, val)); }
+    public static final String PROP_MAXIMUM_HIGH_CAPACITY_PEERS = "profileOrganizer.maxHighCapacityPeers";
+    public static volatile int _defaultMaxHighCapPeers = 800;
+    /** @since 0.9.70+ */
+    public static int getDefaultMaxHighCapPeers() { return _defaultMaxHighCapPeers; }
+    /** @since 0.9.70+ */
+    public static void setDefaultMaxHighCapPeers(int val) { _defaultMaxHighCapPeers = Math.max(200, Math.min(4000, val)); }
 
     /** Minimum tunnel acceptance ratio (40%) to remain in high-capacity/fast tiers */
     private static final double MIN_TUNNEL_ACCEPTANCE_RATIO = 0.4;
@@ -1585,21 +1600,21 @@ public class ProfileOrganizer {
     }
 
     protected int getMaximumFastPeers() {
-        if (_context.router() == null) return ABSOLUTE_MAX_FAST_PEERS;
+        if (_context.router() == null) return _defaultMaxFastPeers;
         int known = _context.netDb().getKnownRouters();
-        return Math.max(known / 12, ABSOLUTE_MAX_FAST_PEERS);
+        return _context.getProperty(PROP_MAXIMUM_FAST_PEERS, known > 3000 ? Math.max(known / 12, _defaultMaxFastPeers) : _defaultMaxFastPeers);
     }
 
     protected int getMaximumHighCapPeers() {
-        if (_context.router() == null) return ABSOLUTE_MAX_HIGHCAP_PEERS;
+        if (_context.router() == null) return _defaultMaxHighCapPeers;
         int known = _context.netDb().getKnownRouters();
-        return Math.max(known / 10, ABSOLUTE_MAX_HIGHCAP_PEERS);
+        return _context.getProperty(PROP_MAXIMUM_HIGH_CAPACITY_PEERS, known > 3000 ? Math.max(known / 10, _defaultMaxHighCapPeers) : _defaultMaxHighCapPeers);
     }
 
     protected int getMinimumHighCapacityPeers() {
-        if (_context.router() == null) return DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS;
+        if (_context.router() == null) return _defaultMinHighCapPeers;
         int known = _context.netDb().getKnownRouters();
-        return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, known > 3000 ? Math.max(known / 15, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS) : DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS);
+        return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, known > 3000 ? Math.max(known / 15, _defaultMinHighCapPeers) : _defaultMinHighCapPeers);
     }
 
     private static final DecimalFormat _fmt = new DecimalFormat("###,##0.00", new DecimalFormatSymbols(Locale.UK));
