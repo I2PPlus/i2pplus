@@ -518,6 +518,14 @@ public class Tuner implements SimpleTimer.TimedEvent {
             _min = _autotune.getInt(name + ".min", _defaultMin);
             _max = _autotune.getInt(name + ".max", _defaultMax);
             _step = _autotune.getInt(name + ".step", _defaultStep);
+            // Clamp loaded ranges to constructor limits (enforce setter constraints)
+            // Prevents stale autotune.config values from exceeding actual setter limits
+            _min = Math.max(_defaultMin, _min);
+            _max = Math.min(_defaultMax, _max);
+            if (_min > _max) {
+                _min = _defaultMin;
+                _max = _defaultMax;
+            }
         }
 
         /** Re-read the default value from autotune.config — live update after form save */
@@ -2291,7 +2299,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         UDPHandlerThreadsParam() {
             super("udp.packetHandler.maxThreads", SUB_BUFFERS,
                   "Max UDP packet handler threads",
-                  1, 64, 1, "udp.pushTime", _context);
+                  4, 64, 1, "udp.pushTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -2575,10 +2583,12 @@ public class Tuner implements SimpleTimer.TimedEvent {
             double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
 
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 15000;
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean buildStorm = !Double.isNaN(concurrentBuilds) && concurrentBuilds > 15;
 
             // Scale divisor with actual tunnel count: share / numTunnels
             // When spare capacity: lower divisor = each tunnel gets more bandwidth
@@ -2593,7 +2603,8 @@ public class Tuner implements SimpleTimer.TimedEvent {
             }
 
             // Heavy load: increase divisor (each tunnel gets less)
-            if (usagePct > 0.5 || congested || systemBusy)
+            // But NOT during build storms — congestion is temporary, divisor will recover
+            if ((usagePct > 0.5 || congested || systemBusy) && !buildStorm)
                 return Math.min(_max, current + _step);
 
             return current;
@@ -2838,7 +2849,11 @@ public class Tuner implements SimpleTimer.TimedEvent {
             // Confirm sustained good health before relaxing throttle
             boolean sustainedGoodHealth = !Double.isNaN(hourlySuccess) && hourlySuccess > 0.9;
 
-            // Build storm = hold (don't trigger more rebuilds)
+            // Build storm + low success = actively decrease throttle (rebuild faster to fix pools)
+            if (buildStorm && observed < 0.7)
+                return Math.max(_min, current - _step);
+
+            // Build storm but good success = hold (throttle is working)
             if (buildStorm) return current;
 
             // Low success + light load = decrease throttle (rebuild faster to fix pools)
@@ -3955,7 +3970,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         BuildRequestTimeoutParam() {
             super("i2p.tunnel.build.requestTimeout", SUB_ROUTER,
                   "Build request reply timeout (ms)",
-                  1000, 60000, 1000, "tunnel.buildSuccessRate", _context);
+                  5000, 60000, 1000, "tunnel.buildSuccessRate", _context);
         }
 
         protected void applyValue(int value) {
@@ -3977,27 +3992,30 @@ public class Tuner implements SimpleTimer.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.buildSuccessRate (0.0-1.0)
-            // Cross-refs: concurrentBuilds (storm), sendConfirmTime (network latency)
-            // Hourly trend: confirm build success trend isn't just a short-term dip
+            // Cross-refs: concurrentBuilds (storm), sendProcessingTime (network latency),
+            //             buildReplySlow (actual reply RTT — most direct indicator)
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
             double confirmTime = getAdditionalStat(_context, "transport.sendProcessingTime");
-            double hourlySuccess = getAdditionalStatHourly(_context, _statName);
+            double buildReplySlow = getAdditionalStat(_context, "tunnel.buildReplySlow");
 
             boolean buildStorm = !Double.isNaN(concurrentBuilds) && concurrentBuilds > 15;
             boolean networkSlow = !Double.isNaN(confirmTime) && confirmTime > 200;
-            // Confirm sustained low success rate
-            boolean sustainedLowSuccess = !Double.isNaN(hourlySuccess) && hourlySuccess < 0.6;
+            // Replies taking >2× current timeout = network is congested
+            boolean repliesSlow = !Double.isNaN(buildReplySlow) && buildReplySlow > current * 2;
 
-            // Build storm = hold (don't increase timeout during storm, makes it worse)
+            // Build storm + slow replies = increase timeout urgently (network congested)
+            if (buildStorm && repliesSlow)
+                return Math.min(_max, current + _step * 2);
+
+            // Build storm but replies not slow = hold (congestion may resolve)
             if (buildStorm) return current;
 
-            // Low success + slow network = increase timeout (peers need more time)
-            // Require sustained trend to avoid over-reacting to brief dips
-            if (observed < 0.5 && networkSlow && sustainedLowSuccess)
+            // Low success + slow network or slow replies = increase timeout
+            if (observed < 0.7 && (networkSlow || repliesSlow))
                 return Math.min(_max, current + _step);
 
-            // High success + fast network = decrease timeout (tighten)
-            if (observed > 0.9 && !networkSlow)
+            // High success + fast network + fast replies = decrease timeout
+            if (observed > 0.9 && !networkSlow && !repliesSlow)
                 return Math.max(_min, current - _step);
 
             return current;
@@ -4012,7 +4030,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         BuildFirstHopTimeoutParam() {
             super("i2p.tunnel.build.firstHopTimeout", SUB_ROUTER,
                   "Build first-hop delivery timeout (ms)",
-                  1000, 60000, 1000, "tunnel.buildSuccessRate", _context);
+                  5000, 60000, 1000, "tunnel.buildSuccessRate", _context);
         }
 
         protected void applyValue(int value) {
@@ -4034,25 +4052,30 @@ public class Tuner implements SimpleTimer.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.buildSuccessRate (0.0-1.0)
-            // Cross-refs: concurrentBuilds (storm), sendConfirmTime (network latency)
-            // Hourly trend: confirm build success trend isn't just a short-term dip
+            // Cross-refs: concurrentBuilds (storm), sendProcessingTime (network latency),
+            //             buildReplySlow (actual reply RTT — most direct indicator)
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
             double confirmTime = getAdditionalStat(_context, "transport.sendProcessingTime");
-            double hourlySuccess = getAdditionalStatHourly(_context, _statName);
+            double buildReplySlow = getAdditionalStat(_context, "tunnel.buildReplySlow");
 
             boolean buildStorm = !Double.isNaN(concurrentBuilds) && concurrentBuilds > 15;
             boolean networkSlow = !Double.isNaN(confirmTime) && confirmTime > 200;
-            // Confirm sustained low success rate
-            boolean sustainedLowSuccess = !Double.isNaN(hourlySuccess) && hourlySuccess < 0.6;
+            // Replies taking >2× current timeout = network is congested
+            boolean repliesSlow = !Double.isNaN(buildReplySlow) && buildReplySlow > current * 2;
 
+            // Build storm + slow replies = increase timeout urgently (network congested)
+            if (buildStorm && repliesSlow)
+                return Math.min(_max, current + _step * 2);
+
+            // Build storm but replies not slow = hold (congestion may resolve)
             if (buildStorm) return current;
 
-            // Low success + slow network = increase timeout (peers need more time)
-            // Require sustained trend to avoid over-reacting to brief dips
-            if (observed < 0.5 && networkSlow && sustainedLowSuccess)
+            // Low success + slow network or slow replies = increase timeout
+            if (observed < 0.7 && (networkSlow || repliesSlow))
                 return Math.min(_max, current + _step);
 
-            if (observed > 0.9 && !networkSlow)
+            // High success + fast network + fast replies = decrease timeout
+            if (observed > 0.9 && !networkSlow && !repliesSlow)
                 return Math.max(_min, current - _step);
 
             return current;
