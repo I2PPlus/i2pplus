@@ -167,6 +167,7 @@ public class ProfileOrganizer {
         _context.statManager().createRequiredRateStat("peer.profileCount", "Number of peer profiles in memory", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.activeProfileCount", "Number of active peer profiles", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.fastPeerCount", "Number of fast-tier peers", "Peers", RATES);
+        _context.statManager().createRequiredRateStat("peer.qualityPeerCount", "Peers with good acceptance + recent activity", "Peers", RATES);
     }
 
     /**
@@ -806,6 +807,17 @@ public class ProfileOrganizer {
                 }
             }
 
+            // Step 6b: Count quality peers (fast/high-cap with good acceptance + recent activity)
+            // Used by tuner to adjust tier limits based on viable tunnel candidates
+            int qualityCount = 0;
+            long recentCutoff = now - 24 * 60 * 60 * 1000L; // 24 hours
+            for (PeerProfile profile : _fastPeers.values()) {
+                if (isQualityPeer(profile, recentCutoff)) qualityCount++;
+            }
+            for (PeerProfile profile : _highCapacityPeers.values()) {
+                if (!profile.isLowLatency() && isQualityPeer(profile, recentCutoff)) qualityCount++;
+            }
+
             // Step 7: Update global thresholds
             _strictCapacityOrder = newStrictCapacityOrder;
             _thresholdCapacityValue = newCapacityThreshold;
@@ -820,13 +832,15 @@ public class ProfileOrganizer {
                           ", Spd: " + num(_thresholdSpeedValue) +
                           ", Int: " + num(_thresholdIntegrationValue) +
                           " -> Fast peers: " + _fastPeers.size() + " (added " + added + " via fallback)" +
-                          ", HighCap peers: " + _highCapacityPeers.size() + " (added " + highCapAdded + " via fallback)");
+                          ", HighCap peers: " + _highCapacityPeers.size() + " (added " + highCapAdded + " via fallback)" +
+                          ", Quality peers: " + qualityCount);
             }
 
             long total = System.currentTimeMillis() - start;
             _context.statManager().addRateData("peer.profileReorgTime", total, profileCount);
             _context.statManager().addRateData("peer.activeProfileCount", profileCount, 0);
             _context.statManager().addRateData("peer.fastPeerCount", _fastPeers.size(), 0);
+            _context.statManager().addRateData("peer.qualityPeerCount", qualityCount, 0);
             _context.statManager().addRateData("peer.expiredProfileCount", expiredCount, 0);
 
             // Step 10: Enforce memory cap
@@ -1590,6 +1604,35 @@ public class ProfileOrganizer {
                        " ratio: " + String.format("%.2f", ratio * 100) + "% (" + agreed + " accept / " +
                        rejected + " reject)");
         }
+        return true;
+    }
+
+    /**
+     * Check if peer is a quality tunnel candidate: good acceptance ratio,
+     * selectable, and recently active. Used by tuner to adjust tier limits
+     * based on viable peers, not just raw counts.
+     * @since 0.9.70+
+     */
+    private boolean isQualityPeer(PeerProfile profile, long recentCutoff) {
+        if (profile.getPeer().equals(_us)) return false;
+        if (!isSelectable(profile.getPeer())) return false;
+
+        // Must have recent activity (last send within 24h)
+        long lastSend = profile.getLastSendSuccessful();
+        if (lastSend < recentCutoff) return false;
+
+        // Check acceptance ratio
+        TunnelHistory th = profile.getTunnelHistory();
+        if (th != null) {
+            long agreed = th.getLifetimeAgreedTo();
+            long rejected = th.getLifetimeRejected();
+            long totalRequests = agreed + rejected;
+            if (totalRequests >= MIN_TUNNEL_REQUESTS) {
+                double ratio = (double) agreed / totalRequests;
+                if (ratio < MIN_TUNNEL_ACCEPTANCE_RATIO) return false;
+            }
+        }
+
         return true;
     }
 

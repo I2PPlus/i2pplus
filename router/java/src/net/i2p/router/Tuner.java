@@ -937,7 +937,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         ObEstablishTimeParam() {
             super("MAX_OB_ESTABLISH_TIME", SUB_TRANSPORT,
                   "Outbound establish timeout (ms)",
-                  1000, 5000, 500, "udp.outboundEstablishTime", _context);
+                  3000, 30000, 500, "udp.outboundEstablishTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -994,7 +994,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         IbEstablishTimeParam() {
             super("MAX_IB_ESTABLISH_TIME", SUB_TRANSPORT,
                   "Inbound establish timeout (ms)",
-                  1000, 8000, 500, "udp.inboundEstablishTime", _context);
+                  3000, 20000, 500, "udp.inboundEstablishTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -1674,13 +1674,21 @@ public class Tuner implements SimpleTimer.TimedEvent {
             if (dropping || congested)
                 return Math.max(_min, current - _step);
 
-            // High RTT = shrink cap (slow pipe can't handle large windows)
-            if (observed > 5000)
+            // Dead zone: hold at default unless signal is strong
+            if (current == _defaultValue && !dropping && !congested)
+                return current;
+
+            // Below default: increase only if RTT is clearly low AND no drops/congestion
+            if (current < _defaultValue && observed < 2000 && !dropping && !congested)
+                return Math.min(_max, current + _step);
+
+            // Above default: decrease if RTT is high
+            if (current > _defaultValue && observed > 5000)
                 return Math.max(_min, current - _step);
 
-            // Low RTT + no drops = increase cap
-            if (observed < 2000 && !dropping && !congested)
-                return Math.min(_max, current + _step);
+            // High RTT = shrink cap (slow pipe can't handle large windows)
+            if (observed > 8000)
+                return Math.max(_min, current - _step);
 
             return current;
         }
@@ -3175,6 +3183,10 @@ public class Tuner implements SimpleTimer.TimedEvent {
             if (!networkHealthy)
                 return Math.max(_min, current - _step);
 
+            // Dead zone: hold at default unless signal is strong
+            if (current == _defaultValue && !dropping && !congested && networkHealthy)
+                return current;
+
             // Large window at congestion + healthy network + no drops = increase growth
             if (observed > 20 && networkHealthy && !dropping && !congested)
                 return Math.min(_max, current + _step);
@@ -3186,6 +3198,8 @@ public class Tuner implements SimpleTimer.TimedEvent {
     /**
      * Slow start growth rate factor.
      * Higher = more aggressive ramp-up during slow start.
+     * Dead zone: hold at default unless signal is strong. This prevents
+     * the classic ping-pong where RTT fluctuates around the threshold.
      */
     private class SlowStartGrowthParam extends BaseParam {
 
@@ -3232,14 +3246,26 @@ public class Tuner implements SimpleTimer.TimedEvent {
             }
 
             // Drops or congestion = slow ramp (loss minimization)
-            if (dropping || congested || !networkHealthy)
+            if (dropping || congested)
                 return Math.max(_min, current - _step);
 
-            // Low RTT + healthy network + no drops = faster ramp
-            if (observed < 5000 && networkHealthy && !dropping)
+            // Network unhealthy = slow ramp
+            if (!networkHealthy)
+                return Math.max(_min, current - _step);
+
+            // Dead zone: if current == default and no strong signal, hold
+            if (current == _defaultValue && !dropping && !congested && networkHealthy)
+                return current;
+
+            // Below default: increase only if RTT is clearly low AND healthy
+            if (current < _defaultValue && observed < 3000 && networkHealthy && !dropping && !congested)
                 return Math.min(_max, current + _step);
 
-            // High RTT = slower ramp
+            // Above default: decrease if RTT is high OR network unhealthy
+            if (current > _defaultValue && (observed > 8000 || !networkHealthy))
+                return Math.max(_min, current - _step);
+
+            // High RTT = slower ramp (regardless of position)
             if (observed > 8000)
                 return Math.max(_min, current - _step);
 
@@ -3789,7 +3815,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         MaxFastPeersParam() {
             super("profileOrganizer.maxFastPeers", SUB_PEER,
                   "Max fast-tier peers",
-                  200, 3000, 50, "peer.fastPeerCount", _context);
+                  200, 3000, 50, "peer.qualityPeerCount", _context);
         }
 
         protected void applyValue(int value) {
@@ -3811,27 +3837,28 @@ public class Tuner implements SimpleTimer.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int minFast = ProfileOrganizer.getDefaultMinFastPeers();
-            // observed = peer.fastPeerCount
-            // Cross-refs: activeProfileCount, minFastPeers (must stay above min)
+            // observed = peer.qualityPeerCount (fast/high-cap peers with good acceptance + recent activity)
+            // Cross-refs: peer.fastPeerCount (raw count), peer.activeProfileCount (total pool)
+            double fastPeers = getAdditionalStat(_context, "peer.fastPeerCount");
             double activeProfiles = getAdditionalStat(_context, "peer.activeProfileCount");
-            double hourlyFastPeers = getAdditionalStatHourly(_context, _statName);
+            double hourlyQuality = getAdditionalStatHourly(_context, _statName);
 
             boolean largePool = !Double.isNaN(activeProfiles) && activeProfiles > 500;
-            boolean sustainedHighFastPeers = !Double.isNaN(hourlyFastPeers) && hourlyFastPeers > current * 0.8;
+            boolean sustainedHighQuality = !Double.isNaN(hourlyQuality) && hourlyQuality > current * 0.8;
 
             // Ensure max always stays above min + 100
             int floor = Math.min(minFast + 100, _max);
 
-            // Observed fast peers near or above max + large pool + sustained = raise max
-            if (observed > current * 0.85 && largePool && sustainedHighFastPeers)
+            // Quality peers near or above max + large pool + sustained = raise max
+            if (observed > current * 0.85 && largePool && sustainedHighQuality)
                 return Math.max(floor, Math.min(_max, current + _step));
 
             // Well below max = decrease (save resources)
             if (observed < current * 0.4 && observed < floor)
                 return Math.max(floor, current - _step);
 
-            // Fast peers declining but still above min = tighten slightly
-            if (observed < current * 0.6 && !sustainedHighFastPeers)
+            // Quality peers declining but still above min = tighten slightly
+            if (observed < current * 0.6 && !sustainedHighQuality)
                 return Math.max(floor, current - _step);
 
             return current;
@@ -3846,7 +3873,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         MinHighCapPeersParam() {
             super("profileOrganizer.minHighCapacityPeers", SUB_PEER,
                   "Min high-capacity peers",
-                  50, 2000, 50, "peer.activeProfileCount", _context);
+                  50, 2000, 50, "peer.qualityPeerCount", _context);
         }
 
         protected void applyValue(int value) {
@@ -3868,21 +3895,21 @@ public class Tuner implements SimpleTimer.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int maxHighCap = ProfileOrganizer.getDefaultMaxHighCapPeers();
-            // observed = peer.activeProfileCount
+            // observed = peer.qualityPeerCount (fast/high-cap peers with good acceptance + recent activity)
             // Cross-refs: peer.fastPeerCount, tunnel build success rate
             double fastPeers = getAdditionalStat(_context, "peer.fastPeerCount");
             double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
-            double hourlyProfiles = getAdditionalStatHourly(_context, _statName);
+            double hourlyQuality = getAdditionalStatHourly(_context, _statName);
 
             boolean manyFastPeers = !Double.isNaN(fastPeers) && fastPeers > 300;
             boolean goodBuild = !Double.isNaN(buildSuccess) && buildSuccess > 0.6;
-            boolean sustainedHighProfiles = !Double.isNaN(hourlyProfiles) && hourlyProfiles > current;
+            boolean sustainedHighQuality = !Double.isNaN(hourlyQuality) && hourlyQuality > current;
 
             // Ensure min always stays below max - 100
             int ceiling = Math.max(maxHighCap - 100, _min);
 
-            // Large active pool + good build success + sustained = raise minimum
-            if (observed > current * 1.5 && manyFastPeers && sustainedHighProfiles)
+            // Quality peers growing + good build success + sustained = raise minimum
+            if (observed > current * 1.5 && manyFastPeers && sustainedHighQuality)
                 return Math.min(ceiling, Math.min(_max, current + _step));
 
             // Good build acceptance + many fast peers = more high-cap peers useful
@@ -3893,7 +3920,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
             if ((!Double.isNaN(buildSuccess) && buildSuccess < 0.4) || observed < current * 0.5)
                 return Math.max(_min, Math.max(current - _step, _min));
 
-            // Few active profiles = decrease minimum
+            // Few quality peers = decrease minimum
             if (observed < current * 0.6)
                 return Math.max(_min, current - _step);
 
@@ -3909,7 +3936,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         MaxHighCapPeersParam() {
             super("profileOrganizer.maxHighCapacityPeers", SUB_PEER,
                   "Max high-capacity peers",
-                  200, 4000, 50, "peer.activeProfileCount", _context);
+                  200, 4000, 50, "peer.qualityPeerCount", _context);
         }
 
         protected void applyValue(int value) {
@@ -3931,27 +3958,27 @@ public class Tuner implements SimpleTimer.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int minHighCap = ProfileOrganizer.getMinHighCapacityPeers();
-            // observed = peer.activeProfileCount
+            // observed = peer.qualityPeerCount (fast/high-cap peers with good acceptance + recent activity)
             // Cross-refs: peer.fastPeerCount, minHighCapacityPeers (must stay above min)
             double fastPeers = getAdditionalStat(_context, "peer.fastPeerCount");
-            double hourlyProfiles = getAdditionalStatHourly(_context, _statName);
+            double hourlyQuality = getAdditionalStatHourly(_context, _statName);
 
             boolean manyFastPeers = !Double.isNaN(fastPeers) && fastPeers > 300;
-            boolean sustainedHighProfiles = !Double.isNaN(hourlyProfiles) && hourlyProfiles > current * 0.8;
+            boolean sustainedHighQuality = !Double.isNaN(hourlyQuality) && hourlyQuality > current * 0.8;
 
             // Ensure max always stays above min + 100
             int floor = Math.min(minHighCap + 100, _max);
 
-            // Active pool growing + many fast peers + sustained = raise max
-            if (observed > current * 0.85 && manyFastPeers && sustainedHighProfiles)
+            // Quality peers growing + many fast peers + sustained = raise max
+            if (observed > current * 0.85 && manyFastPeers && sustainedHighQuality)
                 return Math.max(floor, Math.min(_max, current + _step));
 
             // Well below max = decrease (save resources)
             if (observed < current * 0.4 && observed < floor)
                 return Math.max(floor, current - _step);
 
-            // Declining but still above min = tighten slightly
-            if (observed < current * 0.6 && !sustainedHighProfiles)
+            // Quality peers declining but still above min = tighten slightly
+            if (observed < current * 0.6 && !sustainedHighQuality)
                 return Math.max(floor, current - _step);
 
             return current;
@@ -3970,7 +3997,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         BuildRequestTimeoutParam() {
             super("i2p.tunnel.build.requestTimeout", SUB_ROUTER,
                   "Build request reply timeout (ms)",
-                  5000, 60000, 1000, "tunnel.buildSuccessRate", _context);
+                  5000, 15000, 1000, "tunnel.buildClientExpire", _context);
         }
 
         protected void applyValue(int value) {
@@ -3991,31 +4018,40 @@ public class Tuner implements SimpleTimer.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = tunnel.buildSuccessRate (0.0-1.0)
-            // Cross-refs: concurrentBuilds (storm), sendProcessingTime (network latency),
-            //             buildReplySlow (actual reply RTT — most direct indicator)
+            // observed = tunnel.buildClientExpire (count of timed-out builds in last minute)
+            // Primary signal: direct count of builds that expired waiting for a reply.
+            // If builds are timing out, we need MORE time (not less).
+            // Cross-refs: concurrentBuilds (storm detection),
+            //             buildSuccessRate (overall health)
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
-            double confirmTime = getAdditionalStat(_context, "transport.sendProcessingTime");
-            double buildReplySlow = getAdditionalStat(_context, "tunnel.buildReplySlow");
+            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
 
             boolean buildStorm = !Double.isNaN(concurrentBuilds) && concurrentBuilds > 15;
-            boolean networkSlow = !Double.isNaN(confirmTime) && confirmTime > 200;
-            // Replies taking >2× current timeout = network is congested
-            boolean repliesSlow = !Double.isNaN(buildReplySlow) && buildReplySlow > current * 2;
+            boolean successLow = !Double.isNaN(buildSuccess) && buildSuccess < 0.5;
 
-            // Build storm + slow replies = increase timeout urgently (network congested)
-            if (buildStorm && repliesSlow)
+            // Build storm: DON'T increase timeout (storm = too many concurrent builds, not timeout issue)
+            // Only decrease or hold during storms
+            if (buildStorm) {
+                // Storm + decent success = decrease (the storm is the problem, not timeout)
+                if (buildSuccess > 0.7)
+                    return Math.max(_min, current - _step * 2);
+                return current;
+            }
+
+            // Builds expiring + low success = increase timeout (peers need more time to respond)
+            if (observed > 5 && successLow)
                 return Math.min(_max, current + _step * 2);
 
-            // Build storm but replies not slow = hold (congestion may resolve)
-            if (buildStorm) return current;
-
-            // Low success + slow network or slow replies = increase timeout
-            if (observed < 0.7 && (networkSlow || repliesSlow))
+            // Builds expiring but success ok = increase slightly (edge case)
+            if (observed > 10)
                 return Math.min(_max, current + _step);
 
-            // High success + fast network + fast replies = decrease timeout
-            if (observed > 0.9 && !networkSlow && !repliesSlow)
+            // Storm cleared (concurrentBuilds < 5) + no expirations = decrease aggressively
+            if (!Double.isNaN(concurrentBuilds) && concurrentBuilds < 5 && observed < 1)
+                return Math.max(_min, current - _step * 2);
+
+            // No expirations + high success = decrease (room to go faster)
+            if (observed < 1 && !Double.isNaN(buildSuccess) && buildSuccess > 0.9)
                 return Math.max(_min, current - _step);
 
             return current;
@@ -4024,13 +4060,14 @@ public class Tuner implements SimpleTimer.TimedEvent {
 
     /**
      * Build first-hop delivery timeout.
+     * Primary signal: tunnel.buildFailFirstHop (direct first-hop failures).
      */
     private class BuildFirstHopTimeoutParam extends BaseParam {
 
         BuildFirstHopTimeoutParam() {
             super("i2p.tunnel.build.firstHopTimeout", SUB_ROUTER,
                   "Build first-hop delivery timeout (ms)",
-                  5000, 60000, 1000, "tunnel.buildSuccessRate", _context);
+                  5000, 10000, 1000, "tunnel.buildFailFirstHop", _context);
         }
 
         protected void applyValue(int value) {
@@ -4051,31 +4088,29 @@ public class Tuner implements SimpleTimer.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = tunnel.buildSuccessRate (0.0-1.0)
-            // Cross-refs: concurrentBuilds (storm), sendProcessingTime (network latency),
-            //             buildReplySlow (actual reply RTT — most direct indicator)
+            // observed = tunnel.buildFailFirstHop (count of first-hop delivery failures)
+            // Primary signal: if first hops are failing, we need MORE delivery time.
+            // Cross-refs: concurrentBuilds (storm detection)
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
-            double confirmTime = getAdditionalStat(_context, "transport.sendProcessingTime");
-            double buildReplySlow = getAdditionalStat(_context, "tunnel.buildReplySlow");
 
             boolean buildStorm = !Double.isNaN(concurrentBuilds) && concurrentBuilds > 15;
-            boolean networkSlow = !Double.isNaN(confirmTime) && confirmTime > 200;
-            // Replies taking >2× current timeout = network is congested
-            boolean repliesSlow = !Double.isNaN(buildReplySlow) && buildReplySlow > current * 2;
 
-            // Build storm + slow replies = increase timeout urgently (network congested)
-            if (buildStorm && repliesSlow)
-                return Math.min(_max, current + _step * 2);
-
-            // Build storm but replies not slow = hold (congestion may resolve)
+            // Build storm: DON'T increase (storm = too many concurrent, not timeout issue)
             if (buildStorm) return current;
 
-            // Low success + slow network or slow replies = increase timeout
-            if (observed < 0.7 && (networkSlow || repliesSlow))
+            // First-hop failures = increase timeout (OB delivery needs more time)
+            if (observed > 5)
+                return Math.min(_max, current + _step * 2);
+
+            if (observed > 2)
                 return Math.min(_max, current + _step);
 
-            // High success + fast network + fast replies = decrease timeout
-            if (observed > 0.9 && !networkSlow && !repliesSlow)
+            // Storm cleared + no first-hop failures = decrease aggressively
+            if (!Double.isNaN(concurrentBuilds) && concurrentBuilds < 5 && observed < 1)
+                return Math.max(_min, current - _step * 2);
+
+            // No failures = decrease (room to go faster)
+            if (observed < 1)
                 return Math.max(_min, current - _step);
 
             return current;
