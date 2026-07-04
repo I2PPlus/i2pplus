@@ -298,6 +298,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         // NTCP thread params
         _params.add(new NtcpReaderThreadsParam());
         _params.add(new NtcpWriterThreadsParam());
+        _params.add(new NtcpFailsafeFreqParam());
 
         // Purge stale tuner.* keys from router.config (one-time cleanup)
         purgeOldTunerProps(ctx);
@@ -4685,6 +4686,72 @@ public class Tuner implements SimpleTimer.TimedEvent {
                 if (current > _min)
                     return Math.max(_min, current - 1);
             }
+
+            return current;
+        }
+    }
+
+    /**
+     * Tunes NTCP failsafe iteration frequency based on connection count.
+     *
+     * <p>Primary signal: {@code ntcp.failsafeIterationTime} (ms, iteration duration).
+     * Cross-refs: {@code ntcp.pumperKeySetSize} (connection count), {@code jobQueue.jobLag} (CPU).
+     *
+     * <p>Increases interval under high connection counts to reduce pumper overhead.
+     * Decreases interval under low connection counts for faster idle detection.
+     *
+     * @since 0.9.70+
+     */
+    private class NtcpFailsafeFreqParam extends BaseParam {
+
+        NtcpFailsafeFreqParam() {
+            super("ntcp.failsafe.iterationFreq", SUB_BUFFERS,
+                  "NTCP pumper failsafe interval (ms)",
+                  2000, 30000, 1000, "ntcp.failsafeIterationTime", _context);
+        }
+
+        protected void applyValue(int value) {
+            NTCPTransport.setFailsafeIterationFreq(value);
+        }
+
+        protected int getRuntimeValue() {
+            return (int) NTCPTransport.getFailsafeIterationFreq();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = ntcp.failsafeIterationTime (ms, time to iterate all connections)
+            // Cross-refs: ntcp.pumperKeySetSize (connection count), jobQueue.jobLag (CPU)
+            double keysetSize = getAdditionalStat(_context, "ntcp.pumperKeySetSize");
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 50;
+            int connections = !Double.isNaN(keysetSize) ? (int) keysetSize : 0;
+            boolean highIterationTime = observed > 50;
+            boolean manyConnections = connections > 500;
+
+            // High iteration time or many connections + CPU pressure = increase interval
+            if ((highIterationTime || manyConnections) && cpuPressure)
+                return Math.min(_max, current + _step);
+
+            // High iteration time without CPU pressure = moderate increase
+            if (highIterationTime && current < _max)
+                return Math.min(_max, current + _step);
+
+            // Many connections = increase interval to reduce overhead
+            if (manyConnections && current < _max)
+                return Math.min(_max, current + _step);
+
+            // Low iteration time + few connections + no CPU pressure = decrease interval
+            if (observed < 10 && connections < 100 && !cpuPressure && current > _min)
+                return Math.max(_min, current - _step);
 
             return current;
         }

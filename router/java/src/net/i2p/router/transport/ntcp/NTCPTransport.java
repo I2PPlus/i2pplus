@@ -2013,6 +2013,12 @@ public class NTCPTransport extends TransportImpl {
     public static void setSelectorLoopDelay(long ms) { EventPumper.setSelectorLoopDelay(ms); }
 
     /** @since 0.9.70+ */
+    public static long getFailsafeIterationFreq() { return EventPumper.getFailsafeIterationFreq(); }
+
+    /** @since 0.9.70+ */
+    public static void setFailsafeIterationFreq(long ms) { EventPumper.setFailsafeIterationFreq(ms); }
+
+    /** @since 0.9.70+ */
     public static int getSendFinisherMaxThreads() { return NTCPSendFinisher.getMaxThreads(); }
 
     /** @since 0.9.70+ */

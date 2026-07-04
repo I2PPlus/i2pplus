@@ -122,7 +122,9 @@ class EventPumper implements Runnable {
      * the time to iterate across them to check a few flags shouldn't be a problem.
      */
     private static final boolean IS_SLOW = SystemVersion.isSlow();
-    private static final long FAILSAFE_ITERATION_FREQ = 2 * 1000L;
+    private static volatile long _failsafeIterationFreq = 2 * 1000L;
+    private static final long MIN_FAILSAFE_FREQ = 2 * 1000L;
+    private static final long MAX_FAILSAFE_FREQ = 30 * 1000L;
     private static final int FAILSAFE_LOOP_COUNT = IS_SLOW ? 512 : 2048;
     private static volatile long _selectorLoopDelay = IS_SLOW ? 100 : 5;
     private static final long SELECTOR_MAX_DELAY = 200;  // Max delay when under load
@@ -165,6 +167,7 @@ class EventPumper implements Runnable {
         _failedInboundHandshake = new ObjectCounter<>();
         _context.statManager().createRateStat("ntcp.pumperKeySetSize", "Number of NTCP Pumper KeySetSize events", "Transport [NTCP]", RATES);
         _context.statManager().createRequiredRateStat("ntcp.pumperLoopsPerSecond", "Number of NTCP Pumper loops/s", "Transport [NTCP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        _context.statManager().createRequiredRateStat("ntcp.failsafeIterationTime", "NTCP failsafe iteration time in ms", "Transport [NTCP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("ntcp.zeroRead", "Number of NTCP zero length read events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.zeroReadDrop", "Number of NTCP zero length read events dropped", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.dropInboundNoMessage", "Number of NTCP Inbound empty message drop events", "Transport [NTCP]", RATES);
@@ -328,8 +331,8 @@ class EventPumper implements Runnable {
                     _lastRetryMapClear = now;
                 }
 
-                // Periodic failsafe iteration (every 2s)
-                if (now - lastFailsafeIteration >= FAILSAFE_ITERATION_FREQ) {
+                // Periodic failsafe iteration (adaptive frequency)
+                if (now - lastFailsafeIteration >= _failsafeIterationFreq) {
                     doFailsafeCheck();
                     lastFailsafeIteration = now;
                 }
@@ -395,6 +398,7 @@ class EventPumper implements Runnable {
      * - Send periodic RouterInfo
      */
     private void doFailsafeCheck() {
+        long startTime = System.nanoTime();
         try {
             Set<SelectionKey> all = _selector.keys();
             int failsafeWrites = 0;
@@ -442,7 +446,8 @@ class EventPumper implements Runnable {
                         long estab = con.getEstablishedOn();
                         if (estab > 0) {
                             long uptime = now - estab;
-                            if (uptime >= RI_STORE_INTERVAL && (uptime % RI_STORE_INTERVAL) < FAILSAFE_ITERATION_FREQ) {
+                            long freq = _failsafeIterationFreq;
+                            if (uptime >= RI_STORE_INTERVAL && (uptime % RI_STORE_INTERVAL) < freq) {
                                 con.sendOurRouterInfo(false);
                             }
                         }
@@ -456,6 +461,8 @@ class EventPumper implements Runnable {
             if (failsafeInvalid > 0)
                 _context.statManager().addRateData("ntcp.failsafeInvalid", failsafeInvalid);
         } catch (ClosedSelectorException ignored) { /* ignored */ }
+        long elapsed = (System.nanoTime() - startTime) / 1_000_000;
+        _context.statManager().addRateData("ntcp.failsafeIterationTime", elapsed);
     }
 
     private void processKeys(Set<SelectionKey> selected) {
@@ -1127,6 +1134,12 @@ class EventPumper implements Runnable {
 
     /** @since 0.9.70+ */
     public static void setSelectorLoopDelay(long ms) { _selectorLoopDelay = Math.max(1, Math.min(100, ms)); }
+
+    /** @since 0.9.70+ */
+    public static long getFailsafeIterationFreq() { return _failsafeIterationFreq; }
+
+    /** @since 0.9.70+ */
+    public static void setFailsafeIterationFreq(long ms) { _failsafeIterationFreq = Math.max(MIN_FAILSAFE_FREQ, Math.min(MAX_FAILSAFE_FREQ, ms)); }
 
     public static void setInterest(SelectionKey key, int op) throws CancelledKeyException {
         if (key == null || !key.isValid()) return;
