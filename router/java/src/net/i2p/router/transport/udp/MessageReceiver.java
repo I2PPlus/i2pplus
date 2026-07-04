@@ -1,6 +1,8 @@
 package net.i2p.router.transport.udp;
 
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Base64;
 import net.i2p.data.ByteArray;
 import net.i2p.data.i2np.DatabaseStoreMessage;
@@ -20,6 +22,9 @@ import net.i2p.util.SystemVersion;
  * Pull fully completed fragments off the {@link InboundMessageFragments} queue,
  * parse 'em into I2NPMessages, and stick them on the
  * {@link net.i2p.router.InNetMessagePool} by way of the {@link UDPTransport}.
+ *
+ * Supports dynamic thread count adjustment via {@link #setThreadCount(int)}.
+ * @since 0.9.14 (dynamic resizing since 0.9.70+)
  */
 class MessageReceiver {
     private final RouterContext _context;
@@ -29,9 +34,12 @@ class MessageReceiver {
     /** list of messages (InboundMessageState) fully received but not interpreted yet */
     private final BlockingQueue<InboundMessageState> _completeMessages;
     private volatile boolean _alive;
-    private static final int MAX_THREADS = SystemVersion.isSlow() ? 2 : 3;
-    private final int _threadCount;
+    private static volatile int _threadCount = SystemVersion.isSlow() ? 2 : 3;
+    private final AtomicInteger _activeRunners = new AtomicInteger();
+    private final CopyOnWriteArrayList<Runner> _runners = new CopyOnWriteArrayList<>();
     private static final long POISON_IMS = -99999999999L;
+    private static final int MIN_THREADS = 1;
+    private static final int MAX_THREADS = 16;
 
     public MessageReceiver(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
@@ -40,24 +48,60 @@ class MessageReceiver {
         _banLogger = new BanLogger();
         _banLogger.initialize(ctx);
         long maxMemory = SystemVersion.getMaxMemory();
-        _threadCount = MAX_THREADS;
         int qsize = Math.max(64, Math.min(512, (int)(maxMemory / (32 * 1024 * 1024L))));
         _completeMessages = new CoDelBlockingQueue<>(ctx, "UDP-MessageReceiver", qsize);
-        _context.statManager().createRateStat("udp.inboundExpired", "Number of inbound messages expired before receipt", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRequiredRateStat("udp.inboundExpired", "Number of inbound messages expired before receipt", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRequiredRateStat("udp.msgRx.queueSize", "UDP message receiver queue depth", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRequiredRateStat("codel.UDP-MessageReceiver.delay", "Average queue delay (ms)", "Transport [UDP]", UDPTransport.RATES);
         _alive = true;
+    }
+
+    /**
+     * Returns the current target thread count.
+     * @since 0.9.70+
+     */
+    public static int getThreadCount() { return _threadCount; }
+
+    /**
+     * Returns the current queue depth of the message receiver.
+     * @since 0.9.70+
+     */
+    public int getQueueSize() { return _completeMessages.size(); }
+
+    /**
+     * Returns the maximum capacity of the message receiver queue.
+     * @since 0.9.70+
+     */
+    public int getQueueCapacity() { return _completeMessages.size() + _completeMessages.remainingCapacity(); }
+
+    /**
+     * Sets the target thread count. Takes effect immediately — excess threads
+     * will exit, new threads will be started if needed.
+     * @since 0.9.70+
+     */
+    public static void setThreadCount(int count) {
+        _threadCount = Math.max(MIN_THREADS, Math.min(MAX_THREADS, count));
     }
 
     public synchronized void startup() {
         _alive = true;
-        for (int i = 0; i < _threadCount; i++) {
-            I2PThread t = new I2PThread(new Runner(), "UDPMsgRX " + (i+1) + '/' + _threadCount, true);
-            t.start();
+        int count = _threadCount;
+        for (int i = 0; i < count; i++) {
+            startRunner();
         }
+    }
+
+    private void startRunner() {
+        Runner r = new Runner();
+        _runners.add(r);
+        _activeRunners.incrementAndGet();
+        I2PThread t = new I2PThread(r, "UDPMsgRX " + _activeRunners.get() + '/' + _threadCount, true);
+        t.start();
     }
 
     private class Runner implements Runnable {
         private final I2NPMessageHandler _handler;
-        public Runner() { _handler = new I2NPMessageHandler(_context); }
+        Runner() { _handler = new I2NPMessageHandler(_context); }
         @Override
         public void run() { loop(_handler); }
     }
@@ -65,7 +109,8 @@ class MessageReceiver {
     public synchronized void shutdown() {
         _alive = false;
         _completeMessages.clear();
-        for (int i = 0; i < _threadCount; i++) {
+        // poison all active runners
+        for (int i = 0; i < _activeRunners.get(); i++) {
             InboundMessageState ims = new InboundMessageState(_context, POISON_IMS, null);
             _completeMessages.offer(ims);
         }
@@ -76,6 +121,43 @@ class MessageReceiver {
             }
         }
         _completeMessages.clear();
+        _runners.clear();
+        _activeRunners.set(0);
+    }
+
+    /**
+     *  Dynamically adjust thread count. If target is higher than current,
+     *  start new runners. If lower, poison excess runners.
+     *
+     *  @since 0.9.70+
+     */
+    void adjustThreads() {
+        if (!_alive) return;
+        int target = _threadCount;
+        int current = _activeRunners.get();
+        while (current < target) {
+            if (_activeRunners.compareAndSet(current, current + 1)) {
+                Runner r = new Runner();
+                _runners.add(r);
+                I2PThread t = new I2PThread(r, "UDPMsgRX " + (current + 1) + '/' + target, true);
+                t.start();
+                _log.info("Added MessageReceiver thread, now " + (current + 1) + "/" + target);
+                current = _activeRunners.get();
+            } else {
+                current = _activeRunners.get();
+            }
+        }
+        while (current > target) {
+            if (_activeRunners.compareAndSet(current, current - 1)) {
+                // signal one runner to exit
+                InboundMessageState ims = new InboundMessageState(_context, POISON_IMS, null);
+                _completeMessages.offer(ims);
+                _log.info("Removing MessageReceiver thread, now " + (current - 1) + "/" + target);
+                current = _activeRunners.get();
+            } else {
+                current = _activeRunners.get();
+            }
+        }
     }
 
     /**
@@ -87,45 +169,49 @@ class MessageReceiver {
         if (_alive) {
             try {_completeMessages.put(state);}
             catch (InterruptedException ie) { Thread.currentThread().interrupt(); _alive = false; }
+            _context.statManager().addRateData("udp.msgRx.queueSize", _completeMessages.size());
         }
     }
 
-    public void loop(I2NPMessageHandler handler) {
+    void loop(I2NPMessageHandler handler) {
         InboundMessageState message = null;
         ByteArray buf = new ByteArray(new byte[I2NPMessage.MAX_SIZE]);
-        while (_alive) {
-            int expired = 0;
-            long expiredLifetime = 0;
-            try {
-                while (message == null) {
-                    message = _completeMessages.take();
-                    if ((message != null) && (message.getMessageId() == POISON_IMS)) {
-                        message = null;
-                        break;
-                    }
-                    if ((message != null) && (message.isExpired())) {
-                        expiredLifetime += message.getLifetime();
-                        message = null;
-                        expired++;
-                    }
-                }
-            } catch (InterruptedException ie) {
-                Thread.currentThread().interrupt();
-            }
-
-            if (expired > 0) {_context.statManager().addRateData("udp.inboundExpired", expired, expiredLifetime);}
-
-            if (message != null) {
-                int size = message.getCompleteSize();
+        try {
+            while (_alive) {
+                int expired = 0;
+                long expiredLifetime = 0;
                 try {
-                    I2NPMessage msg = readMessage(buf, message, handler);
-                    if (msg != null) {_transport.messageReceived(msg, null, message.getFrom(), message.getLifetime(), size);}
-                } catch (RuntimeException re) {
-                    _log.error("b0rked receiving a message.. wazza huzza hmm?", re);
-                    continue;
+                    while (message == null) {
+                        message = _completeMessages.take();
+                        if ((message != null) && (message.getMessageId() == POISON_IMS)) {
+                            return;
+                        }
+                        if ((message != null) && (message.isExpired())) {
+                            expiredLifetime += message.getLifetime();
+                            message = null;
+                            expired++;
+                        }
+                    }
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
                 }
-                message = null;
+
+                if (expired > 0) {_context.statManager().addRateData("udp.inboundExpired", expired, expiredLifetime);}
+
+                if (message != null) {
+                    int size = message.getCompleteSize();
+                    try {
+                        I2NPMessage msg = readMessage(buf, message, handler);
+                        if (msg != null) {_transport.messageReceived(msg, null, message.getFrom(), message.getLifetime(), size);}
+                    } catch (RuntimeException re) {
+                        _log.error("b0rked receiving a message.. wazza huzza hmm?", re);
+                        continue;
+                    }
+                    message = null;
+                }
             }
+        } finally {
+            _runners.remove(this);
         }
     }
 
