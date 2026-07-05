@@ -11,9 +11,6 @@ import net.i2p.util.Log;
  *
  * See ConfigServiceHandler for best practices on stopping the router.
  * We don't bother notifying any Wrapper instance here.
- *
- * @author mathias
- *
  */
 public class RouterManager {
 
@@ -43,45 +40,47 @@ public class RouterManager {
     }
 
     /**
-     * Restart the running I2P instance.
+     * Restart the running I2P instance immediately.
+     *
+     * @param ctx the router context
      */
     public static void restart(RouterContext ctx) {
-        //if (ctx.hasWrapper())
-        //    ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_HARD_RESTART, false);
         ctx.router().shutdownGracefully(Router.EXIT_HARD_RESTART);
     }
 
     /**
-     * Stop the running I2P instance.
+     * Stop the running I2P instance immediately.
+     *
+     * @param ctx the router context
      */
     public static void shutDown(RouterContext ctx) {
-        //if (ctx.hasWrapper())
-        //    ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_HARD, false);
         ctx.router().shutdownGracefully(Router.EXIT_HARD);
     }
 
     /**
-     * Restart the running I2P instance.
+     * Restart the running I2P instance gracefully.
+     *
+     * @param ctx the router context
      * @since 0.9.26
      */
     public static void restartGracefully(RouterContext ctx) {
-        //if (ctx.hasWrapper())
-        //    ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_GRACEFUL_RESTART, false);
         ctx.router().shutdownGracefully(Router.EXIT_GRACEFUL_RESTART);
     }
 
     /**
-     * Stop the running I2P instance.
+     * Stop the running I2P instance gracefully.
+     *
+     * @param ctx the router context
      * @since 0.9.26
      */
     public static void shutDownGracefully(RouterContext ctx) {
-        //if (ctx.hasWrapper())
-        //    ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_GRACEFUL, false);
         ctx.router().shutdownGracefully();
     }
 
     /**
-     * Cancel a graceful shutdown or restart
+     * Cancel a graceful shutdown or restart.
+     *
+     * @param ctx the router context
      * @since 0.9.26
      */
     public static void cancelShutdown(RouterContext ctx) {
@@ -90,6 +89,9 @@ public class RouterManager {
 
     /**
      * Is a graceful shutdown or restart in progress?
+     *
+     * @param ctx the router context
+     * @return true if a graceful shutdown or restart is in progress
      * @since 0.9.26
      */
     public static boolean isShutdownInProgress(RouterContext ctx) {
@@ -97,8 +99,10 @@ public class RouterManager {
     }
 
     /**
-     * Get time until shutdown
-     * @return -1 if no shutdown in progress.
+     * Get time until shutdown.
+     *
+     * @param ctx the router context
+     * @return -1 if no shutdown in progress, otherwise milliseconds until shutdown
      * @since 0.9.26
      */
     public static long getShutdownTimeRemaining(RouterContext ctx) {
@@ -106,7 +110,10 @@ public class RouterManager {
     }
 
     /**
-     * Get network status, untranslated
+     * Get network status, untranslated.
+     *
+     * @param ctx the router context
+     * @return the current network status string
      * @since 0.9.26
      */
     public static String getStatus(RouterContext ctx) {

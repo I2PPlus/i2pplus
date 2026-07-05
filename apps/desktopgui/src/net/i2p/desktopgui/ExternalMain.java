@@ -31,18 +31,33 @@ public class ExternalMain implements ClientApp, NotificationService {
 
     private static final String PROP_SWING = "desktopgui.swing";
 
+    /**
+     * Create a new ExternalMain with the specified context and manager.
+     *
+     * @param ctx the I2P application context
+     * @param mgr the client application manager
+     * @param args command line arguments (unused)
+     */
     public ExternalMain(I2PAppContext ctx, ClientAppManager mgr, String[] args) {
         _appContext = ctx;
         _mgr = mgr;
         log = _appContext.logManager().getLog(ExternalMain.class);
     }
 
+    /**
+     * Create a new ExternalMain using the global context.
+     */
     public ExternalMain() {
         _appContext = I2PAppContext.getGlobalContext();
         _mgr = _appContext.clientAppManager();
         log = _appContext.logManager().getLog(ExternalMain.class);
     }
 
+    /**
+     * Main entry point for the external desktop GUI application.
+     *
+     * @param args command line arguments (unused)
+     */
     public static void main(String[] args) {
         // early check so we can bail out when started via CLI
         if (!SystemTray.isSupported()) {
@@ -55,7 +70,8 @@ public class ExternalMain implements ClientApp, NotificationService {
 
     /**
      * Start the tray icon code (loads tray icon in the tray area).
-     * @throws AWTException on startup error, including systray not supported
+     *
+     * @throws Exception on startup error, including systray not supported
      */
     private synchronized void startUp() throws Exception {
         final TrayManager trayManager;

@@ -18,10 +18,21 @@ import net.i2p.desktopgui.router.RouterManager;
  */
 class ExternalTrayManager extends TrayManager {
 
+    /**
+     * Create a new ExternalTrayManager.
+     *
+     * @param ctx the I2P application context
+     * @param useSwing true to use Swing components, false for AWT
+     */
     public ExternalTrayManager(I2PAppContext ctx, boolean useSwing) {
         super(ctx, useSwing);
     }
 
+    /**
+     * Build an AWT popup menu with start and notification controls.
+     *
+     * @return the AWT popup menu
+     */
     public PopupMenu getMainMenu() {
         PopupMenu popup = new PopupMenu();
         MenuItem startItem = new MenuItem(_t("Start I2P"));
@@ -53,34 +64,14 @@ class ExternalTrayManager extends TrayManager {
         return popup;
     }
 
+    /**
+     * Build a Swing popup menu with notification controls.
+     *
+     * @return the Swing popup menu
+     */
     @Override
     public JPopupMenu getSwingMainMenu() {
         JPopupMenu popup = new JPopupMenu();
-/*
-        JMenuItem startItem = new JMenuItem(_t("Start I2P"));
-        startItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                new SwingWorker<Object, Object>() {
-                    @Override
-                    protected Object doInBackground() throws Exception {
-                        RouterManager.start();
-                        return null;
-                    }
-
-                    @Override
-                    protected void done() {
-                        trayIcon.displayMessage(_t("Starting"), _t("I2P is starting!"), TrayIcon.MessageType.INFO);
-                        //Hide the tray icon.
-                        //We cannot stop the desktopgui program entirely,
-                        //since that risks killing the I2P process as well.
-                        tray.remove(trayIcon);
-                    }
-                }.execute();
-            }
-        });
-        popup.add(startItem);
-*/
         initializeJNotificationItems();
         popup.add(_jnotificationItem2);
         popup.add(_jnotificationItem1);

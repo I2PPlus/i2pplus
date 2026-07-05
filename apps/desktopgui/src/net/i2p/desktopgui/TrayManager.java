@@ -53,7 +53,10 @@ abstract class TrayManager {
     protected static final String PROP_NOTIFICATIONS = "desktopgui.showNotifications";
 
     /**
-     * Instantiate tray manager.
+     * Create a new tray manager.
+     *
+     * @param ctx the I2P application context
+     * @param useSwing true to use Swing components, false for AWT
      */
     protected TrayManager(I2PAppContext ctx, boolean useSwing) {
         _appContext = ctx;
@@ -62,6 +65,8 @@ abstract class TrayManager {
 
     /**
      * Add the tray icon to the system tray and start everything up.
+     *
+     * @throws AWTException if the system tray is not supported
      */
     public synchronized void startManager() throws AWTException {
         if (!SystemTray.isSupported())
@@ -80,6 +85,13 @@ abstract class TrayManager {
         trayIcon = ti;
     }
 
+    /**
+     * Create an AWT tray icon with popup menu.
+     *
+     * @param tooltip the tooltip text for the tray icon
+     * @return the tray icon
+     * @throws AWTException if the tray icon cannot be created
+     */
     private TrayIcon getAWTTrayIcon(String tooltip) throws AWTException {
         PopupMenu menu = getMainMenu();
         if (!SystemVersion.isWindows())
@@ -95,6 +107,13 @@ abstract class TrayManager {
         return ti;
     }
 
+    /**
+     * Create a Swing tray icon with JPopupMenu.
+     *
+     * @param tooltip the tooltip text for the tray icon
+     * @return the tray icon
+     * @throws AWTException if the tray icon cannot be created
+     */
     private TrayIcon getSwingTrayIcon(String tooltip) throws AWTException {
         // A JPopupMenu by itself is hard to get rid of,
         // so we hang it off a zero-size, undecorated JFrame.
@@ -118,10 +137,6 @@ abstract class TrayManager {
             @Override
             public void mouseReleased(MouseEvent e) { handle(e); }
             private void handle(MouseEvent e) {
-                //System.out.println("Button " + e.getButton() + " Frame was visible? " +
-                //                   frame.isVisible() + " menu was visible? " + menu.isVisible() +
-                //                   " trigger? " + menu.isPopupTrigger(e));
-                // http://stackoverflow.com/questions/17258250/changing-the-laf-of-a-popupmenu-for-a-trayicon-in-java
                 // menu visible check is never true
                 if (!frame.isVisible() /* || !menu.isVisible() */ ) {
                     frame.setLocation(e.getX(), e.getY());
@@ -169,6 +184,9 @@ abstract class TrayManager {
         }
     }
 
+    /**
+     * Update the tray menu when the language changes.
+     */
     public synchronized void languageChanged() {
         if (trayIcon != null) {
             if (!_useSwing)
@@ -243,47 +261,6 @@ abstract class TrayManager {
         else
             type = TrayIcon.MessageType.ERROR;
         ti.displayMessage(title, message, type);
-/*
- * There's apparently no way to bind a particular message to an action
-   that comes back. We can't keep a queue because we don't get
-   an action back when the message is removed via timeout or user x-out.
-   On OSX, new messages dismiss previous ones.
-   On LXDE (and Gnome?), new messages go under previous ones. Timeout is only 10 seconds.
-   Message timeout is platform-dependent.
-   So the order of events is unknowable.
-   This only works if there is only one message ever.
-
-        if (path != null && path.length() > 0) {
-            if (path.charAt(0) == '/');
-                path = path.substring(1);
-            final String url = _appContext.portMapper().getConsoleURL() + path;
-            ti.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent arg0) {
-                    ti.removeActionListener(this);
-                    new SwingWorker<Object, Object>() {
-                        @Override
-                        protected Object doInBackground() throws Exception {
-                            System.out.println("DIB " + arg0);
-                            UrlLauncher launcher = new UrlLauncher(_appContext, null, null);
-                            try {
-                                launcher.openUrl(url);
-                                System.out.println("DIB success " + url);
-                            } catch (IOException e1) {
-                                System.out.println("DIB fail " + url);
-                            }
-                            return null;
-                        }
-
-                        @Override
-                        protected void done() {
-                            System.out.println("done " + arg0);
-                        }
-                    }.execute();
-                }
-            });
-        }
-*/
         return 0;
     }
 
@@ -370,11 +347,22 @@ abstract class TrayManager {
         _jnotificationItem1 = notificationItem1;
     }
 
+    /**
+     * Translate a string.
+     *
+     * @param s the string to translate
+     * @return the translated string
+     */
     protected String _t(String s) {
         return DesktopguiTranslator._t(_appContext, s);
     }
 
     /**
+     * Translate a string with one parameter.
+     *
+     * @param s the string to translate
+     * @param o the parameter to insert
+     * @return the translated string
      * @since 0.9.26
      */
     protected String _t(String s, Object o) {

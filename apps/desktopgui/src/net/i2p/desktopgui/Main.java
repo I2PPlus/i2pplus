@@ -1,7 +1,7 @@
 package net.i2p.desktopgui;
 
-/*
- * Main.java
+/**
+ * Main.java - Entry point for the I2P Desktop GUI application.
  */
 
 import static net.i2p.app.ClientAppState.*;
@@ -39,6 +39,9 @@ public class Main implements RouterApp, NotificationService {
     private final Log log;
     private ClientAppState _state = UNINITIALIZED;
     private TrayManager _trayManager;
+    /**
+     * Property to enable or disable the desktop GUI.
+     */
     public static final String PROP_ENABLE = "desktopgui.enabled";
     private static final String PROP_SWING = "desktopgui.swing";
 
@@ -69,7 +72,8 @@ public class Main implements RouterApp, NotificationService {
 
     /**
      * Start the tray icon code (loads tray icon in the tray area).
-     * @throws AWTException on startup error, including systray not supported
+     *
+     * @throws Exception on startup error, including systray not supported
      */
     private synchronized void startUp() throws Exception {
         final TrayManager trayManager;
@@ -97,6 +101,11 @@ public class Main implements RouterApp, NotificationService {
         }
     }
 
+    /**
+     * Main entry point for the I2P Desktop GUI application.
+     *
+     * @param args command line arguments (unused)
+     */
     public static void main(String[] args) {
         // early check so we can bail out when started via CLI
         if (!SystemTray.isSupported()) {

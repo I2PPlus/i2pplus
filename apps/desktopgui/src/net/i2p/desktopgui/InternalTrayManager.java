@@ -39,6 +39,13 @@ class InternalTrayManager extends TrayManager {
                                                    Desktop.getDesktop().isSupported(Action.BROWSE);
     private static final String CONSOLE_BUNDLE_NAME = "net.i2p.router.web.messages";
 
+    /**
+     * Create a new InternalTrayManager with full router context access.
+     *
+     * @param ctx the router context
+     * @param main the main application instance
+     * @param useSwing true to use Swing components, false for AWT
+     */
     public InternalTrayManager(RouterContext ctx, Main main, boolean useSwing) {
         super(ctx, useSwing);
         _context = ctx;
@@ -55,6 +62,11 @@ class InternalTrayManager extends TrayManager {
         displayMessage(Log.INFO, _t("Starting"), _t("I2P is starting!"), null);
     }
 
+    /**
+     * Build an AWT popup menu with router management controls.
+     *
+     * @return the AWT popup menu
+     */
     public synchronized PopupMenu getMainMenu() {
         PopupMenu popup = new PopupMenu();
 
@@ -211,6 +223,11 @@ class InternalTrayManager extends TrayManager {
         return popup;
     }
 
+    /**
+     * Build a Swing popup menu with router management controls.
+     *
+     * @return the Swing popup menu
+     */
     @Override
     public synchronized JPopupMenu getSwingMainMenu() {
         JPopupMenu popup = new JPopupMenu();
@@ -438,7 +455,10 @@ class InternalTrayManager extends TrayManager {
     }
 
     /**
-     *  @since 0.9.26 from removed gui/DesktopguiConfigurationFrame
+     * Configure whether the desktop GUI is enabled.
+     *
+     * @param enable true to enable, false to disable
+     * @since 0.9.26 from removed gui/DesktopguiConfigurationFrame
      */
     private void configureDesktopgui(boolean enable) {
         String property = Main.PROP_ENABLE;
@@ -452,7 +472,10 @@ class InternalTrayManager extends TrayManager {
     }
 
     /**
-     *  @since 0.9.53
+     * Configure notification settings and save to router config.
+     *
+     * @param enable true to enable notifications, false to disable
+     * @since 0.9.53
      */
     @Override
     protected void configureNotifications(boolean enable) {

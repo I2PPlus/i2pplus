@@ -36,4 +36,19 @@ Standalone desktop application for I2P router control without a browser.
 
 # Ant (from repo root)
 ant buildDesktopGui
+
+# Ant (from desktopgui directory)
+ant jar
 ```
+
+## Manual Installation
+
+1. Place `desktopgui.jar` in the `$I2P/lib/` directory.
+2. Add to `.i2p/clients.config`:
+   ```
+   clientApp.6.args=
+   clientApp.6.delay=5
+   clientApp.6.main=net.i2p.desktopgui.Main
+   clientApp.6.name=desktopgui
+   clientApp.6.startOnLoad=true
+   ```
