@@ -4940,33 +4940,33 @@ public class Tuner implements SimpleTimer.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = ntcp.readQueueSize (pending connections waiting for a reader)
-            // Cross-refs: ntcp.readError, jobLag (CPU), transport.receiveMessageTime,
-            //             ntcp.sendTime (write path pressure)
+            // observed = ntcp.readQueueSize (avg pending connections waiting for a reader)
+            // With 300+ connections, queue averages ~1. Threads grab a connection,
+            // decrypt + parse, return it. No I/O blocking — EventPumper fills buffers.
+            // Scale based on queue pressure relative to thread count.
             double readErrors = getAdditionalStat(_context, "ntcp.readError");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            double recvTime = getAdditionalStat(_context, "transport.receiveMessageTime");
-            double sendTime = getAdditionalStat(_context, "ntcp.sendTime");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean backlog = !Double.isNaN(observed) && observed > 0;
-            boolean readSlow = !Double.isNaN(recvTime) && recvTime > 50;
             boolean errorsHigh = !Double.isNaN(readErrors) && readErrors > 10;
-            boolean sendSlow = !Double.isNaN(sendTime) && sendTime > 50;
+            int queue = !Double.isNaN(observed) ? (int) Math.round(observed) : 0;
 
-            // Backlog + no CPU pressure = add threads (more peers = more connections)
-            if (backlog && !cpuPressure)
+            // Growing: queue is backing up faster than current threads can drain
+            if (queue > current * 2 && !cpuPressure)
+                return Math.min(_max, current + Math.max(1, queue / current));
+
+            // Urgent: errors + queue backing up
+            if (errorsHigh && queue > current && !cpuPressure)
                 return Math.min(_max, current + 1);
 
-            // Slow reads + no CPU = add threads
-            if (readSlow && !cpuPressure)
-                return Math.min(_max, current + 1);
+            // Shrinking: queue is well below capacity — threads sitting idle
+            // Shrink faster when queue is empty
+            if (queue < current / 2 && current > _min) {
+                int shrinkBy = (queue == 0) ? 2 : 1;
+                return Math.max(_min, current - shrinkBy);
+            }
 
-            // Errors + backlog = add threads urgently
-            if (errorsHigh && backlog && !cpuPressure)
-                return Math.min(_max, current + 1);
-
-            // Idle + no work = shrink (threads sitting doing nothing)
-            if (!backlog && !readSlow && !errorsHigh && !sendSlow && current > _min)
+            // Long-term idle: queue near zero, no errors, no CPU pressure
+            if (queue == 0 && !errorsHigh && !cpuPressure && current > _min)
                 return Math.max(_min, current - 1);
 
             return current;
@@ -5013,15 +5013,14 @@ public class Tuner implements SimpleTimer.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = ntcp.sendTime (ms, message send latency)
-            // Cross-refs: ntcp.sendPool utilization, ntcp.writeBufs.size, ntcp.writeQueueFull,
-            //             ntcp.sendBacklogTime, jobLag (CPU), ntcp.readQueueSize, ntcp.sendFinisher.queueSize
+            // observed = ntcp.sendTime (ms, avg message send latency)
+            // Writers are pure CPU — encrypt + prepare buffer. EventPumper does NIO write.
+            // Scale based on send latency and downstream pressure.
             double sendPoolUtil = getAdditionalStat(_context, "ntcp.sendPool utilization");
             double writeBufs = getAdditionalStat(_context, "ntcp.writeBufs.size");
             double writeQueueFull = getAdditionalStat(_context, "ntcp.writeQueueFull");
             double backlogTime = getAdditionalStat(_context, "ntcp.sendBacklogTime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            double readQueue = getAdditionalStat(_context, "ntcp.readQueueSize");
             double finisherQueue = getAdditionalStat(_context, "ntcp.sendFinisher.queueSize");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean sendSlow = observed > 50;
@@ -5029,18 +5028,23 @@ public class Tuner implements SimpleTimer.TimedEvent {
             boolean backlogged = !Double.isNaN(backlogTime) && backlogTime > 20;
             boolean poolBusy = !Double.isNaN(sendPoolUtil) && sendPoolUtil > 50;
             boolean bufsHigh = !Double.isNaN(writeBufs) && writeBufs > current * 16;
-            boolean readerBacklogged = !Double.isNaN(readQueue) && readQueue > 5;
             boolean finisherBacklogged = !Double.isNaN(finisherQueue) && finisherQueue > 50;
+            int pressure = (sendSlow ? 1 : 0) + (queueFull ? 1 : 0) + (backlogged ? 1 : 0)
+                         + (poolBusy ? 1 : 0) + (bufsHigh ? 1 : 0) + (finisherBacklogged ? 1 : 0);
 
-            // Send slow or backlogged or pool busy or downstream + no CPU = add threads
-            if ((sendSlow || backlogged || queueFull || poolBusy || bufsHigh
-                 || readerBacklogged || finisherBacklogged) && !cpuPressure)
+            // High pressure: multiple signals firing + no CPU = add threads
+            if (pressure >= 2 && !cpuPressure)
                 return Math.min(_max, current + 1);
 
-            // Idle + no work = shrink (threads sitting doing nothing)
-            if (!sendSlow && !queueFull && !backlogged && !poolBusy && !bufsHigh
-                && !readerBacklogged && !finisherBacklogged && current > _min)
-                return Math.max(_min, current - 1);
+            // Moderate pressure: single signal + no CPU = add threads only if near saturation
+            if (pressure == 1 && !cpuPressure && (sendSlow || backlogged || poolBusy))
+                return Math.min(_max, current + 1);
+
+            // Idle: no pressure signals, queue not backing up = shrink
+            if (pressure == 0 && current > _min) {
+                int shrinkBy = (!sendSlow && !backlogged && !poolBusy) ? 2 : 1;
+                return Math.max(_min, current - shrinkBy);
+            }
 
             return current;
         }
