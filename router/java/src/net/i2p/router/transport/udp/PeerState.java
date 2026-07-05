@@ -162,7 +162,7 @@ public class PeerState {
     protected volatile boolean _dead;
 
     /** The minimum number of outstanding messages (NOT fragments/packets) */
-    private static final int MIN_CONCURRENT_MSGS = SystemVersion.isSlow() ? 4 : 8;
+    private static final int MIN_CONCURRENT_MSGS = SystemVersion.isSlow() ? 8 : 32;
     /** Maximum lifetime before a message is considered stuck and expired (60 seconds) */
     private static final long MAX_MESSAGE_LIFETIME = 60 * 1000L;
     /** After this time, we start adding backoff delay (5 seconds) */
@@ -189,12 +189,15 @@ public class PeerState {
         int hardMax = Math.max(256, Math.min(4096, ramScaled));
         MAX_CONCURRENT_MSGS = Math.max(def / 2, Math.min(hardMax, max));
     }
-    /** Target RTT in ms — below this, increase concurrency; above this, decrease */
-    private static final int TARGET_RTT = 150;
-    /** RTT multiplier above which we multiplicative-decrease concurrency */
-    private static final int RTT_DECREASE_FACTOR = 2;
+    /** Target RTT in ms — below this, increase concurrency; above this, decrease.
+     *  I2P network RTT through 2-4 hops is typically 500-2000ms.
+     *  Set high enough to avoid false congestion signals from normal network latency. */
+    private static final int TARGET_RTT = 2000;
+    /** RTT multiplier above which we multiplicative-decrease concurrency.
+     *  Only decrease when RTT > 8s — truly congested, not just high-latency network. */
+    private static final int RTT_DECREASE_FACTOR = 4;
     /** When RTT > TARGET_RTT but there are queued messages, increase modestly */
-    private static final int QUEUE_BACKPRESSURE_INCREASE = 2;
+    private static final int QUEUE_BACKPRESSURE_INCREASE = 4;
     /** how many concurrent outbound messages do we allow OutboundMessageFragments to send
         This counts full messages, NOT fragments (UDP packets).
         Dynamically adjusted based on measured RTT: increased when RTT < TARGET_RTT,
@@ -866,6 +869,8 @@ public class PeerState {
     /**
      *  Adjust the tcp-esque timeouts.
      *  Caller should synch on this
+     *
+     *  @param lifetime network RTT — time from first send to ACK (excludes queue time)
      */
     private void recalculateTimeouts(long lifetime) {
         if (_rtt <= 0) {
@@ -1510,6 +1515,8 @@ public class PeerState {
         int numSends = state.getMaxSends();
         _context.statManager().addRateData("udp.partialACKReceived", 1);
         long lifetime = state.getLifetime();
+        // Use sendLifetime (first send → ACK) for RTT, not total lifetime (includes queue time)
+        long sendLifetime = state.getSendLifetime();
         if (isComplete) {
             _context.statManager().addRateData("udp.sendConfirmTime", lifetime);
             if (state.getFragmentCount() > 1) {
@@ -1548,7 +1555,7 @@ public class PeerState {
         int maxPktSz = state.fragmentSize(0) +
                        SSU2Payload.BLOCK_HEADER_SIZE +
                        (isIPv6() ? PacketBuilder2.MIN_IPV6_DATA_PACKET_OVERHEAD : PacketBuilder2.MIN_DATA_PACKET_OVERHEAD);
-        messageACKed(ackedSize, maxPktSz, lifetime, numSends, anyPending, anyQueued);
+        messageACKed(ackedSize, maxPktSz, sendLifetime, numSends, anyPending, anyQueued);
         return true;
     }
 

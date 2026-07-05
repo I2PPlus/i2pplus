@@ -33,6 +33,8 @@ class OutboundMessageState implements CDPQEntry {
     /** sends for each fragment, or null if only one fragment */
     private final byte[] _fragmentSends;
     private final long _startedOn;
+    /** Time of first fragment send (for network RTT measurement, excludes queue time) */
+    private volatile long _firstSendTime;
     private int _pushCount;
     private int _maxSends;
     // we can't use the ones in _message since it is null for injections
@@ -310,6 +312,17 @@ class OutboundMessageState implements CDPQEntry {
     public long getLifetime() { return _context.clock().now() - _startedOn; }
 
     /**
+     * Network RTT: time since first fragment was sent (excludes queue time).
+     * Falls back to total lifetime if message hasn't been sent yet.
+     *
+     * @since 0.9.70+
+     */
+    public long getSendLifetime() {
+        if (_firstSendTime == 0) return getLifetime();
+        return _context.clock().now() - _firstSendTime;
+    }
+
+    /**
      * Ack all the fragments in the ack list.
      *
      * @return true if the message was completely ACKed
@@ -410,6 +423,9 @@ class OutboundMessageState implements CDPQEntry {
             }
         }
         if (rv > 0) {
+            if (_pushCount == 0 && _firstSendTime == 0) {
+                _firstSendTime = _context.clock().now();
+            }
             _pushCount++;
             if (_log.shouldDebug())
                 _log.debug("Pushed " + rv + " fragments for " + toString());
