@@ -151,6 +151,10 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private static final boolean IS_SLOW = SystemVersion.isSlow();
     private static final int MEM_FACTOR = Math.max(1, (int)(MAX_MEMORY / (256L * 1024 * 1024)));
     private static final int CORE_FACTOR = Math.max(1, CORES);
+    /** ML-KEM precalc min/max — each pair ~3.5KB, scale generously with cores */
+    private static final int MLKEM_FACTOR = Math.max(1, CORES * 2);
+    private static final int MLKEM_PRECALC_MIN = Math.max(512, 4 * MLKEM_FACTOR);
+    private static final int MLKEM_PRECALC_MAX = Math.max(2048, 96 * MLKEM_FACTOR);
 
     /**
      * Compute a system-scaled value: base * factor, bounded by min and max.
@@ -2642,7 +2646,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         MLKEMPreCalcMinParam() {
             super("crypto.mlkem.precalcMin", SUB_BUFFERS,
                   "Min precomputed ML-KEM key pairs",
-                  2, 512, 4, "crypto.MLKEMEmpty", _context);
+                  MLKEM_PRECALC_MIN, MLKEM_PRECALC_MAX, 8, "crypto.MLKEMEmpty", _context);
         }
 
         protected void applyValue(int value) {
