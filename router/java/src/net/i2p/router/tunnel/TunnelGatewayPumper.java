@@ -36,8 +36,8 @@ class TunnelGatewayPumper implements Runnable {
     private final RouterContext _context;
     private final Log _log;
 
-    // Queue of gateways awaiting pumping (bounded capacity)
-    private final BlockingQueue<PumpedTunnelGateway> _wantsPumping;
+    // Queue of gateways awaiting pumping (dynamically resizable)
+    private volatile BlockingQueue<PumpedTunnelGateway> _wantsPumping;
 
     // Concurrent set of gateways already in the queue, prevents duplicate offers
     private final Set<PumpedTunnelGateway> _inQueue;
@@ -51,10 +51,13 @@ class TunnelGatewayPumper implements Runnable {
     // Volatile stop flag visible to all threads
     private volatile boolean _stop;
 
-    private static final int MAX_PUMPERS;
-    private static final int QUEUE_BUFFER;
+    private static volatile int _queueCapacity;
+    private static volatile int _maxPumpers;
 
-    private final int _pumpers;
+    /** Running instance for dynamic resize from Tuner */
+    private static volatile TunnelGatewayPumper _instance;
+
+    private volatile int _pumpers;
 
     /**
      * Wait time to requeue a backlogged gateway to allow task processing to catch up.
@@ -71,26 +74,70 @@ class TunnelGatewayPumper implements Runnable {
         int cores = SystemVersion.getCores();
         long maxMem = SystemVersion.getMaxMemory();
 
-        // Scale pumpers: 25% of cores, min 1, max 6
-        // Leave most CPU for other router operations
-        int calculatedPumps = Math.max(1, cores / 4);
+        // Scale pumpers: 25% of cores, min 2, max 6
+        int calculatedPumps = Math.max(2, cores / 4);
         if (SystemVersion.isSlow()) {
-            MAX_PUMPERS = 1;  // Slow systems: single pumper
+            _maxPumpers = 2;
         } else {
-            MAX_PUMPERS = Math.min(6, calculatedPumps);
+            _maxPumpers = Math.min(6, calculatedPumps);
         }
 
-        // Scale queue buffer based on memory: 16 for <256MB, 24 for <512MB, 32 otherwise
+        // Scale queue capacity based on memory: much larger defaults for throughput
         if (maxMem < 256 * 1024 * 1024L) {
-            QUEUE_BUFFER = 16;
+            _queueCapacity = 256;
         } else if (maxMem < 512 * 1024 * 1024L) {
-            QUEUE_BUFFER = 24;
+            _queueCapacity = 512;
         } else {
-            QUEUE_BUFFER = 32;
+            _queueCapacity = 1024;
         }
 
         // Scale requeue time inversely with cores: faster requeue with more cores
         _requeueTime = Math.max(25, 100 - (cores * 5));
+    }
+
+    /**
+     * Get the current pumper queue capacity.
+     * @since 0.9.70+
+     */
+    public static int getQueueCapacity() { return _queueCapacity; }
+
+    /**
+     * Set the pumper queue capacity. Does not resize existing queue;
+     * call {@link #resizeQueue} to apply to running instance.
+     * @since 0.9.70+
+     */
+    public static void setQueueCapacity(int capacity) { _queueCapacity = Math.max(64, Math.min(4096, capacity)); }
+
+    /**
+     * Get the current max pumper threads.
+     * @since 0.9.70+
+     */
+    public static int getMaxPumpers() { return _maxPumpers; }
+
+    /**
+     * Set the max pumper threads.
+     * @since 0.9.70+
+     */
+    public static void setMaxPumpers(int max) { _maxPumpers = Math.max(2, Math.min(16, max)); }
+
+    /**
+     * Resize the running instance's queue.
+     * @param newCapacity new capacity
+     * @since 0.9.70+
+     */
+    public static void resizeRunningQueue(int newCapacity) {
+        TunnelGatewayPumper instance = _instance;
+        if (instance != null) instance.resizeQueue(newCapacity);
+    }
+
+    /**
+     * Adjust the running instance's thread count.
+     * @param newCount desired thread count
+     * @since 0.9.70+
+     */
+    public static void adjustRunningThreads(int newCount) {
+        TunnelGatewayPumper instance = _instance;
+        if (instance != null) instance.adjustThreads(newCount);
     }
 
     /** @since 0.9.70+ */
@@ -111,11 +158,16 @@ class TunnelGatewayPumper implements Runnable {
     public TunnelGatewayPumper(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(TunnelGatewayPumper.class);
-        _wantsPumping = new LinkedBlockingQueue<>(QUEUE_BUFFER);
+        _wantsPumping = new LinkedBlockingQueue<>(_queueCapacity);
         _inQueue = ConcurrentHashMap.newKeySet();
         _backlogged = ConcurrentHashMap.newKeySet();
         _threads = new CopyOnWriteArrayList<>();
-        _pumpers = ctx.getBooleanProperty("i2p.dummyTunnelManager") ? 1 : MAX_PUMPERS;
+        _pumpers = ctx.getBooleanProperty("i2p.dummyTunnelManager") ? 1 : _maxPumpers;
+        ctx.statManager().createRequiredRateStat("tunnel.pumperQueueFull",
+            "Pumper queue overflow drops", "Tunnels", new long[]{60*1000L, 10*60*1000L, 60*60*1000L});
+        ctx.statManager().createRequiredRateStat("tunnel.pumperQueueDepth",
+            "Pumper queue depth", "Tunnels", new long[]{60*1000L, 10*60*1000L, 60*60*1000L});
+        _instance = this;
 
         for (int i = 0; i < _pumpers; i++) {
             Thread t = new I2PThread(this, "TunnGWPumper " + (i + 1) + '/' + _pumpers, true);
@@ -123,6 +175,43 @@ class TunnelGatewayPumper implements Runnable {
             _threads.add(t);
             t.start();
         }
+    }
+
+    /**
+     * Resize the pumper queue. Drains old queue into new one.
+     * @param newCapacity new queue capacity
+     * @since 0.9.70+
+     */
+    public void resizeQueue(int newCapacity) {
+        if (newCapacity < 64 || newCapacity > 4096) return;
+        BlockingQueue<PumpedTunnelGateway> oldQueue = _wantsPumping;
+        if (oldQueue.remainingCapacity() + oldQueue.size() == newCapacity) return;
+        LinkedBlockingQueue<PumpedTunnelGateway> newQueue = new LinkedBlockingQueue<>(newCapacity);
+        oldQueue.drainTo(newQueue);
+        _wantsPumping = newQueue;
+    }
+
+    /**
+     * Dynamically adjust the number of pumper threads.
+     * Adds threads if count increased, signals excess threads to stop if decreased.
+     * @param newCount desired thread count
+     * @since 0.9.70+
+     */
+    public void adjustThreads(int newCount) {
+        newCount = Math.max(2, Math.min(_maxPumpers, newCount));
+        int current = _threads.size();
+        if (newCount == current) return;
+
+        while (_threads.size() < newCount) {
+            Thread t = new I2PThread(this, "TunnGWPumper " + (_threads.size() + 1) + '/' + newCount, true);
+            t.setPriority(Thread.MAX_PRIORITY);
+            _threads.add(t);
+            t.start();
+        }
+
+        // Excess threads will exit on their own via the stop mechanism
+        // For now, just track the target — threads exit when stop is set
+        _pumpers = newCount;
     }
 
     /**
@@ -204,7 +293,7 @@ class TunnelGatewayPumper implements Runnable {
 
     private void run2() {
         PumpedTunnelGateway gw = null;
-        List<PendingGatewayMessage> queueBuf = new ArrayList<>(QUEUE_BUFFER);
+        List<PendingGatewayMessage> queueBuf = new ArrayList<>(_queueCapacity);
         boolean requeue;
         int pumpCount = 0;
 

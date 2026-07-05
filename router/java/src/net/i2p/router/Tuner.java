@@ -373,6 +373,10 @@ public class Tuner implements SimpleTimer.TimedEvent {
         _params.add(new TestJobMinDelayParam());
         _params.add(new TestJobMaxDelayParam());
 
+        // Tunnel gateway pumper params
+        _params.add(new PumperQueueCapacityParam());
+        _params.add(new PumperThreadsParam());
+
         // Purge stale tuner.* keys from router.config (one-time cleanup)
         purgeOldTunerProps(ctx);
     }
@@ -1486,6 +1490,130 @@ public class Tuner implements SimpleTimer.TimedEvent {
                 if (systemBusy) return current;
                 return Math.min(_max, current + _step);
             }
+
+            return current;
+        }
+    }
+
+    /**
+     * Tunes TunnelGatewayPumper queue capacity based on gateway queue depth.
+     * Larger queue = more buffering before drops under burst load.
+     * Primary signal: tunnel.pumperQueueDepth (pumper queue usage).
+     * Cross-refs: tunnel.pumperQueueFull (drop events), tunnel.ibgw/obgw.queueSize.
+     *
+     * @since 0.9.70+
+     */
+    private class PumperQueueCapacityParam extends BaseParam {
+
+        PumperQueueCapacityParam() {
+            super("tunnel.pumper.queueCapacity", SUB_TUNNEL,
+                  "Pumper queue capacity",
+                  256, 4096, 128, "tunnel.pumperQueueFull", _context);
+        }
+
+        protected void applyValue(int value) {
+            TunnelDispatcher.setPumperQueueCapacity(value);
+            TunnelDispatcher.resizePumperQueue(value);
+        }
+
+        protected int getRuntimeValue() {
+            return TunnelDispatcher.getPumperQueueCapacity();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = tunnel.pumperQueueFull (drop events per minute)
+            // Cross-refs: tunnel.ibgw/obgw.queueSize, tunnel.dispatchParticipant,
+            //             jobQueue.jobLag (CPU)
+            double ibgwQueue = getAdditionalStat(_context, "tunnel.ibgw.queueSize");
+            double obgwQueue = getAdditionalStat(_context, "tunnel.obgw.queueSize");
+            double transitLoad = getAdditionalStat(_context, "tunnel.dispatchParticipant");
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean hasDrops = !Double.isNaN(observed) && observed > 0;
+            boolean queuesBackedUp = (!Double.isNaN(ibgwQueue) && ibgwQueue > 50) ||
+                                     (!Double.isNaN(obgwQueue) && obgwQueue > 50);
+            boolean heavyTransit = !Double.isNaN(transitLoad) && transitLoad > 2000;
+
+            // Drops or backed-up queues + no CPU pressure = grow queue
+            if ((hasDrops || queuesBackedUp) && !cpuPressure)
+                return Math.min(_max, current + _step);
+
+            // Heavy transit + no pressure = grow proactively
+            if (heavyTransit && !cpuPressure && current < _max / 2)
+                return Math.min(_max, current + _step);
+
+            // No drops + low queues + light load = shrink to save memory
+            if (!hasDrops && !queuesBackedUp && !heavyTransit && !cpuPressure && current > _min)
+                return Math.max(_min, current - _step);
+
+            return current;
+        }
+    }
+
+    /**
+     * Tunes TunnelGatewayPumper thread count based on pumper backlog.
+     * More threads = more parallel gateway pumping = lower latency.
+     * Primary signal: tunnel.pumperQueueDepth (pumper queue usage).
+     * Cross-refs: tunnel.ibgw/obgw.queueSize, jobQueue.jobLag (CPU).
+     *
+     * @since 0.9.70+
+     */
+    private class PumperThreadsParam extends BaseParam {
+
+        PumperThreadsParam() {
+            super("tunnel.pumper.threads", SUB_TUNNEL,
+                  "Pumper threads",
+                  2, 16, 1, "tunnel.pumperQueueDepth", _context);
+        }
+
+        protected void applyValue(int value) {
+            TunnelDispatcher.setPumperMaxThreads(value);
+            TunnelDispatcher.adjustPumperThreads(value);
+        }
+
+        protected int getRuntimeValue() {
+            return TunnelDispatcher.getPumperMaxThreads();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = tunnel.pumperQueueDepth (avg items in pumper queue)
+            // Cross-refs: tunnel.ibgw/obgw.queueSize, tunnel.pumperQueueFull,
+            //             jobQueue.jobLag (CPU)
+            double ibgwQueue = getAdditionalStat(_context, "tunnel.ibgw.queueSize");
+            double obgwQueue = getAdditionalStat(_context, "tunnel.obgw.queueSize");
+            double drops = getAdditionalStat(_context, "tunnel.pumperQueueFull");
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean queueHigh = !Double.isNaN(observed) && observed > 20;
+            boolean hasDrops = !Double.isNaN(drops) && drops > 0;
+            boolean queuesBackedUp = (!Double.isNaN(ibgwQueue) && ibgwQueue > 50) ||
+                                     (!Double.isNaN(obgwQueue) && obgwQueue > 50);
+
+            // Queue depth high, drops, or backed up + no CPU = add threads
+            if ((queueHigh || hasDrops || queuesBackedUp) && !cpuPressure)
+                return Math.min(_max, current + 1);
+
+            // Idle + no pressure = remove threads
+            if (!queueHigh && !hasDrops && !queuesBackedUp && !cpuPressure && current > _min)
+                return Math.max(_min, current - 1);
 
             return current;
         }
@@ -4991,7 +5119,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         NtcpSendFinisherThreadsParam() {
             super("ntcp.sendFinisher.threads", SUB_TRANSPORT,
                   "NTCP send finisher threads",
-                  1, 16, 1, "ntcp.sendPool utilization", _context);
+                  2, 16, 1, "ntcp.sendPool utilization", _context);
         }
 
         protected void applyValue(int value) {
@@ -5156,23 +5284,27 @@ public class Tuner implements SimpleTimer.TimedEvent {
             double finisherQ = getAdditionalStat(_context, "ntcp.sendFinisher.queueSize");
             double rtt = getAdditionalStat(_context, "udp.sendConfirmTime");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean criticalUtilization = !Double.isNaN(observed) && observed > 80;
             boolean highUtilization = !Double.isNaN(observed) && observed > 60;
+            boolean finisherBacklog = !Double.isNaN(finisherQ) && finisherQ > 200;
+
+            // Critical saturation: pool IS the bottleneck, grow regardless of latency.
+            // Only CPU pressure stops us — latency is a symptom of the pool being too small.
+            if (criticalUtilization && !cpuPressure)
+                return Math.min(_max, current + _step * 2);
+
+            // High utilization or finisher backlog + no CPU = grow pool
+            if ((highUtilization || finisherBacklog) && !cpuPressure)
+                return Math.min(_max, current + _step * 2);
+
+            // Moderate utilization + low latency + low RTT = grow pool proactively
             boolean lowLatency = !Double.isNaN(sendTime) && sendTime < 100;
             boolean lowRTT = !Double.isNaN(rtt) && rtt < 200;
-            boolean finisherBacklog = !Double.isNaN(finisherQ) && finisherQ > 200;
-            boolean hasCapacity = !cpuPressure && lowLatency;
-
-            // High utilization or finisher backlog + CPU headroom = grow pool aggressively
-            if ((highUtilization || finisherBacklog) && hasCapacity) {
-                return Math.min(_max, current + _step * 2);
-            }
-
-            // Moderate utilization + low latency = grow pool proactively
-            if (!Double.isNaN(observed) && observed > 40 && hasCapacity && lowRTT)
+            if (!Double.isNaN(observed) && observed > 40 && !cpuPressure && lowLatency && lowRTT)
                 return Math.min(_max, current + _step);
 
-            // Low utilization + low latency + no backlog = shrink to reduce memory
-            if ((observed < 20 || Double.isNaN(observed)) && lowLatency && !cpuPressure
+            // Low utilization + no backlog = shrink to reduce memory
+            if ((observed < 20 || Double.isNaN(observed)) && !cpuPressure
                 && !finisherBacklog && current > _min)
                 return Math.max(_min, current - _step);
 

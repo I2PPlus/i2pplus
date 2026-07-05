@@ -95,6 +95,8 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("i2p.streaming.immediateAckDelay", "Duplicate ACK Delay");
         DISPLAY_NAMES.put("i2p.router.maxDispatchAge", "Max Message Queue Age");
         DISPLAY_NAMES.put("i2p.router.handlerThreadPriority", "I/O Thread Priority");
+        DISPLAY_NAMES.put("tunnel.pumper.queueCapacity", "Pumper Queue Capacity");
+        DISPLAY_NAMES.put("tunnel.pumper.threads", "Pumper Threads");
     }
 
     // brief purpose descriptions (<=120 chars)
@@ -168,6 +170,8 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2p.streaming.immediateAckDelay", "Delay for dup or OOO packet ACKs in ms.");
         PARAM_DESCRIPTIONS.put("i2p.router.maxDispatchAge", "Max age a message can be queued before dropping in ms.");
         PARAM_DESCRIPTIONS.put("i2p.router.handlerThreadPriority", "Dynamic priority for I/O handler threads.");
+        PARAM_DESCRIPTIONS.put("tunnel.pumper.queueCapacity", "Max gateway pumper queue depth before dropping.");
+        PARAM_DESCRIPTIONS.put("tunnel.pumper.threads", "Number of gateway pumper threads.");
     }
 
     // display order for subsystems

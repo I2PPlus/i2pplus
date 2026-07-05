@@ -1176,6 +1176,24 @@ public class TunnelDispatcher implements Service {
     public static int getMaxObMsgsPerPump() { return PumpedTunnelGateway.getMaxObMsgsPerPump(); }
 
     /** @since 0.9.70+ */
+    public static int getPumperQueueCapacity() { return TunnelGatewayPumper.getQueueCapacity(); }
+
+    /** @since 0.9.70+ */
+    public static void setPumperQueueCapacity(int value) { TunnelGatewayPumper.setQueueCapacity(value); }
+
+    /** @since 0.9.70+ */
+    public static void resizePumperQueue(int value) { TunnelGatewayPumper.resizeRunningQueue(value); }
+
+    /** @since 0.9.70+ */
+    public static int getPumperMaxThreads() { return TunnelGatewayPumper.getMaxPumpers(); }
+
+    /** @since 0.9.70+ */
+    public static void setPumperMaxThreads(int value) { TunnelGatewayPumper.setMaxPumpers(value); }
+
+    /** @since 0.9.70+ */
+    public static void adjustPumperThreads(int value) { TunnelGatewayPumper.adjustRunningThreads(value); }
+
+    /** @since 0.9.70+ */
     public static void setMaxObMsgsPerPump(int val) { PumpedTunnelGateway.setMaxObMsgsPerPump(val); }
 
     /** @since 0.9.70+ */
