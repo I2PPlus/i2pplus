@@ -49,15 +49,31 @@ public class InclusiveByteRange {
     long first = 0;
     long last = 0;
 
+    /**
+     * Creates a new byte range.
+     *
+     * @param first the first byte in the range (inclusive), or negative for suffix ranges
+     * @param last the last byte in the range (inclusive), or negative for suffix ranges
+     */
     public InclusiveByteRange(long first, long last) {
         this.first = first;
         this.last = last;
     }
 
+    /**
+     * Returns the first byte position in this range.
+     *
+     * @return the first byte position (may be negative for suffix ranges)
+     */
     public long getFirst() {
         return first;
     }
 
+    /**
+     * Returns the last byte position in this range.
+     *
+     * @return the last byte position (may be negative for suffix ranges)
+     */
     public long getLast() {
         return last;
     }
@@ -123,6 +139,13 @@ public class InclusiveByteRange {
         return satRanges;
     }
 
+    /**
+     * Returns the first byte position, resolved against the total entity size.
+     * For suffix ranges (negative first), returns {@code max(0, size - last)}.
+     *
+     * @param size the total size of the entity
+     * @return the resolved first byte position
+     */
     public long getFirst(long size) {
         if (first < 0) {
             long tf = size - last;
@@ -134,6 +157,13 @@ public class InclusiveByteRange {
         return first;
     }
 
+    /**
+     * Returns the last byte position, resolved against the total entity size.
+     * Clamps to {@code size - 1} for open-ended or out-of-bounds ranges.
+     *
+     * @param size the total size of the entity
+     * @return the resolved last byte position
+     */
     public long getLast(long size) {
         if (first < 0 || last < 0 || last >= size) {
             return size - 1;
@@ -141,10 +171,23 @@ public class InclusiveByteRange {
         return last;
     }
 
+    /**
+     * Returns the number of bytes in this range, resolved against the total entity size.
+     *
+     * @param size the total size of the entity
+     * @return the number of bytes in the range (always &gt;= 1)
+     */
     public long getSize(long size) {
         return getLast(size) - getFirst(size) + 1;
     }
 
+    /**
+     * Formats this range as an HTTP Content-Range header value.
+     * Returns a string of the form {@code bytes first-last/size}.
+     *
+     * @param size the total size of the entity
+     * @return the Content-Range header value
+     */
     public String toHeaderRangeString(long size) {
         StringBuilder sb = new StringBuilder(40);
         sb.append("bytes ")
@@ -156,12 +199,24 @@ public class InclusiveByteRange {
         return sb.toString();
     }
 
+    /**
+     * Formats a 416 Range Not Satisfiable response header value.
+     * Returns a string of the form "bytes star/star-size".
+     *
+     * @param size the total size of the entity
+     * @return the Content-Range header value for a 416 response
+     */
     public static String to416HeaderRangeString(long size) {
         StringBuilder sb = new StringBuilder(40);
         sb.append("bytes */").append(size);
         return sb.toString();
     }
 
+    /**
+     * Returns a string representation of this range in the form {@code first:last}.
+     *
+     * @return string representation of this range
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(60);

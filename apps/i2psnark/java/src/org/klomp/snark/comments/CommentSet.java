@@ -59,13 +59,23 @@ public class CommentSet extends AbstractSet<Comment> {
         map = new HashMap<>(4);
     }
 
+    /**
+     * Creates a CommentSet from a collection of comments.
+     *
+     * @param coll the initial collection of comments
+     */
     public CommentSet(Collection<Comment> coll) {
         super();
         map = new HashMap<>(coll.size());
         addAll(coll);
     }
 
-    /** File must be gzipped. Need not be sorted. See Comment.toPersistentString() for format. */
+    /**
+     * Creates a CommentSet by reading from a gzipped file.
+     *
+     * @param file the gzipped file to read from
+     * @throws IOException if an I/O error occurs
+     */
     public CommentSet(File file) throws IOException {
         this();
         BufferedReader br = null;
@@ -89,8 +99,11 @@ public class CommentSet extends AbstractSet<Comment> {
     }
 
     /**
-     * File will be gzipped. Not sorted, includes hidden. See Comment.toPersistentString() for
-     * format. Sets isModified() to false.
+     * Saves this CommentSet to a gzipped file. Not sorted, includes hidden comments.
+     * Sets isModified() to false on success.
+     *
+     * @param file the file to write to
+     * @throws IOException if an I/O error occurs
      */
     public void save(File file) throws IOException {
         PrintWriter out = null;
@@ -113,8 +126,11 @@ public class CommentSet extends AbstractSet<Comment> {
     }
 
     /**
-     * Max length for strings enforced in Comment.java. Max total length for strings enforced here.
-     * Enforces max size for set
+     * Adds a comment to this set. Enforces max size and max total text length.
+     * Checks for duplicates based on approximate time range.
+     *
+     * @param c the comment to add
+     * @return true if added, false if duplicate or at capacity
      */
     @Override
     public boolean add(Comment c) {
@@ -156,8 +172,9 @@ public class CommentSet extends AbstractSet<Comment> {
     }
 
     /**
-     * Only hides the comment, doesn't really remove it.
+     * Hides a comment (does not actually remove it from the underlying set).
      *
+     * @param o the Comment to hide
      * @return true if present and not previously hidden
      */
     @Override
@@ -180,9 +197,9 @@ public class CommentSet extends AbstractSet<Comment> {
     }
 
     /**
-     * Remove the id as retrieved from Comment.getID(). Only hides the comment, doesn't really
-     * remove it. This is for the UI.
+     * Hides a comment by its unique ID (as returned by Comment.getID()).
      *
+     * @param id the comment ID to hide
      * @return true if present and not previously hidden
      */
     public boolean remove(int id) {
@@ -197,7 +214,11 @@ public class CommentSet extends AbstractSet<Comment> {
         return false;
     }
 
-    /** Remove all ratings of mine with empty comments, except the ID specified. */
+    /**
+     * Hides all of my ratings with empty text, except the specified ID.
+     *
+     * @param exceptID the comment ID to preserve
+     */
     private void removeMyOldRatings(int exceptID) {
         for (List<Comment> l : map.values()) {
             for (Comment c : l) {
@@ -209,7 +230,11 @@ public class CommentSet extends AbstractSet<Comment> {
         }
     }
 
-    /** may be hidden */
+    /**
+     * Updates statistics when adding a comment. The comment may be hidden.
+     *
+     * @param c the comment to add stats for
+     */
     private void addStats(Comment c) {
         realSize++;
         if (!c.isHidden()) {
@@ -231,7 +256,11 @@ public class CommentSet extends AbstractSet<Comment> {
         modified = true;
     }
 
-    /** call before setting hidden */
+    /**
+     * Updates statistics when removing a comment. Call before setting hidden.
+     *
+     * @param c the comment to remove stats for
+     */
     private void removeStats(Comment c) {
         if (!c.isHidden()) {
             size--;
@@ -249,22 +278,27 @@ public class CommentSet extends AbstractSet<Comment> {
     }
 
     /**
-     * Is not adjusted if the latest comment wasn't hidden but is then hidden.
+     * Returns the timestamp of the most recent non-hidden comment.
+     * Not adjusted when the latest comment is subsequently hidden.
      *
-     * @return the timestamp of the most recent non-hidden comment
+     * @return the timestamp in milliseconds
      */
     public long getLatestCommentTime() {
         return latestCommentTime;
     }
 
     /**
-     * @return true if modified since instantiation
+     * Returns whether this set has been modified since instantiation or last save.
+     *
+     * @return true if modified
      */
     public boolean isModified() {
         return modified;
     }
 
     /**
+     * Returns the local user's rating, or 0 if none.
+     *
      * @return 0 if none, or 1-5
      */
     public int getMyRating() {
@@ -272,13 +306,17 @@ public class CommentSet extends AbstractSet<Comment> {
     }
 
     /**
-     * @return Number of ratings making up the average rating
+     * Returns the number of ratings making up the average rating.
+     *
+     * @return the count of ratings
      */
     public int getRatingCount() {
         return ratingSize;
     }
 
     /**
+     * Returns the average rating from all non-hidden, non-local comments.
+     *
      * @return 0 if none, or 1-5
      */
     public double getAverageRating() {
@@ -286,7 +324,9 @@ public class CommentSet extends AbstractSet<Comment> {
         return totalRating / (double) ratingSize;
     }
 
-    /** Actually clears everything, including hidden. Resets ratings to zero. */
+    /**
+     * Clears all comments including hidden ones. Resets all statistics to zero.
+     */
     @Override
     public void clear() {
         if (realSize > 0) {
@@ -302,21 +342,23 @@ public class CommentSet extends AbstractSet<Comment> {
     }
 
     /**
-     * May be more than what the iterator returns, we do additional deduping in the iterator.
+     * Returns the number of non-hidden comments. May be more than what iterator() returns
+     * due to additional deduping.
      *
-     * @return the non-hidden size
+     * @return the non-hidden count
      */
     public int size() {
         return size;
     }
 
     /**
-     * Will be in reverse-sort order, i.e. newest-first. The returned iterator is thread-safe after
-     * this call. Changes after this call will not be reflected in the iterator. iter.remove() has
-     * no effect on the underlying set. Hidden comments not included.
+     * Returns an iterator over non-hidden comments in reverse-sort order (newest first).
+     * Thread-safe after this call. Changes after this call are not reflected.
+     * iter.remove() has no effect on the underlying set.
      *
-     * <p>Returned values may be less than indicated in size() due to additional deduping in the
-     * iterator.
+     * <p>Returned values may be fewer than size() due to additional deduping.
+     *
+     * @return an iterator over non-hidden comments
      */
     public Iterator<Comment> iterator() {
         if (size <= 0) return Collections.<Comment>emptyList().iterator();

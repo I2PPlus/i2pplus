@@ -30,9 +30,6 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     private static final int MIN_PORT = 6881;
     private static final int MAX_PORT = 6889;
 
-    // Whether or not to ask the user for commands while sharing
-    // private static boolean command_interpreter = true;
-
     private static final String newline = System.getProperty("line.separator");
 
     /** max connections */
@@ -208,15 +205,12 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                 }
                 storage = new Storage(_util, baseFile, meta, slistener, shouldPreserve);
                 if (completeListener != null) {
-                    storage.check(
-                            completeListener.getSavedTorrentTime(this),
-                            completeListener.getSavedTorrentBitField(this));
+                storage.check(
+                        completeListener.getSavedTorrentTime(this),
+                        completeListener.getSavedTorrentBitField(this));
                 } else {
                     storage.check();
                 }
-                // have to figure out when to reopen
-                // if (!start)
-                // storage.close();
             } catch (IOException ioe) {
                 try {
                     storage.close();
@@ -226,18 +220,6 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                 fatal("Could not check or create files for " + getBaseInfo(), ioe);
             }
         }
-
-        /*
-         * see comment above
-         *
-         * activity = "Collecting pieces";
-         * coordinator = new PeerCoordinator(id, meta, storage, clistener, this);
-         * PeerCoordinatorSet set = PeerCoordinatorSet.instance();
-         * set.add(coordinator);
-         * ConnectionAcceptor acceptor = ConnectionAcceptor.instance();
-         * acceptor.startAccepting(set, serversocket);
-         * trackerclient = new TrackerClient(meta, coordinator);
-         */
 
         savedUploaded = (completeListener != null) ? completeListener.getSavedUploaded(this) : 0;
         if (completeListener != null) {
@@ -1041,6 +1023,13 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     private boolean allChecked;
     private boolean checking;
 
+    /**
+     * StorageListener callback called when a piece check completes.
+     *
+     * @param storage the storage being checked
+     * @param num the piece number
+     * @param checked true if the piece hash was correct
+     */
     public void storageChecked(Storage storage, int num, boolean checked) {
         // allocating = false;
         if (!allChecked && !checking) {
@@ -1051,6 +1040,11 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
     }
 
+    /**
+     * StorageListener callback called when all pieces have been checked.
+     *
+     * @param storage the storage that was checked
+     */
     public void storageAllChecked(Storage storage) {
         allChecked = true;
         checking = false;
@@ -1065,8 +1059,14 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
     }
 
+    /** Whether the torrent storage has reported completion. */
     public boolean storageCompleted;
 
+    /**
+     * StorageListener callback called when the torrent has completed.
+     *
+     * @param storage the storage that completed
+     */
     public void storageCompleted(Storage storage) {
         if (_log.shouldInfo()) {
             _log.info("Torrent " + torrent + " completed");
@@ -1079,10 +1079,18 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
     }
 
+    /**
+     * @return true if the torrent storage has completed
+     */
     public boolean isStorageCompleted() {
         return storageCompleted;
     }
 
+    /**
+     * StorageListener callback to update the coordinator's wanted piece set.
+     *
+     * @param storage the storage whose wanted pieces changed
+     */
     public void setWantedPieces(Storage storage) {
         PeerCoordinator localCoordinator = this.coordinator;
         if (localCoordinator != null) {
@@ -1113,6 +1121,13 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
 
     static final int MAX_TOTAL_UPLOADERS = 50;
 
+    /**
+     * CoordinatorListener callback to check if the total uploaders across all torrents exceeds the
+     * configured limit.
+     *
+     * @param uploaders the number of interested uploaders on this coordinator
+     * @return true if the global upload limit is exceeded
+     */
     public boolean overUploadLimit(int uploaders) {
         int maxUploaders = _util.getMaxUploaders();
         if (maxUploaders < MIN_TOTAL_UPLOADERS) {
@@ -1195,10 +1210,18 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
 
     private boolean notificationSent;
 
+    /**
+     * @return true if a completion notification has already been sent for this torrent
+     */
     public boolean isNotificationSent() {
         return notificationSent;
     }
 
+    /**
+     * Mark that a completion notification has been sent.
+     *
+     * @param sent true if the notification was sent
+     */
     public void setNotificationSent(boolean sent) {
         this.notificationSent = sent;
     }

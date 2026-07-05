@@ -418,6 +418,12 @@ class WebPeer extends Peer implements EepGet.StatusListener {
         }
     }
 
+    /**
+     * Handle a failed fetch, banning the webseed if appropriate.
+     *
+     * @param url the URL that failed
+     * @param resp the HTTP response code
+     */
     private void fail(String url, int resp) {
         if (_log.shouldWarn()) _log.warn("Fetch of " + url + " failed, rc: " + resp);
         if (resp == 301
@@ -523,7 +529,9 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
-     * @return true
+     * {@inheritDoc}
+     *
+     * @return false (WebPeer overrides to return false for historical reasons)
      * @since 0.9.49
      */
     @Override
@@ -535,6 +543,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     // Because super doesn't have a PeerState
 
     /**
+     * {@inheritDoc}
+     *
      * @since 0.9.62
      */
     @Override
@@ -557,6 +567,9 @@ class WebPeer extends Peer implements EepGet.StatusListener {
 
     // private methods below here implementing parts of PeerState
 
+    /**
+     * Add requests for outstanding pieces.
+     */
     private synchronized void addRequest() {
         boolean more_pieces = true;
         while (more_pieces) {
@@ -612,26 +625,15 @@ class WebPeer extends Peer implements EepGet.StatusListener {
         }
 
         // failsafe
-        // However this is bad as it thrashes the peer when we change our mind
-        // Ticket 691 cause here?
         if (outstandingRequests.isEmpty()) lastRequest = null;
 
-        /*
-              // If we are not in the end game, we may run out of things to request
-              // because we are asking other peers. Set not-interesting now rather than
-              // wait for those other requests to be satisfied via havePiece()
-              if (interesting && lastRequest == null) {
-                  interesting = false;
-                  out.sendInterest(false);
-                  if (_log.shouldDebug())
-                      _log.debug(peer + " nothing more to request, now uninteresting");
-              }
-        */
         return false;
     }
 
     /**
-     * @return all pieces we are currently requesting, or empty Set
+     * Returns all pieces we are currently requesting.
+     *
+     * @return set of piece numbers, or empty set
      */
     private synchronized Set<Integer> getRequestedPieces() {
         Set<Integer> rv = new HashSet<>(outstandingRequests.size() + 1);
@@ -642,7 +644,10 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     /**
-     * @return index in outstandingRequests or -1
+     * Returns the index of the first outstanding request for the given piece.
+     *
+     * @param piece the piece number
+     * @return index in outstandingRequests, or -1 if not found
      */
     private synchronized int getFirstOutstandingRequest(int piece) {
         for (int i = 0; i < outstandingRequests.size(); i++) {
@@ -651,6 +656,11 @@ class WebPeer extends Peer implements EepGet.StatusListener {
         return -1;
     }
 
+    /**
+     * Return partial pieces to the coordinator.
+     *
+     * @return list of partial piece requests
+     */
     private synchronized List<Request> returnPartialPieces() {
         Set<Integer> pcs = getRequestedPieces();
         List<Request> rv = new ArrayList<>(pcs.size());
@@ -662,6 +672,12 @@ class WebPeer extends Peer implements EepGet.StatusListener {
         return rv;
     }
 
+    /**
+     * Returns the request with the lowest offset for the given piece.
+     *
+     * @param piece the piece number
+     * @return the lowest-offset request, or null
+     */
     private synchronized Request getLowestOutstandingRequest(int piece) {
         Request rv = null;
         int lowest = Integer.MAX_VALUE;
@@ -676,6 +692,9 @@ class WebPeer extends Peer implements EepGet.StatusListener {
 
     // EepGet status listeners to maintain the state for the web page
 
+    /**
+     * {@inheritDoc}
+     */
     public void bytesTransferred(
             long alreadyTransferred,
             int currentWrite,
@@ -685,6 +704,9 @@ class WebPeer extends Peer implements EepGet.StatusListener {
         lastRcvd = System.currentTimeMillis();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void attemptFailed(
             String url,
             long bytesTransferred,
@@ -693,6 +715,9 @@ class WebPeer extends Peer implements EepGet.StatusListener {
             int numRetries,
             Exception cause) {}
 
+    /**
+     * {@inheritDoc}
+     */
     public void transferComplete(
             long alreadyTransferred,
             long bytesTransferred,
@@ -701,12 +726,20 @@ class WebPeer extends Peer implements EepGet.StatusListener {
             String outputFile,
             boolean notModified) {}
 
+    /**
+     * {@inheritDoc}
+     */
     public void transferFailed(
             String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {}
 
+    /**
+     * {@inheritDoc}
+     */
     public void headerReceived(String url, int attemptNum, String key, String val) {}
 
+    /**
+     * {@inheritDoc}
+     */
     public void attempting(String url) {}
 
-    // End of EepGet status listeners
 }

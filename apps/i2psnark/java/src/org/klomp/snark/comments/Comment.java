@@ -80,27 +80,56 @@ public class Comment implements Comparable<Comment> {
         this.byMe = isMine;
     }
 
+    /**
+     * Returns the comment text.
+     *
+     * @return the text, or null if no text
+     */
     public String getText() {
         return text;
     }
 
+    /**
+     * Returns the commenter's name.
+     *
+     * @return the name, or null if anonymous
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Returns the rating (0-5).
+     *
+     * @return the rating value
+     */
     public int getRating() {
         return rating;
     }
 
-    /** java time (ms) */
+    /**
+     * Returns the comment timestamp in java time (milliseconds since epoch).
+     *
+     * @return the timestamp
+     */
     public long getTime() {
         return (time * TIME_SHRINK) + TIME_OFFSET;
     }
 
+    /**
+     * Returns whether this comment was posted by the local user.
+     *
+     * @return true if the comment is from the local user
+     */
     public boolean isMine() {
         return byMe;
     }
 
+    /**
+     * Returns whether this comment is hidden (deleted by the user).
+     *
+     * @return true if hidden
+     */
     public boolean isHidden() {
         return hidden;
     }
@@ -110,14 +139,22 @@ public class Comment implements Comparable<Comment> {
     }
 
     /**
-     * A unique ID that may be used to delete this comment from the CommentSet via remove(int). NOT
-     * persisted across restarts.
+     * Returns a unique ID for this comment, usable with CommentSet.remove(int).
+     * Not persisted across restarts.
+     *
+     * @return the unique ID
      */
     public int getID() {
         return id;
     }
 
-    /** reverse */
+    /**
+     * Compares comments in reverse chronological order (newest first).
+     * Falls back to rating, then name, then text for ties.
+     *
+     * @param c the other Comment to compare to
+     * @return negative if this comment is newer
+     */
     public int compareTo(Comment c) {
         if (time > c.time) return -1;
         if (time < c.time) return 1;
@@ -139,7 +176,9 @@ public class Comment implements Comparable<Comment> {
     }
 
     /**
-     * @return time,rating,mine,hidden,name,text
+     * Converts this comment to a persistent string representation.
+     *
+     * @return comma-separated string of time,rating,mine,hidden,name,text
      */
     public String toPersistentString() {
         StringBuilder buf = new StringBuilder();
@@ -158,7 +197,10 @@ public class Comment implements Comparable<Comment> {
     }
 
     /**
-     * @return null if can't be parsed
+     * Parses a comment from its persistent string representation.
+     *
+     * @param s the persistent string
+     * @return the parsed Comment, or null if parsing fails
      */
     public static Comment fromPersistentString(String s) {
         String[] ss = DataHelper.split(s, ",", 6);
@@ -177,7 +219,9 @@ public class Comment implements Comparable<Comment> {
     }
 
     /**
-     * @return bucket number
+     * Returns the bucket number for hash-based grouping.
+     *
+     * @return the bucket number
      */
     @Override
     public int hashCode() {
@@ -200,9 +244,10 @@ public class Comment implements Comparable<Comment> {
     }
 
     /**
-     * Ignores timestamp
+     * Checks equality ignoring the timestamp, comparing only rating, text, and name.
      *
-     * @param c non-null
+     * @param c the other Comment to compare to
+     * @return true if rating, text, and name match
      */
     public boolean equalsIgnoreTimestamp(Comment c) {
         return rating == c.rating && eq(text, c.text) && eq(name, c.name);

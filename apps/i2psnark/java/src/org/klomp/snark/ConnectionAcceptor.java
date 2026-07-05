@@ -132,6 +132,11 @@ class ConnectionAcceptor implements Runnable {
         }
     }
 
+    /**
+     * Returns the port this acceptor is listening on.
+     *
+     * @return the port number
+     */
     public int getPort() {
         return TrackerClient.PORT;
     } // serverSocket.getLocalPort();
@@ -292,7 +297,10 @@ class ConnectionAcceptor implements Runnable {
             _socket = socket;
         }
 
-        public void run() {
+    /**
+     * Runs the accept loop, listening for incoming connections.
+     */
+    public void run() {
             try {
                 InputStream in = _socket.getInputStream();
                 OutputStream out = _socket.getOutputStream();

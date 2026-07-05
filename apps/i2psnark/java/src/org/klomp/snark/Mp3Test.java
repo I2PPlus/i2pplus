@@ -20,6 +20,12 @@ import net.i2p.data.DataHelper;
  * @since 0.8.2
  */
 public class Mp3Test {
+    /**
+     * Main entry point for the MP3 metadata test utility.
+     *
+     * @param args command line arguments (MP3 file paths)
+     * @throws Exception if an error occurs reading the files
+     */
     public static void main(String[] args) throws Exception {
         if (args.length == 0) {
             System.out.println("Usage: Mp3Test files...");

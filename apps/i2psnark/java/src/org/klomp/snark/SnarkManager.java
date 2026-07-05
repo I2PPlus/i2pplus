@@ -127,8 +127,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String PROP_I2CP_HOST = "i2psnark.i2cpHost";
     public static final String PROP_I2CP_PORT = "i2psnark.i2cpPort";
     public static final String PROP_I2CP_OPTS = "i2psnark.i2cpOptions";
-    // public static final String PROP_EEP_HOST = "i2psnark.eepHost";
-    // public static final String PROP_EEP_PORT = "i2psnark.eepPort";
     public static final String PROP_UPLOADERS_TOTAL = "i2psnark.uploaders.total";
     public static final String PROP_UPBW_MAX = "i2psnark.upbw.max";
 
@@ -153,8 +151,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final String PROP_META_MAGNET_DN = "magnet_dn";
     private static final String PROP_META_MAGNET_TR = "magnet_tr";
     private static final String PROP_META_MAGNET_DIR = "magnet_dir";
-    // private static final String PROP_META_BITFIELD_SUFFIX = ".bitfield";
-    // private static final String PROP_META_PRIORITY_SUFFIX = ".priority";
     private static final String PROP_META_MAGNET_PREFIX = "i2psnark.magnet.";
 
     /**
@@ -182,8 +178,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String PROP_AUTO_START =
             "i2psnark.autoStart"; // convert in migration to new config file
     private final boolean DEFAULT_AUTO_START;
-    // public static final String PROP_LINK_PREFIX = "i2psnark.linkPrefix";
-    // public static final String DEFAULT_LINK_PREFIX = "file:///";
     public static final String PROP_STARTUP_DELAY = "i2psnark.startupDelay";
     public static final String PROP_REFRESH_DELAY = "i2psnark.refreshSeconds";
     public static final String PROP_PAGE_SIZE = "i2psnark.pageSize";
@@ -498,13 +492,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public void sessionDisconnected() {
         if (!_context.isRouterContext()) {
-            // addMessage(_t("Unable to connect to I2P"));
-            // stopAllTorrents(true);
             _stopping = true;
         }
     }
 
-    /*
+    /**
      *  Called by the webapp at Jetty shutdown.
      *  Stops all torrents. Does not close the tunnel, so the announces have a chance.
      *  Fix this so an individual webapp stop will close the tunnel.
@@ -687,6 +679,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 _config.getProperty(PROP_PREALLOCATE_FILES, DEFAULT_PREALLOCATE_FILES));
     }
 
+    /**
+     * @return true if newly added torrents should be started automatically
+     */
     public boolean shouldAutoStart() {
         return Boolean.parseBoolean(
                 _config.getProperty(PROP_AUTO_START, Boolean.toString(DEFAULT_AUTO_START)));
@@ -822,6 +817,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
     }
 
+    /**
+     * @return the configured torrent data directory
+     */
     public File getDataDir() {
         String dir = _config.getProperty(PROP_DIR, _contextName);
         File f;
@@ -1521,36 +1519,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             } catch (NumberFormatException nfe) { /* ignored */ }
             if (limit != _util.getMaxUpBW()) {
                 if (limit >= MIN_UP_BW) {
-                    _bwManager.setUpBWLimit(limit * 1024L);
-                    changed = true;
-                    _config.setProperty(PROP_UPBW_MAX, Integer.toString(limit));
-                    String msg = _t("Up BW limit changed to {0}KBps", limit);
-                    // addMessage(msg);
-                    if (!_context.isRouterContext()) {
-                        System.out.println(" • " + msg);
-                    }
-                } else {
-                    String msg = _t("Minimum up bandwidth limit is {0}KBps", MIN_UP_BW);
-                    addMessage(msg);
-                    if (!_context.isRouterContext()) {
-                        System.out.println(" • " + msg);
-                    }
-                }
-            }
-        }
-        if (upBW != null) {
-            int limit = _util.getMaxUpBW();
-            try {
-                limit = Integer.parseInt(upBW.trim());
-            } catch (NumberFormatException nfe) { /* ignored */ }
-            if (limit != _util.getMaxUpBW()) {
-                if (limit >= MIN_UP_BW) {
                     _util.setMaxUpBW(limit);
                     _bwManager.setUpBWLimit(limit * 1024L);
                     changed = true;
                     _config.setProperty(PROP_UPBW_MAX, Integer.toString(limit));
                     String msg = _t("Up BW limit changed to {0}KBps", limit);
-                    // addMessage(msg);
                     if (!_context.isRouterContext()) {
                         System.out.println(" • " + msg);
                     }
@@ -1574,7 +1547,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _config.setProperty(PROP_DOWNBW_MAX, Integer.toString(limit));
                     changed = true;
                     String msg = _t("Maximum download speed changed to {0}KB/s", limit);
-                    // addMessage(msg);
                     if (!_context.isRouterContext()) {
                         System.out.println(" • " + msg);
                     }
@@ -4070,11 +4042,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         for (String name : foundNames) {
             if (existingNames.contains(name)) { /* ignored */ } // already known. noop
             else {
-                // Will call connect() in addTorrent() if enabled
-                // if (shouldStart && !_util.connect())
-                //    addMessage(_t("Unable to connect to I2P!"));
                 try {
-                    // Snark.fatal() throws a RuntimeException
                     // don't let one bad torrent kill the whole loop
                     boolean ok = addTorrent(name, null, !shouldStart);
                     if (!ok) {

@@ -64,6 +64,13 @@ class DHTTracker {
         _isRunning = false;
     }
 
+    /**
+     * Announce a peer for a torrent.
+     *
+     * @param ih the info hash of the torrent
+     * @param hash the peer's destination hash
+     * @param isSeed true if the peer is a seed
+     */
     void announce(InfoHash ih, Hash hash, boolean isSeed) {
         if (_log.shouldDebug()) _log.debug("Announce " + hash + " for " + ih);
         Peers peers = _torrents.get(ih);
@@ -82,16 +89,17 @@ class DHTTracker {
             // don't let false trump true, as not all sources know the seed status
             if (isSeed) peer.setSeed(true);
         } else {
-            // We could update setLastSeen if he is already
-            // in there, but that would tend to keep
-            // the same set of peers.
-            // So let it expire so new ones can come in.
-            // Peer peer = peers.get(hash);
-            // if (peer != null)
-            //    peer.setLastSeen(_context.clock().now());
+            // We don't update setLastSeen here so that the peer
+            // will expire, allowing new peers to come in.
         }
     }
 
+    /**
+     * Remove a peer from a torrent's peer list.
+     *
+     * @param ih the info hash of the torrent
+     * @param hash the peer's destination hash
+     */
     void unannounce(InfoHash ih, Hash hash) {
         Peers peers = _torrents.get(ih);
         if (peers == null) return;
@@ -99,8 +107,11 @@ class DHTTracker {
     }
 
     /**
-     * Caller's responsibility to remove himself from the list
+     * Get peers for a torrent.
+     * Caller's responsibility to remove himself from the list.
      *
+     * @param ih the info hash of the torrent
+     * @param max maximum number of peers to return
      * @param noSeeds true if we do not want seeds in the result
      * @return list or empty list (never null)
      */
@@ -141,7 +152,11 @@ class DHTTracker {
         return result;
     }
 
-    /** Debug info, HTML formatted */
+    /**
+     * Debug info, HTML formatted.
+     *
+     * @param buf the buffer to append HTML to
+     */
     public void renderStatusHTML(StringBuilder buf) {
         String separator = " <span class=bullet>&nbsp;&bullet;&nbsp;</span> ";
         buf.append("<div class=debugStats>")

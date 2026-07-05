@@ -94,9 +94,6 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     //  bytes per bt spec:                         0011223344556677
     private static final long OPTION_EXTENSION = 0x0000000000100000L;
     private static final long OPTION_FAST = 0x0000000000000004L;
-    // private static final long OPTION_DHT       = 0x0000000000000001L;
-    // private static final long OPTION_AZMP      = 0x1000000000000000L;
-    // hybrid support TODO
     private static final long OPTION_V2 = 0x0000000000000010L;
     private long options;
     private final boolean _isIncoming;
@@ -118,7 +115,6 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         this.metainfo = metainfo;
         _id = __id.incrementAndGet();
         _isIncoming = false;
-        // _log.debug("Creating a new peer with " + peerID.toString(), new Exception("creating"));
     }
 
     /**
@@ -348,9 +344,6 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         long myOptions = OPTION_EXTENSION;
         // we can't handle HAVE_ALL or HAVE_NONE if we don't know the number of pieces
         if (metainfo != null) myOptions |= OPTION_FAST;
-        // FIXME get util here somehow
-        // if (util.getDHT() != null)
-        //    myOptions |= OPTION_I2P_DHT;
         dout.writeLong(myOptions);
         // Handshake write - metainfo hash
         dout.write(infohash);
@@ -596,7 +589,11 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         }
     }
 
-    /** Whether or not the peer is interested in pieces we have. Returns false if not connected. */
+    /**
+     * Whether or not the peer is interested in pieces we have.
+     *
+     * @return true if interested, false if not connected
+     */
     public boolean isInterested() {
         PeerState s = state;
         return (s != null) && s.interested;
@@ -617,7 +614,11 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         }
     }
 
-    /** Whether or not the peer has pieces we want from it. Returns false if not connected. */
+    /**
+     * Whether or not the peer has pieces we want from it.
+     *
+     * @return true if interesting, false if not connected
+     */
     public boolean isInteresting() {
         PeerState s = state;
         return (s != null) && s.interesting;
@@ -634,13 +635,21 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         }
     }
 
-    /** Whether or not we are choking the peer. Returns true when not connected. */
+    /**
+     * Whether or not we are choking the peer.
+     *
+     * @return true when choking or not connected
+     */
     public boolean isChoking() {
         PeerState s = state;
         return (s == null) || s.choking;
     }
 
-    /** Whether or not the peer choked us. Returns true when not connected. */
+    /**
+     * Whether or not the peer choked us.
+     *
+     * @return true when choked or not connected
+     */
     public boolean isChoked() {
         PeerState s = state;
         return (s == null) || s.choked;
@@ -688,11 +697,20 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         return uploaded.get();
     }
 
-    /** Returns the average rate in Bps */
+    /**
+     * Returns the average rate in Bps.
+     *
+     * @return average upload rate in bytes per second
+     */
     public long getUploadRate() {
         return PeerCoordinator.getRate(uploaded_old);
     }
 
+    /**
+     * Returns the average rate in Bps.
+     *
+     * @return average download rate in bytes per second
+     */
     public long getDownloadRate() {
         return PeerCoordinator.getRate(downloaded_old);
     }
@@ -796,8 +814,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Push the total uploaded/downloaded onto a RATE_DEPTH deep stack Resets the downloaded and
-     * uploaded counters to zero.
+     * Push the total uploaded/downloaded onto a RATE_DEPTH deep stack.
+     * Resets the downloaded and uploaded counters to zero.
      */
     void setRateHistory() {
         long up = uploaded.getAndSet(0);
@@ -808,6 +826,12 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
 
     /////// end BandwidthListener interface ///////
 
+    /**
+     * Returns the time in milliseconds since the last activity on either
+     * the incoming or outgoing connection.
+     *
+     * @return inactive time in ms, or -1 if not connected
+     */
     public long getInactiveTime() {
         PeerState s = state;
         if (s != null) {
@@ -862,7 +886,11 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         return s.bitfield.count();
     }
 
-    /** Return if a peer is a seeder */
+    /**
+     * Return if a peer is a seeder.
+     *
+     * @return true if the peer has all pieces
+     */
     public boolean isCompleted() {
         PeerState s = state;
         if (s == null || s.bitfield == null) {

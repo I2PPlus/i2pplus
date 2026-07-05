@@ -27,7 +27,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.DataHelper;
 import net.i2p.util.SystemVersion;
 
-/* ------------------------------------------------------------ */
 /**
  * Based on MimeTypes from Jetty 6.1.26, heavily simplified and modified to remove all dependencies
  * on Jetty libs.
@@ -36,8 +35,6 @@ import net.i2p.util.SystemVersion;
  *
  * <p>This is only for local mappings. Caller should use getServletContext().getMimeType() if this
  * returns null.
- *
- * <p>------------------------------------------------------------
  *
  * @author Greg Wilkins
  * @since Jetty 7
@@ -53,9 +50,10 @@ class MimeTypes {
                 || SystemVersion.getMaxMemory() < 100 * 1024 * 1024L)) loadSystemMimeTypes();
     }
 
-    /* ------------------------------------------------------------ */
     /**
-     * @param resourcePath A Map of file extension to mime-type.
+     * Load MIME type mappings from a resource file.
+     *
+     * @param resourcePath the resource path in the classpath, without ".properties" extension
      */
     public void loadMimeMap(String resourcePath) {
         loadMimeMap(_mimeMap, resourcePath);
@@ -71,10 +69,6 @@ class MimeTypes {
             try {
                 mime = ResourceBundle.getBundle(resourcePath);
             } catch (MissingResourceException e) {
-                // Jetty 7 webapp classloader blocks jetty classes
-                // http://wiki.eclipse.org/Jetty/Reference/Jetty_Classloading
-                // System.out.println("No mime types loaded from " + resourcePath + ", trying system
-                // classloader");
                 mime =
                         ResourceBundle.getBundle(
                                 resourcePath,
@@ -87,14 +81,11 @@ class MimeTypes {
                 String m = mime.getString(ext);
                 map.put(ext.toLowerCase(Locale.US), m);
             }
-            // System.out.println("Loaded " + map.size() + " mime types from " + resourcePath);
-        } catch (MissingResourceException e) {
-            // System.out.println("No mime types loaded from " + resourcePath);
-        }
+        } catch (MissingResourceException e) { /* ignored */ }
     }
 
     /**
-     * Load mime types from /etc/mime.types Format: mimetype suffix1 suffix2 ...
+     * Load mime types from /etc/mime.types. Format: mimetype suffix1 suffix2 ...
      *
      * @since 0.9.54
      */
@@ -113,10 +104,8 @@ class MimeTypes {
                 if (s.length < 2) continue;
                 for (int i = 1; i < s.length; i++) {
                     _mimeMap.put(s[i].toLowerCase(Locale.US), s[0]);
-                    // System.out.println("Mapping: '" + s[i] + "' -> '" + s[0] + "'");
                 }
             }
-            // System.out.println("Loaded " + _mimeMap.size() + " mime types from /etc/mime.types");
         } catch (IOException ioe) { /* ignored */ } finally {
             if (in != null)
                 try {
@@ -125,7 +114,6 @@ class MimeTypes {
         }
     }
 
-    /* ------------------------------------------------------------ */
     /**
      * Get the MIME type by filename extension.
      *
@@ -133,7 +121,7 @@ class MimeTypes {
      * returns null.
      *
      * @param filename A file name
-     * @return MIME type matching the longest dot extension of the file name.
+     * @return MIME type matching the longest dot extension of the file name, or null if not found
      */
     public String getMimeByExtension(String filename) {
         String type = null;
@@ -152,12 +140,11 @@ class MimeTypes {
         return type;
     }
 
-    /* ------------------------------------------------------------ */
     /**
-     * Set a mime mapping
+     * Set a mime mapping.
      *
-     * @param extension
-     * @param type
+     * @param extension the file extension (without the dot), case-insensitive
+     * @param type the MIME type to associate with the extension
      */
     public void addMimeMapping(String extension, String type) {
         _mimeMap.put(extension.toLowerCase(Locale.US), type);

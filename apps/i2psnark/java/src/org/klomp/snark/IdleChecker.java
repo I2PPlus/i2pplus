@@ -45,6 +45,9 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
         _pcs = pcs;
     }
 
+    /**
+     * Called periodically to check for idle conditions and adjust tunnel counts.
+     */
     public void timeReached() {
         synchronized (_lock) {
             locked_timeReached();
@@ -100,7 +103,9 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
         schedule(CHECK_TIME);
     }
 
-    /** Reduce to 1 in / 1 out tunnel */
+    /**
+     * Reduces tunnel count to 1 in / 1 out (or 2/2 for standalone).
+     */
     private void reduceTunnels() {
         _isIdle = true;
         boolean isStandalone = !_util.getContext().isRouterContext();
@@ -198,7 +203,14 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
         }
     }
 
-    /** Set in / out / in backup / out backup tunnel counts */
+    /**
+     * Sets the inbound/outbound tunnel counts and backup quantities.
+     *
+     * @param i the inbound tunnel quantity
+     * @param o the outbound tunnel quantity
+     * @param ib the inbound backup quantity
+     * @param ob the outbound backup quantity
+     */
     private void setTunnels(String i, String o, String ib, String ob) {
         _consec = 0;
         I2PSocketManager mgr = _util.getSocketManager();

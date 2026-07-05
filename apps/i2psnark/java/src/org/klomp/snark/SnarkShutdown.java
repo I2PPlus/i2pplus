@@ -39,31 +39,21 @@ public class SnarkShutdown extends I2PAppThread {
 
     @Override
     public void run() {
-        // Snark.debug("Shutting down...", Snark.NOTICE);
-
-        // Snark.debug("Halting ConnectionAcceptor...", Snark.INFO);
         if (acceptor != null) acceptor.halt();
 
-        // Snark.debug("Halting TrackerClient...", Snark.INFO);
         if (trackerclient != null) trackerclient.halt(true);
 
-        // Snark.debug("Halting PeerCoordinator...", Snark.INFO);
         if (coordinator != null) coordinator.halt();
 
-        // Snark.debug("Closing Storage...", Snark.INFO);
         if (storage != null) {
             try {
                 storage.close();
             } catch (IOException ioe) {
-                // I2PSnarkUtil.instance().debug("Couldn't properly close storage", Snark.ERROR,
-                // ioe);
                 throw new RuntimeException("b0rking");
             }
         }
 
-        // XXX - Should actually wait till done...
         try {
-            // Snark.debug("Waiting 5 seconds...", Snark.INFO);
             Thread.sleep(5 * 1000);
         } catch (InterruptedException ie) {
             /* ignored */

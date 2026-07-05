@@ -54,7 +54,8 @@ public class BDecoder {
     private MessageDigest sha_digest;
 
     /**
-     * Ugly hack. Return the SHA hash over bytes that make up the special map.
+     * Returns the SHA-1 digest over bytes that make up the special map (info map).
+     * This is an ugly hack needed for torrent info hash calculation.
      *
      * @return the SHA-1 digest of the special map bytes, or null if there was no special map
      */
@@ -64,15 +65,9 @@ public class BDecoder {
         return result;
     }
 
-    /****
-     * // Ugly hack. Name defaults to "info".
-     * public void set_special_map_name(String name)
-     * {
-     * special_map = name;
-     * }
-     ****/
-
-    /** Initializes a new BDecoder. Nothing is read from the given InputStream yet.
+    /**
+     * Initializes a new BDecoder. Nothing is read from the given InputStream yet.
+     *
      * @param in the InputStream to decode from
      */
     public BDecoder(InputStream in) {
@@ -80,21 +75,18 @@ public class BDecoder {
     }
 
     /**
-     * Creates a new BDecoder and immediatly decodes the first value it sees.
+     * Creates a new BDecoder and immediately decodes the first value it sees.
      *
-     * @return The first BEValue on the stream or null when the stream has ended.
-     * @throws InvalidBEncodingException when the stream doesn't start with a bencoded value or the
-     *     stream isn't a bencoded stream at all.
-     * @throws IOException when somthing bad happens with the stream to read from.
+     * @param in the InputStream to decode from
+     * @return the first BEValue on the stream, or null when the stream has ended
+     * @throws IOException when something bad happens with the stream
      */
     public static BEValue bdecode(InputStream in) throws IOException {
         return new BDecoder(in).bdecode();
     }
 
     /**
-     * Used for SHA1 hack
-     *
-     * @since 0.8.5
+     * Creates the SHA-1 digest for the info map hack. Used internally for info hash calculation.
      */
     private void createDigest() {
         if (sha_digest == null) {
@@ -111,11 +103,12 @@ public class BDecoder {
     }
 
     /**
-     * Returns what the next bencoded object will be on the stream or -1 when the end of stream has
-     * been reached. Can return something unexpected (not '0' .. '9', 'i', 'l' or 'd') when the
-     * stream isn't bencoded.
+     * Returns what the next bencoded object will be on the stream, or -1 at end of stream.
+     * Can return something unexpected when the stream isn't bencoded.
+     * This might or might not read one extra byte from the stream.
      *
-     * <p>This might or might not read one extra byte from the stream.
+     * @return the next indicator character, or -1 at end of stream
+     * @throws IOException if an I/O error occurs
      */
     public int getNextIndicator() throws IOException {
         if (indicator == 0) {
@@ -296,10 +289,11 @@ public class BDecoder {
     }
 
     /**
-     * Returns the next byte read from the InputStream (as int).
+     * Returns the next byte read from the InputStream.
      *
-     * @return the next byte as an int (0-255), or -1 if end of stream
-     * @throws IOException if end of stream is reached (EOFException)
+     * @return the next byte as an int (0-255)
+     * @throws EOFException if end of stream is reached
+     * @throws IOException if an I/O error occurs
      */
     private int read() throws IOException {
         int c = in.read();
@@ -309,11 +303,12 @@ public class BDecoder {
     }
 
     /**
-     * Returns a byte[] containing length valid bytes starting at offset zero.
+     * Reads the specified number of bytes from the InputStream.
      *
      * @param length the number of bytes to read
      * @return a byte array containing the requested bytes
-     * @throws IOException if end of stream is reached before all bytes are read (EOFException)
+     * @throws EOFException if end of stream is reached before all bytes are read
+     * @throws IOException if an I/O error occurs
      */
     private byte[] read(int length) throws IOException {
         byte[] result = new byte[length];

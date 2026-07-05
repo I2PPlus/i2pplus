@@ -17,12 +17,8 @@ public class SnarkCommandLine extends net.i2p.util.CommandLine {
             Arrays.asList(
                     new String[] {
                         "org.klomp.snark.MetaInfo",
-                        // "org.klomp.snark.Snark",
-                        // "org.klomp.snark.StaticSnark",
                         "org.klomp.snark.Storage",
                         "org.klomp.snark.bencode.BDecoder",
-                        // "org.klomp.snark.web.RunStandalone",
-                        //        "org.klomp.snark.Mp3Test",
                     });
 
     protected SnarkCommandLine() {}

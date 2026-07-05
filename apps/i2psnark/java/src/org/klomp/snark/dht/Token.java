@@ -110,7 +110,6 @@ class Token extends ByteArray {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
-        //        buf.append("[Token: ");
         buf.append("[");
         byte[] bs = getData();
         if (bs.length == 0) {
@@ -126,7 +125,6 @@ class Token extends ByteArray {
         }
         buf.append("]");
         if (lastSeen > 0) buf.append("\n* Created: ").append((new Date(lastSeen)).toString());
-        //        buf.append(']');
         return buf.toString();
     }
 }

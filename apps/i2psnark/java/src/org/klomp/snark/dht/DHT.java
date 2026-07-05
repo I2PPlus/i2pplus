@@ -29,6 +29,9 @@ public interface DHT {
      * Ping. We don't have a NID yet so the node is presumed to be absent from our DHT.
      * Non-blocking, does not wait for pong. If and when the pong is received the node will be
      * inserted in our DHT.
+     *
+     * @param dest the destination to ping
+     * @param port the UDP port to ping
      */
     public void ping(Destination dest, int port);
 
@@ -59,6 +62,7 @@ public interface DHT {
      * Announce to ourselves. Non-blocking.
      *
      * @param ih the Info Hash (torrent)
+     * @param isSeed true if seed, false if leech
      */
     public void announce(byte[] ih, boolean isSeed);
 
@@ -67,6 +71,7 @@ public interface DHT {
      *
      * @param ih the Info Hash (torrent)
      * @param peerHash the peer's Hash
+     * @param isSeed true if seed, false if leech
      */
     public void announce(byte[] ih, byte[] peerHash, boolean isSeed);
 
@@ -84,6 +89,7 @@ public interface DHT {
      * getPeers() first so we have tokens.
      *
      * @param ih the Info Hash (torrent)
+     * @param max maximum number of peers to announce to
      * @param maxWait the maximum total time to wait (ms) or 0 to do all in parallel and return
      *                immediately.
      * @param isSeed true if seed, false if leech
@@ -94,9 +100,17 @@ public interface DHT {
     /** Stop everything. */
     public void stop();
 
-    /** Known nodes, not estimated total network size. */
+    /**
+     * Known nodes, not estimated total network size.
+     *
+     * @return the number of known nodes in the DHT
+     */
     public int size();
 
-    /** Debug info, HTML formatted */
+    /**
+     * Debug info, HTML formatted.
+     *
+     * @return HTML string with DHT status information
+     */
     public String renderStatusHTML();
 }

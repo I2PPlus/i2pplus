@@ -37,6 +37,12 @@ public class PeerID implements Comparable<PeerID> {
     private final I2PSnarkUtil util;
     private String _toStringCache;
 
+    /**
+     * Creates a PeerID from a peer ID byte array and destination address.
+     *
+     * @param id the peer ID bytes
+     * @param address the destination address
+     */
     public PeerID(byte[] id, Destination address) {
         this.id = id;
         this.address = address;
@@ -46,12 +52,22 @@ public class PeerID implements Comparable<PeerID> {
         util = null;
     }
 
-    /** Creates a PeerID from a BDecoder. */
+    /**
+     * Creates a PeerID from a BDecoder.
+     *
+     * @param be the BDecoder to read from
+     * @throws IOException if the bencoded data is invalid
+     */
     public PeerID(BDecoder be) throws IOException {
         this(be.bdecodeMap().getMap());
     }
 
-    /** Creates a PeerID from a Map containing BEncoded peer id, ip and port. */
+    /**
+     * Creates a PeerID from a Map containing BEncoded peer id, ip and port.
+     *
+     * @param m the map containing peer id and ip entries
+     * @throws InvalidBEncodingException if the map entries are missing or invalid
+     */
     public PeerID(Map<String, BEValue> m) throws InvalidBEncodingException, UnknownHostException {
         BEValue bevalue = m.get("peer id");
         if (bevalue == null) throw new InvalidBEncodingException("peer id missing");
@@ -85,6 +101,11 @@ public class PeerID implements Comparable<PeerID> {
         this.util = util;
     }
 
+    /**
+     * Returns the peer ID bytes.
+     *
+     * @return the peer ID, or null if not yet set
+     */
     public byte[] getID() {
         return id;
     }
@@ -109,6 +130,11 @@ public class PeerID implements Comparable<PeerID> {
         return address;
     }
 
+    /**
+     * Returns the port number.
+     *
+     * @return the port
+     */
     public int getPort() {
         return port;
     }

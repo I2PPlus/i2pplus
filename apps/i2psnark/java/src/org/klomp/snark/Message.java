@@ -84,9 +84,6 @@ class Message {
     // Used to do deferred fetch of data
     private final DataLoader dataLoader;
 
-    // now unused
-    // SimpleTimer.TimedEvent expireEvent;
-
     private static final int BUFSIZE = PeerState.PARTSIZE;
     private static final ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
 
@@ -145,17 +142,6 @@ class Message {
     }
 
     /**
-     * For type PIECE with data We don't use this anymore.
-     *
-     * @since 0.9.32
-     */
-    /****
-     * Message(int piece, int begin, int length, byte[] data) {
-     * this(PIECE, piece, begin, length, data, 0, length, null);
-     * }
-     ****/
-
-    /**
      * @since 0.9.32
      */
     private Message(
@@ -177,7 +163,12 @@ class Message {
         dataLoader = loader;
     }
 
-    /** Utility method for sending a message through a DataStream. */
+    /**
+     * Sends this message through the given DataOutputStream.
+     *
+     * @param dos the output stream to write to
+     * @throws IOException if an I/O error occurs
+     */
     void sendMessage(DataOutputStream dos) throws IOException {
         // KEEP_ALIVE is special.
         if (type == KEEP_ALIVE) {

@@ -20,7 +20,11 @@ class MsgID extends ByteArray {
 
     private static final int MAX_TOK_LEN = 16;
 
-    /** outgoing - generate a random ID */
+    /**
+     * Create an outgoing message ID with a random value.
+     *
+     * @param ctx the I2P application context for random number generation
+     */
     public MsgID(I2PAppContext ctx) {
         super(null);
         byte[] data = new byte[MY_TOK_LEN];
@@ -29,7 +33,12 @@ class MsgID extends ByteArray {
         setValid(MY_TOK_LEN);
     }
 
-    /** incoming - save the ID (arbitrary length) */
+    /**
+     * Create an incoming message ID from received data.
+     *
+     * @param data the message ID bytes
+     * @throws IllegalArgumentException if data exceeds maximum length
+     */
     public MsgID(byte[] data) {
         super(data);
         // lets not get carried away

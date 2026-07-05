@@ -26,6 +26,12 @@ class PeerCheckerTask implements Runnable {
     private final Random random;
     private int _runCount;
 
+    /**
+     * Creates a new checker task for the given coordinator.
+     *
+     * @param util the snark utility
+     * @param coordinator the coordinator to check
+     */
     PeerCheckerTask(I2PSnarkUtil util, PeerCoordinator coordinator) {
         _util = util;
         _log = util.getContext().logManager().getLog(PeerCheckerTask.class);
@@ -77,10 +83,6 @@ class PeerCheckerTask implements Runnable {
 
             // Remove dying peers
             if (!peer.isConnected()) {
-                // This was just a failsafe, right?
-                // it.remove();
-                // coordinator.removePeerFromPieces(peer);
-                // coordinator.peerCount = coordinator.peers.size();
                 continue;
             }
 

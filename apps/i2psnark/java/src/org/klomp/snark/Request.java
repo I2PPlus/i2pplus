@@ -10,8 +10,11 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 /**
- * Holds all information needed for a partial piece request. This class should be used only by
- * PeerState, PeerConnectionIn, and PeerConnectionOut.
+ * Holds all information needed for a partial piece request.
+ *
+ * <p>This class should be used only by PeerState, PeerConnectionIn, and PeerConnectionOut.
+ *
+ * @since 0.1.0
  */
 class Request {
     private final PartialPiece piece;

@@ -15,8 +15,18 @@ import org.klomp.snark.comments.CommentSet;
  * @since 0.9.4 moved from Snark.java
  */
 public interface CompleteListener {
+    /**
+     * Called when all pieces of the torrent have been downloaded and verified.
+     *
+     * @param snark the Snark instance that completed
+     */
     public void torrentComplete(Snark snark);
 
+    /**
+     * Called when the torrent status should be updated (e.g., peer count changed).
+     *
+     * @param snark the Snark instance to update status for
+     */
     public void updateStatus(Snark snark);
 
     /**
@@ -43,9 +53,20 @@ public interface CompleteListener {
      */
     public void gotPiece(Snark snark);
 
-    /** not really listeners but the easiest way to get back to an optional SnarkManager */
+    /**
+     * Returns the saved time for the torrent's last modification.
+     *
+     * @param snark the Snark instance
+     * @return the saved torrent time in milliseconds
+     */
     public long getSavedTorrentTime(Snark snark);
 
+    /**
+     * Returns the saved bitfield for the torrent.
+     *
+     * @param snark the Snark instance
+     * @return the saved bitfield, or null if none
+     */
     public BitField getSavedTorrentBitField(Snark snark);
 
     /**

@@ -58,9 +58,12 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
-     * Use this if we have the full destination
+     * Use this if we have the full destination.
      *
-     * @throws IllegalArgumentException
+     * @param nID the node identifier
+     * @param dest the full I2P destination
+     * @param port the DHT query port
+     * @throws IllegalArgumentException if the NID does not match the destination hash
      */
     public NodeInfo(NID nID, Destination dest, int port) {
         super();
@@ -73,9 +76,12 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
-     * No Destination yet available
+     * No Destination yet available.
      *
-     * @throws IllegalArgumentException
+     * @param nID the node identifier
+     * @param hash the destination hash
+     * @param port the DHT query port
+     * @throws IllegalArgumentException if the NID does not match the hash or port is invalid
      */
     public NodeInfo(NID nID, Hash hash, int port) {
         super();
@@ -87,12 +93,12 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
-     * No Destination yet available
+     * No Destination yet available. Creates from compact node info.
      *
      * @param compactInfo 20 byte node ID, 32 byte destHash, 2 byte port
      * @param offset starting at this offset in compactInfo
-     * @throws IllegalArgumentException
-     * @throws ArrayIndexOutOfBoundsException
+     * @throws IllegalArgumentException if port is invalid
+     * @throws ArrayIndexOutOfBoundsException if compactInfo is too short
      */
     public NodeInfo(byte[] compactInfo, int offset) {
         super();
@@ -109,10 +115,12 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
-     * Create from persistent storage string. Format: NID:Hash:Destination:port First 3 in base 64;
-     * Destination may be empty string
+     * Create from persistent storage string. Format: NID:Hash:Destination:port. First 3 in base 64;
+     * Destination may be empty string.
      *
-     * @throws IllegalArgumentException
+     * @param s the persistent storage string
+     * @throws DataFormatException if the string format is invalid
+     * @throws IllegalArgumentException if the NID does not match the hash
      */
     public NodeInfo(String s) throws DataFormatException {
         super();
@@ -123,7 +131,6 @@ class NodeInfo extends SimpleDataStructure {
         nID = new NID(nid);
         byte[] h = Base64.decode(parts[1]);
         if (h == null || h.length != Hash.HASH_LENGTH) throw new DataFormatException("Bad hash");
-        // hash = new Hash(h);
         hash = Hash.create(h);
         if (parts[2].length() > 0) dest = new Destination(parts[2]);
         try {
@@ -135,9 +142,9 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
-     * Creates 54-byte compact info
+     * Creates 54-byte compact info from the current fields.
      *
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if port is invalid
      */
     private void initialize() {
         if (port <= 0 || port >= 65535) throw new IllegalArgumentException("Bad port");
@@ -152,7 +159,10 @@ class NodeInfo extends SimpleDataStructure {
      * Generate a secure NID that matches the Hash and port. Rules: First 4 bytes must match Hash.
      * Next 2 bytes must match Hash ^ port. Remaining bytes may be random.
      *
-     * @throws IllegalArgumentException
+     * @param h the destination hash
+     * @param p the port number
+     * @param random the random source for generating remaining bytes
+     * @return the generated NID
      */
     public static NID generateNID(Hash h, int p, RandomSource random) {
         byte[] n = new byte[NID.HASH_LENGTH];

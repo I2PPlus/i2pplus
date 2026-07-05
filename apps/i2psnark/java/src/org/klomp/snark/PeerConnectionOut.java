@@ -41,6 +41,12 @@ class PeerConnectionOut implements Runnable {
     private final long _id;
     long lastSent;
 
+    /**
+     * Creates a new outgoing connection handler.
+     *
+     * @param peer the peer this connection is to
+     * @param dout the output stream to send messages on
+     */
     public PeerConnectionOut(Peer peer, DataOutputStream dout) {
         this.peer = peer;
         this.dout = dout;
@@ -48,6 +54,9 @@ class PeerConnectionOut implements Runnable {
         lastSent = System.currentTimeMillis();
     }
 
+    /**
+     * Start the sender thread.
+     */
     public void startup() {
         thread = new I2PAppThread(this, "Snark sender " + _id + ": " + peer);
         thread.start();
@@ -173,7 +182,6 @@ class PeerConnectionOut implements Runnable {
                     // This can block for quite a while.
                     // To help get slow peers going, and track the bandwidth better,
                     // move this _after_ state.uploaded() and see how it works.
-                    // m.sendMessage(dout);
                     lastSent = System.currentTimeMillis();
 
                     // Remove all piece messages after sending a choke message.
@@ -218,6 +226,9 @@ class PeerConnectionOut implements Runnable {
         }
     }
 
+    /**
+     * Disconnect and close the output stream.
+     */
     public void disconnect() {
         synchronized (sendQueue) {
             quit = true;
@@ -277,6 +288,9 @@ class PeerConnectionOut implements Runnable {
         return removed;
     }
 
+    /**
+     * Queue a keepalive message if the queue is empty.
+     */
     void sendAlive() {
         synchronized (sendQueue) {
             if (sendQueue.isEmpty()) {
@@ -287,6 +301,11 @@ class PeerConnectionOut implements Runnable {
         }
     }
 
+    /**
+     * Queue a choke or unchoke message, cancelling any pending inverse.
+     *
+     * @param choke true to choke, false to unchoke
+     */
     void sendChoke(boolean choke) {
         // We cancel the (un)choke but keep PIECE messages.
         // PIECE messages are purged if a choke is actually send.
@@ -299,6 +318,11 @@ class PeerConnectionOut implements Runnable {
         }
     }
 
+    /**
+     * Queue an interested or not-interested message, cancelling any pending inverse.
+     *
+     * @param interest true for interested, false for not-interested
+     */
     void sendInterest(boolean interest) {
         synchronized (sendQueue) {
             int inverseType = interest ? Message.UNINTERESTED : Message.INTERESTED;
@@ -309,11 +333,21 @@ class PeerConnectionOut implements Runnable {
         }
     }
 
+    /**
+     * Queue a have message for the given piece.
+     *
+     * @param piece the piece number
+     */
     void sendHave(int piece) {
         Message m = new Message(Message.HAVE, piece);
         addMessage(m);
     }
 
+    /**
+     * Queue a bitfield, have_all, or have_none message as appropriate.
+     *
+     * @param bitfield the bitfield to send
+     */
     void sendBitfield(BitField bitfield) {
         boolean fast = peer.supportsFast();
         boolean all = false;
@@ -342,6 +376,11 @@ class PeerConnectionOut implements Runnable {
     /** reransmit requests not received in 7m */
     private static final int REQ_TIMEOUT = (2 * SEND_TIMEOUT) + (60 * 1000);
 
+    /**
+     * Retransmit requests that haven't been received within REQ_TIMEOUT.
+     *
+     * @param requests the list of outstanding requests
+     */
     void retransmitRequests(List<Request> requests) {
         long now = System.currentTimeMillis();
         Iterator<Request> it = requests.iterator();
@@ -356,6 +395,11 @@ class PeerConnectionOut implements Runnable {
         }
     }
 
+    /**
+     * Send all requests in the list.
+     *
+     * @param requests the list of requests to send
+     */
     void sendRequests(List<Request> requests) {
         Iterator<Request> it = requests.iterator();
         while (it.hasNext()) {
@@ -364,6 +408,11 @@ class PeerConnectionOut implements Runnable {
         }
     }
 
+    /**
+     * Queue a request message, checking for duplicates.
+     *
+     * @param req the request to send
+     */
     void sendRequest(Request req) {
         // Check for duplicate requests to deal with fibrillating i2p-bt
         // (multiple choke/unchokes received cause duplicate requests in the queue)
@@ -387,7 +436,12 @@ class PeerConnectionOut implements Runnable {
         req.sendTime = System.currentTimeMillis();
     }
 
-    // Used by PeerState to limit pipelined requests
+    /**
+     * Returns the total bytes of piece messages currently queued.
+     * Used by PeerState to limit pipelined requests.
+     *
+     * @return total queued piece bytes
+     */
     int queuedBytes() {
         int total = 0;
         synchronized (sendQueue) {
@@ -414,7 +468,11 @@ class PeerConnectionOut implements Runnable {
         addMessage(m);
     }
 
-    /** send cancel */
+    /**
+     * Send a cancel message and remove any matching request from the queue.
+     *
+     * @param req the request to cancel
+     */
     void sendCancel(Request req) {
         // See if it is still in our send queue
         synchronized (sendQueue) {
@@ -452,7 +510,11 @@ class PeerConnectionOut implements Runnable {
 
     /**
      * Called by the PeerState when the other side doesn't want this request to be handled anymore.
-     * Removes any pending Piece Message from out send queue. Does not send a cancel message.
+     * Removes any pending Piece Message from our send queue. Does not send a cancel message.
+     *
+     * @param piece the piece number
+     * @param begin the offset within the piece
+     * @param length the length of the request
      */
     void cancelRequest(int piece, int begin, int length) {
         synchronized (sendQueue) {

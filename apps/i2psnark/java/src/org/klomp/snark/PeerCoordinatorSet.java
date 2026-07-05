@@ -28,18 +28,36 @@ import net.i2p.crypto.SHA1Hash;
 class PeerCoordinatorSet implements Iterable<PeerCoordinator> {
     private final Map<SHA1Hash, PeerCoordinator> _coordinators;
 
+    /**
+     * Creates a new empty PeerCoordinatorSet.
+     */
     public PeerCoordinatorSet() {
         _coordinators = new ConcurrentHashMap<>();
     }
 
+    /**
+     * Returns an iterator over all registered coordinators.
+     *
+     * @return iterator of PeerCoordinator instances
+     */
     public Iterator<PeerCoordinator> iterator() {
         return _coordinators.values().iterator();
     }
 
+    /**
+     * Register a coordinator for its torrent's info hash.
+     *
+     * @param coordinator the coordinator to add
+     */
     public void add(PeerCoordinator coordinator) {
         _coordinators.put(new SHA1Hash(coordinator.getInfoHash()), coordinator);
     }
 
+    /**
+     * Unregister a coordinator.
+     *
+     * @param coordinator the coordinator to remove
+     */
     public void remove(PeerCoordinator coordinator) {
         _coordinators.remove(new SHA1Hash(coordinator.getInfoHash()));
     }

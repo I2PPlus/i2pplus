@@ -221,6 +221,10 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     //////// private below here
 
     /**
+     * Get or establish a connection to the tracker.
+     *
+     * @param tr the tracker to connect to
+     * @param untilTime the deadline time in milliseconds
      * @return the connection ID, or null on fail
      */
     private Long getConnection(Tracker tr, long untilTime) {
@@ -266,7 +270,11 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     }
 
     /**
-     * @return non-null
+     * Get or create a tracker entry.
+     *
+     * @param host the tracker hostname
+     * @param port the tracker port
+     * @return non-null tracker entry
      */
     private Tracker getTracker(String host, int port) {
         Tracker ndp = new Tracker(host, port);

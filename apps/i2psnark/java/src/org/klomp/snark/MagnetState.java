@@ -43,7 +43,10 @@ class MagnetState {
     private MetaInfo metainfo;
 
     /**
-     * @param meta null for new magnet
+     * Creates a new MagnetState for the given info hash.
+     *
+     * @param iHash the 20-byte info hash
+     * @param meta the MetaInfo if already available, or null for a new magnet download
      */
     public MagnetState(byte[] iHash, MetaInfo meta) {
         infohash = iHash;
@@ -55,9 +58,10 @@ class MagnetState {
     }
 
     /**
-     * Call this for a new magnet when you have the size
+     * Initializes the magnet state with the given metadata size. Must only be called once.
      *
-     * @throws IllegalArgumentException
+     * @param size the metadata size in bytes
+     * @throws IllegalArgumentException if already initialized
      */
     public void initialize(int size) {
         if (isInitialized) throw new IllegalArgumentException("Already set");
@@ -75,16 +79,19 @@ class MagnetState {
     }
 
     /**
-     * Call this for a new magnet when the download is complete.
+     * Sets the MetaInfo for a completed magnet download.
      *
-     * @throws IllegalArgumentException
+     * @param meta the completed MetaInfo
      */
     public void setMetaInfo(MetaInfo meta) {
         metainfo = meta;
     }
 
     /**
-     * @throws IllegalArgumentException
+     * Returns the MetaInfo for this magnet state.
+     *
+     * @return the MetaInfo
+     * @throws IllegalArgumentException if not complete
      */
     public MetaInfo getMetaInfo() {
         if (!complete) throw new IllegalArgumentException("Not complete");
@@ -92,7 +99,10 @@ class MagnetState {
     }
 
     /**
-     * @throws IllegalArgumentException
+     * Returns the total metadata size in bytes.
+     *
+     * @return the metadata size
+     * @throws IllegalArgumentException if not initialized
      */
     public int getSize() {
         if (!isInitialized) throw new IllegalArgumentException("Not initialized");
@@ -213,8 +223,11 @@ class MagnetState {
     }
 
     /**
-     * @return true if this was the last piece
-     * @throws NullPointerException IllegalArgumentException, IOException, ...
+     * Builds a MetaInfo from the collected metadata bytes. Verifies the info hash matches.
+     *
+     * @return the built MetaInfo
+     * @throws IOException if the info hash doesn't match or data is corrupt
+     * @throws Exception if there's an error parsing the metadata
      */
     private MetaInfo buildMetaInfo() throws Exception {
         // top map has nothing in it but the info map (no announce)

@@ -16,6 +16,14 @@ public class TorrentCreateFilter implements java.io.Serializable {
     public final String filterType;
     public final boolean isDefault;
 
+    /**
+     * Creates a new torrent creation filter.
+     *
+     * @param name the display name for this filter
+     * @param filterPattern the pattern to match against
+     * @param filterType the type of filter (e.g., "include", "exclude")
+     * @param isDefault true if this is the default filter
+     */
     public TorrentCreateFilter(
             String name, String filterPattern, String filterType, boolean isDefault) {
         this.name = name;

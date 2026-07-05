@@ -105,8 +105,8 @@ import org.klomp.snark.dht.DHT;
 public class I2PSnarkServlet extends BasicServlet {
 
     private static final long serialVersionUID = 1L;
-    private String _contextPath; /** generally "/i2psnark" */
-    private String _contextName; /** generally "i2psnark" */
+    private String _contextPath; /* generally "/i2psnark" */
+    private String _contextName; /* generally "i2psnark" */
     private transient SnarkManager _manager;
     /** Rotating CSRF nonce, rotates every 5 minutes */
     private long _currentNonce;
@@ -438,8 +438,18 @@ public class I2PSnarkServlet extends BasicServlet {
         doGetAndPost(request, response);
     }
 
+    /**
+     * Returns whether advanced mode is enabled in the router console.
+     *
+     * @return true if advanced mode is enabled
+     */
     public boolean isAdvanced() {return _context.getBooleanProperty(PROP_ADVANCED);}
 
+    /**
+     * Returns whether the Sora display font should be used.
+     *
+     * @return true if the Sora font is enabled or running in standalone mode
+     */
     public boolean useSoraFont() {
         return _context.getBooleanProperty(RC_PROP_ENABLE_SORA_FONT) || isStandalone();
     }
@@ -1105,7 +1115,6 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("</i></td></tr></tbody>");
         }
 
-        //paginator(out, req, start, pageSize, total, filter, noThinsp, true, searchActive, (searchActive ? search.length() : 0));
         appendSnarkFooter(out, buf, stats, total, isConnected, noSnarks, hasPeers, isUploading, dht, isStandalone(), debug, peerParam);
 
         if (showDebug) out.write("<tr id=dhtDebug>");
@@ -1813,6 +1822,12 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("\n");
     }
 
+    /**
+     * Validates that a string is a valid numeric value (optionally negative).
+     *
+     * @param str the string to validate, may be null
+     * @return true if the string represents a valid integer
+     */
     private static boolean isValidNumeric(String str) {
         if (str == null || str.isEmpty()) {return false;}
         String regex = "^-?[0-9]\\d*$";
@@ -2911,7 +2926,12 @@ public class I2PSnarkServlet extends BasicServlet {
 
     private static final String[] iopts = {"inbound.length", "inbound.quantity", "outbound.length", "outbound.quantity" };
 
-    /** put the individual i2cp selections into the option string */
+    /**
+     * Builds the I2CP options string from individual form parameters.
+     *
+     * @param req the HTTP request containing tunnel configuration parameters
+     * @return the combined I2CP options string
+     */
     private static String buildI2CPOpts(HttpServletRequest req) {
         StringBuilder buf = new StringBuilder(128);
         String p = req.getParameter("i2cpOpts");
@@ -2923,6 +2943,12 @@ public class I2PSnarkServlet extends BasicServlet {
         return buf.toString();
     }
 
+    /**
+     * Returns the list of torrents sorted according to the current request's sort parameter.
+     *
+     * @param req the HTTP request containing the "sort" parameter
+     * @return a new sorted list of Snark instances
+     */
     private List<Snark> getSortedSnarks(HttpServletRequest req) {
         ArrayList<Snark> rv = new ArrayList<>(_manager.getTorrents());
         if (rv.size() > 1) {
@@ -2945,6 +2971,14 @@ public class I2PSnarkServlet extends BasicServlet {
     static final int MAX_DISPLAYED_FILENAME_LENGTH = 255;
     private static final int MAX_DISPLAYED_ERROR_LENGTH = 43;
 
+    /**
+     * Checks whether a torrent matches the given filter based on its status string.
+     *
+     * @param s the Snark torrent to check
+     * @param filter the filter name (e.g., "active", "downloading", "stopped")
+     * @param snarkStatus the status keyword string for the torrent
+     * @return true if the torrent matches the filter, or if filter is null/empty
+     */
     private boolean snarkMatchesFilter(Snark s, String filter, String snarkStatus) {
         if (s == null || filter == null || filter.isEmpty()) { return true; }
         if (snarkStatus == null) { return false; }
@@ -3358,8 +3392,9 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      * @param buf the StringBuilder to append to
      * @param peer the Peer object to render
-     * @param MetaInfo the MetaInfo of the torrent (may be null)
-     * @param boolean noThinsp whether to suppress thin space characters
+     * @param snark the Snark (torrent) the peer belongs to
+     * @param meta the MetaInfo of the torrent (may be null)
+     * @param noThinsp whether to suppress thin space characters
      */
     private void appendPeerRow(StringBuilder buf, Peer peer, Snark snark, MetaInfo meta, boolean noThinsp) {
         long t = peer.getInactiveTime();
@@ -3705,25 +3740,6 @@ public class I2PSnarkServlet extends BasicServlet {
             announce = announce.substring(6);
             isUDP = true;
         }
-/**
-        else if (announce.startsWith("udp://tracker.")) {
-            announce = announce.substring(14) + " [ext]";
-            int colon = announce.indexOf(':');
-            String port = "";
-            if (colon > 0) {
-                port = announce.substring(colon);
-                announce = announce.substring(0, colon);
-            }
-        } else if (announce.startsWith("udp://")) {
-            announce = announce.substring(6) + " [ext]";
-            int colon = announce.indexOf(':');
-            String port = "";
-            if (colon > 0) {
-                port = announce.substring(colon);
-                announce = announce.substring(0, colon);
-            }
-        }
-**/
         // strip path
         int slsh = announce.indexOf('/');
         if (slsh > 0) {announce = announce.substring(0, slsh);}
@@ -3772,6 +3788,13 @@ public class I2PSnarkServlet extends BasicServlet {
         return buf.toString();
     }
 
+    /**
+     * Writes the HTML form for adding new torrents via URL or file upload.
+     *
+     * @param out the PrintWriter to write the HTML output
+     * @param req the HTTP request containing query parameters
+     * @throws IOException if an I/O error occurs during writing
+     */
     private void writeAddForm(PrintWriter out, HttpServletRequest req) throws IOException {
         // display incoming parameter if a GET so links will work
         StringBuilder buf = new StringBuilder(1024);
@@ -3805,6 +3828,15 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.setLength(0);
     }
 
+    /**
+     * Writes the HTML form for creating new torrents from local files.
+     *
+     * @param out the PrintWriter to write the HTML output
+     * @param req the HTTP request containing query parameters
+     * @param sortedTrackers the list of available trackers for selection
+     * @param sortedFilters the list of available torrent create filters
+     * @throws IOException if an I/O error occurs during writing
+     */
     private void writeSeedForm(PrintWriter out, HttpServletRequest req, List<Tracker> sortedTrackers, List<TorrentCreateFilter> sortedFilters) throws IOException {
         StringBuilder buf = new StringBuilder(3*1024);
         _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
@@ -3874,6 +3906,13 @@ public class I2PSnarkServlet extends BasicServlet {
 
     private static final int[] times = { 5, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
 
+    /**
+     * Writes the HTML configuration form with all I2PSnark settings.
+     *
+     * @param out the PrintWriter to write the HTML output
+     * @param req the HTTP request containing query parameters
+     * @throws IOException if an I/O error occurs during writing
+     */
     private void writeConfigForm(PrintWriter out, HttpServletRequest req) throws IOException {
         String dataDir = _manager.getDataDir().getAbsolutePath();
         String lang = (Translate.getLanguage(_manager.util().getContext()));
@@ -3890,8 +3929,6 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean noCollapse = noCollapsePanels(req);
         boolean varyInbound = _manager.util().enableVaryInboundHops();
         boolean varyOutbound = _manager.util().enableVaryOutboundHops();
-        //String openTrackers = _manager.util().getOpenTrackerString();
-        //int seedPct = 0;
 
 /* configuration */
 
@@ -4932,10 +4969,8 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</td></tr>\n");
         }
 
-        //DateFormat dfmt=DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
         boolean showSaveButton = false;
         boolean rowEven = true;
-        //boolean inOrder = storage != null && storage.getInOrder(); // disabled for now
         int videoCount = 0;
         int imgCount = 0;
         int txtCount = 0;
@@ -5101,7 +5136,6 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("\" name=savepri>\n</th></tr></thead>\n");
         }
         buf.append("</table>\n</div>\n");
-        //if (videoCount == 1) {buf.append("<script src=\"" + _resourcePath + "js/getMetadata.js?" + CoreVersion.VERSION + "\"></script>\n");}
         if (imgCount > 0) {buf.append("<script src=").append(_resourcePath).append("js/getImgDimensions.js></script>\n");}
         if (txtCount > 0) {buf.append("<script src=").append(_resourcePath).append("js/textView.js></script>\n");}
         buf.append("<script src=").append(_resourcePath).append("js/togglePriorities.js></script>\n");

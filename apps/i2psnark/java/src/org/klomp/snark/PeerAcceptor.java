@@ -32,16 +32,34 @@ class PeerAcceptor {
     /** shorten timeout while reading handshake */
     private static final long HASH_READ_TIMEOUT = 45 * 1000;
 
+    /**
+     * Creates a single-torrent PeerAcceptor.
+     *
+     * @param coordinator the coordinator for the single torrent
+     */
     public PeerAcceptor(PeerCoordinator coordinator) {
         this.coordinator = coordinator;
         this.coordinators = null;
     }
 
+    /**
+     * Creates a multi-torrent PeerAcceptor.
+     *
+     * @param coordinators the set of coordinators for all active torrents
+     */
     public PeerAcceptor(PeerCoordinatorSet coordinators) {
         this.coordinators = coordinators;
         this.coordinator = null;
     }
 
+    /**
+     * Handle an incoming connection from a peer.
+     *
+     * @param socket the incoming socket
+     * @param in the input stream
+     * @param out the output stream
+     * @throws IOException if the connection fails or the infohash is unknown
+     */
     public void connection(I2PSocket socket, InputStream in, OutputStream out) throws IOException {
         // inside this Peer constructor's handshake is where you'd deal with the other
         // side saying they want to communicate with another torrent - aka multitorrent

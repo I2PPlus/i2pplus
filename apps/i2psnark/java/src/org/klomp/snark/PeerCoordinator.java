@@ -95,9 +95,6 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /** External use by PeerCheckerTask only. */
     private final AtomicInteger interestedAndChoking = new AtomicInteger();
 
-    // final static int MAX_DOWNLOADERS = MAX_CONNECTIONS;
-    // int downloaders = 0;
-
     private final AtomicLong uploaded = new AtomicLong();
     private final AtomicLong downloaded = new AtomicLong();
     static final int RATE_DEPTH = 3; // make following arrays RATE_DEPTH long
@@ -271,7 +268,10 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         }
     }
 
-    /** Only called externally from Storage after the double-check fails. Sets wantedBytes too. */
+    /**
+     * Rebuild the wanted pieces list from storage. Sets wantedBytes too.
+     * Only called externally from Storage after the double-check fails.
+     */
     public void setWantedPieces() {
         if (metainfo == null || storage == null) {
             wantedBytes = -1;
@@ -298,37 +298,68 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         }
     }
 
+    /**
+     * Returns the storage for this torrent.
+     *
+     * @return the storage, or null if in magnet mode
+     */
     public Storage getStorage() {
         return storage;
     }
 
-    /** for web page detailed stats */
+    /**
+     * Returns a snapshot of the connected peers list for web page detailed stats.
+     *
+     * @return list of connected peers
+     */
     public List<Peer> peerList() {
         return new ArrayList<>(peers);
     }
 
+    /**
+     * Returns our peer ID.
+     *
+     * @return the peer ID bytes
+     */
     public byte[] getID() {
         return id;
     }
 
+    /**
+     * Returns the torrent name.
+     *
+     * @return the name
+     */
     public String getName() {
         return snark.getName();
     }
 
+    /**
+     * Returns whether the torrent is complete.
+     *
+     * @return true if all pieces are downloaded
+     */
     public boolean completed() {
-        // FIXME return metainfo complete status
         if (storage == null) {
             return false;
         }
         return storage.complete();
     }
 
-    /** might be wrong */
+    /**
+     * Returns the estimated peer count (may be stale).
+     *
+     * @return estimated peer count
+     */
     public int getPeerCount() {
         return peerCount;
     }
 
-    /** should be right */
+    /**
+     * Returns the current number of connected peers.
+     *
+     * @return peer count
+     */
     public int getPeers() {
         int rv = peers.size();
         peerCount = rv;
@@ -365,7 +396,11 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         return wantedBytes;
     }
 
-    /** Returns the total number of uploaded bytes of all peers. */
+    /**
+     * Returns the total number of uploaded bytes of all peers.
+     *
+     * @return total uploaded bytes
+     */
     public long getUploaded() {
         return uploaded.get();
     }
@@ -379,7 +414,11 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         uploaded.set(up);
     }
 
-    /** Returns the total number of downloaded bytes of all peers. */
+    /**
+     * Returns the total number of downloaded bytes of all peers.
+     *
+     * @return total downloaded bytes
+     */
     public long getDownloaded() {
         return downloaded.get();
     }
@@ -465,12 +504,23 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         return rv;
     }
 
-    /** Push the total uploaded/downloaded onto a RATE_DEPTH deep stack */
+    /**
+     * Push the total uploaded/downloaded onto a RATE_DEPTH deep stack.
+     *
+     * @param up uploaded bytes this period
+     * @param down downloaded bytes this period
+     */
     public void setRateHistory(long up, long down) {
         setRate(up, uploaded_old);
         setRate(down, downloaded_old);
     }
 
+    /**
+     * Push a value onto a RATE_DEPTH deep stack.
+     *
+     * @param val the value to push
+     * @param array the rate array to update
+     */
     static void setRate(long val, long[] array) {
         synchronized (array) {
             for (int i = RATE_DEPTH - 1; i > 0; i--) {
@@ -536,7 +586,11 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         return bwListener.getUpBWLimit();
     }
 
-    /** Is snark as a whole over its limit? */
+    /**
+     * Is snark as a whole over its upload limit?
+     *
+     * @return true if over limit
+     */
     public boolean overUpBWLimit() {
         return bwListener.overUpBWLimit();
     }
@@ -544,6 +598,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Is a particular peer who has downloaded this many bytes from us in the last CHECK_PERIOD over
      * its limit?
+     *
+     * @param total bytes uploaded to the peer in the last CHECK_PERIOD
+     * @return true if over limit
      */
     public boolean overUpBWLimit(long total) {
         return total * 1000 / CHECK_PERIOD > getUpBWLimit();
@@ -569,6 +626,11 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
     /////// end BandwidthListener interface ///////
 
+    /**
+     * Returns the metainfo for this torrent.
+     *
+     * @return the metainfo, or null if in magnet mode
+     */
     public MetaInfo getMetaInfo() {
         return metainfo;
     }
@@ -595,7 +657,6 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @since 0.9.1
      */
     public boolean needOutboundPeers() {
-        // return wantedBytes != 0 && needPeers();
         // minus two to make it a little easier for new peers to get in on large swarms
         return (wantedBytes != 0
                         || (_util.utCommentsEnabled()
@@ -641,10 +702,18 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         return max;
     }
 
+    /**
+     * Returns whether this coordinator has been halted.
+     *
+     * @return true if halted
+     */
     public boolean halted() {
         return halted;
     }
 
+    /**
+     * Halt this coordinator, disconnecting all peers.
+     */
     public void halt() {
         halted = true;
         List<Peer> removed = new ArrayList<>();
@@ -691,6 +760,11 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         timer.schedule((CHECK_PERIOD / 2) + _random.nextInt((int) CHECK_PERIOD));
     }
 
+    /**
+     * Called when a peer connection is established.
+     *
+     * @param peer the newly connected peer
+     */
     public void connected(Peer peer) {
         if (halted) {
             peer.disconnect(false);
@@ -1287,9 +1361,6 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     // so we will try again
                     markUnrequested(peer, piece);
                     removePartialPiece(piece); // just in case
-                    // Oops. We didn't actually download this then... :(
-                    // Reports of counter going negative?
-                    // downloaded.addAndGet(0 - metainfo.getPieceLength(piece));
                     // Mark this peer as not having the piece. PeerState will update its bitfield.
                     for (Piece pc : wantedPieces) {
                         if (pc.getId() == piece) {
@@ -1361,13 +1432,24 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         return true;
     }
 
-    /** this does nothing but logging */
+    /**
+     * Called when a choke message is received. This does nothing but logging.
+     *
+     * @param peer the peer that sent the message
+     * @param choke true for choke, false for unchoke
+     */
     public void gotChoke(Peer peer, boolean choke) {
         if (_log.shouldInfo()) {
             _log.info("Received choke(" + choke + ") from [" + peer + "]");
         }
     }
 
+    /**
+     * Called when an interested message is received.
+     *
+     * @param peer the peer that sent the message
+     * @param interest true for interested, false for uninterested
+     */
     public void gotInterest(Peer peer, boolean interest) {
         if (interest) {
             if (storage == null || storage.getBitField().size() == 0) {
@@ -1386,6 +1468,11 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         }
     }
 
+    /**
+     * Called when a peer disconnects.
+     *
+     * @param peer the disconnected peer
+     */
     public void disconnected(Peer peer) {
         if (_log.shouldInfo()) {
             _log.info("Disconnected peer [" + peer + "]");

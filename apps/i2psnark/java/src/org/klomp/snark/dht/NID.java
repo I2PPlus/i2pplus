@@ -56,7 +56,7 @@ public class NID extends SHA1Hash {
     /**
      * Creates a new NID with the specified data.
      *
-     * @param data the 20-byte SHA1 hash data for this node identifier
+     * @param data the 20-byte SHA1 hash data for this node identifier, or null for an empty NID
      */
     public NID(byte[] data) {
         super(data);

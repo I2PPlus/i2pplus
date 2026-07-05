@@ -20,11 +20,13 @@ public class MagnetURI {
     private final byte[] _ih;
 
     /** BEP 9 */
+    /** BEP 9 magnet prefix. */
     public static final String MAGNET = "magnet:";
 
+    /** Full magnet URI prefix with info hash parameter. */
     public static final String MAGNET_FULL = MAGNET + "?xt=urn:btih:";
 
-    /** http://sponge.i2p/files/maggotspec.txt */
+    /** Maggot protocol prefix. */
     public static final String MAGGOT = "maggot://";
 
     /**
@@ -93,6 +95,8 @@ public class MagnetURI {
     }
 
     /**
+     * Returns the 20-byte info hash of the torrent.
+     *
      * @return 20 bytes or null
      */
     public byte[] getInfoHash() {
@@ -100,6 +104,8 @@ public class MagnetURI {
     }
 
     /**
+     * Returns the display name for this magnet link.
+     *
      * @return pretty name or null, NOT HTML escaped
      */
     public String getName() {
@@ -107,6 +113,8 @@ public class MagnetURI {
     }
 
     /**
+     * Returns the first valid I2P tracker URL from the magnet link.
+     *
      * @return first valid tracker url or null
      */
     public String getTrackerURL() {
@@ -114,8 +122,9 @@ public class MagnetURI {
     }
 
     /**
+     * Returns all valid I2P tracker URLs from the magnet link.
+     *
      * @return all valid tracker urls or null if none
-     * @since 0.9.67 TODO to be hooked in via SnarkManager.addMagnet() and new Snark()
      */
     public List<String> getTrackerURLs() {
         return _trackers;

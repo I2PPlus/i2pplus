@@ -102,6 +102,9 @@ class PeerState implements DataLoader {
     }
 
     /**
+     * Returns the bandwidth listener for this peer state.
+     *
+     * @return the bandwidth listener
      * @since 0.9.62
      */
     BandwidthListener getBandwidthListener() {
@@ -112,7 +115,6 @@ class PeerState implements DataLoader {
 
     void keepAliveMessage() {
         if (_log.shouldDebug()) _log.debug("Received keepalive request from [" + peer + "]");
-        /* XXX - ignored */
     }
 
     void chokeMessage(boolean choke) {
@@ -680,6 +682,10 @@ class PeerState implements DataLoader {
     }
 
     /**
+     * Handle an extension message from the peer.
+     *
+     * @param id the extension message ID
+     * @param bs the message payload
      * @since 0.8.2
      */
     void extensionMessage(int id, byte[] bs) {
@@ -738,8 +744,9 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * Unused
+     * Handle a port message from the peer.
      *
+     * @param port the port number
      * @since 0.8.4
      */
     void portMessage(int port) {
@@ -776,10 +783,6 @@ class PeerState implements DataLoader {
      * @since 0.9.21
      */
     void rejectMessage(int piece, int begin, int length) {
-        // Duplicates logging message from PeerConnectionIn
-        //      if (_log.shouldInfo())
-        //           _log.info("Received reject(" + piece + ',' + begin + ',' + length + ") from ["
-        // + peer + "]");
         out.cancelRequest(piece, begin, length);
         synchronized (this) {
             Request deletedRequest = null;
@@ -830,6 +833,12 @@ class PeerState implements DataLoader {
             _log.debug("Ignoring allowed_fast(" + piece + ") from [" + peer + "]");
     }
 
+    /**
+     * Handle an unknown message type from the peer.
+     *
+     * @param type the message type byte
+     * @param bs the message payload
+     */
     void unknownMessage(int type, byte[] bs) {
         if (_log.shouldDebug())
             _log.debug(
@@ -1112,6 +1121,11 @@ class PeerState implements DataLoader {
         return false;
     }
 
+    /**
+     * Sets whether or not we are interested in pieces from this peer.
+     *
+     * @param interest true if interested
+     */
     synchronized void setInteresting(boolean interest) {
         if (interest != interesting) {
             if (_log.shouldDebug()) {
@@ -1129,6 +1143,11 @@ class PeerState implements DataLoader {
 
     private long lastChokeSendTime = 0;
 
+    /**
+     * Sets whether or not we are choking the peer.
+     *
+     * @param choke true to choke, false to unchoke
+     */
     synchronized void setChoking(boolean choke) {
         long now = System.currentTimeMillis();
 
@@ -1143,20 +1162,16 @@ class PeerState implements DataLoader {
         }
     }
 
-    /*
-        synchronized void setChoking(boolean choke) {
-            if (choking != choke) {
-              if (_log.shouldDebug()) {_log.debug("[" + peer + "] setChoking(" + choke + ")");}
-              choking = choke;
-              out.sendChoke(choke);
-            }
-        }
-    */
-
+    /**
+     * Send a keepalive message to the peer.
+     */
     void keepAlive() {
         out.sendAlive();
     }
 
+    /**
+     * Retransmit outstanding requests if necessary.
+     */
     synchronized void retransmitRequests() {
         if (interesting && !choked) {
             out.retransmitRequests(outstandingRequests);

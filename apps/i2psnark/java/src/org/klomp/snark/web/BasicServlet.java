@@ -95,6 +95,12 @@ class BasicServlet extends HttpServlet {
         _mimeTypes = new MimeTypes();
     }
 
+    /**
+     * Initializes the servlet with resource and war base directories.
+     *
+     * @param cfg the servlet configuration
+     * @throws ServletException if initialization fails
+     */
     public void init(ServletConfig cfg) throws ServletException {
         super.init(cfg);
         String rb = getInitParameter("resourceBase");
@@ -237,24 +243,53 @@ class BasicServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Handles HTTP POST requests. Returns 405 Method Not Allowed.
+     *
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @throws ServletException if a servlet error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.sendError(405);
     }
 
-    /* (non-Javadoc)
-     * @see javax.servlet.http.HttpServlet#doTrace(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+    /**
+     * Handles HTTP TRACE requests. Returns 405 Method Not Allowed.
+     *
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @throws ServletException if a servlet error occurs
+     * @throws IOException if an I/O error occurs
      */
     protected void doTrace(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.sendError(405);
     }
 
+    /**
+     * Handles HTTP OPTIONS requests. Returns 405 Method Not Allowed.
+     *
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @throws ServletException if a servlet error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void doOptions(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.sendError(405);
     }
 
+    /**
+     * Handles HTTP DELETE requests. Returns 405 Method Not Allowed.
+     *
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @throws ServletException if a servlet error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.sendError(405);
@@ -297,6 +332,14 @@ class BasicServlet extends HttpServlet {
         return true;
     }
 
+    /**
+     * Sends the content to the client, handling range requests.
+     *
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @param content the content to send
+     * @throws IOException if an I/O error occurs
+     */
     protected void sendData(
             HttpServletRequest request, HttpServletResponse response, HttpContent content)
             throws IOException {

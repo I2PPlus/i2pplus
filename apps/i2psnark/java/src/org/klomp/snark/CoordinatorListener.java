@@ -23,7 +23,12 @@ package org.klomp.snark;
  * @since 0.1.0
  */
 interface CoordinatorListener {
-    /** Called when the PeerCoordinator notices a change in the state of a peer. */
+    /**
+     * Called when the PeerCoordinator notices a change in the state of a peer.
+     *
+     * @param coordinator the PeerCoordinator reporting the change
+     * @param peer the peer whose state changed
+     */
     void peerChange(PeerCoordinator coordinator, Peer peer);
 
     /**
@@ -33,8 +38,18 @@ interface CoordinatorListener {
      */
     void gotMetaInfo(PeerCoordinator coordinator, MetaInfo metainfo);
 
-    /** Is this number of uploaders over the per-torrent limit? */
+    /**
+     * Checks if the given number of uploaders exceeds the per-torrent upload limit.
+     *
+     * @param uploaders the current number of uploaders
+     * @return true if over the limit, false otherwise
+     */
     public boolean overUploadLimit(int uploaders);
 
+    /**
+     * Adds a status message for display to the user.
+     *
+     * @param message the message to display
+     */
     public void addMessage(String message);
 }

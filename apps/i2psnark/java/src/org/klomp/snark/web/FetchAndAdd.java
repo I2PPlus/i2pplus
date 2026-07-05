@@ -55,7 +55,6 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
     private Thread _thread;
     private EepGet _eepGet;
 
-    //    private static final int RETRIES = 3;
     private static final int RETRIES = 20;
 
     /**
@@ -79,7 +78,10 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         _fakeHash = fake;
     }
 
-    /** Set off by startTorrent() */
+    /**
+     * Set off by startTorrent().
+     */
+    @Override
     public void run() {
         _mgr.addMessageNoEscape(_t("Requesting torrent file: {0}", urlify(_url)));
         File file = get();
@@ -300,6 +302,16 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
 
     // EepGet status listeners to maintain the state for the web page
 
+    /**
+     * Called when a download attempt fails.
+     *
+     * @param url the URL being downloaded
+     * @param bytesTransferred bytes transferred so far
+     * @param bytesRemaining bytes remaining to transfer
+     * @param currentAttempt the current attempt number
+     * @param numRetries the maximum number of retries
+     * @param cause the exception that caused the failure, or null
+     */
     public void attemptFailed(
             String url,
             long bytesTransferred,
@@ -315,6 +327,15 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         _active = false;
     }
 
+    /**
+     * Called when bytes are transferred during download.
+     *
+     * @param alreadyTransferred total bytes transferred before this write
+     * @param currentWrite number of bytes in this write
+     * @param bytesTransferred total bytes transferred so far
+     * @param bytesRemaining bytes remaining to transfer
+     * @param url the URL being downloaded
+     */
     public void bytesTransferred(
             long alreadyTransferred,
             int currentWrite,
@@ -329,6 +350,16 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         _active = true;
     }
 
+    /**
+     * Called when a transfer completes successfully.
+     *
+     * @param alreadyTransferred total bytes transferred before this call
+     * @param bytesTransferred bytes transferred in this call
+     * @param bytesRemaining bytes remaining (should be 0)
+     * @param url the URL being downloaded
+     * @param outputFile the output file path
+     * @param notModified true if the server returned 304
+     */
     public void transferComplete(
             long alreadyTransferred,
             long bytesTransferred,
@@ -344,6 +375,14 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         _active = false;
     }
 
+    /**
+     * Called when a transfer fails.
+     *
+     * @param url the URL being downloaded
+     * @param bytesTransferred bytes transferred so far
+     * @param bytesRemaining bytes remaining to transfer
+     * @param currentAttempt the current attempt number
+     */
     public void transferFailed(
             String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {
         if (bytesRemaining >= 0) {
@@ -353,8 +392,21 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         _active = false;
     }
 
+    /**
+     * Called when an HTTP header is received.
+     *
+     * @param url the URL being downloaded
+     * @param attemptNum the current attempt number
+     * @param key the header name
+     * @param val the header value
+     */
     public void headerReceived(String url, int attemptNum, String key, String val) {}
 
+    /**
+     * Called when a download attempt is starting.
+     *
+     * @param url the URL being downloaded
+     */
     public void attempting(String url) {}
 
     // End of EepGet status listeners

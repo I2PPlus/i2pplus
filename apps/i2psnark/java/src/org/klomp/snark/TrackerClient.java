@@ -151,6 +151,9 @@ public class TrackerClient implements Runnable {
         this.backupTrackers = new ArrayList<>(2);
     }
 
+    /**
+     * Start the tracker client thread.
+     */
     public synchronized void start() {
         if (!stop) {
             if (_log.shouldWarn()) {
@@ -168,10 +171,20 @@ public class TrackerClient implements Runnable {
         started = true;
     }
 
+    /**
+     * Check if this tracker client has been halted.
+     *
+     * @return true if halted
+     */
     public boolean halted() {
         return stop;
     }
 
+    /**
+     * Check if this tracker client has been started.
+     *
+     * @return true if started
+     */
     public boolean started() {
         return started;
     }
@@ -528,6 +541,9 @@ public class TrackerClient implements Runnable {
     }
 
     /**
+     * Get peers from a list of trackers.
+     *
+     * @param trckrs the list of trackers to query
      * @return max peers seen
      */
     private int getPeersFromTrackers(List<TCTracker> trckrs) {
@@ -731,6 +747,8 @@ public class TrackerClient implements Runnable {
     }
 
     /**
+     * Get peers from Peer Exchange (PEX).
+     *
      * @return max peers seen
      */
     private int getPeersFromPEX() {
@@ -769,6 +787,8 @@ public class TrackerClient implements Runnable {
     }
 
     /**
+     * Get peers from the DHT.
+     *
      * @return max peers seen
      */
     private int getPeersFromDHT() {
@@ -1141,6 +1161,9 @@ public class TrackerClient implements Runnable {
      * not encoding about 1/4 of the chars, we make random data like hashes about 16% smaller.
      *
      * <p>RFC1738: 0-9a-zA-Z$-_.+!*'(), Us: 0-9a-zA-Z
+     *
+     * @param bs the bytes to encode
+     * @return the URL-encoded string
      */
     public static String urlencode(byte[] bs) {
         StringBuilder sb = new StringBuilder(bs.length * 3);

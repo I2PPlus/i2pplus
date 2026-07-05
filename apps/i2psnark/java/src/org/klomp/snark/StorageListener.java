@@ -45,7 +45,17 @@ interface StorageListener {
     void storageCompleted(Storage storage);
 
     /** Reset the peer's wanted pieces table Call after the storage double-check fails */
+    /**
+     * Resets the peer's wanted pieces table. Call after the storage double-check fails.
+     *
+     * @param storage the storage being checked
+     */
     void setWantedPieces(Storage storage);
 
+    /**
+     * Adds a status message for display to the user.
+     *
+     * @param message the message to display
+     */
     void addMessage(String message);
 }

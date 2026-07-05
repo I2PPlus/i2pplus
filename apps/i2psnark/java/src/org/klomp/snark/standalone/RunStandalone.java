@@ -22,6 +22,11 @@ import org.w3c.dom.NodeList;
 /**
  * Standalone runner for I2PSnark.
  *
+ * <p>Launches an embedded Jetty server hosting the I2PSnark web interface independently
+ * of the main I2P router. Reads configuration from {@code jetty-i2psnark.xml} and
+ * {@code i2psnark-appctx.config}, parses host/port from the Jetty XML config, and
+ * optionally opens the system browser.
+ *
  * @since moved from ../web and fixed in 0.9.27
  */
 public class RunStandalone {
@@ -76,6 +81,9 @@ public class RunStandalone {
         }
     }
 
+    /**
+     * Starts the standalone I2PSnark server and optionally opens the system browser.
+     */
     public void start() {
         try {
             String url = "http://" + _host + ':' + _port + "/i2psnark/";
@@ -96,6 +104,9 @@ public class RunStandalone {
         }
     }
 
+    /**
+     * Stops the embedded Jetty server.
+     */
     public void stop() {
         _jettyStart.shutdown(null);
     }

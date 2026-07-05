@@ -47,6 +47,12 @@ class DHTNodes {
     private static final int KAD_K = 8;
     private static final int KAD_B = 1;
 
+    /**
+     * Create a new DHTNodes instance.
+     *
+     * @param ctx the I2P application context
+     * @param me our own node ID
+     */
     public DHTNodes(I2PAppContext ctx, NID me) {
         _context = ctx;
         _expireTime = MAX_EXPIRE_TIME;
@@ -74,11 +80,20 @@ class DHTNodes {
         return _nodeMap.size();
     }
 
+    /**
+     * Clear all known nodes and the routing table.
+     */
     public void clear() {
         _kad.clear();
         _nodeMap.clear();
     }
 
+    /**
+     * Get a node by its ID.
+     *
+     * @param nid the node ID to look up
+     * @return the node info, or null if not found
+     */
     public NodeInfo get(NID nid) {
         return _nodeMap.get(nid);
     }
@@ -94,11 +109,22 @@ class DHTNodes {
         return rv;
     }
 
+    /**
+     * Remove a node by its ID.
+     *
+     * @param nid the node ID to remove
+     * @return the removed node info, or null if not found
+     */
     public NodeInfo remove(NID nid) {
         _kad.remove(nid);
         return _nodeMap.remove(nid);
     }
 
+    /**
+     * Get all known nodes.
+     *
+     * @return collection of all known node infos
+     */
     public Collection<NodeInfo> values() {
         return _nodeMap.values();
     }
@@ -106,9 +132,11 @@ class DHTNodes {
     // end ConcurrentHashMap methods
 
     /**
-     * DHT
+     * Find the closest nodes to a given hash or node ID.
      *
-     * @param h either a InfoHash or a NID
+     * @param h either an InfoHash or a NID
+     * @param numWant the maximum number of nodes to return
+     * @return list of closest node infos
      */
     public List<NodeInfo> findClosest(SHA1Hash h, int numWant) {
         NID key;
@@ -123,15 +151,19 @@ class DHTNodes {
         return rv;
     }
 
-    /** DHT - get random keys to explore */
+    /**
+     * Get random keys to explore for DHT maintenance.
+     *
+     * @return list of node IDs representing buckets that need refreshing
+     */
     public List<NID> getExploreKeys() {
         return _kad.getExploreKeys(MAX_BUCKET_AGE);
     }
 
     /**
-     * Debug info, HTML formatted
+     * Debug info, HTML formatted.
      *
-     * @since 0.9.4
+     * @param buf the buffer to append HTML to
      */
     public void renderStatusHTML(StringBuilder buf) {
         buf.append(_kad.toString().replace("\n", "<br>\n"));

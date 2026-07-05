@@ -53,10 +53,13 @@ abstract class ExtensionHandler {
     private static final int PARALLEL_REQUESTS = 8;
 
     /**
-     * @param metasize -1 if unknown
-     * @param pexAndMetadata advertise these capabilities
-     * @param dht advertise DHT capability
-     * @param comment advertise ut_comment capability
+     * Creates a bencoded extension handshake message.
+     *
+     * @param metasize the metadata size in bytes, or -1 if unknown
+     * @param pexAndMetadata true to advertise PEX and metadata extensions
+     * @param dht true to advertise DHT capability
+     * @param uploadOnly true to advertise upload-only mode (BEP 21)
+     * @param comment true to advertise ut_comment extension
      * @return bencoded outgoing handshake message
      */
     public static byte[] getHandshake(
@@ -88,6 +91,14 @@ abstract class ExtensionHandler {
         return BEncoder.bencode(handshake);
     }
 
+    /**
+     * Handles an incoming extension message from a peer.
+     *
+     * @param peer the peer that sent the message
+     * @param listener the peer listener for callbacks
+     * @param id the extension message ID
+     * @param bs the raw message bytes
+     */
     public static void handleMessage(Peer peer, PeerListener listener, int id, byte[] bs) {
         Log log = I2PAppContext.getGlobalContext().logManager().getLog(ExtensionHandler.class);
         if (log.shouldInfo())
@@ -108,6 +119,14 @@ abstract class ExtensionHandler {
             log.info("Unknown extension message " + id + " from [" + peer + "]");
     }
 
+    /**
+     * Handles an incoming extension handshake message.
+     *
+     * @param peer the peer that sent the message
+     * @param listener the peer listener for callbacks
+     * @param bs the raw message bytes
+     * @param log the logger instance
+     */
     private static void handleHandshake(Peer peer, PeerListener listener, byte[] bs, Log log) {
         if (log.shouldDebug()) log.debug("Received handshake message from [" + peer + "]");
         try {
@@ -121,18 +140,6 @@ abstract class ExtensionHandler {
 
             if (log.shouldDebug())
                 log.debug("Peer [" + peer + "] supports extensions: " + msgmap.keySet());
-
-            // if (msgmap.get(TYPE_PEX) != null) {
-            //    if (log.shouldDebug())
-            //        log.debug("Peer supports PEX extension: " + peer);
-            //    // peer state calls peer listener calls sendPEX()
-            // }
-
-            // if (msgmap.get(TYPE_DHT) != null) {
-            //    if (log.shouldDebug())
-            //        log.debug("Peer supports DHT extension: " + peer);
-            //    // peer state calls peer listener calls sendDHT()
-            // }
 
             MagnetState state = peer.getMagnetState();
 
@@ -220,9 +227,12 @@ abstract class ExtensionHandler {
     private static final int TYPE_REJECT = 2;
 
     /**
-     * REF: BEP 9
+     * Handles an incoming metadata extension message (BEP 9).
      *
-     * @since 0.8.4
+     * @param peer the peer that sent the message
+     * @param listener the peer listener for callbacks
+     * @param bs the raw message bytes
+     * @param log the logger instance
      */
     private static void handleMetadata(Peer peer, PeerListener listener, byte[] bs, Log log) {
         if (log.shouldDebug()) log.debug("Received metadata message from [" + peer + "]");
@@ -297,6 +307,12 @@ abstract class ExtensionHandler {
         }
     }
 
+    /**
+     * Sends a metadata chunk request to a peer.
+     *
+     * @param peer the peer to send the request to
+     * @param piece the chunk number to request
+     */
     private static void sendRequest(Peer peer, int piece) {
         sendMessage(peer, TYPE_REQUEST, piece);
     }
@@ -308,6 +324,13 @@ abstract class ExtensionHandler {
      ****/
 
     /** REQUEST and REJECT are the same except for message type */
+    /**
+     * Sends a metadata request or reject message to a peer.
+     *
+     * @param peer the peer to send the message to
+     * @param type the message type (TYPE_REQUEST or TYPE_REJECT)
+     * @param piece the chunk number
+     */
     private static void sendMessage(Peer peer, int type, int piece) {
         Map<String, Object> map = new HashMap<>();
         map.put("msg_type", Integer.valueOf(type));
@@ -318,11 +341,17 @@ abstract class ExtensionHandler {
             peer.sendExtension(hisMsgCode, payload);
         } catch (Exception e) {
             // NPE, no metadata capability
-            // if (log.shouldInfo())
-            //    log.info("Metadata send req msg exception to " + peer, e);
         }
     }
 
+    /**
+     * Sends a metadata chunk data message to a peer.
+     *
+     * @param peer the peer to send the data to
+     * @param piece the chunk number
+     * @param data the chunk data bytes
+     * @param totalSize the total metadata size
+     */
     private static void sendPiece(Peer peer, int piece, byte[] data, int totalSize) {
         Map<String, Object> map = new HashMap<>();
         map.put("msg_type", Integer.valueOf(TYPE_DATA));
@@ -341,19 +370,19 @@ abstract class ExtensionHandler {
             peer.sendExtension(hisMsgCode, payload);
         } catch (Exception e) {
             // NPE, no metadata caps
-            // if (log.shouldInfo())
-            //    log.info("Metadata send piece msg exception to " + peer, e);
         }
     }
 
     private static final int HASH_LENGTH = 32;
 
     /**
-     * Can't find a published standard for this anywhere. See the libtorrent code. Here we use the
-     * "added" key as a single string of concatenated 32-byte peer hashes. added.f and dropped
-     * unsupported
+     * Handles an incoming PEX message. Uses the "added" key as a single string of concatenated
+     * 32-byte peer hashes. added.f and dropped are unsupported.
      *
-     * @since 0.8.4
+     * @param peer the peer that sent the message
+     * @param listener the peer listener for callbacks
+     * @param bs the raw message bytes
+     * @param log the logger instance
      */
     private static void handlePEX(Peer peer, PeerListener listener, byte[] bs, Log log) {
         if (log.shouldDebug()) log.debug("Received PEX msg from [" + peer + "]");
@@ -384,9 +413,12 @@ abstract class ExtensionHandler {
     }
 
     /**
-     * Receive the DHT port numbers
+     * Handles an incoming DHT port message.
      *
-     * @since DHT
+     * @param peer the peer that sent the message
+     * @param listener the peer listener for callbacks
+     * @param bs the raw message bytes
+     * @param log the logger instance
      */
     private static void handleDHT(Peer peer, PeerListener listener, byte[] bs, Log log) {
         if (log.shouldDebug()) log.debug("Received DHT messsage from [" + peer + "]");
@@ -405,10 +437,10 @@ abstract class ExtensionHandler {
     }
 
     /**
-     * added.f and dropped unsupported
+     * Sends a PEX message with the given peer list. added.f and dropped are unsupported.
      *
-     * @param pList non-null
-     * @since 0.8.4
+     * @param peer the peer to send the PEX message to
+     * @param pList non-null list of peers to share
      */
     public static void sendPEX(Peer peer, List<Peer> pList) {
         if (pList.isEmpty()) return;
@@ -426,15 +458,15 @@ abstract class ExtensionHandler {
             peer.sendExtension(hisMsgCode, payload);
         } catch (Exception e) {
             // NPE, no PEX caps
-            // if (log.shouldInfo())
-            //    log.info("PEX msg exception to " + peer, e);
         }
     }
 
     /**
-     * Send the DHT port numbers
+     * Sends DHT port numbers to a peer.
      *
-     * @since DHT
+     * @param peer the peer to send the DHT ports to
+     * @param qport the query port
+     * @param rport the response port
      */
     public static void sendDHT(Peer peer, int qport, int rport) {
         Map<String, Object> map = new HashMap<>();
@@ -446,18 +478,16 @@ abstract class ExtensionHandler {
             peer.sendExtension(hisMsgCode, payload);
         } catch (Exception e) {
             // NPE, no DHT caps
-            // if (log.shouldInfo())
-            //    log.info("DHT msg exception to " + peer, e);
         }
     }
 
     /**
-     * Handle comment request and response
+     * Handles an incoming comment request or response message.
      *
-     * <p>Ref: https://blinkenlights.ch/ccms/software/bittorrent.html Ref:
-     * https://github.com/adrian-bl/bitflu/blob/3cb7fe887dbdea8132e4fa36fbbf5f26cf992db3/plugins/Bitflu/20_DownloadBitTorrent.pm#L3403
-     *
-     * @since 0.9.31
+     * @param peer the peer that sent the message
+     * @param listener the peer listener for callbacks
+     * @param bs the raw message bytes
+     * @param log the logger instance
      */
     private static void handleComment(Peer peer, PeerListener listener, byte[] bs, Log log) {
         if (log.shouldDebug()) log.debug("Received comment messsage from [" + peer + "]");
@@ -503,9 +533,10 @@ abstract class ExtensionHandler {
     private static final byte[] COMMENTS_FILTER = new byte[64];
 
     /**
-     * Send comment request
+     * Sends a comment request to a peer.
      *
-     * @since 0.9.31
+     * @param peer the peer to request comments from
+     * @param num the maximum number of comments to request
      */
     public static void sendCommentReq(Peer peer, int num) {
         Map<String, Object> map = new HashMap<>();
@@ -522,11 +553,11 @@ abstract class ExtensionHandler {
     }
 
     /**
-     * Send comments Caller must sync on comments
+     * Sends comments to a peer. Caller must synchronize on comments.
      *
-     * @param num max to send
-     * @param comments non-null
-     * @since 0.9.31
+     * @param peer the peer to send comments to
+     * @param num the maximum number of comments to send
+     * @param comments non-null set of comments to send
      */
     public static void locked_sendComments(Peer peer, int num, CommentSet comments) {
         int toSend = Math.min(num, comments.size());

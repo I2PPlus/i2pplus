@@ -7,8 +7,14 @@
 
 package org.klomp.snark;
 
-/** Callback for end of shutdown sequence. */
+/**
+ * Callback interface for the end of the shutdown sequence.
+ *
+ * @since 0.1.0
+ */
 interface ShutdownListener {
-    /** Called when the SnarkShutdown hook has finished shutting down all subcomponents. */
+    /**
+     * Called when the SnarkShutdown hook has finished shutting down all subcomponents.
+     */
     void shutdown();
 }

@@ -206,6 +206,13 @@ public class BEncoder {
      * @see DataHelper#compareTo(byte[], byte[])
      */
     private static class BAComparator implements Comparator<byte[]>, Serializable {
+        /**
+         * Compares two byte arrays using lexicographic byte ordering.
+         *
+         * @param l the first byte array
+         * @param r the second byte array
+         * @return negative if l is less, positive if greater, 0 if equal
+         */
         public int compare(byte[] l, byte[] r) {
             return DataHelper.compareTo(l, r);
         }

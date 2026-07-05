@@ -28,6 +28,13 @@ public class BWLimits {
     private static long lastUpdateTime = 0L; // store time in milliseconds
     private static final long UPDATE_INTERVAL = 10 * 60 * 1000;
 
+    /**
+     * Retrieves the bandwidth limits from the I2P router at the given host and port.
+     *
+     * @param host the I2CP host to connect to
+     * @param port the I2CP port to connect to
+     * @return an int array of bandwidth limits, or null on failure
+     */
     public static synchronized int[] getBWLimits(String host, int port) {
         long now = System.currentTimeMillis();
         if (cachedResult != null && (now - lastUpdateTime) < UPDATE_INTERVAL) {

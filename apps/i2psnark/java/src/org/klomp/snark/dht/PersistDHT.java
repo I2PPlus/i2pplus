@@ -14,7 +14,10 @@ import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
 
 /**
- * Retrieve / Store the local DHT in a file
+ * Retrieve / Store the local DHT in a file.
+ *
+ * <p>Provides static methods to load and save the DHT routing table to persistent storage.
+ * The DHT node list is stored in a simple text format with one node per line.
  *
  * @since 0.9.2
  */
@@ -23,6 +26,10 @@ abstract class PersistDHT {
     private static final long MAX_AGE = 60 * 60 * 1000;
 
     /**
+     * Load the DHT from file, trying the backup if the primary doesn't exist.
+     *
+     * @param krpc the KRPC instance to load nodes into
+     * @param file the primary DHT file
      * @param backupFile may be null
      * @since 0.9.6
      */
@@ -31,6 +38,12 @@ abstract class PersistDHT {
         else if (backupFile != null) loadDHT(krpc, backupFile);
     }
 
+    /**
+     * Load the DHT from a single file.
+     *
+     * @param krpc the KRPC instance to load nodes into
+     * @param file the DHT file to load
+     */
     public static synchronized void loadDHT(KRPC krpc, File file) {
         Log log = I2PAppContext.getGlobalContext().logManager().getLog(PersistDHT.class);
         int count = 0;
@@ -62,7 +75,11 @@ abstract class PersistDHT {
     }
 
     /**
+     * Save the DHT to a file.
+     *
+     * @param nodes the DHT nodes to save
      * @param saveAll if true, don't check last seen time
+     * @param file the file to write to
      */
     public static synchronized void saveDHT(DHTNodes nodes, boolean saveAll, File file) {
         if (nodes.size() <= 0) return;

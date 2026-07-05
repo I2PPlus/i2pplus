@@ -159,7 +159,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * Max number of peers to return. BEP 5 doesn't say. We'll use more than
      * I2PSnarkUtil.MAX_CONNECTIONS since lots could be old.
      */
-    //    private static final int MAX_WANT = I2PSnarkUtil.MAX_CONNECTIONS * 3 / 2;
     private static final int MAX_WANT = I2PSnarkUtil.MAX_CONNECTIONS * 3;
 
     /** overloads error codes which start with 201 */
@@ -189,12 +188,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** stagger with other cleaners */
     private static final long CLEAN_TIME = 63 * 1000;
 
-    //    private static final long EXPLORE_TIME = 877*1000;
     private static final long EXPLORE_TIME = 10 * 60 * 1000;
-    //    private static final long BLACKLIST_CLEAN_TIME = 17*60*1000;
     private static final long BLACKLIST_CLEAN_TIME = 5 * 60 * 1000;
     private static final int BLACKLIST_MAX_PEERS = 500;
-    //    private static final long NODES_SAVE_TIME = 3*60*60*1000;
     private static final long NODES_SAVE_TIME =
             30 * 60 * 1000; // frequency of save of local dht node list
     public static final String DHT_FILE_SUFFIX = ".dht.dat";
@@ -250,7 +246,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
 
     ///////////////// Public methods
 
-    /** Known nodes, not estimated total network size. */
+    /**
+     * Known nodes, not estimated total network size.
+     *
+     * @return the number of known nodes
+     */
     public int size() {
         return _knownNodes.size();
     }
@@ -655,7 +655,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         return replyType == REPLY_PONG;
     }
 
-    /** Loads the DHT from file. Can't be restarted after stopping? */
+    /**
+     * Start the DHT. Loads the DHT from file. Can't be restarted after stopping.
+     */
     public synchronized void start() {
         if (_isRunning) return;
         if (_log.shouldInfo()) _log.info("KRPC start", new Exception());
@@ -702,13 +704,19 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         _blacklist.clear();
     }
 
-    /** Clears the tracker and DHT data. Call after saving DHT data to disk. */
+    /**
+     * Clears the tracker and DHT data. Call after saving DHT data to disk.
+     */
     public void clear() {
         _tracker.stop();
         _knownNodes.clear();
     }
 
-    /** Debug info, HTML formatted */
+    /**
+     * Debug info, HTML formatted.
+     *
+     * @return HTML string with DHT status information
+     */
     public String renderStatusHTML() {
         long uptime = Math.max(1000, _context.clock().now() - _started);
         StringBuilder buf = new StringBuilder(256);
@@ -749,7 +757,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 .append(_blacklist.size())
                 .append("</span></span>")
                 .append("</div>");
-        // _knownNodes.renderStatusHTML(buf);
         return buf.toString();
     }
 
@@ -762,7 +769,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     // Announces use the response port.
 
     /**
-     * Blocking if we have to look up the dest for the nodeinfo
+     * Send a ping query to a node.
+     * Blocking if we have to look up the dest for the nodeinfo.
      *
      * @param nInfo who to send it to
      * @return null on error
@@ -779,7 +787,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Blocking if we have to look up the dest for the nodeinfo
+     * Send a find_node query.
+     * Blocking if we have to look up the dest for the nodeinfo.
      *
      * @param nInfo who to send it to
      * @param tID target ID we are looking for
@@ -798,9 +807,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Blocking if we have to look up the dest for the nodeinfo
+     * Send a get_peers query.
+     * Blocking if we have to look up the dest for the nodeinfo.
      *
      * @param nInfo who to send it to
+     * @param ih the info hash to look up
      * @param noSeeds true if we do not want seeds in the result
      * @return null on error
      */
@@ -830,9 +841,12 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Non-blocking, will fail if we don't have the dest for the nodeinfo
+     * Send an announce_peer query.
+     * Non-blocking, will fail if we don't have the dest for the nodeinfo.
      *
      * @param nInfo who to send it to
+     * @param ih the info hash to announce
+     * @param token the token received from a previous get_peers response
      * @param isSeed true if seed, false if leech
      * @return null on error
      */
@@ -856,7 +870,10 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     // All responses use the response port.
 
     /**
+     * Send a pong response.
+     *
      * @param nInfo who to send it to
+     * @param msgID the message ID to respond to
      * @return success
      */
     private boolean sendPong(NodeInfo nInfo, MsgID msgID) {
@@ -869,15 +886,25 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         return sendResponse(nInfo, msgID, map);
     }
 
-    /** response to find_node (no token) */
+    /**
+     * Send a nodes response (no token).
+     *
+     * @param nInfo who to send it to
+     * @param msgID the message ID to respond to
+     * @param ids the concatenated 54-byte node infos
+     * @return success
+     */
     private boolean sendNodes(NodeInfo nInfo, MsgID msgID, byte[] ids) {
         return sendNodes(nInfo, msgID, null, ids);
     }
 
     /**
-     * response to find_node (token is null) or get_peers (has a token)
+     * Send a nodes response (token is null for find_node, non-null for get_peers).
      *
      * @param nInfo who to send it to
+     * @param msgID the message ID to respond to
+     * @param token the token to include, or null for find_node responses
+     * @param ids the concatenated 54-byte node infos
      * @return success
      */
     private boolean sendNodes(NodeInfo nInfo, MsgID msgID, Token token, byte[] ids) {
@@ -895,7 +922,13 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * @param token non-null
+     * Send a peers response.
+     *
+     * @param nInfo who to send it to
+     * @param msgID the message ID to respond to
+     * @param token non-null token to include
+     * @param peers the list of peer hashes to send
+     * @return success
      */
     private boolean sendPeers(NodeInfo nInfo, MsgID msgID, Token token, List<byte[]> peers) {
         if (_log.shouldInfo()) {
@@ -914,8 +947,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     // TODO sendQuery with onReply / onTimeout args
 
     /**
-     * Blocking if repliable and we must lookup b32
+     * Send a query message.
+     * Blocking if repliable and we must lookup b32.
      *
+     * @param nInfo who to send it to
+     * @param map the bencoded message to send
      * @param repliable true for all but announce
      * @return null on error
      */
@@ -970,7 +1006,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * @param toPort the query port, we will increment here
+     * Send a response message.
+     *
+     * @param nInfo who to send it to
+     * @param msgID the message ID to respond to
+     * @param map the bencoded response message
      * @return success
      */
     @SuppressWarnings("unchecked")
@@ -1003,8 +1043,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Unused
+     * Send an error response. Currently unused.
      *
+     * @param nInfo who to send it to
+     * @param msgID the message ID to respond to
+     * @param map the bencoded error message
      * @return success
      */
     private boolean sendError(NodeInfo nInfo, MsgID msgID, Map<String, Object> map) {
@@ -1033,6 +1076,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /**
      * Get the dest for a NodeInfo lacking it, and store it there. Blocking.
      *
+     * @param nInfo the node to look up
      * @return success
      */
     private boolean lookupDest(NodeInfo nInfo) {
@@ -1064,6 +1108,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /**
      * Lowest-level send message call.
      *
+     * @param dest the destination to send to
+     * @param toPort the port to send to
+     * @param map the bencoded message to send
      * @param repliable true for all but announce
      * @return success
      */
@@ -1198,10 +1245,14 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     // Queries.....
 
     /**
-     * Adds sender to our DHT.
+     * Handle and respond to an incoming query. Adds sender to our DHT.
      *
-     * @param dest may be null for announce_peer method only
-     * @throws NPE too
+     * @param msgID the message ID
+     * @param dest the sender's destination, may be null for announce_peer method only
+     * @param fromPort the sender's port
+     * @param method the query method name
+     * @param args the query arguments
+     * @throws InvalidBEncodingException if the message is malformed
      */
     private void receiveQuery(
             MsgID msgID, Destination dest, int fromPort, String method, Map<String, BEValue> args)
@@ -1218,7 +1269,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             nInfo = new NodeInfo(new NID(nid), dest, fromPort);
             nInfo = heardFrom(nInfo);
             nInfo.setDestination(dest);
-            // ninfo.checkport ?
         } else {
             nInfo = null;
         }
@@ -1450,7 +1500,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * Handle the response and alert whoever sent the query it is responding to. Adds sender
      * nodeinfo to our DHT.
      *
-     * @throws NPE, IllegalArgumentException, and others too
+     * @param waiter the reply waiter for the original query
+     * @param response the response data
+     * @throws InvalidBEncodingException if the response is malformed
      */
     private void receiveResponse(ReplyWaiter waiter, Map<String, BEValue> response)
             throws InvalidBEncodingException {
@@ -1497,9 +1549,13 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * rcv concatenated 54 byte NodeInfos, return as a List Adds all received nodeinfos to our DHT.
+     * Receive concatenated 54-byte NodeInfos and return as a list. Adds all received nodeinfos
+     * to our DHT.
      *
-     * @throws NPE, IllegalArgumentException, and others too
+     * @param nInfo the sender
+     * @param ids the concatenated node info bytes
+     * @return list of node infos
+     * @throws InvalidBEncodingException if the data is malformed
      */
     private List<NodeInfo> receiveNodes(NodeInfo nInfo, byte[] ids)
             throws InvalidBEncodingException {
@@ -1528,9 +1584,12 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * rcv 32 byte Hashes, return as a List
+     * Receive 32-byte hashes as peer list.
      *
-     * @throws NPE, IllegalArgumentException, and others too
+     * @param nInfo the sender
+     * @param peers the list of peer hash values
+     * @return list of peer hashes
+     * @throws InvalidBEncodingException if the data is malformed
      */
     private List<Hash> receivePeers(NodeInfo nInfo, List<BEValue> peers)
             throws InvalidBEncodingException {
@@ -1547,7 +1606,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 }
                 continue;
             }
-            // Hash h = new Hash(b);
             Hash h = Hash.create(b);
             rv.add(h);
             if (rv.size() >= max) {
@@ -1584,8 +1642,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     // Errors.....
 
     /**
-     * @param error 1st item is error code, 2nd is message string
-     * @throws NPE, and others too
+     * Handle an error response.
+     *
+     * @param waiter the reply waiter for the original query
+     * @param error the error data (1st item is error code, 2nd is message string)
+     * @throws InvalidBEncodingException if the error data is malformed
      */
     private void receiveError(ReplyWaiter waiter, List<BEValue> error)
             throws InvalidBEncodingException {

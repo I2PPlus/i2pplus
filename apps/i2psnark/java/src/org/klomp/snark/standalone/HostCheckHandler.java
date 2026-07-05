@@ -25,10 +25,18 @@ public class HostCheckHandler extends AbstractHandler {
     private final Set<String> _listenHosts;
     private static final String PROP_ALLOWED_HOSTS = "i2psnark.allowedHosts";
 
+    /**
+     * Creates a new HostCheckHandler using the global I2P application context.
+     */
     public HostCheckHandler() {
         this(I2PAppContext.getGlobalContext());
     }
 
+    /**
+     * Creates a new HostCheckHandler with the specified application context.
+     *
+     * @param ctx the I2P application context
+     */
     public HostCheckHandler(I2PAppContext ctx) {
         super();
         _context = ctx;
@@ -105,7 +113,6 @@ public class HostCheckHandler extends AbstractHandler {
         if (_listenHosts.contains(host)) return true;
         // allow all IP addresses
         if (Addresses.isIPAddress(host)) return true;
-        // System.out.println(host + " not found in " + s);
         return false;
     }
 

@@ -39,13 +39,23 @@ class Piece implements Comparable<Piece> {
      */
     private int priority;
 
+    /**
+     * Creates a new Piece with the given ID.
+     *
+     * @param id the piece index within the torrent
+     */
     public Piece(int id) {
         this.id = id;
         this.peers = new HashSet<>(I2PSnarkUtil.MAX_CONNECTIONS / 2);
         // defer creating requests to save memory
     }
 
-    /** Highest priority first, then rarest first */
+    /**
+     * Compares by highest priority first, then by rarest first.
+     *
+     * @param op the other Piece to compare to
+     * @return negative if this piece has higher priority, positive if lower
+     */
     public int compareTo(Piece op) {
         int pdiff = op.priority - this.priority; // reverse
         if (pdiff != 0) return pdiff;
@@ -68,11 +78,21 @@ class Piece implements Comparable<Piece> {
         return hash;
     }
 
+    /**
+     * Returns the piece index within the torrent.
+     *
+     * @return the piece ID
+     */
     public int getId() {
         return this.id;
     }
 
-    /** caller must synchronize */
+    /**
+     * Adds a peer to the set of peers that have this piece. Caller must synchronize.
+     *
+     * @param peer the peer to add
+     * @return true if the peer was added, false if already present
+     */
     public boolean addPeer(Peer peer) {
         return this.peers.add(peer.getPeerID());
     }
@@ -95,7 +115,11 @@ class Piece implements Comparable<Piece> {
         return this.peers.size();
     }
 
-    /** caller must synchronize */
+    /**
+     * Checks if any peer is currently requesting this piece. Caller must synchronize.
+     *
+     * @return true if at least one peer is requesting this piece
+     */
     public boolean isRequested() {
         return this.requests != null && !this.requests.isEmpty();
     }

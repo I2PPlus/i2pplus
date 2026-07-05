@@ -20,8 +20,9 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
 
 /**
  * The data structure for the tracker response. Handles both traditional and compact formats.
- * Compact format 1 - a list of hashes - early format for testing Compact format 2 - One big string
- * of concatenated hashes - official format
+ *
+ * <p>Compact format 1 - a list of hashes - early format for testing.
+ * Compact format 2 - One big string of concatenated hashes - official format.
  */
 class TrackerInfo {
     private final String failure_reason;
