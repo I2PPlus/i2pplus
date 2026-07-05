@@ -100,6 +100,10 @@ public class InNetMessagePool implements Service {
         _context.statManager().createRateStat("inNetPool.droppedDeliveryStatusDelay", "Notification latency for dropped messages (ms)", "InNetPool", RATES);
         _context.statManager().createRateStat("inNetPool.duplicate", "How often we receive a duplicate message", "InNetPool", RATES);
         _context.statManager().createRateStat("inNetPool.droppedDbLookupResponseMessage", "Frequency of DbLookup response drops", "InNetPool", RATES);
+        if (!DISPATCH_DIRECT) {
+            _context.statManager().createRequiredRateStat("inNetPool.dataQueueSize", "Inbound tunnel data message queue depth", "InNetPool", RATES);
+            _context.statManager().createRequiredRateStat("inNetPool.gatewayQueueSize", "Inbound tunnel gateway message queue depth", "InNetPool", RATES);
+        }
     }
 
     /**
@@ -352,6 +356,7 @@ public class InNetMessagePool implements Service {
             doShortCircuitTunnelGateway(messageBody);
         } else {
             _pendingGatewayMessages.offer(messageBody);
+            _context.statManager().addRateData("inNetPool.gatewayQueueSize", _pendingGatewayMessages.size());
             if (!_dispatchThreaded)
                 _context.jobQueue().addJob(_shortCircuitGatewayJob);
         }
@@ -377,6 +382,7 @@ public class InNetMessagePool implements Service {
             doShortCircuitTunnelData(messageBody, from);
         } else {
             _pendingDataMessages.offer(new QueuedMessage(messageBody, from));
+            _context.statManager().addRateData("inNetPool.dataQueueSize", _pendingDataMessages.size());
             if (!_dispatchThreaded)
                 _context.jobQueue().addJob(_shortCircuitDataJob);
         }

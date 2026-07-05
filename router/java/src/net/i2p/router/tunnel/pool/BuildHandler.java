@@ -167,6 +167,7 @@ public class BuildHandler implements Runnable {
         ctx.statManager().createRequiredRateStat("tunnel.rejectTimeout2", "Rejected tunnel build (can't contact next hop)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectTimeout", "Rejected tunnel build (unknown next hop)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectTooOld", "Rejected tunnel build (too old)", "Tunnels [Participating]", RATES);
+        ctx.statManager().createRequiredRateStat("tunnel.buildHandler.queueSize", "Build handler inbound queue depth", "Tunnels", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.acceptLoad", "Delay processing accepted request (ms)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.decryptRequestTime", "Time to decrypt a build request (ms)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.dropLoadBacklog", "Pending request count when dropped", "Tunnels [Participating]", RATES);
@@ -1198,8 +1199,10 @@ public class BuildHandler implements Runnable {
                     }
                     if (accept) {
                         accept = _inboundBuildMessages.offer(new BuildMessageState(_context, receivedMessage, from, fromHash));
-                        if (accept) {_exec.repoll();} // wake up the Executor to call handleInboundRequests()
-                        else {
+                        if (accept) {
+                            _exec.repoll(); // wake up the Executor to call handleInboundRequests()
+                            _context.statManager().addRateData("tunnel.buildHandler.queueSize", _inboundBuildMessages.size());
+                        } else {
                             _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Dropping Tunnel Requests: High load"));
                             _context.statManager().addRateData("tunnel.dropLoadBacklog", sz);
                         }

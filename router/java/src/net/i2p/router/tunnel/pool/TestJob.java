@@ -131,7 +131,7 @@ public class TestJob extends JobImpl {
      * Prevents job queue saturation from too many waiting tunnel tests.
      * Tunable via i2p.tunnel.testJob.maxQueued (default: 192 fast / 96 slow)
      */
-    public static volatile int maxQueuedTests = 384;
+    public static volatile int maxQueuedTests = SystemVersion.isSlow() ? 64 : 96;
 
     /**
      *  Base max queued tests value, read from PROP or static default.
@@ -358,7 +358,7 @@ public class TestJob extends JobImpl {
         } else {
             numPools = 0;
         }
-        int maxTestJobs = Math.min(maxQueuedTests, Math.max(activeRunners, Math.max(numPools * 10, 24)));
+        int maxTestJobs = Math.min(maxQueuedTests, Math.max(activeRunners, Math.max(numPools * 3, 12)));
         int currentTestJobs = getTotalTestJobCount();
         boolean isCritical = false;
         if (pool != null && !pool.getSettings().isExploratory()) {
@@ -375,7 +375,7 @@ public class TestJob extends JobImpl {
         }
         boolean isExpedited = cfg.needsExpeditedTest();
         long expeditedLagLimit = isExpedited ? MAX_LAG_FOR_SCHEDULE * 2 : MAX_LAG_FOR_SCHEDULE;
-        int expeditedJobLimit = isExpedited ? maxTestJobs * 2 : maxTestJobs;
+        int expeditedJobLimit = isExpedited ? maxTestJobs + maxTestJobs / 2 : maxTestJobs;
         if (!isCritical && (readyCount > activeRunners || maxLag > expeditedLagLimit || currentTestJobs >= expeditedJobLimit)) {
             Log log = ctx.logManager().getLog(TestJob.class);
             if (log.shouldInfo()) {

@@ -2021,4 +2021,24 @@ public class NTCPTransport extends TransportImpl {
 
     /** Set the send finisher queue capacity */
     public static void setSendFinisherQueueCapacity(int capacity) { NTCPSendFinisher.setQueueCapacity(capacity); }
+
+    /**
+     * Adjusts the send finisher thread count for the running pool.
+     *
+     * @param threads new thread count (core and max)
+     * @since 0.9.70+
+     */
+    public void adjustSendFinisherThreads(int threads) {
+        _finisher.adjustThreads(threads);
+    }
+
+    /**
+     * Returns the current send finisher queue depth.
+     *
+     * @return pending tasks count
+     * @since 0.9.70+
+     */
+    public int getSendFinisherQueueSize() {
+        return _finisher.getQueueSize();
+    }
 }

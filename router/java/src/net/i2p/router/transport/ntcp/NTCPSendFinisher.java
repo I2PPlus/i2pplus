@@ -9,12 +9,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.router.OutNetMessage;
+import net.i2p.router.transport.TransportImpl;
+import net.i2p.stat.Rate;
+import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
  * Handles asynchronous post-send processing of OutNetMessage using a
- * fixed-size thread pool executor with a bounded queue and backpressure.
+ * dynamically resizable thread pool executor with a bounded queue and backpressure.
  * Provides efficient message serialization and prevents resource exhaustion.
  *
  * @since 0.9.16
@@ -28,10 +31,16 @@ class NTCPSendFinisher {
     private static final AtomicInteger _count = new AtomicInteger();
     private ThreadPoolExecutor _executor;
 
+    private static final long[] RATES = {60*1000L, 10*60*1000L, 60*60*1000L};
+
     public NTCPSendFinisher(I2PAppContext context, NTCPTransport transport) {
         _context = context;
         _log = _context.logManager().getLog(NTCPSendFinisher.class);
         _transport = transport;
+        context.statManager().createRequiredRateStat("ntcp.sendFinisher.queueSize",
+            "NTCP send finisher pending tasks", "Transport [NTCP]", RATES);
+        context.statManager().createRequiredRateStat("ntcp.sendFinisher.threads",
+            "NTCP send finisher thread count", "Transport [NTCP]", RATES);
     }
 
     /**
@@ -45,7 +54,7 @@ class NTCPSendFinisher {
      * @since 0.9.70+
      */
     public static void setMaxThreads(int threads) {
-        _maxThreads = Math.max(1, Math.min(8, threads));
+        _maxThreads = Math.max(1, Math.min(16, threads));
     }
 
     /**
@@ -90,6 +99,34 @@ class NTCPSendFinisher {
     }
 
     /**
+     * Adjusts the thread pool size for the running executor.
+     * If the pool is not running, this is a no-op (new size takes effect on next start).
+     *
+     * @param newMax the new max thread count
+     * @since 0.9.70+
+     */
+    public synchronized void adjustThreads(int newMax) {
+        ThreadPoolExecutor executor = _executor;
+        if (executor != null && !executor.isShutdown() && !executor.isTerminated()) {
+            executor.setCorePoolSize(newMax);
+            executor.setMaximumPoolSize(newMax);
+            _context.statManager().addRateData("ntcp.sendFinisher.threads", newMax);
+        }
+    }
+
+    /**
+     * Returns the current queue size (pending send-finish tasks).
+     *
+     * @return current queue depth, or 0 if not running
+     * @since 0.9.70+
+     */
+    public int getQueueSize() {
+        ThreadPoolExecutor executor = _executor;
+        if (executor == null || executor.isShutdown()) return 0;
+        return executor.getQueue().size();
+    }
+
+    /**
      * Adds a message to the finishing queue to call afterSend asynchronously.
      * If the executor is stopped or saturated, falls back to caller running the task.
      */
@@ -105,6 +142,7 @@ class NTCPSendFinisher {
         }
         try {
             executor.execute(new RunnableEvent(msg));
+            _context.statManager().addRateData("ntcp.sendFinisher.queueSize", executor.getQueue().size());
         } catch (RejectedExecutionException ree) {
             // Pool saturated or shutdown, fallback to caller thread for backpressure
             _log.warn("NTCP Send Finisher saturated, running afterSend inline");

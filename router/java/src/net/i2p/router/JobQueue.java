@@ -124,8 +124,8 @@ public class JobQueue {
         _log = context.logManager().getLog(JobQueue.class);
 
         _context.statManager().createRateStat("jobQueue.droppedJobs", "Scheduled jobs dropped due to insane overload", "JobQueue", RATES);
-        _context.statManager().createRateStat("jobQueue.queuedJobs", "Scheduled jobs in queue", "JobQueue", RATES);
-        _context.statManager().createRateStat("jobQueue.readyJobs", "Ready and waiting scheduled jobs", "JobQueue", RATES);
+        _context.statManager().createRequiredRateStat("jobQueue.queuedJobs", "Scheduled jobs in queue", "JobQueue", RATES);
+        _context.statManager().createRequiredRateStat("jobQueue.readyJobs", "Ready and waiting scheduled jobs", "JobQueue", RATES);
         _context.statManager().createRateStat("jobQueue.testJobCount", "Number of TestJob instances in queue", "JobQueue", RATES);
         _context.statManager().createRateStat("jobQueue.testJobHardLimit", "TestJob hard limit events", "JobQueue", RATES);
         // following are for JobQueueRunner

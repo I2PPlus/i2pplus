@@ -142,7 +142,10 @@ public abstract class TransportImpl implements Transport {
      */
     public static void setSendPoolCapacity(int capacity) {
         int def = SystemVersion.isSlow() ? 64 : 128;
-        SEND_POOL_CAPACITY = Math.max(def / 2, Math.min(def * 4, capacity));
+        // Scale max with cores: more connections = more queued sends
+        // 4 cores → 2048, 8 cores → 4096, 16 cores → 8192
+        int max = Math.max(def * 16, SystemVersion.getCores() * 512);
+        SEND_POOL_CAPACITY = Math.max(def / 2, Math.min(max, capacity));
     }
 
     /**

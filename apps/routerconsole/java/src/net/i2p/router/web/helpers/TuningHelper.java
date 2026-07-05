@@ -52,6 +52,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("crypto.edh.precalcMin", "EDH Precalculate Minimum");
         DISPLAY_NAMES.put("crypto.mlkem.precalcMin", "ML-KEM Precalculate Minimum");
         DISPLAY_NAMES.put("ntcp.sendFinisher.maxThreads", "NTCP Maximum Send Threads");
+        DISPLAY_NAMES.put("ntcp.sendFinisher.threads", "NTCP Send Finisher Threads");
         DISPLAY_NAMES.put("ntcp.sendFinisher.queueCapacity", "NTCP Send Queue Capacity");
         DISPLAY_NAMES.put("udp.messageReceiver.threads", "UDP Message Receiver Threads");
         DISPLAY_NAMES.put("udp.packetHandler.maxThreads", "UDP Maximum Handler Threads");
@@ -75,6 +76,9 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("i2p.tunnel.build.requestTimeout", "Tunnel Build Request Timeout");
         DISPLAY_NAMES.put("i2p.tunnel.build.firstHopTimeout", "Tunnel Build First Hop Timeout");
         DISPLAY_NAMES.put("tunnel.build.maxConcurrent", "Max Concurrent Tunnel Builds");
+        DISPLAY_NAMES.put("tunnel.testJob.maxQueued", "Max Concurrent Test Jobs");
+        DISPLAY_NAMES.put("tunnel.testJob.minTestDelay", "Min Delay Between Tests");
+        DISPLAY_NAMES.put("tunnel.testJob.maxTestDelay", "Max Delay Between Tests");
         DISPLAY_NAMES.put("ntcp.reader.threads", "NTCP Reader Threads");
         DISPLAY_NAMES.put("ntcp.writer.threads", "NTCP Writer Threads");
         DISPLAY_NAMES.put("ntcp.failsafe.iterationFreq", "NTCP Pumper Failsafe Interval");
@@ -119,6 +123,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("crypto.edh.precalcMin", "Min precomputed EDH key pairs.");
         PARAM_DESCRIPTIONS.put("crypto.mlkem.precalcMin", "Min precomputed ML-KEM key pairs for PQ.");
         PARAM_DESCRIPTIONS.put("ntcp.sendFinisher.maxThreads", "Max NTCP send finalizer threads.");
+        PARAM_DESCRIPTIONS.put("ntcp.sendFinisher.threads", "NTCP send finisher thread pool size.");
         PARAM_DESCRIPTIONS.put("ntcp.sendFinisher.queueCapacity", "Max NTCP send queue depth.");
         PARAM_DESCRIPTIONS.put("udp.packetHandler.maxThreads", "Max UDP packet handler threads.");
         PARAM_DESCRIPTIONS.put("udp.messageReceiver.threads", "UDP message assembly threads.");
@@ -142,6 +147,9 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2p.tunnel.build.requestTimeout", "Build reply timeout in ms.");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.build.firstHopTimeout", "First-hop build forward timeout in ms.");
         PARAM_DESCRIPTIONS.put("tunnel.build.maxConcurrent", "Max simultaneous tunnel builds.");
+        PARAM_DESCRIPTIONS.put("tunnel.testJob.maxQueued", "Max concurrent test jobs at once.");
+        PARAM_DESCRIPTIONS.put("tunnel.testJob.minTestDelay", "Minimum delay between tests per tunnel in ms.");
+        PARAM_DESCRIPTIONS.put("tunnel.testJob.maxTestDelay", "Maximum delay between tests per tunnel in ms.");
         PARAM_DESCRIPTIONS.put("ntcp.reader.threads", "NTCP reader threads.");
         PARAM_DESCRIPTIONS.put("ntcp.writer.threads", "NTCP writer threads.");
         PARAM_DESCRIPTIONS.put("ntcp.failsafe.iterationFreq", "Pumper failsafe scan interval in ms.");
