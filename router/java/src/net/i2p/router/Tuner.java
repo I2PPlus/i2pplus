@@ -1532,23 +1532,30 @@ public class Tuner implements SimpleTimer.TimedEvent {
             int current = getRuntimeValue();
             // observed = tunnel.pumperQueueFull (drop events per minute)
             // Cross-refs: tunnel.ibgw/obgw.queueSize, tunnel.dispatchParticipant,
-            //             jobQueue.jobLag (CPU)
+            //             jobQueue.jobLag (CPU), memory pressure
             double ibgwQueue = getAdditionalStat(_context, "tunnel.ibgw.queueSize");
             double obgwQueue = getAdditionalStat(_context, "tunnel.obgw.queueSize");
             double transitLoad = getAdditionalStat(_context, "tunnel.dispatchParticipant");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double memPressure = getMemoryPressure();
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean memOk = memPressure < 0.75;
+            boolean memCritical = memPressure > 0.85;
             boolean hasDrops = !Double.isNaN(observed) && observed > 0;
             boolean queuesBackedUp = (!Double.isNaN(ibgwQueue) && ibgwQueue > 50) ||
                                      (!Double.isNaN(obgwQueue) && obgwQueue > 50);
             boolean heavyTransit = !Double.isNaN(transitLoad) && transitLoad > 2000;
 
-            // Drops or backed-up queues + no CPU pressure = grow queue
-            if ((hasDrops || queuesBackedUp) && !cpuPressure)
+            // Memory critical: shrink immediately
+            if (memCritical && current > _min)
+                return Math.max(_min, current - _step * 2);
+
+            // Drops or backed-up queues + no CPU + memory OK = grow queue
+            if ((hasDrops || queuesBackedUp) && !cpuPressure && memOk)
                 return Math.min(_max, current + _step);
 
-            // Heavy transit + no pressure = grow proactively
-            if (heavyTransit && !cpuPressure && current < _max / 2)
+            // Heavy transit + no pressure + memory OK = grow proactively
+            if (heavyTransit && !cpuPressure && memOk && current < _max / 2)
                 return Math.min(_max, current + _step);
 
             // No drops + low queues + light load = shrink to save memory
@@ -5176,7 +5183,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
         MaxConcurrentMessagesParam() {
             super("udp.peer.concurrentMaxMessages", SUB_BUFFERS,
                   "Max concurrent peer messages",
-                  64, 1024, 16, "udp.allowConcurrentActive", _context);
+                  64, Math.max(256, Math.min(4096,
+                      (int) (SystemVersion.getMaxMemory() / (8 * 1024 * 1024)))),
+                  16, "udp.allowConcurrentActive", _context);
         }
 
         protected void applyValue(int value) {
@@ -5199,36 +5208,55 @@ public class Tuner implements SimpleTimer.TimedEvent {
             int current = getRuntimeValue();
             // observed = udp.allowConcurrentActive (avg concurrent messages per peer)
             // Cross-refs: udp.sendConfirmTime (RTT), tunnel.participating InBps (transit load),
-            //             udp.rejectConcurrentActive (rejection events)
+            //             udp.rejectConcurrentActive (rejection events), jobQueue.jobLag (CPU)
             double rtt = getAdditionalStat(_context, "udp.sendConfirmTime");
             double transitBps = getAdditionalStat(_context, "tunnel.participating InBps");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double rejections = getAdditionalStat(_context, "udp.rejectConcurrentActive");
+            double sendPoolUtil = getAdditionalStat(_context, "ntcp.sendPool utilization");
+            double memPressure = getMemoryPressure();
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean cpuFree = jobLag < 5 || Double.isNaN(jobLag);
+            boolean lowRTT = !Double.isNaN(rtt) && rtt < 200;
+            boolean moderateRTT = !Double.isNaN(rtt) && rtt < 500;
             boolean highUsage = !Double.isNaN(observed) && observed > current * 0.7;
             boolean nearCapacity = !Double.isNaN(observed) && observed > current * 0.9;
-            boolean lowRTT = !Double.isNaN(rtt) && rtt < 500;
             boolean heavyTransit = !Double.isNaN(transitBps) && transitBps > 50000;
             boolean hasRejections = !Double.isNaN(rejections) && rejections > 0;
+            boolean poolFree = !Double.isNaN(sendPoolUtil) && sendPoolUtil < 30;
+            boolean memOk = memPressure < 0.75;
+            boolean memCritical = memPressure > 0.85;
 
-            // Near capacity + low RTT + headroom = increase aggressively
-            if (nearCapacity && lowRTT && !cpuPressure)
+            // Memory critical: shrink immediately regardless of other signals
+            if (memCritical && current > _min)
+                return Math.max(_min, current - _step * 4);
+
+            // Near capacity + low RTT + CPU free + memory OK = grow aggressively (4× step)
+            if (nearCapacity && lowRTT && cpuFree && memOk)
+                return Math.min(_max, current + _step * 4);
+
+            // Near capacity + moderate RTT + CPU free + memory OK = grow fast (2× step)
+            if (nearCapacity && moderateRTT && cpuFree && memOk)
                 return Math.min(_max, current + _step * 2);
 
-            // High usage + low RTT + headroom = grow to handle load
-            if (highUsage && lowRTT && !cpuPressure && current < _max)
+            // High usage + low RTT + CPU free + send pool headroom + memory OK = grow fast
+            if (highUsage && lowRTT && cpuFree && poolFree && memOk)
+                return Math.min(_max, current + _step * 2);
+
+            // Heavy transit + low RTT + CPU free + memory OK = grow to handle load
+            if (heavyTransit && lowRTT && cpuFree && memOk)
+                return Math.min(_max, current + _step * 2);
+
+            // Moderate usage + low RTT + CPU free + memory OK = grow proactively
+            if (!Double.isNaN(observed) && observed > current * 0.4 && lowRTT && cpuFree && memOk)
                 return Math.min(_max, current + _step);
 
-            // Low RTT + heavy transit + no CPU pressure = grow to handle load
-            if (lowRTT && heavyTransit && !cpuPressure && current < _max)
-                return Math.min(_max, current + _step);
-
-            // Rejections + CPU pressure = increase cautiously (need throughput)
-            if (hasRejections && cpuPressure)
+            // Rejections + CPU headroom + memory OK = increase (need throughput even if RTT rises)
+            if (hasRejections && cpuFree && memOk)
                 return Math.min(_max, current + _step);
 
             // Low usage + high RTT + no transit = decrease to reduce pressure
-            if ((!Double.isNaN(observed) && observed < current * 0.3) && !heavyTransit && !lowRTT && current > _min)
+            if ((!Double.isNaN(observed) && observed < current * 0.3) && !heavyTransit && !moderateRTT && current > _min)
                 return Math.max(_min, current - _step);
 
             // High RTT + no rejections = decrease to reduce pressure
@@ -5283,24 +5311,37 @@ public class Tuner implements SimpleTimer.TimedEvent {
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double finisherQ = getAdditionalStat(_context, "ntcp.sendFinisher.queueSize");
             double rtt = getAdditionalStat(_context, "udp.sendConfirmTime");
+            double memPressure = getMemoryPressure();
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean memOk = memPressure < 0.75;
+            boolean memCritical = memPressure > 0.85;
             boolean criticalUtilization = !Double.isNaN(observed) && observed > 80;
             boolean highUtilization = !Double.isNaN(observed) && observed > 60;
             boolean finisherBacklog = !Double.isNaN(finisherQ) && finisherQ > 200;
+            double dispatchExpired = getAdditionalStat(_context, "transport.dispatchExpired");
+            boolean dispatchPressure = !Double.isNaN(dispatchExpired) && dispatchExpired > 100;
+
+            // Memory critical: shrink immediately
+            if (memCritical && current > _min)
+                return Math.max(_min, current - _step * 2);
 
             // Critical saturation: pool IS the bottleneck, grow regardless of latency.
-            // Only CPU pressure stops us — latency is a symptom of the pool being too small.
-            if (criticalUtilization && !cpuPressure)
+            // Only CPU or memory pressure stops us — latency is a symptom of the pool being too small.
+            if (criticalUtilization && !cpuPressure && memOk)
                 return Math.min(_max, current + _step * 2);
 
-            // High utilization or finisher backlog + no CPU = grow pool
-            if ((highUtilization || finisherBacklog) && !cpuPressure)
+            // Dispatch pressure + low utilization + CPU free + memory OK = grow to absorb backlog
+            if (dispatchPressure && !criticalUtilization && !cpuPressure && memOk)
+                return Math.min(_max, current + _step);
+
+            // High utilization or finisher backlog + no CPU + memory OK = grow pool
+            if ((highUtilization || finisherBacklog) && !cpuPressure && memOk)
                 return Math.min(_max, current + _step * 2);
 
-            // Moderate utilization + low latency + low RTT = grow pool proactively
+            // Moderate utilization + low latency + low RTT + memory OK = grow pool proactively
             boolean lowLatency = !Double.isNaN(sendTime) && sendTime < 100;
             boolean lowRTT = !Double.isNaN(rtt) && rtt < 200;
-            if (!Double.isNaN(observed) && observed > 40 && !cpuPressure && lowLatency && lowRTT)
+            if (!Double.isNaN(observed) && observed > 40 && !cpuPressure && lowLatency && lowRTT && memOk)
                 return Math.min(_max, current + _step);
 
             // Low utilization + no backlog = shrink to reduce memory

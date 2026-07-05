@@ -453,6 +453,7 @@ public abstract class TransportImpl implements Transport {
                 _context.statManager().addRateData("transport.expiredOnQueueLifetime", lifetime);
             }
             if (allowRequeue && ((msg.getExpiration() <= 0) || (msg.getExpiration() > now)) && (msg.getMessage() != null)) {
+                msg.resetCreatedTime();
                 _context.outNetMessagePool().add(msg);
             } else {
                 if (debug) {

@@ -180,11 +180,14 @@ public class PeerState {
 
     /**
      * Set the max concurrent messages per peer (called by Tuner).
+     * Scales with available RAM: ~1/8 of RAM in MB, clamped 256-4096.
      * @since 0.9.70+
      */
     public static void setMaxConcurrentMessages(int max) {
         int def = SystemVersion.isSlow() ? 64 : 256;
-        MAX_CONCURRENT_MSGS = Math.max(def / 2, Math.min(1024, max));
+        int ramScaled = (int) (SystemVersion.getMaxMemory() / (8 * 1024 * 1024));
+        int hardMax = Math.max(256, Math.min(4096, ramScaled));
+        MAX_CONCURRENT_MSGS = Math.max(def / 2, Math.min(hardMax, max));
     }
     /** Target RTT in ms — below this, increase concurrency; above this, decrease */
     private static final int TARGET_RTT = 150;

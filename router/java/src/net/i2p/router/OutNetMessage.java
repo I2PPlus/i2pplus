@@ -41,7 +41,7 @@ public class OutNetMessage implements CDPQEntry {
     private MessageSelector _replySelector;
     private List<String> _failedTransports;
     private long _sendBegin;
-    private final long _created;
+    private long _created;
     private long _enqueueTime;
     private long _seqNum;
     private final boolean _shouldTimestamp;
@@ -302,6 +302,9 @@ public class OutNetMessage implements CDPQEntry {
     public void beginSend() {_sendBegin = _context.clock().now();}
 
     public long getCreated() {return _created;}
+
+    /** Reset creation time for dispatch age tracking on requeue */
+    public void resetCreatedTime() {_created = _context.clock().now();}
 
     /** time since the message was created */
     public long getLifetime() {return _context.clock().now() - _created;}
