@@ -72,6 +72,31 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
     private volatile long _interval;
     private final String STAT_DROP;
+
+    /** Active instances for dynamic tuning */
+    private static final java.util.concurrent.CopyOnWriteArrayList<CoDelPriorityBlockingQueue> INSTANCES = new java.util.concurrent.CopyOnWriteArrayList<CoDelPriorityBlockingQueue>();
+
+    /**
+     * Update target on all active CoDelPriorityBlockingQueue instances.
+     *
+     * @since 0.9.70+
+     */
+    public static void updateAllTargets(long target) {
+        for (CoDelPriorityBlockingQueue q : INSTANCES) {
+            q._target = target;
+        }
+    }
+
+    /**
+     * Update interval on all active CoDelPriorityBlockingQueue instances.
+     *
+     * @since 0.9.70+
+     */
+    public static void updateAllIntervals(long interval) {
+        for (CoDelPriorityBlockingQueue q : INSTANCES) {
+            q._interval = interval;
+        }
+    }
     private final String STAT_DELAY;
     public static final int MIN_PRIORITY = 100;
     private static final int[] PRIORITIES = {0, MIN_PRIORITY, 200, 300, 400, 500};
@@ -99,6 +124,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         }
         ctx.statManager().createRequiredRateStat(STAT_DELAY, "Average queue delay (ms)", "Router [CoDel]", CODEL_RATES);
         _id = __id.incrementAndGet();
+        INSTANCES.add(this);
     }
 
     /**
@@ -109,11 +135,25 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     public long getTarget() { return _target; }
 
     /**
- * Returns the current CoDel interval in ms.
- *
- * @since 0.9.70+
- */
+     * Sets the current CoDel target delay in ms.
+     *
+     * @since 0.9.70+
+     */
+    public void setTarget(long target) { _target = target; }
+
+    /**
+     * Returns the current CoDel interval in ms.
+     *
+     * @since 0.9.70+
+     */
     public long getInterval() { return _interval; }
+
+    /**
+     * Sets the current CoDel interval in ms.
+     *
+     * @since 0.9.70+
+     */
+    public void setInterval(long interval) { _interval = interval; }
 
     @Override
     public void clear() {
