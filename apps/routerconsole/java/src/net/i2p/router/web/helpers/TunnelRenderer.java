@@ -728,7 +728,7 @@ class TunnelRenderer {
         result.ip = ip;
 
         if (ip != null && uptime > 30 * 1000) {
-            String rl = _context.commSystem().getCanonicalHostNameSync(ip);
+            String rl = _context.commSystem().getLocalHostName(ip);
             result.canonicalHostName = rl;
 
             if (rl != null && rl.contains(" ")) {

@@ -1996,7 +1996,7 @@ class NetDbRenderer {
                     canonicalHostname = getCachedReverseDNS(primaryAddress);
                 }
                 if (canonicalHostname == null) {
-                    canonicalHostname = _context.commSystem().getCanonicalHostNameSync(primaryAddress);
+                    canonicalHostname = _context.commSystem().getLocalHostName(primaryAddress);
                     if (canonicalHostname != null && !canonicalHostname.equals(primaryAddress) && !canonicalHostname.equals("unknown")) {
                         putCachedReverseDNS(primaryAddress, canonicalHostname);
                     }
@@ -2013,7 +2013,7 @@ class NetDbRenderer {
                     buf.append("<span class=netdb_info><b>").append(_t("IP Address")).append(" (")
                        .append(_t("direct")).append("):</b> <span class=rdns>").append(DataHelper.escapeHTML(directAddressString))
                        .append("</span></span>&nbsp;&nbsp;");
-                    String canonicalHostname = _context.commSystem().getCanonicalHostNameSync(directAddressString);
+                    String canonicalHostname = _context.commSystem().getLocalHostName(directAddressString);
                     if (canonicalHostname != null && !canonicalHostname.equals(directAddressString) && !_t("unknown").equals(canonicalHostname)) {
                         putCachedReverseDNS(directAddressString, canonicalHostname);
                         buf.append("<span class=netdb_info><b>").append(_t("Host"));

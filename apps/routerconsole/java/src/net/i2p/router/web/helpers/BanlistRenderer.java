@@ -61,7 +61,8 @@ class BanlistRenderer {
 
     private String reverseLookup(String ip) {
         if (ip == null || ip.isEmpty()) return null;
-        String hostname = _context.commSystem().getCanonicalHostNameSync(ip);
+        // Use fast local lookup — never blocks on network DNS
+        String hostname = _context.commSystem().getLocalHostName(ip);
         // If result is null, "unknown", or still looks like an IP, return null
         if (hostname == null || hostname.isEmpty() || "unknown".equals(hostname)) {
             return null;

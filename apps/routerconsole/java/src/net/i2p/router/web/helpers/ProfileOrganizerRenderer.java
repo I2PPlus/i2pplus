@@ -159,7 +159,7 @@ class ProfileOrganizerRenderer {
                 String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getCompatibleIP(info)) : null;
                 String rl = null;
                 if (ip != null && uptime > 30*1000) {
-                    rl = _context.commSystem().getCanonicalHostNameSync(ip);
+                    rl = _context.commSystem().getLocalHostName(ip);
                 }
                 if (rl != null && rl.equals("unknown")) {rl = ip;}
                 if (rl != null && !rl.equals("null") && !rl.isEmpty() && rl.length() != 0 && !ip.toString().equals(rl)) {
