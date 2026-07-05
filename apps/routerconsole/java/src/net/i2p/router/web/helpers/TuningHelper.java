@@ -78,6 +78,11 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("ntcp.reader.threads", "NTCP Reader Threads");
         DISPLAY_NAMES.put("ntcp.writer.threads", "NTCP Writer Threads");
         DISPLAY_NAMES.put("ntcp.failsafe.iterationFreq", "NTCP Pumper Failsafe Interval");
+        DISPLAY_NAMES.put("udp.peer.concurrentMaxMessages", "Max Concurrent Peer Messages");
+        DISPLAY_NAMES.put("ntcp.sendPool.capacity", "NTCP Send Pool Capacity");
+        DISPLAY_NAMES.put("i2cp.internalQueueSize", "I2CP Internal Queue Size");
+        DISPLAY_NAMES.put("udp.establish.maxQueuedOutbound", "Max Queued Outbound Connections");
+        DISPLAY_NAMES.put("ntcp.maxWriteBufs", "NTCP Max Write Buffers Per Connection");
         DISPLAY_NAMES.put("i2p.streaming.minResendDelay", "Streaming Minimum Resend Delay");
         DISPLAY_NAMES.put("i2p.streaming.congestionAvoidanceGrowthRateFactor", "Congestion Avoidance Growth Rate");
         DISPLAY_NAMES.put("i2p.streaming.slowStartGrowthRateFactor", "Slow Start Growth Rate");
@@ -116,6 +121,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("ntcp.sendFinisher.maxThreads", "Max NTCP send finalizer threads.");
         PARAM_DESCRIPTIONS.put("ntcp.sendFinisher.queueCapacity", "Max NTCP send queue depth.");
         PARAM_DESCRIPTIONS.put("udp.packetHandler.maxThreads", "Max UDP packet handler threads.");
+        PARAM_DESCRIPTIONS.put("udp.messageReceiver.threads", "UDP message assembly threads.");
         PARAM_DESCRIPTIONS.put("router.peerOutboundQueueSize", "Max outbound queue depth per peer.");
         PARAM_DESCRIPTIONS.put("router.transitThrottleFactor", "Transit rejection aggressiveness (0-1).");
         PARAM_DESCRIPTIONS.put("router.throttleRejectExponent", "Steepness of the transit rejection curve.");
@@ -139,6 +145,11 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("ntcp.reader.threads", "NTCP reader threads.");
         PARAM_DESCRIPTIONS.put("ntcp.writer.threads", "NTCP writer threads.");
         PARAM_DESCRIPTIONS.put("ntcp.failsafe.iterationFreq", "Pumper failsafe scan interval in ms.");
+        PARAM_DESCRIPTIONS.put("udp.peer.concurrentMaxMessages", "Max concurrent outbound messages per peer.");
+        PARAM_DESCRIPTIONS.put("ntcp.sendPool.capacity", "NTCP outbound send pool queue depth.");
+        PARAM_DESCRIPTIONS.put("i2cp.internalQueueSize", "Per-session I2CP client message queue depth.");
+        PARAM_DESCRIPTIONS.put("udp.establish.maxQueuedOutbound", "Pending outbound SSU connections awaiting concurrency slot.");
+        PARAM_DESCRIPTIONS.put("ntcp.maxWriteBufs", "Max queued write buffers per NTCP connection.");
         PARAM_DESCRIPTIONS.put("i2p.streaming.minResendDelay", "Min time between retransmissions in ms.");
         PARAM_DESCRIPTIONS.put("i2p.streaming.congestionAvoidanceGrowthRateFactor", "Congestion avoidance growth rate.");
         PARAM_DESCRIPTIONS.put("i2p.streaming.slowStartGrowthRateFactor", "Window multiplier per RTT during slow start.");

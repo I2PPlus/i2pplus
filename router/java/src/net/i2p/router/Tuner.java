@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Properties;
 import net.i2p.router.transport.udp.PeerState;
 import net.i2p.router.transport.Transport;
+import net.i2p.router.transport.TransportImpl;
 import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.transport.udp.SimpleBandwidthEstimator;
 import net.i2p.router.transport.udp.EstablishmentManager;
@@ -20,6 +21,7 @@ import net.i2p.router.tunnel.pool.BuildExecutor;
 import net.i2p.router.tunnel.pool.BuildRequestor;
 import net.i2p.router.transport.FIFOBandwidthRefiller;
 import net.i2p.router.transport.ntcp.NTCPTransport;
+import net.i2p.router.transport.ntcp.NTCPConnection;
 import net.i2p.router.transport.ntcp.Reader;
 import net.i2p.router.transport.ntcp.Writer;
 import net.i2p.router.transport.crypto.X25519KeyFactory;
@@ -74,6 +76,24 @@ public class Tuner implements SimpleTimer.TimedEvent {
     static final long STAT_PERIOD = 60 * 1000L;
     /** Max history samples for sparklines (30 samples @ 30s = 15min) */
     static final int MAX_HISTORY = 30;
+
+    /** I2CP internal queue size — static so ClientManager can read it without circular dep */
+    private static volatile int _internalQueueSize = SystemVersion.isSlow() ? 256 : 512;
+
+    /**
+     * @return the current I2CP internal queue size
+     * @since 0.9.70+
+     */
+    public static int getInternalQueueSize() { return _internalQueueSize; }
+
+    /**
+     * Set the I2CP internal queue size (called by Tuner).
+     * @since 0.9.70+
+     */
+    public static void setInternalQueueSize(int size) {
+        int def = SystemVersion.isSlow() ? 256 : 512;
+        _internalQueueSize = Math.max(def / 2, Math.min(def * 4, size));
+    }
 
     /** Subsystem labels for grouping in the UI */
     public static final String SUB_TRANSPORT = "Transport";
@@ -300,6 +320,11 @@ public class Tuner implements SimpleTimer.TimedEvent {
         _params.add(new NtcpReaderThreadsParam());
         _params.add(new NtcpWriterThreadsParam());
         _params.add(new NtcpFailsafeFreqParam());
+        _params.add(new MaxConcurrentMessagesParam());
+        _params.add(new SendPoolCapacityParam());
+        _params.add(new InternalQueueSizeParam());
+        _params.add(new MaxQueuedOutboundParam());
+        _params.add(new MaxWriteBufsParam());
 
         // Purge stale tuner.* keys from router.config (one-time cleanup)
         purgeOldTunerProps(ctx);
@@ -2518,7 +2543,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         UDPHandlerThreadsParam() {
             super("udp.packetHandler.maxThreads", SUB_BUFFERS,
                   "Max UDP packet handler threads",
-                  4, 64, 1, "udp.pushTime", _context);
+                  2, 16, 1, "udp.pushTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -2587,7 +2612,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         UDPMessageReceiverThreadsParam() {
             super("udp.messageReceiver.threads", SUB_BUFFERS,
                   "UDP message receiver threads",
-                  1, 16, 1, "codel.UDP-Receiver.delay", _context);
+                  2, 16, 1, "codel.UDP-Receiver.delay", _context);
         }
 
         protected void applyValue(int value) {
@@ -4581,7 +4606,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         NtcpReaderThreadsParam() {
             super("ntcp.reader.threads", SUB_BUFFERS,
                   "NTCP reader threads",
-                  1, 32, 1, "ntcp.sendTime", _context);
+                  2, 32, 1, "ntcp.readQueueSize", _context);
         }
 
         protected void applyValue(int value) {
@@ -4602,23 +4627,26 @@ public class Tuner implements SimpleTimer.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = ntcp.sendTime (ms, message send latency)
-            // Cross-refs: ntcp.writeQueueFull (queue overflow), ntcp.sendBacklogTime (backlog),
-            //             jobLag (CPU)
-            double writeQueueFull = getAdditionalStat(_context, "ntcp.writeQueueFull");
-            double backlogTime = getAdditionalStat(_context, "ntcp.sendBacklogTime");
+            // observed = ntcp.readQueueSize (pending connections waiting for a reader)
+            // Cross-refs: ntcp.readError (errors), jobLag (CPU), transport.receiveMessageTime
+            double readErrors = getAdditionalStat(_context, "ntcp.readError");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double recvTime = getAdditionalStat(_context, "transport.receiveMessageTime");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 50;
-            boolean sendSlow = observed > 100;
-            boolean queueFull = !Double.isNaN(writeQueueFull) && writeQueueFull > 0;
-            boolean backlogged = !Double.isNaN(backlogTime) && backlogTime > 50;
+            boolean highBacklog = !Double.isNaN(observed) && observed > current * 2;
+            boolean readSlow = !Double.isNaN(recvTime) && recvTime > 100;
+            boolean errorsHigh = !Double.isNaN(readErrors) && readErrors > 10;
 
-            // Send slow or backlogged + no CPU pressure = add threads
-            if ((sendSlow || backlogged || queueFull) && !cpuPressure)
+            // High backlog + no CPU pressure = add reader threads
+            if (highBacklog && !cpuPressure)
                 return Math.min(_max, current + 1);
 
-            // Send fast + no queue full + no backlog + low CPU = reduce threads
-            if (observed < 30 && !queueFull && !backlogged && !cpuPressure) {
+            // Slow reads + errors + no CPU = add threads
+            if (readSlow && errorsHigh && !cpuPressure)
+                return Math.min(_max, current + 1);
+
+            // No backlog + fast reads + low errors + no CPU = reduce threads
+            if ((observed < 2 || Double.isNaN(observed)) && !readSlow && !errorsHigh && !cpuPressure) {
                 if (current > _min)
                     return Math.max(_min, current - 1);
             }
@@ -4646,7 +4674,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         NtcpWriterThreadsParam() {
             super("ntcp.writer.threads", SUB_BUFFERS,
                   "NTCP writer threads",
-                  1, 32, 1, "ntcp.sendTime", _context);
+                  2, 32, 1, "ntcp.sendTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -4668,8 +4696,10 @@ public class Tuner implements SimpleTimer.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = ntcp.sendTime (ms, message send latency)
-            // Cross-refs: ntcp.writeQueueFull (queue overflow), ntcp.sendBacklogTime (backlog),
+            // Cross-refs: ntcp.sendPool utilization, ntcp.writeBufs.size, ntcp.writeQueueFull,
             //             jobLag (CPU)
+            double sendPoolUtil = getAdditionalStat(_context, "ntcp.sendPool utilization");
+            double writeBufs = getAdditionalStat(_context, "ntcp.writeBufs.size");
             double writeQueueFull = getAdditionalStat(_context, "ntcp.writeQueueFull");
             double backlogTime = getAdditionalStat(_context, "ntcp.sendBacklogTime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -4677,13 +4707,15 @@ public class Tuner implements SimpleTimer.TimedEvent {
             boolean sendSlow = observed > 100;
             boolean queueFull = !Double.isNaN(writeQueueFull) && writeQueueFull > 0;
             boolean backlogged = !Double.isNaN(backlogTime) && backlogTime > 50;
+            boolean poolBusy = !Double.isNaN(sendPoolUtil) && sendPoolUtil > 60;
+            boolean bufsHigh = !Double.isNaN(writeBufs) && writeBufs > current * 32;
 
-            // Send slow or backlogged + no CPU pressure = add threads
-            if ((sendSlow || backlogged || queueFull) && !cpuPressure)
+            // Send slow or backlogged or pool busy or bufs high + no CPU pressure = add threads
+            if ((sendSlow || backlogged || queueFull || poolBusy || bufsHigh) && !cpuPressure)
                 return Math.min(_max, current + 1);
 
             // Send fast + no queue full + no backlog + low CPU = reduce threads
-            if (observed < 30 && !queueFull && !backlogged && !cpuPressure) {
+            if (observed < 30 && !queueFull && !backlogged && !poolBusy && !bufsHigh && !cpuPressure) {
                 if (current > _min)
                     return Math.max(_min, current - 1);
             }
@@ -4752,6 +4784,306 @@ public class Tuner implements SimpleTimer.TimedEvent {
 
             // Low iteration time + few connections + no CPU pressure = decrease interval
             if (observed < 10 && connections < 100 && !cpuPressure && current > _min)
+                return Math.max(_min, current - _step);
+
+            return current;
+        }
+    }
+
+    /**
+     * Tunes max concurrent outbound messages per peer.
+     * Higher values allow more parallelism; lower values reduce congestion.
+     * Primary signal: udp.rejectConcurrentActive (rejection rate).
+     * Cross-refs: udp.sendConfirmTime (RTT), tunnel.participating InBps (bandwidth).
+     *
+     * @since 0.9.70+
+     */
+    private class MaxConcurrentMessagesParam extends BaseParam {
+
+        MaxConcurrentMessagesParam() {
+            super("udp.peer.concurrentMaxMessages", SUB_BUFFERS,
+                  "Max concurrent peer messages",
+                  64, 1024, 16, "udp.rejectConcurrentActive", _context);
+        }
+
+        protected void applyValue(int value) {
+            PeerState.setMaxConcurrentMessages(value);
+        }
+
+        protected int getRuntimeValue() {
+            return PeerState.getMaxConcurrentMessages();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = udp.rejectConcurrentActive (rejection events per minute)
+            // Cross-refs: udp.sendConfirmTime (RTT), tunnel.participating InBps (transit load)
+            double rtt = getAdditionalStat(_context, "udp.sendConfirmTime");
+            double transitBps = getAdditionalStat(_context, "tunnel.participating InBps");
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean highRejection = !Double.isNaN(observed) && observed > 10;
+            boolean lowRTT = !Double.isNaN(rtt) && rtt < 200;
+            boolean heavyTransit = !Double.isNaN(transitBps) && transitBps > 50000;
+
+            // High rejections + low RTT + headroom = increase aggressively
+            if (highRejection && lowRTT && !cpuPressure)
+                return Math.min(_max, current + _step * 2);
+
+            // Low RTT + heavy transit + no CPU pressure = grow to handle load
+            if (lowRTT && heavyTransit && !cpuPressure && current < _max)
+                return Math.min(_max, current + _step);
+
+            // High rejections + CPU pressure = increase cautiously (need throughput)
+            if (highRejection && cpuPressure)
+                return Math.min(_max, current + _step);
+
+            // Low rejections + low RTT + no transit = shrink to save resources
+            if ((observed < 1 || Double.isNaN(observed)) && !heavyTransit && !lowRTT && current > _min)
+                return Math.max(_min, current - _step);
+
+            // High RTT + no rejections = decrease to reduce pressure
+            if (!Double.isNaN(rtt) && rtt > 500 && (observed < 5 || Double.isNaN(observed)) && current > _min)
+                return Math.max(_min, current - _step);
+
+            return current;
+        }
+    }
+
+    /**
+     * Tunes NTCP send pool capacity (outbound message buffering).
+     * Sweet spot: large enough to prevent send stalls, small enough to avoid buffering latency.
+     * Queue-thread coupling: must scale with ntcp.writer.threads.
+     * Primary signal: ntcp.sendPool utilization (pct of capacity in use).
+     * Cross-refs: ntcp.writer.threads, transport.sendProcessingTime.
+     *
+     * @since 0.9.70+
+     */
+    private class SendPoolCapacityParam extends BaseParam {
+
+        SendPoolCapacityParam() {
+            super("ntcp.sendPool.capacity", SUB_BUFFERS,
+                  "NTCP send pool capacity",
+                  64, 512, 8, "ntcp.sendPool utilization", _context);
+        }
+
+        protected void applyValue(int value) {
+            TransportImpl.setSendPoolCapacity(value);
+            Transport t = _context.commSystem().getTransports().get(NTCPTransport.STYLE);
+            if (t instanceof TransportImpl) ((TransportImpl) t).resizeSendPool();
+        }
+
+        protected int getRuntimeValue() {
+            return TransportImpl.getSendPoolCapacity();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = ntcp.sendPool utilization (pct 0-100)
+            // Cross-refs: ntcp.writer.threads (thread count), transport.sendProcessingTime (latency)
+            int writers = Writer.getThreadCount();
+            double sendTime = getAdditionalStat(_context, "transport.sendProcessingTime");
+            double fullEvents = getAdditionalStat(_context, "transport.sendPool.full");
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean highUtilization = !Double.isNaN(observed) && observed > 70;
+            boolean poolStalls = !Double.isNaN(fullEvents) && fullEvents > 5;
+            boolean lowLatency = !Double.isNaN(sendTime) && sendTime < 50;
+
+            // High utilization or stalls + writer headroom = increase
+            if ((highUtilization || poolStalls) && !cpuPressure) {
+                // Queue-thread coupling: don't exceed writers * 16
+                int maxByThreads = writers * 16;
+                return Math.min(Math.min(_max, maxByThreads), current + _step);
+            }
+
+            // Low utilization + low latency + more writers than needed = decrease (reduce buffering)
+            if ((observed < 30 || Double.isNaN(observed)) && lowLatency && !cpuPressure && current > _min)
+                return Math.max(_min, current - _step);
+
+            return current;
+        }
+    }
+
+    /**
+     * Tunes I2CP internal client queue size.
+     * Sweet spot: large enough to prevent client drops, small enough to avoid buffering latency.
+     * Primary signal: i2cp.internalQueueSize (queue capacity at session creation).
+     * Cross-refs: transport.sendProcessingTime, client.activeSessions.
+     *
+     * @since 0.9.70+
+     */
+    private class InternalQueueSizeParam extends BaseParam {
+
+        InternalQueueSizeParam() {
+            super("i2cp.internalQueueSize", SUB_BUFFERS,
+                  "I2CP internal queue size",
+                  128, 2048, 32, "i2cp.internalQueueSize", _context);
+        }
+
+        protected void applyValue(int value) {
+            Tuner.setInternalQueueSize(value);
+        }
+
+        protected int getRuntimeValue() {
+            return Tuner.getInternalQueueSize();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = i2cp.internalQueueSize (configured capacity)
+            // Cross-refs: transport.sendProcessingTime (latency), client.activeSessions
+            double sendTime = getAdditionalStat(_context, "transport.sendProcessingTime");
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean lowLatency = !Double.isNaN(sendTime) && sendTime < 50;
+
+            // Low latency + no CPU pressure = can afford larger queues
+            if (lowLatency && !cpuPressure && current < _max)
+                return Math.min(_max, current + _step);
+
+            // High latency or CPU pressure = shrink queues (reduce buffering)
+            if ((!Double.isNaN(sendTime) && sendTime > 200) || cpuPressure) {
+                if (current > _min)
+                    return Math.max(_min, current - _step);
+            }
+
+            return current;
+        }
+    }
+
+    /**
+     * Tunes max queued outbound SSU connections.
+     * Sweet spot: large enough to prevent connection drops, small enough to avoid stale connections.
+     * Primary signal: udp.queuedOutbound.size (queue depth at check).
+     * Cross-refs: i2np.udp.maxConcurrentEstablish, udp.sendConfirmTime.
+     *
+     * @since 0.9.70+
+     */
+    private class MaxQueuedOutboundParam extends BaseParam {
+
+        MaxQueuedOutboundParam() {
+            super("udp.establish.maxQueuedOutbound", SUB_BUFFERS,
+                  "Max queued outbound connections",
+                  32, 512, 8, "udp.queuedOutbound.size", _context);
+        }
+
+        protected void applyValue(int value) {
+            EstablishmentManager.setMaxQueuedOutbound(value);
+        }
+
+        protected int getRuntimeValue() {
+            return EstablishmentManager.getMaxQueuedOutbound();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = udp.queuedOutbound.size (avg queue depth)
+            // Cross-refs: udp.sendConfirmTime (RTT), udp.establishRejected (drops)
+            double rtt = getAdditionalStat(_context, "udp.sendConfirmTime");
+            double rejected = getAdditionalStat(_context, "udp.establishRejected");
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean highRejection = !Double.isNaN(rejected) && rejected > 5;
+            boolean lowRTT = !Double.isNaN(rtt) && rtt < 300;
+
+            // High rejection + low RTT + headroom = increase (prevent drops)
+            if (highRejection && lowRTT && !cpuPressure)
+                return Math.min(_max, current + _step);
+
+            // Low queue + low RTT + no rejection = shrink (reduce stale connections)
+            if ((observed < 5 || Double.isNaN(observed)) && !highRejection && current > _min)
+                return Math.max(_min, current - _step);
+
+            return current;
+        }
+    }
+
+    /**
+     * Tunes max write buffers per NTCP connection.
+     * Sweet spot: large enough to prevent write stalls, small enough to avoid memory waste.
+     * Queue-thread coupling: must scale with ntcp.writer.threads.
+     * Primary signal: ntcp.writeBufs.size (avg write buffer count).
+     * Cross-refs: ntcp.writer.threads, transport.sendProcessingTime.
+     *
+     * @since 0.9.70+
+     */
+    private class MaxWriteBufsParam extends BaseParam {
+
+        MaxWriteBufsParam() {
+            super("ntcp.maxWriteBufs", SUB_BUFFERS,
+                  "NTCP max write buffers per connection",
+                  128, 2048, 16, "ntcp.writeBufs.size", _context);
+        }
+
+        protected void applyValue(int value) {
+            NTCPConnection.setMaxWriteBufs(value);
+        }
+
+        protected int getRuntimeValue() {
+            return NTCPConnection.getMaxWriteBufs();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = ntcp.writeBufs.size (avg write buffer count per connection)
+            // Cross-refs: ntcp.writer.threads, transport.sendProcessingTime
+            int writers = Writer.getThreadCount();
+            double sendTime = getAdditionalStat(_context, "transport.sendProcessingTime");
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean highUtilization = !Double.isNaN(observed) && observed > current * 0.7;
+            boolean lowLatency = !Double.isNaN(sendTime) && sendTime < 50;
+
+            // High utilization + writer headroom + no CPU pressure = increase
+            if (highUtilization && !cpuPressure) {
+                // Queue-thread coupling: don't exceed writers * 64
+                int maxByThreads = writers * 64;
+                return Math.min(Math.min(_max, maxByThreads), current + _step);
+            }
+
+            // Low utilization + low latency = decrease (reduce memory waste)
+            if ((observed < current * 0.3 || Double.isNaN(observed)) && lowLatency && !cpuPressure && current > _min)
                 return Math.max(_min, current - _step);
 
             return current;
