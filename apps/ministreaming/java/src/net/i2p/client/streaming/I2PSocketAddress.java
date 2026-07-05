@@ -91,6 +91,9 @@ public class I2PSocketAddress extends SocketAddress {
         _host = host;
     }
 
+    /**
+     * @return the port number, 0 if not specified
+     */
     public int getPort() {
         return _port;
     }
@@ -113,6 +116,9 @@ public class I2PSocketAddress extends SocketAddress {
         return _host;
     }
 
+    /**
+     * @return true if this address was created unresolved or resolution failed
+     */
     public boolean isUnresolved() {
         return _dest == null;
     }

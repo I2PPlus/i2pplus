@@ -91,10 +91,15 @@ public interface I2PSocket extends Closeable {
      */
     public void setReadTimeout(long ms);
 
+    /**
+     * @return true if this socket has been closed
+     */
     public boolean isClosed();
 
     /**
-     *  Deprecated, unimplemented, does nothing
+     *  Deprecated, unimplemented, does nothing.
+     *
+     *  @param lsnr the listener (ignored)
      */
     public void setSocketErrorListener(SocketErrorListener lsnr);
 
