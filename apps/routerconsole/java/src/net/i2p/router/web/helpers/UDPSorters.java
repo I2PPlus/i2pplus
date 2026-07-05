@@ -102,10 +102,6 @@ class UDPSorters {
      * Comparator for sorting UDP peers by inbound idle time in ascending order.
      * @since 0.9.33
      */
-    /**
-     * Comparator for sorting UDP peers by inbound idle time in ascending order.
-     * @since 0.9.33
-     */
     static class IdleInComparator extends PeerComparator {
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -115,10 +111,6 @@ class UDPSorters {
         }
     }
 
-    /**
-     * Comparator for sorting UDP peers by outbound idle time in ascending order.
-     * @since 0.9.33
-     */
     /**
      * Comparator for sorting UDP peers by outbound idle time in ascending order.
      * @since 0.9.33
@@ -136,10 +128,6 @@ class UDPSorters {
      * Comparator for sorting UDP peers by inbound rate in ascending order.
      * @since 0.9.33
      */
-    /**
-     * Comparator for sorting UDP peers by inbound rate in ascending order.
-     * @since 0.9.33
-     */
     static class RateInComparator extends PeerComparator {
         private final long now = I2PAppContext.getGlobalContext().clock().now();
 
@@ -151,10 +139,6 @@ class UDPSorters {
         }
     }
 
-    /**
-     * Comparator for sorting UDP peers by outbound rate in ascending order.
-     * @since 0.9.33
-     */
     /**
      * Comparator for sorting UDP peers by outbound rate in ascending order.
      * @since 0.9.33

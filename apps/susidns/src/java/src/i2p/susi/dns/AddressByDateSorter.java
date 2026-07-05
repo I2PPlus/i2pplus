@@ -8,9 +8,6 @@ package i2p.susi.dns;
 import java.io.Serializable;
 import java.util.Comparator;
 
-/*
- * Newest first, then alphabetical
- */
 /**
  * Comparator for sorting AddressBean by date (newest first, then alphabetical).
  *

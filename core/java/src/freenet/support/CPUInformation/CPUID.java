@@ -319,11 +319,6 @@ public class CPUID {
      *
      * @return Extended Model ID (0-15)
      */
-    /**
-     *  Only valid if family == 15, or, for Intel only, family == 6.
-     *  Left shift by 4 and then add model to get full model.
-     *  @return 0-15
-     */
     static int getCPUExtendedModel() {
         return (getLeaf1().EAX >> 16) & 0xf;
     }
@@ -344,11 +339,6 @@ public class CPUID {
      * <p>For AMD CPUs, this is always added to the base family.</p>
      *
      * @return Extended Family ID (0-255)
-     */
-    /**
-     *  Only valid if family == 15.
-     *  Add family to get full family.
-     *  @return 0-255
      */
     static int getCPUExtendedFamily() {
         return (getLeaf1().EAX >> 20) & 0xff;
