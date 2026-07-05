@@ -4,6 +4,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.router.RouterContext;
+import net.i2p.router.Tuner;
 import net.i2p.router.util.CoDelBlockingQueue;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
@@ -195,6 +196,7 @@ class PacketHandler {
         public void run() {
             try {
                 while (_keepReading) {
+                    Tuner.adjustHandlerPriority();
                     UDPPacket packet = receiveNext();
                     if (packet == null) {break;}
 

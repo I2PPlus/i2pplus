@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import net.i2p.router.RouterContext;
+import net.i2p.router.Tuner;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
@@ -26,7 +27,7 @@ public class Writer {
     private final CopyOnWriteArrayList<Runner> _runners;
     private static volatile int _threadCount = SystemVersion.isSlow() ? 2 : Math.max(SystemVersion.getCores() / 2, 3);
     private static final int MIN_THREADS = 1;
-    private static final int MAX_THREADS = 32;
+    private static final int MAX_THREADS = 16;
 
     public Writer(RouterContext ctx) {
         _log = ctx.logManager().getLog(getClass());
@@ -133,6 +134,7 @@ public class Writer {
             if (_log.shouldInfo()) _log.info("Starting writer");
             NTCPConnection con = null;
             while (!_stop) {
+                Tuner.adjustHandlerPriority();
                 try {
                     synchronized (_pendingConnections) {
                         boolean keepWriting = (con != null) && _writeAfterLive.remove(con);

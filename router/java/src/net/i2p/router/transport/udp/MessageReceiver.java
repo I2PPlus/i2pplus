@@ -11,6 +11,7 @@ import net.i2p.data.i2np.I2NPMessageException;
 import net.i2p.data.i2np.I2NPMessageHandler;
 import net.i2p.data.i2np.I2NPMessageImpl;
 import net.i2p.router.RouterContext;
+import net.i2p.router.Tuner;
 import net.i2p.router.BanLogger;
 import net.i2p.router.util.CoDelBlockingQueue;
 import net.i2p.util.HexDump;
@@ -178,6 +179,7 @@ class MessageReceiver {
         ByteArray buf = new ByteArray(new byte[I2NPMessage.MAX_SIZE]);
         try {
             while (_alive) {
+                Tuner.adjustHandlerPriority();
                 int expired = 0;
                 long expiredLifetime = 0;
                 try {

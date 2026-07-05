@@ -452,7 +452,7 @@ public class JobQueue {
     public void startup() {
         _alive = true;
         I2PThread pumperThread = new I2PThread(_pumper, "JobQueuePumper", true);
-        pumperThread.setPriority(Thread.NORM_PRIORITY + 1);
+        pumperThread.setPriority(Thread.MAX_PRIORITY);
         pumperThread.start();
         _scaler.startup();
     }
@@ -583,6 +583,7 @@ public class JobQueue {
                 JobQueueRunner runner = new JobQueueRunner(_context, i);
                 _queueRunners.put(Integer.valueOf(i), runner);
                 runner.setName("JobQueue " + _runnerId.incrementAndGet() + '/' + numThreads);
+                runner.setPriority(Thread.MAX_PRIORITY);
                 runner.start();
             }
         } else if (_log.shouldWarn()) {

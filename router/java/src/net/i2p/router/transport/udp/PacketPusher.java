@@ -51,6 +51,7 @@ class PacketPusher implements Runnable {
         }
         _alive = true;
         I2PThread t = new I2PThread(this, "UDPPktPusher", true);
+        t.setPriority(Thread.MAX_PRIORITY);
         t.start();
     }
 

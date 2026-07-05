@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.router.OutNetMessage;
+import net.i2p.router.Tuner;
 import net.i2p.router.transport.TransportImpl;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
@@ -179,6 +180,7 @@ class NTCPSendFinisher {
         }
 
         public void run() {
+            Tuner.adjustHandlerPriority();
             try {
                 _transport.afterSend(_msg, true, false, _msg.getSendTime());
             } catch (Exception t) {

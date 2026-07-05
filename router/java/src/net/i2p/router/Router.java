@@ -445,7 +445,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
         _watchdog = new RouterWatchdog(_context);
         _watchdogThread = new I2PAppThread(_watchdog, "RouterWatchdog", true);
-        _watchdogThread.setPriority(Thread.NORM_PRIORITY + 1);
+        _watchdogThread.setPriority(Thread.MAX_PRIORITY);
         _watchdogThread.start();
 
         if (SystemVersion.isWindows()) {BasePerms.fix(_context);}
