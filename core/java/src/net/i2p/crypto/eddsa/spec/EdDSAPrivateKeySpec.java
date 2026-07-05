@@ -20,6 +20,7 @@ import java.util.Arrays;
 
 /**
  * EdDSA private key specification.
+ *
  * @since 0.9.15
  * @author str4d
  */
@@ -31,6 +32,8 @@ public class EdDSAPrivateKeySpec implements KeySpec {
     private final EdDSAParameterSpec spec;
 
     /**
+     * Create a new EdDSA private key specification from a seed.
+     *
      *  @param seed the private key
      *  @param spec the parameter specification for this key
      *  @throws IllegalArgumentException if seed length is wrong or hash algorithm is unsupported
@@ -114,14 +117,6 @@ public class EdDSAPrivateKeySpec implements KeySpec {
      *  @throws IllegalArgumentException if a not clamped or reduced
      */
     public EdDSAPrivateKeySpec(byte[] seed, byte[] h, byte[] a, GroupElement A, EdDSAParameterSpec spec) {
-        /**
-         * // TODO if we move RedDSA to a different spec
-         * int bd8m1 = (spec.getCurve().getField().getb() / 8) - 1;
-         * if ((a[0] & 0x07) != 0 ||
-         * (a[bd8m1] & 0xc0) != 0x40)
-         * throw new IllegalArgumentException("a not clamped: a[0]=0x" + Integer.toString(a[0] & 0xff, 16) +
-         * " a[31]=0x" + Integer.toString(a[31] & 0xff, 16));
-         **/
         this.seed = seed;
         this.h = h;
         this.a = a;
@@ -130,6 +125,8 @@ public class EdDSAPrivateKeySpec implements KeySpec {
     }
 
     /**
+     * Return the seed, or null if constructed from the private key directly.
+     *
      *  @return will be null if constructed directly from the private key
      */
     public byte[] getSeed() {
@@ -137,6 +134,8 @@ public class EdDSAPrivateKeySpec implements KeySpec {
     }
 
     /**
+     * Return the hash.
+     *
      *  @return the hash
      */
     public byte[] getH() {
@@ -144,6 +143,8 @@ public class EdDSAPrivateKeySpec implements KeySpec {
     }
 
     /**
+     * Return the private key.
+     *
      *  @return the private key
      */
     public byte[] geta() {
@@ -151,12 +152,19 @@ public class EdDSAPrivateKeySpec implements KeySpec {
     }
 
     /**
+     * Return the public key.
+     *
      *  @return the public key
      */
     public GroupElement getA() {
         return A;
     }
 
+    /**
+     * Returns the parameter specification for this key.
+     *
+     * @return the parameter specification
+     */
     public EdDSAParameterSpec getParams() {
         return spec;
     }

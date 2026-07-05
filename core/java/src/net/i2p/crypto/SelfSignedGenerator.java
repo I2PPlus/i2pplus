@@ -122,6 +122,7 @@ public final class SelfSignedGenerator {
      *  @param cname the common name, non-null. Must be a hostname or email address. IP addresses will not be correctly encoded.
      *  @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
      *                  cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     *
      *  @param ou The OU (organizational unit) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      *  @param o The O (organization)in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      *  @param l The L (city or locality) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
@@ -181,6 +182,7 @@ public final class SelfSignedGenerator {
      *  @param cname the common name, non-null. Must be a hostname or email address. IP addresses will not be correctly encoded.
      *  @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
      *                  cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     *
      *  @param ou The OU (organizational unit) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      *  @param o The O (organization)in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      *  @param l The L (city or locality) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
@@ -397,6 +399,7 @@ public final class SelfSignedGenerator {
      *  @param cname the common name, non-null
      *  @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
      *                  cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     *
      *  @param ou The OU (organizational unit) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      *  @param o The O (organization)in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      *  @param l The L (city or locality) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
@@ -594,6 +597,7 @@ public final class SelfSignedGenerator {
 
     /**
      *  Sequence of two UTCDates
+     *
      *  @return 32 bytes ASN.1 encoded object
      */
     private static byte[] getValidity(int validDays) {
@@ -612,6 +616,7 @@ public final class SelfSignedGenerator {
 
     /**
      *  A single UTCDate
+     *
      *  @return 15 bytes ASN.1 encoded object
      */
     private static byte[] getDate(long now) {
@@ -643,6 +648,7 @@ public final class SelfSignedGenerator {
      *  @param pubbytes bit string
      *  @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
      *                  cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     *
      *  @return ASN.1 encoded object
      */
     private static byte[] getExtensions(byte[] pubbytes, String cname, Set<String> altNames) {
@@ -920,6 +926,7 @@ public final class SelfSignedGenerator {
 
     /**
      *  0x30 len 0x06 len encodedbytes... 0x05 0
+     *
      *  @return ASN.1 encoded object
      *  @throws IllegalArgumentException
      */
@@ -940,6 +947,7 @@ public final class SelfSignedGenerator {
 
     /**
      *  0x06 len encodedbytes...
+     *
      *  @return ASN.1 encoded object
      *  @throws IllegalArgumentException
      */

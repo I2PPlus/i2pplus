@@ -45,6 +45,9 @@ public class StatManager {
      * appropriate application context itself.
      *
      */
+    /**
+     * @param context the application context
+     */
     public StatManager(I2PAppContext context) {
         _context = context;
         _log = context.logManager().getLog(getClass());
@@ -54,6 +57,7 @@ public class StatManager {
 
     /**
      * Shut down the statistics manager and clear all statistics.
+     *
      * @since 0.8.8
      */
     public synchronized void shutdown() {
@@ -120,19 +124,33 @@ public class StatManager {
         _rateStats.putIfAbsent(name, rs);
     }
 
-    // Hope this doesn't cause any problems with unsynchronized accesses like addRateData() ...
+    /**
+     * Remove a rate stat by name.
+     *
+     * @param name the stat name to remove
+     */
     public void removeRateStat(String name) {
         _rateStats.remove(name);
     }
 
-    /** update the given frequency statistic, taking note that an event occurred (and recalculating all frequencies) */
+    /**
+     * Update the given frequency statistic, taking note that an event occurred (and recalculating all frequencies).
+     *
+     * @param name the stat name
+     */
     public void updateFrequency(String name) {
         FrequencyStat freq = _frequencyStats.get(name);
         if (freq != null) freq.eventOccurred();
         else if (_log.shouldLog(Log.DEBUG)) _log.debug("Invalid frequency stat : " + name);
     }
 
-    /** update the given rate statistic, taking note that the given data point was received (and recalculating all rates) */
+    /**
+     * Update the given rate statistic, taking note that the given data point was received (and recalculating all rates).
+     *
+     * @param name the stat name
+     * @param data the data point value
+     * @param eventDuration how long the event took, or 0
+     */
     public void addRateData(String name, long data, long eventDuration) {
         RateStat stat = _rateStats.get(name); // unsynchronized
         if (stat != null) stat.addData(data, eventDuration);
@@ -142,6 +160,7 @@ public class StatManager {
     /**
      * Update the given rate statistic, taking note that the given data point was received (and recalculating all rates).
      * Zero duration.
+     *
      * @since 0.8.10
      */
     public void addRateData(String name, long data) {
@@ -150,6 +169,9 @@ public class StatManager {
         else if (_log.shouldLog(Log.DEBUG)) _log.warn("Invalid rate stat : " + name);
     }
 
+    /**
+     * Coalesce all rate stats and periodically coalesce frequency stats.
+     */
     public synchronized void coalesceStats() {
         if (++coalesceCounter % FREQ_COALESCE_RATE == 0) {
             for (FrequencyStat stat : _frequencyStats.values()) {
@@ -179,6 +201,7 @@ public class StatManager {
 
     /**
      * Get the names of all frequency statistics.
+     *
      * @return a copy of the frequency stat names
      */
     public Set<String> getFrequencyNames() {
@@ -187,6 +210,7 @@ public class StatManager {
 
     /**
      * Get the names of all rate statistics.
+     *
      * @return a copy of the rate stat names
      */
     public Set<String> getRateNames() {
@@ -243,6 +267,7 @@ public class StatManager {
 
     /**
      * Serializes all Frequencies and Rates to the provided OutputStream
+     *
      * @param out to write to
      * @param prefix to use when serializing
      * @throws IOException if something goes wrong

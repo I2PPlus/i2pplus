@@ -32,6 +32,7 @@ public interface I2CPMessage {
      * @param type type of message (should equal getType())
      * @throws I2CPMessageException if the stream doesn't contain a valid message
      *          that this class can read.
+     *
      * @throws IOException if there is a problem reading from the stream
      */
     public void readMessage(InputStream in, int size, int type) throws I2CPMessageException, IOException;
@@ -44,6 +45,7 @@ public interface I2CPMessage {
      * @param in stream to read from
      * @throws I2CPMessageException if the stream doesn't contain a valid message
      *          that this class can read.
+     *
      * @throws IOException if there is a problem reading from the stream
      */
     public void readMessage(InputStream in) throws I2CPMessageException, IOException;
@@ -55,6 +57,7 @@ public interface I2CPMessage {
      * @param out OutputStream
      * @throws I2CPMessageException if the current object doesn't have sufficient data
      *          to write a properly formatted message.
+     *
      * @throws IOException if there is a problem writing to the stream
      */
     public void writeMessage(OutputStream out) throws I2CPMessageException, IOException;
@@ -62,6 +65,7 @@ public interface I2CPMessage {
     /**
      * Return the unique identifier for this type of message, as specified in the
      * network specification document under #ClientAccessLayerMessages
+     *
      * @return unique identifier for this type of message
      */
     public int getType();

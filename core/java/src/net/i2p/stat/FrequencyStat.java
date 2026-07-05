@@ -19,6 +19,14 @@ public class FrequencyStat {
     /** actual frequency objects for this statistic */
     private final Frequency[] _frequencies;
 
+    /**
+     * Create a new frequency stat.
+     *
+     * @param name unique name of the statistic
+     * @param description simple description of the statistic
+     * @param group used to group statistics together
+     * @param periods array of period lengths (in milliseconds)
+     */
     public FrequencyStat(String name, String description, String group, long[] periods) {
         _statName = name;
         _description = description;
@@ -39,24 +47,34 @@ public class FrequencyStat {
         for (int i = 0; i < _frequencies.length; i++) _frequencies[i].recalculate();
     }
 
+    /** Return the unique name of this statistic. @return the unique name of this statistic */
     public String getName() {
         return _statName;
     }
 
+    /** Return the grouping name under which this statistic is kept. @return the grouping name under which this statistic is kept */
     public String getGroupName() {
         return _groupName;
     }
 
+    /** Return a simple description of this statistic. @return a simple description of this statistic */
     public String getDescription() {
         return _description;
     }
 
+    /** Return the periods this frequency is tracked over, in milliseconds. @return the periods this frequency is tracked over, in milliseconds */
     public long[] getPeriods() {
         long[] rv = new long[_frequencies.length];
         for (int i = 0; i < _frequencies.length; i++) rv[i] = _frequencies[i].getPeriod();
         return rv;
     }
 
+    /**
+     * Get the frequency object for the specified period.
+     *
+     * @param period the period in milliseconds
+     * @return the Frequency for the given period, or null if not found
+     */
     public Frequency getFrequency(long period) {
         for (int i = 0; i < _frequencies.length; i++) {
             if (_frequencies[i].getPeriod() == period) return _frequencies[i];
@@ -93,7 +111,7 @@ public class FrequencyStat {
         return _statName.hashCode();
     }
 
-    /** @since 0.8.2 */
+    /** Compares this frequency stat to another object for equality. @since 0.8.2 */
     @Override
     public boolean equals(Object obj) {
         if ((obj == null) || !(obj instanceof FrequencyStat)) return false;
@@ -104,6 +122,7 @@ public class FrequencyStat {
 
     /**
      * Serializes this FrequencyStat to the provided OutputStream
+     *
      * @param out to write to
      * @param prefix to prepend to the stat
      * @throws IOException if something goes wrong

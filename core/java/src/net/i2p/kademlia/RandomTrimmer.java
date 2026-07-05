@@ -8,7 +8,9 @@ import java.util.List;
 
 /**
  *  Removes a random element. Not resistant to flooding.
+ *
  *  @since 0.9.2 in i2psnark, moved to core in 0.9.10
+ *
  *  @param <T> type of SimpleDataStructure objects in the bucket
  */
 public class RandomTrimmer<T extends SimpleDataStructure> implements KBucketTrimmer<T> {

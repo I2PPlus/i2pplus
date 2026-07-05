@@ -22,6 +22,7 @@ import net.i2p.crypto.eddsa.spec.EdDSAParameterSpec;
 public interface EdDSAKey {
     /**
      * The reported key algorithm for all EdDSA keys
+     *
      * @since 0.9.36
      */
     String KEY_ALGORITHM = "EdDSA";

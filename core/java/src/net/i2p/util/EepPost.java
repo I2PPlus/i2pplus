@@ -179,6 +179,7 @@ public class EepPost extends EepGet {
     /**
      *  Multipart
      *  Adapted from old jrandom EepPost
+     *
      *  @param separator non-null
      */
     private static void sendFields(OutputStream out, String separator, Map<String, Object> fields) throws IOException {
@@ -205,6 +206,7 @@ public class EepPost extends EepGet {
     /**
      *  Multipart
      *  Adapted from old jrandom EepPost
+     *
      *  @param separator non-null
      */
     private static void sendField(OutputStream out, String separator, String field, String val) throws IOException {
@@ -217,6 +219,7 @@ public class EepPost extends EepGet {
     /**
      *  Multipart
      *  Adapted from old jrandom EepPost
+     *
      *  @param separator non-null
      */
     private static void sendFile(OutputStream out, String separator, String field, File file) throws IOException {

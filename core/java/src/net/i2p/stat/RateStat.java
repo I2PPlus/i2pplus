@@ -22,6 +22,13 @@ public class RateStat {
     /** actual rate objects for this statistic */
     protected final Rate[] _rates;
 
+    /**
+     * @param name unique name of the statistic
+     * @param description simple description of the statistic
+     * @param group used to group statistics together
+     * @param periods array of period lengths (in milliseconds), must not be empty
+     * @throws IllegalArgumentException if periods is empty
+     */
     public RateStat(String name, String description, String group, long[] periods) {
         _statName = name;
         _description = description;
@@ -50,6 +57,7 @@ public class RateStat {
     /**
      * Update all of the rates for the various periods with the given value.
      * Zero duration.
+     *
      * @since 0.8.10
      */
     public void addData(long value) {
@@ -61,28 +69,34 @@ public class RateStat {
         for (Rate r : _rates) r.coalesce();
     }
 
+    /** Return the unique name of this statistic. @return the unique name of this statistic */
     public String getName() {
         return _statName;
     }
 
+    /** Return the grouping name under which this statistic is kept. @return the grouping name under which this statistic is kept */
     public String getGroupName() {
         return _groupName;
     }
 
+    /** Return a simple description of this statistic. @return a simple description of this statistic */
     public String getDescription() {
         return _description;
     }
 
+    /** Return the periods this rate is tracked over, in milliseconds. @return the periods this rate is tracked over, in milliseconds */
     public long[] getPeriods() {
         long[] rv = new long[_rates.length];
         for (int i = 0; i < _rates.length; i++) rv[i] = _rates[i].getPeriod();
         return rv;
     }
 
+    /** Return the lifetime average value from the shortest period's rate. @return the lifetime average value from the shortest period's rate */
     public double getLifetimeAverageValue() {
         return _rates[0].getLifetimeAverageValue();
     }
 
+    /** Return the lifetime event count from the shortest period's rate. @return the lifetime event count from the shortest period's rate */
     public long getLifetimeEventCount() {
         return _rates[0].getLifetimeEventCount();
     }
@@ -90,6 +104,7 @@ public class RateStat {
     /**
      * Returns rate with requested period if it exists,
      * otherwise null
+     *
      * @param period ms
      * @return the Rate
      */
@@ -103,6 +118,7 @@ public class RateStat {
 
     /**
      * Tests if a rate with the provided period exists within this RateStat.
+     *
      * @param period ms
      * @return true if exists
      * @since 0.8.8
@@ -134,6 +150,10 @@ public class RateStat {
         return buf.toString();
     }
 
+    /**
+     * @param obj the object to compare
+     * @return true if equal by name, group, description, and rates
+     */
     @Override
     public boolean equals(Object obj) {
         if ((obj == null) || !(obj instanceof RateStat)) return false;
@@ -196,6 +216,7 @@ public class RateStat {
      * @param treatAsCurrent if true, we'll treat the loaded data as if no time has
      *                       elapsed since it was written out, but if it is false, we'll
      *                       treat the data with as much freshness (or staleness) as appropriate.
+     *
      * @throws IllegalArgumentException if the data was formatted incorrectly
      */
     public void load(Properties props, String prefix, boolean treatAsCurrent) throws IllegalArgumentException {
@@ -205,46 +226,4 @@ public class RateStat {
             r.load(props, curPrefix, treatAsCurrent);
         }
     }
-
-    /*********
-     * public static void main(String[] args) {
-     * RateStat rs = new RateStat("moo", "moo moo moo", "cow trueisms", new long[] { 60 * 1000, 60 * 60 * 1000,
-     * 24 * 60 * 60 * 1000});
-     *
-     * for (int i = 0; i < 500; i++) {
-     * try {
-     * Thread.sleep(20);
-     * } catch (InterruptedException ie) { // nop
-     * }
-     * rs.addData(i * 100, 20);
-     * }
-     *
-     * rs.coalesceStats();
-     *
-     * java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(2048);
-     * try {
-     * rs.store(baos, "rateStat.test");
-     * byte[] data = baos.toByteArray();
-     * _log.error("Stored rateStat: size = " + data.length + "\n" + new String(data));
-     *
-     * Properties props = new Properties();
-     * props.load(new java.io.ByteArrayInputStream(data));
-     *
-     * //_log.error("Properties loaded: \n" + props);
-     *
-     * RateStat loadedRs = new RateStat("moo", "moo moo moo", "cow trueisms", new long[] { 60 * 1000,
-     * 60 * 60 * 1000,
-     * 24 * 60 * 60 * 1000});
-     * loadedRs.load(props, "rateStat.test", true);
-     *
-     * _log.error("Comparison after store/load: " + rs.equals(loadedRs));
-     * } catch (Throwable t) {
-     * _log.error("b0rk", t);
-     * }
-     * try {
-     * Thread.sleep(5000);
-     * } catch (InterruptedException ie) { // nop
-     * }
-     * }
-     *********/
 }

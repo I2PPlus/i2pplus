@@ -29,6 +29,7 @@ import java.util.Arrays;
  *
  * @since 0.9.15
  * @author str4d
+ *
  * @see <a href="https://tools.ietf.org/html/rfc8410">RFC 8410</a>
  * @see <a href=
  *      "https://tools.ietf.org/html/draft-josefsson-pkix-eddsa-04">Older draft

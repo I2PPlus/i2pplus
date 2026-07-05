@@ -30,10 +30,11 @@ public final class KeyPairGenerator extends KeyPairGeneratorSpi {
     // always long, don't use short key
     private static final int DEFAULT_STRENGTH = 2048;
     private ElGamalParameterSpec elgParams;
-    // private SecureRandom random;
     private boolean initialized;
 
     /**
+     * Initialize the key pair generator with the specified strength.
+     *
      *  @param strength must be 2048
      *  @param random ignored
      */
@@ -49,6 +50,8 @@ public final class KeyPairGenerator extends KeyPairGeneratorSpi {
     }
 
     /**
+     * Initialize the key pair generator with the specified parameters.
+     *
      *  @param random ignored
      */
     @Override
@@ -63,7 +66,6 @@ public final class KeyPairGenerator extends KeyPairGeneratorSpi {
         } else {
             throw new InvalidAlgorithmParameterException("parameter object not a ElGamalParameterSpec");
         }
-        // this.random = random;
         initialized = true;
     }
 

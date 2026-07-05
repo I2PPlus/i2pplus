@@ -80,6 +80,7 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
 
     /**
      * Override to reduce mem churn
+     *
      * @throws IOException
      */
     @Override

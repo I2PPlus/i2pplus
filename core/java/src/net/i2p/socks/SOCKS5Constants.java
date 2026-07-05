@@ -8,6 +8,7 @@ package net.i2p.socks;
 
 /**
  * Constants for SOCKS5 protocol.
+ *
  * @since 0.9.33 Moved out of net.i2p.i2ptunnel.socks.SOCKS5Server
  */
 public class SOCKS5Constants {
@@ -21,6 +22,7 @@ public class SOCKS5Constants {
      */
     /**
      * SOCKS5 authentication methods.
+     *
      * @since 0.9.33
      */
     public static class Method {
@@ -31,6 +33,7 @@ public class SOCKS5Constants {
 
     /**
      * SOCKS5 address types.
+     *
      * @since 0.9.33
      */
     public static class AddressType {
@@ -41,6 +44,7 @@ public class SOCKS5Constants {
 
     /**
      * SOCKS5 command codes.
+     *
      * @since 0.9.33
      */
     public static class Command {
@@ -61,6 +65,7 @@ public class SOCKS5Constants {
 
     /**
      * SOCKS5 reply codes.
+     *
      * @since 0.9.33
      */
     public static class Reply {

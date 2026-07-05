@@ -25,6 +25,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  *  that may vanish. If you do use multiple writers,
  *  you may get intermittent 'write end dead' or 'pipe broken' IOExceptions on the reader side.
  *  See http://techtavern.wordpress.com/2008/07/16/whats-this-ioexception-write-end-dead/
+ *
  * @since 0.7.9
  */
 @SuppressWarnings("PMD.CloseResource")
@@ -170,6 +171,7 @@ public class InternalServerSocket extends ServerSocket {
 
     /**
      *  For debugging only
+     *
      *  @since 0.9.33
      */
     public static void renderStatusHTML(Writer out) throws IOException {

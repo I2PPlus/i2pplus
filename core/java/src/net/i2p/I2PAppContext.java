@@ -209,6 +209,7 @@ public class I2PAppContext {
      *
      * @param doInit should this context be used as the global one (if necessary)?
      *               Will only apply if there is no global context now.
+     *
      * @since protected since 0.9.33, NOT for external use
      */
     protected I2PAppContext(boolean doInit, Properties envProps) {
@@ -356,7 +357,9 @@ public class I2PAppContext {
      *  installations and should not be accessed by applications.
      *  The only thing that may be useful in here is the lib/ dir
      *  containing the .jars.
+     *
      *  @since 0.7.6
+     *
      *  @return dir constant for the life of the context
      */
     public File getBaseDir() { return _baseDir; }
@@ -367,7 +370,9 @@ public class I2PAppContext {
      *  Usually ~/.i2p on Linux and %APPDIR%\I2P on Windows.
      *  In installations originally installed with 0.7.5 or earlier, and in
      *  "portable" installations, this will be the same as the base dir.
+     *
      *  @since 0.7.6
+     *
      *  @return dir constant for the life of the context
      */
     public File getConfigDir() { return _configDir; }
@@ -376,7 +381,9 @@ public class I2PAppContext {
      *  Where the router keeps its files.
      *  Applications should not use this.
      *  The same as the config dir for now.
+     *
      *  @since 0.7.6
+     *
      *  @return dir constant for the life of the context
      */
     public File getRouterDir() { return _routerDir; }
@@ -387,7 +394,9 @@ public class I2PAppContext {
      *  The same as the router dir by default as of 0.8.12
      *  Was the same as the system temp dir prior to that.
      *  Which was a problem for multi-user installations.
+     *
      *  @since 0.7.6
+     *
      *  @return dir constant for the life of the context
      */
     public File getPIDDir() { return _pidDir; }
@@ -397,7 +406,9 @@ public class I2PAppContext {
      *  Applications should not use this.
      *  The same as the config dir for now.
      *  (i.e. ~/.i2p, NOT ~/.i2p/logs)
+     *
      *  @since 0.7.6
+     *
      *  @return dir constant for the life of the context
      */
     public File getLogDir() { return _logDir; }
@@ -406,7 +417,9 @@ public class I2PAppContext {
      *  Where applications may store data.
      *  The same as the config dir for now, but may change in the future.
      *  Apps should be careful not to overwrite router files.
+     *
      *  @since 0.7.6
+     *
      *  @return dir constant for the life of the context
      */
     public File getAppDir() { return _appDir; }
@@ -417,7 +430,9 @@ public class I2PAppContext {
      *  first call in this context, and is deleted on JVM exit.
      *  Applications should create their own directory inside this directory
      *  to avoid collisions with other apps.
+     *
      *  @since 0.7.6
+     *
      *  @return dir constant for the life of the context
      */
     public final File getTempDir() {
@@ -553,6 +568,7 @@ public class I2PAppContext {
 
     /**
      * Return a long with a long default
+     *
      * @since 0.9.4
      */
     public long getProperty(String propName, long defaultVal) {
@@ -575,6 +591,7 @@ public class I2PAppContext {
 
     /**
      * Return a float with a float default
+     *
      * @since 0.9.58+
      */
     public final float getProperty(String propName, float defaultVal) {
@@ -597,6 +614,7 @@ public class I2PAppContext {
 
     /**
      * Return a boolean with a boolean default
+     *
      * @since 0.7.12
      */
     public final boolean getProperty(String propName, boolean defaultVal) {
@@ -608,6 +626,7 @@ public class I2PAppContext {
 
     /**
      * Default false
+     *
      * @since 0.7.12
      */
     public boolean getBooleanProperty(String propName) {
@@ -616,6 +635,7 @@ public class I2PAppContext {
 
     /**
      * Get a boolean property, defaulting to true if not set.
+     *
      * @param propName the property name
      * @return the boolean value, or true if the property is not set
      * @since 0.7.12
@@ -662,6 +682,7 @@ public class I2PAppContext {
      * Add a callback, which will fire upon changes in the property
      * given in the specific callback.
      * Unimplemented in I2PAppContext: this only makes sense in a router context.
+     *
      * @param callback The implementation of the callback.
      */
     public void addPropertyCallback(I2PPropertyCallback callback) {}
@@ -799,6 +820,7 @@ public class I2PAppContext {
      * This should only be called after the Router is instantiated but
      * before it is started.  Calling this at any other time can have
      * unpredictable side effects.
+     *
      * @since 0.9.41
      */
     public void setLogManager(LogManager logManager) {
@@ -957,6 +979,7 @@ public class I2PAppContext {
      *  at shutdown.
      *  This method moved from Router in 0.7.1 so that clients
      *  may use it without depending on router.jar.
+     *
      *  @since 0.7.1
      */
     public void addShutdownTask(Runnable task) {
@@ -965,6 +988,7 @@ public class I2PAppContext {
 
     /**
      * Remove a shutdown task.
+     *
      * @param task the task to remove
      * @since 0.9.53
      */
@@ -974,6 +998,7 @@ public class I2PAppContext {
 
     /**
      * Get the list of shutdown tasks.
+     *
      * @return an unmodifiable Set of shutdown tasks
      * @since 0.7.1
      */
@@ -983,6 +1008,7 @@ public class I2PAppContext {
 
     /**
      *  Use this instead of context instanceof RouterContext
+     *
      *  @since 0.7.9
      */
     public boolean isRouterContext() {
@@ -991,6 +1017,7 @@ public class I2PAppContext {
 
     /**
      *  Use this to connect to the router in the same JVM.
+     *
      *  @return always null in I2PAppContext, the client manager if in RouterContext
      *  @since 0.8.3
      */
@@ -1000,6 +1027,7 @@ public class I2PAppContext {
 
     /**
      *  Is the wrapper present?
+     *
      *  @since 0.8.8
      */
     public boolean hasWrapper() {
@@ -1008,6 +1036,7 @@ public class I2PAppContext {
 
     /**
      *  Basic mapping from service names to ports
+     *
      *  @since 0.8.12
      */
     public PortMapper portMapper() {
@@ -1016,7 +1045,9 @@ public class I2PAppContext {
 
     /**
      * Use instead of SimpleScheduler.getInstance()
+     *
      * @since 0.9 to replace static instance in the class
+     *
      * @deprecated in 0.9.20, use simpleTimer2()
      */
     @Deprecated
@@ -1040,7 +1071,9 @@ public class I2PAppContext {
 
     /**
      * Use instead of SimpleTimer.getInstance()
+     *
      * @since 0.9 to replace static instance in the class
+     *
      * @deprecated use SimpleTimer2
      */
     @Deprecated
@@ -1064,6 +1097,7 @@ public class I2PAppContext {
 
     /**
      * Use instead of SimpleTimer2.getInstance()
+     *
      * @since 0.9 to replace static instance in the class
      */
     public SimpleTimer2 simpleTimer2() {

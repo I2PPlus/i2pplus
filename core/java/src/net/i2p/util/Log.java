@@ -114,6 +114,7 @@ public class Log {
     /**
      *  Always log this message with the given priority, ignoring current minimum priority level.
      *  This allows an INFO message about changing port numbers, for example, to always be logged.
+     *
      *  @since 0.8.2
      */
     public void logAlways(int priority, String msg) {
@@ -166,6 +167,7 @@ public class Log {
 
     /**
      * Check if DEBUG level logging is enabled.
+     *
      * @since 0.9.20
      */
     public boolean shouldDebug() {
@@ -174,6 +176,7 @@ public class Log {
 
     /**
      * Check if INFO level logging is enabled.
+     *
      * @since 0.9.20
      */
     public boolean shouldInfo() {
@@ -182,6 +185,7 @@ public class Log {
 
     /**
      * Check if WARN level logging is enabled.
+     *
      * @since 0.9.20
      */
     public boolean shouldWarn() {
@@ -190,6 +194,7 @@ public class Log {
 
     /**
      * Check if ERROR level logging is enabled.
+     *
      * @since 0.9.20
      */
     public boolean shouldError() {
@@ -201,6 +206,7 @@ public class Log {
      * This method is for debugging purposes only and
      * is subject to change or removal w/o notice.
      * NOT a supported API.
+     *
      * @param desc vararg description
      * @since 0.9.8
      */
@@ -213,6 +219,7 @@ public class Log {
      * This method is for debugging purposes only and
      * is subject to change or removal w/o notice.
      * NOT a supported API.
+     *
      * @param desc vararg description of the resource
      * @param level level at which to log
      * @since 0.9.8
@@ -241,6 +248,7 @@ public class Log {
 
     /**
      * Returns the LogScope (private class).
+     *
      * @return the LogScope
      */
     public Object getScope() {

@@ -116,6 +116,7 @@ public class I2PSSLSocketFactory {
     /**
      *  Unmodifiable.
      *  Public for RouterConsoleRunner.
+     *
      *  @since 0.9.16
      */
     public static final List<String> EXCLUDE_PROTOCOLS =
@@ -133,6 +134,7 @@ public class I2PSSLSocketFactory {
      *  ref: http://docs.oracle.com/javase/7/docs/technotes/guides/security/SunProviders.html
      *  Unmodifiable.
      *  Public for RouterConsoleRunner.
+     *
      *  @since 0.9.16
      */
     public static final List<String> INCLUDE_PROTOCOLS =
@@ -144,6 +146,7 @@ public class I2PSSLSocketFactory {
      *  See also: https://developer.android.com/reference/javax/net/ssl/SSLSocket.html
      *  Unmodifiable.
      *  Public for RouterConsoleRunner.
+     *
      *  @since 0.9.16
      */
     public static final List<String> EXCLUDE_CIPHERS = Collections.unmodifiableList(Arrays.asList(new String[] {
@@ -219,6 +222,7 @@ public class I2PSSLSocketFactory {
      *  There's nothing disabled by default we would want to enable.
      *  Unmodifiable.
      *  Public for RouterConsoleRunner.
+     *
      *  @since 0.9.16
      */
     public static final List<String> INCLUDE_CIPHERS = Collections.emptyList();

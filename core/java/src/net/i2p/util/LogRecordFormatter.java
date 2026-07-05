@@ -134,6 +134,7 @@ class LogRecordFormatter {
      *  Mark a string for extraction by xgettext and translation.
      *  Use this only in static initializers.
      *  It does not translate!
+     *
      *  @return s
      */
     private static String _x(String s) {

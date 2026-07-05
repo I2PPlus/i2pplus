@@ -185,6 +185,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
 
     /**
      * Returns the session ID for this message.
+     *
      * @return the session ID
      */
     public SessionId getSessionId() {

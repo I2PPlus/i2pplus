@@ -46,6 +46,7 @@ public class EepGetNamingService extends DummyNamingService {
      * application context.  This constructor should only be used by the
      * appropriate application context itself.
      *
+     * @param context the application context
      */
     public EepGetNamingService(I2PAppContext context) {
         super(context);

@@ -35,20 +35,32 @@ public class HostReplyMessage extends I2CPMessageImpl {
     /** generic fail, other codes TBD */
     public static final int RESULT_FAILURE = 1;
 
-    /** Request secret required result code.
-     * @since 0.9.41 */
+    /**
+     * Request secret required result code.
+     *
+     * @since 0.9.41
+     */
     public static final int RESULT_SECRET_REQUIRED = 2;
 
-    /** Request key required result code.
-     * @since 0.9.41 */
+    /**
+     * Request key required result code.
+     *
+     * @since 0.9.41
+     */
     public static final int RESULT_KEY_REQUIRED = 3;
 
-    /** Request secret and key required result code.
-     * @since 0.9.41 */
+    /**
+     * Request secret and key required result code.
+     *
+     * @since 0.9.41
+     */
     public static final int RESULT_SECRET_AND_KEY_REQUIRED = 4;
 
-    /** Decryption failure result code.
-     * @since 0.9.41 */
+    /**
+     * Decryption failure result code.
+     *
+     * @since 0.9.41
+     */
     public static final int RESULT_DECRYPTION_FAILURE = 5;
     /** @since 0.9.69 proposal 167 */
     public static final int RESULT_LEASESET_LOOKUP_FAILURE = 6;

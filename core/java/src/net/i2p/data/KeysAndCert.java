@@ -82,6 +82,7 @@ public class KeysAndCert extends DataStructureImpl {
 
     /**
      *  If compressed, the padding size / 32, else 0
+     *
      *  @since 0.9.62
      */
     protected int _paddingBlocks;
@@ -143,6 +144,7 @@ public class KeysAndCert extends DataStructureImpl {
 
     /**
      *  Valid for RouterIdentities. May contain random padding for Destinations.
+     *
      *  @since 0.9.42
      */
     public PublicKey getPublicKey() {
@@ -205,6 +207,7 @@ public class KeysAndCert extends DataStructureImpl {
 
     /**
      * Is there compressible padding?
+     *
      * @since 0.9.66
      */
     public boolean isCompressible() {
@@ -255,6 +258,7 @@ public class KeysAndCert extends DataStructureImpl {
     /**
      * This only does the padding, does not compress the unused 256 byte LS public key.
      * Savings is 288 bytes for RI and 64 bytes for LS.
+     *
      * @since 0.9.62
      */
     private void compressPadding() {
@@ -277,6 +281,7 @@ public class KeysAndCert extends DataStructureImpl {
 
     /**
      * For Destination.writeBytes()
+     *
      * @return the new offset
      * @since 0.9.62
      */

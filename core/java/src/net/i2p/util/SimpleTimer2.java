@@ -29,6 +29,7 @@ public class SimpleTimer2 {
 
     /**
      *  If you have a context, use context.simpleTimer2() instead
+     *
      *  @return the global SimpleTimer2 instance
      */
     public static SimpleTimer2 getInstance() {
@@ -48,6 +49,7 @@ public class SimpleTimer2 {
     /**
      *  To be instantiated by the context.
      *  Others should use context.simpleTimer2() instead
+     *
      *  @param context the I2P application context
      */
     public SimpleTimer2(I2PAppContext context) {
@@ -57,6 +59,7 @@ public class SimpleTimer2 {
     /**
      *  To be instantiated by the context.
      *  Others should use context.simpleTimer2() instead
+     *
      *  @param context the I2P application context
      *  @param name the timer name
      */
@@ -67,6 +70,7 @@ public class SimpleTimer2 {
     /**
      *  To be instantiated by the context.
      *  Others should use context.simpleTimer2() instead
+     *
      *  @param context the I2P application context
      *  @param name the timer name
      *  @param prestartAllThreads whether to prestart all threads
@@ -318,6 +322,7 @@ public class SimpleTimer2 {
          * Use this to reduce timer queue and object churn for a sloppy timer like
          * an inactivity timer.
          * Default 3 ms.
+         *
          * @param fuzz the fuzz value in milliseconds
          */
         public synchronized void setFuzz(int fuzz) {
@@ -327,6 +332,7 @@ public class SimpleTimer2 {
         /**
          *  Slightly more efficient than reschedule().
          *  Does nothing if already scheduled.
+         *
          *  @param timeoutMs the timeout in milliseconds
          */
         public synchronized void schedule(long timeoutMs) {
@@ -412,6 +418,7 @@ public class SimpleTimer2 {
 
         /**
          * Always use the new time - ignores fuzz
+         *
          * @param timeoutMs timeout in milliseconds
          */
         public synchronized void forceReschedule(long timeoutMs) {
@@ -569,6 +576,7 @@ public class SimpleTimer2 {
 
         /**
          *  So the critical "please report" message above isn't so ugly
+         *
          *  @since 0.9.57
          */
         @Override
@@ -610,6 +618,7 @@ public class SimpleTimer2 {
 
     /**
      * For transition from SimpleScheduler.
+     *
      * @since 0.9.20
      */
     private static abstract class PeriodicTimedEvent extends TimedEvent {

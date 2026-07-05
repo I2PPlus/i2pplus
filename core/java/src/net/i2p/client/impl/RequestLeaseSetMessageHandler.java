@@ -82,6 +82,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
 
     /**
      *  For extension
+     *
      *  @since 0.9.7
      */
     protected RequestLeaseSetMessageHandler(I2PAppContext context, int messageType) {
@@ -203,6 +204,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
 
     /**
      *  Finish creating and signing the new LeaseSet
+     *
      *  @since 0.9.7
      */
     protected synchronized void signLeaseSet(LeaseSet leaseSet, boolean isLS2, I2PSessionImpl session) {
@@ -561,6 +563,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
 
         /**
          *  New keys
+         *
          *  @param types must be available
          */
         public LeaseInfo(Destination dest, List<EncType> types, boolean isLS2) {
@@ -592,6 +595,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
 
         /**
          *  Existing keys, LS1 only
+         *
          *  @param privKeys all EncTypes must be available
          *  @since 0.9.18
          */
@@ -610,6 +614,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
 
         /**
          *  Existing crypto keys, new signing key, LS1 only
+         *
          *  @param privKeys all EncTypes must be available
          *  @since 0.9.21
          */
@@ -631,6 +636,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
 
         /**
          *  Existing keys, LS2 only
+         *
          *  @param privKeys all EncTypes must be available
          *  @since 0.9.47
          */
@@ -679,6 +685,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
 
         /**
          *  Reverse order by enc type
+         *
          *  @since 0.9.39
          */
         private static class PrivKeyComparator implements Comparator<PrivateKey>, java.io.Serializable {

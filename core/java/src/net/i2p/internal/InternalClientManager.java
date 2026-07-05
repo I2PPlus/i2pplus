@@ -12,6 +12,7 @@ public interface InternalClientManager {
 
     /**
      *  Connect to the router, receiving a message queue to talk to the router with.
+     *
      *  @throws I2PSessionException if the router isn't ready
      */
     public I2CPMessageQueue connect() throws I2PSessionException;

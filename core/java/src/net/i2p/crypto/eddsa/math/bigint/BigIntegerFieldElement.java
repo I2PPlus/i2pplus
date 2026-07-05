@@ -16,6 +16,7 @@ import java.math.BigInteger;
 
 /**
  * A particular element of the field \Z/(2^255-19).
+ *
  * @author str4d
  *
  */
@@ -27,6 +28,12 @@ public class BigIntegerFieldElement extends FieldElement implements Serializable
      */
     final BigInteger bi;
 
+    /**
+     * Creates a new field element from a BigInteger value.
+     *
+     * @param f the field this element belongs to
+     * @param bi the BigInteger value
+     */
     public BigIntegerFieldElement(Field f, BigInteger bi) {
         super(f);
         this.bi = bi;
@@ -112,6 +119,8 @@ public class BigIntegerFieldElement extends FieldElement implements Serializable
     }
 
     /**
+     * Conditional move.
+     *
      * @since 0.9.36
      */
     @Override

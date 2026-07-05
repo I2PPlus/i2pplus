@@ -151,6 +151,7 @@ public class NativeBigInteger extends BigInteger {
      * The 7 optimizations below here are since 0.8.7. Each of the 32-bit processors below
      * needs an explicit fallback in getResourceList() or getMiddleName2().
      * 64-bit processors will fallback to athlon64 and athlon in getResourceList().
+     *
      * @since 0.8.7
      */
     private static final String JBIGI_OPTIMIZATION_ATOM = "atom";
@@ -168,6 +169,7 @@ public class NativeBigInteger extends BigInteger {
      * The optimization levels defined here are since 0.9.26. Each of the 32-bit processors below
      * needs an explicit fallback in getResourceList() or getMiddleName2().
      * 64-bit processors will fallback to athlon64 and athlon in getResourceList().
+     *
      * @since 0.9.26
      */
     private static final String JBIGI_OPTIMIZATION_COREI_SBR = "coreisbr";
@@ -196,12 +198,14 @@ public class NativeBigInteger extends BigInteger {
 
     /**
      * Non-x86, no fallbacks to older libs or to "none"
+     *
      * @since 0.8.7
      */
     private static final String JBIGI_OPTIMIZATION_PPC = "ppc";
 
     /**
      * ARM
+     *
      * @since 0.9.26
      */
     private static final String JBIGI_OPTIMIZATION_ARM_ARMV5 = "armv5";
@@ -217,6 +221,7 @@ public class NativeBigInteger extends BigInteger {
 
     /**
      * None, no optimizations. The default fallback for x86.
+     *
      * @since 0.9.26
      */
     private static final String JBIGI_OPTIMIZATION_X86 = "none";
@@ -412,6 +417,7 @@ public class NativeBigInteger extends BigInteger {
     /**
      * Tries to resolve the best type of CPU that we have an optimized jbigi-dll/so for.
      * This is for x86 only.
+     *
      * @return A string containing the CPU-type or null if CPU type is unknown
      */
     private static String resolveCPUType() {
@@ -539,10 +545,13 @@ public class NativeBigInteger extends BigInteger {
      *
      * @param base
      *            big endian twos complement representation of the base (but it must be positive)
+     *
      * @param exponent
      *            big endian twos complement representation of the exponent
+     *
      * @param modulus
      *            big endian twos complement representation of the modulus
+     *
      * @throws ArithmeticException if modulus &lt;= 0 (since libjbigi version 3)
      * @return big endian twos complement representation of (base ^ exponent) % modulus
      */
@@ -554,10 +563,13 @@ public class NativeBigInteger extends BigInteger {
      *
      * @param base
      *            big endian twos complement representation of the base (but it must be positive)
+     *
      * @param exponent
      *            big endian twos complement representation of the exponent
+     *
      * @param modulus
      *            big endian twos complement representation of the modulus
+     *
      * @return big endian twos complement representation of (base ^ exponent) % modulus
      * @throws ArithmeticException if modulus &lt;= 0
      * @since 0.9.26 and libjbigi version 3
@@ -572,30 +584,35 @@ public class NativeBigInteger extends BigInteger {
 
     /**
      *  Get the jbigi version, only available since jbigi version 3
+     *
      *  @since 0.9.26
      */
     private static native int nativeJbigiVersion();
 
     /**
      *  Get the libmp version, only available since jbigi version 3
+     *
      *  @since 0.9.26
      */
     private static native int nativeGMPMajorVersion();
 
     /**
      *  Get the libmp version, only available since jbigi version 3
+     *
      *  @since 0.9.26
      */
     private static native int nativeGMPMinorVersion();
 
     /**
      *  Get the libmp version, only available since jbigi version 3
+     *
      *  @since 0.9.26
      */
     private static native int nativeGMPPatchVersion();
 
     /**
      *  Get the jbigi version
+     *
      *  @return 0 if no jbigi available, 2 if version not supported
      *  @since 0.9.26
      */
@@ -611,6 +628,7 @@ public class NativeBigInteger extends BigInteger {
     /**
      *  Set the jbigi and libgmp versions. Call after loading.
      *  Sets _jbigiVersion, _nativeOk3, and _libGMPVersion.
+     *
      *  @since 0.9.26
      */
     private static void setVersions() {
@@ -633,6 +651,7 @@ public class NativeBigInteger extends BigInteger {
 
     /**
      *  Get the jbigi version
+     *
      *  @return 0 if no jbigi available, 2 if version info not supported
      *  @since 0.9.26
      */
@@ -642,6 +661,7 @@ public class NativeBigInteger extends BigInteger {
 
     /**
      *  Get the libgmp version
+     *
      *  @return "unknown" if no jbigi available or if version not supported
      *  @since 0.9.26
      */
@@ -1249,6 +1269,7 @@ public class NativeBigInteger extends BigInteger {
     /**
      *  Generate a list of resources to search for, in-order.
      *  See loadNative() comments for more info.
+     *
      *  @return non-null
      *  @since 0.8.7
      */
@@ -1295,6 +1316,7 @@ public class NativeBigInteger extends BigInteger {
      *  All keys and values trimmed.
      *  For dup keys, first one wins.
      *  Currently used for ARM only.
+     *
      *  @return non-null, empty on failure
      *  @since 0.9.1
      */

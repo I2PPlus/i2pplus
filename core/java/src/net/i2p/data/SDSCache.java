@@ -41,8 +41,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * }
  *
  *  </pre>
+ *
  *  @since 0.8.3
  *  @author zzz
+ *
  *  @param <V> type of SimpleDataStructure objects cached
  */
 public class SDSCache<V extends SimpleDataStructure> {
@@ -103,6 +105,7 @@ public class SDSCache<V extends SimpleDataStructure> {
 
     /**
      * Clear all entries from the cache.
+     *
      * @since 0.9.17
      */
     public void clear() {
@@ -118,6 +121,7 @@ public class SDSCache<V extends SimpleDataStructure> {
      *  @param data non-null, the byte array for the SimpleDataStructure
      *  @return the cached value if available, otherwise
      *          makes a new object and returns it
+     *
      *  @throws IllegalArgumentException if data is not the correct number of bytes
      *  @throws NullPointerException if data is null
      */

@@ -32,6 +32,7 @@ public class PortMapper {
     public static final String SVC_EEPSITE = "eepsite";
 
     /** HTTPS eepsite service name.
+    *
      *  @since 0.9.34
      */
     public static final String SVC_HTTPS_EEPSITE = "https_eepsite";
@@ -44,11 +45,13 @@ public class PortMapper {
     public static final String SVC_SAM = "SAM";
 
     /** SAM-UDP service name.
+    *
      *  @since 0.9.24
      */
     public static final String SVC_SAM_UDP = "SAM-UDP";
 
     /** SAM-SSL service name.
+    *
      *  @since 0.9.24
      */
     public static final String SVC_SAM_SSL = "SAM-SSL";
@@ -59,16 +62,19 @@ public class PortMapper {
     public static final String SVC_I2CP = "I2CP";
 
     /** I2CP-SSL service name.
+    *
      *  @since 0.9.23
      */
     public static final String SVC_I2CP_SSL = "I2CP-SSL";
 
     /** HTTP I2PControl service name.
+    *
      *  @since 0.9.34
      */
     public static final String SVC_HTTP_I2PCONTROL = "http_i2pcontrol";
 
     /** HTTPS I2PControl service name.
+    *
      *  @since 0.9.34
      */
     public static final String SVC_HTTPS_I2PCONTROL = "https_i2pcontrol";
@@ -76,6 +82,7 @@ public class PortMapper {
     /**
      *  To indicate presence, alternative to WebAppStarter.isWebappRunning().
      *  For actual base URL, use getConsoleURL()
+     *
      *  @since 0.9.34
      */
     public static final String SVC_I2PSNARK = "i2psnark";
@@ -94,6 +101,7 @@ public class PortMapper {
     /**
      *  To indicate presence, alternative to WebAppStarter.isWebappRunning().
      *  For actual base URL, use getConsoleURL()
+     *
      *  @since 0.9.34
      */
     public static final String SVC_IMAGEGEN = "imagegen";
@@ -101,6 +109,7 @@ public class PortMapper {
     /**
      *  To indicate presence, alternative to WebAppStarter.isWebappRunning().
      *  For actual base URL, use getConsoleURL()
+     *
      *  @since 0.9.34
      */
     public static final String SVC_SUSIDNS = "susidns";
@@ -108,6 +117,7 @@ public class PortMapper {
     /**
      *  To indicate presence, alternative to WebAppStarter.isWebappRunning().
      *  For actual base URL, use getConsoleURL()
+     *
      *  @since 0.9.34
      */
     public static final String SVC_SUSIMAIL = "susimail";
@@ -115,21 +125,25 @@ public class PortMapper {
     /**
      *  To indicate presence, alternative to WebAppStarter.isWebappRunning().
      *  For actual base URL, use getConsoleURL()
+     *
      *  @since 0.9.39
      */
     public static final String SVC_JSONRPC = "jsonrpc";
 
     /** Default HTTP console port.
+    *
      *  @since 0.9.34
      */
     public static final int DEFAULT_CONSOLE_PORT = 7657;
 
     /** Default HTTPS console port.
+    *
      *  @since 0.9.34
      */
     public static final int DEFAULT_HTTPS_CONSOLE_PORT = 7667;
 
     /** Default host for local services.
+    *
      *  @since 0.9.34
      */
     public static final String DEFAULT_HOST = "127.0.0.1";
@@ -144,6 +158,7 @@ public class PortMapper {
 
     /**
      *  Add the service
+     *
      *  @param port &gt; 0
      *  @return success, false if already registered
      */
@@ -204,6 +219,7 @@ public class PortMapper {
 
     /**
      *  Get the registered port for a service
+     *
      *  @return -1 if not registered
      */
     public int getPort(String service) {
@@ -213,6 +229,7 @@ public class PortMapper {
 
     /**
      *  Get the registered port for a service
+     *
      *  @param def default
      *  @return def if not registered
      */
@@ -225,6 +242,7 @@ public class PortMapper {
     /**
      *  Get the registered host for a service.
      *  Will return "127.0.0.1" if the service was registered without a host.
+     *
      *  @param def default
      *  @return def if not registered
      *  @since 0.9.21
@@ -361,6 +379,7 @@ public class PortMapper {
 
     /**
      * Get the list of eepsite URLs.
+     *
      * @return unsorted, non-empty, or null if none
      * @since 0.9.50
      */
@@ -385,6 +404,7 @@ public class PortMapper {
 
     /**
      *  For debugging only
+     *
      *  @since 0.9.20
      */
     public void renderStatusHTML(Writer out) throws IOException {

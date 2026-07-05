@@ -265,6 +265,7 @@ final class ECConstants {
 
     /**
      *  Generate a spec from a curve name
+     *
      *  @return null if fail
      */
     private static ECParameterSpec genSpec(String name) {
@@ -300,6 +301,7 @@ final class ECConstants {
 
     /**
      *  Tries curve name1, then name2, then creates new from parms.
+     *
      *  @param name2 null to skip
      *  @param parms null to skip
      *  @return null if all fail

@@ -57,6 +57,7 @@ public class LeaseSet2 extends LeaseSet {
     private static final int FLAG_UNPUBLISHED = 0x02;
     /**
      *  Set if the unencrypted LS, when published, will be blinded/encrypted
+     *
      *  @since 0.9.42
      */
     private static final int FLAG_BLINDED = 0x04;
@@ -120,12 +121,14 @@ public class LeaseSet2 extends LeaseSet {
 
     /**
      *  Set if the unencrypted LS, when published, will be blinded/encrypted
+     *
      *  @since 0.9.42
      */
     public boolean isBlindedWhenPublished() {return (_flags & FLAG_BLINDED) != 0;}
 
     /**
      *  Set if the unencrypted LS, when published, will be blinded/encrypted
+     *
      *  @throws IllegalStateException if already signed
      *  @since 0.9.42
      */
@@ -272,6 +275,7 @@ public class LeaseSet2 extends LeaseSet {
 
     /**
      *  Absolute time, not time from now.
+     *
      *  @return transient expiration time or 0 if not offline signed
      *  @since 0.9.48
      */
@@ -353,6 +357,7 @@ public class LeaseSet2 extends LeaseSet {
 
     /**
      * The orignal blinded hash, where this came from.
+     *
      * @return null if unknown or not previously blinded
      */
     public Hash getBlindedHash() {return _blindedHash;}
@@ -635,6 +640,7 @@ public class LeaseSet2 extends LeaseSet {
     /**
      * Verify with the SPK in the dest for online sigs.
      * Verify with the SPK in the offline sig section for offline sigs.
+     *
      * @return valid
      */
     @Override

@@ -120,6 +120,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
 
     /**
      *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
+     *
      *  @since 0.8.9
      */
     public long getTotalRead() {
@@ -132,6 +133,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
 
     /**
      *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
+     *
      *  @since 0.8.9
      */
     public long getTotalExpanded() {
@@ -145,6 +147,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
 
     /**
      *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
+     *
      *  @since 0.8.9
      */
     public long getRemaining() {
@@ -158,6 +161,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
 
     /**
      *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
+     *
      *  @since 0.8.9
      */
     public boolean getFinished() {
@@ -171,6 +175,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
 
     /**
      *  Calls super.close(). May not be reused after this.
+     *
      *  @since 0.9.40
      */
     public void destroy() throws IOException {
@@ -181,6 +186,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     /**
      *  Does NOT call super.close(), as it cannot be reused if we do that.
      *  Broken before 0.9.20.
+     *
      *  @since 0.9.20
      */
     @Override
@@ -195,6 +201,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
 
     /**
      *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
+     *
      *  @since 0.8.9
      */
     @Override

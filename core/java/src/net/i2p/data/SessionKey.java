@@ -104,6 +104,7 @@ public class SessionKey extends SimpleDataStructure {
 
     /**
      * Sets the data.
+     *
      * @param data 32 bytes, or null
      * @throws IllegalArgumentException if data is not the legal number of bytes (but null is ok)
      * @throws RuntimeException if data already set.

@@ -44,6 +44,7 @@ public interface ClientApp {
 
     /**
      *  The current state of the ClientApp.
+     *
      *  @return non-null
      */
     public ClientAppState getState();
@@ -51,6 +52,7 @@ public interface ClientApp {
     /**
      *  The generic name of the ClientApp, used for registration,
      *  e.g. "console". Do not translate.
+     *
      *  @return non-null
      */
     public String getName();
@@ -58,6 +60,7 @@ public interface ClientApp {
     /**
      *  The display name of the ClientApp, used in user interfaces.
      *  The app must translate.
+     *
      *  @return non-null
      */
     public String getDisplayName();

@@ -18,6 +18,7 @@ import java.util.SortedSet;
  *  as duplicate check is O(n**2).
  *
  *  @since 0.9.55
+ *
  *  @param <E> type of elements in this set
  */
 public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E> {

@@ -38,6 +38,7 @@ public class SessionTag {
 
     /**
      *  Instantiate the data array and fill it with random data.
+     *
      *  @param create ignored as of 0.9.44, assumed true
      */
     public SessionTag(boolean create) {

@@ -45,6 +45,13 @@ public class Field implements Serializable {
 
     private final Encoding enc;
 
+    /**
+     * Creates a new finite field with the given parameters.
+     *
+     * @param b the bit length of the field
+     * @param q the field prime as a byte array
+     * @param enc the encoding to use for field elements
+     */
     public Field(int b, byte[] q, Encoding enc) {
         this.b = b;
         this.enc = enc;
@@ -65,26 +72,57 @@ public class Field implements Serializable {
         qm5d8 = this.q.subtract(FIVE).divide(EIGHT);
     }
 
+    /**
+     * Creates a field element from a byte array.
+     *
+     * @param x the byte array encoding of the field element
+     * @return the field element
+     */
     public final FieldElement fromByteArray(byte[] x) {
         return enc.decode(x);
     }
 
+    /**
+     * Returns the bit length of the field.
+     *
+     * @return the bit length
+     */
     public int getb() {
         return b;
     }
 
+    /**
+     * Returns the field prime q.
+     *
+     * @return the field prime
+     */
     public FieldElement getQ() {
         return q;
     }
 
+    /**
+     * Returns q - 2.
+     *
+     * @return q - 2
+     */
     public FieldElement getQm2() {
         return qm2;
     }
 
+    /**
+     * Returns (q - 5) / 8.
+     *
+     * @return (q - 5) / 8
+     */
     public FieldElement getQm5d8() {
         return qm5d8;
     }
 
+    /**
+     * Returns the encoding used for this field.
+     *
+     * @return the encoding
+     */
     public Encoding getEncoding() {
         return enc;
     }

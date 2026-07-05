@@ -152,6 +152,7 @@ public class I2PSimpleSession extends I2PSessionImpl2 {
 
     /**
      * Ignore, does nothing
+     *
      * @since 0.8.4
      */
     @Override

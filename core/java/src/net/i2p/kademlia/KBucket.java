@@ -18,7 +18,9 @@ import java.util.Set;
  * a local key, using XOR as the distance metric
  *
  * Refactored from net.i2p.router.networkdb.kademlia
+ *
  * @since 0.9.2 in i2psnark, moved to core in 0.9.10
+ *
  * @param <T> type of SimpleDataStructure objects stored in the bucket
  */
 public interface KBucket<T extends SimpleDataStructure> {
@@ -27,6 +29,8 @@ public interface KBucket<T extends SimpleDataStructure> {
      * Lowest order high bit for difference keys.
      * The lower-bounds distance of this bucket is 2**begin.
      * If begin == 0, this is the closest bucket.
+     *
+     * @return the beginning of this bucket's range
      */
     public int getRangeBegin();
 
@@ -35,11 +39,15 @@ public interface KBucket<T extends SimpleDataStructure> {
      * The upper-bounds distance of this bucket is (2**(end+1)) - 1.
      * If begin == end, the bucket cannot be split further.
      * If end == (numbits - 1), this is the furthest bucket.
+     *
+     * @return the end of this bucket's range
      */
     public int getRangeEnd();
 
     /**
-     * Number of keys already contained in this kbucket
+     * Number of keys already contained in this kbucket.
+     *
+     * @return the number of entries in this bucket
      */
     public int getKeyCount();
 
@@ -52,6 +60,7 @@ public interface KBucket<T extends SimpleDataStructure> {
 
     /**
      * Remove the key from the bucket
+     *
      * @return true if the key existed in the bucket before removing it, else false
      */
     public boolean remove(T key);
@@ -67,12 +76,21 @@ public interface KBucket<T extends SimpleDataStructure> {
     public long getLastChanged();
 
     /**
-     * Retrieve all routing table entries stored in the bucket
-     * @return set of Hash structures
+     * Retrieve all routing table entries stored in the bucket.
+     *
+     * @return set of entries in this bucket
      */
     public Set<T> getEntries();
 
+    /**
+     * Add all entries in this bucket to the provided collector.
+     *
+     * @param collector the collector to add entries to
+     */
     public void getEntries(SelectionCollector<T> collector);
 
+    /**
+     * Remove all entries from this bucket.
+     */
     public void clear();
 }

@@ -15,6 +15,7 @@ public enum SigAlgo {
     RSA("RSA"),
     /**
      *  For local use only, not for use in the network.
+     *
      *  @since 0.9.25
      */
     ElGamal("ElGamal");

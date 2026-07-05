@@ -59,6 +59,7 @@ public abstract class NamingService {
 
     /**
      * Look up a hostname.
+     *
      * @param hostname the hostname to look up
      * @return the Destination for this hostname, or
      * <code>null</code> if name is unknown.
@@ -117,6 +118,7 @@ public abstract class NamingService {
 
     /**
      * Returns a string representation of this naming service.
+     *
      * @return the class simple name
      */
     @Override
@@ -128,6 +130,7 @@ public abstract class NamingService {
 
     /**
      * Get the name of this naming service.
+     *
      * @return Class simple name by default
      * @since 0.8.7
      */
@@ -226,6 +229,7 @@ public abstract class NamingService {
 
     /**
      * Get the number of entries in this naming service.
+     *
      * @return number of entries or -1 if unknown
      * @since 0.8.7
      */
@@ -252,6 +256,7 @@ public abstract class NamingService {
      * @return all mappings
      *         or empty Map if none;
      *         Returned Map is not necessarily sorted, implementation dependent
+     *
      * @since 0.8.7
      */
     public Map<String, Destination> getEntries() {
@@ -266,6 +271,7 @@ public abstract class NamingService {
      * @return all mappings (matching the options if non-null)
      *         or empty Map if none;
      *         Returned Map is not necessarily sorted, implementation dependent
+     *
      * @since 0.8.7
      */
     public Map<String, Destination> getEntries(Properties options) {
@@ -285,6 +291,7 @@ public abstract class NamingService {
      * @return all mappings (matching the options if non-null)
      *         or empty Map if none;
      *         Returned Map is not necessarily sorted, implementation dependent
+     *
      * @since 0.8.7, implemented in 0.9.20
      */
     public Map<String, String> getBase64Entries(Properties options) {
@@ -361,8 +368,10 @@ public abstract class NamingService {
 
     /**
      * Get all known hostnames.
+     *
      * @return all known hostnames or empty Set if none;
      *         Returned Set is not necessarily sorted, implementation dependent
+     *
      * @since 0.8.7
      */
     public Set<String> getNames() {
@@ -376,6 +385,7 @@ public abstract class NamingService {
      * @return all known hostnames (matching the options if non-null)
      *         or empty Set if none;
      *         Returned Set is not necessarily sorted, implementation dependent
+     *
      * @since 0.8.7
      */
     public Set<String> getNames(Properties options) {
@@ -475,6 +485,7 @@ public abstract class NamingService {
 
     /**
      *  Delete the entry.
+     *
      * @param hostname the hostname to remove
      * @return true if removed successfully, false on error or if it did not exist
      * @since 0.8.7
@@ -485,6 +496,7 @@ public abstract class NamingService {
 
     /**
      *  Delete the entry.
+     *
      * @param hostname the hostname to remove
      * @param options NamingService-specific, can be null
      * @return true if removed successfully, false on error or if it did not exist
@@ -496,6 +508,7 @@ public abstract class NamingService {
 
     /**
      *  Ask any registered updaters to update now
+     *
      * @param options NamingService- or updater-specific, may be null
      * @since 0.8.7
      */
@@ -507,6 +520,7 @@ public abstract class NamingService {
 
     /**
      * Register a listener for naming service changes.
+     *
      * @param nsl the listener to register
      * @since 0.8.7
      */
@@ -516,6 +530,7 @@ public abstract class NamingService {
 
     /**
      * Unregister a listener for naming service changes.
+     *
      * @param nsl the listener to unregister
      * @since 0.8.7
      */
@@ -525,6 +540,7 @@ public abstract class NamingService {
 
     /**
      * Register an updater for the naming service.
+     *
      * @param nsu the updater to register
      * @since 0.8.7
      */
@@ -534,6 +550,7 @@ public abstract class NamingService {
 
     /**
      * Unregister an updater for the naming service.
+     *
      * @param nsu the updater to unregister
      * @since 0.8.7
      */
@@ -600,6 +617,7 @@ public abstract class NamingService {
      *  Parent will call when added.
      *  If this is the root naming service, the core will start it.
      *  Should not be called by others.
+     *
      *  @since 0.8.7
      */
     public void start() {}
@@ -608,6 +626,7 @@ public abstract class NamingService {
      *  Parent will call when removed.
      *  If this is the root naming service, the core will stop it.
      *  Should not be called by others.
+     *
      *  @since 0.8.7
      */
     public void shutdown() {}
@@ -750,6 +769,7 @@ public abstract class NamingService {
      * @return a non-empty list of hostnames for this hash, or <code>null</code>
      * if none is known. It is safe for subclasses to always return
      * <code>null</code> if no reverse lookup is possible.
+     *
      * @since 0.9.26
      */
     public List<String> reverseLookupAll(Hash h) {
@@ -765,6 +785,7 @@ public abstract class NamingService {
      * @return a non-empty list of hostnames for this Destination, or <code>null</code>
      * if none is known. It is safe for subclasses to always return
      * <code>null</code> if no reverse lookup is possible.
+     *
      * @since 0.9.26
      */
     public List<String> reverseLookupAll(Destination dest) {
@@ -811,6 +832,7 @@ public abstract class NamingService {
      * @param hostname non-null
      * @return true if hostname (case insensitive) ends with .b32.i2p or .b32.i2p.alt
      *              and is long enough. May or may not be blinded.
+     *
      * @since 0.9.66
      */
     public static boolean isB32Host(String hostname) {
@@ -830,6 +852,7 @@ public abstract class NamingService {
      * @param hostname non-null
      * @return true if hostname (case insensitive) ends with .b32.i2p or .b32.i2p.alt
      *              and is long enough.
+     *
      * @since 0.9.66
      */
     public static boolean isBlindedHost(String hostname) {

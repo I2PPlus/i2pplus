@@ -44,6 +44,7 @@ import java.util.Map;
  *
  * @since 0.9.15
  * @author str4d
+ *
  * @see <a href="https://tools.ietf.org/html/rfc8032">RFC 8032 - EdDSA</a>
  */
 public class KeyPairGenerator extends KeyPairGeneratorSpi {
@@ -99,6 +100,7 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
     /**
      * Create an EdDSANamedCurveSpec from the provided curve name. The current
      * implementation fetches the pre-created curve spec from a table.
+     *
      * @param curveName the EdDSA named curve.
      * @return the specification for the named curve.
      * @throws InvalidAlgorithmParameterException if the named curve is unknown.

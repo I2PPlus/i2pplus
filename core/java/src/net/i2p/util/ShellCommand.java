@@ -186,6 +186,7 @@ public class ShellCommand {
      * <code>STDIN</code> of the shell process via {@link #getInputStream()}.
      *
      * Warning, no good way to quote or escape spaces in arguments with this method.
+     *
      * @deprecated unused
      *
      * @param shellCommand The command for the shell to execute.
@@ -205,6 +206,7 @@ public class ShellCommand {
      * {@link #getInputStream()}.
      *
      * Warning, no good way to quote or escape spaces in arguments with this method.
+     *
      * @deprecated unused
      *
      * @param  shellCommand The command for the shell to execute.
@@ -227,6 +229,7 @@ public class ShellCommand {
      * <code>STDIN</code> of the shell process via {@link #getInputStream()}.
      *
      * Warning, no good way to quote or escape spaces in arguments with this method.
+     *
      * @deprecated unused
      *
      * @param  shellCommand The command for the shell to execute.
@@ -234,6 +237,7 @@ public class ShellCommand {
      *                      number of seconds elapses without the process
      *                      returning an exit status. A value of <code>0</code>
      *                      here disables waiting.
+     *
      * @return              <code>true</code> if the spawned shell process
      *                      returns an exit status of 0 (indicating success),
      *                      else <code>false</code>.
@@ -260,6 +264,7 @@ public class ShellCommand {
      * command will not be displayed.
      *
      * Warning, no good way to quote or escape spaces in arguments with this method.
+     *
      * @deprecated unused
      *
      * @param  shellCommand The command for the shell to execute.
@@ -281,6 +286,7 @@ public class ShellCommand {
      * @return              <code>true</code> if the spawned shell process
      *                      returns an exit status of 0 (indicating success),
      *                      else <code>false</code>.
+     *
      * @deprecated Use the String[] method
      */
     @Deprecated
@@ -296,9 +302,11 @@ public class ShellCommand {
      * @param  commandArray The command for the shell to execute,
      *                      as a String[].
      *                      See Runtime.exec(String[]) for more info.
+     *
      * @return              <code>true</code> if the spawned shell process
      *                      returns an exit status of 0 (indicating success),
      *                      else <code>false</code>.
+     *
      * @since 0.9.38
      */
     public boolean executeSilentAndWait(String[] commandArray) {
@@ -317,10 +325,12 @@ public class ShellCommand {
      * @param  shellCommand The command for the shell to execute, as a String.
      *                      You can't quote arguments successfully.
      *                      See Runtime.exec(String) for more info.
+     *
      * @param  seconds      The method will return <code>true</code> if this
      *                      number of seconds elapses without the process
      *                      returning an exit status. A value of <code>0</code>
      *                      here disables waiting.
+     *
      * @return              <code>true</code> if the spawned shell process
      *                      returns an exit status of 0 (indicating success),
      *                      OR if the time expires,
@@ -339,14 +349,17 @@ public class ShellCommand {
      * @param  commandArray The command for the shell to execute,
      *                      as a String[].
      *                      See Runtime.exec(String[]) for more info.
+     *
      * @param  seconds      The method will return <code>true</code> if this
      *                      number of seconds elapses without the process
      *                      returning an exit status. A value of <code>0</code>
      *                      here disables waiting.
+     *
      * @return              <code>true</code> if the spawned shell process
      *                      returns an exit status of 0 (indicating success),
      *                      OR if the time expires,
      *                      else <code>false</code>.
+     *
      * @since 0.8.3
      */
     public boolean executeSilentAndWaitTimed(String[] commandArray, int seconds) {

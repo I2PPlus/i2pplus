@@ -28,6 +28,14 @@ public class TunnelRemovalEvent {
         FAILURE
     }
 
+    /**
+     * Create a new tunnel removal event.
+     *
+     * @param poolName the tunnel pool name
+     * @param tunnelId the tunnel ID
+     * @param isInbound true if inbound
+     * @param reason the removal reason
+     */
     public TunnelRemovalEvent(String poolName, TunnelId tunnelId, boolean isInbound, RemovalReason reason) {
         _poolName = poolName;
         _tunnelId = tunnelId;
@@ -36,22 +44,47 @@ public class TunnelRemovalEvent {
         _timestamp = System.currentTimeMillis();
     }
 
+    /**
+     * Return the tunnel pool name.
+     *
+     * @return the tunnel pool name
+     */
     public String getPoolName() {
         return _poolName;
     }
 
+    /**
+     * Return the tunnel ID.
+     *
+     * @return the tunnel ID
+     */
     public TunnelId getTunnelId() {
         return _tunnelId;
     }
 
+    /**
+     * Return true if the tunnel is inbound.
+     *
+     * @return true if inbound
+     */
     public boolean isInbound() {
         return _isInbound;
     }
 
+    /**
+     * Return the removal reason.
+     *
+     * @return the removal reason
+     */
     public RemovalReason getReason() {
         return _reason;
     }
 
+    /**
+     * Return the event timestamp.
+     *
+     * @return the timestamp
+     */
     public long getTimestamp() {
         return _timestamp;
     }

@@ -48,6 +48,7 @@ public class CoreVersion {
 
     /**
      *  For Vuze.
+     *
      *  @return VERSION
      *  @since 0.9.19
      */

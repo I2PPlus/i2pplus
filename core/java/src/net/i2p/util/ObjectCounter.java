@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * </ul>
  *
  * @author zzz, welterde
+ *
  * @param <K> type of objects being counted
  */
 public class ObjectCounter<K> implements Serializable {
@@ -37,6 +38,7 @@ public class ObjectCounter<K> implements Serializable {
 
     /**
      *  Add one.
+     *
      *  @return count after increment
      */
     public int increment(K h) {
@@ -47,6 +49,7 @@ public class ObjectCounter<K> implements Serializable {
 
     /**
      *  Set a high value
+     *
      *  @since 0.9.56
      */
     public void max(K h) {
@@ -71,6 +74,7 @@ public class ObjectCounter<K> implements Serializable {
 
     /**
      *  Start over. Reset the count for all keys to zero.
+     *
      *  @since 0.7.11
      */
     public void clear() {
@@ -79,6 +83,7 @@ public class ObjectCounter<K> implements Serializable {
 
     /**
      *  Reset the count for this key to zero
+     *
      *  @since 0.9.36
      */
     public void clear(K h) {
@@ -88,6 +93,7 @@ public class ObjectCounter<K> implements Serializable {
     /**
      *  Decay all counts by the given factor (integer division).
      *  Removes entries that decay to zero.
+     *
      *  @param factor divisor for decay (e.g., 2 for 50% decay)
      *  @since 0.9.69+
      */

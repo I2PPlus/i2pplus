@@ -19,6 +19,7 @@ import java.util.Set;
  *  Warning: addAll() and the Collection constructor are O(n**2).
  *
  *  @since 0.9.25, moved to net.i2p.util in 0.9.55
+ *
  *  @param <E> type of elements in this set
  */
 public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
@@ -265,6 +266,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     /**
      *  Supports remove.
      *  Supports comodification checks.
+     *
      * @return an iterator over this set
      */
     @Override
@@ -357,6 +359,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      *  About 3x faster than HashSet.
      */
     /****
+    *
      * @SuppressWarnings({ "unchecked", "rawtypes" })
      * public static void main(String[] args) {
      * if (args.length > 0) {

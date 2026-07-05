@@ -38,6 +38,7 @@ public class SOCKS5Client {
      *  @param sock socket to the proxy
      *  @param connHostName hostname for the proxy to connect to
      *  @param connPort port for the proxy to connect to
+     *  @throws IOException if the connection fails or the proxy rejects the request
      */
     public static void connect(Socket sock, String connHostName, int connPort) throws IOException {
         connect(sock, connHostName, connPort, null, null);
@@ -54,6 +55,7 @@ public class SOCKS5Client {
      *  @param connPort port for the proxy to connect to
      *  @param configUser username for proxy authentication or null
      *  @param configPW password for proxy authentication or null
+     *  @throws IOException if the connection fails or the proxy rejects the request
      */
     public static void connect(Socket sock, String connHostName, int connPort, String configUser, String configPW) throws IOException {
         InputStream in = null;
@@ -86,6 +88,7 @@ public class SOCKS5Client {
      *  @param pout output stream to the proxy
      *  @param connHostName hostname for the proxy to connect to
      *  @param connPort port for the proxy to connect to
+     *  @throws IOException if the connection fails or the proxy rejects the request
      */
     public static void connect(InputStream pin, OutputStream pout, String connHostName, int connPort) throws IOException {
         connect(pin, pout, connHostName, connPort, null, null);
@@ -103,6 +106,7 @@ public class SOCKS5Client {
      *  @param connPort port for the proxy to connect to
      *  @param configUser username for proxy authentication or null
      *  @param configPW password for proxy authentication or null
+     *  @throws IOException if the connection fails or the proxy rejects the request
      */
     public static void connect(InputStream pin, OutputStream pout, String connHostName, int connPort, String configUser, String configPW) throws IOException {
         DataOutputStream out = null;

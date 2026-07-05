@@ -44,6 +44,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
      * Singleton for whatever PRNG i2p uses.
      * Same as I2PAppContext.getGlobalContext().random();
      * use context.random() if you have a context already.
+     *
      * @return I2PAppContext.getGlobalContext().random()
      */
     public static RandomSource getInstance() {

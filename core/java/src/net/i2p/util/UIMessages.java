@@ -69,6 +69,7 @@ public class UIMessages {
     /**
      * Newest last, or empty list.
      * Provide id of last one back to clearThrough().
+     *
      * @return a copy
      */
     public synchronized List<Message> getMessages() {
@@ -78,6 +79,7 @@ public class UIMessages {
 
     /**
      * Newest last, or empty list.
+     *
      * @return a copy (cached)
      * @since 0.9.46
      */
@@ -131,6 +133,7 @@ public class UIMessages {
 
     /**
      * Check if there are any messages.
+     *
      * @since 0.9.46
      */
     public synchronized boolean isEmpty() {

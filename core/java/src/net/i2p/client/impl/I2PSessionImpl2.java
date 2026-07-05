@@ -113,6 +113,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
     /**
      *  Fire up a periodic task to check for unclaimed messages
+     *
      *  @since 0.9.14
      */
     @Override
@@ -124,6 +125,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     /**
      *  Check for expired message states, without wastefully setting a timer for each
      *  message.
+     *
      *  @since 0.9.14
      */
     private class RemoveExpired extends SimpleTimer2.TimedEvent {
@@ -174,51 +176,87 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         return SHOULD_COMPRESS;
     }
 
-    /** @throws UnsupportedOperationException always, use MuxedImpl */
+    /**
+     * Not supported.
+     *
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public void addSessionListener(I2PSessionListener lsnr, int proto, int port) {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
-    /** @throws UnsupportedOperationException always, use MuxedImpl */
+    /**
+     * Not supported.
+     *
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public void addMuxedSessionListener(I2PSessionMuxedListener l, int proto, int port) {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
-    /** @throws UnsupportedOperationException always, use MuxedImpl */
+    /**
+     * Not supported.
+     *
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public void removeListener(int proto, int port) {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
-    /** @throws UnsupportedOperationException always, use MuxedImpl */
+    /**
+     * Not supported.
+     *
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int proto, int fromport, int toport) throws I2PSessionException {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
-    /** @throws UnsupportedOperationException always, use MuxedImpl */
+    /**
+     * Not supported.
+     *
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent,
                                int proto, int fromport, int toport) throws I2PSessionException {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
-    /** @throws UnsupportedOperationException always, use MuxedImpl */
+    /**
+     * Not supported.
+     *
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire,
                                int proto, int fromport, int toport) throws I2PSessionException {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
-    /** @throws UnsupportedOperationException always, use MuxedImpl */
+    /**
+     * Not supported.
+     *
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire,
                                int proto, int fromport, int toport, int flags) throws I2PSessionException {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
-    /** @throws UnsupportedOperationException always, use MuxedImpl */
+    /**
+     * Not supported.
+     *
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size,
                                int proto, int fromport, int toport, SendMessageOptions options) throws I2PSessionException {
         throw new UnsupportedOperationException("Use MuxedImpl");
     }
-    /** @throws UnsupportedOperationException always, use MuxedImpl */
+    /**
+     * Not supported.
+     *
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public long sendMessage(Destination dest, byte[] payload, int offset, int size,
                                int proto, int fromport, int toport,
@@ -240,6 +278,8 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
+     * Send a message with session key and tags.
+     *
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
      */
@@ -249,6 +289,8 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
+     * Send a message with session key and tags.
+     *
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
      */
@@ -320,6 +362,8 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
+     * Send a message with best effort delivery.
+     *
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
      */
@@ -469,6 +513,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         return super.reconnect();
     }
 
+    /**
+     * Clear all pending message states.
+     */
     private void clearStates() {
         if (_sendingStates == null) {return;} // only null if overridden by I2PSimpleSession
         for (MessageState state : _sendingStates.values()) {state.cancel();}
@@ -480,6 +527,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         _sendingStates.clear();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addTunnelStatusListener(TunnelStatusListener lsnr) {
         _tunnelStatusListeners.add(lsnr);
@@ -569,6 +619,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
     /**
      *  Notify all tunnel status listeners of a tunnel failure.
+     *
      *  @since 0.9.69
      */
     protected void notifyTunnelFailed(String poolName, boolean isInbound) {
@@ -584,6 +635,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
     /**
      *  Notify all tunnel status listeners of a tunnel removal.
+     *
      *  @since 0.9.69+
      */
     protected void notifyTunnelRemoved(TunnelRemovalEvent event) {
@@ -599,6 +651,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
     /**
      *  Notify all tunnel status listeners of pool shutdown.
+     *
      *  @since 0.9.69+
      */
     protected void notifyPoolShuttingDown(String poolName, boolean isInbound) {

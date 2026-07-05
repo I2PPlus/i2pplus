@@ -74,10 +74,15 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
 
     private final I2PSessionDemultiplexer _demultiplexer;
 
-    /*
+    /**
+     * Create a new muxed session.
+     *
+     * @param ctx context
      * @param destKeyStream stream containing the private key data,
      *                             format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
+     *
      * @param options set of options to configure the router with, if null will use System properties
+     * @throws I2PSessionException if there is a problem loading the private keys
      */
     public I2PSessionMuxedImpl(I2PAppContext ctx, InputStream destKeyStream, Properties options) throws I2PSessionException {
         super(ctx, destKeyStream, options);
@@ -89,12 +94,15 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         _availabilityNotifier = new MuxedAvailabilityNotifier();
     }
 
-    /*
-     * For extension by SubSession
+    /**
+     * For extension by SubSession.
      *
+     * @param primary the primary session
      * @param destKeyStream stream containing the private key data,
      *                             format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
+     *
      * @param options set of options to configure the router with, if null will use System properties
+     * @throws I2PSessionException if there is a problem loading the private keys
      * @since 0.9.21
      */
     protected I2PSessionMuxedImpl(I2PSessionImpl primary, InputStream destKeyStream, Properties options) throws I2PSessionException {
@@ -123,6 +131,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *         I2PSession.PROTO_STREAMING
      *         I2PSession.PROTO_DATAGRAM
      *         255 disallowed
+     *
      *  @param port 1-65535 or PORT_ANY (0) for all
      */
     @Override
@@ -133,6 +142,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     /**
      *  Listen on specified protocol and port, and receive notification
      *  of proto, fromPort, and toPort for every message.
+     *
      *  @param proto 1-254 or PROTO_ANY (0) for all; 255 disallowed
      *  @param port 1-65535 or PORT_ANY (0) for all
      */
@@ -158,6 +168,8 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     }
 
     /**
+     * Send a message with session key and tags.
+     *
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
      */
@@ -167,6 +179,8 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     }
 
     /**
+     * Send a message with session key and tags.
+     *
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
      */
@@ -176,6 +190,8 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     }
 
     /**
+     * Send a message with protocol and port information.
+     *
      *  @param keyUsed unused - no end-to-end crypto
      *  @param tagsSent unused - no end-to-end crypto
      *  @param proto 1-254 or 0 for unset; recommended:
@@ -183,6 +199,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *         I2PSession.PROTO_STREAMING
      *         I2PSession.PROTO_DATAGRAM
      *         255 disallowed
+     *
      *  @param fromPort 1-65535 or 0 for unset
      *  @param toPort 1-65535 or 0 for unset
      *  @since 0.7.1
@@ -193,6 +210,8 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     }
 
     /**
+     * Send a message with protocol, port, and flags.
+     *
      *  @param keyUsed unused - no end-to-end crypto
      *  @param tagsSent unused - no end-to-end crypto
      *  @param proto 1-254 or 0 for unset; recommended:
@@ -200,6 +219,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *         I2PSession.PROTO_STREAMING
      *         I2PSession.PROTO_DATAGRAM
      *         255 disallowed
+     *
      *  @param fromPort 1-65535 or 0 for unset
      *  @param toPort 1-65535 or 0 for unset
      *  @param flags to be passed to the router
@@ -222,6 +242,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *         I2PSession.PROTO_STREAMING
      *         I2PSession.PROTO_DATAGRAM
      *         255 disallowed
+     *
      *  @param fromPort 1-65535 or 0 for unset
      *  @param toPort 1-65535 or 0 for unset
      *  @param options to be passed to the router
@@ -261,6 +282,8 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     }
 
     /**
+     * Prepare the payload for sending.
+     *
      * @return gzip compressed payload, ready to send
      * @since 0.9.14
      */
@@ -285,6 +308,8 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     }
 
     /**
+     * Send a message without expecting a response.
+     *
      * @since 0.9.2
      */
     private void sendNoEffort(Destination dest, byte[] payload, SendMessageOptions options) throws I2PSessionException {

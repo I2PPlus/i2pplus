@@ -23,12 +23,14 @@ public abstract class I2CPMessageQueue implements Closeable {
 
     /**
      *  Send a message, nonblocking.
+     *
      *  @return success (false if no space available)
      */
     public abstract boolean offer(I2CPMessage msg);
 
     /**
      *  Send a message, blocking.
+     *
      *  @param timeout how long to wait for space (ms)
      *  @return success (false if no space available or if timed out)
      *  @since 0.9.3
@@ -38,6 +40,7 @@ public abstract class I2CPMessageQueue implements Closeable {
     /**
      *  Receive a message, nonblocking.
      *  Unused for now.
+     *
      *  @return message or null if none available
      */
     public abstract I2CPMessage poll();
@@ -50,6 +53,7 @@ public abstract class I2CPMessageQueue implements Closeable {
 
     /**
      *  Receive a message, blocking until one is available.
+     *
      *  @return message
      */
     public abstract I2CPMessage take() throws InterruptedException;

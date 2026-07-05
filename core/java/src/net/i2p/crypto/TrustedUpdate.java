@@ -117,6 +117,7 @@ public class TrustedUpdate {
     /**
      *  Duplicate keys or names rejected,
      *  except that duplicate empty names are allowed
+     *
      *  @param key 172 character base64 string
      *  @param name non-null but "" ok
      *  @since 0.7.12
@@ -546,6 +547,7 @@ public class TrustedUpdate {
      * @param signedFile     The signed update file to write.
      * @param privateKeyFile The name of the file containing the private key to
      *                       sign <code>inputFile</code> with.
+     *
      * @param version        The version string of the input file. If this is
      *                       longer than 16 characters it will be truncated.
      *
@@ -588,6 +590,7 @@ public class TrustedUpdate {
      * @param signedFile        The signed update file to write.
      * @param signingPrivateKey An instance of <code>SigningPrivateKey</code>
      *                          to sign <code>inputFile</code> with.
+     *
      * @param version           The version string of the input file. If this is
      *                          longer than 16 characters it will be truncated.
      *

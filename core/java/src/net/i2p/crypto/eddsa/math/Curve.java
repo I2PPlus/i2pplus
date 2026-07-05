@@ -33,6 +33,13 @@ public class Curve implements Serializable {
     private final GroupElement zeroP3PrecomputedDouble;
     private final GroupElement zeroPrecomp;
 
+    /**
+     * Creates a new twisted Edwards curve.
+     *
+     * @param f the finite field
+     * @param d the curve parameter d
+     * @param I the square root of -1
+     */
     public Curve(Field f, byte[] d, FieldElement I) {
         this.f = f;
         this.d = f.fromByteArray(d);
@@ -47,22 +54,48 @@ public class Curve implements Serializable {
         zeroPrecomp = GroupElement.precomp(this, one, one, zero);
     }
 
+    /**
+     * Returns the finite field of this curve.
+     *
+     * @return the field
+     */
     public Field getField() {
         return f;
     }
 
+    /**
+     * Returns the curve parameter d.
+     *
+     * @return the parameter d
+     */
     public FieldElement getD() {
         return d;
     }
 
+    /**
+     * Returns 2 * d.
+     *
+     * @return 2 * d
+     */
     public FieldElement get2D() {
         return d2;
     }
 
+    /**
+     * Returns the square root of -1 in this field.
+     *
+     * @return the square root of -1
+     */
     public FieldElement getI() {
         return I;
     }
 
+    /**
+     * Returns the neutral (zero) element in the given representation.
+     *
+     * @param repr the representation type
+     * @return the zero element, or null if the representation is unsupported
+     */
     public GroupElement getZero(GroupElement.Representation repr) {
         switch (repr) {
             case P2: return zeroP2;
@@ -73,12 +106,21 @@ public class Curve implements Serializable {
         }
     }
 
+    /**
+     * Creates a point on this curve from an encoded byte array.
+     *
+     * @param P the encoded point
+     * @param precompute whether to precompute lookup tables
+     * @return the group element representing the point
+     */
     public GroupElement createPoint(byte[] P, boolean precompute) {
         GroupElement ge = new GroupElement(this, P, precompute);
         return ge;
     }
 
     /**
+     * Returns a hash code for this curve.
+     *
      *  @since 0.9.25
      */
     @Override
@@ -87,6 +129,8 @@ public class Curve implements Serializable {
     }
 
     /**
+     * Compares this curve to another object for equality.
+     *
      *  @since 0.9.25
      */
     @Override

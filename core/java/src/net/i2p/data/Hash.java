@@ -110,6 +110,7 @@ public class Hash extends SimpleDataStructure {
 
     /**
      * Pull from cache or return new
+     *
      * @throws ArrayIndexOutOfBoundsException if not enough bytes
      * @since 0.8.3
      */
@@ -119,6 +120,7 @@ public class Hash extends SimpleDataStructure {
 
     /**
      * Pull from cache or return new
+     *
      * @since 0.8.3
      */
     public static Hash create(InputStream in) throws IOException {
@@ -171,6 +173,7 @@ public class Hash extends SimpleDataStructure {
 
     /**
      *  For convenience.
+     *
      *  @return "{52 chars}.b32.i2p" or null if data not set.
      *  @since 0.9.25
      */
@@ -180,6 +183,7 @@ public class Hash extends SimpleDataStructure {
     }
 
     /** Clear the hash cache.
+    *
      *  @since 0.9.17
      */
     public static void clearCache() {

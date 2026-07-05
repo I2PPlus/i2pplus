@@ -73,6 +73,7 @@ public abstract class Translate {
      *  @param s string to be translated containing {0}
      *    The {0} will be replaced by the parameter.
      *    Single quotes must be doubled, i.e. ' -&gt; '' in the string.
+     *
      *  @param o parameter, not translated.
      *    To translate parameter also, use _t("foo {0} bar", _t("baz"))
      *    Do not double the single quotes in the parameter.
@@ -89,6 +90,7 @@ public abstract class Translate {
 
     /**
      *  Varargs
+     *
      *  @param oArray parameters
      *  @since 0.9.8
      */
@@ -135,6 +137,7 @@ public abstract class Translate {
 
     /**
      *  Two- or three-letter lower case
+     *
      *  @return lang in routerconsole.lang property, else current locale
      */
     public static String getLanguage(I2PAppContext ctx) {
@@ -153,6 +156,7 @@ public abstract class Translate {
 
     /**
      *  Is this a right-to-left language?
+     *
      *  @param lang Two- or three-letter lower case
      *  @return true for supported RTL languages
      *  @since 0.9.46
@@ -163,6 +167,7 @@ public abstract class Translate {
 
     /**
      *  Two-letter upper case or ""
+     *
      *  @return country in routerconsole.country property, else current locale
      *  @since 0.9.10
      */
@@ -191,6 +196,7 @@ public abstract class Translate {
 
     /**
      * cache both found and not found for speed
+     *
      * @param lang non-null, if "" returns null
      * @param country non-null, may be ""
      * @return null if not found
@@ -241,6 +247,7 @@ public abstract class Translate {
     /**
      *  Clear the cache.
      *  Call this after adding new bundles to the classpath.
+     *
      *  @since 0.7.12
      */
     public static void clearCache() {

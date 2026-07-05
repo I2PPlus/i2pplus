@@ -122,6 +122,7 @@ public class I2PThread extends Thread {
 
     /**
      * Listener for out-of-memory events.
+     *
      * @since 0.9.35
      */
     public interface OOMEventListener {

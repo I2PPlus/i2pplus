@@ -83,6 +83,7 @@ public final class KeyGenerator {
     }
 
     /** Generate a private 256 bit session key
+    *
      * @return session key
      */
     public SessionKey generateSessionKey() {
@@ -102,6 +103,7 @@ public final class KeyGenerator {
     /**
      *  PBE the passphrase with the salt.
      *  Warning - SLOW
+     *
      *  @since 0.7.1
      */
     public SessionKey generateSessionKey(byte[] salt, byte[] passphrase) {
@@ -129,6 +131,7 @@ public final class KeyGenerator {
 
     /**
      *  Get current rounds for new encryptions.
+     *
      *  @return 1000000
      *  @since 2.x.x
      */
@@ -136,6 +139,7 @@ public final class KeyGenerator {
 
     /**
      *  Get legacy rounds for migration.
+     *
      *  @return 1000
      *  @since 2.x.x
      */
@@ -160,6 +164,7 @@ public final class KeyGenerator {
     private static final String PROP_LONG_EXPONENT = "crypto.elGamal.useLongKey";
 
     /** Whether to use a long (2048-bit) ElGamal exponent.
+    *
      *  @since 0.9.8
      */
     public boolean useLongElGamalExponent() {
@@ -167,6 +172,7 @@ public final class KeyGenerator {
     }
 
     /** Get the size of the ElGamal exponent in bits.
+    *
      *  @since 0.9.8
      */
     public int getElGamalExponentSize() {
@@ -212,6 +218,7 @@ public final class KeyGenerator {
 
     /**
      *  Supports EncTypes
+     *
      *  @since 0.9.38
      */
     public KeyPair generatePKIKeys(EncType type) {
@@ -297,6 +304,7 @@ public final class KeyGenerator {
      *  DSA-SHA1 only.
      *
      *  Same as above but different return type
+     *
      *  @since 0.8.7
      */
     public SimpleDataStructure[] generateSigningKeys() {
@@ -322,6 +330,7 @@ public final class KeyGenerator {
 
     /**
      *  Generic signature type, supports DSA, RSA, ECDSA, EdDSA
+     *
      *  @since 0.9.9
      */
     public SimpleDataStructure[] generateSigningKeys(SigType type) throws GeneralSecurityException {

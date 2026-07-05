@@ -104,6 +104,7 @@ public class Ed25519FieldElement extends FieldElement {
      * @param val The field element to subtract.
      * @return The field element this - val.
      **/
+
     @Override
     public FieldElement subtract(FieldElement val) {
         int[] g = ((Ed25519FieldElement) val).t;

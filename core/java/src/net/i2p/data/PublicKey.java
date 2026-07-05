@@ -111,6 +111,7 @@ public class PublicKey extends SimpleDataStructure {
     /**
      * Pull from cache or return new.
      * ELGAMAL_2048 only!
+     *
      * @since 0.8.3
      */
     public static PublicKey create(InputStream in) throws IOException {
@@ -151,6 +152,7 @@ public class PublicKey extends SimpleDataStructure {
 
     /**
      *  Unknown type only.
+     *
      *  @param typeCode must not match a known type. 1-255
      *  @param data must be non-null
      *  @since 0.9.38
@@ -169,6 +171,7 @@ public class PublicKey extends SimpleDataStructure {
 
     /**
      * Constructs from base64. ElGamal only.
+     *
      * @param base64Data a string of base64 data (the output of .toBase64() called
      * on a prior instance of PublicKey
      */
@@ -202,6 +205,7 @@ public class PublicKey extends SimpleDataStructure {
      *  Gets the type code for unknown encryption types.
      *
      *  Only valid if getType() returns null
+     *
      *  @since 0.9.38
      */
     public int getUnknownTypeCode() {

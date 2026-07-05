@@ -49,6 +49,7 @@ public abstract class ZipFileComment {
      *  @param max The max length of the comment in bytes.
      *             If the actual comment is longer, it will not be found and
      *             this method will throw an IOE
+     *
      *  @param skip Number of bytes to skip in the file before looking for the
      *              zip header. Use 56 for sud/su2 files.
      *

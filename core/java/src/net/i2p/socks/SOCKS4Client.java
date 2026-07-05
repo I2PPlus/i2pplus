@@ -66,8 +66,11 @@ public class SOCKS4Client {
      *  Will throw and close pin and pout on all errors.
      *  Caller must close pin and pout on success.
      *
+     *  @param pin input stream from the proxy
+     *  @param pout output stream to the proxy
      *  @param connHostName hostname for the proxy to connect to
      *  @param connPort port for the proxy to connect to
+     *  @throws IOException if the connection fails or the proxy rejects the request
      */
     public static void connect(InputStream pin, OutputStream pout, String connHostName, int connPort) throws IOException {
         DataOutputStream out = null;

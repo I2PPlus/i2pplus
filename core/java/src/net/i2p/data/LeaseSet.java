@@ -209,6 +209,7 @@ public class LeaseSet extends DatabaseEntry {
     /**
      *  The revocation key.
      *  Undeprecated as of 0.9.38, used for the blinded key in EncryptedLeaseSet.
+     *
      *  @return the revocation key for LS1, null for LS2 except blinded key for encrypted LS2
      */
     public SigningPublicKey getSigningKey() {
@@ -218,6 +219,7 @@ public class LeaseSet extends DatabaseEntry {
     /**
      *  The revocation key. Unused except for encrypted LS2.
      *  Must be the same type as the Destination's SigningPublicKey.
+     *
      *  @throws IllegalArgumentException if different type
      */
     public void setSigningKey(SigningPublicKey key) {
@@ -229,6 +231,7 @@ public class LeaseSet extends DatabaseEntry {
 
     /**
      * As of 0.9.65, no longer sets receivedAsReply to true
+     *
      * @param localClient may be null
      * @since 0.9.47
      */

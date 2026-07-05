@@ -68,6 +68,7 @@ public interface I2PSession {
 
     /**
      * See I2PSessionMuxedImpl for proto/port details.
+     *
      * @return success
      * @since 0.7.1
      */
@@ -98,15 +99,18 @@ public interface I2PSession {
      *                it will be filled with the bytes of the session key delivered.  Typically the key delivered is the
      *                same one as the key encrypted with, but not always.  If this is null then the key data will not be
      *                exposed.
+     *
      * @param tagsSent UNUSED, IGNORED. Set of tags delivered to the peer and associated with the keyUsed.  This is also an output parameter -
      *                 the contents of the set is ignored during the call, but afterwards it contains a set of SessionTag
      *                 objects that were sent along side the given keyUsed.
+     *
      * @return success
      */
     public boolean sendMessage(Destination dest, byte[] payload, SessionKey keyUsed, Set<SessionTag> tagsSent) throws I2PSessionException;
 
     /**
      * End-to-End Crypto is disabled, tags and keys are ignored.
+     *
      * @param keyUsed UNUSED, IGNORED.
      * @param tagsSent UNUSED, IGNORED.
      * @return success
@@ -115,6 +119,7 @@ public interface I2PSession {
 
     /**
      * End-to-End Crypto is disabled, tags and keys are ignored.
+     *
      * @param keyUsed UNUSED, IGNORED.
      * @param tagsSent UNUSED, IGNORED.
      * @param expire absolute expiration timestamp, NOT interval from now
@@ -126,6 +131,7 @@ public interface I2PSession {
     /**
      * See I2PSessionMuxedImpl for proto/port details.
      * End-to-End Crypto is disabled, tags and keys are ignored.
+     *
      * @param keyUsed UNUSED, IGNORED.
      * @param tagsSent UNUSED, IGNORED.
      * @param proto 1-254 or 0 for unset; recommended:
@@ -133,6 +139,7 @@ public interface I2PSession {
      *         I2PSession.PROTO_STREAMING
      *         I2PSession.PROTO_DATAGRAM
      *         255 disallowed
+     *
      * @param fromPort 1-65535 or 0 for unset
      * @param toPort 1-65535 or 0 for unset
      * @return success
@@ -143,6 +150,7 @@ public interface I2PSession {
     /**
      * See I2PSessionMuxedImpl for proto/port details.
      * End-to-End Crypto is disabled, tags and keys are ignored.
+     *
      * @param keyUsed UNUSED, IGNORED.
      * @param tagsSent UNUSED, IGNORED.
      * @param expire absolute expiration timestamp, NOT interval from now
@@ -151,6 +159,7 @@ public interface I2PSession {
      *         I2PSession.PROTO_STREAMING
      *         I2PSession.PROTO_DATAGRAM
      *         255 disallowed
+     *
      * @param fromPort 1-65535 or 0 for unset
      * @param toPort 1-65535 or 0 for unset
      * @return success
@@ -161,6 +170,7 @@ public interface I2PSession {
     /**
      * See I2PSessionMuxedImpl for proto/port details.
      * End-to-End Crypto is disabled, tags and keys are ignored.
+     *
      * @param keyUsed UNUSED, IGNORED.
      * @param tagsSent UNUSED, IGNORED.
      * @param expire absolute expiration timestamp, NOT interval from now
@@ -169,6 +179,7 @@ public interface I2PSession {
      *         I2PSession.PROTO_STREAMING
      *         I2PSession.PROTO_DATAGRAM
      *         255 disallowed
+     *
      * @param fromPort 1-65535 or 0 for unset
      * @param toPort 1-65535 or 0 for unset
      * @return success
@@ -185,6 +196,7 @@ public interface I2PSession {
      *         I2PSession.PROTO_STREAMING
      *         I2PSession.PROTO_DATAGRAM
      *         255 disallowed
+     *
      * @param fromPort 1-65535 or 0 for unset
      * @param toPort 1-65535 or 0 for unset
      * @param options to be passed to the router
@@ -206,6 +218,7 @@ public interface I2PSession {
      *         I2PSession.PROTO_STREAMING
      *         I2PSession.PROTO_DATAGRAM
      *         255 disallowed
+     *
      * @param fromPort 1-65535 or 0 for unset
      * @param toPort 1-65535 or 0 for unset
      * @param options to be passed to the router
@@ -253,6 +266,7 @@ public interface I2PSession {
      *  @return a new subsession, non-null
      *  @param privateKeyStream null for transient, if non-null must have same encryption keys as primary session
      *                          and different signing keys
+     *
      *  @param opts subsession options if any, may be null
      *  @since 0.9.21
      */
@@ -305,12 +319,14 @@ public interface I2PSession {
 
     /**
      *  Does this session have offline and transient keys?
+     *
      *  @since 0.9.38
      */
     public boolean isOffline();
 
     /**
      *  Get the offline expiration
+     *
      *  @return Java time (ms) or 0 if not initialized or does not have offline keys
      *  @since 0.9.38
      */
@@ -337,6 +353,7 @@ public interface I2PSession {
     /**
      *  Lookup a Destination by Hash.
      *  Blocking.
+     *
      *  @param maxWait ms
      *  @since 0.8.3
      *  @return null on failure
@@ -399,6 +416,7 @@ public interface I2PSession {
     /**
      *  Ask the router to lookup a Destination by host name.
      *  Blocking. See above for details.
+     *
      *  @param maxWait ms
      *  @since 0.9.11
      *  @return null on failure
@@ -454,6 +472,7 @@ public interface I2PSession {
 
     /**
      * Get the current bandwidth limits. Blocking.
+     *
      * @since 0.8.3
      */
     public int[] bandwidthLimits() throws I2PSessionException;
@@ -482,6 +501,7 @@ public interface I2PSession {
      *         I2PSession.PROTO_STREAMING
      *         I2PSession.PROTO_DATAGRAM
      *         255 disallowed
+     *
      *  @param port 1-65535 or PORT_ANY (0) for all
      *  @since 0.7.1
      */
@@ -490,6 +510,7 @@ public interface I2PSession {
     /**
      *  Listen on specified protocol and port, and receive notification
      *  of proto, fromPort, and toPort for every message.
+     *
      *  @param proto 1-254 or PROTO_ANY (0) for all; 255 disallowed
      *  @param port 1-65535 or PORT_ANY (0) for all
      *  @since 0.7.1
@@ -498,6 +519,7 @@ public interface I2PSession {
 
     /**
      *  removes the specified listener (only)
+     *
      *  @since 0.7.1
      */
     public void removeListener(int proto, int port);
@@ -550,6 +572,7 @@ public interface I2PSession {
 
 /**
      * Simple holder for tunnel pair information.
+     *
      * @since 0.9.69+
      */
     public static class TunnelPair {
@@ -586,6 +609,7 @@ public interface I2PSession {
 
     /**
      *  A raw (unsigned, unrepliable) datagram
+     *
      *  @since 0.9.2
      */
     public static final int PROTO_DATAGRAM_RAW = 18;
@@ -593,6 +617,7 @@ public interface I2PSession {
     /**
      *  A repliable and signed datagram.
      *  See Proposal 163 and datagrams/Datagram2
+     *
      *  @since 0.9.66
      */
     public static final int PROTO_DATAGRAM2 = 19;
@@ -600,6 +625,7 @@ public interface I2PSession {
     /**
      *  A repliable but unsigned datagram.
      *  See Proposal 163 and datagrams/Datagram3
+     *
      *  @since 0.9.66
      */
     public static final int PROTO_DATAGRAM3 = 20;

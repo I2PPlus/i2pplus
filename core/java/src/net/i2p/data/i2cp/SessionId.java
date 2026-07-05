@@ -48,6 +48,7 @@ public class SessionId {
 
     /**
      * Set the session ID.
+     *
      * @param id 0-65535
      * @throws IllegalArgumentException if the ID is out of range
      * @throws IllegalStateException if already set
@@ -64,6 +65,7 @@ public class SessionId {
 
     /**
      * Read the session ID from a stream.
+     *
      * @throws IllegalStateException if already set
      */
     public void readBytes(InputStream in) throws DataFormatException, IOException {

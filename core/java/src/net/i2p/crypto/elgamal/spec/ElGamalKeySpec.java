@@ -12,10 +12,20 @@ import java.security.spec.KeySpec;
 public class ElGamalKeySpec implements KeySpec {
     private final ElGamalParameterSpec spec;
 
+    /**
+     * Constructs an ElGamal key specification with the given parameters.
+     *
+     * @param spec the ElGamal parameter specification containing prime p and generator g
+     */
     public ElGamalKeySpec(ElGamalParameterSpec spec) {
         this.spec = spec;
     }
 
+    /**
+     * Returns the ElGamal parameter specification.
+     *
+     * @return the ElGamal parameter specification
+     */
     public ElGamalParameterSpec getParams() {
         return spec;
     }

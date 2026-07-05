@@ -100,6 +100,7 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
 
     /**
      *  Calls super.close(). May not be reused after this.
+     *
      *  @since 0.9.40
      */
     public void destroy() throws IOException {

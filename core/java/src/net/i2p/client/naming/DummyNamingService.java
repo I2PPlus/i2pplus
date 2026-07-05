@@ -94,6 +94,7 @@ public class DummyNamingService extends NamingService {
 
     /**
      *  Provide basic static caching for all services
+     *
      *  @param s case-sensitive, could be a hostname or a full b64 string
      */
     protected static void putCache(String s, Destination d) {

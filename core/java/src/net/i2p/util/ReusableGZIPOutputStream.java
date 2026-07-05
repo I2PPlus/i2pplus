@@ -87,6 +87,7 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
 
     /**
      *  Clear the cache.
+     *
      *  @since 0.9.21
      */
     public static void clearCache() {

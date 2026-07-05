@@ -50,6 +50,7 @@ class ClientWriterRunner implements Runnable {
     /**
      * Add this message to the writer's queue.
      * Blocking if queue is full.
+     *
      * @throws I2PSessionException if we wait too long or are interrupted
      */
     public void addMessage(I2CPMessage msg) throws I2PSessionException {

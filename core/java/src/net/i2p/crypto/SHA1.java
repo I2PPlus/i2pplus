@@ -156,6 +156,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      *
      * Overrides the protected abstract method of
      * <code>java.security.MessageDigestSpi</code>.
+     *
      * @return the digest length in bytes.
      */
     @Override
@@ -200,6 +201,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      *
      * Overrides the protected abstract method of
      * java.security.MessageDigestSpi.
+     *
      * @param input  the byte to use for the update.
      */
     @Override
@@ -223,6 +225,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      *
      * Overrides the protected abstract method of
      * java.security.MessageDigestSpi.
+     *
      * @param input  the array of bytes to use for the update.
      * @param offset  the offset to start from in the array of bytes.
      * @param len  the number of bytes to use, starting at offset.
@@ -281,6 +284,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      *
      * Overrides the protected abstract method of
      * java.security.MessageDigestSpi.
+     *
      * @return the length of the digest stored in the output buffer.
      */
     @Override
@@ -301,6 +305,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      *
      * Overrides the protected abstract method of
      * java.security.MessageDigestSpi.
+     *
      * @param hashvalue  the output buffer in which to store the digest.
      * @param offset  offset to start from in the output buffer
      * @param len  number of bytes within buf allotted for the digest.
@@ -312,6 +317,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      *             DigestException.  This parameter is ignored if its
      *             value is greater than or equal to the actual digest
      *             length.
+     *
      * @return  the length of the digest stored in the output buffer.
      */
     @Override

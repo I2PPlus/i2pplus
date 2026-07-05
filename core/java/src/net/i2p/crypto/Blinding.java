@@ -296,6 +296,7 @@ public final class Blinding {
 
     /**
      * Command-line tool for encoding/decoding b32 addresses.
+     *
      * @param args command-line arguments
      * @throws Exception on error
      */

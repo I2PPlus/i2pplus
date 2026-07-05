@@ -13,7 +13,9 @@ import java.security.spec.AlgorithmParameterSpec;
 public class ElGamalGenParameterSpec implements AlgorithmParameterSpec {
     private final int primeSize;
 
-    /*
+    /**
+     * Constructs a parameter set for ElGamal key generation.
+     *
      * @param primeSize the size (in bits) of the prime modulus.
      */
     public ElGamalGenParameterSpec(int primeSize) {

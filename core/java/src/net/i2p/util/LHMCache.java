@@ -8,6 +8,7 @@ import java.util.Map;
  *  an LRU cache. Unsynchronized.
  *
  *  @since 0.9.3
+ *
  *  @param <K> type of keys in this cache
  *  @param <V> type of values in this cache
  */

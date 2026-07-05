@@ -540,6 +540,7 @@ public final class SigUtil {
 
     /**
      *  Split a byte array into two BigIntegers
+     *
      *  @param b length must be even
      *  @return array of two BigIntegers
      *  @since 0.9.9
@@ -558,6 +559,7 @@ public final class SigUtil {
 
     /**
      *  Combine two BigIntegers of nominal length = len / 2
+     *
      *  @return array of exactly len bytes
      *  @since 0.9.9, package private since 0.9.31
      */

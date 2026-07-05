@@ -20,6 +20,7 @@ public class SimpleTimer {
 
     /**
      *  If you have a context, use context.simpleTimer() instead
+     *
      *  @deprecated use SimpleTimer2
      */
     @Deprecated
@@ -43,6 +44,7 @@ public class SimpleTimer {
     /**
      *  To be instantiated by the context.
      *  Others should use context.simpleTimer() instead
+     *
      *  @deprecated use SimpleTimer2
      */
     @Deprecated
@@ -53,6 +55,7 @@ public class SimpleTimer {
     /**
      *  To be instantiated by the context.
      *  Others should use context.simpleTimer() instead
+     *
      *  @deprecated use SimpleTimer2
      */
     @Deprecated
@@ -199,6 +202,7 @@ public class SimpleTimer {
 
     /**
      * Simple interface for events to be queued up and notified on expiration
+     *
      * @since 0.9.35
      */
     public interface TimedEvent {

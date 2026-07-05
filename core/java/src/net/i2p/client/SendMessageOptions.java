@@ -57,6 +57,7 @@ public class SendMessageOptions extends DateAndFlags {
 
     /**
      *  Reliability bits 9-10
+     *
      *  @since 0.9.14
      */
     public enum Reliability {
@@ -90,6 +91,7 @@ public class SendMessageOptions extends DateAndFlags {
      *  If we are low on tags, send this many.
      *  Power of 2 recommended - rounds down.
      *  default 0, meaning unset, use the SKM config (default 40)
+     *
      *  @param tags 0 or 2 to 128
      */
     public void setTagsToSend(int tags) {
@@ -100,6 +102,7 @@ public class SendMessageOptions extends DateAndFlags {
 
     /**
      *  If we are low on tags, send this many.
+     *
      *  @return default 0, meaning unset, use the SKM config (default 40)
      */
     public int getTagsToSend() {
@@ -108,6 +111,7 @@ public class SendMessageOptions extends DateAndFlags {
 
     /**
      *  If we are low on tags, send this many.
+     *
      *  @return default 0, meaning unset, use the SKM config (default 40)
      */
     public static int getTagsToSend(int flags) {
@@ -119,6 +123,7 @@ public class SendMessageOptions extends DateAndFlags {
      *  Low tag threshold. If less than this many, send more.
      *  Power of 2 recommended - rounds down.
      *  default 0, meaning unset, use the SKM config (default 30)
+     *
      *  @param tags 0 to 90
      */
     public void setTagThreshold(int tags) {
@@ -129,6 +134,7 @@ public class SendMessageOptions extends DateAndFlags {
 
     /**
      *  Low tag threshold. If less than this many, send more.
+     *
      *  @return default 0, meaning unset, use the SKM config (default 30)
      */
     public int getTagThreshold() {
@@ -137,6 +143,7 @@ public class SendMessageOptions extends DateAndFlags {
 
     /**
      *  Low tag threshold. If less than this many, send more.
+     *
      *  @return default 0, meaning unset, use the SKM config (default 30)
      */
     public static int getTagThreshold(int flags) {
@@ -160,6 +167,7 @@ public class SendMessageOptions extends DateAndFlags {
 
     /**
      *  default Reliability.DEFAULT
+     *
      *  @since 0.9.14
      */
     public void setReliability(Reliability r) {
@@ -185,6 +193,7 @@ public class SendMessageOptions extends DateAndFlags {
 
     /**
      *  default Reliability.DEFAULT
+     *
      *  @since 0.9.14
      */
     public Reliability getReliability() {
@@ -193,6 +202,7 @@ public class SendMessageOptions extends DateAndFlags {
 
     /**
      *  default Reliability.DEFAULT
+     *
      *  @since 0.9.14
      */
     public static Reliability getReliability(int flags) {

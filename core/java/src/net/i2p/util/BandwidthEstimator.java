@@ -9,6 +9,7 @@ public interface BandwidthEstimator {
 
     /**
      * Records an arriving ack.
+     *
      * @param acked how many bytes or packets were acked with this ack
      */
     public void addSample(int acked);

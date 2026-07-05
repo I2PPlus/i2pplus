@@ -42,7 +42,9 @@ import java.util.Set;
  *  removing entries, this KBucket will exceed the max size.
  *
  *  Refactored from net.i2p.router.networkdb.kademlia
+ *
  *  @since 0.9.2 in i2psnark, moved to core in 0.9.10
+ *
  *  @param <T> type of SimpleDataStructure objects stored in this bucket
  */
 class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
@@ -118,6 +120,7 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
      *  Sets last-changed if rv is true OR if the peer is already present.
      *  Calls the trimmer if begin == end and we are full.
      *  If begin != end then add it and caller must do bucket splitting.
+     *
      *  @return true if added
      */
     @Override

@@ -71,6 +71,7 @@ public class HostTxtEntry {
 
     /**
      * A 'remove' entry. Name and Dest will be null.
+     *
      * @param sprops line part after the #!, non-null
      * @throws IllegalArgumentException on dup key in sprops and other errors
      */
@@ -79,6 +80,8 @@ public class HostTxtEntry {
     }
 
     /**
+     * Create a new host text entry with optional properties.
+     *
      * @param props may be null
      */
     public HostTxtEntry(String name, String dest, OrderedProperties props) {
@@ -87,14 +90,29 @@ public class HostTxtEntry {
         this.props = props;
     }
 
+    /**
+     * Return the hostname.
+     *
+     * @return the hostname
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Return the Base64 destination.
+     *
+     * @return the Base64 destination
+     */
     public String getDest() {
         return dest;
     }
 
+    /**
+     * Return the properties, or null.
+     *
+     * @return the properties, or null
+     */
     public OrderedProperties getProps() {
         return props;
     }
@@ -377,6 +395,8 @@ public class HostTxtEntry {
     }
 
     /**
+     * Sign the entry and set the specified signature property.
+     *
      * @param sigprop The signature property to set
      */
     private void signIt(SigningPrivateKey spk, String sigprop) {

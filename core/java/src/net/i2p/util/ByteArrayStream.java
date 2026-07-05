@@ -38,6 +38,7 @@ public class ByteArrayStream extends ByteArrayOutputStream {
 
     /**
      *  Resets this stream to the beginning.
+     *
      *  @throws IllegalStateException if previously written
      */
     @Override
@@ -49,6 +50,7 @@ public class ByteArrayStream extends ByteArrayOutputStream {
      *  Returns the byte array containing the written data.
      *  Zero-copy only if the data fills the buffer.
      *  Use asInputStream() for guaranteed zero-copy.
+     *
      * @return the byte array containing the written data
      */
     @Override
@@ -61,6 +63,7 @@ public class ByteArrayStream extends ByteArrayOutputStream {
      *  Creates an input stream from the written data.
      *  All data previously written. Zero-copy. Not a Pipe.
      *  Data written after this call will not appear.
+     *
      * @return an input stream containing the written data
      */
     public ByteArrayInputStream asInputStream() {

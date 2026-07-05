@@ -6,6 +6,10 @@ package net.i2p.client;
  * @since 0.9.67
  */
 public interface LookupCallback {
-    /** The result */
+    /**
+     * Called when the lookup completes.
+     *
+     * @param result the lookup result
+     */
     public void complete(LookupResult result);
 }

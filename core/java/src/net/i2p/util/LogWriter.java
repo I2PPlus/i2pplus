@@ -47,12 +47,14 @@ abstract class LogWriter implements Runnable {
 
     /**
      *  File may not exist or have old logs in it if not opened yet
+     *
      *  @return non-null
      */
     public abstract String currentFile();
 
     /**
      * Write the provided LogRecord to the writer.
+     *
      * @param rec the LogRecord to write.
      * @param formatted a String pre-formatted from rec, may be ignored.
      */
@@ -60,6 +62,7 @@ abstract class LogWriter implements Runnable {
 
     /**
      * Write a single String verbatim to the writer.
+     *
      * @param priority the level to log the line at.
      * @param line the String to write.
      */
@@ -75,6 +78,7 @@ abstract class LogWriter implements Runnable {
 
     /**
      * Set the flush interval for the log writer.
+     *
      * @param interval the interval in milliseconds
      * @since 0.9.18
      */
@@ -84,6 +88,7 @@ abstract class LogWriter implements Runnable {
 
     /**
      *  Wake up the writer to immediately re-read config and flush pending records.
+     *
      *  @since 2.12.0
      */
     public void wakeup() {
@@ -157,6 +162,7 @@ abstract class LogWriter implements Runnable {
 
     /**
      *  Write a msg with the date stamp of the last duplicate
+     *
      *  @since 0.9.21
      */
     private void writeDupMessage(int dupCount, LogRecord lastRecord) {
@@ -171,6 +177,7 @@ abstract class LogWriter implements Runnable {
 
     /**
      *  Return a msg with the date stamp of the last duplicate
+     *
      *  @since 0.9.3
      */
     private String dupMessage(int dupCount, LogRecord lastRecord, boolean reverse, boolean html) {
@@ -184,6 +191,7 @@ abstract class LogWriter implements Runnable {
 
     /**
      *  gettext
+     *
      *  @since 0.9.3
      */
     private String ngettext(String b, String c, int a) {

@@ -32,6 +32,9 @@ public class MetaNamingService extends DummyNamingService {
     /**
      *  Adds the services from the i2p.nameservicelist property, in order, as chained services.
      */
+    /**
+     * @param context context
+     */
     public MetaNamingService(I2PAppContext context) {
         super(context);
         String list = _context.getProperty(PROP_NAME_SERVICES, DEFAULT_NAME_SERVICES);
@@ -47,9 +50,13 @@ public class MetaNamingService extends DummyNamingService {
     }
 
     /**
-     *  @param services if non-null, services to be added. If null, this will only handle b32 and b64,
+     * Create a new meta naming service with the specified services.
+     *
+     * @param context context
+     * @param services if non-null, services to be added. If null, this will only handle b32 and b64,
      *                  until addNamingService() is called later.
-     *  @since 0.8.7
+     *
+     * @since 0.8.7
      */
     public MetaNamingService(I2PAppContext context, List<NamingService> services) {
         super(context);
@@ -171,6 +178,7 @@ public class MetaNamingService extends DummyNamingService {
 
     /**
      *  All services aggregated
+     *
      *  @since 0.9.20
      */
     @Override
@@ -197,6 +205,7 @@ public class MetaNamingService extends DummyNamingService {
     /**
      *  All services aggregated.
      *  Duplicates not removed (for efficiency)
+     *
      *  @since 0.9.20
      */
     @Override

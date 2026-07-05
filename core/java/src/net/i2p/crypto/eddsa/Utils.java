@@ -22,6 +22,7 @@ package net.i2p.crypto.eddsa;
 public class Utils {
     /**
      * Constant-time byte comparison.
+     *
      * @param b a byte
      * @param c a byte
      * @return 1 if b and c are equal, 0 otherwise.
@@ -37,6 +38,7 @@ public class Utils {
 
     /**
      * Constant-time byte[] comparison.
+     *
      * @param b a byte[]
      * @param c a byte[]
      * @return 1 if b and c are equal, 0 otherwise.
@@ -52,6 +54,7 @@ public class Utils {
 
     /**
      * Constant-time determine if byte is negative.
+     *
      * @param b the byte to check.
      * @return 1 if the byte is negative, 0 otherwise.
      */
@@ -61,6 +64,7 @@ public class Utils {
 
     /**
      * Get the i'th bit of a byte array.
+     *
      * @param h the byte array.
      * @param i the bit index.
      * @return 0 or 1, the value of the i'th bit in h
@@ -71,6 +75,7 @@ public class Utils {
 
     /**
      * Converts a hex string to bytes.
+     *
      * @param s the hex string to be converted.
      * @return the byte[]
      */
@@ -88,6 +93,7 @@ public class Utils {
 
     /**
      * Converts bytes to a hex string.
+     *
      * @param raw the byte[] to be converted.
      * @return the hex representation as a string.
      */

@@ -104,6 +104,7 @@ class I2CPMessageProducer {
 
     /**
      * Update the bandwidth setting
+     *
      * @since 0.8.4
      */
     public void updateBandwidth(I2PSessionImpl session) {
@@ -122,6 +123,7 @@ class I2CPMessageProducer {
 
     /**
      * Strip out the client-side options from the session options.
+     *
      * @return a new copy, may be modified
      * @since 0.9.38
      */

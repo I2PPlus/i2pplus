@@ -555,6 +555,7 @@ public class EepGet {
          *                       the listener should keep its own counter,
          *                       or subtract the initial alreadyTransferred value.
          *                       And watch out for alreadyTransferred resetting if a resume failed...
+         *
          *  @param currentWrite since last call to the listener
          *  @param bytesTransferred includes headers, retries, redirects, discarded partial downloads, ...
          *  @param bytesRemaining on this attempt only, currentWrite already subtracted -
@@ -925,6 +926,7 @@ public class EepGet {
     /**
      *  This reads the response to a single fetch.
      *  Call after sendRequest()
+     *
      *  @param timeout may be null
      */
     protected void doFetch(SocketTimeout timeout) throws IOException {
@@ -1482,6 +1484,7 @@ public class EepGet {
 
     /**
      *  Should we read the body of the response?
+     *
      *  @return true always, overridden in EepHead
      *  @since 0.9.50
      */
@@ -2082,6 +2085,7 @@ public class EepGet {
 
     /**
      *  The server response (200, etc).
+     *
      *  @return -1 if invalid, or if the proxy never responded,
      *  or if no proxy was used and the server never responded.
      *  If a non-proxied request partially succeeded (for example a redirect followed
@@ -2295,6 +2299,7 @@ public class EepGet {
 
     /**
      *  Authentication mode enumeration.
+     *
      *  @since 0.9.12
      */
     protected enum AUTH_MODE {NONE, BASIC, DIGEST, UNKNOWN}

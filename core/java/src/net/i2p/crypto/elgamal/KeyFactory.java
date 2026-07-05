@@ -128,6 +128,7 @@ public final class KeyFactory extends KeyFactorySpi {
      * @return the corresponding key specification
      * @throws InvalidKeySpecException if the requested specification type is unsupported
      *                                  or the key cannot be converted
+     *
      * @since 0.9.25
      */
     @SuppressWarnings("unchecked")

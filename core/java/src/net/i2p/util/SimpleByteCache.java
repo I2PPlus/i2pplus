@@ -73,6 +73,7 @@ public final class SimpleByteCache {
      * @param cacheSize how large we want the cache to grow
      *                  (number of objects, NOT memory size)
      *                  before discarding released objects.
+     *
      * @param size how large should the objects cached be?
      */
     public static SimpleByteCache getInstance(int cacheSize, int size) {

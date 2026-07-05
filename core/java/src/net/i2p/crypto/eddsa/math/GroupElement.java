@@ -35,6 +35,7 @@ public class GroupElement implements Serializable {
         P3,
         /**
          * Extended representation with precomputed doubles.
+         *
          * @since 0.9.36
          */
         P3PrecomputedDouble,
@@ -521,6 +522,7 @@ public class GroupElement implements Serializable {
 
     /**
      * Precomputes table for {@link #scalarMultiply(byte[])}.
+     *
      * @since 0.9.36 split out from precompute()
      */
     private GroupElement[][] precomputeSingle() {
@@ -547,6 +549,7 @@ public class GroupElement implements Serializable {
 
     /**
      * Precomputes table for {@link #doubleScalarMultiplyVariableTime(GroupElement, byte[], byte[])}.
+     *
      * @since 0.9.36 split out from precompute()
      */
     private GroupElement[] precomputeDouble() {
@@ -934,6 +937,7 @@ public class GroupElement implements Serializable {
      * <p>
      * Preconditions: (TODO: Check this applies here)
      *   $a[31] \le 127$
+     *
      * @param a $= a[0]+256*a[1]+\dots+256^{31} a[31]$
      * @return the GroupElement
      */
@@ -1053,6 +1057,7 @@ public class GroupElement implements Serializable {
 
     /**
      * Verify that a point is on its curve.
+     *
      * @return true if the point lies on its curve.
      */
     public boolean isOnCurve() {
@@ -1061,6 +1066,7 @@ public class GroupElement implements Serializable {
 
     /**
      * Verify that a point is on the curve.
+     *
      * @param curve The curve to check.
      * @return true if the point lies on the curve.
      */

@@ -51,6 +51,7 @@ public interface I2PSessionListener {
     /**
      * Notify the client that the session has been terminated
      *
+     * @param session the session
      */
     void disconnected(I2PSession session);
 

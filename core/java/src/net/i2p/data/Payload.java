@@ -104,6 +104,7 @@ public class Payload extends DataStructureImpl {
      *
      * Deprecated.
      * Unless you are doing encryption, use setEncryptedData() instead.
+     *
      * @throws IllegalArgumentException if bigger than 64KB
      */
     public void setUnencryptedData(byte[] data) {
@@ -118,6 +119,7 @@ public class Payload extends DataStructureImpl {
 
     /**
      * the real data
+     *
      * @throws IllegalArgumentException if bigger than 64KB
      */
     public void setEncryptedData(byte[] data) {

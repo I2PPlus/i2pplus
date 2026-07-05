@@ -461,6 +461,7 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
      * @param  sessionKey The session key to use for encryption. This is a CryptixAESKeyCache.KeyCacheEntry.
      *                    We use the Ke field for encryption.
      *                    The actual parameter type is opaque, changed in 0.9.31, and is subject to change again.
+     *
      * @param  blockSize  The block size in bytes of this Rijndael.
      */
     public static final void blockEncrypt(byte[] in, byte[] result, int inOffset, int outOffset, Object sessionKey, int blockSize) {
@@ -513,6 +514,7 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
      * @param  sessionKey The session key to use for decryption. This is a CryptixAESKeyCache.KeyCacheEntry.
      *                    We use the Kd field, for decryption.
      *                    The actual parameter type is opaque, changed in 0.9.31, and is subject to change again.
+     *
      * @param  blockSize  The block size in bytes of this Rijndael.
      */
     public static final void blockDecrypt(byte[] in, byte[] result, int inOffset, int outOffset, Object sessionKey, int blockSize) {

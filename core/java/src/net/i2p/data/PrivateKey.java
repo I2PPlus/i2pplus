@@ -132,6 +132,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     }
 
     /** constructs from base64
+    *
      * @param base64Data a string of base64 data (the output of .toBase64() called
      * on a prior instance of PrivateKey
      */

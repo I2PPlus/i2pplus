@@ -20,6 +20,7 @@ public class RateAverages {
      *  Gets a thread-local temp instance.
      *
      * @since 0.9.4
+     *
      * @return thread-local temp instance.
      */
     public static RateAverages getTemp() {
@@ -41,6 +42,7 @@ public class RateAverages {
      *  Gets the weighted average.
      *
      * @since 0.9.4
+     *
      * @return one of several things:
      * if there are any events (current or last) =&gt; weighted average
      * otherwise if the useLifetime parameter to Rate.computeAverages was:
@@ -59,6 +61,7 @@ public class RateAverages {
      *  Gets the current average.
      *
      * @since 0.9.4
+     *
      * @return the current average == current value / current event count
      */
     public double getCurrent() {
@@ -73,6 +76,7 @@ public class RateAverages {
      *  Gets the last average.
      *
      * @since 0.9.4
+     *
      * @return the last average == last value / last event count
      */
     public double getLast() {
@@ -87,6 +91,7 @@ public class RateAverages {
      *  Gets the total event count.
      *
      * @since 0.9.4
+     *
      * @return the total event count == current + last event counts
      */
     public long getTotalEventCount() {
@@ -101,6 +106,7 @@ public class RateAverages {
      *  Gets the total values.
      *
      * @since 0.9.4
+     *
      * @return the total values == current + last values
      */
     public double getTotalValues() {

@@ -18,10 +18,21 @@ import net.i2p.I2PException;
  */
 public class I2PSessionException extends I2PException {
 
+    /**
+     * Create a new session exception with a message and cause.
+     *
+     * @param msg message
+     * @param t cause
+     */
     public I2PSessionException(String msg, Throwable t) {
         super(msg, t);
     }
 
+    /**
+     * Create a new session exception with a message.
+     *
+     * @param msg message
+     */
     public I2PSessionException(String msg) {
         super(msg);
     }

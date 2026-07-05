@@ -63,6 +63,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     /**
      *  The far-end destination is local and we are pretty darn sure
      *  the delivery succeeded.
+     *
      *  @since 0.9.5
      */
     public static final int STATUS_SEND_SUCCESS_LOCAL = 6;
@@ -70,6 +71,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     /**
      *  The far-end destination is local but delivery failed for some reason.
      *  This is a guaranteed failure.
+     *
      *  @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_LOCAL = 7;
@@ -77,6 +79,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     /**
      *  The router is not ready, has shut down, or has major problems.
      *  This is a guaranteed failure.
+     *
      *  @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_ROUTER = 8;
@@ -84,6 +87,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     /**
      *  The PC apparently has no network connectivity at all.
      *  This is a guaranteed failure.
+     *
      *  @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_NETWORK = 9;
@@ -91,6 +95,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     /**
      *  The session is invalid or closed.
      *  This is a guaranteed failure.
+     *
      *  @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_BAD_SESSION = 10;
@@ -98,6 +103,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     /**
      *  The message payload is invalid or zero-length or too big.
      *  This is a guaranteed failure.
+     *
      *  @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_BAD_MESSAGE = 11;
@@ -106,6 +112,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *  Something is invalid in the message options, or the expiration
      *  is too far in the future.
      *  This is a guaranteed failure.
+     *
      *  @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_BAD_OPTIONS = 12;
@@ -113,6 +120,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     /**
      *  Some queue or buffer in the router is full and the message was dropped.
      *  This is a guaranteed failure.
+     *
      *  @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_OVERFLOW = 13;
@@ -120,6 +128,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     /**
      *  Message expired before it could be sent.
      *  This is a guaranteed failure.
+     *
      *  @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_EXPIRED = 14;
@@ -129,6 +138,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *  a leaseset, or the local keys are invalid, or it has expired,
      *  or it does not have any tunnels in it.
      *  This is a guaranteed failure.
+     *
      *  @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_LOCAL_LEASESET = 15;
@@ -137,6 +147,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *  Local problems - no outbound tunnel to send through,
      *  or no inbound tunnel if a reply is required.
      *  This is a guaranteed failure.
+     *
      *  @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_NO_TUNNELS = 16;
@@ -145,6 +156,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *  The certs or options in the destination or leaseset indicate that
      *  it uses an encryption format that we don't support, so we can't talk to it.
      *  This is a guaranteed failure.
+     *
      *  @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_UNSUPPORTED_ENCRYPTION = 17;
@@ -153,6 +165,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *  Something strange is wrong with the far-end destination.
      *  Bad format, unsupported options, certificates, etc.
      *  This is a guaranteed failure.
+     *
      *  @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_DESTINATION = 18;
@@ -161,6 +174,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *  We got the far-end leaseset but something strange is wrong with it.
      *  Unsupported options or certificates, no tunnels, etc.
      *  This is a guaranteed failure.
+     *
      *  @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_BAD_LEASESET = 19;
@@ -168,6 +182,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     /**
      *  We got the far-end leaseset but it's expired and can't get a new one.
      *  This is a guaranteed failure.
+     *
      *  @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_EXPIRED_LEASESET = 20;
@@ -176,6 +191,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *  Could not find the far-end destination's lease set.
      *  This is a common failure, equivalent to a DNS lookup fail.
      *  This is a guaranteed failure.
+     *
      *  @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_NO_LEASESET = 21;
@@ -186,6 +202,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      *  lease set's contents with a HostLookupMessage, and select
      *  one of the hashes contained within to lookup and send to.
      *  This is a guaranteed failure.
+     *
      *  @since 0.9.41
      */
     public static final int STATUS_SEND_FAILURE_META_LEASESET = 22;
@@ -193,6 +210,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     /**
      *  Message was attempted to be sent to the same Destination.
      *  This is a guaranteed failure.
+     *
      *  @since 0.9.62
      */
     public static final int STATUS_SEND_FAILURE_LOOPBACK = 23;
@@ -252,6 +270,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
 
     /**
      *  Is the status code a success status code?
+     *
      *  @since 0.9.5
      */
     public boolean isSuccessful() {
@@ -260,6 +279,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
 
     /**
      *  Is the status code a success status code?
+     *
      *  @since 0.9.5
      */
     public static boolean isSuccessful(int status) {
@@ -332,6 +352,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
 
     /**
      * Override to reduce mem churn
+     *
      * @throws IOException
      */
     @Override

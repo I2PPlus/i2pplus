@@ -170,6 +170,7 @@ public class Clock implements Timestamper.UpdateListener {
 
     /**
      * Set the clock to the given real time, computing the offset.
+     *
      * @param realTime the real time in milliseconds
      */
     public void setNow(long realTime) {
@@ -240,12 +241,14 @@ public class Clock implements Timestamper.UpdateListener {
 
     /**
      * Listener for clock offset changes.
+     *
      * @since 0.9.35
      */
     public interface ClockUpdateListener {
 
         /**
          * Called when the clock offset changes.
+         *
          * @param delta = (new offset - old offset),
          *        where each offset = (now() - System.currentTimeMillis())
          */

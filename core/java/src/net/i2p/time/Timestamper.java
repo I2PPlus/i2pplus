@@ -20,6 +20,7 @@ public class Timestamper implements Runnable {
     /**
      *  Update the time immediately.
      *  Dummy
+     *
      *  @since 0.8.8
      */
     public void timestampNow() {}
@@ -41,6 +42,7 @@ public class Timestamper implements Runnable {
          */
         /**
          * Set the current time.
+         *
          * @param now the current time
          * @param stratum 1-15, 1 being the best (added in 0.7.12)
          */

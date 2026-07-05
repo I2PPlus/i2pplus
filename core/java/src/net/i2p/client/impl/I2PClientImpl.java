@@ -68,6 +68,7 @@ public class I2PClientImpl implements I2PClient {
      *
      * @param destKeyStream location to write out the destination, PrivateKey, and SigningPrivateKey,
      *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
+     *
      * @since 0.9.12
      */
     @Override
@@ -159,6 +160,7 @@ public class I2PClientImpl implements I2PClient {
      *
      * @param destKeyStream location from which to read the Destination, PrivateKey, and SigningPrivateKey from,
      *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
+     *
      * @param options set of options to configure the router with, if null will use System properties
      */
     @Override
@@ -171,6 +173,7 @@ public class I2PClientImpl implements I2PClient {
      *
      * @param destKeyStream location from which to read the Destination, PrivateKey, and SigningPrivateKey from,
      *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
+     *
      * @param options set of options to configure the router with, if null will use System properties
      */
     public I2PSession createSession(I2PAppContext context, InputStream destKeyStream, Properties options) throws I2PSessionException {

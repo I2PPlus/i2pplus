@@ -103,12 +103,14 @@ public abstract class SimpleDataStructure implements DataStructure {
 
     /**
      * The legal length of the byte array in this data structure
+     *
      * @since 0.8.2
      */
     public abstract int length();
 
     /**
      * Get the data reference (not a copy)
+     *
      * @return the byte array, or null if unset
      */
     public byte[] getData() {
@@ -117,6 +119,7 @@ public abstract class SimpleDataStructure implements DataStructure {
 
     /**
      * Sets the data.
+     *
      * @param data of correct length, or null
      * @throws IllegalArgumentException if data is not the legal number of bytes (but null is ok)
      * @throws RuntimeException if data already set.
@@ -129,6 +132,7 @@ public abstract class SimpleDataStructure implements DataStructure {
 
     /**
      * Sets the data.
+     *
      * @param in the stream to read
      * @throws RuntimeException if data already set.
      */
@@ -165,6 +169,7 @@ public abstract class SimpleDataStructure implements DataStructure {
 
     /**
      * Sets the data.
+     *
      * @throws DataFormatException if decoded data is not the legal number of bytes or on decoding error
      * @throws RuntimeException if data already set.
      */
@@ -195,6 +200,7 @@ public abstract class SimpleDataStructure implements DataStructure {
 
     /**
      * Does the same thing as setData() but null not allowed.
+     *
      * @param data non-null
      * @throws DataFormatException if null or wrong length
      * @throws RuntimeException if data already set.

@@ -46,18 +46,21 @@ public class SessionConfig extends DataStructureImpl {
 
     /**
      *  Seconds since epoch, NOT ms
+     *
      *  @since 0.9.38
      */
     public static final String PROP_OFFLINE_EXPIRATION = "i2cp.leaseSetOfflineExpiration";
 
     /**
      *  Base 64, optionally preceded by sig type and ':', default DSA-SHA1
+     *
      *  @since 0.9.38
      */
     public static final String PROP_TRANSIENT_KEY = "i2cp.leaseSetTransientPublicKey";
 
     /**
      *  Base 64, optionally preceded by sig type and ':', default DSA-SHA1
+     *
      *  @since 0.9.38
      */
     public static final String PROP_OFFLINE_SIGNATURE = "i2cp.leaseSetOfflineSignature";
@@ -156,6 +159,7 @@ public class SessionConfig extends DataStructureImpl {
 
     /**
      *  Get the offline expiration
+     *
      *  @return Java time (ms) or 0 if not initialized or does not have offline keys
      *  @since 0.9.38
      */
@@ -237,6 +241,7 @@ public class SessionConfig extends DataStructureImpl {
      *
      * @param signingKey SigningPrivateKey to sign with.
      *                   If offline data is set, must be with the transient key.
+     *
      * @throws DataFormatException if the data cannot be signed
      */
     public void signSessionConfig(SigningPrivateKey signingKey) throws DataFormatException {

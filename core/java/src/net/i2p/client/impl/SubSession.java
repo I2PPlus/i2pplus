@@ -47,6 +47,7 @@ class SubSession extends I2PSessionMuxedImpl {
 
     /**
      *  Unsupported in a subsession.
+     *
      *  @throws UnsupportedOperationException always
      */
     @Override
@@ -63,6 +64,7 @@ class SubSession extends I2PSessionMuxedImpl {
 
     /**
      *  Unsupported in a subsession.
+     *
      *  @return empty list always
      */
     @Override
@@ -179,6 +181,7 @@ class SubSession extends I2PSessionMuxedImpl {
     /**
      * Pass off the error to the listener
      * Misspelled, oh well.
+     *
      * @param error non-null
      */
     @Override
@@ -249,6 +252,7 @@ class SubSession extends I2PSessionMuxedImpl {
     /**
      *  Called by the message handler
      *  on reception of HostReplyMessage
+     *
      *  @param d non-null
      */
     @Override
@@ -278,6 +282,7 @@ class SubSession extends I2PSessionMuxedImpl {
      *  Blocking. Waits a max of 10 seconds by default.  See lookupDest with maxWait parameter to change.
      *  Implemented in 0.8.3 in I2PSessionImpl; previously was available only in I2PSimpleSession.
      *  Multiple outstanding lookups are now allowed.
+     *
      *  @return null on failure
      */
     @Override
@@ -287,6 +292,7 @@ class SubSession extends I2PSessionMuxedImpl {
 
     /**
      *  Blocking.
+     *
      *  @param maxWait ms
      *  @return null on failure
      */
@@ -319,6 +325,7 @@ class SubSession extends I2PSessionMuxedImpl {
     /**
      *  Ask the router to lookup a Destination by host name.
      *  Blocking. See above for details.
+     *
      *  @param maxWait ms
      *  @return null on failure
      */

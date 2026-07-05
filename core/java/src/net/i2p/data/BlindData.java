@@ -75,24 +75,28 @@ public class BlindData {
 
     /**
      * bits 3-0 including per-client bit
+     *
      * @since 0.9.41
      */
     public static final int AUTH_NONE = 0;
 
     /**
      * bits 3-0 including per-client bit
+     *
      * @since 0.9.41
      */
     public static final int AUTH_DH = 1;
 
     /**
      * bits 3-0 including per-client bit
+     *
      * @since 0.9.41
      */
     public static final int AUTH_PSK = 3;
 
     /**
      * Enabled, unspecified type
+     *
      * @since 0.9.41
      */
     public static final int AUTH_ON = 999;
@@ -349,6 +353,7 @@ public class BlindData {
 
     /**
      *  Creation date. Absolute timestamp.
+     *
      * @param date the creation date in milliseconds
      * @since 0.9.41
      */
@@ -369,6 +374,7 @@ public class BlindData {
 
     /**
      *  Expiration date. Absolute timestamp.
+     *
      * @param date the expiration date in milliseconds
      * @since 0.9.43
      */

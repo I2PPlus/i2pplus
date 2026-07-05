@@ -17,6 +17,7 @@ import java.security.spec.KeySpec;
 
 /**
  * EdDSA public key specification.
+ *
  * @since 0.9.15
  * @author str4d
  */
@@ -26,6 +27,8 @@ public class EdDSAPublicKeySpec implements KeySpec {
     private final EdDSAParameterSpec spec;
 
     /**
+     * Create a new EdDSA public key specification from a byte array.
+     *
      * @param pk the public key
      * @param spec the parameter specification for this key
      * @throws IllegalArgumentException if key length is wrong
@@ -37,15 +40,32 @@ public class EdDSAPublicKeySpec implements KeySpec {
         this.spec = spec;
     }
 
+    /**
+     * Constructs a public key specification from a group element.
+     *
+     * @param A the public key group element
+     * @param spec the parameter specification for this key
+     */
     public EdDSAPublicKeySpec(GroupElement A, EdDSAParameterSpec spec) {
         this.A = A;
         this.spec = spec;
     }
 
+    /**
+     * Returns the public key group element.
+     *
+     * @return the public key group element
+     */
     public GroupElement getA() {
         return A;
     }
 
+    /**
+     * Returns the negation of the public key group element.
+     * The result is lazily computed and cached.
+     *
+     * @return the negated public key group element
+     */
     public GroupElement getNegativeA() {
         // Only read Aneg once, otherwise read re-ordering might occur between here and return. Requires all GroupElement's fields to be final.
         GroupElement ourAneg = Aneg;
@@ -56,6 +76,11 @@ public class EdDSAPublicKeySpec implements KeySpec {
         return ourAneg;
     }
 
+    /**
+     * Returns the parameter specification for this key.
+     *
+     * @return the parameter specification
+     */
     public EdDSAParameterSpec getParams() {
         return spec;
     }

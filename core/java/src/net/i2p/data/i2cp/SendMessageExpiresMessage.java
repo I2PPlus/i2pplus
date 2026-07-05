@@ -82,6 +82,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
 
     /**
      *  Use this instead of getExpiration().getTime()
+     *
      *  @since 0.8.4
      */
     public long getExpirationTime() {

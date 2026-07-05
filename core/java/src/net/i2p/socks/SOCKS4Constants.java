@@ -8,6 +8,7 @@ package net.i2p.socks;
 
 /**
  * Constants for SOCKS4 protocol.
+ *
  * @since 0.9.33 Moved out of net.i2p.i2ptunnel.socks.SOCKS4aServer
  */
 public class SOCKS4Constants {
@@ -21,6 +22,7 @@ public class SOCKS4Constants {
      */
     /**
      * SOCKS4 command codes.
+     *
      * @since 0.9.33
      */
     public static class Command {
@@ -30,6 +32,7 @@ public class SOCKS4Constants {
 
     /**
      * SOCKS4 reply codes.
+     *
      * @since 0.9.33
      */
     public static class Reply {

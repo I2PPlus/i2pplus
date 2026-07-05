@@ -37,7 +37,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * times 2**(B-1) for Kademlia value B.
  *
  * Refactored from net.i2p.router.networkdb.kademlia
+ *
  * @since 0.9.2 in i2psnark, moved to core in 0.9.10
+ *
  * @param <T> type of SimpleDataStructure objects stored in buckets
  */
 public class KBucketSet<T extends SimpleDataStructure> {
@@ -73,8 +75,10 @@ public class KBucketSet<T extends SimpleDataStructure> {
 
     /**
      * Use the default trim strategy, which removes a random entry.
+     *
      * @param us the local identity (typically a SHA1Hash or Hash)
      *           The class must have a zero-argument constructor.
+     *
      * @param max the Kademlia value "k", the max per bucket, k &gt;= 4
      * @param b the Kademlia value "b", split buckets an extra 2**(b-1) times,
      *           b &gt; 0, use 1 for bittorrent, Kademlia paper recommends 5
@@ -109,7 +113,8 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     *  Get the lock if we can. Non-blocking.
+     * Try to acquire the read lock without blocking.
+     *
      *  @return true if the lock was acquired
      */
     private boolean tryReadLock() {
@@ -120,7 +125,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
         _bucketsLock.readLock().unlock();
     }
 
-    /** @return true if the lock was acquired */
+    /** Try to acquire the write lock. @return true if the lock was acquired */
     private boolean getWriteLock() {
         try {
             boolean rv = _bucketsLock.writeLock().tryLock(3000, TimeUnit.MILLISECONDS);
@@ -139,9 +144,12 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
+     * Add a peer to the appropriate bucket.
+     * Will split the bucket if necessary.
+     *
+     * @param peer the peer to add
      * @return true if the peer is new to the bucket it goes in, or false if it was
      *  already in it. Always returns false on an attempt to add ourselves.
-     *
      */
     public boolean add(T peer) {
         KBucket<T> bucket;
@@ -190,6 +198,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      *  Grabs the write lock.
      *  Caller must NOT have the read lock.
      *  The bucket should be splittable (range start != range end).
+     *
      *  @param r the range start of the bucket to be split
      */
     private void split(int r) {
@@ -208,6 +217,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      *
      *  Caller must hold write lock
      *  The bucket should be splittable (range start != range end).
+     *
      *  @param r the range start of the bucket to be split
      */
     private void locked_split(int r) {
@@ -269,7 +279,9 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     *  The current number of entries.
+     * The current number of entries.
+     *
+     * @return total number of entries across all buckets
      */
     public int size() {
         int rv = 0;
@@ -284,6 +296,12 @@ public class KBucketSet<T extends SimpleDataStructure> {
         return rv;
     }
 
+    /**
+     * Remove a peer from its bucket.
+     *
+     * @param entry the peer to remove
+     * @return true if removed
+     */
     public boolean remove(T entry) {
         KBucket<T> kbucket;
         getReadLock();
@@ -299,7 +317,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
         return removed;
     }
 
-    /** @since 0.8.8 */
+    /** Clear all buckets. @since 0.8.8 */
     public void clear() {
         getReadLock();
         try {
@@ -313,6 +331,8 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
+     * Return all entries in all buckets.
+     *
      *  @return a copy in a new set
      */
     public Set<T> getAll() {
@@ -329,7 +349,10 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     *  @return a copy in a new set
+     * Get all entries in all buckets, excluding the specified entries.
+     *
+     * @param toIgnore entries to exclude
+     * @return a copy in a new set
      */
     public Set<T> getAll(Set<T> toIgnore) {
         Set<T> all = getAll();
@@ -337,6 +360,11 @@ public class KBucketSet<T extends SimpleDataStructure> {
         return all;
     }
 
+    /**
+     * Add all entries in all buckets to the provided collector.
+     *
+     * @param collector the collector to add entries to
+     */
     public void getAll(SelectionCollector<T> collector) {
         getReadLock();
         try {
@@ -351,6 +379,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
     /**
      *  The keys closest to us.
      *  Returned list will never contain us.
+     *
      *  @return non-null, closest first
      */
     public List<T> getClosest(int max) {
@@ -360,6 +389,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
     /**
      *  The keys closest to us.
      *  Returned list will never contain us.
+     *
      *  @return non-null, closest first
      */
     public List<T> getClosest(int max, Collection<T> toIgnore) {
@@ -394,6 +424,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
     /**
      *  The keys closest to the key.
      *  Returned list will never contain us.
+     *
      *  @return non-null, closest first
      */
     public List<T> getClosest(T key, int max) {
@@ -403,6 +434,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
     /**
      *  The keys closest to the key.
      *  Returned list will never contain us.
+     *
      *  @return non-null, closest first
      */
     public List<T> getClosest(T key, int max, Collection<T> toIgnore) {
@@ -447,6 +479,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
     /**
      *  The bucket number (NOT the range number) that the xor of the key goes in
      *  Caller must hold read lock
+     *
      *  @return 0 to max-1 or -1 for us
      */
     private int pickBucket(T key) {
@@ -484,6 +517,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
     /**
      *  The bucket that the xor of the key goes in
      *  Caller must hold read lock
+     *
      *  @return null if key is us
      */
     private KBucket<T> getBucket(T key) {
@@ -497,6 +531,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
     /**
      *  The bucket number that contains this range number
      *  Caller must hold read lock or write lock
+     *
      *  @return 0 to max-1 or -1 for us
      */
     private int pickBucket(int range) {
@@ -534,6 +569,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
     /**
      *  The number of bits minus 1 (range number) for the xor of the key.
      *  Package private for testing only. Others shouldn't need this.
+     *
      *  @return 0 to max-1 or -1 for us
      */
     int getRange(T key) {
@@ -545,6 +581,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      *  or isn't close to full,
      *  generate a random key that would be a member of that bucket.
      *  The returned keys may be searched for to "refresh" the buckets.
+     *
      *  @return non-null, closest first
      */
     public List<T> getExploreKeys(long age) {
@@ -644,6 +681,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
 
     /**
      *  Make a new SimpleDataStrucure from the data
+     *
      *  @param data size &lt;= SDS length, else throws IAE
      *              Can be 1 bigger if top byte is zero
      */

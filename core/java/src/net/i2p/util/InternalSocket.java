@@ -14,6 +14,7 @@ import java.nio.channels.SocketChannel;
  *  A simple in-JVM Socket using Piped Streams.
  *  We use port numbers just like regular sockets.
  *  Can only connect to InternalServerSocket.
+ *
  * @since 0.7.9
  */
 @SuppressWarnings("PMD.CloseResource")
@@ -31,6 +32,7 @@ public class InternalSocket extends Socket {
 
     /**
      *  client side
+     *
      *  @param port &gt; 0
      */
     public InternalSocket(int port) throws IOException {
@@ -41,6 +43,7 @@ public class InternalSocket extends Socket {
 
     /**
      *  Convenience method to return either a Socket or an InternalSocket
+     *
      *  @param port &gt; 0
      */
     public static Socket getSocket(String host, int port) throws IOException {
@@ -100,6 +103,7 @@ public class InternalSocket extends Socket {
     /**
      *  Supported as of 0.9.34, if constructed with TimeoutPipedInputStream
      *  and TimeoutPipedOutputStream. Otherwise, does nothing.
+     *
      *  @see TimeoutPipedInputStream
      */
     @Override
@@ -128,6 +132,7 @@ public class InternalSocket extends Socket {
 
     /**
      * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
+     *
      * @return 1 if connected, -1 if not
      */
     @Override
@@ -139,6 +144,7 @@ public class InternalSocket extends Socket {
 
     /**
      * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
+     *
      * @return if connected: actual port for clients, 1 for servers; -1 if not
      */
     @Override
@@ -152,6 +158,7 @@ public class InternalSocket extends Socket {
 
     /**
      * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
+     *
      * @return -1 always
      */
     @Override

@@ -32,6 +32,7 @@ public final class SHA256Generator {
 
     /**
      * Calculate the SHA-256 hash of the source and cache the result.
+     *
      * @param source what to hash
      * @return hash of the source
      */
@@ -58,6 +59,7 @@ public final class SHA256Generator {
     /**
      * Use this if you only need the data, not a Hash object.
      * Does not cache.
+     *
      * @param out needs 32 bytes starting at outOffset
      */
     public final void calculateHash(byte[] source, int start, int len, byte[] out, int outOffset) {
@@ -89,6 +91,7 @@ public final class SHA256Generator {
 
     /**
      *  Release a digest back to the pool
+     *
      *  @param digest must be SHA-256
      *  @since public since 0.9.66
      */
@@ -99,6 +102,7 @@ public final class SHA256Generator {
 
     /**
      *  Release a digest back to the pool - internal version
+     *
      *  @since 0.9.66 renamed from release()
      */
     private void releaseit(MessageDigest digest) {
@@ -107,6 +111,7 @@ public final class SHA256Generator {
 
     /**
      *  Return a new MessageDigest from the system libs.
+     *
      *  @since 0.8.7, public since 0.8.8 for FortunaStandalone
      */
     public static MessageDigest getDigestInstance() {

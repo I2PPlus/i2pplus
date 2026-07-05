@@ -151,6 +151,7 @@ public class Base64 {
 
     /**
      *  The I2P Alphabet.
+     *
      *  @since 0.9.29
      */
     public static final String ALPHABET_I2P = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-~";
@@ -206,6 +207,7 @@ public class Base64 {
 
     /**
      *  Command-line tool for encoding and decoding Base64.
+     *
      * @param args command-line arguments
      */
     public static void main(String[] args) {

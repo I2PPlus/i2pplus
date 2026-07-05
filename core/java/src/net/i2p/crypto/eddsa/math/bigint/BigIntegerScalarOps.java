@@ -25,6 +25,12 @@ public class BigIntegerScalarOps implements ScalarOps {
     private final BigInteger l;
     private final BigIntegerLittleEndianEncoding enc;
 
+    /**
+     * Creates new scalar operations for the given field and group order.
+     *
+     * @param f the finite field
+     * @param l the group order (subgroup size)
+     */
     public BigIntegerScalarOps(Field f, BigInteger l) {
         this.l = l;
         enc = new BigIntegerLittleEndianEncoding();

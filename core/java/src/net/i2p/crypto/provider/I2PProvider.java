@@ -5,6 +5,7 @@ import java.security.Security;
 
 /**
  *  I2P security provider for Java cryptography.
+ *
  *  @since 0.9.15
  */
 public final class I2PProvider extends Provider {
@@ -105,6 +106,7 @@ public final class I2PProvider extends Provider {
     /**
      *  Install the I2PProvider.
      *  Harmless to call multiple times.
+     *
      *  @since 0.9.25
      */
     public static void addProvider() {

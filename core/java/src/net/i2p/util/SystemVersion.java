@@ -280,6 +280,7 @@ public abstract class SystemVersion {
 
     /**
      *  Is this a very slow interpreted mode VM?
+     *
      *  @since 0.9.38
      */
     public static boolean isZeroVM() {
@@ -545,6 +546,7 @@ public abstract class SystemVersion {
     /**
      *  Identical to android.os.Build.VERSION.SDK_INT.
      *  For use outside of Android code.
+     *
      *  @return The SDK (API) version, e.g. 8 for Froyo, 0 if unknown
      */
     public static int getAndroidVersion() {
@@ -561,6 +563,7 @@ public abstract class SystemVersion {
 
     /**
      *  Runtime.getRuntime().maxMemory() but check for bogus values
+     *
      *  @since 0.9.8
      */
     public static long getMaxMemory() {
@@ -576,6 +579,7 @@ public abstract class SystemVersion {
      *  On Linux, reads /sys/devices/system/cpu/present to get the full
      *  CPU topology regardless of cpufreq governor parking.
      *  Falls back to Runtime.getRuntime().availableProcessors().
+     *
      *  @return never smaller than 1
      *  @since 0.9.34
      */
@@ -702,6 +706,7 @@ public abstract class SystemVersion {
 
     /**
      * Retrieve CPU Load of the JVM.
+     *
      * @since 0.9.57+
      */
     public static int getCPULoad() {
@@ -712,6 +717,7 @@ public abstract class SystemVersion {
 
     /**
      * Retrieve CPU Load Average of the JVM.
+     *
      * @since 0.9.57+
      */
     public static int getCPULoadAvg() {
@@ -737,6 +743,7 @@ public abstract class SystemVersion {
 
     /**
      * Retrieve System Load as percentage (100% equals full system load)
+     *
      * @since 0.9.57+
      */
     public static int getSystemLoad() {
@@ -758,6 +765,7 @@ public abstract class SystemVersion {
     /**
      * Returns the current number of active (live) threads in the JVM.
      * This includes both daemon and non-daemon threads.
+     *
      * @return the estimated number of active threads, or 0 if context or stat manager is unavailable
      * @since 0.9.68+
      */
@@ -776,6 +784,7 @@ public abstract class SystemVersion {
 
     /**
      * Retrieve Tunnel build success as a percentage.
+     *
      * @since 0.9.58+
      */
     public static int getTunnelBuildSuccess() {

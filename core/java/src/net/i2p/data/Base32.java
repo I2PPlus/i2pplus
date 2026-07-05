@@ -22,6 +22,7 @@ import java.util.Locale;
  * No whitespace allowed.
  *
  * Decode accepts upper or lower case.
+ *
  * @author zzz
  * @since 0.7
  */

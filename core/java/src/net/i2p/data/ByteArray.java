@@ -53,6 +53,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
 
     /**
      *  Returns the underlying byte array.
+     *
      * @return the byte data, may be null
      */
     public byte[] getData() {
@@ -143,6 +144,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
 
     /**
      *  Returns this ByteArray as a Base64 encoded string.
+     *
      * @return the Base64 encoded string
      */
     public final String toBase64() {

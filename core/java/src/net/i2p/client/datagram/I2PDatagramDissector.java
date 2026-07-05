@@ -212,6 +212,7 @@ public final class I2PDatagramDissector {
     /**
      * Verify the signature of this datagram (previously loaded with the
      * loadI2PDatagram() method)
+     *
      * @throws I2PInvalidDatagramException if the signature is invalid
      */
     public void verifySignature() throws I2PInvalidDatagramException {

@@ -113,6 +113,7 @@ public class SigningPublicKey extends SimpleDataStructure {
 
     /**
      * Pull from cache or return new
+     *
      * @since 0.8.3
      */
     public static SigningPublicKey create(InputStream in) throws IOException {
@@ -151,6 +152,7 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /** constructs from base64
+    *
      * @param base64Data a string of base64 data (the output of .toBase64() called
      * on a prior instance of SigningPublicKey
      */
@@ -263,6 +265,7 @@ public class SigningPublicKey extends SimpleDataStructure {
     /**
      *  Write the data up to a max of 128 bytes.
      *  If longer, the rest will be written in the KeyCertificate.
+     *
      *  @since 0.9.12 (changed from public to package private in 0.9.66, not for external use)
      */
     void writeTruncatedBytes(OutputStream out) throws DataFormatException, IOException {

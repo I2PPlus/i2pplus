@@ -58,8 +58,6 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
 
     public ElGamalPublicKeyImpl(X509EncodedKeySpec spec) throws InvalidKeySpecException {
         throw new InvalidKeySpecException("todo");
-        // this.y = y;
-        // this.elSpec = elSpec;
     }
 
     @Override
@@ -129,6 +127,8 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
+     * Calculate the TLV space for a value of the given length.
+     *
      *  @param val the length of the value, 65535 max
      *  @return the length of the TLV
      */

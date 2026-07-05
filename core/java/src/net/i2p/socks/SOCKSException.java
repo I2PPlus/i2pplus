@@ -24,7 +24,13 @@ public class SOCKSException extends IOException {
         super(s);
     }
 
-    /** @since 0.9.27 */
+    /**
+     * Create a new SOCKS exception with a message and cause.
+     *
+     * @param s the detail message
+     * @param t the cause
+     * @since 0.9.27
+     */
     public SOCKSException(String s, Throwable t) {
         super(s, t);
     }

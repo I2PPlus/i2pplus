@@ -20,6 +20,7 @@ public interface KeyRing {
     /**
      *  Get a key.
      *  Throws on all errors.
+     *
      *  @param scope a domain identifier, indicating router update, reseed, etc.
      *  @return null if none
      */
@@ -28,6 +29,7 @@ public interface KeyRing {
     /**
      *  Store a key.
      *  Throws on all errors.
+     *
      *  @param scope a domain identifier, indicating router update, reseed, etc.
      */
     public void setKey(String keyName, String scope, PublicKey key) throws GeneralSecurityException, IOException;

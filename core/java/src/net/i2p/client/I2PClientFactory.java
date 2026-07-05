@@ -18,6 +18,7 @@ import net.i2p.client.impl.I2PClientImpl;
  */
 public class I2PClientFactory {
     /** Create a new instance of the appropriate I2PClient
+    *
      * @return client implementation
      */
     public static I2PClient createClient() {

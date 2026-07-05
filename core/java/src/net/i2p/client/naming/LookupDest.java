@@ -36,26 +36,21 @@ public class LookupDest {
 
     private static final long DEFAULT_TIMEOUT = 15 * 1000;
 
+    /**
+     * Create a new LookupDest instance.
+     *
+     * @param context context
+     */
     protected LookupDest(I2PAppContext context) {}
 
-    /** @param key 52 chars (do not include the .b32.i2p suffix) */
+    /** Look up a destination by Base32 hash. @param key 52 chars (do not include the .b32.i2p suffix) */
     static Destination lookupBase32Hash(I2PAppContext ctx, String key) throws I2PSessionException {
         byte[] h = Base32.decode(key);
         if (h == null) return null;
         return lookupHash(ctx, h);
     }
 
-    /* Might be useful but not in the context of urls due to upper/lower case */
-    /****
-     * static Destination lookupBase64Hash(I2PAppContext ctx, String key) {
-     * byte[] h = Base64.decode(key);
-     * if (h == null)
-     * return null;
-     * return lookupHash(ctx, h);
-     * }
-     ****/
-
-    /** @param h 32 byte hash */
+    /** Look up a destination by hash. @param h 32 byte hash */
     private static Destination lookupHash(I2PAppContext ctx, byte[] h) throws I2PSessionException {
         Hash key = Hash.create(h);
         Destination rv = null;
@@ -94,6 +89,8 @@ public class LookupDest {
     }
 
     /**
+     * Get I2CP options from the context.
+     *
      * @since 0.9.40 split out from above
      */
     private static Properties getOpts(I2PAppContext ctx) {

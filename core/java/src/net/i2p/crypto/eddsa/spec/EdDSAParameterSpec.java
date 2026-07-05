@@ -35,6 +35,8 @@ public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable 
     private final GroupElement B;
 
     /**
+     * Create a new EdDSA parameter specification.
+     *
      * @param curve the curve
      * @param hashAlgo the JCA string for the hash algorithm
      * @param sc the parameter L represented as ScalarOps
@@ -56,19 +58,36 @@ public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable 
         this.B = B;
     }
 
+    /**
+     * Returns the curve used by this parameter specification.
+     *
+     * @return the curve
+     */
     public Curve getCurve() {
         return curve;
     }
 
+    /**
+     * Returns the JCA hash algorithm name.
+     *
+     * @return the hash algorithm name
+     */
     public String getHashAlgorithm() {
         return hashAlgo;
     }
 
+    /**
+     * Returns the scalar operations implementation.
+     *
+     * @return the scalar operations
+     */
     public ScalarOps getScalarOps() {
         return sc;
     }
 
     /**
+     * Return the base (generator) point.
+     *
      *  @return the base (generator)
      */
     public GroupElement getB() {
@@ -76,7 +95,10 @@ public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable 
     }
 
     /**
-     *  @since 0.9.25
+     * Returns a hash code for this parameter specification.
+     *
+     * @return the hash code
+     * @since 0.9.25
      */
     @Override
     public int hashCode() {
@@ -84,7 +106,11 @@ public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable 
     }
 
     /**
-     *  @since 0.9.25
+     * Compares this parameter specification to another object for equality.
+     *
+     * @param o the object to compare
+     * @return true if the objects are equal
+     * @since 0.9.25
      */
     @Override
     public boolean equals(Object o) {

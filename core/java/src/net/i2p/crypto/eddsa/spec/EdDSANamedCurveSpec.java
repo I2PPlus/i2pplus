@@ -25,11 +25,25 @@ import net.i2p.crypto.eddsa.math.ScalarOps;
 public class EdDSANamedCurveSpec extends EdDSAParameterSpec {
     private final String name;
 
+    /**
+     * Constructs a named EdDSA curve specification.
+     *
+     * @param name the name of the curve
+     * @param curve the curve parameters
+     * @param hashAlgo the hash algorithm name
+     * @param sc the scalar operations implementation
+     * @param B the base (generator) point
+     */
     public EdDSANamedCurveSpec(String name, Curve curve, String hashAlgo, ScalarOps sc, GroupElement B) {
         super(curve, hashAlgo, sc, B);
         this.name = name;
     }
 
+    /**
+     * Returns the name of this curve.
+     *
+     * @return the curve name
+     */
     public String getName() {
         return name;
     }

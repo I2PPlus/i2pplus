@@ -15,12 +15,32 @@ import java.util.Properties;
 class PersistenceHelper {
     private static final String NL = System.getProperty("line.separator");
 
+    /**
+     * Append a double value to the buffer.
+     *
+     * @param buf the buffer to append to
+     * @param addComments if true, prepend a comment line instead of the value
+     * @param prefix property key prefix
+     * @param name property key suffix
+     * @param description description of the value (used as comment when addComments is true)
+     * @param value the value to store
+     */
     public static final void add(StringBuilder buf, boolean addComments, String prefix, String name, String description, double value) {
         if (addComments) buf.append("# ").append(description).append(NL);
         else buf.append(prefix).append(name).append('=').append(value).append(NL);
     }
 
-    /** @since 0.8.5 */
+    /**
+     * Append a date value to the buffer.
+     *
+     * @param buf the buffer to append to
+     * @param addComments if true, prepend a comment line instead of the value
+     * @param prefix property key prefix
+     * @param name property key suffix
+     * @param description description of the value (used as comment when addComments is true)
+     * @param value the epoch millisecond date value
+     * @since 0.8.5
+     */
     public static final void addDate(StringBuilder buf, boolean addComments, String prefix, String name, String description, long value) {
         if (addComments) {
             String when = value > 0 ? Instant.ofEpochMilli(value).toString() : "Never";
@@ -30,7 +50,17 @@ class PersistenceHelper {
         }
     }
 
-    /** @since 0.8.5 */
+    /**
+     * Append a time duration to the buffer.
+     *
+     * @param buf the buffer to append to
+     * @param addComments if true, prepend a comment line instead of the value
+     * @param prefix property key prefix
+     * @param name property key suffix
+     * @param description description of the value (used as comment when addComments is true)
+     * @param value the duration in milliseconds
+     * @since 0.8.5
+     */
     public static final void addTime(StringBuilder buf, boolean addComments, String prefix, String name, String description, long value) {
         if (addComments) {
             String when = DataHelper.formatDuration(value);
@@ -40,14 +70,28 @@ class PersistenceHelper {
         }
     }
 
-    /** @param value non-negative */
+    /**
+     * Append a long value to the buffer.
+     *
+     * @param buf the buffer to append to
+     * @param addComments if true, prepend a comment line instead of the value
+     * @param prefix property key prefix
+     * @param name property key suffix
+     * @param description description of the value (used as comment when addComments is true)
+     * @param value the value to store (non-negative)
+     */
     public static final void add(StringBuilder buf, boolean addComments, String prefix, String name, String description, long value) {
         if (addComments) buf.append("# ").append(description).append(NL);
         else buf.append(prefix).append(name).append('=').append(value).append(NL);
     }
 
     /**
-     *  @return non-negative, returns 0 on error
+     * Read a long value from properties.
+     *
+     * @param props properties to read from
+     * @param prefix property key prefix
+     * @param name property key suffix
+     * @return non-negative, returns 0 on error
      */
     public static final long getLong(Properties props, String prefix, String name) {
         String val = props.getProperty(prefix + name);
@@ -64,7 +108,12 @@ class PersistenceHelper {
     }
 
     /**
-     *  @return 0 on error
+     * Read a double value from properties.
+     *
+     * @param props properties to read from
+     * @param prefix property key prefix
+     * @param name property key suffix
+     * @return 0 on error
      */
     public static final double getDouble(Properties props, String prefix, String name) {
         String val = props.getProperty(prefix + name);
@@ -80,8 +129,13 @@ class PersistenceHelper {
     }
 
     /**
-     *  @return non-negative, returns 0 on error
-     *  @since 0.8.13
+     * Read an integer value from properties.
+     *
+     * @param props properties to read from
+     * @param prefix property key prefix
+     * @param name property key suffix
+     * @return non-negative, returns 0 on error
+     * @since 0.8.13
      */
     public static final int getInt(Properties props, String prefix, String name) {
         String val = props.getProperty(prefix + name);

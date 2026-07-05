@@ -139,6 +139,7 @@ public class DataHelper {
      *  Map of String to itself to cache common
      *  keys in RouterInfo, RouterAddress, and BlockfileNamingService properties.
      *  Reduces Object proliferation caused by frequent deserialization.
+     *
      *  @since 0.8.12
      */
     private static final Map<String, String> _propertiesKeyCache;
@@ -222,6 +223,7 @@ public class DataHelper {
 
     /**
      *  The default formatting for date/time, current locale, local time zone
+     *
      *  @since 0.9.43
      */
     private static final DateFormat DATE_FORMAT = DateFormat.getDateInstance(DateFormat.MEDIUM);
@@ -263,11 +265,13 @@ public class DataHelper {
      *
      *  @param props The Properties to load into.
      *               As of 0.9.38, if null, a new OrderedProperties will be created.
+     *
      *  @param rawStream stream to read the mapping from
      *  @throws DataFormatException if the format is invalid
      *  @throws IOException if there is a problem reading the data
      *  @return the parameter props, or (as of 0.9.38) a new OrderedProperties if props is null,
      *                               and an immutable EmptyProperties if empty.
+     *
      *  @since 0.8.13
      */
     public static Properties readProperties(InputStream rawStream, Properties props) throws DataFormatException, IOException {
@@ -281,12 +285,14 @@ public class DataHelper {
      *
      *  @param props The Properties to load into.
      *               As of 0.9.38, if null, a new OrderedProperties will be created.
+     *
      *  @param rawStream stream to read the mapping from
      *  @param enforceOrder if true, throw DataFormatException if keys are not ordered
      *  @throws DataFormatException if the format is invalid
      *  @throws IOException if there is a problem reading the data
      *  @return the parameter props, or (as of 0.9.38) a new OrderedProperties if props is null,
      *                               and an immutable EmptyProperties if empty.
+     *
      *  @since 0.9.66
      */
     public static Properties readProperties(InputStream rawStream, Properties props, boolean enforceOrder) throws DataFormatException, IOException {
@@ -343,6 +349,7 @@ public class DataHelper {
      * @param props properties to write out, may be null
      * @throws DataFormatException if there is not enough valid data to write out,
      *                             or a length limit is exceeded
+     *
      * @throws IOException if there is an IO error writing out the data
      */
     public static void writeProperties(OutputStream rawStream, Properties props) throws DataFormatException, IOException {
@@ -364,6 +371,7 @@ public class DataHelper {
      *
      * Use utf8 = false for RouterAddress (fast, non UTF-8)
      * Use utf8 = true for SessionConfig (slow, UTF-8)
+     *
      * @param props source may be null
      * @throws DataFormatException if a length limit is exceeded
      */
@@ -387,10 +395,12 @@ public class DataHelper {
      *
      * Use utf8 = false for RouterAddress (fast, non UTF-8)
      * Use utf8 = true for SessionConfig (slow, UTF-8)
+     *
      * @param props source may be null
      * @param sort should we sort the properties? (set to false if already sorted, e.g. OrderedProperties)
      * @throws DataFormatException if any string is over 255 bytes long, or if the total length
      *                             (not including the two length bytes) is greater than 65535 bytes.
+     *
      * @since 0.8.7
      */
     public static void writeProperties(OutputStream rawStream, Properties props, boolean utf8, boolean sort) throws DataFormatException, IOException {
@@ -564,6 +574,7 @@ public class DataHelper {
     /**
      * Pretty print the mapping, unsorted
      * (unless the options param is an OrderedProperties)
+     *
      * @since 0.9.4, as of 0.9.38 supports non-String values
      */
     public static String toString(Map<?, ?> options) {
@@ -759,6 +770,7 @@ public class DataHelper {
     /**
      *  Lower-case hex with leading zeros.
      *  Use toHexString(byte[]) to not get leading zeros
+     *
      *  @param buf may be null (returns "")
      *  @return String of length 2*buf.length
      */
@@ -774,6 +786,7 @@ public class DataHelper {
     /**
      *  Lower-case hex with leading zeros.
      *  Use toHexString(byte[]) to not get leading zeros
+     *
      *  @param buf may be null
      *  @param len number of bytes. If greater than buf.length, additional zeros will be prepended
      *  @return String of length 2*len
@@ -802,6 +815,7 @@ public class DataHelper {
     /**
      *  Lower-case hex without leading zeros.
      *  Use toString(byte[]) to get leading zeros
+     *
      *  @param data may be null (returns "00")
      */
     public static final String toHexString(byte[] data) {
@@ -826,6 +840,7 @@ public class DataHelper {
 
     /** Read the stream for an integer as defined by the I2P data structure specification.
      * Integers are a fixed number of bytes (numBytes), stored as unsigned integers in network byte order.
+     *
      * @param rawStream stream to read from
      * @param numBytes number of bytes to read and format into a number, 1 to 8
      * @throws DataFormatException if negative (only possible if numBytes = 8) (since 0.8.12)
@@ -870,6 +885,7 @@ public class DataHelper {
 
     /** Write an integer as defined by the I2P data structure specification to the stream.
      * Integers are a fixed number of bytes (numBytes), stored as unsigned integers in network byte order.
+     *
      * @param value value to write out, non-negative
      * @param rawStream stream to write to
      * @param numBytes number of bytes to write the number into, 1-8 (padding as necessary)
@@ -1027,6 +1043,7 @@ public class DataHelper {
      * A date is an 8 byte unsigned integer in network byte order specifying the number of
      * milliseconds since midnight on January 1, 1970 in the GMT timezone. If the number is
      * 0, the date is undefined or null. (yes, this means you can't represent midnight on 1/1/1970)
+     *
      * @param in stream to read from
      * @throws DataFormatException if the stream doesn't contain a validly formatted date
      * @throws IOException if there is an IO error reading the date
@@ -1041,6 +1058,7 @@ public class DataHelper {
     }
 
     /** Write out a date to the stream as specified by the I2P data structure spec.
+    *
      * @param out stream to write to
      * @param date date to write (can be null)
      * @throws DataFormatException if the date is not valid
@@ -1138,6 +1156,7 @@ public class DataHelper {
      * @param out stream to write string
      * @param string string to write out: null strings are perfectly valid, but strings of excess length will
      *               cause a DataFormatException to be thrown
+     *
      * @throws DataFormatException if the string is not valid
      * @throws IOException if there is an IO error writing the string
      */
@@ -1164,6 +1183,7 @@ public class DataHelper {
      * @param out stream to write string
      * @param string UTF-8 string to write out: null strings are perfectly valid, but strings of excess length will
      *               cause a DataFormatException to be thrown
+     *
      * @throws DataFormatException if the string is not valid
      * @throws IOException if there is an IO error writing the string
      * @since public since 0.9.26
@@ -1281,6 +1301,7 @@ public class DataHelper {
     /**
      *  Constant time string comparison.
      *  Null-safe. Different lengths handled in constant time.
+     *
      *  @since 0.9.70+
      */
     public static final boolean eqCT(String lhs, String rhs) {
@@ -1568,6 +1589,7 @@ public class DataHelper {
      * @param hash null OK
      * @return true if the line was read, false if eof was reached on an empty line
      *              (returns true for non-empty last line without a newline)
+     *
      * @since 0.8.8
      */
     public static boolean readLine(InputStream in, StringBuilder buf, MessageDigest hash) throws IOException {
@@ -1588,6 +1610,7 @@ public class DataHelper {
 
     /**
      *  update the hash along the way
+     *
      *  @since 0.8.8
      */
     public static void write(OutputStream out, byte[] data, MessageDigest hash) throws IOException {
@@ -1906,6 +1929,7 @@ public class DataHelper {
      *  Examples:
      *  en: Aug 30, 2019
      *  de: 30.08.2019
+     *
      *  @since 0.9.43
      */
     public static String formatDate(long now) {
@@ -1926,6 +1950,7 @@ public class DataHelper {
      *  Examples:
      *  en: Aug 30, 2019 12:38 PM
      *  de: 30.08.2019 12:38
+     *
      *  @since 0.9.43
      */
     public static String formatTime(long now) {
@@ -1942,6 +1967,7 @@ public class DataHelper {
 
     /**
      * Strip out any HTML (simply removing any less than / greater than symbols)
+     *
      * @param orig may be null, returns empty string if null
      */
     public static String stripHTML(String orig) {
@@ -1960,6 +1986,7 @@ public class DataHelper {
 
     /**
      * Escape a string for inclusion in HTML
+     *
      * @param unescaped the unescaped string, may be null
      * @return the escaped string, or null if null is passed in
      */
@@ -1984,12 +2011,14 @@ public class DataHelper {
 
     /**
      *  Appx. 15% slower, 1.5% smaller than MEDIUM_COMPRESSION
+     *
      *  @since 0.9.47
      */
     public static final int HIGH_COMPRESSION = 8;
 
     /**
      *  New default as of 0.9.47
+     *
      *  @since 0.9.47
      */
     public static final int MEDIUM_COMPRESSION = 5;
@@ -2121,8 +2150,10 @@ public class DataHelper {
 
     /**
      *  Decompress the GZIP compressed data (returning null on error).
+     *
      *  @throws IOException if uncompressed is over 40 KB,
      *                      or on a decompression error
+     *
      *  @return null if orig is null
      */
     public static byte[] decompress(byte[] orig) throws IOException {
@@ -2131,8 +2162,10 @@ public class DataHelper {
 
     /**
      *  Decompress the GZIP compressed data (returning null on error).
+     *
      *  @throws IOException if uncompressed is over 40 KB,
      *                      or on a decompression error
+     *
      *  @return null if orig is null
      */
     public static byte[] decompress(byte[] orig, int offset, int length) throws IOException {

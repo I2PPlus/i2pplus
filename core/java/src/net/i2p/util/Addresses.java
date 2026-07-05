@@ -119,6 +119,7 @@ public abstract class Addresses {
 
 /**
  * Gets the first non-local IPv4 address found.
+ *
  * @return the first non-local address IPv4 address it finds, or null
  */
     public static String getAnyAddress() {
@@ -130,6 +131,7 @@ public abstract class Addresses {
 
 /**
  * Gets all non-IPv6 addresses excluding local, broadcast, and multicast addresses.
+ *
  *  @return a sorted set of all addresses, excluding
  *  IPv6, local, broadcast, multicast, etc.
  */
@@ -139,8 +141,10 @@ public abstract class Addresses {
 
 /**
  * Gets all addresses excluding only link-local and multicast addresses.
+ *
  *  @return a sorted set of all addresses, excluding
  *  only link local and multicast
+ *
  *  @since 0.8.3
  */
     public static SortedSet<String> getAllAddresses() {
@@ -347,6 +351,7 @@ public abstract class Addresses {
 
     /**
      *  Strip the trailing "%nn" from Inet6Address.getHostAddress()
+     *
      *  @since IPv6
      */
     private static String stripScope(String ip) {
@@ -395,6 +400,7 @@ public abstract class Addresses {
 
 /**
  *  Convenience method to convert an IP address to a String without throwing an exception.
+ *
  *  @param addr the IP address as byte array
  *  @return string representation, or "null" for null input, or "Bad IP length x" if length is invalid
  *  @since 0.8.12
@@ -411,6 +417,7 @@ public abstract class Addresses {
 
 /**
  *  Convenience method to convert an IP address and port to a String without throwing an exception.
+ *
  *  @param addr the IP address as byte array
  *  @param port the port number
  *  @return formatted string as "ipv4:port" or "[ipv6]:port", or error message for invalid input
@@ -431,6 +438,7 @@ public abstract class Addresses {
 
 /**
  *  Same as toString() but returns IPv6 in compressed form per RFC 5952.
+ *
  *  @param addr the IP address as byte array
  *  @return canonical string representation, or "null" for null input, or "bad IP length x" if length is invalid
  *  @since 0.9.57
@@ -450,6 +458,7 @@ public abstract class Addresses {
 
 /**
  *  Same as toString() but returns IPv6 in compressed form per RFC 5952.
+ *
  *  @param addr the IP address as byte array
  *  @param port the port number
  *  @return canonical string representation with port, or error message for invalid input
@@ -471,6 +480,7 @@ public abstract class Addresses {
 
 /**
  *  Converts IPv6 to compressed form per RFC 5952. IPv4 returned unchanged.
+ *
  *  @param host the host string to convert
  *  @return canonical string representation, or "null" for null input
  *  @since 0.9.57
@@ -485,6 +495,7 @@ public abstract class Addresses {
 
     /**
      *  Internal
+     *
      *  @param host non-null
      *  @since 0.9.57
      */
@@ -741,6 +752,7 @@ public abstract class Addresses {
 
     /**
      * Checks if the host is a valid IPv4 address.
+     *
      * @param host the host to check
      * @return true if IPv4 address
      *  @since 0.9.34
@@ -751,6 +763,7 @@ public abstract class Addresses {
 
     /**
      * Checks if the host is a valid IPv6 address.
+     *
      * @param host the host to check
      * @return true if IPv6 address
      *  @since 0.9.34
@@ -761,6 +774,7 @@ public abstract class Addresses {
 
     /**
      * Checks if the host is a valid IP address (IPv4 or IPv6).
+     *
      * @param host the host to check
      * @return true if either IPv4 or IPv6
      *  @since 0.9.34
@@ -910,6 +924,7 @@ public abstract class Addresses {
     /**
      *  Only call if INET6_CACHE_ENABLED.
      *  Caller must sync on _ifCache.
+     *
      *  @since 0.9.28
      */
     private static void refreshCache() {
@@ -962,6 +977,7 @@ public abstract class Addresses {
 /**
  *  Determines if an IPv6 address is dynamic.
  *  Reliable on Linux. Best guess on Windows, Mac, and BSD (only valid for global scope).
+ *
  *  @param addr IPv6 address of a local interface, as returned from getAddresses()
  *  @return true if address is dynamic
  *  @since 0.9.28
@@ -982,6 +998,7 @@ public abstract class Addresses {
 /**
  *  Determines if an IPv6 address is deprecated.
  *  Reliable on Linux. Returns false on Windows, Mac, and BSD.
+ *
  *  @param addr IPv6 address of a local interface, as returned from getAddresses()
  *  @return true if address is deprecated
  *  @since 0.9.28
@@ -1002,6 +1019,7 @@ public abstract class Addresses {
 /**
  *  Determines if an IPv6 address is temporary.
  *  Reliable on Linux. Best guess on Windows, Mac, and BSD (only valid for global scope).
+ *
  *  @param addr IPv6 address of a local interface, as returned from getAddresses()
  *  @return true if address is temporary
  *  @since 0.9.28
@@ -1045,6 +1063,7 @@ public abstract class Addresses {
 
     /**
      * Clears all internal caches.
+     *
      * @since 0.9.3
      */
     public static void clearCaches() {
@@ -1067,6 +1086,7 @@ public abstract class Addresses {
 
     /**
      *  Print out the local addresses
+     *
      *  @param args command line arguments
      */
     public static void main(String[] args) {
@@ -1254,6 +1274,7 @@ public abstract class Addresses {
 
 /**
  *  Checks if temporary IPv6 addresses are enabled system-wide.
+ *
  *  @return "true", "false", or "unknown" (for Windows/Mac where detection is not supported)
  *  @since 0.9.50
  */
@@ -1275,6 +1296,7 @@ public abstract class Addresses {
 
     /**
      * RFC 4941
+     *
      * @since 0.9.34
      */
     private static String getPrivacyStatus() {
@@ -1293,6 +1315,7 @@ public abstract class Addresses {
 
     /**
      * Return first line in a file as a long
+     *
      * @return -1 on failure
      * @since 0.9.34
      */

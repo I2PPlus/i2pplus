@@ -91,23 +91,36 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     public static final int KEY_TYPE_LEASESET = 1;
 
     /** LeaseSet 2 type.
+    *
      * @since 0.9.38 */
     public static final int KEY_TYPE_LS2 = 3;
 
-    /** Encrypted LeaseSet 2 type.
-     * @since 0.9.38 */
+    /**
+     * Encrypted LeaseSet 2 type.
+     *
+     * @since 0.9.38
+     */
     public static final int KEY_TYPE_ENCRYPTED_LS2 = 5;
 
-    /** Meta LeaseSet 2 type.
-     * @since 0.9.38 */
+    /**
+     * Meta LeaseSet 2 type.
+     *
+     * @since 0.9.38
+     */
     public static final int KEY_TYPE_META_LS2 = 7;
 
-    /** Service record type.
-     * @since 0.9.38 */
+    /**
+     * Service record type.
+     *
+     * @since 0.9.38
+     */
     public static final int KEY_TYPE_SERVICE_RECORD = 9;
 
-    /** Service list type.
-     * @since 0.9.38 */
+    /**
+     * Service list type.
+     *
+     * @since 0.9.38
+     */
     public static final int KEY_TYPE_SERVICE_LIST = 11;
 
     protected volatile Signature _signature;
@@ -309,6 +322,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     /**
      * This is the same as isValid() in RouterInfo
      * or verifySignature() in LeaseSet.
+     *
      * @return valid
      * @since public since 0.9.47, was protected
      */

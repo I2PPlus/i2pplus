@@ -107,6 +107,7 @@ public class SSLEepGet extends EepGet {
 
     /**
      *  Not all may be supported.
+     *
      *  @since 0.9.33
      */
     public enum ProxyType {
@@ -130,6 +131,7 @@ public class SSLEepGet extends EepGet {
      *  @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
      *               This makes repeated fetches from the same host MUCH faster,
      *               and prevents repeated key store loads even for different hosts.
+     *
      *  @since 0.8.2
      */
     public SSLEepGet(I2PAppContext ctx, OutputStream outputStream, String url, SSLState state) {
@@ -141,6 +143,7 @@ public class SSLEepGet extends EepGet {
      *  @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
      *               This makes repeated fetches from the same host MUCH faster,
      *               and prevents repeated key store loads even for different hosts.
+     *
      *  @since 0.9.48
      */
     public SSLEepGet(I2PAppContext ctx, OutputStream outputStream, String url, long maxSize, SSLState state) {
@@ -149,6 +152,7 @@ public class SSLEepGet extends EepGet {
 
     /**
      *  A new SSLEepGet with a new SSLState
+     *
      *  @since 0.9.9
      */
     public SSLEepGet(I2PAppContext ctx, String outputFile, String url) {
@@ -159,6 +163,7 @@ public class SSLEepGet extends EepGet {
      *  @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
      *               This makes repeated fetches from the same host MUCH faster,
      *               and prevents repeated key store loads even for different hosts.
+     *
      *  @since 0.9.9
      */
     public SSLEepGet(I2PAppContext ctx, String outputFile, String url, SSLState state) {
@@ -170,8 +175,10 @@ public class SSLEepGet extends EepGet {
      *
      *  @param proxyHost Must be valid hostname or literal IPv4/v6.
      *                   If type is INTERNAL, set to "localhost".
+     *
      *  @param proxyPort Must be valid, -1 disallowed, no default.
      *                   If type is INTERNAL, set to 4444.
+     *
      *  @since 0.9.33
      */
     public SSLEepGet(
@@ -184,11 +191,14 @@ public class SSLEepGet extends EepGet {
      *
      *  @param proxyHost Must be valid hostname or literal IPv4/v6.
      *                   If type is INTERNAL, set to "localhost".
+     *
      *  @param proxyPort Must be valid, -1 disallowed, no default.
      *                   If type is INTERNAL, set to 4444.
+     *
      *  @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
      *               This makes repeated fetches from the same host MUCH faster,
      *               and prevents repeated key store loads even for different hosts.
+     *
      *  @since 0.9.33
      */
     public SSLEepGet(
@@ -216,8 +226,10 @@ public class SSLEepGet extends EepGet {
      *
      *  @param proxyHost Must be valid hostname or literal IPv4/v6.
      *                   If type is INTERNAL, set to "localhost".
+     *
      *  @param proxyPort Must be valid, -1 disallowed, no default.
      *                   If type is INTERNAL, set to 4444.
+     *
      *  @since 0.9.33
      */
     public SSLEepGet(
@@ -230,11 +242,14 @@ public class SSLEepGet extends EepGet {
      *
      *  @param proxyHost Must be valid hostname or literal IPv4/v6.
      *                   If type is INTERNAL, set to "localhost".
+     *
      *  @param proxyPort Must be valid, -1 disallowed, no default.
      *                   If type is INTERNAL, set to 4444.
+     *
      *  @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
      *               This makes repeated fetches from the same host MUCH faster,
      *               and prevents repeated key store loads even for different hosts.
+     *
      *  @since 0.9.33
      */
     public SSLEepGet(
@@ -263,6 +278,7 @@ public class SSLEepGet extends EepGet {
      *  @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
      *               This makes repeated fetches from the same host MUCH faster,
      *               and prevents repeated key store loads even for different hosts.
+     *
      *  @since 0.9.9
      */
     private SSLEepGet(
@@ -504,6 +520,7 @@ public class SSLEepGet extends EepGet {
     /**
      *  From http://blogs.sun.com/andreas/resource/InstallCert.java
      *  This just saves the certificate chain for later inspection.
+     *
      *  @since 0.8.2
      */
     private static class SavingTrustManager implements X509TrustManager {
@@ -533,6 +550,7 @@ public class SSLEepGet extends EepGet {
 
     /**
      *  Modified from http://blogs.sun.com/andreas/resource/InstallCert.java
+     *
      *  @since 0.8.2
      */
     private static void saveCerts(String host, SavingTrustManager stm) {
@@ -562,6 +580,7 @@ public class SSLEepGet extends EepGet {
 
     /**
      *  An opaque class for the caller to pass to repeated instantiations of SSLEepGet.
+     *
      *  @since 0.8.2
      */
     public static class SSLState {
@@ -575,6 +594,7 @@ public class SSLEepGet extends EepGet {
     /**
      *  Pass this back to the next SSLEepGet constructor for faster fetches.
      *  This may be called either after the constructor or after the fetch.
+     *
      *  @since 0.8.2
      */
     public SSLState getSSLState() {
@@ -584,6 +604,7 @@ public class SSLEepGet extends EepGet {
     /**
      *  Override the config setting, force DNSoverHTTPS on or off
      *  Call before the fetch.
+     *
      *  @since 0.9.49
      */
     public void forceDNSOverHTTPS(boolean on) {
@@ -593,8 +614,10 @@ public class SSLEepGet extends EepGet {
     /**
      *  Override the config setting, force DNSoverHTTPS on or off
      *  Call before the fetch.
+     *
      *  @param forceIPv6 use IPv6 for BOTH the connection to the DoH server
      *         AND for the queried address. on must be true.
+     *
      *  @since 0.9.66
      */
     public void forceDNSOverHTTPS(boolean on, boolean forceIPv6) {

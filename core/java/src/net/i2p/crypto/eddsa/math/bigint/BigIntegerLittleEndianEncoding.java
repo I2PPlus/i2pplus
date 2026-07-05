@@ -37,6 +37,9 @@ public class BigIntegerLittleEndianEncoding extends Encoding implements Serializ
         mask = BigInteger.ONE.shiftLeft(f.getb() - 1).subtract(BigInteger.ONE);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public byte[] encode(FieldElement x) {
         return encode(((BigIntegerFieldElement) x).bi.and(mask));
@@ -99,6 +102,7 @@ public class BigIntegerLittleEndianEncoding extends Encoding implements Serializ
      * than the $(b-1)$-bit encoding of $-x$. If $q$ is an odd prime and the encoding
      * is the little-endian representation of $\{0, 1,\dots, q-1\}$ then the negative
      * elements of $F_q$ are $\{1, 3, 5,\dots, q-2\}$.
+     *
      * @return true if negative
      */
     @Override

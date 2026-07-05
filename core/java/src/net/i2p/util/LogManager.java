@@ -336,6 +336,7 @@ public class LogManager implements Flushable {
 
     /**
      *  File may not exist or have old logs in it if not opened yet
+     *
      *  @return non-null
      */
     public synchronized String currentFile() {
@@ -567,6 +568,7 @@ public class LogManager implements Flushable {
      *
      * @param format null or empty string means use default format for the locale
      *               (with a SHORT date and a MEDIUM time - see DateFormat)
+     *
      * @return true if the format was updated, false if it was invalid
      */
     public boolean setDateFormat(String format) {
@@ -695,6 +697,7 @@ public class LogManager implements Flushable {
 
     /**
      * Do not log here, deadlock of LogWriter via rereadConfig().
+     *
      * @return null if no matches
      */
     private List<LogLimit> getLimits(Log log) {
@@ -739,6 +742,7 @@ public class LogManager implements Flushable {
 
     /**
      * Check if gzip compression should be used for rotated log files.
+     *
      * @since 0.9.56, public since 0.9.57, was pkg private
      */
     public boolean shouldGzip() {
@@ -747,6 +751,7 @@ public class LogManager implements Flushable {
 
     /**
      * Enable or disable gzip compression for rotated log files.
+     *
      * @param yes true to enable gzip compression
      * @since 0.9.57
      */
@@ -756,6 +761,7 @@ public class LogManager implements Flushable {
 
     /**
      * Get the minimum size for gzip compression.
+     *
      * @return the minimum size in bytes, or Long.MAX_VALUE if gzip is disabled
      * @since 0.9.56
      */
@@ -765,6 +771,7 @@ public class LogManager implements Flushable {
 
     /**
      * Save the current logging configuration to disk.
+     *
      * @return true if the configuration was saved successfully
      */
     public synchronized boolean saveConfig() {
@@ -819,6 +826,7 @@ public class LogManager implements Flushable {
     /**
      *  Zero-copy.
      *  For the LogWriter
+     *
      *  @since 0.8.2
      */
     Queue<LogRecord> getQueue() {
@@ -856,6 +864,7 @@ public class LogManager implements Flushable {
     /**
      *  Flush any pending records to disk.
      *  Blocking up to 250 ms.
+     *
      *  @since 0.9.3
      */
     @Override
@@ -909,6 +918,7 @@ public class LogManager implements Flushable {
 
     /**
      *  Convenience method for LogRecordFormatter
+     *
      *  @since 0.7.14
      */
     I2PAppContext getContext() {

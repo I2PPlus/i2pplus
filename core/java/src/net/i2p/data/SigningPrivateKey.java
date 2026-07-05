@@ -123,6 +123,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
     }
 
     /** constructs from base64
+    *
      * @param base64Data a string of base64 data (the output of .toBase64() called
      * on a prior instance of SigningPrivateKey
      */
@@ -169,6 +170,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
 
     /**
      *  Constant time
+     *
      *  @return true if all zeros
      *  @since 0.9.39 moved from PrivateKeyFile
      */

@@ -53,6 +53,7 @@ class MessageState {
 
     /**
      *  For asynchronous notification
+     *
      *  @param expires absolute time (not interval)
      *  @since 0.9.14
      */
@@ -124,6 +125,7 @@ class MessageState {
 
     /**
      *  Update our flags
+     *
      *  @since 0.9.14
      */
     private void locked_update(int status) {

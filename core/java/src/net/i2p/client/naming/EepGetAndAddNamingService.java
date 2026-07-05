@@ -32,6 +32,7 @@ import java.util.Locale;
  * i2p.naming.eepget.list=http://stats.i2p/cgi-bin/hostquery.cgi?a=,http://i2host.i2p/cgi-bin/i2hostquery?
  *
  * @author zzz
+ *
  * @deprecated use HostsTxtNamingService.put()
  * @since 0.7.9
  */
@@ -41,6 +42,11 @@ public class EepGetAndAddNamingService extends EepGetNamingService {
     /** default hosts.txt filename */
     private static final String DEFAULT_HOSTS_FILE = "hosts.txt";
 
+    /**
+     * Create a new EepGet and add naming service.
+     *
+     * @param context the application context
+     */
     public EepGetAndAddNamingService(I2PAppContext context) {
         super(context);
     }

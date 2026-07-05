@@ -58,6 +58,10 @@ public class SingleFileNamingService extends NamingService {
 
     private volatile boolean _isClosed;
 
+    /**
+     * @param context the application context
+     * @param filename the hosts file name
+     */
     public SingleFileNamingService(I2PAppContext context, String filename) {
         super(context);
         File file = new File(filename);
@@ -67,6 +71,8 @@ public class SingleFileNamingService extends NamingService {
     }
 
     /**
+     * Return the file's absolute path.
+     *
      *  @return the file's absolute path
      */
     @Override
@@ -100,6 +106,8 @@ public class SingleFileNamingService extends NamingService {
     }
 
     /**
+     * Reverse lookup a destination to a hostname.
+     *
      *  @param options ignored
      */
     @Override
@@ -162,6 +170,8 @@ public class SingleFileNamingService extends NamingService {
     }
 
     /**
+     * Store a hostname-destination mapping.
+     *
      *  @param hostname case-sensitive; caller should convert to lower case
      *  @param options if non-null, any prefixed with '=' will be appended
      *                 in subscription format
@@ -220,6 +230,8 @@ public class SingleFileNamingService extends NamingService {
     }
 
     /**
+     * Store a hostname-destination mapping if not already present.
+     *
      *  @param hostname case-sensitive; caller should convert to lower case
      *  @param options if non-null, any prefixed with '=' will be appended
      *                 in subscription format
@@ -292,6 +304,8 @@ public class SingleFileNamingService extends NamingService {
     }
 
     /**
+     * Remove a hostname from the naming service.
+     *
      *  @param hostname case-sensitive; caller should convert to lower case
      *  @param options ignored
      */
@@ -348,6 +362,8 @@ public class SingleFileNamingService extends NamingService {
     }
 
     /**
+     * Return all entries matching the options.
+     *
      * @param options null OK, or as follows:
      *                Key "search": return only those matching substring
      *                Key "startsWith": return only those starting with
@@ -415,9 +431,11 @@ public class SingleFileNamingService extends NamingService {
      *                 Key "search": return only those matching substring
      *                 Key "startsWith": return only those starting with
      *                                   ("[0-9]" allowed)
+     *
      *  @return all mappings (matching the options if non-null)
      *          or empty Map if none.
      *          Returned Map is not sorted.
+     *
      *  @since 0.9.20
      */
     @Override
@@ -506,6 +524,8 @@ public class SingleFileNamingService extends NamingService {
     }
 
     /**
+     * Return all known host names.
+     *
      *  @param options ignored
      *  @return all known host names, unsorted
      */
@@ -540,6 +560,8 @@ public class SingleFileNamingService extends NamingService {
     }
 
     /**
+     * Return the number of entries.
+     *
      *  @param options ignored
      */
     @Override
@@ -589,7 +611,7 @@ public class SingleFileNamingService extends NamingService {
         _fileLock.readLock().unlock();
     }
 
-    /** @return true if the lock was acquired */
+    /** Try to acquire the write lock. @return true if the lock was acquired */
     private boolean getWriteLock() {
         try {
             boolean rv = _fileLock.writeLock().tryLock(10000, TimeUnit.MILLISECONDS);

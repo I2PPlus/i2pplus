@@ -109,6 +109,7 @@ public interface DataStructure /* extends Serializable */ {
 
     /**
      * render the structure into modified base 64 notation
+     *
      * @return null on error
      */
     public String toBase64();

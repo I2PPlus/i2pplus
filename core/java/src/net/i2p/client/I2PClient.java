@@ -84,6 +84,7 @@ public interface I2PClient {
 
     /**
      *  7654
+     *
      *  @since 0.9.38
      */
     public static final int DEFAULT_LISTEN_PORT = 7654;
@@ -101,6 +102,7 @@ public interface I2PClient {
      *
      * @param destKeyStream location from which to read the Destination, PrivateKey, and SigningPrivateKey from,
      *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
+     *
      * @param options set of options to configure the router with, if null will use System properties
      * @return new session allowing a Destination to receive all of its messages and send messages to any other Destination.
      * @throws I2PSessionException if there is a problem creating the session
@@ -116,6 +118,7 @@ public interface I2PClient {
      * @param destKeyStream create a new destination and write out the object to the given stream,
      *                      formatted as Destination, PrivateKey, and SigningPrivateKey
      *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
+     *
      * @return new destination
      */
     public Destination createDestination(OutputStream destKeyStream) throws I2PException, IOException;
@@ -130,6 +133,7 @@ public interface I2PClient {
      *
      * @param destKeyStream location to write out the destination, PrivateKey, and SigningPrivateKey,
      *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
+     *
      * @since 0.9.12
      */
     public Destination createDestination(OutputStream destKeyStream, SigType type) throws I2PException, IOException;
@@ -142,6 +146,7 @@ public interface I2PClient {
      *
      * @param destKeyStream location to write out the destination, PrivateKey, and SigningPrivateKey,
      *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
+     *
      * @param cert certificate to tie to the destination
      * @return newly created destination
      */

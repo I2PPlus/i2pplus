@@ -8,6 +8,7 @@ import java.util.Comparator;
  * Characters other than [0-9.-_] are ignored.
  * I2P only uses '.' but Sun Java uses '_' and plugins may use any of '.-_'
  * Moved from TrustedUpdate.java
+ *
  * @since 0.7.10
  */
 public class VersionComparator implements Comparator<String>, Serializable {
@@ -19,6 +20,7 @@ public class VersionComparator implements Comparator<String>, Serializable {
 
     /**
      *  To avoid churning comparators
+     *
      *  @since 0.9.7
      */
     public static int comp(String l, String r) {
@@ -90,6 +92,7 @@ public class VersionComparator implements Comparator<String>, Serializable {
 
     /**
      * Parses a long, ignoring any non-digit characters.
+     *
      * @param s string to parse from
      * @param start index in the string to start
      * @param end index in the string to stop at

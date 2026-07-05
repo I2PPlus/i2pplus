@@ -230,6 +230,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
 
     /**
      * DNS query type for IPv4/IPv6 preference.
+     *
      * @since 0.9.35
      */
     public enum Type {
@@ -251,6 +252,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
 
     /**
      *  V4_ONLY unless we have only IPv6 address, then V6_ONLY
+     *
      *  @return null if not found
      */
     public String lookup(String host) {
@@ -262,6 +264,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
 
     /**
      *  Lookup in cache, then query servers
+     *
      *  @return null if not found
      */
     public String lookup(String host, Type type) {
@@ -270,6 +273,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
 
     /**
      *  Lookup in cache, then query servers
+     *
      *  @param url null to query several default servers, or specify single server
      *  @return null if not found
      *  @since 0.9.48
@@ -317,6 +321,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
 
     /**
      *  Lookup in cache
+     *
      *  @return null if not found or expired
      */
     private static String lookup(String host, Map<String, Result> cache) {
@@ -332,6 +337,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
 
     /**
      *  Query servers
+     *
      *  @param url null to query several default servers, or specify single server
      *  @return null if not found
      */

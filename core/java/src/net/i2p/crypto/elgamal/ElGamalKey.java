@@ -17,6 +17,7 @@ import javax.crypto.interfaces.DHKey;
  *
  * @since 0.9.25
  * @author I2P Project
+ *
  * @see <a href="https://en.wikipedia.org/wiki/ElGamal_encryption">ElGamal Encryption</a>
  */
 public interface ElGamalKey extends DHKey {

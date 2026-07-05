@@ -24,6 +24,8 @@ import java.util.Properties;
 public class I2PSimpleClient implements I2PClient {
 
     /**
+     * This method is not supported.
+     *
      *  @deprecated Don't do this
      *  @throws UnsupportedOperationException always
      */
@@ -34,6 +36,8 @@ public class I2PSimpleClient implements I2PClient {
     }
 
     /**
+     * This method is not supported.
+     *
      *  @deprecated Don't do this
      *  @throws UnsupportedOperationException always
      *  @since 0.9.12
@@ -45,6 +49,8 @@ public class I2PSimpleClient implements I2PClient {
     }
 
     /**
+     * This method is not supported.
+     *
      *  @deprecated Don't do this
      *  @throws UnsupportedOperationException always
      */
@@ -57,6 +63,9 @@ public class I2PSimpleClient implements I2PClient {
     /**
      * Create a new session (though do not connect it yet)
      *
+     * @param destKeyStream stream containing the private key data
+     * @param options set of options to configure the router with
+     * @return the new session
      */
     @Override
     public I2PSession createSession(InputStream destKeyStream, Properties options) throws I2PSessionException {
@@ -66,6 +75,9 @@ public class I2PSimpleClient implements I2PClient {
     /**
      * Create a new session (though do not connect it yet)
      *
+     * @param context the application context
+     * @param options set of options to configure the router with
+     * @return the new session
      */
     public I2PSession createSession(I2PAppContext context, Properties options) throws I2PSessionException {
         return new I2PSimpleSession(context, options);

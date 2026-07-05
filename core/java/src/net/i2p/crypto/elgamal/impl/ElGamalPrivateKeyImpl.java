@@ -61,8 +61,6 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
 
     public ElGamalPrivateKeyImpl(PKCS8EncodedKeySpec spec) throws InvalidKeySpecException {
         throw new InvalidKeySpecException("todo");
-        // this.x = spec.getX();
-        // this.elSpec = new ElGamalParameterSpec(spec.getP(), spec.getG());
     }
 
     @Override

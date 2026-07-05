@@ -93,6 +93,7 @@ public class Lease extends DataStructureImpl {
     public Lease() {}
 
     /** Retrieve the router at which the destination can be contacted
+    *
      * @return identity of the router acting as a gateway
      */
     public Hash getGateway() {
@@ -100,6 +101,7 @@ public class Lease extends DataStructureImpl {
     }
 
     /** Configure the router at which the destination can be contacted
+    *
      * @param ident router acting as the gateway
      */
     public void setGateway(Hash ident) {
@@ -107,6 +109,7 @@ public class Lease extends DataStructureImpl {
     }
 
     /** Tunnel on the gateway to communicate with
+    *
      * @return tunnel ID
      */
     public TunnelId getTunnelId() {
@@ -114,6 +117,7 @@ public class Lease extends DataStructureImpl {
     }
 
     /** Configure the tunnel on the gateway to communicate with
+    *
      * @param id tunnel ID
      */
     public void setTunnelId(TunnelId id) {
@@ -122,6 +126,7 @@ public class Lease extends DataStructureImpl {
 
     /**
      *  Convenience wrapper, prefer getEndTime() for new code.
+     *
      *  @return end date
      */
     public Date getEndDate() {
@@ -130,6 +135,7 @@ public class Lease extends DataStructureImpl {
 
     /**
      *  Convenience wrapper, prefer the long overload for new code.
+     *
      *  @param date end date
      */
     public void setEndDate(Date date) {

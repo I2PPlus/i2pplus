@@ -20,7 +20,8 @@ import net.i2p.crypto.eddsa.math.ed25519.Ed25519LittleEndianEncoding;
 import net.i2p.crypto.eddsa.math.ed25519.Ed25519ScalarOps;
 
 /**
- * The named EdDSA curves.
+ * Table of named EdDSA curves.
+ * Provides lookup of curve specifications by name.
  *
  * @since 0.9.15
  * @author str4d
@@ -58,6 +59,11 @@ public class EdDSANamedCurveTable {
         curves = newCurves;
     }
 
+    /**
+     * Defines a named curve in the table.
+     *
+     * @param curve the named curve specification to add
+     */
     public static void defineCurve(EdDSANamedCurveSpec curve) {
         putCurve(curve.getName().toLowerCase(Locale.ENGLISH), curve);
     }
@@ -77,6 +83,12 @@ public class EdDSANamedCurveTable {
         defineCurveAlias(ED_25519, CURVE_ED25519_SHA512);
     }
 
+    /**
+     * Returns the curve specification for the given name, or null if not found.
+     *
+     * @param name the curve name (case-insensitive)
+     * @return the curve specification, or null if not found
+     */
     public static EdDSANamedCurveSpec getByName(String name) {
         return curves.get(name.toLowerCase(Locale.ENGLISH));
     }

@@ -15,17 +15,13 @@ import java.util.Properties;
  * If value is always a constant, you should be using Frequency instead.
  */
 public class Rate {
-    // private final static Log _log = new Log(Rate.class);
     private float _currentTotalValue;
-    // was long, save space
     private int _currentEventCount;
     private int _currentTotalEventTime;
     private float _lastTotalValue;
-    // was long, save space
     private int _lastEventCount;
     private int _lastTotalEventTime;
     private float _extremeTotalValue;
-    // was long, save space
     private int _extremeEventCount;
     private int _extremeTotalEventTime;
     private float _lifetimeTotalValue;
@@ -36,11 +32,7 @@ public class Rate {
 
     private long _lastCoalesceDate;
     private long _creationDate;
-    // was long, save space
     private int _period;
-
-    /** locked during coalesce and addData */
-    // private final Object _lock = new Object();
 
     /** in current (partial) period, what is the total value acrued through all events? */
     public synchronized double getCurrentTotalValue() {
@@ -120,10 +112,20 @@ public class Rate {
         return _period;
     }
 
+    /**
+     * Return the rate stat this rate belongs to, or null.
+     *
+     * @return the rate stat this rate belongs to, or null
+     */
     public RateStat getRateStat() {
         return _stat;
     }
 
+    /**
+     * Set the rate stat this rate belongs to.
+     *
+     * @param rs the rate stat this rate belongs to
+     */
     public void setRateStat(RateStat rs) {
         _stat = rs;
     }
@@ -131,6 +133,7 @@ public class Rate {
     /**
      * A rate with period shorter than Router.COALESCE_TIME = 50*1000 has to
      * be manually coalesced before values are fetched from it.
+     *
      * @param period number of milliseconds in the period this rate deals with, min 1, max Integer.MAX_VALUE
      * @throws IllegalArgumentException if the period is invalid
      */
@@ -153,6 +156,7 @@ public class Rate {
      * @param treatAsCurrent if true, we'll treat the loaded data as if no time has
      *                       elapsed since it was written out, but if it is false, we'll
      *                       treat the data with as much freshness (or staleness) as appropriate.
+     *
      * @throws IllegalArgumentException if the data was formatted incorrectly
      */
     public Rate(Properties props, String prefix, boolean treatAsCurrent) throws IllegalArgumentException {
@@ -219,14 +223,15 @@ public class Rate {
     /** 2s is plenty of slack to deal with slow coalescing (across many stats) */
     private static final int SLACK = 2000;
 
+    /**
+     * Coalesce the current period's data into the last period.
+     * If the measured period is less than the rate period minus slack, this is a no-op.
+     */
     public synchronized void coalesce() {
         long now = now();
         double correctedTotalValue; // for GraphListener which divides by rounded EventCount
         long measuredPeriod = now - _lastCoalesceDate;
         if (measuredPeriod < _period - SLACK) {
-            // no need to coalesce (assuming we only try to do so once per minute)
-            // if (_log.shouldDebug())
-            //    _log.debug("not coalescing, measuredPeriod = " + measuredPeriod + " period = " + _period);
             return;
         }
 
@@ -253,10 +258,20 @@ public class Rate {
         if (_graphListener != null) _graphListener.add(correctedTotalValue, _lastEventCount, _lastTotalEventTime, _period);
     }
 
+    /**
+     * Set the listener to notify on coalesce.
+     *
+     * @param listener the listener to notify on coalesce, or null to clear
+     */
     public void setSummaryListener(RateSummaryListener listener) {
         _graphListener = listener;
     }
 
+    /**
+     * Return the current summary listener, or null.
+     *
+     * @return the current summary listener, or null
+     */
     public RateSummaryListener getSummaryListener() {
         return _graphListener;
     }
@@ -309,11 +324,6 @@ public class Rate {
      */
     public synchronized double getLastEventSaturation() {
         if ((_lastEventCount > 0) && (_lastTotalEventTime > 0)) {
-            /*double eventTime = (double) _lastTotalEventTime / (double) _lastEventCount;
-            double maxEvents = _period / eventTime;
-            double saturation = _lastEventCount / maxEvents;
-            return saturation;
-             */
             return ((double) _lastTotalEventTime) / (double) _period;
         }
 
@@ -398,6 +408,8 @@ public class Rate {
      * What was the total value, compared to the total value in
      * the extreme period (i.e. the period with the highest total value),
      * Warning- returns ratio, not percentage (i.e. it is not multiplied by 100 here)
+     *
+     * @return ratio of last total to extreme total, or 0 if no data
      */
     public synchronized double getPercentageOfExtremeValue() {
         if ((_lastTotalValue != 0) && (_extremeTotalValue != 0)) return _lastTotalValue / _extremeTotalValue;
@@ -408,6 +420,8 @@ public class Rate {
     /**
      * How large was the last period's value as compared to the lifetime average value?
      * Warning- returns ratio, not percentage (i.e. it is not multiplied by 100 here)
+     *
+     * @return ratio of last period value to lifetime average period value, or 0 if no data
      */
     public synchronized double getPercentageOfLifetimeValue() {
         if ((_lastTotalValue != 0) && (_lifetimeTotalValue != 0)) {
@@ -434,6 +448,7 @@ public class Rate {
      * @param out where to store the computed averages.
      * @param useLifetime whether the lifetime average should be used if
      * there are no events.
+     *
      * @return the same RateAverages object for chaining
      * @since 0.9.4
      */
@@ -486,7 +501,6 @@ public class Rate {
         PersistenceHelper.add(buf, addComments, prefix, ".lastTotalValue", "Total value of data points in most recent period (coalesced): " + _lastTotalValue, _lastTotalValue);
         PersistenceHelper.add(buf, addComments, prefix, ".extremeTotalValue", "Total value of data points in most extreme period: " + _extremeTotalValue, _extremeTotalValue);
         PersistenceHelper.add(buf, addComments, prefix, ".lifetimeTotalValue", "Total value of data points since this stat was created: " + _lifetimeTotalValue, _lifetimeTotalValue);
-        // PersistenceHelper.add(buf, addComments, prefix, ".tunnelCreateResponseTime", "Time for tunnel create response from peer (ms): " + _currentTotalValue, _currentTotalValue);
     }
 
     /**
@@ -496,6 +510,7 @@ public class Rate {
      * @param treatAsCurrent if true, we'll treat the loaded data as if no time has elapsed since it was
      * written out, but if it is false, we'll treat the data with as much freshness
      * (or staleness) as appropriate.
+     *
      * @throws IllegalArgumentException if the data was formatted incorrectly
      */
     public final synchronized void load(Properties props, String prefix, boolean treatAsCurrent) throws IllegalArgumentException {

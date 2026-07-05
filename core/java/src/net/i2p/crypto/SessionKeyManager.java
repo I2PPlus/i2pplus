@@ -99,6 +99,7 @@ public class SessionKeyManager {
 
     /**
      * Get the number of tags to send.
+     *
      * @return the number of tags to send, or 0 if not implemented
      * @since 0.9.2
      */
@@ -106,6 +107,7 @@ public class SessionKeyManager {
 
     /**
      * Get the low threshold for tag sending.
+     *
      * @return the low threshold, or 0 if not implemented
      * @since 0.9.2
      */
@@ -113,6 +115,7 @@ public class SessionKeyManager {
 
     /**
      * Determine if tags should be sent to the target.
+     *
      * @param target the target public key
      * @param key the session key
      * @return true if we have less than the threshold or what we have is about to expire
@@ -124,6 +127,7 @@ public class SessionKeyManager {
 
     /**
      * Determine if tags should be sent to the target with the specified threshold.
+     *
      * @param target the target public key
      * @param key the session key
      * @param lowThreshold the low threshold

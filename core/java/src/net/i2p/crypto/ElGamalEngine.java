@@ -96,6 +96,7 @@ public final class ElGamalEngine {
 
     /**
      *  Note that this stops the precalc thread and it cannot be restarted.
+     *
      *  @since 0.8.8
      */
     public void shutdown() {
@@ -105,6 +106,7 @@ public final class ElGamalEngine {
 
     /**
      *  This is now a noop. Cannot be restarted.
+     *
      *  @since 0.8.8
      */
     public void restart() {}
@@ -114,12 +116,14 @@ public final class ElGamalEngine {
     }
 
     /** encrypt the data to the public key
+    *
      * @return encrypted data, will be exactly 514 bytes long
      *         Contains the two-part encrypted data starting at bytes 0 and 257.
      *         If the encrypted parts are smaller than 257 bytes, they will be
      *         padded with leading zeros.
      *         The parts appear to always be 256 bytes or less, in other words,
      *         bytes 0 and 257 are always zero.
+     *
      * @param publicKey public key encrypt to
      * @param data data to encrypt, must be 222 bytes or less
      *         As the encrypted data may contain a substantial number of zeros if the
@@ -193,10 +197,12 @@ public final class ElGamalEngine {
     }
 
     /** Decrypt the data
+    *
      * @param encrypted encrypted data, must be exactly 514 bytes
      *         Contains the two-part encrypted data starting at bytes 0 and 257.
      *         If the encrypted parts are smaller than 257 bytes, they must be
      *         padded with leading zeros.
+     *
      * @param privateKey private key to decrypt with
      * @return unencrypted data or null on failure
      */

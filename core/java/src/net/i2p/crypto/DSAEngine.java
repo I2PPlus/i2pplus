@@ -138,6 +138,7 @@ public final class DSAEngine {
 
     /**
      *  Verify using DSA-SHA1 ONLY
+     *
      *  @param hash SHA-1 hash, NOT a SHA-256 hash
      */
     public boolean verifySignature(Signature signature, SHA1Hash hash, SigningPublicKey verifyingKey) {
@@ -147,6 +148,7 @@ public final class DSAEngine {
     /**
      *  Nonstandard.
      *  Used by Syndie.
+     *
      *  @since 0.8.3 (restored, was removed in 0.8.1 and 0.8.2)
      */
     public boolean verifySignature(Signature signature, Hash hash, SigningPublicKey verifyingKey) {
@@ -197,6 +199,7 @@ public final class DSAEngine {
 
     /**
      *  Verify using DSA-SHA1 or Syndie DSA-SHA256 ONLY.
+     *
      *  @param hash either a Hash or a SHA1Hash
      *  @since 0.8.3
      */
@@ -470,6 +473,7 @@ public final class DSAEngine {
 
     /**
      * Calculate a SHA-1 hash of the source data.
+     *
      * @param source the source data
      * @param offset the offset in the source data
      * @param len the length of data to hash
@@ -563,6 +567,7 @@ public final class DSAEngine {
 
     /**
      *  Alternate to verifySignature() using java.security libraries.
+     *
      *  @throws GeneralSecurityException if algorithm unvailable or on other errors
      *  @since 0.8.7 added off/len 0.9.12
      */
@@ -672,6 +677,7 @@ public final class DSAEngine {
 
     /**
      *  Alternate to sign() using java.security libraries.
+     *
      *  @throws GeneralSecurityException if algorithm unvailable or on other errors
      *  @since 0.8.7 added off/len args 0.9.12
      */

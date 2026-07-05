@@ -27,6 +27,7 @@ public enum SigType {
     /**
      *  DSA_SHA1 is the default.
      *  Pubkey 128 bytes; privkey 20 bytes; hash 20 bytes; sig 40 bytes
+     *
      *  @since 0.9.8
      */
     DSA_SHA1(
@@ -144,6 +145,7 @@ public enum SigType {
     /**
      *  Prehash version (double hashing, for offline use such as su3, not for use on the network)
      *  Pubkey 32 bytes; privkey 32 bytes; hash 64 bytes; sig 64 bytes
+     *
      *  @since 0.9.25
      */
     EdDSA_SHA512_Ed25519ph(
@@ -287,6 +289,7 @@ public enum SigType {
 
     /**
      *  The elliptic curve ECParameterSpec for ECDSA; DSAParameterSpec for DSA
+     *
      *  @throws InvalidParameterSpecException if the algorithm is not available on this JVM.
      */
     public AlgorithmParameterSpec getParams() throws InvalidParameterSpecException {
@@ -312,6 +315,7 @@ public enum SigType {
      *  Gets a Hash instance for this signature type.
      *
      *  @since 0.9.9
+     *
      *  @throws UnsupportedOperationException if not supported
      */
     public SimpleDataStructure getHashInstance() {
@@ -351,6 +355,7 @@ public enum SigType {
      *  Checks if this signature type is available in the JVM.
      *
      *  @since 0.9.12
+     *
      *  @return true if supported in this JVM
      */
     public boolean isAvailable() {

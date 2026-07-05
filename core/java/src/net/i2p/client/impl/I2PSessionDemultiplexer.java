@@ -32,6 +32,11 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
     private final Log _log;
     private final Map<Integer, I2PSessionMuxedListener> _listeners;
 
+    /**
+     * Create a new demultiplexer.
+     *
+     * @param ctx context
+     */
     public I2PSessionDemultiplexer(I2PAppContext ctx) {
         _log = ctx.logManager().getLog(I2PSessionDemultiplexer.class);
         _listeners = new ConcurrentHashMap<>(4);
@@ -63,6 +68,12 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
         }
     }
 
+    /**
+     * Convert a protocol number to a human-readable string.
+     *
+     * @param proto protocol number
+     * @return human-readable protocol name
+     */
     public static String protocolNumberToString(int proto) {
         switch (proto) {
             case 0: return "ANY (0)";

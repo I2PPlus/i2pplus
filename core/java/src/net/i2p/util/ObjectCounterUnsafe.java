@@ -26,6 +26,7 @@ import java.util.Set;
  * where thread safety is not required.</p>
  *
  * @since 0.9.58
+ *
  * @param <K> type of objects being counted
  */
 public class ObjectCounterUnsafe<K> {
@@ -33,6 +34,7 @@ public class ObjectCounterUnsafe<K> {
 
     /**
      *  Add one.
+     *
      *  @return count after increment
      */
     public int increment(K h) {
@@ -46,6 +48,7 @@ public class ObjectCounterUnsafe<K> {
 
     /**
      *  Add a value
+     *
      *  @return count after adding
      */
     public int add(K h, int val) {

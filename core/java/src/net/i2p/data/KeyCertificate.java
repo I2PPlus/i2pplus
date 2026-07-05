@@ -97,12 +97,14 @@ public class KeyCertificate extends Certificate {
 
     /**
      *  An immutable ElG/Ed25519 certificate.
+     *
      *  @since 0.9.22
      */
     public static final KeyCertificate ELG_Ed25519_CERT;
 
     /**
      *  An immutable X25519/Ed25519 certificate.
+     *
      *  @since 0.9.54
      */
     public static final KeyCertificate X25519_Ed25519_CERT;
@@ -396,6 +398,7 @@ public class KeyCertificate extends Certificate {
 
     /**
      *  An immutable ElG/Ed25519 certificate.
+     *
      *  @since 0.9.22
      */
     @SuppressWarnings("checkstyle:EqualsHashCode")
@@ -461,6 +464,7 @@ public class KeyCertificate extends Certificate {
 
     /**
      *  An immutable X25519/Ed25519 certificate.
+     *
      *  @since 0.9.54
      */
     @SuppressWarnings("checkstyle:EqualsHashCode")

@@ -34,6 +34,7 @@ public class Frequency {
     /**
      * on average over the last $period, after how many milliseconds are events coming in,
      * as calculated during the last event occurrence?
+     *
      * @return milliseconds; returns period + 1 if no events in previous period
      */
     public synchronized double getAverageInterval() {
@@ -42,6 +43,7 @@ public class Frequency {
 
     /**
      * what is the lowest average interval (aka most frequent) we have seen? (ms)
+     *
      * @return milliseconds; returns period + 1 if no events in previous period
      */
     public synchronized double getMinAverageInterval() {
@@ -70,6 +72,7 @@ public class Frequency {
 
     /**
      * Over the lifetime of this stat, without any decay or weighting, what was the average interval between events? (ms)
+     *
      * @return milliseconds; returns Double.MAX_VALUE if no events ever
      */
     public synchronized double getStrictAverageInterval() {
@@ -143,6 +146,7 @@ public class Frequency {
 
     /**
      * Appends the data of this frequency to the specified StringBuilder
+     *
      * @param dest to append data to
      * @since 0.9.23
      */

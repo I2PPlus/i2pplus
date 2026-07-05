@@ -72,6 +72,7 @@ public class EdDSAEngine extends Signature {
 
     /**
      * Specific EdDSA-internal hash requested, only matching keys will be allowed.
+     *
      * @param digest the hash algorithm that keys must have to sign or verify.
      */
     public EdDSAEngine(MessageDigest digest) {

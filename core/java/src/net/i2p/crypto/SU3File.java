@@ -173,6 +173,7 @@ public class SU3File {
 
     /**
      *  Should the signature be verified? Default true
+     *
      *  @since 0.9.15
      */
     public void setVerifySignature(boolean shouldVerify) {
@@ -181,6 +182,7 @@ public class SU3File {
 
     /**
      *  Use this X.509 cert file for verification instead of $I2P/certificates/content_type/foo_at_mail.i2p
+     *
      *  @since 0.9.15
      */
     private void setPublicKeyCertificate(File certFile) {
@@ -776,6 +778,7 @@ public class SU3File {
 
     /**
      *  Zip, xml, and xml.gz only
+     *
      *  @return success
      *  @since 0.9.9
      */
@@ -1121,6 +1124,7 @@ public class SU3File {
 
     /**
      *  For the -k CLI option
+     *
      *  @return non-null, throws IOE on all errors
      *  @since 0.9.15
      */

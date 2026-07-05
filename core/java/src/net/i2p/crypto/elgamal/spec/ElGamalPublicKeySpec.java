@@ -10,6 +10,12 @@ import java.math.BigInteger;
 public class ElGamalPublicKeySpec extends ElGamalKeySpec {
     private final BigInteger y;
 
+    /**
+     * Constructs an ElGamal public key specification.
+     *
+     * @param y the public key value
+     * @param spec the ElGamal parameter specification
+     */
     public ElGamalPublicKeySpec(BigInteger y, ElGamalParameterSpec spec) {
         super(spec);
 

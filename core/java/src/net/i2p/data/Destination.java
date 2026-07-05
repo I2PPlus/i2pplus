@@ -112,6 +112,7 @@ public class Destination extends KeysAndCert {
 
     /**
      * Pull from cache or return new
+     *
      * @since 0.9.9
      */
     public static Destination create(InputStream in) throws DataFormatException, IOException {
@@ -152,6 +153,7 @@ public class Destination extends KeysAndCert {
 
     /**
      * alternative constructor which takes a base64 string representation
+     *
      * @param s a Base64 representation of the destination, as (eg) is used in hosts.txt
      */
     public Destination(String s) throws DataFormatException {
@@ -175,6 +177,7 @@ public class Destination extends KeysAndCert {
     /**
      *  Deprecated, used only by Packet.java in streaming.
      *  Broken for sig types P521 and RSA before 0.9.15
+     *
      *  @return the written length (NOT the new offset)
      */
     public int writeBytes(byte[] target, int offset) {
@@ -209,6 +212,7 @@ public class Destination extends KeysAndCert {
     /**
      *  Cache it.
      *  Useful in I2PTunnelHTTPServer where it is added to the headers
+     *
      *  @since 0.9.9
      */
     @Override
@@ -219,6 +223,7 @@ public class Destination extends KeysAndCert {
 
     /**
      *  For convenience.
+     *
      *  @return "{52 chars}.b32.i2p" or null if fields not set.
      *  @since 0.9.14
      */
@@ -232,6 +237,7 @@ public class Destination extends KeysAndCert {
 
     /**
      *  Clear the cache.
+     *
      *  @since 0.9.9
      */
     public static void clearCache() {

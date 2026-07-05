@@ -16,10 +16,18 @@ package net.i2p.client.datagram;
  */
 public class I2PInvalidDatagramException extends Exception {
 
+    /**
+     * Creates a new I2PInvalidDatagramException without a detail message.
+     */
     public I2PInvalidDatagramException() {
         super();
     }
 
+    /**
+     * Creates a new I2PInvalidDatagramException with a detail message.
+     *
+     * @param s the detail message
+     */
     public I2PInvalidDatagramException(String s) {
         super(s);
     }

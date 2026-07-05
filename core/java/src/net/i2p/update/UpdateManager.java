@@ -20,6 +20,7 @@ public interface UpdateManager {
 
     /**
      *  The name we register with the ClientAppManager
+     *
      *  @since 0.9.12
      */
     public static final String APP_NAME = "update";
@@ -191,6 +192,7 @@ public interface UpdateManager {
      *  Is an update available?
      *  Blocking.
      *  An available update may still have a constraint or lack sources.
+     *
      *  @param type the UpdateType of this request
      *  @return new version or null if nothing newer is available
      *  @since 0.9.21
@@ -201,6 +203,7 @@ public interface UpdateManager {
      *  Is an update available?
      *  Blocking.
      *  An available update may still have a constraint or lack sources.
+     *
      *  @param type the UpdateType of this request
      *  @param maxWait max time to block
      *  @return new version or null if nothing newer is available
@@ -212,6 +215,7 @@ public interface UpdateManager {
      *  Is an update available?
      *  Blocking.
      *  An available update may still have a constraint or lack sources.
+     *
      *  @param type the UpdateType of this request
      *  @param maxWait max time to block
      *  @param id id of this request
@@ -222,6 +226,7 @@ public interface UpdateManager {
 
     /**
      *  Is a router update being downloaded?
+     *
      *  @return true iff router update is being downloaded
      *  @since 0.9.21
      */
@@ -229,6 +234,7 @@ public interface UpdateManager {
 
     /**
      *  Is a router update being downloaded?
+     *
      *  @param type the UpdateType of this request
      *  @return true iff router update is being downloaded
      *  @since 0.9.21
@@ -237,6 +243,7 @@ public interface UpdateManager {
 
     /**
      *  Is a router update being downloaded?
+     *
      *  @param type the UpdateType of this request
      *  @param id of this request
      *  @return true iff router update is being downloaded
@@ -248,6 +255,7 @@ public interface UpdateManager {
      *  Non-blocking. Does not check.
      *  Fails if check or update already in progress.
      *  If returns true, then call isUpdateInProgress() in a loop
+     *
      *  @param type the UpdateType of this request
      *  @return true if task started
      *  @since 0.9.21
@@ -258,6 +266,7 @@ public interface UpdateManager {
      *  Non-blocking. Does not check.
      *  Fails if check or update already in progress.
      *  If returns true, then call isUpdateInProgress() in a loop
+     *
      *  @param type the UpdateType of this request
      *  @param id id of this request
      *  @return true if task started
@@ -269,6 +278,7 @@ public interface UpdateManager {
      *  Non-blocking. Does not check.
      *  Fails if check or update already in progress.
      *  If returns true, then call isUpdateInProgress() in a loop
+     *
      *  @param type the UpdateType of this request
      *  @param maxTime not honored by all Updaters
      *  @return true if task started
@@ -280,6 +290,7 @@ public interface UpdateManager {
      *  Non-blocking. Does not check.
      *  Fails if check or update already in progress.
      *  If returns true, then call isUpdateInProgress() in a loop
+     *
      *  @param type the UpdateType of this request
      *  @param maxTime not honored by all Updaters
      *  @param id id of this request
@@ -290,6 +301,7 @@ public interface UpdateManager {
 
     /**
      *  The status on any update current or last finished.
+     *
      *  @return status or ""
      *  @since 0.9.21
      */

@@ -9,6 +9,7 @@ import java.util.TimeZone;
 
 /**
  *  Moved from NewsFetcher
+ *
  *  @since 0.8.5; moved from net.i2p.router.util in 0.9.34
  */
 public abstract class RFC822Date {

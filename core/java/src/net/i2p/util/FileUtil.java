@@ -36,6 +36,7 @@ public class FileUtil {
      * @param path path to the directory being deleted
      * @param failIfNotEmpty if true, do not delete anything if the directory
      *                       is not empty (and return false)
+     *
      * @return true if the path no longer exists (aka was removed),
      *         false if it remains
      */
@@ -49,6 +50,7 @@ public class FileUtil {
      * @param target the file or directory being deleted
      * @param failIfNotEmpty if true, do not delete anything if the directory
      *                       is not empty (and return false)
+     *
      * @return true if the path no longer exists (aka was removed),
      *         false if it remains
      */
@@ -261,6 +263,7 @@ public class FileUtil {
 
     /**
      * Public since 0.8.3
+     *
      * @since 0.8.1
      */
     public static boolean isPack200Supported() {
@@ -294,8 +297,10 @@ public class FileUtil {
      * with the classes discovered at runtime so neither is required at compile time.
      *
      * Caller must close streams
+     *
      * @throws IOException on unpack error or if neither library is available.
      *         Will not throw ClassNotFoundException.
+     *
      * @throws org.apache.harmony.pack200.Pack200Exception which is not an IOException
      * @throws java.lang.reflect.InvocationTargetException on duplicate zip entries in the packed jar
      * @since 0.8.1
@@ -378,6 +383,7 @@ public class FileUtil {
      *
      * @param startAtBeginning if true, read the first maxNumLines, otherwise read
      *                         the last maxNumLines
+     *
      * @param maxNumLines max number of lines (or -1 for unlimited)
      * @return string or null; does not throw IOException.
      *

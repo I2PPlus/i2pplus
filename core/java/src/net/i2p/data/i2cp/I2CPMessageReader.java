@@ -46,6 +46,7 @@ public class I2CPMessageReader {
 
     /**
      * For internal extension only. No stream.
+     *
      * @since 0.8.3
      */
     protected I2CPMessageReader(I2CPMessageEventListener lsnr) {
@@ -70,6 +71,7 @@ public class I2CPMessageReader {
 
     /**
      * Have the already started reader pause its reading indefinitely
+     *
      * @deprecated unused
      */
     @Deprecated
@@ -79,6 +81,7 @@ public class I2CPMessageReader {
 
     /**
      * Resume reading after a pause
+     *
      * @deprecated unused
      */
     @Deprecated
@@ -174,6 +177,7 @@ public class I2CPMessageReader {
 
         /**
          * Called by run()
+         *
          * @since 0.9.21
          */
         protected void run2() {

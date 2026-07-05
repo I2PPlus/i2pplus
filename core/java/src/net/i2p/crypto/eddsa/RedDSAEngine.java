@@ -52,6 +52,7 @@ public final class RedDSAEngine extends EdDSAEngine {
 
     /**
      * Specific EdDSA-internal hash requested, only matching keys will be allowed.
+     *
      * @param digest the hash algorithm that keys must have to sign or verify.
      */
     public RedDSAEngine(MessageDigest digest) {

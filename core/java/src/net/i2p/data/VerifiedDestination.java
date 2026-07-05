@@ -27,6 +27,7 @@ public class VerifiedDestination extends Destination {
 
     /**
      * alternative constructor which takes a base64 string representation
+     *
      * @param s a Base64 representation of the destination, as (eg) is used in hosts.txt
      */
     public VerifiedDestination(String s) throws DataFormatException {
@@ -36,6 +37,7 @@ public class VerifiedDestination extends Destination {
 
     /**
      * create from an existing Dest
+     *
      * @param d must be non-null
      */
     public VerifiedDestination(Destination d) throws DataFormatException {
@@ -44,6 +46,7 @@ public class VerifiedDestination extends Destination {
 
     /**
      * verify the certificate.
+     *
      * @param allowNone If true, allow a NULL or HIDDEN certificate.
      */
     public boolean verifyCert(boolean allowNone) {

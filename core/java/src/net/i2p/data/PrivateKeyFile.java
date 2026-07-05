@@ -524,6 +524,7 @@ public class PrivateKeyFile {
 
     /**
      *  Can't be used for writing
+     *
      *  @since 0.9.26
      */
     public PrivateKeyFile(InputStream in) throws I2PSessionException {
@@ -710,6 +711,7 @@ public class PrivateKeyFile {
     /**
      * Change cert type - caller must also call write().
      * Side effect - creates new Destination object.
+     *
      * @since 0.9.12
      */
     public Certificate setKeyCert(SigType type) {
@@ -812,6 +814,7 @@ public class PrivateKeyFile {
 
     /**
      *  Does this session have offline and transient keys?
+     *
      *  @since 0.9.38
      */
     public boolean isOffline() {
@@ -826,6 +829,7 @@ public class PrivateKeyFile {
 
     /**
      *  Side effect - zeroes out the current signing private key
+     *
      *  @since 0.9.38
      */
     public void setOfflineData(

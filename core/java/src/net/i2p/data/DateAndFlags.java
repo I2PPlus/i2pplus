@@ -132,6 +132,7 @@ public class DateAndFlags extends DataStructureImpl {
 
     /**
      * Overridden for efficiency.
+     *
      * @param data non-null
      * @throws DataFormatException if null or wrong length
      */

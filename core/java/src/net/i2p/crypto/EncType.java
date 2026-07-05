@@ -48,6 +48,7 @@ public enum EncType {
     /**
      *  Proposal 144.
      *  Pubkey 32 bytes; privkey 32 bytes
+     *
      *  @since 0.9.38
      */
     ECIES_X25519(4, 32, 32, EncAlgo.ECIES, "EC/None/NoPadding", X25519_SPEC, "0.9.38"),
@@ -55,6 +56,7 @@ public enum EncType {
     /**
      *  Proposal 169.
      *  Pubkey 32 bytes; privkey 32 bytes
+     *
      *  @since 0.9.67
      */
     MLKEM512_X25519(5, 32, 32, EncAlgo.ECIES_MLKEM, "EC/None/NoPadding", X25519_SPEC, "0.9.67"),
@@ -62,6 +64,7 @@ public enum EncType {
     /**
      *  Proposal 169.
      *  Pubkey 32 bytes; privkey 32 bytes
+     *
      *  @since 0.9.67
      */
     MLKEM768_X25519(6, 32, 32, EncAlgo.ECIES_MLKEM, "EC/None/NoPadding", X25519_SPEC, "0.9.67"),
@@ -69,6 +72,7 @@ public enum EncType {
     /**
      *  Proposal 169.
      *  Pubkey 32 bytes; privkey 32 bytes
+     *
      *  @since 0.9.67
      */
     MLKEM1024_X25519(7, 32, 32, EncAlgo.ECIES_MLKEM, "EC/None/NoPadding", X25519_SPEC, "0.9.67"),
@@ -77,6 +81,7 @@ public enum EncType {
      *  For internal use only (Alice side)
      *  Proposal 169.
      *  Pubkey 800 bytes; privkey 1632 bytes
+     *
      *  @since 0.9.67
      */
     MLKEM512_X25519_INT(100005, 800, 1632, EncAlgo.ECIES_MLKEM_INT, "EC/None/NoPadding", X25519_SPEC, "0.9.67"),
@@ -85,6 +90,7 @@ public enum EncType {
      *  For internal use only (Alice side)
      *  Proposal 169.
      *  Pubkey 1184 bytes; privkey 2400 bytes
+     *
      *  @since 0.9.67
      */
     MLKEM768_X25519_INT(100006, 1184, 2400, EncAlgo.ECIES_MLKEM_INT, "EC/None/NoPadding", X25519_SPEC, "0.9.67"),
@@ -93,6 +99,7 @@ public enum EncType {
      *  For internal use only (Alice side)
      *  Proposal 169.
      *  Pubkey 1568 bytes; privkey 3168 bytes
+     *
      *  @since 0.9.67
      */
     MLKEM1024_X25519_INT(100007, 1568, 3168, EncAlgo.ECIES_MLKEM_INT, "EC/None/NoPadding", X25519_SPEC, "0.9.67"),
@@ -101,6 +108,7 @@ public enum EncType {
      *  For internal use only (Bob side ciphertext)
      *  Proposal 169.
      *  Pubkey 768 bytes; privkey 0
+     *
      *  @since 0.9.67
      */
     MLKEM512_X25519_CT(100008, 768, 0, EncAlgo.ECIES_MLKEM_INT, "EC/None/NoPadding", X25519_SPEC, "0.9.67"),
@@ -109,6 +117,7 @@ public enum EncType {
      *  For internal use only (Bob side ciphertext)
      *  Proposal 169.
      *  Pubkey 1088 bytes; privkey 0
+     *
      *  @since 0.9.67
      */
     MLKEM768_X25519_CT(100009, 1088, 0, EncAlgo.ECIES_MLKEM_INT, "EC/None/NoPadding", X25519_SPEC, "0.9.67"),
@@ -117,6 +126,7 @@ public enum EncType {
      *  For internal use only (Bob side ciphertext)
      *  Proposal 169.
      *  Pubkey 1568 bytes; privkey 0
+     *
      *  @since 0.9.67
      */
     MLKEM1024_X25519_CT(100010, 1568, 0, EncAlgo.ECIES_MLKEM_INT, "EC/None/NoPadding", X25519_SPEC, "0.9.67");
@@ -179,6 +189,7 @@ public enum EncType {
 
     /**
      *  The elliptic curve ECParameterSpec for ECDSA; DSAParameterSpec for DSA
+     *
      *  @throws InvalidParameterSpecException if the algorithm is not available on this JVM.
      */
     public AlgorithmParameterSpec getParams() throws InvalidParameterSpecException {
@@ -248,6 +259,7 @@ public enum EncType {
      *  Checks if this is a post-quantum encryption type.
      *
      *  @since 0.9.67
+     *
      *  @return true if this is a PQ type
      */
     public boolean isPQ() {

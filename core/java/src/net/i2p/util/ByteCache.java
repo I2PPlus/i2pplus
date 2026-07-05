@@ -136,6 +136,7 @@ public final class ByteCache extends TryCache<ByteArray> {
 
     /**
      *  Clear everything (memory pressure)
+     *
      *  @since 0.7.14
      */
     public static void clearAll() {
@@ -177,6 +178,7 @@ public final class ByteCache extends TryCache<ByteArray> {
 
     /**
      * Resize the cache to a new capacity.
+     *
      * @param maxCachedEntries the new maximum number of entries to cache
      */
     public void resize(int maxCachedEntries) {

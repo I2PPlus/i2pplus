@@ -45,6 +45,9 @@ public class ElGamalParameterSpec implements AlgorithmParameterSpec {
     }
 
     /**
+     * Returns a hash code for this parameter specification.
+     *
+     * @return the hash code
      * @since 0.9.25
      */
     @Override
@@ -53,6 +56,10 @@ public class ElGamalParameterSpec implements AlgorithmParameterSpec {
     }
 
     /**
+     * Compares this ElGamal parameter spec to another object for equality.
+     *
+     * @param obj the object to compare
+     * @return true if the objects are equal
      * @since 0.9.25
      */
     @Override
@@ -63,8 +70,6 @@ public class ElGamalParameterSpec implements AlgorithmParameterSpec {
             ElGamalParameterSpec egps = (ElGamalParameterSpec) obj;
             op = egps.getP();
             og = egps.getG();
-            // } else if (obj.getClass().getName().equals("org.bouncycastle.jce.spec.ElGamalParameterSpec")) {
-            // reflection... no...
         } else {
             return false;
         }
