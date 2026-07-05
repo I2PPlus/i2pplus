@@ -442,7 +442,7 @@ public class PrivateKeyFile {
     }
 
     /**
-     *  @param fileName the key file name
+     *  @param file the key file name
      */
     public PrivateKeyFile(String file) {
         this(new File(file), I2PClientFactory.createClient());
