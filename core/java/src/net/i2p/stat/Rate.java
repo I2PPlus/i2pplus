@@ -487,6 +487,7 @@ public class Rate {
      * @since 0.9.41
      */
     public synchronized void store(String prefix, StringBuilder buf, boolean addComments) throws IOException {
+        PersistenceHelper.add(buf, addComments, prefix, ".period", "Period for this rate:", _period);
         PersistenceHelper.addDate(buf, addComments, prefix, ".creationDate", "Rate creation time:", _creationDate);
         PersistenceHelper.addDate(buf, addComments, prefix, ".lastCoalesceDate", "Last time rate was coalesced:", _lastCoalesceDate);
         PersistenceHelper.addTime(buf, addComments, prefix, ".currentTotalEventTime", "Total time used by events in current period (uncoalesced):", _currentTotalEventTime);
@@ -514,6 +515,7 @@ public class Rate {
      * @throws IllegalArgumentException if the data was formatted incorrectly
      */
     public final synchronized void load(Properties props, String prefix, boolean treatAsCurrent) throws IllegalArgumentException {
+        int origPeriod = _period;
         _period = PersistenceHelper.getInt(props, prefix, ".period");
         _creationDate = PersistenceHelper.getLong(props, prefix, ".creationDate");
         _currentEventCount = PersistenceHelper.getInt(props, prefix, ".currentEventCount");
@@ -535,10 +537,16 @@ public class Rate {
         }
 
         if (_period <= 0) {
-            _period = prefix.contains("tunnelCreateResponse") ? 60 * 60 * 1000 : 60 * 1000;
+            // .period was not stored prior to 0.9.71; preserve the constructor-set period
+            // rather than using a hardcoded fallback which would corrupt multi-period RateStats
+            if (origPeriod > 0) {
+                _period = origPeriod;
+            } else {
+                _period = prefix.contains("tunnelCreateResponse") ? 60 * 60 * 1000 : 60 * 1000;
+            }
             Log _log = I2PAppContext.getGlobalContext().logManager().getLog(Rate.class);
             if (_log.shouldInfo()) {
-                _log.warn("Period for " + prefix + " is invalid -> Setting a default value of " + _period / 60 / 1000 + "m");
+                _log.warn("Period for " + prefix + " missing or invalid, using value: " + _period);
             }
         }
         coalesce();
