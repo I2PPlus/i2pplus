@@ -157,7 +157,8 @@ public class TransportManager implements TransportEventListener {
         _context.statManager().createRateStat("transport.bidFailBanlisted", "Failed to bid on message (banlisted peer)", "Transport", RATES);
         _context.statManager().createRateStat("transport.bidFailSelf", "Failed to bid on message (self as target)", "Transport", RATES);
         _context.statManager().createRateStat("transport.bidFailNoTransports", "Failed to bid on message (unreachable on any transport)", "Transport", RATES);
-        _context.statManager().createRateStat("transport.bidFailAllTransports", "Failed to bid on message (failed on all transports)", "Transport", RATES);
+        _context.statManager().createRequiredRateStat("transport.bidFailAllTransports", "Failed to bid on message (failed on all transports)", "Transport", RATES);
+        _context.statManager().createRequiredRateStat("transport.dispatchExpired", "Messages dropped after exceeding max dispatch age", "Transport", RATES);
         _transports = new ConcurrentHashMap<>(2);
         _pluggableTransports = new HashMap<>(2);
 

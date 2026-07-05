@@ -18,6 +18,7 @@ import net.i2p.router.MessageSelector;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 
+import net.i2p.router.Tuner;
 import net.i2p.util.Log;
 
 /**
@@ -63,6 +64,13 @@ class GetBidsJob extends JobImpl {
 
         if (msg.getFailedTransportCount() > 1) {
             context.statManager().addRateData("transport.bidFailAllTransports", msg.getLifetime());
+            fail(context, msg);
+            return;
+        }
+
+        int maxAge = Tuner.getMaxDispatchAgeMs();
+        if (maxAge > 0 && msg.getLifetime() > maxAge) {
+            context.statManager().addRateData("transport.dispatchExpired", msg.getLifetime());
             fail(context, msg);
             return;
         }
