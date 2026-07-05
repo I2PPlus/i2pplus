@@ -12,7 +12,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
@@ -39,6 +38,12 @@ class SAMUtils {
 
      private final static Log _log = new Log(SAMUtils.class);
 
+    /** The key for the command portion of a parsed SAM message */
+    public static final String COMMAND = "\"\"COMMAND\"\"";
+
+    /** The key for the opcode portion of a parsed SAM message */
+    public static final String OPCODE = "\"\"OPCODE\"\"";
+
     /**
      * Generate a random destination key using DSA_SHA1 signature type.
      * Caller must close streams. Fails silently.
@@ -60,7 +65,6 @@ class SAMUtils {
      * @since 0.9.14
      */
     public static void genRandomKey(OutputStream priv, OutputStream pub, SigType sigType) {
-        //_log.debug("Generating random keys...");
         try {
             I2PClient c = I2PClientFactory.createClient();
             Destination d = c.createDestination(priv, sigType);
@@ -143,9 +147,6 @@ class SAMUtils {
         }
         return d;
     }
-
-    public static final String COMMAND = "\"\"COMMAND\"\"";
-    public static final String OPCODE = "\"\"OPCODE\"\"";
 
     /**
      *  Parse SAM parameters, and put them into a Properties object

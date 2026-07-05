@@ -1,5 +1,5 @@
 package net.i2p.sam;
-/*
+/**
  * free (adj.): unencumbered; not under the control of others
  * Written by human in 2004 and released into the public domain
  * with no warranty of any kind, either expressed or implied.
@@ -127,6 +127,14 @@ class SAMDatagramSession extends SAMMessageSession {
                                               sendLeaseSet, sendTags,tagThreshold, expiration);
     }
 
+    /**
+     * Handle a received datagram message from I2P.
+     *
+     * @param msg the raw I2P datagram message
+     * @param proto the I2CP protocol
+     * @param fromPort the I2CP from port
+     * @param toPort the I2CP to port
+     */
     protected void messageReceived(byte[] msg, int proto, int fromPort, int toPort) {
         byte[] payload;
         Destination sender;
@@ -156,6 +164,9 @@ class SAMDatagramSession extends SAMMessageSession {
         }
     }
 
+    /**
+     * Shut down the datagram session.
+     */
     protected void shutDown() {
         recv.stopDatagramReceiving();
     }

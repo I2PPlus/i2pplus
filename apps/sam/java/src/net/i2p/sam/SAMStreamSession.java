@@ -1,5 +1,5 @@
 package net.i2p.sam;
-/*
+/**
  * free (adj.): unencumbered; not under the control of others
  * Written by human in 2004 and released into the public domain
  * with no warranty of any kind, either expressed or implied.
@@ -160,8 +160,7 @@ class SAMStreamSession implements SAMMessageSess {
             allprops.setProperty("i2cp.dontPublishLeaseSet", "true");
         String name = allprops.getProperty("inbound.nickname");
         if (name == null || name.trim().isEmpty()) {
-            //name = "SAM TCP Client";
-            name = (getClass().getSimpleName().equals("PrimarySession") || getClass().getSimpleName().equals("MasterSession")) ? "SAM Mux Client" : "SAM TCP Client";
+                name = (getClass().getSimpleName().equals("PrimarySession") || getClass().getSimpleName().equals("MasterSession")) ? "SAM Mux Client" : "SAM TCP Client";
             allprops.setProperty("inbound.nickname", name);
         }
         String name2 = allprops.getProperty("outbound.nickname");
@@ -227,7 +226,9 @@ class SAMStreamSession implements SAMMessageSess {
         server = null;
     }
 
-    /*
+    /**
+     * Start the SAM STREAM session server, if applicable.
+     *
      * @since 0.9.25
      */
     public void start() {
@@ -237,14 +238,20 @@ class SAMStreamSession implements SAMMessageSess {
         }
     }
 
-    /*
+    /**
+     * Get the I2CP protocol for this session's listener.
+     *
+     * @return the I2CP protocol
      * @since 0.9.25
      */
     public int getListenProtocol() {
         return listenProtocol;
     }
 
-    /*
+    /**
+     * Get the port for this session's listener.
+     *
+     * @return the listen port
      * @since 0.9.25
      */
     public int getListenPort() {
@@ -348,6 +355,7 @@ class SAMStreamSession implements SAMMessageSess {
      * Lookup a destination through the I2CP session.
      * Blocking.
      *
+     * @param name Base64 or b32 destination name to look up
      * @return the Destination or null
      * @since 0.9.69
      */
@@ -451,7 +459,7 @@ class SAMStreamSession implements SAMMessageSess {
         return id;
     }
 
-    /* Create an unique id, either positive or negative */
+    /** Create a unique id, either positive or negative */
     private int createUniqueId() {
         return lastNegativeId.decrementAndGet();
     }
@@ -620,6 +628,15 @@ class SAMStreamSession implements SAMMessageSess {
     }
 
 
+    /**
+     * Set a receive limit for a stream.
+     * Protocol v1 does not support this.
+     *
+     * @param id Stream id
+     * @param limit the receive limit
+     * @param nolimit true for no limit
+     * @return always false
+     */
     boolean setReceiveLimit ( int id, long limit, boolean nolimit )
     {
         if (_log.shouldDebug())
@@ -660,6 +677,9 @@ class SAMStreamSession implements SAMMessageSess {
          */
         public void stopRunning() {}
 
+        /**
+         * Run the socket reader loop.
+         */
         public void run() {}
 
     }
@@ -753,16 +773,23 @@ class SAMStreamSession implements SAMMessageSess {
     }
 
 
-    /**
-     * Lets us push data through the stream without blocking, (even after exceeding
-     * the I2PSocket's buffer)
-     */
-    protected static abstract class StreamSender implements Runnable {
+        /**
+         * Lets us push data through the stream without blocking, (even after exceeding
+         * the I2PSocket's buffer).
+         */
+        protected static abstract class StreamSender implements Runnable {
 
-        protected final int _id;
-        protected final I2PSocket i2pSocket;
+            protected final int _id;
+            protected final I2PSocket i2pSocket;
 
-        public StreamSender ( I2PSocket s, int id ) throws IOException {
+            /**
+             * Create a new StreamSender.
+             *
+             * @param s the I2PSocket to write to
+             * @param id the stream id
+             * @throws IOException if the output stream cannot be obtained
+             */
+            public StreamSender ( I2PSocket s, int id ) throws IOException {
             _id = id;
             i2pSocket = s;
 	}

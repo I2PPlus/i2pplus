@@ -21,6 +21,10 @@ public class SAMSecureSession implements SAMSecureSessionInterface {
     /**
      * Authenticate based on the i2cp username/password.
      *
+     * @param i2cpProps the I2CP session properties
+     * @param props the SAM connection properties containing USER and PASSWORD
+     * @return true if authentication succeeds
+     * @throws SAMException if USER/PASSWORD not provided or authentication fails
      * @since 1.8.0
      */
     public boolean approveOrDenySecureSession(Properties i2cpProps, Properties props) throws SAMException {

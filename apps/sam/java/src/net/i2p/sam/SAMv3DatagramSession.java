@@ -1,7 +1,3 @@
-/**
- * @author MKVore
- *
- */
 package net.i2p.sam;
 
 import java.io.IOException;
@@ -17,6 +13,8 @@ import net.i2p.data.Destination;
 
 /**
  * SAM v3 datagram session implementation.
+ *
+ * @author MKVore
  * @since 0.9.25
  */
 class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDatagramReceiver {
@@ -26,6 +24,11 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
     private final String nick;
     private final SocketAddress clientAddress;
 
+    /**
+     * Get the session nickname.
+     *
+     * @return the nickname
+     */
     public String getNick() {
         return nick;
     }
@@ -89,6 +92,16 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
         clientAddress = SAMv3RawSession.getSocketAddress(props, handler);
     }
 
+    /**
+     * Receive a datagram from I2P and forward to the SAM client.
+     *
+     * @param sender the sender's Destination
+     * @param data the datagram payload
+     * @param proto the I2CP protocol
+     * @param fromPort the I2CP from port
+     * @param toPort the I2CP to port
+     * @throws IOException if forwarding to the client fails
+     */
     public void receiveDatagramBytes(Destination sender, byte[] data, int proto, int fromPort, int toPort)
             throws IOException {
         if (this.clientAddress == null) {
@@ -110,5 +123,8 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
         }
     }
 
+    /**
+     * Stop receiving datagrams.
+     */
     public void stopDatagramReceiving() {}
 }

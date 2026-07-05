@@ -61,6 +61,8 @@ class SAMv3Handler extends SAMv1Handler
      * @param s Socket attached to a SAM client
      * @param verMajor SAM major version to manage (should be 3)
      * @param verMinor SAM minor version to manage
+     * @throws SAMException if the version is not supported
+     * @throws IOException if an I/O error occurs
     */
     public SAMv3Handler(SocketChannel s, int verMajor, int verMinor, SAMBridge parent) throws SAMException, IOException {
         this(s, verMajor, verMinor, new Properties(), parent);
@@ -75,6 +77,8 @@ class SAMv3Handler extends SAMv1Handler
      * @param verMajor SAM major version to manage (should be 3)
      * @param verMinor SAM minor version to manage
      * @param i2cpProps properties to configure the I2CP connection (host, port, etc)
+     * @throws SAMException if the version is not supported
+     * @throws IOException if an I/O error occurs
      */
 
     public SAMv3Handler(SocketChannel s, int verMajor, int verMinor, Properties i2cpProps, SAMBridge parent) throws SAMException, IOException {
@@ -84,11 +88,21 @@ class SAMv3Handler extends SAMv1Handler
             _log.debug("SAMv3Handler instantiated");
     }
 
+    /**
+     * Verify the SAM protocol version is supported by this handler.
+     *
+     * @return true if the major version matches this handler's version
+     */
     @Override
     public boolean verifVersion() {
         return (verMajor == 3);
     }
 
+    /**
+     * Get the IP address of the connected SAM client.
+     *
+     * @return the client's IP address as a string
+     */
     public String getClientIP() {
         return this.socket.socket().getInetAddress().getHostAddress();
     }
@@ -147,6 +161,10 @@ class SAMv3Handler extends SAMv1Handler
         streamSession = sess; session = sess;
     }
 
+    /**
+     * Handle a SAM v3 client connection by reading and dispatching commands
+     * in a loop until the connection is closed or an error occurs.
+     */
     @Override
     public void handle() {
         String msg = null;
@@ -378,7 +396,13 @@ class SAMv3Handler extends SAMv1Handler
         }
     }
 
-    /* Parse and execute a SESSION message */
+    /**
+     * Parse and execute a SESSION message.
+     *
+     * @param opcode the SESSION sub-command (e.g. CREATE, ADD, REMOVE)
+     * @param props the parsed message properties
+     * @return true if the handler should continue processing commands
+     */
     @Override
     protected boolean execSessionMessage(String opcode, Properties props) {
 
@@ -601,7 +625,6 @@ class SAMv3Handler extends SAMv1Handler
                 InputStream in = s.getInputStream();
                 do {
                     try {
-                        //_log.debug("sleeping...");
                         Thread.sleep(1000);
                     } catch (InterruptedException ie) {
                         break;
@@ -663,7 +686,13 @@ class SAMv3Handler extends SAMv1Handler
             return new SAMv3StreamSession(login);
         }
 
-    /* Parse and execute a STREAM message */
+    /**
+     * Parse and execute a STREAM message.
+     *
+     * @param opcode the STREAM sub-command (e.g. CONNECT, ACCEPT, FORWARD)
+     * @param props the parsed message properties
+     * @return true if the handler should continue processing commands
+     */
     @Override
     protected boolean execStreamMessage ( String opcode, Properties props ) {
         String nick = null;
@@ -744,6 +773,13 @@ class SAMv3Handler extends SAMv1Handler
         }
     }
 
+    /**
+     * Parse and execute a STREAM CONNECT message.
+     * Supports SILENT mode to suppress status messages.
+     *
+     * @param props the parsed message properties
+     * @return true if the handler should continue processing commands
+     */
     @Override
     protected boolean execStreamConnect( Properties props) {
         // Messages are NOT sent if SILENT=true,
@@ -890,13 +926,29 @@ class SAMv3Handler extends SAMv1Handler
         }
     }
 
+    /**
+     * Notify the SAM client of an incoming stream connection on a static channel.
+     *
+     * @param client the client socket channel
+     * @param d the destination of the remote peer
+     * @throws IOException if writing to the client socket fails
+     */
     public static void notifyStreamIncomingConnection(SocketChannel client, Destination d) throws IOException {
         if (!writeString(d.toBase64() + "\n", client)) {
             throw new IOException("Error notifying connection to SAM client");
         }
     }
 
-    /** @since 0.9.24 */
+    /**
+     * Notify the SAM client of an incoming stream connection with port information.
+     *
+     * @param client the client socket channel
+     * @param d the destination of the remote peer
+     * @param fromPort the source port
+     * @param toPort the destination port
+     * @throws IOException if writing to the client socket fails
+     * @since 0.9.24
+     */
     public static void notifyStreamIncomingConnection(SocketChannel client, Destination d, int fromPort, int toPort) throws IOException {
         if (!writeString(d.toBase64() + " FROM_PORT=" + fromPort + " TO_PORT=" + toPort + '\n', client)) {
             throw new IOException("Error notifying connection to SAM client");

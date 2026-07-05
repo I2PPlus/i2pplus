@@ -102,7 +102,11 @@ abstract class SAMHandler implements Runnable, Handler {
     }
 
     /**
-     *  Caller must synch
+     *  Caller must synch.
+     *
+     * @param data the bytes to write
+     * @param out the socket channel to write to
+     * @throws IOException on write errors
      */
     private static void writeBytes(ByteBuffer data, SocketChannel out) throws IOException {
         while (data.hasRemaining()) out.write(data);
@@ -122,7 +126,7 @@ abstract class SAMHandler implements Runnable, Handler {
      * always be used when writing strings, unless you really know what
      * you're doing.
      *
-     * @param str A byte array to be written
+     * @param str A string to be written
      *
      * @return True if the string was successfully written, false otherwise
      */
@@ -135,14 +139,16 @@ abstract class SAMHandler implements Runnable, Handler {
     }
 
     /**
-     * Unsynchronized, use with caution
-     * @return success
+     * Unsynchronized, use with caution.
+     *
+     * @param str the string to write
+     * @param out the socket channel to write to
+     * @return true on success
      */
     public static boolean writeString(String str, SocketChannel out) {
         try {
             writeBytes(ByteBuffer.wrap(DataHelper.getUTF8(str)), out);
         } catch (IOException e) {
-            //_log.debug("Caught IOException", e);
             return false;
         }
         return true;

@@ -31,6 +31,8 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 		 * @param s Socket attached to a SAM client
 		 * @param verMajor SAM major version to manage (should be 2)
 		 * @param verMinor SAM minor version to manage
+		 * @throws SAMException if the version is not supported
+		 * @throws IOException if an I/O error occurs
 		 */
 		public SAMv2Handler(SocketChannel s, int verMajor, int verMinor,
 		                     SAMBridge parent) throws SAMException, IOException
@@ -47,6 +49,8 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 		 * @param verMajor SAM major version to manage (should be 2)
 		 * @param verMinor SAM minor version to manage
 		 * @param i2cpProps properties to configure the I2CP connection (host, port, etc)
+		 * @throws SAMException if the version is not supported
+		 * @throws IOException if an I/O error occurs
 		 */
 
 		public SAMv2Handler(SocketChannel s, int verMajor, int verMinor,
@@ -55,6 +59,11 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 			super(s, verMajor, verMinor, i2cpProps, parent);
 		}
 
+		/**
+		 * Verify the SAM protocol version is supported by this handler.
+		 *
+		 * @return true if the major version matches this handler's version
+		 */
 		@Override
 		public boolean verifVersion()
 		{
@@ -68,7 +77,13 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 		}
 
 
-		/* Parse and execute a STREAM message */
+		/**
+		 * Parse and execute a STREAM message.
+		 *
+		 * @param opcode the STREAM sub-command
+		 * @param props the parsed message properties
+		 * @return true if the handler should continue processing commands
+		 */
 		@Override
 		protected boolean execStreamMessage ( String opcode, Properties props )
 		{
@@ -97,8 +112,8 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 			else
 			{
 				if (_log.shouldDebug())
-					_log.debug ( "Unrecognized RAW message opcode: \""
-						+ opcode + "\"" );
+				_log.debug ( "Unrecognized STREAM message opcode: \""
+					+ opcode + "\"" );
 				return false;
 			}
 		}

@@ -49,13 +49,10 @@ class SAMHandlerFactory {
             line = buf.toString();
         } catch (SocketTimeoutException e) {
             if (log.shouldWarn()) {log.warn("Timeout (75s) waiting for \'HELLO VERSION\' from remote client");}
-            //throw new SAMException("Timeout (60s) waiting for HELLO VERSION" + "\n* Error: " + e.getMessage());
         } catch (IOException e) {
             if (log.shouldWarn()) {log.warn("IO Error reading from socket" + " -> " + e.getMessage());}
-            //throw new SAMException("Error reading from socket" + "\n* Error: " + e.getMessage());
         } catch (RuntimeException e) {
             if (log.shouldError()) {log.error("Unexpected runtime error in SAM protocol handler -> " + e.getMessage());}
-            //throw new SAMException("Unexpected error" + "\n* Error: " + e.getMessage());
         }
         if (log.shouldInfo() && line != null) {log.info("New message received: [" + line + ']');}
 
@@ -66,7 +63,6 @@ class SAMHandlerFactory {
             if (log.shouldWarn()) {
                 log.warn("Malformed SAM handshake received from remote client -> Must start with \'HELLO VERSION\'");
             }
-            //throw new SAMException("Must start with HELLO VERSION");
         }
 
         String minVer = props.getProperty("MIN");
@@ -86,7 +82,6 @@ class SAMHandlerFactory {
             boolean approval = secureSession.approveOrDenySecureSession(i2cpProps, props);
             if (!approval) {
                 if (log.shouldWarn()) {log.warn("SAM connection cancelled by user request");}
-                //throw new SAMException("SAM connection cancelled by user request");
             }
         }
 
@@ -122,7 +117,11 @@ class SAMHandlerFactory {
         return handler;
     }
 
-    /*
+    /**
+     * Choose the best SAM protocol version supported by both client and server.
+     *
+     * @param minVer minimum version the client supports
+     * @param maxVer maximum version the client supports
      * @return "x.y" the best version we can use, or null on failure
      */
     private static String chooseBestVersion(String minVer, String maxVer) {
@@ -149,7 +148,12 @@ class SAMHandlerFactory {
         return null;
     }
 
-    /* Get the major protocol version from a string, or -1 */
+    /**
+     * Get the major protocol version from a version string.
+     *
+     * @param ver version string in "major.minor" format
+     * @return the major version number, or -1 on error
+     */
     private static int getMajor(String ver) {
         if (ver == null) {return -1;}
         int dot = ver.indexOf('.');
@@ -159,7 +163,12 @@ class SAMHandlerFactory {
         catch (NumberFormatException e) {return -1;}
     }
 
-    /* Get the minor protocol version from a string, or -1 */
+    /**
+     * Get the minor protocol version from a version string.
+     *
+     * @param ver version string in "major.minor" format
+     * @return the minor version number, or -1 on error
+     */
     private static int getMinor(String ver) {
         if ((ver == null) || (ver.indexOf('.') < 0)) {return -1;}
         try {

@@ -1,5 +1,5 @@
 package net.i2p.sam;
-/*
+/**
  * free (adj.): unencumbered; not under the control of others
  * Written by human in 2004 and released into the public domain
  * with no warranty of any kind, either expressed or implied.
@@ -111,6 +111,14 @@ class SAMRawSession extends SAMMessageSession {
                                               sendLeaseSet, sendTags,tagThreshold, expiration);
     }
 
+    /**
+     * Handle a received raw message from I2P.
+     *
+     * @param msg the raw I2P message
+     * @param proto the I2CP protocol
+     * @param fromPort the I2CP from port
+     * @param toPort the I2CP to port
+     */
     protected void messageReceived(byte[] msg, int proto, int fromPort, int toPort) {
         try {
             recv.receiveRawBytes(msg, proto, fromPort, toPort);
@@ -120,6 +128,9 @@ class SAMRawSession extends SAMMessageSession {
         }
     }
 
+    /**
+     * Shut down the raw session.
+     */
     protected void shutDown() {
         recv.stopRawReceiving();
     }

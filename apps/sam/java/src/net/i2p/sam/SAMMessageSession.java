@@ -1,5 +1,5 @@
 package net.i2p.sam;
-/*
+/**
  * free (adj.): unencumbered; not under the control of others
  * Written by human in 2004 and released into the public domain
  * with no warranty of any kind, either expressed or implied.
@@ -94,7 +94,9 @@ abstract class SAMMessageSession implements SAMMessageSess {
         handler = new SAMMessageSessionHandler(session);
     }
 
-    /*
+    /**
+     * Start the SAM message session handler.
+     *
      * @since 0.9.25
      */
     public void start() {
@@ -238,8 +240,12 @@ abstract class SAMMessageSession implements SAMMessageSess {
     }
 
     /**
-     * Handle a new received message
+     * Handle a new received message.
+     *
      * @param msg Message payload
+     * @param proto I2CP protocol
+     * @param fromPort I2CP from port
+     * @param toPort I2CP to port
      */
     protected abstract void messageReceived(byte[] msg, int proto, int fromPort, int toPort);
 
@@ -391,11 +397,6 @@ abstract class SAMMessageSession implements SAMMessageSess {
                 byte[] msg = session.receiveMessage(msgId);
                 if (msg == null)
                     return;
-                //if (_log.shouldDebug()) {
-                //    _log.debug("Content of message " + msgId + ":\n"
-                //               + HexDump.dump(msg));
-                //}
-
                 messageReceived(msg, proto, fromPort, toPort);
             } catch (I2PSessionException e) {
                 _log.error("Error fetching I2P message", e);

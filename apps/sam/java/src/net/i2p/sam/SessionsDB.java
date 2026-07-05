@@ -11,12 +11,12 @@ package net.i2p.sam;
 import java.util.HashMap;
 
 /**
- *  basically a HashMap from String to SessionRecord
+ *  A database of SAM sessions, mapping nicknames to {@link SessionRecord}s.
+ *  Provides synchronized access for concurrent SAM handlers.
  *
  *  @since 0.9.25 moved from SAMv3Handler
  */
 class SessionsDB {
-	private static final long serialVersionUID = 0x1;
 
 	/**
 	 * Exception thrown when attempting to create a session with an existing ID.
@@ -36,10 +36,21 @@ class SessionsDB {
 
 	private final HashMap<String, SessionRecord> map;
 
+	/**
+	 * Create a new empty sessions database.
+	 */
 	public SessionsDB() {
 		map = new HashMap<>();
 	}
 
+	/**
+	 * Store a session record. Both the nick and destination must be unique.
+	 *
+	 * @param nick the session nickname
+	 * @param session the session record to store
+	 * @throws ExistingIdException if a session with this nick already exists
+	 * @throws ExistingDestException if a session with this destination already exists
+	 */
 	public synchronized void put(String nick, SessionRecord session)
 		throws ExistingIdException, ExistingDestException
 	{
@@ -55,7 +66,15 @@ class SessionsDB {
 		map.put(nick, session);
 	}
 
-	/** @since 0.9.25 */
+	/**
+	 * Store a session record, allowing duplicate destinations.
+	 * Only the nick must be unique.
+	 *
+	 * @param nick the session nickname
+	 * @param session the session record to store
+	 * @throws ExistingIdException if a session with this nick already exists
+	 * @since 0.9.25
+	 */
 	public synchronized void putDupDestOK(String nick, SessionRecord session)
 		throws ExistingIdException
 	{
@@ -66,17 +85,34 @@ class SessionsDB {
 		map.put(nick, session);
 	}
 
-	/** @return true if removed */
+	/**
+	 * Remove a session record by nickname.
+	 *
+	 * @param nick the session nickname
+	 * @return true if removed, false if not found
+	 */
 	synchronized public boolean del( String nick )
 	{
 		return map.remove(nick) != null;
 	}
 
+	/**
+	 * Get a session record by nickname.
+	 *
+	 * @param nick the session nickname
+	 * @return the session record, or null if not found
+	 */
 	synchronized public SessionRecord get(String nick)
 	{
 		return map.get(nick);
 	}
 
+	/**
+	 * Check if a session with the given nickname exists.
+	 *
+	 * @param nick the session nickname
+	 * @return true if a session with this nick exists
+	 */
 	synchronized public boolean containsKey( String nick )
 	{
 		return map.containsKey(nick);

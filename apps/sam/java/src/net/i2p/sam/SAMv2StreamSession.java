@@ -1,5 +1,5 @@
 package net.i2p.sam;
-/*
+/**
  * free (adj.): unencumbered; not under the control of others
  * Written by human in 2004 and released into the public domain
  * with no warranty of any kind, either expressed or implied.
@@ -339,12 +339,12 @@ class SAMv2StreamSession extends SAMStreamSession {
     }
 
     /**
-     * Send bytes through a SAM STREAM session.
+     * Set a receive limit on a stream.
      *
-     * @param id Stream ID
-     * @param limit limitation
-     * @param nolimit true to limit
-     * @return True if the data was queued for sending, false otherwise
+     * @param id Stream id
+     * @param limit the receive limit in bytes
+     * @param nolimit true for unlimited
+     * @return true if the limit was set, false if the reader was not found
      */
     @Override
     public boolean setReceiveLimit(int id, long limit, boolean nolimit) {

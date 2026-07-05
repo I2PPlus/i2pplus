@@ -1,5 +1,5 @@
 package net.i2p.sam;
-/*
+/**
  * free (adj.): unencumbered; not under the control of others
  * Written by human in 2004 and released into the public domain
  * with no warranty of any kind, either expressed or implied.
@@ -12,7 +12,7 @@ import java.io.IOException;
 import net.i2p.data.Destination;
 
 /**
- * Interface for sending raw data to a SAM client
+ * Interface for sending datagram data to a SAM client.
  */
 interface SAMDatagramReceiver {
 

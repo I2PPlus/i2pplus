@@ -1,6 +1,3 @@
-/**
- *
- */
 package net.i2p.sam;
 
 import java.io.IOException;
@@ -27,6 +24,11 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
     private final SocketAddress clientAddress;
     private final boolean _sendHeader;
 
+    /**
+     * Get the session nickname.
+     *
+     * @return the nickname
+     */
     public String getNick() {
         return nick;
     }
@@ -93,8 +95,12 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
     }
 
     /**
-     *  @return null if PORT not set
-     *  @since 0.9.25 moved from constructor
+     * Get the socket address from session properties.
+     *
+     * @param props the session properties containing PORT and optionally HOST
+     * @param handler the SAM handler for client IP fallback
+     * @return the socket address, or null if PORT is not set
+     * @since 0.9.25 moved from constructor
      */
     static SocketAddress getSocketAddress(Properties props, SAMv3Handler handler) {
         String portStr = props.getProperty("PORT");
@@ -110,6 +116,15 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
         }
     }
 
+    /**
+     * Receive raw data from I2P and forward to the SAM client.
+     *
+     * @param data the raw data payload
+     * @param proto the I2CP protocol
+     * @param fromPort the I2CP from port
+     * @param toPort the I2CP to port
+     * @throws IOException if forwarding to the client fails
+     */
     public void receiveRawBytes(byte[] data, int proto, int fromPort, int toPort) throws IOException {
         if (this.clientAddress == null) {
             this.handler.receiveRawBytes(data, proto, fromPort, toPort);
@@ -136,5 +151,8 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
         }
     }
 
+    /**
+     * Stop receiving raw data.
+     */
     public void stopRawReceiving() {}
 }

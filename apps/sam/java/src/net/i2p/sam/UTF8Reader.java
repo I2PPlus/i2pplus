@@ -101,11 +101,17 @@ public class UTF8Reader extends Reader {
         return _cb.get() & 0xffff;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int read(char[] cbuf) throws IOException {
         return read(cbuf, 0, cbuf.length);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public int read(char[] cbuf, int off, int len) throws IOException {
         for (int i = 0; i < len; i++) {
             int c = read();
@@ -119,35 +125,10 @@ public class UTF8Reader extends Reader {
         return len;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void close() throws IOException {
         _in.close();
     }
-
-/****
-    public static void main(String[] args) {
-        try {
-            String s = "Consider the encoding of the Euro sign, €." +
-                       " The Unicode code point for \"€\" is U+20AC.";
-            byte[] test = s.getBytes("UTF-8");
-            InputStream bais = new java.io.ByteArrayInputStream(test);
-            UTF8Reader r = new UTF8Reader(bais);
-            int b;
-            StringBuilder buf = new StringBuilder(128);
-            while ((b = r.read()) >= 0) {
-                buf.append((char) b);
-            }
-            System.out.println("Received: " + buf);
-            System.out.println("Test passed? " + buf.toString().equals(s));
-            buf.setLength(0);
-            bais = new java.io.ByteArrayInputStream(new byte[] { 'x', (byte) 0xcc, 'x' } );
-            r = new UTF8Reader(bais);
-            while ((b = r.read()) >= 0) {
-                buf.append((char) b);
-            }
-            System.out.println("Received: " + buf);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-    }
-****/
 }

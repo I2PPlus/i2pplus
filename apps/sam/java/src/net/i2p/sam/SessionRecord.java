@@ -11,7 +11,8 @@ package net.i2p.sam;
 import java.util.Properties;
 
 /**
- *  The values in the SessionsDB
+ *  A record of a SAM session stored in the {@link SessionsDB}.
+ *  Contains the destination, properties, and handler for a session.
  *
  *  @since 0.9.25 moved from SAMv3Handler
  */
@@ -21,6 +22,13 @@ class SessionRecord {
 	private ThreadGroup m_threadgroup;
 	private final SAMv3Handler m_handler;
 
+	/**
+	 * Create a new session record.
+	 *
+	 * @param dest base64-encoded destination
+	 * @param props session properties
+	 * @param handler the SAM handler for this session
+	 */
 	public SessionRecord( String dest, Properties props, SAMv3Handler handler )
 	{
 		m_dest = dest;
@@ -29,6 +37,11 @@ class SessionRecord {
 		m_handler = handler;
 	}
 
+	/**
+	 * Copy constructor.
+	 *
+	 * @param in the session record to copy
+	 */
 	public SessionRecord( SessionRecord in )
 	{
 		m_dest = in.getDest();
@@ -37,32 +50,53 @@ class SessionRecord {
 		m_handler = in.getHandler();
 	}
 
+	/**
+	 * Get the base64-encoded destination.
+	 *
+	 * @return the destination string
+	 */
 	public String getDest()
 	{
 		return m_dest;
 	}
 
 	/**
-	 * Warning - returns a copy.
-	 * @return a copy
+	 * Get a copy of the session properties.
+	 *
+	 * @return a copy of the properties
 	 */
 	synchronized public Properties getProps()
 	{
 		Properties p = new Properties();
 		p.putAll(m_props);
-		return m_props;
+		return p;
 	}
 
+	/**
+	 * Get the SAM handler for this session.
+	 *
+	 * @return the handler
+	 */
 	public SAMv3Handler getHandler()
 	{
 		return m_handler;
 	}
 
+	/**
+	 * Get the thread group for this session.
+	 *
+	 * @return the thread group, or null if not yet created
+	 */
 	synchronized public ThreadGroup getThreadGroup()
 	{
 		return m_threadgroup;
 	}
 
+	/**
+	 * Create a thread group for this session if one does not already exist.
+	 *
+	 * @param name the name of the thread group
+	 */
 	synchronized public void createThreadGroup(String name)
 	{
 		if (m_threadgroup == null)

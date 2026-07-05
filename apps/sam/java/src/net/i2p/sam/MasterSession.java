@@ -278,12 +278,24 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
 
     // I2PSessionMuxedImpl interface
 
+        /**
+         * Called when the I2P session is disconnected.
+         *
+         * @param session the disconnected session
+         */
         public void disconnected(I2PSession session) {
             if (_log.shouldDebug())
                 _log.debug("I2P session disconnected");
             close();
         }
 
+        /**
+         * Called when an I2P error occurs.
+         *
+         * @param session the session with the error
+         * @param message error description
+         * @param error the exception, if any
+         */
         public void errorOccurred(I2PSession session, String message,
                                   Throwable error) {
             if (_log.shouldDebug())
@@ -291,12 +303,29 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
             close();
         }
 
+        /**
+         * Called when a message is available (unmuxed).
+         *
+         * @param session the session
+         * @param msgId the message ID
+         * @param size the message size
+         */
         public void messageAvailable(I2PSession session, int msgId, long size) {
             messageAvailable(session, msgId, size, I2PSession.PROTO_UNSPECIFIED,
                              I2PSession.PORT_UNSPECIFIED, I2PSession.PORT_UNSPECIFIED);
         }
 
-        /** @since 0.9.24 */
+        /**
+         * Called when a muxed message is available.
+         *
+         * @param session the session
+         * @param msgId the message ID
+         * @param size the message size
+         * @param proto the protocol number
+         * @param fromPort the source port
+         * @param toPort the destination port
+         * @since 0.9.24
+         */
         public void messageAvailable(I2PSession session, int msgId, long size,
                                      int proto, int fromPort, int toPort) {
             try {
@@ -310,11 +339,25 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
             }
         }
 
+        /**
+         * Called when abuse is reported on the session.
+         *
+         * @param session the session
+         * @param severity the abuse severity level
+         */
         public void reportAbuse(I2PSession session, int severity) {
             _log.warn("Abuse reported (severity: " + severity + ")");
             close();
         }
 
+    /**
+     * Handle a received message. Logs a warning for unhandled messages.
+     *
+     * @param msg the message bytes
+     * @param proto the protocol number
+     * @param fromPort the source port
+     * @param toPort the destination port
+     */
     private void messageReceived(byte[] msg, int proto, int fromPort, int toPort) {
         if (_log.shouldWarn())
             _log.warn("Unhandled message received, length = " + msg.length +

@@ -32,8 +32,6 @@ import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
-import net.i2p.data.Hash;
-import net.i2p.util.Log;
 
 /**
  * Class able to handle a SAM version 1 client connections.
@@ -63,8 +61,9 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
      * @param s Socket attached to a SAM client
      * @param verMajor SAM major version to manage (should be 1)
      * @param verMinor SAM minor version to manage
-     * @throws SAMException
-     * @throws IOException
+     * @param parent the SAM bridge managing this handler
+     * @throws SAMException if the version is not supported
+     * @throws IOException if an I/O error occurs
      */
     public SAMv1Handler(SocketChannel s, int verMajor, int verMinor,
                         SAMBridge parent) throws SAMException, IOException {
@@ -79,8 +78,9 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
      * @param verMajor SAM major version to manage (should be 1)
      * @param verMinor SAM minor version to manage
      * @param i2cpProps properties to configure the I2CP connection (host, port, etc)
-     * @throws SAMException
-     * @throws IOException
+     * @param parent the SAM bridge managing this handler
+     * @throws SAMException if the version is not supported
+     * @throws IOException if an I/O error occurs
      */
     public SAMv1Handler(SocketChannel s, int verMajor, int verMinor,
                         Properties i2cpProps, SAMBridge parent) throws SAMException, IOException {
@@ -94,10 +94,19 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         }
     }
 
+    /**
+     * Verify the SAM protocol version is supported by this handler.
+     *
+     * @return true if the major version matches this handler's version
+     */
     public boolean verifVersion() {
         return (verMajor == 1);
     }
 
+    /**
+     * Handle a SAM v1 client connection by reading and dispatching commands
+     * in a loop until the connection is closed or an error occurs.
+     */
     public void handle() {
         String msg = null;
         String domain = null;
@@ -212,7 +221,13 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         }
     }
 
-    /* Parse and execute a SESSION message */
+    /**
+     * Parse and execute a SESSION message.
+     *
+     * @param opcode the SESSION sub-command (e.g. CREATE)
+     * @param props the parsed message properties
+     * @return true if the handler should continue processing commands
+     */
     protected boolean execSessionMessage(String opcode, Properties props) {
 
         String dest = "BUG!";
@@ -329,7 +344,13 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
     return new SAMStreamSession(destKeystream, direction, props, this);
   }
 
-    /* Parse and execute a DEST message*/
+    /**
+     * Parse and execute a DEST message.
+     *
+     * @param opcode the DEST sub-command (e.g. GENERATE)
+     * @param props the parsed message properties
+     * @return true if the handler should continue processing commands
+     */
   protected boolean execDestMessage(String opcode, Properties props) {
 
         if (opcode.equals("GENERATE")) {
@@ -364,7 +385,13 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         }
     }
 
-    /* Parse and execute a NAMING message */
+    /**
+     * Parse and execute a NAMING message.
+     *
+     * @param opcode the NAMING sub-command (e.g. LOOKUP)
+     * @param props the parsed message properties
+     * @return true if the handler should continue processing commands
+     */
   protected boolean execNamingMessage(String opcode, Properties props) {
         if (opcode.equals("LOOKUP")) {
             String name = props.getProperty("NAME");
@@ -430,7 +457,13 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
     }
 
 
-    /* Parse and execute a DATAGRAM message */
+    /**
+     * Parse and execute a DATAGRAM message.
+     *
+     * @param opcode the DATAGRAM sub-command (e.g. SEND)
+     * @param props the parsed message properties
+     * @return true if the handler should continue processing commands
+     */
     protected boolean execDatagramMessage(String opcode, Properties props) {
         if (datagramSession == null) {
             _log.error("DATAGRAM message received, but no DATAGRAM session exists");
@@ -439,7 +472,13 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         return execDgOrRawMessage(false, opcode, props);
     }
 
-    /* Parse and execute a RAW message */
+    /**
+     * Parse and execute a RAW message.
+     *
+     * @param opcode the RAW sub-command (e.g. SEND)
+     * @param props the parsed message properties
+     * @return true if the handler should continue processing commands
+     */
     protected boolean execRawMessage(String opcode, Properties props) {
         if (rawSession == null) {
             _log.error("RAW message received, but no RAW session exists");
@@ -574,7 +613,13 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         }
     }
 
-    /* Parse and execute a STREAM message */
+    /**
+     * Parse and execute a STREAM message.
+     *
+     * @param opcode the STREAM sub-command (e.g. SEND, CONNECT, CLOSE)
+     * @param props the parsed message properties
+     * @return true if the handler should continue processing commands
+     */
     protected boolean execStreamMessage(String opcode, Properties props) {
         if (streamSession == null) {
             _log.error("STREAM message received, but no STREAM session exists");
@@ -595,6 +640,12 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         }
     }
 
+  /**
+   * Parse and execute a STREAM SEND message.
+   *
+   * @param props the parsed message properties
+   * @return true if the handler should continue processing commands
+   */
   protected boolean execStreamSend(Properties props) {
         if (props.isEmpty()) {
             if (_log.shouldDebug())
@@ -643,7 +694,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         }
 
         try {
-            if (!streamSession.sendBytes(id, getClientSocket().socket().getInputStream(), size)) { // data)) {
+            if (!streamSession.sendBytes(id, getClientSocket().socket().getInputStream(), size)) {
                 if (_log.shouldWarn())
                     _log.warn("STREAM SEND [" + size + "] failed");
                 // a message send failure is no reason to drop the SAM session
@@ -667,6 +718,12 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         }
     }
 
+  /**
+   * Parse and execute a STREAM CONNECT message.
+   *
+   * @param props the parsed message properties
+   * @return true if the handler should continue processing commands
+   */
   protected boolean execStreamConnect(Properties props) {
         if (props.isEmpty()) {
             if (_log.shouldDebug())
@@ -741,6 +798,12 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         return true;
     }
 
+  /**
+   * Parse and execute a STREAM CLOSE message.
+   *
+   * @param props the parsed message properties
+   * @return true if the handler should continue processing commands
+   */
   protected boolean execStreamClose(Properties props) {
         if (props.isEmpty()) {
             if (_log.shouldDebug())
@@ -771,17 +834,35 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         return true;
     }
 
-    /* Check whether a size is inside the limits allowed by this protocol */
+    /**
+     * Check whether a size is inside the limits allowed by this protocol.
+     *
+     * @param size the size to check
+     * @return true if the size is within stream protocol limits
+     */
     private boolean checkSize(int size) {
         return ((size >= 1) && (size <= 32768));
     }
 
-    /* Check whether a size is inside the limits allowed by this protocol */
+    /**
+     * Check whether a size is inside the limits allowed by this protocol.
+     *
+     * @param size the size to check
+     * @return true if the size is within datagram protocol limits
+     */
     private boolean checkDatagramSize(int size) {
         return ((size >= 1) && (size <= 31744));
     }
 
-    // SAMRawReceiver implementation
+    /**
+     * Receive raw bytes from the network and forward them to the SAM client.
+     *
+     * @param data the received raw data
+     * @param proto the protocol number
+     * @param fromPort the source port
+     * @param toPort the destination port
+     * @throws IOException if writing to the client socket fails
+     */
     public void receiveRawBytes(byte[] data, int proto, int fromPort, int toPort) throws IOException {
         if (rawSession == null) {
             _log.error("BUG! Received raw bytes, but session is null!");
@@ -805,6 +886,9 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         writeBytes(ByteBuffer.wrap(msg.toByteArray()));
     }
 
+    /**
+     * Stop receiving raw bytes and close the client socket.
+     */
     public void stopRawReceiving() {
         if (_log.shouldDebug())
             _log.debug("stopRawReceiving() invoked");
@@ -822,7 +906,16 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         }
     }
 
-    // SAMDatagramReceiver implementation
+    /**
+     * Receive datagram bytes from the network and forward them to the SAM client.
+     *
+     * @param sender the destination of the datagram sender
+     * @param data the received datagram data
+     * @param proto the protocol number
+     * @param fromPort the source port
+     * @param toPort the destination port
+     * @throws IOException if writing to the client socket fails
+     */
     public void receiveDatagramBytes(Destination sender, byte[] data, int proto,
                                      int fromPort, int toPort) throws IOException {
         if (datagramSession == null) {
@@ -848,6 +941,9 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         writeBytes(ByteBuffer.wrap(msg.toByteArray()));
     }
 
+    /**
+     * Stop receiving datagram bytes and close the client socket.
+     */
     public void stopDatagramReceiving() {
         if (_log.shouldDebug())
             _log.debug("stopDatagramReceiving() invoked");
@@ -867,6 +963,14 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
 
     // SAMStreamReceiver implementation
 
+    /**
+     * Notify the SAM client of the result of a stream SEND operation.
+     *
+     * @param id the stream connection ID
+     * @param result the result code (e.g. OK, TIMEOUT)
+     * @param bufferState the current buffer state
+     * @throws IOException if writing to the client socket fails
+     */
     public void streamSendAnswer( int id, String result, String bufferState ) throws IOException
     {
         if ( streamSession == null )
@@ -885,6 +989,12 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
     }
 
 
+    /**
+     * Notify the SAM client that the stream send buffer is free for more data.
+     *
+     * @param id the stream connection ID
+     * @throws IOException if writing to the client socket fails
+     */
     public void notifyStreamSendBufferFree( int id ) throws IOException
     {
         if ( streamSession == null )
@@ -900,6 +1010,13 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
     }
 
 
+    /**
+     * Notify the SAM client of an incoming stream connection.
+     *
+     * @param id the stream connection ID
+     * @param d the destination of the remote peer
+     * @throws IOException if writing to the client socket fails
+     */
     public void notifyStreamIncomingConnection(int id, Destination d) throws IOException {
         if (streamSession == null) {
             _log.error("BUG! Received stream connection, but session is null!");
@@ -969,6 +1086,13 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         return writeString(s + createMessageString(msg) + '\n');
     }
 
+    /**
+     * Receive stream bytes from the network and forward them to the SAM client.
+     *
+     * @param id the stream connection ID
+     * @param data the received data
+     * @throws IOException if writing to the client socket fails
+     */
     public void receiveStreamBytes(int id, ByteBuffer data) throws IOException {
         if (streamSession == null) {
             _log.error("Received stream bytes, but session is null!");
@@ -989,7 +1113,14 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         }
     }
 
-    /** @param msg may be null */
+    /**
+     * Notify the SAM client that a stream connection has been disconnected.
+     *
+     * @param id the stream connection ID
+     * @param result the result code (e.g. OK, TIMEOUT)
+     * @param msg optional message, may be null
+     * @throws IOException if writing to the client socket fails
+     */
     public void notifyStreamDisconnection(int id, String result, String msg) throws IOException {
         if (streamSession == null) {
             _log.error("BUG! Received stream disconnection, but session is null!");
@@ -1002,6 +1133,9 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         }
     }
 
+    /**
+     * Stop receiving stream bytes and close the client socket.
+     */
     public void stopStreamReceiving() {
         if (_log.shouldDebug())
             _log.debug("stopStreamReceiving() invoked", new Exception("stopped"));

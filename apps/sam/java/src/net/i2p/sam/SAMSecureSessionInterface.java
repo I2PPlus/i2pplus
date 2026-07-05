@@ -16,12 +16,13 @@ import java.util.Properties;
 public interface SAMSecureSessionInterface {
     /**
      * Within this function, read and accept input from a user to approve a SAM
-     * connection. Return false by default
+     * connection. Return false by default.
      *
-     * if the connection is approved by user input:
-     *
+     * @param i2cpProps the I2CP session properties
+     * @param props the SAM connection properties
+     * @return true if the connection is approved by user input
+     * @throws SAMException if authentication fails
      * @since 1.8.0
-     * @return true
      */
     public boolean approveOrDenySecureSession(Properties i2cpProps, Properties props) throws SAMException;
 }

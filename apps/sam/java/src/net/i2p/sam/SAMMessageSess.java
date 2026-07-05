@@ -54,10 +54,20 @@ interface SAMMessageSess extends Closeable {
                              int fromPort, int toPort,
                              boolean sendLeaseSet, int sendTags,
                              int tagThreshold, int expiration)
-                                  throws DataFormatException, I2PSessionException;
+                                   throws DataFormatException, I2PSessionException;
 
+    /**
+     * Get the I2CP protocol for this session's listener.
+     *
+     * @return the I2CP protocol
+     */
     public int getListenProtocol();
 
+    /**
+     * Get the port for this session's listener.
+     *
+     * @return the listen port
+     */
     public int getListenPort();
 
     /**

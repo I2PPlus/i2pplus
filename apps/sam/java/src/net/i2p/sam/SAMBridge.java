@@ -245,23 +245,7 @@ public class SAMBridge implements Runnable, ClientApp {
      * @param name name of the destination
      * @return null if the name does not exist, or if it is improperly formatted
      */
-/****
-    public Destination getDestination(String name) {
-        synchronized (nameToPrivKeys) {
-            String val = nameToPrivKeys.get(name);
-            if (val == null) return null;
-            try {
-                Destination d = new Destination();
-                d.fromBase64(val);
-                return d;
-            } catch (DataFormatException dfe) {
-                _log.error("Error retrieving the destination from " + name, dfe);
-                nameToPrivKeys.remove(name);
-                return null;
-            }
-        }
-    }
-     ****/
+
 
     /**
      * Retrieve the I2P private keystream for the given name, formatted
@@ -281,10 +265,10 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
-     * Specify that the given keystream should be used for the given name
+     * Specify that the given keystream should be used for the given name.
      *
      * @param name   Name of the destination
-     * @param stream Name of the stream
+     * @param stream Base64-encoded private key stream (Destination+PrivateKey+SigningPrivateKey)
      */
     public void addKeystream(String name, String stream) {
         synchronized (nameToPrivKeys) {
@@ -792,7 +776,11 @@ public class SAMBridge implements Runnable, ClientApp {
                         this.parent = parent;
                     }
 
-                    public void run() {
+    /**
+     * Main listener loop. Accepts incoming SAM connections and delegates
+     * to handler threads.
+     */
+    public void run() {
                         parent.register(this);
                         try {
                             SAMHandler handler = SAMHandlerFactory.createSAMHandler(s, i2cpProps, parent);
@@ -846,16 +834,22 @@ public class SAMBridge implements Runnable, ClientApp {
         }
     }
 
-    /** @since 0.9.24 */
+    /**
+     * Save the current configuration to disk.
+     *
+     * @throws IOException if the config file cannot be written
+     * @since 0.9.24
+     */
     public void saveConfig() throws IOException {
         DataHelper.storeProps(i2cpProps, _configFile);
     }
 
-    /*
+    /**
      * Returns the interactive Secure Session manager which requires SAM
      * applications to seek "approval" for their initial connections from the user
      * before they can start the session.
      *
+     * @return the secure session interface, or null if not configured
      * @since 1.8.0
      */
     public SAMSecureSessionInterface secureSession() {
