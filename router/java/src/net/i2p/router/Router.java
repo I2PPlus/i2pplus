@@ -136,6 +136,7 @@ public class Router implements RouterClock.ClockShiftListener {
     public static final String PROP_DYNAMIC_KEYS = "router.dynamicKeys";
     /**
      *  New router keys once only.
+     *
      *  @since 0.9.34
      */
     public static final String PROP_REBUILD_KEYS = "router.rebuildKeys";
@@ -452,6 +453,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      *  Not for external use.
+     *
      *  @since 0.8.8
      */
     public static final void clearCaches() {
@@ -491,7 +493,6 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     public boolean getKillVMOnEnd() {return _killVMOnEnd;}
 
-    /** @return absolute path */
     /**
      * Get the absolute path to the router configuration file.
      *
@@ -571,6 +572,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  Our current router identity.
      *  Warning, may be null if called very early.
      *  Lockless.
+     *
      *  @since 0.9.67
      */
     public RouterIdentity getRouterIdentity() {return _routerIdent;}
@@ -579,6 +581,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  Our current router hash.
      *  Warning, may be null if called very early.
      *  Lockless.
+     *
      *  @since 0.9.67
      */
     public Hash getRouterHash() {return _routerHash;}
@@ -609,6 +612,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      *  Used only by routerconsole.. to be deprecated?
+     *
      *  @return System time, NOT context time
      */
     public long getWhenStarted() {return _started;}
@@ -711,7 +715,6 @@ public class Router implements RouterClock.ClockShiftListener {
         //_context.jobQueue().addJob(new CoalesceStatsJob(_context));
         _context.simpleTimer2().addPeriodicEvent(new CoalesceStatsEvent(_context), COALESCE_TIME);
         _context.jobQueue().addJob(new UpdateRoutingKeyModifierJob(_context));
-        //_context.adminManager().startup();
         _context.blocklist().startup();
 
         synchronized(_configFileLock) {
@@ -831,6 +834,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      *  For efficiency. EnumSets are bitmasks.
+     *
      *  @since 0.9.34
      */
     private static final Set<State> STATES_ALIVE =
@@ -891,6 +895,7 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      *  Only for Restarter, after soft restart is complete.
      *  Not for external use.
+     *
      *  @since 0.8.12
      */
     public void setIsAlive() {changeState(State.RUNNING);}
@@ -898,6 +903,7 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      *  Only for NetDB, after RIs are loaded.
      *  Not for external use.
+     *
      *  @since 0.9.18
      */
     public void setNetDbReady() {
@@ -939,6 +945,7 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      *  Only for Tunnel Building, after we have non-zero-hop expl. tunnels.
      *  Not for external use.
+     *
      *  @since 0.9.18
      */
     public void setExplTunnelsReady() {
@@ -959,6 +966,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      * Is a final shutdown in progress? This may not be cancelled.
+     *
      * @since 0.8.12
      */
     public boolean isFinalShutdownInProgress() {
@@ -1082,26 +1090,47 @@ public class Router implements RouterClock.ClockShiftListener {
     @Deprecated
     public static final char CAPABILITY_NEW_TUNNEL = 'T';
 
-    /** In binary (1024) Kbytes
-     *  @since 0.9.33 */
+    /**
+     * In binary (1024) Kbytes.
+     *
+     * @since 0.9.33
+     */
     public static final int MIN_BW_K = 0;
-    /** In binary (1024) Kbytes
-     *  @since 0.9.33 */
+    /**
+     * In binary (1024) Kbytes.
+     *
+     * @since 0.9.33
+     */
     public static final int MIN_BW_L = 12;
-    /** In binary (1024) Kbytes
-     *  @since 0.9.33 */
+    /**
+     * In binary (1024) Kbytes.
+     *
+     * @since 0.9.33
+     */
     public static final int MIN_BW_M = 48;
-    /** In binary (1024) Kbytes
-     *  @since 0.9.33 */
+    /**
+     * In binary (1024) Kbytes.
+     *
+     * @since 0.9.33
+     */
     public static final int MIN_BW_N = 64;
-    /** In binary (1024) Kbytes
-     *  @since 0.9.33 */
+    /**
+     * In binary (1024) Kbytes.
+     *
+     * @since 0.9.33
+     */
     public static final int MIN_BW_O = 128;
-    /** In binary (1024) Kbytes
-     *  @since 0.9.33 */
+    /**
+     * In binary (1024) Kbytes.
+     *
+     * @since 0.9.33
+     */
     public static final int MIN_BW_P = 256;
-    /** In binary (1024) Kbytes
-     *  @since 0.9.33 */
+    /**
+     * In binary (1024) Kbytes.
+     *
+     * @since 0.9.33
+     */
     public static final int MIN_BW_X = 2000;
 
     /**
@@ -1148,7 +1177,6 @@ public class Router implements RouterClock.ClockShiftListener {
 
         if (hidden || _context.getBooleanProperty(PROP_FORCE_UNREACHABLE)) {
             rv.append(CAPABILITY_UNREACHABLE);
-            //if (CONGESTION_CAPS) {rv.append(CAPABILITY_NO_TUNNELS);}
             return rv.toString();
         }
         boolean forceG = false;
@@ -1293,7 +1321,6 @@ public class Router implements RouterClock.ClockShiftListener {
      *  Not for external use.
      */
     public void killKeys() {
-        //new Exception("Clearing identity files").printStackTrace();
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < _rebuildFiles.length; i++) {
             File f = new File(_context.getRouterDir(),_rebuildFiles[i]);
@@ -1499,7 +1526,6 @@ public class Router implements RouterClock.ClockShiftListener {
             //System.err.println("Running shutdown task " + task.getClass());
             if (_log.shouldWarn()) {_log.warn(sb.append("Running Shutdown Task ").append(task.getClass()).toString()); sb.setLength(0);}
             try {
-                //task.run();
                 Thread t = new I2PAppThread(task, sb.append("ShutdownTask ").append(task.getClass().getName()).toString());
                 sb.setLength(0);
                 t.setDaemon(true);
@@ -1560,7 +1586,6 @@ public class Router implements RouterClock.ClockShiftListener {
 
         shutdownSubsystems();
 
-        //_context.deleteTempDir();
         List<RouterContext> contexts = RouterContext.getContexts();
         contexts.remove(_context);
 
@@ -1587,6 +1612,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  Shut down all router subsystems.
      *  Error handling level depends on log verbosity:
      *  debug → full stack trace, advanced → message only, else → silent.
+     *
      *  @since 0.9.71
      */
     private void shutdownSubsystems() {
@@ -1612,6 +1638,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      *  Shut down a single subsystem, with error logging appropriate to verbosity.
+     *
      *  @param name subsystem name for logging
      *  @param debug if true, log full stack trace on error
      *  @param advanced if true, log message-only on error
@@ -1767,6 +1794,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      *  How long until the graceful shutdown will kill us?
+     *
      *  @return -1 if no shutdown in progress.
      */
     public long getShutdownTimeRemaining() {
@@ -1918,7 +1946,6 @@ public class Router implements RouterClock.ClockShiftListener {
         }
 
         System.out.println("Starting I2P+ " + RouterVersion.FULL_VERSION + "..."); // NOSONAR CLI startup
-        //verifyWrapperConfig();
         Router r;
         try {r = new Router();}
         catch (IllegalStateException ise) {System.exit(-1); return;}
@@ -2027,6 +2054,7 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      * What fraction of the bandwidth specified in our bandwidth limits should
      * we allow to be consumed by participating tunnels?
+     *
      * @return a number less than one, not a percentage!
      *
      */
@@ -2126,6 +2154,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /**
      *  Translate with console bundle
+     *
      *  @since 0.9.53
      */
     private final String _t(String s) {return Translate.getString(s, _context, BUNDLE_NAME);}

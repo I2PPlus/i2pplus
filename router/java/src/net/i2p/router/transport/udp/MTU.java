@@ -255,7 +255,7 @@ public class MTU {
         }
     }
 
-    /** @since 0.9.57 */
+    /** Comparator for InetAddress by host address */
     private static class IAComparator implements Comparator<InetAddress> {
         @Override
         public int compare(InetAddress l, InetAddress r) {

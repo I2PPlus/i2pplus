@@ -47,8 +47,6 @@ class CapacityCalculator {
     private static final double PENALTY_CAP_D = 2.5;
     private static final String PROP_E_CAP = "router.penaltyCapE";
     private static final double PENALTY_CAP_E = 4.75;
-    // private static final String PROP_G_CAP = "router.gcapPenalty";
-    // private static final double PENALTY_G_CAP = 0;
     private static final double PENALTY_RECENT_SEND_FAIL = 4;
     private static final double BONUS_LAST_SEND_SUCCESS = 1;
     private static final double BONUS_RECENT_SEND_SUCCESS = 1;
@@ -218,6 +216,7 @@ class CapacityCalculator {
      * @param failedStat Failed counter (100 = 1 fail)
      *
      * Let A = accects, R = rejects, F = fails
+     *
      * @return estimated and adjusted accepts per hour, for the given period
      *         which is, more or less, max(0, 5 + (A * (A / (A + 2R))) - (4 * F))
      */

@@ -68,7 +68,6 @@ class SSLClientListenerRunner extends ClientListenerRunner {
         return rv;
     }
 
-
     /**
      * Call out to keytool to create a new keystore with a keypair in it.
      * Trying to do this programatically is a nightmare, requiring either BouncyCastle
@@ -124,6 +123,7 @@ class SSLClientListenerRunner extends ClientListenerRunner {
 
     /**
      * Sets up the SSLContext and sets the socket factory.
+     *
      * @return success
      */
     private boolean initializeFactory(File ks) {

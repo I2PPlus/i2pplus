@@ -27,6 +27,7 @@ class LeaseRequestState {
     /**
      *  @param currentEarliestLeastDate absolute time, the earliest expiration in
      *         the current LS (NOT the requested one), or 0 if none
+     *
      *  @param expiration absolute time, when the request expires (not when the LS expires)
      *  @param requested LeaseSet with requested leases - this object must be updated to contain the
      *         signed version (as well as any changed/added/removed Leases)

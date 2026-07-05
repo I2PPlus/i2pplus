@@ -26,6 +26,7 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
 
     /**
      *  Send a message, nonblocking
+     *
      *  @return success (false if no space available)
      */
     @Override
@@ -33,6 +34,7 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
 
     /**
      *  Send a message, blocking.
+     *
      *  @param timeout how long to wait for space (ms)
      *  @return success (false if no space available or if timed out)
      *  @since 0.9.3
@@ -44,6 +46,7 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
 
     /**
      *  Receive a message, non-blocking
+     *
      *  @return message or null if none available
      */
     @Override
@@ -56,6 +59,7 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
 
     /**
      *  Receive a message, blocking until one is available
+     *
      *  @return message
      */
     public I2CPMessage take() throws InterruptedException {return _in.take();}

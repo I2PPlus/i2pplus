@@ -44,6 +44,7 @@ public class HashDistance {
     /**
      * Compare two XOR distances without allocating BigInteger.
      * Returns negative, zero, or positive as dist(a,b) &lt; = &gt; dist(c,d).
+     *
      * @since 2.12.0
      */
     public static int compare(Hash a, Hash b, Hash c, Hash d) {

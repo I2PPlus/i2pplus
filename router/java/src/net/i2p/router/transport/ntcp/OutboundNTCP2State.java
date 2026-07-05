@@ -93,7 +93,11 @@ class OutboundNTCP2State implements EstablishState {
     }
 
     /**
-     * @throws IllegalArgumentException on bad address in the con
+     * Create a new outbound NTCP2 state.
+     * @param ctx router context
+     * @param transport NTCP transport
+     * @param con connection
+     * @throws IllegalArgumentException on bad address in the connection
      */
     public OutboundNTCP2State(RouterContext ctx, NTCPTransport transport, NTCPConnection con) {
         _context = ctx;
@@ -588,7 +592,6 @@ class OutboundNTCP2State implements EstablishState {
      */
     private void releaseBufs(boolean isVerified) {
         Arrays.fill(_tmp, (byte) 0);
-        // TODO
     }
 
     @Override

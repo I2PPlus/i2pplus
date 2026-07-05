@@ -228,7 +228,6 @@ class UPnPManager {
                 _scannerCallback.beforeScan();
             if (_log.shouldDebug())
                 _log.debug("UPnP Rescan", new Exception());
-            // TODO default search MX (jitter) is 3 seconds... reduce?
             // See also:
             // Adaptive Jitter Control for UPnP M-Search
             // Kevin Mills and Christopher Dabrowski
@@ -298,15 +297,8 @@ class UPnPManager {
         if (_log.shouldDebug())
             _log.debug("UPnP Update with " + ports.size() + " ports", new Exception("I did it"));
 
-        //synchronized(this) {
-            // TODO
-            // called too often and may block for too long
-            // may not have started if net was disconnected previously
-            //if (!_isRunning && !ports.isEmpty())
-            //    start();
-            if (!_isRunning)
+        if (!_isRunning)
                 return;
-        //}
 
         Set<ForwardPort> forwards = new HashSet<>(ports.size());
         for (TransportManager.Port entry : ports) {

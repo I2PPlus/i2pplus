@@ -66,9 +66,7 @@ public class Reseeder {
     private static final boolean ENABLE_SU3 = true;
     /** if false, use su3 only, and disable fallback reading directory index and individual dat files */
     private static final boolean ENABLE_NON_SU3 = false;
-    //private static final int MIN_RI_WANTED = 100;
     private static final int MIN_RI_WANTED = 800;
-    //private static final int MIN_RESEED_SERVERS = 2;
     private static final int MIN_RESEED_SERVERS = 12;
     // network ID cross-check, proposal 147, as of 0.9.42
     private static final String NETID_PARAM = "?netid=";
@@ -262,7 +260,6 @@ public class Reseeder {
         private long _attemptStarted;
         /** bytes per sec for each su3 downloaded */
         private final List<Long> _bandwidths;
-        //private static final int MAX_DATE_SETS = 2;
         private static final int MAX_DATE_SETS = 4;
         private final URI _url;
 
@@ -387,7 +384,6 @@ public class Reseeder {
             }
             _isRunning = false;
             // ReseedChecker will set timer to clean up
-            //_checker.setStatus("");
             if (total > 0) {
                 _context.router().eventLog().addEvent(EventLog.RESEED, Integer.toString(total) + " router infos acquired");
             }

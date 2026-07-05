@@ -51,6 +51,8 @@ public class HopConfig {
     public void setReceiveTunnelId(TunnelId id) { _receiveTunnel = id; }
 
     /**
+     * Set the receive tunnel ID.
+     *
      *  @param id 1 to 0xffffffff
      *  @throws IllegalArgumentException if less than or equal to zero or greater than max value
      *  @since 0.9.48
@@ -78,13 +80,17 @@ public class HopConfig {
     }
 
     /**
+     * Set the send tunnel ID.
      *  Do not set for endpoint
+     *
      *  @since 0.9.48
      */
     public void setSendTunnelId(TunnelId id) { _sendTunnel = id; }
 
     /**
+     * Set the send tunnel ID.
      *  Do not set for endpoint
+     *
      *  @param id 1 to 0xffffffff
      *  @throws IllegalArgumentException if less than or equal to zero or greater than max value
      *  @since 0.9.48
@@ -116,6 +122,8 @@ public class HopConfig {
     public void setCreation(long when) { _creation = when; }
 
     /**
+     * Get the allocated bandwidth for this hop.
+     *
      *  @return Bps
      *  @since 0.9.66
      */
@@ -123,6 +131,8 @@ public class HopConfig {
         return _allocatedBW;
     }
     /**
+     * Set the allocated bandwidth for this hop.
+     *
      *  @param bw Bps
      *  @since 0.9.66
      */

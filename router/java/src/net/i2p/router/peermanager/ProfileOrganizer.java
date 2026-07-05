@@ -982,8 +982,6 @@ public class ProfileOrganizer {
         if (_log.shouldInfo()) {
             _log.info("Evicted " + evicted + " low-priority profiles to enforce cap (" + maxProfiles + ")");
         }
-
-        //_context.statManager().addRateData("peer.profileEvicted", evicted, 0);
     }
 
     private double calculateCapacityThreshold(double meanCapacity, int numExceedingMean, int totalPeers,
@@ -1022,6 +1020,7 @@ public class ProfileOrganizer {
     /**
      *  Check if a peer should be excluded from profiling.
      *  Excludes low bandwidth tiers (K, L, M, Unknown) and G cap (no tunnels).
+     *
      *  @return true if the peer should not be profiled
      *  @since 0.9.70+
      */
@@ -1034,6 +1033,7 @@ public class ProfileOrganizer {
 
     /**
      *  Check if a peer is in a low bandwidth tier (K, L, M, or Unknown).
+     *
      *  @return true if the peer should be excluded from profiling
      *  @since 0.9.70+
      */
@@ -1046,6 +1046,7 @@ public class ProfileOrganizer {
 
     /**
      *  Check if a peer has a congestion capability cap (D or E).
+     *
      *  @return true if the peer is moderately or severely congested
      *  @since 0.9.70+
      */
@@ -1611,6 +1612,7 @@ public class ProfileOrganizer {
      * Check if peer is a quality tunnel candidate: good acceptance ratio,
      * selectable, and recently active. Used by tuner to adjust tier limits
      * based on viable peers, not just raw counts.
+     *
      * @since 0.9.70+
      */
     private boolean isQualityPeer(PeerProfile profile, long recentCutoff) {

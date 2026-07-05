@@ -86,6 +86,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     /**
      * Get the minimum time to lease expiry across all clients.
      * Used by RouterWatchdog to adjust sleep interval.
+     *
      * @return minimum time to expiry in milliseconds, or Long.MAX_VALUE if no leases
      */
     public long getMinTimeToLeaseExpiry() {
@@ -178,6 +179,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      * @param set LeaseSet with requested leases - this object must be updated to contain the
      *            signed version (as well as any changed/added/removed Leases)
      *            The LeaseSet contains Leases only; it is unsigned and does not have the destination set.
+     *
      * @param timeout ms to wait before failing
      * @param onCreateJob Job to run after the LeaseSet is authorized
      * @param onFailedJob Job to run after the timeout passes without receiving authorization
@@ -200,7 +202,6 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     public void requestLeaseSet(Hash dest, LeaseSet set) {
         if (_manager != null) {_manager.requestLeaseSet(dest, set);}
     }
-
 
     /**
      * Instruct the client (or all clients) that they are under attack.  This call does not block.
@@ -294,6 +295,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     /**
      *  The InternalClientManager interface.
      *  Connect to the router, receiving a message queue to talk to the router with.
+     *
      *  @throws I2PSessionException if the router isn't ready
      *  @since 0.8.3
      */

@@ -61,6 +61,7 @@ import net.i2p.util.Log;
  *
  * @author Adam Buckley
  * (minor refactoring by jrandom)
+ *
  * @since 0.9.1 moved from net.i2p.time
  */
 public class NtpClient {

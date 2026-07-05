@@ -216,6 +216,7 @@ public class MuxedSKM extends SessionKeyManager {
     /**
      * EC only
      * One time session
+     *
      * @param expire time from now
      * @since 0.9.51
      */

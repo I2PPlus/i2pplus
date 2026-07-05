@@ -73,9 +73,11 @@ public class GarlicMessageBuilder {
      * @param config how/what to wrap
      * @param wrappedKey non-null with null data,
      *                   output parameter that will be filled with the SessionKey used
+ *
      * @param wrappedTags Output parameter that will be filled with the sessionTags used.
      *                       If non-empty on return you must call skm.tagsDelivered() when sent
      *                       and then call skm.tagsAcked() or skm.failTags() later.
+ *
      * @param skm non-null
      * @return null if expired
      * @throws IllegalArgumentException on error
@@ -93,6 +95,7 @@ public class GarlicMessageBuilder {
      * @param config how/what to wrap
      * @param wrappedKey non-null with null data,
      *                   output parameter that will be filled with the SessionKey used
+ *
      * @param wrappedTags Output parameter that will be filled with the sessionTags used.
                           If non-empty on return you must call skm.tagsDelivered() when sent
                           and then call skm.tagsAcked() or skm.failTags() later.
@@ -116,6 +119,7 @@ public class GarlicMessageBuilder {
      * @param config how/what to wrap
      * @param wrappedKey non-null with null data,
      *                   output parameter that will be filled with the SessionKey used
+ *
      * @param wrappedTags Output parameter that will be filled with the sessionTags used.
                           If non-empty on return you must call skm.tagsDelivered() when sent
                           and then call skm.tagsAcked() or skm.failTags() later.
@@ -179,8 +183,10 @@ public class GarlicMessageBuilder {
      * @param config how/what to wrap
      * @param wrappedTags New tags to be sent along with the message.
      *                    200 max enforced at receiver; null OK
+ *
      * @param target public key of the location being garlic routed to (may be null if we
      *               know the encryptKey and encryptTag)
+ *
      * @param encryptKey sessionKey used to encrypt the current message, non-null
      * @param encryptTag sessionTag used to encrypt the current message, null to force ElG
      * @return null if expired

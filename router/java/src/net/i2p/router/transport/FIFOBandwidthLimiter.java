@@ -123,10 +123,6 @@ public class FIFOBandwidthLimiter {
     //public long getTotalWastedInboundBytes() { return _totalWastedInboundBytes.get(); }
     //public long getTotalWastedOutboundBytes() { return _totalWastedOutboundBytes.get(); }
     //public long getMaxInboundBytes() { return _maxInboundBytes; }
-    //public void setMaxInboundBytes(int numBytes) { _maxInboundBytes = numBytes; }
-    //public long getMaxOutboundBytes() { return _maxOutboundBytes; }
-    //public void setMaxOutboundBytes(int numBytes) { _maxOutboundBytes = numBytes; }
-
     /** @deprecated unused for now, we are always limited */
     @Deprecated
     void setInboundUnlimited(boolean isUnlimited) { _inboundUnlimited = isUnlimited; }
@@ -176,14 +172,14 @@ public class FIFOBandwidthLimiter {
         _refiller.reinitialize();
     }
 
-    /** @since 0.8.8 */
+    /** Shut down the bandwidth limiter */
     public synchronized void shutdown() {
         _refiller.shutdown();
         _refillerThread.interrupt();
         clear();
     }
 
-    /** @since 0.8.8 */
+    /** Clear all pending requests and reset counters */
     private void clear() {
         _pendingInboundRequests.clear();
         _pendingOutboundRequests.clear();
@@ -195,9 +191,7 @@ public class FIFOBandwidthLimiter {
         _maxOutboundBurst = 0;
         _unavailableInboundBurst.set(0);
         _unavailableOutboundBurst.set(0);
-        // always limited for now
-        //_inboundUnlimited = false;
-        //_outboundUnlimited = false;
+
     }
 
     /**
@@ -271,8 +265,6 @@ public class FIFOBandwidthLimiter {
      * So there's no more casting
      */
     private void requestInbound(SimpleRequest req, int bytesIn, String purpose) {
-        // don't init twice - uncomment if we make public again?
-        //req.init(bytesIn, 0, purpose);
         int pending;
         synchronized (_pendingInboundRequests) {
             pending = _pendingInboundRequests.size();
@@ -297,8 +289,6 @@ public class FIFOBandwidthLimiter {
     }
 
     private void requestOutbound(SimpleRequest req, int bytesOut, String purpose) {
-        // don't init twice - uncomment if we make public again?
-        //req.init(0, bytesOut, purpose);
         int pending;
         synchronized (_pendingOutboundRequests) {
             pending = _pendingOutboundRequests.size();
@@ -363,9 +353,6 @@ public class FIFOBandwidthLimiter {
      * @param maxBurstOut allow up to this many bytes in from the burst section for this time period (may be negative)
      */
     final void refillBandwidthQueues(List<Request> buf, long bytesInbound, long bytesOutbound, long maxBurstIn, long maxBurstOut) {
-        //if (_log.shouldDebug())
-        //    _log.debug("Refilling the queues with " + bytesInbound + "/" + bytesOutbound + ": " + getStatus().toString());
-
         // Take some care throughout to minimize accesses to the atomics,
         // both for efficiency and to not let strange things happen if
         // it changes out from under us
@@ -374,12 +361,9 @@ public class FIFOBandwidthLimiter {
         // FIXME wrap - change to AtomicLong or detect
         int avi = _availableInbound.addAndGet((int) bytesInbound);
         if (avi > _maxInbound) {
-            //if (_log.shouldDebug())
-            //    _log.debug("available inbound (" + avi + ") exceeds our inbound burst (" + _maxInbound + "), so no supplement");
             int uib = _unavailableInboundBurst.addAndGet(avi - _maxInbound);
             _availableInbound.set(_maxInbound);
             if (uib > _maxInboundBurst) {
-                //_totalWastedInboundBytes.addAndGet(uib - _maxInboundBurst);
                 _unavailableInboundBurst.set(_maxInboundBurst);
             }
         } else {
@@ -387,9 +371,6 @@ public class FIFOBandwidthLimiter {
             int want = (int)maxBurstIn;
             if (want > (_maxInbound - avi))
                 want = _maxInbound - avi;
-            //if (_log.shouldDebug())
-            //    _log.debug("want to pull " + want + " from the inbound burst (" + _unavailableInboundBurst + ") to supplement " + avi + " (Max: " + _maxInbound + ")");
-
             if (want > 0) {
                 int uib = _unavailableInboundBurst.get();
                 if (want <= uib) {
@@ -404,13 +385,10 @@ public class FIFOBandwidthLimiter {
 
         int avo = _availableOutbound.addAndGet((int) bytesOutbound);
         if (avo > _maxOutbound) {
-            //if (_log.shouldDebug())
-            //    _log.debug("available outbound (" + avo + ") exceeds our outbound burst (" + _maxOutbound + "), so no supplement");
             int uob = _unavailableOutboundBurst.getAndAdd(avo - _maxOutbound);
             _availableOutbound.set(_maxOutbound);
 
             if (uob > _maxOutboundBurst) {
-                //_totalWastedOutboundBytes.getAndAdd(uob - _maxOutboundBurst);
                 _unavailableOutboundBurst.set(_maxOutboundBurst);
             }
         } else {
@@ -418,9 +396,6 @@ public class FIFOBandwidthLimiter {
             int want = (int)maxBurstOut;
             if (want > (_maxOutbound - avo))
                 want = _maxOutbound - avo;
-            //if (_log.shouldDebug())
-            //    _log.debug("want to pull " + want + " from the outbound burst (" + _unavailableOutboundBurst + ") to supplement " + avo + " (Max: " + _maxOutbound + ")");
-
             if (want > 0) {
                 int uob = _unavailableOutboundBurst.get();
                 if (want <= uob) {
@@ -459,34 +434,12 @@ public class FIFOBandwidthLimiter {
             else
                 _recvBps = (0.9f)*_recvBps + (0.1f)*((float)recv*1000)/time;
 
-            // warning, getStatLog() can be null
-            //if (_log.shouldWarn()) {
-                //if (_log.shouldInfo())
-                //    _log.info("BW: time = " + time + " sent: " + _sendBps + " recv: " + _recvBps);
-            //    _context.statManager().getStatLog().addData("bw", "bw.sendBps1s", (long)_sendBps, sent);
-            //    _context.statManager().getStatLog().addData("bw", "bw.recvBps1s", (long)_recvBps, recv);
-            //}
-
             // Maintain an approximate average with a 15-second halflife
             // Weights (0.955 and 0.045) are tuned so that transition between two values (e.g. 0..10)
             // would reach their midpoint (e.g. 5) in 15s
-            //if (_sendBps15s <= 0)
-            //    _sendBps15s = (0.045f)*((float)sent*15*1000f)/(float)time;
-            //else
                 _sendBps15s = (0.955f)*_sendBps15s + (0.045f)*(sent*1000f)/time;
 
-            //if (_recvBps15s <= 0)
-            //    _recvBps15s = (0.045f)*((float)recv*15*1000f)/(float)time;
-            //else
                 _recvBps15s = (0.955f)*_recvBps15s + (0.045f)*((float)recv*1000)/time;
-
-            // warning, getStatLog() can be null
-            //if (_log.shouldWarn()) {
-            //    if (_log.shouldDebug())
-            //        _log.debug("BW15: time = " + time + " sent: " + _sendBps + " recv: " + _recvBps);
-            //    _context.statManager().getStatLog().addData("bw", "bw.sendBps15s", (long)_sendBps15s, sent);
-            //    _context.statManager().getStatLog().addData("bw", "bw.recvBps15s", (long)_recvBps15s, recv);
-            //}
         }
     }
 

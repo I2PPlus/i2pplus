@@ -605,9 +605,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     }
 
     /**
-     *  @param type database store type
-     *  @param lsSigType may be null
-     *  @since 0.9.39
+     * Determines if we should flood the database store to a peer.
+     *
+     * @param type database store type
+     * @param lsSigType may be null
+     * @since 0.9.39
      */
     private boolean shouldFloodTo(Hash key, int type, SigType lsSigType, Hash peer, RouterInfo target) {
        if ((target == null) || (_context.banlist().isBanlisted(peer))) {return false;}
@@ -684,7 +686,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     }
 
     /**
-     *  @param peer may be null, returns false if null
+     * Checks if a RouterInfo has floodfill capability.
+     *
+     * @param peer may be null, returns false if null
      */
     public static boolean isFloodfill(RouterInfo peer) {
         if (peer == null) {return false;}
@@ -806,13 +810,25 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         return sel.selectFloodfillParticipants(getKBuckets());
     }
 
-    /** @since 0.7.10 */
+    /**
+     * Checks if verification is in progress for the specified hash.
+     *
+     * @since 0.7.10
+     */
     boolean isVerifyInProgress(Hash h) {return _verifiesInProgress.contains(h);}
 
-    /** @since 0.7.10 */
+    /**
+     * Marks verification as started for the specified hash.
+     *
+     * @since 0.7.10
+     */
     void verifyStarted(Hash h) {_verifiesInProgress.add(h);}
 
-    /** @since 0.7.10 */
+    /**
+     * Marks verification as finished for the specified hash.
+     *
+     * @since 0.7.10
+     */
     void verifyFinished(Hash h) {_verifiesInProgress.remove(h);}
 
     /** NTCP cons drop quickly but SSU takes a while, so it's prudent to keep this
@@ -899,7 +915,6 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         if (info != null) {
             caps = info.getCapabilities();
         }
-        //boolean isBadFF = isFF && noSSU;
         boolean floodfillEnabled;
         synchronized(this) {
             floodfillEnabled = _floodfillEnabled;
@@ -955,7 +970,6 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         if (caps.indexOf(CAPABILITY_FLOODFILL) >= 0) {
             PeerProfile prof = _context.profileOrganizer().getProfile(peer);
             if (prof == null) {
-                //_log.warn("skip lookup no profile " + peer.toBase64());
                 super.lookupBeforeDropping(peer, info);
                 return;
             }
@@ -964,13 +978,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             long installed = _context.getProperty("router.firstInstalled", 0L);
             boolean enforceHeard = installed > 0 && (now - installed) > 2*60*60*1000L;
             if (enforceHeard && prof.getFirstHeardAbout() > now - 3*60*60*1000L) {
-                //_log.warn("skip lookup new " + DataHelper.formatTime(prof.getFirstHeardAbout()) + ' ' + peer.toBase64());
                 super.lookupBeforeDropping(peer, info);
                 return;
             }
             DBHistory hist = prof.getDBHistory();
             if (hist == null) {
-                //_log.warn("skip lookup no dbhist " + peer.toBase64());
                 super.lookupBeforeDropping(peer, info);
                 return;
             }
@@ -978,7 +990,6 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             long lastLookupSuccess = hist.getLastLookupSuccessful();
             long lastStoreSuccess = hist.getLastStoreSuccessful();
             if (uptime > 30*60*1000L && lastLookupSuccess < cutoff && lastStoreSuccess < cutoff) {
-                //_log.warn("skip lookup no db success " + peer.toBase64());
                 super.lookupBeforeDropping(peer, info);
                 return;
             }
@@ -987,8 +998,6 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             long lastStoreFailed = hist.getLastStoreFailed();
             if (lastLookupFailed > cutoff || lastStoreFailed > cutoff ||
                 lastLookupFailed > lastLookupSuccess || lastStoreFailed > lastStoreSuccess) {
-                //_log.warn("skip lookup dbhist store fail " + DataHelper.formatTime(lastStoreFailed) +
-                //           " lookup fail " + DataHelper.formatTime(lastLookupFailed) + ' ' + peer.toBase64());
                 super.lookupBeforeDropping(peer, info);
                 return;
             }
@@ -1005,18 +1014,10 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             }
             double failRate = hist.getFailedLookupRate().getRate(RateConstants.ONE_HOUR).getAverageValue();
             if (failRate >= 1 || failRate > maxFailRate) {
-                //_log.warn("skip lookup fail rate " + failRate + " max " + maxFailRate + ' ' + peer.toBase64());
-                //super.lookupBeforeDropping(peer, info);
                 return;
             }
         }
 
-        // this sends out the search to the floodfill peers even if we already have the
-        // entry locally, firing no job if it gets a reply with an updated value (meaning
-        // we shouldn't drop them but instead use the new data), or if they all time out,
-        // firing the dropLookupFailedJob, which actually removes our local reference
-        //search(peer, new DropLookupFoundJob(_context, peer, info),
-        //        new DropLookupFailedJob(_context, peer, info), 10*1000, false);
         if (_log.shouldDebug()) {
             _log.debug("Initiating Floodfill Lookup of [" + peer.toBase64().substring(0,6) + "] before dropping..." +
                        "\n* Published: " + new java.util.Date(info.getPublished()));

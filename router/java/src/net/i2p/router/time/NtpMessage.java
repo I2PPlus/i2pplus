@@ -498,6 +498,8 @@ class NtpMessage {
     }
 
     /**
+     *  Convert the reference identifier to a human-readable string.
+     *
      * @since 0.9.29
      * @return non-null, "" if unset
      */
@@ -508,6 +510,7 @@ class NtpMessage {
     /**
      * Returns a string representation of a reference identifier according
      * to the rules set out in RFC 2030.
+ *
      * @return non-null, "" if unset
      */
     private static String referenceIdentifierToString(byte[] ref, short stratum, byte version) {

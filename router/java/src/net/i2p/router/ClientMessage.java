@@ -25,7 +25,6 @@ public class ClientMessage {
     private final Payload _payload;
     private final Destination _destination;
     private final Destination _fromDestination;
-    //private MessageReceptionInfo _receptionInfo;
     private final SessionConfig _senderConfig;
     private final Hash _destinationHash;
     private final MessageId _messageId;
@@ -36,6 +35,7 @@ public class ClientMessage {
 
     /**
      *  For outbound (locally originated)
+     *
      *  @param msgID the router's ID for this message
      *  @param messageNonce the client's ID for this message
      *  @since 0.9.9
@@ -55,6 +55,7 @@ public class ClientMessage {
 
     /**
      *  For inbound (from remote dest)
+     *
      *  @since 0.9.9
      */
     public ClientMessage(Hash toDestHash, Payload payload) {
@@ -101,18 +102,10 @@ public class ClientMessage {
 
     /**
      * Valid for outbound; 0 for inbound.
+     *
      * @since 0.9.14
      */
     public long getMessageNonce() { return _messageNonce; }
-
-    /**
-     * Retrieve the information regarding how the router received this message.  Only
-     * messages received from the network will have this information, not locally
-     * originated ones.
-     *
-     */
-    //public MessageReceptionInfo getReceptionInfo() { return _receptionInfo; }
-    //public void setReceptionInfo(MessageReceptionInfo info) { _receptionInfo = info; }
 
     /**
      * Retrieve the session config of the client that sent the message.  This will only be available

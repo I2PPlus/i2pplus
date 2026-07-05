@@ -47,6 +47,7 @@ public final class MLKEM {
 
     /**
      *  Alice side
+     *
      *  @param type must be one of the internal types MLKEM*_INT
      *  @return encapkey decapkey
      */
@@ -59,6 +60,7 @@ public final class MLKEM {
 
     /**
      *  Alice side
+     *
      *  @param type must be one of the internal types MLKEM*_INT
      *  @return encapkey decapkey
      */
@@ -77,6 +79,7 @@ public final class MLKEM {
 
     /**
      *  Bob side
+     *
      *  @return ciphertext sharedkey, non-null
      */
     public static byte[][] encaps(EncType type, byte[] pub)
@@ -206,7 +209,6 @@ public final class MLKEM {
         byte[] pubkey = keys[0];
         byte[] privkey = keys[1];
 
-        //System.out.println("privkey " + keys[1]);
         for (int i = 0; i < runs; i++) {
             long start = System.nanoTime();
             byte[][] bob = encaps(type, pubkey);

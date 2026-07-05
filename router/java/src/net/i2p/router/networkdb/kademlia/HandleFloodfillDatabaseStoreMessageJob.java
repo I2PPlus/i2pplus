@@ -215,7 +215,6 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                  *  somebody has our keys...
                  */
                 if (isUs) {
-                    //getContext().statManager().addRateData("netDb.storeLocalRouterInfoAttempt", 1, 0);
                     /**
                      *  This is initiated by PeerTestJob from another peer
                      *  throw rather than return, so that we send the ack below (prevent easy attack)
@@ -384,7 +383,6 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                     }
                                     shouldStore = false;
                                     // don't bother checking ban/blocklists.
-                                    //wasNew = true;
                                 }
                             }
                         }

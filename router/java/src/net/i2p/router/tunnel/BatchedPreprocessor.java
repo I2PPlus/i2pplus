@@ -116,11 +116,6 @@ class BatchedPreprocessor extends TrivialPreprocessor {
             timingBuf = null;
             start = 0;
         }
-        //if (DISABLE_BATCHING) {
-        //    if (_log.shouldInfo())
-        //        _log.info("Disabled batching, pushing " + pending + " immediately");
-        //    return super.preprocessQueue(pending, sender, rec);
-        //}
 
         int batchCount = 0;
         int beforeLooping = pending.size();
@@ -181,9 +176,6 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                         afterSend = 0;
                     if (_log.shouldInfo())
                         display(allocated, pending, "Sent the message with " + (i+1) + " fragments");
-                        //_log.info(_name + ": Allocated=" + allocated + "B, Sent " + (i+1)
-                        //          + " msgs (last complete? " + (msg.getOffset() >= msg.getData().length)
-                        //          + ", off=" + msg.getOffset() + ", pending=" + pending.size() + ")");
 
                     // Remove what we sent from the pending queue
                     for (int j = 0; j < i; j++) {

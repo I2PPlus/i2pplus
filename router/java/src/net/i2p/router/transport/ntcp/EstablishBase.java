@@ -157,7 +157,7 @@ abstract class EstablishBase implements EstablishState {
         }
     }
 
-    /** @since 0.9.16 */
+    /** Change the handshake state */
     protected void changeState(State state) {
         synchronized (_stateLock) {
             _state = state;

@@ -1129,16 +1129,16 @@ class EventPumper implements Runnable {
         return _expireIdleWriteTime;
     }
 
-    /** @since 0.9.70+ */
+    /** Get the selector loop delay in milliseconds */
     public static long getSelectorLoopDelay() { return _selectorLoopDelay; }
 
-    /** @since 0.9.70+ */
+    /** Set the selector loop delay, bounded 1-100ms */
     public static void setSelectorLoopDelay(long ms) { _selectorLoopDelay = Math.max(1, Math.min(100, ms)); }
 
-    /** @since 0.9.70+ */
+    /** Get the failsafe iteration frequency in milliseconds */
     public static long getFailsafeIterationFreq() { return _failsafeIterationFreq; }
 
-    /** @since 0.9.70+ */
+    /** Set the failsafe iteration frequency, bounded by MIN-MAX */
     public static void setFailsafeIterationFreq(long ms) { _failsafeIterationFreq = Math.max(MIN_FAILSAFE_FREQ, Math.min(MAX_FAILSAFE_FREQ, ms)); }
 
     public static void setInterest(SelectionKey key, int op) throws CancelledKeyException {

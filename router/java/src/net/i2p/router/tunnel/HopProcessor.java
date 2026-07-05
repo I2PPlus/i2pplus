@@ -76,7 +76,6 @@ class HopProcessor {
                 RouterContext ctx = (RouterContext) I2PAppContext.getGlobalContext();
                 long now = ctx.clock().now();
                 if (_log.shouldWarn()) {
-                    //_log.warn("Attempted mid-tunnel injection from: " + prev + "\n* Expected: " + _config.getReceiveFrom());
                     _log.warn("Banning [" + prev.toBase32().substring(0,6) +
                               "] for 24h -> Attempted mid-tunnel injection \n* Expected: " +
                               _config.getReceiveFrom());

@@ -69,6 +69,7 @@ public class RouterWatchdog implements Runnable {
     /**
      * Shutdown the watchdog gracefully.
      * Sets the running flag to false to stop the monitoring loop.
+ *
      * @since 0.8.8
      */
     public void shutdown() {_isRunning = false;}
@@ -172,6 +173,7 @@ public class RouterWatchdog implements Runnable {
     
     /**
      * Calculate sleep time based on how close leases are to expiration.
+ *
      * @return sleep time in milliseconds
      */
     private long getSleepTimeForLeaseExpiry() {

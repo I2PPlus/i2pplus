@@ -454,11 +454,13 @@ class SSU2Payload {
         }
 
         /**
-         *  @since 0.9.55
+         * Get the block type.
+         * @return block type
+         * @since 0.9.55
          */
         public int getType() { return type; }
 
-        /** @return new offset */
+        /** Write the block to the target array, returning the new offset */
         public int write(byte[] tgt, int off) {
             tgt[off++] = (byte) type;
             // we do it this way so we don't call getDataLength(),
@@ -487,7 +489,7 @@ class SSU2Payload {
          */
         public abstract int getDataLength();
 
-        /** @return new offset */
+        /** Write the block data to the target array, returning the new offset */
         public abstract int writeData(byte[] tgt, int off);
 
         @Override

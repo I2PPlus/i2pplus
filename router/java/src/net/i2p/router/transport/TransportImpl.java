@@ -144,7 +144,7 @@ public abstract class TransportImpl implements Transport {
         _context.statManager().createRequiredRateStat("transport.receiveMessageSize", "Size of received messages (bytes)", "Transport", RATES);
         _context.statManager().createRequiredRateStat("transport.sendMessageSize", "Size of sent messages (bytes)", "Transport", RATES);
         _context.statManager().createRequiredRateStat("transport.sendProcessingTime", "Time to process and send a message (ms)", "Transport", RATES);
-        //_context.statManager().createRequiredRateStat("transport.sendProcessingTime." + getStyle(), "Time to process and send a message (ms)", "Transport", RATES);
+        
 
         _currentAddresses = new ArrayList<>(3);
         if (getStyle().equals("NTCP")) {_sendPool = new ArrayBlockingQueue<>(SEND_POOL_CAPACITY);}
@@ -542,7 +542,7 @@ public abstract class TransportImpl implements Transport {
 
     /** Do we increase the advertised cost when approaching conn limits? */
     protected static final boolean ADJUST_COST = true;
-    /** TODO change to 2 */
+    /** Adjustment factor for congestion cost */
     protected static final int CONGESTION_COST_ADJUSTMENT = 1;
 
     /**
@@ -597,7 +597,7 @@ public abstract class TransportImpl implements Transport {
     /**
      *  Replace any existing addresses for the current transport
      *  with the same IP length (4 or 16) with the given one.
-     *  TODO: Allow multiple addresses of the same length.
+     *  Note: Does not currently allow multiple addresses of the same length.
      *  Calls listener.transportAddressChanged()
      *  To remove all IPv4 or IPv6 addresses, use removeAddress(boolean).
      *

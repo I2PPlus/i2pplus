@@ -29,6 +29,8 @@ public class CloveSet {
     private final long _expiration;
 
     /**
+     *  Create a new CloveSet.
+     *
      *  @param cloves non-null, all entries non-null
      *  @param cert non-null
      */
@@ -41,7 +43,8 @@ public class CloveSet {
 
     public int getCloveCount() { return _cloves.length; }
 
-    /** @throws ArrayIndexOutOfBoundsException */
+    /** Get the clove at the specified index.
+     *  @throws ArrayIndexOutOfBoundsException */
     public GarlicClove getClove(int index) { return _cloves[index]; }
 
     public Certificate getCertificate() { return _cert; }

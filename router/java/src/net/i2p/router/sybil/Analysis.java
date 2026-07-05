@@ -49,6 +49,7 @@ import net.i2p.util.Translate;
 
 /**
  * Sybil attack analysis implementation.
+ *
  * @since 0.9.38 split out from SybilRenderer
  */
 public class Analysis extends JobImpl implements RouterApp, Runnable {
@@ -543,6 +544,8 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
+     *  A dummy list that always returns true on add.
+     *
      *  @since 0.9.57
      */
     private static class DummyList extends ArrayList<RouterInfo> {
@@ -671,6 +674,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
 
     /**
      * v6 only
+ *
      * @since 0.9.57
      */
     private static byte[] getIPv6(RouterInfo ri) {
@@ -1291,6 +1295,8 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
+     *  Build the version comparison report.
+     *
      *  @param usName HTML escaped
      *  @param ris will be re-sorted in place
      *  @since 0.9.38 split out from renderRouterInfoHTML()
@@ -1317,6 +1323,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     /**
      * For debugging
      * http://forums.sun.com/thread.jspa?threadID=597652
+ *
      * @since 0.7.14
      */
     private static double biLog2(BigInteger a) {

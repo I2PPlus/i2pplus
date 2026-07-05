@@ -26,6 +26,7 @@ class NextSessionKey extends PublicKey {
      *  Null data, for acks/requests only.
      *  Type will be ElG but doesn't matter.
      *  Don't call setData().
+     *
      *  @since 0.9.46
      */
     public NextSessionKey(int id, boolean isReverse, boolean isRequest) {

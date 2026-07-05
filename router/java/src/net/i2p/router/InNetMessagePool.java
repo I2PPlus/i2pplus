@@ -344,6 +344,7 @@ public class InNetMessagePool implements Service {
 
     /**
      * Shortcut dispatch tunnel gateway message either directly or queued.
+     *
      * @param messageBody the tunnel gateway message
      */
     private void shortCircuitTunnelGateway(I2NPMessage messageBody) {
@@ -358,6 +359,7 @@ public class InNetMessagePool implements Service {
 
     /**
      * Actual direct dispatch of a tunnel gateway message.
+     *
      * @param messageBody the tunnel gateway message
      */
     private void doShortCircuitTunnelGateway(I2NPMessage messageBody) {
@@ -366,6 +368,7 @@ public class InNetMessagePool implements Service {
 
     /**
      * Shortcut dispatch tunnel data message either directly or queued.
+     *
      * @param messageBody  the tunnel data message
      * @param from         source router hash
      */
@@ -381,6 +384,7 @@ public class InNetMessagePool implements Service {
 
     /**
      * Actual direct dispatch of a tunnel data message.
+     *
      * @param messageBody  the tunnel data message
      * @param from         source router hash
      */

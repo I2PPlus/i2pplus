@@ -38,6 +38,8 @@ public class RouterAppManager extends ClientAppManagerImpl {
     }
 
     /**
+     *  Add and start a client application.
+     *
      *  @param args the args that were used to instantiate the app, non-null, may be zero-length
      *  @return success
      *  @throws IllegalArgumentException if already added
@@ -192,6 +194,8 @@ public class RouterAppManager extends ClientAppManagerImpl {
     /// end ClientAppManager interface
 
     /**
+     *  Shut down all running client applications.
+     *
      *  @since 0.9.6
      */
     public synchronized void shutdown() {

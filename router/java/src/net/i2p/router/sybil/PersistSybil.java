@@ -343,6 +343,8 @@ public class PersistSybil {
     }
 
     /**
+     *  Notify the update manager of a new blocklist version.
+     *
      *  @since 0.9.50
      */
     private void notifyVersion(long v) {
@@ -354,38 +356,4 @@ public class PersistSybil {
         }
     }
 
-/****
-    public static void main(String[] args) {
-        I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        PersistSybil ps = new PersistSybil(ctx);
-        byte[] b = new byte[32];
-        ctx.random().nextBytes(b);
-        Hash h = new Hash(b);
-        String rsn = "Test reason";
-        Points p = new Points(1.234, rsn);
-        rsn = "Test reason2";
-        p.addPoints(2.345, rsn);
-        Map<Hash, Points> map = new HashMap<>();
-        map.put(h, p);
-        b = new byte[32];
-        ctx.random().nextBytes(b);
-        h = new Hash(b);
-        map.put(h, p);
-        try {
-            long now = System.currentTimeMillis();
-            System.out.println("storing entries: " + map.size());
-            ps.store(System.currentTimeMillis(), map);
-            List<Long> dates = ps.load();
-            System.out.println("Found sets: " + dates.size());
-            map = ps.load(Long.valueOf(now));
-            System.out.println("loaded entries: " + map.size());
-            for (Map.Entry<Hash, Points> e : map.entrySet()) {
-                System.out.println(e.getKey().toString() + ": " + e.getValue());
-            }
-        } catch (IOException ioe) {
-            System.out.println("store error from " + args[0]);
-            ioe.printStackTrace();
-        }
-    }
-****/
 }

@@ -102,15 +102,17 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     }
 
     /**
-     * Returns the current CoDel target delay in ms.
-     * @since 0.9.70+
-     */
+ * Returns the current CoDel target delay in ms.
+ *
+ * @since 0.9.70+
+ */
     public long getTarget() { return _target; }
 
     /**
-     * Returns the current CoDel interval in ms.
-     * @since 0.9.70+
-     */
+ * Returns the current CoDel interval in ms.
+ *
+ * @since 0.9.70+
+ */
     public long getInterval() { return _interval; }
 
     @Override
@@ -195,6 +197,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
 
     /**
      *  Caller must synch on this
+     *
      *  @param entry may be null
      */
     private boolean updateVars(E entry) {

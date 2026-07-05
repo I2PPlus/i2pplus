@@ -733,7 +733,11 @@ class SearchJob extends JobImpl {
 
     long timeoutMs() {return _timeoutMs;}
 
-    /** @return true if peer was new */
+    /**
+     * Adds a peer to the search.
+     *
+     * @return true if peer was new
+     */
     boolean add(Hash peer) {
         boolean rv = _facade.getKBuckets().add(peer);
         if (rv) {

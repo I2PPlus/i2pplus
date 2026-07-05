@@ -267,23 +267,23 @@ public class UDPTransport extends TransportImpl {
     /** Consecutive send failures before considering a peer for drop (requires inactivity too) */
     private static final int MAX_CONSECUTIVE_FAILED = 3;
 
-    /** @return current outbound establish timeout in ms */
+    /** Get the outbound establish timeout in ms */
     public static long getMaxObEstablishTime() { return EstablishmentManager.MAX_OB_ESTABLISH_TIME.get(); }
-    /** @param ms new timeout (bounded 1000-5000) */
+    /** Set the outbound establish timeout, bounded 1000-5000ms */
     public static void setMaxObEstablishTime(long ms) {
         EstablishmentManager.MAX_OB_ESTABLISH_TIME.set(Math.max(1000, Math.min(5000, ms)));
     }
 
-    /** @return current inbound establish timeout in ms */
+    /** Get the inbound establish timeout in ms */
     public static long getMaxIbEstablishTime() { return EstablishmentManager.MAX_IB_ESTABLISH_TIME.get(); }
-    /** @param ms new timeout (bounded 1000-8000) */
+    /** Set the inbound establish timeout, bounded 1000-8000ms */
     public static void setMaxIbEstablishTime(long ms) {
         EstablishmentManager.MAX_IB_ESTABLISH_TIME.set(Math.max(1000, Math.min(8000, ms)));
     }
 
-    /** @return current data message timeout in ms */
+    /** Get the data message timeout in ms */
     public static long getDataMessageTimeout() { return EstablishmentManager.DATA_MESSAGE_TIMEOUT.get(); }
-    /** @param ms new timeout (bounded 1000-10000) */
+    /** Set the data message timeout, bounded 1000-10000ms */
     public static void setDataMessageTimeout(long ms) {
         EstablishmentManager.DATA_MESSAGE_TIMEOUT.set(Math.max(1000, Math.min(10000, ms)));
     }
@@ -975,7 +975,7 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
-    /** @since IPv6 */
+    /** Check if inbound fragment handler is alive */
     private boolean isAlive() {
         return _inboundFragments.isAlive();
     }
@@ -3315,7 +3315,7 @@ public class UDPTransport extends TransportImpl {
             return "";
     }
 
-    /** @since IPv6 */
+    /** Get the packet handler */
     PacketHandler getPacketHandler() {
         return _handler;
     }
@@ -4096,10 +4096,10 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
-    /** @since 0.9.70+ */
+    /** Get the max packet handler threads */
     public static int getPacketHandlerMaxThreads() { return PacketHandler.getMaxHandlers(); }
 
-    /** @since 0.9.70+ */
+    /** Set the max packet handler threads */
     public static void setPacketHandlerMaxThreads(int handlers) { PacketHandler.setMaxHandlers(handlers); }
 
     /**

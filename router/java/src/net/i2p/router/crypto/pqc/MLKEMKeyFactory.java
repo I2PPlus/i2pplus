@@ -45,6 +45,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
 
     /**
      *  Alice side only
+     *
      *  @param type must be one of the internal types MLKEM*_INT
      */
     public MLKEMKeyFactory(I2PAppContext ctx, EncType type) {
@@ -54,7 +55,6 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
         _log = ctx.logManager().getLog(MLKEMKeyFactory.class);
         ctx.statManager().createRateStat("crypto.MLKEMGenerateTime", "How long it takes to create keys", "Encryption", new long[] { 60*60*1000L });
         ctx.statManager().createRateStat("crypto.MLKEMUsed", "Take keys from the queue", "Encryption", new long[] { 60*60*1000L });
-        //ctx.statManager().createRateStat("crypto.MLKEMReused", "Unused requeued", "Encryption", new long[] { 60*60*1000 });
         ctx.statManager().createRequiredRateStat("crypto.MLKEMEmpty", "Queue empty", "Encryption", new long[] { 60*1000L, 10*60*1000L, 60*60*1000L });
 
         // Scale precomputation with available memory and cores.
@@ -85,39 +85,45 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     }
 
     /**
-     * Returns the last created instance.
-     * @since 0.9.70+
-     */
+ * Returns the last created instance.
+ *
+ * @since 0.9.70+
+ */
     public static MLKEMKeyFactory getInstance() { return _lastInstance; }
 
     /**
-     * Returns the current minimum precalc queue size.
-     * @since 0.9.70+
-     */
+ * Returns the current minimum precalc queue size.
+ *
+ * @since 0.9.70+
+ */
     public int getMinSize() { return _minSize; }
 
     /**
-     * Sets the minimum precalc queue size.
-     * @since 0.9.70+
-     */
+ * Sets the minimum precalc queue size.
+ *
+ * @since 0.9.70+
+ */
     public void setMinSize(int min) { _minSize = Math.max(1, min); }
 
     /**
-     * Returns the current maximum precalc queue size.
-     * @since 0.9.70+
-     */
+ * Returns the current maximum precalc queue size.
+ *
+ * @since 0.9.70+
+ */
     public int getMaxSize() { return _maxSize; }
 
     /**
-     * Sets the maximum precalc queue size.
-     * @since 0.9.70+
-     */
+ * Sets the maximum precalc queue size.
+ *
+ * @since 0.9.70+
+ */
     public void setMaxSize(int max) { _maxSize = Math.max(_minSize, max); }
 
     /**
-     * Returns the current number of precalc keys queued.
-     * @since 0.9.70+
-     */
+ * Returns the current number of precalc keys queued.
+ *
+ * @since 0.9.70+
+ */
     public int getSize() { return _keys.size(); }
 
     /**

@@ -250,7 +250,7 @@ class PeerTestState {
      */
     public void setTestData(byte[] data) { _testData = data; }
 
-    /** @return new value */
+    /** Increment and return the packets relayed count */
     public int incrementPacketsRelayed() { return _packetsRelayed.incrementAndGet(); }
 
     @Override

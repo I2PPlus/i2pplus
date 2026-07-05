@@ -42,7 +42,7 @@ class IPThrottler {
         return Integer.valueOf(rv);
     }
 
-    /** @since 0.9.55 */
+    /** Hash an IP address for throttling */
     private static Integer hashCode(byte[] ip) {
         int rv = 0;
         for (int i = 0; i < 8; i++) {

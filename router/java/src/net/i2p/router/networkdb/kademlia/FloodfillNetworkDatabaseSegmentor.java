@@ -42,7 +42,6 @@ import net.i2p.util.Log;
 public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseFacade {
     private final Log _log;
     private final RouterContext _context;
-    //private static final String PROP_NETDB_ISOLATION = "router.netdb.isolation";
     public static final Hash MAIN_DBID = null;
     private final FloodfillNetworkDatabaseFacade _mainDbid;
 

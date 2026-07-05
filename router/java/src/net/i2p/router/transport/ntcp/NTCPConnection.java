@@ -339,7 +339,7 @@ public class NTCPConnection implements Closeable {
      */
     public long getClockSkew() { return _clockSkew; }
 
-    /** @return milliseconds */
+    /** Get the connection uptime in milliseconds */
     public long getUptime() {
         long establishedOn;
         synchronized(this) {
@@ -351,6 +351,8 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
+     * Get the time this connection was established.
+     * @return established timestamp, or 0 if not yet established
      * @since 0.9.55
      */
     public long getEstablishedOn() {
@@ -373,7 +375,7 @@ public class NTCPConnection implements Closeable {
             return queued;
     }
 
-    /** @since 0.9.36 */
+    /** Check if there are pending outbound messages */
     private boolean hasCurrentOutbound() {
         synchronized(_writeLock) {
             return ! _currentOutbound.isEmpty();
@@ -398,28 +400,34 @@ public class NTCPConnection implements Closeable {
         return rv;
     }
 
-    /** @return milliseconds */
+    /** Get time since last send in milliseconds */
     public long getTimeSinceSend() { return _context.clock().now()-_lastSendTime; }
 
     /**
+     * Get time since last send in milliseconds.
+     * @param now current time
      * @return milliseconds
      * @since 0.9.38
      */
     public long getTimeSinceSend(long now) { return now - _lastSendTime; }
 
-    /** @return milliseconds */
+    /** Get time since last receive in milliseconds */
     public long getTimeSinceReceive() { return _context.clock().now()-_lastReceiveTime; }
 
     /**
+     * Get time since last receive in milliseconds.
+     * @param now current time
      * @return milliseconds
      * @since 0.9.38
      */
     public long getTimeSinceReceive(long now) { return now - _lastReceiveTime; }
 
-    /** @return milliseconds */
+    /** Get time since connection creation in milliseconds */
     public long getTimeSinceCreated() { return _context.clock().now()-_created; }
 
     /**
+     * Get time since connection creation in milliseconds.
+     * @param now current time
      * @return milliseconds
      * @since 0.9.38
      */
@@ -973,7 +981,6 @@ public class NTCPConnection implements Closeable {
     private void sendNTCP2(byte[] tmp, List<Block> blocks) {
         int payloadlen = NTCP2Payload.writePayload(tmp, 0, blocks);
         int framelen = payloadlen + OutboundNTCP2State.MAC_SIZE;
-        // TODO use a buffer
         byte[] enc = new byte[2 + framelen];
 
         synchronized(_writeLock) {
@@ -1193,7 +1200,7 @@ public class NTCPConnection implements Closeable {
         }
     }
 
-    /** @return null if none available */
+    /** Get the next read buffer, or null if none available */
     ByteBuffer getNextReadBuf() {
         return _readBufs.poll();
     }

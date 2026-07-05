@@ -217,12 +217,7 @@ abstract class TunnelGateway {
             //if (_queue.size() > 10000) // stay out of the synchronized block
             //    System.out.println("foo!");
             synchronized (_queue) {
-                //if (_queue.size() > 10000) // stay in the synchronized block
-                //    System.out.println("foo!");
-                //afterChecked = _context.clock().now();
                 if (!_queue.isEmpty()) {
-                    //if ( (remaining > 0) && (_log.shouldDebug()) )
-                    //    _log.debug("Remaining before delayed flush preprocessing: " + _queue);
                     wantRequeue = _preprocessor.preprocessQueue(_queue, _sender, _receiver);
                     if (wantRequeue) {
                         delayAmount = _preprocessor.getDelayAmount();
@@ -230,7 +225,6 @@ abstract class TunnelGateway {
                             _log.debug("Remaining after delayed flush preprocessing: " + _queue);
                     }
                 }
-                //remaining = _queue.size();
             }
 
             if (wantRequeue)

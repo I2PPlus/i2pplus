@@ -619,10 +619,7 @@ public class TunnelDispatcher implements Service {
             if (_log.shouldInfo())
                 _log.info("Removing our own Outbound tunnel...\n* " + cfg);
             TunnelId outId = cfg.getConfig(0).getSendTunnel();
-            TunnelGateway gw = _outboundGateways.remove(outId);
-            if (gw != null) {
-                // update stats based on gw.getMessagesSent()
-            }
+            _outboundGateways.remove(outId);
         }
 
         long msgs = cfg.getProcessedMessagesCount();
@@ -923,24 +920,24 @@ public class TunnelDispatcher implements Service {
         _context.statManager().addRateData("tunnel.participatingTunnels", partCount);
     }
 
-/**
-         * Implement RED (Random Early Discard) to enforce bandwidth limits.
-         * Only active when queue size > minThreshold (congestion).
-         * When queue > maxThreshold, ALL messages are dropped (regardless of factor).
-         */
-        boolean shouldDropParticipatingMessage(Location loc, int type, int length, SyntheticREDQueue bwe) {
-            if (length <= 0) return false;
+    /**
+     * Implement RED (Random Early Discard) to enforce bandwidth limits.
+     * Only active when queue size > minThreshold (congestion).
+     * When queue > maxThreshold, ALL messages are dropped (regardless of factor).
+     */
+    boolean shouldDropParticipatingMessage(Location loc, int type, int length, SyntheticREDQueue bwe) {
+        if (length <= 0) return false;
 
-// Enable transit throttling. Configurable via router.transitThrottleFactor.
-// 0.0f = disabled
-// 0.95f = light (~5% drop at high congestion)
-// 0.1f = aggressive (higher drop rate)
-// 1.0f = most aggressive
-float factor = _context.getProperty("router.transitThrottleFactor", 0.95f);
+        // Enable transit throttling. Configurable via router.transitThrottleFactor.
+        // 0.0f = disabled
+        // 0.95f = light (~5% drop at high congestion)
+        // 0.1f = aggressive (higher drop rate)
+        // 1.0f = most aggressive
+        float factor = _context.getProperty("router.transitThrottleFactor", 0.95f);
 
-// Approximate drop probability for logging
-// 0.1f = ~90%, 0.95f = ~5%, 0.0f = 0%
-int pct = Math.max(0, (int)((1.0f - factor) * 100));
+        // Approximate drop probability for logging
+        // 0.1f = ~90%, 0.95f = ~5%, 0.0f = 0%
+        int pct = Math.max(0, (int)((1.0f - factor) * 100));
 
         if (bwe != null && !bwe.offer(length, factor)) {
             if (_log.shouldWarn()) {
@@ -1004,12 +1001,12 @@ int pct = Math.max(0, (int)((1.0f - factor) * 100));
         return reject;
     }
 
-/**
-         * Get the max bandwidth per transit tunnel.
-         * Scales with allocation: higher share = higher per-tunnel cap.
-         */
-        int getMaxPerTunnelBandwidth(Location loc) {
-            int max = _context.bandwidthLimiter().getMaxShareBandwidth();
+    /**
+     * Get the max bandwidth per transit tunnel.
+     * Scales with allocation: higher share = higher per-tunnel cap.
+     */
+    int getMaxPerTunnelBandwidth(Location loc) {
+        int max = _context.bandwidthLimiter().getMaxShareBandwidth();
             // Dynamic divisor: configurable via router.tunnel.perTunnelBweDivisor
             // Falls back to min(maxTunnels, 100) if not set
             int divisor = _context.getProperty("router.tunnel.perTunnelBweDivisor", 0);

@@ -107,6 +107,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
     /**
      * Returns current heap memory pressure as a ratio from 0.0 (no pressure)
      * to 1.0 (heap full). Used to scale cache sizes and buffer pools.
+     *
      * @since 0.9.70+
      */
     static double getMemoryPressure() {

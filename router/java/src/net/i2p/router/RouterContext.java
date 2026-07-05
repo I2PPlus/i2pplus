@@ -63,7 +63,6 @@ public class RouterContext extends I2PAppContext {
     private Banlist _banlist;
     private Blocklist _blocklist;
     private MessageValidator _messageValidator;
-    //private MessageStateMonitor _messageStateMonitor;
     private RouterThrottle _throttle;
     private RouterAppManager _appManager;
     private RouterKeyGenerator _routingKeyGenerator;
@@ -101,6 +100,7 @@ public class RouterContext extends I2PAppContext {
      *  @param doInit should this context be used as the global one (if necessary)?
      *                Will only apply if there is no global context now.
      *                If false, caller should call setGlobalContext() afterwards.
+     *
      *  @since 0.9.33
      */
     RouterContext(Router router, Properties envProps, boolean doInit) {
@@ -113,9 +113,6 @@ public class RouterContext extends I2PAppContext {
 
         // Disabled here so that the router can get a context and get the
         // directory locations from it, to do an update, without having
-        // to init everything. Caller MUST call initAll() afterwards.
-        // Sorry, this breaks some main() unit tests out there.
-        //initAll();
         if (!_contexts.isEmpty())
             logManager().getLog(RouterContext.class).warn("Warning - More than one router in this JVM");
         _finalShutdownTasks = new CopyOnWriteArraySet<>();
@@ -349,7 +346,6 @@ public class RouterContext extends I2PAppContext {
      * we don't overflow.
      *
      */
-    //public MessageStateMonitor messageStateMonitor() { return _messageStateMonitor; }
 
     /**
      * Get the network database segmentor for advanced database access.
@@ -535,6 +531,7 @@ public class RouterContext extends I2PAppContext {
 
     /**
      * Return a long with a long default
+     *
      * @since 0.9.4
      */
     @Override
@@ -627,6 +624,7 @@ public class RouterContext extends I2PAppContext {
 
     /**
      *  Use this instead of context instanceof RouterContext
+     *
      *  @return true
      *  @since 0.7.9
      */
@@ -637,6 +635,7 @@ public class RouterContext extends I2PAppContext {
 
     /**
      *  Use this to connect to the router in the same JVM.
+     *
      *  @return the client manager
      *  @since 0.8.3
      */
@@ -647,6 +646,7 @@ public class RouterContext extends I2PAppContext {
 
     /**
      *  The RouterAppManager.
+     *
      *  @return the manager
      *  @since 0.9.4
      */
@@ -658,6 +658,7 @@ public class RouterContext extends I2PAppContext {
     /**
      *  The RouterAppManager.
      *  For convenience, same as clientAppManager(), no cast required
+     *
      *  @return the manager
      *  @since 0.9.11
      */

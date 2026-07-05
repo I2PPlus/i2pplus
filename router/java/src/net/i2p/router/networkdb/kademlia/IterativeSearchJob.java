@@ -144,9 +144,18 @@ public class IterativeSearchJob extends FloodSearchJob {
      */
     private static volatile int _maxConcurrentDefault = SystemVersion.isSlow() ? 4 : 16;
 
-    /** @since 0.9.70+ */
+    /**
+     * Gets the maximum concurrent default value.
+     *
+     * @since 0.9.70+
+     */
     public static int getMaxConcurrentDefault() { return _maxConcurrentDefault; }
-    /** @since 0.9.70+ */
+
+    /**
+     * Sets the maximum concurrent default value.
+     *
+     * @since 0.9.70+
+     */
     public static void setMaxConcurrentDefault(int val) { _maxConcurrentDefault = Math.max(1, Math.min(64, val)); }
 
     public static final String PROP_ENCRYPT_RI = "router.encryptRouterLookups";

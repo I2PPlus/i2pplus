@@ -130,6 +130,7 @@ public class Blocklist {
 
     /**
      *  For Update Manager
+     *
      *  @since 0.9.48
      */
     public static final String ID_FEED = "feed";
@@ -149,6 +150,7 @@ public class Blocklist {
     /**
      *  Constructor.
      *  Router MUST call startup()
+     *
      *  @param context the router context
      */
     public Blocklist(RouterContext context) {
@@ -165,6 +167,7 @@ public class Blocklist {
 
     /**
      *  Initialize configurable properties.
+     *
      *  @since 0.9.70
      */
     private void initConfig() {
@@ -176,6 +179,7 @@ public class Blocklist {
     /**
      *  Reload configuration from properties.
      *  Called when settings are changed in the console.
+     *
      *  @since 0.9.70
      */
     public void reloadConfig() {
@@ -184,6 +188,7 @@ public class Blocklist {
 
     /**
      *  Clear all blocked IPs and peers.
+     *
      *  @since 0.9.70
      */
     public void clearAll() {
@@ -196,18 +201,21 @@ public class Blocklist {
 
     /**
      *  Check if blocklist is enabled.
+     *
      *  @since 0.9.70
      */
     public boolean isBlocklistEnabled() { return _blocklistEnabled; }
 
     /**
      *  Check if Tor blocklist is enabled.
+     *
      *  @since 0.9.70
      */
     public boolean isTorBlocklistEnabled() { return _blocklistTorEnabled; }
 
     /**
      *  Check if country blocklist is enabled.
+     *
      *  @since 0.9.70
      */
     public boolean isCountryBlocklistEnabled() { return _blocklistCountryEnabled; }
@@ -225,6 +233,7 @@ public class Blocklist {
 
     /**
      *  Get the blocklist expiration interval from configuration.
+     *
      *  @return the expiration interval in milliseconds, or 0 if disabled
      */
     private int expireInterval() {
@@ -342,6 +351,7 @@ public class Blocklist {
 
     /**
      *  Delay telling update manager until it's there
+     *
      *  @since 0.9.48
      */
     private class VersionNotifier extends SimpleTimer2.TimedEvent {
@@ -451,6 +461,7 @@ public class Blocklist {
      *  The blocklist-country.txt file was created or updated.
      *  Read it in. Not required normally, as the country file
      *  is read by startup().
+     *
      *  @since 0.9.48
      */
     public synchronized void addCountryFile() {
@@ -486,6 +497,7 @@ public class Blocklist {
 
     /**
      *  Allocate an array for blocklist entries.
+     *
      *  @param files the list of blocklist files to read
      *  @return the allocated array, or null on out of memory error
      *  @since 0.9.18 split out from readBlocklistFile()
@@ -741,6 +753,7 @@ public class Blocklist {
 
     /**
      *  Count the number of entries in a blocklist file.
+     *
      *  @param blFile the blocklist file to count
      *  @return the number of non-comment, non-blank lines
      */
@@ -762,6 +775,7 @@ public class Blocklist {
     /**
      *  Merge and remove overlapping entries from a sorted list.
      *  Caller must re-sort if return code is > 0.
+     *
      *  @param blist the sorted blocklist array
      *  @param count the number of valid entries in the array
      *  @return the number of overlapping entries removed
@@ -959,6 +973,7 @@ public class Blocklist {
 
     /**
      * Will not contain duplicates.
+     *
      * @since 0.9.29
      */
     private List<byte[]> getAddresses(RouterInfo pinfo) {
@@ -980,6 +995,7 @@ public class Blocklist {
     /**
      *  Check if a peer is blocklisted by IP address.
      *  If so, and it isn't banlisted, banlist it forever or for the configured override period.
+     *
      *  @param peer the router hash to check
      *  @return true if the peer's IP is in the blocklist
      *  @since 0.9.29
@@ -999,6 +1015,7 @@ public class Blocklist {
     /**
      *  Check if a peer is blocklisted by IP address.
      *  If so, and it isn't banlisted, banlist it forever or for the configured override period.
+     *
      *  @param pinfo the router info to check
      *  @return true if the peer's IP is in the blocklist
      *  @since 0.9.29
@@ -1019,6 +1036,7 @@ public class Blocklist {
     /**
      *  Check if an IP address is blocklisted.
      *  Calling this externally won't banlist the peer, this is just an IP check.
+     *
      *  @param ip the IP address as a string (IPv4 or IPv6)
      *  @return true if the IP is blocklisted
      */
@@ -1032,6 +1050,7 @@ public class Blocklist {
     /**
      *  Check if an IP address is blocklisted.
      *  Calling this externally won't banlist the peer, this is just an IP check.
+     *
      *  @param ip the IP address as a byte array (IPv4 or IPv6)
      *  @return true if the IP is blocklisted
      */
@@ -1058,6 +1077,7 @@ public class Blocklist {
     /**
      *  Check if an IP is permanently blocklisted using binary search.
      *  Public for console only, not a public API.
+     *
      *  @param ip the IPv4 address as an integer
      *  @return true if the IP is in the permanent blocklist
      *  @since 0.9.45 split out from above, public since 0.9.48 for console
@@ -1093,6 +1113,7 @@ public class Blocklist {
 
     /**
      *  Check if an IP is included in a compressed blocklist entry.
+     *
      *  @param ip the IP to check
      *  @param entry the compressed blocklist entry
      *  @return true if the IP is within the entry's range
@@ -1104,6 +1125,7 @@ public class Blocklist {
 
     /**
      *  Check if an IP is higher than the entry's starting IP.
+     *
      *  @param ip the IP to check
      *  @param entry the compressed blocklist entry
      *  @return true if the IP is higher than the entry's starting IP
@@ -1115,6 +1137,7 @@ public class Blocklist {
     /**
      *  Extract the starting IP from a compressed blocklist entry.
      *  Public for console only, not a public API.
+     *
      *  @param entry the compressed blocklist entry
      *  @return the starting IP as an integer
      *  @since public since 0.9.48
@@ -1124,6 +1147,7 @@ public class Blocklist {
     /**
      *  Extract the ending IP from a compressed blocklist entry.
      *  Public for console only, not a public API.
+     *
      *  @param entry the compressed blocklist entry
      *  @return the ending IP as an integer
      *  @since public since 0.9.48
@@ -1146,6 +1170,7 @@ public class Blocklist {
 
     /**
      *  Store an IPv4 range as a compressed entry in the blocklist array.
+     *
      *  @param ip1 the starting IP as a byte array
      *  @param ip2 the ending IP as a byte array
      *  @param blocklist the blocklist array to store in
@@ -1157,6 +1182,7 @@ public class Blocklist {
 
     /**
      *  Store an IPv4 range as a compressed entry in the blocklist array.
+     *
      *  @param ip1 the starting IP as an integer
      *  @param ip2 the ending IP as an integer
      *  @param blocklist the blocklist array to store in
@@ -1170,6 +1196,7 @@ public class Blocklist {
 
     /**
      *  Convert an IPv4 address from byte array to integer.
+     *
      *  @param ip the IP address as a byte array
      *  @return the IP address as an integer
      */
@@ -1181,6 +1208,7 @@ public class Blocklist {
 
     /**
      *  Convert a compressed blocklist entry to a string representation.
+     *
      *  @param entry the compressed blocklist entry
      *  @return the string representation (e.g., "127.0.0.1-127.0.0.255")
      */
@@ -1197,6 +1225,7 @@ public class Blocklist {
     /**
      *  Convert an IPv4 address to a string representation.
      *  Public for console only, not a public API.
+     *
      *  @param ip the IPv4 address as an integer
      *  @return the string representation (e.g., "192.168.1.1")
      *  @since public since 0.9.48
@@ -1388,6 +1417,7 @@ public class Blocklist {
     /**
      *  Get the size of the permanent blocklist.
      *  Public for console only, not a public API.
+     *
      *  @return the number of entries in the permanent blocklist
      *  @since 0.9.48
      */
@@ -1396,6 +1426,7 @@ public class Blocklist {
     /**
      *  Mark a string for extraction by xgettext and translation.
      *  Use this only in static initializers. It does not translate!
+     *
      *  @return s
      */
     private static final String _x(String s) {return s;}

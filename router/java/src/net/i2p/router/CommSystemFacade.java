@@ -83,12 +83,14 @@ public abstract class CommSystemFacade implements Service {
 
     /**
      * Determine under what conditions we are remotely reachable.
+     *
      * @since 0.9.20
      */
     public Status getStatus() { return Status.OK; }
 
     /**
      * getStatus().toStatusString(), translated if available.
+     *
      * @since 0.9.45
      */
     public String getLocalizedStatusString() {
@@ -218,36 +220,42 @@ public abstract class CommSystemFacade implements Service {
 
     /**
      * Tell other transports our address changed
+     *
      * @since 0.9.20
      */
     public void notifyRemoveAddress(RouterAddress address) {}
 
     /**
      * Tell other transports our address changed
+     *
      * @since 0.9.20
      */
     public void notifyRemoveAddress(boolean ipv6) {}
 
     /**
      *  Pluggable transport
+     *
      *  @since 0.9.16
      */
     public void registerTransport(Transport t) {}
 
     /**
      *  Pluggable transport
+     *
      *  @since 0.9.16
      */
     public void unregisterTransport(Transport t) {}
 
     /**
      *  Factory for making X25519 key pairs.
+     *
      *  @since 0.9.46
      */
     public X25519KeyFactory getXDHFactory() { return null; }
 
     /**
      *  Router must call after netdb is initialized
+     *
      *  @since 0.9.41
      */
     public void initGeoIP() {}
@@ -316,6 +324,7 @@ public abstract class CommSystemFacade implements Service {
      *  We have an IPv6 transport enabled and a public IPv6 address.
      *  We can receive unsolicited connections on IPv4.
      *  We might be able to receive unsolicited connections on IPv6.
+     *
      *  @since 0.9.20
      */
     public static final short STATUS_IPV4_OK_IPV6_UNKNOWN = 2;
@@ -324,6 +333,7 @@ public abstract class CommSystemFacade implements Service {
      *  We have an IPv6 transport enabled and a public IPv6 address.
      *  We can receive unsolicited connections on IPv4.
      *  We cannot receive unsolicited connections on IPv6.
+     *
      *  @since 0.9.20
      */
     public static final short STATUS_IPV4_OK_IPV6_FIREWALLED = 1;
@@ -332,6 +342,7 @@ public abstract class CommSystemFacade implements Service {
      *  We have an IPv6 transport enabled and a public IPv6 address.
      *  We may be able to receive unsolicited connections on IPv4.
      *  We can receive unsolicited connections on IPv6.
+     *
      *  @since 0.9.20
      */
     public static final short STATUS_IPV4_UNKNOWN_IPV6_OK = 4;
@@ -340,6 +351,7 @@ public abstract class CommSystemFacade implements Service {
      *  We have an IPv6 transport enabled and a public IPv6 address.
      *  We cannot receive unsolicited connections on IPv4.
      *  We can receive unsolicited connections on IPv6.
+     *
      *  @since 0.9.20
      */
     public static final short STATUS_IPV4_FIREWALLED_IPV6_OK = 3;
@@ -348,6 +360,7 @@ public abstract class CommSystemFacade implements Service {
      *  We have an IPv6 transport enabled and a public IPv6 address.
      *  IPv4 is disabled.
      *  We can receive unsolicited connections on IPv6.
+     *
      *  @since 0.9.20
      */
     public static final short STATUS_IPV4_DISABLED_IPV6_OK = 5;
@@ -356,6 +369,7 @@ public abstract class CommSystemFacade implements Service {
      *  We are behind a symmetric NAT which will make our 'from' address look
      *  differently when we talk to multiple people
      *  We can receive unsolicited connections on IPv6.
+     *
      *  @since 0.9.20
      */
     public static final short STATUS_IPV4_SNAT_IPV6_OK = 6;
@@ -371,6 +385,7 @@ public abstract class CommSystemFacade implements Service {
      *  We are behind a symmetric NAT which will make our 'from' address look
      *  differently when we talk to multiple people
      *  We might be able to receive unsolicited connections on IPv6.
+     *
      *  @since 0.9.20
      */
     public static final short STATUS_IPV4_SNAT_IPV6_UNKNOWN = 8;
@@ -379,6 +394,7 @@ public abstract class CommSystemFacade implements Service {
      *  We have an IPv6 transport enabled and a public IPv6 address.
      *  We cannot receive unsolicited connections on IPv4.
      *  We might be able to receive unsolicited connections on IPv6.
+     *
      *  @since 0.9.20
      */
     public static final short STATUS_IPV4_FIREWALLED_IPV6_UNKNOWN = 10;
@@ -394,6 +410,7 @@ public abstract class CommSystemFacade implements Service {
      *  We have an IPv6 transport enabled and a public IPv6 address.
      *  We may be able to receive unsolicited connections on IPv4.
      *  We cannot receive unsolicited connections on IPv6.
+     *
      *  @since 0.9.20
      */
     public static final short STATUS_IPV4_UNKNOWN_IPV6_FIREWALLED = 11;
@@ -402,6 +419,7 @@ public abstract class CommSystemFacade implements Service {
      *  We have an IPv6 transport enabled and a public IPv6 address.
      *  IPv4 is disabled.
      *  We might be able to receive unsolicited connections on IPv6.
+     *
      *  @since 0.9.20
      */
     public static final short STATUS_IPV4_DISABLED_IPV6_UNKNOWN = 13;
@@ -410,12 +428,14 @@ public abstract class CommSystemFacade implements Service {
      *  We have an IPv6 transport enabled and a public IPv6 address.
      *  IPv4 is disabled.
      *  We can receive unsolicited connections on IPv6.
+     *
      *  @since 0.9.20
      */
     public static final short STATUS_IPV4_DISABLED_IPV6_FIREWALLED = 12;
 
     /**
      *  We have no network interface at all enabled transports
+     *
      *  @since 0.9.4
      */
     public static final short STATUS_DISCONNECTED = 14;
@@ -434,6 +454,7 @@ public abstract class CommSystemFacade implements Service {
      * Network connectivity status enumeration for IPv4 and IPv6 transport capabilities.
      * Represents firewall status, NAT configuration, and transport readiness for tunnel participation.
      *  Since codes may change.
+     *
      *  @since 0.9.20
      */
     public enum Status {
@@ -724,6 +745,7 @@ public abstract class CommSystemFacade implements Service {
 
         /**
          * toStatusString(), translated if available.
+         *
          * @since 0.9.45
          */
         public String toLocalizedStatusString(I2PAppContext ctx) {

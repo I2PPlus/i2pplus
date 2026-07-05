@@ -38,6 +38,7 @@ public abstract class ClientManagerFacade implements Service {
      * @param dest Destination from which the LeaseSet's authorization should be requested
      * @param set LeaseSet with requested leases - this object must be updated to contain the
      *            signed version (as well as any changed/added/removed Leases)
+     *
      * @param timeout ms to wait before failing
      * @param onCreateJob Job to run after the LeaseSet is authorized
      * @param onFailedJob Job to run after the timeout passes without receiving authorization

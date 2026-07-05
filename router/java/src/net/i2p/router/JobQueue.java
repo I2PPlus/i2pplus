@@ -278,6 +278,7 @@ public class JobQueue {
 
     /**
      * Get and reset the dropped jobs count.
+     *
      * @return number of jobs dropped since last call
      */
     public int getAndResetDroppedCount() {

@@ -48,10 +48,12 @@ abstract class ThreadDump {
      * @param context the I2P application context for accessing directories
      * @param secondsToWait maximum seconds to wait for the signal to complete;
      *                     if &lt;= 0, don't wait for completion
+ *
      * @return true if successful, false in the following cases:
      *         - Windows platform or no wrapper available
      *         - secondsToWait &gt; 0 and operation timed out
      *         - signal failed for other reasons
+ *
      * @since 0.9.3 moved from RouterWatchdog
      */
     public static boolean dump(I2PAppContext context, int secondsToWait) {

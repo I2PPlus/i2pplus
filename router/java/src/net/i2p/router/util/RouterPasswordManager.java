@@ -133,7 +133,6 @@ public class RouterPasswordManager extends PasswordManager {
         return _context.router().saveConfig(toAdd, toDel);
     }
 
-
     /**
      *  This will fail if
      *  if user contains '#' or '=' or starts with '!'

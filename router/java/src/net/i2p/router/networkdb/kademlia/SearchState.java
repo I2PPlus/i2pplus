@@ -140,10 +140,18 @@ class SearchState {
         }
     }
 
-    /** @since 0.9.16 */
+    /**
+     * Checks if this search state has been aborted.
+     *
+     * @since 0.9.16
+     */
     public boolean isAborted() {return _aborted;}
 
-    /** @since 0.9.16 */
+    /**
+     * Aborts this search state.
+     *
+     * @since 0.9.16
+     */
     public void abort() {_aborted = true;}
 
     public long getWhenStarted() {return _started;}

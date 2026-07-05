@@ -157,6 +157,7 @@ public interface TunnelManagerFacade extends Service {
 
     /**
      *  Must be called AFTER deregistration by the client manager.
+     *
      *  @since 0.9.48
      */
     public void removeTunnels(Destination client);
@@ -164,6 +165,7 @@ public interface TunnelManagerFacade extends Service {
     /**
      *  Add another destination to the same tunnels.
      *  Must have same encryption key and a different signing key.
+     *
      *  @throws IllegalArgumentException if not
      *  @return success
      *  @since 0.9.21
@@ -172,6 +174,7 @@ public interface TunnelManagerFacade extends Service {
 
     /**
      *  Remove another destination to the same tunnels.
+     *
      *  @since 0.9.21
      */
     public void removeAlias(Destination dest);
@@ -212,6 +215,7 @@ public interface TunnelManagerFacade extends Service {
 
     /**
      * Get the ghost peer manager for tracking peers with consistent tunnel build timeouts.
+     *
      * @return the GhostPeerManager instance
      * @since 0.9.68+
      */

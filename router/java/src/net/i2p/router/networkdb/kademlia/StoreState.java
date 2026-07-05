@@ -45,6 +45,8 @@ class StoreState {
     }
 
     /**
+     * Constructs a new StoreState for tracking store operations.
+     *
      * @param key the DatabaseEntry hash
      * @param toSkip may be null, if non-null, all attempted and skipped targets will be added as of 0.9.53
      */
@@ -127,6 +129,8 @@ class StoreState {
     public long getWhenCompleted() { return _completed; }
 
     /**
+     * Adds a pending message for tracking.
+     *
      * @since 0.7.10
      */
     public void addPending(Hash peer, MessageWrapper.WrappedMessage msg) {
@@ -135,6 +139,8 @@ class StoreState {
     }
 
     /**
+     * Returns the pending message for the specified peer.
+     *
      * @return the message or null; will only return the message once, so
      * tags are only acked or failed once.
      * @since 0.7.10

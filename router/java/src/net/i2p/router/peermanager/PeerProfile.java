@@ -46,8 +46,6 @@ public class PeerProfile {
     private long _tunnelTestTimeAvgLastUpdate;
     private float _peerTestResponseTimeAvg;
     // periodic rates
-    //private RateStat _sendSuccessSize = null;
-    //private RateStat _receiveSize = null;
     private RateStat _dbResponseTime;
     private RateStat _tunnelCreateResponseTime;
     // unused
@@ -90,9 +88,7 @@ public class PeerProfile {
     private boolean _expandedDB;
     /** low latency flag, set when peer responds quickly to tunnel builds, persisted */
     private volatile boolean _lowLatency;
-    //private int _consecutiveBanlists;
     private final int _distance;
-
 
     /** keep track of the fastest 8 throughputs unless slow, then 4 */
     private static final int THROUGHPUT_COUNT = SystemVersion.isSlow() ? 4 : 8;
@@ -225,6 +221,7 @@ public class PeerProfile {
 
     /**
      *  For now, just a one-byte comparison
+     *
      *  @return -127 to +128, lower is closer
      *  @since 0.8.11
      */
@@ -246,9 +243,9 @@ public class PeerProfile {
         return getLastHeardFrom() >= before || getLastSendSuccessful() >= before || isEstablished();
     }
 
-
     /**
      *  When did we first hear about this peer?
+     *
      *  @return greater than zero, set to now in constructor
      */
     public synchronized long getFirstHeardAbout() {return _firstHeardAbout;}
@@ -263,6 +260,7 @@ public class PeerProfile {
 
     /**
      *  when did we last hear about this peer?
+     *
      *  @return 0 if unset
      */
     public synchronized long getLastHeardAbout() {return _lastHeardAbout;}
@@ -296,6 +294,7 @@ public class PeerProfile {
 
     /**
      * Tunnel acceptance ratio from tunnel history.
+     *
      * @return ratio (0.0 to 1.0), or 1.0 if no data available
      */
     public double getTunnelAcceptanceRatio() {
@@ -306,6 +305,7 @@ public class PeerProfile {
 
     /**
      * When the peer last passed a tunnel test successfully.
+     *
      * @return timestamp, or 0 if never
      */
     public long getLastTestedSuccessfully() {
@@ -429,16 +429,13 @@ public class PeerProfile {
      */
     long getTunnelTestTimeAvgLastUpdate() {return _tunnelTestTimeAvgLastUpdate;}
 
-    /**
-     */
+    
     void setTunnelTestTimeAverage(float avg) {_tunnelTestResponseTimeAvg = avg;}
 
-    /**
-     */
+    
     void setTunnelTestTimeAvgLastUpdate(long ts) {_tunnelTestTimeAvgLastUpdate = ts;}
 
-    /**
-     */
+    
     void updateTunnelTestTimeAverage(float ms) {
 
         if (_tunnelTestResponseTimeAvg <= 0) {_tunnelTestResponseTimeAvg = ms;} // should we instead start at $ms?
@@ -472,6 +469,7 @@ public class PeerProfile {
      * Low latency is defined as an average response time under 3x the peer test timeout
      * (default 750ms, so 2250ms threshold), matching the same threshold used in BuildExecutor.
      * Called periodically to keep _lowLatency in sync with measured data.
+     *
      * @since 0.9.70
      */
     void recalculateLowLatency() {
@@ -680,9 +678,10 @@ public class PeerProfile {
     }
 
     /**
-     *  Caller must next call updateValues()
-     *  @since 0.9.4
-     */
+ * Caller must next call updateValues()
+ *
+ * @since 0.9.4
+ */
     synchronized void coalesceOnly(boolean shouldDecay) {
         _coalescing = true;
         if (_tunnelCreateResponseTime != null) {_tunnelCreateResponseTime.coalesceStats();}
@@ -706,16 +705,15 @@ public class PeerProfile {
         _integrationValue = calculateIntegration();
     }
 
-
-
     private float calculateSpeed() {return (float) SpeedCalculator.calc(this);}
     private float calculateCapacity() {return (float) CapacityCalculator.calc(this);}
     private float calculateIntegration() {return (float) IntegrationCalculator.calc(this);}
 
     /**
-     *  Helper for calculators
-     *  @since 0.9.2
-     */
+ * Helper for calculators
+ *
+ * @since 0.9.2
+ */
     RouterContext getContext() {return _context;}
 
     @Override

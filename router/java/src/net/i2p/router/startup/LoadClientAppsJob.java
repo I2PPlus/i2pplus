@@ -342,22 +342,4 @@ public class LoadClientAppsJob extends JobImpl {
 
     public String getName() { return "Load Client Applications"; }
 
-/****
-    public static void main(String[] args) {
-        test(null);
-        test("hi how are you?");
-        test("hi how are you? ");
-        test(" hi how are you? ");
-        test(" hi how are \"y\"ou? ");
-        test("-nogui -e \"config localhost 17654\" -e \"httpclient 4544\"");
-        test("-nogui -e 'config localhost 17654' -e 'httpclient 4544'");
-    }
-    private static void test(String args) {
-        String[] parsed = parseArgs(args);
-        System.out.print("Parsed [" + args + "] into " + parsed.length + " elements: ");
-        for (int i = 0; i < parsed.length; i++)
-            System.out.print("[" + parsed[i] + "] ");
-        System.out.println();
-    }
-****/
 }

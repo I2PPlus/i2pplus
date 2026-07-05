@@ -73,39 +73,45 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
     }
 
     /**
-     * Returns the last created instance.
-     * @since 0.9.70+
-     */
+ * Returns the last created instance.
+ *
+ * @since 0.9.70+
+ */
     public static Elg2KeyFactory getInstance() { return _lastInstance; }
 
     /**
-     * Returns the current minimum precalc queue size.
-     * @since 0.9.70+
-     */
+ * Returns the current minimum precalc queue size.
+ *
+ * @since 0.9.70+
+ */
     public int getMinSize() { return _minSize; }
 
     /**
-     * Sets the minimum precalc queue size.
-     * @since 0.9.70+
-     */
+ * Sets the minimum precalc queue size.
+ *
+ * @since 0.9.70+
+ */
     public void setMinSize(int min) { _minSize = Math.max(1, min); }
 
     /**
-     * Returns the current maximum precalc queue size.
-     * @since 0.9.70+
-     */
+ * Returns the current maximum precalc queue size.
+ *
+ * @since 0.9.70+
+ */
     public int getMaxSize() { return _maxSize; }
 
     /**
-     * Sets the maximum precalc queue size.
-     * @since 0.9.70+
-     */
+ * Sets the maximum precalc queue size.
+ *
+ * @since 0.9.70+
+ */
     public void setMaxSize(int max) { _maxSize = Math.max(_minSize, max); }
 
     /**
-     * Returns the current number of precalc keys queued.
-     * @since 0.9.70+
-     */
+ * Returns the current number of precalc keys queued.
+ *
+ * @since 0.9.70+
+ */
     public int getSize() { return _keys.size(); }
 
     /**

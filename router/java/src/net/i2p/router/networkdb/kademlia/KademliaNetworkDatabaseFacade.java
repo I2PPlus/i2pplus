@@ -359,7 +359,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     long getLastExploreNewDate() {return _lastExploreNew;}
     void setLastExploreNewDate(long when) {_lastExploreNew = when;}
 
-    /** @return unmodifiable set */
+    /**
+     * Gets the set of keys to explore.
+     *
+     * @return unmodifiable set
+     */
     public Set<Hash> getExploreKeys() {
         if (!_initialized || isClientDb()) {return Collections.emptySet();}
         return Collections.unmodifiableSet(_exploreKeys);
@@ -1799,7 +1803,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         Hash h = routerInfo.getIdentity().getHash();
         if (h == null) {_context.banlist().banlistRouterForever(Hash.FAKE_HASH, "Null RouterInfo hash"); return "Null RouterInfo hash";}
         boolean isUs = h.equals(_context.routerHash());
-        //int existing = _kb.size();
         int existing = getStoredRouterInfoCount();
 
         if (banInvalidNTCPAddresses(routerInfo, now, caps, routerId)) {return "Invalid NTCP address";}
@@ -2831,7 +2834,11 @@ return false;
         return "ClientNetDb [" + _dbid.toBase32().substring(0,8) + "]";
     }
 
-/** @since 0.9.65+ */
+/**
+     * Gets the set of blocked countries.
+     *
+     * @since 0.9.65+
+     */
     private synchronized Set<String> getBlockedCountries() {
         Set<String> cached = _blockedCountries;
         if (cached != null) return cached;

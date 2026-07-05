@@ -304,6 +304,8 @@ public class ConnectChecker {
     private static final String IHOST[] = {"ihost0", "ihost1", "ihost2"};
 
     /**
+     * Get the bitmask of supported transports for the given addresses.
+     *
      *  @param addrs non-empty, set your own default if empty
      *  @return bitmask of v4/v6 NTCP/SSU
      *  @since 0.9.34

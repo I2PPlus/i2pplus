@@ -84,13 +84,11 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
             if (_log.shouldWarn()) {
                 _log.warn("Ignoring unexpected NetDb Lookup for our key from [" +  fromKey.toBase64().substring(0,6) + "] " +
                           "while in hidden mode");
-                          //"\n* Source: " + fromKey.toBase64().substring(0,6) + "] -> [Tunnel " + toTunnel + "]");
             }
             return;
         }
 
         if (searchKey.equals(Hash.FAKE_HASH)) { // i2pd bug?
-            //if (_log.shouldWarn()) {_log.warn("Zero Lookup (fake hash)", new Exception());}
             if (_log.shouldWarn()) {_log.warn("Dropping NetDb Lookup for fake hash key");}
             getContext().statManager().addRateData("netDb.DLMAllZeros", 1);
             return;
@@ -179,15 +177,6 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                 // expired locally - return closest peer hashes
                 Set<Hash> routerHashSet = getNearestRouters(lookupType);
 
-                //  ERR: see above
-                //  Remove hidden nodes from set..
-                //  for (Iterator iter = routerInfoSet.iterator(); iter.hasNext();) {
-                //      RouterInfo peer = (RouterInfo)iter.next();
-                //      if (peer.isHidden()) {
-                //          iter.remove();
-                //      }
-                //  }
-
                 if (_log.shouldDebug()) {
                     _log.debug("Expired [" + searchKey.toBase64().substring(0,6) + "] locally -> Sending back " +
                                routerHashSet.size() + " peers to [" + fromKey.toBase64().substring(0,6) + "]");
@@ -225,9 +214,6 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
             dontInclude.add(Hash.FAKE_HASH);
         } else {dontInclude.add(_us);}
 
-        //  Honor flag to exclude all floodfills
-        //  if (dontInclude.contains(Hash.FAKE_HASH)) {
-        //  This is handled in FloodfillPeerSelector
         return getContext().netDb().findNearestRouters(_message.getSearchKey(),
                                                        MAX_ROUTERS_RETURNED,
                                                        dontInclude);
@@ -279,7 +265,6 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
             }
             Job send = new SendMessageDirectJob(getContext(), message, toPeer, REPLY_TIMEOUT, MESSAGE_PRIORITY, _msgIDBloomXor);
             send.runJob();
-            //getContext().netDb().lookupRouterInfo(toPeer, send, null, REPLY_TIMEOUT);
         }
     }
 
@@ -326,7 +311,6 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
             m.setTunnelId(replyTunnel);
             SendMessageDirectJob j = new SendMessageDirectJob(getContext(), m, toPeer, 10*1000, MESSAGE_PRIORITY, _msgIDBloomXor);
             j.runJob();
-            //getContext().jobQueue().addJob(j);
         }
     }
 

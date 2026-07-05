@@ -137,6 +137,7 @@ public class RandomIterator<E> implements Iterator<E> {
     /**
      *  Workaround for bug in Android (ICS only?)
      *  http://code.google.com/p/android/issues/detail?id=31036
+     *
      *  @since 0.9.2
      */
     private int nextClearBit(int n) {
@@ -177,9 +178,10 @@ public class RandomIterator<E> implements Iterator<E> {
 */
 
     /**
-     *  Test case from android ticket above
-     *  @since 0.9.2
-     */
+ * Test case from android ticket above
+ *
+ * @since 0.9.2
+ */
     private static void testAndroid() {
         System.out.println("Checking for Android BitSet bug"); // NOSONAR S106 test CLI output
         BitSet theBitSet = new BitSet(864);

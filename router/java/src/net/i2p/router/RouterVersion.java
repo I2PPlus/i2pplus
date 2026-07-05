@@ -24,7 +24,6 @@ public class RouterVersion {
 
     /** for example "-test" */
     public static final String EXTRA = "+";
-    //public final static String FULL_VERSION = VERSION + "-" + BUILD + QUALIFIER + EXTRA;
     public static final String FULL_VERSION = VERSION + "-" + BUILD + EXTRA;
 
     public static void main(String[] args) {

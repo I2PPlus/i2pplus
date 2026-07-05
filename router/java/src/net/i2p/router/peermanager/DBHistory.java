@@ -51,27 +51,31 @@ public class DBHistory {
     public long getFailedLookups() {return _failedLookups.get();}
 
     /**
-     *  Not persisted until 0.9.24
-     *  @since 0.7.8
-     */
+ * Not persisted until 0.9.24
+ *
+ * @since 0.7.8
+ */
     public long getLastLookupSuccessful() {return _lastLookupSuccessful;}
 
     /**
-     *  Not persisted until 0.9.24
-     *  @since 0.7.8
-     */
+ * Not persisted until 0.9.24
+ *
+ * @since 0.7.8
+ */
     public long getLastLookupFailed() {return _lastLookupFailed;}
 
     /**
-     *  Not persisted until 0.9.24
-     *  @since 0.7.8
-     */
+ * Not persisted until 0.9.24
+ *
+ * @since 0.7.8
+ */
     public long getLastStoreSuccessful() {return _lastStoreSuccessful;}
 
     /**
-     *  Not persisted until 0.9.24
-     *  @since 0.7.8
-     */
+ * Not persisted until 0.9.24
+ *
+ * @since 0.7.8
+ */
     public long getLastStoreFailed() {return _lastStoreFailed;}
 
     /** how many times have they sent us data we didn't ask for and that we've never seen? */
@@ -138,6 +142,7 @@ public class DBHistory {
 
     /**
      * Note that the peer sent us a data point without us asking for it
+     *
      * @param wasNew whether we already knew about this data point or not
      */
     public void unpromptedStoreReceived(boolean wasNew) {
@@ -163,6 +168,7 @@ public class DBHistory {
 
     /**
      * write out the data from the profile to the stream
+     *
      * @param addComments add comment lines to the output
      * @since 0.9.41
      */

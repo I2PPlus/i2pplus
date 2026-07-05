@@ -63,15 +63,12 @@ public class FamilyKeyCrypto {
     // Note that we can't use EdDSA here, as keystore doesn't know how, and encoding/decoding is unimplemented
     private static final String DEFAULT_KEY_ALGORITHM = SigType.ECDSA_SHA256_P256.isAvailable() ? "EC" : "DSA";
     private static final int DEFAULT_KEY_SIZE = SigType.ECDSA_SHA256_P256.isAvailable() ? 256 : 1024;
-    //private static final String DEFAULT_KEY_ALGORITHM = "EdDSA";
-    //private static final int DEFAULT_KEY_SIZE = 256;
     private static final String KS_DIR = "keystore";
     private static final String CERT_DIR = "certificates/family";
     private static final String CRL_DIR = "crls";
     public static final String OPT_NAME = "family";
     public static final String OPT_SIG = "family.sig";
     public static final String OPT_KEY = "family.key";
-
 
     /**
      *  For signing and verification.
@@ -162,9 +159,10 @@ public class FamilyKeyCrypto {
     }
 
     /**
-     *  Do we have a valid family?
-     *  @since 0.9.28
-     */
+ * Do we have a valid family?
+ *
+ * @since 0.9.28
+ */
     public boolean hasFamily() {
         return _pubkey != null;
     }
@@ -262,9 +260,10 @@ public class FamilyKeyCrypto {
     }
 
     /**
-     *  Verify the family in a RouterInfo, name already retrieved
-     *  @since 0.9.28
-     */
+ * Verify the family in a RouterInfo, name already retrieved
+ *
+ * @since 0.9.28
+ */
     private Result verify(RouterInfo ri, String name) {
         Hash h = ri.getHash();
         String ssig = ri.getOption(OPT_SIG);
@@ -419,7 +418,6 @@ public class FamilyKeyCrypto {
         }
     }
 
-
     /**
      * Call out to keytool to create a new keystore with a keypair in it.
      * Trying to do this programatically is a nightmare, requiring either BouncyCastle
@@ -484,6 +482,7 @@ public class FamilyKeyCrypto {
 
     /**
      * Save the CRL just in case.
+     *
      * @param ksdir parent of directory to save in
      * @since 0.9.25
      */
@@ -552,6 +551,7 @@ public class FamilyKeyCrypto {
 
     /**
      * Get the private key from the keystore
+     *
      * @return non-null, throws on all errors
      */
     private SigningPrivateKey getPrivKey(File ks) throws GeneralSecurityException {

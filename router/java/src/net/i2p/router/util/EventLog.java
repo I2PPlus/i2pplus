@@ -108,6 +108,7 @@ public class EventLog {
 
     /**
      *  Append an event. Fails silently.
+     *
      *  @param event no spaces, e.g. "started"
      *  @throws IllegalArgumentException if event contains a space or newline
      */
@@ -117,6 +118,7 @@ public class EventLog {
 
     /**
      *  Append an event. Fails silently.
+     *
      *  @param event no spaces or newlines, e.g. "started"
      *  @param info no newlines, may be blank or null
      *  @throws IllegalArgumentException if event contains a space or either contains a newline
@@ -142,6 +144,7 @@ public class EventLog {
     /**
      *  Caches.
      *  Fails silently.
+     *
      *  @param event matching this event only, case sensitive
      *  @param since since this time, 0 for all
      *  @return non-null, Map of times to (possibly empty) info strings, sorted, earliest first, unmodifiable

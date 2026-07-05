@@ -98,9 +98,18 @@ public interface DataStore {
      * @return set of all hash keys
      */
     public Set<Hash> getKeys();
-    /** @since 0.8.3 */
+    /**
+     * Gets all entries in the data store.
+     *
+     * @since 0.8.3
+     */
     public Collection<DatabaseEntry> getEntries();
-    /** @since 0.8.3 */
+
+    /**
+     * Gets all map entries in the data store.
+     *
+     * @since 0.8.3
+     */
     public Set<Map.Entry<Hash, DatabaseEntry>> getMapEntries();
     /**
      * Stop the data store and release resources.

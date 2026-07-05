@@ -118,15 +118,17 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     }
 
     /**
-     * Returns the current CoDel target delay in ms.
-     * @since 0.9.70+
-     */
+ * Returns the current CoDel target delay in ms.
+ *
+ * @since 0.9.70+
+ */
     public long getTarget() { return _target; }
 
     /**
-     * Returns the current CoDel interval in ms.
-     * @since 0.9.70+
-     */
+ * Returns the current CoDel interval in ms.
+ *
+ * @since 0.9.70+
+ */
     public long getInterval() { return _interval; }
 
     @Override
@@ -233,6 +235,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
 
     /**
      *  Caller must synch on this
+     *
      *  @param entry may be null
      */
     private boolean updateVars(E entry) {
@@ -270,7 +273,6 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
         E rv = super.take();
         return codel(rv);
     }
-
 
     private static final int MAX_DROPS_PER_CALL = 8;
 

@@ -41,7 +41,6 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
     public synchronized void stopRunning() {
         super.stopRunning();
         queue.close();
-        // queue = null;
     }
 
     /**
@@ -55,6 +54,7 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
     /**
      * Actually send the I2CPMessage to the client.
      * Non-blocking.
+     *
      * @throws I2CPMessageException if queue full or on other errors
      */
     @Override
@@ -64,9 +64,10 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
     }
 
     /**
-     *  Does nothing. Client version is the core version.
-     *  @since 0.9.7
-     */
+ * Does nothing. Client version is the core version.
+ *
+ * @since 0.9.7
+ */
     @Override
     public void setClientVersion(String version) {
         // intentionally empty - client version is the core version, not configurable
@@ -74,6 +75,7 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
 
     /**
      *  The client version.
+     *
      *  @return CoreVersion.PUBLISHED_VERSION
      *  @since 0.9.7
      */

@@ -38,6 +38,8 @@ class BuildReplyHandler {
     private static final Result RESULT_BW = new Result(TunnelHistory.TUNNEL_REJECT_BANDWIDTH, null);
 
     /**
+     * Create a new build reply handler.
+     *
      *  @since 0.9.8 (methods were static before)
      */
     public BuildReplyHandler(I2PAppContext context) {

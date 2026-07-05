@@ -58,6 +58,8 @@ public class DummyClientManagerFacade extends ClientManagerFacade {
     public void requestLeaseSet(Hash dest, LeaseSet set) { /* Intentionally empty - dummy implementation */ }
 
     /**
+     *  Return the floodfill network database facade.
+     *
      *  @since 0.9.61
      */
     public FloodfillNetworkDatabaseFacade getClientFloodfillNetworkDatabaseFacade(Hash dbid) {
@@ -65,6 +67,8 @@ public class DummyClientManagerFacade extends ClientManagerFacade {
     }
 
     /**
+     *  Return the set of primary hashes.
+     *
      *  @since 0.9.61
      */
     public Set<Hash> getPrimaryHashes() {

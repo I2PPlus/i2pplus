@@ -43,7 +43,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.message.CloveSet;
 import net.i2p.util.Log;
 
-
 /**
  * ECIES+AEAD encryption engine providing New Session, New Session Reply, and Existing Session message handling
  *
@@ -87,7 +86,6 @@ public final class ECIESAEADEngine {
     // so we don't continue with ElG
     private static final GarlicClove[] NO_GARLIC = new GarlicClove[] {};
     private static final CloveSet NO_CLOVES = new CloveSet(NO_GARLIC, Certificate.NULL_CERT, 0, 0);
-
 
     private static final String INFO_6 = "AttachPayloadKDF";
 
@@ -1049,9 +1047,7 @@ public final class ECIESAEADEngine {
         return true;
     }
 
-
     //// end decrypt, start encrypt ////
-
 
     /**
      * Encrypt the data to the target using the given key and deliver the specified tags
@@ -1062,9 +1058,11 @@ public final class ECIESAEADEngine {
      * @param to ignored if priv is null
      * @param priv local private key to encrypt with, from the leaseset
      *             may be null for anonymous (N-in-IK)
+     *
      * @param keyManager ignored if priv is null
      * @param callback may be null, if non-null an ack will be requested (except NS/NSR),
      *                 ignored if priv is null
+     *
      * @return encrypted data or null on failure
      *
      */
@@ -1083,6 +1081,7 @@ public final class ECIESAEADEngine {
      * @param to ignored if priv is null
      * @param priv local private key to encrypt with, from the leaseset
      *             may be null for anonymous (N-in-IK)
+     *
      * @param keyManager ignored if priv is null
      * @param callback may be null, ignored if priv is null
      * @return encrypted data or null on failure
@@ -1154,6 +1153,7 @@ public final class ECIESAEADEngine {
      * @param to ignored if priv is null
      * @param priv local private key to encrypt with, from the leaseset
      *             may be null for anonymous (N-in-IK)
+     *
      * @param keyManager ignored if priv is null
      * @param callback may be null, ignored if priv is null
      * @return encrypted data or null on failure
@@ -1260,7 +1260,6 @@ public final class ECIESAEADEngine {
         state.destroy();
         return enc;
     }
-
 
     /**
      * scenario 2: New Session Reply Message
@@ -1480,6 +1479,7 @@ public final class ECIESAEADEngine {
 
         /**
          * ES
+         *
          * @param keyManager only for ES, otherwise null
          * @param remoteKey only for ES, otherwise null
          * @since 0.9.46

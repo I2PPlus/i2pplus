@@ -36,7 +36,6 @@ public class ProfileManagerImpl implements ProfileManager {
         PeerProfile data = getProfileNonblocking(peer);
         if (data == null) return;
         data.setLastSendSuccessful(_context.clock().now());
-        //data.getSendSuccessSize().addData(bytesSent, msToSend);
     }
 
     /**
@@ -182,7 +181,6 @@ public class ProfileManagerImpl implements ProfileManager {
             data.tunnelDataTransferred(size);
     }
 
-
     /**
      * Note that the peer participated in a tunnel that failed.  Its failure may not have
      * been the peer's fault however.
@@ -264,8 +262,6 @@ public class ProfileManagerImpl implements ProfileManager {
         PeerProfile data = getProfileNonblocking(peer);
         if (data == null) return;
         data.setLastHeardFrom(_context.clock().now());
-        //DBHistory hist = data.getDBHistory();
-        //hist.lookupReceived();
     }
 
     /**
@@ -376,12 +372,12 @@ public class ProfileManagerImpl implements ProfileManager {
         PeerProfile data = getProfileNonblocking(peer);
         if (data == null) return;
         data.setLastHeardFrom(_context.clock().now());
-        //data.getReceiveSize().addData(bytesRead, msToReceive);
     }
 
     /**
      *   Blocking.
      *   Creates a new profile if it didn't exist.
+     *
      *   @return non-null
      */
     private PeerProfile getProfile(Hash peer) {
@@ -397,6 +393,7 @@ public class ProfileManagerImpl implements ProfileManager {
     /**
      *  Non-blocking.
      *  Creates a new profile if it didn't exist.
+     *
      *  @return null if the fetch or create would have blocked
      *  @since 0.8.12
      */

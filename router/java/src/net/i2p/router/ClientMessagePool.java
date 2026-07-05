@@ -42,6 +42,7 @@ public class ClientMessagePool {
 
     /**
      * Shutdown the client message pool and clear all caches.
+     *
      * @since 0.8.8
      */
     public void shutdown() {
@@ -50,6 +51,7 @@ public class ClientMessagePool {
 
     /**
      * Restart the client message pool.
+     *
      * @since 0.8.8
      */
     public void restart() {

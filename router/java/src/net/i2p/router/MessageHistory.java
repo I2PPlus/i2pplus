@@ -34,7 +34,6 @@ public class MessageHistory {
     private volatile boolean _doPause; // true == briefly stop writing data to the log (used while submitting it)
     private final ReinitializeJob _reinitializeJob;
     private final WriteJob _writeJob;
-    //private SubmitMessageHistoryJob _submitMessageHistoryJob;
     private volatile boolean _firstPass;
 
     private static final byte[] NL = DataHelper.getUTF8(System.getProperty("line.separator"));
@@ -415,6 +414,7 @@ public class MessageHistory {
      * @param messageType class name for the message object (e.g. DatabaseFindNearestMessage, TunnelMessage, etc)
      * @param messageId the unique message id of the message being sent (not including any tunnel or garlic wrapped
      *                  message ids)
+     *
      * @param expiration the expiration for the message sent
      * @param peer router that the message was sent to
      * @param sentOk whether the message was sent successfully
@@ -441,6 +441,7 @@ public class MessageHistory {
      * @param messageType class name for the message object (e.g. DatabaseFindNearestMessage, TunnelMessage, etc)
      * @param messageId the unique message id of the message received (not including any tunnel or garlic wrapped
      *                  message ids)
+     *
      * @param expiration the expiration for the message received
      * @param from router that the message was sent from (or null if we don't know)
      * @param isValid whether the message is valid (non duplicates, etc)

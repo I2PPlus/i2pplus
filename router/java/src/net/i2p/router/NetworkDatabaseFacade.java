@@ -45,6 +45,7 @@ public abstract class NetworkDatabaseFacade implements Service {
 
     /**
      *  Not for use without validation
+     *
      *  @return RouterInfo, LeaseSet, or null, NOT validated
      *  @since 0.9.38
      */
@@ -54,6 +55,7 @@ public abstract class NetworkDatabaseFacade implements Service {
 
     /**
      *  Lookup using the client's tunnels
+     *
      *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      *  @since 0.9.10
      */
@@ -165,6 +167,7 @@ public abstract class NetworkDatabaseFacade implements Service {
 
     /**
      *  The last time we successfully published our RI.
+     *
      *  @since 0.9.9
      */
     public long getLastRouterInfoPublishTime() {return 0;}
@@ -230,6 +233,7 @@ public abstract class NetworkDatabaseFacade implements Service {
 
     /**
      *  For console ConfigKeyringHelper
+     *
      *  @since 0.9.41
      */
     public List<BlindData> getBlindData() {
@@ -238,6 +242,7 @@ public abstract class NetworkDatabaseFacade implements Service {
 
     /**
      *  For console ConfigKeyringHelper
+     *
      *  @return true if removed
      *  @since 0.9.41
      */
@@ -255,6 +260,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     /**
      *  Trigger a retroactive purge sweep of the NetDb.
      *  Bans and removes all routers matching enabled LU/XG/custom-cap bans.
+     *
      *  @since 0.9.70
      */
     public void purgeMatchingRouters() {}

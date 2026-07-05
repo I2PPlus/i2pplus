@@ -126,6 +126,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
     /**
      *  @param addIfNew if true, add the element to current if it is not already there or in previous;
      *                  if false, only check
+     *
      *  @return if the element is in either the current or previous set
      */
     private boolean locked_add(ArrayWrapper w, boolean addIfNew) {

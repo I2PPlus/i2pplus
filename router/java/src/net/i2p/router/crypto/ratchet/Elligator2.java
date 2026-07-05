@@ -32,7 +32,6 @@ class Elligator2 {
     private static final BigInteger u, inverted_u;
     private static final BigInteger TWO = new NativeBigInteger("2");
 
-
     private static final int REPRESENTATIVE_LENGTH = 32;
 
     private static final EdDSANamedCurveSpec SPEC = EdDSANamedCurveTable.getByName("ed25519-sha-512");
@@ -183,6 +182,7 @@ class Elligator2 {
      *
      * @param representative the encoded data, little endian, 32 bytes
      *                       WILL BE MODIFIED by masking byte 31
+     *
      * @return x or null on failure
      */
     public static PublicKey decode(byte[] representative) {
@@ -198,6 +198,7 @@ class Elligator2 {
      * @param alternative out parameter, or null if you don't care
      * @param representative the encoded data, little endian, 32 bytes;
      *                       WILL BE MODIFIED by masking byte 31
+     *
      * @return x or null on failure
      */
     public static PublicKey decode(AtomicBoolean alternative, byte[] representative) {

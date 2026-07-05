@@ -272,6 +272,7 @@ public class WorkingDir {
      * Returns <code>false</code> if a directory is empty, or contains nothing that
      * is usually migrated from the base install.
      * This allows to pre-install plugins before the first router start.
+ *
      * @return true if already set up
      */
     private static boolean isSetup(File dir) {
@@ -498,6 +499,8 @@ public class WorkingDir {
     }
 
     /**
+     *  Copy a file with secure permissions.
+     *
      * @param src not a directory, must exist
      * @param dst not a directory, will be overwritten if existing, will be mode 600
      * @return true if it was copied successfully

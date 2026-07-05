@@ -71,6 +71,7 @@ class ProfilePersistenceHelper {
 
     /**
      * write out the data from the profile to the file
+     *
      * @return success
      */
     public boolean writeProfile(PeerProfile profile) {
@@ -92,6 +93,7 @@ class ProfilePersistenceHelper {
 
     /**
      * write out the data from the profile to the stream
+     *
      * @param addComments add comment lines to the output
      * @since 0.9.41
      */
@@ -280,9 +282,10 @@ class ProfilePersistenceHelper {
     }
 
     /**
-     *  Migrate from one-level to two-level directory structure
-     *  @since 0.9.4
-     */
+ * Migrate from one-level to two-level directory structure
+ *
+ * @since 0.9.4
+ */
     private void migrate(File[] files) { // NOSONAR S3012: called on line 271
         for (int i = 0; i < files.length; i++) {
             File from = files[i];
@@ -295,6 +298,7 @@ class ProfilePersistenceHelper {
 
     /**
      *  Delete profile files with timestamps older than 'age' ago
+     *
      *  @return number deleted
      *  @since 0.9.28
      */
@@ -307,12 +311,10 @@ class ProfilePersistenceHelper {
             if (f.lastModified() < cutoff && files.size() > LIMIT_PROFILES) {
                 i++;
                 f.delete();
-                //_log.warn("Not deleting " + f + " (debugging active)");
             }
         }
         if (_log.shouldWarn() && i > 0) {
             _log.warn("Deleted " + i + " STALE peer profiles");
-            //_log.warn("Not deleting " + i + " (stale?) peer profiles -> Will expire when read at startup");
         }
         return i;
     }
@@ -323,8 +325,6 @@ class ProfilePersistenceHelper {
     @SuppressWarnings("deprecation")
     public PeerProfile readProfile(File file, long cutoff) {
         if (file.lastModified() < cutoff) {
-            //if (_log.shouldWarn())
-            //    _log.warn("Not deleting STALE peer profile " + file.getName() + " -> Will expire when read at startup");
             file.delete();
             return null;
         }
@@ -510,9 +510,7 @@ class ProfilePersistenceHelper {
             return null;
         String key = name.substring(PREFIX.length());
         key = key.substring(0, 44);
-        //Hash h = new Hash();
         try {
-            //h.fromBase64(key);
             byte[] b = Base64.decode(key);
             if (b == null)
                 return null;

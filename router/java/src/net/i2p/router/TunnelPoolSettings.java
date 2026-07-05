@@ -21,7 +21,6 @@ public class TunnelPoolSettings {
     private String _destinationNickname;
     private int _quantity;
     private int _backupQuantity;
-    //private int _duration;
     private int _length;
     private int _lengthVariance;
     private int _lengthOverride;
@@ -127,6 +126,7 @@ public class TunnelPoolSettings {
 
     /**
      *  Convenience
+     *
      *  @return getQuantity() + getBackupQuantity()
      *  @since 0.8.11
      */
@@ -135,16 +135,17 @@ public class TunnelPoolSettings {
     }
 
     /** how long before tunnel expiration should new tunnels be built */
-    // public void setRebuildPeriod(int periodMs) { _rebuildPeriod = periodMs; }
 
     /**
      *  How many remote hops should be in the tunnel NOT including us
+     *
      *  @return 0 to 7
      */
     public int getLength() { return _length; }
 
     /**
      *  How many remote hops should be in the tunnel NOT including us
+     *
      *  @param length 0 to 7 (not enforced here)
      */
     public void setLength(int length) { _length = length; }
@@ -167,6 +168,7 @@ public class TunnelPoolSettings {
 
     /**
      *  Should tunnels in this pool be tested?
+     *
      *  @return true for normal pools, false for hostchecker/ping tunnels
      *  @since 0.9.68+
      */
@@ -180,6 +182,7 @@ public class TunnelPoolSettings {
      *
      * @param ok if true, getAllowZeroHop() will always return true
      *           if false, getAllowZeroHop will return as documented.
+     *
      * @deprecated unused
      */
     @Deprecated
@@ -217,15 +220,13 @@ public class TunnelPoolSettings {
     /** is this an exploratory tunnel (or a client tunnel) */
     public boolean isExploratory() { return _isExploratory; }
 
-    // Duration is hardcoded
-    //public void setDuration(int ms) { _duration = ms; }
-
     /** what destination is this a client tunnel for (or null if exploratory) */
     public Hash getDestination() { return _destination; }
 
     /**
      *  Other destinations that use the same tunnel (or null if exploratory)
      *  Modifiable, concurrent, not a copy
+     *
      *  @since 0.9.21
      */
     public Set<Hash> getAliases() {
@@ -235,6 +236,7 @@ public class TunnelPoolSettings {
     /**
      *  Other destination that this is an alias of (or null).
      *  If non-null, don't build tunnels.
+     *
      *  @since 0.9.21
      */
     public Hash getAliasOf() {
@@ -245,6 +247,7 @@ public class TunnelPoolSettings {
     /**
      *  Set other destination that this is an alias of (or null).
      *  If non-null, don't build tunnels.
+     *
      *  @since 0.9.21
      */
     public void setAliasOf(Hash h) {
@@ -254,6 +257,7 @@ public class TunnelPoolSettings {
     /**
      *  Get the set of first peer exclusions for diversity.
      *  These are peers that should not be used as the first hop in new tunnels.
+     *
      *  @return Set of peer hashes to exclude, or null if none set
      *  @since 0.9.68+
      */
@@ -263,6 +267,7 @@ public class TunnelPoolSettings {
 
     /**
      *  Set the first peer exclusions for diversity.
+     *
      *  @param exclusions Set of peer hashes to exclude, or null to clear
      *  @since 0.9.68+
      */
@@ -273,6 +278,7 @@ public class TunnelPoolSettings {
     /**
      *  Get the set of last peer exclusions for diversity.
      *  These are peers that should not be used as the last hop in new tunnels.
+     *
      *  @return Set of peer hashes to exclude, or null if none set
      *  @since 0.9.68+
      */
@@ -282,6 +288,7 @@ public class TunnelPoolSettings {
 
     /**
      *  Set the last peer exclusions for diversity.
+     *
      *  @param exclusions Set of peer hashes to exclude, or null to clear
      *  @since 0.9.68+
      */
@@ -314,6 +321,7 @@ public class TunnelPoolSettings {
 
     /**
      *  Outbound message priority - for outbound tunnels only
+     *
      *  @return -25 to +30, default 30 for outbound exploratory and 0 for others
      *  @since 0.9.4
      */

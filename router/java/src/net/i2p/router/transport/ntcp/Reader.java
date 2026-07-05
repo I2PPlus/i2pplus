@@ -8,7 +8,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.router.RouterContext;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
@@ -25,7 +24,7 @@ import net.i2p.util.SystemVersion;
  */
 public class Reader {
     private final Log _log;
-    // TODO change to LBQ ??
+
     private final Set<NTCPConnection> _pendingConnections;
     private final Set<NTCPConnection> _liveReads;
     private final Set<NTCPConnection> _readAfterLive;
@@ -42,10 +41,10 @@ public class Reader {
         _readAfterLive = new HashSet<>(16);
     }
 
-    /** @since 0.9.70+ */
+    /** Get the reader thread count */
     public static int getThreadCount() { return _threadCount; }
 
-    /** @since 0.9.70+ */
+    /** Set the reader thread count, bounded by MIN_THREADS-MAX_THREADS */
     public static void setThreadCount(int count) { _threadCount = Math.max(MIN_THREADS, Math.min(MAX_THREADS, count)); }
 
     public synchronized void startReading(int numReaders) {
@@ -211,7 +210,6 @@ public class Reader {
                 }
                 continue;
             }
-            // FIXME call est.isCorrupt() before also? throws ISE here... see above
             try {
                 est.receive(buf);
             } catch (NullPointerException npe) {

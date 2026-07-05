@@ -83,6 +83,7 @@ public class TunnelHistory {
 
     /**
      * Calculate the ratio of accepted to rejected tunnel requests.
+     *
      * @return ratio (0.0 to 1.0), or 1.0 if no data available
      */
     public double getAcceptanceRatio() {
@@ -122,6 +123,7 @@ public class TunnelHistory {
 
     /**
      * Define this rate as the probability it really failed
+     *
      * @param pct = probability * 100
      */
     public void incrementFailed(int pct) {
@@ -164,6 +166,7 @@ public class TunnelHistory {
 
     /**
      * write out the data from the profile to the stream
+     *
      * @param addComments add comment lines to the output
      * @since 0.9.41
      */
@@ -211,16 +214,16 @@ public class TunnelHistory {
         _lifetimeAgreedTo.set(getLong(props, "tunnels.lifetimeAgreedTo"));
         _lifetimeFailed.set(getLong(props, "tunnels.lifetimeFailed"));
         _lifetimeRejected.set(getLong(props, "tunnels.lifetimeRejected"));
-
-        // TODO: work out why this is causing errors at startup when loading profiles
-/**
         try {
             _rejectRate.load(props, "tunnelHistory.rejectRate", true);
+        } catch (IllegalArgumentException iae) {
+            _log.warn("TunnelHistory reject rate is corrupt, resetting...", iae);
+        }
+        try {
             _failRate.load(props, "tunnelHistory.failRate", true);
         } catch (IllegalArgumentException iae) {
-            _log.warn("TunnelHistory rates are corrupt, resetting...", iae);
+            _log.warn("TunnelHistory fail rate is corrupt, resetting...", iae);
         }
-**/
     }
 
     private static final long getLong(Properties props, String key) {

@@ -72,6 +72,7 @@ class RatchetPayload {
 
         /**
          *  For stats.
+         *
          *  @param paddingLength the number of padding bytes, not including the 3-byte block header
          *  @param frameLength the total size of the frame, including all blocks and block headers
          */
@@ -376,9 +377,10 @@ class RatchetPayload {
     }
 
     /**
-     *  Acknowledgment block for ratchet payload.
-     *  @since 0.9.46
-     */
+ * Acknowledgment block for ratchet payload.
+ *
+ * @since 0.9.46
+ */
     public static class AckBlock extends Block {
         private final byte[] data;
 
@@ -413,9 +415,10 @@ class RatchetPayload {
     }
 
     /**
-     *  Acknowledgment request block for ratchet payload.
-     *  @since 0.9.46
-     */
+ * Acknowledgment request block for ratchet payload.
+ *
+ * @since 0.9.46
+ */
     public static class AckRequestBlock extends Block {
 
         public AckRequestBlock() {
@@ -453,9 +456,10 @@ class RatchetPayload {
     }
 
     /**
-     *  Packet number block for ratchet payload.
-     *  @since 0.9.46
-     */
+ * Packet number block for ratchet payload.
+ *
+ * @since 0.9.46
+ */
     public static class PNBlock extends Block {
         private final int pn;
 

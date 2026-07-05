@@ -510,13 +510,16 @@ public final class ElGamalAESEngine {
      *
      * @param target public key to which the data should be encrypted, must be ELGAMAL_2048.
      *               May be null if key and currentTag are non-null.
+     *
      * @param key session key to use during encryption
      * @param tagsForDelivery session tags to be associated with the key (or newKey if specified), or null;
      *                        200 max enforced at receiver
+     *
      * @param currentTag sessionTag to use, or null if it should use ElG (i.e. new session)
      * @param newKey key to be delivered to the target, with which the tagsForDelivery should be associated, or null
      * @param paddedSize minimum size in bytes of the body after padding it (if less than the
      *          body's real size, no bytes are appended but the body is not truncated)
+     *
      * @throws IllegalArgumentException on bad target EncType
      *
      * Unused externally, only called by below (i.e. newKey is always null)
@@ -568,12 +571,15 @@ public final class ElGamalAESEngine {
      *
      * @param target public key to which the data should be encrypted, must be ELGAMAL_2048.
      *               May be null if key and currentTag are non-null.
+     *
      * @param key session key to use during encryption
      * @param tagsForDelivery session tags to be associated with the key or null;
      *                        200 max enforced at receiver
+     *
      * @param currentTag sessionTag to use, or null if it should use ElG (i.e. new session)
      * @param paddedSize minimum size in bytes of the body after padding it (if less than the
      *          body's real size, no bytes are appended but the body is not truncated)
+     *
      * @throws IllegalArgumentException on bad target EncType
      *
      */
@@ -589,6 +595,7 @@ public final class ElGamalAESEngine {
      *
      * @param tagsForDelivery session tags to be associated with the key or null;
      *                        200 max enforced at receiver
+     *
      * @throws IllegalArgumentException on bad target EncType
      * @deprecated unused
      */
@@ -827,7 +834,6 @@ public final class ElGamalAESEngine {
         //return aesEncr;
         return aesData;
     }
-
 
 /****
     public static void main(String[] args) {

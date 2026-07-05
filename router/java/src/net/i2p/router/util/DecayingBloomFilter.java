@@ -98,6 +98,7 @@ public class DecayingBloomFilter {
 
     /**
      * Uses default m of 23, memory usage is 2 MB.
+     *
      * @param name just for logging / debugging / stats
      */
     public DecayingBloomFilter(I2PAppContext context, int durationMs, int entryBytes, String name) {
@@ -368,6 +369,7 @@ public class DecayingBloomFilter {
     /**
      *  Decays at 5 minutes after the top of the hour.
      *  This ignores leap seconds.
+     *
      *  @since 0.9.24
      */
     private class DecayHourlyEvent extends SimpleTimer2.TimedEvent {

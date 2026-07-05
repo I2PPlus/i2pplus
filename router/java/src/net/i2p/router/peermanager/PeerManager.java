@@ -115,6 +115,7 @@ class PeerManager {
      *  and delete very old ones.
      *
      *  This takes too long to run on the SimpleTimer2 queue
+     *
      *  @since 0.9.10
      */
     private class ReorgThread extends I2PThread {

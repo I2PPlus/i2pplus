@@ -87,6 +87,7 @@ class RatchetTagSet implements TagSetHandle {
      *  Used for O(tags_in_set) removal in RatchetSKM.consumeTag() instead of
      *  O(total_tags) scan of the entire _inboundTagSets map.
      *  Only populated for inbound tagsets (where _lsnr != null).
+     *
      *  @since 0.9.70
      */
     private final Set<RatchetSessionTag> _registeredTags = ConcurrentHashMap.newKeySet();
@@ -131,7 +132,6 @@ class RatchetTagSet implements TagSetHandle {
                          long date, int tagsetid, int keyid, int minSize, int maxSize) {
         this(hkdf, lsnr, null, remoteKey, rootKey, data, date, RatchetSKM.SESSION_LIFETIME_MAX_MS, tagsetid, keyid, true, minSize, maxSize);
     }
-
 
     /**
      *  @param date For inbound and outbound: creation time
@@ -180,9 +180,10 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  For SingleTagSet
-     *  @since 0.9.46
-     */
+ * For SingleTagSet
+ *
+ * @since 0.9.46
+ */
     protected RatchetTagSet(SessionTagListener lsnr, SessionKey rootKey, long date, long timeout) {
         _lsnr = lsnr;
         _state = null;
@@ -275,6 +276,7 @@ class RatchetTagSet implements TagSetHandle {
     /**
      *  For inbound and outbound: Idle timeout interval.
      *  Expiration is getDate() + getTimeout().
+     *
      *  @since 0.9.46
      */
     public long getTimeout() {
@@ -305,6 +307,7 @@ class RatchetTagSet implements TagSetHandle {
 
     /**
      *  unused tags generated
+     *
      *  @return 0 for outbound
      */
     public synchronized int size() {
@@ -313,6 +316,7 @@ class RatchetTagSet implements TagSetHandle {
 
     /**
      *  tags remaining
+     *
      *  @return 0 - 65536
      */
     public synchronized int remaining() {
@@ -376,6 +380,7 @@ class RatchetTagSet implements TagSetHandle {
 
     /**
      *  inbound only
+     *
      *  @return associated SessionKey or null if not found.
      */
     public SessionKeyAndNonce consume(RatchetSessionTag tag) {
@@ -493,6 +498,7 @@ class RatchetTagSet implements TagSetHandle {
     /**
      *  Return the set of tags registered in the SKM's _inboundTagSets map.
      *  Used for O(tags_in_set) removal in RatchetSKM.consumeTag().
+     *
      *  @since 0.9.70
      */
     Set<RatchetSessionTag> getRegisteredTags() {

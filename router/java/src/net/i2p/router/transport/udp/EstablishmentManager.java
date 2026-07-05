@@ -140,13 +140,13 @@ public class EstablishmentManager {
     private final int DEFAULT_MAX_CONCURRENT_ESTABLISH;
     private static volatile int _defaultLowMaxConcurrentEstablish = SystemVersion.isSlow() ? 128 : 512;
     private static volatile int _defaultHighMaxConcurrentEstablish = SystemVersion.isSlow() ? 256 : 2048;
-    /** @since 0.9.70+ */
+    /** Get the default low max concurrent establish */
     public static int getDefaultLowMaxConcurrentEstablish() { return _defaultLowMaxConcurrentEstablish; }
-    /** @since 0.9.70+ */
+    /** Set the default low max concurrent establish, bounded 32-4096 */
     public static void setDefaultLowMaxConcurrentEstablish(int val) { _defaultLowMaxConcurrentEstablish = Math.max(32, Math.min(4096, val)); }
-    /** @since 0.9.70+ */
+    /** Get the default high max concurrent establish */
     public static int getDefaultHighMaxConcurrentEstablish() { return _defaultHighMaxConcurrentEstablish; }
-    /** @since 0.9.70+ */
+    /** Set the default high max concurrent establish, bounded 64-8192 */
     public static void setDefaultHighMaxConcurrentEstablish(int val) { _defaultHighMaxConcurrentEstablish = Math.max(64, Math.min(8192, val)); }
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
 
@@ -2466,13 +2466,13 @@ public class EstablishmentManager {
             expires = (int) (exp >> 10);
             added = (int) (now >> 10);
         }
-        /** @since 0.9.57 */
+        /** Get the token value */
         public long getToken() {return token;}
-        /** @since 0.9.57 */
+        /** Get the expiration time */
         public long getExpiration() {return (expires & 0xFFFFFFFFL) << 10;}
-        /** @since 0.9.57 */
+        /** Get when this token was added */
         public long getWhenAdded() {return (added & 0xFFFFFFFFL) << 10;}
-        /** @since 0.9.57 */
+        /** Get string representation */
         public String toString() {
             return "Token [" + token + "]\n* Added: " + DataHelper.formatTime(getWhenAdded()) +
                    "\n* Expires: " + DataHelper.formatTime(getExpiration());
@@ -2827,7 +2827,7 @@ public class EstablishmentManager {
             }
         }
 
-        /** @since 0.9.2 */
+        /** Perform failsafe cleanup of stale establishment states */
         private void doFailsafe(long now) {
             for (Iterator<OutboundEstablishState> iter = _liveIntroductions.values().iterator(); iter.hasNext(); ) {
                 OutboundEstablishState state = iter.next();

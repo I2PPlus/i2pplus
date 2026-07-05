@@ -19,8 +19,6 @@ class HashSetIVValidator implements IVValidator {
     }
 
     public boolean receiveIV(byte[] ivData, int ivOffset, byte[] payload, int payloadOffset) {
-        //if (true) // foo!
-        //    return true;
         byte[] iv = new byte[HopProcessor.IV_LENGTH];
         DataHelper.xor(ivData, ivOffset, payload, payloadOffset, iv, 0, HopProcessor.IV_LENGTH);
         ByteArray ba = new ByteArray(iv);

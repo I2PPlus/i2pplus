@@ -133,7 +133,6 @@ public class NTCPTransport extends TransportImpl {
 
     /**
      *  Do we have a public IPv6 address?
-     *  TODO periodically update via CSFI.NetMonitor?
      */
     private boolean _haveIPv6Address;
     private long _lastInboundIPv4;
@@ -812,9 +811,8 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     * @return 8 bytes:
-     *         version 1 4 bytes all zeros
-     *         version 2 ipv4 in/out, ipv6 in/out
+     * Get peer counts by transport type and direction.
+     * @return 8 bytes: version 1 4 bytes all zeros, version 2 ipv4 in/out, ipv6 in/out
      * @since 0.9.57
      */
     public int[] getPeerCounts() {
@@ -911,7 +909,7 @@ public class NTCPTransport extends TransportImpl {
         long tooOld = _context.clock().now() - 10*60*1000L;
 
         for (NTCPConnection con : _conByIdent.values()) {
-            // TODO skip isEstablished() check?
+
             if (con.isEstablished() && con.getCreated() > tooOld) {
                 skews.add(Long.valueOf(con.getClockSkew()));
             }
@@ -1092,10 +1090,10 @@ public class NTCPTransport extends TransportImpl {
 
     public boolean isAlive() {return _pumper.isAlive();}
 
-    /** @since 0.9.70+ */
+    /** Adjust reader threads to match configured count */
     public void adjustReaderThreads() { _reader.adjustThreads(); }
 
-    /** @since 0.9.70+ */
+    /** Adjust writer threads to match configured count */
     public void adjustWriterThreads() { _writer.adjustThreads(); }
 
     /**
@@ -1160,7 +1158,6 @@ public class NTCPTransport extends TransportImpl {
                         return null;
                     }
                     // FIXME support multiple binds
-                    // FIXME just close and unregister
                     stopWaitAndRestart();
                 }
                 if (!TransportUtil.isValidPort(port)) {
@@ -1238,12 +1235,13 @@ public class NTCPTransport extends TransportImpl {
     net.i2p.router.transport.ntcp.Writer getWriter() {return _writer;}
 
     /**
+     * Get the transport style.
      * @return always "NTCP"
      */
     public String getStyle() {return STYLE;}
 
     /**
-     * An alternate supported style
+     * Get the alternate supported style.
      * @return "NTCP2" always
      * @since 0.9.35
      */
@@ -1300,12 +1298,10 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Generally returns null
-     *  caller must synch on this
-     *  Note this is only called from startListening()
-     *
-     *  TODO return a list of one or more
-     *  TODO only returns non-null if port is configured
+     *  Generally returns null.
+     *  Caller must synch on this.
+     *  Note this is only called from startListening().
+     *  Only returns non-null if port is configured.
      */
     private RouterAddress configureLocalAddress() {
         // this generally returns null -- see javadoc
@@ -1327,12 +1323,10 @@ public class NTCPTransport extends TransportImpl {
      * This only creates an address if the hostname AND port are set in router.config,
      * which should be rare.
      * Otherwise, notifyReplaceAddress() below takes care of it.
-     * Note this is only called from startListening() via configureLocalAddress()
-     *
-     * TODO return a list of one or more
-     * TODO unlike in UDP rebuildExternalAddress(), this only runs once, at startup,
+     * Note this is only called from startListening() via configureLocalAddress().
+     * Unlike in UDP rebuildExternalAddress(), this only runs once, at startup,
      * so we won't pick up IP changes.
-     * TODO only returns non-null if port is configured
+     * Only returns non-null if port is configured.
      *
      * @since IPv6 moved from CSFI
      */
@@ -1440,9 +1434,7 @@ public class NTCPTransport extends TransportImpl {
     /**
      * Return a single configured IP (as a String) or null if not configured or invalid.
      * Resolves a hostname to an IP.
-     * Called at startup via createNTCPAddress() and later via externalAddressReceived()
-     *
-     * TODO return a list of one or more
+     * Called at startup via createNTCPAddress() and later via externalAddressReceived().
      *
      * @since 0.9.32
      */
@@ -1578,8 +1570,6 @@ public class NTCPTransport extends TransportImpl {
      *
      *  This can be called after the transport is running.
      *
-     *  TODO externalAddressRemoved(source, ip, port)
-     *
      *  @param source defined in Transport.java
      *  @since 0.9.20
      */
@@ -1648,7 +1638,7 @@ public class NTCPTransport extends TransportImpl {
         // Auto Port Setting
         // old behavior (<= 0.7.3): auto-port defaults to false, and true trumps explicit setting
         // new behavior (>= 0.7.4): auto-port defaults to true, but explicit setting trumps auto
-        // TODO rewrite this to operate on ints instead of strings
+
         String oport = newProps.getProperty(RouterAddress.PROP_PORT);
         String nport = null;
         String cport = _context.getProperty(PROP_I2NP_NTCP_PORT);
@@ -2006,27 +1996,27 @@ public class NTCPTransport extends TransportImpl {
 
     // ==================== Tuner delegation ====================
 
-    /** @since 0.9.70+ */
+    /** Get the selector loop delay in milliseconds */
     public static long getSelectorLoopDelay() { return EventPumper.getSelectorLoopDelay(); }
 
-    /** @since 0.9.70+ */
+    /** Set the selector loop delay, bounded 1-100ms */
     public static void setSelectorLoopDelay(long ms) { EventPumper.setSelectorLoopDelay(ms); }
 
-    /** @since 0.9.70+ */
+    /** Get the failsafe iteration frequency in milliseconds */
     public static long getFailsafeIterationFreq() { return EventPumper.getFailsafeIterationFreq(); }
 
-    /** @since 0.9.70+ */
+    /** Set the failsafe iteration frequency, bounded by MIN-MAX */
     public static void setFailsafeIterationFreq(long ms) { EventPumper.setFailsafeIterationFreq(ms); }
 
-    /** @since 0.9.70+ */
+    /** Get the send finisher max threads */
     public static int getSendFinisherMaxThreads() { return NTCPSendFinisher.getMaxThreads(); }
 
-    /** @since 0.9.70+ */
+    /** Set the send finisher max threads */
     public static void setSendFinisherMaxThreads(int threads) { NTCPSendFinisher.setMaxThreads(threads); }
 
-    /** @since 0.9.70+ */
+    /** Get the send finisher queue capacity */
     public static int getSendFinisherQueueCapacity() { return NTCPSendFinisher.getQueueCapacity(); }
 
-    /** @since 0.9.70+ */
+    /** Set the send finisher queue capacity */
     public static void setSendFinisherQueueCapacity(int capacity) { NTCPSendFinisher.setQueueCapacity(capacity); }
 }

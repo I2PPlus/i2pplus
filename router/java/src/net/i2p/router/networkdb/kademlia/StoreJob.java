@@ -306,8 +306,6 @@ abstract class StoreJob extends JobImpl {
         long token = 1 + getContext().random().nextLong(I2NPMessage.MAX_ID_VALUE);
         msg.setReplyToken(token);
 
-        //if (_log.shouldDebug())
-        //    _log.debug(getJobId() + ": send(dbStore) w/ token expected " + msg.getReplyToken() + " msg exp. " + _timeoutMs + " resp exp. " + responseTime);
         sendStore(msg, router, now + responseTime);
     }
 
@@ -545,7 +543,6 @@ abstract class StoreJob extends JobImpl {
             Job waiter = new WaitJob(ctx);
             waiter.getTiming().setStartAfter(ctx.clock().now() + RESEND_DELAY);
             ctx.jobQueue().addJob(waiter);
-            //fail();
         }
     }
 

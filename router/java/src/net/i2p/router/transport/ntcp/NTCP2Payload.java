@@ -185,7 +185,7 @@ class NTCP2Payload {
             type = ttype;
         }
 
-        /** @return new offset */
+        /** Write the block to the target array, returning the new offset */
         public int write(byte[] tgt, int off) {
             tgt[off++] = (byte) type;
             // we do it this way so we don't call getDataLength(),
@@ -208,7 +208,7 @@ class NTCP2Payload {
          */
         public abstract int getDataLength();
 
-        /** @return new offset */
+        /** Write the block data to the target array, returning the new offset */
         public abstract int writeData(byte[] tgt, int off);
 
         @Override

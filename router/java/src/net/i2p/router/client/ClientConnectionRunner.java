@@ -124,6 +124,7 @@ class ClientConnectionRunner {
     /**
      *  Maximum number of unclaimed messages to buffer per client connection.
      *  Prevents unbounded memory growth if the client is slow to consume.
+     *
      *  @since 0.9.70
      */
     private static final int MAX_BUFFERED_MESSAGES = 1024;
@@ -133,9 +134,10 @@ class ClientConnectionRunner {
     private static final String PROP_THRESH = "crypto.lowTagThreshold";
 
     /**
-     *  For multisession
-     *  @since 0.9.21
-     */
+ * For multisession
+ *
+ * @since 0.9.21
+ */
     private static class SessionParams {
         final Destination dest;
         final boolean isPrimary;
@@ -195,9 +197,10 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  Allow override for testing
-     *  @since 0.9.8
-     */
+ * Allow override for testing
+ *
+ * @since 0.9.8
+ */
     protected I2CPMessageReader.I2CPMessageEventListener createListener() {
         return new ClientMessageEventListener(_context, this, true);
     }
@@ -260,6 +263,7 @@ class ClientConnectionRunner {
      *  Current client's config,
      *  will be null if session not found
      *  IS subsession aware.
+     *
      *  @since 0.9.21 added hash param
      */
     public SessionConfig getConfig(Hash h) {
@@ -274,6 +278,7 @@ class ClientConnectionRunner {
      *  will be null if session not found
      *  IS subsession aware.
      *  Returns null if id is null.
+     *
      *  @since 0.9.21 added id param
      */
     public SessionConfig getConfig(SessionId id) {
@@ -289,6 +294,7 @@ class ClientConnectionRunner {
     /**
      *  Primary client's config,
      *  will be null if session not set up
+     *
      *  @since 0.9.21
      */
     public SessionConfig getPrimaryConfig() {
@@ -300,15 +306,17 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  The client version.
-     *  @since 0.9.7
-     */
+ * The client version.
+ *
+ * @since 0.9.7
+ */
     public void setClientVersion(String version) {
         _clientVersion = version;
     }
 
     /**
      *  The client version.
+     *
      *  @return null if unknown or less than 0.8.7
      *  @since 0.9.7
      */
@@ -325,6 +333,7 @@ class ClientConnectionRunner {
     /**
      *  Currently allocated leaseSet.
      *  IS subsession aware. Returns primary leaseset only.
+     *
      *  @return leaseSet or null if not yet set or unknown hash
      *  @since 0.9.21 added hash parameter
      */
@@ -351,6 +360,7 @@ class ClientConnectionRunner {
 
     /**
      *  Return the hash for the given ID
+     *
      *  @return hash or null if unknown
      *  @since 0.9.21
      */
@@ -364,6 +374,7 @@ class ClientConnectionRunner {
 
     /**
      *  Return the dest for the given ID
+     *
      *  @return dest or null if unknown
      *  @since 0.9.21
      */
@@ -493,6 +504,7 @@ class ClientConnectionRunner {
     /**
      *  Data for the current leaseRequest, or null if there is no active leaseSet request.
      *  Not subsession aware. Returns primary ID only.
+     *
      *  @since 0.9.21 added hash param
      */
     LeaseRequestState getLeaseRequest(Hash h) {
@@ -765,6 +777,7 @@ class ClientConnectionRunner {
      *  This is always bad.
      *  See ClientMessageEventListener.handleCreateSession()
      *  for why we don't send a SessionStatusMessage when we do this.
+     *
      *  @param reason will be truncated to 255 bytes
      */
     void disconnectClient(String reason) {disconnectClient(reason, Log.ERROR);}
@@ -913,6 +926,7 @@ class ClientConnectionRunner {
      *            signed version (as well as any changed/added/removed Leases)
      *            The LeaseSet contains Leases only, it is unsigned.
      *            Must be unique for this hash, do not reuse for subsessions.
+     *
      * @param expirationTime ms to wait before failing
      * @param onCreateJob Job to run after the LeaseSet is authorized, null OK
      * @param onFailedJob Job to run after the timeout passes without receiving authorization, null OK
@@ -952,7 +966,6 @@ class ClientConnectionRunner {
         // the earliest one, so we can't use Lease.equals() or Lease.getEndDate().
         // So compare by tunnel ID, and then by gateway.
         // (on the remote possibility that two gateways are using the same ID).
-        // TunnelPool.locked_buildNewLeaseSet() ensures that leases are sorted,
         //  so the comparison will always work.
         int leases = set.getLeaseCount();
         // synch so _currentLeaseSet isn't changed out from under us
@@ -1046,6 +1059,7 @@ class ClientConnectionRunner {
 
         /**
          * Caller must schedule()
+         *
          * @param ls dest must be set
          */
         public Rerequest(LeaseSet ls, long expirationTime, Job onCreate, Job onFailed) {

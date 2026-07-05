@@ -36,6 +36,7 @@ public interface TunnelInfo {
 
     /**
      *  For convenience
+     *
      *  @return getPeer(0)
      *  @since 0.8.9
      */
@@ -43,6 +44,7 @@ public interface TunnelInfo {
 
     /**
      *  For convenience
+     *
      *  @return getPeer(getLength() - 1)
      *  @since 0.8.9
      */
@@ -50,6 +52,7 @@ public interface TunnelInfo {
 
     /**
      *  For convenience
+     *
      *  @return isInbound() ? getGateway() : getEndpoint()
      *  @since 0.8.9
      */
@@ -94,12 +97,14 @@ public interface TunnelInfo {
 
     /**
      *  Did we reuse this tunnel?
+     *
      *  @since 0.8.11
      */
     public boolean wasReused();
 
     /**
      *  Note that we reused this tunnel
+     *
      *  @since 0.8.11
      */
     public void setReused();

@@ -73,7 +73,6 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
     private static final byte[] ZEROLEN = new byte[0];
 
-
     /**
      * For the router SKM only.
      *
@@ -429,6 +428,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
     /**
      *  How many to send, IF we need to.
+     *
      *  @return the configured value (not adjusted for current available)
      */
     @Override
@@ -539,6 +539,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
     /**
      * One time session
+     *
      * @param expire time from now
      */
     public void tagsReceived(SessionKey key, RatchetSessionTag tag, long expire) {
@@ -767,7 +768,6 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         else if (_log.shouldWarn())
             _log.warn("No session found for ACK request");
     }
-
 
     /// end ACKS ///
 
@@ -1302,9 +1302,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         *  Reverse key to send, or null
-         *  @since 0.9.46
-         */
+ * Reverse key to send, or null
+ *
+ * @since 0.9.46
+ */
         private NextSessionKey getReverseSendKey() {
             synchronized (_unackedTagSets) {
                 if (_myIBKey == null)
@@ -1371,6 +1372,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         /**
          *  This is used only by renderStatusHTML().
          *  It includes both acked and unacked RatchetTagSets.
+         *
          *  @return list of RatchetTagSet objects
          */
         List<RatchetTagSet> getTagSets() {
@@ -1410,9 +1412,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         *  ONLY updated for inbound NS/NSR/ES tag used
-         *  @since 0.9.46
-         */
+ * ONLY updated for inbound NS/NSR/ES tag used
+ *
+ * @since 0.9.46
+ */
         public long getLastReceivedDate() {
             return _lastReceived;
         }

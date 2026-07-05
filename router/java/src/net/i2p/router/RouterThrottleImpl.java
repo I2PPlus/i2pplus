@@ -321,7 +321,6 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     /** also limited to 90% - see below */
     private static final int MIN_AVAILABLE_BPS = 4*1024; // always leave at least 4KBps free when allowing
-    //private static final String LIMIT_STR = _x("Declining Tunnel Requests" + ":<br>" + "Bandwidth limit");
     private static final String LIMIT_STR = _x("Declining requests" + ": " + "Bandwidth limit");
 
     /**
@@ -467,6 +466,7 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     /**
      * getTunnelStatus(), translated if available.
+     *
      * @since 0.9.45
      */
     public String getLocalizedTunnelStatus() {
@@ -507,6 +507,7 @@ public class RouterThrottleImpl implements RouterThrottle {
      *  Mark a string for extraction by xgettext and translation.
      *  Use this only in static initializers.
      *  It does not translate!
+     *
      *  @return s
      */
     private static final String _x(String s) {return s;}

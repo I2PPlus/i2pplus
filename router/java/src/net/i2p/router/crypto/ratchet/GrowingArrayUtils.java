@@ -27,9 +27,11 @@ final class GrowingArrayUtils {
 
     /**
      * Appends an element to the end of the array, growing the array if there is no more room.
+     *
      * @param array The array to which to append the element. This must NOT be null.
      * @param currentSize The number of elements in the array. Must be less than or equal to
      *                    array.length.
+     *
      * @param element The element to append.
      * @return the array to which the element was appended. This may be different than the given
      *         array.
@@ -70,6 +72,7 @@ final class GrowingArrayUtils {
      * @param array The array to which to append the element. Must NOT be null.
      * @param currentSize The number of elements in the array. Must be less than or equal to
      *                    array.length.
+     *
      * @param element The element to insert.
      * @return the array to which the element was appended. This may be different than the given
      *         array.

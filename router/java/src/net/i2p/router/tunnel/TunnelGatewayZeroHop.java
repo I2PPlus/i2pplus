@@ -19,7 +19,7 @@ class TunnelGatewayZeroHop extends TunnelGateway {
     private InboundMessageDistributor _inDistributor;
 
     /**
-     *
+     * Create a zero-hop gateway for the specified tunnel.
      */
     public TunnelGatewayZeroHop(RouterContext context, TunnelCreatorConfig config) {
         super(context, null, null, null);

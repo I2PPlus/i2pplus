@@ -360,6 +360,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
+     *  Get the reply lease set, checking the cache first.
+     *
      *  @param force to force including a reply lease set
      *  @return lease set or null if we should not send the lease set
      */
@@ -780,6 +782,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         private final SendTimeoutJob _replyTimeout;
 
         /**
+         *  Create a dispatch job.
+         *
          *  @param sel may be null
          *  @param success non-null if sel non-null
          *  @param timeout non-null if sel non-null

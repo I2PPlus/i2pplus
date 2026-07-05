@@ -202,7 +202,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         }
     }
 
-
     /** TagSet */
     private Set<TagSet> getInboundTagSets() {
         synchronized (_inboundTagSets) {
@@ -327,6 +326,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
     /**
      *  How many to send, IF we need to.
+     *
      *  @return the configured value (not adjusted for current available)
      *  @since 0.9.2
      */
@@ -814,9 +814,10 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     }
 
     /**
-     *  For debugging
-     *  @since 0.9
-     */
+ * For debugging
+ *
+ * @since 0.9
+ */
     private static String toString(PublicKey target) {
         if (target == null)
             return "null";
@@ -1167,6 +1168,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         /**
          *  For outbound only.
          *  Caller must synch.
+         *
          *  @return a tag or null
          */
         public SessionTag consumeNext() {

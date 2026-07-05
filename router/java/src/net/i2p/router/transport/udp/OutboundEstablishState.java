@@ -164,19 +164,19 @@ class OutboundEstablishState {
 
     public synchronized OutboundState getState() { return _currentState; }
 
-    /** @return if previously complete */
+    /** Mark as complete and return whether it was previously complete */
     public synchronized boolean complete() {
         boolean already = _complete;
         _complete = true;
         return already;
     }
 
-    /** @return non-null */
+    /** Get the remote address */
     public UDPAddress getRemoteAddress() { return _remoteAddress; }
 
     public void setIntroNonce(long nonce) { _introductionNonce = nonce; }
 
-    /** @return -1 if unset */
+    /** Get the introduction nonce, or -1 if unset */
     public long getIntroNonce() { return _introductionNonce; }
 
     /**
@@ -461,7 +461,7 @@ class OutboundEstablishState {
         //    _log.debug("Received a packet, nextSend == now");
     }
 
-    /** @since 0.8.9 */
+    /** Get string representation */
     @Override
     public String toString() {
         return "OutboundEstablishState [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " + _remoteHostId +

@@ -37,6 +37,8 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
     private final String _clientNickname;
     private final long _msgIDBloomXor;
     /**
+     * Create a new inbound message distributor.
+     *
      *  @param client null for router tunnel
      */
     public InboundMessageDistributor(RouterContext ctx, Hash client) {

@@ -279,9 +279,6 @@ class PacketBuilder2 {
 
         encryptDataPacket(packet, peer.getSendCipher(), pktNum, peer.getSendHeaderEncryptKey1(), peer.getSendHeaderEncryptKey2());
         setTo(packet, peer.getRemoteIPAddress(), peer.getRemotePort());
-        //if (_log.shouldDebug())
-        //    _log.debug("Packet " + pktNum + " after encryption:\n" + HexDump.dump(data, 0, pkt.getLength()));
-
         // FIXME ticket #2675
         // the packet could have been built before the current mtu got lowered, so
         // compare to LARGE_MTU

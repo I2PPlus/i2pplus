@@ -60,6 +60,7 @@ public class KeyManager {
 
     /**
      * Initialize the key manager and load keys from disk.
+     *
      * @deprecated Keys are no longer read from disk at startup
      */
     @Deprecated
@@ -70,6 +71,7 @@ public class KeyManager {
 
     /**
      *  Configure the router's keys.
+     *
      *  @since 0.9.4 replace individual setters
      */
     public void setKeys(PublicKey key1, PrivateKey key2, SigningPublicKey key3, SigningPrivateKey key4) {
@@ -84,24 +86,28 @@ public class KeyManager {
 
     /**
      * Router key
+     *
      * @return will be null on error or before startup() or setKeys() is called
      */
     public synchronized PrivateKey getPrivateKey() { return _privateKey; }
 
     /**
      * Router key
+     *
      * @return will be null on error or before startup() or setKeys() is called
      */
     public synchronized PublicKey getPublicKey() { return _publicKey; }
 
     /**
      * Router key
+     *
      * @return will be null on error or before startup() or setKeys() is called
      */
     public synchronized SigningPrivateKey getSigningPrivateKey() { return _signingPrivateKey; }
 
     /**
      * Router key
+     *
      * @return will be null on error or before startup() or setKeys() is called
      */
     public synchronized SigningPublicKey getSigningPublicKey() { return _signingPublicKey; }

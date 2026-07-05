@@ -36,6 +36,8 @@ class OutboundMessageDistributor {
     private static final long NEW_ROUTER_PERIOD = SystemVersion.isSlow() ? 30*1000L : 15*1000L;
 
     /**
+     * Create a new outbound message distributor.
+     *
      *  @param priority OutNetMessage.PRIORITY_PARTICIPATING for somebody else's OBEP, or
      *                  OutNetMessage.PRIORITY_MY_DATA for our own zero-hop OBGW/EP
      */
@@ -44,6 +46,8 @@ class OutboundMessageDistributor {
     }
 
     /**
+     * Create a new outbound message distributor with bandwidth estimation.
+     *
      *  @param priority OutNetMessage.PRIORITY_PARTICIPATING for somebody else's OBEP, or
      *                  OutNetMessage.PRIORITY_MY_DATA for our own zero-hop OBGW/EP
      *  @param bwe null for none

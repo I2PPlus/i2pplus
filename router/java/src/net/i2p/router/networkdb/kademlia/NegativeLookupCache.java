@@ -90,7 +90,9 @@ class NegativeLookupCache {
     }
 
     /**
-     *  @since 0.9.16
+     * Clears the negative cache and bad destinations.
+     *
+     * @since 0.9.16
      */
     public void clear() {
         counter.clear();

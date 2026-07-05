@@ -104,7 +104,7 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
 
     public synchronized InboundState getState() {return _currentState;}
 
-    /** @return if previously complete */
+    /** Check if the inbound establish state is complete */
     public synchronized boolean isComplete() {
         return _currentState == InboundState.IB_STATE_COMPLETE ||
                _currentState == InboundState.IB_STATE_FAILED;

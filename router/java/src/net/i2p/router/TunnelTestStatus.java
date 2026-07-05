@@ -2,6 +2,7 @@ package net.i2p.router;
 
 /**
  * Test status for tunnel testing display
+ *
  * @since 0.9.68+
  */
 public enum TunnelTestStatus {

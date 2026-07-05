@@ -273,6 +273,8 @@ class LoadRouterInfoJob extends JobImpl {
     }
 
     /**
+     *  Read key data from the specified files.
+     *
      *  @param rkf1 in router.keys format, tried second
      *  @param rkf2 in eepPriv.dat format, tried first
      *  @return non-null, throws IOE if neither exisits

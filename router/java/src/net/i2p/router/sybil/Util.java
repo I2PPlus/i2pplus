@@ -5,6 +5,7 @@ import java.math.BigInteger;
 /**
  * For NetDbRenderer and Sybil
  * http://forums.sun.com/thread.jspa?threadID=597652
+ *
  * @since 0.9.38 moved from NetDbRenderer
  */
 public class Util {
@@ -14,6 +15,7 @@ public class Util {
     /**
      * For debugging
      * http://forums.sun.com/thread.jspa?threadID=597652
+ *
      * @since 0.7.14
      */
     public static double biLog2(BigInteger a) {

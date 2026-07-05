@@ -48,6 +48,8 @@ public class SendMessageDirectJob extends JobImpl {
     private final long _msgIDBloomXor;
 
     /**
+     *  Send a message directly to a peer.
+     *
      * @param toPeer may be ourselves
      */
     public SendMessageDirectJob(RouterContext ctx, I2NPMessage message, Hash toPeer, int timeoutMs, int priority) {
@@ -55,6 +57,8 @@ public class SendMessageDirectJob extends JobImpl {
     }
 
     /**
+     *  Send a message directly to a peer with an XOR mask.
+     *
      * @param toPeer may be ourselves
      * @param msgIDBloomXor value to xor the messageID with before passing to the InNetMessagePool, may be 0
      */
@@ -63,6 +67,8 @@ public class SendMessageDirectJob extends JobImpl {
     }
 
     /**
+     *  Send a message directly to a peer with reply handling.
+     *
      * @param toPeer may be ourselves
      * @param onSuccess may be null
      * @param onFail may be null
@@ -74,6 +80,8 @@ public class SendMessageDirectJob extends JobImpl {
     }
 
     /**
+     *  Send a message directly to a peer with reply handling and XOR mask.
+     *
      * @param toPeer may be ourselves
      * @param onSuccess may be null
      * @param onFail may be null
@@ -86,6 +94,8 @@ public class SendMessageDirectJob extends JobImpl {
     }
 
     /**
+     *  Send a message directly to a peer with full options.
+     *
      * @param toPeer may be ourselves
      * @param onSend may be null
      * @param onSuccess may be null

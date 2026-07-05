@@ -111,6 +111,7 @@ public class ClientAppConfig {
     /*
      * Only valid for the router's clients (not plugins).
      * Only valid after getClientApps(ctx) has been called.
+ *
      * @since 0.9.42
      */
     public static synchronized boolean isSplitConfig(I2PAppContext ctx) {
@@ -425,6 +426,8 @@ public class ClientAppConfig {
     }
 
     /**
+     *  Hash code based on class name.
+     *
      * @since 0.9.42
      */
     @Override
@@ -434,6 +437,7 @@ public class ClientAppConfig {
 
     /**
      * Matches on class, args, and name only
+ *
      * @since 0.9.42
      */
     @Override

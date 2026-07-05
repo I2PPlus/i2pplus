@@ -71,29 +71,19 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
         System.arraycopy(iv, 0, fragments, fragmentLength, IV_SIZE);
 
         byte[] hashBuf = SimpleByteCache.acquire(Hash.HASH_LENGTH);
-        //Hash h = _context.sha().calculateHash(fragments, 0, fragmentLength + IV_SIZE);
         _context.sha().calculateHash(fragments, 0, fragmentLength + IV_SIZE, hashBuf, 0);
 
-        //Hash h = _context.sha().calculateHash(target, 0, offset + IV_SIZE);
-        //_log.debug("before shift: " + Base64.encode(target));
         // now shiiiiiift
         int distance = PREPROCESSED_SIZE - fragmentLength;
         System.arraycopy(fragments, 0, fragments, distance, fragmentLength);
 
-        //if (_log.shouldDebug())
-        //    _log.debug(msg.getMessageId() + ": fragments begin at " + distance + " (size="
-        //               + payloadLength + " offset=" + offset +")");
-
         java.util.Arrays.fill(fragments, 0, distance, (byte)0x0);
-        //_log.debug("after shift: " + Base64.encode(target));
 
         int offset = 0;
         System.arraycopy(iv, 0, fragments, offset, IV_SIZE);
         offset += IV_SIZE;
-        //System.arraycopy(h.getData(), 0, fragments, offset, 4);
         System.arraycopy(hashBuf, 0, fragments, offset, 4);
         offset += 4;
-        //_log.debug("before pad  : " + Base64.encode(target));
 
         SimpleByteCache.release(hashBuf);
         SimpleByteCache.release(iv);
@@ -104,8 +94,6 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
                           - 4                   // 4 bytes of the SHA256
                           - 1                   // the 0x00 after the padding
                           - fragmentLength;     // the size of the fragments (instructions+payload)
-
-        //_log.debug("# pad bytes:  " + numPadBytes + " payloadLength: " + payloadLength + " instructions: " + instructionsLength);
 
         if (numPadBytes > 0) {
             fillRandomNonZero(fragments, offset, numPadBytes);
@@ -206,13 +194,11 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
         }
         DataHelper.toLong(target, offset, 2, payloadLength);
         offset += 2;
-        //_log.debug("raw data    : " + Base64.encode(msg.getData()));
         System.arraycopy(msg.getData(), msg.getOffset(), target, offset, payloadLength);
         if (_log.shouldDebug())
             _log.debug("Initial fragment [" + msg.getMessageId() + "/" + msg.getFragmentNumber()+ "/"
                        + (PREPROCESSED_SIZE - offset - payloadLength) + "/" + payloadLength + "]: "
                        );
-                       //+ Base64.encode(target, offset, payloadLength));
 
         offset += payloadLength;
 

@@ -6,6 +6,7 @@ import net.i2p.data.DataHelper;
 
 /**
  * Order profiles by their speed (lowest first).
+ *
  * @since 0.7.10
  */
 class SpeedComparator implements Comparator<PeerProfile>, Serializable {

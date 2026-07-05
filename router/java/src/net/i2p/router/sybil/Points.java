@@ -17,6 +17,8 @@ public class Points implements Comparable<Points> {
     private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
 
     /**
+     *  Create a new empty Points instance.
+     *
      *  @since 0.9.38
      */
     private Points() {
@@ -24,6 +26,8 @@ public class Points implements Comparable<Points> {
     }
 
     /**
+     *  Create a new Points instance with an initial value.
+     *
      *  @param reason may not contain '%'
      */
     public Points(double d, String reason) {
@@ -32,6 +36,8 @@ public class Points implements Comparable<Points> {
     }
 
     /**
+     *  Get the total points.
+     *
      *  @since 0.9.38
      */
     public double getPoints() {
@@ -39,6 +45,8 @@ public class Points implements Comparable<Points> {
     }
 
     /**
+     *  Get the list of reasons.
+     *
      *  @since 0.9.38
      */
     public List<String> getReasons() {
@@ -46,6 +54,8 @@ public class Points implements Comparable<Points> {
     }
 
     /**
+     *  Add points with a reason.
+     *
      *  @param reason may not contain '%'
      *  @since 0.9.38
      */
@@ -76,6 +86,8 @@ public class Points implements Comparable<Points> {
     }
 
     /**
+     *  Return a string representation.
+     *
      *  @since 0.9.38
      */
     @Override

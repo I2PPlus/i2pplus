@@ -29,8 +29,10 @@ class StoreMessageSelector implements MessageSelector {
     private volatile boolean _found;
 
     /**
-     *  @param storeJobId just for logging
-     *  @param peer just for logging
+     * Creates a new message selector for database store confirmations.
+     *
+     * @param storeJobId just for logging
+     * @param peer just for logging
      */
     public StoreMessageSelector(RouterContext ctx, long storeJobId, RouterInfo peer, long waitingForId,
                                 long expiration) {

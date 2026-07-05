@@ -292,7 +292,11 @@ class FloodfillVerifyStoreJob extends JobImpl {
         return _sentTo;
     }
 
-    /** @return non-null */
+    /**
+     * Builds the database lookup message for verification.
+     *
+     * @return non-null
+     */
     private DatabaseLookupMessage buildLookup(TunnelInfo replyTunnelInfo) {
         // If we are verifying a leaseset, use the destination's own tunnels,
         // to avoid association by the exploratory tunnel OBEP.

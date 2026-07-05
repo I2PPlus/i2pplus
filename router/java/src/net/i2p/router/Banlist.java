@@ -108,6 +108,7 @@ public class Banlist {
 
     /**
      *  hash of 387 zeros
+     *
      *  @since 0.9.66
      */
     public static final Hash HASH_ZERORI = new Hash(Base64.decode("MRn86w6tHQgE25D7DIejOBCJ-dImSjdsQaOaBuUypkE="));
@@ -150,10 +151,7 @@ public class Banlist {
 
     /**
      *  Buggy i2pd fork
-     *  @since 0.9.52
-     */
-    /**
-     *  Buggy i2pd fork
+     *
      *  @since 0.9.52
      */
     public static final long BANLIST_DURATION_NO_NETWORK = 30*24*60*60*1000L;
@@ -178,6 +176,7 @@ public class Banlist {
 
     /**
      *  Constructor.
+     *
      *  @param context the router context
      */
     public Banlist(RouterContext context) {
@@ -218,6 +217,7 @@ public class Banlist {
     /**
      *  Reload configuration from properties.
      *  Called when settings are changed in the console.
+     *
      *  @since 0.9.70
      */
     public void reloadConfig() {
@@ -226,6 +226,7 @@ public class Banlist {
 
     /**
      *  Clear all session-based bans.
+     *
      *  @since 0.9.70
      */
     public void clearSessionBans() {
@@ -238,66 +239,77 @@ public class Banlist {
 
     /**
      *  Get the current max offenses setting.
+     *
      *  @since 0.9.70
      */
     public int getMaxOffenses() { return _maxOffenses; }
 
     /**
      *  Get the current offense window setting in ms.
+     *
      *  @since 0.9.70
      */
     public long getOffenseWindow() { return _offenseWindow; }
 
     /**
      *  Get the current startup grace period in ms.
+     *
      *  @since 0.9.70
      */
     public long getStartupGrace() { return _startupGrace; }
 
     /**
      *  Get the current bad packet ban duration in ms.
+     *
      *  @since 0.9.70
      */
     public long getBadPacketDuration() { return _badPacketDuration; }
 
     /**
      *  Check if bad packet auto-ban is enabled.
+     *
      *  @since 0.9.70
      */
     public boolean isBadPacketBanEnabled() { return _enableBadPacketBan; }
 
     /**
      *  Check if corrupt connection auto-ban is enabled.
+     *
      *  @since 0.9.70
      */
     public boolean isCorruptConnectionBanEnabled() { return _enableCorruptConnectionBan; }
 
     /**
      *  Check if port hopping auto-ban is enabled.
+     *
      *  @since 0.9.70
      */
     public boolean isPortHoppingBanEnabled() { return _enablePortHoppingBan; }
 
     /**
      *  Check if unsolicited DB search reply auto-ban is enabled.
+     *
      *  @since 0.9.70
      */
     public boolean isDbSearchBanEnabled() { return _enableDbSearchBan; }
 
     /**
      *  Check if IP blocklist is enabled.
+     *
      *  @since 0.9.70
      */
     public boolean isBlocklistEnabled() { return _enableBlocklist; }
 
     /**
      *  Check if Tor exit node blocklist is enabled.
+     *
      *  @since 0.9.70
      */
     public boolean isTorBlocklistEnabled() { return _enableTorBlocklist; }
 
     /**
      *  Check if country-based bans are enabled.
+     *
      *  @since 0.9.70
      */
     public boolean isCountryBanEnabled() { return _enableCountryBan; }
@@ -305,6 +317,7 @@ public class Banlist {
     /**
      *  Check if XG router bans are enabled.
      *  XG = unlimited bandwidth (X), no transit tunnels (G) - often botnet indicators
+     *
      *  @since 0.9.70
      */
     public boolean isXgBanEnabled() { return _enableXgBan; }
@@ -312,6 +325,7 @@ public class Banlist {
 /**
      *  Check if LU router bans are enabled.
      *  LU = low bandwidth tier (L) + unreachable/firewalled (U)
+     *
      *  @since 0.9.70
      */
     public boolean isLuBanEnabled() { return _enableLuBan; }
@@ -319,6 +333,7 @@ public class Banlist {
     /**
      *  Check if a retroactive NetDb purge sweep is needed.
      *  True if LU/XG bans or custom capability bans are enabled.
+     *
      *  @since 0.9.70
      */
     public boolean shouldPurgeExistingRouters() {
@@ -329,12 +344,14 @@ public class Banlist {
     /**
      *  Get custom capability ban pattern.
      *  Format: string of capability letters (e.g., "DG", "UX")
+     *
      *  @since 0.9.70
      */
     public String getCustomCapabilityBans() { return _customCapabilityBans != null ? _customCapabilityBans : ""; }
 
     /**
      *  Check if router capabilities match any of the custom ban patterns.
+     *
      *  @param capabilities router capabilities string (e.g., "XfP")
      *  @return the matched pattern (e.g., "G") or null if no match
      *  @since 0.9.70
@@ -411,6 +428,7 @@ public class Banlist {
 /**
       * Record a bad packet from an IP.
       * If threshold exceeded, ban the IP.
+      *
       * @param ip IP address (format: "1.2.3.4" or "1.2.3.4:port")
       * @param version router version info (may be null)
       */
@@ -463,6 +481,7 @@ public class Banlist {
     /**
      * Record a corrupt connection (EOF/no data during establishment) from an IP.
      * If threshold exceeded, ban the IP.
+     *
      * @param ip IP address (format: "1.2.3.4" or "1.2.3.4:port")
      * @param version router version info (may be null)
      */
@@ -509,6 +528,7 @@ public class Banlist {
     /**
      * Record a port hopping attempt from an IP.
      * If threshold exceeded, ban the IP.
+     *
      * @param ip IP address (format: "1.2.3.4")
      */
     public void portHopping(String ip) {
@@ -551,6 +571,7 @@ public class Banlist {
     /**
      * Track an unsolicited DbSearchReply from a router.
      * If threshold exceeded in window, ban the router hash.
+     *
      * @param routerHash Hash of the router sending unsolicited reply
      * @param version router version (may be null)
      */
@@ -595,6 +616,7 @@ public class Banlist {
 
     /**
      *  Get the number of currently banlisted routers.
+     *
      *  @return the number of currently banlisted routers
      */
     public int getRouterCount() {return _entries.size();}
@@ -603,12 +625,14 @@ public class Banlist {
      *  Get the banlist entries.
      *  For BanlistRenderer in router console.
      *  Note - may contain expired entries.
+     *
      *  @return an unmodifiable map of router hashes to banlist entries
      */
     public Map<Hash, Entry> getEntries() {return Collections.unmodifiableMap(_entries);}
 
     /**
      *  Ban a router with default duration.
+     *
      *  @param peer the router hash to ban
      *  @return true if it WAS previously on the list
      */
@@ -616,6 +640,7 @@ public class Banlist {
 
     /**
      *  Ban a router with default duration.
+     *
      *  @param peer the router hash to ban
      *  @param reason the reason for the ban (may be null)
      *  @return true if it WAS previously on the list
@@ -624,6 +649,7 @@ public class Banlist {
 
     /**
      *  Ban a router with default duration.
+     *
      *  @param reasonCode separate code so cause can contain {0} for translation
      *  @param peer the router hash to ban
      *  @param reason the reason for the ban (may be null)
@@ -635,6 +661,7 @@ public class Banlist {
 
     /**
      *  Ban a router on a specific transport.
+     *
      *  @param peer the router hash to ban
      *  @param reason the reason for the ban (may be null)
      *  @param transport the transport to ban (may be null for all transports)
@@ -646,6 +673,7 @@ public class Banlist {
 
     /**
      *  Permanently ban a router.
+     *
      *  @param peer the router hash to ban
      *  @param reason the reason for the ban (may be null)
      *  @return true if it WAS previously on the list
@@ -656,6 +684,7 @@ public class Banlist {
 
     /**
      *  Permanently ban a router.
+     *
      *  @param peer the router hash to ban
      *  @param reason the reason for the ban (may be null)
      *  @param reasonCode separate code so cause can contain {0} for translation
@@ -667,6 +696,7 @@ public class Banlist {
 
     /**
      *  Ban a router with configurable duration and transport.
+     *
      *  @param peer the router hash to ban
      *  @param reason the reason for the ban (may be null)
      *  @param transport the transport to ban (may be null for all transports)
@@ -679,6 +709,7 @@ public class Banlist {
 
     /**
      *  Ban a router with automatic duration calculation.
+     *
      *  @param peer the router hash to ban
      *  @param reason the reason for the ban (may be null)
      *  @param reasonCode separate code so cause can contain {0} for translation (may be null)
@@ -700,6 +731,7 @@ public class Banlist {
 
     /**
      *  Ban a router with a specified expiration time.
+     *
      *  @param peer the router hash to ban
      *  @param reason the reason for the ban (may be null)
      *  @param reasonCode separate code so cause can contain {0} for translation (may be null)
@@ -774,6 +806,7 @@ public class Banlist {
 
     /**
      *  Remove a router from the banlist.
+     *
      *  @param peer the router hash to remove from banlist
      */
     public void unbanlistRouter(Hash peer) {unbanlistRouter(peer, true);}
@@ -784,6 +817,7 @@ public class Banlist {
     private void unbanlistRouter(Hash peer, boolean realUnbanlist) {unbanlistRouter(peer, realUnbanlist, null);}
     /**
      *  Remove a router from the banlist for a specific transport.
+     *
      *  @param peer the router hash to remove from banlist
      *  @param transport the transport to unban (may be null for all transports)
      */
@@ -791,6 +825,7 @@ public class Banlist {
 
     /**
      *  Remove a router from the banlist.
+     *
      *  @param peer the router hash to remove from banlist
      *  @param realUnbanlist if true, update message history
      *  @param transport the transport to unban (may be null for all transports)
@@ -824,6 +859,7 @@ public class Banlist {
 
     /**
      *  Check if a router is banlisted.
+     *
      *  @param peer the router hash to check
      *  @return true if the router is banlisted on any transport
      */
@@ -831,6 +867,7 @@ public class Banlist {
 
     /**
      *  Check if a router is banlisted on a specific transport.
+     *
      *  @param peer the router hash to check
      *  @param transport the transport to check (may be null)
      *  @return true if the router is banlisted on the specified transport
@@ -862,6 +899,7 @@ public class Banlist {
 
     /**
      *  Check if a router is permanently banlisted.
+     *
      *  @param peer the router hash to check
      *  @return true if the router is permanently banlisted
      */
@@ -872,6 +910,7 @@ public class Banlist {
 
     /**
      *  Check if a router is banlisted with a hostile duration (at least 1 hour).
+     *
      *  @param peer the router hash to check
      *  @return true if the router is banlisted with hostile duration
      *  @since 0.9.58+

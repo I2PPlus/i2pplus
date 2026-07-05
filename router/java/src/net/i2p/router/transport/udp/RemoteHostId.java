@@ -33,13 +33,13 @@ final class RemoteHostId {
         _hashCode = DataHelper.hashCode(_ip) ^ DataHelper.hashCode(_peerHash) ^ _port;
     }
 
-    /** @return null if indirect */
+    /** Get the IP address, or null if indirect */
     public byte[] getIP() { return _ip; }
 
-    /** @return 0 if indirect */
+    /** Get the port, or 0 if indirect */
     public int getPort() { return _port; }
 
-    /** @return null if direct */
+    /** Get the peer hash, or null if direct */
     public Hash getPeerHash() { return _peerHash; }
 
     @Override

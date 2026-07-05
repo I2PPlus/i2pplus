@@ -162,7 +162,6 @@ class FragmentHandler {
         offset++; // skip the final 0x00, terminating the padding
         if (_log.shouldDebug()) {
             _log.debug("Fragments begin at offset: " + offset + "; padding: " + padding);
-            //_log.debug("fragments: " + Base64.encode(preprocessed, offset, preprocessed.length-offset));
         }
         try {
             while (offset < length) {
@@ -301,9 +300,6 @@ class FragmentHandler {
      * @throws RuntimeException
      */
     private int receiveFragment(byte[] preprocessed, int offset, int length) {
-        //if (_log.shouldDebug())
-        //    _log.debug("CONTROL: 0x" + Integer.toHexString(preprocessed[offset] & 0xff) +
-        //               " at offset: " + offset);
         if (0 == (preprocessed[offset] & MASK_IS_SUBSEQUENT))
             return receiveInitialFragment(preprocessed, offset, length);
         else
@@ -427,8 +423,6 @@ class FragmentHandler {
 
         offset += size;
 
-        //if (_log.shouldDebug())
-        //    _log.debug("Handling finished message " + msg.getMessageId() + " at offset " + offset);
         return offset;
     }
 
@@ -504,8 +498,7 @@ class FragmentHandler {
             if (data == null)
                 throw new I2NPMessageException("null data");   // fragments already released???
             if (_log.shouldDebug())
-                _log.debug("Message received (" + data.length + " bytes): "); // + Base64.encode(data)
-                           //+ " " + _context.sha().calculateHash(data).toBase64());
+                _log.debug("Message received (" + data.length + " bytes): ");
 
             // Read in as unknown message for outbound tunnels,
             // since this will just be packaged in a TunnelGatewayMessage.
@@ -564,8 +557,6 @@ class FragmentHandler {
             if (_log.shouldWarn()) {
                 _log.warn("Error receiving unfragmented message" + (router != null ? " from [" +
                           router.toBase64().substring(0,6) + "]" : "") +  " -> Corrupt?", ime);
-                //_log.warn("DUMP:\n" + HexDump.dump(data, offset, len));
-                //_log.warn("RAW:\n" + Base64.encode(data, offset, len));
             }
         }
     }

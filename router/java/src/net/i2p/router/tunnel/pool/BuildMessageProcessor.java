@@ -182,7 +182,6 @@ class BuildMessageProcessor {
             for (int i = 0; i < msg.getRecordCount(); i++) {
                 if (i != ourHop) {
                     EncryptedBuildRecord data = msg.getRecord(i);
-                    //    log.debug("Encrypting record " + i + "/? with replyKey " + replyKey.toBase64() + "/" + Base64.encode(iv));
                     // encrypt in-place, corrupts SDS
                     byte[] bytes = data.getData();
                     // slot number, little endian
@@ -196,7 +195,6 @@ class BuildMessageProcessor {
             for (int i = 0; i < msg.getRecordCount(); i++) {
                 if (i != ourHop) {
                     EncryptedBuildRecord data = msg.getRecord(i);
-                    //    log.debug("Encrypting record " + i + "/? with replyKey " + replyKey.toBase64() + "/" + Base64.encode(iv));
                     // encrypt in-place, corrupts SDS
                     byte[] bytes = data.getData();
                     ctx.aes().encrypt(bytes, 0, bytes, 0, replyKey, iv, 0, EncryptedBuildRecord.LENGTH);

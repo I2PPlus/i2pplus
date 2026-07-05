@@ -46,6 +46,8 @@ public class PayloadGarlicConfig extends GarlicConfig {
     }
 
     /**
+     *  Not supported for single-clove configs.
+     *
      *  @since 0.9.12
      *  @throws UnsupportedOperationException always
      */
@@ -55,6 +57,8 @@ public class PayloadGarlicConfig extends GarlicConfig {
     }
 
     /**
+     *  Return zero, as this is a single-clove config.
+     *
      *  @return zero
      *  @since 0.9.12
      */
@@ -62,6 +66,8 @@ public class PayloadGarlicConfig extends GarlicConfig {
     public int getCloveCount() { return 0; }
 
     /**
+     *  Not supported for single-clove configs.
+     *
      *  @since 0.9.12
      *  @throws UnsupportedOperationException always
      */
@@ -71,6 +77,8 @@ public class PayloadGarlicConfig extends GarlicConfig {
     }
 
     /**
+     *  No-op for single-clove configs.
+     *
      *  @since 0.9.12
      */
     @Override

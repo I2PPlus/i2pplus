@@ -598,6 +598,7 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
+     * Get the adaptive tuner from the UDP transport.
      * @return the adaptive tuner, or null if not available
      * @since 0.9.70+
      */

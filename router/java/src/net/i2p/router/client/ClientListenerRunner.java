@@ -55,6 +55,7 @@ class ClientListenerRunner implements Runnable {
     /**
      * Get a ServerSocket.
      * Split out so it can be overridden for SSL.
+     *
      * @since 0.8.3
      */
     protected ServerSocket getServerSocket() throws IOException {
@@ -154,9 +155,10 @@ class ClientListenerRunner implements Runnable {
     }
 
     /**
-     *  Just so unit tests don't NPE, where router could be null.
-     *  @since 0.9.20
-     */
+ * Just so unit tests don't NPE, where router could be null.
+ *
+ * @since 0.9.20
+ */
     private boolean isAlive() {
         Router r = _context.router();
         return r == null || r.isAlive();

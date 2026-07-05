@@ -26,9 +26,7 @@ public class ClientTunnelSettings {
     }
 
     public TunnelPoolSettings getInboundSettings() { return _inboundSettings; }
-    //public void setInboundSettings(TunnelPoolSettings settings) { _inboundSettings = settings; }
     public TunnelPoolSettings getOutboundSettings() { return _outboundSettings; }
-    //public void setOutboundSettings(TunnelPoolSettings settings) { _outboundSettings = settings; }
 
     public void readFromProperties(Properties props) {
         _inboundSettings.readFromProperties("inbound.", props);

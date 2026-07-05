@@ -6,7 +6,7 @@ import net.i2p.data.i2np.*;
 import net.i2p.router.util.CDPQEntry;
 
 /**
- *  Stores all the state for an unsent or partially-sent message
+ *  Stores all the state for an unsent or partially-sent message.
  *
  *  @since 0.9.3
  */

@@ -9,22 +9,18 @@ package net.i2p.router.transport;
  */
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.io.Writer;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -47,9 +43,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
@@ -338,9 +332,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         // Going to calculate, sort them
         Collections.sort(skews);
-        // enable this is you REALLY need it, which you don't
-        //if (_log.shouldDebug())
-        //    _log.debug("Peer clock skews (ms): \n* " + skews);
         // Calculate frame size
         int frameSize = Math.max((skews.size() * percentToInclude / 100), 1);
         int first = (skews.size() / 2) - (frameSize / 2);
@@ -596,7 +587,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     public void exemptIncoming(Hash peer) {
         if (_manager.isEstablished(peer)) {return;}
-        //RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
         if (ri == null) {return;}
         Collection<RouterAddress> addrs = ri.getAddresses();
@@ -874,7 +864,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     rdnsCache.put(cacheEntry.getIpAddress(), cacheEntry);
                 }
             }
-            //System.out.println("[RDNSCache] Imported " + rdnsCache.size() + " entries from cache file");
         } catch (IOException ex) {
             System.err.println("[RDNSCache] Error reading RDNS cache file. Creating new file..."); // NOSONAR S106 static utility
             createRdnsCacheFile();
@@ -949,7 +938,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                         writtenCount++;
                     }
                 }
-                //System.out.println("[RDNSCache] Entries written to file: " + writtenCount);
             } catch (IOException ex) {
                 System.err.println("[RDNSCache] Error updating reverse DNS cache file: " + ex.getMessage()); // NOSONAR S106 static utility
                 ex.printStackTrace();
@@ -1144,10 +1132,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return parts[len - 2] + "." + parts[len - 1];
     }
 
-    /* @since 0.9.68+ */
+    /** Multi-part TLD list for domain extraction */
     private static final Set<String> MULTI_PART_TLDS;
 
-    /* @since 0.9.68+ */
     static {
         MULTI_PART_TLDS = new HashSet<>(Arrays.asList(
             "co.uk", "gov.uk", "ac.uk", "nhs.uk", "org.uk", "mod.uk", "mil.uk", "sch.uk",
@@ -1715,7 +1702,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static final int TIME_START_DELAY = 5*60*1000;
     private static final int TIME_REPEAT_DELAY = 8*60*1000;
 
-    /** @since 0.7.12 */
+    /** Start the backup timestamper */
     private void startTimestamper() {
         _context.simpleTimer2().addPeriodicEvent(new Timestamper(), TIME_START_DELAY,  TIME_REPEAT_DELAY);
     }
@@ -1740,7 +1727,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
     }
 
-    /** @since 0.9.4 */
+    /** Start the network monitor */
     private void startNetMonitor() {new NetMonitor();}
 
     /**

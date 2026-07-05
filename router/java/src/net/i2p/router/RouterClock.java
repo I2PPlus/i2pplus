@@ -47,6 +47,7 @@ public class RouterClock extends Clock {
     /**
      *  If the system clock shifts by this much,
      *  call the callback, we probably need a soft restart.
+     *
      *  @since 0.8.8
      */
     private static final long MASSIVE_SHIFT_FORWARD = 360L*1000;
@@ -192,11 +193,6 @@ public class RouterClock extends Clock {
             else if (getLog().shouldInfo())
                 getLog().info("Updating target clock offset to " + offsetMs + "ms from " + _offset + "ms (Stratum: " + stratum + ")");
 
-            // Clock skew stat is created by parent Clock class, no duplicate needed
-            // if (!_statCreated) {
-            //     _context.statManager().createRateStat("clock.skew", "Clock step adjustment (ms)", "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR, RateConstants.ONE_DAY });
-            //     _statCreated = true;
-            // }
             _context.statManager().addRateData("clock.skew", delta);
             if (_context.getBooleanProperty(PROP_DISABLE_ADJUSTMENT)) {
                 getLog().error("Clock adjustment disabled", new Exception());
@@ -371,6 +367,7 @@ public class RouterClock extends Clock {
 
     /*
      *  How far we still have to slew, for diagnostics
+     *
      *  @since 0.7.12
      *  @deprecated for debugging only
      */

@@ -84,7 +84,11 @@ class FloodOnlyLookupSelector implements MessageSelector {
         return false;
     }
 
-    /** @since 0.9.12 */
+    /**
+     * Returns a string representation of this selector.
+     *
+     * @since 0.9.12
+     */
     @Override
     public String toString() {
         return "FloodOnlyLookup Selector for " + _search.getKey();

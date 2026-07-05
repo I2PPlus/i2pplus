@@ -52,20 +52,6 @@ class RebuildRouterInfoJob extends JobImpl {
     @Override
     public void runJob() {
         throw new UnsupportedOperationException();
-/****
-        _log.debug("Testing to rebuild router info");
-        File info = new File(getContext().getRouterDir(), CreateRouterInfoJob.INFO_FILENAME);
-        File keyFile = new File(getContext().getRouterDir(), CreateRouterInfoJob.KEYS2_FILENAME);
-
-        if (!info.exists() || !keyFile.exists()) {
-            _log.info("Router info file [" + info.getAbsolutePath() + "] or private key file [" + keyFile.getAbsolutePath() + "] deleted, rebuilding");
-            rebuildRouterInfo();
-        } else {
-            _log.debug("Router info file [" + info.getAbsolutePath() + "] exists, not rebuilding");
-        }
-        getTiming().setStartAfter(getContext().clock().now() + REBUILD_DELAY);
-        getContext().jobQueue().addJob(this);
-****/
     }
 
     void rebuildRouterInfo() {
@@ -73,6 +59,8 @@ class RebuildRouterInfoJob extends JobImpl {
     }
 
     /**
+     *  Rebuild the router info and keys.
+     *
      *  @param alreadyRunning unused
      */
     void rebuildRouterInfo(boolean alreadyRunning) {

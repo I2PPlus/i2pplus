@@ -173,7 +173,11 @@ public class MessageWrapper {
             rtag = null;
         }
 
-        /** @since 0.9.46 */
+        /**
+         * Creates a new one-time session with a ratchet tag.
+         *
+         * @since 0.9.46
+         */
         public OneTimeSession(SessionKey key, RatchetSessionTag tag) {
             this.key = key; rtag = tag;
             this.tag = null;

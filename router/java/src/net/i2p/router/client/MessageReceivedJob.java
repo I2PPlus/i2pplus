@@ -53,6 +53,7 @@ class MessageReceivedJob extends JobImpl {
 
     /**
      *  Same as runJob() but with a return value
+     *
      *  @return success
      *  @since 0.9.29
      */
@@ -86,9 +87,6 @@ class MessageReceivedJob extends JobImpl {
      * Deliver notification to the client that the given message is available.
      */
     private void messageAvailable(MessageId id, long size) throws I2CPMessageException {
-        //if (_log.shouldDebug())
-        //    _log.debug("Sending message available: " + id + " to sessionId " + _runner.getSessionId()
-        //               + " (with nonce=1)", new Exception("available"));
         MessageStatusMessage msg = new MessageStatusMessage();
         msg.setMessageId(id.getMessageId());
         SessionId sid = _runner.getSessionId(_toDest.calculateHash());
@@ -106,9 +104,10 @@ class MessageReceivedJob extends JobImpl {
     }
 
     /**
-     *  Deliver the message directly, skip notification
-     *  @since 0.9.4
-     */
+ * Deliver the message directly, skip notification
+ *
+ * @since 0.9.4
+ */
     private void sendMessage(long id) throws I2CPMessageException {
         SessionId sid = _runner.getSessionId(_toDest.calculateHash());
         if (sid == null) {

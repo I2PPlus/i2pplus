@@ -67,6 +67,7 @@ public abstract class JobImpl implements Job {
 
     /**
      *  Deprecated to avoid JobQueue deadlocks
+     *
      *  @deprecated use madeReady(long)
      */
     @Deprecated
@@ -74,6 +75,7 @@ public abstract class JobImpl implements Job {
 
     /**
      *  For JobQueue only, not for external use
+     *
      *  @param now the current time in milliseconds
      *  @since 0.9.55
      */

@@ -41,6 +41,7 @@ public interface RouterThrottle {
 
     /**
      * getTunnelStatus(), translated if available.
+     *
      * @since 0.9.45
      */
     public String getLocalizedTunnelStatus();

@@ -101,9 +101,6 @@ public class OutboundMessageRegistry {
         List<MessageSelector> removedSelectors = null;
 
         synchronized (_selectors) {
-            // ConcurrentModificationException - why?
-            //for (Iterator<MessageSelector> iter = _selectors.iterator(); iter.hasNext(); ) {
-            //    MessageSelector sel = iter.next();
             for (int i = 0; i < _selectors.size(); i++) {
                 MessageSelector sel = _selectors.get(i);
                 boolean isMatch = sel.isMatch(message);
@@ -271,9 +268,6 @@ public class OutboundMessageRegistry {
             long now = _context.clock().now();
             List<MessageSelector> removing = new ArrayList<>(8);
             synchronized (_selectors) {
-                // CME?
-                //for (Iterator<MessageSelector> iter = _selectors.iterator(); iter.hasNext(); ) {
-                //    MessageSelector sel = iter.next();
                 for (int i = 0; i < _selectors.size(); i++) {
                     MessageSelector sel = _selectors.get(i);
                     long expiration = sel.getExpiration();

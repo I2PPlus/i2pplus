@@ -41,7 +41,6 @@ public class OutNetMessage implements CDPQEntry {
     private MessageSelector _replySelector;
     private List<String> _failedTransports;
     private long _sendBegin;
-    //private Exception _createdBy;
     private final long _created;
     private long _enqueueTime;
     private long _seqNum;
@@ -56,6 +55,7 @@ public class OutNetMessage implements CDPQEntry {
 
     /**
      *  Priorities, higher is higher priority.
+     *
      *  @since 0.9.3
      */
     public static final int PRIORITY_LOWEST = 100;
@@ -67,11 +67,9 @@ public class OutNetMessage implements CDPQEntry {
     public static final int PRIORITY_MY_BUILD_REQUEST = 500;
     public static final int PRIORITY_MY_DATA = PRIORITY_HIGHEST; // may be adjusted +/- 25 for outbound traffic
     public static final int PRIORITY_MY_NETDB_LOOKUP = PRIORITY_HIGHEST;
-    //public static final int PRIORITY_MY_NETDB_STORE_LOW = 150;
     public static final int PRIORITY_MY_NETDB_STORE_LOW = 250;
     public static final int PRIORITY_MY_NETDB_STORE = PRIORITY_HIGHEST;
     public static final int PRIORITY_NETDB_EXPLORE = PRIORITY_LOWEST;
-    //public static final int PRIORITY_NETDB_FLOOD = 300;
     public static final int PRIORITY_NETDB_FLOOD = PRIORITY_HIGHEST;
     public static final int PRIORITY_NETDB_HARVEST = PRIORITY_LOWEST;
     public static final int PRIORITY_NETDB_REPLY = 300;
@@ -80,12 +78,14 @@ public class OutNetMessage implements CDPQEntry {
 
     /**
      *  Null msg and target, zero expiration (used in OutboundMessageRegistry only)
+     *
      *  @since 0.9.9
      */
     public OutNetMessage(RouterContext context) {this(context, null, 0, -1, null);}
 
     /**
      *  Standard constructor
+     *
      *  @param msg generally non-null
      *  @param target generally non-null
      *  @since 0.9.9
@@ -183,6 +183,7 @@ public class OutNetMessage implements CDPQEntry {
 
     /**
      *  For debugging only.
+     *
      *  @return the simple class name
      */
     public String getMessageType() {
@@ -203,6 +204,7 @@ public class OutNetMessage implements CDPQEntry {
     /**
      *  Copies the message data to outbuffer.
      *  Used only by VM Comm System.
+     *
      *  @return the length, or -1 if message is null
      */
     public int getMessageData(byte[] outBuffer) {
@@ -309,18 +311,21 @@ public class OutNetMessage implements CDPQEntry {
 
     /**
      *  For CDQ
+     *
      *  @since 0.9.3
      */
     public void setEnqueueTime(long now) {_enqueueTime = now;}
 
     /**
      *  For CDQ
+     *
      *  @since 0.9.3
      */
     public long getEnqueueTime() {return _enqueueTime;}
 
     /**
      *  For CDQ
+     *
      *  @since 0.9.3
      */
     public void drop() {
@@ -337,12 +342,14 @@ public class OutNetMessage implements CDPQEntry {
 
     /**
      *  For CDPQ
+     *
      *  @since 0.9.3
      */
     public void setSeqNum(long num) {_seqNum = num;}
 
     /**
      *  For CDPQ
+     *
      *  @since 0.9.3
      */
     public long getSeqNum() {return _seqNum;}

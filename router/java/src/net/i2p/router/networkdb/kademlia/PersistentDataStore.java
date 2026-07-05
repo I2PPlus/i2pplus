@@ -82,7 +82,9 @@ public class PersistentDataStore extends TransientDataStore {
     private static final long[] RATES = RateConstants.BASIC_RATES;
 
     /**
-     *  @param dbDir relative path
+     * Creates a new persistent data store.
+     *
+     * @param dbDir relative path
      */
     public PersistentDataStore(RouterContext ctx, String dbDir, KademliaNetworkDatabaseFacade facade) throws IOException {
         super(ctx);
@@ -765,7 +767,9 @@ public class PersistentDataStore extends TransientDataStore {
         private long _knownDate;
 
         /**
-         *  @param key must match the RI hash in the file
+         * Creates a job to read a RouterInfo from disk.
+         *
+         * @param key must match the RI hash in the file
          */
         public ReadRouterJob(File routerFile, Hash key) {
             super(PersistentDataStore.this._context);
@@ -798,8 +802,10 @@ public class PersistentDataStore extends TransientDataStore {
         }
 
         /**
-         *  @return success
-         *  @since 0.9.58
+         * Reads the RouterInfo from disk.
+         *
+         * @return success
+         * @since 0.9.58
          */
         public boolean read() {
             if (_routerFile.length() > RouterInfo.MAX_UNCOMPRESSED_SIZE) {

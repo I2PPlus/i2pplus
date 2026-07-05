@@ -191,6 +191,7 @@ class ClientManager {
     /**
      *  The InternalClientManager interface.
      *  Connects to the router, receiving a message queue to talk to the router with.
+     *
      *  @throws I2PSessionException if the router isn't ready
      *  @since 0.8.3
      */
@@ -379,6 +380,7 @@ class ClientManager {
 
     /**
      *  Generate a new random, unused sessionId. Caller must synch on _runners.
+     *
      *  @return null on failure
      *  @since 0.9.12
      */
@@ -477,7 +479,6 @@ class ClientManager {
         }
     }
 
-
     /**
      * Request that a particular client authorize the Leases contained in the
      * LeaseSet, after which the onCreateJob is queued up.  If that doesn't occur
@@ -490,6 +491,7 @@ class ClientManager {
      * @param set LeaseSet with requested leases - this object must be updated to contain the
      *            signed version (as well as any changed/added/removed Leases).
      *            The LeaseSet contains Leases only; it is unsigned and does not have the destination set.
+     *
      * @param timeout ms to wait before failing
      * @param onCreateJob Job to run after the LeaseSet is authorized
      * @param onFailedJob Job to run after the timeout passes without receiving authorization
@@ -564,7 +566,6 @@ class ClientManager {
         rv.addAll(_runners.keySet());
         return rv;
     }
-
 
     /**
      *  Unsynchronized
@@ -724,7 +725,6 @@ class ClientManager {
      */
     private class ClientTimestamper extends SimpleTimer2.TimedEvent {
 
-        //public static final long LOOP_TIME = 10*60*1000;
         public static final long LOOP_TIME = 5L*60*1000;
 
         /** must call schedule() later */

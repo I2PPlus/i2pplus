@@ -132,13 +132,12 @@ public class FIFOBandwidthRefiller implements Runnable {
      * how often we replenish the queues.
      * the bandwidth limiter will get an update this often (ms)
      */
-//    private static final long REPLENISH_FREQUENCY = 40;
     private static volatile long _replenishFrequency = SystemVersion.isSlow() || SystemVersion.getCPULoadAvg() > 80 ? 100 : 20;
 
-    /** @since 0.9.70+ */
+    /** Get the replenish frequency */
     public static long getReplenishFrequency() { return _replenishFrequency; }
 
-    /** @since 0.9.70+ */
+    /** Set the replenish frequency, bounded 5-200ms */
     public static void setReplenishFrequency(long ms) { _replenishFrequency = Math.max(5, Math.min(200, ms)); }
 
     FIFOBandwidthRefiller(RouterContext context, FIFOBandwidthLimiter limiter) {
@@ -152,7 +151,7 @@ public class FIFOBandwidthRefiller implements Runnable {
         _isRunning = true;
     }
 
-    /** @since 0.8.8 */
+    /** Shut down the bandwidth refiller */
     synchronized void shutdown() {
         _isRunning = false;
     }
@@ -224,10 +223,6 @@ public class FIFOBandwidthRefiller implements Runnable {
             long maxBurstOut = ((_outboundBurstKBytesPerSecond-_outboundKBytesPerSecond)*1024*numMs)/1000;
             _limiter.refillBandwidthQueues(buffer, inboundToAdd, outboundToAdd, maxBurstIn, maxBurstOut);
 
-            //if (_log.shouldDebug()) {
-            //    _log.debug("Adding " + inboundToAdd + " bytes to inboundAvailable");
-            //    _log.debug("Adding " + outboundToAdd + " bytes to outboundAvailable");
-            //}
             return true;
         } else {
             if (_log.shouldDebug())
@@ -261,9 +256,7 @@ public class FIFOBandwidthRefiller implements Runnable {
             _partBWEIn = new SyntheticREDQueue(_context, maxBps);
         }
 
-        // We are always limited for now
-        //_limiter.setInboundUnlimited(_inboundKBytesPerSecond <= 0);
-        //_limiter.setOutboundUnlimited(_outboundKBytesPerSecond <= 0);
+
     }
 
     private void updateInboundRate() {

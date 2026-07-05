@@ -167,7 +167,7 @@ public class PeerState {
     private static final long MAX_MESSAGE_LIFETIME = 60 * 1000L;
     /** After this time, we start adding backoff delay (5 seconds) */
     private static final long BACKOFF_START_LIFETIME = 5 * 1000L;
-    /** @since 0.9.42 */
+    /** Initial concurrent messages per peer */
     private static final int INIT_CONCURRENT_MSGS = SystemVersion.isSlow() ? 16 : 64;
     /** Hard cap on concurrent messages per peer */
     private static final int MAX_CONCURRENT_MSGS = SystemVersion.isSlow() ? 64 : 256;
@@ -291,7 +291,7 @@ public class PeerState {
     /** If this many acks arrive out of order, fast rtx */
     private static final int FAST_RTX_ACKS = 3;
 
-    /** @since 0.9.68+ */
+    /** Lock for outbound operations */
     private final Object _outboundLock = new Object() {
         private static final long serialVersionUID = 1L;
     };
@@ -611,7 +611,7 @@ public class PeerState {
 
     public boolean isInbound() {return _isInbound;}
 
-    /** @since IPv6 */
+    /** Check if peer is using IPv6 */
     public boolean isIPv6() {return _remoteIP.length == 16;}
 
     /** the last time we used them as an introducer, or 0 */

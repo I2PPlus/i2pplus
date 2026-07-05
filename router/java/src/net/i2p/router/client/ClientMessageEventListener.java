@@ -404,6 +404,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
 
     /**
      *  Override for testing
+     *
      *  @since 0.9.8
      *
      */
@@ -426,7 +427,6 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             // Just drop the message for now, don't kill the whole socket...
             // bugs on client side, esp. prior to 0.9.21, may cause sending
             // of messages before the session is established
-            //_runner.disconnectClient(msg);
             // do this instead:
             if (sid != null && message.getNonce() > 0) {
                 MessageStatusMessage status = new MessageStatusMessage();
@@ -473,7 +473,6 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             _log.debug("Took too long to distribute the message (which holds up the ACK): " + timeToDistribute);
         }
     }
-
 
     /**
      * The client asked for a message, so we send it to them.
@@ -704,9 +703,10 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     }
 
     /**
-     * override for testing
-     * @since 0.9.11
-     */
+ * override for testing
+ *
+ * @since 0.9.11
+ */
     protected void handleHostLookup(HostLookupMessage message) {
         SessionId sid = message.getSessionId();
         Hash h;

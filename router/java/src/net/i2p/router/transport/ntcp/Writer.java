@@ -36,10 +36,10 @@ public class Writer {
         _writeAfterLive = new HashSet<>(16);
     }
 
-    /** @since 0.9.70+ */
+    /** Get the writer thread count */
     public static int getThreadCount() { return _threadCount; }
 
-    /** @since 0.9.70+ */
+    /** Set the writer thread count, bounded by MIN_THREADS-MAX_THREADS */
     public static void setThreadCount(int count) { _threadCount = Math.max(MIN_THREADS, Math.min(MAX_THREADS, count)); }
 
     public synchronized void startWriting(int numWriters) {

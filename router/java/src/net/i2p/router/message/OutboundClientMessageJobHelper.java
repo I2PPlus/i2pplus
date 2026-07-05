@@ -76,9 +76,11 @@ class OutboundClientMessageJobHelper {
      *
      * @param wrappedKey non-null with null data,
      *                   output parameter that will be filled with the SessionKey used
+ *
      * @param wrappedTags output parameter that will be filled with the sessionTags used
      * @param bundledReplyLeaseSet if specified, the given LeaseSet will be packaged with the message (allowing
      *                             much faster replies, since their netDb search will return almost instantly)
+ *
      * @param replyTunnel non-null if requireAck is true or bundledReplyLeaseSet is non-null
      * @param requireAck if true, bundle replyToken in an ack clove
      * @return garlic, or null if no tunnels were found (or other errors)
@@ -97,6 +99,7 @@ class OutboundClientMessageJobHelper {
                          that will be filled with the SessionKey used, may be null for ECIES
      * @param wrappedTags for ElGamal, output parameter that will be filled with the sessionTags used,
      *                    may be null for ECIES
+ *
      * @param replyTunnel non-null if requireAck is true or bundledReplyLeaseSet is non-null
      * @param requireAck if true, bundle replyToken in an ack clove
      * @param bundledReplyLeaseSet may be null; if non-null, put it in a clove

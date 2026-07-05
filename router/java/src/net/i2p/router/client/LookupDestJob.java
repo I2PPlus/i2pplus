@@ -224,13 +224,15 @@ class LookupDestJob extends JobImpl {
     }
 
     /**
-     *  Return the request ID or failed hash so the client can correlate replies with requests
-     *  @since 0.8.3
-     */
+ * Return the request ID or failed hash so the client can correlate replies with requests
+ *
+ * @since 0.8.3
+ */
     private void returnFail() {returnFail(HostReplyMessage.RESULT_FAILURE);}
 
     /**
      *  Return the request ID or failed hash so the client can correlate replies with requests
+     *
      *  @param code failure code, greater than zero, only used for HostReplyMessage
      *  @since 0.9.43
      */
