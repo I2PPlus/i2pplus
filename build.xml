@@ -2533,7 +2533,6 @@
   <target name="preplicenses" depends="preplicenses-unlesspkg">
     <copy quiet="true" verbose="false" file="docs/LICENSES.md" tofile="${pkg.temp.dir}/docs/LICENSES.md"/>
     <copy quiet="true" verbose="false" file="docs/LICENSES.md" tofile="${pkg.temp.dir}/licenses/LICENSE.md"/>
-    <copy quiet="true" verbose="false" file="apps/imagegen/identicon/README.md" tofile="${pkg.temp.dir}/licenses/LICENSE-Identicon.txt"/>
   </target>
 
   <target name="preplicenses-unlesspkg" depends="settomcatprop" unless="${with-libtomcat-java}">

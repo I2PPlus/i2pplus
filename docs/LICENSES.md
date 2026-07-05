@@ -117,6 +117,10 @@ The following third-party JavaScript libraries are bundled:
 - **progressx** — MIT License. https://github.com/ryadpasha/progressx
 - **snowflakes** — MIT License. https://github.com/hcodes/snowflakes/
 
+## IDENTICON (apps/imagegen/identicon/)
+
+MIT License. Copyright (c) 2007-2014 Don Park, 2014 Paulo Miguel Almeida Rodenas. https://github.com/rocambille/identicon4j
+
 ## CUSTOM JAVASCRIPT
 
 The following custom JavaScript scripts were written by dr|z3d for I2P+. Licensed under AGPL-3.0 or later.
