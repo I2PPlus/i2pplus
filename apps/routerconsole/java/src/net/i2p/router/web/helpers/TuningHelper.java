@@ -243,7 +243,7 @@ public class TuningHelper extends HelperBase {
                 healthLabel = _t("Degraded");
             }
             int pct = (int)(healthScore * 100);
-            buf.append(' ' ).append(_t("Current system health:")).append(" <strong>")
+            buf.append(' ' ).append(_t("Current system health:")).append(" <strong id=health>")
                .append(healthLabel).append(" (").append(pct).append("%)</strong>.");
         } else {
             buf.append(_t("System health data is not yet available."));

@@ -779,7 +779,7 @@ public class TuningFormHandler extends FormHandler {
         }
 
         if (!changes.isEmpty()) {
-            Tuner.AutotuneConfig autotune = new Tuner.AutotuneConfig(_context);
+            Tuner.AutotuneConfig autotune = tuner.getAutotune();
             for (Map.Entry<String, String> entry : changes.entrySet()) {
                 autotune.setProperty(entry.getKey(), entry.getValue());
             }

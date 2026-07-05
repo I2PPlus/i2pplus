@@ -455,6 +455,17 @@ public class Tuner implements SimpleTimer.TimedEvent {
 
     private volatile double _lastHealthScore = Double.NaN;
 
+    /**
+     * Get the shared AutotuneConfig instance.
+     * Form handlers should use this (not new AutotuneConfig()) so writes
+     * go to the same in-memory instance the Tuner reads from.
+     *
+     * @since 0.9.70+
+     */
+    public AutotuneConfig getAutotune() {
+        return _autotune;
+    }
+
     public TunableParam getParam(String name) {
         for (TunableParam p : _params) {
             if (p.getName().equals(name))

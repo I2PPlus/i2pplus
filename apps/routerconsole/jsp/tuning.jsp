@@ -56,7 +56,7 @@
 <script src=/js/refreshElements.js type=module></script>
 <script nonce=<%=cspNonce%> type=module>
   import {refreshElements} from "/js/refreshElements.js";
-  refreshElements("#tuning", "/tuning", 5000);
+  refreshElements(["td.value", "td.history", "#health"], "/tuning", 5000);
 </script>
 </body>
 </html>
