@@ -53,6 +53,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("crypto.mlkem.precalcMin", "ML-KEM Precalculate Minimum");
         DISPLAY_NAMES.put("ntcp.sendFinisher.maxThreads", "NTCP Maximum Send Threads");
         DISPLAY_NAMES.put("ntcp.sendFinisher.queueCapacity", "NTCP Send Queue Capacity");
+        DISPLAY_NAMES.put("udp.messageReceiver.threads", "UDP Message Receiver Threads");
         DISPLAY_NAMES.put("udp.packetHandler.maxThreads", "UDP Maximum Handler Threads");
         DISPLAY_NAMES.put("router.peerOutboundQueueSize", "Peer Outbound Queue Size");
         DISPLAY_NAMES.put("router.transitThrottleFactor", "Transit Throttle Factor");
