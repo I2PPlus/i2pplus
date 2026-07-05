@@ -22,21 +22,23 @@ import net.i2p.i2ptunnel.ui.GeneralHelper;
 import net.i2p.util.Addresses;
 
 /**
- * Ugly little accessor for the edit page
+ * Web interface bean for editing and configuring I2P tunnel settings.
  *
- * Warning - This class is not part of the i2ptunnel API,
+ * <p>Warning - This class is not part of the i2ptunnel API,
  * it has been moved from the jar to the war.
- * Usage by classes outside of i2ptunnel.war is deprecated.
+ * Usage by classes outside of i2ptunnel.war is deprecated.</p>
  */
-/** Web interface bean for editing and configuring I2P tunnel settings */
 public class EditBean extends IndexBean {
     /** Default constructor @since 0.8.3 */
     public EditBean() { super(); }
 
     /**
-     *  Is it a client or server in the UI and I2P side?
-     *  Note that a streamr client is a UI and I2P client but a server on the localhost side.
-     *  Note that a streamr server is a UI and I2P server but a client on the localhost side.
+     * Is it a client or server in the UI and I2P side?
+     * Note that a streamr client is a UI and I2P client but a server on the localhost side.
+     * Note that a streamr server is a UI and I2P server but a client on the localhost side.
+     *
+     * @param tunnel the tunnel index
+     * @return true if the tunnel is a client type
      */
     public static boolean staticIsClient(int tunnel) {
         TunnelControllerGroup group = TunnelControllerGroup.getInstance();
@@ -164,25 +166,45 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  @param tunnel the tunnel index
-     *  @param defaultLength the default depth if not configured
-     *  @return the tunnel depth (number of hops) for inbound tunnels, or -1 for default
+     * Gets the tunnel depth (number of hops) for inbound tunnels.
+     *
+     * @param tunnel the tunnel index
+     * @param defaultLength the default depth if not configured
+     * @return the tunnel depth, or -1 for default
      */
     public int getTunnelDepth(int tunnel, int defaultLength) {
         return _helper.getTunnelDepth(tunnel, defaultLength);
     }
 
-    /** in or both in/out */
+    /**
+     * Gets the tunnel quantity for inbound or both in/out.
+     *
+     * @param tunnel the tunnel index
+     * @param defaultQuantity the default quantity if not configured
+     * @return the tunnel quantity
+     */
     public int getTunnelQuantity(int tunnel, int defaultQuantity) {
         return _helper.getTunnelQuantity(tunnel, defaultQuantity);
     }
 
-    /** in or both in/out */
+    /**
+     * Gets the backup tunnel quantity for inbound or both in/out.
+     *
+     * @param tunnel the tunnel index
+     * @param defaultBackupQuantity the default backup quantity if not configured
+     * @return the backup tunnel quantity
+     */
     public int getTunnelBackupQuantity(int tunnel, int defaultBackupQuantity) {
         return _helper.getTunnelBackupQuantity(tunnel, defaultBackupQuantity);
     }
 
-    /** in or both in/out */
+    /**
+     * Gets the tunnel variance for inbound or both in/out.
+     *
+     * @param tunnel the tunnel index
+     * @param defaultVariance the default variance if not configured
+     * @return the tunnel variance
+     */
     public int getTunnelVariance(int tunnel, int defaultVariance) {
         return _helper.getTunnelVariance(tunnel, defaultVariance);
     }

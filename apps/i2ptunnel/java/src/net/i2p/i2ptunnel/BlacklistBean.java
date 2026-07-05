@@ -11,7 +11,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 import net.i2p.util.Log;
 
@@ -31,7 +30,9 @@ public class BlacklistBean {
     );
 
     /**
-     * Get blacklist file - look for it in typical I2P locations
+     * Get the blacklist file, searching common I2P directory locations.
+     *
+     * @return the blacklist File object
      */
     private File blacklistFile() {
         // Try common router directory locations
@@ -53,7 +54,7 @@ public class BlacklistBean {
     }
 
     /**
-     * Reload blacklist from file
+     * Reload the blacklist content from file into memory.
      */
     private void reloadBlacklist() {
         File file = blacklistFile();
@@ -87,7 +88,10 @@ public class BlacklistBean {
     }
 
     /**
-     * Check if an address is a valid I2P address
+     * Check if an address is a valid I2P address format.
+     *
+     * @param address the address to validate
+     * @return true if the address matches a known I2P address pattern
      */
     private boolean isValidI2PAddress(String address) {
         if (address == null || address.trim().isEmpty()) {

@@ -11,9 +11,11 @@ import java.util.List;
 public class SSLHelper {
 
     /**
-     *  Adapted from LoadClientAppsJob
-     *  @return param args non-null
-     *  @return non-null
+     * Parses a space-separated argument string, respecting single and double quotes.
+     * Adapted from LoadClientAppsJob.
+     *
+     * @param args the argument string to parse
+     * @return non-null list of parsed arguments
      */
     public static List<String> parseArgs(String args) {
         List<String> argList = new ArrayList<>(4);

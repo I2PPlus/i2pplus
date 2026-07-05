@@ -20,7 +20,10 @@ public class UDPSource implements Source, Runnable {
     public static final int MAX_SIZE = 15360;
 
     /**
-     *  @throws RuntimeException on DatagramSocket IOException
+     * Creates a source listening on the specified port.
+     *
+     * @param port the local UDP port to listen on
+     * @throws RuntimeException if the DatagramSocket cannot be opened
      */
     public UDPSource(int port) {
         // create udp-socket
@@ -34,7 +37,11 @@ public class UDPSource implements Source, Runnable {
         this.thread = new I2PAppThread(this);
     }
 
-    /** use socket from UDPSink */
+    /**
+     * Creates a source using an existing socket (e.g., from UDPSink).
+     *
+     * @param sock the DatagramSocket to receive on
+     */
     public UDPSource(DatagramSocket sock) {
         this.sock = sock;
         port = sock.getLocalPort();
@@ -61,6 +68,9 @@ public class UDPSource implements Source, Runnable {
         this.thread.start();
     }
 
+    /**
+     * Receives UDP datagrams in a loop and forwards them to the configured sink.
+     */
     public void run() {
         // create packet
         byte[] buf = new byte[MAX_SIZE];
@@ -78,7 +88,6 @@ public class UDPSource implements Source, Runnable {
 
                 // transfer to sink
                 this.sink.send(null, port, 0, nbuf);
-                //System.out.print("i");
             } catch(Exception e) {
                 Log log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
                 if (log.shouldWarn())

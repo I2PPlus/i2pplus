@@ -39,11 +39,14 @@ public class Subscriber implements Sink {
     }
 
     /**
-     *  Doesn't really "send" anywhere, just subscribes or unsubscribes the destination
+     * Handles subscription or unsubscription requests. Does not really "send"
+     * anywhere; instead interprets the data byte as a control command.
      *
-     *  @param dest to subscribe or unsubscribe
-     *  @param data must be a single byte, 0 to subscribe, 1 to unsubscribe
-     *  @since 0.9.53 added fromPort and toPort parameters
+     * @param dest the source destination to subscribe or unsubscribe
+     * @param fromPort the source I2CP port (swapped for replies)
+     * @param toPort the destination I2CP port (swapped for replies)
+     * @param data must be a single byte: 0 to subscribe, 1 to unsubscribe
+     * @since 0.9.53 added fromPort and toPort parameters
      */
     public void send(Destination dest, int fromPort, int toPort, byte[] data) {
         if(dest == null || data.length < 1) {
@@ -88,7 +91,11 @@ public class Subscriber implements Sink {
         }
     }
 
-    /** @since 0.9.46 */
+    /**
+     * Timer event that expires stale subscriptions.
+     *
+     * @since 0.9.46
+     */
     private class Expire extends SimpleTimer2.TimedEvent {
 
         public Expire() {

@@ -6,9 +6,11 @@ import net.i2p.client.datagram.I2PDatagramMaker;
 import net.i2p.data.Destination;
 
 /**
- * Producer
+ * I2P sink implementation that sends datagrams to any destination
+ * specified in each {@link #send} call, rather than a fixed destination.
  *
- * This sends to any destination specified in send()
+ * <p>Supports both repliable and raw datagram modes. When not in raw mode,
+ * data is wrapped with {@link I2PDatagramMaker} before sending.</p>
  *
  * @author zzz modded from I2PSink by welterde
  */
@@ -18,10 +20,21 @@ public class I2PSinkAnywhere implements Sink {
     protected final I2PSession sess;
     protected final I2PDatagramMaker maker;
 
+    /**
+     * Creates a repliable (non-raw) sink for the given session.
+     *
+     * @param sess the I2P session to send through
+     */
     public I2PSinkAnywhere(I2PSession sess) {
         this(sess, false);
     }
 
+    /**
+     * Creates a sink for the given session.
+     *
+     * @param sess the I2P session to send through
+     * @param raw true for raw datagrams, false for repliable
+     */
     public I2PSinkAnywhere(I2PSession sess, boolean raw) {
         this.sess = sess;
         this.raw = raw;
@@ -36,19 +49,25 @@ public class I2PSinkAnywhere implements Sink {
     }
 
     /**
-     *  @param to - where it's going
-     *  @throws RuntimeException if session is closed
+     * Sends data to the specified destination using default ports.
+     *
+     * @param to the destination to send to
+     * @param data the data to send
+     * @throws RuntimeException if the session is closed
      */
     public void send(Destination to, byte[] data) {
         send(to, I2PSession.PORT_UNSPECIFIED, I2PSession.PORT_UNSPECIFIED, data);
     }
 
     /**
-     *  @param to - where it's going
-     *  @param fromPort I2CP port 0 - 65535
-     *  @param toPort I2CP port 0 - 65535
-     *  @since 0.9.53
-     *  @throws RuntimeException if session is closed
+     * Sends data to the specified destination using the given ports.
+     *
+     * @param to the destination to send to
+     * @param fromPort I2CP source port, 0-65535
+     * @param toPort I2CP destination port, 0-65535
+     * @param data the data to send
+     * @since 0.9.53
+     * @throws RuntimeException if the session is closed
      */
     public synchronized void send(Destination to, int fromPort, int toPort, byte[] data) {
         // create payload

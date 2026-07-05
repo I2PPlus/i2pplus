@@ -29,7 +29,6 @@ import net.i2p.data.Destination;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.PortMapper;
 
-/** Standard I2P tunnel client for connecting to I2P destinations */
 public class I2PTunnelClient extends I2PTunnelClientBase {
 
     /**

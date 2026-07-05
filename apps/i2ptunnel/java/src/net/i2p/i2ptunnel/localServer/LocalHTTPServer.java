@@ -395,6 +395,14 @@ public abstract class LocalHTTPServer {
         out.flush();
     }
 
+    /**
+     * Write a blinding info redirect page to the output stream.
+     *
+     * @param out the output stream to write to
+     * @param host the blinded host
+     * @param url the URL to redirect to
+     * @throws IOException if an I/O error occurs
+     */
     /** @since 0.9.43 */
     private static void writeB32RedirectPage(OutputStream out, String host, String url) throws IOException {
         PortMapper pm = I2PAppContext.getGlobalContext().portMapper();
@@ -466,8 +474,11 @@ public abstract class LocalHTTPServer {
     }
 
     /**
-     *  Decode %xx encoding
-     *  @since 0.8.7
+     * Decode percent-encoded (%xx) strings.
+     *
+     * @param s the encoded string
+     * @return the decoded string
+     * @since 0.8.7
      */
     public static String decode(String s) {
         if (!s.contains("%"))
@@ -493,17 +504,35 @@ public abstract class LocalHTTPServer {
     /** these strings go in the jar, not the war */
     private static final String BUNDLE_NAME = "net.i2p.i2ptunnel.proxy.messages";
 
-    /** lang in routerconsole.lang property, else current locale */
+    /**
+     * Translate a message key using the proxy message bundle.
+     *
+     * @param key the message key to translate
+     * @return the translated string
+     */
     protected static String _t(String key) {
         return Translate.getString(key, I2PAppContext.getGlobalContext(), BUNDLE_NAME);
     }
 
-    /** {0} */
+    /**
+     * Translate a message key with one parameter.
+     *
+     * @param key the message key to translate
+     * @param o the parameter to substitute for {0}
+     * @return the translated string
+     */
     protected static String _t(String key, Object o) {
         return Translate.getString(key, o, I2PAppContext.getGlobalContext(), BUNDLE_NAME);
     }
 
-    /** {0} and {1} */
+    /**
+     * Translate a message key with two parameters.
+     *
+     * @param key the message key to translate
+     * @param o the parameter to substitute for {0}
+     * @param o2 the parameter to substitute for {1}
+     * @return the translated string
+     */
     protected static String _t(String key, Object o, Object o2) {
         return Translate.getString(key, o, o2, I2PAppContext.getGlobalContext(), BUNDLE_NAME);
     }

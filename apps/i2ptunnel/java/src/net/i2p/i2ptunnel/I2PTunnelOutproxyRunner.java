@@ -111,14 +111,32 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
         return startedOn;
     }
 
+    /**
+     *  Get the input stream from the external socket.
+     *
+     *  @return the socket's input stream
+     *  @throws IOException if an I/O error occurs
+     */
     protected InputStream getSocketIn() throws IOException {
         return s.getInputStream();
     }
 
+    /**
+     *  Get the output stream from the external socket.
+     *
+     *  @return the socket's output stream
+     *  @throws IOException if an I/O error occurs
+     */
     protected OutputStream getSocketOut() throws IOException {
         return s.getOutputStream();
     }
 
+    /**
+     *  Start forwarding data bidirectionally between the external socket
+     *  and the I2P socket. Sends any initial data first, then starts
+     *  two forwarding threads and waits for both to complete.
+     *  Invokes the timeout callback if no data was received.
+     */
     @Override
     public void run() {
         try (Socket autoCloseS = s; Socket autoCloseI2PS = i2ps;

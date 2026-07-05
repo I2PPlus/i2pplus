@@ -133,11 +133,19 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
         return super.close(forced);
     }
 
-    /** @since 0.9.4 */
+    /**
+     *  @since 0.9.4
+     */
     protected String getRealm() {
         return AUTH_REALM;
     }
 
+    /**
+     * Handle an incoming CONNECT proxy connection.
+     * Parses the CONNECT request, resolves the destination, and forwards data.
+     *
+     * @param s the local client socket connection
+     */
     protected void clientConnectionRun(Socket s) {
         InputStream in = null;
         OutputStream out = null;
@@ -368,6 +376,13 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
         }
     }
 
+    /**
+     *  Write an error message to the output stream and close it.
+     *
+     *  @param errMessage the HTML error response to send
+     *  @param out the output stream to write to, may be null
+     *  @throws IOException if an I/O error occurs
+     */
     private static void writeErrorMessage(String errMessage, OutputStream out) throws IOException {
         if (out == null)
             return;

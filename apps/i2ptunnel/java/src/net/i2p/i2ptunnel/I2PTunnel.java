@@ -1468,8 +1468,6 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                 pubdest = new FileOutputStream(args[1]);
             } catch (IOException ioe) {
                 l.log("Error opening output stream");
-                //_log.error(getPrefix() + "Error generating keys to out", ioe);
-                //notifyEvent("genkeysResult", "error");
                 return;
             }
         } else if (args.length != 1) {
@@ -1477,7 +1475,6 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                   "   Creates a new keypair and prints the public key.\n"
                   + "   if pubkeyfile is given, saves the public key there." + "\n"
                   + "   if the privkeyfile already exists, just print/save" + "the pubkey.");
-            //notifyEvent("genkeysResult", "error");
         }
         try {
             File privKeyFile = new File(args[0]);
@@ -1487,11 +1484,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             } else {
                 makeKey(new FileOutputStream(privKeyFile), pubdest, l);
             }
-            //notifyEvent("genkeysResult", "ok");
         } catch (IOException ioe) {
             l.log("Error generating keys - " + ioe.getMessage());
-            //notifyEvent("genkeysResult", "error");
-            //_log.error(getPrefix() + "Error generating keys", ioe);
         } finally {
             if(pubdest != null) try { pubdest.close(); } catch(IOException ioe) { /* ignored */ }
         }
@@ -1512,8 +1506,6 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         ByteArrayOutputStream pubkey = new ByteArrayOutputStream(512);
         makeKey(privkey, pubkey, l);
         l.log("Private key: " + Base64.encode(privkey.toByteArray()));
-        //notifyEvent("privateKey", Base64.encode(privkey.toByteArray()));
-        //notifyEvent("publicDestination", Base64.encode(pubkey.toByteArray()));
     }
 
     /**
@@ -1532,7 +1524,6 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             System.exit(0);
         }
         l.log("There are running tasks. Try 'list' or 'close all'.");
-        //notifyEvent("quitResult", "error");
     }
 
     /**
@@ -1835,14 +1826,12 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /** Helper method to actually close the given task number (optionally forcing closure) */
     private boolean closetask(I2PTunnelTask t, CloseMode mode, Logging l) {
         if (_log.shouldInfo()) {_log.info("Closing task " + t.getId() + " mode: " + mode);}
-        //l.log("Closing task " + t.getId() + (forced ? " forced..." : "..."));
         boolean success;
         if (mode == CloseMode.NORMAL) {success = t.close(false);}
         else if (mode == CloseMode.FORCED) {success = t.close(true);}
         else {success = t.destroy();} // DESTROY
         if (success) {
             if (_log.shouldInfo()) {_log.info("Task " + t.getId() + " closed.");}
-            //l.log("Task " + t.getId() + " closed.");
         }
         return success;
     }

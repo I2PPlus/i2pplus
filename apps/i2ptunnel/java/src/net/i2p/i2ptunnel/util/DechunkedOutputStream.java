@@ -21,6 +21,13 @@ public class DechunkedOutputStream extends LimitOutputStream {
 
     private enum State { LEN, CR, LF, DATA, DATACR, DATALF, TRAILER, DONE }
 
+    /**
+     * Creates a new dechunked output stream.
+     *
+     * @param raw the underlying output stream
+     * @param callback callback invoked when chunking is complete
+     * @param strip true to strip chunk headers/footers, false to pass them through
+     */
     public DechunkedOutputStream(OutputStream raw, DoneCallback callback, boolean strip) {
         super(raw, callback);
         _strip = strip;
@@ -172,39 +179,5 @@ public class DechunkedOutputStream extends LimitOutputStream {
             }
         }
     }
-
-/*
-    public static void main(String[] args) throws Exception {
-        if (args.length != 1) {
-            System.err.println("Usage: DechunkedOutputStream true/false < in > out");
-            System.exit(1);
-        }
-        Test test = new Test();
-        boolean strip = Boolean.parseBoolean(args[0]);
-        test.test(strip);
-    }
-
-    static class Test implements DoneCallback {
-        private boolean run = true;
-
-        public void test(boolean strip) throws Exception {
-            LimitOutputStream cout = new DechunkedOutputStream(System.out, this, strip);
-            final byte[] buf = new byte[4096];
-            try {
-                int read;
-                while (run && (read = System.in.read(buf)) != -1) {
-                    cout.write(buf, 0, read);
-                }
-            } finally {
-                cout.close();
-            }
-        }
-
-        public void streamDone() {
-            System.err.println("Done");
-            run = false;
-        }
-    }
-*/
 
 }

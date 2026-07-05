@@ -1468,35 +1468,4 @@ public class TunnelConfig {
         }
         return rv;
     }
-
-/****
-    private static String[] tests = {
-        "", "foo", "foo=bar",
-        "f=b x", "x f=b",
-        "  aaa=bbb ccc=ddd   ",
-        "aaa=bbb ccc=ddd x",
-        "aaa=bbb ccc=ddd x=",
-        "a=\"w x y z\" b c= d='1 2 3 4'",
-        "klsjdf owi=\"w\tx y\tz\"",
-        "z= aaa= ",
-        "=", " = ", "=foo", " =fpp ",
-        "a=\"\", b='', c='xxx\" d='aaa'",
-        "xx=\"missingquote",
-        "'zxw=123'",
-        "'zxw=123",
-        "'zxw=123' a=b c d e",
-        "x====", "x====x",
-        "aaa=b=cc====dddddd====",
-    };
-
-    public static void main(String[] args) {
-        for (int i = 0; i < tests.length; i++) {
-            Map<String, String> m = parseCustomOptions(tests[i]);
-            System.out.println("\nTest \"" + tests[i] + '"');
-            for (Map.Entry<String, String> e : m.entrySet()) {
-                System.out.println("    \"" + e.getKey() + "\" = \"" + e.getValue() + '"');
-            }
-        }
-    }
-****/
 }

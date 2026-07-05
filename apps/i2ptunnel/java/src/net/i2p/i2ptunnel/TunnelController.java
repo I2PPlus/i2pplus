@@ -300,7 +300,6 @@ public class TunnelController implements Logging {
         }
 
         if (keyFile.exists()) {
-            //log("Not overwriting existing private keys in " + keyFile.getAbsolutePath());
             return true;
         } else {
             File parent = keyFile.getParentFile();

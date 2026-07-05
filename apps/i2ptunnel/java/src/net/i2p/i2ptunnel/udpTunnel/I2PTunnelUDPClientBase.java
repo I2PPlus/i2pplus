@@ -181,12 +181,14 @@ import net.i2p.util.EventDispatcher;
     }
 
     /**
-     *  Sink Methods
+     * Sends data through the I2P sink to the configured destination.
      *
-     * @param to - ignored if configured for a single destination
-     *             (we use the dest specified in the constructor)
+     * @param to the destination to send to, ignored if configured for a single destination
+     * @param fromPort I2CP source port, 0-65535
+     * @param toPort I2CP destination port, 0-65535
+     * @param data the data to send
      * @since 0.9.53 added fromPort and toPort parameters
-     * @throws RuntimeException if session is closed
+     * @throws RuntimeException if the session is closed
      */
     public void send(Destination to, int fromPort, int toPort, byte[] data) {
         _i2pSink.send(to, fromPort, toPort, data);

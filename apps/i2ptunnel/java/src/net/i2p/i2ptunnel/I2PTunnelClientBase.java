@@ -110,7 +110,6 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         this.l = l;
         _ownDest = true; // == ! shared client
         _context = tunnel.getContext();
-        initStats();
         _log = _context.logManager().getLog(getClass());
     }
 
@@ -160,7 +159,6 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         _ownDest = ownDest; // == ! shared client
         _handlerName = handlerName;
         _context = tunnel.getContext();
-        initStats();
         _log = _context.logManager().getLog(getClass());
 
         // Normalize path so we can find it
@@ -180,8 +178,6 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             tunnel.getClientOptions().setProperty("i2p.streaming.answerPings", "false");
         }
     }
-
-    private void initStats() {}
 
     /**
      * Create the manager if it doesn't exist, AND connect it to the router and build tunnels.
@@ -216,8 +212,6 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                     String msg = "Opening tunnels for: " + getTunnel().getClientOptions().getProperty("inbound.nickname") +
                                  " -> Activity detected on listening port";
                     if (_log.shouldInfo()) {_log.info(msg);}
-                    // TODO: ensure we can also display the close on idle event before we show these
-                    //l.log("‣ " + msg);
                     /*
                      * Make sure the old one is closed - if it's shared client,
                      * it will be destroyed in getSocketManager() with the correct locking

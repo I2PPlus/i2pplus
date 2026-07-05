@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * An OutputStream that limits how many bytes are written
+ * An OutputStream that limits how many bytes are written, throwing
+ * {@link EOFException} when the limit is exceeded.
  *
  * @since 0.9.62
  */
@@ -15,7 +16,12 @@ public class ByteLimitOutputStream extends LimitOutputStream {
     private long _count;
 
     /**
-     *  @param limit greater than zero
+     * Creates a new byte-limited output stream.
+     *
+     * @param out the underlying output stream
+     * @param done callback invoked when the limit is reached
+     * @param limit maximum number of bytes allowed, must be greater than zero
+     * @throws IllegalArgumentException if limit is not greater than zero
      */
     public ByteLimitOutputStream(OutputStream out, DoneCallback done, long limit) {
         super(out, done);
@@ -39,39 +45,5 @@ public class ByteLimitOutputStream extends LimitOutputStream {
         if (last)
             setDone();
     }
-
-/*
-    public static void main(String[] args) throws Exception {
-        if (args.length != 1) {
-            System.err.println("Usage: ByteLimitOutputStream length < in > out");
-            System.exit(1);
-        }
-        Test test = new Test();
-        long limit = Long.parseLong(args[0]);
-        test.test(limit);
-    }
-
-    static class Test implements DoneCallback {
-        private boolean run = true;
-
-        public void test(long limit) throws Exception {
-            LimitOutputStream lout = new ByteLimitOutputStream(System.out, this, limit);
-            final byte[] buf = new byte[4096];
-            try {
-                int read;
-                while (run && (read = System.in.read(buf)) != -1) {
-                    lout.write(buf, 0, read);
-                }
-            } finally {
-                lout.close();
-            }
-        }
-
-        public void streamDone() {
-            System.err.println("Done");
-            run = false;
-        }
-    }
-*/
 
 }

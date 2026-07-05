@@ -111,33 +111,33 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
      *  @since 0.9.53
      */
     public void startRunning() {
-        //synchronized (startLock) {
-            try {
-                _session.connect();
-            } catch(I2PSessionException exc) {
-                throw new RuntimeException("failed to connect session", exc);
-            }
-            start();
-        //}
+        try {
+            _session.connect();
+        } catch(I2PSessionException exc) {
+            throw new RuntimeException("failed to connect session", exc);
+        }
+        start();
 
         notifyEvent("openServerResult", "ok");
         open = true;
     }
 
     /**
-     * Set the read idle timeout for newly-created connections (in
-     * milliseconds).  After this time expires without data being reached from
+     * Sets the read idle timeout for newly-created connections (in
+     * milliseconds). After this time expires without data being received from
      * the I2P network, the connection itself will be closed.
+     *
+     * @param ms the timeout in milliseconds, or -1 for no timeout
      */
     public void setReadTimeout(long ms) {
         readTimeout = ms;
     }
 
     /**
-     * Get the read idle timeout for newly-created connections (in
+     * Gets the read idle timeout for newly-created connections (in
      * milliseconds).
      *
-     * @return The read timeout used for connections
+     * @return the read timeout used for connections, or -1 for no timeout
      */
     public long getReadTimeout() {
         return readTimeout;
@@ -188,12 +188,14 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
     }
 
     /**
-     *  Sink Methods
+     * Sends data through the I2P sink.
      *
-     * @param to
+     * @param to the destination to send to
+     * @param fromPort I2CP source port, 0-65535
+     * @param toPort I2CP destination port, 0-65535
+     * @param data the data to send
      * @since 0.9.53 added fromPort and toPort parameters
-     * @throws RuntimeException if session is closed
-     *
+     * @throws RuntimeException if the session is closed
      */
     public void send(Destination to, int fromPort, int toPort, byte[] data) {
         _i2pSink.send(to, fromPort, toPort, data);

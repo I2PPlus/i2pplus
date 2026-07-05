@@ -52,13 +52,14 @@ import net.i2p.util.Log;
 import net.i2p.util.UIMessages;
 
 /**
- * Simple accessor for exposing tunnel info, but also an ugly form handler
+ * Backend bean for I2P tunnel management web interface.
  *
- * Warning - This class is not part of the i2ptunnel API,
+ * <p>Simple accessor for exposing tunnel info, but also an ugly form handler.</p>
+ *
+ * <p>Warning - This class is not part of the i2ptunnel API,
  * it has been moved from the jar to the war.
- * Usage by classes outside of i2ptunnel.war is deprecated.
+ * Usage by classes outside of i2ptunnel.war is deprecated.</p>
  */
-/** Backend bean for I2P tunnel management web interface */
 public class IndexBean {
     protected final I2PAppContext _context;
     protected final Log _log;

@@ -22,6 +22,14 @@ public class IrcOutboundFilter implements Runnable {
     private final Log _log;
     private final DCCHelper _dccHelper;
 
+    /**
+     * Create an outbound filter without DCC support.
+     *
+     * @param lcl the local socket
+     * @param rem the remote I2P socket
+     * @param pong buffer for expected PONG responses
+     * @param log the logger
+     */
     public IrcOutboundFilter(Socket lcl, I2PSocket rem, StringBuffer pong, Log log) {
         this(lcl, rem, pong, log, null);
     }
@@ -38,8 +46,11 @@ public class IrcOutboundFilter implements Runnable {
         _dccHelper = helper;
     }
 
+    /**
+     * Run the outbound filter loop. Reads lines from the local socket,
+     * applies outbound filtering, and writes allowed messages to the remote I2P socket.
+     */
     public void run() {
-        // Todo: Don't use BufferedReader - IRC spec limits line length to 512 but...
         BufferedReader in;
         OutputStream output;
         try {

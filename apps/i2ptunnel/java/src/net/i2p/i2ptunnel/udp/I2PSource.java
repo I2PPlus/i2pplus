@@ -28,27 +28,32 @@ public class I2PSource implements Source {
     public enum Protocol { REPLIABLE, RAW, BOTH }
 
     /**
-     *  Handles both REPLIABLE and RAW on any port
+     * Creates a source handling both repliable and raw datagrams on all ports.
+     *
+     * @param sess the I2P session to listen on
      */
     public I2PSource(I2PSession sess) {
         this(sess, Protocol.BOTH);
     }
 
     /**
-     *  Listen on all I2CP ports.
-     *  No support for arbitrary protocol numbers.
+     * Creates a source listening on all I2CP ports for the specified protocol.
      *
-     *  @param protocol REPLIABLE, RAW, or BOTH
-     *  @since 0.9.53
+     * @param sess the I2P session to listen on
+     * @param protocol REPLIABLE, RAW, or BOTH
+     * @since 0.9.53
      */
     public I2PSource(I2PSession sess, Protocol protocol) {
         this(sess, protocol, I2PSession.PORT_ANY);
     }
 
     /**
-     *  @param port I2CP port or I2PSession.PORT_ANY
-     *  @param protocol REPLIABLE, RAW, or BOTH
-     *  @since 0.9.53
+     * Creates a source listening on the specified port for the specified protocol.
+     *
+     * @param sess the I2P session to listen on
+     * @param protocol REPLIABLE, RAW, or BOTH
+     * @param port I2CP port, or {@link I2PSession#PORT_ANY} for all ports
+     * @since 0.9.53
      */
     public I2PSource(I2PSession sess, Protocol protocol, int port) {
         this.sess = sess;
@@ -59,16 +64,10 @@ public class I2PSource implements Source {
     }
 
     /**
-     *  Sets the sink for received I2P datagrams.
+     * Sets the sink for received I2P datagrams.
      *
-     *  @param sink the sink to receive datagrams
-     *  @since 0.9.53
-     */
-    /**
-     *  Sets the sink for received I2P datagrams.
-     *
-     *  @param sink the sink to receive datagrams
-     *  @since 0.9.53
+     * @param sink the sink to receive datagrams
+     * @since 0.9.53
      */
     @Override
     public void setSink(Sink sink) {
@@ -76,14 +75,9 @@ public class I2PSource implements Source {
     }
 
     /**
-     *  Starts the source to begin receiving datagrams.
+     * Starts the source to begin receiving datagrams.
      *
-     *  @since 0.9.53
-     */
-    /**
-     *  Starts the source to begin receiving datagrams.
-     *
-     *  @since 0.9.53
+     * @since 0.9.53
      */
     @Override
     public void start() {
@@ -95,6 +89,9 @@ public class I2PSource implements Source {
             sess.addMuxedSessionListener(l, I2PSession.PROTO_DATAGRAM_RAW, port);
     }
 
+    /**
+     * Listener for incoming I2P datagrams, dispatching to the configured sink.
+     */
     protected class Listener implements I2PSessionMuxedListener {
 
         public void messageAvailable(I2PSession sess, int id, long size) {
@@ -121,7 +118,6 @@ public class I2PSource implements Source {
                     if (log.shouldWarn())
                         log.warn("dropping message with unknown protocol " + proto);
                 }
-                //System.out.print("r");
             } catch(Exception e) {
                 if (log.shouldWarn())
                     log.warn("error receiving datagram", e);

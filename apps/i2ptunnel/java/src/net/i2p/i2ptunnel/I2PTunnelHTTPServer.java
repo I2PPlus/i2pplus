@@ -51,10 +51,14 @@ import net.i2p.util.Log;
  * replacing the Host header with configured value. Compresses HTTP message
  * body and sets Content-Encoding: x-i2p-gzip when browser requests
  * Accept-Encoding: x-i2p-gzip.
+ * <p>
+ * Features include POST/PUT rate limiting, referer and user-agent rejection,
+ * inproxy detection, HTTP blocklist support, keepalive management,
+ * and response header security filtering.
  */
 public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
-    /** all of these in SECONDS */
+    /* all of these in SECONDS */
     public static final int DEFAULT_POST_BAN_TIME = 15*60;
     public static final int DEFAULT_POST_MAX = 16;
     public static final int DEFAULT_POST_TOTAL_BAN_TIME = 10*60;
@@ -89,11 +93,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final String SEC_GPC_HEADER = "Sec-GPC";
     private static final String X_REAL_IP_HEADER = "X-Real-Ip";
 
-    /** MUST ALL BE LOWER CASE */
+    /* MUST ALL BE LOWER CASE */
     private static final Set<String> CLIENT_SKIPHEADERS = new HashSet<>();
     private static final Set<String> SERVER_SKIPHEADERS = new HashSet<>();
 
-    /** server response headers to remove */
+    /* server response headers to remove */
     private static final String AGE_HEADER = "age"; // possible anonymity implications, informational
     private static final String ALT_SVC_HEADER = "alt-svc"; // superfluous
     private static final String DATE_HEADER = "date";
@@ -158,15 +162,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         SERVER_SKIPHEADERS.add(X_STYX_REQ_ID_HEADER);
     }
 
-    /** timeout for first request line */
+    /* timeout for first request line */
     private static final long HEADER_TIMEOUT = 45*1000;
-    /** timeout for the rest of the request headers */
+    /* timeout for the rest of the request headers */
     private static final long HEADER_FINISH_TIMEOUT = HEADER_TIMEOUT;
     private static final long START_INTERVAL = (60 * 1000) * 3;
     private static final int MAX_LINE_LENGTH = 8*1024;
-    /** ridiculously long, just to prevent OOM DOS @since 0.7.13 */
+    /** ridiculously long, just to prevent OOM DOS
+     *  @since 0.7.13 */
     private static final int MAX_HEADERS = 60;
-    /** Includes request, just to prevent OOM DOS @since 0.9.20 */
+    /** Includes request, just to prevent OOM DOS
+     *  @since 0.9.20 */
     private static final int MAX_TOTAL_HEADER_SIZE = 32*1024;
     // Does not apply to header reads.
     // We set it to forever so that it won't timeout when sending a large response.
@@ -274,7 +280,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "</body>\n" +
          "</html>";
 
-    /** @since 0.9.33 made protected for I2PTunnelHTTPClientBase, was private */
+    /**
+     *  HTTP 408 Request Timeout error response.
+     *  Includes a meta refresh to retry after 5 seconds.
+     *
+     *  @since 0.9.33 made protected for I2PTunnelHTTPClientBase, was private
+     */
     protected final static String ERR_REQUEST_TIMEOUT =
          "HTTP/1.1 408 Request timeout\r\n" +
          "Content-Type: text/html; charset=utf-8\r\n" +
@@ -349,6 +360,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         setupI2PTunnelHTTPServer(spoofHost);
     }
 
+    /**
+     *  Common initialization for all constructors.
+     *  Sets the spoofed host, creates stats, and initializes the blocklist manager.
+     *
+     *  @param spoofHost the hostname to spoof in the Host header, or null for no spoofing
+     */
     private void setupI2PTunnelHTTPServer(String spoofHost) {
         _spoofHost = (spoofHost != null && spoofHost.trim().length() > 0) ? spoofHost.trim() : null;
         getTunnel().getContext().statManager().createRateStat("i2ptunnel.httpserver.blockingHandleTime",
@@ -366,7 +383,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         setupPostThrottle();
     }
 
-    /** @since 0.9.9 */
+    /**
+     *  Initialize or update the POST/PUT throttler from tunnel options.
+     *  Creates a new ConnThrottler if limits are configured, or updates existing.
+     *
+     *  @since 0.9.9
+     */
     private void setupPostThrottle() {
         int pp = getIntOption(OPT_POST_MAX, 0);
         int pt = getIntOption(OPT_POST_TOTAL_MAX, 0);
@@ -384,7 +406,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
-    /** @since 0.9.9 */
+    /**
+     *  Get an integer option from the tunnel client options.
+     *
+     *  @param opt the option key
+     *  @param dflt the default value if not set or invalid
+     *  @return the option value, or dflt
+     *  @since 0.9.9
+     */
     private int getIntOption(String opt, int dflt) {
         Properties opts = getTunnel().getClientOptions();
         String o = opts.getProperty(opt);
@@ -395,31 +424,57 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         return dflt;
     }
 
-    /** @since 0.9.61+ */
+    /**
+     *  Check if the Allow response header should be added.
+     *
+     *  @return true if the option is enabled
+     *  @since 0.9.61+
+     */
     private boolean shouldAddResponseHeaderAllow() {
         Properties opts = getTunnel().getClientOptions();
         return Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_ALLOW));
     }
 
-    /** @since 0.9.61+ */
+    /**
+     *  Check if the Cache-Control response header should be added.
+     *
+     *  @return true if the option is enabled
+     *  @since 0.9.61+
+     */
     private boolean shouldAddResponseHeaderCacheControl() {
         Properties opts = getTunnel().getClientOptions();
         return Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_CACHE_CONTROL));
     }
 
-    /** @since 0.9.61+ */
+    /**
+     *  Check if the Referrer-Policy response header should be added.
+     *
+     *  @return true if the option is enabled
+     *  @since 0.9.61+
+     */
     private boolean shouldAddResponseHeaderReferrerPolicy() {
         Properties opts = getTunnel().getClientOptions();
         return Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_REFERRER_POLICY));
     }
 
-    /** @since 0.9.61+ */
+    /**
+     *  Check if the X-Content-Type-Options: nosniff response header should be added.
+     *
+     *  @return true if the option is enabled
+     *  @since 0.9.61+
+     */
     private boolean shouldAddResponseHeaderNoSniff() {
         Properties opts = getTunnel().getClientOptions();
         return Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_NOSNIFF));
     }
 
-    /** @since 0.9.9 */
+    /**
+     *  Close the tunnel and stop the POST throttler.
+     *
+     *  @param forced true to force close
+     *  @return true if closed successfully
+     *  @since 0.9.9
+     */
     @Override
     public boolean close(boolean forced) {
         synchronized(this) {
@@ -428,7 +483,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         return super.close(forced);
     }
 
-    /** @since 0.9.9 */
+    /**
+     *  Called when tunnel options are updated.
+     *  Re-initializes the POST throttler and updates the spoofed host.
+     *
+     *  @param tunnel the tunnel whose options were updated
+     *  @since 0.9.9
+     */
     @Override
     public void optionsUpdated(I2PTunnel tunnel) {
         if (getTunnel() != tunnel) {return;}
@@ -441,8 +502,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     * Called by the thread pool of I2PSocket handlers
+     *  Called by the thread pool of I2PSocket handlers.
+     *  Handles a single client connection through the HTTP proxy lifecycle:
+     *  read headers, validate, apply spoofing, compress, and forward.
      *
+     *  @param socket the incoming I2P socket from the client
      */
     @Override
     protected void blockingHandle(I2PSocket socket) {
@@ -1032,7 +1096,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Send the message, unless port 443, then just reset
+     *  Send an error response to the client. For port 443 (SSL),
+     *  resets the socket instead since we can't send plaintext error messages.
+     *
+     *  @param socket the client socket
+     *  @param resp the HTTP error response string
+     *  @throws IOException if writing the response fails
      *  @since 0.9.62
      */
     private static void sendError(I2PSocket socket, String resp) throws IOException {
@@ -1263,7 +1332,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
-    /** @since 0.9.63+ */
+    /**
+     *  Extract the Host header value from formatted headers string.
+     *
+     *  @param headers the formatted headers string
+     *  @return the Host header value, or null if not found
+     *  @since 0.9.63+
+     */
     private static synchronized String getHostFromHeaders(String headers) {
         return HttpHeaderFormatter.getHostFromHeaders(headers);
     }
@@ -1277,7 +1352,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         private IOException _failure;
 
         /**
-         *  Caller MUST close streams
+         *  Create a Sender to copy data from input to output streams.
+         *  Caller MUST close streams after Sender completes.
+         *
+         *  @param out the output stream to write to
+         *  @param in the input stream to read from
+         *  @param name descriptive name for logging
+         *  @param log the logging instance
          */
         public Sender(OutputStream out, InputStream in, String name, Log log) {
             _out = out;
@@ -1286,6 +1367,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             _log = log;
         }
 
+        /**
+         *  Copy data from the input stream to the output stream.
+         *  Logs any IOException that occurs during the copy.
+         */
         public void run() {
             if (_log.shouldDebug()) {_log.debug("[HTTPServer] Begin sending " + _name);}
             try {
@@ -1307,6 +1392,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         /**
+         *  Get any IOException that occurred during the copy.
+         *
+         *  @return the failure exception, or null if successful
          *  @since 0.9.33
          */
         public synchronized IOException getFailure() {
@@ -1315,22 +1403,30 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  This plus a typ. HTTP response header will fit into a 1730-byte streaming message.
+     *  Minimum response size in bytes before gzip compression is applied.
+     *  This plus a typical HTTP response header will fit into a 1730-byte
+     *  streaming message.
      */
     private static final int MIN_TO_COMPRESS = 1024;
 
     private static class CompressedResponseOutputStream extends HTTPResponseOutputStream {
         private InternalGZIPOutputStream _gzipOut;
 
+        /**
+         *  Create a compressed response output stream.
+         *
+         *  @param o the underlying output stream
+         *  @param keepalive if true, don't close the stream on finish
+         */
         public CompressedResponseOutputStream(OutputStream o, boolean keepalive) {
             super(o, false, keepalive, false, null);
         }
 
         /**
+         *  Finish gzipping but don't close the output stream if keepalive is true.
          *  Overridden to peek at response code. Always returns line.
-         *  Finish gzipping but don't close the output stream,
-         *  if keepalive is true.
          *
+         *  @throws IOException if finishing the gzip stream fails
          *  @since 0.9.62
          */
         public void finish() throws IOException {
@@ -1350,10 +1446,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                           "application/zip"));
 
         /**
-         *  Don't compress small responses or images.
-         *  Don't compress things that are already compressed.
-         *  Compression is inline, and decompression happens on the client side,
-         *  but it's still CPU.
+         *  Determine if the response should be gzip-compressed.
+         *  Skips small responses, images, audio, video, and already-compressed formats.
+         *  Compression is inline on the server side, decompression on the client side,
+         *  so we avoid re-compressing formats that are already compressed.
+         *
+         *  @return true if the response should be compressed
          */
         @Override
         protected boolean shouldCompress() {
@@ -1366,6 +1464,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                      !COMPRESSED_TYPES.contains(_contentType)));
         }
 
+        /**
+         *  Write the Content-Encoding header if compression is enabled.
+         *
+         *  @throws IOException if writing the header fails
+         */
         @Override
         protected void finishHeaders() throws IOException {
             // TODO if browser supports gzip, send as gzip
@@ -1374,6 +1477,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             super.finishHeaders();
         }
 
+        /**
+         *  Wrap the output stream with gzip compression if compression is enabled.
+         *
+         *  @throws IOException if creating the gzip stream fails
+         */
         @Override
         protected void beginProcessing() throws IOException {
             if (shouldCompress()) {
@@ -1382,12 +1490,22 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             }
         }
 
+        /**
+         *  Get the total number of bytes read before compression.
+         *
+         *  @return total bytes read, or 0 if compression is not active
+         */
         public long getTotalRead() {
             InternalGZIPOutputStream gzipOut = _gzipOut;
             if (gzipOut != null) {return gzipOut.getTotalRead();}
             else {return 0;}
         }
 
+        /**
+         *  Get the total number of bytes written after compression.
+         *
+         *  @return total compressed bytes written, or 0 if compression is not active
+         */
         public long getTotalCompressed() {
             InternalGZIPOutputStream gzipOut = _gzipOut;
             if (gzipOut != null) {return gzipOut.getTotalCompressed();}
@@ -1395,7 +1513,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
-    /** just a wrapper to provide stats for debugging */
+    /* just a wrapper to provide stats for debugging */
     private static class InternalGZIPOutputStream extends GZIPOutputStream {
         public InternalGZIPOutputStream(OutputStream target) throws IOException {super(target);}
         public long getTotalRead() {
@@ -1411,6 +1529,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
+     *  Format headers as a string for transmission to the server.
+     *
+     *  @param headers the header multimap
+     *  @param command the request line (e.g. "GET / HTTP/1.1")
      *  @return the command followed by the header lines
      */
     protected static String formatHeaders(Map<String, List<String>> headers, StringBuilder command) {
@@ -1418,6 +1540,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
+     *  Format headers as a compact string for logging.
+     *
+     *  @param headers the header multimap
+     *  @param command the request line (e.g. "GET / HTTP/1.1")
      *  @return the command followed by the header lines (compact version for logging)
      *
      *  @since 0.9.63+
@@ -1427,7 +1553,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     * Add an entry to the multimap.
+     * Add an entry to the multimap. If the key already exists, appends
+     * the value to the existing list.
+     *
+     * @param headers the header multimap to modify
+     * @param key the header name
+     * @param value the header value to add
      */
     static void addEntry(Map<String, List<String>> headers, String key, String value) {
         List<String> entry = headers.get(key);
@@ -1437,6 +1568,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /**
      * Remove the other matching entries and set this entry as the only one.
+     *
+     * @param headers the header multimap to modify
+     * @param key the header name
+     * @param value the header value to set (replaces all existing values for this key)
      */
     static void setEntry(Map<String, List<String>> headers, String key, String value) {
       List<String> entry = headers.get(key);
@@ -1446,8 +1581,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     * Get the first matching entry in the multimap
-     * @return the first matching entry or null
+     * Get the first matching entry in the multimap.
+     *
+     * @param headers the header multimap to search
+     * @param key the header name to look up
+     * @return the first matching entry or null if not present
      */
     private static String getEntryOrNull(Map<String, List<String>> headers, String key) {
       List<String> entries = headers.get(key);
@@ -1480,6 +1618,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
+     *  Read headers from the input stream, using an array of skip headers.
+     *
      *  @since public since 0.9.57 for SOCKS
       */
     public static Map<String, List<String>> readHeaders(I2PSocket socket, InputStream in, StringBuilder command,
@@ -1609,6 +1749,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
+    /**
+     *  Check the request command against the HTTP blocklist.
+     *  If matched, logs the blocked destination, closes the socket,
+     *  and throws BadRequestException.
+     *
+     *  @param socket the incoming I2P socket to close if blocked
+     *  @param command the request command string to check
+     *  @throws BadRequestException if the request matches a blocklist entry
+     *  @throws IOException if closing the socket fails
+     */
     private void processBlocklist(I2PSocket socket, StringBuilder command) throws BadRequestException, IOException {
         if (_blocklistManager == null) {return;}
         if (_blocklistManager.shouldBlockRequest(command)) {
@@ -1622,6 +1772,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
+     *  Thrown when a header line exceeds MAX_LINE_LENGTH,
+     *  when there are too many headers, or when total header size exceeds MAX_TOTAL_HEADER_SIZE.
+     *
      *  @since 0.9.19
      */
     private static class LineTooLongException extends IOException {
@@ -1629,6 +1782,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
+     *  Thrown when the request line exceeds MAX_LINE_LENGTH.
+     *
      *  @since 0.9.20
      */
     private static class RequestTooLongException extends IOException {
@@ -1636,6 +1791,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
+     *  Thrown when HTTP headers are malformed (missing colon, invalid encoding, etc.).
+     *
      *  @since 0.9.20
      */
     private static class BadRequestException extends IOException {

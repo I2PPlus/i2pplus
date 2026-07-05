@@ -387,7 +387,6 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             i2pout = i2ps.getOutputStream();
             String direction = (toI2P != null ? "[To I2P]" : "[From I2P]");
 
-            //new BufferedOutputStream(i2ps.getOutputStream(), MAX_PACKET_SIZE);
             if (initialI2PData != null) {
                 i2pout.write(initialI2PData);
                 /*
@@ -579,6 +578,9 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         if (t1 != null) {t1.join(30*1000);}
     }
 
+    /**
+     *  Remove this runner's I2PSocket from the shared socket list.
+     */
     private void removeRef() {
         if (sockList != null) {
             synchronized (slock) {sockList.remove(i2ps);}
@@ -586,7 +588,9 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     }
 
     /**
-     *  Forward data in one direction
+     *  Forward data in one direction between two streams.
+     *  Reads from the input stream and writes to the output stream
+     *  until the stream is closed or an error occurs.
      */
     private class StreamForwarder extends I2PAppThread {
 

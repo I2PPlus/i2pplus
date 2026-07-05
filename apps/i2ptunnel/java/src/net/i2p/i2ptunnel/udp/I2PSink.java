@@ -6,9 +6,11 @@ import net.i2p.client.datagram.I2PDatagramMaker;
 import net.i2p.data.Destination;
 
 /**
- * Producer
+ * I2P sink implementation that sends datagrams to a fixed destination
+ * specified in the constructor.
  *
- * This sends to a fixed destination specified in the constructor
+ * <p>Supports both repliable and raw datagram modes. When not in raw mode,
+ * data is wrapped with {@link I2PDatagramMaker} before sending.</p>
  *
  * @author welterde
  */
@@ -24,23 +26,34 @@ public class I2PSink implements Sink {
     protected final int toPort;
 
     /**
-     *  repliable (not raw)
+     * Creates a repliable (non-raw) sink for the given session and destination.
+     *
+     * @param sess the I2P session to send through
+     * @param dest the fixed destination to send to
      */
     public I2PSink(I2PSession sess, Destination dest) {
         this(sess, dest, false);
     }
 
     /**
-     *  @param raw false for repliable
+     * Creates a sink for the given session and destination.
+     *
+     * @param sess the I2P session to send through
+     * @param dest the fixed destination to send to
+     * @param raw true for raw datagrams, false for repliable
      */
     public I2PSink(I2PSession sess, Destination dest, boolean raw) {
         this(sess, dest, raw, I2PSession.PORT_UNSPECIFIED);
     }
 
     /**
-     *  @param raw false for repliable
-     *  @param toPort I2CP destination port, 0-65535
-     *  @since 0.9.53
+     * Creates a sink for the given session, destination, and port.
+     *
+     * @param sess the I2P session to send through
+     * @param dest the fixed destination to send to
+     * @param raw true for raw datagrams, false for repliable
+     * @param toPort I2CP destination port, 0-65535
+     * @since 0.9.53
      */
     public I2PSink(I2PSession sess, Destination dest, boolean raw, int toPort) {
         this.sess = sess;
@@ -58,15 +71,17 @@ public class I2PSink implements Sink {
     }
 
     /**
-     *  @param src ignored
-     *  @param fromPort I2CP port
-     *  @param ign_toPort ignored
-     *  @since 0.9.53 added fromPort and toPort parameters, breaking change, sorry
-     *  @throws RuntimeException if session is closed
+     * Sends data to the fixed destination configured in the constructor.
+     *
+     * @param src ignored
+     * @param fromPort I2CP source port, 0-65535
+     * @param ign_toPort ignored
+     * @param data the data to send
+     * @since 0.9.53 added fromPort and toPort parameters, breaking change, sorry
+     * @throws RuntimeException if the session is closed
      */
     @Override
     public synchronized void send(Destination src, int fromPort, int ign_toPort, byte[] data) {
-        //System.out.print("w");
         // create payload
         byte[] payload;
         if (!this.raw) {
