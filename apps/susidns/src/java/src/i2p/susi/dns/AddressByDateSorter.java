@@ -8,12 +8,12 @@ package i2p.susi.dns;
 import java.io.Serializable;
 import java.util.Comparator;
 
-/**
- *  Newest first, then alphabetical
- *  @since 0.9.66
+/*
+ * Newest first, then alphabetical
  */
 /**
  * Comparator for sorting AddressBean by date (newest first, then alphabetical).
+ *
  * @since 0.9.66
  */
 public class AddressByDateSorter implements Comparator<AddressBean>, Serializable {
@@ -23,6 +23,13 @@ public class AddressByDateSorter implements Comparator<AddressBean>, Serializabl
     public AddressByDateSorter() {
     }
 
+    /**
+     * Compare two AddressBeans by added date, newest first, then alphabetically by display name.
+     *
+     * @param a the first AddressBean
+     * @param b the second AddressBean
+     * @return negative if a is newer, positive if older, 0 if equal
+     */
     public int compare(AddressBean a, AddressBean b) {
         String ad = a.getProp("a");
         String bd = b.getProp("a");

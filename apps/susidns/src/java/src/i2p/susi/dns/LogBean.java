@@ -27,6 +27,8 @@ import net.i2p.data.DataHelper;
 
 /**
  * Bean for managing and displaying subscription log entries and statistics.
+ *
+ * @since 0.9.35
  */
 public class LogBean extends BaseBean
 {
@@ -49,10 +51,16 @@ public class LogBean extends BaseBean
      */
     private File logFile() {return new File(addressbookDir(), LOG_FILE);}
 
+    /**
+     * Reload the log file and parse entries into HTML.
+     */
     private void reloadLog() {
         synchronized(LogBean.class) {locked_reloadLog();}
     }
 
+    /**
+     * Reload the log file (synchronized wrapper).
+     */
     private void locked_reloadLog() {
         File log = logFile();
         int maxLines = 600;
@@ -85,7 +93,7 @@ public class LogBean extends BaseBean
                     }
                 }
                 logged = buf.toString();
-            } catch (IOException e) {e.printStackTrace();} // TODO Auto-generated catch block
+            } catch (IOException e) {warn(e);}
             finally {
                 if (br != null) {
                     try {br.close();}
@@ -95,6 +103,11 @@ public class LogBean extends BaseBean
         } else {logged = LOG_FILE;}
     }
 
+    /**
+     * Get status messages for the UI.
+     *
+     * @return HTML formatted status message
+     */
     public String getMessages() {
         String message = "";
         if (action != null) {
@@ -132,6 +145,11 @@ public class LogBean extends BaseBean
         return countTodayEntries();
     }
 
+    /**
+     * Count the number of log entries from today.
+     *
+     * @return the number of entries logged today
+     */
     private int countTodayEntries() {
         File log = logFile();
         int maxLines = 600;
@@ -152,7 +170,7 @@ public class LogBean extends BaseBean
                         }
                     }
                 }
-            } catch (IOException e) {e.printStackTrace();} // TODO Auto-generated catch block
+            } catch (IOException e) {warn(e);}
             finally {
                 if (br != null) {
                     try {br.close();}
@@ -164,9 +182,11 @@ public class LogBean extends BaseBean
     }
 
     /**
-     * Format date string to human-readable format.
-     * Handles both ISO format (2026-04-23T00:37:54.808039834Z) and
-     * old format (Wed Apr 22 19:33:27 UTC 2026).
+     * Format a date string to a human-readable format.
+     * Handles both ISO format and old format.
+     *
+     * @param dateStr the date string to format
+     * @return the formatted date string
      */
     private String formatDate(String dateStr) {
         try {
@@ -187,6 +207,12 @@ public class LogBean extends BaseBean
         }
     }
 
+    /**
+     * Check if a date string represents today.
+     *
+     * @param dateStr the date string to check
+     * @return true if the date is today
+     */
     private boolean isToday(String dateStr) {
         try {
             DateTimeFormatter isoFormatter = DateTimeFormatter.ISO_INSTANT;

@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Properties;
-import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.OrderedProperties;
 
@@ -46,6 +45,9 @@ public class ConfigBean extends BaseBean implements Serializable {
         return config;
     }
 
+    /**
+     * Reload the configuration from file.
+     */
     @Override
     protected void reload() {
         super.reload();
@@ -57,6 +59,9 @@ public class ConfigBean extends BaseBean implements Serializable {
         saved = true;
     }
 
+    /**
+     * Save the configuration to file.
+     */
     private void save() {
         try {
             // use loadProps to trim, use storeProps to sort and get line endings right
@@ -64,7 +69,7 @@ public class ConfigBean extends BaseBean implements Serializable {
             DataHelper.loadProps(props, new ByteArrayInputStream(config.getBytes("UTF-8")));
             synchronized (BaseBean.class) {DataHelper.storeProps(props, configFile());}
             saved = true;
-        } catch (IOException e) {e.printStackTrace();} // TODO Auto-generated catch block
+        } catch (IOException e) {warn(e);}
     }
 
     /**

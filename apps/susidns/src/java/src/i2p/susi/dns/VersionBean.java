@@ -16,6 +16,12 @@ public class VersionBean {
     private static String url = "http://susi.i2p/";
 
     /**
+     * Create a new VersionBean.
+     */
+    public VersionBean() {
+    }
+
+    /**
      * Get the SusDNS version.
      * @return the version string
      */

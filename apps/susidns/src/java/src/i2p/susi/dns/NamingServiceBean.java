@@ -36,10 +36,10 @@ import net.i2p.servlet.RequestWrapper;
 import net.i2p.util.Log;
 
 /**
- *  Talk to the NamingService API instead of modifying the hosts.txt files directly,
- *  except for the 'published' addressbook.
+ * Talk to the NamingService API instead of modifying the hosts.txt files directly,
+ * except for the 'published' addressbook.
  *
- *  @since 0.8.7
+ * @since 0.8.7
  */
 public class NamingServiceBean extends AddressbookBean {
     private static final Log _log = new Log(NamingServiceBean.class);
@@ -50,8 +50,16 @@ public class NamingServiceBean extends AddressbookBean {
     private int filteredCount;
     private AddressBean[] fullFilteredEntries;
 
+    /**
+     * Check if the published addressbook is in use (direct file access).
+     *
+     * @return true if the book is "published"
+     */
     private boolean isDirect() {return getBook().equals("published");}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected boolean isPrefiltered() {
         if (isDirect()) {return super.isPrefiltered();}
@@ -62,6 +70,9 @@ public class NamingServiceBean extends AddressbookBean {
                getNamingService().getName().equals(DEFAULT_NS);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected int resultSize() {
         if (isDirect()) {return super.resultSize();}
@@ -71,6 +82,8 @@ public class NamingServiceBean extends AddressbookBean {
     /**
      * Gets the total count of filtered results for pagination display.
      * Returns the count BEFORE manual pagination is applied.
+     *
+     * @return the total count of filtered results
      */
     protected int getTotalFilteredCount() {
         if (isDirect()) {return resultSize();}
@@ -80,6 +93,9 @@ public class NamingServiceBean extends AddressbookBean {
         return filteredCount > 0 ? filteredCount : resultSize();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected int totalSize() {
         if (isDirect()) {return super.totalSize();}
@@ -89,12 +105,18 @@ public class NamingServiceBean extends AddressbookBean {
         return getNamingService().size(props);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isNotEmpty() {
         if (isDirect()) {return super.isNotEmpty();}
         return totalSize() > 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getFileName() {
         if (isDirect()) {return super.getFileName();}
@@ -104,6 +126,9 @@ public class NamingServiceBean extends AddressbookBean {
         return basename(filename);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getDisplayName() {
         if (isDirect()) {return super.getDisplayName();}
@@ -111,7 +136,13 @@ public class NamingServiceBean extends AddressbookBean {
         return _t("{0} address book in {1} database", getFileName(), getNamingService().getName());
     }
 
-    /** depth-first search */
+    /**
+     * Perform a depth-first search for a naming service by name.
+     *
+     * @param ns the root naming service to search from
+     * @param srch the name to search for
+     * @return the matching NamingService, or null if not found
+     */
     private static NamingService searchNamingService(NamingService ns, String srch) {
         String name = ns.getName();
         if (name.equals(srch) || basename(name).equals(srch) || name.equals(DEFAULT_NS)) {return ns;}
@@ -125,13 +156,23 @@ public class NamingServiceBean extends AddressbookBean {
         return null;
     }
 
+    /**
+     * Get the basename of a file path.
+     *
+     * @param filename the full file path
+     * @return the basename (part after the last '/')
+     */
     private static String basename(String filename) {
         int slash = filename.lastIndexOf('/');
         if (slash >= 0) {filename = filename.substring(slash + 1);}
         return filename;
     }
 
-    /** @return the NamingService for the current file name, or the root NamingService */
+    /**
+     * Get the NamingService for the current file name, or the root NamingService.
+     *
+     * @return the NamingService
+     */
     private NamingService getNamingService() {
         NamingService root = _context.namingService();
         NamingService rv = searchNamingService(root, getFileName());
@@ -139,9 +180,11 @@ public class NamingServiceBean extends AddressbookBean {
     }
 
     /**
-     *  Load addressbook and apply filter, returning messages about this.
-     *  To control memory, don't load the whole addressbook if we can help it...
-     *  only load what is searched for.
+     * Load addressbook and apply filter, returning messages about this.
+     * To control memory, don't load the whole addressbook if we can help it...
+     * only load what is searched for.
+     *
+     * @return messages about loading the address book
      */
     @Override
     public String getLoadBookMessages() {
@@ -278,7 +321,6 @@ public class NamingServiceBean extends AddressbookBean {
                 BlacklistBean blacklist = new BlacklistBean();
                 boolean isBlacklisted = blacklist.isBlacklistedByAnyForm(name);
                 if (isBlacklisted) {
-                    //_log.warn("Filtering out blacklisted host: " + name);
                     blacklistedHosts++;
                     continue;
                 }
@@ -330,9 +372,12 @@ public class NamingServiceBean extends AddressbookBean {
         return message;
     }
 
+    /**
+     * {@inheritDoc}
+     * Forces reload of entries to ensure blacklist filtering is applied.
+     */
     @Override
     public AddressBean[] getEntries() {
-        // Force reload of entries to ensure blacklist filtering is applied
         getLoadBookMessages();
         return entries;
     }
@@ -821,7 +866,12 @@ public class NamingServiceBean extends AddressbookBean {
     }
 
     /**
-     *  @since 0.9.40
+     * Style a message for display in the UI.
+     *
+     * @param message the message to style
+     * @param fail true if the message indicates a failure
+     * @return the styled HTML message
+     * @since 0.9.40
      */
     private static String styleMessage(String message, boolean fail) {
         return "<p class=\"messages" + (fail ? " fail" : "") + "\">" + message + "</p>";

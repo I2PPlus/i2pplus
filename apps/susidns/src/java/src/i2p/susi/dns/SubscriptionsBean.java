@@ -54,6 +54,9 @@ public class SubscriptionsBean extends BaseBean {
         synchronized(SubscriptionsBean.class) {locked_reloadSubs();}
     }
 
+    /**
+     * Reload subscriptions from file (synchronized wrapper).
+     */
     private void locked_reloadSubs() {
         File file = subsFile();
         if (file.isFile()) {
@@ -67,7 +70,7 @@ public class SubscriptionsBean extends BaseBean {
                     buf.append("\n");
                 }
                 content = buf.toString();
-            } catch (IOException e) {e.printStackTrace();} // TODO Auto-generated catch block
+            } catch (IOException e) {warn(e);}
             finally {
                 if (br != null) {
                     try {br.close();}
@@ -77,10 +80,16 @@ public class SubscriptionsBean extends BaseBean {
         } else {content = DEFAULT_SUB;}
     }
 
+    /**
+     * Save subscriptions to file.
+     */
     private void save() {
         synchronized(SubscriptionsBean.class) {locked_save();}
     }
 
+    /**
+     * Save subscriptions to file (synchronized wrapper).
+     */
     private void locked_save() {
         File file = subsFile();
         try {
@@ -97,9 +106,14 @@ public class SubscriptionsBean extends BaseBean {
                 for (String url : urls) {out.println(url);}
                 if (out.checkError()) {throw new IOException("Failed write to " + file);}
             }
-        } catch (IOException e) {e.printStackTrace();} // TODO Auto-generated catch block
+        } catch (IOException e) {warn(e);}
     }
 
+    /**
+     * Get status messages for the UI.
+     *
+     * @return HTML formatted status message
+     */
     public String getMessages() {
         String message = "";
         if (action != null) {

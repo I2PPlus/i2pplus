@@ -31,11 +31,22 @@ public class TranslateSVGServlet extends HttpServlet {
     private final I2PAppContext _context;
     private static final String DIR = "/svg";
 
+    /**
+     * Create a new TranslateSVGServlet.
+     */
     public TranslateSVGServlet() {
         super();
         _context = I2PAppContext.getGlobalContext();
     }
 
+    /**
+     * Handle GET requests for SVG translation.
+     *
+     * @param req the HTTP request
+     * @param resp the HTTP response
+     * @throws ServletException if a servlet error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // this is the part after /images

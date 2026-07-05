@@ -1,3 +1,8 @@
+/*
+ * This file is part of SusDNS project for I2P
+ * License: GPL2 or later
+ */
+
 package i2p.susi.dns;
 
 import java.io.File;
@@ -31,6 +36,9 @@ public class BaseBean {
     private static final String ADDRESSBOOK_DIR = "addressbook";
     private static final String CONFIG_FILE = "config.txt";
 
+    /**
+     * Default constructor. Initializes the I2P context and properties.
+     */
     public BaseBean() {
         _context = I2PAppContext.getGlobalContext();
         properties = new OrderedProperties();

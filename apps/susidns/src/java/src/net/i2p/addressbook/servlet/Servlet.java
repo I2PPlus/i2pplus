@@ -47,10 +47,11 @@ public class Servlet extends HttpServlet {
     private transient Thread thread;
 
     /**
-     * Simple output to verify that the addressbook servlet is running.
+     * Handle service requests. Outputs a simple status page.
      *
-     * (non-Javadoc)
-     * see javax.servlet.Servlet#service(javax.servlet.ServletRequest, javax.servlet.ServletResponse)
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @throws IOException if an I/O error occurs
      */
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -58,8 +59,10 @@ public class Servlet extends HttpServlet {
         out.write("I2P addressbook OK");
     }
 
-    /* (non-Javadoc)
-     * @see javax.servlet.Servlet#init(javax.servlet.ServletConfig)
+    /**
+     * Initialize the servlet and start the addressbook daemon thread.
+     *
+     * @param config the servlet configuration
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -123,6 +126,9 @@ public class Servlet extends HttpServlet {
         }
     }
 
+    /**
+     * Destroy the servlet and halt the addressbook daemon thread.
+     */
     @SuppressWarnings("unchecked")
     @Override
     public void destroy() {

@@ -365,13 +365,31 @@ public class AddressBean {
         return d;
     }
 
-    /** translate */
+    /**
+     * Translate a string.
+     *
+     * @param s the string to translate
+     * @return the translated string
+     */
     private static String _t(String s) {return Messages.getString(s);}
 
-    /** translate */
+    /**
+     * Translate a string with one parameter.
+     *
+     * @param s the string to translate
+     * @param o the parameter
+     * @return the translated string
+     */
     private static String _t(String s, Object o) {return Messages.getString(s, o);}
 
-    /** translate */
+    /**
+     * Translate a string with two parameters.
+     *
+     * @param s the string to translate
+     * @param o the first parameter
+     * @param o2 the second parameter
+     * @return the translated string
+     */
     private static String _t(String s, Object o, Object o2) {return Messages.getString(s, o, o2);}
 
 }

@@ -21,6 +21,13 @@ public class AddressByNameSorter implements Comparator<AddressBean>, Serializabl
     public AddressByNameSorter() {
     }
 
+    /**
+     * Compare two AddressBeans alphabetically by display name.
+     *
+     * @param a the first AddressBean
+     * @param b the second AddressBean
+     * @return comparison of display names (case-insensitive)
+     */
     public int compare(AddressBean a, AddressBean b) {
         return a.getDisplayName().compareToIgnoreCase(b.getDisplayName());
     }
