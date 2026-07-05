@@ -65,6 +65,11 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
             input = new BufferedReader(new InputStreamReader(fileStream, "UTF-8"));
     }
 
+    /**
+     * Return true if there is another entry to return.
+     *
+     * @return true if there is another entry
+     */
     public boolean hasNext() {
         if (input == null) {return false;}
         if (next != null) {return true;}
@@ -91,9 +96,11 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
     }
 
     /**
-     *  'remove' entries will be returned with a null key,
-     *  and the value will contain a null name, null dest,
-     *  and non-null props.
+     * Return the next entry. 'remove' entries will be returned with a null key,
+     * and the value will contain a null name, null dest, and non-null props.
+     *
+     * @return the next entry
+     * @throws NoSuchElementException if there is no next entry
      */
     public Map.Entry<String, HostTxtEntry> next() {
         if (!hasNext()) {throw new NoSuchElementException();}
@@ -102,8 +109,16 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
         return rv;
     }
 
+    /**
+     * Not supported.
+     *
+     * @throws UnsupportedOperationException always
+     */
     public void remove() {throw new UnsupportedOperationException();}
 
+    /**
+     * Close the underlying stream.
+     */
     public void close() {
         if (input != null) {
             try {input.close();}

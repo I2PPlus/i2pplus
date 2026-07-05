@@ -43,13 +43,13 @@ class SubscriptionIterator implements Iterator<AddressBook> {
     private final long delay;
 
     /**
-     * Construct a SubscriptionIterator using the Subscriprions in List subscriptions.
+     * Construct a SubscriptionIterator using the Subscriptions in List subscriptions.
      *
      * @param subscriptions
      *            List of Subscription objects that represent address books.
      * @param delay the minimum delay since last fetched for the iterator to actually fetch
      * @param proxyHost proxy hostname
-     * @param proxyPort proxt port number
+     * @param proxyPort proxy port number
      */
     public SubscriptionIterator(List<Subscription> subscriptions, long delay, String proxyHost, int proxyPort) {
         this.subIterator = subscriptions.iterator();
@@ -59,8 +59,8 @@ class SubscriptionIterator implements Iterator<AddressBook> {
     }
 
 
-    /* (non-Javadoc)
-     * @see java.util.Iterator#hasNext()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public boolean hasNext() {
@@ -68,9 +68,8 @@ class SubscriptionIterator implements Iterator<AddressBook> {
     }
 
     /**
-     * Yes, the EepGet fetch() is done in here in next().
+     * Fetch the next subscription's address book, if the delay has been met.
      *
-     * see java.util.Iterator#next()
      * @return non-null AddressBook (empty if the minimum delay has not been met,
      *          or there is no proxy tunnel, or the fetch otherwise fails)
      */
@@ -82,19 +81,16 @@ class SubscriptionIterator implements Iterator<AddressBook> {
         } else if (sub.getLastFetched() + this.delay < I2PAppContext.getGlobalContext().clock().now() &&
             I2PAppContext.getGlobalContext().portMapper().getPort(PortMapper.SVC_HTTP_PROXY) >= 0 &&
             !I2PAppContext.getGlobalContext().getBooleanProperty("i2p.vmCommSystem")) {
-            //System.err.println("Fetching addressbook from " + sub.getLocation());
             return new AddressBook(sub, this.proxyHost, this.proxyPort);
         } else {
-            //System.err.println("Addressbook " + sub.getLocation() + " was last fetched " +
-            //                   DataHelper.formatDuration(I2PAppContext.getGlobalContext().clock().now() - sub.getLastFetched()) +
-            //                   " ago but the minimum delay is " +
-            //                   DataHelper.formatDuration(this.delay));
             return new AddressBook(Collections.<String, HostTxtEntry>emptyMap());
         }
     }
 
-    /* (non-Javadoc)
-     * @see java.util.Iterator#remove()
+    /**
+     * Not supported.
+     *
+     * @throws UnsupportedOperationException always
      */
     @Override
     public void remove() {

@@ -133,11 +133,7 @@ public class BlockfileNamingService extends DummyNamingService {
     private static final String VERSION = "4";
 
     private static final String PROP_ADDED = "a";
-    // See susidns
-    //private static final String PROP_MODDED = "m";
     private static final String PROP_SOURCE = "s";
-    // See susidns
-    //private static final String PROP_VALIDATED = "v";
 
     private static final String DUMMY = "";
     private static final int NEGATIVE_CACHE_SIZE = 32;
@@ -150,7 +146,7 @@ public class BlockfileNamingService extends DummyNamingService {
      *
      *  If not in router context, the database will be opened read-only
      *  unless the property i2p.naming.blockfile.writeInAppContext is true.
-     *  Not designed for multiple instantiations or simultaneous use by multple JVMs.
+     *  Not designed for multiple instantiations or simultaneous use by multiple JVMs.
      *
      *  @throws RuntimeException on fatal error
      */
@@ -522,7 +518,6 @@ public class BlockfileNamingService extends DummyNamingService {
             // catch IOE and delete index??
             SkipList<String, DestEntry> sl = bf.getIndex(listname, _stringSerializer, _destSerializer);
             if (sl == null) {
-                //_log.info("Making new skiplist " + listname);
                 sl = bf.makeIndex(listname, _stringSerializer, _destSerializer);
             }
             Properties props = new Properties();
@@ -545,15 +540,6 @@ public class BlockfileNamingService extends DummyNamingService {
      *  @param source may be null
      *  @throws RuntimeException
      */
-/****
-    private void addEntry(SkipList sl, String key, Destination dest, String source) {
-        Properties props = new Properties();
-        props.setProperty(PROP_ADDED, Long.toString(_context.clock().now()));
-        if (source != null)
-            props.setProperty(PROP_SOURCE, source);
-        addEntry(sl, key, dest, props);
-    }
-****/
 
     /**
      *  Single dest version.
@@ -609,17 +595,6 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      *  Caller must synchronize.
-     *  @return null without exception on error (logs only)
-     *  @since 0.8.9
-     */
-/****
-    private String getReverseEntry(Destination dest) {
-        return getReverseEntry(dest.calculateHash());
-    }
-****/
-
-    /**
-     *  Caller must synchronize.
      *  Returns null without exception on error (logs only).
      *  Returns without logging if no reverse skiplist (version 1).
      *
@@ -632,7 +607,6 @@ public class BlockfileNamingService extends DummyNamingService {
             if (rev == null)
                 return null;
             Integer idx = getReverseKey(hash);
-            //_log.info("Get reverse " + idx + ' ' + hash);
             Properties props = rev.get(idx);
             if (props == null)
                 return null;
@@ -681,7 +655,6 @@ public class BlockfileNamingService extends DummyNamingService {
      *  @since 0.8.9
      */
     private static void addReverseEntry(BlockFile bf, String key, Destination dest, Log log) {
-        //log.info("Add reverse " + key);
         try {
             SkipList<Integer, Properties> rev = bf.getIndex(REVERSE_SKIPLIST, _hashIndexSerializer, _infoSerializer);
             if (rev == null)
@@ -709,7 +682,6 @@ public class BlockfileNamingService extends DummyNamingService {
      *  @since 0.8.9
      */
     private void removeReverseEntry(String key, Destination dest) {
-        //_log.info("Remove reverse " + key);
         try {
             SkipList<Integer, Properties> rev = _bf.getIndex(REVERSE_SKIPLIST, _hashIndexSerializer, _infoSerializer);
             if (rev == null)
@@ -747,13 +719,14 @@ public class BlockfileNamingService extends DummyNamingService {
 
     ////////// Start NamingService API
 
-    /*
-     *
-     * Will strip a "www." prefix and retry if lookup fails
+    /**
+     * Lookup a hostname. Will strip a "www." prefix and retry if lookup fails.
      *
      * @param hostname upper/lower case ok
-     * @param options If non-null and contains the key "list", lookup in
+     * @param lookupOptions If non-null and contains the key "list", lookup in
      *                that list only, otherwise all lists
+     * @param storedOptions ignored
+     * @return the destination, or null if not found
      */
     @Override
     public Destination lookup(String hostname, Properties lookupOptions, Properties storedOptions) {
@@ -774,11 +747,13 @@ public class BlockfileNamingService extends DummyNamingService {
         return rv;
     }
 
-    /*
-     * Single dest version.
+    /**
+     * Single dest version lookup.
      *
      * @param lookupOptions If non-null and contains the key "list", lookup in
      *                that list only, otherwise all lists
+     * @param storedOptions If non-null, stored properties will be added
+     * @return the destination, or null if not found
      */
     private Destination lookup2(String hostname, Properties lookupOptions, Properties storedOptions) {
         String listname = null;
@@ -833,12 +808,15 @@ public class BlockfileNamingService extends DummyNamingService {
         return d;
     }
 
-    /*
-     * Multiple dests version.
+    /**
+     * Multiple dests version lookup.
      * DB MUST be version 4.
      *
+     * @param hostname the hostname to look up
      * @param lookupOptions If non-null and contains the key "list", lookup in
      *                that list only, otherwise all lists
+     * @param storedOptions output list for stored properties, may be null
+     * @return non-null list of destinations, or null if not found
      * @since 0.9.26
      */
     private List<Destination> lookupAll2(String hostname, Properties lookupOptions, List<Properties> storedOptions) {
@@ -1793,38 +1771,6 @@ public class BlockfileNamingService extends DummyNamingService {
         _invalid.clear();
     }
 
-  /****
-    private void dumpDB() {
-        synchronized(_bf) {
-            if (_isClosed)
-                _log.error("Database is closed");
-            for (String list : _lists) {
-                try {
-                    SkipList sl = _bf.getIndex(list, _stringSerializer, _destSerializer);
-                    if (sl == null) {
-                        _log.error("No list found for " + list);
-                        continue;
-                    }
-                    int i = 0;
-                    for (SkipIterator iter = sl.iterator(); iter.hasNext(); ) {
-                         String key = (String) iter.nextKey();
-                         DestEntry de = (DestEntry) iter.next();
-                         if (!validate(key, de, list))
-                             continue;
-                         _log.error("DB " + list + " key " + key + " val " + de);
-                         i++;
-                    }
-                    _log.error(i + " entries found for " + list);
-                } catch (IOException ioe) {
-                    _log.error("Fail", ioe);
-                    break;
-                }
-            }
-            deleteInvalid();
-        }
-    }
-  ****/
-
     private void close() {
         synchronized(_bf) {
             try {
@@ -1964,8 +1910,6 @@ public class BlockfileNamingService extends DummyNamingService {
             ByteArrayInputStream bais = new ByteArrayInputStream(b);
             try {
                 rv.props = DataHelper.readProperties(bais);
-                //dest.readBytes(bais);
-                // Will this flush the dest cache too much?
                 rv.dest = Destination.create(bais);
             } catch (IOException ioe) {
                 logError("DB Read Fail", ioe);
@@ -2205,100 +2149,8 @@ public class BlockfileNamingService extends DummyNamingService {
         sprops.setProperty("list", lname);
         System.out.println("List " + lname + " contains " + bns.size(sprops));
 
-/****
-        List<String> names = null;
-        Properties props = new Properties();
-        try {
-            DataHelper.loadProps(props, new File("hosts.txt"), true);
-            names = new ArrayList(props.keySet());
-            Collections.shuffle(names);
-        } catch (IOException ioe) {
-            System.out.println("No hosts.txt to test with");
-            bns.close();
-            return;
-        }
-
-        System.out.println("size() reports " + bns.size());
-        System.out.println("getEntries() returns " + bns.getEntries().size());
-
-        System.out.println("Testing with " + names.size() + " hostnames");
-        int found = 0;
-        int notfound = 0;
-        int rfound = 0;
-        int rnotfound = 0;
-        long start = System.currentTimeMillis();
-        for (String name : names) {
-             Destination dest = bns.lookup(name);
-             if (dest != null) {
-                 found++;
-                 String reverse = bns.reverseLookup(dest);
-                 if (reverse != null)
-                     rfound++;
-                 else
-                     rnotfound++;
-             } else {
-                 notfound++;
-             }
-        }
-        System.out.println("BFNS took " + DataHelper.formatDuration(System.currentTimeMillis() - start));
-        System.out.println("found " + found + " notfound " + notfound);
-        System.out.println("reverse found " + rfound + " notfound " + rnotfound);
-
-        //if (true) return;
-
-        System.out.println("Removing all " + names.size() + " hostnames");
-        found = 0;
-        notfound = 0;
-        Collections.shuffle(names);
-        start = System.currentTimeMillis();
-        for (String name : names) {
-             if (bns.remove(name))
-                 found++;
-             else
-                 notfound++;
-        }
-        System.out.println("BFNS took " + DataHelper.formatDuration(System.currentTimeMillis() - start));
-        System.out.println("removed " + found + " not removed " + notfound);
-
-        System.out.println("Adding back " + names.size() + " hostnames");
-        found = 0;
-        notfound = 0;
-        Collections.shuffle(names);
-        start = System.currentTimeMillis();
-        for (String name : names) {
-            try {
-                 if (bns.put(name, new Destination(props.getProperty(name))))
-                     found++;
-                 else
-                     notfound++;
-            } catch (DataFormatException dfe) {}
-        }
-        System.out.println("BFNS took " + DataHelper.formatDuration(System.currentTimeMillis() - start));
-        System.out.println("Added " + found + " not added " + notfound);
-        System.out.println("size() reports " + bns.size());
-
-
-        //bns.dumpDB();
-****/
         bns.close();
         ctx.logManager().flush();
         System.out.flush();
-/****
-        if (true) return;
-
-        HostsTxtNamingService htns = new HostsTxtNamingService(I2PAppContext.getGlobalContext());
-        found = 0;
-        notfound = 0;
-        start = System.currentTimeMillis();
-        for (String name : names) {
-             Destination dest = htns.lookup(name);
-             if (dest != null)
-                 found++;
-             else
-                 notfound++;
-        }
-        System.out.println("HTNS took " + DataHelper.formatDuration(System.currentTimeMillis() - start));
-        System.out.println("found " + found + " notfound " + notfound);
-****/
     }
 }

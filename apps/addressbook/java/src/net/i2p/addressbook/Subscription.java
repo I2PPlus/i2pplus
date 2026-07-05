@@ -109,12 +109,22 @@ class Subscription {
         this.lastModified = lastModified;
     }
 
-    /** @since 0.8.2 */
+    /**
+     * Return when the subscription was last fetched.
+     *
+     * @return the time the subscription was last fetched (Java time in ms)
+     * @since 0.8.2
+     */
     public long getLastFetched() {
         return this.lastFetched;
     }
 
-    /** @since 0.8.2 */
+    /**
+     * Set when the subscription was last fetched.
+     *
+     * @param t the time the subscription was last fetched (Java time in ms)
+     * @since 0.8.2
+     */
     public void setLastFetched(long t) {
         this.lastFetched = t;
     }

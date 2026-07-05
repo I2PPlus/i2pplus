@@ -171,28 +171,7 @@ class ConfigParser {
         return result;
     }
 
-/*    public static Map<String, String> parse(File file, Map<String, String> map) {
-        Map<String, String> result;
-        try {
-            result = parse(file);
-            // migrate from I2P
-            String master = result.remove("local_addressbook");
-            if (master != null) {result.put("master_addressbook", master);}
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                if (!result.containsKey(entry.getKey())) {
-                    result.put(entry.getKey(), entry.getValue());
-                }
-            }
-        } catch (IOException exp) {
-            result = map;
-            try {write(result, file);}
-            catch (IOException exp2) {
-                // Ignore IOException
-            }
-        }
-        return result;
-    }
-*/
+
 
     /**
      * Return a List where each element is a line from the BufferedReader input.
@@ -335,13 +314,13 @@ class ConfigParser {
     }
 
     /**
-     * Write contents of List list to BufferedReader output. Output is written
+     * Write contents of List list to BufferedWriter output. Output is written
      * with each element of list on a new line.
      *
      * @param list
      *            A List to write to file.
      * @param output
-     *            A BufferedReader to write list to.
+     *            A BufferedWriter to write list to.
      * @throws IOException
      *             if output cannot be written to.
      */

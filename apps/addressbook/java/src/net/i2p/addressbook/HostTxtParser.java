@@ -225,7 +225,6 @@ public class HostTxtParser {
             success = tmp.renameTo(file);
             if (!success) {
                 tmp.delete();
-                //System.out.println("Warning: addressbook rename fail from " + tmp + " to " + file);
             }
         }
         if (!success) {
@@ -309,19 +308,4 @@ public class HostTxtParser {
         }
         System.exit(0);
     }
-
-/****
-    public static void test(String[] args) throws Exception {
-        File f = new File("tmp-hosts.txt");
-        Map<String, HostTxtEntry> map = parse(f);
-        for (HostTxtEntry e : map.values()) {
-            System.out.println("Host: " + e.getName() +
-                               "\nDest: " + e.getDest() +
-                               "\nAction: " + (e.getProps() != null ? e.getProps().getProperty("action") : "(none)") +
-                               "\nValid Inner? " + e.hasValidInnerSig() +
-                               "\nValid? " + e.hasValidSig() +
-                               '\n');
-        }
-    }
-****/
 }
