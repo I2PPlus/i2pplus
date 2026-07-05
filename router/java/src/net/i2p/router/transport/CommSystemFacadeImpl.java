@@ -1076,6 +1076,66 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
+     * Fast hostname lookup that never blocks on network DNS.
+     * Returns cached result if available and useful, otherwise does a local
+     * ASN org name lookup (fast, local MMDB file) and caches it.
+     * Queues background async RDNS if enabled; when RDNS resolves to a
+     * real hostname (not "unknown" or raw IP), it overwrites the ASN result.
+     *
+     * @return hostname from cache, ASN org name, or null if unresolvable
+     * @since 0.9.70+
+     */
+    @Override
+    public String getLocalHostName(String ipAddress) {
+        if (ipAddress == null || ipAddress.equals("null")) {
+            return null;
+        }
+        long now = System.currentTimeMillis();
+
+        // 1. Check cache — return if useful
+        CacheEntry existingEntry = rdnsCache.get(ipAddress);
+        if (existingEntry != null && (now - existingEntry.getTimestamp() <= EXPIRE_TIME)) {
+            String cached = existingEntry.getHostname();
+            if (cached != null && !cached.equals(ipAddress) && !_t("unknown").equals(cached)) {
+                return cached;
+            }
+        }
+
+        // 2. Fast local ASN lookup
+        String hostName = null;
+        String orgName = _geoIP.getOrgName(ipAddress);
+        if (orgName != null && !orgName.isEmpty()) {
+            hostName = orgName;
+            rdnsCache.put(ipAddress, new CacheEntry(ipAddress, orgName, now));
+        }
+
+        // 3. Queue async RDNS in background — updates cache if better
+        if (enableReverseLookups() && pendingLookups.add(ipAddress)) {
+            getReverseDnsExecutor().submit(() -> {
+                try {
+                    String rdnsResult = ipAddress;
+                    try {
+                        rdnsResult = InetAddress.getByName(ipAddress).getCanonicalHostName();
+                    } catch (UnknownHostException e) {
+                        // RDNS failed, keep ASN result
+                        return;
+                    }
+                    // Only update cache if RDNS returned something better than ASN
+                    if (rdnsResult != null && !rdnsResult.equals(ipAddress)
+                            && !_t("unknown").equals(rdnsResult)) {
+                        rdnsCache.put(ipAddress, new CacheEntry(ipAddress, rdnsResult,
+                                System.currentTimeMillis()));
+                    }
+                } finally {
+                    pendingLookups.remove(ipAddress);
+                }
+            });
+        }
+
+        return hostName;
+    }
+
+    /**
      * Convert IP string to Hash and call existing getCountry method
      * Return two-letter country code or null if unknown
      */

@@ -190,6 +190,18 @@ public abstract class CommSystemFacade implements Service {
     }
 
     /**
+     * Fast hostname lookup that never blocks on network DNS.
+     * Returns cached result if available, otherwise does a local ASN lookup.
+     * Queues background async RDNS if enabled, updating the cache on success.
+     *
+     * @return hostname from cache, ASN org name, or null if not resolvable
+     * @since 0.9.70+
+     */
+    public String getLocalHostName(String ipAddress) {
+        return ipAddress;
+    }
+
+    /**
      *  @return SortedMap of style to Transport (a copy)
      *  @since 0.9.31
      */
