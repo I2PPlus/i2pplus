@@ -2885,7 +2885,7 @@ h2#jsonrpc{padding-left:38px;background:url(../images/i2cp.svg) no-repeat 10px c
 #tunnelPeerCount .lazy{contain:none}
 
 /* tuning */
-svg.spark{background:#000}
+svg.spark{position:relative;border:var(--border);background:linear-gradient(180deg,#001800,#010,#001800)}
 #tuning .infohelp{margin-top:10px;box-shadow:var(--border_table)}
 
 /* iframes */
