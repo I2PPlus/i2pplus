@@ -25,11 +25,22 @@ public class EscapeHTMLOutputStream extends FilterOutputStream {
     /** Track state: 0=normal, 1=saw '<', 2=saw '<-', 3=prev was '-' */
     private int _commentState;
 
+    /**
+     * Create an EscapeHTMLOutputStream wrapping the given output stream.
+     *
+     * @param out the underlying output stream
+     */
     public EscapeHTMLOutputStream(OutputStream out) {
         super(out);
         _commentState = 0;
     }
 
+    /**
+     * Write a single byte, escaping HTML special characters.
+     *
+     * @param val the byte value
+     * @throws IOException on I/O error
+     */
     @Override
     public void write(int val) throws IOException {
         switch (val) {

@@ -28,8 +28,11 @@ public class DecodingOutputStream extends OutputStream {
     private static final int REPLACEMENT = 0xfffd;
 
     /**
-     *  @param out UTF-8
-     *  @throws UnsupportedEncodingException (an IOException) on unknown charset
+     * Create a DecodingOutputStream that decodes bytes and writes characters to the given Writer.
+     *
+     * @param out the Writer to write decoded characters to
+     * @param charset the charset to decode (e.g. "UTF-8")
+     * @throws UnsupportedEncodingException on unknown charset
      */
     public DecodingOutputStream(Writer out, String charset) throws UnsupportedEncodingException {
         super();
@@ -45,6 +48,12 @@ public class DecodingOutputStream extends OutputStream {
         _cb = CharBuffer.allocate(1024);
     }
 
+    /**
+     * Write a single byte to be decoded.
+     *
+     * @param b the byte to write
+     * @throws IOException on I/O error
+     */
     @Override
     public void write(int b) throws IOException {
         if (!_bb.hasRemaining())
@@ -52,6 +61,14 @@ public class DecodingOutputStream extends OutputStream {
         _bb.put((byte) b);
     }
 
+    /**
+     * Write bytes to be decoded.
+     *
+     * @param buf the buffer of bytes to write
+     * @param off the start offset in the buffer
+     * @param len the number of bytes to write
+     * @throws IOException on I/O error
+     */
     @Override
     public void write(byte[] buf, int off, int len) throws IOException {
 	while (len > 0) {
@@ -98,6 +115,11 @@ public class DecodingOutputStream extends OutputStream {
         }
     }
 
+    /**
+     * Flush any buffered bytes through the decoder.
+     *
+     * @throws IOException on I/O error
+     */
     @Override
     public void flush() throws IOException {
         decodeAndWrite(false);
@@ -108,42 +130,4 @@ public class DecodingOutputStream extends OutputStream {
     public void close() throws IOException {
         decodeAndWrite(true);
     }
-
-/****
-    public static void main(String[] args) {
-        try {
-            String s = "Consider the encoding of the Euro sign, €." +
-                       " The Unicode code point for \"€\" is U+20AC.\n";
-            StringBuilder buf = new StringBuilder();
-            for (int i = 0; i < 100; i++) {
-                buf.append(s);
-            }
-            s = buf.toString();
-            byte[] test = s.getBytes("UTF-8");
-            java.io.InputStream bais = new java.io.ByteArrayInputStream(test);
-            Writer w = new StringBuilderWriter();
-            DecodingOutputStream r = new DecodingOutputStream(w, "UTF-8");
-            int b;
-            byte[] bf = new byte[256];
-            int rand = 1 + net.i2p.I2PAppContext.getGlobalContext().random().nextInt(256);
-            while ((b = bais.read(bf, 0, rand)) >= 0) {
-                r.write(bf, 0, b);
-                rand = 1 + net.i2p.I2PAppContext.getGlobalContext().random().nextInt(256);
-            }
-            r.close();
-            System.out.println("Received: \"" + w.toString() + '"');
-            System.out.println("Test passed? " + w.toString().equals(s));
-            bais = new java.io.ByteArrayInputStream(new byte[] { 'x', (byte) 0xcc, 'x' } );
-            w = new StringBuilderWriter();
-            r = new DecodingOutputStream(w, "UTF-8");
-            while ((b = bais.read()) >= 0) {
-                r.write(b);
-            }
-            r.close();
-            System.out.println("Received: \"" + w.toString() + '"');
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-    }
-****/
 }

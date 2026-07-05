@@ -24,8 +24,19 @@ public class EscapeHTMLWriter extends FilterWriter {
     /** Track state: 0=normal, 1=saw '<', 2=saw '<-', 3=prev was '-' */
     private int _commentState;
 
+    /**
+     * Create an EscapeHTMLWriter wrapping the given writer.
+     *
+     * @param out the underlying writer
+     */
     public EscapeHTMLWriter(Writer out) {super(out); _commentState = 0;}
 
+    /**
+     * Write a single character, escaping HTML special characters.
+     *
+     * @param c the character value
+     * @throws IOException on I/O error
+     */
     @Override
     public void write(int c) throws IOException {
         switch (c) {
@@ -92,11 +103,27 @@ public class EscapeHTMLWriter extends FilterWriter {
         }
     }
 
+    /**
+     * Write characters from a buffer, escaping HTML special characters.
+     *
+     * @param cbuf the character buffer
+     * @param off the start offset in the buffer
+     * @param len the number of characters to write
+     * @throws IOException on I/O error
+     */
     @Override
     public void write(char[] cbuf, int off, int len) throws IOException {
         for (int i = off; i < off + len; i++) {write(cbuf[i]);}
     }
 
+    /**
+     * Write characters from a string, escaping HTML special characters.
+     *
+     * @param str the string to write
+     * @param off the start offset in the string
+     * @param len the number of characters to write
+     * @throws IOException on I/O error
+     */
     @Override
     public void write(String str, int off, int len) throws IOException {
         for (int i = off; i < off + len; i++) {write(str.charAt(i));}

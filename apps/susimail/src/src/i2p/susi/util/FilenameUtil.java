@@ -90,9 +90,10 @@ public class FilenameUtil {
 	}
 
 	/**
-	 * Modified from QuotedPrintable.decode()
+	 * Decode an RFC 5987 encoded filename back to a string.
 	 *
-	 * @return name on error
+	 * @param name the RFC 5987 encoded filename
+	 * @return the decoded filename, or name on error
 	 * @since 0.9.34
 	 */
 	public static String decodeFilenameRFC5987(String name) {
@@ -160,14 +161,4 @@ public class FilenameUtil {
 			return n;
 		}
 	}
-
-/****
-	public static void main(String[] args) {
-		String in = "2018年01月25-26日(深圳)";
-		String enc = encodeFilenameRFC5987(in);
-		String dec = decodeFilenameRFC5987(enc);
-		System.out.println("in:  " + in + "\nenc: " + enc + "\ndec: " + dec +
-		                   "\nPass? " + in.equals(dec));
-	}
-****/
 }

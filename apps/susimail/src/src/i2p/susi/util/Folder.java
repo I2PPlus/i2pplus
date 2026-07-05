@@ -1,12 +1,12 @@
 /*
  * Created on Nov 23, 2004
- * 
+ *
  *  This file is part of susimail project, see http://susi.i2p/
- *  
+ *
  *  Copyright (C) 2004-2005  <susi23@mail.i2p>
  *
  * Licensed under the GPLv2 or later.
- *  
+ *
  *  $Revision: 1.2 $
  */
 package i2p.susi.util;
@@ -25,18 +25,18 @@ import net.i2p.data.DataHelper;
 
 /**
  * Manages an Object array with paging and sorting support.
- * 
+ *
  * Create a folder, set contents with setElements(), add comparators with addSorter(),
  * select a sort method with setSortBy(), and retrieve the current page with
  * currentPageIterator().
- * 
+ *
  * All public methods are synchronized.
- * 
+ *
  * @author susi
  * @param <O> type of objects stored in this folder
  */
 public class Folder<O extends Object> {
-	
+
 	public static final String PAGESIZE = "pager.pagesize";
 	public static final int DEFAULT_PAGESIZE = 30;
 
@@ -56,7 +56,7 @@ public class Folder<O extends Object> {
 	private SortOrder sortingDirection;
 	private Comparator<O> currentSorter;
 	private String currentSortID;
-	
+
 	public Folder()
 	{
 		pages = 1;
@@ -64,22 +64,22 @@ public class Folder<O extends Object> {
 		sorter = new HashMap<>();
 		sortingDirection = SortOrder.DOWN;
 	}
-	
+
 	/**
-	 * Returns the current page.
+	 * Returns the current page number.
 	 * Starts at 1, even if empty.
-	 * 
-	 * @return Returns the current page.
+	 *
+	 * @return the current page number
 	 */
 	public synchronized int getCurrentPage() {
 		return currentPage;
 	}
 
 	/**
-	 * Sets the current page to the given parameter.
+	 * Sets the current page number.
 	 * Starts at 1.
-	 * 
-	 * @param currentPage The current page to set.
+	 *
+	 * @param currentPage the page number to set (1-based)
 	 */
 	public synchronized void setCurrentPage(int currentPage) {
 		if( currentPage >= 1 && currentPage <= pages )
@@ -87,9 +87,9 @@ public class Folder<O extends Object> {
 	}
 
 	/**
-	 * Returns the size of the folder.
-	 * 
-	 * @return Returns the size of the folder.
+	 * Returns the number of elements in the folder.
+	 *
+	 * @return the number of elements
 	 */
 	public synchronized int getSize() {
 		return elements != null ? elements.length : 0;
@@ -97,27 +97,28 @@ public class Folder<O extends Object> {
 
 	/**
 	 * Returns the number of pages in the folder.
-         * Minimum of 1 even if empty.
-	 * @return Returns the number of pages.
+	 * Minimum of 1 even if empty.
+	 *
+	 * @return the number of pages
 	 */
 	public synchronized int getPages() {
 		return pages;
 	}
 
 	/**
-	 * Returns page size. If no page size has been set, it returns property @link PAGESIZE.
-	 * If no property is set @link DEFAULT_PAGESIZE is returned.
-	 * 
-	 * @return Returns the pageSize.
+	 * Returns page size. If no page size has been set, returns the
+	 * {@link #PAGESIZE} property value, or {@link #DEFAULT_PAGESIZE}.
+	 *
+	 * @return the page size
 	 */
 	public synchronized int getPageSize() {
 		return pageSize > 0 ? pageSize : Config.getProperty( PAGESIZE, DEFAULT_PAGESIZE );
 	}
 
 	/**
-	 * Set page size.
-	 * 
-	 * @param pageSize The page size to set.
+	 * Set page size and recalculate page counts.
+	 *
+	 * @param pageSize the new page size
 	 */
 	public synchronized void setPageSize(int pageSize) {
 		if( pageSize > 0 )
@@ -143,22 +144,22 @@ public class Folder<O extends Object> {
 	}
 
 	/**
-	 * Sorts the elements according the order given by @link addSorter()
-	 * and @link setSortBy().
-         *
-         * @since public since 0.9.33
+	 * Sorts the elements according to the order given by {@link #addSorter(String, Comparator)}
+	 * and {@link #setSortBy(String, SortOrder)}.
+	 *
+	 * @since public since 0.9.33
 	 */
 	public synchronized void sort()
 	{
 		if (currentSorter != null && elements != null && elements.length > 1)
 			DataHelper.sort(elements, currentSorter);
 	}
-	
+
 	/**
 	 * Set the array of objects the folder should manage.
 	 * Does NOT copy the array.
 	 * Sorts the array if a sorter set.
-	 * 
+	 *
 	 * @param elements Array of Os.
 	 */
 	public synchronized void setElements( O[] elements )
@@ -173,20 +174,19 @@ public class Folder<O extends Object> {
 	}
 
 	/**
-	 * Remove an element
-	 * 
-	 * @param element to remove
+	 * Remove an element from the folder.
+	 *
+	 * @param element the element to remove
 	 */
 	public void removeElement(O element) {
 		removeElements(Collections.singleton(element));
 	}
-	
+
 	/**
-	 * Remove elements
-	 * 
-	 * @param elems to remove
+	 * Remove elements from the folder.
+	 *
+	 * @param elems the collection of elements to remove
 	 */
-	@SuppressWarnings("unchecked")
 	public synchronized void removeElements(Collection<O> elems) {
 		if (elements != null) {
 			List<O> list = new ArrayList<>(Arrays.asList(elements));
@@ -203,23 +203,22 @@ public class Folder<O extends Object> {
 	}
 
 	/**
-	 * Add an element only if it does not already exist
-	 * 
-	 * @param element to add
+	 * Add an element only if it does not already exist.
+	 *
+	 * @param element the element to add
 	 * @return true if added
 	 */
 	public boolean addElement(O element) {
 		return addElements(Collections.singletonList(element)) > 0;
 	}
-	
+
 	/**
-	 * Add elements only if they do not already exist
+	 * Add elements only if they do not already exist.
 	 * Re-sorts the array if a sorter is set and any elements are actually added.
-	 * 
-	 * @param elems to add
-	 * @return number added
+	 *
+	 * @param elems the list of elements to add
+	 * @return number of elements added
 	 */
-	@SuppressWarnings("unchecked")
 	public synchronized int addElements(List<O> elems) {
 		int added = 0;
 		if (elements != null) {
@@ -250,7 +249,7 @@ public class Folder<O extends Object> {
 		}
 		return added;
 	}
-	
+
 	/**
 	 * Returns an iterator containing the elements on the current page.
          * This iterator is over a copy of the current page, and so
@@ -269,7 +268,7 @@ public class Folder<O extends Object> {
 			for( int i = 0; i < pageSize && offset >= 0 && offset < elements.length; i++ ) {
 				list.add( elements[offset] );
 				offset++;
-			}			
+			}
 		}
 		return list.iterator();
 	}
@@ -283,7 +282,7 @@ public class Folder<O extends Object> {
 		if( currentPage > pages )
 			currentPage = pages;
 	}
-	
+
 	/**
 	 * Turns folder to previous page.
 	 */
@@ -291,9 +290,9 @@ public class Folder<O extends Object> {
 	{
 		currentPage--;
 		if( currentPage < 1 )
-			currentPage = 1;		
+			currentPage = 1;
 	}
-	
+
 	/**
 	 * Sets folder to display first page.
 	 */
@@ -301,7 +300,7 @@ public class Folder<O extends Object> {
 	{
 		currentPage = 1;
 	}
-	
+
 	/**
 	 * Sets folder to display last page.
 	 */
@@ -309,28 +308,27 @@ public class Folder<O extends Object> {
 	{
 		currentPage = pages;
 	}
-	
+
 	/**
 	 * Adds a new sorter to the folder. You can sort the folder by
-	 * calling setSortBy() and choose the given id there.
-	 * 
-	 * @param id ID to identify the Comparator with @link setSortBy()
-	 * @param sorter a Comparator to sort the Array given by @link setElements()
+	 * calling {@link #setSortBy(String, SortOrder)} with the given id.
+	 *
+	 * @param id identifier for this comparator, used with {@link #setSortBy(String, SortOrder)}
+	 * @param sorter a Comparator to sort the elements
 	 */
 	public synchronized void addSorter( String id, Comparator<O> sorter )
 	{
 		this.sorter.put( id, sorter );
 	}
-	
+
 	/**
-	 * Activates sorting by the choosen Comparator. The id must
-	 * match the one, which the Comparator has been stored in the
-	 * folder with @link addSorter().
+	 * Activates sorting by the chosen Comparator. The id must
+	 * match the one stored with {@link #addSorter(String, Comparator)}.
 	 * Sets the sorting direction of the folder.
-	 * 
-	 * Warning, this does not do the actual sort, only addElements() and setElements() does a sort.
-	 * 
-	 * @param id ID to identify the Comparator stored with @link addSorter()
+	 *
+	 * Warning: this does not do the actual sort, only addElements() and setElements() do.
+	 *
+	 * @param id identifier for the Comparator
 	 * @param direction UP or DOWN. UP is reverse sort.
 	 */
 	public synchronized void setSortBy(String id, SortOrder direction)
@@ -345,45 +343,30 @@ public class Folder<O extends Object> {
 			currentSortID = null;
 		}
 	}
-	
+
 	/**
+	 * Get the ID of the current sort comparator.
+	 *
+	 * @return the current sort ID, or null if none
 	 * @since 0.9.13
 	 */
 	public synchronized String getCurrentSortBy() {
 		return currentSortID;
 	}
-	
+
 	/**
+	 * Get the current sorting direction.
+	 *
+	 * @return the current SortOrder (UP or DOWN)
 	 * @since 0.9.13
 	 */
 	public synchronized SortOrder getCurrentSortingDirection() {
 		return sortingDirection;
 	}
-	
-	/**
-	 * Returns the element on the current page on the given position.
-	 *
-	 * @param x Position of the element on the current page.
-	 * @return Element on the current page on the given position.
-	 */
-/****  unused, we now fetch by UIDL, not position
-	public synchronized O getElementAtPosXonCurrentPage( int x )
-	{
-		O result = null;
-		if( elements != null ) {
-			int pageSize = getPageSize();
-			int offset = ( currentPage - 1 ) * pageSize;
-			offset += x;			
-			if( offset >= 0 && offset < elements.length )
-				result = elements[offset];
-		}
-		return result;
-	}
-****/
 
 	/**
 	 * Returns the first element of the sorted folder.
-	 * 
+	 *
 	 * @return First element.
 	 */
 	public synchronized O getFirstElement()
@@ -393,19 +376,19 @@ public class Folder<O extends Object> {
 
 	/**
 	 * Returns the last element of the sorted folder.
-	 * 
+	 *
 	 * @return Last element.
 	 */
 	public synchronized O getLastElement()
 	{
 		return elements == null ? null : getElement(  elements.length - 1 );
 	}
-	
+
 	/**
 	 * Gets index of an element in the array regardless of sorting direction.
-	 * 
-	 * @param element
-	 * @return index
+	 *
+	 * @param element the element to find
+	 * @return the index, or -1 if not found
 	 */
 	private int getIndexOf( O element )
 	{
@@ -416,17 +399,17 @@ public class Folder<O extends Object> {
 		}
 		return -1;
 	}
-	
+
 	/**
 	 * Retrieves the next element in the sorted array.
-	 * 
-	 * @param element
-	 * @return The next element
+	 *
+	 * @param element the current element
+	 * @return the next element, or null if this is the last
 	 */
 	public synchronized O getNextElement( O element )
 	{
 		O result = null;
-		
+
 		int i = getIndexOf( element );
 
 		if( i != -1 && elements != null ) {
@@ -436,17 +419,17 @@ public class Folder<O extends Object> {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Retrieves the previous element in the sorted array.
-	 * 
-	 * @param element
-	 * @return The previous element
+	 *
+	 * @param element the current element
+	 * @return the previous element, or null if this is the first
 	 */
 	public synchronized O getPreviousElement( O element )
 	{
 		O result = null;
-		
+
 		int i = getIndexOf( element );
 
 		if( i != -1 && elements != null ) {
@@ -458,30 +441,34 @@ public class Folder<O extends Object> {
 	}
 	/**
 	 * Retrieves element at index i.
-	 * 
-	 * @param i
-	 * @return Element at index i
+	 *
+	 * @param i the index
+	 * @return the element, or null if empty
 	 */
 	private O getElement( int i )
 	{
 		O result = null;
-		
+
 		if( elements != null ) {
 			result = elements[i];
 		}
 		return result;
 	}
-	
+
 	/**
-	 * Returns true, if folder shows points to the last page.
+	 * Returns true if the current page is the last page.
+	 *
+	 * @return true if on the last page
 	 */
 	public synchronized boolean isLastPage()
 	{
 		return currentPage == pages;
 	}
-	
+
 	/**
-	 * Returns true, if folder shows points to the first page.
+	 * Returns true if the current page is the first page.
+	 *
+	 * @return true if on the first page
 	 */
 	public synchronized boolean isFirstPage()
 	{
@@ -489,9 +476,10 @@ public class Folder<O extends Object> {
 	}
 
 	/**
-	 * Returns true, if elements.equals( lastElementOfTheSortedArray ).
-	 * 
-	 * @param element
+	 * Returns true if the element is the last in the sorted array.
+	 *
+	 * @param element the element to check
+	 * @return true if the element is the last
 	 */
 	public synchronized boolean isLastElement( O element )
 	{
@@ -499,11 +487,12 @@ public class Folder<O extends Object> {
 			return false;
 		return elements[elements.length - 1].equals( element );
 	}
-	
+
 	/**
-	 * Returns true, if elements.equals( firstElementOfTheSortedArray ).
-	 * 
-	 * @param element
+	 * Returns true if the element is the first in the sorted array.
+	 *
+	 * @param element the element to check
+	 * @return true if the element is the first
 	 */
 	public synchronized boolean isFirstElement( O element )
 	{
@@ -511,11 +500,12 @@ public class Folder<O extends Object> {
 			return false;
 		return elements[0].equals( element );
 	}
-	
+
 	/**
-	 * Returns the page this element is on, using the current sort, or 1 if not found
-	 * 
-	 * @param element
+	 * Returns the page this element is on, using the current sort, or 1 if not found.
+	 *
+	 * @param element the element to find
+	 * @return the page number (1-based)
 	 * @since 0.9.33
 	 */
 	public synchronized int getPageOf(O element)

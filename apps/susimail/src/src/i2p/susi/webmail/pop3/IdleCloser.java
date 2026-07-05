@@ -25,12 +25,20 @@ class IdleCloser {
     private static final int DEFAULT_IDLE_SECONDS = 4*60;
     private static final int MIN_IDLE_CONFIG = 60;
 
+    /**
+     * Creates a new idle closer for the given mailbox.
+     *
+     * @param mailbox the POP3 mailbox to monitor
+     */
     public IdleCloser(POP3MailBox mailbox) {
         this.mailbox = mailbox;
         timer = new Checker();
         _log = I2PAppContext.getGlobalContext().logManager().getLog(IdleCloser.class);
     }
 
+    /**
+     * Cancels the idle closer.
+     */
     public void cancel() {
         isDead = true;
         timer.cancel();

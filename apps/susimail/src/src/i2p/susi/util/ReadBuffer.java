@@ -1,12 +1,12 @@
 /*
  * Created on Nov 15, 2004
- * 
+ *
  *  This file is part of susimail project, see http://susi.i2p/
- *  
+ *
  *  Copyright (C) 2004-2005  <susi23@mail.i2p>
  *
  * Licensed under the GPLv2 or later.
- *  
+ *
  * $Revision: 1.2 $
  */
 package i2p.susi.util;
@@ -26,7 +26,14 @@ public class ReadBuffer implements Buffer {
 
 	public final byte[] content;
 	public final int length, offset;
-	
+
+	/**
+	 * Create a ReadBuffer for a portion of a byte array.
+	 *
+	 * @param content the byte array containing the data
+	 * @param offset the start offset within the array
+	 * @param length the number of bytes from offset
+	 */
 	public ReadBuffer(byte[] content, int offset, int length) {
 		this.content = content;
 		this.offset = offset;

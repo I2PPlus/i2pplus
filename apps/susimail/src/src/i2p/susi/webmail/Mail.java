@@ -196,16 +196,6 @@ class Mail {
     public synchronized String getAttachmentType() {
         if (contentType == null) {return "none";}
         else if (contentType.contains("text/html") || contentType.contains("multipart/alternative")) {return "html";}
-/* TODO: support mailPart to determine attachment mimetype
-        else if (mailPart.type.contains("image/")) {return "image";}
-        else if (mailPart.type.contains("video/")) {return "video";}
-        else if (mailPart.type.contains("audio/")) {return "audio";}
-        else if (mailPart.type.contains("/pdf")) {return "pdf";}
-        else if (mailPart.type.contains("application/zip") ||
-                         mailPart.type.endsWith("zip") ||
-                         mailPart.type.contains("/x-tar") ||
-                         mailPart.type.contains("/x-bzip")) {return "zip";}
-*/
         else {return "undefined";}
     }
 

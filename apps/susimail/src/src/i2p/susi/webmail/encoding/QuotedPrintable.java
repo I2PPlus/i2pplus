@@ -32,6 +32,10 @@ public class QuotedPrintable extends Encoding {
 
 	private static int BUFSIZE = 2;
 
+	/**
+	 * @return Base64-encoded String.
+	 * @throws EncodingException if encoding fails
+	 */
 	public String encode( byte[] in ) throws EncodingException {
 		try {
 			Writer strBuf = new StringBuilderWriter();
@@ -150,7 +154,6 @@ public class QuotedPrintable extends Encoding {
 						/*
 						 * decode sequence
 						 */
-						// System.err.println( "decoding 0x" + (char)a + "" + (char)b );
 						if( a >= '0' && a <= '9' )
 							a -= '0';
 						else if( a >= 'A' && a <= 'F' )

@@ -13,6 +13,11 @@ public class OutputStreamBuffer implements Buffer {
 
 	private final OutputStream _out;
 
+	/**
+	 * Create an OutputStreamBuffer wrapping the given output stream.
+	 *
+	 * @param out the output stream to write to
+	 */
 	public OutputStreamBuffer(OutputStream out) {
 		_out = out;
 	}
@@ -40,7 +45,9 @@ public class OutputStreamBuffer implements Buffer {
 	public void readComplete(boolean success) {}
 
 	/**
-	 * Closes the output stream
+	 * Close the output stream.
+	 *
+	 * @param success ignored
 	 */
 	public void writeComplete(boolean success) {
 		try { _out.close(); } catch (IOException ioe) { /* ignored */ }

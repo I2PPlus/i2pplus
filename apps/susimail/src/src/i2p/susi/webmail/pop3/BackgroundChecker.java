@@ -31,6 +31,11 @@ class BackgroundChecker {
     private static final long MIN_IDLE = 30*60*1000;
     private static final long MIN_SINCE = 60*60*1000;
 
+    /**
+     * Creates a new background checker for the given mailbox.
+     *
+     * @param mailbox the POP3 mailbox to check for new mail
+     */
     public BackgroundChecker(POP3MailBox mailbox) {
         this.mailbox = mailbox;
         toDelete = new ConcurrentHashSet<>();
@@ -38,11 +43,19 @@ class BackgroundChecker {
         _log = I2PAppContext.getGlobalContext().logManager().getLog(BackgroundChecker.class);
     }
 
+    /**
+     * Returns the list of queued deletions.
+     *
+     * @return a copy of the queued UIDLs
+     */
     public Collection<String> getQueued() {
         List<String> rv = new ArrayList<>(toDelete);
         return rv;
     }
 
+    /**
+     * Cancels the background checker.
+     */
     public void cancel() {
         isDead = true;
         timer.cancel();

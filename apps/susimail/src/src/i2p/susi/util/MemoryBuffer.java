@@ -18,16 +18,27 @@ public class MemoryBuffer implements Buffer {
 	private byte[] content;
 	private final int _size;
 	
+	/**
+	 * Create a MemoryBuffer with default initial capacity.
+	 */
 	public MemoryBuffer() {
 		this(4096);
 	}
 
+	/**
+	 * Create a MemoryBuffer with specified initial capacity.
+	 *
+	 * @param size the initial capacity in bytes
+	 */
 	public MemoryBuffer(int size) {
 		_size = size;
 	}
 
 	/**
+	 * Get an InputStream for the buffered data.
+	 *
 	 * @return new ByteArrayInputStream
+	 * @throws IOException if no data has been written
 	 */
 	@Override
 	public synchronized InputStream getInputStream() throws IOException {
@@ -37,6 +48,8 @@ public class MemoryBuffer implements Buffer {
 	}
 
 	/**
+	 * Get an OutputStream for writing data to this buffer.
+	 *
 	 * @return new or existing ByteArrayOutputStream
 	 */
 	@Override
@@ -50,7 +63,10 @@ public class MemoryBuffer implements Buffer {
 	public void readComplete(boolean success) {}
 
 	/**
-	 * Deletes the data if success is false
+	 * Finalize the write. If successful, the data is stored.
+	 * If not, the data is discarded.
+	 *
+	 * @param success if true, stores the data; if false, discards it
 	 */
 	public synchronized void writeComplete(boolean success) {
 		if (success) {
@@ -63,7 +79,9 @@ public class MemoryBuffer implements Buffer {
 	}
 
 	/**
-	 * Current size.
+	 * Get the current size of data in this buffer.
+	 *
+	 * @return the size in bytes
 	 */
 	@Override
 	public synchronized int getLength() {
@@ -82,7 +100,9 @@ public class MemoryBuffer implements Buffer {
 	}
 
 	/**
-	 * @return content if writeComplete(true) was called, otherwise null
+	 * Get the buffered content after writeComplete(true).
+	 *
+	 * @return content bytes if writeComplete(true) was called, otherwise null
 	 */
 	public byte[] getContent() {
 		return content;

@@ -33,8 +33,11 @@ public class Config {
 	private static String configPrefix;
 
 	/**
+	 * Get a property by name, checking system properties first,
+	 * then the config file, then the default properties.
 	 *
-	 * @param name
+	 * @param name the property name (prefix will be added if set)
+	 * @return the property value, or null if not found
 	 */
 	public synchronized static String getProperty( String name )
 	{
@@ -73,8 +76,8 @@ public class Config {
 	}
 
 	/**
-	 *
-	 *
+	 * Reload the configuration from the properties resource and the
+	 * susimail.config file in the config directory.
 	 */
 	public synchronized static void reloadConfiguration()
 	{
@@ -155,9 +158,11 @@ public class Config {
 	}
 
 	/**
+	 * Get a property by name with a default value.
 	 *
-	 * @param name
-	 * @param defaultValue
+	 * @param name the property name
+	 * @param defaultValue the value to return if the property is not found
+	 * @return the property value, or defaultValue if not found
 	 */
 	public synchronized static String getProperty( String name, String defaultValue )
 	{
@@ -166,9 +171,11 @@ public class Config {
 	}
 
 	/**
+	 * Get a property as an integer with a default value.
 	 *
-	 * @param name
-	 * @param defaultValue
+	 * @param name the property name
+	 * @param defaultValue the value to return if the property is not found or not a valid integer
+	 * @return the property value as an integer, or defaultValue
 	 */
 	public synchronized static int getProperty( String name, int defaultValue )
 	{
@@ -188,8 +195,11 @@ public class Config {
 	}
 
 	/**
+	 * Set the configuration key prefix. All property lookups will be
+	 * prefixed with this string followed by a dot (if not already present).
 	 * Static! Not for use by multiple applications!
-	 * @param prefix
+	 *
+	 * @param prefix the prefix to prepend to property names
 	 */
 	public synchronized static void setPrefix( String prefix )
 	{

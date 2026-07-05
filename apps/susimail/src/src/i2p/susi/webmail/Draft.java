@@ -100,16 +100,26 @@ class Draft extends Mail {
 		return !attachments.isEmpty();
 	}
 
-	/** @return may be null */
+	/**
+	 * @return may be null
+	 */
 	public synchronized String[] getBcc() {
 		return bcc;
 	}
 
-	/** @return non-null, not a copy */
+	/**
+	 * @return non-null, not a copy
+	 */
 	public synchronized List<Attachment> getAttachments() {
 		return attachments;
 	}
 
+	/**
+	 * Adds an attachment if not already present.
+	 *
+	 * @param a the attachment to add
+	 * @return the index of the attachment
+	 */
 	public synchronized int addAttachment(Attachment a) {
 		int rv = attachments.indexOf(a);
 		if (rv >= 0)
@@ -120,6 +130,11 @@ class Draft extends Mail {
 		return rv;
 	}
 
+	/**
+	 * Removes an attachment by index and deletes its data file.
+	 *
+	 * @param index the index of the attachment to remove
+	 */
 	public synchronized void removeAttachment(int index) {
 		if (index >= 0 && index < attachments.size()) {
 			Attachment a = attachments.get(index);
@@ -129,6 +144,9 @@ class Draft extends Mail {
 		}
 	}
 
+	/**
+	 * Removes all attachments and deletes their data files.
+	 */
 	public synchronized void clearAttachments() {
 		for (Attachment a : attachments) {
 			size -= a.getSize();
@@ -137,6 +155,11 @@ class Draft extends Mail {
 		attachments.clear();
 	}
 
+	/**
+	 * Encodes all attachments as header lines for storage.
+	 *
+	 * @return the encoded attachment headers
+	 */
 	public synchronized StringBuilder encodeAttachments() {
 		StringBuilder buf = new StringBuilder(256 * attachments.size());
 		if (attachments.isEmpty())

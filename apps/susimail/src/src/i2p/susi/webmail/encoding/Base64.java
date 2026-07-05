@@ -150,7 +150,6 @@ public class Base64 extends Encoding {
 			b = 0;
 		else
 			throw new DecodingException("Decoding base64 failed, invalid data: " + c);
-		// System.err.println( "decoded " + (char)a + " to " + b );
 		return b;
 	}
 
@@ -172,7 +171,6 @@ public class Base64 extends Encoding {
 			if (c < 0)
 				break;
 
-			// System.out.println( "decode: " + (char)in[offset] + (char)in[offset+1]+ (char)in[offset+2]+ (char)in[offset+3] );
 			byte b1 = decodeByte(c);
 			c = readIn(in);
 			byte b2 = decodeByte(c);

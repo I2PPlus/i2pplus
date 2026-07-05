@@ -62,6 +62,12 @@ public class HexTable {
         return table.clone();
     }
 
+    /**
+     * Convert an integer to its hexadecimal string representation.
+     *
+     * @param b the value (0-255)
+     * @return the hex string without leading zeros
+     */
     private static String intToHex(int b) {
         if (b == 0) {return "0";}
         else {

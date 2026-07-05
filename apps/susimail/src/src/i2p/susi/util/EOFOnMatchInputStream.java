@@ -69,33 +69,6 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
         return pos <= 0;
     }
 
-    /**
-     *  Debug only. Return the number of bytes currently in the buffer.
-     *
-     *  @return number of bytes buffered
-     */
-/*
-    public int getBuffered() {
-        return size - pos;
-    }
-*/
-
-    /**
-     *  Debug only. Return the buffer.
-     *
-     *  @return the buffer
-     */
-/*
-    public byte[] getBuffer() {
-        int len = getBuffered();
-        byte[] b = new byte[len];
-        if (len <= 0)
-            return b;
-        System.arraycopy(buf, pos, b, 0, len);
-        return reverse(b);
-    }
-*/
-
     @Override
     public int read() throws IOException {
         if (pos <= 0)
@@ -142,6 +115,15 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
         return rv;
     }
 
+    /**
+     * Read bytes into a buffer.
+     *
+     * @param buf the buffer to read into
+     * @param off the start offset in the buffer
+     * @param len the maximum number of bytes to read
+     * @return the number of bytes read, or -1 on end of stream
+     * @throws IOException on I/O error
+     */
     @Override
     public int read(byte[] buf, int off, int len) throws IOException {
         for (int i = 0; i < len; i++) {
@@ -156,6 +138,13 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
         return len;
     }
 
+    /**
+     * Skip bytes in the stream.
+     *
+     * @param n the number of bytes to skip
+     * @return the actual number of bytes skipped
+     * @throws IOException on I/O error
+     */
     @Override
     public long skip(long n) throws IOException {
         long rv = 0;
@@ -165,27 +154,4 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
         }
         return rv;
     }
-
-/****
-    public static void main(String[] args) {
-        String match = "xxa";
-        String test = "xxbxaxoaaxxyyyyyyxxxazzzz";
-        byte[] m = DataHelper.getASCII(match);
-        byte[] in = DataHelper.getASCII(test);
-        try {
-            InputStream eof = new EOFOnMatchInputStream(new java.io.ByteArrayInputStream(in), m);
-            byte[] out = new byte[in.length + 10];
-            int read = eof.read(out);
-            if (read != test.indexOf(match))
-                System.out.println("EOFOMIS test failed, read " + read);
-            else if (!DataHelper.eq(in, 0, out, 0, read))
-                System.out.println("EOFOMIS test failed, bad data");
-            else
-                System.out.println("EOFOMIS test passed");
-        } catch (Exception e) {
-            System.out.println("EOFOMIS test failed");
-            e.printStackTrace();
-        }
-    }
-****/
 }

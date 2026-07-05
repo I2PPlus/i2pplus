@@ -17,23 +17,38 @@ import net.i2p.util.SecureFileOutputStream;
  *
  * @since 0.9.34
  */
-		// TODO if _sublen > 0, wrap with a read limiter
 public class GzipFileBuffer extends FileBuffer {
 
 	private long _actualLength;
 	private CountingInputStream _cis;
 	private CountingOutputStream _cos;
 
+	/**
+	 * Create a GzipFileBuffer for the entire file.
+	 *
+	 * @param file the gzip-compressed file
+	 */
 	public GzipFileBuffer(File file) {
 		super(file);
 	}
 
+	/**
+	 * Create a GzipFileBuffer for a portion of the uncompressed data.
+	 *
+	 * @param file the gzip-compressed file
+	 * @param offset the byte offset to start reading from (uncompressed)
+	 * @param sublen the number of bytes to read (uncompressed), or 0 for all
+	 */
 	public GzipFileBuffer(File file, int offset, int sublen) {
 		super(file, offset, sublen);
 	}
 
 	/**
-	 * @return new FileInputStream
+	 * Get a GZIP decompressing InputStream, wrapped with a counter.
+	 * Caller must call readComplete().
+	 *
+	 * @return new InputStream chain for reading uncompressed data
+	 * @throws IOException on I/O error
 	 */
 	@Override
 	public synchronized InputStream getInputStream() throws IOException {
@@ -51,7 +66,12 @@ public class GzipFileBuffer extends FileBuffer {
 	}
 
 	/**
-	 * @return new FileOutputStream
+	 * Get a GZIP compressing OutputStream, wrapped with a counter.
+	 * Caller must call writeComplete().
+	 *
+	 * @return new OutputStream chain for writing compressed data
+	 * @throws IllegalStateException if offset > 0 or already open for writing
+	 * @throws IOException on I/O error
 	 */
 	@Override
 	public synchronized OutputStream getOutputStream() throws IOException {
@@ -63,6 +83,11 @@ public class GzipFileBuffer extends FileBuffer {
 		return _cos;
 	}
 
+	/**
+	 * Close the input stream and record the uncompressed length if successful.
+	 *
+	 * @param success if true, records the bytes read
+	 */
 	@Override
 	public synchronized void readComplete(boolean success) {
 		if (_cis != null) {
@@ -74,7 +99,9 @@ public class GzipFileBuffer extends FileBuffer {
 	}
 
 	/**
-	 * Sets the length if success is true
+	 * Close the output stream and record the uncompressed length if successful.
+	 *
+	 * @param success if true, records the bytes written
 	 */
 	@Override
 	public synchronized void writeComplete(boolean success) {
@@ -87,11 +114,12 @@ public class GzipFileBuffer extends FileBuffer {
 	}
 
 	/**
-         * Returns the actual uncompressed size.
-         *
+	 * Returns the actual uncompressed size.
 	 * Only known after reading and calling readComplete(true),
 	 * or after writing and calling writeComplete(true),
-	 * oherwise returns 0.
+	 * otherwise returns 0.
+	 *
+	 * @return the uncompressed length in bytes
 	 */
 	@Override
 	public int getLength() {

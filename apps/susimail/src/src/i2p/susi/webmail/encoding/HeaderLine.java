@@ -56,27 +56,9 @@ public class HeaderLine extends Encoding {
 	}
 
 	/** @since 0.9.33 */
-/*
-	private static boolean isControl(char c) {
-		return (c < 32 && !isWhiteSpace(c)) ||
-		       (c >= 127 && c < 160);
-	}
-*/
-
-	/** @since 0.9.33 */
 	private static boolean isControlOrMultiByte(char c) {
 		return (c < 32 && !isWhiteSpace(c)) || c >= 127;
 	}
-
-	/** @since 0.9.33 */
-/*
-	private static boolean isSpecial(char c) {
-		return c == '(' || c == ')' || c == '<' || c == '>' ||
-		       c == '@' || c == ',' || c == ';' || c == ':' ||
-		       c == '\\' || c == '"' || c == '.' || c == '[' ||
-		       c == ']';
-	}
-*/
 
 	/** @since 0.9.33 */
 	private static boolean isPSpecial(char c) {
@@ -91,13 +73,6 @@ public class HeaderLine extends Encoding {
 		       (c >= 'A' && c <= 'Z') ||
 		       isPSpecial(c);
 	}
-
-	/** @since 0.9.33 */
-/*
-	private static boolean isAtom(char c) {
-		return ! (isWhiteSpace(c) || isControl(c) || isSpecial(c));
-	}
-*/
 
 	/**
 	 *  Encode a single header line ONLY. Do NOT include the \r\n.
@@ -214,11 +189,10 @@ public class HeaderLine extends Encoding {
 		boolean hasPushback = false;
 		while (true) {
 			int c;
-			if (hasPushback) {
-				c = pushbackChar;
-				hasPushback = false;
-				//if (_log.shouldDebug()) _log.debug("Loop " + count + " Using pbchar(dec) " + c);
-			} else {
+		if (hasPushback) {
+			c = pushbackChar;
+			hasPushback = false;
+		} else {
 				c = in.read();
 				if (c < 0)
 					break;
@@ -272,10 +246,6 @@ public class HeaderLine extends Encoding {
 						break;
 					}
 				}
-				//if (f1 > 0)
-				//	if (_log.shouldDebug()) _log.debug("End of encoded word, f1 " + f1 + " f2 " + f2 + " f3 " + f3 + " f4 " + f4 +
-				//	" offset " + offset + " pushback? " + hasPushback + " pbchar(dec) " + c + '\n' +
-				//	net.i2p.util.HexDump.dump(encodedWord, 0, offset));
 				if (f4 == 0) {
 					// at most 1 byte is pushed back
 					if (f1 == 0) {
@@ -310,12 +280,10 @@ public class HeaderLine extends Encoding {
 				             ((encodedWord[f2+1] == 'B' || encodedWord[f2+1] == 'b') ?
 				              "base64" :
 				              null);
-				// System.err.println( "4th ? found at " + f4 + ", encoding=" + enc );
 				if (enc != null) {
 					Encoding e = EncodingFactory.getEncoding( enc );
 					if( e != null ) {
 						try {
-							// System.err.println( "decode(" + (f3 + 1) + "," + ( f4 - f3 - 1 ) + ")" );
 							ReadBuffer tmpIn = new ReadBuffer(encodedWord, f3 + 1, f4 - f3 - 1);
 							// decoded won't be longer than encoded
 							MemoryBuffer tmp = new MemoryBuffer(f4 - f3 - 1);
@@ -434,55 +402,11 @@ public class HeaderLine extends Encoding {
 				out.write(c);
 				lastCharWasQuoted = false;
 			}
-		}  // while true
-		if( linebreak ) {
-			out.write('\r');
-			out.write('\n');
-		}
-		bout.writeComplete(true);
+	}  // while true
+	if( linebreak ) {
+		out.write('\r');
+		out.write('\n');
 	}
-
-/*****
-	public static void main( String[] args ) throws EncodingException {
-		test("Subject: not utf8");
-		test("Subject: a=b c+d");
-		test("Subject: está");
-		test("Subject: 🚚 ORDER SHIPPED");
-		test("12345678: 12345678901234567890123456789012345678901234567890123456789012345");
-		test("12345678: 123456789012345678901234567890123456789012345678901234567890123456");
-		test("12345678: 1234567890123456789012345678901234567890123456789012345678901234567");
-		test("12345678: 1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789");
-		test("12345678: 12345678901234567890123456789012345678901234567890123456789012345@");
-		test("12345678: 123456789012345678901234567890123456789012345678901234567890123456@");
-		test("12345678: 123456789012345678901234567890123456789012345678901@234567890123456789");
-		test("12345678: 1234567890123456789012345678901234567890123456789012@34567890123456789");
-		test("12345678: 12345678901234567890123456789012345678901234567890123@4567890123456789");
-		test("12345678: 123456789012345678901234567890123456789012345678901234@567890123456789");
-	}
-
-	private static void test(String x) {
-		HeaderLine hl = new HeaderLine();
-		String orig = x;
-		System.out.println(x);
-		try {
-			x = hl.encode(x);
-		} catch (EncodingException e) {
-			e.printStackTrace();
-			return;
-		}
-		System.out.print(x);
-		try {
-			ReadBuffer rb = hl.decode(x);
-			String rt = DataHelper.getUTF8(rb.content, rb.offset, rb.length);
-			if (rt.equals(orig + "\r\n")) {
-				System.out.println("Test passed\n");
-			} else {
-				System.out.print(rt);
-				System.out.println("*** Test failed ***\n");
-			}
-		} catch (DecodingException e) {
-			e.printStackTrace();
-		}
-	}
-****/
+	bout.writeComplete(true);
+}
 }

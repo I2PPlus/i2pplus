@@ -46,7 +46,7 @@ class MailPart {
      *  warning - end is exclusive
      */
     private final int beginBody, begin, end;
-    /** fixme never set */
+    /** Always null, reserved for future use */
     public final String filename = null;
     public final List<MailPart> parts;
     public final boolean multipart, message;

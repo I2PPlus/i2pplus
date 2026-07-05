@@ -29,6 +29,11 @@ class DelayedDeleter {
     private static final long CHECK_TIME = 16*60*1000;
     private static final long MIN_IDLE = 60*60*1000;
 
+    /**
+     * Creates a new delayed deleter for the given mailbox.
+     *
+     * @param mailbox the POP3 mailbox to delete from
+     */
     public DelayedDeleter(POP3MailBox mailbox) {
         this.mailbox = mailbox;
         toDelete = new ConcurrentHashSet<>();
@@ -36,15 +41,33 @@ class DelayedDeleter {
         _log = I2PAppContext.getGlobalContext().logManager().getLog(DelayedDeleter.class);
     }
 
+    /**
+     * Queues a UIDL for later deletion.
+     *
+     * @param uidl the message UIDL to delete
+     */
     public void queueDelete(String uidl) {toDelete.add(uidl);}
 
+    /**
+     * Removes a UIDL from the deletion queue.
+     *
+     * @param uidl the message UIDL to remove from queue
+     */
     public void removeQueued(String uidl) {toDelete.remove(uidl);}
 
+    /**
+     * Returns the list of queued deletions.
+     *
+     * @return a copy of the queued UIDLs
+     */
     public Collection<String> getQueued() {
         List<String> rv = new ArrayList<>(toDelete);
         return rv;
     }
 
+    /**
+     * Cancels the delayed deleter.
+     */
     public void cancel() {
         isDead = true;
         timer.cancel();
