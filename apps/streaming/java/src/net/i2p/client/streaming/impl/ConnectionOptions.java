@@ -12,10 +12,10 @@ import net.i2p.util.ConvertToHash;
 import net.i2p.util.Log;
 
 /**
- * Define the current options for the con (and allow custom tweaking midstream)
+ * Define the current options for the con (and allow custom tweaking midstream).
  *
- * TODO many of these are not per-connection options, and should be migrated
- * somewhere so they aren't copied for every connection
+ * Many of these are not per-connection options, and should be migrated
+ * somewhere so they aren't copied for every connection.
  */
 class ConnectionOptions extends I2PSocketOptionsImpl {
     private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(ConnectionOptions.class);
@@ -624,15 +624,17 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
     }
 
     /**
-     * how long will we wait after instantiating a new con
-     * before actually attempting to connect.  If this is
-     * set to 0, connect ASAP.  If it is greater than 0, wait
-     * until the output stream is flushed, the buffer fills,
-     * or that many milliseconds pass.
+     * Get the connect delay in milliseconds.
      *
      * @return how long to wait before actually attempting to connect
      */
     public int getConnectDelay() {return _connectDelay;}
+
+    /**
+     * Set the connect delay in milliseconds.
+     *
+     * @param delayMs the delay
+     */
     public void setConnectDelay(int delayMs) {_connectDelay = delayMs;}
 
     /**
@@ -655,6 +657,11 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
      * @return if we do
      */
     public boolean getAnswerPings() {return _answerPings;}
+    /**
+     * Set whether we respond to pings.
+     *
+     * @param yes true to answer pings
+     */
     public void setAnswerPings(boolean yes) {_answerPings = yes;}
 
     /**
@@ -668,6 +675,11 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
      * @since 0.9.1
      */
     public boolean getEnforceProtocol() {return _enforceProto;}
+    /**
+     * Set whether protocol enforcement is enabled.
+     *
+     * @param yes true to enforce PROTO_STREAMING
+     */
     public void setEnforceProtocol(boolean yes) {_enforceProto = yes;}
 
     /**
@@ -677,6 +689,11 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
      * @since 0.9.4
      */
     public boolean getDisableRejectLogging() {return _disableRejectLog;}
+    /**
+     * Set whether connection rejected logging is disabled.
+     *
+     * @param yes true to disable logging
+     */
     public void setDisableRejectLogging(boolean yes) {_disableRejectLog = yes;}
 
     /**
@@ -685,6 +702,11 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
      * @return Maximum amount of messages that can be in-flight
      */
     public int getWindowSize() {return _windowSize;}
+    /**
+     * Set the window size (number of messages that can be in-flight).
+     *
+     * @param numMsgs the window size, clamped to [MIN_WINDOW_SIZE, maxWindowSize]
+     */
     public void setWindowSize(int numMsgs) {
         if (numMsgs <= 0) {numMsgs = 1;}
         if (numMsgs < MIN_WINDOW_SIZE) {numMsgs = MIN_WINDOW_SIZE;}
@@ -843,6 +865,11 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
      * @return Maximum message size (MTU/MRU)
      */
     public int getMaxMessageSize() {return _maxMessageSize;}
+    /**
+     * Set the maximum message size (MTU/MRU).
+     *
+     * @param bytes the maximum message size, at least MIN_MESSAGE_SIZE
+     */
     public void setMaxMessageSize(int bytes) {
         _maxMessageSize = Math.max(bytes, MIN_MESSAGE_SIZE);
         _maxInitialMessageSize = Math.min(_maxMessageSize, DEFAULT_MAX_MESSAGE_SIZE);
@@ -899,6 +926,11 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
 
     public int getMaxWindowSize() {return _maxWindowSize;}
 
+    /**
+     * Set the maximum window size.
+     *
+     * @param msgs the maximum window size, clamped to [2, 2*MAX_WINDOW_SIZE]
+     */
     public void setMaxWindowSize(int msgs) {
         _maxWindowSize = 1;
         if (msgs > 2 * Connection.MAX_WINDOW_SIZE) {_maxWindowSize = 2 * Connection.MAX_WINDOW_SIZE;}
@@ -912,6 +944,11 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
      * @return size of the buffer used to accept data
      */
     public int getInboundBufferSize() {return _inboundBufferSize;}
+    /**
+     * Set the inbound buffer size in bytes.
+     *
+     * @param bytes the buffer size
+     */
     public void setInboundBufferSize(int bytes) {_inboundBufferSize = bytes;}
 
     /**
@@ -1047,17 +1084,6 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
         if (_inactivityTimeout > 0) {buf.append(" inactivityTimeout=").append(_inactivityTimeout);}
         buf.append(" inboundBuffer=").append(_inboundBufferSize);
         buf.append(" maxWindowSize=").append(_maxWindowSize);
-
-/** Unresolved NPE
-        if (_blackListEnabled && !_blackList.isEmpty() || _accessList.size() > 0 || (_maxConnsPerMinute > 0
-                                   || _maxConnsPerHour > 0 || _maxConnsPerDay > 0)
-                                   || (_maxTotalConnsPerMinute > 0 || _maxTotalConnsPerHour > 0 || _maxTotalConnsPerDay > 0))
-            buf.append("\n*");
-        if (_blackListEnabled && !_blackList.isEmpty())
-            buf.append(" blacklistSize=").append(_blackList.size());
-        if (_accessListEnabled && !_accessList.isEmpty())
-            buf.append(" whitelistSize=").append(_accessList.size());
-**/
         if (_maxConnsPerMinute > 0 || _maxConnsPerHour > 0 || _maxConnsPerDay > 0) {
             buf.append(" maxConns=").append(_maxConnsPerMinute).append('/')
                                     .append(_maxConnsPerHour).append('/')

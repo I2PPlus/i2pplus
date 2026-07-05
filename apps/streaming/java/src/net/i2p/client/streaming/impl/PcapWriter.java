@@ -77,32 +77,47 @@ public class PcapWriter implements Closeable, Flushable {
     private final OutputStream _fos;
     private final I2PAppContext _context;
 
+    /**
+     * Creates a new PcapWriter that writes to the specified file in the log directory.
+     *
+     * @param ctx the application context
+     * @param file the filename to write (relative to the log directory)
+     * @throws IOException if the file cannot be opened or the header cannot be written
+     */
     public PcapWriter(I2PAppContext ctx, String file) throws IOException {
         _context = ctx;
         File f = new File(ctx.getLogDir(), file);
-        //if (f.exists()) {
-        //    _fos = new FileOutputStream(f, true);
-        //} else {
-            _fos = new BufferedOutputStream(new FileOutputStream(f), 64*1024);
-            _fos.write(FILE_HEADER);
-        //}
-    }
-
-    @Override
-    public void close() {
-            try {
-                _fos.close();
-            } catch (IOException ioe) { /* ignored */ }
-    }
-
-    public void flush() {
-            try {
-                _fos.flush();
-            } catch (IOException ioe) { /* ignored */ }
+        _fos = new BufferedOutputStream(new FileOutputStream(f), 64*1024);
+        _fos.write(FILE_HEADER);
     }
 
     /**
-     *  For outbound packets
+     * Closes the output stream, flushing any buffered data.
+     * Errors during close are silently ignored.
+     */
+    @Override
+    public void close() {
+        try {
+            _fos.close();
+        } catch (IOException ioe) { /* ignored */ }
+    }
+
+    /**
+     * Flushes any buffered data to the underlying output stream.
+     * Errors during flush are silently ignored.
+     */
+    @Override
+    public void flush() {
+        try {
+            _fos.flush();
+        } catch (IOException ioe) { /* ignored */ }
+    }
+
+    /**
+     * Write an outbound packet to the pcap file.
+     *
+     * @param pkt the outbound packet to write
+     * @throws IOException if the packet cannot be written
      */
     public void write(PacketLocal pkt) throws IOException {
         try {
@@ -114,8 +129,11 @@ public class PcapWriter implements Closeable, Flushable {
     }
 
     /**
-     *  For inbound packets
-     *  @param con may be null
+     * Write an inbound packet to the pcap file.
+     *
+     * @param pkt the inbound packet to write
+     * @param con the connection, may be null
+     * @throws IOException if the packet cannot be written
      */
     public void write(Packet pkt, Connection con) throws IOException {
         try {
@@ -127,7 +145,13 @@ public class PcapWriter implements Closeable, Flushable {
     }
 
     /**
-     *  @param con may be null
+     * Write a packet to the pcap file in the proper format.
+     *
+     * @param pkt the packet to write
+     * @param con the connection, may be null
+     * @param isInbound true if the packet is inbound
+     * @throws IOException if the packet cannot be written
+     * @throws DataFormatException if the packet data is malformed
      */
     private synchronized void wrt(Packet pkt, Connection con, boolean isInbound) throws IOException, DataFormatException {
         int includeLen = Math.min(MAX_PAYLOAD_BYTES, pkt.getPayloadSize());
@@ -305,16 +329,11 @@ public class PcapWriter implements Closeable, Flushable {
     }
 
     /**
-     *  copied from Connection.ackPackets()
+     * Calculate the lowest sequence number that has been acked through.
      *
-     *  This is really nasty, but if the packet has an ACK, then we
-     *  find the lowest NACK, and we are acked thru the lowest - 1.
-     *
-     *  If there is no ACK, then we could use the conn's highest acked through,
-     *  for an inbound packet (containing acks for outbound packets)
-     *  But it appears that all packets have ACKs, as FLAG_NO_ACK is never set.
-     *
-     *  To do: Add the SACK option to the TCP header.
+     * @param pkt the packet containing ack information
+     * @param con the connection
+     * @return the lowest acked-through sequence number (at least 0)
      */
     private static long getLowestAckedThrough(Packet pkt, Connection con) {
         long[] nacks = pkt.getNacks();
@@ -332,6 +351,9 @@ public class PcapWriter implements Closeable, Flushable {
         return Math.max(0, lowest);
     }
 
+    /**
+     * Builder for TCP option blocks in the pcap output.
+     */
     private static class Options {
         private final byte[] _b;
         private int _len;
@@ -340,16 +362,37 @@ public class PcapWriter implements Closeable, Flushable {
             _b = new byte[MAX_OPTION_LEN];
         }
 
-        /** 40 bytes long, caller must use size() to get actual size */
+        /**
+         * Returns the raw option data buffer (40 bytes long).
+         * The caller must use {@link #size()} to get the actual used length.
+         *
+         * @return the option data buffer
+         */
         public byte[] getData() { return _b; }
 
-        /** rounded to next 4 bytes */
+        /**
+         * Returns the actual option length, rounded up to the next 4-byte boundary.
+         *
+         * @return the padded option length in bytes
+         */
         public int size() { return ((_len + 3) / 4) * 4; }
 
+        /**
+         * Add a zero-data option.
+         *
+         * @param type the option type byte
+         */
         public void add(byte type) {
              add(type, 0, 0);
         }
 
+        /**
+         * Add an option with integer data.
+         *
+         * @param type the option type byte
+         * @param datalen the length of the data in bytes
+         * @param data the option data value
+         */
         public void add(byte type, int datalen, int data) {
             // no room? drop silently
             if (_len + datalen + 2 > MAX_OPTION_LEN)
@@ -366,11 +409,25 @@ public class PcapWriter implements Closeable, Flushable {
         }
     }
 
-    /** one's complement 2-byte checksum update */
+    /**
+     * One's complement 2-byte checksum update.
+     *
+     * @param checksum the running checksum
+     * @param b the data to incorporate
+     * @return the updated checksum
+     */
     private static int update(int checksum, byte[] b) {
         return update(checksum, b, b.length);
     }
 
+    /**
+     * One's complement 2-byte checksum update.
+     *
+     * @param checksum the running checksum
+     * @param b the data to incorporate
+     * @param len the number of bytes to use from b
+     * @return the updated checksum
+     */
     private static int update(int checksum, byte[] b, int len) {
         int rv = checksum;
         for (int i = 0; i < len; i += 2) {

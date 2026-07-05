@@ -4,7 +4,8 @@ import net.i2p.I2PAppContext;
 import net.i2p.util.SimpleTimer2;
 
 /**
- *  Per-destination timer
+ * Per-destination timer for scheduling packet retransmissions.
+ * Each connection gets its own timer instance to avoid contention.
  */
 public class RetransmissionTimer extends SimpleTimer2 {
 
@@ -19,7 +20,11 @@ public class RetransmissionTimer extends SimpleTimer2 {
 
 
     /**
-     *  @since 0.9
+     * Creates a new retransmission timer.
+     *
+     * @param ctx the application context
+     * @param name the timer thread name
+     * @since 0.9
      */
     RetransmissionTimer(I2PAppContext ctx, String name) {
         super(ctx, name, false);

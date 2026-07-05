@@ -34,6 +34,13 @@ class SchedulerClosing extends SchedulerImpl {
         super(ctx);
     }
 
+    /**
+     * Accept connections where both sides have closed but at least one
+     * direction hasn't ACKed the close.
+     *
+     * @param con the connection to check
+     * @return true if the connection is in the closing state
+     */
     @Override
     public boolean accept(Connection con) {
         if (con == null)
@@ -47,6 +54,12 @@ class SchedulerClosing extends SchedulerImpl {
         return ok;
     }
 
+    /**
+     * Handle an event on a closing connection. If there's data to send
+     * and the send delay has elapsed, send it. Otherwise reschedule.
+     *
+     * @param con the connection that had an event
+     */
     public void eventOccurred(Connection con) {
         long nextSend = con.getNextSendTime();
         long now = _context.clock().now();
@@ -63,14 +76,9 @@ class SchedulerClosing extends SchedulerImpl {
         if (remaining <= 0) {
             if (con.getCloseSentOn() <= 0) {
                 con.sendAvailable();
-            } else {
-                //con.ackImmediately();
             }
             con.setNextSendTime(now + con.getOptions().getSendAckDelay());
         } else {
-            //if (remaining < 5*1000)
-            //    remaining = 5*1000;
-            //con.setNextSendTime(when
             reschedule(remaining, con);
         }
     }

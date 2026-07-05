@@ -48,11 +48,19 @@ class TCBShare {
     /**
      * Get the maximum window size for TCB sharing from config.
      * Tunable via i2p.streaming.maxSlowStartWindow (default: 64).
+     *
+     * @return the maximum window size
      */
     private int getMaxWindowSize() {
         return ConnectionPacketHandler.getMaxSlowStartWindow(_context);
     }
 
+    /**
+     * Creates a new TCB share cache.
+     *
+     * @param ctx the application context
+     * @param timer the timer for periodic cache cleaning
+     */
     public TCBShare(I2PAppContext ctx, SimpleTimer2 timer) {
         _context = ctx;
         _log = ctx.logManager().getLog(TCBShare.class);
@@ -83,7 +91,11 @@ class TCBShare {
         _cache.clear();
     }
 
-    /** retrieve from cache */
+    /**
+     * Retrieve cached TCB parameters and apply them to the connection's options.
+     *
+     * @param con the connection to update from the cache
+     */
     public void updateOptsFromShare(Connection con) {
         Destination dest = con.getRemotePeer();
         if (dest == null)
@@ -112,7 +124,11 @@ class TCBShare {
         opts.loadFromCache(rtt,rttDev,wdw);
     }
 
-    /** store to cache */
+    /**
+     * Store the connection's current TCB parameters into the cache.
+     *
+     * @param con the connection whose parameters to cache
+     */
     public void updateShareOpts(Connection con) {
         Destination dest = con.getRemotePeer();
         if (dest == null)
@@ -150,12 +166,22 @@ class TCBShare {
         }
     }
 
+    /**
+     * A cached entry holding dampened TCB parameters for a remote peer.
+     */
     private class Entry {
         int _rtt;
         int _wdw;
         int _rttDev;
         long _updated;
 
+        /**
+         * Creates a new entry with the given initial values.
+         *
+         * @param ms the initial RTT in milliseconds
+         * @param wdw the initial window size
+         * @param rttDev the initial RTT deviation
+         */
         public Entry(int ms, int wdw, int rttDev) {
             _rtt = ms;
             _wdw = wdw;
@@ -188,6 +214,9 @@ class TCBShare {
         }
     }
 
+    /**
+     * Periodic timer event that removes expired entries from the cache.
+     */
     private class CleanEvent extends SimpleTimer2.TimedEvent {
         public CleanEvent(SimpleTimer2 timer) {
             // Use router's SimpleTimer2

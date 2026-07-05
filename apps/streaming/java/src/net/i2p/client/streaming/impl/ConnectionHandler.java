@@ -69,6 +69,13 @@ class ConnectionHandler {
         setActive(false);
     }
 
+    /**
+     * Set whether this handler is actively accepting new connections.
+     * When set to false, a poison packet is offered to wake any
+     * threads blocked in accept().
+     *
+     * @param active true to accept connections, false to stop
+     */
     public synchronized void setActive(boolean active) {
         // FIXME active=false this only kills for one thread in accept()
         // if there are more, they won't get a poison packet.
@@ -89,6 +96,11 @@ class ConnectionHandler {
         }
     }
 
+    /**
+     * Check if this handler is actively accepting new connections.
+     *
+     * @return true if accepting connections
+     */
     public boolean getActive() {return _active;}
 
     /**
@@ -203,7 +215,7 @@ class ConnectionHandler {
                     throw new ConnectException("ServerSocket closed");
                 }
 
-                /** deal with forged / invalid syn packets in _manager.receiveConnection() **/
+                /* deal with forged / invalid syn packets in _manager.receiveConnection() */
 
                 // Handle both SYN and non-SYN packets in the queue
                 if (syn.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
@@ -294,7 +306,6 @@ class ConnectionHandler {
         reply.setReceiveStreamId(0);
         // As of 0.9.20 we do not require FROM
         // Removed in 0.9.39
-        //reply.setOptionalFrom();
         if (_log.shouldDebug()) {_log.debug("Sending RESET: " + reply + " because of " + packet);}
         _manager.getPacketQueue().enqueue(reply); // this just sends the packet - no retries or whatnot
     }
@@ -329,6 +340,10 @@ class ConnectionHandler {
         _manager.getPacketQueue().enqueue(reply);
     }
 
+    /**
+     * Timer event that removes a SYN packet from the queue after the
+     * accept timeout expires, sending a reset if it was a SYN.
+     */
     private class TimeoutSyn implements SimpleTimer.TimedEvent {
         private final Packet _synPacket;
 

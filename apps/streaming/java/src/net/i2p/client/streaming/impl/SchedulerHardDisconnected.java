@@ -32,6 +32,13 @@ class SchedulerHardDisconnected extends SchedulerImpl {
         super(ctx);
     }
 
+    /**
+     * Accept connections that have been locally hard disconnected or
+     * sent a RESET, and the final timeout hasn't passed.
+     *
+     * @param con the connection to check
+     * @return true if the connection is in the hard disconnected state
+     */
     public boolean accept(Connection con) {
         if (con == null) return false;
         long timeSinceClose = _context.clock().now() - con.getCloseSentOn();
@@ -42,7 +49,13 @@ class SchedulerHardDisconnected extends SchedulerImpl {
         return ok || con.getResetReceived();
     }
 
+    /**
+     * Handle an event on a hard-disconnected connection. No-op since
+     * timeout is handled by the simpleTimer.
+     *
+     * @param con the connection that had an event
+     */
     public void eventOccurred(Connection con) {
-        // noop.  we do the timeout through the simpleTimer anyway
+        // noop - timeout handled by the simpleTimer
     }
 }

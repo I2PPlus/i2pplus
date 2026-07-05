@@ -7,7 +7,6 @@ import net.i2p.util.Log;
 
 /**
  * Examine a connection's state and pick the right scheduler for it.
- *
  */
 class SchedulerChooser {
     private final I2PAppContext _context;
@@ -16,6 +15,11 @@ class SchedulerChooser {
     /** list of TaskScheduler objects */
     private final List<TaskScheduler> _schedulers;
 
+    /**
+     * Create a new scheduler chooser with all available schedulers.
+     *
+     * @param context the application context
+     */
     public SchedulerChooser(I2PAppContext context) {
         _context = context;
         _log = context.logManager().getLog(SchedulerChooser.class);
@@ -23,12 +27,16 @@ class SchedulerChooser {
         _nullScheduler = new NullScheduler();
     }
 
+    /**
+     * Return the appropriate scheduler for the given connection.
+     *
+     * @param con the connection to schedule
+     * @return the scheduler that accepts this connection, or the null scheduler
+     */
     public TaskScheduler getScheduler(Connection con) {
         for (int i = 0; i < _schedulers.size(); i++) {
             TaskScheduler scheduler = _schedulers.get(i);
             if (scheduler.accept(con)) {
-                //if (_log.shouldDebug())
-                //    _log.debug("Scheduling for " + con + " with " + scheduler.getClass().getSimpleName());
                 return scheduler;
             }
         }
@@ -56,5 +64,5 @@ class SchedulerChooser {
                 _log.info("Yell at jrandom: Event occurred on " + con, new Exception("source"));
         }
         public boolean accept(Connection con) { return true; }
-    };
+    }
 }

@@ -189,6 +189,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @param session non-null
      * @param opts may be null
      * @param name non-null
+     * @param connectionFilter the filter for incoming connections, may be null
      */
     public I2PSocketManagerFull(I2PAppContext context, I2PSession session, Properties opts, String name,
                 IncomingConnectionFilter connectionFilter) {
@@ -242,6 +243,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     /**
      *  Create a copy of the current options, to be used in a setDefaultOptions() call.
+     *
+     * @return a copy of the current default options
      */
     public I2PSocketOptions buildOptions() { return buildOptions(null); }
 
@@ -250,7 +253,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *
      *  As of 0.9.19, defaults in opts are honored.
      *
-     *  @param opts The new options, may be null
+     * @param opts The new options, may be null
+     * @return a new options object with the specified modifications
      */
     public I2PSocketOptions buildOptions(Properties opts) {
         ConnectionOptions curOpts = new ConnectionOptions(_defaultOptions);
@@ -368,6 +372,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         return _session.getSubsessions();
     }
 
+    /**
+     * @return the connection manager
+     */
     public ConnectionManager getConnectionManager() {
         return _connectionManager;
     }
@@ -400,10 +407,10 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *
      * TODO There is no way to ping on a subsession.
      *
-     * @param peer
+     * @param peer Destination to ping
      * @param timeoutMs timeout in ms, greater than zero
      * @return true on success, false on failure
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if timeoutMs is not greater than zero
      */
     public boolean ping(Destination peer, long timeoutMs) {
         if (timeoutMs <= 0)
@@ -425,7 +432,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @param remotePort 0 - 65535
      * @param timeoutMs timeout in ms, greater than zero
      * @return success or failure
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if ports or timeout are invalid
      * @since 0.9.12
      */
     public boolean ping(Destination peer, int localPort, int remotePort, long timeoutMs) {
@@ -451,7 +458,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @param timeoutMs timeout in ms, greater than zero
      * @param payload to include in the ping
      * @return the payload received in the pong, zero-length if none, null on failure or timeout
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if ports or timeout are invalid
      * @since 0.9.18
      */
     public byte[] ping(Destination peer, int localPort, int remotePort, long timeoutMs, byte[] payload) {
@@ -470,6 +477,10 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @param ms milliseconds to wait, maximum
      */
     public void setAcceptTimeout(long ms) { _acceptTimeout = ms; }
+
+    /**
+     * @return the accept timeout in milliseconds
+     */
     public long getAcceptTimeout() { return _acceptTimeout; }
 
     /**
@@ -529,8 +540,6 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         _connectionManager.setAllowIncomingConnections(true);
         return _realServerSocket;
     }
-
-
 
     /**
      * @throws I2PException if session is closed; as of 0.9.61, this is an I2PSessionException which extends I2PException
@@ -778,9 +787,16 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     public void setName(String name) { _name = name; }
 
 
+    /**
+     * @param lsnr the disconnect listener to add
+     */
     public void addDisconnectListener(I2PSocketManager.DisconnectListener lsnr) {
         _connectionManager.getMessageHandler().addDisconnectListener(lsnr);
     }
+
+    /**
+     * @param lsnr the disconnect listener to remove
+     */
     public void removeDisconnectListener(I2PSocketManager.DisconnectListener lsnr) {
         _connectionManager.getMessageHandler().removeDisconnectListener(lsnr);
     }
@@ -791,6 +807,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     static final String PROP_PCAP = "i2p.streaming.pcap";
     private static final String PCAP_FILE = "streaming.pcap";
 
+    /**
+     * @param ctx the I2P application context
+     */
     private static void debugInit(I2PAppContext ctx) {
         if (!ctx.getBooleanProperty(PROP_PCAP))
             return;
@@ -808,27 +827,51 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     // ==================== Tuner delegation ====================
 
-    /** @since 0.9.70+ */
+    /**
+     * @return the initial window size
+     * @since 0.9.70+
+     */
     public static int getInitialWindowSize() { return ConnectionOptions.getInitialWindowSize(); }
 
-    /** @since 0.9.70+ */
+    /**
+     * @param val the new initial window size
+     * @since 0.9.70+
+     */
     public static void setInitialWindowSize(int val) { ConnectionOptions.setInitialWindowSize(val); }
 
-    /** @since 0.9.70+ */
+    /**
+     * @return the initial retransmission timeout
+     * @since 0.9.70+
+     */
     public static int getInitialRTO() { return ConnectionOptions.getInitialRTO(); }
 
-    /** @since 0.9.70+ */
+    /**
+     * @param val the new initial retransmission timeout
+     * @since 0.9.70+
+     */
     public static void setInitialRTO(int val) { ConnectionOptions.setInitialRTO(val); }
 
-    /** @since 0.9.70+ */
+    /**
+     * @return the default initial ACK delay
+     * @since 0.9.70+
+     */
     public static int getDefaultInitialAckDelay() { return ConnectionOptions.getDefaultInitialAckDelay(); }
 
-    /** @since 0.9.70+ */
+    /**
+     * @param val the new default initial ACK delay
+     * @since 0.9.70+
+     */
     public static void setDefaultInitialAckDelay(int val) { ConnectionOptions.setDefaultInitialAckDelay(val); }
 
-    /** @since 0.9.70+ */
+    /**
+     * @return the default passive flush delay
+     * @since 0.9.70+
+     */
     public static int getDefaultPassiveFlushDelay() { return MessageOutputStream.getDefaultPassiveFlushDelay(); }
 
-    /** @since 0.9.70+ */
+    /**
+     * @param val the new default passive flush delay
+     * @since 0.9.70+
+     */
     public static void setDefaultPassiveFlushDelay(int val) { MessageOutputStream.setDefaultPassiveFlushDelay(val); }
 }

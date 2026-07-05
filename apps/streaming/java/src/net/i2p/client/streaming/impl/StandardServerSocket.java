@@ -78,7 +78,6 @@ class StandardServerSocket extends ServerSocket {
      */
     @Override
     public ServerSocketChannel getChannel() {
-        //return _socket.getChannel();
         return null;
     }
 
@@ -109,6 +108,9 @@ class StandardServerSocket extends ServerSocket {
         return new I2PSocketAddress(_socket.getManager().getSession().getMyDestination(), 0);
     }
 
+    /**
+     * @return the inbound buffer size, or 64KB if options are unavailable
+     */
     @Override
     public int getReceiveBufferSize() {
         ConnectionOptions opts = (ConnectionOptions) ((I2PSocketManagerFull)_socket.getManager()).getDefaultOptions();
@@ -125,6 +127,9 @@ class StandardServerSocket extends ServerSocket {
         return false;
     }
 
+    /**
+     * @return the socket timeout in milliseconds
+     */
     @Override
     public int getSoTimeout() {
         return (int) _socket.getSoTimeout();
@@ -164,6 +169,10 @@ class StandardServerSocket extends ServerSocket {
     public void setReuseAddress(boolean on) {
     }
 
+    /**
+     * @param timeout the timeout in milliseconds
+     * @throws SocketException if the timeout could not be set
+     */
     @Override
     public void setSoTimeout(int timeout) throws SocketException {
         _socket.setSoTimeout(timeout);

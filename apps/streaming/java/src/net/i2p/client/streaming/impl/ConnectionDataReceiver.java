@@ -194,7 +194,6 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         boolean isFirst = (_connection.getAckedPackets() <= 0) && (_connection.getUnackedPacketsSent() <= 0);
 
         PacketLocal packet = new PacketLocal(_context, _connection.getRemotePeer(), _connection);
-        //ByteArray data = packet.acquirePayload();
         ByteArray data = new ByteArray(new byte[size]);
         if (size > 0) {System.arraycopy(buf, off, data.getData(), 0, size);}
         data.setValid(size);
@@ -209,12 +208,6 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
 
         // bugfix release 0.7.8, we weren't dividing by 1000
         packet.setResendDelay(_connection.getOptions().getResendDelay() / 1000);
-
-/*
-        if (_connection.getOptions().getProfile() == ConnectionOptions.PROFILE_INTERACTIVE) {
-            packet.setFlag(Packet.FLAG_PROFILE_INTERACTIVE, true);
-        } else {packet.setFlag(Packet.FLAG_PROFILE_INTERACTIVE, false);}
-*/
 
         if (isFirst) {
             packet.setFlag(Packet.FLAG_SYNCHRONIZE);
@@ -236,11 +229,6 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         // don't set the closed flag if this is a plain ACK and there are outstanding
         // packets sent, otherwise the other side could receive the CLOSE prematurely,
         // since this ACK could arrive before the unacked payload message.
-        // TODO if the only unacked packet is the CLOSE packet and it didn't have any data...
-        //
-        // FIXME Implement better half-close by sending CLOSE whenever. Needs 0.9.9 bug fixes
-        // throughout network?
-        //
         if (_connection.getOutputStream().getClosed() &&
             ((size > 0) || (_connection.getUnackedPacketsSent() <= 0) || (packet.getSequenceNum() > 0)) ) {
             packet.setFlag(Packet.FLAG_CLOSE);
@@ -263,5 +251,5 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         public final boolean writeSuccessful() { return true; }
     }
 
-    void destroy() {} //_connection = null;
+    void destroy() {}
 }

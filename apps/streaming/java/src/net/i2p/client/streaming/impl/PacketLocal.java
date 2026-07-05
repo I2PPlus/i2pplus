@@ -82,6 +82,9 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
         }
     }
 
+    /**
+     * @return the destination this packet is being sent to
+     */
     public Destination getTo() { return _to; }
 
     /**
@@ -113,18 +116,11 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     public void setTagsSent(Set<SessionTag> tags) {
         if (tags != null && !tags.isEmpty())
             _log.error("Who is sending tags through the streaming lib? " + tags.size());
-      /****
-        if ( (_tagsSent != null) && (!_tagsSent.isEmpty()) && (!tags.isEmpty()) ) {
-            //int old = _tagsSent.size();
-            //_tagsSent.addAll(tags);
-            if (!_tagsSent.equals(tags))
-                System.out.println("ERROR: dup tags: old=" + _tagsSent.size() + " new=" + tags.size() + " packet: " + toString());
-        } else {
-            _tagsSent = tags;
-        }
-      ****/
     }
 
+    /**
+     * @return true if this packet should be signed
+     */
     public boolean shouldSign() {
         return isFlagSet(FLAG_SIGNATURE_INCLUDED |
                          FLAG_SYNCHRONIZE |
@@ -132,19 +128,27 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
                          FLAG_ECHO);
     }
 
+    /**
+     * @return the time this packet was created
+     */
     public long getCreatedOn() { return _createdOn; }
+
+    /**
+     * @return the lifetime of this packet in ms
+     */
     public long getLifetime() { return _context.clock().now() - _createdOn; }
 
+    /**
+     * Increment the number of times this packet has been sent
+     */
     public void incrementSends() {
         _numSends.incrementAndGet();
         _lastSend = _context.clock().now();
     }
 
-    private void cancelResend() {
-        // fast restransmits are sent immediately and we don't keep a reference,
-        // can't be cancelled.
-    }
-
+    /**
+     * Record that this packet was ACKed
+     */
     public void ackReceived() {
         final long now = _context.clock().now();
         synchronized (this) {
@@ -153,16 +157,17 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
             releasePayload();
             notifyAll();
         }
-        cancelResend();
     }
 
+    /**
+     * Record that this packet was cancelled
+     */
     public void cancelled() {
         synchronized (this) {
             _cancelledOn = _context.clock().now();
             releasePayload();
             notifyAll();
         }
-       cancelResend();
         if (_log.shouldDebug())
             _log.debug("Resend cancelled! " + toString());
     }
@@ -177,10 +182,19 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
             return (int)(_ackOn - _createdOn);
     }
 
+    /**
+     * @return the number of times this packet has been sent
+     */
     public int getNumSends() { return _numSends.get(); }
+
+    /**
+     * @return the time of the last send, or -1 if never sent
+     */
     public long getLastSend() { return _lastSend; }
 
-    /** @return null if not bound */
+    /**
+     * @return null if not bound
+     */
     public Connection getConnection() { return _connection; }
 
     /**
@@ -281,6 +295,9 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
         return size;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public StringBuilder formatAsString() {
         StringBuilder buf = super.formatAsString();
@@ -326,7 +343,10 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
 
     /**
      * Blocks until outbound window is not full. See Connection.packetSendChoke().
+     *
      * @param maxWaitMs MessageOutputStream is the only caller, generally with -1
+     * @throws IOException if the connection is closed
+     * @throws InterruptedException if the thread is interrupted
      */
     public void waitForAccept(int maxWaitMs) throws IOException, InterruptedException {
         long before = _context.clock().now();
@@ -355,7 +375,13 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
         }
     }
 
-    /** Block until the packet is acked from the far end */
+    /**
+     * Block until the packet is acked from the far end.
+     *
+     * @param maxWaitMs maximum time to wait in ms
+     * @throws IOException if the connection is reset or cancelled
+     * @throws InterruptedException if the thread is interrupted
+     */
     public void waitForCompletion(int maxWaitMs) throws IOException, InterruptedException {
         long expiration = _context.clock().now()+maxWaitMs;
         try {
@@ -384,16 +410,31 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
         }
     }
 
+    /**
+     * @return true if this packet was cancelled
+     */
     private synchronized boolean isCancelled() { return _cancelledOn > 0; }
 
+    /**
+     * @return true if this packet was accepted for sending
+     */
     public synchronized boolean writeAccepted() { return _acceptedOn > 0 && _cancelledOn <= 0; }
+
+    /**
+     * @return true if this packet's send failed
+     */
     public synchronized boolean writeFailed() { return _cancelledOn > 0; }
+
+    /**
+     * @return true if this packet was successfully sent and ACKed
+     */
     public synchronized boolean writeSuccessful() { return _ackOn > 0 && _cancelledOn <= 0; }
 
     ////// end WriteStatus methods
 
-    /** Generate a pcap/tcpdump-compatible format,
-     *  so we can use standard debugging tools.
+    /**
+     * Generate a pcap/tcpdump-compatible format,
+     * so we can use standard debugging tools.
      */
     public void logTCPDump() {
             try {

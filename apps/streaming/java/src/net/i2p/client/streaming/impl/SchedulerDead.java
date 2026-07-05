@@ -31,6 +31,13 @@ class SchedulerDead extends SchedulerImpl {
         super(ctx);
     }
 
+    /**
+     * Accept connections where the final timeout has passed or a RESET
+     * was received.
+     *
+     * @param con the connection to check
+     * @return true if the connection is dead
+     */
     @Override
     public boolean accept(Connection con) {
         if (con == null) return false;
@@ -43,6 +50,11 @@ class SchedulerDead extends SchedulerImpl {
         return nothingLeftToDo || timedOut;
     }
 
+    /**
+     * Handle an event on a dead connection. Completes the disconnect.
+     *
+     * @param con the connection that had an event
+     */
     public void eventOccurred(Connection con) {
         con.disconnectComplete();
     }

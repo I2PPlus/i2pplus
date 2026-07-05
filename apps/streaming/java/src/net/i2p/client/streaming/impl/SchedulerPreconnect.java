@@ -29,12 +29,24 @@ class SchedulerPreconnect extends SchedulerImpl {
         super(ctx);
     }
 
+    /**
+     * Accept locally created connections that haven't sent any packets yet.
+     *
+     * @param con the connection to check
+     * @return true if the connection is in the preconnect state
+     */
     public boolean accept(Connection con) {
         return (con != null) &&
                (con.getSendStreamId() <= 0) &&
                (con.getLastSendId() < 0);
     }
 
+    /**
+     * Handle an event on a preconnect connection. Sends the SYN when
+     * the connect delay has elapsed.
+     *
+     * @param con the connection that had an event
+     */
     public void eventOccurred(Connection con) {
         if (con.getNextSendTime() < 0)
             con.setNextSendTime(_context.clock().now() + con.getOptions().getConnectDelay());

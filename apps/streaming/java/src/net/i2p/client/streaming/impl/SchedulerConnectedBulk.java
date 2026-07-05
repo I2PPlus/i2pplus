@@ -37,6 +37,13 @@ class SchedulerConnectedBulk extends SchedulerImpl {
         super(ctx);
     }
 
+    /**
+     * Accept connections that are established, using the bulk profile,
+     * and not yet closing.
+     *
+     * @param con the connection to check
+     * @return true if the connection is in the connected bulk state
+     */
     @Override
     public boolean accept(Connection con) {
         boolean ok = (con != null) &&
@@ -44,14 +51,15 @@ class SchedulerConnectedBulk extends SchedulerImpl {
                      (con.getOptions().getProfile() == ConnectionOptions.PROFILE_BULK) &&
                      (!con.getResetReceived()) &&
                      ( (con.getCloseSentOn() <= 0) || (con.getCloseReceivedOn() <= 0) );
-        if (!ok) {
-            //if (_log.shouldDebug())
-            //    _log.debug("con: " + con + " closeSentOn: " + con.getCloseSentOn()
-            //               + " closeReceivedOn: " + con.getCloseReceivedOn());
-        }
         return ok;
     }
 
+    /**
+     * Handle an event on a connected bulk connection. If the send time
+     * has arrived, send available data. Otherwise reschedule.
+     *
+     * @param con the connection that had an event
+     */
     public void eventOccurred(Connection con) {
         if (con.getNextSendTime() <= 0)
             return;

@@ -5,7 +5,6 @@ import net.i2p.I2PAppContext;
 /**
  * Scheduler used after receiving an inbound connection but before
  * we have sent our own SYN.
- *
  */
 class SchedulerReceived extends SchedulerImpl {
 
@@ -13,12 +12,24 @@ class SchedulerReceived extends SchedulerImpl {
         super(ctx);
     }
 
+    /**
+     * Accept connections that have received a SYN but haven't sent one.
+     *
+     * @param con the connection to check
+     * @return true if the connection is in the received state
+     */
     public boolean accept(Connection con) {
         return (con != null) &&
                (con.getLastSendId() < 0) &&
                (con.getSendStreamId() > 0);
     }
 
+    /**
+     * Handle an event on a received connection. Sends the SYN when
+     * the send delay has elapsed.
+     *
+     * @param con the connection that had an event
+     */
     public void eventOccurred(Connection con) {
         if (con.getUnackedPacketsReceived() <= 0) {
             if (_log.shouldWarn())

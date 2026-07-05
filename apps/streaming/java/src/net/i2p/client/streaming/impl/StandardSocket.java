@@ -72,7 +72,6 @@ class StandardSocket extends Socket {
      */
     @Override
     public SocketChannel getChannel() {
-        //return _socket.getChannel();
         return null;
     }
 
@@ -84,6 +83,10 @@ class StandardSocket extends Socket {
         return null;
     }
 
+    /**
+     * @return the input stream
+     * @throws IOException if the socket has no input stream
+     */
     @Override
     public InputStream getInputStream() throws IOException {
         InputStream rv = _socket.getInputStream();
@@ -92,6 +95,9 @@ class StandardSocket extends Socket {
         throw new IOException("No stream");
     }
 
+    /**
+     * @return true if keep-alive is enabled (inactivity action is SEND)
+     */
     @Override
     public boolean getKeepAlive() {
         ConnectionOptions opts = (ConnectionOptions) _socket.getOptions();
@@ -133,6 +139,10 @@ class StandardSocket extends Socket {
         return false;
     }
 
+    /**
+     * @return the output stream
+     * @throws IOException if the socket has no output stream
+     */
     @Override
     public OutputStream getOutputStream() throws IOException {
         OutputStream rv = _socket.getOutputStream();
@@ -149,6 +159,9 @@ class StandardSocket extends Socket {
         return _socket.getPort();
     }
 
+    /**
+     * @return the inbound buffer size, or 64KB if options are unavailable
+     */
     @Override
     public int getReceiveBufferSize() {
         ConnectionOptions opts = (ConnectionOptions) _socket.getOptions();
@@ -174,6 +187,9 @@ class StandardSocket extends Socket {
         return false;
     }
 
+    /**
+     * @return the inbound buffer size, or 64KB if options are unavailable
+     */
     @Override
     public int getSendBufferSize() {
         ConnectionOptions opts = (ConnectionOptions) _socket.getOptions();
@@ -182,6 +198,9 @@ class StandardSocket extends Socket {
         return opts.getInboundBufferSize();
     }
 
+    /**
+     * @return -1 always (not implemented)
+     */
     @Override
     public int getSoLinger() {
         I2PSocketOptions opts = _socket.getOptions();
@@ -190,6 +209,9 @@ class StandardSocket extends Socket {
         return -1;  // fixme really?
     }
 
+    /**
+     * @return the socket timeout in milliseconds
+     */
     @Override
     public int getSoTimeout() {
         I2PSocketOptions opts = _socket.getOptions();
@@ -259,6 +281,9 @@ class StandardSocket extends Socket {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * @param on true to enable keep-alive (inactivity action SEND), false for NOOP
+     */
     @Override
     public void setKeepAlive(boolean on) {
         ConnectionOptions opts = (ConnectionOptions) _socket.getOptions();
@@ -271,7 +296,8 @@ class StandardSocket extends Socket {
     }
 
     /**
-     *  @throws UnsupportedOperationException if on is true
+     * @param on true to throw UnsupportedOperationException, false does nothing
+     * @throws UnsupportedOperationException if on is true
      */
     @Override
     public void setOOBInline(boolean on) {
@@ -314,6 +340,10 @@ class StandardSocket extends Socket {
     public void setSoLinger(boolean on, int linger) {
     }
 
+    /**
+     * @param timeout the timeout in milliseconds
+     * @throws SocketException if the options are unavailable
+     */
     @Override
     public void setSoTimeout(int timeout) throws SocketException {
         I2PSocketOptions opts = _socket.getOptions();

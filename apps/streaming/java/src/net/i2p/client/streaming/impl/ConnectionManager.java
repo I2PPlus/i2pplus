@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PSession;
-import net.i2p.stat.RateConstants;
 import net.i2p.client.streaming.IncomingConnectionFilter;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
@@ -179,13 +178,23 @@ class ConnectionManager {
         _context.statManager().createRequiredRateStat("stream.con.sendDuplicateSize", "Size of a message resent on a connection", "Stream", RATES);
     }
 
+    /**
+     * Look up a connection by its inbound stream ID.
+     *
+     * @param id the inbound stream ID
+     * @return the connection, or null if not found
+     */
     Connection getConnectionByInboundId(long id) {
         return _connectionByInboundId.get(Long.valueOf(id));
     }
 
     /**
-     * not guaranteed to be unique, but in case we receive more than one packet
-     * on an inbound connection that we havent ack'ed yet...
+     * Look up a connection by its outbound stream ID.
+     * Not guaranteed to be unique, but in case we receive more than one packet
+     * on an inbound connection that we haven't ack'ed yet...
+     *
+     * @param id the outbound stream ID
+     * @return the connection, or null if not found
      */
     Connection getConnectionByOutboundId(long id) {
             for (Connection con : _connectionByInboundId.values()) {
@@ -223,6 +232,12 @@ class ConnectionManager {
         return _soTimeout;
     }
 
+    /**
+     * Enable or disable acceptance of incoming connections.
+     * When first enabled, initializes throttlers if needed.
+     *
+     * @param allow true to accept incoming connections
+     */
     public void setAllowIncomingConnections(boolean allow) {
         _connectionHandler.setActive(allow);
         if (allow) {
@@ -400,7 +415,6 @@ class ConnectionManager {
             reply.setLocalPort(synPacket.getLocalPort());
             reply.setRemotePort(synPacket.getRemotePort());
             if (_log.shouldInfo())
-                //_log.info("Over limit, sending " + (sendResponse != null ? "configured response" : "reset") + " to " + from.toBase32());
                 _log.info("Over limit, sending " + reply + " to " + from.toBase32());
             // this just sends the packet - no retries or whatnot
             _outboundQueue.enqueue(reply);
@@ -623,10 +637,8 @@ class ConnectionManager {
                      return null;
                  }
 
-                 // no remaining streams, let's wait a bit
-                 // got rid of the lock, so just sleep (fixme?)
-                 // try { _connectionLock.wait(remaining); } catch (InterruptedException ie) {}
-                 try { Thread.sleep(remaining/4); } catch (InterruptedException ie) { /* ignored */ }
+                  // no remaining streams, let's wait a bit
+                  try { Thread.sleep(remaining/4); } catch (InterruptedException ie) { /* ignored */ }
              } else {
                  con = new Connection(_context, this, session, _schedulerChooser, _timer,
                                       _outboundQueue, _conPacketHandler, opts, false);
@@ -725,15 +737,14 @@ class ConnectionManager {
             }
         }
 
-        //if ( (_connectionByInboundId.size() > 100) && (_log.shouldInfo()) )
-        //    _log.info("More than 100 connections!  " + active
-        //              + " total: " + _connectionByInboundId.size());
-
         return false;
     }
 
     /**
-     *  @since 0.9.49
+     * Encapsulates a connection rejection reason with an optional
+     * Retry-After duration in seconds.
+     *
+     * @since 0.9.49
      */
     private static class Reason {
         private final String txt;
@@ -753,8 +764,12 @@ class ConnectionManager {
 
 
     /**
-     *  Reason time is in seconds for Retry-After header; MAX_TIME for drop, 0 if unknown
-     *  @return reason string or null if not rejected
+     * Check if a connection should be rejected based on blacklists,
+     * access lists, throttling, and the connection filter.
+     *
+     * @param syn the incoming SYN packet
+     * @return a Reason with seconds for Retry-After header; MAX_TIME for
+     *         drop, 0 if unknown; or null if not rejected
      */
     private Reason shouldRejectConnection(Packet syn) {
         // unfortunately we don't have access to the router client manager here,
@@ -877,8 +892,6 @@ class ConnectionManager {
      * CAN continue to use the manager.
      */
     public void disconnectAllHard() {
-        //if (_log.shouldInfo())
-        //    _log.info("ConnMan hard disconnect", new Exception("I did it"));
         for (Iterator<Connection> iter = _connectionByInboundId.values().iterator(); iter.hasNext(); ) {
             Connection con = iter.next();
             con.disconnect(false, false);
@@ -905,8 +918,6 @@ class ConnectionManager {
      * @since 0.9.7
      */
     public void shutdown() {
-        //if (_log.shouldInfo())
-        //    _log.info("ConnMan shutdown", new Exception("I did it"));
         disconnectAllHard();
         _tcbShare.stop();
         _timer.stop();
@@ -1093,6 +1104,10 @@ class ConnectionManager {
         public void pingComplete(boolean ok);
     }
 
+    /**
+     * Timer event that removes a pending ping from the map
+     * and notifies the caller on timeout.
+     */
     private class PingFailed extends SimpleTimer2.TimedEvent {
         private final Long _id;
         private final PingNotifier _notifier;
@@ -1114,6 +1129,10 @@ class ConnectionManager {
         }
     }
 
+    /**
+     * Holds the state for a pending ping request, including
+     * optional payload and notification callback.
+     */
     private static class PingRequest {
         private boolean _ponged;
         private ByteArray _payload;
@@ -1151,6 +1170,12 @@ class ConnectionManager {
 
     /**
      *  @param payload may be null
+     */
+    /**
+     * Process a received pong response.
+     *
+     * @param pingId the ping stream ID to match
+     * @param payload the pong payload, may be null
      */
     void receivePong(long pingId, ByteArray payload) {
         PingRequest req = _pendingPings.remove(Long.valueOf(pingId));

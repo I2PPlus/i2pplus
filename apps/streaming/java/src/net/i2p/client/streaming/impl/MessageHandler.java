@@ -143,12 +143,18 @@ class MessageHandler implements I2PSessionMuxedListener {
     public void errorOccurred(I2PSession session, String message, Throwable error) {
         _restartPending.set(message.contains("restart"));
         if (_log.shouldWarn()) {_log.warn("Error occurred: " + message, error);}
-        //_manager.disconnectAllHard();
     }
 
+    /**
+     * @param lsnr the listener to add
+     */
     public void addDisconnectListener(I2PSocketManager.DisconnectListener lsnr) {
             _listeners.add(lsnr);
     }
+
+    /**
+     * @param lsnr the listener to remove
+     */
     public void removeDisconnectListener(I2PSocketManager.DisconnectListener lsnr) {
             _listeners.remove(lsnr);
     }

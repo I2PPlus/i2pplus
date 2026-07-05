@@ -177,8 +177,7 @@ class Connection {
         _options = (opts != null ? opts : new ConnectionOptions());
         _inputStream = new MessageInputStream(_context, _options.getMaxMessageSize(),
                                               _options.getMaxWindowSize(), _options.getInboundBufferSize(),
-                                              _options.getMaxPacketCount());
-        // FIXME pass through a passive flush delay setting as the 4th arg
+                                               _options.getMaxPacketCount());
         _outputStream = new MessageOutputStream(_context, timer, _receiver,
                                                 _options.getMaxMessageSize(), _options.getMaxInitialMessageSize());
         _timer = timer;
@@ -274,6 +273,11 @@ class Connection {
      */
     int getSSThresh() {return _ssthresh;}
 
+    /**
+     * Get the next outbound packet sequence number.
+     *
+     * @return the next sequence number
+     */
     public long getNextOutboundPacketNum() {return _lastSendId.incrementAndGet();}
 
     /**
@@ -343,8 +347,8 @@ class Connection {
     }
 
     /**
-     *  Notify all threads waiting in packetSendChoke()
-     *  Also update pacing rate since window size may have changed.
+     * Notify all threads waiting in packetSendChoke().
+     * Also update pacing rate since window size may have changed.
      */
     void windowAdjusted() {
         synchronized (_outboundPackets) {_outboundPackets.notifyAll();}
@@ -357,7 +361,6 @@ class Connection {
         // this calls sendPacket() below
         packet = _receiver.send(null, 0, 0);
         if (_log.shouldDebug()) {_log.debug("Sending new ACK: " + packet);}
-        //packet.releasePayload();
     }
 
     /**
@@ -565,23 +568,12 @@ class Connection {
                         }
                     } else {
                         /*
-                         * TODO
-                         * we do not currently do an "implicit nack" of the packets higher
-                         * than ackThrough, so those will not be fast retransmitted
-                         * we could incrementNACK them here... but we may need to set the fastRettransmit
-                         * threshold back to 3 for that.
-                         * this will do a fast retransmit if appropriate
+                         * We do not currently do an "implicit nack" of the packets higher
+                         * than ackThrough, so those will not be fast retransmitted.
                          * This doesn't work because every packet has an ACK in it, so we hit the
                          * FAST_TRANSMIT threshold in a heartbeat and retransmit everything,
                          * even with the threshold at 3. (we never set the NO_ACK field in the header)
-                         * Also, we may need to track that we
-                         * have the same ackThrough for 3 or 4 consecutive times.
-                         * See https: *secure.wikimedia.org/wikipedia/en/wiki/Fast_retransmit
                          */
-                        //if (_log.shouldInfo())
-                        //    _log.info("ACK thru " + ackThrough + " implicitly NACKs " + id);
-                        //PacketLocal nackedPacket = e.getValue();
-                        //nackedPacket.incrementNACKs();
                         break; // _outboundPackets is ordered
                     }
                 } // for
@@ -638,6 +630,9 @@ class Connection {
         return acked;
     }
 
+    /**
+     * Notify the scheduler that an event occurred on this connection.
+     */
     void eventOccurred() {
         TaskScheduler sched = _chooser.getScheduler(this);
         long before = System.currentTimeMillis();
@@ -713,8 +708,18 @@ class Connection {
         disconnectComplete();
     }
 
+    /**
+     * Check if a reset has been received on this connection.
+     *
+     * @return true if a reset was received
+     */
     public boolean getResetReceived() {return _resetReceived.get();}
 
+    /**
+     * Check if this is an inbound connection.
+     *
+     * @return true if inbound
+     */
     public boolean isInbound() {return _isInbound;}
 
     /**
@@ -730,8 +735,18 @@ class Connection {
      */
     public boolean getIsConnected() {return _connected.get();}
 
+    /**
+     * Check if this connection has been hard-disconnected (via RESET).
+     *
+     * @return true if hard-disconnected
+     */
     public boolean getHardDisconnected() {return _hardDisconnected;}
 
+    /**
+     * Check if a reset has been sent on this connection.
+     *
+     * @return true if a reset was sent
+     */
     public boolean getResetSent() {return _resetSentOn.get() > 0;}
 
     /** @return 0 if not sent */
@@ -1025,8 +1040,25 @@ class Connection {
     /** @since 0.9.21 */
     public ConnectionManager getConnectionManager() {return _connectionManager;}
 
+    /**
+     * Get the I2P session for this connection.
+     *
+     * @return the session
+     */
     public I2PSession getSession() {return _session;}
+
+    /**
+     * Get the socket associated with this connection.
+     *
+     * @return the socket, or null if not yet set
+     */
     public I2PSocketFull getSocket() {return _socket;}
+
+    /**
+     * Set the socket associated with this connection.
+     *
+     * @param socket the socket
+     */
     public void setSocket(I2PSocketFull socket) {_socket = socket;}
 
     /**
@@ -1042,24 +1074,92 @@ class Connection {
      */
     public int getLocalPort() {return _localPort;}
 
+    /**
+     * Get the connection error message, if any.
+     *
+     * @return error message, or null if no error
+     */
     public String getConnectionError() {return _connectionError;}
+
+    /**
+     * Set the connection error message.
+     *
+     * @param err the error message
+     */
     public void setConnectionError(String err) {_connectionError = err;}
 
+    /**
+     * Get the lifetime of this connection in milliseconds.
+     *
+     * @return connection lifetime in ms
+     */
     public long getLifetime() {
         long cso = _closeSentOn.get();
         if (cso <= 0) {return _context.clock().now() - _createdOn;}
         else {return cso - _createdOn;}
     }
 
+    /**
+     * Get the packet handler for this connection.
+     *
+     * @return the packet handler
+     */
     public ConnectionPacketHandler getPacketHandler() {return _handler;}
 
+    /**
+     * Get total bytes sent on this connection.
+     *
+     * @return lifetime bytes sent
+     */
     public long getLifetimeBytesSent() {return _lifetimeBytesSent.get();}
+
+    /**
+     * Get total bytes received on this connection.
+     *
+     * @return lifetime bytes received
+     */
     public long getLifetimeBytesReceived() {return _lifetimeBytesReceived.get();}
+
+    /**
+     * Get total duplicate messages sent on this connection.
+     *
+     * @return lifetime duplicate messages sent
+     */
     public long getLifetimeDupMessagesSent() {return _lifetimeDupMessageSent.get();}
+
+    /**
+     * Get total duplicate messages received on this connection.
+     *
+     * @return lifetime duplicate messages received
+     */
     public long getLifetimeDupMessagesReceived() {return _lifetimeDupMessageReceived.get();}
+
+    /**
+     * Increment the lifetime bytes sent counter.
+     *
+     * @param bytes number of bytes to add
+     */
     public void incrementBytesSent(int bytes) {_lifetimeBytesSent.addAndGet(bytes);}
+
+    /**
+     * Increment the lifetime duplicate messages sent counter.
+     *
+     * @param msgs number of duplicate messages to add
+     */
     public void incrementDupMessagesSent(int msgs) {_lifetimeDupMessageSent.addAndGet(msgs);}
+
+    /**
+     * Increment the lifetime bytes received counter.
+     *
+     * @param bytes number of bytes to add
+     */
     public void incrementBytesReceived(int bytes) {_lifetimeBytesReceived.addAndGet(bytes);}
+
+    /**
+     * Increment the lifetime duplicate messages received counter.
+     *
+     * @param msgs number of duplicate messages to add
+     */
     public void incrementDupMessagesReceived(int msgs) {_lifetimeDupMessageReceived.addAndGet(msgs);}
 
     /**
@@ -1149,6 +1249,11 @@ class Connection {
      * @return Count of how many packets ACKed.
      */
     public long getAckedPackets() {return _ackedPackets.get();}
+    /**
+     * Get the timestamp when this connection was created.
+     *
+     * @return creation timestamp
+     */
     public long getCreatedOn() {return _createdOn;}
 
     /** @return 0 if not sent */
@@ -1157,6 +1262,9 @@ class Connection {
     /** @return 0 if not received */
     public long getCloseReceivedOn() {return _closeReceivedOn.get();}
 
+    /**
+     * Update shared options from the TCB cache.
+     */
     public void updateShareOpts() {
         if (_closeSentOn.get() > 0 && !_updatedShareOpts) {
             _connectionManager.updateShareOpts(this);
@@ -1164,7 +1272,16 @@ class Connection {
         }
     }
 
+    /**
+     * Increment the count of unacked packets received.
+     */
     public void incrementUnackedPacketsReceived() {_unackedPacketsReceived.incrementAndGet();}
+
+    /**
+     * Get the count of unacked packets received.
+     *
+     * @return number of unacked packets received
+     */
     public int getUnackedPacketsReceived() {return _unackedPacketsReceived.get();}
 
     /** how many packets have we sent but not yet received an ACK for?
@@ -1174,12 +1291,28 @@ class Connection {
         synchronized (_outboundPackets) {return _outboundPackets.size();}
     }
 
+    /**
+     * Get the congestion window end sequence number.
+     *
+     * @return the congestion window end
+     */
     public long getCongestionWindowEnd() {return _congestionWindowEnd;}
+
+    /**
+     * Set the congestion window end sequence number.
+     *
+     * @param endMsg the new congestion window end
+     */
     public void setCongestionWindowEnd(long endMsg) {_congestionWindowEnd = endMsg;}
 
     /** @return the highest outbound packet we have received an ack for */
     public long getHighestAckedThrough() {return _highestAckedThrough.get();}
 
+    /**
+     * Get the timestamp of the last send or receive activity.
+     *
+     * @return the later of last send time and last receive time
+     */
     public long getLastActivityOn() {
         return (_lastSendTime > _lastReceivedOn ? _lastSendTime : _lastReceivedOn);
     }
@@ -1193,6 +1326,10 @@ class Connection {
         }
     }
 
+    /**
+     * Called when a packet is received on this connection.
+     * Updates the last received timestamp and resets the activity timer.
+     */
     void packetReceived() {
         _lastReceivedOn = _context.clock().now();
         resetActivityTimer();
@@ -1424,12 +1561,16 @@ class Connection {
         }
     }
 
-    /** stream that the local peer receives data on
+    /**
+     * Get the input stream that the local peer receives data on.
+     *
      * @return the inbound message stream, non-null
      */
     public MessageInputStream getInputStream() {return _inputStream;}
 
-    /** stream that the local peer sends data to the remote peer on
+    /**
+     * Get the output stream that the local peer sends data to the remote peer on.
+     *
      * @return the outbound message stream, non-null
      */
     public MessageOutputStream getOutputStream() {return _outputStream;}
@@ -1775,8 +1916,6 @@ class Connection {
             _context.statManager().addRateData("stream.fastRetransmit", _packet.getLifetime(), _packet.getLifetime());
 
             // revamp various fields, in case we need to ack more, etc
-            // updateAcks done in enqueue()
-            //_inputStream.updateAcks(_packet);
             if (_isChoking) {
                 _packet.setOptionalDelay(Packet.SEND_DELAY_CHOKE);
                 _packet.setFlag(Packet.FLAG_DELAY_REQUESTED);
@@ -1848,7 +1987,6 @@ class Connection {
                 _packet.cancelled();
                 disconnect(true);
             } else {
-                //long timeout = _options.getResendDelay() << numSends;
                 int timeout = _options.getRTO();
                 int mrd = getMaxResendDelay();
                 if ((timeout > mrd) || (timeout <= 0)) {timeout = mrd;}

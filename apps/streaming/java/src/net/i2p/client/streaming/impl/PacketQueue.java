@@ -64,8 +64,9 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     /**
      * Add a new packet to be sent out ASAP.
      * This updates the acks.
-     *
      * keys and tags disabled since dropped in I2PSession
+     *
+     * @param packet the packet to enqueue
      * @return true if sent
      */
      public boolean enqueue(PacketLocal packet) {
@@ -89,13 +90,8 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
          long enqueueStart = _context.clock().now();
          try {
              int size = 0;
-             //long beforeWrite = System.currentTimeMillis();
              if (packet.shouldSign()) {size = packet.writeSignedPacket(buf, 0);}
              else {size = packet.writePacket(buf, 0);}
-             //long writeTime = System.currentTimeMillis() - beforeWrite;
-             //if ((writeTime > 1000) && (_log.shouldInfo())) {
-             //    _log.warn("Slow message delivery -> Took " + writeTime + "ms to write: " + packet);
-             //}
 
              // last chance to short circuit...
              if (packet.getAckTime() > 0) {return false;}
@@ -223,8 +219,6 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             if (_log.shouldWarn() && !isLogged) {_log.warn("Send failed for packet " + packet);}
             if (con != null) {con.disconnect(false);} // handle race on b0rk
         } else {
-            //packet.setKeyUsed(keyUsed);
-            //packet.setTagsSent(tagsSent);
             packet.incrementSends();
             if (con != null && _log.shouldDebug()) {
                 String suffix = "Wsize " + con.getOptions().getWindowSize() + " RTO " + con.getOptions().getRTO();
@@ -374,16 +368,22 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     }
 
     /**
-     *  Check for expired message states, without wastefully setting a timer for each
-     *  message.
-     *  @since 0.9.14
+     * Check for expired message states, without wastefully setting a timer for each
+     * message.
+     * @since 0.9.14
      */
     private class RemoveExpired extends SimpleTimer2.TimedEvent {
 
+        /**
+         * @param timer the timer to schedule on
+         */
         public RemoveExpired(SimpleTimer2 timer) {
              super(timer, REMOVE_EXPIRED_TIME);
         }
 
+        /**
+         * Remove expired message status entries and reschedule
+         */
         public void timeReached() {
             if (_dead)
                 return;

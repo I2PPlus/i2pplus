@@ -15,6 +15,9 @@ import net.i2p.client.streaming.I2PSocketManager;
 class I2PServerSocketFull implements I2PServerSocket {
     private final I2PSocketManagerFull _socketManager;
 
+    /**
+     * @param mgr the socket manager to accept connections from
+     */
     public I2PServerSocketFull(I2PSocketManagerFull mgr) {
         _socketManager = mgr;
     }
@@ -52,11 +55,17 @@ class I2PServerSocketFull implements I2PServerSocket {
         return null;
     }
 
+    /**
+     * @return the current timeout in milliseconds
+     */
     @Override
     public long getSoTimeout() {
         return _socketManager.getConnectionManager().getSoTimeout();
     }
 
+    /**
+     * @param x timeout in milliseconds
+     */
     public void setSoTimeout(long x) {
         _socketManager.getConnectionManager().setSoTimeout(x);
     }
@@ -68,8 +77,7 @@ class I2PServerSocketFull implements I2PServerSocket {
     }
 
     /**
-     *
-     * @return _socketManager
+     * @return the socket manager
      */
     public I2PSocketManager getManager() {
         return _socketManager;

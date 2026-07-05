@@ -22,7 +22,6 @@ import net.i2p.util.SystemVersion;
  * One of these is instantiated per-Destination
  * (i.e. per-ConnectionManager, not per-Connection).
  * It doesn't store any state.
-
  */
 class ConnectionPacketHandler {
     private final I2PAppContext _context;
@@ -43,6 +42,11 @@ class ConnectionPacketHandler {
 
     private static final long[] RATES = new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
 
+    /**
+     * Create a new ConnectionPacketHandler.
+     *
+     * @param context the I2P application context
+     */
     public ConnectionPacketHandler(I2PAppContext context) {
         _context = context;
         _log = context.logManager().getLog(ConnectionPacketHandler.class);
@@ -55,12 +59,15 @@ class ConnectionPacketHandler {
         _context.statManager().createRateStat("stream.con.receiveMessageSize", "Size of a message received on a connection", "Stream", RATES);
         _context.statManager().createRateStat("stream.resetReceived", "Number of successful sent messages before receiving a RESET", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.sendsBeforeAck", "Number of times a message was sent before it was ACKed", "Stream", RATES);
-        //_context.statManager().createRateStat("stream.trend", "What direction the RTT is trending in (with period = windowsize)", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
     }
 
     /**
-     * Takes ownership of the packet and call packet.releasePayload() unless
+     * Takes ownership of the packet and calls packet.releasePayload() unless
      * it is passed to the MessageInputStream.
+     *
+     * @param packet the received packet
+     * @param con the connection the packet belongs to
+     * @throws I2PException if the packet fails verification
      */
     void receivePacket(Packet packet, Connection con) throws I2PException {
         boolean ok = verifyPacket(packet, con);
@@ -315,10 +322,15 @@ class ConnectionPacketHandler {
     }
 
     /**
-     * Process the acks in a received packet, and adjust our window and RTT
+     * Process the acks in a received packet, and adjust our window and RTT.
+     *
+     * @param con the connection
+     * @param ackThrough the highest ACKed sequence number
+     * @param nacks the NACKed sequence numbers, may be null
+     * @param packet the received packet
      * @param isNew was it a new packet? false for ack-only
      * @param choke did we get a choke in the packet?
-     * @return are we congested?
+     * @return true if congested
      */
     private boolean ack(Connection con, long ackThrough, long[] nacks, Packet packet, boolean isNew, boolean choke) {
         if (ackThrough < 0) return false;
@@ -410,13 +422,17 @@ class ConnectionPacketHandler {
     }
 
     /**
-     * This either does nothing or increases the window, it never decreases it.
-     * Decreasing is done in Connection.ResendPacketEvent.retransmit()
+     * Adjust the congestion window based on ACKs received.
+     * This either does nothing or increases the window; it never decreases it.
+     * Decreasing is done in Connection.ResendPacketEvent.retransmit().
      *
+     * @param con the connection
      * @param isNew was it a new packet? false for ack-only
      * @param sequenceNum 0 for ack-only
+     * @param numResends number of resent packets in this ACK
+     * @param acked number of packets ACKed
      * @param choke did we get a choke in the packet?
-     * @return are we congested?
+     * @return true if congested
      */
     private boolean adjustWindow(Connection con, boolean isNew, long sequenceNum, int numResends, int acked, boolean choke) {
         boolean congested;
@@ -507,12 +523,6 @@ class ConnectionPacketHandler {
         con.windowAdjusted();
         return congested;
     }
-
-    /**
-     * If we don't know the send stream id yet (we're just creating a connection), allow
-     * the first three packets to come in.  The first of those should be the SYN, of course...
-     */
-
 
     /**
      * Make sure this packet is ok and that we can continue processing its data.
@@ -623,7 +633,8 @@ class ConnectionPacketHandler {
     /**
      * Verify the signature if necessary.
      *
-     * @param con non-null
+     * @param packet the packet to verify
+     * @param con the connection
      * @throws I2PException if the signature was necessary and it was invalid
      */
     private void verifySignature(Packet packet, Connection con) throws I2PException {
@@ -649,6 +660,9 @@ class ConnectionPacketHandler {
         }
     }
 
+    /**
+     * Timer event to send an ACK for a duplicate packet after a short delay.
+     */
     private class AckDup implements SimpleTimer.TimedEvent {
         private final long _created;
         private final Connection _con;

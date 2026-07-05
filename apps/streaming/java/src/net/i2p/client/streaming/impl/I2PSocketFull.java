@@ -23,6 +23,10 @@ class I2PSocketFull implements I2PSocket {
     private final Destination _localPeer;
     private final AtomicBoolean _closed = new AtomicBoolean();
 
+    /**
+     * @param con the underlying connection, may be null
+     * @param context the I2P application context
+     */
     public I2PSocketFull(Connection con, I2PAppContext context) {
         log = context.logManager().getLog(I2PSocketFull.class);
         _connection = con;
@@ -41,6 +45,8 @@ class I2PSocketFull implements I2PSocket {
      *  Once a socket has been closed, it is not available for further networking use
      *  (i.e. can't be reconnected or rebound). A new socket needs to be created.
      *  Closing this socket will also close the socket's InputStream and OutputStream.
+     *
+     * @throws IOException if an I/O error occurs
      */
     public void close() throws IOException {
         if (!_closed.compareAndSet(false,true)) {
@@ -59,8 +65,6 @@ class I2PSocketFull implements I2PSocket {
             // this will cause any thread waiting in Connection.packetSendChoke()
             // to throw an IOE
             c.windowAdjusted();
-        } else {
-            //throw new IOException("Not connected");
         }
         destroy();
     }
@@ -75,6 +79,7 @@ class I2PSocketFull implements I2PSocket {
      *  (i.e. can't be reconnected or rebound). A new socket needs to be created.
      *  Resetting this socket will also close the socket's InputStream and OutputStream.
      *
+     * @throws IOException if an I/O error occurs
      *  @since 0.9.30
      */
     public void reset() throws IOException {
@@ -96,7 +101,9 @@ class I2PSocketFull implements I2PSocket {
     /**
      *  As of 0.9.9 will throw an IOE if socket is closed.
      *  Prior to that would return null instead of throwing IOE.
-     *  @return non-null
+     *
+     * @return non-null input stream
+     * @throws IOException if the socket is closed
      */
     public InputStream getInputStream() throws IOException {
         Connection c = _connection;
@@ -105,6 +112,9 @@ class I2PSocketFull implements I2PSocket {
         throw new IOException("Socket closed");
     }
 
+    /**
+     * @return the socket options, or null if the socket is closed
+     */
     public I2PSocketOptions getOptions() {
         Connection c = _connection;
         if (c != null)
@@ -128,7 +138,9 @@ class I2PSocketFull implements I2PSocket {
     /**
      *  As of 0.9.9 will throw an IOE if socket is closed.
      *  Prior to that would return null instead of throwing IOE.
-     *  @return non-null
+     *
+     * @return non-null output stream
+     * @throws IOException if the socket is closed
      */
     public OutputStream getOutputStream() throws IOException {
         Connection c = _connection;
@@ -137,8 +149,14 @@ class I2PSocketFull implements I2PSocket {
         throw new IOException("Socket closed");
     }
 
+    /**
+     * @return the remote peer destination
+     */
     public Destination getPeerDestination() { return _remotePeer; }
 
+    /**
+     * @return the read timeout in milliseconds, or -1 if no options are set
+     */
     public long getReadTimeout() {
         I2PSocketOptions opts = getOptions();
         if (opts != null)
@@ -147,8 +165,14 @@ class I2PSocketFull implements I2PSocket {
             return -1;
     }
 
+    /**
+     * @return the local peer destination
+     */
     public Destination getThisDestination() { return _localPeer; }
 
+    /**
+     * @param options the new socket options
+     */
     public void setOptions(I2PSocketOptions options) {
         Connection c = _connection;
         if (c == null) return;
@@ -159,6 +183,9 @@ class I2PSocketFull implements I2PSocket {
             c.setOptions(new ConnectionOptions(options));
     }
 
+    /**
+     * @param ms the read timeout in milliseconds
+     */
     public void setReadTimeout(long ms) {
         Connection c = _connection;
         if (c == null) return;
@@ -170,11 +197,16 @@ class I2PSocketFull implements I2PSocket {
     }
 
     /**
-     *  Deprecated, unimplemented, does nothing
+     *  Deprecated, unimplemented, does nothing.
+     *
+     * @param lsnr ignored
      */
     public void setSocketErrorListener(I2PSocket.SocketErrorListener lsnr) {
     }
 
+    /**
+     * @return true if the socket is closed or not connected
+     */
     public boolean isClosed() {
         Connection c = _connection;
         return ((c == null) ||
@@ -216,12 +248,18 @@ class I2PSocketFull implements I2PSocket {
         return c == null ? I2PSession.PORT_UNSPECIFIED : c.getLocalPort();
     }
 
+    /**
+     * @return total bytes sent over this socket's lifetime, or 0 if not connected
+     */
     @Override
     public long getLifetimeBytesSent() {
         Connection c = _connection;
         return c != null ? c.getLifetimeBytesSent() : 0;
     }
 
+    /**
+     * @return total bytes received over this socket's lifetime, or 0 if not connected
+     */
     @Override
     public long getLifetimeBytesReceived() {
         Connection c = _connection;

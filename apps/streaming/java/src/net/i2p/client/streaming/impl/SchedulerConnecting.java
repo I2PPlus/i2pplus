@@ -34,16 +34,27 @@ class SchedulerConnecting extends SchedulerImpl {
         super(ctx);
     }
 
+    /**
+     * Accept connections where the SYN has been sent but not yet ACKed.
+     *
+     * @param con the connection to check
+     * @return true if the connection is in the connecting state
+     */
     public boolean accept(Connection con) {
         if (con == null) return false;
         boolean notYetConnected = (con.getIsConnected()) &&
-                                  //(con.getSendStreamId() == null) && // not null on recv
                                   (con.getLastSendId() >= 0) &&
                                   (con.getHighestAckedThrough() < 0) &&
                                   (!con.getResetReceived());
         return notYetConnected;
     }
 
+    /**
+     * Handle an event on a connecting connection. Checks for connect
+     * timeout and sends available data when the send time arrives.
+     *
+     * @param con the connection that had an event
+     */
     public void eventOccurred(Connection con) {
         long waited = _context.clock().now() - con.getCreatedOn();
         if ( (con.getOptions().getConnectTimeout() > 0) &&

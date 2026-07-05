@@ -31,12 +31,18 @@ class SchedulerClosed extends SchedulerImpl {
         super(ctx);
     }
 
+    /**
+     * Accept connections where both sides have closed and ACKed, and the
+     * final timeout hasn't passed.
+     *
+     * @param con the connection to check
+     * @return true if the connection is in the closed state
+     */
     public boolean accept(Connection con) {
         if (con == null) return false;
         long timeSinceClose = _context.clock().now() - con.getCloseSentOn();
         boolean ok = (con.getCloseSentOn() > 0) &&
                      (con.getCloseReceivedOn() > 0) &&
-                     //(con.getUnackedPacketsReceived() <= 0) &&
                      (con.getUnackedPacketsSent() <= 0) &&
                      (!con.getResetReceived()) &&
                       (timeSinceClose < Connection.getDisconnectTimeout());
@@ -48,8 +54,6 @@ class SchedulerClosed extends SchedulerImpl {
 
     @Override
     public void eventOccurred(Connection con) {
-        // noop.  we do the timeout through the simpleTimer anyway
-        //long timeLeft = con.getCloseSentOn() + Connection.DISCONNECT_TIMEOUT - _context.clock().now();
-        //reschedule(timeLeft, con);
+        // noop - timeout handled by the simpleTimer
     }
 }

@@ -197,6 +197,10 @@ class Packet {
      */
     public long getSendStreamId() {return _sendStreamId;}
 
+    /**
+     * @param id the send stream ID to set
+     * @throws RuntimeException if the send stream ID has already been set to a different value
+     */
     public void setSendStreamId(long id) {
         // allow resetting to the same id (race)
         if ((_sendStreamIdSet) && (_sendStreamId > 0) && _sendStreamId != id)
@@ -213,6 +217,10 @@ class Packet {
      */
     public long getReceiveStreamId() {return _receiveStreamId;}
 
+    /**
+     * @param id the receive stream ID to set
+     * @throws RuntimeException if the receive stream ID has already been set to a different value
+     */
     public void setReceiveStreamId(long id) {
         // allow resetting to the same id (race)
         if ((_receiveStreamIdSet) && (_receiveStreamId > 0) && _receiveStreamId != id)
@@ -225,6 +233,10 @@ class Packet {
      * @return 0-indexed sequence number for current Packet in current sendStream
      */
     public long getSequenceNum() {return _sequenceNum;}
+
+    /**
+     * @param num the sequence number to set
+     */
     public void setSequenceNum(long num) {_sequenceNum = num;}
 
     /**
@@ -240,7 +252,7 @@ class Packet {
     }
 
     /**
-     * @param id if &lt; 0, sets FLAG_NO_ACK
+     * @param id the ack through value to set, if &lt; 0 sets FLAG_NO_ACK
      */
     public void setAckThrough(long id) {
         if (id < 0) {setFlag(FLAG_NO_ACK);}
@@ -256,6 +268,10 @@ class Packet {
      * @return List of packet sequence numbers not ACKed, or null if there are none.
      */
     public long[] getNacks() {return _nacks;}
+
+    /**
+     * @param nacks list of packet sequence numbers not ACKed, or null if there are none.
+     */
     public void setNacks(long[] nacks) {_nacks = nacks;}
 
     /**
@@ -288,21 +304,30 @@ class Packet {
      */
     public ByteArray getPayload() {return _payload;}
 
+    /**
+     * @param payload the payload to set, or null to clear
+     * @throws IllegalArgumentException if the payload exceeds MAX_PAYLOAD_SIZE
+     */
     public void setPayload(ByteArray payload) {
         _payload = payload;
         if ((payload != null) && (payload.getValid() > MAX_PAYLOAD_SIZE))
             throw new IllegalArgumentException("Too large payload: " + payload.getValid());
     }
 
+    /**
+     * @return the size of the payload in bytes, or 0 if no payload
+     */
     public int getPayloadSize() {
         return (_payload == null ? 0 : _payload.getValid());
     }
 
     /** does nothing right now */
     public void releasePayload() {
-        //_payload = null;
     }
 
+    /**
+     * @return a new ByteArray of MAX_PAYLOAD_SIZE for this packet
+     */
     public ByteArray acquirePayload() {
         _payload = new ByteArray(new byte[Packet.MAX_PAYLOAD_SIZE]);
         return _payload;
@@ -328,6 +353,9 @@ class Packet {
         else {_flags &= ~flag;}
     }
 
+    /**
+     * @param flags the flags to set
+     */
     private void setFlags(int flags) {_flags = flags;}
 
     /**
@@ -432,8 +460,12 @@ class Packet {
     }
 
     /**
+     * @param buffer bytes to write to a destination
+     * @param offset starting point in the buffer to send
      * @param fakeSigLen if 0, include the real signature in _optionSignature;
      *                   if nonzero, leave space for that many bytes
+     * @return the number of bytes written
+     * @throws IllegalStateException if there is data missing or otherwise b0rked
      */
     protected int writePacket(byte[] buffer, int offset, int fakeSigLen) throws IllegalStateException {
         int cur = offset;
@@ -534,15 +566,6 @@ class Packet {
      * @return How large the current packet would be
      */
     private int writtenSize() {
-        //int size = 0;
-        //size += 4; // _sendStreamId.length;
-        //size += 4; // _receiveStreamId.length;
-        //size += 4; // sequenceNum
-        //size += 4; // ackThrough
-        //    size++; // nacks length
-        //size++; // resendDelay
-        //size += 2; // flags
-        //size += 2; // option size
         int size = 22;
 
         if (_nacks != null) {size += 4 * _nacks.length;} // if max win is ever > 255, limit to 255
@@ -620,11 +643,7 @@ class Packet {
         }
 
         // skip ahead to the payload
-        //_payload = new ByteArray(new byte[payloadSize]);
         _payload = new ByteArray(buffer, payloadBegin, payloadSize);
-        //System.arraycopy(buffer, payloadBegin, _payload.getData(), 0, payloadSize);
-        //_payload.setValid(payloadSize);
-        //_payload.setOffset(0);
 
         // ok now let's go back and deal with the options
         if (isFlagSet(FLAG_DELAY_REQUESTED)) {
@@ -784,9 +803,6 @@ class Packet {
         // Fixup of signature if we guessed wrong on the type in readPacket(), which could happen
         // on a close or reset packet where we have a signature without a FROM
         if (type != _optionSignature.getType() && type.getSigLen() == _optionSignature.length()) {
-            //Log l = ctx.logManager().getLog(Packet.class);
-            //if (l.shouldDebug())
-            //    l.debug("Fixing up sig type from " + _optionSignature.getType() + " to " + type);
             _optionSignature = new Signature(type, _optionSignature.getData());
         }
 
@@ -829,6 +845,10 @@ class Packet {
         return buf;
     }
 
+    /**
+     * @param id the stream ID to format
+     * @return base64-encoded stream ID without trailing '='
+     */
     static final String toId(long id) {
         return Base64.encode(DataHelper.toLong(4, id)).replace("==", "");
     }
@@ -868,8 +888,11 @@ class Packet {
         }
     }
 
-    /** Generate a pcap/tcpdump-compatible format,
-     *  so we can use standard debugging tools.
+    /**
+     * Generate a pcap/tcpdump-compatible format,
+     * so we can use standard debugging tools.
+     *
+     * @param con the connection, may be null for unknown connections
      */
     public void logTCPDump(Connection con) {
         try {I2PSocketManagerFull.pcapWriter.write(this, con);}

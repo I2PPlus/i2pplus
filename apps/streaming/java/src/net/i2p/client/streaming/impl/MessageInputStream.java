@@ -15,7 +15,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.I2PAppContext;
 import net.i2p.data.ByteArray;
 import net.i2p.util.Log;
-import net.i2p.util.SystemVersion;
 
 /**
  * InputStream implementation that accepts messages arriving out of order
