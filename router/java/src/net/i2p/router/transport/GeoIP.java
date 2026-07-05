@@ -594,6 +594,13 @@ public class GeoIP {
 
     // --- ISP Name Normalization (ported from Python normalize-asn.py) ---
 
+    /** Known broken org names in the MaxMind ASN DB — straight replacements */
+    private static final java.util.Map<String, String> ASN_DB_OVERRIDES;
+    static {
+        ASN_DB_OVERRIDES = new java.util.HashMap<>();
+        ASN_DB_OVERRIDES.put("setarimE moceleT puorG oC talasitepuorG CSJP", "Emirates Telecom");
+    }
+
     /** Suffixes to strip from org names (longer patterns first) */
     private static final String[] SUFFIX_PATTERNS = {
         ",?\\s+Pty\\.?\\s+Ltd\\.?$",
@@ -781,6 +788,10 @@ public class GeoIP {
         for (Pattern pat : SKIP_PATTERNS) {
             if (pat.matcher(name).find()) {return name;}
         }
+
+        // Known broken org names in the MaxMind ASN DB (reversed strings, etc.)
+        String fixed = ASN_DB_OVERRIDES.get(name);
+        if (fixed != null) return fixed;
 
         // Strip embedded ASN numbers
         name = ASN_EMBEDDED.matcher(name).replaceAll("");
