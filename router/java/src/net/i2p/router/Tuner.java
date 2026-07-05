@@ -3002,7 +3002,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             // Confirm high usage is a sustained trend, not just a spike
             boolean sustainedHighUsage = !Double.isNaN(hourlyBps) && hourlyBps / maxBps > 0.6;
-            boolean perTunnelHigh = !Double.isNaN(msgsPerTunnel) && msgsPerTunnel > 50;
+            boolean perTunnelHigh = !Double.isNaN(msgsPerTunnel) && msgsPerTunnel > 200;
 
             // High bandwidth usage + network healthy = increase throttle (manage load proactively)
             // Require sustained trend to avoid over-reacting to brief spikes
@@ -3404,7 +3404,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
 
             boolean buildStorm = !Double.isNaN(concurrentBuilds) && concurrentBuilds > 15;
             boolean heavyLoad = !Double.isNaN(transitBps) && transitBps > 80000;
-            boolean perTunnelHigh = !Double.isNaN(msgsPerTunnel) && msgsPerTunnel > 50;
+            boolean perTunnelHigh = !Double.isNaN(msgsPerTunnel) && msgsPerTunnel > 200;
 
             // Build storm + low success = actively decrease throttle (rebuild faster to fix pools)
             if (buildStorm && observed < 0.7)
