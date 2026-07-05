@@ -86,7 +86,7 @@ public abstract class TransportImpl implements Transport {
     private TransportEventListener _listener;
     private final List<RouterAddress> _currentAddresses;
     // Only used by NTCP. SSU does not use. See send() below.
-    private final BlockingQueue<OutNetMessage> _sendPool;
+    private volatile BlockingQueue<OutNetMessage> _sendPool;
     protected final RouterContext _context;
     /** map from routerIdentHash to timestamp (Long) that the peer was last unreachable */
     private final Map<Hash, Long>  _unreachableEntries;
@@ -127,7 +127,23 @@ public abstract class TransportImpl implements Transport {
     /** 50/100/150/250/450/550/700 for BW Tiers K/L/M/N/O/P/X */
     private static final int MAX_CONNECTION_FACTOR = 100;
     // see constructor
-    private static final int SEND_POOL_CAPACITY = SystemVersion.isSlow() ? 64 : 128;
+    private static volatile int SEND_POOL_CAPACITY = SystemVersion.isSlow() ? 64 : 128;
+
+    /**
+     * @return the current NTCP send pool capacity
+     * @since 0.9.70+
+     */
+    public static int getSendPoolCapacity() { return SEND_POOL_CAPACITY; }
+
+    /**
+     * Set the NTCP send pool capacity (called by Tuner).
+     * Resizes the pool on NTCP transports, draining old messages.
+     * @since 0.9.70+
+     */
+    public static void setSendPoolCapacity(int capacity) {
+        int def = SystemVersion.isSlow() ? 64 : 128;
+        SEND_POOL_CAPACITY = Math.max(def / 2, Math.min(def * 4, capacity));
+    }
 
     /**
      * Initialize the new transport
@@ -144,6 +160,7 @@ public abstract class TransportImpl implements Transport {
         _context.statManager().createRequiredRateStat("transport.receiveMessageSize", "Size of received messages (bytes)", "Transport", RATES);
         _context.statManager().createRequiredRateStat("transport.sendMessageSize", "Size of sent messages (bytes)", "Transport", RATES);
         _context.statManager().createRequiredRateStat("transport.sendProcessingTime", "Time to process and send a message (ms)", "Transport", RATES);
+        _context.statManager().createRequiredRateStat("ntcp.sendPool utilization", "Send pool size as fraction of capacity (pct)", "Transport", RATES);
         
 
         _currentAddresses = new ArrayList<>(3);
@@ -162,6 +179,21 @@ public abstract class TransportImpl implements Transport {
             WAS_UNREACHABLE_PERIOD = 5*60*1000L;
         }
         _context.simpleTimer2().addPeriodicEvent(new CleanupUnreachable(), 2 * UNREACHABLE_PERIOD, UNREACHABLE_PERIOD / 2);
+    }
+
+    /**
+     * Resize the NTCP send pool if needed. Creates a new pool with the
+     * current capacity and drains old messages into it.
+     * @since 0.9.70+
+     */
+    public void resizeSendPool() {
+        if (_sendPool == null) return;
+        int current = _sendPool.size();
+        int newCap = SEND_POOL_CAPACITY;
+        if (newCap <= _sendPool.remainingCapacity() + current) return;
+        BlockingQueue<OutNetMessage> newPool = new ArrayBlockingQueue<>(newCap);
+        _sendPool.drainTo(newPool);
+        _sendPool = newPool;
     }
 
     /**
@@ -233,6 +265,12 @@ public abstract class TransportImpl implements Transport {
 
         return _context.getProperty(maxProp, def);
     }
+
+    /**
+     * @return the router context
+     * @since 0.9.70+
+     */
+    public RouterContext getContext() { return _context; }
 
     public static int getTransportMaxConnections(RouterContext ctx, String style) {
         if (ctx.commSystem().isDummy()) {return 0;} // testing
@@ -486,6 +524,11 @@ public abstract class TransportImpl implements Transport {
                 _context.statManager().addRateData("transport.sendPool.full", 1);
                 afterSend(msg, false);
                 return;
+            }
+            int cap = SEND_POOL_CAPACITY;
+            if (cap > 0) {
+                int pct = (_sendPool.size() * 100) / cap;
+                _context.statManager().addRateData("ntcp.sendPool utilization", pct, _sendPool.size());
             }
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();

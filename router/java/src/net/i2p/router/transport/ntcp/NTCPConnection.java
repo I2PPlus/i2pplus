@@ -75,7 +75,21 @@ public class NTCPConnection implements Closeable {
      * and already cleared through the bandwidth limiter.
      * unbounded and lockless
      */
-    private static final int MAX_WRITE_BUFS = 512;
+    private static volatile int MAX_WRITE_BUFS = 512;
+
+    /**
+     * @return the current max write buffers per NTCP connection
+     * @since 0.9.70+
+     */
+    public static int getMaxWriteBufs() { return MAX_WRITE_BUFS; }
+
+    /**
+     * Set the max write buffers per NTCP connection (called by Tuner).
+     * @since 0.9.70+
+     */
+    public static void setMaxWriteBufs(int max) {
+        MAX_WRITE_BUFS = Math.max(128, Math.min(2048, max));
+    }
     private final Queue<ByteBuffer> _writeBufs;
     /** Requests that were not granted immediately */
     private final Set<FIFOBandwidthLimiter.Request> _bwInRequests;
@@ -1181,9 +1195,11 @@ public class NTCPConnection implements Closeable {
     private void write(ByteBuffer buf) {
         if (_writeBufs.size() >= MAX_WRITE_BUFS) {
             _log.warn("Write queue full (" + _writeBufs.size() + "), dropping buffer on " + this);
+            _transport.getContext().statManager().addRateData("ntcp.writeBufs.size", _writeBufs.size(), MAX_WRITE_BUFS);
             return;
         }
         _writeBufs.offer(buf);
+        _transport.getContext().statManager().addRateData("ntcp.writeBufs.size", _writeBufs.size(), MAX_WRITE_BUFS);
         EventPumper pumper = _transport.getPumper();
         if (_isInbound || isEstablished()) {
             // Attempt to write directly

@@ -82,7 +82,6 @@ class ClientManager {
     private static final String PROP_ENABLE_SSL = "i2cp.SSL";
     /** Disable local-local "loopback", force all traffic through tunnels @since 0.9.44 */
     private static final String PROP_DISABLE_LOOPBACK = "i2cp.disableLoopback";
-    private static final int INTERNAL_QUEUE_SIZE = SystemVersion.isSlow() ? 256 : 512;
     private static final long REQUEST_LEASESET_TIMEOUT = 60L*1000;
     private static final int MAX_SESSION_ID = 65534; /** 2 bytes, save 65535 for unknown */
     private static final String PROP_MAX_SESSIONS = "i2cp.maxSessions";
@@ -109,6 +108,7 @@ class ClientManager {
         _ctx.statManager().createRateStat("client.requestLeaseSetSuccess", "Successful LeaseSet requests", "ClientMessages", new long[] { RateConstants.ONE_MINUTE });
         _ctx.statManager().createRateStat("client.requestLeaseSetTimeout", "Requests for new LeaseSet without reply", "ClientMessages", new long[] { RateConstants.ONE_MINUTE });
         _ctx.statManager().createRateStat("client.requestLeaseSetDropped", "Requests for new LeaseSet dropped by the client", "ClientMessages", new long[] { RateConstants.ONE_MINUTE });
+        _ctx.statManager().createRequiredRateStat("i2cp.internalQueueSize", "I2CP internal queue capacity", "ClientMessages", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
     }
 
     /** @since 0.9.8 */
@@ -213,8 +213,9 @@ class ClientManager {
                 throw new I2PSessionException("Router ClientManager failed to start");
             }
         }
-        LinkedBlockingQueue<I2CPMessage> in = new LinkedBlockingQueue<>(INTERNAL_QUEUE_SIZE);
-        LinkedBlockingQueue<I2CPMessage> out = new LinkedBlockingQueue<>(INTERNAL_QUEUE_SIZE);
+        LinkedBlockingQueue<I2CPMessage> in = new LinkedBlockingQueue<>(net.i2p.router.Tuner.getInternalQueueSize());
+        LinkedBlockingQueue<I2CPMessage> out = new LinkedBlockingQueue<>(net.i2p.router.Tuner.getInternalQueueSize());
+        _ctx.statManager().addRateData("i2cp.internalQueueSize", net.i2p.router.Tuner.getInternalQueueSize(), in.size());
         I2CPMessageQueue myQueue = new I2CPMessageQueueImpl(in, out);
         I2CPMessageQueue hisQueue = new I2CPMessageQueueImpl(out, in);
         ClientConnectionRunner runner = new QueuedClientConnectionRunner(_ctx, this, myQueue);

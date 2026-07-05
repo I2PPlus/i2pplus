@@ -214,6 +214,8 @@ public class NTCPTransport extends TransportImpl {
         _context.statManager().createRateStat("ntcp.failsafeInvalid", "Connection to peer closed (JVM bug workaround)", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.failsafeThrottle", "Delay event pumper", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.failsafeWrites", "Extra nio writes added to peer (failsafe)", "Transport [NTCP]", RATES);
+        _context.statManager().createRequiredRateStat("ntcp.writeBufs.size", "Write buffer queue size per connection", "Transport [NTCP]", RATES);
+        _context.statManager().createRequiredRateStat("ntcp.readQueueSize", "Pending connections awaiting reader threads", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.inboundEstablishedDuplicate", "Duplicate established Inbound NTCP connections", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.inboundEstablished", "Established Inbound NTCP connections", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.inboundIPv4Conn", "Inbound IPv4 NTCP connections", "Transport [NTCP]", RATES);

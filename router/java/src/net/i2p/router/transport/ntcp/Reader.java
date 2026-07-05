@@ -24,6 +24,7 @@ import net.i2p.util.SystemVersion;
  */
 public class Reader {
     private final Log _log;
+    private final RouterContext _context;
 
     private final Set<NTCPConnection> _pendingConnections;
     private final Set<NTCPConnection> _liveReads;
@@ -34,6 +35,7 @@ public class Reader {
     private static final int MAX_THREADS = 32;
 
     public Reader(RouterContext ctx) {
+        _context = ctx;
         _log = ctx.logManager().getLog(getClass());
         _pendingConnections = new LinkedHashSet<>(16);
         _runners = new CopyOnWriteArrayList<>();
@@ -142,6 +144,7 @@ public class Reader {
                             }
                             if (_pendingConnections.isEmpty()) {_pendingConnections.wait();}
                             else {
+                                _context.statManager().addRateData("ntcp.readQueueSize", _pendingConnections.size(), _pendingConnections.size());
                                 Iterator<NTCPConnection> iter = _pendingConnections.iterator();
                                 con = iter.next();
                                 iter.remove();

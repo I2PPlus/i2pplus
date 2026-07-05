@@ -151,7 +151,21 @@ public class EstablishmentManager {
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
 
     /** Max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH) */
-    private static final int MAX_QUEUED_OUTBOUND = 128;
+    private static volatile int MAX_QUEUED_OUTBOUND = 128;
+
+    /**
+     * @return the current max queued outbound connections
+     * @since 0.9.70+
+     */
+    public static int getMaxQueuedOutbound() { return MAX_QUEUED_OUTBOUND; }
+
+    /**
+     * Set the max queued outbound connections (called by Tuner).
+     * @since 0.9.70+
+     */
+    public static void setMaxQueuedOutbound(int max) {
+        MAX_QUEUED_OUTBOUND = Math.max(32, Math.min(512, max));
+    }
 
     /** Max queued msgs per peer while peer connection is queued */
     private static final int MAX_QUEUED_PER_PEER = 32;
@@ -222,7 +236,8 @@ public class EstablishmentManager {
         _context.statManager().createRequiredRateStat("udp.outboundEstablishTime", "Time to establish new outbound session (ms)", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("udp.sendIntroRelayTimeout", "Relay request timeouts before response (target or intro peer offline)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.establishDropped", "Dropped an inbound establish message", "Transport [UDP]", UDPTransport.RATES);
-                    _context.statManager().createRequiredRateStat("udp.establishRejected", "Pending outbound connections when we refuse to add any more", "Transport [UDP]", UDPTransport.RATES);
+                     _context.statManager().createRequiredRateStat("udp.establishRejected", "Pending outbound connections when we refuse to add any more", "Transport [UDP]", UDPTransport.RATES);
+                     _context.statManager().createRequiredRateStat("udp.queuedOutbound.size", "Outbound connection queue size", "Transport [UDP]", UDPTransport.RATES);
                     _context.statManager().createRequiredRateStat("udp.establishOverflow", "Messages queued up on a pending connection when it was too much", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.establishBadIP", "Received IP or port was bad", "Transport [UDP]", UDPTransport.RATES);
         // following are for PeerState
@@ -427,6 +442,7 @@ public class EstablishmentManager {
         if (state == null) {
             if (queueIfMaxExceeded && _outboundStates.size() >= getMaxConcurrentEstablish()) {
                 if (_queuedOutbound.size() >= MAX_QUEUED_OUTBOUND && !_queuedOutbound.containsKey(to)) {
+                    _context.statManager().addRateData("udp.queuedOutbound.size", _queuedOutbound.size(), MAX_QUEUED_OUTBOUND);
                     rejected = true;
                 } else {
                     // Use a bounded LinkedBlockingQueue to enforce MAX_QUEUED_PER_PEER atomically
