@@ -169,12 +169,29 @@ public class PeerState {
     private static final long BACKOFF_START_LIFETIME = 5 * 1000L;
     /** Initial concurrent messages per peer */
     private static final int INIT_CONCURRENT_MSGS = SystemVersion.isSlow() ? 16 : 64;
-    /** Hard cap on concurrent messages per peer */
-    private static final int MAX_CONCURRENT_MSGS = SystemVersion.isSlow() ? 64 : 256;
+    /** Hard cap on concurrent messages per peer — adjustable via Tuner */
+    private static volatile int MAX_CONCURRENT_MSGS = SystemVersion.isSlow() ? 64 : 256;
+
+    /**
+     * @return the current max concurrent messages per peer
+     * @since 0.9.70+
+     */
+    public static int getMaxConcurrentMessages() { return MAX_CONCURRENT_MSGS; }
+
+    /**
+     * Set the max concurrent messages per peer (called by Tuner).
+     * @since 0.9.70+
+     */
+    public static void setMaxConcurrentMessages(int max) {
+        int def = SystemVersion.isSlow() ? 64 : 256;
+        MAX_CONCURRENT_MSGS = Math.max(def / 2, Math.min(1024, max));
+    }
     /** Target RTT in ms — below this, increase concurrency; above this, decrease */
     private static final int TARGET_RTT = 150;
     /** RTT multiplier above which we multiplicative-decrease concurrency */
     private static final int RTT_DECREASE_FACTOR = 2;
+    /** When RTT > TARGET_RTT but there are queued messages, increase modestly */
+    private static final int QUEUE_BACKPRESSURE_INCREASE = 2;
     /** how many concurrent outbound messages do we allow OutboundMessageFragments to send
         This counts full messages, NOT fragments (UDP packets).
         Dynamically adjusted based on measured RTT: increased when RTT < TARGET_RTT,
@@ -743,6 +760,7 @@ public class PeerState {
         if (numSends < 2) {
             // Latency-based AIMD for concurrent message limit
             int oldLimit = _concurrentMessagesAllowed;
+            int queued = _outboundQueue.size();
             if (_rtt <= 0) {
                 // No RTT estimate yet — use conservative additive increase
                 if (_context.random().nextInt(INIT_CONCURRENT_MSGS) <= 0 && _concurrentMessagesAllowed < MAX_CONCURRENT_MSGS) {
@@ -753,19 +771,28 @@ public class PeerState {
                 // Ramp faster when far from max, slower near max (avoids oscillation)
                 if (_concurrentMessagesAllowed < MAX_CONCURRENT_MSGS) {
                     int headroom = MAX_CONCURRENT_MSGS - _concurrentMessagesAllowed;
-                    int increase = Math.max(1, headroom / 16);
+                    // Backlog-aware: if messages are queued, increase faster to drain
+                    int backlogBoost = Math.min(queued, 8);
+                    int increase = Math.max(1, (headroom + backlogBoost) / 16);
                     _concurrentMessagesAllowed = Math.min(MAX_CONCURRENT_MSGS, _concurrentMessagesAllowed + increase);
                 }
             } else if (_rtt >= TARGET_RTT * RTT_DECREASE_FACTOR) {
-                // RTT well above target — multiplicative decrease (back off under congestion)
-                int allow = _concurrentMessagesAllowed / 2;
+                // RTT well above target — soft multiplicative decrease
+                // *3/4 instead of /2 to avoid death spirals from transient spikes
+                int allow = (_concurrentMessagesAllowed * 3) / 4;
                 if (allow < MIN_CONCURRENT_MSGS) {allow = MIN_CONCURRENT_MSGS;}
                 _concurrentMessagesAllowed = allow;
+            } else if (queued > 0) {
+                // RTT in hysteresis zone but messages queued — modest increase to drain backlog
+                if (_concurrentMessagesAllowed < MAX_CONCURRENT_MSGS) {
+                    _concurrentMessagesAllowed = Math.min(MAX_CONCURRENT_MSGS,
+                        _concurrentMessagesAllowed + QUEUE_BACKPRESSURE_INCREASE);
+                }
             }
-            // else: RTT in hysteresis zone (TARGET_RTT to TARGET_RTT*2) — hold steady
+            // else: RTT in hysteresis zone, no queue — hold steady
             if (_log.shouldDebug() && _concurrentMessagesAllowed != oldLimit) {
                 _log.debug("Concurrent msg limit [" + _remotePeer.toBase64().substring(0,6) + "] " +
-                           oldLimit + " -> " + _concurrentMessagesAllowed + " (RTT=" + _rtt + "ms)");
+                           oldLimit + " -> " + _concurrentMessagesAllowed + " (RTT=" + _rtt + "ms queued=" + queued + ")");
             }
 
             if (_sendWindowBytes.get() <= _slowStartThreshold) {
@@ -781,8 +808,9 @@ public class PeerState {
                     }
             }
         } else {
-            // Retransmit — fast reaction to loss
-            int allow = _concurrentMessagesAllowed - 1;
+            // Retransmit — proportional decrease to avoid death spiral
+            // /8 is gentle; avoids grinding from 64 to MIN in just a few retransmits
+            int allow = _concurrentMessagesAllowed - Math.max(1, _concurrentMessagesAllowed / 8);
             if (allow < MIN_CONCURRENT_MSGS) {allow = MIN_CONCURRENT_MSGS;}
             _concurrentMessagesAllowed = allow;
         }
