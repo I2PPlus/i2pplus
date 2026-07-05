@@ -1009,7 +1009,16 @@ public class SidebarHelper extends HelperBase {
      */
     public String getMessageDelay() {
         if (_context == null) {return "0";}
-        return DataHelper.formatDuration2(_context.throttle().getMessageDelay());
+        RateStat rs = _context.statManager().getRate("transport.sendProcessingTime");
+        if (rs == null) {return "0";}
+        Rate rate = rs.getRate(RateConstants.ONE_MINUTE);
+        if (rate == null) {return "0";}
+        double avg = rate.getAverageValue();
+        if (avg < 1) {
+            return DataHelper.formatDuration2(avg);
+        } else {
+            return DataHelper.formatDuration2((long) avg);
+        }
     }
 
     /**

@@ -93,6 +93,8 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("i2p.streaming.maxRtt", "RTT Estimate Cap");
         DISPLAY_NAMES.put("i2p.streaming.initialResendDelay", "First Retransmit Delay");
         DISPLAY_NAMES.put("i2p.streaming.immediateAckDelay", "Duplicate ACK Delay");
+        DISPLAY_NAMES.put("i2p.router.maxDispatchAge", "Max Message Queue Age");
+        DISPLAY_NAMES.put("i2p.router.handlerThreadPriority", "I/O Thread Priority");
     }
 
     // brief purpose descriptions (<=120 chars)
@@ -164,6 +166,8 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxRtt", "Upper bound on RTT estimate in ms.");
         PARAM_DESCRIPTIONS.put("i2p.streaming.initialResendDelay", "Delay before first retransmit in ms.");
         PARAM_DESCRIPTIONS.put("i2p.streaming.immediateAckDelay", "Delay for dup or OOO packet ACKs in ms.");
+        PARAM_DESCRIPTIONS.put("i2p.router.maxDispatchAge", "Max age a message can be queued before dropping in ms.");
+        PARAM_DESCRIPTIONS.put("i2p.router.handlerThreadPriority", "Dynamic priority for I/O handler threads.");
     }
 
     // display order for subsystems
