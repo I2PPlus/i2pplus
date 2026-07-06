@@ -6253,7 +6253,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         BuildHandlerThreadsParam() {
             super("router.buildHandlerThreads", "Build handler threads",
-                  SUB_TUNNEL,
+                  SUB_ROUTER,
                   1, 8, 1, "tunnel.buildHandler.queueSize", _context);
         }
 
@@ -6280,14 +6280,30 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
 
-            // Queue backlog + no CPU pressure — grow
-            if (!cpuPressure && observed > 5 && current < _max)
-                return current + 1;
+            // CPU saturated — hold
+            if (cpuPressure)
+                return current;
 
-            // Consistently idle — shrink
-            if (observed < 1 && current > _min)
-                return current - 1;
+            // Scale up on queue backlog
+            if (observed > 0 && current < _max) {
+                int inc = Math.min(Math.max(1, (int) observed / 3), 2);
+                return Math.min(_max, current + inc);
+            }
+
+            // Scale up when concurrent builds exceed threads
+            if (!Double.isNaN(concurrentBuilds) && concurrentBuilds > current * 2 && current < _max) {
+                int inc = Math.min(Math.max(1, (int) concurrentBuilds / 6), 2);
+                return Math.min(_max, current + inc);
+            }
+
+            // Shrink only when queue idle AND no concurrent build demand
+            if (observed < 1 && current > 2) {
+                boolean demandLow = Double.isNaN(concurrentBuilds) || concurrentBuilds < current;
+                if (demandLow)
+                    return current - 1;
+            }
 
             return current;
         }
