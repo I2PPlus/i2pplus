@@ -17,8 +17,8 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Throttles incoming tunnel requests earlier than ParticipatingThrottler,
@@ -100,7 +100,7 @@ class RequestThrottler {
         _banLogger = new BanLogger();
         _banLogger.initialize(ctx);
         // HashPatternDetector scanner is controlled by router.hashScan.frequency property (default: 0 = disabled)
-        ctx.simpleTimer2().addPeriodicEvent(new Cleaner(), CLEAN_TIME);
+        new Cleaner().schedule(CLEAN_TIME);
     }
 
     /**
@@ -228,7 +228,7 @@ class RequestThrottler {
                 if (_log.shouldInfo()) {
                     _log.info("Dropping all connections from [" + routerId + "] -> Low share / " + v + " (load=" + lag + ")");
                 }
-                context.simpleTimer2().addEvent(new Disconnector(h, v), 11*60*1000L);
+                new Disconnector(h, v).schedule(11*60*1000L);
                 return true;
             }
         }
@@ -242,7 +242,7 @@ class RequestThrottler {
                 String banReason = "Excessive tunnel requests";
                 _banLogger.logBan(h, ipPort, banReason, bantime);
                 context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + bantime);
-                context.simpleTimer2().addEvent(new Disconnector(h, v), 11*60*1000L);
+                new Disconnector(h, v).schedule(11*60*1000L);
                 if (_log.shouldWarn()) {
                     _log.warn("Banning " + (isLowShare || isUnreachable ? "slow or unreachable" : "") +
                               " Router [" + routerId + "] for " + period + "m" +
@@ -264,7 +264,7 @@ class RequestThrottler {
             _banLogger.logBan(h, ipPort, banReason, 30*60*1000L);
             context.banlist().banlistRouter(h, banReason, null, null, context.clock().now() + 30*60*1000L);
             // drop after any accepted tunnels have expired
-            context.simpleTimer2().addEvent(new Disconnector(h, v), 11*60*1000L);
+            new Disconnector(h, v).schedule(11*60*1000L);
             if (_log.shouldWarn())
                 _log.warn("Banning Router [" + routerId + "] for 30m -> " +
                           "Excessive tunnel requests (Requested: " + count + " / Hard limit: " + limit + ")");
@@ -302,7 +302,8 @@ class RequestThrottler {
     /**
      * Periodic timer event that clears the request counts to reset throttling.
      */
-    private class Cleaner implements SimpleTimer.TimedEvent {
+    private class Cleaner extends SimpleTimer2.TimedEvent {
+        public Cleaner() { super(context.simpleTimer2()); }
         @Override
         public void timeReached() {RequestThrottler.this.counter.clear();}
     }
@@ -312,10 +313,10 @@ class RequestThrottler {
      *
      * @since 0.9.52
      */
-    private class Disconnector implements SimpleTimer.TimedEvent {
+    private class Disconnector extends SimpleTimer2.TimedEvent {
         private final Hash h;
         private final String version;
-        public Disconnector(Hash h, String version) {this.h = h; this.version = version;}
+        public Disconnector(Hash h, String version) { super(context.simpleTimer2()); this.h = h; this.version = version; }
         public void timeReached() {
             String reason = (version == null || version.isEmpty()) ? "Old version" : "Old version (" + version + ")";
             context.commSystem().forceDisconnect(h, reason);

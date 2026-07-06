@@ -7,7 +7,6 @@ import java.util.Map;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.util.ObjectCounter;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 
 /**
@@ -59,7 +58,7 @@ class LookupThrottler {
         CLEAN_TIME = cleanTime;
         this.counter = new ObjectCounter<>();
         this.burstTimestamps = new HashMap<>();
-        SimpleTimer2.getInstance().addPeriodicEvent(new Cleaner(), CLEAN_TIME);
+        new Cleaner().schedule(CLEAN_TIME);
         _max = _facade.floodfillEnabled() ? MAX_LOOKUPS : MAX_NON_FF_LOOKUPS;
     }
 
@@ -94,7 +93,8 @@ class LookupThrottler {
         return this.counter.increment(rt) > _max;
     }
 
-    private class Cleaner implements SimpleTimer.TimedEvent {
+    private class Cleaner extends SimpleTimer2.TimedEvent {
+        public Cleaner() { super(SimpleTimer2.getInstance()); }
         @Override
         public void timeReached() {
             LookupThrottler.this.counter.clear();

@@ -714,6 +714,7 @@ public class Router implements RouterClock.ClockShiftListener {
         _context.jobQueue().runQueue(1);
         //_context.jobQueue().addJob(new CoalesceStatsJob(_context));
         _context.simpleTimer2().addPeriodicEvent(new CoalesceStatsEvent(_context), COALESCE_TIME);
+        // CoalesceStatsEvent self-reschedules in timeReached()
         _context.jobQueue().addJob(new UpdateRoutingKeyModifierJob(_context));
         _context.blocklist().startup();
 
@@ -925,7 +926,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
             // This is called from PersistentDataStore.ReadJob, so we probably don't need to throw it to the timer queue,
             // but just to be safe
-            _context.simpleTimer2().addEvent(r, 0);
+            r.schedule(0);
 
             // periodically update our RI and republish it to the flooodfills
             PublishLocalRouterInfoJob plrij = new PublishLocalRouterInfoJob(_context);
@@ -1030,7 +1031,7 @@ public class Router implements RouterClock.ClockShiftListener {
             setRouterInfo(ri);
             if (!ri.isValid()) {throw new DataFormatException("Our RouterInfo has a BAD signature");}
             Republish r = new Republish(_context);
-            _context.simpleTimer2().addEvent(r, 0);
+            r.schedule(0);
         } catch (DataFormatException dfe) {
             _log.log(Log.CRIT, "Internal Error -> Unable to sign our own address?!", dfe);
         }
@@ -2008,7 +2009,7 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     private void beginMarkingLiveliness() {
         File f = getPingFile();
-        _context.simpleTimer2().addPeriodicEvent(new MarkLiveliness(this, f), 0, LIVELINESS_DELAY - (5*1000));
+        new MarkLiveliness(this, f, LIVELINESS_DELAY - (5*1000)).schedule(LIVELINESS_DELAY - (5*1000));
     }
 
     /**

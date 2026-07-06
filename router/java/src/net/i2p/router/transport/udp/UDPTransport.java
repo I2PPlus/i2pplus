@@ -59,7 +59,6 @@ import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
@@ -459,10 +458,10 @@ public class UDPTransport extends TransportImpl {
         _context.statManager().createRequiredRateStat("codel.UDP-Sender.delay", "Average queue delay (ms)", "Transport [UDP]", RATES);
         _context.statManager().createRequiredRateStat("codel.UDP-Sender.drop", "Queue delay of dropped items (ms)", "Transport [UDP]", RATES);
 
-        _context.simpleTimer2().addPeriodicEvent(new PingIntroducers(), MIN_EXPIRE_TIMEOUT * 3 / 4);
+        new PingIntroducers().schedule(MIN_EXPIRE_TIMEOUT * 3 / 4);
 
         _tuner = new Tuner(_context);
-        _context.simpleTimer2().addPeriodicEvent(_tuner, 30*1000L);
+        _tuner.schedule(30*1000L);
 
         // SSU2 key and IV generation if required
         _defaultMTU = PeerState2.DEFAULT_MTU;
@@ -2023,7 +2022,7 @@ public class UDPTransport extends TransportImpl {
                             RemoteHostId remote = peer.getRemoteHostId();
                             _dropList.add(remote);
                             _context.statManager().addRateData("udp.dropPeerDroplist", 1);
-                            _context.simpleTimer2().addEvent(new RemoveDropList(remote), DROPLIST_PERIOD);
+                            new RemoveDropList(remote).schedule(DROPLIST_PERIOD);
                         }
                         markUnreachable(peerHash);
                         if (id == -1) {
@@ -2048,9 +2047,9 @@ public class UDPTransport extends TransportImpl {
         super.messageReceived(inMsg, remoteIdent, remoteIdentHash, msToReceive, bytesReceived);
     }
 
-    private class RemoveDropList implements SimpleTimer.TimedEvent {
+    private class RemoveDropList extends SimpleTimer2.TimedEvent {
         private final RemoteHostId _peer;
-        public RemoveDropList(RemoteHostId peer) { _peer = peer; }
+        public RemoveDropList(RemoteHostId peer) { super(_context.simpleTimer2()); _peer = peer; }
         public void timeReached() {
             _dropList.remove(_peer);
         }
@@ -4069,7 +4068,8 @@ public class UDPTransport extends TransportImpl {
      *  than we rebuild our address.
      *  @since 0.8.11
      */
-    private class PingIntroducers implements SimpleTimer.TimedEvent {
+    private class PingIntroducers extends SimpleTimer2.TimedEvent {
+        public PingIntroducers() { super(_context.simpleTimer2()); }
         public void timeReached() {
             if (introducersRequired(false) || introducersRequired(true))
                 _introManager.pingIntroducers();

@@ -7,21 +7,15 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 
 /**
- * Simple event scheduler - toss an event on the queue and it gets fired at the
- * appropriate time.  The method that is fired however should NOT block (otherwise
- * they b0rk the timer).
+ * Scheduled event executor backed by ScheduledThreadPoolExecutor.
+ * Replaces the legacy SimpleTimer (deleted; had lock contention issues).
+ * Supports cancel and reschedule. Events must NOT block.
  *
- * This rewrites the old SimpleTimer to use the java.util.concurrent.ScheduledThreadPoolExecutor.
- * SimpleTimer has problems with lock contention;
- * this should work a lot better.
- *
- * This supports cancelling and arbitrary rescheduling.
- * If you don't need that, use SimpleScheduler instead.
- *
- * SimpleTimer is deprecated, use this or SimpleScheduler.
+ * All timer events should extend TimedEvent and use schedule()/cancel() directly.
  *
  * @author zzz
  */
@@ -36,15 +30,14 @@ public class SimpleTimer2 {
         return I2PAppContext.getGlobalContext().simpleTimer2();
     }
 
-    private static final int MIN_THREADS = 1;
-    private static final int MAX_THREADS = Math.max(SystemVersion.getCores(), 16);
+    private static final int THREADS = 4;
 
     private final ScheduledThreadPoolExecutor _executor;
     private final String _name;
     private final AtomicInteger _count = new AtomicInteger();
-    private final int _threads;
     private final I2PAppContext _context;
-    private final Runnable _shutdown;
+    private final Runnable _onShutdown = () -> stop(false);
+    private final AtomicLong _completed = new AtomicLong();
 
     /**
      *  To be instantiated by the context.
@@ -79,31 +72,15 @@ public class SimpleTimer2 {
     protected SimpleTimer2(I2PAppContext context, String name, boolean prestartAllThreads) {
         _context = context;
         _name = name;
-        long maxMemory = SystemVersion.getMaxMemory();
-        if (SystemVersion.isSlow() || SystemVersion.getCores() <= 4)
-            _threads = 4;
-        else
-            _threads = MAX_THREADS;
-        _executor = new CustomScheduledThreadPoolExecutor(_threads, new CustomThreadFactory());
+        _executor = new CustomScheduledThreadPoolExecutor(THREADS, new CustomThreadFactory());
         if (prestartAllThreads)
             _executor.prestartAllCoreThreads();
-        _shutdown = new Shutdown();
-        context.addShutdownTask(_shutdown);
+        context.addShutdownTask(_onShutdown);
     }
 
     /**
-      * @since 0.8.8
-      */
-    private class Shutdown implements Runnable {
-        @Override
-        public void run() {
-            stop(false);
-        }
-    }
-
-    /**
-     * Stops the SimpleTimer.
-     * Subsequent executions should not throw a RejectedExecutionException.
+     * Stops the timer.
+     * Subsequent executions will not throw RejectedExecutionException.
      * Cannot be restarted.
      */
     public void stop() {
@@ -111,8 +88,8 @@ public class SimpleTimer2 {
     }
 
     /**
-     * Stops the SimpleTimer.
-     * Subsequent executions should not throw a RejectedExecutionException.
+     * Stops the timer.
+     * Subsequent executions will not throw RejectedExecutionException.
      * Cannot be restarted.
      *
      * @param removeTask true to unregister the shutdown hook
@@ -120,7 +97,7 @@ public class SimpleTimer2 {
      */
     private void stop(boolean removeTask) {
         if (removeTask)
-            _context.removeShutdownTask(_shutdown);
+            _context.removeShutdownTask(_onShutdown);
         _executor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
         _executor.shutdownNow();
     }
@@ -134,9 +111,9 @@ public class SimpleTimer2 {
         @Override
         protected void afterExecute(Runnable r, Throwable t) {
             super.afterExecute(r, t);
-            if (t != null) { // shoudn't happen, caught in RunnableEvent.run()
+            if (t != null) { // shouldn't happen, caught in TimedEvent.run()
                 Log log = I2PAppContext.getGlobalContext().logManager().getLog(SimpleTimer2.class);
-                log.log(Log.CRIT, "Event borked: " + r, t);
+                log.log(Log.CRIT, "Uncaught: " + r, t);
             }
         }
     }
@@ -145,7 +122,7 @@ public class SimpleTimer2 {
         @Override
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
-            rv.setName(_name + ' ' + _count.incrementAndGet() + '/' + _threads);
+            rv.setName(_name + ' ' + _count.incrementAndGet() + '/' + THREADS);
             rv.setDaemon(true);
             rv.setPriority(Thread.MAX_PRIORITY - 1);
             return rv;
@@ -158,81 +135,48 @@ public class SimpleTimer2 {
 
     /**
      * Queue up the given event to be fired no sooner than timeoutMs from now.
-     *
-     * For transition from SimpleScheduler. Uncancellable.
-     * New code should use SimpleTimer2.TimedEvent.
+     * Pool is set automatically from this timer.
      *
      * @param event to be run once
      * @param timeoutMs run after this delay
-     * @since 0.9.20
+     * @since 0.9.71
      */
-    public void addEvent(final SimpleTimer.TimedEvent event, final long timeoutMs) {
+    public void addEvent(final TimedEvent event, final long timeoutMs) {
         if (event == null)
             throw new IllegalArgumentException("addEvent null");
-
-        new TimedEvent(this, timeoutMs) {
-            @Override
-            public void timeReached() {
-                event.timeReached();
-            }
-
-            @Override
-            public String toString() {
-                return event.toString();
-            }
-        };
+        event.setPool(this);
+        event.schedule(timeoutMs);
     }
 
     /**
-     * Schedule periodic event
-     *
-     * The TimedEvent must not do its own rescheduling.
-     * As all Exceptions are caught in run(), these will not prevent
-     * subsequent executions (unlike SimpleTimer, where the TimedEvent does
-     * its own rescheduling).
-     *
-     * For transition from SimpleScheduler. Uncancellable.
-     * New code should use SimpleTimer2.TimedEvent.
+     * Schedule a periodic event backed by SimpleTimer2.TimedEvent.
+     * The event self-reschedules via schedule() in timeReached().
      *
      * @param event the event to run periodically
-     * @since 0.9.20
-     * @param timeoutMs run subsequent iterations of this event every timeoutMs ms, 5000 minimum
+     * @param timeoutMs period in ms between executions
      * @throws IllegalArgumentException if timeoutMs less than 5000
+     * @since 0.9.71
      */
-    public void addPeriodicEvent(final SimpleTimer.TimedEvent event, final long timeoutMs) {
+    public void addPeriodicEvent(final TimedEvent event, final long timeoutMs) {
         addPeriodicEvent(event, timeoutMs, timeoutMs);
     }
 
     /**
-     * Schedule periodic event
-     *
-     * The TimedEvent must not do its own rescheduling.
-     * As all Exceptions are caught in run(), these will not prevent
-     * subsequent executions (unlike SimpleTimer, where the TimedEvent does
-     * its own rescheduling).
-     *
-     * For transition from SimpleScheduler. Uncancellable.
-     * New code should use SimpleTimer2.TimedEvent.
+     * Schedule a periodic event backed by SimpleTimer2.TimedEvent.
      *
      * @param event the event to run periodically
-     * @since 0.9.20
-     * @param delay run the first iteration of this event after delay ms
-     * @param timeoutMs run subsequent iterations of this event every timeoutMs ms, 5000 minimum
+     * @param delay run the first iteration after delay ms
+     * @param timeoutMs period in ms between executions
      * @throws IllegalArgumentException if timeoutMs less than 5000
+     * @since 0.9.71
      */
-    public void addPeriodicEvent(final SimpleTimer.TimedEvent event, final long delay,  final long timeoutMs) {
-
-        new PeriodicTimedEvent(this, delay, timeoutMs) {
-            @Override
-            public void timeReached() {
-                event.timeReached();
-            }
-
-            @Override
-            public String toString() {
-                return event.toString();
-            }
-        };
+    public void addPeriodicEvent(final TimedEvent event, final long delay, final long timeoutMs) {
+        if (event == null)
+            throw new IllegalArgumentException("addEvent null");
+        if (timeoutMs < 5000)
+            throw new IllegalArgumentException("timeout minimum 5000");
+        event.setPool(this);
+        event.schedule(delay);
     }
 
     /**
@@ -253,35 +197,19 @@ public class SimpleTimer2 {
 
 
     /**
-     * Similar to SimpleTimer.TimedEvent but users must extend instead of implement,
-     * and all schedule and cancel methods are through this class rather than SimpleTimer2.
+     * Base class for timer events. Extend this and use schedule()/cancel()
+     * directly instead of going through SimpleTimer2.
      *
-     * To convert over, change implements SimpleTimer.TimedEvent to extends SimpleTimer2.TimedEvent,
-     * and be sure to call super(SimpleTimer2.getInstance(), timeoutMs) in the constructor
-     * (or super(SimpleTimer2.getInstance()); .... schedule(timeoutMs); if there is other stuff
-     * in your constructor)
-     *
-     * Other porting:
-     *   SimpleTimer.getInstance().addEvent(new foo(), timeout) =&gt; new foo(SimpleTimer2.getInstance(), timeout)
-     *   SimpleTimer.getInstance().addEvent(this, timeout) =&gt; schedule(timeout)
-     *   SimpleTimer.getInstance().addEvent(foo, timeout) =&gt; foo.reschedule(timeout)
-     *   SimpleTimer.getInstance().removeEvent(foo) =&gt; foo.cancel()
-     *
-     * There's no global locking, but for scheduling, we synchronize on this
-     * to reduce the chance of duplicates on the queue.
-     *
-     * schedule(ms) can get create duplicates
-     * reschedule(ms) and reschedule(ms, true) can lose the timer
-     * reschedule(ms, false) and forceReschedule(ms) are relatively safe from either
-     *
+     * Synchronization is on this to avoid queue duplicates.
+     * schedule() is idempotent if already scheduled.
+     * reschedule() and forceReschedule() replace the existing timer.
      */
     public static abstract class TimedEvent implements Runnable {
-        private final Log _log;
-        private final SimpleTimer2 _pool;
+        private Log _log;
+        private SimpleTimer2 _pool;
         private int _fuzz;
         protected static final int DEFAULT_FUZZ = 100;
-        private ScheduledFuture<?> _future; // _executor.remove() doesn't work so we have to use this
-                                         // ... and I expect cancelling this way is more efficient
+        private ScheduledFuture<?> _future;
 
         /** state of the current event.  All access should be under lock. */
         protected TimedEventState _state;
@@ -292,56 +220,86 @@ public class SimpleTimer2 {
         /** whether this was cancelled during RUNNING state.  LOCKING: this */
         private boolean _cancelAfterRun;
 
-/**
-     * Create a new timed event.
-     * Must call schedule() later.
-     *
-     * @param pool the timer pool
-     */
-        public TimedEvent(SimpleTimer2 pool) {
-            _pool = pool;
-            _fuzz = DEFAULT_FUZZ;
+        /**
+         * Shared init for all constructors.
+         */
+        private void init() {
             _log = I2PAppContext.getGlobalContext().logManager().getLog(SimpleTimer2.class);
+            _fuzz = DEFAULT_FUZZ;
             _state = TimedEventState.IDLE;
         }
 
-/**
-     * Create a new timed event and automatically schedules it.
-     * Don't use this one if you have other things to do first.
-     *
-     * @param pool the timer pool
-     * @param timeoutMs timeout in milliseconds
-     */
+        /**
+         * Create a new timed event without scheduling.
+         * Pool is set later via setPool() or addEvent().
+         *
+         * @since 0.9.71
+         */
+        protected TimedEvent() {
+            init();
+        }
+
+        /**
+         * Create a new timed event.
+         * Must call schedule() later.
+         *
+         * @param pool the timer pool
+         */
+        public TimedEvent(SimpleTimer2 pool) {
+            init();
+            _pool = pool;
+        }
+
+        /**
+         * Create a new timed event and automatically schedules it.
+         *
+         * @param pool the timer pool
+         * @param timeoutMs timeout in milliseconds
+         */
         public TimedEvent(SimpleTimer2 pool, long timeoutMs) {
             this(pool);
             schedule(timeoutMs);
         }
 
         /**
-         * Don't bother rescheduling if +/- this many ms or less.
-         * Use this to reduce timer queue and object churn for a sloppy timer like
-         * an inactivity timer.
-         * Default 3 ms.
-         *
-         * @param fuzz the fuzz value in milliseconds
+         * Set reschedule threshold in ms. Rescheduling is skipped if the
+         * existing and new timeouts differ by less than this value.
+         * Default 100ms.
          */
         public synchronized void setFuzz(int fuzz) {
             _fuzz = fuzz;
         }
 
         /**
-         *  Slightly more efficient than reschedule().
-         *  Does nothing if already scheduled.
+         * Set the timer pool. Must be called before schedule() for events created
+         * via the no-arg constructor. Called automatically by addEvent()/addPeriodicEvent().
+         * Not thread-safe to call concurrently with schedule() or cancel().
          *
-         *  @param timeoutMs the timeout in milliseconds
+         * @param pool the timer pool
+         * @since 0.9.70+
+         */
+        public synchronized void setPool(SimpleTimer2 pool) {
+            _pool = pool;
+        }
+
+        /**
+         * Schedule this event. Does nothing if already scheduled.
+         * For self-rescheduling periodic events, call from timeReached().
+         *
+         * @param timeoutMs delay in ms
          */
         public synchronized void schedule(long timeoutMs) {
+            if (_pool == null) {
+                if (_log.shouldWarn())
+                    _log.warn("Cannot schedule, no pool set: " + this);
+                return;
+            }
             if (_log.shouldDebug())
                 _log.debug("Scheduling: " + this + " (Timeout: " + timeoutMs + "ms) [" + _state + "]");
             if (timeoutMs <= 0) {
                 // streaming timers do call with timeoutMs == 0
-                if (timeoutMs < 0 && _log.shouldDebug())
-                    _log.warn("Scheduled timeout < 0ms (" + timeoutMs + "ms): " + this + " [" + _state + "]");
+                if (timeoutMs < 0 && _log.shouldWarn())
+                    _log.warn("Negative timeout (" + timeoutMs + "ms): " + this);
                 timeoutMs = 1; // otherwise we may execute before _future is updated, which is fine
                                // except it triggers 'early execution' warning logging
             }
@@ -379,14 +337,13 @@ public class SimpleTimer2 {
          * better there.
          *
          * @param timeoutMs timeout in milliseconds
-         * @param useEarliestTime if its already scheduled, use the earlier of the
-         *                        two timeouts, else use the later
+         * @param useEarliestTime if true and already scheduled, use the earlier
+         *                        timeout; if false and already scheduled, use the later
          */
         public synchronized void reschedule(long timeoutMs, boolean useEarliestTime) {
-            String truncClass = this.toString().replace("net.i2p.router.", "...");
             if (timeoutMs <= 0) {
                 if (timeoutMs < 0 && _log.shouldInfo())
-                    _log.info("Reschedule timeout < 0: " + truncClass + " (timeout: " + timeoutMs + "ms) [" + _state + "]");
+                    _log.info("Negative reschedule (" + timeoutMs + "ms): " + this);
                 timeoutMs = 1;
             }
             final long now = System.currentTimeMillis();
@@ -402,14 +359,13 @@ public class SimpleTimer2 {
                 (oldTimeout + _fuzz < timeoutMs && !useEarliestTime)||
                 !scheduled) {
                 if (scheduled && oldTimeout <= 5) {
-                    // don't reschedule to avoid race
                     if (_log.shouldWarn())
-                        _log.warn("Not rescheduling to " + timeoutMs + "ms, about to execute " + truncClass + " in " + oldTimeout + "ms");
+                        _log.warn("Too close to reschedule: " + this + " (" + oldTimeout + "ms away)");
                     return;
                 }
-                if (scheduled && (now + timeoutMs) < _nextRun) {
+                if (scheduled && ((now + timeoutMs) < _nextRun || !useEarliestTime)) {
                     if (_log.shouldInfo())
-                        _log.info("Rescheduling: " + truncClass + " (timeout: " + timeoutMs + "ms); old timeout was " + oldTimeout + "ms; State: " + _state);
+                        _log.info("Reschedule " + this + ": " + timeoutMs + "ms (was " + oldTimeout + "ms)");
                     cancel();
                 }
                 schedule(timeoutMs);
@@ -430,8 +386,10 @@ public class SimpleTimer2 {
 
         /**
          * Cancel the timed event.
+         * If the event is currently running, cancellation is deferred until timeReached()
+         * completes (sets _cancelAfterRun flag).
          *
-         * @return true if cancelled
+         * @return true if the event will not execute, false if already idle/cancelled
          */
         public synchronized boolean cancel() {
             // always clear
@@ -451,9 +409,10 @@ public class SimpleTimer2 {
                     boolean cancelled = _future.cancel(true);
                     if (cancelled) {
                         _state = TimedEventState.CANCELLED;
-                    } else {
-                        if (_log.shouldWarn())
-                            _log.warn("Could not cancel " + this + " to run in " + (_nextRun - System.currentTimeMillis()), new Exception());
+                        _future = null;
+                    } else if (_log.shouldWarn()) {
+                        long remaining = _nextRun - System.currentTimeMillis();
+                        _log.warn("Cancel failed: " + this + " (running in " + remaining + "ms)");
                     }
                     return cancelled;
             }
@@ -467,115 +426,130 @@ public class SimpleTimer2 {
         @Override
         public void run() {
             try {
-                run2();
+                execute();
             } catch (RuntimeException re) {
-                _log.error("Timer error", re);
+                _log.error("Timer error: " + this, re);
                 throw re;
             } catch (OutOfMemoryError oome) {
-                _log.error("timer error", oome);
-                throw new RuntimeException("timer error", oome);
+                _log.error("Timer error: " + this, oome);
+                throw new RuntimeException("timer error: " + this, oome);
             }
         }
 
         @SuppressWarnings("PMD.AvoidThrowingNewInstanceOfSameException")
-        private void run2() {
+        private void execute() {
             if (_log.shouldDebug())
                 _log.debug("Running: " + this);
-            long before = System.currentTimeMillis();
-            long delay = 0;
+            long startTime = System.currentTimeMillis();
             synchronized (this) {
-                if (Thread.currentThread().isInterrupted()) {
-                    if (_log.shouldWarn())
-                        _log.warn("I was interrupted in run, state "+_state+" event "+this);
+                if (!checkAndPrepareRun(startTime))
                     return;
-                }
-                if (_rescheduleAfterRun)
-                    throw new IllegalStateException(this + " rescheduleAfterRun cannot be true here");
-
-                switch (_state) {
-                    case CANCELLED:
-                        if (_log.shouldInfo())
-                            _log.info("Not actually running: CANCELLED " + this);
-                        return; // goodbye
-                    case IDLE:  // fall through
-                    case RUNNING:
-                        throw new IllegalStateException(this + " not possible to be in " + _state);
-                    case SCHEDULED:
-                      // proceed, will switch to IDLE to reschedule
-                }
-
-                // if I was rescheduled by the user, re-submit myself to the executor.
-                long difference = _nextRun - before; // careful with long uptimes
-                if (difference > _fuzz) {
-                    // proceed, switch to IDLE to reschedule
-                    _state = TimedEventState.IDLE;
-                    if (_log.shouldInfo())
-                        _log.info("Early execution, rescheduling for " + difference + " later: " + this);
-                    schedule(difference);
-                    return;
-                }
-
-                // else proceed to run
-                _state = TimedEventState.RUNNING;
             }
-            // cancel()-ing after this point only works if the event supports it explicitly
-            // none of these _future checks should be necessary anymore
-            if (_future != null)
-                delay = _future.getDelay(TimeUnit.MILLISECONDS);
-            else if (_log.shouldWarn())
-                _log.warn(_pool + " no _future " + this);
-            // This can be an incorrect warning especially after a schedule(0)
             if (_log.shouldWarn()) {
-                if (delay > 100)
-                    _log.warn(_pool + " early execution (" + delay + "ms): " + this);
-                else if (delay < -1000)
-                    _log.warn("Late execution (" + (0 - delay) + "ms): " + this + _pool.debug());
+                if (_future != null) {
+                    long delay = _future.getDelay(TimeUnit.MILLISECONDS);
+                    if (delay > 100)
+                        _log.warn("Early exec " + this + " (" + delay + "ms)");
+                    else if (delay < -1000)
+                        _log.warn("Late exec " + this + " (" + (0 - delay) + "ms)" +
+                                  (delay < -5000 ? _pool.debug() : ""));
+                } else {
+                    _log.warn("No future: " + this);
+                }
             }
             try {
                 timeReached();
             } catch (Throwable t) {
-                _log.log(Log.CRIT, _pool + ": Timed task " + this + " exited unexpectedly, please report", t);
-            } finally { // must be in finally
+                _log.log(Log.CRIT, "Timer task crashed: " + this, t);
+            } finally {
                 synchronized (this) {
-                    switch (_state) {
-                        case SCHEDULED:  // fall through
-                        case IDLE:
-                            throw new IllegalStateException(this + " can't be " + _state);
-                        case CANCELLED:
-                            break; // nothing
-                        case RUNNING:
-                            if (_cancelAfterRun) {
-                                _cancelAfterRun = false;
-                                _state = TimedEventState.CANCELLED;
-                            } else {
-                                _state = TimedEventState.IDLE;
-                                // do we need to reschedule?
-                                if (_rescheduleAfterRun) {
-                                    _rescheduleAfterRun = false;
-                                    if (_log.shouldInfo())
-                                        _log.info("Rescheduling after run: " + this);
-                                    schedule(_nextRun - System.currentTimeMillis());
-                                }
-                            }
-                    }
+                    updateStateAfterRun();
                 }
             }
-            long time = System.currentTimeMillis() - before;
-            if (time > 500 && _log.shouldWarn())
-                _log.warn(_pool + " event execution took " + time + "ms: " + this);
-            else if (_log.shouldDebug())
-                _log.debug("Execution finished in " + time + "ms: " + this);
-            if (_log.shouldInfo()) {
-                 // this call is slow - iterates through a HashMap -
-                 // would be better to have a local AtomicLong if we care
-                long completed = _pool.getCompletedTaskCount();
-                if (completed % 250 == 0)
-                     _log.info(_pool.debug());
+            logTimingAndStats(startTime);
+        }
+
+        /**
+         * Validate state before running. Returns true if execution should proceed,
+         * false if the event was cancelled or needs to be rescheduled (already handled).
+         * Must be called inside synchronized(this).
+         */
+        private boolean checkAndPrepareRun(long now) {
+            if (Thread.currentThread().isInterrupted()) {
+                if (_log.shouldWarn())
+                    _log.warn("Interrupted: " + this + " [" + _state + "]");
+                return false;
+            }
+            if (_rescheduleAfterRun)
+                throw new IllegalStateException(this + " rescheduleAfterRun cannot be true here");
+
+            switch (_state) {
+                case CANCELLED:
+                    return false;
+                case IDLE:
+                case RUNNING:
+                    throw new IllegalStateException(this + " not possible to be in " + _state);
+                case SCHEDULED:
+            }
+
+            long difference = _nextRun - now;
+            if (difference > _fuzz) {
+                _state = TimedEventState.IDLE;
+                if (_log.shouldInfo())
+                    _log.info("Early exec, reschedule " + this + " in " + difference + "ms");
+                schedule(difference);
+                return false;
+            }
+            _state = TimedEventState.RUNNING;
+            return true;
+        }
+
+        /**
+         * Update state after timeReached() completes.
+         * Must be called inside synchronized(this).
+         */
+        private void updateStateAfterRun() {
+            switch (_state) {
+                case RUNNING:
+                    if (_cancelAfterRun) {
+                        _cancelAfterRun = false;
+                        _state = TimedEventState.CANCELLED;
+                        _future = null;
+                    } else {
+                        _state = TimedEventState.IDLE;
+                        if (_rescheduleAfterRun) {
+                            _rescheduleAfterRun = false;
+                            if (_log.shouldInfo())
+                                _log.info("Rescheduling after run: " + this);
+                            schedule(_nextRun - System.currentTimeMillis());
+                        } else {
+                            _future = null;
+                        }
+                    }
+                    break;
+                default:
+                    throw new IllegalStateException(this + " can't be " + _state);
             }
         }
 
         /**
-         *  So the critical "please report" message above isn't so ugly
+         * Log execution duration and periodic stats.
+         */
+        private void logTimingAndStats(long before) {
+            long time = System.currentTimeMillis() - before;
+            if (time > 500 && _log.shouldWarn())
+                _log.warn("Slow event (" + time + "ms): " + this);
+            else if (_log.shouldDebug())
+                _log.debug("Execution finished in " + time + "ms: " + this);
+            if (_log.shouldInfo()) {
+                long completed = _pool._completed.incrementAndGet();
+                if (completed % 250 == 0)
+                    _log.info(_pool.debug());
+            }
+        }
+
+        /**
+         *  @return the simple class name for log messages
          *
          *  @since 0.9.57
          */
@@ -585,10 +559,8 @@ public class SimpleTimer2 {
         }
 
         /**
-         * Simple interface for events to be queued up and notified on expiration
-         * the time requested has been reached (this call should NOT block,
-         * otherwise the whole SimpleTimer gets backed up)
-         *
+         * Called when this event's scheduled time arrives. Must NOT block.
+         * For periodic events, call schedule(period) at the end to self-reschedule.
          */
         public abstract void timeReached();
     }
@@ -602,11 +574,6 @@ public class SimpleTimer2 {
     }
 
     /** warning - slow */
-    private long getCompletedTaskCount() {
-        return _executor.getCompletedTaskCount();
-    }
-
-    /** warning - slow */
     private String debug() {
         _executor.purge();  // Remove cancelled tasks from the queue so we get a good queue size stat
         return
@@ -616,39 +583,4 @@ public class SimpleTimer2 {
             "; Queued: " + _executor.getQueue().size();
     }
 
-    /**
-     * For transition from SimpleScheduler.
-     *
-     * @since 0.9.20
-     */
-    private static abstract class PeriodicTimedEvent extends TimedEvent {
-        private final long _timeoutMs;
-
-        /**
-         * Schedule periodic event
-         *
-         * @param pool the timer pool
-         * @param delay run the first iteration of this event after delay ms
-         * @param timeoutMs run subsequent iterations of this event every timeoutMs ms, 5000 minimum
-         * @throws IllegalArgumentException if timeoutMs less than 5000
-         */
-        public PeriodicTimedEvent(SimpleTimer2 pool, long delay, long timeoutMs) {
-            super(pool, delay);
-            if (timeoutMs < 5000)
-                throw new IllegalArgumentException("timeout minimum 5000");
-            _timeoutMs = timeoutMs;
-        }
-
-        @Override
-        public void run() {
-            super.run();
-            synchronized (this) {
-                // Task may have rescheduled itself without actually running.
-                // If we schedule again, it will be stuck in a scheduling loop.
-                // This happens after a backwards clock shift.
-                if (_state == TimedEventState.IDLE)
-                    schedule(_timeoutMs);
-            }
-        }
-    }
 }

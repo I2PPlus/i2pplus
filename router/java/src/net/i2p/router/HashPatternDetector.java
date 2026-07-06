@@ -23,10 +23,10 @@ import java.util.regex.Pattern;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.util.SimpleTimer2;
 
 import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
 
 /**
  * Detects patterns in router hashes to predictively ban algorithmically-generated identities.
@@ -380,11 +380,7 @@ public class HashPatternDetector implements Serializable {
             return;
         }
 
-        _context.simpleTimer2().addPeriodicEvent(
-            new NetDbScanTask(),
-            SCAN_STARTUP_DELAY,
-            frequency
-        );
+        new NetDbScanTask(frequency).schedule(SCAN_STARTUP_DELAY);
 
         if (_log.shouldInfo())
             _log.info("NetDB hash scanner starting in " + (SCAN_STARTUP_DELAY / 60000) + " minutes, interval: " + formatFrequency(frequency));
@@ -396,7 +392,7 @@ public class HashPatternDetector implements Serializable {
      * @since 0.9.68
      */
     public void stopScanner() {
-        // SimpleTimer2 periodic events are uncancellable via SimpleTimer.TimedEvent
+        // SimpleTimer2 periodic events are uncancellable via TimedEvent
         // The scanner will continue running but will check _scanInProgress flag
         if (_log.shouldInfo())
             _log.info("NetDB hash scanner stop requested (events will finish naturally)");
@@ -644,10 +640,13 @@ public class HashPatternDetector implements Serializable {
      *
      * @since 0.9.68
      */
-    private class NetDbScanTask implements SimpleTimer.TimedEvent {
+    private class NetDbScanTask extends SimpleTimer2.TimedEvent {
+        private final long _frequency;
+        public NetDbScanTask(long frequency) { super(_context.simpleTimer2()); _frequency = frequency; }
         @Override
         public void timeReached() {
             scanNetDBForPatterns();
+            schedule(_frequency);
         }
     }
 

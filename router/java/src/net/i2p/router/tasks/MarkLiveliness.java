@@ -15,7 +15,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.router.Router;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Router instance liveliness marker for multi-instance detection.
@@ -47,9 +47,10 @@ import net.i2p.util.SimpleTimer;
  *
  * @since 0.8.12 moved from Router.java
  */
-public class MarkLiveliness implements SimpleTimer.TimedEvent {
+public class MarkLiveliness extends SimpleTimer2.TimedEvent {
     private final Router _router;
     private final File _pingFile;
+    private final long _period;
     private volatile boolean _errorLogged;
 
     /**
@@ -57,11 +58,14 @@ public class MarkLiveliness implements SimpleTimer.TimedEvent {
      * 
      * @param router the router instance to monitor for liveliness
      * @param pingFile the file to write timestamps to
+     * @param period how often to ping (ms)
      * @since 0.8.12 moved from Router.java
      */
-    public MarkLiveliness(Router router, File pingFile) {
+    public MarkLiveliness(Router router, File pingFile, long period) {
+        super(router.getContext().simpleTimer2());
         _router = router;
         _pingFile = pingFile;
+        _period = period;
         _pingFile.deleteOnExit();
     }
 
@@ -81,6 +85,7 @@ public class MarkLiveliness implements SimpleTimer.TimedEvent {
             ping();
         else
             _pingFile.delete(); // NOSONAR false positive S899
+        schedule(_period);
     }
 
     private void ping() {

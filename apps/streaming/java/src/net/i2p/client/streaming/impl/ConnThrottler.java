@@ -4,7 +4,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Hash;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.RandomSource;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 
 /**
@@ -30,15 +29,10 @@ class ConnThrottler {
         _totalMax = totalMax;
         this.counter = new ObjectCounter<>();
         _currentTotal = new AtomicInteger();
-        // Only schedule cleanup if we have at least one limit set
         if (max > 0 || totalMax > 0) {
-            // shorten the initial period by a random amount
-            // to prevent correlation across destinations
-            // and identification of router startup time
-            _cleaner = new Cleaner();
-            timer.addPeriodicEvent(_cleaner,
-                                   (period / 2) + RandomSource.getInstance().nextLong(period / 2),
-                                   period);
+            long delay = (period / 2) + RandomSource.getInstance().nextLong(period / 2);
+            _cleaner = new Cleaner(timer, period);
+            _cleaner.schedule(delay);
         } else {
             _cleaner = null;
         }
@@ -86,12 +80,20 @@ class ConnThrottler {
         return false;
     }
 
-    private class Cleaner implements SimpleTimer.TimedEvent {
+    private class Cleaner extends SimpleTimer2.TimedEvent {
+        private final long _period;
+
+        Cleaner(SimpleTimer2 pool, long period) {
+            super(pool);
+            _period = period;
+        }
+
         public void timeReached() {
             if (_totalMax > 0)
                 _currentTotal.set(0);
             if (_max > 0)
                 ConnThrottler.this.counter.clear();
+            schedule(_period);
         }
     }
 }

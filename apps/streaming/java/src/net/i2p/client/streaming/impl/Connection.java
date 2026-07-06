@@ -18,7 +18,6 @@ import net.i2p.data.Hash;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.util.BandwidthEstimator;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 
@@ -899,8 +898,9 @@ class Connection {
         return true;
     }
 
-    private class DisconnectEvent implements SimpleTimer.TimedEvent {
-        public DisconnectEvent() {
+    private class DisconnectEvent extends SimpleTimer2.TimedEvent {
+        DisconnectEvent() {
+            super();
             if (_log.shouldInfo()) {
                 _log.info("Disconnect timer initiated on connection to " + getRemotePeerString() + " -> 5 minutes to drop...");
             }
@@ -918,11 +918,12 @@ class Connection {
     }
 
     /**
-     *  Schedule something on our timer.
+     *  Schedule an event on our timer.
+     *  The event should use the no-arg constructor; the pool is set here.
      *
      *  @since 0.9.23
      */
-    public void schedule(SimpleTimer.TimedEvent event, long msToWait) {
+    public void schedule(SimpleTimer2.TimedEvent event, long msToWait) {
         _timer.addEvent(event, msToWait);
     }
 
@@ -1853,8 +1854,8 @@ class Connection {
     /**
      * fired to reschedule event notification
      */
-    class ConEvent implements SimpleTimer.TimedEvent {
-        public ConEvent() {}
+    class ConEvent extends SimpleTimer2.TimedEvent {
+        ConEvent() {super();}
         public void timeReached() {eventOccurred();}
         @Override
         public String toString() {return "event on connection to " + getRemotePeerString();}

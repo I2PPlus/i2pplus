@@ -12,8 +12,8 @@ import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * TunnelGatewayPumper runs a pool of threads that process PumpedTunnelGateway instances which need
@@ -336,17 +336,18 @@ class TunnelGatewayPumper implements Runnable {
             return;
         }
         if (_backlogged.add(gw)) {
-            _context.simpleTimer2().addEvent(new Requeue(gw), _requeueTime);
+            new Requeue(gw).schedule(_requeueTime);
         }
     }
 
     /**
      * Timer event for requeuing backlogged gateways after delay.
      */
-    private class Requeue implements SimpleTimer.TimedEvent {
+    private class Requeue extends SimpleTimer2.TimedEvent {
         private final PumpedTunnelGateway _ptg;
 
         public Requeue(PumpedTunnelGateway ptg) {
+            super(_context.simpleTimer2());
             _ptg = ptg;
         }
 

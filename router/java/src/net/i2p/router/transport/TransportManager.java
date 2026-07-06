@@ -49,7 +49,6 @@ import net.i2p.router.Tuner;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
@@ -1143,7 +1142,8 @@ public class TransportManager implements TransportEventListener {
      *
      * @since 0.9.39
      */
-    private class UpdatePorts implements SimpleTimer.TimedEvent {
+    private class UpdatePorts extends SimpleTimer2.TimedEvent {
+        public UpdatePorts() { super(_context.simpleTimer2()); }
         public void timeReached() {
             Set<Port> ports = getPorts();
             synchronized (_upnpManager) {

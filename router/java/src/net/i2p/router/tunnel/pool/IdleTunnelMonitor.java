@@ -10,7 +10,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Monitors transit tunnels for idle behavior.
@@ -25,7 +25,7 @@ import net.i2p.util.SimpleTimer;
  *
  * @since 2.11.0
  */
-class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
+class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
     private final RouterContext _context;
     private final Log _log;
     private TunnelDispatcher _dispatcher;
@@ -53,12 +53,13 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
     private volatile boolean _isShutdown = false;
 
     IdleTunnelMonitor(RouterContext ctx) {
+        super(ctx.simpleTimer2());
         this._context = ctx;
         this._dispatcher = ctx.tunnelDispatcher();
         this._log = ctx.logManager().getLog(IdleTunnelMonitor.class);
 
         long interval = ctx.getProperty(PROP_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL);
-        ctx.simpleTimer2().addPeriodicEvent(this, interval);
+        schedule(interval);
 
         if (_log.shouldInfo()) {
             _log.info("IdleTunnelMonitor started with interval: " + interval + "ms");
@@ -84,6 +85,8 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
                 _log.error("Error in IdleTunnelMonitor scan", t);
             }
         }
+        long interval = _context.getProperty(PROP_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL);
+        schedule(interval);
     }
 
     /**

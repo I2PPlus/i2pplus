@@ -63,8 +63,8 @@ import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.VersionComparator;
+import net.i2p.util.SimpleTimer2;
 
 
 
@@ -2868,9 +2868,9 @@ return false;
     }
 
     /** @since 0.9.52 */
-    private class Disconnector implements SimpleTimer.TimedEvent {
+    private class Disconnector extends SimpleTimer2.TimedEvent {
         private final Hash h;
-        public Disconnector(Hash h) {this.h = h;}
+        public Disconnector(Hash h) {super(_context.simpleTimer2()); this.h = h;}
         public void timeReached() {_context.commSystem().forceDisconnect(h, "Corrupt RouterInfo");}
     }
 

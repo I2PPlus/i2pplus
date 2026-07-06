@@ -26,8 +26,8 @@ import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SyntheticREDQueue;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Handle the actual processing and forwarding of messages through the various tunnels.
@@ -167,7 +167,7 @@ public class TunnelDispatcher implements Service {
         updateThrottleFactors();
 
         // Schedule periodic cleanup for expired tunnels
-        ctx.simpleTimer2().addPeriodicEvent(new PeriodicCleanup(), getCleanupInterval(), getCleanupInterval());
+        new PeriodicCleanup().schedule(getCleanupInterval());
 
         // Initialize stats
         initializeStats();
@@ -188,10 +188,12 @@ public class TunnelDispatcher implements Service {
      * Periodic cleanup task to remove expired tunnels from all maps.
      * This is a safety net in case LeaveTunnel job fails to remove them.
      */
-    private class PeriodicCleanup implements SimpleTimer.TimedEvent {
+    private class PeriodicCleanup extends SimpleTimer2.TimedEvent {
+        public PeriodicCleanup() { super(_context.simpleTimer2()); }
         public void timeReached() {
             updateThrottleFactors();
             cleanupExpiredTunnels();
+            schedule(getCleanupInterval());
         }
     }
 

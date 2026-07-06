@@ -33,6 +33,7 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 
 /**
@@ -1654,7 +1655,7 @@ public class TunnelPool {
         _context.simpleTimer2().addEvent(new LeaseSetRepublishEvent(), 10000);
     }
 
-    private class LeaseSetRepublishEvent implements net.i2p.util.SimpleTimer.TimedEvent {
+    private class LeaseSetRepublishEvent extends SimpleTimer2.TimedEvent {
         public void timeReached() {
             _leaseSetRepublishPending = false;
             refreshLeaseSet(true);
@@ -1871,7 +1872,7 @@ public class TunnelPool {
     /**
      * Event to perform deferred LeaseSet refresh after throttle window expires.
      */
-    private class DeferredRefreshEvent implements net.i2p.util.SimpleTimer.TimedEvent {
+    private class DeferredRefreshEvent extends SimpleTimer2.TimedEvent {
         public void timeReached() {
             _pendingRefreshScheduled.set(false);
             refreshLeaseSet(false);

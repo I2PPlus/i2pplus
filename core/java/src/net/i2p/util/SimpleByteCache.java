@@ -1,6 +1,7 @@
 package net.i2p.util;
 
 import java.util.concurrent.ConcurrentHashMap;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Like ByteCache but works directly with byte arrays, not ByteArrays.
@@ -26,18 +27,19 @@ public final class SimpleByteCache {
 
     static {
         // Start single global cleanup timer for all caches
-        SimpleTimer2.getInstance().addPeriodicEvent(new GlobalCleanup(), CLEANUP_FREQUENCY);
+        new GlobalCleanup().schedule(CLEANUP_FREQUENCY);
     }
 
     /**
      * Global cleanup task that iterates over all caches.
      */
-    private static class GlobalCleanup implements SimpleTimer.TimedEvent {
+    private static class GlobalCleanup extends SimpleTimer2.TimedEvent {
         @Override
         public void timeReached() {
             for (SimpleByteCache cache : _allCaches.values()) {
                 cache.cleanup();
             }
+            schedule(CLEANUP_FREQUENCY);
         }
 
         @Override

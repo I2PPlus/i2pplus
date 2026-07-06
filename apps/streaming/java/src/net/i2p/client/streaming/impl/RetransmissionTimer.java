@@ -1,7 +1,6 @@
 package net.i2p.client.streaming.impl;
 
 import net.i2p.I2PAppContext;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 
 /**
@@ -16,10 +15,8 @@ public class RetransmissionTimer {
     private final SimpleTimer2 _shared;
 
     /**
-     * Creates a new retransmission timer backed by the shared pool.
-     *
      * @param ctx the application context
-     * @param name the timer name (unused, kept for API compat)
+     * @param name unused, kept for API compat
      * @since 0.9
      */
     RetransmissionTimer(I2PAppContext ctx, String name) {
@@ -27,42 +24,48 @@ public class RetransmissionTimer {
     }
 
     /**
-     *  @return the shared SimpleTimer2 instance for use in TimedEvent constructors
-     *  @since 0.9
+     * @return the shared SimpleTimer2 instance
+     * @since 0.9
      */
     public SimpleTimer2 getSharedTimer() {
         return _shared;
     }
 
     /**
-     *  Delegate to shared timer.
-     *  @since 0.9
+     * Schedule an event via the shared timer.
+     * @param event the event to schedule
+     * @param timeoutMs delay in ms
+     * @since 0.9.71
      */
-    public void addEvent(final SimpleTimer.TimedEvent event, final long timeoutMs) {
+    public void addEvent(final SimpleTimer2.TimedEvent event, final long timeoutMs) {
         _shared.addEvent(event, timeoutMs);
     }
 
     /**
-     *  Delegate to shared timer.
-     *  @since 0.9
+     * Schedule a periodic event via the shared timer.
+     * @param event the event to schedule
+     * @param timeoutMs period in ms
+     * @since 0.9.71
      */
-    public void addPeriodicEvent(final SimpleTimer.TimedEvent event, final long timeoutMs) {
+    public void addPeriodicEvent(final SimpleTimer2.TimedEvent event, final long timeoutMs) {
         _shared.addPeriodicEvent(event, timeoutMs);
     }
 
     /**
-     *  Delegate to shared timer.
-     *  @since 0.9
+     * Schedule a periodic event via the shared timer.
+     * @param event the event to schedule
+     * @param delay first execution delay in ms
+     * @param timeoutMs period in ms
+     * @since 0.9.71
      */
-    public void addPeriodicEvent(final SimpleTimer.TimedEvent event, final long delay, final long timeoutMs) {
+    public void addPeriodicEvent(final SimpleTimer2.TimedEvent event, final long delay, final long timeoutMs) {
         _shared.addPeriodicEvent(event, delay, timeoutMs);
     }
 
     /**
-     *  No-op — the shared timer lives for the router lifetime.
-     *  @since 0.9
+     * No-op — the shared timer lives for the router lifetime.
+     * @since 0.9
      */
     public void stop() {
-        // no-op: shared timer cannot be stopped per-session
     }
 }

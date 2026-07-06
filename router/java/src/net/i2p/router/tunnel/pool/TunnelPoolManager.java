@@ -29,8 +29,8 @@ import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounterUnsafe;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Manage all the exploratory and client tunnel pools.
@@ -624,7 +624,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  Retries every 2s; after max attempts, starts unconditionally.
      *  This prevents "Destination not reachable (no LeaseSet found)" at startup.
      */
-    private static class ConditionalOutboundStartup implements SimpleTimer.TimedEvent {
+    private static class ConditionalOutboundStartup extends SimpleTimer2.TimedEvent {
         private final TunnelPool outbound;
         private final TunnelPool inbound;
         private final RouterContext ctx;
@@ -632,6 +632,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         private int attempts;
 
         public ConditionalOutboundStartup(TunnelPool out, TunnelPool in, RouterContext context) {
+            super(context.simpleTimer2());
             this.outbound = out;
             this.inbound = in;
             this.ctx = context;
@@ -642,7 +643,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             if (inbound.getTunnelCount() > 0 || ++attempts >= maxAttempts) {
                 outbound.startup();
             } else {
-                ctx.simpleTimer2().addEvent(this, 2000);
+                schedule(2000);
             }
         }
     }
@@ -682,7 +683,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         // Cancel any existing cleanup for this destination
         DelayedPoolCleanup existingCleanup = _pendingCleanups.remove(destination);
         if (existingCleanup != null) {
-            existingCleanup.cancel();
+            existingCleanup.cancelCleanup();
         }
 
         // Schedule delayed cleanup to allow graceful tunnel expiration
@@ -710,7 +711,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (destination == null) return;
         // Cancel any pending delayed cleanup
         DelayedPoolCleanup cleanup = _pendingCleanups.remove(destination);
-        if (cleanup != null) {cleanup.cancel();}
+        if (cleanup != null) {cleanup.cancelCleanup();}
         doRemoveTunnels(destination);
     }
 
@@ -742,13 +743,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * Allows tunnels to continue operating until they naturally expire.
      * @since 0.9.69+
      */
-    private class DelayedPoolCleanup implements SimpleTimer.TimedEvent {
+    private class DelayedPoolCleanup extends SimpleTimer2.TimedEvent {
         private final Hash _destination;
         private volatile boolean _cancelled = false;
 
-        public DelayedPoolCleanup(Hash dest) {_destination = dest;}
+        public DelayedPoolCleanup(Hash dest) {super(_context.simpleTimer2()); _destination = dest;}
 
-        public void cancel() {_cancelled = true;}
+        public void cancelCleanup() {_cancelled = true;}
 
         public void timeReached() {
             if (_cancelled) return;
@@ -806,7 +807,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         // to receive the reply message. Starting outbound before inbound guarantees
         // initial outbound builds will fail (no reply path exists yet).
         _inboundExploratory.startup();
-        _context.simpleTimer2().addEvent(() -> _outboundExploratory.startup(), 2*1000L);
+        new SimpleTimer2.TimedEvent(_context.simpleTimer2(), 2*1000L) {
+            @Override
+            public void timeReached() {
+                _outboundExploratory.startup();
+            }
+        };
 
         // try to build up longer tunnels
         _context.jobQueue().addJob(new BootstrapPool(_context, _outboundExploratory));
@@ -1459,7 +1465,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 // Cancel any pending cleanup for this destination
                 DelayedPoolCleanup cleanup = _pendingCleanups.remove(h);
                 if (cleanup != null) {
-                    cleanup.cancel();
+                    cleanup.cancelCleanup();
                     if (_log.shouldInfo()) {
                         _log.info("Cancelled delayed cleanup for re-registered client: " +
                                   h.toBase32().substring(0,8));

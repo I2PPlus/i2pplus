@@ -42,7 +42,7 @@ import net.i2p.update.*;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.FileUtil;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
@@ -206,6 +206,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         register((Updater)puh, PLUGIN, FILE, 0);
         new NewsTimerTask(_context, this);
         _context.simpleTimer2().addPeriodicEvent(new TaskCleaner(), TASK_CLEANER_TIME);
+        // TaskCleaner self-reschedules in timeReached()
         changeState(RUNNING);
         if (_cmgr != null) {_cmgr.register(this);}
     }
@@ -1383,10 +1384,10 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
     private void finishStatus(String msg) {
         updateStatus(msg);
-        _context.simpleTimer2().addEvent(new StatusCleaner(msg), STATUS_CLEAN_TIME);
+        new StatusCleaner(msg).schedule(STATUS_CLEAN_TIME);
     }
 
-    private class StatusCleaner implements SimpleTimer.TimedEvent {
+    private class StatusCleaner extends SimpleTimer2.TimedEvent {
         private final String _msg;
         public StatusCleaner(String msg) {_msg = msg;}
         public void timeReached() {
@@ -1397,8 +1398,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     /**
      *  Failsafe
      */
-    private class TaskCleaner implements SimpleTimer.TimedEvent {
+    private class TaskCleaner extends SimpleTimer2.TimedEvent {
         public void timeReached() {
+            schedule(TASK_CLEANER_TIME);
             if (!_activeCheckers.isEmpty()) {
                 synchronized(_activeCheckers) {
                     for (Iterator<UpdateTask> iter = _activeCheckers.iterator(); iter.hasNext(); ) {

@@ -13,7 +13,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Router information publisher for network database synchronization.
@@ -63,7 +63,7 @@ import net.i2p.util.SimpleTimer;
  *
  * @since 0.8.12 moved from Router.java
  */
-public class Republish implements SimpleTimer.TimedEvent {
+public class Republish extends SimpleTimer2.TimedEvent {
     private final RouterContext _context;
 
     /**
@@ -72,7 +72,10 @@ public class Republish implements SimpleTimer.TimedEvent {
      * @param ctx the router context for accessing router services
      * @since 0.8.12 moved from Router.java
      */
-    public Republish(RouterContext ctx) {_context = ctx;}
+    public Republish(RouterContext ctx) {
+        super(ctx.simpleTimer2());
+        _context = ctx;
+    }
 
     /**
      * Publish the router's info to the network database.

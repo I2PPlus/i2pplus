@@ -5,7 +5,6 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.util.ObjectCounter;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 
 /**
@@ -56,7 +55,7 @@ class LookupBanHammer {
         this.counter = new ObjectCounter<>();
         this.burstTimestamps = new ConcurrentHashMap<>();
         this.banExpiration = new ConcurrentHashMap<>();
-        SimpleTimer2.getInstance().addPeriodicEvent(new Cleaner(), CLEAN_TIME);
+        new Cleaner().schedule(CLEAN_TIME);
     }
 
     /**
@@ -106,7 +105,8 @@ class LookupBanHammer {
      * Periodic cleanup task that clears counters and timestamps,
      * and removes any expired bans from the ban expiration map.
      */
-    private class Cleaner implements SimpleTimer.TimedEvent {
+    private class Cleaner extends SimpleTimer2.TimedEvent {
+        public Cleaner() { super(SimpleTimer2.getInstance()); }
         @Override
         public void timeReached() {
             long now = System.currentTimeMillis();

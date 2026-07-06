@@ -37,14 +37,14 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 
 /**
  * General-purpose adaptive tuner. Observes network and system stats,
  * adjusts tunable parameters to optimize router performance.
  *
- * <p>Runs every 60 seconds via {@link SimpleTimer}. Each parameter
+ * <p>Runs every 30 seconds via {@link SimpleTimer2}. Each parameter
  * implements an AIMD-style feedback loop bounded within safe ranges:
  * <ol>
  *   <li>Read observed stat (60s rolling average)</li>
@@ -71,7 +71,7 @@ import net.i2p.util.SystemVersion;
  *
  * @since 0.9.70+
  */
-public class Tuner implements SimpleTimer.TimedEvent {
+public class Tuner extends SimpleTimer2.TimedEvent {
 
     private final RouterContext _context;
     private final Log _log;
@@ -278,6 +278,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
     }
 
     public Tuner(RouterContext ctx) {
+        super(ctx.simpleTimer2());
         _context = ctx;
         _log = ctx.logManager().getLog(Tuner.class);
         _autotune = new AutotuneConfig(ctx);
@@ -407,6 +408,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
     }
 
     public void timeReached() {
+        schedule(30*1000L);
         // Compute system health once per cycle, shared by all params
         SystemHealth health = new SystemHealth(_context);
         _lastHealthScore = health.getScore();

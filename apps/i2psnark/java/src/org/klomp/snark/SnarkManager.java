@@ -50,7 +50,6 @@ import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFileOutputStream;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
@@ -432,7 +431,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (_context.isRouterContext()
                 && "i2psnark".equals(_contextName)) { // only if default instance
             _context.simpleTimer2()
-                    .addEvent(new Register(), 4 * 60 * 1000); // delay until UpdateManager is there
+                    .addEvent(new Register(), 4 * 60 * 1000);
+        // Register self-schedules via setPool() in addEvent()
         }
         _idleChecker = new IdleChecker(this, _peerCoordinatorSet);
         _idleChecker.schedule(3 * 60 * 1000);
@@ -465,7 +465,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * @since 0.9.4
      */
-    private class Register implements SimpleTimer.TimedEvent {
+    private class Register extends SimpleTimer2.TimedEvent {
         public void timeReached() {
             if (!_running) {
                 return;
@@ -4603,7 +4603,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _stopping = false;
                 } else {
                     // Only schedule this if not a final shutdown
-                    _context.simpleTimer2().addEvent(new Disconnector(), 60 * 1000);
+                    new Disconnector().schedule(60 * 1000);
                 }
             } else {
                 _util.disconnect();
@@ -4616,7 +4616,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * @since 0.9.1
      */
-    private class Disconnector implements SimpleTimer.TimedEvent {
+    private class Disconnector extends SimpleTimer2.TimedEvent {
         public void timeReached() {
             if (_util.connected()) {
                 _util.disconnect();

@@ -11,7 +11,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.AddressType;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Checks whether reseeding of the network database is necessary and initiates reseed requests.
@@ -241,7 +241,7 @@ public class ReseedChecker {
      */
     void done() {
         _inProgress.set(false);
-        _context.simpleTimer2().addEvent(new StatusCleaner(_lastStatus, _lastError), STATUS_CLEAN_TIME);
+        new StatusCleaner(_context, _lastStatus, _lastError).schedule(STATUS_CLEAN_TIME);
     }
 
     /**
@@ -285,10 +285,11 @@ public class ReseedChecker {
      *
      * @since 0.9
      */
-    private class StatusCleaner implements SimpleTimer.TimedEvent {
+    private class StatusCleaner extends SimpleTimer2.TimedEvent {
         private final String _status, _error;
 
-        public StatusCleaner(String status, String error) {
+        public StatusCleaner(RouterContext ctx, String status, String error) {
+            super(ctx.simpleTimer2());
             _status = status;
             _error = error;
         }

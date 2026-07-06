@@ -14,9 +14,9 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Count how often we have accepted a tunnel with the peer as the previous or next hop.
@@ -136,7 +136,7 @@ class ParticipatingThrottler {
         this._log = ctx.logManager().getLog(ParticipatingThrottler.class);
         _banLogger = new BanLogger();
         _banLogger.initialize(ctx);
-        ctx.simpleTimer2().addPeriodicEvent(new Cleaner(), CLEAN_TIME);
+        new Cleaner().schedule(CLEAN_TIME);
     }
 
     /**
@@ -427,7 +427,8 @@ class ParticipatingThrottler {
     /**
      * Periodic timer event that clears the participation counts to reset throttling.
      */
-    private class Cleaner implements SimpleTimer.TimedEvent {
+    private class Cleaner extends SimpleTimer2.TimedEvent {
+        public Cleaner() { super(context.simpleTimer2()); }
         @Override
         public void timeReached() {counter.clear();}
     }
@@ -435,10 +436,10 @@ class ParticipatingThrottler {
     /**
      * Timer event that disconnects a router after a delay.
      */
-    private class Disconnector implements SimpleTimer.TimedEvent {
+    private class Disconnector extends SimpleTimer2.TimedEvent {
         private final Hash h;
         private final String version;
-        public Disconnector(Hash h, String version) { this.h = h; this.version = version; }
+        public Disconnector(Hash h, String version) { super(context.simpleTimer2()); this.h = h; this.version = version; }
         public void timeReached() {
             String reason = (version == null || version.isEmpty()) ? "Old version" : "Old version (" + version + ")";
             context.commSystem().forceDisconnect(h, reason);

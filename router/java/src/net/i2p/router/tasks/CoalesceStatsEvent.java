@@ -16,7 +16,7 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.stat.StatManager;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 
 /**
@@ -51,7 +51,7 @@ import net.i2p.util.SystemVersion;
  *
  * @since 0.8.12 moved from Router.java
  */
-public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
+public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
     private final RouterContext _ctx;
     private final long _maxMemory;
     private static final long LOW_MEMORY_THRESHOLD = 5 * 1024 * 1024L;
@@ -63,6 +63,7 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
      * @param ctx the router context for accessing statistics manager
      */
     public CoalesceStatsEvent(RouterContext ctx) {
+        super(ctx.simpleTimer2());
         _ctx = ctx;
         StatManager sm = ctx.statManager();
         // NOTE TO TRANSLATORS - each of these phrases is a description for a statistic
@@ -160,7 +161,8 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
             }
         }
 
-        RateStat sendRate = sm.getRate("transport.sendMessageSize");
+        RateStat         sendRate = sm.getRate("transport.sendMessageSize");
+        schedule(Router.COALESCE_TIME);
         if (sendRate != null) {
             Rate rate = sendRate.getRate(RateConstants.ONE_MINUTE);
             if (rate != null) {

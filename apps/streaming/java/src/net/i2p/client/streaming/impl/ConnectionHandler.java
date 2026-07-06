@@ -10,7 +10,6 @@ import net.i2p.data.ByteArray;
 import net.i2p.data.Destination;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 
@@ -344,20 +343,25 @@ class ConnectionHandler {
      * Timer event that removes a SYN packet from the queue after the
      * accept timeout expires, sending a reset if it was a SYN.
      */
-    private class TimeoutSyn implements SimpleTimer.TimedEvent {
+    private class TimeoutSyn extends SimpleTimer2.TimedEvent {
         private final Packet _synPacket;
 
-        public TimeoutSyn(Packet packet) {_synPacket = packet;}
+        TimeoutSyn(Packet packet) {
+            super();
+            _synPacket = packet;
+        }
 
         public void timeReached() {
             boolean removed = _synQueue.remove(_synPacket);
-
             if (removed) {
                 if (_synPacket.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
-                    if (_log.shouldWarn()) {_log.warn("Expired on the SYN queue: " + _synPacket);}
-                    sendReset(_synPacket); // timeout - send RST
-                } else {reReceivePacket(_synPacket);} // non-syn packet got stranded on the syn queue, send it to the con
-            } else { /* ignored */ } // handled. noop
+                    if (_log.shouldWarn())
+                        _log.warn("Expired on the SYN queue: " + _synPacket);
+                    sendReset(_synPacket);
+                } else {
+                    reReceivePacket(_synPacket);
+                }
+            }
         }
     }
 

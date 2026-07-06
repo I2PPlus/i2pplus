@@ -10,7 +10,7 @@ import net.i2p.data.Destination;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 
 /**
@@ -663,11 +663,12 @@ class ConnectionPacketHandler {
     /**
      * Timer event to send an ACK for a duplicate packet after a short delay.
      */
-    private class AckDup implements SimpleTimer.TimedEvent {
+    private class AckDup extends SimpleTimer2.TimedEvent {
         private final long _created;
         private final Connection _con;
 
-        public AckDup(Connection con) {
+        AckDup(Connection con) {
+            super();
             _created = _context.clock().now();
             _con = con;
         }
@@ -683,8 +684,6 @@ class ConnectionPacketHandler {
 
                 if (_log.shouldDebug())
                     _log.debug("Last sent was a while ago, and we want to ACK a DUP on " + _con);
-                // we haven't done anything since receiving the dup, send an
-                // ack now
                 _con.ackImmediately();
                 sent = true;
             } else {

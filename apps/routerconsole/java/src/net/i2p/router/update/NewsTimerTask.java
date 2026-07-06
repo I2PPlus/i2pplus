@@ -8,7 +8,7 @@ import net.i2p.router.web.ConfigUpdateHandler;
 import net.i2p.router.web.NewsHelper;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Task to periodically look for updates to the news.xml, and to keep
@@ -19,7 +19,7 @@ import net.i2p.util.SimpleTimer;
  *
  * @since 0.9.4 moved from NewsFetcher
  */
-class NewsTimerTask implements SimpleTimer.TimedEvent {
+class NewsTimerTask extends SimpleTimer2.TimedEvent {
     private final RouterContext _context;
     private final Log _log;
     private final ConsoleUpdateManager _mgr;
@@ -30,6 +30,7 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
     private static final long RUN_DELAY = 10*60*1000;
 
     public NewsTimerTask(RouterContext ctx, ConsoleUpdateManager mgr) {
+        super(ctx.simpleTimer2());
         _context = ctx;
         _log = ctx.logManager().getLog(NewsTimerTask.class);
         _mgr = mgr;
@@ -39,11 +40,12 @@ class NewsTimerTask implements SimpleTimer.TimedEvent {
         delay += _context.random().nextLong(INITIAL_DELAY);
         if (_log.shouldInfo())
             _log.info("Scheduling first news check in " + DataHelper.formatDuration(delay));
-        ctx.simpleTimer2().addPeriodicEvent(this, delay, RUN_DELAY);
+        schedule(delay);
         // UpdateManager calls NewsFetcher to check the existing news at startup
     }
 
     public void timeReached() {
+        schedule(RUN_DELAY);
         if (shouldFetchNews()) {
             Thread t = new Fetcher();
             t.start();

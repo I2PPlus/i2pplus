@@ -31,7 +31,7 @@ import net.i2p.router.BanLogger;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.transport.TransportImpl;
 import net.i2p.util.Addresses;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.VersionComparator;
 
 /**
@@ -1209,9 +1209,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         public String getMessage() {return "Code " + rsn + ": " + super.getMessage();}
     }
 
-    private class Disconnector implements SimpleTimer.TimedEvent {
+    private class Disconnector extends SimpleTimer2.TimedEvent {
         private final Hash h;
-        public Disconnector(Hash h) {this.h = h;}
+        public Disconnector(Hash h) {super(_context.simpleTimer2()); this.h = h;}
         public void timeReached() {
             _context.commSystem().forceDisconnect(h, "Invalid SSU address");
         }

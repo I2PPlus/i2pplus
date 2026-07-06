@@ -74,7 +74,7 @@ import net.i2p.stat.RateConstants;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 
@@ -182,7 +182,7 @@ public abstract class TransportImpl implements Transport {
             UNREACHABLE_PERIOD = 5*60*1000L;
             WAS_UNREACHABLE_PERIOD = 5*60*1000L;
         }
-        _context.simpleTimer2().addPeriodicEvent(new CleanupUnreachable(), 2 * UNREACHABLE_PERIOD, UNREACHABLE_PERIOD / 2);
+        new CleanupUnreachable().schedule(2 * UNREACHABLE_PERIOD);
     }
 
     /**
@@ -972,7 +972,8 @@ public abstract class TransportImpl implements Transport {
         if (!isInbound) {markWasUnreachable(peer, false);}
     }
 
-    private class CleanupUnreachable implements SimpleTimer.TimedEvent {
+    private class CleanupUnreachable extends SimpleTimer2.TimedEvent {
+        public CleanupUnreachable() { super(_context.simpleTimer2()); }
         public void timeReached() {
             long now = _context.clock().now();
             long limit = now - UNREACHABLE_PERIOD;
@@ -987,6 +988,7 @@ public abstract class TransportImpl implements Transport {
                 if (when.longValue() < limit)
                     iter.remove();
             }
+            schedule(UNREACHABLE_PERIOD / 2);
         }
     }
 

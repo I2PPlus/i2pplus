@@ -42,9 +42,9 @@ import net.i2p.util.FileUtil;
 import net.i2p.util.I2PThread;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFileOutputStream;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Persistent network database storage with disk I/O and memory management.
@@ -1124,10 +1124,10 @@ public class PersistentDataStore extends TransientDataStore {
         }
     }
 
-    private class Disconnector implements SimpleTimer.TimedEvent {
+    private class Disconnector extends SimpleTimer2.TimedEvent {
         private final Hash h;
         private final String reason;
-        public Disconnector(Hash h, String reason) {this.h = h; this.reason = reason;}
+        public Disconnector(Hash h, String reason) {super(_context.simpleTimer2()); this.h = h; this.reason = reason;}
         public void timeReached() {_context.commSystem().forceDisconnect(h, reason);}
     }
 

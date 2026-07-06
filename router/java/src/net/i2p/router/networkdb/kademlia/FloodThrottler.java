@@ -2,7 +2,6 @@ package net.i2p.router.networkdb.kademlia;
 
 import net.i2p.data.Hash;
 import net.i2p.util.ObjectCounter;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 
 /**
@@ -26,7 +25,7 @@ class FloodThrottler {
 
     FloodThrottler() {
         this.counter = new ObjectCounter<>();
-        SimpleTimer2.getInstance().addPeriodicEvent(new Cleaner(), CLEAN_TIME);
+        new Cleaner().schedule(CLEAN_TIME);
     }
 
     /** increments before checking */
@@ -34,7 +33,8 @@ class FloodThrottler {
         return this.counter.increment(h) > MAX_FLOODS;
     }
 
-    private class Cleaner implements SimpleTimer.TimedEvent {
+    private class Cleaner extends SimpleTimer2.TimedEvent {
+        public Cleaner() { super(SimpleTimer2.getInstance()); }
         public void timeReached() {
             FloodThrottler.this.counter.decay(2);
         }
