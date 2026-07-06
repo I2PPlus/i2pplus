@@ -19,6 +19,13 @@ services:
 
     restart: unless-stopped
 
+    # Allow sufficient time for the router's shutdown hook to complete:
+    # shutdown tasks may wait up to 60s, plus subsystem shutdown and
+    # finalShutdown. Without this, Docker's default 10s SIGKILL kills the
+    # JVM before router.ping is deleted, causing the new instance to stall
+    # for 60+ seconds waiting for the stale ping file to age out.
+    stop_grace_period: 90s
+
     # Mount volumes for persistent data storage
     volumes:
       # Config directory for I2P router
