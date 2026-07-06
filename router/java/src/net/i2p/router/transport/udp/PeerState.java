@@ -320,6 +320,19 @@ public class PeerState {
     };
     private final Object _inboundLock = new Object();
 
+    /** Reusable lists for finishMessages() — avoids per-volley allocation churn */
+    private final List<OutboundMessageState> _succeededBuffer = new ArrayList<>(4);
+    private final List<OutboundMessageState> _failedBuffer = new ArrayList<>(4);
+
+    /**
+     * Cached oldest message lifetime from the most recent finishMessages() pass.
+     * Updated during the finishMessages() iteration to eliminate the separate
+     * getOldestMessageLifetime() scan (3rd iteration per peer per volley).
+     *
+     * @since 0.9.70+
+     */
+    private volatile long _cachedOldestLifetime;
+
     /**
      *  For SSU2
      *
@@ -1131,8 +1144,11 @@ public class PeerState {
             return 0;
         }
 
-        List<OutboundMessageState> succeeded = new ArrayList<>(16);
-        List<OutboundMessageState> failed = new ArrayList<>(8);
+        // Reuse pre-allocated lists to avoid per-volley allocation churn
+        _succeededBuffer.clear();
+        _failedBuffer.clear();
+        List<OutboundMessageState> succeeded = _succeededBuffer;
+        List<OutboundMessageState> failed = _failedBuffer;
 
         boolean shouldLogInfo = _log.shouldInfo();
         boolean shouldLogWarn = _log.shouldWarn();
@@ -1142,10 +1158,17 @@ public class PeerState {
         boolean totalFail = false;
 
         int rv;
+        long oldestLifetime = 0;
         synchronized (_outboundLock) {
             Iterator<OutboundMessageState> iter = _outboundMessages.iterator();
             while (iter.hasNext()) {
                 OutboundMessageState state = iter.next();
+
+                // Track oldest lifetime during this pass to eliminate separate getOldestMessageLifetime() scan
+                long lifetime = state.getLifetime();
+                if (lifetime > oldestLifetime) {
+                    oldestLifetime = lifetime;
+                }
 
                 if (state.isComplete()) {
                     iter.remove();
@@ -1169,8 +1192,16 @@ public class PeerState {
                     }
                 }
             }
+            // Also scan outbound queue for oldest lifetime (same lock, no extra iteration)
+            for (OutboundMessageState state : _outboundQueue) {
+                long lifetime = state.getLifetime();
+                if (lifetime > oldestLifetime) {
+                    oldestLifetime = lifetime;
+                }
+            }
             rv = _outboundMessages.size();
         }
+        _cachedOldestLifetime = oldestLifetime;
 
         for (OutboundMessageState state : succeeded) {
             _transport.succeeded(state);
@@ -1366,11 +1397,13 @@ public class PeerState {
 
     /**
      * High usage - OutboundMessageFragments.getNextVolley() calls this 3rd, if allocateSend() returned null.
-     * TODO combine finishMessages(), allocateSend() so we don't iterate 2 times.
+     * Uses cached oldest lifetime from the most recent finishMessages() pass,
+     * eliminating a separate scan of _outboundMessages + _outboundQueue.
      *
      * @param now what time it is now
      * @return how long to wait before sending, or Integer.MAX_VALUE if we have nothing to send.
      *         If ready now, will return 0.
+     * @since 0.9.48
      */
     int getNextDelay(long now) {
         synchronized (_sendWindowBytesRemainingLock) {
@@ -1378,7 +1411,7 @@ public class PeerState {
             if (_retransmitTimer.get() > 0) {
                 return Math.max(0, (int)(_retransmitTimer.get() - now));
             }
-            long oldestLifetime = getOldestMessageLifetime(now);
+            long oldestLifetime = _cachedOldestLifetime;
             if (oldestLifetime > MAX_MESSAGE_LIFETIME) {
                 return 0;
             }

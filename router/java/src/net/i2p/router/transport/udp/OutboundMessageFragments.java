@@ -201,8 +201,10 @@ class OutboundMessageFragments {
             int remaining = p.finishMessages(now);
             if (remaining <= 0) {
                 _peersToRemove.add(p);
-                // Immediate cleanup if list gets too large to prevent OOM
-                if (_peersToRemove.size() > 1000) {
+                // Eager cleanup to prevent accumulation of dead PeerState references.
+                // CopyOnWriteArrayList.removeAll() copies the backing array, so batch
+                // at a reasonable threshold to balance copy cost vs memory pressure.
+                if (_peersToRemove.size() >= 32) {
                     _activePeers.removeAll(_peersToRemove);
                     _peersToRemove.clear();
                 }

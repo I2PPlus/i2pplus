@@ -25,6 +25,7 @@ class PacketPusher implements Runnable {
     // Use thread-safe CopyOnWriteArrayList for safe concurrent iterations with minimal locking
     private final List<UDPEndpoint> _endpoints;
     private volatile boolean _alive;
+    private volatile Thread _thread;
 
     /**
      * Constructs a PacketPusher instance.
@@ -52,6 +53,7 @@ class PacketPusher implements Runnable {
         _alive = true;
         I2PThread t = new I2PThread(this, "UDPPktPusher", true);
         t.setPriority(Thread.MAX_PRIORITY);
+        _thread = t;
         t.start();
     }
 
@@ -61,9 +63,10 @@ class PacketPusher implements Runnable {
      */
     public synchronized void shutdown() {
         _alive = false;
-        // Interrupt the current thread running this Runnable to unblock blocking calls in getNextVolley()
-        // This assumes that getNextVolley() reacts appropriately to Thread.interrupt()
-        Thread.currentThread().interrupt();
+        Thread t = _thread;
+        if (t != null) {
+            t.interrupt();
+        }
     }
 
     /**
