@@ -123,6 +123,11 @@ wrapper.java.additional.2.quotable=TRUE
 #  http://www.evanjones.ca/jvm-mmap-pause.html
 wrapper.java.additional.3=-XX:+PerfDisableSharedMem
 
+#  Disable the JVM's fast-throw optimization so repeated exceptions
+#  at the same code path retain full stack traces (critical for diagnosing
+#  bare ArrayIndexOutOfBoundsException, NullPointerException, etc.)
+wrapper.java.additional.4=-XX:-OmitStackTraceInFastThrow
+
 #  On some IPv6 enabled systems, I2P and other network-enabled java applications
 #  may fail to start. For examples see
 #  http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=560044.
