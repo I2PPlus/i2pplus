@@ -329,10 +329,10 @@ public class ProfileOrganizer {
      *
      * @param peer the router hash to look up or create a profile for
      * @return the existing or new profile, or null if the peer is excluded or lock contention
+     * @since 0.9.47, public since 0.9.70
      */
-    PeerProfile getOrCreateProfileNonblocking(Hash peer) {
+    public PeerProfile getOrCreateProfileNonblocking(Hash peer) {
         if (peer == null || peer.equals(_us) || !tryReadLock()) return null;
-
         PeerProfile rv;
         try {rv = locked_getProfile(peer);}
         finally {releaseReadLock();}
