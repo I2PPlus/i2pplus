@@ -21,6 +21,7 @@ import net.i2p.router.tunnel.pool.BuildHandler;
 import net.i2p.router.tunnel.pool.BuildExecutor;
 import net.i2p.router.tunnel.pool.BuildRequestor;
 import net.i2p.router.tunnel.pool.TestJob;
+import net.i2p.router.tunnel.pool.TunnelPoolManager;
 import net.i2p.router.transport.FIFOBandwidthRefiller;
 import net.i2p.router.transport.ntcp.NTCPTransport;
 import net.i2p.router.transport.ntcp.NTCPConnection;
@@ -327,6 +328,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new TestJobMinDelayParam());
         _params.add(new TunnelGrowthFactorParam());
         _params.add(new I2PTunnelServerHandlerThreadsParam());
+        _params.add(new I2PTunnelClientRunnerMaxParam());
+        _params.add(new BuildHandlerThreadsParam());
 
         // Streaming
         _params.add(new CongestionAvoidanceGrowthParam());
@@ -6194,6 +6197,97 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Idle pool with minimal queue — shrink
             if (observed < 5 && current > _min)
                 return Math.max(_min, current - 1);
+
+            return current;
+        }
+    }
+
+    /**
+     * Tunes I2PTunnel client runner max pool size.
+     * Pool is cached-style (core=0, SynchronousQueue), so threads are created on demand
+     * and time out after 2 min idle. This caps the burst ceiling.
+     */
+    private class I2PTunnelClientRunnerMaxParam extends BaseParam {
+
+        I2PTunnelClientRunnerMaxParam() {
+            super("i2ptunnel.clientRunner.max", "Client runner max threads (ceiling for burst)",
+                  SUB_TUNNEL,
+                  4, 1024, 4, "i2ptunnel.clientRunner.poolSize", _context);
+        }
+
+        protected void applyValue(int value) {
+            I2PTunnelReflector.invokeSetInt("setClientRunnerMax", value);
+        }
+
+        protected int getRuntimeValue() {
+            return I2PTunnelReflector.invokeGetInt("getClientRunnerMax");
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = i2ptunnel.clientRunner.poolSize (60s rolling avg)
+            // If active threads are near the max ceiling, raise it
+            if (observed > current * 0.75 && current < _max)
+                return Math.min(_max, current + Math.max(current / 4, 16));
+            // If active threads are well below max, lower the ceiling
+            if (observed < current * 0.25 && current > _min)
+                return Math.max(_min, current - Math.max(current / 4, 16));
+            return current;
+        }
+    }
+
+    /**
+     * Tunes BuildHandler thread count based on inbound build request backlog.
+     * BuildHandler processes incoming tunnel build requests. More threads reduce
+     * backlog when under load; fewer threads save resources when idle.
+     */
+    private class BuildHandlerThreadsParam extends BaseParam {
+
+        BuildHandlerThreadsParam() {
+            super("router.buildHandlerThreads", "Build handler threads (higher = more concurrent builds)",
+                  SUB_TUNNEL,
+                  1, 8, 1, "tunnel.buildHandler.queueSize", _context);
+        }
+
+        protected void applyValue(int value) {
+            if (_context.tunnelManager() instanceof TunnelPoolManager) {
+                ((TunnelPoolManager) _context.tunnelManager()).setBuildHandlerThreads(value);
+                ((TunnelPoolManager) _context.tunnelManager()).adjustBuildHandlerThreads(value);
+            }
+        }
+
+        protected int getRuntimeValue() {
+            return TunnelPoolManager.getBuildHandlerThreads();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+
+            // Queue backlog + no CPU pressure — grow
+            if (!cpuPressure && observed > 5 && current < _max)
+                return current + 1;
+
+            // Consistently idle — shrink
+            if (observed < 1 && current > _min)
+                return current - 1;
 
             return current;
         }

@@ -126,7 +126,7 @@ public class TunnelControllerGroup implements ClientApp {
     }
     public static int getClientRunnerMax() { return _clientRunnerMax; }
     public static void setClientRunnerMax(int val) {
-        _clientRunnerMax = Math.max(64, Math.min(65536, val));
+        _clientRunnerMax = Math.max(4, Math.min(1024, val));
     }
 
     static final long[] RATES = {60*1000L, 10*60*1000L, 60*60*1000L};
@@ -1335,8 +1335,16 @@ public class TunnelControllerGroup implements ClientApp {
      */
     ThreadPoolExecutor getClientExecutor() {
         synchronized (_executorLock) {
-            if (_executor == null)
+            if (_executor == null) {
                 _executor = new CustomThreadPoolExecutor();
+                I2PAppContext ctx = _context;
+                if (ctx != null) {
+                    ctx.statManager().createRequiredRateStat("i2ptunnel.clientRunner.activeThreads", "Client runner active threads", "I2PTunnel", RATES);
+                    ctx.statManager().createRequiredRateStat("i2ptunnel.clientRunner.poolSize", "Client runner pool size", "I2PTunnel", RATES);
+                }
+            } else if (_executor.getMaximumPoolSize() != _clientRunnerMax) {
+                resizeClientExecutor(_clientRunnerMax);
+            }
         }
         return _executor;
     }
@@ -1411,6 +1419,20 @@ public class TunnelControllerGroup implements ClientApp {
                     Thread.currentThread().interrupt();
                 }
                 _serverExecutor = null;
+            }
+        }
+    }
+
+    /**
+     *  Resize the client executor max pool size. Called by Tuner.
+     */
+    void resizeClientExecutor(int newMax) {
+        synchronized (_executorLock) {
+            if (_executor != null && !_executor.isShutdown()) {
+                _executor.setMaximumPoolSize(newMax);
+                I2PAppContext ctx = _context;
+                if (ctx != null)
+                    ctx.statManager().addRateData("i2ptunnel.clientRunner.poolSize", newMax);
             }
         }
     }

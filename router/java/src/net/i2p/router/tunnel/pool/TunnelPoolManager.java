@@ -10,8 +10,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
@@ -50,7 +51,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private final TunnelPeerSelector _clientPeerSelector;
     private final GhostPeerManager _ghostPeerManager;
     private volatile boolean _isShutdown;
-    private final int _numHandlerThreads;
+    private static volatile int _numHandlerThreads = 4;
+    private final CopyOnWriteArrayList<I2PThread> _handlerThreads;
     private final int DEFAULT_MAX_PCT_TUNNELS;
     private final int STARTUP_MAX_PCT_TUNNELS;
     private static final String PROP_DISABLE_TUNNEL_TESTING = "router.disableTunnelTesting";
@@ -97,9 +99,10 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         // threads will be started in startup()
         _executor = new BuildExecutor(ctx, this, _ghostPeerManager);
         _handler = new BuildHandler(ctx, this, _executor);
-        int numHandlerThreads;
+        _handlerThreads = new CopyOnWriteArrayList<>();
         Boolean isSlow = SystemVersion.isSlow();
-        _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", isSlow ? 2 : 4);
+        int numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", isSlow ? 2 : 4);
+        setBuildHandlerThreads(numHandlerThreads);
 
         if (isFirewalled()) {
             DEFAULT_MAX_PCT_TUNNELS = 30;
@@ -800,6 +803,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             for (int i = 1; i <= _numHandlerThreads; i++) {
                 I2PThread hThread = new I2PThread(_handler, "BuildHandler " + i + '/' + _numHandlerThreads, true);
                 hThread.start();
+                _handlerThreads.add(hThread);
             }
         }
 
@@ -819,6 +823,37 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         _context.jobQueue().addJob(new BootstrapPool(_context, _inboundExploratory));
         if (!_context.getBooleanProperty("router.tunnel.disableSlowTunnelRemoval")) {
             _context.jobQueue().addJob(new RemoveSlowTunnelsJob(_context, this));
+        }
+    }
+
+    /**
+     *  Tuned by Tuner — min 1, max 8
+     */
+    public static int getBuildHandlerThreads() { return _numHandlerThreads; }
+    public static void setBuildHandlerThreads(int val) {
+        _numHandlerThreads = Math.max(1, Math.min(8, val));
+    }
+
+    /**
+     *  Dynamically adjust BuildHandler thread count to match target.
+     *  @since 0.9.70+
+     */
+    public synchronized void adjustBuildHandlerThreads(int target) {
+        if (_isShutdown || _handlerThreads == null)
+            return;
+        int current = _handlerThreads.size();
+        if (target > current) {
+            for (int i = current; i < target; i++) {
+                I2PThread hThread = new I2PThread(_handler,
+                    "BuildHandler " + (i + 1) + '/' + target, true);
+                hThread.start();
+                _handlerThreads.add(hThread);
+            }
+        } else if (target < current) {
+            for (int i = current - 1; i >= target; i--) {
+                I2PThread hThread = _handlerThreads.remove(i);
+                hThread.interrupt();
+            }
         }
     }
 
@@ -1190,7 +1225,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  Cannot be restarted
      */
     public synchronized void shutdown() {
-        _handler.shutdown(_numHandlerThreads);
+        _handler.shutdown(_handlerThreads.size());
+        // clear tracked threads
+        _handlerThreads.clear();
         _executor.shutdown();
 
         // Cancel all pending delayed cleanups and force remove all client pools

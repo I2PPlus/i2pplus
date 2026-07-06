@@ -262,7 +262,7 @@ public class BuildHandler implements Runnable {
     @Override
     public void run() {
         _isRunning = true;
-        while (_isRunning && !_manager.isShutdown()) {
+        while (_isRunning && !_manager.isShutdown() && !Thread.currentThread().isInterrupted()) {
             try {handleInboundRequest();}
             catch (RuntimeException e) {_log.log(Log.CRIT, "Catastrophic tunnel build failure! -> " +  e.getMessage());}
         }
