@@ -6212,7 +6212,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         I2PTunnelClientRunnerMaxParam() {
             super("i2ptunnel.clientRunner.max", "Client runner max threads",
                   SUB_TUNNEL,
-                  4, 1024, 4, "i2ptunnel.clientRunner.poolSize", _context);
+                   4, 8192, 4, "i2ptunnel.clientRunner.poolSize", _context);
         }
 
         protected void applyValue(int value) {

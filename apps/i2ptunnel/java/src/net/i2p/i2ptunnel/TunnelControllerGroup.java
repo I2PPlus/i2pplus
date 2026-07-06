@@ -126,7 +126,7 @@ public class TunnelControllerGroup implements ClientApp {
     }
     public static int getClientRunnerMax() { return _clientRunnerMax; }
     public static void setClientRunnerMax(int val) {
-        _clientRunnerMax = Math.max(4, Math.min(1024, val));
+        _clientRunnerMax = Math.max(4, Math.min(8192, val));
     }
 
     static final long[] RATES = {60*1000L, 10*60*1000L, 60*60*1000L};
