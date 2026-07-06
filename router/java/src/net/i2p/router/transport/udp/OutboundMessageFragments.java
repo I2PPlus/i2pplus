@@ -35,7 +35,7 @@ class OutboundMessageFragments {
      *  List of peers currently sending outbound messages.
      *  Thread-safe for iteration and modification with reduced array copying.
      */
-    private final List<PeerState> _activePeers = new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<PeerState> _activePeers = new CopyOnWriteArrayList<>();
     private int _peerIndex = 0;
     private final List<PeerState> _peersToRemove = new ArrayList<>();
     private final Object _waitLock = new Object();
@@ -140,7 +140,11 @@ class OutboundMessageFragments {
      * @since 0.8.9
      */
     public void add(PeerState peer, int size) {
-        boolean added = _activePeers.add(peer);
+        // Remove from pending-removal list first, in case a new message
+        // arrives while finishMessages() queued this peer for removal.
+        // Without this, removeAll() could remove a peer that just got a new message.
+        _peersToRemove.remove(peer);
+        boolean added = _activePeers.addIfAbsent(peer);
         if (added) {
             if (_log.shouldDebug()) {
                 _log.debug("Adding a new message to new peer [" + peer.getRemotePeer().toBase64().substring(0,6) + "]");
@@ -200,7 +204,8 @@ class OutboundMessageFragments {
             // Clean up completed messages
             int remaining = p.finishMessages(now);
             if (remaining <= 0) {
-                _peersToRemove.add(p);
+                if (!_peersToRemove.contains(p))
+                    _peersToRemove.add(p);
                 // Eager cleanup to prevent accumulation of dead PeerState references.
                 // CopyOnWriteArrayList.removeAll() copies the backing array, so batch
                 // at a reasonable threshold to balance copy cost vs memory pressure.
@@ -358,9 +363,11 @@ class OutboundMessageFragments {
                     if (_log.shouldWarn()) {
                         _log.warn("Building UDP packet FAIL for " + DataHelper.toString(sendNext) + " to: " + peer);
                     }
-                    // Requeue fragments so they aren't permanently lost
-                    remaining.addAll(sendNext);
-                    continue;
+                    // Don't retry in this volley — peer session is dead/invalid.
+                    // Fragments remain in OutboundMessageState and will be
+                    // retried on the next getNextVolley() cycle.
+                    _context.statManager().addRateData("udp.sendFailed", 1);
+                    break;
                 }
 
                 // Set metadata for debugging and stats
