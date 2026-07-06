@@ -14,6 +14,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -98,15 +99,37 @@ public class TunnelControllerGroup implements ClientApp {
      *  We keep a pool of socket handlers for all clients,
      *  as there is no need for isolation on the client side.
      *  Extending classes may use it for other purposes.
-     *
-     *  May also be used by servers, carefully,
-     *  as there is no limit on threads.
      */
     private ThreadPoolExecutor _executor;
     private static final AtomicLong _executorThreadCount = new AtomicLong();
     private final Object _executorLock = new Object();
     /** how long to wait before dropping an idle thread */
     private static final long HANDLER_KEEPALIVE_MS = 2*60*1000;
+
+    /**
+     *  Shared bounded executor for all server tunnel connection handlers.
+     *  Handler tasks are short-lived (µs-scale), so a modest pool suffices.
+     *  CallerRunsPolicy applies backpressure when saturated rather than silently dropping.
+     */
+    private ThreadPoolExecutor _serverExecutor;
+    private static final AtomicLong _serverExecutorThreadCount = new AtomicLong();
+    private final Object _serverExecutorLock = new Object();
+    private static final long SERVER_KEEPALIVE_MS = 30*1000;
+
+    /** Tuned by Tuner — min 2, max 128 */
+    private static volatile int _serverHandlerThreads = Math.max(SystemVersion.getCores(), 4);
+    private static volatile int _clientRunnerMax = 8192;
+
+    public static int getServerHandlerThreads() { return _serverHandlerThreads; }
+    public static void setServerHandlerThreads(int val) {
+        _serverHandlerThreads = Math.max(2, Math.min(128, val));
+    }
+    public static int getClientRunnerMax() { return _clientRunnerMax; }
+    public static void setClientRunnerMax(int val) {
+        _clientRunnerMax = Math.max(64, Math.min(65536, val));
+    }
+
+    static final long[] RATES = {60*1000L, 10*60*1000L, 60*60*1000L};
 
 
     /**
@@ -368,6 +391,7 @@ public class TunnelControllerGroup implements ClientApp {
             if (_instance == this)
                 _instance = null;
         }
+        killServerExecutor();
         killClientExecutor();
         changeState(STOPPED);
     }
@@ -1307,7 +1331,7 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      *  @return non-null
-     *  @since 0.8.8 Moved from I2PTunnelClientBase in 0.9.18
+     *  @since 0.9.8 Moved from I2PTunnelClientBase in 0.9.18
      */
     ThreadPoolExecutor getClientExecutor() {
         synchronized (_executorLock) {
@@ -1315,6 +1339,80 @@ public class TunnelControllerGroup implements ClientApp {
                 _executor = new CustomThreadPoolExecutor();
         }
         return _executor;
+    }
+
+    /**
+     *  Shared bounded executor for server tunnel connection handlers.
+     *  Tasks are short-lived (µs-scale), so core threads handle bursts via a queue.
+     *  CallerRunsPolicy provides backpressure under load.
+     *
+     *  @return non-null
+     */
+    ThreadPoolExecutor getServerExecutor() {
+        synchronized (_serverExecutorLock) {
+            if (_serverExecutor == null) {
+                int threads = _serverHandlerThreads;
+                _serverExecutor = new ThreadPoolExecutor(
+                    threads, threads,
+                    SERVER_KEEPALIVE_MS, TimeUnit.MILLISECONDS,
+                    new LinkedBlockingQueue<>(1024),
+                    r -> {
+                        Thread t = new Thread(r);
+                        t.setName("I2PTunnel Server " + _serverExecutorThreadCount.incrementAndGet());
+                        t.setDaemon(true);
+                        return t;
+                    },
+                    new ThreadPoolExecutor.CallerRunsPolicy()
+                );
+                I2PAppContext ctx = _context;
+                if (ctx != null) {
+                    ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.queueDepth", "Server handler tasks waiting", "I2PTunnel", RATES);
+                    ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.active", "Server handler active threads", "I2PTunnel", RATES);
+                    ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.threads", "Server handler thread count", "I2PTunnel", RATES);
+                    ctx.statManager().createRequiredRateStat("i2ptunnel.serverHandler.blockingHandleTime", "Handler socket connect time (ms)", "I2PTunnel", RATES);
+                }
+            } else if (_serverExecutor.getCorePoolSize() != _serverHandlerThreads) {
+                resizeServerExecutor(_serverHandlerThreads);
+            }
+        }
+        return _serverExecutor;
+    }
+
+    /**
+     *  Resize the shared server executor pool. Called by Tuner.
+     */
+    void resizeServerExecutor(int newThreads) {
+        synchronized (_serverExecutorLock) {
+            if (_serverExecutor != null && !_serverExecutor.isShutdown()) {
+                _serverExecutor.setCorePoolSize(newThreads);
+                _serverExecutor.setMaximumPoolSize(newThreads);
+                I2PAppContext ctx = _context;
+                if (ctx != null)
+                    ctx.statManager().addRateData("i2ptunnel.serverHandler.threads", newThreads);
+            }
+        }
+    }
+
+    /**
+     *  Shutdown the server executor
+     */
+    private void killServerExecutor() {
+        synchronized (_serverExecutorLock) {
+            if (_serverExecutor != null) {
+                _serverExecutor.shutdown();
+                try {
+                    if (!_serverExecutor.awaitTermination(60, TimeUnit.SECONDS)) {
+                        _serverExecutor.shutdownNow();
+                        if (!_serverExecutor.awaitTermination(60, TimeUnit.SECONDS))
+                            _log.error("Server executor did not terminate");
+                    }
+                } catch (InterruptedException ie) {
+                    _serverExecutor.shutdownNow();
+                    Thread.currentThread().interrupt();
+                }
+                _serverExecutor = null;
+            }
+        }
     }
 
     /**
@@ -1345,7 +1443,7 @@ public class TunnelControllerGroup implements ClientApp {
      */
     static class CustomThreadPoolExecutor extends ThreadPoolExecutor {
         public CustomThreadPoolExecutor() {
-             super(0, Integer.MAX_VALUE, HANDLER_KEEPALIVE_MS, TimeUnit.MILLISECONDS,
+             super(0, _clientRunnerMax, HANDLER_KEEPALIVE_MS, TimeUnit.MILLISECONDS,
                    new SynchronousQueue<>(), new CustomThreadFactory());
         }
     }

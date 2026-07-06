@@ -789,8 +789,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         // and rely on the server to do the actual timeout
         socket.setReadTimeout(SERVER_READ_TIMEOUT_POST);
         Socket s = getSocket(socket.getPeerDestination().calculateHash(), 443);
-        Runnable t = new I2PTunnelRunner(s, socket, slock, null, null, null, (I2PTunnelRunner.FailCallback) null);
-        _clientExecutor.execute(t);
+        I2PTunnelRunner runner = new I2PTunnelRunner(s, socket, slock, null, null, null, (I2PTunnelRunner.FailCallback) null);
+        runner.setExecutor(_clientExecutor);
+        _clientExecutor.execute(runner);
         return true;
     }
 

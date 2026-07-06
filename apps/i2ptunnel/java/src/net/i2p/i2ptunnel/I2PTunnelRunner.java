@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.List;
+import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.net.ssl.SSLException;
 import net.i2p.I2PAppContext;
@@ -86,6 +87,8 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     private volatile long totalReceived;
     // not final, may be changed by extending classes
     protected volatile boolean _keepAliveI2P, _keepAliveSocket;
+    // Executor for submitting tasks; null = fallback to new Thread
+    private volatile Executor _runnerExecutor;
     // Track socket streams for cleanup
     private InputStream _socketIn;
     private volatile StreamForwarder toI2P;
@@ -302,6 +305,12 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     }
 
     /**
+     *  Set the executor for submitting forwarder tasks.
+     *  When null (default), forwarders use a fallback thread.
+     */
+    public void setExecutor(Executor exec) { _runnerExecutor = exec; }
+
+    /**
      *  Gets the TCP socket input stream.
      * <p>
      * This method is protected to allow subclasses to override socket access
@@ -425,7 +434,14 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 // Store reference for cleanup
                 _socketIn = in;
                 toI2P = new StreamForwarder(in, i2pout, true, null);
-                toI2P.start();
+                Executor exec = _runnerExecutor;
+                if (exec != null) {
+                    exec.execute(toI2P);
+                } else {
+                    Thread t = new Thread(toI2P, "StreamForwarder " + _runnerId + ".toI2P");
+                    t.setDaemon(true);
+                    t.start();
+                }
             }
             fromI2P = new StreamForwarder(i2pin, out, false, _onSuccess);
             // We are already a thread, so run the second one inline
@@ -534,7 +550,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 _keepAliveSocket = false;
             } else {
                 // Now one connection is dead - kill the other as well, after making sure we flush
-                try {close(out, in, i2pout, i2pin, s, i2ps, toI2P, fromI2P);}
+                try {close(out, in, i2pout, i2pin, s, i2ps, null, null);}
                 catch (InterruptedException ie) { /* ignored */ }
             }
         }
@@ -592,7 +608,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      *  Reads from the input stream and writes to the output stream
      *  until the stream is closed or an error occurs.
      */
-    private class StreamForwarder extends I2PAppThread {
+    private class StreamForwarder implements Runnable {
 
         private final InputStream in;
         private final OutputStream out;
@@ -604,7 +620,6 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         public volatile boolean done;
 
         /**
-         *  Does not start itself. Caller must start()
          *  @param cb may be null, only used for toI2P == false
          */
         public StreamForwarder(InputStream in, OutputStream out, boolean toI2P, SuccessCallback cb) {
@@ -614,7 +629,6 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             _callback = cb;
             direction = (toI2P ? "[To I2P]" : "[From I2P]");
             _cache = ByteCache.getInstance(32, NETWORK_BUFFER_SIZE);
-            if (toI2P) {setName("StreamForwarder " + _runnerId + '.' + direction);}
         }
 
         @Override

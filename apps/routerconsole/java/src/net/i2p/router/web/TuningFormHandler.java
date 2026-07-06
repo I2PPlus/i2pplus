@@ -117,6 +117,9 @@ public class TuningFormHandler extends FormHandler {
     private String _tunnelGrowthFactorMin;
     private String _tunnelGrowthFactorMax;
     private String _tunnelGrowthFactorStep;
+    private String _threadsMin;
+    private String _threadsMax;
+    private String _threadsStep;
     private String _maxRTOMin;
     private String _maxRTOMax;
     private String _maxRTOStep;
@@ -200,6 +203,7 @@ public class TuningFormHandler extends FormHandler {
     private String _goodDeficitThrottleDefault;
     private String _perTunnelBweDivisorDefault;
     private String _tunnelGrowthFactorDefault;
+    private String _threadsDefault;
     private String _maxRTODefault;
     private String _maxResendDelayDefault;
     private String _maxRetransmissionsDefault;
@@ -320,6 +324,9 @@ public class TuningFormHandler extends FormHandler {
     public void setTunnelGrowthFactorMin(String v) { _tunnelGrowthFactorMin = v; }
     public void setTunnelGrowthFactorMax(String v) { _tunnelGrowthFactorMax = v; }
     public void setTunnelGrowthFactorStep(String v) { _tunnelGrowthFactorStep = v; }
+    public void setThreadsMin(String v) { _threadsMin = v; }
+    public void setThreadsMax(String v) { _threadsMax = v; }
+    public void setThreadsStep(String v) { _threadsStep = v; }
     public void setMaxRTOMin(String v) { _maxRTOMin = v; }
     public void setMaxRTOMax(String v) { _maxRTOMax = v; }
     public void setMaxRTOStep(String v) { _maxRTOStep = v; }
@@ -403,6 +410,7 @@ public class TuningFormHandler extends FormHandler {
     public void setGoodDeficitThrottleDefault(String v) { _goodDeficitThrottleDefault = v; }
     public void setPerTunnelBweDivisorDefault(String v) { _perTunnelBweDivisorDefault = v; }
     public void setTunnelGrowthFactorDefault(String v) { _tunnelGrowthFactorDefault = v; }
+    public void setThreadsDefault(String v) { _threadsDefault = v; }
     public void setMaxRTODefault(String v) { _maxRTODefault = v; }
     public void setMaxResendDelayDefault(String v) { _maxResendDelayDefault = v; }
     public void setMaxRetransmissionsDefault(String v) { _maxRetransmissionsDefault = v; }
@@ -457,6 +465,7 @@ public class TuningFormHandler extends FormHandler {
     public void setGoodDeficitThrottleOverride(String v) { _goodDeficitThrottleOverride = v; }
     public void setPerTunnelBweDivisorOverride(String v) { _perTunnelBweDivisorOverride = v; }
     public void setTunnelGrowthFactorOverride(String v) { _tunnelGrowthFactorOverride = v; }
+    public void setThreadsOverride(String v) { _threadsOverride = v; }
     public void setMaxRTOOverride(String v) { _maxRTOOverride = v; }
     public void setMaxResendDelayOverride(String v) { _maxResendDelayOverride = v; }
     public void setMaxRetransmissionsOverride(String v) { _maxRetransmissionsOverride = v; }
@@ -613,6 +622,9 @@ public class TuningFormHandler extends FormHandler {
         saveField(changes, "router.tunnelGrowthFactor", "Min", _tunnelGrowthFactorMin, 10);
         saveField(changes, "router.tunnelGrowthFactor", "Max", _tunnelGrowthFactorMax, 80);
         saveField(changes, "router.tunnelGrowthFactor", "Step", _tunnelGrowthFactorStep, 5);
+        saveField(changes, "i2ptunnel.serverHandler.threads", "Min", _threadsMin, 2);
+        saveField(changes, "i2ptunnel.serverHandler.threads", "Max", _threadsMax, 128);
+        saveField(changes, "i2ptunnel.serverHandler.threads", "Step", _threadsStep, 1);
 
         // Streaming congestion
         saveField(changes, "i2p.streaming.maxRTO", "Min", _maxRTOMin, 3000);
@@ -706,6 +718,7 @@ public class TuningFormHandler extends FormHandler {
         saveField(changes, "i2p.tunnel.goodDeficitThrottle", "Default", _goodDeficitThrottleDefault, 30000);
         saveField(changes, "router.tunnel.perTunnelBweDivisor", "Default", _perTunnelBweDivisorDefault, 100);
         saveField(changes, "router.tunnelGrowthFactor", "Default", _tunnelGrowthFactorDefault, 30);
+        saveField(changes, "i2ptunnel.serverHandler.threads", "Default", _threadsDefault, 24);
         saveField(changes, "i2p.streaming.maxRTO", "Default", _maxRTODefault, 30000);
         saveField(changes, "i2p.streaming.maxResendDelay", "Default", _maxResendDelayDefault, 15000);
         saveField(changes, "i2p.streaming.maxRetransmissions", "Default", _maxRetransmissionsDefault, 64);
@@ -762,6 +775,7 @@ public class TuningFormHandler extends FormHandler {
             applyOverride(tuner, "i2p.tunnel.goodDeficitThrottle", _goodDeficitThrottleOverride);
             applyOverride(tuner, "router.tunnel.perTunnelBweDivisor", _perTunnelBweDivisorOverride);
             applyOverride(tuner, "router.tunnelGrowthFactor", _tunnelGrowthFactorOverride);
+            applyOverride(tuner, "i2ptunnel.serverHandler.threads", _threadsOverride);
             applyOverride(tuner, "i2p.streaming.maxRTO", _maxRTOOverride);
             applyOverride(tuner, "i2p.streaming.maxResendDelay", _maxResendDelayOverride);
             applyOverride(tuner, "i2p.streaming.maxRetransmissions", _maxRetransmissionsOverride);
@@ -834,6 +848,7 @@ public class TuningFormHandler extends FormHandler {
             "router.peerOutboundQueueSize", "router.transitThrottleFactor", "router.throttleRejectExponent",
             "router.maxParticipatingTunnels", "router.buildHandlerMaxQueue",
             "i2p.tunnel.goodDeficitThrottle", "router.tunnel.perTunnelBweDivisor", "router.tunnelGrowthFactor",
+            "i2ptunnel.serverHandler.threads",
             "i2p.streaming.maxSlowStartWindow", "i2p.streaming.maxRTO", "i2p.streaming.maxResendDelay",
             "i2p.streaming.maxRetransmissions", "i2p.streaming.minResendDelay",
             "i2p.streaming.congestionAvoidanceGrowthRateFactor", "i2p.streaming.slowStartGrowthRateFactor",
@@ -924,6 +939,7 @@ public class TuningFormHandler extends FormHandler {
     private String _goodDeficitThrottleOverride;
     private String _perTunnelBweDivisorOverride;
     private String _tunnelGrowthFactorOverride;
+    private String _threadsOverride;
     private String _maxRTOOverride;
     private String _maxResendDelayOverride;
     private String _maxRetransmissionsOverride;

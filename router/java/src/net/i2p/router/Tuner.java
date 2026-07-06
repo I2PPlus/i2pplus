@@ -326,6 +326,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new TestJobMaxQueuedParam());
         _params.add(new TestJobMinDelayParam());
         _params.add(new TunnelGrowthFactorParam());
+        _params.add(new I2PTunnelServerHandlerThreadsParam());
 
         // Streaming
         _params.add(new CongestionAvoidanceGrowthParam());
@@ -1101,6 +1102,50 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (_connectionCls == null) return;
             try {
                 _connectionCls.getMethod(methodName, int.class).invoke(null, value);
+            } catch (Exception e) {
+                // ignore
+            }
+        }
+    }
+
+    /**
+     * Reflection helper for accessing TunnelControllerGroup across module boundaries.
+     * i2ptunnel is not compiled into the router module, so we reflect.
+     *
+     * @since 0.9.70+
+     */
+    private static class I2PTunnelReflector {
+        private static final String TCG = "net.i2p.i2ptunnel.TunnelControllerGroup";
+        private static volatile Class<?> _cls;
+        private static volatile boolean _resolved;
+
+        private static Class<?> getCLS() {
+            if (!_resolved) {
+                try {
+                    _cls = Class.forName(TCG);
+                } catch (ClassNotFoundException e) {
+                    // i2ptunnel not loaded
+                }
+                _resolved = true;
+            }
+            return _cls;
+        }
+
+        static int invokeGetInt(String methodName) {
+            Class<?> c = getCLS();
+            if (c == null) return -1;
+            try {
+                return (Integer) c.getMethod(methodName).invoke(null);
+            } catch (Exception e) {
+                return -1;
+            }
+        }
+
+        static void invokeSetInt(String methodName, int value) {
+            Class<?> c = getCLS();
+            if (c == null) return;
+            try {
+                c.getMethod(methodName, int.class).invoke(null, value);
             } catch (Exception e) {
                 // ignore
             }
@@ -6099,6 +6144,56 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 int minDelay = _context.getProperty("i2p.tunnel.testJob.minTestDelay", 30000);
                 return Math.max(Math.max(_min, minDelay), current - _step);
             }
+
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the I2PTunnel server handler thread pool size.
+     * Primary signal: serverHandler.queueDepth (tasks waiting for a handler thread).
+     * Cross-refs: jobQueue.jobLag (CPU pressure).
+     *
+     * @since 0.9.70+
+     */
+    private class I2PTunnelServerHandlerThreadsParam extends BaseParam {
+
+        I2PTunnelServerHandlerThreadsParam() {
+            super("i2ptunnel.serverHandler.threads", "Server handler threads (higher = more concurrent)",
+                  SUB_TUNNEL,
+                  2, 128, 1, "i2ptunnel.serverHandler.queueDepth", _context);
+        }
+
+        protected void applyValue(int value) {
+            I2PTunnelReflector.invokeSetInt("setServerHandlerThreads", value);
+        }
+
+        protected int getRuntimeValue() {
+            return I2PTunnelReflector.invokeGetInt("getServerHandlerThreads");
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = i2ptunnel.serverHandler.queueDepth (60s rolling avg)
+            // Cross-refs: jobQueue.jobLag (CPU pressure)
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+
+            // Queue backlog + no CPU pressure — grow pool
+            if (!cpuPressure && observed > 100)
+                return Math.min(_max, current + 1);
+
+            // Idle pool with minimal queue — shrink
+            if (observed < 5 && current > _min)
+                return Math.max(_min, current - 1);
 
             return current;
         }

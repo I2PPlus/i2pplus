@@ -149,10 +149,11 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
                 modifiedRegistration = buf.toString();
             }
             Socket s = getSocket(socket.getPeerDestination().calculateHash(), socket.getLocalPort());
-            Thread t = new I2PTunnelRunner(s, socket, slock, null, DataHelper.getUTF8(modifiedRegistration),
+            I2PTunnelRunner runner = new I2PTunnelRunner(s, socket, slock, null, DataHelper.getUTF8(modifiedRegistration),
                                            null, (I2PTunnelRunner.FailCallback) null);
             // run in the unlimited client pool
-            _clientExecutor.execute(t);
+            runner.setExecutor(_clientExecutor);
+            _clientExecutor.execute(runner);
         } catch (RegistrationException ex) {
             try {
                 // Send a response so the user doesn't just see a disconnect
