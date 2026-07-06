@@ -82,6 +82,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("i2p.tunnel.build.requestTimeout", "Tunnel Build Request Timeout");
         DISPLAY_NAMES.put("i2p.tunnel.build.firstHopTimeout", "Tunnel Build First Hop Timeout");
         DISPLAY_NAMES.put("tunnel.build.maxConcurrent", "Max Concurrent Tunnel Builds");
+        DISPLAY_NAMES.put("i2p.tunnel.build.maxLookupLimit", "Max Concurrent RI Lookups");
         DISPLAY_NAMES.put("tunnel.testJob.maxQueued", "Max Concurrent Test Jobs");
         DISPLAY_NAMES.put("tunnel.testJob.minTestDelay", "Min Delay Between Tests");
         DISPLAY_NAMES.put("tunnel.testJob.maxTestDelay", "Max Delay Between Tests");
@@ -160,6 +161,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2p.tunnel.build.requestTimeout", "Build reply timeout in ms.");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.build.firstHopTimeout", "First-hop build forward timeout in ms.");
         PARAM_DESCRIPTIONS.put("tunnel.build.maxConcurrent", "Max simultaneous tunnel builds.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.build.maxLookupLimit", "Max concurrent netdb RI lookups for builds.");
         PARAM_DESCRIPTIONS.put("tunnel.testJob.maxQueued", "Max concurrent test jobs at once.");
         PARAM_DESCRIPTIONS.put("tunnel.testJob.minTestDelay", "Minimum delay between tests per tunnel in ms.");
         PARAM_DESCRIPTIONS.put("tunnel.testJob.maxTestDelay", "Maximum delay between tests per tunnel in ms.");
@@ -234,7 +236,7 @@ public class TuningHelper extends HelperBase {
             list.add(s);
         }
         // Pre-compute display names for sorting
-        java.util.Map<String, String> dn = new java.util.HashMap<String, String>();
+        Map<String, String> dn = new HashMap<String, String>();
         for (ParamSnapshot s : snaps) {
             String display = DISPLAY_NAMES.get(s.name);
             dn.put(s.name, display != null ? display : s.name);

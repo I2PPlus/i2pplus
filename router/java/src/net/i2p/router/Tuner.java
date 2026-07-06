@@ -312,6 +312,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         _params.add(new BuildRequestTimeoutParam());
         _params.add(new IbMsgsPerPumpParam());
         _params.add(new MaxConcurrentBuildsParam());
+        _params.add(new LookupLimitParam());
         _params.add(new MaxParticipatingTunnelsParam());
         _params.add(new ObMsgsPerPumpParam());
         _params.add(new PerTunnelBweDivisorParam());
@@ -2612,7 +2613,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
             int minThreshold = getRuntimeValue(); // fallback
             try {
                 // Read the current min threshold from the instance
-                java.util.List<SyntheticREDQueue> instances = SyntheticREDQueue.getInstances();
+                List<SyntheticREDQueue> instances = SyntheticREDQueue.getInstances();
                 if (!instances.isEmpty()) {
                     minThreshold = instances.get(0).getMinThreshold();
                 }
@@ -5107,6 +5108,67 @@ public class Tuner implements SimpleTimer.TimedEvent {
             if (!Double.isNaN(concurrentBuilds) && concurrentBuilds < current * 0.3
                 && successHigh && !buildsBackedUp && !buildsExpiring)
                 return Math.max(_min, current - _step);
+
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the maximum concurrent next-hop RouterInfo lookups.
+     *
+     * <p>Primary signal: {@code tunnel.dropLookupThrottle} (dropped builds from lookup limit).
+     * Cross-refs: {@code tunnel.pendingLookupQueue} (pending lookup queue depth),
+     *             {@code tunnel.buildClientExpire} (timed-out builds).
+     *
+     * @since 0.9.70+
+     */
+    private class LookupLimitParam extends BaseParam {
+
+        LookupLimitParam() {
+            super("i2p.tunnel.build.maxLookupLimit", "Max concurrent RI lookups",
+                  SUB_TUNNEL,
+                  10, 64, 2, "tunnel.dropLookupThrottle", _context);
+        }
+
+        protected void applyValue(int value) {
+            _context.router().saveConfig("i2p.tunnel.build.maxLookupLimit", Integer.toString(value));
+        }
+
+        protected int getRuntimeValue() {
+            return _context.getProperty("i2p.tunnel.build.maxLookupLimit", 32);
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double pendingQueue = getAdditionalStat(_context, "tunnel.pendingLookupQueue");
+            double buildExpires = getAdditionalStat(_context, "tunnel.buildClientExpire");
+
+            boolean lookupsDropped = !Double.isNaN(observed) && observed > 5;
+            boolean queueBackedUp = !Double.isNaN(pendingQueue) && pendingQueue > 10;
+            boolean buildsFailing = !Double.isNaN(buildExpires) && buildExpires > 20;
+
+            // Lookups dropping + queue backed up = increase aggressively
+            if (lookupsDropped && queueBackedUp)
+                return Math.min(_max, current + _step * 2);
+
+            // Builds failing from lookups = increase
+            if (lookupsDropped && buildsFailing)
+                return Math.min(_max, current + _step);
+
+            // No drops + low usage = decrease cautiously
+            if (!lookupsDropped && !queueBackedUp) {
+                double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
+                if (!Double.isNaN(concurrentBuilds) && concurrentBuilds < 5)
+                    return Math.max(_min, current - _step);
+            }
 
             return current;
         }
