@@ -2756,11 +2756,53 @@
   <target name="updaterWithJettyRepack" depends="timestamp.started, prepjupdate, repack200, zipit, timestamp.stopped"/>
   <target name="updaterWithLicenses" depends="timestamp.started, prepupdate, preplicenses, zipit, timestamp.stopped"/>
   <target name="check-updater">
+    <uptodate property="updater.sources.clean" targetfile="dist/i2pupdate.zip">
+      <srcfiles dir="core/java/src" includes="**/*.java"/>
+      <srcfiles dir="router/java/src" includes="**/*.java"/>
+      <srcfiles dir="apps/addressbook/java/src" includes="**/*.java"/>
+      <srcfiles dir="apps/i2psnark/java/src" includes="**/*.java"/>
+      <srcfiles dir="apps/i2ptunnel/java/src" includes="**/*.java"/>
+      <srcfiles dir="apps/ministreaming/java/src" includes="**/*.java"/>
+      <srcfiles dir="apps/routerconsole/java/src" includes="**/*.java"/>
+      <srcfiles dir="apps/sam/java/src" includes="**/*.java"/>
+      <srcfiles dir="apps/streaming/java/src" includes="**/*.java"/>
+      <srcfiles dir="apps/susimail/src" includes="**/*.java"/>
+      <srcfiles dir="apps/susidns/src" includes="**/*.java"/>
+      <srcfiles dir="apps/desktopgui/src" includes="**/*.java"/>
+      <srcfiles dir="apps/jetty/java/src" includes="**/*.java"/>
+    </uptodate>
+    <if>
+      <not><isset property="updater.sources.clean"/></not>
+      <then>
+        <delete file="dist/i2pupdate.zip" quiet="true"/>
+      </then>
+    </if>
     <uptodate property="updater.uptodate" targetfile="dist/i2pupdate.zip">
       <srcfiles dir="${build.root}build" includes="*.jar *.war" excludes="jbigi.jar tools.jar utility.jar"/>
     </uptodate>
   </target>
   <target name="check-updater200">
+    <uptodate property="updater200.sources.clean" targetfile="dist/i2pupdate200.zip">
+      <srcfiles dir="core/java/src" includes="**/*.java"/>
+      <srcfiles dir="router/java/src" includes="**/*.java"/>
+      <srcfiles dir="apps/addressbook/java/src" includes="**/*.java"/>
+      <srcfiles dir="apps/i2psnark/java/src" includes="**/*.java"/>
+      <srcfiles dir="apps/i2ptunnel/java/src" includes="**/*.java"/>
+      <srcfiles dir="apps/ministreaming/java/src" includes="**/*.java"/>
+      <srcfiles dir="apps/routerconsole/java/src" includes="**/*.java"/>
+      <srcfiles dir="apps/sam/java/src" includes="**/*.java"/>
+      <srcfiles dir="apps/streaming/java/src" includes="**/*.java"/>
+      <srcfiles dir="apps/susimail/src" includes="**/*.java"/>
+      <srcfiles dir="apps/susidns/src" includes="**/*.java"/>
+      <srcfiles dir="apps/desktopgui/src" includes="**/*.java"/>
+      <srcfiles dir="apps/jetty/java/src" includes="**/*.java"/>
+    </uptodate>
+    <if>
+      <not><isset property="updater200.sources.clean"/></not>
+      <then>
+        <delete file="dist/i2pupdate200.zip" quiet="true"/>
+      </then>
+    </if>
     <uptodate property="updater200.uptodate" targetfile="dist/i2pupdate200.zip">
       <srcfiles dir="${build.root}build" includes="*.jar *.war" excludes="jbigi.jar tools.jar utility.jar"/>
     </uptodate>
