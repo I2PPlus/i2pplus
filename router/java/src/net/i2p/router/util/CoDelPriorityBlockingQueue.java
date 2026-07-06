@@ -1,6 +1,8 @@
 package net.i2p.router.util;
 
+import java.lang.ref.WeakReference;
 import java.util.Collection;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
@@ -73,28 +75,39 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     private volatile long _interval;
     private final String STAT_DROP;
 
-    /** Active instances for dynamic tuning */
-    private static final java.util.concurrent.CopyOnWriteArrayList<CoDelPriorityBlockingQueue> INSTANCES = new java.util.concurrent.CopyOnWriteArrayList<CoDelPriorityBlockingQueue>();
+    /** Active instances for dynamic tuning — weak refs prevent leak when tunnels expire */
+    private static final CopyOnWriteArrayList<WeakReference<CoDelPriorityBlockingQueue>> INSTANCES = new CopyOnWriteArrayList<WeakReference<CoDelPriorityBlockingQueue>>();
 
     /**
-     * Update target on all active CoDelPriorityBlockingQueue instances.
+     * Remove this instance from the tuning list.
+     * Called when the owning tunnel/queue is no longer active.
      *
      * @since 0.9.70+
      */
-    public static void updateAllTargets(long target) {
-        for (CoDelPriorityBlockingQueue q : INSTANCES) {
-            q._target = target;
-        }
+    public void dispose() {
+        INSTANCES.removeIf(ref -> ref.get() == this || ref.get() == null);
     }
 
     /**
-     * Update interval on all active CoDelPriorityBlockingQueue instances.
+     * Remove cleared (GC'd) weak references from the list.
      *
      * @since 0.9.70+
      */
+    public static void expungeStaleInstances() {
+        INSTANCES.removeIf(ref -> ref.get() == null);
+    }
+
+    public static void updateAllTargets(long target) {
+        for (WeakReference<CoDelPriorityBlockingQueue> ref : INSTANCES) {
+            CoDelPriorityBlockingQueue q = ref.get();
+            if (q != null) q._target = target;
+        }
+    }
+
     public static void updateAllIntervals(long interval) {
-        for (CoDelPriorityBlockingQueue q : INSTANCES) {
-            q._interval = interval;
+        for (WeakReference<CoDelPriorityBlockingQueue> ref : INSTANCES) {
+            CoDelPriorityBlockingQueue q = ref.get();
+            if (q != null) q._interval = interval;
         }
     }
     private final String STAT_DELAY;
@@ -124,14 +137,14 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         }
         ctx.statManager().createRequiredRateStat(STAT_DELAY, "Average queue delay (ms)", "Router [CoDel]", CODEL_RATES);
         _id = __id.incrementAndGet();
-        INSTANCES.add(this);
+        INSTANCES.add(new WeakReference<CoDelPriorityBlockingQueue>(this));
     }
 
     /**
- * Returns the current CoDel target delay in ms.
- *
- * @since 0.9.70+
- */
+     * Returns the current CoDel target delay in ms.
+     *
+     * @since 0.9.70+
+     */
     public long getTarget() { return _target; }
 
     /**

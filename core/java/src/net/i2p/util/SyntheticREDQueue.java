@@ -3,7 +3,11 @@ package net.i2p.util;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * A "synthetic" queue that does not store data but estimates the average queue size
@@ -43,8 +47,27 @@ public class SyntheticREDQueue implements BandwidthEstimator {
     private static final int DEFAULT_LOW_THRESHOLD_DIV = 4;
     private static final int DEFAULT_HIGH_THRESHOLD_DIV = 2;
 
-    /** Active instances for dynamic tuning */
-    private static final java.util.concurrent.CopyOnWriteArrayList<SyntheticREDQueue> INSTANCES = new java.util.concurrent.CopyOnWriteArrayList<SyntheticREDQueue>();
+    /** Active instances for dynamic tuning — weak refs prevent leak when tunnels expire */
+    private static final CopyOnWriteArrayList<WeakReference<SyntheticREDQueue>> INSTANCES = new CopyOnWriteArrayList<WeakReference<SyntheticREDQueue>>();
+
+    /**
+     * Remove this instance from the tuning list.
+     * Called when the owning tunnel/queue is no longer active.
+     *
+     * @since 0.9.70+
+     */
+    public void dispose() {
+        INSTANCES.removeIf(ref -> ref.get() == this || ref.get() == null);
+    }
+
+    /**
+     * Remove cleared (GC'd) weak references from the list.
+     *
+     * @since 0.9.70+
+     */
+    public static void expungeStaleInstances() {
+        INSTANCES.removeIf(ref -> ref.get() == null);
+    }
 
     /**
      * Update max drop probability on all active instances.
@@ -53,8 +76,9 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      */
     public static void updateAllMaxDropProbability(float probability) {
         _maxDropProbability = probability;
-        for (SyntheticREDQueue q : INSTANCES) {
-            q._maxDropProbability = probability;
+        for (WeakReference<SyntheticREDQueue> ref : INSTANCES) {
+            SyntheticREDQueue q = ref.get();
+            if (q != null) q._maxDropProbability = probability;
         }
     }
 
@@ -64,8 +88,9 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * @since 0.9.70+
      */
     public static void updateAllMinThresholds(int threshold) {
-        for (SyntheticREDQueue q : INSTANCES) {
-            if (threshold < q._maxThresholdBytes) {
+        for (WeakReference<SyntheticREDQueue> ref : INSTANCES) {
+            SyntheticREDQueue q = ref.get();
+            if (q != null && threshold < q._maxThresholdBytes) {
                 q._minThresholdBytes = threshold;
             }
         }
@@ -77,8 +102,9 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * @since 0.9.70+
      */
     public static void updateAllMaxThresholds(int threshold) {
-        for (SyntheticREDQueue q : INSTANCES) {
-            if (threshold > q._minThresholdBytes) {
+        for (WeakReference<SyntheticREDQueue> ref : INSTANCES) {
+            SyntheticREDQueue q = ref.get();
+            if (q != null && threshold > q._minThresholdBytes) {
                 q._maxThresholdBytes = threshold;
             }
         }
@@ -99,8 +125,9 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * @since 0.9.70+
      */
     public static int getCurrentMinThreshold() {
-        for (SyntheticREDQueue q : INSTANCES) {
-            return q._minThresholdBytes;
+        for (WeakReference<SyntheticREDQueue> ref : INSTANCES) {
+            SyntheticREDQueue q = ref.get();
+            if (q != null) return q._minThresholdBytes;
         }
         return -1;
     }
@@ -111,8 +138,9 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * @since 0.9.70+
      */
     public static int getCurrentMaxThreshold() {
-        for (SyntheticREDQueue q : INSTANCES) {
-            return q._maxThresholdBytes;
+        for (WeakReference<SyntheticREDQueue> ref : INSTANCES) {
+            SyntheticREDQueue q = ref.get();
+            if (q != null) return q._maxThresholdBytes;
         }
         return -1;
     }
@@ -122,8 +150,13 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      *
      * @since 0.9.70+
      */
-    public static java.util.List<SyntheticREDQueue> getInstances() {
-        return new java.util.ArrayList<SyntheticREDQueue>(INSTANCES);
+    public static List<SyntheticREDQueue> getInstances() {
+        List<SyntheticREDQueue> result = new ArrayList<SyntheticREDQueue>();
+        for (WeakReference<SyntheticREDQueue> ref : INSTANCES) {
+            SyntheticREDQueue q = ref.get();
+            if (q != null) result.add(q);
+        }
+        return result;
     }
 
     private final I2PAppContext _context;
@@ -185,7 +218,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
         _bandwidthBytesPerMs = bwBps / 1000f;
 
         _lastQueueUpdateTime = _lastAckTime;
-        INSTANCES.add(this);
+        INSTANCES.add(new WeakReference<SyntheticREDQueue>(this));
 
         if (_log.shouldDebug()) {
             _log.debug("Configured bandwidth: " + bwBps + "B/s; MinThreshold: " + minThB + "B; MaxThreshold: " + maxThB + "B");

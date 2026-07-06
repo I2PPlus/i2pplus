@@ -1,6 +1,8 @@
 package net.i2p.router.util;
 
+import java.lang.ref.WeakReference;
 import java.util.Collection;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
@@ -58,8 +60,27 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
 
     private static final long[] CODEL_RATES = RateConstants.SHORT_TERM_RATES;
 
-    /** Active instances for dynamic tuning */
-    private static final java.util.concurrent.CopyOnWriteArrayList<CoDelBlockingQueue> INSTANCES = new java.util.concurrent.CopyOnWriteArrayList<CoDelBlockingQueue>();
+    /** Active instances for dynamic tuning — weak refs prevent leak when tunnels expire */
+    private static final CopyOnWriteArrayList<WeakReference<CoDelBlockingQueue>> INSTANCES = new CopyOnWriteArrayList<WeakReference<CoDelBlockingQueue>>();
+
+    /**
+     * Remove this instance from the tuning list.
+     * Called when the owning tunnel/queue is no longer active.
+     *
+     * @since 0.9.70+
+     */
+    public void dispose() {
+        INSTANCES.removeIf(ref -> ref.get() == this || ref.get() == null);
+    }
+
+    /**
+     * Remove cleared (GC'd) weak references from the list.
+     *
+     * @since 0.9.70+
+     */
+    public static void expungeStaleInstances() {
+        INSTANCES.removeIf(ref -> ref.get() == null);
+    }
 
     /**
      * Update target on all active CoDelBlockingQueue instances.
@@ -67,8 +88,9 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      * @since 0.9.70+
      */
     public static void updateAllTargets(long target) {
-        for (CoDelBlockingQueue q : INSTANCES) {
-            q._target = target;
+        for (WeakReference<CoDelBlockingQueue> ref : INSTANCES) {
+            CoDelBlockingQueue q = ref.get();
+            if (q != null) q._target = target;
         }
     }
 
@@ -78,8 +100,9 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      * @since 0.9.70+
      */
     public static void updateAllIntervals(long interval) {
-        for (CoDelBlockingQueue q : INSTANCES) {
-            q._interval = interval;
+        for (WeakReference<CoDelBlockingQueue> ref : INSTANCES) {
+            CoDelBlockingQueue q = ref.get();
+            if (q != null) q._interval = interval;
         }
     }
 
@@ -140,14 +163,14 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
         ctx.statManager().createRateStat(STAT_DROP, "Queue delay of dropped items (ms)", "Router [CoDel]", CODEL_RATES);
         ctx.statManager().createRateStat(STAT_DELAY, "Average queue delay (ms)", "Router [CoDel]", CODEL_RATES);
         _id = __id.incrementAndGet();
-        INSTANCES.add(this);
+        INSTANCES.add(new WeakReference<CoDelBlockingQueue>(this));
     }
 
     /**
- * Returns the current CoDel target delay in ms.
- *
- * @since 0.9.70+
- */
+     * Returns the current CoDel target delay in ms.
+     *
+     * @since 0.9.70+
+     */
     public long getTarget() { return _target; }
 
     /**
