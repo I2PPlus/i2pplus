@@ -557,21 +557,23 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 // established/connecting tier entirely — accept whatever passed the
                 // tier filters above (transport address, acceptance ratio, etc.).
                 if (!matches.isEmpty()) {
-                    final int ESTABLISHED_PREF_ATTEMPTS = 1;
-                    final int CONNECTING_PREF_ATTEMPTS = 2;
+                    // First-hop quality: aggressively prefer connected/established
+                    // peers.  33/min first-hop failures mean we're selecting peers
+                    // that look fast on paper but can't actually receive the build.
+                    // More attempts = higher chance of finding a connected peer.
+                    final int ESTABLISHED_PREF_ATTEMPTS = 3;
+                    final int CONNECTING_PREF_ATTEMPTS = 5;
                     int qualityAttempts = 0;
                     int tier = 0;
                     boolean inStartup = ctx.router() != null && ctx.router().getUptime() < 15*60*1000;
                     if (inStartup)
                         tier = 2;
-                    // When few candidates remain, skip established preference to avoid
-                    // exhausting the pool. Quality filtering with only 2-3 candidates
-                    // nearly always rejects all of them (cooldowns, stale, first-hop
-                    // fails), leaving matches empty and triggering "Not enough peers".
-                    if (matches.size() < 5)
+                    // When very few candidates remain, skip established preference
+                    // to avoid exhausting the pool entirely.
+                    if (matches.size() < 3)
                         tier = 2;
                     Set<Hash> localExclude = new HashSet<>();
-                    while (qualityAttempts < 4 && !matches.isEmpty()) {
+                    while (qualityAttempts < 8 && !matches.isEmpty()) {
                         qualityAttempts++;
                         if (!inStartup) {
                             if (qualityAttempts > CONNECTING_PREF_ATTEMPTS) {

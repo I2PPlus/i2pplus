@@ -374,8 +374,12 @@ public class BuildExecutor implements Runnable {
         final long now = _context.clock().now();
 
         final int maxKBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond();
-        int allowed = maxKBps / 2;
-        if (allowed < 12) {allowed = 12;}
+        // Conservative build concurrency: builds are bandwidth-intensive and
+        // each build sends through 2-3 hops.  Old formula (maxKBps / 2) allowed
+        // 41 concurrent builds for 83KBps — overwhelming peers and causing 33%
+        // build expires.  New formula limits to ~10 concurrent builds, forcing
+        // higher quality per build instead of flooding the network.
+        int allowed = Math.max(maxKBps / 8, 6);
 
         final RateStat rs = _context.statManager().getRate("tunnel.buildRequestTime");
         double avg = -1;
@@ -391,10 +395,14 @@ public class BuildExecutor implements Runnable {
         int maxConcurrentBuilds = getMaxConcurrentBuilds();
 
         if (avg > 0) {
-            int throttleFactor = isSlow ? 150 : 250;
+            int throttleFactor = isSlow ? 100 : 160;
             int throughput = (int)(throttleFactor * maxConcurrentBuilds / avg);
+            // Don't let throughput boost override the conservative base by more than 2x
+            if (throughput > allowed * 2) {
+                throughput = allowed * 2;
+            }
             if (throughput > allowed) {
-                allowed = throughput; // Boost when builds are fast
+                allowed = throughput; // Modest boost when builds are fast
             } else if (throughput < allowed) {
                 allowed = throughput; // Throttle when builds are slow
             }
@@ -570,7 +578,9 @@ public class BuildExecutor implements Runnable {
                 int allowed = allowed(); // also expires timed out requests
                 allowed = buildZeroHopTunnels(wanted, allowed); // zero-hop tunnels build inline
                 // Cap per-iteration builds to prevent flooding the network
-                if (allowed > 4) allowed = 4;
+                // Reduced from 4 to 2: fewer concurrent builds = higher quality
+                // per build, less overwhelm for peers, fewer timeouts.
+                if (allowed > 2) allowed = 2;
 
                 // Transport congestion backpressure: when the send pipeline is
                 // backed up (>2s processing time), reduce builds so data messages

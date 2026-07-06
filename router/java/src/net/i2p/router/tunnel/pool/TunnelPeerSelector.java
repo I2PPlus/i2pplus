@@ -439,17 +439,17 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // Peers that have never been tested, heard from, or connected to
         // will waste tunnel builds and test cycles.  This is always active
         // for client pools (skipped for exploratory and during startup).
-        // The filter is gentle — it only requires ANY evidence of life —
-        // so it won't starve pools with 900+ fast/high-cap peers.
+        // Require evidence of life within 24 hours — a peer tested once
+        // years ago should not pass indefinitely.
         if (!isExploratory && !isInStartupGracePeriod(ctx)) {
             boolean hasSignal = false;
+            long now = ctx.clock().now();
             // Connected peers always pass
             if (ctx.commSystem().isEstablished(peerHash)) {
                 hasSignal = true;
             }
-            // Recently heard from or successfully sent to
+            // Recently heard from or successfully sent to (10-minute window)
             if (!hasSignal && profile != null) {
-                long now = ctx.clock().now();
                 if (profile.getLastHeardFrom() > 0 &&
                     now - profile.getLastHeardFrom() < 10 * 60 * 1000L) {
                     hasSignal = true;
@@ -459,10 +459,12 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                     hasSignal = true;
                 }
             }
-            // Has a successful tunnel test
-            if (!hasSignal && profile != null &&
-                profile.getTunnelHistory().getLastTestedSuccessfully() > 0) {
-                hasSignal = true;
+            // Has a recent successful tunnel test (dynamic window)
+            if (!hasSignal && profile != null) {
+                long lastTested = profile.getTunnelHistory().getLastTestedSuccessfully();
+                if (lastTested > 0 && now - lastTested < getActivityWindow(ctx)) {
+                    hasSignal = true;
+                }
             }
             if (!hasSignal) {
                 return "no-signal";
@@ -1260,7 +1262,12 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     *  Check if a peer is stale — no contact (heard from or heard about) in the last 4 hours.
+     *  Check if a peer is stale — no contact (heard from or heard about) within
+     *  the dynamic activity window.  Window adapts to network visibility:
+     *  - 500+ active peers → 1 hour (very selective)
+     *  - 200+ active peers → 2 hours
+     *  - 100+ active peers → 4 hours
+     *  - <100 active peers → 8 hours (fresh router, building up picture)
      *  Peers in the netDb often go offline silently; this avoids wasting first-hop
      *  selection and keepalive resources on peers that are likely dead.
      *  Skipped during the first 15 minutes of uptime (startup grace) to allow
@@ -1268,7 +1275,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *
      *  @param ctx the router context
      *  @param peer hash of the peer to check
-     *  @return true if the peer hasn't been heard from or about in the last 4 hours
+     *  @return true if the peer hasn't been heard from or about within the activity window
      */
     static boolean isStalePeer(RouterContext ctx, Hash peer) {
         if (ctx.router() != null && ctx.router().getUptime() < 15*60*1000L)
@@ -1277,8 +1284,25 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         if (profile == null)
             return true;
         long now = ctx.clock().now();
-        long cutoff = now - 4*60*60*1000L;
+        long cutoff = now - getActivityWindow(ctx);
         return profile.getLastHeardFrom() < cutoff && profile.getLastHeardAbout() < cutoff;
+    }
+
+    /**
+     *  Compute the activity window for peer selection based on current network
+     *  visibility.  When we hear from many peers, we can be selective (short window).
+     *  When the router is fresh or the network is sparse, use a wider window to
+     *  avoid starving peer pools.
+     *
+     *  @return activity window in milliseconds
+     *  @since 0.9.70+
+     */
+    public static long getActivityWindow(RouterContext ctx) {
+        int active = ctx.commSystem().countActivePeers();
+        if (active >= 500) return 1 * 60 * 60 * 1000L;   // 1 hour
+        if (active >= 200) return 2 * 60 * 60 * 1000L;   // 2 hours
+        if (active >= 100) return 4 * 60 * 60 * 1000L;   // 4 hours
+        return 8 * 60 * 60 * 1000L;                       // 8 hours
     }
 
     /**
