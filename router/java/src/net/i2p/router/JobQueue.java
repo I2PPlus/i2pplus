@@ -70,7 +70,7 @@ public class JobQueue {
     static {
         int cores = SystemVersion.getCores();
         int maxRunners = 32;
-        RUNNERS = SystemVersion.isSlow() ? 16 : Math.max(cores * 2, 24);
+        RUNNERS = SystemVersion.isSlow() ? 8 : Math.max(cores * 2, 12);
         if (RUNNERS > maxRunners) {RUNNERS = maxRunners;}
     }
 
@@ -442,7 +442,14 @@ public class JobQueue {
      */
     public void allowParallelOperation() {
         _allowParallelOperation = true;
-        runQueue(_context.getProperty(PROP_MAX_RUNNERS, RUNNERS));
+        int requested = _context.getProperty(PROP_MAX_RUNNERS, RUNNERS);
+        // Cap to 2× cores to prevent context-switching death spirals
+        int capped = Math.min(requested, Math.max(SystemVersion.getCores() * 2, 16));
+        if (requested > capped && _log.shouldWarn()) {
+            _log.warn("Capping job runners from " + requested + " to " + capped +
+                      " (2× cores) to prevent CPU thrashing");
+        }
+        runQueue(capped);
     }
 
     /**
@@ -620,10 +627,13 @@ public class JobQueue {
      * @since 0.9.68+
      */
     public int getMaxRunnerCount() {
-        int hardLimit = _context.getProperty(PROP_MAX_RUNNERS, RUNNERS) * 2;
+        int configured = _context.getProperty(PROP_MAX_RUNNERS, RUNNERS);
+        int hardLimit = configured * 2;
+        // Cap to 2× cores
+        int cpuCap = Math.max(SystemVersion.getCores() * 2, 16);
+        hardLimit = Math.min(hardLimit, cpuCap);
         if (_scaler != null && _scaler.isAlive()) {
             int ramLimit = _scaler.getCurrentMaxRunners();
-            // Return the lower of the two - if RAM is constrained, show that
             return Math.min(hardLimit, ramLimit);
         }
         return hardLimit;

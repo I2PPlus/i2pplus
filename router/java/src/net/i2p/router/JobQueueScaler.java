@@ -67,18 +67,22 @@ class JobQueueScaler implements Runnable {
     private static final long RUNNER_MEMORY_ESTIMATE = 2 * MB; // ~2MB per thread (stack + overhead)
     private static final double MAX_MEMORY_PERCENTAGE = 0.10; // Use max 10% of heap for runners
 
-    // Configuration defaults - Optimized for SUB-MICROSECOND lag targets
+    // Configuration defaults
+    //
+    // Scale-up: add runners when lag is consistently high, not on every transient spike.
+    // Scale-down: remove idle runners when load drops, don't require impossible conditions.
+    // Max runners capped at 2× cores to prevent context-switching death spirals.
 
-    private static final long DEFAULT_SCALE_CHECK_INTERVAL = 1000; // 1 second (very responsive for sub-μs targets)
-    private static final long DEFAULT_SCALE_COOLDOWN = 5000; // 5 seconds (quick recovery)
-    private static final int DEFAULT_SCALE_UP_LAG_THRESHOLD = 1; // 1ms = 1000μs (scale up if job lag exceeds 1ms)
+    private static final long DEFAULT_SCALE_CHECK_INTERVAL = 2000; // 2 seconds (less frequent checks reduce overhead)
+    private static final long DEFAULT_SCALE_COOLDOWN = 10000; // 10 seconds (cooldown between scale events)
+    private static final int DEFAULT_SCALE_UP_LAG_THRESHOLD = 10; // 10ms (scale up only when lag is significant)
     private static final int DEFAULT_SCALE_UP_MESSAGE_DELAY_THRESHOLD = 200; // 200ms (scale up if message delay exceeds 200ms)
-    private static final int DEFAULT_SCALE_DOWN_LAG_THRESHOLD = 1; // 1ms (scale down when lag is low)
-    private static final double DEFAULT_SCALE_UP_JOBS_RATIO = 1.2; // 1.2x (very aggressive - any backlog triggers scale)
-    private static final int DEFAULT_SCALE_UP_STEP = 1; // Add 1 at a time (very conservative to avoid disruption)
-    private static final int DEFAULT_SCALE_DOWN_STEP = 1;
-    private static final int SUSTAINED_CHECKS_REQUIRED = 3; // 3 checks (need sustained evidence for sub-μs targets)
-    private static final int SUSTAINED_CHECKS_REQUIRED_DOWN = 5; // Require more sustained evidence to scale down
+    private static final int DEFAULT_SCALE_DOWN_LAG_THRESHOLD = 5; // 5ms (scale down when lag is moderate)
+    private static final double DEFAULT_SCALE_UP_JOBS_RATIO = 2.0; // 2x (require real backlog, not just 1 extra job)
+    private static final int DEFAULT_SCALE_UP_STEP = 1;
+    private static final int DEFAULT_SCALE_DOWN_STEP = 2; // Remove 2 at a time (shrink faster than we grow)
+    private static final int SUSTAINED_CHECKS_REQUIRED = 3; // 3 checks before scaling up
+    private static final int SUSTAINED_CHECKS_REQUIRED_DOWN = 2; // 2 checks before scaling down (respond faster to idle)
 
     // Property names
     private static final String PROP_DYNAMIC_SCALING = "router.dynamicJobScaling";
@@ -175,9 +179,13 @@ class JobQueueScaler implements Runnable {
         long freeMemory = maxMemory - usedMemory;
         int freeMemoryBasedMax = (int) ((freeMemory * 0.5) / RUNNER_MEMORY_ESTIMATE); // Only use 50% of free mem
 
+        // CPU-based cap: more than 2× cores causes context-switching death spirals
+        int cores = SystemVersion.getCores();
+        int cpuBasedMax = Math.max(cores * 2, 16);
+
         int effectiveMax = Math.min(ramBasedMax, freeMemoryBasedMax);
         int targetMax = configuredMax * 2;
-        int finalMax = Math.min(targetMax, effectiveMax);
+        int finalMax = Math.min(targetMax, Math.min(effectiveMax, cpuBasedMax));
 
         // Ensure at least minimum
         finalMax = Math.max(getMinRunnersDynamic(), finalMax);
@@ -515,12 +523,18 @@ class JobQueueScaler implements Runnable {
         if (!inCooldown && activeRunners > minRunners && _preScaleSnapshot == null) {
             int lagThreshold = getScaleDownLagThreshold();
 
-            // Check for sustained low load - require 0 ready jobs and very low lag
-            if (readyJobs == 0 && maxLag < lagThreshold && avgLag < lagThreshold) {
+            // Scale down when average lag is low and ready jobs are manageable.
+            // Don't require readyJobs == 0 — with 90+ timed jobs queued, that never happens.
+            // Instead: avg lag below threshold AND ready jobs < activeRunners (job-to-runner ratio < 1).
+            boolean lowLag = avgLag < lagThreshold;
+            boolean lowBacklog = readyJobs < activeRunners;
+
+            if (lowLag && lowBacklog) {
                 _consecutiveScaleDownChecks++;
-                // Require sustained evidence for scale-down
                 if (_consecutiveScaleDownChecks >= SUSTAINED_CHECKS_REQUIRED_DOWN) {
-                    int runnersToRemove = Math.min(DEFAULT_SCALE_DOWN_STEP, activeRunners - minRunners);
+                    // Remove up to half the excess above min, or DEFAULT_SCALE_DOWN_STEP, whichever is larger
+                    int excess = activeRunners - minRunners;
+                    int runnersToRemove = Math.min(Math.max(DEFAULT_SCALE_DOWN_STEP, excess / 2), excess);
                     if (runnersToRemove > 0) {
                         scaleDown(runnersToRemove, readyJobs, maxLag);
                     }
