@@ -27,6 +27,7 @@ import net.i2p.router.transport.ntcp.NTCPConnection;
 import net.i2p.router.transport.ntcp.Reader;
 import net.i2p.router.transport.ntcp.Writer;
 import net.i2p.router.transport.crypto.X25519KeyFactory;
+import net.i2p.util.SyntheticREDQueue;
 import net.i2p.router.client.ClientManagerFacadeImpl;
 import net.i2p.router.networkdb.kademlia.IterativeSearchJob;
 import net.i2p.router.peermanager.ProfileOrganizer;
@@ -150,10 +151,16 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private static final boolean IS_SLOW = SystemVersion.isSlow();
     private static final int MEM_FACTOR = Math.max(1, (int)(MAX_MEMORY / (256L * 1024 * 1024)));
     private static final int CORE_FACTOR = Math.max(1, CORES);
-    /** ML-KEM precalc min/max — each pair ~3.5KB, scale generously with cores */
-    private static final int MLKEM_FACTOR = Math.max(1, CORES * 2);
+    /** ML-KEM precalc min/max — each pair ~3.5KB, scale with cores and memory */
+    private static final int MLKEM_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
     private static final int MLKEM_PRECALC_MIN = Math.max(512, 4 * MLKEM_FACTOR);
     private static final int MLKEM_PRECALC_MAX = Math.max(2048, 96 * MLKEM_FACTOR);
+    /** X25519/EDH precalc — each pair ~64 bytes, scale with cores and memory */
+    private static final int XDH_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
+    private static final int XDH_PRECALC_MIN = Math.max(64, 8 * XDH_FACTOR);
+    private static final int XDH_PRECALC_MAX = Math.max(256, 128 * XDH_FACTOR);
+    private static final int EDH_PRECALC_MIN = Math.max(64, 16 * XDH_FACTOR);
+    private static final int EDH_PRECALC_MAX = Math.max(256, 256 * XDH_FACTOR);
 
     /**
      * Compute a system-scaled value: base * factor, bounded by min and max.
@@ -338,9 +345,12 @@ public class Tuner implements SimpleTimer.TimedEvent {
         _params.add(new InternalQueueSizeParam());
         _params.add(new WriterQueueSizeParam());
 
-        // Congestion — CoDel + Westwood
+        // Congestion — CoDel + Westwood + RED
         _params.add(new CodelIntervalParam());
         _params.add(new CodelTargetParam());
+        _params.add(new REDMaxDropProbParam());
+        _params.add(new REDMaxThresholdParam());
+        _params.add(new REDMinThresholdParam());
         _params.add(new WestwoodDecayFactorParam());
 
         // Crypto — precalc pools
@@ -2363,17 +2373,27 @@ public class Tuner implements SimpleTimer.TimedEvent {
             boolean hasDrops = !Double.isNaN(drops) && drops > 5;
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
 
-            // High delay + drops = bufferbloat, lower target for more aggressive dropping
-            if (observed > 5 && hasDrops)
+            // Delay approaching current target = tighten target for more aggressive dropping
+            if (observed > current * 0.6 && hasDrops)
                 return Math.max(_min, current - _step);
 
-            // High system load = lower target for more aggressive dropping
-            if (highLoad)
+            // Active drops without high delay = early congestion signal, tighten
+            if (hasDrops && observed > 2)
                 return Math.max(_min, current - _step);
 
-            // Low delay + no drops + system not loaded = raise target (less aggressive, things are fine)
-            if (observed < 2 && !hasDrops && !systemBusy && !highLoad)
-                return Math.min(_max, current + _step);
+            // High system load = lower target to keep queues short under pressure
+            if (highLoad && observed > 1)
+                return Math.max(_min, current - _step);
+
+            // Queue delay well under target (less than half) + no drops = healthy,
+            // drift back toward default gradually (not toward max)
+            int defaultVal = 5;
+            if (observed < current * 0.3 && !hasDrops && !highLoad) {
+                if (current > defaultVal)
+                    return Math.max(defaultVal, current - _step);
+                if (current < defaultVal)
+                    return Math.min(defaultVal, current + _step);
+            }
 
             return current;
         }
@@ -2423,17 +2443,22 @@ public class Tuner implements SimpleTimer.TimedEvent {
             boolean hasDrops = !Double.isNaN(drops) && drops > 5;
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
 
-            // High delay + drops = shorten interval for faster reaction
-            if (observed > 10 && hasDrops)
+            // Active congestion with drops = shorten interval for faster reaction
+            if (hasDrops && observed > 5)
                 return Math.max(_min, current - _step);
 
-            // High system load = shorten for more aggressive congestion response
-            if (highLoad)
+            // High system load + any delay = shorten interval
+            if (highLoad && observed > 2)
                 return Math.max(_min, current - _step);
 
-            // Low delay + no drops + system not loaded = lengthen interval (smoother)
-            if (observed < 5 && !hasDrops && !systemBusy && !highLoad)
-                return Math.min(_max, current + _step);
+            // Well under default + no drops = drift back toward default (not toward max)
+            int defaultVal = 50;
+            if (observed < 2 && !hasDrops && !highLoad) {
+                if (current > defaultVal)
+                    return Math.max(defaultVal, current - _step);
+                if (current < defaultVal)
+                    return Math.min(defaultVal, current + _step);
+            }
 
             return current;
         }
@@ -2498,6 +2523,172 @@ public class Tuner implements SimpleTimer.TimedEvent {
         }
     }
 
+    /**
+     * SyntheticREDQueue minimum queue threshold (bytes).
+     * Below this queue size, no packets are dropped.
+     * Increase when healthy to reduce unnecessary drops; decrease under heavy congestion.
+     */
+    private class REDMinThresholdParam extends BaseParam {
+
+        REDMinThresholdParam() {
+            super("RED_MIN_THRESHOLD",
+                  "RED min queue threshold",
+                   SUB_CONGESTION, 1024, 65536, 512,
+                   "bwLimiter.participatingBandwidthQueue", _context);
+        }
+
+        protected void applyValue(int value) {
+            SyntheticREDQueue.updateAllMinThresholds(value);
+        }
+
+        protected int getRuntimeValue() {
+            return SyntheticREDQueue.getCurrentMinThreshold();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = participating bandwidth queue (bytes) — growing = more transit load
+            double drops = getAdditionalStat(_context, "tunnel.participatingMessageDropped");
+            double overflow = getAdditionalStat(_context, "tunnel.dropGatewayOverflow");
+            double codelDelay = getAdditionalStat(_context, "codel.OBGW.delay");
+
+            boolean congested = (!Double.isNaN(drops) && drops > 10) ||
+                                (!Double.isNaN(overflow) && overflow > 10);
+            boolean hasCapacity = Double.isNaN(drops) || drops < 1;
+            boolean lowDelay = !Double.isNaN(codelDelay) && codelDelay < 1;
+
+            // Drops present + queue building: lower threshold (drop earlier to protect downstream)
+            if (congested && observed > 1000)
+                return Math.max(_min, current - _step);
+
+            // No drops, low CoDel delay, queue building slowly: raise threshold (allow bursts)
+            if (hasCapacity && lowDelay && observed < 500)
+                return Math.min(_max, current + _step);
+
+            return current;
+        }
+    }
+
+    /**
+     * SyntheticREDQueue maximum queue threshold (bytes).
+     * Above this, ALL packets are dropped (100% drop probability).
+     * Should scale with bandwidth and available memory.
+     */
+    private class REDMaxThresholdParam extends BaseParam {
+
+        REDMaxThresholdParam() {
+            super("RED_MAX_THRESHOLD",
+                  "RED max queue threshold",
+                   SUB_CONGESTION, 2048, 131072, 1024,
+                   "bwLimiter.participatingBandwidthQueue", _context);
+        }
+
+        protected void applyValue(int value) {
+            SyntheticREDQueue.updateAllMaxThresholds(value);
+        }
+
+        protected int getRuntimeValue() {
+            return SyntheticREDQueue.getCurrentMaxThreshold();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            int minThreshold = getRuntimeValue(); // fallback
+            try {
+                // Read the current min threshold from the instance
+                java.util.List<SyntheticREDQueue> instances = SyntheticREDQueue.getInstances();
+                if (!instances.isEmpty()) {
+                    minThreshold = instances.get(0).getMinThreshold();
+                }
+            } catch (Exception e) { /* use fallback */ }
+
+            double drops = getAdditionalStat(_context, "tunnel.participatingMessageDropped");
+            boolean hardDrops = !Double.isNaN(drops) && drops > 50;
+
+            // Hard drops occurring: raise max threshold (allow deeper queue before 100% drop)
+            if (hardDrops)
+                return Math.min(_max, current + _step);
+
+            // Queue healthy, no hard drops: lower max toward 2x min (tighter bound)
+            if (Double.isNaN(drops) || drops == 0) {
+                int target = Math.max(minThreshold * 2, _min);
+                if (current > target)
+                    return Math.max(target, current - _step);
+            }
+
+            return current;
+        }
+    }
+
+    /**
+     * SyntheticREDQueue maximum drop probability.
+     * Controls how aggressively RED drops when queue is between min and max thresholds.
+     * Higher = more aggressive drops under congestion; lower = gentler, buffer-heavy.
+     */
+    private class REDMaxDropProbParam extends BaseParam {
+
+        REDMaxDropProbParam() {
+            // Convert float probability to integer micro-units for BaseParam (long integer type)
+            // 0.00005f = 50 micro-units, min 10 (0.0001%), max 1000 (0.1%), step 10
+            super("RED_MAX_DROP_PROB",
+                  "RED max drop probability",
+                   SUB_CONGESTION, 10, 1000, 10,
+                   "tunnel.participatingMessageDropped", _context);
+        }
+
+        protected void applyValue(int value) {
+            float prob = value / 1_000_000.0f;
+            SyntheticREDQueue.updateAllMaxDropProbability(prob);
+        }
+
+        protected int getRuntimeValue() {
+            float prob = SyntheticREDQueue.getCurrentMaxDropProbability();
+            return Math.round(prob * 1_000_000);
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = tunnel.participatingMessageDropped rate
+            double overflow = getAdditionalStat(_context, "tunnel.dropGatewayOverflow");
+            double codelDelay = getAdditionalStat(_context, "codel.OBGW.delay");
+            boolean systemBusy = !Double.isNaN(overflow) && overflow > 10;
+
+            // Heavy drops + CoDel delay rising: increase drop probability (drop harder)
+            if (!Double.isNaN(observed) && observed > 20 && !Double.isNaN(codelDelay) && codelDelay > 3)
+                return Math.min(_max, current + _step);
+
+            // No drops, queue healthy: decrease probability (buffer more gently)
+            if ((Double.isNaN(observed) || observed == 0) && !systemBusy)
+                return Math.max(_min, current - _step);
+
+            return current;
+        }
+    }
+
     // =====================================================================
     // Buffer & Thread params
     // =====================================================================
@@ -2512,7 +2703,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
             super("crypto.x25519.precalcMin", "Min precomputed X25519 key pairs",
                   SUB_CRYPTO,
 
-                  8, 1024, 8, "crypto.XDHUsed", _context);
+                  XDH_PRECALC_MIN, XDH_PRECALC_MAX, 8, "crypto.XDHUsed", _context);
         }
 
         protected void applyValue(int value) {
@@ -2536,45 +2727,33 @@ public class Tuner implements SimpleTimer.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = crypto.XDHUsed (key usage events/sec)
-            // Cross-refs: jobLag (CPU pressure), crypto.XDHEmpty (empty pool events),
-            //             memory pressure, system load
+            // Cross-refs: crypto.XDHEmpty (empty pool events — the only trigger to grow),
+            //             jobLag (CPU pressure), memory pressure, system load
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double empties = getAdditionalStat(_context, "crypto.XDHEmpty");
             int sysLoad = SystemVersion.getSystemLoad();
             boolean highLoad = sysLoad > 80;
             double memPressure = getMemoryPressure();
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean demandHigh = observed > 10;
             boolean poolEmptying = !Double.isNaN(empties) && empties > 0;
 
-            // Severe memory pressure: shrink
+            // Severe memory pressure: shrink fast
             if (memPressure > 0.85)
                 return Math.max(_min, current - _step * 2);
 
-            // Moderate memory pressure: grow only if pool is emptying
-            if (memPressure > 0.7) {
-                if (poolEmptying && demandHigh)
-                    return Math.min(_max, current + _step);
-                return current;
-            }
-
-            // High usage + pool emptying = increase pool aggressively
-            if (demandHigh && poolEmptying && !highLoad) {
+            // Pool is emptying under load = grow to absorb demand
+            if (poolEmptying && !highLoad && memPressure < 0.7) {
                 int step = (memPressure < 0.5 && sysLoad < 40) ? _step * 2 : _step;
                 return Math.min(_max, current + step);
             }
 
-            // High usage but pool not emptying yet = preemptive growth
-            if (demandHigh && !highLoad && memPressure < 0.6)
-                return Math.min(_max, current + Math.max(1, _step / 2));
+            // Pool emptying under memory pressure = hold (can't grow, can't shrink)
+            if (poolEmptying)
+                return current;
 
-            // Low usage + no emptying + tight resources = shrink slowly
-            if (!demandHigh && !poolEmptying && (memPressure > 0.6 || highLoad))
+            // Not emptying + idle or loaded = shrink toward factory default
+            if (!poolEmptying && (highLoad || memPressure > 0.6 || systemBusy))
                 return Math.max(_min, current - 1);
-
-            // Low usage + headroom = maintain or grow slightly for future demand
-            if (!demandHigh && !highLoad && memPressure < 0.5)
-                return Math.min(_max, current + 1);
 
             return current;
         }
@@ -2582,7 +2761,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
 
     /**
      * EDH (Elligator2) key precalculation minimum pool size.
-     * Scales up when usage is high, scales down when idle.
+     * Scales up only when pool is emptying, scales down when idle.
      */
     private class EDHPreCalcMinParam extends BaseParam {
 
@@ -2590,7 +2769,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
             super("crypto.edh.precalcMin", "Min precomputed EDH key pairs",
                   SUB_CRYPTO,
 
-                  8, 1024, 8, "crypto.EDHUsed", _context);
+                  EDH_PRECALC_MIN, EDH_PRECALC_MAX, 8, "crypto.EDHUsed", _context);
         }
 
         protected void applyValue(int value) {
@@ -2615,37 +2794,29 @@ public class Tuner implements SimpleTimer.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = crypto.EDHUsed (key usage events/sec)
-            // Cross-refs: jobLag, crypto.EDHEmpty (empty pool events), memory, system load
+            // Cross-refs: crypto.EDHEmpty (empty pool events — the only trigger to grow),
+            //             jobLag, memory pressure, system load
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double empties = getAdditionalStat(_context, "crypto.EDHEmpty");
             int sysLoad = SystemVersion.getSystemLoad();
             boolean highLoad = sysLoad > 80;
             double memPressure = getMemoryPressure();
-            boolean demandHigh = observed > 10;
+            boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
             boolean poolEmptying = !Double.isNaN(empties) && empties > 0;
 
             if (memPressure > 0.85)
                 return Math.max(_min, current - _step * 2);
 
-            if (memPressure > 0.7) {
-                if (poolEmptying && demandHigh)
-                    return Math.min(_max, current + _step);
-                return current;
-            }
-
-            if (demandHigh && poolEmptying && !highLoad) {
+            if (poolEmptying && !highLoad && memPressure < 0.7) {
                 int step = (memPressure < 0.5 && sysLoad < 40) ? _step * 2 : _step;
                 return Math.min(_max, current + step);
             }
 
-            if (demandHigh && !highLoad && memPressure < 0.6)
-                return Math.min(_max, current + Math.max(1, _step / 2));
+            if (poolEmptying)
+                return current;
 
-            if (!demandHigh && !poolEmptying && (memPressure > 0.6 || highLoad))
+            if (!poolEmptying && (highLoad || memPressure > 0.6 || systemBusy))
                 return Math.max(_min, current - 1);
-
-            if (!demandHigh && !highLoad && memPressure < 0.5)
-                return Math.min(_max, current + 1);
 
             return current;
         }
@@ -2684,40 +2855,30 @@ public class Tuner implements SimpleTimer.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = crypto.MLKEMEmpty (queue empty events/sec)
+            // observed = crypto.MLKEMEmpty (queue empty events — the only trigger to grow)
             // Cross-refs: jobLag (CPU pressure), memory pressure, system load
-            // Hourly trend: confirm empty events trend isn't just a short-term spike
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            double hourlyEmpties = getAdditionalStatHourly(_context, _statName);
             int sysLoad = SystemVersion.getSystemLoad();
             boolean highLoad = sysLoad > 80;
-            boolean sustainedEmpties = !Double.isNaN(hourlyEmpties) && hourlyEmpties > 0;
+            boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
             double memPressure = getMemoryPressure();
 
-            if (memPressure > 0.85) {
+            // Severe memory pressure: shrink fast
+            if (memPressure > 0.85)
                 return Math.max(_min, current - _step * 2);
-            }
-            if (memPressure > 0.7) {
-                if (observed > 0)
-                    return Math.min(_max, current + _step);
-                return current;
-            }
 
-            if (observed > 0 && !highLoad) {
+            // Pool emptying under load = grow to absorb demand
+            if (observed > 0 && !highLoad && memPressure < 0.7) {
                 int step = (memPressure < 0.5 && sysLoad < 40) ? _step * 2 : _step;
                 return Math.min(_max, current + step);
             }
 
-            if (observed > 0 && sustainedEmpties)
-                return Math.min(_max, current + _step);
+            // Pool emptying under memory pressure = hold
+            if (observed > 0)
+                return current;
 
-            if (!highLoad && memPressure < 0.6)
-                return Math.min(_max, current + Math.max(1, _step / 2));
-
-            if (observed == 0 && !highLoad && memPressure < 0.5)
-                return Math.min(_max, current + 1);
-
-            if (observed == 0 && (memPressure > 0.6 || highLoad))
+            // Not emptying + idle or loaded = shrink toward factory default
+            if (observed == 0 && (highLoad || memPressure > 0.6 || systemBusy))
                 return Math.max(_min, current - 1);
 
             return current;
