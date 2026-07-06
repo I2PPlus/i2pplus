@@ -39,6 +39,15 @@ class PacketBuilder2 {
     private final UDPTransport _transport;
 
     /**
+     * Reusable block list for outbound data packets — avoids per-packet ArrayList allocation.
+     * Cleared and reused on each call; safe because buildDataPacket is called from the
+     * PacketPusher thread only.
+     *
+     * @since 0.9.70+
+     */
+    private final ThreadLocal<List<Block>> _blockListCache = ThreadLocal.withInitial(() -> new ArrayList<>(8));
+
+    /**
      *  For debugging and stats only - does not go out on the wire.
      *  These are chosen to be higher than the highest I2NP message type,
      *  as a data packet is set to the underlying I2NP message type.
@@ -195,7 +204,8 @@ class PacketBuilder2 {
         int bcnt = fragments.size() + 2;
         if (otherBlocks != null)
             bcnt += otherBlocks.size();
-        List<Block> blocks = new ArrayList<>(bcnt);
+        List<Block> blocks = _blockListCache.get();
+        blocks.clear();
         // payload only
         int sizeWritten = 0;
 

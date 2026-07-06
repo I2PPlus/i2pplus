@@ -100,6 +100,15 @@ public class TunnelDispatcher implements Service {
     /** Timestamp of the last expiration of a participating tunnel */
     private volatile long _lastParticipatingExpiration;
 
+    /**
+     * Cached transit throttle factors — avoids property lookup per tunnel message.
+     * Updated via {@link #updateThrottleFactors()} on property change or periodically.
+     *
+     * @since 0.9.70+
+     */
+    private volatile float _transitThrottleFactor = 0.95f;
+    private volatile float _inboundTransitThrottleFactor = 0.0f;
+
     /** Validator used for tunnel IVs */
     private BloomFilterIVValidator _validator;
 
@@ -154,6 +163,9 @@ public class TunnelDispatcher implements Service {
         _pumper = new TunnelGatewayPumper(ctx);
         _leaveJob = new LeaveTunnel(ctx);
 
+        // Cache throttle factors from properties
+        updateThrottleFactors();
+
         // Schedule periodic cleanup for expired tunnels
         ctx.simpleTimer2().addPeriodicEvent(new PeriodicCleanup(), getCleanupInterval(), getCleanupInterval());
 
@@ -178,6 +190,7 @@ public class TunnelDispatcher implements Service {
      */
     private class PeriodicCleanup implements SimpleTimer.TimedEvent {
         public void timeReached() {
+            updateThrottleFactors();
             cleanupExpiredTunnels();
         }
     }
@@ -666,7 +679,10 @@ public class TunnelDispatcher implements Service {
             if (_leaveJob != null) {
                 _leaveJob.remove(cfg);
             }
-            updateLastParticipatingExpiration();
+            // Only recompute if the removed tunnel had the max expiration
+            if (cfg.getExpiration() >= _lastParticipatingExpiration) {
+                updateLastParticipatingExpiration();
+            }
             addRecentlyExpired(recvId);
 
             if (_log.shouldDebug()) {
@@ -921,6 +937,17 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
+     * Update cached transit throttle factors from router properties.
+     * Called on property change or periodically.
+     *
+     * @since 0.9.70+
+     */
+    void updateThrottleFactors() {
+        _transitThrottleFactor = _context.getProperty("router.transitThrottleFactor", 0.95f);
+        _inboundTransitThrottleFactor = _context.getProperty("router.transitThrottleFactor", 0.0f);
+    }
+
+    /**
      * Implement RED (Random Early Discard) to enforce bandwidth limits.
      * Only active when queue size > minThreshold (congestion).
      * When queue > maxThreshold, ALL messages are dropped (regardless of factor).
@@ -928,12 +955,8 @@ public class TunnelDispatcher implements Service {
     boolean shouldDropParticipatingMessage(Location loc, int type, int length, SyntheticREDQueue bwe) {
         if (length <= 0) return false;
 
-        // Enable transit throttling. Configurable via router.transitThrottleFactor.
-        // 0.0f = disabled
-        // 0.95f = light (~5% drop at high congestion)
-        // 0.1f = aggressive (higher drop rate)
-        // 1.0f = most aggressive
-        float factor = _context.getProperty("router.transitThrottleFactor", 0.95f);
+        // Use cached factor instead of property lookup per message
+        float factor = _transitThrottleFactor;
 
         // Approximate drop probability for logging
         // 0.1f = ~90%, 0.95f = ~5%, 0.0f = 0%
@@ -976,7 +999,8 @@ public class TunnelDispatcher implements Service {
     boolean shouldDropParticipatingInboundMessage(Location loc, int type, int length, SyntheticREDQueue bwe) {
         if (length <= 0) return false;
 
-        float factor = _context.getProperty("router.transitThrottleFactor", 0.0f);
+        // Use cached factor instead of property lookup per message
+        float factor = _inboundTransitThrottleFactor;
         int pct = (int)(factor * 100);
 
         if (bwe != null && !bwe.offer(length, factor)) {

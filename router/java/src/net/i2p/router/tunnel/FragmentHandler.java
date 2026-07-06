@@ -1,7 +1,7 @@
 package net.i2p.router.tunnel;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Base64;
 import net.i2p.data.ByteArray;
@@ -100,6 +100,9 @@ class FragmentHandler {
     private final AtomicInteger _failed = new AtomicInteger();
     private final boolean _isInbound;
 
+    /** Reusable I2NP message handler — avoids per-message allocation */
+    private final I2NPMessageHandler _inboundHandler;
+
     /** don't wait more than this long to completely receive a fragmented message */
     static long MAX_DEFRAGMENT_TIME = 45*1000L;
     private static final ByteCache _cache = ByteCache.getInstance(512, TrivialPreprocessor.PREPROCESSED_SIZE);
@@ -120,9 +123,10 @@ class FragmentHandler {
     public FragmentHandler(RouterContext context, DefragmentedReceiver receiver, boolean isInbound) {
         _context = context;
         _log = context.logManager().getLog(FragmentHandler.class);
-        _fragmentedMessages = new HashMap<>(16);
+        _fragmentedMessages = new ConcurrentHashMap<>(16);
         _receiver = receiver;
         _isInbound = isInbound;
+        _inboundHandler = isInbound ? new I2NPMessageHandler(context) : null;
         // all createRateStat in TunnelDispatcher
     }
 
@@ -385,22 +389,16 @@ class FragmentHandler {
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
         } else if (fragmented) {
             FragmentedMessage msg;
-            synchronized (_fragmentedMessages) {
-                msg = _fragmentedMessages.get((int) messageId);
-                if (msg == null) {
-                    msg = new FragmentedMessage(_context, messageId);
-                    _fragmentedMessages.put((int) messageId, msg);
-                }
-            }
+            final long fMessageId = messageId;
+            msg = _fragmentedMessages.computeIfAbsent((int) messageId,
+                k -> new FragmentedMessage(_context, fMessageId));
 
             // synchronized is required, fragments may be arriving in different threads
             synchronized(msg) {
                 boolean ok = msg.receive(preprocessed, offset, size, false, router, tunnelId);
                 if (!ok) return -1;
                 if (msg.isComplete()) {
-                    synchronized (_fragmentedMessages) {
-                        _fragmentedMessages.remove((int) messageId);
-                    }
+                    _fragmentedMessages.remove((int) messageId);
                     if (msg.getExpireEvent() != null)
                         msg.getExpireEvent().cancel();
                     receiveComplete(msg);
@@ -449,14 +447,10 @@ class FragmentHandler {
             throw new RuntimeException("Preprocessed message was invalid [messageId: " + messageId + "; size:"
                                        + size + "; offset: " + offset + "; fragment:" + fragmentNum);
 
+        final long fMessageId = messageId;
         FragmentedMessage msg = null;
-        synchronized (_fragmentedMessages) {
-            msg = _fragmentedMessages.get((int) messageId);
-            if (msg == null) {
-                msg = new FragmentedMessage(_context, messageId);
-                _fragmentedMessages.put((int) messageId, msg);
-            }
-        }
+        msg = _fragmentedMessages.computeIfAbsent((int) messageId,
+            k -> new FragmentedMessage(_context, fMessageId));
 
         // synchronized is required, fragments may be arriving in different threads
         synchronized(msg) {
@@ -464,9 +458,7 @@ class FragmentHandler {
             if (!ok) return -1;
 
             if (msg.isComplete()) {
-                synchronized (_fragmentedMessages) {
-                    _fragmentedMessages.remove((int) messageId);
-                }
+                _fragmentedMessages.remove((int) messageId);
                 if (msg.getExpireEvent() != null)
                     msg.getExpireEvent().cancel();
                 _context.statManager().addRateData("tunnel.fragmentedComplete", msg.getFragmentCount(), msg.getLifetime());
@@ -508,7 +500,7 @@ class FragmentHandler {
             // and perhaps an occasional DatabaseLookupMessage
             I2NPMessage m;
             if (_isInbound) {
-                m = new I2NPMessageHandler(_context).readMessage(data);
+                m = _inboundHandler.readMessage(data);
             } else {
                 int utype = data[0] & 0xff;
                 m = new UnknownI2NPMessage(_context, utype);
@@ -544,9 +536,8 @@ class FragmentHandler {
             // and perhaps an occasional DatabaseLookupMessage
             I2NPMessage m;
             if (_isInbound) {
-                I2NPMessageHandler h = new I2NPMessageHandler(_context);
-                h.readMessage(data, offset, len);
-                m = h.lastRead();
+                _inboundHandler.readMessage(data, offset, len);
+                m = _inboundHandler.lastRead();
             } else {
                 int utype = data[offset++] & 0xff;
                 m = new UnknownI2NPMessage(_context, utype);
@@ -589,9 +580,7 @@ class FragmentHandler {
 
         public void timeReached() {
             boolean removed;
-            synchronized (_fragmentedMessages) {
-                removed = (null != _fragmentedMessages.remove((int) _msg.getMessageId()));
-            }
+            removed = (null != _fragmentedMessages.remove((int) _msg.getMessageId()));
             synchronized (_msg) {
                 if (removed && !_msg.getReleased()) {
                     _failed.incrementAndGet();
