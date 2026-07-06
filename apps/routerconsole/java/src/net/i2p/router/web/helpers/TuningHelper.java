@@ -23,6 +23,9 @@ public class TuningHelper extends HelperBase {
 
     private static final int SPARK_W = 140;
     private static final int SPARK_H = 36;
+    private String _nonce;
+
+    public void setNonce(String nonce) { _nonce = nonce; }
 
     // human-readable labels for raw param names
     private static final Map<String, String> DISPLAY_NAMES = new HashMap<String, String>();
@@ -174,19 +177,32 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("tunnel.pumper.threads", "Number of gateway pumper threads.");
     }
 
-    // display order for subsystems
+    // display order for subsystems (alphabetical)
     private static final String[] SUBSYSTEM_ORDER = {
-        Tuner.SUB_TRANSPORT,
-        Tuner.SUB_TUNNEL,
-        Tuner.SUB_STREAMING,
+        Tuner.SUB_CONGESTION,
+        Tuner.SUB_CRYPTO,
         Tuner.SUB_I2CP,
-        Tuner.SUB_CODEL,
-        Tuner.SUB_WESTWOOD,
-        Tuner.SUB_BUFFERS,
-        Tuner.SUB_ROUTER,
         Tuner.SUB_NETDB,
-        Tuner.SUB_PEER
+        Tuner.SUB_PEER,
+        Tuner.SUB_ROUTER,
+        Tuner.SUB_STREAMING,
+        Tuner.SUB_TUNNEL,
+        Tuner.SUB_TRANSPORT
     };
+
+    // single-word section headings
+    private static final Map<String, String> SECTION_LABELS = new LinkedHashMap<String, String>();
+    static {
+        SECTION_LABELS.put(Tuner.SUB_TRANSPORT, "Transport");
+        SECTION_LABELS.put(Tuner.SUB_TUNNEL, "Tunnel");
+        SECTION_LABELS.put(Tuner.SUB_STREAMING, "Streaming");
+        SECTION_LABELS.put(Tuner.SUB_I2CP, "I2CP");
+        SECTION_LABELS.put(Tuner.SUB_CONGESTION, "Congestion");
+        SECTION_LABELS.put(Tuner.SUB_CRYPTO, "Crypto");
+        SECTION_LABELS.put(Tuner.SUB_ROUTER, "Router");
+        SECTION_LABELS.put(Tuner.SUB_NETDB, "NetDB");
+        SECTION_LABELS.put(Tuner.SUB_PEER, "Peers");
+    }
 
     /**
      * Main content: editable tables of tunable params with sparklines.
@@ -251,8 +267,8 @@ public class TuningHelper extends HelperBase {
         buf.append("</p>");
 
         buf.append("<form id=tuningform method=POST target=processForm>")
-           .append("<input type=hidden name=nonce value=\"\">")
-           .append("<div class=tablewrap><table id=tuningtable>")
+           .append("<input type=hidden name=nonce value=\"").append(_nonce != null ? _nonce : "").append("\">")
+           .append("<div class=tablewrap><table id=tuningtable><thead>")
            .append("<tr>")
             .append("<th class=parameter>").append(_t("Parameter")).append("</th>")
             .append("<th class=value>").append(_t("Current")).append("</th>")
@@ -262,11 +278,17 @@ public class TuningHelper extends HelperBase {
             .append("<th class=step>").append(_t("Step")).append("</th>")
             .append("<th class=history>").append(_t("History")).append("</th>")
             .append("<th class=auto>").append(_t("Auto")).append("</th>")
-            .append("</tr>");
+            .append("</tr></thead>");
 
         for (Map.Entry<String, List<ParamSnapshot>> entry : groups.entrySet()) {
             List<ParamSnapshot> params = entry.getValue();
             if (params.isEmpty()) continue;
+
+            String sectionLabel = SECTION_LABELS.get(entry.getKey());
+            if (sectionLabel != null)
+                buf.append("<thead class=section><tr><td>").append(sectionLabel).append("</td><td colspan=7></td></tr></thead>");
+
+            buf.append("<tbody>");
 
             for (ParamSnapshot s : params) {
                 String prefix = toFormPrefix(s.name);
@@ -303,6 +325,8 @@ public class TuningHelper extends HelperBase {
                    .append(s.autoTuning ? " checked" : "").append("></td>")
                    .append("</tr>");
             }
+
+            buf.append("</tbody>");
         }
 
         buf.append("<tr><td class=optionsave colspan=8>")

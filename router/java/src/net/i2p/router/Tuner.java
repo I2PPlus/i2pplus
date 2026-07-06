@@ -138,12 +138,11 @@ public class Tuner implements SimpleTimer.TimedEvent {
     public static final String SUB_TUNNEL = "Tunnel";
     public static final String SUB_STREAMING = "Streaming";
     public static final String SUB_I2CP = "I2CP";
-    public static final String SUB_CODEL = "CoDel";
-    public static final String SUB_WESTWOOD = "Westwood";
-    public static final String SUB_BUFFERS = "Buffers & Threads";
-    public static final String SUB_ROUTER = "Router Core";
+    public static final String SUB_CONGESTION = "Congestion";
+    public static final String SUB_CRYPTO = "Crypto";
+    public static final String SUB_ROUTER = "Router";
     public static final String SUB_NETDB = "NetDB";
-    public static final String SUB_PEER = "Peer Management";
+    public static final String SUB_PEER = "Peers";
 
     // System capability factors for scaling defaults
     private static final long MAX_MEMORY = SystemVersion.getMaxMemory();
@@ -278,108 +277,94 @@ public class Tuner implements SimpleTimer.TimedEvent {
         BaseParam._sharedAutotune = _autotune;
         _maxDispatchAgeMs = ctx.getProperty("i2p.router.maxDispatchAge", 3000);
         _handlerThreadPriority = ctx.getProperty("i2p.router.handlerThreadPriority", Thread.NORM_PRIORITY);
-        _params = new ArrayList<TunableParam>(24);
+        _params = new ArrayList<TunableParam>(72);
 
-        // Transport params
+        // Transport — NTCP/UDP/SSU
         _params.add(new AckFrequencyParam());
         _params.add(new DataMessageTimeoutParam());
-        _params.add(new ObEstablishTimeParam());
-        _params.add(new IbEstablishTimeParam());
-        _params.add(new MaxDispatchAgeParam());
         _params.add(new HandlerThreadPriorityParam());
-
-        // Tunnel params
-        _params.add(new RequeueTimeParam());
-        _params.add(new ReplenishFrequencyParam());
-        _params.add(new SelectorLoopDelayParam());
-        _params.add(new ObMsgsPerPumpParam());
-        _params.add(new IbMsgsPerPumpParam());
-
-        // Streaming params
-        _params.add(new InitialWindowSizeParam());
-        _params.add(new InitialRTOParam());
-        _params.add(new InitialAckDelayParam());
-        _params.add(new PassiveFlushDelayParam());
-        _params.add(new MaxSlowStartWindowParam());
-
-        // I2CP params
-        _params.add(new WriterQueueSizeParam());
-
-        // CoDel params
-        _params.add(new CodelTargetParam());
-        _params.add(new CodelIntervalParam());
-
-        // Westwood params
-        _params.add(new WestwoodDecayFactorParam());
-
-        // Buffer & thread params
-        _params.add(new XDHPreCalcMinParam());
-        _params.add(new EDHPreCalcMinParam());
-        _params.add(new MLKEMPreCalcMinParam());
-        _params.add(new NTCPQueueCapacityParam());
-        _params.add(new UDPHandlerThreadsParam());
-        _params.add(new UDPMessageReceiverThreadsParam());
-        _params.add(new PeerOutboundQueueParam());
-
-        // Router core params
-        _params.add(new TransitThrottleFactorParam());
-        _params.add(new ThrottleRejectExponentParam());
-        _params.add(new MaxParticipatingTunnelsParam());
-        _params.add(new BuildHandlerMaxQueueParam());
-        _params.add(new GoodDeficitThrottleParam());
-        _params.add(new PerTunnelBweDivisorParam());
-        _params.add(new TunnelGrowthFactorParam());
-
-        // Streaming congestion params
-        _params.add(new MaxRTOParam());
-        _params.add(new MaxResendDelayParam());
-        _params.add(new MaxRetransmissionsParam());
-        _params.add(new MinResendDelayParam());
-        _params.add(new CongestionAvoidanceGrowthParam());
-        _params.add(new SlowStartGrowthParam());
-        _params.add(new MaxRttParam());
-        _params.add(new InitialResendDelayParam());
-        _params.add(new ImmediateAckDelayParam());
-
-        // NetDB params
-        _params.add(new NetDBSearchLimitParam());
-        _params.add(new NetDBMaxConcurrentParam());
-        _params.add(new NetDBSingleSearchTimeParam());
-
-        // Transport params
+        _params.add(new IbEstablishTimeParam());
         _params.add(new MaxConcurrentEstablishParam());
-
-        // Peer management params
-        _params.add(new MaxProfilesParam());
-        _params.add(new MinFastPeersParam());
-        _params.add(new MaxFastPeersParam());
-        _params.add(new MinHighCapPeersParam());
-        _params.add(new MaxHighCapPeersParam());
-
-        // Build timeout params
-        _params.add(new BuildRequestTimeoutParam());
-        _params.add(new BuildFirstHopTimeoutParam());
-        _params.add(new MaxConcurrentBuildsParam());
-
-        // NTCP thread params
-        _params.add(new NtcpReaderThreadsParam());
-        _params.add(new NtcpWriterThreadsParam());
-        _params.add(new NtcpFailsafeFreqParam());
         _params.add(new MaxConcurrentMessagesParam());
-        _params.add(new SendPoolCapacityParam());
-        _params.add(new InternalQueueSizeParam());
+        _params.add(new MaxDispatchAgeParam());
         _params.add(new MaxQueuedOutboundParam());
         _params.add(new MaxWriteBufsParam());
+        _params.add(new NtcpFailsafeFreqParam());
+        _params.add(new NTCPQueueCapacityParam());
+        _params.add(new NtcpReaderThreadsParam());
         _params.add(new NtcpSendFinisherThreadsParam());
+        _params.add(new NtcpWriterThreadsParam());
+        _params.add(new ObEstablishTimeParam());
+        _params.add(new SendPoolCapacityParam());
+        _params.add(new UDPHandlerThreadsParam());
+        _params.add(new UDPMessageReceiverThreadsParam());
 
-        // TestJob params
-        _params.add(new TestJobMaxQueuedParam());
-        _params.add(new TestJobMinDelayParam());
-        _params.add(new TestJobMaxDelayParam());
-
-        // Tunnel gateway pumper params
+        // Tunnel
+        _params.add(new BuildFirstHopTimeoutParam());
+        _params.add(new BuildHandlerMaxQueueParam());
+        _params.add(new BuildRequestTimeoutParam());
+        _params.add(new IbMsgsPerPumpParam());
+        _params.add(new MaxConcurrentBuildsParam());
+        _params.add(new MaxParticipatingTunnelsParam());
+        _params.add(new ObMsgsPerPumpParam());
+        _params.add(new PerTunnelBweDivisorParam());
         _params.add(new PumperQueueCapacityParam());
         _params.add(new PumperThreadsParam());
+        _params.add(new ReplenishFrequencyParam());
+        _params.add(new RequeueTimeParam());
+        _params.add(new SelectorLoopDelayParam());
+        _params.add(new TestJobMaxDelayParam());
+        _params.add(new TestJobMaxQueuedParam());
+        _params.add(new TestJobMinDelayParam());
+        _params.add(new TunnelGrowthFactorParam());
+
+        // Streaming
+        _params.add(new CongestionAvoidanceGrowthParam());
+        _params.add(new ImmediateAckDelayParam());
+        _params.add(new InitialAckDelayParam());
+        _params.add(new InitialResendDelayParam());
+        _params.add(new InitialRTOParam());
+        _params.add(new InitialWindowSizeParam());
+        _params.add(new MaxRetransmissionsParam());
+        _params.add(new MaxResendDelayParam());
+        _params.add(new MaxRTOParam());
+        _params.add(new MaxRttParam());
+        _params.add(new MaxSlowStartWindowParam());
+        _params.add(new MinResendDelayParam());
+        _params.add(new PassiveFlushDelayParam());
+        _params.add(new SlowStartGrowthParam());
+
+        // I2CP
+        _params.add(new InternalQueueSizeParam());
+        _params.add(new WriterQueueSizeParam());
+
+        // Congestion — CoDel + Westwood
+        _params.add(new CodelIntervalParam());
+        _params.add(new CodelTargetParam());
+        _params.add(new WestwoodDecayFactorParam());
+
+        // Crypto — precalc pools
+        _params.add(new EDHPreCalcMinParam());
+        _params.add(new MLKEMPreCalcMinParam());
+        _params.add(new XDHPreCalcMinParam());
+
+        // Router
+        _params.add(new GoodDeficitThrottleParam());
+        _params.add(new PeerOutboundQueueParam());
+        _params.add(new ThrottleRejectExponentParam());
+        _params.add(new TransitThrottleFactorParam());
+
+        // NetDB
+        _params.add(new NetDBMaxConcurrentParam());
+        _params.add(new NetDBSearchLimitParam());
+        _params.add(new NetDBSingleSearchTimeParam());
+
+        // Peers
+        _params.add(new MaxFastPeersParam());
+        _params.add(new MaxHighCapPeersParam());
+        _params.add(new MaxProfilesParam());
+        _params.add(new MinFastPeersParam());
+        _params.add(new MinHighCapPeersParam());
 
         // Purge stale tuner.* keys from router.config (one-time cleanup)
         purgeOldTunerProps(ctx);
@@ -1085,9 +1070,8 @@ public class Tuner implements SimpleTimer.TimedEvent {
         private static final double HIGH_THRESHOLD = 500;
 
         AckFrequencyParam() {
-            super("ACK_FREQUENCY", SUB_TRANSPORT,
-                  "Packets between ACKs (lower = more ACKs, less loss)",
-                  50, 300, 10, "udp.sendConfirmTime", _context);
+            super("ACK_FREQUENCY", "Packets between ACKs (lower = more ACKs, less loss)",
+                  SUB_TRANSPORT, 50, 300, 10, "udp.sendConfirmTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -1144,9 +1128,8 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class DataMessageTimeoutParam extends BaseParam {
 
         DataMessageTimeoutParam() {
-            super("DATA_MESSAGE_TIMEOUT", SUB_TRANSPORT,
-                  "DSM message expiration (ms)",
-                  1000, 10000, 500, "transport.sendProcessingTime", _context);
+            super("DATA_MESSAGE_TIMEOUT", "DSM message expiration (ms)",
+                  SUB_TRANSPORT, 1000, 10000, 500, "transport.sendProcessingTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -1206,8 +1189,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class ObEstablishTimeParam extends BaseParam {
 
         ObEstablishTimeParam() {
-            super("MAX_OB_ESTABLISH_TIME", SUB_TRANSPORT,
-                  "Outbound establish timeout (ms)",
+            super("MAX_OB_ESTABLISH_TIME", "Outbound establish timeout (ms)",
+                  SUB_TRANSPORT,
+
                   3000, 30000, 500, "udp.outboundEstablishTime", _context);
         }
 
@@ -1264,8 +1248,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class IbEstablishTimeParam extends BaseParam {
 
         IbEstablishTimeParam() {
-            super("MAX_IB_ESTABLISH_TIME", SUB_TRANSPORT,
-                  "Inbound establish timeout (ms)",
+            super("MAX_IB_ESTABLISH_TIME", "Inbound establish timeout (ms)",
+                  SUB_TRANSPORT,
+
                   3000, 20000, 500, "udp.inboundEstablishTime", _context);
         }
 
@@ -1324,8 +1309,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class MaxDispatchAgeParam extends BaseParam {
 
         MaxDispatchAgeParam() {
-            super("i2p.router.maxDispatchAge", SUB_TRANSPORT,
-                  "Max message queue age (ms)",
+            super("i2p.router.maxDispatchAge", "Max message queue age (ms)",
+                  SUB_TRANSPORT,
+
                   500, 30000, 500, "transport.expiredOnQueueLifetime", _context);
         }
 
@@ -1388,8 +1374,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class HandlerThreadPriorityParam extends BaseParam {
 
         HandlerThreadPriorityParam() {
-            super("i2p.router.handlerThreadPriority", SUB_TRANSPORT,
-                  "I/O thread priority (1-10)",
+            super("i2p.router.handlerThreadPriority", "I/O thread priority (1-10)",
+                  SUB_TRANSPORT,
+
                   Thread.MIN_PRIORITY + 2, Thread.MAX_PRIORITY - 1, 1,
                   "transport.sendProcessingTime", _context);
         }
@@ -1456,8 +1443,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class RequeueTimeParam extends BaseParam {
 
         RequeueTimeParam() {
-            super("REQUEUE_TIME", SUB_TUNNEL,
-                  "Pumper requeue delay (ms)",
+            super("REQUEUE_TIME", "Pumper requeue delay (ms)",
+                  SUB_TUNNEL,
+
                   10, 200, 5, "tunnel.participating InBps", _context);
         }
 
@@ -1521,8 +1509,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class PumperQueueCapacityParam extends BaseParam {
 
         PumperQueueCapacityParam() {
-            super("tunnel.pumper.queueCapacity", SUB_TUNNEL,
-                  "Pumper queue capacity",
+            super("tunnel.pumper.queueCapacity", "Pumper queue capacity",
+                  SUB_TUNNEL,
+
                   256, 4096, 128, "tunnel.pumperQueueFull", _context);
         }
 
@@ -1592,8 +1581,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class PumperThreadsParam extends BaseParam {
 
         PumperThreadsParam() {
-            super("tunnel.pumper.threads", SUB_TUNNEL,
-                  "Pumper threads",
+            super("tunnel.pumper.threads", "Pumper threads",
+                  SUB_TUNNEL,
+
                   2, 16, 1, "tunnel.pumperQueueDepth", _context);
         }
 
@@ -1650,8 +1640,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class ReplenishFrequencyParam extends BaseParam {
 
         ReplenishFrequencyParam() {
-            super("REPLENISH_FREQUENCY", SUB_TUNNEL,
-                  "Bandwidth token refill interval (ms)",
+            super("REPLENISH_FREQUENCY", "Bandwidth token refill interval (ms)",
+                  SUB_TUNNEL,
+
                   5, 200, 5, "tunnel.participating OutBps", _context);
         }
 
@@ -1706,8 +1697,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class SelectorLoopDelayParam extends BaseParam {
 
         SelectorLoopDelayParam() {
-            super("SELECTOR_LOOP_DELAY", SUB_TUNNEL,
-                  "NTCP selector sleep (ms)",
+            super("SELECTOR_LOOP_DELAY", "NTCP selector sleep (ms)",
+                  SUB_TUNNEL,
+
                   1, 100, 1, "ntcp.pumperLoopsPerSecond", _context);
         }
 
@@ -1770,8 +1762,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class ObMsgsPerPumpParam extends BaseParam {
 
         ObMsgsPerPumpParam() {
-            super("MAX_OB_MSGS_PER_PUMP", SUB_TUNNEL,
-                  "Outbound gateway batch size",
+            super("MAX_OB_MSGS_PER_PUMP", "Outbound gateway batch size",
+                  SUB_TUNNEL,
+
                   8, 1024, 16, "tunnel.obgw.queueSize", _context);
         }
 
@@ -1835,8 +1828,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class IbMsgsPerPumpParam extends BaseParam {
 
         IbMsgsPerPumpParam() {
-            super("MAX_IB_MSGS_PER_PUMP", SUB_TUNNEL,
-                  "Inbound gateway batch size",
+            super("MAX_IB_MSGS_PER_PUMP", "Inbound gateway batch size",
+                  SUB_TUNNEL,
+
                   8, 512, 8, "tunnel.ibgw.queueSize", _context);
         }
 
@@ -1906,8 +1900,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class InitialWindowSizeParam extends BaseParam {
 
         InitialWindowSizeParam() {
-            super("INITIAL_WINDOW_SIZE", SUB_STREAMING,
-                  "Streaming initial congestion window",
+            super("INITIAL_WINDOW_SIZE", "Streaming initial congestion window",
+                  SUB_STREAMING,
+
                   1, 32, 4, "stream.con.initialRTT.in", _context);
         }
 
@@ -1993,8 +1988,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class InitialRTOParam extends BaseParam {
 
         InitialRTOParam() {
-            super("INITIAL_RTO", SUB_STREAMING,
-                  "Streaming initial RTO (ms)",
+            super("INITIAL_RTO", "Streaming initial RTO (ms)",
+                  SUB_STREAMING,
+
                   1000, 30000, 500, "stream.con.initialRTT.out", _context);
         }
 
@@ -2057,8 +2053,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class InitialAckDelayParam extends BaseParam {
 
         InitialAckDelayParam() {
-            super("INITIAL_ACK_DELAY", SUB_STREAMING,
-                  "Streaming ACK delay (ms)",
+            super("INITIAL_ACK_DELAY", "Streaming ACK delay (ms)",
+                  SUB_STREAMING,
+
                   1, 500, 5, "stream.sendsBeforeAck", _context);
         }
 
@@ -2124,8 +2121,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class PassiveFlushDelayParam extends BaseParam {
 
         PassiveFlushDelayParam() {
-            super("PASSIVE_FLUSH_DELAY", SUB_STREAMING,
-                  "Streaming Nagle flush delay (ms)",
+            super("PASSIVE_FLUSH_DELAY", "Streaming Nagle flush delay (ms)",
+                  SUB_STREAMING,
+
                   10, 300, 10, "stream.con.sendMessageSize", _context);
         }
 
@@ -2191,8 +2189,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class MaxSlowStartWindowParam extends BaseParam {
 
         MaxSlowStartWindowParam() {
-            super("i2p.streaming.maxSlowStartWindow", SUB_STREAMING,
-                  "Streaming congestion window cap during slow start",
+            super("i2p.streaming.maxSlowStartWindow", "Streaming congestion window cap during slow start",
+                  SUB_STREAMING,
+
                   4, 256, 4, "stream.con.initialRTT.out", _context);
         }
 
@@ -2258,8 +2257,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class WriterQueueSizeParam extends BaseParam {
 
         WriterQueueSizeParam() {
-            super("CLIENT_WRITER_QUEUE_SIZE", SUB_I2CP,
-                  "I2CP write queue size",
+            super("CLIENT_WRITER_QUEUE_SIZE", "I2CP write queue size",
+                  SUB_I2CP,
+
                   32, 2048, 32, "udp.sendConfirmTime", _context);
         }
 
@@ -2327,7 +2327,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         CodelTargetParam() {
             super("CODEL_TARGET",
                   "CoDel drop target",
-                  SUB_CODEL, 1, 10, 1, "codel.UDP-Sender.delay", _context);
+                   SUB_CONGESTION, 1, 10, 1, "codel.UDP-Sender.delay", _context);
         }
 
         protected void applyValue(int value) {
@@ -2389,7 +2389,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         CodelIntervalParam() {
             super("CODEL_INTERVAL",
                   "CoDel measurement window",
-                  SUB_CODEL, 20, 200, 10, "codel.UDP-Sender.delay", _context);
+                   SUB_CONGESTION, 20, 200, 10, "codel.UDP-Sender.delay", _context);
         }
 
         protected void applyValue(int value) {
@@ -2452,7 +2452,7 @@ public class Tuner implements SimpleTimer.TimedEvent {
         WestwoodDecayFactorParam() {
             super("WESTWOOD_DECAY_FACTOR",
                   "Westwood EWMA smoothing",
-                  SUB_WESTWOOD, 2, 16, 1, "transport.sendProcessingTime", _context);
+                   SUB_CONGESTION, 2, 16, 1, "transport.sendProcessingTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -2509,8 +2509,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class XDHPreCalcMinParam extends BaseParam {
 
         XDHPreCalcMinParam() {
-            super("crypto.x25519.precalcMin", SUB_BUFFERS,
-                  "Min precomputed X25519 key pairs",
+            super("crypto.x25519.precalcMin", "Min precomputed X25519 key pairs",
+                  SUB_CRYPTO,
+
                   8, 1024, 8, "crypto.XDHUsed", _context);
         }
 
@@ -2586,8 +2587,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class EDHPreCalcMinParam extends BaseParam {
 
         EDHPreCalcMinParam() {
-            super("crypto.edh.precalcMin", SUB_BUFFERS,
-                  "Min precomputed EDH key pairs",
+            super("crypto.edh.precalcMin", "Min precomputed EDH key pairs",
+                  SUB_CRYPTO,
+
                   8, 1024, 8, "crypto.EDHUsed", _context);
         }
 
@@ -2655,8 +2657,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class MLKEMPreCalcMinParam extends BaseParam {
 
         MLKEMPreCalcMinParam() {
-            super("crypto.mlkem.precalcMin", SUB_BUFFERS,
-                  "Min precomputed ML-KEM key pairs",
+            super("crypto.mlkem.precalcMin", "Min precomputed ML-KEM key pairs",
+                  SUB_CRYPTO,
+
                   MLKEM_PRECALC_MIN, MLKEM_PRECALC_MAX, 8, "crypto.MLKEMEmpty", _context);
         }
 
@@ -2736,8 +2739,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class NTCPThreadsParam extends BaseParam {
 
         NTCPThreadsParam() {
-            super("ntcp.sendFinisher.maxThreads", SUB_BUFFERS,
-                  "Max NTCP send finisher threads",
+            super("ntcp.sendFinisher.maxThreads", "Max NTCP send finisher threads",
+                  SUB_TRANSPORT,
+
                   1, 64, 1, "ntcp.sendTime", _context);
         }
 
@@ -2804,8 +2808,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class NTCPQueueCapacityParam extends BaseParam {
 
         NTCPQueueCapacityParam() {
-            super("ntcp.sendFinisher.queueCapacity", SUB_BUFFERS,
-                  "NTCP send queue capacity",
+            super("ntcp.sendFinisher.queueCapacity", "NTCP send queue capacity",
+                  SUB_TRANSPORT,
+
                   256, 16384, 256, "ntcp.sendTime", _context);
         }
 
@@ -2878,8 +2883,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class UDPHandlerThreadsParam extends BaseParam {
 
         UDPHandlerThreadsParam() {
-            super("udp.packetHandler.maxThreads", SUB_BUFFERS,
-                  "Max UDP packet handler threads",
+            super("udp.packetHandler.maxThreads", "Max UDP packet handler threads",
+                  SUB_TRANSPORT,
+
                   2, 16, 1, "udp.pushTime", _context);
         }
 
@@ -2949,8 +2955,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class UDPMessageReceiverThreadsParam extends BaseParam {
 
         UDPMessageReceiverThreadsParam() {
-            super("udp.messageReceiver.threads", SUB_BUFFERS,
-                  "UDP message receiver threads",
+            super("udp.messageReceiver.threads", "UDP message receiver threads",
+                  SUB_TRANSPORT,
+
                   2, 16, 1, "codel.UDP-Receiver.delay", _context);
         }
 
@@ -3025,8 +3032,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class PeerOutboundQueueParam extends BaseParam {
 
         PeerOutboundQueueParam() {
-            super("router.peerOutboundQueueSize", SUB_BUFFERS,
-                  "Max outbound messages per peer",
+            super("router.peerOutboundQueueSize", "Max outbound messages per peer",
+                  SUB_ROUTER,
+
                   50, 1000, 50, "peer.activeProfileCount", _context);
         }
 
@@ -3090,8 +3098,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class TransitThrottleFactorParam extends BaseParam {
 
         TransitThrottleFactorParam() {
-            super("router.transitThrottleFactor", SUB_ROUTER,
-                  "Transit throttle aggressiveness (0.0=disabled, 1.0=max drop)",
+            super("router.transitThrottleFactor", "Transit throttle aggressiveness (0.0=disabled, 1.0=max drop)",
+                  SUB_ROUTER,
+
                   50, 100, 5, "tunnel.participating InBps", _context);
         }
 
@@ -3187,8 +3196,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class ThrottleRejectExponentParam extends BaseParam {
 
         ThrottleRejectExponentParam() {
-            super("router.throttleRejectExponent", SUB_ROUTER,
-                  "Rejection curve steepness (higher = sharper cutoff)",
+            super("router.throttleRejectExponent", "Rejection curve steepness (higher = sharper cutoff)",
+                  SUB_ROUTER,
+
                   1, 50, 1, "tunnel.buildSuccessRate", _context);
         }
 
@@ -3248,8 +3258,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class PerTunnelBweDivisorParam extends BaseParam {
 
         PerTunnelBweDivisorParam() {
-            super("router.tunnel.perTunnelBweDivisor", SUB_TUNNEL,
-                  "Per-tunnel bandwidth divisor (lower = more per tunnel)",
+            super("router.tunnel.perTunnelBweDivisor", "Per-tunnel bandwidth divisor (lower = more per tunnel)",
+                  SUB_TUNNEL,
+
                   2, 1000, 10, "tunnel.participating InBps", _context);
         }
 
@@ -3323,8 +3334,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class TunnelGrowthFactorParam extends BaseParam {
 
         TunnelGrowthFactorParam() {
-            super("router.tunnelGrowthFactor", SUB_TUNNEL,
-                  "Tunnel growth tolerance (higher = accept more)",
+            super("router.tunnelGrowthFactor", "Tunnel growth tolerance (higher = accept more)",
+                  SUB_TUNNEL,
+
                   10, 100, 5, "tunnel.participating InBps", _context);
         }
 
@@ -3382,8 +3394,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class MaxParticipatingTunnelsParam extends BaseParam {
 
         MaxParticipatingTunnelsParam() {
-            super("router.maxParticipatingTunnels", SUB_ROUTER,
-                  "Max transit tunnels",
+            super("router.maxParticipatingTunnels", "Max transit tunnels",
+                  SUB_ROUTER,
+
                   500, 20000, 500, "tunnel.participating InBps", _context);
         }
 
@@ -3456,8 +3469,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class BuildHandlerMaxQueueParam extends BaseParam {
 
         BuildHandlerMaxQueueParam() {
-            super("router.buildHandlerMaxQueue", SUB_ROUTER,
-                  "Build handler queue",
+            super("router.buildHandlerMaxQueue", "Build handler queue",
+                  SUB_ROUTER,
+
                   16, 2048, 32, "jobQueue.jobLag", _context);
         }
 
@@ -3522,8 +3536,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class GoodDeficitThrottleParam extends BaseParam {
 
         GoodDeficitThrottleParam() {
-            super("i2p.tunnel.goodDeficitThrottle", SUB_ROUTER,
-                  "Rebuild throttle when pools healthy (ms)",
+            super("i2p.tunnel.goodDeficitThrottle", "Rebuild throttle when pools healthy (ms)",
+                  SUB_ROUTER,
+
                   1000, 60000, 5000, "tunnel.buildSuccessRate", _context);
         }
 
@@ -3594,8 +3609,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class MaxRTOParam extends BaseParam {
 
         MaxRTOParam() {
-            super("i2p.streaming.maxRTO", SUB_STREAMING,
-                  "Max retransmission timeout (ms)",
+            super("i2p.streaming.maxRTO", "Max retransmission timeout (ms)",
+                  SUB_STREAMING,
+
                   1000, 120000, 1000, "udp.sendConfirmTime", _context);
         }
 
@@ -3646,8 +3662,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class MaxResendDelayParam extends BaseParam {
 
         MaxResendDelayParam() {
-            super("i2p.streaming.maxResendDelay", SUB_STREAMING,
-                  "Max delay between retransmissions (ms)",
+            super("i2p.streaming.maxResendDelay", "Max delay between retransmissions (ms)",
+                  SUB_STREAMING,
+
                   1000, 120000, 1000, "stream.con.initialRTT.out", _context);
         }
 
@@ -3702,8 +3719,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class MaxRetransmissionsParam extends BaseParam {
 
         MaxRetransmissionsParam() {
-            super("i2p.streaming.maxRetransmissions", SUB_STREAMING,
-                  "Max retransmissions before giving up",
+            super("i2p.streaming.maxRetransmissions", "Max retransmissions before giving up",
+                  SUB_STREAMING,
+
                   1, 256, 8, "stream.con.initialRTT.out", _context);
         }
 
@@ -3762,8 +3780,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class MinResendDelayParam extends BaseParam {
 
         MinResendDelayParam() {
-            super("i2p.streaming.minResendDelay", SUB_STREAMING,
-                  "Min resend delay (ms)",
+            super("i2p.streaming.minResendDelay", "Min resend delay (ms)",
+                  SUB_STREAMING,
+
                   50, 10000, 50, "stream.con.initialRTT.out", _context);
         }
 
@@ -3818,8 +3837,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class CongestionAvoidanceGrowthParam extends BaseParam {
 
         CongestionAvoidanceGrowthParam() {
-            super("i2p.streaming.congestionAvoidanceGrowthRateFactor", SUB_STREAMING,
-                  "CA growth rate (higher = faster)",
+            super("i2p.streaming.congestionAvoidanceGrowthRateFactor", "CA growth rate (higher = faster)",
+                  SUB_STREAMING,
+
                   1, 16, 1, "stream.con.sendDuplicateSize", _context);
         }
 
@@ -3896,8 +3916,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class SlowStartGrowthParam extends BaseParam {
 
         SlowStartGrowthParam() {
-            super("i2p.streaming.slowStartGrowthRateFactor", SUB_STREAMING,
-                  "SS growth rate (higher = faster)",
+            super("i2p.streaming.slowStartGrowthRateFactor", "SS growth rate (higher = faster)",
+                  SUB_STREAMING,
+
                   1, 16, 1, "stream.con.initialRTT.out", _context);
         }
 
@@ -3978,8 +3999,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class MaxRttParam extends BaseParam {
 
         MaxRttParam() {
-            super("i2p.streaming.maxRtt", SUB_STREAMING,
-                  "RTT estimate cap (ms)",
+            super("i2p.streaming.maxRtt", "RTT estimate cap (ms)",
+                  SUB_STREAMING,
+
                   1000, 120000, 5000, "stream.con.initialRTT.out", _context);
         }
 
@@ -4030,8 +4052,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class InitialResendDelayParam extends BaseParam {
 
         InitialResendDelayParam() {
-            super("i2p.streaming.initialResendDelay", SUB_STREAMING,
-                  "First retransmit delay (ms)",
+            super("i2p.streaming.initialResendDelay", "First retransmit delay (ms)",
+                  SUB_STREAMING,
+
                   50, 10000, 50, "stream.con.initialRTT.out", _context);
         }
 
@@ -4082,8 +4105,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class ImmediateAckDelayParam extends BaseParam {
 
         ImmediateAckDelayParam() {
-            super("i2p.streaming.immediateAckDelay", SUB_STREAMING,
-                  "Dup ACK delay (ms)",
+            super("i2p.streaming.immediateAckDelay", "Dup ACK delay (ms)",
+                  SUB_STREAMING,
+
                   1, 1000, 10, "stream.con.initialRTT.out", _context);
         }
 
@@ -4143,8 +4167,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class NetDBSearchLimitParam extends BaseParam {
 
         NetDBSearchLimitParam() {
-            super("netdb.searchLimit", SUB_NETDB,
-                  "Max peers per NetDB search",
+            super("netdb.searchLimit", "Max peers per NetDB search",
+                  SUB_NETDB,
+
                   1, 256, 2, "transport.sendProcessingTime", _context);
         }
 
@@ -4194,8 +4219,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class NetDBMaxConcurrentParam extends BaseParam {
 
         NetDBMaxConcurrentParam() {
-            super("netdb.maxConcurrent", SUB_NETDB,
-                  "Max concurrent NetDB searches",
+            super("netdb.maxConcurrent", "Max concurrent NetDB searches",
+                  SUB_NETDB,
+
                   1, 128, 1, "transport.sendProcessingTime", _context);
         }
 
@@ -4245,8 +4271,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class NetDBSingleSearchTimeParam extends BaseParam {
 
         NetDBSingleSearchTimeParam() {
-            super("netdb.singleSearchTime", SUB_NETDB,
-                  "Per-peer NetDB search timeout (ms)",
+            super("netdb.singleSearchTime", "Per-peer NetDB search timeout (ms)",
+                  SUB_NETDB,
+
                   500, 60000, 500, "transport.sendProcessingTime", _context);
         }
 
@@ -4299,8 +4326,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class MaxConcurrentEstablishParam extends BaseParam {
 
         MaxConcurrentEstablishParam() {
-            super("i2np.udp.maxConcurrentEstablish", SUB_TRANSPORT,
-                  "Max concurrent SSU session establishment",
+            super("i2np.udp.maxConcurrentEstablish", "Max concurrent SSU session establishment",
+                  SUB_TRANSPORT,
+
                   8, 8192, 32, "udp.outboundEstablishTime", _context);
         }
 
@@ -4379,8 +4407,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class MaxProfilesParam extends BaseParam {
 
         MaxProfilesParam() {
-            super("profileOrganizer.maxProfiles", SUB_PEER,
-                  "Max peer profiles in RAM",
+            super("profileOrganizer.maxProfiles", "Max peer profiles in RAM",
+                  SUB_PEER,
+
                   200, 8000, 200, "peer.activeProfileCount", _context);
         }
 
@@ -4431,8 +4460,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class MinFastPeersParam extends BaseParam {
 
         MinFastPeersParam() {
-            super("profileOrganizer.minFastPeers", SUB_PEER,
-                  "Min fast-tier peers",
+            super("profileOrganizer.minFastPeers", "Min fast-tier peers",
+                  SUB_PEER,
+
                   50, 2000, 50, "peer.fastPeerCount", _context);
         }
 
@@ -4500,8 +4530,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class MaxFastPeersParam extends BaseParam {
 
         MaxFastPeersParam() {
-            super("profileOrganizer.maxFastPeers", SUB_PEER,
-                  "Max fast-tier peers",
+            super("profileOrganizer.maxFastPeers", "Max fast-tier peers",
+                  SUB_PEER,
+
                   200, 3000, 50, "peer.qualityPeerCount", _context);
         }
 
@@ -4558,8 +4589,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class MinHighCapPeersParam extends BaseParam {
 
         MinHighCapPeersParam() {
-            super("profileOrganizer.minHighCapacityPeers", SUB_PEER,
-                  "Min high-capacity peers",
+            super("profileOrganizer.minHighCapacityPeers", "Min high-capacity peers",
+                  SUB_PEER,
+
                   50, 2000, 50, "peer.qualityPeerCount", _context);
         }
 
@@ -4621,8 +4653,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class MaxHighCapPeersParam extends BaseParam {
 
         MaxHighCapPeersParam() {
-            super("profileOrganizer.maxHighCapacityPeers", SUB_PEER,
-                  "Max high-capacity peers",
+            super("profileOrganizer.maxHighCapacityPeers", "Max high-capacity peers",
+                  SUB_PEER,
+
                   200, 4000, 50, "peer.qualityPeerCount", _context);
         }
 
@@ -4682,8 +4715,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class BuildRequestTimeoutParam extends BaseParam {
 
         BuildRequestTimeoutParam() {
-            super("i2p.tunnel.build.requestTimeout", SUB_ROUTER,
-                  "Build request reply timeout (ms)",
+            super("i2p.tunnel.build.requestTimeout", "Build request reply timeout (ms)",
+                  SUB_ROUTER,
+
                   5000, 15000, 1000, "tunnel.buildClientExpire", _context);
         }
 
@@ -4764,8 +4798,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class BuildFirstHopTimeoutParam extends BaseParam {
 
         BuildFirstHopTimeoutParam() {
-            super("i2p.tunnel.build.firstHopTimeout", SUB_ROUTER,
-                  "Build first-hop delivery timeout (ms)",
+            super("i2p.tunnel.build.firstHopTimeout", "Build first-hop delivery timeout (ms)",
+                  SUB_ROUTER,
+
                   5000, 10000, 1000, "tunnel.buildFailFirstHop", _context);
         }
 
@@ -4846,8 +4881,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class MaxConcurrentBuildsParam extends BaseParam {
 
         MaxConcurrentBuildsParam() {
-            super("tunnel.build.maxConcurrent", SUB_TUNNEL,
-                  "Max concurrent builds",
+            super("tunnel.build.maxConcurrent", "Max concurrent builds",
+                  SUB_TUNNEL,
+
                   8, 256, 4, "tunnel.buildSuccessRate", _context);
         }
 
@@ -4932,8 +4968,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class NtcpReaderThreadsParam extends BaseParam {
 
         NtcpReaderThreadsParam() {
-            super("ntcp.reader.threads", SUB_BUFFERS,
-                  "NTCP reader threads",
+            super("ntcp.reader.threads", "NTCP reader threads",
+                  SUB_TRANSPORT,
+
                   2, 16, 1, "ntcp.readQueueSize", _context);
         }
 
@@ -5005,8 +5042,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class NtcpWriterThreadsParam extends BaseParam {
 
         NtcpWriterThreadsParam() {
-            super("ntcp.writer.threads", SUB_BUFFERS,
-                  "NTCP writer threads",
+            super("ntcp.writer.threads", "NTCP writer threads",
+                  SUB_TRANSPORT,
+
                   2, 16, 1, "ntcp.sendTime", _context);
         }
 
@@ -5079,8 +5117,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class NtcpFailsafeFreqParam extends BaseParam {
 
         NtcpFailsafeFreqParam() {
-            super("ntcp.failsafe.iterationFreq", SUB_BUFFERS,
-                  "NTCP pumper failsafe interval (ms)",
+            super("ntcp.failsafe.iterationFreq", "NTCP pumper failsafe interval (ms)",
+                  SUB_TRANSPORT,
+
                   2000, 30000, 1000, "ntcp.failsafeIterationTime", _context);
         }
 
@@ -5143,8 +5182,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class NtcpSendFinisherThreadsParam extends BaseParam {
 
         NtcpSendFinisherThreadsParam() {
-            super("ntcp.sendFinisher.threads", SUB_TRANSPORT,
-                  "NTCP send finisher threads",
+            super("ntcp.sendFinisher.threads", "NTCP send finisher threads",
+                  SUB_TRANSPORT,
+
                   2, 16, 1, "ntcp.sendPool utilization", _context);
         }
 
@@ -5200,8 +5240,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class MaxConcurrentMessagesParam extends BaseParam {
 
         MaxConcurrentMessagesParam() {
-            super("udp.peer.concurrentMaxMessages", SUB_BUFFERS,
-                  "Max concurrent peer messages",
+            super("udp.peer.concurrentMaxMessages", "Max concurrent peer messages",
+                  SUB_TRANSPORT,
+
                   64, Math.max(256, Math.min(4096,
                       (int) (SystemVersion.getMaxMemory() / (8 * 1024 * 1024)))),
                   16, "udp.allowConcurrentActive", _context);
@@ -5298,8 +5339,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class SendPoolCapacityParam extends BaseParam {
 
         SendPoolCapacityParam() {
-            super("ntcp.sendPool.capacity", SUB_BUFFERS,
-                  "NTCP send pool capacity",
+            super("ntcp.sendPool.capacity", "NTCP send pool capacity",
+                  SUB_TRANSPORT,
+
                   64, 8192, 32, "ntcp.sendPool utilization", _context);
         }
 
@@ -5383,8 +5425,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class InternalQueueSizeParam extends BaseParam {
 
         InternalQueueSizeParam() {
-            super("i2cp.internalQueueSize", SUB_BUFFERS,
-                  "I2CP internal queue size",
+            super("i2cp.internalQueueSize", "I2CP internal queue size",
+                  SUB_I2CP,
+
                   128, 2048, 32, "udp.sendConfirmTime", _context);
         }
 
@@ -5443,8 +5486,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class MaxQueuedOutboundParam extends BaseParam {
 
         MaxQueuedOutboundParam() {
-            super("udp.establish.maxQueuedOutbound", SUB_BUFFERS,
-                  "Max queued outbound connections",
+            super("udp.establish.maxQueuedOutbound", "Max queued outbound connections",
+                  SUB_TRANSPORT,
+
                   32, 512, 8, "udp.sendConfirmTime", _context);
         }
 
@@ -5503,8 +5547,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class MaxWriteBufsParam extends BaseParam {
 
         MaxWriteBufsParam() {
-            super("ntcp.maxWriteBufs", SUB_BUFFERS,
-                  "NTCP max write buffers per connection",
+            super("ntcp.maxWriteBufs", "NTCP max write buffers per connection",
+                  SUB_TRANSPORT,
+
                   128, 2048, 16, "ntcp.writeBufs.size", _context);
         }
 
@@ -5599,8 +5644,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class TestJobMaxQueuedParam extends BaseParam {
 
         TestJobMaxQueuedParam() {
-            super("tunnel.testJob.maxQueued", SUB_TUNNEL,
-                  "Max concurrent test jobs",
+            super("tunnel.testJob.maxQueued", "Max concurrent test jobs",
+                  SUB_TUNNEL,
+
                   12, 256, 4, "transport.sendProcessingTime", _context);
         }
 
@@ -5659,8 +5705,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class TestJobMinDelayParam extends BaseParam {
 
         TestJobMinDelayParam() {
-            super("tunnel.testJob.minTestDelay", SUB_TUNNEL,
-                  "Min delay between tests (ms)",
+            super("tunnel.testJob.minTestDelay", "Min delay between tests (ms)",
+                  SUB_TUNNEL,
+
                   10000, 120000, 5000, "transport.sendProcessingTime", _context);
         }
 
@@ -5716,8 +5763,9 @@ public class Tuner implements SimpleTimer.TimedEvent {
     private class TestJobMaxDelayParam extends BaseParam {
 
         TestJobMaxDelayParam() {
-            super("tunnel.testJob.maxTestDelay", SUB_TUNNEL,
-                  "Max delay between tests (ms)",
+            super("tunnel.testJob.maxTestDelay", "Max delay between tests (ms)",
+                  SUB_TUNNEL,
+
                   60000, 600000, 10000, "transport.sendProcessingTime", _context);
         }
 

@@ -2887,6 +2887,9 @@ h2#jsonrpc{padding-left:38px;background:url(../images/i2cp.svg) no-repeat 10px c
 /* tuning */
 svg.spark{position:relative;border:var(--border);background:linear-gradient(180deg,#001800,#010,#001800)}
 #tuning .infohelp{margin-top:10px;box-shadow:var(--border_table)}
+#tuning .section tr{background:var(--th)}
+#tuning .section td{border:var(--border_soft);border-width:2px;border-left:0;border-right:0}
+#tuning .section td:first-child{padding-left:10px}
 
 /* iframes */
 #dns{padding:0;min-width:650px}
