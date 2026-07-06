@@ -835,6 +835,14 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
+     *  Actual number of running BuildHandler threads.
+     *  May differ from {@link #getBuildHandlerThreads()} if threads
+     *  were interrupted or failed to start.
+     *  @since 0.9.70+
+     */
+    public int getBuildHandlerThreadCount() { return _handlerThreads != null ? _handlerThreads.size() : 0; }
+
+    /**
      *  Dynamically adjust BuildHandler thread count to match target.
      *  @since 0.9.70+
      */

@@ -6265,7 +6265,25 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected int getRuntimeValue() {
-            return TunnelPoolManager.getBuildHandlerThreads();
+            int stored = TunnelPoolManager.getBuildHandlerThreads();
+            if (_context.tunnelManager() instanceof TunnelPoolManager) {
+                TunnelPoolManager mgr = (TunnelPoolManager) _context.tunnelManager();
+                int actual = mgr.getBuildHandlerThreadCount();
+                if (actual != stored) {
+                    if (_log.shouldWarn())
+                        _log.warn("BuildHandler thread mismatch: stored=" + stored + " actual=" + actual + " — reconciling");
+                    TunnelPoolManager.setBuildHandlerThreads(actual);
+                    stored = actual;
+                }
+                if (stored < 2) {
+                    if (_log.shouldWarn())
+                        _log.warn("BuildHandler thread count " + stored + " below floor 2 — rescaling");
+                    stored = 2;
+                    TunnelPoolManager.setBuildHandlerThreads(2);
+                    mgr.adjustBuildHandlerThreads(2);
+                }
+            }
+            return stored;
         }
 
         protected double getObservedStat(RouterContext ctx) {
