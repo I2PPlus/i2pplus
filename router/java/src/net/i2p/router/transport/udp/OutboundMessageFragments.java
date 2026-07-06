@@ -37,7 +37,7 @@ class OutboundMessageFragments {
      */
     private final CopyOnWriteArrayList<PeerState> _activePeers = new CopyOnWriteArrayList<>();
     private int _peerIndex = 0;
-    private final List<PeerState> _peersToRemove = new ArrayList<>();
+    private final CopyOnWriteArrayList<PeerState> _peersToRemove = new CopyOnWriteArrayList<>();
     private final Object _waitLock = new Object();
     private volatile boolean _alive;
     private final PacketBuilder2 _builder2;
