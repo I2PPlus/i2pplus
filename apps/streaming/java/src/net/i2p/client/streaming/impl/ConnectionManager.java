@@ -52,7 +52,7 @@ class ConnectionManager {
     private volatile ConnThrottler _hourThrottler;
     private volatile ConnThrottler _dayThrottler;
     /** since 0.9, each manager instantiates its own timer */
-    private final SimpleTimer2 _timer;
+    private final RetransmissionTimer _timer;
     private final Map<Long, Object> _recentlyClosed;
     private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
     private static final Object DUMMY = new Object();
@@ -143,8 +143,8 @@ class ConnectionManager {
         _conPacketHandler = new ConnectionPacketHandler(_context);
         _timer = new RetransmissionTimer(_context, "Streaming Timer " +
                                          session.getMyDestination().calculateHash().toBase64().substring(0, 4));
-        _connectionHandler = new ConnectionHandler(_context, this, _timer);
-        _tcbShare = new TCBShare(_context, _timer);
+        _connectionHandler = new ConnectionHandler(_context, this, _timer.getSharedTimer());
+        _tcbShare = new TCBShare(_context, _timer.getSharedTimer());
         // PROTO_ANY is for backward compatibility (pre-0.7.1)
         // PacketQueue has sent PROTO_STREAMING since the beginning of mux support (0.7.1)
         // As of 0.9.1, new option to enforce streaming protocol, off by default
@@ -152,7 +152,7 @@ class ConnectionManager {
         // enforce protocol default changed to true in 0.9.36
         int protocol = defaultOptions.getEnforceProtocol() ? I2PSession.PROTO_STREAMING : I2PSession.PROTO_ANY;
         _session.addMuxedSessionListener(_messageHandler, protocol, defaultOptions.getLocalPort());
-        _outboundQueue = new PacketQueue(_context, _timer);
+        _outboundQueue = new PacketQueue(_context, _timer.getSharedTimer());
         _recentlyClosed = new LHMCache<>(128);
         /** Socket timeout for accept() */
         _soTimeout = -1;
@@ -259,7 +259,7 @@ class ConnectionManager {
                 _minuteThrottler == null) {
                _context.statManager().createRateStat("stream.con.throttledMinute", "Dropped for conn limit", "Stream", RATES);
                _minuteThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerMinute(), _defaultOptions.getMaxTotalConnsPerMinute(),
-                                                    60*1000, _timer);
+                                                     60*1000, _timer.getSharedTimer());
             } else if (_minuteThrottler != null) {
                _minuteThrottler.updateLimits(_defaultOptions.getMaxConnsPerMinute(), _defaultOptions.getMaxTotalConnsPerMinute());
             }
@@ -267,7 +267,7 @@ class ConnectionManager {
                 _hourThrottler == null) {
                _context.statManager().createRateStat("stream.con.throttledHour", "Dropped for conn limit", "Stream", RATES);
                _hourThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerHour(), _defaultOptions.getMaxTotalConnsPerHour(),
-                                                  60*60*1000, _timer);
+                                                   60*60*1000, _timer.getSharedTimer());
             } else if (_hourThrottler != null) {
                _hourThrottler.updateLimits(_defaultOptions.getMaxConnsPerHour(), _defaultOptions.getMaxTotalConnsPerHour());
             }
@@ -275,7 +275,7 @@ class ConnectionManager {
                 _dayThrottler == null) {
                _context.statManager().createRateStat("stream.con.throttledDay", "Dropped for conn limit", "Stream", RATES);
                _dayThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerDay(), _defaultOptions.getMaxTotalConnsPerDay(),
-                                                 24*60*60*1000, _timer);
+                                                  24*60*60*1000, _timer.getSharedTimer());
             } else if (_dayThrottler != null) {
                _dayThrottler.updateLimits(_defaultOptions.getMaxConnsPerDay(), _defaultOptions.getMaxTotalConnsPerDay());
             }
@@ -456,7 +456,7 @@ class ConnectionManager {
         }
 
         Connection con = new Connection(_context, this, synPacket.getSession(), _schedulerChooser,
-                                        _timer, _outboundQueue, _conPacketHandler, opts, true);
+                                        _timer.getSharedTimer(), _outboundQueue, _conPacketHandler, opts, true);
         _tcbShare.updateOptsFromShare(con);
         assignReceiveStreamId(con);
 
@@ -640,8 +640,8 @@ class ConnectionManager {
                   // no remaining streams, let's wait a bit
                   try { Thread.sleep(remaining/4); } catch (InterruptedException ie) { /* ignored */ }
              } else {
-                 con = new Connection(_context, this, session, _schedulerChooser, _timer,
-                                      _outboundQueue, _conPacketHandler, opts, false);
+                 con = new Connection(_context, this, session, _schedulerChooser, _timer.getSharedTimer(),
+                                       _outboundQueue, _conPacketHandler, opts, false);
                  con.setRemotePeer(peer);
                  assignReceiveStreamId(con);
                  break; // stop looping as a psuedo-wait
@@ -1113,7 +1113,7 @@ class ConnectionManager {
         private final PingNotifier _notifier;
 
         public PingFailed(Long id, PingNotifier notifier) {
-            super(_timer);
+            super(_timer.getSharedTimer());
             _id = id;
             _notifier = notifier;
         }
