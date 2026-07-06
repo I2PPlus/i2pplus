@@ -5,6 +5,7 @@ import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -68,6 +69,7 @@ public class BuildHandler implements Runnable {
     private final IdleTunnelMonitor _idleTunnelMonitor;
     private final BanLogger _banLogger;
     private final AtomicInteger _currentLookups = new AtomicInteger();
+    private final ConcurrentLinkedQueue<PendingLookup> _pendingLookups = new ConcurrentLinkedQueue<>();
     private volatile boolean _isRunning;
     private final Object _startupLock = new Object();
     private ExplState _explState = ExplState.NONE; // NOSONAR S1170
@@ -83,8 +85,9 @@ public class BuildHandler implements Runnable {
     private static final int NEXT_HOP_LOOKUP_TIMEOUT = 3*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
     private static final int MIN_LOOKUP_LIMIT = IS_SLOW ? 4 : 10; // limits on concurrent next-hop RI lookup
-    private static final int MAX_LOOKUP_LIMIT = IS_SLOW ? 10 : Math.max(SystemVersion.getCores() / 2, 32);
+    private static final int MAX_LOOKUP_LIMIT = IS_SLOW ? 10 : Math.max(SystemVersion.getCores(), 32);
     private static final int PERCENT_LOOKUP_LIMIT = IS_SLOW ? 15 : 40; // limit lookups to this % of current participating tunnels
+    private static final int MAX_PENDING_LOOKUPS = 64;
     private static final long MAX_REQUEST_FUTURE = 5*60*1000L;
     private static final long MAX_REQUEST_AGE = 65*60*1000L; /** must be > 1 hour due to rounding down */
     private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000L;
@@ -96,7 +99,7 @@ public class BuildHandler implements Runnable {
         return ctx.getProperty("i2p.tunnel.build.minLookupLimit", SystemVersion.isSlow() ? 4 : 10);
     }
     private static int getMaxLookupLimit(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.build.maxLookupLimit", SystemVersion.isSlow() ? 10 : Math.max(SystemVersion.getCores() / 2, 16));
+        return ctx.getProperty("i2p.tunnel.build.maxLookupLimit", IS_SLOW ? 10 : MAX_LOOKUP_LIMIT);
     }
     private static int getPercentLookupLimit(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.build.percentLookupLimit", SystemVersion.isSlow() ? 15 : 40);
@@ -176,6 +179,7 @@ public class BuildHandler implements Runnable {
         ctx.statManager().createRequiredRateStat("tunnel.dropLoadProactiveAbort", "Allowed requests during load", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.dropLoadProactive", "Delay estimate when dropped (ms)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.dropLookupThrottle", "Dropped tunnel build (hop lookup limit)", "Tunnels [Participating]", RATES);
+        ctx.statManager().createRequiredRateStat("tunnel.pendingLookupQueue", "Pending lookup queue size", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.dropReqThrottle", "Dropped tunnel build (request limit)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.nextHopLookupSuccessTime", "Time taken for successful remote next hop lookup (ms)", "Tunnels", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.ownDupID", "Our tunnel dup. ID", "Tunnels [Participating]", RATES);
@@ -571,7 +575,18 @@ public class BuildHandler implements Runnable {
                 _context.netDb().lookupRouterInfo(nextPeer, new HandleReq(_context, state, req, nextPeer, decremented),
                                                   new TimeoutReq(_context, state, req, nextPeer, decremented), getNextHopLookupTimeout(_context));
             } else {
-                _context.statManager().addRateData("tunnel.dropLookupThrottle", 1);
+                if (_pendingLookups.size() < MAX_PENDING_LOOKUPS) {
+                    _pendingLookups.offer(new PendingLookup(state, req, nextPeer));
+                    if (_log.shouldInfo()) {
+                        _log.info("Queuing pending lookup for [" + nextPeer.toBase64().substring(0,6) +
+                                  "] -> Queue size: " + _pendingLookups.size() + " / Lookups: " + currentLookups + " / " + limit + req);
+                    }
+                } else {
+                    _context.statManager().addRateData("tunnel.dropLookupThrottle", 1);
+                    if (_log.shouldInfo()) {
+                        _log.info("Dropping tunnel build [MsgID " + state.msg.getUniqueId() + "] -> Lookup queue full (" + _pendingLookups.size() + ")");
+                    }
+                }
                 return -1;
             }
             return -1;
@@ -663,6 +678,7 @@ public class BuildHandler implements Runnable {
                     }
                     _currentLookups.set(0);
                 }
+                drainPendingLookups();
             }
         }
     }
@@ -706,7 +722,71 @@ public class BuildHandler implements Runnable {
                     }
                     _currentLookups.set(0);
                 }
+                drainPendingLookups();
             }
+        }
+    }
+
+    /**
+     *  A pending lookup request waiting for a concurrent lookup slot.
+     *
+     *  @since 0.9.70+
+     */
+    private static class PendingLookup {
+        final BuildMessageState state;
+        final BuildRequestRecord req;
+        final Hash nextPeer;
+        final long queuedTime;
+
+        PendingLookup(BuildMessageState state, BuildRequestRecord req, Hash nextPeer) {
+            this.state = state;
+            this.req = req;
+            this.nextPeer = nextPeer;
+            this.queuedTime = System.currentTimeMillis();
+        }
+    }
+
+    /**
+     *  Drain the pending lookup queue, starting lookups for entries
+     *  while we have capacity. Discard stale entries.
+     *
+     *  @since 0.9.70+
+     */
+    private void drainPendingLookups() {
+        int numTunnels = _context.tunnelManager().getParticipatingCount();
+        int limit = Math.max(getMinLookupLimit(_context), Math.min(getMaxLookupLimit(_context), numTunnels * getPercentLookupLimit(_context) / 100));
+        long maxAge = getNextHopLookupTimeout(_context) * 2;
+
+        PendingLookup pending;
+        while ((pending = _pendingLookups.poll()) != null) {
+            long age = System.currentTimeMillis() - pending.queuedTime;
+            if (age > maxAge) {
+                if (_log.shouldInfo()) {
+                    _log.info("Discarding stale pending lookup for [" + pending.nextPeer.toBase64().substring(0,6) + "] after " + age + "ms");
+                }
+                _context.statManager().addRateData("tunnel.dropLookupThrottle", 1);
+                continue;
+            }
+            int currentLookups = _currentLookups.get();
+            if (currentLookups >= limit) {
+                _pendingLookups.offer(pending);
+                break;
+            }
+            RouterInfo ri = _context.netDb().lookupRouterInfoLocally(pending.nextPeer);
+            if (ri != null) {
+                handleReq(ri, pending.state, pending.req, pending.nextPeer);
+                continue;
+            }
+            _currentLookups.incrementAndGet();
+            AtomicBoolean decremented = new AtomicBoolean(false);
+            if (_log.shouldInfo()) {
+                _log.info("Draining pending lookup for [" + pending.nextPeer.toBase64().substring(0,6) +
+                          "] -> Concurrent lookups: " + _currentLookups.get() + " / " + limit);
+            }
+            _context.netDb().lookupRouterInfo(pending.nextPeer,
+                new HandleReq(_context, pending.state, pending.req, pending.nextPeer, decremented),
+                new TimeoutReq(_context, pending.state, pending.req, pending.nextPeer, decremented),
+                getNextHopLookupTimeout(_context));
         }
     }
 
