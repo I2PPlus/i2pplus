@@ -36,12 +36,95 @@ import java.util.Random;
  */
 public class SyntheticREDQueue implements BandwidthEstimator {
 
-    private static final float MAX_DROP_PROBABILITY = 0.00005f;
+    private static volatile float _maxDropProbability = 0.00005f;
     private static final int DECAY_FACTOR = 8;
     private static final int WESTWOOD_RTT_MIN = 50; // ms
 
     private static final int DEFAULT_LOW_THRESHOLD_DIV = 4;
     private static final int DEFAULT_HIGH_THRESHOLD_DIV = 2;
+
+    /** Active instances for dynamic tuning */
+    private static final java.util.concurrent.CopyOnWriteArrayList<SyntheticREDQueue> INSTANCES = new java.util.concurrent.CopyOnWriteArrayList<SyntheticREDQueue>();
+
+    /**
+     * Update max drop probability on all active instances.
+     *
+     * @since 0.9.70+
+     */
+    public static void updateAllMaxDropProbability(float probability) {
+        _maxDropProbability = probability;
+        for (SyntheticREDQueue q : INSTANCES) {
+            q._maxDropProbability = probability;
+        }
+    }
+
+    /**
+     * Update min threshold on all active instances.
+     *
+     * @since 0.9.70+
+     */
+    public static void updateAllMinThresholds(int threshold) {
+        for (SyntheticREDQueue q : INSTANCES) {
+            if (threshold < q._maxThresholdBytes) {
+                q._minThresholdBytes = threshold;
+            }
+        }
+    }
+
+    /**
+     * Update max threshold on all active instances.
+     *
+     * @since 0.9.70+
+     */
+    public static void updateAllMaxThresholds(int threshold) {
+        for (SyntheticREDQueue q : INSTANCES) {
+            if (threshold > q._minThresholdBytes) {
+                q._maxThresholdBytes = threshold;
+            }
+        }
+    }
+
+    /**
+     * Returns current max drop probability across all instances.
+     *
+     * @since 0.9.70+
+     */
+    public static float getCurrentMaxDropProbability() {
+        return _maxDropProbability;
+    }
+
+    /**
+     * Returns the minimum threshold from the first active instance, or -1 if none.
+     *
+     * @since 0.9.70+
+     */
+    public static int getCurrentMinThreshold() {
+        for (SyntheticREDQueue q : INSTANCES) {
+            return q._minThresholdBytes;
+        }
+        return -1;
+    }
+
+    /**
+     * Returns the maximum threshold from the first active instance, or -1 if none.
+     *
+     * @since 0.9.70+
+     */
+    public static int getCurrentMaxThreshold() {
+        for (SyntheticREDQueue q : INSTANCES) {
+            return q._maxThresholdBytes;
+        }
+        return -1;
+    }
+
+    /**
+     * Returns a snapshot of all active SyntheticREDQueue instances.
+     *
+     * @since 0.9.70+
+     */
+    public static java.util.List<SyntheticREDQueue> getInstances() {
+        return new java.util.ArrayList<SyntheticREDQueue>(INSTANCES);
+    }
 
     private final I2PAppContext _context;
     private final Log _log;
@@ -56,7 +139,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
     private int _newDataSize;
     private long _lastQueueUpdateTime;
 
-    private final int _minThresholdBytes, _maxThresholdBytes;
+    private int _minThresholdBytes, _maxThresholdBytes;
     private final int _bandwidthBps;
     private final float _bandwidthBytesPerMs;
 
@@ -102,6 +185,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
         _bandwidthBytesPerMs = bwBps / 1000f;
 
         _lastQueueUpdateTime = _lastAckTime;
+        INSTANCES.add(this);
 
         if (_log.shouldDebug()) {
             _log.debug("Configured bandwidth: " + bwBps + "B/s; MinThreshold: " + minThB + "B; MaxThreshold: " + maxThB + "B");
@@ -113,6 +197,33 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      */
     public int getMaxBandwidth() {
         return _bandwidthBps;
+    }
+
+    /**
+     * Returns the current minimum threshold in bytes.
+     *
+     * @since 0.9.70+
+     */
+    public int getMinThreshold() {
+        return _minThresholdBytes;
+    }
+
+    /**
+     * Returns the current maximum threshold in bytes.
+     *
+     * @since 0.9.70+
+     */
+    public int getMaxThreshold() {
+        return _maxThresholdBytes;
+    }
+
+    /**
+     * Returns the current max drop probability.
+     *
+     * @since 0.9.70+
+     */
+    public float getMaxDropProbability() {
+        return _maxDropProbability;
     }
 
     /**
@@ -192,8 +303,8 @@ public class SyntheticREDQueue implements BandwidthEstimator {
                 _dropCount++; // Increment count of consecutive drop attempts
 
                 // Compute base drop probability proportional to bytes size, factor, max drop probability, and queue size above min threshold
-                float pb = (bytes / 1024f) * factor * MAX_DROP_PROBABILITY * (_avgQueueSize - _minThresholdBytes) / (_maxThresholdBytes - _minThresholdBytes);
-                pb = Math.min(pb, MAX_DROP_PROBABILITY); // Clamp to max drop probability
+                float pb = (bytes / 1024f) * factor * _maxDropProbability * (_avgQueueSize - _minThresholdBytes) / (_maxThresholdBytes - _minThresholdBytes);
+                pb = Math.min(pb, _maxDropProbability); // Clamp to max drop probability
 
                 // Calculate adjusted drop probability pa that accounts for consecutive drops to avoid over-dropping
                 float denominator = 1.0f - (_dropCount * pb);
