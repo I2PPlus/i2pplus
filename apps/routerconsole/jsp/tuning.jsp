@@ -11,6 +11,7 @@
 <jsp:setProperty name="tuninghelper" property="contextId" value="<%=i2pcontextId%>"/>
 <jsp:setProperty name="tuninghelper" property="nonce" value="<%=pageNonce%>"/>
 <% tuninghelper.storeWriter(out); %>
+<iframe name=processForm id=processForm hidden></iframe>
 <jsp:getProperty name="tuninghelper" property="tuning"/>
 <script src=/js/toggleElements.js></script>
 <script src=/js/tuning.js type=module></script>

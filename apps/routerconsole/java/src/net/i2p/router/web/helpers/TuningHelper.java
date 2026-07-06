@@ -51,6 +51,9 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("CODEL_TARGET", "CoDel Target Delay");
         DISPLAY_NAMES.put("CODEL_INTERVAL", "CoDel Interval");
         DISPLAY_NAMES.put("WESTWOOD_DECAY_FACTOR", "Westwood Decay Factor");
+        DISPLAY_NAMES.put("RED_MIN_THRESHOLD", "RED Minimum Queue Threshold");
+        DISPLAY_NAMES.put("RED_MAX_THRESHOLD", "RED Maximum Queue Threshold");
+        DISPLAY_NAMES.put("RED_MAX_DROP_PROB", "RED Maximum Drop Probability");
         DISPLAY_NAMES.put("crypto.x25519.precalcMin", "X25519 Precalculate Minimum");
         DISPLAY_NAMES.put("crypto.edh.precalcMin", "EDH Precalculate Minimum");
         DISPLAY_NAMES.put("crypto.mlkem.precalcMin", "ML-KEM Precalculate Minimum");
@@ -126,6 +129,9 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("CODEL_TARGET", "CoDel drop target delay in ms.");
         PARAM_DESCRIPTIONS.put("CODEL_INTERVAL", "CoDel measurement window in ms.");
         PARAM_DESCRIPTIONS.put("WESTWOOD_DECAY_FACTOR", "Westwood EWMA smoothing factor.");
+        PARAM_DESCRIPTIONS.put("RED_MIN_THRESHOLD", "Min RED queue size before probabilistic drops (bytes).");
+        PARAM_DESCRIPTIONS.put("RED_MAX_THRESHOLD", "Max RED queue size at which all packets are dropped (bytes).");
+        PARAM_DESCRIPTIONS.put("RED_MAX_DROP_PROB", "Max probability of RED drop when queue is full (ppm).");
         PARAM_DESCRIPTIONS.put("crypto.x25519.precalcMin", "Min precomputed X25519 key pairs.");
         PARAM_DESCRIPTIONS.put("crypto.edh.precalcMin", "Min precomputed EDH key pairs.");
         PARAM_DESCRIPTIONS.put("crypto.mlkem.precalcMin", "Min precomputed ML-KEM key pairs for PQ.");
