@@ -24,9 +24,13 @@ public class TryCache<T> {
     }
 
     private final ObjectFactory<T> factory;
-    private final int capacity;
+    private volatile int capacity;
     private final ConcurrentLinkedDeque<T> items = new ConcurrentLinkedDeque<>();
     private volatile long _lastUnderflow = System.currentTimeMillis();
+    private volatile long _acquireCount;
+    private volatile long _missCount;
+    private volatile long _releaseCount;
+    private volatile long _discardCount;
 
     public TryCache(ObjectFactory<T> factory, int capacity) {
         this.factory = factory;
@@ -40,8 +44,10 @@ public class TryCache<T> {
         T item = items.pollLast();
         if (item == null) {
             _lastUnderflow = System.currentTimeMillis();
+            _missCount++;
             item = factory.newInstance();
         }
+        _acquireCount++;
         return item;
     }
 
@@ -61,10 +67,12 @@ public class TryCache<T> {
 
         // If full, discard the object
         if (items.size() >= capacity) {
+            _discardCount++;
             return;
         }
 
         items.add(item);
+        _releaseCount++;
     }
 
     /**
@@ -89,7 +97,72 @@ public class TryCache<T> {
         }
     }
 
+    /**
+     * Resize the cache to a new capacity.
+     * If shrinking, excess items are evicted. If growing, the cache
+     * simply allows more items to accumulate on future releases.
+     *
+     * @param newCapacity the new maximum number of entries
+     * @since 0.9.70+
+     */
+    public void resize(int newCapacity) {
+        newCapacity = Math.max(0, newCapacity);
+        int oldCapacity = capacity;
+        capacity = newCapacity;
+        // If shrinking, evict excess items
+        if (newCapacity < oldCapacity) {
+            shrink(newCapacity);
+        }
+    }
+
     public long getLastUnderflowTime() {
         return _lastUnderflow;
+    }
+
+    /**
+     * Return the current cache capacity.
+     *
+     * @since 0.9.70+
+     */
+    public int getCapacity() {
+        return capacity;
+    }
+
+    /**
+     * Return the number of acquire() calls that found an empty cache
+     * (misses required allocating a new object).
+     *
+     * @since 0.9.70+
+     */
+    public long getMissCount() {
+        return _missCount;
+    }
+
+    /**
+     * Return the number of release() calls that were discarded because
+     * the cache was full.
+     *
+     * @since 0.9.70+
+     */
+    public long getDiscardCount() {
+        return _discardCount;
+    }
+
+    /**
+     * Return total acquire() count (hits + misses).
+     *
+     * @since 0.9.70+
+     */
+    public long getAcquireCount() {
+        return _acquireCount;
+    }
+
+    /**
+     * Return total release() count (returned to cache).
+     *
+     * @since 0.9.70+
+     */
+    public long getReleaseCount() {
+        return _releaseCount;
     }
 }

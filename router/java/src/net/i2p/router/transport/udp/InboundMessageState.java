@@ -27,7 +27,7 @@ class InboundMessageState implements CDQEntry {
     private static final long MAX_RECEIVE_TIME = 10*1000L;
     public static final int MAX_FRAGMENTS = 32;
     private static final int MAX_FRAGMENT_SIZE = UDPPacket.MAX_PACKET_SIZE;
-    private static final ByteCache _fragmentCache = ByteCache.getInstance(8, MAX_FRAGMENT_SIZE);
+    private static final ByteCache _fragmentCache = ByteCache.getInstance(64, MAX_FRAGMENT_SIZE);
 
     /**
      * Constructs a new InboundMessageState with no fragments.

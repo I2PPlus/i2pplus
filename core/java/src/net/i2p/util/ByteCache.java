@@ -94,6 +94,10 @@ public final class ByteCache extends TryCache<ByteArray> {
         }
     }
 
+    /** Snapshot of miss/discard counts at last cleanup, for delta computation */
+    private long _lastMissCount;
+    private long _lastDiscardCount;
+
     /**
      * Cleanup this specific cache - shrink if underutilized.
      */
@@ -104,6 +108,18 @@ public final class ByteCache extends TryCache<ByteArray> {
             shrink(origsz - toRemove);
         }
         I2PAppContext.getGlobalContext().statManager().addRateData("byteCache.memory." + _entrySize, (long) _entrySize * origsz);
+
+        // Report miss/discard deltas since last cleanup
+        long misses = getMissCount();
+        long discards = getDiscardCount();
+        long missDelta = misses - _lastMissCount;
+        long discardDelta = discards - _lastDiscardCount;
+        _lastMissCount = misses;
+        _lastDiscardCount = discards;
+        if (missDelta > 0 || discardDelta > 0) {
+            I2PAppContext.getGlobalContext().statManager().addRateData("byteCache.miss." + _entrySize, missDelta);
+            I2PAppContext.getGlobalContext().statManager().addRateData("byteCache.discard." + _entrySize, discardDelta);
+        }
     }
 
     @SuppressWarnings("PMD.SingletonClassReturningNewInstance")
@@ -174,6 +190,8 @@ public final class ByteCache extends TryCache<ByteArray> {
             _allCaches.add(this);
         }
         I2PAppContext.getGlobalContext().statManager().createRateStat("byteCache.memory." + entrySize, "Memory usage (B)", "Router [ByteCache]", new long[] {60 * 1000, 10 * 60 * 1000, 24 * 60 * 60 * 1000});
+        I2PAppContext.getGlobalContext().statManager().createRateStat("byteCache.miss." + entrySize, "Acquire miss rate", "Router [ByteCache]", new long[] {60 * 1000, 10 * 60 * 1000, 24 * 60 * 60 * 1000});
+        I2PAppContext.getGlobalContext().statManager().createRateStat("byteCache.discard." + entrySize, "Release discard rate", "Router [ByteCache]", new long[] {60 * 1000, 10 * 60 * 1000, 24 * 60 * 60 * 1000});
     }
 
     /**
@@ -182,9 +200,7 @@ public final class ByteCache extends TryCache<ByteArray> {
      * @param maxCachedEntries the new maximum number of entries to cache
      */
     public void resize(int maxCachedEntries) {
-        // TryCache doesn't support dynamic resize, but we can create a new one
-        // For now, this is a no-op as TryCache uses a fixed-size ConcurrentLinkedDeque
-        // To fully support resize, TryCache would need modification
+        super.resize(maxCachedEntries);
     }
 
     /**
