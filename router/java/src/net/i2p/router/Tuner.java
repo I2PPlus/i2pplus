@@ -659,6 +659,40 @@ public class Tuner implements SimpleTimer.TimedEvent {
         public boolean isAutoTuning() { return _autoTuning; }
 
         /**
+         * Get the current share bandwidth in bytes per second.
+         * Useful for params whose ranges should scale with bandwidth.
+         *
+         * @since 0.9.70+
+         */
+        protected static int getShareBps(RouterContext ctx) {
+            return 1000 * TunnelDispatcher.getShareBandwidth(ctx);
+        }
+
+        /**
+         * Effective default min — override for bandwidth-scaled params.
+         * Called by refreshRanges() instead of _defaultMin.
+         *
+         * @since 0.9.70+
+         */
+        protected int getDefaultMin(RouterContext ctx) { return _defaultMin; }
+
+        /**
+         * Effective default max — override for bandwidth-scaled params.
+         * Called by refreshRanges() instead of _defaultMax.
+         *
+         * @since 0.9.70+
+         */
+        protected int getDefaultMax(RouterContext ctx) { return _defaultMax; }
+
+        /**
+         * Effective default step — override for bandwidth-scaled params.
+         * Called by refreshRanges() instead of _defaultStep.
+         *
+         * @since 0.9.70+
+         */
+        protected int getDefaultStep(RouterContext ctx) { return _defaultStep; }
+
+        /**
          * Re-read min/max/step from autotune.config — live update, no restart.
          *
          * <p>Called once per tuning cycle before computeTarget(). Clamps
@@ -671,16 +705,19 @@ public class Tuner implements SimpleTimer.TimedEvent {
          */
         public void refreshRanges(RouterContext ctx) {
             String name = _name;
-            _min = _autotune.getInt(name + ".min", _defaultMin);
-            _max = _autotune.getInt(name + ".max", _defaultMax);
-            _step = _autotune.getInt(name + ".step", _defaultStep);
-            // Clamp loaded ranges to constructor limits (enforce setter constraints)
+            int floor = getDefaultMin(ctx);
+            int ceil = getDefaultMax(ctx);
+            int step = getDefaultStep(ctx);
+            _min = _autotune.getInt(name + ".min", floor);
+            _max = _autotune.getInt(name + ".max", ceil);
+            _step = _autotune.getInt(name + ".step", step);
+            // Clamp loaded ranges to effective defaults (enforce setter constraints)
             // Prevents stale autotune.config values from exceeding actual setter limits
-            _min = Math.max(_defaultMin, _min);
-            _max = Math.min(_defaultMax, _max);
+            _min = Math.max(floor, _min);
+            _max = Math.min(ceil, _max);
             if (_min > _max) {
-                _min = _defaultMin;
-                _max = _defaultMax;
+                _min = floor;
+                _max = ceil;
             }
             // Clamp persisted value to new range — prevents stale autotune.config
             // values from exceeding caps after code changes (e.g., max lowered)
@@ -2538,6 +2575,25 @@ public class Tuner implements SimpleTimer.TimedEvent {
                    "bwLimiter.participatingBandwidthQueue", _context);
         }
 
+        /**
+         * Scale min/max/step with share bandwidth.
+         * Default = bwBps / 4; range = [bwBps/16 .. bwBps].
+         */
+        @Override
+        protected int getDefaultMin(RouterContext ctx) {
+            return Math.max(1024, getShareBps(ctx) / 16);
+        }
+
+        @Override
+        protected int getDefaultMax(RouterContext ctx) {
+            return getShareBps(ctx);
+        }
+
+        @Override
+        protected int getDefaultStep(RouterContext ctx) {
+            return Math.max(256, getShareBps(ctx) / 256);
+        }
+
         protected void applyValue(int value) {
             SyntheticREDQueue.updateAllMinThresholds(value);
         }
@@ -2590,6 +2646,25 @@ public class Tuner implements SimpleTimer.TimedEvent {
                   "RED max queue threshold",
                    SUB_CONGESTION, 2048, 131072, 1024,
                    "bwLimiter.participatingBandwidthQueue", _context);
+        }
+
+        /**
+         * Scale min/max/step with share bandwidth.
+         * Default = bwBps / 2; range = [bwBps/8 .. bwBps*2].
+         */
+        @Override
+        protected int getDefaultMin(RouterContext ctx) {
+            return Math.max(2048, getShareBps(ctx) / 8);
+        }
+
+        @Override
+        protected int getDefaultMax(RouterContext ctx) {
+            return getShareBps(ctx) * 2;
+        }
+
+        @Override
+        protected int getDefaultStep(RouterContext ctx) {
+            return Math.max(512, getShareBps(ctx) / 128);
         }
 
         protected void applyValue(int value) {
