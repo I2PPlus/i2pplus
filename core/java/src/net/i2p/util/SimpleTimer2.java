@@ -30,7 +30,7 @@ public class SimpleTimer2 {
         return I2PAppContext.getGlobalContext().simpleTimer2();
     }
 
-    private static final int THREADS = 4;
+    private static final int THREADS = 2;
 
     private final ScheduledThreadPoolExecutor _executor;
     private final String _name;
@@ -139,7 +139,7 @@ public class SimpleTimer2 {
      *
      * @param event to be run once
      * @param timeoutMs run after this delay
-     * @since 0.9.71
+     * @since 0.9.70+
      */
     public void addEvent(final TimedEvent event, final long timeoutMs) {
         if (event == null)
@@ -155,7 +155,7 @@ public class SimpleTimer2 {
      * @param event the event to run periodically
      * @param timeoutMs period in ms between executions
      * @throws IllegalArgumentException if timeoutMs less than 5000
-     * @since 0.9.71
+     * @since 0.9.70+
      */
     public void addPeriodicEvent(final TimedEvent event, final long timeoutMs) {
         addPeriodicEvent(event, timeoutMs, timeoutMs);
@@ -168,7 +168,7 @@ public class SimpleTimer2 {
      * @param delay run the first iteration after delay ms
      * @param timeoutMs period in ms between executions
      * @throws IllegalArgumentException if timeoutMs less than 5000
-     * @since 0.9.71
+     * @since 0.9.70+
      */
     public void addPeriodicEvent(final TimedEvent event, final long delay, final long timeoutMs) {
         if (event == null)
@@ -233,7 +233,7 @@ public class SimpleTimer2 {
          * Create a new timed event without scheduling.
          * Pool is set later via setPool() or addEvent().
          *
-         * @since 0.9.71
+         * @since 0.9.70+
          */
         protected TimedEvent() {
             init();

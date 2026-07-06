@@ -1614,7 +1614,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  Error handling level depends on log verbosity:
      *  debug → full stack trace, advanced → message only, else → silent.
      *
-     *  @since 0.9.71
+     *  @since 0.9.70+
      */
     private void shutdownSubsystems() {
         boolean debug = _log.shouldDebug();
@@ -1644,7 +1644,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  @param debug if true, log full stack trace on error
      *  @param advanced if true, log message-only on error
      *  @param task the shutdown operation
-     *  @since 0.9.71
+     *  @since 0.9.70+
      */
     private void shutdownOne(String name, boolean debug, boolean advanced, Runnable task) {
         try {

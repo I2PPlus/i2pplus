@@ -35,7 +35,7 @@ public class RetransmissionTimer {
      * Schedule an event via the shared timer.
      * @param event the event to schedule
      * @param timeoutMs delay in ms
-     * @since 0.9.71
+     * @since 0.9.70+
      */
     public void addEvent(final SimpleTimer2.TimedEvent event, final long timeoutMs) {
         _shared.addEvent(event, timeoutMs);
@@ -45,7 +45,7 @@ public class RetransmissionTimer {
      * Schedule a periodic event via the shared timer.
      * @param event the event to schedule
      * @param timeoutMs period in ms
-     * @since 0.9.71
+     * @since 0.9.70+
      */
     public void addPeriodicEvent(final SimpleTimer2.TimedEvent event, final long timeoutMs) {
         _shared.addPeriodicEvent(event, timeoutMs);
@@ -56,7 +56,7 @@ public class RetransmissionTimer {
      * @param event the event to schedule
      * @param delay first execution delay in ms
      * @param timeoutMs period in ms
-     * @since 0.9.71
+     * @since 0.9.70+
      */
     public void addPeriodicEvent(final SimpleTimer2.TimedEvent event, final long delay, final long timeoutMs) {
         _shared.addPeriodicEvent(event, delay, timeoutMs);
