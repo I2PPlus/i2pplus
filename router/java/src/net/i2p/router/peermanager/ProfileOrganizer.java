@@ -762,7 +762,8 @@ public class ProfileOrganizer {
                 // First pass: low-latency peers (proven fast via tunnel builds or peer tests)
                 for (PeerProfile profile : candidates) {
                     if (_fastPeers.size() >= target) break;
-                    if (profile.isLowLatency() && isSelectable(profile.getPeer())) {
+                    if (profile.isLowLatency() && isSelectable(profile.getPeer()) &&
+                        !isLowTunnelAcceptance(profile)) {
                         _fastPeers.put(profile.getPeer(), profile);
                         added++;
                     }
@@ -775,19 +776,29 @@ public class ProfileOrganizer {
                     for (PeerProfile profile : candidates) {
                         if (_fastPeers.size() >= target) break;
                         if (profile.getIsActive() && profile.getSpeedValue() >= threshold &&
-                            isSelectable(profile.getPeer())) {
+                            isSelectable(profile.getPeer()) && !isLowTunnelAcceptance(profile)) {
                             _fastPeers.put(profile.getPeer(), profile);
                             added++;
                         }
                     }
                 }
 
-                // Third pass: accept any selectable peer from capacity order to fill gaps
+                // Third pass: accept any recently-active selectable peer to fill gaps
+                // During startup (first 15 min), skip activity requirement — we have
+                // no lastHeardFrom data yet.  After startup, use dynamic window:
+                // tight when many peers, wide when sparse.
                 if (_fastPeers.size() < target) {
+                    boolean inStartup = _context.router() != null &&
+                                        _context.router().getUptime() < 15 * 60 * 1000L;
+                    long activeCutoff = inStartup ? now : now - TunnelPeerSelector.getActivityWindow(_context);
                     for (PeerProfile profile : newStrictCapacityOrder) {
                         if (_fastPeers.size() >= target) break;
                         if (profile.getPeer().equals(_us)) continue;
                         if (!isSelectable(profile.getPeer())) continue;
+                        if (isLowTunnelAcceptance(profile)) continue;
+                        // Require recent activity — don't fill fast tier with stale peers
+                        if (profile.getLastHeardFrom() < activeCutoff &&
+                            profile.getLastSendSuccessful() < activeCutoff) continue;
                         _fastPeers.put(profile.getPeer(), profile);
                         added++;
                     }
@@ -798,10 +809,17 @@ public class ProfileOrganizer {
             int minHighCap = getMinimumHighCapacityPeers();
             int highCapAdded = 0;
             if (_highCapacityPeers.size() < minHighCap) {
+                boolean inStartup = _context.router() != null &&
+                                    _context.router().getUptime() < 15 * 60 * 1000L;
+                long activeCutoff = inStartup ? now : now - TunnelPeerSelector.getActivityWindow(_context);
                 for (PeerProfile profile : newStrictCapacityOrder) {
                     if (_highCapacityPeers.size() >= minHighCap) break;
                     if (profile.getPeer().equals(_us)) continue;
                     if (!isSelectable(profile.getPeer())) continue;
+                    if (isLowTunnelAcceptance(profile)) continue;
+                    // Require recent activity — don't fill high-cap tier with stale peers
+                    if (profile.getLastHeardFrom() < activeCutoff &&
+                        profile.getLastSendSuccessful() < activeCutoff) continue;
                     _highCapacityPeers.put(profile.getPeer(), profile);
                     highCapAdded++;
                 }
@@ -1647,13 +1665,30 @@ public class ProfileOrganizer {
     protected int getMaximumFastPeers() {
         if (_context.router() == null) return _defaultMaxFastPeers;
         int known = _context.netDb().getKnownRouters();
-        return _context.getProperty(PROP_MAXIMUM_FAST_PEERS, known > 3000 ? Math.max(known / 12, _defaultMaxFastPeers) : _defaultMaxFastPeers);
+        int maxFromKnown = _context.getProperty(PROP_MAXIMUM_FAST_PEERS, known > 3000 ? Math.max(known / 12, _defaultMaxFastPeers) : _defaultMaxFastPeers);
+        // Cap fast tier by active peers — having more fast peers than are
+        // actually reachable wastes builds on stale/unresponsive peers.
+        // Allow 1.5x headroom over active count for near-active peers.
+        int active = _context.commSystem().countActivePeers();
+        if (active > 0) {
+            int activeCap = Math.max(active + active / 2, _defaultMinFastPeers);
+            return Math.min(maxFromKnown, activeCap);
+        }
+        return maxFromKnown;
     }
 
     protected int getMaximumHighCapPeers() {
         if (_context.router() == null) return _defaultMaxHighCapPeers;
         int known = _context.netDb().getKnownRouters();
-        return _context.getProperty(PROP_MAXIMUM_HIGH_CAPACITY_PEERS, known > 3000 ? Math.max(known / 10, _defaultMaxHighCapPeers) : _defaultMaxHighCapPeers);
+        int maxFromKnown = _context.getProperty(PROP_MAXIMUM_HIGH_CAPACITY_PEERS, known > 3000 ? Math.max(known / 10, _defaultMaxHighCapPeers) : _defaultMaxHighCapPeers);
+        // Cap high-cap tier by active peers — same rationale as fast tier cap.
+        // Allow 2x headroom since high-cap is a broader category.
+        int active = _context.commSystem().countActivePeers();
+        if (active > 0) {
+            int activeCap = Math.max(active * 2, _defaultMinHighCapPeers);
+            return Math.min(maxFromKnown, activeCap);
+        }
+        return maxFromKnown;
     }
 
     protected int getMinimumHighCapacityPeers() {
