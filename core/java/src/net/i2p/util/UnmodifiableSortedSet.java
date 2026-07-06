@@ -3,6 +3,7 @@ package net.i2p.util;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
@@ -170,7 +171,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
             java.util.List<String> list = Arrays.asList(test);
             Set<String> set = new UnmodifiableSortedSet(list);
             System.out.println(set.toString());
-            Set<String> set2 = new java.util.HashSet<>(list);
+            Set<String> set2 = new HashSet<>(list);
             set = new UnmodifiableSortedSet(set2);
             System.out.println(set.toString());
         }

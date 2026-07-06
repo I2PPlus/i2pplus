@@ -17,6 +17,7 @@ import net.i2p.data.DataHelper;
 
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.util.Properties;
 
 /**
  * Wrapper around GNU-Crypto's Fortuna PRNG.  This seeds from /dev/urandom and
@@ -302,7 +303,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
      */
     public static void main(String[] args) {
         try {
-            java.util.Properties props = new java.util.Properties();
+            Properties props = new Properties();
             props.setProperty("prng.buffers", "12");
             I2PAppContext ctx = new I2PAppContext(props);
             RandomSource rand = ctx.random();

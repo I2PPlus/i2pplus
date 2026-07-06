@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -154,7 +155,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
             if (ip != null) {
                 int port = 0;
                 for (RouterAddress addr : router.getAddresses()) {
-                    if (addr != null && addr.getIP() != null && java.util.Arrays.equals(addr.getIP(), ip)) {
+                    if (addr != null && addr.getIP() != null && Arrays.equals(addr.getIP(), ip)) {
                         port = addr.getPort();
                         break;
                     }

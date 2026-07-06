@@ -4,12 +4,14 @@
  */
 package org.klomp.snark;
 
+import java.io.Serializable;
+
 /**
  * A structure for torrent creation filters
  *
  * @since 0.9.62+
  */
-public class TorrentCreateFilter implements java.io.Serializable {
+public class TorrentCreateFilter implements Serializable {
 
     public final String name;
     public final String filterPattern;

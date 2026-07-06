@@ -12,12 +12,15 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.regex.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.SU3File;
 import net.i2p.data.Base64;
@@ -1268,13 +1271,13 @@ public class Reseeder {
                         long ver = Long.parseLong(version.trim()) * 1000;
                         long cutoff = System.currentTimeMillis() - MAX_FILE_AGE / 4;
                         if (ver < cutoff) {throw new IOException("su3 file is too old");}
-                        java.util.zip.ZipFile zipf = new java.util.zip.ZipFile(zip);
+                        ZipFile zipf = new ZipFile(zip);
                         int ri = 0, old = 0, bad = 0;
                         int oldver = 0, unreach = 0;
                         try {
-                        java.util.Enumeration<? extends java.util.zip.ZipEntry> entries = zipf.entries();
+                        Enumeration<? extends ZipEntry> entries = zipf.entries();
                         while (entries.hasMoreElements()) {
-                            java.util.zip.ZipEntry entry = entries.nextElement();
+                            ZipEntry entry = entries.nextElement();
                             net.i2p.data.router.RouterInfo r = new net.i2p.data.router.RouterInfo();
                             InputStream in = zipf.getInputStream(entry);
                             try {r.readBytes(in);}

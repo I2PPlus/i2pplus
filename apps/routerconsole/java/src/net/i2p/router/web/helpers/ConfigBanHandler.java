@@ -1,5 +1,6 @@
 package net.i2p.router.web.helpers;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -209,7 +210,7 @@ public class ConfigBanHandler extends FormHandler {
             if (pattern.isEmpty()) continue;
             // Sort characters alphabetically
             char[] chars = pattern.toCharArray();
-            java.util.Arrays.sort(chars);
+            Arrays.sort(chars);
             String sortedPattern = new String(chars);
             // Verify all characters are valid
             boolean valid = true;

@@ -12,9 +12,11 @@ import net.i2p.stat.RateStat;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.StatManager;
 
+import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
 import java.util.TimeZone;
 import java.util.TreeSet;
 
@@ -589,11 +591,11 @@ public abstract class SystemVersion {
             return fallback;
         }
         try {
-            java.io.File f = new java.io.File("/sys/devices/system/cpu/present");
+            File f = new File("/sys/devices/system/cpu/present");
             if (!f.exists()) {
                 return fallback;
             }
-            String content = new String(java.nio.file.Files.readAllBytes(f.toPath()), "UTF-8").trim();
+            String content = new String(Files.readAllBytes(f.toPath()), "UTF-8").trim();
             int count = 0;
             for (String part : content.split(",")) {
                 part = part.trim();

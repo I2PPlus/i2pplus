@@ -147,7 +147,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             if (ip != null) {
                 int port = 0;
                 for (RouterAddress addr : router.getAddresses()) {
-                    if (addr != null && addr.getIP() != null && java.util.Arrays.equals(addr.getIP(), ip)) {
+                    if (addr != null && addr.getIP() != null && Arrays.equals(addr.getIP(), ip)) {
                         port = addr.getPort();
                         break;
                     }

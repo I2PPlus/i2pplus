@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -248,7 +249,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
             pfx += '.' + user;
         try {
             byte[] salt = new byte[16];
-            java.security.SecureRandom sr = new java.security.SecureRandom();
+            SecureRandom sr = new SecureRandom();
             sr.nextBytes(salt);
             PBEKeySpec spec = new PBEKeySpec(pw.toCharArray(), salt, PBKDF2_ITERATIONS, 256);
             SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");

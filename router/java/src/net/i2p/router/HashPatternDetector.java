@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -259,7 +262,7 @@ public class HashPatternDetector implements Serializable {
      */
     private int parseBanLogFile(File file) {
         int count = 0;
-        try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 // Parse format: TIMESTAMP | HASH | IP:PORT | REASON | DURATION
@@ -589,7 +592,7 @@ public class HashPatternDetector implements Serializable {
             if (ip != null) {
                 int port = 0;
                 for (RouterAddress addr : router.getAddresses()) {
-                    if (addr != null && addr.getIP() != null && java.util.Arrays.equals(addr.getIP(), ip)) {
+                    if (addr != null && addr.getIP() != null && Arrays.equals(addr.getIP(), ip)) {
                         port = addr.getPort();
                         break;
                     }

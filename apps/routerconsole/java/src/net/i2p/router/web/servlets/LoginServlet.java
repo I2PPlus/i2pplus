@@ -4,8 +4,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -128,12 +134,12 @@ public class LoginServlet extends HttpServlet {
         return DEFAULT_THEME;
     }
 
-    private static final java.util.Set<String> ALLOWED_THEMES =
-            java.util.Collections.unmodifiableSet(
-                new java.util.HashSet<>(java.util.Arrays.asList("dark", "classic", "light", "midnight")));
-    private static final java.util.Set<String> ALLOWED_LANGS =
-            java.util.Collections.unmodifiableSet(
-                new java.util.HashSet<>(java.util.Arrays.asList(
+    private static final Set<String> ALLOWED_THEMES =
+            Collections.unmodifiableSet(
+                new HashSet<>(Arrays.asList("dark", "classic", "light", "midnight")));
+    private static final Set<String> ALLOWED_LANGS =
+            Collections.unmodifiableSet(
+                new HashSet<>(Arrays.asList(
                     "ar", "az", "cs", "zh", "da", "de", "et", "en",
                     "es", "fi", "fr", "el", "hi", "hu", "in", "it",
                     "ja", "ko", "nl", "nb", "fa", "pl", "pt", "ro",
@@ -183,7 +189,7 @@ public class LoginServlet extends HttpServlet {
         String sessionCSRF = (String) session.getAttribute("loginCSRF");
         if (sessionCSRF == null || csrfToken == null || !csrfToken.equals(sessionCSRF)) {
             _log.warn("CSRF validation failed or session expired — re-displaying form");
-            String newCsrfToken = Long.toString(System.currentTimeMillis()) + "-" + java.util.UUID.randomUUID().toString();
+            String newCsrfToken = Long.toString(System.currentTimeMillis()) + "-" + UUID.randomUUID().toString();
             session.setAttribute("loginCSRF", newCsrfToken);
             req.setAttribute("I2P+CSRFTOKEN", newCsrfToken);
             req.setAttribute("error", "Session expired, please try again");
@@ -238,7 +244,7 @@ public class LoginServlet extends HttpServlet {
                     _log.info("Password set for user: " + username);
                     req.setAttribute("success", "Password set successfully. Please log in.");
                     req.setAttribute("theme", getLoginTheme());
-                    String newCsrfToken = Long.toString(System.currentTimeMillis()) + "-" + java.util.UUID.randomUUID().toString();
+                    String newCsrfToken = Long.toString(System.currentTimeMillis()) + "-" + UUID.randomUUID().toString();
                     req.setAttribute("I2P+CSRFTOKEN", newCsrfToken);
                     req.getSession(true).setAttribute("loginCSRF", newCsrfToken);
                     req.getRequestDispatcher("/login.jsp").forward(req, resp);
@@ -300,7 +306,7 @@ public class LoginServlet extends HttpServlet {
                 // URL-decode to defeat encoding tricks, then validate
                 String decoded;
                 try {
-                    decoded = java.net.URLDecoder.decode(redirect, "UTF-8");
+                    decoded = URLDecoder.decode(redirect, "UTF-8");
                 } catch (Exception e) {
                     decoded = redirect;
                 }
@@ -375,7 +381,7 @@ public class LoginServlet extends HttpServlet {
         ConsolePasswordManager mgr = new ConsolePasswordManager(ctx);
         _log.info("verifyPassword for user: " + username);
 
-boolean result = mgr.checkMD5(RouterConsoleRunner.PROP_CONSOLE_PW, REALM, username, password);
+        boolean result = mgr.checkMD5(RouterConsoleRunner.PROP_CONSOLE_PW, REALM, username, password);
         _log.info("checkMD5 result: " + result + " for user: " + username);
 
         if (result) {
@@ -451,7 +457,7 @@ boolean result = mgr.checkMD5(RouterConsoleRunner.PROP_CONSOLE_PW, REALM, userna
         router.saveConfig(PROP_PERSISTED_SESSIONS, sb.toString());
     }
 
-private void loadPersistedSessions() {
+    private void loadPersistedSessions() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         if (!(ctx instanceof net.i2p.router.RouterContext)) return;
         net.i2p.router.RouterContext rctx = (net.i2p.router.RouterContext) ctx;

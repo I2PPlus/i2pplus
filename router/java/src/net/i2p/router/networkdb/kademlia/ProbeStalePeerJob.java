@@ -2,6 +2,7 @@ package net.i2p.router.networkdb.kademlia;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -119,7 +120,7 @@ class ProbeStalePeerJob extends JobImpl {
             if (ri != null && _log.shouldInfo()) {
                 _log.info("Pinging " + (isStartupBurst ? "startup" : "stale") +
                           " peer [" + peer.toBase64().substring(0, 6) + "]" +
-                          " pub=" + new java.util.Date(ri.getPublished()));
+                          " pub=" + new Date(ri.getPublished()));
             }
 
             ctx.profileOrganizer().demoteIfStale(peer);

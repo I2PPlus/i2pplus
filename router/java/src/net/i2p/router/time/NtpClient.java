@@ -37,6 +37,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.I2PAppContext;
@@ -281,7 +282,7 @@ public class NtpClient {
         Log log = new Log(NtpClient.class);
         try {
             long[] rv = currentTimeAndStratum(args, DEFAULT_TIMEOUT, ipv6, log);
-            System.out.println("Current time: " + new java.util.Date(rv[0]) + " (stratum " + rv[1] +
+            System.out.println("Current time: " + new Date(rv[0]) + " (stratum " + rv[1] +
                                ") offset " + (rv[0] - System.currentTimeMillis()) + "ms"); // NOSONAR S106 CLI output
         } catch (IllegalArgumentException iae) {
             System.out.println("Failed: " + iae.getMessage()); // NOSONAR S106 CLI output

@@ -29,15 +29,19 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 import net.i2p.util.LHMCache;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import net.i2p.crypto.EncType;
@@ -802,13 +806,13 @@ class NetDbRenderer {
     private static final long PAUSE_AFTER_BATCH_MS = 1000;
 
     /** Pending IPs for background reverse DNS resolution. */
-    private static final java.util.Queue<String> _rdnsQueue = new java.util.concurrent.ConcurrentLinkedQueue<>();
+    private static final Queue<String> _rdnsQueue = new ConcurrentLinkedQueue<>();
 
     /** Dedup set — prevents the same IP from being queued multiple times. */
-    private static final java.util.Set<String> _rdnsQueued = java.util.concurrent.ConcurrentHashMap.newKeySet();
+    private static final Set<String> _rdnsQueued = ConcurrentHashMap.newKeySet();
 
     /** Guards against multiple concurrent background workers. */
-    private static final java.util.concurrent.atomic.AtomicBoolean _rdnsWorkerRunning = new java.util.concurrent.atomic.AtomicBoolean(false);
+    private static final AtomicBoolean _rdnsWorkerRunning = new AtomicBoolean(false);
 
     public Map<String, String> precacheReverseDNSLookups(Collection<RouterInfo> routers) {
         if (_context.router().isHidden()) {

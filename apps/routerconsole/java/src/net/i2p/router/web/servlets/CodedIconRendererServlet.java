@@ -22,7 +22,7 @@ public class CodedIconRendererServlet extends HttpServlet {
 
     private static final long serialVersionUID = 16851750L;
     private static final String base = I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath();
-    private static final String slash = String.valueOf(java.io.File.separatorChar);
+    private static final String slash = String.valueOf(File.separatorChar);
     private static final String file = "docs" + slash + "themes" + slash + "console" +  slash + "images" + slash + "plugin.png";
 
      @Override

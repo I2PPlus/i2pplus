@@ -3,6 +3,7 @@ package net.i2p.router.transport.udp;
 import static net.i2p.router.transport.TransportUtil.IPv6Config.*;
 import static net.i2p.router.transport.udp.PeerTestState.Role.*;
 
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
@@ -62,8 +63,8 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
             } else {
                 if (_log.shouldDebug())
                     _log.debug("PeerTestEvent timeReached(), no test run" +
-                              "\n* Last v4 test: " + new java.util.Date(_lastTested.get()) +
-                              "\n* Last v6 test: " + new java.util.Date(_lastTestedV6.get()));
+                              "\n* Last v4 test: " + new Date(_lastTested.get()) +
+                              "\n* Last v6 test: " + new Date(_lastTestedV6.get()));
             }
         }
         if (_alive) {

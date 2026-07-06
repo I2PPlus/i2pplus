@@ -7,11 +7,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.MessageDigest;
 import java.security.PrivateKey;
 import java.security.ProviderException;
+import java.security.PublicKey;
+import java.security.Signature;
 import java.security.cert.CertStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateExpiredException;
@@ -1513,19 +1517,19 @@ public final class KeyStoreUtil {
         // keygen test using the I2PProvider
         SigType type = SigType.EdDSA_SHA512_Ed25519;
         // SigType type = SigType.ElGamal_SHA256_MODP2048;
-        java.security.KeyPairGenerator kpg = java.security.KeyPairGenerator.getInstance(
+        KeyPairGenerator kpg = KeyPairGenerator.getInstance(
                 type.getBaseAlgorithm().getName());
         kpg.initialize(type.getParams());
-        java.security.KeyPair kp = kpg.generateKeyPair();
-        java.security.PublicKey jpub = kp.getPublic();
-        java.security.PrivateKey jpriv = kp.getPrivate();
+        KeyPair kp = kpg.generateKeyPair();
+        PublicKey jpub = kp.getPublic();
+        PrivateKey jpriv = kp.getPrivate();
 
         System.out.println("Encoded private key:");
         System.out.println(net.i2p.util.HexDump.dump(jpriv.getEncoded()));
         System.out.println("Encoded public key:");
         System.out.println(net.i2p.util.HexDump.dump(jpub.getEncoded()));
 
-        java.security.Signature jsig = java.security.Signature.getInstance(type.getAlgorithmName());
+        Signature jsig = Signature.getInstance(type.getAlgorithmName());
         jsig.initSign(jpriv);
         byte[] data = new byte[111];
         net.i2p.util.RandomSource.getInstance().nextBytes(data);

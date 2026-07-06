@@ -10,6 +10,7 @@ package net.i2p.data.router;
  */
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -700,7 +701,7 @@ public class RouterInfo extends DatabaseEntry {
              RouterInfo ri = new RouterInfo();
              InputStream is = null;
              try {
-                 is = new java.io.FileInputStream(args[i]);
+                 is = new FileInputStream(args[i]);
                  ri.readBytes(is);
                  if (ri.isValid()) {
                      System.out.println(ri.toString());

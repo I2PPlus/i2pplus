@@ -22,6 +22,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
 import net.i2p.router.BanLogger;
 import net.i2p.router.transport.ntcp.NTCP2Payload.Block;
+import net.i2p.util.HexDump;
 import net.i2p.util.Log;
 
 /**
@@ -486,7 +487,7 @@ class OutboundNTCP2State implements EstablishState {
         }
         // send it all at once
         if (_log.shouldDebug())
-            _log.debug("Sending message #3, part 1 is:\n" + net.i2p.util.HexDump.dump(tmp, 0, MSG3P1_SIZE));
+            _log.debug("Sending message #3, part 1 is:\n" + HexDump.dump(tmp, 0, MSG3P1_SIZE));
         _con.wantsWrite(tmp);
         if (_log.shouldDebug())
             _log.debug("After message #3: " + _handshakeState.toString());

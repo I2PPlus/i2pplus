@@ -9,8 +9,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import net.i2p.data.DataHelper;
 import net.i2p.router.Job;
 import net.i2p.router.JobStats;
@@ -188,7 +191,7 @@ public class JobQueueHelper extends HelperBase {
             }
 
             // Use Set to avoid duplicate timestamps
-            java.util.Set<Long> uniqueTimes = new java.util.HashSet<>();
+            Set<Long> uniqueTimes = new HashSet<>();
             for (Map<Long, List<Job>> timeGroups : groupedFinishedJobs.values()) {
                 uniqueTimes.addAll(timeGroups.keySet());
             }
@@ -328,7 +331,7 @@ public class JobQueueHelper extends HelperBase {
             Job j = timedJobs.get(i);
             String jobName = j.getName();
             long delay = j.getTiming().getStartAfter() - now;
-            boolean isDisabled = jobName.toLowerCase(java.util.Locale.US).contains("disabled");
+            boolean isDisabled = jobName.toLowerCase(Locale.US).contains("disabled");
 
             // Track max scheduled delay
             if (delay > maxScheduledDelay) maxScheduledDelay = delay;

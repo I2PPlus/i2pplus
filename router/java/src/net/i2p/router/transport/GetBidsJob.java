@@ -8,6 +8,8 @@ package net.i2p.router.transport;
  *
  */
 
+import java.util.Arrays;
+
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
@@ -161,7 +163,7 @@ class GetBidsJob extends JobImpl {
             if (ip != null) {
                 int port = 0;
                 for (RouterAddress addr : router.getAddresses()) {
-                    if (addr != null && addr.getIP() != null && java.util.Arrays.equals(addr.getIP(), ip)) {
+                    if (addr != null && addr.getIP() != null && Arrays.equals(addr.getIP(), ip)) {
                         port = addr.getPort();
                         break;
                     }

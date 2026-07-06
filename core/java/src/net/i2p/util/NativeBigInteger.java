@@ -24,6 +24,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.net.URL;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +36,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import javax.crypto.KeyAgreement;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.CryptoConstants;
 import net.i2p.crypto.eddsa.EdDSAEngine;
@@ -961,14 +965,14 @@ public class NativeBigInteger extends BigInteger {
         try {
             EdDSANamedCurveSpec spec = EdDSANamedCurveTable.getByName(EdDSANamedCurveTable.ED_25519);
             byte[] seed = new byte[32];
-            new java.security.SecureRandom().nextBytes(seed);
+            new SecureRandom().nextBytes(seed);
             EdDSAPrivateKey privKey =
                     new EdDSAPrivateKey(new net.i2p.crypto.eddsa.spec.EdDSAPrivateKeySpec(seed, spec));
             EdDSAPublicKey pubKey =
                     new EdDSAPublicKey(new net.i2p.crypto.eddsa.spec.EdDSAPublicKeySpec(privKey.getA(), spec));
 
             byte[] message = new byte[256];
-            new java.security.SecureRandom().nextBytes(message);
+            new SecureRandom().nextBytes(message);
 
             // Warmup
             for (int i = 0; i < 500; i++) {
@@ -1022,13 +1026,13 @@ public class NativeBigInteger extends BigInteger {
     private static void runX25519Test(int numRuns) {
         try {
             // X25519 requires Java 11+ (JEP 324)
-            java.security.KeyPairGenerator kg = java.security.KeyPairGenerator.getInstance("X25519");
-            java.security.KeyPair alice = kg.generateKeyPair();
-            java.security.KeyPair bob = kg.generateKeyPair();
+            KeyPairGenerator kg = KeyPairGenerator.getInstance("X25519");
+            KeyPair alice = kg.generateKeyPair();
+            KeyPair bob = kg.generateKeyPair();
 
             // Warmup
             for (int i = 0; i < 500; i++) {
-                javax.crypto.KeyAgreement ka = javax.crypto.KeyAgreement.getInstance("X25519");
+                KeyAgreement ka = KeyAgreement.getInstance("X25519");
                 ka.init(alice.getPrivate());
                 ka.doPhase(bob.getPublic(), true);
                 ka.generateSecret();
@@ -1038,7 +1042,7 @@ public class NativeBigInteger extends BigInteger {
             long totalTime = 0;
             byte[] lastSecret = null;
             for (int i = 0; i < numRuns; i++) {
-                javax.crypto.KeyAgreement ka = javax.crypto.KeyAgreement.getInstance("X25519");
+                KeyAgreement ka = KeyAgreement.getInstance("X25519");
                 ka.init(alice.getPrivate());
                 ka.doPhase(bob.getPublic(), true);
                 long before = System.nanoTime();
@@ -1050,7 +1054,7 @@ public class NativeBigInteger extends BigInteger {
             System.out.println(String.format("key agreement (%d iterations):", numRuns));
             System.out.println(String.format("  Result: %8.1f ms  (%.4f ms/op)", dtotal, dtotal / numRuns));
             System.out.println(String.format("  Shared secret: %d bytes", lastSecret.length));
-        } catch (java.security.NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
             System.out.println("X25519 not available (requires Java 11+): " + e.getMessage());
         } catch (Exception e) {
             System.out.println("X25519 benchmark failed: " + e.getMessage());

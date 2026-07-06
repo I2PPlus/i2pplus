@@ -1,5 +1,7 @@
 package net.i2p.router.tunnel.pool;
 
+import java.util.Arrays;
+
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
@@ -81,7 +83,7 @@ class ParticipatingThrottler {
                 int port = 0;
                 // Find port from addresses
                 for (RouterAddress addr : router.getAddresses()) {
-                    if (addr != null && addr.getIP() != null && java.util.Arrays.equals(addr.getIP(), ip)) {
+                    if (addr != null && addr.getIP() != null && Arrays.equals(addr.getIP(), ip)) {
                         port = addr.getPort();
                         break;
                     }

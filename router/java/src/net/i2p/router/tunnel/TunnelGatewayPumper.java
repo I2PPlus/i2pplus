@@ -7,6 +7,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.util.I2PThread;
@@ -266,7 +267,7 @@ class TunnelGatewayPumper implements Runnable {
             return; // already in queue, skip duplicate offer
         }
         try {
-            if (!_wantsPumping.offer(gw, OFFER_TIMEOUT_MS, java.util.concurrent.TimeUnit.MILLISECONDS)) {
+            if (!_wantsPumping.offer(gw, OFFER_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
                 _inQueue.remove(gw);
                 _context.statManager().addRateData("tunnel.pumperQueueFull", 1);
                 if (_log.shouldWarn())

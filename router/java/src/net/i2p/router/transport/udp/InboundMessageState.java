@@ -7,6 +7,8 @@ import net.i2p.router.util.CDQEntry;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 
+import java.util.Arrays;
+
 /**
  * Hold the raw data fragments of an inbound message.
  */
@@ -86,7 +88,7 @@ class InboundMessageState implements CDQEntry {
                 }
                 // Grow the array to accommodate the fragment
                 int newSize = Math.min(fragmentNum + 1, MAX_FRAGMENTS);
-                _fragments = java.util.Arrays.copyOf(_fragments, newSize);
+                _fragments = Arrays.copyOf(_fragments, newSize);
             }
             if (_fragments[fragmentNum] == null) {
                 ByteArray message = _fragmentCache.acquire();

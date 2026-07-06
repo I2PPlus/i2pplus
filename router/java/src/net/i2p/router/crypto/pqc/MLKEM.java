@@ -2,6 +2,9 @@ package net.i2p.router.crypto.pqc;
 
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyFactory;
@@ -157,9 +160,9 @@ public final class MLKEM {
         RandomSource.getInstance().nextBoolean();
         try { Thread.sleep(1000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
         int runs = 200; // warmup
-        java.util.Collection<EncType> toTest;
+        Collection<EncType> toTest;
         if (args.length > 0) {
-            toTest = new java.util.ArrayList<>();
+            toTest = new ArrayList<>();
             for (int i = 0; i < args.length; i++) {
                 EncType type = EncType.parseEncType(args[i]);
                 if (type != null)
@@ -172,7 +175,7 @@ public final class MLKEM {
                 return;
             }
         } else {
-            toTest = java.util.Arrays.asList(EncType.values());
+            toTest = Arrays.asList(EncType.values());
         }
         for (int j = 0; j < 2; j++) {
             for (EncType type : toTest) {

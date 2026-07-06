@@ -1,10 +1,12 @@
 package net.i2p.router.peermanager;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,6 +25,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.router.CommSystemFacade;
 import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.router.Router;
@@ -174,7 +177,7 @@ public class ProfileOrganizer {
      * Check if current router is firewalled to adjust peer selection thresholds
      */
     private boolean isFirewalled() {
-        net.i2p.router.CommSystemFacade.Status status = _context.commSystem().getStatus();
+        CommSystemFacade.Status status = _context.commSystem().getStatus();
         return status != null && (status.toString().contains("FIREWALLED") ||
                                 status.toString().contains("REJECT_UNSOLICITED"));
     }
@@ -900,7 +903,7 @@ public class ProfileOrganizer {
         double meanCapacity = totalCapacity / totalPeers;
 
         // Sort to find median and Nth peer
-        java.util.Arrays.sort(capacities);
+        Arrays.sort(capacities);
         int minHighCap = getMinimumHighCapacityPeers();
         double thresholdAtMedian = capacities[totalPeers / 2];
         double thresholdAtMinHighCap = (minHighCap <= totalPeers)
@@ -1712,7 +1715,7 @@ public class ProfileOrganizer {
         ProfilePersistenceHelper helper = new ProfilePersistenceHelper(ctx);
 
         for (int i = 0; i < args.length; i++) {
-            PeerProfile profile = helper.readProfile(new java.io.File(args[i]), 0);
+            PeerProfile profile = helper.readProfile(new File(args[i]), 0);
             if (profile == null) {
                 System.err.println("Could not load profile " + args[i]); // NOSONAR CLI tool
                 continue;

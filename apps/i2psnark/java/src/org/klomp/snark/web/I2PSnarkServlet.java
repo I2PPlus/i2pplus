@@ -38,6 +38,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import net.i2p.CoreVersion;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Base32;
@@ -183,7 +184,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.9.69
      */
     @SuppressWarnings("unchecked")
-    private String getNonce(javax.servlet.http.HttpSession session, boolean xhr) {
+    private String getNonce(HttpSession session, boolean xhr) {
         if (session == null) {
             return null;
         }
@@ -203,7 +204,7 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     @SuppressWarnings("unchecked")
-    private String getInnerNonce(javax.servlet.http.HttpSession session) {
+    private String getInnerNonce(HttpSession session) {
         if (session == null) {
             return null;
         }
@@ -230,7 +231,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.9.69
      */
     @SuppressWarnings("unchecked")
-    private static boolean isValidNonce(String nonce, javax.servlet.http.HttpSession session) {
+    private static boolean isValidNonce(String nonce, HttpSession session) {
         if (nonce == null || session == null) {
             return false;
         }
@@ -254,7 +255,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.9.69
      */
     @SuppressWarnings("unchecked")
-    private static boolean isValidInnerNonce(String nonce, javax.servlet.http.HttpSession session) {
+    private static boolean isValidInnerNonce(String nonce, HttpSession session) {
         if (nonce == null || session == null) {
             return false;
         }
@@ -836,7 +837,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append(HEADER_A).append(_themePath).append(HEADER_B).append("\n");
         buf.append(HEADER_A).append(_themePath).append(HEADER_I).append("\n");
 
-        String slash = String.valueOf(java.io.File.separatorChar);
+        String slash = String.valueOf(File.separatorChar);
         String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + slash +
                            "docs" + slash + "themes" + slash + "snark" + slash + theme + slash;
         File override = new File(themeBase + "override.css");
@@ -4682,7 +4683,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String decodedBase = decodePath(base);
         String title = decodedBase;
         String cpath = _contextPath + '/';
-        String slash = String.valueOf(java.io.File.separatorChar);
+        String slash = String.valueOf(File.separatorChar);
         if (title.startsWith(cpath)) {title = title.substring(cpath.length());}
 
         // Get the snark associated with this directory
@@ -5980,7 +5981,7 @@ public class I2PSnarkServlet extends BasicServlet {
             return icon;
         }
 
-        for (java.util.Map.Entry<String, String> entry : IconMaps.SUFFIX_ICON_MAP.entrySet()) {
+        for (Map.Entry<String, String> entry : IconMaps.SUFFIX_ICON_MAP.entrySet()) {
             if (plc.endsWith(entry.getKey())) {
                 return entry.getValue();
             }
@@ -6002,11 +6003,11 @@ public class I2PSnarkServlet extends BasicServlet {
      * Initialized once and reused to optimize performance of icon lookup.
      */
     private static class IconMaps {
-        static final java.util.Map<String, String> MIME_ICON_MAP;
-        static final java.util.Map<String, String> SUFFIX_ICON_MAP;
+        static final Map<String, String> MIME_ICON_MAP;
+        static final Map<String, String> SUFFIX_ICON_MAP;
 
         static {
-            java.util.Map<String, String> mimeMap = new java.util.HashMap<>();
+            Map<String, String> mimeMap = new HashMap<>();
             mimeMap.put("application/compress", "compress");
             mimeMap.put("application/epub+zip", "ebook");
             mimeMap.put("application/gzip", "compress");
@@ -6027,9 +6028,9 @@ public class I2PSnarkServlet extends BasicServlet {
             mimeMap.put("text/html", "html");
             mimeMap.put("text/plain", "text");
             mimeMap.put("text/x-sfv", "text");
-            MIME_ICON_MAP = java.util.Collections.unmodifiableMap(mimeMap);
+            MIME_ICON_MAP = Collections.unmodifiableMap(mimeMap);
 
-            java.util.Map<String, String> suffixMap = new java.util.HashMap<>();
+            Map<String, String> suffixMap = new HashMap<>();
             suffixMap.put(".appimage", "package");
             suffixMap.put(".azw3", "ebook");
             suffixMap.put(".azw4", "ebook");
@@ -6072,7 +6073,7 @@ public class I2PSnarkServlet extends BasicServlet {
             suffixMap.put(".woff2", "font");
             suffixMap.put(".woff", "font");
             suffixMap.put(".xpi2p", "plugin");
-            SUFFIX_ICON_MAP = java.util.Collections.unmodifiableMap(suffixMap);
+            SUFFIX_ICON_MAP = Collections.unmodifiableMap(suffixMap);
         }
     }
 

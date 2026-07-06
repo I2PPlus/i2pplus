@@ -41,6 +41,7 @@ import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
 
 import java.io.EOFException;
+import java.io.Serializable;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -688,7 +689,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
          *
          *  @since 0.9.39
          */
-        private static class PrivKeyComparator implements Comparator<PrivateKey>, java.io.Serializable {
+        private static class PrivKeyComparator implements Comparator<PrivateKey>, Serializable {
             private static final long serialVersionUID = 1L;
 
             @Override

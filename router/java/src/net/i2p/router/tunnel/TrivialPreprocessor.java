@@ -1,5 +1,6 @@
 package net.i2p.router.tunnel;
 
+import java.util.Arrays;
 import java.util.List;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
@@ -77,7 +78,7 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
         int distance = PREPROCESSED_SIZE - fragmentLength;
         System.arraycopy(fragments, 0, fragments, distance, fragmentLength);
 
-        java.util.Arrays.fill(fragments, 0, distance, (byte)0x0);
+        Arrays.fill(fragments, 0, distance, (byte)0x0);
 
         int offset = 0;
         System.arraycopy(iv, 0, fragments, offset, IV_SIZE);

@@ -1,5 +1,6 @@
 package net.i2p.i2ptunnel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -134,7 +135,7 @@ public class SecurityHeaderBuilder {
         }
 
         if (cacheControlList != null && cacheControlList.contains("post-check")) {
-            List<String> newList = new java.util.ArrayList<>();
+            List<String> newList = new ArrayList<>();
             for (String s : cacheControlList) {
                 if (!"post-check".equalsIgnoreCase(s)) {
                     newList.add(s);
@@ -221,7 +222,7 @@ public class SecurityHeaderBuilder {
         List<String> setCookieList = headers.get("Set-Cookie");
         if (setCookieList == null || setCookieList.isEmpty()) {return;}
 
-        List<String> newSetCookieList = new java.util.ArrayList<>();
+        List<String> newSetCookieList = new ArrayList<>();
         for (String setCookie : setCookieList) {
             boolean containsString = false;
             for (String cookieString : COOKIE_STRINGS) {
@@ -258,7 +259,7 @@ public class SecurityHeaderBuilder {
         boolean hasPostCheck = cacheControlList.stream().anyMatch(s -> "post-check".equalsIgnoreCase(s));
 
         if (hasNone || hasPostCheck) {
-            List<String> newList = new java.util.ArrayList<>();
+            List<String> newList = new ArrayList<>();
             for (String s : cacheControlList) {
                 String lc = s.toLowerCase();
                 if (!lc.equals("none") && !lc.equals("post-check")) {

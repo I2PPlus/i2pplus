@@ -2,7 +2,12 @@ package net.i2p.router.web;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedMap;
+import net.i2p.router.CommSystemFacade;
+import net.i2p.router.RouterContext;
 import net.i2p.router.Tuner;
+import net.i2p.router.transport.Transport;
+import net.i2p.router.transport.udp.UDPTransport;
 
 /**
  * Form handler for the transport tuning page.
@@ -480,7 +485,7 @@ public class TuningFormHandler extends FormHandler {
 
         // Restore Defaults: reset all params to factory defaults
         if (_action.equals(_t("Restore Defaults"))) {
-            net.i2p.router.Tuner tuner = getTuner();
+            Tuner tuner = getTuner();
             if (tuner != null) {
                 tuner.restoreDefaults();
                 addFormNotice(_t("All parameters restored to factory defaults"));
@@ -725,7 +730,7 @@ public class TuningFormHandler extends FormHandler {
         saveField(changes, "crypto.mlkem.precalcMin", "Default", _mlkemPrecalcMinDefault, 8);
 
         // Process auto-tuning overrides (checkbox toggle)
-        net.i2p.router.Tuner tuner = getTuner();
+        Tuner tuner = getTuner();
         if (tuner != null) {
             applyOverride(tuner, "ACK_FREQUENCY", _ackFrequencyOverride);
             applyOverride(tuner, "DATA_MESSAGE_TIMEOUT", _dataMessageTimeoutOverride);
@@ -814,8 +819,8 @@ public class TuningFormHandler extends FormHandler {
     /**
      * Build a map of property deletions to reset all tuner ranges to defaults.
      */
-    private java.util.Map<String, String> getResetChanges() {
-        java.util.Map<String, String> deletions = new java.util.HashMap<String, String>();
+    private Map<String, String> getResetChanges() {
+        Map<String, String> deletions = new HashMap<String, String>();
         String[] params = {
             "ACK_FREQUENCY", "DATA_MESSAGE_TIMEOUT", "MAX_OB_ESTABLISH_TIME", "MAX_IB_ESTABLISH_TIME",
             "REQUEUE_TIME", "REPLENISH_FREQUENCY", "SELECTOR_LOOP_DELAY",
@@ -853,7 +858,7 @@ public class TuningFormHandler extends FormHandler {
      * @param paramName the Tuner param name
      * @param value form value: "-1" = auto, numeric = manual lock
      */
-    private void applyOverride(net.i2p.router.Tuner tuner, String paramName, String value) {
+    private void applyOverride(Tuner tuner, String paramName, String value) {
         if (value == null || value.isEmpty())
             return;
         try {
@@ -867,14 +872,14 @@ public class TuningFormHandler extends FormHandler {
     /**
      * Get the Tuner instance via the UDP transport.
      */
-    private net.i2p.router.Tuner getTuner() {
+    private Tuner getTuner() {
         if (_context == null) return null;
-        net.i2p.router.CommSystemFacade cs = _context.commSystem();
+        CommSystemFacade cs = _context.commSystem();
         if (cs == null) return null;
-        java.util.SortedMap<String, net.i2p.router.transport.Transport> transports = cs.getTransports();
-        net.i2p.router.transport.Transport udp = transports.get(net.i2p.router.transport.udp.UDPTransport.STYLE);
-        if (udp instanceof net.i2p.router.transport.udp.UDPTransport)
-            return ((net.i2p.router.transport.udp.UDPTransport) udp).getTuner();
+        SortedMap<String, Transport> transports = cs.getTransports();
+        Transport udp = transports.get(UDPTransport.STYLE);
+        if (udp instanceof UDPTransport)
+            return ((UDPTransport) udp).getTuner();
         return null;
     }
 
@@ -882,7 +887,7 @@ public class TuningFormHandler extends FormHandler {
      * Read a tuner property with a default.
      * Used by TuningHelper for display.
      */
-    public static String getProp(net.i2p.router.RouterContext ctx,
+    public static String getProp(RouterContext ctx,
                                  String param, String field, int defaultVal) {
         String key = PREFIX + param + "." + field.toLowerCase();
         return ctx.getProperty(key, String.valueOf(defaultVal));

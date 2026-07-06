@@ -1,5 +1,8 @@
 package net.i2p.router.web.helpers;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 import javax.servlet.http.HttpSession;
 
 import net.i2p.data.DataHelper;
@@ -146,12 +149,12 @@ public class ConfigRestartBean {
             return false;
         }
         try {
-            java.lang.reflect.Field f = i2pt.getClass().getDeclaredField("_instance");
-            if (f != null && f.getType() == java.lang.reflect.Field.class) {
+            Field f = i2pt.getClass().getDeclaredField("_instance");
+            if (f != null && f.getType() == Field.class) {
                 f.setAccessible(true);
                 Object instance = f.get(null);
                 if (instance != null && instance.getClass().getName().equals("net.i2p.i2ptunnel.TunnelControllerGroup")) {
-                    java.lang.reflect.Method m = instance.getClass().getMethod("hasServerTunnelDelays");
+                    Method m = instance.getClass().getMethod("hasServerTunnelDelays");
                     if (m != null) {
                         Object result = m.invoke(instance);
                         if (result instanceof Boolean) {

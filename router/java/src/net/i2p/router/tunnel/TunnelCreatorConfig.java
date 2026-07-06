@@ -1,5 +1,6 @@
 package net.i2p.router.tunnel;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -7,6 +8,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.data.TunnelId;
+import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelTestStatus;
@@ -208,8 +210,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
             if (_context != null && _peers.length > 0) {
                 int start = _isInbound ? 0 : 1;
                 int end = _isInbound ? _peers.length - 1 : _peers.length;
-                Hash[] peersCopy = java.util.Arrays.copyOfRange(_peers, start, end);
-                _context.jobQueue().addJob(new net.i2p.router.JobImpl(_context) {
+                Hash[] peersCopy = Arrays.copyOfRange(_peers, start, end);
+                _context.jobQueue().addJob(new JobImpl(_context) {
                     @Override
                     public void runJob() {
                         for (Hash peer : peersCopy) {

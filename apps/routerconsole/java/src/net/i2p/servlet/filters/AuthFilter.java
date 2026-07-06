@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -183,7 +184,7 @@ if ("/prefs".equals(path)) {
         }
         try {
             String encoded = authHeader.substring(6);
-            String decoded = new String(java.util.Base64.getDecoder().decode(encoded), StandardCharsets.UTF_8);
+            String decoded = new String(Base64.getDecoder().decode(encoded), StandardCharsets.UTF_8);
             int colon = decoded.indexOf(':');
             if (colon <= 0) return null;
             String username = decoded.substring(0, colon);

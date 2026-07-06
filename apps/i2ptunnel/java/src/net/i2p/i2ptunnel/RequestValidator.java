@@ -2,6 +2,7 @@ package net.i2p.i2ptunnel;
 
 import java.net.InetAddress;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
@@ -139,7 +140,7 @@ public class RequestValidator {
      * @param headers the HTTP request headers
      * @return true if the request should be rejected, false otherwise
      */
-    public boolean shouldRejectInproxy(java.util.Map<String, List<String>> headers) {
+    public boolean shouldRejectInproxy(Map<String, List<String>> headers) {
         if (!Boolean.parseBoolean(_opts.getProperty(I2PTunnelHTTPServer.OPT_REJECT_INPROXY))) {
             return false;
         }
@@ -159,7 +160,7 @@ public class RequestValidator {
      * @param headers the HTTP request headers
      * @return a formatted string suitable for logging
      */
-    public String buildInproxyRejectLog(java.util.Map<String, List<String>> headers) {
+    public String buildInproxyRejectLog(Map<String, List<String>> headers) {
         StringBuilder buf = new StringBuilder();
         buf.append("[HTTPServer] Refusing Inproxy access \n* Client: ").append(_peerB32);
         List<String> h = headers.get("X-Forwarded-For");
@@ -184,7 +185,7 @@ public class RequestValidator {
      * @param headers the HTTP request headers
      * @return true if the request should be rejected, false otherwise
      */
-    public boolean shouldRejectReferer(java.util.Map<String, List<String>> headers) {
+    public boolean shouldRejectReferer(Map<String, List<String>> headers) {
         if (!Boolean.parseBoolean(_opts.getProperty(I2PTunnelHTTPServer.OPT_REJECT_REFERER))) {
             return false;
         }
@@ -205,7 +206,7 @@ public class RequestValidator {
      * @param headers the HTTP request headers
      * @return the referer URL without the header prefix, or null if not available
      */
-    public String getRefererForLog(java.util.Map<String, List<String>> headers) {
+    public String getRefererForLog(Map<String, List<String>> headers) {
         List<String> h = headers.get("Referer");
         if (h != null && h.get(0).length() > 9) {
             return h.get(0).substring(9);
@@ -229,7 +230,7 @@ public class RequestValidator {
      * @param headers the HTTP request headers
      * @return true if the request should be rejected, false otherwise
      */
-    public boolean shouldRejectUserAgent(java.util.Map<String, List<String>> headers) {
+    public boolean shouldRejectUserAgent(Map<String, List<String>> headers) {
         if (!Boolean.parseBoolean(_opts.getProperty(I2PTunnelHTTPServer.OPT_REJECT_USER_AGENTS))) {
             return false;
         }
@@ -260,7 +261,7 @@ public class RequestValidator {
      * @param headers the HTTP request headers
      * @return the user agent string, or null if not present
      */
-    public String getUserAgentForCheck(java.util.Map<String, List<String>> headers) {
+    public String getUserAgentForCheck(Map<String, List<String>> headers) {
         if (headers != null && headers.containsKey("User-Agent")) {
             return headers.get("User-Agent").get(0);
         }

@@ -1,6 +1,8 @@
 package net.i2p.router.web.helpers;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -243,7 +245,7 @@ public class TuningHelper extends HelperBase {
         }
         // Sort each group by display name
         for (List<ParamSnapshot> list : groups.values()) {
-            java.util.Collections.sort(list, new java.util.Comparator<ParamSnapshot>() {
+            Collections.sort(list, new Comparator<ParamSnapshot>() {
                 public int compare(ParamSnapshot a, ParamSnapshot b) {
                     return dn.get(a.name).compareToIgnoreCase(dn.get(b.name));
                 }

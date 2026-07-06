@@ -8,9 +8,16 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,6 +27,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -38,6 +46,7 @@ import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
+import net.i2p.data.PublicKey;
 import net.i2p.router.Job;
 import net.i2p.router.JobTiming;
 import net.i2p.router.NetworkDatabaseFacade;
@@ -1093,10 +1102,10 @@ public class HostChecker {
             StringBuilder content = new StringBuilder();
             content.append("# I2P+ Address Book Host Check\n");
             content.append("# Format: timestamp,host,reachable,category,responseTime,leaseSetTypes\n");
-            content.append("# Generated: ").append(new java.util.Date()).append("\n\n");
+            content.append("# Generated: ").append(new Date()).append("\n\n");
 
-            java.util.List<Map.Entry<String, PingResult>> sortedEntries = new java.util.ArrayList<>(_pingResults.entrySet());
-            sortedEntries.sort(java.util.Comparator.comparingLong(e -> e.getValue().timestamp));
+            List<Map.Entry<String, PingResult>> sortedEntries = new ArrayList<>(_pingResults.entrySet());
+            sortedEntries.sort(Comparator.comparingLong(e -> e.getValue().timestamp));
 
             for (Map.Entry<String, PingResult> entry : sortedEntries) {
                 String hostname = entry.getKey();
@@ -1110,13 +1119,13 @@ public class HostChecker {
             }
 
             // Write using Files.write with explicit options
-            java.nio.file.Path path = java.nio.file.Paths.get(absolutePath);
-            java.nio.file.Files.write(path, content.toString().getBytes(),
-                java.nio.file.StandardOpenOption.CREATE,
-                java.nio.file.StandardOpenOption.TRUNCATE_EXISTING,
-                java.nio.file.StandardOpenOption.WRITE);
+            Path path = Paths.get(absolutePath);
+            Files.write(path, content.toString().getBytes(),
+                StandardOpenOption.CREATE,
+                StandardOpenOption.TRUNCATE_EXISTING,
+                StandardOpenOption.WRITE);
 
-        } catch (java.io.IOException e) {
+        } catch (IOException e) {
             if (_log.shouldError()) {
                 _log.error("IOException saving HostChecker results: " + e.getMessage() +
                            "\n* File path: " + _hostsCheckFile.getAbsolutePath());
@@ -1903,8 +1912,8 @@ public class HostChecker {
 
             // Get all hostnames and randomize order
             Set<String> allHostnamesSet = getAllHostnames();
-            java.util.List<String> allHostnames = new java.util.ArrayList<>(allHostnamesSet);
-            java.util.Collections.shuffle(allHostnames, _context.random());
+            List<String> allHostnames = new ArrayList<>(allHostnamesSet);
+            Collections.shuffle(allHostnames, _context.random());
             int addressBookSize = allHostnames.size();
 
             // Wait for socket manager to be fully ready
@@ -1946,7 +1955,7 @@ public class HostChecker {
                 }
 
                 // Create a list of ping tasks to run concurrently
-                java.util.List<java.util.concurrent.Future<Void>> futures = new java.util.ArrayList<>();
+                List<Future<Void>> futures = new ArrayList<>();
 
                 for (String hostname : allHostnames) {
                     if (!_running.get()) {
@@ -1977,7 +1986,7 @@ public class HostChecker {
                         total++;
 
                         // Submit ping task for concurrent execution with semaphore limit
-                        java.util.concurrent.Future<Void> future = _scheduler.submit(new java.util.concurrent.Callable<Void>() {
+                        Future<Void> future = _scheduler.submit(new Callable<Void>() {
                             @Override
                             public Void call() throws Exception {
                                 try {
@@ -2014,7 +2023,7 @@ public class HostChecker {
                 }
 
                 // Wait for all pings to complete
-                for (java.util.concurrent.Future<Void> future : futures) {
+                for (Future<Void> future : futures) {
                     try {
                         future.get();
                     } catch (Exception e) {
@@ -2098,7 +2107,7 @@ public class HostChecker {
             }
 
             Set<String> newBlacklist = new HashSet<>();
-            List<String> lines = java.nio.file.Files.readAllLines(_blacklistFile.toPath());
+            List<String> lines = Files.readAllLines(_blacklistFile.toPath());
             for (String line : lines) {
                 line = line.trim().toLowerCase();
                 if (!line.isEmpty() && !line.startsWith("#")) {
@@ -2143,20 +2152,20 @@ public class HostChecker {
             return "[]";
         }
 
-        java.util.List<Integer> types = new java.util.ArrayList<>();
+        List<Integer> types = new ArrayList<>();
 
         // Check for LeaseSet2 type (multiple encryption keys)
         if (leaseSet.getType() == DatabaseEntry.KEY_TYPE_LS2) {
             // LeaseSet2 supports multiple encryption keys
             try {
-                java.lang.reflect.Method getEncryptionKeys = leaseSet.getClass().getMethod("getEncryptionKeys");
+                Method getEncryptionKeys = leaseSet.getClass().getMethod("getEncryptionKeys");
                 @SuppressWarnings("unchecked")
-                java.util.List<net.i2p.data.PublicKey> keys = (java.util.List<net.i2p.data.PublicKey>) getEncryptionKeys.invoke(leaseSet);
+                List<PublicKey> keys = (List<PublicKey>) getEncryptionKeys.invoke(leaseSet);
 
                 if (keys != null && !keys.isEmpty()) {
                     for (net.i2p.data.PublicKey key : keys) {
                         try {
-                            java.lang.reflect.Method getType = key.getClass().getMethod("getType");
+                            Method getType = key.getClass().getMethod("getType");
                             EncType encType = (EncType) getType.invoke(key);
                             if (encType != null) {
                                 types.add(encType.getCode());
@@ -2172,11 +2181,11 @@ public class HostChecker {
         } else {
             // LeaseSet type 1 - single encryption key
             try {
-                java.lang.reflect.Method getEncryptionKey = leaseSet.getClass().getMethod("getEncryptionKey");
+                Method getEncryptionKey = leaseSet.getClass().getMethod("getEncryptionKey");
                 net.i2p.data.PublicKey key = (net.i2p.data.PublicKey) getEncryptionKey.invoke(leaseSet);
                 if (key != null) {
                     try {
-                        java.lang.reflect.Method getType = key.getClass().getMethod("getType");
+                        Method getType = key.getClass().getMethod("getType");
                         EncType encType = (EncType) getType.invoke(key);
                         if (encType != null) {
                             types.add(encType.getCode());

@@ -57,6 +57,7 @@ import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
@@ -524,7 +525,7 @@ public abstract class TransportImpl implements Transport {
             return;
         }
         try {
-            if (!_sendPool.offer(msg, 200, java.util.concurrent.TimeUnit.MILLISECONDS)) {
+            if (!_sendPool.offer(msg, 200, TimeUnit.MILLISECONDS)) {
                 _context.statManager().addRateData("transport.sendPool.full", 1);
                 afterSend(msg, false);
                 return;

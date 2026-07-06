@@ -145,7 +145,7 @@ public class BuildTime {
             Manifest man = new Manifest(in);
             return man.getMainAttributes();
         } catch (IOException ioe) {
-            return new java.util.jar.Attributes();
+            return new Attributes();
         } finally {
             if (in != null) {
                 try {

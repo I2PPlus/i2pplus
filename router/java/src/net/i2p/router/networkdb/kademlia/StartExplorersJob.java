@@ -1,7 +1,9 @@
 package net.i2p.router.networkdb.kademlia;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-
+import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
@@ -103,10 +105,10 @@ class StartExplorersJob extends JobImpl {
         }
 
         // Don't flood the queue - cap at MAX_EXPLORE_JOBS concurrent
-        java.util.List<Job> activeJobs = new java.util.ArrayList<>(8);
-        java.util.List<Job> readyJobs = new java.util.ArrayList<>(64);
-        java.util.List<Job> timedJobs = new java.util.ArrayList<>(64);
-        java.util.List<Job> justFinishedJobs = new java.util.ArrayList<>(8);
+        List<Job> activeJobs = new ArrayList<>(8);
+        List<Job> readyJobs = new ArrayList<>(64);
+        List<Job> timedJobs = new ArrayList<>(64);
+        List<Job> justFinishedJobs = new ArrayList<>(8);
         ctx.jobQueue().getJobs(readyJobs, timedJobs, activeJobs, justFinishedJobs);
         int exploring = 0;
         for (Job j : activeJobs) {
@@ -129,7 +131,7 @@ class StartExplorersJob extends JobImpl {
         final int floodfillCount = ctx.peerManager().countPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL);
         final boolean needFloodfills = floodfillCount < MIN_FFS;
         final boolean lowFloodfills = floodfillCount < LOW_FFS;
-        final java.util.Random random = ctx.random();
+        final Random random = ctx.random();
 
         long delay = 0;
         for (Hash key : keysToExplore) {

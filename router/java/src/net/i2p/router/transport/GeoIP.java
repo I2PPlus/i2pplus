@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -595,9 +596,9 @@ public class GeoIP {
     // --- ISP Name Normalization (ported from Python normalize-asn.py) ---
 
     /** Known broken org names in the MaxMind ASN DB — straight replacements */
-    private static final java.util.Map<String, String> ASN_DB_OVERRIDES;
+    private static final Map<String, String> ASN_DB_OVERRIDES;
     static {
-        ASN_DB_OVERRIDES = new java.util.HashMap<>();
+        ASN_DB_OVERRIDES = new HashMap<>();
         ASN_DB_OVERRIDES.put("setarimE moceleT puorG oC talasitepuorG CSJP", "Emirates Telecom");
     }
 
@@ -655,7 +656,7 @@ public class GeoIP {
     }
 
     /** Words to keep uppercase */
-    private static final Set<String> KEEP_UPPER = new java.util.HashSet<>(java.util.Arrays.asList(
+    private static final Set<String> KEEP_UPPER = new HashSet<>(Arrays.asList(
         "IP", "IPv4", "IPv6", "ATM", "TV", "DNS", "IPTV", "AS",
         "USA", "UK", "EU", "APAC", "EMEA", "LAN", "WAN", "DSL",
         "ISDN", "GSM", "CDMA", "UMTS", "LTE", "WiFi", "WiMAX",
@@ -667,7 +668,7 @@ public class GeoIP {
     ));
 
     /** Brand names that should keep their exact casing */
-    private static final Map<String, String> BRAND_NAMES = new java.util.HashMap<>();
+    private static final Map<String, String> BRAND_NAMES = new HashMap<>();
     static {
         String[][] brands = {
             {"SoftBank", "SoftBank"}, {"T-Mobile", "T-Mobile"}, {"Telia", "Telia"},

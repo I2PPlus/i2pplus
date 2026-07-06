@@ -1,6 +1,7 @@
 package net.i2p.router.web;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.HashSet;
 import java.util.Set;
 import javax.servlet.ServletException;
@@ -304,7 +305,7 @@ public class HostCheckHandler extends GzipHandler
     private static String normalizeIP(String host) {
         if (host == null) return null;
         try {
-            java.net.InetAddress addr = java.net.InetAddress.getByName(host);
+            InetAddress addr = InetAddress.getByName(host);
             return addr.getHostAddress();
         } catch (Exception e) {
             return host;

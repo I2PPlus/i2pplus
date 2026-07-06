@@ -817,7 +817,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
             if (!_pcapInitialized) {
                 try {
                     pcapWriter = new PcapWriter(ctx, PCAP_FILE);
-                } catch (java.io.IOException ioe) {
+                } catch (IOException ioe) {
                      System.err.println("pcap init ioe: " + ioe);
                 }
                  _pcapInitialized = true;

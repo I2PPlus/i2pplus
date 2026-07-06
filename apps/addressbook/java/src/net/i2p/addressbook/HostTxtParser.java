@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -240,7 +241,7 @@ public class HostTxtParser {
         boolean quiet = false;
         if (args.length > 0 && args[0].equals("-q")) {
             quiet = true;
-            args = java.util.Arrays.copyOfRange(args, 1, args.length);
+            args = Arrays.copyOfRange(args, 1, args.length);
         }
         if (args.length != 2 || !args[0].equals("validate")) {
             System.err.println("Usage: HostTxtParser validate example.i2p=b64dest[#!key1=val1#key2=val2]");

@@ -8,6 +8,7 @@ package net.i2p.router.networkdb.kademlia;
  *
  */
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -310,7 +311,7 @@ class TransientDataStore implements DataStore {
             if (ip != null) {
                 int port = 0;
                 for (RouterAddress addr : router.getAddresses()) {
-                    if (addr != null && addr.getIP() != null && java.util.Arrays.equals(addr.getIP(), ip)) {
+                    if (addr != null && addr.getIP() != null && Arrays.equals(addr.getIP(), ip)) {
                         port = addr.getPort();
                         break;
                     }

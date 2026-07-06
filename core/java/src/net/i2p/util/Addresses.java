@@ -272,7 +272,7 @@ public abstract class Addresses {
                     }
                 }
             }
-        } catch (SocketException e) { /* ignored */ } catch (java.lang.Error e) {
+        } catch (SocketException e) { /* ignored */ } catch (Error e) {
             // Windows, possibly when IPv6 only...
             // https://bugs.openjdk.java.net/browse/JDK-8046500
             // java.lang.Error: IP Helper Library GetIfTable function failed
@@ -314,7 +314,7 @@ public abstract class Addresses {
                     }
                 }
             }
-        } catch (SocketException e) { /* ignored */ } catch (java.lang.Error e) { /* ignored */ }
+        } catch (SocketException e) { /* ignored */ } catch (Error e) { /* ignored */ }
         return null;
     }
 
@@ -345,7 +345,7 @@ public abstract class Addresses {
                     }
                 }
             }
-        } catch (SocketException e) { /* ignored */ } catch (java.lang.Error e) { /* ignored */ }
+        } catch (SocketException e) { /* ignored */ } catch (Error e) { /* ignored */ }
         return rv;
     }
 

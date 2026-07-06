@@ -73,7 +73,7 @@ class RequestThrottler {
     private static final long BURST_OFFENSE_RESET = 60 * 60 * 1000L; // Reset after 1 hour clean
 
     private final BurstWindowCounter _burstCounter;
-    private final Map<Hash, BurstOffenseRecord> _burstOffenses = new java.util.concurrent.ConcurrentHashMap<>();
+    private final Map<Hash, BurstOffenseRecord> _burstOffenses = new ConcurrentHashMap<>();
 
     private static final boolean DEFAULT_SHOULD_THROTTLE = true;
     private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";

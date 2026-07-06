@@ -7,9 +7,12 @@
 package org.klomp.snark;
 
 import gnu.getopt.Getopt;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -889,7 +892,7 @@ public class MetaInfo {
         }
         for (int i = g.getOptind(); i < args.length; i++) {
             InputStream in = null;
-            java.io.OutputStream out = null;
+            OutputStream out = null;
             try {
                 in = new FileInputStream(args[i]);
                 MetaInfo meta = new MetaInfo(in);
@@ -912,10 +915,10 @@ public class MetaInfo {
                     String cm = comment != null ? comment : meta.getComment();
                     List<String> urls = url_list != null ? url_list : meta.getWebSeedURLs();
                     MetaInfo meta2 = new MetaInfo(meta, an, meta.getAnnounceList(), cm, cb, urls);
-                    java.io.File from = new java.io.File(args[i]);
-                    java.io.File to = new java.io.File(args[i] + ".bak");
+                    File from = new File(args[i]);
+                    File to = new File(args[i] + ".bak");
                     if (net.i2p.util.FileUtil.copy(from, to, true, false)) {
-                        out = new java.io.FileOutputStream(from);
+                        out = new FileOutputStream(from);
                         out.write(meta2.getTorrentData());
                         out.close();
                         System.out.println("Modified " + from + " and backed up old file to " + to);

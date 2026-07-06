@@ -92,7 +92,7 @@ public class TunnelPool {
      *  calls ensureSufficientTunnels() — creating recursive build storms that
      *  inflate _inProgress and trigger 800+ "Cancelling excess" per session.
      */
-    private final java.util.concurrent.atomic.AtomicBoolean _ensuringTunnels = new java.util.concurrent.atomic.AtomicBoolean(false);
+    private final AtomicBoolean _ensuringTunnels = new AtomicBoolean(false);
 
     /** Default early expiration time for pruned tunnels (30 seconds) */
     static final long DEFAULT_PRUNE_EARLY_EXPIRY = 120L * 1000;
@@ -1441,7 +1441,7 @@ public class TunnelPool {
 
         if (removed) {
             _manager.tunnelFailed();
-            processRemovalStats(java.util.Collections.singletonList(info));
+            processRemovalStats(Collections.singletonList(info));
         }
 
         if (_alive && _settings.isInbound() && !_settings.isExploratory()) {
@@ -1539,7 +1539,7 @@ public class TunnelPool {
         }
 
         LeaseSet ls = new LeaseSet();
-        java.util.Iterator<Lease> iter = leases.iterator();
+        Iterator<Lease> iter = leases.iterator();
         int count = Math.min(leases.size(), wanted);
         for (int i = 0; i < count; i++) {
             ls.addLease(iter.next());
@@ -3292,7 +3292,7 @@ public class TunnelPool {
         }
 
         // Check for specific peer issues
-        Set<Hash> failedPeers = new java.util.HashSet<>();
+        Set<Hash> failedPeers = new HashSet<>();
         for (int i = 0; i < cfg.getLength(); i++) {
             failedPeers.add(cfg.getPeer(i));
         }
