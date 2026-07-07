@@ -23,7 +23,10 @@ import net.i2p.util.OrderedProperties;
 public class BaseBean {
     protected final I2PAppContext _context;
     protected final Properties properties;
-    protected String action, lastSerial, serial, method;
+    protected String action;
+    protected String lastSerial;
+    protected String serial;
+    protected String method;
     private long configLastLoaded;
     private static final String PRIVATE_BOOK = "private_addressbook";
     private static final String DEFAULT_PRIVATE_BOOK = "../privatehosts.txt";

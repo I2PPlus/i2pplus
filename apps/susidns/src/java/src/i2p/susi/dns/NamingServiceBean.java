@@ -313,8 +313,8 @@ public class NamingServiceBean extends AddressbookBean {
                         continue;
                     }
                 }
-                if (search != null && search.length() > 0 && reverse == null) {
-                    if (name.indexOf(search) == -1) {continue;}
+                if (search != null && search.length() > 0 && reverse == null && name.indexOf(search) == -1) {
+                    continue;
                 }
 
                 // Check if host is blacklisted
@@ -325,7 +325,6 @@ public class NamingServiceBean extends AddressbookBean {
                     continue;
                 }
 
-                String destination = entry.getValue().toBase64();
                 AddressBean bean = new AddressBean(name, entry.getValue());
                 Properties p = new Properties();
                 Destination d = service.lookup(name, searchProps, p);
@@ -337,7 +336,8 @@ public class NamingServiceBean extends AddressbookBean {
             // Store the full filtered list BEFORE pagination for accurate count
             fullFilteredEntries = array;
             // Apply pagination - only apply manual pagination when NOT filtering by category
-            int fromIndex, toIndex;
+            int fromIndex;
+            int toIndex;
             if (category == null) {
                 // Not filtering by category, use manual begin/end pagination
                 if (sortByDate) {
@@ -496,8 +496,11 @@ public class NamingServiceBean extends AddressbookBean {
                     if (action.equals(_t("Delete Entry"))) {
                         // remove specified dest only in case there is more than one
                         if (destination != null) {
-                            try {matchDest = new Destination(destination);}
-                            catch (DataFormatException dfe) { /* ignored */ }
+                            try {
+                                matchDest = new Destination(destination);
+                            } catch (DataFormatException dfe) {
+                                /* ignored */
+                            }
                         }
                     }
                     for (String n : deletionMarks) {
@@ -789,7 +792,6 @@ public class NamingServiceBean extends AddressbookBean {
      * @since 0.9.40
      */
     public String importFile(RequestWrapper wrequest) throws IOException {
-        String message = "";
         InputStream in = wrequest.getInputStream("file");
         OutputStream out = null;
         File tmp = null;
@@ -819,7 +821,8 @@ public class NamingServiceBean extends AddressbookBean {
             }
             else {
                 NamingService service = getNamingService();
-                int added = 0, dup = 0;
+                int added = 0;
+                int dup = 0;
                 Properties nsOptions = new Properties();
                 nsOptions.setProperty("list", getFileName());
                 String now = Long.toString(_context.clock().now());

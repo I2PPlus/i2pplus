@@ -381,7 +381,8 @@ public class AddressbookBean extends BaseBean {
             }
             AddressBean[] array = list.toArray(new AddressBean[list.size()]);
             // Apply pagination - only apply manual pagination when NOT filtering by category
-            int fromIndex, toIndex;
+            int fromIndex;
+            int toIndex;
             if (category == null) {
                 // Not filtering by category, use manual begin/end pagination
                 Arrays.sort(array, sorter);

@@ -28,7 +28,8 @@ import net.i2p.util.SecureFileOutputStream;
  * Supports hostnames, b32, and b64 addresses.
  */
 public class BlacklistBean extends BaseBean {
-    private String fileName, content;
+    private String fileName;
+    private String content;
     private static String cachedContent = null;
     private static long lastModified = 0;
     private static final String BLACKLIST_FILE = "blacklist.txt";

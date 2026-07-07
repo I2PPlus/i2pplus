@@ -28,7 +28,8 @@ import net.i2p.util.SecureFileOutputStream;
  * Bean for managing address book subscription sources and updates.
  */
 public class SubscriptionsBean extends BaseBean {
-    private String fileName, content;
+    private String fileName;
+    private String content;
     private static final String SUBS_FILE = "subscriptions.txt";
     // If you change this, change in Addressbook Daemon also
     private static final String DEFAULT_SUB = "http://stats.i2p/cgi-bin/newhosts.txt" + "\n" +

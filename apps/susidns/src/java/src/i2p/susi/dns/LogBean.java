@@ -32,7 +32,8 @@ import net.i2p.data.DataHelper;
  */
 public class LogBean extends BaseBean
 {
-    private String logName, logged;
+    private String logName;
+    private String logged;
     private static final String LOG_FILE = "log.txt";
     private static final Pattern DASH_SPLIT = Pattern.compile("\\s*--\\s*");
 
@@ -110,11 +111,9 @@ public class LogBean extends BaseBean
      */
     public String getMessages() {
         String message = "";
-        if (action != null) {
-            if (logged != null && logged.length() > 2) {
-                reloadLog();
-                message = _t("Subscription log reloaded.");
-            }
+        if (action != null && logged != null && logged.length() > 2) {
+            reloadLog();
+            message = _t("Subscription log reloaded.");
         }
         if (message.length() > 0) {message = "<p class=\"messages\">" + message + "</p>";}
         return message;
@@ -152,7 +151,6 @@ public class LogBean extends BaseBean
      */
     private int countTodayEntries() {
         File log = logFile();
-        int maxLines = 600;
         int todayEntryCount = 0;
 
         if (log.isFile()) {

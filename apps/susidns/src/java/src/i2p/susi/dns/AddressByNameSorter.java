@@ -19,6 +19,7 @@ public class AddressByNameSorter implements Comparator<AddressBean>, Serializabl
      * Default constructor.
      */
     public AddressByNameSorter() {
+        super();
     }
 
     /**

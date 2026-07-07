@@ -77,7 +77,6 @@ public class Servlet extends HttpServlet {
             Class<?> cls = Class.forName("net.i2p.addressbook.DaemonThread", true, cl);
             // We do it this way so that if we can't find addressbook, the whole thing doesn't die.
             // We do add addressbook.jar in WebAppConfiguration, so this is just in case.
-            //Thread t = new DaemonThread(args);
             Thread t = (Thread) cls.getConstructor(String[].class).newInstance((Object)args);
             t.setDaemon(true);
             t.setName("Addressbook");
@@ -107,8 +106,6 @@ public class Servlet extends HttpServlet {
                             if (retryCount >= maxRetries) {
                                 I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).warn("HostChecker instance still null after " + maxRetries + " attempts, giving up...");
                                 scheduler.shutdown();
-                            } else {
-                                //I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).debug("HostChecker instance is null, retry " + retryCount + "/" + maxRetries);
                             }
                         }
                     } catch (Exception e) {

@@ -19,6 +19,7 @@ public class VersionBean {
      * Create a new VersionBean.
      */
     public VersionBean() {
+        super();
     }
 
     /**

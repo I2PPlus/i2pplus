@@ -18,6 +18,7 @@ public class AddressByDateSorter implements Comparator<AddressBean>, Serializabl
      * Default constructor.
      */
     public AddressByDateSorter() {
+        super();
     }
 
     /**
