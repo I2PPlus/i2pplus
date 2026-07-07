@@ -48,7 +48,7 @@ public class Main implements RouterApp, NotificationService {
     /**
      *  @since 0.9.26
      */
-    public Main(RouterContext ctx, ClientAppManager mgr, String[] args) {
+    public Main(RouterContext ctx, ClientAppManager mgr) {
         _appContext = _context = ctx;
         _mgr = mgr;
         log = _appContext.logManager().getLog(Main.class);
@@ -113,15 +113,13 @@ public class Main implements RouterApp, NotificationService {
             return;
         }
         Main main = new Main();
-        main.beginStartup(args);
+        main.beginStartup();
     }
 
     /**
      * Main method launching the application.
-     *
-     * @param args unused
      */
-    private void beginStartup(String[] args) {
+    private void beginStartup() {
         changeState(STARTING);
         String headless = System.getProperty("java.awt.headless");
         boolean isHeadless = Boolean.parseBoolean(headless);
@@ -262,7 +260,7 @@ public class Main implements RouterApp, NotificationService {
     /** @since 0.9.26 */
     @Override
     public synchronized void startup() {
-        beginStartup(null);
+        beginStartup();
     }
 
     /** @since 0.9.26 */

@@ -43,8 +43,10 @@ abstract class TrayManager {
     ///Our tray icon, or null if unsupported
     protected TrayIcon trayIcon;
     protected volatile boolean _showNotifications;
-    protected MenuItem  _notificationItem1, _notificationItem2;
-    protected JMenuItem _jnotificationItem1, _jnotificationItem2;
+    protected MenuItem  _notificationItem1;
+    protected MenuItem  _notificationItem2;
+    protected JMenuItem _jnotificationItem1;
+    protected JMenuItem _jnotificationItem2;
 
     private static final String PNG_DIR = "/desktopgui/resources/images/";
     private static final String MAC_ICON = "itoopie_black_24.png";
@@ -98,9 +100,9 @@ abstract class TrayManager {
             menu.setFont(new Font("Arial", Font.BOLD, 14));
         TrayIcon ti = new TrayIcon(getTrayImage(), tooltip, menu);
         ti.addMouseListener(new MouseListener() {
-            public void mouseClicked(MouseEvent m)  {}
-            public void mouseEntered(MouseEvent m)  {}
-            public void mouseExited(MouseEvent m)   {}
+            public void mouseClicked(MouseEvent m)  { /* no-op */ }
+            public void mouseEntered(MouseEvent m)  { /* no-op */ }
+            public void mouseExited(MouseEvent m)   { /* no-op */ }
             public void mousePressed(MouseEvent m)  { updateMenu(); }
             public void mouseReleased(MouseEvent m) { updateMenu(); }
         });
@@ -130,9 +132,9 @@ abstract class TrayManager {
         TrayIcon ti = new TrayIcon(getTrayImage(), tooltip, null);
         ti.addMouseListener(new MouseListener() {
             @Override
-            public void mouseClicked(MouseEvent e)  {}
-            public void mouseEntered(MouseEvent e)  {}
-            public void mouseExited(MouseEvent e)   {}
+            public void mouseClicked(MouseEvent e)  { /* no-op */ }
+            public void mouseEntered(MouseEvent e)  { /* no-op */ }
+            public void mouseExited(MouseEvent e)   { /* no-op */ }
             public void mousePressed(MouseEvent e)  { handle(e); }
             @Override
             public void mouseReleased(MouseEvent e) { handle(e); }
@@ -148,21 +150,21 @@ abstract class TrayManager {
         });
         menu.addPopupMenuListener(new PopupMenuListener() {
             @Override
-            public void popupMenuCanceled(PopupMenuEvent e)            { /* frame.setVisible(false); */ }
+            public void popupMenuCanceled(PopupMenuEvent e)            { /* no-op */ }
             public void popupMenuWillBecomeInvisible(PopupMenuEvent e) { frame.setVisible(false); }
-            public void popupMenuWillBecomeVisible(PopupMenuEvent e)   {}
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e)   { /* no-op */ }
         });
         // this is to make it go away when we click elsewhere
         // doesn't do anything
         menu.addFocusListener(new FocusListener() {
-            public void focusGained(FocusEvent e) {}
+            public void focusGained(FocusEvent e) { /* no-op */ }
             public void focusLost(FocusEvent e)   { frame.setVisible(false); }
         });
         // this is to make it go away when we hit escape
         // doesn't do anything
         menu.addMenuKeyListener(new MenuKeyListener() {
-            public void menuKeyPressed(MenuKeyEvent e)  {}
-            public void menuKeyReleased(MenuKeyEvent e) {}
+            public void menuKeyPressed(MenuKeyEvent e)  { /* no-op */ }
+            public void menuKeyReleased(MenuKeyEvent e) { /* no-op */ }
             public void menuKeyTyped(MenuKeyEvent e)    {
                 if (e.getKeyChar() == (char) 0x1b)
                     frame.setVisible(false);
@@ -188,11 +190,9 @@ abstract class TrayManager {
      * Update the tray menu when the language changes.
      */
     public synchronized void languageChanged() {
-        if (trayIcon != null) {
-            if (!_useSwing)
-                trayIcon.setPopupMenu(getMainMenu());
-            // else TODO
-        }
+        if (trayIcon != null && !_useSwing)
+            trayIcon.setPopupMenu(getMainMenu());
+        // else TODO
     }
 
     /**

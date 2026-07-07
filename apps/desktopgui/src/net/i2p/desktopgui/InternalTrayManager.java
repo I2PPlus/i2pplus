@@ -30,10 +30,10 @@ class InternalTrayManager extends TrayManager {
     private final RouterContext _context;
     private final Log log;
     private final Main _main;
-    private MenuItem _statusItem, _browserItem, _configItem, _restartItem, _stopItem,
+    private MenuItem _browserItem, _configItem, _restartItem, _stopItem,
                      _restartHardItem, _stopHardItem, _cancelItem;
     private JMenuItem _jstatusItem, _jbrowserItem, _jconfigItem, _jrestartItem, _jstopItem,
-                      _jrestartHardItem, _jstopHardItem, _jcancelItem;
+                       _jrestartHardItem, _jstopHardItem, _jcancelItem;
 
     private static final boolean CONSOLE_ENABLED = Desktop.isDesktopSupported() &&
                                                    Desktop.getDesktop().isSupported(Action.BROWSE);
@@ -211,7 +211,6 @@ class InternalTrayManager extends TrayManager {
         popup.add(stopItem2);
         popup.add(cancelItem);
 
-        _statusItem = statusItem;
         _browserItem = browserLauncher;
         _configItem = desktopguiConfigurationLauncher;
         _restartItem = restartItem;

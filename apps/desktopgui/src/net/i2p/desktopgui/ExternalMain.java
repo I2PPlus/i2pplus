@@ -65,7 +65,7 @@ public class ExternalMain implements ClientApp, NotificationService {
             return;
         }
         ExternalMain main = new ExternalMain();
-        main.beginStartup(args);
+        main.beginStartup();
     }
 
     /**
@@ -74,7 +74,6 @@ public class ExternalMain implements ClientApp, NotificationService {
      * @throws Exception on startup error, including systray not supported
      */
     private synchronized void startUp() throws Exception {
-        final TrayManager trayManager;
         boolean useSwingDefault = !(SystemVersion.isWindows() || SystemVersion.isMac());
         boolean useSwing = _appContext.getProperty(PROP_SWING, useSwingDefault);
         _trayManager = new ExternalTrayManager(_appContext, useSwing);
@@ -88,7 +87,7 @@ public class ExternalMain implements ClientApp, NotificationService {
      *
      * @param args unused
      */
-    private void beginStartup(String[] args) {
+    private void beginStartup() {
         String headless = System.getProperty("java.awt.headless");
         boolean isHeadless = Boolean.parseBoolean(headless);
         if (isHeadless) {
@@ -220,7 +219,7 @@ public class ExternalMain implements ClientApp, NotificationService {
 
     @Override
     public synchronized void startup() {
-        beginStartup(null);
+        beginStartup();
     }
 
     public synchronized void shutdown(String[] args) {
