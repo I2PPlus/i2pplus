@@ -162,7 +162,7 @@ class TransientDataStore implements DataStore {
             boolean isXG = !isUs && isXTier && isG;
 
             if (isLU) {
-                if (!_context.banlist().isBanlisted(key)) {
+                if (_context.banlist().isLuBanEnabled() && !_context.banlist().isBanlisted(key)) {
                     if (_log.shouldWarn()) {
                         _log.warn("Banning " + (!caps.isEmpty() ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
                                   " [" + routerId + "] for 1h -> LU");
@@ -176,7 +176,7 @@ class TransientDataStore implements DataStore {
             }
 
             if (isXG) {
-                if (!_context.banlist().isBanlisted(key)) {
+                if (_context.banlist().isXgBanEnabled() && !_context.banlist().isBanlisted(key)) {
                     if (_log.shouldWarn()) {
                         _log.warn("Banning " + (!caps.isEmpty() ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
                                   " [" + routerId + "] for 1h -> XG");

@@ -1202,6 +1202,7 @@ public class GeoIP {
      * @since 0.9.48 Introduced method for banning routers by country
      */
     public static void banCountry(RouterContext ctx, String country) {
+        if (!ctx.banlist().isCountryBanEnabled()) return;
         BanLogger bl = _banLogger;
         if (bl == null) {
             synchronized (GeoIP.class) {

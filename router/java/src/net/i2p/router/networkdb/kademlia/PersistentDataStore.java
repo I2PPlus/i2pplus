@@ -430,10 +430,12 @@ public class PersistentDataStore extends TransientDataStore {
             if (_log.shouldDebug()) {
                 _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> LU Router");
             }
-            if (_log.shouldInfo()) {
-                _log.info("Banning [" + key.toBase64().substring(0,6) + "] for 1h -> LU Router");
-                _banLogger.logBan(key, f.ip != null ? f.ip : "UNKNOWN", "LU Router", 60L*60*1000);
-                _context.banlist().banlistRouter(key, "LU Router", null, null, _context.clock().now() + 60L*60*1000);
+            if (_context.banlist().isLuBanEnabled()) {
+                if (_log.shouldInfo()) {
+                    _log.info("Banning [" + key.toBase64().substring(0,6) + "] for 1h -> LU Router");
+                    _banLogger.logBan(key, f.ip != null ? f.ip : "UNKNOWN", "LU Router", 60L*60*1000);
+                    _context.banlist().banlistRouter(key, "LU Router", null, null, _context.clock().now() + 60L*60*1000);
+                }
             }
             _context.simpleTimer2().addEvent(new Disconnector(key, "Invalid version"), 11L*60*1000);
             shouldDelete = true;

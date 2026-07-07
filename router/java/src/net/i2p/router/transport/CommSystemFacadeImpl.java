@@ -1365,7 +1365,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         boolean isStrict = _context.commSystem().isInStrictCountry();
         boolean isHidden = _context.router().isHidden();
 
-        if (isStrict || isHidden || blockMyCountry) {
+        if (_context.banlist().isCountryBanEnabled() && (isStrict || isHidden || blockMyCountry)) {
             String myCountry = _context.getProperty(PROP_IP_COUNTRY);
             if (myCountry != null && myCountry.equals(country)) {
                 _geoIP.banCountry(_context, country);

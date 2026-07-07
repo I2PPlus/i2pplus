@@ -894,6 +894,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @since 0.9.67+
      */
     private boolean shouldBanlistXG(RouterInfo ri, Hash _key) {
+        if (!_context.banlist().isXgBanEnabled()) return false;
         boolean isG = containsCapability(ri, Router.CAPABILITY_NO_TUNNELS);
         boolean isXTier = containsCapability(ri, Router.CAPABILITY_BW_UNLIMITED);
         boolean isUs = _context.routerHash().equals(ri.getIdentity().getHash());
@@ -914,6 +915,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @since 0.9.69+
      */
     private boolean shouldBanlistLU(RouterInfo ri, Hash _key) {
+        if (!_context.banlist().isLuBanEnabled()) return false;
         boolean isLTier = containsCapability(ri, Router.CAPABILITY_BW12);
         boolean isUs = _context.routerHash().equals(ri.getIdentity().getHash());
         boolean isUnreachable = containsCapability(ri, Router.CAPABILITY_UNREACHABLE) ||
@@ -1956,6 +1958,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @since 0.9.67+
      */
     private boolean checkCountryBlocking(RouterInfo routerInfo, String caps, String routerId, Hash h) {
+        if (!_context.banlist().isCountryBanEnabled()) return false;
         String country = _context.commSystem().getCountry(h);
         if (country == null) country = "unknown";
         boolean isFF = caps.contains("f");
@@ -2002,6 +2005,7 @@ return false;
     }
 
     private boolean checkXG(RouterInfo routerInfo, String caps, String routerId, Hash h) {
+        if (!_context.banlist().isXgBanEnabled()) return false;
         if (isRouterXG(routerInfo, h.equals(_context.routerHash()))) {
             if (!_context.banlist().isBanlisted(h)) {
                 boolean isFF = caps != null && caps.contains("f");
@@ -2023,6 +2027,7 @@ return false;
      * @since 0.9.67+
      */
     private boolean checkLU(RouterInfo routerInfo, String caps, String routerId, Hash h) {
+        if (!_context.banlist().isLuBanEnabled()) return false;
         if (caps == null) return false;
         boolean isLowTier = caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
                             caps.indexOf(Router.CAPABILITY_BW32) >= 0;
@@ -2047,6 +2052,7 @@ return false;
      * @since 0.9.67+
      */
     public void cleanupLURouters() {
+        if (!_context.banlist().isLuBanEnabled()) return;
         int removed = 0;
         int total = 0;
         for (DatabaseEntry entry : _ds.getEntries()) {

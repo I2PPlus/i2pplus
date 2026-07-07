@@ -142,7 +142,7 @@ public class RequestThrottler {
                                             caps.indexOf(Router.CAPABILITY_BW32) >= 0);
             boolean isUnreachable = caps != null && (caps.indexOf('U') >= 0 || caps.indexOf('R') < 0);
             if (isLowTier && isUnreachable) {
-                if (!context.banlist().isBanlisted(h)) {
+                if (context.banlist().isLuBanEnabled() && !context.banlist().isBanlisted(h)) {
                     if (_log.shouldWarn()) {
                         _log.warn("Banning LU Router at throttle: " + routerId);
                     }

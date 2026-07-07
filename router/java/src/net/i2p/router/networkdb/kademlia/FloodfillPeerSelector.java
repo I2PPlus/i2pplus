@@ -354,12 +354,14 @@ class FloodfillPeerSelector extends PeerSelector {
             if (_log.shouldDebug())
                 _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is slow (L or M tier)");
             if (info.getBandwidthTier().equals("L")) {
-                String ipPort = getIPFromRouterInfo(info);
-                _context.banlist().banlistRouter(entry, "L tier Floodfill", null, null, now + 4*60*60*1000L);
-                _banLogger.logBan(entry, ipPort != null ? ipPort : "UNKNOWN", "L tier Floodfill", 4*60*60*1000L);
-                _context.commSystem().forceDisconnect(entry, "L tier Floodfill");
-                if (_log.shouldWarn()) {
-                    _log.warn("Banning for 4h and disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] -> L tier");
+                if (_context.banlist().isLuBanEnabled()) {
+                    String ipPort = getIPFromRouterInfo(info);
+                    _context.banlist().banlistRouter(entry, "L tier Floodfill", null, null, now + 4*60*60*1000L);
+                    _banLogger.logBan(entry, ipPort != null ? ipPort : "UNKNOWN", "L tier Floodfill", 4*60*60*1000L);
+                    _context.commSystem().forceDisconnect(entry, "L tier Floodfill");
+                    if (_log.shouldWarn()) {
+                        _log.warn("Banning for 4h and disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] -> L tier");
+                    }
                 }
             }
             return PeerClass.BAD;
