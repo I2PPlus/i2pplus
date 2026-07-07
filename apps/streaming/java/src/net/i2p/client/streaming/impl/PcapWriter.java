@@ -204,7 +204,8 @@ public class PcapWriter implements Closeable, Flushable {
 
         // src and dst IP 8 bytes
         // make our side always start with 127.0.x.x
-        byte[] srcAddr, dstAddr;
+        byte[] srcAddr;
+        byte[] dstAddr;
         if (isInbound) {
             if (con != null) {
                 dstAddr = new byte[4];
@@ -264,7 +265,7 @@ public class PcapWriter implements Closeable, Flushable {
         DataHelper.writeLong(_fos, 4, seq);
         long acked = 0;
         if (con != null) {
-            acked = getLowestAckedThrough(pkt, con);
+            acked = getLowestAckedThrough(pkt);
         }
         DataHelper.writeLong(_fos, 4, acked);
 
@@ -335,7 +336,7 @@ public class PcapWriter implements Closeable, Flushable {
      * @param con the connection
      * @return the lowest acked-through sequence number (at least 0)
      */
-    private static long getLowestAckedThrough(Packet pkt, Connection con) {
+    private static long getLowestAckedThrough(Packet pkt) {
         long[] nacks = pkt.getNacks();
         long lowest = pkt.getAckThrough(); // can return -1 but we increment below
         if (nacks != null) {

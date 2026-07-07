@@ -201,8 +201,7 @@ class I2PSocketFull implements I2PSocket {
      *
      * @param lsnr ignored
      */
-    public void setSocketErrorListener(I2PSocket.SocketErrorListener lsnr) {
-    }
+    public void setSocketErrorListener(I2PSocket.SocketErrorListener lsnr) { /* no-op */ }
 
     /**
      * @return true if the socket is closed or not connected

@@ -8,7 +8,6 @@ import net.i2p.client.I2PSession;
 import net.i2p.client.I2PSessionException;
 import net.i2p.client.I2PSessionMuxedListener;
 import net.i2p.client.streaming.I2PSocketManager;
-import net.i2p.client.streaming.I2PSocketManager.DisconnectListener;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 

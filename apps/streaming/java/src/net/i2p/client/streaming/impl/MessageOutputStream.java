@@ -748,14 +748,10 @@ class MessageOutputStream extends OutputStream {
                 }
             }
 
-            if (sent) {
-                if (_log.shouldDebug()) {
-                    _log.debug("Passive flush executed: " + ws);
-                }
-            } else if (ws != null && ws.writeFailed()) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Passive flush failed, will retry on close: " + ws);
-                }
+            if (sent && _log.shouldDebug()) {
+                _log.debug("Passive flush executed: " + ws);
+            } else if (ws != null && ws.writeFailed() && _log.shouldWarn()) {
+                _log.warn("Passive flush failed, will retry on close: " + ws);
             }
         }
     }

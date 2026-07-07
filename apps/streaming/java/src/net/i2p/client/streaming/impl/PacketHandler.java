@@ -185,16 +185,14 @@ class PacketHandler {
             sendReset(packet);
             packet.releasePayload();
         } else {
-            if (!con.getResetSent()) {
-                if (log.shouldWarn()) {
-                    StringBuilder buf = new StringBuilder(512);
-                    buf.append("Received packet on the wrong stream: ").append(packet).append("\nConnection:\n").append(con)
-                       .append("\nAll connections:");
-                    for (Connection c : manager.listConnections()) {
-                        buf.append('\n').append(c);
-                    }
-                    log.warn(buf.toString(), new Exception("Wrong stream"));
+            if (!con.getResetSent() && log.shouldWarn()) {
+                StringBuilder buf = new StringBuilder(512);
+                buf.append("Received packet on the wrong stream: ").append(packet).append("\nConnection:\n").append(con)
+                   .append("\nAll connections:");
+                for (Connection c : manager.listConnections()) {
+                    buf.append('\n').append(c);
                 }
+                log.warn(buf.toString(), new Exception("Wrong stream"));
             }
             packet.releasePayload();
         }

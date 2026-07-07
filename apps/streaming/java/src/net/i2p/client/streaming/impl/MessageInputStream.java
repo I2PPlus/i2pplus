@@ -222,7 +222,7 @@ class MessageInputStream extends InputStream {
 
             int allowedBlocks = available / _maxMessageSize;
             if (messageId > _highestReadyBlockId + allowedBlocks) {
-                logBufferBlockWindowExceeded(messageId, allowedBlocks);
+                logBufferBlockWindowExceeded(messageId);
                 return false;
             }
 
@@ -244,7 +244,7 @@ class MessageInputStream extends InputStream {
         }
     }
 
-    private void logBufferBlockWindowExceeded(long messageId, int allowedBlocks) {
+    private void logBufferBlockWindowExceeded(long messageId) {
         if (_log.shouldWarn()) {
             _log.warn("Dropping message " + messageId + ", exceeds allowed buffer blocks window");
         }

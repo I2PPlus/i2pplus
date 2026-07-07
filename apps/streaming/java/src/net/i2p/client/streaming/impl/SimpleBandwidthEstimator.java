@@ -30,7 +30,8 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
 
     private long _tAck;
     // bw_est, bw_ns_est
-    private float _bKFiltered, _bK_ns_est;
+    private float _bKFiltered;
+    private float _bK_ns_est;
     // bk
     private int _acked;
 

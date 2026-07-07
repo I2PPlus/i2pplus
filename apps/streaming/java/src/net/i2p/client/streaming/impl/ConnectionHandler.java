@@ -226,10 +226,9 @@ class ConnectionHandler {
                         continue; // drop it
                     }
                     Connection oldcon = _manager.getConnectionByOutboundId(syn.getReceiveStreamId());
-                    if (oldcon != null) {
+                    if (oldcon != null && from.equals(oldcon.getRemotePeer())) {
                         // His ID not guaranteed to be unique to us, but probably is...
                         // only act on it on a destination match too
-                        if (from.equals(oldcon.getRemotePeer())) {
                             // This is a retransmitted SYN - the client hasn't received our
                             // SYN-ACK yet (or it was lost). Re-send the SYN-ACK for the
                             // existing connection rather than destroying it and breaking
@@ -240,7 +239,6 @@ class ConnectionHandler {
                             }
                             resendSynAck(oldcon, syn);
                             continue;
-                        }
                     }
                     Connection con = _manager.receiveConnection(syn);
                     if (con != null) {return con;}

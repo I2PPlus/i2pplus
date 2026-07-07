@@ -152,22 +152,19 @@ class StandardServerSocket extends ServerSocket {
      *  Does nothing.
      */
     @Override
-    public void setPerformancePreferences(int connectionTime, int latency, int bandwidth) {
-    }
+    public void setPerformancePreferences(int connectionTime, int latency, int bandwidth) { /* no-op */ }
 
     /**
      *  Does nothing.
      */
     @Override
-    public void setReceiveBufferSize(int size) {
-    }
+    public void setReceiveBufferSize(int size) { /* no-op */ }
 
     /**
      *  Does nothing.
      */
     @Override
-    public void setReuseAddress(boolean on) {
-    }
+    public void setReuseAddress(boolean on) { /* no-op */ }
 
     /**
      * @param timeout the timeout in milliseconds

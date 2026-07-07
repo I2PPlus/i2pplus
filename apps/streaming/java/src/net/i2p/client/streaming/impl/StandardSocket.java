@@ -309,36 +309,31 @@ class StandardSocket extends Socket {
      *  Does nothing.
      */
     @Override
-    public void setPerformancePreferences(int connectionTime, int latency, int bandwidth) {
-    }
+    public void setPerformancePreferences(int connectionTime, int latency, int bandwidth) { /* no-op */ }
 
     /**
      *  Does nothing.
      */
     @Override
-    public void setReceiveBufferSize(int size) {
-    }
+    public void setReceiveBufferSize(int size) { /* no-op */ }
 
     /**
      *  Does nothing.
      */
     @Override
-    public void setReuseAddress(boolean on) {
-    }
+    public void setReuseAddress(boolean on) { /* no-op */ }
 
     /**
      *  Does nothing.
      */
     @Override
-    public void setSendBufferSize(int size) {
-    }
+    public void setSendBufferSize(int size) { /* no-op */ }
 
     /**
      *  Does nothing.
      */
     @Override
-    public void setSoLinger(boolean on, int linger) {
-    }
+    public void setSoLinger(boolean on, int linger) { /* no-op */ }
 
     /**
      * @param timeout the timeout in milliseconds
@@ -359,15 +354,13 @@ class StandardSocket extends Socket {
      *  Does nothing.
      */
     @Override
-    public void setTcpNoDelay(boolean on) {
-    }
+    public void setTcpNoDelay(boolean on) { /* no-op */ }
 
     /**
      *  Does nothing.
      */
     @Override
-    public void setTrafficClass(int tc) {
-    }
+    public void setTrafficClass(int tc) { /* no-op */ }
 
     @Override
     public void shutdownInput() throws IOException {

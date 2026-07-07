@@ -66,6 +66,5 @@ public class RetransmissionTimer {
      * No-op — the shared timer lives for the router lifetime.
      * @since 0.9
      */
-    public void stop() {
-    }
+    public void stop() { /* no-op */ }
 }

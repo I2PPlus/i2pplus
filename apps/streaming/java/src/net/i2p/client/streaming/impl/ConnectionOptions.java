@@ -18,7 +18,6 @@ import net.i2p.util.Log;
  * somewhere so they aren't copied for every connection.
  */
 class ConnectionOptions extends I2PSocketOptionsImpl {
-    private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(ConnectionOptions.class);
     private int _connectDelay;
     private boolean _fullySigned;
     private boolean _answerPings;
@@ -87,8 +86,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     private static final String PROP_INITIAL_RTO = "i2p.streaming.initialRTO";
     static final String PROP_MAX_RTO = "i2p.streaming.maxRTO";
-    private static final String PROP_MIN_RESEND_DELAY = "i2p.streaming.minResendDelay";
-    private static final String PROP_MAX_RESEND_DELAY = "i2p.streaming.maxResendDelay";
     /** @since 0.9.70+ mutable for adaptive tuning */
     private static volatile int _initialRTO = 6000;
 
@@ -1032,7 +1029,8 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
         boolean blackListEnabled = getBool(opts, PROP_ENABLE_BLACKLIST, false);
         // Don't think these would ever be accessed simultaneously,
         // but avoid concurrent modification just in case
-        Set<Hash> accessList, blackList;
+        Set<Hash> accessList;
+        Set<Hash> blackList;
         if (accessListEnabled) {accessList = new HashSet<>();}
         else {accessList = Collections.emptySet();}
         if (blackListEnabled) {blackList = new HashSet<>();}

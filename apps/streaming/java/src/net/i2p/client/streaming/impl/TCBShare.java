@@ -27,7 +27,9 @@ class TCBShare {
     private final Log _log;
     private final Map<Destination, Entry> _cache;
     private final CleanEvent _cleaner;
-    private final double _rttDampening, _wdwDampening, _rttDevDampening;
+    private final double _rttDampening;
+    private final double _wdwDampening;
+    private final double _rttDevDampening;
 
     // Must be less than SessionKeyManager outbound timeout (12 minutes)
     // to avoid large number of DH operations
@@ -106,7 +108,9 @@ class TCBShare {
         Entry e = _cache.get(dest);
         if (e == null || e.isExpired())
             return;
-        final int rtt, rttDev, wdw;
+        final int rtt;
+        final int rttDev;
+        final int wdw;
         synchronized(e) {
             rtt = e.getRTT();
             rttDev = e.getRTTDev();

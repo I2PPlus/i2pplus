@@ -96,9 +96,8 @@ class ConnectionPacketHandler {
         }
 
         if ((con.getCloseSentOn() > 0) && (con.getUnackedPacketsSent() <= 0) &&
-             (seqNum > 0) && (packet.getPayloadSize() > 0)) {
-            if (_log.shouldInfo())
-                _log.info("Received new data when we've sent them data and all of our data is ACKed on " + con);
+             (seqNum > 0) && (packet.getPayloadSize() > 0) && _log.shouldInfo()) {
+            _log.info("Received new data when we've sent them data and all of our data is ACKed on " + con);
             // this is fine, half-close
             // Major bug before 0.9.9, packets were dropped here and a reset sent
             // If we are fully closed, will handle that in the canAccept test below
@@ -152,7 +151,6 @@ class ConnectionPacketHandler {
                 choke = true;
                 if (_log.shouldInfo())
                     _log.info("Received a choke on " + con);
-                //con.getOptions().setRTT(con.getOptions().getRTT() + 10*1000);
             }
             // Only call this if the flag is set
             con.setChoked(choke);
@@ -219,7 +217,6 @@ class ConnectionPacketHandler {
             if (delayReq && packet.getOptionalDelay() <= 0) {
                 if (_log.shouldDebug())
                     _log.debug("Scheduling immediate ACK for " + packet);
-                //con.setNextSendTime(_context.clock().now() + con.getOptions().getSendAckDelay());
                 // honor request "almost" immediately
                 // Note: the delay below _may_ be a big limiter in how fast local "loopback" connections
                 // can go, however if it goes too fast then we start choking which causes
@@ -379,13 +376,6 @@ class ConnectionPacketHandler {
 
                 _context.statManager().addRateData("stream.sendsBeforeAck", numSends, ackTime);
 
-                // ACK the tags we delivered so we can use them
-                //if ((p.getKeyUsed() != null) && (p.getTagsSent() != null)
-                //      && (p.getTagsSent().size() > 0)) {
-                //    _context.sessionKeyManager().tagsDelivered(p.getTo().getPublicKey(),
-                //                                               p.getKeyUsed(),
-                //                                               p.getTagsSent());
-                //}
                 if (_log.shouldDebug())
                     _log.debug("Packet ACKed after " + ackTime + "ms: " + p);
             }
@@ -480,11 +470,6 @@ class ConnectionPacketHandler {
                     if (_log.shouldDebug())
                         _log.debug("Slow start ACKs = " + acked + " for " + con);
                 // this is too fast since we mostly disabled the CongestionWindowEnd test above
-                //} else if (trend < 0) {
-                //    // rtt is shrinking, so lets increment the cwin
-                //    newWindowSize++;
-                //    if (_log.shouldDebug())
-                //        _log.debug("trend < 0 for " + con);
                 } else {
                     // congestion avoidance
                     // linear growth - increase window 1/N per RTT

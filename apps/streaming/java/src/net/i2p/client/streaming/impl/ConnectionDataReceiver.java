@@ -244,12 +244,12 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
      * Used if no new packet was sent.
      */
     private static final class DummyStatus implements MessageOutputStream.WriteStatus {
-        public final void waitForAccept(int maxWaitMs) {}
-        public final void waitForCompletion(int maxWaitMs) {}
+        public final void waitForAccept(int maxWaitMs) { /* no-op */ }
+        public final void waitForCompletion(int maxWaitMs) { /* no-op */ }
         public final boolean writeAccepted() { return true; }
         public final boolean writeFailed() { return false; }
         public final boolean writeSuccessful() { return true; }
     }
 
-    void destroy() {}
+    void destroy() { /* no-op */ }
 }

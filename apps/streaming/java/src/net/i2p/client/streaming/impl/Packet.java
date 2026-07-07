@@ -322,8 +322,7 @@ class Packet {
     }
 
     /** does nothing right now */
-    public void releasePayload() {
-    }
+    public void releasePayload() { /* no-op */ }
 
     /**
      * @return a new ByteArray of MAX_PAYLOAD_SIZE for this packet
@@ -714,10 +713,7 @@ class Packet {
                     if (siglen < Signature.SIGNATURE_BYTES) {
                         throw new IllegalArgumentException("Unknown Signature Type (Size: " + siglen + " bytes)");
                     }
-                    // Hope it's the default type with some unknown options following;
-                    // if not the sig will fail later
                     type = SigType.DSA_SHA1;
-                    siglen = Signature.SIGNATURE_BYTES;
                 }
                 optionSignature = new Signature(type);
             }
@@ -725,7 +721,6 @@ class Packet {
             System.arraycopy(buffer, cur, buf, 0, buf.length);
             optionSignature.setData(buf);
             setOptionalSignature(optionSignature);
-            cur += buf.length;
         }
     }
 

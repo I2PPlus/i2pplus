@@ -256,9 +256,8 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * @since 0.9.20 moved from Packet
      */
     public int writeSignedPacket(byte[] buffer, int offset) throws IllegalStateException {
-        if (isFlagSet(FLAG_SIGNATURE_OFFLINE)) {
-            if (_transientExpires < _context.clock().now())
-                throw new IllegalStateException("Offline signature expired " + DataHelper.formatTime(_transientExpires));
+        if (isFlagSet(FLAG_SIGNATURE_OFFLINE) && _transientExpires < _context.clock().now()) {
+            throw new IllegalStateException("Offline signature expired " + DataHelper.formatTime(_transientExpires));
         }
         setFlag(FLAG_SIGNATURE_INCLUDED);
         SigningPrivateKey key = _session.getPrivateKey();

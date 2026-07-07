@@ -1143,8 +1143,6 @@ class ConnectionManager {
          */
         public void pong(ByteArray payload) {
             // static, no log
-            //_log.debug("Ping successful");
-            //_context.sessionKeyManager().tagsDelivered(_peer.getPublicKey(), _packet.getKeyUsed(), _packet.getTagsSent());
             synchronized (this) {
                 _ponged = true;
                 _payload = payload;

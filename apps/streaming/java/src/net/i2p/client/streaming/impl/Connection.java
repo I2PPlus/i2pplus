@@ -14,7 +14,6 @@ import net.i2p.client.I2PSession;
 import net.i2p.client.streaming.I2PSocketException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
-import net.i2p.data.Hash;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.util.BandwidthEstimator;
 import net.i2p.util.Log;
@@ -68,7 +67,6 @@ class Connection {
     private final AtomicLong _disconnectScheduledOn = new AtomicLong();
     private long _lastReceivedOn;
     private final ActivityTimer _activityTimer;
-    private long _lastCongestionTime;
     private volatile long _lastCongestionHighestUnacked;
 
     // Pacing fields for smooth transmission
@@ -97,8 +95,6 @@ class Connection {
     private final BandwidthEstimator _bwEstimator;
 
     private final AtomicLong _lifetimeBytesSent = new AtomicLong();
-    /** TBD for tcpdump-compatible ack output */
-    private long _lowestBytesAckedThrough;
     private final AtomicLong _lifetimeBytesReceived = new AtomicLong();
     private final AtomicLong _lifetimeDupMessageSent = new AtomicLong();
     private final AtomicLong _lifetimeDupMessageReceived = new AtomicLong();
@@ -195,7 +191,6 @@ class Connection {
         _createdOn = _context.clock().now();
         _congestionWindowEnd = _options.getWindowSize()-1;
         _ssthresh = ConnectionPacketHandler.getMaxSlowStartWindow(_context);
-        _lastCongestionTime = -1;
         _lastCongestionHighestUnacked = -1;
         _lastReceivedOn = -1;
         _activityTimer = new ActivityTimer();
@@ -650,9 +645,9 @@ class Connection {
      *  May be called multiple times... but shouldn't be.
      */
     public void notifyCloseSent() {
-        if (!_closeSentOn.compareAndSet(0, _context.clock().now())) {
+        if (!_closeSentOn.compareAndSet(0, _context.clock().now()) && _log.shouldDebug()) {
             // TODO ackImmediately() after sending CLOSE causes this. Bad?
-            if (_log.shouldDebug()) {_log.debug("Sent more than one CLOSE: " + toString());}
+            _log.debug("Sent more than one CLOSE: " + toString());
         }
         // that's it, wait for notifyLastPacketAcked() or closeReceived()
     }
@@ -803,7 +798,6 @@ class Connection {
             if (_log.shouldDebug()) {
                 _log.debug("Clean disconnecting from " + getRemotePeerString() + " -> " +
                            (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
-                           //"\n* " + toString(), new Exception("Disconnected"));
             }
             _outputStream.closeInternal();
         } else {
@@ -826,7 +820,6 @@ class Connection {
                 }
             }
             _outputStream.streamErrorOccurred(new IOException("Hard disconnect"));
-            disconnectCount++;
         }
 
         if (removeFromConMgr) {
@@ -1322,7 +1315,6 @@ class Connection {
         // if we hit congestion and e.g. 5 packets are resent,
         // Don't set the size to (winSize >> 4).  only set the
         if (_ackSinceCongestion.compareAndSet(true,false)) {
-            _lastCongestionTime = _context.clock().now();
             _lastCongestionHighestUnacked = _lastSendId.get();
         }
     }
@@ -1821,12 +1813,10 @@ class Connection {
      */
     private class PacedPacketEvent extends SimpleTimer2.TimedEvent {
         private final PacketLocal _packet;
-        private final long _createdOn;
 
         public PacedPacketEvent(PacketLocal packet) {
             super(_timer);
             _packet = packet;
-            _createdOn = _context.clock().now();
         }
 
         public void timeReached() {
@@ -1842,10 +1832,8 @@ class Connection {
                 }
                 resetActivityTimer();
                 // Schedule RTO now that the packet is actually in flight
-                if (_retransmitEvent.scheduleIfNotRunning(_packet.getTimeout())) {
-                    if (_log.shouldDebug()) {
-                        _log.debug("[" + Connection.this + "] Resend in " + _packet.getTimeout() + "ms for paced " + _packet);
-                    }
+                if (_retransmitEvent.scheduleIfNotRunning(_packet.getTimeout()) && _log.shouldDebug()) {
+                    _log.debug("[" + Connection.this + "] Resend in " + _packet.getTimeout() + "ms for paced " + _packet);
                 }
             }
         }
@@ -1934,34 +1922,32 @@ class Connection {
             if (_isChoked) {
                 congestionOccurred();
                 _options.setWindowSize(1);
-            } else if (_ackSinceCongestion.get()) {
+            } else if (_ackSinceCongestion.get() && _packet.getSequenceNum() > _lastCongestionHighestUnacked) {
                 // only shrink the window once per window
-                if (_packet.getSequenceNum() > _lastCongestionHighestUnacked) {
-                    congestionOccurred();
-                    _context.statManager().addRateData("stream.con.windowSizeAtCongestion", newWindowSize, _packet.getLifetime());
-                    /*
-                     * RTO doubling enabled - TCP-style backoff for better congestion control.
-                     * Tunnel failover still provides redundancy, but we now also use RTO
-                     * backoff for more aggressive retransmit timing.
-                     * Window size shrinks for congestion control.
-                     */
-                     _options.doubleRTO();
+                congestionOccurred();
+                _context.statManager().addRateData("stream.con.windowSizeAtCongestion", newWindowSize, _packet.getLifetime());
+                /*
+                 * RTO doubling enabled - TCP-style backoff for better congestion control.
+                 * Tunnel failover still provides redundancy, but we now also use RTO
+                 * backoff for more aggressive retransmit timing.
+                 * Window size shrinks for congestion control.
+                 */
+                _options.doubleRTO();
 
-                    if (_packet.getNumSends() == 1) {
-                        _ssthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2);
-                        _ssthresh = Math.min(ConnectionPacketHandler.getMaxSlowStartWindow(_context), _ssthresh);
-                        int wsize = _options.getWindowSize();
-                        _options.setWindowSize(Math.min(_ssthresh, wsize));
-                        updatePacingRate(); // Update pacing when window changes
-                    }
-
-                    if (_log.shouldInfo()) {
-                        _log.info("Network congestion: Resending packet [" + _packet.getSequenceNum() + "]"
-                                      + "\n* New Window Size: " + newWindowSize + "/" + _options.getWindowSize()
-                                      + " for " + Connection.this.toString());
-                    }
-                    windowAdjusted();
+                if (_packet.getNumSends() == 1) {
+                    _ssthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2);
+                    _ssthresh = Math.min(ConnectionPacketHandler.getMaxSlowStartWindow(_context), _ssthresh);
+                    int wsize = _options.getWindowSize();
+                    _options.setWindowSize(Math.min(_ssthresh, wsize));
+                    updatePacingRate(); // Update pacing when window changes
                 }
+
+                if (_log.shouldInfo()) {
+                    _log.info("Network congestion: Resending packet [" + _packet.getSequenceNum() + "]"
+                                  + "\n* New Window Size: " + newWindowSize + "/" + _options.getWindowSize()
+                                  + " for " + Connection.this.toString());
+                }
+                windowAdjusted();
             }
 
             int numSends = _packet.getNumSends() + 1;
@@ -1993,10 +1979,8 @@ class Connection {
                 _packet.setTimeout(timeout);
 
                 if (_outboundQueue.enqueue(_packet)) {
-                    if (_retransmitEvent.scheduleIfNotRunning(timeout)) {
-                        if (_log.shouldDebug()) {
-                            _log.debug("[" + Connection.this + "] Fast retransmit and schedule timer");
-                        }
+                    if (_retransmitEvent.scheduleIfNotRunning(timeout) && _log.shouldDebug()) {
+                        _log.debug("[" + Connection.this + "] Fast retransmit and schedule timer");
                     }
 
                     // first resend for this packet ?
