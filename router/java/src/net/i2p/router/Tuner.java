@@ -6329,10 +6329,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return Math.min(_max, current + inc);
             }
 
-            // Shrink only when queue idle AND no concurrent build demand
+            // Shrink when queue idle AND service time is negligible (<10ms)
             if (observed < 1 && current > 2) {
-                boolean demandLow = Double.isNaN(concurrentBuilds) || concurrentBuilds < current;
-                if (demandLow)
+                if (!Double.isNaN(acceptLoad) && acceptLoad < 10)
                     return current - 1;
             }
 
