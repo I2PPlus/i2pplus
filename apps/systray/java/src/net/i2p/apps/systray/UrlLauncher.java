@@ -283,9 +283,8 @@ public class UrlLauncher implements ClientApp {
     private String followProgIdToCommand(String progid) {
         String hkeyquery = "HKEY_CLASSES_ROOT\\"+progid+"\\shell\\open\\command";
         String finalValue = registryQuery(hkeyquery, "(Default)");
-        if (finalValue != null) {
-            if (!finalValue.isEmpty())
-                return finalValue;
+        if (finalValue != null && !finalValue.isEmpty()) {
+            return finalValue;
         }
         return null;
     }
@@ -299,14 +298,12 @@ public class UrlLauncher implements ClientApp {
      */
     private String getDefaultOutOfRegistry(String hkeyquery) {
         String defaultValue = registryQuery(hkeyquery, "Default");
-        if (defaultValue != null) {
-            if (!defaultValue.isEmpty())
-                return defaultValue;
-        }else{
+        if (defaultValue != null && !defaultValue.isEmpty()) {
+            return defaultValue;
+        } else {
             defaultValue = followUserConfiguredBrowserToCommand(hkeyquery);
-            if (defaultValue != null) {
-                if (!defaultValue.isEmpty())
-                    return defaultValue;
+            if (defaultValue != null && !defaultValue.isEmpty()) {
+                return defaultValue;
             }
         }
         return null;
