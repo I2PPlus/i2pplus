@@ -54,7 +54,6 @@ class ConnectionPacketHandler {
         _context.statManager().createRateStat("stream.ack.dup.sent", "Was the ACK for a duplicate packet sent as scheduled?", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.con.initialRTT.in", "RTT for the first packet of an inbound connection", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.con.initialRTT.out", "RTT for the first packet of an outbound connection", "Stream", RATES);
-        _context.statManager().createRequiredRateStat("stream.con.packetsAckedPerMessageReceived", "Avg number of ACKs in a message", "Stream", RATES);
         _context.statManager().createRateStat("stream.con.receiveDuplicateSize", "Size of a duplicate message received on a connection", "Stream", RATES);
         _context.statManager().createRateStat("stream.con.receiveMessageSize", "Size of a message received on a connection", "Stream", RATES);
         _context.statManager().createRateStat("stream.resetReceived", "Number of successful sent messages before receiving a RESET", "Stream", RATES);
@@ -410,7 +409,6 @@ class ConnectionPacketHandler {
                         _context.statManager().addRateData("stream.con.initialRTT.out", highestRTT);
                 }
             }
-            _context.statManager().addRateData("stream.con.packetsAckedPerMessageReceived", acked.size(), highestRTT);
             if (con.getCloseSentOn() > 0 && con.getUnackedPacketsSent() <= 0)
                 lastPacketAcked = true;
         }

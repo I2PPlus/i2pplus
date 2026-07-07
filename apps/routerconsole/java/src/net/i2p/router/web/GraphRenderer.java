@@ -103,7 +103,6 @@ class GraphRenderer {
         _log = ctx.logManager().getLog(GraphRenderer.class);
         _listener = lsnr;
         _context = ctx;
-        ctx.statManager().createRateStat("graph.renderTime", "Time to render graphs (ms)", "Router", RATES);
     }
 
     /**
@@ -433,9 +432,6 @@ class GraphRenderer {
             if (name.startsWith("SDSCache.")) {
                 graphTitle = graphTitle.replace("SDSCache.", "[Router] SDSCache.");
             }
-            if (name.startsWith("byteCache.memory.")) {
-                graphTitle = graphTitle.replace("byteCache.memory.", "[Router] ByteCache:");
-            }
             if (name.startsWith("stream.")) {
                 graphTitle = graphTitle.replace("stream.", "[Stream] ");
             }
@@ -676,7 +672,6 @@ class GraphRenderer {
                 throw new IOException("Error rendering - disabling graph generation.");
             }
             out.write(graph.getRrdGraphInfo().getBytes());
-            _context.statManager().addRateData("graph.renderTime", System.currentTimeMillis() - begin);
         } catch (RrdException re) {
             _log.error("Error rendering", re);
             throw new IOException("Error plotting: " + re.getLocalizedMessage());

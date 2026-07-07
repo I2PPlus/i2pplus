@@ -129,7 +129,6 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      */
     private static final int DEFAULT_CODEL_INTERVAL = 50;
     private volatile long _interval;
-    private final String STAT_DROP;
     private final String STAT_DELAY;
     private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 1000 : 500;
 
@@ -158,10 +157,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
         _capacity = capacity;
         _target = target;
         _interval = interval;
-        STAT_DROP = ("codel." + name + ".drop").intern();
         STAT_DELAY = ("codel." + name + ".delay").intern();
-        ctx.statManager().createRateStat(STAT_DROP, "Queue delay of dropped items (ms)", "Router [CoDel]", CODEL_RATES);
-        ctx.statManager().createRateStat(STAT_DELAY, "Average queue delay (ms)", "Router [CoDel]", CODEL_RATES);
         _id = __id.incrementAndGet();
         INSTANCES.add(new WeakReference<CoDelBlockingQueue>(this));
     }
@@ -410,7 +406,6 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
 
     private void drop(E entry) {
         long delay = _context.clock().now() - entry.getEnqueueTime();
-        _context.statManager().addRateData(STAT_DROP, delay);
         if (_log.shouldWarn())
             _log.warn("CDQ #" + _id + ' ' + _name + " dropped item with " + delay + "ms delay \n* " +
                       DataHelper.formatDuration(_context.clock().now() - _first_above_time) + " since first above, " +

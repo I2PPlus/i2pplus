@@ -96,7 +96,6 @@ public class Destination extends KeysAndCert {
 
     private String _cachedB64;
 
-    // private static final boolean STATS = true;
     private static final int CACHE_SIZE;
     private static final int MIN_CACHE_SIZE = 32;
     private static final int MAX_CACHE_SIZE = 512;
@@ -104,8 +103,6 @@ public class Destination extends KeysAndCert {
     static {
         long maxMemory = SystemVersion.getMaxMemory();
         CACHE_SIZE = (int) Math.min(MAX_CACHE_SIZE, Math.max(MIN_CACHE_SIZE, maxMemory / 512 * 1024));
-        // if (STATS)
-        //    I2PAppContext.getGlobalContext().statManager().createRateStat("DestCache", "Hit rate", "Router", new long[] { RateConstants.TEN_MINUTES });
     }
 
     private static final Map<SigningPublicKey, Destination> _cache = new LHMCache<>(CACHE_SIZE);
@@ -137,12 +134,8 @@ public class Destination extends KeysAndCert {
         synchronized (_cache) {
             rv = _cache.get(sk);
             if (rv != null && rv.getPublicKey().equals(pk) && rv.getCertificate().equals(c) && DataHelper.eq(rv.getPadding(), padding)) {
-                // if (STATS)
-                //    I2PAppContext.getGlobalContext().statManager().addRateData("DestCache", 1);
-                return rv;
+                    return rv;
             }
-            // if (STATS)
-            //    I2PAppContext.getGlobalContext().statManager().addRateData("DestCache", 0);
             rv = new Destination(pk, sk, c, padding);
             _cache.put(sk, rv);
         }

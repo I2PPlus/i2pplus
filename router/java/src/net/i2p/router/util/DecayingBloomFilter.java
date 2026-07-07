@@ -158,14 +158,6 @@ public class DecayingBloomFilter {
         if (_log.shouldWarn())
            _log.warn("New DecayingBloomFilter " + name + " m = " + m + " k = " + k + " entryBytes = " + entryBytes +
                      " numExtenders = " + numExtenders + " cycle (s) = " + (durationMs / 1000));
-        // try to get a handle on memory usage vs. false positives
-        context.statManager().createRateStat("router.decayingBloomFilter." + name + ".size",
-             "Size", "Router", RateConstants.BASIC_RATES);
-        context.statManager().createRateStat("router.decayingBloomFilter." + name + ".dups",
-             "1000000 * Duplicates/Size", "Router", RateConstants.BASIC_RATES);
-        context.statManager().createRateStat("router.decayingBloomFilter." + name + ".log10(falsePos)",
-             "log10 of the false positive rate (must have net.i2p.util.DecayingBloomFilter=DEBUG)",
-             "Router", RateConstants.BASIC_RATES);
         context.addShutdownTask(new Shutdown());
     }
 
@@ -336,17 +328,6 @@ public class DecayingBloomFilter {
         if (_log.shouldDebug())
             _log.debug("Decaying the " + _name + " filter after inserting " + currentCount
                        + " elements and " + dups + " false positives with FPR = " + fpr);
-        _context.statManager().addRateData("router.decayingBloomFilter." + _name + ".size",
-                                           currentCount);
-        if (currentCount > 0)
-            _context.statManager().addRateData("router.decayingBloomFilter." + _name + ".dups",
-                                               1000L*1000*dups/currentCount);
-        if (fpr > 0d) {
-            // only if log.shouldDebug() ...
-            long exponent = (long) Math.log10(fpr);
-            _context.statManager().addRateData("router.decayingBloomFilter." + _name + ".log10(falsePos)",
-                                               exponent);
-        }
     }
 
     private class DecayEvent extends SimpleTimer2.TimedEvent {

@@ -56,12 +56,6 @@ public class VMCommSystem extends CommSystemFacade {
         _context.statManager().createFrequencyStat("transport.sendMessageFailureFrequency", "How often do we fail to send messages?", "Transport", new long[] { RateConstants.ONE_MINUTE });
         _context.statManager().createRequiredRateStat("transport.sendMessageSize", "Size of sent messages (bytes)", "Transport", new long[] { RateConstants.ONE_MINUTE });
         _context.statManager().createRequiredRateStat("transport.receiveMessageSize", "Size of received messages (bytes)", "Transport", new long[] { RateConstants.ONE_MINUTE });
-        _context.statManager().createRateStat("transport.sendMessageSmall", "How many messages under 1KB are sent?", "Transport", RateConstants.SIDEBAR_RATES);
-        _context.statManager().createRateStat("transport.receiveMessageSmall", "How many messages under 1KB are received?", "Transport", RateConstants.SIDEBAR_RATES);
-        _context.statManager().createRateStat("transport.sendMessageMedium", "How many messages between 1KB and 4KB are sent?", "Transport", RateConstants.SIDEBAR_RATES);
-        _context.statManager().createRateStat("transport.receiveMessageMedium", "How many messages between 1KB and 4KB are received?", "Transport", RateConstants.SIDEBAR_RATES);
-        _context.statManager().createRateStat("transport.sendMessageLarge", "How many messages over 4KB are sent?", "Transport", RateConstants.SIDEBAR_RATES);
-        _context.statManager().createRateStat("transport.receiveMessageLarge", "How many messages over 4KB are received?", "Transport", RateConstants.SIDEBAR_RATES);
         _context.statManager().createRequiredRateStat("transport.sendProcessingTime", "Time to process and send a message (ms)", "Transport", new long[] { RateConstants.ONE_MINUTE });
         // we do NOT start the thread, all keys will be generated inline
         _xdhThread = new X25519KeyFactory(context);
@@ -112,13 +106,6 @@ public class VMCommSystem extends CommSystemFacade {
             msg.getMessageData(data);
             _context.statManager().addRateData("transport.sendMessageSize", data.length, sendTime);
 
-            if (data.length < 1024)
-                _context.statManager().addRateData("transport.sendMessageSmall", 1, sendTime);
-            else if (data.length <= 4096)
-                _context.statManager().addRateData("transport.sendMessageMedium", 1, sendTime);
-            else
-                _context.statManager().addRateData("transport.sendMessageLarge", 1, sendTime);
-
             peerSys.receive(data, _context.routerHash());
             //_context.jobQueue().addJob(new SendJob(peerSys, msg.getMessage(), _context));
             sendSuccessful = true;
@@ -154,13 +141,6 @@ public class VMCommSystem extends CommSystemFacade {
                 int size = _msg.length;
                 _ctx.profileManager().messageReceived(_from, "vm", 1, size);
                 _ctx.statManager().addRateData("transport.receiveMessageSize", size, 1);
-
-                if (size < 1024)
-                    ReceiveJob.this.getContext().statManager().addRateData("transport.receiveMessageSmall", 1, 1);
-                else if (size <= 4096)
-                    ReceiveJob.this.getContext().statManager().addRateData("transport.receiveMessageMedium", 1, 1);
-                else
-                    ReceiveJob.this.getContext().statManager().addRateData("transport.receiveMessageLarge", 1, 1);
 
                 _ctx.inNetMessagePool().add(msg, null, _from, 0);
             } catch (I2NPMessageException e) {

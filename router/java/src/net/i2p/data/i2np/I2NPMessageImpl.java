@@ -64,8 +64,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         _context = context;
         _log = context.logManager().getLog(I2NPMessageImpl.class);
         _expiration = _context.clock().now() + DEFAULT_EXPIRATION_MS;
-        //_context.statManager().createRateStat("i2np.writeTime", "Time to write an I2NP message", "I2NP", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        //_context.statManager().createRateStat("i2np.readTime", "Time to read an I2NP message", "I2NP", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+
     }
 
     /**
@@ -150,9 +149,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         }
         readMessage(data, cur, sz, type);
         cur += sz;
-        //long time = _context.clock().now() - start;
-        //if (time > 50)
-        //    _context.statManager().addRateData("i2np.readTime", time, time);
+
         return cur - offset;
     }
 

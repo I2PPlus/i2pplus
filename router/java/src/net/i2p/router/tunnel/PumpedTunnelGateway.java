@@ -123,6 +123,9 @@ class PumpedTunnelGateway extends TunnelGateway {
                     context.statManager().createRequiredRateStat("codel.IBGW.delay",
                         "Average queue delay (ms)", "Tunnels [Participating]",
                         new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+                    context.statManager().createRequiredRateStat("tunnel.dropGatewayOverflow",
+                        "Gateway queue overflow (combined OB+IB)", "Tunnels [Participating]",
+                        new long[] { 60*1000, 10*60*1000, 60*60*1000 });
                     _statsCreated = true;
                 }
             }

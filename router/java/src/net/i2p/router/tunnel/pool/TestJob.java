@@ -628,7 +628,6 @@ public class TestJob extends JobImpl {
             if (_log.shouldWarn()) {
                 _log.warn("Deferring test due to job lag (" + maxLag + "ms) -> " + _cfg);
             }
-            ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
             scheduleRetest(_cfg.needsExpeditedTest());
             cleanupTunnelTracking();
             decrementTotalJobs();

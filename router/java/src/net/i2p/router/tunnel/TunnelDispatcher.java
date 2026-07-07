@@ -332,7 +332,7 @@ public class TunnelDispatcher implements Service {
         _context.statManager().createRateStat("tunnel.dispatchOutboundPeer", "Outbound messages targeting a peer", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.dispatchOutboundTunnel", "Outbound messages targeting a tunnel", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.dispatchInbound", "Messages we sent through our Tunnel Gateway", "Tunnels [Participating]", RATES);
-        _context.statManager().createRateStat("tunnel.dispatchParticipant", "Messages we sent through a tunnel we are participating in", "Tunnels [Participating]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.dispatchParticipant", "Messages we sent through a tunnel we are participating in", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.dispatchEndpoint", "Messages received as Outbound Endpoint of a tunnel", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.joinOutboundGateway", "Tunnels joined as Outbound Gateway", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.cache.outboundGateways", "Outbound gateway cache size", "Tunnels [Memory]", RATES);
@@ -348,7 +348,7 @@ public class TunnelDispatcher implements Service {
         _context.statManager().createRateStat("tunnel.joinInboundGateway", "Tunnels joined as Inbound Gateway", "Tunnels [Participating]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.participating InBps", "In (B/s) for Participating tunnels", "Tunnels [Participating]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.participating OutBps", "Out (B/s) for Participating tunnels", "Tunnels [Participating]", RATES);
-        _context.statManager().createRateStat("tunnel.participatingMessageDropped", "Dropped participating messages (share limit exceeded)", "Tunnels [Participating]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.participatingMessageDropped", "Dropped participating messages (share limit exceeded)", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.participatingInboundMessageDropped", "Dropped inbound participating messages (share limit exceeded)", "Tunnels [Participating]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.participatingMessageCount", "Total 1KB participating messages", "Tunnels [Participating]", RATES);
         // 10m period used for tunnel capacity planning (smoother average than 1m)

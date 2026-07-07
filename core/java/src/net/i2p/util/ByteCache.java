@@ -96,10 +96,6 @@ public final class ByteCache extends TryCache<ByteArray> {
         }
     }
 
-    /** Snapshot of miss/discard counts at last cleanup, for delta computation */
-    private long _lastMissCount;
-    private long _lastDiscardCount;
-
     /**
      * Cleanup this specific cache - shrink if underutilized.
      */
@@ -108,19 +104,6 @@ public final class ByteCache extends TryCache<ByteArray> {
         if (origsz > 1 && wasUnderfilled(EXPIRE_PERIOD)) {
             int toRemove = origsz / 2;
             shrink(origsz - toRemove);
-        }
-        I2PAppContext.getGlobalContext().statManager().addRateData("byteCache.memory." + _entrySize, (long) _entrySize * origsz);
-
-        // Report miss/discard deltas since last cleanup
-        long misses = getMissCount();
-        long discards = getDiscardCount();
-        long missDelta = misses - _lastMissCount;
-        long discardDelta = discards - _lastDiscardCount;
-        _lastMissCount = misses;
-        _lastDiscardCount = discards;
-        if (missDelta > 0 || discardDelta > 0) {
-            I2PAppContext.getGlobalContext().statManager().addRateData("byteCache.miss." + _entrySize, missDelta);
-            I2PAppContext.getGlobalContext().statManager().addRateData("byteCache.discard." + _entrySize, discardDelta);
         }
     }
 
@@ -191,9 +174,7 @@ public final class ByteCache extends TryCache<ByteArray> {
         synchronized (_allCaches) {
             _allCaches.add(this);
         }
-        I2PAppContext.getGlobalContext().statManager().createRateStat("byteCache.memory." + entrySize, "Memory usage (B)", "Router [ByteCache]", new long[] {60 * 1000, 10 * 60 * 1000, 24 * 60 * 60 * 1000});
-        I2PAppContext.getGlobalContext().statManager().createRateStat("byteCache.miss." + entrySize, "Acquire miss rate", "Router [ByteCache]", new long[] {60 * 1000, 10 * 60 * 1000, 24 * 60 * 60 * 1000});
-        I2PAppContext.getGlobalContext().statManager().createRateStat("byteCache.discard." + entrySize, "Release discard rate", "Router [ByteCache]", new long[] {60 * 1000, 10 * 60 * 1000, 24 * 60 * 60 * 1000});
+
     }
 
     /**

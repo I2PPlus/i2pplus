@@ -132,17 +132,13 @@ public class ProfileManagerImpl implements ProfileManager {
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
     @Override
-    @SuppressWarnings("deprecation")
     public void tunnelTestSucceeded(Hash peer, long responseTimeMs) {
-        if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
-            PeerProfile data = getProfileNonblocking(peer);
-            if (data == null) return;
-            data.updateTunnelTestTimeAverage(responseTimeMs);
-            data.getTunnelTestResponseTime().addData(responseTimeMs, responseTimeMs);
-            data.getTunnelHistory().incrementTestSucceeded();
-            // Immediately demote from fast/high-cap tiers if RTT exceeds threshold
-            _context.profileOrganizer().demoteIfHighRTT(peer, responseTimeMs);
-        }
+        PeerProfile data = getProfileNonblocking(peer);
+        if (data == null) return;
+        data.updateTunnelTestTimeAverage(responseTimeMs);
+        data.getTunnelHistory().incrementTestSucceeded();
+        // Immediately demote from fast/high-cap tiers if RTT exceeds threshold
+        _context.profileOrganizer().demoteIfHighRTT(peer, responseTimeMs);
     }
 
     /**

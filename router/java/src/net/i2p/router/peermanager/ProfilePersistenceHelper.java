@@ -148,7 +148,7 @@ class ProfilePersistenceHelper {
         if (profile.getLastHeardFrom() != 0) {addDate(buf, addComments, "lastHeardFrom", profile.getLastHeardFrom(), "Last message from peer received:");}
         if (profile.getLastSendSuccessful() != 0) {addDate(buf, addComments, "lastSentToSuccessfully", profile.getLastSendSuccessful(), "Last successful message sent to peer:");}
         if (profile.getLastSendFailed() != 0) {addDate(buf, addComments, "lastFailedSend", profile.getLastSendFailed(), "Last failed message to sent peer:");}
-        if (profile.getTunnelTestTimeAverage() != 0 && PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
+        if (profile.getTunnelTestTimeAverage() != 0) {
             add(buf, addComments, "tunnelTestTimeAverage", (long) profile.getTunnelTestTimeAverage(), "Average peer response time (ms):" +
                 profile.getTunnelTestTimeAverage());
             add(buf, addComments, "tunnelTestTimeAvgLastUpdate", profile.getTunnelTestTimeAvgLastUpdate(), "Last update time for tunnel test EWMA:");
@@ -173,12 +173,6 @@ class ProfilePersistenceHelper {
         if (profile.getIsExpanded()) { // only write out expanded data if, uh, we've got it
             profile.getTunnelHistory().store(out, addComments);
             profile.getTunnelCreateResponseTime().store(out, "tunnelCreateResponseTime", addComments);
-            if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
-                profile.getTunnelTestResponseTime().store(out, "tunnelTestResponseTime", addComments);
-            }
-            if (profile.getPeerTestResponseTime() != null) {
-                profile.getPeerTestResponseTime().store(out, "peerTestResponseTime", addComments);
-            }
         }
 
         if (profile.getIsExpandedDB()) {
@@ -383,10 +377,8 @@ class ProfilePersistenceHelper {
             profile.setLastSendFailed(getLong(props, "lastFailedSend"));
             profile.setLastHeardFrom(getLong(props, "lastHeardFrom"));
 
-            if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
-                profile.setTunnelTestTimeAverage(getFloat(props, "tunnelTestTimeAverage"));
-                profile.setTunnelTestTimeAvgLastUpdate(getLong(props, "tunnelTestTimeAvgLastUpdate"));
-            }
+            profile.setTunnelTestTimeAverage(getFloat(props, "tunnelTestTimeAverage"));
+            profile.setTunnelTestTimeAvgLastUpdate(getLong(props, "tunnelTestTimeAvgLastUpdate"));
 
             profile.setPeakThroughputKBps(getFloat(props, "tunnelPeakThroughput"));
             profile.setPeakTunnelThroughputKBps(getFloat(props, "tunnelPeakTunnelThroughput"));
@@ -409,9 +401,6 @@ class ProfilePersistenceHelper {
 
             if (!caps.isEmpty() && !caps.contains("K") && !caps.contains("L") && !caps.contains("M") && !caps.contains("U")) {
                 profile.getTunnelCreateResponseTime().load(props, "tunnelCreateResponseTime", true);
-                if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
-                    profile.getTunnelTestResponseTime().load(props, "tunnelTestResponseTime", true);
-                }
             }
 
             if (_log.shouldDebug()) {

@@ -144,7 +144,7 @@ public class FIFOBandwidthRefiller implements Runnable {
         _limiter = limiter;
         _context = context;
         _log = context.logManager().getLog(FIFOBandwidthRefiller.class);
-        _context.statManager().createRateStat("bwLimiter.participatingBandwidthQueue",
+        _context.statManager().createRequiredRateStat("bwLimiter.participatingBandwidthQueue",
                                               "Participating tunnel queue (bytes)", "BandwidthLimiter",
                                               RateConstants.SIDEBAR_RATES);
         reinitialize();

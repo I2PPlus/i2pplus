@@ -15,9 +15,6 @@ import net.i2p.util.Log;
 class RouterDoSThrottle extends RouterThrottleImpl {
     public RouterDoSThrottle(RouterContext context) {
         super(context);
-        context.statManager().createRateStat("router.throttleNetDbDoS",
-                                              "NetDb lookup messages received during detected DoS", "Router [Throttle]",
-                                              RateConstants.TUNNEL_RATES);
         _log = context.logManager().getLog(RouterDoSThrottle.class);
     }
 
@@ -40,7 +37,6 @@ class RouterDoSThrottle extends RouterThrottleImpl {
             // same period, check for DoS
             int cnt = _currentLookupCount.incrementAndGet();
             if (cnt >= LOOKUP_THROTTLE_MAX) {
-                _context.statManager().addRateData("router.throttleNetDbDoS", cnt);
                 if (cnt >= LOOKUP_THROTTLE_MAX*2) {
                     _context.banlist().banlistRouter(key, "Excessive NetDb lookups", null, null, now + 5*60*1000L);
                     if (_log.shouldWarn()) {

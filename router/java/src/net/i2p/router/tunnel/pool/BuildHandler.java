@@ -182,8 +182,6 @@ public class BuildHandler implements Runnable {
         ctx.statManager().createRequiredRateStat("tunnel.pendingLookupQueue", "Pending lookup queue size", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.dropReqThrottle", "Dropped tunnel build (request limit)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.nextHopLookupSuccessTime", "Time taken for successful remote next hop lookup (ms)", "Tunnels", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.ownDupID", "Our tunnel dup. ID", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.rejectDupID", "Rejected tunnel build (duplicate ID)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectHopThrottle", "Rejected tunnel build (per-hop limit)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectHostile", "Rejected malicious tunnel build", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectOverloaded", "Delay processing rejected request (ms)", "Tunnels [Participating]", RATES);
@@ -308,7 +306,6 @@ public class BuildHandler implements Runnable {
                 _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Dropping Tunnel Requests: High job lag")
                                    .replace("requests: ", "requests:<br>"));
             }
-            _context.statManager().addRateData("router.throttleTunnelCause", lag);
             return;
         }
         if (highLoad && maxTunnels > 0) {
@@ -316,7 +313,6 @@ public class BuildHandler implements Runnable {
                 _log.warn("Dropping Tunnel Request -> System under load");
                 _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Dropping Tunnel Requests:<br>High CPU load"));
             }
-            _context.statManager().addRateData("router.throttleTunnelCause", lag);
             return;
         }
         handleRequest(state, now);
@@ -418,9 +414,6 @@ public class BuildHandler implements Runnable {
                 if (cfg.isInbound()) {success = _context.tunnelDispatcher().joinInbound(cfg);}
                 else {success = _context.tunnelDispatcher().joinOutbound(cfg);}
                 if (!success) {
-                    // This will happen very rarely. We check for dups when
-                    // creating the config, but we don't track IDs for builds in progress.
-                    _context.statManager().addRateData("tunnel.ownDupID", 1);
                     _exec.buildComplete(cfg, DUP_ID);
                     if (_log.shouldWarn()) {_log.warn("Duplicate ID for our own tunnel " + cfg);}
                     return;
@@ -1042,38 +1035,7 @@ public class BuildHandler implements Runnable {
                 if ((min > 0 || rqu > 0 || ibgwmax > 0) && response == 0) {
                     int share = 1000 * TunnelDispatcher.getShareBandwidth(_context);
                     int max = share / 2;
-                    if (min > max) {response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;}
-                    else {
-                        RateStat stat = _context.statManager().getRate("tunnel.participatingBandwidth");
-                        if (stat != null) {
-                            Rate rate = stat.getRate(RateConstants.TEN_MINUTES);
-                            if (rate != null) {
-                            int used = (int) rate.getAvgOrLifetimeAvg();
-                            int available = share - used;
-                            avail = Math.min(max, available);
-                                if (_log.shouldDebug())
-                                    _log.debug("Tunnel bandwidth - share: " + formatBandwidth(share) +
-                                              " used: " + formatBandwidth(used) + " max: " + formatBandwidth(max) +
-                                              " avail: " + formatBandwidth(avail));
-                                if (min > avail) {
-                                    if (_log.shouldInfo())
-                                        _log.info("Rejecting transit tunnel request -> Insufficient bandwidth available (Required / Available: " +
-                                                  rqu + " / " + avail + "bytes");
-                                    response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
-                                } else {
-                                    if (min > 0 && rqu > 4 * min)
-                                        rqu = 4 * min;
-                                    if (rqu > 0 && rqu < avail)
-                                        avail = rqu;
-                                    if (ibgwmax > 0 && ibgwmax < avail)
-                                        avail = ibgwmax;
-                                    if (_log.shouldDebug())
-                                        _log.debug("Accepting transit tunnel request -> Sufficient bandwidth available (Required / Available: " +
-                                                  rqu + " / " + avail + "bytes");
-                                }
-                            }
-                        }
-                    }
+
                 }
             }
         }
@@ -1112,7 +1074,6 @@ public class BuildHandler implements Runnable {
                 // Probability in 11 minutes (per hop type):
                 // 0.1% for 2900 tunnels; 1% for 9300 tunnels
                 response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
-                _context.statManager().addRateData("tunnel.rejectDupID", 1);
                 if (shouldLog) {_log.warn("Duplicate TunnelID failure " + req);}
             }
         }

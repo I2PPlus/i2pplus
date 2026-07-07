@@ -9,6 +9,7 @@ import net.i2p.router.CommSystemFacade;
 import net.i2p.router.RouterContext;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
+
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
@@ -41,16 +42,12 @@ public class PeerProfile {
     private long _lastSentToSuccessfully;
     private long _lastFailedSend;
     private long _lastHeardFrom;
-    // unused
     private float _tunnelTestResponseTimeAvg;
     private long _tunnelTestTimeAvgLastUpdate;
     private float _peerTestResponseTimeAvg;
     // periodic rates
     private RateStat _dbResponseTime;
     private RateStat _tunnelCreateResponseTime;
-    // unused
-    private RateStat _tunnelTestResponseTime;
-    private RateStat _peerTestResponseTime;
     private RateStat _dbIntroduction;
     // calculation bonuses
     // ints to save some space
@@ -112,7 +109,6 @@ public class PeerProfile {
     // the goal is to cut an unchanged profile in half in 24 hours.
     // x**4 = .5; x = 4th root of .5,  x = .5**(1/4), x ~= 0.84
     private static final float DEGRADE_FACTOR = (float) Math.pow(TOTAL_DEGRADE_PER_DAY, 1.0d / DEGRADES_PER_DAY);
-    static final boolean ENABLE_TUNNEL_TEST_RESPONSE_TIME = true;
     private long _lastCoalesceDate = System.currentTimeMillis();
     private static final long[] RATES = RateConstants.STANDARD_RATES;
 
@@ -334,11 +330,6 @@ public class PeerProfile {
      *
      *  @return latency response time in ms
      */
-    public RateStat getTunnelTestResponseTime() {return _tunnelTestResponseTime;}
-
-    /** how long it takes for a peer to respond to a direct test (ms) */
-    public RateStat getPeerTestResponseTime() {return _peerTestResponseTime;}
-
     /** how many new peers we get from dbSearchReplyMessages or dbStore messages, calculated over a 1 hour, 1 day, and 1 week period
         Warning - may return null if !getIsExpandedDB() */
     public synchronized RateStat getDbIntroduction() {return _dbIntroduction;}
@@ -601,9 +592,6 @@ public class PeerProfile {
         if (_tunnelCreateResponseTime == null) {
             _tunnelCreateResponseTime = new RateStat("tunnelCreateResponseTime", "Time for tunnel create response from peer (ms)", group, RATES);
         }
-        if (ENABLE_TUNNEL_TEST_RESPONSE_TIME && _tunnelTestResponseTime == null) {
-            _tunnelTestResponseTime = new RateStat("tunnelTestResponseTime", "Time to test a tunnel this peer participates in (ms)", group, RATES);
-        }
         if (_tunnelHistory == null) {_tunnelHistory = new TunnelHistory(_context, group);}
         _expanded = true;
     }
@@ -623,6 +611,26 @@ public class PeerProfile {
             _dbHistory = new DBHistory(_context, group);
         }
         _expandedDB = true;
+    }
+
+    /**
+     *  Shrink the profile by dropping the RateStat objects.
+     *  They will be re-created lazily by expandProfile()
+     *  when the profile is used again.
+     *  TunnelHistory and DBHistory keep their RateStats (final fields).
+     */
+    public synchronized void shrinkProfile() {
+        _tunnelCreateResponseTime = null;
+        _expanded = false;
+    }
+
+    /**
+     *  Shrink the DB-specific part of the profile.
+     */
+    public synchronized void shrinkDBProfile() {
+        _dbResponseTime = null;
+        _dbIntroduction = null;
+        _expandedDB = false;
     }
 
     private void coalesceThroughput(boolean decay) {
@@ -686,9 +694,6 @@ public class PeerProfile {
         _coalescing = true;
         if (_tunnelCreateResponseTime != null) {_tunnelCreateResponseTime.coalesceStats();}
 
-        if (_tunnelTestResponseTime != null) {_tunnelTestResponseTime.coalesceStats();}
-        if (_peerTestResponseTime != null) {_peerTestResponseTime.coalesceStats();}
-
         _tunnelHistory.coalesceStats();
 
         if (_expandedDB) {
@@ -730,33 +735,16 @@ public class PeerProfile {
     public String toString() {return "Profile: " + _peer;}
 
     /**
-     * New measurement is 12KB per expanded profile. (2009-03 zzz)
-     * And nowhere in the code is shrinkProfile() called so
-     * the size of compact profiles doesn't matter right now.
-     * This is far bigger than the NetDB entry, which is only about 1.5KB
-     * now that most of the stats have been removed.
+     * RateStat memory per expanded profile:
+     * PeerProfile:     3 RateStats (was 5; 2 dead removed), 3-5 Rates each - ~15 rates total
+     * DBHistory:       2 RateStats, 2 rates each -            4 rates total
+     * TunnelHistory:   2 RateStats, 2 rates each -            4 rates total
+     *                ---                                    ---------
+     *                 7                                      23 rates total
      *
-     * The biggest user in the profile is the Rates. (144 bytes per according to jhat).
-     * PeerProfile:     9 RateStats, 3-5 Rates each - 35 total
-     * DBHistory:       2 RateStats, 3 each -          6 total
-     * TunnelHistory:   4 RateStats, 5 each -         20 total
-     *                ---                            ---------
-     *                 15                             61 total
-     *                *60 bytes                     *144 bytes
-     *                ---                            ---------
-     *                900 bytes                     8784 bytes
-     *
-     * The RateStat itself is 32 bytes and the Rate[] is 28 so that adds
-     * about 1KB.
-     *
-     * So two obvious things to do are cut out some of the Rates,
-     * and call shrinkProfile().
-     *
-     * Obsolete calculation follows:
-     *
-     * Calculate the memory consumption of profiles.  Measured to be ~3739 bytes
-     * for an expanded profile, and ~212 bytes for a compacted one.
-     *
+     * shrinkProfile() / shrinkDBProfile() drop the PeerProfile
+     * and DBProfile RateStats; TunnelHistory RateStats are final
+     * and retained. Re-created lazily on the next expand.
      */
 
 }

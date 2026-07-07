@@ -166,7 +166,6 @@ public class ProfileOrganizer {
         _context.statManager().createRateStat("peer.profileReorgTime", "Time to reorganize peers (ms)", "Peers", RATES);
         _context.statManager().createRateStat("peer.profileThresholdTime", "Time to determine tier thresholds (ms)", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.failedLookupRate", "NetDb Lookup failure rate", "Peers", RATES);
-        _context.statManager().createRequiredRateStat("peer.profileSortTime", "Time to sort peers (ms)", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.profileCount", "Number of peer profiles in memory", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.activeProfileCount", "Number of active peer profiles", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.fastPeerCount", "Number of fast-tier peers", "Peers", RATES);
@@ -710,10 +709,14 @@ public class ProfileOrganizer {
                 }
 
                  long cutoff = Math.max(lastSend, Math.max(lastHeard, lastHeardAbout));
-                 if (cutoff < now - expireWindow) {
-                     expiredCount++;
-                     continue;
-                 }
+                  if (cutoff < now - expireWindow) {
+                      expiredCount++;
+                      profile.shrinkProfile();
+                      if (profile.getIsExpandedDB()) {
+                          profile.shrinkDBProfile();
+                      }
+                      continue;
+                  }
 
                   // Skip peers in low bandwidth tiers (K, L, M, Unknown) and G cap (no tunnels).
                   // With isExcludedFromProfiling() gating profile creation, this is mainly
@@ -1763,23 +1766,20 @@ public class ProfileOrganizer {
             RateStat eClient = _context.statManager().getRate("tunnel.buildClientExpire");
             RateStat rClient = _context.statManager().getRate("tunnel.buildClientReject");
             RateStat sClient = _context.statManager().getRate("tunnel.buildClientSuccess");
-            RateStat dup = _context.statManager().getRate("tunnel.buildDuplicate");
             if (eExpl != null && rExpl != null && sExpl != null &&
-                eClient != null && rClient != null && sClient != null && dup != null) {
+                eClient != null && rClient != null && sClient != null) {
                 Rate er = eExpl.getRate(RateConstants.TEN_MINUTES);
                 Rate rr = rExpl.getRate(RateConstants.TEN_MINUTES);
                 Rate sr = sExpl.getRate(RateConstants.TEN_MINUTES);
                 Rate erClient = eClient.getRate(RateConstants.TEN_MINUTES);
                 Rate rrClient = rClient.getRate(RateConstants.TEN_MINUTES);
                 Rate srClient = sClient.getRate(RateConstants.TEN_MINUTES);
-                Rate dr = dup.getRate(RateConstants.TEN_MINUTES);
                 if (er != null && rr != null && sr != null &&
-                    erClient != null && rrClient != null && srClient != null && dr != null) {
+                    erClient != null && rrClient != null && srClient != null) {
                     double expire = er.getCurrentTotalValue() + erClient.getCurrentTotalValue();
                     double reject = rr.getCurrentTotalValue() + rrClient.getCurrentTotalValue();
                     double success = sr.getCurrentTotalValue() + srClient.getCurrentTotalValue();
-                    double dupCount = dr.getCurrentTotalValue();
-                    double total = expire + reject + success + dupCount;
+                    double total = expire + reject + success;
                     if (total > 0) {
                         return success / total;
                     }

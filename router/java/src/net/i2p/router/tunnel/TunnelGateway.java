@@ -61,8 +61,7 @@ abstract class TunnelGateway {
         //_flushFrequency = 500;
         _delayedFlush = new DelayedFlush();
         _lastFlush = _context.clock().now();
-        //_context.statManager().createRateStat("tunnel.lockedGatewayAdd", "How long do we block when adding a message to a tunnel gateway's queue", "Tunnels", new long[] { 60*1000, 10*60*1000 });
-        //_context.statManager().createRateStat("tunnel.lockedGatewayCheck", "How long do we block when flushing a tunnel gateway's queue", "Tunnels", new long[] { 60*1000, 10*60*1000 });
+
     }
 
     /**
@@ -130,7 +129,7 @@ abstract class TunnelGateway {
         if (delayedFlush) {
             _delayedFlush.reschedule(delayAmount);
         }
-        _context.statManager().addRateData("tunnel.lockedGatewayAdd", afterAdded-beforeLock, remaining);
+
         if (_log.shouldDebug()) {
             long complete = System.currentTimeMillis();
             _log.debug("Time to add the message " + msg.getUniqueId() + ": " + (complete-startAdd)
@@ -232,7 +231,7 @@ abstract class TunnelGateway {
             else
                 _lastFlush = _context.clock().now();
 
-            //_context.statManager().addRateData("tunnel.lockedGatewayCheck", afterChecked-beforeLock, remaining);
+
         }
     }
 }

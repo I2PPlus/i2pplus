@@ -1914,8 +1914,6 @@ class Connection {
                 return false;
             }
 
-            _context.statManager().addRateData("stream.fastRetransmit", _packet.getLifetime(), _packet.getLifetime());
-
             // revamp various fields, in case we need to ack more, etc
             if (_isChoking) {
                 _packet.setOptionalDelay(Packet.SEND_DELAY_CHOKE);

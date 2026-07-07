@@ -159,12 +159,9 @@ public class BuildExecutor implements Runnable {
         _currentlyBuildingMap = new ConcurrentHashMap<>(maxConcurrentBuilds);
         _recentlyBuildingMap = new ConcurrentHashMap<>(4 * maxConcurrentBuilds);
         _context.statManager().createRequiredRateStat("tunnel.buildFailFirstHop", "OB tunnel build failure frequency (can't contact 1st hop)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildReplySlow", "Build reply late, but not too late", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.concurrentBuildsLagged", "Concurrent build count before rejecting (job lag)", "Tunnels", RATES); // (period is lag)
         _context.statManager().createRequiredRateStat("tunnel.buildClientExpire", "No response to our build request", "Tunnels [Participating]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildClientReject", "Response time for rejection (ms)", "Tunnels [Participating]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildClientSuccess", "Response time for success (ms)", "Tunnels [Participating]", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildConfigTime", "Time to build a tunnel config (ms)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildExploratoryExpire", "No response to our build request", "Tunnels [Exploratory]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildExploratoryReject", "Response time for rejection (ms)", "Tunnels [Exploratory]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildExploratorySuccess", "Response time for success (ms)", "Tunnels [Exploratory]", RATES);
@@ -173,8 +170,6 @@ public class BuildExecutor implements Runnable {
         _context.statManager().createRequiredRateStat("tunnel.buildSuccessRate", "Tunnel build success rate (0-100)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildFailureRate", "Tunnel build failure rate (0-100)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildTimeoutRate", "Tunnel build timeout rate (0-100)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.firstHopSuccessRate", "First-hop success count", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.firstHopFailureRate", "First-hop failure count", "Tunnels", RATES);
 
         StatManager statMgr = _context.statManager(); // Get stat manager, get recognized bandwidth tiers
         String bwTiers = RouterInfo.BW_CAPABILITY_CHARS; // For each bandwidth tier, create tunnel build agree/reject/expire stats
@@ -675,8 +670,6 @@ public class BuildExecutor implements Runnable {
                                     pool.buildComplete(cfg, Result.OTHER_FAILURE);
                                     continue;
                                 }
-                                long pTime = System.currentTimeMillis() - bef;
-                                _context.statManager().addRateData("tunnel.buildConfigTime", pTime);
                                 if (_log.shouldDebug()) {
                                     _log.debug("Configuring new tunnel [" + i + "] for " + pool + " -> " + cfg);
                                 }
@@ -963,13 +956,10 @@ public class BuildExecutor implements Runnable {
             (buildTime >= 50 && !firstHopFailure)) {
             updateBuildStats(result);
         }
-        StatManager smFH = _context.statManager();
         if (result == Result.SUCCESS) {
             _firstHopSuccessCount.incrementAndGet();
-            smFH.addRateData("tunnel.firstHopSuccessRate", 1, 0);
         } else if (result == Result.TIMEOUT || result == Result.BAD_RESPONSE || firstHopFailure) {
             _firstHopFailureCount.incrementAndGet();
-            smFH.addRateData("tunnel.firstHopFailureRate", 1, 0);
         }
 
         /* Only wake up the build thread if it took a reasonable amount of time -
@@ -1077,10 +1067,9 @@ public class BuildExecutor implements Runnable {
         if (rv != null) {return rv;}
         rv = _recentlyBuildingMap.remove(key);
         if (rv != null) {
-            long rtt = _context.clock().now() - rv.getConfig(0).getCreation();
-            if (rtt < 0) {rtt = 0;}
-            _context.statManager().addRateData("tunnel.buildReplySlow", rtt);
             if (_log.shouldInfo()) {
+                long rtt = _context.clock().now() - rv.getConfig(0).getCreation();
+                if (rtt < 0) {rtt = 0;}
                 _log.info("Received late reply (RTT: " + rtt + "ms) for: " + rv);
             }
         }

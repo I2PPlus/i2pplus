@@ -89,7 +89,6 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         _context.statManager().createRateStat("i2cp.receiveStatusTime.5", "Time to get status=5 back", "I2CP", RATES);
         _context.statManager().createRateStat("i2cp.tx.msgCompressed", "Compressed size transferred", "I2CP", RATES);
         _context.statManager().createRateStat("i2cp.tx.msgExpanded", "Size before compression", "I2CP", RATES);
-        //_context.statManager().createRateStat("i2cp.receiveStatusTime", "Time to get any status", "I2CP", RATES);
     }
 
     /*
@@ -477,13 +476,6 @@ class I2PSessionImpl2 extends I2PSessionImpl {
                 case 1:
                     _context.statManager().addRateData("i2cp.receiveStatusTime.1", lifetime);
                     break;
-                // best effort codes unused
-                //case 2:
-                //    _context.statManager().addRateData("i2cp.receiveStatusTime.2", lifetime, 0);
-                //    break;
-                //case 3:
-                //    _context.statManager().addRateData("i2cp.receiveStatusTime.3", lifetime, 0);
-                //    break;
                 case 4:
                     _context.statManager().addRateData("i2cp.receiveStatusTime.4", lifetime);
                     break;
