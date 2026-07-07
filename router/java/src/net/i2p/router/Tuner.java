@@ -6254,7 +6254,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         BuildHandlerThreadsParam() {
             super("router.buildHandlerThreads", "Build handler threads",
                   SUB_ROUTER,
-                  1, 8, 1, "tunnel.buildHandler.queueSize", _context);
+                  2, 8, 1, "tunnel.buildHandler.queueSize", _context);
         }
 
         protected void applyValue(int value) {

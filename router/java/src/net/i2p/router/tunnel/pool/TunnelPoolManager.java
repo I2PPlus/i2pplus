@@ -801,7 +801,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             t.start();
             _handler.init();
             for (int i = 1; i <= _numHandlerThreads; i++) {
-                I2PThread hThread = new I2PThread(_handler, "BuildHandler " + i + '/' + _numHandlerThreads, true);
+                I2PThread hThread = new I2PThread(_handler, "BuildHandler", true);
                 hThread.start();
                 _handlerThreads.add(hThread);
             }
@@ -831,7 +831,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      */
     public static int getBuildHandlerThreads() { return _numHandlerThreads; }
     public static void setBuildHandlerThreads(int val) {
-        _numHandlerThreads = Math.max(1, Math.min(8, val));
+        _numHandlerThreads = Math.max(2, Math.min(8, val));
     }
 
     /**
@@ -853,7 +853,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (target > current) {
             for (int i = current; i < target; i++) {
                 I2PThread hThread = new I2PThread(_handler,
-                    "BuildHandler " + (i + 1) + '/' + target, true);
+                    "BuildHandler", true);
                 hThread.start();
                 _handlerThreads.add(hThread);
             }

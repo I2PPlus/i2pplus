@@ -262,7 +262,7 @@ public class BuildHandler implements Runnable {
     @Override
     public void run() {
         _isRunning = true;
-        while (_isRunning && !_manager.isShutdown() && !Thread.currentThread().isInterrupted()) {
+        while (!_manager.isShutdown() && !Thread.currentThread().isInterrupted()) {
             try {handleInboundRequest();}
             catch (RuntimeException e) {_log.log(Log.CRIT, "Catastrophic tunnel build failure! -> " +  e.getMessage());}
         }
@@ -278,7 +278,7 @@ public class BuildHandler implements Runnable {
         try {state = _inboundBuildMessages.take();}
         catch (InterruptedException ie) { Thread.currentThread().interrupt(); return; }
         // check for poison
-        if (state.msg == null) {_isRunning = false; return;}
+        if (state.msg == null) {Thread.currentThread().interrupt(); return;}
         long now = System.currentTimeMillis();
         long uptime = _context.router().getUptime();
         long dropBefore = now - (BuildRequestor.getRequestTimeout(_context) / 4);
