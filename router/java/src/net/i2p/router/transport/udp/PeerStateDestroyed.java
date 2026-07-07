@@ -193,12 +193,9 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
      *  @since 0.9.55
      */
     void receivePacket(RemoteHostId from, UDPPacket packet) {
-        if (!from.equals(_remoteHostId)) {
-            // TODO, QUIC says we can respond, or not...
-            if (_log.shouldWarn())
-                //_log.warn("Inbound packet from [" + from + "] from " + this);
-                _log.warn("Dropping irregular packet from " + from + " -> Host/packet ID mimsmatch");
-        }
+        if (!from.equals(_remoteHostId) && _log.shouldWarn())
+            //_log.warn("Inbound packet from [" + from + "] from " + this);
+            _log.warn("Dropping irregular packet from " + from + " -> Host/packet ID mimsmatch");
         DatagramPacket dpacket = packet.getPacket();
         byte[] data = dpacket.getData();
         int off = dpacket.getOffset();
@@ -237,7 +234,6 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
             // spec says a packet with termination may be retransmitted as-is
             // and we need to respond to it
             //if (_receivedMessages.get(n)) {
-            //    // dup...
             //    return;
             //}
 

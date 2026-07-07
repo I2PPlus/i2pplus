@@ -259,9 +259,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      */
     @Override
     List<OutboundMessageState> allocateSend(long now) {
-        if (!_isInbound && _ackedMessages.getOffset() == 0 && !_ackedMessages.get(0)) {
-            if (!checkRetransmitSessionConfirmed(_context.clock().now(), false)) {return null;}
-        }
+        if (!_isInbound && _ackedMessages.getOffset() == 0 && !_ackedMessages.get(0) && !checkRetransmitSessionConfirmed(_context.clock().now(), false)) {return null;}
         return super.allocateSend(now);
     }
 
@@ -676,12 +674,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     public void gotRelayTagRequest() {
         if (shouldLogDebug) {_log.debug("[SSU] Received RELAY TAG REQUEST " + this);}
         long tag = getWeRelayToThemAs();
-        if (tag <= 0) {
-            if (_transport.canIntroduce(isIPv6())) {
-                tag = 1 + _context.random().nextLong(EstablishmentManager.MAX_TAG_VALUE);
-                setWeRelayToThemAs(tag);
-                _transport.getIntroManager().add(this);
-            }
+        if (tag <= 0 && _transport.canIntroduce(isIPv6())) {
+            tag = 1 + _context.random().nextLong(EstablishmentManager.MAX_TAG_VALUE);
+            setWeRelayToThemAs(tag);
+            _transport.getIntroManager().add(this);
         }
         if (tag > 0) {
             SSU2Payload.Block block = new SSU2Payload.RelayTagBlock(tag);
@@ -1028,7 +1024,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         int sz = state.getCompleteSize();
         try {
             byte[] buf = new byte[sz];
-            I2NPMessage m;
             int numFragments = state.getFragmentCount();
             ByteArray[] fragments = state.getFragments();
             int off = 0;

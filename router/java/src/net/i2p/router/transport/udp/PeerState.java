@@ -150,7 +150,6 @@ public class PeerState {
      *  Priority queue of messages that have not yet been sent.
      *  They are taken from here and put in _outboundMessages.
      */
-    //private final CoDelPriorityBlockingQueue<OutboundMessageState> _outboundQueue;
     private final PriBlockingQueue<OutboundMessageState> _outboundQueue;
 
     /** when the retransmit timer is about to trigger */
@@ -305,11 +304,6 @@ public class PeerState {
      * @since 0.9.70+
      */
     public static int getClockSkewFudge() { return (getAckFrequency() * 2) / 3; }
-
-    /**
-     *  The max number of acks we save to send as duplicates
-     */
-    private static final int MAX_RESEND_ACKS = 32;
 
     /** If this many acks arrive out of order, fast rtx */
     private static final int FAST_RTX_ACKS = 3;

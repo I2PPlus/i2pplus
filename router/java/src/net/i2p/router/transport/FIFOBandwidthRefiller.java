@@ -80,10 +80,7 @@ public class FIFOBandwidthRefiller implements Runnable {
     public static final String PROP_OUTBOUND_BURST_BANDWIDTH = "i2np.bandwidth.outboundBurstKBytesPerSecond";
     public static final String PROP_INBOUND_BANDWIDTH_PEAK = "i2np.bandwidth.inboundBurstKBytes";
     public static final String PROP_OUTBOUND_BANDWIDTH_PEAK = "i2np.bandwidth.outboundBurstKBytes";
-    //public static final String PROP_REPLENISH_FREQUENCY = "i2np.bandwidth.replenishFrequencyMs";
-
     // no longer allow unlimited bandwidth - the user must specify a value, else use defaults below (KBps)
-//    public static final int DEFAULT_INBOUND_BANDWIDTH = 300;
     public static final int DEFAULT_INBOUND_BANDWIDTH = 1024;
     /**
      *  Caution, do not make DEFAULT_OUTBOUND_BANDWIDTH * DEFAULT_SHARE_PCT &gt; 32
@@ -91,34 +88,25 @@ public class FIFOBandwidthRefiller implements Runnable {
      *  of moving the default bandwidth class from L to M, or maybe
      *  adjusting bandwidth class boundaries.
      */
-//    public static final int DEFAULT_OUTBOUND_BANDWIDTH = 60;
     public static final int DEFAULT_OUTBOUND_BANDWIDTH = 128;
-//    public static final int DEFAULT_INBOUND_BURST_BANDWIDTH = 300;
     public static final int DEFAULT_INBOUND_BURST_BANDWIDTH = 1024;
-//    public static final int DEFAULT_OUTBOUND_BURST_BANDWIDTH = 60;
     public static final int DEFAULT_OUTBOUND_BURST_BANDWIDTH = 128;
 
     public static final int DEFAULT_BURST_SECONDS = 60;
 
     /** For now, until there is some tuning and safe throttling, we set the floor at this inbound (KBps) */
-//    public static final int MIN_INBOUND_BANDWIDTH = 5;
     public static final int MIN_INBOUND_BANDWIDTH = 32;
     /** For now, until there is some tuning and safe throttling, we set the floor at this outbound (KBps) */
-//    public static final int MIN_OUTBOUND_BANDWIDTH = 5;
     public static final int MIN_OUTBOUND_BANDWIDTH = 32;
     /** For now, until there is some tuning and safe throttling, we set the floor at this during burst (KBps) */
-//    public static final int MIN_INBOUND_BANDWIDTH_PEAK = 5;
     public static final int MIN_INBOUND_BANDWIDTH_PEAK = 32;
     /** For now, until there is some tuning and safe throttling, we set the floor at this during burst (KBps) */
-//    public static final int MIN_OUTBOUND_BANDWIDTH_PEAK = 5;
     public static final int MIN_OUTBOUND_BANDWIDTH_PEAK = 32;
     /**
      *  Max for reasonable Bloom filter false positive rate.
      *  Do not increase without adding a new Bloom filter size!
      *  See util/DecayingBloomFilter and tunnel/BloomFilterIVValidator.
      */
-//    public static final int MAX_OUTBOUND_BANDWIDTH = 16384;
-    //public static final int MAX_OUTBOUND_BANDWIDTH = 32768;
     public static final int MAX_OUTBOUND_BANDWIDTH = SystemVersion.isSlow() || SystemVersion.getCores() == 1 ? 16384 :
                                                      SystemVersion.getCores() < 3 || SystemVersion.getMaxMemory() < 1024*1024*1024L ? 32768 :
                                                      SystemVersion.getCores() < 6 || SystemVersion.getMaxMemory() < 3072*1024*1024L ? 65536 :
@@ -203,21 +191,6 @@ public class FIFOBandwidthRefiller implements Runnable {
 
             if (inboundToAdd < 0) inboundToAdd = 0;
             if (outboundToAdd < 0) outboundToAdd = 0;
-
-         /**** Always limited for now
-            if (_inboundKBytesPerSecond <= 0) {
-                _limiter.setInboundUnlimited(true);
-                inboundToAdd = 0;
-            } else {
-                _limiter.setInboundUnlimited(false);
-            }
-            if (_outboundKBytesPerSecond <= 0) {
-                _limiter.setOutboundUnlimited(true);
-                outboundToAdd = 0;
-            } else {
-                _limiter.setOutboundUnlimited(false);
-            }
-         ****/
 
             long maxBurstIn = ((_inboundBurstKBytesPerSecond-_inboundKBytesPerSecond)*1024*numMs)/1000;
             long maxBurstOut = ((_outboundBurstKBytesPerSecond-_outboundKBytesPerSecond)*1024*numMs)/1000;

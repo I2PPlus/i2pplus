@@ -839,7 +839,7 @@ public abstract class TransportImpl implements Transport {
      *  @param source defined in Transport.java
      *  @since 0.9.20
      */
-    public void externalAddressRemoved(AddressSource source, boolean ipv6) {}
+    public void externalAddressRemoved(AddressSource source, boolean ipv6) { /* no-op */ }
 
     /**
      *  Notify a transport of the results of trying to forward a port.
@@ -851,7 +851,7 @@ public abstract class TransportImpl implements Transport {
      *  @param externalPort the external port, which for now should always be the same as
      *                      the internal port if the forwarding was successful.
      */
-    public void forwardPortStatus(byte[] ip, int port, int externalPort, boolean success, String reason) {}
+    public void forwardPortStatus(byte[] ip, int port, int externalPort, boolean success, String reason) { /* no-op */ }
 
     /**
      * What INTERNAL port would the transport like to have forwarded by UPnP.
@@ -865,7 +865,7 @@ public abstract class TransportImpl implements Transport {
     /** Who to notify on message availability */
     public void setListener(TransportEventListener listener) {_listener = listener;}
     /** Make this stuff pretty */
-    public void renderStatusHTML(Writer out) throws IOException {}
+    public void renderStatusHTML(Writer out) throws IOException { /* no-op */ }
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {renderStatusHTML(out);}
 
     /**
@@ -877,7 +877,7 @@ public abstract class TransportImpl implements Transport {
      * @deprecated unused
      */
     @Deprecated
-    public void recheckReachability() {}
+    public void recheckReachability() { /* no-op */ }
 
     /**
      *  This returns true if the force-firewalled setting is configured, false otherwise.
@@ -885,7 +885,7 @@ public abstract class TransportImpl implements Transport {
      *  @since 0.9.20, public since 0.9.30
      */
     public boolean isIPv4Firewalled() {
-        return TransportUtil.isIPv4Firewalled(_context, getStyle());
+        return TransportUtil.isIPv4Firewalled(_context);
     }
 
     /**
@@ -894,7 +894,7 @@ public abstract class TransportImpl implements Transport {
      *  @since 0.9.27, public since 0.9.30
      */
     public boolean isIPv6Firewalled() {
-        return TransportUtil.isIPv6Firewalled(_context, getStyle());
+        return TransportUtil.isIPv6Firewalled(_context);
     }
 
     public boolean isBacklogged(Hash peer) {return false;}
@@ -917,7 +917,7 @@ public abstract class TransportImpl implements Transport {
      *
      * @since 0.9.24
      */
-    public void mayDisconnect(Hash peer) {}
+    public void mayDisconnect(Hash peer) { /* no-op */ }
 
     public boolean isUnreachable(Hash peer) {
         if (peer == _lastReachablePeer) {return false;}

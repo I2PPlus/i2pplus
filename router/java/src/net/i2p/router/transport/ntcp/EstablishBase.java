@@ -189,7 +189,7 @@ abstract class EstablishBase implements EstablishState {
      * We are establishing an outbound connection, so prepare ourselves by
      * queueing up the write of the first part of the handshake
      */
-    public void prepareOutbound() {}
+    public void prepareOutbound() { /* no-op */ }
 
     /** did the handshake fail for some reason? */
     public boolean isCorrupt() {

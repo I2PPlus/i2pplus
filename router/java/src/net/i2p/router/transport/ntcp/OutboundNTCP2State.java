@@ -426,10 +426,8 @@ class OutboundNTCP2State implements EstablishState {
         }
 
         // check for remaining data
-        if ((_state == State.VERIFIED || _state == State.CORRUPT) && src.hasRemaining()) {
-            if (_log.shouldWarn())
-                _log.warn("Received unexpected " + src.remaining() + " on " + this, new Exception());
-        }
+        if ((_state == State.VERIFIED || _state == State.CORRUPT) && src.hasRemaining() && _log.shouldWarn())
+            _log.warn("Received unexpected " + src.remaining() + " on " + this, new Exception());
     }
 
     /**
@@ -462,7 +460,6 @@ class OutboundNTCP2State implements EstablishState {
         block = new NTCP2Payload.OptionsBlock(opts);
         blocks.add(block);
         // all zeros is fine here
-        //block = new NTCP2Payload.PaddingBlock(_context, _padlen3);
         block = new NTCP2Payload.PaddingBlock(_padlen3);
         blocks.add(block);
         // we put it at the offset so it doesn't get overwritten by HandshakeState

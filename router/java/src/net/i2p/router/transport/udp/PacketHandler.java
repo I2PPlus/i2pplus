@@ -232,8 +232,6 @@ class PacketHandler {
             RemoteHostId rem = packet.getRemoteHost();
             PeerState state = _transport.getPeerState(rem);
             if (state == null) {
-                //if (_log.shouldDebug())
-                //    _log.debug("Packet received is not for a connected peer");
                 InboundEstablishState est = _establisher.getInboundState(rem);
                 if (est != null) {
                     // Group 2: Inbound Establishment
@@ -242,8 +240,6 @@ class PacketHandler {
                     }
                     receiveSSU2Packet(rem, packet, (InboundEstablishState2) est);
                 } else {
-                    //if (_log.shouldDebug())
-                    //    _log.debug("Packet received is not for an inbound establishment");
                     OutboundEstablishState oest = _establisher.getOutboundState(rem);
                     if (oest != null) {
                         // Group 3: Outbound Establishment
@@ -262,9 +258,6 @@ class PacketHandler {
                     }
                 }
             } else {
-                // Group 1: Established
-                //if (_log.shouldDebug())
-                //    _log.debug("Packet received IS for an existing peer");
                 ((PeerState2) state).receivePacket(rem, packet);
             }
         }

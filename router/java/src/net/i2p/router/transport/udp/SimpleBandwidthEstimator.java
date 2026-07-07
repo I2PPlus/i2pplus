@@ -27,7 +27,8 @@ public class SimpleBandwidthEstimator implements BandwidthEstimator {
     private final PeerState _state;
 
     private long _tAck;
-    private float _bKFiltered, _bK_ns_est;
+    private float _bKFiltered;
+    private float _bK_ns_est;
     private int _acked;
 
     private static final int DEFAULT_DECAY_FACTOR = 8;

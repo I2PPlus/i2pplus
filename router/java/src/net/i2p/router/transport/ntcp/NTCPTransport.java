@@ -56,7 +56,6 @@ import net.i2p.util.Addresses;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
-import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
@@ -159,7 +158,6 @@ public class NTCPTransport extends TransportImpl {
         "RouterInfo store fail"
     )));
 
-    private static final int MIN_CONCURRENT_READERS = 2;  // unless < 32MB
 
     /**
      *  RI sigtypes supported in 0.9.16
@@ -651,11 +649,8 @@ public class NTCPTransport extends TransportImpl {
             return _transientFail;
         }
 
-        //if ((_myAddress != null) && (_myAddress.equals(addr)))
-        //    return null; // Don't talk to yourself
+        //if (_myAddress != null && _myAddress.equals(addr))
 
-        //if (_log.shouldDebug())
-        //    _log.debug("slow bid when trying to send to " + peer);
         if (haveCapacity()) {
             if (addr.getCost() > DEFAULT_COST)
                 return _slowCostBid;
@@ -692,9 +687,6 @@ public class NTCPTransport extends TransportImpl {
             }
             if (!isValid(ip)) {
                 if (! allowLocal()) {
-                    //_context.statManager().addRateData("ntcp.bidRejectedLocalAddress", 1);
-                    //if (_log.shouldDebug())
-                    //    _log.debug("no bid when trying to send to " + peer + " as they have a private ntcp address");
                     continue;
                 }
             }
@@ -800,7 +792,6 @@ public class NTCPTransport extends TransportImpl {
         if (ident != null) {
             synchronized (_conLock) {
                 // only remove the con passed in
-                //removed = _conByIdent.remove(ident.calculateHash());
                 if (_conByIdent.remove(ident.calculateHash(), con))
                     removed = con;
             }
@@ -1045,8 +1036,6 @@ public class NTCPTransport extends TransportImpl {
         props.setProperty("s", _b64Ntcp2StaticPubkey);
         props.setProperty("v", NTCP2_VERSION);
         // not needed for outbound
-        //if (PQ_INT_VERSION != 0)
-        //    props.setProperty("pq", PQ_VERSION);
         RouterAddress myAddress = new RouterAddress(STYLE2, props, NTCP2_OUTBOUND_COST);
         replaceAddress(myAddress);
     }
@@ -1858,7 +1847,8 @@ public class NTCPTransport extends TransportImpl {
         if (!isAlive())
             return Status.UNKNOWN;
         TransportUtil.IPv6Config config = getIPv6Config();
-        boolean v4Disabled, v6Disabled;
+        boolean v4Disabled;
+        boolean v6Disabled;
         if (config == IPV6_DISABLED) {
             v4Disabled = false;
             v6Disabled = true;

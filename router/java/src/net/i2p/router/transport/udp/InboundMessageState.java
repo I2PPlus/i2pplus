@@ -77,7 +77,7 @@ class InboundMessageState implements CDQEntry {
      * Receives and stores a fragment.
      * @return true if successful, false if corrupt or invalid
      */
-    public boolean receiveFragment(byte[] data, int off, int len, int fragmentNum, boolean isLast) throws DataFormatException {
+    public boolean receiveFragment(byte[] data, int off, int len, int fragmentNum, boolean isLast) {
         synchronized(lock) {
             // Grow array if needed, but cap at MAX_FRAGMENTS
             if (fragmentNum >= _fragments.length) {

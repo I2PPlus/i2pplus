@@ -1234,7 +1234,6 @@ class PeerTestManager {
                 }
                 test.setReceiveBobTime(now);
                 test.setLastSendTime(now);
-                boolean fail = false;
                 RouterInfo charlieRI = null;
                 SessionKey charlieIntroKey = null;
                 InetAddress charlieIP = null;
@@ -1512,13 +1511,9 @@ class PeerTestManager {
                     if (_transport.isValid(addrBlockIP) &&
                         TransportUtil.isValidPort(addrBlockPort)) {
                         RouterAddress ra = _transport.getCurrentExternalAddress(isIPv6);
-                        if (ra != null) {
-                            if (addrBlockPort != ra.getPort() || !DataHelper.eq(addrBlockIP, ra.getIP())) {
-                                if (_log.shouldWarn())
-                                    _log.warn("Alice said we had a different IP/port: " +
-                                              Addresses.toString(addrBlockIP, addrBlockPort) + " on " + state);
-                            }
-                        }
+                        if (ra != null && (addrBlockPort != ra.getPort() || !DataHelper.eq(addrBlockIP, ra.getIP())) && _log.shouldWarn())
+                            _log.warn("Alice said we had a different IP/port: " +
+                                      Addresses.toString(addrBlockIP, addrBlockPort) + " on " + state);
                         // We already call externalAddressReceived() for every outbound connection from EstablishmentManager
                         // and we don't do SNAT detection there
                         // _transport.externalAddressReceived(state.getAliceHash(), addrBlockIP, addrBlockPort)

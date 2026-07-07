@@ -278,8 +278,6 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      *   Plain DataFormatExceptions indicate you may not respond in-session.
      */
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException {
-        //if (_log.shouldDebug())
-        //    _log.debug("[SSU] Received RouterInfo block: " + ri);
         if (isHandshake) {throw new DataFormatException("RouterInfo in Session Request");}
         if (_receivedUnconfirmedIdentity != null) {throw new DataFormatException("Duplicate RouterInfo in SessionConfirmed");}
         _receivedUnconfirmedIdentity = ri.getIdentity();

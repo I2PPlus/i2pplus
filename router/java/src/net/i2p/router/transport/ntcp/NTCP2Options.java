@@ -11,8 +11,14 @@ import net.i2p.data.DataHelper;
  */
 class NTCP2Options {
 
-    private final float _sendMin, _sendMax, _recvMin, _recvMax;
-    private final int _sendDummy, _recvDummy, _sendDelay, _recvDelay;
+    private final float _sendMin;
+    private final float _sendMax;
+    private final float _recvMin;
+    private final float _recvMax;
+    private final int _sendDummy;
+    private final int _recvDummy;
+    private final int _sendDelay;
+    private final int _recvDelay;
 
     public NTCP2Options(float sendMin, float sendMax, float recvMin, float recvMax,
                         int sendDummy, int recvDummy, int sendDelay, int recvDelay) {

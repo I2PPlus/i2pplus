@@ -137,7 +137,6 @@ public class UDPTransport extends TransportImpl {
     private long _v6IntroducersSelectedOn;
     private volatile long _lastInboundReceivedOn;
     private int _mtu = PeerState.MIN_MTU;
-    private int _mtu_ipv6 = PeerState.MIN_IPV6_MTU;
     private int _mtu_ssu2;
     private int _mtu_ssu2_ipv6;
     private final int _defaultMTU;
@@ -171,10 +170,14 @@ public class UDPTransport extends TransportImpl {
     private volatile long _expireTimeout;
 
     /** Last report from a peer of our IP */
-    private Hash _lastFromv4, _lastFromv6;
-    private byte[] _lastFromIPv4, _lastFromIPv6;
-    private byte[] _lastOurIPv4, _lastOurIPv6;
-    private int _lastOurPortv4, _lastOurPortv6;
+    private Hash _lastFromv4;
+    private Hash _lastFromv6;
+    private byte[] _lastFromIPv4;
+    private byte[] _lastFromIPv6;
+    private byte[] _lastOurIPv4;
+    private byte[] _lastOurIPv6;
+    private int _lastOurPortv4;
+    private int _lastOurPortv6;
     private boolean _haveUPnP;
     /** We don't publish our IP/port if introduced, so we need to store it somewhere. */
     private RouterAddress _currentOurV4Address;
@@ -438,7 +441,6 @@ public class UDPTransport extends TransportImpl {
         _v6IntroducersSelectedOn = -1;
         _lastInboundReceivedOn = -1;
         _mtu = PeerState.LARGE_MTU;
-        _mtu_ipv6 = PeerState.MIN_IPV6_MTU;
         setupPort();
         _needsRebuild = true;
         _min_peers = _context.getProperty("i2np.udp.minpeers", MIN_PEERS);
@@ -1192,7 +1194,6 @@ public class UDPTransport extends TransportImpl {
             try {
                 int pmtu = Integer.parseInt(p);
                 _mtu = MTU.rectify(false, pmtu);
-                _mtu_ipv6 = MTU.rectify(true, pmtu);
                 return _mtu;
             } catch (NumberFormatException nfe) { /* ignored */ }
         }
@@ -1200,7 +1201,6 @@ public class UDPTransport extends TransportImpl {
         if (addr != null && addr.getAddress().length == 16) {
             if (mtu <= 0)
                 mtu = PeerState.MIN_IPV6_MTU;
-            _mtu_ipv6 = mtu;
         } else {
             if (mtu <= 0)
                 mtu = PeerState.LARGE_MTU;
@@ -1254,8 +1254,6 @@ public class UDPTransport extends TransportImpl {
             _lastInboundIPv6 = _context.clock().now();
             _context.statManager().addRateData("udp.inboundIPv6Conn", 1);
             // former workaround for lack of IPv6 peer testing
-            //if (_currentOurV6Address != null)
-            //    setReachabilityStatus(Status.IPV4_UNKNOWN_IPV6_OK, true);
         } else {
             // Introduced connections are still inbound, this is not evidence
             // that we are not firewalled.
@@ -2956,8 +2954,6 @@ public class UDPTransport extends TransportImpl {
                 introducersIncluded = true;
             } else {
                 // logged elsewhere
-                //if (_log.shouldWarn())
-                //    _log.warn("ipv6? " + isIPv6 + " no introducers");
             }
         }
 
@@ -3235,7 +3231,6 @@ public class UDPTransport extends TransportImpl {
     boolean introducersMaybeRequired(boolean ipv6) {
         if (_context.router().isHidden())
             return false;
-        //if (ipv6) return false;
         Status status = getReachabilityStatus();
         TransportUtil.IPv6Config config = getIPv6Config();
         if (ipv6) {
@@ -3684,8 +3679,6 @@ public class UDPTransport extends TransportImpl {
                     } else if ((!haveCap || !peer.isInbound()) &&
                                peer.getMayDisconnect() &&
                                peer.getMessagesReceived() <= 2 && peer.getMessagesSent() <= 2) {
-                        //if (_log.shouldInfo())
-                        //    _log.info("Possible early disconnect for: " + peer);
                         inactivityCutoff = mayDisconCutoff;
                     } else {
                         inactivityCutoff = shortInactivityCutoff;

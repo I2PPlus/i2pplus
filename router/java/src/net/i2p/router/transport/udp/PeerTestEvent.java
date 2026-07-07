@@ -164,8 +164,6 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
             _lastTestedV6.set(now);
         else
             _lastTested.set(now);
-        //if (_log.shouldDebug())
-        //    _log.debug("PeerTestEvent setLastTested() - v6? " + isIPv6, new Exception());
     }
 
     private boolean shouldTest() {
@@ -175,7 +173,5 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
         return ! (_context.router().isHidden() ||
                   _context.router().gracefulShutdownInProgress() ||
                   (_transport.isIPv4Firewalled() && _transport.isIPv6Firewalled()));
-        //String val = _context.getProperty(PROP_SHOULD_TEST);
-        //return ( (val != null) && ("true".equals(val)) );
     }
 }

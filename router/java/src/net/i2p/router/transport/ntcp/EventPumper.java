@@ -739,11 +739,9 @@ class EventPumper implements Runnable {
             while (true) {
                 buf = acquireBuf();
                 int totalRead = 0;
-                int readCount = 0;
                 int bytesRead;
                 while ((bytesRead = chan.read(buf)) > 0) {
                     totalRead += bytesRead;
-                    readCount++;
                 }
                 if (bytesRead < 0 && totalRead == 0) totalRead = bytesRead;
                 if (shouldDebug && totalRead != 0) {

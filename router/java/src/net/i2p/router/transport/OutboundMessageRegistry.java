@@ -110,7 +110,6 @@ public class OutboundMessageRegistry {
                     if (!sel.continueMatching()) {
                         if (removedSelectors == null) removedSelectors = new ArrayList<>(1);
                         removedSelectors.add(sel);
-                        //iter.remove();
                         _selectors.remove(i);
                         i--;
                     }
@@ -205,7 +204,6 @@ public class OutboundMessageRegistry {
             if (oldMsg != null) {
                 List<OutNetMessage> multi = null;
                 if (oldMsg instanceof OutNetMessage) {
-                    //multi = Collections.synchronizedList(new ArrayList(4));
                     multi = new ArrayList<>(4);
                     multi.add((OutNetMessage)oldMsg);
                     multi.add(msg);
@@ -273,7 +271,6 @@ public class OutboundMessageRegistry {
                     long expiration = sel.getExpiration();
                     if (expiration <= now) {
                         removing.add(sel);
-                        //iter.remove();
                         _selectors.remove(i);
                         i--;
                     } else if (expiration < _nextExpire || _nextExpire < now) {

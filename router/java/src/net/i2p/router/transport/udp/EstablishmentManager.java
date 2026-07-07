@@ -290,8 +290,6 @@ public class EstablishmentManager {
                     _log.info("[SSU] Found by claimed address: " + state);
                 }
             }
-            // if ( (state == null) && (_log.shouldDebug()) )
-            //     _log.debug("No outbound states for " + from + ", with remaining: " + _outboundStates);
             return state;
     }
 
@@ -522,10 +520,8 @@ public class EstablishmentManager {
                                 _log.warn("[SSU] Banning [" + truncHash + "] for 1h -> No Introduction key");
                             }
                         }
-                    } else if (!ipAddress.isEmpty()) {
-                        if (_log.shouldWarn()) {
+                    } else if (!ipAddress.isEmpty() && _log.shouldWarn()) {
                                 _log.warn("[SSU] Received no Introduction key from: " + ipAddress + ":" + maybePort);
-                        }
                     }
                     return;
                 }
@@ -543,10 +539,8 @@ public class EstablishmentManager {
                                 _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Bad Introduction key");
                             }
                         }
-                    } else if (!ipAddress.isEmpty()) {
-                        if (_log.shouldWarn()) {
+                    } else if (!ipAddress.isEmpty() && _log.shouldWarn()) {
                             _log.warn("[SSU] Received Bad Introduction key from: " + ipAddress + ":" + maybePort);
-                        }
                     }
                     return;
                 }
@@ -714,10 +708,8 @@ public class EstablishmentManager {
                    if (_log.shouldWarn()) {
                       _log.warn("[SSU] Banning [" + truncHash + "] for 15m -> Invalid address/port in Session Request" + " (" + from + ")");
                    }
-                } else if (isBanned) {
-                    if (_log.shouldInfo()) {
+                } else if (isBanned && _log.shouldInfo()) {
                         _log.info("[SSU] Not banning [" + truncHash + "] -> Already in blocklist (" + from + ")");
-                    }
                 }
             }
             return;
@@ -727,10 +719,8 @@ public class EstablishmentManager {
             if (isBlocklisted) {
                 if (_log.shouldInfo()) {
                     _log.info("[SSU] Received Session Request from blocklisted IP address " + from);
-                } else if (isBanned) {
-                    if (_log.shouldInfo()) {
+                } else if (isBanned && _log.shouldInfo()) {
                         _log.info("[SSU] Received Session Request from banned Router [" + truncHash + "}");
-                    }
                 }
                 _context.statManager().addRateData("udp.establishBadIP", 1);
                 if (!_context.commSystem().isInStrictCountry())

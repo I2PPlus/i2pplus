@@ -91,8 +91,6 @@ public class Writer {
     }
 
     public void wantsWrite(NTCPConnection con, String source) {
-        //if (con.getCurrentOutbound() != null)
-        //    throw new RuntimeException("Current outbound message already in play on " + con);
         boolean already = false;
         boolean pending = false;
         synchronized (_pendingConnections) {

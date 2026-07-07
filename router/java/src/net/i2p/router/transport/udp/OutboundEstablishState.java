@@ -457,8 +457,6 @@ class OutboundEstablishState {
      */
     protected void packetReceived() {
         _nextSend = _context.clock().now();
-        //if (_log.shouldDebug())
-        //    _log.debug("Received a packet, nextSend == now");
     }
 
     /** Get string representation */

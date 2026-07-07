@@ -59,7 +59,8 @@ class UDPAddress {
     private final Hash[] _introHashes;
     private final int _mtu;
     // could be both
-    private final boolean _isIPv4, _isIPv6;
+    private final boolean _isIPv4;
+    private final boolean _isIPv6;
 
     public static final String PROP_PORT = RouterAddress.PROP_PORT;
     public static final String PROP_HOST = RouterAddress.PROP_HOST;
@@ -466,15 +467,13 @@ class UDPAddress {
         synchronized (_inetAddressCache) {
             rv = _inetAddressCache.get(host);
         }
-        if (rv == null) {
-            if (Addresses.isIPAddress(host)) {
-                try {
-                    rv = InetAddress.getByName(host);
-                    synchronized (_inetAddressCache) {
-                        _inetAddressCache.put(host, rv);
-                    }
-                } catch (UnknownHostException uhe) { /* ignored */ }
-            }
+        if (rv == null && Addresses.isIPAddress(host)) {
+            try {
+                rv = InetAddress.getByName(host);
+                synchronized (_inetAddressCache) {
+                    _inetAddressCache.put(host, rv);
+                }
+            } catch (UnknownHostException uhe) { /* ignored */ }
         }
         return rv;
     }

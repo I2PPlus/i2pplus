@@ -201,9 +201,6 @@ class PacketBuilder2 {
 
         // ok, now for the body...
         // +2 for acks and padding
-        int bcnt = fragments.size() + 2;
-        if (otherBlocks != null)
-            bcnt += otherBlocks.size();
         List<Block> blocks = _blockListCache.get();
         blocks.clear();
         // payload only
@@ -279,8 +276,6 @@ class PacketBuilder2 {
         SSU2Payload.writePayload(data, SHORT_HEADER_SIZE, blocks);
         pkt.setLength(off);
         int length = off + ipHeaderSize;
-        //if (_log.shouldDebug())
-        //    _log.debug("Packet " + pktNum + " before encryption:\n" + HexDump.dump(data, 0, off));
 
         // ack immediate flag
         if (numFragments > 0) {

@@ -275,11 +275,9 @@ public class UDPSender {
                             _log.warn("Error sending to " + ipaddress + "\n* Error: " + ioe.getMessage());
                         }
                         _context.statManager().addRateData("udp.sendException", 1);
-                        if (_socket.isClosed()) {
-                            if (_keepRunning) {
+                        if (_socket.isClosed() && _keepRunning) {
                                 _keepRunning = false;
                                 _endpoint.fail();
-                            }
                         }
                     }
 

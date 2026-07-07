@@ -12,7 +12,7 @@ import java.util.Set;
  */
 public abstract class StrictCountries {
 
-    private StrictCountries() {}
+    private StrictCountries() { /* no-op */ }
 
     private static final Set<String> _countries;
 

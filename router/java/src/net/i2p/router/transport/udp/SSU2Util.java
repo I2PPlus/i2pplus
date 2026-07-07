@@ -197,7 +197,7 @@ final class SSU2Util {
         }
     }
 
-    private SSU2Util() {}
+    private SSU2Util() { /* no-op */ }
 
     /**
      *  32 byte output, ZEROLEN data
@@ -266,7 +266,6 @@ final class SSU2Util {
             return null;
         int len = 1 + datalen + spk.getType().getSigLen();
         byte[] rv = new byte[len];
-        //rv[0] = 0;  // flag
         System.arraycopy(data, 0, rv, 1, data.length);
         byte[] s = sig.getData();
         System.arraycopy(s, 0, rv, 1 + datalen, s.length);
@@ -307,7 +306,6 @@ final class SSU2Util {
         if (token != 0)
             len += 8;
         byte[] rv = new byte[len];
-        //rv[0] = 0;  // flag
         rv[1] = (byte) code;
         System.arraycopy(data, 0, rv, 2, data.length);
         byte[] s = sig.getData();

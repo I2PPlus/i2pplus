@@ -495,10 +495,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 						service = current2.getService(WAN_IP_CONNECTION);
 						if (service == null) {
 							service = current2.getService(WAN_PPP_CONNECTION);
-							if (service == null) {
-								if (_log.shouldWarn())
+							if (service == null && _log.shouldWarn())
 									_log.warn(_router.getFriendlyName() + " doesn't have any recognized connection type; we won't be able to use it!");
-							}
 						}
 					}
 					if (service != null) {

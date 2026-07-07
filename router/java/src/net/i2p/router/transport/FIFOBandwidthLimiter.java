@@ -78,10 +78,7 @@ public class FIFOBandwidthLimiter {
     // following is temp until switch to PBQ
     private static final AtomicLong __requestId = new AtomicLong();
 
-    /** lifetime counter of tokens available for use but exceeded our maxInboundBurst size */
-    //private final AtomicLong _totalWastedInboundBytes = new AtomicLong();
-    /** lifetime counter of tokens available for use but exceeded our maxOutboundBurst size */
-    //private final AtomicLong _totalWastedOutboundBytes = new AtomicLong();
+
 
     private final FIFOBandwidthRefiller _refiller;
     private final Thread _refillerThread;
@@ -117,13 +114,8 @@ public class FIFOBandwidthLimiter {
         _refillerThread.start();
     }
 
-    //public long getAvailableInboundBytes() { return _availableInboundBytes; }
-    //public long getAvailableOutboundBytes() { return _availableOutboundBytes; }
     public long getTotalAllocatedInboundBytes() { return _totalAllocatedInboundBytes.get(); }
     public long getTotalAllocatedOutboundBytes() { return _totalAllocatedOutboundBytes.get(); }
-    //public long getTotalWastedInboundBytes() { return _totalWastedInboundBytes.get(); }
-    //public long getTotalWastedOutboundBytes() { return _totalWastedOutboundBytes.get(); }
-    //public long getMaxInboundBytes() { return _maxInboundBytes; }
     /** @deprecated unused for now, we are always limited */
     @Deprecated
     void setInboundUnlimited(boolean isUnlimited) { _inboundUnlimited = isUnlimited; }
@@ -563,16 +555,6 @@ public class FIFOBandwidthLimiter {
             if (avi <= 0) break;
             // NO, don't do this, since SSU requires a full allocation to proceed.
             // By stopping after a partial allocation, we stall SSU.
-            // This never affected NTCP (which also requires a full allocation)
-            // since it registers a CompleteListener, so getAllocationsSinceWait() was always zero.
-            //if (req.getAllocationsSinceWait() > 0) {
-                // we have already allocated some values to this request, but
-                // they haven't taken advantage of it yet (most likely they're
-                // IO bound)
-                // (also, the complete listener is only set for situations where
-                // waitForNextAllocation() is never called)
-            //    continue;
-            //}
             // ok, they are really waiting for us to give them stuff
             int requested = req.getPendingRequested();
             int allocated;
@@ -686,16 +668,6 @@ public class FIFOBandwidthLimiter {
             if (avo <= 0) break;
             // NO, don't do this, since SSU requires a full allocation to proceed.
             // By stopping after a partial allocation, we stall SSU.
-            // This never affected NTCP (which also requires a full allocation)
-            // since it registers a CompleteListener, so getAllocationsSinceWait() was always zero.
-            //if (req.getAllocationsSinceWait() > 0) {
-                // we have already allocated some values to this request, but
-                // they haven't taken advantage of it yet (most likely they're
-                // IO bound)
-            //    if (_log.shouldWarn())
-            //        _log.warn("multiple allocations since wait... ntcp shouldn't do this: " + req);
-            //    continue;
-            //}
             // ok, they are really waiting for us to give them stuff
             int requested = req.getPendingRequested();
             int allocated;
@@ -748,8 +720,6 @@ public class FIFOBandwidthLimiter {
             _availableInbound.addAndGet(0 - requested);
             _totalAllocatedInboundBytes.addAndGet(requested);
         }
-        //if (_log.shouldInfo())
-        //    _log.info("IB shortcut for " + requested + "B? " + rv);
         return rv;
     }
 
@@ -770,45 +740,13 @@ public class FIFOBandwidthLimiter {
             _availableOutbound.addAndGet(0 - requested);
             _totalAllocatedOutboundBytes.addAndGet(requested);
         }
-        //if (_log.shouldInfo())
-        //    _log.info("Outbound shortcut for " + requested + "B? " + rv);
         return rv;
     }
 
     /** @deprecated not worth translating */
     @Deprecated
     public void renderStatusHTML(Writer out) throws IOException {
-/*******
-        long now = now();
-        StringBuilder buf = new StringBuilder(4096);
-        buf.append("<h3><b id=bwlim>Limiter Status:</b></h3>").append(getStatus().toString()).append("\n");
-        buf.append("<h3>Pending bandwidth requests:</h3><ul>");
-        buf.append("<li>Inbound requests: <ol>");
-        synchronized (_pendingInboundRequests) {
-            for (int i = 0; i < _pendingInboundRequests.size(); i++) {
-                Request req = (Request)_pendingInboundRequests.get(i);
-                buf.append("<li>").append(req.getRequestName()).append(" for ");
-                buf.append(req.getTotalInboundRequested()).append(" bytes ");
-                buf.append("requested (").append(req.getPendingInboundRequested()).append(" pending) as of ");
-                buf.append(now-req.getRequestTime());
-                buf.append("ms ago</li>\n");
-            }
-        }
-        buf.append("</ol></li><li>Outbound requests: <ol>\n");
-        synchronized (_pendingOutboundRequests) {
-            for (int i = 0; i < _pendingOutboundRequests.size(); i++) {
-                Request req = (Request)_pendingOutboundRequests.get(i);
-                buf.append("<li>").append(req.getRequestName()).append(" for ");
-                buf.append(req.getTotalOutboundRequested()).append(" bytes ");
-                buf.append("requested (").append(req.getPendingOutboundRequested()).append(" pending) as of ");
-                buf.append(now-req.getRequestTime());
-                buf.append("ms ago</li>\n");
-            }
-        }
-        buf.append("</ol></li></ul><hr>\n");
-        out.append(buf);
-        out.flush();
-******/
+        // no-op
     }
 
     private static class SimpleRequest implements Request {
@@ -861,8 +799,6 @@ public class FIFOBandwidthLimiter {
                 }
             }
             if (complete && lsnr != null) {
-                //if (_log.shouldInfo())
-                //    _log.info("complete listener set AND completed: " + lsnr);
                 lsnr.complete(this);
             }
         }
@@ -918,9 +854,7 @@ public class FIFOBandwidthLimiter {
             }
             if (complete && _lsnr != null) {
                 _lsnr.complete(this);
-                //if (_log.shouldInfo())
-                //    _log.info("at completion for " + _total
-                //              + ", recvBps=" + _recvBps + "/"+ _recvBps15s + " listener is " + _lsnr);
+
             }
         }
 

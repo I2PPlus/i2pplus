@@ -100,8 +100,6 @@ class IntroductionManager {
         if (id2 > 0 && _inbound.size() < MAX_INBOUND) {
             _inbound.put(Long.valueOf(id2), peer);
         }
-        //if (added &&_log.shouldDebug())
-        //    _log.debug("Adding peer [" + peer.toString().substring(0,6) + "]");
     }
 
     public void remove(PeerState peer) {
@@ -113,8 +111,6 @@ class IntroductionManager {
         if (id2 > 0) {
             _inbound.remove(Long.valueOf(id2));
         }
-        //if ((id > 0 || id2 > 0) &&_log.shouldDebug())
-        //    _log.debug("Removing peer [" + peer.toString().substring(0,6) + "]");
     }
 
     /**
@@ -160,7 +156,6 @@ class IntroductionManager {
         List<Introducer> introducers = new ArrayList<>(howMany);
         String exp = Long.toString((now + INTRODUCER_EXPIRATION) / 1000);
 
-        int ssu2count = 0;
         // reuse old ones if ok
         if (current != null) {
             UDPAddress ua = new UDPAddress(current);
@@ -173,7 +168,6 @@ class IntroductionManager {
                     continue;
                 String sexp = Long.toString(ua.getIntroducerExpiration(i) / 1000);
                 Introducer intro = new Introducer(ua.getIntroducerHash(i), tag, sexp);
-                ssu2count++;
                 if (_log.shouldInfo())
                     _log.info("Reusing introducer: " + ua.getIntroducerHash(i));
                 introducers.add(intro);
@@ -252,7 +246,6 @@ class IntroductionManager {
                 }
                 cur.setIntroducerTime();
                 Introducer intro = new Introducer(hash, cur.getTheyRelayToUsAs(), exp);
-                ssu2count++;
                 introducers.add(intro);
                 found++;
                 break;
@@ -323,7 +316,9 @@ class IntroductionManager {
      *  @since 0.9.18
      */
     private static class Introducer implements Comparable<Introducer> {
-        public final String stag, sexp, shash;
+        public final String stag;
+        public final String sexp;
+        public final String shash;
 
         /**
          * SSU 2
@@ -509,7 +504,6 @@ class IntroductionManager {
 
             // put alice hash in intro data
             byte[] idata = new byte[1 + Hash.HASH_LENGTH + data.length];
-            //idata[0] = 0; // flag
             System.arraycopy(alice.getRemotePeer().getData(), 0, idata, 1, Hash.HASH_LENGTH);
             System.arraycopy(data, 0, idata, 1 + Hash.HASH_LENGTH, data.length);
 
@@ -891,7 +885,6 @@ class IntroductionManager {
                 }
             }
             byte[] idata = new byte[2 + data.length];
-            //idata[0] = 0; // flag
             idata[1] = (byte) status;
             System.arraycopy(data, 0, idata, 2, data.length);
             try {

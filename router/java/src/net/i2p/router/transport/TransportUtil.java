@@ -137,20 +137,18 @@ public abstract class TransportUtil {
     /**
      *  This returns true if the force-firewalled setting is configured, false otherwise.
      *
-     *  @param transportStyle ignored
      *  @since 0.9.20
      */
-    public static boolean isIPv4Firewalled(RouterContext ctx, String transportStyle) {
+    public static boolean isIPv4Firewalled(RouterContext ctx) {
         return ctx.getBooleanProperty(PROP_IPV4_FIREWALLED);
     }
 
     /**
      *  This returns true if the force-firewalled setting is configured, false otherwise.
      *
-     *  @param transportStyle ignored
      *  @since 0.9.27, implemented in 0.9.28
      */
-    public static boolean isIPv6Firewalled(RouterContext ctx, String transportStyle) {
+    public static boolean isIPv6Firewalled(RouterContext ctx) {
         return ctx.getBooleanProperty(PROP_IPV6_FIREWALLED);
     }
 
@@ -383,15 +381,4 @@ public abstract class TransportUtil {
         return minPort + ctx.random().nextInt(1 + maxPort - minPort);
     }
 
-/*
-    public static void main(String[] args) {
-        java.util.Set<String> addrs = net.i2p.util.Addresses.getAddresses(true, true, true, true);
-        net.i2p.util.OrderedProperties props = new net.i2p.util.OrderedProperties();
-        RouterAddress ra = new RouterAddress("foo", props, 10);
-        for (String a : addrs) {
-            props.setProperty("host", a);
-            System.out.println(a + " - " + isYggdrasil(ra));
-        }
-    }
-*/
 }

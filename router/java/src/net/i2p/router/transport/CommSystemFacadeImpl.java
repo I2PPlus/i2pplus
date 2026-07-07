@@ -776,7 +776,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static final long EXPIRE_TIME = computeExpireTime() * 60L * 60 * 1000; // 1/1.5/2 day expiration
     private static final long EVICT_THRESHOLD = 3L * 24 * 60 * 60 * 1000; // 3 day for eviction from file cache
     private static final int MAX_RDNS_CACHE_SIZE = computeMaxRdnsCacheSize();
-    private static final Object rdnslock = new Object();
 
     private static long computeExpireTime() {
         if (!HAS_512_MB) {
@@ -931,13 +930,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             File cacheFile = new File(RDNS_CACHE_FILE);
             try (BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(cacheFile))) {
                 long now = System.currentTimeMillis();
-                int writtenCount = 0;
                 for (CacheEntry cacheEntry : liveCacheSnapshot.values()) {
                     if (now - cacheEntry.getTimestamp() <= EVICT_THRESHOLD) {
                         String line = new StringBuilder(rdnsEntryToString(cacheEntry)).append('\n').toString();
                         byte[] bytes = line.getBytes(ENCODING);
                         fos.write(bytes);
-                        writtenCount++;
                     }
                 }
             } catch (IOException ex) {
@@ -1148,7 +1145,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         } catch (UnknownHostException e) {return null;}
     }
 
-    private static final int CORES = SystemVersion.getCores();
 
     private ExecutorService reverseDnsExecutor;
     private final Object reverseDnsExecutorLock = new Object();
@@ -1275,8 +1271,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     private static final int MAX_COUNTRY_CACHE_SIZE = 20000;
     private static final long COUNTRY_CACHE_EXPIRY = 60*60*1000L; // 1 hour
-    private static final Random random = new Random();
-
     private long lastUnknownPurge = 0;
     private long lastCacheCleanup = 0;
     private final ConcurrentHashMap<Hash, String> countryCache = new ConcurrentHashMap<>(MAX_COUNTRY_CACHE_SIZE);

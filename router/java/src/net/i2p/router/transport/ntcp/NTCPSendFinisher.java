@@ -10,9 +10,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.Tuner;
-import net.i2p.router.transport.TransportImpl;
-import net.i2p.stat.Rate;
-import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 

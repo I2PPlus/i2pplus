@@ -25,7 +25,8 @@ class UDPEndpoint implements SocketListener {
     private UDPReceiver _receiver;
     private DatagramSocket _socket;
     private final InetAddress _bindAddress;
-    private final boolean _isIPv4, _isIPv6;
+    private final boolean _isIPv4;
+    private final boolean _isIPv6;
     private static final AtomicInteger _counter = new AtomicInteger();
 
     private static final int MIN_SOCKET_BUFFER = 256*1024;

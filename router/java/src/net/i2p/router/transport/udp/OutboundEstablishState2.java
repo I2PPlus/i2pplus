@@ -565,14 +565,12 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             throw new GeneralSecurityException("Connection ID mismatch -> 1: " + _sendConnID + " 2: " + sid);
         long token = DataHelper.fromLong8(data, off + TOKEN_OFFSET);
         // continue and decrypt even if token == 0 to get and log termination reason
-        if (token != 0) {
-            if (token != _token) {
-                if (_currentState == OutboundState.OB_STATE_REQUEST_SENT_NEW_TOKEN) {
-                    // we already got a retry with a different token
-                    throw new GeneralSecurityException("Token mismatch -> Expected: " + _token + " Received: " + token);
-                }
-                _token = token;
+        if (token != 0 && token != _token) {
+            if (_currentState == OutboundState.OB_STATE_REQUEST_SENT_NEW_TOKEN) {
+                // we already got a retry with a different token
+                throw new GeneralSecurityException("Token mismatch -> Expected: " + _token + " Received: " + token);
             }
+            _token = token;
         }
         _timeReceived = 0;
         ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();

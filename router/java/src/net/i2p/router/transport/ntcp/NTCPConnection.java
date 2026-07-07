@@ -216,7 +216,8 @@ public class NTCPConnection implements Closeable {
     private volatile NTCP2Options _paddingConfig = OUR_PADDING;
     private int _version;
     private CipherState _sender;
-    private long _sendSipk1, _sendSipk2;
+    private long _sendSipk1;
+    private long _sendSipk2;
     private byte[] _sendSipIV;
 
     /**
@@ -913,7 +914,6 @@ public class NTCPConnection implements Closeable {
         if (availForPad > 0) {
             int padlen = getPaddingSize(size, availForPad);
             // all zeros is fine here
-            //block = new NTCP2Payload.PaddingBlock(_context, padlen);
             block = new NTCP2Payload.PaddingBlock(padlen);
             blocks.add(block);
         }
@@ -961,7 +961,6 @@ public class NTCPConnection implements Closeable {
         int padlen = getPaddingSize(plen, PADDING_MAX);
         if (padlen > 0) {
             // all zeros is fine here
-            //block = new NTCP2Payload.PaddingBlock(_context, padlen);
             block = new NTCP2Payload.PaddingBlock(padlen);
             blocks.add(block);
         }
@@ -1489,7 +1488,6 @@ public class NTCPConnection implements Closeable {
             _context.statManager().addRateData("ntcp.inboundEstablishedDuplicate", toClose.getUptime());
             toClose.close();
         }
-        //enqueueInfoMessage();
     }
 
     /**
@@ -1560,7 +1558,8 @@ public class NTCPConnection implements Closeable {
     private class NTCP2ReadState implements ReadState, NTCP2Payload.PayloadCallback {
         // temp to read the encrypted lengh into
         private final byte[] _recvLen = new byte[2];
-        private final long _sipk1, _sipk2;
+        private final long _sipk1;
+        private final long _sipk2;
         // the siphash ratchet, as a byte array
         private final byte[] _sipIV = new byte[SIP_IV_LENGTH];
         private final CipherState _rcvr;
@@ -1572,7 +1571,6 @@ public class NTCPConnection implements Closeable {
         // Valid frames received in data phase
         private int _frameCount;
         // for logging only
-        private int _blockCount;
         private boolean _terminated;
 
         /**
@@ -1615,8 +1613,6 @@ public class NTCPConnection implements Closeable {
                         delayedClose(buf, _frameCount);
                         return;
                     }
-                    //if (_log.shouldDebug())
-                    //    _log.debug("Next frame length: " + _framelen);
                 }
                 int remaining = buf.remaining();
                 if (remaining <= 0)
@@ -1711,7 +1707,6 @@ public class NTCPConnection implements Closeable {
                                                          _framelen - OutboundNTCP2State.MAC_SIZE, false);
                 if (_log.shouldDebug())
                     _log.debug("Processed " + blocks + " blocks in frame");
-                _blockCount += blocks;
             } catch (IOException ioe) {
                 if (_log.shouldWarn())
                     _log.warn("Payload delivery failure \n* " + ioe.getMessage());

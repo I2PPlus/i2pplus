@@ -19,7 +19,7 @@ final class SSU2Header {
     /** 12 bytes of zeros */
     public static final byte[] CHACHA_IV_0 = new byte[CHACHA_IV_LEN];
 
-    private SSU2Header() {}
+    private SSU2Header() { /* no-op */ }
 
     /**
      *  Session Request and Session Created only. 64 bytes.

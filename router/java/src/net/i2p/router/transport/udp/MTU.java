@@ -27,7 +27,7 @@ public class MTU {
 
     private static final boolean HAS_MTU = SystemVersion.isJava6();
 
-    private MTU() {}
+    private MTU() { /* no-op */ }
 
     /**
      * The MTU for the socket interface, if available.
@@ -84,7 +84,6 @@ public class MTU {
                     if (ia.equals(addr)) {
                         try {
                             // testing
-                            //return ifc.getMTU();
                             boolean isIPv6 = addr instanceof Inet6Address;
                             int mtu = ifc.getMTU();
                             // can be -1 on Windows

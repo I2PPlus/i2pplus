@@ -200,7 +200,6 @@ public class GeoIPv6 {
                 }
             } catch (IOException ioe) {
                 ioe.printStackTrace();
-                //if (_log.shouldError())
                 //    _log.error("Error reading the geoFile", ioe);
                 return false;
             }
@@ -270,7 +269,8 @@ public class GeoIPv6 {
      *  Used to temporarily hold, sort, and merge entries before compressing
      */
     private static class V6Entry implements Comparable<V6Entry> {
-        public final long from, to;
+        public final long from;
+        public final long to;
         public final String cc;
 
         public V6Entry(byte[] f, byte[] t, String c) {
@@ -328,7 +328,7 @@ public class GeoIPv6 {
     }
 
     /** like DataHelper.readLong(src, offset, 8) but allows negative values */
-    private static long readLong(byte[] src, int offset) throws IOException {
+    private static long readLong(byte[] src, int offset) {
         long rv = 0;
         int limit = offset + 8;
         for (int i = offset; i < limit; i++) {

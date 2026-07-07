@@ -504,9 +504,12 @@ class SSU2Payload {
      */
     public static class RIBlock extends Block {
         private final byte[] data;
-        private final int doff, dlen;
-        private final boolean f, gz;
-        private final int fr, frt;
+        private final int doff;
+        private final int dlen;
+        private final boolean f;
+        private final boolean gz;
+        private final int fr;
+        private final int frt;
 
         /**
          *  Whole thing
