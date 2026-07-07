@@ -600,7 +600,7 @@ class Attribute implements Comparable<Attribute> {
         }
         @Override
         public String toString() {
-
+            String str = null;
             // If -ea, print out more informative strings!
             assert((str = stringForDebug()) != null);
             return str;
@@ -636,7 +636,7 @@ class Attribute implements Comparable<Attribute> {
                 return bandIndex >= 0;
             }
             public String toString() {
-
+                String str = null;
                 // If -ea, print out more informative strings!
                 assert((str = stringForDebug()) != null);
                 return str;
@@ -716,6 +716,8 @@ class Attribute implements Comparable<Attribute> {
         private static final long serialVersionUID = -2542243830788066513L;
 
         String layout;
+        private int ctype;
+        private String name;
         public FormatException(String message,
                                int ctype, String name, String layout) {
             super(ATTR_CONTEXT_NAME[ctype]+ " attribute \"" + name + "\"" +

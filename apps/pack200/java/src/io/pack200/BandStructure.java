@@ -733,9 +733,8 @@ class BandStructure {
                 }
             }
             if (bandCoding != regularCoding && verbose > 1) {
-
-                    Utils.log.fine(name()+": irregular coding "+bandCoding);
-
+                Utils.log.fine(name()+": irregular coding "+bandCoding);
+            }
             bandCoding.readArrayFrom(in, values, 0, length);
             if (optDumpBands)  dumpBand();
         }

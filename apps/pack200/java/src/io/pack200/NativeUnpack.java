@@ -229,10 +229,9 @@ class NativeUnpack {
                 !Utils.isPackMagic(Utils.readMagic(in0))) {
                 break;
             }
-            if (_verbose > 0  && presetInput != null) {
-
-                    Utils.log.info("unused input = "+presetInput);
-
+            if (_verbose > 0 && presetInput != null) {
+                Utils.log.info("unused input = "+presetInput);
+            }
         }
     }
 

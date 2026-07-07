@@ -580,9 +580,6 @@ class CodingChooser {
         if (cm instanceof Coding) {
             Coding c = (Coding) cm;
             int size = c.getLength(values, start, end);
-            int size2;
-
-                : (cm+" : "+size+" != "+size2);
             return size;
         }
         return countBytesToSizer(cm, values, start, end);
@@ -1161,7 +1158,7 @@ class CodingChooser {
         public int getSize() { return count; }
 
         public String toString() {
-
+            String str = null;
             // If -ea, print out more informative strings!
             assert((str = stringForDebug()) != null);
             return str;
