@@ -41,7 +41,6 @@ import net.i2p.util.SystemVersion;
 */
 class Mail {
 
-    private static final String DATEFORMAT = "date.format";
     private static final String unknown = "unknown";
     private static final String P1 = "^[^@< \t]+@[A-Za-z0-9-]+\\.[A-Za-z0-9\\.-]+$";
     private static final String P2 = "^<[^@< \t]+@[A-Za-z0-9-]+\\.[A-Za-z0-9\\.-]+>$";
@@ -54,23 +53,27 @@ class Mail {
     static final byte[] HEADER_MATCH = DataHelper.getASCII("\r\n\r");
 
     private long size;
-    public String sender,    // as received, trimmed only, not HTML escaped
-        reply,               // address only, enclosed by <>
-        subject,             // as received, trimmed only, not HTML escaped, non-null, default ""
-        dateString,
-        formattedDate,       // US Locale, UTC
-        localFormattedDate,  // Current Locale, local time zone
-        shortSender,         // Either name or address but not both, HTML escaped, double-quotes removed, truncated with hellip
-        shortSubject,        // HTML escaped, truncated with hellip, non-null, default ""
-        quotedDate,          // Current Locale, local time zone, longer format
-        dateOnly;            // Long date only format for mail list date tooltips e.g. Tuesday 30th December, 1999
+    public String sender;       // as received, trimmed only, not HTML escaped
+    public String reply;        // address only, enclosed by <>
+    public String subject;      // as received, trimmed only, not HTML escaped, non-null, default ""
+    public String dateString;
+    public String formattedDate;       // US Locale, UTC
+    public String localFormattedDate;  // Current Locale, local time zone
+    public String shortSender;         // Either name or address but not both, HTML escaped, double-quotes removed, truncated with hellip
+    public String shortSubject;        // HTML escaped, truncated with hellip, non-null, default ""
+    public String quotedDate;          // Current Locale, local time zone, longer format
+    public String dateOnly;            // Long date only format for mail list date tooltips e.g. Tuesday 30th December, 1999
     public final String uidl;
     public Date date;
-    private Buffer header, body;
+    private Buffer header;
+    private Buffer body;
     private MailPart part;
     /** May be null. Non-empty if non-null. Not HTML escaped. */
-    String[] to, cc; // addresses only, enclosed by <>
-    private boolean isNew, isSpam, headersParsed;
+    String[] to; // addresses only, enclosed by <>
+    String[] cc; // addresses only, enclosed by <>
+    private boolean isNew;
+    private boolean isSpam;
+    private boolean headersParsed;
     public String contentType;
     public String messageID; // as received, trimmed only, probably enclosed with <>, not HTML escaped
     public String error;
@@ -365,8 +368,8 @@ class Mail {
                     EOFOnMatchInputStream eofin = new EOFOnMatchInputStream(in, HEADER_MATCH);
                     MemoryBuffer decoded = new MemoryBuffer(4096);
                     hl.decode(eofin, decoded);
-                    if (!eofin.wasFound()) {
-                        if (_log.shouldDebug()) _log.debug("EOF hit before \\r\\n\\r\\n in Mail");
+                    if (!eofin.wasFound() && _log.shouldDebug()) {
+                        _log.debug("EOF hit before \\r\\n\\r\\n in Mail");
                     }
                     // Fixme UTF-8 to bytes to UTF-8
                     headerLines = DataHelper.split(new String(decoded.getContent(), decoded.getOffset(), decoded.getLength(), StandardCharsets.UTF_8), "\r\n");
@@ -428,10 +431,8 @@ class Mail {
                             // even if we haven't fetched the body
                             contentType = line.substring(13).trim();
                         } else if (hlc.startsWith("message-id:")) {messageID = line.substring(11).trim();}
-                        else if (hlc.startsWith("x-uidl:")) {
-                            // shouldn't happen unless you imported or
-                            // copied external emails to the cache
-                            if (!uidl.equals(line.substring(7).trim()) && _log.shouldWarn()) {
+                        else if (hlc.startsWith("x-uidl:") && !uidl.equals(line.substring(7).trim())) {
+                            if (_log.shouldWarn()) {
                                 _log.warn("UIDL mismatch, may be unable to load body later. Original: " + uidl +
                                           " b64: " + Base64.encode(uidl) +
                                           " header: " + line.substring(7).trim());

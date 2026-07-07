@@ -78,7 +78,6 @@ class MailCache {
 		_context = ctx;
 		Folder<String> folder = new Folder<>();
 		// setElements() sorts, so configure the sorting first
-		//sessionObject.folder.addSorter( SORT_ID, new IDSorter( sessionObject.mailCache ) );
 		if (folderName.equals(WebMail.DIR_DRAFTS) || folderName.equals(WebMail.DIR_SENT))
 			folder.addSorter(WebMail.SORT_SENDER, new ToSorter(this));
 		else
@@ -319,7 +318,8 @@ class MailCache {
 	 */
         @SuppressWarnings({"unchecked", "rawtypes"})
 	public Mail getMail(String uidl, FetchMode mode) {
-		Mail mail = null, newMail = null;
+		Mail mail = null;
+		Mail newMail = null;
 
 		/*
 		 * synchronize update to Map
@@ -421,7 +421,8 @@ class MailCache {
 		//  Fill in the answers from the cache and make a list of
 		//  requests.to send off
 		for (String uidl : popKnown) {
-			Mail mail = null, newMail = null;
+			Mail mail = null;
+			Mail newMail = null;
 			boolean headerOnly = hOnly;
 
 			/*
@@ -585,7 +586,8 @@ class MailCache {
 	 */
 	private static class POP3Request implements FetchRequest {
 		public final Mail mail;
-		private boolean headerOnly, success;
+		private boolean headerOnly;
+		private boolean success;
 		public final Buffer buf;
 
 		public POP3Request(Mail m, boolean hOnly, Buffer buffer) {

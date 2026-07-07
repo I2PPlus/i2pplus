@@ -120,12 +120,12 @@ public class StringBuilderWriter extends Writer {
     /**
      *  Does nothing.
      */
-    public void close() {}
+    public void close() { /* no-op */ }
 
     /**
      *  Does nothing.
      */
-    public void flush() {}
+    public void flush() { /* no-op */ }
 
     /**
      * Get the underlying StringBuilder.

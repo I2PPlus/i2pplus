@@ -53,7 +53,7 @@ public class SMTPClient {
     private Socket socket;
     public String error;
     private String lastResponse;
-    private boolean supportsPipelining, eightBitMime;
+    private boolean supportsPipelining;
     private long maxSize = DEFAULT_MAX_SIZE;
     private static final Encoding base64;
     static {base64 = EncodingFactory.getEncoding("base64");}
@@ -232,8 +232,6 @@ public class SMTPClient {
                                 if (_log.shouldDebug()) {_log.debug("Server max size: " + maxSize);}
                             } catch (NumberFormatException nfe) { /* ignored */ }
                         } else if (c.equals("8BITMIME")) {
-                            // unused, see encoding/EightBit.java
-                            eightBitMime = true;
                             if (_log.shouldDebug()) {_log.debug("Server supports 8bitmime");}
                         }
                     }

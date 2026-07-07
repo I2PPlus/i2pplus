@@ -60,7 +60,7 @@ public class MemoryBuffer implements Buffer {
 	}
 
 	@Override
-	public void readComplete(boolean success) {}
+	public void readComplete(boolean success) { /* no-op */ }
 
 	/**
 	 * Finalize the write. If successful, the data is stored.

@@ -25,7 +25,8 @@ import net.i2p.data.DataHelper;
 public class ReadBuffer implements Buffer {
 
 	public final byte[] content;
-	public final int length, offset;
+	public final int length;
+	public final int offset;
 
 	/**
 	 * Create a ReadBuffer for a portion of a byte array.
@@ -63,13 +64,13 @@ public class ReadBuffer implements Buffer {
 	 * @since 0.9.34
 	 */
 	@Override
-	public void readComplete(boolean success) {}
+	public void readComplete(boolean success) { /* no-op */ }
 
 	/**
 	 * Does nothing
 	 * @since 0.9.34
 	 */
-	public void writeComplete(boolean success) {}
+	public void writeComplete(boolean success) { /* no-op */ }
 
 	/**
 	 * Always valid

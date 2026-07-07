@@ -37,9 +37,12 @@ import net.i2p.util.Log;
  * @author susi
  */
 public class POP3MailBox implements NewMailListener {
-    private final String host, user, pass;
+    private final String host;
+    private final String user;
+    private final String pass;
     private final Log _log;
-    private String lastLine, lastError;
+    private String lastLine;
+    private String lastError;
     private final int port;
     private int mails;
     private boolean connected;

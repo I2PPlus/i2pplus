@@ -56,8 +56,8 @@ public class QuotedPrintable extends Encoding {
 	@Override
 	public void encode(InputStream in, Writer out) throws IOException
 	{
-		int buffered = 0, tmp[] = new int[BUFSIZE];
-		int index = 0;
+		int buffered = 0;
+		int tmp[] = new int[BUFSIZE];
 		int l = 0;
 		while( true ) {
 			int read = 0;

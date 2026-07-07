@@ -106,5 +106,5 @@ public class EscapeHTMLOutputStream extends FilterOutputStream {
      *  Does nothing. Does not close the underlying stream.
      */
     @Override
-    public void close() {}
+    public void close() { /* no-op */ }
 }

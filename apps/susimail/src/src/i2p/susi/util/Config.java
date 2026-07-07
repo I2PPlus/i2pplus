@@ -29,7 +29,8 @@ import net.i2p.util.OrderedProperties;
  */
 public class Config {
 
-	private static Properties properties, config;
+	private static Properties properties;
+	private static Properties config;
 	private static String configPrefix;
 
 	/**

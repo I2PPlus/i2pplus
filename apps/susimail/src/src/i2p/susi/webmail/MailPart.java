@@ -39,17 +39,28 @@ class MailPart {
     private static final OutputStream DUMMY_OUTPUT = new DummyOutputStream();
     public final String[] headerLines;
     /** encoding non-null */
-    public final String type, encoding, name, description, disposition, charset, version, multipart_type, cid;
+    public final String type;
+    public final String encoding;
+    public final String name;
+    public final String description;
+    public final String disposition;
+    public final String charset;
+    public final String version;
+    public final String multipart_type;
+    public final String cid;
     /** begin, end, and beginBody are relative to readBuffer.getOffset().
      *  begin is before the headers
      *  beginBody is after the headers
      *  warning - end is exclusive
      */
-    private final int beginBody, begin, end;
+    private final int beginBody;
+    private final int begin;
+    private final int end;
     /** Always null, reserved for future use */
     public final String filename = null;
     public final List<MailPart> parts;
-    public final boolean multipart, message;
+    public final boolean multipart;
+    public final boolean message;
     public final Buffer buffer;
     private final Log _log;
 
@@ -95,7 +106,7 @@ class MailPart {
             EOFOnMatchInputStream eofin = new EOFOnMatchInputStream(in, Mail.HEADER_MATCH);
             MemoryBuffer decodedHeaders = new MemoryBuffer(4096);
             EncodingFactory.getEncoding("HEADERLINE").decode(eofin, decodedHeaders);
-            if (!eofin.wasFound()) {if (_log.shouldDebug()) _log.debug("EOF hit before \\r\\n\\r\\n in MailPart");}
+            if (!eofin.wasFound() && _log.shouldDebug()) {_log.debug("EOF hit before \\r\\n\\r\\n in MailPart");}
             // Fixme UTF-8 to bytes to UTF-8
             headerLines = DataHelper.split(new String(decodedHeaders.getContent(),
                                                       decodedHeaders.getOffset(),
@@ -190,12 +201,9 @@ class MailPart {
                     // Read through first boundary line, not including "\r\n" or "--\r\n"
                     OutputStream dummy = new DummyOutputStream();
                     DataHelper.copy(eofin, dummy);
-                    if (!eofin.wasFound())
-                        if (_log.shouldDebug()) _log.debug("EOF hit before first boundary " + boundary + " UIDL: " + uidl);
+                    if (!eofin.wasFound() && _log.shouldDebug()) _log.debug("EOF hit before first boundary " + boundary + " UIDL: " + uidl);
                     if (readBoundaryTrailer(in)) {
-                        if (!eofin.wasFound()) {
-                            if (_log.shouldDebug()) _log.debug("EOF hit before first part body " + boundary + " UIDL: " + uidl);
-                        }
+                        if (!eofin.wasFound() && _log.shouldDebug()) _log.debug("EOF hit before first part body " + boundary + " UIDL: " + uidl);
                         tmpEnd = (int) eofin.getRead();
                         break;
                     }
@@ -209,9 +217,7 @@ class MailPart {
                 if (!eofin.wasFound()) {
                     // if MailPart contains a MailPart, we may not have drained to the end
                     DataHelper.copy(eofin, DUMMY_OUTPUT);
-                    if (!eofin.wasFound()) {
-                        if (_log.shouldDebug()) _log.debug("EOF hit before end of body " + i + " boundary: " + boundary + " UIDL: " + uidl);
-                    }
+                    if (_log.shouldDebug()) _log.debug("EOF hit before end of body " + i + " boundary: " + boundary + " UIDL: " + uidl);
                 }
                 if (readBoundaryTrailer(in)) {break;}
             }
@@ -253,28 +259,28 @@ class MailPart {
         if (c == '-') {
             // end of parts with this boundary
             c = in.read();
-            if (c != '-') {
-                if (_log.shouldDebug()) {_log.debug("Unexpected char after boundary-: " + c);}
-                return true;
+            if (c != '-' && _log.shouldDebug()) {
+                _log.debug("Unexpected char after boundary-: " + c);
             }
+            if (c != '-') {return true;}
             c = in.read();
             if (c == -1) {return true;}
-            if (c != '\r') {
-                if (_log.shouldDebug()) {_log.debug("Unexpected char after boundary--: " + c);}
-                return true;
+            if (c != '\r' && _log.shouldDebug()) {
+                _log.debug("Unexpected char after boundary--: " + c);
             }
+            if (c != '\r') {return true;}
             c = in.read();
-            if (c != '\n') {
-                if (_log.shouldDebug()) {_log.debug("Unexpected char after boundary--\\r: " + c);}
+            if (c != '\n' && _log.shouldDebug()) {
+                _log.debug("Unexpected char after boundary--\\r: " + c);
             }
             return true;
         } else if (c == '\r') {
             c = in.read();
-            if (c != '\n') {
-                if (_log.shouldDebug()) {_log.debug("Unexpected char after boundary\\r: " + c);}
+            if (c != '\n' && _log.shouldDebug()) {
+                _log.debug("Unexpected char after boundary\\r: " + c);
             }
-        } else {
-            if (_log.shouldDebug()) {_log.debug("Unexpected char after boundary: " + c);}
+        } else if (_log.shouldDebug()) {
+            _log.debug("Unexpected char after boundary: " + c);
         }
         return c == -1;
     }
@@ -290,7 +296,6 @@ class MailPart {
         if (enc == null) {
             throw new DecodingException(_t("No encoder found for encoding \\''{0}\\''.", WebMail.quoteHTML(encoding)));
         }
-        InputStream in = null;
         LimitInputStream lin = null;
         CountingOutputStream cos = null;
         Buffer dout = null;
@@ -388,7 +393,6 @@ class MailPart {
                 int m = line.indexOf(';', j + 1);
                 if (k != -1 && ( m == -1 || k < m)) {
                     /* We found a " before a possible ; - now we look for the 2nd (not quoted) " */
-                    m = -1;
                     int k2 = k + 1;
                     while (true) {
                         m = line.indexOf('"', k2);
@@ -406,8 +410,8 @@ class MailPart {
                             }
                         }
                     }
-                } else if (m != -1) {result = line.substring( j + 1, m).trim();} /* No " found, but a ; */
-                else {result = line.substring( j + 1).trim();} /* No " found and no ; */
+                } else if (m != -1) {result = line.substring( j + 1, m).trim();}
+                else {result = line.substring( j + 1).trim();}
             }
         }
         return result;

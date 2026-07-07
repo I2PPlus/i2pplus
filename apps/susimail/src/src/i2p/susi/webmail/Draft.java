@@ -93,7 +93,7 @@ class Draft extends Mail {
 	 * @since 0.9.62
 	 */
 	@Override
-	public synchronized void setSize(long size) {}
+	public synchronized void setSize(long size) { /* no-op */ }
 
 	@Override
 	public synchronized boolean hasAttachment() {

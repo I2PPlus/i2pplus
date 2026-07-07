@@ -50,7 +50,9 @@ public class Folder<O extends Object> {
 		UP;
 	}
 
-	private int pages, pageSize, currentPage;
+	private int pages;
+	private int pageSize;
+	private int currentPage;
 	private O[] elements;
 	private final Map<String, Comparator<O>> sorter;
 	private SortOrder sortingDirection;

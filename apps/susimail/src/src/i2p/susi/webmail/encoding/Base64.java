@@ -86,7 +86,6 @@ public class Base64 extends Encoding {
 				strBuf.append( (char)out[3] );
 			else
 				strBuf.append( "=" );
-			i += 3;
 			l += 4;
 			if( l >= 76 ) {
 				strBuf.append( "\r\n" );

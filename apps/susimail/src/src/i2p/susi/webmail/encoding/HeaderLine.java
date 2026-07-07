@@ -38,8 +38,6 @@ public class HeaderLine extends Encoding {
 		return NAME;
 	}
 
-	private static final int BUFSIZE = 2;
-
 	/**
 	 *  This will split multibyte chars across lines,
 	 *  see 4th ref above
@@ -204,7 +202,10 @@ public class HeaderLine extends Encoding {
 				if (encodedWord == null)
 					encodedWord = new byte[DECODE_MAX];
 				int offset = 0;
-				int f1 = 0, f2 = 0, f3 = 0, f4 = 0;
+				int f1 = 0;
+				int f2 = 0;
+				int f3 = 0;
+				int f4 = 0;
 				encodedWord[offset++] = (byte) c;
 				// Read until we have 4 '?', stored in encodedWord positions f1, f2, f3, f4,
 				// plus one char after the 4th '?', which should be '='

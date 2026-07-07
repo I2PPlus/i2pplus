@@ -133,7 +133,6 @@ public class WebMail extends HttpServlet {
      * button names
      */
     private static final String LOGOUT = "logout";
-    private static final String RELOAD = "reload";
     private static final String SAVE = "save";
     private static final String SAVE_AS = "saveas";
     private static final String REFRESH = "refresh";
@@ -230,20 +229,26 @@ public class WebMail extends HttpServlet {
     private static final String CONFIG_THEME = "theme";
     private static final String DEFAULT_THEME = "dark";
     private static final String spacer = ""; /* this is best done with css */
-    private static final String thSpacer = "<th>&nbsp;</th>";
     private static final String CONSOLE_BUNDLE_NAME = "net.i2p.router.web.messages";
     static {Config.setPrefix("susimail");}
 
     /** Data structure to hold any persistent data (to store them in session dictionary) */
     private static class SessionObject implements HttpSessionBindingListener, NewMailListener {
-        boolean pageChanged, markAll, clear, invert;
+        boolean pageChanged;
+        boolean markAll;
+        boolean clear;
+        boolean invert;
         int smtpPort;
         POP3MailBox mailbox;
         final Map<String, MailCache> caches;
         boolean isFetching;
         String connectError; // Set by threaded connector. Error or null
         int newMails = -1; // Set by threaded connector. -1 if nothing to report, 0 or more after fetch complete
-        String user, pass, host, error = "", info = "";
+        String user;
+        String pass;
+        String host;
+        String error = "";
+        String info = "";
         String draftUIDL; // Just convenience to pass from PSCB to P-R-G
         /** Local password verification for session protection @since 0.9.70+ */
         private String _sessionSalt;
@@ -251,7 +256,8 @@ public class WebMail extends HttpServlet {
         private String _sessionKey;
         public ArrayList<Attachment> attachments; // TODO Map of UIDL to List
         public boolean reallyDelete; // This is only for multi-delete. Single-message delete is handled with P-R-G
-        String themePath, imgPath;
+        String themePath;
+        String imgPath;
         boolean isMobile;
         private final List<String> nonces;
         private static final int MAX_NONCES = 15;
@@ -315,7 +321,7 @@ public class WebMail extends HttpServlet {
         }
 
         /** @since 0.9.13 */
-        public void valueBound(HttpSessionBindingEvent event) {}
+        public void valueBound(HttpSessionBindingEvent event) { /* no-op */ }
 
         /**
          * Close the POP3 socket if still open
@@ -1138,7 +1144,10 @@ public class WebMail extends HttpServlet {
                 MailPart part = mail != null ? mail.getPart() : null;
                 if (part != null) {
                     StringBuilderWriter text = new StringBuilderWriter();
-                    String to = null, cc = null, bcc = null, subject = null;
+                    String to = null;
+                    String cc = null;
+                    String bcc = null;
+                    String subject = null;
                     List<Attachment> attachments = null;
                     if (reply || replyAll) {
                         if (mail.reply != null && Mail.validateAddress(mail.reply)) {to = mail.reply;}
@@ -1540,9 +1549,7 @@ public class WebMail extends HttpServlet {
                         part = getMailPartFromID(mail.getPart(), id);
                     }
                 }
-                if (part != null) {
-                    if (sendAttachment(sessionObject, part, response, isRaw)) {return true;}
-                }
+                if (part != null && sendAttachment(sessionObject, part, response, isRaw)) {return true;}
             } catch(NumberFormatException nfe) { /* ignored */ }
             // error if we get here
             try {response.sendError(404, _t("Attachment not found."));}
@@ -2033,13 +2040,11 @@ public class WebMail extends HttpServlet {
             state = processStateChangeButtons(sessionObject, request, isPOST, state);
             state = processConfigButtons(sessionObject, request, isPOST, state);
             if (_log.shouldDebug()) _log.debug("Prelim. state is " + state);
-            if (state == State.CONFIG) {
-                if (isPOST) {
-                    // P-R-G
-                    String q = '?' + CONFIGURE;
-                    sendRedirect(httpRequest, response, q);
-                    return;
-                }
+            if (state == State.CONFIG && isPOST) {
+                // P-R-G
+                String q = '?' + CONFIGURE;
+                sendRedirect(httpRequest, response, q);
+                return;
             }
             if (state == State.LOADING) {
                 if (isPOST) {
@@ -2236,7 +2241,6 @@ public class WebMail extends HttpServlet {
             else if (state == State.LIST) {
                 // mailbox.getNumMails() forces a connection, don't use it
                 // Not only does it slow things down, but a failure causes all our messages to "vanish"
-                //subtitle = ngettext("1 Message", "{0} Messages", sessionObject.mailbox.getNumMails());
                 int sz = folder.getSize();
                 subtitle = mc.getTranslatedName() + " - ";
                 if (sz > 0) {subtitle += ngettext("1 message", "{0} messages", folder.getSize());}
@@ -2379,7 +2383,7 @@ public class WebMail extends HttpServlet {
                 }
             }
 
-            renderNotifications(buf, showRefresh, sessionObject, mc);
+            renderNotifications(buf, showRefresh, sessionObject);
             out.print(buf.toString());
             out.flush();
             buf.setLength(0);
@@ -2445,11 +2449,10 @@ public class WebMail extends HttpServlet {
      * @param buf The StringBuilder to append markup to.
      * @param showRefresh Whether a refresh indicator should be shown.
      * @param sessionObject The current session context.
-     * @param mc Optional mail cache; can be null if not used for loading state.
      * @since 0.9.68+
      */
     private static void renderNotifications(StringBuilder buf, boolean showRefresh,
-                                            SessionObject sessionObject, Object mc) {
+                                            SessionObject sessionObject) {
 
         String currentError = (sessionObject != null) ? sessionObject.error : null;
         String currentInfo  = (sessionObject != null) ? sessionObject.info  : null;
@@ -2710,7 +2713,7 @@ public class WebMail extends HttpServlet {
         String subject = request.getParameter(NEW_SUBJECT);
         String text = request.getParameter(NEW_TEXT, "");
         List<Attachment> attachments = sessionObject.attachments;
-        return composeDraft(sessionObject, from, to, cc, bcc, subject, text, sessionObject.attachments);
+        return composeDraft(sessionObject, from, to, cc, bcc, subject, text, attachments);
     }
 
     /**
@@ -2949,7 +2952,11 @@ public class WebMail extends HttpServlet {
     private static class EmailSender implements Runnable {
         private final SessionObject sessionObject;
         private final Draft draft;
-        private final String host, user, pass, sender, boundary;
+        private final String host;
+        private final String user;
+        private final String pass;
+        private final String sender;
+        private final String boundary;
         private final int port;
         private final List<String> recipients;
         private final StringBuilder body;
@@ -3157,7 +3164,6 @@ public class WebMail extends HttpServlet {
         String from = "";
         String to = "";
         String cc = "";
-        String bc = "";
         String bcc = "";
         String subject = "";
         String text = "";
@@ -3447,16 +3453,7 @@ public class WebMail extends HttpServlet {
             String loc = myself + '?' + (folderName.equals(DIR_DRAFTS) ? NEW_UIDL : SHOW) + '=' + b64UIDL + floc;
             String jslink = "tdclick\" data-url=\"" + loc + "\"";
 
-            boolean idChecked = false;
-            String checkId = sessionObject.pageChanged ? null : request.getParameter("check" + b64UIDL);
-
-            if (checkId != null && checkId.equals("1")) {idChecked = true;}
-
-            if (sessionObject.markAll) {idChecked = true;}
-            if (sessionObject.invert) {idChecked = !idChecked;}
-            if (sessionObject.clear) {idChecked = false;}
-
-            String rowHtml = renderMailRow(mail, b64UIDL, loc, jslink, isSpamFolder, showToColumn, sessionObject, floc);
+            String rowHtml = renderMailRow(mail, b64UIDL, loc, jslink, isSpamFolder, showToColumn);
 
             sb.append(rowHtml);
             i++;
@@ -3527,7 +3524,7 @@ public class WebMail extends HttpServlet {
      * A String containing the HTML markup for a single <tr> representing the mail row.
      */
     private static String renderMailRow(Mail mail, String b64UIDL, String loc, String jslink, boolean isSpamFolder,
-                                        boolean showToColumn, SessionObject sessionObject, String floc) {
+                                        boolean showToColumn) {
         // Determine row type
         String type;
         if (mail.isSpam()) {type = "linkspam";}
@@ -3690,7 +3687,6 @@ public class WebMail extends HttpServlet {
      * @param outputHidden whether to emit hidden inputs to preserve state
      */
     private static void renderPageNav(PrintWriter out, String folderName, int page, int pages, boolean outputHidden) {
-        String name = DIR_FOLDER.equals(folderName) ? "Inbox" : folderName;
         StringBuilder sb = new StringBuilder();
 
         sb.append("<div class=pagenavcontainer")

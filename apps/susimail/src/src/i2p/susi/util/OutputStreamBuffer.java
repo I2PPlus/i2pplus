@@ -42,7 +42,7 @@ public class OutputStreamBuffer implements Buffer {
 	 * Does nothing
 	 */
 	@Override
-	public void readComplete(boolean success) {}
+	public void readComplete(boolean success) { /* no-op */ }
 
 	/**
 	 * Close the output stream.

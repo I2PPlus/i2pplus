@@ -18,7 +18,7 @@ public class DummyOutputStream extends OutputStream {
      *
      * @param val the byte value (ignored)
      */
-    public void write(int val) {}
+    public void write(int val) { /* no-op */ }
 
     /**
      * Discard all bytes in the array.
@@ -26,7 +26,7 @@ public class DummyOutputStream extends OutputStream {
      * @param src the byte array (ignored)
      */
     @Override
-    public void write(byte[] src) {}
+    public void write(byte[] src) { /* no-op */ }
 
     /**
      * Discard bytes from the array.
@@ -36,11 +36,11 @@ public class DummyOutputStream extends OutputStream {
      * @param len the number of bytes (ignored)
      */
     @Override
-    public void write(byte[] src, int off, int len) {}
+    public void write(byte[] src, int off, int len) { /* no-op */ }
 
     @Override
-    public void flush() {}
+    public void flush() { /* no-op */ }
 
     @Override
-    public void close() {}
+    public void close() { /* no-op */ }
 }

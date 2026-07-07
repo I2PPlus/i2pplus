@@ -85,9 +85,9 @@ class PersistentMailCache {
         _context = ctx;
         _log = ctx.logManager().getLog(PersistentMailCache.class);
         _isDrafts = folder.equals(WebMail.DIR_DRAFTS);
-        _lock = getLock(host, port, user, pass);
+        _lock = getLock(host, port, user);
         synchronized(_lock) {
-            _cacheDir = makeCacheDirs(host, port, user, pass, folder);
+            _cacheDir = makeCacheDirs(host, port, user, folder);
             // Debugging only for now.
             File attach = null;
             if (folder.equals(WebMail.DIR_FOLDER)) {
@@ -176,10 +176,10 @@ class PersistentMailCache {
      * @return success
      */
     public boolean getMail(Mail mail, boolean headerOnly) {
-        synchronized(_lock) {return locked_getMail(mail, headerOnly);}
+        synchronized(_lock) {return locked_getMail(mail);}
     }
 
-    private boolean locked_getMail(Mail mail, boolean headerOnly) {
+    private boolean locked_getMail(Mail mail) {
         boolean found = false;
         File f = getFullFile(mail.uidl);
         if (f.exists()) {
@@ -252,7 +252,7 @@ class PersistentMailCache {
         }
     }
 
-    private static Object getLock(String host, int port, String user, String pass) {
+    private static Object getLock(String host, int port, String user) {
         Object lock = new Object();
         Object old = _locks.putIfAbsent(user + host + port, lock);
         return (old != null) ? old : lock;
@@ -262,7 +262,7 @@ class PersistentMailCache {
      *   ~/.i2p/susimail/cache/cache-xxxxx/cur/s[b64char]/mail-xxxxx.full.txt.gz
      *   folder1 is the base.
      */
-    private File makeCacheDirs(String host, int port, String user, String pass, String folder) throws IOException {
+    private File makeCacheDirs(String host, int port, String user, String folder) throws IOException {
         File f = new SecureDirectory(_context.getConfigDir(), DIR_SUSI);
         if (!f.exists() && !f.mkdir()) {throw new IOException("Cannot create " + f);}
         f = new SecureDirectory(f, DIR_CACHE);

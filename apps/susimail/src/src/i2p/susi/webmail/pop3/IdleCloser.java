@@ -18,7 +18,6 @@ class IdleCloser {
     private final Log _log;
     private volatile boolean isClosing;
     private volatile boolean isDead;
-    private static final long CHECK_TIME = 30*1000;
     // POP3 RFC 1939 server minimum idle timeout is 10 minutes
     // pop3.postman.i2p timeout is 5 minutes
     // We want to be less than that.

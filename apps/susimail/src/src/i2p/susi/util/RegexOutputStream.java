@@ -15,7 +15,8 @@ import net.i2p.util.Log;
  */
 public class RegexOutputStream extends FilterOutputStream {
 
-    private final String match, repl;
+    private final String match;
+    private final String repl;
     /** parse in progress */
     private final StringBuilder buf;
     private final String noMatch;
@@ -79,8 +80,6 @@ public class RegexOutputStream extends FilterOutputStream {
      */
     private void pushit(char c) {
         buf.append(c);
-        //if (_log.shouldDebug())
-        //    _log.debug("Push, buf now '" + buf + "'");
     }
 
     /**
@@ -94,8 +93,6 @@ public class RegexOutputStream extends FilterOutputStream {
             }
             clearit();
         }
-        //if (_log.shouldDebug())
-        //    _log.debug("Flush");
     }
     /**
      *  Throw out inbuf, output replacement, start over
