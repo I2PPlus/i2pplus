@@ -187,9 +187,7 @@ public class I2CPMessageReader {
                     try {
                         I2CPMessage msg = I2CPMessageHandler.readMessage(_stream);
                         if (msg != null) {
-                            // _log.debug("Before handling the newly received message");
                             _listener.messageReceived(I2CPMessageReader.this, msg);
-                            // _log.debug("After handling the newly received message");
                         }
                     } catch (I2CPMessageException ime) {
                         _log.warn("Error handling message", ime);

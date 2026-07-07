@@ -47,7 +47,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -229,7 +228,8 @@ public class DataHelper {
     private static final DateFormat DATE_FORMAT = DateFormat.getDateInstance(DateFormat.MEDIUM);
 
     private static final DateFormat TIME_FORMAT = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
-    private static boolean _date_tz_set, _time_tz_set;
+    private static boolean _date_tz_set;
+    private static boolean _time_tz_set;
 
     /** Read a mapping from the stream, as defined by the I2P data structure spec,
      * and store it into a Properties object.
@@ -656,12 +656,6 @@ public class DataHelper {
                 // Unescape line breaks after loading.
                 // Remember: "\" needs escaping both for regex and string.
 
-                // For some reason this was turning \r (one backslash) into CR,
-                // I think it needed one more \\ in the pattern?,
-                // which sucks if your username is randy on DOS,
-                // it was a horrible idea anyway
-                // val = val.replaceAll("\\\\r","\r");
-                // val = val.replaceAll("\\\\n","\n");
 
                 // as of 0.9.10, an empty value is allowed
                 if (forceLowerCase) {

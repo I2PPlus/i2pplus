@@ -145,8 +145,6 @@ public class SU3File {
     }
 
     private static final ContentType DEFAULT_CONTENT_TYPE = ContentType.UNKNOWN;
-    // avoid early ctx init
-    // private static final SigType DEFAULT_SIG_TYPE = SigType.DSA_SHA1;
     private static final int DEFAULT_SIG_CODE = 6;
 
     /**
@@ -300,9 +298,6 @@ public class SU3File {
         if (_contentLength <= 0) throw new IOException("Bad content length");
         skip(in, 1);
         _fileType = in.read();
-        // Allow any file type
-        // if (_fileType != TYPE_ZIP && _fileType != TYPE_XML)
-        //    throw new IOException("Bad file type");
         skip(in, 1);
         int cType = in.read();
         _contentType = BY_CODE.get(Integer.valueOf(cType));
@@ -421,10 +416,9 @@ public class SU3File {
             in = din;
             if (!_headerVerified) verifyHeader(in);
             else skip(in, getContentOffset());
-            if (_verifySignature) {
-                if (_signerPubkey == null)
-                    throw new IOException(
-                            "Unknown signer: " + _signer + " for content type: " + _contentType.getName());
+            if (_verifySignature && _signerPubkey == null) {
+                throw new IOException(
+                        "Unknown signer: " + _signer + " for content type: " + _contentType.getName());
             }
             if (migrateTo != null) out = new SecureFileOutputStream(migrateTo); // else verify only
             byte[] buf = new byte[16 * 1024];

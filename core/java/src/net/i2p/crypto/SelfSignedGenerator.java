@@ -887,7 +887,6 @@ public final class SelfSignedGenerator {
             rv[idx++] = (byte) 0x30; // seq.
             idx = intToASN1(rv, idx, oid11.length);
             System.arraycopy(oid11, 0, rv, idx, oid11.length);
-            idx += oid11.length;
         }
 
         return rv;
@@ -920,7 +919,7 @@ public final class SelfSignedGenerator {
         rv[idx++] = (byte) 3;
         rv[idx++] = (byte) 0x02;
         rv[idx++] = (byte) 1;
-        rv[idx++] = (byte) crlNum;
+        rv[idx] = (byte) crlNum;
         return rv;
     }
 
@@ -983,7 +982,9 @@ public final class SelfSignedGenerator {
             else usage();
         } else if (args[0].equals("renew")) {
             if (args.length >= 3) {
-                String ksPW, cert, ks;
+                String ksPW;
+                String cert;
+                String ks;
                 if (args[1].equals("-p")) {
                     ksPW = args[2];
                     cert = args[3];

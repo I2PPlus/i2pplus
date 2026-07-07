@@ -1,5 +1,4 @@
 package net.i2p.crypto.provider;
-// import java.security.PrivilegedAction;
 import java.security.Provider;
 import java.security.Security;
 
@@ -42,17 +41,8 @@ public final class I2PProvider extends Provider {
         // quote
         // http://docs.oracle.com/javase/7/docs/technotes/guides/security/crypto/HowToImplAProvider.html
         //
-        // If your provider is supplying encryption algorithms through the
-        // Cipher, KeyAgreement, KeyGenerator, Mac, or SecretKeyFactory classes,
-        // you will need to sign your JAR file so that the JCA can authenticate the code at runtime.
-        // If you are NOT providing an implementation of this type you can skip this step.
-        //
-        // put("Cipher.AES", "net.i2p.crypto.provider.CipherSpi$aesCBC");
-        // put("Cipher.ElGamal", "net.i2p.crypto.provider.CipherSpi$elGamal");
-        // put("Mac.HmacMD5-I2P", "net.i2p.crypto.provider.MacSpi");
 
         put("MessageDigest.SHA-1", "net.i2p.crypto.SHA1");
-        // put("Signature.SHA1withDSA", "net.i2p.crypto.provider.SignatureSpi");
 
         // EdDSA
         // Key OID: 1.3.101.100; Sig OID: 1.3.101.101

@@ -158,7 +158,6 @@ public final class Blinding {
         byte[] out = new byte[64];
         int stoff = INFO_ALPHA.length + destspk.length();
         byte[] in = new byte[stoff + 4];
-        // SHA256("I2PGenerateAlpha" || spk || sigtypein || sigtypeout)
         System.arraycopy(INFO_ALPHA, 0, in, 0, INFO_ALPHA.length);
         System.arraycopy(destspk.getData(), 0, in, INFO_ALPHA.length, destspk.length());
         DataHelper.toLong(in, stoff, 2, type.getCode());
@@ -166,11 +165,6 @@ public final class Blinding {
         Hash salt = ctx.sha().calculateHash(in);
         hkdf.calculate(salt.getData(), data, INFO, out, out, 32);
         byte[] b = EdDSABlinding.reduce(out);
-        // net.i2p.util.Log log = ctx.logManager().getLog(Blinding.class);
-        // log.debug("Input to salt sha256:\n" + net.i2p.util.HexDump.dump(in));
-        // log.debug("salt:\n" + net.i2p.util.HexDump.dump(salt.getData()));
-        // log.debug("data:\n" + net.i2p.util.HexDump.dump(data));
-        // log.debug("hkdf output (seed):\n" + net.i2p.util.HexDump.dump(out));
         // log.debug("alpha (seed mod l):\n" + net.i2p.util.HexDump.dump(b));
         return new SigningPrivateKey(TYPER, b);
     }

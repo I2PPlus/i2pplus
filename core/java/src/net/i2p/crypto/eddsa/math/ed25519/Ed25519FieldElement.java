@@ -792,7 +792,10 @@ public class Ed25519FieldElement extends FieldElement {
      */
     @Override
     public FieldElement invert() {
-        FieldElement t0, t1, t2, t3;
+        FieldElement t0;
+        FieldElement t1;
+        FieldElement t2;
+        FieldElement t3;
 
         // 2 == 2 * 1
         t0 = square();
@@ -914,7 +917,9 @@ public class Ed25519FieldElement extends FieldElement {
      */
     @Override
     public FieldElement pow22523() {
-        FieldElement t0, t1, t2;
+        FieldElement t0;
+        FieldElement t1;
+        FieldElement t2;
 
         // 2 == 2 * 1
         t0 = square();

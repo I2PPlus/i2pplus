@@ -281,7 +281,6 @@ public final class KeyStoreUtil {
             for (Enumeration<String> e = ks.aliases(); e.hasMoreElements(); ) {
                 String alias = e.nextElement();
                 if (ks.isCertificateEntry(alias)) {
-                    // info("Found cert " + alias);
                     count++;
                 }
             }
@@ -361,7 +360,6 @@ public final class KeyStoreUtil {
                             try {
                                 cert.checkValidity();
                                 long expiresIn = cert.getNotAfter().getTime() - System.currentTimeMillis();
-                                // DataHelper.formatDuration(expiresIn));
                                 if (expiresIn < expiresWithin) {
                                     Log l = I2PAppContext.getGlobalContext()
                                             .logManager()
@@ -429,21 +427,11 @@ public final class KeyStoreUtil {
                 if (ks.isCertificateEntry(alias)) {
                     Certificate c = ks.getCertificate(alias);
                     if (c != null && (c instanceof X509Certificate)) {
-                        // X509Certificate xc = (X509Certificate) c;
-                        // BigInteger serial = xc.getSerialNumber();
-                        // debug:
-                        // String xname = CertUtil.getIssuerValue(xc, "CN");
-                        // info("Found \"" + xname + "\" s/n: " + serial.toString(16));
                         // if (xname == null)
                         //    info("name is null, full issuer: " + xc.getIssuerX500Principal().getName());
                         byte[] enc = c.getEncoded();
                         if (enc != null) {
                             byte[] h = md.digest(enc);
-                            // StringBuilder buf = new StringBuilder(60);
-                            // String hex = DataHelper.toString(h);
-                            // for (int i = 0; i < hex.length(); i += 2) {
-                            //    buf.append(hex.charAt(i));
-                            //    buf.append(hex.charAt(i+1));
                             //    if (i < hex.length() - 2)
                             //        buf.append(':');
                             // }
@@ -560,12 +548,7 @@ public final class KeyStoreUtil {
             info("Now trusting X509 Certificate, Issuer: " + cert.getIssuerX500Principal());
         } catch (CertificateExpiredException cee) {
             String s = "Rejecting expired X509 Certificate: " + file.getAbsolutePath();
-            // Android often has old system certs
-            // our SSL certs may be old also
-            // if (SystemVersion.isAndroid())
             warn(s, cee);
-            // else
-            //    error(s, cee);
             return false;
         } catch (CertificateNotYetValidException cnyve) {
             error("Rejecting X509 Certificate not yet valid: " + file.getAbsolutePath(), cnyve);
@@ -930,10 +913,8 @@ public final class KeyStoreUtil {
         }
         Object[] rv = SelfSignedGenerator.generate(
                 cname, altNames, ou, "I2P", "I2P Anonymous Network", null, null, validDays, type);
-        // PublicKey jpub = (PublicKey) rv[0];
         PrivateKey jpriv = (PrivateKey) rv[1];
         X509Certificate cert = (X509Certificate) rv[2];
-        // X509CRL crl = (X509CRL) rv[3];
         List<X509Certificate> certs = Collections.singletonList(cert);
         storePrivateKey(ks, ksPW, alias, keyPW, jpriv, certs);
         return rv;
@@ -1340,13 +1321,7 @@ public final class KeyStoreUtil {
         log(I2PAppContext.getGlobalContext(), Log.ERROR, msg, t);
     }
 
-    // private static void info(I2PAppContext ctx, String msg) {
-    //    log(ctx, Log.INFO, msg, null);
-    // }
 
-    // private static void error(I2PAppContext ctx, String msg, Throwable t) {
-    //    log(ctx, Log.ERROR, msg, t);
-    // }
 
     private static void log(I2PAppContext ctx, int level, String msg, Throwable t) {
         if (level >= Log.WARN && !ctx.isRouterContext()) {
@@ -1509,14 +1484,11 @@ public final class KeyStoreUtil {
                 256,
                 pw);
         System.out.println("EdDSA genkey ok? " + ok);
-        // ok = createKeys(ksf, DEFAULT_KEYSTORE_PASSWORD, alias + "-ElG", "test cname", "test ou",
-        //                        DEFAULT_KEY_VALID_DAYS, "ElGamal", 2048, pw);
     }
 
     private static void testKeygen2(String[] args) throws Exception {
         // keygen test using the I2PProvider
         SigType type = SigType.EdDSA_SHA512_Ed25519;
-        // SigType type = SigType.ElGamal_SHA256_MODP2048;
         KeyPairGenerator kpg = KeyPairGenerator.getInstance(
                 type.getBaseAlgorithm().getName());
         kpg.initialize(type.getParams());

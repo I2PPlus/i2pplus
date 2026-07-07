@@ -76,7 +76,8 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     private PrivateKey _clientPrivateKey;
     private final Log _log;
     // debug
-    private int _authType, _numKeys;
+    private int _authType;
+    private int _numKeys;
 
     private static final int MIN_ENCRYPTED_SIZE = 8 + 16;
     private static final int MAX_ENCRYPTED_SIZE = 4096;
@@ -114,8 +115,8 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      *  @since 0.9.39
      */
     public void setSecret(String secret) {
-        if (_signingKey != null && !DataHelper.eq(secret, _secret)) {
-            if (_log.shouldWarn()) _log.warn("setSecret() after setSigningKey()" + " was: " + _secret + " now: " + secret);
+        if (_signingKey != null && !DataHelper.eq(secret, _secret) && _log.shouldWarn()) {
+            _log.warn("setSecret() after setSigningKey()" + " was: " + _secret + " now: " + secret);
         }
         _secret = secret;
     }
@@ -741,7 +742,6 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         if (_unblindedSPK == null) throw new IllegalStateException("No known SigningPrivateKey to decrypt with");
         int spklen = _unblindedSPK.length();
         byte[] in = new byte[spklen + 4];
-        // SHA256("credential" || spk || sigtypein || sigtypeout)
         System.arraycopy(_unblindedSPK.getData(), 0, in, 0, spklen);
         DataHelper.toLong(in, spklen, 2, _unblindedSPK.getType().getCode());
         DataHelper.toLong(in, spklen + 2, 2, SigType.RedDSA_SHA512_Ed25519.getCode());
@@ -864,7 +864,6 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         _log.info("Encrypted LeaseSet2 outer signature verification succeeded");
         if (_unblindedSPK == null) {
             if (_log.shouldWarn())
-                // _log.warn("Encrypted LeaseSet2 no destination / SigningPrivateKey to decrypt with", new Exception("I did it"));
                 _log.warn("Encrypted LeaseSet2 -> No destination / SigningPrivateKey to decrypt with");
             return true;
         }

@@ -25,7 +25,7 @@ public class DestroySessionMessage extends I2CPMessageImpl {
     public static final int MESSAGE_TYPE = 3;
     private SessionId _sessionId;
 
-    public DestroySessionMessage() {}
+    public DestroySessionMessage() { /* required for I2CP deserialization */ }
 
     public SessionId getSessionId() {
         return _sessionId;

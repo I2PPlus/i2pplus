@@ -76,14 +76,13 @@ import java.util.Arrays;
  * @author jrandom
  */
 public class Payload extends DataStructureImpl {
-    // private final static Log _log = new Log(Payload.class);
     private byte[] _encryptedData;
     private byte[] _unencryptedData;
 
     /** So we don't OOM on I2CP protocol errors. Actual max is smaller. */
     private static final int MAX_LENGTH = 64 * 1024;
 
-    public Payload() {}
+    public Payload() { /* required for deserialization */ }
 
     /**
      * Retrieve the unencrypted body of the message.
@@ -140,8 +139,6 @@ public class Payload extends DataStructureImpl {
         _encryptedData = new byte[size];
         int read = read(in, _encryptedData);
         if (read != size) throw new DataFormatException("Incorrect number of bytes read in the payload structure");
-        // if (_log.shouldDebug())
-        //    _log.debug("read payload: " + read + " bytes");
     }
 
     @Override
@@ -149,8 +146,6 @@ public class Payload extends DataStructureImpl {
         if (_encryptedData == null) throw new DataFormatException("Not yet encrypted.  Please set the encrypted data");
         DataHelper.writeLong(out, 4, _encryptedData.length);
         out.write(_encryptedData);
-        // if (_log.shouldDebug())
-        //    _log.debug("wrote payload: " + _encryptedData.length);
     }
 
     /**

@@ -238,7 +238,6 @@ public class LeaseSet extends DatabaseEntry {
     @Override
     public void setReceivedBy(Hash localClient) {
         super.setReceivedBy(localClient);
-        // setReceivedAsReply();
     }
 
     /**
@@ -424,7 +423,6 @@ public class LeaseSet extends DatabaseEntry {
         if (numLeases > MAX_LEASES) {
             throw new DataFormatException("Error: Too many leases (" + numLeases + ") -> Maximum permitted is " + MAX_LEASES);
         }
-        // _version = DataHelper.readLong(in, 4);
         for (int i = 0; i < numLeases; i++) {
             Lease lease = new Lease();
             lease.readBytes(in);

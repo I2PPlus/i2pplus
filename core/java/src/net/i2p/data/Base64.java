@@ -40,7 +40,6 @@ import java.util.Locale;
 public class Base64 {
 
 
-    //private final static Log _log = new Log(Base64.class);
 
     /**
      *  Output will be a multiple of 4 chars, including 0-2 trailing '='
@@ -199,8 +198,6 @@ public class Base64 {
     };
 
     private final static byte WHITE_SPACE_ENC = -5; // Indicates white space in encoding
-    private final static byte EQUALS_SIGN_ENC = -1; // Indicates equals sign in encoding
-
     /** Defeats instantiation. */
     private Base64() { // nop
     }
@@ -211,7 +208,6 @@ public class Base64 {
      * @param args command-line arguments
      */
     public static void main(String[] args) {
-        //test();
         if (args.length == 0) {
             help();
         }
@@ -437,12 +433,6 @@ public class Base64 {
      *  @param alpha alphabet
      */
     private static void encode3to4(byte[] source, int srcOffset, int numSigBytes, StringBuilder buf, byte[] alpha) {
-        //           1         2         3
-        // 01234567890123456789012345678901 Bit position
-        // --------000000001111111122222222 Array position from threeBytes
-        // --------|    ||    ||    ||    | Six bit groups to index ALPHABET
-        //          >>18  >>12  >> 6  >> 0  Right shift necessary
-        //                0x3f  0x3f  0x3f  Additional AND
 
         // Create buffer with zero-padding if there are only one or two
         // significant bytes passed in the array.
@@ -516,12 +506,9 @@ public class Base64 {
         if (source == null) return null;
         String toDecode;
         if (useStandardAlphabet) {
-            //toDecode = source;
             toDecode = source.replace('/', '~');
             toDecode = toDecode.replace('+', '-');
         } else {
-            //toDecode = source.replace('~', '/');
-            //toDecode = toDecode.replace('-', '+');
             toDecode = source;
         }
         return standardDecode(toDecode);
@@ -572,32 +559,23 @@ public class Base64 {
      * @since 1.4
      */
     private static void encodeBytes(byte[] source, int off, int len, boolean breakLines, StringBuilder out, byte[] alpha) {
-        //int len43 = len * 4 / 3;
-        //byte[] outBuff = new byte[(len43) // Main 4:3
-        //                          + ((len % 3) > 0 ? 4 : 0) // Account for padding
-        //                          + (breakLines ? (len43 / MAX_LINE_LENGTH) : 0)]; // New lines
         int d = 0;
         int len2 = len - 2;
         int lineLength = 0;
         for (; d < len2; d += 3) {
-            //encode3to4(source, d + off, 3, outBuff, e);
             encode3to4(source, d + off, 3, out, alpha);
 
             lineLength += 4;
             if (breakLines && lineLength == MAX_LINE_LENGTH) {
-                //outBuff[e + 4] = NEW_LINE;
                 out.append('\n');
                 lineLength = 0;
             } // end if: end of line
         } // en dfor: each piece of array
 
         if (d < len) {
-            //encode3to4(source, d + off, len - d, outBuff, e);
             encode3to4(source, d + off, len - d, out, alpha);
         } // end if: some padding needed
 
-        //out.append(new String(outBuff, 0, e));
-        //return new String(outBuff, 0, e);
     } // end encodeBytes
 
     /**

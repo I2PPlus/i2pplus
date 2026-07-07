@@ -279,10 +279,6 @@ public final class SigUtil {
     private static ECPrivateKey cvtToJavaECKey(SigningPrivateKey pk) throws GeneralSecurityException {
         SigType type = pk.getType();
         byte[] b = pk.getData();
-        // Java 17 is zeroing out the byte array somewhere.
-        // So we can't use NBI which caches the byte array returned in toByteArray(),
-        // or it trashes our private key
-        // BigInteger s = new NativeBigInteger(1, b);
         BigInteger s = new BigInteger(1, b);
         // see ECConstants re: casting
         ECPrivateKeySpec ks = new ECPrivateKeySpec(s, (ECParameterSpec) type.getParams());

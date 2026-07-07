@@ -90,7 +90,7 @@ public class Lease extends DataStructureImpl {
     protected TunnelId _tunnelId;
     protected long _end;
 
-    public Lease() {}
+    public Lease() { /* required for deserialization */ }
 
     /** Retrieve the router at which the destination can be contacted
     *
@@ -172,8 +172,6 @@ public class Lease extends DataStructureImpl {
 
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
-        // _gateway = new Hash();
-        // _gateway.readBytes(in);
         _gateway = Hash.create(in);
         _tunnelId = new TunnelId();
         _tunnelId.readBytes(in);

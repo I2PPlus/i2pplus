@@ -65,7 +65,8 @@ public class ElGamalParameterSpec implements AlgorithmParameterSpec {
     @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
-        BigInteger op, og;
+        BigInteger op;
+        BigInteger og;
         if (obj instanceof ElGamalParameterSpec) {
             ElGamalParameterSpec egps = (ElGamalParameterSpec) obj;
             op = egps.getP();

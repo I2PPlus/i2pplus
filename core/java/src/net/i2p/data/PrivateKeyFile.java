@@ -541,7 +541,7 @@ public class PrivateKeyFile {
      *  Also reads in the file to get the privKey and signingPrivKey,
      *  which aren't available from I2PClient.
      */
-    public Destination createIfAbsent() throws I2PException, IOException, DataFormatException {
+    public Destination createIfAbsent() throws I2PException, IOException {
         return createIfAbsent(I2PClient.DEFAULT_SIGTYPE);
     }
 
@@ -553,7 +553,7 @@ public class PrivateKeyFile {
      *
      *  @since 0.9.26
      */
-    public Destination createIfAbsent(SigType type) throws I2PException, IOException, DataFormatException {
+    public Destination createIfAbsent(SigType type) throws I2PException, IOException {
         if (!this.file.exists()) {
             OutputStream out = null;
             try {
@@ -584,7 +584,7 @@ public class PrivateKeyFile {
      *  @since 0.9.42
      */
     private Destination createIfAbsent(SigType type, EncType ptype)
-            throws I2PException, IOException, DataFormatException {
+            throws I2PException, IOException {
         if (!this.file.exists()) {
             OutputStream out = null;
             try {

@@ -32,8 +32,6 @@ import javax.crypto.spec.SecretKeySpec;
 public final class CryptixAESEngine extends AESEngine {
     private final LinkedBlockingQueue<Cipher> _ciphers;
 
-    // keys are now cached in the SessionKey objects
-    // private CryptixAESKeyCache _cache;
 
     private static final int MIN_SYSTEM_AES_LENGTH = 640;
     private static final boolean USE_SYSTEM_AES = hasAESNI() && CryptoCheck.isUnlimited();
@@ -63,10 +61,7 @@ public final class CryptixAESEngine extends AESEngine {
     /** */
     public CryptixAESEngine(I2PAppContext context) {
         super(context);
-        // testing
-        // _ciphers = new LinkedBlockingQueue<>(CACHE_SIZE);
         _ciphers = USE_SYSTEM_AES ? new LinkedBlockingQueue<>(CACHE_SIZE) : null;
-        // _cache = new CryptixAESKeyCache();
     }
 
     /**
@@ -164,7 +159,6 @@ public final class CryptixAESEngine extends AESEngine {
             System.arraycopy(payload, payloadIndex, cur, 0, 16);
             decryptBlock(payload, payloadIndex, sessionKey, out, outIndex);
             payloadIndex += 16;
-            // DataHelper.xor(out, outIndex + x * 16, prev, 0, out, outIndex + x * 16, 16);
             for (int i = 0; i < 16; i++) {
                 out[outIndex++] ^= prev[i];
             }
@@ -216,12 +210,6 @@ public final class CryptixAESEngine extends AESEngine {
      */
     @Override
     public final void decryptBlock(byte[] payload, int inIndex, SessionKey sessionKey, byte[] rv, int outIndex) {
-        // just let it throw NPE or IAE later for speed, you'll figure it out
-        // if ((payload == null) || (rv == null))
-        //    throw new IllegalArgumentException("null block args");
-        // if (payload.length - inIndex > rv.length - outIndex)
-        //    throw new IllegalArgumentException("Bad block args [payload.len=" + payload.length
-        //                                       + " inIndex=" + inIndex + " rv.len=" + rv.length
         //                                       + " outIndex="+outIndex);
         Object pkey = sessionKey.getPreparedKey();
         if (pkey == null) {

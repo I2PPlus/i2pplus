@@ -61,7 +61,12 @@ final class ECConstants {
     public static boolean isBCAvailable() { return BC_AVAILABLE; }
 
     private static class ECParms {
-        public final String ps, ns, ss, bs, gxs, gys;
+        public final String ps;
+        public final String ns;
+        public final String ss;
+        public final String bs;
+        public final String gxs;
+        public final String gys;
         private static final BigInteger A = new NativeBigInteger("-3");
         private static final int H = 1;
 
@@ -319,20 +324,10 @@ final class ECConstants {
         return rv;
     }
 
-    // standard curve names
-    // first is OpenJDK 6/7
-    // second is BC
-    //public static final ECParameterSpec P192_SPEC = genSpec("secp192r1", "P-192", PARM_P192);
     public static final ECParameterSpec P256_SPEC = genSpec("secp256r1", "P-256", PARM_P256);
     public static final ECParameterSpec P384_SPEC = genSpec("secp384r1", "P-384", PARM_P384);
     public static final ECParameterSpec P521_SPEC = genSpec("secp521r1", "P-521", PARM_P521);
 
-    // Koblitz
-    //public static final ECParameterSpec K163_SPEC = genSpec("sect163k1", "K-163", null);
-    //public static final ECParameterSpec K233_SPEC = genSpec("sect233k1", "K-233", null);
-    //public static final ECParameterSpec K283_SPEC = genSpec("sect283k1", "K-283", null);
-    //public static final ECParameterSpec K409_SPEC = genSpec("sect409k1", "K-409", null);
-    //public static final ECParameterSpec K571_SPEC = genSpec("sect571k1", "K-571", null);
 
 
     /**

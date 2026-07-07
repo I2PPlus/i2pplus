@@ -227,29 +227,15 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
             }
             idx++; // OID, checked above
             // parameters only with old OID
-            if (doid == OID_OLD) {
-                if (d[idx++] != 0x0a || d[idx++] != 1 || d[idx++] != 1) {
-                    throw new InvalidKeySpecException("unsupported key spec");
-                }
+            if (doid == OID_OLD && (d[idx++] != 0x0a || d[idx++] != 1 || d[idx++] != 1)) {
+                throw new InvalidKeySpecException("unsupported key spec");
             } else {
                 // Handle parameter value of NULL
                 //
                 // Quoting RFC 8410 section 3:
-                // > For all of the OIDs, the parameters MUST be absent.
-                // >
-                // > It is possible to find systems that require the parameters to be
-                // > present. This can be due to either a defect in the original 1997
-                // > syntax or a programming error where developers never got input where
-                // > this was not true. The optimal solution is to fix these systems;
-                // > where this is not possible, the problem needs to be restricted to
-                // > that subsystem and not propagated to the Internet.
-                //
-                // Java's default keystore puts it in (when decoding as PKCS8 and then
                 // re-encoding to pass on), so we must accept it.
-                if (idlen == 7) {
-                    if (d[idx++] != 0x05 || d[idx++] != 0) {
-                        throw new InvalidKeySpecException("unsupported key spec");
-                    }
+                if (idlen == 7 && (d[idx++] != 0x05 || d[idx++] != 0)) {
+                    throw new InvalidKeySpecException("unsupported key spec");
                 }
                 // PrivateKey wrapping the CurvePrivateKey
                 if (d[idx++] != 0x04 || d[idx++] != 34) {

@@ -192,7 +192,8 @@ public class EdDSAEngine extends Signature {
         byte[] a = ((EdDSAPrivateKey) key).geta();
 
         byte[] message;
-        int offset, length;
+        int offset;
+        int length;
         if (oneShotMode) {
             if (oneShotBytes == null) throw new SignatureException("update() not called first");
             message = oneShotBytes;
@@ -250,7 +251,8 @@ public class EdDSAEngine extends Signature {
         digest.update(((EdDSAPublicKey) key).getAbyte());
         // h = H(Rbar,Abar,M)
         byte[] message;
-        int offset, length;
+        int offset;
+        int length;
         if (oneShotMode) {
             if (oneShotBytes == null) throw new SignatureException("update() not called first");
             message = oneShotBytes;

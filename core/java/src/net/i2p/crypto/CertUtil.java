@@ -74,8 +74,6 @@ public final class CertUtil {
     public static boolean saveCert(Certificate cert, File file) {
         OutputStream os = null;
         try {
-            // The point is probably to share this, so don't make it 600
-            // os = new SecureFileOutputStream(file);
             os = new FileOutputStream(file);
             exportCert(cert, os);
             return true;
@@ -363,7 +361,6 @@ public final class CertUtil {
                     rv = kf.generatePrivate(ks);
                     break;
                 } catch (GeneralSecurityException gse) {
-                    /*gse.printStackTrace(); */
                 }
             }
             if (rv == null) {
@@ -629,8 +626,7 @@ public final class CertUtil {
                 SigningPrivateKey spk = SigUtil.fromJavaKey(priv);
                 System.out.println("Found private key: " + spk);
             } else if (args[0].equals("checkall")) {
-                int rv = checkAll(f);
-                // System.exit(rv);
+                checkAll(f);
             } else {
                 System.out.println("Usage: [loadcert | loadcrl | loadcrldir | loadcrldirs | isrevoked | loadprivatekey | checkall] file");
             }

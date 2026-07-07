@@ -164,8 +164,6 @@ public class BlindData {
         if (secret != null) _secretRequired = true;
         if (authKey != null) _authRequired = true;
         _date = _context.clock().now();
-        // defer until needed
-        // calculate();
     }
 
     /**

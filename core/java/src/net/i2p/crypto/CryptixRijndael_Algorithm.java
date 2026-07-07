@@ -49,7 +49,8 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
 
     static {
         int ROOT = 0x11B;
-        int i, j = 0;
+        int i;
+        int j = 0;
 
         //
         // produce log and alog tables, needed for multiplying in the
@@ -114,7 +115,8 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
             }
             AA[i][i + 4] = 1;
         }
-        byte pivot, tmp;
+        byte pivot;
+        byte tmp;
         byte[][] iG = new byte[4][4];
         for (i = 0; i < 4; i++) {
             pivot = AA[i][i];
@@ -235,7 +237,10 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
         int t3 = ((in[inOffset++] & 0xFF) << 24 | (in[inOffset++] & 0xFF) << 16 | (in[inOffset++] & 0xFF) << 8 | (in[inOffset++] & 0xFF))
                  ^ Ker[3];
 
-        int a0, a1, a2, a3;
+        int a0;
+        int a1;
+        int a2;
+        int a3;
         for (int r = 1; r < ROUNDS; r++) { // apply round transforms
             Ker = Ke[r];
             a0 = (_T1[(t0 >>> 24) & 0xFF] ^ _T2[(t1 >>> 16) & 0xFF] ^ _T3[(t2 >>> 8) & 0xFF] ^ _T4[t3 & 0xFF]) ^ Ker[0];
@@ -303,7 +308,10 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
         int t3 = ((in[inOffset++] & 0xFF) << 24 | (in[inOffset++] & 0xFF) << 16 | (in[inOffset++] & 0xFF) << 8 | (in[inOffset++] & 0xFF))
                  ^ Kdr[3];
 
-        int a0, a1, a2, a3;
+        int a0;
+        int a1;
+        int a2;
+        int a3;
         for (int r = 1; r < ROUNDS; r++) { // apply round transforms
             Kdr = Kd[r];
             a0 = (_T5[(t0 >>> 24) & 0xFF] ^ _T6[(t3 >>> 16) & 0xFF] ^ _T7[(t2 >>> 8) & 0xFF] ^ _T8[t1 & 0xFF]) ^ Kdr[0];
@@ -384,7 +392,8 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
         int ROUND_KEY_COUNT = (ROUNDS + 1) * BC;
         int KC = k.length / 4;
         int[] tk = new int[KC];
-        int i, j;
+        int i;
+        int j;
 
         if (keyData == null) {
             keyData = new CryptixAESKeyCache.KeyCacheEntry(ROUNDS, BC);
@@ -402,7 +411,8 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
             Ke[t / BC][t % BC] = tk[j];
             Kd[ROUNDS - (t / BC)][t % BC] = tk[j];
         }
-        int tt, rconpointer = 0;
+        int tt;
+        int rconpointer = 0;
         while (t < ROUND_KEY_COUNT) {
             // extrapolate using phi (the round key evolution function)
             tt = tk[KC - 1];
@@ -411,17 +421,11 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
                      ^ (_rcon[rconpointer++] & 0xFF) << 24;
             if (KC != 8) {
                 for (i = 1, j = 0; i < KC;) {
-                    //tk[i++] ^= tk[j++];
-                    // The above line replaced with the code below in order to work around
-                    // a bug in the kjc-1.4F java compiler (which has been reported).
                     tk[i] ^= tk[j++];
                     i++;
                 }
             } else {
                 for (i = 1, j = 0; i < KC / 2;) {
-                    //tk[i++] ^= tk[j++];
-                    // The above line replaced with the code below in order to work around
-                    // a bug in the kjc-1.4F java compiler (which has been reported).
                     tk[i] ^= tk[j++];
                     i++;
                 }
@@ -429,9 +433,6 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
                 tk[KC / 2] ^= (_S[tt & 0xFF] & 0xFF) ^ (_S[(tt >>> 8) & 0xFF] & 0xFF) << 8
                               ^ (_S[(tt >>> 16) & 0xFF] & 0xFF) << 16 ^ (_S[(tt >>> 24) & 0xFF] & 0xFF) << 24;
                 for (j = KC / 2, i = j + 1; i < KC;) {
-                    //tk[i++] ^= tk[j++];
-                    // The above line replaced with the code below in order to work around
-                    // a bug in the kjc-1.4F java compiler (which has been reported).
                     tk[i] ^= tk[j++];
                     i++;
                 }

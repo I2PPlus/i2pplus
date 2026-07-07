@@ -107,7 +107,7 @@ public final class ElGamalEngine {
      *
      *  @since 0.8.8
      */
-    public void restart() {}
+    public void restart() { /* noop, cannot be restarted */ }
 
     private BigInteger[] getNextYK() {
         return _ykgen.getNextYK();
@@ -144,24 +144,16 @@ public final class ElGamalEngine {
         _context.sha().calculateHash(data, 0, data.length, d2, 1);
         System.arraycopy(data, 0, d2, 1 + Hash.HASH_LENGTH, data.length);
 
-        // long t0 = _context.clock().now();
         BigInteger m = new NativeBigInteger(1, d2);
-        // long t1 = _context.clock().now();
         if (m.compareTo(CryptoConstants.elgp) >= 0) throw new IllegalArgumentException("ARGH.  Data cannot be larger than the ElGamal prime.  FIXME");
-        // long t2 = _context.clock().now();
         BigInteger aalpha = new NativeBigInteger(1, publicKey.getData());
-        // long t3 = _context.clock().now();
         BigInteger[] yk = getNextYK();
         BigInteger k = yk[1];
         BigInteger y = yk[0];
 
-        // long t7 = _context.clock().now();
         BigInteger d = aalpha.modPow(k, CryptoConstants.elgp);
-        // long t8 = _context.clock().now();
         d = d.multiply(m);
-        // long t9 = _context.clock().now();
         d = d.mod(CryptoConstants.elgp);
-        // long t10 = _context.clock().now();
 
         byte[] ybytes = y.toByteArray();
         byte[] dbytes = d.toByteArray();
@@ -186,8 +178,8 @@ public final class ElGamalEngine {
         long end = _context.clock().now();
 
         long diff = end - start;
-        if (diff > 1000) {
-            if (_log.shouldWarn()) _log.warn("Took too long to encrypt ElGamal block (" + diff + "ms)");
+        if (diff > 1000 && _log.shouldWarn()) {
+            _log.warn("Took too long to encrypt ElGamal block (" + diff + "ms)");
         }
 
         return out;
@@ -232,11 +224,6 @@ public final class ElGamalEngine {
             return null;
         }
 
-        // ByteArrayInputStream bais = new ByteArrayInputStream(val, i, val.length - i);
-        // byte[] hashData = new byte[Hash.HASH_LENGTH];
-        // System.arraycopy(val, i + 1, hashData, 0, Hash.HASH_LENGTH);
-        // Hash hash = new Hash(hashData);
-        // Hash hash = Hash.create(val, i + 1);
         byte[] rv = new byte[payloadLen];
         System.arraycopy(val, i + 1 + Hash.HASH_LENGTH, rv, 0, rv.length);
 
@@ -248,13 +235,11 @@ public final class ElGamalEngine {
         long end = _context.clock().now();
 
         long diff = end - start;
-        //        if (diff > 1000) {
-        if (diff > 1500) {
-            if (_log.shouldWarn()) _log.warn("Took too long (" + diff + "ms) to decrypt and verify ElGamal block");
+        if (diff > 1500 && _log.shouldWarn()) {
+            _log.warn("Took too long (" + diff + "ms) to decrypt block");
         }
 
         if (ok) {
-            // _log.debug("Hash matches: " + DataHelper.toString(hash.getData(), hash.getData().length));
             return rv;
         }
         if (_log.shouldDebug()) _log.debug("Doesn't match hash data = " + Base64.encode(rv), new Exception("Doesn't match"));

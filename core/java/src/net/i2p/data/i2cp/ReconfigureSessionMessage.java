@@ -26,7 +26,7 @@ public class ReconfigureSessionMessage extends I2CPMessageImpl {
     private SessionId _sessionId;
     private SessionConfig _sessionConfig;
 
-    public ReconfigureSessionMessage() {}
+    public ReconfigureSessionMessage() { /* required for I2CP deserialization */ }
 
     public SessionId getSessionId() {
         return _sessionId;

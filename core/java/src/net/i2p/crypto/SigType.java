@@ -219,10 +219,17 @@ public enum SigType {
     // Pubkey 384 bytes; privkey 32 bytes; hash 32 bytes; sig 64 bytes
     // DSA_3072_256(3, 384, 32, 32, 64, "SHA-256", "?"),
 
-    private final int code, pubkeyLen, privkeyLen, hashLen, sigLen;
+    private final int code;
+    private final int pubkeyLen;
+    private final int privkeyLen;
+    private final int hashLen;
+    private final int sigLen;
 
     private final SigAlgo base;
-    private final String digestName, algoName, oid, since;
+    private final String digestName;
+    private final String algoName;
+    private final String oid;
+    private final String since;
     private final AlgorithmParameterSpec params;
     private final boolean isAvail;
 

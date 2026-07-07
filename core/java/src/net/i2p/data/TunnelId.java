@@ -127,8 +127,6 @@ public class TunnelId {
      *  @throws IOException if there is an error writing
      */
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
-        // writeLong() will throw DFE on negative value
-        // if (_tunnelId < 0) throw new DataFormatException("Invalid tunnel ID: " + _tunnelId);
         DataHelper.writeLong(out, 4, _tunnelId);
     }
 

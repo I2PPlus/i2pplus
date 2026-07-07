@@ -26,7 +26,7 @@ public class DisconnectMessage extends I2CPMessageImpl {
     public static final int MESSAGE_TYPE = 30;
     private String _reason;
 
-    public DisconnectMessage() {}
+    public DisconnectMessage() { /* required for I2CP deserialization */ }
 
     public String getReason() {
         return _reason;

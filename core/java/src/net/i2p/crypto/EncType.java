@@ -130,11 +130,15 @@ public enum EncType {
      *  @since 0.9.67
      */
     MLKEM1024_X25519_CT(100010, 1568, 0, EncAlgo.ECIES_MLKEM_INT, "EC/None/NoPadding", X25519_SPEC, "0.9.67");
-    private final int code, pubkeyLen, privkeyLen;
+    private final int code;
+    private final int pubkeyLen;
+    private final int privkeyLen;
     private final EncAlgo base;
-    private final String algoName, since;
+    private final String algoName;
+    private final String since;
     private final AlgorithmParameterSpec params;
-    private final boolean isAvail, isPQ;
+    private final boolean isAvail;
+    private final boolean isPQ;
 
     /**
      *

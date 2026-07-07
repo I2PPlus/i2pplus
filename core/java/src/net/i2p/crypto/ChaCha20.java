@@ -64,30 +64,17 @@ public final class ChaCha20 {
         int[] input = new int[16];
         int[] output = new int[16];
         ChaChaCore.initKey256(input, key, 0);
-        // dumpBlock(input);
-        // RFC 7539
-        // block counter
         input[12] = 1;
-        // Words 13-15 are a nonce, which should not be repeated for the same
-        // key.  The 13th word is the first 32 bits of the input nonce taken
-        // as a little-endian integer, while the 15th word is the last 32
-        // bits.
-        // ChaChaCore.initIV(input, iv, counter);
-        // ChaChaCore.initIV(input, iv[4:11], iv[0:3]);
         input[13] = (int) DataHelper.fromLongLE(iv, ivOffset, 4);
         input[14] = (int) DataHelper.fromLongLE(iv, ivOffset + 4, 4);
         input[15] = (int) DataHelper.fromLongLE(iv, ivOffset + 8, 4);
-        // dumpBlock(input);
         ChaChaCore.hash(output, input);
-        // int ctr = 1;
-        // dumpBlock(output);
         while (length > 0) {
             int tempLen = 64;
             if (tempLen > length) {
                 tempLen = length;
             }
             ChaChaCore.hash(output, input);
-            // dumpBlock(output);
             ChaChaCore.xorBlock(plaintext, plaintextOffset, ciphertext, ciphertextOffset, tempLen, output);
             if (++(input[12]) == 0) {
                 ++(input[13]);

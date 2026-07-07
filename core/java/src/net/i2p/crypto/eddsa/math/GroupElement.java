@@ -295,7 +295,14 @@ public class GroupElement implements Serializable {
      * @since 0.9.36
      */
     public GroupElement(final Curve curve, final byte[] s, boolean precomputeSingleAndDouble) {
-        FieldElement x, y, yy, u, v, v3, vxx, check;
+        FieldElement x;
+        FieldElement y;
+        FieldElement yy;
+        FieldElement u;
+        FieldElement v;
+        FieldElement v3;
+        FieldElement vxx;
+        FieldElement check;
         y = curve.getField().fromByteArray(s);
         yy = y.square();
 
@@ -605,7 +612,13 @@ public class GroupElement implements Serializable {
         switch (this.repr) {
             case P2:
             case P3: // Ignore T for P3 representation
-                FieldElement XX, YY, B, A, AA, Yn, Zn;
+                FieldElement XX;
+                FieldElement YY;
+                FieldElement B;
+                FieldElement A;
+                FieldElement AA;
+                FieldElement Yn;
+                FieldElement Zn;
                 XX = this.X.square();
                 YY = this.Y.square();
                 B = this.Z.squareAndDouble();
@@ -670,7 +683,12 @@ public class GroupElement implements Serializable {
         if (q.repr != Representation.PRECOMP)
             throw new IllegalArgumentException();
 
-        FieldElement YpX, YmX, A, B, C, D;
+        FieldElement YpX;
+        FieldElement YmX;
+        FieldElement A;
+        FieldElement B;
+        FieldElement C;
+        FieldElement D;
         YpX = this.Y.add(this.X);
         YmX = this.Y.subtract(this.X);
         A = YpX.multiply(q.X); // q->y+x
@@ -699,7 +717,12 @@ public class GroupElement implements Serializable {
         if (q.repr != Representation.PRECOMP)
             throw new IllegalArgumentException();
 
-        FieldElement YpX, YmX, A, B, C, D;
+        FieldElement YpX;
+        FieldElement YmX;
+        FieldElement A;
+        FieldElement B;
+        FieldElement C;
+        FieldElement D;
         YpX = this.Y.add(this.X);
         YmX = this.Y.subtract(this.X);
         A = YpX.multiply(q.Y); // q->y-x
@@ -741,7 +764,13 @@ public class GroupElement implements Serializable {
         if (q.repr != Representation.CACHED)
             throw new IllegalArgumentException();
 
-        FieldElement YpX, YmX, A, B, C, ZZ, D;
+        FieldElement YpX;
+        FieldElement YmX;
+        FieldElement A;
+        FieldElement B;
+        FieldElement C;
+        FieldElement ZZ;
+        FieldElement D;
         YpX = this.Y.add(this.X);
         YmX = this.Y.subtract(this.X);
         A = YpX.multiply(q.X); // q->Y+X
@@ -770,7 +799,13 @@ public class GroupElement implements Serializable {
         if (q.repr != Representation.CACHED)
             throw new IllegalArgumentException();
 
-        FieldElement YpX, YmX, A, B, C, ZZ, D;
+        FieldElement YpX;
+        FieldElement YmX;
+        FieldElement A;
+        FieldElement B;
+        FieldElement C;
+        FieldElement ZZ;
+        FieldElement D;
         YpX = Y.add(X);
         YmX = Y.subtract(X);
         A = YpX.multiply(q.Y); // q->Y-X

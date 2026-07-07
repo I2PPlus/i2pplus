@@ -223,8 +223,6 @@ public class Certificate extends DataStructureImpl {
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_type < 0) throw new DataFormatException("Invalid certificate type: " + _type);
-        // if ((_type != 0) && (_payload == null)) throw new DataFormatException("Payload is required for non null
-        // type");
 
         out.write((byte) _type);
         if (_payload != null) {
@@ -351,8 +349,6 @@ public class Certificate extends DataStructureImpl {
         private static final byte[] NULL_DATA = new byte[NULL_LENGTH];
 
         public NullCert() {
-            // zero already
-            // _type = CERTIFICATE_TYPE_NULL;
         }
 
         /** @throws RuntimeException always */

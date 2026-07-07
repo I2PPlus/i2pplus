@@ -2,16 +2,6 @@ package net.i2p.crypto;
 
 /*
  *  As pulled from https://github.com/nahi/siphash-java-inline
- *  Last commit was https://github.com/nahi/siphash-java-inline/commit/5be5c84851a28f800fcac66ced658bdbd01f31ef
- *  2012-11-06
- *
- * Copyright 2012  Hiroshi Nakamura <nahi@ruby-lang.org>
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -74,17 +64,9 @@ public final class SipHashInline {
                     | ((((long) data[i++]) & 0xff) << 40)
                     | ((((long) data[i++]) & 0xff) << 48)
                     | ((((long) data[i++]) & 0xff) << 56);
-            // MSGROUND {
             v3 ^= m;
 
             /* SIPROUND wih hand reordering
-             *
-             * SIPROUND in siphash24.c:
-             *   A: v0 += v1;
-             *   B: v1=ROTL(v1,13);
-             *   C: v1 ^= v0;
-             *   D: v0=ROTL(v0,32);
-             *   E: v2 += v3;
              *   F: v3=ROTL(v3,16);
              *   G: v3 ^= v2;
              *   H: v0 += v3;
@@ -120,7 +102,6 @@ public final class SipHashInline {
              *   -> EFGKLMN
              */
 
-            // SIPROUND {
             v0 += v1;
             v2 += v3;
             v1 = (v1 << 13) | v1 >>> 51;
@@ -135,8 +116,6 @@ public final class SipHashInline {
             v1 ^= v2;
             v3 ^= v0;
             v2 = (v2 << 32) | v2 >>> 32;
-            // }
-            // SIPROUND {
             v0 += v1;
             v2 += v3;
             v1 = (v1 << 13) | v1 >>> 51;
@@ -151,9 +130,7 @@ public final class SipHashInline {
             v1 ^= v2;
             v3 ^= v0;
             v2 = (v2 << 32) | v2 >>> 32;
-            // }
             v0 ^= m;
-            // }
         }
 
         // packing the last block to long, as LE 0-7 bytes + the length in the top byte
@@ -163,9 +140,7 @@ public final class SipHashInline {
             m |= (long) (data[i] & 0xff);
         }
         m |= (long) len << 56;
-        // MSGROUND {
         v3 ^= m;
-        // SIPROUND {
         v0 += v1;
         v2 += v3;
         v1 = (v1 << 13) | v1 >>> 51;
@@ -180,8 +155,6 @@ public final class SipHashInline {
         v1 ^= v2;
         v3 ^= v0;
         v2 = (v2 << 32) | v2 >>> 32;
-        // }
-        // SIPROUND {
         v0 += v1;
         v2 += v3;
         v1 = (v1 << 13) | v1 >>> 51;
@@ -196,13 +169,10 @@ public final class SipHashInline {
         v1 ^= v2;
         v3 ^= v0;
         v2 = (v2 << 32) | v2 >>> 32;
-        // }
         v0 ^= m;
-        // }
 
         // finishing...
         v2 ^= 0xff;
-        // SIPROUND {
         v0 += v1;
         v2 += v3;
         v1 = (v1 << 13) | v1 >>> 51;
@@ -217,8 +187,6 @@ public final class SipHashInline {
         v1 ^= v2;
         v3 ^= v0;
         v2 = (v2 << 32) | v2 >>> 32;
-        // }
-        // SIPROUND {
         v0 += v1;
         v2 += v3;
         v1 = (v1 << 13) | v1 >>> 51;
@@ -233,8 +201,6 @@ public final class SipHashInline {
         v1 ^= v2;
         v3 ^= v0;
         v2 = (v2 << 32) | v2 >>> 32;
-        // }
-        // SIPROUND {
         v0 += v1;
         v2 += v3;
         v1 = (v1 << 13) | v1 >>> 51;
@@ -249,8 +215,6 @@ public final class SipHashInline {
         v1 ^= v2;
         v3 ^= v0;
         v2 = (v2 << 32) | v2 >>> 32;
-        // }
-        // SIPROUND {
         v0 += v1;
         v2 += v3;
         v1 = (v1 << 13) | v1 >>> 51;
@@ -265,7 +229,6 @@ public final class SipHashInline {
         v1 ^= v2;
         v3 ^= v0;
         v2 = (v2 << 32) | v2 >>> 32;
-        // }
         return v0 ^ v1 ^ v2 ^ v3;
     }
 

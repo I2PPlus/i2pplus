@@ -39,11 +39,6 @@ public final class EdDSABlinding {
         GroupElement d = a.add(aa.toCached());
         EdDSAPublicKeySpec pubKey = new EdDSAPublicKeySpec(d, key.getParams());
         EdDSAPublicKey rv = new EdDSAPublicKey(pubKey);
-        //   net.i2p.util.HexDump.dump(key.getAbyte()) +
-        //   "\nplus privkey\n" +
-        //   net.i2p.util.HexDump.dump(alpha.geta()) +
-        //   "\nequals\n" +
-        //   net.i2p.util.HexDump.dump(rv.getAbyte()));
         return rv;
     }
 
@@ -64,11 +59,6 @@ public final class EdDSABlinding {
         // Add the two private keys together.
         // just for now, since we don't have a pure add.
         byte[] d = sc.multiplyAndAdd(ONE, a, aa);
-        //   net.i2p.util.HexDump.dump(a) +
-        //   "\nplus\n" +
-        //   net.i2p.util.HexDump.dump(aa) +
-        //   "\nequals\n" +
-        //   net.i2p.util.HexDump.dump(d));
         EdDSAPrivateKeySpec privKey = new EdDSAPrivateKeySpec(d, null, key.getParams());
         return new EdDSAPrivateKey(privKey);
     }

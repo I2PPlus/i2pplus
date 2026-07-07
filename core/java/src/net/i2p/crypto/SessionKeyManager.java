@@ -41,7 +41,8 @@ public class SessionKeyManager {
      *  @param context unused
      *  @since public since 0.9.14; protected before that
      */
-    public SessionKeyManager(I2PAppContext context) {}
+    public SessionKeyManager(I2PAppContext context) { // nop
+    }
 
     /**
      * Retrieve the session key currently associated with encryption to the target,
@@ -176,7 +177,8 @@ public class SessionKeyManager {
      * Accept the given tags and associate them with the given key for decryption,
      * with the default expiration.
      */
-    public void tagsReceived(SessionKey key, Set<SessionTag> sessionTags) {}
+    public void tagsReceived(SessionKey key, Set<SessionTag> sessionTags) { // nop
+    }
 
     /**
      * Accept the given tags and associate them with the given key for decryption,
@@ -186,7 +188,8 @@ public class SessionKeyManager {
      * @param expire time from now
      * @since 0.9.7
      */
-    public void tagsReceived(SessionKey key, Set<SessionTag> sessionTags, long expire) {}
+    public void tagsReceived(SessionKey key, Set<SessionTag> sessionTags, long expire) { // nop
+    }
 
     /**
      * Determine if we have received a session key associated with the given session tag,
@@ -207,7 +210,10 @@ public class SessionKeyManager {
     public void shutdown() { // nop
     }
 
-    public void renderStatusHTML(Writer out) throws IOException {}
-    public void failTags(PublicKey target, SessionKey key, TagSetHandle ts) {}
-    public void tagsAcked(PublicKey target, SessionKey key, TagSetHandle ts) {}
+    public void renderStatusHTML(Writer out) throws IOException { // nop
+    }
+    public void failTags(PublicKey target, SessionKey key, TagSetHandle ts) { // nop
+    }
+    public void tagsAcked(PublicKey target, SessionKey key, TagSetHandle ts) { // nop
+    }
 }

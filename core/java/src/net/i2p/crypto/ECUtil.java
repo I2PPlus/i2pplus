@@ -54,7 +54,6 @@ final class ECUtil {
         else if (r.equals(ECPoint.POINT_INFINITY)) return s;
         else if (s.equals(ECPoint.POINT_INFINITY)) return r;
         BigInteger prime = ((ECFieldFp) curve.getField()).getP();
-        // use NBI modInverse();
         BigInteger tmp = r.getAffineX().subtract(s.getAffineX());
         tmp = new NativeBigInteger(tmp);
         BigInteger slope = (r.getAffineY().subtract(s.getAffineY())).multiply(tmp.modInverse(prime)).mod(prime);
@@ -71,7 +70,6 @@ final class ECUtil {
         BigInteger slope = (r.getAffineX().pow(2)).multiply(THREE);
         slope = slope.add(curve.getA());
         BigInteger prime = ((ECFieldFp) curve.getField()).getP();
-        // use NBI modInverse();
         BigInteger tmp = r.getAffineY().multiply(TWO);
         tmp = new NativeBigInteger(tmp);
         slope = slope.multiply(tmp.modInverse(prime));

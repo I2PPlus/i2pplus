@@ -29,7 +29,6 @@ import java.util.Locale;
 @SuppressWarnings("PMD.CloseResource")
 public class Base32 {
 
-    // private final static Log _log = new Log(Base32.class);
 
     /** The 32 valid Base32 values. */
     private static final char[] ALPHABET = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '2', '3', '4', '5', '6', '7'};
@@ -318,12 +317,10 @@ public class Base32 {
                         outBuff[outBuffPosn] = next;
                         usedbits -= 3;
                     } else if (next != 0) {
-                        // _log.warn("Extra data at the end: " + next + "(decimal)");
                         return null;
                     }
                 }
             } else {
-                // _log.warn("Bad Base32 input character at " + i + ": " + source[i] + "(decimal)");
                 return null;
             }
         }

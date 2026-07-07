@@ -7,13 +7,6 @@ package net.i2p.crypto;
  * @author  Philippe Verdy
  */
 
-/* Sun may wish to change the following package name, if integrating this
- * class in the Sun JCE Security Provider for Java 1.5 (code-named Tiger).
- *
- * You can include it in your own Security Provider by inserting
- * this property in your Provider derived class:
- * put("MessageDigest.SHA-1", "com.bitzi.util.SHA1");
- */
 import java.security.DigestException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -99,7 +92,6 @@ public final class SHA1 extends MessageDigest implements Cloneable {
                 useBitzi = false;
             } catch (NoSuchAlgorithmException e) { /* ignored */ }
         }
-        //if (useBitzi)
         _useBitzi = useBitzi;
     }
 
@@ -751,7 +743,6 @@ public final class SHA1 extends MessageDigest implements Cloneable {
         hC += /* c= */ (c << 30) | (c >>> 2);
     }
 
-    //private static final int RUNS = 100000;
 
     /**
      *  Test the GNU and the JVM's implementations for speed

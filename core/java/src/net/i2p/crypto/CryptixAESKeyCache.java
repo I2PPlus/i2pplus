@@ -18,7 +18,6 @@ public final class CryptixAESKeyCache {
     private static final int BLOCKSIZE = 16;
     private static final int ROUNDS = CryptixRijndael_Algorithm.getRounds(KEYSIZE, BLOCKSIZE);
     private static final int BC = BLOCKSIZE / 4;
-    private static final int KC = KEYSIZE / 4;
 
     public static final KeyCacheEntry createNew() {
         KeyCacheEntry e = new KeyCacheEntry();

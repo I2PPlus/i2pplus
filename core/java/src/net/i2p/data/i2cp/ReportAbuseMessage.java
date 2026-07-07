@@ -28,7 +28,7 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
     private AbuseReason _reason;
     private MessageId _messageId;
 
-    public ReportAbuseMessage() {}
+    public ReportAbuseMessage() { /* required for I2CP deserialization */ }
 
     public SessionId getSessionId() {
         return _sessionId;

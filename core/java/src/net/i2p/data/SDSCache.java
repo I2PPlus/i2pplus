@@ -11,7 +11,6 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -47,7 +46,6 @@ import java.util.concurrent.ConcurrentHashMap;
  *  @param <V> type of SimpleDataStructure objects cached
  */
 public class SDSCache<V extends SimpleDataStructure> {
-    // private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(SDSCache.class);
 
     private static final double MIN_FACTOR = 0.20;
     private static final double MAX_FACTOR = 5.0;

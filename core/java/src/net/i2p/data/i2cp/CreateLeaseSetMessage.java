@@ -31,7 +31,7 @@ public class CreateLeaseSetMessage extends I2CPMessageImpl {
     private SigningPrivateKey _signingPrivateKey;
     protected PrivateKey _privateKey;
 
-    public CreateLeaseSetMessage() {}
+    public CreateLeaseSetMessage() { /* required for I2CP deserialization */ }
 
     public SessionId getSessionId() {
         return _sessionId;

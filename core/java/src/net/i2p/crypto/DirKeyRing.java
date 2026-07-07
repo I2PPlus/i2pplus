@@ -44,7 +44,6 @@ public class DirKeyRing implements KeyRing {
         File test = new File(fileName);
         if (test.getParent() != null) throw new IOException("Bad key name");
         File sd = new File(_base, scope);
-        // File td = new File(sd, Integer.toString(type.getCode()));
         File kd = new File(sd, fileName + ".crt");
         if (!kd.exists()) return null;
         X509Certificate cert = CertUtil.loadCert(kd);
@@ -62,5 +61,5 @@ public class DirKeyRing implements KeyRing {
      *  Unimplemented, unused.
      */
     @Override
-    public void setKey(String keyName, String scope, PublicKey key) {}
+    public void setKey(String keyName, String scope, PublicKey key) { /* nop */ }
 }

@@ -96,8 +96,6 @@ public class BigIntegerFieldElement extends FieldElement implements Serializable
 
     @Override
     public FieldElement invert() {
-        // Euler's theorem
-        // return modPow(f.getQm2(), f.getQ());
         return new BigIntegerFieldElement(f, bi.modInverse(((BigIntegerFieldElement) f.getQ()).bi));
     }
 

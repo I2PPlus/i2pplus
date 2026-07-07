@@ -63,7 +63,6 @@ public final class DSAEngine {
     private final Log _log;
     private final I2PAppContext _context;
 
-    // private static final boolean _isAndroid = System.getProperty("java.vendor").contains("Android");
     private static final boolean _useJavaLibs = false; // = _isAndroid;
 
     /**
@@ -212,8 +211,6 @@ public final class DSAEngine {
             byte[] sigbytes = signature.getData();
             byte[] rbytes = new byte[20];
             byte[] sbytes = new byte[20];
-            // System.arraycopy(sigbytes, 0, rbytes, 0, 20);
-            // System.arraycopy(sigbytes, 20, sbytes, 0, 20);
             for (int x = 0; x < 40; x++) {
                 if (x < 20) {
                     rbytes[x] = sigbytes[x];
@@ -243,8 +240,8 @@ public final class DSAEngine {
             boolean ok = v.compareTo(r) == 0;
 
             long diff = _context.clock().now() - start;
-            if (diff > 1000) {
-                if (_log.shouldWarn()) _log.warn("Took too long to verify the signature (" + diff + "ms)");
+            if (diff > 1000 && _log.shouldWarn()) {
+                _log.warn("Took too long to verify the signature (" + diff + "ms)");
             }
             return ok;
         } catch (RuntimeException e) {
@@ -406,12 +403,10 @@ public final class DSAEngine {
         _context.random().harvester().feedEntropy("DSA.sign", rbytes, 0, rbytes.length);
 
         if (rbytes.length == 20) {
-            // System.arraycopy(rbytes, 0, out, 0, 20);
             for (int i = 0; i < 20; i++) {
                 out[i] = rbytes[i];
             }
         } else if (rbytes.length == 21) {
-            // System.arraycopy(rbytes, 1, out, 0, 20);
             for (int i = 0; i < 20; i++) {
                 out[i] = rbytes[i + 1];
             }
@@ -419,17 +414,13 @@ public final class DSAEngine {
             _log.error("Bad R length " + rbytes.length);
             return null;
         } else {
-            // if (_log.shouldDebug()) _log.debug("Using short rbytes.length [" + rbytes.length + "]");
-            // System.arraycopy(rbytes, 0, out, 20 - rbytes.length, rbytes.length);
             for (int i = 0; i < rbytes.length; i++) out[i + 20 - rbytes.length] = rbytes[i];
         }
         if (sbytes.length == 20) {
-            // System.arraycopy(sbytes, 0, out, 20, 20);
             for (int i = 0; i < 20; i++) {
                 out[i + 20] = sbytes[i];
             }
         } else if (sbytes.length == 21) {
-            // System.arraycopy(sbytes, 1, out, 20, 20);
             for (int i = 0; i < 20; i++) {
                 out[i + 20] = sbytes[i + 1];
             }
@@ -437,14 +428,12 @@ public final class DSAEngine {
             _log.error("Bad S length " + sbytes.length);
             return null;
         } else {
-            // if (_log.shouldDebug()) _log.debug("Using short sbytes.length [" + sbytes.length + "]");
-            // System.arraycopy(sbytes, 0, out, 40 - sbytes.length, sbytes.length);
             for (int i = 0; i < sbytes.length; i++) out[i + 20 + 20 - sbytes.length] = sbytes[i];
         }
 
         long diff = _context.clock().now() - start;
-        if (diff > 1000) {
-            if (_log.shouldWarn()) _log.warn("Took too long to sign (" + diff + "ms)");
+        if (diff > 1000 && _log.shouldWarn()) {
+            _log.warn("Took too long to sign (" + diff + "ms)");
         }
 
         return new Signature(out);
@@ -577,8 +566,6 @@ public final class DSAEngine {
         jsig.initVerify(pubKey);
         jsig.update(data, offset, len);
         boolean rv = jsig.verify(SigUtil.toJavaSig(signature));
-        // if (!rv) {
-        // }
         return rv;
     }
 
