@@ -6299,15 +6299,28 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
+            double acceptLoad = getAdditionalStat(_context, "tunnel.acceptLoad");
+            boolean dropping = getAdditionalStat(_context, "tunnel.dropLoadProactive") > 0 ||
+                               getAdditionalStat(_context, "tunnel.rejectOverloaded") > 0;
 
             // CPU saturated — hold
             if (cpuPressure)
                 return current;
 
-            // Scale up on queue backlog
+            // Scale up on queue backlog — only when genuine need
             if (observed > 0 && current < _max) {
-                int inc = Math.min(Math.max(1, (int) observed / 3), 2);
-                return Math.min(_max, current + inc);
+                // Strong signal: dropping or rejecting requests — scale up aggressively
+                if (dropping) {
+                    int inc = Math.min(Math.max(1, (int) observed / 2), 3);
+                    return Math.min(_max, current + inc);
+                }
+                // Moderate signal: backlog with significant queue wait time (>500ms avg)
+                if (!Double.isNaN(acceptLoad) && acceptLoad > 500) {
+                    int inc = Math.min(Math.max(1, (int) observed / 3), 2);
+                    return Math.min(_max, current + inc);
+                }
+                // Backlog but fast service — transient, don't scale
+                return current;
             }
 
             // Scale up when concurrent builds exceed threads
