@@ -5,7 +5,6 @@ import java.util.Comparator;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
-import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
@@ -22,7 +21,7 @@ import net.i2p.util.SystemVersion;
  * unbounded growth and enable backpressure management.
  * <p>
  * Thread-safe implementation suitable for concurrent producer-consumer
- * scenarios with comprehensive statistics tracking and performance monitoring.
+ * scenarios.
  *
  * @param <E>  type of elements held in this queue, extending {@link PQEntry}
  *
@@ -48,16 +47,6 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
     private final int _maxSize;
 
     /**
-     * Stat name to track full queue events.
-     */
-    private final String STAT_FULL;
-
-    /**
-     * Time windows for rate statistics in milliseconds.
-     */
-    protected static final long[] RATES = RateConstants.SHORT_TERM_RATES;
-
-    /**
      * Default backlog and max size depending on system speed.
      */
     protected static final int DEFAULT_BACKLOG_SIZE = SystemVersion.isSlow() ? 256 : 384;
@@ -79,7 +68,7 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
      * The queue is bounded by a configurable max size read once at construction.
      *
      * @param ctx             the I2P application context
-     * @param name            a name for this queue instance (used in stats)
+     * @param name            a name for this queue instance
      * @param initialCapacity the initial capacity for the priority queue
      */
     @SuppressWarnings("unchecked")
@@ -88,8 +77,6 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
         _context = ctx;
         _log = ctx.logManager().getLog(PriBlockingQueue.class);
         _name = name;
-        STAT_FULL = ("pbq." + name + ".full").intern();
-        ctx.statManager().createRateStat(STAT_FULL, "Priority Blocking Queue full", "Router [PriorityBlockingQueue]", RATES);
 
         // Cache max size on construction to avoid repeated property lookups
         _maxSize = ctx.getProperty(PROP_MAX_SIZE, DEFAULT_MAX_SIZE);
@@ -112,7 +99,6 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
     public boolean offer(E o) {
         timestamp(o);
         if (size() >= _maxSize) {
-            _context.statManager().addRateData(STAT_FULL, 1);
             return false;
         }
         return super.offer(o);

@@ -47,7 +47,6 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
         _emptyBuffers = new LinkedBlockingQueue<>(_bufferCount);
         _fullBuffers = new LinkedBlockingQueue<>(_bufferCount);
         _context = context;
-        context.statManager().createRateStat("prng.bufferFillTime", "Time to fill random number buffer (ms)", "Encryption", new long[] { RateConstants.ONE_MINUTE } );
         _log = context.logManager().getLog(AsyncFortunaStandalone.class);
     }
 
@@ -124,7 +123,6 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
             long after = System.currentTimeMillis();
             boolean shouldWait = _fullBuffers.size() > 1;
             _fullBuffers.offer(aBuff);
-            _context.statManager().addRateData("prng.bufferFillTime", after - before, 0);
 
             if (shouldWait) {
                 Thread.yield();

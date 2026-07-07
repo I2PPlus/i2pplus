@@ -176,8 +176,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         _context = context;
         _outboundSessions = new HashMap<>(64);
         _inboundTagSets = new HashMap<>(128);
-        context.statManager().createRateStat("crypto.sessionTagsExpired", "Number of expired tags/sessions", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
-        context.statManager().createRateStat("crypto.sessionTagsRemaining", "Number of remaining tags/sessions after a cleanup", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
          _alive = true;
         new CleanupEvent().schedule(60L*1000);
     }
@@ -198,7 +196,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             int overage = _inboundTagSets.size() - MAX_INBOUND_SESSION_TAGS;
             if (overage > 0) {clearExcess(overage);}
             long expireTime = _context.clock().now() - beforeExpire;
-            _context.statManager().addRateData("crypto.sessionTagsExpired", expired, expireTime);
             schedule(60L*1000);
         }
     }
@@ -696,7 +693,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                 remaining = _inboundTagSets.size();
             }
         }
-        _context.statManager().addRateData("crypto.sessionTagsRemaining", remaining, 0);
         if (removed > 0 && _log.shouldInfo())
             _log.info("Expired " + removed + " Inbound tags");
 

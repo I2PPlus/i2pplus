@@ -53,8 +53,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
         _context = ctx;
         _type = type;
         _log = ctx.logManager().getLog(MLKEMKeyFactory.class);
-        ctx.statManager().createRateStat("crypto.MLKEMGenerateTime", "How long it takes to create keys", "Encryption", new long[] { 60*60*1000L });
-        ctx.statManager().createRateStat("crypto.MLKEMUsed", "Take keys from the queue", "Encryption", new long[] { 60*60*1000L });
+        ctx.statManager().createRequiredRateStat("crypto.MLKEMUsed", "Take keys from the queue", "Encryption", new long[] { 60*60*1000L });
         ctx.statManager().createRequiredRateStat("crypto.MLKEMEmpty", "Queue empty", "Encryption", new long[] { 60*1000L, 10*60*1000L, 60*60*1000L });
 
         // Scale precomputation with available memory and cores.
@@ -211,12 +210,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     }
 
     private KeyPair precalc() throws GeneralSecurityException {
-        long start = System.currentTimeMillis();
-        KeyPair rv = MLKEM.getKeys(_type);
-        long end = System.currentTimeMillis();
-        long diff = end - start;
-        _context.statManager().addRateData("crypto.MLKEMGenerateTime", diff);
-        return rv;
+        return MLKEM.getKeys(_type);
     }
 
     /**

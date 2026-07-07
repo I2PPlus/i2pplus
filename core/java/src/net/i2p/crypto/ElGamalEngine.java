@@ -82,8 +82,6 @@ public final class ElGamalEngine {
      * Starts the YK precalc thread if context is RouterContext or Android.
      */
     public ElGamalEngine(I2PAppContext context) {
-        context.statManager().createRateStat("crypto.elGamal.encrypt", "Time for ElGamal encryption (ms)", "Encryption", new long[] {60 * 60 * 1000});
-        context.statManager().createRateStat("crypto.elGamal.decrypt", "Time for ElGamal decryption (ms)", "Encryption", new long[] {60 * 60 * 1000});
         _context = context;
         _log = context.logManager().getLog(ElGamalEngine.class);
         _ykgen = new YKGenerator(context);
@@ -192,7 +190,6 @@ public final class ElGamalEngine {
             if (_log.shouldWarn()) _log.warn("Took too long to encrypt ElGamal block (" + diff + "ms)");
         }
 
-        _context.statManager().addRateData("crypto.elGamal.encrypt", diff);
         return out;
     }
 
@@ -255,8 +252,6 @@ public final class ElGamalEngine {
         if (diff > 1500) {
             if (_log.shouldWarn()) _log.warn("Took too long (" + diff + "ms) to decrypt and verify ElGamal block");
         }
-
-        _context.statManager().addRateData("crypto.elGamal.decrypt", diff);
 
         if (ok) {
             // _log.debug("Hash matches: " + DataHelper.toString(hash.getData(), hash.getData().length));

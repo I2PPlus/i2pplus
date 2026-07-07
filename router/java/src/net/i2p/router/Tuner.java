@@ -3002,16 +3002,22 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = crypto.MLKEMEmpty (queue empty events — the only trigger to grow)
-            // Cross-refs: jobLag (CPU pressure), memory pressure, system load
+            // Cross-refs: crypto.MLKEMUsed (key consumption rate), jobLag (CPU), memory pressure, system load
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double used = getAdditionalStat(_context, "crypto.MLKEMUsed");
             int sysLoad = SystemVersion.getSystemLoad();
             boolean highLoad = sysLoad > 80;
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
             double memPressure = getMemoryPressure();
+            boolean highUsage = !Double.isNaN(used) && used > 10;
 
             // Severe memory pressure: shrink fast
             if (memPressure > 0.85)
                 return Math.max(_min, current - _step * 2);
+
+            // Pool emptying under high usage = grow aggressively to absorb demand
+            if (observed > 0 && highUsage && !highLoad && memPressure < 0.7)
+                return Math.min(_max, current + _step * 2);
 
             // Pool emptying under load = grow to absorb demand
             if (observed > 0 && !highLoad && memPressure < 0.7) {

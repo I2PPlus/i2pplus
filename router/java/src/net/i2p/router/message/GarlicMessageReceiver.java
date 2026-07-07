@@ -173,7 +173,6 @@ public class GarlicMessageReceiver {
                 final String keysUsed = (decryptionKey2 != null) ? "both ElGamal and ECIES keys" : decryptionKey.getType().toString();
                 _log.warn("Failed to decrypt " + message + " with " + keysUsed + " -> Target: " + d);
             }
-            _context.statManager().addRateData("crypto.garlic.decryptFail", 1);
             _context.messageHistory().messageProcessingError(message.getUniqueId(), message.getClass().getName(),
                     "Garlic could not be decrypted");
         }

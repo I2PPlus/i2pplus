@@ -423,9 +423,6 @@ class GraphRenderer {
             if (name.startsWith("bwLimiter.")) {
                 graphTitle = graphTitle.replace("bwLimiter.", "[BWLimiter] ");
             }
-            if (name.startsWith("pbq.")) {
-                graphTitle = graphTitle.replace("pbq.", "[Router] PBQ.");
-            }
             if (name.startsWith("codel.")) {
                 graphTitle = graphTitle.replace("codel.", "[Router] CODEL.");
             }

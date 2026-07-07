@@ -262,8 +262,6 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         ctx.statManager().createRequiredRateStat("client.dispatchTime", "Time to dispatch the message (since we started)", "ClientMessages", RATES);
         ctx.statManager().createRequiredRateStat("client.leaseSetFailedRemoteTime", "Time to look for a remote LeaseSet (when we failed)", "ClientMessages", RATES);
         ctx.statManager().createRequiredRateStat("client.leaseSetFoundRemoteTime", "Time to look for a remote LeaseSet (when we succeeded)", "ClientMessages", RATES);
-        // for HandleGarlicMessageJob / GarlicMessageReceiver
-        ctx.statManager().createRateStat("crypto.garlic.decryptFail", "How often undecryptable garlic messages are received", "Encryption", RATES);
         ctx.statManager().createRequiredRateStat("client.sendAckTime", "Message round trip time (ms)", "ClientMessages", RATES);
     }
 

@@ -44,9 +44,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         _context = ctx;
         _log = ctx.logManager().getLog(Elg2KeyFactory.class);
         _elg2 = new Elligator2(ctx);
-        ctx.statManager().createRateStat("crypto.EDHGenerateTime", "Time to create x and X", "Encryption", new long[] { RateConstants.ONE_MINUTE });
         ctx.statManager().createRequiredRateStat("crypto.EDHUsed", "Need a DH from the queue", "Encryption", new long[] { RateConstants.ONE_MINUTE });
-        ctx.statManager().createRateStat("crypto.EDHReused", "Unused DH requeued", "Encryption", new long[] { RateConstants.ONE_MINUTE });
         ctx.statManager().createRequiredRateStat("crypto.EDHEmpty", "DH queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
 
         // Scale precomputation with available memory and cores.
@@ -194,7 +192,6 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
             }
         } while (enc == null);
         long diff = System.currentTimeMillis() - start;
-        _context.statManager().addRateData("crypto.EDHGenerateTime", diff);
         if (_log.shouldDebug()) {
             _log.debug("Took " + i + " tries and " + diff + "ms to generate local DH value");
         }

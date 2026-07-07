@@ -41,9 +41,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         super("XDH Precalc");
         _context = ctx;
         _log = ctx.logManager().getLog(X25519KeyFactory.class);
-        ctx.statManager().createRateStat("crypto.XDHGenerateTime", "Time to create x and X", "Encryption", new long[] { RateConstants.ONE_MINUTE });
         ctx.statManager().createRequiredRateStat("crypto.XDHUsed", "Need a DH from the queue", "Encryption", new long[] { RateConstants.ONE_MINUTE });
-        ctx.statManager().createRateStat("crypto.XDHReused", "Unused DH requeued", "Encryption", new long[] { RateConstants.ONE_MINUTE });
         ctx.statManager().createRequiredRateStat("crypto.XDHEmpty", "DH queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
 
         // Scale precomputation with available memory and cores.
@@ -175,9 +173,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     private KeyPair precalc() {
         long start = System.currentTimeMillis();
         KeyPair rv = _context.keyGenerator().generatePKIKeys(EncType.ECIES_X25519);
-        long end = System.currentTimeMillis();
-        long diff = end - start;
-        _context.statManager().addRateData("crypto.XDHGenerateTime", diff);
+        long diff = System.currentTimeMillis() - start;
         if (_log.shouldDebug()) {
             _log.debug("Took " + diff + "ms to generate local DH value");
         }
@@ -189,7 +185,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
      * to be put back onto the queue for reuse.
      */
     public void returnUnused(KeyPair kp) {
-        if (_keys.offer(kp)) {_context.statManager().addRateData("crypto.XDHReused", 1);}
+        _keys.offer(kp);
     }
 
     /** @return true if successful, false if full */
