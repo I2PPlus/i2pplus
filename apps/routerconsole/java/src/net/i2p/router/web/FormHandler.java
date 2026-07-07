@@ -35,7 +35,9 @@ public abstract class FormHandler {
     protected Map _settings;
     /** Only for multipart/form-data. Warning, parameters are NOT XSS filtered */
     protected RequestWrapper _requestWrapper;
-    private String _nonce, _nonce1, _nonce2;
+    private String _nonce;
+    private String _nonce1;
+    private String _nonce2;
     protected String _action;
     protected String _method;
     private final List<Message> _errors;
@@ -357,17 +359,14 @@ public abstract class FormHandler {
             return;
         }
         // Rate limiting for form submissions - prevent brute-force nonce guessing
-        if (_method != null && "POST".equals(_method)) {
-            if (!checkRateLimit("global")) {
-                addFormError(_t("Too many form submissions, please try again later"), true);
-                _valid = false;
-                return;
-            }
+        if (_method != null && "POST".equals(_method) && !checkRateLimit("global")) {
+            addFormError(_t("Too many form submissions, please try again later"), true);
+            _valid = false;
+            return;
         }
         // CSRF validation is done at the handler level in HostCheckHandler
         // Always validate nonce - don't skip based on console password
         if (_nonce == null) {
-            //addFormError("You trying to mess with me?  Huh?  Are you?");
             _valid = false;
             return;
         }

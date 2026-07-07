@@ -1,6 +1,5 @@
 package net.i2p.router.web.helpers;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.Collections;
@@ -21,19 +20,18 @@ import net.i2p.router.web.HelperBase;
  * @since 0.9.33
  */
 public class ConfigKeyringHelper extends HelperBase {
-    public ConfigKeyringHelper() {}
+    public ConfigKeyringHelper() { /* nop */ }
 
     public String getSummary() {
         StringWriter sw = new StringWriter(4*1024);
-        try {renderStatusHTML(sw);}
-        catch (IOException ioe) {ioe.printStackTrace();}
+        renderStatusHTML(sw);
         return sw.toString();
     }
 
     /**
      *  @since 0.9.33 moved from PersistentKeyRing
      */
-    private void renderStatusHTML(StringWriter out) throws IOException {
+    private void renderStatusHTML(StringWriter out) {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<h3>").append(_t("Local encrypted destinations")).append("</h3>");
         boolean rv1 = render(buf, true);

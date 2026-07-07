@@ -1,6 +1,5 @@
 package net.i2p.router.web.helpers;
 
-import net.i2p.router.Banlist;
 import net.i2p.router.web.HelperBase;
 
 /**

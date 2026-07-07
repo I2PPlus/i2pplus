@@ -49,19 +49,13 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
         if (shouldFetchNews()) {
             Thread t = new Fetcher();
             t.start();
-        } else if (_firstRun) {
-            // This covers the case where we got a new news but then shut down before it
-            // was successfully downloaded, and then restarted within the 36 hour delay
-            // before fetching news again.
-            // If we already know about a new version (from ConsoleUpdateManager calling
-            // NewsFetcher.checkForUpdates() before any Updaters were registered),
-            // this will fire off an update.
-            // If disabled this does nothing.
+        } else if (_firstRun &&
+                   _mgr.shouldInstall() &&
+                   !_mgr.isCheckInProgress() && !_mgr.isUpdateInProgress()) {
+            // A prior update check detected a new version but we shut down before
+            // it downloaded and the 36h news-delay hasn't elapsed; try again now.
             // TODO unsigned too?
-            if (_mgr.shouldInstall() &&
-                !_mgr.isCheckInProgress() && !_mgr.isUpdateInProgress())
-                // non-blocking
-                _mgr.update(ROUTER_SIGNED);
+            _mgr.update(ROUTER_SIGNED);
         }
         _firstRun = false;
     }

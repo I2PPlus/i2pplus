@@ -67,7 +67,6 @@ public class NewsHelper extends ContentHelper {
      *  @since 0.9.4 moved from NewsFetcher
      */
     public static boolean isUpdateAvailable() {
-        ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
 /*
         if (mgr == null) return false;
         return mgr.getUpdateAvailable(ROUTER_SIGNED) != null ||

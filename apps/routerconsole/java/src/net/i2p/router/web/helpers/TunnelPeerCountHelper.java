@@ -9,7 +9,7 @@ import net.i2p.router.web.HelperBase;
  * @since 0.9.33
  */
 public class TunnelPeerCountHelper extends HelperBase {
-    public TunnelPeerCountHelper() {}
+    public TunnelPeerCountHelper() { /* nop */ }
 
     public String getTunnelPeerCount() {
         TunnelRenderer renderer = new TunnelRenderer(_context);

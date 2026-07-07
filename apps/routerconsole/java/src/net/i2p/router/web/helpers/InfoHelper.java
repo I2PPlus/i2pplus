@@ -27,7 +27,7 @@ import net.i2p.util.SystemVersion;
 public class InfoHelper extends HelperBase {
     private boolean _full;
 
-    public InfoHelper() {}
+    public InfoHelper() { /* nop */ }
 
     public void setFull(String f) {_full = f != null && f.length() > 0;}
 

@@ -49,7 +49,6 @@ public abstract class HelperBase {
     }
 
     /** might be useful in the jsp's */
-    //public RouterContext getContext() { return _context; }
 
 
     /**

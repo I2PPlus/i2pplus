@@ -18,7 +18,8 @@ import net.i2p.router.web.FormHandler;
  */
 public class ConfigAdvancedHandler extends FormHandler {
     private boolean _shouldSave;
-    private String _oldConfig, _config;
+    private String _oldConfig;
+    private String _config;
     private String _ff;
 
     @Override

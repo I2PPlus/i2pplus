@@ -30,7 +30,7 @@ public class StreamHelper extends HelperBase {
 
     private String _direction;
 
-    public StreamHelper() {}
+    public StreamHelper() { /* nop */ }
 
     public String getDirection() { return _direction != null ? _direction : ""; }
     public void setDirection(String d) { _direction = d; }

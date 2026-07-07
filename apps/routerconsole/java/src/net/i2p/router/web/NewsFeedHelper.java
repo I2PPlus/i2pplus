@@ -43,12 +43,11 @@ public class NewsFeedHelper extends HelperBase {
             if (nmgr != null) {
                 entries = nmgr.getEntries();
                 NewsEntry init = nmgr.getInitialNews();
-                if (init != null) {
+                if (init != null &&
                     // crude check to see if it's already in there
-                    if (entries.size() != 1 || !DataHelper.eq(entries.get(0).title, init.title)) {
-                        if (entries.isEmpty()) {entries = Collections.singletonList(init);} // in case of empty list
-                        else {entries.add(init);}
-                    }
+                    (entries.size() != 1 || !DataHelper.eq(entries.get(0).title, init.title))) {
+                    if (entries.isEmpty()) {entries = Collections.singletonList(init);} // in case of empty list
+                    else {entries.add(init);}
                 }
             }
         }

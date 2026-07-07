@@ -61,7 +61,6 @@ class PluginUpdateHandler implements Checker, Updater {
         }
 
         if (oldVersion == null || updateSources == null) {
-            //updateStatus("<b>" + _t("Cannot check, plugin {0} is not installed", appName) + "</b>");
             return null;
         }
 

@@ -152,10 +152,8 @@ public class ConfigKeyringHandler extends FormHandler {
                 } else {
                     bdout = new BlindData(_context, spk, blindType, _secret, atype, pk);
                 }
-                if (bdold != null) {
-                    if (_log.shouldDebug())
-                        _log.debug("Already cached: " + bdold);
-                }
+                if (bdold != null && _log.shouldDebug())
+                    _log.debug("Already cached: " + bdold);
                 try {
                     _context.netDb().setBlindData(bdout);
                     addFormNotice(_t("Key for {0} added to keyring", bdout.toBase32()), true);
@@ -199,7 +197,6 @@ public class ConfigKeyringHandler extends FormHandler {
                 }
             }
         } else {
-            // addFormError(_t("Unsupported"));
         }
     }
 

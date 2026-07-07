@@ -481,9 +481,6 @@ public class TuningFormHandler extends FormHandler {
     public void setMaxConcurrentEstablishOverride(String v) { _maxConcurrentEstablishOverride = v; }
     public void setMaxProfilesOverride(String v) { _maxProfilesOverride = v; }
     public void setMinFastPeersOverride(String v) { _minFastPeersOverride = v; }
-    public void setMaxFastPeersOverride(String v) { _maxFastPeersOverride = v; }
-    public void setMinHighCapPeersOverride(String v) { _minHighCapPeersOverride = v; }
-    public void setMaxHighCapPeersOverride(String v) { _maxHighCapPeersOverride = v; }
     public void setBuildRequestTimeoutOverride(String v) { _buildRequestTimeoutOverride = v; }
     public void setBuildFirstHopTimeoutOverride(String v) { _buildFirstHopTimeoutOverride = v; }
 
@@ -510,237 +507,237 @@ public class TuningFormHandler extends FormHandler {
         Map<String, String> changes = new HashMap<String, String>();
 
         // Transport
-        saveField(changes, "ACK_FREQUENCY", "Min", _ackFrequencyMin, 20);
-        saveField(changes, "ACK_FREQUENCY", "Max", _ackFrequencyMax, 100);
-        saveField(changes, "ACK_FREQUENCY", "Step", _ackFrequencyStep, 5);
-        saveField(changes, "DATA_MESSAGE_TIMEOUT", "Min", _dataMessageTimeoutMin, 1000);
-        saveField(changes, "DATA_MESSAGE_TIMEOUT", "Max", _dataMessageTimeoutMax, 10000);
-        saveField(changes, "DATA_MESSAGE_TIMEOUT", "Step", _dataMessageTimeoutStep, 500);
-        saveField(changes, "MAX_OB_ESTABLISH_TIME", "Min", _obEstablishTimeMin, 1000);
-        saveField(changes, "MAX_OB_ESTABLISH_TIME", "Max", _obEstablishTimeMax, 5000);
-        saveField(changes, "MAX_OB_ESTABLISH_TIME", "Step", _obEstablishTimeStep, 500);
-        saveField(changes, "MAX_IB_ESTABLISH_TIME", "Min", _ibEstablishTimeMin, 1000);
-        saveField(changes, "MAX_IB_ESTABLISH_TIME", "Max", _ibEstablishTimeMax, 8000);
-        saveField(changes, "MAX_IB_ESTABLISH_TIME", "Step", _ibEstablishTimeStep, 500);
+        saveField(changes, "ACK_FREQUENCY", "Min", _ackFrequencyMin);
+        saveField(changes, "ACK_FREQUENCY", "Max", _ackFrequencyMax);
+        saveField(changes, "ACK_FREQUENCY", "Step", _ackFrequencyStep);
+        saveField(changes, "DATA_MESSAGE_TIMEOUT", "Min", _dataMessageTimeoutMin);
+        saveField(changes, "DATA_MESSAGE_TIMEOUT", "Max", _dataMessageTimeoutMax);
+        saveField(changes, "DATA_MESSAGE_TIMEOUT", "Step", _dataMessageTimeoutStep);
+        saveField(changes, "MAX_OB_ESTABLISH_TIME", "Min", _obEstablishTimeMin);
+        saveField(changes, "MAX_OB_ESTABLISH_TIME", "Max", _obEstablishTimeMax);
+        saveField(changes, "MAX_OB_ESTABLISH_TIME", "Step", _obEstablishTimeStep);
+        saveField(changes, "MAX_IB_ESTABLISH_TIME", "Min", _ibEstablishTimeMin);
+        saveField(changes, "MAX_IB_ESTABLISH_TIME", "Max", _ibEstablishTimeMax);
+        saveField(changes, "MAX_IB_ESTABLISH_TIME", "Step", _ibEstablishTimeStep);
 
         // Tunnel
-        saveField(changes, "REQUEUE_TIME", "Min", _requeueTimeMin, 10);
-        saveField(changes, "REQUEUE_TIME", "Max", _requeueTimeMax, 100);
-        saveField(changes, "REQUEUE_TIME", "Step", _requeueTimeStep, 5);
-        saveField(changes, "REPLENISH_FREQUENCY", "Min", _replenishFrequencyMin, 5);
-        saveField(changes, "REPLENISH_FREQUENCY", "Max", _replenishFrequencyMax, 100);
-        saveField(changes, "REPLENISH_FREQUENCY", "Step", _replenishFrequencyStep, 5);
-        saveField(changes, "SELECTOR_LOOP_DELAY", "Min", _selectorLoopDelayMin, 1);
-        saveField(changes, "SELECTOR_LOOP_DELAY", "Max", _selectorLoopDelayMax, 20);
-        saveField(changes, "SELECTOR_LOOP_DELAY", "Step", _selectorLoopDelayStep, 1);
-        saveField(changes, "MAX_OB_MSGS_PER_PUMP", "Min", _obMsgsPerPumpMin, 32);
-        saveField(changes, "MAX_OB_MSGS_PER_PUMP", "Max", _obMsgsPerPumpMax, 512);
-        saveField(changes, "MAX_OB_MSGS_PER_PUMP", "Step", _obMsgsPerPumpStep, 16);
-        saveField(changes, "MAX_IB_MSGS_PER_PUMP", "Min", _ibMsgsPerPumpMin, 16);
-        saveField(changes, "MAX_IB_MSGS_PER_PUMP", "Max", _ibMsgsPerPumpMax, 256);
-        saveField(changes, "MAX_IB_MSGS_PER_PUMP", "Step", _ibMsgsPerPumpStep, 8);
+        saveField(changes, "REQUEUE_TIME", "Min", _requeueTimeMin);
+        saveField(changes, "REQUEUE_TIME", "Max", _requeueTimeMax);
+        saveField(changes, "REQUEUE_TIME", "Step", _requeueTimeStep);
+        saveField(changes, "REPLENISH_FREQUENCY", "Min", _replenishFrequencyMin);
+        saveField(changes, "REPLENISH_FREQUENCY", "Max", _replenishFrequencyMax);
+        saveField(changes, "REPLENISH_FREQUENCY", "Step", _replenishFrequencyStep);
+        saveField(changes, "SELECTOR_LOOP_DELAY", "Min", _selectorLoopDelayMin);
+        saveField(changes, "SELECTOR_LOOP_DELAY", "Max", _selectorLoopDelayMax);
+        saveField(changes, "SELECTOR_LOOP_DELAY", "Step", _selectorLoopDelayStep);
+        saveField(changes, "MAX_OB_MSGS_PER_PUMP", "Min", _obMsgsPerPumpMin);
+        saveField(changes, "MAX_OB_MSGS_PER_PUMP", "Max", _obMsgsPerPumpMax);
+        saveField(changes, "MAX_OB_MSGS_PER_PUMP", "Step", _obMsgsPerPumpStep);
+        saveField(changes, "MAX_IB_MSGS_PER_PUMP", "Min", _ibMsgsPerPumpMin);
+        saveField(changes, "MAX_IB_MSGS_PER_PUMP", "Max", _ibMsgsPerPumpMax);
+        saveField(changes, "MAX_IB_MSGS_PER_PUMP", "Step", _ibMsgsPerPumpStep);
 
         // Streaming
-        saveField(changes, "INITIAL_WINDOW_SIZE", "Min", _initialWindowSizeMin, 4);
-        saveField(changes, "INITIAL_WINDOW_SIZE", "Max", _initialWindowSizeMax, 64);
-        saveField(changes, "INITIAL_WINDOW_SIZE", "Step", _initialWindowSizeStep, 4);
-        saveField(changes, "INITIAL_RTO", "Min", _initialRTOMin, 2000);
-        saveField(changes, "INITIAL_RTO", "Max", _initialRTOMax, 15000);
-        saveField(changes, "INITIAL_RTO", "Step", _initialRTOStep, 500);
-        saveField(changes, "INITIAL_ACK_DELAY", "Min", _initialAckDelayMin, 5);
-        saveField(changes, "INITIAL_ACK_DELAY", "Max", _initialAckDelayMax, 100);
-        saveField(changes, "INITIAL_ACK_DELAY", "Step", _initialAckDelayStep, 5);
-        saveField(changes, "PASSIVE_FLUSH_DELAY", "Min", _passiveFlushDelayMin, 10);
-        saveField(changes, "PASSIVE_FLUSH_DELAY", "Max", _passiveFlushDelayMax, 300);
-        saveField(changes, "PASSIVE_FLUSH_DELAY", "Step", _passiveFlushDelayStep, 10);
+        saveField(changes, "INITIAL_WINDOW_SIZE", "Min", _initialWindowSizeMin);
+        saveField(changes, "INITIAL_WINDOW_SIZE", "Max", _initialWindowSizeMax);
+        saveField(changes, "INITIAL_WINDOW_SIZE", "Step", _initialWindowSizeStep);
+        saveField(changes, "INITIAL_RTO", "Min", _initialRTOMin);
+        saveField(changes, "INITIAL_RTO", "Max", _initialRTOMax);
+        saveField(changes, "INITIAL_RTO", "Step", _initialRTOStep);
+        saveField(changes, "INITIAL_ACK_DELAY", "Min", _initialAckDelayMin);
+        saveField(changes, "INITIAL_ACK_DELAY", "Max", _initialAckDelayMax);
+        saveField(changes, "INITIAL_ACK_DELAY", "Step", _initialAckDelayStep);
+        saveField(changes, "PASSIVE_FLUSH_DELAY", "Min", _passiveFlushDelayMin);
+        saveField(changes, "PASSIVE_FLUSH_DELAY", "Max", _passiveFlushDelayMax);
+        saveField(changes, "PASSIVE_FLUSH_DELAY", "Step", _passiveFlushDelayStep);
 
         // I2CP
-        saveField(changes, "CLIENT_WRITER_QUEUE_SIZE", "Min", _writerQueueSizeMin, 32);
-        saveField(changes, "CLIENT_WRITER_QUEUE_SIZE", "Max", _writerQueueSizeMax, 1024);
-        saveField(changes, "CLIENT_WRITER_QUEUE_SIZE", "Step", _writerQueueSizeStep, 32);
+        saveField(changes, "CLIENT_WRITER_QUEUE_SIZE", "Min", _writerQueueSizeMin);
+        saveField(changes, "CLIENT_WRITER_QUEUE_SIZE", "Max", _writerQueueSizeMax);
+        saveField(changes, "CLIENT_WRITER_QUEUE_SIZE", "Step", _writerQueueSizeStep);
 
         // CoDel
-        saveField(changes, "CODEL_TARGET", "Min", _codelTargetMin, 1);
-        saveField(changes, "CODEL_TARGET", "Max", _codelTargetMax, 20);
-        saveField(changes, "CODEL_TARGET", "Step", _codelTargetStep, 1);
-        saveField(changes, "CODEL_INTERVAL", "Min", _codelIntervalMin, 10);
-        saveField(changes, "CODEL_INTERVAL", "Max", _codelIntervalMax, 200);
-        saveField(changes, "CODEL_INTERVAL", "Step", _codelIntervalStep, 10);
+        saveField(changes, "CODEL_TARGET", "Min", _codelTargetMin);
+        saveField(changes, "CODEL_TARGET", "Max", _codelTargetMax);
+        saveField(changes, "CODEL_TARGET", "Step", _codelTargetStep);
+        saveField(changes, "CODEL_INTERVAL", "Min", _codelIntervalMin);
+        saveField(changes, "CODEL_INTERVAL", "Max", _codelIntervalMax);
+        saveField(changes, "CODEL_INTERVAL", "Step", _codelIntervalStep);
 
         // Westwood
-        saveField(changes, "WESTWOOD_DECAY_FACTOR", "Min", _westwoodDecayFactorMin, 2);
-        saveField(changes, "WESTWOOD_DECAY_FACTOR", "Max", _westwoodDecayFactorMax, 16);
-        saveField(changes, "WESTWOOD_DECAY_FACTOR", "Step", _westwoodDecayFactorStep, 1);
+        saveField(changes, "WESTWOOD_DECAY_FACTOR", "Min", _westwoodDecayFactorMin);
+        saveField(changes, "WESTWOOD_DECAY_FACTOR", "Max", _westwoodDecayFactorMax);
+        saveField(changes, "WESTWOOD_DECAY_FACTOR", "Step", _westwoodDecayFactorStep);
 
         // Streaming (continued)
-        saveField(changes, "i2p.streaming.maxSlowStartWindow", "Min", _maxSlowStartWindowMin, 8);
-        saveField(changes, "i2p.streaming.maxSlowStartWindow", "Max", _maxSlowStartWindowMax, 128);
-        saveField(changes, "i2p.streaming.maxSlowStartWindow", "Step", _maxSlowStartWindowStep, 4);
+        saveField(changes, "i2p.streaming.maxSlowStartWindow", "Min", _maxSlowStartWindowMin);
+        saveField(changes, "i2p.streaming.maxSlowStartWindow", "Max", _maxSlowStartWindowMax);
+        saveField(changes, "i2p.streaming.maxSlowStartWindow", "Step", _maxSlowStartWindowStep);
 
         // Buffers & Threads
-        saveField(changes, "crypto.x25519.precalcMin", "Min", _xdhPreCalcMinMin, 8);
-        saveField(changes, "crypto.x25519.precalcMin", "Max", _xdhPreCalcMinMax, 1024);
-        saveField(changes, "crypto.x25519.precalcMin", "Step", _xdhPreCalcMinStep, 8);
-        saveField(changes, "crypto.edh.precalcMin", "Min", _edhPrecalcMinMin, 8);
-        saveField(changes, "crypto.edh.precalcMin", "Max", _edhPrecalcMinMax, 1024);
-        saveField(changes, "crypto.edh.precalcMin", "Step", _edhPrecalcMinStep, 8);
-        saveField(changes, "crypto.mlkem.precalcMin", "Min", _mlkemPrecalcMinMin, 2);
-        saveField(changes, "crypto.mlkem.precalcMin", "Max", _mlkemPrecalcMinMax, 512);
-        saveField(changes, "crypto.mlkem.precalcMin", "Step", _mlkemPrecalcMinStep, 4);
-        saveField(changes, "ntcp.sendFinisher.maxThreads", "Min", _ntcpThreadsMin, 1);
-        saveField(changes, "ntcp.sendFinisher.maxThreads", "Max", _ntcpThreadsMax, 8);
-        saveField(changes, "ntcp.sendFinisher.maxThreads", "Step", _ntcpThreadsStep, 1);
-        saveField(changes, "ntcp.sendFinisher.queueCapacity", "Min", _ntcpQueueCapacityMin, 256);
-        saveField(changes, "ntcp.sendFinisher.queueCapacity", "Max", _ntcpQueueCapacityMax, 16384);
-        saveField(changes, "ntcp.sendFinisher.queueCapacity", "Step", _ntcpQueueCapacityStep, 256);
-        saveField(changes, "udp.packetHandler.maxThreads", "Min", _udpHandlerThreadsMin, 1);
-        saveField(changes, "udp.packetHandler.maxThreads", "Max", _udpHandlerThreadsMax, 16);
-        saveField(changes, "udp.packetHandler.maxThreads", "Step", _udpHandlerThreadsStep, 1);
-        saveField(changes, "router.peerOutboundQueueSize", "Min", _peerOutboundQueueMin, 50);
-        saveField(changes, "router.peerOutboundQueueSize", "Max", _peerOutboundQueueMax, 500);
-        saveField(changes, "router.peerOutboundQueueSize", "Step", _peerOutboundQueueStep, 50);
+        saveField(changes, "crypto.x25519.precalcMin", "Min", _xdhPreCalcMinMin);
+        saveField(changes, "crypto.x25519.precalcMin", "Max", _xdhPreCalcMinMax);
+        saveField(changes, "crypto.x25519.precalcMin", "Step", _xdhPreCalcMinStep);
+        saveField(changes, "crypto.edh.precalcMin", "Min", _edhPrecalcMinMin);
+        saveField(changes, "crypto.edh.precalcMin", "Max", _edhPrecalcMinMax);
+        saveField(changes, "crypto.edh.precalcMin", "Step", _edhPrecalcMinStep);
+        saveField(changes, "crypto.mlkem.precalcMin", "Min", _mlkemPrecalcMinMin);
+        saveField(changes, "crypto.mlkem.precalcMin", "Max", _mlkemPrecalcMinMax);
+        saveField(changes, "crypto.mlkem.precalcMin", "Step", _mlkemPrecalcMinStep);
+        saveField(changes, "ntcp.sendFinisher.maxThreads", "Min", _ntcpThreadsMin);
+        saveField(changes, "ntcp.sendFinisher.maxThreads", "Max", _ntcpThreadsMax);
+        saveField(changes, "ntcp.sendFinisher.maxThreads", "Step", _ntcpThreadsStep);
+        saveField(changes, "ntcp.sendFinisher.queueCapacity", "Min", _ntcpQueueCapacityMin);
+        saveField(changes, "ntcp.sendFinisher.queueCapacity", "Max", _ntcpQueueCapacityMax);
+        saveField(changes, "ntcp.sendFinisher.queueCapacity", "Step", _ntcpQueueCapacityStep);
+        saveField(changes, "udp.packetHandler.maxThreads", "Min", _udpHandlerThreadsMin);
+        saveField(changes, "udp.packetHandler.maxThreads", "Max", _udpHandlerThreadsMax);
+        saveField(changes, "udp.packetHandler.maxThreads", "Step", _udpHandlerThreadsStep);
+        saveField(changes, "router.peerOutboundQueueSize", "Min", _peerOutboundQueueMin);
+        saveField(changes, "router.peerOutboundQueueSize", "Max", _peerOutboundQueueMax);
+        saveField(changes, "router.peerOutboundQueueSize", "Step", _peerOutboundQueueStep);
 
         // Router Core
-        saveField(changes, "router.transitThrottleFactor", "Min", _transitThrottleFactorMin, 10);
-        saveField(changes, "router.transitThrottleFactor", "Max", _transitThrottleFactorMax, 100);
-        saveField(changes, "router.transitThrottleFactor", "Step", _transitThrottleFactorStep, 5);
-        saveField(changes, "router.throttleRejectExponent", "Min", _throttleRejectExponentMin, 2);
-        saveField(changes, "router.throttleRejectExponent", "Max", _throttleRejectExponentMax, 30);
-        saveField(changes, "router.throttleRejectExponent", "Step", _throttleRejectExponentStep, 1);
-        saveField(changes, "router.maxParticipatingTunnels", "Min", _maxParticipatingTunnelsMin, 500);
-        saveField(changes, "router.maxParticipatingTunnels", "Max", _maxParticipatingTunnelsMax, 15000);
-        saveField(changes, "router.maxParticipatingTunnels", "Step", _maxParticipatingTunnelsStep, 500);
-        saveField(changes, "router.buildHandlerMaxQueue", "Min", _buildHandlerMaxQueueMin, 16);
-        saveField(changes, "router.buildHandlerMaxQueue", "Max", _buildHandlerMaxQueueMax, 2048);
-        saveField(changes, "router.buildHandlerMaxQueue", "Step", _buildHandlerMaxQueueStep, 32);
-        saveField(changes, "i2p.tunnel.goodDeficitThrottle", "Min", _goodDeficitThrottleMin, 5000);
-        saveField(changes, "i2p.tunnel.goodDeficitThrottle", "Max", _goodDeficitThrottleMax, 60000);
-        saveField(changes, "i2p.tunnel.goodDeficitThrottle", "Step", _goodDeficitThrottleStep, 5000);
-        saveField(changes, "router.tunnel.perTunnelBweDivisor", "Min", _perTunnelBweDivisorMin, 10);
-        saveField(changes, "router.tunnel.perTunnelBweDivisor", "Max", _perTunnelBweDivisorMax, 500);
-        saveField(changes, "router.tunnel.perTunnelBweDivisor", "Step", _perTunnelBweDivisorStep, 10);
-        saveField(changes, "router.tunnelGrowthFactor", "Min", _tunnelGrowthFactorMin, 10);
-        saveField(changes, "router.tunnelGrowthFactor", "Max", _tunnelGrowthFactorMax, 80);
-        saveField(changes, "router.tunnelGrowthFactor", "Step", _tunnelGrowthFactorStep, 5);
-        saveField(changes, "i2ptunnel.serverHandler.threads", "Min", _threadsMin, 2);
-        saveField(changes, "i2ptunnel.serverHandler.threads", "Max", _threadsMax, 128);
-        saveField(changes, "i2ptunnel.serverHandler.threads", "Step", _threadsStep, 1);
+        saveField(changes, "router.transitThrottleFactor", "Min", _transitThrottleFactorMin);
+        saveField(changes, "router.transitThrottleFactor", "Max", _transitThrottleFactorMax);
+        saveField(changes, "router.transitThrottleFactor", "Step", _transitThrottleFactorStep);
+        saveField(changes, "router.throttleRejectExponent", "Min", _throttleRejectExponentMin);
+        saveField(changes, "router.throttleRejectExponent", "Max", _throttleRejectExponentMax);
+        saveField(changes, "router.throttleRejectExponent", "Step", _throttleRejectExponentStep);
+        saveField(changes, "router.maxParticipatingTunnels", "Min", _maxParticipatingTunnelsMin);
+        saveField(changes, "router.maxParticipatingTunnels", "Max", _maxParticipatingTunnelsMax);
+        saveField(changes, "router.maxParticipatingTunnels", "Step", _maxParticipatingTunnelsStep);
+        saveField(changes, "router.buildHandlerMaxQueue", "Min", _buildHandlerMaxQueueMin);
+        saveField(changes, "router.buildHandlerMaxQueue", "Max", _buildHandlerMaxQueueMax);
+        saveField(changes, "router.buildHandlerMaxQueue", "Step", _buildHandlerMaxQueueStep);
+        saveField(changes, "i2p.tunnel.goodDeficitThrottle", "Min", _goodDeficitThrottleMin);
+        saveField(changes, "i2p.tunnel.goodDeficitThrottle", "Max", _goodDeficitThrottleMax);
+        saveField(changes, "i2p.tunnel.goodDeficitThrottle", "Step", _goodDeficitThrottleStep);
+        saveField(changes, "router.tunnel.perTunnelBweDivisor", "Min", _perTunnelBweDivisorMin);
+        saveField(changes, "router.tunnel.perTunnelBweDivisor", "Max", _perTunnelBweDivisorMax);
+        saveField(changes, "router.tunnel.perTunnelBweDivisor", "Step", _perTunnelBweDivisorStep);
+        saveField(changes, "router.tunnelGrowthFactor", "Min", _tunnelGrowthFactorMin);
+        saveField(changes, "router.tunnelGrowthFactor", "Max", _tunnelGrowthFactorMax);
+        saveField(changes, "router.tunnelGrowthFactor", "Step", _tunnelGrowthFactorStep);
+        saveField(changes, "i2ptunnel.serverHandler.threads", "Min", _threadsMin);
+        saveField(changes, "i2ptunnel.serverHandler.threads", "Max", _threadsMax);
+        saveField(changes, "i2ptunnel.serverHandler.threads", "Step", _threadsStep);
 
         // Streaming congestion
-        saveField(changes, "i2p.streaming.maxRTO", "Min", _maxRTOMin, 3000);
-        saveField(changes, "i2p.streaming.maxRTO", "Max", _maxRTOMax, 60000);
-        saveField(changes, "i2p.streaming.maxRTO", "Step", _maxRTOStep, 1000);
-        saveField(changes, "i2p.streaming.maxResendDelay", "Min", _maxResendDelayMin, 2000);
-        saveField(changes, "i2p.streaming.maxResendDelay", "Max", _maxResendDelayMax, 60000);
-        saveField(changes, "i2p.streaming.maxResendDelay", "Step", _maxResendDelayStep, 1000);
-        saveField(changes, "i2p.streaming.maxRetransmissions", "Min", _maxRetransmissionsMin, 8);
-        saveField(changes, "i2p.streaming.maxRetransmissions", "Max", _maxRetransmissionsMax, 256);
-        saveField(changes, "i2p.streaming.maxRetransmissions", "Step", _maxRetransmissionsStep, 8);
-        saveField(changes, "i2p.streaming.maxRtt", "Min", _maxRttMin, 10000);
-        saveField(changes, "i2p.streaming.maxRtt", "Max", _maxRttMax, 120000);
-        saveField(changes, "i2p.streaming.maxRtt", "Step", _maxRttStep, 5000);
-        saveField(changes, "i2p.streaming.initialResendDelay", "Min", _initialResendDelayMin, 50);
-        saveField(changes, "i2p.streaming.initialResendDelay", "Max", _initialResendDelayMax, 5000);
-        saveField(changes, "i2p.streaming.initialResendDelay", "Step", _initialResendDelayStep, 50);
-        saveField(changes, "i2p.streaming.immediateAckDelay", "Min", _immediateAckDelayMin, 10);
-        saveField(changes, "i2p.streaming.immediateAckDelay", "Max", _immediateAckDelayMax, 500);
-        saveField(changes, "i2p.streaming.immediateAckDelay", "Step", _immediateAckDelayStep, 10);
+        saveField(changes, "i2p.streaming.maxRTO", "Min", _maxRTOMin);
+        saveField(changes, "i2p.streaming.maxRTO", "Max", _maxRTOMax);
+        saveField(changes, "i2p.streaming.maxRTO", "Step", _maxRTOStep);
+        saveField(changes, "i2p.streaming.maxResendDelay", "Min", _maxResendDelayMin);
+        saveField(changes, "i2p.streaming.maxResendDelay", "Max", _maxResendDelayMax);
+        saveField(changes, "i2p.streaming.maxResendDelay", "Step", _maxResendDelayStep);
+        saveField(changes, "i2p.streaming.maxRetransmissions", "Min", _maxRetransmissionsMin);
+        saveField(changes, "i2p.streaming.maxRetransmissions", "Max", _maxRetransmissionsMax);
+        saveField(changes, "i2p.streaming.maxRetransmissions", "Step", _maxRetransmissionsStep);
+        saveField(changes, "i2p.streaming.maxRtt", "Min", _maxRttMin);
+        saveField(changes, "i2p.streaming.maxRtt", "Max", _maxRttMax);
+        saveField(changes, "i2p.streaming.maxRtt", "Step", _maxRttStep);
+        saveField(changes, "i2p.streaming.initialResendDelay", "Min", _initialResendDelayMin);
+        saveField(changes, "i2p.streaming.initialResendDelay", "Max", _initialResendDelayMax);
+        saveField(changes, "i2p.streaming.initialResendDelay", "Step", _initialResendDelayStep);
+        saveField(changes, "i2p.streaming.immediateAckDelay", "Min", _immediateAckDelayMin);
+        saveField(changes, "i2p.streaming.immediateAckDelay", "Max", _immediateAckDelayMax);
+        saveField(changes, "i2p.streaming.immediateAckDelay", "Step", _immediateAckDelayStep);
 
         // NetDB
-        saveField(changes, "netdb.searchLimit", "Min", _netDBSearchLimitMin, 4);
-        saveField(changes, "netdb.searchLimit", "Max", _netDBSearchLimitMax, 64);
-        saveField(changes, "netdb.searchLimit", "Step", _netDBSearchLimitStep, 2);
-        saveField(changes, "netdb.maxConcurrent", "Min", _netDBMaxConcurrentMin, 1);
-        saveField(changes, "netdb.maxConcurrent", "Max", _netDBMaxConcurrentMax, 64);
-        saveField(changes, "netdb.maxConcurrent", "Step", _netDBMaxConcurrentStep, 1);
-        saveField(changes, "netdb.singleSearchTime", "Min", _netDBSingleSearchTimeMin, 1000);
-        saveField(changes, "netdb.singleSearchTime", "Max", _netDBSingleSearchTimeMax, 15000);
-        saveField(changes, "netdb.singleSearchTime", "Step", _netDBSingleSearchTimeStep, 500);
+        saveField(changes, "netdb.searchLimit", "Min", _netDBSearchLimitMin);
+        saveField(changes, "netdb.searchLimit", "Max", _netDBSearchLimitMax);
+        saveField(changes, "netdb.searchLimit", "Step", _netDBSearchLimitStep);
+        saveField(changes, "netdb.maxConcurrent", "Min", _netDBMaxConcurrentMin);
+        saveField(changes, "netdb.maxConcurrent", "Max", _netDBMaxConcurrentMax);
+        saveField(changes, "netdb.maxConcurrent", "Step", _netDBMaxConcurrentStep);
+        saveField(changes, "netdb.singleSearchTime", "Min", _netDBSingleSearchTimeMin);
+        saveField(changes, "netdb.singleSearchTime", "Max", _netDBSingleSearchTimeMax);
+        saveField(changes, "netdb.singleSearchTime", "Step", _netDBSingleSearchTimeStep);
 
         // Transport
-        saveField(changes, "i2np.udp.maxConcurrentEstablish", "Min", _maxConcurrentEstablishMin, 64);
-        saveField(changes, "i2np.udp.maxConcurrentEstablish", "Max", _maxConcurrentEstablishMax, 2048);
-        saveField(changes, "i2np.udp.maxConcurrentEstablish", "Step", _maxConcurrentEstablishStep, 32);
+        saveField(changes, "i2np.udp.maxConcurrentEstablish", "Min", _maxConcurrentEstablishMin);
+        saveField(changes, "i2np.udp.maxConcurrentEstablish", "Max", _maxConcurrentEstablishMax);
+        saveField(changes, "i2np.udp.maxConcurrentEstablish", "Step", _maxConcurrentEstablishStep);
 
         // Peer management
-        saveField(changes, "profileOrganizer.maxProfiles", "Min", _maxProfilesMin, 800);
-        saveField(changes, "profileOrganizer.maxProfiles", "Max", _maxProfilesMax, 8000);
-        saveField(changes, "profileOrganizer.maxProfiles", "Step", _maxProfilesStep, 200);
-        saveField(changes, "profileOrganizer.minFastPeers", "Min", _minFastPeersMin, 50);
-        saveField(changes, "profileOrganizer.minFastPeers", "Max", _minFastPeersMax, 2000);
-        saveField(changes, "profileOrganizer.minFastPeers", "Step", _minFastPeersStep, 50);
-        saveField(changes, "profileOrganizer.maxFastPeers", "Min", _maxFastPeersMin, 200);
-        saveField(changes, "profileOrganizer.maxFastPeers", "Max", _maxFastPeersMax, 3000);
-        saveField(changes, "profileOrganizer.maxFastPeers", "Step", _maxFastPeersStep, 50);
-        saveField(changes, "profileOrganizer.minHighCapacityPeers", "Min", _minHighCapPeersMin, 50);
-        saveField(changes, "profileOrganizer.minHighCapacityPeers", "Max", _minHighCapPeersMax, 2000);
-        saveField(changes, "profileOrganizer.minHighCapacityPeers", "Step", _minHighCapPeersStep, 50);
-        saveField(changes, "profileOrganizer.maxHighCapacityPeers", "Min", _maxHighCapPeersMin, 200);
-        saveField(changes, "profileOrganizer.maxHighCapacityPeers", "Max", _maxHighCapPeersMax, 4000);
-        saveField(changes, "profileOrganizer.maxHighCapacityPeers", "Step", _maxHighCapPeersStep, 50);
+        saveField(changes, "profileOrganizer.maxProfiles", "Min", _maxProfilesMin);
+        saveField(changes, "profileOrganizer.maxProfiles", "Max", _maxProfilesMax);
+        saveField(changes, "profileOrganizer.maxProfiles", "Step", _maxProfilesStep);
+        saveField(changes, "profileOrganizer.minFastPeers", "Min", _minFastPeersMin);
+        saveField(changes, "profileOrganizer.minFastPeers", "Max", _minFastPeersMax);
+        saveField(changes, "profileOrganizer.minFastPeers", "Step", _minFastPeersStep);
+        saveField(changes, "profileOrganizer.maxFastPeers", "Min", _maxFastPeersMin);
+        saveField(changes, "profileOrganizer.maxFastPeers", "Max", _maxFastPeersMax);
+        saveField(changes, "profileOrganizer.maxFastPeers", "Step", _maxFastPeersStep);
+        saveField(changes, "profileOrganizer.minHighCapacityPeers", "Min", _minHighCapPeersMin);
+        saveField(changes, "profileOrganizer.minHighCapacityPeers", "Max", _minHighCapPeersMax);
+        saveField(changes, "profileOrganizer.minHighCapacityPeers", "Step", _minHighCapPeersStep);
+        saveField(changes, "profileOrganizer.maxHighCapacityPeers", "Min", _maxHighCapPeersMin);
+        saveField(changes, "profileOrganizer.maxHighCapacityPeers", "Max", _maxHighCapPeersMax);
+        saveField(changes, "profileOrganizer.maxHighCapacityPeers", "Step", _maxHighCapPeersStep);
 
         // Build timeouts
-        saveField(changes, "i2p.tunnel.build.requestTimeout", "Min", _buildRequestTimeoutMin, 3000);
-        saveField(changes, "i2p.tunnel.build.requestTimeout", "Max", _buildRequestTimeoutMax, 30000);
-        saveField(changes, "i2p.tunnel.build.requestTimeout", "Step", _buildRequestTimeoutStep, 1000);
-        saveField(changes, "i2p.tunnel.build.firstHopTimeout", "Min", _buildFirstHopTimeoutMin, 2000);
-        saveField(changes, "i2p.tunnel.build.firstHopTimeout", "Max", _buildFirstHopTimeoutMax, 20000);
-        saveField(changes, "i2p.tunnel.build.firstHopTimeout", "Step", _buildFirstHopTimeoutStep, 1000);
+        saveField(changes, "i2p.tunnel.build.requestTimeout", "Min", _buildRequestTimeoutMin);
+        saveField(changes, "i2p.tunnel.build.requestTimeout", "Max", _buildRequestTimeoutMax);
+        saveField(changes, "i2p.tunnel.build.requestTimeout", "Step", _buildRequestTimeoutStep);
+        saveField(changes, "i2p.tunnel.build.firstHopTimeout", "Min", _buildFirstHopTimeoutMin);
+        saveField(changes, "i2p.tunnel.build.firstHopTimeout", "Max", _buildFirstHopTimeoutMax);
+        saveField(changes, "i2p.tunnel.build.firstHopTimeout", "Step", _buildFirstHopTimeoutStep);
 
         // Factory defaults (persisted for auto-revert baseline)
-        saveField(changes, "ACK_FREQUENCY", "Default", _ackFrequencyDefault, 30);
-        saveField(changes, "DATA_MESSAGE_TIMEOUT", "Default", _dataMessageTimeoutDefault, 5000);
-        saveField(changes, "MAX_OB_ESTABLISH_TIME", "Default", _obEstablishTimeDefault, 2000);
-        saveField(changes, "MAX_IB_ESTABLISH_TIME", "Default", _ibEstablishTimeDefault, 5000);
-        saveField(changes, "REQUEUE_TIME", "Default", _requeueTimeDefault, 30);
-        saveField(changes, "REPLENISH_FREQUENCY", "Default", _replenishFrequencyDefault, 30);
-        saveField(changes, "SELECTOR_LOOP_DELAY", "Default", _selectorLoopDelayDefault, 5);
-        saveField(changes, "MAX_OB_MSGS_PER_PUMP", "Default", _obMsgsPerPumpDefault, 256);
-        saveField(changes, "MAX_IB_MSGS_PER_PUMP", "Default", _ibMsgsPerPumpDefault, 128);
-        saveField(changes, "INITIAL_WINDOW_SIZE", "Default", _initialWindowSizeDefault, 16);
-        saveField(changes, "INITIAL_RTO", "Default", _initialRTODefault, 6000);
-        saveField(changes, "INITIAL_ACK_DELAY", "Default", _initialAckDelayDefault, 40);
-        saveField(changes, "PASSIVE_FLUSH_DELAY", "Default", _passiveFlushDelayDefault, 100);
-        saveField(changes, "CLIENT_WRITER_QUEUE_SIZE", "Default", _writerQueueSizeDefault, 256);
-        saveField(changes, "CODEL_TARGET", "Default", _codelTargetDefault, 5);
-        saveField(changes, "CODEL_INTERVAL", "Default", _codelIntervalDefault, 100);
-        saveField(changes, "WESTWOOD_DECAY_FACTOR", "Default", _westwoodDecayFactorDefault, 8);
-        saveField(changes, "i2p.streaming.maxSlowStartWindow", "Default", _maxSlowStartWindowDefault, 32);
-        saveField(changes, "crypto.x25519.precalcMin", "Default", _xdhPreCalcMinDefault, 20);
-        saveField(changes, "ntcp.sendFinisher.maxThreads", "Default", _ntcpThreadsDefault, 2);
-        saveField(changes, "ntcp.sendFinisher.queueCapacity", "Default", _ntcpQueueCapacityDefault, 4096);
-        saveField(changes, "udp.packetHandler.maxThreads", "Default", _udpHandlerThreadsDefault, 4);
-        saveField(changes, "router.peerOutboundQueueSize", "Default", _peerOutboundQueueDefault, 150);
-        saveField(changes, "router.transitThrottleFactor", "Default", _transitThrottleFactorDefault, 50);
-        saveField(changes, "router.throttleRejectExponent", "Default", _throttleRejectExponentDefault, 10);
-        saveField(changes, "router.maxParticipatingTunnels", "Default", _maxParticipatingTunnelsDefault, 5000);
-        saveField(changes, "router.buildHandlerMaxQueue", "Default", _buildHandlerMaxQueueDefault, 600);
-        saveField(changes, "i2p.tunnel.goodDeficitThrottle", "Default", _goodDeficitThrottleDefault, 30000);
-        saveField(changes, "router.tunnel.perTunnelBweDivisor", "Default", _perTunnelBweDivisorDefault, 100);
-        saveField(changes, "router.tunnelGrowthFactor", "Default", _tunnelGrowthFactorDefault, 30);
-        saveField(changes, "i2ptunnel.serverHandler.threads", "Default", _threadsDefault, 24);
-        saveField(changes, "i2p.streaming.maxRTO", "Default", _maxRTODefault, 30000);
-        saveField(changes, "i2p.streaming.maxResendDelay", "Default", _maxResendDelayDefault, 15000);
-        saveField(changes, "i2p.streaming.maxRetransmissions", "Default", _maxRetransmissionsDefault, 64);
-        saveField(changes, "netdb.searchLimit", "Default", _netDBSearchLimitDefault, 24);
-        saveField(changes, "netdb.maxConcurrent", "Default", _netDBMaxConcurrentDefault, 8);
-        saveField(changes, "netdb.singleSearchTime", "Default", _netDBSingleSearchTimeDefault, 8000);
-        saveField(changes, "i2np.udp.maxConcurrentEstablish", "Default", _maxConcurrentEstablishDefault, 512);
-        saveField(changes, "profileOrganizer.maxProfiles", "Default", _maxProfilesDefault, 4000);
-        saveField(changes, "profileOrganizer.minFastPeers", "Default", _minFastPeersDefault, 400);
-        saveField(changes, "profileOrganizer.maxFastPeers", "Default", _maxFastPeersDefault, 600);
-        saveField(changes, "profileOrganizer.minHighCapacityPeers", "Default", _minHighCapPeersDefault, 500);
-        saveField(changes, "profileOrganizer.maxHighCapacityPeers", "Default", _maxHighCapPeersDefault, 800);
-        saveField(changes, "i2p.tunnel.build.requestTimeout", "Default", _buildRequestTimeoutDefault, 10000);
-        saveField(changes, "i2p.tunnel.build.firstHopTimeout", "Default", _buildFirstHopTimeoutDefault, 10000);
-        saveField(changes, "i2p.streaming.minResendDelay", "Default", _minResendDelayDefault, 2000);
-        saveField(changes, "i2p.streaming.congestionAvoidanceGrowthRateFactor", "Default", _congestionAvoidanceGrowthDefault, 10);
-        saveField(changes, "i2p.streaming.slowStartGrowthRateFactor", "Default", _slowStartGrowthDefault, 10);
-        saveField(changes, "i2p.streaming.maxRtt", "Default", _maxRttDefault, 60000);
-        saveField(changes, "i2p.streaming.initialResendDelay", "Default", _initialResendDelayDefault, 1000);
-        saveField(changes, "i2p.streaming.immediateAckDelay", "Default", _immediateAckDelayDefault, 80);
-        saveField(changes, "crypto.edh.precalcMin", "Default", _edhPrecalcMinDefault, 8);
-        saveField(changes, "crypto.mlkem.precalcMin", "Default", _mlkemPrecalcMinDefault, 8);
+        saveField(changes, "ACK_FREQUENCY", "Default", _ackFrequencyDefault);
+        saveField(changes, "DATA_MESSAGE_TIMEOUT", "Default", _dataMessageTimeoutDefault);
+        saveField(changes, "MAX_OB_ESTABLISH_TIME", "Default", _obEstablishTimeDefault);
+        saveField(changes, "MAX_IB_ESTABLISH_TIME", "Default", _ibEstablishTimeDefault);
+        saveField(changes, "REQUEUE_TIME", "Default", _requeueTimeDefault);
+        saveField(changes, "REPLENISH_FREQUENCY", "Default", _replenishFrequencyDefault);
+        saveField(changes, "SELECTOR_LOOP_DELAY", "Default", _selectorLoopDelayDefault);
+        saveField(changes, "MAX_OB_MSGS_PER_PUMP", "Default", _obMsgsPerPumpDefault);
+        saveField(changes, "MAX_IB_MSGS_PER_PUMP", "Default", _ibMsgsPerPumpDefault);
+        saveField(changes, "INITIAL_WINDOW_SIZE", "Default", _initialWindowSizeDefault);
+        saveField(changes, "INITIAL_RTO", "Default", _initialRTODefault);
+        saveField(changes, "INITIAL_ACK_DELAY", "Default", _initialAckDelayDefault);
+        saveField(changes, "PASSIVE_FLUSH_DELAY", "Default", _passiveFlushDelayDefault);
+        saveField(changes, "CLIENT_WRITER_QUEUE_SIZE", "Default", _writerQueueSizeDefault);
+        saveField(changes, "CODEL_TARGET", "Default", _codelTargetDefault);
+        saveField(changes, "CODEL_INTERVAL", "Default", _codelIntervalDefault);
+        saveField(changes, "WESTWOOD_DECAY_FACTOR", "Default", _westwoodDecayFactorDefault);
+        saveField(changes, "i2p.streaming.maxSlowStartWindow", "Default", _maxSlowStartWindowDefault);
+        saveField(changes, "crypto.x25519.precalcMin", "Default", _xdhPreCalcMinDefault);
+        saveField(changes, "ntcp.sendFinisher.maxThreads", "Default", _ntcpThreadsDefault);
+        saveField(changes, "ntcp.sendFinisher.queueCapacity", "Default", _ntcpQueueCapacityDefault);
+        saveField(changes, "udp.packetHandler.maxThreads", "Default", _udpHandlerThreadsDefault);
+        saveField(changes, "router.peerOutboundQueueSize", "Default", _peerOutboundQueueDefault);
+        saveField(changes, "router.transitThrottleFactor", "Default", _transitThrottleFactorDefault);
+        saveField(changes, "router.throttleRejectExponent", "Default", _throttleRejectExponentDefault);
+        saveField(changes, "router.maxParticipatingTunnels", "Default", _maxParticipatingTunnelsDefault);
+        saveField(changes, "router.buildHandlerMaxQueue", "Default", _buildHandlerMaxQueueDefault);
+        saveField(changes, "i2p.tunnel.goodDeficitThrottle", "Default", _goodDeficitThrottleDefault);
+        saveField(changes, "router.tunnel.perTunnelBweDivisor", "Default", _perTunnelBweDivisorDefault);
+        saveField(changes, "router.tunnelGrowthFactor", "Default", _tunnelGrowthFactorDefault);
+        saveField(changes, "i2ptunnel.serverHandler.threads", "Default", _threadsDefault);
+        saveField(changes, "i2p.streaming.maxRTO", "Default", _maxRTODefault);
+        saveField(changes, "i2p.streaming.maxResendDelay", "Default", _maxResendDelayDefault);
+        saveField(changes, "i2p.streaming.maxRetransmissions", "Default", _maxRetransmissionsDefault);
+        saveField(changes, "netdb.searchLimit", "Default", _netDBSearchLimitDefault);
+        saveField(changes, "netdb.maxConcurrent", "Default", _netDBMaxConcurrentDefault);
+        saveField(changes, "netdb.singleSearchTime", "Default", _netDBSingleSearchTimeDefault);
+        saveField(changes, "i2np.udp.maxConcurrentEstablish", "Default", _maxConcurrentEstablishDefault);
+        saveField(changes, "profileOrganizer.maxProfiles", "Default", _maxProfilesDefault);
+        saveField(changes, "profileOrganizer.minFastPeers", "Default", _minFastPeersDefault);
+        saveField(changes, "profileOrganizer.maxFastPeers", "Default", _maxFastPeersDefault);
+        saveField(changes, "profileOrganizer.minHighCapacityPeers", "Default", _minHighCapPeersDefault);
+        saveField(changes, "profileOrganizer.maxHighCapacityPeers", "Default", _maxHighCapPeersDefault);
+        saveField(changes, "i2p.tunnel.build.requestTimeout", "Default", _buildRequestTimeoutDefault);
+        saveField(changes, "i2p.tunnel.build.firstHopTimeout", "Default", _buildFirstHopTimeoutDefault);
+        saveField(changes, "i2p.streaming.minResendDelay", "Default", _minResendDelayDefault);
+        saveField(changes, "i2p.streaming.congestionAvoidanceGrowthRateFactor", "Default", _congestionAvoidanceGrowthDefault);
+        saveField(changes, "i2p.streaming.slowStartGrowthRateFactor", "Default", _slowStartGrowthDefault);
+        saveField(changes, "i2p.streaming.maxRtt", "Default", _maxRttDefault);
+        saveField(changes, "i2p.streaming.initialResendDelay", "Default", _initialResendDelayDefault);
+        saveField(changes, "i2p.streaming.immediateAckDelay", "Default", _immediateAckDelayDefault);
+        saveField(changes, "crypto.edh.precalcMin", "Default", _edhPrecalcMinDefault);
+        saveField(changes, "crypto.mlkem.precalcMin", "Default", _mlkemPrecalcMinDefault);
 
         // Process auto-tuning overrides (checkbox toggle)
         Tuner tuner = getTuner();
@@ -816,7 +813,7 @@ public class TuningFormHandler extends FormHandler {
      * Validates that the value is a valid integer.
      */
     private void saveField(Map<String, String> changes, String param, String field,
-                           String value, int defaultVal) {
+                           String value) {
         if (value == null || value.isEmpty())
             return;
         int parsed;
@@ -955,9 +952,6 @@ public class TuningFormHandler extends FormHandler {
     private String _maxConcurrentEstablishOverride;
     private String _maxProfilesOverride;
     private String _minFastPeersOverride;
-    private String _maxFastPeersOverride;
-    private String _minHighCapPeersOverride;
-    private String _maxHighCapPeersOverride;
     private String _buildRequestTimeoutOverride;
     private String _buildFirstHopTimeoutOverride;
     private String _edhPrecalcMinOverride;

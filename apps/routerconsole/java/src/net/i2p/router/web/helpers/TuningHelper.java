@@ -326,7 +326,7 @@ public class TuningHelper extends HelperBase {
 
             for (ParamSnapshot s : params) {
                 String prefix = toFormPrefix(s.name);
-                String sparkSvg = renderSparkline(s.valueHistory, s.defaultValue, s.currentValue);
+                String sparkSvg = renderSparkline(s.valueHistory, s.defaultValue);
 
                 buf.append("<tr data-prefix=\"").append(prefix).append("\" data-current=\"").append(s.currentValue).append("\">")
                    .append("<td class=parameter title=\"").append(esc(s.name)).append("\">").append(esc(getDisplayName(s.name)));
@@ -413,7 +413,7 @@ public class TuningHelper extends HelperBase {
      * Green bars above = value above default (tuned up).
      * Red bars below = value below default (tuned down).
      */
-    private static String renderSparkline(int[] values, int defaultValue, int current) {
+    private static String renderSparkline(int[] values, int defaultValue) {
         int n = values.length;
         if (n < 2) return "<span class=spark>collecting...</span>";
 

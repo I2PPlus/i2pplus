@@ -43,7 +43,6 @@ public class CertHelper extends HelperBase {
 
             // i2ptunnel clients
             File tunnelDir = new File(_context.getConfigDir(), I2PTUNNEL_DIR);
-            boolean hasTunnels = false;
             File[] tunnels = tunnelDir.listFiles(new FileSuffixFilter("i2ptunnel-", ".local.crt"));
             if (tunnels != null) {
                 for (int i = 0; i < tunnels.length; i++) {
@@ -52,26 +51,22 @@ public class CertHelper extends HelperBase {
                     String b32 = name.substring(10, name.length() - 10);
                     output(_t("I2PTunnel") + ": <span class=unbold>" + b32.substring(0,6) + "&hellip;</span><span style=float:right>" +
                            _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "i2ptunnel" + slash + "</span></span>", f);
-                    hasTunnels = true;
                 }
             }
 
             // SAM
             tunnelDir = new File(dir, SAM_DIR);
-            hasTunnels = false;
             tunnels = tunnelDir.listFiles(new FileSuffixFilter("sam-", ".local.crt"));
             if (tunnels != null) {
                 for (int i = 0; i < tunnels.length; i++) {
                     File f = tunnels[i];
                     output(_t("SAM") + "<span style=float:right>" +
                            _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "sam" + slash + "</span></span>", f);
-                    hasTunnels = true;
                 }
             }
 
             // Eepsite
             tunnelDir = new File(dir, EEPSITE_DIR);
-            hasTunnels = false;
             tunnels = tunnelDir.listFiles(new FileSuffixFilter(".crt"));
             if (tunnels != null) {
                 for (int i = 0; i < tunnels.length; i++) {
@@ -79,7 +74,6 @@ public class CertHelper extends HelperBase {
                     String name = f.getName();
                     output(_t("Website") + ": <span class=unbold>" + name.substring(0, name.length() - 4) + "</span><span style=float:right>" +
                            _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "eepsite" + slash + "</span></span>", f);
-                    hasTunnels = true;
                 }
             }
 

@@ -41,7 +41,6 @@ public class GraphHelper extends FormHandler {
     private static final boolean DEFAULT_HIDE_LEGEND = false;
     private static final int MIN_X = 160;
     private static final int MIN_Y = 40;
-    //private static final int MIN_C = 20;
     private static final int MIN_C = 5; // minimum period (minutes)
     private static final int MAX_C = GraphListener.MAX_ROWS;
     private static final int MIN_REFRESH = 5;
@@ -255,7 +254,6 @@ public class GraphHelper extends FormHandler {
         if (ss == null) return "";
 
         StringBuilder buf = new StringBuilder(2 * 1024);
-        boolean hideLegend = false; // default false no longer read from context here for simplicity,
                                     // but could cache from context here if desired
 
         if (_stat == null) {

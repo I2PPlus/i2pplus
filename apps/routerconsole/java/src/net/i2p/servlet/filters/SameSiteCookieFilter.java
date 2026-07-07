@@ -20,7 +20,7 @@ public class SameSiteCookieFilter implements Filter {
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(SameSiteCookieFilter.class);
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {}
+    public void init(FilterConfig filterConfig) throws ServletException { /* nop */ }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
@@ -60,5 +60,5 @@ public class SameSiteCookieFilter implements Filter {
     }
 
     @Override
-    public void destroy() {}
+    public void destroy() { /* nop */ }
 }

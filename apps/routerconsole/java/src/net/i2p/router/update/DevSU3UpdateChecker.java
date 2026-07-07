@@ -52,7 +52,6 @@ class DevSU3UpdateChecker extends UpdateRunner {
             _mgr.notifyCheckComplete(this, false, false);
             return;
         }
-        //updateStatus("<b>" + _t("Checking for development build update") + "</b>");
         _baos.reset();
         try {
             _get = new PartialEepGet(_context, proxyHost, proxyPort, _baos, _currentURI.toString(), TrustedUpdate.HEADER_BYTES);
@@ -84,7 +83,6 @@ class DevSU3UpdateChecker extends UpdateRunner {
                 _mgr.notifyVersionConstraint(this, _currentURI, UpdateType.ROUTER_DEV_SU3, "", newVersion, msg);
             }
         } else {
-            //updateStatus("<b>" + _t("No new version found at {0}", linkify(url)) + "</b>");
             if (_log.shouldWarn())
                 _log.warn("Found old version \"" + newVersion + "\" at " + url);
         }

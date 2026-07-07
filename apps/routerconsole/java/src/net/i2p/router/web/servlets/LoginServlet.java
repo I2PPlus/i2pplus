@@ -1,8 +1,5 @@
 package net.i2p.router.web.servlets;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.security.SecureRandom;
@@ -42,8 +39,6 @@ public class LoginServlet extends HttpServlet {
     private static final String REALM = "i2prouter";
     private static final String DEFAULT_THEME = "dark";
     private static final String PROP_PERSISTED_SESSIONS = "routerconsole.persistedSessions";
-    private static final String PROP_THEME = "routerconsole.theme";
-    private static final String PROP_LANG = "routerconsole.lang";
     private static final SecureRandom CSRF_RANDOM = new SecureRandom();
 
     @Override
@@ -470,7 +465,6 @@ public class LoginServlet extends HttpServlet {
         for (String entry : persisted.split("\\|")) {
             int eq = entry.indexOf('=');
             if (eq <= 0) continue;
-            String token = entry.substring(0, eq);
             String data = entry.substring(eq + 1);
 
             int colon = data.indexOf(':');

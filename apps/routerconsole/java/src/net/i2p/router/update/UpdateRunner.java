@@ -286,9 +286,9 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
         // update() will call notifyTaskFailed() after last URL
     }
 
-    public void headerReceived(String url, int attemptNum, String key, String val) {}
+    public void headerReceived(String url, int attemptNum, String key, String val) { /* nop */ }
 
-    public void attempting(String url) {}
+    public void attempting(String url) { /* nop */ }
 
     protected void updateStatus(String s) {_mgr.notifyProgress(this, s);}
 

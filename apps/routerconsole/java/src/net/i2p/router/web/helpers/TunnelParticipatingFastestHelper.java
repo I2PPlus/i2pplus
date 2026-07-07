@@ -10,7 +10,7 @@ import java.io.StringWriter;
  * @since 0.9.33
  */
 public class TunnelParticipatingFastestHelper extends HelperBase {
-    public TunnelParticipatingFastestHelper() {}
+    public TunnelParticipatingFastestHelper() { /* nop */ }
 
     public String getTunnelParticipatingFastest() {
         TunnelRenderer renderer = new TunnelRenderer(_context);

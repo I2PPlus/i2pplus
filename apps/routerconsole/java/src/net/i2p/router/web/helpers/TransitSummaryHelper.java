@@ -9,7 +9,7 @@ import net.i2p.router.web.HelperBase;
  * @since 0.9.33
  */
 public class TransitSummaryHelper extends HelperBase {
-    public TransitSummaryHelper() {}
+    public TransitSummaryHelper() { /* nop */ }
 
     public String getTransitSummary() {
         TunnelRenderer renderer = new TunnelRenderer(_context);

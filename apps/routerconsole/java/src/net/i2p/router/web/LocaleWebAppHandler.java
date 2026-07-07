@@ -77,7 +77,6 @@ public class LocaleWebAppHandler extends HandlerWrapper
 
         //System.err.println("Path: " + pathInContext);
         String newPath = pathInContext;
-        //if (pathInContext.endsWith(".jsp")) {
         // We only ended up doing this for help.jsp, so save some effort
         // unless we translate more pages like this
         if (pathInContext.equals("/help.jsp")) {

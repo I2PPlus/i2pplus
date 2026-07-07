@@ -49,7 +49,6 @@ class PluginUpdateRunner extends UpdateRunner {
 
     private String _appName;
     private final String _appDisplayName;
-    private final String _oldVersion;
     private final URI _uri;
     private final String _xpi2pURL;
     private boolean _updated;
@@ -84,7 +83,6 @@ class PluginUpdateRunner extends UpdateRunner {
             }
         } catch (NumberFormatException nfe) { /* ignored */ }
         _appDisplayName = appDisplayName;
-        _oldVersion = oldVersion;
     }
 
     @Override
@@ -241,7 +239,6 @@ class PluginUpdateRunner extends UpdateRunner {
         if (pubkey == null || signer == null || pubkey.length() != 172 || signer.length() <= 0) {
             f.delete();
             to.delete();
-            // updateStatus("<b>" + "Plugin contains an invalid key" + ' ' + pubkey + ' ' + signer + "</b>");
             statusDone("<b>" + _t("Plugin from {0} contains an invalid key", url) + "</b>");
             return;
         }
