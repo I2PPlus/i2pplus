@@ -58,7 +58,6 @@ public class I2PDefaultServlet extends DefaultServlet {
     private Resource _stylesheet;
     private static final String FORMAT = "dd MMM yyyy HH:mm";
     private static final String LAST_MODIFIED_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
-    private boolean setLastModifiedHeader = true;
 
     /**
      * Overridden to save local copies of dirAllowed, locale, resourceBase, and stylesheet.
@@ -88,11 +87,6 @@ public class I2PDefaultServlet extends DefaultServlet {
         }
         catch(Exception e) { /* ignored */ }
 
-        // Read the configuration parameter from webdefault.xml and set the flag
-        String setLastModifiedHeaderParam = getInitParameter("setLastModifiedHeader");
-        if (setLastModifiedHeaderParam != null && setLastModifiedHeaderParam.equalsIgnoreCase("false")) {
-            setLastModifiedHeader = false;
-        }
     }
 
     /**

@@ -38,7 +38,9 @@ public class WebAppProviderConfiguration {
      */
     public static class WAPConfiguration implements Configuration {
 
-        public void deconfigure(WebAppContext context) {}
+        public void deconfigure(WebAppContext context) {
+            // no-op
+        }
 
         public void configure(WebAppContext context) throws Exception {
             // http://stackoverflow.com/questions/17529936/issues-while-using-jetty-embedded-to-handle-jsp-jasperexception-unable-to-com
@@ -46,12 +48,20 @@ public class WebAppProviderConfiguration {
             context.getServletContext().setAttribute("org.apache.tomcat.InstanceManager", new SimpleInstanceManager());
         }
 
-        public void cloneConfigure(WebAppContext template, WebAppContext context) {}
+        public void cloneConfigure(WebAppContext template, WebAppContext context) {
+            // no-op
+        }
 
-        public void destroy(WebAppContext context) {}
+        public void destroy(WebAppContext context) {
+            // no-op
+        }
 
-        public void preConfigure(WebAppContext context) {}
+        public void preConfigure(WebAppContext context) {
+            // no-op
+        }
 
-        public void postConfigure(WebAppContext context) {}
+        public void postConfigure(WebAppContext context) {
+            // no-op
+        }
     }
 }

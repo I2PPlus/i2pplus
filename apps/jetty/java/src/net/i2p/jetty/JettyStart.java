@@ -44,7 +44,8 @@ public class JettyStart implements ClientApp {
     // warning, may be null if called from main
     private final I2PAppContext _context;
     private volatile ClientAppState _state;
-    private volatile int _port, _sslPort;
+    private volatile int _port;
+    private volatile int _sslPort;
     private static final String GZIP_DIR = "eepsite-jetty9.3";
     private static final String GZIP_CONFIG = "jetty-gzip.xml";
     private static final String MIN_GZIP_HANDLER_VER = "9.3";
@@ -219,9 +220,7 @@ public class JettyStart implements ClientApp {
                                                 host = "::1";
                                             // at some point this changed from "SSL-http/1.1" to "SSL" and "HTTP/1.1" ?
                                             boolean isSSL = false;
-                                            //System.out.println("Found connector: " + nconn);
                                             for (ConnectionFactory fact : nconn.getConnectionFactories()) {
-                                                //System.out.println("  Factory: " + fact + " protocol: " + fact.getProtocol());
                                                 if (fact.getProtocol().startsWith("SSL")) {
                                                     isSSL = true;
                                                     break;

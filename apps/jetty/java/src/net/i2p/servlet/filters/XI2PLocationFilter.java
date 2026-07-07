@@ -32,7 +32,6 @@ public class XI2PLocationFilter extends HandlerWrapper {
     private String X_I2P_Location = null;
     private long lastFailure = -1;
     private static final long failTimeout = 600000;
-    private static final String encodeUTF = StandardCharsets.UTF_8.toString();
     private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(XI2PLocationFilter.class);
 
 
@@ -88,10 +87,8 @@ public class XI2PLocationFilter extends HandlerWrapper {
                     boolean hostmatch = (host.equals(targetHost) || "0.0.0.0".equals(targetHost) || "::".equals(targetHost));
                     if ( hostmatch && port.equals(tunnelProps.getProperty("targetPort")) ) {
                         String sh = tunnelProps.getProperty("spoofedHost");
-                        if (sh != null) {
-                            if (sh.endsWith(".i2p"))
-                                return sh;
-                        }
+                        if (sh != null && sh.endsWith(".i2p"))
+                            return sh;
                         String kf = tunnelProps.getProperty("privKeyFile");
                         if (kf != null) {
                             File keyFile = new File(kf);

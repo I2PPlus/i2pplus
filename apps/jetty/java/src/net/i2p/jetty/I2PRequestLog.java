@@ -178,8 +178,6 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
                 buf.append(" [");
                 if (_logDateCache!=null) {buf.append(_logDateCache.format(request.getTimeStamp()));}
                 else {
-                    //buf.append(request.getTimeStampBuffer().toString());
-                    // TODO SimpleDateFormat or something
                     buf.append(request.getTimeStamp());
                 }
 
@@ -250,7 +248,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
                     _buffers.add(u8buf);
 
                     // TODO do outside synchronized scope
-                    if (_extended) {logExtended(request, response, _writer);}
+                    if (_extended) {logExtended(request, _writer);}
 
                     // TODO do outside synchronized scope
                     if (_logCookies) {
@@ -283,7 +281,6 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     }
 
     protected void logExtended(Request request,
-                               Response response,
                                java.io.Writer writer) throws IOException {
         String referer = request.getHeader("Referer");
         if (referer == null) {writer.write("\"-\" ");}

@@ -9,8 +9,6 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-//import org.owasp.esapi.ESAPI;
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
@@ -113,10 +111,6 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
 
     private static String stripXSS(String value, Pattern whitelistPattern) {
         if (value != null) {
-            // NOTE: It's highly recommended to use the ESAPI library and uncomment the following line to
-            // avoid encoded attacks.
-            //value = ESAPI.encoder().canonicalize(value);
-
             // Remove bad parameters entirely.
             // NOTE: This doesn't consider whether null is acceptable.
             if (!whitelistPattern.matcher(value).matches()) {
