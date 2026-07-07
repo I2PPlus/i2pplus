@@ -132,7 +132,6 @@ public class SOCKS5Client {
             // is this right or should we not try to do 5-to-4 conversion?
             int hisVersion = in.readByte();
             if (hisVersion != SOCKS_VERSION_5 /* && addrtype == AddressType.DOMAINNAME */) throw new SOCKSException("SOCKS proxy is not Version 5");
-            // else if (hisVersion != 4)
             //    throw new SOCKSException("Unsupported SOCKS Proxy Version");
 
             int method = in.readByte();

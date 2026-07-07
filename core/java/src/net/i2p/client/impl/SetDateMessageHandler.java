@@ -30,7 +30,6 @@ class SetDateMessageHandler extends HandlerImpl {
             _log.debug("Handling " + message);
         }
         SetDateMessage msg = (SetDateMessage) message;
-        // Only do this if we are NOT in the router context;
         // otherwise, it sets getUpdatedSuccessfully() in Clock when all
         // we did was get the time from ourselves.
         if (!_context.isRouterContext()) Clock.getInstance().setNow(msg.getDate().getTime());

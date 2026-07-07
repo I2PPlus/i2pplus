@@ -144,12 +144,10 @@ class FileLogWriter extends LogWriter {
                 boolean ok = sd.mkdirs();
                 if (!ok) {
                     System.err.println("Unable to create the parent directory: " + parent.getAbsolutePath());
-                    // System.exit(0);
                 }
             }
             if (!parent.isDirectory()) {
                 System.err.println("Cannot put the logs in a subdirectory of a plain file: " + f.getAbsolutePath());
-                // System.exit(0);
             }
         }
         closeWriter(old, true);
@@ -221,7 +219,8 @@ class FileLogWriter extends LogWriter {
                 oldest = f;
             } else {
                 // set file or file.gz for last mod check
-                File ff, oo;
+File ff;
+    File oo;
                 if (!_manager.shouldGzip() || f.exists()) ff = f;
                 else ff = new File(f.getPath() + ".gz");
                 if (!_manager.shouldGzip() || oldest.exists()) oo = oldest;

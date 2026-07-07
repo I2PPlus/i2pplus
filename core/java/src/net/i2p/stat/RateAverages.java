@@ -27,7 +27,10 @@ public class RateAverages {
         return TEMP.get();
     }
 
-    private double average, current, last, totalValues;
+    private double average;
+    private double current;
+    private double last;
+    private double totalValues;
     private long totalEventCount;
 
     void reset() {

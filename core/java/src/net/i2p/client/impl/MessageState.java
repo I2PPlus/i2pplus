@@ -77,10 +77,9 @@ class MessageState {
             newState = _state;
             this.notifyAll();
         }
-        if (_listener != null) {
-            // only notify on changing state, and only if we haven't expired
-            if (oldState != newState && _expires > _context.clock().now()) _listener.messageStatus(_session, _nonce, status);
-        }
+        // only notify on changing state, and only if we haven't expired
+        if (_listener != null && oldState != newState && _expires > _context.clock().now())
+            _listener.messageStatus(_session, _nonce, status);
     }
 
     public void setMessageId(MessageId id) {

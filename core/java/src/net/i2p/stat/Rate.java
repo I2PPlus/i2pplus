@@ -476,7 +476,7 @@ public class Rate {
      *  Stores the rate data to a string builder.
      *  Includes comment lines
      */
-    public synchronized void store(String prefix, StringBuilder buf) throws IOException {
+    public synchronized void store(String prefix, StringBuilder buf) {
         store(prefix, buf, true);
     }
 
@@ -486,7 +486,7 @@ public class Rate {
      * @param addComments add comment lines to the output
      * @since 0.9.41
      */
-    public synchronized void store(String prefix, StringBuilder buf, boolean addComments) throws IOException {
+    public synchronized void store(String prefix, StringBuilder buf, boolean addComments) {
         PersistenceHelper.add(buf, addComments, prefix, ".period", "Period for this rate:", _period);
         PersistenceHelper.addDate(buf, addComments, prefix, ".creationDate", "Rate creation time:", _creationDate);
         PersistenceHelper.addDate(buf, addComments, prefix, ".lastCoalesceDate", "Last time rate was coalesced:", _lastCoalesceDate);
