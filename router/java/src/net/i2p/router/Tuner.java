@@ -4597,20 +4597,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, network latency proxy)
-            // Cross-refs: netDb.lookupsMatched (match rate), jobLag (CPU)
+            // Cross-refs: netDb.lookupsMatched (match rate), netDb.successTime (actual lookup time), jobLag (CPU)
             double matchRate = getAdditionalStat(_context, "netDb.lookupsMatched");
+            double netdbTime = getAdditionalStat(_context, "netDb.successTime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
-            boolean networkSlow = observed > 300;
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
             boolean lowMatch = !Double.isNaN(matchRate) && matchRate < 0.5;
 
-            // Slow network + low match = increase timeout (peers need more time)
-            if (networkSlow && lowMatch && !systemBusy)
+            // netDb.successTime gives actual lookup latency — replace crude observed > 300 proxy
+            boolean searchSlow = !Double.isNaN(netdbTime) && netdbTime > 300;
+
+            // Slow lookups + low match = increase timeout (peers need more time)
+            if (searchSlow && lowMatch && !systemBusy)
                 return Math.min(_max, current + _step);
 
-            // Fast network + high match = decrease timeout (searches complete quickly)
-            if (!networkSlow && !Double.isNaN(matchRate) && matchRate > 0.9)
+            // Fast lookups + high match = decrease timeout (searches complete quickly)
+            if (!searchSlow && !Double.isNaN(matchRate) && matchRate > 0.9)
                 return Math.max(_min, current - _step);
 
             return current;
@@ -6497,11 +6500,21 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double accept = getAdditionalStat(_context, "tunnel.throttleParticipatingAccept");
+            double reject = getAdditionalStat(_context, "tunnel.throttleParticipatingReject");
+            double drop = getAdditionalStat(_context, "tunnel.throttleParticipatingDrop");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
             boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
-            if (hasCapacity) return Math.min(_max, current + _step);
-            if (stressed) return Math.max(_min, current - _step);
+            // Throttle accept ratio: high = spare capacity, low = aggressive throttle
+            double totalThrottle = (!Double.isNaN(accept) && !Double.isNaN(reject) && !Double.isNaN(drop))
+                ? accept + reject + drop : Double.NaN;
+            double acceptRatio = !Double.isNaN(totalThrottle) && totalThrottle > 0
+                ? accept / totalThrottle : Double.NaN;
+            boolean tightThrottle = !Double.isNaN(acceptRatio) && acceptRatio < 0.3;
+            boolean looseThrottle = !Double.isNaN(acceptRatio) && acceptRatio > 0.8;
+            if (hasCapacity && !tightThrottle) return Math.min(_max, current + _step);
+            if (stressed && !looseThrottle) return Math.max(_min, current - _step);
             return current;
         }
     }
@@ -6526,11 +6539,20 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double accept = getAdditionalStat(_context, "tunnel.throttleParticipatingAccept");
+            double reject = getAdditionalStat(_context, "tunnel.throttleParticipatingReject");
+            double drop = getAdditionalStat(_context, "tunnel.throttleParticipatingDrop");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
             boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
-            if (hasCapacity) return Math.min(_max, current + _step);
-            if (stressed) return Math.max(_min, current - _step);
+            double totalThrottle = (!Double.isNaN(accept) && !Double.isNaN(reject) && !Double.isNaN(drop))
+                ? accept + reject + drop : Double.NaN;
+            double acceptRatio = !Double.isNaN(totalThrottle) && totalThrottle > 0
+                ? accept / totalThrottle : Double.NaN;
+            boolean tightThrottle = !Double.isNaN(acceptRatio) && acceptRatio < 0.3;
+            boolean looseThrottle = !Double.isNaN(acceptRatio) && acceptRatio > 0.8;
+            if (hasCapacity && !tightThrottle) return Math.min(_max, current + _step);
+            if (stressed && !looseThrottle) return Math.max(_min, current - _step);
             return current;
         }
     }
@@ -6555,11 +6577,20 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double accept = getAdditionalStat(_context, "tunnel.throttleParticipatingAccept");
+            double reject = getAdditionalStat(_context, "tunnel.throttleParticipatingReject");
+            double drop = getAdditionalStat(_context, "tunnel.throttleParticipatingDrop");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
             boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
-            if (hasCapacity) return Math.min(_max, current + _step);
-            if (stressed) return Math.max(_min, current - _step);
+            double totalThrottle = (!Double.isNaN(accept) && !Double.isNaN(reject) && !Double.isNaN(drop))
+                ? accept + reject + drop : Double.NaN;
+            double acceptRatio = !Double.isNaN(totalThrottle) && totalThrottle > 0
+                ? accept / totalThrottle : Double.NaN;
+            boolean tightThrottle = !Double.isNaN(acceptRatio) && acceptRatio < 0.3;
+            boolean looseThrottle = !Double.isNaN(acceptRatio) && acceptRatio > 0.8;
+            if (hasCapacity && !tightThrottle) return Math.min(_max, current + _step);
+            if (stressed && !looseThrottle) return Math.max(_min, current - _step);
             return current;
         }
     }
@@ -6584,11 +6615,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double requestReject = getAdditionalStat(_context, "tunnel.throttleRequestReject");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
             boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
-            if (hasCapacity) return Math.min(_max, current + _step);
-            if (stressed) return Math.max(_min, current - _step);
+            boolean rejecting = !Double.isNaN(requestReject) && requestReject > 0;
+            if (hasCapacity && !rejecting) return Math.min(_max, current + _step);
+            if (stressed || rejecting) return Math.max(_min, current - _step);
             return current;
         }
     }
@@ -6613,11 +6646,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double requestReject = getAdditionalStat(_context, "tunnel.throttleRequestReject");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
             boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
-            if (hasCapacity) return Math.min(_max, current + _step);
-            if (stressed) return Math.max(_min, current - _step);
+            boolean rejecting = !Double.isNaN(requestReject) && requestReject > 0;
+            if (hasCapacity && !rejecting) return Math.min(_max, current + _step);
+            if (stressed || rejecting) return Math.max(_min, current - _step);
             return current;
         }
     }
@@ -6642,11 +6677,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double requestReject = getAdditionalStat(_context, "tunnel.throttleRequestReject");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
             boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
-            if (hasCapacity) return Math.min(_max, current + _step);
-            if (stressed) return Math.max(_min, current - _step);
+            boolean rejecting = !Double.isNaN(requestReject) && requestReject > 0;
+            if (hasCapacity && !rejecting) return Math.min(_max, current + _step);
+            if (stressed || rejecting) return Math.max(_min, current - _step);
             return current;
         }
     }
@@ -6673,11 +6710,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double requestReject = getAdditionalStat(_context, "tunnel.throttleRequestReject");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
             boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
-            if (hasCapacity) return Math.min(_max, current + _step);
-            if (stressed) return Math.max(_min, current - _step);
+            boolean rejecting = !Double.isNaN(requestReject) && requestReject > 0;
+            if (hasCapacity && !rejecting) return Math.min(_max, current + _step);
+            if (stressed || rejecting) return Math.max(_min, current - _step);
             return current;
         }
     }
