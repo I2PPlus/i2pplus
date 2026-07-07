@@ -180,7 +180,6 @@ class Attribute implements Comparable<Attribute> {
         define(sd, ATTR_CONTEXT_METHOD, "Deprecated", "");
         define(sd, ATTR_CONTEXT_METHOD, "Exceptions", "NH[RCH]");
         define(sd, ATTR_CONTEXT_METHOD, "MethodParameters", "NB[RUNHFH]");
-        //define(sd, ATTR_CONTEXT_METHOD, "Code", "HHNI[B]NH[PHPOHPOHRCNH]NH[RUHNI[B]]");
 
         define(sd, ATTR_CONTEXT_CODE, "StackMapTable",
                ("[NH[(1)]]" +
@@ -200,8 +199,6 @@ class Attribute implements Comparable<Attribute> {
         define(sd, ATTR_CONTEXT_CODE, "LineNumberTable", "NH[PHH]");
         define(sd, ATTR_CONTEXT_CODE, "LocalVariableTable", "NH[PHOHRUHRSHH]");
         define(sd, ATTR_CONTEXT_CODE, "LocalVariableTypeTable", "NH[PHOHRUHRSHH]");
-        //define(sd, ATTR_CONTEXT_CODE, "CharacterRangeTable", "NH[PHPOHIIH]");
-        //define(sd, ATTR_CONTEXT_CODE, "CoverageTable", "NH[PHHII]");
 
         // Note:  Code and InnerClasses are special-cased elsewhere.
         // Their layout specs. are given here for completeness.
@@ -547,7 +544,6 @@ class Attribute implements Comparable<Attribute> {
                         Element ce = lelems[i];
                         ce.body = tokenizeLayout(this, i, bodies[i]);
                     }
-                    //System.out.println(Arrays.asList(elems));
                 }
             } catch (StringIndexOutOfBoundsException ee) {
                 // simplest way to catch syntax errors...
@@ -604,7 +600,7 @@ class Attribute implements Comparable<Attribute> {
         }
         @Override
         public String toString() {
-            String str = contextName(ctype)+"."+name+"["+layout+"]";
+
             // If -ea, print out more informative strings!
             assert((str = stringForDebug()) != null);
             return str;
@@ -640,7 +636,7 @@ class Attribute implements Comparable<Attribute> {
                 return bandIndex >= 0;
             }
             public String toString() {
-                String str = layout;
+
                 // If -ea, print out more informative strings!
                 assert((str = stringForDebug()) != null);
                 return str;
@@ -719,8 +715,6 @@ class Attribute implements Comparable<Attribute> {
     class FormatException extends IOException {
         private static final long serialVersionUID = -2542243830788066513L;
 
-        private int ctype;
-        private String name;
         String layout;
         public FormatException(String message,
                                int ctype, String name, String layout) {
@@ -912,8 +906,6 @@ class Attribute implements Comparable<Attribute> {
             int body;
             Layout.Element e = self.new Element();
             byte kind;
-            //System.out.println("at "+i+": ..."+layout.substring(i));
-            // strip a prefix
             switch (layout.charAt(i++)) {
             /// layout_element: integral
             case 'B': case 'H': case 'I': case 'V': // unsigned_int
@@ -999,7 +991,8 @@ class Attribute implements Comparable<Attribute> {
                             String cstr1 = cstr.substring(cp, endp);
                             if (cstr1.isEmpty())
                                 cstr1 = "empty";  // will fail parse
-                            int value0, value1;
+                            int value0;
+                            int value1;
                             // Check for a case range (new in 1.6).
                             int dash = findCaseDash(cstr1, 0);
                             if (dash >= 0) {
@@ -1274,7 +1267,8 @@ class Attribute implements Comparable<Attribute> {
             Layout.Element e = elems[i];
             int bandIndex = e.bandIndex;
             int value;
-            int BCI, RBCI;
+            int BCI;
+            int RBCI;
             switch (e.kind) {
             case EK_INT:
                 pos = parseInt(e, bytes, pos, buf);
@@ -1413,7 +1407,8 @@ class Attribute implements Comparable<Attribute> {
             Layout.Element e = elems[i];
             int bandIndex = e.bandIndex;
             int value;
-            int BCI, RBCI;  // "RBCI" is R(BCI), BCI's coded representation
+            int BCI;
+            int RBCI;  // "RBCI" is R(BCI), BCI's coded representation
             switch (e.kind) {
             case EK_INT:
                 value = in.getInt(bandIndex);

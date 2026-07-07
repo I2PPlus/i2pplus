@@ -206,7 +206,6 @@ class Driver {
                 System.setErr(System.out);
             } else {
                 OutputStream log = new FileOutputStream(logFile);
-                //log = new BufferedOutputStream(out);
                 System.setErr(new PrintStream(log, false, StandardCharsets.UTF_8.name()));
             }
         }
@@ -522,7 +521,6 @@ class Driver {
     String parseCommandOptions(List<String> args,
                                String options,
                                Map<String,String> properties) {
-        //System.out.println(args+" // "+properties);
 
         String resultString = null;
 
@@ -576,7 +574,7 @@ class Driver {
                     // pfxmap.lastKey is no shorter than any prefix in optmap.
                     int len = pfxmap.isEmpty() ? 0 : pfxmap.lastKey().length();
                     optlen = Math.min(len, optlen - 1);
-                    opt = arg.substring(0, optlen);
+
                     // (Note:  We could cut opt down to its common prefix with
                     // pfxmap.lastKey, but that wouldn't save many cycles.)
                 }
@@ -679,7 +677,7 @@ class Driver {
                             if (old != null) {
                                 // Append new val to old with embedded delim.
                                 String delim = specarg;
-                                if (delim.length() == 0)  delim = " ";
+
                                 strval = old + specarg + strval;
                             }
                         }
@@ -724,7 +722,6 @@ class Driver {
         while (pbp.hasPrevious()) {
             args.add(0, pbp.previous());
         }
-        //System.out.println(args+" // "+properties+" -> "+resultString);
         return resultString;
     }
 }

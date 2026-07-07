@@ -200,7 +200,6 @@ class ClassReader {
         int majver = (short) readUnsignedShort();
         cls.version = Package.Version.of(majver, minver);
 
-        //System.out.println("ClassFile.version="+cls.majver+"."+cls.minver);
         String bad = checkVersion(cls.version);
         if (bad != null) {
             throw new Attribute.FormatException
@@ -228,7 +227,6 @@ class ClassReader {
 
     void readConstantPool() throws IOException {
         int length = in.readUnsignedShort();
-        //System.err.println("reading CP, length="+length);
 
         int[] fixups = new int[length*4];
         int fptr = 0;
@@ -236,7 +234,6 @@ class ClassReader {
         Entry[] cpMap = new Entry[length];
         cpMap[0] = null;
         for (int i = 1; i < length; i++) {
-            //System.err.println("reading CP elt, i="+i);
             int tag = in.readByte();
             switch (tag) {
                 case CONSTANT_Utf8:

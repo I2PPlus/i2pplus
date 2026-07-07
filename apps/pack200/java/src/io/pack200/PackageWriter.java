@@ -61,7 +61,7 @@ class PackageWriter extends BandStructure {
     }
 
     void write() throws IOException {
-        boolean ok = false;
+
         try {
             if (verbose > 0) {
                 Utils.log.info("Setting up constant pool...");
@@ -94,11 +94,8 @@ class PackageWriter extends BandStructure {
 
             writeAllBandsTo(finalOut);
 
-            ok = true;
         } catch (Exception ee) {
             Utils.log.warning("Error on output: "+ee, ee);
-            //if (verbose > 0)  ee.printStackTrace();
-            // Write partial output only if we are verbose.
             if (verbose > 0)  finalOut.close();
             if (ee instanceof IOException)  throw (IOException)ee;
             if (ee instanceof RuntimeException)  throw (RuntimeException)ee;
@@ -235,7 +232,6 @@ class PackageWriter extends BandStructure {
                 verCounts.put(version, var);
             }
             int count = (var[0] += 1);
-            //System.out.println("version="+version+" count="+count);
             if (bestCount < count) {
                 bestCount = count;
                 bestVersion = version;
@@ -1118,7 +1114,6 @@ class PackageWriter extends BandStructure {
 
         InnerClass[] allICs = new InnerClass[allICMap.size()];
         allICMap.values().toArray(allICs);
-        allICMap = null;  // done with it
 
         // Note: The InnerClasses attribute must be in a valid order,
         // so that A$B always occurs earlier than A$B$C.  This is an
@@ -1257,7 +1252,8 @@ class PackageWriter extends BandStructure {
     }
 
     void writeCodeHandlers(Code c) throws IOException {
-        int sum, del;
+        int sum;
+        int del;
         for (int j = 0, jmax = c.getHandlerCount(); j < jmax; j++) {
             code_handler_class_RCN.putRef(c.handler_class[j]); // null OK
             // Encode end as offset from start, and catch as offset from end,
@@ -1314,7 +1310,6 @@ class PackageWriter extends BandStructure {
                     Utils.log.fine("Adding overflow attr #"+overflowCount);
                 IntBand xxx_attr_indexes = getAttrBand(xxx_attr_bands, AB_ATTR_INDEXES);
                 xxx_attr_indexes.putInt(index);
-                // System.out.println("overflow @"+index);
             }
             if (def.bandCount == 0) {
                 if (def == attrInnerClassesEmpty) {
@@ -1490,8 +1485,7 @@ class PackageWriter extends BandStructure {
 
             int self_bc = selfOpVariant(i);
             if (self_bc >= 0) {
-                boolean isField = Instruction.isFieldOp(bc);
-                boolean isSuper = (self_bc >= _self_linker_op+_self_linker_super_flag);
+
                 boolean isAload = prevAload;
                 prevAload = false;  //used up
                 if (isAload)
@@ -1517,8 +1511,7 @@ class PackageWriter extends BandStructure {
                 bc_codes.putByte(bc);
                 Instruction.Switch isw = (Instruction.Switch) i;
                 // Note that we do not write the alignment bytes.
-                int apc = isw.getAlignedPC();
-                int npc = isw.getNextPC();
+
                 // write a length specification into the bytecode stream
                 int caseCount = isw.getCaseCount();
                 bc_case_count.putInt(caseCount);

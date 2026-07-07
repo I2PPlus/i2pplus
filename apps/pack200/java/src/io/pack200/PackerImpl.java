@@ -542,7 +542,6 @@ public class PackerImpl  extends TLGlobals implements Pack200.Packer {
             }
         }
 
-
         /** Write all information in the current package segment
          *  to the output stream.
          */
@@ -558,7 +557,7 @@ public class PackerImpl  extends TLGlobals implements Pack200.Packer {
                 // Package builder must have created a stub for each class.
                 assert(pkg.files.containsAll(pkg.getClassStubs()));
                 // Order of stubs in file list must agree with classes.
-                List<Package.File> res = pkg.files;
+
                 assert((res = new ArrayList<>(pkg.files))
                        .retainAll(pkg.getClassStubs()) || true);
                 assert(res.equals(pkg.getClassStubs()));

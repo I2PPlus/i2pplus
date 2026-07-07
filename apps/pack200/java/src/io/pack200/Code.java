@@ -113,10 +113,7 @@ class Code extends Attribute.Holder {
     }
 
     void setInstructionMap(int[] insnMap, int mapLen) {
-        //int[] oldMap = null;
-        //assert((oldMap = getInstructionMap()) != null);
         this.insnMap = allocateInstructionMap(insnMap, mapLen);
-        //assert(Arrays.equals(oldMap, getInstructionMap()));
     }
     void setInstructionMap(int[] insnMap) {
         setInstructionMap(insnMap, insnMap.length);
@@ -232,7 +229,6 @@ class Code extends Attribute.Holder {
         }
         // Make it byte[], short[], or int[] according to the max BCI.
         insnMap = allocateInstructionMap(map, fillp);
-        //assert(assertBCICodingsOK());
         return insnMap;
     }
 
@@ -246,7 +242,8 @@ class Code extends Attribute.Holder {
     public int encodeBCI(int bci) {
         if (bci <= 0 || bci > getLength())  return bci;
         Object map0 = getInsnMap();
-        int i, len;
+        int i;
+        int len;
         if (shrinkMaps && map0 instanceof byte[]) {
             byte[] map = (byte[]) map0;
             len = map.length;
@@ -269,7 +266,8 @@ class Code extends Attribute.Holder {
     public int decodeBCI(int bciCode) {
         if (bciCode <= 0 || bciCode > getLength())  return bciCode;
         Object map0 = getInsnMap();
-        int i, len;
+        int i;
+        int len;
         // len == map.length
         // If bciCode < len, result is map[bciCode], the common and fast case.
         // Otherwise, let map[i] be the smallest map[*] larger than bci.

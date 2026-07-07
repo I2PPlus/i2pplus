@@ -368,7 +368,6 @@ class BandStructure {
         public final int seqForDebug;
         public int       elementCountForDebug;
 
-
         protected Band(String name, Coding regularCoding) {
             this.name = name;
             this.regularCoding = regularCoding;
@@ -445,7 +444,6 @@ class BandStructure {
             assert(assertPhase(this, EXPECT_PHASE));
             valuesExpected += l;
         }
-
 
         /// Phase change markers.
 
@@ -690,7 +688,6 @@ class BandStructure {
                 // there is a non-default coding method, or because
                 // the first value would be parsed as an escape value.
                 int X = encodeEscapeValue(XB, regularCoding);
-                //System.out.println("X="+X+" XB="+XB+" in "+this);
                 regularCoding.setD(0).writeTo(out, X);
             }
             bandCoding.writeArrayTo(out, values, 0, length);
@@ -735,10 +732,10 @@ class BandStructure {
                                      metaCoding, 0, metaCoding.length);
                 }
             }
-            if (bandCoding != regularCoding) {
-                if (verbose > 1)
+            if (bandCoding != regularCoding && verbose > 1) {
+
                     Utils.log.fine(name()+": irregular coding "+bandCoding);
-            }
+
             bandCoding.readArrayFrom(in, values, 0, length);
             if (optDumpBands)  dumpBand();
         }
@@ -1075,7 +1072,6 @@ class BandStructure {
     // intended CP indexes, before the CP has been created.
     private final List<CPRefBand> allKQBands = new ArrayList<>();
     private List<Object[]> needPredefIndex = new ArrayList<>();
-
 
     int encodeRef(Entry e, Index ix) {
         if (ix == null)
@@ -1799,8 +1795,6 @@ class BandStructure {
                            "Signature", "RSH");
         predefineAttribute(X_ATTR_Deprecated, ATTR_CONTEXT_CLASS, null,
                            "Deprecated", "");
-        //predefineAttribute(X_ATTR_Synthetic, ATTR_CONTEXT_CLASS, null,
-        //                 "Synthetic", "");
         predefineAttribute(X_ATTR_OVERFLOW, ATTR_CONTEXT_CLASS, null,
                            ".Overflow", "");
         attrConstantValue =
@@ -1812,8 +1806,6 @@ class BandStructure {
                            "Signature", "RSH");
         predefineAttribute(X_ATTR_Deprecated, ATTR_CONTEXT_FIELD, null,
                            "Deprecated", "");
-        //predefineAttribute(X_ATTR_Synthetic, ATTR_CONTEXT_FIELD, null,
-        //                 "Synthetic", "");
         predefineAttribute(X_ATTR_OVERFLOW, ATTR_CONTEXT_FIELD, null,
                            ".Overflow", "");
         attrCodeEmpty =
@@ -1838,8 +1830,6 @@ class BandStructure {
                            "Signature", "RSH");
         predefineAttribute(X_ATTR_Deprecated, ATTR_CONTEXT_METHOD, null,
                            "Deprecated", "");
-        //predefineAttribute(X_ATTR_Synthetic, ATTR_CONTEXT_METHOD, null,
-        //                 "Synthetic", "");
         predefineAttribute(X_ATTR_OVERFLOW, ATTR_CONTEXT_METHOD, null,
                            ".Overflow", "");
 
@@ -1887,7 +1877,6 @@ class BandStructure {
                     Attribute.lookup(null, ctype,
                     "RuntimeInvisibleTypeAnnotations"));
         }
-
 
         Attribute.Layout stackMapDef = Attribute.lookup(null, ATTR_CONTEXT_CODE, "StackMapTable").layout();
         predefineAttribute(CODE_ATTR_StackMapTable, ATTR_CONTEXT_CODE,
@@ -2091,7 +2080,6 @@ class BandStructure {
                                         String name, String layout) {
         // Use Attribute.find to get uniquification of layouts.
         Attribute.Layout def = Attribute.find(ctype, name, layout).layout();
-        //def.predef = true;
         if (index >= 0) {
             setAttributeLayoutIndex(def, index);
         }
@@ -2112,7 +2100,6 @@ class BandStructure {
     Attribute.Layout predefineAttribute(int index,
                                         String bandPrefix, MultiBand addHere,
                                         Attribute attr) {
-        //Attribute.Layout def = Attribute.find(ctype, name, layout).layout();
         Attribute.Layout def = attr.layout();
         int ctype = def.ctype();
         return predefineAttribute(index, ctype,
@@ -2170,7 +2157,7 @@ class BandStructure {
                     assert(attrBandTable.get(def) != null);
                     continue;
                 }
-                int base = xxx_attr_bands.size();
+
                 String pfx = cname+"_"+def.name()+"_";  // debug only
                 if (verbose > 1)
                     Utils.log.fine("Making new bands for "+def);
@@ -2186,7 +2173,6 @@ class BandStructure {
                 }
             }
         }
-        //System.out.println(prevForAssertMap);
     }
     private
     Band[] makeNewAttributeBands(String pfx, Attribute.Layout def,
@@ -2485,12 +2471,10 @@ class BandStructure {
         return true;
     }
 
-
     // DEBUG ONLY:  Tells whether verbosity is turned on.
     static int verbose() {
         return Utils.currentPropMap().getInteger(Utils.DEBUG_VERBOSE);
     }
-
 
     // DEBUG ONLY:  Validate me at each phase change.
     static boolean assertPhaseChangeOK(Band b, int p0, int p1) {
@@ -2616,7 +2600,6 @@ class BandStructure {
             assert(bandSequenceList != null);
             // Verify synchronization between reader & writer:
             String inName = bandSequenceList.removeFirst();
-            // System.out.println("Reading: " + name);
             if (!inName.equals(name)) {
                 Utils.log.warning("Expected " + name + " but read: " + inName);
                 return false;
@@ -2662,7 +2645,6 @@ class BandStructure {
                 bandSequenceList = new LinkedList<>();
             // Verify synchronization between reader & writer:
             bandSequenceList.add(name);
-            // System.out.println("Writing: " + b);
         }
         return true;
     }
@@ -2679,7 +2661,6 @@ class BandStructure {
     protected static long setBit(long flags, long bitMask, boolean z) {
         return z ? (flags | bitMask) : (flags &~ bitMask);
     }
-
 
     static void printArrayTo(PrintStream ps, int[] values, int start, int end) {
         int len = end-start;
@@ -2725,7 +2706,6 @@ class BandStructure {
             ps.println(buf);
         }
     }
-
 
     // Utilities for reallocating:
     protected static Object[] realloc(Object[] a, int len) {

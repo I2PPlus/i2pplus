@@ -23,7 +23,6 @@
  * questions.
  */
 
-
 package io.pack200;
 
 import java.io.BufferedInputStream;
@@ -83,8 +82,6 @@ class NativeUnpack {
     private  PropMap _props;
 
     static {
-        // If loading from stand alone build uncomment this.
-        // System.loadLibrary("unpack");
         java.security.AccessController.doPrivileged(
             new java.security.PrivilegedAction<Void>() {
                 public Void run() {
@@ -208,11 +205,8 @@ class NativeUnpack {
 
             // Write the files.
             int[] intParts = { 0,0, 0, 0 };
-            //    intParts = {size.hi/lo, mod, defl}
             Object[] parts = { intParts, null, null, null };
-            //       parts = { {intParts}, name, data0/1 }
             while (getNextFile(parts)) {
-                //BandStructure.printArrayTo(System.out, intParts, 0, parts.length);
                 String name = (String) parts[1];
                 long   size = ( (long)intParts[0] << 32)
                             + (((long)intParts[1] << 32) >>> 32);
@@ -235,10 +229,10 @@ class NativeUnpack {
                 !Utils.isPackMagic(Utils.readMagic(in0))) {
                 break;
             }
-            if (_verbose > 0 ) {
-                if (presetInput != null)
+            if (_verbose > 0  && presetInput != null) {
+
                     Utils.log.info("unused input = "+presetInput);
-            }
+
         }
     }
 

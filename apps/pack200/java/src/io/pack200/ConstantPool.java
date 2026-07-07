@@ -193,7 +193,6 @@ class ConstantPool {
         return e;
     }
 
-
     /** Entries in the constant pool. */
     public abstract static
     class Entry implements Comparable<Object> {
@@ -778,7 +777,6 @@ class ConstantPool {
                 String cls = parts[k++];
                 cls.getChars(0, cls.length(), sig, j);
                 j += cls.length();
-                //sig[j++] = ';';
             }
         }
         assert(j == len);
@@ -797,14 +795,6 @@ class ConstantPool {
             String[] parts = { sig };
             return parts;
         }
-        // Segment the string like sig.split("L\\([^;<]*\\)").
-        // N.B.: Previous version of this code did a more complex match,
-        // to next ch < ' ' or ch in [';'..'@'].  The only important
-        // characters are ';' and '<', since they are part of the
-        // signature syntax.
-        // Examples:
-        //   "(Ljava/lang/Object;IJLLoo;)V" => {"(L;IJL;)V", "java/lang/Object", "Loo"}
-        //   "Ljava/util/List<Ljava/lang/String;>;" => {"L<L;>;", "java/util/List", "java/lang/String"}
         char[] form = null;
         String[] parts = null;
         for (int pass = 0; pass <= 1; pass++) {
@@ -836,7 +826,6 @@ class ConstantPool {
             parts = new String[partPtr];
         }
         parts[0] = new String(form);
-        //assert(flattenSignature(parts).equals(sig));
         return parts;
     }
 
@@ -1031,7 +1020,7 @@ class ConstantPool {
             // Arguments are formatted as "<foo;bar;baz>" instead of "[foo,bar,baz]".
             // This ensures there will be no confusion if "[,]" appear inside of names.
             char nextSep = '<';
-            boolean didOne = false;
+
             for (Entry argRef : argRefs) {
                 sb.append(nextSep).append(argRef.stringValue());
                 nextSep = ';';
@@ -1295,7 +1284,7 @@ class ConstantPool {
         private Index[] indexByTag = new Index[CONSTANT_Limit];
         private Index[] indexByTagGroup;
         private int[]   untypedFirstIndexByTag;
-        private int     totalSizeQQ;
+
         private Index[][] indexByTagAndClass;
 
         /** Index of all CP entries of all types, in definition order. */

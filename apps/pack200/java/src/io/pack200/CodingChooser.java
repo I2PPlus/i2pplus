@@ -134,9 +134,6 @@ class CodingChooser {
         }
 
         this.effort = effort;
-        // The following line "makes sense" but is too much
-        // work for a simple heuristic.
-        //if (effort > 5)  zipDef.setLevel(effort);
 
         this.allCodingChoices = allCodingChoices;
 
@@ -307,7 +304,6 @@ class CodingChooser {
 
         // save these first-cut numbers for later
         int zipSize1 = bestZipSize;
-        int byteSize1 = bestByteSize;
 
         if (regularChoice.coding == regular && topLevel) {
             // Give credit for being the default; no band header is needed.
@@ -518,7 +514,6 @@ class CodingChooser {
         }
     }
 
-
     private int updateDistances(Choice c) {
         // update all minDistance values in still unevaluated choices
         int[] distance = c.distance;
@@ -532,7 +527,7 @@ class CodingChooser {
                 Utils.log.info("evaluate dist "+d+" to "+c2);
             int mind = c2.minDistance;
             if (mind > d)
-                c2.minDistance = mind = d;
+
             if (maxd < d)
                 maxd = d;
         }
@@ -586,7 +581,7 @@ class CodingChooser {
             Coding c = (Coding) cm;
             int size = c.getLength(values, start, end);
             int size2;
-            assert(size == (size2=countBytesToSizer(cm, values, start, end)))
+
                 : (cm+" : "+size+" != "+size2);
             return size;
         }
@@ -637,7 +632,6 @@ class CodingChooser {
     }
 
     private void tryPopulationCoding(Coding plainCoding) {
-        // assert(plainCoding.canRepresent(min, max));
         Histogram hist = getValueHistogram();
         // Start with "reasonable" default codings.
         final int approxL = 64;
@@ -668,7 +662,6 @@ class CodingChooser {
 
         // Record all the values, in decreasing order of favor.
         int[] allFavoredValues = new int[1+hist.getTotalLength()];
-        //int[] allPopSizes    = new int[1+hist.getTotalLength()];
 
         // What sizes are "interesting"?
         int targetLowFVC = -1;
@@ -701,7 +694,6 @@ class CodingChooser {
             // (This is the whole point of the exercise!)
             currentUSize -= thisVLen * thisVCount;
             int currentSize = (currentFSize + currentTSize + currentUSize);
-            //allPopSizes[fvcount] = currentSize;
             if (bestPopSize > currentSize) {
                 if (currentSize <= targetSize) {
                     targetHighFVC = fvcount;
@@ -911,7 +903,6 @@ class CodingChooser {
                              " fc="+pop.favoredCoding+
                              " tc="+pop.tokenCoding+
                              " uc="+pop.unfavoredCoding);
-            //pop.hist.print("pop-hist", null, System.out);
             StringBuilder sb = new StringBuilder();
             sb.append("fv = {");
             for (int i = 1; i <= fVlen; i++) {
@@ -968,7 +959,6 @@ class CodingChooser {
             sizes[fillp++] = totalSize;
             int size = plainCoding.getLength(val);
             assert(size < Integer.MAX_VALUE);
-            //System.out.println("len "+val+" = "+size);
             totalSize += size;
         }
         sizes[fillp++] = totalSize;
@@ -1080,7 +1070,8 @@ class CodingChooser {
                                              avgSize*(bend-i)));
                         Utils.log.info("{ //BEGIN");
                     }
-                    CodingMethod begcm, midcm, endcm;
+                    CodingMethod begcm;
+                    CodingMethod midcm, endcm;
                     midcm = runHelper.choose(this.values,
                                              this.start+i,
                                              this.start+bend,
@@ -1133,11 +1124,11 @@ class CodingChooser {
                 }
             }
         }
-        if (verbose > 3) {
-            if (bestZipSize < oldZipSize) {
+        if (verbose > 3 && bestZipSize < oldZipSize) {
+
                 Utils.log.info(">>> RUN WINS BY "+
                                  (oldZipSize - bestZipSize));
-            }
+
         }
     }
 
@@ -1170,7 +1161,7 @@ class CodingChooser {
         public int getSize() { return count; }
 
         public String toString() {
-            String str = super.toString();
+
             // If -ea, print out more informative strings!
             assert((str = stringForDebug()) != null);
             return str;
@@ -1214,7 +1205,6 @@ class CodingChooser {
         flushData();
         return zipSizer.getSize();
     }
-
 
     /// Stress-test helpers.
 
@@ -1334,7 +1324,6 @@ class CodingChooser {
                         else
                             KX -= 1;
                     }
-                    //System.out.println("KX="+KX+" KB="+KB+" K="+thisspan);
                     assert(AdaptiveCoding.isCodableLength(thisspan));
                 }
                 if (thisspan > scan - lstart)  thisspan = scan - lstart;

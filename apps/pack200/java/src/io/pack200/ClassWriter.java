@@ -98,12 +98,8 @@ class ClassWriter {
             writeHeader();
             writeMembers(false);  // fields
             writeMembers(true);   // methods
-            writeAttributes(ATTR_CONTEXT_CLASS, cls);
-            /* Closing here will cause all the underlying
-               streams to close, Causing the jar stream
-               to close prematurely, instead we just flush.
-               out.close();
-             */
+            writeAttributes(cls);
+
             out.flush();
             ok = true;
         } finally {
@@ -205,8 +201,7 @@ class ClassWriter {
         writeShort(m.flags);
         writeRef(m.getDescriptor().nameRef);
         writeRef(m.getDescriptor().typeRef);
-        writeAttributes(!doMethod ? ATTR_CONTEXT_FIELD : ATTR_CONTEXT_METHOD,
-                        m);
+        writeAttributes(m);
     }
 
     private void reorderBSMandICS(Attribute.Holder h) {
@@ -229,7 +224,7 @@ class ClassWriter {
     ByteArrayOutputStream buf    = new ByteArrayOutputStream();
     DataOutputStream      bufOut = new DataOutputStream(buf);
 
-    void writeAttributes(int ctype, Attribute.Holder h) throws IOException {
+    void writeAttributes(Attribute.Holder h) throws IOException {
         if (h.attributes == null) {
             writeShort(0);  // attribute size
             return;
@@ -291,7 +286,7 @@ class ClassWriter {
              writeShort(code.handler_catch[i]);
              writeRef(code.handler_class[i]);
         }
-        writeAttributes(ATTR_CONTEXT_CODE, code);
+        writeAttributes(code);
     }
 
     void writeBootstrapMethods(Class cls) throws IOException {

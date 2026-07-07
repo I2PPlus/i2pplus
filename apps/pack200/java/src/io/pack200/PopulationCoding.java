@@ -262,7 +262,7 @@ class PopulationCoding implements CodingMethod {
                 last = fValues[i];
                 min = moreCentral(min, last);
             }
-            int endVal;
+
             if (fc.getLength(min) <= fc.getLength(last))
                 return min;
             else
@@ -331,7 +331,6 @@ class PopulationCoding implements CodingMethod {
                 assert(fillp <= maxForDebug);
                 last = val;
                 min = moreCentral(min, val);
-                //min2 = moreCentral2(min2, val, min);
             }
             fcm = ac.tailCoding;
         }
@@ -355,7 +354,6 @@ class PopulationCoding implements CodingMethod {
                 assert(fillp <= maxForDebug);
                 last = val;
                 min = moreCentral(min, val);
-                //min2 = moreCentral(min2, val);
             }
         } else {
             for (;;) {
@@ -369,7 +367,6 @@ class PopulationCoding implements CodingMethod {
                 assert(fillp <= maxForDebug);
                 last = val;
                 min = moreCentral(min, val);
-                //min2 = moreCentral2(min2, val, min);
             }
         }
         return BandStructure.realloc(lfValues, fillp);
@@ -386,14 +383,6 @@ class PopulationCoding implements CodingMethod {
         assert(xy == moreCentralSlow(x, y));
         return xy;
     }
-//  private static int moreCentral2(int x, int y, int min) {
-//      // Strict implementation of buggy 150.7 specification.
-//      // The bug is that the spec. says absolute-value ties are broken
-//      // in favor of positive numbers, but the suggested implementation
-//      // (also mentioned in the spec.) breaks ties in favor of negatives.
-//      if (x + y == 0)  return (x > y? x : y);
-//      return min;
-//  }
     private static int moreCentralSlow(int x, int y) {
         int ax = x;
         if (ax < 0)  ax = -ax;
@@ -411,7 +400,7 @@ class PopulationCoding implements CodingMethod {
         = { -1, 4, 8, 16, 32, 64, 128, 192, 224, 240, 248, 252 };
 
     public byte[] getMetaCoding(Coding dflt) {
-        int K = fVlen;
+
         int LCoded = 0;
         if (tokenCoding instanceof Coding) {
             Coding tc = (Coding) tokenCoding;

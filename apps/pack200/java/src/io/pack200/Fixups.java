@@ -112,7 +112,6 @@ final class Fixups extends AbstractCollection<Fixups.Fixup> {
         if (bytes != null) {
             // Clean the bytes:
             for (Fixup fx : this) {
-                //System.out.println("clean "+fx);
                 storeIndex(fx.location(), fx.format(), 0);
             }
         }
@@ -186,7 +185,8 @@ final class Fixups extends AbstractCollection<Fixups.Fixup> {
         if (bytes == null)
             return false;
         int value = desc - (loc << LOC_SHIFT);
-        byte b1, b2;
+        byte b1;
+        byte b2;
         switch (fmt) {
         case U2_FORMAT:
             assert(bytes[loc+0] == UNUSED_BYTE);
@@ -371,7 +371,6 @@ final class Fixups extends AbstractCollection<Fixups.Fixup> {
                 int bigSize = bigDescs[BIGSIZE];
                 if (bigDescs.length == bigSize)
                     growBigDescs();
-                //System.out.println("bigDescs["+bigSize+"] = "+thisDesc);
                 bigDescs[bigSize++] = thisDesc;
                 bigDescs[BIGSIZE] = bigSize;
             }
@@ -480,9 +479,6 @@ final class Fixups extends AbstractCollection<Fixups.Fixup> {
             return;
         for (Fixup fx : this) {
             int index = ix.indexOf(fx.entry);
-            //System.out.println("finish "+fx+" = "+index);
-            // Note that the iterator has already fetched the
-            // bytes we are about to overwrite.
             storeIndex(fx.location(), fx.format(), index);
         }
         // Further iterations should do nothing:

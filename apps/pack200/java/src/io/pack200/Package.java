@@ -83,7 +83,6 @@ class Package {
 
     Version observedHighestClassVersion = null;
 
-
     // What constants are used in this unit?
     ConstantPool.IndexGroup cp = new ConstantPool.IndexGroup();
 
@@ -96,7 +95,6 @@ class Package {
         maxClassVersion = JAVA_MAX_CLASS_VERSION;
         packageVersion = null;
     }
-
 
     /*
      * Typically used by the PackerImpl during before packing, the defaults are
@@ -112,7 +110,6 @@ class Package {
                 : maxClassVersion;
         this.packageVersion  = packageVersion;
     }
-
 
     public void reset() {
         cp = new ConstantPool.IndexGroup();
@@ -813,7 +810,6 @@ class Package {
         }
         public java.io.File getFileName(java.io.File parent) {
             String lname = this.nameString;
-            //if (name.startsWith("./"))  name = name.substring(2);
             String fname = lname.replace('/', java.io.File.separatorChar);
             return new java.io.File(parent, fname);
         }
@@ -943,16 +939,13 @@ class Package {
         }
 
         private boolean computePredictable() {
-            //System.out.println("computePredictable "+outerClass+" "+this.name);
             String[] parse = parseInnerClassName(thisClass.stringValue());
             if (parse == null)  return false;
             String pkgOuter = parse[0];
-            //String number = parse[1];
             String lname     = parse[2];
             String haveName  = (this.name == null)  ? null : this.name.stringValue();
             String haveOuter = (outerClass == null) ? null : outerClass.stringValue();
             boolean lpredictable = (lname == haveName && pkgOuter == haveOuter);
-            //System.out.println("computePredictable => "+predictable);
             return lpredictable;
         }
 
@@ -1008,9 +1001,10 @@ class Package {
     }
 
     static String[] parseInnerClassName(String n) {
-        //System.out.println("parseInnerClassName "+n);
-        String pkgOuter, number, name;
-        int dollar1, dollar2;  // pointers to $ in the pattern
+        String pkgOuter;
+        String number, name;
+        int dollar1;
+        int dollar2;  // pointers to $ in the pattern
         // parse n = (<pkg>/)*<outer>($<number>)?($<name>)?
         int nlen = n.length();
         int pkglen = lastIndexOf(SLASH_MIN,  SLASH_MAX,  n, n.length()) + 1;
@@ -1038,7 +1032,6 @@ class Package {
             pkgOuter = n.substring(0, dollar1).intern();
         else
             pkgOuter = null;
-        //System.out.println("parseInnerClassName parses "+pkgOuter+" "+number+" "+name);
         return new String[] { pkgOuter, number, name };
     }
 
@@ -1106,7 +1099,6 @@ class Package {
     }
 
     void stripAttributeKind(String what) {
-        // what is one of { Debug, Compile, Constant, Exceptions, InnerClasses }
         if (verbose > 0)
             Utils.log.info("Stripping "+what.toLowerCase()+" data and attributes...");
         switch (what) {
@@ -1117,10 +1109,6 @@ class Package {
                 strip("LocalVariableTypeTable");
                 break;
             case "Compile":
-                // Keep the inner classes normally.
-                // Although they have no effect on execution,
-                // the Reflection API exposes them, and JCK checks them.
-                // NO: // strip("InnerClasses");
                 strip("Deprecated");
                 strip("Synthetic");
                 break;

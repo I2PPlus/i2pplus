@@ -118,7 +118,6 @@ class PackageReader extends BandStructure {
             int nr = super.read(b, off, len);
             servedPos = pos;
             if (nr >= 0)  served += nr;
-            //assert(served <= limit || limit == -1);
             return nr;
         }
         public long skip(long n) throws IOException {
@@ -151,7 +150,7 @@ class PackageReader extends BandStructure {
     }
 
     void read() throws IOException {
-        boolean ok = false;
+
         try {
             //  pack200_archive:
             //        file_header
@@ -180,7 +179,6 @@ class PackageReader extends BandStructure {
                 reconstructClass(classes[i]);
             }
 
-            ok = true;
         } catch (Exception ee) {
             Utils.log.warning("Error on input: "+ee, ee);
             if (verbose > 0)
@@ -188,7 +186,6 @@ class PackageReader extends BandStructure {
                                  " served="+in.getBytesServed()+
                                  " buffered="+in.buffered+
                                  " limit="+in.limit);
-            //if (verbose > 0)  ee.printStackTrace();
             if (ee instanceof IOException)  throw (IOException)ee;
             if (ee instanceof RuntimeException)  throw (RuntimeException)ee;
             throw new Error("error unpacking", ee);
@@ -1038,7 +1035,6 @@ class PackageReader extends BandStructure {
                 String[] parse = Package.parseInnerClassName(n);
                 assert(parse != null);
                 String pkgOuter = parse[0];
-                //String number = parse[1];
                 String name     = parse[2];
                 if (pkgOuter == null)
                     outerClass = null;
@@ -1242,12 +1238,12 @@ class PackageReader extends BandStructure {
             }
             assert(fillp == 1+ldcRefs.size());
             cpRefs.removeAll(ldcRefs);
-            ldcRefs = null;  // done with it
+
         }
 
         // Next add all the two-byte references.
         Set<Entry> wideRefs = cpRefs;
-        cpRefs = null;  // do not use!
+
         int narrowLimit = fillp;
         for (Entry e : wideRefs) {
             cpMap[fillp++] = e;
@@ -1319,7 +1315,6 @@ class PackageReader extends BandStructure {
         class_field_count.doneDisbursing();
         field_descr.doneDisbursing();
         countAndReadAttrs(ATTR_CONTEXT_FIELD, fields);
-        fields = null;  // release to GC
 
         List<Class.Method> methods = new ArrayList<>(totalNM);
         method_descr.readFrom(in);
@@ -1593,7 +1588,6 @@ class PackageReader extends BandStructure {
         int[] totalCounts = new int[defs.length];
         for (Attribute.Holder h : holders) {
             assert(h.attributes == null);
-            // System.out.println("flags="+h.flags+" using fm="+flagMask);
             long attrBits = ((h.flags & flagMask) << 32) >>> 32;
             // Clean up the flags now.
             h.flags -= (int)attrBits;   // strip attr bits
@@ -2079,7 +2073,7 @@ class PackageReader extends BandStructure {
             int pc = 0;  // fill pointer in buf; actual bytecode PC
             int numInsns = 0;
             int numLabels = 0;
-            boolean hasEscs = false;
+
             fixupBuf.clear();
             for (int i = 0; i < codeOps.length; i++) {
                 int bc = Instruction.getByte(codeOps, i);
@@ -2106,7 +2100,6 @@ class PackageReader extends BandStructure {
                         Arrays.fill(buf, pc, pc+30, (byte)0);
                         Instruction.Switch isw = (Instruction.Switch)
                             Instruction.at(buf, curPC);
-                        //isw.setDefaultLabel(getLabel(bc_label, code, curPC));
                         isw.setCaseCount(caseCount);
                         if (bc == _tableswitch) {
                             isw.setCaseValue(0, bc_case_value.getInt());
@@ -2154,15 +2147,15 @@ class PackageReader extends BandStructure {
                 case _ref_escape:
                     {
                         // Note that insnMap has one entry for this.
-                        hasEscs = true;
+
                         int size = bc_escrefsize.getInt();
                         Entry ref = bc_escref.getRef();
                         if (size == 1)  ldcRefSet.add(ref);
-                        int fmt;
+
                         switch (size) {
                         case 1: fixupBuf.addU1(pc, ref); break;
                         case 2: fixupBuf.addU2(pc, ref); break;
-                        default: assert(false); fmt = 0;
+
                         }
                         buf[pc+0] = buf[pc+1] = 0;
                         pc += size;
@@ -2171,7 +2164,7 @@ class PackageReader extends BandStructure {
                 case _byte_escape:
                     {
                         // Note that insnMap has one entry for all these bytes.
-                        hasEscs = true;
+
                         int size = bc_escsize.getInt();
                         while ((pc + size) > buf.length)
                             buf = realloc(buf);
@@ -2243,7 +2236,6 @@ class PackageReader extends BandStructure {
                         int nextPC = curPC + Instruction.opLength(bc);
                         // Make our getLabel calls later.
                         labels[numLabels++] = curPC;
-                        //Instruction.at(buf, curPC).setBranchLabel(getLabel(bc_label, code, curPC));
                         while (pc < nextPC)  buf[pc++] = 0;
                         continue;
                     }
@@ -2292,11 +2284,11 @@ class PackageReader extends BandStructure {
                             break;
                         }
                         buf[pc++] = (byte) origBC;
-                        int fmt;
+
                         switch (size) {
                         case 1: fixupBuf.addU1(pc, ref); break;
                         case 2: fixupBuf.addU2(pc, ref); break;
-                        default: assert(false); fmt = 0;
+
                         }
                         buf[pc+0] = buf[pc+1] = 0;
                         pc += size;

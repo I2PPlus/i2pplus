@@ -219,7 +219,8 @@ class AdaptiveCoding implements CodingMethod {
             assert(ABDef < 3);
             int ADef = (ABDef & 1);
             int BDef = (ABDef & 2);
-            CodingMethod[] ACode = {dflt}, BCode = {dflt};
+            CodingMethod[] ACode = {dflt};
+            CodingMethod[] BCode = {dflt};
             int KB = KB_DEFAULT;
             if (KBFlag != 0)
                 KB = bytes[pos++] & 0xFF;
@@ -269,31 +270,6 @@ class AdaptiveCoding implements CodingMethod {
         return res.toString();
     }
 
-/*
-    public static void main(String av[]) {
-        int[][] samples = {
-            {1,2,3,4,5},
-            {254,255,256,256+1*16,256+2*16},
-            {0xfd,0xfe,0xff,0x100,0x110,0x120,0x130},
-            {0xfd0,0xfe0,0xff0,0x1000,0x1100,0x1200,0x1300},
-            {0xfd00,0xfe00,0xff00,0x10000,0x11000,0x12000,0x13000},
-            {0xfd000,0xfe000,0xff000,0x100000}
-        };
-        for (int i = 0; i < samples.length; i++) {
-            for (int j = 0; j < samples[i].length; j++) {
-                int K = samples[i][j];
-                int KX = getKXOf(K);
-                int KB = getKBOf(K);
-                System.out.println("K="+Integer.toHexString(K)+
-                                   " KX="+KX+" KB="+KB);
-                assert(isCodableLength(K));
-                assert(K == decodeK(KX, KB));
-                if (j == 0)  continue;
-                int K1 = samples[i][j-1];
-                assert(K == getNextK(K1));
-            }
-        }
-    }
-//*/
+
 
 }

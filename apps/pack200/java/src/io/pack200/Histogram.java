@@ -503,7 +503,7 @@ final class Histogram {
             newEntries += groups[ni];
         }
         if (newEntries > oldEntries) {
-            int newlen = groups.length;
+
             long ok = oldEntries;
             for (int ni = 0; ni < groups.length; ni++) {
                 if (ok < groups[ni]) {
@@ -511,7 +511,7 @@ final class Histogram {
                     System.arraycopy(groups, 0, newGroups, 0, ni+1);
                     groups = newGroups;
                     groups[ni] = (int) ok;
-                    ok = 0;
+
                     break;
                 }
                 ok -= groups[ni];
@@ -608,7 +608,6 @@ final class Histogram {
         }
         return values;
     }
-
 
     /// Debug stuff follows.
 

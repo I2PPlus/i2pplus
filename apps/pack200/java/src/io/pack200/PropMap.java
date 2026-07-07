@@ -146,7 +146,6 @@ final class PropMap implements SortedMap<String, String>  {
             return this;
         char nextch = (char)(prefix.charAt(len-1) + 1);
         String limit = prefix.substring(0, len-1)+nextch;
-        //System.out.println(prefix+" => "+subMap(prefix, limit));
         return subMap(prefix, limit);
     }
 

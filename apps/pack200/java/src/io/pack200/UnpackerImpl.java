@@ -52,7 +52,7 @@ import java.util.zip.ZipEntry;
 
 public class UnpackerImpl extends TLGlobals implements Pack200.Unpacker {
 
-    public UnpackerImpl() {}
+    public UnpackerImpl() { /* no-op */ }
 
 
 

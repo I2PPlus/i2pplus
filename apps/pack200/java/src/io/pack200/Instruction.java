@@ -91,7 +91,6 @@ class Instruction  {
         this.length = length;
     }
 
-
     /** A fake instruction at this pc whose next() will be at nextpc. */
     public Instruction forceNextPC(int nextpc) {
         int llength = nextpc - pc;
@@ -104,7 +103,7 @@ class Instruction  {
 
     public static Instruction at(byte[] bytes, int pc, Instruction reuse) {
         int bc = getByte(bytes, pc);
-        int prefix = -1;
+
         int w = 0;
         int length = BC_LENGTH[w][bc];
         if (length == 0) {
@@ -379,9 +378,6 @@ class Instruction  {
         return s;
     }
 
-
-    //public static byte constantPoolTagFor(int bc) { return BC_TAG[0][bc]; }
-
     /// Fetching values from byte arrays:
 
     public int getIntAt(int off) {
@@ -394,7 +390,6 @@ class Instruction  {
         return getByte(bytes, pc+off);
     }
 
-
     public static int getInt(byte[] bytes, int pc) {
         return (getShort(bytes, pc+0) << 16) + (getShort(bytes, pc+2) << 0);
     }
@@ -404,7 +399,6 @@ class Instruction  {
     public static int getByte(byte[] bytes, int pc) {
         return bytes[pc] & 0xFF;
     }
-
 
     public static void setInt(byte[] bytes, int pc, int x) {
         setShort(bytes, pc+0, x >> 16);
@@ -419,7 +413,6 @@ class Instruction  {
     }
 
     // some bytecode classifiers
-
 
     public static boolean isNonstandard(int bc) {
         return BC_LENGTH[0][bc] < 0;
@@ -515,8 +508,6 @@ class Instruction  {
         def("boo", _ifnull, _ifnonnull);                // pack oo
         def("boooo", _goto_w, _jsr_w);          // pack oooo
         for (int i = 0; i < _bytecode_limit; i++) {
-            //System.out.println(i+": l="+BC_LENGTH[0][i]+" i="+BC_INDEX[0][i]);
-            //assert(BC_LENGTH[0][i] != -1);
             if (BC_LENGTH[0][i] == -1) {
                 continue;  // unknown opcode
             }
@@ -600,7 +591,7 @@ class Instruction  {
         }
         return iname;
     }
-    private static int BW = 4;  // width of classification field
+
     private static void def(String fmt, int bc) {
         def(fmt, bc, bc);
     }

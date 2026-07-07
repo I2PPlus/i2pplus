@@ -187,7 +187,6 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
     }
     /** Largest int representable by (B,H,S) in up to nMax bytes. */
     public static int codeMax(int B, int H, int S, int nMax) {
-        //assert(S >= 0 && S <= S_MAX);
         long range = codeRangeLong(B, H, nMax);
         if (range == 0)
             return -1;  // degenerate max value for empty set of codes
@@ -209,7 +208,6 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
         the entire negative range.
      */
     public static int codeMin(int B, int H, int S, int nMax) {
-        //assert(S >= 0 && S <= S_MAX);
         long range = codeRangeLong(B, H, nMax);
         if (range >= (long)1<<32 && nMax == B) {
             // Can code negative values via 32-bit wraparound.
@@ -310,8 +308,6 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
         out[pos++] = (byte)sum;
         // Report number of bytes written by updating outpos[0]:
         outpos[0] = pos;
-        // Check right away for mis-coding.
-        //assert(sx == readInt(out, new int[1], B, H, S));
     }
     public static int readInt(byte[] in, int[] inpos, int B, int H, int S) {
         // U(b[i]: i<n) == Sum[i<n]( b[i] * H^i )
@@ -325,8 +321,6 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
             H_i *= H;
             if (b_i < L)  break;
         }
-        //assert(sum >= 0 && sum < codeRangeLong(B, H));
-        // Report number of bytes read by updating inpos[0]:
         inpos[0] = pos;
         return decodeSign32(sum, S);
     }
@@ -493,9 +487,6 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
             start = 0;
             end = deltas.length;
         }
-        // The following code is a buffered version of this loop:
-        //    for (int i = start; i < end; i++)
-        //        writeTo(out, a[i]);
         byte[] buf = new byte[1<<8];
         final int bufmax = buf.length-B;
         int[] pos = { 0 };
@@ -695,7 +686,6 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
             w += 8;
         }
         w += byteBitWidths[lo];
-        //assert(w == ceil_lg2(i + 1));
         return w;
     }
 
@@ -803,7 +793,6 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
                 deltas = makeDeltas(values, start, end, 0, 0);
             else
                 deltas = makeDeltas(values, start, end, min, max);
-            //return Coding.of(B, H, S).getLength(deltas, 0, len);
             values = deltas;
             start = 0;
         }
@@ -869,15 +858,12 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
         return pos-1;  // backup
     }
 
-
     public String keyString() {
         return "("+B+","+H+","+S+","+del+")";
     }
 
     public String toString() {
         String str = "Coding"+keyString();
-        // If -ea, print out more informative strings!
-        //assert((str = stringForDebug()) != null);
         return str;
     }
 
