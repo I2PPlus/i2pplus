@@ -20,9 +20,9 @@ the pinned version must be bumped by a developer.
 
 ### Ant Target
 
-| Target                | Description                                                                                                   |
-| --------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `ant sonarqube-report` | Full analysis: download/start server, run scanner, generate HTML report, stop server |
+| Target                 | Description                                                                                                   |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `ant sonarqube-report` | Full analysis: download/start server, run scanner, generate HTML report, stop server                          |
 
 ### Workflow
 
@@ -98,6 +98,40 @@ python3 tools/sonarqube/sonarqube-to-html.py \
     --cached-issues /tmp/i2p-sonarqube/.issues-cache.json \
     --output dist/sonarqube.html
 ```
+
+### Custom Quality Profile
+
+`run-sonar.sh` auto-imports `i2pplus-custom-java.xml` as the default Java quality
+profile before each scan. This profile is a copy of "Sonar way" with project-specific
+overrides. Current overrides:
+
+| Rule   | Change                          | Reason                                |
+| ------ | ------------------------------- | ------------------------------------- |
+| S116   | Format: `^_?[a-z][a-zA-Z0-9]*$` | Allow `_prefix` field convention      |
+| S106   | Deactivated                     | `System.out` usage (dev logging)      |
+| S1135  | Deactivated                     | TODO comment tracking (informational) |
+| S1192  | Deactivated                     | Duplicate string literals (invasive)  |
+
+**Creating or modifying a custom profile:**
+
+1. Export the current "Sonar way" Java profile from the running server:
+   ```bash
+   curl -u admin:SonarQube2026! \
+     -G 'http://localhost:11199/api/qualityprofiles/backup' \
+     --data-urlencode 'qualityProfile=Sonar way' \
+     --data-urlencode 'language=java' \
+     -o my-profile-java.xml
+   ```
+2. Edit the XML — find the `<rule>` for `S116` and change its `<format>` value.
+3. Change `<name>Sonar way</name>` to a unique name.
+4. Save to `tools/sonarqube/`    prepended with `my-profile-java.xml` — or replace
+   `i2pplus-custom-java.xml` entirely (the script imports whatever file
+   `CUSTOM_PROFILE` points to at the top of the import block).
+
+The profile is imported as the default Java profile on the server
+via `api/qualityprofiles/set_default` — no per-project association needed.
+If the XML file is missing from `tools/sonarqube/`, the script skips the import
+and the server's existing defaults are used.
 
 ### Scripts
 

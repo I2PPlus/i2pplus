@@ -41,6 +41,9 @@ SONAR_TMP="/tmp/build-i2p/sonarqube"
 SONAR_ISSUES_CACHE="${SONAR_TMP}/.issues-cache.json"
 
 SERVER_DIR="$(find_latest "sonarqube-*")"
+# Extract project key from properties file
+SONAR_PROJECT_KEY=$(grep -m1 '^sonar\.projectKey=' "$PROPERTIES_FILE" 2>/dev/null | cut -d= -f2- | tr -d '[:space:]')
+SONAR_PROJECT_KEY="${SONAR_PROJECT_KEY:-net.i2p.router:i2pplus}"
 SONAR_USER="${SONAR_USER:-admin}"
 SONAR_PASSWORD="${SONAR_PASSWORD:-SonarQube2026!}"
 SONAR_TOKEN_FILE="${SCRIPT_DIR}/.token"
@@ -205,6 +208,48 @@ for attempt in 1 2 3 4 5; do
     fi
     sleep 2
 done
+
+# ---- Import custom quality profile ----
+CUSTOM_PROFILE="${SCRIPT_DIR}/i2pplus-custom-java.xml"
+CUSTOM_PROFILE_NAME="I2P+ Custom"
+if [ -f "$CUSTOM_PROFILE" ]; then
+    echo "Importing quality profile '${CUSTOM_PROFILE_NAME}'..."
+    # Check if profile already exists
+    PROFILE_KEY=$(LD_PRELOAD="" curl -s -u "${SONAR_USER}:${SONAR_PASSWORD}" \
+        -G "${SONAR_HOST}/api/qualityprofiles/search" \
+        --data-urlencode "qualityProfile=${CUSTOM_PROFILE_NAME}" \
+        --data-urlencode "language=java" 2>/dev/null | \
+        python3 -c "import sys,json; d=json.load(sys.stdin); ps=d.get('profiles',[]); print(ps[0]['key'] if ps else '')" 2>/dev/null)
+    if [ -n "$PROFILE_KEY" ]; then
+        # Remove existing profile so restore recreates it fresh
+        LD_PRELOAD="" curl -s -u "${SONAR_USER}:${SONAR_PASSWORD}" \
+            -X POST "${SONAR_HOST}/api/qualityprofiles/delete" \
+            --data-urlencode "profile=${PROFILE_KEY}" -o /dev/null 2>/dev/null && \
+            echo "  Removed existing profile"
+    fi
+    # Restore from XML backup (must use -F for file upload, --data-urlencode sends literal string)
+    RESP=$(LD_PRELOAD="" curl -s -u "${SONAR_USER}:${SONAR_PASSWORD}" \
+        -X POST "${SONAR_HOST}/api/qualityprofiles/restore" \
+        -F "backup=@${CUSTOM_PROFILE}" 2>/dev/null)
+    PROFILE_KEY=$(echo "$RESP" | python3 -c "import sys,json; d=json.load(sys.stdin); p=d.get('profile',{}); print(p.get('key',''))" 2>/dev/null)
+    if [ -n "$PROFILE_KEY" ]; then
+        echo "  Profile '${CUSTOM_PROFILE_NAME}' imported (key=${PROFILE_KEY})"
+        # Set as default for Java so it applies even if the project
+        # doesn't exist yet (scanner creates it during report upload).
+        SET_RESP=$(LD_PRELOAD="" curl -s -u "${SONAR_USER}:${SONAR_PASSWORD}" \
+            -X POST "${SONAR_HOST}/api/qualityprofiles/set_default" \
+            --data-urlencode "qualityProfile=${CUSTOM_PROFILE_NAME}" \
+            --data-urlencode "language=java" 2>/dev/null)
+        if echo "$SET_RESP" | grep -q '"errors"' 2>/dev/null; then
+            ERR=$(echo "$SET_RESP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('errors',[{}])[0].get('msg',''))" 2>/dev/null)
+            echo "  Warning: could not set as default: $ERR"
+        else
+            echo "  Set as default Java profile"
+        fi
+    else
+        echo "  Warning: failed to import quality profile: $(echo "$RESP" | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d.get(\"errors\",[{}])[0].get(\"msg\",\"unknown\"))' 2>/dev/null)"
+    fi
+fi
 
 # ---- Get or generate token ----
 # ---- Persist password for Web UI ----
