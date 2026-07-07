@@ -41,6 +41,10 @@ class DirectLookupJob extends FloodOnlySearchJob {
     @Override
     public void runJob() {
         RouterContext ctx = getContext();
+        if (_oldRI == null) {
+            failed();
+            return;
+        }
         _onm = ctx.messageRegistry().registerPending(_replySelector, _onReply, _onTimeout);
         DatabaseLookupMessage dlm = new DatabaseLookupMessage(ctx, true);
         dlm.setFrom(ctx.routerHash());

@@ -77,13 +77,18 @@ class GetBidsJob extends JobImpl {
             return;
         }
         Log log = context.logManager().getLog(GetBidsJob.class);
-        Hash to = msg.getTarget().getIdentity().getHash();
+        RouterInfo target = msg.getTarget();
+        if (target == null) {
+            context.statManager().addRateData("transport.bidFailNullTarget", msg.getLifetime());
+            fail(context, msg);
+            return;
+        }
+        Hash to = target.getIdentity().getHash();
         msg.timestamp("Bid");
 
         if (context.banlist().isBanlisted(to)) {
             if (log.shouldInfo())
                 log.info("Attempted to send message to banlisted peer [" + to.toBase64().substring(0,6) + "]");
-            //context.messageRegistry().peerFailed(to);
             context.statManager().addRateData("transport.bidFailBanlisted", msg.getLifetime());
             fail(context, msg);
             return;
