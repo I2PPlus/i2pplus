@@ -2,7 +2,6 @@ package net.i2p.sam;
 
 import java.io.IOException;
 import java.net.SocketAddress;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.Properties;
 import net.i2p.client.I2PSession;

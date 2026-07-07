@@ -30,7 +30,7 @@ public class TuningHelper extends HelperBase {
     public void setNonce(String nonce) { _nonce = nonce; }
 
     // human-readable labels for raw param names
-    private static final Map<String, String> DISPLAY_NAMES = new HashMap<String, String>();
+    private static final Map<String, String> DISPLAY_NAMES = new HashMap<>();
     static {
         DISPLAY_NAMES.put("ACK_FREQUENCY", "Acknowledgement Frequency");
         DISPLAY_NAMES.put("DATA_MESSAGE_TIMEOUT", "Data Message Timeout");
@@ -121,7 +121,7 @@ public class TuningHelper extends HelperBase {
     }
 
     // brief purpose descriptions (<=120 chars)
-    private static final Map<String, String> PARAM_DESCRIPTIONS = new HashMap<String, String>();
+    private static final Map<String, String> PARAM_DESCRIPTIONS = new HashMap<>();
     static {
         PARAM_DESCRIPTIONS.put("ACK_FREQUENCY", "Data packets between each ACK.");
         PARAM_DESCRIPTIONS.put("DATA_MESSAGE_TIMEOUT", "Time in ms before a message is declared lost.");
@@ -225,7 +225,7 @@ public class TuningHelper extends HelperBase {
     };
 
     // single-word section headings
-    private static final Map<String, String> SECTION_LABELS = new LinkedHashMap<String, String>();
+    private static final Map<String, String> SECTION_LABELS = new LinkedHashMap<>();
     static {
         SECTION_LABELS.put(Tuner.SUB_TRANSPORT, "Transport");
         SECTION_LABELS.put(Tuner.SUB_TUNNEL, "Tunnel");
@@ -250,19 +250,19 @@ public class TuningHelper extends HelperBase {
         double healthScore = tuner.getHealthScore();
 
         // group by subsystem for ordering
-        Map<String, List<ParamSnapshot>> groups = new LinkedHashMap<String, List<ParamSnapshot>>();
+        Map<String, List<ParamSnapshot>> groups = new LinkedHashMap<>();
         for (String sub : SUBSYSTEM_ORDER)
-            groups.put(sub, new ArrayList<ParamSnapshot>());
+            groups.put(sub, new ArrayList<>());
         for (ParamSnapshot s : snaps) {
             List<ParamSnapshot> list = groups.get(s.subsystem);
             if (list == null) {
-                list = new ArrayList<ParamSnapshot>();
+                list = new ArrayList<>();
                 groups.put(s.subsystem, list);
             }
             list.add(s);
         }
         // Pre-compute display names for sorting
-        Map<String, String> dn = new HashMap<String, String>();
+        Map<String, String> dn = new HashMap<>();
         for (ParamSnapshot s : snaps) {
             String display = DISPLAY_NAMES.get(s.name);
             dn.put(s.name, display != null ? display : s.name);

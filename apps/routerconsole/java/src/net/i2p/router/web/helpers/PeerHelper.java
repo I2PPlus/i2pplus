@@ -391,7 +391,7 @@ public class PeerHelper extends HelperBase {
            .append(" / ")
            .append(nt.getMaxConnections())
            .append("<span id=topCount hidden></span></h3>\n<div class=widescroll>\n<table id=ntcpconnections class=cells>\n");
-        if (peers.size() != 0) {
+        if (!peers.isEmpty()) {
             buf.append("<thead><tr><th class=peer>")
                .append(_t("Peer"))
                .append("</th><th class=caps title=\"")
@@ -648,7 +648,7 @@ public class PeerHelper extends HelperBase {
         buf.append("<span id=topCount hidden></span></h3>\n<div class=widescroll>\n<table id=udpconnections class=\"");
         if (debugmode) {buf.append("advancedview ");}
         buf.append("cells\">\n");
-        if (peers.size() != 0) {
+        if (!peers.isEmpty()) {
             buf.append("<thead><tr class=smallhead><th class=peer>")
                .append(_t("Peer"));
             if (debugmode) {

@@ -56,7 +56,7 @@ class SAMRawSession extends SAMMessageSession {
      * @throws I2PSessionException
      */
     public SAMRawSession(InputStream destStream, Properties props,
-                         SAMRawReceiver recv) throws IOException, DataFormatException, I2PSessionException {
+                         SAMRawReceiver recv) throws I2PSessionException {
         super(destStream, props);
         this.recv = recv;
     }
@@ -68,8 +68,8 @@ class SAMRawSession extends SAMMessageSession {
      * @since 0.9.25
      */
     protected SAMRawSession(I2PSession sess, Properties props, int listenProtocol, int listenPort,
-                            SAMRawReceiver recv) throws IOException,
-                              DataFormatException, I2PSessionException {
+                            SAMRawReceiver recv) throws 
+                              I2PSessionException {
         super(sess, listenProtocol, listenPort);
         this.recv = recv;
     }

@@ -492,7 +492,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     public synchronized boolean close(boolean forced) {
         if (!open) return true;
         synchronized (lock) {
-            if (!forced && sockMgr.listSockets().size() != 0) {
+            if (!forced && !sockMgr.listSockets().isEmpty()) {
                 l.log("There are still active connections!");
                 for (I2PSocket skt : sockMgr.listSockets()) {l.log("->" + skt);}
                 return false;

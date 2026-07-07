@@ -329,7 +329,7 @@ class SearchState {
         if (_aborted) {buf.append(" aborted");}
         // this _should_ only show the following if debug logging is enabled, but currently it supresses it
         if (debug) {
-            if (_attemptedPeers.size() > 0) {
+            if (!_attemptedPeers.isEmpty()) {
                 buf.append("\n* Queried: ");
                 synchronized (_attemptedPeers) {
                     buf.append(_attemptedPeers.size()).append(' ');
@@ -338,7 +338,7 @@ class SearchState {
                     }
                 }
             }
-            if (_pendingPeers.size() > 0) {
+            if (!_pendingPeers.isEmpty()) {
                 buf.append("\n* Pending: ");
                 synchronized (_pendingPeers) {
                     buf.append(_pendingPeers.size()).append(' ');
@@ -347,7 +347,7 @@ class SearchState {
                     }
                 }
             }
-            if (_failedPeers.size() > 0) {
+            if (!_failedPeers.isEmpty()) {
                 buf.append("\n* Failed: ");
                 synchronized (_failedPeers) {
                     buf.append(_failedPeers.size()).append(' ');
@@ -356,7 +356,7 @@ class SearchState {
                     }
                 }
             }
-            if (_successfulPeers.size() > 0) {
+            if (!_successfulPeers.isEmpty()) {
                 buf.append("\n* Successful: ");
                 synchronized (_successfulPeers) {
                     buf.append(_successfulPeers.size()).append(' ');

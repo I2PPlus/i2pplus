@@ -1018,8 +1018,8 @@ class NetDbRenderer {
         }
         if (notLocal) {leases.addAll(netdb.getLeases());}
         else {
-            if (netdb.getPublishedLeases().size() > 0) {leases.addAll(netdb.getPublishedLeases());}
-            if (netdb.getUnpublishedLeases().size() > 0) {leases.addAll(netdb.getUnpublishedLeases());}
+            if (!netdb.getPublishedLeases().isEmpty()) {leases.addAll(netdb.getPublishedLeases());}
+            if (!netdb.getUnpublishedLeases().isEmpty()) {leases.addAll(netdb.getUnpublishedLeases());}
             localLSCount = netdb.getPublishedLeases().size() + netdb.getUnpublishedLeases().size();
         }
         int medianCount = 0;
@@ -1042,7 +1042,7 @@ class NetDbRenderer {
         } else {renderLocalSummary(out);}
         if (debug) {
             RouterKeyGenerator gen = _context.routerKeyGenerator();
-            if (leases.size() > 0) {
+            if (!leases.isEmpty()) {
                 buf.append("<tr id=rapLS><td><b>").append(_t("Published (RAP) Leasesets")).append("</b></td><td colspan=4>").append(leases.size())
                    .append(" (").append(_t("Sorted by hash distance, closest first.")).append(")</td></tr>\n");
             }

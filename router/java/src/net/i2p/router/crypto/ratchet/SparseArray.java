@@ -116,7 +116,7 @@ class SparseArray<E> implements Cloneable {
     @Override
     @SuppressWarnings("unchecked")
     public SparseArray<E> clone() {
-        return new SparseArray<E>(this);
+        return new SparseArray<>(this);
     }
 
     /**

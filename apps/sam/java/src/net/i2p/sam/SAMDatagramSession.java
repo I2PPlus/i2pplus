@@ -64,8 +64,8 @@ class SAMDatagramSession extends SAMMessageSession {
      * @throws I2PSessionException
      */
     public SAMDatagramSession(InputStream destStream, Properties props,
-                              SAMDatagramReceiver recv) throws IOException,
-                              DataFormatException, I2PSessionException {
+                              SAMDatagramReceiver recv) throws 
+                              I2PSessionException {
         super(destStream, props);
         this.recv = recv;
         dgramMaker = new I2PDatagramMaker(getI2PSession());
@@ -78,8 +78,8 @@ class SAMDatagramSession extends SAMMessageSession {
      * @since 0.9.25
      */
     protected SAMDatagramSession(I2PSession sess, Properties props, int listenPort,
-                              SAMDatagramReceiver recv) throws IOException,
-                              DataFormatException, I2PSessionException {
+                              SAMDatagramReceiver recv) throws 
+                              I2PSessionException {
         super(sess, I2PSession.PROTO_DATAGRAM, listenPort);
         this.recv = recv;
         dgramMaker = new I2PDatagramMaker(getI2PSession());

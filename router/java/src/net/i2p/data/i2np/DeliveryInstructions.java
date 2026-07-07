@@ -58,7 +58,7 @@ public class DeliveryInstructions extends DataStructureImpl {
      *
      *  @since 0.9.20
      */
-    public static DeliveryInstructions create(byte[] data, int offset) throws DataFormatException {
+    public static DeliveryInstructions create(byte[] data, int offset) {
         if (data[offset] == 0)
             return LOCAL;
         DeliveryInstructions rv = new DeliveryInstructions();

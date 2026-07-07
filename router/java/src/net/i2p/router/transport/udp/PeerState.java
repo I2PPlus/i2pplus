@@ -1731,7 +1731,7 @@ public class PeerState {
         if (_lastACKSend != 0) {buf.append("\n* Last ACK sent: ").append(new Date(_lastACKSend));}
         if (_log.shouldInfo()) {
             int txQueue = _outboundQueue.size();
-            boolean isQueued = _inboundMessages.size() > 0 || _outboundMessages.size() > 0;
+            boolean isQueued = _inboundMessages.size() > 0 || !_outboundMessages.isEmpty();
             buf.append("\n* Lifetime: ").append(now-_keyEstablishedTime).append("ms")
                .append("; RTT: ").append(_rtt).append("ms")
                .append("; RTTdev: ").append(_rttDeviation).append("ms")

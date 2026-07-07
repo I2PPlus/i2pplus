@@ -48,7 +48,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
     private static final int DEFAULT_HIGH_THRESHOLD_DIV = 2;
 
     /** Active instances for dynamic tuning — weak refs prevent leak when tunnels expire */
-    private static final CopyOnWriteArrayList<WeakReference<SyntheticREDQueue>> INSTANCES = new CopyOnWriteArrayList<WeakReference<SyntheticREDQueue>>();
+    private static final CopyOnWriteArrayList<WeakReference<SyntheticREDQueue>> INSTANCES = new CopyOnWriteArrayList<>();
 
     /**
      * Remove this instance from the tuning list.
@@ -151,7 +151,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * @since 0.9.70+
      */
     public static List<SyntheticREDQueue> getInstances() {
-        List<SyntheticREDQueue> result = new ArrayList<SyntheticREDQueue>();
+        List<SyntheticREDQueue> result = new ArrayList<>();
         for (WeakReference<SyntheticREDQueue> ref : INSTANCES) {
             SyntheticREDQueue q = ref.get();
             if (q != null) result.add(q);
@@ -221,7 +221,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
         _bandwidthBytesPerMs = bwBps / 1000f;
 
         _lastQueueUpdateTime = _lastAckTime;
-        INSTANCES.add(new WeakReference<SyntheticREDQueue>(this));
+        INSTANCES.add(new WeakReference<>(this));
 
         if (_log.shouldDebug()) {
             _log.debug("Configured bandwidth: " + bwBps + "B/s; MinThreshold: " + minThB + "B; MaxThreshold: " + maxThB + "B");

@@ -14,7 +14,6 @@ import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.NoRouteToHostException;
 import java.net.SocketTimeoutException;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -94,7 +93,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      */
     public SAMv3StreamSession(
             String login, Properties props, SAMv3Handler handler, I2PSocketManager mgr, int listenPort)
-            throws IOException, DataFormatException, SAMException {
+ {
         super(mgr, props, handler, listenPort);
         this.nick = login;
         _acceptQueue = new LinkedBlockingQueue<>(MAX_ACCEPT_QUEUE);

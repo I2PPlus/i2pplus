@@ -293,7 +293,7 @@ public final class ElGamalAESEngine {
      * @return null if decryption fails
      */
     private byte[] decryptNewSession(byte[] data, PrivateKey targetPrivateKey, Set<SessionTag> foundTags, SessionKey usedKey,
-                                    SessionKey foundKey) throws DataFormatException {
+                                    SessionKey foundKey) {
         byte[] elgEncr = new byte[ELG_ENCRYPTED_LENGTH];
         if (data.length > ELG_ENCRYPTED_LENGTH) {
             System.arraycopy(data, 0, elgEncr, 0, ELG_ENCRYPTED_LENGTH);

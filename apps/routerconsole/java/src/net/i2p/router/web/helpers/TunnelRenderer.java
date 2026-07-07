@@ -895,7 +895,7 @@ class TunnelRenderer {
             if (length > maxLength) {maxLength = length;}
         }
         StringBuilder buf = new StringBuilder(32*1024);
-        if (tunnels.size() != 0) {
+        if (!tunnels.isEmpty()) {
             buf.append("<table class=\"tunneldisplay tunnels_client\">\n<tr><th title=\"")
                .append(_t("Inbound or outbound?"))
                .append("\">")
@@ -1083,7 +1083,7 @@ class TunnelRenderer {
             if (length > maxLength) {maxLength = length;}
         }
         StringBuilder buf = new StringBuilder(32*1024);
-        if (tunnels.size() != 0) {
+        if (!tunnels.isEmpty()) {
             buf.append("<table id=tunnelbandwidth><tr><th>")
                .append(_t("Tunnel Name")).append("</th><th>").append(_t("Data In"))
                .append("</th><th>").append(_t("Data Out")).append("</th></tr>\n");

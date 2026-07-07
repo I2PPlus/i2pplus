@@ -344,7 +344,7 @@ public class TunnelPool {
             } else {
                 TunnelInfo backloggedTunnel = null;
                 // Random start index for statistical load balancing
-                int startIdx = _tunnels.size() > 0 ? _context.random().nextInt(_tunnels.size()) : 0;
+                int startIdx = !_tunnels.isEmpty() ? _context.random().nextInt(_tunnels.size()) : 0;
                 if (avoidZeroHop) {
                     for (int i = 0; i < _tunnels.size(); i++) {
                         int idx = (startIdx + i) % _tunnels.size();

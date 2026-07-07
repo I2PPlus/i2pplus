@@ -504,7 +504,7 @@ public class TuningFormHandler extends FormHandler {
         if (!_action.equals(_t("Save")))
             return;
 
-        Map<String, String> changes = new HashMap<String, String>();
+        Map<String, String> changes = new HashMap<>();
 
         // Transport
         saveField(changes, "ACK_FREQUENCY", "Min", _ackFrequencyMin);
@@ -831,7 +831,7 @@ public class TuningFormHandler extends FormHandler {
      * Build a map of property deletions to reset all tuner ranges to defaults.
      */
     private Map<String, String> getResetChanges() {
-        Map<String, String> deletions = new HashMap<String, String>();
+        Map<String, String> deletions = new HashMap<>();
         String[] params = {
             "ACK_FREQUENCY", "DATA_MESSAGE_TIMEOUT", "MAX_OB_ESTABLISH_TIME", "MAX_IB_ESTABLISH_TIME",
             "REQUEUE_TIME", "REPLENISH_FREQUENCY", "SELECTOR_LOOP_DELAY",

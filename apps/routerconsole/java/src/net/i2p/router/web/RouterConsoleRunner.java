@@ -816,7 +816,7 @@ public class RouterConsoleRunner implements RouterApp {
         if (rewrite)
             storeWebAppProperties(_context, props);
 
-        if (rootServletHandler != null && notStarted.size() > 0) {
+        if (rootServletHandler != null && !notStarted.isEmpty()) {
             // map each not-started webapp to the error page
             ServletHolder noWebApp = rootServletHandler.getServlet("net.i2p.router.web.jsp.nowebapp_jsp");
             for (int i = 0; i < notStarted.size(); i++) {

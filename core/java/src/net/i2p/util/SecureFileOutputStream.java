@@ -88,7 +88,7 @@ public class SecureFileOutputStream extends FileOutputStream {
      */
     public static void setGroupPerms(File f) {
         try {
-            Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
+            Set<PosixFilePermission> perms = new HashSet<>();
             perms.add(PosixFilePermission.OWNER_READ);
             perms.add(PosixFilePermission.OWNER_WRITE);
             perms.add(PosixFilePermission.GROUP_READ);

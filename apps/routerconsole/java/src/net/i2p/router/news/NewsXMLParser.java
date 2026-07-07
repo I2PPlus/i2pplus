@@ -216,7 +216,7 @@ public class NewsXMLParser {
 
         List<NewsMetadata.Release> releases = new ArrayList<>();
         List<Node> releaseNodes = getNodes(feed, "i2p:release");
-        if (releaseNodes.size() == 0)
+        if (releaseNodes.isEmpty())
             throw new I2PParserException("no release data in XML");
         for (Node r : releaseNodes) {
             NewsMetadata.Release release = new NewsMetadata.Release();
@@ -243,7 +243,7 @@ public class NewsXMLParser {
 
             List<NewsMetadata.Update> updates = new ArrayList<>();
             List<Node> updateNodes = getNodes(r, "i2p:update");
-            if (updateNodes.size() == 0)
+            if (updateNodes.isEmpty())
                 throw new I2PParserException("no updates in release");
             Set<String> types = new HashSet<>();
             for (Node u : updateNodes) {

@@ -76,7 +76,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     private final String STAT_DROP;
 
     /** Active instances for dynamic tuning — weak refs prevent leak when tunnels expire */
-    private static final CopyOnWriteArrayList<WeakReference<CoDelPriorityBlockingQueue>> INSTANCES = new CopyOnWriteArrayList<WeakReference<CoDelPriorityBlockingQueue>>();
+    private static final CopyOnWriteArrayList<WeakReference<CoDelPriorityBlockingQueue>> INSTANCES = new CopyOnWriteArrayList<>();
 
     /**
      * Remove this instance from the tuning list.
@@ -137,7 +137,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         }
         ctx.statManager().createRequiredRateStat(STAT_DELAY, "Average queue delay (ms)", "Router [CoDel]", CODEL_RATES);
         _id = __id.incrementAndGet();
-        INSTANCES.add(new WeakReference<CoDelPriorityBlockingQueue>(this));
+        INSTANCES.add(new WeakReference<>(this));
     }
 
     /**

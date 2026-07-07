@@ -49,7 +49,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
      * @throws DataFormatException
      * @throws I2PSessionException
      */
-    protected SAMMessageSession(String dest, Properties props) throws IOException, DataFormatException, I2PSessionException {
+    protected SAMMessageSession(String dest, Properties props) throws I2PSessionException {
         this(new ByteArrayInputStream(Base64.decode(dest)), props);
     }
 
@@ -83,7 +83,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
      * @since 0.9.25
      */
     protected SAMMessageSession(I2PSession sess, int listenProtocol, int listenPort)
-                            throws I2PSessionException {
+ {
         _log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
         if (_log.shouldDebug())
             _log.debug("Initializing SAM message-based session");

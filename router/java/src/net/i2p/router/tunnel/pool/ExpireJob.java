@@ -317,7 +317,7 @@ class ExpireJob extends JobImpl {
             _expirations.remove(te.tunnelKey);
         }
 
-        if (log.shouldInfo() && (readyToExpire.size() > 0 || readyToDrop.size() > 0)) {
+        if (log.shouldInfo() && (!readyToExpire.isEmpty() || !readyToDrop.isEmpty())) {
             log.info("ExpireJob processed " + readyToExpire.size() + " phase 1, " +
                 readyToDrop.size() + " phase 2, " + _expirations.size() + " remaining");
         }

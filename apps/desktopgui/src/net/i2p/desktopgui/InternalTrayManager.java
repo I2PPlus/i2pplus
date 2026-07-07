@@ -7,7 +7,7 @@ import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -496,10 +496,6 @@ class InternalTrayManager extends TrayManager {
         // null args ok
         UrlLauncher launcher = new UrlLauncher(_context, null, null);
         String url = _context.portMapper().getConsoleURL();
-        try {
-            launcher.openUrl(url);
-        } catch (IOException e1) {
-            log.log(Log.WARN, "Failed to open browser!", e1);
-        }
+        launcher.openUrl(url);
     }
 }

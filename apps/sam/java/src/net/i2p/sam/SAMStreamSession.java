@@ -15,7 +15,6 @@ import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.NoRouteToHostException;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.util.ArrayList;
@@ -93,7 +92,7 @@ class SAMStreamSession implements SAMMessageSess {
      * @throws SAMException
      */
     public SAMStreamSession(String dest, String dir, Properties props,
-                            SAMStreamReceiver recv) throws IOException, DataFormatException, SAMException {
+                            SAMStreamReceiver recv) throws SAMException {
         this(new ByteArrayInputStream(Base64.decode(dest)), dir, props, recv);
     }
 

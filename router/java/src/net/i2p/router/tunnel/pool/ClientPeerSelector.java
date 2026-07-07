@@ -651,7 +651,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 // not enough peers to build the minimum size
                 if (rv.size() < min) {
                 // For firewalled routers with very few peers, allow shorter tunnels as fallback
-                    if (hidden && rv.size() > 0) {
+                    if (hidden && !rv.isEmpty()) {
                         if (log.shouldInfo()) {
                             log.info("Firewalled router: allowing shorter tunnel (" + rv.size() + " hops) instead of requested " + length + " hops");
                         }
@@ -668,7 +668,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         // Progressive fallback under network stress based on build success rate
                         boolean isUnderStress = buildSuccess < ATTACK_THRESHOLD;
 
-                        if ((isUnderStress || useHighCapPrimary) && rv.size() > 0) {
+                        if ((isUnderStress || useHighCapPrimary) && !rv.isEmpty()) {
                             // Network stress or HighCap mode: try fallback with relaxed restrictions
                             if (log.shouldInfo()) {
                                 log.info("Network stress or HighCap primary (" + (int) (buildSuccess * 100) + "% success) -> Trying relaxed fallback peer selection...");
@@ -779,7 +779,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
                         // Final check - if still not enough peers and we have some, allow shorter tunnel
                         if (rv.size() < min) {
-                            if ((isUnderStress || useHighCapPrimary) && rv.size() > 0) {
+                            if ((isUnderStress || useHighCapPrimary) && !rv.isEmpty()) {
                                 // Under stress but have some peers - allow shorter tunnel instead of null
                                 if (log.shouldWarn()) {
                                     log.warn("Network stress: allowing shorter tunnel (" + rv.size() + " hops) instead of " + min + " minimum");

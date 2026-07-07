@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.Properties;
 import net.i2p.client.I2PSession;

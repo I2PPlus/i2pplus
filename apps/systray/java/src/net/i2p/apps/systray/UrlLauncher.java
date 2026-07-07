@@ -326,7 +326,7 @@ public class UrlLauncher implements ClientApp {
      *
      * @throws IOException
      */
-    public boolean openUrl(String url) throws IOException {
+    public boolean openUrl(String url) {
         if (IS_SERVICE)
             return false;
         if (_log.shouldDebug()) _log.debug("Waiting for Router Console initialization before launching browser...");
@@ -515,13 +515,9 @@ public class UrlLauncher implements ClientApp {
     private class Runner implements Runnable {
         public void run() {
             changeState(RUNNING);
-            try {
-                String url = _args[0];
-                openUrl(url);
-                changeState(STOPPED);
-            } catch (IOException e) {
-                changeState(CRASHED, e);
-            }
+            String url = _args[0];
+            openUrl(url);
+            changeState(STOPPED);
         }
     }
 
@@ -579,11 +575,9 @@ public class UrlLauncher implements ClientApp {
      */
     public static void main(String[] args) {
         UrlLauncher launcher = new UrlLauncher();
-        try {
-            if (args.length > 0)
-                launcher.openUrl(args[0]);
-            else
-                launcher.openUrl(I2PAppContext.getGlobalContext().portMapper().getConsoleURL());
-         } catch (IOException e) { /* ignored */ }
+        if (args.length > 0)
+            launcher.openUrl(args[0]);
+        else
+            launcher.openUrl(I2PAppContext.getGlobalContext().portMapper().getConsoleURL());
     }
 }

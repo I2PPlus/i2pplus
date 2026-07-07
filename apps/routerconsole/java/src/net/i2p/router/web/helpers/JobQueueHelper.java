@@ -128,7 +128,7 @@ public class JobQueueHelper extends HelperBase {
            .append(lagStr)
            .append("</h3>\n");
 
-        if (activeJobs.size() > 0) {
+        if (!activeJobs.isEmpty()) {
             buf.append("<ol class=jobqueue>\n");
             // Group active jobs by name
             Map<String, List<Job>> groupedActiveJobs = new HashMap<>();
@@ -155,7 +155,7 @@ public class JobQueueHelper extends HelperBase {
         }
         buf.append("</div>\n");
 
-        if ((justFinishedJobs.size() != 0) && (isAdvanced())) {
+        if ((!justFinishedJobs.isEmpty()) && (isAdvanced())) {
             // Calculate total runtime for just finished jobs
             long totalRuntime = 0;
             for (Job j : justFinishedJobs) {
@@ -260,7 +260,7 @@ public class JobQueueHelper extends HelperBase {
             buf.append("</ol></div>\n");
         }
 
-        boolean hasJobs = readyJobs.size() > 0;
+        boolean hasJobs = !readyJobs.isEmpty();
         String droppedStr = " <span id=dropped class=jobCounter style=float:right>" + _t("Dropped: {0}", droppedCount) + "</span>";
         buf.append("<div class=tablewrap id=ready>\n<h3 id=readyjobs")
            .append(!hasJobs ? " class=nojobs" : "").append(">")

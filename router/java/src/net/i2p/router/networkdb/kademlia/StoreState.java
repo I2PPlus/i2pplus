@@ -203,7 +203,7 @@ class StoreState {
             buf.append(" - Completed? false ");
         else
             buf.append("\n* Completed: ").append(new Date(_completed));
-        if (_attemptedPeers.size() > 0) {
+        if (!_attemptedPeers.isEmpty()) {
             buf.append("\n* Queried: ").append(_attempted);
             buf.append("\n* Queried and skipped: ");
             synchronized (_attemptedPeers) {
@@ -213,7 +213,7 @@ class StoreState {
                 }
             }
         }
-        if (_pendingPeers.size() > 0) {
+        if (!_pendingPeers.isEmpty()) {
             buf.append("\n* Pending: ");
             synchronized (_pendingPeers) {
                 buf.append(_pendingPeers.size()).append(' ');
@@ -222,7 +222,7 @@ class StoreState {
                 }
             }
         }
-        if (_successfulPeers.size() > 0) {
+        if (!_successfulPeers.isEmpty()) {
             buf.append("\n* Successful: ");
             synchronized (_successfulPeers) {
                 buf.append(_successfulPeers.size()).append(' ');
