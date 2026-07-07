@@ -162,10 +162,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final long START_INTERVAL = (60 * 1000) * 3;
     private static final int MAX_LINE_LENGTH = 8*1024;
     /** ridiculously long, just to prevent OOM DOS
-     *  @since 0.7.13 */
+     *  @since 0.7.13
+     */
     private static final int MAX_HEADERS = 60;
     /** Includes request, just to prevent OOM DOS
-     *  @since 0.9.20 */
+     *  @since 0.9.20
+     */
     private static final int MAX_TOTAL_HEADER_SIZE = 32*1024;
     // Does not apply to header reads.
     // We set it to forever so that it won't timeout when sending a large response.

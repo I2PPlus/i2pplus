@@ -91,8 +91,9 @@ public class Certificate extends DataStructureImpl {
     public static final int CERTIFICATE_TYPE_MULTIPLE = 4;
 
     /** Key certificate type.
-    *
-     * @since 0.9.12 */
+     *
+     * @since 0.9.12
+     */
     public static final int CERTIFICATE_TYPE_KEY = 5;
 
     /**

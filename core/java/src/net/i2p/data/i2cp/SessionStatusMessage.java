@@ -33,8 +33,9 @@ public class SessionStatusMessage extends I2CPMessageImpl {
     public static final int STATUS_INVALID = 3;
 
     /** Session refused status.
-    *
-     * @since 0.9.12 */
+     *
+     * @since 0.9.12
+     */
     public static final int STATUS_REFUSED = 4;
 
     /**

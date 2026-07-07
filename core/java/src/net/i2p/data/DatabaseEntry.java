@@ -91,8 +91,9 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     public static final int KEY_TYPE_LEASESET = 1;
 
     /** LeaseSet 2 type.
-    *
-     * @since 0.9.38 */
+     *
+     * @since 0.9.38
+     */
     public static final int KEY_TYPE_LS2 = 3;
 
     /**

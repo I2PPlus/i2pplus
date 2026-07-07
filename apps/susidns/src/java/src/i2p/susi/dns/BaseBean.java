@@ -164,7 +164,8 @@ public class BaseBean {
     /**
      * Checks if Sora font should be used.
      * @return true if Sora font is enabled
-     * @since 0.9.59+ */
+     * @since 0.9.59+
+     */
     public boolean useSoraFont() {return _context.getBooleanProperty(RC_PROP_ENABLE_SORA_FONT);}
 
     /**

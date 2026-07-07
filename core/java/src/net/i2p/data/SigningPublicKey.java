@@ -152,7 +152,7 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /** constructs from base64
-    *
+     *
      * @param base64Data a string of base64 data (the output of .toBase64() called
      * on a prior instance of SigningPublicKey
      */

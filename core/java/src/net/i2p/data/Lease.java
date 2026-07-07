@@ -93,7 +93,7 @@ public class Lease extends DataStructureImpl {
     public Lease() { /* required for deserialization */ }
 
     /** Retrieve the router at which the destination can be contacted
-    *
+     *
      * @return identity of the router acting as a gateway
      */
     public Hash getGateway() {
@@ -101,7 +101,7 @@ public class Lease extends DataStructureImpl {
     }
 
     /** Configure the router at which the destination can be contacted
-    *
+     *
      * @param ident router acting as the gateway
      */
     public void setGateway(Hash ident) {
@@ -109,7 +109,7 @@ public class Lease extends DataStructureImpl {
     }
 
     /** Tunnel on the gateway to communicate with
-    *
+     *
      * @return tunnel ID
      */
     public TunnelId getTunnelId() {
@@ -117,7 +117,7 @@ public class Lease extends DataStructureImpl {
     }
 
     /** Configure the tunnel on the gateway to communicate with
-    *
+     *
      * @param id tunnel ID
      */
     public void setTunnelId(TunnelId id) {

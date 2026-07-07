@@ -10,8 +10,9 @@ public enum EncAlgo {
     EC("EC"),
 
     /** ECIES encryption.
-    *
-     * @since 0.9.38 */
+     *
+     * @since 0.9.38
+     */
     ECIES("ECIES"),
 
     /**

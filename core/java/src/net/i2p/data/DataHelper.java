@@ -1052,7 +1052,7 @@ public class DataHelper {
     }
 
     /** Write out a date to the stream as specified by the I2P data structure spec.
-    *
+     *
      * @param out stream to write to
      * @param date date to write (can be null)
      * @throws DataFormatException if the date is not valid

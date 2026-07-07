@@ -181,7 +181,7 @@ public final class CryptixAESEngine extends AESEngine {
     }
 
     /** encrypt exactly 16 bytes using the session key
-    *
+     *
      * @param payload plaintext data, 16 bytes starting at inIndex
      * @param sessionKey private session key
      * @param out out parameter, 16 bytes starting at outIndex
@@ -203,7 +203,7 @@ public final class CryptixAESEngine extends AESEngine {
     }
 
     /** decrypt exactly 16 bytes of data with the session key provided
-    *
+     *
      * @param payload encrypted data, 16 bytes starting at inIndex
      * @param sessionKey private session key
      * @param rv out parameter, 16 bytes starting at outIndex

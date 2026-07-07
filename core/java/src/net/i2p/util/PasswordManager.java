@@ -34,9 +34,9 @@ public class PasswordManager {
     /** stored as the hex of the MD5 hash of the UTF-8 bytes. Compatible with Jetty. */
     protected static final String PROP_MD5 = ".md5";
 
-    /** stored as a Unix crypt string */
     /**
-     *  Stored as the b64 of the 16 byte salt + the 32 byte hash of the UTF-8 bytes */
+     *  Stored as the b64 of the 16 byte salt + the 32 byte hash of the UTF-8 bytes
+     */
     protected static final String PROP_SHASH = ".shash";
 
     public PasswordManager(I2PAppContext ctx) {

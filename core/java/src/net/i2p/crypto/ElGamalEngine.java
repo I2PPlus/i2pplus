@@ -114,7 +114,7 @@ public final class ElGamalEngine {
     }
 
     /** encrypt the data to the public key
-    *
+     *
      * @return encrypted data, will be exactly 514 bytes long
      *         Contains the two-part encrypted data starting at bytes 0 and 257.
      *         If the encrypted parts are smaller than 257 bytes, they will be
@@ -186,7 +186,7 @@ public final class ElGamalEngine {
     }
 
     /** Decrypt the data
-    *
+     *
      * @param encrypted encrypted data, must be exactly 514 bytes
      *         Contains the two-part encrypted data starting at bytes 0 and 257.
      *         If the encrypted parts are smaller than 257 bytes, they must be
