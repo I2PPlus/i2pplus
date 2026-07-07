@@ -94,7 +94,7 @@ public class SSLClientUtil {
             if (!sdir.mkdirs())
                 throw new IOException("Unable to create keystore " + ks);
         }
-        boolean rv = createKeyStore(ks, name, opts, optPfx, altNames);
+        boolean rv = createKeyStore(ks, opts, optPfx, altNames);
         if (!rv)
             throw new IOException("Unable to create keystore " + ks);
 
@@ -116,7 +116,7 @@ public class SSLClientUtil {
      *                  cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *  @return success, if true, opts will have password properties added to be saved
      */
-    private static boolean createKeyStore(File ks, String name, Properties opts, String optPfx, Set<String> altNames) {
+    private static boolean createKeyStore(File ks, Properties opts, String optPfx, Set<String> altNames) {
         // make a random 48 character password (30 * 8 / 5)
         String keyPassword = KeyStoreUtil.randomString();
         String cname = "localhost";

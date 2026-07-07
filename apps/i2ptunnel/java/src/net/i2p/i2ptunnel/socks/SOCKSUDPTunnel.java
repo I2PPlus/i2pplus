@@ -112,8 +112,7 @@ public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {
     }
 
     /** you should really add() after startRunning() */
-    private void startall() {
-    }
+    private void startall() { /* no-op */ }
 
     private void stopall() {
          for (SOCKSUDPPort sup : this.ports.values()) {

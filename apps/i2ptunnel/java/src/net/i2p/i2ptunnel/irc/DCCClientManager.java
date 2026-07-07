@@ -100,13 +100,13 @@ public class DCCClientManager extends EventReceiver {
      * @since 0.8.9
      */
     public int newIncoming(String b32, int port, String type) {
-        return newIncoming(b32, port, type, 0);
+        return newIncoming(b32, port, 0);
     }
 
     /**
      *  @param localPort bind to port or 0; if nonzero it will be the rv
      */
-    private int newIncoming(String b32, int port, String type, int localPort) {
+    private int newIncoming(String b32, int port, int localPort) {
         b32 = b32.toLowerCase(Locale.US);
         // do some basic verification before starting the client
         if (b32.length() != 60 || !b32.endsWith(".b32.i2p"))
@@ -178,17 +178,17 @@ public class DCCClientManager extends EventReceiver {
         // do a reverse lookup
         for (I2PTunnelDCCClient tun : _complete.values()) {
             if (tun.getRemotePort() == port)
-                return newIncoming(tun.getDest(), port, "ACCEPT", tun.getLocalPort());
+                return newIncoming(tun.getDest(), port, tun.getLocalPort());
         }
         for (I2PTunnelDCCClient tun : _active.values()) {
             if (tun.getRemotePort() == port)
-                return newIncoming(tun.getDest(), port, "ACCEPT", tun.getLocalPort());
+                return newIncoming(tun.getDest(), port, tun.getLocalPort());
         }
         for (I2PTunnelDCCClient tun : _incoming.values()) {
             if (tun.getRemotePort() == port) {
                 // shouldn't happen
                 tun.stop();
-                return newIncoming(tun.getDest(), port, "ACCEPT", tun.getLocalPort());
+                return newIncoming(tun.getDest(), port, tun.getLocalPort());
             }
         }
         return -1;

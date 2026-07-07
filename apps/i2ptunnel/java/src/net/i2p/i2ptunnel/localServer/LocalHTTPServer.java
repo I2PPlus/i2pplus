@@ -274,7 +274,6 @@ public abstract class LocalHTTPServer {
 
                 int authType = BlindData.AUTH_NONE;
                 if (!code.equals("3") && !code.equals("4")) {
-                    privkey = null;
                 } else if ("newdh".equals(action) || "newpsk".equals(action)) {
                     // newpsk probably not required
                     KeyPair kp = context.keyGenerator().generatePKIKeys(EncType.ECIES_X25519);
@@ -451,13 +450,6 @@ public abstract class LocalHTTPServer {
                     key = query.substring(keystart, i);
                 if (key.length() > 0) {
                     String decodedKey = decode(key);
-                    String newQuery = keystart > 0 ? query.substring(0, keystart - 1) : "";
-                    if (i < query.length() - 1) {
-                        if (keystart > 0)
-                            newQuery += query.substring(i);
-                        else
-                            newQuery += query.substring(i + 1);
-                    }
                     String value = valstart >= 0 ? query.substring(valstart, i) : "";
                     String decodedValue = decode(value);
                     rv.put(decodedKey, decodedValue);

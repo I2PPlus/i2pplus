@@ -161,7 +161,8 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
             s.setSoTimeout(INITIAL_SO_TIMEOUT);
             out = s.getOutputStream();
             in = s.getInputStream();
-            String line, method = null, host = null, destination = null, restofline = null;
+            String line;
+            String method = null, host = null, destination = null, restofline = null;
             StringBuilder newRequest = new StringBuilder();
             String authorization = null;
             int remotePort = 443;
@@ -173,9 +174,8 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                     break;
                 }
                 line = line.trim();
-                if (_log.shouldDebug())
-                    if (line != null)
-                        _log.debug(getPrefix(requestId) + "Request: " + line);
+                if (_log.shouldDebug() && line != null)
+                    _log.debug(getPrefix(requestId) + "Request: " + line);
 
                 if (method == null) { // first line CONNECT blah.i2p:80 HTTP/1.1
                     int pos = line.indexOf(' ');

@@ -97,8 +97,6 @@ public class IndexBean {
     private static final Set<String> _seenMessages = new LinkedHashSet<>(MAX_SEEN_MESSAGES);
     private static final String PROP_THEME_NAME = "routerconsole.theme";
     private static final String DEFAULT_THEME = "dark";
-    /** From CSSHelper */
-    private static final String PROP_PW_ENABLE = "routerconsole.auth.enable";
     private static final String PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
 
     public IndexBean() {
@@ -311,7 +309,6 @@ public class IndexBean {
         List<TunnelController> controllers = _group.getControllers();
         if (controllers == null) {return "✖ " + _t("No services configured, cannot restart!");}
         int running = 0;
-        boolean msgSent = false;
 
         for (TunnelController controller : controllers) {
             if (controller.getIsRunning()) {
@@ -334,11 +331,9 @@ public class IndexBean {
             }
         }
 
-        if (!msgSent) {
-            if (running < 1) {return "";}
+        if (running >= 1) {
             String doneMsg = "✔ " +_t("Restarted all running tunnels");
             _timestampedMessages.add(new TimestampedMessage(doneMsg));
-            msgSent = true;
         }
         return "";
     }
@@ -351,7 +346,6 @@ public class IndexBean {
         List<TunnelController> controllers = _group.getControllers();
         if (controllers == null) {return "✖ " + _t("No clients configured, cannot restart!");}
         int running = 0;
-        boolean msgSent = false;
 
         for (TunnelController controller : controllers) {
             if (controller.isClient() && controller.getIsRunning()) {
@@ -376,11 +370,9 @@ public class IndexBean {
             }
         }
 
-        if (!msgSent) {
-            if (running < 1) {return "";}
+        if (running >= 1) {
             String doneMsg = ("✔ " + _t("Restarted all running client tunnels"));
             _timestampedMessages.add(new TimestampedMessage(doneMsg));
-            msgSent = true;
         }
         return "";
     }
@@ -395,13 +387,11 @@ public class IndexBean {
 
         int restarted = 0;
         int serversToRestart = 0;
-        boolean noRunningServers = true;
         boolean msgSent = false;
 
         for (TunnelController controller : controllers) {
             if (!controller.isClient() && controller.getIsRunning()) {
                 serversToRestart++;
-                noRunningServers = false;
                 String name = controller.getName();
 
                 String stoppingMsg = "• " + _t("Stopping tunnel") + ": " + name + "...";
@@ -427,15 +417,12 @@ public class IndexBean {
             }
         }
 
-        // Reset the noRunningServers flag after the loop
-        noRunningServers = (restarted == 0);
         String count = String.valueOf(restarted);
         String doneMsg = "";
 
         if (!msgSent && serversToRestart == restarted && restarted >= 1) {
             doneMsg = "✔ Restarted " + count + " running server " + (restarted > 1 ? "tunnels" : "tunnel");
             _timestampedMessages.add(new TimestampedMessage(doneMsg));
-            msgSent = true;
         }
         return "";
     }
@@ -450,14 +437,10 @@ public class IndexBean {
         List<TunnelController> controllers = _group.getControllers();
         if (_tunnel >= controllers.size()) {return "✖ Error: Invalid tunnel";}
 
-        boolean sentMessage = false;
         TunnelController controller = controllers.get(_tunnel);
         controller.startTunnelBackground();
-        if (!sentMessage) {
-            String msg =  "✔ " + _t("Started tunnel") + ": " + getTunnelName(_tunnel);
-            _timestampedMessages.add(new TimestampedMessage(msg));
-            sentMessage = true;
-        }
+        String msg =  "✔ " + _t("Started tunnel") + ": " + getTunnelName(_tunnel);
+        _timestampedMessages.add(new TimestampedMessage(msg));
         return "";
     }
 
@@ -466,14 +449,10 @@ public class IndexBean {
         List<TunnelController> controllers = _group.getControllers();
         if (controllers == null || _tunnel >= controllers.size()) {return "✖ Error: Invalid tunnel";}
 
-        boolean sentMessage = false;
         TunnelController controller = controllers.get(_tunnel);
         controller.stopTunnel();
-        if (!sentMessage) {
-            String msg = "✔ " + _t("Stopped tunnel") + ": " + getTunnelName(_tunnel);
-            _timestampedMessages.add(new TimestampedMessage(msg));
-            sentMessage = true;
-        }
+        String msg = "✔ " + _t("Stopped tunnel") + ": " + getTunnelName(_tunnel);
+        _timestampedMessages.add(new TimestampedMessage(msg));
         return "";
     }
 
@@ -929,13 +908,11 @@ public class IndexBean {
      */
     public boolean getIsUsingOutproxyPlugin(int tunnel) {
         TunnelController tun = getController(tunnel);
-        if (tun != null) {
-            if (TunnelController.TYPE_HTTP_CLIENT.equals(tun.getType())) {
-                Properties opts = tun.getClientOptionProps();
-                if (Boolean.parseBoolean(opts.getProperty(I2PTunnelHTTPClientBase.PROP_USE_OUTPROXY_PLUGIN, "true"))) {
-                    ClientAppManager mgr = _context.clientAppManager();
-                    if (mgr != null) {return mgr.getRegisteredApp(Outproxy.NAME) != null;}
-                }
+        if (tun != null && TunnelController.TYPE_HTTP_CLIENT.equals(tun.getType())) {
+            Properties opts = tun.getClientOptionProps();
+            if (Boolean.parseBoolean(opts.getProperty(I2PTunnelHTTPClientBase.PROP_USE_OUTPROXY_PLUGIN, "true"))) {
+                ClientAppManager mgr = _context.clientAppManager();
+                if (mgr != null) {return mgr.getRegisteredApp(Outproxy.NAME) != null;}
             }
         }
         return false;

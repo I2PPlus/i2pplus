@@ -186,7 +186,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     private I2PTunnel(String[] args, ConnectionEventListener lsnr, TunnelController tc) {
         super();
-        _context = I2PAppContext.getGlobalContext(); // new I2PAppContext();
+        _context = I2PAppContext.getGlobalContext();
         _tunnelId = __tunnelId.incrementAndGet();
         _log = _context.logManager().getLog(I2PTunnel.class);
         _controller = tc;
@@ -470,7 +470,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         else if (cmdname.equals("ping")) {runPing(allargs, l);}
         else if (cmdname.equals("owndest")) {runOwnDest(args, l);}
         else if (cmdname.equals("auth")) {runAuth(args, l);}
-        else if (cmdname.equals("blinding")) {runBlinding(args, l);}
+        else if (cmdname.equals("blinding")) {runBlinding(args);}
         else {l.log("Unknown command [" + cmdname + "]");}
     }
 
@@ -1519,7 +1519,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param l logger to receive events and output
      */
     private void runQuit(Logging l) {
-        purgetasks(l);
+        purgetasks();
         if (tasks.isEmpty()) {
             System.exit(0);
         }
@@ -1536,7 +1536,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param l logger to receive events and output
      */
     private void runList(Logging l) {
-        purgetasks(l);
+        purgetasks();
         for (I2PTunnelTask t : tasks) {
             l.log("[" + t.getId() + "] " + t.toString());
         }
@@ -1571,12 +1571,10 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             }
             if (args[argindex].equalsIgnoreCase("all")) {
                 boolean error = false;
-                if (tasks.isEmpty()) {
-                    if (_log.shouldInfo())
-                        _log.info(getPrefix() + " runClose(all) no tasks");
-                }
+                if (tasks.isEmpty() && _log.shouldInfo())
+                    _log.info(getPrefix() + " runClose(all) no tasks");
                 for (I2PTunnelTask t : tasks) {
-                    if (!closetask(t, mode, l)) {
+                    if (!closetask(t, mode)) {
                         notifyEvent("closeResult", "error");
                         error = true;
                     } else if (!error) { // If there's an error, don't hide it
@@ -1705,7 +1703,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Send a BlindingInfo message, just for testing
      * @since 0.9.43
      */
-    private void runBlinding(String[] argv, Logging l) {
+    private void runBlinding(String[] argv) {
         // blinding [-d|p] [-k key] [-s password] [-e expires] xxx.b32.i2p  // -d for DH; -p for PSK; expires in days
         Getopt g = new Getopt("blinding", argv, "dpk:s:e:");
         boolean error = false;
@@ -1816,7 +1814,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                 _log.debug(getPrefix() + "closetask(): parsing task " + id + " (" + t.toString() + ")");
             }
             if (id == num) {
-                closed = closetask(t, mode, l);
+                closed = closetask(t, mode);
                 break;
             } else if (id > num) {break;}
         }
@@ -1824,15 +1822,14 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /** Helper method to actually close the given task number (optionally forcing closure) */
-    private boolean closetask(I2PTunnelTask t, CloseMode mode, Logging l) {
+    private boolean closetask(I2PTunnelTask t, CloseMode mode) {
         if (_log.shouldInfo()) {_log.info("Closing task " + t.getId() + " mode: " + mode);}
         boolean success;
         if (mode == CloseMode.NORMAL) {success = t.close(false);}
         else if (mode == CloseMode.FORCED) {success = t.close(true);}
         else {success = t.destroy();} // DESTROY
-        if (success) {
-            if (_log.shouldInfo()) {_log.info("Task " + t.getId() + " closed.");}
-        }
+        if (success && _log.shouldInfo())
+            _log.info("Task " + t.getId() + " closed.");
         return success;
     }
 
@@ -1840,7 +1837,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Helper task to remove closed / completed tasks.
      *
      */
-    private void purgetasks(Logging l) {
+    private void purgetasks() {
         List<I2PTunnelTask> removed = new ArrayList<>();
         for (I2PTunnelTask t : tasks) {
             if (!t.isOpen()) {

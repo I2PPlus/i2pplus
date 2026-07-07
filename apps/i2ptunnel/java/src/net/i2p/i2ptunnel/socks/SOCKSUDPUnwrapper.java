@@ -41,7 +41,7 @@ public class SOCKSUDPUnwrapper implements Source, Sink {
      *  @since 0.9.53
      */
     @Override
-    public void start() {}
+    public void start() { /* no-op */ }
 
     /**
      *

@@ -88,8 +88,6 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
             destSock = serv.getDestinationI2PSocket(this);
             Thread t = new I2PTunnelRunner(clientSock, destSock, sockLock, null, null, mySockets,
                                            (I2PTunnelRunner.FailCallback) null);
-            // we are called from an unlimited thread pool, so run inline
-            //t.start();
             t.run();
         } catch (SOCKSException e) {
             if (_log.shouldWarn())

@@ -133,12 +133,10 @@ class ConnThrottler {
      */
     public synchronized boolean shouldThrottle(Hash h) {
         // all throttled already?
-        if (_totalMax > 0) {
-            if (_totalThrottleUntil > 0) {
-                if (_totalThrottleUntil > Clock.getInstance().now())
-                    return true;
-                _totalThrottleUntil = 0;
-            }
+        if (_totalMax > 0 && _totalThrottleUntil > 0) {
+            if (_totalThrottleUntil > Clock.getInstance().now())
+                return true;
+            _totalThrottleUntil = 0;
         }
         // do this first, so we don't increment total if individual throttled
         if (_max > 0) {

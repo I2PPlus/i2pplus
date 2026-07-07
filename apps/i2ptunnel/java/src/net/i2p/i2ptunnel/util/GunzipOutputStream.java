@@ -44,8 +44,6 @@ public class GunzipOutputStream extends InflaterOutputStream {
     private final DoneCallback _callback;
     private final Log _log;
 
-    private static final OutputStream DUMMY_OUT = new DummyOutputStream();
-
     /**
      * Build a new Gunzip stream
      */

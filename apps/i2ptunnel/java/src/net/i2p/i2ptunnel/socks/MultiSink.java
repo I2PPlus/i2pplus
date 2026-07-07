@@ -23,10 +23,10 @@ public class MultiSink<S extends Sink> implements Source, Sink {
     }
 
     /** Don't use this - put sinks in the cache */
-    public void setSink(Sink sink) {}
+    public void setSink(Sink sink) { /* no-op */ }
 
     @Override
-    public void start() {}
+    public void start() { /* no-op */ }
 
     /**
      *  Send to a single sink looked up by toPort

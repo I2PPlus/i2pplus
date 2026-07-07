@@ -36,7 +36,8 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     private final byte[] _buf1;
     protected volatile boolean _gzip;
     protected volatile long _dataExpected = -1;
-    protected volatile boolean _keepAliveIn, _keepAliveOut;
+    protected volatile boolean _keepAliveIn;
+    protected volatile boolean _keepAliveOut;
     /** lower-case, trimmed */
     protected String _contentType;
     /** lower-case, trimmed */
@@ -322,18 +323,14 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         }
 
         // Now make the final keepalive decisions
-        if (_keepAliveOut) {
-            // we need one but not both
-            if ((chunked && _dataExpected >= 0) ||
-                (!chunked && _dataExpected < 0))
-                _keepAliveOut = false;
-        }
-        if (_keepAliveIn) {
-            // we need one but not both
-            if ((chunked && _dataExpected >= 0) ||
-                (!chunked && _dataExpected < 0))
-                _keepAliveIn = false;
-        }
+        // we need one but not both
+        if (_keepAliveOut && ((chunked && _dataExpected >= 0) ||
+            (!chunked && _dataExpected < 0)))
+            _keepAliveOut = false;
+        // we need one but not both
+        if (_keepAliveIn && ((chunked && _dataExpected >= 0) ||
+            (!chunked && _dataExpected < 0)))
+            _keepAliveIn = false;
 
         if (!connectionSent && !_keepAliveOut)
             out.write(CONNECTION_CLOSE);

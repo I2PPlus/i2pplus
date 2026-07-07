@@ -40,7 +40,7 @@ public class MultiSource implements Source, Sink {
      *  @since 0.9.53
      */
     @Override
-    public void start() {}
+    public void start() { /* no-op */ }
 
     /**
      *  Stops the multi-source and clears all registered sinks.
@@ -89,7 +89,8 @@ public class MultiSource implements Source, Sink {
      */
     static class MSink {
         public final Destination dest;
-        public final int fromPort, toPort;
+        public final int fromPort;
+        public final int toPort;
 
         public MSink(Destination dest, int fromPort, int toPort) {
             this.dest = dest; this.fromPort = fromPort; this.toPort = toPort;

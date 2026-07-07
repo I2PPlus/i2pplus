@@ -52,7 +52,7 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
 
     protected Logging l;
 
-    private static final long DEFAULT_READ_TIMEOUT = -1; // 3*60*1000;
+    private static final long DEFAULT_READ_TIMEOUT = -1;
     /** default timeout to 3 minutes - override if desired */
     protected long readTimeout = DEFAULT_READ_TIMEOUT;
 
@@ -73,7 +73,7 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(privkey);
-            init(fis, privkeyname, l);
+            init(fis, l);
         } catch (IOException ioe) {
             _log.error("Error starting server", ioe);
             notifyEvent("openServerResult", "error");
@@ -83,7 +83,7 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
         }
     }
 
-    private void init(InputStream privData, String privkeyname, Logging l) {
+    private void init(InputStream privData, Logging l) {
         this.l = l;
 
         // create i2pclient

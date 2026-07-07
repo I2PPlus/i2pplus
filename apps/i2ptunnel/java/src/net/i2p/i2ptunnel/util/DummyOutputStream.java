@@ -10,17 +10,17 @@ import java.io.OutputStream;
 public class DummyOutputStream extends OutputStream {
 
     @Override
-    public void write(int val) {}
+    public void write(int val) { /* no-op */ }
 
     @Override
-    public void write(byte[] src) {}
+    public void write(byte[] src) { /* no-op */ }
 
     @Override
-    public void write(byte[] src, int off, int len) {}
+    public void write(byte[] src, int off, int len) { /* no-op */ }
 
     @Override
-    public void flush() {}
+    public void flush() { /* no-op */ }
 
     @Override
-    public void close() {}
+    public void close() { /* no-op */ }
 }

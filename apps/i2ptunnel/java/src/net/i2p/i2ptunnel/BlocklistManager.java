@@ -54,7 +54,6 @@ public class BlocklistManager {
     private List<String> _clientBlockList = new ArrayList<>();
     private static long _blocklistClientsLastModified;
     private static int _cachedClientBlockListSize = -1;
-    private static Pattern _cachedBlocklistPattern;
     private int _clientLimit;
 
     /**

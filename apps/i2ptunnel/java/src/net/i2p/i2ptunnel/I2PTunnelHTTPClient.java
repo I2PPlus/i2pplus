@@ -215,8 +215,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     public I2PTunnelHTTPClient(int localPort, Logging l, I2PSocketManager sockMgr, I2PTunnel tunnel, EventDispatcher notifyThis, long clientId) {
         super(localPort, l, sockMgr, tunnel, notifyThis, clientId);
         _proxyNonce = Long.toString(_context.random().nextLong());
-        // proxyList = new ArrayList();
-
         setName("HTTP Proxy on " + getTunnel().listenHost + ':' + localPort);
         notifyEvent("openHTTPClientResult", "ok");
     }
@@ -271,8 +269,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         if (!defaultOpts.contains(I2PSocketOptions.PROP_READ_TIMEOUT)) {
             defaultOpts.setProperty(I2PSocketOptions.PROP_READ_TIMEOUT, "" + DEFAULT_READ_TIMEOUT);
         }
-        //if (!defaultOpts.contains("i2p.streaming.inactivityTimeout"))
-        //    defaultOpts.setProperty("i2p.streaming.inactivityTimeout", ""+DEFAULT_READ_TIMEOUT);
         // delayed start
         verifySocketManager();
         I2PSocketOptions opts = sockMgr.buildOptions(defaultOpts);
@@ -429,7 +425,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     _log.debug("KeepAlive, awaiting request #" + requestCount);
             }
 
-            String line, method = null, protocol = null, host = null, destination = null;
+            String line;
+            String method = null;
+            String protocol = null;
+            String host = null;
+            String destination = null;
             String hostLowerCase = null;
             StringBuilder newRequest = new StringBuilder();
             boolean ahelperPresent = false;
@@ -443,12 +443,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             boolean preserveConnectionHeader = false;
             boolean allowGzip = true;
 
-            while((line = reader.readLine(method)) != null) {
+            while((line = reader.readLine()) != null) {
                 line = line.trim();
-                if (_log.shouldDebug()) {
-                    if (line != null) {
-                        _log.debug(getPrefix(requestId) + "Request header: " + line);
-                    }
+                if (_log.shouldDebug() && line != null) {
+                    _log.debug(getPrefix(requestId) + "Request header: " + line);
                 }
 
                 String lowercaseLine = line.toLowerCase(Locale.US);
@@ -933,11 +931,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         line = method + ' ' + requestURI.toASCIIString() + ' ' + protocolVersion;
                     }
 
-                    String outproxyName = destination;
-                    if (destination != null && destination.length() > 20) {
-                        outproxyName = destination.substring(0,15) + "...";
-                    }
-
                     if (_log.shouldDebug()) {
                         _log.debug(getPrefix(requestId) + "Request: " + request );
                         _log.debug(getPrefix(requestId) + "Request URI: " + requestURI );
@@ -1045,11 +1038,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         } // else allow
                     } else if (lowercaseLine.startsWith("via: ") &&
                             !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_VIA))) {
-                        //line = "Via: i2p";
                         line = null;
                         continue; // completely strip the line
                     } else if (lowercaseLine.startsWith("from: ")) {
-                        //line = "From: i2p";
                         line = null;
                         continue; // completely strip the line
                     } else if (lowercaseLine.startsWith("authorization: ntlm ")) {
@@ -1080,17 +1071,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     if (ok != null) {
                         gzip = Boolean.parseBoolean(ok);
                     }
-                    if (gzip && !usingInternalServer && !isConnect) {
+                    if (gzip && !usingInternalServer && !isConnect && !usingInternalOutproxy) {
                         // according to rfc2616 s14.3, this *should* force identity, even if
                         // an explicit q=0 for gzip doesn't.  tested against orion.i2p, and it
                         // seems to work.
-                        //if (!Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_ACCEPT)))
-                        //    newRequest.append("Accept-Encoding: \r\n");
-                        if (!usingInternalOutproxy)
-                            newRequest.append("X-Accept-Encoding: x-i2p-gzip;q=1.0, identity;q=0.5, deflate;q=0, gzip;q=0, *;q=0\r\n");
+                        newRequest.append("X-Accept-Encoding: x-i2p-gzip;q=1.0, identity;q=0.5, deflate;q=0, gzip;q=0, *;q=0\r\n");
                     }
-                    if (!shout && !isConnect) {
-                        if (!Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_USER_AGENT))) {
+                    if (!shout && !isConnect && !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_USER_AGENT))) {
                             // let's not advertise to external sites that we are from I2P
                             String ua;
                             if (usingWWWProxy || usingInternalOutproxy) {
@@ -1110,7 +1097,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             }
                             newRequest.append(ua);
                         }
-                    }
                     // Add Proxy-Authentication header for next hop (outproxy)
                     if (usingWWWProxy && Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_OUTPROXY_AUTH))) {
                         // specific for this proxy
@@ -1253,8 +1239,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         BlindData bd = Blinding.decode(_context, destination);
                         if (_log.shouldWarn())
                             _log.warn("[HTTPClient] Resolved b33: " + bd);
-                        // TESTING
-                        //sess.sendBlindingInfo(bd, 24*60*60*1000);
                     } catch (IllegalArgumentException iae) {
                         if (_log.shouldWarn())
                             _log.warn("[HTTPClient] Unable to resolve b33: " + destination, iae);
@@ -1330,7 +1314,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             }
 
             if (clientDest == null) {
-                //l.log("Could not resolve " + destination + ".");
                 if (_log.shouldWarn()) {
                     String destName = destination;
                     if (destination != null && destination.length() > 20) {
@@ -1446,10 +1429,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             if (needNewSocket) {
 
                 Properties opts = new Properties();
-                //opts.setProperty("i2p.streaming.inactivityTimeout", ""+120*1000);
-                // 1 == disconnect.  see ConnectionOptions in the new streaming lib, which i
-                // Don't want to hard link to here
-                //opts.setProperty("i2p.streaming.inactivityTimeoutAction", ""+1);
                 I2PSocketOptions sktOpts;
                 try {sktOpts = getDefaultOptions(opts);}
                 catch (RuntimeException re) {
@@ -1669,8 +1648,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                       "<p><b>DH:</b> " + _t("Generate new DH encryption key") + ":</p>\n" +
                       "<div class=formaction_xx>" + "<button type=submit class=accept name=action value=\"newdh\">" +
                       label + "</button>\n</div>\n");
-                      //"<p>" + _t("Generate new PSK encryption key") +
-                      //"<button type=submit class=accept name=action value=\"newpsk\">" + label + "</button>\n");
         }
         if (code == LookupResult.RESULT_SECRET_REQUIRED || code == LookupResult.RESULT_SECRET_AND_KEY_REQUIRED) {
             out.write("<h4>" + _t("Lookup password") + "</h4>\n" +
@@ -1701,13 +1678,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             _s = s;
         }
 
-        String readLine(String method) throws IOException {
-            //  Use unbuffered until we can find a BufferedReader that limits line length
-            //if (method == null || "POST".equals(method))
+        String readLine() throws IOException {
             return DataHelper.readLine(_s);
-        //if (_br == null)
-        //    _br = new BufferedReader(new InputStreamReader(_s, "ISO-8859-1"));
-        //return _br.readLine();
         }
 
         /**

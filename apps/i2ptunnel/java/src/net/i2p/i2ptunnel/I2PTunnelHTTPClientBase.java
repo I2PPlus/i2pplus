@@ -494,13 +494,11 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                         if (user.equals(configUser))
                             configPW = getTunnel().getClientOptions().getProperty(PROP_PW);
                     }
-                    if (configPW != null) {
-                        if (pw != null && DataHelper.eqCT(pw, configPW)) {
-                            if (_log.shouldInfo()) {
-                                _log.info(getPrefix(requestId) + "Good auth - user: " + user + " pw: " + pw);
-                            }
-                            return AuthResult.AUTH_GOOD;
+                    if (configPW != null && pw != null && DataHelper.eqCT(pw, configPW)) {
+                        if (_log.shouldInfo()) {
+                            _log.info(getPrefix(requestId) + "Good auth - user: " + user + " pw: " + pw);
                         }
+                        return AuthResult.AUTH_GOOD;
                     }
                     _log.logAlways(Log.WARN, "[HTTPClient] HTTP proxy authentication failed -> User: " + user + " on " + s.getInetAddress());
                     try { Thread.sleep(5000); } catch (InterruptedException ie) { /* ignored */ }
@@ -881,7 +879,8 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  @since 0.9.39
      */
     protected class OnProxySuccess implements I2PTunnelRunner.SuccessCallback {
-        private final String _proxy, _host;
+        private final String _proxy;
+        private final String _host;
         private final boolean _isSSL;
 
         /** @param isSSL FALSE for ConnectClient */
@@ -1119,11 +1118,6 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     private static String getFooter() {
         // The css is hiding this div for now, but we'll keep it here anyway
         // Tag the strings below for translation if we unhide it.
-        //StringBuilder buf = new StringBuilder(128);
-        //buf.append("<div class=\"proxyfooter\"><p><i>I2P HTTP Proxy Server<br>Generated on: ")
-        //   .append(new Date().toString())
-        //   .append("</i></div>\n</body>\n</html>\n");
-        //return buf.toString();
         return "<style>body{display:block!important;pointer-events:auto!important}</style>\n</body>\n</html>\n";
     }
 

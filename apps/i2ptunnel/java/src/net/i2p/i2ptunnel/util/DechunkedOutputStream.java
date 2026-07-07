@@ -17,8 +17,6 @@ public class DechunkedOutputStream extends LimitOutputStream {
     // During the trailer, counts the trailer header size
     private int _remaining;
 
-    private static final byte[] CRLF = DataHelper.getASCII("\r\n");
-
     private enum State { LEN, CR, LF, DATA, DATACR, DATALF, TRAILER, DONE }
 
     /**
@@ -40,7 +38,6 @@ public class DechunkedOutputStream extends LimitOutputStream {
 
         for (int i = 0; i < len; i++) {
             // _state is what we are expecting next
-            //System.err.println("State: " + _state + " i=" + i + " len=" + len + " remaining=" + _remaining + " char=0x" + Integer.toHexString(buf[off + i] & 0xff));
             switch (_state) {
                 // collect chunk len and possible ';' then wait for extension if any and CRLF
                 case LEN: {

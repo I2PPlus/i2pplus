@@ -72,9 +72,6 @@ public class IrcInboundFilter implements Runnable {
                         break;
                     if(inmsg.endsWith("\r"))
                         inmsg=inmsg.substring(0,inmsg.length()-1);
-                    // dupe of info level log
-                    //if (_log.shouldDebug())
-                    //    _log.debug("[IRC Client] In: [" + inmsg + "]");
                     String outmsg = IRCFilter.inboundFilter(inmsg, expectedPong, _dccHelper);
                     if(outmsg != null)
                     {

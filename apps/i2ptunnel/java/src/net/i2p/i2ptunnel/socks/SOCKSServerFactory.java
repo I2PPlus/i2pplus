@@ -85,7 +85,6 @@ class SOCKSServerFactory {
                 throw new SOCKSException("SOCKS protocol version not supported (" + Integer.toHexString(socksVer) + ")");
             }
         } catch (IOException e) {
-            //_log.debug("error reading SOCKS protocol version");
             throw new SOCKSException("Connection error", e);
         }
 

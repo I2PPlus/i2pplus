@@ -196,9 +196,6 @@ class SOCKS5Server extends SOCKSServer {
         }
         if (_log.shouldLog(Log.INFO)) {
             _log.info("SOCKS authorization success -> User: " + u + " on " + client);
-            // torsocks -i
-            // user "torsocks-77673:1668695377" pw "0"
-            //_log.info("PW: \"" + DataHelper.getUTF8(pw) + '"');
         }
         sendAuthReply(AUTH_SUCCESS, out);
     }
@@ -272,9 +269,8 @@ class SOCKS5Server extends SOCKSServer {
                         _log.debug("IPV4 address " + connHostName + " was mapped to domain name " + mappedDomainName);
                     addressType = AddressType.DOMAINNAME;
                     connHostName = mappedDomainName;
-                } else if (command != Command.UDP_ASSOCIATE) {
-                    if (_log.shouldWarn())
-                        _log.warn("IPV4 address type in request: " + connHostName + ". Is your client secure?");
+                } else if (command != Command.UDP_ASSOCIATE && _log.shouldWarn()) {
+                    _log.warn("IPV4 address type in request: " + connHostName + ". Is your client secure?");
                 }
                 break;
             }
@@ -300,16 +296,14 @@ class SOCKS5Server extends SOCKSServer {
                     synchronized(_torCache) {
                         old = _torCache.put(fakeIP, host);
                     }
-                    if (old != null && !old.equals(host)) {
-                        if (_log.shouldWarn())
-                            _log.warn("Hash collision " + old + " and " + host);
+                    if (old != null && !old.equals(host) && _log.shouldWarn()) {
+                        _log.warn("Hash collision " + old + " and " + host);
                     }
                     if (_log.shouldDebug())
                         _log.debug("Cached host " + host + " at address " + fakeIP);
                     sendRequestReply(Reply.SUCCEEDED, AddressType.IPV4, InetAddress.getByName(fakeIP), null, 1, out);
                     throw new SOCKSException("ignore");
                 }
-                //if (host.startsWith("4fff:")) {
                 if (host.startsWith("255.")) {
                 // For Tor, where hostname was sent previously in the RESOLVE
                     synchronized(_torCache) {
@@ -471,9 +465,6 @@ class SOCKS5Server extends SOCKSServer {
         try {
             String hostLowerCase = connHostName.toLowerCase(Locale.US);
             if (NamingService.isI2PHost(hostLowerCase)) {
-                // Let's not do a new Dest for every request, huh?
-                //I2PSocketManager sm = I2PSocketManagerFactory.createManager();
-                //destSock = sm.connect(I2PTunnel.destFromName(connHostName), null);
                 Destination dest = _context.namingService().lookup(connHostName);
                 if (dest == null) {
                     try {

@@ -129,8 +129,7 @@ public class I2PSource implements Source {
             // ignore
         }
 
-        public void disconnected(I2PSession arg0) {
-        }
+        public void disconnected(I2PSession arg0) { /* no-op */ }
 
         public void errorOccurred(I2PSession arg0, String arg1, Throwable arg2) {
             log.error(arg1, arg2);

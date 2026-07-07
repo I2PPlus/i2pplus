@@ -73,12 +73,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
             // Maybe figure out where to put a waitEventValue("openClientResult") ??
             // In the meantime, let's do this the easy way
 
-            // Don't close() here, because it does a removeSession() and then
-            // TunnelController can't acquire() it to release() it.
-            //close(true);
-            // Unfortunately, super() built the whole tunnel before we get here.
             throw new IllegalArgumentException("No valid target destinations found");
-            //return;
         }
 
         setName(getLocalPort() + " -> " + destinations);

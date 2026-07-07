@@ -52,7 +52,7 @@ public class SecurityHeaderBuilder {
      * @param command the HTTP request command (used for logging/debugging)
      * @param mimeType the MIME type of the response content; may be null
      */
-    public static void addSecurityHeaders(Map<String, List<String>> headers, StringBuilder command, String mimeType) {
+    public static void addSecurityHeaders(Map<String, List<String>> headers, String mimeType) {
         addReferrerPolicyHeader(headers, mimeType);
         addAllowHeader(headers, mimeType);
         addCacheControlHeader(headers, mimeType);

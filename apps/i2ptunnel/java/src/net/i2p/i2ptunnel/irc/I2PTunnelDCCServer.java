@@ -163,13 +163,13 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
      *  @return i2p port or -1 on error
      */
     public int newOutgoing(byte[] ip, int port, String type) {
-        return newOutgoing(ip, port, type, 0);
+        return newOutgoing(ip, port, 0);
     }
 
     /**
      *  @param port local dcc server I2P port or 0 to pick one at random
      */
-    private int newOutgoing(byte[] ip, int port, String type, int i2pPort) {
+    private int newOutgoing(byte[] ip, int port, int i2pPort) {
         expireOutbound();
         if (_outgoing.size() >= MAX_OUTGOING_PENDING ||
             _active.size() >= MAX_OUTGOING_ACTIVE) {
@@ -239,7 +239,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
             LocalAddress local = e.getValue();
             if (local.port == port) {
                 iter.remove();
-                return newOutgoing(local.ia.getAddress(), port, "ACCEPT", e.getKey().intValue());
+                return newOutgoing(local.ia.getAddress(), port, e.getKey().intValue());
             }
         }
         return -1;

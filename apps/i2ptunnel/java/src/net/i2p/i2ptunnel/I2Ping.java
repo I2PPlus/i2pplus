@@ -16,15 +16,11 @@ import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PSession;
 import net.i2p.client.I2PSessionException;
-import net.i2p.client.streaming.I2PSocket;
-import net.i2p.client.streaming.I2PSocketAddress;
-import net.i2p.client.streaming.I2PSocketException;
 import net.i2p.data.Base32;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.I2PAppThread;
-import net.i2p.util.Log;
 
 /**
  * I2P ping utility for CLI use.
@@ -38,13 +34,8 @@ public class I2Ping extends I2PTunnelClientBase {
     private static final int PING_COUNT = 10;
     private static final int CPING_COUNT = 5;
     private static final int PING_TIMEOUT = 90 * 1000;
-    private static final long PING_DISTANCE = 1000;
-    private int MAX_SIMUL_PINGS = 16; // matches usage text
     private volatile boolean finished;
 
-    private final Object simulLock = new Object();
-    private int simulPings;
-    private long lastPingTime;
     private boolean fromList = false;
 
     private static class PingResult {
@@ -120,9 +111,6 @@ public class I2Ping extends I2PTunnelClientBase {
                     if (timeout < 100) {
                         timeout *= 1000;
                     }
-                    break;
-                case 'm':
-                    MAX_SIMUL_PINGS = Integer.parseInt(g.getOptarg());
                     break;
                 case 'n':
                     count = Integer.parseInt(g.getOptarg());
@@ -253,7 +241,7 @@ public class I2Ping extends I2PTunnelClientBase {
     }
 
     @Override
-    protected void clientConnectionRun(Socket s) {}
+    protected void clientConnectionRun(Socket s) { /* no-op */ }
 
     private class PingHandler extends I2PAppThread {
         private final String destination;
@@ -328,8 +316,6 @@ public class I2Ping extends I2PTunnelClientBase {
                 return;
             }
 
-            int pass = 0;
-            long totalTime = 0;
             boolean allSuccess = true;
             List<PingResult> results = new ArrayList<>();
 
@@ -352,8 +338,6 @@ public class I2Ping extends I2PTunnelClientBase {
                 } else {
                     if (reportTimes && !fromList) {
                         if (result.success) {
-                            pass++;
-                            totalTime += result.duration;
                             l.log(" ✔ " + (i + 1) + ": \t " + result.duration + "ms");
                         } else {
                             l.log(" ✖ " + (i + 1) + ": \t ------");

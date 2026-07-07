@@ -49,7 +49,6 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
     private final Socket i2ps;
     private final Object slock;
 
-    // Latch to await completion of forwarding threads
     private final CountDownLatch finishLatch = new CountDownLatch(2);
 
     private final byte[] initialI2PData;

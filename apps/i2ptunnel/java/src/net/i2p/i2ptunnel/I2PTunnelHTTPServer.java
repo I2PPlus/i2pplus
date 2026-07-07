@@ -4,35 +4,28 @@
 package net.i2p.i2ptunnel;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.EOFException;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.HashSet;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Matcher;
+import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
 import javax.net.ssl.SSLException;
@@ -528,9 +521,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             boolean keepalive = getBooleanOption(OPT_KEEPALIVE, DEFAULT_KEEPALIVE);
 
             do {
-                if (requestCount > 0) {
-                    if (_log.shouldDebug()) {_log.debug("[HTTPServer] KeepAlive, awaiting request [#" + requestCount + "]");}
-                }
+                if (requestCount > 0 && _log.shouldDebug()) {_log.debug("[HTTPServer] KeepAlive, awaiting request [#" + requestCount + "]");}
 
                 // The headers _should_ be in the first packet, but may not be, depending on the client-side options
 
@@ -550,10 +541,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     } else {
                         try {sendError(socket, ERR_REQUEST_TIMEOUT);}
                         catch (IOException ioe) { /* ignored */ }
-                        if (_log.shouldWarn()) {
-                            if (ste.getMessage() != null) {
-                                _log.warn("[HTTPServer] Request error: " + ste.getMessage() + " \n* Client: " + peerB32);
-                            }
+                        if (_log.shouldWarn() && ste.getMessage() != null) {
+                            _log.warn("[HTTPServer] Request error: " + ste.getMessage() + " \n* Client: " + peerB32);
                         }
                     }
                     try {socket.close();}
@@ -566,10 +555,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     } else {
                         try {sendError(socket, ERR_BAD_REQUEST);}
                         catch (IOException ioe) { /* ignored */ }
-                        if (_log.shouldWarn()) {
-                            if (eofe.getMessage() != null) {
-                                _log.warn("[HTTPServer] Request error: " + eofe.getMessage() + " \n* Client: " + peerB32);
-                            }
+                        if (_log.shouldWarn() && eofe.getMessage() != null) {
+                            _log.warn("[HTTPServer] Request error: " + eofe.getMessage() + " \n* Client: " + peerB32);
                         }
                     }
                     try {socket.close();}
@@ -604,10 +591,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         try {socket.close();}
                         catch (IOException ioe) { /* ignored */ }
                     }
-                    if (_log.shouldDebug()) {
-                        if (bre.getMessage() != null) {
-                            _log.warn("[HTTPServer] Request error: " + bre.getMessage() + " \n* Client: " + peerB32);
-                        }
+                    if (_log.shouldDebug() && bre.getMessage() != null) {
+                        _log.warn("[HTTPServer] Request error: " + bre.getMessage() + " \n* Client: " + peerB32);
                     }
                     return;
                 }
@@ -818,7 +803,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             _log.warn("[HTTPServer] Invalid B32 (expected 60 characters, got " + peerB32.length() + ") -> Denying request to [" + hostname + "]" +
             "\n* Client: " + peerB32);
             isValidRequest = false;
-            isPossibleExploit = false;
         }
 
         if (host != null) {
@@ -1203,7 +1187,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     mimeType = contentTypeList.get(0);
                 }
 
-                SecurityHeaderBuilder.addSecurityHeaders(headers, command, mimeType);
+                SecurityHeaderBuilder.addSecurityHeaders(headers, mimeType);
 
                 String modifiedHeaders = HttpHeaderFormatter.formatHeaders(headers, command);
                 // after the headers, set a short timeout
@@ -1692,12 +1676,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 else if ("referer".equals(lcName)) {name = "Referer";}
                 else if ("connection".equals(lcName)) {name = "Connection";}
                 else if ("host".equals(lcName)) {name = "Host";}
-                else if (lcName.contains("-encoding") && !lcName.contains("accept")) {
-                    if (socket != null) {
-                        try {socket.close();}
-                        catch (IOException ioe) { /* ignored */ }
-                        throw new BadRequestException("Invalid HTTP header: \"" + name + "\" -> Terminating connection...");
-                    }
+                else if (lcName.contains("-encoding") && !lcName.contains("accept") && socket != null) {
+                    try {socket.close();}
+                    catch (IOException ioe) { /* ignored */ }
+                    throw new BadRequestException("Invalid HTTP header: \"" + name + "\" -> Terminating connection...");
                 }
                 // For incoming, we remove certain headers to prevent spoofing.
                 // For outgoing, we remove certain headers to improve anonymity.

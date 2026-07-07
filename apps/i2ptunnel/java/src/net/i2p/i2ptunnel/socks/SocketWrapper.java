@@ -106,14 +106,14 @@ class SocketWrapper implements I2PSocket {
      * Does nothing
      */
     @Override
-    public void setOptions(I2PSocketOptions options) {}
+    public void setOptions(I2PSocketOptions options) { /* no-op */ }
 
     public long getReadTimeout() {
         return -1;
     }
 
     @Override
-    public void setReadTimeout(long ms) {}
+    public void setReadTimeout(long ms) { /* no-op */ }
 
     public void close() throws IOException {
         socket.close();
@@ -135,7 +135,7 @@ class SocketWrapper implements I2PSocket {
     /**
      *  Deprecated, unimplemented, does nothing
      */
-    public void setSocketErrorListener(SocketErrorListener lsnr) {}
+    public void setSocketErrorListener(SocketErrorListener lsnr) { /* no-op */ }
 
     /**
      *  The remote port.

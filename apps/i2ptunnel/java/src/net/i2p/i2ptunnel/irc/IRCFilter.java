@@ -74,7 +74,6 @@ abstract class IRCFilter {
             command = field[idx++].toUpperCase(Locale.US);
         } catch (IndexOutOfBoundsException ioobe) {
             // server sent borked command?
-           //_log.warn("Dropping defective message: index out of bounds while extracting command.");
            return null;
         }
 
@@ -95,7 +94,6 @@ abstract class IRCFilter {
             // If we haven't PINGed them, or the PING we sent isn't something we know how to filter, this
             // is blank.
             //
-            // String pong = expectedPong.length() > 0 ? expectedPong.toString() : null;
             // If we aren't going to rewrite it, pass it through
             String pong = expectedPong.length() > 0 ? expectedPong.toString() : s;
             expectedPong.setLength(0);
@@ -318,22 +316,15 @@ abstract class IRCFilter {
             if (field.length == idx) { // PING
                 rv = "PING";
                 // If we aren't rewriting the PING don't rewrite the PONG
-                // expectedPong.append("PONG 127.0.0.1");
             } else if (field.length == idx + 1) { // PING nonce
                 rv = "PING " + field[idx];
                 // If we aren't rewriting the PING don't rewrite the PONG
-                // expectedPong.append("PONG ").append(field[1]);
             } else if (field.length == idx + 2) { // PING nonce serverLocation
                 rv = "PING " + field[idx];
                 expectedPong.append("PONG ").append(field[idx + 1]).append(" :").append(field[idx]); // PONG serverLocation nonce
             } else {
-                //if (_log.shouldError())
-                //    _log.error("IRC client sent a PING we don't understand, filtering it (\"" + s + "\")");
                 rv = null;
             }
-
-            //if (_log.shouldWarn())
-            //    _log.warn("sending ping [" + rv + "], waiting for [" + expectedPong + "] orig was [" + s  + "]");
 
             return rv;
         }
@@ -558,12 +549,10 @@ abstract class IRCFilter {
         // no IP in these, replace port only
         if (type.equals("RESUME") || type.equals("ACCEPT")) {
             haveIP = false;
-        } else if (!(type.equals("CHAT") || type.equals("SEND"))) {
-            if (ALLOW_ALL_DCC_OUT) {
-                if (ctcp > 0)
-                    return pfx + msg + (char) 0x01;
-                return pfx + msg;
-            }
+        } else if (!(type.equals("CHAT") || type.equals("SEND")) && ALLOW_ALL_DCC_OUT) {
+            if (ctcp > 0)
+                return pfx + msg + (char) 0x01;
+            return pfx + msg;
         }
         if (helper == null || !helper.isEnabled())
             return null;
@@ -584,7 +573,6 @@ abstract class IRCFilter {
                     // xchat sends an IP of 199 and a port of 0
                     Log log = new Log(IRCFilter.class);
                     log.logAlways(Log.WARN, "Reverse / Firewall DCC, IP = 0x" + Long.toHexString(ipl));
-                    //return null;
                 }
                 ip = DataHelper.toLong(4, ipl);
             } catch (NumberFormatException nfe) {

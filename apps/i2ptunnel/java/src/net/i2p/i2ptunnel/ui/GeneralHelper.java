@@ -133,10 +133,10 @@ public class GeneralHelper {
         Properties props = config.getConfig();
         String type = props.getProperty(TunnelController.PROP_TYPE);
 
-        if (TunnelController.TYPE_STD_CLIENT.equals(type) || TunnelController.TYPE_IRC_CLIENT.equals(type)) {
+        if ((TunnelController.TYPE_STD_CLIENT.equals(type) || TunnelController.TYPE_IRC_CLIENT.equals(type)) &&
+            Boolean.parseBoolean(props.getProperty(OPT + I2PTunnelClientBase.PROP_USE_SSL))) {
             // If we switch to SSL, create the keystore here, so we can store the new properties.
             // Down in I2PTunnelClientBase it's very hard to save the config.
-            if (Boolean.parseBoolean(props.getProperty(OPT + I2PTunnelClientBase.PROP_USE_SSL))) {
                 // Add the local interface and all targets to the cert
                 String intfc = props.getProperty(TunnelController.PROP_INTFC);
                 Set<String> altNames = new HashSet<>(4);
@@ -169,7 +169,6 @@ public class GeneralHelper {
                     msgs.add("Failed to create new self-signed certificate for tunnel " +
                             getTunnelName(tcg, tunnel) + ", check logs: " + ioe);
                 }
-            }
         }
         if (cur == null) {
             // creating new
@@ -725,7 +724,6 @@ public class GeneralHelper {
     public boolean hasEncType(int tunnel, int encType) {
         TunnelController tun = getController(tunnel);
         if (tun == null) {return encType == 4;} // New clients and servers now default to MLKEM768+ECIES
-        String type = tun.getType();
         String dflt = "6,4";
         String senc = getProperty(tunnel, "i2cp.leaseSetEncType", dflt);
         String[] senca = DataHelper.split(senc, ",");

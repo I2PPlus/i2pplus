@@ -51,7 +51,7 @@ public class SOCKSUDPWrapper implements Source, Sink {
      *
      *  @since 0.9.53
      */
-    public void start() {}
+    public void start() { /* no-op */ }
 
     /**
      * Use the cached header, which should have the host string and port
@@ -75,8 +75,6 @@ public class SOCKSUDPWrapper implements Source, Sink {
 
         SOCKSHeader h = cache.get(new I2PSocketAddress(from, fromPort));
         if (h == null) {
-            // RFC 1928 says drop
-            // h = new SOCKSHeader(from);
             return;
         }
 

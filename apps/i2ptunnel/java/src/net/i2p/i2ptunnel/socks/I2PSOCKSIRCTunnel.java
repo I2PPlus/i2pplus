@@ -53,7 +53,6 @@ public class I2PSOCKSIRCTunnel extends I2PSOCKSTunnel {
     protected void clientConnectionRun(Socket s) {
         I2PSocket destSock = null;
         try {
-            //_log.error("SOCKS IRC Tunnel Start");
             try {
                 s.setSoTimeout(INITIAL_SO_TIMEOUT);
             } catch (SocketException ioe) { /* ignored */ }
@@ -68,11 +67,7 @@ public class I2PSOCKSIRCTunnel extends I2PSOCKSTunnel {
             Thread in = new I2PAppThread(new IrcInboundFilter(clientSock, destSock, expectedPong, _log),
                                          "SOCKS IRC Client " + id + " in", true);
             in.start();
-            //Thread out = new I2PAppThread(new IrcOutboundFilter(clientSock, destSock, expectedPong, _log),
-            //                              "SOCKS IRC Client " + id + " out", true);
             Runnable out = new IrcOutboundFilter(clientSock, destSock, expectedPong, _log);
-            // we are called from an unlimited thread pool, so run inline
-            //out.start();
             out.run();
         } catch (SOCKSException e) {
             if (_log.shouldWarn())
