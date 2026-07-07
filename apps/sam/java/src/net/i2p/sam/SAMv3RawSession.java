@@ -154,5 +154,5 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
     /**
      * Stop receiving raw data.
      */
-    public void stopRawReceiving() {}
+    public void stopRawReceiving() { /* no-op */ }
 }

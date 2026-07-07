@@ -675,12 +675,12 @@ class SAMStreamSession implements SAMMessageSess {
         /**
          * Stop a SAM STREAM session socket reader thread immediately.
          */
-        public void stopRunning() {}
+        public void stopRunning() { /* no-op */ }
 
         /**
          * Run the socket reader loop.
          */
-        public void run() {}
+        public void run() { /* no-op */ }
 
     }
 
@@ -828,7 +828,8 @@ class SAMStreamSession implements SAMMessageSess {
         private final List<ByteArray> _data;
         private final ByteCache _cache;
         private final OutputStream _out;
-        private volatile boolean _stillRunning, _shuttingDownGracefully;
+        private volatile boolean _stillRunning;
+        private volatile boolean _shuttingDownGracefully;
         private final Object runningLock = new Object();
 
 	public V1StreamSender ( I2PSocket s, int id ) throws IOException {

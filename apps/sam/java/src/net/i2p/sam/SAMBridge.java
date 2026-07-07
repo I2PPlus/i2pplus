@@ -78,7 +78,7 @@ public class SAMBridge implements Runnable, ClientApp {
     private final ClientAppManager _mgr;
     private volatile ClientAppState _state = UNINITIALIZED;
 
-    private static final int SAM_LISTENPORT = 7656;
+
 
     public static final String DEFAULT_SAM_KEYFILE = "sam.keys";
     static final String DEFAULT_SAM_CONFIGFILE = "sam.config";
@@ -556,7 +556,8 @@ public class SAMBridge implements Runnable, ClientApp {
      * @since 0.9.6
      */
     private static class Options {
-        private final String host, keyFile;
+        private final String host;
+        private final String keyFile;
         private final int port;
         private final Properties opts;
         private final boolean isSSL;

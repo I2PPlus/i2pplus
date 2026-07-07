@@ -48,7 +48,8 @@ public class SAMStreamSink {
     private final String _destFile;
     private final String _sinkDir;
     private String _conOptions;
-    private SAMReader _reader, _reader2;
+    private SAMReader _reader;
+    private SAMReader _reader2;
     private boolean _isV3;
     private boolean _isV32;
     private String _v3ID;
@@ -56,7 +57,14 @@ public class SAMStreamSink {
     private final Map<String, Sink> _remotePeers;
     private static I2PSSLSocketFactory _sslSocketFactory;
 
-    private static final int STREAM=0, DG=1, V1DG=2, RAW=3, V1RAW=4, RAWHDR = 5, FORWARD = 6, FORWARDSSL=7;
+    private static final int STREAM=0;
+    private static final int DG=1;
+    private static final int V1DG=2;
+    private static final int RAW=3;
+    private static final int V1RAW=4;
+    private static final int RAWHDR = 5;
+    private static final int FORWARD = 6;
+    private static final int FORWARDSSL=7;
     private static final int MASTER=8;
     private static final String USAGE = "Usage: SAMStreamSink [-s] [-m mode] [-v version] [-b samHost] [-p samPort]\n" +
                                         "                     [-o opt=val] [-u user] [-w password] myDestFile sinkDir\n" +
@@ -598,8 +606,6 @@ public class SAMStreamSink {
                 if (hisVersion == null)
                     throw new IOException("Hello failed");
                 if (!isMaster) {
-                    // only for v3
-                    //String req = "STREAM ACCEPT SILENT=true ID=" + _v3ID + "\n";
                     // TO_PORT not supported until 3.2 but 3.0-3.1 will ignore
                     String req;
                     if (mode == STREAM)
@@ -704,17 +710,15 @@ public class SAMStreamSink {
                 samOut.flush();
                 if (_log.shouldDebug())
                     _log.debug("SESSION " + command + " sent");
-                //if (mode == STREAM) {
-                    boolean ok;
-                    if (masterMode)
-                        ok = eventHandler.waitForSessionAddReply();
-                    else
-                        ok = eventHandler.waitForSessionCreateReply();
-                    if (!ok)
-                        throw new IOException("SESSION " + command + " failed");
-                    if (_log.shouldDebug())
-                        _log.debug("SESSION " + command + " reply found: " + ok);
-                //}
+                boolean ok;
+                if (masterMode)
+                    ok = eventHandler.waitForSessionAddReply();
+                else
+                    ok = eventHandler.waitForSessionCreateReply();
+                if (!ok)
+                    throw new IOException("SESSION " + command + " failed");
+                if (_log.shouldDebug())
+                    _log.debug("SESSION " + command + " reply found: " + ok);
                 if (masterMode) {
                     // do a bunch more
                     req = "SESSION ADD STYLE=STREAM FROM_PORT=99 ID=stream99\n";
@@ -767,13 +771,7 @@ public class SAMStreamSink {
 
     private boolean writeDest(String dest) {
         File f = new File(_destFile);
-/*
-        if (f.exists()) {
-            if (_log.shouldDebug())
-                _log.debug("Destination file exists, not overwriting: " + _destFile);
-            return false;
-        }
-*/
+
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(f);

@@ -338,17 +338,15 @@ class SAMv3Handler extends SAMv1Handler
                         _log.warn("Error closing socket" + "\n* Error: " + e.getMessage());
                 }
             }
-            if (streamForwardingSocket) {
-                if (this.getStreamSession()!=null) {
-                    try {
-                        ((SAMv3StreamSession)streamSession).stopForwardingIncoming();
-                    } catch (SAMException e) {
-                        if (_log.shouldWarn())
-                            _log.warn("Error while stopping forwarding connections" + "\n* Error: " + e.getMessage());
-                    } catch (InterruptedIOException e) {
-                      if (_log.shouldWarn())
-                          _log.warn("Interrupted while stopping forwarding connections" + "\n* Error: " + e.getMessage());
-                    }
+            if (streamForwardingSocket && this.getStreamSession() != null) {
+                try {
+                    ((SAMv3StreamSession)streamSession).stopForwardingIncoming();
+                } catch (SAMException e) {
+                    if (_log.shouldWarn())
+                        _log.warn("Error while stopping forwarding connections" + "\n* Error: " + e.getMessage());
+                } catch (InterruptedIOException e) {
+                    if (_log.shouldWarn())
+                        _log.warn("Interrupted while stopping forwarding connections" + "\n* Error: " + e.getMessage());
                 }
             }
             die();

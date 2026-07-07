@@ -188,11 +188,7 @@ public class SAMReader {
                 String id = params.getProperty("ID");
                 String msg = params.getProperty("MESSAGE");
                 // id is null in v3, so pass it through regardless
-                //if (id != null) {
-                    _listener.streamStatusReceived(result, id, msg);
-                //} else {
-                //    _listener.unknownMessageReceived(major, minor, params);
-                //}
+                _listener.streamStatusReceived(result, id, msg);
             } else if ("CONNECTED".equals(minor)) {
                 String dest = params.getProperty("DESTINATION");
                 String id = params.getProperty("ID");

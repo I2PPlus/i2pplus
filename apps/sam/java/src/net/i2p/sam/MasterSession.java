@@ -208,7 +208,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     /**
      *  Does nothing.
      */
-    public void stopDatagramReceiving() {}
+    public void stopDatagramReceiving() { /* no-op */ }
 
     /**
      *  @throws IOException always
@@ -220,7 +220,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     /**
      *  Does nothing.
      */
-    public void stopRawReceiving() {}
+    public void stopRawReceiving() { /* no-op */ }
 
 
 
@@ -246,7 +246,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
 
     /** does nothing */
     @Override
-    public void stopForwardingIncoming() {}
+    public void stopForwardingIncoming() { /* no-op */ }
 
 
     ///// SAMMessageSess interface
@@ -368,8 +368,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
 
         private volatile boolean stop;
 
-        public StreamAcceptor() {
-        }
+        public StreamAcceptor() { /* no-op */ }
 
         public void stopRunning() {
             stop = true;

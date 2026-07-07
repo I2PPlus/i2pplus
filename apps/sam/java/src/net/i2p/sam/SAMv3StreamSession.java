@@ -304,7 +304,9 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     private class SocketForwarder implements Runnable {
         private final String host;
         private final int port;
-        private final boolean isSSL, verbose, sendPorts;
+        private final boolean isSSL;
+        private final boolean verbose;
+        private final boolean sendPorts;
 
         SocketForwarder(String host, int port, boolean isSSL, boolean verbose, boolean sendPorts) {
             this.host = host;

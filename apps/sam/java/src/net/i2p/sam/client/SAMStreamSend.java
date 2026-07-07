@@ -44,16 +44,21 @@ public class SAMStreamSend {
     private final String _destFile;
     private final String _dataFile;
     private String _conOptions;
-    private SAMReader _reader, _reader2;
+    private SAMReader _reader;
+    private SAMReader _reader2;
     private boolean _isV3;
     private boolean _isV32;
     private String _v3ID;
-    //private boolean _dead;
+
     /** Connection id (Integer) to peer (Flooder) */
     private final Map<String, Sender> _remotePeers;
     private static I2PSSLSocketFactory _sslSocketFactory;
 
-    private static final int STREAM=0, DG=1, V1DG=2, RAW=3, V1RAW=4;
+    private static final int STREAM=0;
+    private static final int DG=1;
+    private static final int V1DG=2;
+    private static final int RAW=3;
+    private static final int V1RAW=4;
     private static final int MASTER=8;
     private static final String USAGE = "Usage: SAMStreamSend [-s] [-x] [-m mode] [-v version] [-b samHost] [-p samPort]\n" +
                                         "                     [-o opt=val] [-u user] [-w password] peerDestFile dataDir\n" +
@@ -153,7 +158,7 @@ public class SAMStreamSend {
     public SAMStreamSend(I2PAppContext ctx, String samHost, String samPort, String destFile, String dataFile) {
         _context = ctx;
         _log = ctx.logManager().getLog(SAMStreamSend.class);
-        //_dead = false;
+
         _samHost = samHost;
         _samPort = samPort;
         _destFile = destFile;
@@ -545,7 +550,6 @@ public class SAMStreamSend {
                             _samOut.write(msg);
                             _samOut.flush();
                             // we can't close this yet, we will lose data
-                            //_samOut.close();
                         }
                     } catch (IOException ioe) {
                         _log.info("Error closing", ioe);

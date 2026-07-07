@@ -195,7 +195,8 @@ class SAMv2StreamSession extends SAMStreamSession {
         private int _dataSize;
         private final ByteCache _cache;
         private final OutputStream _out;
-        private volatile boolean _stillRunning, _shuttingDownGracefully;
+        private volatile boolean _stillRunning;
+        private volatile boolean _shuttingDownGracefully;
         private final Object runningLock = new Object();
 
         public V2StreamSender(I2PSocket s, int id) throws IOException {

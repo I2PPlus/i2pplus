@@ -123,8 +123,6 @@ class SAMv3DatagramServer implements Handler {
 				ByteBuffer outBuf = ByteBuffer.wrap(new byte[inBuf.remaining()]);
 				outBuf.put(inBuf);
 				((Buffer)outBuf).flip();
-				// A new thread for every message is wildly inefficient...
-				//new I2PAppThread(new MessageDispatcher(outBuf.array()), "MessageDispatcher").start();
 				// inline
 				// Even though we could be sending messages through multiple sessions,
 				// that isn't a common use case, and blocking should be rare.
@@ -144,8 +142,6 @@ class SAMv3DatagramServer implements Handler {
 
 		public void run() {
 			try {
-				// not UTF-8
-				//String header = DataHelper.readLine(is).trim();
 				// we cannot use SAMUtils.parseParams() here
 				final UTF8Reader reader = new UTF8Reader(is);
 				final StringBuilder buf = new StringBuilder(MAX_LINE_LENGTH);

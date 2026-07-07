@@ -11,7 +11,6 @@ import net.i2p.util.Log;
  *
  */
 public class SAMEventHandler extends SAMClientEventListenerImpl {
-    //private I2PAppContext _context;
     private final Log _log;
     private Boolean _helloOk;
     private String _version;
@@ -25,7 +24,6 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
     private final Map<String,String> _namingReplies = new HashMap<>();
 
     public SAMEventHandler(I2PAppContext ctx) {
-        //_context = ctx;
         _log = ctx.logManager().getLog(getClass());
     }
 

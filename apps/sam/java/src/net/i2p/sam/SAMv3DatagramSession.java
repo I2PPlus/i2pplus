@@ -126,5 +126,5 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
     /**
      * Stop receiving datagrams.
      */
-    public void stopDatagramReceiving() {}
+    public void stopDatagramReceiving() { /* no-op */ }
 }

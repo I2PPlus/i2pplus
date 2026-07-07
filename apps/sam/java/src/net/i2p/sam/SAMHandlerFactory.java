@@ -58,11 +58,9 @@ class SAMHandlerFactory {
 
         // Message format: HELLO VERSION [MIN=v1] [MAX=v2]
         Properties props = SAMUtils.parseParams(line);
-        if (!"HELLO".equals(props.remove(SAMUtils.COMMAND)) ||
-            !"VERSION".equals(props.remove(SAMUtils.OPCODE))) {
-            if (log.shouldWarn()) {
-                log.warn("Malformed SAM handshake received from remote client -> Must start with \'HELLO VERSION\'");
-            }
+        if ((!"HELLO".equals(props.remove(SAMUtils.COMMAND)) ||
+             !"VERSION".equals(props.remove(SAMUtils.OPCODE))) && log.shouldWarn()) {
+            log.warn("Malformed SAM handshake received from remote client -> Must start with \'HELLO VERSION\'");
         }
 
         String minVer = props.getProperty("MIN");
@@ -80,8 +78,8 @@ class SAMHandlerFactory {
 
         if (secureSession != null) {
             boolean approval = secureSession.approveOrDenySecureSession(i2cpProps, props);
-            if (!approval) {
-                if (log.shouldWarn()) {log.warn("SAM connection cancelled by user request");}
+            if (!approval && log.shouldWarn()) {
+                log.warn("SAM connection cancelled by user request");
             }
         }
 
