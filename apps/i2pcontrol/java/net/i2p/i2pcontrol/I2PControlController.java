@@ -78,7 +78,7 @@ public class I2PControlController implements RouterApp {
     /**
      *  RouterApp (new way)
      */
-    public I2PControlController(RouterContext ctx, ClientAppManager mgr, String[] args) {
+    public I2PControlController(RouterContext ctx, ClientAppManager mgr) {
         _appContext = _context = ctx;
         _mgr = mgr;
         _log = _appContext.logManager().getLog(I2PControlController.class);
@@ -115,7 +115,7 @@ public class I2PControlController implements RouterApp {
     public synchronized void startup() {
         changeState(STARTING);
         try {
-            start(null);
+            start();
             changeState(RUNNING);
         } catch (Exception e) {
             changeState(START_FAILED, "Failed to start", e);
@@ -198,7 +198,7 @@ public class I2PControlController implements RouterApp {
     }
 
 
-    private synchronized void start(String[] args) throws Exception {
+    private synchronized void start() throws Exception {
         _appContext.logManager().getLog(JSONRPC2Servlet.class).setMinimumPriority(Log.DEBUG);
         _server.start();
         _context.portMapper().register(SVC_HTTPS_I2PCONTROL,

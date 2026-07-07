@@ -100,7 +100,6 @@ public class HostCheckHandler extends HandlerWrapper
         // allow all IP addresses
         if (InetAddressUtils.isIPv4Address(host) || InetAddressUtils.isIPv6Address(host))
             return true;
-        //System.out.println(host + " not found in " + s);
         return false;
     }
 

@@ -59,17 +59,14 @@ public class SocketController implements RouterApp {
     private ServerSocket _server;
     private final List<Socket> _listeners;
     private ClientAppState _state = UNINITIALIZED;
-    // only for main()
-    private static SocketController _instance;
     static final String PROP_ALLOWED_HOSTS = "i2pcontrol.allowedhosts";
     private static final String SVC_SKT_I2PCONTROL = "skt_i2pcontrol";
-    private static final String SVC_SSL_I2PCONTROL = "skt_ssl_i2pcontrol";
     private static final int DEFAULT_PORT = 7640;
 
     /**
      *  RouterApp (new way)
      */
-    public SocketController(RouterContext ctx, ClientAppManager mgr, String[] args) throws IOException {
+    public SocketController(RouterContext ctx, ClientAppManager mgr) throws IOException {
         _context = ctx;
         _mgr = mgr;
         _log = _context.logManager().getLog(SocketController.class);
@@ -87,7 +84,7 @@ public class SocketController implements RouterApp {
     public synchronized void startup() {
         changeState(STARTING);
         try {
-            start(null);
+            start();
             changeState(RUNNING);
         } catch (Exception e) {
             changeState(START_FAILED, "Failed to start", e);
@@ -134,7 +131,7 @@ public class SocketController implements RouterApp {
         }
     }
 
-    private synchronized void start(String[] args) throws Exception {
+    private synchronized void start() throws Exception {
         _context.logManager().getLog(JSONRPC2Servlet.class).setMinimumPriority(Log.DEBUG);
         _server = buildServer();
         _context.portMapper().register(SVC_SKT_I2PCONTROL,

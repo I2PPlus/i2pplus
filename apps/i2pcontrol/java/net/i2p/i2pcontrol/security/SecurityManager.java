@@ -36,7 +36,6 @@ public class SecurityManager {
     public final static String DEFAULT_AUTH_PASSWORD = "itoopie";
     private final HashMap<String, AuthToken> authTokens;
     private final SimpleTimer2.TimedEvent timer;
-    private final KeyStore _ks;
     private final Log _log;
     private final ConfigurationManager _conf;
     private final I2PAppContext _context;
@@ -51,8 +50,6 @@ public class SecurityManager {
         authTokens = new HashMap<>();
 
         timer = new Sweeper();
-
-        _ks = ksp != null ? ksp.getDefaultKeyStore() : null;
     }
 
     public void stopTimedEvents() {

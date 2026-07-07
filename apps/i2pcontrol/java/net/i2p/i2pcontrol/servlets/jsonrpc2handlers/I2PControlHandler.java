@@ -35,22 +35,12 @@ import net.i2p.util.Log;
  */
 public class I2PControlHandler implements RequestHandler {
 
-    private static final int BW_BURST_PCT = 110;
-    private static final int BW_BURST_TIME = 20;
-    private final RouterContext _context;
-    private final Log _log;
-    //private final ConfigurationManager _conf;
     private final SecurityManager _secMan;
     private final JSONRPC2Helper _helper;
 
-    public I2PControlHandler(RouterContext ctx, JSONRPC2Helper helper, SecurityManager secMan) {
+    public I2PControlHandler(JSONRPC2Helper helper, SecurityManager secMan) {
         _helper = helper;
         _secMan = secMan;
-        _context = ctx;
-        if (ctx != null)
-            _log = ctx.logManager().getLog(I2PControlHandler.class);
-        else
-            _log = I2PAppContext.getGlobalContext().logManager().getLog(I2PControlHandler.class);
     }
 
 
@@ -86,7 +76,6 @@ public class I2PControlHandler implements RequestHandler {
         Map<String, Object> inParams = req.getNamedParams();
         Map<String, Object> outParams = new HashMap<>(4);
 
-        boolean restartNeeded = false;
         boolean settingsSaved = false;
         String inParam;
 
@@ -141,13 +130,11 @@ public class I2PControlHandler implements RequestHandler {
         }
 ****/
 
-        if (inParams.containsKey("i2pcontrol.password")) {
-            if ((inParam = (String) inParams.get("i2pcontrol.password")) != null) {
-                if (_secMan.setPasswd(inParam)) {
-                    outParams.put("i2pcontrol.password", null);
-                    settingsSaved = true;
-                }
-            }
+        if (inParams.containsKey("i2pcontrol.password") &&
+            (inParam = (String) inParams.get("i2pcontrol.password")) != null &&
+            _secMan.setPasswd(inParam)) {
+            outParams.put("i2pcontrol.password", null);
+            settingsSaved = true;
         }
 
 /****

@@ -61,10 +61,9 @@ public class KeyStoreProvider {
     }
 
     /**
-     *  @param password unused
      *  @return null on failure
      */
-    public static X509Certificate readCert(KeyStore ks, String certAlias, String password) {
+    public static X509Certificate readCert(KeyStore ks, String certAlias) {
         try {
             X509Certificate cert = (X509Certificate) ks.getCertificate(certAlias);
 

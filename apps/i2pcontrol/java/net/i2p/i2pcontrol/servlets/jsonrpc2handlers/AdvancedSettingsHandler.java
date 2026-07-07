@@ -19,7 +19,6 @@ import net.i2p.util.Log;
 public class AdvancedSettingsHandler implements RequestHandler {
 
     private final RouterContext _context;
-    private final Log _log;
     private final JSONRPC2Helper _helper;
     private static final String[] requiredArgs = {};
 
@@ -31,10 +30,6 @@ public class AdvancedSettingsHandler implements RequestHandler {
     public AdvancedSettingsHandler(RouterContext ctx, JSONRPC2Helper helper) {
         _helper = helper;
         _context = ctx;
-        if (ctx != null)
-            _log = ctx.logManager().getLog(AdvancedSettingsHandler.class);
-        else
-            _log = I2PAppContext.getGlobalContext().logManager().getLog(AdvancedSettingsHandler.class);
     }
 
     // Reports the method names of the handled requests

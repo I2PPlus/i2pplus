@@ -55,7 +55,8 @@ public class JSONRPC2Servlet extends HttpServlet {
     private final JSONRPC2Helper _helper;
     private final RouterContext _context;
     private final boolean _isWebapp;
-    private boolean _isHTTP, _isHTTPS;
+    private boolean _isHTTP;
+    private boolean _isHTTPS;
 
     /**
      *  Webapp
@@ -67,11 +68,6 @@ public class JSONRPC2Servlet extends HttpServlet {
         _context = (RouterContext) ctx;
         File appDir = ctx.getAppDir();
         _conf = new ConfigurationManager(ctx, appDir, false);
-        // we don't really need a keystore
-        //File ksDir = new File(ctx.getConfigDir(), "keystore");
-        //ksDir.mkDir();
-        //KeyStoreProvider ksp = new KeyStoreProvider(ksDir.getAbsolutePath());
-        //_secMan = new SecurityManager(ctx, ksp, _conf);
         _secMan = new SecurityManager(ctx, null, _conf);
         _helper = new JSONRPC2Helper(_secMan);
         _log = ctx.logManager().getLog(JSONRPC2Servlet.class);
@@ -104,7 +100,7 @@ public class JSONRPC2Servlet extends HttpServlet {
         disp.register(new NetworkSettingHandler(_context, _helper));
         disp.register(new RouterInfoHandler(_context, _helper));
         disp.register(new RouterManagerHandler(_context, _helper));
-        disp.register(new I2PControlHandler(_context, _helper, _secMan));
+        disp.register(new I2PControlHandler(_helper, _secMan));
         disp.register(new AdvancedSettingsHandler(_context, _helper));
         if (_isWebapp) {
             PortMapper pm = _context.portMapper();

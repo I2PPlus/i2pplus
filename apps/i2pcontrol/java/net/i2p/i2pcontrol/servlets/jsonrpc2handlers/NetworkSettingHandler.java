@@ -214,15 +214,14 @@ public class NetworkSettingHandler implements RequestHandler {
         }
 
         // Non-setable key.
-        if (inParams.containsKey("i2p.router.net.ssu.detectedip")) {
-            if ((inParam = (String) inParams.get("i2p.router.net.ssu.autoip")) == null) {
-                byte[] ipBytes = _context.router().getRouterInfo().getTargetAddress("SSU").getIP();
-                try {
-                    InetAddress i = InetAddress.getByAddress(ipBytes);
-                    outParams.put("i2p.router.net.ssu.detectedip", i.getHostAddress());
-                } catch (UnknownHostException e) {
-                    outParams.put("i2p.router.net.ssu.detectedip", "Failed to parse ip address");
-                }
+        if (inParams.containsKey("i2p.router.net.ssu.detectedip") &&
+            inParams.get("i2p.router.net.ssu.autoip") == null) {
+            byte[] ipBytes = _context.router().getRouterInfo().getTargetAddress("SSU").getIP();
+            try {
+                InetAddress i = InetAddress.getByAddress(ipBytes);
+                outParams.put("i2p.router.net.ssu.detectedip", i.getHostAddress());
+            } catch (UnknownHostException e) {
+                outParams.put("i2p.router.net.ssu.detectedip", "Failed to parse ip address");
             }
         }
 
