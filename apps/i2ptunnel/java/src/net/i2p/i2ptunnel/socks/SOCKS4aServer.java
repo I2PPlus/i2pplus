@@ -89,7 +89,7 @@ class SOCKS4aServer extends SOCKSServer {
      * stuff preceding or enveloping the actual request
      * has been stripped out of the input/output streams.
      */
-    private void manageRequest(DataInputStream in, DataOutputStream out) throws IOException, SOCKSException {
+    private void manageRequest(DataInputStream in, DataOutputStream out) throws IOException {
 
         int command = in.readByte() & 0xff;
         switch (command) {

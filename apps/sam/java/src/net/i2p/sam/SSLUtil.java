@@ -64,7 +64,7 @@ class SSLUtil {
             if (!sdir.mkdirs())
                 throw new IOException("Unable to create keystore " + ks);
         }
-        boolean rv = createKeyStore(ks, name, opts);
+        boolean rv = createKeyStore(ks, opts);
         if (!rv)
             throw new IOException("Unable to create keystore " + ks);
 
@@ -83,7 +83,7 @@ class SSLUtil {
      *  @param opts in/out, updated if rv is true, must contain PROP_KEY_ALIAS
      *  @return success, if true, opts will have password properties added to be saved
      */
-    private static boolean createKeyStore(File ks, String name, Properties opts) {
+    private static boolean createKeyStore(File ks, Properties opts) {
         // make a random 48 character password (30 * 8 / 5)
         String keyPassword = KeyStoreUtil.randomString();
         String cname = "localhost";
