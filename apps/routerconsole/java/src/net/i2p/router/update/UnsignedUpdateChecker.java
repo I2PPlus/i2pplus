@@ -50,7 +50,6 @@ class UnsignedUpdateChecker extends UpdateRunner {
         _currentURI = _urls.get(0);
         String url = _currentURI.toString();
         // assume always proxied for now
-        //boolean shouldProxy = Boolean.valueOf(_context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY)).booleanValue();
         String proxyHost = _context.getProperty(ConfigUpdateHandler.PROP_PROXY_HOST, ConfigUpdateHandler.DEFAULT_PROXY_HOST);
         int proxyPort = _context.getProperty(ConfigUpdateHandler.PROP_PROXY_PORT, ConfigUpdateHandler.DEFAULT_PROXY_PORT_INT);
         if (proxyPort == ConfigUpdateHandler.DEFAULT_PROXY_PORT_INT &&

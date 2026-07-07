@@ -22,7 +22,6 @@ class UDPSorters {
     static final int FLAG_CWND= 6;
     static final int FLAG_SSTHRESH = 7;
     static final int FLAG_RTT = 8;
-    // static final int FLAG_DEV = 9;
     static final int FLAG_RTO = 10;
     static final int FLAG_MTU = 11;
     static final int FLAG_SEND = 12;
@@ -63,7 +62,6 @@ class UDPSorters {
                 rv = new RTTComparator();
                 break;
             //case FLAG_DEV:
-            //    rv = new DevComparator();
             //    break;
             case FLAG_RTO:
                 rv = new RTOComparator();

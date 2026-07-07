@@ -171,7 +171,6 @@ public class GraphListener implements RateSummaryListener {
             GraphGenerator.setDisabled(_context);
         } catch (NoSuchMethodError nsme) {
             // Covariant fail Java 8/9/10
-            // java.lang.NoSuchMethodError: java.nio.MappedByteBuffer.position(I)Ljava/nio/MappedByteBuffer;
             // see e.g. https://jira.mongodb.org/browse/JAVA-2559
             _log.error("Error starting RRD for stat " + baseName, nsme);
             String s = "Error:" +

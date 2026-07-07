@@ -45,7 +45,6 @@ class PluginUpdateChecker extends UpdateRunner {
             _isPartial = true;
             // use the same settings as for updater
             // always proxy, or else FIXME
-            //boolean shouldProxy = Boolean.valueOf(_context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY)).booleanValue();
             String proxyHost = _context.getProperty(ConfigUpdateHandler.PROP_PROXY_HOST, ConfigUpdateHandler.DEFAULT_PROXY_HOST);
             int proxyPort = ConfigUpdateHandler.proxyPort(_context);
             if (proxyPort == ConfigUpdateHandler.DEFAULT_PROXY_PORT_INT &&
