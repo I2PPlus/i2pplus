@@ -1,3 +1,18 @@
+2026-07-07 dr|z3d
+  * Router: Improve first-hop quality and build concurrency; fix RTT measurement and
+    concurrent message limits; scale request throttle limits for transit stability;
+    add RED/Codel tuning, pending lookup queue, raised lookup limits
+  * Transport: UDP peer state leak and hot loop fix, PacketPusher shutdown fix, peer
+    removal race fix; NTCP reader/writer thread scaling; ISP name override for Emirates
+  * Console: Tuning params in collapsible sections; non-blocking RDNS for faster loads;
+    fix graph settings save; theme tweaks; configban toggle wiring
+  * Core: CoDel/RED leak fix, TryCache resize, replace SimpleTimer with shared
+    SimpleTimer2; fix JobQueue thread CPU explosion
+  * Streaming: Replace per-session timer pools with shared global timer
+  * I2PTunnel: Bounded server executor with Tuner integration
+  * Wrapper: Add -XX:-OmitStackTraceInFastThrow for crash diagnostics
+  * Docker: Configurable UID/GID; fix restart hang with stop_grace_period
+
 2026-07-04 dr|z3d
   * Console: Add /tuning page with sparkline history, parameter
     descriptions, and per-row auto-tuning toggle
