@@ -21,7 +21,6 @@ import net.i2p.data.MetaLease;
 import net.i2p.data.MetaLeaseSet;
 import net.i2p.data.i2cp.I2CPMessage;
 import net.i2p.data.i2cp.RequestVariableLeaseSetMessage;
-import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
 
 import java.util.Properties;

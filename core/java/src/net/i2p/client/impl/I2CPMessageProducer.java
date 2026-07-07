@@ -314,7 +314,6 @@ class I2CPMessageProducer {
      */
     private boolean updateBps(int len, long expires) {
         if (_maxBytesPerSecond <= 0) return true;
-        // synchronized (this) {
         _lock.lock();
         try {
             int waitCount = 0;
@@ -371,7 +370,6 @@ class I2CPMessageProducer {
                     _log.debug("Throttled " + len + " bytes, wait #" + waitCount + ' ' + (1000 - period)
                             + "ms" /*, new Exception()*/);
                 try {
-                    // this.wait(1000 - period);
                     _lock.newCondition().await(1000 - period, TimeUnit.MILLISECONDS);
                 } catch (InterruptedException ie) { /* ignored */ }
             }

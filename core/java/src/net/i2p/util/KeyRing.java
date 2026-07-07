@@ -26,5 +26,5 @@ public class KeyRing extends ConcurrentHashMap<Hash, SessionKey> {
      *  @deprecated unused since 0.9.33; code moved to routerconsole
      */
     @Deprecated
-    public void renderStatusHTML(Writer out) throws IOException {}
+    public void renderStatusHTML(Writer out) throws IOException { /* nop */ }
 }

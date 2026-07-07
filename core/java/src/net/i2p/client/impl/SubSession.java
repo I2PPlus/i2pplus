@@ -60,7 +60,7 @@ class SubSession extends I2PSessionMuxedImpl {
      *  Does nothing.
      */
     @Override
-    public void removeSubsession(I2PSession session) {}
+    public void removeSubsession(I2PSession session) { /* nop */ }
 
     /**
      *  Unsupported in a subsession.
@@ -76,7 +76,7 @@ class SubSession extends I2PSessionMuxedImpl {
      *  Does nothing for now
      */
     @Override
-    public void updateOptions(Properties options) {}
+    public void updateOptions(Properties options) { /* nop */ }
 
     /**
      *  @since 0.9.33

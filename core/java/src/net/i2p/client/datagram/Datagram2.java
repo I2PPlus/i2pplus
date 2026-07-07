@@ -190,7 +190,6 @@ public class Datagram2 {
                 if (!ctx.dsa().verifySignature(offlineSignature, dgram, off2, 6 + transientSigningPublicKey.length(), spk)) throw new I2PInvalidDatagramException("Bad offline signature");
             }
             int siglen = type.getSigLen();
-            long skipped = in.skip(in.available() - siglen);
             // end of signed data
             Signature sig = new Signature(type);
             sig.readBytes(in);

@@ -33,6 +33,5 @@ class DisconnectMessageHandler extends HandlerImpl {
         session.propagateError(reason, new I2PSessionException("Disconnect Message received: " + reason));
         session.destroySession(false);
         // Higher layers (only) must do the reconnect, to prevent dup destinations
-        // if (reason.contains("restart")) ...
     }
 }

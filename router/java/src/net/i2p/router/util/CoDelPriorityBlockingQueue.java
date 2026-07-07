@@ -352,7 +352,6 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         getCurrentTime();
         long delay = _now - entry.getEnqueueTime();
         // round down for the stat
-        //int priority = entry.getPriority() / 100 * 100;
         int priority = Math.floorDiv(entry.getPriority(), 100) * 100;
         _context.statManager().addRateData(STAT_DROP + priority, delay);
         if (_log.shouldWarn())

@@ -25,7 +25,6 @@ abstract class LogWriter implements Runnable {
     /** every 10 seconds? why? Just have the gui force a reread after a change?? */
     private static final long CONFIG_READ_INTERVAL = 50 * 1000;
 
-    //    final static long FLUSH_INTERVAL = 29 * 1000;
     static final long FLUSH_INTERVAL = 15 * 1000; // ajax refresh interval
     private static final long MIN_FLUSH_INTERVAL = 2 * 1000;
     private static final long MAX_FLUSH_INTERVAL = 5 * 60 * 1000;
@@ -171,7 +170,6 @@ abstract class LogWriter implements Runnable {
         if (_manager.getDisplayOnScreenLevel() <= lastRecord.getPriority() && _manager.displayOnScreen()) System.out.print(dmsg);
         dmsg = dupMessage(dupCount, lastRecord, BUFFER_DISPLAYED_REVERSE, true);
         _manager.getBuffer().add(dmsg);
-        //        if (lastRecord.getPriority() >= Log.CRIT)
         if (lastRecord.getPriority() >= Log.ERROR) _manager.getBuffer().addCritical(dmsg);
     }
 
@@ -213,7 +211,6 @@ abstract class LogWriter implements Runnable {
         // we always add to the console buffer, but only sometimes write to stdout
         _manager.getBuffer().add(val);
         int priority = rec.getPriority();
-        //        if (priority >= Log.CRIT)
         if (priority >= Log.ERROR) _manager.getBuffer().addCritical(val);
         // Default is CRIT
         if (_manager.getDisplayOnScreenLevel() <= priority) {

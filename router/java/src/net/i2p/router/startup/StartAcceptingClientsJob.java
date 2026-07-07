@@ -25,6 +25,5 @@ class StartAcceptingClientsJob extends JobImpl {
         getContext().clientManager().startup();
 
         // pointless
-        //getContext().jobQueue().addJob(new RebuildRouterInfoJob(getContext()));
     }
 }

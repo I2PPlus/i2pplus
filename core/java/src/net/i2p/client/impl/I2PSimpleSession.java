@@ -156,7 +156,7 @@ public class I2PSimpleSession extends I2PSessionImpl2 {
      * @since 0.8.4
      */
     @Override
-    public void updateOptions(Properties options) {}
+    public void updateOptions(Properties options) { /* nop */ }
 
     /**
      * Only map message handlers that we will use

@@ -201,7 +201,6 @@ public class SendMessageDirectJob extends JobImpl {
             if (_log.shouldDebug())
                 _log.debug("Adding " + _message.getClass().getName() +
                            " to Inbound message pool as it was destined for ourselves");
-            //_log.debug("debug", _createdBy);
         } else {
             OutNetMessage msg = new OutNetMessage(getContext(), _message, _expiration, _priority, _router);
             msg.setOnFailedReplyJob(_onFail);
@@ -213,7 +212,6 @@ public class SendMessageDirectJob extends JobImpl {
             if (_log.shouldDebug())
                 _log.debug("Adding " + _message.getClass().getName() + " to Outbound message pool targeting [" +
                            _router.getIdentity().getHash().toBase64().substring(0,6) + "]");
-            //_log.debug("Message pooled: " + _message);
         }
     }
 }

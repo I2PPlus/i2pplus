@@ -46,7 +46,6 @@ public class MessageValidator {
             _context.statManager().addRateData("router.duplicateMessageId", 1);
             return "Duplicate message";
         } else {
-            //if (_log.shouldDebug())
             //    _log.debug("Accepting message " + messageId + " because it is NOT a duplicate", new Exception("Original origin"));
             return null;
         }

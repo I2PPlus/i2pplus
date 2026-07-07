@@ -1274,7 +1274,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             boolean hasSendFailures = !Double.isNaN(sendFailed) && sendFailed > 0;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 50;
             boolean heavyTransit = !Double.isNaN(transitBps) && transitBps > 50000;
 
             // Target: timeout = 3x observed confirm time, with minimum floor
@@ -2479,7 +2478,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean highLoad = sysLoad > 80;
 
             boolean hasDrops = !Double.isNaN(drops) && drops > 5;
-            boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
 
             // Delay approaching current target = tighten target for more aggressive dropping
             if (observed > current * 0.6 && hasDrops)
@@ -2549,7 +2547,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean highLoad = sysLoad > 80;
 
             boolean hasDrops = !Double.isNaN(drops) && drops > 5;
-            boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
 
             // Active congestion with drops = shorten interval for faster reaction
             if (hasDrops && observed > 5)
@@ -4567,7 +4564,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             //             client.requestLeaseSetSuccess/Dropped (LS health), jobLag (CPU)
             double matchRate = getAdditionalStat(_context, "netDb.lookupsMatched");
             double leaseTime = getAdditionalStat(_context, "client.leaseSetFoundRemoteTime");
-            double lsSuccess = getAdditionalStat(_context, "client.requestLeaseSetSuccess");
             double lsDropped = getAdditionalStat(_context, "client.requestLeaseSetDropped");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
@@ -4898,7 +4894,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int minFast = ProfileOrganizer.getDefaultMinFastPeers();
             // observed = peer.qualityPeerCount (fast/high-cap peers with good acceptance + recent activity)
             // Cross-refs: peer.fastPeerCount (raw count), peer.activeProfileCount (total pool)
-            double fastPeers = getAdditionalStat(_context, "peer.fastPeerCount");
             double activeProfiles = getAdditionalStat(_context, "peer.activeProfileCount");
             double hourlyQuality = getAdditionalStatHourly(_context, _statName);
 
@@ -5677,7 +5672,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double rejections = getAdditionalStat(_context, "udp.rejectConcurrentActive");
             double sendPoolUtil = getAdditionalStat(_context, "ntcp.sendPool utilization");
             double memPressure = getMemoryPressure();
-            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean cpuFree = jobLag < 5 || Double.isNaN(jobLag);
             boolean lowRTT = !Double.isNaN(rtt) && rtt < 200;
             boolean moderateRTT = !Double.isNaN(rtt) && rtt < 500;
@@ -6140,7 +6134,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // observed = transport.sendProcessingTime (ms)
             // Cross-refs: tunnel.testFailedTime, tunnel.testSuccessTime
             double testFailTime = getAdditionalStat(_context, "tunnel.testFailedTime");
-            double testSuccessTime = getAdditionalStat(_context, "tunnel.testSuccessTime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 50;
             boolean highLatency = !Double.isNaN(observed) && observed > 200;

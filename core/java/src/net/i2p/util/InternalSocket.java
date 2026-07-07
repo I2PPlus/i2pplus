@@ -5,10 +5,7 @@ import net.i2p.I2PAppContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
-import java.nio.channels.SocketChannel;
 
 /**
  *  A simple in-JVM Socket using Piped Streams.
@@ -203,7 +200,7 @@ public class InternalSocket extends Socket {
      * Does nothing as of 0.9.33, prior to that threw UnsupportedOperationException
      */
     @Override
-    public void setSoLinger(boolean on, int linger) {}
+    public void setSoLinger(boolean on, int linger) { /* nop */ }
 
 
 

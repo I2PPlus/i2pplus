@@ -169,7 +169,6 @@ class OutboundTunnelEndpoint {
                 }
             }
             // this overstates the stat somewhat, but ok for now
-            //int kb = (size + 1023) / 1024;
             //for (int i = 0; i < kb; i++)
             //    _config.incrementSentMessages();
             _outDistributor.distribute(msg, toRouter, toTunnel);

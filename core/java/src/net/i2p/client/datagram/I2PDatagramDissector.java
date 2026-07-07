@@ -100,7 +100,6 @@ public final class I2PDatagramDissector {
             // Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PDatagramDissector.class);
             // log.error("Error loading datagram", e);
             throw new DataFormatException("Error loading datagram", e);
-            // } catch (AssertionError e) {
             //    Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PDatagramDissector.class);
             //    log.error("Assertion failed!", e);
         }

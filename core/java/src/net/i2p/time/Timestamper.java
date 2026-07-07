@@ -12,10 +12,10 @@ package net.i2p.time;
 public class Timestamper implements Runnable {
 
     /** dummy */
-    public Timestamper() {}
+    public Timestamper() { /* nop */ }
 
     /** dummy */
-    public void waitForInitialization() {}
+    public void waitForInitialization() { /* nop */ }
 
     /**
      *  Update the time immediately.
@@ -23,11 +23,11 @@ public class Timestamper implements Runnable {
      *
      *  @since 0.8.8
      */
-    public void timestampNow() {}
+    public void timestampNow() { /* nop */ }
 
     /** dummy */
     @Override
-    public void run() {}
+    public void run() { /* nop */ }
 
     /**
      * Interface to receive update notifications for when we query the time

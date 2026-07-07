@@ -28,7 +28,6 @@ class BuildTrustedLinksJob extends JobImpl {
     public void runJob() {
         // create trusted links with peers
 
-        //try { Thread.sleep(5000); } catch (InterruptedException ie) {}
 
         getContext().jobQueue().addJob(_next);
     }
