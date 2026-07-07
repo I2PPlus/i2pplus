@@ -998,15 +998,15 @@ public class SidebarHelper extends HelperBase {
         long maxLag = _context.jobQueue().getMaxLag();
         if (!isAdvanced() || maxLag < (double)30) {
             if (lagRate.getAverageValue() < 1) {
-                return DataHelper.formatDuration2((double)lagRate.getAverageValue());
+                return DataHelper.formatDuration2(lagRate.getAverageValue());
             } else {
                 return DataHelper.formatDuration2((long)lagRate.getAverageValue());
             }
         } else {
             if (lagRate.getAverageValue() < 1 && (double)maxLag < 1) {
-                return DataHelper.formatDuration2((double)lagRate.getAverageValue()) + THINSP + (double)maxLag + "&nbsp;µs";
+                return DataHelper.formatDuration2(lagRate.getAverageValue()) + THINSP + (double)maxLag + "&nbsp;µs";
             } else if (lagRate.getAverageValue() < 1) {
-                return DataHelper.formatDuration2((double)lagRate.getAverageValue()) + THINSP + maxLag + "&nbsp;ms";
+                return DataHelper.formatDuration2(lagRate.getAverageValue()) + THINSP + maxLag + "&nbsp;ms";
             } else {
                 return (long)lagRate.getAverageValue() + THINSP + maxLag + "&nbsp;ms";
             }

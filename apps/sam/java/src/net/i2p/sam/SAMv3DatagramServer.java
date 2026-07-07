@@ -113,16 +113,16 @@ class SAMv3DatagramServer implements Handler {
 			while (!Thread.interrupted())
 			{
 				// not ByteBuffer to avoid Java 8/9 issues
-				((Buffer)inBuf).clear();
+				(inBuf).clear();
 				try {
 					server.receive(inBuf);
 				} catch (IOException e) {
 					break;
 				}
-				((Buffer)inBuf).flip();
+				(inBuf).flip();
 				ByteBuffer outBuf = ByteBuffer.wrap(new byte[inBuf.remaining()]);
 				outBuf.put(inBuf);
-				((Buffer)outBuf).flip();
+				(outBuf).flip();
 				// inline
 				// Even though we could be sending messages through multiple sessions,
 				// that isn't a common use case, and blocking should be rare.

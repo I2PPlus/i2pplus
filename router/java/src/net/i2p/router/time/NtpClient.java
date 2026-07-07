@@ -265,7 +265,7 @@ public class NtpClient {
      * @param args command-line arguments; optionally "-6" followed by list of NTP servers
      * @throws IOException if a network error occurs
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         boolean ipv6 = false;
         if (args.length > 0 && args[0].equals("-6")) {
             ipv6 = true;

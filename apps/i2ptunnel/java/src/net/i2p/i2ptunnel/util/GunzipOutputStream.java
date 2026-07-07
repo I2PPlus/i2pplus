@@ -57,7 +57,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
      * @param cb may be null
      * @since 0.9.62
      */
-    public GunzipOutputStream(OutputStream uncompressedStream, DoneCallback cb) throws IOException {
+    public GunzipOutputStream(OutputStream uncompressedStream, DoneCallback cb) {
         super(new CRC32OutputStream(uncompressedStream), new Inflater(true));
         _log = I2PAppContext.getGlobalContext().logManager().getLog(GunzipOutputStream.class);
         _callback = cb;

@@ -651,9 +651,9 @@ public class I2PAppContext {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public Set<String> getPropertyNames() {
         // clone to avoid ConcurrentModificationException
-        Set<String> names = new HashSet<>((Set<String>) (Set) ((Properties) System.getProperties().clone()).keySet()); // TODO-Java6: s/keySet()/stringPropertyNames()/
+        Set<String> names = new HashSet<>( (Set) ((Properties) System.getProperties().clone()).keySet()); // TODO-Java6: s/keySet()/stringPropertyNames()/
         if (_overrideProps != null)
-            names.addAll((Set<String>) (Set) _overrideProps.keySet()); // TODO-Java6: s/keySet()/stringPropertyNames()/
+            names.addAll( (Set) _overrideProps.keySet()); // TODO-Java6: s/keySet()/stringPropertyNames()/
         return names;
     }
 

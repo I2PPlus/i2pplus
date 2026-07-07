@@ -431,7 +431,7 @@ public final class ElGamalAESEngine {
      * Note: package private for ElGamalTest.testAES()
      */
     byte[] decryptAESBlock(byte[] encrypted, int offset, int encryptedLen, SessionKey key, byte[] iv,
-                           byte[] sentTag, Set<SessionTag> foundTags, SessionKey foundKey) throws DataFormatException {
+                           byte[] sentTag, Set<SessionTag> foundTags, SessionKey foundKey) {
         //_log.debug("iv for decryption: " + DataHelper.toString(iv, 16));
         //_log.debug("decrypting AES block.  encr.length = " + (encrypted == null? -1 : encrypted.length) + " sentTag: " + DataHelper.toString(sentTag, 32));
         byte[] decrypted = new byte[encryptedLen];

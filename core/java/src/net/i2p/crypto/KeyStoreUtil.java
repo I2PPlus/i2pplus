@@ -1436,7 +1436,7 @@ public final class KeyStoreUtil {
         exportPrivateKey(ksf, DEFAULT_KEYSTORE_PASSWORD, alias, pw, System.out);
     }
 
-    private static void testKeygen(String[] args) throws Exception {
+    private static void testKeygen(String[] args) {
         File ksf = new File(args[1]);
         String alias = args[2];
         String pw = args[3];

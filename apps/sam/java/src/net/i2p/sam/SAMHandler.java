@@ -53,7 +53,7 @@ abstract class SAMHandler implements Runnable, Handler {
      * @throws IOException
      */
     protected SAMHandler(SocketChannel s, int verMajor, int verMinor,
-                         Properties i2cpProps, SAMBridge parent) throws IOException {
+                         Properties i2cpProps, SAMBridge parent) {
         _log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
         socket = s;
 

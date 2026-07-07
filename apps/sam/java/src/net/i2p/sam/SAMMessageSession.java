@@ -63,7 +63,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
      * @throws DataFormatException
      * @throws I2PSessionException
      */
-    protected SAMMessageSession(InputStream destStream, Properties props) throws IOException, DataFormatException, I2PSessionException {
+    protected SAMMessageSession(InputStream destStream, Properties props) throws I2PSessionException {
         _log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
         if (_log.shouldDebug())
             _log.debug("Initializing SAM message-based session");
@@ -83,7 +83,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
      * @since 0.9.25
      */
     protected SAMMessageSession(I2PSession sess, int listenProtocol, int listenPort)
-                            throws IOException, DataFormatException, I2PSessionException {
+                            throws I2PSessionException {
         _log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
         if (_log.shouldDebug())
             _log.debug("Initializing SAM message-based session");
@@ -311,7 +311,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
          *
          * @since 0.9.25
          */
-        public SAMMessageSessionHandler(I2PSession sess) throws I2PSessionException {
+        public SAMMessageSessionHandler(I2PSession sess) {
             _session = sess;
             _session.addMuxedSessionListener(this, listenProtocol, listenPort);
         }

@@ -38,11 +38,7 @@ public class DisconnectMessage extends I2CPMessageImpl {
 
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
-        try {
-            _reason = DataHelper.readString(in);
-        } catch (DataFormatException dfe) {
-            throw new I2CPMessageException("Unable to load the message data", dfe);
-        }
+        _reason = DataHelper.readString(in);
     }
 
     @Override

@@ -150,7 +150,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * @throws IOException
      */
     public void connect(SAMv3Handler handler, String dest, Properties props)
-            throws I2PException, ConnectException, NoRouteToHostException, DataFormatException, InterruptedIOException,
+            throws I2PException, 
                     IOException {
 
         boolean verbose = !Boolean.parseBoolean(props.getProperty("SILENT"));
@@ -219,7 +219,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * @throws IOException
      */
     public void accept(SAMv3Handler handler, boolean verbose)
-            throws I2PException, InterruptedIOException, IOException, SAMException {
+            throws I2PException, IOException, SAMException {
 
         synchronized (this.socketServerLock) {
             if (this.socketServer != null) {
@@ -428,7 +428,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
             try {
                 while (!Thread.interrupted() && (in.read(buf) >= 0 || buf.position() != 0)) {
                     // not ByteBuffer to avoid Java 8/9 issues with flip()
-                    ((Buffer) buf).flip();
+                    ( buf).flip();
                     out.write(buf);
                     buf.compact();
                 }
@@ -439,7 +439,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
                     in.close();
                 } catch (IOException e) { /* ignored */ }
                 try {
-                    ((Buffer) buf).flip();
+                    ( buf).flip();
                     while (buf.hasRemaining()) {
                         out.write(buf);
                     }

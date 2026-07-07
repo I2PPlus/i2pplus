@@ -229,13 +229,7 @@ public class PersistentDataStore extends TransientDataStore {
                 iter.remove();
                 toRemove++;
                 if (toRemove < 50) {
-                    try {removeFile(key, _dbDir);}
-                    catch (IOException ioe) {
-                        if (_log.shouldWarn()) {
-                            _log.warn(sb.append("Error removing key ").append(key).toString(), ioe);
-                            sb.setLength(0);
-                        }
-                    }
+                    removeFile(key, _dbDir);
                 }
             }
         }
@@ -1127,7 +1121,7 @@ public class PersistentDataStore extends TransientDataStore {
         } catch (RuntimeException e) {return null;}
     }
 
-    private void removeFile(Hash key, File dir) throws IOException {
+    private void removeFile(Hash key, File dir) {
         String riName = getRouterInfoName(key);
         File f = new File(dir, riName);
         if (f.exists()) {

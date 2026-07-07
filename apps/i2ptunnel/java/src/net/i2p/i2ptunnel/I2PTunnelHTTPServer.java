@@ -1743,7 +1743,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  @throws BadRequestException if the request matches a blocklist entry
      *  @throws IOException if closing the socket fails
      */
-    private void processBlocklist(I2PSocket socket, StringBuilder command) throws BadRequestException, IOException {
+    private void processBlocklist(I2PSocket socket, StringBuilder command) throws IOException {
         if (_blocklistManager == null) {return;}
         if (_blocklistManager.shouldBlockRequest(command)) {
             String matchedString = _blocklistManager.getMatchedBlocklistString(command);

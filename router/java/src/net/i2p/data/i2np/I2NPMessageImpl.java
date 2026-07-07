@@ -393,7 +393,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *
      * @return non-null, returns an UnknownI2NPMessage if unknown type
      */
-    public static I2NPMessage createMessage(I2PAppContext context, int type) throws I2NPMessageException {
+    public static I2NPMessage createMessage(I2PAppContext context, int type) {
         switch (type) {
             case DatabaseStoreMessage.MESSAGE_TYPE:
                 return new DatabaseStoreMessage(context);

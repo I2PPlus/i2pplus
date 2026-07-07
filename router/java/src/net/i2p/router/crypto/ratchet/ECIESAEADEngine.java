@@ -1015,7 +1015,7 @@ public final class ECIESAEADEngine {
      * @return success
      */
     private boolean decryptAEADBlock(byte[] ad, byte[] encrypted, int offset, int encryptedLen, SessionKey key,
-                                    long n) throws DataFormatException {
+                                    long n) {
         ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
         chacha.initializeKey(key.getData(), 0);
         chacha.setNonce(n);

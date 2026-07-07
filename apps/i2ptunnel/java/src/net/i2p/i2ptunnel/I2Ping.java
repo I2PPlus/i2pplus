@@ -228,7 +228,7 @@ public class I2Ping extends I2PTunnelClientBase {
      * Attempts to "ping" by opening an I2P socket to the destination.
      * Returns true if connection succeeds within timeout.
      */
-    private PingResult ping(Destination dest, int fromPort, int toPort, long timeout) throws I2PException {
+    private PingResult ping(Destination dest, int fromPort, int toPort, long timeout) {
         long pingStart = System.currentTimeMillis();
         try {
             boolean success = sockMgr.ping(dest, fromPort, toPort, timeout);
@@ -322,12 +322,7 @@ public class I2Ping extends I2PTunnelClientBase {
             for (int i = 0; i < cnt; i++) {
                 l.log(" • Attempting ping " + (i + 1) + "/" + cnt + "...");
                 PingResult result;
-                try {
-                    result = ping(dest, localPort, remotePort, timeout);
-                } catch (I2PException e) {
-                    l.log(" ✖ Ping error: " + e.getMessage());
-                    result = new PingResult(false, 0);
-                }
+                result = ping(dest, localPort, remotePort, timeout);
 
                 results.add(result);
 

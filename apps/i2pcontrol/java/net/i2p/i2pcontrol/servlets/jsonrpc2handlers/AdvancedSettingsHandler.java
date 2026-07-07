@@ -82,7 +82,7 @@ public class AdvancedSettingsHandler implements RequestHandler {
                         return new JSONRPC2Response(rpcErr, req.getID());
                     }
 
-                    Map<String, String> allSettings = (Map<String, String>) objMap;
+                    Map<String, String> allSettings =  objMap;
                     boolean success = setAdvancedSettings(allSettings, true);
                     if (!success) {
                         JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INTERNAL_ERROR.getCode(),
@@ -129,7 +129,7 @@ public class AdvancedSettingsHandler implements RequestHandler {
                         return new JSONRPC2Response(rpcErr, req.getID());
                     }
 
-                    Map<String, String> allSettings = (Map<String, String>) objMap;
+                    Map<String, String> allSettings =  objMap;
                     boolean success = setAdvancedSettings(allSettings, false);
                     if (!success) {
                         JSONRPC2Error rpcErr = new JSONRPC2Error(JSONRPC2Error.INTERNAL_ERROR.getCode(),

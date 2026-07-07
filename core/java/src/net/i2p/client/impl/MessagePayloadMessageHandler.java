@@ -11,7 +11,7 @@ package net.i2p.client.impl;
 
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSessionException;
-import net.i2p.data.DataFormatException;
+
 import net.i2p.data.Payload;
 import net.i2p.data.i2cp.I2CPMessage;
 import net.i2p.data.i2cp.MessagePayloadMessage;
@@ -55,8 +55,6 @@ class MessagePayloadMessageHandler extends HandlerImpl {
                 m.setSessionId(msg.getSessionId());
                 session.sendMessage(m);
             }
-        } catch (DataFormatException dfe) {
-            session.propagateError("Error handling a new payload message", dfe);
         } catch (I2PSessionException ise) {
             session.propagateError("Error handling a new payload message", ise);
         }
@@ -68,7 +66,7 @@ class MessagePayloadMessageHandler extends HandlerImpl {
      * We don't really decrypt (no more end-to-end crypto)
      * If we do, we need to use the correct key manager in the decrypt() call below
      */
-    private Payload decryptPayload(MessagePayloadMessage msg, I2PSessionImpl session) throws DataFormatException {
+    private Payload decryptPayload(MessagePayloadMessage msg, I2PSessionImpl session) {
         Payload payload = msg.getPayload();
         payload.setUnencryptedData(payload.getEncryptedData());
         return payload;

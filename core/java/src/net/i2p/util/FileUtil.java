@@ -101,7 +101,7 @@ public class FileUtil {
             zip = new ZipFile(zipfile);
             Enumeration<? extends ZipEntry> entries = zip.entries();
             while (entries.hasMoreElements()) {
-                ZipEntry entry = (ZipEntry) entries.nextElement();
+                ZipEntry entry =  entries.nextElement();
                 if (entry.getName().contains("..")) {
                     System.err.println("ERROR: Refusing to extract a zip entry with '..' in it [" + entry.getName() + "]");
                     return false;
@@ -219,7 +219,7 @@ public class FileUtil {
             Enumeration<? extends ZipEntry> entries = zip.entries();
             boolean p200TestRequired = true;
             while (entries.hasMoreElements()) {
-                ZipEntry entry = (ZipEntry) entries.nextElement();
+                ZipEntry entry =  entries.nextElement();
                 if (entry.getName().indexOf("..") != -1) {
                     System.err.println("ERROR: Refusing to extract a zip entry with '..' in the name [" + entry.getName() + "]");
                     return false;

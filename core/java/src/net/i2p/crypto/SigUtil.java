@@ -367,7 +367,7 @@ public final class SigUtil {
     /**
      *  @since 0.9.15
      */
-    public static SigningPublicKey fromJavaKey(EdDSAPublicKey pk, SigType type) throws GeneralSecurityException {
+    public static SigningPublicKey fromJavaKey(EdDSAPublicKey pk, SigType type) {
         return new SigningPublicKey(type, pk.getAbyte());
     }
 

@@ -66,7 +66,7 @@ public class LoginServlet extends HttpServlet {
         String theme = getLoginTheme();
         boolean enforceLogin = false;
         if (ctx instanceof net.i2p.router.RouterContext) {
-            enforceLogin = ((net.i2p.router.RouterContext) ctx).getBooleanPropertyDefaultTrue("routerconsole.enforceLogin");
+            enforceLogin = ( ctx).getBooleanPropertyDefaultTrue("routerconsole.enforceLogin");
         }
         boolean hasPasswords = isPasswordConfigured();
         if (!enforceLogin && !hasPasswords) {

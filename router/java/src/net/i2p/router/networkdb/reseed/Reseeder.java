@@ -993,7 +993,7 @@ public class Reseeder {
         }
 
         /** @return null on error */
-        private byte[] readURL(URI url) throws IOException {
+        private byte[] readURL(URI url) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream(4*1024);
             EepGet get;
             boolean ssl = "https".equals(url.getScheme());
@@ -1048,7 +1048,7 @@ public class Reseeder {
          *  @return null on error
          *  @since 0.9.14
          */
-        private File fetchURL(URI url) throws IOException {
+        private File fetchURL(URI url) {
             File out = new File(_context.getTempDir(), "reseed-" + _context.random().nextInt() + ".tmp");
             EepGet get;
             boolean ssl = "https".equals(url.getScheme());

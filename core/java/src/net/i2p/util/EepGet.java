@@ -292,10 +292,10 @@ public class EepGet {
     public static void main(String[] args) {
         String proxyHost = "127.0.0.1";
         int proxyPort = 4444;
-        int numRetries = (int) I2PAppContext.getGlobalContext().getProperty(PROP_DEFAULT_RETRIES, DEFAULT_NUM_RETRIES);
+        int numRetries =  I2PAppContext.getGlobalContext().getProperty(PROP_DEFAULT_RETRIES, DEFAULT_NUM_RETRIES);
         int markSize = 1024;
         int lineLen = 10;
-        long inactivityTimeout = (int) I2PAppContext.getGlobalContext().getProperty(PROP_INACTIVITY_TIMEOUT, DEFAULT_INACTIVITY_TIMEOUT);
+        long inactivityTimeout =  I2PAppContext.getGlobalContext().getProperty(PROP_INACTIVITY_TIMEOUT, DEFAULT_INACTIVITY_TIMEOUT);
         String etag = null;
         String saveAs = null;
         List<String> extra = null;
@@ -436,7 +436,7 @@ public class EepGet {
             get.addAuthorization(username, password);
         }
         get.addStatusListener(get.new CLIStatusListener(markSize, lineLen));
-        if (!get.fetch((int) I2PAppContext.getGlobalContext().getProperty(PROP_CONNECT_TIMEOUT, DEFAULT_CONNECT_TIMEOUT), -1, inactivityTimeout)) {
+        if (!get.fetch( I2PAppContext.getGlobalContext().getProperty(PROP_CONNECT_TIMEOUT, DEFAULT_CONNECT_TIMEOUT), -1, inactivityTimeout)) {
             System.exit(1);
         } else {
             System.exit(0);

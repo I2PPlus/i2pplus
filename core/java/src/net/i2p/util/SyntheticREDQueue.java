@@ -186,7 +186,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * @param bwBps nominal output bandwidth in bytes per second
      */
     public SyntheticREDQueue(I2PAppContext ctx, int bwBps) {
-        this(ctx, bwBps, Math.max(1, (int) (bwBps / DEFAULT_LOW_THRESHOLD_DIV)), Math.max(1, (int) (bwBps / DEFAULT_HIGH_THRESHOLD_DIV)));
+        this(ctx, bwBps, Math.max(1,  (bwBps / DEFAULT_LOW_THRESHOLD_DIV)), Math.max(1,  (bwBps / DEFAULT_HIGH_THRESHOLD_DIV)));
     }
 
     /**
@@ -547,6 +547,6 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      */
     @Override
     public synchronized String toString() {
-        return "\n* " + (_bKFiltered > 0 ? "Bandwidth: " + DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false) + "Bytes/s " : "") + (_avgQueueSize > 0 ? "Average Queue Size / " : "") + (_avgQueueSize > 0 ? DataHelper.formatSize2((long) _avgQueueSize, false) + "B / " : "") + "Limit: " + DataHelper.formatSize2Decimal((long) _bandwidthBps, false) + "Bytes/s";
+        return "\n* " + (_bKFiltered > 0 ? "Bandwidth: " + DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false) + "Bytes/s " : "") + (_avgQueueSize > 0 ? "Average Queue Size / " : "") + (_avgQueueSize > 0 ? DataHelper.formatSize2((long) _avgQueueSize, false) + "B / " : "") + "Limit: " + DataHelper.formatSize2Decimal( _bandwidthBps, false) + "Bytes/s";
     }
 }

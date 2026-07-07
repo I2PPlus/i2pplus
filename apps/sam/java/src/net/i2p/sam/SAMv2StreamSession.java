@@ -414,7 +414,7 @@ class SAMv2StreamSession extends SAMStreamSession {
                     }
 
                     // not ByteBuffer to avoid Java 8/9 issues
-                    ((Buffer) data).clear();
+                    ( data).clear();
                     read = Channels.newChannel(in).read(data);
 
                     if (read == -1) {
@@ -424,7 +424,7 @@ class SAMv2StreamSession extends SAMStreamSession {
 
                     totalReceived += read;
                     // not ByteBuffer to avoid Java 8/9 issues with flip()
-                    ((Buffer) data).flip();
+                    ( data).flip();
                     recv.receiveStreamBytes(id, data);
                 }
             } catch (IOException e) {

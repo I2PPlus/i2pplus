@@ -6490,7 +6490,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int maxKBps = _ctx.getProperty("i2np.bandwidth.outboundKBytesPerSecond", 128);
             long maxBps = maxKBps * 1024L;
             if (maxBps <= 0) return 1.0;
-            double usageRatio = bps / (double) maxBps;
+            double usageRatio = bps /  maxBps;
             // 0%→1.0, 70%→0.5, 100%→0.0
             return clamp(1.0 - (usageRatio / 0.7));
         }

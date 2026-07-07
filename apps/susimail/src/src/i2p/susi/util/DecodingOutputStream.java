@@ -84,7 +84,7 @@ public class DecodingOutputStream extends OutputStream {
 
     private void decodeAndWrite(boolean endOfInput) throws IOException {
         // not ByteBuffer to avoid Java 8/9 issues with flip()
-        ((Buffer)_bb).flip();
+        (_bb).flip();
 	if (!_bb.hasRemaining())
             return;
         CoderResult result;
@@ -102,15 +102,15 @@ public class DecodingOutputStream extends OutputStream {
         if (result == null || (result.isError() && !_cb.hasRemaining())) {
             _out.write(REPLACEMENT);
             // need to do this or we will infinite loop
-            ((Buffer)_bb).clear();
+            (_bb).clear();
         } else {
-            ((Buffer)_cb).flip();
+            (_cb).flip();
             _out.append(_cb);
-            ((Buffer)_cb).clear();
+            (_cb).clear();
             if (result.isError()) {
                 _out.write(REPLACEMENT);
                 // need to do this or we will infinite loop
-                ((Buffer)_bb).clear();
+                (_bb).clear();
             }
         }
     }

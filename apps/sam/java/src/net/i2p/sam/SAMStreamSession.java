@@ -112,7 +112,7 @@ class SAMStreamSession implements SAMMessageSess {
      * @throws SAMException
      */
     protected SAMStreamSession(InputStream destStream, String dir,
-                               Properties props,  SAMStreamReceiver recv) throws IOException, DataFormatException, SAMException {
+                               Properties props,  SAMStreamReceiver recv) throws SAMException {
         this.recv = recv;
         _log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
 
@@ -209,7 +209,7 @@ class SAMStreamSession implements SAMMessageSess {
      * @since 0.9.25
      */
     protected SAMStreamSession(I2PSocketManager mgr, Properties props, SAMStreamReceiver recv, int listenport)
-                               throws IOException, DataFormatException, SAMException {
+ {
         this.recv = recv;
         _log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
         if (_log.shouldDebug())
@@ -290,7 +290,7 @@ class SAMStreamSession implements SAMMessageSess {
      * @throws I2PException if there's another I2P-related error
      * @throws IOException
      */
-    public boolean connect ( int id, String dest, Properties props ) throws I2PException, ConnectException, NoRouteToHostException, DataFormatException, InterruptedIOException, SAMInvalidDirectionException, IOException {
+    public boolean connect ( int id, String dest, Properties props ) throws I2PException, SAMInvalidDirectionException, IOException {
         if (!canCreate) {
             if (_log.shouldDebug())
                 _log.debug("Trying to create an outgoing connection using a receive-only session");
@@ -667,7 +667,7 @@ class SAMStreamSession implements SAMMessageSess {
 	 * @param id Unique id assigned to the handler
 	 * @throws IOException
          */
-        public SAMStreamSessionSocketReader ( I2PSocket s, int id ) throws IOException {
+        public SAMStreamSessionSocketReader ( I2PSocket s, int id ) {
             i2pSocket = s;
             this.id = id;
 	}
@@ -732,7 +732,7 @@ class SAMStreamSession implements SAMMessageSess {
                 InputStream in = i2pSocket.getInputStream();
 
                 while (stillRunning) {
-                    ((Buffer)data).clear();
+                    (data).clear();
                     read = Channels.newChannel(in).read(data);
                     if (read == -1) {
                         if (_log.shouldDebug())
@@ -740,7 +740,7 @@ class SAMStreamSession implements SAMMessageSess {
                         break;
                     }
                     // not ByteBuffer to avoid Java 8/9 issues with flip()
-                    ((Buffer)data).flip();
+                    (data).flip();
                     recv.receiveStreamBytes(id, data);
                 }
             } catch (IOException e) {

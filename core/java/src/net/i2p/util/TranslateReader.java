@@ -80,7 +80,7 @@ public class TranslateReader extends FilterReader {
      *  @param bundle may be null for tagging only
      *  @since 0.9.34
      */
-    public TranslateReader(I2PAppContext ctx, String bundle, Reader in) throws IOException {
+    public TranslateReader(I2PAppContext ctx, String bundle, Reader in) {
         super(in);
         _ctx = ctx;
         _bundle = bundle;

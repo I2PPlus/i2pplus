@@ -217,7 +217,7 @@ public class PeerHelper extends HelperBase {
 
                     int cnt = counts[idx + i];
                     int bps = bandwidths[i];
-                    bw = formatKBps((int)bps);
+                    bw = formatKBps(bps);
 
                     buf.append("<td");
                     if (cnt <= 0 && ((i & 0x01) != 0 || warnInbound)) {buf.append(" class=notice");}
@@ -252,7 +252,7 @@ public class PeerHelper extends HelperBase {
 
                 int cnt = totals[i];
                 int bps = totalBw[i - 1];
-                bw = formatKBps((int)bps);
+                bw = formatKBps(bps);
 
                 buf.append("</td><td");
                 if (cnt <= 0 && ((i & 0x01) == 0 || warnInbound)) {buf.append(" class=warn");}
@@ -305,8 +305,8 @@ public class PeerHelper extends HelperBase {
                 if (peer.getRemotePeer() == null) continue;
                 boolean ipv6 = peer.isIPv6();
                 boolean inbound = peer.isInbound();
-                int bpsIn = (int) peer.getReceiveBps(now);
-                int bpsOut = (int) peer.getSendBps(now);
+                int bpsIn =  peer.getReceiveBps(now);
+                int bpsOut =  peer.getSendBps(now);
 
                 if (ipv6) {
                     if (inbound) {

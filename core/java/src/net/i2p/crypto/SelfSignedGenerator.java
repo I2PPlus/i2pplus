@@ -417,7 +417,7 @@ public final class SelfSignedGenerator {
             int validDays,
             byte[] sigoid,
             PublicKey jpub)
-            throws GeneralSecurityException {
+ {
         // a0 ???, int = 2
         byte[] version = {(byte) 0xa0, 3, 2, 1, 2};
 
@@ -503,7 +503,7 @@ public final class SelfSignedGenerator {
      *  @return ASN.1 encoded object
      */
     private static byte[] genTBSCRL(X509Certificate cert, int validDays, int crlNum, byte[] sigalg)
-            throws GeneralSecurityException {
+ {
         // a0 ???, int = 2
         byte[] version = {2, 1, 1};
         byte[] issuer = cert.getIssuerX500Principal().getEncoded();

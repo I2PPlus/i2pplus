@@ -1118,7 +1118,7 @@ public class TunnelControllerGroup implements ClientApp {
      * @since 0.9.42
      * @return the File ready for use
      */
-    private synchronized File assureConfigFile(TunnelController tc) throws IOException {
+    private synchronized File assureConfigFile(TunnelController tc) {
         File file = tc.getConfigFile();
         if (file != null)
             return file;
@@ -1206,7 +1206,7 @@ public class TunnelControllerGroup implements ClientApp {
      * @throws IOException if unable to load from file
      * @since 0.9.42
      */
-    private List<Properties> splitMonolithicConfig(Properties config) throws IOException {
+    private List<Properties> splitMonolithicConfig(Properties config) {
         List<Properties> rv = new ArrayList<>();
         int i = 0;
         while (true) {

@@ -97,7 +97,7 @@ class CapacityCalculator {
             long firstHeard = profile.getFirstHeardAbout();
             long ago = now - firstHeard;
             if (ago < 2*60*60*1000L)
-                capacity -= PENALTY_NEW * (2*60*60*1000L - ago) / (double) (2*60*60*1000L);
+                capacity -= PENALTY_NEW * (2*60*60*1000L - ago) /  (2*60*60*1000L);
         }
         // boost connected peers
         if (profile.isEstablished())

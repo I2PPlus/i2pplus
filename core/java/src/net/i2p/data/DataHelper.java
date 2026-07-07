@@ -1125,7 +1125,7 @@ public class DataHelper {
      *  @throws IOException if there is an IO error reading the string
      *  @return UTF-8 string
      */
-    public static String readString(InputStream in) throws DataFormatException, IOException {
+    public static String readString(InputStream in) throws IOException {
         int size = in.read();
         if (size == -1) {
             throw new EOFException("EOF reading string");

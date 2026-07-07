@@ -376,7 +376,7 @@ public class NetDbHelper extends FormHandler {
     /**
      *  @since 0.9.1
      */
-    private String renderNavBar() throws IOException {
+    private String renderNavBar() {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<div class=confignav id=confignav>");
         int tab = getTab();

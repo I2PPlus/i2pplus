@@ -137,7 +137,7 @@ public final class SipHashInline {
         m = 0;
         for (i = off + len - 1; i >= last; --i) {
             m <<= 8;
-            m |= (long) (data[i] & 0xff);
+            m |=  (data[i] & 0xff);
         }
         m |= (long) len << 56;
         v3 ^= m;

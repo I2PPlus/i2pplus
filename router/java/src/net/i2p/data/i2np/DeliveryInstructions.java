@@ -132,7 +132,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         throw new UnsupportedOperationException();
     }
 
-    public int readBytes(byte[] data, int offset) throws DataFormatException {
+    public int readBytes(byte[] data, int offset) {
         int cur = offset;
         int flags = data[cur] & 0xff;
         cur++;
@@ -385,7 +385,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         }
 
         @Override
-        public int readBytes(byte[] data, int offset) throws DataFormatException {
+        public int readBytes(byte[] data, int offset) {
             throw new RuntimeException("immutable");
         }
 

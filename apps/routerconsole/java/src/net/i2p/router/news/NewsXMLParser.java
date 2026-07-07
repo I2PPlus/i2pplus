@@ -419,7 +419,7 @@ public class NewsXMLParser {
      *  @return null if none
      *  @since 0.9.26
      */
-    private static List<CRLEntry> extractCRLEntries(Node feed) throws I2PParserException {
+    private static List<CRLEntry> extractCRLEntries(Node feed) {
         Node rev = feed.getNode("i2p:revocations");
         if (rev == null)
             return null;
@@ -454,7 +454,7 @@ public class NewsXMLParser {
      *  @return null if none
      *  @since 0.9.28
      */
-    private BlocklistEntries extractBlocklistEntries(Node feed) throws I2PParserException {
+    private BlocklistEntries extractBlocklistEntries(Node feed) {
         Node bl = feed.getNode("i2p:blocklist");
         if (bl == null)
             return null;

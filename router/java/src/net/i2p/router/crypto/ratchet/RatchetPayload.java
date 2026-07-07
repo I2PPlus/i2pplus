@@ -7,7 +7,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.i2np.GarlicClove;
-import net.i2p.data.i2np.I2NPMessageException;
+
 
 /**
  *
@@ -88,7 +88,7 @@ class RatchetPayload {
  */
     public static int processPayload(I2PAppContext ctx, PayloadCallback cb,
                                      byte[] payload, int off, int length, boolean isHandshake)
-                                     throws IOException, DataFormatException, I2NPMessageException {
+                                     throws IOException, DataFormatException {
         int blocks = 0;
         boolean gotPadding = false;
         boolean gotTermination = false;

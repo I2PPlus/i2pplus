@@ -364,7 +364,7 @@ public class BlockfileNamingService extends DummyNamingService {
      *  @throws IOE on bad version
      *  @since 0.8.9
      */
-    private boolean needsUpgrade(BlockFile bf) throws IOException {
+    private boolean needsUpgrade(BlockFile bf) {
         if (VersionComparator.comp(_version, VERSION) >= 0)
             return false;
         if (!bf.file.canWrite()) {

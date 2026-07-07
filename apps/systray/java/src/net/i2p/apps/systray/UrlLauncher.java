@@ -394,7 +394,7 @@ public class UrlLauncher implements ClientApp {
      *
      * @throws IOException
      */
-    public boolean openUrl(String url, String browser) throws IOException {
+    public boolean openUrl(String url, String browser) {
         if (IS_SERVICE)
             return false;
         waitForServer(url);
