@@ -6694,6 +6694,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
             boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
             boolean rejecting = !Double.isNaN(requestReject) && requestReject > 0;
+            // Raise ceiling faster when underutilized — the capacity factor in
+            // RequestThrottle needs headroom to work
+            int numTunnels = _context.tunnelManager().getParticipatingCount();
+            int maxTunnels = net.i2p.router.RouterThrottleImpl.getDefaultMaxTunnels();
+            double utilization = (double) numTunnels / Math.max(1, maxTunnels);
+            boolean lowUtilization = utilization < 0.3;
+            if (hasCapacity && !rejecting && lowUtilization) return Math.min(_max, current + _step * 2);
             if (hasCapacity && !rejecting) return Math.min(_max, current + _step);
             if (stressed || rejecting) return Math.max(_min, current - _step);
             return current;
@@ -6702,6 +6709,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Tunes the percentage-based request throttle limit.
+     * When utilization is low, raise faster to ensure limits keep pace
+     * with the capacity factor in RequestThrottle.
      */
     private class RequestThrottlePctParam extends BaseParam {
         RequestThrottlePctParam() {
@@ -6725,7 +6734,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
             boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
             boolean rejecting = !Double.isNaN(requestReject) && requestReject > 0;
-            if (hasCapacity && !rejecting) return Math.min(_max, current + _step);
+            // Factor in utilization — when underutilized, be more aggressive about
+            // raising limits since the capacity factor in RequestThrottle handles
+            // the per-peer scaling anyway
+            int numTunnels = _context.tunnelManager().getParticipatingCount();
+            int maxTunnels = net.i2p.router.RouterThrottleImpl.getDefaultMaxTunnels();
+            double utilization = (double) numTunnels / Math.max(1, maxTunnels);
+            boolean lowUtilization = utilization < 0.3;
+            if (hasCapacity && !rejecting && !lowUtilization) return Math.min(_max, current + _step);
+            if (lowUtilization && !rejecting && !cpuPressure) return Math.min(_max, current + _step * 2);
             if (stressed || rejecting) return Math.max(_min, current - _step);
             return current;
         }

@@ -162,18 +162,23 @@ public class RequestThrottler {
         updateCachedProperties();
         boolean shouldBlockOldRouters = weAreFirewalled ? false : cachedShouldBlockOldRouters; // NOSONAR S1125
         int numTunnels = this.context.tunnelManager().getParticipatingCount();
-        int limit;
         int minLimit = _reqMinLimit;
         int maxLimit = _reqMaxLimit;
+        // Scale limits with spare capacity to avoid death spiral at low utilization.
+        // At 100% utilization, use base percent; at low utilization, allow proportionally
+        // more requests so peers aren't banned when we have capacity.
+        int maxTunnels = net.i2p.router.RouterThrottleImpl.getDefaultMaxTunnels();
+        double utilization = Math.min(1.0, (double) numTunnels / Math.max(1, maxTunnels));
+        // At 2% utilization → 50x multiplier; at 100% → 1x; capped at 100%
+        double capacityFactor = Math.min(50.0, 1.0 / Math.max(0.02, utilization));
+        int effectivePercent = Math.min(100, (int) (_reqPercentLimit * capacityFactor));
+        int limit;
         if (isUnreachable || isLowShare) {
-            // 4% for unreachable/low-share routers - conservative limit to protect network
-            limit = Math.min(maxLimit, Math.max(minLimit, numTunnels * 4 / 100));
+            limit = Math.min(maxLimit, Math.max(minLimit, numTunnels * effectivePercent / 200));
         } else if (isFast) {
-            // 15% for high-bandwidth routers - rewards capable routers with higher limits
-            limit = Math.min(maxLimit, Math.max(minLimit, numTunnels * 15 / 100));
+            limit = Math.min(maxLimit, Math.max(minLimit, numTunnels * effectivePercent * 3 / 200));
         } else {
-            // 8% for regular routers - balanced approach for average capability
-            limit = Math.min(maxLimit, Math.max(minLimit, numTunnels * 8 / 100));
+            limit = Math.min(maxLimit, Math.max(minLimit, numTunnels * effectivePercent / 100));
         }
         int count = counter.increment(h);
         boolean rv = count > limit;
