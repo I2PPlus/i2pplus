@@ -138,7 +138,7 @@ public class IdenticonServlet extends HttpServlet {
 				else
 					code = codeParam.hashCode();
 			}
-			byte[] imageBytes = null;
+			byte[] imageBytes;
 
 			// retrieve image bytes from either cache or renderer
 			if (cache == null

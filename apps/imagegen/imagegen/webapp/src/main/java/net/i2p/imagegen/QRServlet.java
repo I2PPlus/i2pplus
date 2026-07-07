@@ -65,8 +65,6 @@ public class QRServlet extends HttpServlet {
     private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * 60 * 1000;
     private static final String DEFAULT_FONT_NAME = SystemVersion.isWindows() ?
                                                     "Lucida Sans Typewriter" : Font.MONOSPACED;
-    private static final Font DEFAULT_LARGE_FONT = new Font(DEFAULT_FONT_NAME, Font.BOLD, 16);
-
     private int version = 1;
     private IdenticonCache cache;
     private long identiconExpiresInMillis = DEFAULT_IDENTICON_EXPIRES_IN_MILLIS;
@@ -223,7 +221,7 @@ public class QRServlet extends HttpServlet {
         if (requestETag != null && requestETag.equals(identiconETag)) {
             response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
         } else {
-            byte[] imageBytes = null;
+            byte[] imageBytes;
 
             if (cache == null || (imageBytes = cache.get(identiconETag)) == null) {
                 if (svg) {

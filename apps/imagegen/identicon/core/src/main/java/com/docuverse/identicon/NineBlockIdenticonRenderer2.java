@@ -133,11 +133,11 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
         drawPatch(g, blockSize, 0, blockSize, sideType, sideTurn++, sideInvert, fillColor, strokeColor);
         drawPatch(g, blockSize2, blockSize, blockSize, sideType, sideTurn++, sideInvert, fillColor, strokeColor);
         drawPatch(g, blockSize, blockSize2, blockSize, sideType, sideTurn++, sideInvert, fillColor, strokeColor);
-        drawPatch(g, 0, blockSize, blockSize, sideType, sideTurn++, sideInvert, fillColor, strokeColor);
+        drawPatch(g, 0, blockSize, blockSize, sideType, sideTurn, sideInvert, fillColor, strokeColor);
         drawPatch(g, 0, 0, blockSize, cornerType, cornerTurn++, cornerInvert, fillColor, strokeColor);
         drawPatch(g, blockSize2, 0, blockSize, cornerType, cornerTurn++, cornerInvert, fillColor, strokeColor);
         drawPatch(g, blockSize2, blockSize2, blockSize, cornerType, cornerTurn++, cornerInvert, fillColor, strokeColor);
-        drawPatch(g, 0, blockSize2, blockSize, cornerType, cornerTurn++, cornerInvert, fillColor, strokeColor);
+        drawPatch(g, 0, blockSize2, blockSize, cornerType, cornerTurn, cornerInvert, fillColor, strokeColor);
 
         g.dispose();
         return targetImage;

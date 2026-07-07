@@ -100,8 +100,6 @@ public class RandomArt {
     private static final char U_BOX_BL = '\u0020';
     private static final char U_BOX_BR = '\u0020';
 
-    private static final int BASE = 0x778899;
-
     /**
      *  @param dgst_raw the data to be visualized, recommend 64 bytes or less
      *  @param key_type output in the first line, recommend 6 chars or less
@@ -241,8 +239,6 @@ public class RandomArt {
 
     private static String getColor(long base, int mod) {
         if (mod != 0) {
-            //base += mod * 16;
-            //base += mod * 16 * 256;
             base += mod * (5 * 256 * 256L);
         }
         if (base > 0xffffff || base < 0)
