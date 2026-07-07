@@ -55,6 +55,9 @@ MIT License. Copyright (c) 2004 Ragnarok.
 **Desktopgui**
 GPLv2. Copyright (C) 2009 Mathias De Maré.
 
+**I2PControl**
+Apache v2.0. Copyright (c) 2011 hottuna (dev@robertfoss.se).
+
 **I2PTunnel**
 GPLv2+. Copyright (c) 2003-2004 mihi. With special exception for proprietary Java linking.
 

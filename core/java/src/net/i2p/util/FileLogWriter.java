@@ -219,8 +219,8 @@ class FileLogWriter extends LogWriter {
                 oldest = f;
             } else {
                 // set file or file.gz for last mod check
-File ff;
-    File oo;
+                File ff;
+                File oo;
                 if (!_manager.shouldGzip() || f.exists()) ff = f;
                 else ff = new File(f.getPath() + ".gz");
                 if (!_manager.shouldGzip() || oldest.exists()) oo = oldest;
