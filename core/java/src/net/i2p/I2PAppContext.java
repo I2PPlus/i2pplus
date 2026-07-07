@@ -33,7 +33,6 @@ import net.i2p.util.PortMapper;
 import net.i2p.util.RandomSource;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SimpleTimer2;
-import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.TempDirScanner;
 
@@ -680,8 +679,9 @@ public class I2PAppContext {
      *
      * @param callback The implementation of the callback.
      */
-    public void addPropertyCallback(I2PPropertyCallback callback) {}
-
+    public void addPropertyCallback(I2PPropertyCallback callback) {
+        // TODO
+    }
     /**
      * The statistics component with which we can track various events
      * over time.

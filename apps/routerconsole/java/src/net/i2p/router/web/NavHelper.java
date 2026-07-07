@@ -162,8 +162,9 @@ public class NavHelper implements NavService, ClientApp {
     /////// ClientApp methods
 
     /** @since 0.9.56 */
-    public void startup() {}
-
+    public void startup() {
+        // TODO
+    }
     /** @since 0.9.56 */
     public void shutdown(String[] args) {
         _apps.clear();

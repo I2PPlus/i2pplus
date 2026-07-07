@@ -2,7 +2,6 @@ package net.i2p.router.web.helpers;
 
 import java.io.File;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 import net.i2p.router.web.CSSHelper;

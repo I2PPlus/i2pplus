@@ -16,7 +16,6 @@ import net.i2p.client.naming.NamingService;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.I2PSocketManagerFactory;
 import net.i2p.data.Destination;
-import net.i2p.util.Log;
 
 /**
  * Simple command-line ping tool

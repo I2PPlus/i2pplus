@@ -56,8 +56,9 @@ public class PeerHelper extends HelperBase {
     // Opera doesn't have the char, TODO check UA
     private static final String THINSP = " / ";
 
-    public PeerHelper() {}
-
+    public PeerHelper() {
+        // TODO
+    }
     public void setSort(String flags) {
         if (flags != null) {
             try {_sortFlags = Integer.parseInt(flags);}

@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.io.PipedOutputStream;
 import java.io.Writer;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.nio.channels.ServerSocketChannel;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -128,8 +126,9 @@ public class InternalServerSocket extends ServerSocket {
 
     /** warning - unsupported */
     @Override
-    public void setSoTimeout(int timeout) {}
-
+    public void setSoTimeout(int timeout) {
+        // TODO
+    }
     @Override
     public int getSoTimeout() {
         return 0;

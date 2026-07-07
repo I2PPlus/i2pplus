@@ -9,13 +9,11 @@
  * @license AGPL3 or later
  */
 
-import {MESSAGE_TYPES} from "./messageTypes.js";
 import {pageNav} from "./pageNav.js";
 import {showBadge} from "./filterBar.js";
 import {snarkSort} from "./snarkSort.js";
 import {toggleDebug} from "./toggleDebug.js";
 import {Lightbox} from "./lightbox.js";
-import {initSnarkAlert} from "./snarkAlert.js";
 
 /**
  * @type {Map<string, Object>}

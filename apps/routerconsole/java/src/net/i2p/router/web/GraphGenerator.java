@@ -191,14 +191,16 @@ public class GraphGenerator implements Runnable, ClientApp {
      * Does nothing, we aren't tracked
      * @since 0.9.38
      */
-    public void startup() {}
-
+    public void startup() {
+        // TODO
+    }
     /**
      * Does nothing, we aren't tracked
      * @since 0.9.38
      */
-    public void shutdown(String[] args) {}
-
+    public void shutdown(String[] args) {
+        // TODO
+    }
     /** @since 0.9.38 */
     public ClientAppState getState() {return ClientAppState.RUNNING;}
 

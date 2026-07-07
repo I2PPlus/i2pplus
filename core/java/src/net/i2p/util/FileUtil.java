@@ -94,7 +94,7 @@ public class FileUtil {
      * @since 0.9.7
      */
     public static boolean extractZip(File zipfile, File targetDir, int logLevel) {
-        int files = 0;
+        int files = 0; // NOSONAR S1481
         ZipFile zip = null;
         try {
             final byte[] buf = new byte[8192];

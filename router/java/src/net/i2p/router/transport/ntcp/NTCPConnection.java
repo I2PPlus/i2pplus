@@ -38,7 +38,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.BanLogger;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.transport.FIFOBandwidthLimiter;
-import net.i2p.router.transport.FIFOBandwidthLimiter.Request;
 import net.i2p.router.transport.ntcp.NTCP2Payload.Block;
 import net.i2p.router.util.PriBlockingQueue;
 import net.i2p.util.Addresses;

@@ -24,7 +24,9 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
     /** when did we last test our reachability */
     private final AtomicLong _lastTested = new AtomicLong();
     private final AtomicLong _lastTestedV6 = new AtomicLong();
-    private static final int NO_FORCE = 0, FORCE_IPV4 = 1, FORCE_IPV6 = 2;
+    private static final int NO_FORCE = 0;
+    private static final int FORCE_IPV4 = 1;
+    private static final int FORCE_IPV6 = 2;
     private int _forceRun;
     private boolean _lastTestIPv6 = true;
     private static final int TEST_FREQUENCY = 5*60*1000;

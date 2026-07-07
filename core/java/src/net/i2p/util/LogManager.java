@@ -48,7 +48,11 @@ public class LogManager implements Flushable {
     /**
      * These define the characters in the format line of the config file
      */
-    public static final char DATE = 'd', CLASS = 'c', THREAD = 't', PRIORITY = 'p', MESSAGE = 'm';
+    public static final char DATE = 'd';
+    public static final char CLASS = 'c';
+    public static final char THREAD = 't';
+    public static final char PRIORITY = 'p';
+    public static final char MESSAGE = 'm';
 
     public static final String PROP_FORMAT = "logger.format";
     public static final String PROP_DATEFORMAT = "logger.dateFormat";

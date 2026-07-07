@@ -54,7 +54,6 @@ import net.i2p.data.PrivateKey;
 import net.i2p.data.Signature;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;
-import net.i2p.client.TunnelRemovalEvent;
 import net.i2p.client.TunnelStatusListener;
 import net.i2p.data.i2cp.BlindingInfoMessage;
 import net.i2p.data.i2cp.DestLookupMessage;

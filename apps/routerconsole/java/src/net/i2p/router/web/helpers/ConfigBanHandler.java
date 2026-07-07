@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
-import net.i2p.router.Banlist;
-import net.i2p.router.Blocklist;
 import net.i2p.router.web.FormHandler;
 
 /**

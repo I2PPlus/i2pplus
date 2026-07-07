@@ -193,8 +193,9 @@ public class WebAppConfiguration implements Configuration {
     }
 
     /** @since Jetty 7 */
-    public void deconfigure(WebAppContext context) {}
-
+    public void deconfigure(WebAppContext context) {
+        // TODO
+    }
     /** @since Jetty 7 */
     public void configure(WebAppContext context) throws Exception {
         configureClassPath(context);
@@ -210,11 +211,14 @@ public class WebAppConfiguration implements Configuration {
     }
 
     /** @since Jetty 7 */
-    public void destroy(WebAppContext context) {}
-
+    public void destroy(WebAppContext context) {
+        // TODO
+    }
     /** @since Jetty 7 */
-    public void preConfigure(WebAppContext context) {}
-
+    public void preConfigure(WebAppContext context) {
+        // TODO
+    }
     /** @since Jetty 7 */
-    public void postConfigure(WebAppContext context) {}
-}
+    public void postConfigure(WebAppContext context) {
+        // TODO
+    }}

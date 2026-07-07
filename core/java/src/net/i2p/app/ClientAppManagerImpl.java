@@ -29,8 +29,9 @@ public class ClientAppManagerImpl implements ClientAppManager {
      *  @param e may be null
      */
     @Override
-    public void notify(ClientApp app, ClientAppState state, String message, Exception e) {}
-
+    public void notify(ClientApp app, ClientAppState state, String message, Exception e) {
+        // TODO
+    }
     /**
      *  Register with the manager under the given name,
      *  so that other clients may find it.

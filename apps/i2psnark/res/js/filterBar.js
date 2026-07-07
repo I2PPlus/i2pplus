@@ -8,7 +8,6 @@
  * @license AGPL3 or later
  */
 
-import {refreshTorrents, doRefresh} from "./refreshTorrents.js";
 
 /**
  * @type {?HTMLElement}

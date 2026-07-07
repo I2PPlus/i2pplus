@@ -798,8 +798,9 @@ public class KBucketSet<T extends SimpleDataStructure> {
         }
 
         @Override
-        public void clear() {}
-
+        public void clear() {
+            // TODO
+        }
         @Override
         public boolean add(T peer) {
             throw new UnsupportedOperationException();
@@ -811,8 +812,9 @@ public class KBucketSet<T extends SimpleDataStructure> {
         }
 
         @Override
-        public void setLastChanged() {}
-
+        public void setLastChanged() {
+            // TODO
+        }
         @Override
         public long getLastChanged() {
             return 0;

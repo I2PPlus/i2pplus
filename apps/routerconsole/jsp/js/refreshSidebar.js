@@ -11,7 +11,6 @@
 import { sectionToggler, countNewsItems } from "/js/sectionToggle.js";
 import { stickySidebar } from "/js/stickySidebar.js";
 import { newHosts } from "/js/newHosts.js";
-import { miniGraph } from "/js/miniGraph.js";
 
 let alwaysUpdate = new Set();
 let autoRefreshInterval = null;

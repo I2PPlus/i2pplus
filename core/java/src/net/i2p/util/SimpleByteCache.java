@@ -1,7 +1,6 @@
 package net.i2p.util;
 
 import java.util.concurrent.ConcurrentHashMap;
-import net.i2p.util.SimpleTimer2;
 
 /**
  * Like ByteCache but works directly with byte arrays, not ByteArrays.

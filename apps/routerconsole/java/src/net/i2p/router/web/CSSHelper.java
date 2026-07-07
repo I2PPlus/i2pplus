@@ -9,7 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
 
-import net.i2p.I2PAppContext;
 import net.i2p.servlet.util.ServletUtil;
 import net.i2p.util.RandomSource;
 import net.i2p.util.SystemVersion;

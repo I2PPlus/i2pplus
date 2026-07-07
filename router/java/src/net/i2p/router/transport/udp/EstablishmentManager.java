@@ -4,7 +4,6 @@ import static net.i2p.router.transport.udp.InboundEstablishState.InboundState.*;
 import static net.i2p.router.transport.udp.OutboundEstablishState.OutboundState.*;
 import static net.i2p.router.transport.udp.OutboundEstablishState2.IntroState.*;
 import static net.i2p.router.transport.udp.SSU2Util.*;
-import static net.i2p.router.transport.udp.UDPPacket.*;
 
 import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
 import java.io.BufferedInputStream;

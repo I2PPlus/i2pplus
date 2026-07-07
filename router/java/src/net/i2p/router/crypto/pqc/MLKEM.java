@@ -2,9 +2,6 @@ package net.i2p.router.crypto.pqc;
 
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyFactory;

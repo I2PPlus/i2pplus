@@ -162,7 +162,10 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
             out = s.getOutputStream();
             in = s.getInputStream();
             String line;
-            String method = null, host = null, destination = null, restofline = null;
+            String method = null;
+            String host = null;
+            String destination = null;
+            String restofline = null;
             StringBuilder newRequest = new StringBuilder();
             String authorization = null;
             int remotePort = 443;

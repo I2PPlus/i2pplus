@@ -102,7 +102,7 @@ public class LookaheadInputStream extends FilterInputStream {
     @Override
     public long skip(long n) throws IOException {
         long rv = 0;
-        int c;
+        int c; // NOSONAR S1481
         while (rv < n && (c = read()) >= 0) {
             rv++;
         }

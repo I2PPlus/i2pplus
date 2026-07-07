@@ -72,7 +72,9 @@ public class RouterContext extends I2PAppContext {
     private final Set<Runnable> _finalShutdownTasks;
     // split up big lock on this to avoid deadlocks
     private volatile boolean _initialized;
-    private final Object _lock1 = new Object(), _lock2 = new Object(), _lock3 = new Object();
+    private final Object _lock1 = new Object();
+    private final Object _lock2 = new Object();
+    private final Object _lock3 = new Object();
 
     private static final List<RouterContext> _contexts = new CopyOnWriteArrayList<>();
 

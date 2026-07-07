@@ -1238,7 +1238,9 @@ public class Reseeder {
         }
         String[] urls = (args.length > 0) ? args : DataHelper.split(DEFAULT_SSL_SEED_URL, ",");
         if (args.length == 0) {Arrays.sort(urls);}
-        int pass = 0, warn = 0, fail = 0;
+        int pass = 0;
+        int warn = 0;
+        int fail = 0;
         SSLEepGet.SSLState sslState = null;
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         System.out.println("Initiating reseed hosts test...\n"); // NOSONAR S106 CLI output
@@ -1275,8 +1277,11 @@ public class Reseeder {
                         long cutoff = System.currentTimeMillis() - MAX_FILE_AGE / 4;
                         if (ver < cutoff) {throw new IOException("su3 file is too old");}
                         ZipFile zipf = new ZipFile(zip);
-                        int ri = 0, old = 0, bad = 0;
-                        int oldver = 0, unreach = 0;
+                        int ri = 0;
+                        int old = 0;
+                        int bad = 0;
+                        int oldver = 0;
+                        int unreach = 0;
                         try {
                         Enumeration<? extends ZipEntry> entries = zipf.entries();
                         while (entries.hasMoreElements()) {

@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.net.NoRouteToHostException;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -42,7 +41,6 @@ import net.i2p.util.EventDispatcher;
 import net.i2p.util.I2PThread;
 import net.i2p.util.InternalSocket;
 import net.i2p.util.PortMapper;
-import net.i2p.i2ptunnel.BlacklistBean;
 
 /**
  * HTTP proxy that tunnels requests through I2P.

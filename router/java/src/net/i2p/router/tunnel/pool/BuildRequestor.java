@@ -532,7 +532,8 @@ public abstract class BuildRequestor {
 
         // Prepare bandwidth properties (only for ShortTBM non-exploratory)
         Properties baseProps;
-        int bw = 0, variance = 0;
+        int bw = 0;
+        int variance = 0;
         if (useShortTBM && !pool.getSettings().isExploratory()) {
             bw = pool.getAvgBWPerTunnel();
             if (bw > 7000) {

@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import net.i2p.util.SimpleTimer2;
 
 /**
  * Cache the objects frequently used to reduce memory churn. The ByteArray

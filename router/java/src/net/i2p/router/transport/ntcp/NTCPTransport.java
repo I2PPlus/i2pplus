@@ -960,7 +960,8 @@ public class NTCPTransport extends TransportImpl {
         } else if (port > 0 && !isFixedOrForceFirewalled) {
             Collection<InetAddress> addrs = getSavedLocalAddresses();
             if (!addrs.isEmpty() && !_context.router().isHidden()) {
-                boolean skipv4 = false, skipv6 = false;
+                boolean skipv4 = false;
+                boolean skipv6 = false;
                 int count = 0;
 
                 boolean ipv6Firewalled = isIPv6Firewalled();

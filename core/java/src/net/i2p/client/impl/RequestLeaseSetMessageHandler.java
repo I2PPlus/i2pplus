@@ -37,7 +37,6 @@ import net.i2p.data.SigningPublicKey;
 import net.i2p.data.SimpleDataStructure;
 import net.i2p.data.i2cp.I2CPMessage;
 import net.i2p.data.i2cp.RequestLeaseSetMessage;
-import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
 
 import java.io.EOFException;

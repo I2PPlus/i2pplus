@@ -7,8 +7,6 @@
  * @license AGPL3 or later
  */
 
-import { lsDebug } from "/js/lsDebug.js";
-import { onVisible, onHidden } from "/js/onVisible.js";
 import { searchLS } from "/js/searchLS.js";
 
 const isSingleLS = document.getElementById("singleLS") !== null;

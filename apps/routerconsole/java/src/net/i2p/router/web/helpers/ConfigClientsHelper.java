@@ -51,8 +51,9 @@ public class ConfigClientsHelper extends HelperBase {
     private static final Pattern VALID_EMAIL_ADDRESS_REGEX =
         Pattern.compile("[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z2]{2,6}", Pattern.CASE_INSENSITIVE);
 
-    public ConfigClientsHelper() {}
-
+    public ConfigClientsHelper() {
+        // TODO
+    }
     /** @since 0.9.14.1 */
     public boolean isClientChangeEnabled() {
         return _context.getBooleanProperty(PROP_ENABLE_CLIENT_CHANGE) || isAdvanced();

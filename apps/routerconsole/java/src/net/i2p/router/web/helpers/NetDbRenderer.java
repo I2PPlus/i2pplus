@@ -1815,7 +1815,12 @@ class NetDbRenderer {
         String profileTier = getPeerProfileTier(routerHash, true);
         String profileTierClass = getPeerProfileTier(routerHash, false);
         String caps = DataHelper.stripHTML(routerInfo.getCapabilities());
-        boolean hasD = false, hasE = false, hasG = false, isReachable = false, isUnreachable = false, isFF = false;
+        boolean hasD = false;
+        boolean hasE = false;
+        boolean hasG = false;
+        boolean isReachable = false;
+        boolean isUnreachable = false;
+        boolean isFF = false;
         for (int i = 0; i < caps.length(); i++) {
             char c = caps.charAt(i);
             if (c == 'f') isFF = true;

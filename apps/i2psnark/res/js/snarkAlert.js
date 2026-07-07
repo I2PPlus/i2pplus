@@ -8,7 +8,6 @@
  * @license AGPL3 or later
  */
 
-import { initSnarkRefresh, refreshTorrents, refreshScreenLog } from "./refreshTorrents.js";
 
 "use strict";
 

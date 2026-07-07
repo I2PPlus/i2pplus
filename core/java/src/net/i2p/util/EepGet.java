@@ -777,10 +777,12 @@ public class EepGet {
         }
 
         @Override
-        public void attempting(String url) {}
-        @Override
-        public void headerReceived(String url, int currentAttempt, String key, String val) {}
-    }
+        public void attempting(String url) {
+            // TODO
+        }        @Override
+        public void headerReceived(String url, int currentAttempt, String key, String val) {
+            // TODO
+        }    }
 
     /**
      * @param lsnr the listener to add

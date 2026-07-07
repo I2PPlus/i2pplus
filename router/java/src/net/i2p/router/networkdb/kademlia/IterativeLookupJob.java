@@ -69,7 +69,9 @@ class IterativeLookupJob extends JobImpl {
         // Chase the hashes from the reply - 255 max, see comments in SingleLookupJob
         int limit = Math.min(_dsrm.getNumReplies(), SingleLookupJob.MAX_TO_FOLLOW);
         Hash ourHash = ctx.routerHash();
-        int newPeers = 0, oldPeers = 0, invalidPeers = 0;
+        int newPeers = 0;
+        int oldPeers = 0;
+        int invalidPeers = 0;
 
         for (int i = 0; i < limit; i++) {
             Hash peer = _dsrm.getReply(i);

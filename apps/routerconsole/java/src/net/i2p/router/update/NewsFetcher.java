@@ -444,8 +444,9 @@ class NewsFetcher extends UpdateRunner {
 
     /** override to prevent status update */
     @Override
-    public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {}
-
+    public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {
+        // TODO
+    }
     /**
      *  Overriden to get the last-modified header
      */

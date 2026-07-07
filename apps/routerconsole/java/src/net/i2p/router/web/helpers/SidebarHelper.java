@@ -40,7 +40,6 @@ import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.NewsHelper;
 import net.i2p.servlet.util.ServletUtil;
 import net.i2p.stat.Rate;
-import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SystemVersion;
@@ -476,8 +475,12 @@ public class SidebarHelper extends HelperBase {
 
         // Get 10-minute rates (original) - with null checks
         RateStat stat;
-        Rate explSuccess10 = null, explReject10 = null, explExpire10 = null;
-        Rate clientSuccess10 = null, clientReject10 = null, clientExpire10 = null;
+        Rate explSuccess10 = null;
+        Rate explReject10 = null;
+        Rate explExpire10 = null;
+        Rate clientSuccess10 = null;
+        Rate clientReject10 = null;
+        Rate clientExpire10 = null;
 
         stat = _context.statManager().getRate("tunnel.buildExploratorySuccess");
         if (stat != null) explSuccess10 = stat.getRate(RateConstants.TEN_MINUTES);
@@ -493,8 +496,12 @@ public class SidebarHelper extends HelperBase {
         if (stat != null) clientExpire10 = stat.getRate(RateConstants.TEN_MINUTES);
 
         // Get 1-minute rates - with null checks
-        Rate explSuccess1 = null, explReject1 = null, explExpire1 = null;
-        Rate clientSuccess1 = null, clientReject1 = null, clientExpire1 = null;
+        Rate explSuccess1 = null;
+        Rate explReject1 = null;
+        Rate explExpire1 = null;
+        Rate clientSuccess1 = null;
+        Rate clientReject1 = null;
+        Rate clientExpire1 = null;
 
         stat = _context.statManager().getRate("tunnel.buildExploratorySuccess");
         if (stat != null) explSuccess1 = stat.getRate(RateConstants.ONE_MINUTE);
@@ -516,7 +523,9 @@ public class SidebarHelper extends HelperBase {
             clientSuccess1 == null && clientReject1 == null && clientExpire1 == null) {return 0;}
 
         // Calculate 10-minute percentage
-        int success10 = 0, reject10 = 0, expire10 = 0;
+        int success10 = 0;
+        int reject10 = 0;
+        int expire10 = 0;
         if (explSuccess10 != null) success10 = (int)explSuccess10.getLastEventCount();
         if (clientSuccess10 != null) success10 += (int)clientSuccess10.getLastEventCount();
         if (explReject10 != null) reject10 = (int)explReject10.getLastEventCount();
@@ -530,7 +539,9 @@ public class SidebarHelper extends HelperBase {
         }
 
         // Calculate 1-minute percentage
-        int success1 = 0, reject1 = 0, expire1 = 0;
+        int success1 = 0;
+        int reject1 = 0;
+        int expire1 = 0;
         if (explSuccess1 != null) success1 = (int)explSuccess1.getLastEventCount();
         if (clientSuccess1 != null) success1 += (int)clientSuccess1.getLastEventCount();
         if (explReject1 != null) reject1 = (int)explReject1.getLastEventCount();

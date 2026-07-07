@@ -528,8 +528,9 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             boolean notModified) {}
 
     @Override
-    public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {}
-
+    public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {
+        // TODO
+    }
     @Override
     public void attempting(String url) {
         if (gotDate < MAX_DATE_SETS) fetchStart = System.currentTimeMillis();
@@ -695,7 +696,8 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             Collections.sort(totest);
             DNSOverHTTPS doh = new DNSOverHTTPS(I2PAppContext.getGlobalContext());
             System.out.println("Testing " + totest.size() + " servers");
-            int pass = 0, fail = 0;
+            int pass = 0;
+            int fail = 0;
             for (String test : totest) {
                 String result = doh.lookup(hostname, type, test);
                 if (result != null) {

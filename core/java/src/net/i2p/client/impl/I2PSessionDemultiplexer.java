@@ -44,8 +44,9 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
 
     /** unused */
     @Override
-    public void messageAvailable(I2PSession session, int msgId, long size) {}
-
+    public void messageAvailable(I2PSession session, int msgId, long size) {
+        // TODO
+    }
     @Override
     public void messageAvailable(I2PSession session, int msgId, long size, int proto, int fromport, int toport) {
         I2PSessionMuxedListener l = findListener(proto, toport);

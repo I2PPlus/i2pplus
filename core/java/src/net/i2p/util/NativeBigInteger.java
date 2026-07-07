@@ -901,7 +901,8 @@ public class NativeBigInteger extends BigInteger {
         long totalTime = 0;
         long javaTime = 0;
         int runsProcessed = 0;
-        BigInteger myValue = null, jval;
+        BigInteger myValue = null;
+        BigInteger jval;
         boolean success = true;
 
         for (runsProcessed = 0; runsProcessed < numRuns; runsProcessed++) {

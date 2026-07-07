@@ -28,8 +28,10 @@ public class VersionComparator implements Comparator<String>, Serializable {
 
         final int ll = l.length();
         final int rl = r.length();
-        int il = 0, ir = 0;
-        int nl = 0, nr = 0;
+        int il = 0;
+        int ir = 0;
+        int nl = 0;
+        int nr = 0;
 
         while (true) {
 

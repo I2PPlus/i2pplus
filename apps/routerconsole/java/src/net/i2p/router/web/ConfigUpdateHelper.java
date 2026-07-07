@@ -25,8 +25,9 @@ public class ConfigUpdateHelper extends HelperBase {
      */
     public void storeSession(HttpSession session) { _session = session; }
 
-    public ConfigUpdateHelper() {}
-
+    public ConfigUpdateHelper() {
+        // TODO
+    }
     /** hook this so we can call dontInstall() once after getting a context */
     @Override
     public void setContextId(String contextId) {

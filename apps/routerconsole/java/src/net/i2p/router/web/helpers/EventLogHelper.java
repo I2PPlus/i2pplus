@@ -65,8 +65,9 @@ public class EventLogHelper extends FormHandler {
         _xevents = new HashMap<>(1 + (_events.length / 2));
     }
 
-    protected void processForm() {}
-
+    protected void processForm() {
+        // TODO
+    }
     /** set the defaults after we have a context */
     @Override
     public void setContextId(String contextId) {

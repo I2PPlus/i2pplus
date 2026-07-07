@@ -2,7 +2,6 @@ package net.i2p.router.tunnel.pool;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -1147,9 +1146,21 @@ public class BuildExecutor implements Runnable {
             List<TunnelInfo> tunnels = pool.listTunnels();
             boolean allowZeroHop = pool.getSettings().getAllowZeroHop();
 
-            int expire30s = 0, expire90s = 0, expire150s = 0, expire210s = 0, expire270s = 0, expire330s = 0, expireLater = 0;
+            int expire30s = 0;
+            int expire90s = 0;
+            int expire150s = 0;
+            int expire210s = 0;
+            int expire270s = 0;
+            int expire330s = 0;
+            int expireLater = 0;
             int fallbackCount = 0;
-            int goodExpire30s = 0, goodExpire90s = 0, goodExpire150s = 0, goodExpire210s = 0, goodExpire270s = 0, goodExpire330s = 0, goodExpireLater = 0;
+            int goodExpire30s = 0;
+            int goodExpire90s = 0;
+            int goodExpire150s = 0;
+            int goodExpire210s = 0;
+            int goodExpire270s = 0;
+            int goodExpire330s = 0;
+            int goodExpireLater = 0;
             int goodCount = 0;
             long totalLatency = 0;
 

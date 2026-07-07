@@ -267,8 +267,9 @@ public class TranslateReader extends FilterReader {
     }
 
     @Override
-    public void mark(int readLimit) {}
-
+    public void mark(int readLimit) {
+        // TODO
+    }
     @Override
     public void reset() throws IOException {
         throw new IOException();
