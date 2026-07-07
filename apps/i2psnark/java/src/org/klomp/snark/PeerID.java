@@ -7,7 +7,6 @@
 package org.klomp.snark;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.Map;
 import net.i2p.data.Base32;
 import net.i2p.data.Base64;
@@ -68,7 +67,7 @@ public class PeerID implements Comparable<PeerID> {
      * @param m the map containing peer id and ip entries
      * @throws InvalidBEncodingException if the map entries are missing or invalid
      */
-    public PeerID(Map<String, BEValue> m) throws InvalidBEncodingException, UnknownHostException {
+    public PeerID(Map<String, BEValue> m) throws InvalidBEncodingException {
         BEValue bevalue = m.get("peer id");
         if (bevalue == null) throw new InvalidBEncodingException("peer id missing");
         id = bevalue.getBytes();

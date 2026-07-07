@@ -19,13 +19,13 @@ import org.klomp.snark.Storage;
 class Sorters {
 
     /** See below */
-    private static final Pattern PATTERN_DE,
-            PATTERN_EN,
-            PATTERN_ES,
-            PATTERN_FR,
-            PATTERN_IT,
-            PATTERN_NL,
-            PATTERN_PT;
+    private static final Pattern PATTERN_DE;
+    private static final Pattern PATTERN_EN;
+    private static final Pattern PATTERN_ES;
+    private static final Pattern PATTERN_FR;
+    private static final Pattern PATTERN_IT;
+    private static final Pattern PATTERN_NL;
+    private static final Pattern PATTERN_PT;
 
     /**
      * Negative is reverse

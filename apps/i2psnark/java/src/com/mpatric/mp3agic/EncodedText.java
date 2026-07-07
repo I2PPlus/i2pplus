@@ -76,7 +76,7 @@ public class EncodedText {
     public EncodedText(String string, byte transcodeToTextEncoding)
             throws IllegalArgumentException, CharacterCodingException {
         this(string);
-        setTextEncoding(transcodeToTextEncoding, true);
+        setTextEncoding(transcodeToTextEncoding);
     }
 
     public EncodedText(byte textEncoding, String string) {
@@ -161,11 +161,7 @@ public class EncodedText {
      * @param textEncoding the new text encoding
      * @throws CharacterCodingException if the text cannot be transcoded
      */
-    public void setTextEncoding(byte textEncoding) throws CharacterCodingException {
-        setTextEncoding(textEncoding, true);
-    }
-
-    public void setTextEncoding(byte textEncoding, boolean transcode)
+    public void setTextEncoding(byte textEncoding)
             throws CharacterCodingException {
         if (this.textEncoding != textEncoding) {
             CharBuffer charBuffer =

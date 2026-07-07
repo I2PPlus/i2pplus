@@ -139,7 +139,7 @@ class ConnectionAcceptor implements Runnable {
      */
     public int getPort() {
         return TrackerClient.PORT;
-    } // serverSocket.getLocalPort();
+    }
 
     public void run() {
         try {

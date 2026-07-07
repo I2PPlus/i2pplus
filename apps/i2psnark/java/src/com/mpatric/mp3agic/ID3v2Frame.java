@@ -130,12 +130,12 @@ public class ID3v2Frame {
         BufferTools.copyIntoByteBuffer(data, 0, data.length, bytes, offset + HEADER_LENGTH);
     }
 
-    private void packHeader(byte[] bytes, int i) {
+    private void packHeader(byte[] bytes, int offset) {
         try {
-            BufferTools.stringIntoByteBuffer(id, 0, id.length(), bytes, 0);
+            BufferTools.stringIntoByteBuffer(id, 0, id.length(), bytes, offset);
         } catch (UnsupportedEncodingException e) { /* ignored */ }
-        BufferTools.copyIntoByteBuffer(packDataLength(), 0, 4, bytes, 4);
-        BufferTools.copyIntoByteBuffer(packFlags(), 0, 2, bytes, 8);
+        BufferTools.copyIntoByteBuffer(packDataLength(), 0, 4, bytes, offset + 4);
+        BufferTools.copyIntoByteBuffer(packFlags(), 0, 2, bytes, offset + 8);
     }
 
     protected byte[] packDataLength() {

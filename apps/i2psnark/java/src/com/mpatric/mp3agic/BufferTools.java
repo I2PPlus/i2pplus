@@ -380,7 +380,7 @@ public final class BufferTools {
         }
         newBuffer[j++] = bytes[bytes.length - 1];
         if (bytes[bytes.length - 1] == (byte) 0xff) {
-            newBuffer[j++] = 0;
+            newBuffer[j] = 0;
         }
         return newBuffer;
     }
@@ -506,7 +506,7 @@ public final class BufferTools {
      * @return index of the first null terminator, or -1 if not found
      */
     public static int indexOfTerminator(byte[] bytes, int fromIndex) {
-        return indexOfTerminator(bytes, 0, 1);
+        return indexOfTerminator(bytes, fromIndex, 1);
     }
 
     /**

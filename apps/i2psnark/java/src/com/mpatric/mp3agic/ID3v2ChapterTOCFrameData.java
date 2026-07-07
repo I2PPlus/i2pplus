@@ -50,7 +50,7 @@ public class ID3v2ChapterTOCFrameData extends AbstractID3v2FrameData {
             isOrdered = true;
         }
 
-        int childCount = bb.get(); // TODO: 0xFF -> int = 255; byte = -128;
+        int childCount = bb.get();
 
         children = new String[childCount];
 
