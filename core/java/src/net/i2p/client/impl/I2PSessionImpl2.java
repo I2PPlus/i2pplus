@@ -84,11 +84,6 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         _sendMessageNonce = new AtomicLong();
         // default is BestEffort
         _noEffort = "none".equals(getOptions().getProperty(I2PClient.PROP_RELIABILITY, "").toLowerCase(Locale.US));
-        _context.statManager().createRateStat("i2cp.receiveStatusTime.1", "Time to get status=1 back", "I2CP", RATES);
-        _context.statManager().createRateStat("i2cp.receiveStatusTime.4", "Time to get status=4 back", "I2CP", RATES);
-        _context.statManager().createRateStat("i2cp.receiveStatusTime.5", "Time to get status=5 back", "I2CP", RATES);
-        _context.statManager().createRateStat("i2cp.tx.msgCompressed", "Compressed size transferred", "I2CP", RATES);
-        _context.statManager().createRateStat("i2cp.tx.msgExpanded", "Size before compression", "I2CP", RATES);
     }
 
     /*
@@ -103,11 +98,6 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         _sendingStates = new ConcurrentHashMap<>(32);
         _sendMessageNonce = new AtomicLong();
         _noEffort = "none".equals(getOptions().getProperty(I2PClient.PROP_RELIABILITY, "").toLowerCase(Locale.US));
-        _context.statManager().createRateStat("i2cp.receiveStatusTime.1", "Time to get status=1 back", "I2CP", RATES);
-        _context.statManager().createRateStat("i2cp.receiveStatusTime.4", "Time to get status=4 back", "I2CP", RATES);
-        _context.statManager().createRateStat("i2cp.receiveStatusTime.5", "Time to get status=5 back", "I2CP", RATES);
-        _context.statManager().createRateStat("i2cp.tx.msgCompressed", "Compressed size transferred", "I2CP", RATES);
-        _context.statManager().createRateStat("i2cp.tx.msgExpanded", "Size before compression", "I2CP", RATES);
     }
 
     /**
@@ -334,8 +324,6 @@ class I2PSessionImpl2 extends I2PSessionImpl {
             String d = dest.calculateHash().toBase32().substring(0,8);
             _log.info("Sending message to: [" + d + "] -> Compressed? " + sc + " Size In: " + size + " bytes; Size Out: " + compressed + " bytes");
         }
-        _context.statManager().addRateData("i2cp.tx.msgCompressed", compressed);
-        _context.statManager().addRateData("i2cp.tx.msgExpanded", size);
         if (_noEffort) {return sendNoEffort(dest, payload, expires, 0);}
         else {return sendBestEffort(dest, payload, keyUsed, tagsSent, expires);}
     }
@@ -470,19 +458,6 @@ class I2PSessionImpl2 extends I2PSessionImpl {
             }
             state.receive(status);
             if (state.wasSuccessful()) {_sendingStates.remove(Long.valueOf(nonce));}
-
-            long lifetime = state.getElapsed();
-            switch (status) {
-                case 1:
-                    _context.statManager().addRateData("i2cp.receiveStatusTime.1", lifetime);
-                    break;
-                case 4:
-                    _context.statManager().addRateData("i2cp.receiveStatusTime.4", lifetime);
-                    break;
-                case 5:
-                    _context.statManager().addRateData("i2cp.receiveStatusTime.5", lifetime);
-                    break;
-            }
 
         } else {
             if (_log.shouldInfo()) {

@@ -2394,10 +2394,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
-            // Cross-refs: client.writerQueueFull (overflow events), jobLag (CPU), sendProcessingTime
+            // Cross-refs: client.writerQueueFull (overflow events), client.dispatchSendTime, jobLag (CPU), sendProcessingTime
             double overflows = getAdditionalStat(_context, "client.writerQueueFull");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double sendTime = getAdditionalStat(_context, "transport.sendProcessingTime");
+            double dispatchSend = getAdditionalStat(_context, "client.dispatchSendTime");
             double hourlyOverflows = getAdditionalStatHourly(_context, "client.writerQueueFull");
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
             boolean hasOverflows = !Double.isNaN(overflows) && overflows > 0;
@@ -2405,6 +2406,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean highRTT = !Double.isNaN(observed) && observed > 20000;
             boolean moderateRTT = !Double.isNaN(observed) && observed > 10000;
             boolean lowLatency = !Double.isNaN(sendTime) && sendTime < 50;
+            boolean dispatchSlow = !Double.isNaN(dispatchSend) && dispatchSend > 200;
 
             // Overflow or sustained overflows + headroom = increase queue
             if ((hasOverflows || sustainedOverflows) && !systemBusy)
@@ -2418,8 +2420,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (moderateRTT && !Double.isNaN(sendTime) && sendTime > 100 && !systemBusy)
                 return Math.min(_max, current + Math.max(1, _step / 2));
 
-            // Low latency + no overflows = decrease queue (save memory, reduce buffering)
-            if (lowLatency && !hasOverflows && !sustainedOverflows && !systemBusy && current > _min)
+            // Dispatch send time high = queue contention, increase capacity
+            if (dispatchSlow && !systemBusy && !hasOverflows)
+                return Math.min(_max, current + _step);
+
+            // Low latency + no overflows + fast dispatch = decrease queue (save memory)
+            if (lowLatency && !hasOverflows && !sustainedOverflows && !systemBusy && !dispatchSlow && current > _min)
                 return Math.max(_min, current - _step);
 
             return current;
@@ -4493,21 +4499,27 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, network latency proxy)
-            // Cross-refs: netDb.lookupsMatched (match rate), jobLag (CPU)
+            // Cross-refs: netDb.lookupsMatched (match rate), client.leaseSetFoundRemoteTime, jobLag (CPU)
             double matchRate = getAdditionalStat(_context, "netDb.lookupsMatched");
+            double leaseTime = getAdditionalStat(_context, "client.leaseSetFoundRemoteTime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
             boolean networkSlow = observed > 300;
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
             boolean lowMatch = !Double.isNaN(matchRate) && matchRate < 0.5;
+            boolean lsSlow = !Double.isNaN(leaseTime) && leaseTime > 500;
 
             // Slow network + low match rate = increase search limit (peers need more probes)
             if (networkSlow && lowMatch && !systemBusy)
                 return Math.min(_max, current + _step);
 
             // Fast network + high match rate = decrease limit (searches succeed with fewer peers)
-            if (!networkSlow && !Double.isNaN(matchRate) && matchRate > 0.9)
+            if (!networkSlow && !Double.isNaN(matchRate) && matchRate > 0.9 && !lsSlow)
                 return Math.max(_min, current - _step);
+
+            // Slow LS lookups = network congested, increase search limit
+            if (lsSlow && !systemBusy)
+                return Math.min(_max, current + _step);
 
             return current;
         }
@@ -4545,20 +4557,34 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, network latency proxy)
-            // Cross-refs: netDb.lookupsMatched (match rate), jobLag (CPU)
+            // Cross-refs: netDb.lookupsMatched (match rate), client.leaseSetFoundRemoteTime,
+            //             client.requestLeaseSetSuccess/Dropped (LS health), jobLag (CPU)
             double matchRate = getAdditionalStat(_context, "netDb.lookupsMatched");
+            double leaseTime = getAdditionalStat(_context, "client.leaseSetFoundRemoteTime");
+            double lsSuccess = getAdditionalStat(_context, "client.requestLeaseSetSuccess");
+            double lsDropped = getAdditionalStat(_context, "client.requestLeaseSetDropped");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
             boolean networkSlow = observed > 300;
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
             boolean lowMatch = !Double.isNaN(matchRate) && matchRate < 0.5;
+            boolean lsSlow = !Double.isNaN(leaseTime) && leaseTime > 500;
+            boolean lsUnhealthy = !Double.isNaN(lsDropped) && lsDropped > 0;
 
             // Slow network + low match + CPU headroom = increase concurrency
-            if (networkSlow && lowMatch && !systemBusy)
+            if (networkSlow && lowMatch && !systemBusy && !lsUnhealthy)
                 return Math.min(_max, current + 1);
 
-            // Fast network + high match = decrease concurrency (not needed)
-            if (!networkSlow && !Double.isNaN(matchRate) && matchRate > 0.9)
+            // Slow LS lookups = increase concurrency (more parallel probes)
+            if (lsSlow && !systemBusy && !lsUnhealthy)
+                return Math.min(_max, current + 1);
+
+            // LS requests getting dropped = too much concurrency, pull back
+            if (lsUnhealthy)
+                return Math.max(_min, current - 1);
+
+            // Fast network + high match + healthy LS = decrease concurrency (not needed)
+            if (!networkSlow && !Double.isNaN(matchRate) && matchRate > 0.9 && !lsSlow && !lsUnhealthy)
                 return Math.max(_min, current - 1);
 
             return current;
@@ -4597,9 +4623,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, network latency proxy)
-            // Cross-refs: netDb.lookupsMatched (match rate), netDb.successTime (actual lookup time), jobLag (CPU)
+            // Cross-refs: netDb.lookupsMatched (match rate), netDb.successTime (actual lookup time),
+            //             client.leaseSetFoundRemoteTime (client LS lookup), jobLag (CPU)
             double matchRate = getAdditionalStat(_context, "netDb.lookupsMatched");
             double netdbTime = getAdditionalStat(_context, "netDb.successTime");
+            double leaseTime = getAdditionalStat(_context, "client.leaseSetFoundRemoteTime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
@@ -4607,6 +4635,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // netDb.successTime gives actual lookup latency — replace crude observed > 300 proxy
             boolean searchSlow = !Double.isNaN(netdbTime) && netdbTime > 300;
+            // Client LS lookups confirm slow NetDB — use the better of the two signals
+            if (!searchSlow)
+                searchSlow = !Double.isNaN(leaseTime) && leaseTime > 300;
 
             // Slow lookups + low match = increase timeout (peers need more time)
             if (searchSlow && lowMatch && !systemBusy)
@@ -5815,14 +5846,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
-            // Cross-refs: client.writerQueueFull (overflow events), jobLag (CPU), sendProcessingTime
+            // Cross-refs: client.writerQueueFull (overflow events), client.dispatchTime, jobLag (CPU), sendProcessingTime
             double overflows = getAdditionalStat(_context, "client.writerQueueFull");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double sendTime = getAdditionalStat(_context, "transport.sendProcessingTime");
+            double dispatchTime = getAdditionalStat(_context, "client.dispatchTime");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean hasOverflows = !Double.isNaN(overflows) && overflows > 0;
             boolean highRTT = !Double.isNaN(observed) && observed > 1000;
             boolean lowLatency = !Double.isNaN(sendTime) && sendTime < 50;
+            boolean dispatchSlow = !Double.isNaN(dispatchTime) && dispatchTime > 500;
 
             // Overflow events + headroom = increase queue (prevent client drops)
             if (hasOverflows && !cpuPressure)
@@ -5832,8 +5865,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (highRTT && !cpuPressure)
                 return Math.min(_max, current + _step);
 
-            // Low latency + no overflows = decrease queue (reduce buffering)
-            if (lowLatency && !hasOverflows && !cpuPressure && current > _min)
+            // Dispatch time high = queuing delays, increase capacity
+            if (dispatchSlow && !cpuPressure && !hasOverflows)
+                return Math.min(_max, current + _step);
+
+            // Low latency + no overflows + fast dispatch = decrease queue (reduce buffering)
+            if (lowLatency && !hasOverflows && !cpuPressure && !dispatchSlow && current > _min)
                 return Math.max(_min, current - _step);
 
             return current;

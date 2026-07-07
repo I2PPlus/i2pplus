@@ -1,7 +1,6 @@
 package net.i2p.data;
 
 import net.i2p.I2PAppContext;
-import net.i2p.stat.RateConstants;
 import net.i2p.util.SimpleByteCache;
 import net.i2p.util.SystemVersion;
 
@@ -68,8 +67,6 @@ public class SDSCache<V extends SimpleDataStructure> {
     /** the constructor for the class we are caching */
     private final Constructor<V> _rvCon;
 
-    private final String _statName;
-
     /**
      *  @param rvClass the class that we are storing, i.e. an extension of SimpleDataStructure
      *  @param len the length of the byte array in the SimpleDataStructure
@@ -85,11 +82,6 @@ public class SDSCache<V extends SimpleDataStructure> {
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("SDSCache init error", e);
         }
-        _statName = "SDSCache." + rvClass.getSimpleName();
-        // if (_log.shouldDebug())
-        //    _log.debug("New SDSCache for " + rvClass + " data size: " + len +
-        //               " max: " + size + " max mem: " + (len * size));
-        I2PAppContext.getGlobalContext().statManager().createRateStat(_statName, "Hit rate", "Router [SDSCache]", new long[] {RateConstants.TEN_MINUTES});
         I2PAppContext.getGlobalContext().addShutdownTask(new Shutdown());
     }
 
@@ -127,7 +119,6 @@ public class SDSCache<V extends SimpleDataStructure> {
      */
     public V get(byte[] data) {
         if (data == null) throw new NullPointerException("Don't pull null data from the cache");
-        int found;
         V rv;
         Integer key = hashCodeOf(data);
         WeakReference<V> ref = _cache.get(key);
@@ -136,7 +127,6 @@ public class SDSCache<V extends SimpleDataStructure> {
         if (rv != null && Arrays.equals(data, rv.getData())) {
             // found it, we don't need the data passed in any more
             SimpleByteCache.release(data);
-            found = 1;
         } else {
             // make a new one
             try {
@@ -149,9 +139,7 @@ public class SDSCache<V extends SimpleDataStructure> {
                 throw new RuntimeException("SDSCache error", e);
             }
             _cache.put(key, new WeakReference<>(rv));
-            found = 0;
         }
-        I2PAppContext.getGlobalContext().statManager().addRateData(_statName, found);
         return rv;
     }
 

@@ -105,9 +105,9 @@ class ClientManager {
         _port = port;
         _clientTimestamper = new ClientTimestamper();
         // following are for RequestLeaseSetJob
-        _ctx.statManager().createRateStat("client.requestLeaseSetSuccess", "Successful LeaseSet requests", "ClientMessages", new long[] { RateConstants.ONE_MINUTE });
-        _ctx.statManager().createRateStat("client.requestLeaseSetTimeout", "Requests for new LeaseSet without reply", "ClientMessages", new long[] { RateConstants.ONE_MINUTE });
-        _ctx.statManager().createRateStat("client.requestLeaseSetDropped", "Requests for new LeaseSet dropped by the client", "ClientMessages", new long[] { RateConstants.ONE_MINUTE });
+        _ctx.statManager().createRequiredRateStat("client.requestLeaseSetSuccess", "Successful LeaseSet requests", "ClientMessages", new long[] { RateConstants.ONE_MINUTE });
+        _ctx.statManager().createRequiredRateStat("client.requestLeaseSetTimeout", "Requests for new LeaseSet without reply", "ClientMessages", new long[] { RateConstants.ONE_MINUTE });
+        _ctx.statManager().createRequiredRateStat("client.requestLeaseSetDropped", "Requests for new LeaseSet dropped by the client", "ClientMessages", new long[] { RateConstants.ONE_MINUTE });
         _ctx.statManager().createRequiredRateStat("i2cp.internalQueueSize", "I2CP internal queue capacity", "ClientMessages", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
     }
 

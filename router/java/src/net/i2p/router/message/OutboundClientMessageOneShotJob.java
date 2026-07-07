@@ -258,12 +258,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         ctx.statManager().createFrequencyStat("client.sendMessageFailFrequency", "How often client fails to send a message", "ClientMessages", RATES);
         ctx.statManager().createRateStat("client.dispatchNoACK", "Repeated message sends to a peer (no ACK required)", "ClientMessages", RATES);
         ctx.statManager().createRateStat("client.dispatchNoTunnels", "How long after startup we run out of local tunnels to send/receive with", "ClientMessages", RATES);
-        ctx.statManager().createRateStat("client.dispatchPrepareTime", "Time to queue up the Dispatch job (since we started)", "ClientMessages", RATES);
-        ctx.statManager().createRateStat("client.dispatchSendTime", "Time taken by the Dispatch job", "ClientMessages", RATES);
-        ctx.statManager().createRateStat("client.dispatchTime", "Time to dispatch the message (since we started)", "ClientMessages", RATES);
-        ctx.statManager().createRateStat("client.leaseSetFailedRemoteTime", "Time to look for a remote LeaseSet (when we failed)", "ClientMessages", RATES);
-        ctx.statManager().createRateStat("client.leaseSetFoundRemoteTime", "Time to look for a remote LeaseSet (when we succeeded)", "ClientMessages", RATES);
-        ctx.statManager().createRateStat("client.sendMessageSize", "Size of messages sent by the client", "ClientMessages", RATES);
+        ctx.statManager().createRequiredRateStat("client.dispatchSendTime", "Time taken by the Dispatch job", "ClientMessages", RATES);
+        ctx.statManager().createRequiredRateStat("client.dispatchTime", "Time to dispatch the message (since we started)", "ClientMessages", RATES);
+        ctx.statManager().createRequiredRateStat("client.leaseSetFailedRemoteTime", "Time to look for a remote LeaseSet (when we failed)", "ClientMessages", RATES);
+        ctx.statManager().createRequiredRateStat("client.leaseSetFoundRemoteTime", "Time to look for a remote LeaseSet (when we succeeded)", "ClientMessages", RATES);
         // for HandleGarlicMessageJob / GarlicMessageReceiver
         ctx.statManager().createRateStat("crypto.garlic.decryptFail", "How often undecryptable garlic messages are received", "Encryption", RATES);
         ctx.statManager().createRequiredRateStat("client.sendAckTime", "Message round trip time (ms)", "ClientMessages", RATES);
@@ -767,7 +765,6 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         //    getContext().jobQueue().addJob(dispatchJob);
         //else
         dispatchJob.runJob();
-        getContext().statManager().addRateData("client.dispatchPrepareTime", now - _start);
         if (!wantACK) {getContext().statManager().addRateData("client.dispatchNoACK", 1);}
     }
 
@@ -1205,7 +1202,6 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             int size = _clientMessageSize;
 
             getContext().statManager().addRateData("client.sendAckTime", sendTime);
-            getContext().statManager().addRateData("client.sendMessageSize", _clientMessageSize, sendTime);
             if (_outTunnel != null) {
                 if (_outTunnel.getLength() > 0) {size = (int) (((size + 1023) / 1024) * 1024L);} // messages are in ~1KB blocks
 

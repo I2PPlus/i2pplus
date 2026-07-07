@@ -429,9 +429,6 @@ class GraphRenderer {
             if (name.startsWith("codel.")) {
                 graphTitle = graphTitle.replace("codel.", "[Router] CODEL.");
             }
-            if (name.startsWith("SDSCache.")) {
-                graphTitle = graphTitle.replace("SDSCache.", "[Router] SDSCache.");
-            }
             if (name.startsWith("stream.")) {
                 graphTitle = graphTitle.replace("stream.", "[Stream] ");
             }

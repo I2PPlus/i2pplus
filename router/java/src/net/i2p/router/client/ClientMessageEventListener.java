@@ -83,9 +83,6 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         _runner = runner;
         _enforceAuth = enforceAuth;
         if ((!_enforceAuth) || !_context.getBooleanProperty(PROP_AUTH)) {_authorized = true;}
-        _context.statManager().createRateStat("client.distributeTime",
-                                              "Time to inject client message into router",
-                                              "ClientMessages", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
     }
 
     /**
@@ -468,7 +465,6 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         long timeToDistribute = _context.clock().now() - beforeDistribute;
         // TODO validate session id
         _runner.ackSendMessage(sid, id, message.getNonce());
-        _context.statManager().addRateData("client.distributeTime", timeToDistribute);
         if ((timeToDistribute > 50) && (_log.shouldDebug())) {
             _log.debug("Took too long to distribute the message (which holds up the ACK): " + timeToDistribute);
         }
