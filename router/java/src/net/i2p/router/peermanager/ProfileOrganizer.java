@@ -126,6 +126,15 @@ public class ProfileOrganizer {
      *  on any success and first-hop cooldown is only 5 minutes. */
     private static final long MAX_LIFETIME_TUNNEL_FAILURES = 20;
 
+    /** When high-cap tier has at least this many peers, require actual capacity
+     *  threshold — stop bucket-filling with marginal peers.
+     *  @since 0.9.70+ */
+    private static final int MIN_HC_TIGHT_COUNT = 300;
+    /** When fast tier has at least this many peers, require speed threshold
+     *  — stop admitting via low-latency bypass alone.
+     *  @since 0.9.70+ */
+    private static final int MIN_FAST_TIGHT_COUNT = 200;
+
     public static final String PROP_MAX_PROFILES = "profileOrganizer.maxProfiles";
     public static volatile int _defaultMaxProfiles = getDefaultMaxProfiles();
     /** @since 0.9.70+ */
@@ -769,7 +778,7 @@ public class ProfileOrganizer {
                 for (PeerProfile profile : candidates) {
                     if (_fastPeers.size() >= target) break;
                     if (profile.isLowLatency() && isSelectable(profile.getPeer()) &&
-                        !isLowTunnelAcceptance(profile)) {
+                        !isLowTunnelAcceptance(profile) && !hasRecentTunnelFailures(profile)) {
                         _fastPeers.put(profile.getPeer(), profile);
                         added++;
                     }
@@ -782,7 +791,8 @@ public class ProfileOrganizer {
                     for (PeerProfile profile : candidates) {
                         if (_fastPeers.size() >= target) break;
                         if (profile.getIsActive() && profile.getSpeedValue() >= threshold &&
-                            isSelectable(profile.getPeer()) && !isLowTunnelAcceptance(profile)) {
+                            isSelectable(profile.getPeer()) && !isLowTunnelAcceptance(profile) &&
+                            !hasRecentTunnelFailures(profile)) {
                             _fastPeers.put(profile.getPeer(), profile);
                             added++;
                         }
@@ -802,6 +812,7 @@ public class ProfileOrganizer {
                         if (profile.getPeer().equals(_us)) continue;
                         if (!isSelectable(profile.getPeer())) continue;
                         if (isLowTunnelAcceptance(profile)) continue;
+                        if (hasRecentTunnelFailures(profile)) continue;
                         // Require recent activity — don't fill fast tier with stale peers
                         if (profile.getLastHeardFrom() < activeCutoff &&
                             profile.getLastSendSuccessful() < activeCutoff) continue;
@@ -823,11 +834,42 @@ public class ProfileOrganizer {
                     if (profile.getPeer().equals(_us)) continue;
                     if (!isSelectable(profile.getPeer())) continue;
                     if (isLowTunnelAcceptance(profile)) continue;
+                    if (hasRecentTunnelFailures(profile)) continue;
                     // Require recent activity — don't fill high-cap tier with stale peers
                     if (profile.getLastHeardFrom() < activeCutoff &&
                         profile.getLastSendSuccessful() < activeCutoff) continue;
                     _highCapacityPeers.put(profile.getPeer(), profile);
                     highCapAdded++;
+                }
+            }
+
+            // Step 6a: Purge peers with recent tunnel failures from fast/high-cap tiers.
+            // Rebuild clears tiers, so this catches peers admitted via locked_promoteProfileToTiers()
+            // that subsequently developed failures during this reorganize window.
+            if (_fastPeers.size() >= MIN_FAST_TIGHT_COUNT) {
+                Iterator<Map.Entry<Hash, PeerProfile>> fastIt = _fastPeers.entrySet().iterator();
+                while (fastIt.hasNext()) {
+                    PeerProfile profile = fastIt.next().getValue();
+                    if (hasRecentTunnelFailures(profile)) {
+                        if (_log.shouldDebug()) {
+                            _log.debug("Purging peer [" + profile.getPeer().toBase32().substring(0, 6) +
+                                       "] from fast tier: recent tunnel failures");
+                        }
+                        fastIt.remove();
+                    }
+                }
+            }
+            if (_highCapacityPeers.size() >= MIN_HC_TIGHT_COUNT) {
+                Iterator<Map.Entry<Hash, PeerProfile>> hcIt = _highCapacityPeers.entrySet().iterator();
+                while (hcIt.hasNext()) {
+                    PeerProfile profile = hcIt.next().getValue();
+                    if (hasRecentTunnelFailures(profile)) {
+                        if (_log.shouldDebug()) {
+                            _log.debug("Purging peer [" + profile.getPeer().toBase32().substring(0, 6) +
+                                       "] from high-cap tier: recent tunnel failures");
+                        }
+                        hcIt.remove();
+                    }
                 }
             }
 
@@ -1287,6 +1329,7 @@ public class ProfileOrganizer {
         boolean lowTunnelAcceptance = isLowTunnelAcceptance(profile);
         boolean highLatency = profile.getCapacityBonus() == -30 || profile.getCapacityBonusRaw() == -30;
         boolean congested = isCongestedPeer(peer);
+        boolean recentFailures = hasRecentTunnelFailures(profile);
 
         if (!isPeerSelectable || isStrictCountry || lowTunnelAcceptance || highLatency || congested) {
             if (highLatency && _log.shouldDebug()) {
@@ -1303,25 +1346,38 @@ public class ProfileOrganizer {
         double effectiveSpeedThreshold = _thresholdSpeedValue;
 
         // High-capacity tier
+        // When tier count is healthy, require actual capacity threshold AND no
+        // recent tunnel failures. Bucket-filling (size < min/max) only when we need more peers.
+        boolean hcNeedsFilling = _highCapacityPeers.size() < minHighCap;
+        boolean hcHasRoom = _highCapacityPeers.size() < getMaximumHighCapPeers();
+        boolean hcTight = _highCapacityPeers.size() >= MIN_HC_TIGHT_COUNT;
         if (!_highCapacityPeers.containsKey(peer) &&
+            !(!hcTight && recentFailures) &&
             (profile.getCapacityValue() >= effectiveCapThreshold ||
-            _highCapacityPeers.size() < minHighCap ||
-            _highCapacityPeers.size() < getMaximumHighCapPeers())) {
+            (!hcTight && (hcNeedsFilling || hcHasRoom)))) {
             _highCapacityPeers.put(peer, profile);
         }
 
         // Fast tier
+        // When tier count is healthy, require all tests passing — peer test
+        // (low latency), active, AND no recent tunnel failures. When filling,
+        // allow speed-based admission and low-latency bypass as before.
         if (!_fastPeers.containsKey(peer) && _fastPeers.size() < getMaximumFastPeers()) {
-            // Promote if:
-            //  - Speed >= threshold AND (active OR has proven throughput history), OR
-            //  - Low latency (never had high-RTT penalties)
-            // The hasProvenThroughput bypass prevents the fast tier from emptying
-            // during activity lulls — peers with a measurable track record stay eligible.
             boolean hasProvenThroughput = profile.getPeakTunnel1mThroughputKBps() > 0;
-            if ((profile.getSpeedValue() >= effectiveSpeedThreshold &&
-                 (profile.getIsActive() || hasProvenThroughput)) ||
-                profile.isLowLatency()) {
-                _fastPeers.put(peer, profile);
+            boolean fastTight = _fastPeers.size() >= MIN_FAST_TIGHT_COUNT;
+            if (fastTight) {
+                // Tight mode: require peer test passing + active + no recent failures
+                if (profile.isLowLatency() && profile.getIsActive() && !recentFailures) {
+                    _fastPeers.put(peer, profile);
+                }
+            } else {
+                // Filling mode: speed-based or low-latency bypass, but still reject recent failures
+                if (!recentFailures &&
+                    ((profile.getSpeedValue() >= effectiveSpeedThreshold &&
+                     (profile.getIsActive() || hasProvenThroughput)) ||
+                    profile.isLowLatency())) {
+                    _fastPeers.put(peer, profile);
+                }
             }
         }
 
@@ -1660,6 +1716,20 @@ public class ProfileOrganizer {
         }
 
         return true;
+    }
+
+    /**
+     * Check if a peer has had recent tunnel failures (failed tests or builds).
+     * Used to gate fast/high-cap tier admission when tier counts are healthy.
+     * @return true if the peer has had any tunnel failures in the last hour
+     * @since 0.9.70+
+     */
+    private boolean hasRecentTunnelFailures(PeerProfile profile) {
+        TunnelHistory th = profile.getTunnelHistory();
+        if (th == null) return false;
+        Rate failed = th.getFailedRate().getRate(RateConstants.ONE_HOUR);
+        if (failed == null) return false;
+        return failed.getCurrentEventCount() > 0;
     }
 
     protected int getMinimumFastPeers() {
