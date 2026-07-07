@@ -12,7 +12,9 @@ import net.i2p.data.SessionKey;
 class SplitKeys {
 
     private static final byte[] ZEROLEN = new byte[0];
-    public final SessionKey ck, k_ab, k_ba;
+    public final SessionKey ck;
+    public final SessionKey k_ab;
+    public final SessionKey k_ba;
 
     public SplitKeys(HandshakeState state, HKDF hkdf) {
         byte[] ckd = state.getChainingKey();

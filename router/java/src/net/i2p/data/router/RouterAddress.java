@@ -237,7 +237,6 @@ public class RouterAddress extends DataStructureImpl {
                DataHelper.eq(getHost(), addr.getHost()) &&
                DataHelper.eq(_transportStyle, addr._transportStyle);
                //DataHelper.eq(_options, addr._options) &&
-               //DataHelper.eq(_expiration, addr._expiration);
         if (!rv || !_transportStyle.equals("SSU"))
                return rv;
         // SSU 4/6 caps

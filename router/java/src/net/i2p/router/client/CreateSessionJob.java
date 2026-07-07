@@ -51,7 +51,6 @@ class CreateSessionJob extends JobImpl {
          */
 
         // XXX take the router's defaults
-        // XXX props.putAll(Router.getInstance().getConfigMap());
 
         // override them by the client's settings
         props.putAll(_config.getOptions());

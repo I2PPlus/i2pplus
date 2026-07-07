@@ -10,7 +10,8 @@ import net.i2p.data.PublicKey;
  */
 class NextSessionKey extends PublicKey {
     private final int _id;
-    private final boolean _isReverse, _isRequest;
+    private final boolean _isReverse;
+    private final boolean _isRequest;
 
     /**
      *  @param data non-null

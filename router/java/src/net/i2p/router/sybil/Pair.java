@@ -9,7 +9,8 @@ import net.i2p.data.router.RouterInfo;
  *  @since 0.9.38 moved from SybilRenderer
  */
 public class Pair implements Comparable<Pair> {
-    public final RouterInfo r1, r2;
+    public final RouterInfo r1;
+    public final RouterInfo r2;
     public final BigInteger dist;
 
     public Pair(RouterInfo ri1, RouterInfo ri2, BigInteger distance) {
