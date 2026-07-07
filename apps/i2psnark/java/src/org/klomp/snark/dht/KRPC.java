@@ -115,7 +115,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** recently unreachable, with lastSeen() as the added-to-blacklist time */
     private final Set<NID> _blacklist;
 
-    private SimpleTimer2.TimedEvent _cleaner, _explorer;
+    private SimpleTimer2.TimedEvent _cleaner;
+    private SimpleTimer2.TimedEvent _explorer;
 
     /** hook to inject and receive datagrams */
     private final I2PSession _session;
@@ -178,7 +179,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private static final int MAX_OUTBOUND_TOKENS = 5000;
 
     /** how long since sent do we wait for a reply */
-    private static final long MAX_MSGID_AGE = 2 * 60 * 1000;
 
     /** how long since sent do we wait for a reply */
     private static final long DEFAULT_QUERY_TIMEOUT = 75 * 1000;
@@ -479,8 +479,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                     && !heardFrom.isEmpty()
                     && comp.compare(toTry.first(), heardFrom.first()) >= 0) {
                 if (_log.shouldInfo())
-                    //                    _log.info("Finished get_peers, nothing closer to try after
-                    // " + (i+1));
                     _log.info(
                             "Finished get_peers, nothing closer after trying "
                                     + (i + 1)
@@ -540,8 +538,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     public void announce(byte[] ih, byte[] peerHash, boolean isSeed) {
         InfoHash iHash = new InfoHash(ih);
         _tracker.announce(iHash, new Hash(peerHash), isSeed);
-        // Do NOT do this, corrupts the Hash cache and the Peer ID
-        // _tracker.announce(iHash, Hash.create(peerHash));
     }
 
     /**
@@ -599,12 +595,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      */
     private boolean announce(byte[] ih, NodeInfo nInfo, long maxWait, boolean isSeed) {
         InfoHash iHash = new InfoHash(ih);
-        // it isn't clear from BEP 5 if a token is bound to a single infohash?
-        // for now, just bind to the NID
-        // TokenKey tokenKey = new TokenKey(nInfo.getNID(), iHash);
         Token token = _incomingTokens.get(nInfo.getNID());
         if (token != null && token.lastSeen() < _context.clock().now() - MAX_INBOUND_TOKEN_AGE) {
-            // too old, cleaner will get it soon
             token = null;
         }
         if (token == null) {
@@ -1830,9 +1822,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /** for non-muxed */
-    public void messageAvailable(I2PSession session, int msgId, long size) {}
+    public void messageAvailable(I2PSession session, int msgId, long size) { /* no-op */ }
 
-    public void reportAbuse(I2PSession session, int severity) {}
+    public void reportAbuse(I2PSession session, int severity) { /* no-op */ }
 
     public void disconnected(I2PSession session) {
         if (_log.shouldWarn()) {

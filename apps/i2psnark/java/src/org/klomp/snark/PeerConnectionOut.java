@@ -164,10 +164,8 @@ class PeerConnectionOut implements Runnable {
                                     } catch (InterruptedException ie) { /* ignored */ }
                                     continue;
                                 }
-                            } else if (m != null && m.type == Message.REQUEST) {
-                                if (shouldThrottleRequests) {
-                                    continue;
-                                }
+                            } else if (m != null && m.type == Message.REQUEST && shouldThrottleRequests) {
+                                continue;
                             }
                             m = sendQueue.poll();
                         }
@@ -179,35 +177,21 @@ class PeerConnectionOut implements Runnable {
                         _log.debug("Sending [" + peer + "]: " + m);
                     }
 
-                    // This can block for quite a while.
-                    // To help get slow peers going, and track the bandwidth better,
-                    // move this _after_ state.uploaded() and see how it works.
                     lastSent = System.currentTimeMillis();
 
-                    // Remove all piece messages after sending a choke message.
-                    // FiXME this causes REJECT messages to be sent before sending the CHOKE;
-                    // BEP 6 recommends sending them after.
                     if (m.type == Message.CHOKE) {
                         removeMessage(Message.PIECE);
                     }
 
-                    // XXX - Should also register overhead...
-                    // Don't let other clients requesting big chunks get an advantage
-                    // when we are seeding;
-                    // only count the rest of the upload after sendMessage().
                     int remainder = 0;
-                    if (m.type == Message.PIECE) {
-                        // first PARTSIZE was signalled in shouldSend() above
-                        if (m.len > PeerState.PARTSIZE) {
-                            remainder = m.len - PeerState.PARTSIZE;
-                        }
+                    if (m.type == Message.PIECE && m.len > PeerState.PARTSIZE) {
+                        remainder = m.len - PeerState.PARTSIZE;
                     }
 
                     m.sendMessage(dout);
                     if (remainder > 0) {
                         peer.uploaded(remainder);
                     }
-                    m = null;
                 }
             }
         } catch (IOException ioe) {

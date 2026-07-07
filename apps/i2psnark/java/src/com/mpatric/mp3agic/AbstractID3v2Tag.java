@@ -361,9 +361,9 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
             }
             int framesLength = dataLength;
             if (footer) framesLength -= 10;
-            offset = unpackFrames(bytes, offset, framesLength);
+            unpackFrames(bytes, offset, framesLength);
             if (footer) {
-                offset = unpackFooter(bytes, dataLength);
+                unpackFooter(bytes, dataLength);
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new InvalidDataException("Premature end of tag", e);
@@ -527,9 +527,9 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
         if (extendedHeader) {
             offset = packExtendedHeader(bytes, offset);
         }
-        offset = packFrames(bytes, offset);
+        packFrames(bytes, offset);
         if (footer) {
-            offset = packFooter(bytes, dataLength);
+            packFooter(bytes, dataLength);
         }
     }
 
@@ -1045,12 +1045,10 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
      */
     protected int extractGenreNumber(String genreValue) throws NumberFormatException {
         String value = genreValue.trim();
-        if (value.length() > 0) {
-            if (value.charAt(0) == '(') {
-                int pos = value.indexOf(')');
-                if (pos > 0) {
-                    return Integer.parseInt(value.substring(1, pos));
-                }
+        if (value.length() > 0 && value.charAt(0) == '(') {
+            int pos = value.indexOf(')');
+            if (pos > 0) {
+                return Integer.parseInt(value.substring(1, pos));
             }
         }
         return Integer.parseInt(value);

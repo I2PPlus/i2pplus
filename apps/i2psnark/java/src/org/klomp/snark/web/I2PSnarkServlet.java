@@ -123,10 +123,6 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final Pattern HEX_PATTERN = Pattern.compile("[a-fA-F0-9]+");
     private static final Pattern BASE32_PATTERN = Pattern.compile("[a-zA-Z2-7]+");
     private static final Pattern NUMBER_PATTERN = Pattern.compile("\\d+");
-    private static final Pattern DEST_PATTERN = Pattern.compile("^[A-Za-z0-9~\\-]+$");
-    private static final Pattern B32_PATTERN = Pattern.compile("^[a-z2-7]+$");
-    private static final Pattern HOSTNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9\\-]+$");
-    private static final Pattern COUNTRY_CODE_PATTERN = Pattern.compile("[a-z][a-z]");
 
     private String _themePath;
     private String _resourcePath;
@@ -1059,7 +1055,8 @@ public class I2PSnarkServlet extends BasicServlet {
             try { pageSize = Integer.parseInt(ps); } catch(NumberFormatException ignored) { /* ignored */ }
         }
 
-        boolean isDegraded = false, noThinsp = false;
+        boolean isDegraded = false;
+        boolean noThinsp = false;
         String ua = req.getHeader("User-Agent");
         if (ua != null) {
             isDegraded = ServletUtil.isTextBrowser(ua);
@@ -1193,8 +1190,11 @@ public class I2PSnarkServlet extends BasicServlet {
         String filterQuery = fq.toString();
 
         // Cache torrent activity flags and counts, break early if all true to save time
-        boolean hasPeers = false, isDownloading = false, isUploading = false;
-        int activeDownloadsCount = 0, activeUploadsCount = 0;
+        boolean hasPeers = false;
+        boolean isDownloading = false;
+        boolean isUploading = false;
+        int activeDownloadsCount = 0;
+        int activeUploadsCount = 0;
         int end = Math.min(start + pageSize, total);
         for (int i = start; i < end && !(hasPeers && isDownloading && isUploading); i++) {
             Snark s = snarks.get(i);
@@ -1336,7 +1336,8 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         // TX header with ratio sorting
-        boolean isRatSort = false, nextRatSort = false;
+        boolean isRatSort = false;
+        boolean nextRatSort = false;
         if (showSort) {
             if ("-7".equals(currentSort)) {
                 nextSort = "7";
@@ -2970,7 +2971,6 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     static final int MAX_DISPLAYED_FILENAME_LENGTH = 255;
-    private static final int MAX_DISPLAYED_ERROR_LENGTH = 43;
 
     /**
      * Checks whether a torrent matches the given filter based on its status string.
@@ -3008,11 +3008,6 @@ public class I2PSnarkServlet extends BasicServlet {
         }
     }
 
-    private String snarkStatus;
-    private String filterParam;
-    private boolean filterEnabled;
-    private String sortParam;
-    private boolean sortEnabled;
 
     /**
      * Displays a single snark (torrent) as an HTML table row, including optional peer rows.
@@ -4532,8 +4527,6 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String HOP = "hop";
     private static final String TUNNEL = "tunnel";
     /** dummies for translation */
-    private static final String HOPS = ngettext("1 hop", "{0} hops");
-    private static final String TUNNELS = ngettext("1 tunnel", "{0} tunnels");
     /** prevents the ngettext line below from getting tagged */
     private static final String DUMMY0 = "{0} ";
     private static final String DUMMY1 = "1 ";
@@ -6138,9 +6131,6 @@ public class I2PSnarkServlet extends BasicServlet {
                 } catch (Throwable t) {t.printStackTrace();}
             }
         }
-        //if (postParams.get("setInOrderEnabled") != null) {
-        //    storage.setInOrder(postParams.get("enableInOrder") != null);
-        //}
         snark.updatePiecePriorities();
         _manager.saveTorrentStatus(snark);
     }

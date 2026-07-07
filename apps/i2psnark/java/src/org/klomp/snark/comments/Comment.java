@@ -16,7 +16,8 @@ import net.i2p.data.DataHelper;
  */
 public class Comment implements Comparable<Comment> {
 
-    private final String text, name;
+    private final String text;
+    private final String name;
     // seconds since 1/1/2005
     private final int time;
     private final byte rating;

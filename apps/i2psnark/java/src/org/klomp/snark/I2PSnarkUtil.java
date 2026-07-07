@@ -99,7 +99,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     private boolean _enableAddCreate;
     private boolean _shouldUseOT;
     private boolean _shouldUseDHT;
-    private boolean _enableRatings, _enableComments;
+    private boolean _enableRatings;
+    private boolean _enableComments;
     private String _commentsName;
     private boolean _areFilesPublic;
     private boolean _shouldPreallocateFiles;
@@ -112,7 +113,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     private long _startedTime;
     private final DisconnectListener _discon;
     private int _maxFilesPerTorrent = SnarkManager.DEFAULT_MAX_FILES_PER_TORRENT;
-    private String _apiTarget, _apiKey;
+    private String _apiTarget;
+    private String _apiKey;
     private static final int EEPGET_CONNECT_TIMEOUT = 60 * 1000;
     private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 15 * 1000;
     public static final int DEFAULT_STARTUP_DELAY = 3;
@@ -152,7 +154,6 @@ public class I2PSnarkUtil implements DisconnectListener {
         _baseName = baseName;
         _discon = discon;
         _opts = new HashMap<>();
-        // setProxy("127.0.0.1", 4444);
         setI2CPConfig("127.0.0.1", I2PClient.DEFAULT_LISTEN_PORT, null);
         _banlist = new ConcurrentHashSet<>();
         _maxUploaders = Snark.MAX_TOTAL_UPLOADERS;
@@ -745,10 +746,8 @@ public class I2PSnarkUtil implements DisconnectListener {
             retries = 10;
         } else {
             timeout = EEPGET_CONNECT_TIMEOUT;
-            if (!connected()) {
-                if (!connect()) {
-                    return null;
-                }
+            if (!connected() && !connect()) {
+                return null;
             }
         }
         EepGet get =
@@ -823,10 +822,8 @@ public class I2PSnarkUtil implements DisconnectListener {
             retries = 0;
         } else {
             timeout = EEPGET_CONNECT_TIMEOUT;
-            if (!connected()) {
-                if (!connect()) {
-                    return null;
-                }
+            if (!connected() && !connect()) {
+                return null;
             }
         }
         ByteArrayOutputStream out = new ByteArrayOutputStream(initialSize);
@@ -942,13 +939,10 @@ public class I2PSnarkUtil implements DisconnectListener {
                 if (_manager != null
                         && ip.length() == BASE32_HASH_LENGTH + 8
                         && ip.endsWith(".b32.i2p")) {
-                    // Use existing I2PSession for b32 lookups if we have it
-                    // This is much more efficient than using the naming service
                     I2PSession sess = _manager.getSession();
                     if (sess != null) {
                         byte[] b = Base32.decode(ip.substring(0, BASE32_HASH_LENGTH));
                         if (b != null) {
-                            // Hash h = new Hash(b);
                             Hash h = Hash.create(b);
                             if (_log.shouldDebug())
                                 _log.debug("Using existing session for lookup of [" + ip + "]");
@@ -1007,7 +1001,6 @@ public class I2PSnarkUtil implements DisconnectListener {
                 "http://i2p/"
                         + origAnnounce.substring(destStart, destEnd)
                         + origAnnounce.substring(pathStart);
-        // _log.debug("Rewriting [" + origAnnounce + "] as [" + rv + "]");
         return rv;
     }
 

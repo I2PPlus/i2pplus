@@ -246,9 +246,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
 
     /** This is called by stopTorrent() among others */
     public void updateStatus(Snark snark) {
-        if (snark.isStopped()) {
-            if (!_isComplete) fatal("stopped by user");
-        }
+        if (snark.isStopped() && !_isComplete) fatal("stopped by user");
         _smgr.updateStatus(snark);
     }
 

@@ -131,7 +131,8 @@ public class RunStandalone {
     public String getSnarkRevision() {
         File base = _context.getBaseDir();
         File jar = new File(base, "i2psnark.jar");
-        String rev = "", date = "";
+        String rev = "";
+        String date = "";
         try {
             Manifest manifest =
                     new Manifest(
@@ -162,12 +163,10 @@ public class RunStandalone {
             NodeList nList = doc.getElementsByTagName("Set");
             for (int temp = 0; temp < nList.getLength(); temp++) {
                 Node nNode = nList.item(temp);
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    if ("host".equals(nNode.getAttributes().getNamedItem("name").getNodeValue())) {
+                if (nNode.getNodeType() == Node.ELEMENT_NODE && "host".equals(nNode.getAttributes().getNamedItem("name").getNodeValue())) {
                         return nNode.getTextContent();
                     }
                 }
-            }
         } catch (Exception e) { /* ignored */ }
         return "127.0.0.1";
     }
@@ -187,12 +186,10 @@ public class RunStandalone {
             NodeList nList = doc.getElementsByTagName("Set");
             for (int temp = 0; temp < nList.getLength(); temp++) {
                 Node nNode = nList.item(temp);
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    if ("port".equals(nNode.getAttributes().getNamedItem("name").getNodeValue())) {
+                if (nNode.getNodeType() == Node.ELEMENT_NODE && "port".equals(nNode.getAttributes().getNamedItem("name").getNodeValue())) {
                         return Integer.parseInt(nNode.getTextContent());
                     }
                 }
-            }
         } catch (Exception e) { /* ignored */ }
         return 8002;
     }

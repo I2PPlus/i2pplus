@@ -44,7 +44,9 @@ public class BandwidthManager implements BandwidthListener {
 
     private final I2PAppContext _context;
     private final Log _log;
-    private SyntheticREDQueue _up, _down, _req;
+    private SyntheticREDQueue _up;
+    private SyntheticREDQueue _down;
+    private SyntheticREDQueue _req;
 
     BandwidthManager(I2PAppContext ctx, int upLimit, int downLimit) {
         _context = ctx;

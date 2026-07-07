@@ -203,10 +203,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
     @Override
     public synchronized void startTorrent() {
         if (_isRunning) return;
-        // reset counters in case starting a second time
         _remaining = -1;
-        // leave the total if we knew it before
-        // _total = -1;
         _transferred = 0;
         _failCause = null;
         _started = _util.getContext().clock().now();
@@ -400,14 +397,14 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
      * @param key the header name
      * @param val the header value
      */
-    public void headerReceived(String url, int attemptNum, String key, String val) {}
+    public void headerReceived(String url, int attemptNum, String key, String val) { /* no-op */ }
 
     /**
      * Called when a download attempt is starting.
      *
      * @param url the URL being downloaded
      */
-    public void attempting(String url) {}
+    public void attempting(String url) { /* no-op */ }
 
     // End of EepGet status listeners
 

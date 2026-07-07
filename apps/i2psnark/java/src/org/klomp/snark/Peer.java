@@ -94,7 +94,6 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     //  bytes per bt spec:                         0011223344556677
     private static final long OPTION_EXTENSION = 0x0000000000100000L;
     private static final long OPTION_FAST = 0x0000000000000004L;
-    private static final long OPTION_V2 = 0x0000000000000010L;
     private long options;
     private final boolean _isIncoming;
     private int _totalCommentsSent;
@@ -386,12 +385,10 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             throw new IOException("Connected to myself");
         }
 
-        if (options != 0) {
-            // send them something in runConnection() above
-            if (_log.shouldDebug())
-                _log.debug(
-                        "Peer supports options 0x" + Long.toHexString(options) + ": " + toString());
-        }
+        if (options != 0 && _log.shouldDebug())
+            _log.debug(
+                    "Peer supports options 0x" + Long.toHexString(options) + ": " + toString());
+
 
         return bs;
     }
@@ -507,8 +504,6 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
                 if (p != null) {
                     List<Request> pcs = s.returnPartialPieces();
                     if (!pcs.isEmpty()) p.savePartialPieces(this, pcs);
-                    // now covered by savePartialPieces
-                    // p.markUnrequested(this);
                 }
             }
             state = null;

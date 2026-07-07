@@ -441,14 +441,13 @@ public class TrackerClient implements Runnable {
             return false;
         }
         boolean rv = existing.add(h);
-        if (!rv) {
-            if (_log.shouldInfo())
-                _log.info(
-                        "Duplicate announce URL: ["
-                                + ann
-                                + "] \n* Torrent: "
-                                + snark.getBaseName());
-        }
+        if (!rv && _log.shouldInfo())
+            _log.info(
+                    "Duplicate announce URL: ["
+                            + ann
+                            + "] \n* Torrent: "
+                            + snark.getBaseName());
+
         return rv;
     }
 
@@ -652,8 +651,6 @@ public class TrackerClient implements Runnable {
                         Iterator<Peer> it = ordered.iterator();
                         while ((!stop) && it.hasNext() && coordinator.needOutboundPeers()) {
                             Peer cur = it.next();
-                            // FIXME if id == us || dest == us continue;
-                            // only delay if we actually make an attempt to add peer
                             if (coordinator.addPeer(cur) && it.hasNext()) {
                                 int delay = r.nextInt(DELAY_RAND) + DELAY_MIN;
                                 try {

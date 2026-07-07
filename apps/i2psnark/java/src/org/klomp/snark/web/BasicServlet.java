@@ -310,17 +310,15 @@ class BasicServlet extends HttpServlet {
         try {
             if (!request.getMethod().equals("HEAD")) {
                 long ifmsl = request.getDateHeader("If-Modified-Since");
-                if (ifmsl != -1) {
-                    if (content.getLastModified() / 1000 <= ifmsl / 1000) {
-                        try {
-                            response.reset();
-                        } catch (IllegalStateException ise) {
-                            return true;
-                        } // committed
-                        response.setStatus(304);
-                        response.getOutputStream().close();
-                        return false;
-                    }
+                if (ifmsl != -1 && content.getLastModified() / 1000 <= ifmsl / 1000) {
+                    try {
+                        response.reset();
+                    } catch (IllegalStateException ise) {
+                        return true;
+                    } // committed
+                    response.setStatus(304);
+                    response.getOutputStream().close();
+                    return false;
                 }
             }
         } catch (IllegalArgumentException iae) {

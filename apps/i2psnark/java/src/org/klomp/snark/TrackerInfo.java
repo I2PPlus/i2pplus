@@ -140,12 +140,8 @@ class TrackerInfo {
                 peerID = new PeerID(bev.getMap());
             } catch (InvalidBEncodingException ibe) {
                 try {
-                    // Case 2 - compact - A list of 32-byte binary strings (hashes)
-                    // This was just for testing and is not the official format
                     peerID = new PeerID(bev.getBytes(), util);
                 } catch (InvalidBEncodingException ibe2) {
-                    // don't let one bad entry spoil the whole list
-                    // Snark.debug("Discarding peer from list: " + ibe, Snark.ERROR);
                     continue;
                 }
             }

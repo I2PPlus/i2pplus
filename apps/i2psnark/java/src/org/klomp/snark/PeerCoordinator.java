@@ -684,13 +684,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
         int pieces = metainfo.getPieces();
         int max = _util.getMaxConnections();
-        if (pieces <= 10) {
-            if (max > 4) max = 4;
-        } else if (pieces <= 25) {
-            if (max > 10) max = 10;
-        } else if (pieces <= 80) {
-            if (max > 16) max = 16;
-        }
+        if (pieces <= 10 && max > 4) max = 4;
+        else if (pieces <= 25 && max > 10) max = 10;
+        else if (pieces <= 80 && max > 16) max = 16;
 
         long bwl = getDownBWLimit();
         if (bwl < 32 * 1024) {
@@ -873,10 +869,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         int peersize = 0;
         synchronized (peers) {
             peersize = peers.size();
-            // This isn't a strict limit, as we may have several pending connections;
-            // thus there is an additional check in connected()
             need_more = (!peer.isConnected()) && peersize < getMaxConnections();
-            // Check if we already have this peer before we build the connection
             if (need_more) {
                 Peer old = peerIDInList(peer.getPeerID(), peers);
                 need_more = old == null || old.getInactiveTime() > old.getMaxInactiveTime();
@@ -1211,21 +1204,19 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             }
             BitField bitfield = storage.getBitField();
             for (int i = 0; i < pri.length; i++) {
-                if (pri[i] >= 0 && !bitfield.get(i)) {
-                    if (!want.get(i)) {
-                        Piece piece = new Piece(i);
-                        wantedPieces.add(piece);
-                        wantedBytes += metainfo.getPieceLength(i);
-                        // As connections are already up, new Pieces will
-                        // not have their PeerID list populated, so do that.
-                        for (Peer p : peers) {
-                            // TODO don't access state directly
-                            PeerState s = p.state;
-                            if (s != null) {
-                                BitField bf = s.bitfield;
-                                if (bf != null && bf.get(i)) {
-                                    piece.addPeer(p);
-                                }
+                if (pri[i] >= 0 && !bitfield.get(i) && !want.get(i)) {
+                    Piece piece = new Piece(i);
+                    wantedPieces.add(piece);
+                    wantedBytes += metainfo.getPieceLength(i);
+                    // As connections are already up, new Pieces will
+                    // not have their PeerID list populated, so do that.
+                    for (Peer p : peers) {
+                        // TODO don't access state directly
+                        PeerState s = p.state;
+                        if (s != null) {
+                            BitField bf = s.bitfield;
+                            if (bf != null && bf.get(i)) {
+                                piece.addPeer(p);
                             }
                         }
                     }
@@ -1455,14 +1446,12 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             if (storage == null || storage.getBitField().size() == 0) {
                 return;
             } // XD bug #80
-            if (uploaders.get() < allowedUploaders()) {
-                if (peer.isChoking() && !overUpBWLimit()) {
-                    uploaders.incrementAndGet();
-                    interestedUploaders.incrementAndGet();
-                    peer.setChoking(false);
-                    if (_log.shouldInfo()) {
-                        _log.info("Unchoking [" + peer + "]");
-                    }
+            if (uploaders.get() < allowedUploaders() && peer.isChoking() && !overUpBWLimit()) {
+                uploaders.incrementAndGet();
+                interestedUploaders.incrementAndGet();
+                peer.setChoking(false);
+                if (_log.shouldInfo()) {
+                    _log.info("Unchoking [" + peer + "]");
                 }
             }
         }
@@ -1620,11 +1609,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                                         if (bf == null) {
                                             continue;
                                         }
-                                        if (bf.get(savedPiece)) {
-                                            if (++nonSeeds > 1) {
-                                                skipped = true;
-                                                break outer;
-                                            }
+                                        if (bf.get(savedPiece) && ++nonSeeds > 1) {
+                                            skipped = true;
+                                            break outer;
                                         }
                                     }
                                 }

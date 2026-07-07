@@ -320,9 +320,6 @@ class PeerState implements DataLoader {
             return;
         }
 
-        // Sanity check
-        // There is no check here that we actually have the piece;
-        // this will be caught in loadData() below
         if (piece < 0
                 || piece >= metainfo.getPieces()
                 || begin < 0
@@ -447,9 +444,6 @@ class PeerState implements DataLoader {
      * (including us).
      */
     void pieceMessage(Request req) {
-        int size = req.len;
-        // Now reported byte-by-byte in PartialPiece
-        // peer.downloaded(size);
 
         if (_log.shouldDebug())
             _log.debug(
@@ -481,13 +475,10 @@ class PeerState implements DataLoader {
             }
         }
 
-        // ok done with this one
         synchronized (this) {
             pendingRequest = null;
         }
 
-        // getOutstandingRequest() was called by PeerConnectionIn at the start of the chunk;
-        // if the bandwidth limiter throttled us to zero requests then, try again now
         if (outstandingRequests.isEmpty()) {
             addRequest();
             if (!complete) {
@@ -716,16 +707,12 @@ class PeerState implements DataLoader {
                 bitfield = new BitField(bitfield.getFieldBytes(), meta.getPieces());
             // else no extra
         } else if (havesBeforeMetaInfo != null) {
-            // initialize it now
             bitfield = new BitField(meta.getPieces());
         } else {
-            // it will be initialized later
-            // bitfield = new BitField(meta.getPieces());
         }
         metainfo = meta;
         if (bitfield != null) {
             if (havesBeforeMetaInfo != null) {
-                // set all 'haves' we got before the metainfo in the bitfield
                 for (Integer i : havesBeforeMetaInfo) {
                     if (i.equals(PIECE_ALL)) {
                         bitfield.setAll();

@@ -158,7 +158,8 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
 
         // We don't need more tunnels than we have peers, reduce if so reduce to max(peerCount / 2,
         // 2)
-        int in, out;
+        int in;
+        int out;
         try {
             in = Integer.parseInt(i);
         } catch (NumberFormatException nfe) {

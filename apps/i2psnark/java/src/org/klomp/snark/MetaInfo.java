@@ -776,10 +776,7 @@ public class MetaInfo {
         // otherwise we must create it
         Map<String, BEValue> info = new HashMap<>();
         info.put("name", new BEValue(DataHelper.getUTF8(name)));
-        // BEP 27
         if (privateTorrent != 0) {
-            // switched to number in 0.9.14
-            // info.put("private", new BEValue(DataHelper.getUTF8("1")));
             info.put("private", new BEValue(Integer.valueOf(privateTorrent > 0 ? 1 : 0)));
         }
 
@@ -810,11 +807,7 @@ public class MetaInfo {
             info.put("files", new BEValue(l));
         }
 
-        // TODO BEP 52 meta version and file tree
 
-        // TODO if we add the ability for other keys in the first constructor
-        //if (otherInfo != null)
-        //    info.putAll(otherInfo);
         infoMap = info;
         return Collections.unmodifiableMap(infoMap);
     }
@@ -833,7 +826,6 @@ public class MetaInfo {
             _log.debug(buf.toString());
         }
         byte[] infoBytes = BEncoder.bencode(info);
-        // _log.debug("info bencoded: [" + Base64.encode(infoBytes, true) + "]");
         MessageDigest digest = SHA1.getInstance();
         byte[] hash = digest.digest(infoBytes);
         if (_log.shouldDebug()) {

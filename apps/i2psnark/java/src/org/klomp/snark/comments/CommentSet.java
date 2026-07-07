@@ -38,7 +38,8 @@ import net.i2p.util.SecureFileOutputStream;
 public class CommentSet extends AbstractSet<Comment> {
 
     private final HashMap<Integer, List<Comment>> map;
-    private int size, realSize;
+    private int size;
+    private int realSize;
     private int myRating;
     private int totalRating;
     private int ratingSize;

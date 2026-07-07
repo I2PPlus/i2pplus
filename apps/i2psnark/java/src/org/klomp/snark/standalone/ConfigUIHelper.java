@@ -27,7 +27,6 @@ import net.i2p.util.Translate;
 public class ConfigUIHelper {
 
     private static final String CHECKED = " selected ";
-    private static final String BUNDLE_NAME = "org.klomp.snark.web.messages";
 
     /**
      * Each language has the ISO code, the flag, the name, and the optional country name.

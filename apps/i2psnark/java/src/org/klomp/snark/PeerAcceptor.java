@@ -125,9 +125,8 @@ class PeerAcceptor {
         } else {
             // multitorrent capable, so let's see what we can handle
             PeerCoordinator cur = coordinators.get(peerInfoHash);
-            if (cur != null) {
-                if (DataHelper.eq(cur.getInfoHash(), peerInfoHash)) {
-                    if (cur.needPeers()) {
+            if (cur != null && DataHelper.eq(cur.getInfoHash(), peerInfoHash)) {
+                if (cur.needPeers()) {
                         Peer peer =
                                 new Peer(
                                         socket,
@@ -144,7 +143,6 @@ class PeerAcceptor {
                         socket.close();
                         return;
                     }
-                }
             }
             // this is only reached if none of the coordinators match the infohash
             throw new IOException(

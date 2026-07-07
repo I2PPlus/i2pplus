@@ -273,9 +273,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * @since 0.9.67+
      */
-    private long lastUpBwChange = 0;
 
-    private long lastDownBwChange = 0;
 
     /**
      * "name", "announceURL=websiteURL" pairs '=' in announceURL must be escaped as &#44;
@@ -541,14 +539,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *
      * @since 0.9.30
      */
-    public void startup() {}
+    public void startup() { /* no-op */ }
 
     /**
      * ClientApp method. Does nothing. Doesn't matter, we are only registering.
      *
      * @since 0.9.30
      */
-    public void shutdown(String[] args) {}
+    public void shutdown(String[] args) { /* no-op */ }
 
     /**
      * ClientApp method. Doesn't matter, we are only registering.
@@ -1731,7 +1729,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 && lang.length() >= 2
                 && lang.length() <= 6) {
             int under = lang.indexOf('_');
-            String nlang, ncountry;
+            String nlang;
+            String ncountry;
             if (under > 0 && lang.length() > under + 1) {
                 nlang = lang.substring(0, under);
                 ncountry = lang.substring(under + 1);
@@ -1982,11 +1981,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             changed = true;
         }
 
-        if (theme != null) {
-            if (!theme.equals(_config.getProperty(PROP_THEME))) {
-                _config.setProperty(PROP_THEME, theme);
-                changed = true;
-            }
+        if (theme != null && !theme.equals(_config.getProperty(PROP_THEME))) {
+            _config.setProperty(PROP_THEME, theme);
+            changed = true;
         }
 
         if (_util.collapsePanels() != collapsePanels) {
@@ -2521,8 +2518,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         addMessage(msg);
                         System.out.println(" • " + msg);
                     }
-                    // this would rename the torrent to .BAD
-                    // return false;
                 }
             }
             torrent.startTorrent();
@@ -3926,7 +3921,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *
      * @since 0.9.4
      */
-    public void gotPiece(Snark snark) {}
+    public void gotPiece(Snark snark) { /* no-op */ }
 
     // End Snark.CompleteListeners
 
@@ -4802,8 +4797,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                             + "<span id=diskSpaceInner style='width:%d%%'></span></span>";
             bar = bar.replace(".0", "").replace(" G", "G").replace(" M", "M");
 
-            int gCount = 0, mCount = 0;
-            int gIndex = -1, mIndex = -1;
+            int gCount = 0;
+            int mCount = 0;
+            int gIndex = -1;
+            int mIndex = -1;
 
             for (int i = 0; i < bar.length(); i++) {
                 char ch = bar.charAt(i);

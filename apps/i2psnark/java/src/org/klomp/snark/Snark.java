@@ -27,10 +27,7 @@ import org.klomp.snark.comments.CommentSet;
  * @author Mark Wielaard (mark@klomp.org)
  */
 public class Snark implements StorageListener, CoordinatorListener, ShutdownListener {
-    private static final int MIN_PORT = 6881;
-    private static final int MAX_PORT = 6889;
 
-    private static final String newline = System.getProperty("line.separator");
 
     /** max connections */
     public static final String PROP_MAX_CONNECTIONS = "i2psnark.maxConnections";
@@ -56,7 +53,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     private volatile String trackerProblems;
     private volatile int trackerSeenPeers;
     private volatile boolean _autoStoppable;
-    private volatile String activity = "Not started"; // String indicating main activity
+    private volatile String activity = "Not started";
     private long savedUploaded;
     private long _startedTime;
     private CommentSet _comments;
@@ -944,7 +941,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /** CoordinatorListener - this does nothing */
-    public void peerChange(PeerCoordinator coordinator, Peer peer) {}
+    public void peerChange(PeerCoordinator coordinator, Peer peer) { /* no-op */ }
 
     /**
      * Called when the PeerCoordinator got the MetaInfo via magnet. CoordinatorListener. Create the
@@ -1012,13 +1009,12 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     ///////////// Begin StorageListener methods
 
     /** does nothing */
-    public void storageCreateFile(Storage storage, String name, long length) {}
+    public void storageCreateFile(Storage storage, String name, long length) { /* no-op */ }
 
     // How much storage space has been allocated
-    private long allocated = 0;
 
     /** does nothing */
-    public void storageAllocated(Storage storage, long length) {}
+    public void storageAllocated(Storage storage, long length) { /* no-op */ }
 
     private boolean allChecked;
     private boolean checking;
@@ -1031,7 +1027,6 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @param checked true if the piece hash was correct
      */
     public void storageChecked(Storage storage, int num, boolean checked) {
-        // allocating = false;
         if (!allChecked && !checking) {
             checking = true;
         }
@@ -1103,7 +1098,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     ///////////// End StorageListener methods
 
     /** SnarkShutdown callback unused */
-    public void shutdown() {}
+    public void shutdown() { /* no-op */ }
 
     /**
      * StorageListener and CoordinatorListener callback

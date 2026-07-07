@@ -70,19 +70,11 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
 
     private static final int ACTION_CONNECT = 0;
     private static final int ACTION_ANNOUNCE = 1;
-    private static final int ACTION_SCRAPE = 2;
     private static final int ACTION_ERROR = 3;
 
-    private static final int SEND_CRYPTO_TAGS = 8;
-    private static final int LOW_CRYPTO_TAGS = 4;
 
-    // private static final long CONN_EXPIRATION = 60*1000; // BEP 15
-    // private static final long DEFAULT_TIMEOUT = 15*1000;
-    // private static final long CLEAN_TIME = 163*1000;
     private static final long CONN_EXPIRATION = 3 * 60 * 1000;
     private static final long DEFAULT_TIMEOUT = 90 * 1000;
-    private static final long DEFAULT_QUERY_TIMEOUT = 75 * 1000;
-    private static final long CLEAN_TIME = 2 * 60 * 1000;
 
     /** in seconds */
     private static final int DEFAULT_INTERVAL = 60 * 60;
@@ -690,9 +682,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     }
 
     /** for non-muxed */
-    public void messageAvailable(I2PSession session, int msgId, long size) {}
+    public void messageAvailable(I2PSession session, int msgId, long size) { /* no-op */ }
 
-    public void reportAbuse(I2PSession session, int severity) {}
+    public void reportAbuse(I2PSession session, int severity) { /* no-op */ }
 
     public void disconnected(I2PSession session) {
         if (_log.shouldWarn()) _log.warn("UDPTC disconnected");
@@ -712,7 +704,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
      */
     public static class TrackerResponse {
 
-        private final int interval, complete, incomplete;
+        private final int interval;
+        private final int complete;
+        private final int incomplete;
         private final String error;
         private final Set<Hash> peers;
 
@@ -821,7 +815,6 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         private int interval = DEFAULT_INTERVAL;
         private ConnState state = ConnState.INVALID;
 
-        private static final long DELAY = 15 * 1000;
 
         public Tracker(String host, int port) {
             super(host, port);

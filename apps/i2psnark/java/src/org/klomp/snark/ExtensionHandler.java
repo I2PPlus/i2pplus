@@ -49,7 +49,6 @@ abstract class ExtensionHandler {
     /** Pieces * SHA1 Hash length, + 25% extra for file names, bencoding overhead, etc */
     private static final int MAX_METADATA_SIZE = Storage.MAX_PIECES * 20 * 5 / 4;
 
-    //    private static final int PARALLEL_REQUESTS = 3;
     private static final int PARALLEL_REQUESTS = 8;
 
     /**
@@ -258,13 +257,6 @@ abstract class ExtensionHandler {
                 // Do this here because PeerConnectionOut only reports for PIECE messages
                 peer.uploaded(pc.length);
             } else if (type == TYPE_DATA) {
-                // On close reading of BEP 9, this is the total metadata size.
-                // Prior to 0.9.21, we sent the piece size, so we can't count on it.
-                // just ignore it. The actual length will be verified in saveChunk()
-                // int size = map.get("total_size").getInt();
-                // if (log.shouldDebug())
-                //    log.debug("Received data for " + piece + " length " + size + " from: " +
-                // peer);
                 boolean done;
                 int chk = -1;
                 synchronized (state) {
@@ -356,10 +348,6 @@ abstract class ExtensionHandler {
         Map<String, Object> map = new HashMap<>();
         map.put("msg_type", Integer.valueOf(TYPE_DATA));
         map.put("piece", Integer.valueOf(piece));
-        // BEP 9
-        // "This key has the same semantics as the 'metadata_size' in the extension header"
-        // which apparently means the same value. Fixed in 0.9.21.
-        // map.put("total_size", Integer.valueOf(data.length));
         map.put("total_size", Integer.valueOf(totalSize));
         byte[] dict = BEncoder.bencode(map);
         byte[] payload = new byte[dict.length + data.length];
@@ -404,11 +392,9 @@ abstract class ExtensionHandler {
                 PeerID pID = new PeerID(hash, listener.getUtil());
                 peers.add(pID);
             }
-            // could include ourselves, listener must remove
             listener.gotPeers(peer, peers);
         } catch (Exception e) {
             if (log.shouldInfo()) log.info("PEX messsage exception from [" + peer + "]", e);
-            // peer.disconnect(false);
         }
     }
 
@@ -432,7 +418,6 @@ abstract class ExtensionHandler {
             listener.gotPort(peer, qport, rport);
         } catch (Exception e) {
             if (log.shouldInfo()) log.info("DHT messsage exception from [" + peer + "]", e);
-            // peer.disconnect(false);
         }
     }
 
@@ -526,7 +511,6 @@ abstract class ExtensionHandler {
             }
         } catch (Exception e) {
             if (log.shouldInfo()) log.info("Comment messsage exception from [" + peer + "]", e);
-            // peer.disconnect(false);
         }
     }
 

@@ -120,7 +120,6 @@ public class Storage implements Closeable {
     private static final int BUFSIZE = PeerState.PARTSIZE;
     private static final ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
 
-    private Properties _config;
 
     /** Configuration key for enabling file pre-allocation. */
     public static final String PROP_PREALLOCATE_FILES = "i2psnark.preallocateFiles";
@@ -1369,11 +1368,9 @@ public class Storage implements Closeable {
                     List<List<String>> files = metainfo.getFiles();
                     if (files != null) {
                         createFileFromNames(_base, files.get(i), _util.getFilesPublic());
-                    } else {
-                        if (!_base.createNewFile()) {
-                            throw new IOException(
-                                    "File '" + tf.name + "' was deleted, unable to recreate");
-                        }
+                    } else if (!_base.createNewFile()) {
+                        throw new IOException(
+                                "File '" + tf.name + "' was deleted, unable to recreate");
                     }
                     String msg =
                             "Corrupt file '"
@@ -1632,7 +1629,6 @@ public class Storage implements Closeable {
                             }
                         }
                         raf.seek(start);
-                        // rafs[i].write(bs, off + written, len);
                         pp.write(raf, written, len);
                     } catch (IOException ioe) {
                         try {

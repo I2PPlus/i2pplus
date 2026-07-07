@@ -195,14 +195,10 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                             requests.add(r);
                             lastRequest = r;
                         } else {
-                            // all requests for a piece should be together, but not in practice
-                            // as orphaned requests can get in-between
-                            // break;
                         }
                     }
                 }
 
-                // total values
                 Request first = requests.get(0);
                 Request last = requests.get(requests.size() - 1);
                 int piece = first.getPiece();
@@ -463,10 +459,10 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     @Override
-    public void have(int piece) {}
+    public void have(int piece) { /* no-op */ }
 
     @Override
-    void cancel(int piece) {}
+    void cancel(int piece) { /* no-op */ }
 
     @Override
     void request() {
@@ -480,7 +476,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
 
     @Deprecated
     @Override
-    public void setInteresting(boolean interest) {}
+    public void setInteresting(boolean interest) { /* no-op */ }
 
     @Override
     public boolean isInteresting() {
@@ -488,7 +484,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     @Override
-    public void setChoking(boolean choke) {}
+    public void setChoking(boolean choke) { /* no-op */ }
 
     @Override
     public boolean isChoking() {
@@ -513,10 +509,10 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     }
 
     @Override
-    public void keepAlive() {}
+    public void keepAlive() { /* no-op */ }
 
     @Override
-    public void retransmitRequests() {}
+    public void retransmitRequests() { /* no-op */ }
 
     @Override
     public int completed() {
@@ -735,11 +731,11 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     /**
      * {@inheritDoc}
      */
-    public void headerReceived(String url, int attemptNum, String key, String val) {}
+    public void headerReceived(String url, int attemptNum, String key, String val) { /* no-op */ }
 
     /**
      * {@inheritDoc}
      */
-    public void attempting(String url) {}
+    public void attempting(String url) { /* no-op */ }
 
 }

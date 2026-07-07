@@ -35,19 +35,16 @@ public class Mp3Tags {
             String artist = null;
             String title = null;
             String album = null;
-            String year = null;
 
             if (mp3file.hasId3v2Tag()) {
                 ID3v2 id3v2Tag = mp3file.getId3v2Tag();
                 artist = id3v2Tag.getArtist();
                 album = id3v2Tag.getAlbum();
-                year = id3v2Tag.getYear();
                 title = id3v2Tag.getTitle();
             } else if (mp3file.hasId3v1Tag()) {
                 ID3v1 id3v1Tag = mp3file.getId3v1Tag();
                 artist = id3v1Tag.getArtist();
                 album = id3v1Tag.getAlbum();
-                year = id3v1Tag.getYear();
                 title = id3v1Tag.getTitle();
             } else {
                 return null;
