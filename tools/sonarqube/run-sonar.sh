@@ -159,7 +159,15 @@ STARTED_BY_US=true
 
 echo "Waiting for server to be ready..."
 for i in $(seq 1 180); do
-    if curl -m 2 -s -o /dev/null -w "%{http_code}" "${SONAR_HOST}/api/system/health" 2>/dev/null | grep -qE '200|403|401'; then
+    STATUS=$(curl -m 2 -s "${SONAR_HOST}/api/system/status" 2>/dev/null | python3 -c "
+import sys, json
+try:
+    d = json.load(sys.stdin)
+    print(d.get('status', ''))
+except Exception:
+    print('')
+" 2>/dev/null)
+    if [ "$STATUS" = "UP" ]; then
         echo "Server ready after ${i}s"
         sleep 3
         break
@@ -227,17 +235,17 @@ fi
 
 if [ -z "${SONAR_TOKEN_ARG}" ]; then
     echo "Generating scanner token..."
-    for attempt in 1 2 3; do
-        TOKEN_JSON=$(_get_token)
-        TOKEN=$(echo "$TOKEN_JSON" | python3 -c "import json,sys; print(json.load(sys.stdin).get('token',''))" 2>/dev/null)
+    for attempt in 1 2 3 4 5; do
+        TOKEN_JSON=$(_get_token 2>/dev/null) || true
+        TOKEN=$(echo "$TOKEN_JSON" | python3 -c "import json,sys; print(json.load(sys.stdin).get('token',''))" 2>/dev/null) || true
         if [ -n "$TOKEN" ]; then
             break
         fi
-        echo "  Token generation attempt $attempt failed, retrying in 5s..."
-        sleep 5
+        echo "  Token generation attempt $attempt failed, retrying in 10s..."
+        sleep 10
     done
     if [ -z "$TOKEN" ]; then
-        echo "Error: Failed to generate token after 3 attempts"
+        echo "Error: Failed to generate token after 5 attempts"
         echo "Last response: $TOKEN_JSON"
         exit 1
     fi
