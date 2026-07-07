@@ -73,8 +73,17 @@ public class BuildExecutor implements Runnable {
      * fully collapses.  Previous 8s was too short to prevent repeated storms
      * when the underlying issue was transient.
      */
-    private static final int CONSECUTIVE_FAILURE_THRESHOLD = 5;
-    private static final long POOL_BACKOFF_MS = 12 * 1000L;
+    private static volatile int CONSECUTIVE_FAILURE_THRESHOLD = 5;
+    private static volatile long POOL_BACKOFF_MS = 12 * 1000L;
+
+    /** @since 0.9.70+ */
+    public static int getPoolFailureThreshold() { return CONSECUTIVE_FAILURE_THRESHOLD; }
+    /** @since 0.9.70+ */
+    public static void setPoolFailureThreshold(int val) { CONSECUTIVE_FAILURE_THRESHOLD = Math.max(1, Math.min(20, val)); }
+    /** @since 0.9.70+ */
+    public static long getPoolBackoffMs() { return POOL_BACKOFF_MS; }
+    /** @since 0.9.70+ */
+    public static void setPoolBackoffMs(long val) { POOL_BACKOFF_MS = Math.max(1000, Math.min(60000, val)); }
     private final ConcurrentHashMap<TunnelPool, long[]> _poolFailureState = new ConcurrentHashMap<>(64);
     private int _keepAliveCounter;
     private volatile long _adaptiveTimeout;

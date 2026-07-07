@@ -109,6 +109,15 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("i2ptunnel.serverHandler.threads", "Server Handler Threads");
         DISPLAY_NAMES.put("router.buildHandlerThreads", "Build Handler Threads");
         DISPLAY_NAMES.put("i2ptunnel.clientRunner.max", "Client Runner Max Threads");
+        DISPLAY_NAMES.put("i2p.tunnel.participatingThrottle.minLimit", "Participating Throttle Min");
+        DISPLAY_NAMES.put("i2p.tunnel.participatingThrottle.maxLimit", "Participating Throttle Max");
+        DISPLAY_NAMES.put("i2p.tunnel.participatingThrottle.percentLimit", "Participating Throttle Percent");
+        DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.minLimit", "Request Throttle Min");
+        DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.maxLimit", "Request Throttle Max");
+        DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.percentLimit", "Request Throttle Percent");
+        DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.burst1sThreshold", "Request Throttle Burst Threshold");
+        DISPLAY_NAMES.put("tunnel.pool.failureThreshold", "Pool Build Failure Threshold");
+        DISPLAY_NAMES.put("tunnel.pool.backoffMs", "Pool Build Backoff");
     }
 
     // brief purpose descriptions (<=120 chars)
@@ -191,6 +200,15 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2ptunnel.serverHandler.threads", "Handler thread pool for incoming I2PTunnel connections.");
         PARAM_DESCRIPTIONS.put("router.buildHandlerThreads", "Thread pool for processing inbound tunnel build requests.");
         PARAM_DESCRIPTIONS.put("i2ptunnel.clientRunner.max", "Ceiling for client proxy thread pool; higher = more concurrent clients.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.participatingThrottle.minLimit", "Floor for transit tunnels per peer; higher = more tolerance.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.participatingThrottle.maxLimit", "Ceiling for transit tunnels per peer; higher = more tolerance.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.participatingThrottle.percentLimit", "Percent of total transit tunnels allowed per peer.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.minLimit", "Floor for inbound requests per peer; higher = more tolerance.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.maxLimit", "Ceiling for inbound requests per peer; higher = more tolerance.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.percentLimit", "Percent of total tunnels for inbound requests per peer.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.burst1sThreshold", "Requests per second before burst ban; lower = more aggressive.");
+        PARAM_DESCRIPTIONS.put("tunnel.pool.failureThreshold", "Consecutive failures before pool backoff kicks in.");
+        PARAM_DESCRIPTIONS.put("tunnel.pool.backoffMs", "Pool cooldown duration after failure threshold hit, in ms.");
     }
 
     // display order for subsystems (alphabetical)

@@ -20,6 +20,8 @@ import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.router.tunnel.pool.BuildHandler;
 import net.i2p.router.tunnel.pool.BuildExecutor;
 import net.i2p.router.tunnel.pool.BuildRequestor;
+import net.i2p.router.tunnel.pool.ParticipatingThrottler;
+import net.i2p.router.tunnel.pool.RequestThrottler;
 import net.i2p.router.tunnel.pool.TestJob;
 import net.i2p.router.tunnel.pool.TunnelPoolManager;
 import net.i2p.router.transport.FIFOBandwidthRefiller;
@@ -330,6 +332,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new I2PTunnelServerHandlerThreadsParam());
         _params.add(new I2PTunnelClientRunnerMaxParam());
         _params.add(new BuildHandlerThreadsParam());
+
+        // Throttling
+        _params.add(new ParticipatingThrottleMinParam());
+        _params.add(new ParticipatingThrottleMaxParam());
+        _params.add(new ParticipatingThrottlePctParam());
+        _params.add(new RequestThrottleMinParam());
+        _params.add(new RequestThrottleMaxParam());
+        _params.add(new RequestThrottlePctParam());
+        _params.add(new RequestThrottleBurstParam());
+        // Pool backoff
+        _params.add(new PoolFailureThresholdParam());
+        _params.add(new PoolBackoffMsParam());
 
         // Streaming
         _params.add(new CongestionAvoidanceGrowthParam());
@@ -6459,6 +6473,273 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         private static double clamp(double v) {
             return Math.max(0.0, Math.min(1.0, v));
+        }
+    }
+
+    /**
+     * Tunes the minimum per-participant transit tunnel limit in ParticipatingThrottler.
+     * Raises when we have capacity (high build success, low CPU), lowers under stress.
+     */
+    private class ParticipatingThrottleMinParam extends BaseParam {
+        ParticipatingThrottleMinParam() {
+            super("i2p.tunnel.participatingThrottle.minLimit", "Participating Throttle Min",
+                  SUB_TUNNEL, 1, 500, 4, "tunnel.buildSuccessRate", _context);
+        }
+        protected void applyValue(int value) { ParticipatingThrottler.setParticipatingMinLimit(value); }
+        protected int getRuntimeValue() { return ParticipatingThrottler.getParticipatingMinLimit(); }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
+            boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
+            if (hasCapacity) return Math.min(_max, current + _step);
+            if (stressed) return Math.max(_min, current - _step);
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the maximum per-participant transit tunnel limit in ParticipatingThrottler.
+     */
+    private class ParticipatingThrottleMaxParam extends BaseParam {
+        ParticipatingThrottleMaxParam() {
+            super("i2p.tunnel.participatingThrottle.maxLimit", "Participating Throttle Max",
+                  SUB_TUNNEL, 10, 1000, 8, "tunnel.buildSuccessRate", _context);
+        }
+        protected void applyValue(int value) { ParticipatingThrottler.setParticipatingMaxLimit(value); }
+        protected int getRuntimeValue() { return ParticipatingThrottler.getParticipatingMaxLimit(); }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
+            boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
+            if (hasCapacity) return Math.min(_max, current + _step);
+            if (stressed) return Math.max(_min, current - _step);
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the percentage-based transit tunnel limit in ParticipatingThrottler.
+     */
+    private class ParticipatingThrottlePctParam extends BaseParam {
+        ParticipatingThrottlePctParam() {
+            super("i2p.tunnel.participatingThrottle.percentLimit", "Participating Throttle Pct",
+                  SUB_TUNNEL, 1, 100, 1, "tunnel.buildSuccessRate", _context);
+        }
+        protected void applyValue(int value) { ParticipatingThrottler.setParticipatingPctLimit(value); }
+        protected int getRuntimeValue() { return ParticipatingThrottler.getParticipatingPctLimit(); }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
+            boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
+            if (hasCapacity) return Math.min(_max, current + _step);
+            if (stressed) return Math.max(_min, current - _step);
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the minimum per-peer request throttle limit.
+     */
+    private class RequestThrottleMinParam extends BaseParam {
+        RequestThrottleMinParam() {
+            super("i2p.tunnel.requestThrottle.minLimit", "Request Throttle Min",
+                  SUB_TUNNEL, 1, 100, 2, "tunnel.buildSuccessRate", _context);
+        }
+        protected void applyValue(int value) { RequestThrottler.setRequestMinLimit(value); }
+        protected int getRuntimeValue() { return RequestThrottler.getRequestMinLimit(); }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
+            boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
+            if (hasCapacity) return Math.min(_max, current + _step);
+            if (stressed) return Math.max(_min, current - _step);
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the maximum per-peer request throttle limit.
+     */
+    private class RequestThrottleMaxParam extends BaseParam {
+        RequestThrottleMaxParam() {
+            super("i2p.tunnel.requestThrottle.maxLimit", "Request Throttle Max",
+                  SUB_TUNNEL, 10, 1000, 8, "tunnel.buildSuccessRate", _context);
+        }
+        protected void applyValue(int value) { RequestThrottler.setRequestMaxLimit(value); }
+        protected int getRuntimeValue() { return RequestThrottler.getRequestMaxLimit(); }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
+            boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
+            if (hasCapacity) return Math.min(_max, current + _step);
+            if (stressed) return Math.max(_min, current - _step);
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the percentage-based request throttle limit.
+     */
+    private class RequestThrottlePctParam extends BaseParam {
+        RequestThrottlePctParam() {
+            super("i2p.tunnel.requestThrottle.percentLimit", "Request Throttle Pct",
+                  SUB_TUNNEL, 1, 100, 1, "tunnel.buildSuccessRate", _context);
+        }
+        protected void applyValue(int value) { RequestThrottler.setRequestPctLimit(value); }
+        protected int getRuntimeValue() { return RequestThrottler.getRequestPctLimit(); }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
+            boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
+            if (hasCapacity) return Math.min(_max, current + _step);
+            if (stressed) return Math.max(_min, current - _step);
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the 1-second burst detection threshold in RequestThrottler.
+     * Higher = less sensitive (fewer false positives). Lower = more aggressive (more bans).
+     * Relax when healthy, tighten under stress.
+     */
+    private class RequestThrottleBurstParam extends BaseParam {
+        RequestThrottleBurstParam() {
+            super("i2p.tunnel.requestThrottle.burst1sThreshold", "Request Throttle Burst",
+                  SUB_TUNNEL, 1, 100, 1, "tunnel.buildSuccessRate", _context);
+        }
+        protected void applyValue(int value) { RequestThrottler.setRequestBurst1sThreshold(value); }
+        protected int getRuntimeValue() { return RequestThrottler.getRequestBurst1sThreshold(); }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
+            boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
+            if (hasCapacity) return Math.min(_max, current + _step);
+            if (stressed) return Math.max(_min, current - _step);
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the consecutive failure threshold for pool backoff.
+     * Higher = more tolerant (pools keep building through failures).
+     * Lower = more sensitive (backoff kicks in sooner).
+     */
+    private class PoolFailureThresholdParam extends BaseParam {
+        PoolFailureThresholdParam() {
+            super("tunnel.pool.failureThreshold", "Pool Build Failure Threshold",
+                  SUB_TUNNEL, 1, 20, 1, "tunnel.buildSuccessRate", _context);
+        }
+        protected void applyValue(int value) { BuildExecutor.setPoolFailureThreshold(value); }
+        protected int getRuntimeValue() { return BuildExecutor.getPoolFailureThreshold(); }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean healthy = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
+            boolean failing = !Double.isNaN(observed) && observed < 70;
+            if (healthy) return Math.min(_max, current + 1);
+            if (failing) return Math.max(_min, current - 1);
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the pool backoff duration.
+     * Shorter = faster recovery after failures. Longer = more cooling during storms.
+     */
+    private class PoolBackoffMsParam extends BaseParam {
+        PoolBackoffMsParam() {
+            super("tunnel.pool.backoffMs", "Pool Build Backoff Ms",
+                  SUB_TUNNEL, 1000, 60000, 2000, "tunnel.buildSuccessRate", _context);
+        }
+        protected void applyValue(int value) { BuildExecutor.setPoolBackoffMs(value); }
+        protected int getRuntimeValue() { return (int) BuildExecutor.getPoolBackoffMs(); }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean healthy = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
+            boolean failing = !Double.isNaN(observed) && observed < 70;
+            if (healthy) return Math.max(_min, current - 2000);
+            if (failing) return Math.min(_max, current + 2000);
+            return current;
         }
     }
 }

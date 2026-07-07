@@ -14,6 +14,8 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
+import net.i2p.stat.RateStat;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 import net.i2p.util.SimpleTimer2;
@@ -31,7 +33,7 @@ import net.i2p.util.SimpleTimer2;
  *
  * @since 0.8.4
  */
-class ParticipatingThrottler {
+public class ParticipatingThrottler {
     private final RouterContext context;
     private final ObjectCounter<Hash> counter;
     private final Log _log;
@@ -44,20 +46,28 @@ class ParticipatingThrottler {
     private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
     private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
 
-    // Minimum tunnels per peer - prevents decay floor from being too aggressive at low counts
-    private static int getMinLimit(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.participatingThrottle.minLimit", SystemVersion.isSlow() ? 40 : 80);
-    }
-    // Maximum tunnels per peer - caps individual peer participation
-    private static int getMaxLimit(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.participatingThrottle.maxLimit", SystemVersion.isSlow() ? 150 : 300);
-    }
-    // Percentage-based limit for fast peers - ~10% of total tunnels
-    private static int getPercentLimit(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.participatingThrottle.percentLimit", 10);
-    }
+    /** @since 0.9.70+ */
+    public static volatile int _minLimit = SystemVersion.isSlow() ? 40 : 80;
+    /** @since 0.9.70+ */
+    public static volatile int _maxLimit = SystemVersion.isSlow() ? 150 : 300;
+    /** @since 0.9.70+ */
+    public static volatile int _percentLimit = 10;
+
+    /** @since 0.9.70+ */
+    public static int getParticipatingMinLimit() { return _minLimit; }
+    /** @since 0.9.70+ */
+    public static void setParticipatingMinLimit(int val) { _minLimit = Math.max(1, Math.min(500, val)); }
+    /** @since 0.9.70+ */
+    public static int getParticipatingMaxLimit() { return _maxLimit; }
+    /** @since 0.9.70+ */
+    public static void setParticipatingMaxLimit(int val) { _maxLimit = Math.max(10, Math.min(1000, val)); }
+    /** @since 0.9.70+ */
+    public static int getParticipatingPctLimit() { return _percentLimit; }
+    /** @since 0.9.70+ */
+    public static void setParticipatingPctLimit(int val) { _percentLimit = Math.max(1, Math.min(100, val)); }
     // Cleanup interval in ms - 90 seconds
     private static final long CLEAN_TIME = 90 * 1000L;
+    private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
     private static final String MIN_VERSION = "0.9.66";
 
     /**
@@ -136,6 +146,13 @@ class ParticipatingThrottler {
         this._log = ctx.logManager().getLog(ParticipatingThrottler.class);
         _banLogger = new BanLogger();
         _banLogger.initialize(ctx);
+        // Initialize from config, Tuner will override at runtime
+        _minLimit = ctx.getProperty("i2p.tunnel.participatingThrottle.minLimit", SystemVersion.isSlow() ? 40 : 80);
+        _maxLimit = ctx.getProperty("i2p.tunnel.participatingThrottle.maxLimit", SystemVersion.isSlow() ? 150 : 300);
+        _percentLimit = ctx.getProperty("i2p.tunnel.participatingThrottle.percentLimit", 10);
+        ctx.statManager().createRequiredRateStat("tunnel.throttleParticipatingAccept", "Participating throttle accepts", "Tunnels [Participating]", RATES);
+        ctx.statManager().createRequiredRateStat("tunnel.throttleParticipatingReject", "Participating throttle rejects", "Tunnels [Participating]", RATES);
+        ctx.statManager().createRequiredRateStat("tunnel.throttleParticipatingDrop", "Participating throttle drops", "Tunnels [Participating]", RATES);
         new Cleaner().schedule(CLEAN_TIME);
     }
 
@@ -192,6 +209,13 @@ class ParticipatingThrottler {
         if (checkUnreachableAndOld(version, isUnreachable, isFast, shouldBlockOldRouters, h, shouldDisconnect, isBanned, caps)) return Result.DROP;
 
         rv = evaluateThrottleConditions(count, limit, shouldThrottle, isFast, isLowShare, isUnreachable, h, caps, isBanned, bantime, ri);
+        if (rv == Result.ACCEPT) {
+            context.statManager().addRateData("tunnel.throttleParticipatingAccept", 1);
+        } else if (rv == Result.REJECT) {
+            context.statManager().addRateData("tunnel.throttleParticipatingReject", 1);
+        } else {
+            context.statManager().addRateData("tunnel.throttleParticipatingDrop", 1);
+        }
         return rv;
     }
 
@@ -208,12 +232,15 @@ class ParticipatingThrottler {
      */
     private int calculateLimit(int numTunnels, boolean isUnreachable, boolean isLowShare, boolean isFast) {
         int baseLimit;
+        int minLimit = _minLimit;
+        int maxLimit = _maxLimit;
+        int pctLimit = _percentLimit;
         if (isUnreachable || isLowShare) {
-            baseLimit = Math.min(getMinLimit(context), Math.max(getMaxLimit(context) / 20, numTunnels * (getPercentLimit(context) / 5) / 100));
+            baseLimit = Math.min(minLimit, Math.max(maxLimit / 20, numTunnels * (pctLimit / 5) / 100));
         } else if (IS_SLOW) {
-            baseLimit = Math.min(getMinLimit(context), Math.max(getMaxLimit(context) / 10, numTunnels * (getPercentLimit(context) / 3) / 100));
+            baseLimit = Math.min(minLimit, Math.max(maxLimit / 10, numTunnels * (pctLimit / 3) / 100));
         } else {
-            baseLimit = Math.min((getMinLimit(context) * 3), Math.max(getMaxLimit(context) / 2, numTunnels * getPercentLimit(context) / 100));
+            baseLimit = Math.min((minLimit * 3), Math.max(maxLimit / 2, numTunnels * pctLimit / 100));
         }
 
         // Capacity-based relaxation: if we have plenty of headroom, allow more tunnels per peer
