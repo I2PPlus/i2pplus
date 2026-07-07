@@ -61,8 +61,6 @@ public class I2PSocketEepGet extends EepGet {
 
     public I2PSocketEepGet(I2PAppContext ctx, I2PSocketManager mgr, int numRetries, long minSize, long maxSize,
                            String outputFile, OutputStream outputStream, String url) {
-        // we're using this constructor:
-        // public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort, int numRetries, long minSize, long maxSize, String outputFile, OutputStream outputStream, String url, boolean allowCaching, String etag, String postData) {
         super(ctx, false, null, -1, numRetries, minSize, maxSize, outputFile, outputStream, url, true, null, null);
         _socketManager = mgr;
     }
@@ -213,9 +211,7 @@ public class I2PSocketEepGet extends EepGet {
         _proxyIn = _socket.getInputStream();
         _proxyOut = _socket.getOutputStream();
 
-        // SocketTimeout doesn't take an I2PSocket, but no matter, because we
-        // always close our socket in fetch() above.
-        //timeout.setSocket(_socket);
+
 
         String req = getRequest();
         _proxyOut.write(DataHelper.getUTF8(req));
@@ -239,7 +235,6 @@ public class I2PSocketEepGet extends EepGet {
             ioe.initCause(use);
             throw ioe;
         }
-        //String host = url.getHost();
         String path = url.getRawPath();
         String query = url.getRawQuery();
         if (query != null)
