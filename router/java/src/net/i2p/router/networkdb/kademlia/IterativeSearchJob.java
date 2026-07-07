@@ -853,6 +853,7 @@ public class IterativeSearchJob extends FloodSearchJob {
          */
         int tries;
         Hash peer = null;
+        Set<Hash> failedSnapshot;
 
         synchronized(this) {
             if (_dead) {return;}
@@ -863,6 +864,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 peer = _unheardFrom.iterator().next();
                 _unheardFrom.clear();
             }
+            failedSnapshot = new HashSet<>(_failedPeers);
         }
 
         _facade.complete(_key);
@@ -871,7 +873,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         long graceUntil = getContext().clock().now() + getGracePeriod();
         getContext().statManager().addRateData("netDb.lateReplyCacheSize", _recentlyCompleted.size());
         int added = 0;
-        for (Hash h : _failedPeers) {
+        for (Hash h : failedSnapshot) {
             if (_recentlyCompleted.size() > COMPLETED_CACHE_SIZE) {
                 // Clean expired entries if cache approaching capacity
                 long now = getContext().clock().now();
