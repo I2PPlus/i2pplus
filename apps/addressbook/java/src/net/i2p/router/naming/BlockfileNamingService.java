@@ -392,7 +392,7 @@ public class BlockfileNamingService extends DummyNamingService {
             if (VersionComparator.comp(_version, "2") < 0) {
                 SkipList<Integer, Properties> rev = _bf.getIndex(REVERSE_SKIPLIST, _hashIndexSerializer, _infoSerializer);
                 if (rev == null) {
-                    rev = _bf.makeIndex(REVERSE_SKIPLIST, _hashIndexSerializer, _infoSerializer);
+                    _bf.makeIndex(REVERSE_SKIPLIST, _hashIndexSerializer, _infoSerializer);
                     if (_log.shouldWarn())
                         _log.warn("Created reverse index");
                 }

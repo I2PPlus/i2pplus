@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,7 +20,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -37,7 +35,6 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.I2PAppContext;
-import net.i2p.client.I2PSessionException;
 import net.i2p.client.naming.NamingService;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.I2PSocketManagerFactory;
@@ -55,7 +52,6 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.util.EepGet;
 import net.i2p.util.EepHead;
-import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 
 /**
@@ -110,7 +106,6 @@ public class HostChecker {
             return;
         }
 
-        Properties config = new Properties();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(configFile), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -444,10 +439,8 @@ public class HostChecker {
                     }
                 }
 
-                if (_log.shouldInfo()) {
-                    if (!reachable) {
-                        _log.info("HostChecker lset [FAILURE] -> Found expired LeaseSet " + leaseSetTypes + " for " + hostname);
-                    }
+                if (_log.shouldInfo() && !reachable) {
+                    _log.info("HostChecker lset [FAILURE] -> Found expired LeaseSet " + leaseSetTypes + " for " + hostname);
                 }
 
                 if (reachable && existingResponseTime > -1) {
@@ -464,7 +457,7 @@ public class HostChecker {
                 if (netDb instanceof KademliaNetworkDatabaseFacade) {
                     ((KademliaNetworkDatabaseFacade) netDb).markHostCheckerLeaseSet(destHash);
                 }
-                return lookupLeaseSetRemotely(hostname, destination, destHash, startTime, existingResponseTime);
+                return lookupLeaseSetRemotely(hostname, destHash, startTime, existingResponseTime);
             }
         } catch (Exception e) {
             if (_log.shouldWarn()) {
@@ -541,7 +534,7 @@ public class HostChecker {
      * Perform remote LeaseSet lookup via floodfill network
      * Always returns responseTime of -1 (we measure host response, not lookup time)
      */
-    private PingResult lookupLeaseSetRemotely(String hostname, Destination destination,
+    private PingResult lookupLeaseSetRemotely(String hostname,
                                            Hash destHash, long startTime, long existingResponseTime) {
         try {
             RouterContext routerContext = (RouterContext) _context;
@@ -549,7 +542,6 @@ public class HostChecker {
 
             final boolean[] lookupResult = {false};
             final boolean[] lookupComplete = {false};
-            final Exception[] lookupError = {null};
 
             Job onSuccess = new Job() {
                 @Override
@@ -1022,22 +1014,19 @@ public class HostChecker {
                 String[] parts = line.split(",", 6);
                 boolean isValid = false;
 
-                if (parts.length >= 3) {
-                    // Validate timestamp before parsing
-                    if (parts[0] != null && !parts[0].isEmpty()) {
-                        try {
-                            long timestamp = Long.parseLong(parts[0]);
-                            String hostname = parts[1];
-                            boolean reachable = "y".equals(parts[2]);
-                            String category = parts.length > 3 ? parts[3] : null;
-                            long responseTime = parts.length > 4 ? Long.parseLong(parts[4]) : -1;
-                            String leaseSetTypes = parts.length > 5 ? parts[5] : null;
-                            PingResult result = new PingResult(reachable, timestamp, responseTime, category, leaseSetTypes);
-                            _pingResults.put(hostname, result);
-                            isValid = true;
-                        } catch (NumberFormatException e) {
-                            // Invalid timestamp or responseTime - mark for removal
-                        }
+                if (parts.length >= 3 && parts[0] != null && !parts[0].isEmpty()) {
+                    try {
+                        long timestamp = Long.parseLong(parts[0]);
+                        String hostname = parts[1];
+                        boolean reachable = "y".equals(parts[2]);
+                        String category = parts.length > 3 ? parts[3] : null;
+                        long responseTime = parts.length > 4 ? Long.parseLong(parts[4]) : -1;
+                        String leaseSetTypes = parts.length > 5 ? parts[5] : null;
+                        PingResult result = new PingResult(reachable, timestamp, responseTime, category, leaseSetTypes);
+                        _pingResults.put(hostname, result);
+                        isValid = true;
+                    } catch (NumberFormatException e) {
+                        // Invalid timestamp or responseTime - mark for removal
                     }
                 }
 
@@ -1095,7 +1084,7 @@ public class HostChecker {
             // Ensure parent directory exists
             File parentDir = _hostsCheckFile.getParentFile();
             if (!parentDir.exists()) {
-                boolean created = parentDir.mkdirs();
+                parentDir.mkdirs();
             }
 
             // Write file with explicit error handling
@@ -1554,10 +1543,9 @@ public class HostChecker {
         String category = _hostCategories.get(hostname);
 
         PingResult existing = _pingResults.get(hostname);
-        if (existing != null && existing.leaseSetTypes != null && !existing.leaseSetTypes.equals("[]")) {
-            if (leaseSetTypes == null || leaseSetTypes.equals("[]") || existing.leaseSetTypes.equals(leaseSetTypes)) {
-                leaseSetTypes = existing.leaseSetTypes;
-            }
+        if (existing != null && existing.leaseSetTypes != null && !existing.leaseSetTypes.equals("[]") &&
+            (leaseSetTypes == null || leaseSetTypes.equals("[]") || existing.leaseSetTypes.equals(leaseSetTypes))) {
+            leaseSetTypes = existing.leaseSetTypes;
         }
 
         return new PingResult(reachable, timestamp, responseTime, category, leaseSetTypes);
@@ -2057,15 +2045,13 @@ public class HostChecker {
                 long configuredIntervalMinutes = _pingInterval / 60000;
                 long bufferMinutes = 3;
 
-                if (cycleDurationMinutes > 0 && configuredIntervalMinutes > 0) {
-                    if (cycleDurationMinutes > configuredIntervalMinutes) {
-                        long newInterval = cycleDuration + (bufferMinutes * 60000);
-                        if (_log.shouldWarn()) {
-                            _log.warn("HostChecker cycle took " + cycleDurationMinutes + " minutes, which exceeds configured interval of " +
-                                      configuredIntervalMinutes + " minutes -> Adjusting interval to " + (newInterval / 60000) + " minutes");
-                        }
-                        _pingInterval = newInterval;
+                if (cycleDurationMinutes > 0 && configuredIntervalMinutes > 0 && cycleDurationMinutes > configuredIntervalMinutes) {
+                    long newInterval = cycleDuration + (bufferMinutes * 60000);
+                    if (_log.shouldWarn()) {
+                        _log.warn("HostChecker cycle took " + cycleDurationMinutes + " minutes, which exceeds configured interval of " +
+                                  configuredIntervalMinutes + " minutes -> Adjusting interval to " + (newInterval / 60000) + " minutes");
                     }
+                    _pingInterval = newInterval;
                 }
 
                 // Save ping results to file after each cycle

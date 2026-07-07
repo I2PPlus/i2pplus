@@ -140,14 +140,12 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 			size = total;
 			flush();
 		}
-		//rng = new Random(System.currentTimeMillis());
 	}
 
 	/**
 	 *  Close this skiplist and flush all data to disk.
 	 */
 	public void close() {
-		//System.out.println("Closing index " + size + " and " + spans);
 		flush();
 		spanHash.clear();
 		levelHash.clear();
@@ -247,7 +245,6 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 		}
 		int max = Math.max(hob, super.maxLevels());
 		// 252
-		//int cells = (BlockFile.PAGESIZE - BSkipLevels.HEADER_LEN) / 4;
 		return Math.min(BSkipLevels.MAX_SIZE, max);
 	}
 
@@ -313,23 +310,6 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 		//print();
 		//bf.log.info("*** Lvlck() ***");
 		boolean rv = stack.blvlck(fix);
-	     /****
-		int items = 0;
-		for (SkipIterator iter = this.iterator(); iter.hasNext(); ) {
-			String key = (String) iter.nextKey();
-			if (isMeta) {
-				int sz = ((Integer) iter.next()).intValue();
-				bf.log.info("        Item " + key.toString() + " page " + sz);
-			} else {
-				String cls= iter.next().getClass().getSimpleName();
-				bf.log.info("        Item " + key.toString() + " class " + cls);
-			}
-			items++;
-		}
-		bf.log.warn("    actual size " + items);
-		if (items != this.size)
-			bf.log.warn("****** size mismatch, header = " + this.size + " actual = " + items);
-              ****/
 		return rv;
 	}
 

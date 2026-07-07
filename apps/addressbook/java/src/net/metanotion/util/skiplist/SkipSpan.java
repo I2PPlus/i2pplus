@@ -48,7 +48,9 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
 	/** Array of values */
 	public V[] vals;
 	/** Next and previous spans */
-	public SkipSpan<K, V> next, prev;
+	public SkipSpan<K, V> next;
+	/** Previous span */
+	public SkipSpan<K, V> prev;
 
 	/**
 	 *  Create a new instance of this span type.
@@ -61,12 +63,12 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
 	/**
 	 *  Mark this instance as killed.
 	 */
-	public void killInstance() { }
+	public void killInstance() { /* no-op */ }
 
 	/**
 	 *  Flush this span to disk.
 	 */
-	public void flush() { }
+	public void flush() { /* no-op */ }
 
 	/**
 	 *  Protected constructor for subclasses.
@@ -331,7 +333,6 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
 				}
 
 				nKeys = next.nKeys;
-				//BlockFile.log.error("Killing next span " + next + ") and copying to this span " + this + " in remove of " + key);
 				// Make us point to next.next and him point back to us
 				SkipSpan<K, V> nn = next.next;
 				next.killInstance();
@@ -343,7 +344,6 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
 				this.flush();
 			} else {
 				// Normal situation. We are now empty, kill ourselves
-				//BlockFile.log.error("Killing this span " + this + ", prev " + this.prev + ", next " + this.next);
 				if(this.prev != null) {
 					this.prev.next = this.next;
 					this.prev.flush();
@@ -360,7 +360,6 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
 					res[1] = this;
 				} else {
 					// Never kill first span
-					//BlockFile.log.error("Not killing First span, now empty!!!!!!!!!!!!!!!!!!");
 					this.flush();
 					res[1] = null;
 				}

@@ -133,7 +133,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 		this.firstKey = this.keySer.construct(k);
 		if (this.firstKey == null) {
 			bf.log.error("Null deserialized first key in page " + curPage);
-			repair(1);
+			repair();
 		}
 		if (bf.log.shouldDebug())
 			bf.log.debug("Loaded header for page " + this.page + " containing " + this.nKeys + '/' + this.spanSize + " first key: " + this.firstKey);
@@ -173,7 +173,6 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 		int[] pageCounter = new int[1];
 		pageCounter[0] = HEADER_LEN;
 		int fail = 0;
-		//System.out.println("Span Load " + sz + " nKeys " + nKeys + " page " + curPage);
 		for(int i=0;i<this.nKeys;i++) {
 			if((pageCounter[0] + 4) > BlockFile.PAGESIZE) {
 				BlockFile.pageSeek(this.bf.file, curNextPage[0]);
@@ -198,7 +197,6 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 				lostEntries(i, curPage);
 				break;
 			}
-			//System.out.println("i=" + i + ", Page " + curPage + ", offset " + pageCounter[0] + " ksz " + ksz + " vsz " + vsz);
 			K ckey = this.keySer.construct(k);
 			if (ckey == null) {
 				// skip the value and keep going
@@ -209,7 +207,6 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 			}
 			int diff = ckey.compareTo(key);
 			if (diff == 0) {
-				//System.err.println("Found " + key + " at " + i + " (first: " + this.firstKey + ')');
 				byte[] v = new byte[vsz];
 				try {
 					curPage = this.bf.readMultiPageData(v, curPage, pageCounter, curNextPage);
@@ -225,36 +222,24 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 					fail++;
 				}
 				if (fail > 0)
-					repair(fail);
+					repair();
 				return rv;
 			}
 			if (diff > 0) {
-				//System.err.println("NOT Found " + key + " at " + i + " (first: " + this.firstKey + " current: " + ckey + ')');
 				if (fail > 0)
-					repair(fail);
+					repair();
 				return null;
 			}
 			// skip the value and keep going
 			curPage = this.bf.skipMultiPageBytes(vsz, curPage, pageCounter, curNextPage);
 		}
-		//System.err.println("NOT Found " + key + " at end (first: " + this.firstKey + ')');
 		if (fail > 0)
-			repair(fail);
+			repair();
 		return null;
 	}
 
-        private void repair(int fail) {
-	/*****  needs work
-		try {
-			loadData(false);
-			if (this.nKeys > 0)
-				this.firstKey = this.keys[0];
-			flush();
-			bf.log.error("Repaired corruption of " + fail + " entries");
-		} catch (IOException ioe) {
-			bf.log.error("Failed to repair corruption of " + fail + " entries", ioe);
-		}
-	*****/
+        private void repair() {
+	/* no-op */
 	}
 
 	private IBSkipSpan(BlockFile bf, BSkipList<K, V> bsl) {

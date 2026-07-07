@@ -51,7 +51,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 
 	protected int size;
 
-	public void flush() { }
+	public void flush() { /* no-op */ }
 	protected SkipList() {
         // Protected constructor for subclasses
     }
@@ -65,7 +65,6 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 			throw new IllegalArgumentException("Invalid span size");
 		first = new SkipSpan<>(span);
 		stack = new SkipLevels<>(1, first);
-		//rng = new Random(System.currentTimeMillis());
 	}
 
 	public int size() { return size; }
@@ -108,7 +107,6 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 		SkipLevels<K, V> slvls = stack.put(stack.levels.length - 1, key, val, this);
 		if(slvls != null) {
 			// grow our stack
-			//BlockFile.log.info("Top level old hgt " + stack.levels.length +  " new hgt " + slvls.levels.length);
 			SkipLevels<K, V>[] levels = (SkipLevels<K, V>[]) new SkipLevels[slvls.levels.length];
 			for(int i=0;i < slvls.levels.length; i++) {
 				if(i < stack.levels.length) {

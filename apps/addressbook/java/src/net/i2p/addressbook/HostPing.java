@@ -3,7 +3,6 @@ package net.i2p.addressbook;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -13,7 +12,6 @@ import java.util.Properties;
 import java.util.regex.Pattern;
 
 import net.i2p.I2PAppContext;
-import net.i2p.client.I2PSessionException;
 import net.i2p.client.naming.NamingService;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.I2PSocketManagerFactory;
@@ -27,7 +25,6 @@ import net.i2p.util.Log;
 public class HostPing {
 
     private final I2PAppContext _context;
-    private final Log _log;
     private final NamingService _namingService;
 
     // Default settings matching I2PIng
@@ -46,7 +43,6 @@ public class HostPing {
 
     public HostPing() {
         _context = I2PAppContext.getGlobalContext();
-        _log = _context.logManager().getLog(HostPing.class);
         _namingService = _context.namingService();
     }
 

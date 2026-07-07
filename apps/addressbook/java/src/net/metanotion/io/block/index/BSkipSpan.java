@@ -269,10 +269,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
                 }
             }
         } catch (IOException ioe) { throw new RuntimeException("Error writing to database", ioe); }
-        // FIXME can't get there from here
-        //bsl.size -= fail;
-        //bsl.flush();
-    }
+	}
 
 	/**
 	 *  Load a BSkipSpan from disk.
@@ -356,7 +353,8 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
         this.keys = (K[]) new Comparable[this.spanSize];
         this.vals = (V[]) new Object[this.spanSize];
 
-        int ksz, vsz;
+        int ksz;
+        int vsz;
         int curPage = this.page;
         int[] curNextPage = new int[1];
         curNextPage[0] = this.overflowPage;
@@ -419,14 +417,11 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
             bf.log.error("Repairing corruption of " + fail + " entries");
             if (flushOnError)
                 fflush();
-            // FIXME can't get there from here
-            //bsl.size -= fail;
-            //bsl.flush();
         }
     }
 
-	/**
-	 *  Attempt to recover from corrupt data in this span.
+    /**
+     *  Attempt to recover from corrupt data in this span.
 	 *  All entries starting with firstBadEntry are lost.
 	 *  Zero out the overflow page on lastGoodPage,
 	 *  and correct the number of entries in the first page.

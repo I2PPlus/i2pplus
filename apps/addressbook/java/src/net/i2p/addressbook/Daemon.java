@@ -38,8 +38,6 @@ import net.i2p.data.Destination;
 import net.i2p.util.OrderedProperties;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SystemVersion;
-import net.i2p.addressbook.HostChecker;
-import net.i2p.addressbook.HostCheckerBridge;
 
 /**
  * Main class of addressbook.  Performs updates, and runs the main loop.
@@ -171,7 +169,11 @@ public class Daemon {
                                NamingService publishedNS, AddressBook addressbook,
                                Iterator<Map.Entry<String, HostTxtEntry>> iter, Log log) {
             long start = DEBUG ? System.currentTimeMillis() : 0;
-            int old = 0, nnew = 0, invalid = 0, conflict = 0, total = 0;
+            int old = 0;
+            int nnew = 0;
+            int invalid = 0;
+            int conflict = 0;
+            int total = 0;
             int deleted = 0;
             while(iter.hasNext()) {
                 Map.Entry<String, HostTxtEntry> entry = iter.next();
@@ -179,14 +181,10 @@ public class Daemon {
                 // may be null for 'remove' entries
                 String key = entry.getKey();
                 boolean isKnown;
-                // NOT set for text file NamingService
-                Destination oldDest;
                 if (knownNames != null) {
-                    oldDest = null;
                     isKnown = key != null ? knownNames.contains(key) : false;
                 } else {
-                    oldDest = key != null ? router.lookup(key) : null;
-                    isKnown = oldDest != null;
+                    isKnown = key != null ? router.lookup(key) != null : false;
                 }
                 try {
                     HostTxtEntry he = entry.getValue();
@@ -775,12 +773,12 @@ public class Daemon {
      */
     public static void main(String[] args) {
         Daemon daemon = new Daemon();
-        if (args.length > 0 && "test".equals(args[0])) {daemon.test(args);}
+        if (args.length > 0 && "test".equals(args[0])) {daemon.test();}
         else {daemon.run(args);}
     }
 
     /** @since 0.9.26 */
-    public static void test(String[] args) {
+    public static void test() {
         Properties ctxProps = new Properties();
         String PROP_FORCE = "i2p.naming.blockfile.writeInAppContext";
         ctxProps.setProperty(PROP_FORCE, "true");

@@ -182,8 +182,6 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
 					                    ' ' + print() +
 					                    " i = " + i + ' ' + levels[i]);
 					// This will be fixed in blvlfix() via BlockFile.getIndex()
-					//levels[i] = null;
-					//fail = true;
 				}
 				// TODO also check that the level[] array is not out-of-order
 			} else {
@@ -441,9 +439,8 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
 		for (int i = levels.length - 1; i >= 0; i--) {
 			if (levels[i] != null) {
 				bf.log.info("                level " + i + " -> " + levels[i].key() + " ");
-				if (higher != null) {
-					if (higher.key().compareTo(key()) < 0)
-						bf.log.warn("                Higher level has lower key " + higher.key());
+				if (higher != null && higher.key().compareTo(key()) < 0) {
+					bf.log.warn("                Higher level has lower key " + higher.key());
 				}
 			} else {
 				bf.log.info("                level " + i + " empty");

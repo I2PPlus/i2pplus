@@ -42,7 +42,8 @@ import java.io.RandomAccessFile;
 public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
 	private final File f;
 	private final RandomAccessFile delegate;
-	private final boolean r, w;
+	private final boolean r;
+	private final boolean w;
 
 	public RAIFile(RandomAccessFile file) throws FileNotFoundException {
 		this.f = null;

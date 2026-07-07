@@ -71,12 +71,12 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
 	/**
 	 *  Mark this instance as killed.
 	 */
-	public void killInstance() { }
+	public void killInstance() { /* no-op */ }
 
 	/**
 	 *  Flush this level to disk.
 	 */
-	public void flush() { }
+	public void flush() { /* no-op */ }
 
 	/**
 	 *  Protected constructor for subclasses.

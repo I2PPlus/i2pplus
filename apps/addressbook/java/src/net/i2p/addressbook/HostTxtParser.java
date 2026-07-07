@@ -97,7 +97,8 @@ public class HostTxtParser {
             sprops = null;
             kv = inputLine;
         }
-        String name, dest;
+        String name;
+        String dest;
         if (comment != 0) {
             // we have a name=dest
             String[] splitLine = DataHelper.split(kv, "=", 2);
@@ -274,21 +275,19 @@ public class HostTxtParser {
             System.exit(3);
         }
         Properties p = e.getProps();
-        if (p != null) {
-            if (p.containsKey(HostTxtEntry.PROP_ACTION) ||
-                p.containsKey(HostTxtEntry.PROP_OLDDEST) ||
-                p.containsKey(HostTxtEntry.PROP_OLDNAME) ||
-                p.containsKey(HostTxtEntry.PROP_OLDSIG)) {
-                if (!e.hasValidSig()) {
-                    if (!quiet) {
-                        System.err.println("Bad inner signature for " + e.getName());
-                        for (Map.Entry<?,?> m : p.entrySet()) {
-                            System.err.println(m.getKey() + "=" + m.getValue());
-                        }
-                    }
-                    System.exit(4);
+        if (p != null &&
+            (p.containsKey(HostTxtEntry.PROP_ACTION) ||
+             p.containsKey(HostTxtEntry.PROP_OLDDEST) ||
+             p.containsKey(HostTxtEntry.PROP_OLDNAME) ||
+             p.containsKey(HostTxtEntry.PROP_OLDSIG)) &&
+            !e.hasValidSig()) {
+            if (!quiet) {
+                System.err.println("Bad inner signature for " + e.getName());
+                for (Map.Entry<?,?> m : p.entrySet()) {
+                    System.err.println(m.getKey() + "=" + m.getValue());
                 }
             }
+            System.exit(4);
         }
         if (!quiet) {
             System.err.println("Good signature for " + e.getName());
