@@ -391,7 +391,7 @@ public class ConfigServiceHandler extends FormHandler {
                     if (Boolean.parseBoolean(System.getProperty("java.awt.headless"))) {
                         addFormError(_t("Restart required to take effect"), true);
                     } else {
-                        dtg = new net.i2p.desktopgui.Main(_context, mgr, null);
+                        dtg = new net.i2p.desktopgui.Main(_context, mgr);
                         dtg.startup();
                         addFormNotice(_t("Enabled system tray"), true);
                     }

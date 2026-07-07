@@ -342,7 +342,7 @@ public class RouterConsoleRunner implements RouterApp {
         try {
             if (isSystrayEnabled(_context)) {
                 System.setProperty("java.awt.headless", "false");
-                net.i2p.desktopgui.Main dtg = new net.i2p.desktopgui.Main(_context, _mgr, null);
+                net.i2p.desktopgui.Main dtg = new net.i2p.desktopgui.Main(_context, _mgr);
                 dtg.startup();
             } else {
                 // required true for jrobin to work
