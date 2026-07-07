@@ -7,6 +7,9 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
+      args:
+        - "UID=${UID:-1000}"
+        - "GID=${GID:-1000}"
 
     # Run the container in host network mode for direct access to host network
     network_mode: host

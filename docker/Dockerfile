@@ -30,9 +30,13 @@ COPY --from=builder /tmp/pkg-temp-output .
 COPY docker/rootfs/ /
 RUN chmod a+rx /startapp.sh
 
-# Create i2p user and group
-RUN addgroup -g 1000 i2p && \
-    adduser -D -u 1000 -G i2p -s /bin/sh i2p
+# Create i2p user and group with configurable UID/GID
+# Override at build time: docker compose build --build-arg UID=1001 --build-arg GID=1001
+# Or set UID/GID in .env file (docker compose reads it automatically)
+ARG UID=1000
+ARG GID=1000
+RUN addgroup -g "${GID}" i2p && \
+    adduser -D -u "${UID}" -G i2p -s /bin/sh i2p
 
 # Set ownership for i2p user
 RUN chown -R i2p:i2p ${APP_HOME}

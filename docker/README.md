@@ -28,7 +28,35 @@ Then open http://127.0.0.1:7657 in your browser. The web console binds to `0.0.0
 By default the image limits the memory available to the Java heap to 1024MB. You can override this at runtime with the `-e JVM_XMX=2048m` flag, or by modifying the `JVM_XMX` environment variable in the `docker/rootfs/startapp.sh` file before building.
 
 ### Security
-The container runs as a non-root user `i2p` (UID 1000) for security. If you need to exec into the container for debugging, note that you are running as user `i2p`.
+The container runs as a non-root user `i2p` for security. If you need to exec into the container for debugging, note that you are running as user `i2p`.
+
+#### Custom UID / GID
+By default the `i2p` user is created with UID 1000 and GID 1000. On most Linux systems the first user is 1000, so this works out of the box. If your host user has a different UID/GID (check with `id`), volume-mounted files will be owned by the container's UID/GID instead of yours, causing permission errors.
+
+**Fix at build time with docker compose (recommended):**
+
+Create a `.env` file in the project root (next to `docker-compose.yml`):
+```bash
+UID=1001
+GID=1001
+```
+Then rebuild:
+```bash
+docker compose up --build -d
+```
+
+**Or pass build args directly:**
+```bash
+docker compose build --build-arg UID=1001 --build-arg GID=1001
+docker compose up -d
+```
+
+**Or with plain docker build:**
+```bash
+docker build --build-arg UID=1001 --build-arg GID=1001 -t i2pplus -f docker/Dockerfile .
+```
+
+> **Note:** Changing UID/GID requires a full rebuild (`docker compose build --no-cache`). A previously built image with UID 1000 will still use 1000 regardless of later `.env` changes.
 
 ### Healthcheck
 The image includes a HEALTHCHECK that monitors the router every 5 minutes. You can verify container health with:
