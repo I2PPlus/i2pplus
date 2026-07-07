@@ -32,6 +32,7 @@ import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
 import net.i2p.util.Translate;
 
+import java.nio.charset.StandardCharsets;
 /**
  *  Very simple web server.
  *
@@ -118,7 +119,7 @@ public abstract class LocalHTTPServer {
                                       String query, String proxyNonce, boolean allowGzip) throws IOException {
         // a home page message for the curious...
         if (targetRequest.equals("/")) {
-            out.write(OK.getBytes("UTF-8"));
+            out.write(OK.getBytes(StandardCharsets.UTF_8));
             out.flush();
             return;
         }
@@ -187,7 +188,7 @@ public abstract class LocalHTTPServer {
                 } else {
                     buf.append("\r\nCache-Control: private, no-cache, max-age=2628000\r\nConnection: close\r\n\r\n");
                 }
-                out.write(buf.toString().getBytes("UTF-8"));
+                out.write(buf.toString().getBytes(StandardCharsets.UTF_8));
                 FileUtil.readFile(filename, themesDir.getAbsolutePath(), out);
                 return;
             }
@@ -198,7 +199,7 @@ public abstract class LocalHTTPServer {
         // Do the add and redirect.
         if (targetRequest.equals("/add")) {
             if (query == null) {
-                out.write(ERR_ADD.getBytes("UTF-8"));
+                out.write(ERR_ADD.getBytes(StandardCharsets.UTF_8));
                 return;
             }
             Map<String, String> opts = decodeQuery(query);
@@ -237,14 +238,14 @@ public abstract class LocalHTTPServer {
                 writeRedirectPage(out, success, host, book, url);
                 return;
             }
-            out.write(ERR_ADD.getBytes("UTF-8"));
+            out.write(ERR_ADD.getBytes(StandardCharsets.UTF_8));
 
         } else if (targetRequest.equals("/b32")) {
             // Send a blinding info message (form submit)
             // Parameters are url, host, nonce, code, privkey, secret, action.
             // Store the results and either display them or redirect.
             if (query == null) {
-                out.write(ERR_ADD.getBytes("UTF-8"));
+                out.write(ERR_ADD.getBytes(StandardCharsets.UTF_8));
                 return;
             }
             Map<String, String> opts = decodeQuery(query);
@@ -267,7 +268,7 @@ public abstract class LocalHTTPServer {
                 PublicKey publicKey = null;
                 if (!code.equals("2") && !code.equals("4")) {
                     secret = null;
-                } else if (secret == null || secret.length() == 0) {
+                } else if (secret == null || secret.isEmpty()) {
                     err = _t("Missing lookup password");
                     success = false;
                 }
@@ -280,7 +281,7 @@ public abstract class LocalHTTPServer {
                     privateKey = kp.getPrivate();
                     publicKey = kp.getPublic();
                     authType = action.equals("newdh") ? BlindData.AUTH_DH : BlindData.AUTH_PSK;
-                } else if (privkey == null || privkey.length() == 0) {
+                } else if (privkey == null || privkey.isEmpty()) {
                     err = _t("Missing private key");
                     success = false;
                 } else {
@@ -333,7 +334,7 @@ public abstract class LocalHTTPServer {
                                .append(_t("After you are granted permission, you may proceed to the website."))
                                .append("</p>\n")
                                .append("<p><a href=\"").append(url).append("\">").append(url).append("</a></p></div>");
-                            out.write(buf.toString().getBytes("UTF-8"));
+                            out.write(buf.toString().getBytes(StandardCharsets.UTF_8));
                             I2PTunnelHTTPClientBase.writeFooter(out);
                         } else {
                             writeB32RedirectPage(out, host, url);
@@ -346,11 +347,11 @@ public abstract class LocalHTTPServer {
                     }
                 }
             }
-            out.write(ERR_B32.getBytes("UTF-8"));
+            out.write(ERR_B32.getBytes(StandardCharsets.UTF_8));
             if (err != null)
-                out.write(("\n\n" + err + "\n\n" + _t("Go back and fix the error")).getBytes("UTF-8"));
+                out.write(("\n\n" + err + "\n\n" + _t("Go back and fix the error")).getBytes(StandardCharsets.UTF_8));
         } else {
-            out.write(ERR_404.getBytes("UTF-8"));
+            out.write(ERR_404.getBytes(StandardCharsets.UTF_8));
         }
         out.flush();
     }
@@ -378,18 +379,18 @@ public abstract class LocalHTTPServer {
                   "<!DOCTYPE html>\n<html>\n<head>\n<title>" + _t("Redirecting to {0}", idn) + "</title>\n" + headerLinks +
                   "<meta http-equiv=\"Refresh\" content=\"1; url=" + url + "\">\n</head>\n<body>\n" +
                   "<div class=logo>\n<a href=\"" + conURL + "\" title=\"" + _t("Router Console") + "\">" + logo +
-                  "</a><hr>\n").getBytes("UTF-8"));
+                  "</a><hr>\n").getBytes(StandardCharsets.UTF_8));
         if (pm.isRegistered(PortMapper.SVC_SUSIDNS))
-            out.write(("<a href=\"" + conURL + "susidns/index\">" + _t("Addressbook") + "</a> ").getBytes("UTF-8"));
+            out.write(("<a href=\"" + conURL + "susidns/index\">" + _t("Addressbook") + "</a> ").getBytes(StandardCharsets.UTF_8));
         out.write(("<a href=\"" + conURL + "config\">" + _t("Configuration") + "</a> " +
-                  "<a href=\"" + conURL + "help/\">" + _t("Help") + "</a>\n").getBytes("UTF-8"));
+                  "<a href=\"" + conURL + "help/\">" + _t("Help") + "</a>\n").getBytes(StandardCharsets.UTF_8));
         out.write(("</div>\n<div class=\"warning redirect\" id=warning>\n<h3>" + _t("Redirection in progress") + "&hellip;</h3>\n<br>\n<p><b>" +
                   (success ?
                            _t("Saved {0} to the {1} addressbook, redirecting now.", idn, tbook).replace("now.", "now&hellip;") :
                            _t("Failed to save {0} to the {1} addressbook, redirecting now.", idn, tbook).replace("now.", "now&hellip;")) +
                   "</h3>\n<hr><p><a href=\"" + url + "\">" +
                   _t("Click here if you are not redirected automatically.") +
-                  "</a></p>\n<br></div>\n").getBytes("UTF-8"));
+                  "</a></p>\n<br></div>\n").getBytes(StandardCharsets.UTF_8));
         I2PTunnelHTTPClientBase.writeFooter(out);
         out.flush();
     }
@@ -415,16 +416,16 @@ public abstract class LocalHTTPServer {
                   "<!DOCTYPE html>\n<html>\n<head>\n<title>" + _t("Redirecting to {0}", idn) + "</title>\n" + headerLinks +
                   "<meta http-equiv=\"Refresh\" content=\"1; url=" + url + "\">\n</head>\n<body>\n" +
                   "<div class=logo>\n<a href=\"" + conURL + "\" title=\"" + _t("Router Console") + "\">" + logo +
-                  "</a><hr>\n").getBytes("UTF-8"));
+                  "</a><hr>\n").getBytes(StandardCharsets.UTF_8));
         if (pm.isRegistered(PortMapper.SVC_SUSIDNS))
-            out.write(("<a href=\"" + conURL + "susidns/index\">" + _t("Addressbook") + "</a> ").getBytes("UTF-8"));
+            out.write(("<a href=\"" + conURL + "susidns/index\">" + _t("Addressbook") + "</a> ").getBytes(StandardCharsets.UTF_8));
         out.write(("<a href=\"" + conURL + "config\">" + _t("Configuration") + "</a> " +
-                  "<a href=\"" + conURL + "help/\">" + _t("Help") + "</a>\n").getBytes("UTF-8"));
+                  "<a href=\"" + conURL + "help/\">" + _t("Help") + "</a>\n").getBytes(StandardCharsets.UTF_8));
         out.write(("</div>\n<div class=\"warning redirect\" id=warning>\n<h3>" +
                   _t("Saved the authentication for {0}, redirecting now.", idn).replace("now.", "now&hellip;") +
                   "</b></p>\n<hr>\n<p><a href=\"" + url + "\">" +
                   _t("Click here if you are not redirected automatically.") +
-                  "</a></p>\n<br>\n</div>\n").getBytes("UTF-8"));
+                  "</a></p>\n<br>\n</div>\n").getBytes(StandardCharsets.UTF_8));
         I2PTunnelHTTPClientBase.writeFooter(out);
         out.flush();
     }
@@ -448,7 +449,7 @@ public abstract class LocalHTTPServer {
                 // end of key or value
                 if (valstart < 0)
                     key = query.substring(keystart, i);
-                if (key.length() > 0) {
+                if (!key.isEmpty()) {
                     String decodedKey = decode(key);
                     String value = valstart >= 0 ? query.substring(valstart, i) : "";
                     String decodedValue = decode(value);

@@ -72,7 +72,7 @@ public class SessionConfig extends DataStructureImpl {
      * Really? See also ClientManager.REQUEST_LEASESET_TIMEOUT.
      * If I2CP replay attacks are a thing, there's a lot more to do.
      */
-    private static final long OFFSET_VALIDITY = 3 * 60 * 1000;
+    private static final long OFFSET_VALIDITY = 3 * (long) 60 * 1000;
 
     public SessionConfig() {
         this(null);

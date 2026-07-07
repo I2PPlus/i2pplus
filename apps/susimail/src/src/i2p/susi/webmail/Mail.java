@@ -208,7 +208,7 @@ class Mail {
     * @return Is the e-mail address valid?
     */
     public static boolean validateAddress(String address) {
-        if (address == null || address.length() == 0) {return false;}
+        if (address == null || address.isEmpty()) {return false;}
         address = address.trim();
         if (address.indexOf('\n') != -1 || address.indexOf('\r') != -1) {return false;}
 
@@ -244,7 +244,7 @@ class Mail {
     * @return true if ALL e-mail addresses are valid AND the in parameter was true
     */
     public static boolean getRecipientsFromList(ArrayList<String> recipients, String text, boolean ok) {
-        if (text != null && text.length() > 0) {
+        if (text != null && !text.isEmpty()) {
             String[] ccs = DataHelper.split(text, ",");
             ok = getRecipientsFromList(recipients, ccs, ok);
         }
@@ -266,7 +266,7 @@ class Mail {
                 String recipient = ccs[i].trim();
                 if (validateAddress(recipient)) {
                     String str = getAddress(recipient);
-                    if (str != null && str.length() > 0) {recipients.add(str);}
+                    if (str != null && !str.isEmpty()) {recipients.add(str);}
                     else {ok = false;}
                 }
                 else {ok = false;}
@@ -377,7 +377,7 @@ class Mail {
                     if (headersParsed) {return headerLines;}
                     for (int j = 0; j < headerLines.length; j++) {
                         String line = headerLines[j];
-                        if (line.length() == 0) {break;}
+                        if (line.isEmpty()) {break;}
 
                         String hlc = line.toLowerCase(Locale.US);
                         if (hlc.startsWith("from:")) {

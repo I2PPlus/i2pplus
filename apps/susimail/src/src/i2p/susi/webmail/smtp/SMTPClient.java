@@ -27,6 +27,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.InternalSocket;
 import net.i2p.util.Log;
 
+import java.nio.charset.StandardCharsets;
 /**
  * SMTP client for sending email through SMTP servers over I2P.
  * Supports command pipelining, attachments, and size limits optimized for I2P.
@@ -281,7 +282,7 @@ public class SMTPClient {
                 // in-memory replace, no copies
                 DataHelper.replace(body, "\r\n.\r\n", "\r\n..\r\n");
                 // Do it this way so we don't double the memory
-                out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
+                out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
                 writeMail(out, body, attachments, boundary);
                 out.write("\r\n.\r\n");
                 out.flush();
@@ -294,7 +295,7 @@ public class SMTPClient {
             if (_log.shouldWarn()) {_log.warn("Error sending mail", e);}
             error += _t("Error sending mail") + ": " + e.getMessage() + '\n';
         }
-        if (!mailSent && lastResponse.length() > 0) {
+        if (!mailSent && !lastResponse.isEmpty()) {
             String[] lines = DataHelper.split(lastResponse, "\r");
             for (int i = 0; i < lines.length; i++) {error += lines[i] + '\n';}
         }
@@ -389,7 +390,7 @@ public class SMTPClient {
         public String toString() {
             StringBuilder buf = new StringBuilder();
             buf.append(result);
-            if (recv.length() > 0) {buf.append(' ').append(recv);}
+            if (!recv.isEmpty()) {buf.append(' ').append(recv);}
             return buf.toString();
         }
     }

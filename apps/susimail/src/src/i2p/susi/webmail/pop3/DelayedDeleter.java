@@ -26,8 +26,8 @@ class DelayedDeleter {
     private final Log _log;
     private volatile boolean isDeleting;
     private volatile boolean isDead;
-    private static final long CHECK_TIME = 16*60*1000;
-    private static final long MIN_IDLE = 60*60*1000;
+    private static final long CHECK_TIME = 16*(long) 60*1000;
+    private static final long MIN_IDLE = 60*(long) 60*1000;
 
     /**
      * Creates a new delayed deleter for the given mailbox.

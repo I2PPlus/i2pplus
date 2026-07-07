@@ -1017,8 +1017,8 @@ public class Reseeder {
                 if (_shouldProxySSL && _context.getBooleanProperty(PROP_SPROXY_AUTH_ENABLE)) {
                     String user = _context.getProperty(PROP_SPROXY_USERNAME);
                     String pass = _context.getProperty(PROP_SPROXY_PASSWORD);
-                    if (user != null && user.length() > 0 &&
-                        pass != null && pass.length() > 0)
+                    if (user != null && !user.isEmpty() &&
+                        pass != null && !pass.isEmpty())
                         get.addAuthorization(user, pass);
                 }
             } else {
@@ -1028,8 +1028,8 @@ public class Reseeder {
                 if (_shouldProxyHTTP && _context.getBooleanProperty(PROP_PROXY_AUTH_ENABLE)) {
                     String user = _context.getProperty(PROP_PROXY_USERNAME);
                     String pass = _context.getProperty(PROP_PROXY_PASSWORD);
-                    if (user != null && user.length() > 0 &&
-                        pass != null && pass.length() > 0)
+                    if (user != null && !user.isEmpty() &&
+                        pass != null && !pass.isEmpty())
                         get.addAuthorization(user, pass);
                 }
             }
@@ -1069,8 +1069,8 @@ public class Reseeder {
                 if (_shouldProxySSL && _context.getBooleanProperty(PROP_SPROXY_AUTH_ENABLE)) {
                     String user = _context.getProperty(PROP_SPROXY_USERNAME);
                     String pass = _context.getProperty(PROP_SPROXY_PASSWORD);
-                    if (user != null && user.length() > 0 &&
-                        pass != null && pass.length() > 0)
+                    if (user != null && !user.isEmpty() &&
+                        pass != null && !pass.isEmpty())
                         get.addAuthorization(user, pass);
                 }
             } else {
@@ -1080,8 +1080,8 @@ public class Reseeder {
                 if (_shouldProxyHTTP && _context.getBooleanProperty(PROP_PROXY_AUTH_ENABLE)) {
                     String user = _context.getProperty(PROP_PROXY_USERNAME);
                     String pass = _context.getProperty(PROP_PROXY_PASSWORD);
-                    if (user != null && user.length() > 0 &&
-                        pass != null && pass.length() > 0) {
+                    if (user != null && !user.isEmpty() &&
+                        pass != null && !pass.isEmpty()) {
                         get.addAuthorization(user, pass);
                     }
                 }

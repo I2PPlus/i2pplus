@@ -13,6 +13,7 @@ import net.i2p.data.DataFormatException;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Retrieve / Store the local DHT in a file.
  *
@@ -23,7 +24,7 @@ import net.i2p.util.SecureFileOutputStream;
  */
 abstract class PersistDHT {
 
-    private static final long MAX_AGE = 60 * 60 * 1000;
+    private static final long MAX_AGE = 60 * (long) 60 * 1000;
 
     /**
      * Load the DHT from file, trying the backup if the primary doesn't exist.
@@ -49,7 +50,7 @@ abstract class PersistDHT {
         int count = 0;
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "ISO-8859-1"));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.ISO_8859_1));
             String line = null;
             while ((line = br.readLine()) != null) {
                 if (line.startsWith("#")) continue;
@@ -92,7 +93,7 @@ abstract class PersistDHT {
                     new PrintWriter(
                             new BufferedWriter(
                                     new OutputStreamWriter(
-                                            new SecureFileOutputStream(file), "ISO-8859-1")));
+                                            new SecureFileOutputStream(file), StandardCharsets.ISO_8859_1)));
             out.println("# DHT nodes, format is NID:Hash:Destination:port");
             for (NodeInfo ni : nodes.values()) {
                 if (ni.lastSeen() < maxAge) continue;

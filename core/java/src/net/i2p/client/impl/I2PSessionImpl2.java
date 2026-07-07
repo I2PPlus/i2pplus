@@ -47,13 +47,13 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     protected final Map<Long, MessageState> _sendingStates;
     protected final AtomicLong _sendMessageNonce;
     /** max # seconds to wait for confirmation of the message send */
-    private final static long SEND_TIMEOUT = 60 * 1000; // 60 seconds to send
+    private final static long SEND_TIMEOUT = (long) 60 * 1000; // 60 seconds to send
     /** should we gzip each payload prior to sending it? */
     private final static boolean SHOULD_COMPRESS = true;
     private final static boolean SHOULD_DECOMPRESS = true;
     /** Don't expect any MSMs from the router for outbound traffic @since 0.8.1 */
     protected boolean _noEffort;
-    private static final long REMOVE_EXPIRED_TIME = 63*1000;
+    private static final long REMOVE_EXPIRED_TIME = (long) 63*1000;
     private static final long[] RATES = { 60*1000, 10*60*1000L, 30*60*1000L, 60*60*1000L };
 
     /**

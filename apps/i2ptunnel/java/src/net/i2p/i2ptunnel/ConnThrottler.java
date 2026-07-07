@@ -107,9 +107,9 @@ class ConnThrottler {
     public synchronized void updateLimits(int max, int totalMax, long checkPeriod, long throttlePeriod, long totalThrottlePeriod) {
         _max = max;
         _totalMax = totalMax;
-        _checkPeriod = Math.max(checkPeriod, 10*1000);
-        _throttlePeriod = Math.max(throttlePeriod, 10*1000);
-        _totalThrottlePeriod = Math.max(totalThrottlePeriod, 10*1000);
+        _checkPeriod = Math.max(checkPeriod, (long) 10*1000);
+        _throttlePeriod = Math.max(throttlePeriod, (long) 10*1000);
+        _totalThrottlePeriod = Math.max(totalThrottlePeriod, (long) 10*1000);
     }
 
     /**

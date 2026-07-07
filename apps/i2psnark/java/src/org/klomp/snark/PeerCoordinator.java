@@ -74,11 +74,11 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
     // package local for access by CheckDownLoadersTask
     static final long CHECK_PERIOD =
-            5 * 1000; // update download speed in UI and choke/unchoke tests
+            (long) 5 * 1000; // update download speed in UI and choke/unchoke tests
     static final int MAX_UPLOADERS = 16;
     public static final long MAX_INACTIVE =
-            5 * 60 * 1000; // how long before we disconnect from an inactive peer
-    public static final long MAX_SEED_INACTIVE = 3 * 60 * 1000;
+            5 * (long) 60 * 1000; // how long before we disconnect from an inactive peer
+    public static final long MAX_SEED_INACTIVE = 3 * (long) 60 * 1000;
 
     /**
      * Approximation of the number of current uploaders (unchoked peers), whether interested or not.
@@ -263,7 +263,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 synchronized (rerequestLock) {
                     wasRequestAllowed = false;
                 }
-                schedule(2 * 1000);
+                schedule((long) 2 * 1000);
             }
         }
     }
@@ -496,7 +496,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                         _log.warn("Now throttled, scheduling rerequest timer...");
                     }
                     isRerequestScheduled = true;
-                    rerequestTimer.schedule(3 * 1000);
+                    rerequestTimer.schedule((long) 3 * 1000);
                 }
                 wasRequestAllowed = false;
             }

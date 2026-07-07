@@ -24,7 +24,7 @@ public class Subscriber implements Sink {
     private volatile boolean timerRunning;
 
     private static final int MAX_SUBSCRIPTIONS = 10;
-    private static final long EXPIRATION = 60*1000;
+    private static final long EXPIRATION = (long) 60*1000;
 
     /**
      *  Creates a new subscriber for managing data source connections.

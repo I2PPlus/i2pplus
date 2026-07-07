@@ -63,7 +63,7 @@ public class PasswordManager {
      */
     public boolean checkPlain(String realm, String user, String pw) {
         String pfx = realm;
-        if (user != null && user.length() > 0) pfx += '.' + user;
+        if (user != null && !user.isEmpty()) pfx += '.' + user;
         String s = _context.getProperty(pfx + PROP_PW);
         if (s == null)
             return false;
@@ -78,7 +78,7 @@ public class PasswordManager {
      */
     public boolean checkB64(String realm, String user, String pw) {
         String pfx = realm;
-        if (user != null && user.length() > 0) pfx += '.' + user;
+        if (user != null && !user.isEmpty()) pfx += '.' + user;
         String b64 = _context.getProperty(pfx + PROP_B64);
         if (b64 == null) return false;
         return DataHelper.eqCT(Base64.encode(DataHelper.getUTF8(pw)), b64);
@@ -94,7 +94,7 @@ public class PasswordManager {
      */
     public boolean checkHash(String realm, String user, String pw) {
         String pfx = realm;
-        if (user != null && user.length() > 0) pfx += '.' + user;
+        if (user != null && !user.isEmpty()) pfx += '.' + user;
         String shash = _context.getProperty(pfx + PROP_SHASH);
         if (shash == null) return false;
         return checkHash(shash, pw);
@@ -160,7 +160,7 @@ public class PasswordManager {
      */
     public String getPlain(String realm, String user) {
         String pfx = realm;
-        if (user != null && user.length() > 0) pfx += '.' + user;
+        if (user != null && !user.isEmpty()) pfx += '.' + user;
         return _context.getProperty(pfx + PROP_PW);
     }
 
@@ -171,7 +171,7 @@ public class PasswordManager {
      */
     public String getB64(String realm, String user) {
         String pfx = realm;
-        if (user != null && user.length() > 0) pfx += '.' + user;
+        if (user != null && !user.isEmpty()) pfx += '.' + user;
         String b64 = _context.getProperty(pfx + PROP_B64);
         if (b64 == null) return null;
         return Base64.decodeToString(b64);

@@ -454,7 +454,7 @@ public class Rate {
     public synchronized RateAverages computeAverages(RateAverages out, boolean useLifetime) {
         out.reset();
 
-        final long total = _currentEventCount + _lastEventCount;
+        final long total = (long) _currentEventCount + _lastEventCount;
         out.setTotalEventCount(total);
 
         if (total <= 0) {

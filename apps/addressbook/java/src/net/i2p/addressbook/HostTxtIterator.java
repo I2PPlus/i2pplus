@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import net.i2p.client.naming.HostTxtEntry;
 
+import java.nio.charset.StandardCharsets;
 /**
  *  A class to iterate through a hosts.txt or config file without
  *  reading the whole thing into memory.
@@ -62,7 +63,7 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
      */
     public HostTxtIterator(File file) throws IOException {
             FileInputStream fileStream = new FileInputStream(file);
-            input = new BufferedReader(new InputStreamReader(fileStream, "UTF-8"));
+            input = new BufferedReader(new InputStreamReader(fileStream, StandardCharsets.UTF_8));
     }
 
     /**

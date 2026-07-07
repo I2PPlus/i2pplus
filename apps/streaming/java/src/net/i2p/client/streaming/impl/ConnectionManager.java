@@ -258,7 +258,7 @@ class ConnectionManager {
                 _minuteThrottler == null) {
                _context.statManager().createRateStat("stream.con.throttledMinute", "Dropped for conn limit", "Stream", RATES);
                _minuteThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerMinute(), _defaultOptions.getMaxTotalConnsPerMinute(),
-                                                     60*1000, _timer.getSharedTimer());
+                                                     (long) 60*1000, _timer.getSharedTimer());
             } else if (_minuteThrottler != null) {
                _minuteThrottler.updateLimits(_defaultOptions.getMaxConnsPerMinute(), _defaultOptions.getMaxTotalConnsPerMinute());
             }
@@ -266,7 +266,7 @@ class ConnectionManager {
                 _hourThrottler == null) {
                _context.statManager().createRateStat("stream.con.throttledHour", "Dropped for conn limit", "Stream", RATES);
                _hourThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerHour(), _defaultOptions.getMaxTotalConnsPerHour(),
-                                                   60*60*1000, _timer.getSharedTimer());
+                                                   60*(long) 60*1000, _timer.getSharedTimer());
             } else if (_hourThrottler != null) {
                _hourThrottler.updateLimits(_defaultOptions.getMaxConnsPerHour(), _defaultOptions.getMaxTotalConnsPerHour());
             }
@@ -274,7 +274,7 @@ class ConnectionManager {
                 _dayThrottler == null) {
                _context.statManager().createRateStat("stream.con.throttledDay", "Dropped for conn limit", "Stream", RATES);
                _dayThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerDay(), _defaultOptions.getMaxTotalConnsPerDay(),
-                                                  24*60*60*1000, _timer.getSharedTimer());
+                                                  24*60*(long) 60*1000, _timer.getSharedTimer());
             } else if (_dayThrottler != null) {
                _dayThrottler.updateLimits(_defaultOptions.getMaxConnsPerDay(), _defaultOptions.getMaxTotalConnsPerDay());
             }
@@ -787,7 +787,7 @@ class ConnectionManager {
         if (!_currentBlacklist.equals(hashes)) {
             // rebuild _globalBlacklist when property changes
             synchronized(_globalBlacklist) {
-                if (hashes.length() > 0) {
+                if (!hashes.isEmpty()) {
                     Set<Hash> newSet = new HashSet<>();
                     StringTokenizer tok = new StringTokenizer(hashes, ",; ");
                     while (tok.hasMoreTokens()) {
@@ -807,7 +807,7 @@ class ConnectionManager {
                 }
             }
         }
-        if (hashes.length() > 0 && _globalBlacklist.contains(h))
+        if (!hashes.isEmpty() && _globalBlacklist.contains(h))
             return new Reason("Blacklisted globally", MAX_TIME);
 
         if (_defaultOptions.isAccessListEnabled() &&

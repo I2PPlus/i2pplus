@@ -25,6 +25,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 import net.i2p.data.DataHelper;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Bean for managing and displaying subscription log entries and statistics.
  *
@@ -68,7 +69,7 @@ public class LogBean extends BaseBean
         if (log.isFile()) {
             BufferedReader br = null;
             try {
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(log), "UTF-8"));
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(log), StandardCharsets.UTF_8));
                 List<String> lines = new ArrayList<>(maxLines);
                 String line;
                 while ((line = br.readLine()) != null) {
@@ -115,7 +116,7 @@ public class LogBean extends BaseBean
             reloadLog();
             message = _t("Subscription log reloaded.");
         }
-        if (message.length() > 0) {message = "<p class=\"messages\">" + message + "</p>";}
+        if (!message.isEmpty()) {message = "<p class=\"messages\">" + message + "</p>";}
         return message;
     }
 
@@ -156,7 +157,7 @@ public class LogBean extends BaseBean
         if (log.isFile()) {
             BufferedReader br = null;
             try {
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(log), "UTF-8"));
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(log), StandardCharsets.UTF_8));
                 String line;
                 while ((line = br.readLine()) != null) {
                     if (!line.contains("Bad hostname")) {

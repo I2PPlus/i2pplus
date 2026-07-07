@@ -294,7 +294,7 @@ public class I2PControlController implements RouterApp {
                                                   new HttpConnectionFactory(httpConfig));
         ssl.setHost(address);
         ssl.setPort(port);
-        ssl.setIdleTimeout(90*1000);  // default 10 sec
+        ssl.setIdleTimeout((long) 90*1000);  // default 10 sec
         // all with same name will use the same thread pool
         ssl.setName("I2PControl");
 

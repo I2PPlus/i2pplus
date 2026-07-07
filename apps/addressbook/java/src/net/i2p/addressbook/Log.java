@@ -32,6 +32,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import java.nio.charset.StandardCharsets;
 /**
  * A simple log with automatic time stamping.
  *
@@ -62,7 +63,7 @@ class Log {
      *            A String containing a message to append to the log.
      */
     public void append(String entry) {
-        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.file, true), "UTF-8"))) {
+        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.file, true), StandardCharsets.UTF_8))) {
             String timestamp = Instant.now().toString();
             bw.write(timestamp);
             bw.write(" -- ");
@@ -82,7 +83,7 @@ class Log {
                 for (int i = remove; i < lines.size(); i++) {
                     sb.append(fixEntry(lines.get(i))).append('\n');
                 }
-                Files.write(path, sb.toString().getBytes("UTF-8"));
+                Files.write(path, sb.toString().getBytes(StandardCharsets.UTF_8));
             }
         } catch (IOException e) { /* ignored */ }
     }

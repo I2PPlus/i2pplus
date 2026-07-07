@@ -27,7 +27,7 @@ public class StatHelper extends HelperBase {
      * Set full flag for stats generation
      */
     public void setFull(String f) {
-        _full = f != null && f.length() > 0;
+        _full = f != null && !f.isEmpty();
     }
 
     /**

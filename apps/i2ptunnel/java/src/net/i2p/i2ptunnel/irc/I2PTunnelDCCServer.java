@@ -61,7 +61,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
     private static final int MAX_I2P_PORT = 65535;
     private static final int MAX_OUTGOING_PENDING = 20;
     private static final int MAX_OUTGOING_ACTIVE = 20;
-    private static final long OUTBOUND_EXPIRE = 30*60*1000;
+    private static final long OUTBOUND_EXPIRE = 30*(long) 60*1000;
     private static final long DEFAULT_DCC_READ_TIMEOUT = -1;
 
     /**

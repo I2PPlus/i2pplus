@@ -54,7 +54,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     protected final Log _log;
     protected final I2PAppContext _context;
     protected final Logging l;
-    static final long DEFAULT_CONNECT_TIMEOUT = 90*1000;
+    static final long DEFAULT_CONNECT_TIMEOUT = (long) 90*1000;
     private static final AtomicLong __clientId = new AtomicLong();
     protected long _clientId;
     protected final Object sockLock = new Object(); // Guards sockMgr and mySockets
@@ -523,7 +523,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 verifySocketManager();
                 if (sockMgr == null) {
                     _log.error("Unable to connect to router and build tunnels for [" + _handlerName + "]");
-                    try {Thread.sleep(10*1000);}
+                    try {Thread.sleep((long) 10*1000);}
                     catch (InterruptedException ie) {return;}
                 }
             }

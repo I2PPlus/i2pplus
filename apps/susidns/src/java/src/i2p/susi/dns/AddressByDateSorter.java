@@ -33,9 +33,9 @@ public class AddressByDateSorter implements Comparator<AddressBean>, Serializabl
         String bd = b.getProp("a");
         long al;
         long bl;
-        if (ad.length() > 0) {al = Long.parseLong(ad);}
+        if (!ad.isEmpty()) {al = Long.parseLong(ad);}
         else {al = 0;}
-        if (bd.length() > 0) {bl = Long.parseLong(bd);}
+        if (!bd.isEmpty()) {bl = Long.parseLong(bd);}
         else {bl = 0;}
         if (al < bl) {return 1;}
         if (al > bl) {return -1;}

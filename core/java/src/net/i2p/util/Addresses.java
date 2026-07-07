@@ -32,6 +32,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.apache.http.conn.util.InetAddressUtils;
 import net.i2p.data.DataHelper;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Methods to get the local addresses, and other IP utilities.
  * <p>
@@ -50,7 +51,7 @@ public abstract class Addresses {
     }
 
     private static final File IF_INET6_FILE = new File("/proc/net/if_inet6");
-    private static final long INET6_CACHE_EXPIRE = 10*60*1000;
+    private static final long INET6_CACHE_EXPIRE = 10 * (long) 60 * 1000;
     private static final boolean INET6_CACHE_ENABLED = !SystemVersion.isMac() && !SystemVersion.isWindows() &&
                                                     !SystemVersion.isAndroid() && IF_INET6_FILE.exists();
     private static final int FLAG_PERMANENT = 0x80;
@@ -936,7 +937,7 @@ public abstract class Addresses {
         _ifCache.clear();
         BufferedReader in = null;
         try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(IF_INET6_FILE), "ISO-8859-1"), 1024);
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(IF_INET6_FILE), StandardCharsets.ISO_8859_1), 1024);
             String line = null;
             StringBuilder buf = new StringBuilder(40);
             while ((line = in.readLine()) != null) {
@@ -1327,7 +1328,7 @@ public abstract class Addresses {
         if (f.exists()) {
             BufferedReader in = null;
             try {
-                in = new BufferedReader(new InputStreamReader(new FileInputStream(f), "ISO-8859-1"), 64);
+                in = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.ISO_8859_1), 64);
                 String line = in.readLine();
                 if (line != null) {
                     try {

@@ -229,7 +229,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
      */
     static Destination lookupDest(I2PSession session, String name) throws I2PSessionException {
         // session will convert b32 to hash, no need to do it here
-        return session.lookupDest(name, 10*1000);
+        return session.lookupDest(name, (long) 10*1000);
     }
 
     /**

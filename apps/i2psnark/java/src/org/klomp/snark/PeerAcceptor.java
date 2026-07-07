@@ -30,7 +30,7 @@ class PeerAcceptor {
     final PeerCoordinatorSet coordinators;
 
     /** shorten timeout while reading handshake */
-    private static final long HASH_READ_TIMEOUT = 45 * 1000;
+    private static final long HASH_READ_TIMEOUT = (long) 45 * 1000;
 
     /**
      * Creates a single-torrent PeerAcceptor.

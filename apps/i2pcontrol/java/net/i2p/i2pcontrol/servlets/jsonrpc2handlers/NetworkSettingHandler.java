@@ -245,7 +245,7 @@ public class NetworkSettingHandler implements RequestHandler {
                     Integer percent;
                     try {
                         percent = Integer.parseInt(inParam);
-                        if (percent < 0 || percent > 100 || inParam.length() == 0) {
+                        if (percent < 0 || percent > 100 || inParam.isEmpty()) {
                             throw new NumberFormatException();
                         }
                     } catch (NumberFormatException e) {
@@ -268,7 +268,7 @@ public class NetworkSettingHandler implements RequestHandler {
                 Integer rate;
                 try {
                     rate = Integer.parseInt(inParam);
-                    if (rate < 0 || inParam.length() == 0) {
+                    if (rate < 0 || inParam.isEmpty()) {
                         throw new NumberFormatException();
                     }
                 } catch (NumberFormatException e) {
@@ -298,7 +298,7 @@ public class NetworkSettingHandler implements RequestHandler {
                 Integer rate;
                 try {
                     rate = Integer.parseInt(inParam);
-                    if (rate < 0 || inParam.length() == 0)
+                    if (rate < 0 || inParam.isEmpty())
                         throw new NumberFormatException();
                 } catch (NumberFormatException e) {
                     return new JSONRPC2Response(

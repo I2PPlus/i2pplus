@@ -73,8 +73,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     private static final int ACTION_ERROR = 3;
 
 
-    private static final long CONN_EXPIRATION = 3 * 60 * 1000;
-    private static final long DEFAULT_TIMEOUT = 90 * 1000;
+    private static final long CONN_EXPIRATION = 3 * (long) 60 * 1000;
+    private static final long DEFAULT_TIMEOUT = (long) 90 * 1000;
 
     /** in seconds */
     private static final int DEFAULT_INTERVAL = 60 * 60;

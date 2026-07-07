@@ -56,7 +56,7 @@ class ConnectionAcceptor implements Runnable {
     private final SimpleTimer2.TimedEvent _cleaner;
     private volatile boolean stop; // protocol errors before blacklisting.
     private static final int MAX_BAD = 1;
-    private static final long BAD_CLEAN_INTERVAL = 15 * 60 * 1000;
+    private static final long BAD_CLEAN_INTERVAL = 15 * (long) 60 * 1000;
 
     /** Multitorrent. Caller MUST call startAccepting() */
     public ConnectionAcceptor(I2PSnarkUtil util, PeerCoordinatorSet set) {
@@ -160,7 +160,7 @@ class ConnectionAcceptor implements Runnable {
                     break;
                 }
                 try {
-                    Thread.sleep(10 * 1000);
+                    Thread.sleep((long) 10 * 1000);
                 } catch (InterruptedException ie) { /* ignored */ }
                 serverSocket = _util.getServerSocket();
             }
@@ -224,14 +224,14 @@ class ConnectionAcceptor implements Runnable {
                     System.out.println(" • " + msg);
                 }
                 try {
-                    Thread.sleep(2 * 60 * 1000);
+                    Thread.sleep(2 * (long) 60 * 1000);
                 } catch (InterruptedException ie) { /* ignored */ }
                 while (true) {
                     if (_util.connected() || _util.connect()) {
                         break;
                     }
                     try {
-                        Thread.sleep(60 * 1000);
+                        Thread.sleep((long) 60 * 1000);
                     } catch (InterruptedException ie) {
                         break;
                     }

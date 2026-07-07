@@ -38,7 +38,7 @@ import net.i2p.util.SimpleTimer2;
 class AccessFilter implements StatefulConnectionFilter {
 
     private static final long PURGE_INTERVAL = 1000;
-    private static final long SYNC_INTERVAL = 5 * 1000;
+    private static final long SYNC_INTERVAL = (long) 5 * 1000;
     private static final int MAX_STORED_DESTS = 1024;
 
     /**

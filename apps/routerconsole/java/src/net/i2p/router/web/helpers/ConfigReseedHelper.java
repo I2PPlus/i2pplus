@@ -100,7 +100,7 @@ public class ConfigReseedHelper extends HelperBase {
         List<String> URLList = new ArrayList<>(16);
         while (tok.hasMoreTokens()) {
             String s = tok.nextToken().trim();
-            if (s.length() > 0)
+            if (!s.isEmpty())
                 URLList.add(s);
         }
         return URLList;

@@ -22,7 +22,7 @@ public class Frequency {
     /** @param period ms */
     public Frequency(long period) {
         _period = period;
-        _avgInterval = period + 1;
+        _avgInterval = (long) period + 1;
         _minAverageInterval = _avgInterval;
     }
 
@@ -122,7 +122,7 @@ public class Frequency {
 
             if (interval >= _period && !eventOccurred) {
                 // ensure getAverageEventsPerPeriod() will return 0
-                _avgInterval = _period + 1;
+                _avgInterval = (long) _period + 1;
             } else {
                 double oldWeight = 1 - (interval / (float) _period);
                 double newWeight = (interval / (float) _period);

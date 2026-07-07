@@ -28,8 +28,8 @@ class BackgroundChecker {
 
     private static final int DEFAULT_CHECK_MINUTES = 3*60;
     private static final int MIN_CHECK_MINUTES = 15;
-    private static final long MIN_IDLE = 30*60*1000;
-    private static final long MIN_SINCE = 60*60*1000;
+    private static final long MIN_IDLE = 30*(long) 60*1000;
+    private static final long MIN_SINCE = 60*(long) 60*1000;
 
     /**
      * Creates a new background checker for the given mailbox.

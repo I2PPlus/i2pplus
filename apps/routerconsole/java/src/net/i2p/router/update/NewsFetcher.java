@@ -58,6 +58,7 @@ import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
 import org.cybergarage.xml.Node;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Task to fetch updates to the news.xml, and to keep
  * track of whether that has an announcement for a new version.
@@ -82,7 +83,7 @@ class NewsFetcher extends UpdateRunner {
     static final String PROP_BLOCKLIST_TIME = "router.blocklistVersion";
     private static final String BLOCKLIST_DIR = "docs/feed/blocklist";
     private static final String BLOCKLIST_FILE = "blocklist.txt";
-    private static final long DEFAULT_TIMEOUT = 60*1000;
+    private static final long DEFAULT_TIMEOUT = (long) 60*1000;
 
     public NewsFetcher(RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris) {
         this(ctx, mgr, uris, DEFAULT_TIMEOUT);
@@ -206,7 +207,7 @@ class NewsFetcher extends UpdateRunner {
         else {buf.append("?lang=");}
         buf.append(lang);
         String co = Translate.getCountry(_context);
-        if (co.length() > 0) {buf.append('_').append(co);}
+        if (!co.isEmpty()) {buf.append('_').append(co);}
         try {return new URI(buf.toString());}
         catch (URISyntaxException use) {return uri;}
     }
@@ -718,7 +719,7 @@ class NewsFetcher extends UpdateRunner {
         boolean fail = false;
         BufferedWriter out = null;
         try {
-            out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(f), "UTF-8"));
+            out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(f), StandardCharsets.UTF_8));
             out.write("# ");
             out.write(ble.supdated);
             out.newLine();
@@ -760,7 +761,7 @@ class NewsFetcher extends UpdateRunner {
         NewsMetadata.Release latestRelease = data.releases.get(0);
         Writer out = null;
         try {
-            out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(to), "UTF-8"));
+            out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(to), StandardCharsets.UTF_8));
             out.write("<!--\n");
             // update metadata in old format
             out.write(VERSION_PREFIX);

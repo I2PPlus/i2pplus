@@ -643,7 +643,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 _log.warn("Waiting for router restart...");
                 closeSilently(i2ps);
                 try {
-                    Thread.sleep(2 * 60 * 1000);
+                    Thread.sleep(2 * (long) 60 * 1000);
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
                 }
@@ -653,7 +653,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 _log.warn("Error accepting server socket connection, attempting to recover...", ipe);
                 closeSilently(i2ps);
                 try {
-                    Thread.sleep(10 * 1000);
+                    Thread.sleep((long) 10 * 1000);
                     i2pss = sockMgr.getServerSocket();
                     if (i2pss == null) {
                         throw new I2PException("Failed to recreate server socket");
@@ -681,7 +681,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                     _log.error("Error accepting server socket connection \n* " + ce.getMessage());
                 }
                 try {
-                    Thread.sleep(2 * 60 * 1000);
+                    Thread.sleep(2 * (long) 60 * 1000);
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
                 }

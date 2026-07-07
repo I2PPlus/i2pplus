@@ -50,7 +50,7 @@ public class ConfigClientsHandler extends FormHandler {
         // set action for when CR is hit in a text input box
         if (_action.length() <= 0) {
             String url = getJettyString("pluginURL");
-            if (url != null && url.length() > 0)
+            if (url != null && !url.isEmpty())
                 _action = "Install Plugin";
             else
                 _action = "Save Client Configuration";
@@ -276,7 +276,7 @@ public class ConfigClientsHandler extends FormHandler {
             isAdvanced()) {
             int newClient = clients.size();
             String newDesc = getJettyString("nofilter_desc" + newClient);
-            if (newDesc != null && newDesc.trim().length() > 0) {
+            if (newDesc != null && !newDesc.trim().isEmpty()) {
                 // new entry
                 int spc = newDesc.indexOf(' ');
                 String clss = newDesc;
@@ -287,7 +287,7 @@ public class ConfigClientsHandler extends FormHandler {
                 }
                 String name = getJettyString("nofilter_name" + newClient);
                 if (name == null || name.trim().length() <= 0) name = "new client";
-                ClientAppConfig ca = new ClientAppConfig(clss, name, args, 2*60*1000,
+                ClientAppConfig ca = new ClientAppConfig(clss, name, args, 2*(long) 60*1000,
                                                          _settings.get(newClient + ".enabled") == null);  // true for disabled
                 clients.add(ca);
                 saveClients.add(ca);
@@ -477,7 +477,7 @@ public class ConfigClientsHandler extends FormHandler {
                 } catch (InterruptedException ie) { /* ignored */ }
              }
              String status = mgr.getStatus();
-             if (status != null && status.length() > 0)
+             if (status != null && !status.isEmpty())
                  addFormNoticeNoEscape(status);
         } catch (IOException ioe) {
             addFormError(_t("Install from file failed") + " - " + ioe.getLocalizedMessage(), true);
@@ -605,7 +605,7 @@ public class ConfigClientsHandler extends FormHandler {
             String name = ConfigClientsHelper.stripHTML(props, "consoleLinkName_" + Messages.getLanguage(_context));
             if (name == null) {name = ConfigClientsHelper.stripHTML(props, "consoleLinkName");}
             String url = ConfigClientsHelper.stripHTML(props, "consoleLinkURL");
-            if (name != null && url != null && name.length() > 0 && url.length() > 0) {
+            if (name != null && url != null && !name.isEmpty() && !url.isEmpty()) {
                 app = "<a href=\"" + url + "\" target=_blank>" + name + "</a>";
                 addFormNoticeNoEscape(_t("Started plugin {0}", app), true);
             } else {addFormNotice(_t("Started plugin {0}", app), true);}
@@ -634,7 +634,7 @@ public class ConfigClientsHandler extends FormHandler {
         }
         String user = getJettyString("user");
         String pw = getJettyString("nofilter_pw");
-        if (user != null && pw != null && user.length() > 0 && pw.length() > 0) {
+        if (user != null && pw != null && !user.isEmpty() && !pw.isEmpty()) {
             ConsolePasswordManager mgr = new ConsolePasswordManager(_context);
             mgr.saveHash(ConfigClientsHelper.PROP_AUTH, user, pw);
             addFormNotice(_t("Added user {0}", user), true);

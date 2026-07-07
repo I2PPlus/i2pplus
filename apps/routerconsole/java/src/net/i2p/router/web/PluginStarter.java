@@ -179,18 +179,18 @@ public class PluginStarter implements Runnable {
             int loop = 0;
             while (!ctx.router().isRunning()) {
                 try {
-                    Thread.sleep(10*1000);
+                    Thread.sleep((long) 10*1000);
                 } catch (InterruptedException ie) { return; }
                 // 30 minutes
                 if (loop++ > 180) return;
             }
             // wait for proxy
-            mgr.update(TYPE_DUMMY, 3*60*1000);
+            mgr.update(TYPE_DUMMY, 3*(long) 60*1000);
             mgr.notifyProgress(null, Messages.getString("Checking for plugin updates", ctx));
             loop = 0;
             do {
                 try {
-                    Thread.sleep(5*1000);
+                    Thread.sleep((long) 5*1000);
                 } catch (InterruptedException ie) { break; }
                 if (loop++ > 40) break;
             } while (mgr.isUpdateInProgress(TYPE_DUMMY));
@@ -221,7 +221,7 @@ public class PluginStarter implements Runnable {
                 log.warn("Checking for update plugin: " + appName);
 
             // blocking
-            if (mgr.checkAvailable(PLUGIN, appName, 60*1000) == null) {
+            if (mgr.checkAvailable(PLUGIN, appName, (long) 60*1000) == null) {
                 if (log.shouldWarn())
                     log.warn("No update available for plugin: " + appName);
                 continue;
@@ -231,13 +231,13 @@ public class PluginStarter implements Runnable {
                 log.warn("Updating plugin: " + appName);
             // non-blocking
             // mgr.update(PLUGIN, appName, 30*60*1000); // 30 minutes sidebar notification persistence
-            mgr.update(PLUGIN, appName, 3*60*1000); // 3 minutes sidebar notification persistence
+            mgr.update(PLUGIN, appName, 3*(long) 60*1000); // 3 minutes sidebar notification persistence
             int loop = 0;
             do {
                 // only wait for 4 minutes, then we will
                 // keep going
                 try {
-                    Thread.sleep(5*1000);
+                    Thread.sleep((long) 5*1000);
                 } catch (InterruptedException ie) { /* ignored */ }
                 if (loop++ > 48) break;
             } while (mgr.isUpdateInProgress(PLUGIN, appName));
@@ -542,7 +542,7 @@ public class PluginStarter implements Runnable {
         if (name == null)
             name = stripHTML(props, "consoleLinkName");
         String url = stripHTML(props, "consoleLinkURL");
-        if (name != null && url != null && name.length() > 0 && url.length() > 0) {
+        if (name != null && url != null && !name.isEmpty() && !url.isEmpty()) {
             String tip = stripHTML(props, "consoleLinkTooltip_" + Messages.getLanguage(ctx));
             if (tip == null)
                 tip = stripHTML(props, "consoleLinkTooltip");
@@ -820,7 +820,7 @@ public class PluginStarter implements Runnable {
             Properties props = pluginProperties(ctx, name);
             String pubkey = props.getProperty("key");
             String signer = props.getProperty("signer");
-            if (pubkey != null && signer != null && pubkey.length() == 172 && signer.length() > 0)
+            if (pubkey != null && signer != null && pubkey.length() == 172 && !signer.isEmpty())
                 rv.put(pubkey, signer);
         }
         return rv;

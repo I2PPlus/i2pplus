@@ -142,14 +142,14 @@ public class ConfigUpdateHandler extends FormHandler {
                 return;
             }
 
-            boolean a1 = mgr.checkAvailable(NEWS, 40*1000) != null;
+            boolean a1 = mgr.checkAvailable(NEWS, (long) 40*1000) != null;
             boolean a2 = false;
             boolean a3 = true;
-            if ((!a1) && _updateDevSU3 && _devSU3URL != null && _devSU3URL.length() > 0) {
-                a2 = mgr.checkAvailable(ROUTER_DEV_SU3, 40*1000) != null;
+            if ((!a1) && _updateDevSU3 && _devSU3URL != null && !_devSU3URL.isEmpty()) {
+                a2 = mgr.checkAvailable(ROUTER_DEV_SU3, (long) 40*1000) != null;
             }
-            if ((!a2) && _updateUnsigned && _zipURL != null && _zipURL.length() > 0) {
-                a3 = mgr.checkAvailable(ROUTER_UNSIGNED, 40*1000) != null;
+            if ((!a2) && _updateUnsigned && _zipURL != null && !_zipURL.isEmpty()) {
+                a3 = mgr.checkAvailable(ROUTER_UNSIGNED, (long) 40*1000) != null;
             }
             if (a1 || a2 || a3) {
                 if ((_updatePolicy == null) || (!_updatePolicy.equals("notify"))) {
@@ -163,7 +163,7 @@ public class ConfigUpdateHandler extends FormHandler {
 
         Map<String, String> changes = new HashMap<>();
 
-        if ((_newsURL != null) && (_newsURL.length() > 0)) {
+        if ((_newsURL != null) && (!_newsURL.isEmpty())) {
             if (_newsURL.startsWith("https"))
                 _newsThroughProxy = false;
             String oldURL = ConfigUpdateHelper.getNewsURL(_context);
@@ -177,7 +177,7 @@ public class ConfigUpdateHandler extends FormHandler {
             }
         }
 
-        if (_proxyHost != null && _proxyHost.length() > 0 && !_proxyHost.equals(_t("internal"))) {
+        if (_proxyHost != null && !_proxyHost.isEmpty() && !_proxyHost.equals(_t("internal"))) {
             String oldHost = _context.router().getConfigSetting(PROP_PROXY_HOST);
             if ((oldHost == null) || (!_proxyHost.equals(oldHost))) {
                 changes.put(PROP_PROXY_HOST, _proxyHost);
@@ -185,7 +185,7 @@ public class ConfigUpdateHandler extends FormHandler {
             }
         }
 
-        if (_proxyPort != null && _proxyPort.length() > 0 && !_proxyPort.equals(_t("internal"))) {
+        if (_proxyPort != null && !_proxyPort.isEmpty() && !_proxyPort.equals(_t("internal"))) {
             String oldPort = _context.router().getConfigSetting(PROP_PROXY_PORT);
             if ((oldPort == null) || (!_proxyPort.equals(oldPort))) {
                 changes.put(PROP_PROXY_PORT, _proxyPort);
@@ -214,7 +214,7 @@ public class ConfigUpdateHandler extends FormHandler {
                             _refreshFrequency <= 0 ? _t("Never") : DataHelper.formatDuration2(_refreshFrequency)));
         }
 
-        if ((_updatePolicy != null) && (_updatePolicy.length() > 0)) {
+        if ((_updatePolicy != null) && (!_updatePolicy.isEmpty())) {
             String oldPolicy = _context.router().getConfigSetting(PROP_UPDATE_POLICY);
             if ((oldPolicy == null) || (!_updatePolicy.equals(oldPolicy))) {
                 changes.put(PROP_UPDATE_POLICY, _updatePolicy);
@@ -222,7 +222,7 @@ public class ConfigUpdateHandler extends FormHandler {
             }
         }
 
-        if ((_updateURL != null) && (_updateURL.length() > 0)) {
+        if ((_updateURL != null) && (!_updateURL.isEmpty())) {
             _updateURL = _updateURL.replace("\r\n", ",").replace("\n", ",");
             String oldURL = _context.router().getConfigSetting(PROP_UPDATE_URL);
             if ((oldURL == null) || (!_updateURL.equals(oldURL))) {
@@ -231,7 +231,7 @@ public class ConfigUpdateHandler extends FormHandler {
             }
         }
 
-        if ((_trustedKeys != null) && (_trustedKeys.length() > 0)) {
+        if ((_trustedKeys != null) && (!_trustedKeys.isEmpty())) {
             _trustedKeys = _trustedKeys.replace("\r\n", ",").replace("\n", ",");
             String oldKeys = new TrustedUpdate(_context).getTrustedKeysString();
             oldKeys = oldKeys.replace("\r\n", ",");
@@ -244,7 +244,7 @@ public class ConfigUpdateHandler extends FormHandler {
             }
         }
 
-        if ((_zipURL != null) && (_zipURL.length() > 0)) {
+        if ((_zipURL != null) && (!_zipURL.isEmpty())) {
             String oldURL = _context.router().getConfigSetting(PROP_ZIP_URL);
             if ((oldURL == null) || (!_zipURL.equals(oldURL))) {
                 changes.put(PROP_ZIP_URL, _zipURL);
@@ -252,7 +252,7 @@ public class ConfigUpdateHandler extends FormHandler {
             }
         }
 
-        if ((_devSU3URL != null) && (_devSU3URL.length() > 0)) {
+        if ((_devSU3URL != null) && (!_devSU3URL.isEmpty())) {
             String oldURL = _context.router().getConfigSetting(PROP_DEV_SU3_URL);
             if ((oldURL == null) || (!_devSU3URL.equals(oldURL))) {
                 changes.put(PROP_DEV_SU3_URL, _devSU3URL);

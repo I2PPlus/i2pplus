@@ -32,7 +32,7 @@ public class ConfigStatsHandler extends FormHandler {
             StringBuilder s = new StringBuilder(128);
             for (int i = 0; i < stats.length; i++) {
                 String cur = stats[i].trim();
-                if (cur.length() > 0) {
+                if (!cur.isEmpty()) {
                     if (s.length() > 0)
                         s.append(",");
                     s.append(cur);

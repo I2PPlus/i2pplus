@@ -225,8 +225,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * @since 0.9.14
      */
     protected static final String PROP_DOMAIN_SOCKET = "i2cp.domainSocket";
-    private static final long VERIFY_USAGE_TIME = 60*1000;
-    private static final long MAX_SEND_WAIT = 10*1000;
+    private static final long VERIFY_USAGE_TIME = (long) 60*1000;
+    private static final long MAX_SEND_WAIT = (long) 10*1000;
     private static final String MIN_FAST_VERSION = "0.9.30";
     private static final String MIN_LS2_VERSION = "0.9.38";
     private static final String MIN_BLINDINFO_VERSION = "0.9.43";
@@ -235,15 +235,15 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     void dateUpdated(String routerVersion) {
         _routerVersion = routerVersion;
         boolean isrc = _context.isRouterContext();
-        _routerSupportsFastReceive = isrc || (routerVersion != null && routerVersion.length() > 0 &&
+        _routerSupportsFastReceive = isrc || (routerVersion != null && !routerVersion.isEmpty() &&
                                      VersionComparator.comp(routerVersion, MIN_FAST_VERSION) >= 0);
-        _routerSupportsHostLookup = isrc || (routerVersion != null && routerVersion.length() > 0 &&
+        _routerSupportsHostLookup = isrc || (routerVersion != null && !routerVersion.isEmpty() &&
                                     VersionComparator.comp(routerVersion, MIN_HOST_LOOKUP_VERSION) >= 0);
-        _routerSupportsSubsessions = isrc || (routerVersion != null && routerVersion.length() > 0 &&
+        _routerSupportsSubsessions = isrc || (routerVersion != null && !routerVersion.isEmpty() &&
                                      VersionComparator.comp(routerVersion, MIN_SUBSESSION_VERSION) >= 0);
-        _routerSupportsLS2 = isrc || (routerVersion != null && routerVersion.length() > 0 &&
+        _routerSupportsLS2 = isrc || (routerVersion != null && !routerVersion.isEmpty() &&
                                      VersionComparator.comp(routerVersion, MIN_LS2_VERSION) >= 0);
-        _routerSupportsBlindingInfo = isrc || (routerVersion != null && routerVersion.length() > 0 &&
+        _routerSupportsBlindingInfo = isrc || (routerVersion != null && !routerVersion.isEmpty() &&
                                       VersionComparator.comp(routerVersion, MIN_BLINDINFO_VERSION) >= 0);
         synchronized (_stateLock) {
             if (_state == State.OPENING) {changeState(State.GOTDATE);}
@@ -668,7 +668,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                     case OPENING:
                     case GOTDATE:
                         wasOpening = true;
-                        try {_stateLock.wait(10*1000);}
+                        try {_stateLock.wait((long) 10*1000);}
                         catch (InterruptedException ie) {throw new I2PSessionException("Interrupted", ie);}
                         break;
                     case CLOSING:
@@ -1183,7 +1183,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                     case OPENING:  // fall thru
                     case GOTDATE:
                         try {
-                            _stateLock.wait(5*1000);
+                            _stateLock.wait((long) 5*1000);
                             continue;
                         } catch (InterruptedException ie) {
                             throw new I2PSessionException("Interrupted", ie);
@@ -1658,7 +1658,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      */
     @Override
     public Destination lookupDest(Hash h) throws I2PSessionException {
-        return lookupDest(h, 10*1000);
+        return lookupDest(h, (long) 10*1000);
     }
 
     /**
@@ -1734,7 +1734,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      */
     @Override
     public Destination lookupDest(String name) throws I2PSessionException {
-        return lookupDest(name, 10*1000);
+        return lookupDest(name, (long) 10*1000);
     }
 
     /**
@@ -1784,7 +1784,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  @return null on failure
      */
     private LookupWaiter x_lookupDest(String name, long maxWait) throws I2PSessionException {
-        if (name.length() == 0) {return null;}
+        if (name.isEmpty()) {return null;}
         if (name.length() >= 516) { // Shortcut for b64
             try {return new LookupWaiter(new Destination(name));}
             catch (DataFormatException dfe) {return null;}
@@ -1860,7 +1860,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         if (id == null)
             id = DUMMY_SESSION;
         if (maxWait > 60*1000)
-            maxWait = 60*1000;
+            maxWait = (long) 60*1000;
         try {
             sendMessage_unchecked(new HostLookupMessage(id, h, nonce, maxWait));
         } catch (I2PSessionException ise) {
@@ -1884,7 +1884,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      */
     @Override
     public LookupResult lookupDest(String name, long maxWait, LookupCallback callback) throws I2PSessionException {
-        if (name.length() == 0)
+        if (name.isEmpty())
             return LOOKUP_FAILURE;
         // Shortcut for b64
         if (name.length() >= 516) {
@@ -1921,7 +1921,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         if (id == null)
             id = DUMMY_SESSION;
         if (maxWait > 60*1000)
-            maxWait = 60*1000;
+            maxWait = (long) 60*1000;
         try {
             sendMessage_unchecked(new HostLookupMessage(id, name, nonce, maxWait));
         } catch (I2PSessionException ise) {
@@ -1978,7 +1978,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             }
         }
         sendMessage_unchecked(new GetBandwidthLimitsMessage());
-        try {synchronized (_bwReceivedLock) {_bwReceivedLock.wait(5*1000);}}
+        try {synchronized (_bwReceivedLock) {_bwReceivedLock.wait((long) 5*1000);}}
         catch (InterruptedException ie) {throw new I2PSessionException("Interrupted", ie);}
         return _bwLimits;
     }

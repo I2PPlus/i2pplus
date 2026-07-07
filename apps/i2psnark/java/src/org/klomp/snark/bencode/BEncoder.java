@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import net.i2p.data.DataHelper;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Converts Java objects to bencoded format for BitTorrent protocol communication.
  *
@@ -76,7 +77,7 @@ public class BEncoder {
      * @throws IOException if an I/O error occurs
      */
     public static void bencode(String s, OutputStream out) throws IOException {
-        byte[] bs = s.getBytes("UTF-8");
+        byte[] bs = s.getBytes(StandardCharsets.UTF_8);
         bencode(bs, out);
     }
 
@@ -90,7 +91,7 @@ public class BEncoder {
     public static void bencode(Number n, OutputStream out) throws IOException {
         out.write('i');
         String s = n.toString();
-        out.write(s.getBytes("UTF-8"));
+        out.write(s.getBytes(StandardCharsets.UTF_8));
         out.write('e');
     }
 
@@ -117,7 +118,7 @@ public class BEncoder {
      */
     public static void bencode(byte[] bs, OutputStream out) throws IOException {
         String l = Integer.toString(bs.length);
-        out.write(l.getBytes("UTF-8"));
+        out.write(l.getBytes(StandardCharsets.UTF_8));
         out.write(':');
         out.write(bs);
     }

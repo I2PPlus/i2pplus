@@ -161,7 +161,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * How long to wait for the client app to accept() before sending back CLOSE?
      * This includes the time waiting in the queue.  Currently set to 5 seconds.
      */
-    private static final long ACCEPT_TIMEOUT_DEFAULT = 10*1000;
+    private static final long ACCEPT_TIMEOUT_DEFAULT = (long) 10*1000;
  
     /**
      * @deprecated use 4-arg constructor
@@ -636,7 +636,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         if (!_userDsaList.equals(hashes)) {
             // rebuild _userDsaOnly when property changes
             synchronized(_userDsaOnly) {
-                if (hashes.length() > 0) {
+                if (!hashes.isEmpty()) {
                     Set<Hash> newSet = new HashSet<>();
                     StringTokenizer tok = new StringTokenizer(hashes, ",; ");
                     while (tok.hasMoreTokens()) {

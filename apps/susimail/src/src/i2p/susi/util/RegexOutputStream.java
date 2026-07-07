@@ -33,7 +33,7 @@ public class RegexOutputStream extends FilterOutputStream {
      */
     public RegexOutputStream(OutputStream out, String pattern, String replace, String onNoMatch) {
         super(out);
-        if (pattern.length() == 0 || pattern.startsWith("*") || pattern.endsWith("*") || pattern.contains("**"))
+        if (pattern.isEmpty() || pattern.startsWith("*") || pattern.endsWith("*") || pattern.contains("**"))
             throw new IllegalArgumentException();
         match = pattern.toLowerCase(Locale.US);
         repl = replace;

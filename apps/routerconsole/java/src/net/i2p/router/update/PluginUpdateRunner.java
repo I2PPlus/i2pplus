@@ -79,7 +79,7 @@ class PluginUpdateRunner extends UpdateRunner {
                 String slc = s.toLowerCase(Locale.US);
                 if (slc.endsWith(".su3")) s = s.substring(0, s.length() - 4);
                 else if (slc.endsWith(".xpi2p")) s = s.substring(0, s.length() - 6);
-                if (s.length() > 0) appDisplayName = s;
+                if (!s.isEmpty()) appDisplayName = s;
             }
         } catch (NumberFormatException nfe) { /* ignored */ }
         _appDisplayName = appDisplayName;
@@ -102,7 +102,7 @@ class PluginUpdateRunner extends UpdateRunner {
         if (_xpi2pURL.startsWith("file:") || _method == UpdateMethod.FILE) {
             // strip off file:// or just file:
             String xpi2pfile = _uri.getPath();
-            if (xpi2pfile == null || xpi2pfile.length() == 0) {
+            if (xpi2pfile == null || xpi2pfile.isEmpty()) {
                 statusDone("<b>" + _t("Bad URL {0}", _xpi2pURL) + "</b>");
             } else {
                 // copy the contents of from to _updateFile

@@ -214,7 +214,7 @@ public class ConfigKeyringHandler extends FormHandler {
     public void setNofilter_blindedPassword(String pw) {
         if (pw != null) {
             pw = pw.trim();
-            if (pw.length() > 0)
+            if (!pw.isEmpty())
                 _secret = pw;
         }
     }

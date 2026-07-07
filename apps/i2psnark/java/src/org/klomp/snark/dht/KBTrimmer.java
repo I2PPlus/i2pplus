@@ -29,10 +29,10 @@ class KBTrimmer implements KBucketTrimmer<NID> {
     private final int _max;
 
     /** Minimum time (5 minutes) a bucket must be unchanged before trimming is allowed */
-    private static final long MIN_BUCKET_AGE = 5 * 60 * 1000;
+    private static final long MIN_BUCKET_AGE = 5 * (long) 60 * 1000;
 
     /** Maximum age (15 minutes) for nodes before they become candidates for removal */
-    private static final long MAX_NODE_AGE = 15 * 60 * 1000;
+    private static final long MAX_NODE_AGE = 15 * (long) 60 * 1000;
 
     /**
      * Creates a new bucket trimmer with the specified maximum bucket size.

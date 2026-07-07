@@ -23,6 +23,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.zip.GZIPOutputStream;
 
+import java.nio.charset.StandardCharsets;
 /**
  * File-based log writer thread that pulls log records from the LogManager,
  * writes them to the current logfile, and rotates the logs as necessary.
@@ -153,7 +154,7 @@ class FileLogWriter extends LogWriter {
         closeWriter(old, true);
         if (_manager.shouldGzip()) (new File(f.getPath() + ".gz")).delete();
         try {
-            _currentOut = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(f), "UTF-8"));
+            _currentOut = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(f), StandardCharsets.UTF_8));
             if (_manager.getContext().getBooleanProperty("logger.groupReadable")) {
                 f.setReadable(true, false);
             }

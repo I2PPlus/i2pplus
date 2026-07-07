@@ -26,7 +26,7 @@ import net.i2p.client.I2PSimpleClient;
 public class BWLimits {
     private static int[] cachedResult = null;
     private static long lastUpdateTime = 0L; // store time in milliseconds
-    private static final long UPDATE_INTERVAL = 10 * 60 * 1000;
+    private static final long UPDATE_INTERVAL = 10 * (long) 60 * 1000;
 
     /**
      * Retrieves the bandwidth limits from the I2P router at the given host and port.

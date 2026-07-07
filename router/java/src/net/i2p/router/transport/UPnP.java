@@ -1041,7 +1041,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 	 */
 	private String toLong(String action, String arg, Service serv) {
 		String rv = toString(action, arg, serv);
-		if (rv != null && rv.length() > 0) {
+		if (rv != null && !rv.isEmpty()) {
 			try {
 				long l = Long.parseLong(rv);
 				rv = DataHelper.formatSize2Decimal(l);
@@ -1058,7 +1058,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 	 */
 	private String toTime(String action, String arg, Service serv) {
 		String rv = toString(action, arg, serv);
-		if (rv != null && rv.length() > 0) {
+		if (rv != null && !rv.isEmpty()) {
 			try {
 				long l = Long.parseLong(rv);
 				rv = DataHelper.formatDuration2(l * 1000);
@@ -1134,7 +1134,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 				sb.append("<li>").append(_t("Uptime")).append(": ")
 				   .append(toTime("GetStatusInfo", "NewUptime", serv));
 				String error = toString("GetStatusInfo", "NewLastConnectionError", serv);
-				if (error != null && error.length() > 0 && !error.equals("ERROR_NONE"))
+				if (error != null && !error.isEmpty() && !error.equals("ERROR_NONE"))
 					sb.append("<li>").append("Last Error").append(": ").append(error);
 				sb.append("<li>").append(_t("Type")).append(": ")
 				  .append(toString("GetConnectionTypeInfo", "NewConnectionType", serv));
@@ -1526,7 +1526,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		// see ControlRequest.setRequestHost()
 		String rv = null;
 		String him = dev.getURLBase();
-		if (him != null && him.length() > 0) {
+		if (him != null && !him.isEmpty()) {
 			try {
 				URI url = new URI(him);
 				rv = url.getHost();
@@ -1534,7 +1534,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		}
 		if (rv == null) {
 			him = dev.getLocation();
-			if (him != null && him.length() > 0) {
+			if (him != null && !him.isEmpty()) {
 				try {
 					URI url = new URI(him);
 					rv = url.getHost();
@@ -2058,7 +2058,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 				System.out.println("<p>UDN: " + DataHelper.escapeHTML(device.getUDN())); // NOSONAR S106 CLI output
 				System.out.println("<br>IP: " + getIP(device)); // NOSONAR S106 CLI output
 				String loc = device.getLocation();
-				if (loc != null && loc.length() > 0)
+				if (loc != null && !loc.isEmpty())
 					System.out.println("<br>URL: <a href=\"" + loc + "\">" + loc + "</a>"); // NOSONAR S106 CLI output
 				System.out.println(sb.toString()); // NOSONAR S106 CLI output
 				sb.setLength(0);

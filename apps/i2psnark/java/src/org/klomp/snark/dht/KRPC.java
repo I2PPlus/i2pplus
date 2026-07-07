@@ -173,7 +173,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     public static final boolean SECURE_NID = true;
 
     /** how long since generated do we delete - BEP 5 says 10 minutes */
-    private static final long MAX_TOKEN_AGE = 10 * 60 * 1000;
+    private static final long MAX_TOKEN_AGE = 10 * (long) 60 * 1000;
 
     private static final long MAX_INBOUND_TOKEN_AGE = MAX_TOKEN_AGE - 2 * 60 * 1000;
     private static final int MAX_OUTBOUND_TOKENS = 5000;
@@ -181,18 +181,18 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** how long since sent do we wait for a reply */
 
     /** how long since sent do we wait for a reply */
-    private static final long DEFAULT_QUERY_TIMEOUT = 75 * 1000;
+    private static final long DEFAULT_QUERY_TIMEOUT = (long) 75 * 1000;
 
-    private static final long DEST_LOOKUP_TIMEOUT = 10 * 1000;
+    private static final long DEST_LOOKUP_TIMEOUT = (long) 10 * 1000;
 
     /** stagger with other cleaners */
-    private static final long CLEAN_TIME = 63 * 1000;
+    private static final long CLEAN_TIME = (long) 63 * 1000;
 
-    private static final long EXPLORE_TIME = 10 * 60 * 1000;
-    private static final long BLACKLIST_CLEAN_TIME = 5 * 60 * 1000;
+    private static final long EXPLORE_TIME = 10 * (long) 60 * 1000;
+    private static final long BLACKLIST_CLEAN_TIME = 5 * (long) 60 * 1000;
     private static final int BLACKLIST_MAX_PEERS = 500;
     private static final long NODES_SAVE_TIME =
-            30 * 60 * 1000; // frequency of save of local dht node list
+            30 * (long) 60 * 1000; // frequency of save of local dht node list
     public static final String DHT_FILE_SUFFIX = ".dht.dat";
 
     private static final int SEND_CRYPTO_TAGS = 8;
@@ -426,8 +426,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 try {
                     waiter.wait(
                             Math.max(
-                                    30 * 1000,
-                                    (Math.min(45 * 1000, endTime - _context.clock().now()))));
+                                    (long) 30 * 1000,
+                                    (Math.min((long) 45 * 1000, endTime - _context.clock().now()))));
                 } catch (InterruptedException ie) { /* ignored */ }
             }
 
@@ -496,7 +496,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                     iter.hasNext() && annCnt < annMax && _isRunning; ) {
                 NodeInfo annTo = iter.next();
                 if (_log.shouldInfo()) _log.info("Announcing to closest from get_peers: " + annTo);
-                long toWait = annMaxWait > 0 ? Math.min(annMaxWait, 60 * 1000) : 0;
+                long toWait = annMaxWait > 0 ? Math.min(annMaxWait, (long) 60 * 1000) : 0;
                 if (announce(ih, annTo, toWait, isSeed)) annCnt++;
                 if (annMaxWait > 0) {
                     annMaxWait -= _context.clock().now() - start;
@@ -576,7 +576,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         if (_log.shouldInfo()) _log.info("Found " + nodes.size() + " to announce to for " + iHash);
         for (NodeInfo nInfo : nodes) {
             if (!_isRunning) break;
-            if (announce(ih, nInfo, Math.min(maxWait, 60 * 1000), isSeed)) rv++;
+            if (announce(ih, nInfo, Math.min(maxWait, (long) 60 * 1000), isSeed)) rv++;
             maxWait -= _context.clock().now() - start;
             if (maxWait < 1000) break;
         }
@@ -661,7 +661,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         // start the explore thread
         _isRunning = true;
         _cleaner = new Cleaner();
-        _explorer = new Explorer(5 * 1000);
+        _explorer = new Explorer((long) 5 * 1000);
         _txPkts.set(0);
         _rxPkts.set(0);
         _txBytes.set(0);
@@ -1932,7 +1932,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             if (_knownNodes.size() > 0) {
                 (new I2PAppThread(new ExplorerThread(), "DHT Explore", true)).start();
             } else {
-                schedule(60 * 1000);
+                schedule((long) 60 * 1000);
             }
         }
     }
@@ -1948,7 +1948,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 if (_log.shouldInfo()) {
                     _log.info("Bootstrap start, size: " + _knownNodes.size());
                 }
-                explore(_myNID, 8, 60 * 1000, 1);
+                explore(_myNID, 8, (long) 60 * 1000, 1);
                 if (_log.shouldInfo()) {
                     _log.info("Bootstrap done, size: " + _knownNodes.size());
                 }
@@ -1962,7 +1962,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             }
             List<NID> keys = _knownNodes.getExploreKeys();
             for (NID nid : keys) {
-                explore(nid, 8, 60 * 1000, 1);
+                explore(nid, 8, (long) 60 * 1000, 1);
                 if (!_isRunning) {
                     return;
                 }

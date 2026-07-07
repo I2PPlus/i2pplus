@@ -182,7 +182,7 @@ public class TransportManager implements TransportEventListener {
         boolean rv = false;
         // These two affect all standard Sockets (but NOT NIO)
         String proxy = System.getProperty(PROP_JAVA_PROXY1);
-        if (proxy != null && proxy.length() > 0) {
+        if (proxy != null && !proxy.isEmpty()) {
             String msg = "UPnP disabled by system property " + PROP_JAVA_PROXY1 + '=' + proxy +
                          "\nI2P connections will not be proxied." +
                          "\nReseeding will be proxied.";
@@ -209,12 +209,12 @@ public class TransportManager implements TransportEventListener {
         }
         // These only apply to Http/HttpsURLConnection
         proxy = System.getProperty(PROP_JAVA_PROXY3);
-        if (proxy != null && proxy.length() > 0) {
+        if (proxy != null && !proxy.isEmpty()) {
             String msg = "Ignoring proxy setting " + PROP_JAVA_PROXY3 + '=' + proxy;
             _log.logAlways(Log.WARN, msg);
         }
         proxy = System.getProperty(PROP_JAVA_PROXY4);
-        if (proxy != null && proxy.length() > 0) {
+        if (proxy != null && !proxy.isEmpty()) {
             String msg = "Ignoring proxy setting " + PROP_JAVA_PROXY4 + '=' + proxy;
             _log.logAlways(Log.WARN, msg);
         }

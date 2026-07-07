@@ -232,7 +232,7 @@ class NetDbRenderer {
                 return routerCountry != null && countryCodes.contains(routerCountry.toLowerCase(Locale.US));
             });
         }
-        if (capabilities != null && capabilities.length() > 0) {
+        if (capabilities != null && !capabilities.isEmpty()) {
             routerStream = routerStream.filter(ri -> {
                 String caps = ri.getCapabilities();
                 // Include router only if it contains ALL characters in the filter string
@@ -1149,7 +1149,7 @@ class NetDbRenderer {
                 LookupWaiter lw = new LookupWaiter();
                 synchronized(lw) {
                     _context.netDb().lookupLeaseSetRemotely(hash, lw, lw, LOOKUP_WAIT, null);
-                    try {lw.wait(LOOKUP_WAIT + 1000);}
+                    try {lw.wait((long) LOOKUP_WAIT + 1000);}
                     catch (InterruptedException ie) { /* ignored */ }
                 }
                 ls = _context.netDb().lookupLeaseSetLocally(hash);
@@ -1764,7 +1764,7 @@ class NetDbRenderer {
      * Small cache since we rely on file-backed rdnsCache in CommSystemFacadeImpl
      */
     private final LHMCache<String, CacheEntry> reverseLookupCache = new LHMCache<>(50);
-    private static final long TTL_24_HOURS = 24 * 60 * 60 * 1000; // 24 hours
+    private static final long TTL_24_HOURS = 24 * 60 * (long) 60 * 1000; // 24 hours
 
     /**
      * Gets a value from cache if it's still valid.

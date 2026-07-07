@@ -19,6 +19,7 @@ import net.i2p.util.SecureFile;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Utility class providing methods to parse and write files in a hosts.txt file
  * format, and subscription file format.
@@ -106,7 +107,7 @@ public class HostTxtParser {
                 return null;
             name = splitLine[0].trim().toLowerCase(Locale.US);
             dest = splitLine[1].trim();
-            if (name.length() == 0 || dest.length() == 0)
+            if (name.isEmpty() || dest.isEmpty())
                 return null;
         } else {
             // line starts with #!, rv will contain props only
@@ -143,7 +144,7 @@ public class HostTxtParser {
         try {
             fileStream = new FileInputStream(file);
             BufferedReader input = new BufferedReader(new InputStreamReader(
-                    fileStream, "UTF-8"));
+                    fileStream, StandardCharsets.UTF_8));
             return parse(input);
         } finally {
             if (fileStream != null) {
@@ -223,7 +224,7 @@ public class HostTxtParser {
         boolean success = false;
         if (!isWindows) {
             File tmp = SecureFile.createTempFile("temp-", ".tmp", file.getAbsoluteFile().getParentFile());
-            write(map, new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(tmp), "UTF-8")));
+            write(map, new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(tmp), StandardCharsets.UTF_8)));
             success = tmp.renameTo(file);
             if (!success) {
                 tmp.delete();
@@ -231,7 +232,7 @@ public class HostTxtParser {
         }
         if (!success) {
             // hmm, that didn't work, try it the old way
-            write(map, new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "UTF-8")));
+            write(map, new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(file), StandardCharsets.UTF_8)));
         }
     }
 

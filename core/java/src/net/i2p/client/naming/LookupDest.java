@@ -34,7 +34,7 @@ import java.util.Properties;
  */
 public class LookupDest {
 
-    private static final long DEFAULT_TIMEOUT = 15 * 1000;
+    private static final long DEFAULT_TIMEOUT = (long) 15 * 1000;
 
     /**
      * Create a new LookupDest instance.

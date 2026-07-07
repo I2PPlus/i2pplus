@@ -22,6 +22,7 @@ import net.i2p.data.Destination;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.PortMapper;
 
+import java.nio.charset.StandardCharsets;
 /**
  * SSL tunnel through HTTP proxy using CONNECT method.
  * <p>
@@ -265,7 +266,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                     // save for auth check below
                     authorization = line.substring(21);  // "proxy-authorization: ".length()
                     line = null;
-                } else if (line.length() > 0) {
+                } else if (!line.isEmpty()) {
                     // Additional lines - shouldn't be too many. Firefox sends:
                     // User-Agent: blabla
                     // Proxy-Connection: keep-alive
@@ -307,7 +308,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
             if (usingInternalOutproxy) {
                 Socket outSocket = outproxy.connect(host, remotePort);
                 OnTimeout onTimeout = new OnTimeout(s, s.getOutputStream(), targetRequest, usingWWWProxy, currentProxy, requestId);
-                byte[] response = SUCCESS_RESPONSE.getBytes("UTF-8");
+                byte[] response = SUCCESS_RESPONSE.getBytes(StandardCharsets.UTF_8);
                 Thread t = new I2PTunnelOutproxyRunner(s, outSocket, sockLock, null, response, onTimeout);
                 // Execute task (inline when called from unlimited thread pool)
                 executeTask(t);
@@ -350,9 +351,9 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
             byte[] data = null;
             byte[] response = null;
             if (usingWWWProxy)
-                data = newRequest.toString().getBytes("ISO-8859-1");
+                data = newRequest.toString().getBytes(StandardCharsets.ISO_8859_1);
             else
-                response = SUCCESS_RESPONSE.getBytes("UTF-8");
+                response = SUCCESS_RESPONSE.getBytes(StandardCharsets.UTF_8);
             OnTimeout onTimeout = new OnTimeout(s, s.getOutputStream(), targetRequest, usingWWWProxy,
                                                 currentProxy, requestId, targetRequest, false);
             I2PTunnelRunner t = new I2PTunnelRunner(s, i2ps, sockLock, data, response, mySockets, onTimeout);
@@ -389,7 +390,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
     private static void writeErrorMessage(String errMessage, OutputStream out) throws IOException {
         if (out == null)
             return;
-        out.write(errMessage.getBytes("UTF-8"));
+        out.write(errMessage.getBytes(StandardCharsets.UTF_8));
         writeFooter(out);
     }
 }

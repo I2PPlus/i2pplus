@@ -36,6 +36,7 @@ import net.i2p.data.Hash;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.Log;
 
+import java.nio.charset.StandardCharsets;
 /**
  * HTTP server tunnel that filters headers and provides compression.
  * <p>
@@ -155,7 +156,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /* timeout for first request line */
-    private static final long HEADER_TIMEOUT = 45*1000;
+    private static final long HEADER_TIMEOUT = (long) 45*1000;
     /* timeout for the rest of the request headers */
     private static final long HEADER_FINISH_TIMEOUT = HEADER_TIMEOUT;
     private static final long START_INTERVAL = (60 * 1000) * 3;
@@ -361,7 +362,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  @param spoofHost the hostname to spoof in the Host header, or null for no spoofing
      */
     private void setupI2PTunnelHTTPServer(String spoofHost) {
-        _spoofHost = (spoofHost != null && spoofHost.trim().length() > 0) ? spoofHost.trim() : null;
+        _spoofHost = (spoofHost != null && !spoofHost.trim().isEmpty()) ? spoofHost.trim() : null;
         getTunnel().getContext().statManager().createRateStat("i2ptunnel.httpserver.blockingHandleTime",
                                                               "How long the blocking handle takes to complete",
                                                               "Tunnels [HTTPServer]", new long[] { 60*1000, 10*60*1000, 3*60*60*1000 });
@@ -491,7 +492,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         Properties props = tunnel.getClientOptions();
         // see TunnelController.setSessionOptions()
         String spoofHost = props.getProperty(TunnelController.PROP_SPOOFED_HOST);
-        _spoofHost = (spoofHost != null && spoofHost.trim().length() > 0) ? spoofHost.trim() : null;
+        _spoofHost = (spoofHost != null && !spoofHost.trim().isEmpty()) ? spoofHost.trim() : null;
         super.optionsUpdated(tunnel);
     }
 
@@ -955,7 +956,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             for (int i = 0; i < agents.length; i++) {
                 String ag = agents[i].trim();
                 if (ag.equals("none")) {continue;}
-                if (ag.length() > 0 && ua.contains(ag)) {
+                if (!ag.isEmpty() && ua.contains(ag)) {
                     if (_log.shouldWarn()) {
                         _log.warn("[HTTPServer] Refusing access: Blacklisted User Agent (" + ua + ") \n* Client: " + peerB32);
                     }
@@ -1092,7 +1093,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     private static void sendError(I2PSocket socket, String resp) throws IOException {
         if (socket.getLocalPort() == 443) {socket.reset();}
-        else {socket.getOutputStream().write(resp.getBytes("UTF-8"));}
+        else {socket.getOutputStream().write(resp.getBytes(StandardCharsets.UTF_8));}
     }
 
     private static class CompressedRequestor implements Runnable {
@@ -1215,7 +1216,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     if (_browser.getLocalPort() == 443) {_browser.reset();}
                     else {
                         if (browserout == null) {browserout = _browser.getOutputStream();}
-                        browserout.write(ERR_UNAVAILABLE.getBytes("UTF-8"));
+                        browserout.write(ERR_UNAVAILABLE.getBytes(StandardCharsets.UTF_8));
                     }
                 } catch (IOException ioe) { /* ignored */ }
                 _keepalive = false;

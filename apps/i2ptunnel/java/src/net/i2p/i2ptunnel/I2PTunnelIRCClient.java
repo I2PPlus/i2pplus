@@ -31,7 +31,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     /** list of Destination objects that we point at */
     private final List<I2PSocketAddress> _addrs;
     // application should ping timeout before this
-    private static final long DEFAULT_READ_TIMEOUT = 10*60*1000;
+    private static final long DEFAULT_READ_TIMEOUT = 10 * (long) 60 * 1000;
     protected long readTimeout = DEFAULT_READ_TIMEOUT;
     private final boolean _dccEnabled;
     private I2PTunnelDCCServer _DCCServer;

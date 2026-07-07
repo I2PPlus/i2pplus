@@ -85,6 +85,7 @@ import net.i2p.apache.http.conn.util.PublicSuffixMatcher;
 import net.i2p.crypto.KeyStoreUtil;
 import net.i2p.data.DataHelper;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Loads trusted ASCII certs from ~/.i2p/certificates/ and $I2P/certificates/.
  *
@@ -362,7 +363,7 @@ public class I2PSSLSocketFactory {
                         try {
                             in = new FileInputStream(geoFile);
                             PublicSuffixList list2 =
-                                    new PublicSuffixListParser().parse(new InputStreamReader(in, "UTF-8"));
+                                    new PublicSuffixListParser().parse(new InputStreamReader(in, StandardCharsets.UTF_8));
                             list = merge(list, list2);
                         } finally {
                             try {
@@ -434,7 +435,7 @@ public class I2PSSLSocketFactory {
         }
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(geoFile), "UTF-8"));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(geoFile), StandardCharsets.UTF_8));
             String line = null;
             int i = 0;
             while ((line = br.readLine()) != null) {

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import net.i2p.data.Base32;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Magnet URI parser and handler for BitTorrent magnet links.
  *
@@ -258,9 +259,7 @@ public class MagnetURI {
             }
         }
         if (utf8) {
-            try {
-                return new String(buf.toString().getBytes("ISO-8859-1"), "UTF-8");
-            } catch (UnsupportedEncodingException uee) { /* ignored */ }
+            return new String(buf.toString().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
         }
         return buf.toString();
     }

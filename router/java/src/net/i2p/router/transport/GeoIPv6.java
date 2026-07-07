@@ -92,7 +92,7 @@ public class GeoIPv6 {
             if (!DataHelper.eq(magic, DataHelper.getASCII(MAGIC)))
                 throw new IOException("Not a IPv6 geoip data file");
             // skip timestamp and comments
-            DataHelper.skip(in, HEADER_LEN - MAGIC.length());
+            DataHelper.skip(in, (long) HEADER_LEN - MAGIC.length());
             byte[] buf = new byte[18];
             while (idx < search.length) {
                 try {

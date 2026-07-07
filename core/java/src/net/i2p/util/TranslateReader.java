@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import net.i2p.I2PAppContext;
 
+import java.nio.charset.StandardCharsets;
 /**
  *  Translate.
  *
@@ -73,7 +74,7 @@ public class TranslateReader extends FilterReader {
      *  @param in UTF-8
      */
     public TranslateReader(I2PAppContext ctx, String bundle, InputStream in) throws IOException {
-        this(ctx, bundle, new BufferedReader(new InputStreamReader(in, "UTF-8")));
+        this(ctx, bundle, new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
     }
 
     /**

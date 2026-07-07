@@ -102,7 +102,7 @@ public class ConfigUIHelper {
         String clang = Translate.getLanguage(ctx);
         String current = clang;
         String country = Translate.getCountry(ctx);
-        if (country != null && country.length() > 0) {
+        if (country != null && !country.isEmpty()) {
             current += '_' + country;
         }
         // find best match
@@ -114,7 +114,7 @@ public class ConfigUIHelper {
             }
         }
         if (!found) {
-            if (country != null && country.length() > 0) {
+            if (country != null && !country.isEmpty()) {
                 current = clang;
                 for (int i = 0; i < langs.length; i++) {
                     if (langs[i][0].equals(current)) {

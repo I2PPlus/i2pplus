@@ -132,7 +132,7 @@ public class EventLog {
         try (OutputStream out = new SecureFileOutputStream(_file, true)) {
             StringBuilder buf = new StringBuilder(128);
             buf.append(_context.clock().now()).append(' ').append(event);
-            if (info != null && info.length() > 0)
+            if (info != null && !info.isEmpty())
                 buf.append(' ').append(info);
             if (SystemVersion.isWindows())
                 buf.append('\r');

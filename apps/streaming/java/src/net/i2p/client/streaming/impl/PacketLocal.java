@@ -397,9 +397,9 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
                     if (_cancelledOn > 0)
                         throw new IOException("cancelled");
                     if (timeRemaining > 60*1000)
-                        timeRemaining = 60*1000;
+                        timeRemaining = (long) 60*1000;
                     else if (timeRemaining <= 0)
-                        timeRemaining = 10*1000;
+                        timeRemaining = (long) 10*1000;
                     wait(timeRemaining);
                 }
             }

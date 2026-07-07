@@ -16,6 +16,7 @@ import java.util.Properties;
 import net.i2p.data.DataHelper;
 import net.i2p.util.OrderedProperties;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Bean for managing SusDNS configuration properties and file operations.
  */
@@ -66,7 +67,7 @@ public class ConfigBean extends BaseBean implements Serializable {
         try {
             // use loadProps to trim, use storeProps to sort and get line endings right
             Properties props = new OrderedProperties();
-            DataHelper.loadProps(props, new ByteArrayInputStream(config.getBytes("UTF-8")));
+            DataHelper.loadProps(props, new ByteArrayInputStream(config.getBytes(StandardCharsets.UTF_8)));
             synchronized (BaseBean.class) {DataHelper.storeProps(props, configFile());}
             saved = true;
         } catch (IOException e) {warn(e);}
@@ -103,7 +104,7 @@ public class ConfigBean extends BaseBean implements Serializable {
                              ' ' + _t("If the problem persists, verify that you have cookies enabled in your browser.");
             }
         }
-        if (message.length() > 0) {message = "<p class=\"messages\">" + message + "</p>";}
+        if (!message.isEmpty()) {message = "<p class=\"messages\">" + message + "</p>";}
         return message;
     }
 

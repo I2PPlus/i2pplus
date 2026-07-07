@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import java.util.Locale;
 import net.i2p.data.DataHelper;
 
+import java.nio.charset.StandardCharsets;
 /**
  *  Ref:
  *  http://en.wikipedia.org/wiki/MIME#Encoded-Word
@@ -300,7 +301,7 @@ public class HeaderLine extends Encoding {
 							}
 							tmp.writeComplete(true);
 							// get charset
-							String charset = new String(encodedWord, f1 + 1, f2 - f1 - 1, "ISO-8859-1");
+							String charset = new String(encodedWord, f1 + 1, f2 - f1 - 1, StandardCharsets.ISO_8859_1);
 							String clc = charset.toLowerCase(Locale.US);
 							if (clc.equals("utf-8") || clc.equals("utf8")) {
 								// FIXME could be more efficient?

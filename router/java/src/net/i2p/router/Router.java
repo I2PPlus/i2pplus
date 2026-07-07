@@ -1147,7 +1147,7 @@ public class Router implements RouterClock.ClockShiftListener {
         bwLim = (int)(bwLim * getSharePercentage());
         String force = _context.getProperty(PROP_FORCE_BWCLASS);
 
-        if (force != null && force.length() > 0) {return force.charAt(0);}
+        if (force != null && !force.isEmpty()) {return force.charAt(0);}
         else if (bwLim < MIN_BW_L) {return CAPABILITY_BW12;}
         else if (bwLim <= MIN_BW_M) {return CAPABILITY_BW32;}
         else if (bwLim <= MIN_BW_N) {return CAPABILITY_BW64;}

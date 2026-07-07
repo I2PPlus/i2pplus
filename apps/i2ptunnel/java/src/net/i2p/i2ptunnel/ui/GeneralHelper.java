@@ -642,7 +642,7 @@ public class GeneralHelper {
             else {rv = 2;}
 
             String pw = getBlindedPassword(tunnel);
-            if (pw != null && pw.length() > 0) {rv++;}
+            if (pw != null && !pw.isEmpty()) {rv++;}
             return rv;
         } else if (lstype.equals("3")) {return 10;}
         return 0;

@@ -80,7 +80,7 @@ public class ConfigAdvancedHelper extends HelperBase {
                     lastType = type;
                     String dtype = _headers.get(type);
                     if (dtype == null) {dtype = type;}
-                    if (type.length() > 0) {
+                    if (!type.isEmpty()) {
                         buf.append("<tr class=section><th colspan=2>").append(_t(dtype)).append("</th></tr>\n");
                     }
                 } else {

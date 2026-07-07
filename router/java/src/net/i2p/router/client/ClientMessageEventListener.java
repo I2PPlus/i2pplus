@@ -378,7 +378,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                 user = props.getProperty(I2PClient.PROP_USER);
                 pw = props.getProperty(I2PClient.PROP_PW);
             }
-            if (user == null || user.length() == 0 || pw == null || pw.length() == 0) {
+            if (user == null || user.isEmpty() || pw == null || pw.isEmpty()) {
                 _log.logAlways(Log.WARN, "I2CP authentication failed");
                 _runner.disconnectClient("Authorization required, specify i2cp.username and i2cp.password in options");
                 _authorized = false;

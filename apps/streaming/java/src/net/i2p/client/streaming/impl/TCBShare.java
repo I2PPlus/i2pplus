@@ -33,8 +33,8 @@ class TCBShare {
 
     // Must be less than SessionKeyManager outbound timeout (12 minutes)
     // to avoid large number of DH operations
-    private static final long EXPIRE_TIME = 10*60*1000;
-    private static final long CLEAN_TIME = 5*60*1000;
+    private static final long EXPIRE_TIME = 10 * (long) 60 * 1000;
+    private static final long CLEAN_TIME = 5 * (long) 60 * 1000;
     ///// constants defined in rfc 2140
     ///// do not change unless you know what you're doing
     private static final double RTT_DAMPENING = 0.75;

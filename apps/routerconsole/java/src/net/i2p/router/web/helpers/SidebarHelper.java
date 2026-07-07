@@ -1143,7 +1143,7 @@ public class SidebarHelper extends HelperBase {
         String status = NewsHelper.getUpdateStatus();
         String source = _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL);
         boolean needSpace = false;
-        if (status.length() > 0) {
+        if (!status.isEmpty()) {
             buf.append("<h4 class=\"sb_info sb_update volatile");
             if (NewsHelper.isUpdateInProgress()) {buf.append(" inProgress");}
             buf.append("\">").append(status).append("</h4>\n");
@@ -1326,7 +1326,7 @@ public class SidebarHelper extends HelperBase {
         // checker will be null for DummyNetworkDatabaseFacade
         ReseedChecker checker = _context.netDb().reseedChecker();
         String status = checker != null ? checker.getStatus() : "";
-        if (status.length() > 0) {
+        if (!status.isEmpty()) {
             // Show status message even if not running, timer in ReseedChecker should remove after 20 minutes
             buf.append("<div class=\"sb_notice volatile\" id=sb_notice><i>").append(status).append("</i></div>");
         } else {
@@ -1336,7 +1336,7 @@ public class SidebarHelper extends HelperBase {
         if (checker != null && !checker.inProgress()) {
             // If a new reseed isn't running, and the last reseed had errors, show error message
             String reseedErrorMessage = checker.getError();
-            if (reseedErrorMessage.length() > 0) {
+            if (!reseedErrorMessage.isEmpty()) {
                 buf.append("<div class=\"sb_notice volatile\" id=sb_notice><i>").append(reseedErrorMessage).append("</i></div>");
             }
             // If showing the reseed link is allowed

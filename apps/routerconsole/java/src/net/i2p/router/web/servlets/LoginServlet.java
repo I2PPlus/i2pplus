@@ -331,16 +331,16 @@ public class LoginServlet extends HttpServlet {
 
     private long parseDuration(String duration) {
         if (duration == null || duration.isEmpty()) {
-            return 60 * 60 * 1000; // default 1 hour
+            return 60 * (long) 60 * 1000; // default 1 hour
         }
         switch (duration) {
-            case "15m": return 15 * 60 * 1000;
-            case "1h":  return 60 * 60 * 1000;
-            case "4h":  return 4 * 60 * 60 * 1000;
-            case "8h":  return 8 * 60 * 60 * 1000;
-            case "1d":  return 24 * 60 * 60 * 1000;
+            case "15m": return 15 * (long) 60 * 1000;
+            case "1h":  return 60 * (long) 60 * 1000;
+            case "4h":  return 4 * 60 * (long) 60 * 1000;
+            case "8h":  return 8 * 60 * (long) 60 * 1000;
+            case "1d":  return 24 * 60 * (long) 60 * 1000;
             case "forever": return -1;
-            default: return 60 * 60 * 1000;
+            default: return 60 * (long) 60 * 1000;
         }
     }
 

@@ -12,6 +12,7 @@ import java.util.Map;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Holds different types that a bencoded byte array can represent. You need to call the correct get
  * method to get the correct java type object. If the BEValue wasn't actually of the requested type
@@ -69,11 +70,9 @@ public class BEValue {
      */
     public String getString() throws InvalidBEncodingException {
         try {
-            return new String(getBytes(), "UTF-8");
+            return new String(getBytes(), StandardCharsets.UTF_8);
         } catch (ClassCastException cce) {
             throw new InvalidBEncodingException(cce.toString());
-        } catch (UnsupportedEncodingException uee) {
-            throw new InternalError(uee.toString());
         }
     }
 

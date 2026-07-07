@@ -306,7 +306,7 @@ class SAMStreamSession implements SAMMessageSess {
 
         I2PSocketOptions opts = socketMgr.buildOptions(props);
         if (props.getProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT) == null)
-            opts.setConnectTimeout(60 * 1000);
+            opts.setConnectTimeout((long) 60 * 1000);
 
         if (_log.shouldDebug())
             _log.debug("Connecting new I2PSocket...");

@@ -357,7 +357,7 @@ public class TunnelConfig {
 
     /** @since 0.9.40 */
     public void setBlindedPassword(String s) {
-        if (s != null && s.length() > 0)
+        if (s != null && !s.isEmpty())
             _otherOptions.put("i2cp.leaseSetSecret", Base64.encode(DataHelper.getUTF8(s.trim())));
         else
             _otherOptions.remove("i2cp.leaseSetSecret");
@@ -849,7 +849,7 @@ public class TunnelConfig {
             String user = config.getProperty(puser);
             String ppw = OPT + I2PTunnelHTTPClientBase.PROP_PW;
             String pw = config.getProperty(ppw);
-            if (user != null && pw != null && user.length() > 0 && pw.length() > 0) {
+            if (user != null && pw != null && !user.isEmpty() && !pw.isEmpty()) {
                 String pmd5 = OPT + I2PTunnelHTTPClientBase.PROP_PROXY_DIGEST_PREFIX +
                               user + I2PTunnelHTTPClientBase.PROP_PROXY_DIGEST_SUFFIX;
                 if (config.getProperty(pmd5) == null) {
@@ -879,7 +879,7 @@ public class TunnelConfig {
             String auth = _otherOptions.get(I2PTunnelHTTPClientBase.PROP_AUTH);
             if (auth != null && !auth.equals("false")) {
                 if (_newProxyUser != null && _newProxyPW != null &&
-                    _newProxyUser.length() > 0 && _newProxyPW.length() > 0) {
+                    !_newProxyUser.isEmpty() && !_newProxyPW.isEmpty()) {
                     String pmd5 = OPT + I2PTunnelHTTPClientBase.PROP_PROXY_DIGEST_PREFIX +
                                   _newProxyUser + I2PTunnelHTTPClientBase.PROP_PROXY_DIGEST_SUFFIX;
                     String realm = _type.equals(TunnelController.TYPE_HTTP_CLIENT) ? I2PTunnelHTTPClient.AUTH_REALM
@@ -900,7 +900,7 @@ public class TunnelConfig {
             String auth = _otherOptions.get(I2PTunnelHTTPClientBase.PROP_AUTH);
             if (auth != null && !auth.equals("false")) {
                 if (_newProxyUser != null && _newProxyPW != null &&
-                    _newProxyUser.length() > 0 && _newProxyPW.length() > 0) {
+                    !_newProxyUser.isEmpty() && !_newProxyPW.isEmpty()) {
                     String psha256 = OPT + I2PTunnelHTTPClientBase.PROP_PROXY_DIGEST_PREFIX +
                                      _newProxyUser + I2PTunnelHTTPClientBase.PROP_PROXY_DIGEST_SHA256_SUFFIX;
                     String hex = PasswordManager.sha256Hex(I2PSOCKSTunnel.AUTH_REALM, _newProxyUser, _newProxyPW);
@@ -1000,7 +1000,7 @@ public class TunnelConfig {
             p = OPT + "i2cp.leaseSetPrivateKey";
             String skeys = config.getProperty(p);
             // normalize it first to make the code below easier
-            if (skeys != null && skeys.length() > 0 && !skeys.contains(":"))
+            if (skeys != null && !skeys.isEmpty() && !skeys.contains(":"))
                 config.setProperty(p, "ELGAMAL_2048:" + skeys);
             String[] senca = DataHelper.split(senc, ",");
             // for each configured enc type, generate a key if we don't have it
@@ -1011,7 +1011,7 @@ public class TunnelConfig {
                     skeys = config.getProperty(p, "");
                     if (!skeys.contains(stype + ':')) {
                         KeyPair keys = KeyGenerator.getInstance().generatePKIKeys(type);
-                        if (skeys.length() > 0)
+                        if (!skeys.isEmpty())
                             config.setProperty(p, skeys + ',' + stype + ':' + keys.getPrivate().toBase64());
                         else
                             config.setProperty(p, stype + ':' + keys.getPrivate().toBase64());
@@ -1119,7 +1119,7 @@ public class TunnelConfig {
                 clientAuth = new ArrayList<>(1);
                 if (!_addClientAuth) {
                     _addClientAuth = true;
-                    if (_newClientName == null || _newClientName.length() == 0)
+                    if (_newClientName == null || _newClientName.isEmpty())
                         _newClientName = GeneralHelper._t("Client", _context) + " 1";
                 }
             }
@@ -1134,7 +1134,7 @@ public class TunnelConfig {
                     byte[] b = Base64.decode(key);
                     if (b == null || b.length != 32)
                        continue;
-                    if (name.length() > 0)
+                    if (!name.isEmpty())
                         name = Base64.encode(DataHelper.getUTF8(name));
                     else
                         name = Base64.encode(DataHelper.getUTF8(GeneralHelper._t("Client", _context) + ' ' + (i + 1)));
@@ -1148,7 +1148,7 @@ public class TunnelConfig {
             }
             if (_addClientAuth && _newClientName != null) {
                 String name = _newClientName;
-                if (name.length() > 0)
+                if (!name.isEmpty())
                     name = Base64.encode(DataHelper.getUTF8(name));
                 else
                     name = Base64.encode(DataHelper.getUTF8(GeneralHelper._t("Client", _context) + ' ' + (clientAuth.size() + 1)));
@@ -1293,7 +1293,7 @@ public class TunnelConfig {
         if (!_context.isRouterContext()) {
             if (_i2cpHost != null)
                 config.setProperty(TunnelController.PROP_I2CP_HOST, _i2cpHost);
-            if ( (_i2cpPort != null) && (_i2cpPort.trim().length() > 0) ) {
+            if ( (_i2cpPort != null) && (!_i2cpPort.trim().isEmpty()) ) {
                 config.setProperty(TunnelController.PROP_I2CP_PORT, _i2cpPort);
             } else {
                 config.setProperty(TunnelController.PROP_I2CP_PORT, Integer.toString(I2PClient.DEFAULT_LISTEN_PORT));
@@ -1302,7 +1302,7 @@ public class TunnelConfig {
         if (_privKeyFile != null)
             config.setProperty(TunnelController.PROP_FILE, _privKeyFile);
 
-        if (_customOptions != null && _customOptions.length() > 0) {
+        if (_customOptions != null && !_customOptions.isEmpty()) {
             Map<String, String> custom = parseCustomOptions(_customOptions);
             for (Map.Entry<String, String> e : custom.entrySet()) {
                 String key = e.getKey();
@@ -1432,12 +1432,12 @@ public class TunnelConfig {
                         buf.append(c);
                     } else {
                         if (key != null) {
-                            if (key.length() > 0)
+                            if (!key.isEmpty())
                                 rv.put(key, buf.toString().trim());
                             key = null;
                         } else {
                           String k = buf.toString().trim();
-                          if (k.length() > 0)
+                          if (!k.isEmpty())
                               rv.put(k, "");
                         }
                         buf.setLength(0);
@@ -1459,11 +1459,11 @@ public class TunnelConfig {
             }
         }
         if (key != null) {
-            if (key.length() > 0)
+            if (!key.isEmpty())
                 rv.put(key, buf.toString().trim());
         } else {
             key = buf.toString().trim();
-            if (key.length() > 0)
+            if (!key.isEmpty())
                 rv.put(key, "");
         }
         return rv;

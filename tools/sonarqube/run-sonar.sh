@@ -249,6 +249,14 @@ if [ -f "$CUSTOM_PROFILE" ]; then
     else
         echo "  Warning: failed to import quality profile: $(echo "$RESP" | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d.get(\"errors\",[{}])[0].get(\"msg\",\"unknown\"))' 2>/dev/null)"
     fi
+    # Deactivate high-risk rules that cause breakage
+    for RULE in S1168 S1481; do
+        LD_PRELOAD="" curl -s -u "${SONAR_USER}:${SONAR_PASSWORD}" \
+            -X POST "${SONAR_HOST}/api/qualityprofiles/deactivate_rule" \
+            --data-urlencode "rule=java:${RULE}" \
+            --data-urlencode "profile=${PROFILE_KEY}" -o /dev/null 2>/dev/null && \
+            echo "  Deactivated ${RULE}"
+    done
 fi
 
 # ---- Get or generate token ----

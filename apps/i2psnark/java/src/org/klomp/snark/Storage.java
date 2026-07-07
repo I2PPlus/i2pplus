@@ -1752,7 +1752,7 @@ public class Storage implements Closeable {
         return length;
     }
 
-    private static final long RAF_CLOSE_DELAY = 4 * 60 * 1000;
+    private static final long RAF_CLOSE_DELAY = 4 * (long) 60 * 1000;
 
     /** Close unused RAFs - call periodically */
     public void cleanRAFs() {
@@ -1900,7 +1900,7 @@ public class Storage implements Closeable {
          */
         private synchronized void balloonFile() throws IOException {
             long remaining = length;
-            final int ZEROBLOCKSIZE = (int) Math.min(remaining, 32 * 1024);
+            final int ZEROBLOCKSIZE = (int) Math.min(remaining, (long) 32 * 1024);
             byte[] zeros = new byte[ZEROBLOCKSIZE];
             raf.seek(0);
             // don't bother setting flag for small files

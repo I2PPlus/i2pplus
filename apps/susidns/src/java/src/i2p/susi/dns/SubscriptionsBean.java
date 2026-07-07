@@ -24,6 +24,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SecureFileOutputStream;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Bean for managing address book subscription sources and updates.
  */
@@ -64,7 +65,7 @@ public class SubscriptionsBean extends BaseBean {
             StringBuilder buf = new StringBuilder();
             BufferedReader br = null;
             try {
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
                 String line;
                 while((line = br.readLine()) != null) {
                     buf.append(line);
@@ -96,14 +97,14 @@ public class SubscriptionsBean extends BaseBean {
         try {
             // trim and sort
             List<String> urls = new ArrayList<>();
-            InputStream in = new ByteArrayInputStream(content.getBytes("UTF-8"));
+            InputStream in = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
             String line;
             while ((line = DataHelper.readLine(in)) != null) {
                 line = line.trim();
-                if (line.length() > 0) {urls.add(line);}
+                if (!line.isEmpty()) {urls.add(line);}
             }
             Collections.sort(urls);
-            try (PrintWriter out = new PrintWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "UTF-8"))) {
+            try (PrintWriter out = new PrintWriter(new OutputStreamWriter(new SecureFileOutputStream(file), StandardCharsets.UTF_8))) {
                 for (String url : urls) {out.println(url);}
                 if (out.checkError()) {throw new IOException("Failed write to " + file);}
             }
@@ -139,7 +140,7 @@ public class SubscriptionsBean extends BaseBean {
                           _t("If the problem persists, verify that you have cookies enabled in your browser.");
             }
         }
-        if (message.length() > 0) {message = "<p class=\"messages\">" + message + "</p>";}
+        if (!message.isEmpty()) {message = "<p class=\"messages\">" + message + "</p>";}
         return message;
     }
 

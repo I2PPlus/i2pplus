@@ -27,6 +27,7 @@ import net.i2p.util.I2PSSLSocketFactory;
 import net.i2p.util.Log;
 import net.i2p.util.VersionComparator;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Swiss army knife tester.
  * Saves our transient b64 destination to myKeyFile where SAMStreamSend can get it.
@@ -337,9 +338,7 @@ public class SAMStreamSink {
                                     if (b == (byte) '\n') {
                                         gotDest = true;
                                         if (_log.shouldInfo()) {
-                                            try {
-                                                _log.info("Received incoming accept from: \"" + new String(dest, 0, dlen, "ISO-8859-1") + '"');
-                                            } catch (IOException uee) { /* ignored */ }
+                                            _log.info("Received incoming accept from: \"" + new String(dest, 0, dlen, StandardCharsets.ISO_8859_1) + '"');
                                         }
                                         // feed any remaining to the sink
                                         i++;
@@ -382,7 +381,7 @@ public class SAMStreamSink {
         public void run() {
             while (true) {
                 try {
-                    Thread.sleep(127*1000);
+                    Thread.sleep((long) 127*1000);
                     synchronized(_out) {
                         _out.write(DataHelper.getUTF8("PING " + System.currentTimeMillis() + '\n'));
                         _out.flush();
@@ -454,7 +453,7 @@ public class SAMStreamSink {
                 _log.info("Received PING " + data + ", sending PONG " + data);
             synchronized (_out) {
                 try {
-                    _out.write(("PONG " + data + '\n').getBytes("UTF-8"));
+                    _out.write(("PONG " + data + '\n').getBytes(StandardCharsets.UTF_8));
                     _out.flush();
                 } catch (IOException ioe) {
                     _log.error("PONG fail", ioe);
@@ -534,9 +533,7 @@ public class SAMStreamSink {
                             if (b == (byte) '\n') {
                                 gotDest = true;
                                 if (_log.shouldInfo()) {
-                                    try {
-                                        _log.info("Received incoming accept from: \"" + new String(dest, 0, dlen, "ISO-8859-1") + '"');
-                                    } catch (IOException uee) { /* ignored */ }
+                                    _log.info("Received incoming accept from: \"" + new String(dest, 0, dlen, StandardCharsets.ISO_8859_1) + '"');
                                 }
                                 // feed any remaining to the sink
                                 i++;
@@ -594,9 +591,9 @@ public class SAMStreamSink {
         synchronized (samOut) {
             try {
                 if (user != null && password != null)
-                    samOut.write(("HELLO VERSION MIN=1.0 MAX=" + version + " USER=" + user + " PASSWORD=" + password + '\n').getBytes("UTF-8"));
+                    samOut.write(("HELLO VERSION MIN=1.0 MAX=" + version + " USER=" + user + " PASSWORD=" + password + '\n').getBytes(StandardCharsets.UTF_8));
                 else
-                    samOut.write(("HELLO VERSION MIN=1.0 MAX=" + version + '\n').getBytes("UTF-8"));
+                    samOut.write(("HELLO VERSION MIN=1.0 MAX=" + version + '\n').getBytes(StandardCharsets.UTF_8));
                 samOut.flush();
                 if (_log.shouldDebug())
                     _log.debug("Hello sent");
@@ -616,7 +613,7 @@ public class SAMStreamSink {
                         req = "STREAM FORWARD ID=" + _v3ID + " PORT=" + V3FORWARDPORT + " SSL=true\n";
                     else
                         throw new IllegalStateException("mode " + mode);
-                    samOut.write(req.getBytes("UTF-8"));
+                    samOut.write(req.getBytes(StandardCharsets.UTF_8));
                     samOut.flush();
                     if (_log.shouldDebug())
                         _log.debug("STREAM ACCEPT/FORWARD sent");
@@ -694,7 +691,7 @@ public class SAMStreamSink {
                     if (mode == V1DG || mode == V1RAW)
                         throw new IllegalArgumentException("v1 dg/raw incompatible with master session");
                     String req = "SESSION CREATE DESTINATION=" + dest + " STYLE=MASTER ID=masterSink " + sopts + '\n';
-                    samOut.write(req.getBytes("UTF-8"));
+                    samOut.write(req.getBytes(StandardCharsets.UTF_8));
                     samOut.flush();
                     if (_log.shouldDebug())
                         _log.debug("SESSION CREATE STYLE=MASTER sent");
@@ -706,7 +703,7 @@ public class SAMStreamSink {
                 }
 
                 String req = "SESSION " + command + " STYLE=" + style + ' ' + _conOptions + ' ' + sopts + '\n';
-                samOut.write(req.getBytes("UTF-8"));
+                samOut.write(req.getBytes(StandardCharsets.UTF_8));
                 samOut.flush();
                 if (_log.shouldDebug())
                     _log.debug("SESSION " + command + " sent");
@@ -722,29 +719,29 @@ public class SAMStreamSink {
                 if (masterMode) {
                     // do a bunch more
                     req = "SESSION ADD STYLE=STREAM FROM_PORT=99 ID=stream99\n";
-                    samOut.write(req.getBytes("UTF-8"));
+                    samOut.write(req.getBytes(StandardCharsets.UTF_8));
                     req = "SESSION ADD STYLE=STREAM FROM_PORT=98 ID=stream98\n";
-                    samOut.write(req.getBytes("UTF-8"));
+                    samOut.write(req.getBytes(StandardCharsets.UTF_8));
                     req = "SESSION ADD STYLE=DATAGRAM PORT=9997 LISTEN_PORT=97 ID=dg97\n";
-                    samOut.write(req.getBytes("UTF-8"));
+                    samOut.write(req.getBytes(StandardCharsets.UTF_8));
                     req = "SESSION ADD STYLE=DATAGRAM PORT=9996 FROM_PORT=96 ID=dg96\n";
-                    samOut.write(req.getBytes("UTF-8"));
+                    samOut.write(req.getBytes(StandardCharsets.UTF_8));
                     req = "SESSION ADD STYLE=RAW PORT=9995 LISTEN_PORT=95 ID=raw95\n";
-                    samOut.write(req.getBytes("UTF-8"));
+                    samOut.write(req.getBytes(StandardCharsets.UTF_8));
                     req = "SESSION ADD STYLE=RAW PORT=9994 FROM_PORT=94 LISTEN_PROTOCOL=222 ID=raw94\n";
-                    samOut.write(req.getBytes("UTF-8"));
+                    samOut.write(req.getBytes(StandardCharsets.UTF_8));
                     req = "SESSION REMOVE ID=stream99\n";
-                    samOut.write(req.getBytes("UTF-8"));
+                    samOut.write(req.getBytes(StandardCharsets.UTF_8));
                     req = "SESSION REMOVE ID=raw95\n";
-                    samOut.write(req.getBytes("UTF-8"));
+                    samOut.write(req.getBytes(StandardCharsets.UTF_8));
                     req = "SESSION REMOVE ID=notfound\n";
-                    samOut.write(req.getBytes("UTF-8"));
+                    samOut.write(req.getBytes(StandardCharsets.UTF_8));
                     req = "SESSION REMOVE ID=masterSink\n"; // shouldn't remove ourselves
-                    samOut.write(req.getBytes("UTF-8"));
+                    samOut.write(req.getBytes(StandardCharsets.UTF_8));
                     samOut.flush();
                 }
                 req = "NAMING LOOKUP NAME=ME\n";
-                samOut.write(req.getBytes("UTF-8"));
+                samOut.write(req.getBytes(StandardCharsets.UTF_8));
                 samOut.flush();
                 if (_log.shouldDebug())
                     _log.debug("Naming lookup sent");
@@ -775,7 +772,7 @@ public class SAMStreamSink {
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(f);
-            fos.write(dest.getBytes("UTF-8"));
+            fos.write(dest.getBytes(StandardCharsets.UTF_8));
             if (_log.shouldDebug())
                 _log.debug("My destination written to " + _destFile);
         } catch (IOException e) {

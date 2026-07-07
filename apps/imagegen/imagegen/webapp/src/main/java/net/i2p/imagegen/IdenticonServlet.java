@@ -64,7 +64,7 @@ public class IdenticonServlet extends HttpServlet {
 	private static final String PARAM_IDENTICON_CODE_SHORT = "c";
 	private static final String IDENTICON_IMAGE_FORMAT = "PNG";
 	private static final String IDENTICON_IMAGE_MIMETYPE = "image/png";
-	private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * 60 * 1000;
+	private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * (long) 60 * 1000;
 	private int version = 1;
 	private final IdenticonRenderer renderer = new NineBlockIdenticonRenderer2();
 	private IdenticonCache cache;
@@ -100,7 +100,7 @@ public class IdenticonServlet extends HttpServlet {
 		if (request.getCharacterEncoding() == null)
 			request.setCharacterEncoding("UTF-8");
 		String codeParam = request.getParameter(PARAM_IDENTICON_CODE_SHORT);
-		boolean codeSpecified = codeParam != null && codeParam.length() > 0;
+		boolean codeSpecified = codeParam != null && !codeParam.isEmpty();
 		if (!codeSpecified) {
 			response.setStatus(404);
 			return;

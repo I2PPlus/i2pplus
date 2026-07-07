@@ -1004,7 +1004,7 @@ public final class SelfSignedGenerator {
                             System.exit(1);
                         }
                         keypw = keypw.trim();
-                        if (keypw.length() > 0 && keypw.length() < 6)
+                        if (!keypw.isEmpty() && keypw.length() < 6)
                             System.out.println("Key password must be at least 6 characters");
                     }
                 } catch (IOException ioe) {

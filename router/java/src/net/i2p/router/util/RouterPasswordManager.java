@@ -77,7 +77,7 @@ public class RouterPasswordManager extends PasswordManager {
             // i2cp.password
             String user = _context.getProperty(PROP_I2CP_OLD_USER);
             String pw = _context.getProperty(PROP_I2CP_OLD_PW);
-            if (pw != null && user != null && pw.length() > 0 && user.length() > 0) {
+            if (pw != null && user != null && !pw.isEmpty() && !user.isEmpty()) {
                 if (!saveHash(PROP_I2CP_NEW, user, pw))
                     return false;
             }
@@ -122,7 +122,7 @@ public class RouterPasswordManager extends PasswordManager {
      */
     public boolean savePlain(String realm, String user, String pw) {
         String pfx = realm;
-        if (user != null && user.length() > 0)
+        if (user != null && !user.isEmpty())
             pfx += '.' + user;
         Map<String, String> toAdd = Collections.singletonMap(pfx + PROP_PW, pw);
         List<String> toDel = new ArrayList<>(4);
@@ -144,7 +144,7 @@ public class RouterPasswordManager extends PasswordManager {
      */
     public boolean saveB64(String realm, String user, String pw) {
         String pfx = realm;
-        if (user != null && user.length() > 0)
+        if (user != null && !user.isEmpty())
             pfx += '.' + user;
         String b64 = Base64.encode(DataHelper.getUTF8(pw));
         Map<String, String> toAdd = Collections.singletonMap(pfx + PROP_B64, b64);
@@ -167,7 +167,7 @@ public class RouterPasswordManager extends PasswordManager {
      */
     public boolean saveHash(String realm, String user, String pw) {
         String pfx = realm;
-        if (user != null && user.length() > 0)
+        if (user != null && !user.isEmpty())
             pfx += '.' + user;
         String shash = createHash(pw);
         Map<String, String> toAdd = Collections.singletonMap(pfx + PROP_SHASH, shash);
@@ -188,7 +188,7 @@ public class RouterPasswordManager extends PasswordManager {
      */
     public boolean remove(String realm, String user) {
         String pfx = realm;
-        if (user != null && user.length() > 0)
+        if (user != null && !user.isEmpty())
             pfx += '.' + user;
         List<String> toDel = new ArrayList<>(5);
         toDel.add(pfx + PROP_PW);

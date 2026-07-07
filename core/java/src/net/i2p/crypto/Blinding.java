@@ -146,7 +146,7 @@ public final class Blinding {
         if (modVal.length() != LENGTH) throw new IllegalStateException();
         byte[] mod = DataHelper.getASCII(modVal);
         byte[] data;
-        if (secret != null && secret.length() > 0) {
+        if (secret != null && !secret.isEmpty()) {
             byte[] sb = DataHelper.getUTF8(secret);
             data = new byte[LENGTH + sb.length];
             System.arraycopy(mod, 0, data, 0, LENGTH);

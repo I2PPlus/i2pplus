@@ -23,11 +23,11 @@ import java.util.Queue;
  */
 abstract class LogWriter implements Runnable {
     /** every 10 seconds? why? Just have the gui force a reread after a change?? */
-    private static final long CONFIG_READ_INTERVAL = 50 * 1000;
+    private static final long CONFIG_READ_INTERVAL = (long) 50 * 1000;
 
-    static final long FLUSH_INTERVAL = 15 * 1000; // ajax refresh interval
-    private static final long MIN_FLUSH_INTERVAL = 2 * 1000;
-    private static final long MAX_FLUSH_INTERVAL = 5 * 60 * 1000;
+    static final long FLUSH_INTERVAL = (long) 15 * 1000; // ajax refresh interval
+    private static final long MIN_FLUSH_INTERVAL = (long) 2 * 1000;
+    private static final long MAX_FLUSH_INTERVAL = 5 * (long) 60 * 1000;
     // true for newest first on /logs page; false for oldest first
     private static final boolean BUFFER_DISPLAYED_REVERSE = true;
     private long _lastReadConfig;

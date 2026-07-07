@@ -48,6 +48,7 @@ import java.util.Set;
 
 import javax.security.auth.x500.X500Principal;
 
+import java.nio.charset.StandardCharsets;
 /**
  *  Java X.509 certificate utilities, consolidated from various places.
  *
@@ -154,7 +155,7 @@ public final class CertUtil {
      *  @since 0.9.25 consolidated from other methods
      */
     private static void writePEM(byte[] buf, String what, OutputStream out) throws IOException {
-        PrintWriter wr = new PrintWriter(new OutputStreamWriter(out, "UTF-8"));
+        PrintWriter wr = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8));
         wr.println("-----BEGIN " + what + "-----");
         String b64 = Base64.encode(buf, true); // true = use standard alphabet
         for (int i = 0; i < b64.length(); i += LINE_LENGTH) {

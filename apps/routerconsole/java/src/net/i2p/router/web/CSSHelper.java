@@ -43,7 +43,7 @@ public class CSSHelper extends HelperBase {
     private static String _currentNonce;
     private static final String[] _recentNonces = new String[2];
     private static long _lastRotation;
-    private static final long NONCE_ROTATION_MS = 5 * 60 * 1000; // 5 minutes
+    private static final long NONCE_ROTATION_MS = 5 * (long) 60 * 1000; // 5 minutes
     /** @since 0.9.67+ */
     public static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
     public static final boolean DEFAULT_UNIFIED_SIDEBAR = false;
@@ -223,7 +223,7 @@ public class CSSHelper extends HelperBase {
     public void setLang(String lang) {
         // Protected with nonce in css.jsi
         if (lang != null && lang.length() >= 2 && lang.length() <= 6 &&
-            LANG_PATTERN.matcher(lang).replaceAll("").length() == 0) {
+            LANG_PATTERN.matcher(lang).replaceAll("").isEmpty()) {
             Map<String, String> m = new HashMap<>(2);
             int under = lang.indexOf('_');
             if (under < 0) {

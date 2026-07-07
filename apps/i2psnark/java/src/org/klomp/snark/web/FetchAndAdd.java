@@ -23,6 +23,7 @@ import org.klomp.snark.Snark;
 import org.klomp.snark.SnarkManager;
 import org.klomp.snark.Storage;
 
+import java.nio.charset.StandardCharsets;
 /**
  * A cancellable torrent file downloader. We extend Snark so its status may be easily listed in the
  * web table without adding a lot of code there.
@@ -71,10 +72,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         _url = url;
         _name = _t("Downloading {0}", url);
         _dataDir = dataDir;
-        byte[] fake = null;
-        try {
-            fake = SHA1.getInstance().digest(url.getBytes("ISO-8859-1"));
-        } catch (IOException ioe) { /* ignored */ }
+        byte[] fake = SHA1.getInstance().digest(url.getBytes(StandardCharsets.ISO_8859_1));
         _fakeHash = fake;
     }
 

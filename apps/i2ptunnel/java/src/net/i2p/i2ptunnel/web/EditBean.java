@@ -84,7 +84,7 @@ public class EditBean extends IndexBean {
         if (tun == null)
             return null;
         String keyFile = tun.getPrivKeyFile();
-        if (keyFile != null && keyFile.trim().length() > 0) {
+        if (keyFile != null && !keyFile.trim().isEmpty()) {
             File f = new File(keyFile);
             if (!f.isAbsolute())
                 f = new File(_context.getConfigDir(), keyFile);
@@ -450,8 +450,8 @@ public class EditBean extends IndexBean {
     /** @return true if outproxy authentication is enabled @since 0.8.3 */
     public boolean getOutproxyAuth(int tunnel) {
         return _helper.getOutproxyAuth(tunnel) &&
-               getOutproxyUsername(tunnel).length() > 0 &&
-               getOutproxyPassword(tunnel).length() > 0;
+               !getOutproxyUsername(tunnel).isEmpty() &&
+               !getOutproxyPassword(tunnel).isEmpty();
     }
 
     /** @return the outproxy username @since 0.8.3 */

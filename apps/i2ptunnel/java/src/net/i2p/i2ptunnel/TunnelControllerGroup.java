@@ -104,7 +104,7 @@ public class TunnelControllerGroup implements ClientApp {
     private static final AtomicLong _executorThreadCount = new AtomicLong();
     private final Object _executorLock = new Object();
     /** how long to wait before dropping an idle thread */
-    private static final long HANDLER_KEEPALIVE_MS = 2*60*1000;
+    private static final long HANDLER_KEEPALIVE_MS = 2*(long) 60*1000;
 
     /**
      *  Shared bounded executor for all server tunnel connection handlers.
@@ -114,7 +114,7 @@ public class TunnelControllerGroup implements ClientApp {
     private ThreadPoolExecutor _serverExecutor;
     private static final AtomicLong _serverExecutorThreadCount = new AtomicLong();
     private final Object _serverExecutorLock = new Object();
-    private static final long SERVER_KEEPALIVE_MS = 30*1000;
+    private static final long SERVER_KEEPALIVE_MS = (long) 30*1000;
 
     /** Tuned by Tuner — min 2, max 128 */
     private static volatile int _serverHandlerThreads = Math.max(SystemVersion.getCores(), 4);
@@ -792,7 +792,7 @@ public class TunnelControllerGroup implements ClientApp {
                                     public void run() {
                                         tc.log(msg);
                                         try {
-                                            Thread.sleep(delay * 1000);
+                                            Thread.sleep((long) delay * 1000);
                                         } catch (InterruptedException e) {
                                             Thread.currentThread().interrupt();
                                             tc.log("‣ Startup cancelled for " + name);

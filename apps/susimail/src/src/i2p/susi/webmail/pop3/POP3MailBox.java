@@ -1014,7 +1014,7 @@ public class POP3MailBox implements NewMailListener {
      */
     private List<String> getResultNl() throws IOException {
         List<String> rv = new ArrayList<>(16);
-        long timeOut = 120*1000;
+        long timeOut = (long) 120*1000;
         InputStream input = socket.getInputStream();
         long startTime = System.currentTimeMillis();
         StringBuilder buf = new StringBuilder(512);

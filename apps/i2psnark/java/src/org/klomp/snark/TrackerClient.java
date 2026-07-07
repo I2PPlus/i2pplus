@@ -76,8 +76,8 @@ public class TrackerClient implements Runnable {
     private static final int INITIAL_SLEEP = 90 * 1000;
     private static final int MAX_CONSEC_FAILS = 10; // slow down after this
     private static final int LONG_SLEEP = 10 * 60 * 1000; // sleep a while after lots of fails
-    private static final long MIN_TRACKER_ANNOUNCE_INTERVAL = 10 * 60 * 1000;
-    private static final long MIN_DHT_ANNOUNCE_INTERVAL = 15 * 60 * 1000;
+    private static final long MIN_TRACKER_ANNOUNCE_INTERVAL = 10 * (long) 60 * 1000;
+    private static final long MIN_DHT_ANNOUNCE_INTERVAL = 15 * (long) 60 * 1000;
 
     /** No guidance in BEP 5; standard practice is K (=8) */
     private static final int DHT_ANNOUNCE_PEERS = 8;
@@ -249,7 +249,7 @@ public class TrackerClient implements Runnable {
             boolean ok = _util.connect();
             if (!ok) {
                 try {
-                    Thread.sleep(30 * 1000);
+                    Thread.sleep((long) 30 * 1000);
                 } catch (InterruptedException ie) { /* ignored */ }
             }
         }
@@ -809,9 +809,9 @@ public class TrackerClient implements Runnable {
                     dht.getPeersAndAnnounce(
                             snark.getInfoHash(),
                             numwant,
-                            5 * 60 * 1000,
+                            5 * (long) 60 * 1000,
                             DHT_ANNOUNCE_PEERS,
-                            3 * 60 * 1000,
+                            3 * (long) 60 * 1000,
                             coordinator.completed(),
                             numwant <= 1);
             if (!hashes.isEmpty()) {

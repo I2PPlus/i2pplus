@@ -56,7 +56,7 @@ public class EncodingFactory {
 	 */
 	public static Encoding getEncoding( String name )
 	{
-		return name != null && name.length() > 0 ? encodings.get( name ) : null;
+		return name != null && !name.isEmpty() ? encodings.get( name ) : null;
 	}
 	/**
 	 * Returns list of available encodings;

@@ -358,7 +358,7 @@ public class AddressBean {
      */
     private String getDate(String key) {
         String d = getProp(key);
-        if (d.length() > 0) {
+        if (!d.isEmpty()) {
             try {d = DataHelper.formatTime(Long.parseLong(d));}
             catch (NumberFormatException nfe) { /* ignored */ }
         }

@@ -798,7 +798,7 @@ public class MetaInfo {
                 String attr = null;
                 if (attributes != null) {
                     attr = attributes.get(i);
-                    if (attr.length() > 0) {
+                    if (!attr.isEmpty()) {
                         file.put("attr", new BEValue(DataHelper.getASCII(attr)));
                     }
                 }

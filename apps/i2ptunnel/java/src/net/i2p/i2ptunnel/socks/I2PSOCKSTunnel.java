@@ -183,7 +183,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
         verifySocketManager();
         I2PSocketOptions opts = sockMgr.buildOptions(defaultOpts);
         if (!defaultOpts.containsKey(I2PSocketOptions.PROP_CONNECT_TIMEOUT))
-            opts.setConnectTimeout(60 * 1000);
+            opts.setConnectTimeout((long) 60 * 1000);
         return opts;
     }
 

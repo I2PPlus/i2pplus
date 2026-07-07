@@ -23,6 +23,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Bean for managing address book blacklist entries.
  * Supports hostnames, b32, and b64 addresses.
@@ -84,7 +85,7 @@ public class BlacklistBean extends BaseBean {
             StringBuilder buf = new StringBuilder();
             BufferedReader br = null;
             try {
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
                 String line;
                 while((line = br.readLine()) != null) {
                     buf.append(line);
@@ -99,7 +100,7 @@ public class BlacklistBean extends BaseBean {
                 String[] entryLines = content.split("\\n");
                 for (String entryLine : entryLines) {
                     String trimmed = entryLine.trim();
-                    if (trimmed.length() > 0 && !trimmed.startsWith("#")) {
+                    if (!trimmed.isEmpty() && !trimmed.startsWith("#")) {
                         validEntries++;
                     }
                 }
@@ -138,16 +139,16 @@ public class BlacklistBean extends BaseBean {
         try {
             // trim, validate, and sort
             List<String> entries = new ArrayList<>();
-            InputStream in = new ByteArrayInputStream(content.getBytes("UTF-8"));
+            InputStream in = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
             String line;
             while ((line = DataHelper.readLine(in)) != null) {
                 line = line.trim();
-                if (line.length() > 0 && isValidI2PAddress(line)) {
+                if (!line.isEmpty() && isValidI2PAddress(line)) {
                     entries.add(line);
                 }
             }
             Collections.sort(entries, String.CASE_INSENSITIVE_ORDER);
-            try (PrintWriter out = new PrintWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "UTF-8"))) {
+            try (PrintWriter out = new PrintWriter(new OutputStreamWriter(new SecureFileOutputStream(file), StandardCharsets.UTF_8))) {
                 for (String entry : entries) {out.println(entry);}
                 if (out.checkError()) {throw new IOException("Failed write to " + file);}
             }
@@ -340,7 +341,7 @@ public class BlacklistBean extends BaseBean {
                 message = _t("Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit.") + ' ' +
                           _t("If the problem persists, verify that you have cookies enabled in your browser.");
             }
-            if (message.length() > 0) {message = "<p class=\"messages\">" + message + "</p>";}
+            if (!message.isEmpty()) {message = "<p class=\"messages\">" + message + "</p>";}
         }
         return message;
     }
@@ -378,7 +379,7 @@ public class BlacklistBean extends BaseBean {
         int added = 0;
         List<String> newEntries = new ArrayList<>();
         for (String entry : entries) {
-            if (entry != null && entry.trim().length() > 0) {
+            if (entry != null && !entry.trim().isEmpty()) {
                 String trimmedEntry = entry.trim();
                 if (isValidI2PAddress(trimmedEntry) && !isEntryInContent(trimmedEntry, currentContent)) {
                     newEntries.add(trimmedEntry);
@@ -403,7 +404,7 @@ public class BlacklistBean extends BaseBean {
             StringBuilder buf = new StringBuilder();
             BufferedReader br = null;
             try {
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
                 String line;
                 while((line = br.readLine()) != null) {
                     buf.append(line);
@@ -457,7 +458,7 @@ public class BlacklistBean extends BaseBean {
                 String[] lines = currentContent.split("\\n");
                 for (String line : lines) {
                     line = line.trim();
-                    if (line.length() > 0 && isValidI2PAddress(line)) {
+                    if (!line.isEmpty() && isValidI2PAddress(line)) {
                         allEntries.add(line);
                     }
                 }
@@ -467,7 +468,7 @@ public class BlacklistBean extends BaseBean {
             // Sort all entries
             Collections.sort(allEntries, String.CASE_INSENSITIVE_ORDER);
             // Write to file
-            try (PrintWriter out = new PrintWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "UTF-8"))) {
+            try (PrintWriter out = new PrintWriter(new OutputStreamWriter(new SecureFileOutputStream(file), StandardCharsets.UTF_8))) {
                 for (String entry : allEntries) {out.println(entry);}
                 if (out.checkError()) {throw new IOException("Failed write to " + file);}
             }

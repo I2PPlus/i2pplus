@@ -34,7 +34,7 @@ public class JobQueueHelper extends HelperBase {
     private static int CORES = SystemVersion.getCores();
     private static boolean isSlow = SystemVersion.isSlow();
     private static int MAX_JOBS_DISPLAYED = 30;
-    private static final long RECENT_WINDOW_MS = 10 * 1000;
+    private static final long RECENT_WINDOW_MS = (long) 10 * 1000;
     private static final int MAX_RECENT_DISPLAY = 10000;
 
     private String _requestURI;

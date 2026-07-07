@@ -8,6 +8,7 @@ import java.net.Socket;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.util.Log;
 
+import java.nio.charset.StandardCharsets;
 /**
  *  Thread to do outbound filtering.
  *  Moved from I2PTunnelIRCClient.java
@@ -54,7 +55,7 @@ public class IrcOutboundFilter implements Runnable {
         BufferedReader in;
         OutputStream output;
         try {
-            in = new BufferedReader(new InputStreamReader(local.getInputStream(), "ISO-8859-1"));
+            in = new BufferedReader(new InputStreamReader(local.getInputStream(), StandardCharsets.ISO_8859_1));
             output=remote.getOutputStream();
         } catch (IOException e) {
             if (_log.shouldWarn())
@@ -85,7 +86,7 @@ public class IrcOutboundFilter implements Runnable {
                                 _log.info("[IRC Client] Outbound message [" + outmsg + "]");
                         }
                         outmsg = outmsg + "\r\n"; // rfc1459 sec. 2.3
-                        output.write(outmsg.getBytes("ISO-8859-1"));
+                        output.write(outmsg.getBytes(StandardCharsets.ISO_8859_1));
                         // save 250 ms in streaming
                         // Check ready() so we don't split the initial handshake up into multiple streaming messages
                         if (!in.ready())

@@ -262,7 +262,7 @@ public class EepGet {
                   String etag, String lastModified, String postData) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
-        _shouldProxy = (proxyHost != null) && (proxyHost.length() > 0) && (proxyPort > 0) && shouldProxy;
+        _shouldProxy = (proxyHost != null) && (!proxyHost.isEmpty()) && (proxyPort > 0) && shouldProxy;
         _proxyHost = proxyHost;
         _proxyPort = proxyPort;
         _numRetries = numRetries;
@@ -405,7 +405,7 @@ public class EepGet {
                 System.err.println("Etag option unsupported with https");
                 System.exit(1);
             }
-            boolean shouldProxy = proxyHost != null && proxyHost.length() > 0 && proxyPort > 0;
+            boolean shouldProxy = proxyHost != null && !proxyHost.isEmpty() && proxyPort > 0;
             if (shouldProxy)
                 get = new SSLEepGet(I2PAppContext.getGlobalContext(), SSLEepGet.ProxyType.HTTP, proxyHost, proxyPort, saveAs, url);
             else
@@ -1739,7 +1739,7 @@ public class EepGet {
     protected String getRequest() throws IOException {
         StringBuilder buf = new StringBuilder(2048);
         boolean post = false;
-        if ((_postData != null && _postData.length() > 0) ||
+        if ((_postData != null && !_postData.isEmpty()) ||
             (_postBinaryData != null && _postBinaryData.length > 0) ||
             (_postDataFile != null && _postDataFile.length() > 0))
             post = true;

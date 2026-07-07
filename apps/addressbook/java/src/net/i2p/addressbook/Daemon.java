@@ -850,7 +850,7 @@ public class Daemon {
 
         // wait
         try {
-            Thread.sleep(5*60*1000 + I2PAppContext.getGlobalContext().random().nextLong(5*60*1000));
+            Thread.sleep(5*60*1000 + I2PAppContext.getGlobalContext().random().nextLong(5 * (long) 60 * 1000));
         } catch (InterruptedException ie) { /* ignored */ }
 
         while (_running) {

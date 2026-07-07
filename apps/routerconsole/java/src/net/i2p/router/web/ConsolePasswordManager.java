@@ -69,7 +69,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
          return true;
      // Fall back to MD5 for backward compatibility
      String pfx = realm;
-     if (user != null && user.length() > 0)
+     if (user != null && !user.isEmpty())
          pfx += '.' + user;
      String hex = _context.getProperty(pfx + PROP_MD5);
      if (hex == null)
@@ -89,7 +89,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      */
     private boolean checkPBKDF2(String realm, String user, String pw) {
         String pfx = realm;
-        if (user != null && user.length() > 0)
+        if (user != null && !user.isEmpty())
             pfx += '.' + user;
         String stored = _context.getProperty(pfx + PROP_PBKDF2);
         if (stored == null)
@@ -135,7 +135,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
             if (prop.startsWith(pfx) && prop.endsWith(PROP_MD5)) {
                 String user = prop.substring(0, prop.length() - PROP_MD5.length()).substring(pfx.length());
                 String hex = e.getValue();
-                if (user.length() > 0 && hex.length() == 32)
+                if (!user.isEmpty() && hex.length() == 32)
                     rv.put(user, hex);
             }
         }
@@ -156,7 +156,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
             if (prop.startsWith(pfx) && prop.endsWith(PROP_PBKDF2)) {
                 String user = prop.substring(0, prop.length() - PROP_PBKDF2.length()).substring(pfx.length());
                 String hash = e.getValue();
-                if (user.length() > 0 && hash != null && !hash.isEmpty())
+                if (!user.isEmpty() && hash != null && !hash.isEmpty())
                     rv.put(user, hash);
             }
         }
@@ -177,7 +177,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
             String pw = _context.getProperty(PROP_CONSOLE_OLD);
             if (pw != null) {
                 Map<String, String> toAdd = new HashMap<>(2);
-                if (pw.length() > 0) {
+                if (!pw.isEmpty()) {
                     saveMD5(RouterConsoleRunner.PROP_CONSOLE_PW, RouterConsoleRunner.JETTY_REALM,
                             CONSOLE_USER, pw);
                     toAdd.put(RouterConsoleRunner.PROP_PW_ENABLE, "true");
@@ -245,7 +245,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      */
     private boolean savePBKDF2(String realm, String subrealm, String user, String pw) {
         String pfx = realm;
-        if (user != null && user.length() > 0)
+        if (user != null && !user.isEmpty())
             pfx += '.' + user;
         try {
             byte[] salt = new byte[16];

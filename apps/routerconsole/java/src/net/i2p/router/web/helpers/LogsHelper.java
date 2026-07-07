@@ -307,7 +307,7 @@ public class LogsHelper extends HelperBase {
         } else {
             obuf.append("<p>").append(_t("File location")).append(": <a href=\"/wrapper.log\" target=_blank>")
                 .append(loc).append("</a>").append("</p></td></tr>\n<tr><td>");
-            if (str.length() > 0) {
+            if (!str.isEmpty()) {
                 str = str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
                 obuf.append("<pre id=service_logs>").append(str).append("</pre>");
             } else {

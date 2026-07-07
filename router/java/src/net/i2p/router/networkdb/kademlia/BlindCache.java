@@ -401,7 +401,7 @@ class BlindCache {
         SigningPublicKey spk = new SigningPublicKey(st1);
         spk.fromBase64(ss[4]);
         String secret;
-        if (ss[5].length() > 0) {
+        if (!ss[5].isEmpty()) {
             byte[] b = Base64.decode(ss[5]);
             if (b == null)
                 throw new DataFormatException("Bad secret");
@@ -410,7 +410,7 @@ class BlindCache {
             secret = null;
         }
         PrivateKey privkey;
-        if (ss[6].length() > 0) {
+        if (!ss[6].isEmpty()) {
             byte[] b = Base64.decode(ss[6]);
             if (b == null)
                 throw new DataFormatException("Bad privkey");
@@ -419,7 +419,7 @@ class BlindCache {
             privkey = null;
         }
         BlindData rv;
-        if (ss[7].length() > 0) {
+        if (!ss[7].isEmpty()) {
             Destination dest = new Destination(ss[7]);
             if (!spk.equals(dest.getSigningPublicKey()))
                 throw new DataFormatException("SigningPublickKey mismatch");
@@ -457,7 +457,7 @@ class BlindCache {
         buf.append(time).append(',');
         buf.append(spk.toBase64()).append(',');
         String secret = bd.getSecret();
-        if (secret != null && secret.length() > 0)
+        if (secret != null && !secret.isEmpty())
             buf.append(Base64.encode(secret));
         buf.append(',');
         PrivateKey pk = bd.getAuthPrivKey();

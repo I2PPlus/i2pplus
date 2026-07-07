@@ -139,7 +139,7 @@ public class EepHead extends EepGet {
             get.addAuthorization(username, password);
         }
 
-        if (get.fetch(10 * 1000, -1, inactivityTimeout)) {
+        if (get.fetch((long) 10 * 1000, -1, inactivityTimeout)) {
             System.out.println(" • URL: " + url);
             String x = get.getServer();
             String cc = get.getCacheControl();

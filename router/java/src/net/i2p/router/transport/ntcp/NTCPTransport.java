@@ -1634,7 +1634,7 @@ public class NTCPTransport extends TransportImpl {
         String oport = newProps.getProperty(RouterAddress.PROP_PORT);
         String nport = null;
         String cport = _context.getProperty(PROP_I2NP_NTCP_PORT);
-        if (cport != null && cport.length() > 0) {
+        if (cport != null && !cport.isEmpty()) {
             nport = cport;
             if (port > 0 && !nport.equals(Integer.toString(port)))
                 _log.logAlways(Log.WARN, "UDP detected external port is " + port + " but TCP configured port is " + nport);
@@ -1651,7 +1651,7 @@ public class NTCPTransport extends TransportImpl {
         if (_log.shouldInfo())
             _log.info("Old port: " + oport + " Config: " + cport + " New: " + nport);
 
-        if (oport == null && nport != null && nport.length() > 0) {
+        if (oport == null && nport != null && !nport.isEmpty()) {
             newProps.setProperty(RouterAddress.PROP_PORT, nport);
             changed = true;
         }
@@ -1668,7 +1668,7 @@ public class NTCPTransport extends TransportImpl {
         String enabled = _context.getProperty(PROP_I2NP_NTCP_AUTO_IP, "true").toLowerCase(Locale.US);
         String name = getConfiguredIP();
         // hostname config trumps auto config
-        if (name != null && name.length() > 0)
+        if (name != null && !name.isEmpty())
             enabled = "false";
 
         // assume SSU is happy if the address is non-null
@@ -1696,7 +1696,7 @@ public class NTCPTransport extends TransportImpl {
                 changed = true;
             }
         } else if (enabled.equals("false") &&
-                   name != null && name.length() > 0 &&
+                   name != null && !name.isEmpty() &&
                    !name.equals(ohost)) {
             // Host name is configured, and we have a port (either auto or configured)
             // but we probably only get here if the port is auto,

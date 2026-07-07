@@ -364,7 +364,7 @@ public class NamingServiceBean extends AddressbookBean {
                        (blacklistedHosts > 0 ? " (Blacklisted: " + blacklistedHosts + ")" : ""));
             message = generateLoadMessage();
         } catch (RuntimeException e) {warn(e);}
-        if (message.length() > 0) {
+        if (!message.isEmpty()) {
             if ((filter != null && filter.length() > 0)) {
                 message = "<span id=filtered>" + message; // span closed in AddressbookBean
             } else {message = "<span id=showing>" + message;}
@@ -475,7 +475,7 @@ public class NamingServiceBean extends AddressbookBean {
                                     }
                                 } catch (DataFormatException dfe) {
                                     String msg = dfe.getMessage();
-                                    if (msg != null && msg.length() > 0) {message = msg;}
+                                    if (msg != null && !msg.isEmpty()) {message = msg;}
                                     else if (wasB32) {message = _t("Invalid Base 32 host name.");}
                                     else {message = _t("Invalid Base 64 destination.");}
                                     fail = true;
@@ -549,7 +549,7 @@ public class NamingServiceBean extends AddressbookBean {
 
         action = null;
 
-        if (message.length() > 0) {message = styleMessage(message, fail);}
+        if (!message.isEmpty()) {message = styleMessage(message, fail);}
         return message;
     }
 
@@ -571,7 +571,7 @@ public class NamingServiceBean extends AddressbookBean {
         for (int i = 0; i < dests.size(); i++) {
             if (!dests.get(i).toBase64().equals(destination)) {continue;}
             Properties props = propsList.get(i);
-            if (notes != null && notes.length() > 0) {
+            if (notes != null && !notes.isEmpty()) {
                 byte[] nbytes = DataHelper.getUTF8(notes);
                     if (nbytes.length > 255) { // violently truncate, possibly splitting a char
                     byte[] newbytes = new byte[255];

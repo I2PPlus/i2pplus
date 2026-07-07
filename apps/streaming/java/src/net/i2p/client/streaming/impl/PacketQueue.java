@@ -39,7 +39,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     private static final int TAG_WINDOW_FACTOR = 5;
     private static final int FINAL_TAGS_TO_SEND = 4;
     private static final int FINAL_TAG_THRESHOLD = 2;
-    private static final long REMOVE_EXPIRED_TIME = 67*1000;
+    private static final long REMOVE_EXPIRED_TIME = (long) 67*1000;
     private static final boolean ENABLE_STATUS_LISTEN = true;
     private static final long I2CP_EXPIRATION_ADJUST = Math.min(25, Connection.getMinResendDelay() / 4);
 

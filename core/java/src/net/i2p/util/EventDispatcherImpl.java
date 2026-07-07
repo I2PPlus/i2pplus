@@ -101,7 +101,7 @@ public class EventDispatcherImpl implements EventDispatcher {
                 Object val = _events.get(name);
                 if (val != null) return val;
                 try {
-                    _events.wait(5 * 1000);
+                    _events.wait((long) 5 * 1000);
                 } catch (InterruptedException e) { /* ignored */ }
             }
         } while (true);

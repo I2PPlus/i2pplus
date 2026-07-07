@@ -34,6 +34,7 @@ import net.i2p.data.Signature;
 import net.i2p.data.SimpleDataStructure;
 import net.i2p.util.SecureFileOutputStream;
 
+import java.nio.charset.StandardCharsets;
 /**
  * I2P update file format handler for .su3 files.
  * Supports reading, writing, and verification of signed update packages.
@@ -311,7 +312,7 @@ public class SU3File {
         for (zbyte = 0; zbyte < _versionLength; zbyte++) {
             if (data[zbyte] == 0x00) break;
         }
-        _version = new String(data, 0, zbyte, "UTF-8");
+        _version = new String(data, 0, zbyte, StandardCharsets.UTF_8);
 
         data = new byte[_signerLength];
         bytesRead = DataHelper.read(in, data);
@@ -804,7 +805,7 @@ public class SU3File {
                     return false;
                 }
                 keypw = keypw.trim();
-                if (keypw.length() > 0 && keypw.length() < 6)
+                if (!keypw.isEmpty() && keypw.length() < 6)
                     System.out.println("Key password must be at least 6 characters");
             }
         } catch (IOException ioe) {
@@ -919,7 +920,7 @@ public class SU3File {
                     return false;
                 }
                 keypw = keypw.trim();
-                if (keypw.length() > 0 && keypw.length() < 6)
+                if (!keypw.isEmpty() && keypw.length() < 6)
                     System.out.println("Key password must be at least 6 characters");
             }
             File pkfile = new File(privateKeyFile);
@@ -1064,7 +1065,7 @@ public class SU3File {
         File ksFile = new File(privateKeyFile);
         String keypw = "";
         try {
-            while (alias.length() == 0) {
+            while (alias.isEmpty()) {
                 System.out.print("Enter key name (example@mail.i2p): ");
                 alias = DataHelper.readLine(System.in);
                 if (alias == null) {
@@ -1081,7 +1082,7 @@ public class SU3File {
                     return false;
                 }
                 keypw = keypw.trim();
-                if (keypw.length() > 0 && keypw.length() < 6)
+                if (!keypw.isEmpty() && keypw.length() < 6)
                     System.out.println("Key password must be at least 6 characters");
             }
         } catch (IOException ioe) {

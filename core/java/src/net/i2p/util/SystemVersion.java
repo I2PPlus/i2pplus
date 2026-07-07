@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.util.TimeZone;
 import java.util.TreeSet;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Methods to find out what system we are running on
  *
@@ -595,7 +596,7 @@ public abstract class SystemVersion {
             if (!f.exists()) {
                 return fallback;
             }
-            String content = new String(Files.readAllBytes(f.toPath()), "UTF-8").trim();
+            String content = new String(Files.readAllBytes(f.toPath()), StandardCharsets.UTF_8).trim();
             int count = 0;
             for (String part : content.split(",")) {
                 part = part.trim();

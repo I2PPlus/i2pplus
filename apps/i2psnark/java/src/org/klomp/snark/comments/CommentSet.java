@@ -22,6 +22,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import net.i2p.util.SecureFileOutputStream;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Store comments.
  *
@@ -84,7 +85,7 @@ public class CommentSet extends AbstractSet<Comment> {
             br =
                     new BufferedReader(
                             new InputStreamReader(
-                                    new GZIPInputStream(new FileInputStream(file)), "UTF-8"));
+                                    new GZIPInputStream(new FileInputStream(file)), StandardCharsets.UTF_8));
             String line = null;
             while ((line = br.readLine()) != null) {
                 Comment c = Comment.fromPersistentString(line);
@@ -113,7 +114,7 @@ public class CommentSet extends AbstractSet<Comment> {
                     new PrintWriter(
                             new OutputStreamWriter(
                                     new GZIPOutputStream(new SecureFileOutputStream(file)),
-                                    "UTF-8"));
+                                    StandardCharsets.UTF_8));
             for (List<Comment> l : map.values()) {
                 for (Comment c : l) {
                     out.println(c.toPersistentString());

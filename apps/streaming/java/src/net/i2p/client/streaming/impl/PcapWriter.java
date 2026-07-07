@@ -189,8 +189,8 @@ public class PcapWriter implements Closeable, Flushable {
             now = ((PacketLocal)pkt).getLastSend();
         DataHelper.writeLong(_fos, 4, now / 1000);
         DataHelper.writeLong(_fos, 4, 1000 * (now % 1000));
-        DataHelper.writeLong(_fos, 4, 54 + optLen + includeLen);   // 14 MAC + 20 IP + 20 TCP
-        DataHelper.writeLong(_fos, 4, 58 + optLen + pkt.getPayloadSize()); // 54 + MAC checksum
+        DataHelper.writeLong(_fos, 4, 54 + (long) optLen + includeLen);   // 14 MAC + 20 IP + 20 TCP
+        DataHelper.writeLong(_fos, 4, 58 + (long) optLen + pkt.getPayloadSize()); // 54 + MAC checksum
 
         // MAC Header 14 bytes
         _fos.write(MAC_HEADER);

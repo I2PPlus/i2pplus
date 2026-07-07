@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import java.nio.charset.StandardCharsets;
 /**
  *  A simple SOCKS 5 client.
  *  Note: Caller is advised to setSoTimeout on the socket. Not done here.
@@ -141,8 +142,8 @@ public class SOCKS5Client {
                 if (authAvail) {
                     // send the auth
                     out.writeByte(AUTH_VERSION);
-                    byte[] user = configUser.getBytes("UTF-8");
-                    byte[] pw = configPW.getBytes("UTF-8");
+                    byte[] user = configUser.getBytes(StandardCharsets.UTF_8);
+                    byte[] pw = configPW.getBytes(StandardCharsets.UTF_8);
                     out.writeByte(user.length);
                     out.write(user);
                     out.writeByte(pw.length);
@@ -171,7 +172,7 @@ public class SOCKS5Client {
             if (addressType == AddressType.IPV4 || addressType == AddressType.IPV6) {
                 out.write(InetAddress.getByName(connHostName).getAddress());
             } else {
-                byte[] d = connHostName.getBytes("ISO-8859-1");
+                byte[] d = connHostName.getBytes(StandardCharsets.ISO_8859_1);
                 out.writeByte(d.length);
                 out.write(d);
             }

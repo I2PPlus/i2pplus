@@ -85,9 +85,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     private volatile boolean _externalRestartPending;
 
     private static final long DEFAULT_MAX_TIME = 3*60*60*1000L;
-    private static final long DEFAULT_CHECK_TIME = 90*1000;
-    private static final long STATUS_CLEAN_TIME = 5*60*1000; // 5 minutes sidebar notification persistence ?
-    private static final long TASK_CLEANER_TIME = 15*60*1000;
+    private static final long DEFAULT_CHECK_TIME = (long) 90*1000;
+    private static final long STATUS_CLEAN_TIME = 5 * (long) 60 * 1000; // 5 minutes sidebar notification persistence ?
+    private static final long TASK_CLEANER_TIME = 15 * (long) 60 * 1000;
     private static final String PROP_UNSIGNED_AVAILABLE = "router.updateUnsignedAvailable";
     private static final String PROP_DEV_SU3_AVAILABLE = "router.updateDevSU3Available";
 
@@ -997,11 +997,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 uri = DataHelper.stripHTML(task.getURI().getPath());
                 buf.append(_t("Install failed:{0}", "<br>")).append(uri.replace("http://", ""));
             } else {buf.append(_t("Transfer failed:{0}", "<br>")).append(uri.replace("http://", ""));}
-            if (reason != null && reason.length() > 0) {
+            if (reason != null && !reason.isEmpty()) {
                 String trimmed = reason.replace("http://", "").replace("java.io.IOException", _t("Error")).replaceAll(FOR_CONTENT_PATTERN.pattern(), "");
                 buf.append("<br>").append(trimmed);
             }
-            if (t != null && t.getMessage() != null && t.getMessage().length() > 0) {
+            if (t != null && t.getMessage() != null && !t.getMessage().isEmpty()) {
                 buf.append("<br>").append(DataHelper.stripHTML(t.getMessage()));
             }
             buf.append("</b>");

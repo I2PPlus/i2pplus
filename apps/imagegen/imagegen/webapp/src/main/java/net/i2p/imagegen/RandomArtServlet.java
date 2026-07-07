@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.i2p.data.Hash;
 import net.i2p.util.ConvertToHash;
 
+import java.nio.charset.StandardCharsets;
 /**
  * This servlet generates random art (visual identifier) images.
  *
@@ -20,7 +21,7 @@ public class RandomArtServlet extends HttpServlet {
 	private static final long serialVersionUID = -3507466186902317988L;
 	private static final String PARAM_IDENTICON_CODE_SHORT = "c";
 	private static final String PARAM_IDENTICON_MODE_SHORT = "m";
-	private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * 60 * 1000;
+	private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * (long) 60 * 1000;
 	private int version = 1;
 	private long identiconExpiresInMillis = DEFAULT_IDENTICON_EXPIRES_IN_MILLIS;
 
@@ -31,7 +32,7 @@ public class RandomArtServlet extends HttpServlet {
 		if (request.getCharacterEncoding() == null)
 			request.setCharacterEncoding("UTF-8");
 		String codeParam = request.getParameter(PARAM_IDENTICON_CODE_SHORT);
-		boolean codeSpecified = codeParam != null && codeParam.length() > 0;
+		boolean codeSpecified = codeParam != null && !codeParam.isEmpty();
 		if (!codeSpecified) {
 			response.setStatus(404);
 			return;
@@ -80,7 +81,7 @@ public class RandomArtServlet extends HttpServlet {
 				}
 
 				// return image bytes to requester
-				byte[] imageBytes = buf.toString().getBytes("UTF-8");
+				byte[] imageBytes = buf.toString().getBytes(StandardCharsets.UTF_8);
 				response.setContentLength(imageBytes.length);
 				response.getOutputStream().write(imageBytes);
 			}

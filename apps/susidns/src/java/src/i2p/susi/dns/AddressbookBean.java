@@ -29,6 +29,7 @@ import net.i2p.data.Destination;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Bean for managing I2P address books.
  * Provides functionality for loading, filtering, and managing address entries.
@@ -125,7 +126,7 @@ public class AddressbookBean extends BaseBean {
      * @return true if a filter is active
      */
     public boolean isHasFilter() {
-        return filter != null && filter.length() > 0;
+        return filter != null && !filter.isEmpty();
     }
 
     /**
@@ -193,7 +194,7 @@ public class AddressbookBean extends BaseBean {
      */
     private void loadPropertiesFromFile(AddressBean bean, String hostname) {
         try (BufferedReader reader =
-                new BufferedReader(new InputStreamReader(new FileInputStream(getFileName()), "UTF-8"))) {
+                new BufferedReader(new InputStreamReader(new FileInputStream(getFileName()), StandardCharsets.UTF_8))) {
             String line;
             String search = hostname + '=';
 
@@ -308,7 +309,7 @@ public class AddressbookBean extends BaseBean {
                     }
                 }
 
-                if (filter != null && filter.length() > 0) {
+                if (filter != null && !filter.isEmpty()) {
                     if (filter.equals("0-9")) {
                         char first = name.charAt(0);
                         if (first < '0' || first > '9') {
@@ -361,7 +362,7 @@ public class AddressbookBean extends BaseBean {
                         continue;
                     }
                 }
-                if (search != null && search.length() > 0 && name.indexOf(search) == -1) {
+                if (search != null && !search.isEmpty() && name.indexOf(search) == -1) {
                     continue;
                 }
 
@@ -407,7 +408,7 @@ public class AddressbookBean extends BaseBean {
                 } catch (IOException ioe) { /* ignored */ }
             }
         }
-        if (message.length() > 0) {
+        if (!message.isEmpty()) {
             message = "<p id=filtered>" + message + "</p>";
         }
         return message;
@@ -423,8 +424,8 @@ public class AddressbookBean extends BaseBean {
         String message;
         String filterArg = "";
         int resultCount = resultSize();
-        if (filter != null && filter.length() > 0) {
-            if (search != null && search.length() > 0) {
+        if (filter != null && !filter.isEmpty()) {
+            if (search != null && !search.isEmpty()) {
                 message = ngettext(
                         "Search for <span class=active>" + search + "</span> with filter <span class=active>" + filter
                                 + "</span> returned 1 result",
@@ -440,7 +441,7 @@ public class AddressbookBean extends BaseBean {
                         .replace(".", "");
             }
             filterArg = "&amp;filter=" + filter;
-        } else if (search != null && search.length() > 0) {
+        } else if (search != null && !search.isEmpty()) {
             message = ngettext(
                     "One result for: " + "<span class=active>" + search + "</span>",
                     "{0} results for: " + "<span class=active>" + search + "</span>",
@@ -638,7 +639,7 @@ public class AddressbookBean extends BaseBean {
 
         action = null;
 
-        if (message.length() > 0) {
+        if (!message.isEmpty()) {
             message = "<p class=\"messages" + (fail ? " fail" : "") + "\">" + message + "</p>";
         }
         return message;
@@ -692,7 +693,7 @@ public class AddressbookBean extends BaseBean {
      * @param filter filter string to set
      */
     public void setFilter(String filter) {
-        if (filter != null && (filter.length() == 0 || filter.equalsIgnoreCase("none"))) {
+        if (filter != null && (filter.isEmpty() || filter.equalsIgnoreCase("none"))) {
             filter = null;
             search = null;
         }

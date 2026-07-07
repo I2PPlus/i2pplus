@@ -86,7 +86,7 @@ public class LocaleWebAppHandler extends HandlerWrapper
                 String lang = _context.getProperty(Messages.PROP_LANG);
                 if (lang == null || lang.length() <= 0)
                     lang = Locale.getDefault().getLanguage();
-                if (lang != null && lang.length() > 0 && !lang.equals("en")) {
+                if (lang != null && !lang.isEmpty() && !lang.equals("en")) {
                     String testPath = pathInContext.substring(0, len - 4) + '_' + lang + ".jsp";
                     // Do we have a servlet for the new path that isn't the catchall *.jsp?
                     @SuppressWarnings("rawtypes")

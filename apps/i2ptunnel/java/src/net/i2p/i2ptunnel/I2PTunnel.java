@@ -1609,7 +1609,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         if (args.length == 1) {
             BufferedReader br = null;
             try {
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(args[0]), "UTF-8"));
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(args[0]), StandardCharsets.UTF_8));
                 String line;
                 while ((line = br.readLine()) != null) {
                     if (line.startsWith("#"))
@@ -1677,7 +1677,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param l logger to receive events and output
      */
     private void runPing(String allargs, Logging l) {
-        if (allargs.length() != 0) {
+        if (!allargs.isEmpty()) {
             _clientOptions.setProperty(I2Ping.PROP_COMMAND, allargs);
             if (!_clientOptions.containsKey("inbound.nickname"))
                 _clientOptions.setProperty("inbound.nickname", "I2Ping");

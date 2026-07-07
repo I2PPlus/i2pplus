@@ -38,10 +38,10 @@ class WebPeer extends Peer implements EepGet.StatusListener {
 
     // to be recognized by the UI
     public static final byte[] IDBytes = DataHelper.getASCII("WebSeedBEP19");
-    private static final long HEADER_TIMEOUT = 60 * 1000;
-    private static final long TOTAL_TIMEOUT = 10 * 60 * 1000;
-    private static final long INACTIVITY_TIMEOUT = 2 * 60 * 1000;
-    private static final long TARGET_FETCH_TIME = 2 * 60 * 1000;
+    private static final long HEADER_TIMEOUT = (long) 60 * 1000;
+    private static final long TOTAL_TIMEOUT = 10 * (long) 60 * 1000;
+    private static final long INACTIVITY_TIMEOUT = 2 * (long) 60 * 1000;
+    private static final long TARGET_FETCH_TIME = 2 * (long) 60 * 1000;
     // 128 KB
     private static final int ABSOLUTE_MIN_REQUESTS = 8;
     // 2 MB

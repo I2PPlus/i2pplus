@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Handles signing and verification of I2P update files.
  * Supports multiple signature types and content formats for secure software distribution.
@@ -89,7 +90,7 @@ public class TrustedUpdate {
 
         String propertyTrustedKeys = context.getProperty(PROP_TRUSTED_KEYS);
 
-        if ((propertyTrustedKeys != null) && (propertyTrustedKeys.length() > 0)) {
+        if ((propertyTrustedKeys != null) && (!propertyTrustedKeys.isEmpty())) {
             StringTokenizer propertyTrustedKeysTokens = new StringTokenizer(propertyTrustedKeys, ",\r\n");
 
             while (propertyTrustedKeysTokens.hasMoreTokens()) {
@@ -370,10 +371,10 @@ public class TrustedUpdate {
             }
 
             for (int i = 0; i < VERSION_BYTES; i++) if (data[i] == 0x00) {
-                    return new String(data, 0, i, "UTF-8");
+                    return new String(data, 0, i, StandardCharsets.UTF_8);
                 }
 
-            return new String(data, "UTF-8");
+            return new String(data, StandardCharsets.UTF_8);
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("your JVM doesnt support utf-8? " + uee.getMessage());
         } catch (IOException ioe) {
@@ -406,10 +407,10 @@ public class TrustedUpdate {
             }
 
             for (int i = 0; i < VERSION_BYTES; i++) if (data[i] == 0x00) {
-                    return new String(data, 0, i, "UTF-8");
+                    return new String(data, 0, i, StandardCharsets.UTF_8);
                 }
 
-            return new String(data, "UTF-8");
+            return new String(data, StandardCharsets.UTF_8);
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException("your JVM doesnt support utf-8? " + uee.getMessage());
         } catch (IOException ioe) {
@@ -608,11 +609,7 @@ public class TrustedUpdate {
 
         if (version.length() > VERSION_BYTES) version = version.substring(0, VERSION_BYTES);
 
-        try {
-            versionRawBytes = version.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("your JVM doesnt support utf-8? " + e.getMessage());
-        }
+        versionRawBytes = version.getBytes(StandardCharsets.UTF_8);
 
         System.arraycopy(versionRawBytes, 0, versionHeader, 0, versionRawBytes.length);
 

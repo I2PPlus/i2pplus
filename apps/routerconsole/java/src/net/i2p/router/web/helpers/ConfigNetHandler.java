@@ -172,7 +172,7 @@ public class ConfigNetHandler extends FormHandler {
                                                  _context.router().isHidden() ? "hidden" : UDPTransport.DEFAULT_SOURCES);
             String oldUHost = _context.getProperty(UDPTransport.PROP_EXTERNAL_HOST, "");
             // force change to fixed if user enters a hostname/IP
-            if (_udpHost1 != null && _udpHost1.length() > 0)
+            if (_udpHost1 != null && !_udpHost1.isEmpty())
                 _udpAutoIP = "fixed";
             if (_udpAutoIP != null) {
                 String uhost = "";
@@ -184,11 +184,11 @@ public class ConfigNetHandler extends FormHandler {
                         String k = (String) o;
                         if (k.startsWith("addr_")) {
                             String v = DataHelper.stripHTML(k.substring(5));
-                            if (v.length() > 0)
+                            if (!v.isEmpty())
                                 addrs.add(v);
                         }
                     }
-                    if (_udpHost1 != null && _udpHost1.length() > 0) {
+                    if (_udpHost1 != null && !_udpHost1.isEmpty()) {
                         if (verifyAddress(_udpHost1)) {
                             addrs.add(_udpHost1);
                         } else {
@@ -213,7 +213,7 @@ public class ConfigNetHandler extends FormHandler {
                     }
                 } else {
                     // not fixed
-                    if (oldUHost.length() > 0)
+                    if (!oldUHost.isEmpty())
                         removes.add(UDPTransport.PROP_EXTERNAL_HOST);
                 }
                 changes.put(UDPTransport.PROP_SOURCES, _udpAutoIP);
@@ -259,7 +259,7 @@ public class ConfigNetHandler extends FormHandler {
                 boolean valid = true;
                 if ("disabled".equals(_ntcpAutoIP)) {
                     addFormNotice(_t("Disabling TCP completely") + "...");
-                } else if ("false".equals(_ntcpAutoIP) && _ntcpHostname.length() > 0) {
+                } else if ("false".equals(_ntcpAutoIP) && !_ntcpHostname.isEmpty()) {
                     valid = verifyAddress(_ntcpHostname);
                     if (valid) {
                         changes.put(ConfigNetHelper.PROP_I2NP_NTCP_HOSTNAME, _ntcpHostname);
@@ -284,7 +284,7 @@ public class ConfigNetHandler extends FormHandler {
                 }
             }
             if (oldAutoPort != _ntcpAutoPort || ! oldNPort.equals(_ntcpPort)) {
-                if (_ntcpPort.length() > 0 && !_ntcpAutoPort) {
+                if (!_ntcpPort.isEmpty() && !_ntcpAutoPort) {
                     int port = Addresses.getPort(_ntcpPort);
                     if (port != 0) {
                         changes.put(ConfigNetHelper.PROP_I2NP_NTCP_PORT, _ntcpPort);
@@ -306,7 +306,7 @@ public class ConfigNetHandler extends FormHandler {
             }
 
             // UDP Settings
-            if ( (_udpPort != null) && (_udpPort.length() > 0) ) {
+            if ( (_udpPort != null) && (!_udpPort.isEmpty()) ) {
                 String oldPort = _context.getProperty(UDPTransport.PROP_INTERNAL_PORT, "unset");
                 if (!oldPort.equals(_udpPort)) {
                     int port = Addresses.getPort(_udpPort);
@@ -498,7 +498,7 @@ public class ConfigNetHandler extends FormHandler {
         // Since burst is now hidden in the gui, set burst to +10% for 20 seconds (prior to 0.9.33)
         // As of 0.9.33, we set strict bandwidth limits. Specified rate is the burst rate,
         // and we set the standard rate to 50KB or 10% lower (whichever is less).
-        if ( (_inboundRate != null) && (_inboundRate.length() > 0) &&
+        if ( (_inboundRate != null) && (!_inboundRate.isEmpty()) &&
             !_inboundRate.equals(_context.getProperty(FIFOBandwidthRefiller.PROP_INBOUND_BURST_BANDWIDTH,
                                                       Integer.toString(FIFOBandwidthRefiller.DEFAULT_INBOUND_BURST_BANDWIDTH)))) {
             try {
@@ -513,7 +513,7 @@ public class ConfigNetHandler extends FormHandler {
                 addFormError(_t("Invalid bandwidth"));
             }
         }
-        if ( (_outboundRate != null) && (_outboundRate.length() > 0) &&
+        if ( (_outboundRate != null) && (!_outboundRate.isEmpty()) &&
             !_outboundRate.equals(_context.getProperty(FIFOBandwidthRefiller.PROP_OUTBOUND_BURST_BANDWIDTH,
                                                        Integer.toString(FIFOBandwidthRefiller.DEFAULT_OUTBOUND_BURST_BANDWIDTH)))) {
             try {

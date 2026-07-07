@@ -63,7 +63,7 @@ public final class ByteCache extends TryCache<ByteArray> {
     private static final int CLEANUP_FREQUENCY = 33 * 1000;
 
     /** if we haven't exceeded the cache size in 90 seconds, cut our cache in half */
-    private static final long EXPIRE_PERIOD = 90 * 1000;
+    private static final long EXPIRE_PERIOD = (long) 90 * 1000;
 
     /** Global cleanup task - single timer for all caches */
     private static final List<ByteCache> _allCaches = new ArrayList<>();

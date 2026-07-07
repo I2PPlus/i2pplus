@@ -239,7 +239,7 @@ public abstract class Translate {
             if (!rv.equals(dflt)) return rv;
             Locale curLocale = new Locale(curLang);
             rv = (new Locale(langCode)).getDisplayLanguage(curLocale);
-            if (rv.length() > 0 && !rv.equals(langCode)) return rv;
+            if (!rv.isEmpty() && !rv.equals(langCode)) return rv;
         }
         return dflt;
     }

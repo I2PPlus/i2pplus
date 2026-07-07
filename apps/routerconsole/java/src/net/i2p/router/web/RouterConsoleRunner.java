@@ -73,6 +73,7 @@ import org.eclipse.jetty.util.thread.ScheduledExecutorScheduler;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.tanukisoftware.wrapper.WrapperManager;
 
+import java.nio.charset.StandardCharsets;
 /**
  *  Start the router console.
  */
@@ -542,7 +543,7 @@ public class RouterConsoleRunner implements RouterApp {
                         //lsnr.setUseDirectBuffers(false);  // default true seems to be leaky
                         lsnr.setHost(host);
                         lsnr.setPort(lport);
-                        lsnr.setIdleTimeout(90*1000);  // default 10 sec
+                        lsnr.setIdleTimeout((long) 90*1000);  // default 10 sec
                         lsnr.setName("ConsoleSocket");   // all with same name will use the same thread pool
                         //_server.addConnector(lsnr);
                         connectors.add(lsnr);
@@ -633,7 +634,7 @@ public class RouterConsoleRunner implements RouterApp {
                             //sssll.setUseDirectBuffers(false);  // default true seems to be leaky
                             ssll.setHost(host);
                             ssll.setPort(sslPort);
-                            ssll.setIdleTimeout(90*1000);  // default 10 sec
+                            ssll.setIdleTimeout((long) 90*1000);  // default 10 sec
                             ssll.setName("ConsoleSocket");   // all with same name will use the same thread pool
                             //_server.addConnector(ssll);
                             connectors.add(ssll);
@@ -960,28 +961,26 @@ public class RouterConsoleRunner implements RouterApp {
                     byte[] b1 = DataHelper.getUTF8(user);
                     byte[] b2 = DataHelper.getASCII(user);
                     if (!DataHelper.eq(b1, b2)) {
-                        try {
-                            // each char truncated to 8 bytes
-                            String user2 = new String(b2, "ISO-8859-1");
-                            realm.putUser(user2, cred, role);
-                            constraint = new Constraint(user2, JETTY_ROLE);
-                            constraint.setAuthenticate(true);
-                            cm = new ConstraintMapping();
-                            cm.setConstraint(constraint);
-                            cm.setPathSpec("/");
-                            constraints.add(cm);
+                        // each char truncated to 8 bytes
+                        String user2 = new String(b2, StandardCharsets.ISO_8859_1);
+                        realm.putUser(user2, cred, role);
+                        constraint = new Constraint(user2, JETTY_ROLE);
+                        constraint.setAuthenticate(true);
+                        cm = new ConstraintMapping();
+                        cm.setConstraint(constraint);
+                        cm.setPathSpec("/");
+                        constraints.add(cm);
 
-                            // each UTF-8 byte as a char
-                            // this is what chrome does
-                            String user3 = new String(b1, "ISO-8859-1");
-                            realm.putUser(user3, cred, role);
-                            constraint = new Constraint(user3, JETTY_ROLE);
-                            constraint.setAuthenticate(true);
-                            cm = new ConstraintMapping();
-                            cm.setConstraint(constraint);
-                            cm.setPathSpec("/");
-                            constraints.add(cm);
-                        } catch (UnsupportedEncodingException uee) { /* ignored */ }
+                        // each UTF-8 byte as a char
+                        // this is what chrome does
+                        String user3 = new String(b1, StandardCharsets.ISO_8859_1);
+                        realm.putUser(user3, cred, role);
+                        constraint = new Constraint(user3, JETTY_ROLE);
+                        constraint.setAuthenticate(true);
+                        cm = new ConstraintMapping();
+                        cm.setConstraint(constraint);
+                        cm.setPathSpec("/");
+                        constraints.add(cm);
                     }
                 }
             }

@@ -22,6 +22,7 @@ import net.i2p.data.Destination;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.I2PAppThread;
 
+import java.nio.charset.StandardCharsets;
 /**
  * I2P ping utility for CLI use.
  * <p>
@@ -157,7 +158,7 @@ public class I2Ping extends I2PTunnelClientBase {
         if (hostListFile != null) {
             BufferedReader br = null;
             try {
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(hostListFile), "UTF-8"));
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(hostListFile), StandardCharsets.UTF_8));
                 String line;
                 List<PingHandler> pingHandlers = new ArrayList<>();
                 int i = 0;

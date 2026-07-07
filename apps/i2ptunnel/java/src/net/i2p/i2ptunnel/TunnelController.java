@@ -644,7 +644,7 @@ public class TunnelController implements Logging {
      */
     private void startStreamrServer() {
         String listenOn = getListenOnInterface();
-        if ( (listenOn != null) && (listenOn.length() > 0) ) {
+        if ( (listenOn != null) && (!listenOn.isEmpty()) ) {
             _tunnel.runListenOn(new String[] { listenOn }, this);
         }
         String listenPort = getTargetPort();
@@ -756,7 +756,7 @@ public class TunnelController implements Logging {
 
     private void setListenOn() {
         String listenOn = getListenOnInterface();
-        if ( (listenOn != null) && (listenOn.length() > 0) ) {
+        if ( (listenOn != null) && (!listenOn.isEmpty()) ) {
             _tunnel.runListenOn(new String[] { listenOn }, this);
         }
     }
@@ -809,12 +809,12 @@ public class TunnelController implements Logging {
 
     private void setI2CPOptions() {
         String host = getI2CPHost();
-        if ( (host != null) && (host.length() > 0) )
+        if ( (host != null) && (!host.isEmpty()) )
             _tunnel.host = host;
         // woohah, special casing for people with ipv6/etc
         if ("localhost".equals(_tunnel.host)) {_tunnel.host = "127.0.0.1";}
         String port = getI2CPPort();
-        if ( (port != null) && (port.length() > 0) ) {
+        if ( (port != null) && (!port.isEmpty()) ) {
             try {
                 int portNum = Integer.parseInt(port);
                 _tunnel.port = String.valueOf(portNum);
@@ -1006,7 +1006,7 @@ public class TunnelController implements Logging {
      */
     public void setConfig(Properties config, String prefix) {
         Properties props;
-        if (prefix.length() > 0) {
+        if (!prefix.isEmpty()) {
             props = new Properties();
             for (Map.Entry<Object, Object> e : config.entrySet()) {
                 String key = (String) e.getKey();
@@ -1175,7 +1175,7 @@ public class TunnelController implements Logging {
      */
     public Properties getConfig(String prefix) {
         Properties rv = new Properties();
-        if (prefix.length() > 0) {
+        if (!prefix.isEmpty()) {
             for (Map.Entry<Object, Object> e : _config.entrySet()) {
                 String key = (String) e.getKey();
                 String val = (String) e.getValue();
@@ -1319,7 +1319,7 @@ public class TunnelController implements Logging {
         if (f == null)
             return null;
         f = f.trim();
-        if (f.length() == 0)
+        if (f.isEmpty())
             return null;
         File rv = new File(f);
         if (!rv.isAbsolute())

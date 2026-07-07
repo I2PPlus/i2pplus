@@ -207,7 +207,7 @@ public class InstallUpdate {
             String line;
             while ( (line = in.readLine()) != null) {
                 String fl = line.trim();
-                if (fl.length() == 0 || fl.startsWith("#")) continue;
+                if (fl.isEmpty() || fl.startsWith("#")) continue;
                 if (fl.contains("..")) continue;
                 if (fl.startsWith("/") || fl.startsWith("\\")) continue;
                 File df = new File(context.getBaseDir(), fl);

@@ -429,11 +429,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (_context.isRouterContext()
                 && "i2psnark".equals(_contextName)) { // only if default instance
             _context.simpleTimer2()
-                    .addEvent(new Register(), 4 * 60 * 1000);
+                    .addEvent(new Register(), 4 * (long) 60 * 1000);
         // Register self-schedules via setPool() in addEvent()
         }
         _idleChecker = new IdleChecker(this, _peerCoordinatorSet);
-        _idleChecker.schedule(3 * 60 * 1000);
+        _idleChecker.schedule(3 * (long) 60 * 1000);
         if (!_context.isRouterContext()) {
             String lang = _config.getProperty(PROP_LANG);
             if (lang != null) {
@@ -1378,7 +1378,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private int getInt(String prop, int defaultVal) {
         String p = _config.getProperty(prop);
         try {
-            if ((p != null) && (p.trim().length() > 0)) {
+            if ((p != null) && (!p.trim().isEmpty())) {
                 return Integer.parseInt(p.trim());
             }
         } catch (NumberFormatException nfe) { /* ignored */ } // ignore
@@ -1783,7 +1783,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
         boolean reconnect =
                 i2cpHost != null
-                        && i2cpHost.trim().length() > 0
+                        && !i2cpHost.trim().isEmpty()
                         && port > 0
                         && (port != _util.getI2CPPort() || !oldI2CPHost.equals(i2cpHost));
         if (reconnect || !oldOpts.equals(opts)) {
@@ -2035,7 +2035,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             changed = true;
         }
 
-        if (apiKey != null && apiKey.length() > 0 && apiTarget != null && apiTarget.length() > 0) {
+        if (apiKey != null && !apiKey.isEmpty() && apiTarget != null && !apiTarget.isEmpty()) {
             apiKey = DataHelper.stripHTML(apiKey.trim());
             apiTarget = DataHelper.stripHTML(apiTarget.trim());
             String oldk = _util.getAPIKey();
@@ -2947,7 +2947,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             int[] rv = new int[filecount];
             String[] arr = DataHelper.split(pri, ",");
             for (int i = 0; i < filecount && i < arr.length; i++) {
-                if (arr[i].length() > 0) {
+                if (!arr[i].isEmpty()) {
                     try {
                         rv[i] = Integer.parseInt(arr[i]);
                     } catch (Throwable t) { /* ignored */ }
@@ -3739,7 +3739,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     }
                 }
                 try {
-                    Thread.sleep(30 * 1000);
+                    Thread.sleep((long) 30 * 1000);
                 } // Polling period for scanning data dir for new content
                 catch (InterruptedException ie) { /* ignored */ }
             }
@@ -4201,7 +4201,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             for (int i = 0; i < toks.length; i += 2) {
                 String name = toks[i].trim().replace("&#44;", ",");
                 String url = toks[i + 1].trim().replace("&#44;", ",");
-                if ((name.length() > 0) && (url.length() > 0)) {
+                if ((!name.isEmpty()) && (!url.isEmpty())) {
                     String[] urls = DataHelper.split(url, "=", 2);
                     String url2 = urls.length > 1 ? urls[1] : "";
                     _trackerMap.put(name, new Tracker(name, urls[0], url2));
@@ -4222,7 +4222,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         for (int i = 0; i < toks.length; i += 2) {
             String name = toks[i].trim().replace("&#44;", ",");
             String filterPattern = toks[i + 1].trim().replace("&#44;", ",");
-            if ((name.length() > 0) && (filterPattern.length() > 0)) {
+            if ((!name.isEmpty()) && (!filterPattern.isEmpty())) {
                 String[] data = DataHelper.split(filterPattern, "=", 2);
                 boolean isDefault = data.length > 1 ? true : false;
                 _torrentCreateFilterMap.put(
@@ -4587,7 +4587,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     System.out.println(" • " + msg);
                 }
                 if (finalShutdown) {
-                    long toWait = 5 * 1000;
+                    long toWait = (long) 5 * 1000;
                     if (SystemVersion.isARM()) {
                         toWait *= 2;
                     }
@@ -4598,7 +4598,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _stopping = false;
                 } else {
                     // Only schedule this if not a final shutdown
-                    new Disconnector().schedule(60 * 1000);
+                    new Disconnector().schedule((long) 60 * 1000);
                 }
             } else {
                 _util.disconnect();

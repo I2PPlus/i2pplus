@@ -158,7 +158,7 @@ public class UrlLauncher implements ClientApp {
                 // Jetty 6 seems to start the Connector before the
                 // webapp is completely ready
                 try {
-                   Thread.sleep(2*1000);
+                   Thread.sleep((long) 2*1000);
                 } catch (InterruptedException ie) { /* ignored */ }
                 return true;
             } catch (IOException e) { /* ignored */ }
@@ -434,7 +434,7 @@ public class UrlLauncher implements ClientApp {
                 case '"':
                     if (isQuoted) {
                         String str = buf.toString().trim();
-                        if (str.length() > 0)
+                        if (!str.isEmpty())
                             argList.add(str);
                         buf.setLength(0);
                     }
@@ -448,7 +448,7 @@ public class UrlLauncher implements ClientApp {
                         buf.append(c);
                     } else {
                         String str = buf.toString().trim();
-                        if (str.length() > 0)
+                        if (!str.isEmpty())
                             argList.add(str);
                         buf.setLength(0);
                     }
@@ -460,7 +460,7 @@ public class UrlLauncher implements ClientApp {
         }
         if (buf.length() > 0) {
             String str = buf.toString().trim();
-            if (str.length() > 0)
+            if (!str.isEmpty())
                 argList.add(str);
         }
         if (argList.isEmpty())

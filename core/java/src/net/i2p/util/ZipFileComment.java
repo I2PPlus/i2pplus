@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.ZipException;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Not available in ZipFile until Java 7. Refs:
  * https://secure.wikimedia.org/wikipedia/en/wiki/ZIP_%28file_format%29
@@ -72,7 +73,7 @@ public abstract class ZipFileComment {
             byte[] hdr = new byte[HEADER_LEN];
             DataHelper.read(in, hdr);
             if (!DataHelper.eq(hdr, magicStart)) throw new ZipException("Not a zip file: " + file);
-            DataHelper.skip(in, fileLen - (skip + HEADER_LEN + buffer.length));
+            DataHelper.skip(in, (long) fileLen - (skip + HEADER_LEN + buffer.length));
             DataHelper.read(in, buffer);
             return getComment(buffer);
         } finally {
@@ -89,7 +90,7 @@ public abstract class ZipFileComment {
         for (int i = buffer.length - (1 + BLOCK_LEN - MAGIC_LEN); i >= 0; i--) {
             if (DataHelper.eq(buffer, i, magicDirEnd, 0, MAGIC_LEN)) {
                 int commentLen = (buffer[i + BLOCK_LEN - 2] & 0xff) + ((buffer[i + BLOCK_LEN - 1] & 0xff) * 256);
-                return new String(buffer, i + BLOCK_LEN, commentLen, "UTF-8");
+                return new String(buffer, i + BLOCK_LEN, commentLen, StandardCharsets.UTF_8);
             }
         }
         throw new ZipException("No comment block found");

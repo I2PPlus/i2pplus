@@ -54,7 +54,7 @@ public class SnarkShutdown extends I2PAppThread {
         }
 
         try {
-            Thread.sleep(5 * 1000);
+            Thread.sleep((long) 5 * 1000);
         } catch (InterruptedException ie) {
             /* ignored */
         }

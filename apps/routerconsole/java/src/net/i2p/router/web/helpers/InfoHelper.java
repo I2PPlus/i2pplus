@@ -29,7 +29,7 @@ public class InfoHelper extends HelperBase {
 
     public InfoHelper() { /* nop */ }
 
-    public void setFull(String f) {_full = f != null && f.length() > 0;}
+    public void setFull(String f) {_full = f != null && !f.isEmpty();}
 
     public String getConsole() {
         try {

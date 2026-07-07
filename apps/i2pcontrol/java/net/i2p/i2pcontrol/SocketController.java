@@ -39,6 +39,7 @@ import net.i2p.util.Log;
 import org.json.simple.DeserializationException;
 import org.json.simple.Jsoner;
 
+import java.nio.charset.StandardCharsets;
 /**
  * This handles the starting and stopping of a ServerSocket
  * from a single static class so it can be called via clients.config.
@@ -183,7 +184,7 @@ public class SocketController implements RouterApp {
 
         public void run() {
             try {
-                final BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream(), "UTF-8"));
+                final BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream(), StandardCharsets.UTF_8));
                 while (true) {
                     Object o = Jsoner.deserialize(reader);
                     // TODO

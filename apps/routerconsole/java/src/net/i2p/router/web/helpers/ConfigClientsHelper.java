@@ -137,7 +137,7 @@ public class ConfigClientsHelper extends HelperBase {
         for (int cur = 0; cur < clients.size(); cur++) {
             ClientAppConfig ca = clients.get(cur);
             String xname = ca.clientName;
-            if (xname.length() > 0)
+            if (!xname.isEmpty())
                 xname = _t(xname);
             cacs.add(new CAC(cur, ca, xname));
         }
@@ -370,10 +370,10 @@ public class ConfigClientsHelper extends HelperBase {
             buf.append("<a href=\"").append(link).append("\">").append(_t(escapedName)).append("</a>");
         } else if (edit && !ro) {
             buf.append("<input type=text name=\"nofilter_name").append(index).append("\" value=\"");
-            if (name.length() > 0) {buf.append(_t(escapedName));}
+            if (!name.isEmpty()) {buf.append(_t(escapedName));}
             buf.append("\">");
         } else {
-            if (name.length() > 0) {
+            if (!name.isEmpty()) {
                 buf.append("<label for=\"").append("client_").append(index).append("\">").append(_t(escapedName)).append("</label>");
             }
         }

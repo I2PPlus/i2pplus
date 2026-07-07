@@ -111,7 +111,7 @@ public class ConfigBanHandler extends FormHandler {
     private void saveChanges() {
         Map<String, String> changes = new HashMap<>();
 
-        if (_maxOffenses != null && _maxOffenses.length() > 0) {
+        if (_maxOffenses != null && !_maxOffenses.isEmpty()) {
             try {
                 int val = Integer.parseInt(_maxOffenses);
                 if (val >= 1 && val <= 100) {
@@ -120,7 +120,7 @@ public class ConfigBanHandler extends FormHandler {
             } catch (NumberFormatException e) { /* ignored */ }
         }
 
-        if (_offenseWindow != null && _offenseWindow.length() > 0) {
+        if (_offenseWindow != null && !_offenseWindow.isEmpty()) {
             try {
                 int val = Integer.parseInt(_offenseWindow);
                 if (val >= 1 && val <= 1440) {
@@ -129,7 +129,7 @@ public class ConfigBanHandler extends FormHandler {
             } catch (NumberFormatException e) { /* ignored */ }
         }
 
-        if (_startupGrace != null && _startupGrace.length() > 0) {
+        if (_startupGrace != null && !_startupGrace.isEmpty()) {
             try {
                 int val = Integer.parseInt(_startupGrace);
                 if (val >= 0 && val <= 60) {
@@ -138,7 +138,7 @@ public class ConfigBanHandler extends FormHandler {
             } catch (NumberFormatException e) { /* ignored */ }
         }
 
-        if (_badPacketDuration != null && _badPacketDuration.length() > 0) {
+        if (_badPacketDuration != null && !_badPacketDuration.isEmpty()) {
             try {
                 int val = Integer.parseInt(_badPacketDuration);
                 if (val >= 1 && val <= 10080) {

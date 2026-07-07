@@ -78,7 +78,7 @@ public class XMLParser extends JaxpParser {
         // Only add it to the value if we don't have any other nodes.
         // Otherwise, add it as a node.
         if (domNodeType == org.w3c.dom.Node.TEXT_NODE) {
-            if (WHITESPACE.matcher(domNodeValue).replaceAll("").length() == 0) {
+            if (WHITESPACE.matcher(domNodeValue).replaceAll("").isEmpty()) {
                 return parentNode;
             }
             if (!parentNode.hasNodes()) {
@@ -97,7 +97,7 @@ public class XMLParser extends JaxpParser {
         if (parentNode != null) {
             // I2P - take the value and convert it to a text node, if it's not just whitespace
             String oldValue = parentNode.getValue();
-            if (oldValue != null && oldValue.length() > 0) {
+            if (oldValue != null && !oldValue.isEmpty()) {
                 parentNode.setValue("");
                 Node text = new Node();
                 text.setName(TEXT_NAME);
@@ -171,7 +171,7 @@ public class XMLParser extends JaxpParser {
             }
             buf.append("</").append(name).append('>');
         } else {
-            if (value == null || value.length() == 0) {
+            if (value == null || value.isEmpty()) {
                 // space for <br />
                 buf.append(" />");
             } else {

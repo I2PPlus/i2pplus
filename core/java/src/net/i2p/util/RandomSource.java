@@ -170,7 +170,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
         Thread t = new I2PThread(new SecureRandomInit(tbuf), "SecureRandomInit", true);
         t.start();
         try {
-            t.join(10 * 1000);
+            t.join((long) 10 * 1000);
             synchronized (tbuf) {
                 for (int i = 0; i < tbuf.length; i++) {
                     if (tbuf[i] != 0) {

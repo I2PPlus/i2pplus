@@ -99,7 +99,7 @@ class SAMv2StreamSession extends SAMStreamSession {
 
         Destination d = SAMUtils.getDest(dest);
         I2PSocketOptions opts = socketMgr.buildOptions(props);
-        if (props.getProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT) == null) opts.setConnectTimeout(60 * 1000);
+        if (props.getProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT) == null) opts.setConnectTimeout((long) 60 * 1000);
 
         if (_log.shouldDebug()) _log.debug("Connecting new I2PSocket...");
 

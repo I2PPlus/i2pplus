@@ -285,7 +285,7 @@ abstract class IRCFilter {
 
         String[] field = DataHelper.split(s, " ", 4);
 
-        if(field[0].length()==0)
+        if(field[0].isEmpty())
             return null; // W T F?
 
 

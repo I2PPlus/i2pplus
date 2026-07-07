@@ -49,7 +49,7 @@ public class ConfigUIHandler extends FormHandler {
     /** Note - lang change is handled in CSSHelper but we still need to save it here */
     private void saveChanges() {
         if (_config == null || _config.length() <= 0) {return;}
-        if (CONFIG_PATTERN.matcher(_config).replaceAll("").length() != 0) {
+        if (!CONFIG_PATTERN.matcher(_config).replaceAll("").isEmpty()) {
             addFormError(_t("Cannot save theme choice, theme name has illegal characters"), true);
             return;
         }

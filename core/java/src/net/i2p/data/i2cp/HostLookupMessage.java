@@ -139,7 +139,7 @@ public class HostLookupMessage extends I2CPMessageImpl {
                 _hash = Hash.create(in);
             } else if (_lookupType == LOOKUP_HOST) {
                 _host = DataHelper.readString(in);
-                if (_host.length() == 0) throw new I2CPMessageException("Bad host");
+                if (_host.isEmpty()) throw new I2CPMessageException("Bad host");
             } else {
                 throw new I2CPMessageException("Bad type");
             }

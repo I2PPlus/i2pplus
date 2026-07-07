@@ -113,7 +113,7 @@ public class EepPost extends EepGet {
      */
     public boolean post(
             String contentType, String data, long headerTimeout, long totalTimeout, long inactivityTimeout) {
-        if (data.length() == 0) throw new IllegalArgumentException();
+        if (data.isEmpty()) throw new IllegalArgumentException();
         setPostData(contentType, data);
         return super.fetch(headerTimeout, totalTimeout, inactivityTimeout);
     }
@@ -289,7 +289,7 @@ public class EepPost extends EepGet {
 
                     case 'f': {
                         String[] t = DataHelper.split(g.getOptarg(), "=", 2);
-                        if (t.length == 2 && t[0].length() > 0) fields.put(t[0], new File(t[1]));
+                        if (t.length == 2 && !t[0].isEmpty()) fields.put(t[0], new File(t[1]));
                         else error = true;
                         break;
                     }
@@ -312,7 +312,7 @@ public class EepPost extends EepGet {
 
                     case 's': {
                         String[] t = DataHelper.split(g.getOptarg(), "=", 2);
-                        if (t.length == 2 && t[0].length() > 0) fields.put(t[0], t[1]);
+                        if (t.length == 2 && !t[0].isEmpty()) fields.put(t[0], t[1]);
                         else error = true;
                         break;
                     }

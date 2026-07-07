@@ -31,6 +31,7 @@ import net.i2p.util.FileUtil;
 import net.i2p.util.SecureFile;
 import net.i2p.util.SecureFileOutputStream;
 
+import java.nio.charset.StandardCharsets;
 /**
  * A naming service based on a single file using the "hosts.txt" format.
  * Supports adds, removes, and listeners.
@@ -116,7 +117,7 @@ public class SingleFileNamingService extends NamingService {
         BufferedReader in = null;
         getReadLock();
         try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
             String line = null;
             while ((line = in.readLine()) != null) {
                 if (line.startsWith("#")) continue;
@@ -150,7 +151,7 @@ public class SingleFileNamingService extends NamingService {
         BufferedReader in = null;
         getReadLock();
         try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
             String line = null;
             String search = host + '=';
             while ((line = in.readLine()) != null) {
@@ -187,9 +188,9 @@ public class SingleFileNamingService extends NamingService {
             if (_isClosed) return false;
             File tmp = SecureFile.createTempFile(
                     "temp-", ".tmp", _file.getAbsoluteFile().getParentFile());
-            out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(tmp), "UTF-8"));
+            out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(tmp), StandardCharsets.UTF_8));
             if (_file.exists()) {
-                in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
+                in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
                 String line = null;
                 String search = hostname + '=';
                 while ((line = in.readLine()) != null) {
@@ -252,7 +253,7 @@ public class SingleFileNamingService extends NamingService {
                 }
                 // else new file
             }
-            out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(_file, true), "UTF-8"));
+            out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(_file, true), StandardCharsets.UTF_8));
             // FIXME fails if previous last line didn't have a trailing \n
             out.write(hostname);
             out.write('=');
@@ -317,10 +318,10 @@ public class SingleFileNamingService extends NamingService {
         try {
             if (!_file.exists()) return false;
             if (_isClosed) return false;
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
             File tmp = SecureFile.createTempFile(
                     "temp-", ".tmp", _file.getAbsoluteFile().getParentFile());
-            out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(tmp), "UTF-8"));
+            out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(tmp), StandardCharsets.UTF_8));
             String line = null;
             String search = hostname + '=';
             boolean success = false;
@@ -383,7 +384,7 @@ public class SingleFileNamingService extends NamingService {
         BufferedReader in = null;
         getReadLock();
         try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
             String line = null;
             Map<String, Destination> rv = new HashMap<>();
             while ((line = in.readLine()) != null) {
@@ -450,7 +451,7 @@ public class SingleFileNamingService extends NamingService {
         BufferedReader in = null;
         getReadLock();
         try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
             String line = null;
             Map<String, String> rv = new HashMap<>();
             while ((line = in.readLine()) != null) {
@@ -508,7 +509,7 @@ public class SingleFileNamingService extends NamingService {
         BufferedReader in = null;
         getReadLock();
         try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
             String line = null;
             while ((line = in.readLine()) != null) {
                 out.write(line);
@@ -535,7 +536,7 @@ public class SingleFileNamingService extends NamingService {
         BufferedReader in = null;
         getReadLock();
         try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
             String line = null;
             Set<String> rv = new HashSet<>();
             while ((line = in.readLine()) != null) {
@@ -571,7 +572,7 @@ public class SingleFileNamingService extends NamingService {
         getReadLock();
         try {
             if (_file.lastModified() <= _lastWrite) return _size;
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), "UTF-8"), 16 * 1024);
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8), 16 * 1024);
             String line = null;
             int rv = 0;
             while ((line = in.readLine()) != null) {

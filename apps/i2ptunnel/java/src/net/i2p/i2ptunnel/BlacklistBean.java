@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.util.regex.Pattern;
 import net.i2p.util.Log;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Simple blacklist checker for HTTP proxy.
  * Loads blacklist from addressbook/blacklist.txt and checks if addresses are blacklisted.
@@ -60,7 +61,7 @@ public class BlacklistBean {
         File file = blacklistFile();
         if (file.isFile()) {
             StringBuilder buf = new StringBuilder();
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
                 String line;
                 while((line = br.readLine()) != null) {
                     buf.append(line);

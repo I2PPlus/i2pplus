@@ -113,7 +113,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private long _currentNonce;
     private final long[] _recentNonces = new long[2];
     private long _lastRotation;
-    private static final long NONCE_ROTATION_MS = 5 * 60 * 1000; // 5 minutes
+    private static final long NONCE_ROTATION_MS = 5 * (long) 60 * 1000; // 5 minutes
 
     /** Session-bound nonce for CSRF protection @since 0.9.69 */
     private static final String SESSION_NONCE_OUTER = "__i2psnark.nonce.outer__";
@@ -392,7 +392,7 @@ public class I2PSnarkServlet extends BasicServlet {
     public File getResource(String pathInContext) {
         synchronized(this) {
         if (pathInContext == null || pathInContext.equals("/") || pathInContext.equals("/index.jsp") ||
-            !pathInContext.startsWith("/") || pathInContext.length() == 0 || pathInContext.equals("/index.html") ||
+            !pathInContext.startsWith("/") || pathInContext.isEmpty() || pathInContext.equals("/index.html") ||
             pathInContext.startsWith(WARBASE)) {
             return super.getResource(pathInContext);
         }
@@ -956,7 +956,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(" tabindex=0>\n<a id=closelog href=\"")
                .append(_contextPath).append('/');
             if (isConfigure) {buf.append("configure");}
-            if (peerString.length() > 0) {buf.append(peerString).append("&amp;");}
+            if (!peerString.isEmpty()) {buf.append(peerString).append("&amp;");}
             else {buf.append("?");}
             int lastID = msgs.get(msgs.size() - 1).id;
             String tx = _t("clear messages");
@@ -1761,7 +1761,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String[] terms = DataHelper.split(search, " ");
         for (int i = 0; i < terms.length; i++) {
             String term = terms[i];
-            if (term.length() > 0) {
+            if (!term.isEmpty()) {
                 if (searchList == null) {searchList = new ArrayList<>(4);}
                 searchList.add(Normalizer.normalize(term.toLowerCase(Locale.US), Normalizer.Form.NFKD));
             }
@@ -2846,7 +2846,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (!hurl.startsWith("http://") && !hurl.startsWith("udp://")) {hurl = "http://" + hurl;} // Add http:// if not present
                 aurl = DataHelper.stripHTML(aurl.trim()).replace("=", "&#61;");
                 if (!aurl.startsWith("http://") && !aurl.startsWith("udp://")) {aurl = "http://" + aurl;}  // Add http:// if not present
-                if (name.length() > 0 && hurl.startsWith("http://") && TrackerClient.isValidAnnounce(aurl)) {
+                if (!name.isEmpty() && hurl.startsWith("http://") && TrackerClient.isValidAnnounce(aurl)) {
                     Map<String, Tracker> trackers = _manager.getTrackerMap();
                     trackers.put(name, new Tracker(name, aurl, hurl));
                     _manager.saveTrackerMap();
@@ -3805,7 +3805,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append(addTop);
         writeHiddenInputs(buf, req, "Add");
         buf.append("<input hidden class=toggle_input id=toggle_addtorrent type=checkbox");
-        if (newURL.length() > 0) {buf.append(" checked>");} // force toggle open
+        if (!newURL.isEmpty()) {buf.append(" checked>");} // force toggle open
         else {buf.append('>');}
         buf.append("<label id=tab_addtorrent class=toggleview for=toggle_addtorrent><span class=tab_label>")
            .append(_t("Add Torrent")).append("</span></label><hr>\n<table border=0><tr><td class=right><span>")
@@ -5485,7 +5485,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         if (meta != null) {
             String com = meta.getComment();
-            if (com != null && com.length() > 0) {
+            if (com != null && !com.isEmpty()) {
                 if (com.length() > 5000) { com = com.substring(0, 5000) + "&hellip;"; }
                 buf.append("<tr><td id=metacomment colspan=3><div class=commentWrapper>\n")
                    .append(DataHelper.stripHTML(com).replace("\r\n", "<br>").replace("\n", "<br>").replace("&apos;", "'"))
@@ -5796,7 +5796,7 @@ public class I2PSnarkServlet extends BasicServlet {
         Iterator<Comment> iter = null;
         int myRating = 0;
         CommentSet comments = snark.getComments();
-        boolean canRate = esc && _manager.util().getCommentsName().length() > 0;
+        boolean canRate = esc && !_manager.util().getCommentsName().isEmpty();
 
         buf.append("<table id=commentInfo>\n<tr><th colspan=3>")
            .append(_t("Ratings and Comments").replace("and", "&amp;"))
@@ -6141,7 +6141,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String r = (a != null) ? a[0] : null;
         a = postParams.get("nofilter_newComment");
         String c = (a != null) ? a[0] : null;
-        if ((r == null || r.equals("0")) && (c == null || c.length() == 0)) {return;}
+        if ((r == null || r.equals("0")) && (c == null || c.isEmpty())) {return;}
         int rat = 0;
         try {rat = Integer.parseInt(r);}
         catch (NumberFormatException nfe) { /* ignored */ }
@@ -6269,7 +6269,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         String com = meta.getComment();
         if (com == null) {com = "";}
-        else if (com.length() > 0) {com = DataHelper.escapeHTML(com);}
+        else if (!com.isEmpty()) {com = DataHelper.escapeHTML(com);}
         buf.append("<tr class=header><th colspan=4>")
            .append(_t("Torrent Comment"))
            .append("</th></tr>\n<tr><td colspan=4 id=addCommentText><textarea name=nofilter_newTorrentComment cols=88 rows=4");

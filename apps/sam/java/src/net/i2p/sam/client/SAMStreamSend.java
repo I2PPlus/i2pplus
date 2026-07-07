@@ -24,6 +24,7 @@ import net.i2p.util.I2PSSLSocketFactory;
 import net.i2p.util.Log;
 import net.i2p.util.VersionComparator;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Swiss army knife tester.
  * Sends a file (datafile) to a peer (b64 dest in peerDestFile).
@@ -260,9 +261,9 @@ public class SAMStreamSend {
             try {
                 if (user != null && password != null)
                     samOut.write(("HELLO VERSION MIN=1.0 MAX=" + version + " USER=\"" + user.replace("\"", "\\\"") +
-                                  "\" PASSWORD=\"" + password.replace("\"", "\\\"") + "\"\n").getBytes("UTF-8"));
+                                  "\" PASSWORD=\"" + password.replace("\"", "\\\"") + "\"\n").getBytes(StandardCharsets.UTF_8));
                 else
-                    samOut.write(("HELLO VERSION MIN=1.0 MAX=" + version + '\n').getBytes("UTF-8"));
+                    samOut.write(("HELLO VERSION MIN=1.0 MAX=" + version + '\n').getBytes(StandardCharsets.UTF_8));
                 samOut.flush();
                 if (_log.shouldDebug())
                     _log.debug("Hello sent");
@@ -305,7 +306,7 @@ public class SAMStreamSend {
                     if (mode == V1DG || mode == V1RAW)
                         throw new IllegalArgumentException("v1 dg/raw incompatible with master session");
                     String req = "SESSION CREATE DESTINATION=TRANSIENT STYLE=MASTER ID=masterSend " + opts + '\n';
-                    samOut.write(req.getBytes("UTF-8"));
+                    samOut.write(req.getBytes(StandardCharsets.UTF_8));
                     samOut.flush();
                     if (_log.shouldDebug())
                         _log.debug("SESSION CREATE STYLE=MASTER sent");
@@ -319,7 +320,7 @@ public class SAMStreamSend {
                         opts += " PORT=9999";
                 }
                 String req = "SESSION " + command + " STYLE=" + style + ' ' + _conOptions + ' ' + opts + '\n';
-                samOut.write(req.getBytes("UTF-8"));
+                samOut.write(req.getBytes(StandardCharsets.UTF_8));
                 samOut.flush();
                 if (_log.shouldDebug())
                     _log.debug("SESSION " + command + " sent");
@@ -336,15 +337,15 @@ public class SAMStreamSend {
                 if (masterMode) {
                     // do a bunch more
                     req = "SESSION ADD STYLE=STREAM FROM_PORT=99 ID=stream99\n";
-                    samOut.write(req.getBytes("UTF-8"));
+                    samOut.write(req.getBytes(StandardCharsets.UTF_8));
                     req = "SESSION ADD STYLE=STREAM FROM_PORT=98 ID=stream98\n";
-                    samOut.write(req.getBytes("UTF-8"));
+                    samOut.write(req.getBytes(StandardCharsets.UTF_8));
                     req = "SESSION REMOVE ID=stream99\n";
-                    samOut.write(req.getBytes("UTF-8"));
+                    samOut.write(req.getBytes(StandardCharsets.UTF_8));
                     samOut.flush();
                 }
                 req = "NAMING LOOKUP NAME=ME\n";
-                samOut.write(req.getBytes("UTF-8"));
+                samOut.write(req.getBytes(StandardCharsets.UTF_8));
                 samOut.flush();
                 if (_log.shouldDebug())
                     _log.debug("Naming lookup sent");
@@ -545,7 +546,7 @@ public class SAMStreamSend {
                     }
                 } else {
                     try {
-                        byte[] msg = ("STREAM CLOSE ID=" + _connectionId + "\n").getBytes("UTF-8");
+                        byte[] msg = ("STREAM CLOSE ID=" + _connectionId + "\n").getBytes(StandardCharsets.UTF_8);
                         synchronized (_samOut) {
                             _samOut.write(msg);
                             _samOut.flush();

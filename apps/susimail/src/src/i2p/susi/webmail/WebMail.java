@@ -76,6 +76,7 @@ import net.i2p.util.RFC822Date;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.Translate;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Main webmail application class providing email functionality for I2P.
  */
@@ -308,7 +309,7 @@ public class WebMail extends HttpServlet {
             try {
                 javax.crypto.SecretKeyFactory factory = javax.crypto.SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
                 javax.crypto.spec.PBEKeySpec spec = new javax.crypto.spec.PBEKeySpec(
-                    password.toCharArray(), salt.getBytes("UTF-8"), 1000000, 256);
+                    password.toCharArray(), salt.getBytes(StandardCharsets.UTF_8), 1000000, 256);
                 byte[] hash = factory.generateSecret(spec).getEncoded();
                 StringBuilder sb = new StringBuilder(hash.length * 2);
                 for (byte b : hash) {
@@ -467,7 +468,7 @@ public class WebMail extends HttpServlet {
      */
     private static boolean buttonPressed(RequestWrapper request, String key) {
         String value = request.getParameter(key);
-        return value != null && (value.length() > 0 || key.equals(CONFIGURE) || key.equals(NEW_UIDL));
+        return value != null && (!value.isEmpty() || key.equals(CONFIGURE) || key.equals(NEW_UIDL));
     }
     /**
      * recursively render all mail body parts
@@ -583,7 +584,7 @@ public class WebMail extends HttpServlet {
                     showBody = true;
                 } else {prepareAttachment = true;}
             }
-            if (reason != null && reason.length() > 0) {
+            if (reason != null && !reason.isEmpty()) {
                 if (html) {buf.append("<p class=info>");}
                 buf.append(reason);
                 if (html) {buf.append("</p>\n");}
@@ -650,7 +651,7 @@ public class WebMail extends HttpServlet {
                 }
                 if (html) {buf.append("</p>\n");}
             }
-            if (reason != null && reason.length() > 0) {
+            if (reason != null && !reason.isEmpty()) {
                 if (html) {buf.append("<p class=info>");}
                 buf.append(reason);
                 if (html) {buf.append("</p>\n");}
@@ -753,7 +754,7 @@ public class WebMail extends HttpServlet {
             boolean offline = buttonPressed(request, OFFLINE);
             if (buttonPressed(request, LOGIN) || offline) {
 
-                if (user == null || user.length() == 0) {
+                if (user == null || user.isEmpty()) {
                     sessionObject.error += _t("Need username for authentication.") + '\n';
                     doContinue = false;
                 } else {
@@ -764,18 +765,18 @@ public class WebMail extends HttpServlet {
                     }
                 }
 
-                if (pass == null || pass.length() == 0) {
+                if (pass == null || pass.isEmpty()) {
                     sessionObject.error += _t("Need password for authentication.") + '\n';
                     doContinue = false;
                 } else {pass = pass.trim();}
 
-                if (host == null || host.length() == 0) {
+                if (host == null || host.isEmpty()) {
                     sessionObject.error += _t("Need hostname for connect.") + '\n';
                     doContinue = false;
                 } else {host = host.trim();}
 
                 int pop3PortNo = 0;
-                if (pop3Port == null || pop3Port.length() == 0) {
+                if (pop3Port == null || pop3Port.isEmpty()) {
                     sessionObject.error += _t("Need port number for pop3 connect.") + '\n';
                     doContinue = false;
                 } else {
@@ -793,7 +794,7 @@ public class WebMail extends HttpServlet {
                 }
 
                 int smtpPortNo = 0;
-                if (smtpPort == null || smtpPort.length() == 0) {
+                if (smtpPort == null || smtpPort.isEmpty()) {
                     sessionObject.error += _t("Need port number for smtp connect.") + '\n';
                     doContinue = false;
                 } else {
@@ -955,7 +956,7 @@ public class WebMail extends HttpServlet {
             synchronized(_so) {
                 if (!connected) {
                     String error = _mb.lastError();
-                    if (error.length() > 0) {_so.connectError = error;}
+                    if (!error.isEmpty()) {_so.connectError = error;}
                     else {_so.connectError = _t("Error connecting to server");}
                 } else if (!found) {
                     if (log.shouldInfo()) log.info("No new emails");
@@ -1175,7 +1176,7 @@ public class WebMail extends HttpServlet {
                         String us = '<' + sessionObject.user + '@' + Config.getProperty(CONFIG_SENDER_DOMAIN, "mail.i2p") + '>';
                         StringBuilder buf = new StringBuilder();
                         if (mail.to != null) {
-                            String pad = to.length() > 0 ? ", " : "";
+                            String pad = !to.isEmpty() ? ", " : "";
                             for (String s : mail.to) {
                                 if (s.equals(us) || s.equals(to)) {continue;}
                                 buf.append(pad).append(s);
@@ -1301,7 +1302,7 @@ public class WebMail extends HttpServlet {
              * check if user wants to view a message
              */
             String show = request.getParameter(SHOW);
-            if (show != null && show.length() > 0) {
+            if (show != null && !show.isEmpty()) {
                 // This is the I2P Base64, not the encoder
                 String uidl = Base64.decodeToString(show);
                 if (uidl != null) {state = State.SHOW;}
@@ -1369,13 +1370,13 @@ public class WebMail extends HttpServlet {
         State state = null;
         String filename = request.getFilename(NEW_FILENAME);
         // We handle an attachment whether sending or uploading
-        if (filename != null && filename.length() > 0 &&
+        if (filename != null && !filename.isEmpty() &&
             (buttonPressed(request, NEW_UPLOAD) || buttonPressed(request, SEND) || buttonPressed(request, SAVE_AS_DRAFT))) {
             int i = filename.lastIndexOf('/');
             if (i != - 1) {filename = filename.substring(i + 1);}
             i = filename.lastIndexOf('\\');
             if (i != -1) {filename = filename.substring(i + 1);}
-            if (filename.length() > 0) {
+            if (!filename.isEmpty()) {
                 InputStream in = null;
                 OutputStream out = null;
                 I2PAppContext ctx = I2PAppContext.getGlobalContext();
@@ -2369,7 +2370,7 @@ public class WebMail extends HttpServlet {
             if ((mc != null && mc.isLoading()) || sessionObject.isFetching) {showRefresh = true;}
             else if (state != State.LOADING && state != State.AUTH && state != State.CONFIG) {
                 String error = sessionObject.connectError;
-                if (error != null && error.length() > 0) {
+                if (error != null && !error.isEmpty()) {
                     sessionObject.error += error + '\n';
                     sessionObject.connectError = null;
                 }
@@ -2466,8 +2467,8 @@ public class WebMail extends HttpServlet {
         boolean infoChanged  = sessionObject != null &&
                                (!safeEquals(sessionObject.lastInfo, currentInfo) || showRefresh);
 
-        boolean hasError = currentError != null && currentError.length() > 0;
-        boolean hasInfo  = (currentInfo != null && currentInfo.length() > 0) || showRefresh;
+        boolean hasError = currentError != null && !currentError.isEmpty();
+        boolean hasInfo  = (currentInfo != null && !currentInfo.isEmpty()) || showRefresh;
 
         if (!(hasError || hasInfo)) return;
 
@@ -2500,7 +2501,7 @@ public class WebMail extends HttpServlet {
                 info.append("<noscript>").append(_t("Refresh the page for updates"))
                     .append("</br></noscript>");
             }
-            if (currentInfo != null && currentInfo.length() > 0) {
+            if (currentInfo != null && !currentInfo.isEmpty()) {
                 info.append(quoteHTML(currentInfo).replace("\n", "<br>"));
             }
             info.append("</b></p>");
@@ -2537,7 +2538,7 @@ public class WebMail extends HttpServlet {
         if (qq >= 0)
             url = url.substring(0, qq);
         buf.append(url);
-        if (q != null && q.length() > 0 && q.indexOf('\n') < 0 && q.indexOf('\r') < 0)
+        if (q != null && !q.isEmpty() && q.indexOf('\n') < 0 && q.indexOf('\r') < 0)
             buf.append(q.replace("&amp;", "&"));  // no you don't html escape the redirect header
         resp.setHeader("Location", buf.toString());
         resp.setStatus(303);
@@ -2818,7 +2819,7 @@ public class WebMail extends HttpServlet {
             if (draft == null)
                 throw new IOException("Draft compose error");  // composeDraft added error messages
             buffer = toMC.getFullWriteBuffer(uidl);
-            wout = new BufferedWriter(new OutputStreamWriter(buffer.getOutputStream(), "ISO-8859-1"));
+            wout = new BufferedWriter(new OutputStreamWriter(buffer.getOutputStream(), StandardCharsets.ISO_8859_1));
             SMTPClient.writeMail(wout, draft, null, null);
             if (log.shouldDebug()) log.debug("Saved as draft: " + uidl);
             ok = true;
@@ -2863,7 +2864,7 @@ public class WebMail extends HttpServlet {
         }
         else {
             sender = Mail.getAddress(from);
-            if (sender == null || sender.length() == 0) {
+            if (sender == null || sender.isEmpty()) {
                 ok = false;
                 sessionObject.error += _t("Found no valid address in \\''{0}\\''.", quoteHTML(from)) + '\n';
             }
@@ -3002,7 +3003,7 @@ public class WebMail extends HttpServlet {
                             Buffer buffer = null;
                             try {
                                 buffer = mc.getFullWriteBuffer(uidl);
-                                wout = new BufferedWriter(new OutputStreamWriter(buffer.getOutputStream(), "ISO-8859-1"));
+                                wout = new BufferedWriter(new OutputStreamWriter(buffer.getOutputStream(), StandardCharsets.ISO_8859_1));
                                 SMTPClient.writeMail(wout, body,
                                                      attachments, boundary);
                                 if (log.shouldDebug()) log.debug("Sent email saved to Sent");
@@ -3291,7 +3292,7 @@ public class WebMail extends HttpServlet {
         String from;
         String user = sessionObject.user;
         String name = Config.getProperty(CONFIG_SENDER_NAME);
-        if (name != null && name.length() > 0) {
+        if (name != null && !name.isEmpty()) {
             name = name.trim();
             if (name.contains(" ")) {from = '"' + name + "\" ";}
             else {from = name + ' ';}
@@ -3302,7 +3303,7 @@ public class WebMail extends HttpServlet {
             from += '<' + user + '>';
         } else {
             String domain = Config.getProperty(CONFIG_SENDER_DOMAIN, "mail.i2p");
-            if (from.length() == 0) {
+            if (from.isEmpty()) {
                 from = user + ' ';
             }
             from += '<' + user + '@' + domain + '>';
@@ -3878,7 +3879,7 @@ public class WebMail extends HttpServlet {
         buf.append("<table id=message_full>\n");
         if (hasHeader) {
             String subj = mail.subject;
-            if (subj.length() > 0) {subj = quoteHTML(subj);}
+            if (!subj.isEmpty()) {subj = quoteHTML(subj);}
             else {subj = "<i>" + _t("no subject") + "</i>";}
             buf.append("<tr><td colspan=2>\n<table id=mailhead>\n")
                .append("<tr><td colspan=2><hr></td></tr>\n")

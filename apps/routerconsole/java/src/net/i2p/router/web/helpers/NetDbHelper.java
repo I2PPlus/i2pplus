@@ -97,32 +97,32 @@ public class NetDbHelper extends FormHandler {
 
 
     public void setRouter(String r) {
-        if (r != null && r.length() > 0) {_routerPrefix = DataHelper.stripHTML(r.trim());} // XSS
+        if (r != null && !r.isEmpty()) {_routerPrefix = DataHelper.stripHTML(r.trim());} // XSS
     }
 
     /** @since 0.9.21 */
     public void setVersion(String v) {
-        if (v != null && v.length() > 0) {_version = DataHelper.stripHTML(v.trim());} // XSS
+        if (v != null && !v.isEmpty()) {_version = DataHelper.stripHTML(v.trim());} // XSS
     }
 
     /** @since 0.9.21 */
     public void setCountry(String c) {
-        if (c != null && c.length() > 0) {_country = DataHelper.stripHTML(c.trim());} // XSS
+        if (c != null && !c.isEmpty()) {_country = DataHelper.stripHTML(c.trim());} // XSS
     }
 
     /** @since 0.9.28 */
     public void setFamily(String c) {
-        if (c != null && c.length() > 0) {_family = DataHelper.stripHTML(c.trim());} // XSS
+        if (c != null && !c.isEmpty()) {_family = DataHelper.stripHTML(c.trim());} // XSS
     }
 
     /** @since 0.9.28 */
     public void setCaps(String c) {
-        if (c != null && c.length() > 0) {_caps = DataHelper.stripHTML(c.trim());} // XSS
+        if (c != null && !c.isEmpty()) {_caps = DataHelper.stripHTML(c.trim());} // XSS
     }
 
     /** @since 0.9.28 */
     public void setIp(String c) {
-        if (c != null && c.length() > 0) {_ip = DataHelper.stripHTML(c.trim());} // XSS
+        if (c != null && !c.isEmpty()) {_ip = DataHelper.stripHTML(c.trim());} // XSS
     }
 
     /** @since 0.9.28 */
@@ -134,7 +134,7 @@ public class NetDbHelper extends FormHandler {
      *  @since 0.9.28
      */
     public void setSybil2(String c) {
-        if (c != null && c.length() > 0) {_sybil = DataHelper.stripHTML(c.trim());} // XSS
+        if (c != null && !c.isEmpty()) {_sybil = DataHelper.stripHTML(c.trim());} // XSS
     }
 
     /** @since 0.9.28 */
@@ -151,22 +151,22 @@ public class NetDbHelper extends FormHandler {
 
     /** @since 0.9.28 */
     public void setType(String f) {
-        if (f != null && f.length() > 0) {_type = SigType.parseSigType(f);}
+        if (f != null && !f.isEmpty()) {_type = SigType.parseSigType(f);}
     }
 
     /** @since 0.9.49 */
     public void setEtype(String f) {
-        if (f != null && f.length() > 0) {_etype = EncType.parseEncType(f);}
+        if (f != null && !f.isEmpty()) {_etype = EncType.parseEncType(f);}
     }
 
     /** @since 0.9.28 */
     public void setMtu(String f) {
-        if (f != null && f.length() > 0) {_mtu = DataHelper.stripHTML(f.trim());} // XSS
+        if (f != null && !f.isEmpty()) {_mtu = DataHelper.stripHTML(f.trim());} // XSS
     }
 
     /** @since 0.9.28 */
     public void setIpv6(String f) {
-        if (f != null && f.length() > 0) {
+        if (f != null && !f.isEmpty()) {
             _ipv6 = DataHelper.stripHTML(f.trim()); // XSS
             if (!_ipv6.endsWith(":")) {_ipv6 = _ipv6 + ':';}
         }
@@ -174,12 +174,12 @@ public class NetDbHelper extends FormHandler {
 
     /** @since 0.9.28 */
     public void setSsucaps(String f) {
-        if (f != null && f.length() > 0) {_ssucaps = DataHelper.stripHTML(f.trim());} // XSS
+        if (f != null && !f.isEmpty()) {_ssucaps = DataHelper.stripHTML(f.trim());} // XSS
     }
 
     /** @since 0.9.36 */
     public void setTransport(String f) {
-        if (f != null && f.length() > 0) {_transport = DataHelper.stripHTML(f).toUpperCase(Locale.US);}
+        if (f != null && !f.isEmpty()) {_transport = DataHelper.stripHTML(f).toUpperCase(Locale.US);}
     }
 
     /** @since 0.9.28 */
@@ -213,7 +213,7 @@ public class NetDbHelper extends FormHandler {
 
     /** @since 0.9.57 */
     public void setLeaseset(String f) {
-        if (f != null && f.length() > 0) {_hostname = DataHelper.stripHTML(f);}
+        if (f != null && !f.isEmpty()) {_hostname = DataHelper.stripHTML(f);}
     }
 
     /** @since 0.9.36 */
@@ -278,17 +278,17 @@ public class NetDbHelper extends FormHandler {
                     toSave.put(Analysis.PROP_FREQUENCY, Long.toString(ntime));
                 }
                 String thresh = getJettyString("threshold");
-                if (thresh != null && thresh.length() > 0) {
+                if (thresh != null && !thresh.isEmpty()) {
                     float val = Math.max(Float.parseFloat(thresh), Analysis.MIN_BLOCK_POINTS);
                     toSave.put(Analysis.PROP_THRESHOLD, Float.toString(val));
                 }
                 String days = getJettyString("days");
-                if (days != null && days.length() > 0) {
+                if (days != null && !days.isEmpty()) {
                     long val = 24*60*60*1000L * Integer.parseInt(days);
                     toSave.put(Analysis.PROP_BLOCKTIME, Long.toString(val));
                 }
                 String age = getJettyString("deleteAge");
-                if (age != null && age.length() > 0) {
+                if (age != null && !age.isEmpty()) {
                     long val = 24*60*60*1000L * Integer.parseInt(age);
                     toSave.put(Analysis.PROP_REMOVETIME, Long.toString(val));
                 }

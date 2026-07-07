@@ -14,7 +14,7 @@ package org.klomp.snark;
  */
 @Deprecated
 class PeerMonitorTask implements Runnable {
-    static final long MONITOR_PERIOD = 10 * 1000; // Ten seconds.
+    static final long MONITOR_PERIOD = (long) 10 * 1000; // Ten seconds.
 
 
     PeerMonitorTask(PeerCoordinator coordinator) {

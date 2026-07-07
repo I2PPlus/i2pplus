@@ -95,7 +95,7 @@ class LookupDestJob extends JobImpl {
                                 // BlindData from database may have privkey or secret
                                 // check if we need it but don't have it
                                 if ((bd.getAuthRequired() && bd2.getAuthPrivKey() == null) ||
-                                    (bd.getSecretRequired() && (bd2.getSecret() == null || bd2.getSecret().length() == 0))) {
+                                    (bd.getSecretRequired() && (bd2.getSecret() == null || bd2.getSecret().isEmpty()))) {
                                     // don't copy over existing info, this will force an immediate
                                     // failure in runJob()
                                     if (_log.shouldDebug()) {_log.debug("No auth or secret, immediate fail " + bd);}
@@ -137,7 +137,7 @@ class LookupDestJob extends JobImpl {
         if (_blindData != null) {
             boolean fail1 = _blindData.getAuthRequired() && _blindData.getAuthPrivKey() == null;
             boolean fail2 = _blindData.getSecretRequired() &&
-                            (_blindData.getSecret() == null || _blindData.getSecret().length() == 0);
+                            (_blindData.getSecret() == null || _blindData.getSecret().isEmpty());
             if (fail1 || fail2) {
                 int code;
                 if (fail1 && fail2) {code = HostReplyMessage.RESULT_SECRET_AND_KEY_REQUIRED;}

@@ -25,7 +25,7 @@ public class SessionManager {
     private final Map<String, FailedLogin> _failedLogins = new ConcurrentHashMap<>();
     private final ScheduledExecutorService _cleanup;
     private static final int MAX_FAILED_ATTEMPTS = 5;
-    private static final long FAILURE_WINDOW_MS = 5 * 60 * 1000; // 5 minutes
+    private static final long FAILURE_WINDOW_MS = 5 * (long) 60 * 1000; // 5 minutes
     public static final String SESSION_COOKIE_NAME = "I2P+AUTH";
     public static final String SESSION_ATTR_USER = "user";
 

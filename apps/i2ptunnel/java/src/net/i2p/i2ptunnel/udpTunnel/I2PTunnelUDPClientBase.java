@@ -47,7 +47,7 @@ import net.i2p.util.EventDispatcher;
     protected I2PAppContext _context;
     protected Logging l;
 
-    static final long DEFAULT_CONNECT_TIMEOUT = 60 * 1000;
+    static final long DEFAULT_CONNECT_TIMEOUT = (long) 60 * 1000;
 
     private static final AtomicLong __clientId = new AtomicLong();
     protected long _clientId;
@@ -106,7 +106,7 @@ import net.i2p.util.EventDispatcher;
         _i2pSource = new I2PSource(_session, I2PSource.Protocol.BOTH);
 
         // Setup the sink. Always send repliable datagrams.
-        if (destination != null && destination.length() > 0) {
+        if (destination != null && !destination.isEmpty()) {
             I2PSocketAddress addr = new I2PSocketAddress(destination);
             if (addr.isUnresolved()) {
                 // unlike in I2PTunnelClient, we don't defer and retry resolution later

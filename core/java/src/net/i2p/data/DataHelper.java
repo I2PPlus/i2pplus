@@ -57,6 +57,7 @@ import java.util.regex.Pattern;
 import java.util.zip.CRC32;
 import java.util.zip.Deflater;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Comprehensive utility class for I2P data structure serialization, encoding, and manipulation.
  *
@@ -634,7 +635,7 @@ public class DataHelper {
     public static void loadProps(Properties props, InputStream inStr, boolean forceLowerCase) throws IOException {
         BufferedReader in = null;
         try {
-            in = new BufferedReader(new InputStreamReader(inStr, "UTF-8"), 4 * 1024);
+            in = new BufferedReader(new InputStreamReader(inStr, StandardCharsets.UTF_8), 4 * 1024);
             String line = null;
             while ((line = in.readLine()) != null) {
                 if (line.trim().isEmpty()) {
@@ -693,7 +694,7 @@ public class DataHelper {
         File tmpFile = new File(file.getPath() + ".tmp");
         try {
             fos = new SecureFileOutputStream(tmpFile);
-            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(fos, "UTF-8")));
+            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(fos, StandardCharsets.UTF_8)));
             out.println("# NOTE: This I2P config file must use UTF-8 encoding");
             out.println("# Last saved: " + formatTime(System.currentTimeMillis()));
             for (Map.Entry<Object, Object> entry : props.entrySet()) {
@@ -1138,7 +1139,7 @@ public class DataHelper {
         read(in, raw); // full read guaranteed
         // The following constructor throws an UnsupportedEncodingException which is an IOException,
         // but that's only if UTF-8 is not supported. Other encoding errors are not thrown.
-        return new String(raw, "UTF-8");
+        return new String(raw, StandardCharsets.UTF_8);
     }
 
     /** Write out a string to the stream as specified by the I2P data structure spec.  Note that the max
@@ -1188,7 +1189,7 @@ public class DataHelper {
         } else {
             // the following method throws an UnsupportedEncodingException which is an IOException,
             // but that's only if UTF-8 is not supported. Other encoding errors are not thrown.
-            byte[] raw = string.getBytes("UTF-8");
+            byte[] raw = string.getBytes(StandardCharsets.UTF_8);
             int len = raw.length;
             if (len > 255) {
                 throw new DataFormatException("The I2P data spec limits strings to 255 bytes or less, but this is " + len + " bytes [" + string + "]");
@@ -2256,11 +2257,7 @@ public class DataHelper {
      */
     public static byte[] getUTF8(String orig) {
         if (orig == null) return new byte[0];
-        try {
-            return orig.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("no utf8!?");
-        }
+        return orig.getBytes(StandardCharsets.UTF_8);
     }
 
     /**
@@ -2275,11 +2272,7 @@ public class DataHelper {
         if (orig == null) {
             return null;
         }
-        try {
-            return new String(orig, "UTF-8");
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("no utf8!?");
-        }
+        return new String(orig, StandardCharsets.UTF_8);
     }
 
     /**
@@ -2293,11 +2286,7 @@ public class DataHelper {
         if (orig == null) {
             return null;
         }
-        try {
-            return new String(orig, offset, len, "UTF-8");
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("No UTF8!?");
-        }
+        return new String(orig, offset, len, StandardCharsets.UTF_8);
     }
 
     /**

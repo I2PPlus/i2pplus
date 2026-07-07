@@ -352,7 +352,7 @@ public class RouterTimestamper extends Timestamper {
                 if (country != null)
                     country = country.toLowerCase(Locale.US);
             }
-            if (country != null &&  country.length() > 0 &&
+            if (country != null &&  !country.isEmpty() &&
                 !country.equals("a1") && !country.equals("a2")) {
                 _priorityServers = new ArrayList<>(2);
                 List<String> p1 = new ArrayList<>(3);
@@ -379,7 +379,7 @@ public class RouterTimestamper extends Timestamper {
         while (tok.hasMoreTokens()) {
             String val = tok.nextToken();
             val = val.trim();
-            if (val.length() > 0)
+            if (!val.isEmpty())
                 _servers.add(val);
         }
 

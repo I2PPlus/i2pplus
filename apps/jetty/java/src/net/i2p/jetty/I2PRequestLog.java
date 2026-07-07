@@ -25,6 +25,7 @@ import org.eclipse.jetty.util.Utf8StringBuilder;
 import org.eclipse.jetty.util.component.AbstractLifeCycle;
 import org.eclipse.jetty.util.log.Log;
 
+import java.nio.charset.StandardCharsets;
 /**
  * This {@link RequestLog} implementation outputs logs in the pseudo-standard NCSA common log format.
  * Configuration options allow a choice between the standard Common Log Format (as used in the 3 log format)
@@ -93,7 +94,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     public void setFilename(String filename) {
         if (filename != null) {
             filename = filename.trim();
-            if (filename.length() == 0) {filename = null;}
+            if (filename.isEmpty()) {filename = null;}
         }
         _filename = filename;
     }
@@ -319,7 +320,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
             }
         } else {_ignorePathMap = null;}
 
-        _writer = new OutputStreamWriter(_out, "UTF-8");
+        _writer = new OutputStreamWriter(_out, StandardCharsets.UTF_8);
         _buffers = new ArrayList<>();
         _copy = new char[1024];
         super.doStart();

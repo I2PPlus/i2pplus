@@ -19,6 +19,7 @@ import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import java.nio.charset.StandardCharsets;
 /**
  * General helper methods for messing with files
  *
@@ -395,7 +396,7 @@ public class FileUtil {
         BufferedReader in = null;
         try {
             fis = new FileInputStream(f);
-            in = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
+            in = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
             List<String> lines = new ArrayList<>(maxNumLines > 0 ? maxNumLines : 64);
             String line = null;
             while ((line = in.readLine()) != null) {
@@ -429,7 +430,7 @@ public class FileUtil {
      */
     public static void readFile(String path, String root, OutputStream out) throws IOException {
         File rootDir = new File(root);
-        while (path.startsWith("/") && (path.length() > 0)) path = path.substring(1);
+        while (path.startsWith("/") && (!path.isEmpty())) path = path.substring(1);
         if (path.length() <= 0) throw new FileNotFoundException("Not serving up the root dir");
         File target = new File(rootDir, path);
         if (!target.exists()) throw new FileNotFoundException("Requested file does not exist: " + path);

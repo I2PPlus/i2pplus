@@ -28,7 +28,7 @@ public class SSLHelper {
                 case '"':
                     if (isQuoted) {
                         String str = buf.toString().trim();
-                        if (str.length() > 0)
+                        if (!str.isEmpty())
                             argList.add(str);
                         buf.setLength(0);
                     }
@@ -42,7 +42,7 @@ public class SSLHelper {
                         buf.append(c);
                     } else {
                         String str = buf.toString().trim();
-                        if (str.length() > 0)
+                        if (!str.isEmpty())
                             argList.add(str);
                         buf.setLength(0);
                     }
@@ -54,7 +54,7 @@ public class SSLHelper {
         }
         if (buf.length() > 0) {
             String str = buf.toString().trim();
-            if (str.length() > 0)
+            if (!str.isEmpty())
                 argList.add(str);
         }
         return argList;

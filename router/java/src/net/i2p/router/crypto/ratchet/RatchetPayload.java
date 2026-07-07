@@ -235,7 +235,7 @@ class RatchetPayload {
             // which may be inefficient
             // off is where the length goes
             int rv = writeData(tgt, off + 2);
-            DataHelper.toLong(tgt, off, 2, rv - (off + 2));
+            DataHelper.toLong(tgt, off, 2, (long) rv - (off + 2));
             return rv;
         }
 

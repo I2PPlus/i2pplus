@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Properties;
 
+import java.nio.charset.StandardCharsets;
 /** coordinate a moving rate over various periods */
 public class RateStat {
     /** unique name of the statistic */
@@ -188,7 +189,7 @@ public class RateStat {
             buf.append(HR).append(NL);
             buf.append("# ").append(_description).append(" [").append(_statName).append("]").append(NL);
             buf.append(HR).append(NL);
-            out.write(buf.toString().getBytes("UTF-8"));
+            out.write(buf.toString().getBytes(StandardCharsets.UTF_8));
             buf.setLength(0);
         }
         for (Rate r : _rates) {
@@ -199,7 +200,7 @@ public class RateStat {
             }
             String curPrefix = prefix + "." + DataHelper.formatDuration(r.getPeriod());
             r.store(curPrefix, buf, addComments);
-            out.write(buf.toString().getBytes("UTF-8"));
+            out.write(buf.toString().getBytes(StandardCharsets.UTF_8));
             buf.setLength(0);
         }
     }

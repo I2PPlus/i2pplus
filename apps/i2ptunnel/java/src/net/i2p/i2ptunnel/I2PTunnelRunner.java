@@ -587,7 +587,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         catch (IOException ioe) { /* ignored */ }
         try {i2ps.close();}
         catch (IOException ioe) { /* ignored */ }
-        if (t1 != null) {t1.join(30*1000);}
+        if (t1 != null) {t1.join((long) 30*1000);}
     }
 
     /**

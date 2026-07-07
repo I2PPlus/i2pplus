@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import java.nio.charset.StandardCharsets;
 /**
  *  A simple SOCKS 4/4a client.
  *  Note: Caller is advised to setSoTimeout on the socket. Not done here.
@@ -94,7 +95,7 @@ public class SOCKS4Client {
             }
             out.writeByte(0); // empty username
             if (!isIPv4) {
-                byte[] d = connHostName.getBytes("ISO-8859-1");
+                byte[] d = connHostName.getBytes(StandardCharsets.ISO_8859_1);
                 out.write(d);
                 out.writeByte(0);
             }

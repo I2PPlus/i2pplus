@@ -1056,20 +1056,20 @@ class SidebarRenderer {
            .append("</a>")
            .append(getToggle())
            .append("</h3>\n<hr class=b><table id=sb_bandwidth>\n<tr><td><b>")
-           .append(DataHelper.formatDuration2(3 * 1000).replace("3&nbsp;sec", _t("Current")))
+           .append(DataHelper.formatDuration2((long) 3 * 1000).replace("3&nbsp;sec", _t("Current")))
            .append("</b></td><td class=digits><span class=volatile>")
            .append(_helper.getSecondKBps())
            .append("Bps</span></td></tr>\n");
 
         if (_context.router().getUptime() > 6*60*1000) {
             buf.append("<tr><td><b>")
-               .append(DataHelper.formatDuration2(5 * 60 * 1000).replace("5&nbsp;min", _t("5 Min Average")))
+               .append(DataHelper.formatDuration2(5 * (long) 60 * 1000).replace("5&nbsp;min", _t("5 Min Average")))
                .append("</b></td><td class=digits><span class=volatile>")
                .append(_helper.getFiveMinuteKBps())
                .append("Bps</span></td></tr>\n");
         } else {
             buf.append("<tr hidden><td><b>")
-               .append(DataHelper.formatDuration2(5 * 60 * 1000).replace("5&nbsp;min", _t("5 Min Average")))
+               .append(DataHelper.formatDuration2(5 * (long) 60 * 1000).replace("5&nbsp;min", _t("5 Min Average")))
                .append("</b></td><td class=digits><span class=volatile>---Bps</span></td></tr>\n");
         }
 

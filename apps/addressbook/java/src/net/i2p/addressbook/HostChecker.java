@@ -2217,7 +2217,7 @@ public class HostChecker {
 
         tester.start();
         // Run for 5 minutes for testing
-        Thread.sleep(5 * 60 * 1000);
+        Thread.sleep(5 * (long) 60 * 1000);
         tester.stop();
 
         // Use I2P's logger for output

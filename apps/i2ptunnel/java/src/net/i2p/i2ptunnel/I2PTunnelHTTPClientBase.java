@@ -60,6 +60,7 @@ import net.i2p.util.PortMapper;
 import net.i2p.util.Translate;
 import net.i2p.util.TranslateReader;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Common things for HTTPClient and ConnectClient
  * Retrofit over them in 0.8.2
@@ -420,7 +421,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                 _proxyList.clear();
                 while (tok.hasMoreTokens()) {
                     String p = tok.nextToken().trim();
-                    if (p.length() > 0) {_proxyList.add(p);}
+                    if (!p.isEmpty()) {_proxyList.add(p);}
                 }
             }
         } else {
@@ -482,7 +483,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             if (decoded != null) {
                 // We send Accept-Charset: UTF-8 in the 407 so hopefully it comes back that way inside the B64 ?
                 try {
-                    String dec = new String(decoded, "UTF-8");
+                    String dec = new String(decoded, StandardCharsets.UTF_8);
                     String[] parts = DataHelper.split(dec, ":");
                     String user = parts[0];
                     String pw = parts[1];
@@ -502,8 +503,6 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                     }
                     _log.logAlways(Log.WARN, "[HTTPClient] HTTP proxy authentication failed -> User: " + user + " on " + s.getInetAddress());
                     try { Thread.sleep(5000); } catch (InterruptedException ie) { /* ignored */ }
-                } catch (UnsupportedEncodingException uee) {
-                    _log.error(getPrefix(requestId) + "[HTTPClient] No UTF-8 support? B64: " + authorization, uee);
                 } catch (ArrayIndexOutOfBoundsException aioobe) {
                     // no ':' in response
                     if (_log.shouldWarn()) {
@@ -764,7 +763,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                 reader = new TranslateReader(ctx, BUNDLE_NAME, new FileInputStream(file));
             } else {
                 // strip out the addressbook links
-                reader = new InputStreamReader(new FileInputStream(file), "UTF-8");
+                reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
                 int len;
                 while((len = reader.read(buf)) > 0) {out.append(buf, 0, len);}
                 reader.close();
@@ -981,7 +980,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                                      boolean usingWWWProxy, String wwwProxy,
                                      String jumpServers) throws IOException {
         if (outs == null) {return;}
-        Writer out = new BufferedWriter(new OutputStreamWriter(outs, "UTF-8"));
+        Writer out = new BufferedWriter(new OutputStreamWriter(outs, StandardCharsets.UTF_8));
         if (targetRequest != null) {
             String uri = DataHelper.escapeHTML(targetRequest);
             errMessage = errMessage.replace("<a href=\"\">", "<a href=\"" + uri + "\">");
@@ -1003,7 +1002,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             if (extraMessage != null) {
                 out.write("<br><b id=extraMsg>" + DataHelper.escapeHTML(extraMessage) + "</b><br><br>");
             }
-            if (jumpServers != null && jumpServers.length() > 0) {
+            if (jumpServers != null && !jumpServers.isEmpty()) {
                 boolean first = true;
                 if (uri.startsWith("http://")) {uri = uri.substring(7);}
                 if (uri.endsWith("/")) {uri = uri.substring(0, uri.length() - 1);}
@@ -1100,7 +1099,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  @since 0.9.14 moved from I2PTunnelHTTPClient
      */
     public static void writeFooter(OutputStream out) throws IOException {
-        out.write(getFooter().getBytes("UTF-8"));
+        out.write(getFooter().getBytes(StandardCharsets.UTF_8));
         out.flush();
     }
 

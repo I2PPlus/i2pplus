@@ -44,6 +44,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.i2p.util.SystemVersion;
 
+import java.nio.charset.StandardCharsets;
 /**
  * This servlet generates QR code images.
  *
@@ -62,7 +63,7 @@ public class QRServlet extends HttpServlet {
     private static final String IDENTICON_IMAGE_FORMAT = "PNG";
     private static final String IDENTICON_IMAGE_MIMETYPE = "image/png";
     private static final String IDENTICON_SVG_MIMETYPE = "image/svg+xml";
-    private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * 60 * 1000;
+    private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * (long) 60 * 1000;
     private static final String DEFAULT_FONT_NAME = SystemVersion.isWindows() ?
                                                     "Lucida Sans Typewriter" : Font.MONOSPACED;
     private int version = 1;
@@ -82,9 +83,9 @@ public class QRServlet extends HttpServlet {
         int qrWidth = matrix.getWidth();
         int qrHeight = matrix.getHeight();
         String name = text;
-        if (name == null || name.length() == 0)
+        if (name == null || name.isEmpty())
             name = textName;
-        if (name != null && name.length() > 0) {
+        if (name != null && !name.isEmpty()) {
             float shrink = Math.min(1.0f, 14.0f / name.length());
             int fontSize = Math.max(2, Math.round(shrink * qrWidth / 10));
             int gap = Math.max(2, fontSize);
@@ -193,7 +194,7 @@ public class QRServlet extends HttpServlet {
 
         if (request.getCharacterEncoding() == null) {request.setCharacterEncoding("UTF-8");}
         String codeParam = request.getParameter(PARAM_IDENTICON_CODE_SHORT);
-        boolean codeSpecified = codeParam != null && codeParam.length() > 0;
+        boolean codeSpecified = codeParam != null && !codeParam.isEmpty();
         if (!codeSpecified) {
             response.setStatus(404);
             return;
@@ -234,7 +235,7 @@ public class QRServlet extends HttpServlet {
                     }
                     String text = request.getParameter(PARAM_IDENTICON_TEXT_SHORT);
                     String svgOut = bitMatrixToSvg(matrix, text, null);
-                    imageBytes = svgOut.getBytes("UTF-8");
+                    imageBytes = svgOut.getBytes(StandardCharsets.UTF_8);
                 } else {
                     ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
                     QRCodeWriter qrcw = new QRCodeWriter();

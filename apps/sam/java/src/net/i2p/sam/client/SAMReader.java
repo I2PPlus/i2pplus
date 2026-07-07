@@ -140,9 +140,9 @@ public class SAMReader {
                             _log.error("Empty value for " + name);
                             continue;
                         }
-                        while ( (val.charAt(0) == '\"') && (val.length() > 0) )
+                        while ( (val.charAt(0) == '\"') && (!val.isEmpty()) )
                             val = val.substring(1);
-                        while ( (val.length() > 0) && (val.charAt(val.length()-1) == '\"') )
+                        while ( (!val.isEmpty()) && (val.charAt(val.length()-1) == '\"') )
                             val = val.substring(0, val.length()-1);
                         params.setProperty(name, val);
                     }

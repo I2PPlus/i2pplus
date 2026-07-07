@@ -510,19 +510,19 @@ class GraphRenderer {
             if (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid) {
                 def.area(plotName, AREA_COLOR_NEUTRAL);
             } else if (theme.equals("dark")) {
-                if (descr.length() > 0) {
+                if (!descr.isEmpty()) {
                     def.area(plotName, AREA_COLOR_DARK, descr + "\\l");
                 } else {
                     def.area(plotName, AREA_COLOR_DARK);
                 }
             } else if (theme.equals("midnight")) {
-                if (descr.length() > 0) {
+                if (!descr.isEmpty()) {
                     def.area(plotName, AREA_COLOR_MIDNIGHT, descr + "\\l");
                 } else {
                     def.area(plotName, AREA_COLOR_MIDNIGHT);
                 }
             } else {
-                if (descr.length() > 0) {
+                if (!descr.isEmpty()) {
                     def.area(plotName, AREA_COLOR, descr + "\\l");
                 } else {
                     def.area(plotName, AREA_COLOR);

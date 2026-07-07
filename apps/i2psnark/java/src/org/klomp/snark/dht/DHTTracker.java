@@ -36,12 +36,12 @@ class DHTTracker {
     private int _torrentCount;
 
     /** stagger with other cleaners */
-    private static final long CLEAN_TIME = 199 * 1000;
+    private static final long CLEAN_TIME = (long) 199 * 1000;
 
     /** no guidance in BEP 5; Vuze is 8h */
-    private static final long MAX_EXPIRE_TIME = 10*60*1000;
-    private static final long MIN_EXPIRE_TIME = 5*60*1000;
-    private static final long DELTA_EXPIRE_TIME = 3 * 60 * 1000;
+    private static final long MAX_EXPIRE_TIME = 10 * (long) 60 * 1000;
+    private static final long MIN_EXPIRE_TIME = 5 * (long) 60 * 1000;
+    private static final long DELTA_EXPIRE_TIME = 3 * (long) 60 * 1000;
     private static final int MAX_PEERS = 400;
     private static final int MAX_PEERS_PER_TORRENT = 60;
     private static final int ABSOLUTE_MAX_PER_TORRENT = MAX_PEERS_PER_TORRENT * 2;

@@ -132,7 +132,7 @@ class NodeInfo extends SimpleDataStructure {
         byte[] h = Base64.decode(parts[1]);
         if (h == null || h.length != Hash.HASH_LENGTH) throw new DataFormatException("Bad hash");
         hash = Hash.create(h);
-        if (parts[2].length() > 0) dest = new Destination(parts[2]);
+        if (!parts[2].isEmpty()) dest = new Destination(parts[2]);
         try {
             port = Integer.parseInt(parts[3]);
         } catch (NumberFormatException nfe) {

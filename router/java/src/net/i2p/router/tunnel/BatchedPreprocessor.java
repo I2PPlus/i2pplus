@@ -201,7 +201,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                         _context.statManager().addRateData("tunnel.writeDelay", cur.getLifetime(), cur.getData().length);
                     }
                     if (i > 0)
-                        _context.statManager().addRateData("tunnel.batchMultipleCount", i+1);
+                        _context.statManager().addRateData("tunnel.batchMultipleCount", (long) i+1);
                     allocated = 0;
                     batchCount++;
                     if (timingBuf != null) {
@@ -243,7 +243,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                     _context.statManager().addRateData("tunnel.batchDelaySent", pending.size(), 0);
 
                     send(pending, 0, pending.size()-1, sender, rec);
-                    _context.statManager().addRateData("tunnel.batchSmallFragments", FULL_SIZE - allocated);
+                    _context.statManager().addRateData("tunnel.batchSmallFragments", (long) FULL_SIZE - allocated);
 
                     // Remove everything in the outgoing message from the pending queue
                     int beforeSize = pending.size();

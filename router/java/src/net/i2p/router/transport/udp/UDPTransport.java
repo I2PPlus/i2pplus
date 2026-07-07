@@ -2705,7 +2705,7 @@ public class UDPTransport extends TransportImpl {
     private boolean explicitAddressSpecified() {
         String h = _context.getProperty(PROP_EXTERNAL_HOST);
         // Bug in config.jsp prior to 0.7.14, sets an empty host config
-        return h != null && h.length() > 0;
+        return h != null && !h.isEmpty();
     }
 
     /**

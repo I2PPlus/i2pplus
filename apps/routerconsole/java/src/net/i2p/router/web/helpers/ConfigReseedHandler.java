@@ -39,7 +39,7 @@ public class ConfigReseedHandler extends FormHandler {
             String val = getJettyString("url");
             if (val != null)
                 val = val.trim();
-            if (val == null || val.length() == 0) {
+            if (val == null || val.isEmpty()) {
                 addFormError(_t("No URL specified. Please supply a valid reseed URL."), true);
                 return;
             }
@@ -113,12 +113,12 @@ public class ConfigReseedHandler extends FormHandler {
      */
     private boolean addCheckerStatus(ReseedChecker checker) {
         String error = checker.getError();
-        if (error.length() > 0) {
+        if (!error.isEmpty()) {
             addFormErrorNoEscape(error);
             return true;
         }
         String status = checker.getStatus();
-        if (status.length() > 0) {
+        if (!status.isEmpty()) {
             addFormNoticeNoEscape(status);
             return true;
         }
@@ -135,7 +135,7 @@ public class ConfigReseedHandler extends FormHandler {
     /** @since 0.8.9 */
     private void saveString(String config, String param) {
         String val = getJettyString(param);
-        if (val != null && val.length() > 0)
+        if (val != null && !val.isEmpty())
             changes.put(config, val);
         else
             removes.add(config);
@@ -177,7 +177,7 @@ public class ConfigReseedHandler extends FormHandler {
                                            Boolean.toString(disabled));
         saveBoolean(Reseeder.PROP_PROXY_ENABLE, "enable");
         String pmode = getJettyString("pmode");
-        boolean senable = pmode != null && pmode.length() > 0;
+        boolean senable = pmode != null && !pmode.isEmpty();
         changes.put(Reseeder.PROP_SPROXY_ENABLE, Boolean.toString(senable));
         saveString(Reseeder.PROP_SPROXY_TYPE, "pmode");
         if (_context.router().saveConfig(changes, removes))

@@ -143,7 +143,7 @@ public class LoadClientAppsJob extends JobImpl {
                     case '"':
                         if (isQuoted) {
                             String str = buf.toString().trim();
-                            if (str.length() > 0)
+                            if (!str.isEmpty())
                                 argList.add(str);
                             buf.setLength(0);
                         }
@@ -157,7 +157,7 @@ public class LoadClientAppsJob extends JobImpl {
                             buf.append(c);
                         } else {
                             String str = buf.toString().trim();
-                            if (str.length() > 0)
+                            if (!str.isEmpty())
                                 argList.add(str);
                             buf.setLength(0);
                         }
@@ -169,7 +169,7 @@ public class LoadClientAppsJob extends JobImpl {
             }
             if (buf.length() > 0) {
                 String str = buf.toString().trim();
-                if (str.length() > 0)
+                if (!str.isEmpty())
                     argList.add(str);
             }
         }

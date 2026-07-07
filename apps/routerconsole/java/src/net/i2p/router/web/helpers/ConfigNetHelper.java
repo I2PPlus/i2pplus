@@ -116,7 +116,7 @@ public class ConfigNetHelper extends HelperBase {
 
     public String getTcpAutoPortChecked(int mode) {
         String port = _context.getProperty(PROP_I2NP_NTCP_PORT);
-        boolean specified = port != null && port.length() > 0;
+        boolean specified = port != null && !port.isEmpty();
         if ((mode == 1 && specified) ||
             (mode == 2 && !specified))
             return CHECKED;
@@ -126,7 +126,7 @@ public class ConfigNetHelper extends HelperBase {
     public String getTcpAutoIPChecked(int mode) {
         boolean enabled = TransportManager.isNTCPEnabled(_context);
         String hostname = _context.getProperty(PROP_I2NP_NTCP_HOSTNAME);
-        boolean specified = hostname != null && hostname.length() > 0;
+        boolean specified = hostname != null && !hostname.isEmpty();
         String auto = _context.getProperty(PROP_I2NP_NTCP_AUTO_IP, "true");
         if ((mode == 0 && (!specified) && auto.equals("false") && enabled) ||
             (mode == 1 && specified && auto.equals("false") && enabled) ||
@@ -139,7 +139,7 @@ public class ConfigNetHelper extends HelperBase {
 
     public String getUdpAutoIPChecked(int mode) {
         String hostname = _context.getProperty(UDPTransport.PROP_EXTERNAL_HOST);
-        boolean specified = hostname != null && hostname.length() > 0;
+        boolean specified = hostname != null && !hostname.isEmpty();
         boolean hidden = _context.router().isHidden();
         String sources = _context.getProperty(UDPTransport.PROP_SOURCES, UDPTransport.DEFAULT_SOURCES);
         if ((mode == 0 && sources.equals("ssu") && !hidden) ||
@@ -237,7 +237,7 @@ public class ConfigNetHelper extends HelperBase {
             String[] ca = DataHelper.split(cs, "[,; \r\n\t]");
             for (int i = 0; i < ca.length; i++) {
                 String c = ca[i];
-                if (c.length() > 0) {
+                if (!c.isEmpty()) {
                     configs.add(c);
                     addrs.add(c);
                 }
@@ -246,7 +246,7 @@ public class ConfigNetHelper extends HelperBase {
         StringBuilder buf = new StringBuilder(128);
         buf.append("<input name=\"udpHost1\" type=text size=16");
         String hostname = _context.getProperty(UDPTransport.PROP_EXTERNAL_HOST);
-        boolean specified = hostname != null && hostname.length() > 0;
+        boolean specified = hostname != null && !hostname.isEmpty();
         if (specified) {
             buf.append(" value=\"").append(hostname).append("\" checked title=\"")
                .append(_t("Delete this value to disable")).append("\"");

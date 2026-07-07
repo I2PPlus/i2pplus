@@ -5,6 +5,7 @@ import net.i2p.data.DataHelper;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import java.nio.charset.StandardCharsets;
 /** coordinate an event frequency over various periods */
 public class FrequencyStat {
     /** unique name of the statistic */
@@ -135,14 +136,14 @@ public class FrequencyStat {
         buf.append("# Frequency: ").append(_groupName).append(": ").append(_statName).append(NL);
         buf.append("# ").append(_description).append(NL);
         buf.append("# ").append(NL).append(NL);
-        out.write(buf.toString().getBytes("UTF-8"));
+        out.write(buf.toString().getBytes(StandardCharsets.UTF_8));
         buf.setLength(0);
         for (Frequency r : _frequencies) {
             buf.append("#######").append(NL);
             buf.append("# Period : ").append(DataHelper.formatDuration(r.getPeriod())).append(" for rate ").append(_groupName).append(" - ").append(_statName).append(NL);
             buf.append(NL);
             r.store(buf);
-            out.write(buf.toString().getBytes("UTF-8"));
+            out.write(buf.toString().getBytes(StandardCharsets.UTF_8));
             buf.setLength(0);
         }
     }

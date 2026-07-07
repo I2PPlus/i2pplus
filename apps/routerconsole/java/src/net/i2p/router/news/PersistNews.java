@@ -22,6 +22,7 @@ import net.i2p.util.SecureFileOutputStream;
 import org.cybergarage.xml.Node;
 import org.cybergarage.xml.ParserException;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Handles persistent storage and retrieval of news entries to/from disk.
  * <p>
@@ -76,7 +77,7 @@ class PersistNews {
                 rv = true;
             Writer out = null;
             try {
-                out = new OutputStreamWriter(new GZIPOutputStream(new SecureFileOutputStream(file)), "UTF-8");
+                out = new OutputStreamWriter(new GZIPOutputStream(new SecureFileOutputStream(file)), StandardCharsets.UTF_8);
                 out.write(XML_START);
                 XMLParser.toString(buf, entry);
                 out.append(buf);
@@ -158,7 +159,7 @@ class PersistNews {
         n = entry.getNode("link");
         if (n != null) {
             String a = n.getAttributeValue("href");
-            if (a.length() > 0)
+            if (!a.isEmpty())
                 e.link = a.trim();
         }
         n = entry.getNode("id");
@@ -194,7 +195,7 @@ class PersistNews {
         n = entry.getNode("content");
         if (n != null) {
             String a = n.getAttributeValue("type");
-            if (a.length() > 0)
+            if (!a.isEmpty())
                 e.contentType = a;
             // now recursively sanitize
             // and convert everything in the content to string

@@ -834,7 +834,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (tries > 0) {
             // Don't bias the stats with immediate fails
             getContext().statManager().addRateData("netDb.failedTime", time);
-            getContext().statManager().addRateData("netDb.failedRetries", tries - 1);
+            getContext().statManager().addRateData("netDb.failedRetries", (long) tries - 1);
         }
         for (Job j : _onFailed) {getContext().jobQueue().addJob(j);}
         _onFailed.clear();
@@ -901,7 +901,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                       "\n* Peers queried: " + tries + "; Time taken: " + time + "ms");
         }
         getContext().statManager().addRateData("netDb.successTime", time);
-        getContext().statManager().addRateData("netDb.successRetries", tries - 1);
+        getContext().statManager().addRateData("netDb.successRetries", (long) tries - 1);
         for (Job j : _onFind) {getContext().jobQueue().addJob(j);}
         _onFind.clear();
     }

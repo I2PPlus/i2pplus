@@ -385,7 +385,7 @@ public class ShellCommand {
         commandThread.start();
         try {
             if (seconds > 0) {
-                commandThread.join(seconds * 1000);
+                commandThread.join((long) seconds * 1000);
                 if (commandThread.isAlive()) {
                     if (log.shouldDebug()) log.debug("ShellCommand gave up waiting for \"" + name + "\" after " + seconds + " seconds");
                     return true;

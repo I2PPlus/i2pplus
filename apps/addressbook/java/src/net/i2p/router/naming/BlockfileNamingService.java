@@ -50,6 +50,7 @@ import net.metanotion.io.data.UTF8StringBytes;
 import net.metanotion.util.skiplist.SkipIterator;
 import net.metanotion.util.skiplist.SkipList;
 
+import java.nio.charset.StandardCharsets;
 /**
  * A naming service using the net.metanotion BlockFile database.
  *
@@ -250,7 +251,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 BufferedReader in = null;
                 String sourceMsg = "Imported from " + hostsfile + " file";
                 try {
-                    in = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"), 16*1024);
+                    in = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8), 16*1024);
                     String line = null;
                     while ( (line = in.readLine()) != null) {
                         if (line.startsWith("#"))
@@ -1722,7 +1723,7 @@ public class BlockfileNamingService extends DummyNamingService {
             return false;
         // de.props may be null
         // publickey check is a quick proxy to detect dest deserialization failure
-        boolean rv = key.length() > 0 &&
+        boolean rv = !key.isEmpty() &&
                      de != null &&
                      de.dest != null &&
                      de.dest.getPublicKey() != null;
@@ -2071,7 +2072,7 @@ public class BlockfileNamingService extends DummyNamingService {
         if (string == null) {
             out.write(0);
         } else {
-            byte[] raw = string.getBytes("UTF-8");
+            byte[] raw = string.getBytes(StandardCharsets.UTF_8);
             int len = raw.length;
             if (len >= 255) {
                 if (len > MAX_VALUE_LENGTH)
@@ -2112,7 +2113,7 @@ public class BlockfileNamingService extends DummyNamingService {
         int read = DataHelper.read(in, raw);
         if (read != size)
             throw new EOFException("EOF reading string");
-        return new String(raw, "UTF-8");
+        return new String(raw, StandardCharsets.UTF_8);
     }
 
     /**

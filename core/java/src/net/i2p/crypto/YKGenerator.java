@@ -160,7 +160,7 @@ final class YKGenerator {
         private final int _maxSize;
 
         /** check every 30 seconds whether we have less than the minimum */
-        private long _checkDelay = 30 * 1000;
+        private long _checkDelay = (long) 30 * 1000;
 
         private YKPrecalcRunner(int minSize, int maxSize) {
             _minSize = minSize;

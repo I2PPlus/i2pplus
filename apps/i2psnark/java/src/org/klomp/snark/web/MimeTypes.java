@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.DataHelper;
 import net.i2p.util.SystemVersion;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Based on MimeTypes from Jetty 6.1.26, heavily simplified and modified to remove all dependencies
  * on Jetty libs.
@@ -95,7 +96,7 @@ class MimeTypes {
             in =
                     new BufferedReader(
                             new InputStreamReader(
-                                    new FileInputStream("/etc/mime.types"), "ISO-8859-1"));
+                                    new FileInputStream("/etc/mime.types"), StandardCharsets.ISO_8859_1));
             while (true) {
                 String line = in.readLine();
                 if (line == null) break;

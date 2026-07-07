@@ -22,7 +22,7 @@ public final class SimpleByteCache {
     private static final int CLEANUP_FREQUENCY = 60 * 1000; // 1 minute
 
     /** if we haven't exceeded the cache size in 90 seconds, cut our cache in half */
-    private static final long EXPIRE_PERIOD = 90 * 1000;
+    private static final long EXPIRE_PERIOD = (long) 90 * 1000;
 
     static {
         // Start single global cleanup timer for all caches

@@ -25,9 +25,9 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
     private final ConsoleUpdateManager _mgr;
     private volatile boolean _firstRun = true;
 
-    private static final long INITIAL_DELAY = 5*60*1000;
-    private static final long NEW_INSTALL_DELAY = 25*60*1000;
-    private static final long RUN_DELAY = 10*60*1000;
+    private static final long INITIAL_DELAY = 5 * (long) 60 * 1000;
+    private static final long NEW_INSTALL_DELAY = 25 * (long) 60 * 1000;
+    private static final long RUN_DELAY = 10 * (long) 60 * 1000;
 
     public NewsTimerTask(RouterContext ctx, ConsoleUpdateManager mgr) {
         super(ctx.simpleTimer2());
@@ -89,12 +89,12 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
 
     /** blocking */
     private void fetchNews() {
-        _mgr.checkAvailable(NEWS, 60*1000);
+        _mgr.checkAvailable(NEWS, (long) 60*1000);
     }
 
     private boolean shouldFetchUnsigned() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL);
-        return url != null && url.length() > 0 &&
+        return url != null && !url.isEmpty() &&
                _context.getBooleanProperty(ConfigUpdateHandler.PROP_UPDATE_UNSIGNED) &&
                !NewsHelper.dontInstall(_context);
     }
@@ -102,7 +102,7 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
     /** @since 0.9.20 */
     private boolean shouldFetchDevSU3() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_DEV_SU3_URL);
-        return url != null && url.length() > 0 &&
+        return url != null && !url.isEmpty() &&
                _context.getBooleanProperty(ConfigUpdateHandler.PROP_UPDATE_DEV_SU3) &&
                !NewsHelper.dontInstall(_context);
     }
@@ -123,14 +123,14 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
             fetchNews();
             if (shouldFetchDevSU3()) {
                 // give it a sec for the download to kick in, if it's going to
-                try { Thread.sleep(5*1000); } catch (InterruptedException ie) { /* ignored */ }
+                try { Thread.sleep((long) 5*1000); } catch (InterruptedException ie) { /* ignored */ }
                 if (!_mgr.isCheckInProgress() && !_mgr.isUpdateInProgress())
                     // nonblocking
                     _mgr.check(ROUTER_DEV_SU3);
             }
             if (shouldFetchUnsigned()) {
                 // give it a sec for the download to kick in, if it's going to
-                try { Thread.sleep(5*1000); } catch (InterruptedException ie) { /* ignored */ }
+                try { Thread.sleep((long) 5*1000); } catch (InterruptedException ie) { /* ignored */ }
                 if (!_mgr.isCheckInProgress() && !_mgr.isUpdateInProgress())
                     // nonblocking
                     _mgr.check(ROUTER_UNSIGNED);

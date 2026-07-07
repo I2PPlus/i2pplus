@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
 <%@include file="head.jsi"%>
-<%=intl.title("auto-tuning")%>
+<%=intl.title("router auto-tuning")%>
 </head>
 <body id=autotuning>
 <%@include file="sidebar.jsi"%><h1 class=sched><%=intl._t("Auto-Tuning")%></h1>

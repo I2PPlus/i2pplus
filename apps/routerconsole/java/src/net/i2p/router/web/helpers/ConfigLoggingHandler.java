@@ -61,7 +61,7 @@ public class ConfigLoggingHandler extends FormHandler {
 
     /** @since 0.8.1 */
     public void setNewlogclass(String s) {
-        if (s != null && s.length() > 0)
+        if (s != null && !s.isEmpty())
             _newLogClass = s;
     }
 
@@ -80,7 +80,7 @@ public class ConfigLoggingHandler extends FormHandler {
         boolean shouldSave = false;
         LogManager mgr = _context.logManager();
 
-        if ((_levels != null && _levels.length() > 0) || _newLogClass != null) {
+        if ((_levels != null && !_levels.isEmpty()) || _newLogClass != null) {
             try {
                 Properties props = new Properties();
                 if (_levels != null)
@@ -142,7 +142,7 @@ public class ConfigLoggingHandler extends FormHandler {
             shouldSave = true;
         }
 
-        if ((_recordFormat != null) && (_recordFormat.trim().length() > 0)) {
+        if ((_recordFormat != null) && (!_recordFormat.trim().isEmpty())) {
             _recordFormat = _recordFormat.trim();
             String old = new String(mgr.getFormat());
             if (_recordFormat.equalsIgnoreCase(old)) {

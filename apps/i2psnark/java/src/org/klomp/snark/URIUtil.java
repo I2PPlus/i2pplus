@@ -42,7 +42,7 @@ public class URIUtil {
      * @return The encoded path
      */
     public static String encodePath(String path) {
-        if (path == null || path.length() == 0) {
+        if (path == null || path.isEmpty()) {
             return path;
         }
         StringBuilder buf = encodePath(null, path);

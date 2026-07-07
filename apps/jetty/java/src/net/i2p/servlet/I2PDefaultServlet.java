@@ -42,6 +42,7 @@ import org.eclipse.jetty.util.URIUtil;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.resource.ResourceCollection;
 
+import java.nio.charset.StandardCharsets;
 /**
  *  Extends DefaultServlet to set locale for the displayed time of directory listings,
  *  to prevent leaking of the locale.
@@ -107,7 +108,7 @@ public class I2PDefaultServlet extends DefaultServlet {
     /* copied from DefaultServlet unchanged */
     private boolean getInitBoolean(String name, boolean dft) {
         String value = getInitParameter(name);
-        if (value == null || value.length() == 0) {return dft;}
+        if (value == null || value.isEmpty()) {return dft;}
         return (value.startsWith("t") ||
                 value.startsWith("T") ||
                 value.startsWith("y") ||
@@ -149,7 +150,7 @@ public class I2PDefaultServlet extends DefaultServlet {
             return;
         }
 
-        data=dir.getBytes("UTF-8");
+        data=dir.getBytes(StandardCharsets.UTF_8);
         response.setContentType("text/html; charset=UTF-8");
         response.setContentLength(data.length);
         response.getOutputStream().write(data);

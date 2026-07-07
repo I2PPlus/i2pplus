@@ -60,7 +60,7 @@ public class JSONRPC2Helper {
                     missingArgs = missingArgs.concat(requiredArgs[i] + ",");
                 }
             }
-            if (missingArgs.length() > 0) {
+            if (!missingArgs.isEmpty()) {
                 missingArgs = missingArgs.substring(0, missingArgs.length() - 1);
                 return new JSONRPC2Error(JSONRPC2Error.INVALID_PARAMS.getCode(), "Missing parameter(s): " + missingArgs);
             }

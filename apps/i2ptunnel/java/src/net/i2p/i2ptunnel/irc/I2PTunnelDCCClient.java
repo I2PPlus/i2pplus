@@ -30,8 +30,8 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
     private final int _remotePort;
     private long _expires;
 
-    private static final long INBOUND_EXPIRE = 30*60*1000;
-    private static final long INBOUND_STOP_EXPIRE = 30*60*1000;
+    private static final long INBOUND_EXPIRE = 30*(long) 60*1000;
+    private static final long INBOUND_STOP_EXPIRE = 30*(long) 60*1000;
     public static final String CONNECT_START_EVENT = "connectionStarted";
     public static final String CONNECT_STOP_EVENT = "connectionStopped";
 

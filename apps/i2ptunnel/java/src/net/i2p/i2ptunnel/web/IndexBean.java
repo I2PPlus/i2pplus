@@ -675,7 +675,7 @@ public class IndexBean {
 
     public String getTunnelName(int tunnel) {
         String name = _helper.getTunnelName(tunnel);
-        if (name != null && name.length() > 0) {return DataHelper.escapeHTML(name);}
+        if (name != null && !name.isEmpty()) {return DataHelper.escapeHTML(name);}
         else {return _t("New Tunnel");}
     }
 
@@ -695,7 +695,7 @@ public class IndexBean {
         TunnelController tun = getController(tunnel);
         if (tun != null && tun.getListenPort() != null) {
             String port = tun.getListenPort();
-            if (port.length() == 0) {return "<span class=ink_warn>" + _t("Port not set") + "</span>";}
+            if (port.isEmpty()) {return "<span class=ink_warn>" + _t("Port not set") + "</span>";}
             int iport = Addresses.getPort(port);
             if (iport == 0) {return "<span class=ink_warn>" + _t("Invalid port") + ' ' + port + "</span>";}
             if (iport < 1024) {
@@ -807,10 +807,10 @@ public class IndexBean {
             if ("streamrserver".equals(tun.getType())) {host = tun.getListenOnInterface();}
             else {host = tun.getTargetHost();}
             String port = tun.getTargetPort();
-            if (host == null || host.length() == 0) {host = "<span class=ink_warn>" + _t("Host not set") + "</span>";}
+            if (host == null || host.isEmpty()) {host = "<span class=ink_warn>" + _t("Host not set") + "</span>";}
             else if (Addresses.getIP(host) == null) {host = "<span class=ink_warn>" + _t("Invalid address") + ' ' + host + "</span>";}
             else if (host.indexOf(':') >= 0) {host = '[' + host + ']';}
-            if (port == null || port.length() == 0) {port = "<span class=ink_warn>" + _t("Port not set") + "</span>";}
+            if (port == null || port.isEmpty()) {port = "<span class=ink_warn>" + _t("Port not set") + "</span>";}
             else if (Addresses.getPort(port) == 0) {port = "<span class=ink_warn>" + _t("Invalid port") + ' ' + port + "</span>";}
             return host + ':' + port;
         } else {return "";}
@@ -855,7 +855,7 @@ public class IndexBean {
             if (mode > 1 && mode < 10) {
                 try {
                     String secret = _helper.getBlindedPassword(tunnel);
-                    boolean requireSecret = secret != null && secret.length() > 0 &&
+                    boolean requireSecret = secret != null && !secret.isEmpty() &&
                                             (mode == 3 || mode == 5 || mode == 7 || mode == 9);
                     boolean requireAuth = mode >= 4 && mode <= 9;
                     return Blinding.encode(d.getSigningPublicKey(), requireSecret, requireAuth);

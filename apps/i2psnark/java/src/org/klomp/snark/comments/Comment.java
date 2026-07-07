@@ -56,7 +56,7 @@ public class Comment implements Comparable<Comment> {
         if (text != null) {
             text = text.trim();
             text = text.replaceAll("[\r\n]", " ");
-            if (text.length() == 0) text = null;
+            if (text.isEmpty()) text = null;
             else if (text.length() > MAX_TEXT_LEN) text = text.substring(0, MAX_TEXT_LEN);
         }
         this.text = text;
@@ -64,7 +64,7 @@ public class Comment implements Comparable<Comment> {
             name = name.trim();
             // comma because it's not last in the persistent string
             name = name.replaceAll("[,\r\n]", "");
-            if (name.length() == 0) name = null;
+            if (name.isEmpty()) name = null;
             else if (name.length() > MAX_NAME_LEN) name = name.substring(0, MAX_NAME_LEN);
         }
         this.name = name;

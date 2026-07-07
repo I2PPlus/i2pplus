@@ -46,6 +46,7 @@ import net.i2p.crypto.eddsa.spec.EdDSANamedCurveSpec;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
 import net.i2p.data.DataHelper;
 
+import java.nio.charset.StandardCharsets;
 /**
  * <p>BigInteger that takes advantage of the jbigi library for the modPow operation,
  * which accounts for a massive segment of the processing cost of asymmetric crypto.
@@ -1329,7 +1330,7 @@ public class NativeBigInteger extends BigInteger {
         Map<String, String> rv = new HashMap<>(32);
         BufferedReader in = null;
         try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream("/proc/cpuinfo"), "ISO-8859-1"), 4096);
+            in = new BufferedReader(new InputStreamReader(new FileInputStream("/proc/cpuinfo"), StandardCharsets.ISO_8859_1), 4096);
             String line = null;
             while ((line = in.readLine()) != null) {
                 String[] parts = DataHelper.split(line, ":", 2);

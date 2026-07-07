@@ -26,6 +26,7 @@ import org.minidns.record.CNAME;
 import org.minidns.record.Data;
 import org.minidns.record.Record.TYPE;
 
+import java.nio.charset.StandardCharsets;
 /**
  *  Simple implemetation of DNS over HTTPS.
  *  Also sets the local clock from the received date header.
@@ -205,9 +206,9 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
 
     // keep the timeout very short, as we try multiple addresses,
     // and will be falling back to regular DNS.
-    private static final long TIMEOUT = 3 * 1000;
+    private static final long TIMEOUT = (long) 3 * 1000;
     // total for v4 + v6
-    private static final long OVERALL_TIMEOUT = 10 * 1000;
+    private static final long OVERALL_TIMEOUT = (long) 10 * 1000;
     private static final int MAX_TTL = 24 * 60 * 60;
     // don't use a URL after this many consecutive failures
     private static final int MAX_FAILS = 3;
@@ -591,7 +592,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             if (is == null) {
                 return;
             }
-            in = new BufferedReader(new InputStreamReader(is, "ISO-8859-1"), 4096);
+            in = new BufferedReader(new InputStreamReader(is, StandardCharsets.ISO_8859_1), 4096);
             int count = 0;
             String line = null;
             while ((line = in.readLine()) != null) {
@@ -762,9 +763,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             int len = d[9] & 0xff;
             String addr = "n/a";
             if (len > 0) {
-                try {
-                    addr = new String(d, 10, len, "ISO-8859-1");
-                } catch (IOException ioe) { /* ignored */ }
+                addr = new String(d, 10, len, StandardCharsets.ISO_8859_1);
             }
             String host = "";
             String path = "/";
@@ -779,20 +778,16 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
                 off += vlen;
                 len = d[off++] & 0xff;
                 if (len > 0) {
-                    try {
-                        host = new String(d, off, len, "ISO-8859-1");
-                    } catch (IOException ioe) { /* ignored */ }
+                    host = new String(d, off, len, StandardCharsets.ISO_8859_1);
                     off += len;
                 }
                 len = d[off++] & 0xff;
                 if (len > 0) {
-                    try {
-                        path = new String(d, off, len, "ISO-8859-1");
-                    } catch (IOException ioe) { /* ignored */ }
+                    path = new String(d, off, len, StandardCharsets.ISO_8859_1);
                     off += len;
                 }
             }
-            String url = (type == 2 && host.length() > 0) ? "https://" + host + path : null;
+            String url = (type == 2 && !host.isEmpty()) ? "https://" + host + path : null;
             if (log) {
                 if (url != null) System.out.print(url + ' ');
                 if (type == 1) System.out.print("DNSCrypt");
@@ -826,7 +821,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
         BufferedReader in = null;
         try {
             FileInputStream fis = new FileInputStream(file);
-            in = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
+            in = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
             String line = null;
             while ((line = in.readLine()) != null) {
                 line = line.trim();

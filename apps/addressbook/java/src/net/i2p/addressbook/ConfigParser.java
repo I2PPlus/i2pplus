@@ -38,6 +38,7 @@ import net.i2p.util.SecureFile;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Utility class providing methods to parse and write files in config file
  * format, and subscription file format.
@@ -90,7 +91,7 @@ class ConfigParser {
             String inputLine;
             while ((inputLine = input.readLine()) != null) {
                 inputLine = stripComments(inputLine);
-                if (inputLine.length() == 0) {continue;}
+                if (inputLine.isEmpty()) {continue;}
                 String[] splitLine = DataHelper.split(inputLine, "=", 2);
                 if (splitLine.length == 2) {
                     result.put(splitLine[0].trim().toLowerCase(Locale.US), splitLine[1].trim());
@@ -119,7 +120,7 @@ class ConfigParser {
         FileInputStream fileStream = null;
         try {
             fileStream = new FileInputStream(file);
-            BufferedReader input = new BufferedReader(new InputStreamReader(fileStream, "UTF-8"));
+            BufferedReader input = new BufferedReader(new InputStreamReader(fileStream, StandardCharsets.UTF_8));
             return parse(input);
         } finally {
             if (fileStream != null) {
@@ -188,7 +189,7 @@ class ConfigParser {
             String inputLine;
             while ((inputLine = input.readLine()) != null) {
                 inputLine = stripComments(inputLine).trim();
-                if (inputLine.length() > 0) {result.add(inputLine);}
+                if (!inputLine.isEmpty()) {result.add(inputLine);}
             }
             return result;
         } finally {
@@ -212,7 +213,7 @@ class ConfigParser {
         FileInputStream fileStream = null;
         try {
             fileStream = new FileInputStream(file);
-            BufferedReader input = new BufferedReader(new InputStreamReader(fileStream, "UTF-8"));
+            BufferedReader input = new BufferedReader(new InputStreamReader(fileStream, StandardCharsets.UTF_8));
             return parseSubscriptions(input);
         } finally {
             if (fileStream != null) {
@@ -303,13 +304,13 @@ class ConfigParser {
         boolean success = false;
         if (!isWindows) {
             File tmp = SecureFile.createTempFile("temp-", ".tmp", file.getAbsoluteFile().getParentFile());
-            write(map, new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(tmp), "UTF-8")));
+            write(map, new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(tmp), StandardCharsets.UTF_8)));
             success = tmp.renameTo(file);
             if (!success) {tmp.delete();}
         }
         if (!success) {
             // hmm, that didn't work, try it the old way
-            write(map, new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "UTF-8")));
+            write(map, new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(file), StandardCharsets.UTF_8)));
         }
     }
 
@@ -350,7 +351,7 @@ class ConfigParser {
      *             if output cannot be written to.
      */
     private static void writeSubscriptions(List<String> list, File file) throws IOException {
-        writeSubscriptions(list, new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "UTF-8")));
+        writeSubscriptions(list, new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(file), StandardCharsets.UTF_8)));
     }
 
 }

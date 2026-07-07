@@ -51,6 +51,7 @@ import net.i2p.util.Translate;
 import org.klomp.snark.dht.DHT;
 import org.klomp.snark.dht.KRPC;
 
+import java.nio.charset.StandardCharsets;
 /**
  * I2P-specific utilities and context management for I2PSnark.
  *
@@ -382,9 +383,9 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     public boolean hasAPIKey() {
         return _apiTarget != null
-                && _apiTarget.length() > 0
+                && !_apiTarget.isEmpty()
                 && _apiKey != null
-                && _apiKey.length() > 0;
+                && !_apiKey.isEmpty();
     }
 
     /**
@@ -666,7 +667,7 @@ public class I2PSnarkUtil implements DisconnectListener {
             return rv;
         } catch (I2PException ie) {
             _banlist.add(dest);
-            new Unbanlist(dest).schedule(15 * 60 * 1000);
+            new Unbanlist(dest).schedule(15 * (long) 60 * 1000);
             IOException ioe = new IOException("Unable to reach peer [" + peer + "]");
             ioe.initCause(ie);
             throw ioe;
@@ -947,7 +948,7 @@ public class I2PSnarkUtil implements DisconnectListener {
                             if (_log.shouldDebug())
                                 _log.debug("Using existing session for lookup of [" + ip + "]");
                             try {
-                                return sess.lookupDest(h, 15 * 1000);
+                                return sess.lookupDest(h, (long) 15 * 1000);
                             } catch (I2PSessionException ise) { /* ignored */ }
                         }
                     }
@@ -1286,7 +1287,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     static void loadProps(Properties props, File f) throws IOException {
         BufferedReader in = null;
         try {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF-8"), 1024);
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8), 1024);
             String line = null;
             while ((line = in.readLine()) != null) {
                 if (line.trim().length() <= 0) {
@@ -1328,7 +1329,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         File tmpFile = new File(file.getPath() + ".tmp");
         try {
             fos = new SecureFileOutputStream(tmpFile);
-            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(fos, "UTF-8")));
+            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(fos, StandardCharsets.UTF_8)));
             out.println("# NOTE: This I2P config file must use UTF-8 encoding");
             out.println("# Last saved: " + DataHelper.formatTime(System.currentTimeMillis()));
             for (Map.Entry<Object, Object> entry : props.entrySet()) {

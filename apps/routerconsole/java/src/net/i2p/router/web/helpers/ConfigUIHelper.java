@@ -235,7 +235,7 @@ public class ConfigUIHelper extends HelperBase {
         String clang = Messages.getLanguage(_context);
         String current = clang;
         String country = Messages.getCountry(_context);
-        if (country != null && country.length() > 0)
+        if (country != null && !country.isEmpty())
             current += '_' + country;
         // find best match
         boolean found = false;
@@ -246,7 +246,7 @@ public class ConfigUIHelper extends HelperBase {
             }
         }
         if (!found) {
-            if (country != null && country.length() > 0) {
+            if (country != null && !country.isEmpty()) {
                 current = clang;
                 for (int i = 0; i < langs.length; i++) {
                     if (langs[i][0].equals(current)) {

@@ -81,7 +81,7 @@ public class WizardHandler extends FormHandler {
                 updated = true;
             }
         }
-        if ((inboundRate != null) && (inboundRate.length() > 0) &&
+        if ((inboundRate != null) && (!inboundRate.isEmpty()) &&
             !inboundRate.equals(_context.getProperty(FIFOBandwidthRefiller.PROP_INBOUND_BURST_BANDWIDTH,
                                                      Integer.toString(FIFOBandwidthRefiller.DEFAULT_INBOUND_BURST_BANDWIDTH)))) {
             try {
@@ -94,7 +94,7 @@ public class WizardHandler extends FormHandler {
             bwUpdated = true;
             } catch (NumberFormatException nfe) {addFormError(_t("Invalid bandwidth"));}
         }
-        if ((outboundRate != null) && (outboundRate.length() > 0) &&
+        if ((outboundRate != null) && (!outboundRate.isEmpty()) &&
             !outboundRate.equals(_context.getProperty(FIFOBandwidthRefiller.PROP_OUTBOUND_BURST_BANDWIDTH,
                                                       Integer.toString(FIFOBandwidthRefiller.DEFAULT_OUTBOUND_BURST_BANDWIDTH)))) {
             try {

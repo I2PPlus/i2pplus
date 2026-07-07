@@ -39,6 +39,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Provide an JSON-RPC 2.0 API for remote controlling of I2P
  */
@@ -258,7 +259,7 @@ public class JSONRPC2Servlet extends HttpServlet {
     private String getRequest(ServletInputStream sis) throws IOException {
         Writer writer = new StringWriter();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(sis, "UTF-8"));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(sis, StandardCharsets.UTF_8));
         char[] readBuffer = new char[BUFFER_LENGTH];
         int n;
         while ((n = reader.read(readBuffer)) != -1) {

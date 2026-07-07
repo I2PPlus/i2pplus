@@ -222,16 +222,16 @@ public class NewsXMLParser {
             NewsMetadata.Release release = new NewsMetadata.Release();
             // release attributes
             String a = r.getAttributeValue("date");
-            if (a.length() > 0) {
+            if (!a.isEmpty()) {
                 long time = RFC3339Date.parse3339Date(a.trim());
                 if (time > 0)
                     release.date = time;
             }
             a = r.getAttributeValue("minVersion");
-            if (a.length() > 0)
+            if (!a.isEmpty())
                 release.minVersion = a.trim();
             a = r.getAttributeValue("minJavaVersion");
-            if (a.length() > 0)
+            if (!a.isEmpty())
                 release.minJavaVersion = a.trim();
             // release nodes
             n = r.getNode("i2p:version");
@@ -262,7 +262,7 @@ public class NewsXMLParser {
                 if (t != null) {
                     // returns "" for none
                     String href = t.getAttributeValue("href");
-                    if (href.length() > 0) {
+                    if (!href.isEmpty()) {
                         update.torrent = href.trim();
                         totalSources++;
                     }
@@ -270,7 +270,7 @@ public class NewsXMLParser {
                 List<Node> urlNodes = getNodes(u, "i2p:clearnet");
                 for (Node n1 : urlNodes) {
                     String href = n1.getAttributeValue("href");
-                    if (href.length() > 0) {
+                    if (!href.isEmpty()) {
                         if (update.clearnet == null)
                             update.clearnet = new ArrayList<>(4);
                         update.clearnet.add(href.trim());
@@ -280,7 +280,7 @@ public class NewsXMLParser {
                 urlNodes = getNodes(u, "i2p:clearnetssl");
                 for (Node n2 : urlNodes) {
                     String href = n2.getAttributeValue("href");
-                    if (href.length() > 0) {
+                    if (!href.isEmpty()) {
                         if (update.ssl == null)
                             update.ssl = new ArrayList<>(4);
                         update.ssl.add(href.trim());
@@ -290,7 +290,7 @@ public class NewsXMLParser {
                 urlNodes = getNodes(u, "i2p:url");
                 for (Node n3 : urlNodes) {
                     String href = n3.getAttributeValue("href");
-                    if (href.length() > 0) {
+                    if (!href.isEmpty()) {
                         if (update.i2pnet == null)
                             update.i2pnet = new ArrayList<>(4);
                         update.i2pnet.add(href.trim());
@@ -330,7 +330,7 @@ public class NewsXMLParser {
             n = entry.getNode("link");
             if (n != null) {
                 String a = n.getAttributeValue("href");
-                if (a.length() > 0)
+                if (!a.isEmpty())
                     e.link = a.trim();
             }
             n = entry.getNode("id");
@@ -366,7 +366,7 @@ public class NewsXMLParser {
             n = entry.getNode("content");
             if (n != null) {
                 String a = n.getAttributeValue("type");
-                if (a.length() > 0)
+                if (!a.isEmpty())
                     e.contentType = a;
                 // now recursively sanitize
                 // and convert everything in the content to string
@@ -430,10 +430,10 @@ public class NewsXMLParser {
         for (Node entry : entries) {
             CRLEntry e = new CRLEntry();
             String a = entry.getAttributeValue("id");
-            if (a.length() > 0)
+            if (!a.isEmpty())
                 e.id = a;
             a = entry.getAttributeValue("updated");
-            if (a.length() > 0) {
+            if (!a.isEmpty()) {
                 long time = RFC3339Date.parse3339Date(a.trim());
                 if (time > 0)
                     e.updated = time;
@@ -461,10 +461,10 @@ public class NewsXMLParser {
         List<Node> entries = getNodes(bl, "i2p:block");
         BlocklistEntries rv = new BlocklistEntries(entries.size());
         String a = bl.getAttributeValue("signer");
-        if (a.length() > 0)
+        if (!a.isEmpty())
             rv.signer = a;
         a = bl.getAttributeValue("sig");
-        if (a.length() > 0) {
+        if (!a.isEmpty()) {
             rv.sig = a;
         }
         Node n =  bl.getNode("updated");

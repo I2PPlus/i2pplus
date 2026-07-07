@@ -23,6 +23,7 @@ import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.util.Log;
 
+import java.nio.charset.StandardCharsets;
 /**
  * Data structure and management for I2P router blocklist entries.
  * <p>
@@ -212,7 +213,7 @@ public class BlocklistEntries {
         buf.append(date).append('\n');
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), "UTF-8"));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), StandardCharsets.UTF_8));
             String s = null;
             while ((s = br.readLine()) != null) {
                 int index = s.indexOf('#');
@@ -222,7 +223,7 @@ public class BlocklistEntries {
                     s = s.substring(0, index);
                 s = s.trim();
                 if (s.length() < 7) {
-                    if (s.length() > 0)
+                    if (!s.isEmpty())
                         System.err.println("Bad line: " + s);
                     continue;
                 }
@@ -263,7 +264,7 @@ public class BlocklistEntries {
                     System.exit(1);
                 }
                 keypw = keypw.trim();
-                if (keypw.length() > 0 && keypw.length() < 6)
+                if (!keypw.isEmpty() && keypw.length() < 6)
                     System.out.println("Key password must be at least 6 characters");
             }
             File pkfile = new File(privateKeyFile);

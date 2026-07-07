@@ -48,9 +48,9 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     protected URI _currentURI;
     private final String _currentVersion;
 
-    protected static final long CONNECT_TIMEOUT = 55*1000;
-    protected static final long INACTIVITY_TIMEOUT = 5*60*1000;
-    protected static final long NOPROXY_INACTIVITY_TIMEOUT = 60*1000;
+    protected static final long CONNECT_TIMEOUT = (long) 55*1000;
+    protected static final long INACTIVITY_TIMEOUT = 5 * (long) 60 * 1000;
+    protected static final long NOPROXY_INACTIVITY_TIMEOUT = (long) 60*1000;
 
     /**
      *  Uses router version for partial checks

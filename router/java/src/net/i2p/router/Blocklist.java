@@ -763,7 +763,7 @@ public class Blocklist {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(blFile), StandardCharsets.ISO_8859_1))) {
             String s;
             while ((s = br.readLine()) != null) {
-                if (s.length() > 0 && !s.startsWith("#")) {lines++;}
+                if (!s.isEmpty() && !s.startsWith("#")) {lines++;}
             }
         } catch (IOException ioe) {
             if (_log.shouldWarn()) {_log.warn("Error reading the blocklist file", ioe);}

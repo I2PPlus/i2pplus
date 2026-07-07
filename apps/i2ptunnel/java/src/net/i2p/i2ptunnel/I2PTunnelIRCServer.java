@@ -18,6 +18,7 @@ import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.util.EventDispatcher;
 
+import java.nio.charset.StandardCharsets;
 /**
  * IRC server tunnel that filters registration to pass client destination hash as hostname.
  * <p>
@@ -57,11 +58,11 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
     public static final String PROP_WEBIRC_SPOOF_IP_DEFAULT="127.0.0.1";
     public static final String PROP_HOSTNAME="ircserver.fakeHostname";
     public static final String PROP_HOSTNAME_DEFAULT="%f.b32.i2p";
-    private static final long HEADER_TIMEOUT = 15*1000;
+    private static final long HEADER_TIMEOUT = (long) 15*1000;
     private static final long TOTAL_HEADER_TIMEOUT = 2 * HEADER_TIMEOUT;
     private static final int MAX_LINE_LENGTH = 1024;
     // application should ping timeout before this
-    private static final long DEFAULT_IRC_READ_TIMEOUT = 10*60*1000;
+    private static final long DEFAULT_IRC_READ_TIMEOUT = 10 * (long) 60 * 1000;
 
     private final static String ERR_UNAVAILABLE =
         ":ircserver.i2p 499 you :" +
@@ -158,7 +159,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
             try {
                 // Send a response so the user doesn't just see a disconnect
                 // and blame his router or the network.
-                socket.getOutputStream().write(ERR_REGISTRATION.getBytes("ISO-8859-1"));
+                socket.getOutputStream().write(ERR_REGISTRATION.getBytes(StandardCharsets.ISO_8859_1));
             } catch (IOException ioe) { /* ignored */ } finally {
                  try { socket.close(); } catch (IOException ioe) { /* ignored */ }
             }
@@ -168,7 +169,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
             try {
                 // Send a response so the user doesn't just see a disconnect
                 // and blame his router or the network.
-                socket.getOutputStream().write(ERR_EOF.getBytes("ISO-8859-1"));
+                socket.getOutputStream().write(ERR_EOF.getBytes(StandardCharsets.ISO_8859_1));
             } catch (IOException ioe) { /* ignored */ } finally {
                  try { socket.close(); } catch (IOException ioe) { /* ignored */ }
             }
@@ -178,7 +179,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
             try {
                 // Send a response so the user doesn't just see a disconnect
                 // and blame his router or the network.
-                socket.getOutputStream().write(ERR_TIMEOUT.getBytes("ISO-8859-1"));
+                socket.getOutputStream().write(ERR_TIMEOUT.getBytes(StandardCharsets.ISO_8859_1));
             } catch (IOException ioe) { /* ignored */ } finally {
                  try { socket.close(); } catch (IOException ioe) { /* ignored */ }
             }
@@ -188,7 +189,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
             try {
                 // Send a response so the user doesn't just see a disconnect
                 // and blame his router or the network.
-                socket.getOutputStream().write(ERR_UNAVAILABLE.getBytes("ISO-8859-1"));
+                socket.getOutputStream().write(ERR_UNAVAILABLE.getBytes(StandardCharsets.ISO_8859_1));
             } catch (IOException ioe) { /* ignored */ }
             try {
                 socket.close();

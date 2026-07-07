@@ -718,7 +718,7 @@ public class SAMBridge implements Runnable, ClientApp {
             String val = args[i].substring(eq + 1);
             key = key.trim();
             val = val.trim();
-            if ((key.length() > 0) && (val.length() > 0))
+            if ((!key.isEmpty()) && (!val.isEmpty()))
                 props.setProperty(key, val);
             else
                 throw new HelpRequestedException();

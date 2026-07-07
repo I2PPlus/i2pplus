@@ -31,7 +31,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
     private String _lastOut = DEFAULT_QTY;
     private final Object _lock = new Object();
 
-    private static final long CHECK_TIME = 63 * 1000;
+    private static final long CHECK_TIME = (long) 63 * 1000;
     private static final int MAX_CONSEC_IDLE = 4;
     private static final int MAX_CONSEC_NOT_RUNNING = 20;
     private static final String DEFAULT_QTY = "2";

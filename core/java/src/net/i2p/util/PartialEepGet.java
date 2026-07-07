@@ -160,7 +160,7 @@ public class PartialEepGet extends EepGet {
             get.addAuthorization(username, password);
         }
         get.addStatusListener(get.new CLIStatusListener(1024, 40));
-        if (get.fetch(45 * 1000, -1, 60 * 1000)) {
+        if (get.fetch((long) 45 * 1000, -1, (long) 60 * 1000)) {
             System.err.println("Last-Modified: " + get.getLastModified());
             System.err.println("Etag: " + get.getEtag());
         } else {
