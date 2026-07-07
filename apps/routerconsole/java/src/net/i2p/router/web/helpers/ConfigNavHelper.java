@@ -35,7 +35,8 @@ public class ConfigNavHelper extends HelperBase {
 
     /** @since 0.9.19 */
     private static class Tab {
-        public final String page, title;
+        public final String page;
+        public final String title;
         public Tab(String p, String t) {
             page = p; title = t;
         }

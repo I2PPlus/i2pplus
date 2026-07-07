@@ -35,7 +35,8 @@ import net.i2p.util.Log;
 class FloodfillVerifyStoreJob extends JobImpl {
     private final Log _log;
     private final BanLogger _banLogger;
-    private final Hash _key, _client;
+    private final Hash _key;
+    private final Hash _client;
     private volatile Hash _target;
     private final Hash _sentTo;
     private final FloodfillNetworkDatabaseFacade _facade;

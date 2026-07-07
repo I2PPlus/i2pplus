@@ -12,7 +12,8 @@ import java.util.Locale;
  */
 public class FileSuffixFilter implements FileFilter {
 
-    private final String begin, end;
+    private final String begin;
+    private final String end;
 
     /**
      *  A filter that accepts regular files that

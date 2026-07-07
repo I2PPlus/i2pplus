@@ -408,7 +408,11 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
 
     /** let's keep this simple */
     private static class MsgData {
-        public final int id, size, proto, fromPort, toPort;
+        public final int id;
+        public final int size;
+        public final int proto;
+        public final int fromPort;
+        public final int toPort;
 
         public MsgData(int i, int s, int p, int f, int t) {
             id = i;

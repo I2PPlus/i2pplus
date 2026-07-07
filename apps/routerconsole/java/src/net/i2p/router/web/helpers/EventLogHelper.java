@@ -24,7 +24,8 @@ import net.i2p.router.web.HelperBase;
 public class EventLogHelper extends FormHandler {
     private static final Pattern EVENT_SPACE = Pattern.compile(" .+$");
     private static final Pattern EVENT_DIGIT = Pattern.compile("\\d");
-    private long _from, _age;
+    private long _from;
+    private long _age;
     //private long _to = Long.MAX_VALUE;
     private String _event = ALL;
     // EventLog name to translated display string

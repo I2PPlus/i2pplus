@@ -25,7 +25,10 @@ class OutboundTunnelEndpoint {
     private final FragmentHandler _handler;
     private final OutboundMessageDistributor _outDistributor;
     private final SyntheticREDQueue _partBWE;
-    private int _lsdsm, _ridsm, _i2npmsg, _totalmsg;
+    private int _lsdsm;
+    private int _ridsm;
+    private int _i2npmsg;
+    private int _totalmsg;
 
     public OutboundTunnelEndpoint(RouterContext ctx, HopConfig config, HopProcessor processor) {
         _context = ctx;

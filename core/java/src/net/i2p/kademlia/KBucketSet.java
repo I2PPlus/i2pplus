@@ -229,7 +229,10 @@ public class KBucketSet<T extends SimpleDataStructure> {
             // e.g. 0-159 => 0-158, 159-159
             // When B_VALUE > 1, and the bucket is smaller than B_FACTOR, then
             // e.g. 1020-1023 => 1020-1021, 1022-1023
-            int s1, e1, s2, e2;
+            int s1;
+            int e1;
+            int s2;
+            int e2;
             s1 = b0.getRangeBegin();
             e2 = b0.getRangeEnd();
             if (B_VALUE == 1 || ((s1 & (B_FACTOR - 1)) == 0 && ((e2 + 1) & (B_FACTOR - 1)) == 0 && e2 > s1 + B_FACTOR)) {

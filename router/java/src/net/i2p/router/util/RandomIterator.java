@@ -67,7 +67,8 @@ public class RandomIterator<E> implements Iterator<E> {
     private final Random rand = RandomSource.getInstance();
 
     /** Used to narrow the range to take random indexes from */
-    private int lower, upper;
+    private int lower;
+    private int upper;
 
     private static final boolean HAS_ANDROID_BUG;
     static {

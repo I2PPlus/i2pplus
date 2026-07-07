@@ -254,9 +254,12 @@ public class Reseeder {
 
     private class ReseedRunner implements Runnable, EepGet.StatusListener {
         private boolean _isRunning;
-        private final String _proxyHost, _sproxyHost;
-        private final int _proxyPort, _sproxyPort;
-        private final boolean _shouldProxyHTTP, _shouldProxySSL;
+        private final String _proxyHost;
+        private final String _sproxyHost;
+        private final int _proxyPort;
+        private final int _sproxyPort;
+        private final boolean _shouldProxyHTTP;
+        private final boolean _shouldProxySSL;
         private final SSLEepGet.ProxyType _sproxyType;
         private SSLEepGet.SSLState _sslState;
         private int _gotDate;

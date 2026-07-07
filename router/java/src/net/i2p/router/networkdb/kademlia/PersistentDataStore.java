@@ -328,8 +328,20 @@ public class PersistentDataStore extends TransientDataStore {
 
     /** Pre-computed classification flags for a RouterInfo being written. */
     private static class RiFlags {
-        final String version, caps, bw, ip, ourIP;
-        final boolean hasIP, unreachable, reachable, isOld, isInvalidVersion, isLTier, isSlow, isDegraded, isBanned;
+        final String version;
+        final String caps;
+        final String bw;
+        final String ip;
+        final String ourIP;
+        final boolean hasIP;
+        final boolean unreachable;
+        final boolean reachable;
+        final boolean isOld;
+        final boolean isInvalidVersion;
+        final boolean isLTier;
+        final boolean isSlow;
+        final boolean isDegraded;
+        final boolean isBanned;
 
         RiFlags(String version, String caps, String bw, String ip, String ourIP,
                 boolean hasIP, boolean unreachable, boolean reachable,

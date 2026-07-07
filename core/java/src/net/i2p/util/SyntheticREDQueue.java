@@ -164,15 +164,18 @@ public class SyntheticREDQueue implements BandwidthEstimator {
     private final Random _random;
 
     private long _lastAckTime;
-    private float _bKFiltered, _bKNonSmoothed;
+    private float _bKFiltered;
+    private float _bKNonSmoothed;
     private int _bytesAcked;
 
     private int _dropCount = -1;
-    private float _avgQueueSize, _queueSizeEstimate;
+    private float _avgQueueSize;
+    private float _queueSizeEstimate;
     private int _newDataSize;
     private long _lastQueueUpdateTime;
 
-    private int _minThresholdBytes, _maxThresholdBytes;
+    private int _minThresholdBytes;
+    private int _maxThresholdBytes;
     private final int _bandwidthBps;
     private final float _bandwidthBytesPerMs;
 

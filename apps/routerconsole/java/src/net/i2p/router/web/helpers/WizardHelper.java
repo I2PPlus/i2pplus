@@ -259,7 +259,8 @@ public class WizardHelper extends HelperBase {
 
     /** test results */
     private static class TestListener implements MLabRunner.ToolListener {
-        private String _summary, _detail;
+        private String _summary;
+        private String _detail;
         private Map<String, Object> _results;
         public synchronized void reportSummary(String str) {_summary = str;}
         public synchronized void reportDetail(String str) {_detail = str;}

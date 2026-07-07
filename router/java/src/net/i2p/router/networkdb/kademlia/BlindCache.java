@@ -382,7 +382,9 @@ class BlindCache {
         String[] ss = DataHelper.split(line, ",", 8);
         if (ss.length != 8)
             throw new DataFormatException("Bad format");
-        int ist1, ist2, auth;
+        int ist1;
+        int ist2;
+        int auth;
         long time;
         try {
             ist1 = Integer.parseInt(ss[0]);

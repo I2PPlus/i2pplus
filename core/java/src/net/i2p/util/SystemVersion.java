@@ -73,7 +73,7 @@ public abstract class SystemVersion {
     private static final boolean _twentyOne;
     private static final boolean _twentyTwo;
     private static final boolean _twentyThree;
-    private static final boolean _twentyFour;
+    private static final boolean _twentyFour; // NOSONAR S1068
     private static final int _androidSDK;
 
     /** @since 0.9.55+ */

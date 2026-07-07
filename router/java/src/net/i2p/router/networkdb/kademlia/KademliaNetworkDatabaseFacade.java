@@ -98,7 +98,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     protected final int _networkID;
     private final BlindCache _blindCache;
     private final Hash _dbid;
-    private final Job _elj, _erj, _lurj;
+    private final Job _elj;
+    private final Job _erj;
+    private final Job _lurj;
     static final String PROP_MIN_ROUTER_VERSION = "router.minVersionAllowed";
     public static final String PROP_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
     public static final String PROP_IP_COUNTRY = "i2np.lastCountry";
@@ -1514,7 +1516,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
 
         // Determine LeaseSet date boundaries based on LeaseSet type
-        long earliest, latest;
+        long earliest;
+        long latest;
         int type = leaseSet.getType();
 
         if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {

@@ -78,7 +78,11 @@ public class HexDump {
      */
     public static void dump(byte[] data, int off, int len, OutputStream out) throws IOException {
         String hexoff;
-        int dumpoff, hexofflen, i, nextbytes, end = len + off;
+        int dumpoff;
+        int hexofflen;
+        int i;
+        int nextbytes;
+        int end = len + off;
         int val;
 
         for (dumpoff = off; dumpoff < end; dumpoff += FORMAT_BYTES_PER_ROW) {

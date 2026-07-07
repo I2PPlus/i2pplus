@@ -905,7 +905,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *     then siphash(l) - siphash(r)
      */
     private static class HashComparator implements Comparator<Hash>, Serializable {
-        private final long k0, k1;
+        private final long k0;
+        private final long k1;
 
         /**
          * not thread safe
@@ -1015,7 +1016,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     protected class Excluder extends ExcluderBase {
         private static final int MAX_EXCLUDED_PEERS = 384;
-        private final boolean _isIn, _isExpl;
+        private final boolean _isIn;
+        private final boolean _isExpl;
         /** Maps peer hash to the reason it was excluded, for diagnostic logging */
         final Map<Hash, String> _reasons = new LinkedHashMap<>();
 

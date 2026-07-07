@@ -438,7 +438,8 @@ public class ProfileOrganizer {
         SLICE_1(0x03, 1),
         SLICE_2(0x03, 2),
         SLICE_3(0x03, 3);
-        final int mask, val;
+        final int mask;
+        final int val;
         Slice(int mask, int val) {
             this.mask = mask;
             this.val = val;

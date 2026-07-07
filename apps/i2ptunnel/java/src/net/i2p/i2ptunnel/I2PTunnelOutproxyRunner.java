@@ -47,7 +47,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
 
     private final Socket s;
     private final Socket i2ps;
-    private final Object slock;
+    private final Object slock; // NOSONAR S1068
 
     private final CountDownLatch finishLatch = new CountDownLatch(2);
 

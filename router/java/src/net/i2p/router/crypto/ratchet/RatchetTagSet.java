@@ -437,7 +437,8 @@ class RatchetTagSet implements TagSetHandle {
      *  inbound only
      */
     private void addTags(int usedTagNumber) {
-        int lookAhead, trimBehind;
+        int lookAhead;
+        int trimBehind;
         if (_maxSize > _originalSize) {
             // grow from originalSize at N = 0 to
             // maxSize at N = 2 * (maxSize - originalSize)

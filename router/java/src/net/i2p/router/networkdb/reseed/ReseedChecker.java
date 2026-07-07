@@ -286,7 +286,8 @@ public class ReseedChecker {
      * @since 0.9
      */
     private class StatusCleaner extends SimpleTimer2.TimedEvent {
-        private final String _status, _error;
+        private final String _status;
+        private final String _error;
 
         public StatusCleaner(RouterContext ctx, String status, String error) {
             super(ctx.simpleTimer2());

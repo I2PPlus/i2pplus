@@ -243,7 +243,9 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
                 _haveNextGaussian = false;
                 return _nextGaussian;
             }
-            double v1, v2, s;
+            double v1;
+            double v2;
+            double s;
             do {
                 v1 = 2 * nextDouble() - 1; // between -1.0 and 1.0
                 v2 = 2 * nextDouble() - 1; // between -1.0 and 1.0

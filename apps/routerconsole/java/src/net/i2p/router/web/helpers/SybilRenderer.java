@@ -102,7 +102,8 @@ public class SybilRenderer {
              int rc = r.indexOf(':');
              if (lc <= 0 || rc <= 0)
                  return 0;
-             double ld, rd;
+             double ld;
+             double rd;
              try {
                  ld = Double.parseDouble(l.substring(0, lc));
                  rd = Double.parseDouble(r.substring(0, rc));

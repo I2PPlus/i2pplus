@@ -79,7 +79,11 @@ public final class SHA1 extends MessageDigest implements Cloneable {
     /**
      * Private context that contains the current digest key.
      */
-    private int hA, hB, hC, hD, hE;
+    private int hA;
+    private int hB;
+    private int hC;
+    private int hD;
+    private int hE;
 
     private static final boolean _useBitzi;
     static {
@@ -422,7 +426,11 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      */
     private void computeBlock(final byte[] input, int offset) {
         /* Local temporary work variables for intermediate digests. */
-        int a, b, c, d, e;
+        int a;
+        int b;
+        int c;
+        int d;
+        int e;
         /* Cache the input block into the local working set of 32-bit
          * values, in big-endian byte order. Be careful when
          * widening bytes or integers due to sign extension! */

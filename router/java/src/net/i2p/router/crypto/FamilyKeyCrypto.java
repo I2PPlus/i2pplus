@@ -204,7 +204,8 @@ public class FamilyKeyCrypto {
      *  @since 0.9.54
      */
     private static class Verified {
-        public final String name, sig;
+        public final String name;
+        public final String sig;
         public final Result result;
         public Verified(String n, String s, Result r) {
             name = n; sig = s; result = r;

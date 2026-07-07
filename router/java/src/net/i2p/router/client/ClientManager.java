@@ -73,7 +73,8 @@ class ClientManager {
     private final Set<Hash> _metaHashes;
     protected final RouterContext _ctx;
     protected final int _port;
-    protected volatile boolean _isStarted, _wasStarted;
+    protected volatile boolean _isStarted;
+    protected volatile boolean _wasStarted;
     private final SimpleTimer2.TimedEvent _clientTimestamper;
 
     /** Disable external interface, allow internal clients only @since 0.8.3 */

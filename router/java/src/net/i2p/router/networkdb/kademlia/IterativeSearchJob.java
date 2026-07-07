@@ -361,7 +361,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (_expiration - 1500 < now)  {_expiration = now + 1500;}
         while (true) {
             Hash peer = null;
-            final int done, pend;
+            final int done;
+            final int pend;
             synchronized (this) {
                 if (_dead) {return;}
                 pend = _unheardFrom.size();

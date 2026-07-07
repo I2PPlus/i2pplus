@@ -906,7 +906,9 @@ public abstract class Addresses {
      */
     private static class Inet6Addr {
         private final Inet6Address addr;
-        private final boolean isDyn, isDep, isTemp;
+        private final boolean isDyn;
+        private final boolean isDep;
+        private final boolean isTemp;
 
         public Inet6Addr(Inet6Address a, int flags) {
             addr = a;

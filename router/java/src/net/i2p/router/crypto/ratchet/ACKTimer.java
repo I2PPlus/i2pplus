@@ -21,7 +21,8 @@ import net.i2p.util.SimpleTimer2;
 class ACKTimer extends SimpleTimer2.TimedEvent {
     private final RouterContext _context;
     private final Log _log;
-    private final Destination _from, _to;
+    private final Destination _from;
+    private final Destination _to;
 
     private static final long EXPIRATION = 60*1000L;
     // ClientMessageOptions.LS_MASK, don't send LS

@@ -13,7 +13,8 @@ import net.i2p.data.SessionKey;
  * @since 0.9.44
  */
 class SessionKeyAndNonce extends SessionKey {
-    private final int _id, _nonce;
+    private final int _id;
+    private final int _nonce;
     private final HandshakeState _state;
     private final PublicKey _remoteKey;
 

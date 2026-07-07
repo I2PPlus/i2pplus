@@ -732,8 +732,12 @@ public class TunnelPool {
     private void setLengthOverride() {
         int len = _settings.getLength();
         if (len > 1) {
-            int th1, th2, minLen;
-            RateStat e, r, s;
+            int th1;
+            int th2;
+            int minLen;
+            RateStat e;
+            RateStat r;
+            RateStat s;
             if (_settings.isExploratory()) {
                 th1 = BUILD_TRIES_LENGTH_OVERRIDE_1;   // 10
                 th2 = BUILD_TRIES_LENGTH_OVERRIDE_2;   // 12
