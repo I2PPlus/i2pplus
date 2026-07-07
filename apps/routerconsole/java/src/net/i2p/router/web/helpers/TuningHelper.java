@@ -161,12 +161,12 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("router.maxParticipatingTunnels", "Transit tunnel capacity.");
         PARAM_DESCRIPTIONS.put("router.buildHandlerMaxQueue", "Max queued inbound build requests; overflows drop requests.");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.goodDeficitThrottle", "Delay between rebuild rounds when pools are healthy; in ms.");
-        PARAM_DESCRIPTIONS.put("router.tunnel.perTunnelBweDivisor", "Divides bandwidth among transit tunnels; lower = more per tunnel.");
+        PARAM_DESCRIPTIONS.put("router.tunnel.perTunnelBweDivisor", "Divides bandwidth among transit tunnels.");
         PARAM_DESCRIPTIONS.put("router.tunnelGrowthFactor", "How aggressively new tunnels are accepted before throttling.");
-        PARAM_DESCRIPTIONS.put("netdb.searchLimit", "Peers queried per iterative search; higher = slower but more thorough.");
-        PARAM_DESCRIPTIONS.put("netdb.maxConcurrent", "Max simultaneous NetDB lookups; higher = faster discovery but more load.");
-        PARAM_DESCRIPTIONS.put("netdb.singleSearchTime", "Per-peer lookup timeout in ms; higher = more tolerant of slow peers.");
-        PARAM_DESCRIPTIONS.put("i2np.udp.maxConcurrentEstablish", "Max simultaneous SSU connection handshakes; higher = faster peer discovery.");
+        PARAM_DESCRIPTIONS.put("netdb.searchLimit", "Peers queried per iterative search.");
+        PARAM_DESCRIPTIONS.put("netdb.maxConcurrent", "Max simultaneous NetDB lookups.");
+        PARAM_DESCRIPTIONS.put("netdb.singleSearchTime", "Per-peer lookup timeout in ms.");
+        PARAM_DESCRIPTIONS.put("i2np.udp.maxConcurrentEstablish", "Max simultaneous SSU connection handshakes.");
         PARAM_DESCRIPTIONS.put("profileOrganizer.maxProfiles", "Memory cap for peer performance profiles.");
         PARAM_DESCRIPTIONS.put("profileOrganizer.minFastPeers", "Floor for fast-latency peer count in routing table.");
         PARAM_DESCRIPTIONS.put("profileOrganizer.maxFastPeers", "Ceiling for fast-latency peer count in routing table.");
@@ -174,10 +174,10 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("profileOrganizer.maxHighCapacityPeers", "Ceiling for high-bandwidth peer count.");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.build.requestTimeout", "Build reply timeout in ms.");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.build.firstHopTimeout", "First-hop build forward timeout in ms.");
-        PARAM_DESCRIPTIONS.put("tunnel.build.maxConcurrent", "Max concurrent tunnel builds; higher = faster pool recovery but more overhead.");
+        PARAM_DESCRIPTIONS.put("tunnel.build.maxConcurrent", "Max concurrent tunnel builds.");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.build.maxLookupLimit", "Max concurrent RouterInfo lookups during tunnel building.");
-        PARAM_DESCRIPTIONS.put("tunnel.testJob.maxQueued", "Max concurrent tunnel test jobs; higher = faster failure detection but more load.");
-        PARAM_DESCRIPTIONS.put("tunnel.testJob.minTestDelay", "Min interval between tunnel tests; shorter = faster failure detection.");
+        PARAM_DESCRIPTIONS.put("tunnel.testJob.maxQueued", "Max concurrent tunnel test jobs.");
+        PARAM_DESCRIPTIONS.put("tunnel.testJob.minTestDelay", "Min interval between tunnel tests.");
         PARAM_DESCRIPTIONS.put("tunnel.testJob.maxTestDelay", "Max interval between tunnel tests; caps backoff for healthy tunnels.");
         PARAM_DESCRIPTIONS.put("ntcp.reader.threads", "Threads decrypting and parsing inbound NTCP data.");
         PARAM_DESCRIPTIONS.put("ntcp.writer.threads", "Threads encrypting and sending NTCP messages.");
@@ -185,7 +185,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("udp.peer.concurrentMaxMessages", "In-flight message limit per UDP peer to prevent overwhelm.");
         PARAM_DESCRIPTIONS.put("ntcp.sendPool.capacity", "NTCP send pool queue depth; overflows drop outbound messages.");
         PARAM_DESCRIPTIONS.put("i2cp.internalQueueSize", "Per-session I2CP message buffer; overflow drops but prevents client stalls.");
-        PARAM_DESCRIPTIONS.put("udp.establish.maxQueuedOutbound", "Pending outbound handshake queue; larger = less connection dropping under load.");
+        PARAM_DESCRIPTIONS.put("udp.establish.maxQueuedOutbound", "Pending outbound handshake queue.");
         PARAM_DESCRIPTIONS.put("ntcp.maxWriteBufs", "Write buffer ceiling per NTCP connection; larger prevents stalls.");
         PARAM_DESCRIPTIONS.put("i2p.streaming.minResendDelay", "Min time between retransmissions in ms.");
         PARAM_DESCRIPTIONS.put("i2p.streaming.congestionAvoidanceGrowthRateFactor", "Congestion avoidance growth rate.");
@@ -196,19 +196,19 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2p.router.maxDispatchAge", "Max age a message can be queued before dropping in ms.");
         PARAM_DESCRIPTIONS.put("i2p.router.handlerThreadPriority", "Dynamic priority for I/O handler threads.");
         PARAM_DESCRIPTIONS.put("tunnel.pumper.queueCapacity", "Gateway pumper queue capacity; overflows drop tunnel messages.");
-        PARAM_DESCRIPTIONS.put("tunnel.pumper.threads", "Gateway pumper thread count; more = better concurrent message flow.");
+        PARAM_DESCRIPTIONS.put("tunnel.pumper.threads", "Gateway pumper thread count.");
         PARAM_DESCRIPTIONS.put("i2ptunnel.serverHandler.threads", "Handler thread pool for incoming I2PTunnel connections.");
         PARAM_DESCRIPTIONS.put("router.buildHandlerThreads", "Thread pool for processing inbound tunnel build requests.");
-        PARAM_DESCRIPTIONS.put("i2ptunnel.clientRunner.max", "Ceiling for client proxy thread pool; higher = more concurrent clients.");
-        PARAM_DESCRIPTIONS.put("i2p.tunnel.participatingThrottle.minLimit", "Floor for transit tunnels per peer; higher = more tolerance.");
-        PARAM_DESCRIPTIONS.put("i2p.tunnel.participatingThrottle.maxLimit", "Ceiling for transit tunnels per peer; higher = more tolerance.");
-        PARAM_DESCRIPTIONS.put("i2p.tunnel.participatingThrottle.percentLimit", "Percent of total transit tunnels allowed per peer.");
-        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.minLimit", "Floor for inbound requests per peer; higher = more tolerance.");
-        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.maxLimit", "Ceiling for inbound requests per peer; higher = more tolerance.");
-        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.percentLimit", "Percent of total tunnels for inbound requests per peer.");
-        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.burst1sThreshold", "Requests per second before burst ban; lower = more aggressive.");
+        PARAM_DESCRIPTIONS.put("i2ptunnel.clientRunner.max", "Ceiling for client proxy thread pool.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.participatingThrottle.minLimit", "Minimum transit tunnels any peer can hold.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.participatingThrottle.maxLimit", "Maximum transit tunnels a single peer can hold.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.participatingThrottle.percentLimit", "Max share of transit tunnels for a single peer.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.minLimit", "Minimum inbound requests accepted from any peer.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.maxLimit", "Maximum inbound requests accepted from any peer.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.percentLimit", "Max share of tunnel requests from a single peer.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.burst1sThreshold", "Burst threshold: requests per second before a ban.");
         PARAM_DESCRIPTIONS.put("tunnel.pool.failureThreshold", "Consecutive failures before pool backoff kicks in.");
-        PARAM_DESCRIPTIONS.put("tunnel.pool.backoffMs", "Pool cooldown duration after failure threshold hit, in ms.");
+        PARAM_DESCRIPTIONS.put("tunnel.pool.backoffMs", "Cooldown duration after pool failure threshold, in ms.");
     }
 
     // display order for subsystems (alphabetical)
