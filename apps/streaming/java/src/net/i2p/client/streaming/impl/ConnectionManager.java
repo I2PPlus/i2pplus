@@ -901,11 +901,7 @@ class ConnectionManager {
             _recentlyClosed.clear();
         }
         _pendingPings.clear();
-        // FIXME
-        // Ideally we would like to stop all TCBShare and all the timer threads here,
-        // but leave them ready to restart when things resume.
-        // However that's quite difficult.
-        // So the timer threads will continue to run.
+        // Timer threads are shared via ctx.simpleTimer2() — no per-pool threads to stop.
     }
 
     /**
