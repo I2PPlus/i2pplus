@@ -44,6 +44,7 @@ public class ConfigSidebarHandler extends FormHandler {
         boolean stickySidebar = ctx.getBooleanProperty("routerconsole.stickySidebar");
 
         if (_action.equals(_t("Save")) && "0".equals(group)) {handleSave(unifiedSidebar, stickySidebar);}
+        else if (_action.equals(_t("Save")) && "1".equals(group)) {handleGraphSave();}
         else if (_action.equals(_t("Restore full default"))) {restoreDefault(true);}
         else if (_action.equals(_t("Restore minimal default"))) {restoreDefault(false);}
         else if (editing) {moveSection();}
@@ -78,6 +79,29 @@ public class ConfigSidebarHandler extends FormHandler {
         } catch (NumberFormatException e) {
             addFormError(_t("Refresh interval must be a number"), true);
         }
+    }
+
+    private void handleGraphSave() {
+        Map<String, String> toAdd = new HashMap<>(4);
+        boolean legacy = "true".equals(getJettyStringOrDefault("sidebarGraphLegacy", "false"));
+        toAdd.put(CSSHelper.PROP_SIDEBAR_GRAPH_LEGACY, Boolean.toString(legacy));
+
+        boolean split = "true".equals(getJettyStringOrDefault("sidebarGraphSplit", "true"));
+        toAdd.put(CSSHelper.PROP_SIDEBAR_GRAPH_SPLIT, Boolean.toString(split));
+
+        String direction = getJettyStringOrDefault("sidebarGraphDirection", "rtl");
+        toAdd.put(CSSHelper.PROP_SIDEBAR_GRAPH_DIRECTION, "ltr".equals(direction) ? "ltr" : "rtl");
+
+        try {
+            int minutes = Integer.parseInt(getJettyStringOrDefault("sidebarGraphMinutes", "20"));
+            minutes = Math.max(2, Math.min(30, minutes));
+            toAdd.put(CSSHelper.PROP_SIDEBAR_GRAPH_MINUTES, Integer.toString(minutes));
+        } catch (NumberFormatException e) {
+            toAdd.put(CSSHelper.PROP_SIDEBAR_GRAPH_MINUTES, "20");
+        }
+
+        _context.router().saveConfig(toAdd, null);
+        addFormNotice(_t("Graph preferences updated"), true);
     }
 
     private int parseRefreshInterval(String refreshStr) throws NumberFormatException {

@@ -58,6 +58,8 @@ public class CSSHelper extends HelperBase {
     public static final String PROP_SIDEBAR_GRAPH_MINUTES = "routerconsole.sidebarGraphMinutes";
     /** @since 0.9.70+ — true = split display (inbound top, outbound bottom); false = overlay */
     public static final String PROP_SIDEBAR_GRAPH_SPLIT = "routerconsole.sidebarGraphSplit";
+    /** @since 0.9.70+ — graph render direction: "ltr" or "rtl" */
+    public static final String PROP_SIDEBAR_GRAPH_DIRECTION = "routerconsole.sidebarGraphDirection";
 
     /** Session-bound nonce for CSRF protection, replaces static nonces @since 0.9.69 */
     private static final String SESSION_CONSOLE_NONCE = "__router.console.nonce.queue__";
@@ -225,6 +227,31 @@ public class CSSHelper extends HelperBase {
      * @since 0.9.70+
      */
     public boolean useLegacySidebarGraph() {return _context.getBooleanProperty(PROP_SIDEBAR_GRAPH_LEGACY);}
+
+    /**
+     * Returns the sidebar graph time period in minutes (2–30).
+     * @since 0.9.70+
+     */
+    public int getSidebarGraphMinutes() {
+        int val = _context.getProperty(PROP_SIDEBAR_GRAPH_MINUTES, 20);
+        return Math.max(2, Math.min(30, val));
+    }
+
+    /**
+     * Returns whether the sidebar graph uses split mode (inbound top, outbound bottom).
+     * When false, overlay mode is used (both lines from top).
+     * @since 0.9.70+
+     */
+    public boolean useSidebarGraphSplit() {return _context.getBooleanPropertyDefaultTrue(PROP_SIDEBAR_GRAPH_SPLIT);}
+
+    /**
+     * Returns the sidebar graph render direction ("ltr" or "rtl").
+     * @since 0.9.70+
+     */
+    public String getSidebarGraphDirection() {
+        String val = _context.getProperty(PROP_SIDEBAR_GRAPH_DIRECTION, "rtl");
+        return "ltr".equals(val) ? "ltr" : "rtl";
+    }
 
     /**
      * Returns whether we should use a unified sidebar

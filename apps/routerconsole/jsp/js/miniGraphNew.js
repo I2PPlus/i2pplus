@@ -345,18 +345,27 @@ function renderNewGraph() {
             }
             lastShiftTime = Date.now();
         } else {
-            // Shift by 1 and append new live value — but only once per POLL_INTERVAL
             const now = Date.now();
-            if (now - lastShiftTime >= POLL_INTERVAL) {
+            const elapsed = now - lastShiftTime;
+            // If hidden for more than 3 cycles, re-interpolate from fresh server data
+            // to fill the gap smoothly instead of shifting point-by-point.
+            if (elapsed > POLL_INTERVAL * 3) {
+                const pointsPerStep = Math.max(Math.round(TARGET_BUFFER / rxAll.length), 1);
+                rxBuffer = interpolate(rxAll, pointsPerStep);
+                txBuffer = interpolate(txAll, pointsPerStep);
+                rxBuffer.push(liveRx);
+                txBuffer.push(liveTx);
+            } else if (elapsed >= POLL_INTERVAL) {
+                // Normal shift: drop oldest, append new live value
                 rxBuffer.shift();
                 txBuffer.shift();
                 rxBuffer.push(liveRx);
                 txBuffer.push(liveTx);
-                lastShiftTime = now;
             } else {
                 rxBuffer[rxBuffer.length - 1] = liveRx;
                 txBuffer[txBuffer.length - 1] = liveTx;
             }
+            lastShiftTime = now;
         }
         saveBuffers(minutes);
     }
@@ -386,7 +395,7 @@ function renderNewGraph() {
     const txColor = getCSSVar("--minigraph_out") || "#f90";
     const rxFill = getCSSVar("--minigraph_in_fill") || "rgba(0,204,204,.15)";
     const txFill = getCSSVar("--minigraph_out_fill") || "rgba(255,153,0,.15)";
-    const rtl = getCSSVar("--minigraph_direction") === "rtl";
+    const rtl = window.graphDirection === "rtl";
     const glowWidth = parseFloat(getCSSVar("--minigraph_glow_width")) || 4;
     const glowAlpha = parseFloat(getCSSVar("--minigraph_glow_alpha")) || 0.3;
     const glowBlur = parseFloat(getCSSVar("--minigraph_glow_blur")) || 6;
@@ -501,14 +510,23 @@ function initNewGraph() {
     // Poll for canvas element replacement or data attribute changes.
     // The sidebar XHR refresh may replace the canvas element entirely
     // (via refreshAll()), which destroys any MutationObserver attached to it.
-    setInterval(() => {
+    const pollGraph = () => {
         const el = document.getElementById("minigraph");
         if (el !== graphCanvas) {
             graphCanvas = el;
             graphCtx = null;
         }
         if (graphCanvas) {renderNewGraph();}
-    }, POLL_INTERVAL);
+    };
+    let pollIntervalId = setInterval(pollGraph, POLL_INTERVAL);
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            clearInterval(pollIntervalId);
+        } else {
+            pollIntervalId = setInterval(pollGraph, POLL_INTERVAL);
+        }
+    });
 }
 
 export { initNewGraph, renderNewGraph };

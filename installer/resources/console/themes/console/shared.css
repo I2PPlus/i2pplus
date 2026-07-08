@@ -106,6 +106,7 @@ html:not([".advmode"]) #tuning input[type=number]{min-width:0!important;text-ali
 #tuning .section.toggle:hover td:last-child::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
 #tuning .section.toggle.expanded td:last-child::after{background:var(--dropdown);content:"";transform:none}
 #tuning .section.toggle.expanded:hover td:last-child::after{background:var(--dropdown_hover);content:"";transform:none}
+#config_summarybar input[type=text]{width:64px;min-width:0}
 
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1.1)}50%{opacity:.7;transform:scale(.9)}}
 

@@ -17,14 +17,13 @@
 --isD:linear-gradient(135deg,#993 18%,#0000 18%);
 --isE:linear-gradient(135deg,#717 18%,#0000 18%);
 --isG:linear-gradient(135deg,#711 18%,#0000 18%);
---minigraph_in:#6ea8;
---minigraph_out:#6ae8;
---minigraph_in_fill:linear-gradient(#6ea4,#6ea3);
---minigraph_out_fill:linear-gradient(#6ae4,#6ae3);
---minigraph_grid:rgba(255,255,255,.12);
---minigraph_direction:ltr;
+--minigraph_in:#f506;
+--minigraph_out:#8086;
+--minigraph_in_fill:linear-gradient(#f503,#f502);
+--minigraph_out_fill:linear-gradient(#8083,#8082);
+--minigraph_grid:#339;
 --minigraph_glow_width:4;
---minigraph_glow_alpha:.3;
+--minigraph_glow_alpha:.2;
 --minigraph_glow_blur:6;
 --minigraph_line_width:1.5;
 --minigraph_minutes:20;
@@ -1109,12 +1108,11 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 
 /* sidebar */
 #config_summarybar h3.tabletitle:first-of-type{margin-top:-4px}
-#refreshsidebar{margin-bottom:12px}
-#refreshsidebar td{padding:10px 16px;border:0;background:var(--th)}
-#refreshsidebar label{padding:8px 16px;display:inline-block;vertical-align:text-top;box-shadow:var(--bevel);background:var(--badge)}
-#refreshsidebar label#unifiedSidebar{padding:6px 16px}
+#graphoptions,#refreshsidebar{margin-bottom:12px}
+#graphoptions td,#refreshsidebar td{padding:10px 16px;border:0;background:var(--th)}
+#graphoptions label,#refreshsidebar label{padding:8px 16px;display:inline-block;vertical-align:text-top;box-shadow:var(--bevel);background:var(--badge)}
 #refreshsidebar label b{display:inline-block;text-align:right}
-#refreshsidebar .optbox{margin:12px 6px}
+#graphoptions .optbox,#refreshsidebar .optbox{margin:12px 6px}
 #sidebarconf{margin-top:-1px}
 #sidebarconf+.formaction{margin-bottom:-3px}
 #sidebarconf button{margin:2px 6px 2px 2px;padding:12px;min-width:0;border-radius:1px}

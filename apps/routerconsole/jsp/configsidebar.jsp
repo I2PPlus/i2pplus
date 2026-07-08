@@ -41,6 +41,33 @@
 </tr>
 </table>
 </form>
+<h3 class=tabletitle><%=intl._t("Graph Options")%></h3>
+<form method=POST>
+<table class=configtable id=graphoptions>
+<tr>
+<td>
+<input type=hidden name=nonce value="<%=pageNonce%>">
+<input type=hidden name=group value=1>
+<label id=legacyGraph><b><%=intl._t("Legacy renderer")%>:</b>
+<input type=checkbox class="optbox slider" name=sidebarGraphLegacy value=true <%=(intl.useLegacySidebarGraph() ? "checked" : "")%>>
+<%=intl._t("Use RRD4J renderer")%></label>
+<input type=hidden name=sidebarGraphLegacy value=false>
+<label><b><%=intl._t("Display period")%>:</b>
+<input type=text name=sidebarGraphMinutes maxlength=2 pattern="[0-9]{1,2}" required value="<%=intl.getSidebarGraphMinutes()%>">
+<%=intl._t("minutes (2–30)")%></label>
+<label id=splitGraph><b><%=intl._t("Split display")%>:</b>
+<input type=checkbox class="optbox slider" name=sidebarGraphSplit value=true <%=(intl.useSidebarGraphSplit() ? "checked" : "")%>>
+<%=intl._t("Separate Inbound and Outbound")%></label>
+<input type=hidden name=sidebarGraphSplit value=false>
+<label id=graphDirection><b><%=intl._t("Graph direction")%>:</b>
+<input type=checkbox class="optbox slider" name=sidebarGraphDirection value=ltr <%="ltr".equals(intl.getSidebarGraphDirection()) ? "checked" : ""%>>
+<%=intl._t("Left-to-right")%></label>
+<input type=hidden name=sidebarGraphDirection value=rtl>
+</td>
+<td class=right><input type=submit name=action class=accept value="<%=intl._t("Save")%>"></td>
+</tr>
+</table>
+</form>
 <h3 class=tabletitle><%=intl._t("Customize Sidebar")%></h3>
 <form id=form_sidebar action=/updatesidebar method=POST>
 <input type=hidden name=nonce value="<%=pageNonce%>">
@@ -52,5 +79,6 @@
 </div>
 </form>
 </div>
+<script nonce="<%=cspNonce%>">document.dispatchEvent(new Event("sidebarRefreshed"));</script>
 </body>
 </html>

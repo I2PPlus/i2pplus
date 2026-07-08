@@ -20,7 +20,6 @@
 --minigraph_in_fill:linear-gradient(#0994,#0998);
 --minigraph_out_fill:linear-gradient(#5a54,#5a58);
 --minigraph_grid:#252;
---minigraph_direction:ltr;
 --minigraph_glow_width:3;
 --minigraph_glow_alpha:.1;
 --minigraph_glow_blur:6;
@@ -2267,13 +2266,13 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 .buttonDown:active{background:var(--hover) var(--mv_down_active) var(--center)}
 .buttonBottom:active{background:var(--hover) var(--mv_bottom_active) var(--center)}
 .buttonTop,.buttonBottom,.buttonUp,.buttonDown{background-size:11px,100%!important}
-#refreshsidebar input[type=text]{margin:0 3px 0 5px}
-#refreshsidebar input[type=checkbox]{margin:6px 3px 6px 5px}
-#refreshsidebar label{margin:4px 0 4px 6px;padding:10px 16px;display:inline-block;white-space:nowrap;vertical-align:middle;border-radius:4px;box-shadow:var(--bevel);background:var(--tr)}
-#refreshsidebar label:hover{box-shadow:var(--outline),var(--highlight),0 0 2px 1px #f60}
-#refreshsidebar label b{display:inline-block;vertical-align:middle;text-align:right}
-#refreshsidebar td{padding:6px 4px;background:var(--th)}
-#refreshsidebar td:last-child{padding-right:10px;background:var(--th)}
+#config_summarybar input[type=text]{margin:0 3px 0 5px}
+#config_summarybar input[type=checkbox]{margin:6px 3px 6px 5px}
+#graphoptions label,#refreshsidebar label{margin:4px 0 4px 6px;padding:10px 16px;display:inline-block;white-space:nowrap;vertical-align:middle;border-radius:4px;box-shadow:var(--bevel);background:var(--tr)}
+#graphoptions label:hover,#refreshsidebar label:hover{box-shadow:var(--outline),var(--highlight),0 0 2px 1px #f60}
+#graphoptions label b,,#refreshsidebar label b{display:inline-block;vertical-align:middle;text-align:right}
+#config_summarybar td{padding:6px 4px;background:var(--th)}
+#config_summarybar td:last-child{padding-right:10px;background:var(--th)}
 #sidebarconf{margin-top:-1px}
 #sidebarconf tr:hover,.homelinkedit tr:hover{background:#002000}
 #sidebarconf+.formaction{margin-bottom:-3px}

@@ -18,7 +18,6 @@
 --minigraph_in_fill:linear-gradient(#48f5,#48f2);
 --minigraph_out_fill:linear-gradient(#4a85,#4a82);
 --minigraph_grid:#5598;
---minigraph_direction:ltr;
 --minigraph_glow_width:4;
 --minigraph_glow_alpha:.3;
 --minigraph_glow_blur:6;
@@ -2147,10 +2146,10 @@ select[name="newlogclass"]{margin-left:3px}
 .buttonDown:active{background:var(--mv_down_active) no-repeat center center}
 .buttonBottom:active{background:var(--mv_bottom_active) no-repeat center center}
 .buttonTop,.buttonBottom,.buttonUp,.buttonDown,.buttonTop,.buttonTop:hover,.buttonBottom:hover,.buttonUp:hover,.buttonDown:hover,.buttonTop:focus,.buttonBottom:focus,.buttonUp:focus,.buttonDown:focus,.buttonTop:active,.buttonBottom:active,.buttonUp:active,.buttonDown:active{background-size:11px,100%}
-#refreshsidebar tr:first-child td{padding:4px 4px 4px 10px;background:var(--th)}
-#refreshsidebar input[type=checkbox]{margin-right:3px}
-#refreshsidebar label{margin:2px 0;padding: 0 24px 0 0;display:inline-block}
-#refreshsidebar label b{margin-right:4px;display:inline-block;text-align:right}
+#graphoptions tr:first-child td,#refreshsidebar tr:first-child td{padding:4px 4px 4px 10px;background:var(--th)}
+#graphoptions input[type=checkbox],#refreshsidebar input[type=checkbox]{margin-right:3px}
+#graphoptions label,#refreshsidebar label{margin:2px 0;padding: 0 24px 0 0;display:inline-block}
+#graphoptions label b,#refreshsidebar label b{margin-right:4px;display:inline-block;text-align:right}
 #sidebarconf label{display:inline-block;width:100%}
 #sidebarconf tr:hover label{color:var(--hover)}
 #sidebarconf button{margin:2px;padding:2px 3px;width:22px;height:22px;min-width:0}

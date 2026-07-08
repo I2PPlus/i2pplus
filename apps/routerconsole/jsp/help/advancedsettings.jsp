@@ -80,6 +80,9 @@
 <tr class=config><th>routerconsole.sidebarGraphSplit={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("When set to true (the default), inbound and outbound traffic are displayed in a split view with a center baseline, with outbound spikes upward and inbound spikes downward. When set to false, both lines are displayed in overlay mode from the top of the graph with a configurable composite blend. [Default is true]")%></td></tr>
 
+<tr class=config><th>routerconsole.sidebarGraphDirection={ltr|rtl} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Sets the render direction for the sidebar bandwidth graph. When set to rtl (the default), the graph renders right-to-left with newest data on the right. When set to ltr, the graph renders left-to-right with newest data on the left. [Default is rtl]")%></td></tr>
+
 <tr class=section><th>router</th></tr>
 
 <tr class=config><th>router.blocklist.enable={true|false}</th></tr>

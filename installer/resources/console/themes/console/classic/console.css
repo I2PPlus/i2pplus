@@ -20,7 +20,6 @@
 --minigraph_in_fill:linear-gradient(#48f5,#48f2);
 --minigraph_out_fill:linear-gradient(#4a85,#4a82);
 --minigraph_grid:#5598;
---minigraph_direction:ltr;
 --minigraph_glow_width:4;
 --minigraph_glow_alpha:.3;
 --minigraph_glow_blur:6;
@@ -1133,9 +1132,9 @@ p.infohelp+hr,p.infohelp+p+hr,#tunnelconfig+hr{display:none}
 #config_ui p.infohelp{margin-bottom:-5px;background:var(--bg) var(--ui) var(--bgpos_info)}
 #enablefullstats{line-height:1.2;text-align:left;background:var(--bg)}
 #profiles_overview,#themeheading{margin-top:15px}
-#refreshsidebar td{padding:6px 8px 6px 12px;background:var(--bg)}
-#refreshsidebar label{display:inline-block;vertical-align:middle}
-#refreshsidebar label b{display:inline-block;text-align:right}
+#graphoptions td,#refreshsidebar td{padding:6px 8px 6px 12px;background:var(--bg)}
+#graphoptions label,#refreshsidebar label{padding: 0 24px 0 0;display:inline-block;vertical-align:middle}
+#graphoptions label b,#refreshsidebar label b{display:inline-block;text-align:right}
 #webappconfigtext{margin:11px 0 -1px}
 #config_stats .tablefooter td,#enablefull td{padding:10px}
 #netconfig tr,#externali2cp tr{background:var(--bg)}

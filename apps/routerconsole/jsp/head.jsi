@@ -51,6 +51,7 @@ else if (lang.equals("bo")) {%> <link rel=stylesheet href="<%=themePath%>console
   window.theme = "<%=theme%>";
   window.stickySidebarEnabled = <%=useStickySidebar%>;
   window.graphNewRenderer = !<%=useLegacySidebarGraph%>;
+  window.graphDirection = "<%=graphDirection%>";
   progressx.show(theme);progressx.progress(0.1);
   document.cookie = "csrfToken=<%=csrfMetaToken%>; Path=/; SameSite=Lax";
 </script>

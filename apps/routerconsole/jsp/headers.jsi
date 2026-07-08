@@ -24,6 +24,7 @@
   boolean useStickySidebar = intl.useStickySidebar();
   boolean useUnifiedSidebar = intl.useUnifiedSidebar();
   boolean useLegacySidebarGraph = intl.useLegacySidebarGraph();
+  String graphDirection = intl.getSidebarGraphDirection();
   String type = request.getContentType();
   boolean needsCSP = true;
   boolean isAdvancedMode = intl.isAdvancedMode();
