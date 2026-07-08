@@ -859,8 +859,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     continue;
                 }
                 CacheEntry cacheEntry = rdnsEntryFromString(line);
-                if (cacheEntry != null && now - cacheEntry.getTimestamp() <= EXPIRE_TIME) {
-                    rdnsCache.put(cacheEntry.getIpAddress(), cacheEntry);
+                if (cacheEntry != null && now - cacheEntry.getTimestamp() <= EVICT_THRESHOLD) {
+                    rdnsCachePut(cacheEntry.getIpAddress(), cacheEntry);
                 }
             }
         } catch (IOException ex) {
@@ -924,16 +924,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         @Override
         public void run() {
+            cleanupRDNSCache();
             Map<String, CacheEntry> liveCacheSnapshot = new HashMap<>(rdnsCache);
             File cacheFile = new File(RDNS_CACHE_FILE);
             try (BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(cacheFile))) {
-                long now = System.currentTimeMillis();
                 for (CacheEntry cacheEntry : liveCacheSnapshot.values()) {
-                    if (now - cacheEntry.getTimestamp() <= EVICT_THRESHOLD) {
-                        String line = new StringBuilder(rdnsEntryToString(cacheEntry)).append('\n').toString();
-                        byte[] bytes = line.getBytes(ENCODING);
-                        fos.write(bytes);
-                    }
+                    String line = new StringBuilder(rdnsEntryToString(cacheEntry)).append('\n').toString();
+                    byte[] bytes = line.getBytes(ENCODING);
+                    fos.write(bytes);
                 }
             } catch (IOException ex) {
                 System.err.println("[RDNSCache] Error updating reverse DNS cache file: " + ex.getMessage()); // NOSONAR S106 static utility
@@ -951,9 +949,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             Map.Entry<String, CacheEntry> entry = it.next();
             CacheEntry ce = entry.getValue();
             long age = now - ce.getTimestamp();
-            long expireTime = EXPIRE_TIME;
+            long expireTime = EVICT_THRESHOLD;
 
-            // Convert cacheEntry to string line and check for "unknown"
+            // "unknown" entries expire quickly — no point keeping dead lookups
             String cacheEntryStr = rdnsEntryToString(ce);
             if (cacheEntryStr.contains("unknown")) {
                 expireTime = unknownExpireTimeMillis;
@@ -963,9 +961,41 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 removed++;
             }
         }
+        // If still over budget after expired-entry cleanup, evict oldest entries
+        if (rdnsCache.size() > MAX_RDNS_CACHE_SIZE) {
+            int excess = rdnsCache.size() - MAX_RDNS_CACHE_SIZE;
+            long oldestTimestamp = Long.MAX_VALUE;
+            String oldestKey = null;
+            // Iterate excess times to find and remove the oldest entries
+            for (int i = 0; i < excess; i++) {
+                oldestTimestamp = Long.MAX_VALUE;
+                oldestKey = null;
+                for (Map.Entry<String, CacheEntry> entry : rdnsCache.entrySet()) {
+                    if (entry.getValue().getTimestamp() < oldestTimestamp) {
+                        oldestTimestamp = entry.getValue().getTimestamp();
+                        oldestKey = entry.getKey();
+                    }
+                }
+                if (oldestKey != null) {
+                    rdnsCache.remove(oldestKey);
+                    removed++;
+                }
+            }
+        }
         if (removed > 0) {
             System.out.println("[RDNSCache] Removed " + removed + " stale entries from the cache"); // NOSONAR S106 static utility
         }
+    }
+
+    /**
+     * Insert into the rdns cache with budget enforcement.
+     * Evicts expired entries first, then oldest entries if still over budget.
+     */
+    private static void rdnsCachePut(String ipAddress, CacheEntry entry) {
+        if (rdnsCache.size() >= MAX_RDNS_CACHE_SIZE) {
+            cleanupRDNSCache();
+        }
+        rdnsCache.put(ipAddress, entry);
     }
 
     public static int countRdnsCacheEntries() {
@@ -981,6 +1011,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         int maxSize = MAX_RDNS_CACHE_SIZE;
         double utilization = (double) size / maxSize * 100;
         return String.format("RDNS Cache: %d/%d entries (%.1f%% utilized)", size, maxSize, utilization);
+    }
+
+    /**
+     * @return the computed maximum rdns cache size based on available memory
+     * @since 0.9.61+
+     */
+    public static int getMaxRdnsCacheSize() {
+        return MAX_RDNS_CACHE_SIZE;
     }
 
     /**
@@ -1015,7 +1053,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     if (enableReverseLookups()) {
                         try {
                             hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
-                            rdnsCache.put(ipAddress, new CacheEntry(ipAddress, hostName, System.currentTimeMillis()));
+                            rdnsCachePut(ipAddress, new CacheEntry(ipAddress, hostName, System.currentTimeMillis()));
                         } catch (UnknownHostException e) {
                             // RDNS failed, will fall through to ASN lookup
                         }
@@ -1024,7 +1062,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     if (hostName.equals(ipAddress) || _t("unknown").equals(hostName)) {
                         String orgName = _geoIP.getOrgName(ipAddress);
                         if (orgName != null && !orgName.isEmpty()) {
-                            rdnsCache.put(ipAddress, new CacheEntry(ipAddress, orgName, System.currentTimeMillis()));
+                            rdnsCachePut(ipAddress, new CacheEntry(ipAddress, orgName, System.currentTimeMillis()));
                         }
                     }
                 } finally {
@@ -1068,7 +1106,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             }
         }
 
-        rdnsCache.put(ipAddress, new CacheEntry(ipAddress, hostName, now));
+        rdnsCachePut(ipAddress, new CacheEntry(ipAddress, hostName, now));
         return hostName;
     }
 
@@ -1103,7 +1141,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         String orgName = _geoIP.getOrgName(ipAddress);
         if (orgName != null && !orgName.isEmpty()) {
             hostName = orgName;
-            rdnsCache.put(ipAddress, new CacheEntry(ipAddress, orgName, now));
+            rdnsCachePut(ipAddress, new CacheEntry(ipAddress, orgName, now));
         }
 
         // 3. Queue async RDNS in background — updates cache if better
@@ -1120,7 +1158,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     // Only update cache if RDNS returned something better than ASN
                     if (rdnsResult != null && !rdnsResult.equals(ipAddress)
                             && !_t("unknown").equals(rdnsResult)) {
-                        rdnsCache.put(ipAddress, new CacheEntry(ipAddress, rdnsResult,
+                        rdnsCachePut(ipAddress, new CacheEntry(ipAddress, rdnsResult,
                                 System.currentTimeMillis()));
                     }
                 } finally {
