@@ -15,6 +15,19 @@
 --isE:linear-gradient(135deg,#717 18%,#0000 18%);
 --isG:linear-gradient(135deg,#711 18%,#0000 18%);
 --graphbar:#f60;
+--minigraph_in:#099b;
+--minigraph_out:#5a5b;
+--minigraph_in_fill:linear-gradient(#0994,#0998);
+--minigraph_out_fill:linear-gradient(#5a54,#5a58);
+--minigraph_grid:#252;
+--minigraph_direction:ltr;
+--minigraph_glow_width:3;
+--minigraph_glow_alpha:.1;
+--minigraph_glow_blur:6;
+--minigraph_line_width:2;
+--minigraph_minutes:20;
+--minigraph_tension:.5;
+--minigraph_overlay_blend:color-burn;
 }
 
 /* global */
@@ -196,13 +209,16 @@ p:empty+.sb_notice{margin-top:9px}
 #sidebar #sb_newsheadings tr:last-child td{border-bottom:0}
 
 /* mini sidebar graph */
-#sb_graphcontainer{margin:-6px 0 -8px;padding:0 1px 1px;width:calc(100% - 3px);height:44px;position:relative;z-index:10;overflow:hidden;box-shadow:var(--outline),inset 0 0 0 1px #131,inset 0 0 0 2px #000,inset 0 0 3px 1px #040;background:repeating-linear-gradient(90deg,#0000 15px,rgba(64,160,64,.3) 16px,#0000 16px,#0000 31px),repeating-linear-gradient(to top,#0000,rgba(48,152,48,.2),#0000 1px,#0000 14px);contain:paint}
-#sb_graphcontainer::after{width:calc(100% - 4px);display:inline-block;position:absolute;top:2px;right:2px;bottom:2px;left:2px;z-index:10;box-shadow:var(--outline),var(--bevel_hard),inset 0 0 0 2px #242;background:var(--graphoverlay);content:"";pointer-events:none}
+#sb_graphcontainer{margin:-6px 0 -8px;padding:0 1px 1px;width:calc(100% - 3px);height:44px;position:relative;z-index:10;overflow:hidden;box-shadow:var(--outline),inset 0 0 0 1px #131,inset 0 0 0 2px #000,inset 0 0 3px 1px #040;contain:paint}
+#sb_graphcontainer.legacy{background:repeating-linear-gradient(90deg,#0000 15px,rgba(64,160,64,.3) 16px,#0000 16px,#0000 31px),repeating-linear-gradient(to top,#0000,rgba(48,152,48,.2),#0000 1px,#0000 14px)}
+#sb_graphcontainer::after{width:calc(100% - 4px);display:inline-block;position:absolute;top:2px;right:2px;bottom:2px;left:2px;z-index:10;box-shadow:var(--outline),var(--bevel_hard),inset 0 0 0 2px #242;content:"";pointer-events:none}
+#sb_graphcontainer.legacy::after{background:var(--graphoverlay)}
 #sb_graphcontainer:hover a{cursor:zoom-in}
 #sb_graphstats{margin-top:4px;padding:2px 8px;display:inline-block;position:relative;z-index:1000;font-size:110%;font-weight:700;color:#393;text-shadow:0 0 1px #000;border:1px solid #252;border-top:0;border-radius:0 0 2px 2px;box-shadow:0 0 0 1px rgba(0,0,0,.7) inset,0 0 3px rgba(0,0,0,.5) inset;background:linear-gradient(90deg,rgba(0,0,0,.5),rgba(0,0,0,.7),rgba(0,0,0,.5));opacity:0;transition:ease opacity .3s;pointer-events:none}
 #sb_graphcontainer:hover #sb_graphstats,#sb_graphstats.show{opacity:1;transition:ease opacity .2s}
 #minigraphcontainer,#minigraphcontainer_noscript{margin-top:-43px;margin-left:1px;width:204px;height:44px;background-repeat:no-repeat;background-size:204px 40px;contain:paint}
-#minigraph{margin:-15px 0 0;width:100%;height:36px;position:relative;z-index:5;contain:paint}
+#minigraph{margin:-20px 0 0;width:calc(100% - 2px);height:36px;position:relative;z-index:5;contain:paint}
+#minigraph.legacy{margin:-15px 0 0;width:100%}
 
 /* status bar */
 .percentBarOuter{margin:-3px 0 -5px;width:calc(100% - 3px);position:relative;border:var(--border_soft);box-shadow:var(--highlight),inset 0 3px 3px #000c;background:linear-gradient(90deg,rgba(0,128,0,.05) 45%,rgba(255,96,0,.1),rgba(255,0,0,.1)),repeating-linear-gradient(90deg,#000 1px,#000 2px,#010 2px,#010 4px);opacity:1}
@@ -3292,7 +3308,8 @@ span#newtab{margin-top:4px}
 #events .tab,#events .tab2,#logs .tab,#logs .tab2{min-width:130px}
 #loggingoptions input[type=text],#loggingoptions select{min-width:240px}
 #manualreseed input[type=submit]{min-width:140px}
-#minigraph{margin-top:-16px;width:254px;height:43px}
+#minigraph{margin-top:-19px;height:46px}
+.legacy #minigraph{margin-top:-16px;width:254px;height:43px}
 #minigraphcontainer,#minigraphcontainer_noscript{margin-top:-40px;margin-left:1px;width:258px;height:39px;background-size:250px 40px}
 #netdboverview #netdbcountrylist td:last-child,#netdboverview #netdbcountrylist th:last-child{padding-right:10%}
 #netdboverview #netdbcountrylist th:nth-child(n+2)::after{right:12%}
@@ -3305,8 +3322,8 @@ span#newtab{margin-top:4px}
 #peers .cells:nth-child(n+2){padding-left:15px;padding-right:15px}
 #pluginconfigtext+form>input{margin-top:3px}
 #reseedconfig input[type=text],#reseedconfig input[type=password]{width:250px}
-#sb_graphcontainer{margin:-6px 0 -8px;background:repeating-linear-gradient(90deg,#0000 16px,rgba(64,160,64,.3) 17px,#0000 17px,#0000 32px),repeating-linear-gradient(to top,#0000,rgba(48,152,48,.2),#0000 1px,#0000 19px)}
-#sb_graphcontainer{height:54px}
+#sb_graphcontainer{margin:-6px 0 -8px;height:54px}
+#sb_graphcontainer.legacy{background:repeating-linear-gradient(90deg,#0000 16px,rgba(64,160,64,.3) 17px,#0000 17px,#0000 32px),repeating-linear-gradient(to top,#0000,rgba(48,152,48,.2),#0000 1px,#0000 19px)}
 #sb_logo{height:44px!important}
 #sb_logo img{margin:-3px 0 -8px -4px;width:248px}
 #sb_memoryBar .percentBarText{margin-top:-2px}

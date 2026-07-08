@@ -25,6 +25,7 @@ import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.ConfigUpdateHandler;
 import net.i2p.router.web.ContextHelper;
 import net.i2p.router.web.GraphGenerator;
+import net.i2p.router.web.GraphListener;
 import net.i2p.router.web.Messages;
 import net.i2p.router.web.NavHelper;
 import net.i2p.router.web.NewsHelper;
@@ -1095,7 +1096,12 @@ class SidebarRenderer {
         return buf.toString();
     }
 
-    /** @since 0.9.32 */
+    /**
+     *  Renders the sidebar bandwidth graph HTML. When routerconsole.sidebarGraphLegacy
+     *  is false, emits data-rx/data-tx attributes for the dual-baseline canvas renderer
+     *  (inbound inverted top, outbound normal bottom). Otherwise, serves the RRD4J SVG.
+     *  @since 0.9.32
+     */
     public String renderBandwidthGraphHTML() {
         if (_helper == null) {return "";}
         if (GraphGenerator.isDisabled(_context)) {return "";}
@@ -1106,17 +1112,76 @@ class SidebarRenderer {
         String t = "&amp;t=" + (_context.clock().now() / 1000);
         String g = "style=\"background-image:url(\'/viewstat.jsp?stat=bw.combined&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;hideTitle=true" +
                     t + "\')\"";
+        boolean useLegacy = _context.getBooleanProperty(CSSHelper.PROP_SIDEBAR_GRAPH_LEGACY);
+        String dataAttrs = "";
+        if (!useLegacy) {
+            dataAttrs = getDataAttributes();
+        }
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<div id=sb_graphcontainer class=collapse title=\"")
+        buf.append("<div id=sb_graphcontainer class=\"collapse")
+           .append(useLegacy ? " legacy" : "")
+           .append("\" title=\"")
            .append(_t("Our inbound &amp; outbound traffic for the last 20 minutes"))
            .append("\">\n<span id=sb_graphstats class=volatile>")
            .append(_helper.getSecondKBps())
-           .append("Bps</span>\n<a href=/graphs>\n<canvas id=minigraph width=245 height=50>\n<div id=minigraphcontainer ")
+           .append("Bps</span>\n<a href=/graphs>\n<canvas id=minigraph width=245 height=50")
+           .append(dataAttrs)
+           .append(">\n<div id=minigraphcontainer ")
            .append(g)
            .append("></div></canvas>\n<noscript><div id=minigraphcontainer_noscript ")
            .append(g)
            .append("></div></noscript></a>\n</div>\n");
         return buf.toString();
+    }
+
+    /**
+     *  Fetch last 20 data points for bw.sendRate and bw.recvRate and return
+     *  as data-rx and data-tx attributes for the dual-baseline minigraph renderer.
+     *  Inbound (rx) renders in the top half (inverted), outbound (tx) in the bottom half.
+     *  @since 0.9.70+
+     */
+    private String getDataAttributes() {
+        try {
+            GraphGenerator gen = GraphGenerator.instance(_context);
+            GraphListener txLsnr = null;
+            GraphListener rxLsnr = null;
+            for (GraphListener lsnr : gen.getListeners()) {
+                String name = lsnr.getRate().getRateStat().getName();
+                if (name.equals("bw.sendRate")) {txLsnr = lsnr;}
+                else if (name.equals("bw.recvRate")) {rxLsnr = lsnr;}
+            }
+            if (txLsnr == null || rxLsnr == null) {return "";}
+            // Read minutes from config property, capped to 2–30
+            int minutes = Math.min(Math.max(
+                Integer.parseInt(_context.getProperty(CSSHelper.PROP_SIDEBAR_GRAPH_MINUTES, "20")), 2), 30);
+            // RRD points (n-1) + live bandwidth limiter value as leading edge
+            double[] rx = rxLsnr.getLastValues(minutes - 1);
+            double[] tx = txLsnr.getLastValues(minutes - 1);
+            double liveRx = _context.bandwidthLimiter().getReceiveBps();
+            double liveTx = _context.bandwidthLimiter().getSendBps();
+            StringBuilder sb = new StringBuilder(128);
+            sb.append(" data-rx=\"");
+            appendValues(sb, rx);
+            sb.append(',').append(Math.round(liveRx));
+            sb.append("\" data-tx=\"");
+            appendValues(sb, tx);
+            sb.append(',').append(Math.round(liveTx));
+            sb.append("\" data-minutes=\"").append(minutes).append('"');
+            // Split flag: true = split display (inbound top, outbound bottom), false = overlay
+            boolean split = !"false".equals(_context.getProperty(CSSHelper.PROP_SIDEBAR_GRAPH_SPLIT, "true"));
+            if (!split) {sb.append(" data-split=\"0\"");}
+            return sb.toString();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    private static void appendValues(StringBuilder sb, double[] values) {
+        for (int i = 0; i < values.length; i++) {
+            if (i > 0) {sb.append(',');}
+            if (Double.isNaN(values[i])) {sb.append('0');}
+            else {sb.append(Math.round(values[i]));}
+        }
     }
 
     public String renderTunnelsHTML() {

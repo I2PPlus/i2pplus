@@ -22,6 +22,7 @@ String csrfMetaToken = net.i2p.router.web.CSSHelper.getNonce();
 <link rel=modulepreload href=/js/refreshSidebar.js>
 <link rel=modulepreload href=/js/sectionToggle.js>
 <link rel=modulepreload href=/js/miniGraph.js>
+<link rel=modulepreload href=/js/miniGraphNew.js>
 <link rel=modulepreload href=/js/stickySidebar.js>
 <link rel=modulepreload href=/js/iframeResizer/iframeResizer.js>
 <link rel=preload href="<%=themePath%>console.css?version=<%=v%>" as=style>
@@ -49,6 +50,7 @@ else if (lang.equals("bo")) {%> <link rel=stylesheet href="<%=themePath%>console
   const cspNonce = "<%=cspNonce%>";
   window.theme = "<%=theme%>";
   window.stickySidebarEnabled = <%=useStickySidebar%>;
+  window.graphNewRenderer = !<%=useLegacySidebarGraph%>;
   progressx.show(theme);progressx.progress(0.1);
   document.cookie = "csrfToken=<%=csrfMetaToken%>; Path=/; SameSite=Lax";
 </script>

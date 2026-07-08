@@ -1,11 +1,15 @@
 /**
  * @module miniGraph
- * @description Renders a mini bandwidth graph in the console sidebar using
- * a SharedWorker for background fetch requests and canvas rendering for
- * efficient updates.
+ * @description Renders a mini bandwidth graph in the console sidebar.
+ * When routerconsole.graphNewRenderer is enabled, uses the dual-baseline
+ * client-side canvas renderer (miniGraphNew). Otherwise, falls back to the
+ * SharedWorker-based RRD4J SVG image renderer.
  * @author dr|z3d
  * @license AGPL3 or later
  */
+
+/** @type {boolean} Whether the new dual-baseline renderer is enabled */
+const useNewRenderer = window.graphNewRenderer === true;
 
 /** @type {number} */
 let refreshInterval = refresh !== null ? Math.max(refresh * 1000, 1000) : 5000;
@@ -15,10 +19,15 @@ let minigraphRefreshIntervalId, minigraphRefreshInterval = Math.min(((refreshInt
 let lastRefreshTime = 0;
 /** @type {boolean} */
 const isDocumentVisible = !document.hidden;
-/** @type {HTMLCanvasElement} */
-const offscreenCanvas = document.createElement("canvas");
-/** @type {SharedWorker} */
-const worker = new SharedWorker("/js/fetchWorker.js");
+/** @type {?HTMLCanvasElement} */
+let offscreenCanvas;
+/** @type {?SharedWorker} */
+let worker;
+
+if (!useNewRenderer) {
+  offscreenCanvas = document.createElement("canvas");
+  worker = new SharedWorker("/js/fetchWorker.js");
+}
 
 /**
  * Initializes the mini graph by starting the SharedWorker connection and
@@ -91,12 +100,17 @@ function handleGraphUpdate(responseBlob) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  miniGraph();
-  refreshGraph();
-  minigraphRefreshIntervalId = setInterval(refreshGraph, refreshInterval);
+  if (useNewRenderer) {
+    import("/js/miniGraphNew.js").then(m => m.initNewGraph());
+  } else {
+    miniGraph();
+    refreshGraph();
+    minigraphRefreshIntervalId = setInterval(refreshGraph, refreshInterval);
+  }
 });
 
 document.addEventListener("visibilitychange", () => {
+  if (useNewRenderer) {return;}
   if (!isDocumentVisible) {clearInterval(minigraphRefreshIntervalId);}
   else {minigraphRefreshIntervalId = setInterval(refreshGraph, refreshInterval);}
 });

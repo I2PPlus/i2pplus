@@ -20,6 +20,8 @@ import org.rrd4j.core.RrdDef;
 import org.rrd4j.core.RrdException;
 import org.rrd4j.core.RrdMemoryBackendFactory;
 import org.rrd4j.core.Sample;
+import org.rrd4j.core.FetchRequest;
+import org.rrd4j.core.FetchData;
 
 /**
  *  Creates and updates the in-memory or on-disk RRD database,
@@ -245,6 +247,40 @@ public class GraphListener implements RateSummaryListener {
 
     /** @since 0.8.7 */
     int getRows() {return _rows;}
+
+    /**
+     *  Fetch the last count data points from the RRD database for use by the
+     *  dual-baseline minigraph renderer (data-rx/data-tx attributes on canvas).
+     *  Returns NaN-padded array if fewer points are available.
+     *
+     *  @param count number of most recent data points to retrieve
+     *  @return array of average values (bytes/sec), length = count
+     *  @since 0.9.70+
+     */
+    public double[] getLastValues(int count) {
+        double[] result = new double[count];
+        if (_db == null) {
+            java.util.Arrays.fill(result, Double.NaN);
+            return result;
+        }
+        try {
+            long period = _rate.getPeriod();
+            long now = now() / 1000;
+            long end = now - 75;  // match GraphRenderer's 75s offset
+            long start = end - (period / 1000 * count);
+            FetchRequest req = _db.createFetchRequest(CF, start, end);
+            FetchData data = req.fetchData();
+            double[] values = data.getValues(_name);
+            if (values != null && values.length > 0) {
+                int copyLen = Math.min(values.length, count);
+                System.arraycopy(values, 0, result, count - copyLen, copyLen);
+            }
+        } catch (Exception e) {
+            if (_log.shouldWarn()) {_log.warn("Error fetching last " + count + " values", e);}
+            java.util.Arrays.fill(result, Double.NaN);
+        }
+        return result;
+    }
 
     @Override
     public boolean equals(Object obj) {

@@ -13,6 +13,19 @@
 --isE:linear-gradient(135deg,#717 18%,#0000 18%);
 --isG:linear-gradient(135deg,#711 18%,#0000 18%);
 --graphbar:#78a;
+--minigraph_in:#48f8;
+--minigraph_out:#4a88;
+--minigraph_in_fill:linear-gradient(#48f5,#48f2);
+--minigraph_out_fill:linear-gradient(#4a85,#4a82);
+--minigraph_grid:#5598;
+--minigraph_direction:ltr;
+--minigraph_glow_width:4;
+--minigraph_glow_alpha:.3;
+--minigraph_glow_blur:6;
+--minigraph_line_width:1.5;
+--minigraph_minutes:20;
+--minigraph_tension:.5;
+--minigraph_overlay_blend:difference;
 }
 
 /* globals */
@@ -183,7 +196,8 @@ h4.sb_info{margin-top:-11px}
 a:active #sb_bandwidthgraph{border:1px solid var(--active)}
 #sb_graphstats{padding:2px 8px;display:inline-block;position:relative;z-index:10000;font-size:110%;font-weight:700;color:var(--ink_dark);text-shadow:var(--txt_shadow);border:1px solid #adadeb;border-top:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.45);background:linear-gradient(180deg,rgba(255,255,255,.75) 50%,rgba(220,220,255,.65) 50%);opacity:0;transition:ease opacity .1s .2s;pointer-events:none;user-select:none}
 #sb_graphcontainer:hover #sb_graphstats,#sb_graphstats.show{opacity:1;transition:ease opacity .1s}
-#sb_graphcontainer:not([hidden]){margin:-6px -5px -10px;height:38px;display:inline-block;overflow:hidden;box-shadow:inset 0 0 0 2px #fff,inset 0 0 1px 1px #adadeb;border:1px solid #afafcf;box-shadow:0 0 1px #e0e0eb,var(--highlight);background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(32,32,64,.05)),repeating-linear-gradient(to left,rgba(255,255,255,.0) 18px,rgba(120,120,255,.4) 18px,rgba(255,255,255,.0) 19px,rgba(255,255,255,.0) 36px),repeating-linear-gradient(to top,#0000,#0000 14px,rgba(120,120,255,.4) 14px,#0000 15px)}
+#sb_graphcontainer:not([hidden]){margin:-6px -5px -10px;height:38px;display:inline-block;overflow:hidden;box-shadow:inset 0 0 0 2px #fff,inset 0 0 1px 1px #adadeb;border:1px solid #afafcf;box-shadow:0 0 1px #e0e0eb,var(--highlight);background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(32,32,64,.05))}
+#sb_graphcontainer.legacy{background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(32,32,64,.05)),repeating-linear-gradient(to left,rgba(255,255,255,.0) 18px,rgba(120,120,255,.4) 18px,rgba(255,255,255,.0) 19px,rgba(255,255,255,.0) 36px),repeating-linear-gradient(to top,#0000,#0000 14px,rgba(120,120,255,.4) 14px,#0000 15px)}
 #sb_graphcontainer:hover{border:1px solid var(--hover)}
 #minigraph{margin-top:-17px;padding:0 1px;width:198px;height:34px;display:inline-block}
 #minigraphcontainer,#minigraphcontainer_noscript{margin-top:-42px;margin-left:1px;width:196px;height:38px;background-repeat:no-repeat;background-size:197px 40px}

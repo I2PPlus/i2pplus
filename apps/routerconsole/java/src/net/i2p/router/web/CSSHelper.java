@@ -50,6 +50,14 @@ public class CSSHelper extends HelperBase {
     /** @since 0.9.68+ */
     public static final String PROP_STICKY_SIDEBAR = "routerconsole.stickySidebar";
     public static final boolean DEFAULT_STICKY_SIDEBAR = true;
+    /** @since 0.9.70+ */
+    public static final String PROP_SIDEBAR_GRAPH_LEGACY = "routerconsole.sidebarGraphLegacy";
+    /** @since 0.9.70+ — default true for legacy RRD4J; set false for dual-baseline canvas */
+    public static final boolean DEFAULT_SIDEBAR_GRAPH_LEGACY = true;
+    /** @since 0.9.70+ — graph time period in minutes (2–30, default 20) */
+    public static final String PROP_SIDEBAR_GRAPH_MINUTES = "routerconsole.sidebarGraphMinutes";
+    /** @since 0.9.70+ — true = split display (inbound top, outbound bottom); false = overlay */
+    public static final String PROP_SIDEBAR_GRAPH_SPLIT = "routerconsole.sidebarGraphSplit";
 
     /** Session-bound nonce for CSRF protection, replaces static nonces @since 0.9.69 */
     private static final String SESSION_CONSOLE_NONCE = "__router.console.nonce.queue__";
@@ -209,6 +217,14 @@ public class CSSHelper extends HelperBase {
      * @since 0.9.68+
      */
     public boolean useStickySidebar() {return _context.getBooleanProperty(PROP_STICKY_SIDEBAR);}
+
+    /**
+     * Returns whether to use the legacy RRD4J minigraph renderer.
+     * When false, the new dual-baseline canvas renderer is used with
+     * inbound spiking upward (top half) and outbound downward (bottom half).
+     * @since 0.9.70+
+     */
+    public boolean useLegacySidebarGraph() {return _context.getBooleanProperty(PROP_SIDEBAR_GRAPH_LEGACY);}
 
     /**
      * Returns whether we should use a unified sidebar

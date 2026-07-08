@@ -208,8 +208,28 @@ function applySidebarUpdates() {
     });
   }
 
+  // Sync minigraph canvas data attributes from response
+  syncGraphDataAttributes();
+
   isRefreshing = false;
   noResponse = 0;
+}
+
+/**
+ * Copies data-rx/data-tx attributes from the response canvas to the live canvas,
+ * so the minigraph can re-render with fresh data after differential updates.
+ * @function syncGraphDataAttributes
+ * @returns {void}
+ */
+function syncGraphDataAttributes() {
+  const canvas = document.getElementById("minigraph");
+  const respCanvas = responseDoc && responseDoc.getElementById("minigraph");
+  if (!canvas || !respCanvas) {return;}
+  const rx = respCanvas.getAttribute("data-rx");
+  const tx = respCanvas.getAttribute("data-tx");
+  if (rx) {canvas.setAttribute("data-rx", rx);}
+  if (tx) {canvas.setAttribute("data-tx", tx);}
+  if (window.renderNewGraph) {window.renderNewGraph();}
 }
 
 /**
@@ -237,6 +257,8 @@ function refreshAll() {
   noResponse = 0;
   document.body.classList.remove("isDown");
   isRefreshing = false;
+  // Trigger immediate minigraph re-render after full sidebar replacement
+  document.dispatchEvent(new Event("sidebarRefreshed"));
 }
 
 /**
