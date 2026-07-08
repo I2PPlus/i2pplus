@@ -49,7 +49,6 @@ public class SecurityHeaderBuilder {
      * </p>
      *
      * @param headers the HTTP response headers map to modify
-     * @param command the HTTP request command (used for logging/debugging)
      * @param mimeType the MIME type of the response content; may be null
      */
     public static void addSecurityHeaders(Map<String, List<String>> headers, String mimeType) {
