@@ -1,3 +1,12 @@
+2026-07-08 dr|z3d
+  * Console: Add dual-baseline canvas minigraph renderer with gradient fills,
+    glow effects, configurable time period (2-30 minutes), split or overlay
+    display modes, and horizontal scrolling; legacy SVG renderer remains
+    available via routerconsole.sidebarGraphLegacy
+  * Console: Fix RDNS cache budget enforcement, 3-day TTL, and info page
+    limit display
+  * Console: Add sidebar graph configuration options to advanced settings
+
 2026-07-07 dr|z3d
   * Router: Improve first-hop quality and build concurrency; fix RTT measurement and
     concurrent message limits; scale request throttle limits for transit stability;
