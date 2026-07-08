@@ -3832,7 +3832,7 @@
     </path>
     <pathconvert refid="spotbugs.auxclasspath" property="spotbugs.auxclasspath.path" pathsep=":"/>
 
-    <spotbugs home="${spotbugs.home}" output="xml:withMessages" outputFile="dist/spotbugs.xml" effort="max" debug="false" reportLevel="medium" timeout="1800000" jvm="${spotbugs.java}" excludeFilter="tools/spotbugs/config/spotbugs-exclude.xml">
+    <spotbugs home="${spotbugs.home}" output="xml:withMessages" outputFile="/tmp/build-i2p/reports/spotbugs.xml" effort="max" debug="false" reportLevel="medium" timeout="1800000" jvm="${spotbugs.java}" excludeFilter="tools/spotbugs/config/spotbugs-exclude.xml">
       <auxAnalyzepath path="./build"/>
       <auxClasspath path="${spotbugs.auxclasspath.path}"/>
       <!-- Only analyze core I2P JAR files, exclude third-party heavy libraries -->
@@ -3855,17 +3855,17 @@
   <target name="transform-spotbugs">
     <fail message="SpotBugs XML report not found. SpotBugs may have failed to produce output.">
       <condition>
-        <not><available file="dist/spotbugs.xml"/></not>
+        <not><available file="/tmp/build-i2p/reports/spotbugs.xml"/></not>
       </condition>
     </fail>
     <exec executable="python3" failonerror="true">
       <arg value="tools/spotbugs/spotbugs-to-html.py"/>
-      <arg value="dist/spotbugs.xml"/>
+      <arg value="/tmp/build-i2p/reports/spotbugs.xml"/>
       <arg value="dist/spotbugs.html"/>
     </exec>
     <exec executable="python3" failonerror="true">
       <arg value="tools/spotbugs/spotbugs-to-html.py"/>
-      <arg value="dist/spotbugs.xml"/>
+      <arg value="/tmp/build-i2p/reports/spotbugs.xml"/>
       <arg value="dist/spotbugs-local.html"/>
       <arg value="--local"/>
     </exec>
@@ -3885,6 +3885,7 @@
     </exec>
     <echo message="Running PMD (Java) analysis..."/>
     <mkdir dir="dist"/>
+    <mkdir dir="/tmp/build-i2p/reports"/>
     <exec executable="${pmd.java}" failonerror="false" outputproperty="pmd.result">
       <arg value="-Xmx4g"/>
       <arg value="-Xss1g"/>
@@ -3903,18 +3904,18 @@
       <arg value="-f"/>
       <arg value="xml"/>
       <arg value="-r"/>
-      <arg value="dist/pmd-java.xml"/>
+      <arg value="/tmp/build-i2p/reports/pmd-java.xml"/>
       <arg value="--no-cache"/>
     </exec>
     <exec executable="python3" failonerror="true">
       <arg value="tools/pmd/pmd-to-html.py"/>
-      <arg value="dist/pmd-java.xml"/>
+      <arg value="/tmp/build-i2p/reports/pmd-java.xml"/>
       <arg value="dist/pmd-java.html"/>
       <arg value="Java"/>
     </exec>
     <exec executable="python3" failonerror="true">
       <arg value="tools/pmd/pmd-to-html.py"/>
-      <arg value="dist/pmd-java.xml"/>
+      <arg value="/tmp/build-i2p/reports/pmd-java.xml"/>
       <arg value="dist/pmd-java-local.html"/>
       <arg value="Java"/>
       <arg value="--local"/>
@@ -3928,6 +3929,7 @@
     </exec>
     <echo message="Running PMD (JavaScript) analysis..."/>
     <mkdir dir="dist"/>
+    <mkdir dir="/tmp/build-i2p/reports"/>
     <exec executable="${pmd.java}" failonerror="false" outputproperty="pmd.result">
       <arg value="-Xmx4g"/>
       <arg value="-Xss1g"/>
@@ -3942,18 +3944,18 @@
       <arg value="-f"/>
       <arg value="xml"/>
       <arg value="-r"/>
-      <arg value="dist/pmd-js.xml"/>
+      <arg value="/tmp/build-i2p/reports/pmd-js.xml"/>
       <arg value="--no-cache"/>
     </exec>
     <exec executable="python3" failonerror="true">
       <arg value="tools/pmd/pmd-to-html.py"/>
-      <arg value="dist/pmd-js.xml"/>
+      <arg value="/tmp/build-i2p/reports/pmd-js.xml"/>
       <arg value="dist/pmd-js.html"/>
       <arg value="JavaScript"/>
     </exec>
     <exec executable="python3" failonerror="true">
       <arg value="tools/pmd/pmd-to-html.py"/>
-      <arg value="dist/pmd-js.xml"/>
+      <arg value="/tmp/build-i2p/reports/pmd-js.xml"/>
       <arg value="dist/pmd-js-local.html"/>
       <arg value="JavaScript"/>
       <arg value="--local"/>
@@ -3981,6 +3983,7 @@
     </exec>
     <echo message="Running Checkstyle analysis..."/>
     <mkdir dir="dist"/>
+    <mkdir dir="/tmp/build-i2p/reports"/>
     <exec executable="java" failonerror="false" outputproperty="cs.result">
       <arg value="-Xmx4g"/>
       <arg value="-Xss1g"/>
@@ -3991,19 +3994,19 @@
       <arg value="-f"/>
       <arg value="xml"/>
       <arg value="-o"/>
-      <arg value="dist/checkstyle.xml"/>
+      <arg value="/tmp/build-i2p/reports/checkstyle.xml"/>
       <arg value="core/java/src/net/i2p"/>
       <arg value="router/java/src"/>
       <arg value="apps"/>
     </exec>
     <exec executable="python3" failonerror="true">
       <arg value="tools/checkstyle/checkstyle-to-html.py"/>
-      <arg value="dist/checkstyle.xml"/>
+      <arg value="/tmp/build-i2p/reports/checkstyle.xml"/>
       <arg value="dist/checkstyle.html"/>
     </exec>
     <exec executable="python3" failonerror="true">
       <arg value="tools/checkstyle/checkstyle-to-html.py"/>
-      <arg value="dist/checkstyle.xml"/>
+      <arg value="/tmp/build-i2p/reports/checkstyle.xml"/>
       <arg value="dist/checkstyle-local.html"/>
       <arg value="--local"/>
     </exec>
@@ -4134,12 +4137,16 @@
     <echo message="CodeQL: ${cq.java.issues} (Java), ${cq.js.issues} (JavaScript), ${cq.jsp.issues} (JSP)"/>
   </target>
 
+  <!-- Intermediate artifacts (SARIF, XML) go to /tmp/build-i2p/reports/;
+       only final HTML reports land in dist/ -->
   <target name="codeql-java" depends="codeql-setup">
     <mkdir dir="dist"/>
     <mkdir dir="/tmp/codeql"/>
     <mkdir dir="/tmp/codeql/classes"/>
+    <mkdir dir="/tmp/build-i2p/reports"/>
     <echo message="Creating CodeQL Java database at /tmp/codeql/db-java..."/>
     <exec executable="bash" dir="${basedir}" failonerror="true">
+      <env key="CODEQL_JAVA_HOME" value="/usr/lib/jvm/java-21-openjdk-amd64"/>
       <arg value="-c"/>
       <arg value="tools/codeql/codeql-${codeql.version}/codeql database create /tmp/codeql/db-java --language=java --source-root=. --overwrite --ram=8192 --search-path=tools/codeql/codeql-to-html.py/codeql-${codeql.version} --command='bash tools/codeql/build-java.sh'"/>
     </exec>
@@ -4149,7 +4156,7 @@
       <arg value="analyze"/>
       <arg value="/tmp/codeql/db-java"/>
       <arg value="--format=sarif-latest"/>
-      <arg value="--output=dist/codeql-java.sarif"/>
+      <arg value="--output=/tmp/build-i2p/reports/codeql-java.sarif"/>
       <arg value="--sarif-add-query-help"/>
       <arg value="--ram=8192"/>
       <arg value="--additional-packs=tools/codeql/packs"/>
@@ -4157,18 +4164,18 @@
     </exec>
     <exec executable="python3" failonerror="false">
       <arg value="tools/codeql/codeql-to-html.py"/>
-      <arg value="dist/codeql-java.sarif"/>
+      <arg value="/tmp/build-i2p/reports/codeql-java.sarif"/>
       <arg value="dist/codeql-java.html"/>
     </exec>
     <exec executable="python3" failonerror="false">
       <arg value="tools/codeql/codeql-to-html.py"/>
-      <arg value="dist/codeql-java.sarif"/>
+      <arg value="/tmp/build-i2p/reports/codeql-java.sarif"/>
       <arg value="dist/codeql-java-local.html"/>
       <arg value="--local"/>
     </exec>
     <exec executable="bash" failonerror="false" outputproperty="cq.java.count">
       <arg value="-c"/>
-      <arg value="python3 tools/codeql/codeql-to-html.py/sarif-count.py dist/codeql-java.sarif 2>/dev/null || echo 0"/>
+      <arg value="python3 tools/codeql/codeql-to-html.py/sarif-count.py /tmp/build-i2p/reports/codeql-java.sarif 2>/dev/null || echo 0"/>
     </exec>
     <echo message="${cq.java.count}" file="dist/codeql-java.txt"/>
     <echo message="CodeQL Java: dist/codeql-java.html, dist/codeql-java-local.html (${cq.java.count} issues)"/>
@@ -4177,6 +4184,7 @@
   <target name="codeql-js" depends="codeql-setup">
     <mkdir dir="dist"/>
     <mkdir dir="/tmp/codeql"/>
+    <mkdir dir="/tmp/build-i2p/reports"/>
     <echo message="Creating CodeQL JavaScript database at /tmp/codeql/db-js..."/>
     <exec executable="bash" dir="${basedir}" failonerror="true">
       <arg value="-c"/>
@@ -4188,7 +4196,7 @@
       <arg value="analyze"/>
       <arg value="/tmp/codeql/db-js"/>
       <arg value="--format=sarif-latest"/>
-      <arg value="--output=dist/codeql-js.sarif"/>
+      <arg value="--output=/tmp/build-i2p/reports/codeql-js.sarif"/>
       <arg value="--sarif-add-query-help"/>
       <arg value="--ram=8192"/>
       <arg value="--additional-packs=tools/codeql/packs"/>
@@ -4196,12 +4204,12 @@
     </exec>
     <exec executable="python3" failonerror="false">
       <arg value="tools/codeql/codeql-to-html.py"/>
-      <arg value="dist/codeql-js.sarif"/>
+      <arg value="/tmp/build-i2p/reports/codeql-js.sarif"/>
       <arg value="dist/codeql-js.html"/>
     </exec>
     <exec executable="bash" failonerror="false" outputproperty="cq.js.count">
       <arg value="-c"/>
-      <arg value="python3 tools/codeql/codeql-to-html.py/sarif-count.py dist/codeql-js.sarif 2>/dev/null || echo 0"/>
+      <arg value="python3 tools/codeql/codeql-to-html.py/sarif-count.py /tmp/build-i2p/reports/codeql-js.sarif 2>/dev/null || echo 0"/>
     </exec>
     <echo message="${cq.js.count}" file="dist/codeql-js.txt"/>
     <echo message="CodeQL JavaScript report written to dist/codeql-js.html (${cq.js.count} issues)"/>
@@ -4211,14 +4219,14 @@
     <echo message="Filtering JSP results from Java SARIF..."/>
     <exec executable="python3" failonerror="false" outputproperty="cq.jsp.count">
       <arg value="tools/codeql/filter-sarif.py"/>
-      <arg value="dist/codeql-java.sarif"/>
-      <arg value="dist/codeql-jsp.sarif"/>
+      <arg value="/tmp/build-i2p/reports/codeql-java.sarif"/>
+      <arg value="/tmp/build-i2p/reports/codeql-jsp.sarif"/>
       <arg value="_jsp.java"/>
     </exec>
     <exec executable="python3" failonerror="false">
       <arg value="tools/codeql/codeql-to-html.py"/>
       <arg value="--no-exclude"/>
-      <arg value="dist/codeql-jsp.sarif"/>
+      <arg value="/tmp/build-i2p/reports/codeql-jsp.sarif"/>
       <arg value="dist/codeql-jsp.html"/>
     </exec>
     <echo message="${cq.jsp.count}" file="dist/codeql-jsp.txt"/>
@@ -4260,6 +4268,7 @@
     <antcall target="download-spotbugs"/>
 
     <mkdir dir="dist"/>
+    <mkdir dir="/tmp/build-i2p/reports"/>
 
     <!-- CodeQL compilation first (creates the database) -->
     <echo message="  [1/2] CodeQL compilation..."/>
@@ -4301,18 +4310,18 @@
           <arg value="-f"/>
           <arg value="xml"/>
           <arg value="-r"/>
-          <arg value="dist/pmd-java.xml"/>
+          <arg value="/tmp/build-i2p/reports/pmd-java.xml"/>
           <arg value="--no-cache"/>
         </exec>
         <exec executable="python3" failonerror="false" output="/dev/null" error="/dev/null">
           <arg value="tools/pmd/pmd-to-html.py"/>
-          <arg value="dist/pmd-java.xml"/>
+          <arg value="/tmp/build-i2p/reports/pmd-java.xml"/>
           <arg value="dist/pmd-java.html"/>
           <arg value="Java"/>
         </exec>
         <exec executable="python3" failonerror="false" output="/dev/null" error="/dev/null">
           <arg value="tools/pmd/pmd-to-html.py"/>
-          <arg value="dist/pmd-java.xml"/>
+          <arg value="/tmp/build-i2p/reports/pmd-java.xml"/>
           <arg value="dist/pmd-java-local.html"/>
           <arg value="Java"/>
           <arg value="--local"/>
@@ -4331,19 +4340,19 @@
           <arg value="-f"/>
           <arg value="xml"/>
           <arg value="-o"/>
-          <arg value="dist/checkstyle.xml"/>
+          <arg value="/tmp/build-i2p/reports/checkstyle.xml"/>
           <arg value="core/java/src/net/i2p"/>
           <arg value="router/java/src"/>
           <arg value="apps"/>
         </exec>
         <exec executable="python3" failonerror="false" output="/dev/null" error="/dev/null">
           <arg value="tools/checkstyle/checkstyle-to-html.py"/>
-          <arg value="dist/checkstyle.xml"/>
+          <arg value="/tmp/build-i2p/reports/checkstyle.xml"/>
           <arg value="dist/checkstyle.html"/>
         </exec>
         <exec executable="python3" failonerror="false" output="/dev/null" error="/dev/null">
           <arg value="tools/checkstyle/checkstyle-to-html.py"/>
-          <arg value="dist/checkstyle.xml"/>
+          <arg value="/tmp/build-i2p/reports/checkstyle.xml"/>
           <arg value="dist/checkstyle-local.html"/>
           <arg value="--local"/>
         </exec>
@@ -4361,7 +4370,7 @@
           <pathelement location="${system.ant.path}"/>
         </path>
         <pathconvert refid="spotbugs.auxclasspath" property="spotbugs.auxclasspath.path" pathsep=":"/>
-        <spotbugs home="${spotbugs.home}" output="xml:withMessages" outputFile="dist/spotbugs.xml" effort="max" debug="false" reportLevel="medium" timeout="1800000" jvm="${spotbugs.java}" excludeFilter="tools/spotbugs/config/spotbugs-exclude.xml">
+        <spotbugs home="${spotbugs.home}" output="xml:withMessages" outputFile="/tmp/build-i2p/reports/spotbugs.xml" effort="max" debug="false" reportLevel="medium" timeout="1800000" jvm="${spotbugs.java}" excludeFilter="tools/spotbugs/config/spotbugs-exclude.xml">
           <auxAnalyzepath path="./build"/>
           <auxClasspath path="${spotbugs.auxclasspath.path}"/>
           <class location="./build/i2p.jar"/>
@@ -4386,7 +4395,7 @@
           <arg value="analyze"/>
           <arg value="/tmp/codeql/db-java"/>
           <arg value="--format=sarif-latest"/>
-          <arg value="--output=dist/codeql-java.sarif"/>
+          <arg value="--output=/tmp/build-i2p/reports/codeql-java.sarif"/>
           <arg value="--sarif-add-query-help"/>
           <arg value="--ram=8192"/>
           <arg value="--additional-packs=tools/codeql/packs"/>
@@ -4394,12 +4403,12 @@
         </exec>
         <exec executable="python3" failonerror="false" output="/dev/null" error="/dev/null">
           <arg value="tools/codeql/codeql-to-html.py"/>
-          <arg value="dist/codeql-java.sarif"/>
+          <arg value="/tmp/build-i2p/reports/codeql-java.sarif"/>
           <arg value="dist/codeql-java.html"/>
         </exec>
         <exec executable="python3" failonerror="false" output="/dev/null" error="/dev/null">
           <arg value="tools/codeql/codeql-to-html.py"/>
-          <arg value="dist/codeql-java.sarif"/>
+          <arg value="/tmp/build-i2p/reports/codeql-java.sarif"/>
           <arg value="dist/codeql-java-local.html"/>
           <arg value="--local"/>
         </exec>
@@ -4414,26 +4423,26 @@
     <exec executable="python3" failonerror="true">
       <arg value="tools/template/report-all-java.py"/>
       <arg value="--pmd"/>
-      <arg value="dist/pmd-java.xml"/>
+      <arg value="/tmp/build-i2p/reports/pmd-java.xml"/>
       <arg value="--checkstyle"/>
-      <arg value="dist/checkstyle.xml"/>
+      <arg value="/tmp/build-i2p/reports/checkstyle.xml"/>
       <arg value="--codeql"/>
-      <arg value="dist/codeql-java.sarif"/>
+      <arg value="/tmp/build-i2p/reports/codeql-java.sarif"/>
       <arg value="--spotbugs"/>
-      <arg value="dist/spotbugs.xml"/>
+      <arg value="/tmp/build-i2p/reports/spotbugs.xml"/>
       <arg value="-o"/>
       <arg value="dist/report-all-java.html"/>
     </exec>
     <exec executable="python3" failonerror="true">
       <arg value="tools/template/report-all-java.py"/>
       <arg value="--pmd"/>
-      <arg value="dist/pmd-java.xml"/>
+      <arg value="/tmp/build-i2p/reports/pmd-java.xml"/>
       <arg value="--checkstyle"/>
-      <arg value="dist/checkstyle.xml"/>
+      <arg value="/tmp/build-i2p/reports/checkstyle.xml"/>
       <arg value="--codeql"/>
-      <arg value="dist/codeql-java.sarif"/>
+      <arg value="/tmp/build-i2p/reports/codeql-java.sarif"/>
       <arg value="--spotbugs"/>
-      <arg value="dist/spotbugs.xml"/>
+      <arg value="/tmp/build-i2p/reports/spotbugs.xml"/>
       <arg value="--local"/>
       <arg value="-o"/>
       <arg value="dist/report-all-java-local.html"/>
@@ -4446,26 +4455,26 @@
     <exec executable="python3" failonerror="true">
       <arg value="tools/template/report-all-java.py"/>
       <arg value="--pmd"/>
-      <arg value="dist/pmd-java.xml"/>
+      <arg value="/tmp/build-i2p/reports/pmd-java.xml"/>
       <arg value="--checkstyle"/>
-      <arg value="dist/checkstyle.xml"/>
+      <arg value="/tmp/build-i2p/reports/checkstyle.xml"/>
       <arg value="--codeql"/>
-      <arg value="dist/codeql-java.sarif"/>
+      <arg value="/tmp/build-i2p/reports/codeql-java.sarif"/>
       <arg value="--spotbugs"/>
-      <arg value="dist/spotbugs.xml"/>
+      <arg value="/tmp/build-i2p/reports/spotbugs.xml"/>
       <arg value="-o"/>
       <arg value="dist/report-all-java.html"/>
     </exec>
     <exec executable="python3" failonerror="true">
       <arg value="tools/template/report-all-java.py"/>
       <arg value="--pmd"/>
-      <arg value="dist/pmd-java.xml"/>
+      <arg value="/tmp/build-i2p/reports/pmd-java.xml"/>
       <arg value="--checkstyle"/>
-      <arg value="dist/checkstyle.xml"/>
+      <arg value="/tmp/build-i2p/reports/checkstyle.xml"/>
       <arg value="--codeql"/>
-      <arg value="dist/codeql-java.sarif"/>
+      <arg value="/tmp/build-i2p/reports/codeql-java.sarif"/>
       <arg value="--spotbugs"/>
-      <arg value="dist/spotbugs.xml"/>
+      <arg value="/tmp/build-i2p/reports/spotbugs.xml"/>
       <arg value="--local"/>
       <arg value="-o"/>
       <arg value="dist/report-all-java-local.html"/>
@@ -4484,7 +4493,7 @@
       <arg value="indent"/>
       <arg value="imports"/>
       <arg value="-x"/>
-      <arg value="dist/checkstyle.xml"/>
+      <arg value="/tmp/build-i2p/reports/checkstyle.xml"/>
       <arg value="--dry-run"/>
     </exec>
   </target>
@@ -4500,7 +4509,7 @@
       <arg value="indent"/>
       <arg value="imports"/>
       <arg value="-x"/>
-      <arg value="dist/checkstyle.xml"/>
+      <arg value="/tmp/build-i2p/reports/checkstyle.xml"/>
     </exec>
   </target>
 

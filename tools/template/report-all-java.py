@@ -293,6 +293,8 @@ def parse_spotbugs(xml_file):
     }
     with open(xml_file) as f:
         content = f.read()
+    if not content.strip():
+        return []
     root = ET.fromstring(content)
 
     # Build priority → severity class map
