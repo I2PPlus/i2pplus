@@ -8,6 +8,7 @@
  * @license AGPL3 or later
  */
 
+import { refreshScreenLog } from "./refreshTorrents.js"; // NOSONAR S1128
 
 "use strict";
 

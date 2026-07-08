@@ -7,6 +7,7 @@
  * @license AGPL3 or later
  */
 
+import { lsDebug } from "/js/lsDebug.js"; // NOSONAR S1128
 import { searchLS } from "/js/searchLS.js";
 
 const isSingleLS = document.getElementById("singleLS") !== null;
