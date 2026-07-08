@@ -71,6 +71,15 @@
 <tr class=config><th>routerconsole.enforceLogin={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]")%></td></tr>
 
+<tr class=config><th>routerconsole.sidebarGraphLegacy={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("When set to true, the sidebar bandwidth graph uses the legacy RRD4J SVG renderer. When set to false, the new dual-baseline canvas renderer is used, with gradient fills, glow effects, and a split inbound/outbound display. [Default is false]")%></td></tr>
+
+<tr class=config><th>routerconsole.sidebarGraphMinutes={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("The time period, in minutes, displayed in the sidebar bandwidth graph. Values outside the valid range (2–30) are clamped. [Default is 20]")%></td></tr>
+
+<tr class=config><th>routerconsole.sidebarGraphSplit={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("When set to true (the default), inbound and outbound traffic are displayed in a split view with a center baseline, with outbound spikes upward and inbound spikes downward. When set to false, both lines are displayed in overlay mode from the top of the graph with a configurable composite blend. [Default is true]")%></td></tr>
+
 <tr class=section><th>router</th></tr>
 
 <tr class=config><th>router.blocklist.enable={true|false}</th></tr>
