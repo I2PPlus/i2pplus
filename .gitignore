@@ -13,6 +13,7 @@
 *.torrent
 
 *~
+*.swp
 web-fragment.xml
 web-out.xml
 *.out
