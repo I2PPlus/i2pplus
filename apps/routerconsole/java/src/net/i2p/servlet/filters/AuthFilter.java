@@ -208,12 +208,16 @@ if ("/prefs".equals(path)) {
     }
 
     private String createSessionAndSetCookie(HttpServletRequest req, HttpServletResponse resp, String username) {
-        String sessionToken = SessionManager.getInstance().createSession(username);
+        net.i2p.router.RouterContext ctx = (net.i2p.router.RouterContext) I2PAppContext.getGlobalContext();
+        boolean hasPasswords = hasAnyPassword(ctx);
+        // No expiry when no password is configured — session persists until browser closes
+        long expiryMs = hasPasswords ? 30 * 60 * 1000 : -1;
+        String sessionToken = SessionManager.getInstance().createSession(username, expiryMs);
         javax.servlet.http.Cookie cookie = new javax.servlet.http.Cookie(SessionManager.SESSION_COOKIE_NAME, sessionToken);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setSecure(req.isSecure());
-        cookie.setMaxAge(30 * 60);
+        if (expiryMs > 0) cookie.setMaxAge((int) (expiryMs / 1000));
         resp.addCookie(cookie);
         req.getSession(true).setAttribute(SessionManager.SESSION_ATTR_USER, username);
         return username;

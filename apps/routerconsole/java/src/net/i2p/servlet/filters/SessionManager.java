@@ -122,7 +122,8 @@ public class SessionManager {
         long now = System.currentTimeMillis();
         int removed = 0;
         for (Map.Entry<String, Session> entry : _sessions.entrySet()) {
-            if (entry.getValue().expiresAt < now) {
+            long expiresAt = entry.getValue().expiresAt;
+            if (expiresAt > 0 && expiresAt < now) {
                 _sessions.remove(entry.getKey());
                 removed++;
             }
