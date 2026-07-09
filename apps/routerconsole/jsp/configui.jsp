@@ -41,13 +41,10 @@
 <input type=hidden name=nonce value="<%=pageNonce%>">
 <jsp:getProperty name="uihelper" property="passwordForm"/>
 <div class=formaction id=submitconsolepass>
-<input type=submit name=action class=default value="<%=intl._t("Add user")%>">
-<%  boolean pwEnabled = net.i2p.I2PAppContext.getGlobalContext().getBooleanProperty("routerconsole.auth.enable");
-    if (pwEnabled) {
+<%  if (uihelper.hasUsers()) {
 %>
 <input type=submit name=action class=delete value="<%=intl._t("Delete selected")%>">
 <%  } %>
-<input type=reset class=cancel value="<%=intl._t("Cancel")%>">
 <input type=submit name=action class=add value="<%=intl._t("Add user")%>">
 </div>
 </form>

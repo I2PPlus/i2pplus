@@ -288,6 +288,16 @@ public class ConfigUIHelper extends HelperBase {
     }
 
     /**
+     * Returns true if any console users are configured.
+     */
+    public boolean hasUsers() {
+        ConsolePasswordManager mgr = new ConsolePasswordManager(_context);
+        Map<String, String> userpw = mgr.getMD5(RouterConsoleRunner.PROP_CONSOLE_PW);
+        Map<String, String> pbkdf2 = mgr.getPBKDF2(RouterConsoleRunner.PROP_CONSOLE_PW);
+        return !userpw.isEmpty() || !pbkdf2.isEmpty();
+    }
+
+    /**
      * Generates HTML for console password management interface.
      *
      * <p>Renders a form for managing router console authentication including:
