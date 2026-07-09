@@ -30,7 +30,6 @@ public class GraphHelper extends FormHandler {
     private boolean _graphHideLegend;
     private boolean _graphGlow;
     private boolean _useUtc;
-    private boolean _bezierSmoothing;
     private String _stat;
     private int _end;
     private static final String PROP_X = "routerconsole.graphX";
@@ -41,7 +40,6 @@ public class GraphHelper extends FormHandler {
     private static final String PROP_HIDE_LEGEND = "routerconsole.graphHideLegend";
     private static final String PROP_GLOW = "routerconsole.graphGlow";
     private static final String PROP_UTC = "routerconsole.graphUtc";
-    private static final String PROP_BEZIER = "routerconsole.graphBezier";
     private static final int DEFAULT_REFRESH = 1*60;
     private static final int DEFAULT_PERIODS = 60;
     private static final boolean DEFAULT_HIDE_LEGEND = false;
@@ -75,7 +73,7 @@ public class GraphHelper extends FormHandler {
         _persistent = _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT);
         _graphGlow = _context.getBooleanPropertyDefaultTrue(PROP_GLOW);
         _useUtc = _context.getBooleanPropertyDefaultTrue(PROP_UTC);
-        _bezierSmoothing = _context.getBooleanProperty(PROP_BEZIER);
+        
     }
 
     /**
@@ -152,7 +150,7 @@ public class GraphHelper extends FormHandler {
     public void setUseUtc(String foo) {_useUtc = !"false".equals(foo);}
 
     /** @since 0.9.70+ */
-    public void setBezierSmoothing(String foo) {_bezierSmoothing = !"false".equals(foo);}
+    
 
     /** @since 0.9.32 */
     public void setHideLegend(String foo) {
@@ -482,15 +480,7 @@ public class GraphHelper extends FormHandler {
         buf.append(">")
            .append(_t("Store graph data on disk"))
            .append("</label><input type=hidden name=persistent value=false></span><br><span class=nowrap>\n<b>")
-           .append(_t("Glow effect"))
-           .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=graphGlow");
-        if (_graphGlow) {
-            buf.append(HelperBase.CHECKED);
-        }
-        buf.append(">")
-           .append(_t("Add a glow effect to graph lines"))
-           .append("</label><input type=hidden name=graphGlow value=false></span><br><span class=nowrap>\n<b>")
-           .append(_t("UTC time"))
+.append(_t("UTC time"))
            .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=useUtc");
         if (_useUtc) {
             buf.append(HelperBase.CHECKED);
@@ -498,14 +488,14 @@ public class GraphHelper extends FormHandler {
         buf.append(">")
            .append(_t("Display time in UTC on graph axes"))
            .append("</label><input type=hidden name=useUtc value=false></span><br><span class=nowrap>\n<b>")
-           .append(_t("Bezier smoothing"))
-           .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=bezierSmoothing");
-        if (_bezierSmoothing) {
+           .append(_t("Glow effect"))
+           .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=graphGlow");
+        if (_graphGlow) {
             buf.append(HelperBase.CHECKED);
         }
         buf.append(">")
-           .append(_t("Smooth plot lines with cubic bezier curves"))
-           .append("</label><input type=hidden name=bezierSmoothing value=false></span>\n</div>\n</td></tr>\n</table>\n<hr>\n<div class=formaction id=graphing><a class=fakebutton href=/configstats>")
+           .append(_t("Add a glow effect to graph lines"))
+           .append("</label><input type=hidden name=graphGlow value=false></span>\n</div>\n</td></tr>\n</table>\n<hr>\n<div class=formaction id=graphing><a class=fakebutton href=/configstats>")
            .append(_t("Select Stats"))
            .append("</a> <input type=submit class=accept value=\"")
            .append(_t("Save settings and redraw graphs"))
@@ -560,7 +550,7 @@ public class GraphHelper extends FormHandler {
             _persistent != _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT) ||
             _graphGlow != _context.getBooleanPropertyDefaultTrue(PROP_GLOW) ||
             _useUtc != _context.getBooleanPropertyDefaultTrue(PROP_UTC) ||
-            _bezierSmoothing != _context.getBooleanProperty(PROP_BEZIER)) {
+            false) {
             Map<String, String> changes = new HashMap<>();
             changes.put(PROP_X, Integer.toString(_width));
             changes.put(PROP_Y, Integer.toString(_height));
@@ -571,7 +561,6 @@ public class GraphHelper extends FormHandler {
             changes.put(GraphListener.PROP_PERSISTENT, Boolean.toString(_persistent));
             changes.put(PROP_GLOW, Boolean.toString(_graphGlow));
             changes.put(PROP_UTC, Boolean.toString(_useUtc));
-            changes.put(PROP_BEZIER, Boolean.toString(_bezierSmoothing));
             boolean warn = _persistent != _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT);
             _context.router().saveConfig(changes, null);
             addFormNotice(_t("Graph settings saved") + ".", true);
