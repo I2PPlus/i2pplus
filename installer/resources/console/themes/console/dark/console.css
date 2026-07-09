@@ -588,7 +588,7 @@ input[type=file]::file-selector-button{font-size:8.5pt}
 #graphdisplay{margin:6px -11px 10px;border-color:#252}
 #graphdisplay a{float:right;letter-spacing:normal;text-transform:capitalize;font-size:9pt}
 #graphs{padding:0 10px;text-align:center}
-#graphs .messages{margin:19px 5px -3px}
+#graphs .messages:not(.canClose){position:absolute;top:-3px;right:8px;box-shadow:var(--highlight),inset 0 0 2px 0 #393,4px 4px 4px #0008;animation:toast 3s ease 3s both}
 #graphs .widepanel{margin:-4px 0 17px}
 #gform{margin:-11px -11px -18px;padding:0;border:var(--border);border-radius:0 0 3px 3px;background:#000}
 #gform hr{margin:0 -1px 8px}
@@ -2945,6 +2945,7 @@ iframe.iframed{margin:15px 0 0}
 @keyframes slide{from{transform:translateY(-20px)}to{transform:translateY(0)}}
 @keyframes spin{from{transform:rotate(-360deg)}}
 @keyframes textglow{from{text-shadow:0 0 1px #995}}
+@keyframes toast{from{transform:translateY(0);opacity:1}to{transform:translateY(-999px);opacity:0}}
 @keyframes updatingIcon{from{background-image:var(--clock)}}
 @keyframes updatingTd{0%,50%{transform:scale(1.2)}100%{color:var(--ink_bright);transform:scale(1)}}
 @keyframes updatingTdRevert{from{color:var(--ink_bright)}to{color:var(--ink)}}
