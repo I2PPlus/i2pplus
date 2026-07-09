@@ -109,6 +109,7 @@ import net.i2p.util.Translate;
  * </ul>
  */
 public class CommSystemFacadeImpl extends CommSystemFacade {
+    private static final Log _slog = I2PAppContext.getGlobalContext().logManager().getLog(CommSystemFacadeImpl.class);
     private final Log _log;
     private final RouterContext _context;
     private final TransportManager _manager;
@@ -982,8 +983,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 }
             }
         }
-        if (removed > 0) {
-            System.out.println("[RDNSCache] Removed " + removed + " stale entries from the cache"); // NOSONAR S106 static utility
+        if (removed > 0 && _slog.shouldInfo()) {
+            _slog.info("[RDNSCache] Removed " + removed + " stale entries from the cache");
         }
     }
 
