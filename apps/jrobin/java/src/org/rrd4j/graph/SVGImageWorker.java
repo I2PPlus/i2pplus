@@ -16,8 +16,24 @@ public class SVGImageWorker extends ImageWorker {
     private SVGGraphics2D g2d;
     private int imgWidth;
     private int imgHeight;
+    private boolean glow;
+    private boolean bezier;
 
     public SVGImageWorker(int width, int height) {
+        this.glow = false;
+        this.bezier = false;
+        initGraphics(width, height);
+    }
+
+    public SVGImageWorker(int width, int height, boolean glow) {
+        this.glow = glow;
+        this.bezier = false;
+        initGraphics(width, height);
+    }
+
+    public SVGImageWorker(int width, int height, boolean glow, boolean bezier) {
+        this.glow = glow;
+        this.bezier = bezier;
         initGraphics(width, height);
     }
 
@@ -25,6 +41,8 @@ public class SVGImageWorker extends ImageWorker {
         imgWidth = width;
         imgHeight = height;
         g2d = new SVGGraphics2D(imgWidth, imgHeight);
+        g2d.setGlowEnabled(glow);
+        g2d.setBezierEnabled(bezier);
         setG2d(g2d);
     }
 

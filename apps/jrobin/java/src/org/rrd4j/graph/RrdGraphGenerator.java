@@ -330,7 +330,8 @@ class RrdGraphGenerator {
                         worker.fillPolygon(x, areaZero, y, source.color);
                     } else {
                         worker.fillPolygon(x, lastY, y, source.color);
-                        worker.drawPolyline(x, lastY, source.getParentColor(), new BasicStroke(0));
+                        worker.drawPolyline(x, lastY, source.getParentColor(),
+                                RrdGraphConstants.TICK_STROKE);
                     }
                 } else if (source instanceof Stack) {
                     Stack stack = (Stack) source;
@@ -341,7 +342,8 @@ class RrdGraphGenerator {
                     } else {
                         // area
                         worker.fillPolygon(x, lastY, y, stack.color);
-                        worker.drawPolyline(x, lastY, stack.getParentColor(), new BasicStroke(0));
+                        worker.drawPolyline(x, lastY, stack.getParentColor(),
+                                RrdGraphConstants.TICK_STROKE);
                     }
                 } else {
                     // should not be here

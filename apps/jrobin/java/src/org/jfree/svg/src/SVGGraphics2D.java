@@ -241,6 +241,34 @@ public final class SVGGraphics2D extends Graphics2D {
     private String fillStyleCache;
     private boolean fillStyleCacheValid;
 
+    /** When true, the next draw(Path2D) emits a glow-filtered path before the original. */
+    private boolean glowEnabled;
+
+    /**
+     * Enables or disables the glow effect for subsequent draw(Path2D) calls.
+     * When enabled, a filtered copy of the path is emitted before the original,
+     * creating a soft glow behind stroked lines.
+     *
+     * @param enabled true to enable glow path emission
+     */
+    public void setGlowEnabled(boolean enabled) {
+        this.glowEnabled = enabled;
+    }
+
+    /** When true, draw(Path2D) converts line segments to cubic bezier curves for smooth rendering. */
+    private boolean bezierEnabled;
+
+    /**
+     * Enables or disables bezier smoothing for subsequent draw(Path2D) calls.
+     * When enabled, straight line segments are converted to cubic bezier curves
+     * using Catmull-Rom interpolation for smoother graph plots.
+     *
+     * @param enabled true to enable bezier smoothing
+     */
+    public void setBezierEnabled(boolean enabled) {
+        this.bezierEnabled = enabled;
+    }
+
     /**
      * The width of the SVG stroke to use when the user supplies a BasicStroke with a width of 0.0
      * (in this case the Java specification says "If width is set to 0.0f, the stroke is rendered as
@@ -1055,8 +1083,9 @@ public final class SVGGraphics2D extends Graphics2D {
             String x2 = geomDP(l.getX2());
             String y1 = geomDP(l.getY1());
             String y2 = geomDP(l.getY2());
-            if (!strokeStyle().contains("stroke-opacity:0;")
-                    && !strokeStyle().contains("stroke-width:0.1;")) {
+            String style = strokeStyle();
+            if (!style.contains("stroke-opacity:0;")
+                    && !style.contains("stroke-width:0.1;")) {
                 this.sb.append("<line ");
                 appendOptionalElementIDFromHint(this.sb);
                 this.sb
@@ -1069,7 +1098,7 @@ public final class SVGGraphics2D extends Graphics2D {
                         .append("\" y2=\"")
                         .append(y2)
                         .append("\" style=\"")
-                        .append(strokeStyle())
+                        .append(style)
                         .append("\" ");
                 if (!this.transform.isIdentity()) {
                     this.sb
@@ -1081,7 +1110,8 @@ public final class SVGGraphics2D extends Graphics2D {
             }
         } else if (s instanceof Rectangle2D) {
             Rectangle2D r = (Rectangle2D) s;
-            if (!strokeStyle().contains("fill-opacity:0\"")) {
+            String style = strokeStyle();
+            if (!style.contains("fill-opacity:0\"")) {
                 this.sb.append("<rect ");
                 appendOptionalElementIDFromHint(this.sb);
                 this.sb
@@ -1095,7 +1125,7 @@ public final class SVGGraphics2D extends Graphics2D {
                         .append(geomDP(r.getHeight()))
                         .append("\" ")
                         .append("style=\"")
-                        .append(strokeStyle())
+                        .append(style)
                         .append("fill:none")
                         .append("\" ");
                 if (!this.transform.isIdentity()) {
@@ -1135,9 +1165,19 @@ public final class SVGGraphics2D extends Graphics2D {
             this.sb.append("/>");
         } else if (s instanceof Path2D) {
             Path2D path = (Path2D) s;
-            this.sb.append("<g ");
+            String style = strokeStyle();
+            if (this.glowEnabled) {
+                this.sb.append("<path filter=\"url(#glow)\" fill=\"none\" style=\"")
+                        .append(style)
+                        .append("fill:none\" ")
+                        .append(getClipPathRef())
+                        .append(" ")
+                        .append(getSVGPathData(path))
+                        .append("/>");
+            }
+            this.sb.append("<g fill=\"none\" ");
             appendOptionalElementIDFromHint(this.sb);
-            this.sb.append("style=\"").append(strokeStyle()).append("fill:none").append("\" ");
+            this.sb.append("style=\"").append(style).append("fill:none").append("\" ");
             if (!this.transform.isIdentity()) {
                 this.sb
                         .append("transform=\"")
@@ -1248,6 +1288,66 @@ public final class SVGGraphics2D extends Graphics2D {
      * @return An SVG path string.
      */
     private String getSVGPathData(Path2D path) {
+        if (this.bezierEnabled) {
+            return getSVGPathDataBezier(path);
+        }
+        return getSVGPathDataRaw(path);
+    }
+
+    /**
+     * Convert a Path2D to SVG path data with cubic bezier smoothing.
+     * Uses Catmull-Rom to cubic bezier conversion for smooth curves through data points.
+     */
+    private String getSVGPathDataBezier(Path2D path) {
+        // collect all points
+        java.util.List<float[]> points = new java.util.ArrayList<>();
+        float[] coords = new float[6];
+        PathIterator iterator = path.getPathIterator(null);
+        while (!iterator.isDone()) {
+            int type = iterator.currentSegment(coords);
+            if (type == PathIterator.SEG_MOVETO || type == PathIterator.SEG_LINETO) {
+                points.add(new float[] { coords[0], coords[1] });
+            }
+            // SEG_CLOSE, SEG_QUADTO, SEG_CUBICTO — fall back to raw
+            if (type == PathIterator.SEG_CLOSE || type == PathIterator.SEG_QUADTO || type == PathIterator.SEG_CUBICTO) {
+                return getSVGPathDataRaw(path);
+            }
+            iterator.next();
+        }
+        int n = points.size();
+        if (n < 2) {
+            return getSVGPathDataRaw(path);
+        }
+        StringBuilder b = new StringBuilder("d=\"");
+        float[] p = points.get(0);
+        b.append("M").append(geomDP(p[0])).append(" ").append(geomDP(p[1]));
+        if (n == 2) {
+            float[] p1 = points.get(1);
+            b.append("l").append(geomDP(p1[0] - p[0])).append(" ").append(geomDP(p1[1] - p[1]));
+        } else {
+            for (int i = 0; i < n - 1; i++) {
+                float[] p0 = points.get(Math.max(i - 1, 0));
+                float[] p1 = points.get(i);
+                float[] p2 = points.get(i + 1);
+                float[] p3 = points.get(Math.min(i + 2, n - 1));
+                // Catmull-Rom to cubic bezier control points
+                float cp1x = p1[0] + (p2[0] - p0[0]) / 6f;
+                float cp1y = p1[1] + (p2[1] - p0[1]) / 6f;
+                float cp2x = p2[0] - (p3[0] - p1[0]) / 6f;
+                float cp2y = p2[1] - (p3[1] - p1[1]) / 6f;
+                b.append("c")
+                        .append(geomDP(cp1x - p1[0])).append(" ").append(geomDP(cp1y - p1[1]))
+                        .append(" ").append(geomDP(cp2x - p1[0])).append(" ").append(geomDP(cp2y - p1[1]))
+                        .append(" ").append(geomDP(p2[0] - p1[0])).append(" ").append(geomDP(p2[1] - p1[1]));
+            }
+        }
+        return b.append("\"").toString();
+    }
+
+    /**
+     * Convert a Path2D to SVG path data without smoothing (original behavior).
+     */
+    private String getSVGPathDataRaw(Path2D path) {
         StringBuilder b = new StringBuilder("d=\"");
         float[] coords = new float[6];
         boolean first = true;
@@ -1309,9 +1409,6 @@ public final class SVGGraphics2D extends Graphics2D {
                     prevY = coords[5];
                     break;
                 case (PathIterator.SEG_CLOSE):
-                    if (!first) {
-                        b.append("L").append((int) coords[0]).append(" ").append((int) coords[1]);
-                    }
                     b.append("Z");
                     break;
                 default:
@@ -2766,7 +2863,7 @@ public final class SVGGraphics2D extends Graphics2D {
                 s = s.replace(
                                 "style=\"fill:rgb(0,72,8);fill-opacity:.86;stroke:none\"",
                                 "fill=\"url(#dark)\"")
-                        .replace("stroke:rgb(0,72,8)", "stroke:#00800da0");
+                        .replace("stroke:rgb(0,72,8)", "stroke:#00800da0;fill:none");
                 break;
             case LIGHT:
                 s = s.replace(
@@ -2813,7 +2910,6 @@ public final class SVGGraphics2D extends Graphics2D {
                         ";stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1\"",
                         "\" class=\"dash\"")
                 .replace("style=\"stroke:rgb(220,16,48);fill:none\"", "class=\"restart\"")
-                .replace(" clip-path=\"url(#clip-2)\"", "")
                 .replace(" L ", "L");
 
         // --- Font class extraction (mono/sans-serif inline styles → CSS classes) ---
@@ -2999,18 +3095,27 @@ public final class SVGGraphics2D extends Graphics2D {
 
         StringBuilder defs = new StringBuilder("<defs>");
         for (int i = 0; i < this.clipPaths.size(); i++) {
-            if (i != 1) { // no clipPath for entire graph
+            if (i != 1) { // skip clip-1 (entire graph, not needed)
                 StringBuilder b =
                         new StringBuilder("<clipPath id=\"")
                                 .append(CLIP_KEY_PREFIX)
                                 .append(i)
                                 .append("\">");
-                b.append("<path ").append(this.clipPaths.get(i)).append("/>").append("</clipPath>");
+                String pathData = this.clipPaths.get(i);
+                b.append("<path ").append(pathData).append("/>").append("</clipPath>");
                 defs.append(b.toString());
             }
         }
         Theme theme = detectTheme(this.sb.toString());
         appendThemeDefs(theme, defs);
+        if (this.glowEnabled) {
+            defs.append("<filter id=\"glow\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"140%\">")
+                    .append("<feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"3\" result=\"blur\"/>")
+                    .append("<feMerge>")
+                    .append("<feMergeNode in=\"blur\"/>")
+                    .append("<feMergeNode in=\"SourceGraphic\"/>")
+                    .append("</feMerge></filter>");
+        }
         defs.append(
                 "<link xmlns=\"http://www.w3.org/1999/xhtml\" rel=\"stylesheet\" type=\"text/css\"" +
                 " href=\"/themes/fonts/OpenSans.css\"/>");
@@ -3021,7 +3126,6 @@ public final class SVGGraphics2D extends Graphics2D {
                         "<style>text{font-weight:600;text-rendering:optimizeLegibility;white-space:pre}")
                 .append(
                         "line,path,rect{shape-rendering:crispEdges;vector-effect:non-scaling-stroke}")
-                .append("line,rect,text{clip-path:url(#clip-1)}")
                 .append(".axis{stroke-width:")
                 .append(axisStrokeWidth)
                 .append(";stroke-linecap:round}")
@@ -3229,9 +3333,49 @@ public final class SVGGraphics2D extends Graphics2D {
         if (this.clipRef == null) {
             this.clipRef = registerClip(getClip());
         }
+        if ("clip-2".equals(this.clipRef)) {
+            return "";
+        }
         StringBuilder b = new StringBuilder();
         b.append("clip-path=\"url(#").append(this.clipRef).append(")\"");
         return b.toString();
+    }
+
+    /**
+     * Expand a rectangular clip path by the given padding on all sides.
+     * Handles the format: d="M x y l w 0 l 0 h l -w 0 l 0 -h Z"
+     *
+     * @param pathData the full SVG path data attribute (d="...")
+     * @param padding pixels to expand on each side
+     * @return expanded path data attribute, or original if format unrecognized
+     */
+    private static String expandClipPath(String pathData, int padding) {
+        try {
+            // parse "d=\"M{x} {y}l{w} 0l0 {h}l-{w} 0l0 -{h}Z\""
+            String s = pathData.trim();
+            int dIdx = s.indexOf("d=\"");
+            int mIdx = s.indexOf('M', dIdx);
+            int spIdx = s.indexOf(' ', mIdx + 1);
+            int lIdx = s.indexOf('l', spIdx);
+            double x = Double.parseDouble(s.substring(mIdx + 1, spIdx).trim());
+            double y = Double.parseDouble(s.substring(spIdx + 1, lIdx).trim());
+            // l w 0
+            int sp2 = s.indexOf(' ', lIdx + 1);
+            double w = Double.parseDouble(s.substring(lIdx + 1, sp2).trim());
+            int l2 = s.indexOf('l', sp2);
+            // l 0 h
+            int sp3 = s.indexOf(' ', l2 + 1);
+            int l3 = s.indexOf('l', sp3);
+            double h = Double.parseDouble(s.substring(sp3 + 1, l3).trim());
+            int p = padding;
+            return "d=\"M" + (x - p) + " " + (y - p)
+                    + "l" + (w + 2 * p) + " 0"
+                    + "l0 " + (h + 2 * p)
+                    + "l" + -(w + 2 * p) + " 0"
+                    + "l0 " + -(h + 2 * p) + "Z\"";
+        } catch (Exception e) {
+            return pathData;
+        }
     }
 
     /**

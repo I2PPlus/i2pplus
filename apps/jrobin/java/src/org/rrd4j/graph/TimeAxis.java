@@ -89,14 +89,48 @@ class TimeAxis extends Axis {
             return false;
         }
 
-        drawMinor();
-        drawMajor();
+        drawMinorTicks();
+        drawMajorTicks();
+        drawMinorGrids();
+        drawMajorGrids();
         drawLabels();
 
         return true;
     }
 
-    private void drawMinor() {
+    private void drawMinorTicks() {
+        if (!gdef.noMinorGrid && gdef.drawTicks()) {
+            adjustStartingTime(tickSetting.minorUnit, tickSetting.minorUnitCount);
+            Paint color = gdef.getColor(ElementsNames.grid);
+            int y0 = im.yorigin;
+            for (int status = getTimeShift(); status <= 0; status = getTimeShift()) {
+                if (status == 0) {
+                    long time = calendar.getTime().getTime() / 1000L;
+                    int x = mapper.xtr(time);
+                    worker.drawLine(x, y0 - 1, x, y0 + 1, color, gdef.tickStroke);
+                }
+                findNextTime(tickSetting.minorUnit, tickSetting.minorUnitCount);
+            }
+        }
+    }
+
+    private void drawMajorTicks() {
+        if (gdef.drawTicks()) {
+            adjustStartingTime(tickSetting.majorUnit, tickSetting.majorUnitCount);
+            Paint color = gdef.getColor(ElementsNames.mgrid);
+            int y0 = im.yorigin;
+            for (int status = getTimeShift(); status <= 0; status = getTimeShift()) {
+                if (status == 0) {
+                    long time = calendar.getTime().getTime() / 1000L;
+                    int x = mapper.xtr(time);
+                    worker.drawLine(x, y0 - 2, x, y0 + 2, color, gdef.tickStroke);
+                }
+                findNextTime(tickSetting.majorUnit, tickSetting.majorUnitCount);
+            }
+        }
+    }
+
+    private void drawMinorGrids() {
         if (!gdef.noMinorGrid) {
             adjustStartingTime(tickSetting.minorUnit, tickSetting.minorUnitCount);
             Paint color = gdef.getColor(ElementsNames.grid);
@@ -105,10 +139,6 @@ class TimeAxis extends Axis {
                 if (status == 0) {
                     long time = calendar.getTime().getTime() / 1000L;
                     int x = mapper.xtr(time);
-                    // skip ticks if zero width
-                    if (gdef.drawTicks()) {
-                        worker.drawLine(x, y0 - 1, x, y0 + 1, color, gdef.tickStroke);
-                    }
                     worker.drawLine(x, y0, x, y1, color, gdef.gridStroke);
                 }
                 findNextTime(tickSetting.minorUnit, tickSetting.minorUnitCount);
@@ -116,7 +146,7 @@ class TimeAxis extends Axis {
         }
     }
 
-    private void drawMajor() {
+    private void drawMajorGrids() {
         adjustStartingTime(tickSetting.majorUnit, tickSetting.majorUnitCount);
         Paint color = gdef.getColor(ElementsNames.mgrid);
         int y0 = im.yorigin, y1 = y0 - im.ysize;
@@ -124,10 +154,6 @@ class TimeAxis extends Axis {
             if (status == 0) {
                 long time = calendar.getTime().getTime() / 1000L;
                 int x = mapper.xtr(time);
-                // skip ticks if zero width
-                if (gdef.drawTicks()) {
-                    worker.drawLine(x, y0 - 2, x, y0 + 2, color, gdef.tickStroke);
-                }
                 worker.drawLine(x, y0, x, y1, color, gdef.gridStroke);
             }
             findNextTime(tickSetting.majorUnit, tickSetting.majorUnitCount);
