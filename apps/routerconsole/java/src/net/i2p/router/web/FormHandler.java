@@ -36,8 +36,6 @@ public abstract class FormHandler {
     /** Only for multipart/form-data. Warning, parameters are NOT XSS filtered */
     protected RequestWrapper _requestWrapper;
     private String _nonce;
-    private String _nonce1;
-    private String _nonce2;
     protected String _action;
     protected String _method;
     private final List<Message> _errors;
@@ -189,15 +187,6 @@ public abstract class FormHandler {
      * @since 0.9.38
      */
     public void storeWriter(Writer out) {_out = out;}
-
-    /**
-     * The old nonces from the session
-     * @since 0.9.4
-     */
-    public void storeNonces(String n1, String n2) {
-        _nonce1 = n1;
-        _nonce2 = n2;
-    }
 
     /**
      * Implement this to perform the final processing (in turn, adding formNotice
@@ -368,15 +357,20 @@ public abstract class FormHandler {
         // Always validate nonce - don't skip based on console password
         if (_nonce == null) {
             _valid = false;
+            if (_log != null) {_log.error("validate(): _nonce is null");}
             return;
         }
 
-        // Try session-based validation first (new method)
-        if (_session != null && CSSHelper.validateNonce(_session, _nonce)) {
-            return;
+        // Session-bound queue validation (primary method)
+        if (_session != null) {
+            boolean sessionValid = CSSHelper.validateNonce(_session, _nonce);
+            if (!sessionValid) {
+                if (_log != null) {_log.error("validate(): session queue FAILED session=" + System.identityHashCode(_session) + " id=" + _session.getId());}
+            }
+            if (sessionValid) {return;}
         }
 
-        // Fallback to static nonce for backward compatibility
+        // Fallback to static nonce for backward compatibility (pre-0.9.69 nonces)
         String sharedNonce = CSSHelper.getNonce();
         if (sharedNonce.equals(_nonce)) {return;}
 
@@ -386,11 +380,10 @@ public abstract class FormHandler {
         if ((recent0 != null && recent0.equals(_nonce)) ||
             (recent1 != null && recent1.equals(_nonce))) {return;}
 
-        if (!_nonce.equals(_nonce1) && !_nonce.equals(_nonce2)) {
-            addFormError(_t("Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit.") + ' ' +
-                         _t("If the problem persists, verify that you have cookies enabled in your browser."), true);
-            _valid = false;
-        }
+        if (_log != null) {_log.error("validate(): nonce FAIL nonce=" + _nonce + " session=" + (_session != null) + " method=" + _method);}
+        addFormError(_t("Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit.") + ' ' +
+                     _t("If the problem persists, verify that you have cookies enabled in your browser."), true);
+        _valid = false;
     }
 
     private void process() {
@@ -411,17 +404,6 @@ public abstract class FormHandler {
             buf.append("</ul>\n");
             return buf.toString();
         }
-    }
-
-    /**
-     *  Generate a new nonce.
-     *  Only call once per page!
-     *  @return a new random long as a String
-     *  @since 0.8.5
-     */
-    public String getNewNonce() {
-        String rv = Long.toString(_context.random().nextLong());
-        return rv;
     }
 
     /** translate a string */

@@ -9,7 +9,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
 
+import net.i2p.I2PAppContext;
 import net.i2p.servlet.util.ServletUtil;
+import net.i2p.util.Log;
 import net.i2p.util.RandomSource;
 import net.i2p.util.SystemVersion;
 
@@ -18,6 +20,7 @@ import net.i2p.util.SystemVersion;
  * @author zzz
  */
 public class CSSHelper extends HelperBase {
+    private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(CSSHelper.class);
     private static final Pattern LANG_PATTERN = Pattern.compile("[a-zA-Z_]");
 
     private static final Map<String, Boolean> _UACache = new ConcurrentHashMap<>();
@@ -63,7 +66,7 @@ public class CSSHelper extends HelperBase {
 
     /** Session-bound nonce for CSRF protection, replaces static nonces @since 0.9.69 */
     private static final String SESSION_CONSOLE_NONCE = "__router.console.nonce.queue__";
-    private static final int NONCE_QUEUE_SIZE = 10;
+    private static final int NONCE_QUEUE_SIZE = 50;
 
     /**
      *  Session-bound nonce generation - replaces static consoleNonce, updateNonce, reseedNonce, systemNonce
@@ -88,6 +91,8 @@ public class CSSHelper extends HelperBase {
             if (nonces.size() > NONCE_QUEUE_SIZE)
                 nonces.poll();
         }
+        String logMsg = "CSSHelper.getNonce(): added " + rv + " session=" + System.identityHashCode(session) + " id=" + session.getId();
+        _log.error(logMsg);
         return rv;
     }
 
@@ -122,12 +127,18 @@ public class CSSHelper extends HelperBase {
         synchronized(session) {
             LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_CONSOLE_NONCE);
             if (nonces != null) {
+                System.err.println("CSSHelper.validateNonce(): queue=" + nonces.size() + " session=" + System.identityHashCode(session) + " id=" + session.getId());
+                _log.error("CSSHelper.validateNonce(): queue=" + nonces.size() + " session=" + System.identityHashCode(session) + " id=" + session.getId());
                 if (preserve)
                     rv = nonces.lastIndexOf(nonce) >= 0;
                 else
                     rv = nonces.removeLastOccurrence(nonce);
+                System.err.println("CSSHelper.validateNonce(): MISS nonce=" + nonce + " queue_contents=" + nonces);
+                _log.error("CSSHelper.validateNonce(): MISS nonce=" + nonce + " queue=" + nonces + " session=" + System.identityHashCode(session) + " id=" + session.getId());
             } else {
                 rv = false;
+                System.err.println("CSSHelper.validateNonce(): NO QUEUE session=" + System.identityHashCode(session) + " id=" + session.getId());
+                _log.error("CSSHelper.validateNonce(): NO QUEUE session=" + System.identityHashCode(session) + " id=" + session.getId());
             }
         }
         return rv;

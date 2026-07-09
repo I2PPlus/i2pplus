@@ -57,7 +57,6 @@ public class NetDbHelper extends FormHandler {
     private boolean _graphical;
     private SigType _type;
     private EncType _etype;
-    private String _newNonce;
     private boolean _postOK;
     private static final int DEFAULT_LIMIT = SystemVersion.isSlow() ? 100 : 200;
     private static final int DEFAULT_PAGE = 0;
@@ -254,13 +253,11 @@ public class NetDbHelper extends FormHandler {
     public void allowGraphical() {_graphical = true;}
 
     /**
-     *  Override to save it
+     *  Get a session-bound nonce for forms in this page.
      *  @since 0.9.38
      */
-    @Override
-    public String getNewNonce() {
-        _newNonce = super.getNewNonce();
-        return _newNonce;
+    private String getNonce() {
+        return net.i2p.router.web.CSSHelper.getNonce(_session);
     }
 
     /**
@@ -333,7 +330,7 @@ public class NetDbHelper extends FormHandler {
             else if (_full == 3) {
                 if (_mode == 12 && !_postOK) {_mode = 0;}
                 else if ((_mode == 13 || _mode == 16) && !_postOK) {_mode = 14;}
-                (new SybilRenderer(_context)).getNetDbSummary(_out, _newNonce, _mode, _date);
+                (new SybilRenderer(_context)).getNetDbSummary(_out, getNonce(), _mode, _date);
             } else if (_full == 4) {renderLookupForm();}
             else if (_full == 5) {renderer.renderStatusHTML(_out, _limit, _page, _full);}
             else if (_full == 6) {renderer.renderStatusHTML(_out, _limit, _page, _full);}
@@ -415,7 +412,7 @@ public class NetDbHelper extends FormHandler {
     private void renderLookupForm() throws IOException {
         StringBuilder buf = new StringBuilder(16*1024);
         buf.append("<form action=/netdb method=GET id=netdbSearch>\n<input type=hidden name=nonce value=")
-           .append(_newNonce)
+           .append(getNonce())
            .append(">\n<table id=netdblookup><tr><th colspan=4>")
            .append(_t("Network Database Search"))
            .append("</th></tr>\n<tr><td><b>")
@@ -488,7 +485,7 @@ public class NetDbHelper extends FormHandler {
     private void renderCompactLookupForm() throws IOException {
         StringBuilder buf = new StringBuilder(8192);
         buf.append("<div id=compactLookup hidden>\n<form action=/netdb method=GET id=netdbSearchCompact>\n")
-           .append("<input type=hidden name=nonce value=").append(_newNonce).append(">\n")
+           .append("<input type=hidden name=nonce value=").append(getNonce()).append(">\n")
            .append("<table id=netdblookup>\n")
            .append("<tr><td><select name=\"field\" title=\"").append(_t("Select the field to search on")).append("\">\n");
 
