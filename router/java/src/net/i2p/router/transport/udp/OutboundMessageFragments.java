@@ -43,6 +43,8 @@ class OutboundMessageFragments {
     private final PacketBuilder2 _builder2;
     static final int MAX_VOLLEYS = 10; // don't send a packet more than 10 times
     private static final int MAX_WAIT = SystemVersion.isSlow() ? 1000 : 500;
+    /** Counter for periodic aggregate stat emission */
+    private int _statEmitCounter;
 
     public OutboundMessageFragments(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
@@ -245,6 +247,16 @@ class OutboundMessageFragments {
                 } else {
                     // Reset for next round
                     _peerIndex = 0;
+                    // Emit aggregate transport stats every full round-robin cycle
+                    if (++_statEmitCounter >= 10) {
+                        _statEmitCounter = 0;
+                        long[] agg = PeerState.getAggregateStats(_activePeers);
+                        if (agg != null) {
+                            _context.statManager().addRateData("udp.avgSendWindow", agg[0]);
+                            _context.statManager().addRateData("udp.avgRTO", agg[1]);
+                            _context.statManager().addRateData("udp.avgConcurrentMsgs", agg[2]);
+                        }
+                    }
                 }
             }
         }
@@ -298,6 +310,7 @@ class OutboundMessageFragments {
                 int transmitted = peer.getPacketsTransmitted();
                 _context.statManager().addRateData("udp.peerPacketsRetransmitted", peer.getPacketsTransmitted(), transmitted);
                 _context.statManager().addRateData("udp.packetsRetransmitted", lifetime, transmitted);
+                _context.statManager().addRateData("udp.retransmitEvents", 1);
                 if (_log.shouldInfo()) {
                     _log.info("Retransmitting..." + state + " to " + peer);
                 }

@@ -160,8 +160,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private static final int MLKEM_PRECALC_MAX = Math.max(2048, 96 * MLKEM_FACTOR);
     /** X25519/EDH precalc — each pair ~64 bytes, scale with cores and memory */
     private static final int XDH_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
-    private static final int XDH_PRECALC_MIN = Math.max(64, 8 * XDH_FACTOR);
-    private static final int XDH_PRECALC_MAX = Math.max(256, 128 * XDH_FACTOR);
+    private static final int XDH_PRECALC_MIN = Math.max(128, 8 * XDH_FACTOR);
+    private static final int XDH_PRECALC_MAX = Math.max(1024, 128 * XDH_FACTOR);
     private static final int EDH_PRECALC_MIN = Math.max(64, 16 * XDH_FACTOR);
     private static final int EDH_PRECALC_MAX = Math.max(256, 256 * XDH_FACTOR);
 
@@ -297,6 +297,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new IbEstablishTimeParam());
         _params.add(new MaxConcurrentEstablishParam());
         _params.add(new MaxConcurrentMessagesParam());
+        _params.add(new InitConcurrentMsgsParam());
+        _params.add(new MinConcurrentMsgsParam());
+        _params.add(new InitRTOParam());
+        _params.add(new MinRTOParam());
+        _params.add(new UdpMaxRtoParam());
+        _params.add(new MaxSendWindowParam());
         _params.add(new MaxDispatchAgeParam());
         _params.add(new MaxQueuedOutboundParam());
         _params.add(new MaxWriteBufsParam());
@@ -442,6 +448,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             } catch (Exception e) {
                 if (_log.shouldWarn())
                     _log.warn("Tuner: error updating " + param.getName(), e);
+            }
+        }
+        // Refresh XDH pool sizes based on current system conditions
+        X25519KeyFactory xdh = X25519KeyFactory.getInstance();
+        if (xdh != null) {
+            try { xdh.refreshPoolSize(); }
+            catch (Exception e) {
+                if (_log.shouldWarn())
+                    _log.warn("Tuner: error refreshing XDH pool", e);
             }
         }
         // Flush dirty state to disk (at most once per 5min, per AutotuneConfig throttle)
@@ -873,6 +888,71 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             Rate rate = rs.getRate(RateConstants.ONE_HOUR);
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
+        }
+
+        /**
+         * Fetch the event count for an additional stat using the 60s period.
+         *
+         * <p>For event-count stats where {@code addRateData(name, 1)} is called,
+         * {@link #getAdditionalStat} returns {@code getAverageValue()} which is
+         * always 1.0 when events exist. This method returns the raw event count
+         * instead, which is the correct metric for "how many events occurred".
+         *
+         * @param ctx      the router context
+         * @param statName the stat to query
+         * @return the event count in the last 60s, or NaN if not available
+         * @since 0.9.70+
+         */
+        protected double getAdditionalEventCount(RouterContext ctx, String statName) {
+            RateStat rs = ctx.statManager().getRate(statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getLastEventCount();
+        }
+
+        /**
+         * Fetch the event count for an additional stat using the 1-hour period.
+         *
+         * @param ctx      the router context
+         * @param statName the stat to query
+         * @return the event count in the last hour, or NaN if not available
+         * @since 0.9.70+
+         */
+        protected double getAdditionalEventCountHourly(RouterContext ctx, String statName) {
+            RateStat rs = ctx.statManager().getRate(statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(RateConstants.ONE_HOUR);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getLastEventCount();
+        }
+
+        /**
+         * Fetch the total CoDel drop event count across all priority levels.
+         *
+         * <p>CoDelPriorityBlockingQueue emits per-priority stats with names like
+         * {@code codel.UDP-Sender.drop.0}, {@code codel.UDP-Sender.drop.100}, etc.
+         * This method sums the event counts across all priorities.
+         *
+         * @param ctx      the router context
+         * @param prefix   the stat prefix (e.g., "codel.UDP-Sender.drop")
+         * @return the total drop event count, or NaN if no priorities have events
+         * @since 0.9.70+
+         */
+        protected double getCoDelDropEventCount(RouterContext ctx, String prefix) {
+            // CoDelPriorityBlockingQueue priorities: {0, 100, 200, 300, 400, 500}
+            final int[] priorities = {0, 100, 200, 300, 400, 500};
+            double total = 0;
+            boolean found = false;
+            for (int p : priorities) {
+                RateStat rs = ctx.statManager().getRate(prefix + p);
+                if (rs == null) continue;
+                Rate rate = rs.getRate(STAT_PERIOD);
+                if (rate == null || rate.getLastEventCount() == 0) continue;
+                total += rate.getLastEventCount();
+                found = true;
+            }
+            return found ? total : Double.NaN;
         }
 
         /**
@@ -1451,7 +1531,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = transport.expiredOnQueueLifetime (ms, avg lifetime of expired messages)
             // Cross-refs: transport.bidFailAllTransports (messages with no transport)
-            double bidFails = getAdditionalStat(_context, "transport.bidFailAllTransports");
+            // Note: bidFailAllTransports records msg.getLifetime() — getAverageValue()
+            //       returns avg lifetime, not count. Use getAdditionalEventCount() for
+            //       the raw event count (number of bid failures).
+            double bidFails = getAdditionalEventCount(_context, "transport.bidFailAllTransports");
 
             boolean lotsOfExpirations = observed > 5000;
             boolean lotsOfBidFails = !Double.isNaN(bidFails) && bidFails > 10;
@@ -1901,7 +1984,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = tunnel.obgw.queueSize (queue depth, messages waiting)
             // Cross-refs: tunnel.dropGatewayOverflowOB (drops), jobLag (CPU), memory
-            double drops = getAdditionalStat(_context, "tunnel.dropGatewayOverflowOB");
+            // Note: dropGatewayOverflowOB is an event-count stat (addRateData(1));
+            //       getAdditionalStat() returns 1.0 always when events exist,
+            //       so we use getAdditionalEventCount() for the raw count.
+            double drops = getAdditionalEventCount(_context, "tunnel.dropGatewayOverflowOB");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             int sysLoad = SystemVersion.getSystemLoad();
             boolean highLoad = sysLoad > 80;
@@ -1967,7 +2053,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = tunnel.ibgw.queueSize (queue depth, messages waiting)
             // Cross-refs: tunnel.dropGatewayOverflowIB (drops), transit InBps, jobLag, memory
-            double drops = getAdditionalStat(_context, "tunnel.dropGatewayOverflowIB");
+            // Note: dropGatewayOverflowIB is an event-count stat (addRateData(1));
+            //       use getAdditionalEventCount() for the raw count.
+            double drops = getAdditionalEventCount(_context, "tunnel.dropGatewayOverflowIB");
             double transitBps = getAdditionalStat(_context, "tunnel.participating InBps");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             int sysLoad = SystemVersion.getSystemLoad();
@@ -2038,7 +2126,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             //             lifetimeSendWindowSize (final window size at stream close),
             //             chokeSizeBegin (choke pressure)
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
+            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
             double lifetimeRTT = getAdditionalStat(_context, "stream.con.lifetimeRTT");
             double lifetimeWindowSize = getAdditionalStat(_context, "stream.con.lifetimeSendWindowSize");
@@ -2124,7 +2212,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Cross-refs: sendMessageFailureLifetime (congestion), buildSuccessRate (network health),
             //             udp.sendConfirmTime (actual RTT), sendDuplicateSize (drops!)
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
+            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
             double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
 
@@ -2394,11 +2482,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
             // Cross-refs: client.writerQueueFull (overflow events), client.dispatchSendTime, jobLag (CPU), sendProcessingTime
-            double overflows = getAdditionalStat(_context, "client.writerQueueFull");
+            // Note: writerQueueFull is an event-count stat (addRateData(1));
+            //       use getAdditionalEventCount/Hourly() for raw counts.
+            double overflows = getAdditionalEventCount(_context, "client.writerQueueFull");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double sendTime = getAdditionalStat(_context, "transport.sendProcessingTime");
             double dispatchSend = getAdditionalStat(_context, "client.dispatchSendTime");
-            double hourlyOverflows = getAdditionalStatHourly(_context, "client.writerQueueFull");
+            double hourlyOverflows = getAdditionalEventCountHourly(_context, "client.writerQueueFull");
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
             boolean hasOverflows = !Double.isNaN(overflows) && overflows > 0;
             boolean sustainedOverflows = !Double.isNaN(hourlyOverflows) && hourlyOverflows > 2;
@@ -2471,8 +2561,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = codel.UDP-Sender.delay (avg queue sojourn time, ms)
-            // Cross-refs: codel.UDP-Sender.drop (drop rate), jobLag (CPU)
-            double drops = getAdditionalStat(_context, "codel.UDP-Sender.drop");
+            // Cross-refs: codel.UDP-Sender.drop.<priority> (drop events), jobLag (CPU)
+            // Note: CoDel drop stats are per-priority; sum all priorities.
+            double drops = getCoDelDropEventCount(_context, "codel.UDP-Sender.drop.");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             int sysLoad = SystemVersion.getSystemLoad();
             boolean highLoad = sysLoad > 80;
@@ -2540,8 +2631,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = codel.UDP-Sender.delay (avg queue sojourn time, ms)
-            // Cross-refs: codel.UDP-Sender.drop (drop rate), jobLag (CPU)
-            double drops = getAdditionalStat(_context, "codel.UDP-Sender.drop");
+            // Cross-refs: codel.UDP-Sender.drop.<priority> (drop events), jobLag (CPU)
+            // Note: CoDel drop stats are per-priority; sum all priorities.
+            double drops = getCoDelDropEventCount(_context, "codel.UDP-Sender.drop.");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             int sysLoad = SystemVersion.getSystemLoad();
             boolean highLoad = sysLoad > 80;
@@ -2761,7 +2853,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 }
             } catch (Exception e) { /* use fallback */ }
 
-            double drops = getAdditionalStat(_context, "tunnel.participatingMessageDropped");
+            // Note: participatingMessageDropped is an event-count stat (addRateData(1));
+            //       use getAdditionalEventCount() for the raw count.
+            double drops = getAdditionalEventCount(_context, "tunnel.participatingMessageDropped");
             boolean hardDrops = !Double.isNaN(drops) && drops > 50;
 
             // Hard drops occurring: raise max threshold (allow deeper queue before 100% drop)
@@ -3000,8 +3094,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = crypto.MLKEMEmpty (queue empty events — the only trigger to grow)
             // Cross-refs: crypto.MLKEMUsed (key consumption rate), jobLag (CPU), memory pressure, system load
+            // Note: MLKEMUsed is an event-count stat (addRateData(1));
+            //       use getAdditionalEventCount() for the raw count.
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            double used = getAdditionalStat(_context, "crypto.MLKEMUsed");
+            double used = getAdditionalEventCount(_context, "crypto.MLKEMUsed");
             int sysLoad = SystemVersion.getSystemLoad();
             boolean highLoad = sysLoad > 80;
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
@@ -3462,7 +3558,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Cross-refs: buildSuccessRate (network health), sendMessageFailureLifetime (congestion),
             //             participatingMessageCountAvgPerTunnel (per-tunnel load)
             // Hourly trend: confirm bandwidth usage trend isn't just a short-term spike
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
+            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double hourlyBps = getAdditionalStatHourly(_context, _statName);
             double msgsPerTunnel = getAdditionalStat(_context, "tunnel.participatingMessageCountAvgPerTunnel");
@@ -3604,7 +3700,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (maxBps <= 0) return current;
             double usagePct = observed / maxBps;
 
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
+            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
@@ -3677,7 +3773,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (maxBps <= 0) return current;
             double usagePct = observed / maxBps;
 
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
+            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
@@ -3748,7 +3844,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double countPct = current > 0 ? tunnelCount / current : 0;
 
             // Cross-refs: buildSuccessRate, sendMessageFailureLifetime, jobLag
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
+            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
@@ -3805,7 +3901,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = jobQueue.jobLag (ms)
             // Cross-refs: buildSuccessRate, concurrentBuilds, memory
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
+            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
             double hourlyLag = getAdditionalStatHourly(_context, _statName);
             int sysLoad = SystemVersion.getSystemLoad();
@@ -3865,12 +3961,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            // Stat emitted as 0-100; normalize to 0-1 for threshold comparisons
+            return rate.getAverageValue() / 100.0;
         }
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = tunnel.buildSuccessRate (0.0-1.0)
+            // observed = tunnel.buildSuccessRate (normalized 0.0-1.0)
             // Cross-refs: concurrentBuilds (storm), participating InBps (load),
             //             participatingMessageCountAvgPerTunnel (per-tunnel load)
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
@@ -4172,7 +4269,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             //             lifetimeRTT (completed stream RTT), lifetimeSendWindowSize (final window),
             //             chokeSizeBegin (choke pressure)
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
+            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
             double lifetimeRTT = getAdditionalStat(_context, "stream.con.lifetimeRTT");
             double lifetimeWindowSize = getAdditionalStat(_context, "stream.con.lifetimeSendWindowSize");
             double chokeSize = getAdditionalStat(_context, "stream.chokeSizeBegin");
@@ -4251,7 +4348,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             //             sendDuplicateSize (drops!), lifetimeRTT (completed stream RTT),
             //             lifetimeSendWindowSize (final window size at stream close),
             //             chokeSizeBegin (choke pressure)
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
+            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
             double lifetimeRTT = getAdditionalStat(_context, "stream.con.lifetimeRTT");
@@ -4502,22 +4599,25 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, network latency proxy)
-            // Cross-refs: netDb.lookupsMatched (match rate), client.leaseSetFoundRemoteTime, jobLag (CPU)
-            double matchRate = getAdditionalStat(_context, "netDb.lookupsMatched");
+            // Cross-refs: netDb.lookupsMatched (match events), client.leaseSetFoundRemoteTime, jobLag (CPU)
+            // Note: lookupsMatched is an event-count stat (addRateData(1)) — each matched
+            //       lookup fires once. getAverageValue() returns 1.0 always, so use
+            //       getAdditionalEventCount() for the raw count; treat any matches as "healthy".
+            double matchCount = getAdditionalEventCount(_context, "netDb.lookupsMatched");
             double leaseTime = getAdditionalStat(_context, "client.leaseSetFoundRemoteTime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
             boolean networkSlow = observed > 300;
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean lowMatch = !Double.isNaN(matchRate) && matchRate < 0.5;
+            boolean hasMatches = !Double.isNaN(matchCount) && matchCount > 0;
             boolean lsSlow = !Double.isNaN(leaseTime) && leaseTime > 500;
 
-            // Slow network + low match rate = increase search limit (peers need more probes)
-            if (networkSlow && lowMatch && !systemBusy)
+            // Slow network + no matches = increase search limit (peers need more probes)
+            if (networkSlow && !hasMatches && !systemBusy)
                 return Math.min(_max, current + _step);
 
-            // Fast network + high match rate = decrease limit (searches succeed with fewer peers)
-            if (!networkSlow && !Double.isNaN(matchRate) && matchRate > 0.9 && !lsSlow)
+            // Fast network + matches present = decrease limit (searches succeed with fewer peers)
+            if (!networkSlow && hasMatches && !lsSlow)
                 return Math.max(_min, current - _step);
 
             // Slow LS lookups = network congested, increase search limit
@@ -4560,21 +4660,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, network latency proxy)
-            // Cross-refs: netDb.lookupsMatched (match rate), client.leaseSetFoundRemoteTime,
+            // Cross-refs: netDb.lookupsMatched (match events), client.leaseSetFoundRemoteTime,
             //             client.requestLeaseSetSuccess/Dropped (LS health), jobLag (CPU)
-            double matchRate = getAdditionalStat(_context, "netDb.lookupsMatched");
+            // Note: lookupsMatched is an event-count stat (addRateData(1));
+            //       use getAdditionalEventCount() for the raw count.
+            double matchCount = getAdditionalEventCount(_context, "netDb.lookupsMatched");
             double leaseTime = getAdditionalStat(_context, "client.leaseSetFoundRemoteTime");
             double lsDropped = getAdditionalStat(_context, "client.requestLeaseSetDropped");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
             boolean networkSlow = observed > 300;
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean lowMatch = !Double.isNaN(matchRate) && matchRate < 0.5;
+            boolean hasMatches = !Double.isNaN(matchCount) && matchCount > 0;
             boolean lsSlow = !Double.isNaN(leaseTime) && leaseTime > 500;
             boolean lsUnhealthy = !Double.isNaN(lsDropped) && lsDropped > 0;
 
-            // Slow network + low match + CPU headroom = increase concurrency
-            if (networkSlow && lowMatch && !systemBusy && !lsUnhealthy)
+            // Slow network + no matches + CPU headroom = increase concurrency
+            if (networkSlow && !hasMatches && !systemBusy && !lsUnhealthy)
                 return Math.min(_max, current + 1);
 
             // Slow LS lookups = increase concurrency (more parallel probes)
@@ -4585,8 +4687,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (lsUnhealthy)
                 return Math.max(_min, current - 1);
 
-            // Fast network + high match + healthy LS = decrease concurrency (not needed)
-            if (!networkSlow && !Double.isNaN(matchRate) && matchRate > 0.9 && !lsSlow && !lsUnhealthy)
+            // Fast network + matches + healthy LS = decrease concurrency (not needed)
+            if (!networkSlow && hasMatches && !lsSlow && !lsUnhealthy)
                 return Math.max(_min, current - 1);
 
             return current;
@@ -4625,15 +4727,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, network latency proxy)
-            // Cross-refs: netDb.lookupsMatched (match rate), netDb.successTime (actual lookup time),
+            // Cross-refs: netDb.lookupsMatched (match events), netDb.successTime (actual lookup time),
             //             client.leaseSetFoundRemoteTime (client LS lookup), jobLag (CPU)
-            double matchRate = getAdditionalStat(_context, "netDb.lookupsMatched");
+            // Note: lookupsMatched is an event-count stat (addRateData(1));
+            //       use getAdditionalEventCount() for the raw count.
+            double matchCount = getAdditionalEventCount(_context, "netDb.lookupsMatched");
             double netdbTime = getAdditionalStat(_context, "netDb.successTime");
             double leaseTime = getAdditionalStat(_context, "client.leaseSetFoundRemoteTime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean lowMatch = !Double.isNaN(matchRate) && matchRate < 0.5;
+            boolean hasMatches = !Double.isNaN(matchCount) && matchCount > 0;
 
             // netDb.successTime gives actual lookup latency — replace crude observed > 300 proxy
             boolean searchSlow = !Double.isNaN(netdbTime) && netdbTime > 300;
@@ -4641,12 +4745,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (!searchSlow)
                 searchSlow = !Double.isNaN(leaseTime) && leaseTime > 300;
 
-            // Slow lookups + low match = increase timeout (peers need more time)
-            if (searchSlow && lowMatch && !systemBusy)
+            // Slow lookups + no matches = increase timeout (peers need more time)
+            if (searchSlow && !hasMatches && !systemBusy)
                 return Math.min(_max, current + _step);
 
-            // Fast lookups + high match = decrease timeout (searches complete quickly)
-            if (!searchSlow && !Double.isNaN(matchRate) && matchRate > 0.9)
+            // Fast lookups + matches present = decrease timeout (searches complete quickly)
+            if (!searchSlow && hasMatches)
                 return Math.max(_min, current - _step);
 
             return current;
@@ -4700,7 +4804,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean slowEstablish = !Double.isNaN(observed) && observed > 5000;
             boolean hittingLimit = !Double.isNaN(rejected) && rejected > 0;
             boolean overflowing = !Double.isNaN(overflow) && overflow > 0;
-            boolean failing = !Double.isNaN(sendFailed) && sendFailed > 5;
+            boolean failing = !Double.isNaN(sendFailed) && sendFailed > 0;
 
             // Hitting the limit + fast establishes + no CPU pressure = raise limit
             if (hittingLimit && !slowEstablish && !cpuPressure)
@@ -4825,7 +4929,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // observed = peer.fastPeerCount (fast peers available)
             // Cross-refs: activeProfileCount, build success rate, send confirm time
             double activeProfiles = getAdditionalStat(_context, "peer.activeProfileCount");
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
+            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
             double confirmTime = getAdditionalStat(_context, "transport.sendProcessingTime");
             double hourlyFastPeers = getAdditionalStatHourly(_context, _statName);
 
@@ -4953,7 +5057,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // observed = peer.qualityPeerCount (fast/high-cap peers with good acceptance + recent activity)
             // Cross-refs: peer.fastPeerCount, tunnel build success rate
             double fastPeers = getAdditionalStat(_context, "peer.fastPeerCount");
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
+            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
             double hourlyQuality = getAdditionalStatHourly(_context, _statName);
 
             boolean manyFastPeers = !Double.isNaN(fastPeers) && fastPeers > 300;
@@ -5081,7 +5185,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Cross-refs: concurrentBuilds (storm detection), dropLoadBacklog (pending build queue),
             //             buildSuccessRate (overall health), testSuccessTime (actual tunnel latency)
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate");
+            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
             double testTime = getAdditionalStat(_context, "tunnel.testSuccessTime");
             double backlog = getAdditionalStat(_context, "tunnel.dropLoadBacklog");
 
@@ -5236,12 +5340,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            // Stat emitted as 0-100; normalize to 0-1 for threshold comparisons
+            return rate.getAverageValue() / 100.0;
         }
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = tunnel.buildSuccessRate (0-100 scale)
+            // observed = tunnel.buildSuccessRate (normalized 0.0-1.0)
             // Cross-refs: concurrentBuilds (current usage), buildClientExpire (timeouts),
             //             dropLoadBacklog (pending builds), testSuccessTime (latency)
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
@@ -5250,8 +5355,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double testTime = getAdditionalStat(_context, "tunnel.testSuccessTime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
-            boolean successHigh = !Double.isNaN(observed) && observed > 90;
-            boolean successLow = !Double.isNaN(observed) && observed < 70;
+            boolean successHigh = !Double.isNaN(observed) && observed > 0.9;
+            boolean successLow = !Double.isNaN(observed) && observed < 0.7;
             boolean buildsExpiring = !Double.isNaN(buildExpires) && buildExpires > 10;
             boolean buildsBackedUp = !Double.isNaN(backlog) && backlog > 20;
             boolean buildsSlow = !Double.isNaN(testTime) && testTime > 10000;
@@ -5393,7 +5498,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // With 300+ connections, queue averages ~1. Threads grab a connection,
             // decrypt + parse, return it. No I/O blocking — EventPumper fills buffers.
             // Scale based on queue pressure relative to thread count.
-            double readErrors = getAdditionalStat(_context, "ntcp.readError");
+            // Note: ntcp.readError is an event-count stat (addRateData(1));
+            //       use getAdditionalEventCount() for the raw count.
+            double readErrors = getAdditionalEventCount(_context, "ntcp.readError");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean errorsHigh = !Double.isNaN(readErrors) && readErrors > 10;
@@ -5724,6 +5831,290 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
+     * Initial concurrent messages per peer — starting point for new connections.
+     * Lower = conservative start, higher = aggressive start.
+     * Primary signal: udp.sendConfirmTime (RTT).
+     *
+     * @since 0.9.70+
+     */
+    private class InitConcurrentMsgsParam extends BaseParam {
+
+        InitConcurrentMsgsParam() {
+            super("udp.peer.initConcurrentMsgs", "Init concurrent messages per peer",
+                  SUB_TRANSPORT,
+
+                  16, 256, 4, "udp.sendConfirmTime", _context);
+        }
+
+        protected void applyValue(int value) {
+            _context.router().saveConfig("i2p.transport.udp.initConcurrentMsgs", Integer.toString(value));
+            PeerState.setInitConcurrentMsgs(value);
+        }
+
+        protected int getRuntimeValue() {
+            return PeerState.getInitConcurrentMsgs();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) { return Double.NaN; }
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) { return Double.NaN; }
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double memPressure = getMemoryPressure();
+            boolean cpuFree = jobLag < 10 || Double.isNaN(jobLag);
+            boolean lowRTT = !Double.isNaN(observed) && observed < 500;
+            boolean highRTT = !Double.isNaN(observed) && observed > 2000;
+            boolean memOk = memPressure < 0.75;
+
+            if (memPressure > 0.85) { return Math.max(_min, current - _step * 2); }
+            if (lowRTT && cpuFree && memOk) { return Math.min(_max, current + _step); }
+            if (highRTT && current > _min) { return Math.max(_min, current - _step); }
+            return current;
+        }
+    }
+
+    /**
+     * Minimum concurrent messages per peer — floor below which we never drop.
+     * Scales down under memory/CPU pressure, up when idle headroom available.
+     *
+     * @since 0.9.70+
+     */
+    private class MinConcurrentMsgsParam extends BaseParam {
+
+        MinConcurrentMsgsParam() {
+            super("udp.peer.minConcurrentMsgs", "Min concurrent messages per peer",
+                  SUB_TRANSPORT,
+
+                  8, 128, 2, "udp.sendConfirmTime", _context);
+        }
+
+        protected void applyValue(int value) {
+            _context.router().saveConfig("i2p.transport.udp.minConcurrentMsgs", Integer.toString(value));
+            PeerState.setMinConcurrentMsgs(value);
+        }
+
+        protected int getRuntimeValue() {
+            return PeerState.getMinConcurrentMsgs();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) { return Double.NaN; }
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) { return Double.NaN; }
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double memPressure = getMemoryPressure();
+            boolean highRTT = !Double.isNaN(observed) && observed > 2000;
+
+            if (memPressure > 0.85) { return Math.max(_min, current - _step); }
+            if (highRTT && current > _min) { return Math.max(_min, current - _step); }
+            return current;
+        }
+    }
+
+    /**
+     * Initial RTO for new UDP peers — starting point before RTT estimation kicks in.
+     * Lower = faster retransmit on lossy links, higher = avoids spurious retransmits on high-latency links.
+     * Primary signal: udp.sendConfirmTime (measured RTT).
+     *
+     * @since 0.9.70+
+     */
+    private class InitRTOParam extends BaseParam {
+
+        InitRTOParam() {
+            super("udp.peer.initRTO", "Initial retransmission timeout (ms)",
+                  SUB_TRANSPORT,
+
+                  250, 2000, 50, "udp.sendConfirmTime", _context);
+        }
+
+        protected void applyValue(int value) {
+            _context.router().saveConfig("i2p.transport.udp.initRTO", Integer.toString(value));
+            PeerState.setInitRTO(value);
+        }
+
+        protected int getRuntimeValue() {
+            return PeerState.getInitRTO();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) { return Double.NaN; }
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) { return Double.NaN; }
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = avg RTT in ms
+            // Set init RTO to ~1.5× observed RTT, clamped to range
+            if (Double.isNaN(observed) || observed <= 0) { return current; }
+            int target = (int)(observed * 1.5);
+            return Math.max(_min, Math.min(_max, target));
+        }
+    }
+
+    /**
+     * Minimum RTO — floor for retransmission timeout.
+     * Lower = more aggressive retransmit, higher = avoids retransmit storms.
+     * Primary signal: udp.sendConfirmTime (RTT) and udp.retransmitEvents (retransmit count).
+     *
+     * @since 0.9.70+
+     */
+    private class MinRTOParam extends BaseParam {
+
+        MinRTOParam() {
+            super("udp.peer.minRTO", "Min retransmission timeout (ms)",
+                  SUB_TRANSPORT,
+
+                  250, 2000, 50, "udp.sendConfirmTime", _context);
+        }
+
+        protected void applyValue(int value) {
+            _context.router().saveConfig("i2p.transport.udp.minRTO", Integer.toString(value));
+            PeerState.setMinRTO(value);
+        }
+
+        protected int getRuntimeValue() {
+            return PeerState.getMinRTO();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) { return Double.NaN; }
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) { return Double.NaN; }
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // Use event-count stat: getAverageValue() is 1.0 when events exist, NaN when none
+            double retransmits = getAdditionalStat(_context, "udp.retransmitEvents");
+            boolean hasRetransmits = !Double.isNaN(retransmits) && retransmits > 0;
+
+            // If retransmits occurring, increase min RTO to reduce retransmit storms
+            if (hasRetransmits) { return Math.min(_max, current + _step); }
+            // If no retransmits and RTT is low, can safely lower
+            if (!Double.isNaN(observed) && observed < 300 && !hasRetransmits) {
+                return Math.max(_min, current - _step);
+            }
+            return current;
+        }
+    }
+
+    /**
+     * Maximum RTO — ceiling for retransmission timeout.
+     * Lower = fail peers faster, higher = tolerates longer outages.
+     * Primary signal: udp.sendConfirmTime (RTT) and udp.sendFailed (timeout failures).
+     *
+     * @since 0.9.70+
+     */
+    private class UdpMaxRtoParam extends BaseParam {
+
+        UdpMaxRtoParam() {
+            super("udp.peer.maxRTO", "Max retransmission timeout (ms)",
+                  SUB_TRANSPORT,
+
+                  10000, 120000, 1000, "udp.sendConfirmTime", _context);
+        }
+
+        protected void applyValue(int value) {
+            _context.router().saveConfig("i2p.transport.udp.maxRTO", Integer.toString(value));
+            PeerState.setMaxRTO(value);
+        }
+
+        protected int getRuntimeValue() {
+            return PeerState.getMaxRTO();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) { return Double.NaN; }
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) { return Double.NaN; }
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double failures = getAdditionalStat(_context, "udp.sendFailed");
+            boolean hasFailures = !Double.isNaN(failures) && failures > 0;
+
+            // If peers are timing out frequently, raise max RTO to give them more time
+            if (hasFailures) { return Math.min(_max, current + _step * 2); }
+            // If RTT is consistently low, can lower max RTO to fail faster
+            if (!Double.isNaN(observed) && observed < 1000 && !hasFailures) {
+                return Math.max(_min, current - _step);
+            }
+            return current;
+        }
+    }
+
+    /**
+     * Max send window (CWIN) — bytes in flight per peer.
+     * Higher = more aggressive sending, lower = less buffering.
+     * Primary signal: udp.avgSendWindow (current usage across peers).
+     *
+     * @since 0.9.70+
+     */
+    private class MaxSendWindowParam extends BaseParam {
+
+        MaxSendWindowParam() {
+            super("udp.peer.maxSendWindow", "Max send window (CWIN) bytes",
+                  SUB_TRANSPORT,
+
+                  32768, 1048576, 8192, "udp.avgSendWindow", _context);
+        }
+
+        protected void applyValue(int value) {
+            _context.router().saveConfig("i2p.transport.udp.maxSendWindow", Integer.toString(value));
+            PeerState.setMaxSendWindow(value);
+        }
+
+        protected int getRuntimeValue() {
+            return PeerState.getMaxSendWindow();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) { return Double.NaN; }
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) { return Double.NaN; }
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double memPressure = getMemoryPressure();
+            boolean cpuFree = jobLag < 10 || Double.isNaN(jobLag);
+            boolean memOk = memPressure < 0.75;
+            boolean highUsage = !Double.isNaN(observed) && observed > current * 0.7;
+            boolean lowUsage = !Double.isNaN(observed) && observed < current * 0.3;
+
+            // Memory critical: shrink fast
+            if (memPressure > 0.85) { return Math.max(_min, current - _step * 4); }
+            // High usage + CPU free + memory OK = grow
+            if (highUsage && cpuFree && memOk) { return Math.min(_max, current + _step * 2); }
+            // Low usage = shrink to reduce buffering
+            if (lowUsage && current > _min) { return Math.max(_min, current - _step); }
+            return current;
+        }
+    }
+
+    /**
      * Tunes NTCP send pool capacity (outbound message buffering).
      * Sweet spot: large enough to prevent send stalls, small enough to avoid buffering latency.
      * Queue-thread coupling: must scale with ntcp.writer.threads.
@@ -5914,7 +6305,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
             // Cross-refs: udp.establishBadIP (bad connection attempts), jobLag (CPU)
-            double badIP = getAdditionalStat(_context, "udp.establishBadIP");
+            // Note: establishBadIP is an event-count stat (addRateData(1));
+            //       use getAdditionalEventCount() for the raw count.
+            double badIP = getAdditionalEventCount(_context, "udp.establishBadIP");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean highRTT = !Double.isNaN(observed) && observed > 1000;
@@ -6536,9 +6929,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            double accept = getAdditionalStat(_context, "tunnel.throttleParticipatingAccept");
-            double reject = getAdditionalStat(_context, "tunnel.throttleParticipatingReject");
-            double drop = getAdditionalStat(_context, "tunnel.throttleParticipatingDrop");
+            // Note: throttleParticipating{Accept,Reject,Drop} are event-count stats
+            //       (addRateData(..., 1)); use getAdditionalEventCount() for raw counts.
+            double accept = getAdditionalEventCount(_context, "tunnel.throttleParticipatingAccept");
+            double reject = getAdditionalEventCount(_context, "tunnel.throttleParticipatingReject");
+            double drop = getAdditionalEventCount(_context, "tunnel.throttleParticipatingDrop");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
             boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
@@ -6575,9 +6970,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            double accept = getAdditionalStat(_context, "tunnel.throttleParticipatingAccept");
-            double reject = getAdditionalStat(_context, "tunnel.throttleParticipatingReject");
-            double drop = getAdditionalStat(_context, "tunnel.throttleParticipatingDrop");
+            // Note: throttleParticipating{Accept,Reject,Drop} are event-count stats
+            //       (addRateData(..., 1)); use getAdditionalEventCount() for raw counts.
+            double accept = getAdditionalEventCount(_context, "tunnel.throttleParticipatingAccept");
+            double reject = getAdditionalEventCount(_context, "tunnel.throttleParticipatingReject");
+            double drop = getAdditionalEventCount(_context, "tunnel.throttleParticipatingDrop");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
             boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
@@ -6613,9 +7010,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            double accept = getAdditionalStat(_context, "tunnel.throttleParticipatingAccept");
-            double reject = getAdditionalStat(_context, "tunnel.throttleParticipatingReject");
-            double drop = getAdditionalStat(_context, "tunnel.throttleParticipatingDrop");
+            // Note: throttleParticipating{Accept,Reject,Drop} are event-count stats
+            //       (addRateData(..., 1)); use getAdditionalEventCount() for raw counts.
+            double accept = getAdditionalEventCount(_context, "tunnel.throttleParticipatingAccept");
+            double reject = getAdditionalEventCount(_context, "tunnel.throttleParticipatingReject");
+            double drop = getAdditionalEventCount(_context, "tunnel.throttleParticipatingDrop");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
             boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;

@@ -160,14 +160,14 @@ public class PeerState {
     /** have we migrated away from this peer to another newer one? */
     protected volatile boolean _dead;
 
-    /** The minimum number of outstanding messages (NOT fragments/packets) */
-    private static final int MIN_CONCURRENT_MSGS = SystemVersion.isSlow() ? 8 : 32;
+    /** The minimum number of outstanding messages (NOT fragments/packets) — configurable */
+    private static volatile int MIN_CONCURRENT_MSGS = SystemVersion.isSlow() ? 8 : 32;
     /** Maximum lifetime before a message is considered stuck and expired (60 seconds) */
     private static final long MAX_MESSAGE_LIFETIME = 60 * 1000L;
     /** After this time, we start adding backoff delay (5 seconds) */
     private static final long BACKOFF_START_LIFETIME = 5 * 1000L;
-    /** Initial concurrent messages per peer */
-    private static final int INIT_CONCURRENT_MSGS = SystemVersion.isSlow() ? 16 : 64;
+    /** Initial concurrent messages per peer — configurable */
+    private static volatile int INIT_CONCURRENT_MSGS = SystemVersion.isSlow() ? 16 : 64;
     /** Hard cap on concurrent messages per peer — adjustable via Tuner */
     private static volatile int MAX_CONCURRENT_MSGS = SystemVersion.isSlow() ? 64 : 256;
 
@@ -188,13 +188,83 @@ public class PeerState {
         int hardMax = Math.max(256, Math.min(4096, ramScaled));
         MAX_CONCURRENT_MSGS = Math.max(def / 2, Math.min(hardMax, max));
     }
+
+    /**
+     * Load configurable UDP transport parameters from router.config.
+     * Called once during UDPTransport initialization.
+     *
+     * @param ctx router context for property access
+     * @since 0.9.70+
+     */
+    public static void loadConfig(RouterContext ctx) {
+        boolean isSlow = SystemVersion.isSlow();
+
+        // CWIN parameters
+        int maxSendWindow = ctx.getProperty("i2p.transport.udp.maxSendWindow",
+                                            isSlow ? 32*1024 : 128*1024);
+        MAX_SEND_WINDOW_BYTES = Math.max(32*1024, Math.min(1024*1024, maxSendWindow));
+
+        // RTO parameters
+        MIN_RTO = Math.max(250, Math.min(2000,
+                   ctx.getProperty("i2p.transport.udp.minRTO", 1000)));
+        INIT_RTO = Math.max(250, Math.min(2000,
+                    ctx.getProperty("i2p.transport.udp.initRTO", 1000)));
+        MAX_RTO = Math.max(10000, Math.min(120000,
+                   ctx.getProperty("i2p.transport.udp.maxRTO", 60*1000)));
+
+        // Concurrent message parameters
+        MIN_CONCURRENT_MSGS = Math.max(8, Math.min(128,
+                             ctx.getProperty("i2p.transport.udp.minConcurrentMsgs",
+                                             isSlow ? 8 : 32)));
+        INIT_CONCURRENT_MSGS = Math.max(16, Math.min(256,
+                              ctx.getProperty("i2p.transport.udp.initConcurrentMsgs",
+                                              isSlow ? 16 : 64)));
+
+        // AIMD parameters
+        TARGET_RTT = Math.max(500, Math.min(8000,
+                   ctx.getProperty("i2p.transport.udp.targetRTT", 2000)));
+        RTT_DECREASE_FACTOR = Math.max(2, Math.min(8,
+                             ctx.getProperty("i2p.transport.udp.rttDecreaseFactor", 4)));
+    }
+
+    /**
+     * Compute aggregate transport stats across all peers for tuner visibility.
+     * Called periodically from OutboundMessageFragments.
+     *
+     * @param peers collection of active peer states
+     * @return array: [avgSendWindow, avgRTO, avgConcurrentMsgs] or null if no peers
+     * @since 0.9.70+
+     */
+    public static long[] getAggregateStats(java.util.Collection<PeerState> peers) {
+        if (peers == null || peers.isEmpty()) { return null; }
+        long totalSendWindow = 0;
+        long totalRTO = 0;
+        long totalConcurrent = 0;
+        int count = 0;
+        for (PeerState ps : peers) {
+            if (ps._dead) { continue; }
+            totalSendWindow += ps._sendWindowBytes.get();
+            totalRTO += ps._rto;
+            totalConcurrent += ps._concurrentMessagesAllowed;
+            count++;
+        }
+        if (count == 0) { return null; }
+        return new long[] {
+            totalSendWindow / count,
+            totalRTO / count,
+            totalConcurrent / count
+        };
+    }
+
     /** Target RTT in ms — below this, increase concurrency; above this, decrease.
      *  I2P network RTT through 2-4 hops is typically 500-2000ms.
-     *  Set high enough to avoid false congestion signals from normal network latency. */
-    private static final int TARGET_RTT = 2000;
+     *  Set high enough to avoid false congestion signals from normal network latency.
+     *  Configurable via i2p.transport.udp.targetRTT */
+    private static volatile int TARGET_RTT = 2000;
     /** RTT multiplier above which we multiplicative-decrease concurrency.
-     *  Only decrease when RTT > 8s — truly congested, not just high-latency network. */
-    private static final int RTT_DECREASE_FACTOR = 4;
+     *  Only decrease when RTT > TARGET_RTT * RTT_DECREASE_FACTOR — truly congested.
+     *  Configurable via i2p.transport.udp.rttDecreaseFactor */
+    private static volatile int RTT_DECREASE_FACTOR = 4;
     /** When RTT > TARGET_RTT but there are queued messages, increase modestly */
     private static final int QUEUE_BACKPRESSURE_INCREASE = 4;
     /** how many concurrent outbound messages do we allow OutboundMessageFragments to send
@@ -210,7 +280,8 @@ public class PeerState {
     /** Last time it was made an introducer **/
     private long _lastIntroducerTime;
 
-    private static final int MAX_SEND_WINDOW_BYTES = SystemVersion.isSlow() ? 32*1024 : 128*1024;
+    /** Max send window bytes — configurable via i2p.transport.udp.maxSendWindow */
+    private static volatile int MAX_SEND_WINDOW_BYTES = SystemVersion.isSlow() ? 32*1024 : 128*1024;
 
     /**
      *  Was 32 before 0.9.2, but since the streaming lib goes up to 128,
@@ -281,10 +352,13 @@ public class PeerState {
     /** Amount to adjust up or down in adjustMTU() - should be multiple of 16, at least for SSU 1 */
     private static final int MTU_STEP = 64;
 
-    private static final int MIN_RTO = 1000;
-    private static final int INIT_RTO = 1000;
+    /** Minimum retransmission timeout — configurable via i2p.transport.udp.minRTO */
+    private static volatile int MIN_RTO = 1000;
+    /** Initial RTO before first RTT sample — configurable via i2p.transport.udp.initRTO */
+    private static volatile int INIT_RTO = 1000;
     private static final int INIT_RTT = 0;
-    private static final int MAX_RTO = 60*1000;
+    /** Maximum retransmission timeout — configurable via i2p.transport.udp.maxRTO */
+    private static volatile int MAX_RTO = 60*1000;
     /** How frequently do we want to send ACKs to a peer? (dynamically tuned) */
     private static final AtomicInteger ACK_FREQUENCY = new AtomicInteger(300);
     /**
@@ -299,6 +373,84 @@ public class PeerState {
     public static void setAckFrequency(int freq) {
         ACK_FREQUENCY.set(Math.max(50, Math.min(300, freq)));
     }
+
+    /**
+     * Set the initial RTO for new peers (called by Tuner).
+     * @param ms initial RTO in ms, clamped 250-2000
+     * @since 0.9.70+
+     */
+    public static void setInitRTO(int ms) { INIT_RTO = Math.max(250, Math.min(2000, ms)); }
+
+    /**
+     * Set the minimum RTO floor (called by Tuner).
+     * @param ms minimum RTO in ms, clamped 250-2000
+     * @since 0.9.70+
+     */
+    public static void setMinRTO(int ms) { MIN_RTO = Math.max(250, Math.min(2000, ms)); }
+
+    /**
+     * Set the maximum RTO ceiling (called by Tuner).
+     * @param ms maximum RTO in ms, clamped 10000-120000
+     * @since 0.9.70+
+     */
+    public static void setMaxRTO(int ms) { MAX_RTO = Math.max(10000, Math.min(120000, ms)); }
+
+    /**
+     * Set the max send window / CWIN (called by Tuner).
+     * @param bytes max send window in bytes, clamped 32KB-1MB
+     * @since 0.9.70+
+     */
+    public static void setMaxSendWindow(int bytes) { MAX_SEND_WINDOW_BYTES = Math.max(32*1024, Math.min(1024*1024, bytes)); }
+
+    /**
+     * Set the initial concurrent messages per peer (called by Tuner).
+     * @param msgs initial concurrent messages, clamped 16-256
+     * @since 0.9.70+
+     */
+    public static void setInitConcurrentMsgs(int msgs) { INIT_CONCURRENT_MSGS = Math.max(16, Math.min(256, msgs)); }
+
+    /**
+     * Set the minimum concurrent messages per peer (called by Tuner).
+     * @param msgs minimum concurrent messages, clamped 8-128
+     * @since 0.9.70+
+     */
+    public static void setMinConcurrentMsgs(int msgs) { MIN_CONCURRENT_MSGS = Math.max(8, Math.min(128, msgs)); }
+
+    /**
+     * @return the initial RTO for new peers in ms
+     * @since 0.9.70+
+     */
+    public static int getInitRTO() { return INIT_RTO; }
+
+    /**
+     * @return the minimum RTO floor in ms
+     * @since 0.9.70+
+     */
+    public static int getMinRTO() { return MIN_RTO; }
+
+    /**
+     * @return the maximum RTO ceiling in ms
+     * @since 0.9.70+
+     */
+    public static int getMaxRTO() { return MAX_RTO; }
+
+    /**
+     * @return the max send window (CWIN) in bytes
+     * @since 0.9.70+
+     */
+    public static int getMaxSendWindow() { return MAX_SEND_WINDOW_BYTES; }
+
+    /**
+     * @return the initial concurrent messages per peer
+     * @since 0.9.70+
+     */
+    public static int getInitConcurrentMsgs() { return INIT_CONCURRENT_MSGS; }
+
+    /**
+     * @return the minimum concurrent messages per peer
+     * @since 0.9.70+
+     */
+    public static int getMinConcurrentMsgs() { return MIN_CONCURRENT_MSGS; }
     /**
      * @return clock skew fudge derived from current ACK frequency
      * @since 0.9.70+

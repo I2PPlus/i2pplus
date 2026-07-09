@@ -625,9 +625,11 @@ public class NTCPConnection implements Closeable {
         if (!_outbound.offer(msg)) {
             if (_log.shouldWarn())
                 _log.warn("Dropping message: Outbound queue full on " + this + msg);
+            _transport.getContext().statManager().addRateData("ntcp.sendBacklogTime", msg.getLifetime());
             _transport.afterSend(msg, false, false, msg.getLifetime());
             return;
         }
+        _transport.getContext().statManager().addRateData("ntcp.sendQueueSize", _outbound.size());
         if (isEstablished() && !hasCurrentOutbound())
             _transport.getWriter().wantsWrite(this, "enqueued");
     }
@@ -1194,6 +1196,7 @@ public class NTCPConnection implements Closeable {
         if (_writeBufs.size() >= MAX_WRITE_BUFS) {
             _log.warn("Write queue full (" + _writeBufs.size() + "), dropping buffer on " + this);
             _transport.getContext().statManager().addRateData("ntcp.writeBufs.size", _writeBufs.size(), MAX_WRITE_BUFS);
+            _transport.getContext().statManager().addRateData("ntcp.writeQueueFull", 1);
             return;
         }
         _writeBufs.offer(buf);

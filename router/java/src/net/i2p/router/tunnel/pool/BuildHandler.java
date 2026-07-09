@@ -568,6 +568,7 @@ public class BuildHandler implements Runnable {
             } else {
                 if (_pendingLookups.size() < MAX_PENDING_LOOKUPS) {
                     _pendingLookups.offer(new PendingLookup(state, req, nextPeer));
+                    _context.statManager().addRateData("tunnel.pendingLookupQueue", _pendingLookups.size());
                     if (_log.shouldInfo()) {
                         _log.info("Queuing pending lookup for [" + nextPeer.toBase64().substring(0,6) +
                                   "] -> Queue size: " + _pendingLookups.size() + " / Lookups: " + currentLookups + " / " + limit + req);

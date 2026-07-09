@@ -1259,9 +1259,10 @@ public class NTCPTransport extends TransportImpl {
 
     /**
      * how long from initial connection attempt (accept() or connect()) until
-     * the con must be established to avoid premature close()ing
+     * the con must be established to avoid premature close()ing.
+     * Configurable via i2p.transport.ntcp.establishTimeout.
      */
-    public static final int ESTABLISH_TIMEOUT = 8*1000;
+    static volatile int ESTABLISH_TIMEOUT = 8*1000;
 
     /** add us to the establishment timeout process */
     void establishing(NTCPConnection con) {_establishing.add(con);}
@@ -1279,7 +1280,7 @@ public class NTCPTransport extends TransportImpl {
                 if (con.isClosed() || con.isEstablished()) {iter.remove();}
                 else if (con.getTimeSinceCreated(now) > ESTABLISH_TIMEOUT) {
                     iter.remove();
-                    con.closeOnTimeout("\n* Reason: Establishment timeout (>15s)", null);
+                    con.closeOnTimeout("\n* Reason: Establishment timeout (>" + ESTABLISH_TIMEOUT/1000 + "s)", null);
                     expired++;
                 }
             }
