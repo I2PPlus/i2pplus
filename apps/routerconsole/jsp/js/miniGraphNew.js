@@ -335,7 +335,10 @@ function renderNewGraph() {
         const liveRx = rxAll.pop();
         const liveTx = txAll.pop();
         if (rxBuffer === null) {
-            // Try sessionStorage first, then init from server data (RRD + live)
+            // Try sessionStorage first, then init from server data (RRD + live).
+            // Interpolate to fill a TARGET_BUFFER-length buffer for smooth
+            // scrolling from the start; shift+push gradually replaces the
+            // interpolated values with real live data over time.
             if (!restoreBuffers(minutes)) {
                 const pointsPerStep = Math.max(Math.round(TARGET_BUFFER / rxAll.length), 1);
                 rxBuffer = interpolate(rxAll, pointsPerStep);
@@ -346,26 +349,20 @@ function renderNewGraph() {
             lastShiftTime = Date.now();
         } else {
             const now = Date.now();
-            const elapsed = now - lastShiftTime;
-            // If hidden for more than 3 cycles, re-interpolate from fresh server data
-            // to fill the gap smoothly instead of shifting point-by-point.
-            if (elapsed > POLL_INTERVAL * 3) {
-                const pointsPerStep = Math.max(Math.round(TARGET_BUFFER / rxAll.length), 1);
-                rxBuffer = interpolate(rxAll, pointsPerStep);
-                txBuffer = interpolate(txAll, pointsPerStep);
-                rxBuffer.push(liveRx);
-                txBuffer.push(liveTx);
-            } else if (elapsed >= POLL_INTERVAL) {
-                // Normal shift: drop oldest, append new live value
+            // Normal scroll: shift oldest, append new live value.
+            // No gap-fill branch — once the buffer scrolls past the
+            // interpolated initial data it stays real; re-interpolating
+            // from the server would reset scroll position.
+            if (now - lastShiftTime >= POLL_INTERVAL) {
                 rxBuffer.shift();
                 txBuffer.shift();
                 rxBuffer.push(liveRx);
                 txBuffer.push(liveTx);
+                lastShiftTime = now;
             } else {
                 rxBuffer[rxBuffer.length - 1] = liveRx;
                 txBuffer[txBuffer.length - 1] = liveTx;
             }
-            lastShiftTime = now;
         }
         saveBuffers(minutes);
     }
@@ -429,7 +426,7 @@ function renderNewGraph() {
 /**
  * Draws a subtle dotted grid behind the graph data.
  * Split mode: horizontal line at center baseline, vertical lines at adaptive intervals.
- * Overlay mode: 5 horizontal grid lines evenly spaced, vertical lines at adaptive intervals.
+ * Overlay mode: 3 horizontal grid lines (top, middle, bottom), vertical lines at adaptive intervals.
  * @function drawGrid
  * @param {CanvasRenderingContext2D} ctx - Canvas rendering context
  * @param {number} minutes - Total time period in minutes
@@ -448,10 +445,9 @@ function drawGrid(ctx, minutes, split) {
         ctx.moveTo(PAD, CENTER_Y);
         ctx.lineTo(PAD + DRAW_W, CENTER_Y);
     } else {
-        // 5 evenly spaced horizontal lines
-        const rows = 5;
-        for (let i = 1; i < rows; i++) {
-            const y = PAD + (i / rows) * DRAW_H;
+        // 3 horizontal lines: top, middle, bottom
+        for (const frac of [0.25, 0.5, 0.75]) {
+            const y = PAD + frac * DRAW_H;
             ctx.moveTo(PAD, y);
             ctx.lineTo(PAD + DRAW_W, y);
         }
@@ -516,7 +512,7 @@ function initNewGraph() {
             graphCanvas = el;
             graphCtx = null;
         }
-        if (graphCanvas) {renderNewGraph();}
+        if (graphCanvas && rxBuffer !== null) {renderNewGraph();}
     };
     let pollIntervalId = setInterval(pollGraph, POLL_INTERVAL);
 
@@ -524,6 +520,12 @@ function initNewGraph() {
         if (document.hidden) {
             clearInterval(pollIntervalId);
         } else {
+            // After a visibility gap the buffer is behind real time.
+            // Null it to force a clean re-init from the next sidebar
+            // refresh data, avoiding the long flat line from missed
+            // intermediate values.
+            rxBuffer = null;
+            txBuffer = null;
             pollIntervalId = setInterval(pollGraph, POLL_INTERVAL);
         }
     });
