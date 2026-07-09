@@ -22,7 +22,6 @@ String csrfMetaToken = net.i2p.router.web.CSSHelper.getNonce();
 <link rel=modulepreload href=/js/refreshSidebar.js>
 <link rel=modulepreload href=/js/sectionToggle.js>
 <link rel=modulepreload href=/js/miniGraph.js>
-<link rel=modulepreload href=/js/miniGraphNew.js>
 <link rel=modulepreload href=/js/stickySidebar.js>
 <link rel=modulepreload href=/js/iframeResizer/iframeResizer.js>
 <link rel=preload href="<%=themePath%>console.css?version=<%=v%>" as=style>
