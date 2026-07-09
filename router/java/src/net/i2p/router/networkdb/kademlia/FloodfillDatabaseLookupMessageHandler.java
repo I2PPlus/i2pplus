@@ -113,7 +113,6 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             _log.debug("Throttling lookup from " + dlm.getFrom().toBase64().substring(0, 6));
         }
         final boolean shouldAccept = shouldAcceptLookup(isSenderUs, shouldThrottle, shouldBan, ourRI, floodfillMode, isFF, type);
-        final boolean isSelfLookup = ourRouter.equals(dlm.getSearchKey()) || dlm.getFrom().equals(ourRouter);
         final int maxLookups = isFF ? 60 : 30;
         final long uptime = _context.router().getUptime();
         final long bantime = _context.clock().now() + 30 * 60 * 1000;
@@ -147,15 +146,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             return null;
         }
 
-        if ((!isSelfLookup && !floodfillMode) || !shouldAccept) {
-            if (_log.shouldWarn()) {
-                logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
-            }
-            _context.statManager().addRateData("netDb.nonFFLookupsDropped", 1);
-            return null;
-        }
-
-        if (!isSenderUs && isFF && isDirect && (type == DatabaseLookupMessage.Type.EXPL || type == DatabaseLookupMessage.Type.ANY)) {
+        if (!shouldAccept) {
             if (_log.shouldWarn()) {
                 logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
             }
@@ -163,33 +154,16 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             return null;
         }
 
-        if (!floodfillMode && !shouldBan) {
-            if (_log.shouldWarn()) {
-                logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
+        if (_log.shouldInfo()) {
+            if (dlm.getReplyTunnel() != null) {
+                _log.info("Replying to " + searchType + " lookup from [" + fromBase64.substring(0,6) + "] for [" +
+                          searchKeyBase64.substring(0, keyLength) + "] via [TunnelId " + dlm.getReplyTunnel() + "]");
+            } else {
+                _log.info("Replying to direct " + searchType + " lookup from [" + fromBase64.substring(0,6) + "] for [" +
+                          searchKeyBase64.substring(0, keyLength) + "]");
             }
-            _context.statManager().addRateData("netDb.lookupsDropped", 1);
-            return null;
         }
-
-        if (isSelfLookup) {
-
-            if (_log.shouldInfo()) {
-                if (dlm.getReplyTunnel() != null) {
-                    _log.info("Replying to " + searchType + " lookup from [" + fromBase64.substring(0,6) + "] for [" +
-                              searchKeyBase64.substring(0, keyLength) + "] via [TunnelId " + dlm.getReplyTunnel() + "]");
-                } else {
-                    _log.info("Replying to direct " + searchType + " lookup from [" + fromBase64.substring(0,6) + "] for [" +
-                              searchKeyBase64.substring(0, keyLength) + "]");
-                }
-            }
-            return new HandleFloodfillDatabaseLookupMessageJob(_context, dlm, from, fromHash, _msgIDBloomXor);
-        }
-
-        if (_log.shouldWarn()) {
-            logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
-        }
-        _context.statManager().addRateData("netDb.lookupsDropped", 1);
-        return null;
+        return new HandleFloodfillDatabaseLookupMessageJob(_context, dlm, from, fromHash, _msgIDBloomXor);
     }
 
     /**
