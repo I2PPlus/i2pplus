@@ -357,15 +357,20 @@ public abstract class FormHandler {
         // Always validate nonce - don't skip based on console password
         if (_nonce == null) {
             _valid = false;
-            if (_log != null) {_log.error("validate(): _nonce is null");}
+            if (_log != null && _log.shouldDebug()) {
+                _log.debug("validate(): _nonce is null");
+            }
             return;
         }
 
         // Session-bound queue validation (primary method)
         if (_session != null) {
             boolean sessionValid = CSSHelper.validateNonce(_session, _nonce);
-            if (!sessionValid) {
-                if (_log != null) {_log.error("validate(): session queue FAILED session=" + System.identityHashCode(_session) + " id=" + _session.getId());}
+            if (!sessionValid && _log.shouldDebug()) {
+                if (_log != null) {
+                	  _log.debug("validate(): session queue FAILED session=" +
+                	              System.identityHashCode(_session) + " id=" + _session.getId());
+                }
             }
             if (sessionValid) {return;}
         }
