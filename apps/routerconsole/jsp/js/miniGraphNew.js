@@ -436,7 +436,7 @@ function drawGrid(ctx, minutes, split) {
     ctx.save();
     ctx.strokeStyle = getCSSVar("--minigraph_grid") || "rgba(128,128,128,.15)";
     ctx.lineWidth = 0.5;
-    ctx.setLineDash([2, 3]);
+    ctx.setLineDash([1, 1]);
 
     // Horizontal lines
     ctx.beginPath();

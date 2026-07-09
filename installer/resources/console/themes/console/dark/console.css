@@ -17,8 +17,8 @@
 --graphbar:#f60;
 --minigraph_in:#099b;
 --minigraph_out:#5a5b;
---minigraph_in_fill:linear-gradient(#0994,#0998);
---minigraph_out_fill:linear-gradient(#5a54,#5a58);
+--minigraph_in_fill:linear-gradient(#0993,#0997);
+--minigraph_out_fill:linear-gradient(#5a53,#5a57);
 --minigraph_grid:#252;
 --minigraph_glow_width:3;
 --minigraph_glow_alpha:.1;
@@ -26,7 +26,7 @@
 --minigraph_line_width:2;
 --minigraph_minutes:20;
 --minigraph_tension:.5;
---minigraph_overlay_blend:color-burn;
+--minigraph_overlay_blend:screen;
 }
 
 /* global */
