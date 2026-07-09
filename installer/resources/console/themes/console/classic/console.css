@@ -1170,7 +1170,6 @@ p.infohelp+hr,p.infohelp+p+hr,#tunnelconfig+hr{display:none}
 #graph_single .graphContainer{padding-top:4px}
 #graphs .statimage,#graphs .statimage:hover,#graphs a:hover .statimage,#graph_single .statimage,#graph_single .statimage:hover{border:0;box-shadow:none}
 #graphs .statimage{min-width:180px;min-height:40px}
-#updategraphs .messages{margin-bottom:-11px}
 #nographs{font-size:0;text-align:center}
 #graphs #nographs.widepanel{margin:28px 0;width:100%;display:block}
 #graphdisplay{animation:fade .15s ease 1s reverse both}

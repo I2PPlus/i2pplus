@@ -640,7 +640,7 @@ p#upnpconfig,p#ipchange,p#ipv6config,p#tcpconfig,p#confignotes,p#defaultswork{ma
 
 /* graphs */
 #graphing{margin:-10px 0 0;padding-top:1px;border-left:0;border-right:0}
-form[action="graphs"],form[action="/updategraphs"]{margin-top:-11px;margin-bottom:10px;padding:10px 10px 0;border:var(--border_inner);background:var(--panel)}
+form[action="graphs"]{margin-top:-11px;margin-bottom:10px;padding:10px 10px 0;border:var(--border_inner);background:var(--panel)}
 .graphspanel{padding:0;margin:15px 0 -15px 0;width:100%;text-align:center;overflow:auto;background:none}
 .graphspanel a{font-size:0}
 .graphspanel a img{max-width:100%;text-align:center;opacity:.9;transition:ease border .1s}
@@ -678,7 +678,6 @@ form[action="graphs"],form[action="/updategraphs"]{margin-top:-11px;margin-botto
 #graphs .optionlist .nowrap{text-align:left}
 #graphs .optionlist label{box-shadow:none;background:none}
 #graph_single .graphContainer{padding-top:5px}
-#updategraphs .messages{margin-bottom:10px}
 #graphing{border-top:0!important}
 #graphdisplay{animation:fade .15s ease 1s reverse both}
 #graphdisplay:not(.visible){margin-bottom:10px}

@@ -615,7 +615,6 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 #graphdisplay:not(.visible){margin-bottom:5px}
 #graphdisplay:hover,#graphdisplay:focus{color:var(--hover)}
 #toggleSettings{display:none}
-#updategraphs .messages{margin-bottom:4px}
 
 /* graphs filter */
 #graphFilter{margin:0;position:absolute;right:16px;top:15px;animation:fade .15s ease 1s reverse both}
