@@ -717,7 +717,7 @@ public class Router implements RouterClock.ClockShiftListener {
         _context.simpleTimer2().addPeriodicEvent(new CoalesceStatsEvent(_context), COALESCE_TIME);
         // CoalesceStatsEvent self-reschedules in timeReached()
         _bandwidthHistory = new BandwidthHistory(_context);
-        _context.simpleTimer2().addPeriodicEvent(_bandwidthHistory, BandwidthHistory.SAMPLE_INTERVAL);
+        _bandwidthHistory.schedule(BandwidthHistory.SAMPLE_INTERVAL);
         _context.jobQueue().addJob(new UpdateRoutingKeyModifierJob(_context));
         _context.blocklist().startup();
 
