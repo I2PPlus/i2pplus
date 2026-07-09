@@ -1,0 +1,771 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Anonymous Proxy"
+msgstr "বেনামী প্রক্সি"
+
+msgid "Satellite Provider"
+msgstr "স্যাটেলাইট প্রদানকারী"
+
+msgid "Andorra"
+msgstr "অ্যান্ডোরা"
+
+msgid "United Arab Emirates"
+msgstr "সংযুক্ত আরব আমিরাত"
+
+msgid "Afghanistan"
+msgstr "আফগানিস্তান"
+
+msgid "Antigua and Barbuda"
+msgstr "অ্যান্টিগুয়া ও বার্বুডা"
+
+msgid "Anguilla"
+msgstr "অ্যাঙ্গুইলা"
+
+msgid "Albania"
+msgstr "আলবেনিয়া"
+
+msgid "Armenia"
+msgstr "আর্মেনিয়া"
+
+msgid "Netherlands Antilles"
+msgstr "নেদারল্যান্ডস অ্যান্টিলেস"
+
+msgid "Angola"
+msgstr "অ্যাঙ্গোলা"
+
+msgid "Asia/Pacific Region"
+msgstr "এশিয়া/প্রশান্ত মহাসাগরীয় অঞ্চল"
+
+msgid "Antarctica"
+msgstr "অ্যান্টার্কটিকা"
+
+msgid "Argentina"
+msgstr "আর্জেন্টিনা"
+
+msgid "American Samoa"
+msgstr "আমেরিকান সামোয়া"
+
+msgid "Austria"
+msgstr "অস্ট্রিয়া"
+
+msgid "Australia"
+msgstr "অস্ট্রেলিয়া"
+
+msgid "Aruba"
+msgstr "আরুবা"
+
+msgid "Åland Islands"
+msgstr "আলান্ড দ্বীপপুঞ্জ"
+
+msgid "Azerbaijan"
+msgstr "আজারবাইজান"
+
+msgid "Bosnia and Herzegovina"
+msgstr "বসনিয়া ও হার্জেগোভিনা"
+
+msgid "Barbados"
+msgstr "বার্বাডোস"
+
+msgid "Bangladesh"
+msgstr "বাংলাদেশ"
+
+msgid "Belgium"
+msgstr "বেলজিয়াম"
+
+msgid "Burkina Faso"
+msgstr "বুর্কিনা ফাসো"
+
+msgid "Bulgaria"
+msgstr "বুলগেরিয়া"
+
+msgid "Bahrain"
+msgstr "বাহরাইন"
+
+msgid "Burundi"
+msgstr "বুরুন্ডি"
+
+msgid "Benin"
+msgstr "বেনিন"
+
+msgid "Saint Barthélemy"
+msgstr "সেন্ট বার্থেলেমি"
+
+msgid "Bermuda"
+msgstr "বারমুডা"
+
+msgid "Brunei Darussalam"
+msgstr "ব্রুনাই দারুসসালাম"
+
+msgid "Bolivia"
+msgstr "বলিভিয়া"
+
+msgid "Bonaire"
+msgstr "বোনেয়ার"
+
+msgid "Brazil"
+msgstr "ব্রাজিল"
+
+msgid "Bahamas"
+msgstr "বাহামাস"
+
+msgid "Bhutan"
+msgstr "ভুটান"
+
+msgid "Bouvet Island"
+msgstr "বুভেট দ্বীপ"
+
+msgid "Botswana"
+msgstr "বতসোয়ানা"
+
+msgid "Belarus"
+msgstr "বেলারুশ"
+
+msgid "Belize"
+msgstr "বেলিজ"
+
+msgid "Canada"
+msgstr "কানাডা"
+
+msgid "Cocos (Keeling) Islands"
+msgstr "কোকোস (কিলিং) দ্বীপপুঞ্জ"
+
+msgid "Congo"
+msgstr "কঙ্গো"
+
+msgid "Central African Republic"
+msgstr "মধ্য আফ্রিকান প্রজাতন্ত্র"
+
+msgid "Switzerland"
+msgstr "সুইজারল্যান্ড"
+
+msgid "Cote D'Ivoire"
+msgstr "কোট ডি'আইভোর"
+
+msgid "Cook Islands"
+msgstr "কুক দ্বীপপুঞ্জ"
+
+msgid "Chile"
+msgstr "চিলি"
+
+msgid "Cameroon"
+msgstr "ক্যামেরুন"
+
+msgid "China"
+msgstr "চীন"
+
+msgid "Colombia"
+msgstr "কলম্বিয়া"
+
+msgid "Costa Rica"
+msgstr "কোস্টা রিকা"
+
+msgid "Serbia and Montenegro"
+msgstr "সার্বিয়া ও মন্টিনিগ্রো"
+
+msgid "Cuba"
+msgstr "কিউবা"
+
+msgid "Cape Verde"
+msgstr "কেপ ভার্দে"
+
+msgid "Curaçao"
+msgstr "কুরাকাও"
+
+msgid "Christmas Island"
+msgstr "ক্রিস্টমাস দ্বীপ"
+
+msgid "Cyprus"
+msgstr "সাইপ্রাস"
+
+msgid "Czech Republic"
+msgstr "চেক প্রজাতন্ত্র"
+
+msgid "Germany"
+msgstr "জার্মানি"
+
+msgid "Djibouti"
+msgstr "জিবুতি"
+
+msgid "Denmark"
+msgstr "ডেনমার্ক"
+
+msgid "Dominica"
+msgstr "ডোমিনিকা"
+
+msgid "Dominican Republic"
+msgstr "ডোমিনিকান প্রজাতন্ত্র"
+
+msgid "Algeria"
+msgstr "আলজেরিয়া"
+
+msgid "Ecuador"
+msgstr "ইকুয়েডর"
+
+msgid "Estonia"
+msgstr "এস্তোনিয়া"
+
+msgid "Egypt"
+msgstr "মিশর"
+
+msgid "Western Sahara"
+msgstr "পশ্চিম সাহারা"
+
+msgid "Eritrea"
+msgstr "ইরিত্রিয়া"
+
+msgid "Spain"
+msgstr "স্পেন"
+
+msgid "Ethiopia"
+msgstr "ইথিওপিয়া"
+
+msgid "European Union"
+msgstr "ইউরোপীয় ইউনিয়ন"
+
+msgid "Finland"
+msgstr "ফিনল্যান্ড"
+
+msgid "Fiji"
+msgstr "ফিজি"
+
+msgid "Falkland Islands (Malvinas)"
+msgstr "ফকল্যান্ড দ্বীপপুঞ্জ (মালভিনাস)"
+
+msgid "Micronesia"
+msgstr "মাইক্রোনেশিয়া"
+
+msgid "Faroe Islands"
+msgstr "ফ্যারো দ্বীপপুঞ্জ"
+
+msgid "France"
+msgstr "ফ্রান্স"
+
+msgid "Gabon"
+msgstr "গ্যাবন"
+
+msgid "United Kingdom"
+msgstr "যুক্তরাজ্য"
+
+msgid "Grenada"
+msgstr "গ্রেনাডা"
+
+msgid "Georgia"
+msgstr "জর্জিয়া"
+
+msgid "French Guiana"
+msgstr "ফরাসি গায়ানা"
+
+msgid "Guernsey"
+msgstr "গার্নসি"
+
+msgid "Ghana"
+msgstr "ঘানা"
+
+msgid "Gibraltar"
+msgstr "জিব্রাল্টার"
+
+msgid "Greenland"
+msgstr "গ্রিনল্যান্ড"
+
+msgid "Gambia"
+msgstr "গাম্বিয়া"
+
+msgid "Guinea"
+msgstr "গিনি"
+
+msgid "Guadeloupe"
+msgstr "গুয়াদেলুপ"
+
+msgid "Equatorial Guinea"
+msgstr "নিরক্ষীয় গিনি"
+
+msgid "Greece"
+msgstr "গ্রীস"
+
+msgid "South Georgia and the South Sandwich Islands"
+msgstr "দক্ষিণ জর্জিয়া ও দক্ষিণ স্যান্ডউইচ দ্বীপপুঞ্জ"
+
+msgid "Guatemala"
+msgstr "গুয়াতেমালা"
+
+msgid "Guam"
+msgstr "গুয়াম"
+
+msgid "Guinea-Bissau"
+msgstr "গিনি-বিসাউ"
+
+msgid "Guyana"
+msgstr "গায়ানা"
+
+msgid "Hong Kong"
+msgstr "হংকং"
+
+msgid "Honduras"
+msgstr "হন্ডুরাস"
+
+msgid "Croatia"
+msgstr "ক্রোয়েশিয়া"
+
+msgid "Haiti"
+msgstr "হাইতি"
+
+msgid "Hungary"
+msgstr "হাঙ্গেরি"
+
+msgid "Indonesia"
+msgstr "ইন্দোনেশিয়া"
+
+msgid "Ireland"
+msgstr "আয়ারল্যান্ড"
+
+msgid "Israel"
+msgstr "ইসরায়েল"
+
+msgid "Isle of Man"
+msgstr "আইল অফ ম্যান"
+
+msgid "India"
+msgstr "ভারত"
+
+msgid "British Indian Ocean Territory"
+msgstr "ব্রিটিশ ভারত মহাসাগরীয় অঞ্চল"
+
+msgid "Iraq"
+msgstr "ইরাক"
+
+msgid "Iran"
+msgstr "ইরান"
+
+msgid "Iceland"
+msgstr "আইসল্যান্ড"
+
+msgid "Italy"
+msgstr "ইতালি"
+
+msgid "Jersey"
+msgstr "জার্সি"
+
+msgid "Jamaica"
+msgstr "জ্যামাইকা"
+
+msgid "Jordan"
+msgstr "জর্ডান"
+
+msgid "Japan"
+msgstr "জাপান"
+
+msgid "Kenya"
+msgstr "কেনিয়া"
+
+msgid "Kyrgyzstan"
+msgstr "কিরগিজস্তান"
+
+msgid "Cambodia"
+msgstr "কম্বোডিয়া"
+
+msgid "Kiribati"
+msgstr "কিরিবাতি"
+
+msgid "Comoros"
+msgstr "কোমোরোস"
+
+msgid "Saint Kitts and Nevis"
+msgstr "সেন্ট কিটস ও নেভিস"
+
+msgid "North Korea"
+msgstr "উত্তর কোরিয়া"
+
+msgid "Republic of Korea"
+msgstr "কোরিয়া প্রজাতন্ত্র"
+
+msgid "Kuwait"
+msgstr "কুয়েত"
+
+msgid "Cayman Islands"
+msgstr "কেম্যান দ্বীপপুঞ্জ"
+
+msgid "Kazakhstan"
+msgstr "কাজাখস্তান"
+
+msgid "Lao People's Democratic Republic"
+msgstr "লাও গণতান্ত্রিক প্রজাতন্ত্র"
+
+msgid "Lebanon"
+msgstr "লেবানন"
+
+msgid "Saint Lucia"
+msgstr "সেন্ট লুসিয়া"
+
+msgid "Liechtenstein"
+msgstr "লিচেনস্টাইন"
+
+msgid "Sri Lanka"
+msgstr "শ্রীলঙ্কা"
+
+msgid "Liberia"
+msgstr "লাইবেরিয়া"
+
+msgid "Lesotho"
+msgstr "লেসোথো"
+
+msgid "Lithuania"
+msgstr "লিথুয়ানিয়া"
+
+msgid "Luxembourg"
+msgstr "লুক্সেমবার্গ"
+
+msgid "Latvia"
+msgstr "লাটভিয়া"
+
+msgid "Libya"
+msgstr "লিবিয়া"
+
+msgid "Morocco"
+msgstr "মরক্কো"
+
+msgid "Monaco"
+msgstr "মোনাকো"
+
+msgid "Moldova"
+msgstr "মলদোভা"
+
+msgid "Montenegro"
+msgstr "মন্টিনিগ্রো"
+
+msgid "Saint Martin"
+msgstr "সেন্ট মার্টিন"
+
+msgid "Madagascar"
+msgstr "মাদাগাস্কার"
+
+msgid "Marshall Islands"
+msgstr "মার্শাল দ্বীপপুঞ্জ"
+
+msgid "Macedonia"
+msgstr "ম্যাসেডোনিয়া"
+
+msgid "Mali"
+msgstr "মালি"
+
+msgid "Myanmar"
+msgstr "মায়ানমার"
+
+msgid "Mongolia"
+msgstr "মঙ্গোলিয়া"
+
+msgid "Macau"
+msgstr "ম্যাকাও"
+
+msgid "Northern Mariana Islands"
+msgstr "উত্তর মারিয়ানা দ্বীপপুঞ্জ"
+
+msgid "Martinique"
+msgstr "মার্টিনিক"
+
+msgid "Mauritania"
+msgstr "মৌরিতানিয়া"
+
+msgid "Montserrat"
+msgstr "মন্টসেরাট"
+
+msgid "Malta"
+msgstr "মাল্টা"
+
+msgid "Mauritius"
+msgstr "মরিশাস"
+
+msgid "Maldives"
+msgstr "মালদ্বীপ"
+
+msgid "Malawi"
+msgstr "মালাউই"
+
+msgid "Mexico"
+msgstr "মেক্সিকো"
+
+msgid "Malaysia"
+msgstr "মালয়েশিয়া"
+
+msgid "Mozambique"
+msgstr "মোজাম্বিক"
+
+msgid "Namibia"
+msgstr "নামিবিয়া"
+
+msgid "New Caledonia"
+msgstr "নিউ ক্যালেডোনিয়া"
+
+msgid "Niger"
+msgstr "নাইজার"
+
+msgid "Norfolk Island"
+msgstr "নরফোক দ্বীপ"
+
+msgid "Nigeria"
+msgstr "নাইজেরিয়া"
+
+msgid "Nicaragua"
+msgstr "নিকারাগুয়া"
+
+msgid "Netherlands"
+msgstr "নেদারল্যান্ডস"
+
+msgid "Norway"
+msgstr "নরওয়ে"
+
+msgid "Nepal"
+msgstr "নেপাল"
+
+msgid "Nauru"
+msgstr "নাউরু"
+
+msgid "Niue"
+msgstr "নিউয়ে"
+
+msgid "New Zealand"
+msgstr "নিউজিল্যান্ড"
+
+msgid "Oman"
+msgstr "ওমান"
+
+msgid "Panama"
+msgstr "পানামা"
+
+msgid "Peru"
+msgstr "পেরু"
+
+msgid "French Polynesia"
+msgstr "ফরাসি পলিনেশিয়া"
+
+msgid "Papua New Guinea"
+msgstr "পাপুয়া নিউ গিনি"
+
+msgid "Philippines"
+msgstr "ফিলিপাইন"
+
+msgid "Pakistan"
+msgstr "পাকিস্তান"
+
+msgid "Poland"
+msgstr "পোল্যান্ড"
+
+msgid "Saint Pierre and Miquelon"
+msgstr "সেন্ট পিয়ের ও মিকেলন"
+
+msgid "Pitcairn Islands"
+msgstr "পিটকেয়ার্ন দ্বীপপুঞ্জ"
+
+msgid "Puerto Rico"
+msgstr "পুয়ের্তো রিকো"
+
+msgid "Palestinian Territory"
+msgstr "ফিলিস্তিনি অঞ্চল"
+
+msgid "Portugal"
+msgstr "পর্তুগাল"
+
+msgid "Palau"
+msgstr "পালাউ"
+
+msgid "Paraguay"
+msgstr "প্যারাগুয়ে"
+
+msgid "Qatar"
+msgstr "কাতার"
+
+msgid "Réunion"
+msgstr "রিইউনিয়ন"
+
+msgid "Romania"
+msgstr "রোমানিয়া"
+
+msgid "Serbia"
+msgstr "সার্বিয়া"
+
+msgid "Russian Federation"
+msgstr "রাশিয়ান ফেডারেশন"
+
+msgid "Rwanda"
+msgstr "রুয়ান্ডা"
+
+msgid "Saudi Arabia"
+msgstr "সৌদি আরব"
+
+msgid "Solomon Islands"
+msgstr "সলোমন দ্বীপপুঞ্জ"
+
+msgid "Seychelles"
+msgstr "সেশেলস"
+
+msgid "Sudan"
+msgstr "সুদান"
+
+msgid "Sweden"
+msgstr "সুইডেন"
+
+msgid "Singapore"
+msgstr "সিঙ্গাপুর"
+
+msgid "Saint Helena"
+msgstr "সেন্ট হেলেনা"
+
+msgid "Slovenia"
+msgstr "স্লোভেনিয়া"
+
+msgid "Svalbard and Jan Mayen"
+msgstr "স্বালবার্ড ও জান মেয়েন"
+
+msgid "Slovakia"
+msgstr "স্লোভাকিয়া"
+
+msgid "Sierra Leone"
+msgstr "সিয়েরা লিওন"
+
+msgid "San Marino"
+msgstr "সান মারিনো"
+
+msgid "Senegal"
+msgstr "সেনেগাল"
+
+msgid "Somalia"
+msgstr "সোমালিয়া"
+
+msgid "Suriname"
+msgstr "সুরিনাম"
+
+msgid "South Sudan"
+msgstr "দক্ষিণ সুদান"
+
+msgid "Sao Tome and Principe"
+msgstr "সাও টোমে ও প্রিন্সিপি"
+
+msgid "El Salvador"
+msgstr "এল সালভাদর"
+
+msgid "Sint Maarten"
+msgstr "সিন্ট মার্টেন"
+
+msgid "Syria"
+msgstr "সিরিয়া"
+
+msgid "Swaziland"
+msgstr "সোয়াজিল্যান্ড"
+
+msgid "Turks and Caicos Islands"
+msgstr "টার্কস ও কাইকোস দ্বীপপুঞ্জ"
+
+msgid "Chad"
+msgstr "চাদ"
+
+msgid "French Southern Territories"
+msgstr "ফরাসি দক্ষিণাঞ্চল"
+
+msgid "Togo"
+msgstr "টোগো"
+
+msgid "Thailand"
+msgstr "থাইল্যান্ড"
+
+msgid "Tajikistan"
+msgstr "তাজিকিস্তান"
+
+msgid "Tokelau"
+msgstr "টোকেলাউ"
+
+msgid "Timor-Leste"
+msgstr "তিমুর-লেস্টে"
+
+msgid "Turkmenistan"
+msgstr "তুর্কমেনিস্তান"
+
+msgid "Tunisia"
+msgstr "তিউনিসিয়া"
+
+msgid "Tonga"
+msgstr "টোঙ্গা"
+
+msgid "Turkey"
+msgstr "তুরস্ক"
+
+msgid "Trinidad and Tobago"
+msgstr "ত্রিনিদাদ ও টোবাগো"
+
+msgid "Tuvalu"
+msgstr "টুভালু"
+
+msgid "Taiwan"
+msgstr "তাইওয়ান"
+
+msgid "Tanzania"
+msgstr "তানজানিয়া"
+
+msgid "Ukraine"
+msgstr "ইউক্রেন"
+
+msgid "Uganda"
+msgstr "উগান্ডা"
+
+msgid "United States Minor Outlying Islands"
+msgstr "যুক্তরাষ্ট্রের পার্শ্ববর্তী ছোট দ্বীপপুঞ্জ"
+
+msgid "United States"
+msgstr "যুক্তরাষ্ট্র"
+
+msgid "Uruguay"
+msgstr "উরুগুয়ে"
+
+msgid "Uzbekistan"
+msgstr "উজবেকিস্তান"
+
+msgid "Vatican"
+msgstr "ভ্যাটিকান"
+
+msgid "Saint Vincent and the Grenadines"
+msgstr "সেন্ট ভিনসেন্ট ও গ্রেনাডাইনস"
+
+msgid "Venezuela"
+msgstr "ভেনেজুয়েলা"
+
+msgid "Virgin Islands"
+msgstr "ভার্জিন দ্বীপপুঞ্জ"
+
+msgid "Vietnam"
+msgstr "ভিয়েতনাম"
+
+msgid "Vanuatu"
+msgstr "ভানুয়াটু"
+
+msgid "Wallis and Futuna"
+msgstr "ওয়ালিস ও ফুটুনা"
+
+msgid "Samoa"
+msgstr "সামোয়া"
+
+msgid "Kosovo"
+msgstr "কসোভো"
+
+msgid "Yemen"
+msgstr "ইয়েমেন"
+
+msgid "Mayotte"
+msgstr "মায়োট"
+
+msgid "Unknown"
+msgstr "অজানা"
+
+msgid "South Africa"
+msgstr "দক্ষিণ আফ্রিকা"
+
+msgid "Zambia"
+msgstr "জাম্বিয়া"
+
+msgid "Zimbabwe"
+msgstr "জিম্বাবুয়ে"

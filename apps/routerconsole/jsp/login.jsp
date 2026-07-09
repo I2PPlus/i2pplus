@@ -43,6 +43,7 @@
     langToCountry.put("uk", "ua");
     langToCountry.put("ar", "lang_ar");
     langToCountry.put("az", "az");
+    langToCountry.put("bn", "bn");
     langToCountry.put("cs", "cz");
     langToCountry.put("zh", "cn");
     langToCountry.put("da", "dk");
@@ -89,6 +90,7 @@
 <div class=dropdown-content>
 <a href="#" data-param="lang" data-value="ar" title="Arabic"><img src="/flags.jsp?c=lang_ar"></a>
 <a href="#" data-param="lang" data-value="az" title="Azerbaijani"><img src="/flags.jsp?c=az"></a>
+<a href="#" data-param="lang" data-value="bn" title="Bengali"><img src="/flags.jsp?c=bn"></a>
 <a href="#" data-param="lang" data-value="cs" title="Cestina"><img src="/flags.jsp?c=cz"></a>
 <a href="#" data-param="lang" data-value="zh" title="Chinese"><img src="/flags.jsp?c=cn"></a>
 <a href="#" data-param="lang" data-value="da" title="Dansk"><img src="/flags.jsp?c=dk"></a>

@@ -1,0 +1,1611 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "internal"
+msgstr "অভ্যন্তরীণ"
+
+#, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} আগত, {0} বহির্গামী টানেল"
+msgstr[1] "{0} ইনবাউন্ড, {0} আউটবাউন্ড টানেল"
+
+#, java-format
+msgid "{0} inbound tunnel"
+msgid_plural "{0} inbound tunnels"
+msgstr[0] "{0} আগত টানেল"
+msgstr[1] "{0} ইনবাউন্ড টানেল"
+
+#, java-format
+msgid "{0} outbound tunnel"
+msgid_plural "{0} outbound tunnels"
+msgstr[0] "{0} বহির্গামী টানেল"
+msgstr[1] "{0} আউটবাউন্ড টানেল"
+
+msgid "lower bandwidth and reliability"
+msgstr "নিম্ন ব্যান্ডউইথ এবং নির্ভরযোগ্যতা"
+
+msgid "standard bandwidth and reliability"
+msgstr "মানক ব্যান্ডউইথ এবং নির্ভরযোগ্যতা"
+
+msgid "higher bandwidth and reliability"
+msgstr "উচ্চতর ব্যান্ডউইথ এবং নির্ভরযোগ্যতা"
+
+msgid "Error - tunnels are not initialized yet"
+msgstr "ত্রুটি - টানেলগুলি এখনও আরম্ভ করা হয়নি"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "অবৈধ ফর্ম জমা, সম্ভবত আপনি 'পিছন' বা 'রিলোড' বাটন ব্যবহার করেছেন। অনুগ্রহ করে পুনরায় জমা দিন।"
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "যদি সমস্যা থেকে যায়, আপনার ব্রাউজারে কুকি সক্রিয় আছে কিনা যাচাই করুন।"
+
+msgid "No services configured, cannot restart!"
+msgstr "কোন পরিষেবা কনফিগার করা হয়নি, পুনরায় চালু করা যাবে না!"
+
+msgid "Stopping tunnel"
+msgstr "টানেল বন্ধ করা হচ্ছে"
+
+msgid "Starting tunnel"
+msgstr "টানেল শুরু করা হচ্ছে"
+
+msgid "Error restarting tunnel"
+msgstr "টানেল পুনরায় চালু করতে ত্রুটি"
+
+msgid "Restarted all running tunnels"
+msgstr "সমস্ত চলমান টানেল পুনরায় চালু করা হয়েছে"
+
+msgid "No clients configured, cannot restart!"
+msgstr "কোন ক্লায়েন্ট কনফিগার করা হয়নি, পুনরায় চালু করা যাবে না!"
+
+msgid "Restarted all running client tunnels"
+msgstr "সমস্ত চলমান ক্লায়েন্ট টানেল পুনরায় চালু করা হয়েছে"
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "সমস্ত টানেলের জন্য কনফিগারেশন পুনরায় লোড করা হয়েছে"
+
+msgid "Error: Invalid tunnel"
+msgstr "ত্রুটি: অবৈধ টানেল"
+
+msgid "Started tunnel"
+msgstr "টানেল শুরু হয়েছে"
+
+msgid "Stopped tunnel"
+msgstr "টানেল বন্ধ হয়েছে"
+
+msgid "Restarting tunnel"
+msgstr "টানেল পুনরায় চালু করা হচ্ছে"
+
+msgid "Please confirm removal"
+msgstr "অনুগ্রহ করে অপসারণ নিশ্চিত করুন"
+
+msgid "New Tunnel"
+msgstr "নতুন টানেল"
+
+msgid "Port not set"
+msgstr "পোর্ট সেট করা নেই"
+
+msgid "Invalid port"
+msgstr "অবৈধ পোর্ট"
+
+msgid "Warning - ports less than 1024 are not recommended"
+msgstr "সতর্কতা - 1024-এর কম পোর্ট সুপারিশ করা হয় না"
+
+msgid "Warning - duplicate port"
+msgstr "সতর্কতা - পুনরাবৃত্ত পোর্ট"
+
+msgid "Standard client"
+msgstr "স্ট্যান্ডার্ড ক্লায়েন্ট"
+
+msgid "HTTP/HTTPS client"
+msgstr "HTTP/HTTPS ক্লায়েন্ট"
+
+msgid "IRC client"
+msgstr "IRC ক্লায়েন্ট"
+
+msgid "Standard server"
+msgstr "স্ট্যান্ডার্ড সার্ভার"
+
+msgid "HTTP server"
+msgstr "HTTP সার্ভার"
+
+msgid "SOCKS 4/4a/5 proxy"
+msgstr "SOCKS 4/4a/5 প্রক্সি"
+
+msgid "SOCKS IRC proxy"
+msgstr "SOCKS IRC প্রক্সি"
+
+msgid "CONNECT/SSL/HTTPS proxy"
+msgstr "CONNECT/SSL/HTTPS প্রক্সি"
+
+msgid "IRC server"
+msgstr "IRC সার্ভার"
+
+msgid "Streamr client"
+msgstr "Streamr ক্লায়েন্ট"
+
+msgid "Streamr server"
+msgstr "Streamr সার্ভার"
+
+msgid "HTTP bidir"
+msgstr "HTTP দ্বিমুখী"
+
+msgid "Host not set"
+msgstr "হোস্ট সেট করা নেই"
+
+msgid "Invalid address"
+msgstr "অবৈধ ঠিকানা"
+
+msgid "Tunnel Manager"
+msgstr "টানেল ম্যানেজার"
+
+msgid "Edit Client Tunnel"
+msgstr "ক্লায়েন্ট টানেল সম্পাদনা করুন"
+
+msgid "Edit Server Tunnel"
+msgstr "সার্ভার টানেল সম্পাদনা করুন"
+
+msgid "Are you sure you want to delete?"
+msgstr "আপনি কি মুছে ফেলতে চান?"
+
+msgid "required"
+msgstr "আবশ্যক"
+
+msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
+msgstr "এই কনফিগারেশন পরিবর্তন করতে টানেল এবং অন্যান্য সমস্ত শেয়ার্ড ক্লায়েন্ট টানেল বন্ধ করতে হবে"
+
+msgid "Tunnel must be stopped to change this configuration"
+msgstr "এই কনফিগারেশন পরিবর্তন করতে টানেল বন্ধ করতে হবে"
+
+msgid "Configuration"
+msgstr "কনফিগারেশন"
+
+msgid "New Client Configuration"
+msgstr "নতুন ক্লায়েন্ট কনফিগারেশন"
+
+msgid "Name"
+msgstr "নাম"
+
+msgid "Auto Start Tunnel"
+msgstr "স্বয়ংক্রিয় টানেল শুরু"
+
+msgid "Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar"
+msgstr "টানেল ম্যানেজার হোম পৃষ্ঠা এবং রাউটার কনসোল সাইডবারে প্রদর্শিত টানেলের নাম"
+
+msgid "Enable this option to ensure this service is available when the router starts"
+msgstr "রাউটার শুরু হলে এই পরিষেবাটি উপলব্ধ তা নিশ্চিত করতে এই বিকল্পটি সক্রিয় করুন"
+
+msgid "Automatically start tunnel when router starts"
+msgstr "রাউটার শুরু হলে স্বয়ংক্রিয়ভাবে টানেল শুরু করুন"
+
+msgid "Description"
+msgstr "বিবরণ"
+
+msgid "Shared Client"
+msgstr "শেয়ার্ড ক্লায়েন্ট"
+
+msgid "Description of tunnel to be displayed on Tunnel Manager home page"
+msgstr "টানেল ম্যানেজার হোম পৃষ্ঠায় প্রদর্শিত টানেলের বিবরণ"
+
+msgid "Traffic from all clients with this feature enabled will be routed over the same set of tunnels. This will make profiling the tunnels by an adversary more difficult, but will link the clients together."
+msgstr "এই বৈশিষ্ট্য সক্রিয় থাকা সমস্ত ক্লায়েন্টের ট্রাফিক একই সেট টানেলের মাধ্যমে রুট করা হবে। এটি প্রতিপক্ষের পক্ষে টানেল প্রোফাইল করা আরও কঠিন করে তুলবে, কিন্তু ক্লায়েন্টদের একসাথে লিঙ্ক করবে।"
+
+msgid "Share tunnels with other configured clients"
+msgstr "অন্যান্য কনফিগার করা ক্লায়েন্টদের সাথে টানেল ভাগ করুন"
+
+msgid "Target"
+msgstr "লক্ষ্য"
+
+msgid "Access Point"
+msgstr "অ্যাক্সেস পয়েন্ট"
+
+msgid "Use Outproxy Plugin"
+msgstr "আউটপ্রক্সি প্লাগইন ব্যবহার করুন"
+
+msgid "Enable DCC"
+msgstr "DCC সক্রিয় করুন"
+
+msgid "Port"
+msgstr "পোর্ট"
+
+msgid "Specify the local port this service should be accessible from"
+msgstr "এই পরিষেবাটি যে স্থানীয় পোর্ট থেকে অ্যাক্সেসযোগ্য হওয়া উচিত তা নির্দিষ্ট করুন"
+
+msgid "Host"
+msgstr "হোস্ট"
+
+msgid "Hostname or IP address of the target server"
+msgstr "টার্গেট সার্ভারের হোস্টনেম বা IP ঠিকানা"
+
+msgid "Reachable by"
+msgstr "দ্বারা পৌঁছানো যায়"
+
+msgid "Local interface (ip address) the client tunnel will be reachable from"
+msgstr "ক্লায়েন্ট টানেলটি যে স্থানীয় ইন্টারফেস (IP ঠিকানা) থেকে পৌঁছানো যাবে"
+
+msgid "If an outproxy plugin is installed (e.g. Orchid), use this instead of any configured outproxies to access websites outside of I2P"
+msgstr "যদি একটি আউটপ্রক্সি প্লাগইন ইনস্টল করা থাকে (যেমন Orchid), I2P-এর বাইরের ওয়েবসাইট অ্যাক্সেস করতে যেকোনো কনফিগার করা আউটপ্রক্সির পরিবর্তে এটি ব্যবহার করুন"
+
+msgid "Use plugin instead of proxies listed below if available"
+msgstr "যদি উপলব্ধ থাকে তবে নীচে তালিকাভুক্ত প্রক্সিগুলির পরিবর্তে প্লাগইন ব্যবহার করুন"
+
+msgid "Enables direct chat and file transfers, bypassing I2P. Note that this will compromise your anonymity and is not recommended."
+msgstr "সরাসরি চ্যাট এবং ফাইল স্থানান্তর সক্ষম করে, I2P বাইপাস করে। মনে রাখবেন এটি আপনার anonymity এর সাথে আপস করবে এবং সুপারিশ করা হয় না।"
+
+msgid "Enable Direct Client-to-Client protocol"
+msgstr "সরাসরি ক্লায়েন্ট-টু-ক্লায়েন্ট প্রোটোকল সক্রিয় করুন"
+
+msgid "Outproxies"
+msgstr "আউটপ্রক্সি"
+
+msgid "SSL Outproxies"
+msgstr "SSL আউটপ্রক্সি"
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the outproxy here."
+msgstr "এখানে আউটপ্রক্সির .i2p ঠিকানা বা গন্তব্য (b32 বা b64) নির্দিষ্ট করুন।"
+
+msgid "For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p"
+msgstr "একটি পুল থেকে এলোমেলো নির্বাচনের জন্য, কমা দিয়ে পৃথক করুন যেমন server1.i2p,server2.i2p"
+
+msgid "Outproxy Type"
+msgstr "আউটপ্রক্সির ধরন"
+
+msgid "Tunnel Destination"
+msgstr "টানেল গন্তব্য"
+
+msgid "Use SSL"
+msgstr "SSL ব্যবহার করুন"
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the tunnel here."
+msgstr "এখানে টানেলের .i2p ঠিকানা বা গন্তব্য (b32 বা b64) নির্দিষ্ট করুন।"
+
+msgid "name, name:port, or destination"
+msgstr "নাম, নাম:পোর্ট, অথবা গন্তব্য"
+
+msgid "If you are accessing a service on a remote I2P router, you may wish to connect with SSL to avoid traffic interception. The client application should be also be configured to use SSL."
+msgstr "আপনি যদি একটি দূরবর্তী I2P রাউটারে একটি পরিষেবা অ্যাক্সেস করেন, ট্রাফিক ইন্টারসেপশন এড়াতে আপনি SSL দিয়ে সংযোগ করতে চাইতে পারেন। ক্লায়েন্ট অ্যাপ্লিকেশনটিও SSL ব্যবহার করতে কনফিগার করা উচিত।"
+
+msgid "Clients use SSL to connect to tunnel"
+msgstr "ক্লায়েন্টরা টানেলে সংযোগ করতে SSL ব্যবহার করে"
+
+msgid "Please specify the full b64 destination."
+msgstr "অনুগ্রহ করে সম্পূর্ণ b64 গন্তব্য নির্দিষ্ট করুন।"
+
+msgid "Local destination"
+msgstr "স্থানীয় গন্তব্য"
+
+msgid "Local Base32"
+msgstr "স্থানীয় Base32"
+
+msgid "Read Only: Local Destination (if known)"
+msgstr "শুধুমাত্র পঠনযোগ্য: স্থানীয় গন্তব্য (যদি জানা থাকে)"
+
+msgid "Stop"
+msgstr "বন্ধ"
+
+msgid "Start this Tunnel"
+msgstr "এই টানেল শুরু করুন"
+
+msgid "Start"
+msgstr "শুরু"
+
+msgid "Cancel"
+msgstr "বাতিল"
+
+msgid "Delete this tunnel (cannot be undone)"
+msgstr "এই টানেল মুছুন (পূর্বাবস্থায় ফেরানো যাবে না)"
+
+msgid "Delete"
+msgstr "মুছে ফেলুন"
+
+msgid "Save"
+msgstr "সংরক্ষণ করুন"
+
+msgid "Advanced networking options"
+msgstr "উন্নত নেটওয়ার্কিং বিকল্প"
+
+msgid "Note: When this client is configured to share tunnels, these options apply to all clients configured to share tunnels."
+msgstr "দ্রষ্টব্য: যখন এই ক্লায়েন্ট টানেল ভাগ করতে কনফিগার করা হয়, তখন এই বিকল্পগুলি টানেল ভাগ করতে কনফিগার করা সমস্ত ক্লায়েন্টের ক্ষেত্রে প্রযোজ্য।"
+
+msgid "Profile"
+msgstr "প্রোফাইল"
+
+msgid "Delay Connect"
+msgstr "সংযোগ বিলম্বিত করুন"
+
+msgid "Connection Profile"
+msgstr "সংযোগ প্রোফাইল"
+
+msgid "interactive connection"
+msgstr "ইন্টারঅ্যাকটিভ সংযোগ"
+
+msgid "bulk connection (downloads/websites/BT)"
+msgstr "বাল্ক সংযোগ (ডাউনলোড/ওয়েবসাইট/BT)"
+
+msgid "Delay Connection"
+msgstr "সংযোগ বিলম্বিত করুন"
+
+msgid "for request/response connections"
+msgstr "অনুরোধ/প্রতিক্রিয়া সংযোগের জন্য"
+
+msgid "Router I2CP Address"
+msgstr "রাউটার I2CP ঠিকানা"
+
+msgid "I2CP Hostname or IP"
+msgstr "I2CP হোস্টনেম বা IP"
+
+msgid "I2CP Port Number"
+msgstr "I2CP পোর্ট নম্বর"
+
+msgid "Delay tunnel open until required"
+msgstr "প্রয়োজন না হওয়া পর্যন্ত টানেল খোলা বিলম্বিত করুন"
+
+msgid "Signature type"
+msgstr "স্বাক্ষরের ধরন"
+
+msgid "Conserve resources by only creating tunnels when required"
+msgstr "প্রয়োজন হলেই কেবল টানেল তৈরি করে সম্পদ সংরক্ষণ করুন"
+
+msgid "Don't open tunnel until activity is detected on port"
+msgstr "পোর্টে কার্যকলাপ সনাক্ত না হওয়া পর্যন্ত টানেল খুলবেন না"
+
+msgid "This is the default, recommended option"
+msgstr "এটি ডিফল্ট, প্রস্তাবিত বিকল্প"
+
+msgid "Encryption types"
+msgstr "এনক্রিপশনের ধরন"
+
+msgid "Legacy options"
+msgstr "লিগ্যাসি বিকল্প"
+
+msgid "Post Quantum"
+msgstr "পোস্ট কোয়ান্টাম"
+
+msgid "Both encryption types"
+msgstr "উভয় এনক্রিপশনের ধরন"
+
+msgid "Tunnel Options"
+msgstr "টানেল বিকল্প"
+
+msgid "Length"
+msgstr "দৈর্ঘ্য"
+
+msgid "Count"
+msgstr "গণনা"
+
+msgid "Length of each Tunnel"
+msgstr "প্রতিটি টানেলের দৈর্ঘ্য"
+
+msgid "0 hop tunnel (no anonymity)"
+msgstr "০ হপ টানেল (কোন anonymity নেই)"
+
+msgid "1 hop tunnel (low anonymity)"
+msgstr "১ হপ টানেল (নিম্ন anonymity)"
+
+msgid "2 hop tunnel (medium anonymity)"
+msgstr "২ হপ টানেল (মাঝারি anonymity)"
+
+msgid "3 hop tunnel (high anonymity)"
+msgstr "৩ হপ টানেল (উচ্চ anonymity)"
+
+#, java-format
+msgid "{0} hop tunnel"
+msgid_plural "{0} hop tunnel"
+msgstr[0] "{0} হপ টানেল"
+msgstr[1] "{0} হপ টানেল"
+
+msgid "Number of Tunnels in Group"
+msgstr "গ্রুপে টানেলের সংখ্যা"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr "০ হপ টানেলের জন্য নিষ্ক্রিয়"
+
+msgid "Variance"
+msgstr "ভ্যারিয়েন্স"
+
+msgid "Backup Count"
+msgstr "ব্যাকআপ সংখ্যা"
+
+msgid "Level of Randomization for Tunnel Length"
+msgstr "টানেল দৈর্ঘ্যের জন্য র্যান্ডমাইজেশনের স্তর"
+
+msgid "0 hop variance"
+msgstr "০ হপ ভ্যারিয়েন্স"
+
+msgid "no randomization, consistent performance"
+msgstr "কোন র্যান্ডমাইজেশন নেই, ধারাবাহিক কর্মক্ষমতা"
+
+msgid "+ 0-1 hop variance"
+msgstr "+ ০-১ হপ ভ্যারিয়েন্স"
+
+msgid "medium randomization, lower performance"
+msgstr "মাঝারি র্যান্ডমাইজেশন, নিম্ন কর্মক্ষমতা"
+
+msgid "+ 0-2 hop variance"
+msgstr "+ ০-২ হপ ভ্যারিয়েন্স"
+
+msgid "high randomization, very low performance"
+msgstr "উচ্চ র্যান্ডমাইজেশন, খুব নিম্ন কর্মক্ষমতা"
+
+msgid "+/- 0-1 hop variance"
+msgstr "+/- ০-১ হপ ভ্যারিয়েন্স"
+
+msgid "standard randomization, standard performance"
+msgstr "মানক র্যান্ডমাইজেশন, মানক কর্মক্ষমতা"
+
+msgid "+/- 0-2 hop variance"
+msgstr "+/- ০-২ হপ ভ্যারিয়েন্স"
+
+msgid "not recommended"
+msgstr "সুপারিশ করা হয় না"
+
+msgid "hop variance"
+msgstr "হপ ভ্যারিয়েন্স"
+
+msgid "Number of Reserve Tunnels"
+msgstr "রিজার্ভ টানেলের সংখ্যা"
+
+#, java-format
+msgid "{0} backup tunnel"
+msgid_plural "{0} backup tunnels"
+msgstr[0] "{0} ব্যাকআপ টানেল"
+msgstr[1] "{0} ব্যাকআপ টানেল"
+
+msgid "no redundancy, no added resource usage"
+msgstr "কোন অপ্রয়োজনীয়তা নেই, কোন অতিরিক্ত সম্পদ ব্যবহার নেই"
+
+msgid "low redundancy, low resource usage"
+msgstr "নিম্ন অপ্রয়োজনীয়তা, নিম্ন সম্পদ ব্যবহার"
+
+msgid "medium redundancy, medium resource usage"
+msgstr "মাঝারি অপ্রয়োজনীয়তা, মাঝারি সম্পদ ব্যবহার"
+
+msgid "high redundancy, high resource usage"
+msgstr "উচ্চ অপ্রয়োজনীয়তা, উচ্চ সম্পদ ব্যবহার"
+
+msgid "Reduce tunnel quantity"
+msgstr "টানেল সংখ্যা হ্রাস করুন"
+
+msgid "Reduce tunnel count when idle to conserve resources but keep tunnel open (to ensure immediate availability)"
+msgstr "সম্পদ সংরক্ষণ করতে নিষ্ক্রিয় অবস্থায় টানেল সংখ্যা হ্রাস করুন কিন্তু টানেল খোলা রাখুন (তাৎক্ষণিক প্রাপ্যতা নিশ্চিত করতে)"
+
+msgid "Reduce tunnel quantity when idle"
+msgstr "নিষ্ক্রিয় অবস্থায় টানেল সংখ্যা হ্রাস করুন"
+
+msgid "Idle period"
+msgstr "নিষ্ক্রিয় সময়কাল"
+
+msgid "Reduced Tunnel Idle Time"
+msgstr "হ্রাসকৃত টানেল নিষ্ক্রিয় সময়"
+
+msgid "Reduced count"
+msgstr "হ্রাসকৃত সংখ্যা"
+
+msgid "Reduced tunnel count"
+msgstr "হ্রাসকৃত টানেল সংখ্যা"
+
+msgid "Close tunnels when idle"
+msgstr "নিষ্ক্রিয় অবস্থায় টানেল বন্ধ করুন"
+
+msgid "To conserve resources, close tunnels when not in use"
+msgstr "সম্পদ সংরক্ষণ করতে, ব্যবহার না হলে টানেল বন্ধ করুন"
+
+msgid "Close client tunnels after specified idle period"
+msgstr "নির্দিষ্ট নিষ্ক্রিয় সময়ের পরে ক্লায়েন্ট টানেল বন্ধ করুন"
+
+msgid "Close Tunnel Idle Time"
+msgstr "টানেল বন্ধের নিষ্ক্রিয় সময়"
+
+msgid "New Keys on Reopen"
+msgstr "পুনরায় খোলার সময় নতুন কী"
+
+msgid "Change tunnel identity (destination) when tunnels reopen"
+msgstr "টানেল পুনরায় খোলার সময় টানেল পরিচয় (গন্তব্য) পরিবর্তন করুন"
+
+msgid "Enable"
+msgstr "সক্রিয়"
+
+msgid "Retain tunnel identity (destination) when tunnels reopen"
+msgstr "টানেল পুনরায় খোলার সময় টানেল পরিচয় (গন্তব্য) ধরে রাখুন"
+
+msgid "Disable"
+msgstr "নিষ্ক্রিয়"
+
+msgid "Persistent private key"
+msgstr "স্থায়ী ব্যক্তিগত কী"
+
+msgid "Private key file"
+msgstr "ব্যক্তিগত কী ফাইল"
+
+msgid "Enabling this feature will ensure your tunnel identity (destination) remains static, for services offering features based on destination e.g. IRC user authentication"
+msgstr "এই বৈশিষ্ট্যটি সক্রিয় করলে নিশ্চিত হবে যে আপনার টানেল পরিচয় (গন্তব্য) স্থির থাকে, গন্তব্যের উপর ভিত্তি করে বৈশিষ্ট্য প্রদানকারী পরিষেবাগুলির জন্য যেমন IRC ব্যবহারকারী প্রমাণীকরণ"
+
+msgid "Generate key to enable persistent client tunnel identity"
+msgstr "স্থায়ী ক্লায়েন্ট টানেল পরিচয় সক্ষম করতে কী তৈরি করুন"
+
+msgid "Path to Private Key File"
+msgstr "ব্যক্তিগত কী ফাইলের পাথ"
+
+msgid "HTTP Filtering"
+msgstr "HTTP ফিল্টারিং"
+
+msgid "When enabled, the user agent of your web browser or http client will not be spoofed, potentially reducing your anonymity"
+msgstr "সক্রিয় করা হলে, আপনার ওয়েব ব্রাউজার বা http ক্লায়েন্টের ইউজার এজেন্ট স্পুফ করা হবে না, সম্ভাব্যভাবে আপনার anonymity হ্রাস করবে"
+
+msgid "Do not spoof User-Agent header"
+msgstr "User-Agent হেডার স্পুফ করবেন না"
+
+msgid "When enabled, the referer (originating page) of your web requests will not be filtered, potentially reducing your anonymity"
+msgstr "সক্রিয় করা হলে, আপনার ওয়েব অনুরোধের রেফারার (উৎপত্তি পৃষ্ঠা) ফিল্টার করা হবে না, সম্ভাব্যভাবে আপনার anonymity হ্রাস করবে"
+
+msgid "Do not block Referer header"
+msgstr "Referer হেডার ব্লক করবেন না"
+
+msgid "When enabled, the accept headers (mime types support) broadcast by your web browser will not be filtered, potentially reducing your anonymity"
+msgstr "সক্রিয় করা হলে, আপনার ওয়েব ব্রাউজার দ্বারা সম্প্রচারিত অ্যাকসেপ্ট হেডার (মাইম টাইপ সমর্থন) ফিল্টার করা হবে না, সম্ভাব্যভাবে আপনার anonymity হ্রাস করবে"
+
+msgid "Do not block Accept headers"
+msgstr "Accept হেডার ব্লক করবেন না"
+
+msgid "Allow SSL to I2P addresses when enabled"
+msgstr "সক্রিয় করা হলে I2P ঠিকানায় SSL অনুমতি দিন"
+
+msgid "Allow SSL to I2P addresses"
+msgstr "I2P ঠিকানায় SSL অনুমতি দিন"
+
+msgid "Local Authorization"
+msgstr "স্থানীয় অনুমোদন"
+
+msgid "Local Credentials"
+msgstr "স্থানীয় পরিচয়পত্র"
+
+msgid "Enable to require a username and password to access this local service (for example if hosting on a LAN)"
+msgstr "এই স্থানীয় পরিষেবা অ্যাক্সেস করতে একটি ব্যবহারকারীর নাম এবং পাসওয়ার্ড প্রয়োজন করতে সক্রিয় করুন (উদাহরণস্বরূপ LAN-এ হোস্টিং করলে)"
+
+msgid "Require local authorization for this service"
+msgstr "এই পরিষেবার জন্য স্থানীয় অনুমোদন প্রয়োজন"
+
+msgid "Set username required to access this service"
+msgstr "এই পরিষেবা অ্যাক্সেস করতে প্রয়োজনীয় ব্যবহারকারীর নাম সেট করুন"
+
+msgid "Username"
+msgstr "ব্যবহারকারীর নাম"
+
+msgid "Set password required to access this service"
+msgstr "এই পরিষেবা অ্যাক্সেস করতে প্রয়োজনীয় পাসওয়ার্ড সেট করুন"
+
+msgid "Password"
+msgstr "পাসওয়ার্ড"
+
+msgid "Outproxy Authorization"
+msgstr "আউটপ্রক্সি অনুমোদন"
+
+msgid "Remote Credentials"
+msgstr "দূরবর্তী পরিচয়পত্র"
+
+msgid "Enable if the outproxy a username and password to access"
+msgstr "আউটপ্রক্সি অ্যাক্সেস করতে ব্যবহারকারীর নাম এবং পাসওয়ার্ড প্রয়োজন হলে সক্রিয় করুন"
+
+msgid "Outproxy requires authorization"
+msgstr "আউটপ্রক্সির অনুমোদন প্রয়োজন"
+
+msgid "Enter username required by outproxy"
+msgstr "আউটপ্রক্সির প্রয়োজনীয় ব্যবহারকারীর নাম লিখুন"
+
+msgid "Enter password required by outproxy"
+msgstr "আউটপ্রক্সির প্রয়োজনীয় পাসওয়ার্ড লিখুন"
+
+msgid "Jump URL List"
+msgstr "জাম্প URL তালিকা"
+
+msgid "List of helper URLs providing jump links when a host is not found in your addressbook"
+msgstr "আপনার ঠিকানা বইতে একটি হোস্ট না পাওয়া গেলে জাম্প লিঙ্ক প্রদানকারী সহায়ক URL-এর তালিকা"
+
+msgid "Custom options"
+msgstr "কাস্টম বিকল্প"
+
+msgid "Advanced tunnel, streaming, and I2CP options"
+msgstr "উন্নত টানেল, স্ট্রিমিং এবং I2CP বিকল্প"
+
+msgid "New Server Configuration"
+msgstr "নতুন সার্ভার কনফিগারেশন"
+
+msgid "Hostname"
+msgstr "হোস্টনাম"
+
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "কোরিলেশন আক্রমণ থেকে রক্ষা করতে র্যান্ডম স্টার্টআপ বিলম্ব (যখন স্বয়ংক্রিয়-শুরু সক্রিয় থাকে)"
+
+msgid "Startup Delay"
+msgstr "স্টার্টআপ বিলম্ব"
+
+msgid "Minimum"
+msgstr "সর্বনিম্ন"
+
+msgid "Minimum startup delay"
+msgstr "সর্বনিম্ন স্টার্টআপ বিলম্ব"
+
+msgid "seconds"
+msgstr "সেকেন্ড"
+
+msgid "Maximum"
+msgstr "সর্বোচ্চ"
+
+msgid "Maximum startup delay"
+msgstr "সর্বোচ্চ স্টার্টআপ বিলম্ব"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "টানেল বন্ধের আগে র্যান্ডম বিলম্ব যোগ করুন, তারপর সুশৃঙ্খল রাউটার বন্ধ/পুনরারম্ভ প্রক্রিয়া শুরু করুন"
+
+msgid "Shutdown Delay"
+msgstr "শাটডাউন বিলম্ব"
+
+msgid "Minimum shutdown delay"
+msgstr "সর্বনিম্ন শাটডাউন বিলম্ব"
+
+msgid "Maximum shutdown delay"
+msgstr "সর্বোচ্চ শাটডাউন বিলম্ব"
+
+msgid "Website Hostname"
+msgstr "ওয়েবসাইট হোস্টনেম"
+
+msgid "(leave blank for outproxies)"
+msgstr "(আউটপ্রক্সির জন্য খালি রাখুন)"
+
+msgid "Website Hostname e.g. mysite.i2p"
+msgstr "ওয়েবসাইট হোস্টনেম যেমন mysite.i2p"
+
+msgid "Specify the port the server is running on"
+msgstr "সার্ভার যে পোর্টে চলছে তা নির্দিষ্ট করুন"
+
+msgid "Listening interface (IP address) for client access (normally 127.0.0.1)"
+msgstr "ক্লায়েন্ট অ্যাক্সেসের জন্য শোনার ইন্টারফেস (IP ঠিকানা) (সাধারণত 127.0.0.1)"
+
+msgid "To avoid traffic sniffing if connecting to a remote server, you can enable an SSL connection. Note that the target server must be configured to accept SSL connections."
+msgstr "দূরবর্তী সার্ভারে সংযোগ করার সময় ট্রাফিক স্নিফিং এড়াতে, আপনি একটি SSL সংযোগ সক্রিয় করতে পারেন। মনে রাখবেন টার্গেট সার্ভার SSL সংযোগ গ্রহণ করতে কনফিগার করা আবশ্যক।"
+
+msgid "Use SSL to connect to target"
+msgstr "টার্গেটে সংযোগ করতে SSL ব্যবহার করুন"
+
+msgid "Port required to access service (this can be a different port to the port the service is hosted on)"
+msgstr "পরিষেবা অ্যাক্সেস করতে প্রয়োজনীয় পোর্ট (এটি পরিষেবাটি যে পোর্টে হোস্ট করা হয়েছে তার থেকে আলাদা পোর্ট হতে পারে)"
+
+msgid "Generate a QR Code for this domain"
+msgstr "এই ডোমেনের জন্য একটি QR কোড তৈরি করুন"
+
+msgid "Generate QR Code"
+msgstr "QR কোড তৈরি করুন"
+
+msgid "Add to Private addressbook"
+msgstr "ব্যক্তিগত ঠিকানা বইতে যোগ করুন"
+
+msgid "Add to local addressbook"
+msgstr "স্থানীয় ঠিকানা বইতে যোগ করুন"
+
+msgid "Register, unregister or change details for hostname"
+msgstr "হোস্টনেমের জন্য নিবন্ধন, নিবন্ধনমুক্ত বা বিবরণ পরিবর্তন করুন"
+
+msgid "Registration Authentication"
+msgstr "নিবন্ধন প্রমাণীকরণ"
+
+msgid "HTTPS configuration"
+msgstr "HTTPS কনফিগারেশন"
+
+msgid "SSL Wizard"
+msgstr "SSL উইজার্ড"
+
+msgid "Note: In order to enable QR code generation or registration authentication, configure the Website Hostname field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
+msgstr "দ্রষ্টব্য: QR কোড জেনারেশন বা নিবন্ধন প্রমাণীকরণ সক্ষম করতে, উপরের ওয়েবসাইট হোস্টনেম ফিল্ড (ওয়েবসাইটের জন্য) বা নাম ফিল্ড (অন্য সবকিছুর জন্য) একটি .i2p প্রত্যয়যুক্ত হোস্টনেম যেমন mynewserver.i2p দিয়ে কনফিগার করুন"
+
+msgid "Absolute path to Private Key File (will be created if it does not exist)"
+msgstr "ব্যক্তিগত কী ফাইলের সম্পূর্ণ পাথ (যদি না থাকে তবে তৈরি করা হবে)"
+
+msgid "Alternate private key file"
+msgstr "বিকল্প ব্যক্তিগত কী ফাইল"
+
+msgid "Alternate local destination"
+msgstr "বিকল্প স্থানীয় গন্তব্য"
+
+msgid "Absolute path for new key (will be created)"
+msgstr "নতুন কী-র জন্য সম্পূর্ণ পাথ (তৈরি করা হবে)"
+
+msgid "Read Only: Alternate Local Destination"
+msgstr "শুধুমাত্র পঠনযোগ্য: বিকল্প স্থানীয় গন্তব্য"
+
+msgid "Specify filename or full path for new key"
+msgstr "নতুন কী-র জন্য ফাইলনেম বা সম্পূর্ণ পাথ নির্দিষ্ট করুন"
+
+msgid "Configuration cannot be changed after destination is created"
+msgstr "গন্তব্য তৈরি হওয়ার পরে কনফিগারেশন পরিবর্তন করা যাবে না"
+
+msgid "Configuration of signature type is only possible when the tunnel is first created. To change, you must create a new tunnel."
+msgstr "স্বাক্ষরের ধরনের কনফিগারেশন শুধুমাত্র টানেল প্রথম তৈরি করার সময় সম্ভব। পরিবর্তন করতে, আপনাকে একটি নতুন টানেল তৈরি করতে হবে।"
+
+msgid "Legacy option, with alternate key configured"
+msgstr "লিগ্যাসি বিকল্প, বিকল্প কী কনফিগার করা সহ"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "লিগ্যাসি বিকল্প (অপ্রচলিত), পশ্চাদগামী সামঞ্জস্যের জন্য প্রদত্ত"
+
+msgid "Recommended for blinded and encrypted destinations"
+msgstr "ব্লাইন্ডেড এবং এনক্রিপ্টেড গন্তব্যগুলির জন্য সুপারিশ করা হয়"
+
+msgid "Inbound"
+msgstr "ইনবাউন্ড"
+
+msgid "Outbound"
+msgstr "আউটবাউন্ড"
+
+msgid "no anonymity"
+msgstr "কোন anonymity নেই"
+
+msgid "low anonymity"
+msgstr "নিম্ন anonymity"
+
+msgid "medium anonymity"
+msgstr "মাঝারি anonymity"
+
+msgid "high anonymity"
+msgstr "উচ্চ anonymity"
+
+msgid "Level of Randomization for Tunnel Depth"
+msgstr "টানেল গভীরতার জন্য র্যান্ডমাইজেশনের স্তর"
+
+msgid "very high randomization, very low performance"
+msgstr "অত্যন্ত উচ্চ র্যান্ডমাইজেশন, অত্যন্ত নিম্ন কর্মক্ষমতা"
+
+msgid "+ 0-3 hop variance"
+msgstr "+ ০-৩ হপ ভ্যারিয়েন্স"
+
+msgid "definitely not recommended"
+msgstr "অবশ্যই সুপারিশ করা হয় না"
+
+msgid "+/- 0-3 hop variance"
+msgstr "+/- ০-৩ হপ ভ্যারিয়েন্স"
+
+msgid "backup tunnels"
+msgstr "ব্যাকআপ টানেল"
+
+msgid "Reduce tunnels to conserve resources"
+msgstr "সম্পদ সংরক্ষণের জন্য টানেল সংখ্যা হ্রাস করুন"
+
+msgid "Period of inactivity before tunnel number is reduced"
+msgstr "টানেল সংখ্যা হ্রাসের পূর্বে নিষ্ক্রিয়তার সময়সীমা"
+
+msgid "minutes"
+msgstr "মিনিট"
+
+msgid "Number of tunnels to keep open to maintain availability of service"
+msgstr "সেবার প্রাপ্যতা বজায় রাখতে খোলা রাখার জন্য টানেলের সংখ্যা"
+
+msgid "Server Access Options"
+msgstr "সার্ভার অ্যাক্সেস অপশন"
+
+msgid "Prevent clients from accessing this service via an inproxy"
+msgstr "ক্লায়েন্টদের ইনপ্রক্সির মাধ্যমে এই সেবা অ্যাক্সেস করা থেকে বিরত রাখুন"
+
+msgid "Block Access via Inproxies"
+msgstr "ইনপ্রক্সির মাধ্যমে অ্যাক্সেস ব্লক করুন"
+
+msgid "Block Accesses containing Referers"
+msgstr "রেফারার সম্বলিত অ্যাক্সেস ব্লক করুন"
+
+msgid "Use unique IP addresses for each connecting client (local non-SSL servers only)"
+msgstr "প্রতিটি সংযোগকারী ক্লায়েন্টের জন্য পৃথক IP ঠিকানা ব্যবহার করুন (শুধুমাত্র স্থানীয় নন-SSL সার্ভার)"
+
+msgid "Unique Local Address per Client"
+msgstr "প্রতি ক্লায়েন্টে অনন্য স্থানীয় ঠিকানা"
+
+msgid "Only enable if you are hosting this service on multiple routers"
+msgstr "শুধুমাত্র যদি আপনি এই সেবাটি একাধিক রাউটারে হোস্ট করছেন তবে সক্রিয় করুন"
+
+msgid "Optimize for Multihoming"
+msgstr "মাল্টিহোমিংয়ের জন্য অপ্টিমাইজ করুন"
+
+msgid "Deny User-Agents matching these strings (probably from inproxies)"
+msgstr "এই স্ট্রিংগুলির সাথে মেলে এমন User-Agent অস্বীকার করুন (সম্ভবত ইনপ্রক্সি থেকে)"
+
+msgid "Block these User-Agents"
+msgstr "এই User-Agent গুলি ব্লক করুন"
+
+msgid "comma separated, e.g. Mozilla,Opera (case-sensitive)"
+msgstr "কমা দ্বারা পৃথক, যেমন Mozilla,Opera (কেস-সংবেদনশীল)"
+
+msgid "Encrypt Leaseset"
+msgstr "লিজসেট এনক্রিপ্ট করুন"
+
+msgid "Optional Lookup Password"
+msgstr "ঐচ্ছিক লুকআপ পাসওয়ার্ড"
+
+msgid "Keyring Manager"
+msgstr "কিরিং ব্যবস্থাপক"
+
+msgid "Allow all clients to connect to this service"
+msgstr "সমস্ত ক্লায়েন্টকে এই সেবায় সংযোগের অনুমতি দিন"
+
+msgid "Send key to all users."
+msgstr "সকল ব্যবহারকারীকে কী পাঠান।"
+
+msgid "Encrypted"
+msgstr "এনক্রিপ্টেড"
+
+msgid "Prevents server discovery by floodfills"
+msgstr "Floodfill দ্বারা সার্ভার আবিষ্কার প্রতিরোধ করে"
+
+msgid "Blinded"
+msgstr "ব্লাইন্ডেড"
+
+msgid "Send password to all users."
+msgstr "সকল ব্যবহারকারীকে পাসওয়ার্ড পাঠান।"
+
+msgid "Blinded with lookup password"
+msgstr "লুকআপ পাসওয়ার্ড সহ ব্লাইন্ডেড"
+
+msgid "Send key and password to all users."
+msgstr "সকল ব্যবহারকারীকে কী এবং পাসওয়ার্ড পাঠান।"
+
+msgid "Encrypted with lookup password"
+msgstr "লুকআপ পাসওয়ার্ড সহ এনক্রিপ্টেড"
+
+msgid "Send individual key to each user."
+msgstr "প্রত্যেক ব্যবহারকারীকে পৃথক কী পাঠান।"
+
+msgid "Encrypted with per-user key"
+msgstr "প্রতি-ব্যবহারকারী কী সহ এনক্রিপ্টেড"
+
+msgid "Encrypted with lookup password and per-user key"
+msgstr "লুকআপ পাসওয়ার্ড এবং প্রতি-ব্যবহারকারী কী সহ এনক্রিপ্টেড"
+
+msgid "Enter key from each user."
+msgstr "প্রত্যেক ব্যবহারকারীর কাছ থেকে কী প্রবেশ করান।"
+
+msgid "Encryption Key"
+msgstr "এনক্রিপশন কী"
+
+msgid "Generate New Key"
+msgstr "নতুন কী তৈরি করুন"
+
+msgid "Encryption key required to access this service"
+msgstr "এই সেবা অ্যাক্সেসের জন্য এনক্রিপশন কী প্রয়োজন"
+
+msgid "Generate new encryption key"
+msgstr "নতুন এনক্রিপশন কী তৈরি করুন"
+
+msgid "Generate"
+msgstr "জেনারেট করুন"
+
+msgid "Tunnel must be stopped first"
+msgstr "প্রথমে টানেল বন্ধ করতে হবে"
+
+msgid "Client Manager"
+msgstr "ক্লায়েন্ট ব্যবস্থাপক"
+
+msgid "Client Name"
+msgstr "ক্লায়েন্ট নাম"
+
+msgid "Client Key"
+msgstr "ক্লায়েন্ট কী"
+
+msgid "Revoke"
+msgstr "প্রত্যাহার"
+
+msgid "Client"
+msgstr "ক্লায়েন্ট"
+
+msgid "Add"
+msgstr "যোগ করুন"
+
+msgid "Restricted Access List"
+msgstr "সীমাবদ্ধ অ্যাক্সেস তালিকা"
+
+msgid "Activate to enable editing"
+msgstr "সম্পাদনা সক্রিয় করতে চালু করুন"
+
+msgid "Tunnel Filter"
+msgstr "টানেল ফিল্টার"
+
+msgid "Help with defining tunnel filters"
+msgstr "টানেল ফিল্টার সংজ্ঞায়িত করতে সহায়তা"
+
+msgid "Prevent listed clients from connecting to this service"
+msgstr "তালিকাভুক্ত ক্লায়েন্টদের এই সেবায় সংযোগ থেকে বিরত রাখুন"
+
+msgid "Blacklist"
+msgstr "ব্ল্যাকলিস্ট"
+
+msgid "Only allow listed clients to connect to this service"
+msgstr "শুধুমাত্র তালিকাভুক্ত ক্লায়েন্টদের এই সেবায় সংযোগের অনুমতি দিন"
+
+msgid "Whitelist"
+msgstr "হোয়াইটলিস্ট"
+
+msgid "Absolute path to file containing filter definition"
+msgstr "ফিল্টার সংজ্ঞা ধারণকারী ফাইলের সম্পূর্ণ পাথ"
+
+msgid "Absolute path to filter definition"
+msgstr "ফিল্টার সংজ্ঞার সম্পূর্ণ পাথ"
+
+msgid "Specify client destinations, 1 per line"
+msgstr "ক্লায়েন্ট গন্তব্য নির্ধারণ করুন, প্রতি লাইনে ১টি"
+
+msgid "Server Throttling"
+msgstr "সার্ভার থ্রটলিং"
+
+msgid "Inbound connection limits"
+msgstr "ইনবাউন্ড সংযোগ সীমা"
+
+msgid "Per Minute"
+msgstr "প্রতি মিনিটে"
+
+msgid "Per Hour"
+msgstr "প্রতি ঘণ্টায়"
+
+msgid "Per Day"
+msgstr "প্রতি দিনে"
+
+msgid "Concurrent"
+msgstr "সমন্বিত"
+
+msgid "Per Client"
+msgstr "প্রতি ক্লায়েন্ট"
+
+msgid "Maximum number of web page requests per minute for a unique client before access to the server is blocked"
+msgstr "সার্ভারে অ্যাক্সেস ব্লক হওয়ার আগে একটি স্বতন্ত্র ক্লায়েন্টের প্রতি মিনিটে ওয়েব পৃষ্ঠা অনুরোধের সর্বাধিক সংখ্যা"
+
+msgid "(0 = unlimited)"
+msgstr "(০ = সীমাহীন)"
+
+msgid "Maximum number of web page requests per hour for a unique client before access to the server is blocked"
+msgstr "সার্ভারে অ্যাক্সেস ব্লক হওয়ার আগে একটি স্বতন্ত্র ক্লায়েন্টের প্রতি ঘণ্টায় ওয়েব পৃষ্ঠা অনুরোধের সর্বাধিক সংখ্যা"
+
+msgid "Maximum number of web page requests per day for a unique client before access to the server is blocked"
+msgstr "সার্ভারে অ্যাক্সেস ব্লক হওয়ার আগে একটি স্বতন্ত্র ক্লায়েন্টের প্রতি দিনে ওয়েব পৃষ্ঠা অনুরোধের সর্বাধিক সংখ্যা"
+
+msgid "Total"
+msgstr "মোট"
+
+msgid "Total number of web page requests per minute before access to the server is blocked"
+msgstr "সার্ভারে অ্যাক্সেস ব্লক হওয়ার আগে প্রতি মিনিটে মোট ওয়েব পৃষ্ঠা অনুরোধের সংখ্যা"
+
+msgid "Total number of web page requests per hour before access to the server is blocked"
+msgstr "সার্ভারে অ্যাক্সেস ব্লক হওয়ার আগে প্রতি ঘণ্টায় মোট ওয়েব পৃষ্ঠা অনুরোধের সংখ্যা"
+
+msgid "Total number of web page requests per day before access to the server is blocked"
+msgstr "সার্ভারে অ্যাক্সেস ব্লক হওয়ার আগে প্রতি দিনে মোট ওয়েব পৃষ্ঠা অনুরোধের সংখ্যা"
+
+msgid "Maximum number of simultaneous client connections"
+msgstr "সর্বাধিক সমকালীন ক্লায়েন্ট সংযোগ সংখ্যা"
+
+msgid "POST limits"
+msgstr "POST সীমা"
+
+msgid "Per Period"
+msgstr "প্রতি সময়সীমায়"
+
+msgid "Ban Duration"
+msgstr "নিষেধাজ্ঞার সময়কাল"
+
+msgid "POST limit period"
+msgstr "POST সীমা সময়কাল"
+
+msgid "Maximum number of post requests permitted for a unique client for the configured timespan"
+msgstr "নির্ধারিত সময়সীমার জন্য একটি স্বতন্ত্র ক্লায়েন্টের জন্য অনুমোদিত সর্বাধিক POST অনুরোধ সংখ্যা"
+
+msgid "If a client exceeds the maximum number of post requests per allocated period, enforce a ban for this number of minutes"
+msgstr "যদি কোনো ক্লায়েন্ট বরাদ্দ সময়সীমার মধ্যে সর্বাধিক POST অনুরোধ সংখ্যা অতিক্রম করে, তাহলে এই সংখ্যক মিনিটের জন্য নিষেধাজ্ঞা প্রয়োগ করুন"
+
+msgid "Timespan for the maximum number of post requests to be reached before a ban is triggered"
+msgstr "নিষেধাজ্ঞা কার্যকর হওয়ার আগে সর্বাধিক POST অনুরোধ সংখ্যায় পৌঁছানোর সময়সীমা"
+
+msgid "Total number of post requests permitted for the configured timespan"
+msgstr "নির্ধারিত সময়সীমার জন্য অনুমোদিত মোট POST অনুরোধ সংখ্যা"
+
+msgid "If the maximum number of post requests per allocated period is exceeded, enforce a global access ban for this number of minutes"
+msgstr "যদি বরাদ্দ সময়সীমার মধ্যে সর্বাধিক POST অনুরোধ সংখ্যা অতিক্রম করা হয়, তাহলে এই সংখ্যক মিনিটের জন্য বিশ্বব্যাপী অ্যাক্সেস নিষেধাজ্ঞা প্রয়োগ করুন"
+
+msgid "Custom HTTP Headers"
+msgstr "কাস্টম HTTP হেডার"
+
+msgid "Note: These custom headers will only be enabled for served files that don't have the relevant header already set."
+msgstr "দ্রষ্টব্য: এই কাস্টম হেডারগুলি শুধুমাত্র সেই ফাইলগুলির জন্য সক্রিয় হবে যেখানে পূর্বে প্রাসঙ্গিক হেডার নির্ধারিত নেই।"
+
+msgid "Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text files"
+msgstr "html, xml, json এবং টেক্সট ফাইলের জন্য Allow হেডার 'GET, POST, HEAD' এ নির্ধারণ করুন"
+
+msgid "Allow"
+msgstr "Allow"
+
+msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immutable for everything else)"
+msgstr "Cache-Control হেডার সক্রিয় করুন (html, xml, json এবং টেক্সটের জন্য no-cache, বাকি সবকিছুর জন্য immutable)"
+
+msgid "Cache-Control"
+msgstr "Cache-Control"
+
+msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
+msgstr "html, xml, json এবং টেক্সট ফাইলের জন্য Referrer-Policy হেডার 'same-origin' এ নির্ধারণ করুন"
+
+msgid "Referrer-Policy"
+msgstr "Referrer-Policy"
+
+msgid "Set the X-Content-Type-Options header to 'nosniff'"
+msgstr "X-Content-Type-Options হেডার 'nosniff' এ নির্ধারণ করুন"
+
+msgid "X-Content-Type-Options"
+msgstr "X-Content-Type-Options"
+
+#, java-format
+msgid "Initializing Tunnel Manager{0}"
+msgstr "টানেল ব্যবস্থাপক শুরু করা হচ্ছে{0}"
+
+msgid "Tunnels not initialized yet; please retry in a few moments."
+msgstr "টানেলগুলি এখনও চালু হয়নি; অনুগ্রহ করে কয়েক মুহূর্ত পরে পুনরায় চেষ্টা করুন।"
+
+msgid "Status Messages"
+msgstr "স্থিতি বার্তা"
+
+msgid "Clear"
+msgstr "পরিষ্কার"
+
+msgid "Refresh"
+msgstr "রিফ্রেশ"
+
+msgid "Global Tunnel Control"
+msgstr "বৈশ্বিক টানেল নিয়ন্ত্রণ"
+
+msgid "Tunnel Wizard"
+msgstr "টানেল উইজার্ড"
+
+msgid "Stop All"
+msgstr "সব বন্ধ করুন"
+
+msgid "Start All"
+msgstr "সব শুরু করুন"
+
+msgid "Restart all running tunnels"
+msgstr "সমস্ত চলমান টানেল পুনরায় শুরু করুন"
+
+msgid "Restart All"
+msgstr "সব পুনরায় শুরু করুন"
+
+msgid "Restart all running server tunnels"
+msgstr "সমস্ত চলমান সার্ভার টানেল পুনরায় শুরু করুন"
+
+msgid "Restart All Servers"
+msgstr "সব সার্ভার পুনরায় শুরু করুন"
+
+msgid "Restart all running client tunnels"
+msgstr "সমস্ত চলমান ক্লায়েন্ট টানেল পুনরায় শুরু করুন"
+
+msgid "Restart All Clients"
+msgstr "সব ক্লায়েন্ট পুনরায় শুরু করুন"
+
+msgid "I2P Server Tunnels"
+msgstr "I2P সার্ভার টানেল"
+
+msgid "Helper"
+msgstr "সহায়ক"
+
+msgid "Type"
+msgstr "ধরন"
+
+msgid "Points at"
+msgstr "নির্দেশ করছে"
+
+msgid "Preview"
+msgstr "পূর্বরূপ"
+
+msgid "Status"
+msgstr "অবস্থা"
+
+msgid "Control"
+msgstr "নিয়ন্ত্রণ"
+
+msgid "Edit Server Tunnel Settings for"
+msgstr "এর জন্য সার্ভার টানেল সেটিংস সম্পাদনা"
+
+msgid "Test IRC server, bypassing I2P"
+msgstr "I2P বাইপাস করে IRC সার্ভার পরীক্ষা করুন"
+
+msgid "Test HTTPS server, bypassing I2P"
+msgstr "I2P বাইপাস করে HTTPS সার্ভার পরীক্ষা করুন"
+
+msgid "Test HTTP server, bypassing I2P"
+msgstr "I2P বাইপাস করে HTTP সার্ভার পরীক্ষা করুন"
+
+msgid "Test HTTP server through I2P"
+msgstr "I2P এর মাধ্যমে HTTP সার্ভার পরীক্ষা করুন"
+
+msgid "Base32 Address"
+msgstr "Base32 ঠিকানা"
+
+msgid "Offline"
+msgstr "অফলাইন"
+
+msgid "No Preview"
+msgstr "কোনো পূর্বরূপ নেই"
+
+msgid "Starting..."
+msgstr "শুরু হচ্ছে..."
+
+msgid "Starting in"
+msgstr "শুরু হবে"
+
+msgid "Running"
+msgstr "চলমান"
+
+msgid "Hops"
+msgstr "হপস"
+
+msgid "in"
+msgstr "আগত"
+
+msgid "out"
+msgstr "বহির্গামী"
+
+msgid "Stopped"
+msgstr "বন্ধ"
+
+msgid "Stop this Tunnel"
+msgstr "এই টানেল বন্ধ করুন"
+
+msgid "Restart this Tunnel"
+msgstr "এই টানেল পুনরায় শুরু করুন"
+
+msgid "Restart"
+msgstr "পুনরায় চালু"
+
+msgid "Destination"
+msgstr "গন্তব্য"
+
+msgid "Signature"
+msgstr "স্বাক্ষর"
+
+msgid "Alternate"
+msgstr "বিকল্প"
+
+msgid "Alt Destination"
+msgstr "বিকল্প গন্তব্য"
+
+msgid "Encryption"
+msgstr "এনক্রিপশন"
+
+msgid "Supported encryption"
+msgstr "সমর্থিত এনক্রিপশন"
+
+msgid "New server tunnel"
+msgstr "নতুন সার্ভার টানেল"
+
+msgid "Standard"
+msgstr "মান"
+
+msgid "Create"
+msgstr "তৈরি করুন"
+
+msgid "I2P Client Tunnels"
+msgstr "I2P ক্লায়েন্ট টানেল"
+
+msgid "Interface"
+msgstr "ইন্টারফেস"
+
+msgid "Edit Tunnel Settings for"
+msgstr "এর জন্য টানেল সেটিংস সম্পাদনা"
+
+msgid "Standby"
+msgstr "স্ট্যান্ডবাই"
+
+msgid "Outproxy"
+msgstr "আউটপ্রক্সি"
+
+msgid "internal plugin"
+msgstr "অভ্যন্তরীণ প্লাগইন"
+
+msgid "none"
+msgstr "কিছুই নয়"
+
+msgid "New client tunnel"
+msgstr "নতুন ক্লায়েন্ট টানেল"
+
+msgid "Registration Helper"
+msgstr "নিবন্ধন সহায়ক"
+
+msgid "This service uses encrypted leasesets. Registration is not recommended. Registration authentication is disabled."
+msgstr "এই সেবা এনক্রিপ্টেড লিজসেট ব্যবহার করে। নিবন্ধন সুপারিশ করা হয় না। নিবন্ধন প্রমাণীকরণ নিষ্ক্রিয়।"
+
+msgid "Please be sure to select, copy, and paste the entire contents of the appropriate authentication data into the form of your favorite registration site"
+msgstr "অনুগ্রহ করে যথাযথ প্রমাণীকরণ ডেটার সম্পূর্ণ বিষয়বস্তু নির্বাচন, অনুলিপি এবং আপনার পছন্দের নিবন্ধন সাইটের ফর্মে পেস্ট করুন"
+
+msgid "Tunnel name"
+msgstr "টানেল নাম"
+
+msgid "Website name"
+msgstr "ওয়েবসাইট নাম"
+
+msgid "Local Destination"
+msgstr "স্থানীয় গন্তব্য"
+
+msgid "Local destination is not available. Start the tunnel."
+msgstr "স্থানীয় গন্তব্য উপলব্ধ নয়। টানেল শুরু করুন।"
+
+msgid "To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'"
+msgstr "নিবন্ধন যাচাই সক্রিয় করতে, টানেল সম্পাদনা করুন এবং নাম (বা ওয়েবসাইট নাম) '.i2p' এ শেষ হওয়া একটি বৈধ হোস্ট নামে নির্ধারণ করুন"
+
+msgid "To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'"
+msgstr "নিবন্ধন যাচাই সক্রিয় করতে, টানেল সম্পাদনা করুন এবং নাম '.i2p' এ শেষ হওয়া একটি বৈধ হোস্ট নামে নির্ধারণ করুন"
+
+msgid "Destination signing key is not available. Start the tunnel."
+msgstr "গন্তব্য স্বাক্ষর কী উপলব্ধ নয়। টানেল শুরু করুন।"
+
+msgid "Destination signing key is offline. Use CLI tools on the offline machine."
+msgstr "গন্তব্য স্বাক্ষর কী অফলাইন। অফলাইন মেশিনে CLI টুল ব্যবহার করুন।"
+
+#, java-format
+msgid "Authentication for adding host {0}"
+msgstr "হোস্ট {0} যোগ করার জন্য প্রমাণীকরণ"
+
+msgid "Copy and paste this to the registration site"
+msgstr "এটি নিবন্ধন সাইটে অনুলিপি এবং পেস্ট করুন"
+
+msgid "Advanced authentication strings"
+msgstr "উন্নত প্রমাণীকরণ স্ট্রিং"
+
+#, java-format
+msgid "Authentication for removing host {0}"
+msgstr "হোস্ট {0} অপসারণের জন্য প্রমাণীকরণ"
+
+msgid "Authentication for changing name"
+msgstr "নাম পরিবর্তনের জন্য প্রমাণীকরণ"
+
+#, java-format
+msgid "This will change the name from {0} to {1}, using the same destination"
+msgstr "এটি নাম {0} থেকে {1} এ পরিবর্তন করবে, একই গন্তব্য ব্যবহার করে"
+
+msgid "This tunnel must be configured with the new host name."
+msgstr "এই টানেলটি নতুন হোস্ট নামের সাথে কনফিগার করতে হবে।"
+
+msgid "Enter old hostname below."
+msgstr "নীচে পুরানো হোস্টনাম লিখুন।"
+
+msgid "Authentication for adding alias"
+msgstr "উপনাম যোগ করার জন্য প্রমাণীকরণ"
+
+#, java-format
+msgid "This will add an alias {0} for {1}, using the same destination"
+msgstr "এটি {1} এর জন্য একটি উপনাম {0} যোগ করবে, একই গন্তব্য ব্যবহার করে"
+
+msgid "Authentication for changing destination"
+msgstr "গন্তব্য পরিবর্তনের জন্য প্রমাণীকরণ"
+
+#, java-format
+msgid "This will change the destination for {0}"
+msgstr "এটি {0} এর গন্তব্য পরিবর্তন করবে"
+
+msgid "This tunnel must be configured with the new destination."
+msgstr "এই টানেলটি নতুন গন্তব্যের সাথে কনফিগার করতে হবে।"
+
+msgid "Enter old destination below."
+msgstr "নিচে পুরনো গন্তব্য লিখুন।"
+
+msgid "Authentication for adding alternate destination"
+msgstr "বিকল্প গন্তব্য যোগ করার জন্য প্রমাণীকরণ"
+
+#, java-format
+msgid "This will add an alternate destination for {0}"
+msgstr "এটি {0} এর জন্য একটি বিকল্প গন্তব্য যোগ করবে"
+
+msgid "Authentication for adding subdomain"
+msgstr "সাবডোমেইন যোগ করার জন্য প্রমাণীকরণ"
+
+#, java-format
+msgid "This will add a subdomain {0} of {1}, with a different destination"
+msgstr "এটি {1} এর একটি সাবডোমেইন {0} যোগ করবে, একটি ভিন্ন গন্তব্য সহ"
+
+msgid "This tunnel must be configured with the new subdomain and destination."
+msgstr "এই টানেলটি নতুন সাবডোমেইন এবং গন্তব্যের সাথে কনফিগার করতে হবে।"
+
+msgid "Enter higher-level domain and destination below."
+msgstr "নিচে উচ্চ-স্তরের ডোমেইন এবং গন্তব্য লিখুন।"
+
+msgid "Return to Tunnel Configuration"
+msgstr "টানেল কনফিগারেশনে ফিরে যান"
+
+msgid "Specify old name and destination"
+msgstr "পুরনো নাম এবং গন্তব্য নির্ধারণ করুন"
+
+msgid "This is only required for advanced authentication."
+msgstr "এটি শুধুমাত্র উন্নত প্রমাণীকরণের জন্য প্রয়োজন।"
+
+msgid "See above for required items."
+msgstr "প্রয়োজনীয় আইটেমগুলির জন্য উপরে দেখুন।"
+
+msgid "Old / parent hostname "
+msgstr "পুরনো / প্যারেন্ট হোস্টনাম"
+
+msgid "Private key file for old destination / sub-domain parent"
+msgstr "পুরনো গন্তব্য / সাব-ডোমেইন প্যারেন্টের জন্য প্রাইভেট কী ফাইল"
+
+msgid "Generate Authentication"
+msgstr "প্রমাণীকরণ তৈরি করুন"
+
+msgid "SSL Helper"
+msgstr "SSL সহায়ক"
+
+msgid "Experts only!"
+msgstr "শুধুমাত্র বিশেষজ্ঞদের জন্য!"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Alt Base32"
+msgstr "বিকল্প Base32"
+
+msgid "Incoming I2P Port Routing"
+msgstr "আগত I2P পোর্ট রাউটিং"
+
+msgid "Virtual Host"
+msgstr "ভার্চুয়াল হোস্ট"
+
+msgid "Via SSL?"
+msgstr "SSL এর মাধ্যমে?"
+
+msgid "Test HTTPS server through I2P"
+msgstr "I2P এর মাধ্যমে HTTPS সার্ভার পরীক্ষা করুন"
+
+msgid "Server"
+msgstr "সার্ভার"
+
+msgid "SSL Activation"
+msgstr "SSL সক্রিয়করণ"
+
+msgid "I2P webserver (eepsite)"
+msgstr "I2P ওয়েবসার্ভার (ইপসাইট)"
+
+msgid "Disable SSL"
+msgstr "SSL নিষ্ক্রিয় করুন"
+
+msgid "Enable SSL"
+msgstr "SSL সক্রিয় করুন"
+
+msgid "New Certificate Password"
+msgstr "নতুন সার্টিফিকেট পাসওয়ার্ড"
+
+msgid "Password (required to encrypt the certificate)"
+msgstr "পাসওয়ার্ড (সার্টিফিকেট এনক্রিপ্ট করার জন্য প্রয়োজন)"
+
+msgid "Generate new SSL certificate"
+msgstr "নতুন SSL সার্টিফিকেট তৈরি করুন"
+
+msgid "Generate SSL certificate and enable"
+msgstr "SSL সার্টিফিকেট তৈরি করুন এবং সক্রিয় করুন"
+
+#, java-format
+msgid "Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel"
+msgstr "কনফিগার করা যাচ্ছে না, {0}ক্লায়েন্ট কনফিগারেশন{1} এ এই টানেলের সাথে মেলে এমন কোনো Jetty সার্ভার পাওয়া যায়নি"
+
+msgid "Support for non-Jetty servers will be added in a future release"
+msgstr "নন-Jetty সার্ভারগুলির জন্য সমর্থন ভবিষ্যতের রিলিজে যোগ করা হবে"
+
+msgid "Return to Tunnel Manager Index"
+msgstr "টানেল ব্যবস্থাপক সূচকে ফিরে যান"
+
+msgid "Return to Tunnel Editor"
+msgstr "টানেল সম্পাদকে ফিরে যান"
+
+msgid "I2P Tunnel Manager - Tunnel Creation Wizard"
+msgstr "I2P টানেল ব্যবস্থাপক - টানেল তৈরি উইজার্ড"
+
+msgid "Server or client tunnel?"
+msgstr "সার্ভার না ক্লায়েন্ট টানেল?"
+
+msgid "Tunnel type"
+msgstr "টানেল প্রকার"
+
+msgid "Tunnel name and description"
+msgstr "টানেল নাম এবং বিবরণ"
+
+msgid "Tunnel destination"
+msgstr "টানেল গন্তব্য"
+
+msgid "Binding address and port"
+msgstr "বাইন্ডিং ঠিকানা এবং পোর্ট"
+
+msgid "Tunnel auto-start"
+msgstr "টানেল স্বয়ংক্রিয়-শুরু"
+
+msgid "Wizard completed"
+msgstr "উইজার্ড সম্পন্ন"
+
+msgid "This wizard will take you through the various options available for creating tunnels in I2P."
+msgstr "এই উইজার্ডটি আপনাকে I2P-এ টানেল তৈরির জন্য উপলব্ধ বিভিন্ন অপশনের মাধ্যমে নিয়ে যাবে।"
+
+msgid "The first thing to decide is whether you want to create a server or a client tunnel."
+msgstr "প্রথমেই সিদ্ধান্ত নিতে হবে আপনি একটি সার্ভার না ক্লায়েন্ট টানেল তৈরি করতে চান।"
+
+msgid "If you need to connect to a remote service, such as an IRC server inside I2P or a code repository, then you will require a CLIENT tunnel."
+msgstr "যদি আপনার একটি দূরবর্তী সেবায় সংযোগ প্রয়োজন হয়, যেমন I2P এর ভেতরে একটি IRC সার্ভার বা কোড রিপোজিটরি, তাহলে আপনার একটি ক্লায়েন্ট টানেল প্রয়োজন হবে।"
+
+msgid "On the other hand, if you wish to host a service for others to connect to you'll need to create a SERVER tunnel."
+msgstr "অন্যদিকে, যদি আপনি অন্যদের সংযোগের জন্য একটি সেবা হোস্ট করতে চান, তাহলে আপনাকে একটি সার্ভার টানেল তৈরি করতে হবে।"
+
+msgid "Server Tunnel"
+msgstr "সার্ভার টানেল"
+
+msgid "Client Tunnel"
+msgstr "ক্লায়েন্ট টানেল"
+
+msgid "There are several types of tunnels to choose from:"
+msgstr "বেছে নেওয়ার জন্য বেশ কয়েক ধরনের টানেল রয়েছে:"
+
+msgid "Basic tunnel for connecting to a single service inside I2P."
+msgstr "I2P এর ভেতরে একটি একক সেবায় সংযোগের জন্য মৌলিক টানেল।"
+
+msgid "Try this if none of the tunnel types below fit your requirements, or you don't know what type of tunnel you need."
+msgstr "যদি নিচের কোনো টানেল প্রকার আপনার প্রয়োজন পূরণ না করে, অথবা আপনার কী ধরনের টানেল প্রয়োজন তা না জানেন তাহলে এটি চেষ্টা করুন।"
+
+msgid "Tunnel that acts as an HTTP proxy for reaching eepsites inside I2P."
+msgstr "I2P এর ভেতরে eepsite (I2P ওয়েবসাইট) এ পৌঁছানোর জন্য HTTP প্রক্সি হিসাবে কাজ করে এমন টানেল।"
+
+msgid "Set your browser to use this tunnel as an http proxy, or set your \"http_proxy\" environment variable for command-line applications in GNU/Linux."
+msgstr "আপনার ব্রাউজারকে http প্রক্সি হিসাবে এই টানেল ব্যবহার করতে নির্ধারণ করুন, অথবা GNU/Linux-এ কমান্ড-লাইন অ্যাপ্লিকেশনের জন্য আপনার \"http_proxy\" এনভায়রনমেন্ট ভেরিয়েবল নির্ধারণ করুন।"
+
+msgid "Websites outside I2P can also be reached if an HTTP proxy within I2P is known."
+msgstr "I2P এর বাইরের ওয়েবসাইটগুলিও অ্যাক্সেস করা যেতে পারে যদি I2P এর ভেতরে একটি HTTP প্রক্সি জানা থাকে।"
+
+msgid "Customised client tunnel specific for IRC connections."
+msgstr "IRC সংযোগের জন্য নির্দিষ্ট কাস্টমাইজড ক্লায়েন্ট টানেল।"
+
+msgid "With this tunnel type, your IRC client will be able to connect to an IRC network inside I2P."
+msgstr "এই টানেল প্রকারের মাধ্যমে, আপনার IRC ক্লায়েন্ট I2P এর ভেতরে একটি IRC নেটওয়ার্কে সংযোগ করতে সক্ষম হবে।"
+
+msgid "Each IRC network in I2P that you wish to connect to will require its own tunnel. (See Also, SOCKS IRC)"
+msgstr "আপনি I2P-এ যে প্রতিটি IRC নেটওয়ার্কে সংযোগ করতে চান তার নিজস্ব টানেল প্রয়োজন হবে। (এছাড়াও দেখুন, SOCKS IRC)"
+
+msgid "A tunnel that implements the SOCKS protocol."
+msgstr "একটি টানেল যা SOCKS প্রোটোকল বাস্তবায়ন করে।"
+
+msgid "This enables both TCP and UDP connections to be made through a SOCKS outproxy within I2P."
+msgstr "এটি I2P এর ভেতরে একটি SOCKS আউটপ্রক্সির মাধ্যমে TCP এবং UDP উভয় সংযোগ স্থাপন সক্ষম করে।"
+
+msgid "A client tunnel implementing the SOCKS protocol, which is customised for connecting to IRC networks."
+msgstr "একটি ক্লায়েন্ট টানেল যা SOCKS প্রোটোকল বাস্তবায়ন করে এবং IRC নেটওয়ার্কে সংযোগের জন্য কাস্টমাইজড।"
+
+msgid "With this tunnel type, IRC networks in I2P can be reached by typing the I2P address into your IRC client, and configuring the IRC client to use this SOCKS tunnel."
+msgstr "এই টানেল প্রকারের মাধ্যমে, আপনার IRC ক্লায়েন্টে I2P ঠিকানা টাইপ করে এবং IRC ক্লায়েন্টকে এই SOCKS টানেল ব্যবহার করতে কনফিগার করে I2P-এ IRC নেটওয়ার্কগুলিতে পৌঁছানো যায়।"
+
+msgid "This means that only one I2P tunnel is required rather than a separate tunnel per IRC network."
+msgstr "এর অর্থ হল প্রতি IRC নেটওয়ার্কের জন্য পৃথক টানেলের পরিবর্তে শুধুমাত্র একটি I2P টানেল প্রয়োজন।"
+
+msgid "IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P is known, though it depends on whether or not the outproxy has been blocked by the IRC network."
+msgstr "I2P-এর বাইরের IRC নেটওয়ার্কগুলিও অ্যাক্সেস করা যেতে পারে যদি I2P-এর ভেতরে একটি SOCKS আউটপ্রক্সি জানা থাকে, যদিও এটি নির্ভর করে আউটপ্রক্সিটি IRC নেটওয়ার্ক দ্বারা ব্লক করা হয়েছে কিনা তার উপর।"
+
+msgid "A basic server tunnel for hosting a generic service inside I2P."
+msgstr "I2P-এর ভেতরে একটি সাধারণ সেবা হোস্ট করার জন্য মৌলিক সার্ভার টানেল।"
+
+msgid "A server tunnel that is customised for HTTP connections."
+msgstr "একটি সার্ভার টানেল যা HTTP সংযোগের জন্য কাস্টমাইজড।"
+
+msgid "Use this tunnel type if you want to host an eepsite."
+msgstr "আপনি যদি একটি eepsite (I2P ওয়েবসাইট) হোস্ট করতে চান তবে এই টানেল প্রকার ব্যবহার করুন।"
+
+msgid "A customised server tunnel for hosting IRC networks inside I2P."
+msgstr "I2P-এর ভেতরে IRC নেটওয়ার্ক হোস্ট করার জন্য কাস্টমাইজড সার্ভার টানেল।"
+
+msgid "Usually, a separate tunnel needs to be created for each IRC server that is to be accessible inside I2P."
+msgstr "সাধারণত, I2P-এর ভেতরে অ্যাক্সেসযোগ্য প্রতিটি IRC সার্ভারের জন্য একটি পৃথক টানেল তৈরি করতে হয়।"
+
+msgid "Select tunnel type"
+msgstr "টানেল প্রকার নির্বাচন করুন"
+
+msgid "Choose a name and description for your tunnel."
+msgstr "আপনার টানেলের জন্য একটি নাম এবং বিবরণ চয়ন করুন।"
+
+msgid "These can be anything you want - they are just for ease of identifying the tunnel in the routerconsole."
+msgstr "এগুলি আপনার ইচ্ছামতো যেকোনো কিছু হতে পারে - এগুলি কেবল রাউটার কনসোলে টানেল সনাক্ত করার সুবিধার জন্য।"
+
+msgid "If you know of any outproxies for this type of tunnel (either HTTP or SOCKS), fill them in below."
+msgstr "যদি আপনি এই ধরনের টানেলের জন্য কোনো আউটপ্রক্সি (HTTP বা SOCKS) জানেন, তাহলে সেগুলি নিচে পূরণ করুন।"
+
+msgid "Separate multiple proxies with commas."
+msgstr "একাধিক প্রক্সি কমা দিয়ে পৃথক করুন।"
+
+msgid "List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,proxy2.i2p)"
+msgstr "I2P আউটপ্রক্সি গন্তব্যের তালিকা, কমা দ্বারা পৃথক (যেমন proxy1.i2p, proxy2.i2p)"
+
+msgid "Type in the I2P destination of the service that this client tunnel should connect to."
+msgstr "এই ক্লায়েন্ট টানেল যে সেবায় সংযোগ করবে তার I2P গন্তব্য টাইপ করুন।"
+
+msgid "This could be the full Base64 destination key, or an I2P URL from your address book."
+msgstr "এটি সম্পূর্ণ Base64 গন্তব্য কী, অথবা আপনার অ্যাড্রেসবুক থেকে একটি I2P URL হতে পারে।"
+
+msgid "Enter a b64 or .i2p address here"
+msgstr "এখানে একটি b64 বা .i2p ঠিকানা লিখুন"
+
+msgid "This is the IP that your service is running on, this is usually on the same machine so 127.0.0.1 is autofilled."
+msgstr "এটি সেই IP যেখানে আপনার সেবা চলছে, এটি সাধারণত একই মেশিনে থাকে তাই 127.0.0.1 স্বয়ংক্রিয়ভাবে পূরণ করা হয়।"
+
+msgid "This is the port that the service is accepting connections on."
+msgstr "এটি সেই পোর্ট যেখানে সেবা সংযোগ গ্রহণ করছে।"
+
+msgid "This is the port that the client tunnel will be accessed from locally."
+msgstr "এটি সেই পোর্ট যেখান থেকে ক্লায়েন্ট টানেল স্থানীয়ভাবে অ্যাক্সেস করা হবে।"
+
+msgid "How do you want this tunnel to be accessed? By just this machine, your entire subnet, or external internet?"
+msgstr "আপনি কীভাবে এই টানেলটি অ্যাক্সেস করতে চান? শুধু এই মেশিন, আপনার সম্পূর্ণ সাবনেট, নাকি বাহ্যিক ইন্টারনেট?"
+
+msgid "You will most likely want to just allow 127.0.0.1"
+msgstr "আপনি সম্ভবত শুধুমাত্র 127.0.0.1 অনুমতি দিতে চাইবেন"
+
+msgid "The I2P router can automatically start this tunnel for you when the router is started."
+msgstr "I2P রাউটার রাউটার চালু হলে আপনার জন্য এই টানেলটি স্বয়ংক্রিয়ভাবে শুরু করতে পারে।"
+
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgstr "এটি প্রায়শই ব্যবহৃত টানেলগুলির জন্য (বিশেষ করে সার্ভার টানেল) উপযোগী হতে পারে, কিন্তু শুধুমাত্র মাঝে মাঝে ব্যবহৃত টানেলের জন্য এর অর্থ হবে I2P রাউটার অপ্রয়োজনীয় টানেল তৈরি এবং রক্ষণাবেক্ষণ করছে।"
+
+msgid "The wizard has now collected enough information to create your tunnel."
+msgstr "উইজার্ড এখন আপনার টানেল তৈরি করার জন্য যথেষ্ট তথ্য সংগ্রহ করেছে।"
+
+msgid "Upon clicking the Save button below, the wizard will set up the tunnel, and take you back to the main I2PTunnel page."
+msgstr "নিচের Save বাটনে ক্লিক করলে, উইজার্ড টানেলটি সেট আপ করবে এবং আপনাকে মূল I2PTunnel পৃষ্ঠায় ফিরিয়ে নিয়ে যাবে।"
+
+msgid "Because you chose to automatically start the tunnel when the router starts, you don't have to do anything further."
+msgstr "যেহেতু আপনি রাউটার চালু হলে স্বয়ংক্রিয়ভাবে টানেল শুরু করতে নির্বাচন করেছেন, আপনাকে আর কিছু করতে হবে না।"
+
+msgid "The router will start the tunnel once it has been set up."
+msgstr "সেট আপ হওয়ার পর রাউটার টানেলটি শুরু করবে।"
+
+msgid "Because you chose not to automatically start the tunnel, you will have to manually start it."
+msgstr "যেহেতু আপনি স্বয়ংক্রিয়ভাবে টানেল শুরু না করার নির্বাচন করেছেন, আপনাকে এটি ম্যানুয়ালি শুরু করতে হবে।"
+
+msgid "You can do this by clicking the Start button on the main page which corresponds to the new tunnel."
+msgstr "আপনি মূল পৃষ্ঠায় নতুন টানেলের সাথে সম্পর্কিত Start বাটনে ক্লিক করে এটি করতে পারেন।"
+
+msgid "Below is a summary of the options you chose:"
+msgstr "নিচে আপনি যে অপশনগুলি নির্বাচন করেছেন তার সারসংক্ষেপ দেওয়া হল:"
+
+msgid "Tunnel description"
+msgstr "টানেল বিবরণ"
+
+msgid "Binding address"
+msgstr "বাইন্ডিং ঠিকানা"
+
+msgid "Tunnel port"
+msgstr "টানেল পোর্ট"
+
+msgid "Alongside these basic settings, there are a number of advanced options for tunnel configuration."
+msgstr "এই মৌলিক সেটিংসের পাশাপাশি, টানেল কনফিগারেশনের জন্য বেশ কিছু উন্নত অপশন রয়েছে।"
+
+msgid "The wizard will set reasonably sensible default values for these, but you can view and/or edit these by clicking on the tunnel's name in the main I2PTunnel page."
+msgstr "উইজার্ড এর জন্য যুক্তিসঙ্গত ডিফল্ট মান নির্ধারণ করবে, কিন্তু আপনি মূল I2PTunnel পৃষ্ঠায় টানেলের নাম ক্লিক করে এগুলি দেখতে এবং/অথবা সম্পাদনা করতে পারেন।"
+
+msgid "Cancel the wizard and return to Tunnel Manager home page"
+msgstr "উইজার্ড বাতিল করুন এবং টানেল ব্যবস্থাপক হোম পৃষ্ঠায় ফিরে যান"
+
+msgid "Return to previous page"
+msgstr "পূর্ববর্তী পৃষ্ঠায় ফিরে যান"
+
+msgid "Previous"
+msgstr "পূর্ববর্তী"
+
+msgid "Save tunnel configuration"
+msgstr "টানেল কনফিগারেশন সংরক্ষণ করুন"
+
+msgid "Save Tunnel"
+msgstr "টানেল সংরক্ষণ করুন"
+
+msgid "Finish Wizard and review tunnel settings"
+msgstr "উইজার্ড শেষ করুন এবং টানেল সেটিংস পর্যালোচনা করুন"
+
+msgid "Finish"
+msgstr "শেষ"
+
+msgid "Advance to next page"
+msgstr "পরবর্তী পৃষ্ঠায় অগ্রসর হন"
+
+msgid "Next"
+msgstr "পরবর্তী"

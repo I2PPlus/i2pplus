@@ -1,0 +1,63 @@
+# I2P
+# Copyright (C) 2014 The I2P Project
+msgid ""
+msgstr ""
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Message timeout"
+msgstr "বার্তা সময় শেষ"
+
+msgid "Failed delivery to local destination"
+msgstr "স্থানীয় গন্তব্যে বিতরণ ব্যর্থ"
+
+msgid "Local router failure"
+msgstr "স্থানীয় রাউটার ব্যর্থতা"
+
+msgid "Local network failure"
+msgstr "স্থানীয় নেটওয়ার্ক ব্যর্থতা"
+
+msgid "Session closed"
+msgstr "সেশন বন্ধ"
+
+msgid "Invalid message"
+msgstr "অবৈধ বার্তা"
+
+msgid "Invalid message options"
+msgstr "অবৈধ বার্তা অপশন"
+
+msgid "Buffer overflow"
+msgstr "বাফার ওভারফ্লো"
+
+msgid "Message expired"
+msgstr "বার্তার মেয়াদ শেষ"
+
+msgid "Local lease set invalid"
+msgstr "স্থানীয় লিজ সেট অবৈধ"
+
+msgid "No local tunnels"
+msgstr "কোনো স্থানীয় টানেল নেই"
+
+msgid "Unsupported encryption options"
+msgstr "অসমর্থিত এনক্রিপশন অপশন"
+
+msgid "Invalid destination"
+msgstr "অবৈধ গন্তব্য"
+
+msgid "Destination lease set expired"
+msgstr "গন্তব্য লিজ সেটের মেয়াদ শেষ"
+
+msgid "Destination lease set not found"
+msgstr "গন্তব্য লিজ সেট খুঁজে পাওয়া যায়নি"
+
+msgid "Local destination shutdown"
+msgstr "স্থানীয় গন্তব্য বন্ধ"
+
+msgid "Connection was reset"
+msgstr "সংযোগ রিসেট করা হয়েছে"
+
+msgid "Failure code"
+msgstr "ব্যর্থতা কোড"

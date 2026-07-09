@@ -175,6 +175,7 @@ public class ConfigUIHelper extends HelperBase {
          */
         { "ar", "lang_ar", "Arabic عربية", null },
         { "az", "az", "Azerbaijani", null },
+        { "bn", "bn", "Bengali বাংলা", null },
         { "cs", "cz", "Čeština", null },
         { "zh", "cn", "Chinese 中文", null },
         { "da", "dk", "Dansk", null },

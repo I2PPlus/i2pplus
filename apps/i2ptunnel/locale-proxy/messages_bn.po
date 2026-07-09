@@ -1,0 +1,428 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "This seems to be a bad destination:"
+msgstr "এটি একটি খারাপ গন্তব্য বলে মনে হচ্ছে:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper এই ধরনের গন্তব্যে আপনাকে সাহায্য করতে পারে না!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "আপনার অ্যাড্রেসবুকে গন্তব্য দেখতে, <a href=\"{0}\">এখানে</a> ক্লিক করুন। বিরোধী অ্যাড্রেসহেল্পার গন্তব্য দেখতে, <a href=\"{1}\">এখানে</a> ক্লিক করুন।"
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "অ্যাড্রেসবুকে {0} এর জন্য গন্তব্য"
+
+msgid "Conflicting address helper destination"
+msgstr "বিরোধী অ্যাড্রেস হেল্পার গন্তব্য"
+
+msgid "Corrupt Base32 address"
+msgstr "দূষিত Base32 ঠিকানা"
+
+msgid "Destination LeaseSet not found"
+msgstr "গন্তব্য LeaseSet পাওয়া যায়নি"
+
+msgid "Host"
+msgstr "হোস্ট"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "গন্তব্য"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "সংরক্ষণ না করে {0} এ চালিয়ে যান"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "আপনি সাইটটি অ্যাড্রেসবুকে সংরক্ষণ না করেই ব্রাউজ করতে পারেন। আপনি আপনার I2P রাউটার পুনরায় চালু না করা পর্যন্ত ঠিকানাটি মনে রাখা হবে।"
+
+msgid "Continue without saving"
+msgstr "সংরক্ষণ না করে চালিয়ে যান"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "{0} রাউটার অ্যাড্রেসবুকে সংরক্ষণ করুন এবং ওয়েবসাইটে চালিয়ে যান"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "এই ঠিকানাটি আপনার রাউটার অ্যাড্রেসবুকে সংরক্ষণ করা হবে যেখানে আপনার সাবস্ক্রিপশন-ভিত্তিক ঠিকানাগুলি সংরক্ষিত থাকে।"
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "আপনি ম্যানুয়ালি যোগ করা সাইটগুলোর ট্র্যাক রাখতে চাইলে, পরিবর্তে আপনার মাস্টার বা প্রাইভেট অ্যাড্রেসবুকে যোগ করুন।"
+
+msgid "Save & continue"
+msgstr "সংরক্ষণ ও চালিয়ে যান"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "{0} মাস্টার অ্যাড্রেসবুকে সংরক্ষণ করুন এবং ওয়েবসাইটে চালিয়ে যান"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "এই ঠিকানাটি আপনার মাস্টার অ্যাড্রেসবুকে সংরক্ষণ করা হবে। যে ঠিকানাগুলি আপনি প্রধান রাউটার অ্যাড্রেসবুক থেকে আলাদা রাখতে চান কিন্তু প্রকাশ করতে আপত্তি নেই, সেগুলির জন্য এই বিকল্পটি নির্বাচন করুন।"
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "{0} প্রাইভেট অ্যাড্রেসবুকে সংরক্ষণ করুন এবং ওয়েবসাইটে চালিয়ে যান"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "এই ঠিকানাটি আপনার প্রাইভেট অ্যাড্রেসবুকে সংরক্ষণ করা হবে, যা কখনো প্রকাশিত হবে না।"
+
+msgid "Base32 address requires lookup password"
+msgstr "Base32 ঠিকানার জন্য লুকআপ পাসওয়ার্ড প্রয়োজন"
+
+msgid "Base32 address requires encryption key"
+msgstr "Base32 ঠিকানার জন্য এনক্রিপশন কী প্রয়োজন"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Base32 ঠিকানার জন্য এনক্রিপশন কী এবং লুকআপ পাসওয়ার্ড প্রয়োজন"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Base32 ঠিকানা ডিক্রিপশন ব্যর্থ, এনক্রিপশন কী পরীক্ষা করুন"
+
+msgid "Generate"
+msgstr "জেনারেট করুন"
+
+msgid "Encryption key"
+msgstr "এনক্রিপশন কী"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "আপনাকে সার্ভার অপারেটরের দেওয়া একটি PSK এনক্রিপশন কী প্রবেশ করাতে হবে, অথবা একটি DH এনক্রিপশন কী জেনারেট করে সার্ভার অপারেটরে পাঠাতে হবে।"
+
+msgid "Ask the server operator for help."
+msgstr "সার্ভার অপারেটরের কাছে সাহায্য চান।"
+
+msgid "Enter PSK encryption key"
+msgstr "PSK এনক্রিপশন কী প্রবেশ করান"
+
+msgid "Generate new DH encryption key"
+msgstr "নতুন DH এনক্রিপশন কী জেনারেট করুন"
+
+msgid "Lookup password"
+msgstr "লুকআপ পাসওয়ার্ড"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "আপনাকে সার্ভার অপারেটরের দেওয়া পাসওয়ার্ডটি প্রবেশ করাতে হবে।"
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "{0} থেকে অ্যাড্রেস হেল্পারের মাধ্যমে যোগ করা হয়েছে"
+
+msgid "Added via address helper"
+msgstr "অ্যাড্রেস হেল্পারের মাধ্যমে যোগ করা হয়েছে"
+
+msgid "Missing lookup password"
+msgstr "লুকআপ পাসওয়ার্ড অনুপস্থিত"
+
+msgid "Missing private key"
+msgstr "প্রাইভেট কী অনুপস্থিত"
+
+msgid "Invalid private key"
+msgstr "অবৈধ প্রাইভেট কী"
+
+msgid "Your new encryption key"
+msgstr "আপনার নতুন এনক্রিপশন কী"
+
+msgid "Router Console"
+msgstr "রাউটার কনসোল"
+
+msgid "Addressbook"
+msgstr "অ্যাড্রেসবুক"
+
+msgid "Configuration"
+msgstr "কনফিগারেশন"
+
+msgid "Help"
+msgstr "সাহায্য"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "কীটি কপি করে সার্ভার অপারেটরে পাঠান।"
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "আপনাকে অনুমতি দেওয়ার পর, আপনি ওয়েবসাইটে যেতে পারেন।"
+
+msgid "Go back and fix the error"
+msgstr "ফিরে যান এবং ত্রুটি ঠিক করুন"
+
+msgid "router"
+msgstr "রাউটার"
+
+msgid "master"
+msgstr "মাস্টার"
+
+msgid "private"
+msgstr "ব্যক্তিগত"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "{0} এ পুনঃনির্দেশিত হচ্ছে"
+
+msgid "Redirection in progress"
+msgstr "পুনঃনির্দেশ চলছে"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "{0} {1} অ্যাড্রেসবুকে সংরক্ষিত হয়েছে, এখন পুনঃনির্দেশিত হচ্ছে।"
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "{0} {1} অ্যাড্রেসবুকে সংরক্ষণ ব্যর্থ হয়েছে, এখন পুনঃনির্দেশিত হচ্ছে।"
+
+msgid "Click here if you are not redirected automatically."
+msgstr "আপনি যদি স্বয়ংক্রিয়ভাবে পুনঃনির্দেশিত না হন তবে এখানে ক্লিক করুন।"
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "{0} এর জন্য প্রমাণীকরণ সংরক্ষিত হয়েছে, এখন পুনঃনির্দেশিত হচ্ছে।"
+
+msgid "Website Unknown"
+msgstr "ওয়েবসাইট অজানা"
+
+msgid "I2P Router Console"
+msgstr "I2P রাউটার কনসোল"
+
+msgid "Website Not Found in Addressbook"
+msgstr "অ্যাড্রেসবুকে ওয়েবসাইট পাওয়া যায়নি"
+
+msgid "The website was not found in your router's addressbook."
+msgstr "আপনার রাউটারের অ্যাড্রেসবুকে ওয়েবসাইটটি পাওয়া যায়নি।"
+
+msgid "Check the link or find a Base 32 or Base 64 address."
+msgstr "লিংকটি পরীক্ষা করুন বা একটি Base 32 বা Base 64 ঠিকানা খুঁজুন।"
+
+#, java-format
+msgid "If you have the Base 64 address, {0}add it to your addressbook{1}."
+msgstr "আপনার কাছে Base 64 ঠিকানা থাকলে, {0}আপনার অ্যাড্রেসবুকে যোগ করুন{1}।"
+
+msgid "Otherwise, find a Base 32 or address helper link, or use a jump service link below."
+msgstr "অন্যথায়, একটি Base 32 বা অ্যাড্রেস হেল্পার লিংক খুঁজুন, অথবা নিচের জাম্প সার্ভিস লিংক ব্যবহার করুন।"
+
+#, java-format
+msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
+msgstr "প্রায়ই এই পৃষ্ঠাটি দেখছেন? আপনার অ্যাড্রেসবুকে {2}কিছু সাবস্ক্রিপশন যোগ{3} করার জন্য {0}FAQ{1} দেখুন।"
+
+msgid "Could not find the following destination:"
+msgstr "নিম্নলিখিত গন্তব্য পাওয়া যায়নি:"
+
+msgid "Warning: Non-HTTP Protocol"
+msgstr "সতর্কীকরণ: নন-HTTP প্রোটোকল"
+
+msgid "The request uses a bad protocol."
+msgstr "অনুরোধটি একটি ভুল প্রোটোকল ব্যবহার করে।"
+
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "I2P HTTP প্রক্সি শুধুমাত্র HTTP এবং HTTPS অনুরোধ সমর্থন করে।"
+
+msgid "Other protocols such as FTP are not allowed."
+msgstr "FTP এর মতো অন্যান্য প্রোটোকল অনুমোদিত নয়।"
+
+msgid "Error: Request Denied"
+msgstr "ত্রুটি: অনুরোধ প্রত্যাখ্যান করা হয়েছে"
+
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "ত্রুটি: I2P প্রক্সির মাধ্যমে রাউটার কনসোল অ্যাক্সেস করা যাবে না"
+
+msgid "Your browser is misconfigured."
+msgstr "আপনার ব্রাউজার ভুল কনফিগার করা হয়েছে।"
+
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "রাউটার কনসোল, লোকালহোস্ট, বা স্থানীয় LAN গন্তব্য অ্যাক্সেস করতে প্রক্সি ব্যবহার করবেন না।"
+
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "আপনাকে 127.0.0.1 (অথবা আপনি যে ঠিকানায় I2P কনসোল অ্যাক্সেস করছেন) কে I2P-এর HTTP প্রক্সির মাধ্যমে রুট হতে বাধা দিতে হবে, সাধারণত আপনার ব্রাউজারের প্রক্সি কনফিগারেশন বিভাগে ঠিকানাটি বাদ দিয়ে।"
+
+msgid "Warning: Destination Key Conflict"
+msgstr "সতর্কীকরণ: গন্তব্য কী দ্বন্দ্ব"
+
+msgid "The address helper link you followed specifies a different destination key than the entry in your address book."
+msgstr "আপনি যে অ্যাড্রেস হেল্পার লিংক অনুসরণ করেছেন তা আপনার অ্যাড্রেসবুকের এন্ট্রি থেকে ভিন্ন গন্তব্য কী নির্দিষ্ট করে।"
+
+msgid "Someone could be trying to impersonate another website, or people have given two websites identical names."
+msgstr "কেউ অন্য ওয়েবসাইটের ছদ্মবেশ নেওয়ার চেষ্টা করতে পারে, অথবা লোকেরা দুটি ওয়েবসাইটকে একই নাম দিয়েছে।"
+
+msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
+msgstr "আপনি কোন কী বিশ্বাস করেন তা নির্ধারণ করে দ্বন্দ্ব সমাধান করুন, এবং তারপর অ্যাড্রেস হেল্পার লিংকটি উপেক্ষা করুন, অথবা আপনার অ্যাড্রেসবুক থেকে হোস্ট এন্ট্রি মুছে ফেলুন এবং আবার অ্যাড্রেস হেল্পার লিংকে ক্লিক করুন।"
+
+msgid "Connection Reset"
+msgstr "সংযোগ রিসেট"
+
+msgid "The connection to the website was reset while the page was loading."
+msgstr "পৃষ্ঠা লোড হওয়ার সময় ওয়েবসাইটের সাথে সংযোগ রিসেট হয়েছে।"
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "ওয়েবসাইটটি সাময়িকভাবে অনুপলব্ধ, খুব ব্যস্ত, অথবা এটি আপনার অ্যাক্সেস ব্লক করেছে।"
+
+#, java-format
+msgid "You may want to {0}retry{1}."
+msgstr "আপনি {0}পুনরায় চেষ্টা{1} করতে চাইতে পারেন।"
+
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "আপনি যদি এই পৃষ্ঠাটি খোলা রাখেন, তবে এটি ব্যর্থ সংযোগ প্রচেষ্টার পরে প্রতি {0} সেকেন্ডে স্বয়ংক্রিয়ভাবে ওয়েবসাইটে পুনরায় সংযোগের চেষ্টা করবে।"
+
+msgid "Website Unreachable"
+msgstr "ওয়েবসাইট অ্যাক্সেসযোগ্য নয়"
+
+msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "ওয়েবসাইটটি অ্যাক্সেসযোগ্য ছিল না, কারণ এটি আপনার I2P বা Java সংস্করণ দ্বারা সমর্থিত নয় এমন এনক্রিপশন বিকল্প ব্যবহার করে।"
+
+msgid "Could not connect to the following destination:"
+msgstr "নিম্নলিখিত গন্তব্যে সংযোগ করা যায়নি:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "ওয়েবসাইটটি অ্যাক্সেসযোগ্য ছিল না, কারণ এর লিজ সেট পাওয়া যায়নি।"
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "ওয়েবসাইটটি সম্ভবত ডাউন, তবে নেটওয়ার্ক যানজটও থাকতে পারে।"
+
+msgid "The connection to the proxy was reset."
+msgstr "প্রক্সির সাথে সংযোগ রিসেট হয়েছে।"
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "প্রক্সিটি সাময়িকভাবে অনুপলব্ধ, খুব ব্যস্ত, অথবা এটি আপনার অ্যাক্সেস ব্লক করেছে।"
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "আপনি {0}পুনরায় চেষ্টা{1} করতে চাইতে পারেন কারণ এটি আপনার সংজ্ঞায়িত পুল থেকে এলোমেলোভাবে একটি আউটপ্রক্সি পুনরায় নির্বাচন করবে {2}এখানে{3} (যদি আপনি একাধিক কনফিগার করে থাকেন)।"
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "আপনার যদি সমস্যা চলতেই থাকে তবে আপনি আপনার আউটপ্রক্সি তালিকা {0}এখানে{1} সম্পাদনা করতে চাইতে পারেন।"
+
+msgid "Outproxy Unreachable"
+msgstr "আউটপ্রক্সি অ্যাক্সেসযোগ্য নয়"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "HTTP আউটপ্রক্সিটি অ্যাক্সেসযোগ্য ছিল না, কারণ এটি আপনার I2P বা Java সংস্করণ দ্বারা সমর্থিত নয় এমন এনক্রিপশন বিকল্প ব্যবহার করে।"
+
+msgid "The website was not reachable."
+msgstr "ওয়েবসাইটটি অ্যাক্সেসযোগ্য ছিল না।"
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "ওয়েবসাইটটি অফলাইন, নেটওয়ার্ক যানজট আছে, অথবা আপনার রাউটার এখনো পিয়ারদের সাথে ভালভাবে সংহত হয়নি।"
+
+msgid "Warning: No Outproxy Configured"
+msgstr "সতর্কীকরণ: কোনো আউটপ্রক্সি কনফিগার করা নেই"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "আপনার অনুরোধটি I2P-এর বাইরের একটি সাইটের জন্য ছিল, কিন্তু আপনার কোনো HTTP আউটপ্রক্সি কনফিগার করা নেই।"
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "অনুগ্রহ করে I2PTunnel-এ একটি আউটপ্রক্সি কনফিগার করুন।"
+
+msgid "Outproxy Not Found"
+msgstr "আউটপ্রক্সি পাওয়া যায়নি"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "HTTP আউটপ্রক্সিটি পাওয়া যায়নি।"
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "এটি অফলাইন, নেটওয়ার্ক যানজট আছে, অথবা আপনার রাউটার এখনো পিয়ারদের সাথে ভালভাবে সংহত হয়নি।"
+
+msgid "Information: New Host Name"
+msgstr "তথ্য: নতুন হোস্ট নাম"
+
+msgid "Information: New Host Name with Address Helper"
+msgstr "তথ্য: অ্যাড্রেস হেল্পার সহ নতুন হোস্ট নাম"
+
+msgid "The address helper link you followed is for a new host name that is not in your address book."
+msgstr "আপনি যে অ্যাড্রেস হেল্পার লিংক অনুসরণ করেছেন তা একটি নতুন হোস্ট নামের জন্য যা আপনার অ্যাড্রেসবুকে নেই।"
+
+msgid "You may save this host name to your local address book."
+msgstr "আপনি এই হোস্ট নামটি আপনার স্থানীয় অ্যাড্রেসবুকে সংরক্ষণ করতে পারেন।"
+
+msgid "If you save it to your address book, you will not see this message again."
+msgstr "আপনি যদি এটি আপনার অ্যাড্রেসবুকে সংরক্ষণ করেন, তবে আপনি এই বার্তাটি আর দেখতে পাবেন না।"
+
+msgid "If you do not save it, the host name will be forgotten after the next router restart."
+msgstr "আপনি যদি এটি সংরক্ষণ না করেন, তবে পরবর্তী রাউটার রিস্টার্টের পরে হোস্ট নামটি ভুলে যাবে।"
+
+msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
+msgstr "আপনি যদি এই হোস্টটি দেখতে না চান, তবে আপনার ব্রাউজারে \"back\" বাটনে ক্লিক করুন।"
+
+msgid "Proxy Authorization Required"
+msgstr "প্রক্সি অনুমোদন প্রয়োজন"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "I2P HTTP প্রক্সি অনুমোদন প্রয়োজন"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "এই প্রক্সিটি অ্যাক্সেসের জন্য একটি ব্যবহারকারীর নাম এবং পাসওয়ার্ড প্রয়োজন করার জন্য কনফিগার করা হয়েছে।"
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "অনুগ্রহ করে আপনার ব্যবহারকারীর নাম এবং পাসওয়ার্ড প্রবেশ করান, অথবা আপনার {0}রাউটার কনফিগারেশন{1} বা {2}I2PTunnel কনফিগারেশন{3} পরীক্ষা করুন।"
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "অনুমোদন নিষ্ক্রিয় করতে, কনফিগারেশন {0}i2ptunnel.proxy.auth=basic{1} সরান, তারপর HTTP প্রক্সি টানেল বন্ধ ও পুনরায় চালু করুন।"
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "HTTP আউটপ্রক্সিটি অ্যাক্সেসযোগ্য ছিল না, কারণ এর লিজ সেট পাওয়া যায়নি।"
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "আউটপ্রক্সিটি সম্ভবত ডাউন, তবে নেটওয়ার্ক যানজটও থাকতে পারে।"
+
+msgid "Warning: Request Denied"
+msgstr "সতর্কীকরণ: অনুরোধ প্রত্যাখ্যান"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "এই ঠিকানাটি ত্রুটিপূর্ণ বলে মনে হচ্ছে। অনুগ্রহ করে নিশ্চিত করুন আপনি একটি বৈধ ঠিকানা দিয়েছেন!"
+
+msgid "Warning: Bad Address Helper"
+msgstr "সতর্কীকরণ: খারাপ অ্যাড্রেস হেল্পার"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "URL-এ হেল্পার কী ({0}i2paddresshelper={1}) সমাধানযোগ্য নয়।"
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "এটি আবর্জনা ডেটা, অথবা ভুল টাইপ করা Base 32 ঠিকানা বলে মনে হচ্ছে।"
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "হেল্পার কীটি একটি বৈধ Base 32 হোস্টনাম বা Base 64 কী হতে ঠিক করতে আপনার URL পরীক্ষা করুন।"
+
+msgid "Warning: Address Blacklisted"
+msgstr "সতর্কীকরণ: ঠিকানা কালোতালিকাভুক্ত"
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr "অনুরোধ করা গন্তব্যটি আপনার কালোতালিকায় আছে এবং অ্যাক্সেস ব্লক করা হয়েছে।"
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr "এই সাইটে অ্যাক্সেসের অনুমতি দিতে, SusiDNS কালোতালিকা ব্যবস্থাপনা পৃষ্ঠা থেকে এটি সরান।"
+
+msgid "Warning: Invalid Destination"
+msgstr "সতর্কীকরণ: অবৈধ গন্তব্য"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "নির্দিষ্ট ওয়েবসাইট গন্তব্যটি বৈধ ছিল না, অথবা অ্যাক্সেসযোগ্য ছিল না।"
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "সম্ভবত আপনি ভুল Base 64 স্ট্রিং পেস্ট করেছেন অথবা আপনি যে লিংক অনুসরণ করছেন তা খারাপ।"
+
+msgid "The I2P host could also be offline."
+msgstr "I2P হোস্টটিও অফলাইন থাকতে পারে।"
+
+msgid "Warning: Authorization Required"
+msgstr "সতর্কীকরণ: অনুমোদন প্রয়োজন"
+
+msgid "Warning: Invalid Request URI"
+msgstr "সতর্কীকরণ: অবৈধ অনুরোধ URI"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "অনুরোধ URI অবৈধ, এবং সম্ভবত অবৈধ অক্ষর রয়েছে।"
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "আপনি যদি একটি লিংকে ক্লিক করেন, URI-এর শেষে ব্রাউজারটি ভুলভাবে যোগ করা কোনো অক্ষর আছে কিনা পরীক্ষা করুন।"
+
+msgid "The Base32 address is invalid."
+msgstr "Base32 ঠিকানাটি অবৈধ।"

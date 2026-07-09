@@ -1,0 +1,459 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, java-format
+msgid "{0} new message"
+msgid_plural "{0} new messages"
+msgstr[0] "{0}টি নতুন বার্তা"
+msgstr[1] "{0}টি নতুন বার্তা"
+
+msgid "Email"
+msgstr "ইমেল"
+
+#, java-format
+msgid "No encoder found for encoding \\''{0}\\''."
+msgstr ""
+
+msgid "Re:"
+msgstr "পুনঃ:"
+
+msgid "Fwd:"
+msgstr "ফরোয়ার্ড:"
+
+msgid "Drafts"
+msgstr "খসড়া"
+
+msgid "Sent"
+msgstr "পাঠানো"
+
+msgid "Trash"
+msgstr "আবর্জনা"
+
+msgid "Bulk Mail"
+msgstr "বাল্ক মেইল"
+
+msgid "Inbox"
+msgstr "ইনবক্স"
+
+msgid "View message as HTML"
+msgstr "HTML হিসাবে বার্তা দেখুন"
+
+msgid "View message as plain text"
+msgstr "সাধারণ টেক্সট হিসাবে বার্তা দেখুন"
+
+msgid "unknown"
+msgstr "অজানা"
+
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
+msgstr "আপনার গোপনীয়তা রক্ষায়, SusiMail জাভাস্ক্রিপ্ট এবং এই HTML বার্তায় থাকিত যেকোনো দূরবর্তী বিষয়বস্তু ব্লক করছে।"
+
+msgid "Enable Javascript for enhanced presentation and additional features."
+msgstr "উন্নত উপস্থাপনা এবং অতিরিক্ত বৈশিষ্ট্যের জন্য জাভাস্ক্রিপ্ট সক্রিয় করুন।"
+
+#, java-format
+msgid "Tracking images removed from message: {0}"
+msgstr "বার্তা থেকে ট্র্যাকিং ছবি সরানো হয়েছে: {0}"
+
+#, java-format
+msgid "Blocked images not displayed: {0}"
+msgstr "ব্লক করা ছবি প্রদর্শিত হয়নি: {0}"
+
+#, java-format
+msgid "Charset \\''{0}\\'' not supported."
+msgstr ""
+
+#, java-format
+msgid "Part ({0}) not shown, because of {1}"
+msgstr "অংশ ({0}) দেখানো হয়নি, কারণ {1}"
+
+msgid "Reloading the page may fix the error."
+msgstr "পৃষ্ঠাটি পুনরায় লোড করলে ত্রুটিটি ঠিক হতে পারে।"
+
+msgid "File"
+msgstr "ফাইল"
+
+#, java-format
+msgid "Download attachment {0}"
+msgstr "অ্যাটাচমেন্ট {0} ডাউনলোড করুন"
+
+msgid "File is packed into a zipfile for security reasons."
+msgstr "নিরাপত্তার কারণে ফাইলটি জিপ ফাইলে প্যাক করা হয়েছে।"
+
+#, java-format
+msgid "Attachment ({0})."
+msgstr "অ্যাটাচমেন্ট ({0})।"
+
+msgid "Need username for authentication."
+msgstr "প্রমাণীকরণের জন্য ব্যবহারকারীর নাম প্রয়োজন।"
+
+msgid "Do not include @mail.i2p in the username"
+msgstr "ব্যবহারকারীর নামে @mail.i2p অন্তর্ভুক্ত করবেন না"
+
+msgid "Need password for authentication."
+msgstr "প্রমাণীকরণের জন্য পাসওয়ার্ড প্রয়োজন।"
+
+msgid "Need hostname for connect."
+msgstr "সংযোগের জন্য হোস্টনাম প্রয়োজন।"
+
+msgid "Need port number for pop3 connect."
+msgstr "POP3 সংযোগের জন্য পোর্ট নম্বর প্রয়োজন।"
+
+msgid "POP3 port number is not in range 0..65535."
+msgstr "POP3 পোর্ট নম্বর 0..65535 সীমার মধ্যে নয়।"
+
+msgid "POP3 port number is invalid."
+msgstr "POP3 পোর্ট নম্বর অবৈধ।"
+
+msgid "Need port number for smtp connect."
+msgstr "SMTP সংযোগের জন্য পোর্ট নম্বর প্রয়োজন।"
+
+msgid "SMTP port number is not in range 0..65535."
+msgstr "SMTP পোর্ট নম্বর 0..65535 সীমার মধ্যে নয়।"
+
+msgid "SMTP port number is invalid."
+msgstr "SMTP পোর্ট নম্বর অবৈধ।"
+
+msgid "Cannot connect"
+msgstr "সংযোগ করতে অক্ষম"
+
+msgid "Error connecting to server"
+msgstr "সার্ভারে সংযোগে ত্রুটি"
+
+msgid "Draft saved."
+msgstr "খসড়া সংরক্ষিত।"
+
+msgid "Unable to save mail."
+msgstr "মেইল সংরক্ষণ করতে অক্ষম।"
+
+#, java-format
+msgid "On {0} {1} wrote:"
+msgstr "{0} {1} লিখেছেন:"
+
+#, java-format
+msgid "Error reading uploaded file: {0}"
+msgstr "আপলোড করা ফাইল পড়তে ত্রুটি: {0}"
+
+msgid "begin forwarded mail"
+msgstr "ফরোয়ার্ড করা মেইলের শুরু"
+
+msgid "end forwarded mail"
+msgstr "ফরোয়ার্ড করা মেইলের শেষ"
+
+msgid "Could not fetch mail body."
+msgstr "মেইলের বডি আনতে পারেনি।"
+
+msgid "Message id not valid."
+msgstr "বার্তা আইডি বৈধ নয়।"
+
+msgid "Internal error, lost connection."
+msgstr "অভ্যন্তরীণ ত্রুটি, সংযোগ হারিয়েছে।"
+
+#, java-format
+msgid "No Encoding found for {0}"
+msgstr "{0} এর জন্য কোনো এনকোডিং পাওয়া যায়নি"
+
+msgid "Attachment not found."
+msgstr "অ্যাটাচমেন্ট পাওয়া যায়নি।"
+
+msgid "Message not found."
+msgstr "বার্তা পাওয়া যায়নি।"
+
+#, java-format
+msgid "1 message deleted."
+msgid_plural "{0} messages deleted."
+msgstr[0] "1টি বার্তা মুছে ফেলা হয়েছে।"
+msgstr[1] "{0}টি বার্তা মুছে ফেলা হয়েছে।"
+
+msgid "No messages marked for deletion."
+msgstr "মুছে ফেলার জন্য কোনো বার্তা চিহ্নিত করা হয়নি।"
+
+#, java-format
+msgid "Host unchanged. Edit configation file {0} to change host."
+msgstr "হোস্ট অপরিবর্তিত। হোস্ট পরিবর্তন করতে কনফিগারেশন ফাইল {0} সম্পাদনা করুন।"
+
+msgid "Configuration saved"
+msgstr "কনফিগারেশন সংরক্ষিত"
+
+msgid "Invalid pagesize number, resetting to default value."
+msgstr "অবৈধ পৃষ্ঠা আকার, ডিফল্ট মানে রিসেট করা হচ্ছে।"
+
+msgid "Login"
+msgstr "লগইন"
+
+msgid "Loading messages, please wait..."
+msgstr "বার্তা লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন..."
+
+#, java-format
+msgid "1 message"
+msgid_plural "{0} messages"
+msgstr[0] "1টি বার্তা"
+msgstr[1] "{0}টি বার্তা"
+
+msgid "No messages"
+msgstr "কোনো বার্তা নেই"
+
+msgid "Show Message"
+msgstr "বার্তা দেখান"
+
+msgid "New Message"
+msgstr "নতুন বার্তা"
+
+msgid "Configuration"
+msgstr "কনফিগারেশন"
+
+msgid "I2PMail"
+msgstr "I2Pমেইল"
+
+msgid "No new messages"
+msgstr "কোনো নতুন বার্তা নেই"
+
+#, java-format
+msgid "{0} is an I2P-exclusive service provided by {1}."
+msgstr "{0} একটি I2P-এক্সক্লুসিভ পরিষেবা যা {1} দ্বারা প্রদত্ত।"
+
+#, java-format
+msgid "{0} webmail client &copy Susi 2004-2005."
+msgstr "{0} ওয়েবমেইল ক্লায়েন্ট &copy সুসি ২০০৪-২০০৫।"
+
+msgid "Checking for new messages on server"
+msgstr "সার্ভারে নতুন বার্তা পরীক্ষা করা হচ্ছে"
+
+msgid "Refresh the page for updates"
+msgstr "আপডেটের জন্য পৃষ্ঠাটি রিফ্রেশ করুন"
+
+msgid "Removed tracking image placeholder"
+msgstr "ট্র্যাকিং ছবির প্লেসহোল্ডার সরানো হয়েছে"
+
+msgid "no subject"
+msgstr "কোনো বিষয় নেই"
+
+msgid "Found no valid sender address."
+msgstr "কোনো বৈধ প্রেরকের ঠিকানা পাওয়া যায়নি।"
+
+#, java-format
+msgid "Found no valid address in \\''{0}\\''."
+msgstr ""
+
+msgid "No recipients found."
+msgstr "কোনো প্রাপক পাওয়া যায়নি।"
+
+#, java-format
+msgid "Email is too large, max is {0}"
+msgstr "ইমেল খুব বড়, সর্বোচ্চ {0}"
+
+msgid "Sending mail."
+msgstr "মেইল পাঠানো হচ্ছে।"
+
+msgid "Error sending mail"
+msgstr "মেইল পাঠাতে ত্রুটি"
+
+msgid "Mail sent."
+msgstr "মেইল পাঠানো হয়েছে।"
+
+msgid "Cancel"
+msgstr "বাতিল"
+
+msgid "Save as Draft"
+msgstr "খসড়া হিসাবে সংরক্ষণ করুন"
+
+msgid "Send"
+msgstr "পাঠান"
+
+msgid "From"
+msgstr "থেকে"
+
+msgid "To"
+msgstr "প্রতি"
+
+msgid "Cc"
+msgstr "কার্বন কপি"
+
+msgid "Bcc"
+msgstr "ব্লাইন্ড কার্বন কপি"
+
+msgid "Subject"
+msgstr "বিষয়"
+
+msgid "Add Attachment"
+msgstr "অ্যাটাচমেন্ট যোগ করুন"
+
+msgid "Add attachment"
+msgstr "অ্যাটাচমেন্ট যোগ করুন"
+
+msgid "Attachments"
+msgstr "অ্যাটাচমেন্ট"
+
+msgid "Delete selected attachments"
+msgstr "নির্বাচিত অ্যাটাচমেন্ট মুছে ফেলুন"
+
+msgid "I2PMail Login"
+msgstr "I2Pমেইল লগইন"
+
+msgid "User"
+msgstr "ব্যবহারকারী"
+
+msgid "Username"
+msgstr "ব্যবহারকারীর নাম"
+
+msgid "Password"
+msgstr "পাসওয়ার্ড"
+
+msgid "Toggle password visibility"
+msgstr "পাসওয়ার্ড দৃশ্যমানতা টগল করুন"
+
+msgid "Host"
+msgstr "হোস্ট"
+
+msgid "POP3 Port"
+msgstr "POP3 পোর্ট"
+
+msgid "SMTP Port"
+msgstr "SMTP পোর্ট"
+
+msgid "Read Mail Offline"
+msgstr "অফলাইনে মেইল পড়ুন"
+
+msgid "Settings"
+msgstr "সেটিংস"
+
+msgid "Learn about I2PMail"
+msgstr "I2Pমেইল সম্পর্কে জানুন"
+
+msgid "Create Account"
+msgstr "অ্যাকাউন্ট তৈরি করুন"
+
+msgid "New"
+msgstr "নতুন"
+
+msgid "Check Mail"
+msgstr "মেইল পরীক্ষা করুন"
+
+msgid "Refresh Page"
+msgstr "পৃষ্ঠা রিফ্রেশ করুন"
+
+msgid "Change to Folder"
+msgstr "ফোল্ডারে পরিবর্তন করুন"
+
+#, java-format
+msgid "1 Message"
+msgid_plural "{0} Messages"
+msgstr[0] "1টি বার্তা"
+msgstr[1] "{0}টি বার্তা"
+
+msgid "Logout"
+msgstr "লগআউট"
+
+msgid "Date"
+msgstr "তারিখ"
+
+msgid "Size"
+msgstr "আকার"
+
+msgid "Mark for deletion"
+msgstr "মুছে ফেলার জন্য চিহ্নিত করুন"
+
+msgid "Really delete the marked messages?"
+msgstr "চিহ্নিত বার্তাগুলো কি সত্যিই মুছে ফেলবেন?"
+
+msgid "Yes, really delete them!"
+msgstr "হ্যাঁ, সত্যিই মুছে ফেলুন!"
+
+msgid "Delete Selected"
+msgstr "নির্বাচিত মুছে ফেলুন"
+
+msgid "Mark All"
+msgstr "সব চিহ্নিত করুন"
+
+msgid "Clear All"
+msgstr "সব পরিষ্কার করুন"
+
+msgid "Message contains HTML"
+msgstr "বার্তায় HTML আছে"
+
+msgid "Message is new"
+msgstr "বার্তাটি নতুন"
+
+msgid "Message is spam"
+msgstr "বার্তাটি স্প্যাম"
+
+msgid "Message body not downloaded"
+msgstr "বার্তার বডি ডাউনলোড করা হয়নি"
+
+msgid "First"
+msgstr "প্রথম"
+
+msgid "Previous"
+msgstr "পূর্ববর্তী"
+
+msgid "Next"
+msgstr "পরবর্তী"
+
+msgid "Last"
+msgstr "শেষ"
+
+msgid "Really delete this message?"
+msgstr "এই বার্তাটি কি সত্যিই মুছে ফেলবেন?"
+
+msgid "Yes, really delete it!"
+msgstr "হ্যাঁ, সত্যিই মুছে ফেলুন!"
+
+msgid "Reply"
+msgstr "উত্তর"
+
+msgid "Reply All"
+msgstr "সবাইকে উত্তর"
+
+msgid "Forward"
+msgstr "ফরোয়ার্ড"
+
+msgid "Save As"
+msgstr "... হিসাবে সংরক্ষণ করুন"
+
+msgid "Delete"
+msgstr "মুছে ফেলুন"
+
+msgid "Back to Folder"
+msgstr "ফোল্ডারে ফিরে যান"
+
+msgid "Move to Folder"
+msgstr "ফোল্ডারে সরান"
+
+msgid "View message in new tab"
+msgstr "নতুন ট্যাবে বার্তা দেখুন"
+
+msgid "Folder Page Size"
+msgstr "ফোল্ডার পৃষ্ঠা আকার"
+
+msgid "Set"
+msgstr "সেট করুন"
+
+msgid "Advanced Configuration"
+msgstr "উন্নত কনফিগারেশন"
+
+msgid "Save Configuration"
+msgstr "কনফিগারেশন সংরক্ষণ করুন"
+
+msgid "No response from server"
+msgstr "সার্ভার থেকে কোনো সাড়া নেই"
+
+msgid "Mail server login failed, wrong username or password."
+msgstr "মেইল সার্ভার লগইন ব্যর্থ, ভুল ব্যবহারকারীর নাম বা পাসওয়ার্ড।"
+
+msgid "Logout and then login again with the correct username and password."
+msgstr "লগআউট করুন এবং সঠিক ব্যবহারকারীর নাম ও পাসওয়ার্ড দিয়ে পুনরায় লগইন করুন।"
+
+msgid "Login failed"
+msgstr "লগইন ব্যর্থ"
+
+msgid "Server refused connection"
+msgstr "সার্ভার সংযোগ প্রত্যাখ্যান করেছে"
+
+msgid "Mail rejected"
+msgstr "মেইল প্রত্যাখ্যাত"

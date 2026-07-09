@@ -1,0 +1,1502 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "No more torrents running."
+msgstr "কোনো টরেন্ট চলছে না।"
+
+msgid "I2P tunnel closed."
+msgstr "I2P টানেল বন্ধ।"
+
+msgid "Magnet"
+msgstr "ম্যাগনেট"
+
+msgid "Unable to connect to I2P"
+msgstr "I2P-এ সংযোগ করা যাচ্ছে না"
+
+msgid "Error connecting to I2P - check your I2CP settings!"
+msgstr "I2P-এ সংযোগ করতে ত্রুটি - আপনার I2CP সেটিংস পরীক্ষা করুন!"
+
+msgid "Download already running: "
+msgstr "ডাউনলোড ইতিমধ্যে চলছে:"
+
+msgid "Downloading"
+msgstr "ডাউনলোড হচ্ছে"
+
+msgid "Configuring I2PSnark with I2CP options"
+msgstr "I2CP অপশনের সাথে I2PSnark কনফিগার করা হচ্ছে"
+
+msgid "No write permissions for data directory"
+msgstr "ডেটা ডিরেক্টরির জন্য লেখার অনুমতি নেই"
+
+msgid "Data directory cannot be created"
+msgstr "ডেটা ডিরেক্টরি তৈরি করা যাচ্ছে না"
+
+#, java-format
+msgid "Total uploaders limit changed to {0}"
+msgstr "মোট আপলোডার সীমা {0} এ পরিবর্তিত হয়েছে"
+
+#, java-format
+msgid "Minimum uploaders limit is {0}"
+msgstr "ন্যূনতম আপলোডার সীমা {0}"
+
+#, java-format
+msgid "Up BW limit changed to {0}KBps"
+msgstr "আপলিংক ব্যান্ডউইথ সীমা {0}KBps এ পরিবর্তিত হয়েছে"
+
+#, java-format
+msgid "Minimum up bandwidth limit is {0}KBps"
+msgstr "ন্যূনতম আপলিংক ব্যান্ডউইথ সীমা {0}KBps"
+
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr "সর্বাধিক ডাউনলোড গতি {0}KB/s এ পরিবর্তিত হয়েছে"
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr "ডাউনলোড গতির সীমা {0}KB/s"
+
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr "দ্রষ্টব্য: এই পরিবর্তন কার্যকর করতে আপনাকে আপনার টরেন্টগুলি বন্ধ এবং পুনরায় শুরু করতে বা I2PSnark পুনরায় শুরু করতে হতে পারে।"
+
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "ইনবাউন্ড টানেলে +0/1 টানেল হপ র্যান্ডমাইজেশন সক্রিয় করা হয়েছে"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "ইনবাউন্ড টানেলে টানেল হপ র্যান্ডমাইজেশন নিষ্ক্রিয় করা হয়েছে"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "আউটবাউন্ড টানেলে +0/1 টানেল হপ র্যান্ডমাইজেশন সক্রিয় করা হয়েছে"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "আউটবাউন্ড টানেলে টানেল হপ র্যান্ডমাইজেশন নিষ্ক্রিয় করা হয়েছে"
+
+#, java-format
+msgid "Startup delay changed to {0}"
+msgstr "স্টার্টআপ বিলম্ব {0} এ পরিবর্তিত হয়েছে"
+
+#, java-format
+msgid "Refresh time changed to {0}"
+msgstr "রিফ্রেশ সময় {0} এ পরিবর্তিত হয়েছে"
+
+msgid "Refresh disabled"
+msgstr "রিফ্রেশ নিষ্ক্রিয়"
+
+#, java-format
+msgid "Page size changed to {0}"
+msgstr "পৃষ্ঠার আকার {0} এ পরিবর্তিত হয়েছে"
+
+msgid "New files will be publicly readable"
+msgstr "নতুন ফাইল সর্বজনীনভাবে পঠনযোগ্য হবে"
+
+msgid "New files will not be publicly readable"
+msgstr "নতুন ফাইল সর্বজনীনভাবে পঠনযোগ্য হবে না"
+
+msgid "Stop all torrents before changing data directory"
+msgstr "ডেটা ডিরেক্টরি পরিবর্তনের আগে সমস্ত টরেন্ট বন্ধ করুন"
+
+msgid "Data directory must be an absolute path"
+msgstr "ডেটা ডিরেক্টরি অবশ্যই একটি সম্পূর্ণ পাথ হতে হবে"
+
+msgid "Not a directory"
+msgstr "ডিরেক্টরি নয়"
+
+msgid "Unreadable"
+msgstr "পঠনযোগ্য নয়"
+
+#, java-format
+msgid "Data directory changed to {0}"
+msgstr "ডেটা ডিরেক্টরি {0} এ পরিবর্তিত হয়েছে"
+
+msgid "I2CP and tunnel changes will take effect after stopping all torrents"
+msgstr "সমস্ত টরেন্ট বন্ধ করার পর I2CP এবং টানেল পরিবর্তন কার্যকর হবে"
+
+#, java-format
+msgid "I2CP options changed to: {0}"
+msgstr "I2CP অপশনগুলি পরিবর্তিত হয়েছে: {0}"
+
+msgid "Disconnecting old I2CP destination"
+msgstr "পুরনো I2CP গন্তব্য বিচ্ছিন্ন করা হচ্ছে"
+
+msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
+msgstr "নতুন সেটিংসের সাথে সংযোগ করা যাচ্ছে না, পুরনো I2CP সেটিংসে ফিরে যাওয়া হচ্ছে"
+
+msgid "Unable to reconnect with the old settings!"
+msgstr "পুরনো সেটিংসের সাথে পুনরায় সংযোগ করা যাচ্ছে না!"
+
+msgid "Reconnected on the new I2CP destination"
+msgstr "নতুন I2CP গন্তব্যে পুনরায় সংযোগ করা হয়েছে"
+
+#, java-format
+msgid "I2CP listener restarted for \"{0}\""
+msgstr "\"{0}\" এর জন্য I2CP শ্রোতা পুনরায় শুরু করা হয়েছে"
+
+msgid "Enabled autostart"
+msgstr "অটোস্টার্ট সক্রিয়"
+
+msgid "Disabled autostart"
+msgstr "অটোস্টার্ট নিষ্ক্রিয়"
+
+msgid "Enabled open trackers - torrent restart required to take effect."
+msgstr "ওপেন ট্র্যাকার সক্রিয় - কার্যকর হতে টরেন্ট পুনরায় শুরু প্রয়োজন।"
+
+msgid "Disabled open trackers - torrent restart required to take effect."
+msgstr "ওপেন ট্র্যাকার নিষ্ক্রিয় - কার্যকর হতে টরেন্ট পুনরায় শুরু প্রয়োজন।"
+
+msgid "Enabled DHT."
+msgstr "DHT সক্রিয়।"
+
+msgid "Disabled DHT."
+msgstr "DHT নিষ্ক্রিয়।"
+
+msgid "DHT change requires tunnel shutdown and reopen"
+msgstr "DHT পরিবর্তনের জন্য টানেল বন্ধ এবং পুনরায় খোলা প্রয়োজন"
+
+msgid "Enabled Ratings."
+msgstr "রেটিং সক্রিয়।"
+
+msgid "Disabled Ratings."
+msgstr "রেটিং নিষ্ক্রিয়।"
+
+msgid "Enabled Comments."
+msgstr "মন্তব্য সক্রিয়।"
+
+msgid "Disabled Comments."
+msgstr "মন্তব্য নিষ্ক্রিয়।"
+
+#, java-format
+msgid "Comments name set to {0}."
+msgstr "মন্তব্যের নাম {0} নির্ধারণ করা হয়েছে।"
+
+msgid "Collapsible panels enabled."
+msgstr "ভাঁজযোগ্য প্যানেল সক্রিয়।"
+
+msgid "Collapsible panels disabled."
+msgstr "ভাঁজযোগ্য প্যানেল নিষ্ক্রিয়।"
+
+msgid "Torrent filter bar enabled."
+msgstr "টরেন্ট ফিল্টার বার সক্রিয়।"
+
+msgid "Torrent filter bar disabled."
+msgstr "টরেন্ট ফিল্টার বার নিষ্ক্রিয়।"
+
+msgid "Lightbox enabled for image thumbnails."
+msgstr "ইমেজ থাম্বনেইলের জন্য লাইটবক্স সক্রিয়।"
+
+msgid "Lightbox disabled for image thumbnails."
+msgstr "ইমেজ থাম্বনেইলের জন্য লাইটবক্স নিষ্ক্রিয়।"
+
+msgid "Add and Create sections enabled on all torrent listing pages."
+msgstr "সমস্ত টরেন্ট তালিকা পৃষ্ঠায় Add এবং Create বিভাগ সক্রিয়।"
+
+msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
+msgstr "Add এবং Create বিভাগ শুধুমাত্র মাল্টিপেজ টরেন্ট তালিকা পৃষ্ঠার প্রথম পৃষ্ঠায় প্রদর্শিত হবে।"
+
+msgid "API key updated."
+msgstr "API কী আপডেট করা হয়েছে।"
+
+msgid "Open Tracker list changed - torrent restart required to take effect."
+msgstr "ওপেন ট্র্যাকার তালিকা পরিবর্তিত - কার্যকর হতে টরেন্ট পুনরায় শুরু প্রয়োজন।"
+
+msgid "Private tracker list changed - affects newly created torrents only."
+msgstr "প্রাইভেট ট্র্যাকার তালিকা পরিবর্তিত - শুধুমাত্র নবনির্মিত টরেন্ট প্রভাবিত করে।"
+
+#, java-format
+msgid "Unable to save the config to {0}"
+msgstr "{0} এ কনফিগার সংরক্ষণ করা যাচ্ছে না"
+
+#, java-format
+msgid "Torrent file deleted: {0}"
+msgstr "টরেন্ট ফাইল মুছে ফেলা হয়েছে: {0}"
+
+#, java-format
+msgid "Torrent file moved from {0} to {1}"
+msgstr "টরেন্ট ফাইল {0} থেকে {1} এ সরানো হয়েছে"
+
+#, java-format
+msgid "Error: Could not add torrent: {0}"
+msgstr "ত্রুটি: টরেন্ট যোগ করা যায়নি: {0}"
+
+#, java-format
+msgid "Torrent already running: {0}"
+msgstr "টরেন্ট ইতিমধ্যে চলছে: {0}"
+
+#, java-format
+msgid "Cannot open \"{0}\""
+msgstr "\"{0}\" খোলা যাচ্ছে না"
+
+#, java-format
+msgid "Torrent with this info hash is already running: {0}"
+msgstr "এই ইনফো হ্যাশের টরেন্ট ইতিমধ্যে চলছে: {0}"
+
+#, java-format
+msgid "Torrent with the same data location is already running: {0}"
+msgstr "একই ডেটা অবস্থানের টরেন্ট ইতিমধ্যে চলছে: {0}"
+
+#, java-format
+msgid "Torrent in \"{0}\" is invalid"
+msgstr "\"{0}\" এ টরেন্ট অবৈধ"
+
+#, java-format
+msgid "ERROR - Out of memory, cannot create torrent from {0}"
+msgstr "ত্রুটি - মেমরি অপ্রতুল, {0} থেকে টরেন্ট তৈরি করা যাচ্ছে না"
+
+msgid "Initializing I2PSnark and opening tunnels"
+msgstr "I2PSnark শুরু করা এবং টানেল খোলা হচ্ছে"
+
+#, java-format
+msgid "Torrent added and started: {0}"
+msgstr "টরেন্ট যোগ করা হয়েছে এবং শুরু: {0}"
+
+#, java-format
+msgid "Torrent added: {0}"
+msgstr "টরেন্ট যোগ করা হয়েছে: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "ত্রুটি - প্রাইভেট টরেন্ট \"{0}\" এ কোনো I2P ট্র্যাকার নেই"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "সতর্কীকরণ - \"{0}\" এ কোনো I2P ট্র্যাকার নেই, শুধুমাত্র I2P ওপেন ট্র্যাকার এবং DHT-তে ঘোষণা করা হবে।"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "সতর্কীকরণ - \"{0}\" এ কোনো I2P ট্র্যাকার নেই, এবং ওপেন ট্র্যাকার নিষ্ক্রিয়, শুধুমাত্র DHT-তে ঘোষণা করা হবে।"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "সতর্কীকরণ - \"{0}\" এ কোনো I2P ট্র্যাকার নেই, এবং DHT এবং ওপেন ট্র্যাকার নিষ্ক্রিয়, টরেন্ট শুরুর আগে আপনাকে ওপেন ট্র্যাকার বা DHT সক্রিয় করতে হবে।"
+
+#, java-format
+msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
+msgstr "ওপেন ট্র্যাকার নিষ্ক্রিয় এবং আমাদের কোনো DHT পিয়ার নেই। {0} এর ফেচ সফল নাও হতে পারে যতক্ষণ না আপনি অন্য টরেন্ট শুরু করেন, ওপেন ট্র্যাকার সক্রিয় করেন, বা DHT সক্রিয় করেন।"
+
+#, java-format
+msgid "Adding {0}"
+msgstr "{0} যোগ করা হচ্ছে"
+
+#, java-format
+msgid "Download already running: {0}"
+msgstr "ডাউনলোড ইতিমধ্যে চলছে: {0}"
+
+#, java-format
+msgid "Failed to copy torrent file to {0}"
+msgstr "টরেন্ট ফাইল {0} এ অনুলিপি করতে ব্যর্থ"
+
+msgid " - torrent file already exists"
+msgstr " - টরেন্ট ফাইল ইতিমধ্যে বিদ্যমান"
+
+#, java-format
+msgid "Too many files in \"{0}\" ({1})!"
+msgstr "\"{0}\" এ অনেক বেশি ফাইল ({1})!"
+
+#, java-format
+msgid "Torrent file \"{0}\" cannot end in \".torrent\"!"
+msgstr "টরেন্ট ফাইল \"{0}\" \".torrent\" দিয়ে শেষ হতে পারে না!"
+
+#, java-format
+msgid "No pieces in \"{0}\"!"
+msgstr "\"{0}\" এ কোনো পিস নেই!"
+
+#, java-format
+msgid "Too many pieces in \"{0}\", limit is {1}!"
+msgstr "\"{0}\" এ অনেক বেশি পিস, সীমা {1}!"
+
+#, java-format
+msgid "Pieces are too large in \"{0}\" ({1}B)!"
+msgstr "\"{0}\" এ পিসগুলি খুব বড় ({1}B)!"
+
+#, java-format
+msgid "Limit is {0}B"
+msgstr "সীমা {0}B"
+
+#, java-format
+msgid "Torrent \"{0}\" has no data!"
+msgstr "টরেন্ট \"{0}\" এর কোনো ডেটা নেই!"
+
+#, java-format
+msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
+msgstr "{0}B এর চেয়ে বড় টরেন্ট এখনো সমর্থিত নয় \"{1}\"!"
+
+#, java-format
+msgid "Error: Could not remove the torrent {0}"
+msgstr "ত্রুটি: টরেন্ট {0} অপসারণ করা যায়নি"
+
+#, java-format
+msgid "Torrent stopped: {0}"
+msgstr "টরেন্ট বন্ধ: {0}"
+
+#, java-format
+msgid "Torrent removed: {0}"
+msgstr "টরেন্ট অপসারিত: {0}"
+
+#, java-format
+msgid "Adding torrents in {0}&hellip;"
+msgstr "{0} এ টরেন্ট যোগ করা হচ্ছে&hellip;"
+
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "ডাউনলিংক ব্যান্ডউইথ সীমা {0} KB/s"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "আপলিংক ব্যান্ডউইথ সীমা {0} KB/s"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr "{0} এ I2P ইন্সট্যান্সের I2CP পোর্টে সংযোগ করা হচ্ছে"
+
+msgid "Connecting to I2P"
+msgstr "I2P-এ সংযোগ করা হচ্ছে"
+
+msgid "Connected to I2P at"
+msgstr "I2P-এ সংযোগ সফল হয়েছে"
+
+#, java-format
+msgid "Starting up torrent {0}"
+msgstr "টরেন্ট {0} শুরু করা হচ্ছে"
+
+#, java-format
+msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
+msgstr "আপলোড ব্যান্ডউইথ সীমা {0} KBps সর্বাধিক {1} সমকালীন পিয়ার পর্যন্ত।"
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr "স্টোরেজ: কনফিগারকৃত ডেটা পার্টিশনে ডাউনলোডের জন্য বর্তমানে {0}GB উপলব্ধ"
+
+#, java-format
+msgid "Storage: {0}MB currently available for downloads on configured data partition"
+msgstr "স্টোরেজ: কনফিগারকৃত ডেটা পার্টিশনে ডাউনলোডের জন্য বর্তমানে {0}MB উপলব্ধ"
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured data partition"
+msgstr "সতর্কীকরণ - কনফিগারকৃত ডেটা পার্টিশনে ডাউনলোডের জন্য শুধুমাত্র {0}MB উপলব্ধ"
+
+#, java-format
+msgid "Download finished: {0}"
+msgstr "ডাউনলোড শেষ: {0}"
+
+msgid "I2PSnark"
+msgstr "I2PSnark"
+
+#, java-format
+msgid "Starting torrent: {0}"
+msgstr "টরেন্ট শুরু হচ্ছে: {0}"
+
+msgid "Unable to load torrent create file filter config: "
+msgstr "টরেন্ট ফাইল ফিল্টার কনফিগ লোড করা যাচ্ছে না:"
+
+msgid "Unable to save torrent create file filter config: "
+msgstr "টরেন্ট ফাইল ফিল্টার কনফিগ সংরক্ষণ করা যাচ্ছে না:"
+
+msgid "Torrent not found"
+msgstr "টরেন্ট পাওয়া যায়নি"
+
+msgid "Opening the I2P tunnel"
+msgstr "I2P টানেল খোলা হচ্ছে"
+
+msgid "Opening the I2P tunnel and starting all torrents."
+msgstr "I2P টানেল খোলা হচ্ছে এবং সব টরেন্ট শুরু করা হচ্ছে।"
+
+msgid "Stopping all torrents and closing the I2P tunnel."
+msgstr "সব টরেন্ট বন্ধ করা হচ্ছে এবং I2P টানেল বন্ধ করা হচ্ছে।"
+
+msgid "Closing I2P tunnel after notifying trackers."
+msgstr "ট্র্যাকারকে জানানোর পর I2P টানেল বন্ধ করা হচ্ছে।"
+
+#, java-format
+msgid "Cannot check {0}"
+msgstr "{0} পরীক্ষা করা যাচ্ছে না"
+
+msgid "Torrent already started"
+msgstr "টরেন্ট ইতিমধ্যে শুরু হয়েছে"
+
+msgid "No storage"
+msgstr "কোনো স্টোরেজ নেই"
+
+msgid "Starting recheck of {}"
+msgstr "{}-এর পুনঃপরীক্ষা শুরু হচ্ছে"
+
+#, java-format
+msgid "Finished recheck of torrent {0}, now {1} complete"
+msgstr "টরেন্ট {0}-এর পুনঃপরীক্ষা শেষ, এখন {1} সম্পূর্ণ"
+
+#, java-format
+msgid "Finished recheck of torrent {0}, unchanged"
+msgstr "টরেন্ট {0}-এর পুনঃপরীক্ষা শেষ, অপরিবর্তিত"
+
+#, java-format
+msgid "Error checking torrent {0}"
+msgstr "টরেন্ট {0} পরীক্ষা করতে ত্রুটি"
+
+msgid "Data directory does not exist"
+msgstr "ডেটা ডিরেক্টরি বিদ্যমান নেই"
+
+msgid "Cannot create diskspace bar"
+msgstr "ডিস্কস্পেস বার তৈরি করা যাচ্ছে না"
+
+msgid "Data partition"
+msgstr "ডেটা পার্টিশন"
+
+#, java-format
+msgid "No valid trackers for {0} - enable opentrackers or DHT?"
+msgstr "{0}-এর জন্য কোনো বৈধ ট্র্যাকার নেই - ওপেনট্র্যাকার বা DHT সক্রিয় করবেন?"
+
+msgid "Updating"
+msgstr "আপডেট করা হচ্ছে"
+
+#, java-format
+msgid "Updating from {0}"
+msgstr "{0} থেকে আপডেট করা হচ্ছে"
+
+#, java-format
+msgid "Downloading {0}"
+msgstr "{0} ডাউনলোড করা হচ্ছে"
+
+#, java-format
+msgid "Requesting torrent file: {0}"
+msgstr "টরেন্ট ফাইল অনুরোধ করা হচ্ছে: {0}"
+
+#, java-format
+msgid "Failed to retrieve torrent file: {0}"
+msgstr "টরেন্ট ফাইল পুনরুদ্ধার ব্যর্থ: {0}"
+
+#, java-format
+msgid "Torrent downloaded from {0}"
+msgstr "টরেন্ট {0} থেকে ডাউনলোড করা হয়েছে"
+
+#, java-format
+msgid "Torrent already in the queue: {0}"
+msgstr "টরেন্ট ইতিমধ্যে সারিতে আছে: {0}"
+
+#, java-format
+msgid "Torrent at {0} was not valid"
+msgstr "{0} এ টরেন্ট বৈধ ছিল না"
+
+msgid "Torrents"
+msgstr "টরেন্ট"
+
+msgid "Refresh page"
+msgstr "পৃষ্ঠা রিফ্রেশ করুন"
+
+msgid "Configure"
+msgstr "কনফিগার করুন"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "টরেন্ট ও ফাইলশেয়ারিং ফোরাম"
+
+msgid "Forum"
+msgstr "ফোরাম"
+
+msgid "Search torrents"
+msgstr "টরেন্ট অনুসন্ধান"
+
+msgid "Clear search"
+msgstr "অনুসন্ধান পরিষ্কার"
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "টরেন্ট ফেতেচ করতে \"Add torrent\" বাটনে ক্লিক করুন"
+
+msgid "Anonymous BitTorrent Client"
+msgstr "বেনামী বিটটরেন্ট ক্লায়েন্ট"
+
+msgid "Configuration"
+msgstr "কনফিগারেশন"
+
+#, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr "আপনি কি নিশ্চিত আপনি {0} এবং সমস্ত ডাউনলোডকৃত ডেটা মুছতে চান?"
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr "<b>{0}</b> এবং সমস্ত সম্পর্কিত ডেটা মুছে ফেলা হচ্ছে..."
+
+#, java-format
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
+msgstr "আপনি কি নিশ্চিত আপনি টরেন্ট ফাইল {0} এবং সম্পর্কিত মেটাডেটা মুছতে চান?"
+
+msgid "Note: Downloaded data will not be deleted."
+msgstr "দ্রষ্টব্য: ডাউনলোডকৃত ডেটা মুছে ফেলা হবে না।"
+
+#, java-format
+msgid "Deleting {0} and associated metadata only..."
+msgstr "শুধুমাত্র {0} এবং সম্পর্কিত মেটাডেটা মুছে ফেলা হচ্ছে..."
+
+msgid "clear messages"
+msgstr "বার্তা পরিষ্কার"
+
+msgid "Expand"
+msgstr "প্রসারিত করুন"
+
+msgid "Shrink"
+msgstr "সংক্ষিপ্ত করুন"
+
+#, java-format
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "সতর্কীকরণ! আপনার ব্রাউজারে জাভাস্ক্রিপ্ট নিষ্ক্রিয়। যদি {0} সক্রিয় থাকে, তাহলে রিফ্রেশ হলে আপনি add/create টরেন্ট বিভাগে যেকোনো ইনপুট হারাবেন।"
+
+msgid "page refresh"
+msgstr "পৃষ্ঠা রিফ্রেশ"
+
+msgid "Warning - No I2P"
+msgstr "সতর্কীকরণ - কোনো I2P নেই"
+
+msgid "No torrents found."
+msgstr "কোনো টরেন্ট পাওয়া যায়নি।"
+
+msgid "No torrents loaded."
+msgstr "কোনো টরেন্ট লোড হয়নি।"
+
+msgid "No DHT Peers"
+msgstr "কোনো DHT পিয়ার নেই"
+
+msgid "Status"
+msgstr "অবস্থা"
+
+msgid "Torrent"
+msgstr "টরেন্ট"
+
+msgid "File type"
+msgstr "ফাইলের ধরন"
+
+msgid "Torrent name"
+msgstr "টরেন্ট নাম"
+
+msgid "ETA"
+msgstr "আনুমানিক সময় বাকি"
+
+msgid "RX"
+msgstr "গৃহীত"
+
+msgid "RX Rate"
+msgstr "প্রাপ্তি হার"
+
+msgid "TX"
+msgstr "প্রেরিত"
+
+msgid "TX Rate"
+msgstr "প্রেরণ হার"
+
+msgid "Start All"
+msgstr "সব শুরু করুন"
+
+msgid "Stop All"
+msgstr "সব বন্ধ করুন"
+
+msgid "Stop all torrents and the I2P tunnel"
+msgstr "সমস্ত টরেন্ট এবং I2P টানেল বন্ধ করুন"
+
+msgid "Start all torrents and the I2P tunnel"
+msgstr "সমস্ত টরেন্ট এবং I2P টানেল শুরু করুন"
+
+msgid "Start all stopped torrents"
+msgstr "সমস্ত বন্ধ টরেন্ট শুরু করুন"
+
+msgid "Hide Peers"
+msgstr "পিয়ার লুকান"
+
+msgid "Show Peers"
+msgstr "পিয়ার দেখান"
+
+#, java-format
+msgid "Sort by {0}"
+msgstr "{0} অনুসারে সাজান"
+
+msgid "Up Rate"
+msgstr "আপলিংক গতি"
+
+msgid "Total size of loaded torrents"
+msgstr "লোডকৃত টরেন্টের মোট আকার"
+
+#, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] "১টি সংযুক্ত পিয়ার"
+msgstr[1] "১টি সংযুক্ত পিয়ার"
+
+msgid "Active downloads"
+msgstr "সক্রিয় ডাউনলোড"
+
+msgid "Active uploads"
+msgstr "সক্রিয় আপলোড"
+
+msgid "Active Inbound tunnels"
+msgstr "সক্রিয় ইনবাউন্ড টানেল"
+
+msgid "Active Outbound tunnels"
+msgstr "সক্রিয় আউটবাউন্ড টানেল"
+
+msgid "Estimated download time for all torrents"
+msgstr "সমস্ত টরেন্টের জন্য আনুমানিক ডাউনলোড সময়"
+
+msgid "Data downloaded this session"
+msgstr "এই সেশনে ডাউনলোডকৃত ডেটা"
+
+msgid "Total download speed"
+msgstr "মোট ডাউনলোড গতি"
+
+msgid "Total data uploaded (for listed torrents)"
+msgstr "মোট আপলোডকৃত ডেটা (তালিকাভুক্ত টরেন্টের জন্য)"
+
+msgid "Total upload speed"
+msgstr "মোট আপলোড গতি"
+
+msgid "Toggle Debug Panel"
+msgstr "ডিবাগ প্যানেল টগল করুন"
+
+msgid "Debug Mode"
+msgstr "ডিবাগ মোড"
+
+msgid "Normal Mode"
+msgstr "সাধারণ মোড"
+
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "১টি টরেন্ট"
+msgstr[1] "১টি টরেন্ট"
+
+msgid "Search"
+msgstr "অনুসন্ধান"
+
+msgid "Show All"
+msgstr "সব দেখান"
+
+msgid "Active"
+msgstr "সক্রিয়"
+
+msgid "Inactive"
+msgstr "নিষ্ক্রিয়"
+
+msgid "Connected"
+msgstr "সংযুক্ত"
+
+msgid "Seeding"
+msgstr "সীডিং"
+
+msgid "Complete"
+msgstr "সম্পূর্ণ"
+
+msgid "Incomplete"
+msgstr "অসম্পূর্ণ"
+
+msgid "Stopped"
+msgstr "বন্ধ"
+
+msgid "First"
+msgstr "প্রথম"
+
+msgid "First page"
+msgstr "প্রথম পৃষ্ঠা"
+
+msgid "Prev"
+msgstr "পূর্ববর্তী"
+
+msgid "Previous page"
+msgstr "পূর্ববর্তী পৃষ্ঠা"
+
+msgid "Next"
+msgstr "পরবর্তী"
+
+msgid "Next page"
+msgstr "পরবর্তী পৃষ্ঠা"
+
+msgid "Last"
+msgstr "শেষ"
+
+msgid "Last page"
+msgstr "শেষ পৃষ্ঠা"
+
+msgid "Enter URL or select torrent file"
+msgstr "URL লিখুন বা টরেন্ট ফাইল নির্বাচন করুন"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr "টরেন্ট ফাইল আপলোড করতে ত্রুটি: {0}"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "টরেন্ট {0} অন্য টরেন্টের ভেতরে যোগ করা যাবে না: {1}"
+
+#, java-format
+msgid "Download from non-I2P location {0} is not supported"
+msgstr "নন-I2P অবস্থান {0} থেকে ডাউনলোড সমর্থিত নয়"
+
+msgid "Error: Version 2 info hashes are not supported"
+msgstr "ত্রুটি: সংস্করণ ২ ইনফো হ্যাশ সমর্থিত নয়"
+
+#, java-format
+msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
+msgstr "অবৈধ URL: \"{0}\" বা \"{1}\" দিয়ে শুরু হতে হবে"
+
+#, java-format
+msgid "Magnet deleted: {0}"
+msgstr "ম্যাগনেট মুছে ফেলা হয়েছে: {0}"
+
+#, java-format
+msgid "Torrent file could not be deleted: {0}"
+msgstr "টরেন্ট ফাইল মুছে ফেলা যায়নি: {0}"
+
+#, java-format
+msgid "Data file deleted: {0}"
+msgstr "ডেটা ফাইল মুছে ফেলা হয়েছে: {0}"
+
+#, java-format
+msgid "Data file could not be deleted: {0}"
+msgstr "ডেটা ফাইল মুছে ফেলা যায়নি: {0}"
+
+#, java-format
+msgid "Directory could not be deleted: {0}"
+msgstr "ডিরেক্টরি মুছে ফেলা যায়নি: {0}"
+
+#, java-format
+msgid "Directory deleted: {0}"
+msgstr "ডিরেক্টরি মুছে ফেলা হয়েছে: {0}"
+
+msgid "Error creating torrent - you must specify a file or directory"
+msgstr "টরেন্ট তৈরি করতে ত্রুটি - আপনাকে একটি ফাইল বা ডিরেক্টরি নির্ধারণ করতে হবে"
+
+#, java-format
+msgid "Cannot create a torrent for the nonexistent data: {0}"
+msgstr "অবিদ্যমান ডেটার জন্য টরেন্ট তৈরি করা যাবে না: {0}"
+
+#, java-format
+msgid "Cannot add a torrent ending in \".torrent\": {0}"
+msgstr "\".torrent\" দিয়ে শেষ হওয়া টরেন্ট যোগ করা যাবে না: {0}"
+
+#, java-format
+msgid "Torrent with this name is already running: {0}"
+msgstr "এই নামের টরেন্ট ইতিমধ্যে চলছে: {0}"
+
+#, java-format
+msgid "Cannot add a torrent including an I2P directory: {0}"
+msgstr "একটি I2P ডিরেক্টরি অন্তর্ভুক্ত টরেন্ট যোগ করা যাবে না: {0}"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "অন্য টরেন্ট অন্তর্ভুক্ত টরেন্ট {0} যোগ করা যাবে না: {1}"
+
+msgid "Error - Cannot include alternate trackers without a primary tracker"
+msgstr "ত্রুটি - প্রাথমিক ট্র্যাকার ছাড়া বিকল্প ট্র্যাকার অন্তর্ভুক্ত করা যাবে না"
+
+msgid "Error - Cannot mix private and public trackers in a torrent"
+msgstr "ত্রুটি - একটি টরেন্টে প্রাইভেট এবং পাবলিক ট্র্যাকার মিশ্রিত করা যাবে না"
+
+#, java-format
+msgid " files or folders were excluded from \"{0}\" due to filter rules."
+msgstr " ফাইল বা ফোল্ডার ফিল্টার নিয়মের কারণে \"{0}\" থেকে বাদ দেওয়া হয়েছে।"
+
+#, java-format
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
+msgstr "ফিল্টার নিয়মের কারণে নিম্নলিখিত ফাইল বা ফোল্ডারগুলি \"{0}\" থেকে বাদ দেওয়া হয়েছে:"
+
+#, java-format
+msgid "Torrent created for \"{0}\""
+msgstr "\"{0}\" এর জন্য টরেন্ট তৈরি করা হয়েছে"
+
+#, java-format
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "অনেক I2P ট্র্যাকার সীডিংয়ের আগে নতুন টরেন্ট নিবন্ধন করতে বলে - অনুগ্রহ করে \"{0}\" শুরুর আগে তা করুন"
+
+#, java-format
+msgid "Error creating a torrent for \"{0}\""
+msgstr "\"{0}\" এর জন্য টরেন্ট তৈরি করতে ত্রুটি"
+
+msgid "Delete selected"
+msgstr "নির্বাচিত মুছুন"
+
+msgid "Save tracker configuration"
+msgstr "ট্র্যাকার কনফিগারেশন সংরক্ষণ করুন"
+
+msgid "Removed"
+msgstr "অপসারিত"
+
+msgid "Add tracker"
+msgstr "ট্র্যাকার যোগ করুন"
+
+msgid "Enter valid tracker name and URLs"
+msgstr "বৈধ ট্র্যাকার নাম এবং URL লিখুন"
+
+msgid "Restore defaults"
+msgstr "ডিফল্ট পুনরুদ্ধার"
+
+msgid "Restored default trackers"
+msgstr "ডিফল্ট ট্র্যাকার পুনরুদ্ধার করা হয়েছে"
+
+msgid "Save Filter Configuration"
+msgstr "ফিল্টার কনফিগারেশন সংরক্ষণ করুন"
+
+msgid "Add File Filter"
+msgstr "ফাইল ফিল্টার যোগ করুন"
+
+msgid "Enter valid name and filter pattern"
+msgstr "বৈধ নাম এবং ফিল্টার প্যাটার্ন লিখুন"
+
+msgid "Restored default torrent create filters"
+msgstr "ডিফল্ট টরেন্ট তৈরি ফিল্টার পুনরুদ্ধার করা হয়েছে"
+
+msgid "Torrent details"
+msgstr "টরেন্ট বিবরণ"
+
+msgid "Torrent has comments"
+msgstr "টরেন্টে মন্তব্য আছে"
+
+msgid "Open file"
+msgstr "ফাইল খুলুন"
+
+msgid "View files"
+msgstr "ফাইল দেখুন"
+
+msgid "Completed"
+msgstr "সম্পন্ন"
+
+msgid "Share ratio"
+msgstr "অংশীদার অনুপাত"
+
+msgid "Last activity"
+msgstr "শেষ কার্যকলাপ"
+
+msgid "Stop"
+msgstr "বন্ধ"
+
+msgid "Stop torrent"
+msgstr "টরেন্ট বন্ধ করুন"
+
+msgid "Start"
+msgstr "শুরু"
+
+msgid "Start torrent"
+msgstr "টরেন্ট শুরু করুন"
+
+msgid "Remove"
+msgstr "সরান"
+
+msgid "Remove and delete torrent, retaining downloaded files"
+msgstr "টরেন্ট অপসারণ ও মুছুন, ডাউনলোডকৃত ফাইল সংরক্ষণ করে"
+
+msgid "Delete"
+msgstr "মুছে ফেলুন"
+
+msgid "Delete .torrent file and associated data files"
+msgstr ".torrent ফাইল এবং সম্পর্কিত ডেটা ফাইল মুছুন"
+
+msgid "Checking"
+msgstr "পরীক্ষা করা হচ্ছে"
+
+msgid "Allocating"
+msgstr "বরাদ্দ করা হচ্ছে"
+
+msgid "Starting"
+msgstr "চালু হচ্ছে"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "{0} পিয়ারে সীডিং করা হচ্ছে"
+msgstr[1] "{0} পিয়ারে সীডিং করা হচ্ছে"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "স্বামে {1} পিয়ারের মধ্যে {0} এর সাথে সংযুক্ত"
+
+msgid "Stalled"
+msgstr "স্থগিত"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] "স্বামে {0} পিয়ারে সীডিং করা হচ্ছে"
+msgstr[1] "স্বামে {0} পিয়ারে সীডিং করা হচ্ছে"
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "{0} পিয়ার থেকে ডাউনলোড করা হচ্ছে"
+msgstr[1] "{0} পিয়ার থেকে ডাউনলোড করা হচ্ছে"
+
+msgid "OK"
+msgstr "ঠিক আছে"
+
+msgid "No Peers"
+msgstr "কোনো পিয়ার নেই"
+
+msgid "Peer attached to swarm"
+msgstr "স্বামের সাথে পিয়ার সংযুক্ত"
+
+msgid "Destination (identity) of peer"
+msgstr "পিয়ারের গন্তব্য (পরিচয়)"
+
+msgid "seconds"
+msgstr "সেকেন্ড"
+
+msgid "Seed"
+msgstr "সীড"
+
+msgid "Uninteresting (The peer has no pieces we need)"
+msgstr "অনুপযোগী (পিয়ারের কাছে আমাদের প্রয়োজনীয় কোনো পিস নেই)"
+
+msgid "Choked (The peer is not allowing us to request pieces)"
+msgstr "চোকড (পিয়ার আমাদের পিস অনুরোধ করতে দিচ্ছে না)"
+
+msgid "Peer is interested but currently idle"
+msgstr "পিয়ার আগ্রহী কিন্তু বর্তমানে নিষ্ক্রিয়"
+
+msgid "Uninterested (We have no pieces the peer needs)"
+msgstr "অনাগ্রহী (আমাদের কাছে পিয়ারের প্রয়োজনীয় কোনো পিস নেই)"
+
+msgid "Choking (We are not allowing the peer to request pieces)"
+msgstr "চোকিং (আমরা পিয়ারকে পিস অনুরোধ করতে দিচ্ছি না)"
+
+#, java-format
+msgid "Details at {0} tracker"
+msgstr "{0} ট্র্যাকারে বিস্তারিত"
+
+msgid "Info"
+msgstr "তথ্য"
+
+msgid "Add Torrent"
+msgstr "টরেন্ট যোগ করুন"
+
+msgid "From URL"
+msgstr "URL থেকে"
+
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "টরেন্ট ফাইল ডাউনলোড URL (শুধুমাত্র I2P), ম্যাগনেট লিংক, অথবা ইনফো হ্যাশ লিখুন"
+
+msgid "Add torrent"
+msgstr "টরেন্ট যোগ করুন"
+
+msgid "Torrent file"
+msgstr "টরেন্ট ফাইল"
+
+msgid "Data dir"
+msgstr "ডেটা ডিরেক্টরি"
+
+#, java-format
+msgid "Enter the directory to save the data in (default {0})"
+msgstr "ডেটা সংরক্ষণের ডিরেক্টরি লিখুন (ডিফল্ট {0})"
+
+msgid "Create Torrent"
+msgstr "টরেন্ট তৈরি করুন"
+
+msgid "Data to seed"
+msgstr "সীড করার ডেটা"
+
+#, java-format
+msgid "File or directory to seed (full path or within the directory {0} )"
+msgstr ""
+
+msgid "Create torrent"
+msgstr "টরেন্ট তৈরি করুন"
+
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr "ফাইলগুলি টরেন্ট ফোল্ডারে থাকলে টরেন্ট থেকে বাদ দিন"
+
+msgid "Content Filters"
+msgstr "কন্টেন্ট ফিল্টার"
+
+msgid "Trackers"
+msgstr "ট্র্যাকার"
+
+msgid "Alternates"
+msgstr "বিকল্প"
+
+msgid "Primary"
+msgstr "প্রাথমিক"
+
+msgid "Tracker Type"
+msgstr "ট্র্যাকার প্রকার"
+
+msgid "Standard"
+msgstr "মান"
+
+msgid "Open"
+msgstr "ওপেন"
+
+msgid "Private"
+msgstr "ব্যক্তিগত"
+
+msgid "none"
+msgstr "কিছুই নয়"
+
+msgid "User Interface"
+msgstr "ব্যবহারকারী ইন্টারফেস"
+
+msgid "Switch to Embedded Mode"
+msgstr "এমবেডেড মোডে স্যুইচ করুন"
+
+msgid "Switch to Fullscreen Mode"
+msgstr "পূর্ণস্ক্রীন মোডে স্যুইচ করুন"
+
+msgid "Theme"
+msgstr "থিম"
+
+msgid "To change themes manually, disable universal theming"
+msgstr "ম্যানুয়ালি থিম পরিবর্তন করতে, ইউনিভার্সাল থিমিং নিষ্ক্রিয় করুন"
+
+msgid "Universal theming is enabled."
+msgstr "ইউনিভার্সাল থিমিং সক্রিয়।"
+
+msgid "Refresh time"
+msgstr "রিফ্রেশ সময়"
+
+msgid "How frequently torrent status is updated on the main page"
+msgstr "মূল পৃষ্ঠায় টরেন্ট স্থিতি কত ঘন ঘন আপডেট হয়"
+
+msgid "Never"
+msgstr "কখনো নয়"
+
+msgid "Page size"
+msgstr "পৃষ্ঠার আকার"
+
+msgid "Maximum number of torrents to display per page"
+msgstr "প্রতি পৃষ্ঠায় প্রদর্শনের জন্য সর্বাধিক টরেন্ট সংখ্যা"
+
+msgid "torrents"
+msgstr "টরেন্ট"
+
+msgid "Language"
+msgstr "ভাষা"
+
+msgid "Collapsible panels"
+msgstr "ভাঁজযোগ্য প্যানেল"
+
+msgid "Your browser does not support this feature."
+msgstr "আপনার ব্রাউজার এই বৈশিষ্ট্যটি সমর্থন করে না।"
+
+msgid "Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"
+msgstr "'Add Torrent' এবং 'Create Torrent' প্যানেল ভাঁজ করার অনুমতি দিন এবং নন-এম্বেডেড মোডে ডিফল্টভাবে ভাঁজ করুন"
+
+msgid "Torrent filter bar"
+msgstr "টরেন্ট ফিল্টার বার"
+
+msgid "Show filter bar above torrents for selective display based on status"
+msgstr "স্থিতির ভিত্তিতে নির্বাচিত প্রদর্শনের জন্য টরেন্টের উপরে ফিল্টার বার দেখান"
+
+msgid "requires javascript"
+msgstr "জাভাস্ক্রিপ্ট প্রয়োজন"
+
+msgid "Enable lightbox"
+msgstr "লাইটবক্স সক্রিয় করুন"
+
+msgid "Use a lightbox to display images when thumbnails are clicked"
+msgstr "থাম্বনেইল ক্লিক করলে ইমেজ প্রদর্শনের জন্য লাইটবক্স ব্যবহার করুন"
+
+msgid "Persist Add/Create"
+msgstr "Add/Create ধরে রাখুন"
+
+msgid "Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"
+msgstr "মাল্টিপেজ মোডে সমস্ত টরেন্ট তালিকা পৃষ্ঠায় 'Add' এবং 'Create' বিভাগ প্রদর্শন করুন"
+
+msgid "Comments &amp; Ratings"
+msgstr "মন্তব্য ও রেটিং"
+
+msgid "Enable Ratings"
+msgstr "রেটিং সক্রিয় করুন"
+
+msgid "Show ratings on torrent pages"
+msgstr "টরেন্ট পৃষ্ঠায় রেটিং দেখান"
+
+msgid "Enable Comments"
+msgstr "মন্তব্য সক্রিয় করুন"
+
+msgid "Show comments on torrent pages"
+msgstr "টরেন্ট পৃষ্ঠায় মন্তব্য দেখান"
+
+msgid "Comment Author"
+msgstr "মন্তব্য লেখক"
+
+msgid "Set the author name for your comments and ratings"
+msgstr "আপনার মন্তব্য এবং রেটিংয়ের জন্য লেখকের নাম নির্ধারণ করুন"
+
+msgid "Torrent Options"
+msgstr "টরেন্ট অপশন"
+
+msgid "Half available bandwidth recommended."
+msgstr "অর্ধেক উপলব্ধ ব্যান্ডউইথ সুপারিশ করা হয়।"
+
+msgid "Bandwidth limit"
+msgstr "ব্যান্ডউইথ সীমা"
+
+msgid "Maximum bandwidth allocated for downloading"
+msgstr "ডাউনলোডের জন্য বরাদ্দকৃত সর্বাধিক ব্যান্ডউইথ"
+
+msgid "Maximum bandwidth allocated for uploading"
+msgstr "আপলোডের জন্য বরাদ্দকৃত সর্বাধিক ব্যান্ডউইথ"
+
+msgid "View or change router bandwidth"
+msgstr "রাউটার ব্যান্ডউইথ দেখুন বা পরিবর্তন করুন"
+
+msgid "Total uploader limit"
+msgstr "মোট আপলোডার সীমা"
+
+msgid "Maximum number of peers to upload to"
+msgstr "আপলোডের জন্য সর্বাধিক পিয়ার সংখ্যা"
+
+msgid "peers"
+msgstr "পিয়ার"
+
+msgid "Use open trackers also"
+msgstr "ওপেন ট্র্যাকারও ব্যবহার করুন"
+
+msgid "Announce torrents to open trackers as well as trackers listed in the torrent file"
+msgstr "টরেন্ট ফাইলে তালিকাভুক্ত ট্র্যাকারসহ ওপেন ট্র্যাকারেও টরেন্ট ঘোষণা করুন"
+
+msgid "Enable DHT"
+msgstr "DHT সক্রিয় করুন"
+
+msgid "Use DHT to find additional peers"
+msgstr "অতিরিক্ত পিয়ার খুঁজতে DHT ব্যবহার করুন"
+
+msgid "Auto start torrents"
+msgstr "স্বয়ংক্রিয় টরেন্ট শুরু"
+
+msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
+msgstr "যোগ করার সময় স্বয়ংক্রিয়ভাবে টরেন্ট শুরু করুন এবং I2PSnark চালু হলে টরেন্ট পুনরায় শুরু করুন"
+
+msgid "Startup delay"
+msgstr "স্টার্টআপ বিলম্ব"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts"
+msgstr "I2PSnark চালু হলে কত সময় পর অটো-স্টার্টেড টরেন্ট লোড হবে"
+
+msgid "minutes"
+msgstr "মিনিট"
+
+msgid "Data Storage"
+msgstr "ডেটা স্টোরেজ"
+
+msgid "Data directory"
+msgstr "ডেটা ডিরেক্টরি"
+
+msgid "Directory where torrents and downloaded/shared files are stored"
+msgstr "যে ডিরেক্টরিতে টরেন্ট এবং ডাউনলোড/শেয়ারকৃত ফাইল সংরক্ষিত হয়"
+
+msgid "Files readable by all"
+msgstr "সবার জন্য পঠনযোগ্য ফাইল"
+
+msgid "Set file permissions to allow other local users to access the downloaded files"
+msgstr "অন্যান্য স্থানীয় ব্যবহারকারীদের ডাউনলোডকৃত ফাইল অ্যাক্সেস করার অনুমতি দিতে ফাইল অনুমতি নির্ধারণ করুন"
+
+msgid "Max files per torrent"
+msgstr "প্রতি টরেন্টে সর্বাধিক ফাইল"
+
+msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
+msgstr "প্রতি টরেন্টে অনুমোদিত ফাইলের সর্বাধিক সংখ্যা - লক্ষ্য করুন ট্র্যাকার তাদের নিজস্ব সীমা নির্ধারণ করতে পারে, এবং আপনার OS খোলা ফাইলের সংখ্যা সীমিত করতে পারে, যা অনেক ফাইলযুক্ত টরেন্ট (এবং পরবর্তী টরেন্ট) লোড হতে বাধা দিতে পারে"
+
+msgid "Tunnel Configuration"
+msgstr "টানেল কনফিগারেশন"
+
+msgid "Our destination (identity) for this session"
+msgstr "এই সেশনের জন্য আমাদের গন্তব্য (পরিচয়)"
+
+msgid "Dest."
+msgstr "গন্তব্য"
+
+msgid "Inbound Settings"
+msgstr "ইনবাউন্ড সেটিংস"
+
+msgid "Outbound Settings"
+msgstr "আউটবাউন্ড সেটিংস"
+
+msgid "Vary Tunnel Length"
+msgstr "টানেল দৈর্ঘ্য পরিবর্তন করুন"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "ইনবাউন্ড টানেলে এলোমেলোভাবে 0 বা 1 অতিরিক্ত হপ যোগ করুন"
+
+msgid "Inbound"
+msgstr "ইনবাউন্ড"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "আউটবাউন্ড টানেলে এলোমেলোভাবে 0 বা 1 অতিরিক্ত হপ যোগ করুন"
+
+msgid "Outbound"
+msgstr "আউটবাউন্ড"
+
+msgid "I2CP host"
+msgstr "I2CP হোস্ট"
+
+msgid "I2CP port"
+msgstr "I2CP পোর্ট"
+
+msgid "I2CP options"
+msgstr "I2CP অপশন"
+
+msgid "Save configuration"
+msgstr "কনফিগারেশন সংরক্ষণ করুন"
+
+msgid "Torrent Create File Filtering"
+msgstr "টরেন্ট তৈরি ফাইল ফিল্টারিং"
+
+msgid "Mark filter for deletion"
+msgstr "মুছে ফেলার জন্য ফিল্টার চিহ্নিত করুন"
+
+msgid "Name"
+msgstr "নাম"
+
+msgid "Filter Pattern"
+msgstr "ফিল্টার প্যাটার্ন"
+
+msgid "Starts With"
+msgstr "শুরু হয়"
+
+msgid "Contains"
+msgstr "ধারণ করে"
+
+msgid "Ends With"
+msgstr "শেষ হয়"
+
+msgid "Enabled by Default"
+msgstr "ডিফল্টভাবে সক্রিয়"
+
+msgid "Add"
+msgstr "যোগ করুন"
+
+msgid "Select trackers for removal from I2PSnark's known list"
+msgstr "I2PSnarkের পরিচিত তালিকা থেকে অপসারণের জন্য ট্র্যাকার নির্বাচন করুন"
+
+msgid "Website URL"
+msgstr "ওয়েবসাইট URL"
+
+msgid "Announce URL"
+msgstr "ঘোষণা URL"
+
+msgid "Mark tracker for deletion"
+msgstr "মুছে ফেলার জন্য ট্র্যাকার চিহ্নিত করুন"
+
+msgid "Cannot add magnet: Version 2 magnet links are not supported"
+msgstr "ম্যাগনেট যোগ করা যাবে না: সংস্করণ ২ ম্যাগনেট লিংক সমর্থিত নয়"
+
+#, java-format
+msgid "Invalid magnet URL {0}"
+msgstr "অবৈধ ম্যাগনেট URL {0}"
+
+#, java-format
+msgid "1 hop"
+msgid_plural "{0} hops"
+msgstr[0] "১ হপ"
+msgstr[1] "১ হপ"
+
+#, java-format
+msgid "1 tunnel"
+msgid_plural "{0} tunnels"
+msgstr[0] "১টি টানেল"
+msgstr[1] "১টি টানেল"
+
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "এটি খোলার জন্য সর্বাধিক টানেল সংখ্যা কনফিগার করে, যা সংযুক্ত পিয়ারের সংখ্যা দ্বারা নির্ধারিত (প্রকৃত ব্যবহার কম হতে পারে)"
+
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "এই সেটিং ৩ হপের কম পরিবর্তন করলে গতি বাড়তে পারে কিন্তু বেনামীতা হ্রাস পায়, এবং এটি সুপারিশ করা হয় না"
+
+msgid "Sequential piece or file order not saved - feature currently broken."
+msgstr "সিকোয়েন্সিয়াল পিস বা ফাইল অর্ডার সংরক্ষণ করা হয়নি - বৈশিষ্ট্যটি বর্তমানে ত্রুটিপূর্ণ।"
+
+msgid "Unknown command"
+msgstr "অজানা কমান্ড"
+
+msgid "Please retry form submission (bad nonce)"
+msgstr "অনুগ্রহ করে ফর্ম জমা পুনরায় চেষ্টা করুন (ত্রুটিপূর্ণ নন্স)"
+
+msgid "Resource Does Not Exist"
+msgstr "সম্পদ বিদ্যমান নয়"
+
+msgid "Resource"
+msgstr "সম্পদ"
+
+msgid "Base"
+msgstr "ভিত্তি"
+
+msgid "Files"
+msgstr "ফাইল"
+
+msgid "Directory"
+msgstr "ডিরেক্টরি"
+
+msgid "Size"
+msgstr "আকার"
+
+msgid "Download Status"
+msgstr "ডাউনলোড স্থিতি"
+
+msgid "Remaining"
+msgstr "অবশিষ্ট"
+
+msgid "Download Priority"
+msgstr "ডাউনলোড অগ্রাধিকার"
+
+msgid "up"
+msgstr "উপর"
+
+msgid "Parent directory"
+msgstr "প্যারেন্ট ডিরেক্টরি"
+
+msgid "Audio Playlist"
+msgstr "অডিও প্লেলিস্ট"
+
+msgid "Not found"
+msgstr "পাওয়া যায়নি"
+
+msgid "File not found in torrent"
+msgstr "টরেন্টে ফাইল পাওয়া যায়নি"
+
+msgid "Unrecognized"
+msgstr "অপরিচিত"
+
+msgid "Preview"
+msgstr "পূর্বরূপ"
+
+msgid "Save priorities"
+msgstr "অগ্রাধিকার সংরক্ষণ করুন"
+
+msgid "Comments"
+msgstr "মন্তব্য"
+
+msgid "Resource Not found"
+msgstr "সম্পদ পাওয়া যায়নি"
+
+msgid "Info hash"
+msgstr "ইনফো হ্যাশ"
+
+msgid "Created"
+msgstr "তৈরি হয়েছে"
+
+msgid "Added"
+msgstr "যোগ করা হয়েছে"
+
+msgid "Pieces"
+msgstr "পিস"
+
+msgid "Average download speed for torrent"
+msgstr "টরেন্টের গড় ডাউনলোড গতি"
+
+msgid "Download speed"
+msgstr "ডাউনলোড গতি"
+
+msgid "Completion"
+msgstr "সম্পূর্ণতা"
+
+msgid "Skipped"
+msgstr "বাদ দেওয়া"
+
+msgid "Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"
+msgstr ""
+
+msgid "Tracker"
+msgstr "ট্র্যাকার"
+
+msgid "Web Seeds"
+msgstr "ওয়েব সীড"
+
+msgid "Refresh page for results"
+msgstr "ফলাফলের জন্য পৃষ্ঠা রিফ্রেশ করুন"
+
+msgid "Force Recheck"
+msgstr "বাধ্যতামূলক পুনঃপরীক্ষা"
+
+msgid "Stop the torrent in order to check file integrity"
+msgstr "ফাইল অখণ্ডতা পরীক্ষা করার জন্য টরেন্ট বন্ধ করুন"
+
+msgid "Check integrity of the downloaded files"
+msgstr "ডাউনলোডকৃত ফাইলের অখণ্ডতা পরীক্ষা করুন"
+
+msgid "Download file at high priority"
+msgstr "উচ্চ অগ্রাধিকারে ফাইল ডাউনলোড করুন"
+
+msgid "High"
+msgstr "উচ্চ"
+
+msgid "Download file at normal priority"
+msgstr "সাধারণ অগ্রাধিকারে ফাইল ডাউনলোড করুন"
+
+msgid "Normal"
+msgstr "সাধারণ"
+
+msgid "Do not download this file"
+msgstr "এই ফাইলটি ডাউনলোড করবেন না"
+
+msgid "Skip"
+msgstr "বাদ দিন"
+
+msgid "complete"
+msgstr "সম্পূর্ণ"
+
+msgid "remaining"
+msgstr "অবশিষ্ট"
+
+msgid "Ratings and Comments"
+msgstr "রেটিং এবং মন্তব্য"
+
+msgid "Author name required to rate or comment"
+msgstr "রেট বা মন্তব্য করতে লেখকের নাম প্রয়োজন"
+
+msgid "Your author name for published comments and ratings"
+msgstr "প্রকাশিত মন্তব্য এবং রেটিংয়ের জন্য আপনার লেখকের নাম"
+
+#, java-format
+msgid "1 star"
+msgid_plural "{0} stars"
+msgstr[0] "১ তারা"
+msgstr[1] "১ তারা"
+
+msgid "No rating"
+msgstr "কোনো রেটিং নেই"
+
+msgid "Rate and Comment"
+msgstr "রেট এবং মন্তব্য"
+
+msgid "Rate Torrent"
+msgstr "টরেন্ট রেটিং দিন"
+
+msgid "Add Comment"
+msgstr "মন্তব্য যোগ করুন"
+
+msgid "My Rating"
+msgstr "আমার রেটিং"
+
+msgid "Average Rating"
+msgstr "গড় রেটিং"
+
+msgid "No community ratings currently available"
+msgstr "বর্তমানে কোনো কমিউনিটি রেটিং উপলব্ধ নয়"
+
+msgid "Submitted"
+msgstr "জমা দেওয়া হয়েছে"
+
+msgid "Mark for deletion"
+msgstr "মুছে ফেলার জন্য চিহ্নিত করুন"
+
+msgid "Delete Selected"
+msgstr "নির্বাচিত মুছে ফেলুন"
+
+msgid "File downloading priorities updated for torrent "
+msgstr "টরেন্টের জন্য ফাইল ডাউনলোড অগ্রাধিকার আপডেট করা হয়েছে"
+
+msgid "Edit Torrent"
+msgstr "টরেন্ট সম্পাদনা"
+
+msgid "Active Trackers"
+msgstr "সক্রিয় ট্র্যাকার"
+
+msgid "Add Tracker"
+msgstr "ট্র্যাকার যোগ করুন"
+
+msgid "Torrent Comment"
+msgstr "টরেন্ট মন্তব্য"
+
+msgid "Torrent must be stopped in order to edit"
+msgstr "সম্পাদনা করতে টরেন্ট বন্ধ করতে হবে"
+
+msgid "Save Changes"
+msgstr "পরির্বতন সংরক্ষণ করুন"
+
+msgid "Torrent must be stopped"
+msgstr "টরেন্ট বন্ধ করতে হবে"

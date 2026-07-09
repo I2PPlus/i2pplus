@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "ক্রিপ্টোকারেন্সি সম্পর্কিত পরিষেবা"
+
+msgid "Controlled substances marketplaces"
+msgstr "নিয়ন্ত্রিত পদার্থের বাজার"
+
+msgid "E-book libraries and publishing"
+msgstr "ই-বুক গ্রন্থাগার ও প্রকাশনা"
+
+msgid "File hosting and storage services"
+msgstr "ফাইল হোস্টিং ও স্টোরেজ পরিষেবা"
+
+msgid "Peer-to-peer file sharing"
+msgstr "পিয়ার-টু-পিয়ার ফাইল শেয়ারিং"
+
+msgid "Discussion forums and message boards"
+msgstr "আলোচনা ফোরাম ও বার্তা বোর্ড"
+
+msgid "Image galleries and photo sharing"
+msgstr "ছবি গ্যালারি ও ফটো শেয়ারিং"
+
+msgid "Gaming servers and communities"
+msgstr "গেমিং সার্ভার ও সম্প্রদায়"
+
+msgid "Git repositories and code hosting"
+msgstr "Git রিপোজিটরি ও কোড হোস্টিং"
+
+msgid "Help and support resources"
+msgstr "সাহায্য ও সহায়তা সংস্থান"
+
+msgid "Human rights and civil liberties"
+msgstr "মানবাধিকার ও নাগরিক স্বাধীনতা"
+
+msgid "Official I2P infrastructure services"
+msgstr "সরকারি I2P পরিকাঠামো পরিষেবা"
+
+msgid "News and media outlets"
+msgstr "সংবাদ ও গণমাধ্যম"
+
+msgid "Text/code paste services"
+msgstr "টেক্সট/কোড পেস্ট পরিষেবা"
+
+msgid "Personal websites and blogs"
+msgstr "ব্যক্তিগত ওয়েবসাইট ও ব্লগ"
+
+msgid "Internet radio and streaming"
+msgstr "ইন্টারনেট রেডিও ও স্ট্রিমিং"
+
+msgid "Search engines and directories"
+msgstr "সার্চ ইঞ্জিন ও ডিরেক্টরি"
+
+msgid "Software repositories and downloads"
+msgstr "সফটওয়্যার রিপোজিটরি ও ডাউনলোড"
+
+msgid "Statistics and analytics"
+msgstr "পরিসংখ্যান ও বিশ্লেষণ"
+
+msgid "Utilities and web tools"
+msgstr "ইউটিলিটি ও ওয়েব টুলস"
+
+msgid "Torrent and content trackers"
+msgstr "টরেন্ট ও কন্টেন্ট ট্র্যাকার"
+
+msgid "Conspiracy / Religious content"
+msgstr "ষড়যন্ত্র / ধর্মীয় বিষয়বস্তু"
+
+msgid "Unclassified or pending review"
+msgstr "শ্রেণীবদ্ধ নয় বা পর্যালোচনাধীন"
+
+msgid "Not yet categorized"
+msgstr "এখনও শ্রেণীবদ্ধ করা হয়নি"
+
+msgid "Video streaming and media"
+msgstr "ভিডিও স্ট্রিমিং ও মিডিয়া"
+
+msgid "Wiki and collaborative documentation"
+msgstr "উইকি ও সহযোগিতামূলক ডকুমেন্টেশন"
+
+msgid "Work in progress / development"
+msgstr "চলমান কাজ / উন্নয়ন"

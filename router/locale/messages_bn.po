@@ -1,0 +1,144 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "OK"
+msgstr "ঠিক আছে"
+
+msgid "IPv4: OK; IPv6: Testing"
+msgstr "IPv4: ঠিক আছে; IPv6: পরীক্ষা চলছে"
+
+msgid "IPv4: OK; IPv6: Firewalled"
+msgstr "IPv4: ঠিক আছে; IPv6: ফায়ারওয়ালযুক্ত"
+
+msgid "IPv4: Testing; IPv6: OK"
+msgstr "IPv4: পরীক্ষা চলছে; IPv6: ঠিক আছে"
+
+msgid "IPv4: Firewalled; IPv6: OK"
+msgstr "IPv4: ফায়ারওয়ালযুক্ত; IPv6: ঠিক আছে"
+
+msgid "IPv4: Disabled; IPv6: OK"
+msgstr "IPv4: নিষ্ক্রিয়; IPv6: ঠিক আছে"
+
+msgid "IPv4: Symmetric NAT; IPv6: OK"
+msgstr "IPv4: সিমেট্রিক NAT; IPv6: ঠিক আছে"
+
+msgid "Symmetric NAT"
+msgstr "সিমেট্রিক NAT"
+
+msgid "IPv4: Symmetric NAT; IPv6: Testing"
+msgstr "IPv4: সিমেট্রিক NAT; IPv6: পরীক্ষা চলছে"
+
+msgid "IPv4: Firewalled; IPv6: Testing"
+msgstr "IPv4: ফায়ারওয়ালযুক্ত; IPv6: পরীক্ষা চলছে"
+
+msgid "Firewalled"
+msgstr "ফায়ারওয়ালযুক্ত"
+
+msgid "IPv4: Testing; IPv6: Firewalled"
+msgstr "IPv4: পরীক্ষা চলছে; IPv6: ফায়ারওয়ালযুক্ত"
+
+msgid "IPv4: Disabled; IPv6: Testing"
+msgstr "IPv4: নিষ্ক্রিয়; IPv6: পরীক্ষা চলছে"
+
+msgid "IPv4: Disabled; IPv6: Firewalled"
+msgstr "IPv4: নিষ্ক্রিয়; IPv6: ফায়ারওয়ালযুক্ত"
+
+msgid "Disconnected"
+msgstr "সংযোগ বিচ্ছিন্ন"
+
+msgid "Port Conflict"
+msgstr "পোর্ট দ্বন্দ্ব"
+
+msgid "Testing"
+msgstr "পরীক্ষা চলছে"
+
+msgid "Starting up"
+msgstr "চালু হচ্ছে"
+
+msgid "Declining all tunnel requests:<br>"
+msgstr "সব টানেল অনুরোধ প্রত্যাখ্যান করা হচ্ছে:<br>"
+
+msgid "Hidden Mode"
+msgstr "গোপন মোড"
+
+msgid "Declining Tunnel Requests:<br>"
+msgstr "টানেল অনুরোধ প্রত্যাখ্যান করা হচ্ছে:<br>"
+
+msgid "High message delay"
+msgstr "উচ্চ বার্তা বিলম্ব"
+
+msgid "Declining requests: "
+msgstr "অনুরোধ প্রত্যাখ্যান করা হচ্ছে: "
+
+msgid "Limit reached"
+msgstr "সীমা অতিক্রান্ত"
+
+msgid "Participation disabled"
+msgstr "অংশগ্রহণ নিষ্ক্রিয়"
+
+msgid "High system load"
+msgstr "উচ্চ সিস্টেম লোড"
+
+msgid "Rejecting all tunnel requests:<br>"
+msgstr "সমস্ত টানেল অনুরোধ বাতিল করা হচ্ছে:<br>"
+
+msgid "High number of requests"
+msgstr "অনুরোধের উচ্চ সংখ্যা"
+
+msgid "Rejecting most tunnel requests:<br>"
+msgstr "বেশিরভাগ টানেল অনুরোধ বাতিল করা হচ্ছে:<br>"
+
+msgid "Accepting most tunnel requests"
+msgstr "বেশিরভাগ টানেল অনুরোধ গ্রহণ করা হচ্ছে"
+
+msgid "Accepting tunnel requests"
+msgstr "টানেল অনুরোধ গ্রহণ করা হচ্ছে"
+
+msgid "Declining requests: Bandwidth limit"
+msgstr "অনুরোধ প্রত্যাখ্যান: ব্যান্ডউইথ সীমা"
+
+msgid "Declining requests"
+msgstr "অনুরোধ প্রত্যাখ্যান করা হচ্ছে"
+
+msgid "Shutting down"
+msgstr "বন্ধ করা হচ্ছে"
+
+msgid "Restarting"
+msgstr "পুনরায় চালু করা হচ্ছে"
+
+msgid "Declining Tunnel Requests"
+msgstr "টানেল অনুরোধ প্রত্যাখ্যান করা হচ্ছে"
+
+msgid "Dropping Tunnel Requests: Too slow"
+msgstr "টানেল অনুরোধ বাদ দেওয়া হচ্ছে: খুব ধীর"
+
+msgid "Dropping Tunnel Requests: High job lag"
+msgstr "টানেল অনুরোধ বাদ দেওয়া হচ্ছে: উচ্চ কাজ পিছিয়ে"
+
+msgid "Dropping Tunnel Requests:<br>High CPU load"
+msgstr "টানেল অনুরোধ বাদ দেওয়া হচ্ছে:<br>উচ্চ CPU লোড"
+
+msgid "Dropping Tunnel Requests: Overloaded"
+msgstr "টানেল অনুরোধ বাদ দেওয়া হচ্ছে: ওভারলোডেড"
+
+msgid "Declining requests:"
+msgstr "অনুরোধ প্রত্যাখ্যান করা হচ্ছে:"
+
+msgid "Request overload"
+msgstr "অনুরোধ ওভারলোড"
+
+msgid "Connection limit reached"
+msgstr "সংযোগ সীমা অতিক্রান্ত"
+
+msgid "Dropping Tunnel Requests: High load"
+msgstr "টানেল অনুরোধ বাদ দেওয়া হচ্ছে: উচ্চ লোড"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "টানেল অনুরোধ বাদ দেওয়া হচ্ছে: সারির সময়"

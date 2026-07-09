@@ -1,0 +1,39 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+msgid ""
+msgstr ""
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Should the I2P router be started at boot?"
+msgstr "বুট করার সময় কি I2P রাউটার চালু করা উচিত?"
+
+msgid "The I2P router can be run as a daemon that starts automatically when your computer boots up. This is the recommended configuration."
+msgstr "I2P রাউটার একটি ডেমন হিসাবে চালানো যেতে পারে যা আপনার কম্পিউটার বুট হলে স্বয়ংক্রিয়ভাবে শুরু হয়। এটি প্রস্তাবিত কনফিগারেশন।"
+
+msgid "I2P daemon user:"
+msgstr "I2P ডেমন ব্যবহারকারী:"
+
+msgid "By default I2P is configured to run under the account i2psvc when running as a daemon. To use an **existing** I2P profile you may enter a different account name here. For example, if your previous I2P installation is at /home/user/i2p, you may enter 'user' here."
+msgstr "ডিফল্টরূপে I2P ডেমন হিসাবে চলার সময় i2psvc অ্যাকাউন্টের অধীনে চালানোর জন্য কনফিগার করা হয়। একটি **বিদ্যমান** I2P প্রোফাইল ব্যবহার করতে আপনি এখানে একটি ভিন্ন অ্যাকাউন্ট নাম লিখতে পারেন। উদাহরণস্বরূপ, আপনার আগের I2P ইনস্টলেশন /home/user/i2p-এ থাকলে, আপনি এখানে 'user' লিখতে পারেন।"
+
+msgid "Very important: If a user other than the default of 'i2psvc' is entered here, the chosen username *MUST* already exist."
+msgstr "অত্যন্ত গুরুত্বপূর্ণ: যদি ডিফল্ট 'i2psvc' ছাড়া অন্য কোনো ব্যবহারকারী এখানে প্রবেশ করানো হয়, তবে নির্বাচিত ব্যবহারকারীর নাম *অবশ্যই* ইতিমধ্যে বিদ্যমান থাকতে হবে।"
+
+msgid "Memory that can be allocated to I2P:"
+msgstr "I2P-তে বরাদ্দ করা যেতে পারে এমন মেমরি:"
+
+msgid "By default, I2P will only be allowed to use up to 128MB of RAM."
+msgstr "ডিফল্টরূপে, I2P-কে সর্বোচ্চ 128MB RAM ব্যবহার করার অনুমতি দেওয়া হবে।"
+
+msgid "High bandwidth routers, as well as routers with a lot of active torrents / plugins, may need to have this value increased."
+msgstr "Router mit hoher Bandbreite, sowie vielen aktiven Torrents oder Plugins, müssen gegebenenfalls diesen Wert erhöhen."
+
+msgid "Should the I2P daemon be confined with AppArmor?"
+msgstr "Soll der I2P-Daemon mit AppArmor eingeschränkt werden?"
+
+msgid "With this option enabled I2P will be sandboxed with AppArmor, restricting which files and directories may be accessed by I2P."
+msgstr "Wenn diese Option aktiviert ist, läuft I2P in einer AppArmor-Sandbox, welche den Zugriff von I2P auf Dateien und Verzeichnisse beschränkt."

@@ -135,7 +135,7 @@ public class LoginServlet extends HttpServlet {
     private static final Set<String> ALLOWED_LANGS =
             Collections.unmodifiableSet(
                 new HashSet<>(Arrays.asList(
-                    "ar", "az", "cs", "zh", "da", "de", "et", "en",
+                    "ar", "az", "bn", "cs", "zh", "da", "de", "et", "en",
                     "es", "fi", "fr", "el", "hi", "hu", "in", "it",
                     "ja", "ko", "nl", "nb", "fa", "pl", "pt", "ro",
                     "ru", "sl", "sv", "bo", "tr", "vi")));
