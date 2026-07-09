@@ -928,6 +928,28 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
+         * Compute actual tunnel build success rate from event counts.
+         *
+         * <p>The build success/failure/timeout stats are event-count markers
+         * ({@code addRateData(name, 100, 0)}), so {@link #getAdditionalStat}
+         * always returns ~100 and is useless for computing a ratio. This method
+         * uses {@link #getAdditionalEventCount} on all three stats to derive
+         * the real success percentage.
+         *
+         * @param ctx the router context
+         * @return success rate as 0.0–1.0, or NaN if no build events
+         * @since 0.9.70+
+         */
+        protected double getBuildSuccessRate(RouterContext ctx) {
+            double success = getAdditionalEventCount(ctx, "tunnel.buildSuccessRate");
+            double failure = getAdditionalEventCount(ctx, "tunnel.buildFailureRate");
+            double timeout = getAdditionalEventCount(ctx, "tunnel.buildTimeoutRate");
+            double total = success + failure + timeout;
+            if (Double.isNaN(total) || total <= 0) return Double.NaN;
+            return success / total;
+        }
+
+        /**
          * Fetch the total CoDel drop event count across all priority levels.
          *
          * <p>CoDelPriorityBlockingQueue emits per-priority stats with names like
@@ -2126,7 +2148,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             //             lifetimeSendWindowSize (final window size at stream close),
             //             chokeSizeBegin (choke pressure)
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
+            double buildSuccess = getBuildSuccessRate(_context);
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
             double lifetimeRTT = getAdditionalStat(_context, "stream.con.lifetimeRTT");
             double lifetimeWindowSize = getAdditionalStat(_context, "stream.con.lifetimeSendWindowSize");
@@ -2212,7 +2234,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Cross-refs: sendMessageFailureLifetime (congestion), buildSuccessRate (network health),
             //             udp.sendConfirmTime (actual RTT), sendDuplicateSize (drops!)
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
+            double buildSuccess = getBuildSuccessRate(_context);
             double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
 
@@ -3558,7 +3580,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Cross-refs: buildSuccessRate (network health), sendMessageFailureLifetime (congestion),
             //             participatingMessageCountAvgPerTunnel (per-tunnel load)
             // Hourly trend: confirm bandwidth usage trend isn't just a short-term spike
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
+            double buildSuccess = getBuildSuccessRate(_context);
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double hourlyBps = getAdditionalStatHourly(_context, _statName);
             double msgsPerTunnel = getAdditionalStat(_context, "tunnel.participatingMessageCountAvgPerTunnel");
@@ -3700,7 +3722,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (maxBps <= 0) return current;
             double usagePct = observed / maxBps;
 
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
+            double buildSuccess = getBuildSuccessRate(_context);
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
@@ -3773,7 +3795,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (maxBps <= 0) return current;
             double usagePct = observed / maxBps;
 
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
+            double buildSuccess = getBuildSuccessRate(_context);
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
@@ -3844,7 +3866,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double countPct = current > 0 ? tunnelCount / current : 0;
 
             // Cross-refs: buildSuccessRate, sendMessageFailureLifetime, jobLag
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
+            double buildSuccess = getBuildSuccessRate(_context);
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
@@ -3901,7 +3923,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = jobQueue.jobLag (ms)
             // Cross-refs: buildSuccessRate, concurrentBuilds, memory
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
+            double buildSuccess = getBuildSuccessRate(_context);
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
             double hourlyLag = getAdditionalStatHourly(_context, _statName);
             int sysLoad = SystemVersion.getSystemLoad();
@@ -4269,7 +4291,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             //             lifetimeRTT (completed stream RTT), lifetimeSendWindowSize (final window),
             //             chokeSizeBegin (choke pressure)
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
+            double buildSuccess = getBuildSuccessRate(_context);
             double lifetimeRTT = getAdditionalStat(_context, "stream.con.lifetimeRTT");
             double lifetimeWindowSize = getAdditionalStat(_context, "stream.con.lifetimeSendWindowSize");
             double chokeSize = getAdditionalStat(_context, "stream.chokeSizeBegin");
@@ -4348,7 +4370,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             //             sendDuplicateSize (drops!), lifetimeRTT (completed stream RTT),
             //             lifetimeSendWindowSize (final window size at stream close),
             //             chokeSizeBegin (choke pressure)
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
+            double buildSuccess = getBuildSuccessRate(_context);
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
             double lifetimeRTT = getAdditionalStat(_context, "stream.con.lifetimeRTT");
@@ -4929,7 +4951,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // observed = peer.fastPeerCount (fast peers available)
             // Cross-refs: activeProfileCount, build success rate, send confirm time
             double activeProfiles = getAdditionalStat(_context, "peer.activeProfileCount");
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
+            double buildSuccess = getBuildSuccessRate(_context);
             double confirmTime = getAdditionalStat(_context, "transport.sendProcessingTime");
             double hourlyFastPeers = getAdditionalStatHourly(_context, _statName);
 
@@ -5057,7 +5079,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // observed = peer.qualityPeerCount (fast/high-cap peers with good acceptance + recent activity)
             // Cross-refs: peer.fastPeerCount, tunnel build success rate
             double fastPeers = getAdditionalStat(_context, "peer.fastPeerCount");
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
+            double buildSuccess = getBuildSuccessRate(_context);
             double hourlyQuality = getAdditionalStatHourly(_context, _statName);
 
             boolean manyFastPeers = !Double.isNaN(fastPeers) && fastPeers > 300;
@@ -5185,7 +5207,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Cross-refs: concurrentBuilds (storm detection), dropLoadBacklog (pending build queue),
             //             buildSuccessRate (overall health), testSuccessTime (actual tunnel latency)
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
-            double buildSuccess = getAdditionalStat(_context, "tunnel.buildSuccessRate") / 100.0;
+            double buildSuccess = getBuildSuccessRate(_context);
             double testTime = getAdditionalStat(_context, "tunnel.testSuccessTime");
             double backlog = getAdditionalStat(_context, "tunnel.dropLoadBacklog");
 
@@ -6831,14 +6853,25 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Build success rate: >80% = 1.0, <30% = 0.0
          */
         private double scoreBuildSuccess() {
-            RateStat rs = _ctx.statManager().getRate("tunnel.buildSuccessRate");
-            if (rs == null) return 1.0;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return 1.0;
-            double avg = rate.getAverageValue();
-            if (avg < 0) return 1.0;
+            double success = getEventCount("tunnel.buildSuccessRate");
+            double failure = getEventCount("tunnel.buildFailureRate");
+            double timeout = getEventCount("tunnel.buildTimeoutRate");
+            double total = success + failure + timeout;
+            if (total <= 0) return 1.0;
+            double rate = success / total;
             // 0%→0.0, 30%→0.0, 80%→1.0
-            return clamp((avg - 0.3) / 0.5);
+            return clamp((rate - 0.3) / 0.5);
+        }
+
+        /**
+         * Fetch the event count for a stat using the 60s period.
+         */
+        private double getEventCount(String statName) {
+            RateStat rs = _ctx.statManager().getRate(statName);
+            if (rs == null) return 0;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return 0;
+            return rate.getLastEventCount();
         }
 
         /**
