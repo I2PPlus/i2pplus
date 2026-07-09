@@ -669,8 +669,7 @@ class GraphRenderer {
             int totalHeight = info.getHeight();
             try {
                 graph = new RrdGraph(def, new SVGImageWorker(totalWidth + 8, totalHeight,
-                        _context.getBooleanPropertyDefaultTrue("routerconsole.graphGlow"),
-                        _context.getBooleanProperty("routerconsole.graphBezier")));
+                        _context.getBooleanPropertyDefaultTrue("routerconsole.graphGlow")));
             } // svg
             catch (NullPointerException npe) {
                 _log.error("Error rendering graph", npe);

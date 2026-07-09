@@ -165,7 +165,7 @@ public final class SVGGraphics2D extends Graphics2D {
 
     /** The number of decimal places to use when writing coordinates for geometrical shapes. */
     // private int geometryDP = 4;
-    private int geometryDP = 0;
+    private int geometryDP = 1;
 
     /** The buffer that accumulates the SVG output. */
     private final StringBuilder sb;
@@ -253,20 +253,6 @@ public final class SVGGraphics2D extends Graphics2D {
      */
     public void setGlowEnabled(boolean enabled) {
         this.glowEnabled = enabled;
-    }
-
-    /** When true, draw(Path2D) converts line segments to cubic bezier curves for smooth rendering. */
-    private boolean bezierEnabled;
-
-    /**
-     * Enables or disables bezier smoothing for subsequent draw(Path2D) calls.
-     * When enabled, straight line segments are converted to cubic bezier curves
-     * using Catmull-Rom interpolation for smoother graph plots.
-     *
-     * @param enabled true to enable bezier smoothing
-     */
-    public void setBezierEnabled(boolean enabled) {
-        this.bezierEnabled = enabled;
     }
 
     /**
@@ -1288,60 +1274,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * @return An SVG path string.
      */
     private String getSVGPathData(Path2D path) {
-        if (this.bezierEnabled) {
-            return getSVGPathDataBezier(path);
-        }
         return getSVGPathDataRaw(path);
-    }
-
-    /**
-     * Convert a Path2D to SVG path data with cubic bezier smoothing.
-     * Uses Catmull-Rom to cubic bezier conversion for smooth curves through data points.
-     */
-    private String getSVGPathDataBezier(Path2D path) {
-        // collect all points
-        java.util.List<float[]> points = new java.util.ArrayList<>();
-        float[] coords = new float[6];
-        PathIterator iterator = path.getPathIterator(null);
-        while (!iterator.isDone()) {
-            int type = iterator.currentSegment(coords);
-            if (type == PathIterator.SEG_MOVETO || type == PathIterator.SEG_LINETO) {
-                points.add(new float[] { coords[0], coords[1] });
-            }
-            // SEG_CLOSE, SEG_QUADTO, SEG_CUBICTO — fall back to raw
-            if (type == PathIterator.SEG_CLOSE || type == PathIterator.SEG_QUADTO || type == PathIterator.SEG_CUBICTO) {
-                return getSVGPathDataRaw(path);
-            }
-            iterator.next();
-        }
-        int n = points.size();
-        if (n < 2) {
-            return getSVGPathDataRaw(path);
-        }
-        StringBuilder b = new StringBuilder("d=\"");
-        float[] p = points.get(0);
-        b.append("M").append(geomDP(p[0])).append(" ").append(geomDP(p[1]));
-        if (n == 2) {
-            float[] p1 = points.get(1);
-            b.append("l").append(geomDP(p1[0] - p[0])).append(" ").append(geomDP(p1[1] - p[1]));
-        } else {
-            for (int i = 0; i < n - 1; i++) {
-                float[] p0 = points.get(Math.max(i - 1, 0));
-                float[] p1 = points.get(i);
-                float[] p2 = points.get(i + 1);
-                float[] p3 = points.get(Math.min(i + 2, n - 1));
-                // Catmull-Rom to cubic bezier control points
-                float cp1x = p1[0] + (p2[0] - p0[0]) / 6f;
-                float cp1y = p1[1] + (p2[1] - p0[1]) / 6f;
-                float cp2x = p2[0] - (p3[0] - p1[0]) / 6f;
-                float cp2y = p2[1] - (p3[1] - p1[1]) / 6f;
-                b.append("c")
-                        .append(geomDP(cp1x - p1[0])).append(" ").append(geomDP(cp1y - p1[1]))
-                        .append(" ").append(geomDP(cp2x - p1[0])).append(" ").append(geomDP(cp2y - p1[1]))
-                        .append(" ").append(geomDP(p2[0] - p1[0])).append(" ").append(geomDP(p2[1] - p1[1]));
-            }
-        }
-        return b.append("\"").toString();
     }
 
     /**
