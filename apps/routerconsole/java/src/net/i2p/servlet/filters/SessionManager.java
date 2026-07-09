@@ -83,10 +83,19 @@ public class SessionManager {
             _sessions.remove(token);
             return null;
         }
-        if (session.expiresAt > 0) {
-            session.expiresAt = System.currentTimeMillis() + SESSION_TIMEOUT_MS;
-        }
         return session.username;
+    }
+
+    /**
+     * Restore a persisted session with its original token.
+     * Used on router restart to maintain login sessions.
+     * @param token the original session token from persistence
+     * @param username the username
+     * @param expiresAt absolute expiry time, or -1 for no expiry
+     */
+    public void restoreSession(String token, String username, long expiresAt) {
+        Session session = new Session(username, expiresAt);
+        _sessions.put(token, session);
     }
 
     /**

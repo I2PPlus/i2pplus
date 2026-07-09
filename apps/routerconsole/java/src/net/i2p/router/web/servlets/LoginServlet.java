@@ -473,7 +473,8 @@ public class LoginServlet extends HttpServlet {
             try {
                 long expiresAt = Long.parseLong(data.substring(colon + 1));
                 if (expiresAt > 0 && expiresAt <= now) continue;
-                sm.createSession(username, expiresAt > 0 ? expiresAt - now : -1);
+                String token = entry.substring(0, eq);
+                sm.restoreSession(token, username, expiresAt);
                 _log.info("Loaded persisted session for user: " + username);
             } catch (NumberFormatException e) {
                 _log.warn("Invalid persisted session data: " + data);

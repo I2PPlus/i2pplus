@@ -1,47 +1,43 @@
 /**
  * @module autologout
- * @description Auto-logout on session expiry. Checks session validity periodically
- * and redirects to /logout if session is invalid or expired.
+ * @description Auto-redirect to login on session expiry. Polls /session/check
+ * and redirects to /login when the session is no longer valid.
  * @author dr|z3d
  * @license AGPL3 or later
  */
-(function() {
-  /** @constant {number} */
-  var CHECK_INTERVAL = 300000;
-  /** @constant {string} */
-  var LOGOUT_URL = '/logout';
 
-  /**
-   * Checks session validity via XHR and redirects to logout if expired.
-   * @returns {void}
-   */
+(function() {
+  /** @constant {number} check interval in ms (60 seconds) */
+  var CHECK_INTERVAL = 60000;
+  /** @constant {string} session validation endpoint */
+  var CHECK_URL = '/session/check';
+  /** @constant {number} consecutive failures before redirect */
+  var MAX_FAILURES = 2;
+
+  var failures = 0;
+
   function checkSession() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/', true);
+    xhr.open('GET', CHECK_URL, true);
     xhr.onload = function() {
-      if (xhr.status === 302 || xhr.status === 0) {
-        var loc = xhr.getResponseHeader('Location') || '';
-        if (loc.indexOf('/login') >= 0 || xhr.responseURL.indexOf('/login') >= 0) {
-          window.location.href = LOGOUT_URL;
+      if (xhr.status === 401) {
+        failures++;
+        if (failures >= MAX_FAILURES) {
+          window.location.href = '/login';
         }
-      } else if (xhr.status === 200) {
-        var body = xhr.responseText || '';
-        if (body.indexOf('id="topbar"') === -1 && body.indexOf('session') === -1) {
-          var loginLink = body.indexOf('/login') >= 0 || body.indexOf('Login') >= 0;
-          if (loginLink) {
-            window.location.href = LOGOUT_URL;
-          }
-        }
+      } else {
+        failures = 0;
       }
     };
-    xhr.onerror = function() {};
+    xhr.onerror = function() {
+      failures++;
+      if (failures >= MAX_FAILURES) {
+        window.location.href = '/login';
+      }
+    };
     xhr.send();
   }
 
-  /**
-   * Initializes the session check interval.
-   * @returns {void}
-   */
   function init() {
     setInterval(checkSession, CHECK_INTERVAL);
   }

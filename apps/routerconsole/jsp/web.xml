@@ -51,6 +51,15 @@
     <url-pattern>/logout</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>SessionCheckServlet</servlet-name>
+    <servlet-class>net.i2p.router.web.servlets.SessionCheckServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SessionCheckServlet</servlet-name>
+    <url-pattern>/session/check</url-pattern>
+  </servlet-mapping>
+
   <!-- precompiled servlets -->
 
   <servlet>

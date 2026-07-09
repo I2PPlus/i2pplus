@@ -35,6 +35,8 @@ public class AuthFilter implements Filter {
     static {
         PUBLIC_PATHS.add("/index.jsp");
         PUBLIC_PATHS.add("/login");
+        PUBLIC_PATHS.add("/logout");
+        PUBLIC_PATHS.add("/session/");
         PUBLIC_PATHS.add("/prefs");
         PUBLIC_PATHS.add("/themes/login/");
         PUBLIC_PATHS.add("/js/");
