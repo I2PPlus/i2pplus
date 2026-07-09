@@ -13,6 +13,7 @@ See also: [Project README](../README.md)
 ### Translated READMEs
 
 - [README-ar.md](README-ar.md) - Arabic
+- [README-bn.md](README-bn.md) - Bengali
 - [README-bo.md](README-bo.md) - Tibetan
 - [README-cs.md](README-cs.md) - Czech
 - [README-de.md](README-de.md) - German
