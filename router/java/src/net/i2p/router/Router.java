@@ -113,6 +113,7 @@ public class Router implements RouterClock.ClockShiftListener {
     private UPnPScannerCallback _upnpScannerCallback;
     private long _downtime = -1;
     private char _lastCongestionCap = 0;
+    private BandwidthHistory _bandwidthHistory;
 
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
     public static final String PROP_CONFIG_FILE = "router.configLocation";
@@ -715,6 +716,8 @@ public class Router implements RouterClock.ClockShiftListener {
         //_context.jobQueue().addJob(new CoalesceStatsJob(_context));
         _context.simpleTimer2().addPeriodicEvent(new CoalesceStatsEvent(_context), COALESCE_TIME);
         // CoalesceStatsEvent self-reschedules in timeReached()
+        _bandwidthHistory = new BandwidthHistory(_context);
+        _context.simpleTimer2().addPeriodicEvent(_bandwidthHistory, BandwidthHistory.SAMPLE_INTERVAL);
         _context.jobQueue().addJob(new UpdateRoutingKeyModifierJob(_context));
         _context.blocklist().startup();
 
@@ -1635,6 +1638,9 @@ public class Router implements RouterClock.ClockShiftListener {
         shutdownOne("ECIES engine", debug, advanced, () -> _context.eciesEngine().shutdown());
         shutdownOne("MessageHistoryLogger", debug, advanced, () -> _context.messageHistory().shutdown());
         shutdownOne("StatsManager", debug, advanced, () -> _context.statManager().shutdown());
+        if (_bandwidthHistory != null) {
+            shutdownOne("BandwidthHistory", debug, advanced, () -> _bandwidthHistory.save());
+        }
     }
 
     /**

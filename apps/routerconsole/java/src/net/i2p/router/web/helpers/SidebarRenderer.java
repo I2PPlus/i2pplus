@@ -18,6 +18,7 @@ import net.i2p.app.ClientAppManager;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataHelper;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.router.BandwidthHistory;
 import net.i2p.router.RouterContext;
 import net.i2p.router.news.NewsEntry;
 import net.i2p.router.news.NewsManager;
@@ -1135,39 +1136,62 @@ class SidebarRenderer {
     }
 
     /**
-     *  Fetch last 20 data points for bw.sendRate and bw.recvRate and return
-     *  as data-rx and data-tx attributes for the dual-baseline minigraph renderer.
-     *  Inbound (rx) renders in the top half (inverted), outbound (tx) in the bottom half.
+     *  Return data-rx and data-tx attributes for the dual-baseline canvas minigraph.
+     *  Uses the live bandwidth ring buffer when available (≥ 400 samples), falling
+     *  back to 1-min RRD averages + live BPS. Inbound renders in the top half
+     *  (inverted), outbound in the bottom half.
      *  @since 0.9.70+
      */
     private String getDataAttributes() {
         try {
-            GraphGenerator gen = GraphGenerator.instance(_context);
-            GraphListener txLsnr = null;
-            GraphListener rxLsnr = null;
-            for (GraphListener lsnr : gen.getListeners()) {
-                String name = lsnr.getRate().getRateStat().getName();
-                if (name.equals("bw.sendRate")) {txLsnr = lsnr;}
-                else if (name.equals("bw.recvRate")) {rxLsnr = lsnr;}
+            BandwidthHistory bh = BandwidthHistory.getInstance();
+            boolean useBuffer = bh != null && bh.getCount() >= BandwidthHistory.CAPACITY;
+            int minutes;
+            double[] rx, tx;
+            if (useBuffer) {
+                // Buffer sends raw, no RRD lookup needed
+                rx = null;
+                tx = null;
+                minutes = Math.min(Math.max(
+                    Integer.parseInt(_context.getProperty(CSSHelper.PROP_SIDEBAR_GRAPH_MINUTES, "20")), 2), 30);
+            } else {
+                GraphGenerator gen = GraphGenerator.instance(_context);
+                GraphListener txLsnr = null;
+                GraphListener rxLsnr = null;
+                for (GraphListener lsnr : gen.getListeners()) {
+                    String name = lsnr.getRate().getRateStat().getName();
+                    if (name.equals("bw.sendRate")) {txLsnr = lsnr;}
+                    else if (name.equals("bw.recvRate")) {rxLsnr = lsnr;}
+                }
+                if (txLsnr == null || rxLsnr == null) {return "";}
+                minutes = Math.min(Math.max(
+                    Integer.parseInt(_context.getProperty(CSSHelper.PROP_SIDEBAR_GRAPH_MINUTES, "20")), 2), 30);
+                rx = rxLsnr.getLastValues(minutes - 1);
+                tx = txLsnr.getLastValues(minutes - 1);
             }
-            if (txLsnr == null || rxLsnr == null) {return "";}
-            // Read minutes from config property, capped to 2–30
-            int minutes = Math.min(Math.max(
-                Integer.parseInt(_context.getProperty(CSSHelper.PROP_SIDEBAR_GRAPH_MINUTES, "20")), 2), 30);
-            // RRD points (n-1) + live bandwidth limiter value as leading edge
-            double[] rx = rxLsnr.getLastValues(minutes - 1);
-            double[] tx = txLsnr.getLastValues(minutes - 1);
             double liveRx = _context.bandwidthLimiter().getReceiveBps();
             double liveTx = _context.bandwidthLimiter().getSendBps();
-            StringBuilder sb = new StringBuilder(128);
+            StringBuilder sb = new StringBuilder(4096);
             sb.append(" data-rx=\"");
-            appendValues(sb, rx);
-            sb.append(',').append(Math.round(liveRx));
+            if (useBuffer) {
+                sb.append(bh.getLastRx(BandwidthHistory.CAPACITY));
+                sb.append(',').append(Math.round(liveRx));
+            } else {
+                appendValues(sb, rx);
+                sb.append(',').append(Math.round(liveRx));
+            }
             sb.append("\" data-tx=\"");
-            appendValues(sb, tx);
-            sb.append(',').append(Math.round(liveTx));
+            if (useBuffer) {
+                sb.append(bh.getLastTx(BandwidthHistory.CAPACITY));
+                sb.append(',').append(Math.round(liveTx));
+            } else {
+                appendValues(sb, tx);
+                sb.append(',').append(Math.round(liveTx));
+            }
             sb.append("\" data-minutes=\"").append(minutes).append('"');
-            // Split flag: true = split display (inbound top, outbound bottom), false = overlay
+            if (useBuffer) {
+                sb.append(" data-count=\"").append(bh.getCount()).append('"');
+            }
             boolean split = !"false".equals(_context.getProperty(CSSHelper.PROP_SIDEBAR_GRAPH_SPLIT, "true"));
             if (!split) {sb.append(" data-split=\"0\"");}
             return sb.toString();
