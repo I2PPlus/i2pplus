@@ -28,6 +28,9 @@ public class GraphHelper extends FormHandler {
     private int _refreshDelaySeconds;
     private boolean _persistent;
     private boolean _graphHideLegend;
+    private boolean _graphGlow;
+    private boolean _useUtc;
+    private boolean _bezierSmoothing;
     private String _stat;
     private int _end;
     private static final String PROP_X = "routerconsole.graphX";
@@ -36,6 +39,9 @@ public class GraphHelper extends FormHandler {
     private static final String PROP_PERIODS = "routerconsole.graphPeriods";
     private static final String PROP_EVENTS = "routerconsole.graphEvents";
     private static final String PROP_HIDE_LEGEND = "routerconsole.graphHideLegend";
+    private static final String PROP_GLOW = "routerconsole.graphGlow";
+    private static final String PROP_UTC = "routerconsole.graphUtc";
+    private static final String PROP_BEZIER = "routerconsole.graphBezier";
     private static final int DEFAULT_REFRESH = 1*60;
     private static final int DEFAULT_PERIODS = 60;
     private static final boolean DEFAULT_HIDE_LEGEND = false;
@@ -65,6 +71,11 @@ public class GraphHelper extends FormHandler {
         _periodCount = _context.getProperty(PROP_PERIODS, DEFAULT_PERIODS);
         _refreshDelaySeconds = _context.getProperty(PROP_REFRESH, DEFAULT_REFRESH);
         _showEvents = _context.getBooleanProperty(PROP_EVENTS);
+        _graphHideLegend = _context.getProperty(PROP_HIDE_LEGEND, DEFAULT_HIDE_LEGEND);
+        _persistent = _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT);
+        _graphGlow = _context.getBooleanPropertyDefaultTrue(PROP_GLOW);
+        _useUtc = _context.getBooleanPropertyDefaultTrue(PROP_UTC);
+        _bezierSmoothing = _context.getBooleanProperty(PROP_BEZIER);
     }
 
     /**
@@ -133,6 +144,15 @@ public class GraphHelper extends FormHandler {
 
     /** @since 0.8.7 */
     public void setPersistent(String foo) {_persistent = true;}
+
+    /** @since 0.9.70+ */
+    public void setGraphGlow(String foo) {_graphGlow = !"false".equals(foo);}
+
+    /** @since 0.9.70+ */
+    public void setUseUtc(String foo) {_useUtc = !"false".equals(foo);}
+
+    /** @since 0.9.70+ */
+    public void setBezierSmoothing(String foo) {_bezierSmoothing = !"false".equals(foo);}
 
     /** @since 0.9.32 */
     public void setHideLegend(String foo) {
@@ -404,7 +424,7 @@ public class GraphHelper extends FormHandler {
         StringBuilder buf = new StringBuilder(3 * 1024);
         buf.append("<br><input type=checkbox id=toggleSettings hidden><label for=toggleSettings><h3 id=graphdisplay tabindex=0>")
            .append(_t("Configure Graph Display"))
-           .append("</h3></label><form id=gform action=/updategraphs method=POST>\n<table>\n<tr><td><div class=optionlist>\n<input type=hidden name=action value=Save>\n")
+           .append("</h3></label><form id=gform action=/graphs method=POST>\n<table>\n<tr><td><div class=optionlist>\n<input type=hidden name=action value=Save>\n")
            .append("<input type=hidden name=nonce value=")
            .append(nonce)
            .append(">\n<span class=nowrap title=\"")
@@ -448,16 +468,44 @@ public class GraphHelper extends FormHandler {
            .append("</label></span><br>\n<span class=nowrap>\n<b>")
            .append(_t("Hide legend"))
            .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=hideLegend");
-        if (hideLegend) buf.append(HelperBase.CHECKED);
+        if (hideLegend) {
+            buf.append(HelperBase.CHECKED);
+        }
         buf.append(">")
            .append(_t("Do not show legend on graphs"))
-           .append("</label></span><br><span class=nowrap>\n<b>")
+           .append("</label><input type=hidden name=hideLegend value=false></span><br><span class=nowrap>\n<b>")
            .append(_t("Persistence"))
            .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=persistent");
-        if (persistent) buf.append(HelperBase.CHECKED);
+        if (persistent) {
+            buf.append(HelperBase.CHECKED);
+        }
         buf.append(">")
            .append(_t("Store graph data on disk"))
-           .append("</label></span>\n</div>\n</td></tr>\n</table>\n<hr>\n<div class=formaction id=graphing><a class=fakebutton href=/configstats>")
+           .append("</label><input type=hidden name=persistent value=false></span><br><span class=nowrap>\n<b>")
+           .append(_t("Glow effect"))
+           .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=graphGlow");
+        if (_graphGlow) {
+            buf.append(HelperBase.CHECKED);
+        }
+        buf.append(">")
+           .append(_t("Add a glow effect to graph lines"))
+           .append("</label><input type=hidden name=graphGlow value=false></span><br><span class=nowrap>\n<b>")
+           .append(_t("UTC time"))
+           .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=useUtc");
+        if (_useUtc) {
+            buf.append(HelperBase.CHECKED);
+        }
+        buf.append(">")
+           .append(_t("Display time in UTC on graph axes"))
+           .append("</label><input type=hidden name=useUtc value=false></span><br><span class=nowrap>\n<b>")
+           .append(_t("Bezier smoothing"))
+           .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=bezierSmoothing");
+        if (_bezierSmoothing) {
+            buf.append(HelperBase.CHECKED);
+        }
+        buf.append(">")
+           .append(_t("Smooth plot lines with cubic bezier curves"))
+           .append("</label><input type=hidden name=bezierSmoothing value=false></span>\n</div>\n</td></tr>\n</table>\n<hr>\n<div class=formaction id=graphing><a class=fakebutton href=/configstats>")
            .append(_t("Select Stats"))
            .append("</a> <input type=submit class=accept value=\"")
            .append(_t("Save settings and redraw graphs"))
@@ -509,7 +557,10 @@ public class GraphHelper extends FormHandler {
             _refreshDelaySeconds != _context.getProperty(PROP_REFRESH, DEFAULT_REFRESH) ||
             _showEvents != _context.getBooleanProperty(PROP_EVENTS) ||
             _graphHideLegend != _context.getProperty(PROP_HIDE_LEGEND, DEFAULT_HIDE_LEGEND) ||
-            _persistent != _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT)) {
+            _persistent != _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT) ||
+            _graphGlow != _context.getBooleanPropertyDefaultTrue(PROP_GLOW) ||
+            _useUtc != _context.getBooleanPropertyDefaultTrue(PROP_UTC) ||
+            _bezierSmoothing != _context.getBooleanProperty(PROP_BEZIER)) {
             Map<String, String> changes = new HashMap<>();
             changes.put(PROP_X, Integer.toString(_width));
             changes.put(PROP_Y, Integer.toString(_height));
@@ -518,9 +569,12 @@ public class GraphHelper extends FormHandler {
             changes.put(PROP_EVENTS, Boolean.toString(_showEvents));
             changes.put(PROP_HIDE_LEGEND, Boolean.toString(_graphHideLegend));
             changes.put(GraphListener.PROP_PERSISTENT, Boolean.toString(_persistent));
+            changes.put(PROP_GLOW, Boolean.toString(_graphGlow));
+            changes.put(PROP_UTC, Boolean.toString(_useUtc));
+            changes.put(PROP_BEZIER, Boolean.toString(_bezierSmoothing));
             boolean warn = _persistent != _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT);
             _context.router().saveConfig(changes, null);
-            addFormNotice(_t("Graph settings saved") + ".");
+            addFormNotice(_t("Graph settings saved") + ".", true);
             if (warn) {
                 addFormError(_t("Restart required to take effect"));
             }

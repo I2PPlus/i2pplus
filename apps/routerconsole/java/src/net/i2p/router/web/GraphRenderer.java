@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.regex.Pattern;
 import javax.imageio.stream.ImageOutputStream;
 import net.i2p.I2PAppContext;
@@ -201,6 +202,11 @@ class GraphRenderer {
             else if (periodCount >= 1440) {
                 def.setDownsampler(new LargestTriangleThreeBucketsTime(500));
             } // 1 day
+            // UTC time toggle
+            boolean useUtc = _context.getBooleanProperty("routerconsole.graphUtc");
+            if (useUtc) {
+                def.setTimeZone(TimeZone.getTimeZone("UTC"));
+            }
             // sidebar minigraph
             if ((width == 250 && height == 50 && hideTitle && hideLegend && hideGrid)
                     || (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid)) {
@@ -584,6 +590,15 @@ class GraphRenderer {
             }
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd MMM HH:mm", Locale.US);
+            if (useUtc) {
+                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+            }
+            String timeLabel = useUtc ? " UTC" : "";
+            String legendFormat = "dd MMM HH:mm";
+            SimpleDateFormat legendSdf = new SimpleDateFormat(legendFormat, Locale.US);
+            if (useUtc) {
+                legendSdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+            }
             int count = 0;
             Color RESTART_COLOR =
                     theme.equals("midnight") || theme.equals("dark") ? RESTART_BAR_COLOR_DARK : RESTART_BAR_COLOR;
@@ -609,15 +624,15 @@ class GraphRenderer {
                     def.vrule(started / 1000, RESTART_COLOR, legend, 1.0f);
                     count++;
                 }
-                def.comment(sdf.format(new Date(start)) + " — " + sdf.format(new Date(end)) + " UTC\\r");
+                def.comment(legendSdf.format(new Date(start)) + " — " + legendSdf.format(new Date(end)) + timeLabel + "\\r");
             }
             if (!showCredit) {
                 def.setShowSignature(false);
             } else if (hideLegend) {
                 if (height > 65) {
-                    def.setSignature("    " + sdf.format(new Date(end)) + " UTC");
+                    def.setSignature("    " + legendSdf.format(new Date(end)) + timeLabel);
                 } else {
-                    def.setSignature(sdf.format(new Date(end)) + " UTC");
+                    def.setSignature(legendSdf.format(new Date(end)) + timeLabel);
                 }
             }
             if (hideLegend) {
@@ -653,7 +668,9 @@ class GraphRenderer {
             int totalWidth = info.getWidth();
             int totalHeight = info.getHeight();
             try {
-                graph = new RrdGraph(def, new SVGImageWorker(totalWidth + 8, totalHeight));
+                graph = new RrdGraph(def, new SVGImageWorker(totalWidth + 8, totalHeight,
+                        _context.getBooleanPropertyDefaultTrue("routerconsole.graphGlow"),
+                        _context.getBooleanProperty("routerconsole.graphBezier")));
             } // svg
             catch (NullPointerException npe) {
                 _log.error("Error rendering graph", npe);

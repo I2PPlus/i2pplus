@@ -6,6 +6,5 @@
 <%@include file="formhandler.jsi"%>
 <meta http-equiv=refresh content="0;URL=/graphs">
 </head>
-<body hidden>
-</body>
+<body hidden></body>
 </html>
