@@ -1,5 +1,6 @@
 package net.i2p.router.networkdb.kademlia;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import net.i2p.data.Hash;
@@ -17,7 +18,7 @@ import net.i2p.util.SimpleTimer2;
  * Thread-safe implementation utilizing concurrent data structures and finer-grained synchronization
  * for improved performance under concurrent access.
  * <p>
- * This mechanism is a partial DOS protection and does not prevent spoofed reply identifiers or multiple reply tunnels.
+ * All internal maps are size-bounded to prevent memory exhaustion under high lookup volume.
  *
  * @since 0.9.59
  */
@@ -46,6 +47,9 @@ class LookupBanHammer {
 
     // Duration of ban in milliseconds (5 minutes)
     private static final long BAN_DURATION_MS = 5 * 60 * 1000L;
+
+    // Hard cap on unique (from, tunnel) pairs tracked to prevent memory leaks
+    private static final int MAX_ENTRIES = 50000;
 
     /**
      * Constructs a newly initialized LookupBanHammer instance.
@@ -92,6 +96,10 @@ class LookupBanHammer {
             }
             deque.addLast(now);
             if (deque.size() > BURST_THRESHOLD_FOR_BAN) {
+                // Cap ban map before inserting — evict expired entries first, then random entries if still full
+                if (banExpiration.size() >= MAX_ENTRIES) {
+                    expireOrEvictBan(now);
+                }
                 banExpiration.put(rt, now + BAN_DURATION_MS);
                 return true;
             }
@@ -99,6 +107,28 @@ class LookupBanHammer {
 
         // Check overall lookup count threshold
         return this.counter.increment(rt) > MAX_LOOKUPS * 2;
+    }
+
+    /**
+     * Try to make room in the ban map. Remove expired entries first.
+     * If still full, remove a random entry (any single ban is expendable
+     * since the burst detector will re-ban on the next burst).
+     */
+    private void expireOrEvictBan(long now) {
+        for (Map.Entry<ReplyTunnel, Long> e : banExpiration.entrySet()) {
+            if (e.getValue() <= now) {
+                banExpiration.remove(e.getKey());
+                return;
+            }
+        }
+        Map.Entry<ReplyTunnel, Long> first = null;
+        for (Map.Entry<ReplyTunnel, Long> e : banExpiration.entrySet()) {
+            first = e;
+            break;
+        }
+        if (first != null) {
+            banExpiration.remove(first.getKey());
+        }
     }
 
     /**
@@ -110,9 +140,15 @@ class LookupBanHammer {
         @Override
         public void timeReached() {
             long now = System.currentTimeMillis();
+            int tsSize = burstTimestamps.size();
+            int banSize = banExpiration.size();
             counter.clear();
             burstTimestamps.clear();
             banExpiration.entrySet().removeIf(entry -> entry.getValue() <= now);
+            // Under heavy load, clean more frequently to stay bounded
+            if (tsSize > MAX_ENTRIES || banSize > MAX_ENTRIES) {
+                reschedule(Math.max(CLEAN_TIME / 6, 1000));
+            }
         }
     }
 
