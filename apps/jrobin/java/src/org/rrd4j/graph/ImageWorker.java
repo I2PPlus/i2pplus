@@ -13,7 +13,8 @@ import java.nio.file.Paths;
 
 /**
  * Abstract base class for image workers in RRD graphs. Provides drawing operations for creating
- * graph images with various output formats.
+ * graph images with various output formats. Tracks last paint/stroke/font to avoid redundant
+ * state changes that produce duplicate inline styles in SVG output.
  */
 public abstract class ImageWorker {
 
@@ -23,6 +24,12 @@ public abstract class ImageWorker {
 
     /** Graphics context for drawing operations */
     private Graphics2D g2d;
+    /** Last paint set on the graphics context (for deduplication) */
+    private Paint lastPaint;
+    /** Last stroke set on the graphics context (for deduplication) */
+    private Stroke lastStroke;
+    /** Last font set on the graphics context (for deduplication) */
+    private Font lastFont;
 
     /**
      * Sets the graphics context for drawing operations. Disposes of previous context if exists.
@@ -34,6 +41,17 @@ public abstract class ImageWorker {
             dispose();
         }
         this.g2d = g2d;
+        resetState();
+    }
+
+    /**
+     * Resets cached state tracking. Called when the graphics context changes or when an SVG
+     * group boundary is opened/closed that may affect inherited state.
+     */
+    protected void resetState() {
+        this.lastPaint = null;
+        this.lastStroke = null;
+        this.lastFont = null;
     }
 
     abstract void resize(int width, int height);
@@ -133,8 +151,14 @@ public abstract class ImageWorker {
     }
 
     void drawLine(int x1, int y1, int x2, int y2, Paint paint, Stroke stroke) {
-        g2d.setStroke(stroke);
-        g2d.setPaint(paint);
+        if (stroke != lastStroke) {
+            g2d.setStroke(stroke);
+            lastStroke = stroke;
+        }
+        if (!paint.equals(lastPaint)) {
+            g2d.setPaint(paint);
+            lastPaint = paint;
+        }
         g2d.drawLine(x1, y1, x2, y2);
     }
 
@@ -167,8 +191,14 @@ public abstract class ImageWorker {
     }
 
     void drawString(String text, int x, int y, Font font, Paint paint) {
-        g2d.setFont(font);
-        g2d.setPaint(paint);
+        if (font != lastFont) {
+            g2d.setFont(font);
+            lastFont = font;
+        }
+        if (!paint.equals(lastPaint)) {
+            g2d.setPaint(paint);
+            lastPaint = paint;
+        }
         g2d.drawString(text, x, y);
     }
 

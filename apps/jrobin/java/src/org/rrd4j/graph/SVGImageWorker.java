@@ -6,10 +6,8 @@ import java.io.OutputStream;
 import org.jfree.svg.SVGGraphics2D;
 
 /**
- * I2P adapter for jfreesvg. Requires: https://github.com/jfree/jfreesvg Requires: rrd4j
- * custom_Graphics2D branch patch
- * https://github.com/rrd4j/rrd4j/commit/225c06b245377e2995ea39c885548e8ef0514630 Ref:
- * https://github.com/rrd4j/rrd4j/issues/165
+ * I2P adapter for jfreesvg. State deduplication in {@link ImageWorker} handles inline style
+ * reduction; SVG element grouping is handled by postProcessSvg consolidation in SVGGraphics2D.
  *
  * @since 2024-05-04
  * @author zzz

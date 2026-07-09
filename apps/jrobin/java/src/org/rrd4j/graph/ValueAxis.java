@@ -138,6 +138,38 @@ class ValueAxis extends Axis {
         int egrid = (int) (im.maxval / gridstep + 1);
         double scaledstep = gridstep / im.magfact;
         boolean fractional = isFractional(scaledstep, labfact);
+        // Pass 1: draw all grid lines (minor and major)
+        drawGridLines(sgrid, egrid, gridstep, x0, x1, gridColor, mGridColor, labfact);
+        // Pass 2: draw all labels (major positions only)
+        drawLabels(sgrid, egrid, gridstep, x0, scaledstep, fractional, labfact, font, fontColor,
+                labelOffset);
+        return true;
+    }
+
+    /**
+     * Draws all grid lines for the value axis. Minor grid lines use the grid color; major grid
+     * lines use the mgrid color. Separated from label drawing to produce consecutive SVG elements
+     * with identical stroke/paint, enabling tighter SVG grouping.
+     */
+    private void drawGridLines(int sgrid, int egrid, double gridstep, int x0, int x1,
+            Paint gridColor, Paint mGridColor, int labfact) {
+        for (int i = sgrid; i <= egrid; i++) {
+            int y = mapper.ytr(gridstep * i);
+            if (y >= im.yorigin - im.ysize && y <= im.yorigin) {
+                if (i % labfact == 0) {
+                    worker.drawLine(x0, y, x1, y, mGridColor, gdef.gridStroke);
+                } else if (!(gdef.noMinorGrid)) {
+                    worker.drawLine(x0, y, x1, y, gridColor, gdef.gridStroke);
+                }
+            }
+        }
+    }
+
+    /**
+     * Draws all labels for the value axis at major grid positions.
+     */
+    private void drawLabels(int sgrid, int egrid, double gridstep, int x0, double scaledstep,
+            boolean fractional, int labfact, Font font, Paint fontColor, int labelOffset) {
         for (int i = sgrid; i <= egrid; i++) {
             int y = mapper.ytr(gridstep * i);
             if (y >= im.yorigin - im.ysize && y <= im.yorigin) {
@@ -146,11 +178,6 @@ class ValueAxis extends Axis {
                     if (i == 0 || im.symbol == ' ') {
                         if (fractional) {
                             graph_label = Util.sprintf(gdef.locale, "%4.1f", scaledstep * i);
-                            /**
-                             * if (i != 0 && gdef.altYGrid) { graph_label =
-                             * Util.sprintf(gdef.locale, labfmt, scaledstep * i); } else {
-                             * graph_label = Util.sprintf(gdef.locale, "%4.1f", scaledstep * i); }
-                             */
                         } else {
                             graph_label = Util.sprintf(gdef.locale, "%4.0f", scaledstep * i);
                         }
@@ -174,13 +201,9 @@ class ValueAxis extends Axis {
                             y + labelOffset,
                             font,
                             fontColor);
-                    worker.drawLine(x0, y, x1, y, mGridColor, gdef.gridStroke);
-                } else if (!(gdef.noMinorGrid)) {
-                    worker.drawLine(x0, y, x1, y, gridColor, gdef.gridStroke);
                 }
             }
         }
-        return true;
     }
 
     /**

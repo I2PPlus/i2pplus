@@ -72,6 +72,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import org.jfree.svg.util.Args;
 import org.jfree.svg.util.GradientPaintKey;
@@ -230,6 +232,14 @@ public final class SVGGraphics2D extends Graphics2D {
 
     /** The current stroke. */
     private Stroke stroke = new BasicStroke(1.0f);
+
+    /** Cached strokeStyle() result, invalidated on setStroke/setPaint/setComposite. */
+    private String strokeStyleCache;
+    private boolean strokeStyleCacheValid;
+
+    /** Cached getSVGFillStyle() result, invalidated on setPaint/setComposite. */
+    private String fillStyleCache;
+    private boolean fillStyleCacheValid;
 
     /**
      * The width of the SVG stroke to use when the user supplies a BasicStroke with a width of 0.0
@@ -448,6 +458,7 @@ public final class SVGGraphics2D extends Graphics2D {
             throw new IllegalArgumentException("Unrecognised value: " + value);
         }
         this.shapeRendering = value;
+        this.strokeStyleCacheValid = false;
     }
 
     /**
@@ -501,6 +512,7 @@ public final class SVGGraphics2D extends Graphics2D {
      */
     public void setCheckStrokeControlHint(boolean check) {
         this.checkStrokeControlHint = check;
+        this.strokeStyleCacheValid = false;
     }
 
     /**
@@ -722,6 +734,8 @@ public final class SVGGraphics2D extends Graphics2D {
             return;
         }
         this.paint = paint;
+        this.strokeStyleCacheValid = false;
+        this.fillStyleCacheValid = false;
         this.gradientPaintRef = null;
         if (paint instanceof Color) {
             setColor((Color) paint);
@@ -839,6 +853,8 @@ public final class SVGGraphics2D extends Graphics2D {
             throw new IllegalArgumentException("Null 'comp' argument.");
         }
         this.composite = comp;
+        this.strokeStyleCacheValid = false;
+        this.fillStyleCacheValid = false;
     }
 
     /**
@@ -864,6 +880,7 @@ public final class SVGGraphics2D extends Graphics2D {
             throw new IllegalArgumentException("Null 's' argument.");
         }
         this.stroke = s;
+        this.strokeStyleCacheValid = false;
     }
 
     /**
@@ -951,6 +968,9 @@ public final class SVGGraphics2D extends Graphics2D {
                     .append("</title>");
         } else {
             this.hints.put(hintKey, hintValue);
+            if (RenderingHints.KEY_STROKE_CONTROL.equals(hintKey)) {
+                this.strokeStyleCacheValid = false;
+            }
         }
     }
 
@@ -976,6 +996,7 @@ public final class SVGGraphics2D extends Graphics2D {
     public void setRenderingHints(Map<?, ?> hints) {
         this.hints.clear();
         addRenderingHints(hints);
+        this.strokeStyleCacheValid = false;
     }
 
     /**
@@ -986,6 +1007,9 @@ public final class SVGGraphics2D extends Graphics2D {
     @Override
     public void addRenderingHints(Map<?, ?> hints) {
         this.hints.putAll(hints);
+        if (hints.containsKey(RenderingHints.KEY_STROKE_CONTROL)) {
+            this.strokeStyleCacheValid = false;
+        }
     }
 
     /**
@@ -1366,7 +1390,6 @@ public final class SVGGraphics2D extends Graphics2D {
 
     private static final String DEFAULT_STROKE_CAP = "butt";
     private static final String DEFAULT_STROKE_JOIN = "miter";
-    private static final float DEFAULT_MITER_LIMIT = 4.0f;
 
     /**
      * Returns a stroke style string based on the current stroke and alpha settings.
@@ -1374,10 +1397,12 @@ public final class SVGGraphics2D extends Graphics2D {
      * @return A stroke style string.
      */
     private String strokeStyle() {
+        if (this.strokeStyleCacheValid) {
+            return this.strokeStyleCache;
+        }
         double strokeWidth = 1.0f;
         String strokeCap = DEFAULT_STROKE_CAP;
         String strokeJoin = DEFAULT_STROKE_JOIN;
-        float miterLimit = DEFAULT_MITER_LIMIT;
         float[] dashArray = new float[0];
         DecimalFormat df = new DecimalFormat("#.##");
         if (this.stroke instanceof BasicStroke) {
@@ -1405,7 +1430,6 @@ public final class SVGGraphics2D extends Graphics2D {
                 default:
                     // already set to "miter"
             }
-            miterLimit = bs.getMiterLimit();
             dashArray = bs.getDashArray();
         }
         StringBuilder b = new StringBuilder();
@@ -1424,9 +1448,6 @@ public final class SVGGraphics2D extends Graphics2D {
         }
         if (!strokeJoin.equals(DEFAULT_STROKE_JOIN)) {
             b.append("stroke-linejoin:").append(strokeJoin).append(";");
-        }
-        if (Math.abs(DEFAULT_MITER_LIMIT - miterLimit) < 0.001) {
-            b.append("stroke-miterlimit:").append(geomDP(miterLimit));
         }
         if (dashArray != null && dashArray.length != 0) {
             b.append("stroke-dasharray:");
@@ -1447,7 +1468,9 @@ public final class SVGGraphics2D extends Graphics2D {
                 b.append("shape-rendering:geometricPrecision;");
             }
         }
-        return b.toString();
+        this.strokeStyleCache = b.toString();
+        this.strokeStyleCacheValid = true;
+        return this.strokeStyleCache;
     }
 
     /**
@@ -1470,11 +1493,16 @@ public final class SVGGraphics2D extends Graphics2D {
      * @return A fill style string.
      */
     private String getSVGFillStyle() {
+        if (this.fillStyleCacheValid) {
+            return this.fillStyleCache;
+        }
         DecimalFormat df = new DecimalFormat("#.##");
         StringBuilder b = new StringBuilder();
         b.append("fill:").append(svgColorStr()).append(";");
         b.append("fill-opacity:").append(df.format(getColorAlpha() * getAlpha()));
-        return b.toString();
+        this.fillStyleCache = b.toString();
+        this.fillStyleCacheValid = true;
+        return this.fillStyleCache;
     }
 
     /**
@@ -2589,6 +2617,318 @@ public final class SVGGraphics2D extends Graphics2D {
     }
 
     /**
+     * Identifies the I2P console theme for SVG post-processing. Each theme requires different
+     * gradient fills, stroke colors, and CSS class overrides in the generated SVG output.
+     */
+    private enum Theme {
+        /** Dark theme — green gradient fill, yellow-green axis/stroke colors. */
+        DARK,
+        /** Light theme — blue gradient fill, dark gray axis/stroke colors. */
+        LIGHT,
+        /** Midnight theme — blue gradient fill, lavender axis/stroke colors. */
+        MIDNIGHT,
+        /** Classic theme — no gradient fill (uses inline RGB), dark gray axis/stroke colors. */
+        CLASSIC
+    }
+
+    /**
+     * Regex pattern for extracting {@code font-family} and {@code font-size} from inline
+     * {@code style} attributes and converting them to shorthand CSS classes. Matches any
+     * {@code style} attribute containing {@code font-family:(monospace|sans-serif)} and
+     * {@code font-size:(\\d+)px} in any order relative to other properties, and captures
+     * the font family group (1) and size (2).
+     */
+    private static final Pattern FONT_CLASS_PATTERN =
+            Pattern.compile(
+                    "style=\"[^\"]*font-family:(monospace|sans-serif);" +
+                    "[^\"]*?font-size:(\\d+)px[^\"]*\"");
+
+    /**
+     * Regex pattern for merging adjacent {@code <text>} elements that are split across
+     * separate {@code <g>} groups by the font class extraction step. Matches the closing
+     * {@code </text></g>} followed by an opening {@code <g>} with an optional CSS class
+     * and/or {@code clip-path="url(#clip-2)"}, then another {@code <text>}. The replacement
+     * collapses the group boundary into a single {@code <text>} continuation.
+     */
+    private static final Pattern TEXT_MERGE_PATTERN =
+            Pattern.compile(
+                    "</text></g><g(?:\\s+class=\"[^\"]*\")?" +
+                    "(?:\\s+clip-path=\"url\\(#clip-2\\)\")?><text");
+
+    /**
+     * Detects the I2P console theme from the SVG content by matching background color RGB values.
+     *
+     * @param svg the SVG content to scan.
+     * @return the detected {@link Theme}.
+     */
+    private Theme detectTheme(String svg) {
+        if (svg.indexOf("rgb(0,72,8)") != -1) {
+            return Theme.DARK;
+        } else if (svg.indexOf("rgb(100,160,200)") != -1) {
+            return Theme.LIGHT;
+        } else if (svg.indexOf("rgb(0,72,160)") != -1) {
+            return Theme.MIDNIGHT;
+        }
+        return Theme.CLASSIC;
+    }
+
+    /**
+     * Appends theme-specific linear gradient definitions to the SVG defs block.
+     * Classic theme has no gradient fill (uses inline RGB colors).
+     *
+     * @param theme the detected theme.
+     * @param defs  the defs StringBuilder to append to.
+     */
+    private void appendThemeDefs(Theme theme, StringBuilder defs) {
+        switch (theme) {
+            case DARK:
+                defs.append("<linearGradient id=\"dark\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"100%\">")
+                        .append("<stop offset=\"0\" style=\"stop-color:#00660add\"/>")
+                        .append("<stop offset=\"100%\" style=\"stop-color:#003d06dd\"/>")
+                        .append("</linearGradient>");
+                break;
+            case LIGHT:
+                defs.append("<linearGradient id=\"light\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"100%\">")
+                        .append("<stop offset=\"0\" style=\"stop-color:#a1c5ded0\"/>")
+                        .append("<stop offset=\"100%\" style=\"stop-color:#7baed1d0\"/>")
+                        .append("</linearGradient>");
+                break;
+            case MIDNIGHT:
+                defs.append(
+                                "<linearGradient id=\"midnight\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"100%\">")
+                        .append("<stop offset=\"0\" style=\"stop-color:#338fffd0\"/>")
+                        .append("<stop offset=\"100%\" style=\"stop-color:#0050b3d0\"/>")
+                        .append("</linearGradient>");
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Appends theme-specific CSS rule overrides (major/minor grid colors, graph stroke)
+     * to the defs block. These are appended inside the {@code <style>} element.
+     *
+     * @param theme the detected theme.
+     * @param defs  the defs StringBuilder containing the base {@code <style>} block.
+     */
+    private void appendThemeCSSDefs(Theme theme, StringBuilder defs) {
+        switch (theme) {
+            case DARK:
+                defs.append(".major{stroke:#f4f4be30}").append(".minor{stroke:#c8c80028}");
+                break;
+            case MIDNIGHT:
+                defs.append(".major{stroke:#d260bf30}")
+                        .append(".minor{stroke:#c9ceff28}")
+                        .append("#graph{stroke:#1a81ffbb}");
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Post-processes the raw SVG output by normalizing values, assigning CSS classes,
+     * merging adjacent text elements, and applying theme-specific color overrides.
+     * <p>
+     * The replacements are ordered to preserve element structure: common normalizations
+     * first, then theme gradient/stroke rewrites, class assignments, font class extraction,
+     * text merging, and finally theme-specific CSS class overrides. All original replacements
+     * are preserved with identical output.
+     *
+     * @param svgRaw the raw SVG string from the rendering pipeline.
+     * @return the fully post-processed SVG string.
+     */
+    private String postProcessSvg(String svgRaw) {
+        Theme theme = detectTheme(svgRaw);
+
+        // --- Common value normalizations ---
+        String s =
+                svgRaw.replace(";fill-opacity:1", "")
+                        .replace("stroke-dasharray:1.0,1.0", "stroke-dasharray:1,1")
+                        .replace("<g >", "<g>")
+                        .replace(":0.", ":.")
+                        .replace(";\"", "\"")
+                        .replace(".0 ", " ")
+                        .replace(".0\"", "\"")
+                        .replace(
+                                ";stroke-opacity:.2;stroke-linecap:round;stroke-linejoin:round" +
+                                ";stroke-dasharray:1,1\"",
+                                "\" class=\"dash\"")
+                        .replace(";stroke-opacity:.2;stroke-linecap:square\"", "\" class=\"line\"")
+                        .replace(
+                                "fill-opacity:0\" /><g style=\"fill",
+                                "fill-opacity:0\"/><g id=\"graph\" style=\"fill");
+
+        // --- Theme gradient fill and stroke color rewrites ---
+        switch (theme) {
+            case DARK:
+                s = s.replace(
+                                "style=\"fill:rgb(0,72,8);fill-opacity:.86;stroke:none\"",
+                                "fill=\"url(#dark)\"")
+                        .replace("stroke:rgb(0,72,8)", "stroke:#00800da0");
+                break;
+            case LIGHT:
+                s = s.replace(
+                        "style=\"fill:rgb(100,160,200);fill-opacity:.78;stroke:none\"",
+                        "fill=\"url(#light)\"");
+                break;
+            case MIDNIGHT:
+                s = s.replace(
+                                "style=\"fill:rgb(0,72,160);fill-opacity:.78;stroke:none\"",
+                                "fill=\"url(#midnight)\"")
+                        .replace("stroke:rgb(0,30,110)", "stroke:#003de6a0;fill:none")
+                        .replace(
+                                "stroke:rgb(100,160,200);stroke-opacity:.78;",
+                                "stroke:#4da3cb99;");
+                break;
+            default:
+                break;
+        }
+
+        // --- Common class assignments and structural normalizations ---
+        s = s.replaceAll("/></g><g (style=\"stroke:.*?\").*?</g>", " $1/></g>")
+                .replace("stroke-linecap:square;fill:none", "stroke-linecap:square")
+                .replace("stroke-opacity:.86;stroke-linecap:square", "stroke-linecap:square")
+                .replace(");stroke-linecap:square", ");stroke-linecap:square;fill:none")
+                .replace("stroke-width:3.0", "stroke-width:3;fill:none")
+                .replaceAll(" style=\"stroke-width:5.*?\"", " class=\"axis\"")
+                .replace(
+                        "stroke:rgb(100,200,160);stroke-linecap:square",
+                        "stroke:#64c8a0cc;stroke-linecap:square;fill:none")
+                .replace(
+                        "stroke:#00800da0;stroke-linecap:square\" /></g><g" +
+                        " style=\"stroke-width:3",
+                        "stroke:none;stroke-linecap:square\"/></g><g" +
+                        " style=\"stroke-width:3")
+                .replace(
+                        "<rect x=\"0\" y=\"0\" width=\"250\" height=\"50\"" +
+                        " style=\"fill:rgb(0,0,0);fill-opacity:0\" />",
+                        "")
+                .replace(";stroke-linecap:square", "")
+                .replace("fill:rgb(0,0,0);fill-opacity:0;stroke:none", "opacity:0")
+                .replace("fill:none;fill:none", "fill:none")
+                .replace(" style=\"stroke:rgb(0,0,0);stroke-opacity:0\"", "")
+                .replace(
+                        ";stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1\"",
+                        "\" class=\"dash\"")
+                .replace("style=\"stroke:rgb(220,16,48);fill:none\"", "class=\"restart\"")
+                .replace(" clip-path=\"url(#clip-2)\"", "")
+                .replace(" L ", "L");
+
+        // --- Font class extraction (mono/sans-serif inline styles → CSS classes) ---
+        if (s.indexOf("font-family:") != -1) {
+            Matcher m = FONT_CLASS_PATTERN.matcher(s);
+            StringBuffer buf = new StringBuffer();
+            while (m.find()) {
+                String family = "monospace".equals(m.group(1)) ? "mono" : "sans";
+                m.appendReplacement(buf, " class=\"" + family + " s" + m.group(2) + "\"");
+            }
+            m.appendTail(buf);
+            s = buf.toString();
+        }
+        s = s.replace(" style=\"\"", "")
+                .replace("  class=", " class=");
+
+        // --- Merge adjacent text elements within clip groups ---
+        s = TEXT_MERGE_PATTERN.matcher(s).replaceAll("</text><text");
+
+        // --- Theme-specific CSS class overrides ---
+        switch (theme) {
+            case LIGHT:
+            case CLASSIC:
+                s = s.replace(".axis{", ".axis{stroke:#33333f;")
+                        .replace(".dash{", ".dash{stroke:#444;")
+                        .replace(".line{", ".line{stroke:#444;")
+                        .replace("text{", "text{fill:#33333f;")
+                        .replace("style=\"stroke:rgb(80,80,80)\" ", "")
+                        .replace("fill:rgb(51,51,63);", "");
+                break;
+            case DARK:
+                s = s.replace(".axis{", ".axis{stroke:#beca95;")
+                        .replace(".dash{", ".dash{stroke:#f4f4be;")
+                        .replace(".line{", ".line{stroke:#f4f4be;")
+                        .replace("text{", "text{fill:#f4f4be;")
+                        .replace("style=\"stroke:rgb(244,244,190)\" ", "")
+                        .replace("fill:rgb(244,244,190);", "")
+                        .replaceAll("<g style=\"opacity:0\".*?</g>", "")
+                        .replace(" clip-path=\"url(#clip-1)\"", "")
+                        .replace(
+                                " style=\"stroke:rgb(244,244,190);stroke-opacity:.12\"" +
+                                " class=\"dash\"",
+                                " class=\"dash minor\"")
+                        .replace(
+                                " style=\"stroke:rgb(200,200,0)\" class=\"dash\"",
+                                " class=\"dash major\"")
+                        .replace("fill:rgb(0,0,0);fill-opacity:0\"", "opacity:0\"")
+                        .replace("style=\"fill:rgb(0,0,0);fill-opacity:.75\"", "class=\"bg\"")
+                        .replace(
+                                "style=\"stroke:rgb(244,244,190);stroke-opacity:.78\"",
+                                "class=\"axis\"")
+                        .replace("stroke:#f4f4be;stroke-opacity:.2", "stroke:#f4f4be30");
+                break;
+            case MIDNIGHT:
+                s = s.replace(".axis{", ".axis{stroke:#a6b3e8;")
+                        .replace(
+                                "</style>",
+                                "#path2{stroke-width:2;stroke:#5af2f2aa;fill:none}</style>")
+                        .replace(" style=\"stroke:rgb(0,72,160);stroke-opacity:.78\"", "")
+                        .replace(
+                                " style=\"stroke-width:2.0;stroke:rgb(128,180,212);fill:none\"",
+                                " id=\"path2\"")
+                        .replace(
+                                " style=\"stroke:rgb(201,206,255)\" class=\"dash\"",
+                                " class=\"dash minor\"")
+                        .replace(
+                                " style=\"stroke:rgb(240,32,192);stroke-opacity:.43\"" +
+                                " class=\"dash\"",
+                                " class=\"dash major\"");
+                break;
+            default:
+                break;
+        }
+        return consolidateSvgGroups(s);
+    }
+
+    /**
+     * Consolidates consecutive SVG {@code <line>} elements with the same CSS class into shared
+     * {@code <g>} groups. For example, 47 consecutive {@code <line class="dash minor"/>} elements
+     * become a single {@code <g class="dash minor">} wrapper. Text consolidation is handled by
+     * the existing font class extraction and text merge steps in {@code postProcessSvg}.
+     *
+     * @param svg the post-processed SVG content.
+     * @return the SVG with consolidated line groups.
+     */
+    private String consolidateSvgGroups(String svg) {
+        Matcher m = LINE_RUN_PATTERN.matcher(svg);
+        StringBuffer out = new StringBuffer(svg.length());
+        while (m.find()) {
+            String run = m.group(0);
+            Matcher cm = LINE_CLASS_PATTERN.matcher(run);
+            if (cm.find()) {
+                String cssClass = cm.group(1);
+                String stripped = LINE_CLASS_PATTERN.matcher(run).replaceAll("");
+                m.appendReplacement(out, "<g class=\"" + cssClass + "\">" + stripped + "</g>");
+            }
+        }
+        m.appendTail(out);
+        return out.toString();
+    }
+
+    /**
+     * Matches consecutive runs of self-closing {@code <line>} elements. A run is one or more
+     * {@code <line .../>} elements with no other element types between them.
+     */
+    private static final Pattern LINE_RUN_PATTERN =
+            Pattern.compile("(?:<line[^/]*/>\\s*)+");
+
+    /**
+     * Extracts the CSS class name from a {@code class="..."} attribute within a line run.
+     */
+    private static final Pattern LINE_CLASS_PATTERN =
+            Pattern.compile("class=\"([^\"]+)\"");
+
+    /**
      * Returns the SVG element that has been generated by calls to this {@code Graphics2D}
      * implementation.
      *
@@ -2669,28 +3009,14 @@ public final class SVGGraphics2D extends Graphics2D {
                 defs.append(b.toString());
             }
         }
-        if (this.sb.indexOf("rgb(0,72,8)") != -1) { // dark
-            defs.append("<linearGradient id=\"dark\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"100%\">")
-                    .append("<stop offset=\"0\" style=\"stop-color:#00660add\"/>")
-                    .append("<stop offset=\"100%\" style=\"stop-color:#003d06dd\"/>")
-                    .append("</linearGradient>");
-        } else if (this.sb.indexOf("rgb(100,160,200)") != -1) { // light
-            defs.append("<linearGradient id=\"light\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"100%\">")
-                    .append("<stop offset=\"0\" style=\"stop-color:#a1c5ded0\"/>")
-                    .append("<stop offset=\"100%\" style=\"stop-color:#7baed1d0\"/>")
-                    .append("</linearGradient>");
-        } else if (this.sb.indexOf("rgb(0,72,160)") != -1) { // midnight
-            defs.append("<linearGradient id=\"midnight\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"100%\">")
-                    .append("<stop offset=\"0\" style=\"stop-color:#338fffd0\"/>")
-                    .append("<stop offset=\"100%\" style=\"stop-color:#0050b3d0\"/>")
-                    .append("</linearGradient>");
-        }
+        Theme theme = detectTheme(this.sb.toString());
+        appendThemeDefs(theme, defs);
         defs.append(
-                "<link xmlns=\"http://www.w3.org/1999/xhtml\" rel=\"stylesheet\" type=\"text/css\""
-                        + " href=\"/themes/fonts/OpenSans.css\"/>");
+                "<link xmlns=\"http://www.w3.org/1999/xhtml\" rel=\"stylesheet\" type=\"text/css\"" +
+                " href=\"/themes/fonts/OpenSans.css\"/>");
         defs.append(
-                "<link xmlns=\"http://www.w3.org/1999/xhtml\" rel=\"stylesheet\" type=\"text/css\""
-                        + " href=\"/themes/fonts/FiraCode.css\"/>");
+                "<link xmlns=\"http://www.w3.org/1999/xhtml\" rel=\"stylesheet\" type=\"text/css\"" +
+                " href=\"/themes/fonts/FiraCode.css\"/>");
         defs.append(
                         "<style>text{font-weight:600;text-rendering:optimizeLegibility;white-space:pre}")
                 .append(
@@ -2713,168 +3039,12 @@ public final class SVGGraphics2D extends Graphics2D {
                 .append(".s13{font-size:13px}")
                 .append(".s14{font-size:14px}")
                 .append("#date{font-style:italic}");
-        if (this.sb.indexOf("rgb(0,72,8)") != -1) { // dark
-            defs.append(".major{stroke:#f4f4be30}").append(".minor{stroke:#c8c80028}");
-        } else if (this.sb.indexOf("201,206,255") != -1) { // midnight
-            defs.append(".major{stroke:#d260bf30}")
-                    .append(".minor{stroke:#c9ceff28}")
-                    .append("#graph{stroke:#1a81ffbb}");
-        }
+        appendThemeCSSDefs(theme, defs);
         defs.append("</style></defs>");
         svg.append(defs);
         svg.append(this.sb);
         svg.append("</svg>");
-        String svgOut =
-                svg.toString()
-                        .replace(";fill-opacity:1", "")
-                        .replace("stroke-dasharray:1.0,1.0", "stroke-dasharray:1,1")
-                        .replace("<g >", "<g>")
-                        .replace(":0.", ":.")
-                        .replace(";\"", "\"")
-                        .replace(".0 ", " ")
-                        .replace(".0\"", "\"")
-                        .replace(
-                                ";stroke-opacity:.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1\"",
-                                "\" class=\"dash\"")
-                        .replace(";stroke-opacity:.2;stroke-linecap:square\"", "\" class=\"line\"")
-                        .replace(
-                                "fill-opacity:0\" /><g style=\"fill",
-                                "fill-opacity:0\"/><g id=\"graph\" style=\"fill")
-                        .replace(
-                                "style=\"fill:rgb(0,72,8);fill-opacity:.86;stroke:none\"",
-                                "fill=\"url(#dark)\"")
-                        .replace(
-                                "style=\"fill:rgb(100,160,200);fill-opacity:.78;stroke:none\"",
-                                "fill=\"url(#light)\"")
-                        .replace(
-                                "style=\"fill:rgb(0,72,160);fill-opacity:.78;stroke:none\"",
-                                "fill=\"url(#midnight)\"")
-                        .replace("stroke:rgb(0,72,8)", "stroke:#00800da0")
-                        .replace("stroke:rgb(0,30,110)", "stroke:#003de6a0;fill:none")
-                        .replace("stroke:rgb(100,160,200);stroke-opacity:.78;", "stroke:#4da3cb99;")
-                        .replaceAll("/></g><g (style=\"stroke:.*?\").*?</g>", " $1/></g>")
-                        .replace("stroke-linecap:square;fill:none", "stroke-linecap:square")
-                        .replace(
-                                "stroke-opacity:.86;stroke-linecap:square", "stroke-linecap:square")
-                        .replace(");stroke-linecap:square", ");stroke-linecap:square;fill:none")
-                        .replace("stroke-width:3.0", "stroke-width:3;fill:none")
-                        .replaceAll(" style=\"stroke-width:5.*?\"", " class=\"axis\"")
-                        .replace(
-                                "stroke:rgb(100,200,160);stroke-linecap:square",
-                                "stroke:#64c8a0cc;stroke-linecap:square;fill:none")
-                        .replace(
-                                "stroke:#00800da0;stroke-linecap:square\" /></g><g"
-                                        + " style=\"stroke-width:3",
-                                "stroke:none;stroke-linecap:square\"/></g><g"
-                                        + " style=\"stroke-width:3")
-                        .replace(
-                                "<rect x=\"0\" y=\"0\" width=\"250\" height=\"50\""
-                                        + " style=\"fill:rgb(0,0,0);fill-opacity:0\" />",
-                                "")
-                        .replace(";stroke-linecap:square", "")
-                        .replace("fill:rgb(0,0,0);fill-opacity:0;stroke:none", "opacity:0")
-                        .replace("fill:none;fill:none", "fill:none")
-                        .replace(" style=\"stroke:rgb(0,0,0);stroke-opacity:0\"", "")
-                        .replace(
-                                ";stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1\"",
-                                "\" class=\"dash\"")
-                        .replace("style=\"stroke:rgb(220,16,48);fill:none\"", "class=\"restart\"")
-                        .replace(" clip-path=\"url(#clip-2)\"", "")
-                        .replace(" L ", "L");
-        if (svgOut.indexOf("80,80,80") != -1) { // light/classic
-            svgOut =
-                    svgOut.replace(".axis{", ".axis{stroke:#33333f;")
-                            .replace(".dash{", ".dash{stroke:#444;")
-                            .replace(".line{", ".line{stroke:#444;")
-                            .replace("text{", "text{fill:#33333f;")
-                            .replace("style=\"stroke:rgb(80,80,80)\" ", "")
-                            .replace("fill:rgb(51,51,63);", "");
-
-        } else if (svgOut.indexOf("244,244,190") != -1) { // dark
-            svgOut =
-                    svgOut.replace(".axis{", ".axis{stroke:#beca95;")
-                            .replace(".dash{", ".dash{stroke:#f4f4be;")
-                            .replace(".line{", ".line{stroke:#f4f4be;")
-                            .replace("text{", "text{fill:#f4f4be;")
-                            .replace("style=\"stroke:rgb(244,244,190)\" ", "")
-                            .replace("fill:rgb(244,244,190);", "")
-                            .replaceAll("<g style=\"opacity:0\".*?</g>", "")
-                            .replace(" clip-path=\"url(#clip-1)\"", "")
-                            .replace(
-                                    " style=\"stroke:rgb(244,244,190);stroke-opacity:.12\""
-                                            + " class=\"dash\"",
-                                    " class=\"dash minor\"")
-                            .replace(
-                                    " style=\"stroke:rgb(200,200,0)\" class=\"dash\"",
-                                    " class=\"dash major\"")
-                            .replace("fill:rgb(0,0,0);fill-opacity:0\"", "opacity:0\"")
-                            .replace("style=\"fill:rgb(0,0,0);fill-opacity:.75\"", "class=\"bg\"")
-                            .replace(
-                                    "style=\"stroke:rgb(244,244,190);stroke-opacity:.78\"",
-                                    "class=\"axis\"")
-                            .replace("stroke:#f4f4be;stroke-opacity:.2", "stroke:#f4f4be30");
-        } else if (svgOut.indexOf("201,206,255") != -1) { // midnight
-            svgOut =
-                    svgOut.replace(".axis{", ".axis{stroke:#a6b3e8;")
-                            .replace(
-                                    "</style>",
-                                    "#path2{stroke-width:2;stroke:#5af2f2aa;fill:none}</style>")
-                            .replace(" style=\"stroke:rgb(0,72,160);stroke-opacity:.78\"", "")
-                            .replace(
-                                    " style=\"stroke-width:2.0;stroke:rgb(128,180,212);fill:none\"",
-                                    " id=\"path2\"")
-                            .replace(
-                                    " style=\"stroke:rgb(201,206,255)\" class=\"dash\"",
-                                    " class=\"dash minor\"")
-                            .replace(
-                                    " style=\"stroke:rgb(240,32,192);stroke-opacity:.43\""
-                                            + " class=\"dash\"",
-                                    " class=\"dash major\"");
-        }
-        if (svgOut.indexOf("font-family:monospace") != -1) {
-            svgOut = svgOut.replace("style=\"font-family:monospace;", "class=\"mono\" style=\"");
-            svgOut =
-                    svgOut.replace(
-                            " class=\"mono\" style=\"font-size:10px\"", " class=\"mono s10\"");
-            svgOut =
-                    svgOut.replace(
-                            " class=\"mono\" style=\"font-size:11px\"", " class=\"mono s11\"");
-            svgOut = svgOut.replace("</text></g><g class=\"mono s11\"><text", "</text><text");
-        }
-        if (svgOut.indexOf("font-family:sans-serif") != -1) {
-            svgOut =
-                    svgOut.replace(
-                            " style=\"font-family:sans-serif;font-size:11px\"",
-                            " class=\"sans s11\"");
-            svgOut =
-                    svgOut.replace(
-                            " style=\"font-family:sans-serif;font-size:12px\"",
-                            " class=\"sans s12\"");
-            svgOut =
-                    svgOut.replace(
-                            " style=\"font-family:sans-serif;font-size:13px\"",
-                            " class=\"sans s13\"");
-            svgOut =
-                    svgOut.replace(
-                            " style=\"font-family:sans-serif;font-size:14px\"",
-                            " class=\"sans s14\"");
-            svgOut = svgOut.replace("</text></g><g class=\"sans s11\"><text", "</text><text");
-        }
-        svgOut =
-                svgOut.replace(
-                                "</text></g><g class=\"mono s11\" clip-path=\"url(#clip-2)\"><text",
-                                "</text><text")
-                        .replace(
-                                "</text></g><g class=\"sans s11\" clip-path=\"url(#clip-2)\"><text",
-                                "</text><text")
-                        .replace(
-                                "</text></g><g class=\"sans s12\" clip-path=\"url(#clip-2)\"><text",
-                                "</text><text")
-                        .replace("</text></g><g class=\"mono s10\"><text", "</text><text")
-                        .replace("</text></g><g class=\"mono s11\"><text", "</text><text")
-                        .replace("</text></g><g class=\"sans s11\"><text", "</text><text")
-                        .replace("</text></g><g class=\"sans s12\"><text", "</text><text");
-        return svgOut;
+        return postProcessSvg(svg.toString());
     }
 
     /**
