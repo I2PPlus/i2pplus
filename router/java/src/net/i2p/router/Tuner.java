@@ -7085,17 +7085,31 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * Build success rate: >80% = 1.0, <30% = 0.0
+         * Build success rate: read the stat VALUE (0-100) directly.
+         * The build stats emit the computed percentage as the stat value
+         * with event count 0, so getEventCount() is always 0 (dead).
          */
         private double scoreBuildSuccess() {
-            double success = getEventCount("tunnel.buildSuccessRate");
-            double failure = getEventCount("tunnel.buildFailureRate");
-            double timeout = getEventCount("tunnel.buildTimeoutRate");
-            double total = success + failure + timeout;
-            if (total <= 0) return 1.0;
-            double rate = success / total;
-            // 0%→0.0, 30%→0.0, 80%→1.0
-            return clamp((rate - 0.3) / 0.5);
+            RateStat rs = _ctx.statManager().getRate("tunnel.buildSuccessRate");
+            if (rs == null) return 1.0;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return 1.0;
+            double pct = rate.getAverageValue();
+            // pct is 0-100; >80% = 1.0, <30% = 0.0
+            return clamp((pct - 30.0) / 50.0);
+        }
+
+        /**
+         * Message send failure rate: failures vs total sends in the last period.
+         * <1% = 1.0, >10% = 0.0
+         */
+        private double scoreMessageFailures() {
+            double failures = getEventCount("transport.sendMessageFailureLifetime");
+            double sends = getEventCount("transport.sendMessageSize");
+            if (sends <= 0) return 1.0;
+            double failRate = failures / sends;
+            // 0%→1.0, 1%→1.0, 10%→0.0
+            return clamp(1.0 - ((failRate - 0.01) / 0.09));
         }
 
         /**
@@ -7107,20 +7121,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() == 0) return 0;
             return rate.getLastEventCount();
-        }
-
-        /**
-         * Message send failures: 0 = 1.0, >5000ms = degraded, >30000ms = 0.0
-         */
-        private double scoreMessageFailures() {
-            RateStat rs = _ctx.statManager().getRate("transport.sendMessageFailureLifetime");
-            if (rs == null) return 1.0;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return 1.0;
-            double avg = rate.getAverageValue();
-            if (avg <= 0) return 1.0;
-            // 0ms→1.0, 5s→0.8, 30s→0.0
-            return clamp(1.0 - ((avg - 5000) / 25000.0));
         }
 
         /**
@@ -7138,7 +7138,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * Transit load: participating bandwidth vs configured max.
+         * Transit load: participating bandwidth vs share bandwidth.
          * Low usage = 1.0, at capacity = 0.0
          */
         private double scoreTransitLoad() {
@@ -7147,11 +7147,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() == 0) return 1.0;
             double bps = rate.getAverageValue();
-            // read configured outbound bandwidth (KB/s → B/s)
-            int maxKBps = _ctx.getProperty("i2np.bandwidth.outboundKBytesPerSecond", 128);
-            long maxBps = maxKBps * 1024L;
-            if (maxBps <= 0) return 1.0;
-            double usageRatio = bps /  maxBps;
+            long shareBps = TunnelDispatcher.getShareBandwidth(_ctx) * 1024L;
+            if (shareBps <= 0) return 1.0;
+            double usageRatio = bps / shareBps;
             // 0%→1.0, 70%→0.5, 100%→0.0
             return clamp(1.0 - (usageRatio / 0.7));
         }
