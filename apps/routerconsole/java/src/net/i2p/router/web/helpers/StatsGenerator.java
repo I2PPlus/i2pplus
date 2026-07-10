@@ -67,7 +67,7 @@ public class StatsGenerator {
             Set<String> stats = entry.getValue();
             buf.append("<input name=\"statgroup\" type=radio class=toggle_input id=\"toggle_")
                .append(group.replace(" ", "_").replace("[", "").replace("]", "")).append("\"");
-            if (group.equals(_t("Router"))) {buf.append(" checked");}
+            if (group.equals("Router")) {buf.append(" checked");}
             buf.append(" hidden>\n");
             buf.append("<h3>").append(group).append("</h3>\n");
             buf.append("<ul class=statlist>");
@@ -89,6 +89,7 @@ public class StatsGenerator {
 
     private void renderFrequency(String name, StringBuilder buf) {
         FrequencyStat freq = _context.statManager().getFrequency(name);
+        if (freq == null) {return;}
         buf.append("<i>");
         buf.append(freq.getDescription());
         buf.append("</i><br>");
@@ -124,6 +125,7 @@ public class StatsGenerator {
 
     private void renderRate(String name, StringBuilder buf, boolean showAll) {
         RateStat rate = _context.statManager().getRate(name);
+        if (rate == null) {return;}
         String d = rate.getDescription();
         if (! "".equals(d)) {buf.append("<span class=statsLongName><i>").append(d).append("</i></span><br>");}
         if (rate.getLifetimeEventCount() <= 0) {
@@ -186,7 +188,7 @@ public class StatsGenerator {
                    .append(" <a class=graphstat href=\"graph?stat=").append(name.replace(" ", "%20")).append('.').append(periods[i])
                    .append("&amp;w=600&amp;h=200&amp;showEvents=true\">").append(_t("Graph Event Count")).append("</a> ")
                    .append(" <a class=graphstat href=\"/viewstat.jsp?stat=").append(name.replace(" ", "%20")).append("&amp;period=").append(periods[i])
-                   .append("&amp;format=xml\" download=\"graphdata_").append(name.replace(".", "_").replace("%20", "s")).append(".xml\">")
+                   .append("&amp;format=xml\" download=\"graphdata_").append(name.replace(".", "_").replace("%20", "_")).append(".xml\">")
                    .append(_t("Export Data as XML")).append("</a>").append("</span>");
             }
             buf.append("</li>\n");
@@ -215,19 +217,18 @@ public class StatsGenerator {
      */
     private class AlphaComparator implements Comparator<String> {
         public int compare(String lhs, String rhs) {
+            // put the Router sections at the top of the page (compare raw keys, not translated)
+            boolean lrouter = lhs.equals("Router");
+            boolean rrouter = rhs.equals("Router");
+            if (lrouter && !rrouter) {return -1;}
+            if (rrouter && !lrouter) {return 1;}
+            lrouter = lhs.startsWith("Router");
+            rrouter = rhs.startsWith("Router");
+            if (lrouter && !rrouter) {return -1;}
+            if (rrouter && !lrouter) {return 1;}
+
             String lname = _t(lhs);
             String rname = _t(rhs);
-
-            // put the Router sections at the top of the page
-            boolean lrouter = lname.equals("Router");
-            boolean rrouter = rname.equals("Router");
-            if (lrouter && !rrouter) {return -1;}
-            if (rrouter && !lrouter) {return 1;}
-            lrouter = lname.startsWith("Router");
-            rrouter = rname.startsWith("Router");
-            if (lrouter && !rrouter) {return -1;}
-            if (rrouter && !lrouter) {return 1;}
-
             return Collator.getInstance().compare(lname, rname);
         }
     }

@@ -148,16 +148,14 @@ public class ConfigStatsHelper extends HelperBase {
      */
     private class AlphaComparator implements Comparator<String> {
         public int compare(String lhs, String rhs) {
+            // compare raw keys, not translated
+            boolean lrouter = lhs.startsWith("Router");
+            boolean rrouter = rhs.startsWith("Router");
+            if (lrouter && !rrouter) {return -1;}
+            if (rrouter && !lrouter) {return 1;}
+
             String lname = _t(lhs);
             String rname = _t(rhs);
-
-            boolean lrouter = lname.startsWith("Router");
-            boolean rrouter = rname.startsWith("Router");
-            if (lrouter && !rrouter)
-                return -1;
-            if (rrouter && !lrouter)
-                return 1;
-
             return Collator.getInstance().compare(lname, rname);
         }
     }
