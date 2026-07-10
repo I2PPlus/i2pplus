@@ -265,6 +265,14 @@ public class ParticipatingThrottler {
             baseLimit = (int) (baseLimit * (1.0 + relaxation * 0.5));
         }
 
+        // System load relaxation: further boost when CPU is idle
+        int sysLoad = SystemVersion.getSystemLoad();
+        if (sysLoad < 30) {
+            // Up to 25% bonus when system is very idle (0% → 25%, 30% → 0%)
+            double idleBonus = (30 - sysLoad) / 30.0 * 0.25;
+            baseLimit = (int) (baseLimit * (1.0 + idleBonus));
+        }
+
         return baseLimit;
     }
 

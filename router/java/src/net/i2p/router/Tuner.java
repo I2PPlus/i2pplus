@@ -350,6 +350,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new RequestThrottleMaxParam());
         _params.add(new RequestThrottlePctParam());
         _params.add(new RequestThrottleBurstParam());
+        // Sustained load thresholds
+        _params.add(new RequestHighLoadLagParam());
+        _params.add(new RequestHighLoadCpuParam());
+        _params.add(new RequestModerateLoadLagParam());
+        _params.add(new RequestModerateLoadCpuParam());
+        _params.add(new RequestSustainedHighLoadParam());
+        _params.add(new RequestSustainedModerateLoadParam());
         // Pool backoff
         _params.add(new PoolFailureThresholdParam());
         _params.add(new PoolBackoffMsParam());
@@ -7424,6 +7431,190 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean rejecting = !Double.isNaN(observed) && observed > 0;
             if (hasCapacity) return Math.min(_max, current + _step * 2);
             if (rejecting || cpuPressure) return Math.max(_min, current - _step);
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the high-load job lag threshold in RequestThrottler.
+     * Higher = more tolerant (only rejects under severe lag).
+     * Lower = more sensitive (rejects sooner under moderate lag).
+     * Sustained load detection requires this threshold to persist for sustainedHighLoadMs.
+     *
+     * @since 0.9.70+
+     */
+    private class RequestHighLoadLagParam extends BaseParam {
+        RequestHighLoadLagParam() {
+            super("i2p.tunnel.requestThrottle.highLoadLagMs", "High-load lag threshold (ms)",
+                  SUB_TUNNEL, 200, 5000, 100, "jobQueue.jobLag", _context);
+        }
+        protected void applyValue(int value) { RequestThrottler.setHighLoadLagMs(value); }
+        protected int getRuntimeValue() { return RequestThrottler.getHighLoadLagMs(); }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = avg jobLag (ms)
+            // When job lag is consistently high, tighten the threshold to catch problems sooner
+            // When job lag is low, loosen to avoid false positives
+            if (!Double.isNaN(observed) && observed > 200 && current > _min)
+                return Math.max(_min, current - _step);
+            if (!Double.isNaN(observed) && observed < 50 && current < _max)
+                return Math.min(_max, current + _step);
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the high-load CPU threshold in RequestThrottler.
+     *
+     * @since 0.9.70+
+     */
+    private class RequestHighLoadCpuParam extends BaseParam {
+        RequestHighLoadCpuParam() {
+            super("i2p.tunnel.requestThrottle.highLoadCpuPct", "High-load CPU threshold (%)",
+                  SUB_TUNNEL, 50, 100, 1, "jobQueue.jobLag", _context);
+        }
+        protected void applyValue(int value) { RequestThrottler.setHighLoadCpuPct(value); }
+        protected int getRuntimeValue() { return RequestThrottler.getHighLoadCpuPct(); }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // Hold steady — CPU threshold is system-dependent, not load-reactive
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the moderate-load job lag threshold in RequestThrottler.
+     * Controls when low-share peers start being disconnected.
+     *
+     * @since 0.9.70+
+     */
+    private class RequestModerateLoadLagParam extends BaseParam {
+        RequestModerateLoadLagParam() {
+            super("i2p.tunnel.requestThrottle.moderateLoadLagMs", "Moderate-load lag threshold (ms)",
+                  SUB_TUNNEL, 100, 3000, 50, "jobQueue.jobLag", _context);
+        }
+        protected void applyValue(int value) { RequestThrottler.setModerateLoadLagMs(value); }
+        protected int getRuntimeValue() { return RequestThrottler.getModerateLoadLagMs(); }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // Keep moderate threshold roughly half of high threshold
+            int highLag = RequestThrottler.getHighLoadLagMs();
+            int target = Math.max(_min, Math.min(_max, highLag / 2));
+            if (current < target && current < _max) return Math.min(_max, current + _step);
+            if (current > target && current > _min) return Math.max(_min, current - _step);
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the moderate-load CPU threshold in RequestThrottler.
+     *
+     * @since 0.9.70+
+     */
+    private class RequestModerateLoadCpuParam extends BaseParam {
+        RequestModerateLoadCpuParam() {
+            super("i2p.tunnel.requestThrottle.moderateLoadCpuPct", "Moderate-load CPU threshold (%)",
+                  SUB_TUNNEL, 40, 100, 1, "jobQueue.jobLag", _context);
+        }
+        protected void applyValue(int value) { RequestThrottler.setModerateLoadCpuPct(value); }
+        protected int getRuntimeValue() { return RequestThrottler.getModerateLoadCpuPct(); }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            return current;
+        }
+    }
+
+    /**
+     * Tunes how long high load must persist before gating requests.
+     * Higher = more tolerant (waits longer before rejecting).
+     * Lower = more responsive (rejects sooner under sustained load).
+     *
+     * @since 0.9.70+
+     */
+    private class RequestSustainedHighLoadParam extends BaseParam {
+        RequestSustainedHighLoadParam() {
+            super("i2p.tunnel.requestThrottle.sustainedHighLoadMs", "Sustained high-load window (ms)",
+                  SUB_TUNNEL, 5000, 120_000, 5000, "jobQueue.jobLag", _context);
+        }
+        protected void applyValue(int value) { RequestThrottler.setSustainedHighLoadMs(value); }
+        protected int getRuntimeValue() { return (int) RequestThrottler.getSustainedHighLoadMs(); }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            int sysLoad = SystemVersion.getSystemLoad();
+            boolean highLoad = !Double.isNaN(jobLag) && jobLag > 500 && sysLoad > 70;
+            // Under sustained high load, shorten window for faster reaction
+            if (highLoad && current > _min) return Math.max(_min, current - _step * 2);
+            // When idle, lengthen window to avoid reacting to transient spikes
+            if (!highLoad && current < _max) return Math.min(_max, current + _step);
+            return current;
+        }
+    }
+
+    /**
+     * Tunes how long moderate load must persist before disconnecting low-share peers.
+     *
+     * @since 0.9.70+
+     */
+    private class RequestSustainedModerateLoadParam extends BaseParam {
+        RequestSustainedModerateLoadParam() {
+            super("i2p.tunnel.requestThrottle.sustainedModerateLoadMs", "Sustained moderate-load window (ms)",
+                  SUB_TUNNEL, 10_000, 300_000, 5000, "jobQueue.jobLag", _context);
+        }
+        protected void applyValue(int value) { RequestThrottler.setSustainedModerateLoadMs(value); }
+        protected int getRuntimeValue() { return (int) RequestThrottler.getSustainedModerateLoadMs(); }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            int sysLoad = SystemVersion.getSystemLoad();
+            boolean moderateLoad = !Double.isNaN(jobLag) && jobLag > 200 && sysLoad > 50;
+            // Moderate window should be ~2x the high window
+            int highWindow = (int) RequestThrottler.getSustainedHighLoadMs();
+            int target = Math.max(_min, Math.min(_max, highWindow * 2));
+            if (current < target && current < _max) return Math.min(_max, current + _step);
+            if (current > target && current > _min) return Math.max(_min, current - _step);
             return current;
         }
     }

@@ -58,6 +58,24 @@ public class RequestThrottler {
     /** @since 0.9.70+ */
     public static volatile int _reqBurst1sThreshold = 10;
 
+    // Sustained load thresholds — require load to persist before gating
+    /** High-load job lag threshold (ms) @since 0.9.70+ */
+    public static volatile int _highLoadLagMs = 1000;
+    /** High-load CPU threshold (percent) @since 0.9.70+ */
+    public static volatile int _highLoadCpuPct = 95;
+    /** High-load system load threshold (percent, normalized by cores) @since 0.9.70+ */
+    public static volatile int _highLoadSysLoadPct = 90;
+    /** Moderate-load job lag threshold (ms) @since 0.9.70+ */
+    public static volatile int _moderateLoadLagMs = 500;
+    /** Moderate-load CPU threshold (percent) @since 0.9.70+ */
+    public static volatile int _moderateLoadCpuPct = 90;
+    /** Moderate-load system load threshold (percent, normalized by cores) @since 0.9.70+ */
+    public static volatile int _moderateLoadSysLoadPct = 80;
+    /** Duration (ms) high load must persist before gating requests @since 0.9.70+ */
+    public static volatile long _sustainedHighLoadMs = 30_000;
+    /** Duration (ms) moderate load must persist before disconnecting low-share peers @since 0.9.70+ */
+    public static volatile long _sustainedModerateLoadMs = 60_000;
+
     /** @since 0.9.70+ */
     public static int getRequestMinLimit() { return _reqMinLimit; }
     /** @since 0.9.70+ */
@@ -74,6 +92,38 @@ public class RequestThrottler {
     public static int getRequestBurst1sThreshold() { return _reqBurst1sThreshold; }
     /** @since 0.9.70+ */
     public static void setRequestBurst1sThreshold(int val) { _reqBurst1sThreshold = Math.max(1, Math.min(100, val)); }
+    /** @since 0.9.70+ */
+    public static int getHighLoadLagMs() { return _highLoadLagMs; }
+    /** @since 0.9.70+ */
+    public static void setHighLoadLagMs(int val) { _highLoadLagMs = Math.max(200, Math.min(5000, val)); }
+    /** @since 0.9.70+ */
+    public static int getHighLoadCpuPct() { return _highLoadCpuPct; }
+    /** @since 0.9.70+ */
+    public static void setHighLoadCpuPct(int val) { _highLoadCpuPct = Math.max(50, Math.min(100, val)); }
+    /** @since 0.9.70+ */
+    public static int getHighLoadSysLoadPct() { return _highLoadSysLoadPct; }
+    /** @since 0.9.70+ */
+    public static void setHighLoadSysLoadPct(int val) { _highLoadSysLoadPct = Math.max(50, Math.min(100, val)); }
+    /** @since 0.9.70+ */
+    public static int getModerateLoadLagMs() { return _moderateLoadLagMs; }
+    /** @since 0.9.70+ */
+    public static void setModerateLoadLagMs(int val) { _moderateLoadLagMs = Math.max(100, Math.min(3000, val)); }
+    /** @since 0.9.70+ */
+    public static int getModerateLoadCpuPct() { return _moderateLoadCpuPct; }
+    /** @since 0.9.70+ */
+    public static void setModerateLoadCpuPct(int val) { _moderateLoadCpuPct = Math.max(40, Math.min(100, val)); }
+    /** @since 0.9.70+ */
+    public static int getModerateLoadSysLoadPct() { return _moderateLoadSysLoadPct; }
+    /** @since 0.9.70+ */
+    public static void setModerateLoadSysLoadPct(int val) { _moderateLoadSysLoadPct = Math.max(30, Math.min(100, val)); }
+    /** @since 0.9.70+ */
+    public static long getSustainedHighLoadMs() { return _sustainedHighLoadMs; }
+    /** @since 0.9.70+ */
+    public static void setSustainedHighLoadMs(long val) { _sustainedHighLoadMs = Math.max(5000, Math.min(120_000, val)); }
+    /** @since 0.9.70+ */
+    public static long getSustainedModerateLoadMs() { return _sustainedModerateLoadMs; }
+    /** @since 0.9.70+ */
+    public static void setSustainedModerateLoadMs(long val) { _sustainedModerateLoadMs = Math.max(10_000, Math.min(300_000, val)); }
 
     private static final long CLEAN_TIME = 90 * 1000L; // Reset limits every 90 seconds
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
@@ -88,6 +138,10 @@ public class RequestThrottler {
 
     private final BurstWindowCounter _burstCounter;
     private final Map<Hash, BurstOffenseRecord> _burstOffenses = new ConcurrentHashMap<>();
+
+    // Sustained load tracking — timestamp when load first exceeded threshold
+    private volatile long _highLoadStart;
+    private volatile long _moderateLoadStart;
 
     private static final boolean DEFAULT_SHOULD_THROTTLE = true;
     private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
@@ -118,6 +172,14 @@ public class RequestThrottler {
         _reqMaxLimit = ctx.getProperty("i2p.tunnel.requestThrottle.maxLimit", 300);
         _reqPercentLimit = ctx.getProperty("i2p.tunnel.requestThrottle.percentLimit", 20);
         _reqBurst1sThreshold = ctx.getProperty("i2p.tunnel.requestThrottle.burst1sThreshold", 10);
+        _highLoadLagMs = ctx.getProperty("i2p.tunnel.requestThrottle.highLoadLagMs", 1000);
+        _highLoadCpuPct = ctx.getProperty("i2p.tunnel.requestThrottle.highLoadCpuPct", 95);
+        _highLoadSysLoadPct = ctx.getProperty("i2p.tunnel.requestThrottle.highLoadSysLoadPct", 90);
+        _moderateLoadLagMs = ctx.getProperty("i2p.tunnel.requestThrottle.moderateLoadLagMs", 500);
+        _moderateLoadCpuPct = ctx.getProperty("i2p.tunnel.requestThrottle.moderateLoadCpuPct", 90);
+        _moderateLoadSysLoadPct = ctx.getProperty("i2p.tunnel.requestThrottle.moderateLoadSysLoadPct", 80);
+        _sustainedHighLoadMs = ctx.getProperty("i2p.tunnel.requestThrottle.sustainedHighLoadMs", 30_000L);
+        _sustainedModerateLoadMs = ctx.getProperty("i2p.tunnel.requestThrottle.sustainedModerateLoadMs", 60_000L);
         ctx.statManager().createRequiredRateStat("tunnel.throttleRequestReject", "Request throttle reject count", "Tunnels [Participating]", RATES);
         // HashPatternDetector scanner is controlled by router.hashScan.frequency property (default: 0 = disabled)
         new Cleaner().schedule(CLEAN_TIME);
@@ -236,25 +298,48 @@ public class RequestThrottler {
 
         String v = "unknown";
         long lag = context.jobQueue().getMaxLag();
-        boolean highload = lag > 1000 && SystemVersion.getCPULoadAvg() > 95;
+        int cpuLoad = SystemVersion.getCPULoadAvg();
+        int sysLoad = SystemVersion.getSystemLoad();
         if (ri != null) {
             v = ri.getVersion();
         }
+
+        // Sustained high load: require all three signals above threshold for the duration
+        boolean highLoadNow = lag > _highLoadLagMs && cpuLoad > _highLoadCpuPct && sysLoad > _highLoadSysLoadPct;
+        if (highLoadNow) {
+            if (_highLoadStart == 0) {
+                _highLoadStart = context.clock().now();
+            }
+        } else {
+            _highLoadStart = 0;
+        }
+        boolean highload = _highLoadStart > 0 &&
+            (context.clock().now() - _highLoadStart) > _sustainedHighLoadMs;
 
         // Early return: High system load
         if (highload) {
             if (_log.shouldWarn())
                 _log.warn("Rejecting Tunnel Request from Router [" + routerId + "] -> " +
-                          "CPU is under sustained high load");
+                          "System under sustained high load (lag=" + lag + " cpu=" + cpuLoad + " sys=" + sysLoad + ")");
             return rv;
         }
 
-        // Moderate load gate: only block low-share peers when under load pressure
+        // Moderate load gate: only block low-share peers when under sustained load pressure
         if (isLowShare && shouldBlockOldRouters) {
-            boolean underLoad = lag > 500 || SystemVersion.getCPULoadAvg() > 90;
+            boolean moderateLoadNow = lag > _moderateLoadLagMs || cpuLoad > _moderateLoadCpuPct || sysLoad > _moderateLoadSysLoadPct;
+            if (moderateLoadNow) {
+                if (_moderateLoadStart == 0) {
+                    _moderateLoadStart = context.clock().now();
+                }
+            } else {
+                _moderateLoadStart = 0;
+            }
+            boolean underLoad = _moderateLoadStart > 0 &&
+                (context.clock().now() - _moderateLoadStart) > _sustainedModerateLoadMs;
             if (underLoad) {
                 if (_log.shouldInfo()) {
-                    _log.info("Dropping all connections from [" + routerId + "] -> Low share / " + v + " (load=" + lag + ")");
+                    _log.info("Dropping all connections from [" + routerId + "] -> Low share / " + v +
+                              " (sustained load: lag=" + lag + " cpu=" + cpuLoad + " sys=" + sysLoad + ")");
                 }
                 new Disconnector(h, v).schedule(11*60*1000L);
                 return true;
