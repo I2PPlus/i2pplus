@@ -932,21 +932,25 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          *
          * <p>The build success/failure/timeout stats are event-count markers
          * ({@code addRateData(name, 100, 0)}), so {@link #getAdditionalStat}
-         * always returns ~100 and is useless for computing a ratio. This method
-         * uses {@link #getAdditionalEventCount} on all three stats to derive
-         * the real success percentage.
+         * <p>BuildExecutor emits these stats as 0-100 integer percentages with
+         * {@code addRateData(name, rate, 0)}. The {@code eventDuration=0} parameter is
+         * <em>not</em> an event count delta — event count always increments by 1 per call.
+         * {@link #getAdditionalStat} returns {@code getAverageValue()} = average of emitted
+         * rates, which is the correct success percentage. Do NOT use
+         * {@link #getAdditionalEventCount} here — it returns the call count (always 1.0
+         * when all three stats are emitted together), not the rate value.
          *
          * @param ctx the router context
          * @return success rate as 0.0–1.0, or NaN if no build events
          * @since 0.9.70+
          */
         protected double getBuildSuccessRate(RouterContext ctx) {
-            double success = getAdditionalEventCount(ctx, "tunnel.buildSuccessRate");
-            double failure = getAdditionalEventCount(ctx, "tunnel.buildFailureRate");
-            double timeout = getAdditionalEventCount(ctx, "tunnel.buildTimeoutRate");
+            double success = getAdditionalStat(ctx, "tunnel.buildSuccessRate");
+            double failure = getAdditionalStat(ctx, "tunnel.buildFailureRate");
+            double timeout = getAdditionalStat(ctx, "tunnel.buildTimeoutRate");
             double total = success + failure + timeout;
             if (Double.isNaN(total) || total <= 0) return Double.NaN;
-            return success / total;
+            return success / 100.0;
         }
 
         /**
@@ -1687,8 +1691,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = participating InBps (transit inbound bandwidth)
             // Cross-refs: gateway overflow drops, queue sizes, job lag
-            double obDrops = getAdditionalStat(_context, "tunnel.dropGatewayOverflowOB");
-            double ibDrops = getAdditionalStat(_context, "tunnel.dropGatewayOverflowIB");
+            double obDrops = getAdditionalEventCount(_context, "tunnel.dropGatewayOverflowOB");
+            double ibDrops = getAdditionalEventCount(_context, "tunnel.dropGatewayOverflowIB");
             double obQueue = getAdditionalStat(_context, "tunnel.obgw.queueSize");
             double ibQueue = getAdditionalStat(_context, "tunnel.ibgw.queueSize");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -1755,7 +1759,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             //             jobQueue.jobLag (CPU), memory pressure
             double ibgwQueue = getAdditionalStat(_context, "tunnel.ibgw.queueSize");
             double obgwQueue = getAdditionalStat(_context, "tunnel.obgw.queueSize");
-            double transitLoad = getAdditionalStat(_context, "tunnel.dispatchParticipant");
+            double transitLoad = getAdditionalEventCount(_context, "tunnel.dispatchParticipant");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double memPressure = getMemoryPressure();
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
@@ -2794,8 +2798,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = participating bandwidth queue (bytes) — growing = more transit load
-            double drops = getAdditionalStat(_context, "tunnel.participatingMessageDropped");
-            double overflow = getAdditionalStat(_context, "tunnel.dropGatewayOverflow");
+            double drops = getAdditionalEventCount(_context, "tunnel.participatingMessageDropped");
+            double overflow = getAdditionalEventCount(_context, "tunnel.dropGatewayOverflow");
             double codelDelay = getAdditionalStat(_context, "codel.OBGW.delay");
 
             boolean congested = (!Double.isNaN(drops) && drops > 10) ||
@@ -2932,7 +2936,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = tunnel.participatingMessageDropped rate
-            double overflow = getAdditionalStat(_context, "tunnel.dropGatewayOverflow");
+            double overflow = getAdditionalEventCount(_context, "tunnel.dropGatewayOverflow");
             double codelDelay = getAdditionalStat(_context, "codel.OBGW.delay");
             boolean systemBusy = !Double.isNaN(overflow) && overflow > 10;
 
@@ -3643,7 +3647,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            // Stat emitted as 0-100; normalize to 0-1 for threshold comparisons
+            return rate.getAverageValue() / 100.0;
         }
 
         protected int computeTarget(double observed) {
@@ -3653,7 +3658,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Hourly trend: confirm build success trend isn't just a short-term dip
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
             double transitBps = getAdditionalStat(_context, "tunnel.participating InBps");
-            double hourlySuccess = getAdditionalStatHourly(_context, _statName);
+            double hourlySuccess = getAdditionalStatHourly(_context, _statName) / 100.0;
 
             boolean buildStorm = !Double.isNaN(concurrentBuilds) && concurrentBuilds > 15;
             boolean heavyLoad = !Double.isNaN(transitBps) && transitBps > 80000;
@@ -3830,6 +3835,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected void applyValue(int value) {
             RouterThrottleImpl.setDefaultMaxTunnels(value);
+            _context.router().saveConfig("router.maxParticipatingTunnels", Integer.toString(value));
         }
 
         protected int getRuntimeValue() {
@@ -3855,7 +3861,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int maxBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond() * 1024;
-            if (maxBps <= 0) return current;
+            if (maxBps <= 0) {return current;}
 
             // Use actual tunnel count vs max as the trigger — not bandwidth.
             Rate avgTunnels = _context.statManager().getRate("tunnel.participatingTunnels") != null
@@ -3869,22 +3875,25 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double buildSuccess = getBuildSuccessRate(_context);
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double memPressure = getMemoryPressure();
 
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
 
-            // Tunnel count approaching max (>50%) + healthy = increase
-            if (countPct > 0.5 && networkHealthy && !congested && !systemBusy)
-                return Math.min(_max, current + _step);
-
-            // Tunnel count approaching max (>70%) + healthy = increase aggressively
-            if (countPct > 0.7 && networkHealthy && !congested && !systemBusy)
+            // Transit tunnels are provisioned by peers — max is capacity, not a target.
+            // Scale up when approaching capacity and healthy.
+            if (countPct > 0.7 && networkHealthy && !congested && !systemBusy) {
                 return Math.min(_max, current + _step * 2);
+            }
+            if (countPct > 0.5 && networkHealthy && !congested && !systemBusy) {
+                return Math.min(_max, current + _step);
+            }
 
-            // Far below max + congested or unhealthy = decrease toward actual need
-            if (countPct < 0.1 && (congested || !networkHealthy || systemBusy))
+            // Only scale down under extreme memory pressure — never for low utilization
+            if (memPressure > 0.9) {
                 return Math.max(_min, current - _step);
+            }
 
             return current;
         }
@@ -5372,7 +5381,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Cross-refs: concurrentBuilds (current usage), buildClientExpire (timeouts),
             //             dropLoadBacklog (pending builds), testSuccessTime (latency)
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
-            double buildExpires = getAdditionalStat(_context, "tunnel.buildClientExpire");
+            double buildExpires = getAdditionalEventCount(_context, "tunnel.buildClientExpire");
             double backlog = getAdditionalStat(_context, "tunnel.dropLoadBacklog");
             double testTime = getAdditionalStat(_context, "tunnel.testSuccessTime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -5450,7 +5459,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double pendingQueue = getAdditionalStat(_context, "tunnel.pendingLookupQueue");
-            double buildExpires = getAdditionalStat(_context, "tunnel.buildClientExpire");
+            double buildExpires = getAdditionalEventCount(_context, "tunnel.buildClientExpire");
 
             boolean lookupsDropped = !Double.isNaN(observed) && observed > 5;
             boolean queueBackedUp = !Double.isNaN(pendingQueue) && pendingQueue > 10;
@@ -6260,7 +6269,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (ms, actual network RTT)
             // Cross-refs: client.writerQueueFull (overflow events), client.dispatchTime, jobLag (CPU), sendProcessingTime
-            double overflows = getAdditionalStat(_context, "client.writerQueueFull");
+            double overflows = getAdditionalEventCount(_context, "client.writerQueueFull");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double sendTime = getAdditionalStat(_context, "transport.sendProcessingTime");
             double dispatchTime = getAdditionalStat(_context, "client.dispatchTime");

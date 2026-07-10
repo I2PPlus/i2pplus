@@ -215,16 +215,23 @@ public class BuildExecutor implements Runnable {
         StatManager sm = _context.statManager();
         if (result == Result.SUCCESS) {
             _buildSuccessCount.incrementAndGet();
-            sm.addRateData("tunnel.buildSuccessRate", 100, 0);
         } else if (result == Result.TIMEOUT) {
             _buildTimeoutCount.incrementAndGet();
-            sm.addRateData("tunnel.buildTimeoutRate", 100, 0);
         } else {
             _buildFailureCount.incrementAndGet();
-            sm.addRateData("tunnel.buildFailureRate", 100, 0);
+        }
+        // Emit actual computed success rate (0-100) from counters
+        int success = _buildSuccessCount.get();
+        int failure = _buildFailureCount.get();
+        int timeout = _buildTimeoutCount.get();
+        int total = success + failure + timeout;
+        if (total > 0) {
+            int rate = (success * 100) / total;
+            sm.addRateData("tunnel.buildSuccessRate", rate, 0);
+            sm.addRateData("tunnel.buildFailureRate", (failure * 100) / total, 0);
+            sm.addRateData("tunnel.buildTimeoutRate", (timeout * 100) / total, 0);
         }
         // Every 50 builds, recalculate adaptive timeout
-        int total = _buildSuccessCount.get() + _buildFailureCount.get() + _buildTimeoutCount.get();
         if (total >= 50) {
             calculateAdaptiveTimeoutFromSuccess();
             // Reset counters periodically to favor recent behavior
