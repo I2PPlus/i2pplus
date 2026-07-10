@@ -235,10 +235,7 @@ public class WebMail extends HttpServlet {
 
     /** Data structure to hold any persistent data (to store them in session dictionary) */
     private static class SessionObject implements HttpSessionBindingListener, NewMailListener {
-        boolean pageChanged;
-        boolean markAll;
-        boolean clear;
-        boolean invert;
+
         int smtpPort;
         POP3MailBox mailbox;
         final Map<String, MailCache> caches;
@@ -907,9 +904,7 @@ public class WebMail extends HttpServlet {
                 Folder<String> f = _mc.getFolder();
                 String[] uidls = _mc.getUIDLs();
                 int added = f.addElements(Arrays.asList(uidls));
-                if (added > 0) {
-                    _so.pageChanged = true;
-                }
+
                 _so.notifyAll();
             }
         }
@@ -965,7 +960,6 @@ public class WebMail extends HttpServlet {
                 } else if (mc != null) {
                     String[] uidls = mc.getUIDLs();
                     int added = mc.getFolder().addElements(Arrays.asList(uidls));
-                    if (added > 0) {_so.pageChanged = true;}
                     _so.newMails = added;
                     _so.connectError = null;
                     if (log.shouldInfo()) log.info("Added " + added + " new emails");
@@ -1684,7 +1678,6 @@ public class WebMail extends HttpServlet {
             if (sp != null) {
                 try {
                     page = Integer.parseInt(sp);
-                    sessionObject.pageChanged = true;
                 } catch (NumberFormatException nfe) { /* ignored */ }
             }
         }
@@ -1693,16 +1686,13 @@ public class WebMail extends HttpServlet {
             if (sp != null) {
                 try {
                     page = Integer.parseInt(sp);
-                    sessionObject.pageChanged = true;
                 } catch (NumberFormatException nfe) { /* ignored */ }
             }
         }
         else if (buttonPressed(request, FIRSTPAGE)) {
-            sessionObject.pageChanged = true;
             page = 1;
         }
         else if (buttonPressed(request, LASTPAGE)) {
-            sessionObject.pageChanged = true;
             Folder<String> folder = getCurrentFolder(sessionObject, request);
             page = (folder != null) ? folder.getPages() : 1;
         } else if (buttonPressed(request, DELETE) ||
@@ -1725,7 +1715,6 @@ public class WebMail extends HttpServlet {
                     if (numberDeleted > 0) {
                         mc.delete(toDelete);
                         mc.getFolder().removeElements(toDelete);
-                        sessionObject.pageChanged = true;
                         sessionObject.info += ' ' + ngettext("1 message deleted.", "{0} messages deleted.", numberDeleted);
                     } else {sessionObject.error += ' ' + _t("No messages marked for deletion.") + '\n';}
                     sessionObject.reallyDelete = false;
@@ -1736,9 +1725,6 @@ public class WebMail extends HttpServlet {
             }
         } else if (buttonPressed(request, CLEAR)) {sessionObject.reallyDelete = false;}
 
-        sessionObject.markAll = buttonPressed(request, MARKALL);
-        sessionObject.clear = buttonPressed(request, CLEAR);
-        sessionObject.invert = buttonPressed(request, INVERT);
         return page;
     }
 
@@ -1998,7 +1984,6 @@ public class WebMail extends HttpServlet {
         sessionObject = getSessionObject(httpSession);
 
         synchronized(sessionObject) {
-            sessionObject.pageChanged = false;
             sessionObject.themePath = "/themes/susimail/" + theme + '/';
             sessionObject.imgPath = sessionObject.themePath + "images/";
             sessionObject.isMobile = isMobile;

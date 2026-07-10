@@ -1328,27 +1328,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         // Deprecated - moved to routerconsole
     }
 
-    /** @return total number of non-fallback expl. + client tunnels */
-    private int countTunnelsPerPeer(ObjectCounterUnsafe<Hash> lc) {
-        List<TunnelPool> pools = new ArrayList<>();
-        listPools(pools);
-        int tunnelCount = 0;
-        for (TunnelPool tp : pools) {
-            for (TunnelInfo info : tp.listTunnels()) {
-                if (info.getLength() > 1) {
-                    tunnelCount++;
-                    for (int j = 0; j < info.getLength(); j++) {
-                        Hash peer = info.getPeer(j);
-                        if (!_context.routerHash().equals(peer)) {
-                            lc.increment(peer);
-                        }
-                    }
-                }
-            }
-        }
-        return tunnelCount;
-    }
-
     /**
      * Count tunnels and peers separately for exploratory or client pools.
      * @param lc object counter to store peer counts
