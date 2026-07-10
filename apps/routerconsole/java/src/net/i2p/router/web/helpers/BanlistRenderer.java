@@ -360,35 +360,33 @@ class BanlistRenderer {
             }
             // GeoIP lookup for country flag - try hash first, then IP
             String countryCode = "xx";
-            if (key != null) {
-                String geoCountry = _context.commSystem().getCountry(key);
-                if (geoCountry != null && !geoCountry.isEmpty() && !"xx".equals(geoCountry)) {
-                    countryCode = geoCountry.toLowerCase();
+            String geoCountry = _context.commSystem().getCountry(key);
+            if (geoCountry != null && !geoCountry.isEmpty() && !"xx".equals(geoCountry)) {
+                countryCode = geoCountry.toLowerCase();
+            }
+            // Fallback to IP lookup if hash lookup failed or returned "xx"
+            if (("xx".equals(countryCode) || countryCode.isEmpty()) && ip != null && !ip.isEmpty()) {
+                // Check if ipPort was actually in the map (for debugging)
+                String ipPortDebug = ipMap.get(key.toBase64());
+                if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(net.i2p.util.Log.DEBUG)) {
+                    _context.logManager().getLog(BanlistRenderer.class).debug(
+                        "GeoIP lookup for hash " + key.toBase64().substring(0, 8) +
+                        ": ipPort=" + ipPortDebug + ", extractedIP=" + ip +
+                        ", ipFromMap=" + (ipMap.get(key.toBase64()) != null ? "yes" : "no"));
+                }
+                // Queue the IP for GeoIP lookup if not already in database
+                byte[] geoIpBytes = Addresses.getIPOnly(ip);
+                if (geoIpBytes != null) {
+                    _context.commSystem().queueLookup(geoIpBytes);
+                }
+                String ipGeoCountry = _context.commSystem().getCountry(ip);
+                if (ipGeoCountry != null && !ipGeoCountry.isEmpty() && !"xx".equals(ipGeoCountry)) {
+                    countryCode = ipGeoCountry.toLowerCase();
+                } else if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(net.i2p.util.Log.DEBUG)) {
+                    _context.logManager().getLog(BanlistRenderer.class).debug(
+                        "GeoIP lookup failed for IP: " + ip + ", geoCountry=" + ipGeoCountry);
                 }
             }
-             // Fallback to IP lookup if hash lookup failed or returned "xx"
-             if (("xx".equals(countryCode) || countryCode.isEmpty()) && ip != null && !ip.isEmpty()) {
-                  // Check if ipPort was actually in the map (for debugging)
-                  String ipPortDebug = ipMap.get(key != null ? key.toBase64() : "");
-                  if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(net.i2p.util.Log.DEBUG)) {
-                      _context.logManager().getLog(BanlistRenderer.class).debug(
-                          "GeoIP lookup for hash " + (key != null ? key.toBase64().substring(0, 8) : "null") +
-                          ": ipPort=" + ipPortDebug + ", extractedIP=" + ip +
-                          ", ipFromMap=" + (ipMap.get(key != null ? key.toBase64() : "") != null ? "yes" : "no"));
-                  }
-                  // Queue the IP for GeoIP lookup if not already in database
-                  byte[] geoIpBytes = Addresses.getIPOnly(ip);
-                  if (geoIpBytes != null) {
-                      _context.commSystem().queueLookup(geoIpBytes);
-                  }
-                  String geoCountry = _context.commSystem().getCountry(ip);
-                  if (geoCountry != null && !geoCountry.isEmpty() && !"xx".equals(geoCountry)) {
-                      countryCode = geoCountry.toLowerCase();
-                  } else if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(net.i2p.util.Log.DEBUG)) {
-                      _context.logManager().getLog(BanlistRenderer.class).debug(
-                          "GeoIP lookup failed for IP: " + ip + ", geoCountry=" + geoCountry);
-                  }
-             }
             // Final fallback to xx if unknown
             if ("unknown".equals(countryCode)) {
                 countryCode = "xx";
@@ -402,7 +400,7 @@ class BanlistRenderer {
                .append("<img width=28 height=21 title=\"").append(countryName)
                .append("\" src=\"/flags.jsp?c=").append(countryCode).append("\">")
                .append("</td><td class=hash>")
-               .append(key != null ? "<span class=b64>" + key.toBase64() + "</span>" : "")
+               .append("<span class=b64>").append(key.toBase64()).append("</span>")
                .append("</td><td class=routerversion>").append(routerVersion != null ? routerVersion : "")
                .append("</td><td class=ip>")
                .append(ip != null ? ip : "")

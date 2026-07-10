@@ -836,7 +836,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double obsVal = Double.NaN;
             try {
                 obsVal = getObservedStat(null);
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                if (_log.shouldDebug()) _log.debug(_name + " snapshot stat unavailable", e);
+            }
             return new ParamSnapshot(_name, _description, _subsystem, getCurrentValue(),
                                      _defaultValue, _min, _max, _step, _autoTuning,
                                      _statName, obsVal, vh, sh);
