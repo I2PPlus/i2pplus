@@ -1449,7 +1449,7 @@ public class UDPTransport extends TransportImpl {
                                          + ourPort
                                          + "\n* Check NAT/firewall configuration, the IANA recommended dynamic outside port range is 49152-65535");
             }
-            _context.banlist().banlistRouter(from, "Reported our IP address or port as invalid", STYLE);
+            _context.banlist().banlistRouter(from, "Reported our IP/port as invalid", STYLE);
             _banLogger.logBan(from, _context, "Reported our IP/port as invalid", 4*60*60*1000L);
             return;
         }
