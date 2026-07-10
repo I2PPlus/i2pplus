@@ -162,10 +162,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private static final int MLKEM_PRECALC_MAX = Math.max(4096, 64 * MLKEM_FACTOR);
     /** X25519/EDH precalc — each pair ~64 bytes, scale with cores and memory */
     private static final int XDH_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
-    private static final int XDH_PRECALC_MIN = Math.max(128, 8 * XDH_FACTOR);
-    private static final int XDH_PRECALC_MAX = Math.max(16384, 1024 * XDH_FACTOR);
-    private static final int EDH_PRECALC_MIN = Math.max(64, 16 * XDH_FACTOR);
-    private static final int EDH_PRECALC_MAX = Math.max(8192, 512 * XDH_FACTOR);
+    private static final int XDH_PRECALC_MIN = Math.max(256, 128 * XDH_FACTOR);
+    private static final int XDH_PRECALC_MAX = Math.max(32768, 2048 * XDH_FACTOR);
+    private static final int EDH_PRECALC_MIN = Math.max(128, 64 * XDH_FACTOR);
+    private static final int EDH_PRECALC_MAX = Math.max(16384, 1024 * XDH_FACTOR);
 
     /**
      * Compute a system-scaled value: base * factor, bounded by min and max.
@@ -538,7 +538,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         };
         String[][] metrics = {
             { "jobQueue.jobLag" },
-            { "tunnel.buildSuccessRate", "tunnel.concurrentBuilds" },
+            { "tunnel.buildSuccessRate" },
             { "transport.sendProcessingTime", "tunnel.participating InBps" },
             { "netDb.lookupsMatched / netDb.lookupsHandled" },
             { "streaming.connSuccessLifetime" },
@@ -4873,7 +4873,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("netdb.searchLimit", "NetDB peers per search",
                   SUB_NETDB,
 
-                  8, 512, 2, "transport.sendProcessingTime", _context);
+                  8, 20, 1, "transport.sendProcessingTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -4881,7 +4881,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected int getRuntimeValue() {
-            return _context.getProperty("netdb.searchLimit", 24);
+            return _context.getProperty("netdb.searchLimit", 16);
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -4896,9 +4896,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, network latency proxy)
             // Cross-refs: netDb.lookupsMatched (match events), client.leaseSetFoundRemoteTime, jobLag (CPU)
-            // Note: lookupsMatched is an event-count stat (addRateData(1)) — each matched
-            //       lookup fires once. getAverageValue() returns 1.0 always, so use
-            //       getAdditionalEventCount() for the raw count; treat any matches as "healthy".
             double matchCount = getAdditionalEventCount(_context, "netDb.lookupsMatched");
             double leaseTime = getAdditionalStat(_context, "client.leaseSetFoundRemoteTime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -4908,16 +4905,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean hasMatches = !Double.isNaN(matchCount) && matchCount > 0;
             boolean lsSlow = !Double.isNaN(leaseTime) && leaseTime > 500;
 
-            // Slow network + no matches = increase search limit (peers need more probes)
-            if (networkSlow && !hasMatches && !systemBusy)
-                return Math.min(_max, current + _step);
+            // No matches = lookups are failing, shrink limit to reduce load
+            if (!hasMatches && !systemBusy)
+                return Math.max(_min, current - _step);
 
             // Fast network + matches present = decrease limit (searches succeed with fewer peers)
             if (!networkSlow && hasMatches && !lsSlow)
                 return Math.max(_min, current - _step);
 
-            // Slow LS lookups = network congested, increase search limit
-            if (lsSlow && !systemBusy)
+            // Slow LS lookups + matches present = increase limit slightly
+            if (lsSlow && hasMatches && !systemBusy)
                 return Math.min(_max, current + _step);
 
             return current;
@@ -4956,10 +4953,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, network latency proxy)
-            // Cross-refs: netDb.lookupsMatched (match events), client.leaseSetFoundRemoteTime,
-            //             client.requestLeaseSetSuccess/Dropped (LS health), jobLag (CPU)
-            // Note: lookupsMatched is an event-count stat (addRateData(1));
-            //       use getAdditionalEventCount() for the raw count.
             double matchCount = getAdditionalEventCount(_context, "netDb.lookupsMatched");
             double leaseTime = getAdditionalStat(_context, "client.leaseSetFoundRemoteTime");
             double lsDropped = getAdditionalStat(_context, "client.requestLeaseSetDropped");
@@ -4971,17 +4964,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean lsSlow = !Double.isNaN(leaseTime) && leaseTime > 500;
             boolean lsUnhealthy = !Double.isNaN(lsDropped) && lsDropped > 0;
 
-            // Slow network + no matches + CPU headroom = increase concurrency
-            if (networkSlow && !hasMatches && !systemBusy && !lsUnhealthy)
-                return Math.min(_max, current + 1);
-
-            // Slow LS lookups = increase concurrency (more parallel probes)
-            if (lsSlow && !systemBusy && !lsUnhealthy)
-                return Math.min(_max, current + 1);
+            // No matches = lookups failing, pull back concurrency
+            if (!hasMatches && !systemBusy)
+                return Math.max(_min, current - 1);
 
             // LS requests getting dropped = too much concurrency, pull back
             if (lsUnhealthy)
                 return Math.max(_min, current - 1);
+
+            // Slow LS lookups + matches present = increase concurrency slightly
+            if (lsSlow && hasMatches && !systemBusy && !lsUnhealthy)
+                return Math.min(_max, current + 1);
 
             // Fast network + matches + healthy LS = decrease concurrency (not needed)
             if (!networkSlow && hasMatches && !lsSlow && !lsUnhealthy)
@@ -5001,7 +4994,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("netdb.singleSearchTime", "NetDB search timeout (ms)",
                   SUB_NETDB,
 
-                  500, 60000, 500, "transport.sendProcessingTime", _context);
+                  500, 10000, 250, "transport.sendProcessingTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -5009,7 +5002,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected int getRuntimeValue() {
-            return _context.getProperty("netdb.singleSearchTime", 6000);
+            return _context.getProperty("netdb.singleSearchTime", 3000);
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -5023,10 +5016,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, network latency proxy)
-            // Cross-refs: netDb.lookupsMatched (match events), netDb.successTime (actual lookup time),
-            //             client.leaseSetFoundRemoteTime (client LS lookup), jobLag (CPU)
-            // Note: lookupsMatched is an event-count stat (addRateData(1));
-            //       use getAdditionalEventCount() for the raw count.
             double matchCount = getAdditionalEventCount(_context, "netDb.lookupsMatched");
             double netdbTime = getAdditionalStat(_context, "netDb.successTime");
             double leaseTime = getAdditionalStat(_context, "client.leaseSetFoundRemoteTime");
@@ -5035,14 +5024,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
             boolean hasMatches = !Double.isNaN(matchCount) && matchCount > 0;
 
-            // netDb.successTime gives actual lookup latency — replace crude observed > 300 proxy
             boolean searchSlow = !Double.isNaN(netdbTime) && netdbTime > 300;
-            // Client LS lookups confirm slow NetDB — use the better of the two signals
             if (!searchSlow)
                 searchSlow = !Double.isNaN(leaseTime) && leaseTime > 300;
 
-            // Slow lookups + no matches = increase timeout (peers need more time)
-            if (searchSlow && !hasMatches && !systemBusy)
+            // No matches = lookups failing, shorten timeout to fail fast
+            if (!hasMatches && !systemBusy)
+                return Math.max(_min, current - _step);
+
+            // Slow lookups + matches present = increase timeout slightly
+            if (searchSlow && hasMatches && !systemBusy)
                 return Math.min(_max, current + _step);
 
             // Fast lookups + matches present = decrease timeout (searches complete quickly)
@@ -7369,12 +7360,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Frequent empty queue = key generation bottleneck
          */
         private double scoreCryptoPressure() {
-            double used = getEventCount("crypto.EDHUsed");
-            double empty = getEventCount("crypto.XDHEmpty");
-            if (used <= 0) return 1.0;
-            double emptyRatio = empty / used;
+            // Score both DH key pools independently, take the worse score
+            double edhEmpty = getEventCount("crypto.EDHEmpty");
+            double edhUsed = getEventCount("crypto.EDHUsed");
+            double xdhEmpty = getEventCount("crypto.XDHEmpty");
+            double xdhUsed = getEventCount("crypto.XDHUsed");
+            double scoreEdh = (edhUsed > 0) ? clamp(1.0 - ((edhEmpty / edhUsed) / 0.3)) : 1.0;
+            double scoreXdh = (xdhUsed > 0) ? clamp(1.0 - ((xdhEmpty / xdhUsed) / 0.3)) : 1.0;
             // 0% empty → 1.0, >30% empty → 0.0
-            return clamp(1.0 - (emptyRatio / 0.3));
+            return Math.min(scoreEdh, scoreXdh);
         }
 
         /**
@@ -7618,7 +7612,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestThrottleBurstParam extends BaseParam {
         RequestThrottleBurstParam() {
             super("i2p.tunnel.requestThrottle.burst1sThreshold", "Build request burst threshold",
-                  SUB_TUNNEL, 1, 100, 1, "tunnel.throttleParticipatingReject", _context);
+                  SUB_TUNNEL, 5, 100, 1, "tunnel.throttleParticipatingReject", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setRequestBurst1sThreshold(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestBurst1sThreshold(); }

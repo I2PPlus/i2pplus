@@ -124,6 +124,12 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.maxLimit", "Request Throttle Max");
         DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.percentLimit", "Request Throttle Percent");
         DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.burst1sThreshold", "Request Throttle Burst Threshold");
+        DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.highLoadLagMs", "High-Load Lag Threshold");
+        DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.highLoadCpuPct", "High-Load CPU Threshold");
+        DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.moderateLoadLagMs", "Moderate-Load Lag Threshold");
+        DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.moderateLoadCpuPct", "Moderate-Load CPU Threshold");
+        DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.sustainedHighLoadMs", "Sustained High-Load Window");
+        DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.sustainedModerateLoadMs", "Sustained Moderate-Load Window");
         DISPLAY_NAMES.put("tunnel.pool.failureThreshold", "Pool Build Failure Threshold");
         DISPLAY_NAMES.put("tunnel.pool.backoffMs", "Pool Build Backoff");
     }
@@ -223,6 +229,12 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.maxLimit", "Max inbound requests accepted from any peer.");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.percentLimit", "Max share of tunnel requests from a single peer.");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.burst1sThreshold", "Burst threshold: requests per second before a ban.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.highLoadLagMs", "Job queue lag triggering high-load request gating (ms).");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.highLoadCpuPct", "System load percent triggering high-load request gating.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.moderateLoadLagMs", "Job queue lag triggering moderate-load peer disconnect (ms).");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.moderateLoadCpuPct", "System load percent triggering moderate-load disconnect.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.sustainedHighLoadMs", "Duration high load must persist before gating requests (ms).");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.sustainedModerateLoadMs", "Duration moderate load must persist before disconnecting peers (ms).");
         PARAM_DESCRIPTIONS.put("tunnel.pool.failureThreshold", "Consecutive failures before pool backoff.");
         PARAM_DESCRIPTIONS.put("tunnel.pool.backoffMs", "Cooldown duration after pool failure threshold, in ms.");
     }
