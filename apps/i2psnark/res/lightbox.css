@@ -10,7 +10,7 @@ body.lightbox{height:100%;overflow:hidden}
 #lb.active{width:100%;height:100vh;justify-content:center;align-items:center;position:fixed;left:0;top:0;z-index:999999;background:#000e;backdrop-filter:blur(3px) saturate(.3);cursor:crosshair}
 #lb button,#lb button::before,#lb button::after{box-shadow:none;background:none}
 #lb-close{display:none}
-#lb>img{margin:0 auto;padding:8px;position:absolute;box-sizing;border-box;border:10px solid #fff;border-radius:10px;background:#fff;animation:fadeAndBlur .1s ease-in-out .4s both}
+#lb>img{margin:0 auto;padding:8px;position:absolute;box-sizing:border-box;border:10px solid #fff;border-radius:10px;background:#fff;animation:fadeAndBlur .1s ease-in-out .4s both}
 .iframed #lb>img{max-height:75%!important}
 #lb-next,#lb-prev{width:200px;max-width:6%;max-height:250px;position:absolute;text-align:center;font-size:0;border-left:0;border-right:0;background:none;cursor:pointer;opacity:.8;filter:drop-shadow(0 .2px #930);animation:fadeAndBlur 0s ease-in-out 2s both}
 .iframed #lb-next,.iframed #lb-prev{top:calc(50% - 70px)}
