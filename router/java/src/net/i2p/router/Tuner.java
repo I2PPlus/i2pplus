@@ -157,13 +157,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /** ML-KEM precalc min/max — each pair ~3.5KB, scale with cores and memory */
     private static final int MLKEM_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
     private static final int MLKEM_PRECALC_MIN = Math.max(512, 4 * MLKEM_FACTOR);
-    private static final int MLKEM_PRECALC_MAX = Math.max(2048, 96 * MLKEM_FACTOR);
+    private static final int MLKEM_PRECALC_MAX = Math.max(4096, 128 * MLKEM_FACTOR);
     /** X25519/EDH precalc — each pair ~64 bytes, scale with cores and memory */
     private static final int XDH_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
     private static final int XDH_PRECALC_MIN = Math.max(128, 8 * XDH_FACTOR);
-    private static final int XDH_PRECALC_MAX = Math.max(1024, 128 * XDH_FACTOR);
+    private static final int XDH_PRECALC_MAX = Math.max(2048, 128 * XDH_FACTOR);
     private static final int EDH_PRECALC_MIN = Math.max(64, 16 * XDH_FACTOR);
-    private static final int EDH_PRECALC_MAX = Math.max(256, 256 * XDH_FACTOR);
+    private static final int EDH_PRECALC_MAX = Math.max(512, 256 * XDH_FACTOR);
 
     /**
      * Compute a system-scaled value: base * factor, bounded by min and max.
@@ -3900,7 +3900,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("router.buildHandlerMaxQueue", "Tunnel build handler queue",
                   SUB_ROUTER,
 
-                  16, 2048, 32, "jobQueue.jobLag", _context);
+                  64, 4096, 32, "jobQueue.jobLag", _context);
         }
 
         protected void applyValue(int value) {
@@ -4599,7 +4599,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("netdb.searchLimit", "NetDB peers per search",
                   SUB_NETDB,
 
-                  1, 256, 2, "transport.sendProcessingTime", _context);
+                  8, 512, 2, "transport.sendProcessingTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -4660,7 +4660,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("netdb.maxConcurrent", "NetDB max concurrent searches",
                   SUB_NETDB,
 
-                  1, 128, 1, "transport.sendProcessingTime", _context);
+                  4, 256, 1, "transport.sendProcessingTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -6049,7 +6049,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("udp.peer.maxRTO", "Max UDP RTO (ms)",
                   SUB_TRANSPORT,
 
-                  10000, 120000, 1000, "udp.sendConfirmTime", _context);
+                  5000, 30000, 1000, "udp.sendConfirmTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -6097,7 +6097,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("udp.peer.maxSendWindow", "Max UDP send window (bytes)",
                   SUB_TRANSPORT,
 
-                  32768, 1048576, 8192, "udp.avgSendWindow", _context);
+                  32768, 2097152, 8192, "udp.avgSendWindow", _context);
         }
 
         protected void applyValue(int value) {
