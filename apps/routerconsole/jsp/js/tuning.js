@@ -93,7 +93,7 @@ function restoreTuningState() {
  * @returns {void}
  */
 document.addEventListener("DOMContentLoaded", function() {
-  refreshElements(["td.value", "td.history", "#health", ".subsystem-rings"], "/tuning", 5000);
+  refreshElements(["td.value", "td.history", "#health", "#tuningstats"], "/tuning", 5000);
   initTuningToggles();
   setupToggles("thead.section", "thead.section + tbody", "table-row-group", true, false);
   restoreTuningState();

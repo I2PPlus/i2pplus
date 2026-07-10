@@ -7397,7 +7397,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class ParticipatingThrottleMinParam extends BaseParam {
         ParticipatingThrottleMinParam() {
             super("i2p.tunnel.participatingThrottle.minLimit", "Transit throttle min (tunnels)",
-                  SUB_TUNNEL, 1, 500, 4, "tunnel.buildSuccessRate", _context);
+                  SUB_TUNNEL, 20, 500, 4, "tunnel.buildSuccessRate", _context);
         }
         protected void applyValue(int value) { ParticipatingThrottler.setParticipatingMinLimit(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getParticipatingMinLimit(); }
@@ -7419,15 +7419,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
             boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
-            // Throttle accept ratio: high = spare capacity, low = aggressive throttle
             double totalThrottle = (!Double.isNaN(accept) && !Double.isNaN(reject) && !Double.isNaN(drop))
                 ? accept + reject + drop : Double.NaN;
             double acceptRatio = !Double.isNaN(totalThrottle) && totalThrottle > 0
                 ? accept / totalThrottle : Double.NaN;
             boolean tightThrottle = !Double.isNaN(acceptRatio) && acceptRatio < 0.3;
-            boolean looseThrottle = !Double.isNaN(acceptRatio) && acceptRatio > 0.8;
-            if (hasCapacity && !tightThrottle) return Math.min(_max, current + _step);
-            if (stressed && !looseThrottle) return Math.max(_min, current - _step);
+            // Don't decrease when throttle is already tight — that's the feedback loop
+            if (tightThrottle) return Math.min(_max, current + _step);
+            if (hasCapacity) return Math.min(_max, current + _step);
+            if (stressed) return Math.max(_min, current - _step);
             return current;
         }
     }
@@ -7438,7 +7438,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class ParticipatingThrottleMaxParam extends BaseParam {
         ParticipatingThrottleMaxParam() {
             super("i2p.tunnel.participatingThrottle.maxLimit", "Transit throttle max (tunnels)",
-                  SUB_TUNNEL, 10, 1000, 8, "tunnel.buildSuccessRate", _context);
+                  SUB_TUNNEL, 50, 1000, 8, "tunnel.buildSuccessRate", _context);
         }
         protected void applyValue(int value) { ParticipatingThrottler.setParticipatingMaxLimit(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getParticipatingMaxLimit(); }
@@ -7452,8 +7452,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            // Note: throttleParticipating{Accept,Reject,Drop} are event-count stats
-            //       (addRateData(..., 1)); use getAdditionalEventCount() for raw counts.
             double accept = getAdditionalEventCount(_context, "tunnel.throttleParticipatingAccept");
             double reject = getAdditionalEventCount(_context, "tunnel.throttleParticipatingReject");
             double drop = getAdditionalEventCount(_context, "tunnel.throttleParticipatingDrop");
@@ -7465,9 +7463,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double acceptRatio = !Double.isNaN(totalThrottle) && totalThrottle > 0
                 ? accept / totalThrottle : Double.NaN;
             boolean tightThrottle = !Double.isNaN(acceptRatio) && acceptRatio < 0.3;
-            boolean looseThrottle = !Double.isNaN(acceptRatio) && acceptRatio > 0.8;
-            if (hasCapacity && !tightThrottle) return Math.min(_max, current + _step);
-            if (stressed && !looseThrottle) return Math.max(_min, current - _step);
+            if (tightThrottle) return Math.min(_max, current + _step);
+            if (hasCapacity) return Math.min(_max, current + _step);
+            if (stressed) return Math.max(_min, current - _step);
             return current;
         }
     }
@@ -7478,7 +7476,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class ParticipatingThrottlePctParam extends BaseParam {
         ParticipatingThrottlePctParam() {
             super("i2p.tunnel.participatingThrottle.percentLimit", "Transit throttle target (%)",
-                  SUB_TUNNEL, 1, 100, 1, "tunnel.buildSuccessRate", _context);
+                  SUB_TUNNEL, 5, 100, 1, "tunnel.buildSuccessRate", _context);
         }
         protected void applyValue(int value) { ParticipatingThrottler.setParticipatingPctLimit(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getParticipatingPctLimit(); }
@@ -7492,8 +7490,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            // Note: throttleParticipating{Accept,Reject,Drop} are event-count stats
-            //       (addRateData(..., 1)); use getAdditionalEventCount() for raw counts.
             double accept = getAdditionalEventCount(_context, "tunnel.throttleParticipatingAccept");
             double reject = getAdditionalEventCount(_context, "tunnel.throttleParticipatingReject");
             double drop = getAdditionalEventCount(_context, "tunnel.throttleParticipatingDrop");
@@ -7505,9 +7501,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double acceptRatio = !Double.isNaN(totalThrottle) && totalThrottle > 0
                 ? accept / totalThrottle : Double.NaN;
             boolean tightThrottle = !Double.isNaN(acceptRatio) && acceptRatio < 0.3;
-            boolean looseThrottle = !Double.isNaN(acceptRatio) && acceptRatio > 0.8;
-            if (hasCapacity && !tightThrottle) return Math.min(_max, current + _step);
-            if (stressed && !looseThrottle) return Math.max(_min, current - _step);
+            if (tightThrottle) return Math.min(_max, current + _step);
+            if (hasCapacity) return Math.min(_max, current + _step);
+            if (stressed) return Math.max(_min, current - _step);
             return current;
         }
     }
