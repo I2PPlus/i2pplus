@@ -312,6 +312,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new NtcpReaderThreadsParam());
         _params.add(new NtcpSendFinisherThreadsParam());
         _params.add(new NtcpWriterThreadsParam());
+        _params.add(new NtcpEstablishTimeParam());
         _params.add(new ObEstablishTimeParam());
         _params.add(new RdnsPoolSizeParam());
         _params.add(new SendPoolCapacityParam());
@@ -1569,6 +1570,61 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return current;
 
             if (target < current && (hasEstablishFailures || highRTT || congested))
+                return current;
+
+            return clamp(current, target, _step);
+        }
+    }
+
+    /**
+     * Tunes NTCP ESTABLISH_TIMEOUT based on outbound establish time stat.
+     * Single shared timeout for both inbound and outbound NTCP2 handshakes.
+     * Primary signal: {@code ntcp.outboundEstablishTime}.
+     *
+     * @since 0.9.70+
+     */
+    private class NtcpEstablishTimeParam extends BaseParam {
+
+        NtcpEstablishTimeParam() {
+            super("NTCP_ESTABLISH_TIMEOUT", "NTCP establish timeout (ms)",
+                  SUB_TRANSPORT,
+                  1500, 5000, 250, "ntcp.outboundEstablishTime", _context);
+        }
+
+        protected void applyValue(int value) {
+            NTCPTransport.setEstablishTimeout(value);
+        }
+
+        protected int getRuntimeValue() {
+            return NTCPTransport.getEstablishTimeout();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null)
+                return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0)
+                return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double ibTime = getAdditionalStat(_context, "ntcp.inboundEstablishTime");
+            double sendFailed = getAdditionalStat(_context, "ntcp.outboundEstablishFailed");
+
+            boolean hasFailures = !Double.isNaN(sendFailed) && sendFailed > 0;
+            double worstObserved = observed;
+            if (!Double.isNaN(ibTime) && ibTime > worstObserved)
+                worstObserved = ibTime;
+
+            int target = Math.max(1500, (int) (worstObserved * 4));
+
+            if (current >= target * 0.5 && current <= target * 1.5 && !hasFailures)
+                return current;
+
+            if (target < current && hasFailures)
                 return current;
 
             return clamp(current, target, _step);
@@ -3280,7 +3336,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("ntcp.sendFinisher.maxThreads", "Max NTCP send finisher threads",
                   SUB_TRANSPORT,
 
-                  1, 64, 1, "ntcp.sendTime", _context);
+                  1, 16, 1, "ntcp.sendTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -4036,7 +4092,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("router.buildHandlerMaxQueue", "Tunnel build handler queue",
                   SUB_ROUTER,
 
-                  64, 4096, 32, "jobQueue.jobLag", _context);
+                  64, 2048, 32, "jobQueue.jobLag", _context);
         }
 
         protected void applyValue(int value) {
@@ -4796,7 +4852,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("netdb.maxConcurrent", "NetDB max concurrent searches",
                   SUB_NETDB,
 
-                  4, 256, 1, "transport.sendProcessingTime", _context);
+                  4, 64, 1, "transport.sendProcessingTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -5009,7 +5065,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("profileOrganizer.maxProfiles", "Max peer profiles in RAM",
                   SUB_PEER,
 
-                  200, 8000, 200, "peer.activeProfileCount", _context);
+                  800, Math.min(ProfileOrganizer.ABSOLUTE_MAX_PROFILES,
+                      Math.max(ProfileOrganizer.MIN_MAX_PROFILES,
+                          (int) (SystemVersion.getMaxMemory() / (128 * 1024)))),
+                  200, "peer.activeProfileCount", _context);
         }
 
         protected void applyValue(int value) {
@@ -5922,7 +5981,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("udp.peer.concurrentMaxMessages", "Max UDP concurrent messages",
                   SUB_TRANSPORT,
 
-                  64, Math.max(256, Math.min(4096,
+                  128, Math.max(256, Math.min(4096,
                       (int) (SystemVersion.getMaxMemory() / (8 * 1024 * 1024)))),
                   16, "udp.allowConcurrentActive", _context);
         }
@@ -6202,7 +6261,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("udp.peer.maxRTO", "Max UDP RTO (ms)",
                   SUB_TRANSPORT,
 
-                  5000, 30000, 1000, "udp.sendConfirmTime", _context);
+                  10000, 120000, 1000, "udp.sendConfirmTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -6250,7 +6309,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("udp.peer.maxSendWindow", "Max UDP send window (bytes)",
                   SUB_TRANSPORT,
 
-                  32768, 2097152, 8192, "udp.avgSendWindow", _context);
+                  32768, 1048576, 8192, "udp.avgSendWindow", _context);
         }
 
         protected void applyValue(int value) {
@@ -6390,7 +6449,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2cp.internalQueueSize", "I2CP internal queue (messages)",
                   SUB_I2CP,
 
-                  128, 2048, 32, "udp.sendConfirmTime", _context);
+                  128, 1024, 32, "udp.sendConfirmTime", _context);
         }
 
         protected void applyValue(int value) {

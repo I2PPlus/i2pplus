@@ -40,7 +40,7 @@ class MessageReceiver {
     private final AtomicInteger _processingCount = new AtomicInteger();
     private final CopyOnWriteArrayList<Runner> _runners = new CopyOnWriteArrayList<>();
     private static final long POISON_IMS = -99999999999L;
-    private static final int MIN_THREADS = 1;
+    private static final int MIN_THREADS = 2;
     private static final int MAX_THREADS = 16;
     private static final AtomicInteger _threadNum = new AtomicInteger();
 

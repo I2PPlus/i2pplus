@@ -271,16 +271,16 @@ public class UDPTransport extends TransportImpl {
 
     /** Get the outbound establish timeout in ms */
     public static long getMaxObEstablishTime() { return EstablishmentManager.MAX_OB_ESTABLISH_TIME.get(); }
-    /** Set the outbound establish timeout, bounded 1000-5000ms */
+    /** Set the outbound establish timeout, bounded 1500-5000ms */
     public static void setMaxObEstablishTime(long ms) {
-        EstablishmentManager.MAX_OB_ESTABLISH_TIME.set(Math.max(1000, Math.min(5000, ms)));
+        EstablishmentManager.MAX_OB_ESTABLISH_TIME.set(Math.max(1500, Math.min(5000, ms)));
     }
 
     /** Get the inbound establish timeout in ms */
     public static long getMaxIbEstablishTime() { return EstablishmentManager.MAX_IB_ESTABLISH_TIME.get(); }
-    /** Set the inbound establish timeout, bounded 1000-5000ms */
+    /** Set the inbound establish timeout, bounded 1500-5000ms */
     public static void setMaxIbEstablishTime(long ms) {
-        EstablishmentManager.MAX_IB_ESTABLISH_TIME.set(Math.max(1000, Math.min(5000, ms)));
+        EstablishmentManager.MAX_IB_ESTABLISH_TIME.set(Math.max(1500, Math.min(5000, ms)));
     }
 
     /** Get the data message timeout in ms */

@@ -1443,9 +1443,10 @@ public class NTCPConnection implements Closeable {
      * @since 0.9.36
      */
     synchronized void finishOutboundEstablishment(CipherState sender, CipherState receiver,
-                                                  byte[] sip_ab, byte[] sip_ba, long clockSkew) {
+                                                   byte[] sip_ab, byte[] sip_ba, long clockSkew) {
         if (isBanned()) {return;}
         finishEstablishment(sender, receiver, sip_ab, sip_ba, clockSkew);
+        _context.statManager().addRateData("ntcp.outboundEstablishTime", _establishedOn - _created);
         RouterIdentity remote = getRemotePeer();
         if (remote != null) {
             _transport.markReachable(remote.calculateHash(), false);
@@ -1474,6 +1475,7 @@ public class NTCPConnection implements Closeable {
                                                  NTCP2Options hisPadding) {
         if (isBanned()) {return;}
         finishEstablishment(sender, receiver, sip_ba, sip_ab, clockSkew);
+        _context.statManager().addRateData("ntcp.inboundEstablishTime", _establishedOn - _created);
         if (hisPadding != null) {
             _paddingConfig = OUR_PADDING.merge(hisPadding);
             if (_log.shouldDebug())

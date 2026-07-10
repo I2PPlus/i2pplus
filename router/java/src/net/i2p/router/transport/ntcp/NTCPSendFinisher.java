@@ -52,7 +52,7 @@ class NTCPSendFinisher {
      * @since 0.9.70+
      */
     public static void setMaxThreads(int threads) {
-        _maxThreads = Math.max(1, Math.min(16, threads));
+        _maxThreads = Math.max(2, Math.min(16, threads));
     }
 
     /**

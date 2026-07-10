@@ -240,6 +240,8 @@ public class NTCPTransport extends TransportImpl {
         _context.statManager().createRateStat("ntcp.wantsQueuedWrite", "Number of wanted NTCP QueuedWrite events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.writeError", "Number of NTCP write errors", "Transport [NTCP]", RATES);
         _context.statManager().createRequiredRateStat("ntcp.writeQueueFull", "NTCP write queue full (frames dropped)", "Transport [NTCP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        _context.statManager().createRequiredRateStat("ntcp.outboundEstablishTime", "Time to establish new outbound NTCP connection (ms)", "Transport [NTCP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        _context.statManager().createRequiredRateStat("ntcp.inboundEstablishTime", "Time to establish new inbound NTCP connection (ms)", "Transport [NTCP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
 
         _endpoints = new HashSet<>(4);
         _establishing = new ConcurrentHashSet<>(64);
@@ -1260,9 +1262,17 @@ public class NTCPTransport extends TransportImpl {
     /**
      * how long from initial connection attempt (accept() or connect()) until
      * the con must be established to avoid premature close()ing.
-     * Configurable via i2p.transport.ntcp.establishTimeout.
+     * Tuned to ~3-5x average establish time; the Tuner further adjusts this at runtime.
      */
-    static volatile int ESTABLISH_TIMEOUT = 8*1000;
+    static volatile int ESTABLISH_TIMEOUT = 5*1000;
+
+    /** Get the NTCP establish timeout in ms. @since 0.9.70+ */
+    public static int getEstablishTimeout() { return ESTABLISH_TIMEOUT; }
+
+    /** Set the NTCP establish timeout, bounded 1500-5000ms. @since 0.9.70+ */
+    public static void setEstablishTimeout(int ms) {
+        ESTABLISH_TIMEOUT = Math.max(1500, Math.min(5000, ms));
+    }
 
     /** add us to the establishment timeout process */
     void establishing(NTCPConnection con) {_establishing.add(con);}

@@ -74,7 +74,7 @@ class PacketHandler {
      * @since 0.9.70+
      */
     public static void setMaxHandlers(int handlers) {
-        _maxHandlers = Math.max(1, Math.min(16, handlers));
+        _maxHandlers = Math.max(2, Math.min(16, handlers));
     }
 
     /**

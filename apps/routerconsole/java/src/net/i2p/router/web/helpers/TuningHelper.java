@@ -36,6 +36,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("DATA_MESSAGE_TIMEOUT", "Data Message Timeout");
         DISPLAY_NAMES.put("MAX_OB_ESTABLISH_TIME", "Outbound Establish Timeout");
         DISPLAY_NAMES.put("MAX_IB_ESTABLISH_TIME", "Inbound Establish Timeout");
+        DISPLAY_NAMES.put("NTCP_ESTABLISH_TIMEOUT", "NTCP Establish Timeout");
         DISPLAY_NAMES.put("REQUEUE_TIME", "Tunnel Requeue Delay");
         DISPLAY_NAMES.put("REPLENISH_FREQUENCY", "Tunnel Replenish Frequency");
         DISPLAY_NAMES.put("SELECTOR_LOOP_DELAY", "Tunnel Selector Loop Delay");
@@ -134,6 +135,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("DATA_MESSAGE_TIMEOUT", "Time before a message is declared lost (ms).");
         PARAM_DESCRIPTIONS.put("MAX_OB_ESTABLISH_TIME", "Outbound SSU handshake timeout (ms).");
         PARAM_DESCRIPTIONS.put("MAX_IB_ESTABLISH_TIME", "Inbound SSU handshake timeout (ms).");
+        PARAM_DESCRIPTIONS.put("NTCP_ESTABLISH_TIMEOUT", "NTCP2 handshake timeout (ms).");
         PARAM_DESCRIPTIONS.put("REQUEUE_TIME", "Pumper idle wait before re-checking work (ms).");
         PARAM_DESCRIPTIONS.put("REPLENISH_FREQUENCY", "Bandwidth token refill interval (ms).");
         PARAM_DESCRIPTIONS.put("SELECTOR_LOOP_DELAY", "NTCP selector sleep between loops (ms).");

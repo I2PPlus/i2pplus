@@ -27,7 +27,7 @@ public class Writer {
     private final Set<NTCPConnection> _writeAfterLive;
     private final CopyOnWriteArrayList<Runner> _runners;
     private static volatile int _threadCount = SystemVersion.isSlow() ? 2 : Math.max(SystemVersion.getCores() / 2, 3);
-    private static final int MIN_THREADS = 1;
+    private static final int MIN_THREADS = 2;
     private static final int MAX_THREADS = 16;
     private static final AtomicInteger _threadNum = new AtomicInteger();
     /** Tracks how many runner threads are actively processing (not parked). */
