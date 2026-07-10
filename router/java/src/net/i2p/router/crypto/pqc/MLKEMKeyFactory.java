@@ -38,9 +38,10 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     private static final String PROP_MLKEM_PRECALC_MIN = "crypto.mlkem.precalc.min";
     private static final String PROP_MLKEM_PRECALC_MAX = "crypto.mlkem.precalc.max";
     private static final String PROP_MLKEM_PRECALC_DELAY = "crypto.mlkem.precalc.delay";
-    // MLKEM-768 pair is 1184 + 2400 = 3584 byte so keep the queue relatively small
-    private static final int DEFAULT_MLKEM_PRECALC_MIN = 4;
-    private static final int DEFAULT_MLKEM_PRECALC_MAX = 12;
+    // MLKEM-768 pair is ~3.5KB so even 1000 keys is <4MB.
+    // Scale up by factor (cores/memory) at construction time.
+    private static final int DEFAULT_MLKEM_PRECALC_MIN = 64;
+    private static final int DEFAULT_MLKEM_PRECALC_MAX = 256;
     private static final int DEFAULT_MLKEM_PRECALC_DELAY = 25;
 
     /**

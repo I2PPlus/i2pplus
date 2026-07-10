@@ -156,8 +156,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private static final int CORE_FACTOR = Math.max(1, CORES);
     /** ML-KEM precalc min/max — each pair ~3.5KB, scale with cores and memory */
     private static final int MLKEM_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
-    private static final int MLKEM_PRECALC_MIN = Math.max(512, 4 * MLKEM_FACTOR);
-    private static final int MLKEM_PRECALC_MAX = Math.max(4096, 128 * MLKEM_FACTOR);
+    private static final int MLKEM_PRECALC_MIN = Math.max(512, 8 * MLKEM_FACTOR);
+    private static final int MLKEM_PRECALC_MAX = Math.max(4096, 64 * MLKEM_FACTOR);
     /** X25519/EDH precalc — each pair ~64 bytes, scale with cores and memory */
     private static final int XDH_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
     private static final int XDH_PRECALC_MIN = Math.max(128, 8 * XDH_FACTOR);
@@ -2990,7 +2990,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
+            // Clamp to bounds first — config may have stale value beyond current range
+            int current = Math.min(Math.max(getRuntimeValue(), _min), _max);
             // observed = crypto.XDHUsed (key usage events/sec)
             // Cross-refs: crypto.XDHEmpty (empty pool events — the only trigger to grow),
             //             jobLag (CPU pressure), memory pressure, system load
@@ -3012,7 +3013,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return Math.min(_max, current + step);
             }
 
-            // Pool emptying under memory pressure = hold (can't grow, can't shrink)
+            // Pool emptying under memory pressure = hold
             if (poolEmptying)
                 return current;
 
@@ -3057,7 +3058,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
+            int current = Math.min(Math.max(getRuntimeValue(), _min), _max);
             // observed = crypto.EDHUsed (key usage events/sec)
             // Cross-refs: crypto.EDHEmpty (empty pool events — the only trigger to grow),
             //             jobLag, memory pressure, system load
@@ -3096,7 +3097,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("crypto.mlkem.precalcMin", "Min precomputed ML-KEM key pairs",
                   SUB_CRYPTO,
 
-                  MLKEM_PRECALC_MIN, MLKEM_PRECALC_MAX, 8, "crypto.MLKEMEmpty", _context);
+                  MLKEM_PRECALC_MIN, MLKEM_PRECALC_MAX, 64, "crypto.MLKEMEmpty", _context);
         }
 
         protected void applyValue(int value) {
@@ -3119,7 +3120,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
+            int current = Math.min(Math.max(getRuntimeValue(), _min), _max);
             // observed = crypto.MLKEMEmpty (queue empty events — the only trigger to grow)
             // Cross-refs: crypto.MLKEMUsed (key consumption rate), jobLag (CPU), memory pressure, system load
             // Note: MLKEMUsed is an event-count stat (addRateData(1));
