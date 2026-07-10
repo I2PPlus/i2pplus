@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.transport.udp.PeerState;
 import net.i2p.router.transport.Transport;
 import net.i2p.router.transport.TransportImpl;
@@ -312,6 +313,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new NtcpSendFinisherThreadsParam());
         _params.add(new NtcpWriterThreadsParam());
         _params.add(new ObEstablishTimeParam());
+        _params.add(new RdnsPoolSizeParam());
         _params.add(new SendPoolCapacityParam());
         _params.add(new UDPHandlerThreadsParam());
         _params.add(new UDPMessageReceiverThreadsParam());
@@ -1467,17 +1469,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
     }
 
-        /**
-         * Tunes MAX_OB_ESTABLISH_TIME based on outbound establish time stat.
-         * Target: ~3x observed average outbound establish time with floor.
-         */
+    /**
+     * Tunes MAX_OB_ESTABLISH_TIME based on outbound establish time stat.
+     * Target: ~4x observed average outbound establish time with floor.
+     */
     private class ObEstablishTimeParam extends BaseParam {
 
         ObEstablishTimeParam() {
             super("MAX_OB_ESTABLISH_TIME", "Outbound establish timeout (ms)",
                   SUB_TRANSPORT,
 
-                  3000, 30000, 500, "udp.outboundEstablishTime", _context);
+                  1500, 5000, 250, "udp.outboundEstablishTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -1500,25 +1502,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = udp.outboundEstablishTime (ms)
-            // Cross-refs: sendFailed (establish failures), udp.sendConfirmTime (actual RTT),
-            //             sendMessageFailureLifetime (congestion)
             double sendFailed = getAdditionalStat(_context, "udp.sendFailed");
             double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
 
             boolean hasEstablishFailures = !Double.isNaN(sendFailed) && sendFailed > 0;
-            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 20000;
-            boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
+            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 5000;
+            boolean congested = !Double.isNaN(failLifetime) && failLifetime > 5000;
 
-            // Target: 5x observed, but floor at 3000ms
-            int target = Math.max(3000, (int) (observed * 5));
+            int target = Math.max(1500, (int) (observed * 4));
 
-            // Dead zone: if current is already within 50% of target and no failures, hold
             if (current >= target * 0.5 && current <= target * 1.5 && !hasEstablishFailures)
                 return current;
 
-            // Never decrease when there are establish failures or network is slow
             if (target < current && (hasEstablishFailures || highRTT || congested))
                 return current;
 
@@ -1528,7 +1524,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Tunes MAX_IB_ESTABLISH_TIME based on inbound establish time stat.
-     * Target: ~3x observed average inbound establish time with floor.
+     * Target: ~4x observed average inbound establish time with floor.
      */
     private class IbEstablishTimeParam extends BaseParam {
 
@@ -1536,7 +1532,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("MAX_IB_ESTABLISH_TIME", "Inbound establish timeout (ms)",
                   SUB_TRANSPORT,
 
-                  3000, 20000, 500, "udp.inboundEstablishTime", _context);
+                  1500, 5000, 250, "udp.inboundEstablishTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -1559,19 +1555,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = udp.inboundEstablishTime (ms)
-            // Cross-refs: sendFailed (establish failures), udp.sendConfirmTime (actual RTT),
-            //             sendMessageFailureLifetime (congestion)
             double sendFailed = getAdditionalStat(_context, "udp.sendFailed");
             double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
 
             boolean hasEstablishFailures = !Double.isNaN(sendFailed) && sendFailed > 0;
-            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 20000;
-            boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
+            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 5000;
+            boolean congested = !Double.isNaN(failLifetime) && failLifetime > 5000;
 
-            // Target: 5x observed, but floor at 3000ms
-            int target = Math.max(3000, (int) (observed * 5));
+            int target = Math.max(1500, (int) (observed * 4));
 
             if (current >= target * 0.5 && current <= target * 1.5 && !hasEstablishFailures)
                 return current;
@@ -1580,6 +1572,62 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return current;
 
             return clamp(current, target, _step);
+        }
+    }
+
+    /**
+     * Tunes rDNS executor core pool size based on queue depth.
+     * Only active when {@code routerconsole.enableReverseLookups} is true.
+     * Primary signal: {@code rdns.executor.queueSize}.
+     *
+     * @since 0.9.70+
+     */
+    private class RdnsPoolSizeParam extends BaseParam {
+
+        RdnsPoolSizeParam() {
+            super("rdns.corePoolSize", "rDNS executor threads",
+                  SUB_TRANSPORT,
+                  2, 8, 1, "rdns.executor.queueSize", _context);
+        }
+
+        protected void applyValue(int value) {
+            CommSystemFacadeImpl.setRdnsCorePoolSize(value);
+        }
+
+        protected int getRuntimeValue() {
+            return CommSystemFacadeImpl.getRdnsCorePoolSize();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            if (!_context.getBooleanProperty("routerconsole.enableReverseLookups"))
+                return Double.NaN;
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null)
+                return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0)
+                return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // Skip tuning when rDNS is disabled
+            if (!_context.getBooleanProperty("routerconsole.enableReverseLookups"))
+                return current;
+            double queueSize = observed;
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 50;
+
+            // Queue building up — scale up
+            if (!Double.isNaN(queueSize) && queueSize > 5 && !cpuPressure)
+                return Math.min(_max, current + 1);
+
+            // Queue empty and headroom — scale down
+            if ((Double.isNaN(queueSize) || queueSize < 1) && !cpuPressure)
+                return Math.max(_min, current - 1);
+
+            return current;
         }
     }
 

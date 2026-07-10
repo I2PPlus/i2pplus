@@ -137,6 +137,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static final Object DUMMY = Integer.valueOf(0);
     private static final Pattern CAPACITY_PATTERN = Pattern.compile("[DEG]");
 
+    private static final long[] RATES = {60*1000L, 10*60*1000L, 60*60*1000L};
+
+    private static volatile int _rdnsCorePoolSize = 2;
+    private static volatile int _rdnsMaxPoolSize = 8;
+
     public CommSystemFacadeImpl(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(CommSystemFacadeImpl.class);
@@ -144,7 +149,27 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         _geoIP = new GeoIP(_context);
         _manager = new TransportManager(_context);
         _exemptIncoming = new LHMCache<>(128);
+        _context.statManager().createRequiredRateStat("rdns.executor.queueSize",
+            "rDNS executor pending lookups", "Transport", RATES);
+        _context.statManager().createRequiredRateStat("rdns.executor.threads",
+            "rDNS executor thread count", "Transport", RATES);
         getReverseDnsExecutor();
+    }
+
+    /** Get the rDNS executor core pool size. @since 0.9.70+ */
+    public static int getRdnsCorePoolSize() { return _rdnsCorePoolSize; }
+
+    /** Set the rDNS executor core pool size, bounded 2-8. @since 0.9.70+ */
+    public static void setRdnsCorePoolSize(int size) {
+        _rdnsCorePoolSize = Math.max(2, Math.min(8, size));
+    }
+
+    /** Get the rDNS executor max pool size. @since 0.9.70+ */
+    public static int getRdnsMaxPoolSize() { return _rdnsMaxPoolSize; }
+
+    /** Set the rDNS executor max pool size, bounded 2-8. @since 0.9.70+ */
+    public static void setRdnsMaxPoolSize(int size) {
+        _rdnsMaxPoolSize = Math.max(2, Math.min(8, size));
     }
 
     /**
@@ -154,13 +179,103 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         synchronized (reverseDnsExecutorLock) {
             if (reverseDnsExecutor == null || reverseDnsExecutor.isShutdown()) {
                 reverseDnsExecutor = new ThreadPoolExecutor(
-                    2, 10,
+                    _rdnsCorePoolSize, _rdnsMaxPoolSize,
                     60L, TimeUnit.SECONDS,
                     new LinkedBlockingQueue<>(500),
                     new ThreadPoolExecutor.CallerRunsPolicy()
                 );
             }
             return reverseDnsExecutor;
+        }
+    }
+
+    /**
+     * Adjust the running rDNS executor pool sizes.
+     * Called by the Tuner when queue depth signals scaling.
+     *
+     * @param coreSize new core pool size (bounded 2-8)
+     * @since 0.9.70+
+     */
+    public void adjustRdnsPool(int coreSize) {
+        synchronized (reverseDnsExecutorLock) {
+            if (reverseDnsExecutor instanceof ThreadPoolExecutor) {
+                ThreadPoolExecutor exec = (ThreadPoolExecutor) reverseDnsExecutor;
+                if (!exec.isShutdown()) {
+                    exec.setCorePoolSize(coreSize);
+                    exec.setMaximumPoolSize(Math.max(coreSize, _rdnsMaxPoolSize));
+                    _context.statManager().addRateData("rdns.executor.threads", coreSize);
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns rDNS executor pending lookup count, or 0 if not running.
+     *
+     * @since 0.9.70+
+     */
+    public int getRdnsQueueSize() {
+        synchronized (reverseDnsExecutorLock) {
+            if (reverseDnsExecutor instanceof ThreadPoolExecutor) {
+                ThreadPoolExecutor exec = (ThreadPoolExecutor) reverseDnsExecutor;
+                if (!exec.isShutdown()) {
+                    return exec.getQueue().size();
+                }
+            }
+            return 0;
+        }
+    }
+
+    /**
+     * Returns rDNS executor active thread count, or 0 if not running.
+     *
+     * @since 0.9.70+
+     */
+    public int getRdnsActiveCount() {
+        synchronized (reverseDnsExecutorLock) {
+            if (reverseDnsExecutor instanceof ThreadPoolExecutor) {
+                ThreadPoolExecutor exec = (ThreadPoolExecutor) reverseDnsExecutor;
+                if (!exec.isShutdown()) {
+                    return exec.getActiveCount();
+                }
+            }
+            return 0;
+        }
+    }
+
+    /**
+     * Returns rDNS executor total thread count, or 0 if not running.
+     *
+     * @since 0.9.70+
+     */
+    public int getRdnsPoolSize() {
+        synchronized (reverseDnsExecutorLock) {
+            if (reverseDnsExecutor instanceof ThreadPoolExecutor) {
+                ThreadPoolExecutor exec = (ThreadPoolExecutor) reverseDnsExecutor;
+                if (!exec.isShutdown()) {
+                    return exec.getPoolSize();
+                }
+            }
+            return 0;
+        }
+    }
+
+    /**
+     * Returns rDNS executor utilization as a ratio (0.0-1.0),
+     * or {@link Double#NaN} if not running.
+     *
+     * @since 0.9.70+
+     */
+    public double getRdnsUtilization() {
+        synchronized (reverseDnsExecutorLock) {
+            if (reverseDnsExecutor instanceof ThreadPoolExecutor) {
+                ThreadPoolExecutor exec = (ThreadPoolExecutor) reverseDnsExecutor;
+                if (!exec.isShutdown()) {
+                    int size = exec.getPoolSize();
+                    return size > 0 ? (double) exec.getActiveCount() / size : Double.NaN;
+                }
+            }
+            return Double.NaN;
         }
     }
 
@@ -1070,6 +1185,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     pendingLookups.remove(ipAddress);
                 }
             });
+            _context.statManager().addRateData("rdns.executor.queueSize", getRdnsQueueSize());
         }
 
         return ipAddress;
@@ -1166,6 +1282,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     pendingLookups.remove(ipAddress);
                 }
             });
+            _context.statManager().addRateData("rdns.executor.queueSize", getRdnsQueueSize());
         }
 
         return hostName;

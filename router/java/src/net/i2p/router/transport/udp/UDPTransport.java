@@ -278,9 +278,9 @@ public class UDPTransport extends TransportImpl {
 
     /** Get the inbound establish timeout in ms */
     public static long getMaxIbEstablishTime() { return EstablishmentManager.MAX_IB_ESTABLISH_TIME.get(); }
-    /** Set the inbound establish timeout, bounded 1000-8000ms */
+    /** Set the inbound establish timeout, bounded 1000-5000ms */
     public static void setMaxIbEstablishTime(long ms) {
-        EstablishmentManager.MAX_IB_ESTABLISH_TIME.set(Math.max(1000, Math.min(8000, ms)));
+        EstablishmentManager.MAX_IB_ESTABLISH_TIME.set(Math.max(1000, Math.min(5000, ms)));
     }
 
     /** Get the data message timeout in ms */

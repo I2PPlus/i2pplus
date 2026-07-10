@@ -64,6 +64,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("ntcp.sendFinisher.queueCapacity", "NTCP Send Queue Capacity");
         DISPLAY_NAMES.put("udp.messageReceiver.threads", "UDP Message Receiver Threads");
         DISPLAY_NAMES.put("udp.packetHandler.maxThreads", "UDP Maximum Handler Threads");
+        DISPLAY_NAMES.put("rdns.corePoolSize", "rDNS Executor Threads");
         DISPLAY_NAMES.put("router.peerOutboundQueueSize", "Peer Outbound Queue Size");
         DISPLAY_NAMES.put("router.transitThrottleFactor", "Transit Throttle Factor");
         DISPLAY_NAMES.put("router.throttleRejectExponent", "Throttle Reject Exponent");
@@ -161,6 +162,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("ntcp.sendFinisher.queueCapacity", "NTCP send finalizer queue size.");
         PARAM_DESCRIPTIONS.put("udp.packetHandler.maxThreads", "Thread pool cap for UDP packet dispatch.");
         PARAM_DESCRIPTIONS.put("udp.messageReceiver.threads", "Threads reassembling UDP messages from fragments.");
+        PARAM_DESCRIPTIONS.put("rdns.corePoolSize", "Threads performing reverse DNS lookups.");
         PARAM_DESCRIPTIONS.put("router.peerOutboundQueueSize", "Per-peer outbound queue size.");
         PARAM_DESCRIPTIONS.put("router.transitThrottleFactor", "Transit rejection aggressiveness (0-1).");
         PARAM_DESCRIPTIONS.put("router.throttleRejectExponent", "Steepness of the transit rejection curve.");

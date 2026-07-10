@@ -107,7 +107,7 @@ class OutboundEstablishState {
      *  Flat delay between all retransmits (no exponential backoff).
      *  Handshake packets are tiny (~200B) and infrequent per-peer,
      *  so the bandwidth cost of flat retransmission is negligible.
-     *  The 30s OB_MESSAGE_TIMEOUT bounds total retransmits to ~60 packets.
+     *  The OB_MESSAGE_TIMEOUT (2.5s) bounds total retransmits per establishment phase.
      *
      *  Was 1000ms with exponential doubling (max gap 16s).
      *  Reduced to 500ms, now 200ms for sub-100ms message delivery.

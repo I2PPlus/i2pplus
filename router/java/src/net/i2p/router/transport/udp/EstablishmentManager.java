@@ -175,20 +175,19 @@ public class EstablishmentManager {
      * Kill any outbound that takes more than this.
      * Two round trips (Req-Created-Confirmed-Data) for direct;
      * 3 1/2 round trips (RReq-RResp+Intro-HolePunch-Req-Created-Confirmed-Data) for indirect.
-     * Note: could be shorter for fast routers with better connectivity.
-     * But it's important to not fail an establishment too soon and waste it.
+     * Tuned to ~3-5x average establish time; the Tuner further adjusts this at runtime.
      */
-    static final AtomicLong MAX_OB_ESTABLISH_TIME = new AtomicLong(30*1000L);
+    static final AtomicLong MAX_OB_ESTABLISH_TIME = new AtomicLong(5*1000L);
 
     /**
-     * Kill any inbound that takes more than this
-     * One round trip (Created-Confirmed)
-     * Note: could be two round trips for SSU2 with retry
+     * Kill any inbound that takes more than this.
+     * One round trip (Created-Confirmed), possibly two for SSU2 with retry.
+     * Tuned to ~3-5x average establish time; the Tuner further adjusts this at runtime.
      */
-    static final AtomicLong MAX_IB_ESTABLISH_TIME = new AtomicLong(20*1000L);
+    static final AtomicLong MAX_IB_ESTABLISH_TIME = new AtomicLong(5*1000L);
 
     /** Max wait before receiving a response to a single message during outbound establishment */
-    public static final long OB_MESSAGE_TIMEOUT = 5*1000L;
+    public static final long OB_MESSAGE_TIMEOUT = 2500L;
 
     /** for the DSM and or netdb store */
     static final AtomicLong DATA_MESSAGE_TIMEOUT = new AtomicLong(10*1000L);
@@ -2836,21 +2835,21 @@ public class EstablishmentManager {
         private void doFailsafe(long now) {
             for (Iterator<OutboundEstablishState> iter = _liveIntroductions.values().iterator(); iter.hasNext(); ) {
                 OutboundEstablishState state = iter.next();
-                if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME.get()) {
+                if (state.getLifetime(now) > 2*MAX_OB_ESTABLISH_TIME.get()) {
                     iter.remove();
                     if (_log.shouldWarn()) {_log.warn("Failsafe removal of LiveIntroduction: " + state);}
                 }
             }
             for (Iterator<OutboundEstablishState> iter = _outboundByClaimedAddress.values().iterator(); iter.hasNext(); ) {
                 OutboundEstablishState state = iter.next();
-                if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME.get()) {
+                if (state.getLifetime(now) > 2*MAX_OB_ESTABLISH_TIME.get()) {
                     iter.remove();
                     if (_log.shouldWarn()) {_log.warn("Failsafe removal of OutboundByClaimedAddress: " + state);}
                 }
             }
             for (Iterator<OutboundEstablishState> iter = _outboundByHash.values().iterator(); iter.hasNext(); ) {
                 OutboundEstablishState state = iter.next();
-                if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME.get()) {
+                if (state.getLifetime(now) > 2*MAX_OB_ESTABLISH_TIME.get()) {
                     iter.remove();
                     if (_log.shouldWarn()) {_log.warn("Failsafe removal of OutboundByHash: " + state);}
                 }
