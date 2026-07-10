@@ -299,7 +299,7 @@ class IntroductionManager {
      *
      *  @since 0.9.55
      */
-    private static class PeerStateComparator implements Comparator<PeerState> {
+    private static class PeerStateComparator implements Comparator<PeerState>, java.io.Serializable {
 
         public int compare(PeerState l, PeerState r) {
             long d = r.getKeyEstablishedTime() - l.getKeyEstablishedTime();

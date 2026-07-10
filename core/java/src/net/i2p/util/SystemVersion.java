@@ -793,7 +793,7 @@ public abstract class SystemVersion {
     public static int getTunnelBuildSuccess() {
         I2PAppContext context = I2PAppContext.getGlobalContext();
         StatManager sm = context.statManager();
-        if (context == null || sm == null) {
+        if (sm == null) {
             return 0;
         }
         int RATE = 10 * 60 * 1000;

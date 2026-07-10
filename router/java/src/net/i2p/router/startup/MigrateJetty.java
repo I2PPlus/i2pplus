@@ -179,15 +179,6 @@ abstract class MigrateJetty {
     }
 
     /**
-     *  Backup a file
-     *  @return success
-     *  @since Jetty 7
-     */
-    private static boolean backupFile(File from) {
-        return backupFile(from, BACKUP_SUFFIX);
-    }
-
-    /**
      *  Backup a file with given suffix
      *  @return success
      *  @since Jetty 9

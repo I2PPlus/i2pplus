@@ -1254,10 +1254,6 @@ public class TestJob extends JobImpl {
         return 15*1000;
     }
 
-    private boolean scheduleRetest() {
-        return scheduleRetest(false);
-    }
-
     private boolean scheduleRetest(boolean asap) {
         if (_pool == null || !_pool.isAlive()) return false;
 

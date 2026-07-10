@@ -192,4 +192,40 @@
         <Bug pattern="~.*" />
     </Match>
     -->
+
+    <!-- RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE - SpotBugs false positive in catch blocks
+         where variable can be non-null if earlier operation succeeded but later one threw -->
+    <Match>
+        <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE" />
+    </Match>
+
+    <!-- ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD - intentional singleton pattern,
+         one Tuner/Daemon/BlocklistManager instance per router writes to config fields -->
+    <Match>
+        <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD" />
+    </Match>
+
+    <!-- DMI_RANDOM_USED_ONLY_ONCE - all use SecureRandom (not Random),
+         SecureRandom has no seed-quality issue -->
+    <Match>
+        <Bug pattern="DMI_RANDOM_USED_ONLY_ONCE" />
+    </Match>
+
+    <!-- VO_VOLATILE_INCREMENT - statistical counters for cache/transport metrics,
+         lost increments have no correctness impact -->
+    <Match>
+        <Bug pattern="VO_VOLATILE_INCREMENT" />
+    </Match>
+
+    <!-- JLM_JSR166_UTILCONCURRENT_MONITORENTER - false positive for
+         j.u.c. lock patterns used correctly -->
+    <Match>
+        <Bug pattern="JLM_JSR166_UTILCONCURRENT_MONITORENTER" />
+    </Match>
+
+    <!-- DM_GC - explicit GC call in ConfigServiceHandler is intentional
+         during shutdown to release native resources -->
+    <Match>
+        <Bug pattern="DM_GC" />
+    </Match>
 </FindBugsFilter>

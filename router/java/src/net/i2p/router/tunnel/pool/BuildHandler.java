@@ -587,7 +587,7 @@ public class BuildHandler implements Runnable {
             handleReq(nextPeerInfo, state, req, nextPeer);
             long handleTime = System.currentTimeMillis() - beforeHandle;
             long msgId = 0;
-            if (state != null && state.msg != null) {msgId = state.msg.getUniqueId();}
+            if (state.msg != null) {msgId = state.msg.getUniqueId();}
             if (_log.shouldDebug()) {
                 String nextHop = (nextPeer != null) ? "and next hop [" + nextPeer.toBase64().substring(0, 6) + "] is known" : "";
                 String fromHash = from != null ? from.toString() : "Unknown";

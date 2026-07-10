@@ -919,7 +919,7 @@ class SidebarRenderer {
     public String renderUpdateStatusHTML() {
         String updateStatus = _helper.getUpdateStatus();
         StringBuilder buf = new StringBuilder(512);
-        if (_helper == null || updateStatus.isEmpty()) {return "";}
+        if (updateStatus.isEmpty()) {return "";}
         else {
             toggleId = "toggle_sb_updatesection";
             buf.append("<div id=sb_updatesection class=collapse><h3><a href=/configupdate target=_top title=\"")

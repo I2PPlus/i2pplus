@@ -2172,29 +2172,6 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  @return 1 for ipv4, 2 for ipv6, 0 for neither
-     */
-    private int locked_needsRebuild() {
-        if (_context.router().isHidden()) return 0;
-        TransportUtil.IPv6Config config = getIPv6Config();
-        // IPv4
-        boolean v6Only = config == IPV6_ONLY;
-        if (!v6Only) {
-            RouterAddress addr = getCurrentAddress(false);
-            if (locked_needsRebuild(addr, false))
-                return 1;
-        }
-        // IPv6
-        boolean v4Only = config == IPV6_DISABLED;
-        if (!v4Only && _haveIPv6Address) {
-            RouterAddress addr = getCurrentAddress(true);
-            if (locked_needsRebuild(addr, true))
-                return 2;
-        }
-        return 0;
-    }
-
-    /**
      *  Does this address need rebuilding?
      *
      *  @param addr may be null
@@ -2385,8 +2362,8 @@ public class UDPTransport extends TransportImpl {
             if (toAddress.getCapabilities().indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0) {
                 PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(to);
                 if (prof != null) {
-                    int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());
-                    int rejected = Math.round(prof.getTunnelHistory().getLifetimeRejected());
+                    int agreed = (int) prof.getTunnelHistory().getLifetimeAgreedTo();
+                    int rejected = (int) prof.getTunnelHistory().getLifetimeRejected();
                     boolean weAreFirewalled = _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
                                               _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
                                               _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||

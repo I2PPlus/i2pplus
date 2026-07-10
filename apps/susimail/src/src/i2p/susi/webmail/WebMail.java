@@ -3869,7 +3869,7 @@ public class WebMail extends HttpServlet {
         buf.append("</div>\n</div>\n").append("<div id=viewmail>");
         // can't move unless has body
         // can't move from drafts
-        if (mail.hasBody() && !mc.getFolderName().equals(DIR_DRAFTS)) {
+        if (mail.hasBody() && mc.getFolderName() != null && !mc.getFolderName().equals(DIR_DRAFTS)) {
             buf.append("<div class=folders>")
                .append(button(MOVE_TO, _t("Move to Folder")))
                .append(showFolderSelect(mc.getFolderName(), true))

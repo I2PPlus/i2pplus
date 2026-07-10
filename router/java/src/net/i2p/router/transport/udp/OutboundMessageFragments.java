@@ -342,11 +342,7 @@ class OutboundMessageFragments {
                 }
 
                 // If this is the first fragment in the packet, add the first fragment header
-                if (sendNext.isEmpty()) {
-                    nextDataSize += SSU2Util.FIRST_FRAGMENT_HEADER_SIZE;
-                } else {
-                    nextDataSize += SSU2Payload.BLOCK_HEADER_SIZE;
-                }
+                nextDataSize += SSU2Payload.BLOCK_HEADER_SIZE;
 
                 // Check if it fits
                 if (curTotalDataSize + nextDataSize <= maxPacketSize || sendNext.isEmpty()) {

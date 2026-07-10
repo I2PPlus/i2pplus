@@ -73,7 +73,7 @@ public class HostPing {
             if (responseTime > 0) {
                 responseTimes.add(responseTime);
                 successCount++;
-                System.out.printf("%-6dms\n", responseTime);
+                System.out.printf("%-6dms%n", responseTime);
             } else {
                 System.out.println("------");
             }
@@ -110,7 +110,7 @@ public class HostPing {
 
             if (responseTime > 0) {
                 consecutiveSuccesses++;
-                System.out.printf("%-6dms\n", responseTime);
+                System.out.printf("%-6dms%n", responseTime);
             } else {
                 consecutiveSuccesses = 0;
                 System.out.println("------");
@@ -127,10 +127,10 @@ public class HostPing {
         }
 
         if (consecutiveSuccesses >= requiredConsecutive) {
-            System.out.printf(" ✔ + (%d consecutive successes) ‣ %s\n", requiredConsecutive, destination);
+            System.out.printf(" ✔ + (%d consecutive successes) ‣ %s%n", requiredConsecutive, destination);
             return 0;
         } else {
-            System.out.printf(" ✖ Only %d/%d consecutive successes ‣ %s\n", consecutiveSuccesses, requiredConsecutive, destination);
+            System.out.printf(" ✖ Only %d/%d consecutive successes ‣ %s%n", consecutiveSuccesses, requiredConsecutive, destination);
             return 1;
         }
     }
@@ -224,10 +224,10 @@ public class HostPing {
             }
 
             long avg = total / responseTimes.size();
-            System.out.printf("Results for %s: %d / %d pongs received, average response %dms\n",
+            System.out.printf("Results for %s: %d / %d pongs received, average response %dms%n",
                 destination, successCount, totalCount, avg);
         } else {
-            System.out.printf("Results for %s: 0 / %d pongs received\n", destination, totalCount);
+            System.out.printf("Results for %s: 0 / %d pongs received%n", destination, totalCount);
         }
     }
 
@@ -241,7 +241,7 @@ public class HostPing {
             return 1;
         }
 
-        System.out.printf(" • Found %d destinations, initiating ping...\n", destinations.size());
+        System.out.printf(" • Found %d destinations, initiating ping...%n", destinations.size());
         System.out.println(" • Trying to open tunnel(s)");
 
         int successCount = 0;
@@ -250,13 +250,13 @@ public class HostPing {
             long responseTime = pingSingle(destination);
             if (responseTime > 0) {
                 successCount++;
-                System.out.printf(" ✔ %dms\n", responseTime);
+                System.out.printf(" ✔ %dms%n", responseTime);
             } else {
                 System.out.println(" ✖ timeout");
             }
         }
 
-        System.out.printf("\nBatch results: %d / %d destinations reachable\n",
+        System.out.printf("%nBatch results: %d / %d destinations reachable%n",
             successCount, destinations.size());
 
         return successCount > 0 ? 0 : 1;
@@ -270,7 +270,7 @@ public class HostPing {
         File file = new File(filename);
 
         if (!file.exists()) {
-            System.out.printf(" ✖ File %s not found\n", filename);
+            System.out.printf(" ✖ File %s not found%n", filename);
             return destinations;
         }
 
@@ -301,17 +301,17 @@ public class HostPing {
                     if (isValidDestination(destination)) {
                         destinations.add(destination);
                         if (_debug) {
-                            System.out.printf(" • Added destination: %s (from line: %s)\n", destination, line);
+                            System.out.printf(" • Added destination: %s (from line: %s)%n", destination, line);
                         }
                     } else {
                         if (_debug) {
-                            System.out.printf(" • Skipping invalid destination: %s (from line: %s)\n", destination, line);
+                            System.out.printf(" • Skipping invalid destination: %s (from line: %s)%n", destination, line);
                         }
                     }
                 }
             }
         } catch (IOException e) {
-            System.out.printf(" ✖ Error reading file %s: %s\n", filename, e.getMessage());
+            System.out.printf(" ✖ Error reading file %s: %s%n", filename, e.getMessage());
         }
 
         return destinations;
@@ -399,12 +399,12 @@ public class HostPing {
             } else if (!destinations.isEmpty()) {
                 for (String destination : destinations) {
                     if (!pingTool.isValidDestination(destination)) {
-                        System.out.printf(" ✖ Invalid destination format: %s\n", destination);
+                        System.out.printf(" ✖ Invalid destination format: %s%n", destination);
                         exitCode = 1;
                         continue;
                     }
 
-                    System.out.printf(" ➤ Initiating ping of %s\n", destination);
+                    System.out.printf(" ➤ Initiating ping of %s%n", destination);
                     int result = pingTool.pingDestination(destination);
                     if (result != 0) {
                         exitCode = result;
@@ -422,7 +422,7 @@ public class HostPing {
             System.out.println(" ✖ Invalid number format in arguments");
             exitCode = 1;
         } catch (Exception e) {
-            System.out.printf(" ✖ Error: %s\n", e.getMessage());
+            System.out.printf(" ✖ Error: %s%n", e.getMessage());
             if (pingTool._debug) {
                 e.printStackTrace();
             }

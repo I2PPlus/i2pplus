@@ -408,9 +408,7 @@ public class TunnelPool {
                     if (_log.shouldWarn() && uptime > 120L * 1000 && shouldLogLastResortWarning()) {
                         _log.warn(toString() + " -> Using last resort tunnel as only option");
                     }
-                    if (lastResortTunnel instanceof PooledTunnelCreatorConfig) {
-                        ((PooledTunnelCreatorConfig) lastResortTunnel).recordActivity();
-                    }
+                    ((PooledTunnelCreatorConfig) lastResortTunnel).recordActivity();
                     return lastResortTunnel;
                 }
                 if (backloggedTunnel != null) {

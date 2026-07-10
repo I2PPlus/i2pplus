@@ -211,13 +211,13 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
             // the predicate used to be '+', changing to '-' --zab
 
             if (_log.shouldDebug()) {
-                final String log = String.format("%s NACKS and retransmits. \n* Criteria: nacks=%d, retransmitted=%b,"+
+                final String log = String.format("%s NACKS and retransmits. %n* Criteria: nacks=%d, retransmitted=%b,"+
                     " numSends=%d, lastSend=%d, now=%d",
                     toString(), cnt, _retransmitted, _numSends.get(), _lastSend, _context.clock().now());
                     _log.debug(log);
             }
         } else if (_log.shouldDebug()) {
-            final String log = String.format("%s NACK but no retransmit. \n* Criteria: nacks=%d, retransmitted=%b,"+
+            final String log = String.format("%s NACK but no retransmit. %n* Criteria: nacks=%d, retransmitted=%b,"+
                     " numSends=%d, lastSend=%d, now=%d",
                     toString(), cnt, _retransmitted, _numSends.get(), _lastSend, _context.clock().now());
                     _log.debug(log);

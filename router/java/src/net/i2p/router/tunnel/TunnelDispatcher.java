@@ -821,7 +821,7 @@ public class TunnelDispatcher implements Service {
         long now = _context.clock().now();
         long age = now - msg.getMessageExpiration();
         TunnelGateway gw = _outboundGateways.get(outboundTunnel);
-        boolean hasMsg = msg != null && !msg.toString().isEmpty();
+        boolean hasMsg = !msg.toString().isEmpty();
 
         if (gw != null) {
             if (_log.shouldDebug()) {

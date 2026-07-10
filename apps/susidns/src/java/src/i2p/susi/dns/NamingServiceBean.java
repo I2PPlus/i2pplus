@@ -503,6 +503,7 @@ public class NamingServiceBean extends AddressbookBean {
                             }
                         }
                     }
+                    StringBuilder msgBuilder = new StringBuilder();
                     for (String n : deletionMarks) {
                         boolean success;
                         if (matchDest != null) {success = getNamingService().remove(n, matchDest, nsOptions);}
@@ -510,13 +511,14 @@ public class NamingServiceBean extends AddressbookBean {
                         String uni = AddressBean.toUnicode(n);
                         String displayHost = uni.equals(n) ? n :  uni + " (" + n + ')';
                         if (!success) {
-                            message += _t("Failed to delete Destination for {0} from naming service {1}", displayHost, getNamingService().getName()) + "<br>";
+                            msgBuilder.append(_t("Failed to delete Destination for {0} from naming service {1}", displayHost, getNamingService().getName())).append("<br>");
                             fail = true;
                         } else if (deleted++ == 0) {
                             changed = true;
                             name = displayHost;
                         }
                     }
+                    message = msgBuilder.toString();
                     if (changed) {
                         if (deleted == 1) {message += _t("Destination {0} deleted.", name);} // parameter is a host name
                         else {message = ngettext("1 destination deleted.", "{0} destinations deleted.", deleted);} // parameter will always be >= 2

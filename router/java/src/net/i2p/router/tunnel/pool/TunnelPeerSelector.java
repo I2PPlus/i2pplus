@@ -207,7 +207,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Is the router in the startup grace period?
-     * During startup, peers haven't accumulated test history yet, so 
+     * During startup, peers haven't accumulated test history yet, so
      * quality filters (pre-qualification, tier capping) should be relaxed
      * to allow tunnels to build.
      * @param ctx the router context
@@ -472,10 +472,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
 
         return null;
-    }
-
-    private boolean shouldExclude(Hash peerHash, boolean isInbound, boolean isExploratory) {
-        return getExclusionReason(peerHash, isInbound, isExploratory) != null;
     }
 
     /**

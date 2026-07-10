@@ -1287,10 +1287,10 @@ public class HostChecker {
 
                     // Reload categories into memory
                     loadCategories();
-                    
+
                     // Update hosts_check.txt with new categories and add new hosts
                     updateHostsWithCategories();
-                    
+
                     downloadSuccess = true;
 
                     if (_log.shouldInfo()) {
@@ -2201,12 +2201,6 @@ public class HostChecker {
 
     /** translate */
     private static String _t(String s) {return Messages.getString(s);}
-
-    /** translate */
-    private static String _t(String s, Object o) {return Messages.getString(s, o);}
-
-    /** translate */
-    private static String _t(String s, Object o, Object o2) {return Messages.getString(s, o, o2);}
 
     /**
      * Test method

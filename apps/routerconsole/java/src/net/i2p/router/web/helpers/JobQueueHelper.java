@@ -365,10 +365,10 @@ public class JobQueueHelper extends HelperBase {
 
         // Sort jobs for display
         List<JobTimeEntry> sortedJobs = new ArrayList<>();
-        for (String jobName : groupedJobs.keySet()) {
-            Map<Long, List<Job>> timeGroups = groupedJobs.get(jobName);
-            for (Long time : timeGroups.keySet()) {
-                sortedJobs.add(new JobTimeEntry(jobName, time, timeGroups.get(time)));
+        for (Map.Entry<String, Map<Long, List<Job>>> entry : groupedJobs.entrySet()) {
+            String jobName = entry.getKey();
+            for (Map.Entry<Long, List<Job>> timeEntry : entry.getValue().entrySet()) {
+                sortedJobs.add(new JobTimeEntry(jobName, timeEntry.getKey(), timeEntry.getValue()));
             }
         }
         Collections.sort(sortedJobs);

@@ -1278,7 +1278,7 @@ public class SidebarHelper extends HelperBase {
                     else {buf.append(_t("Unsigned update available").replace("update", "I2P update"));}
                     buf.append("<br><i>").append(getUnsignedUpdateVersion())
                        .append("</i></span><br><button type=submit id=sb_downloadUnsignedDevUpdate class=download name=updateAction value=Unsigned>");
-                    if (source != null && source.contains("skank")) {buf.append(_t("Download I2P Update").replace("I2P", "I2P+"));}
+                    if (source.contains("skank")) {buf.append(_t("Download I2P Update").replace("I2P", "I2P+"));}
                     else {buf.append(_t("Download I2P Update"));}
                     buf.append("</button><br>\n");
                 }

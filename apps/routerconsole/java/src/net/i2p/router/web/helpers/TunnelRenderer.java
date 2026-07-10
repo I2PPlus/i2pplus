@@ -654,7 +654,7 @@ class TunnelRenderer {
                     } else {
                         chunkSb.append("<td></td>");
                     }
-                    chunkSb.append(String.format("<td><a class=configpeer href=\"/configpeer?peer=%s\" title=\"%s\">%s</a></td></tr>\n",
+                    chunkSb.append(String.format("<td><a class=configpeer href=\"/configpeer?peer=%s\" title=\"%s\">%s</a></td></tr>%n",
                         info.getHash(),
                         _t("Configure peer"),
                         _t("Edit")));

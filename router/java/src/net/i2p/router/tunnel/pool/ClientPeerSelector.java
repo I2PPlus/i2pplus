@@ -875,7 +875,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             }
         }
 
-        if (rv.size() > 1) {
+        if (rv != null && rv.size() > 1) {
             if (!checkTunnel(isInbound, false, rv)) {
                 if (log.shouldWarn()) {
                     log.warn("CPS checkTunnel failed for " + settings.getDestinationNickname() +

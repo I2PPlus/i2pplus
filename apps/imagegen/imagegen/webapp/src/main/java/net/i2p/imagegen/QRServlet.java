@@ -75,10 +75,6 @@ public class QRServlet extends HttpServlet {
         return accept != null && accept.contains("image/svg+xml");
     }
 
-    private static String bitMatrixToSvg(BitMatrix matrix) {
-        return bitMatrixToSvg(matrix, null, null);
-    }
-
     private static String bitMatrixToSvg(BitMatrix matrix, String text, String textName) {
         int qrWidth = matrix.getWidth();
         int qrHeight = matrix.getHeight();

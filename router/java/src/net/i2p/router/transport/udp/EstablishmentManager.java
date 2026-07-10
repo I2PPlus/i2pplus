@@ -2619,7 +2619,7 @@ public class EstablishmentManager {
      * Soonest expiration first
      * @since 0.9.57
      */
-    private static class TokenComparator implements Comparator<Map.Entry<RemoteHostId, Token>> {
+    private static class TokenComparator implements Comparator<Map.Entry<RemoteHostId, Token>>, java.io.Serializable {
         @Override
         public int compare(Map.Entry<RemoteHostId, Token> l, Map.Entry<RemoteHostId, Token> r) {
              long le = l.getValue().expires;

@@ -282,7 +282,7 @@ class SSU2Payload {
                 case BLOCK_ACK: {
                     if (isHandshake)
                         throw new IOException("Illegal block in handshake: " + type);
-                    if (len < 5 || (len % 2) != 1)
+                    if (len < 5 || (len & 1) != 1)
                         throw new IOException("Bad length for ACK: " + len);
                     long ack = DataHelper.fromLong(payload, i, 4);
                     int acnt = payload[i + 4] & 0xff;

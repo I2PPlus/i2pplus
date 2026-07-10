@@ -198,8 +198,12 @@ public class EventLogHelper extends FormHandler {
             long time = e.getKey().longValue();
             String event = e.getValue();
             String type = event;
-            while (type.length() < 8) {
-                type = type + (' ');
+            if (type.length() < 8) {
+                StringBuilder typeBuf = new StringBuilder(type);
+                while (typeBuf.length() < 8) {
+                    typeBuf.append(' ');
+                }
+                type = typeBuf.toString();
             }
             // create a class from truncated event type so we can style the tr's by event severity
             type = EVENT_DIGIT.matcher(EVENT_SPACE.matcher(type.substring(0,8)).replaceAll("")).replaceAll("");

@@ -124,7 +124,7 @@ class ExpireLeasesJob extends JobImpl {
      *  Oldest first
      *  @since 0.9.65
      */
-    private static class LeaseSetComparator implements Comparator<LeaseSet> {
+    private static class LeaseSetComparator implements Comparator<LeaseSet>, java.io.Serializable {
          @Override
          public int compare(LeaseSet l, LeaseSet r) {
              long dl = l.getLatestLeaseDate();

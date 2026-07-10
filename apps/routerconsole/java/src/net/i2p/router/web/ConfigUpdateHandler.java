@@ -89,11 +89,7 @@ public class ConfigUpdateHandler extends FormHandler {
      *  These are only for .sud and .su2.
      *  Do NOT use this for .su3
      */
-    public static final String DEFAULT_UPDATE_URL;
-    static {
-        if (FileUtil.isPack200Supported()) {DEFAULT_UPDATE_URL = PACK200_URLS;}
-        else {DEFAULT_UPDATE_URL = NO_PACK200_URLS;}
-    }
+    public static final String DEFAULT_UPDATE_URL = "";
 
     private static final String SU3_CERT_DIR = "certificates/router";
 

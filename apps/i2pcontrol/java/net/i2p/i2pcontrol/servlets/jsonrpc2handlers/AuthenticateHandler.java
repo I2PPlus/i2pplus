@@ -12,7 +12,7 @@ import net.i2p.i2pcontrol.security.AuthToken;
 import net.i2p.i2pcontrol.security.SecurityManager;
 
 /*
- * 
+ *
  *  Copyright 2011 hottuna (dev@robertfoss.se)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -97,12 +97,12 @@ public class AuthenticateHandler implements RequestHandler {
         }
 
         if (!I2PControlVersion.SUPPORTED_API_VERSIONS.contains(apiVersion)) {
-            String supportedAPIVersions = "";
+            StringBuilder supportedAPIVersionsBuilder = new StringBuilder();
             for (Integer i : I2PControlVersion.SUPPORTED_API_VERSIONS) {
-                supportedAPIVersions += ", " + i;
+                supportedAPIVersionsBuilder.append(", ").append(i);
             }
             return new JSONRPC2Error(JSONRPC2ExtendedError.UNSUPPORTED_API_VERSION.getCode(),
-                                     "The provided API version \'" + apiVersion + "\' is not supported. The supported versions are" + supportedAPIVersions + ".");
+                                     "The provided API version \'" + apiVersion + "\' is not supported. The supported versions are" + supportedAPIVersionsBuilder.toString() + ".");
         }
         return null;
     }

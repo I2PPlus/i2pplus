@@ -1304,9 +1304,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     return;
                 }
                 job.getTiming().setStartAfter(now + PUBLISH_DELAY);
-                if (job instanceof JobImpl) {
-                    job.madeReady(now);
-                }
+                job.madeReady(now);
                 _context.jobQueue().addJobToTop(job);
                 return;
             }

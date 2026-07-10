@@ -1303,16 +1303,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             if (url.length() > 100)
                 url = url.substring(0, 48) + "..." + url.substring(url.length() - 48);
             String[] urlParts = url.split("/");
-            String host;
+            StringBuilder hostBuilder = new StringBuilder();
             if (urlParts.length > 0) {
-                host = urlParts[0];
+                hostBuilder.append(urlParts[0]);
                 for (int i = 1; i < urlParts.length; i++) {
                     if (!urlParts[i].trim().isEmpty())
-                        host += "/" + urlParts[i];
+                        hostBuilder.append("/").append(urlParts[i]);
                 }
             } else {
-                host = url;
+                hostBuilder.append(url);
             }
+            String host = hostBuilder.toString();
             if (host != null && host.contains("b32.i2p"))
                 host = host.substring(0, 12) + "...b32.i2p";
             return host != null ? host : "Unknown request";

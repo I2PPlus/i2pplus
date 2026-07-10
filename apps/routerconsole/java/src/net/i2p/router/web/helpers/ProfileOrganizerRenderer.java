@@ -64,8 +64,8 @@ class ProfileOrganizerRenderer {
         for (Hash peer : peers) {
             PeerProfile prof = _organizer.getProfileNonblocking(peer);
             if (prof == null) {continue;}
-            int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());
-            int rejected = Math.round(prof.getTunnelHistory().getLifetimeRejected());
+            int agreed = (int) prof.getTunnelHistory().getLifetimeAgreedTo();
+            int rejected = (int) prof.getTunnelHistory().getLifetimeRejected();
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
             boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;
             if (_organizer.getUs().equals(peer) || prof.getLastHeardFrom() <= 0 || (agreed <= 0 && rejected <= 0 && prof.getFirstHeardAbout() <= 0)) {continue;}

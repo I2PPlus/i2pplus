@@ -1193,7 +1193,7 @@ class NetDbRenderer {
         buf.append("<tr><th><b class=lskey>");
         if (type == DatabaseEntry.KEY_TYPE_META_LS2) {buf.append(_t("Meta"));}
         buf.append(_t("LeaseSet")).append(":</b> <code title =\"")
-           .append(_t("LeaseSet Key")).append("\">").append(key.toBase64()).append("</code>");
+           .append(_t("LeaseSet Key")).append("\">").append(key != null ? key.toBase64() : "null").append("</code>");
         if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2 || _context.keyRing().get(key) != null) {
             buf.append(" <b class=encls>[").append(_t("Encrypted")).append("]</b>");
         }
@@ -1408,7 +1408,7 @@ class NetDbRenderer {
             for (RouterInfo ri : routers) {
                 Hash key = ri.getIdentity().getHash();
                 isLocal = key != null && key.equals(us);
-                if (!key.equals(us)) {
+                if (key != null && !key.equals(us)) {
                     if (skipped < offset) {
                         skipped++;
                     } else if (pagedRouters.size() < pageSize) {
@@ -1716,7 +1716,7 @@ class NetDbRenderer {
      *  Comparator for router addresses by transport then host.
      *  @since 0.9.38
      */
-    static class RAComparator implements Comparator<RouterAddress> {
+    static class RAComparator implements Comparator<RouterAddress>, java.io.Serializable {
          private static final long serialVersionUID = 1L;
          public int compare(RouterAddress l, RouterAddress r) {
              int rv = l.getTransportStyle().compareTo(r.getTransportStyle());
