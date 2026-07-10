@@ -161,9 +161,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /** X25519/EDH precalc — each pair ~64 bytes, scale with cores and memory */
     private static final int XDH_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
     private static final int XDH_PRECALC_MIN = Math.max(128, 8 * XDH_FACTOR);
-    private static final int XDH_PRECALC_MAX = Math.max(2048, 128 * XDH_FACTOR);
+    private static final int XDH_PRECALC_MAX = Math.max(16384, 1024 * XDH_FACTOR);
     private static final int EDH_PRECALC_MIN = Math.max(64, 16 * XDH_FACTOR);
-    private static final int EDH_PRECALC_MAX = Math.max(512, 256 * XDH_FACTOR);
+    private static final int EDH_PRECALC_MAX = Math.max(8192, 512 * XDH_FACTOR);
 
     /**
      * Compute a system-scaled value: base * factor, bounded by min and max.
