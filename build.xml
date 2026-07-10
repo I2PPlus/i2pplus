@@ -3825,7 +3825,7 @@
     <available file="installer/lib/wrapper/all/wrapper.jar" property="wrapper.jar.path" value="installer/lib/wrapper/all/wrapper.jar"/>
     <available file="/usr/share/java/ant.jar" property="system.ant.path" value="/usr/share/java/ant.jar"/>
     <path id="spotbugs.auxclasspath">
-      <fileset dir="build" includes="*.jar"/>
+      <fileset dir="${build.root}build" includes="*.jar"/>
       <fileset dir="${spotbugs.dir}/lib" includes="*.jar"/>
       <pathelement location="${wrapper.jar.path}"/>
       <pathelement location="${system.ant.path}"/>
@@ -3833,20 +3833,20 @@
     <pathconvert refid="spotbugs.auxclasspath" property="spotbugs.auxclasspath.path" pathsep=":"/>
 
     <spotbugs home="${spotbugs.home}" output="xml:withMessages" outputFile="/tmp/build-i2p/reports/spotbugs.xml" effort="max" debug="false" reportLevel="medium" timeout="1800000" jvm="${spotbugs.java}" excludeFilter="tools/spotbugs/config/spotbugs-exclude.xml">
-      <auxAnalyzepath path="./build"/>
+      <auxAnalyzepath path="${build.root}build"/>
       <auxClasspath path="${spotbugs.auxclasspath.path}"/>
       <!-- Only analyze core I2P JAR files, exclude third-party heavy libraries -->
-      <class location="./build/i2p.jar"/>
-      <class location="./build/router.jar"/>
-      <class location="./build/streaming.jar"/>
-      <class location="./build/mstreaming.jar"/>
-      <class location="./build/utility.jar"/>
-      <class location="./build/sam.jar"/>
+      <class location="${build.root}build/i2p.jar"/>
+      <class location="${build.root}build/router.jar"/>
+      <class location="${build.root}build/streaming.jar"/>
+      <class location="${build.root}build/mstreaming.jar"/>
+      <class location="${build.root}build/utility.jar"/>
+      <class location="${build.root}build/sam.jar"/>
       <!-- Optional: include apps if needed -->
-      <class location="./build/addressbook.jar"/>
-      <class location="./build/desktopgui.jar"/>
-      <class location="./build/i2psnark.jar"/>
-      <class location="./build/i2ptunnel.jar"/>
+      <class location="${build.root}build/addressbook.jar"/>
+      <class location="${build.root}build/desktopgui.jar"/>
+      <class location="${build.root}build/i2psnark.jar"/>
+      <class location="${build.root}build/i2ptunnel.jar"/>
       <sourcePath path="./apps:./router:./core"/>
     </spotbugs>
     <antcall target="transform-spotbugs"/>
@@ -4364,25 +4364,25 @@
         <available file="installer/lib/wrapper/all/wrapper.jar" property="wrapper.jar.path" value="installer/lib/wrapper/all/wrapper.jar"/>
         <available file="/usr/share/java/ant.jar" property="system.ant.path" value="/usr/share/java/ant.jar"/>
         <path id="spotbugs.auxclasspath">
-          <fileset dir="build" includes="*.jar"/>
+          <fileset dir="${build.root}build" includes="*.jar"/>
           <fileset dir="${spotbugs.dir}/lib" includes="*.jar"/>
           <pathelement location="${wrapper.jar.path}"/>
           <pathelement location="${system.ant.path}"/>
         </path>
         <pathconvert refid="spotbugs.auxclasspath" property="spotbugs.auxclasspath.path" pathsep=":"/>
         <spotbugs home="${spotbugs.home}" output="xml:withMessages" outputFile="/tmp/build-i2p/reports/spotbugs.xml" effort="max" debug="false" reportLevel="medium" timeout="1800000" jvm="${spotbugs.java}" excludeFilter="tools/spotbugs/config/spotbugs-exclude.xml">
-          <auxAnalyzepath path="./build"/>
+          <auxAnalyzepath path="${build.root}build"/>
           <auxClasspath path="${spotbugs.auxclasspath.path}"/>
-          <class location="./build/i2p.jar"/>
-          <class location="./build/router.jar"/>
-          <class location="./build/streaming.jar"/>
-          <class location="./build/mstreaming.jar"/>
-          <class location="./build/utility.jar"/>
-          <class location="./build/sam.jar"/>
-          <class location="./build/addressbook.jar"/>
-          <class location="./build/desktopgui.jar"/>
-          <class location="./build/i2psnark.jar"/>
-          <class location="./build/i2ptunnel.jar"/>
+          <class location="${build.root}build/i2p.jar"/>
+          <class location="${build.root}build/router.jar"/>
+          <class location="${build.root}build/streaming.jar"/>
+          <class location="${build.root}build/mstreaming.jar"/>
+          <class location="${build.root}build/utility.jar"/>
+          <class location="${build.root}build/sam.jar"/>
+          <class location="${build.root}build/addressbook.jar"/>
+          <class location="${build.root}build/desktopgui.jar"/>
+          <class location="${build.root}build/i2psnark.jar"/>
+          <class location="${build.root}build/i2ptunnel.jar"/>
           <sourcePath path="./apps:./router:./core"/>
         </spotbugs>
         <antcall target="transform-spotbugs"/>
