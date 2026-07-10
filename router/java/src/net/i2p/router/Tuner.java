@@ -1747,16 +1747,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected double getObservedStat(RouterContext ctx) {
-            RateStat rs = _context.statManager().getRate(_statName);
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return getAdditionalEventCount(_context, _statName);
         }
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = tunnel.pumperQueueFull (drop events per minute)
+            // observed = tunnel.pumperQueueFull event count (drop events per period)
             // Cross-refs: tunnel.ibgw/obgw.queueSize, tunnel.dispatchParticipant,
             //             jobQueue.jobLag (CPU), memory pressure
             double ibgwQueue = getAdditionalStat(_context, "tunnel.ibgw.queueSize");
@@ -2928,16 +2924,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected double getObservedStat(RouterContext ctx) {
-            RateStat rs = _context.statManager().getRate(_statName);
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return getAdditionalEventCount(_context, _statName);
         }
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = tunnel.participatingMessageDropped rate
+            // observed = tunnel.participatingMessageDropped event count
             double overflow = getAdditionalEventCount(_context, "tunnel.dropGatewayOverflow");
             double codelDelay = getAdditionalStat(_context, "codel.OBGW.delay");
             boolean systemBusy = !Double.isNaN(overflow) && overflow > 10;
@@ -2982,17 +2974,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected double getObservedStat(RouterContext ctx) {
-            RateStat rs = _context.statManager().getRate(_statName);
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return getAdditionalEventCount(_context, _statName);
         }
 
         protected int computeTarget(double observed) {
             // Clamp to bounds first — config may have stale value beyond current range
             int current = Math.min(Math.max(getRuntimeValue(), _min), _max);
-            // observed = crypto.XDHUsed (key usage events/sec)
+            // observed = crypto.XDHUsed event count (key consumption per period)
             // Cross-refs: crypto.XDHEmpty (empty pool events — the only trigger to grow),
             //             jobLag (CPU pressure), memory pressure, system load
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -3050,16 +3038,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected double getObservedStat(RouterContext ctx) {
-            RateStat rs = _context.statManager().getRate(_statName);
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return getAdditionalEventCount(_context, _statName);
         }
 
         protected int computeTarget(double observed) {
             int current = Math.min(Math.max(getRuntimeValue(), _min), _max);
-            // observed = crypto.EDHUsed (key usage events/sec)
+            // observed = crypto.EDHUsed event count (key consumption per period)
             // Cross-refs: crypto.EDHEmpty (empty pool events — the only trigger to grow),
             //             jobLag, memory pressure, system load
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -3112,16 +3096,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected double getObservedStat(RouterContext ctx) {
-            RateStat rs = _context.statManager().getRate(_statName);
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return getAdditionalEventCount(_context, _statName);
         }
 
         protected int computeTarget(double observed) {
             int current = Math.min(Math.max(getRuntimeValue(), _min), _max);
-            // observed = crypto.MLKEMEmpty (queue empty events — the only trigger to grow)
+            // observed = crypto.MLKEMEmpty event count (queue empty events per period)
             // Cross-refs: crypto.MLKEMUsed (key consumption rate), jobLag (CPU), memory pressure, system load
             // Note: MLKEMUsed is an event-count stat (addRateData(1));
             //       use getAdditionalEventCount() for the raw count.
@@ -5204,16 +5184,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected double getObservedStat(RouterContext ctx) {
-            RateStat rs = _context.statManager().getRate(_statName);
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return getAdditionalEventCount(_context, _statName);
         }
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = tunnel.buildClientExpire (count of timed-out builds in last minute)
+            // observed = tunnel.buildClientExpire event count (timed-out builds per period)
             // Primary signal: direct count of builds that expired waiting for a reply.
             // If builds are timing out, we need MORE time (not less).
             // Cross-refs: concurrentBuilds (storm detection), dropLoadBacklog (pending build queue),
@@ -5287,16 +5263,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected double getObservedStat(RouterContext ctx) {
-            RateStat rs = _context.statManager().getRate(_statName);
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return getAdditionalEventCount(_context, _statName);
         }
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = tunnel.buildFailFirstHop (count of first-hop delivery failures)
+            // observed = tunnel.buildFailFirstHop event count (first-hop delivery failures per period)
             // Primary signal: if first hops are failing, we need MORE delivery time.
             // Cross-refs: concurrentBuilds (storm detection), dropLoadBacklog (pending build queue),
             //             testSuccessTime (actual tunnel latency)
@@ -5452,11 +5424,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected double getObservedStat(RouterContext ctx) {
-            RateStat rs = _context.statManager().getRate(_statName);
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return getAdditionalEventCount(_context, _statName);
         }
 
         protected int computeTarget(double observed) {
