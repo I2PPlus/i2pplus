@@ -2900,7 +2900,11 @@ h2#jsonrpc{padding-left:38px;background:url(../images/i2cp.svg) no-repeat 10px c
 #tunnelPeerCount .lazy{contain:none}
 
 /* tuning */
+.ring{border:4px solid #010;border-radius:50%;box-shadow:0 0 0 3px #252,0 0 0 5px #000;background:#000}
+.ring .ring-bg{stroke:#111}
 svg.spark{position:relative;border:var(--border);background:linear-gradient(180deg,#001800,#010,#001800)}
+.spark.init{font-size:90%}
+#tuningstats{margin:13px auto;box-shadow:var(--border_table);background:var(--msg);background-size:0}
 #tuning .infohelp{margin-top:10px;box-shadow:var(--border_table)}
 #tuning .section tr{background:var(--th)}
 #tuning .section td{border:var(--border_soft);border-width:2px;border-left:0;border-right:0}

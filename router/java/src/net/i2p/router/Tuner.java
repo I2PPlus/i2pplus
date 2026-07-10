@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -446,6 +447,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         // Compute system health once per cycle, shared by all params
         SystemHealth health = new SystemHealth(_context);
         _lastHealthScore = health.getScore();
+        _lastSubsystemScores = health.computeSubsystemScores();
         for (TunableParam param : _params) {
             try {
                 if (param instanceof BaseParam) {
@@ -495,6 +497,63 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     private volatile double _lastHealthScore = Double.NaN;
+    private volatile Map<String, double[]> _lastSubsystemScores = Collections.emptyMap();
+
+    /**
+     * Per-subsystem health scores. Each entry: {score, ...detail values}.
+     * Score is 0.0-1.0. Updated once per tuning cycle alongside the overall health score.
+     *
+     * @since 0.9.70+
+     */
+    public static class SubsystemScore {
+        public final String name;
+        public final String label;
+        public final double score;
+        public final String[] details;
+
+        SubsystemScore(String name, String label, double score, String[] details) {
+            this.name = name;
+            this.label = label;
+            this.score = Math.max(0.0, Math.min(1.0, score));
+            this.details = details != null ? details : new String[0];
+        }
+    }
+
+    /**
+     * Get per-subsystem health scores computed during the last tuning cycle.
+     * Returns a list of SubsystemScore sorted by the SUBSYSTEM_ORDER used on the tuning page.
+     *
+     * @since 0.9.70+
+     */
+    public List<SubsystemScore> getSubsystemScores() {
+        Map<String, double[]> scores = _lastSubsystemScores;
+        List<SubsystemScore> result = new ArrayList<SubsystemScore>();
+        String[] order = {
+            SUB_ROUTER, SUB_TUNNEL, SUB_TRANSPORT, SUB_NETDB,
+            SUB_STREAMING, SUB_I2CP, SUB_PEER, SUB_CONGESTION, SUB_CRYPTO
+        };
+        String[] labels = {
+            "Router", "Tunnel", "Transport", "NetDB",
+            "Streaming", "I2CP", "Peers", "Congestion", "Crypto"
+        };
+        String[][] metrics = {
+            { "jobQueue.jobLag" },
+            { "tunnel.buildSuccessRate", "tunnel.concurrentBuilds" },
+            { "transport.sendProcessingTime", "tunnel.participating InBps" },
+            { "netDb.lookupsMatched / netDb.lookupsHandled" },
+            { "streaming.connSuccessLifetime" },
+            { "i2cp.internalQueueSize" },
+            { "peer.activeProfileCount" },
+            { "udp.congestionOccurred / udp.allowConcurrentActive" },
+            { "crypto.EDHUsed / crypto.XDHEmpty" }
+        };
+        for (int i = 0; i < order.length; i++) {
+            double[] vals = scores.get(order[i]);
+            double score = (vals != null && vals.length > 0) ? vals[0] : Double.NaN;
+            result.add(new SubsystemScore(order[i], labels[i], score, metrics[i]));
+        }
+        return result;
+    }
 
     /**
      * Get the shared AutotuneConfig instance.
@@ -7086,8 +7145,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Build success rate: read the stat VALUE (0-100) directly.
-         * The build stats emit the computed percentage as the stat value
-         * with event count 0, so getEventCount() is always 0 (dead).
+         * When firewalled, lower thresholds since inbound builds are rejected.
          */
         private double scoreBuildSuccess() {
             RateStat rs = _ctx.statManager().getRate("tunnel.buildSuccessRate");
@@ -7095,8 +7153,21 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() == 0) return 1.0;
             double pct = rate.getAverageValue();
-            // pct is 0-100; >80% = 1.0, <30% = 0.0
+            if (isFirewalled()) {
+                // firewalled: 10%→0.0, 50%→1.0
+                return clamp((pct - 10.0) / 40.0);
+            }
+            // normal: 30%→0.0, 80%→1.0
             return clamp((pct - 30.0) / 50.0);
+        }
+
+        /**
+         * @return true if any transport reports firewalled status
+         */
+        private boolean isFirewalled() {
+            CommSystemFacade.Status status = _ctx.commSystem().getStatus();
+            return status == CommSystemFacade.Status.REJECT_UNSOLICITED
+                || status.toString().contains("FIREWALLED");
         }
 
         /**
@@ -7171,6 +7242,151 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         private static double clamp(double v) {
             return Math.max(0.0, Math.min(1.0, v));
+        }
+
+        /**
+         * Compute per-subsystem health scores for the ring chart dashboard.
+         * Each subsystem gets a score based on its most relevant stat(s).
+         *
+         * @return map of subsystem key → {score, ...detail}
+         * @since 0.9.70+
+         */
+        Map<String, double[]> computeSubsystemScores() {
+            Map<String, double[]> scores = new LinkedHashMap<String, double[]>();
+
+            // Router: job lag + memory
+            scores.put(SUB_ROUTER, new double[] {
+                scoreJobLag(),
+                getStatValue("jobQueue.memoryUsedPercent") / 100.0
+            });
+
+            // Tunnel: build success + build storms
+            double buildSuccess = scoreBuildSuccess();
+            double buildStorm = scoreBuildStorms();
+            scores.put(SUB_TUNNEL, new double[] {
+                Math.min(buildSuccess, buildStorm),
+                buildSuccess,
+                buildStorm
+            });
+
+            // Transport: latency + transit load
+            double latency = scoreLatency();
+            double transit = scoreTransitLoad();
+            scores.put(SUB_TRANSPORT, new double[] {
+                Math.min(latency, transit),
+                latency,
+                transit
+            });
+
+            // NetDB: lookup success rate
+            scores.put(SUB_NETDB, new double[] {
+                scoreNetDbLookup()
+            });
+
+            // Streaming: connection success (if stat available, else NaN)
+            double streamScore = getStatValue("streaming.connSuccessLifetime");
+            if (Double.isNaN(streamScore)) {
+                // No streaming stat available — use job lag as proxy
+                streamScore = scoreJobLag();
+            }
+            scores.put(SUB_STREAMING, new double[] { streamScore });
+
+            // I2CP: queue utilization
+            scores.put(SUB_I2CP, new double[] {
+                scoreI2cpQueue()
+            });
+
+            // Peers: active profiles vs capacity
+            scores.put(SUB_PEER, new double[] {
+                scorePeerHealth()
+            });
+
+            // Congestion: BW throttle + congestion events
+            scores.put(SUB_CONGESTION, new double[] {
+                scoreCongestion()
+            });
+
+            // Crypto: DH queue pressure
+            scores.put(SUB_CRYPTO, new double[] {
+                scoreCryptoPressure()
+            });
+
+            return scores;
+        }
+
+        /**
+         * NetDB lookup success: matched/handled ratio.
+         * <50% = 0.0, >90% = 1.0
+         */
+        private double scoreNetDbLookup() {
+            double handled = getEventCount("netDb.lookupsHandled");
+            double matched = getEventCount("netDb.lookupsMatched");
+            if (handled <= 0) return 1.0;
+            double ratio = matched / handled;
+            return clamp((ratio - 0.5) / 0.4);
+        }
+
+        /**
+         * I2CP internal queue utilization.
+         * 0% = 1.0, >80% = 0.0
+         */
+        private double scoreI2cpQueue() {
+            double used = getStatValue("i2cp.internalQueueSize");
+            if (Double.isNaN(used) || used <= 0) return 1.0;
+            // used is the average queue size; capacity is ~65536 (internal default)
+            double ratio = used / 65536.0;
+            return clamp(1.0 - (ratio / 0.8));
+        }
+
+        /**
+         * Peer health: active profiles count.
+         * <100 = degraded, >500 = healthy
+         */
+        private double scorePeerHealth() {
+            double active = getStatValue("peer.activeProfileCount");
+            if (Double.isNaN(active) || active <= 0) return 1.0;
+            // Normalize: 0 peers → 0.0, 500+ peers → 1.0
+            return clamp(active / 500.0);
+        }
+
+        /**
+         * Congestion: send BW throttle time + congestion event frequency.
+         * Low throttle = 1.0, high = 0.0
+         */
+        private double scoreCongestion() {
+            double throttleTime = getStatValue("udp.sendBWThrottleTime");
+            if (Double.isNaN(throttleTime)) return 1.0;
+            double congEvents = getEventCount("udp.congestionOccurred");
+            double totalSends = getEventCount("udp.allowConcurrentActive");
+            if (totalSends <= 0) return 1.0;
+            double congRatio = congEvents / totalSends;
+            // 0% congestion → 1.0, 5% → 0.0
+            return clamp(1.0 - (congRatio / 0.05));
+        }
+
+        /**
+         * Crypto: DH queue empty events vs used events.
+         * Frequent empty queue = key generation bottleneck
+         */
+        private double scoreCryptoPressure() {
+            double used = getEventCount("crypto.EDHUsed");
+            double empty = getEventCount("crypto.XDHEmpty");
+            if (used <= 0) return 1.0;
+            double emptyRatio = empty / used;
+            // 0% empty → 1.0, >30% empty → 0.0
+            return clamp(1.0 - (emptyRatio / 0.3));
+        }
+
+        /**
+         * Read a stat's average value using the 60s period.
+         * Returns NaN if stat unavailable.
+         */
+        private double getStatValue(String statName) {
+            RateStat rs = _ctx.statManager().getRate(statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
         }
     }
 

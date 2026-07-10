@@ -316,19 +316,22 @@ public class TuningHelper extends HelperBase {
         }
         buf.append("</p>");
 
+        // Subsystem ring chart dashboard
+        buf.append(renderSubsystemRings(tuner));
+
         buf.append("<form id=tuningform method=POST target=processForm>")
            .append("<input type=hidden name=nonce value=\"").append(_nonce != null ? _nonce : "").append("\">")
            .append("<div class=tablewrap><table id=tuningtable><thead>")
            .append("<tr>")
-            .append("<th class=parameter>").append(_t("Parameter")).append("</th>")
-            .append("<th class=value>").append(_t("Current")).append("</th>")
-            .append("<th class=default>").append(_t("Default")).append("</th>")
-            .append("<th class=min>").append(_t("Min")).append("</th>")
-            .append("<th class=max>").append(_t("Max")).append("</th>")
-            .append("<th class=step>").append(_t("Step")).append("</th>")
-            .append("<th class=history>").append(_t("History")).append("</th>")
-            .append("<th class=auto>").append(_t("Auto")).append("</th>")
-            .append("</tr></thead>");
+           .append("<th class=parameter>").append(_t("Parameter")).append("</th>")
+           .append("<th class=value>").append(_t("Current")).append("</th>")
+           .append("<th class=default>").append(_t("Default")).append("</th>")
+           .append("<th class=min>").append(_t("Min")).append("</th>")
+           .append("<th class=max>").append(_t("Max")).append("</th>")
+           .append("<th class=step>").append(_t("Step")).append("</th>")
+           .append("<th class=history>").append(_t("History")).append("</th>")
+           .append("<th class=auto>").append(_t("Auto")).append("</th>")
+           .append("</tr></thead>");
 
         for (Map.Entry<String, List<ParamSnapshot>> entry : groups.entrySet()) {
             List<ParamSnapshot> params = entry.getValue();
@@ -379,11 +382,11 @@ public class TuningHelper extends HelperBase {
             buf.append("</tbody>");
         }
 
-        buf.append("<tr><td class=optionsave colspan=8>")
-           .append("<input type=submit name=action class=accept style=float:left value=\"").append(_t("Restore Defaults")).append("\">")
-           .append(' ')
-           .append("<input type=submit name=action class=accept value=\"").append(_t("Save")).append("\"></td></tr>");
-        buf.append("</table></form></div>");
+        buf.append("<tr><td class=optionsave colspan=8><input type=submit name=action class=accept style=float:left value=\"")
+           .append(_t("Restore Defaults"))
+           .append("\"> <input type=submit name=action class=accept value=\"")
+           .append(_t("Save"))
+           .append("\"></td></tr></table></form></div>");
         return buf.toString();
     }
 
@@ -431,7 +434,7 @@ public class TuningHelper extends HelperBase {
      */
     private static String renderSparkline(int[] values, int defaultValue) {
         int n = values.length;
-        if (n < 2) return "<span class=spark>collecting...</span>";
+        if (n < 2) return "<span class=\"spark init\">Collecting...</span>";
 
         int pad = 4;
         int pw = SPARK_W - pad * 2;
@@ -480,6 +483,95 @@ public class TuningHelper extends HelperBase {
     }
 
     /**
+     * Ring chart dimensions — small enough for a 3×3 grid, large enough to read.
+     */
+    private static final int RING_SIZE = 90;
+    private static final int RING_STROKE = 8;
+    private static final int RING_RADIUS = (RING_SIZE - RING_STROKE) / 2;
+    private static final double RING_CIRCUM = 2 * Math.PI * RING_RADIUS;
+
+    /**
+     * Render a single SVG donut/ring chart.
+     *
+     * @param score   0.0–1.0 fill level
+     * @param label   subsystem name (center text)
+     * @param pct     percentage string for the center (e.g. "93%")
+     * @return inline SVG markup
+     */
+    private static String renderRingChart(double score, String label, String pct) {
+        // clamp
+        if (score < 0) score = 0;
+        if (score > 1) score = 1;
+        double offset = RING_CIRCUM * (1.0 - score);
+
+        String cls = score >= 0.8 ? "green" : score >= 0.5 ? "yellow" : "red";
+
+        StringBuilder sb = new StringBuilder(256);
+        sb.append("<svg class=ring viewBox=\"0 0 ").append(RING_SIZE).append(' ').append(RING_SIZE).append("\">");
+
+        // background ring
+        sb.append("<circle class=\"ring-bg\" cx=\"").append(RING_SIZE / 2).append("\" cy=\"").append(RING_SIZE / 2)
+          .append("\" r=\"").append(RING_RADIUS).append("\"/>");
+
+        // foreground arc (rotated from 12 o'clock)
+        sb.append("<circle class=\"ring-arc ").append(cls).append("\" cx=\"").append(RING_SIZE / 2)
+          .append("\" cy=\"").append(RING_SIZE / 2).append("\" r=\"").append(RING_RADIUS)
+          .append("\" stroke-dasharray=\"").append(RING_CIRCUM).append(' ').append(RING_CIRCUM)
+          .append("\" stroke-dashoffset=\"").append(offset)
+          .append("\" transform=\"rotate(-90 ").append(RING_SIZE / 2).append(' ').append(RING_SIZE / 2)
+          .append(")\"/>");
+
+        // center percentage text
+        sb.append("<text class=\"ring-pct ").append(cls).append("\" x=\"").append(RING_SIZE / 2)
+          .append("\" y=\"").append(RING_SIZE / 2 - 2).append("\">")
+          .append(esc(pct)).append("</text>");
+
+        // label below percentage
+        sb.append("<text class=ring-label x=\"").append(RING_SIZE / 2)
+          .append("\" y=\"").append(RING_SIZE / 2 + 12).append("\">")
+          .append(esc(label)).append("</text>");
+
+        sb.append("</svg>");
+        return sb.toString();
+    }
+
+    /**
+     * Render the subsystem ring chart dashboard.
+     * Returns an HTML div with a grid of SVG ring charts, one per subsystem.
+     * NaN-scored subsystems show a gray "collecting..." ring.
+     *
+     * @since 0.9.70+
+     */
+    private String renderSubsystemRings(Tuner tuner) {
+        List<Tuner.SubsystemScore> scores = tuner.getSubsystemScores();
+        if (scores.isEmpty()) return "";
+
+        StringBuilder buf = new StringBuilder(2048);
+        buf.append("<div id=tuningstats>");
+
+        for (Tuner.SubsystemScore ss : scores) {
+            buf.append("<div class=ring-cell>");
+            if (Double.isNaN(ss.score)) {
+                buf.append(renderRingChart(0, ss.label, "\u2014"));
+            } else {
+                int pct = (int) (ss.score * 100);
+                buf.append(renderRingChart(ss.score, ss.label, pct + "%"));
+            }
+            // CSS tooltip
+            buf.append("<div class=ring-tip>");
+            for (int i = 0; i < ss.details.length; i++) {
+                if (i > 0) buf.append("<br>");
+                buf.append(esc(ss.details[i]));
+            }
+            buf.append("</div>");
+            buf.append("</div>");
+        }
+
+        buf.append("</div>");
+        return buf.toString();
+    }
+
+    /**
      * @return the UDPTransport's Tuner, or null
      */
     private Tuner getTuner() {
@@ -488,8 +580,9 @@ public class TuningHelper extends HelperBase {
         if (cs == null) return null;
         SortedMap<String, Transport> transports = cs.getTransports();
         Transport udp = transports.get(UDPTransport.STYLE);
-        if (udp instanceof UDPTransport)
+        if (udp instanceof UDPTransport) {
             return ((UDPTransport) udp).getTuner();
+        }
         return null;
     }
 }

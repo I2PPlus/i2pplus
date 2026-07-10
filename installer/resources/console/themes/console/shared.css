@@ -42,6 +42,7 @@
 #compactLookup #netdblookup td:first-child{padding-left:6px;width:15%;min-width:180px}
 #compactLookup #netdblookup td:last-child{padding-right:6px;width:10%;min-width:120px}
 #compactLookup #netdblookup tr{background:var(--th)}
+#config_summarybar input[type=text]{width:64px;min-width:0}
 #netdbSearchCompact{width:100%}
 #netdb .netdbentry th.router{text-align:center}
 #netdb .netdbentry th.router b{display:inline-block;width:24px;height:24px;min-width:unset;vertical-align:middle;font-size:0;color:#0000;background:var(--client) no-repeat center center/24px}
@@ -106,7 +107,21 @@ html:not([".advmode"]) #tuning input[type=number]{min-width:0!important;text-ali
 #tuning .section.toggle:hover td:last-child::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
 #tuning .section.toggle.expanded td:last-child::after{background:var(--dropdown);content:"";transform:none}
 #tuning .section.toggle.expanded:hover td:last-child::after{background:var(--dropdown_hover);content:"";transform:none}
-#config_summarybar input[type=text]{width:64px;min-width:0}
+#tuningstats{margin:12px 0;padding:16px 8px;width:calc(100% - 18px);display:grid;grid-template-columns:repeat(9,1fr);gap:8px;border:var(--border);text-align:center}
+.ring{max-height:110px;max-width:110px;display:block}
+.ring-cell{display:flex;justify-content:center;align-items:center;position:relative}
+.ring-tip{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:6px;padding:6px 10px;background:#222;color:#ccc;font-size:11px;line-height:1.4;white-space:nowrap;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.5);z-index:10;text-align:left;pointer-events:none}
+.ring-cell:hover .ring-tip{display:block}
+.ring .ring-arc{fill:none;stroke-width:8;stroke-linecap:round}
+.ring .ring-arc.green{stroke:#2ecc71}
+.ring .ring-arc.red{stroke:#e74c3c}
+.ring .ring-arc.yellow{stroke:#f39c12}
+.ring .ring-bg{fill:none;stroke:#333;stroke-width:8}
+.ring .ring-label{font-size:75%;font-weight:600;fill:#999;text-anchor:middle;dominant-baseline:central}
+.ring .ring-pct{font-size:14px;font-weight:bold;text-anchor:middle;dominant-baseline:central}
+.ring .ring-pct.green{fill:#2ecc71}
+.ring .ring-pct.red{fill:#e74c3c}
+.ring .ring-pct.yellow{fill:#f39c12}
 
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1.1)}50%{opacity:.7;transform:scale(.9)}}
 
