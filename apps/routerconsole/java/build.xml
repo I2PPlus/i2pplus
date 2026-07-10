@@ -176,17 +176,12 @@
     unless="jar.uptodate">
     <!-- Set if unset -->
     <property name="workspace.changes.j.tr" value=""/>
-    <!-- copy the NDT translations, strip the countries -->
-    <parallel>
-      <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_en_US.properties" tofile="${build.dir}/obj/edu/internet2/ndt/locale/Tcpbw100_msgs.properties"/>
-      <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_ca_ES.properties" tofile="${build.dir}/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_ca.properties"/>
-      <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_el_GR.properties" tofile="${build.dir}/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_el.properties"/>
-      <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_fr_FR.properties" tofile="${build.dir}/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_fr.properties"/>
-      <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_nb_NO.properties" tofile="${build.dir}/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_nb.properties"/>
-      <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_nl_NL.properties" tofile="${build.dir}/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_nl.properties"/>
-      <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_pt_BR.properties" tofile="${build.dir}/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_pt.properties"/>
-      <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_ru_RU.properties" tofile="${build.dir}/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_ru.properties"/>
-    </parallel>
+    <!-- copy the NDT translations (source files are already language-only) -->
+    <copy todir="${build.dir}/obj/edu/internet2/ndt/locale" includeemptydirs="false">
+      <fileset dir="src/edu/internet2/ndt/locale" includes="Tcpbw100_msgs_*.properties"/>
+    </copy>
+    <!-- copy English as the default/fallback bundle (no locale suffix) -->
+    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_en.properties" tofile="${build.dir}/obj/edu/internet2/ndt/locale/Tcpbw100_msgs.properties"/>
     <jar destfile="${build.dir}/routerconsole.jar" basedir="${build.dir}/obj" excludes="net/i2p/router/web/helpers/* net/i2p/router/web/servlets/* net/i2p/router/web/resources/**/*">
       <manifest>
         <!-- DTG added in 0.8.4, not in the classpath for very old installs, before we changed

@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 /**
  * Class that defines utility methods used by the NDT code
  */
- public class NDTUtils {
+public class NDTUtils {
 
     /**
      * Utility method to print double value up to the hundredth place.

@@ -118,7 +118,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     String[] _saDelays = { "immediate", "1min", "5mins", "10mins", "30mins", "2hours", "12hours", "1day" };
 
     boolean _bFailed;
-    NewFrame _frameWeb100Vars, _frameDetailedStats, _frameOptions;
+    NewFrame _frameWeb100Vars, _frameDetailedStats;
     double _dTime;
     int _s2cspdUpdateTime = 500, _c2sspdUpdateTime = 500; // ms
     int _iECNEnabled, _iNagleEnabled, MSSSent, MSSRcvd;
@@ -160,7 +160,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     private final AtomicBoolean _bTestInProgress = new AtomicBoolean();
     String sHostName = null;
     InetAddress hostAddress = null;
-    String _sTestResults, _sMidBoxTestResult;
+    String _sTestResults = "";
     byte _yTests = NDTConstants.TEST_C2S | NDTConstants.TEST_S2C | NDTConstants.TEST_STATUS | NDTConstants.TEST_META;
     int _iC2sSFWResult = NDTConstants.SFW_NOTTESTED;
     int _iS2cSFWResult = NDTConstants.SFW_NOTTESTED;
@@ -205,9 +205,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     private int pub_DupAcksOut = 0;
     private int pub_DupAcksIn = 0;
     private Date pub_TimeStamp;
-    private String pub_isReady = "no";
     private String pub_clientIP = "unknown";
-    private int pub_jitter = 0; // unused. TODO: find out use
     private int pub_Timeouts = 0;
     private String pub_errmsg = "Test not run.";
     private String pub_diagnosis = "Test not run.";
@@ -480,13 +478,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                 _log.error(_sErrMsg, e);
             }
 
-            // If test failed due to any reason, mark failure reason too
-            if (_bFailed) {
-                _resultsTxtPane.append(_sErrMsg);
-                pub_isReady = "failed";
-                pub_errmsg = _sErrMsg;
-            }
-
             // Enable all buttons. Continue activities to mark status as complete
             _buttonDetails.setEnabled(true);
             _buttonStatistics.setEnabled(true);
@@ -648,8 +639,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         _frameDetailedStats.getContentPane().add(new JScrollPane(_txtStatistics));
         _frameDetailedStats.pack();
     } // createStatsWindow()
-
-    public void createOptionsWindow() {}
 
     /**
      * Run the Thread that calls the "dottcp" method to run tests. This method
@@ -1585,7 +1574,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             _resultsTxtPane.append(ex + "\n");
         }
 
-        pub_isReady = "yes";
         pub_errmsg = "All tests completed OK.";
         pub_status = "done";
     }
@@ -1802,8 +1790,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                 if (((2 * rwin) / rttsec) < mylink) { // multiply by 2 to counter round-trip
 
                     // Link speed is in Mbps. Convert it back to kbps (*1000), and bytes (/8)
-                    j = (float) ((mylink * avgrtt) * NDTConstants.KILO) / NDTConstants.EIGHT / NDTConstants.KILO_BITS;
-                    if (j > (float) _iMaxRwinRcvd) {
+                    j = ((mylink * avgrtt) * NDTConstants.KILO) / NDTConstants.EIGHT / NDTConstants.KILO_BITS;
+                    if (j > _iMaxRwinRcvd) {
                         _resultsTxtPane.append(_resBundDisplayMsgs.getString("receiveBufferShouldBe") + " " + NDTUtils.prtdbl(j) +
                                                _resBundDisplayMsgs.getString("toMaximizeThroughput") + " \n");
                     }
@@ -1964,14 +1952,14 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             // the statistics pane. Data is displayed as a percentage
             if ((_yTests & NDTConstants.TEST_S2C) == NDTConstants.TEST_S2C) {
                 if (_dSs2cspd > _dS2cspd) {
-                    if (_dSs2cspd < (_dSs2cspd * (1.0 - NDTConstants.VIEW_DIFF))) {
+                    if (_dS2cspd < (_dSs2cspd * (1.0 - NDTConstants.VIEW_DIFF))) {
                         _txtStatistics.append(_resBundDisplayMsgs.getString("s2c") + " " +
-                                              _resBundDisplayMsgs.getString("eqSeen") + ": " +
-                                              NDTUtils.prtdbl(NDTConstants.PERCENTAGE * (_dSs2cspd - _dS2cspd) / _dSs2cspd) + "%\n");
+                                               _resBundDisplayMsgs.getString("eqSeen") + ": " +
+                                               NDTUtils.prtdbl(NDTConstants.PERCENTAGE * (_dSs2cspd - _dS2cspd) / _dSs2cspd) + "%\n");
                     } else {
                         _txtStatistics.append(_resBundDisplayMsgs.getString("s2c") + " " +
-                                              _resBundDisplayMsgs.getString("qSeen") + ": " +
-                                              NDTUtils.prtdbl(NDTConstants.PERCENTAGE * (_dSs2cspd - _dS2cspd) / _dSs2cspd) + "%\n");
+                                               _resBundDisplayMsgs.getString("qSeen") + ": " +
+                                               NDTUtils.prtdbl(NDTConstants.PERCENTAGE * (_dSs2cspd - _dS2cspd) / _dSs2cspd) + "%\n");
                     }
                 }
             }
@@ -2082,11 +2070,10 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      */
 
     /**
-     * Method to save double values of various "keys" from the the test results
-     * string into corresponding double datatypes.
+     * Save double values of various keys from the test results string.
      *
-     * @param sSysvarParam key name string
-     * @param dSysvalParam Value for this key name
+     * @param sSysvarParam key name (e.g. "bw:", "loss:")
+     * @param dSysvalParam parsed double value
      */
     public void save_dbl_values(String sSysvarParam, double dSysvalParam) {
         if (sSysvarParam.equals("bw:")) {estimate = dSysvalParam;}
@@ -2113,23 +2100,20 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     } // save_dbl_values()
 
     /**
-     * Method to save long values of various "keys" from the the test results
-     * string into corresponding long datatypes.
+     * Save long values of various keys from the test results string.
      *
-     * @param sSysvarParam key name string
-     * @param lSysvalParam Value for this key name
+     * @param sSysvarParam key name (e.g. "DataBytesOut:")
+     * @param lSysvalParam parsed long value
      */
     public void save_long_values(String sSysvarParam, long lSysvalParam) {
         if (sSysvarParam.equals("DataBytesOut:")) {_iDataBytesOut = lSysvalParam;}
     }
 
     /**
-     * Method to save integer values of various "keys" from the the test results
-     * string into corresponding integer datatypes.
+     * Save integer values of various keys from the test results string.
      *
-     * @param sSysvarParam String key name
-     * @param iSysvalParam Value for this key name
-     *
+     * @param sSysvarParam key name (e.g. "MSSSent:", "Timeouts:")
+     * @param iSysvalParam parsed integer value
      */
     public void save_int_values(String sSysvarParam, int iSysvalParam) {
         //
@@ -2148,7 +2132,10 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         else if (sSysvarParam.equals("SumRTT:")) {_iSumRTT = iSysvalParam;}
         else if (sSysvarParam.equals("CountRTT:")) {_iCountRTT = iSysvalParam;}
         else if (sSysvarParam.equals("CurMSS:")) {_iCurrentMSS = iSysvalParam;}
-        else if (sSysvarParam.equals("Timeouts:")) {_iTimeouts = iSysvalParam;}
+        else if (sSysvarParam.equals("Timeouts:")) {
+            _iTimeouts = iSysvalParam;
+            pub_Timeouts = iSysvalParam;
+        }
         else if (sSysvarParam.equals("PktsRetrans:")) {_iPktsRetrans = iSysvalParam;}
         else if (sSysvarParam.equals("SACKsRcvd:")) {
             _iSACKsRcvd = iSysvalParam;
@@ -2184,7 +2171,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         else if (sSysvarParam.equals("MinRTT:")) {pub_MinRTT = iSysvalParam;}
         else if (sSysvarParam.equals("MaxRTT:")) {pub_MaxRTT = iSysvalParam;}
         else if (sSysvarParam.equals("CurRwinRcvd:")) {pub_CurRwinRcvd = iSysvalParam;}
-        else if (sSysvarParam.equals("Timeouts:")) {pub_Timeouts = iSysvalParam;}
         else if (sSysvarParam.equals("c2sData:")) {_iC2sData = iSysvalParam;}
         else if (sSysvarParam.equals("c2sAck:")) {_iC2sAck = iSysvalParam;}
         else if (sSysvarParam.equals("s2cData:")) {_iS2cData = iSysvalParam;}
@@ -2202,27 +2188,28 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         } else if (sSysvarParam.equals("half_duplex:")) {half_duplex = iSysvalParam;}
         else if (sSysvarParam.equals("CongestionSignals:")) {_iCongestionSignals = iSysvalParam;}
         else if (sSysvarParam.equals("RcvWinScale:")) {
-            if (_iRcvWinScale > 15) {_iRcvWinScale = 0;}
+            if (iSysvalParam > 14) {_iRcvWinScale = 0;}
             else {_iRcvWinScale = iSysvalParam;}
         }
     } // save_int_values()
 
     /**
-     * Method check, if values of various "keys" from the the test results string is saved by
-     * save_int_values(), save_dbl_values() or save_long_values() after parse to int/double/long
+     * Check if the given key is one whose value is saved by
+     * save_int_values(), save_dbl_values(), or save_long_values().
      *
-     * @param sSysvarParam String key name
+     * @param sSysvarParam key name string from test results
+     * @return true if the key is recognized and saved
      */
     private boolean isValueSave(String sSysvarParam) {
         Set<String> saveValues = new HashSet<>(Arrays.asList(
-            "AckPktsIn:", "AckPktsOut:", "Bad_cable:", "Congestion:", "CongestionSignals:", "CountRTT:", "CurCwnd:",
+            "AckPktsIn:", "AckPktsOut:", "bad_cable:", "congestion:", "CongestionSignals:", "CountRTT:", "CurCwnd:",
             "CurMSS:", "CurRTO:", "CurRwinRcvd:", "DataBytesOut:", "DataPktsOut:", "DupAcksIn:", "ECNEnabled:",
-            "FastRetran:", "Half_duplex:", "MaxCwnd:", "MaxRTO:", "MaxRwinRcvd:", "MaxRwinSent:", "MaxSsthresh:",
-            "MaxRTT:", "MinRTO:", "MinRTT:", "MSSRcvd:", "MSSSent:", "NagleEnabled:", "Order:", "PktsOut:",
-            "PktsRetrans:", "RcvWinScale:", "Rwin:", "S2cAck:", "S2cData:", "SACKEnabled:", "SACKsRcvd:", "Sndbuf:",
+            "FastRetran:", "half_duplex:", "MaxCwnd:", "MaxRTO:", "MaxRwinRcvd:", "MaxRwinSent:", "MaxSsthresh:",
+            "MaxRTT:", "MinRTO:", "MinRTT:", "MSSRcvd:", "MSSSent:", "NagleEnabled:", "order:", "PktsOut:",
+            "PktsRetrans:", "RcvWinScale:", "rwin:", "s2cAck:", "s2cData:", "SACKEnabled:", "SACKsRcvd:", "Sndbuf:",
             "SndLimTimeCwnd:", "SndLimTimeRwin:", "SndLimTimeSender:", "SndLimTransCwnd:", "SndLimTransRwin:",
-            "SndLimTransSender:", "SmoothedRTT:", "Sndbuf:", "Swin:", "SumRTT:", "Swin:", "Timeouts:", "TimestampsEnabled:",
-            "Timesec:", "Waitsec:", "WinScaleRcvd:", "WinScaleSent:", "X_Rcvbuf:", "aspd:", "avgrtt:", "bw:", "c2sAck:",
+            "SndLimTransSender:", "SmoothedRTT:", "swin:", "SumRTT:", "Timeouts:", "TimestampsEnabled:",
+            "timesec:", "waitsec:", "WinScaleRcvd:", "WinScaleSent:", "X_Rcvbuf:", "aspd:", "avgrtt:", "bw:", "c2sAck:",
             "c2sData:", "cwin:", "cwndtime:", "loss:", "mismatch:", "rttsec:", "rwintime:", "sendtime:", "spd:"
         ));
         return saveValues.contains(sSysvarParam);
@@ -2294,17 +2281,19 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     }
 
     /**
-     * Function that parse String to Integer
-     * @param {String} Value to parse.
-     * @return {int} The parsed value.
+     * Parse a message body string to an integer using base 10.
+     *
+     * @param msg string to parse
+     * @return parsed value, or 0 on failure
      */
     private int parseMsgBodyToInt(String msg) {return parseMsgBodyToInt(msg, 10);}
 
     /**
-     * Function that parse String to Integer
-     * @param {String} Value to parse.
-     * @param {int}  the radix to be used while parsing
-     * @return {int} The parsed value.
+     * Parse a message body string to an integer using the given radix.
+     *
+     * @param msg string to parse
+     * @param radix numeric base (e.g. 10 or 16)
+     * @return parsed value, or 0 on failure
      */
     private int parseMsgBodyToInt(String msg, int radix) {
         try {
