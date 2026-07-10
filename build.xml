@@ -3824,13 +3824,22 @@
     <!-- Build aux classpath dynamically from available system jars -->
     <available file="installer/lib/wrapper/all/wrapper.jar" property="wrapper.jar.path" value="installer/lib/wrapper/all/wrapper.jar"/>
     <available file="/usr/share/java/ant.jar" property="system.ant.path" value="/usr/share/java/ant.jar"/>
+    <available file="/usr/share/java/eclipse-jdt-core-compiler-batch.jar" property="eclipse.jdt.compiler.path" value="/usr/share/java/eclipse-jdt-core-compiler-batch.jar"/>
+    <available file="/usr/share/java/taglibs-standard-impl.jar" property="taglibs.impl.path" value="/usr/share/java/taglibs-standard-impl.jar"/>
+    <available file="/usr/share/java/taglibs-standard-spec.jar" property="taglibs.spec.path" value="/usr/share/java/taglibs-standard-spec.jar"/>
+    <available file="/usr/share/java/tomcat11-coyote.jar" property="tomcat.coyote.path" value="/usr/share/java/tomcat11-coyote.jar"/>
     <path id="spotbugs.auxclasspath">
       <fileset dir="${build.root}build" includes="*.jar"/>
       <fileset dir="${spotbugs.dir}/lib" includes="*.jar"/>
       <pathelement location="${wrapper.jar.path}"/>
       <pathelement location="${system.ant.path}"/>
+      <pathelement location="${eclipse.jdt.compiler.path}"/>
+      <pathelement location="${taglibs.impl.path}"/>
+      <pathelement location="${taglibs.spec.path}"/>
+      <pathelement location="${tomcat.coyote.path}"/>
     </path>
     <pathconvert refid="spotbugs.auxclasspath" property="spotbugs.auxclasspath.path" pathsep=":"/>
+    <mkdir dir="/tmp/build-i2p/reports"/>
 
     <spotbugs home="${spotbugs.home}" output="xml:withMessages" outputFile="/tmp/build-i2p/reports/spotbugs.xml" effort="max" debug="false" reportLevel="medium" timeout="1800000" jvm="${spotbugs.java}" excludeFilter="tools/spotbugs/config/spotbugs-exclude.xml">
       <auxAnalyzepath path="${build.root}build"/>
@@ -4363,13 +4372,22 @@
         <taskdef resource="edu/umd/cs/findbugs/anttask/tasks.properties" classpath="${spotbugs.jar}"/>
         <available file="installer/lib/wrapper/all/wrapper.jar" property="wrapper.jar.path" value="installer/lib/wrapper/all/wrapper.jar"/>
         <available file="/usr/share/java/ant.jar" property="system.ant.path" value="/usr/share/java/ant.jar"/>
+        <available file="/usr/share/java/eclipse-jdt-core-compiler-batch.jar" property="eclipse.jdt.compiler.path" value="/usr/share/java/eclipse-jdt-core-compiler-batch.jar"/>
+        <available file="/usr/share/java/taglibs-standard-impl.jar" property="taglibs.impl.path" value="/usr/share/java/taglibs-standard-impl.jar"/>
+        <available file="/usr/share/java/taglibs-standard-spec.jar" property="taglibs.spec.path" value="/usr/share/java/taglibs-standard-spec.jar"/>
+        <available file="/usr/share/java/tomcat11-coyote.jar" property="tomcat.coyote.path" value="/usr/share/java/tomcat11-coyote.jar"/>
         <path id="spotbugs.auxclasspath">
           <fileset dir="${build.root}build" includes="*.jar"/>
           <fileset dir="${spotbugs.dir}/lib" includes="*.jar"/>
           <pathelement location="${wrapper.jar.path}"/>
           <pathelement location="${system.ant.path}"/>
+          <pathelement location="${eclipse.jdt.compiler.path}"/>
+          <pathelement location="${taglibs.impl.path}"/>
+          <pathelement location="${taglibs.spec.path}"/>
+          <pathelement location="${tomcat.coyote.path}"/>
         </path>
         <pathconvert refid="spotbugs.auxclasspath" property="spotbugs.auxclasspath.path" pathsep=":"/>
+        <mkdir dir="/tmp/build-i2p/reports"/>
         <spotbugs home="${spotbugs.home}" output="xml:withMessages" outputFile="/tmp/build-i2p/reports/spotbugs.xml" effort="max" debug="false" reportLevel="medium" timeout="1800000" jvm="${spotbugs.java}" excludeFilter="tools/spotbugs/config/spotbugs-exclude.xml">
           <auxAnalyzepath path="${build.root}build"/>
           <auxClasspath path="${spotbugs.auxclasspath.path}"/>
