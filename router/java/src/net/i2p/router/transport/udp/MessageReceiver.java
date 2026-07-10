@@ -37,10 +37,12 @@ class MessageReceiver {
     private volatile boolean _alive;
     private static volatile int _threadCount = SystemVersion.isSlow() ? 2 : 3;
     private final AtomicInteger _activeRunners = new AtomicInteger();
+    private final AtomicInteger _processingCount = new AtomicInteger();
     private final CopyOnWriteArrayList<Runner> _runners = new CopyOnWriteArrayList<>();
     private static final long POISON_IMS = -99999999999L;
     private static final int MIN_THREADS = 1;
     private static final int MAX_THREADS = 16;
+    private static final AtomicInteger _threadNum = new AtomicInteger();
 
     public MessageReceiver(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
@@ -70,6 +72,23 @@ class MessageReceiver {
     public int getQueueSize() { return _completeMessages.size(); }
 
     /**
+     * Returns the number of runners actively processing messages (not parked on take()).
+     * @since 0.9.70+
+     */
+    public int getProcessingCount() { return _processingCount.get(); }
+
+    /**
+     * Get message receiver pool utilization as a ratio (0.0-1.0).
+     * Returns NaN if not started.
+     *
+     * @since 0.9.70+
+     */
+    public double getUtilization() {
+        int count = _threadCount;
+        return count > 0 ? (double) _processingCount.get() / count : Double.NaN;
+    }
+
+    /**
      * Returns the maximum capacity of the message receiver queue.
      * @since 0.9.70+
      */
@@ -96,7 +115,7 @@ class MessageReceiver {
         Runner r = new Runner();
         _runners.add(r);
         _activeRunners.incrementAndGet();
-        I2PThread t = new I2PThread(r, "UDPMsgRX " + _activeRunners.get() + '/' + _threadCount, true);
+                I2PThread t = new I2PThread(r, "UDPMsgRX." + _threadNum.incrementAndGet(), true);
         t.start();
     }
 
@@ -140,7 +159,7 @@ class MessageReceiver {
             if (_activeRunners.compareAndSet(current, current + 1)) {
                 Runner r = new Runner();
                 _runners.add(r);
-                I2PThread t = new I2PThread(r, "UDPMsgRX " + (current + 1) + '/' + target, true);
+                I2PThread t = new I2PThread(r, "UDPMsgRX." + _threadNum.incrementAndGet(), true);
                 t.start();
                 _log.info("Added MessageReceiver thread, now " + (current + 1) + "/" + target);
                 current = _activeRunners.get();
@@ -202,12 +221,14 @@ class MessageReceiver {
 
                 if (message != null) {
                     int size = message.getCompleteSize();
+                    _processingCount.incrementAndGet();
                     try {
                         I2NPMessage msg = readMessage(buf, message, handler);
                         if (msg != null) {_transport.messageReceived(msg, null, message.getFrom(), message.getLifetime(), size);}
                     } catch (RuntimeException re) {
-                        _log.error("b0rked receiving a message.. wazza huzza hmm?", re);
-                        continue;
+                        _log.error("Error processing UDP message from " + message.getFrom(), re);
+                    } finally {
+                        _processingCount.decrementAndGet();
                     }
                     message = null;
                 }

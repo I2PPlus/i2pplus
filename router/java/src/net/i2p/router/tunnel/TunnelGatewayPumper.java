@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.util.I2PThread;
@@ -49,11 +50,16 @@ class TunnelGatewayPumper implements Runnable {
     // Pool of threads pumping gateways
     private final List<Thread> _threads;
 
+    /** Tracks how many pumper threads are actively processing (not parked on take()). */
+    private final AtomicInteger _activeCount = new AtomicInteger();
+
     // Volatile stop flag visible to all threads
     private volatile boolean _stop;
 
     private static volatile int _queueCapacity;
     private static volatile int _maxPumpers;
+
+    private static final AtomicInteger _threadNum = new AtomicInteger();
 
     /** Running instance for dynamic resize from Tuner */
     private static volatile TunnelGatewayPumper _instance;
@@ -122,6 +128,23 @@ class TunnelGatewayPumper implements Runnable {
     public static void setMaxPumpers(int max) { _maxPumpers = Math.max(2, Math.min(16, max)); }
 
     /**
+     * Get the number of pumper threads actively processing (not parked on take()).
+     * @since 0.9.70+
+     */
+    public int getActiveCount() { return _activeCount.get(); }
+
+    /**
+     * Get pumper pool utilization as a ratio (0.0-1.0).
+     * Returns NaN if no pumpers are running.
+     *
+     * @since 0.9.70+
+     */
+    public double getInstanceUtilization() {
+        int size = _threads.size();
+        return size > 0 ? (double) _activeCount.get() / size : Double.NaN;
+    }
+
+    /**
      * Resize the running instance's queue.
      * @param newCapacity new capacity
      * @since 0.9.70+
@@ -148,6 +171,17 @@ class TunnelGatewayPumper implements Runnable {
     public static void setRequeueTime(long ms) { _requeueTime = Math.max(10, Math.min(200, ms)); }
 
     /**
+     * Get pumper pool utilization as a ratio (0.0-1.0).
+     * Returns NaN if not started.
+     *
+     * @since 0.9.70+
+     */
+    public static double getUtilization() {
+        TunnelGatewayPumper instance = _instance;
+        return instance != null ? instance.getInstanceUtilization() : Double.NaN;
+    }
+
+    /**
      * Special poison pill constant used to signal termination.
      */
     private static final int POISON_PTG = -99999;
@@ -171,7 +205,7 @@ class TunnelGatewayPumper implements Runnable {
         _instance = this;
 
         for (int i = 0; i < _pumpers; i++) {
-            Thread t = new I2PThread(this, "TunnGWPumper " + (i + 1) + '/' + _pumpers, true);
+            Thread t = new I2PThread(this, "TunnGWPumper." + _threadNum.incrementAndGet(), true);
             t.setPriority(Thread.MAX_PRIORITY);
             _threads.add(t);
             t.start();
@@ -204,15 +238,20 @@ class TunnelGatewayPumper implements Runnable {
         if (newCount == current) return;
 
         while (_threads.size() < newCount) {
-            Thread t = new I2PThread(this, "TunnGWPumper " + (_threads.size() + 1) + '/' + newCount, true);
+            Thread t = new I2PThread(this, "TunnGWPumper." + _threadNum.incrementAndGet(), true);
             t.setPriority(Thread.MAX_PRIORITY);
             _threads.add(t);
             t.start();
         }
 
-        // Excess threads will exit on their own via the stop mechanism
-        // For now, just track the target — threads exit when stop is set
-        _pumpers = newCount;
+        if (newCount < current) {
+            // Signal excess threads to exit via poison pills
+            int toStop = current - newCount;
+            for (int i = 0; i < toStop; i++) {
+                _wantsPumping.offer(new PoisonPTG(_context));
+            }
+            _pumpers = newCount;
+        }
     }
 
     /**
@@ -305,9 +344,14 @@ class TunnelGatewayPumper implements Runnable {
                 if (gw.getMessagesSent() == POISON_PTG) {
                     break; // poison pill detected, exit thread
                 }
-                requeue = gw.pump(queueBuf);
-                if (requeue) {
-                    handleRequeue(gw);
+                _activeCount.incrementAndGet();
+                try {
+                    requeue = gw.pump(queueBuf);
+                    if (requeue) {
+                        handleRequeue(gw);
+                    }
+                } finally {
+                    _activeCount.decrementAndGet();
                 }
                 // Report queue depth every 100 pumps
                 if (++pumpCount % 100 == 0) {
@@ -324,6 +368,7 @@ class TunnelGatewayPumper implements Runnable {
                 }
             }
         }
+        _threads.remove(Thread.currentThread());
     }
 
     /**

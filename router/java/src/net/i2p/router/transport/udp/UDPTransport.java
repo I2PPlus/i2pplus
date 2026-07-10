@@ -4123,4 +4123,24 @@ public class UDPTransport extends TransportImpl {
         return _inboundFragments != null ? _inboundFragments.getReceiverQueueCapacity() : 0;
     }
 
+    /**
+     * Get packet handler pool utilization as a ratio (0.0-1.0).
+     * Returns NaN if not started.
+     *
+     * @since 0.9.70+
+     */
+    public double getPacketHandlerUtilization() {
+        return _handler != null ? _handler.getUtilization() : Double.NaN;
+    }
+
+    /**
+     * Get message receiver pool utilization as a ratio (0.0-1.0).
+     * Returns NaN if not started.
+     *
+     * @since 0.9.70+
+     */
+    public double getMessageReceiverUtilization() {
+        return _inboundFragments != null ? _inboundFragments.getMessageReceiverUtilization() : Double.NaN;
+    }
+
 }

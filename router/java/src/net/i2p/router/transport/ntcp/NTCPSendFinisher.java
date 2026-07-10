@@ -125,6 +125,43 @@ class NTCPSendFinisher {
     }
 
     /**
+     * Returns the number of threads currently processing tasks.
+     *
+     * @return active thread count, or 0 if not running
+     * @since 0.9.70+
+     */
+    public int getActiveCount() {
+        ThreadPoolExecutor executor = _executor;
+        if (executor == null || executor.isShutdown()) return 0;
+        return executor.getActiveCount();
+    }
+
+    /**
+     * Returns the current pool size (total threads).
+     *
+     * @return pool size, or 0 if not running
+     * @since 0.9.70+
+     */
+    public int getPoolSize() {
+        ThreadPoolExecutor executor = _executor;
+        if (executor == null || executor.isShutdown()) return 0;
+        return executor.getPoolSize();
+    }
+
+    /**
+     * Get send finisher pool utilization as a ratio (0.0-1.0).
+     * Returns NaN if pool not started.
+     *
+     * @since 0.9.70+
+     */
+    public double getUtilization() {
+        ThreadPoolExecutor executor = _executor;
+        if (executor == null || executor.isShutdown()) return Double.NaN;
+        int size = executor.getPoolSize();
+        return size > 0 ? (double) executor.getActiveCount() / size : Double.NaN;
+    }
+
+    /**
      * Adds a message to the finishing queue to call afterSend asynchronously.
      * If the executor is stopped or saturated, falls back to caller running the task.
      */

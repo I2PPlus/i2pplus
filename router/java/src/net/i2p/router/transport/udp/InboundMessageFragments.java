@@ -72,6 +72,12 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
     int getReceiverQueueCapacity() { return _messageReceiver.getQueueCapacity(); }
 
     /**
+     * Get message receiver pool utilization as a ratio (0.0-1.0).
+     * @since 0.9.70+
+     */
+    double getMessageReceiverUtilization() { return _messageReceiver.getUtilization(); }
+
+    /**
      * This message was received - SSU 2 only.
      * No stats updated here, caller should handle stats.
      *

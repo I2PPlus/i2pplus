@@ -206,7 +206,7 @@ class FragmentHandler {
             // ...
             // still trying to find root cause
             // let's limit the damage here and skip the:
-            // .transport.udp.MessageReceiver: b0rked receiving a message.. wazza huzza hmm?
+            // .transport.udp.MessageReceiver: Error processing UDP message
             //throw e;
             return false;
         } finally {

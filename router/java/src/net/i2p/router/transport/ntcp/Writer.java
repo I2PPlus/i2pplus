@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.router.RouterContext;
 import net.i2p.router.Tuner;
 import net.i2p.util.I2PThread;
@@ -28,6 +29,9 @@ public class Writer {
     private static volatile int _threadCount = SystemVersion.isSlow() ? 2 : Math.max(SystemVersion.getCores() / 2, 3);
     private static final int MIN_THREADS = 1;
     private static final int MAX_THREADS = 16;
+    private static final AtomicInteger _threadNum = new AtomicInteger();
+    /** Tracks how many runner threads are actively processing (not parked). */
+    private final AtomicInteger _activeCount = new AtomicInteger();
 
     public Writer(RouterContext ctx) {
         _log = ctx.logManager().getLog(getClass());
@@ -39,6 +43,18 @@ public class Writer {
 
     /** Get the writer thread count */
     public static int getThreadCount() { return _threadCount; }
+
+    /** Get the number of threads currently processing (not parked). */
+    public int getActiveCount() { return _activeCount.get(); }
+
+    /**
+     * Get writer pool utilization as a ratio (0.0-1.0).
+     * Returns NaN if no writers are active (pool not started).
+     */
+    public double getUtilization() {
+        int size = _runners.size();
+        return size > 0 ? (double) _activeCount.get() / size : Double.NaN;
+    }
 
     /** Set the writer thread count, bounded by MIN_THREADS-MAX_THREADS */
     public static void setThreadCount(int count) { _threadCount = Math.max(MIN_THREADS, Math.min(MAX_THREADS, count)); }
@@ -52,7 +68,7 @@ public class Writer {
     private void startRunner() {
         Runner r = new Runner();
         _runners.add(r);
-        I2PThread t = new I2PThread(r, "NTCPWriter " + _runners.size() + '/' + _threadCount, true);
+        I2PThread t = new I2PThread(r, "NTCPWriter." + _threadNum.incrementAndGet(), true);
         t.start();
     }
 
@@ -165,6 +181,7 @@ public class Writer {
                     Thread.currentThread().interrupt();
                 }
                 if (!_stop && (con != null)) {
+                    _activeCount.incrementAndGet();
                     try {
                         if (_log.shouldDebug())
                             _log.debug("Prepare next write on: " + con);
@@ -172,6 +189,8 @@ public class Writer {
                         con.prepareNextWrite(_prepBuffer);
                     } catch (RuntimeException re) {
                         _log.log(Log.CRIT, "Error in the ntcp writer on " + con, re);
+                    } finally {
+                        _activeCount.decrementAndGet();
                     }
                 }
             }

@@ -2033,4 +2033,34 @@ public class NTCPTransport extends TransportImpl {
     public int getSendFinisherQueueSize() {
         return _finisher.getQueueSize();
     }
+
+    /**
+     * Get send finisher pool utilization as a ratio (0.0-1.0).
+     * Returns NaN if pool not started.
+     *
+     * @since 0.9.70+
+     */
+    public double getSendFinisherUtilization() {
+        return _finisher.getUtilization();
+    }
+
+    /**
+     * Get reader pool utilization as a ratio (0.0-1.0).
+     * Returns NaN if not started.
+     *
+     * @since 0.9.70+
+     */
+    public double getReaderUtilization() {
+        return _reader.getUtilization();
+    }
+
+    /**
+     * Get writer pool utilization as a ratio (0.0-1.0).
+     * Returns NaN if not started.
+     *
+     * @since 0.9.70+
+     */
+    public double getWriterUtilization() {
+        return _writer.getUtilization();
+    }
 }

@@ -629,6 +629,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int _defaultValue;
         /** Last known value (from persistence or runtime default). Used as tuning baseline. */
         protected final int _initialValue;
+        /** True until first update() call — applies persisted value from autotune.config. */
+        protected boolean _firstTick = true;
         protected volatile int _override;
         protected volatile boolean _autoTuning;
         protected SystemHealth _health;
@@ -1004,6 +1006,59 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return getAdditionalStat(ctx, "udp.sendConfirmTime");
         }
 
+        /**
+         * Get NTCP reader pool utilization (0.0-1.0).
+         * @since 0.9.70+
+         */
+        protected double getReaderUtilization(RouterContext ctx) {
+            Transport t = ctx.commSystem().getTransports().get(NTCPTransport.STYLE);
+            return (t instanceof NTCPTransport) ? ((NTCPTransport) t).getReaderUtilization() : Double.NaN;
+        }
+
+        /**
+         * Get NTCP writer pool utilization (0.0-1.0).
+         * @since 0.9.70+
+         */
+        protected double getWriterUtilization(RouterContext ctx) {
+            Transport t = ctx.commSystem().getTransports().get(NTCPTransport.STYLE);
+            return (t instanceof NTCPTransport) ? ((NTCPTransport) t).getWriterUtilization() : Double.NaN;
+        }
+
+        /**
+         * Get NTCP send finisher pool utilization (0.0-1.0).
+         * @since 0.9.70+
+         */
+        protected double getSendFinisherUtilization(RouterContext ctx) {
+            Transport t = ctx.commSystem().getTransports().get(NTCPTransport.STYLE);
+            return (t instanceof NTCPTransport) ? ((NTCPTransport) t).getSendFinisherUtilization() : Double.NaN;
+        }
+
+        /**
+         * Get UDP packet handler pool utilization (0.0-1.0).
+         * @since 0.9.70+
+         */
+        protected double getPacketHandlerUtilization(RouterContext ctx) {
+            Transport t = ctx.commSystem().getTransports().get(UDPTransport.STYLE);
+            return (t instanceof UDPTransport) ? ((UDPTransport) t).getPacketHandlerUtilization() : Double.NaN;
+        }
+
+        /**
+         * Get UDP message receiver pool utilization (0.0-1.0).
+         * @since 0.9.70+
+         */
+        protected double getMessageReceiverUtilization(RouterContext ctx) {
+            Transport t = ctx.commSystem().getTransports().get(UDPTransport.STYLE);
+            return (t instanceof UDPTransport) ? ((UDPTransport) t).getMessageReceiverUtilization() : Double.NaN;
+        }
+
+        /**
+         * Get tunnel pumper pool utilization (0.0-1.0).
+         * @since 0.9.70+
+         */
+        protected double getPumperUtilization(RouterContext ctx) {
+            return TunnelDispatcher.getPumperUtilization();
+        }
+
         public int getCurrentValue() { return getRuntimeValue(); }
 
         protected void recordHistory(double observed) {
@@ -1043,6 +1098,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         public void update() {
             double observed = getObservedStat(null);
             recordHistory(observed);
+            // First tick: restore persisted value from autotune.config
+            if (_firstTick) {
+                _firstTick = false;
+                int current = getRuntimeValue();
+                if (_initialValue != current) {
+                    if (_log.shouldInfo())
+                        _log.info(_name + " restoring persisted value " + _initialValue + " (current: " + current + ")");
+                    applyValue(_initialValue);
+                    persistValue(_ctx, _initialValue);
+                }
+            }
             if (!_autoTuning)
                 return;
             if (Double.isNaN(observed))
@@ -1837,12 +1903,21 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean queuesBackedUp = (!Double.isNaN(ibgwQueue) && ibgwQueue > 50) ||
                                      (!Double.isNaN(obgwQueue) && obgwQueue > 50);
 
+            // Utilization: ratio of threads actively pumping vs total pool size
+            double utilization = getPumperUtilization(_context);
+            boolean highUtilization = !Double.isNaN(utilization) && utilization > 0.8;
+            boolean lowUtilization = !Double.isNaN(utilization) && utilization < 0.2;
+
             // Queue depth high, drops, or backed up + no CPU = add threads
             if ((queueHigh || hasDrops || queuesBackedUp) && !cpuPressure)
                 return Math.min(_max, current + 1);
 
+            // High utilization + queue pressure = add threads
+            if (highUtilization && (queueHigh || queuesBackedUp) && !cpuPressure)
+                return Math.min(_max, current + 1);
+
             // Idle + no pressure = remove threads
-            if (!queueHigh && !hasDrops && !queuesBackedUp && !cpuPressure && current > _min)
+            if (!queueHigh && !hasDrops && !queuesBackedUp && !cpuPressure && lowUtilization && current > _min)
                 return Math.max(_min, current - 1);
 
             return current;
@@ -3339,6 +3414,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean sustainedHeavyTransit = !Double.isNaN(hourlyBps) && hourlyBps > 40000;
             boolean downstreamBackedUp = !Double.isNaN(msgRxQueue) && msgRxQueue > 50;
 
+            // Utilization: ratio of handlers actively processing vs max
+            double utilization = getPacketHandlerUtilization(_context);
+            boolean highUtilization = !Double.isNaN(utilization) && utilization > 0.8;
+            boolean lowUtilization = !Double.isNaN(utilization) && utilization < 0.2;
+
             // Any push time pressure + no CPU = add threads (max throughput)
             if (observed > 10 && !systemBusy && !highLoad)
                 return Math.min(_max, current + 1);
@@ -3347,12 +3427,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (heavyTransit && !systemBusy && !highLoad && memPressure < 0.7)
                 return Math.min(_max, current + 1);
 
+            // High utilization + downstream pressure = add threads
+            if (highUtilization && downstreamBackedUp && !systemBusy)
+                return Math.min(_max, current + 1);
+
             // Downstream backed up = add threads to drain faster
             if (downstreamBackedUp && !systemBusy && !highLoad)
                 return Math.min(_max, current + 1);
 
             // Idle + no pressure = shrink (threads doing nothing useful)
-            if (observed < 1 && !heavyTransit && !sustainedHeavyTransit && !downstreamBackedUp && current > _min)
+            // Scale down when utilization is low regardless of transit volume —
+            // handlers keeping up fine (low pushTime) means threads are idle.
+            if (observed < 1 && !downstreamBackedUp
+                && lowUtilization && current > _min)
                 return Math.max(_min, current - 1);
 
             return current;
@@ -3415,8 +3502,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean longSojourn = !Double.isNaN(sojournTime) && sojournTime > 2;
             boolean downstreamSlow = !Double.isNaN(pushTime) && pushTime > 10;
 
+            // Utilization: ratio of runners actively processing vs total
+            double utilization = getMessageReceiverUtilization(_context);
+            boolean highUtilization = !Double.isNaN(utilization) && utilization > 0.8;
+            boolean lowUtilization = !Double.isNaN(utilization) && utilization < 0.2;
+
             // Any upstream pressure + no CPU = add threads (max throughput)
             if (upstreamBackpressure && !cpuPressure && !highLoad)
+                return Math.min(_max, current + 1);
+
+            // High utilization + queue backed up = add threads
+            if (highUtilization && queueBackedUp && !cpuPressure)
                 return Math.min(_max, current + 1);
 
             // Queue backed up + no CPU = add threads
@@ -3433,7 +3529,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // Idle + no work = shrink (threads doing nothing useful)
             if (!upstreamBackpressure && !queueBackedUp && !messagesExpiring
-                && !longSojourn && !downstreamSlow && observed < 1 && current > _min)
+                && !longSojourn && !downstreamSlow && observed < 1 && lowUtilization && current > _min)
                 return Math.max(_min, current - 1);
 
             return current;
@@ -5508,23 +5604,33 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean errorsHigh = !Double.isNaN(readErrors) && readErrors > 10;
             int queue = !Double.isNaN(observed) ? (int) Math.round(observed) : 0;
 
+            // Utilization: ratio of threads actively processing vs total pool size.
+            // Directly measures CPU consumption by reader threads.
+            double utilization = getReaderUtilization(_context);
+            boolean highUtilization = !Double.isNaN(utilization) && utilization > 0.8;
+            boolean lowUtilization = !Double.isNaN(utilization) && utilization < 0.2;
+
             // Growing: queue is backing up faster than current threads can drain
             if (queue > current * 2 && !cpuPressure)
                 return Math.min(_max, current + Math.max(1, queue / current));
+
+            // High utilization + queue pressure = definitely need more threads
+            if (highUtilization && queue > current && !cpuPressure)
+                return Math.min(_max, current + 1);
 
             // Urgent: errors + queue backing up
             if (errorsHigh && queue > current && !cpuPressure)
                 return Math.min(_max, current + 1);
 
             // Shrinking: queue is well below capacity — threads sitting idle
-            // Shrink faster when queue is empty
+            // Shrink faster when queue is empty and utilization is low
             if (queue < current / 2 && current > _min) {
-                int shrinkBy = (queue == 0) ? 2 : 1;
+                int shrinkBy = (queue == 0 && lowUtilization) ? 2 : 1;
                 return Math.max(_min, current - shrinkBy);
             }
 
             // Long-term idle: queue near zero, no errors, no CPU pressure
-            if (queue == 0 && !errorsHigh && !cpuPressure && current > _min)
+            if (queue == 0 && !errorsHigh && !cpuPressure && lowUtilization && current > _min)
                 return Math.max(_min, current - 1);
 
             return current;
@@ -5588,11 +5694,21 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean poolBusy = !Double.isNaN(sendPoolUtil) && sendPoolUtil > 50;
             boolean bufsHigh = !Double.isNaN(writeBufs) && writeBufs > current * 16;
             boolean finisherBacklogged = !Double.isNaN(finisherQueue) && finisherQueue > 50;
+
+            // Utilization: ratio of threads actively encrypting vs total pool size
+            double utilization = getWriterUtilization(_context);
+            boolean highUtilization = !Double.isNaN(utilization) && utilization > 0.8;
+            boolean lowUtilization = !Double.isNaN(utilization) && utilization < 0.2;
+
             int pressure = (sendSlow ? 1 : 0) + (queueFull ? 1 : 0) + (backlogged ? 1 : 0)
                          + (poolBusy ? 1 : 0) + (bufsHigh ? 1 : 0) + (finisherBacklogged ? 1 : 0);
 
             // High pressure: multiple signals firing + no CPU = add threads
             if (pressure >= 2 && !cpuPressure)
+                return Math.min(_max, current + 1);
+
+            // High utilization + any pressure = add threads
+            if (highUtilization && (sendSlow || backlogged || poolBusy) && !cpuPressure)
                 return Math.min(_max, current + 1);
 
             // Moderate pressure: single signal + no CPU = add threads only if near saturation
@@ -5601,7 +5717,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // Idle: no pressure signals, queue not backing up = shrink
             if (pressure == 0 && current > _min) {
-                int shrinkBy = (!sendSlow && !backlogged && !poolBusy) ? 2 : 1;
+                int shrinkBy = (!sendSlow && !backlogged && !poolBusy && lowUtilization) ? 2 : 1;
                 return Math.max(_min, current - shrinkBy);
             }
 
@@ -5723,12 +5839,21 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean finisherBacklog = !Double.isNaN(finisherQueue) && finisherQueue > 50;
             boolean highWriteBufs = !Double.isNaN(writeBufs) && writeBufs > current * 16;
 
+            // Utilization: ratio of threads actively finishing vs total pool size
+            double utilization = getSendFinisherUtilization(_context);
+            boolean highUtil = !Double.isNaN(utilization) && utilization > 0.8;
+            boolean lowUtil = !Double.isNaN(utilization) && utilization < 0.2;
+
             // High send pool utilization or finisher backlog = increase threads
             if (highUtilization || finisherBacklog || highWriteBufs)
                 return Math.min(_max, current + 1);
 
+            // High utilization + any queue pressure = add threads
+            if (highUtil && (finisherBacklog || highWriteBufs))
+                return Math.min(_max, current + 1);
+
             // Idle + no work = shrink (threads doing nothing useful)
-            if (!highUtilization && !finisherBacklog && !highWriteBufs && current > _min)
+            if (!highUtilization && !finisherBacklog && !highWriteBufs && lowUtil && current > _min)
                 return Math.max(_min, current - 1);
 
             return current;
@@ -7049,7 +7174,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestThrottleMinParam extends BaseParam {
         RequestThrottleMinParam() {
             super("i2p.tunnel.requestThrottle.minLimit", "Build request throttle min (ms)",
-                  SUB_TUNNEL, 1, 100, 2, "tunnel.buildSuccessRate", _context);
+                  SUB_TUNNEL, 1, 100, 2, "tunnel.throttleParticipatingReject", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setRequestMinLimit(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestMinLimit(); }
@@ -7063,13 +7188,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            double requestReject = getAdditionalStat(_context, "tunnel.throttleRequestReject");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
-            boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
-            boolean rejecting = !Double.isNaN(requestReject) && requestReject > 0;
-            if (hasCapacity && !rejecting) return Math.min(_max, current + _step);
-            if (stressed || rejecting) return Math.max(_min, current - _step);
+            int numTunnels = _context.tunnelManager().getParticipatingCount();
+            int maxTunnels = net.i2p.router.RouterThrottleImpl.getDefaultMaxTunnels();
+            double utilization = (double) numTunnels / Math.max(1, maxTunnels);
+            boolean lowUtilization = utilization < 0.3;
+            boolean hasCapacity = lowUtilization && !cpuPressure;
+            boolean rejecting = !Double.isNaN(observed) && observed > 0;
+            if (hasCapacity) return Math.min(_max, current + _step * 2);
+            if (rejecting || cpuPressure) return Math.max(_min, current - _step);
             return current;
         }
     }
@@ -7080,7 +7207,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestThrottleMaxParam extends BaseParam {
         RequestThrottleMaxParam() {
             super("i2p.tunnel.requestThrottle.maxLimit", "Build request throttle max (ms)",
-                  SUB_TUNNEL, 10, 1000, 8, "tunnel.buildSuccessRate", _context);
+                  SUB_TUNNEL, 10, 1000, 8, "tunnel.throttleParticipatingReject", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setRequestMaxLimit(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestMaxLimit(); }
@@ -7094,20 +7221,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            double requestReject = getAdditionalStat(_context, "tunnel.throttleRequestReject");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
-            boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
-            boolean rejecting = !Double.isNaN(requestReject) && requestReject > 0;
-            // Raise ceiling faster when underutilized — the capacity factor in
-            // RequestThrottle needs headroom to work
             int numTunnels = _context.tunnelManager().getParticipatingCount();
             int maxTunnels = net.i2p.router.RouterThrottleImpl.getDefaultMaxTunnels();
             double utilization = (double) numTunnels / Math.max(1, maxTunnels);
             boolean lowUtilization = utilization < 0.3;
-            if (hasCapacity && !rejecting && lowUtilization) return Math.min(_max, current + _step * 2);
-            if (hasCapacity && !rejecting) return Math.min(_max, current + _step);
-            if (stressed || rejecting) return Math.max(_min, current - _step);
+            boolean hasCapacity = lowUtilization && !cpuPressure;
+            boolean rejecting = !Double.isNaN(observed) && observed > 0;
+            // Raise ceiling faster when underutilized
+            if (hasCapacity) return Math.min(_max, current + _step * 2);
+            if (rejecting || cpuPressure) return Math.max(_min, current - _step);
             return current;
         }
     }
@@ -7120,7 +7243,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestThrottlePctParam extends BaseParam {
         RequestThrottlePctParam() {
             super("i2p.tunnel.requestThrottle.percentLimit", "Build request throttle target (%)",
-                  SUB_TUNNEL, 1, 100, 1, "tunnel.buildSuccessRate", _context);
+                  SUB_TUNNEL, 1, 100, 1, "tunnel.throttleParticipatingReject", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setRequestPctLimit(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestPctLimit(); }
@@ -7134,21 +7257,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            double requestReject = getAdditionalStat(_context, "tunnel.throttleRequestReject");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
-            boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
-            boolean rejecting = !Double.isNaN(requestReject) && requestReject > 0;
-            // Factor in utilization — when underutilized, be more aggressive about
-            // raising limits since the capacity factor in RequestThrottle handles
-            // the per-peer scaling anyway
             int numTunnels = _context.tunnelManager().getParticipatingCount();
             int maxTunnels = net.i2p.router.RouterThrottleImpl.getDefaultMaxTunnels();
             double utilization = (double) numTunnels / Math.max(1, maxTunnels);
             boolean lowUtilization = utilization < 0.3;
-            if (hasCapacity && !rejecting && !lowUtilization) return Math.min(_max, current + _step);
-            if (lowUtilization && !rejecting && !cpuPressure) return Math.min(_max, current + _step * 2);
-            if (stressed || rejecting) return Math.max(_min, current - _step);
+            boolean hasCapacity = lowUtilization && !cpuPressure;
+            boolean rejecting = !Double.isNaN(observed) && observed > 0;
+            if (hasCapacity) return Math.min(_max, current + _step * 2);
+            if (rejecting || cpuPressure) return Math.max(_min, current - _step);
             return current;
         }
     }
@@ -7161,7 +7278,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestThrottleBurstParam extends BaseParam {
         RequestThrottleBurstParam() {
             super("i2p.tunnel.requestThrottle.burst1sThreshold", "Build request burst threshold",
-                  SUB_TUNNEL, 1, 100, 1, "tunnel.buildSuccessRate", _context);
+                  SUB_TUNNEL, 1, 100, 1, "tunnel.throttleParticipatingReject", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setRequestBurst1sThreshold(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestBurst1sThreshold(); }
@@ -7175,13 +7292,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            double requestReject = getAdditionalStat(_context, "tunnel.throttleRequestReject");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
-            boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure;
-            boolean rejecting = !Double.isNaN(requestReject) && requestReject > 0;
-            if (hasCapacity && !rejecting) return Math.min(_max, current + _step);
-            if (stressed || rejecting) return Math.max(_min, current - _step);
+            int numTunnels = _context.tunnelManager().getParticipatingCount();
+            int maxTunnels = net.i2p.router.RouterThrottleImpl.getDefaultMaxTunnels();
+            double utilization = (double) numTunnels / Math.max(1, maxTunnels);
+            boolean lowUtilization = utilization < 0.3;
+            boolean hasCapacity = lowUtilization && !cpuPressure;
+            boolean rejecting = !Double.isNaN(observed) && observed > 0;
+            if (hasCapacity) return Math.min(_max, current + _step * 2);
+            if (rejecting || cpuPressure) return Math.max(_min, current - _step);
             return current;
         }
     }

@@ -1213,6 +1213,14 @@ public class TunnelDispatcher implements Service {
     /** @since 0.9.70+ */
     public static int getPumperMaxThreads() { return TunnelGatewayPumper.getMaxPumpers(); }
 
+    /**
+     * Get pumper pool utilization as a ratio (0.0-1.0).
+     * Returns NaN if not started.
+     *
+     * @since 0.9.70+
+     */
+    public static double getPumperUtilization() { return TunnelGatewayPumper.getUtilization(); }
+
     /** @since 0.9.70+ */
     public static void setPumperMaxThreads(int value) { TunnelGatewayPumper.setMaxPumpers(value); }
 

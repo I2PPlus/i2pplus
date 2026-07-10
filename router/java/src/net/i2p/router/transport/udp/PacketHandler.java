@@ -32,6 +32,7 @@ class PacketHandler {
     private volatile boolean _keepReading;
     private final CopyOnWriteArrayList<Handler> _handlers;
     private final AtomicInteger _activeHandlers = new AtomicInteger();
+    private final AtomicInteger _processingCount = new AtomicInteger();
     private final BlockingQueue<UDPPacket> _inboundQueue;
     private final int _networkID;
 
@@ -39,6 +40,7 @@ class PacketHandler {
     private static final int MIN_QUEUE_SIZE = SystemVersion.isSlow() ? 16 : 64;
     private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 64 : 512;
     private static volatile int _maxHandlers = Math.max(SystemVersion.getCores() / 2, 4);
+    private static final AtomicInteger _threadNum = new AtomicInteger();
     private static final int MIN_VERSION = 2;
     private static final int MAX_VERSION = 4;
 
@@ -81,6 +83,23 @@ class PacketHandler {
      */
     public int getActiveHandlers() { return _activeHandlers.get(); }
 
+    /**
+     * Returns the number of handlers actively processing packets (not parked on take()).
+     * @since 0.9.70+
+     */
+    public int getProcessingCount() { return _processingCount.get(); }
+
+    /**
+     * Get packet handler pool utilization as a ratio (0.0-1.0).
+     * Returns NaN if not started.
+     *
+     * @since 0.9.70+
+     */
+    public double getUtilization() {
+        int max = getMaxHandlers();
+        return max > 0 ? (double) _processingCount.get() / max : Double.NaN;
+    }
+
     public synchronized void startup() {
         _keepReading = true;
         adjustThreads();
@@ -107,7 +126,7 @@ class PacketHandler {
             if (_activeHandlers.compareAndSet(current, current + 1)) {
                 Handler h = new Handler();
                 _handlers.add(h);
-                I2PThread t = new I2PThread(h, "UDPPktHandler " + (current + 1) + '/' + target, true);
+                I2PThread t = new I2PThread(h, "UDPPktHandler." + _threadNum.incrementAndGet(), true);
                 t.start();
                 current = _activeHandlers.get();
             } else {
@@ -200,16 +219,21 @@ class PacketHandler {
                     UDPPacket packet = receiveNext();
                     if (packet == null) {break;}
 
-                    packet.received();
-                    if (_log.shouldDebug()) {_log.debug("Received packet from " + packet);}
-                    try {handlePacket(packet);}
-                    catch (RuntimeException e) {
-                        if (_log.shouldError()) {
-                            _log.error("Internal error handling a UDP packet from " + packet, e);
+                    _processingCount.incrementAndGet();
+                    try {
+                        packet.received();
+                        if (_log.shouldDebug()) {_log.debug("Received packet from " + packet);}
+                        try {handlePacket(packet);}
+                        catch (RuntimeException e) {
+                            if (_log.shouldError()) {
+                                _log.error("Internal error handling a UDP packet from " + packet, e);
+                            }
                         }
+                        // back to the cache with thee!
+                        packet.release();
+                    } finally {
+                        _processingCount.decrementAndGet();
                     }
-                    // back to the cache with thee!
-                    packet.release();
                 }
             } finally {
                 _handlers.remove(this);

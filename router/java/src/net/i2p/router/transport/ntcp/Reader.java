@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.router.RouterContext;
 import net.i2p.router.Tuner;
 import net.i2p.util.I2PThread;
@@ -32,6 +33,9 @@ public class Reader {
     private static volatile int _threadCount = SystemVersion.isSlow() ? 2 : Math.max(SystemVersion.getCores() / 2, 3);
     private static final int MIN_THREADS = 1;
     private static final int MAX_THREADS = 16;
+    private static final AtomicInteger _threadNum = new AtomicInteger();
+    /** Tracks how many runner threads are actively processing (not parked). */
+    private final AtomicInteger _activeCount = new AtomicInteger();
 
     public Reader(RouterContext ctx) {
         _context = ctx;
@@ -45,6 +49,18 @@ public class Reader {
     /** Get the reader thread count */
     public static int getThreadCount() { return _threadCount; }
 
+    /** Get the number of threads currently processing (not parked). */
+    public int getActiveCount() { return _activeCount.get(); }
+
+    /**
+     * Get reader pool utilization as a ratio (0.0-1.0).
+     * Returns NaN if no runners are active (pool not started).
+     */
+    public double getUtilization() {
+        int size = _runners.size();
+        return size > 0 ? (double) _activeCount.get() / size : Double.NaN;
+    }
+
     /** Set the reader thread count, bounded by MIN_THREADS-MAX_THREADS */
     public static void setThreadCount(int count) { _threadCount = Math.max(MIN_THREADS, Math.min(MAX_THREADS, count)); }
 
@@ -57,7 +73,7 @@ public class Reader {
     private void startRunner() {
         Runner r = new Runner();
         _runners.add(r);
-        I2PThread t = new I2PThread(r, "NTCPReader " + _runners.size() + '/' + _threadCount, true);
+        I2PThread t = new I2PThread(r, "NTCPReader." + _threadNum.incrementAndGet(), true);
         t.start();
     }
 
@@ -158,22 +174,27 @@ public class Reader {
                 if (!_stop && (con != null) ) {
                     if (_log.shouldDebug())
                         _log.debug("Begin read for " + con);
+                    _activeCount.incrementAndGet();
                     try {
-                        processRead(con);
-                    } catch (IllegalStateException ise) {
-                        // FailedEstablishState.receive() (race - see below)
-                        if (_log.shouldWarn())
-                            _log.warn("Error in the NTCP Reader", ise);
-                    } catch (IllegalArgumentException iae) {
-                        // probably a race with a cancelled key
-                        // java.lang.IllegalArgumentException
-                        // at java.nio.Buffer.position(Unknown Source)
-                        // at java.nio.HeapByteBuffer.get(Unknown Source)
-                        // at net.i2p.router.transport.ntcp.NTCPConnection$NTCP2ReadState.receive(NTCPConnection.java:2054)
-                        // at net.i2p.router.transport.ntcp.NTCPConnection.recvEncryptedI2NP(NTCPConnection.java:1383)
-                        // at net.i2p.router.transport.ntcp.Reader.processRead(Reader.java:170)
-                        if (_log.shouldWarn()) {_log.warn("Error in the NTCP reader", iae);}
-                    } catch (RuntimeException re) {_log.error("Error in the NTCP Reader", re);}
+                        try {
+                            processRead(con);
+                        } catch (IllegalStateException ise) {
+                            // FailedEstablishState.receive() (race - see below)
+                            if (_log.shouldWarn())
+                                _log.warn("Error in the NTCP Reader", ise);
+                        } catch (IllegalArgumentException iae) {
+                            // probably a race with a cancelled key
+                            // java.lang.IllegalArgumentException
+                            // at java.nio.Buffer.position(Unknown Source)
+                            // at java.nio.HeapByteBuffer.get(Unknown Source)
+                            // at net.i2p.router.transport.ntcp.NTCPConnection$NTCP2ReadState.receive(NTCPConnection.java:2054)
+                            // at net.i2p.router.transport.ntcp.NTCPConnection.recvEncryptedI2NP(NTCPConnection.java:1383)
+                            // at net.i2p.router.transport.ntcp.Reader.processRead(Reader.java:170)
+                            if (_log.shouldWarn()) {_log.warn("Error in the NTCP reader", iae);}
+                        } catch (RuntimeException re) {_log.error("Error in the NTCP Reader", re);}
+                    } finally {
+                        _activeCount.decrementAndGet();
+                    }
                     if (_log.shouldDebug()) {_log.debug("End read for " + con);}
                 }
             }
