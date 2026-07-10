@@ -602,6 +602,7 @@ public class GeoIP {
         ASN_DB_OVERRIDES.put("setarimE moceleT puorG oC talasitepuorG CSJP", "Emirates Telecom");
         ASN_DB_OVERRIDES.put("eteicoS esiacnarF uD enohpeletoidaR", "Societe France Du RadioTelephone");
         ASN_DB_OVERRIDES.put("etavirP namssenisuB vonayruB nitnatsnoK", "Private Business von Knutsen");
+        ASN_DB_OVERRIDES.put("oixenI eigolonhcetsnoitamrofnI dnU", "Und Informationstechnologie Inexio");
     }
 
     /**
@@ -661,7 +662,16 @@ public class GeoIP {
         "industrial", "chemical", "pharmaceutical",
         "biotechnology", "nanotechnology",
         "automobile", "aviation", "navigation",
-        "robotics", "automation", "instrumentation"
+        "robotics", "automation", "instrumentation",
+        // German compound words common in MaxMind ASN DB
+        "telekommunikation", "informationstechnologie", "dienstleistung",
+        "versicherung", "elektronik", "netzwerk", "datenverarbeitung",
+        "nachrichtentechnik", "systemhaus", "systemintegration",
+        "unternehmen", "dienstanbieter", "breitband", "glasfaser",
+        // French/Spanish/Portuguese common org words
+        "telecomunicaciones", "telecomunicacao", "informatica",
+        "soluciones", "servicios", "tecnologia", "comunicacoes",
+        "provedores", "redes", "societe", "entreprise"
     ));
 
     /** Reverse a single word */
@@ -844,31 +854,79 @@ public class GeoIP {
      * Detect and fix character-reversed words from MaxMind ASN DB.
      * e.g. "eteicoS esiacnarF uD enohpeletoidaR" -> "Societe France Du RadioTelephone"
      *
-     * Heuristic: for each word, check if its reversed form is a known common word.
-     * If enough words match (>= 20%, min 1), reverse all words.
+     * Two-pass detection:
+     * 1. Word-by-word: words starting lowercase and ending uppercase are likely reversed.
+     * 2. Full-string: try reversing the entire name for compound words without spaces.
+     * Picks whichever pass matches more known words.
      */
     private static String fixReversedWords(String name) {
         String[] words = name.split("\\s+");
         if (words.length < 1) {return name;}
 
-        int matchedCount = 0;
-        for (String w : words) {
-            String reversed = reverseWord(w).toLowerCase(Locale.US);
-            if (KNOWN_WORDS.contains(reversed)) {matchedCount++;}
-        }
+        // Pass 1: full-string reversal (handles compound words and whole-string reversals)
+        String fullResult = tryFullStringReversal(name);
 
-        // Need at least one match, and it should be a significant fraction
-        // (more than 20% of words, minimum 1) to avoid false positives on short names
-        int threshold = Math.max(1, words.length / 5);
-        if (matchedCount >= threshold) {
-            StringBuilder fixed = new StringBuilder();
-            for (int i = 0; i < words.length; i++) {
-                if (i > 0) {fixed.append(' ');}
-                fixed.append(reverseWord(words[i]));
-            }
-            return fixed.toString();
-        }
+        // Pass 2: word-by-word reversal using case-pattern detection
+        String wordResult = tryWordReversal(words);
+
+        // Pick the result with more known-word matches.
+        // On tie, prefer word-reversal (preserves original word order).
+        // Full-string reversal only wins if it scores strictly better.
+        int fullScore = countKnownWordMatches(fullResult);
+        int wordScore = countKnownWordMatches(wordResult);
+        if (wordScore >= 1 && wordScore >= fullScore) {return wordResult;}
+        if (fullScore > wordScore) {return fullResult;}
         return name;
+    }
+
+    /** Try reversing individual words that look reversed (lowercase start, uppercase end). */
+    private static String tryWordReversal(String[] words) {
+        boolean anyReversed = false;
+        for (String w : words) {
+            if (looksReversed(w)) {anyReversed = true; break;}
+        }
+        if (!anyReversed) {return "";}
+
+        StringBuilder fixed = new StringBuilder();
+        for (int i = 0; i < words.length; i++) {
+            if (i > 0) {fixed.append(' ');}
+            fixed.append(looksReversed(words[i]) ? reverseWord(words[i]) : words[i]);
+        }
+        return fixed.toString();
+    }
+
+    /** Try reversing the entire string as one block (for compound words). */
+    private static String tryFullStringReversal(String name) {
+        String reversed = reverseWord(name);
+        // Only use if the reversed form looks like normal text
+        // (contains at least one word starting with uppercase)
+        String[] revWords = reversed.split("\\s+");
+        for (String w : revWords) {
+            if (w.length() > 1 && Character.isUpperCase(w.charAt(0))) {return reversed;}
+        }
+        return "";
+    }
+
+    /** Count how many space-separated words match known words. */
+    private static int countKnownWordMatches(String text) {
+        if (text.isEmpty()) {return 0;}
+        int count = 0;
+        for (String w : text.split("\\s+")) {
+            if (KNOWN_WORDS.contains(w.toLowerCase(Locale.US))) {count++;}
+        }
+        return count;
+    }
+
+    /**
+     * A word looks reversed if it starts with a lowercase letter and ends with
+     * an uppercase letter — normal English/org words don't do this.
+     * Excludes short words (likely abbreviations) and all-uppercase tokens.
+     */
+    private static boolean looksReversed(String word) {
+        if (word.length() < 3) {return false;}
+        char first = word.charAt(0);
+        char last = word.charAt(word.length() - 1);
+        return Character.isLowerCase(first) && Character.isUpperCase(last);
     }
 
     /**

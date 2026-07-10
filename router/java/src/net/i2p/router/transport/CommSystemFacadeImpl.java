@@ -1059,6 +1059,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static void cleanupRDNSCache() {
         long now = System.currentTimeMillis();
         int removed = 0;
+        int normalized = 0;
         long unknownExpireTimeMillis = 15 * 60 * 1000L; // 15 minutes
         Iterator<Map.Entry<String, CacheEntry>> it = rdnsCache.entrySet().iterator();
         while (it.hasNext()) {
@@ -1098,8 +1099,21 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 }
             }
         }
+        // Sweep: normalize any reversed ASN org names cached from MaxMind
+        for (Map.Entry<String, CacheEntry> entry : rdnsCache.entrySet()) {
+            CacheEntry ce = entry.getValue();
+            String hostname = ce.getHostname();
+            String fixed = GeoIP.normalizeOrgName(hostname);
+            if (!fixed.equals(hostname)) {
+                rdnsCache.put(entry.getKey(), new CacheEntry(ce.getIpAddress(), fixed, ce.getTimestamp()));
+                normalized++;
+            }
+        }
         if (removed > 0 && _slog.shouldInfo()) {
             _slog.info("[RDNSCache] Removed " + removed + " stale entries from the cache");
+        }
+        if (normalized > 0 && _slog.shouldInfo()) {
+            _slog.info("[RDNSCache] Normalized " + normalized + " reversed ASN names");
         }
     }
 
