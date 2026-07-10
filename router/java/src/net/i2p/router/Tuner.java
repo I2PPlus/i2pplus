@@ -725,6 +725,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int getDefaultMax(RouterContext ctx) { return _defaultMax; }
 
         /**
+         * Transit bandwidth threshold for "heavy" — 80% of configured share bandwidth.
+         * Replaces the old hardcoded 50 KB/s which was far too low for any real router.
+         * @since 0.9.70+
+         */
+        protected static int getHeavyTransitThreshold(RouterContext ctx) {
+            return getShareBps(ctx) * 4 / 5;
+        }
+
+        /**
+         * Transit bandwidth threshold for "sustained heavy" — 50% of configured share.
+         * @since 0.9.70+
+         */
+        protected static int getSustainedHeavyTransitThreshold(RouterContext ctx) {
+            return getShareBps(ctx) / 2;
+        }
+
+        /**
          * Effective default step — override for bandwidth-scaled params.
          * Called by refreshRanges() instead of _defaultStep.
          *
@@ -1451,7 +1468,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             boolean hasSendFailures = !Double.isNaN(sendFailed) && sendFailed > 0;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            boolean heavyTransit = !Double.isNaN(transitBps) && transitBps > 50000;
+            boolean heavyTransit = !Double.isNaN(transitBps) && transitBps > getHeavyTransitThreshold(_context);
 
             // Target: timeout = 3x observed confirm time, with minimum floor
             int target = Math.max(5000, (int) (observed * 3));
@@ -2265,7 +2282,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean highLoad = sysLoad > 80;
             double memPressure = getMemoryPressure();
 
-            boolean heavyTransit = !Double.isNaN(transitBps) && transitBps > 50000;
+            boolean heavyTransit = !Double.isNaN(transitBps) && transitBps > getHeavyTransitThreshold(_context);
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
             boolean hasDrops = !Double.isNaN(drops) && drops > 5;
             boolean queueFilling = observed > 200;
@@ -3437,8 +3454,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double memPressure = getMemoryPressure();
 
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean heavyTransit = !Double.isNaN(transitBps) && transitBps > 50000;
-            boolean sustainedHeavyTransit = !Double.isNaN(hourlyBps) && hourlyBps > 40000;
+            boolean heavyTransit = !Double.isNaN(transitBps) && transitBps > getHeavyTransitThreshold(_context);
+            boolean sustainedHeavyTransit = !Double.isNaN(hourlyBps) && hourlyBps > getSustainedHeavyTransitThreshold(_context);
             boolean queueOverflow = !Double.isNaN(writeQueueFull) && writeQueueFull > 0;
             boolean sendSlow = observed > 100;
             boolean finisherBacklog = !Double.isNaN(finisherQ) && finisherQ > 200;
@@ -3513,15 +3530,21 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean highLoad = sysLoad > 80;
             double memPressure = getMemoryPressure();
 
-            boolean heavyTransit = !Double.isNaN(transitBps) && transitBps > 50000;
+            boolean heavyTransit = !Double.isNaN(transitBps) && transitBps > getHeavyTransitThreshold(_context);
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean sustainedHeavyTransit = !Double.isNaN(hourlyBps) && hourlyBps > 40000;
+            boolean sustainedHeavyTransit = !Double.isNaN(hourlyBps) && hourlyBps > getSustainedHeavyTransitThreshold(_context);
             boolean downstreamBackedUp = !Double.isNaN(msgRxQueue) && msgRxQueue > 50;
 
             // Utilization: ratio of handlers actively processing vs max
             double utilization = getPacketHandlerUtilization(_context);
             boolean highUtilization = !Double.isNaN(utilization) && utilization > 0.8;
             boolean lowUtilization = !Double.isNaN(utilization) && utilization < 0.2;
+
+            // Idle: shrink first — handlers keeping up fine means threads are wasted.
+            // Transit volume is irrelevant for shrink; only handler load matters.
+            if (observed < 1 && !downstreamBackedUp
+                && lowUtilization && current > _min)
+                return Math.max(_min, current - 1);
 
             // Any push time pressure + no CPU = add threads (max throughput)
             if (observed > 10 && !systemBusy && !highLoad)
@@ -3538,13 +3561,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Downstream backed up = add threads to drain faster
             if (downstreamBackedUp && !systemBusy && !highLoad)
                 return Math.min(_max, current + 1);
-
-            // Idle + no pressure = shrink (threads doing nothing useful)
-            // Scale down when utilization is low regardless of transit volume —
-            // handlers keeping up fine (low pushTime) means threads are idle.
-            if (observed < 1 && !downstreamBackedUp
-                && lowUtilization && current > _min)
-                return Math.max(_min, current - 1);
 
             return current;
         }
@@ -6018,7 +6034,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean moderateRTT = !Double.isNaN(rtt) && rtt < 500;
             boolean highUsage = !Double.isNaN(observed) && observed > current * 0.7;
             boolean nearCapacity = !Double.isNaN(observed) && observed > current * 0.9;
-            boolean heavyTransit = !Double.isNaN(transitBps) && transitBps > 50000;
+            boolean heavyTransit = !Double.isNaN(transitBps) && transitBps > getHeavyTransitThreshold(_context);
             boolean hasRejections = !Double.isNaN(rejections) && rejections > 0;
             boolean poolFree = !Double.isNaN(sendPoolUtil) && sendPoolUtil < 30;
             boolean memOk = memPressure < 0.75;
