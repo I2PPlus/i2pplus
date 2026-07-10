@@ -600,6 +600,73 @@ public class GeoIP {
     static {
         ASN_DB_OVERRIDES = new HashMap<>();
         ASN_DB_OVERRIDES.put("setarimE moceleT puorG oC talasitepuorG CSJP", "Emirates Telecom");
+        ASN_DB_OVERRIDES.put("eteicoS esiacnarF uD enohpeletoidaR", "Societe France Du RadioTelephone");
+        ASN_DB_OVERRIDES.put("etavirP namssenisuB vonayruB nitnatsnoK", "Private Business von Knutsen");
+    }
+
+    /**
+     * Common org/internet words used to detect character-reversed names.
+     * If enough words in a name match their reversed form, the name is auto-reversed.
+     */
+    private static final Set<String> KNOWN_WORDS = new HashSet<>(Arrays.asList(
+        // Core business/org terms
+        "private", "business", "telecom", "group", "network", "internet",
+        "services", "systems", "technology", "communications", "corporate",
+        "international", "national", "global", "online", "digital",
+        "security", "hosting", "solutions", "consulting", "management",
+        "information", "development", "engineering",
+        "university", "college", "institute", "foundation", "association",
+        "government", "municipal", "regional", "local", "federal",
+        // Infrastructure
+        "cable", "wireless", "mobile", "broadband", "fiber", "optical",
+        "data", "cloud", "server", "host", "domain", "portal",
+        "connection", "direct", "perfect",
+        // Science/education
+        "research", "science", "physics", "logical", "mathematics",
+        "medical", "health", "education",
+        // Media
+        "media", "entertainment", "production", "broadcast", "radio",
+        "television", "telephone", "satellite", "space",
+        // Industry
+        "energy", "power", "electric", "gas", "oil", "mining",
+        "finance", "bank", "insurance", "investment", "capital",
+        "real", "estate", "property", "construction", "building",
+        "transport", "logistics", "shipping", "airline", "marine",
+        "food", "agriculture", "environment", "ecology",
+        "software", "hardware", "electronics", "semiconductor",
+        "automotive", "aerospace", "defense", "military",
+        // Domain/tech abbreviations
+        "com", "net", "org", "edu", "gov", "co", "ltd", "inc",
+        "corp", "gmbh", "sarl", "sas", "bv", "nv", "ab", "kk",
+        // Country/region names
+        "france", "germany", "spain", "italy", "china", "japan",
+        "korea", "india", "brazil", "russia", "canada", "australia",
+        "emirates", "saudi", "egypt", "nigeria", "kenya",
+        // City names
+        "amsterdam", "london", "berlin", "paris", "tokyo",
+        "virginia", "california", "texas", "florida", "york",
+        // Common brand/org words
+        "radio", "telephone", "telecom", "societe", "residential",
+        "people", "communicate", "recommend", "balance",
+        "academy", "pharmacy", "hospital", "clinic",
+        "studio", "laboratory", "library", "museum",
+        "church", "temple", "mosque",
+        "market", "store", "shop", "retail",
+        "travel", "hotel", "restaurant",
+        "sports", "fitness", "gym",
+        "design", "creative", "art",
+        "legal", "law", "accounting",
+        "marketing", "advertising", "publishing",
+        "printing", "packaging", "manufacturing",
+        "industrial", "chemical", "pharmaceutical",
+        "biotechnology", "nanotechnology",
+        "automobile", "aviation", "navigation",
+        "robotics", "automation", "instrumentation"
+    ));
+
+    /** Reverse a single word */
+    private static String reverseWord(String word) {
+        return new StringBuilder(word).reverse().toString();
     }
 
     /** Suffixes to strip from org names (longer patterns first) */
@@ -630,6 +697,7 @@ public class GeoIP {
         ",?\\s+Co\\.?$",
         ",?\\s+CO\\.?$",
         ",?\\s+S\\.?\\s+A\\.?\\s+R\\.?\\s+L\\.?$",
+        ",?\\s+S\\.?\\s+r\\.?\\s+l\\.?$",
         ",?\\s+S\\.?\\s+A\\.?$",
         ",?\\s+SA\\.?$",
         ",?\\s+GmbH\\s*&\\s+Co\\.?\\s+KG\\.?$",
@@ -773,12 +841,43 @@ public class GeoIP {
     };
 
     /**
+     * Detect and fix character-reversed words from MaxMind ASN DB.
+     * e.g. "eteicoS esiacnarF uD enohpeletoidaR" -> "Societe France Du RadioTelephone"
+     *
+     * Heuristic: for each word, check if its reversed form is a known common word.
+     * If enough words match (>= 20%, min 1), reverse all words.
+     */
+    private static String fixReversedWords(String name) {
+        String[] words = name.split("\\s+");
+        if (words.length < 1) {return name;}
+
+        int matchedCount = 0;
+        for (String w : words) {
+            String reversed = reverseWord(w).toLowerCase(Locale.US);
+            if (KNOWN_WORDS.contains(reversed)) {matchedCount++;}
+        }
+
+        // Need at least one match, and it should be a significant fraction
+        // (more than 20% of words, minimum 1) to avoid false positives on short names
+        int threshold = Math.max(1, words.length / 5);
+        if (matchedCount >= threshold) {
+            StringBuilder fixed = new StringBuilder();
+            for (int i = 0; i < words.length; i++) {
+                if (i > 0) {fixed.append(' ');}
+                fixed.append(reverseWord(words[i]));
+            }
+            return fixed.toString();
+        }
+        return name;
+    }
+
+    /**
      * Normalize an ISP/org name from the ASN database.
      * Strips suffixes, abbreviates verbose words, title-cases with acronym preservation.
      *
      * @param raw original org name from MMDB
      * @return normalized name
-     * @since 0.9.65+
+     * @since 0.9.70+
      */
     public static String normalizeOrgName(String raw) {
         if (raw == null || raw.isEmpty()) {return raw;}
@@ -793,6 +892,9 @@ public class GeoIP {
         // Known broken org names in the MaxMind ASN DB (reversed strings, etc.)
         String fixed = ASN_DB_OVERRIDES.get(name);
         if (fixed != null) return fixed;
+
+        // Auto-detect reversed words: if multiple words look character-reversed, fix them
+        name = fixReversedWords(name);
 
         // Strip embedded ASN numbers
         name = ASN_EMBEDDED.matcher(name).replaceAll("");
@@ -828,6 +930,8 @@ public class GeoIP {
         name = TRAILING_JUNK.matcher(name).replaceAll("");
         name = name.replace("\"", "");
         name = PAIRED_SINGLE_QUOTES.matcher(name).replaceAll("$1");
+        // Collapse consecutive apostrophes (e.g. Fruit'' -> Fruit)
+        name = name.replace("''", "'");
         name = DOUBLE_COMMA.matcher(name).replaceAll(",");
         name = DOUBLE_SPACE.matcher(name).replaceAll(" ");
         name = name.replaceAll("^[ ,.]+|[ ,.]+$", "");
