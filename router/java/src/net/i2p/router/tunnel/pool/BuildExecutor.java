@@ -606,7 +606,7 @@ public class BuildExecutor implements Runnable {
                 }
 
                 TunnelManagerFacade mgr = _context.tunnelManager();
-                boolean noInboundOrOutbound = (mgr == null) || (mgr.getFreeTunnelCount() <= 0) || (mgr.getOutboundTunnelCount() <= 0);
+                boolean noInboundOrOutbound = (mgr == null) || (mgr.getFreeTunnelCount() <= 0 && mgr.getOutboundTunnelCount() <= 0);
 
                 if (noInboundOrOutbound) {
                     // Kickstart inbound/outbound tunnels if missing to avoid stall
