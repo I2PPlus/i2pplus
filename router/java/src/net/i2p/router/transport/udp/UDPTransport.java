@@ -466,6 +466,8 @@ public class UDPTransport extends TransportImpl {
         _context.statManager().createRequiredRateStat("udp.avgConcurrentMsgs", "Average concurrent messages allowed per peer", "Transport [UDP]", RATES);
         // Event-count stat for retransmission storm detection (value=1 per event)
         _context.statManager().createRequiredRateStat("udp.retransmitEvents", "Retransmission events (1 per retransmit)", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        // Outbound queue depth — total across all peers, for Tuner cross-references on outbound pressure
+        _context.statManager().createRequiredRateStat("udp.outboundQueueDepth", "Total outbound messages queued across all UDP peers", "Transport [UDP]", RATES);
 
         new PingIntroducers().schedule(MIN_EXPIRE_TIMEOUT * 3 / 4);
 
@@ -4121,6 +4123,21 @@ public class UDPTransport extends TransportImpl {
      */
     public int getReceiverQueueCapacity() {
         return _inboundFragments != null ? _inboundFragments.getReceiverQueueCapacity() : 0;
+    }
+
+    /**
+     * Returns total outbound messages queued across all UDP peers.
+     * Unsynchronized — uses ConcurrentHashMap.values() which is weakly consistent.
+     * For Tuner cross-references on outbound pressure.
+     *
+     * @since 0.9.70+
+     */
+    public int getTotalOutboundQueueDepth() {
+        int total = 0;
+        for (PeerState ps : _peersByRemoteHost.values()) {
+            total += ps.getOutboundMessageCount();
+        }
+        return total;
     }
 
     /**
