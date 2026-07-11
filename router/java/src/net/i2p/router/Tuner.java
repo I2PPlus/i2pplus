@@ -540,12 +540,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             { "jobQueue.jobLag" },
             { "tunnel.buildSuccessRate" },
             { "transport.sendProcessingTime", "tunnel.participating InBps" },
-            { "netDb.lookupsMatched / netDb.lookupsHandled" },
+            { "client.leaseSetFoundRemoteTime / netDb.successTime" },
             { "streaming.connSuccessLifetime" },
             { "i2cp.internalQueueSize" },
             { "peer.activeProfileCount" },
             { "udp.congestionOccurred / udp.allowConcurrentActive" },
-            { "crypto.EDHUsed / crypto.XDHEmpty" }
+            { "crypto.EDHEmpty/Used, XDHEmpty/Used, MLKEMEmpty/Used" }
         };
         for (int i = 0; i < order.length; i++) {
             double[] vals = scores.get(order[i]);
@@ -7372,15 +7372,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Frequent empty queue = key generation bottleneck
          */
         private double scoreCryptoPressure() {
-            // Score both DH key pools independently, take the worse score
+            // Score all 3 key pools independently, take the worst
             double edhEmpty = getEventCount("crypto.EDHEmpty");
             double edhUsed = getEventCount("crypto.EDHUsed");
             double xdhEmpty = getEventCount("crypto.XDHEmpty");
             double xdhUsed = getEventCount("crypto.XDHUsed");
+            double mlkemEmpty = getEventCount("crypto.MLKEMEmpty");
+            double mlkemUsed = getEventCount("crypto.MLKEMUsed");
             double scoreEdh = (edhUsed > 0) ? clamp(1.0 - ((edhEmpty / edhUsed) / 0.3)) : 1.0;
             double scoreXdh = (xdhUsed > 0) ? clamp(1.0 - ((xdhEmpty / xdhUsed) / 0.3)) : 1.0;
+            double scoreMlkem = (mlkemUsed > 0) ? clamp(1.0 - ((mlkemEmpty / mlkemUsed) / 0.3)) : 1.0;
             // 0% empty → 1.0, >30% empty → 0.0
-            return Math.min(scoreEdh, scoreXdh);
+            return Math.min(Math.min(scoreEdh, scoreXdh), scoreMlkem);
         }
 
         /**
