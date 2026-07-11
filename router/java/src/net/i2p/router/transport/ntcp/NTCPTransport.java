@@ -207,7 +207,7 @@ public class NTCPTransport extends TransportImpl {
         _context.statManager().createRateStat("ntcp.connectSuccessful", "Successful connection attempts to NTCP peer", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.corruptI2NPIME", "Corrupt NTCP messages decrypted (IME)", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.corruptSkew", "Corrupt clock skews received from NTCP peer", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.failsafeCloses", "Idle connection to peer closed (failsafe)", "Transport [NTCP]", RATES);
+        _context.statManager().createRequiredRateStat("ntcp.failsafeCloses", "Idle connection to peer closed (failsafe)", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.failsafeInvalid", "Connection to peer closed (JVM bug workaround)", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.failsafeThrottle", "Delay event pumper", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.failsafeWrites", "Extra nio writes added to peer (failsafe)", "Transport [NTCP]", RATES);
@@ -222,7 +222,7 @@ public class NTCPTransport extends TransportImpl {
         _context.statManager().createRateStat("ntcp.invalidOutboundSkew", "Invalid NTCP Outbound clock skews", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.multipleCloseOnRemove", "Number of NTCP multipleCloseOnRemove events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.noBidTooLargeI2NP", "NTCP tunnel send size", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.outboundEstablishFailed", "Failed NTCP Outbound Tunnel Establishment events", "Transport [NTCP]", RATES);
+        _context.statManager().createRequiredRateStat("ntcp.outboundEstablishFailed", "Failed NTCP Outbound Tunnel Establishment events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.outboundFailedIOEImmediate", "Failed NTCP Outbound Tunnel events (IOerror)", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.queuedRecv", "Number of queued NTCP RECV packets", "Transport [NTCP]", RATES);
         _context.statManager().createRequiredRateStat("ntcp.readError", "Number of NTCP read errors", "Transport [NTCP]", RATES);

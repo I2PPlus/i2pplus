@@ -462,10 +462,10 @@ public class UDPTransport extends TransportImpl {
         _context.statManager().createRequiredRateStat("codel.UDP-Sender.drop", "Queue delay of dropped items (ms)", "Transport [UDP]", RATES);
         // Aggregate transport stats for tuner visibility
         _context.statManager().createRequiredRateStat("udp.avgSendWindow", "Average send window (CWIN) across peers (bytes)", "Transport [UDP]", RATES);
-        _context.statManager().createRequiredRateStat("udp.avgRTO", "Average retransmission timeout across peers (ms)", "Transport [UDP]", RATES);
+        _context.statManager().createRequiredRateStat("udp.avgRTO", "Average retransmission timeout across peers (ms)", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("udp.avgConcurrentMsgs", "Average concurrent messages allowed per peer", "Transport [UDP]", RATES);
         // Event-count stat for retransmission storm detection (value=1 per event)
-        _context.statManager().createRequiredRateStat("udp.retransmitEvents", "Retransmission events (1 per retransmit)", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
+        _context.statManager().createRequiredRateStat("udp.retransmitEvents", "Retransmission events (1 per retransmit)", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
 
         new PingIntroducers().schedule(MIN_EXPIRE_TIMEOUT * 3 / 4);
 

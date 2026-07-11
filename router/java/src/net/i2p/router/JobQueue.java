@@ -130,9 +130,9 @@ public class JobQueue {
         _context.statManager().createRateStat("jobQueue.testJobHardLimit", "TestJob hard limit events", "JobQueue", RATES);
         // following are for JobQueueRunner
         _context.statManager().createRateStat("jobQueue.jobRun", "Duration of scheduled jobs", "JobQueue", RATES);
-        _context.statManager().createRateStat("jobQueue.jobRunSlow", "Duration of jobs that take over a second (ms)", "JobQueue", RATES);
+        _context.statManager().createRequiredRateStat("jobQueue.jobRunSlow", "Duration of jobs that take over a second (ms)", "JobQueue", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("jobQueue.jobWait", "Time a scheduled job stays queued before running (ms)", "JobQueue", RATES);
-        _context.statManager().createRequiredRateStat("jobQueue.jobLag", "Delay before waiting jobs are run (ms)", "JobQueue", RATES);
+        _context.statManager().createRequiredRateStat("jobQueue.jobLag", "Delay before waiting jobs are run (ms)", "JobQueue", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
 
         _readyJobs = new LinkedBlockingQueue<>();
         _highPriorityJobs = new LinkedBlockingQueue<>();

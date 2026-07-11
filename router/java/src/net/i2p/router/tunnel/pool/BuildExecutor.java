@@ -165,7 +165,7 @@ public class BuildExecutor implements Runnable {
         _context.statManager().createRequiredRateStat("tunnel.buildExploratoryReject", "Response time for rejection (ms)", "Tunnels [Exploratory]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildExploratorySuccess", "Response time for success (ms)", "Tunnels [Exploratory]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildRequestTime", "Time to build a tunnel request (ms)", "Tunnels [Participating]", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.concurrentBuilds", "How many builds are going at once", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.concurrentBuilds", "How many builds are going at once", "Tunnels", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("tunnel.buildSuccessRate", "Tunnel build success rate (0-100)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildFailureRate", "Tunnel build failure rate (0-100)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildTimeoutRate", "Tunnel build timeout rate (0-100)", "Tunnels", RATES);

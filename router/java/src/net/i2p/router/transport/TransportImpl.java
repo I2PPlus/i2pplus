@@ -161,7 +161,7 @@ public abstract class TransportImpl implements Transport {
         _context.statManager().createRequiredRateStat("transport.sendMessageFailureLifetime", "Lifetime of failed sent messages", "Transport", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("transport.receiveMessageSize", "Size of received messages (bytes)", "Transport", RATES);
         _context.statManager().createRequiredRateStat("transport.sendMessageSize", "Size of sent messages (bytes)", "Transport", RATES);
-        _context.statManager().createRequiredRateStat("transport.sendProcessingTime", "Time to process and send a message (ms)", "Transport", RATES);
+        _context.statManager().createRequiredRateStat("transport.sendProcessingTime", "Time to process and send a message (ms)", "Transport", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("ntcp.sendPool utilization", "Send pool size as fraction of capacity (pct)", "Transport", RATES);
         
 

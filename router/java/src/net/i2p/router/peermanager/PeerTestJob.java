@@ -75,7 +75,7 @@ public class PeerTestJob extends JobImpl {
         _keepTesting = false;
         getContext().statManager().createRequiredRateStat("peer.testOK", "Time a successful test takes (ms)", "Peers", RateConstants.TUNNEL_RATES);
         getContext().statManager().createRequiredRateStat("peer.testTooSlow", "Excess time taken by too slow test (ms)", "Peers", RateConstants.TUNNEL_RATES);
-        getContext().statManager().createRateStat("peer.testTimeout", "Frequency of test timeouts (no reply)", "Peers", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
+        getContext().statManager().createRequiredRateStat("peer.testTimeout", "Frequency of test timeouts (no reply)", "Peers", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
     }
 
     /**

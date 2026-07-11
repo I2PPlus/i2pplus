@@ -158,7 +158,7 @@ class ConnectionManager {
         _soTimeout = -1;
 
         // Stats for this class
-        _context.statManager().createRateStat("stream.con.lifetimeMessagesSent", "Number of messages we send on a stream", "Stream", RATES);
+        _context.statManager().createRequiredRateStat("stream.con.lifetimeMessagesSent", "Number of messages we send on a stream", "Stream", RATES);
         _context.statManager().createRateStat("stream.con.lifetimeMessagesReceived", "Number of messages we receive on a stream", "Stream", RATES);
         _context.statManager().createRateStat("stream.con.lifetimeBytesSent", "How many bytes we send on a stream", "Stream", RATES);
         _context.statManager().createRateStat("stream.con.lifetimeBytesReceived", "How many bytes we receive on a stream", "Stream", RATES);

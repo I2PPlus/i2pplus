@@ -71,7 +71,7 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
         // Please keep relatively short so it will fit on the graphs.
         _maxMemory = Runtime.getRuntime().maxMemory();
         sm.createRateStat("clock.skew", _x("Clock step adjustment (ms)"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
-        sm.createRateStat("router.tunnelBacklog", _x("Size of tunnel acceptor backlog"), "Tunnels", new long[] { RateConstants.ONE_MINUTE });
+        sm.createRequiredRateStat("router.tunnelBacklog", _x("Size of tunnel acceptor backlog"), "Tunnels", new long[] { RateConstants.ONE_MINUTE });
         sm.createRequiredRateStat("bw.receiveBps", _x("Message receive rate (B/s)"), "Router", RateConstants.SIDEBAR_RATES);
         sm.createRequiredRateStat("bw.recvRate", _x("Low-level receive rate (B/s)"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.FIVE_MINUTES, RateConstants.ONE_HOUR });
         sm.createRequiredRateStat("bw.sendBps", _x("Message send rate (B/s)"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.FIVE_MINUTES, RateConstants.ONE_HOUR });

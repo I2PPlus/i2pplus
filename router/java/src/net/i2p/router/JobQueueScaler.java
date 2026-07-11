@@ -157,7 +157,7 @@ class JobQueueScaler implements Runnable {
         context.statManager().createRateStat("jobQueue.scaleRollback",
             "Number of rollback events (scale up made things worse)", "JobQueue",
             new long[] { RateConstants.ONE_MINUTE });
-        context.statManager().createRateStat("jobQueue.memoryUsedPercent",
+        context.statManager().createRequiredRateStat("jobQueue.memoryUsedPercent",
             "Percentage of max memory used", "JobQueue",
             new long[] { RateConstants.ONE_MINUTE });
     }

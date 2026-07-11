@@ -285,7 +285,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         context.statManager().createRateStat("netDb.ackTime", "Time peer takes to ACK a DbStore", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.DLMAllZeros", "Message lookups in NetDb with zero key ", "NetworkDatabase", RATES); // HandleDatabaseLookupMessageJob
         context.statManager().createRateStat("netDb.DSMAllZeros", "Messages stored in NetDb with zero key", "NetworkDatabase", RATES); // DatabaseStoreMessage
-        context.statManager().createRateStat("netDb.replyTimeout", "Timeout expiry after a NetDb send (peer fails to reply in time)", "NetworkDatabase", RATES);
+        context.statManager().createRequiredRateStat("netDb.replyTimeout", "Timeout expiry after a NetDb send (peer fails to reply in time)", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.republishLeaseSetCount", "How often we republish a LeaseSet", "NetworkDatabase", RATES); // RepublishLeaseSetJob
         context.statManager().createRateStat("netDb.republishLeaseSetFail", "How often we fail to republish a LeaseSet", "NetworkDatabase", RATES); // RepublishLeaseSetJob
         context.statManager().createRateStat("netDb.storeFailedPeers", "Peers each NetDb must be sent to before failing completely", "NetworkDatabase", RATES);

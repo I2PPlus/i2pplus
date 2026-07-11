@@ -239,10 +239,10 @@ public class EstablishmentManager {
                     _context.statManager().createRequiredRateStat("udp.establishOverflow", "Messages queued up on a pending connection when it was too much", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRequiredRateStat("udp.establishBadIP", "Received IP or port was bad", "Transport [UDP]", UDPTransport.RATES);
         // following are for PeerState
-        _context.statManager().createRateStat("udp.congestionOccurred", "Size of CWIN when congestion occurred (duration = sendBps)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRequiredRateStat("udp.congestionOccurred", "Size of CWIN when congestion occurred (duration = sendBps)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRequiredRateStat("udp.congestedRTO", "RTO after congestion (duration = RTT dev)", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.mtuIncrease", "Number of resends to peer when MTU was increased", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.mtuDecrease", "Number of resends to peer when MTU was decreased", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRequiredRateStat("udp.mtuIncrease", "Number of resends to peer when MTU was increased", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRequiredRateStat("udp.mtuDecrease", "Number of resends to peer when MTU was decreased", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRequiredRateStat("udp.rejectConcurrentActive", "Messages in transit to peer when we reject it", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("udp.allowConcurrentActive", "Messages in transit to peer when we accept it", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.rejectConcurrentSequence", "Consecutive concurrency rejections when we stop rejecting", "Transport [UDP]", UDPTransport.RATES);
