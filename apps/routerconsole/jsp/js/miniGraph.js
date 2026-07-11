@@ -408,6 +408,7 @@ function renderNewGraph() {
         graphCtx = null;
     }
 
+    const continuous = graphCanvas.dataset.continuous === "1";
     const rxStr = graphCanvas.dataset.rx;
     const txStr = graphCanvas.dataset.tx;
     const minutes = parseInt(getCSSVar("--minigraph_minutes"), 10) || parseInt(graphCanvas.dataset.minutes, 10) || 20;
@@ -419,25 +420,44 @@ function renderNewGraph() {
         const liveRx = rxAll.pop();
         const liveTx = txAll.pop();
         if (rxBuffer === null) {
-            if (!restoreBuffers(minutes)) {
+            if (continuous) {
+                // Scroll mode — fill buffer with last DRAW_W values from server data
+                const take = Math.min(rxAll.length, DRAW_W);
+                rxBuffer = rxAll.slice(rxAll.length - take);
+                txBuffer = txAll.slice(txAll.length - take);
+                while (rxBuffer.length < DRAW_W) {
+                    rxBuffer.unshift(rxBuffer[0] || 0);
+                    txBuffer.unshift(txBuffer[0] || 0);
+                }
+            } else if (!restoreBuffers(minutes)) {
                 const pointsPerStep = Math.max(Math.round(TARGET_BUFFER / rxAll.length), 1);
                 rxBuffer = interpolate(rxAll, pointsPerStep);
                 txBuffer = interpolate(txAll, pointsPerStep);
-                rxBuffer.push(liveRx);
-                txBuffer.push(liveTx);
+            }
+            rxBuffer.push(liveRx);
+            txBuffer.push(liveTx);
+            if (rxBuffer.length > DRAW_W) {
+                rxBuffer.splice(0, rxBuffer.length - DRAW_W);
+                txBuffer.splice(0, txBuffer.length - DRAW_W);
             }
             lastShiftTime = Date.now();
-            saveBuffers(minutes);
+            if (!continuous) {saveBuffers(minutes);}
         } else {
             const now = Date.now();
-            if (now - lastShiftTime >= POLL_INTERVAL) {
-                rxBuffer.shift();
-                txBuffer.shift();
-                rxBuffer.push(liveRx);
-                txBuffer.push(liveTx);
-                lastShiftTime = now;
-                saveBuffers(minutes);
-            } else {
+            const shiftInterval = continuous ? 1000 : POLL_INTERVAL;
+            const timeSinceLast = now - lastShiftTime;
+            const shifts = Math.floor(timeSinceLast / shiftInterval);
+            if (shifts > 0) {
+                // Catch up on missed shifts — push the latest value for each
+                for (let s = 0; s < Math.min(shifts, DRAW_W); s++) {
+                    rxBuffer.shift();
+                    txBuffer.shift();
+                    rxBuffer.push(s === 0 && liveRx !== undefined ? liveRx : rxBuffer[rxBuffer.length - 1]);
+                    txBuffer.push(s === 0 && liveTx !== undefined ? liveTx : txBuffer[txBuffer.length - 1]);
+                }
+                lastShiftTime += shifts * shiftInterval;
+                if (!continuous) {saveBuffers(minutes);}
+            } else if (!continuous && liveRx !== undefined) {
                 rxBuffer[rxBuffer.length - 1] = liveRx;
                 txBuffer[txBuffer.length - 1] = liveTx;
             }
@@ -524,6 +544,8 @@ function initNewGraph() {
         if (graphCanvas) {renderNewGraph();}
     });
 
+    // In continuous scroll mode, render every 1s for smooth per-pixel shift
+    const scrollMode = graphCanvas.dataset.continuous === "1";
     // Poll for canvas element replacement or data attribute changes.
     const pollGraph = () => {
         const el = document.getElementById("minigraph");
@@ -533,7 +555,7 @@ function initNewGraph() {
         }
         if (graphCanvas && rxBuffer !== null) {renderNewGraph();}
     };
-    let pollIntervalId = setInterval(pollGraph, POLL_INTERVAL);
+    let pollIntervalId = setInterval(pollGraph, scrollMode ? 1000 : POLL_INTERVAL);
 
     document.addEventListener("visibilitychange", () => {
         if (document.hidden) {
@@ -545,7 +567,9 @@ function initNewGraph() {
             // intermediate values.
             rxBuffer = null;
             txBuffer = null;
-            pollIntervalId = setInterval(pollGraph, POLL_INTERVAL);
+            const el = document.getElementById("minigraph");
+            const mode = el && el.dataset.continuous === "1";
+            pollIntervalId = setInterval(pollGraph, mode ? 1000 : POLL_INTERVAL);
         }
     });
 }

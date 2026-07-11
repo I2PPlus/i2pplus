@@ -63,6 +63,8 @@ public class CSSHelper extends HelperBase {
     public static final String PROP_SIDEBAR_GRAPH_SPLIT = "routerconsole.sidebarGraphSplit";
     /** @since 0.9.70+ — graph render direction: "ltr" or "rtl" */
     public static final String PROP_SIDEBAR_GRAPH_DIRECTION = "routerconsole.sidebarGraphDirection";
+    /** @since 0.9.70+ — true = continuous scrolling graph; false = full-buffer redraw (default) */
+    public static final String PROP_SIDEBAR_GRAPH_CONTINUOUS = "routerconsole.sidebarGraphContinuous";
 
     /** Session-bound nonce for CSRF protection, replaces static nonces @since 0.9.69 */
     private static final String SESSION_CONSOLE_NONCE = "__router.console.nonce.queue__";
@@ -268,6 +270,13 @@ public class CSSHelper extends HelperBase {
      * @since 0.9.70+
      */
     public boolean useSidebarGraphSplit() {return _context.getBooleanPropertyDefaultTrue(PROP_SIDEBAR_GRAPH_SPLIT);}
+
+    /**
+     * Returns whether the sidebar graph uses continuous scroll mode.
+     * When enabled, the graph scrolls left as new data arrives.
+     * @since 0.9.70+
+     */
+    public boolean useSidebarGraphContinuous() {return _context.getBooleanProperty(PROP_SIDEBAR_GRAPH_CONTINUOUS);}
 
     /**
      * Returns the sidebar graph render direction ("ltr" or "rtl").

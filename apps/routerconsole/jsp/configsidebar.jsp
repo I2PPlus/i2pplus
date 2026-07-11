@@ -63,6 +63,10 @@
 <input type=checkbox class="optbox slider" name=sidebarGraphDirection value=ltr <%="ltr".equals(intl.getSidebarGraphDirection()) ? "checked" : ""%>>
 <%=intl._t("Left-to-right")%></label>
 <input type=hidden name=sidebarGraphDirection value=rtl>
+<label id=scrollGraph><b><%=intl._t("Scrolling display")%>:</b>
+<input type=checkbox class="optbox slider" name=sidebarGraphContinuous value=true <%=(intl.useSidebarGraphContinuous() ? "checked" : "")%>>
+<%=intl._t("Continuously scroll new data")%></label>
+<input type=hidden name=sidebarGraphContinuous value=false>
 </td>
 <td class=right><input type=submit name=action class=accept value="<%=intl._t("Save")%>"></td>
 </tr>

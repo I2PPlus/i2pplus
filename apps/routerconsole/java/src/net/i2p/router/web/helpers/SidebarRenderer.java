@@ -1194,6 +1194,9 @@ class SidebarRenderer {
             }
             boolean split = !"false".equals(_context.getProperty(CSSHelper.PROP_SIDEBAR_GRAPH_SPLIT, "true"));
             if (!split) {sb.append(" data-split=\"0\"");}
+            if (_context.getBooleanProperty(CSSHelper.PROP_SIDEBAR_GRAPH_CONTINUOUS)) {
+                sb.append(" data-continuous=\"1\"");
+            }
             return sb.toString();
         } catch (Exception e) {
             return "";

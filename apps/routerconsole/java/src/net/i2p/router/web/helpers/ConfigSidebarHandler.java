@@ -92,6 +92,9 @@ public class ConfigSidebarHandler extends FormHandler {
         String direction = getJettyStringOrDefault("sidebarGraphDirection", "rtl");
         toAdd.put(CSSHelper.PROP_SIDEBAR_GRAPH_DIRECTION, "ltr".equals(direction) ? "ltr" : "rtl");
 
+        boolean scroll = "true".equals(getJettyStringOrDefault("sidebarGraphContinuous", "false"));
+        toAdd.put(CSSHelper.PROP_SIDEBAR_GRAPH_CONTINUOUS, Boolean.toString(scroll));
+
         try {
             int minutes = Integer.parseInt(getJettyStringOrDefault("sidebarGraphMinutes", "20"));
             minutes = Math.max(2, Math.min(30, minutes));
