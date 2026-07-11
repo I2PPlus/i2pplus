@@ -172,7 +172,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("udp.messageReceiver.threads", "Threads reassembling UDP messages from fragments.");
         PARAM_DESCRIPTIONS.put("rdns.corePoolSize", "Threads performing reverse DNS lookups.");
         PARAM_DESCRIPTIONS.put("router.peerOutboundQueueSize", "Per-peer outbound queue size.");
-        PARAM_DESCRIPTIONS.put("router.transitThrottleFactor", "Transit rejection aggressiveness (0-1).");
+        PARAM_DESCRIPTIONS.put("router.transitThrottleFactor", "Transit rejection aggressiveness (50-100%).");
         PARAM_DESCRIPTIONS.put("router.throttleRejectExponent", "Steepness of the transit rejection curve.");
         PARAM_DESCRIPTIONS.put("router.maxParticipatingTunnels", "Transit tunnel capacity.");
         PARAM_DESCRIPTIONS.put("router.buildHandlerMaxQueue", "Max queued build requests.");

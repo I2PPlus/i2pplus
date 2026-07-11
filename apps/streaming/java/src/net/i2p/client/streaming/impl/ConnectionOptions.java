@@ -541,7 +541,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
             setReceiveWindow(getInt(opts, PROP_INITIAL_RECEIVE_WINDOW, 1));
         }
         if (opts.getProperty(PROP_INITIAL_RESEND_DELAY) != null) {
-setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
+            setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
         }
         if (opts.getProperty(PROP_INITIAL_ACK_DELAY) != null) {
             setSendAckDelay(getInt(opts, PROP_INITIAL_ACK_DELAY, _defaultInitialAckDelay));

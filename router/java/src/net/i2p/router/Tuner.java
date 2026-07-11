@@ -2404,7 +2404,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("INITIAL_WINDOW_SIZE", "Initial congestion window",
                   SUB_STREAMING,
 
-                  1, 32, 4, "stream.con.initialRTT.in", _context);
+                  1, 128, 4, "stream.con.initialRTT.in", _context);
         }
 
         protected void applyValue(int value) {
@@ -2489,10 +2489,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class InitialRTOParam extends BaseParam {
 
         InitialRTOParam() {
-            super("INITIAL_RTO", "Initial RTO (ms)",
+            super("INITIAL_RTO", "First retransmit timeout (ms)",
                   SUB_STREAMING,
 
-                  1000, 30000, 500, "stream.con.initialRTT.out", _context);
+                  1000, 10000, 500, "stream.con.initialRTT.out", _context);
         }
 
         protected void applyValue(int value) {
@@ -2554,10 +2554,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class InitialAckDelayParam extends BaseParam {
 
         InitialAckDelayParam() {
-            super("INITIAL_ACK_DELAY", "ACK delay (ms)",
+            super("INITIAL_ACK_DELAY", "Piggyback ACK wait (ms)",
                   SUB_STREAMING,
 
-                  1, 500, 5, "stream.sendsBeforeAck", _context);
+                  10, 100, 5, "stream.sendsBeforeAck", _context);
         }
 
         protected void applyValue(int value) {
@@ -3411,75 +3411,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // Not emptying + idle or loaded = shrink toward factory default
             if (observed == 0 && (highLoad || memPressure > 0.6 || systemBusy))
-                return Math.max(_min, current - 1);
-
-            return current;
-        }
-    }
-
-    /**
-     * NTCP send finisher thread count. Scales with send path congestion.
-     *
-     * <p>Primary signal: {@code ntcp.sendTime} (ms, message lifetime in
-     * finisher pipeline). Cross-refs: {@code ntcp.writeQueueFull},
-     * {@code ntcp.sendQueueSize}, {@code jobQueue.jobLag}.
-     *
-     * <p>Increases when send bottleneck or queue overflow detected.
-     * Decreases only under CPU pressure with low send time.
-     *
-     * @since 0.9.70+
-     */
-    private class NTCPThreadsParam extends BaseParam {
-
-        NTCPThreadsParam() {
-            super("ntcp.sendFinisher.maxThreads", "Max NTCP send finisher threads",
-                  SUB_TRANSPORT,
-
-                  1, 16, 1, "ntcp.sendTime", _context);
-        }
-
-        protected void applyValue(int value) {
-            NTCPTransport.setSendFinisherMaxThreads(value);
-        }
-
-        protected int getRuntimeValue() {
-            return NTCPTransport.getSendFinisherMaxThreads();
-        }
-
-        protected double getObservedStat(RouterContext ctx) {
-            RateStat rs = _context.statManager().getRate(_statName);
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
-        }
-
-        protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
-            // observed = ntcp.sendTime (ms, message lifetime in finisher pipeline)
-            // Cross-refs: ntcp.writeQueueFull (overflow), ntcp.sendQueueSize (backlog), jobLag (CPU)
-            double writeQueueFull = getAdditionalStat(_context, "ntcp.writeQueueFull");
-            double sendQueueSize = getAdditionalStat(_context, "ntcp.sendQueueSize");
-            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            int sysLoad = SystemVersion.getSystemLoad();
-            boolean highLoad = sysLoad > 80;
-            double memPressure = getMemoryPressure();
-
-            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 50;
-            boolean sendBottleneck = observed > 200 && !Double.isNaN(sendQueueSize) && sendQueueSize > 10;
-            boolean queueOverflow = !Double.isNaN(writeQueueFull) && writeQueueFull > 0;
-
-            // Emergency: bottleneck or overflow, no CPU pressure
-            if ((sendBottleneck || queueOverflow) && !cpuPressure && !highLoad)
-                return Math.min(_max, current + 1);
-
-            // Proactive growth: no pressure, no overflow, send time low
-            if (!cpuPressure && !highLoad && memPressure < 0.6 && queueOverflow
-                && observed < 100)
-                return Math.min(_max, current + 1);
-
-            // Only shrink under real pressure: high CPU or system overloaded + send time low
-            if ((cpuPressure || highLoad) && observed < 50 && !sendBottleneck && !queueOverflow)
                 return Math.max(_min, current - 1);
 
             return current;
@@ -4352,7 +4283,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxRTO", "Streaming max RTO (ms)",
                   SUB_STREAMING,
 
-                  1000, 120000, 1000, "udp.sendConfirmTime", _context);
+                  1000, 30000, 1000, "udp.sendConfirmTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -4405,7 +4336,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxResendDelay", "Streaming max resend delay (ms)",
                   SUB_STREAMING,
 
-                  1000, 120000, 1000, "stream.con.initialRTT.out", _context);
+                  1000, 20000, 1000, "stream.con.initialRTT.out", _context);
         }
 
         protected void applyValue(int value) {
@@ -4462,7 +4393,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxRetransmissions", "Streaming max retransmissions",
                   SUB_STREAMING,
 
-                  1, 256, 8, "stream.con.initialRTT.out", _context);
+                  8, 16, 2, "stream.con.initialRTT.out", _context);
         }
 
         protected void applyValue(int value) {
@@ -4523,15 +4454,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.minResendDelay", "Streaming min resend delay (ms)",
                   SUB_STREAMING,
 
-                  50, 10000, 50, "stream.con.initialRTT.out", _context);
+                  100, 5000, 50, "stream.con.initialRTT.out", _context);
         }
 
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.streaming.minResendDelay", Integer.toString(value));
+            StreamingConnectionReflector.invokeConnectionOptionsSet("setMinResendDelay", value);
         }
 
         protected int getRuntimeValue() {
-            return _context.getProperty("i2p.streaming.minResendDelay", 500);
+            return StreamingConnectionReflector.invokeConnectionOptionsInt("getMinResendDelayStatic");
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -4584,11 +4515,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.streaming.congestionAvoidanceGrowthRateFactor", Integer.toString(value));
+            // Invert: Tuner treats higher=more aggressive, but code treats higher=slower
+            _context.router().saveConfig("i2p.streaming.congestionAvoidanceGrowthRateFactor",
+                                         Integer.toString(_min + _max - value));
         }
 
         protected int getRuntimeValue() {
-            return _context.getProperty("i2p.streaming.congestionAvoidanceGrowthRateFactor", 1);
+            int codeVal = _context.getProperty("i2p.streaming.congestionAvoidanceGrowthRateFactor", 1);
+            return Math.max(_min, Math.min(_max, _min + _max - codeVal));
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -4665,11 +4599,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.streaming.slowStartGrowthRateFactor", Integer.toString(value));
+            // Invert: Tuner treats higher=more aggressive, but code treats higher=slower
+            _context.router().saveConfig("i2p.streaming.slowStartGrowthRateFactor",
+                                         Integer.toString(_min + _max - value));
         }
 
         protected int getRuntimeValue() {
-            return _context.getProperty("i2p.streaming.slowStartGrowthRateFactor", 1);
+            int codeVal = _context.getProperty("i2p.streaming.slowStartGrowthRateFactor", 1);
+            return Math.max(_min, Math.min(_max, _min + _max - codeVal));
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -4799,7 +4736,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.initialResendDelay", "Streaming initial resend delay (ms)",
                   SUB_STREAMING,
 
-                  50, 10000, 50, "stream.con.initialRTT.out", _context);
+                  100, 5000, 50, "stream.con.initialRTT.out", _context);
         }
 
         protected void applyValue(int value) {
@@ -5098,7 +5035,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2np.udp.maxConcurrentEstablish", "I2NP max concurrent handshakes",
                   SUB_TRANSPORT,
 
-                  8, 8192, 32, "udp.outboundEstablishTime", _context);
+                  32, 1024, 32, "udp.outboundEstablishTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -6592,6 +6529,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   64, 8192, 32, "ntcp.sendPool utilization", _context);
         }
 
+        @Override
+        protected int getDefaultMax(RouterContext ctx) {
+            int def = SystemVersion.isSlow() ? 64 : 128;
+            // Scale max with cores: more connections = more queued sends.
+            // Mirrors TransportImpl.setSendPoolCapacity() clamp.
+            return Math.max(def * 16, SystemVersion.getCores() * 512);
+        }
+
         protected void applyValue(int value) {
             TransportImpl.setSendPoolCapacity(value);
             Transport t = _context.commSystem().getTransports().get(NTCPTransport.STYLE);
@@ -7317,22 +7262,47 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * Build success rate: read the stat VALUE (0-100) directly.
-         * Requires at least 20 builds in the period for a stable rate.
+         * Build success rate computed from raw event counts, matching the sidebar
+         * display (SidebarHelper.getTunnelBuildSuccess()).
+         * Uses 1m averages of exploratory + client success / (success + reject + expire).
          * When firewalled, lower thresholds since inbound builds are rejected.
          */
         private double scoreBuildSuccess() {
-            RateStat rs = _ctx.statManager().getRate("tunnel.buildSuccessRate");
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() < 20) return Double.NaN;
-            double pct = rate.getAverageValue();
+            double pct = getBuildSuccessPct(STAT_PERIOD);
+            if (Double.isNaN(pct)) return Double.NaN;
             if (isFirewalled()) {
                 // firewalled: 10%→0.0, 50%→1.0
                 return clamp((pct - 10.0) / 40.0);
             }
             // normal: 30%→0.0, 80%→1.0
             return clamp((pct - 30.0) / 50.0);
+        }
+
+        /**
+         * Compute build success percentage over a given period from raw
+         * exploratory + client success/reject/expire event counts, matching
+         * SidebarHelper.getTunnelBuildSuccess().
+         * @return 0.0–100.0 or NaN if no events in the period
+         */
+        private double getBuildSuccessPct(long period) {
+            int success = 0, reject = 0, expire = 0;
+            RateStat rs;
+            Rate r;
+            rs = _ctx.statManager().getRate("tunnel.buildExploratorySuccess");
+            if (rs != null) { r = rs.getRate(period); if (r != null) success += (int) r.getLastEventCount(); }
+            rs = _ctx.statManager().getRate("tunnel.buildClientSuccess");
+            if (rs != null) { r = rs.getRate(period); if (r != null) success += (int) r.getLastEventCount(); }
+            rs = _ctx.statManager().getRate("tunnel.buildExploratoryReject");
+            if (rs != null) { r = rs.getRate(period); if (r != null) reject += (int) r.getLastEventCount(); }
+            rs = _ctx.statManager().getRate("tunnel.buildClientReject");
+            if (rs != null) { r = rs.getRate(period); if (r != null) reject += (int) r.getLastEventCount(); }
+            rs = _ctx.statManager().getRate("tunnel.buildExploratoryExpire");
+            if (rs != null) { r = rs.getRate(period); if (r != null) expire += (int) r.getLastEventCount(); }
+            rs = _ctx.statManager().getRate("tunnel.buildClientExpire");
+            if (rs != null) { r = rs.getRate(period); if (r != null) expire += (int) r.getLastEventCount(); }
+            int total = success + reject + expire;
+            if (total <= 0) return Double.NaN;
+            return (100.0 * success) / total;
         }
 
         /**
