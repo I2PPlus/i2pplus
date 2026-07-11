@@ -517,4 +517,61 @@
     </exec>
   </target>
 
+  <target name="compileTest" depends="compile">
+    <property name="junit.home" value="../../tools/test/junit"/>
+    <property name="hamcrest.home" value="../../tools/test/hamcrest"/>
+    <mkdir dir="${build.dir}/obj_test"/>
+    <javac
+      srcdir="./test/junit"
+      debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
+      release="${javac.release}"
+      includeAntRuntime="false"
+      encoding="UTF-8"
+      destdir="${build.dir}/obj_test">
+      <compilerarg line="${javac.compilerargs}"/>
+      <classpath>
+        <pathelement location="${build.dir}/obj"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
+        <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
+        <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
+        <pathelement location="${streaming.java.build.dir}/streaming.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+      </classpath>
+    </javac>
+    <echo message="I2PSnark test compilation completed"/>
+  </target>
+
+  <target name="junit.test" depends="compileTest">
+    <property name="junit.reports.dir" value="../../reports"/>
+    <property name="junit.home" value="../../tools/test/junit"/>
+    <property name="hamcrest.home" value="../../tools/test/hamcrest"/>
+    <mkdir dir="${junit.reports.dir}/i2psnark/junit"/>
+    <delete>
+      <fileset dir="${junit.reports.dir}/i2psnark/junit">
+        <include name="TEST-*.xml"/>
+      </fileset>
+    </delete>
+    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes">
+      <classpath>
+        <pathelement location="${build.dir}/obj_test"/>
+        <pathelement location="${build.dir}/obj"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
+        <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
+        <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
+        <pathelement location="${streaming.java.build.dir}/streaming.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
+      </classpath>
+      <batchtest todir="${junit.reports.dir}/i2psnark/junit">
+        <fileset dir="./test/junit" includes="**/*Test.java"/>
+      </batchtest>
+      <formatter type="xml"/>
+    </junit>
+    <echo message="I2PSnark JUnit tests completed"/>
+  </target>
+
+  <target name="test" depends="junit.test"/>
+
 </project>

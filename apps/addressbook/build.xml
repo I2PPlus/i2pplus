@@ -139,6 +139,65 @@
     </condition>
   </target>
 
+  <target name="builddeptest">
+    <ant dir="../../core/java/" target="jarTest">
+      <property name="build.dir" location="${core.java.build.dir}"/>
+    </ant>
+  </target>
+
+  <target name="compileTest" depends="builddeptest, compile">
+    <property name="junit.home" value="${ant.home}/lib/"/>
+    <javac srcdir="./java/test/junit" debug="true" source="${javac.version}" target="${javac.version}"
+      release="${javac.release}"
+      debuglevel="lines,vars,source"
+      includeAntRuntime="true"
+      encoding="UTF-8"
+      destdir="${build}">
+      <classpath>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
+        <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
+        <pathelement location="${router.java.build.dir}/router.jar"/>
+        <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
+        <pathelement location="${streaming.java.build.dir}/streaming.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="${build}"/>
+      </classpath>
+      <compilerarg line="${javac.compilerargs}"/>
+    </javac>
+  </target>
+
+  <target name="junit.test" depends="compileTest">
+    <property name="junit.reports.dir" value="../../reports"/>
+    <property name="junit.home" value="${ant.home}/lib/"/>
+    <property name="hamcrest.home" value="${ant.home}/lib/"/>
+    <mkdir dir="${junit.reports.dir}/addressbook/junit/"/>
+    <delete>
+      <fileset dir="${junit.reports.dir}/addressbook/junit">
+        <include name="TEST-*.xml"/>
+      </fileset>
+    </delete>
+    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes">
+      <classpath>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
+        <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
+        <pathelement location="${router.java.build.dir}/router.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
+        <pathelement location="${build}"/>
+      </classpath>
+      <batchtest todir="${junit.reports.dir}/addressbook/junit/">
+        <fileset dir="./java/test/junit">
+          <include name="**/*Test.java"/>
+        </fileset>
+      </batchtest>
+      <formatter type="xml"/>
+    </junit>
+  </target>
+
+  <target name="test" depends="junit.test"/>
+
   <target name="changes" depends="warUpToDate" if="shouldListChanges">
     <exec executable="sh" outputproperty="workspace.changes" errorproperty="git.error2" failifexecutionfails="false">
     <arg value="-c"/>

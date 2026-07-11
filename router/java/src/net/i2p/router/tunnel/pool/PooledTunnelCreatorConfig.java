@@ -26,6 +26,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     public PooledTunnelCreatorConfig(RouterContext ctx, int length, boolean isInbound, Hash destination, TunnelPool pool) {
         super(ctx, length, isInbound, destination);
         _pool = pool;
+        _lastActivity = System.currentTimeMillis();
         String nickname = pool.getSettings().getDestinationNickname();
         if (nickname != null) {
             setDestinationNickname(nickname);

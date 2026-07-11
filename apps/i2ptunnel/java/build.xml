@@ -590,13 +590,23 @@
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
         <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
+        <pathelement location="${streaming.java.build.dir}/streaming.jar"/>
+        <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
       </classpath>
     </javac>
   </target>
 
-  <target name="test" depends="clean, compileTest">
-    <junit printsummary="on" fork="yes">
+  <target name="test" depends="compileTest">
+    <property name="junit.reports.dir" value="../../../reports"/>
+    <mkdir dir="${junit.reports.dir}/i2ptunnel/junit/"/>
+    <delete>
+      <fileset dir="${junit.reports.dir}/i2ptunnel/junit">
+        <include name="TEST-*.xml"/>
+      </fileset>
+    </delete>
+    <property name="hamcrest.home" value="${ant.home}/lib/"/>
+    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes">
       <classpath>
         <pathelement path="${classpath}"/>
         <pathelement location="${build.dir}/obj"/>
@@ -605,32 +615,17 @@
         <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
         <pathelement location="${streaming.java.build.dir}/streaming.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
       </classpath>
-      <batchtest>
+      <batchtest todir="${junit.reports.dir}/i2ptunnel/junit/">
         <fileset dir="./test/junit/">
           <include name="**/*Test.java"/>
         </fileset>
       </batchtest>
       <formatter type="xml"/>
     </junit>
-    <mkdir dir="../../../reports/"/>
-    <mkdir dir="../../../reports/i2ptunnel/"/>
-    <mkdir dir="../../../reports/i2ptunnel/junit/"/>
-    <delete>
-      <fileset dir="../../../reports/i2ptunnel/junit">
-        <include name="TEST-*.xml"/>
-      </fileset>
-    </delete>
-    <copy todir="../../../reports/i2ptunnel/junit">
-      <fileset dir=".">
-        <include name="TEST-*.xml"/>
-      </fileset>
-    </copy>
-    <delete>
-      <fileset dir=".">
-        <include name="TEST-*.xml"/>
-      </fileset>
-    </delete>
   </target>
 
   <target name="clean">

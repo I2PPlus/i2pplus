@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="susimail">
   <available file="git" property="git.available"/>
+  <available file="../../tools/ant-contrib.jar" property="antcontrib.present"/>
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties" onerror="ignore">
+    <classpath>
+      <pathelement location="../../tools/ant-contrib.jar"/>
+    </classpath>
+  </taskdef>
   <property name="build.dir" value="${java.io.tmpdir}/build-i2p/apps/susimail/build"/>
   <property name="classes.dir" value="${build.dir}/classes"/>
 
@@ -296,4 +302,61 @@
     </exec>
   </target>
 
+  <target name="builddeptest">
+    <ant dir="../../core/java/" target="jarTest">
+      <property name="build.dir" location="${core.java.build.dir}"/>
+    </ant>
+  </target>
+
+  <target name="compileTest" depends="builddeptest, compile">
+    <property name="junit.home" value="../../tools/test/junit/"/>
+    <property name="hamcrest.home" value="../../tools/test/hamcrest/"/>
+    <mkdir dir="${build.dir}/obj_test"/>
+    <javac srcdir="./src/test/junit" debug="true" source="${javac.version}" target="${javac.version}"
+      release="${javac.release}"
+      debuglevel="lines,vars,source"
+      includeAntRuntime="true"
+      encoding="UTF-8"
+      destdir="${build.dir}/obj_test">
+      <classpath>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
+        <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="${classes.dir}"/>
+      </classpath>
+      <compilerarg line="${javac.compilerargs}"/>
+    </javac>
+  </target>
+
+  <target name="junit.test" depends="compileTest">
+    <property name="junit.reports.dir" value="../../reports"/>
+    <property name="junit.home" value="../../tools/test/junit/"/>
+    <property name="hamcrest.home" value="../../tools/test/hamcrest/"/>
+    <mkdir dir="${junit.reports.dir}/susimail/junit/"/>
+    <delete>
+      <fileset dir="${junit.reports.dir}/susimail/junit">
+        <include name="TEST-*.xml"/>
+      </fileset>
+    </delete>
+    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes">
+      <classpath>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
+        <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
+        <pathelement location="${build.dir}/obj_test"/>
+        <pathelement location="${classes.dir}"/>
+      </classpath>
+      <batchtest todir="${junit.reports.dir}/susimail/junit/">
+        <fileset dir="./src/test/junit">
+          <include name="**/*Test.java"/>
+        </fileset>
+      </batchtest>
+      <formatter type="xml"/>
+    </junit>
+  </target>
+
+  <target name="test" depends="junit.test"/>
 </project>

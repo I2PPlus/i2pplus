@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="routerconsole">
   <available file="git" property="git.available"/>
+  <available file="../../../tools/ant-contrib.jar" property="antcontrib.present"/>
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties" onerror="ignore">
+    <classpath>
+      <pathelement location="../../../tools/ant-contrib.jar"/>
+    </classpath>
+  </taskdef>
   <property name="build.dir" value="${java.io.tmpdir}/build-i2p/apps/routerconsole/java/build"/>
   <property name="jsp.build.dir" value="${java.io.tmpdir}/build-i2p/apps/routerconsole/jsp"/>
 
@@ -866,7 +872,51 @@
     <replace dir="../../../reports/apps/routerconsole/scalatest/" token="${host.name}" value="${host.fakename}"/>
   </target>
 
-  <target name="test" depends="scalatest.test"/>
+  <target name="compileTest" depends="compile">
+    <property name="junit.home" value="../../tools/test/junit"/>
+    <property name="hamcrest.home" value="../../tools/test/hamcrest"/>
+    <mkdir dir="${build.dir}"/>
+    <javac
+      srcdir="./test/junit"
+      debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
+      release="${javac.release}"
+      includeAntRuntime="false"
+      encoding="UTF-8"
+      destdir="${build.dir}/obj">
+      <compilerarg line="${javac.compilerargs}"/>
+      <classpath>
+        <pathelement location="${build.dir}/obj"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
+        <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
+        <pathelement location="${router.java.build.dir}/router.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="junit.test" depends="compileTest">
+    <property name="junit.reports.dir" value="../../reports"/>
+    <property name="junit.home" value="../../tools/test/junit"/>
+    <property name="hamcrest.home" value="../../tools/test/hamcrest"/>
+    <mkdir dir="${junit.reports.dir}/routerconsole/junit"/>
+    <junit fork="yes" maxmemory="384M">
+      <classpath>
+        <pathelement location="${build.dir}/obj"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
+        <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
+        <pathelement location="${router.java.build.dir}/router.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+      </classpath>
+      <formatter type="xml"/>
+      <batchtest todir="${junit.reports.dir}/routerconsole/junit">
+        <fileset dir="./test/junit" includes="**/*Test.java"/>
+      </batchtest>
+    </junit>
+  </target>
+
+  <target name="test" depends="scalatest.test, junit.test"/>
 
   <!-- Test reports -->
   <target name="scalatest.report">

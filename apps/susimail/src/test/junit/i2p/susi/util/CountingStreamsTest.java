@@ -39,7 +39,7 @@ public class CountingStreamsTest {
     public void testInputStreamEOF() throws Exception {
         byte[] data = {1};
         CountingInputStream cis = new CountingInputStream(new ByteArrayInputStream(data));
-        assertEquals(1, cis.getRead() + 0); // initial 0
+        assertEquals(0, cis.getRead()); // initial 0
         cis.read();
         assertEquals(1, cis.getRead());
         assertEquals(-1, cis.read());

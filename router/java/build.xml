@@ -323,6 +323,7 @@
         <pathelement location="${hamcrest.home}/hamcrest-integration.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-all.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="${mockito.home}/mockito-core.jar"/>
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
         <pathelement location="${apps.i2ptunnel.java.build.dir}/i2ptunnel.jar"/>
         <pathelement location="${build.dir}/obj"/>

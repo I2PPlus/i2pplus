@@ -55,6 +55,8 @@
   </target>
 
   <target name="compileTest" depends="compile">
+    <property name="junit.home" value="../../tools/test/junit/"/>
+    <property name="hamcrest.home" value="../../tools/test/hamcrest/"/>
     <javac
       srcdir="./test"
       debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
@@ -62,7 +64,7 @@
       includeAntRuntime="false"
       encoding="UTF-8"
       destdir="${build.dir}/obj"
-      classpath="${core.java.build.dir}/i2p.jar:${ministreaming.java.build.dir}/mstreaming.jar">
+      classpath="${core.java.build.dir}/i2p.jar:${core.java.build.dir}/i2ptest.jar:${ministreaming.java.build.dir}/mstreaming.jar:${streaming.java.build.dir}/streaming.jar:${junit.home}/junit4.jar:${hamcrest.home}/hamcrest-core.jar">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
@@ -132,6 +134,36 @@
   <target name="jarTest" depends="jar, compileTest">
     <jar destfile="${build.dir}/sam.jar" basedir="${build.dir}/obj" includes="**/*Test*.class" update="true"/>
   </target>
+  <target name="junit.test" depends="compileTest">
+    <property name="junit.reports.dir" value="../../reports"/>
+    <property name="junit.home" value="../../tools/test/junit/"/>
+    <property name="hamcrest.home" value="../../tools/test/hamcrest/"/>
+    <mkdir dir="${junit.reports.dir}/sam/junit/"/>
+    <delete>
+      <fileset dir="${junit.reports.dir}/sam/junit">
+        <include name="TEST-*.xml"/>
+      </fileset>
+    </delete>
+    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes">
+      <classpath>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
+        <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
+        <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
+        <pathelement location="${streaming.java.build.dir}/streaming.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
+        <pathelement location="${build.dir}/obj"/>
+      </classpath>
+      <batchtest todir="${junit.reports.dir}/sam/junit/">
+        <fileset dir="./test">
+          <include name="**/*Test.java"/>
+        </fileset>
+      </batchtest>
+      <formatter type="xml"/>
+    </junit>
+  </target>
+  <target name="test" depends="junit.test"/>
   <target name="javadoc">
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}/javadoc"/>

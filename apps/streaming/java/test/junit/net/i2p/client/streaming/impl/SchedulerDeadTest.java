@@ -15,13 +15,14 @@ public class SchedulerDeadTest extends TaskSchedulerTestBase {
         return new SchedulerDead(context);
     }
 
+    @SuppressWarnings("unchecked")
     private void setMocks(int now, int discSchOn, int connTimeout, int lifetime, int sendStreamId) {
-        when(clock.now()).thenReturn((long) now);
-        when(con.getDisconnectScheduledOn()).thenReturn((long) discSchOn);
-        when(con.getOptions()).thenReturn(opts);
-        when(opts.getConnectTimeout()).thenReturn((long) connTimeout);
-        when(con.getLifetime()).thenReturn((long) lifetime);
-        when(con.getSendStreamId()).thenReturn((long) sendStreamId);
+        doReturn((long) now).when(clock).now();
+        doReturn((long) discSchOn).when(con).getDisconnectScheduledOn();
+        doReturn(opts).when(con).getOptions();
+        doReturn((long) connTimeout).when(opts).getConnectTimeout();
+        doReturn((long) lifetime).when(con).getLifetime();
+        doReturn((long) sendStreamId).when(con).getSendStreamId();
     }
 
     @Test
