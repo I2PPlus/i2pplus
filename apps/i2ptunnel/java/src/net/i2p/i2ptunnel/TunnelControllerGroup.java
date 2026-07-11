@@ -104,7 +104,7 @@ public class TunnelControllerGroup implements ClientApp {
     private static final AtomicLong _executorThreadCount = new AtomicLong();
     private final Object _executorLock = new Object();
     /** how long to wait before dropping an idle thread */
-    private static final long HANDLER_KEEPALIVE_MS = 2*(long) 60*1000;
+    private static final long HANDLER_KEEPALIVE_MS = (long) 30*1000;
 
     /**
      *  Shared bounded executor for all server tunnel connection handlers.
