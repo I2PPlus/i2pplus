@@ -212,7 +212,6 @@ public class I2PSocketEepGet extends EepGet {
         _proxyOut = _socket.getOutputStream();
 
 
-
         String req = getRequest();
         _proxyOut.write(DataHelper.getUTF8(req));
         _proxyOut.flush();

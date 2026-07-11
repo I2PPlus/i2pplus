@@ -34,7 +34,6 @@ public class I2PLogger implements Logger
     private final StringBuilder _buffer = new StringBuilder();
 
 
-
     public I2PLogger()
     {
         this(I2PAppContext.getGlobalContext());

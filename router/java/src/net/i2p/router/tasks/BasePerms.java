@@ -8,23 +8,23 @@ import net.i2p.util.VersionComparator;
 
 /**
  * Windows permission fixer for router installations.
- * 
+ *
  * This class handles permission issues on Windows platforms where
  * older I2P installations may have set overly broad file permissions.
  * It detects installations that need permission fixes and runs
  * the appropriate scripts to tighten security.
- * 
+ *
  * <strong>Platform Specific:</strong>
  * <ul>
  *   <li>Only runs on Windows platforms</li>
  *   <li>Skipped on embedded installations (killVMOnEnd = false)</li>
  *   <li>Requires write permissions to base directory</li>
  * </ul>
- * 
+ *
  * The fix is applied once per installation and marked as complete
  * to avoid repeated execution. This is particularly important for
  * installations upgraded from versions prior to 0.9.46.
- * 
+ *
  *  @since 0.9.46
  */
 public class BasePerms {

@@ -35,7 +35,6 @@ public class JSONRPC2ParseException extends Exception {
 	private int causeType = PROTOCOL;
 
 
-
 	/**
 	 * The string that could't be parsed.
 	 */

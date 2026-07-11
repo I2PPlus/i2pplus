@@ -121,12 +121,6 @@ public class InternalSocket extends Socket {
     // everything below here unsupported unless otherwise noted
 
 
-
-
-
-
-
-
     /**
      * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
      *
@@ -136,7 +130,6 @@ public class InternalSocket extends Socket {
     public int getLocalPort() {
         return isConnected() ? 1 : -1;
     }
-
 
 
     /**
@@ -150,9 +143,6 @@ public class InternalSocket extends Socket {
     }
 
 
-
-
-
     /**
      * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
      *
@@ -162,8 +152,6 @@ public class InternalSocket extends Socket {
     public int getSoLinger() {
         return -1;
     }
-
-
 
 
     /**
@@ -191,17 +179,11 @@ public class InternalSocket extends Socket {
     }
 
 
-
-
-
-
-
     /**
      * Does nothing as of 0.9.33, prior to that threw UnsupportedOperationException
      */
     @Override
     public void setSoLinger(boolean on, int linger) { /* nop */ }
-
 
 
     /**

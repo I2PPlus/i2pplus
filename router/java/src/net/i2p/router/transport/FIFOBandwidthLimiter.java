@@ -14,12 +14,12 @@ import net.i2p.util.Log;
 
 /**
  * FIFO-based bandwidth limiter for managing inbound and outbound traffic.
- * 
+ *
  * This class provides bandwidth management using First-In-First-Out
  * queues for both inbound and outbound traffic. It implements
  * token bucket algorithm to control data rates and prevent burst
  * traffic patterns.
- * 
+ *
  * <strong>Core Features:</strong>
  * <ul>
  *   <li>FIFO request queuing for fair bandwidth allocation</li>
@@ -29,7 +29,7 @@ import net.i2p.util.Log;
  *   <li>Thread-safe operations with atomic counters</li>
  *   <li>Request satisfaction and partial fulfillment handling</li>
  * </ul>
- * 
+ *
  * <strong>Concurrency Strategy:</strong>
  * <ul>
  *   <li>Java 5: Used synchronized ArrayList with head/tail access</li>
@@ -37,7 +37,7 @@ import net.i2p.util.Log;
  *   <li>Request polling from queue head for efficiency</li>
  *   <li>Partial request satisfaction with push-back mechanism</li>
  * </ul>
- * 
+ *
  * <strong>Algorithm:</strong>
  * <ul>
  *   <li>Token refill at fixed intervals</li>
@@ -77,7 +77,6 @@ public class FIFOBandwidthLimiter {
     private final AtomicLong _totalAllocatedOutboundBytes = new AtomicLong();
     // following is temp until switch to PBQ
     private static final AtomicLong __requestId = new AtomicLong();
-
 
 
     private final FIFOBandwidthRefiller _refiller;

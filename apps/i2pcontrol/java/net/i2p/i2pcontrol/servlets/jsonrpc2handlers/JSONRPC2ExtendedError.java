@@ -83,7 +83,6 @@ public class JSONRPC2ExtendedError extends JSONRPC2Error {
     public static final JSONRPC2Error UNSUPPORTED_API_VERSION = new JSONRPC2ExtendedError(-32006, "The version of the I2PControl API specified is not supported by I2PControl.");
 
 
-
     /**
      * Creates a new JSON-RPC 2.0 error with the specified code and
      * message. The optional data is omitted.

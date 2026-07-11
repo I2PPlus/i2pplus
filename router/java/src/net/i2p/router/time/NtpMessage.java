@@ -233,7 +233,6 @@ class NtpMessage {
     public final double transmitTimestamp;
 
 
-
     /**
      * Constructs a new NtpMessage from an array of bytes.
      *
@@ -270,7 +269,6 @@ class NtpMessage {
     }
 
 
-
     /**
      * Constructs a new NtpMessage in client -&gt; server mode, and sets the
      * transmit timestamp to the current time.
@@ -281,7 +279,6 @@ class NtpMessage {
         this.mode = 3;
         this.transmitTimestamp = (System.currentTimeMillis()/1000.0) + NtpClient.SECONDS_1900_TO_EPOCH;
     }
-
 
 
     /**
@@ -327,7 +324,6 @@ class NtpMessage {
     }
 
 
-
     /**
      * Returns a string representation of a NtpMessage
      */
@@ -351,7 +347,6 @@ class NtpMessage {
     }
 
 
-
     /**
      * Converts an unsigned byte to a short.  By default, Java assumes that
      * a byte is signed.
@@ -362,7 +357,6 @@ class NtpMessage {
         else
             return b;
     }
-
 
 
     /**
@@ -387,7 +381,6 @@ class NtpMessage {
             r += SECONDS_ERA;
         return r;
     }
-
 
 
     /**
@@ -441,7 +434,6 @@ class NtpMessage {
         // 2 bytes of random data
         RandomSource.getInstance().nextBytes(array, pointer + 6, 2);
     }
-
 
 
     /**

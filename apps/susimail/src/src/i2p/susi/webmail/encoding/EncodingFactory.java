@@ -13,11 +13,11 @@ import net.i2p.util.Log;
  * @author susi
  */
 public class EncodingFactory {
-	
+
 	private static final String DEFAULT_ENCODINGS = "i2p.susi.webmail.encoding.HeaderLine;i2p.susi.webmail.encoding.QuotedPrintable;i2p.susi.webmail.encoding.Base64;i2p.susi.webmail.encoding.SevenBit;i2p.susi.webmail.encoding.EightBit;i2p.susi.webmail.encoding.HTML";
-	
+
 	private static final Map<String, Encoding> encodings;
-	
+
 	static {
 		encodings = new HashMap<>();
 		String list = DEFAULT_ENCODINGS;
@@ -39,9 +39,9 @@ public class EncodingFactory {
 
 	/**
 	 * Retrieve instance of an encoder for a supported encoding (or null).
-	 * 
+	 *
 	 * @param name name of encoding (e.g. quoted-printable)
-	 * 
+	 *
 	 * @return Encoder instance
 	 */
 	public static Encoding getEncoding( String name )
@@ -50,7 +50,7 @@ public class EncodingFactory {
 	}
 	/**
 	 * Returns list of available encodings;
-	 * 
+	 *
 	 * @return List of encodings
 	 */
 	public static Set<String> availableEncodings()

@@ -1369,7 +1369,6 @@ public class TunnelPool {
         } finally {_tunnelsLock.unlock();}
 
 
-
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Removing tunnel " + info);}
 
         // Do NOT cancel the ExpireJob here.  The 2-phase ExpireJob lifecycle
@@ -2192,7 +2191,6 @@ public class TunnelPool {
         _lastLeaseSetBuildTime = now;
         return ls;
     }
-
 
 
     /**

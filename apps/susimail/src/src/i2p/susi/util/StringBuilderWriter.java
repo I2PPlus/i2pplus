@@ -114,7 +114,7 @@ public class StringBuilderWriter extends Writer {
      */
     @Override
     public void write(String str, int off, int len) {
-        buf.append(str, off, len);
+        buf.append(str, off, off + len);
     }
 
     /**

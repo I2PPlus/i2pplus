@@ -33,7 +33,7 @@ public class ReadConfigJob extends JobImpl {
 
     /**
      * Create a new configuration reader job.
-     * 
+     *
      * @param ctx router context for accessing configuration and clock
      */
     public ReadConfigJob(RouterContext ctx) {
@@ -43,7 +43,7 @@ public class ReadConfigJob extends JobImpl {
 
     /**
      * Check if advanced console mode is enabled.
-     * 
+     *
      * @return true if routerconsole.advanced property is true
      */
     public boolean isAdvanced() {
@@ -52,24 +52,24 @@ public class ReadConfigJob extends JobImpl {
 
     /**
      * Get the name of this job.
-     * 
+     *
      * @return job name for logging and identification
      */
     public String getName() { return "Read Router Configuration"; }
 
     /**
      * Check for and reload router configuration if file has changed.
-     * 
+     *
      * This job runs periodically to detect external configuration changes.
      * If the router.config file has been modified since last check, it will
      * be reloaded and the last read timestamp updated.
-     * 
+     *
      * The check interval varies based on console mode:
      * <ul>
      *   <li>Normal mode: every 60 seconds</li>
      *   <li>Advanced mode: every 90 seconds</li>
      * </ul>
-     * 
+     *
      * Note: This will also trigger when the router itself writes the config file,
      * but that's acceptable behavior.
      */

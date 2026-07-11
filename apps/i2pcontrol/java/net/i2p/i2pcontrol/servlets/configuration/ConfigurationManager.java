@@ -33,7 +33,6 @@ public class ConfigurationManager {
     private final Map<String, Integer> integerConfigurations = new HashMap<>();
 
 
-
     public ConfigurationManager(I2PAppContext ctx, File dir, boolean isPlugin) {
         _log = ctx.logManager().getLog(ConfigurationManager.class);
         if (isPlugin) {

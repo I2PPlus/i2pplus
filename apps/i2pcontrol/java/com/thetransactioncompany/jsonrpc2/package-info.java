@@ -29,4 +29,3 @@
 package com.thetransactioncompany.jsonrpc2;
 
 
-

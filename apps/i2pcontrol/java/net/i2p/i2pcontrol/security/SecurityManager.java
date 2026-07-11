@@ -89,7 +89,6 @@ public class SecurityManager {
 ****/
 
 
-
     /**
      * Hash pwd with using BCrypt with the default salt.
      * @param pwd

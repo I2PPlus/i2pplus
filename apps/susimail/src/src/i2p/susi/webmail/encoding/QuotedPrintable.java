@@ -15,7 +15,7 @@ import java.io.Writer;
  * @author susi
  */
 public class QuotedPrintable extends Encoding {
-	
+
 	public String getName() {
 		return "quoted-printable";
 	}
@@ -38,7 +38,7 @@ public class QuotedPrintable extends Encoding {
 
 	/**
 	 * More efficient than super
-	 * 
+	 *
 	 * @param in
 	 * @see Base64#encode(String)
 	 * @since since 0.9.33
@@ -58,12 +58,12 @@ public class QuotedPrintable extends Encoding {
 			}
 			if( read == 0 && buffered == 0 )
 				break;
-			
+
 			int c = tmp[0];
 			buffered--;
 			for( int j = 1; j < BUFSIZE; j++ )
 				tmp[j-1] = tmp[j];
-			
+
 			if ((c == '.' || c == '-') && l == 0) {
 				// leading '.' seems to get eaten by SMTP,
 				// even if more chars after it
@@ -157,7 +157,7 @@ public class QuotedPrintable extends Encoding {
 							b = (byte) (b - 'A' + 10);
 						else if(b >= 'a' && b <= 'f')
 							b = (byte) (b - 'a' + 10);
-						
+
 						out.write(a*16 + b);
 						continue;
 					}

@@ -149,7 +149,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * @throws IOException
      */
     public void connect(SAMv3Handler handler, String dest, Properties props)
-            throws I2PException, 
+            throws I2PException,
                     IOException {
 
         boolean verbose = !Boolean.parseBoolean(props.getProperty("SILENT"));

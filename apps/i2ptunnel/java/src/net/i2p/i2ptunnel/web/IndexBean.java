@@ -1507,7 +1507,6 @@ public class IndexBean {
     }
 
 
-
     public void setCert(String val) {
         if (val != null) {
             try {_certType = Integer.parseInt(val.trim());}

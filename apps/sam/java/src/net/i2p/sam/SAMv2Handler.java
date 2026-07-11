@@ -119,9 +119,6 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 		}
 
 
-
-
-
 		private boolean execStreamReceive ( Properties props )
 		{
 			if (props.isEmpty())

@@ -40,7 +40,6 @@ import java.util.Locale;
 public class Base64 {
 
 
-
     /**
      *  Output will be a multiple of 4 chars, including 0-2 trailing '='
      *  As of 0.9.14, encodes the UTF-8 encoding of source. Prior to that, used the platform's encoding.
@@ -591,7 +590,6 @@ public class Base64 {
         return encodeString(s, true);
     } // end encodeString
 ******/
-
 
 
     /* ********  D E C O D I N G   M E T H O D S  ******** */

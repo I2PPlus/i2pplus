@@ -223,7 +223,6 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     public void stopRawReceiving() { /* no-op */ }
 
 
-
     /////// stream session overrides
 
     /** @throws I2PException always */

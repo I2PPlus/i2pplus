@@ -1,12 +1,12 @@
 /*
  * Created on 09.11.2004
- * 
+ *
  *  This file is part of susimail project, see http://susi.i2p/
- *  
+ *
  *  Copyright (C) 2004-2005  <susi23@mail.i2p>
  *
  * Licensed under the GPLv2 or later.
- *  
+ *
  */
 package i2p.susi.webmail.encoding;
 
@@ -24,14 +24,14 @@ import java.io.Writer;
  * @author susi
  */
 public class Base64 extends Encoding {
-	
+
 	public String getName() {
 		return "base64";
 	}
 
 	/**
 	 * @return Base64-encoded String.
-	 * @throws EncodingException 
+	 * @throws EncodingException
 	 */
 	public String encode( byte[] in ) throws EncodingException
 	{
@@ -46,7 +46,7 @@ public class Base64 extends Encoding {
 
 	/**
 	 * More efficient than super
-	 * 
+	 *
 	 * @param in
 	 * @see Base64#encode(String)
 	 * @since public since 0.9.33 with new params

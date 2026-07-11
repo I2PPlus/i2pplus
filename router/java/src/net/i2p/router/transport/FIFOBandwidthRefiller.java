@@ -11,13 +11,13 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Bandwidth token refiller for FIFO-based bandwidth limiting.
- * 
+ *
  * This thread periodically refills bandwidth token buckets
  * for the FIFOBandwidthLimiter. It runs independently
  * to ensure tokens are available at regular intervals,
  * preventing traffic starvation and maintaining consistent
  * throughput.
- * 
+ *
  * <strong>Refill Strategy:</strong>
  * <ul>
  *   <li>Fixed interval token replenishment</li>
@@ -26,7 +26,7 @@ import net.i2p.util.SystemVersion;
  *   <li>Participating bandwidth counter (since 0.8.12)</li>
  *   <li>Thread-safe operations with atomic counters</li>
  * </ul>
- * 
+ *
  * <strong>Configuration:</strong>
  * <ul>
  *   <li>Configurable inbound bandwidth limits (KBps)</li>
@@ -34,19 +34,19 @@ import net.i2p.util.SystemVersion;
  *   <li>Adjustable refill intervals and amounts</li>
  *   <li>System property integration for defaults</li>
  * </ul>
- * 
+ *
  * <strong>Thread Safety:</strong>
  * <ul>
  *   <li>Atomic counters for bandwidth tracking</li>
  *   <li>Thread-safe refill operations</li>
  *   <li>Non-blocking queue operations</li>
  * </ul>
- * 
+ *
  * <strong>Note:</strong> This class was originally created to provide a
  * dedicated thread for bandwidth refilling when the main limiter
  * needed thread resources. As of 0.8.12, it also includes
  * participating bandwidth counter functionality.
- * 
+ *
  * Public only for properties and defaults.
  */
 public class FIFOBandwidthRefiller implements Runnable {

@@ -420,7 +420,7 @@ public class JobQueue {
                 // Drop timeout-based jobs when lagging to reduce queue pressure
                 if (jobName.contains("SendTimeoutJob") || jobName.contains("VerifyTimeout") || jobName.contains("FloodOnlyLookupTimeout")) {return true;}
                 // Drop non-critical verification jobs when lagging
-                if (jobName.contains("DropLookupFoundJob") || jobName.contains("DropLookupFailedJob") || 
+                if (jobName.contains("DropLookupFoundJob") || jobName.contains("DropLookupFailedJob") ||
                     jobName.contains("DirectLookupJob") || jobName.contains("DirectLookupMatch")) {return true;}
                 if (cls == PeerTestJob.class) {
                     return true;

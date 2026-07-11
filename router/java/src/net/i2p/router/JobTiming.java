@@ -35,8 +35,8 @@ public class JobTiming implements Clock.ClockUpdateListener {
      * WARNING - this does not force a resort of the job queue any more...
      * ALWAYS call JobImpl.requeue() instead if job is already queued.
      */
-    public void setStartAfter(long startTime) { 
-        _start = startTime; 
+    public void setStartAfter(long startTime) {
+        _start = startTime;
     }
 
     /**

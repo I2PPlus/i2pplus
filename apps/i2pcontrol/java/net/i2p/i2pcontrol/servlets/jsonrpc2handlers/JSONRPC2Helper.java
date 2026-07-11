@@ -79,7 +79,6 @@ public class JSONRPC2Helper {
     }
 
 
-
     /**
      * Will check incoming parameters to make sure they contain a valid token.
      * @param req - Parameters of incoming request

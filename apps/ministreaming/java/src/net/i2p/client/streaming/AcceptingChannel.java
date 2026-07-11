@@ -18,7 +18,7 @@ public abstract class AcceptingChannel extends SelectableChannel {
 
     /**
      * Accept an incoming connection.
-     * 
+     *
      * @return the accepted I2P socket
      * @throws I2PException if an I2P error occurs
      * @throws ConnectException if a connection error occurs
@@ -30,7 +30,7 @@ public abstract class AcceptingChannel extends SelectableChannel {
 
     /**
      * Create a new accepting channel.
-     * 
+     *
      * @param manager the socket manager
      */
     protected AcceptingChannel(I2PSocketManager manager) {

@@ -46,7 +46,6 @@ class ClientPeerSelector extends TunnelPeerSelector {
     }
 
 
-
     /** Per-pool cooldown map so one pool's selections don't starve another's. */
     private static final Map<Hash, Long> _clientCooldowns = new ConcurrentHashMap<>();
 

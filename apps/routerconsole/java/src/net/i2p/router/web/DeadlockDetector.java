@@ -103,7 +103,7 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
             if (cmgr != null) {
                 NotificationService ns = (NotificationService) cmgr.getRegisteredApp("desktopgui");
                 if (ns != null) {
-                    ns.notify("Router", null, Log.CRIT, Messages.getString("Router", ctx), 
+                    ns.notify("Router", null, Log.CRIT, Messages.getString("Router", ctx),
                               msg1 + '\n' + msg2, null);
                 }
             }

@@ -17,7 +17,7 @@ import net.i2p.router.RouterContext;
  * <p>
  * Tracks peer interaction status, timing information, and operation progress
  * for store operations. Maintains separate sets for pending, attempted,
- * and successful operations to coordinate concurrent store operations 
+ * and successful operations to coordinate concurrent store operations
  * and prevent duplicate queries.
  * <p>
  * Thread-safe implementation using synchronized collections and atomic

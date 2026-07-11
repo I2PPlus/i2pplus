@@ -8,22 +8,22 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Thread dump utility for debugging hung router instances.
- * 
+ *
  * This class provides functionality to request Java Service Wrapper
  * to dump all thread stacks to wrapper.log file. This is essential
  * for diagnosing router hangs, deadlocks, or performance issues.
- * 
+ *
  * <strong>Platform Requirements:</strong>
  * <ul>
  *   <li>Requires Java Service Wrapper to be installed and running</li>
  *   <li>Only works on non-Windows platforms (Linux, macOS, Unix)</li>
  *   <li>Does not function on Windows due to wrapper limitations</li>
  * </ul>
- * 
+ *
  * The dump operation is asynchronous - this method signals the wrapper
  * to start the dump but does not wait for it to complete. The actual
  * thread dump will appear in wrapper.log shortly after the call returns.
- * 
+ *
  * This utility is typically called by the watchdog when router appears
  * to be unresponsive, but can also be invoked manually for debugging.
  *
@@ -35,16 +35,16 @@ abstract class ThreadDump {
 
     /**
      * Signal the wrapper to asynchronously dump threads to wrapper.log.
-     * 
+     *
      * This method sends a signal to the Java Service Wrapper to dump all
      * thread stacks to the wrapper log file. This is useful for debugging
      * hung or unresponsive router instances.
-     * 
+     *
      * The method waits for the signal to be sent (which should be fast)
      * but does not wait for the actual thread dump to complete.
-     * 
+     *
      * Note: Only works on non-Windows platforms with the Java Service Wrapper.
-     * 
+     *
      * @param context the I2P application context for accessing directories
      * @param secondsToWait maximum seconds to wait for the signal to complete;
      *                     if &lt;= 0, don't wait for completion

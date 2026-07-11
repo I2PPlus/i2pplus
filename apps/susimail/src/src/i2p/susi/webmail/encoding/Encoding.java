@@ -19,7 +19,7 @@ import net.i2p.util.Log;
 
 /**
  * Interface to encode/decode content transfer encodings like quoted-printable, base64 etc.
- * 
+ *
  * @since 0.9.33 changed from interface to abstract class
  */
 public abstract class Encoding {
@@ -181,5 +181,5 @@ public abstract class Encoding {
     * @since 0.9.34
     */
    public abstract void decode(InputStream in, Buffer out) throws IOException;
-  
+
 }

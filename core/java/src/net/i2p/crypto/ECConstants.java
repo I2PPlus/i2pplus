@@ -329,7 +329,6 @@ final class ECConstants {
     public static final ECParameterSpec P521_SPEC = genSpec("secp521r1", "P-521", PARM_P521);
 
 
-
     /**
      *  There is no ECParameterSpec.equals().
      *  Needed to load family keys on Android via SigUtil.fromJavaKey().

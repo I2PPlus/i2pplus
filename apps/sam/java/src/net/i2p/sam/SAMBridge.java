@@ -79,7 +79,6 @@ public class SAMBridge implements Runnable, ClientApp {
     private volatile ClientAppState _state = UNINITIALIZED;
 
 
-
     public static final String DEFAULT_SAM_KEYFILE = "sam.keys";
     static final String DEFAULT_SAM_CONFIGFILE = "sam.config";
     private static final String PROP_SAM_KEYFILE = "sam.keyfile";

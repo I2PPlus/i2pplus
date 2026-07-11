@@ -153,7 +153,6 @@ class ConfigParser {
     }
 
 
-
     /**
      * Return a List where each element is a line from the BufferedReader input.
      *

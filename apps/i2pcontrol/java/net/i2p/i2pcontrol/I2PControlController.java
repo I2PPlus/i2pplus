@@ -207,7 +207,6 @@ public class I2PControlController implements RouterApp {
     }
 
 
-
     /**
      * Builds a new server. Used for changing ports during operation and such.
      * @return Server - A new server built from current configuration.

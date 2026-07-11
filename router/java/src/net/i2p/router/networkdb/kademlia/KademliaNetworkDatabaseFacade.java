@@ -67,7 +67,6 @@ import net.i2p.util.VersionComparator;
 import net.i2p.util.SimpleTimer2;
 
 
-
 /**
  * Kademlia based version of network database.
  * <p>
@@ -801,7 +800,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (key == null) return;
         _clientLeaseSetAccessTime.remove(key);
     }
-
 
 
     /**

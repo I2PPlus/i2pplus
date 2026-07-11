@@ -26,12 +26,12 @@ import org.freenetproject.ForwardPortStatus;
 
 /**
  * Universal Plug and Play (UPnP) manager for NAT traversal and port forwarding.
- * 
+ *
  * This class manages UPnP operations to automatically configure
  * port forwarding on UPnP-enabled routers, allowing I2P to
  * work through NAT and firewalls. It bridges between I2P's
  * RouterAddress structures and the external FreeNet UPnP library.
- * 
+ *
  * <strong>Core Features:</strong>
  * <ul>
  *   <li>Automatic UPnP device discovery</li>
@@ -41,7 +41,7 @@ import org.freenetproject.ForwardPortStatus;
  *   <li>Lease renewal and monitoring</li>
  *   <li>Service advertisement for I2P</li>
  * </ul>
- * 
+ *
  * <strong>UPnP Protocol Support:</strong>
  * <ul>
  *   <li>SSDP (Simple Service Discovery Protocol)</li>
@@ -49,7 +49,7 @@ import org.freenetproject.ForwardPortStatus;
  *   <li>SOAP-based control messages</li>
  *   <li>Event-driven architecture with callbacks</li>
  * </ul>
- * 
+ *
  * <strong>Integration:</strong>
  * <ul>
  *   <li>Bridges I2P RouterAddress to FreeNet structures</li>
@@ -57,7 +57,7 @@ import org.freenetproject.ForwardPortStatus;
  *   <li>Provides callbacks for transport events</li>
  *   <li>Handles multiple router discovery protocols</li>
  * </ul>
- * 
+ *
  * <strong>Configuration:</strong>
  * <ul>
  *   <li>Configurable HTTP and SSDP ports</li>

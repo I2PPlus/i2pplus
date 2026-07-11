@@ -68,7 +68,7 @@ class SAMRawSession extends SAMMessageSession {
      * @since 0.9.25
      */
     protected SAMRawSession(I2PSession sess, Properties props, int listenProtocol, int listenPort,
-                            SAMRawReceiver recv) throws 
+                            SAMRawReceiver recv) throws
                               I2PSessionException {
         super(sess, listenProtocol, listenPort);
         this.recv = recv;

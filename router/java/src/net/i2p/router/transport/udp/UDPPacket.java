@@ -14,12 +14,12 @@ import net.i2p.util.TryCache;
 
 /**
  * UDP packet wrapper with caching and metadata support.
- * 
+ *
  * This class wraps standard DatagramPacket objects and adds
  * I2P-specific metadata for efficient packet handling and reuse.
  * It implements an object cache pattern to reduce garbage collection
  * overhead and improve performance in high-throughput scenarios.
- * 
+ *
  * <strong>Core Features:</strong>
  * <ul>
  *   <li>Packet wrapping with metadata preservation</li>
@@ -29,7 +29,7 @@ import net.i2p.util.TryCache;
  *   <li>Bandwidth reservation and throttling integration</li>
  *   <li>Timestamp and routing metadata</li>
  * </ul>
- * 
+ *
  * <strong>Caching Strategy:</strong>
  * <ul>
  *   <li>Internal object pool for packet reuse</li>
@@ -37,7 +37,7 @@ import net.i2p.util.TryCache;
  *   <li>Thread-safe cache operations</li>
  *   <li>Memory-efficient packet allocation</li>
  * </ul>
- * 
+ *
  * <strong>Metadata Support:</strong>
  * <ul>
  *   <li>Message type and protocol information</li>
@@ -46,7 +46,7 @@ import net.i2p.util.TryCache;
  *   <li>Bandwidth allocation tracking</li>
  *   <li>Routing and forwarding information</li>
  * </ul>
- * 
+ *
  * <strong>Performance Optimizations:</strong>
  * <ul>
  *   <li>Minimal object creation overhead</li>
@@ -436,7 +436,7 @@ class UDPPacket implements CDPQEntry {
         // Only build detailed string if debug logging is enabled
         if (!_context.logManager().getLog(UDPPacket.class).shouldDebug())
             return "UDPPacket[size=" + _packet.getLength() + "]";
-            
+
         StringBuilder buf = new StringBuilder(128);
         InetAddress addr = _packet.getAddress();
 
