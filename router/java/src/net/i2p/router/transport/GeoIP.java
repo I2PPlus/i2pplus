@@ -599,10 +599,14 @@ public class GeoIP {
     private static final Map<String, String> ASN_DB_OVERRIDES;
     static {
         ASN_DB_OVERRIDES = new HashMap<>();
+        // Word-by-word character-reversed names from MaxMind ASN DB
+        ASN_DB_OVERRIDES.put("setarimE moceleT puorG oC talasitepuorG CSJP", "Emirates Telecom Group Co PJSC");
         ASN_DB_OVERRIDES.put("CSJP )puorG talasite( oC puorG moceleT setarimE", "Emirates Telecom Group Co (etisalat Group) PJSC");
         ASN_DB_OVERRIDES.put("eteicoS esiacnarF uD enohpeletoidaR", "Societe France Du RadioTelephone");
         ASN_DB_OVERRIDES.put("etavirP namssenisuB vonayruB nitnatsnoK", "Private Business von Knutsen");
         ASN_DB_OVERRIDES.put("oixenI eigolonhcetsnoitamrofnI dnU", "Und Informationstechnologie Inexio");
+        // First/last char case-swap corrupted names from MaxMind ASN DB
+        ASN_DB_OVERRIDES.put("techteL LMDS comunicacioneS interactivaS S", "Techtel LMDS Comunicaciones Interactivas S.A.");
     }
 
     /**
@@ -639,6 +643,7 @@ public class GeoIP {
         // Domain/tech abbreviations
         "com", "net", "org", "edu", "gov", "co", "ltd", "inc",
         "corp", "gmbh", "sarl", "sas", "bv", "nv", "ab", "kk",
+        "pjsc", "jsc", "sa", "sl", "s.a.", "s.l.", "s.r.l.", "sas",
         // Country/region names
         "france", "germany", "spain", "italy", "china", "japan",
         "korea", "india", "brazil", "russia", "canada", "australia",
@@ -671,7 +676,9 @@ public class GeoIP {
         // French/Spanish/Portuguese common org words
         "telecomunicaciones", "telecomunicacao", "informatica",
         "soluciones", "servicios", "tecnologia", "comunicacoes",
-        "provedores", "redes", "societe", "entreprise"
+        "provedores", "redes", "societe", "entreprise",
+        // Telecom brand names (for case-swap detection)
+        "etisalat", "techtel"
     ));
 
     /** Reverse a single word */
@@ -872,13 +879,17 @@ public class GeoIP {
         // Pass 2: word-by-word reversal using case-pattern detection
         String wordResult = tryWordReversal(words);
 
+        // Pass 3: first/last char case-swap (handles "techteL" → "Techtel" corruption)
+        String caseResult = tryCaseSwap(words);
+
         // Pick the result with more known-word matches.
-        // On tie, prefer full-string reversal (more robust for whole-string reversals).
-        // Word-reversal only wins if it scores strictly better.
+        // On tie, prefer full-string reversal (most robust for whole-string reversals).
         int fullScore = countKnownWordMatches(fullResult);
         int wordScore = countKnownWordMatches(wordResult);
-        if (fullScore > 0 && fullScore >= wordScore) {return fullResult;}
-        if (wordScore > fullScore) {return wordResult;}
+        int caseScore = countKnownWordMatches(caseResult);
+        if (fullScore > 0 && fullScore >= wordScore && fullScore >= caseScore) {return fullResult;}
+        if (wordScore > fullScore && wordScore >= caseScore) {return wordResult;}
+        if (caseScore > fullScore && caseScore > wordScore) {return caseResult;}
         return name;
     }
 
@@ -896,6 +907,37 @@ public class GeoIP {
             fixed.append(looksReversed(words[i]) ? reverseWord(words[i]) : words[i]);
         }
         return fixed.toString();
+    }
+
+    /**
+     * Try swapping the case of first and last characters in each word.
+     * Handles MaxMind corruption where "Techtel" becomes "techteL" (first/last case swapped).
+     * Only acts if at least one word has the corruption signature (lowercase start, uppercase end).
+     * Words that don't match the corruption pattern are left unchanged.
+     */
+    private static String tryCaseSwap(String[] words) {
+        boolean anyCorrupted = false;
+        for (String w : words) {
+            if (looksReversed(w)) {anyCorrupted = true; break;}
+        }
+        if (!anyCorrupted) {return "";}
+
+        StringBuilder fixed = new StringBuilder();
+        for (int i = 0; i < words.length; i++) {
+            if (i > 0) {fixed.append(' ');}
+            fixed.append(looksReversed(words[i]) ? swapFirstLastCase(words[i]) : words[i]);
+        }
+        return fixed.toString();
+    }
+
+    /** Swap the case of the first and last characters of a word. */
+    private static String swapFirstLastCase(String word) {
+        if (word.length() < 2) {return word;}
+        char first = word.charAt(0);
+        char last = word.charAt(word.length() - 1);
+        char newFirst = Character.isLowerCase(first) ? Character.toUpperCase(first) : Character.toLowerCase(first);
+        char newLast = Character.isLowerCase(last) ? Character.toUpperCase(last) : Character.toLowerCase(last);
+        return newFirst + word.substring(1, word.length() - 1) + newLast;
     }
 
     /** Try reversing the entire string as one block (for compound words). */
@@ -923,10 +965,10 @@ public class GeoIP {
     /**
      * A word looks reversed if it starts with a lowercase letter and ends with
      * an uppercase letter — normal English/org words don't do this.
-     * Excludes short words (likely abbreviations) and all-uppercase tokens.
+     * Excludes single-character tokens and all-uppercase tokens.
      */
     private static boolean looksReversed(String word) {
-        if (word.length() < 3) {return false;}
+        if (word.length() < 2) {return false;}
         char first = word.charAt(0);
         char last = word.charAt(word.length() - 1);
         return Character.isLowerCase(first) && Character.isUpperCase(last);
