@@ -123,6 +123,7 @@ Para las licencias de los subcomponentes, ver: [README.md](docs/LICENSES.md)
 - [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Instalación sin GUI (modo consola)
 - [docs/HACKING.md](docs/HACKING.md) - Guía para desarrolladores y sistemas de compilación
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Diseño del árbol de código fuente
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Depuración en tiempo de ejecución con JDWP y otras herramientas
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Gestión de prohibiciones de sesión I2P con nftables
 - [docs/LICENSES.md](docs/LICENSES.md) - Licencias de terceros
 - [docs/history.txt](docs/history.txt) - Registro de cambios completo

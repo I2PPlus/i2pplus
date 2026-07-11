@@ -124,6 +124,7 @@ For the various sub-component licenses, see: [README.md](docs/LICENSES.md)
 - [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Headless (console mode) installation
 - [docs/HACKING.md](docs/HACKING.md) - Developer guide and build systems
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Source tree layout and where to find things
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Runtime debugging with JDWP and other tools
 - [docs/LICENSES.md](docs/LICENSES.md) - Third-party licenses
 - [docs/history.txt](docs/history.txt) - Full changelog
 

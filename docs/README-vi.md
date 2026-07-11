@@ -123,6 +123,7 @@ I2P+ được cấp phép theo AGPL v.3.
 - [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Cài đặt headless (console mode)
 - [docs/HACKING.md](docs/HACKING.md) - Hướng dẫn phát triển và hệ thống build
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Bố trí cây mã nguồn và nơi tìm thứ
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Gỡ lỗi thời gian chạy với JDWP và các công cụ khác
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Quản lý lệnh cấm session I2P với nftables
 - [docs/LICENSES.md](docs/LICENSES.md) - Giấy phép third-party
 - [docs/history.txt](docs/history.txt) - Lịch sử thay đổi đầy đủ

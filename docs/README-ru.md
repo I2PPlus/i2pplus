@@ -111,6 +111,7 @@ I2P+ лицензирована по AGPL v.3.
 - [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Установка без GUI (консольный режим)
 - [docs/HACKING.md](docs/HACKING.md) - Руководство разработчика и системы сборки
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Структура исходного кода
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Отладка в среде выполнения с помощью JDWP и других инструментов
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Управление bans сессий I2P через nftables
 - [docs/LICENSES.md](docs/LICENSES.md) - Лицензии третьих сторон
 - [docs/history.txt](docs/history.txt) - Полный список изменений

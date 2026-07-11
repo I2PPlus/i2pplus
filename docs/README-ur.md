@@ -121,6 +121,7 @@ variousسابقہ اجزا کے لائسنسز کے لیے دیکھیں: [README
 - [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - ہیڈلیس (کنسول موڈ) انسٹالیشن
 - [docs/HACKING.md](docs/HACKING.md) - ڈیولپر گائیڈ اور بلڈ سسٹمز
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - سورس ٹری لے آؤٹ اور کہاں چیزیں تلاش کرنی ہیں
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - JDWP اور دیگر ٹولز کے ساتھ رن ٹائم ڈیبگنگ
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - nftables کے ساتھ I2P سیشن پابندیاں کا انتظام
 - [docs/history.txt](docs/history.txt) - مکمل چینج لاگ
 

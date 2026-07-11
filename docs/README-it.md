@@ -123,6 +123,7 @@ Per le licenze dei vari sub-componenti, vedi: [README.md](docs/LICENSES.md)
 - [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Installazione headless (modalità console)
 - [docs/HACKING.md](docs/HACKING.md) - Guida per sviluppatori e sistemi di build
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Layout dell'albero dei sorgenti
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Debugging a runtime con JDWP e altri strumenti
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Gestione divieti di sessione I2P con nftables
 - [docs/LICENSES.md](docs/LICENSES.md) - Licenze di terze parti
 - [docs/history.txt](docs/history.txt) - Registro completo delle modifiche

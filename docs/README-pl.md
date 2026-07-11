@@ -124,6 +124,7 @@ W przypadku różnych subkomponentów zobacz: [README.md](docs/LICENSES.md)
 - [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Instalacja bez GUI (tryb konsolowy)
 - [docs/HACKING.md](docs/HACKING.md) - Przewodnik programisty i systemy budowania
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Układ drzewa źródłowego
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Debugowanie w czasie uruchomienia za pomocą JDWP i innych narzędzi
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Zarządzanie blokadami sesji I2P za pomocą nftables
 - [docs/LICENSES.md](docs/LICENSES.md) - Licencje stron trzecich
 - [docs/history.txt](docs/history.txt) - Pełny dziennik zmian

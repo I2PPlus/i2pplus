@@ -43,6 +43,7 @@ See also: [Project README](../README.md)
 ### Sub-project READMEs
 
 - [HACKING.md](HACKING.md) - Developer guide and build systems
+- [DEBUGGING.md](DEBUGGING.md) - Runtime debugging with JDWP and other tools
 - [INSTALL.md](INSTALL.md) - Building from source
 - [INSTALL-headless.md](INSTALL-headless.md) - Headless installation guide
 - [DIRECTORIES.md](DIRECTORIES.md) - Source tree layout
@@ -65,6 +66,7 @@ See also: [Project README](../README.md)
 | ----------------------------------------------- | ---------------------------------------------- |
 | [HACKING.md](HACKING.md)                        | Build systems, developer guide, and workflow   |
 | [DIRECTORIES.md](DIRECTORIES.md)                | Source tree layout and where to find things    |
+| [DEBUGGING.md](DEBUGGING.md)                    | Runtime debugging with JDWP and other tools    |
 
 ## Installation
 

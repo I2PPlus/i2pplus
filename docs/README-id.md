@@ -124,6 +124,7 @@ Untuk lisensi sub-komponen lainnya, lihat: [README.md](docs/LICENSES.md)
 - [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Instalasi headless (mode konsol)
 - [docs/HACKING.md](docs/HACKING.md) - Panduan pengembang dan sistem build
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Tata letak pohon sumber
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Debugging runtime dengan JDWP dan alat lainnya
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Mengelola pelarangan sesi I2P dengan nftables
 - [docs/LICENSES.md](docs/LICENSES.md) - Lisensi pihak ketiga
 - [docs/history.txt](docs/history.txt) - Log perubahan lengkap

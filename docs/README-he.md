@@ -175,6 +175,7 @@ I2P+ מורשית תחת AGPL v.3.
 ## רישיונות
 ## ראה גם
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - פריסת עץ המקור והיכן למצוא דברים
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - איפוס באגים בזמן אמת עם JDWP וכלי נוספים
 
 ## פרטי קשר
 ## רישיונות

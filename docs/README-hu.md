@@ -123,6 +123,7 @@ A különböző alkomponensek licenciájáért lásd: [README.md](docs/LICENSES.
 - [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Fej nélküli (konzol) telepítés
 - [docs/HACKING.md](docs/HACKING.md) - Fejlesztői útmutató és build rendszerek
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Forrásfa elrendezés és hol mi található
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Futtatási hibakeresés JDWP-vel és más eszközökkel
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - I2P session tiltások kezelése nftables-szel
 - [docs/LICENSES.md](docs/LICENSES.md) - Harmadik fél licenciák
 - [docs/history.txt](docs/history.txt) - Teljes változtatási napló

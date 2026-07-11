@@ -35,6 +35,8 @@ API: https://i2pplus.github.io/javadoc/
 
 ཁྱེད་ཀྱིས་[HACKING.md](HACKING.md)དང་docsཐོག་གི་ཡིག་ཆ་གཞན་དག་ལ་གཟིགས་རོགས།
 
+
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - JDWP དང་ལག་ཆ་གཞན་དག་སྤྱད་དེ་ལས་རིམ་ནོར་འདོམས།
 ## འབྱུང་ཁུངས་ནས་ཐུམ་སྒྲིལ་བཟོ་བ།
 
 འཕེལ་རྒྱས་ཡན་ལག་འབྱུང་ཁུངས་ཚོད་འཛིན་ནས་ལེན་ཐབས། https://github.com/I2PPlus/i2pplus/

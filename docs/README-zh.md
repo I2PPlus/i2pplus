@@ -107,6 +107,7 @@ I2P+已根据AGPL v.3许可。
 - [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - 无GUI安装（控制台模式）
 - [docs/HACKING.md](docs/HACKING.md) - 开发者指南和构建系统
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - 源代码树布局
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - 使用JDWP和其他工具进行运行时调试
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - 使用nftables管理I2P会话禁令
 - [docs/LICENSES.md](docs/LICENSES.md) - 第三方许可证
 - [docs/history.txt](docs/history.txt) - 完整更改日志

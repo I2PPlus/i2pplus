@@ -127,6 +127,7 @@ I2P+, AGPL v.3 altında lisanslanmıştır.
 - [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Headless (konsol modu) kurulum
 - [docs/HACKING.md](docs/HACKING.md) - Geliştirici kılavuzu ve derleme sistemleri
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Kaynak ağacı düzeni
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - JDWP ve diğer araçlarla çalışma zamanı hata ayıklama
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - nftables ile I2P oturum yasaklarını yönetme
 - [docs/LICENSES.md](docs/LICENSES.md) - Üçüncü taraf lisansları
 - [docs/history.txt](docs/history.txt) - Tam değişiklik günlüğü

@@ -151,6 +151,7 @@ API: https://i2pplus.github.io/javadoc/
 ## Άδειες
 ## Τεκμηρίωση
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Διάταξη δέντρου πηγαίου κώδικα
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Εντοπισμός σφαλμάτων σε χρόνο εκτέλεσης με JDWP και άλλα εργαλεία
 
 ## Στοιχεία επικοινωνίας
 ## Άδειες

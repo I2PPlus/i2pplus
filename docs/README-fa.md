@@ -35,6 +35,8 @@ API: https://i2pplus.github.io/javadoc/
 
 لطفاً [HACKING.md](HACKING.md) و سایر اسناد در پوشه docs را بررسی کنید.
 
+
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - اشکال‌زدایی در زمان اجرا با JDWP و سایر ابزارها
 ## ساخت بسته‌ها از منبع
 
 برای گرفتن شاخه توسعه از کنترل منبع: https://github.com/I2PPlus/i2pplus/

@@ -124,6 +124,7 @@ Pour les licences des sous-composants, voir : [README.md](docs/LICENSES.md)
 - [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Installation sans GUI (mode console)
 - [docs/HACKING.md](docs/HACKING.md) - Guide du développeur et systèmes de build
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Structure de l'arborescence source et où trouver les choses
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Débogage en temps réel avec JDWP et autres outils
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Gestion des interdictions de session I2P avec nftables
 - [docs/LICENSES.md](docs/LICENSES.md) - Licences tierces
 - [docs/history.txt](docs/history.txt) - Journal des modifications complet

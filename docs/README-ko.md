@@ -122,6 +122,7 @@ various 하위 구성 요소 라이선스는 다음을 참조하세요: [README.
 - [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - 헤드리스(콘솔 모드) 설치
 - [docs/HACKING.md](docs/HACKING.md) - 개발자 가이드 및 빌드 시스템
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - 소스 트리 레이아웃
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - JDWP 및 기타 도구를 사용한 런타임 디버깅
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - nftables로 I2P 세션 금지 관리
 - [docs/LICENSES.md](docs/LICENSES.md) - 서드파티 라이선스
 - [docs/history.txt](docs/history.txt) - 전체 변경 로그

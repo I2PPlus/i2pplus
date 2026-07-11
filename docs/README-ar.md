@@ -176,6 +176,7 @@ ant buildAppImage
 ## التراخيص
 ## انظر أيضًا
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - تخطيط شجرة المصدر وأين تجد الأشياء
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - التصحيح في الوقت الفعلي باستخدام JDWP وأدوات أخرى
 
 ## معلومات الاتصال
 ## التراخيص

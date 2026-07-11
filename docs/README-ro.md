@@ -124,6 +124,7 @@ Pentru licențele diferitelor sub-componente, consultați: [README.md](docs/LICE
 - [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Instalare headless (mod consolă)
 - [docs/HACKING.md](docs/HACKING.md) - Ghid pentru dezvoltatori și sisteme de build
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Structura arborelui sursă și unde să găsiți lucrurile
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Depanare în timpul rulării cu JDWP și alte instrumente
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Gestionarea interdicțiilor de sesiune I2P cu nftables
 - [docs/LICENSES.md](docs/LICENSES.md) - Licențe terțe părți
 - [docs/history.txt](docs/history.txt) - Jurnal complet de modificări

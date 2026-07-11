@@ -124,6 +124,7 @@ Pro licence různých subkomponent viz: [README.md](docs/LICENSES.md)
 - [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Instalace bez GUI (konzolový režim)
 - [docs/HACKING.md](docs/HACKING.md) - Průvodce pro vývojáře a build systémy
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Rozložení zdrojového stromu
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Ladicí runtime prostředí pomocí JDWP a dalších nástrojů
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Správa zákazů relací I2P pomocí nftables
 - [docs/LICENSES.md](docs/LICENSES.md) - Licence třetích stran
 - [docs/history.txt](docs/history.txt) - Úplný seznam změn

@@ -124,6 +124,7 @@ Für die verschiedenen Unterkomponentenlizenzen siehe: [README.md](docs/LICENSES
 - [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Headless-Installation (Konsolenmodus)
 - [docs/HACKING.md](docs/HACKING.md) - Entwicklerhandbuch und Build-Systeme
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Quellbaumlayout und wo etwas zu finden ist
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Laufzeit-Debugging mit JDWP und anderen Tools
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - I2P-Sitzungsverbote mit nftables verwalten
 - [docs/LICENSES.md](docs/LICENSES.md) - Drittanbieterlizenzen
 - [docs/history.txt](docs/history.txt) - Vollständiges Änderungsprotokoll
