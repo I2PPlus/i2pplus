@@ -21,7 +21,7 @@ public class RateTest extends TestCase {
         rate.coalesce();
         StringBuilder buf = new StringBuilder(1024);
 
-        rate.store("rate.test", buf);
+        rate.store("rate.test", buf, false);
         byte[] data = DataHelper.getUTF8(buf.toString());
 
         Properties props = new Properties();
@@ -31,8 +31,8 @@ public class RateTest extends TestCase {
 
         // Test basic functionality rather than exact equality which depends on timing
         assertNotNull(r);
-        // The Rate class sets default period of 60000 (60s) if stored period <= 0
-        // This is expected behavior based on the load() method implementation
-        assertEquals(60000, r.getPeriod());
+        // The Rate class defaults to addComments=true in store(), which writes only
+        // comment lines — not property entries. Use addComments=false for a real round-trip.
+        assertEquals(5000, r.getPeriod());
     }
 }

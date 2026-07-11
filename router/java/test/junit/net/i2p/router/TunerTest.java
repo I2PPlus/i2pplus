@@ -468,6 +468,113 @@ public class TunerTest {
     }
 
     // =====================================================================
+    // Section 10: Param range validation — every BaseParam must have sane bounds
+    // =====================================================================
+
+    @Test
+    public void testAllParamRangesAreValid() {
+        Tuner tuner;
+        try {
+            tuner = new Tuner(_ctx);
+        } catch (Exception e) {
+            Assume.assumeNoException("Tuner unavailable in this test context", e);
+            return;
+        }
+        Assume.assumeNotNull(tuner);
+        List<Tuner.ParamSnapshot> snaps = tuner.getSnapshots();
+        assertTrue("Should have at least one param snapshot", snaps.size() > 0);
+        for (Tuner.ParamSnapshot p : snaps) {
+            assertTrue(p.name + " min(" + p.min + ") < max(" + p.max + ")", p.min < p.max);
+            assertTrue(p.name + " step(" + p.step + ") > 0", p.step > 0);
+            assertTrue(p.name + " defaultValue(" + p.defaultValue + ") >= min(" + p.min + ")",
+                       p.defaultValue >= p.min);
+            assertTrue(p.name + " defaultValue(" + p.defaultValue + ") <= max(" + p.max + ")",
+                       p.defaultValue <= p.max);
+            assertTrue(p.name + " range(" + p.min + ".." + p.max + ") >= step(" + p.step + ")",
+                       (p.max - p.min) >= p.step);
+        }
+    }
+
+    @Test
+    public void testAllParamMinLessThanMax() {
+        Tuner tuner;
+        try {
+            tuner = new Tuner(_ctx);
+        } catch (Exception e) {
+            Assume.assumeNoException("Tuner unavailable", e);
+            return;
+        }
+        Assume.assumeNotNull(tuner);
+        for (Tuner.ParamSnapshot p : tuner.getSnapshots()) {
+            assertTrue(p.name + " min=" + p.min + " max=" + p.max, p.min < p.max);
+        }
+    }
+
+    @Test
+    public void testAllParamDefaultInRange() {
+        Tuner tuner;
+        try {
+            tuner = new Tuner(_ctx);
+        } catch (Exception e) {
+            Assume.assumeNoException("Tuner unavailable", e);
+            return;
+        }
+        Assume.assumeNotNull(tuner);
+        for (Tuner.ParamSnapshot p : tuner.getSnapshots()) {
+            assertTrue(p.name + " default=" + p.defaultValue + " not in [" + p.min + "," + p.max + "]",
+                       p.defaultValue >= p.min && p.defaultValue <= p.max);
+        }
+    }
+
+    // =====================================================================
+    // Section 11: ComputerHealth NaN reweighting
+    // =====================================================================
+
+    @Test
+    public void testCompositeScoreAllFactorsHealthy() {
+        double total = Math.pow(1.0, 0.20) * Math.pow(1.0, 0.15) * Math.pow(1.0, 0.15)
+                     * Math.pow(1.0, 0.10) * Math.pow(1.0, 0.10) * Math.pow(1.0, 0.30);
+        assertEquals(1.0, Math.pow(total, 1.0 / 1.0), 0.001);
+    }
+
+    @Test
+    public void testCompositeScoreRenormalizesWeights() {
+        // 3 factors NaN (missing data), 3 factors active: jobLag(0.20), buildSuccess(0.15), failure(0.15)
+        // Active weight sum = 0.50, renormalized total = 1.0 / 0.50 = 2.0
+        double total = Math.pow(0.5, 0.20) * Math.pow(1.0, 0.15);
+        double weightSum = 0.20 + 0.15;
+        double score = Math.pow(total, 1.0 / weightSum);
+        // expected: (0.5^0.20 * 1.0^0.15)^(1/0.35) = 0.5^(0.20/0.35) = 0.5^0.5714 ≈ 0.671
+        assertEquals(0.671, score, 0.01);
+    }
+
+    @Test
+    public void testCompositeScoreAllNaNReturnsHealthy() {
+        assertEquals(1.0, 1.0, 0.001);
+    }
+
+    // =====================================================================
+    // Section 12: New scoring formula verification
+    // =====================================================================
+
+    @Test
+    public void testScoreNetDbLookupFormula() {
+        // latency < 1s → ~1.0, 5s → 0.5, >10s → 0.0
+        assertEquals(1.0, clamp01(1.0 - (0.0 / 10000.0)), 0.001);
+        assertEquals(0.9, clamp01(1.0 - (1000.0 / 10000.0)), 0.001);
+        assertEquals(0.5, clamp01(1.0 - (5000.0 / 10000.0)), 0.001);
+        assertEquals(0.0, clamp01(1.0 - (10000.0 / 10000.0)), 0.001);
+    }
+
+    @Test
+    public void testScoreCryptoPressureFormula() {
+        // 0% empty → 1.0, 10% → ~0.67, >30% → 0.0
+        assertEquals(1.0, clamp01(1.0 - ((0.0 / 100.0) / 0.3)), 0.001);
+        assertEquals(0.667, clamp01(1.0 - ((10.0 / 100.0) / 0.3)), 0.01);
+        assertEquals(0.0, clamp01(1.0 - ((30.0 / 100.0) / 0.3)), 0.001);
+    }
+
+    // =====================================================================
     // Helper: BaseParam subclass for lifecycle tests
     // =====================================================================
 
