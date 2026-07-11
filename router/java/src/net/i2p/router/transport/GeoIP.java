@@ -819,6 +819,9 @@ public class GeoIP {
     /** Trailing parentheticals to strip */
     private static final Pattern PAREN_TRAILING = Pattern.compile("\\s*\\([^)]{0,50}\\)\\s*$");
 
+    /** Normalize mangled dash separators: "hosted- -vdsina" → "hosted - vdsina" */
+    private static final Pattern DASH_SPACE_DASH = Pattern.compile("(\\w)-\\s+-(\\w)");
+
     /** Leading/trailing junk */
     private static final Pattern LEADING_JUNK = Pattern.compile("^[-\u2013\u2014\\s\"']+");
     private static final Pattern TRAILING_JUNK = Pattern.compile("[-\u2013\u2014\\s\"']+$");
@@ -982,6 +985,9 @@ public class GeoIP {
 
         // Strip trailing parentheticals
         name = PAREN_TRAILING.matcher(name).replaceAll("");
+
+        // Fix mangled dash separators: "hosted- -vdsina" → "hosted - vdsina"
+        name = DASH_SPACE_DASH.matcher(name).replaceAll("$1 - $2");
 
         // Clean punctuation
         name = LEADING_JUNK.matcher(name).replaceAll("");
