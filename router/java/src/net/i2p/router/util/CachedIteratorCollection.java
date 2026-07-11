@@ -51,11 +51,17 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     // FOR DEBUGGING & LOGGING PURPOSES
     //Log log = I2PAppContext.getGlobalContext().logManager().getLog(CachedIteratorCollection.class);
 
-    // Thread-local iterators to avoid concurrent modification when multiple threads iterate
-    private final ThreadLocal<CachedIterator> _iterator = ThreadLocal.withInitial(() -> new CachedIterator());
+    // Thread-local iterators to avoid concurrent modification when multiple threads iterate.
+    // Each thread's iterator holds an explicit reference back to this collection, so
+    // clear() sets _cleared to prevent stale iterators from holding PeerStates alive.
+    private final ThreadLocal<CachedIterator<E>> _iterator = ThreadLocal.withInitial(() -> new CachedIterator<>(this));
+
+    // Set to true in clear() to signal all iterator instances the collection is gone.
+    // ThreadLocalMap entries for other threads will be cleaned lazily via WeakRef key.
+    volatile boolean _cleared;
 
     // Size of the AbstractCollectionTest object
-    private int size = 0;
+    int size;
 
     /**
      * Node object that contains:
@@ -76,10 +82,10 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     }
 
     // First Node in the AbstractCollectionTest object
-    private Node<E> first = null;
+    Node<E> first;
 
     // Last Node in the AbstractCollectionTest object
-    private Node<E> last = null;
+    Node<E> last;
 
     /**
      * Default constructor
@@ -114,6 +120,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
         this.first = null;
         this.last = null;
         this.size = 0;
+        this._cleared = true;
         _iterator.remove();
     }
 
@@ -128,9 +135,9 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
      */
     @Override
     public synchronized Iterator<E> iterator() {
-        CachedIterator it = _iterator.get();
+        CachedIterator<E> it = _iterator.get();
         if (it.inUse()) {
-            CachedIterator nested = new CachedIterator();
+            CachedIterator<E> nested = new CachedIterator<>(this);
             nested.reset();
             return nested;
         }
@@ -139,24 +146,31 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     }
 
     /**
-     *  Inner CachedIterator class - implements hasNext(), next() &amp; remove()
+     *  Static inner CachedIterator class - implements hasNext(), next() &amp; remove()
+     *  <p>
+     *  Static to avoid holding an implicit {@code this$0} reference to the enclosing
+     *  collection, which would prevent GC of the collection (and its owning PeerState)
+     *  when held in another thread's ThreadLocal after {@link CachedIteratorCollection#clear()} is called.
      *
      */
     @SuppressWarnings("ReferenceEquality")
-    public class CachedIterator implements Iterator<E> {
+    public static class CachedIterator<E> implements Iterator<E> {
 
+        private final CachedIteratorCollection<E> coll;
         private boolean nextCalled;
 
         // Iteration Index
         private Node<E> itrIndexNode;
 
-        // Methods to support iteration
+        CachedIterator(CachedIteratorCollection<E> coll) {
+            this.coll = coll;
+        }
 
         /**
          * Reset iteration
          */
         private void reset() {
-            itrIndexNode = first;
+            itrIndexNode = coll.first;
             nextCalled = false;
         }
 
@@ -164,7 +178,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
          * @return true if this iterator is in the middle of an iteration
          */
         private boolean inUse() {
-            return nextCalled || (itrIndexNode != null && itrIndexNode != first);
+            return itrIndexNode != null;
         }
 
         /**
@@ -174,13 +188,15 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
          */
         @Override
         public void remove() {
+            if (coll._cleared)
+                throw new IllegalStateException();
             if (nextCalled) {
                 // Are we at the end of the collection? If so itrIndexNode will
                 // be null
                 if (itrIndexNode != null) {
                     // The Node we are trying to remove is itrIndexNode.prev
                     // Is there a Node before itrIndexNode.prev?
-                    if (itrIndexNode != first.next) {
+                    if (itrIndexNode != coll.first.next) {
                         // Set current itrIndexNode's prev to Node N-2
                         itrIndexNode.prev = itrIndexNode.prev.prev;
                         // Then set Node N-2's next to current itrIndexNode,
@@ -190,22 +206,22 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
                         // There is no N-2 Node, we are removing the first Node
                         // in the collection
                         itrIndexNode.prev = null;
-                        first = itrIndexNode;
+                        coll.first = itrIndexNode;
                     }
                 } else {
                     // itrIndexNode is null, we are at the end of the collection
                     // Are there any items before the Node that is being removed?
-                    if (last.prev != null) {
-                        last.prev.next = null;
-                        last = last.prev;
+                    if (coll.last.prev != null) {
+                        coll.last.prev.next = null;
+                        coll.last = coll.last.prev;
                     } else {
                         // There are no more items, clear() the collection
                         nextCalled = false;
-                        clear();
+                        coll.clear();
                         return;
                     }
                 }
-                size--;
+                coll.size--;
                 nextCalled = false;
             } else {
                 throw new IllegalStateException();
@@ -219,6 +235,8 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
          */
         @Override
         public boolean hasNext() {
+            if (coll._cleared)
+                return false;
             return itrIndexNode != null;
         }
 
@@ -228,6 +246,8 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
          */
         @Override
         public E next() {
+            if (coll._cleared)
+                throw new NoSuchElementException();
             if (this.hasNext()) {
                 Node<E> node = itrIndexNode;
                 itrIndexNode = itrIndexNode.next;
