@@ -539,9 +539,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         String[][] metrics = {
             { "jobQueue.jobLag" },
             { "tunnel.buildSuccessRate" },
-            { "transport.sendProcessingTime", "tunnel.participating InBps" },
+            { "transport.sendProcessingTime", "transport.sendMessageFailureLifetime / sendMessageSize" },
             { "client.leaseSetFoundRemoteTime / netDb.successTime" },
-            { "streaming.connSuccessLifetime" },
+            { "stream.resetReceived / stream.connectionReceived" },
             { "i2cp.internalQueueSize" },
             { "peer.activeProfileCount" },
             { "udp.congestionOccurred / udp.allowConcurrentActive" },
@@ -7108,9 +7108,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         private void compute() {
             double jobLagScore = scoreJobLag();
             double buildScore = scoreBuildSuccess();
-            double failureScore = scoreMessageFailures();
+            double sendFailScore = scoreSendFailure();
             double buildStormScore = scoreBuildStorms();
-            double transitScore = scoreTransitLoad();
             double latencyScore = scoreLatency();
 
             // Weighted geometric mean — skip NaN factors (insufficient data).
@@ -7119,9 +7118,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double weightSum = 0;
             if (!Double.isNaN(jobLagScore))     { total *= Math.pow(jobLagScore, 0.20);     weightSum += 0.20; }
             if (!Double.isNaN(buildScore))      { total *= Math.pow(buildScore, 0.15);      weightSum += 0.15; }
-            if (!Double.isNaN(failureScore))    { total *= Math.pow(failureScore, 0.15);    weightSum += 0.15; }
+            if (!Double.isNaN(sendFailScore))   { total *= Math.pow(sendFailScore, 0.15);   weightSum += 0.15; }
             if (!Double.isNaN(buildStormScore)) { total *= Math.pow(buildStormScore, 0.10); weightSum += 0.10; }
-            if (!Double.isNaN(transitScore))    { total *= Math.pow(transitScore, 0.10);    weightSum += 0.10; }
             if (!Double.isNaN(latencyScore))    { total *= Math.pow(latencyScore, 0.30);    weightSum += 0.30; }
             _score = (weightSum > 0) ? Math.pow(total, 1.0 / weightSum) : 1.0;
         }
@@ -7169,19 +7167,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * Message send failure rate: failures vs total sends in the last period.
-         * <1% = 1.0, >10% = 0.0
-         */
-        private double scoreMessageFailures() {
-            double failures = getEventCount("transport.sendMessageFailureLifetime");
-            double sends = getEventCount("transport.sendMessageSize");
-            if (sends < 10) return Double.NaN;
-            double failRate = failures / sends;
-            // 0%→1.0, 1%→1.0, 10%→0.0
-            return clamp(1.0 - ((failRate - 0.01) / 0.09));
-        }
-
-        /**
          * Fetch the event count for a stat using the 60s period.
          */
         private double getEventCount(String statName) {
@@ -7207,20 +7192,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * Transit load: participating bandwidth vs share bandwidth.
-         * Low usage = 1.0, at capacity = 0.0
+         * Transport send failure rate: failed sends vs total sends.
+         * Uses event counts (each send = 1 event, each failure = 1 event).
+         * <1% = 1.0, >10% = 0.0
          */
-        private double scoreTransitLoad() {
-            RateStat rs = _ctx.statManager().getRate("tunnel.participating InBps");
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() < 3) return Double.NaN;
-            double bps = rate.getAverageValue();
-            long shareBps = TunnelDispatcher.getShareBandwidth(_ctx) * 1024L;
-            if (shareBps <= 0) return 1.0;
-            double usageRatio = bps / shareBps;
-            // 0%→1.0, 70%→0.5, 100%→0.0
-            return clamp(1.0 - (usageRatio / 0.7));
+        private double scoreSendFailure() {
+            double failures = getEventCount("transport.sendMessageFailureLifetime");
+            double sends = getEventCount("transport.sendMessageSize");
+            if (sends < 10) return Double.NaN;
+            double failRate = failures / sends;
+            // 0%→1.0, 1%→1.0, 10%→0.0
+            return clamp(1.0 - ((failRate - 0.01) / 0.09));
         }
 
         /**
@@ -7236,6 +7218,20 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (avg <= 100) return 1.0;
             // 100ms→1.0, 500ms→0.75, 5000ms→0.0
             return clamp(1.0 - ((avg - 100) / 4900.0));
+        }
+
+        /**
+         * Streaming health: connection resets indicate failures.
+         * Low reset rate = healthy, high = degraded.
+         * Uses stream.resetReceived / stream.connectionReceived ratio.
+         */
+        private double scoreStreaming() {
+            double resets = getEventCount("stream.resetReceived");
+            double conns = getEventCount("stream.connectionReceived");
+            if (conns < 5) return Double.NaN;
+            double resetRatio = resets / conns;
+            // 0% resets→1.0, 10%→0.0
+            return clamp(1.0 - (resetRatio / 0.1));
         }
 
         private static double clamp(double v) {
@@ -7267,13 +7263,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 buildStorm
             });
 
-            // Transport: latency + transit load
+            // Transport: latency + send failure rate
             double latency = scoreLatency();
-            double transit = scoreTransitLoad();
+            double sendFail = scoreSendFailure();
             scores.put(SUB_TRANSPORT, new double[] {
-                Math.min(latency, transit),
+                Math.min(latency, sendFail),
                 latency,
-                transit
+                sendFail
             });
 
             // NetDB: lookup success rate
@@ -7281,12 +7277,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 scoreNetDbLookup()
             });
 
-            // Streaming: connection success (if stat available, else NaN)
-            double streamScore = getStatValue("streaming.connSuccessLifetime");
-            if (Double.isNaN(streamScore)) {
-                // No streaming stat available — use job lag as proxy
-                streamScore = scoreJobLag();
-            }
+            // Streaming: reset rate as health signal (resets = connection failures)
+            double streamScore = scoreStreaming();
             scores.put(SUB_STREAMING, new double[] { streamScore });
 
             // I2CP: queue utilization
@@ -7353,12 +7345,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * Congestion: send BW throttle time + congestion event frequency.
-         * Low throttle = 1.0, high = 0.0
+         * Congestion: congestion event frequency.
+         * Low congestion ratio = 1.0, high = 0.0
          */
         private double scoreCongestion() {
-            double throttleTime = getStatValue("udp.sendBWThrottleTime");
-            if (Double.isNaN(throttleTime)) return 1.0;
             double congEvents = getEventCount("udp.congestionOccurred");
             double totalSends = getEventCount("udp.allowConcurrentActive");
             if (totalSends <= 0) return 1.0;

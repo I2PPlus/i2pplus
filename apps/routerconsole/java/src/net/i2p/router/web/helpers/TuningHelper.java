@@ -511,12 +511,13 @@ public class TuningHelper extends HelperBase {
      * @return inline SVG markup
      */
     private static String renderRingChart(double score, String label, String pct) {
+        boolean collecting = score < 0;
         // clamp
         if (score < 0) score = 0;
         if (score > 1) score = 1;
         double offset = RING_CIRCUM * (1.0 - score);
 
-        String cls = score >= 0.8 ? "green" : score >= 0.5 ? "yellow" : "red";
+        String cls = collecting ? "gray" : score >= 0.8 ? "green" : score >= 0.5 ? "yellow" : "red";
 
         StringBuilder sb = new StringBuilder(256);
         sb.append("<svg class=ring viewBox=\"0 0 ").append(RING_SIZE).append(' ').append(RING_SIZE).append("\">");
@@ -564,7 +565,7 @@ public class TuningHelper extends HelperBase {
         for (Tuner.SubsystemScore ss : scores) {
             buf.append("<div class=ring-cell>");
             if (Double.isNaN(ss.score)) {
-                buf.append(renderRingChart(0, ss.label, "\u2014"));
+                buf.append(renderRingChart(-1, ss.label, "\u2014"));
             } else {
                 int pct = (int) (ss.score * 100);
                 buf.append(renderRingChart(ss.score, ss.label, pct + "%"));
