@@ -7194,12 +7194,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Transport send failure rate: failed sends vs total sends.
          * Uses event counts (each send = 1 event, each failure = 1 event).
+         * Requires 500+ sends to skip noisy startup window.
          * <1% = 1.0, >10% = 0.0
          */
         private double scoreSendFailure() {
             double failures = getEventCount("transport.sendMessageFailureLifetime");
             double sends = getEventCount("transport.sendMessageSize");
-            if (sends < 10) return Double.NaN;
+            if (sends < 500) return Double.NaN;
             double failRate = failures / sends;
             // 0%→1.0, 1%→1.0, 10%→0.0
             return clamp(1.0 - ((failRate - 0.01) / 0.09));
@@ -7228,7 +7229,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         private double scoreStreaming() {
             double resets = getEventCount("stream.resetReceived");
             double conns = getEventCount("stream.connectionReceived");
-            if (conns < 5) return Double.NaN;
+            if (conns < 10) return Double.NaN;
             double resetRatio = resets / conns;
             // 0% resets→1.0, 10%→0.0
             return clamp(1.0 - (resetRatio / 0.1));
