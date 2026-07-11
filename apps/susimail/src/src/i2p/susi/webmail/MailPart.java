@@ -399,7 +399,7 @@ class MailPart {
                                 break;
                             } else {
                                 /* This is quoted, so we extract the quote and continue the search */
-                                line = line.substring( 0, m - 1) + line.substring( m);
+                                line = new StringBuilder(line).deleteCharAt(m - 1).toString();
                                 k2 = m;
                             }
                         }

@@ -4250,16 +4250,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             return;
         }
 
-        try {
-            FileInputStream file =
+        try (FileInputStream file =
                     new FileInputStream(_configDir + "/" + PROP_TORRENT_FILTERS_CONFIG);
-            ObjectInputStream in = new ObjectInputStream(file);
+             ObjectInputStream in = new ObjectInputStream(file)) {
             Map<String, TorrentCreateFilter> filterMap = (Map) in.readObject();
             for (Map.Entry<String, TorrentCreateFilter> entry : filterMap.entrySet()) {
                 _torrentCreateFilterMap.put(entry.getKey(), entry.getValue());
             }
-            in.close();
-            file.close();
         } catch (IOException ex) {
             String msg = _t("Unable to load torrent create file filter config: ");
             _log.error(msg + ex.getMessage());
@@ -4355,13 +4352,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.9.62+
      */
     public void saveTorrentCreateFilterMap() {
-        try {
-            FileOutputStream file =
+        try (FileOutputStream file =
                     new FileOutputStream(_configDir + "/" + PROP_TORRENT_FILTERS_CONFIG);
-            ObjectOutputStream out = new ObjectOutputStream(file);
+             ObjectOutputStream out = new ObjectOutputStream(file)) {
             out.writeObject(_torrentCreateFilterMap);
-            out.close();
-            file.close();
         } catch (IOException ex) {
             String msg = _t("Unable to save torrent create file filter config: ");
             _log.error("[I2PSnark] " + msg + ex);

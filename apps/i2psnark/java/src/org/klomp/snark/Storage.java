@@ -1159,13 +1159,15 @@ public class Storage implements Closeable {
             } else if (SystemVersion.isWindows()) {
                 // https://docs.microsoft.com/en-us/windows/desktop/FileIO/naming-a-file
                 String iname = name.toLowerCase(Locale.US);
+                StringBuilder rvBuf = new StringBuilder(rv);
                 for (int i = 0; i < WIN_ILLEGAL.length; i++) {
                     String w = WIN_ILLEGAL[i];
                     if (iname.equals(w)
                             || (iname.startsWith(w + '.') && w.indexOf('.', w.length() + 1) < 0)) {
-                        rv = '_' + rv;
+                        rvBuf.insert(0, '_');
                     }
                 }
+                rv = rvBuf.toString();
             }
             if (rv.endsWith(".") || rv.endsWith(" ")) {
                 rv = rv.substring(0, rv.length() - 1) + '_';

@@ -61,15 +61,15 @@ public class HexTable {
     private static String intToHex(int b) {
         if (b == 0) {return "0";}
         else {
-            String str = "";
+            StringBuilder buf = new StringBuilder(8);
             while(b > 0) {
                 byte c = (byte)(b % 16);
                 if (c < 10) {c += '0';}
                 else {c += 'A' - 10;}
-                str = "" + (char)c + str;
+                buf.insert(0, (char) c);
                 b = (byte) (b / 16);
             }
-            return str;
+            return buf.toString();
         }
     }
 

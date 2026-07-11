@@ -233,20 +233,18 @@ public class UrlLauncher implements ClientApp {
             // Get registry where we find the default browser
             String[] cmd = {"REG", "QUERY", hkeyquery};
             Process process = Runtime.getRuntime().exec(cmd);
-            Scanner kb = new Scanner(process.getInputStream(), StandardCharsets.UTF_8.name());
-            while (kb.hasNextLine()) {
-                String line = kb.nextLine().trim();
-                if (line.startsWith(key)) {
-                    String[] splitLine = line.split("  ");
-                    kb.close();
-                    String finalValue = splitLine[splitLine.length - 1].trim();
-                    if (!finalValue.isEmpty()) {
-                        return finalValue;
+            try (Scanner kb = new Scanner(process.getInputStream(), StandardCharsets.UTF_8.name())) {
+                while (kb.hasNextLine()) {
+                    String line = kb.nextLine().trim();
+                    if (line.startsWith(key)) {
+                        String[] splitLine = line.split("  ");
+                        String finalValue = splitLine[splitLine.length - 1].trim();
+                        if (!finalValue.isEmpty()) {
+                            return finalValue;
+                        }
                     }
                 }
             }
-            // Match wasn't found, still need to close Scanner
-            kb.close();
         } catch (Exception e) {
             if (_log.shouldError())
                 _log.error(hkeyquery, e);

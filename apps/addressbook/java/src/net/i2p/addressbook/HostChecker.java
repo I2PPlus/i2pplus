@@ -4,9 +4,10 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -552,7 +553,7 @@ public class HostChecker {
                     lookupResult[0] = true;
                     lookupComplete[0] = true;
                     synchronized (lookupComplete) {
-                        lookupComplete.notify();
+                        lookupComplete.notifyAll();
                     }
                 }
                 @Override
@@ -560,7 +561,7 @@ public class HostChecker {
                     lookupResult[0] = false;
                     lookupComplete[0] = true;
                     synchronized (lookupComplete) {
-                        lookupComplete.notify();
+                        lookupComplete.notifyAll();
                     }
                 }
             };
@@ -574,14 +575,14 @@ public class HostChecker {
                     lookupResult[0] = false;
                     lookupComplete[0] = true;
                     synchronized (lookupComplete) {
-                        lookupComplete.notify();
+                        lookupComplete.notifyAll();
                     }
                 }
                 public void dropped() {
                     lookupResult[0] = false;
                     lookupComplete[0] = true;
                     synchronized (lookupComplete) {
-                        lookupComplete.notify();
+                        lookupComplete.notifyAll();
                     }
                 }
             };
@@ -1109,7 +1110,7 @@ public class HostChecker {
 
             // Write using Files.write with explicit options
             Path path = Paths.get(absolutePath);
-            Files.write(path, content.toString().getBytes(),
+            Files.write(path, content.toString().getBytes(StandardCharsets.UTF_8),
                 StandardOpenOption.CREATE,
                 StandardOpenOption.TRUNCATE_EXISTING,
                 StandardOpenOption.WRITE);
@@ -1128,7 +1129,7 @@ public class HostChecker {
      * Write cleaned hosts_check.txt file with only valid entries
      */
     private void writeCleanHostsCheckFile(List<String> validLines) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(_hostsCheckFile))) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_hostsCheckFile), StandardCharsets.UTF_8))) {
             for (String line : validLines) {
                 writer.write(line);
                 writer.newLine();
@@ -1262,7 +1263,7 @@ public class HostChecker {
                     }
 
                     // Now write to the final file with header
-                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(_categoriesFile))) {
+                    try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_categoriesFile), StandardCharsets.UTF_8))) {
                         writer.write("# I2P+ Address Book Host Categories");
                         writer.newLine();
                         writer.write("# Format: hostname,category");
@@ -1365,7 +1366,7 @@ public class HostChecker {
             }
 
             // Write file with header
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(_categoriesFile))) {
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_categoriesFile), StandardCharsets.UTF_8))) {
                 writer.write("# I2P+ Address Book Host Categories");
                 writer.newLine();
                 writer.write("# Format: hostname,category");
@@ -1400,7 +1401,7 @@ public class HostChecker {
      * Write cleaned categories.txt file with only valid entries (no empty lines)
      */
     private void writeCleanCategoriesFile(List<String> validLines) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(_categoriesFile))) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_categoriesFile), StandardCharsets.UTF_8))) {
             for (String line : validLines) {
                 writer.write(line);
                 writer.newLine();
@@ -1657,7 +1658,7 @@ public class HostChecker {
 
                 if (dataLineCount > 0) {
                     // Now write to the final file with header
-                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(_categoriesFile))) {
+                    try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_categoriesFile), StandardCharsets.UTF_8))) {
                         writer.write("# I2P+ Address Book Host Categories");
                         writer.newLine();
                         writer.write("# Format: hostname,category");
@@ -1753,7 +1754,7 @@ public class HostChecker {
 
                 if (dataLineCount > 0) {
                     // Now write to the final file with header
-                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(_categoriesFile))) {
+                    try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_categoriesFile), StandardCharsets.UTF_8))) {
                         writer.write("# I2P+ Address Book Host Categories");
                         writer.newLine();
                         writer.write("# Format: hostname,category");

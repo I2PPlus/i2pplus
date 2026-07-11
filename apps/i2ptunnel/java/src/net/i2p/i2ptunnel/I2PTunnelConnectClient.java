@@ -287,8 +287,9 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                             pw = getTunnel().getClientOptions().getProperty(PROP_OUTPROXY_PW);
                         }
                         if (user != null && pw != null) {
+                            String auth = user + ":" + pw;
                             newRequest.append("Proxy-Authorization: Basic ")
-                                      .append(Base64.encode(DataHelper.getUTF8(user + ":" + pw), true))    // true = use standard alphabet
+                                      .append(Base64.encode(DataHelper.getUTF8(auth), true))    // true = use standard alphabet
                                       .append("\r\n");
                         }
                     }

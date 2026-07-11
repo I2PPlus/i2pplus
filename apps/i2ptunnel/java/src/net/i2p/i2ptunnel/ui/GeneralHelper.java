@@ -404,7 +404,7 @@ public class GeneralHelper {
         // which could happen after other tunnels are deleted.
         int i = 0;
         while ((new File(_context.getConfigDir(), rv)).exists()) {
-            rv = "i2ptunnel" + tunnel + '.' + (++i) + "-privKeys.dat";
+            rv = new StringBuilder(64).append("i2ptunnel").append(tunnel).append('.').append(++i).append("-privKeys.dat").toString();
         }
         return rv;
     }

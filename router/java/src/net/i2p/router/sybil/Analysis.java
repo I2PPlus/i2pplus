@@ -587,8 +587,13 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                         if (host != null) {blocks.add(host);}
                     }
                 }
-                String reason = version != null ? "Sybil Analysis (" + version + ")" : "Sybil Analysis";
-                reason += " (" + fmt.format(p).replace(".00", "") + " points)";
+                StringBuilder reasonBuf = new StringBuilder(128);
+                reasonBuf.append("Sybil Analysis");
+                if (version != null) {
+                    reasonBuf.append(" (").append(version).append(")");
+                }
+                reasonBuf.append(" (").append(fmt.format(p).replace(".00", "")).append(" points)");
+                String reason = reasonBuf.toString();
                 _context.banlist().banlistRouter(h, reason, null, null, blockUntil);
                 _banLogger.logBan(h, ipPort, reason, blockUntil);
 

@@ -324,7 +324,7 @@ public class TuningHelper extends HelperBase {
             buf.append(_t("Current system health:")).append(" <b>")
                .append(healthLabel).append(" (").append(pct).append("%)</b>.");
         } else {
-            buf.append(_t("System health data is not yet available."));
+            buf.append(_t("System health assessment is not yet available."));
         }
         buf.append("</span></p>");
 
@@ -568,7 +568,8 @@ public class TuningHelper extends HelperBase {
                 buf.append(renderRingChart(-1, ss.label, "\u2014"));
             } else {
                 int pct = (int) (ss.score * 100);
-                buf.append(renderRingChart(ss.score, ss.label, pct + "%"));
+                String pctStr = pct + "%";
+                buf.append(renderRingChart(ss.score, ss.label, pctStr));
             }
             // CSS tooltip
             buf.append("<div class=ring-tip>");

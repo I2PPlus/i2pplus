@@ -3321,13 +3321,13 @@ public class I2PSnarkServlet extends BasicServlet {
             statusBuf.append(iconBuf).append(peerCountHtml);
             snarkSt = "active seeding complete connected";
         } else if (isSeeding && hasConnectedPeers && !isUploading) {
-            statusBuf.append(toSVGWithDataTooltip("seeding", "",
-                    _t("Seeding") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")"))
+            String seedingTooltip = _t("Seeding") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")";
+            statusBuf.append(toSVGWithDataTooltip("seeding", "", seedingTooltip))
                 .append(peerCountHtml);
             snarkSt = "inactive seeding complete connected";
         } else if (!isComplete && hasConnectedPeers && !isUploading && !isDownloading) {
-            statusBuf.append(toSVGWithDataTooltip("stalled", "",
-                    _t("Stalled") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")"))
+            String stalledTooltip = _t("Stalled") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")";
+            statusBuf.append(toSVGWithDataTooltip("stalled", "", stalledTooltip))
                 .append(peerCountHtml);
             snarkSt = "inactive incomplete connected";
         } else if (isSeeding) {
@@ -3340,18 +3340,18 @@ public class I2PSnarkServlet extends BasicServlet {
             statusBuf.append(toSVGWithDataTooltip("complete", "", _t("Complete"))).append("</td><td class=peerCount><b>&mdash;");
         } else {
             if (hasConnectedPeers && isDownloading) {
-                statusBuf.append(toSVGWithDataTooltip("downloading", "",
-                        _t("OK") + ", " + ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers)))
+                String downloadingTooltip = _t("OK") + ", " + ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers);
+                statusBuf.append(toSVGWithDataTooltip("downloading", "", downloadingTooltip))
                     .append(peerCountHtml);
                 snarkSt = "active downloading incomplete connected";
             } else if (!isComplete && hasConnectedPeers) {
-                statusBuf.append(toSVGWithDataTooltip("stalled", "",
-                        _t("Stalled") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")"))
+                String stalledTooltip2 = _t("Stalled") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")";
+                statusBuf.append(toSVGWithDataTooltip("stalled", "", stalledTooltip2))
                     .append(peerCountHtml);
                 snarkSt = "inactive downloading incomplete connected";
             } else if (isRunning && hasPeers && !hasConnectedPeers) {
-                statusBuf.append(toSVGWithDataTooltip("nopeers", "",
-                        _t("No Peers") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")"))
+                String nopeersTooltip = _t("No Peers") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")";
+                statusBuf.append(toSVGWithDataTooltip("nopeers", "", nopeersTooltip))
                     .append("</td><td class=peerCount><b><span class=right>0</span>")
                     .append(thinsp(noThinsp))
                     .append("<span class=left>").append(knownPeers).append("</span>");
@@ -3981,7 +3981,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<option value=\"").append(Integer.toString(times[i])).append("\"");
             if (times[i] == delay) {buf.append(" selected");}
             buf.append(">");
-            if (times[i] > 0) {buf.append(DataHelper.formatDuration2(times[i] * 1000));}
+            if (times[i] > 0) {buf.append(DataHelper.formatDuration2((long) times[i] * 1000));}
             else {buf.append(_t("Never"));}
             buf.append("</option>\n");
         }
@@ -4023,7 +4023,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("title=\"");
         if (noCollapse) {
             String ua = req.getHeader("user-agent");
-            buf.append(_t("Your browser does not support this feature.")).append("[" + ua + "]").append("\" disabled");
+            buf.append(_t("Your browser does not support this feature.")).append("[").append(ua).append("]").append("\" disabled");
         } else {
             buf.append(_t("Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode")).append("\"");
         }
@@ -4171,7 +4171,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(_t("Max files per torrent"))
            .append("</b> <input type=text name=maxFiles size=5 maxlength=5 pattern=\"[0-9]{1,5}\" class=\"r numeric\"").append(" title=\"")
            .append(_t("Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"))
-           .append("\" value=\"" + _manager.getMaxFilesPerTorrent() + "\" spellcheck=false disabled></label></span><br>\n")
+            .append("\" value=\"").append(_manager.getMaxFilesPerTorrent()).append("\" spellcheck=false disabled></label></span><br>\n")
            .append("</div></td></tr>\n");
 
 /* i2cp/tunnel configuration */
@@ -4211,7 +4211,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<input type=checkbox class=\"optbox slider\" name=varyOutbound id=varyOutbound ")
            .append(varyOutbound ? "checked " : "").append("> <span>").append(_t("Outbound")).append("</span></label>")
            .append("</span><br>\n")
-           .append("<script src=\"" + _resourcePath + "js/toggleVaryTunnelLength.js?" + CoreVersion.VERSION + "\" defer></script>\n")
+            .append("<script src=\"").append(_resourcePath).append("js/toggleVaryTunnelLength.js?").append(CoreVersion.VERSION).append("\" defer></script>\n")
            .append("<noscript><style>#hopVariance .optbox.slider{pointer-events:none!important;opacity:.4!important}</style></noscript>\n");
 
         if (isStandalone()) {
@@ -5888,7 +5888,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 Comment c = iter.next();
                 buf.append("<tr><td class=commentAuthor>");
                 if (c.getName() != null) {
-                    buf.append("<span class=commentAuthorName title=\"" + DataHelper.escapeHTML(c.getName()) + "\">")
+                    buf.append("<span class=commentAuthorName title=\"").append(DataHelper.escapeHTML(c.getName())).append("\">")
                        .append(DataHelper.escapeHTML(c.getName())).append("</span>");
                 }
                 buf.append("</td><td class=commentRating>");

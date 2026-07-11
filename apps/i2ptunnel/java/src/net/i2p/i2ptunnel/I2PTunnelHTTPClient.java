@@ -469,7 +469,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         // /eepproxy/foo.i2p/bar/baz.html
                         String subRequest = request.substring("/eepproxy/".length());
                         if (subRequest.indexOf('/') == -1) {
-                            subRequest += '/';
+                            subRequest = subRequest.concat("/");
                         }
                         request = "http://" + subRequest;
                     }
@@ -602,7 +602,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         int slash = oldPath.indexOf('/');
                         if (slash < 0) {
                             slash = oldPath.length();
-                            oldPath += '/';
+                            oldPath = oldPath.concat("/");
                         }
                         String _dest = oldPath.substring(0, slash);
                         if (slash >= 516 && !_dest.contains(".")) {
@@ -614,7 +614,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             String newURI = oldPath.substring(slash);
                             String query = requestURI.getRawQuery();
                             if (query != null) {
-                                newURI += '?' + query;
+                                newURI = newURI.concat("?").concat(query);
                             }
                             try {
                                 requestURI = new URI(newURI);
@@ -801,7 +801,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         if (!isConnect) {
                             // now strip everything but path and query from URI
                             String newURI = requestURI.getRawPath();
-                            if (query != null) {newURI += '?' + query;}
+                            if (query != null) {newURI = newURI.concat("?").concat(query);}
                             // strip :80 from request if we are http://
                             if (newURI.contains(":80/")) {newURI = newURI.replaceAll(":80/", "/");}
                             try {requestURI = new URI(newURI);}
@@ -1827,9 +1827,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     String newQuery = keystart > 0 ? query.substring(0, keystart - 1) : "";
                     if (i < query.length() - 1) {
                         if (keystart > 0) {
-                            newQuery += query.substring(i);
+                            newQuery = newQuery.concat(query.substring(i));
                         } else {
-                            newQuery += query.substring(i + 1);
+                            newQuery = newQuery.concat(query.substring(i + 1));
                         }
                     }
                     String value = valstart >= 0 ? query.substring(valstart, i) : "";

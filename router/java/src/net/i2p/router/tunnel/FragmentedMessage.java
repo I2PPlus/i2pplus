@@ -247,7 +247,7 @@ class FragmentedMessage {
         if (_completed)
             buf.append("; completed");
         if (_releasedAfter > 0)
-            buf.append("; released after " + DataHelper.formatDuration(_releasedAfter));
+            buf.append("; released after ").append(DataHelper.formatDuration(_releasedAfter));
         return buf.toString();
     }
 }

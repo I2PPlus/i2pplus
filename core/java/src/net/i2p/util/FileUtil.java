@@ -235,12 +235,10 @@ public class FileUtil {
                         }
                         p200TestRequired = false;
                     }
-                    try {
-                        InputStream in = zip.getInputStream(entry);
+                    try (InputStream in = zip.getInputStream(entry)) {
                         while ((in.read(buf)) != -1) {
                             // throw the data away
                         }
-                        in.close();
                     } catch (IOException ioe) {
                         System.err.println("ERROR: Error extracting the zip entry (" + entry.getName() + "]");
                         ioe.printStackTrace();
@@ -392,11 +390,8 @@ public class FileUtil {
     public static String readTextFile(String filename, int maxNumLines, boolean startAtBeginning) {
         File f = new File(filename);
         if (!f.exists()) return null;
-        FileInputStream fis = null;
-        BufferedReader in = null;
-        try {
-            fis = new FileInputStream(f);
-            in = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
+        try (FileInputStream fis = new FileInputStream(f);
+             BufferedReader in = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8))) {
             List<String> lines = new ArrayList<>(maxNumLines > 0 ? maxNumLines : 64);
             String line = null;
             while ((line = in.readLine()) != null) {
@@ -413,10 +408,6 @@ public class FileUtil {
             return buf.toString();
         } catch (IOException ioe) {
             return null;
-        } finally {
-            if (in != null) try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
         }
     }
 

@@ -145,11 +145,12 @@ public class JobQueueHelper extends HelperBase {
             Collections.sort(sortedNames);
             for (String jobName : sortedNames) {
                 List<Job> jobs = groupedActiveJobs.get(jobName);
-                String jobDisplay = "<b title=\"" + jobs.get(0).toString() + "\">" + jobName + "</b>";
+                StringBuilder jobDisplayBuf = new StringBuilder(128);
+                jobDisplayBuf.append("<b title=\"").append(jobs.get(0).toString()).append("\">").append(jobName).append("</b>");
                 if (jobs.size() > 1) {
-                    jobDisplay += " <span class=jobsCounter>" + jobs.size() + "</span>";
+                    jobDisplayBuf.append(" <span class=jobsCounter>").append(jobs.size()).append("</span>");
                 }
-                buf.append("<li>").append(jobDisplay).append("</li>\n");
+                buf.append("<li>").append(jobDisplayBuf.toString()).append("</li>\n");
             }
             buf.append("</ol>");
         }
@@ -235,13 +236,14 @@ public class JobQueueHelper extends HelperBase {
 
                     long elapsed = Math.max(0, now - completionTime);
                     String timeAgo = DataHelper.formatDuration2(elapsed);
-                    String jobDisplay = "<b title=\"" + firstJob.toString() + "\">" + jobName + "</b>";
+                    StringBuilder jobDisplayBuf = new StringBuilder(128);
+                    jobDisplayBuf.append("<b title=\"").append(firstJob.toString()).append("\">").append(jobName).append("</b>");
 
                     if (jobsAtTime.size() > 1) {
-                        jobDisplay += " <span class=jobsCounter>" + jobsAtTime.size() + "</span>";
+                        jobDisplayBuf.append(" <span class=jobsCounter>").append(jobsAtTime.size()).append("</span>");
                     }
 
-                    buf.append("<li>").append(jobDisplay).append(" &#10140; ");
+                    buf.append("<li>").append(jobDisplayBuf.toString()).append(" &#10140; ");
                     if (completionTime <= 0 || elapsed == 0) {
                         buf.append(_t("finished just now"));
                     } else {
@@ -302,12 +304,13 @@ public class JobQueueHelper extends HelperBase {
                     displayedJobCount += jobsAtTime.size();
 
                     String timeStr = "<i>" + DataHelper.formatDuration2(elapsedSeconds) + "</i>";
-                    String jobDisplay = "<b title=\"" + jobsAtTime.get(0).toString() + "\">" + jobName + "</b>";
+                    StringBuilder jobDisplayBuf = new StringBuilder(128);
+                    jobDisplayBuf.append("<b title=\"").append(jobsAtTime.get(0).toString()).append("\">").append(jobName).append("</b>");
                     if (jobsAtTime.size() > 1) {
-                        jobDisplay += " <span class=jobsCounter>" + jobsAtTime.size() + "</span>";
+                        jobDisplayBuf.append(" <span class=jobsCounter>").append(jobsAtTime.size()).append("</span>");
                     }
 
-                    buf.append("<li>").append(jobDisplay);
+                    buf.append("<li>").append(jobDisplayBuf.toString());
                     if (elapsedSeconds > 0) {
                        buf.append(" &#10140; ").append(_t("waiting {0}", timeStr));
                     }
@@ -403,14 +406,15 @@ public class JobQueueHelper extends HelperBase {
             displayedLiCount++;
             displayedJobCount += jobsAtTime.size();
 
-            String timeStr = "<i>" + DataHelper.formatDuration2(earliestDelay) + "</i>";
-            String jobDisplay = "<b title=\"" + firstJob.toString() + "\">" + jobName + "</b>";
+            String timeStr = new StringBuilder(64).append("<i>").append(DataHelper.formatDuration2(earliestDelay)).append("</i>").toString();
+            StringBuilder jobDisplayBuf = new StringBuilder(128);
+            jobDisplayBuf.append("<b title=\"").append(firstJob.toString()).append("\">").append(jobName).append("</b>");
             if (jobsAtTime.size() > 1) {
-                jobDisplay += " <span class=jobsCounter>" + jobsAtTime.size() + "</span>";
+                jobDisplayBuf.append(" <span class=jobsCounter>").append(jobsAtTime.size()).append("</span>");
             }
-
+            String jobWithArrow = jobDisplayBuf.append(" &#10140; ").toString();
             scheduledBuf.append("<li>")
-               .append(_t("{0} starting in {1}", jobDisplay + " &#10140; ", timeStr))
+               .append(_t("{0} starting in {1}", jobWithArrow, timeStr))
                .append("</li>\n");
         }
         scheduledBuf.append("</ol>\n</div>\n");

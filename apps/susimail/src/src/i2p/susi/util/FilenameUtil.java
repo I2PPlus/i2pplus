@@ -105,9 +105,8 @@ public class FilenameUtil {
 		if (idx <= 0)
 			return name;
 		String n = name.substring(idx + 1);
-		StringReader in = new StringReader(n);
-		ByteArrayOutputStream out = new ByteArrayOutputStream(n.length());
-		try {
+		try (StringReader in = new StringReader(n);
+		     ByteArrayOutputStream out = new ByteArrayOutputStream(n.length())) {
 			while (true) {
 				int c = in.read();
 				if (c < 0)

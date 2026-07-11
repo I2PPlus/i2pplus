@@ -296,7 +296,9 @@ public class SMTPClient {
         }
         if (!mailSent && !lastResponse.isEmpty()) {
             String[] lines = DataHelper.split(lastResponse, "\r");
-            for (int i = 0; i < lines.length; i++) {error += lines[i] + '\n';}
+            StringBuilder errorBuf = new StringBuilder(error);
+            for (int i = 0; i < lines.length; i++) {errorBuf.append(lines[i]).append('\n');}
+            error = errorBuf.toString();
         }
         sendCmd("QUIT", false);
         if (socket != null) {

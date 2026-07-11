@@ -1215,21 +1215,24 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 				for (Map.Entry<String, Device> e : other) {
 					String udn = e.getKey();
 					Device dev = e.getValue();
-			                String name = dev.getFriendlyName();
-					if (name == null)
-						name = udn;
-					String type = dev.getDeviceType();
-					boolean isIGD = (ROUTER_DEVICE.equals(type) || ROUTER_DEVICE_2.equals(type)) && dev.isRootDevice();
-					if (!isIGD && !_context.getBooleanProperty(PROP_ADVANCED))
-						continue;
-					if (!found) {
-						found = true;
-						sb.append("<ul>");
-					}
-					name += isIGD ? " IGD" : (' ' + type);
-					String ip = getIP(dev);
-					if (ip != null)
-						name += ' ' + ip;
+				String baseName = dev.getFriendlyName();
+				if (baseName == null)
+					baseName = udn;
+				String type = dev.getDeviceType();
+				boolean isIGD = (ROUTER_DEVICE.equals(type) || ROUTER_DEVICE_2.equals(type)) && dev.isRootDevice();
+				if (!isIGD && !_context.getBooleanProperty(PROP_ADVANCED))
+					continue;
+				if (!found) {
+					found = true;
+					sb.append("<ul>");
+				}
+				StringBuilder nameBuf = new StringBuilder(128);
+				nameBuf.append(baseName);
+				nameBuf.append(isIGD ? " IGD" : " ").append(type);
+				String ip = getIP(dev);
+				if (ip != null)
+					nameBuf.append(' ').append(ip);
+				String name = nameBuf.toString();
 					sb.append("<li>").append(DataHelper.escapeHTML(name));
 					sb.append("<br>UDN: ").append(DataHelper.escapeHTML(udn))
 					  .append("</li>");

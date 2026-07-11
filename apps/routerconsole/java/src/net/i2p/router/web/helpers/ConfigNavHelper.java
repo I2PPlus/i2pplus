@@ -73,7 +73,7 @@ public class ConfigNavHelper extends HelperBase {
         for (int i = 0; i < tabs.size(); i++) {
             String page = "config" + tabs.get(i).page;
             String id = page;
-            if (id.equals("config")) {id += "bandwidth";}
+            if (id.equals("config")) {id = "configbandwidth";}
             id = id.replace("config", "nav_");
             if (requestURI.endsWith(page) || requestURI.endsWith(page + ".jsp")) {// we are there
                 buf.append("<span id=").append(id).append(" class=tab2>").append(tabs.get(i).title);

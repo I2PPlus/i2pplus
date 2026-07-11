@@ -3,10 +3,13 @@ package net.i2p.router;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -143,7 +146,7 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
     synchronized void save() {
         if (_count == 0) {return;}
         try {
-            PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(_file)));
+            PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_file), StandardCharsets.UTF_8)));
             try {
                 int start = (_head - _count + _capacity) % _capacity;
                 for (int i = 0; i < _count; i++) {
@@ -170,7 +173,7 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
         long now = System.currentTimeMillis();
         long cutoff = now - MAX_FILE_AGE;
         List<long[]> entries = new ArrayList<>(_capacity);
-        try (BufferedReader br = new BufferedReader(new FileReader(_file))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(_file), StandardCharsets.UTF_8))) {
             String line;
             while ((line = br.readLine()) != null) {
                 line = line.trim();

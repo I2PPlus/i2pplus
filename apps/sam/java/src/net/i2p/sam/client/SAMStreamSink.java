@@ -89,7 +89,7 @@ public class SAMStreamSink {
         String port = "7656";
         String user = null;
         String password = null;
-        String opts = "inbound.length=0 outbound.length=0";
+        StringBuilder optsBuf = new StringBuilder("inbound.length=0 outbound.length=0");
         int c;
         while ((c = g.getopt()) != -1) {
           switch (c) {
@@ -118,7 +118,7 @@ public class SAMStreamSink {
                 break;
 
             case 'o':
-                opts = opts + ' ' + g.getOptarg();
+                optsBuf.append(' ').append(g.getOptarg());
                 break;
 
             case 'p':
@@ -163,7 +163,7 @@ public class SAMStreamSink {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         SAMStreamSink sink = new SAMStreamSink(ctx, host, port,
                                                     args[startArgs], args[startArgs + 1]);
-        sink.startup(version, isSSL, mode, user, password, opts);
+        sink.startup(version, isSSL, mode, user, password, optsBuf.toString());
     }
 
     public SAMStreamSink(I2PAppContext ctx, String samHost, String samPort, String destFile, String sinkDir) {

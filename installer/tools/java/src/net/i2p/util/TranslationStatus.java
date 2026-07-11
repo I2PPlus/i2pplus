@@ -241,11 +241,11 @@ public class TranslationStatus {
                 buf2.append(String.format(Locale.US, "<tr><td>%s %s %s</td><td>%s</td><td>%d</td>" +
                                                      "<td><span class=percentBarOuter title=\"%5.1f%%\">" +
                                                      "<span class=percentBarInner style=\"width:%5.1f%%\"></span></span></td>" +
-                                                     "</tr>\n",
-                                                     flag, lang, country, s, resources - bundles.count(loc), 100f * counts.count(loc) / grandtot,
-                                                     100f * counts.count(loc) / grandtot));
+                                                      "</tr>%n",
+                                                      flag, lang, country, s, resources - bundles.count(loc), 100f * counts.count(loc) / grandtot,
+                                                      100f * counts.count(loc) / grandtot));
             } else {
-                buf2.append(String.format("%s\t%5.1f%%\t%s %s\n", s, 100f * counts.count(loc) / grandtot, resources - bundles.count(loc), lang, country));
+                buf2.append(String.format("%s\t%5.1f%%\t%s %s%n", s, 100f * counts.count(loc) / grandtot, resources - bundles.count(loc), lang, country));
             }
         }
         if (_html) {
@@ -310,9 +310,11 @@ public class TranslationStatus {
         }
         String git = "<a href=http://git.skank.i2p/i2pplus/I2P.Plus/src/branch/master/" + location + " target=_blank>" + location + "</a>";
         if (!_html) {
-            buf.append("\n\nTranslations for " + clz + " (" + max + " strings, " + buns.size() + " translations)\n");
-            buf.append("Code\t  TX\t   %TX\tLanguage\n");
-            buf.append("----\t----\t------\t--------\n");
+            buf.append("\n\nTranslations for ")
+               .append(clz).append(" (").append(max).append(" strings, ")
+               .append(buns.size()).append(" translations)\n")
+               .append("Code\t  TX\t   %TX\tLanguage\n")
+               .append("----\t----\t------\t--------\n");
         } else {
             buf.append("<table class=\"tx tx_compiled\">\n<thead>\n")
                .append("<tr class=\"tx_header ").append(classTitle).append("\">")
@@ -345,10 +347,10 @@ public class TranslationStatus {
             if (_html) {
                 buf.append(String.format(Locale.US, "%s<td>%s %s %s</td><td>%s</td><td>%4d</td>" +
                                                     "<td><span class=percentBarOuter title=\"%5.1f%%\">" +
-                                                    "<span class=percentBarInner style=\"width:%5.1f%%\"></span></span></td></tr>\n",
-                                                    row, flag, dlang, country, lang, tot, 100f * tot / max, 100f * tot / max));
+                                                    "<span class=percentBarInner style=\"width:%5.1f%%\"></span></span></td></tr>%n",
+                                                     row, flag, dlang, country, lang, tot, 100f * tot / max, 100f * tot / max));
             } else {
-                buf.append(String.format("%s\t%4d\t%5.1f%%\t%s %s\n", lang, tot, 100f * tot / max, dlang, country));
+                buf.append(String.format("%s\t%4d\t%5.1f%%\t%s %s%n", lang, tot, 100f * tot / max, dlang, country));
             }
         }
         buf.append("</tbody>");

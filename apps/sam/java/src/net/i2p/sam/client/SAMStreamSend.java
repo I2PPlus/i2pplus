@@ -79,7 +79,7 @@ public class SAMStreamSend {
         String port = "7656";
         String user = null;
         String password = null;
-        String opts = "inbound.length=0 outbound.length=0";
+        StringBuilder optsBuf = new StringBuilder("inbound.length=0 outbound.length=0");
         int c;
         while ((c = g.getopt()) != -1) {
           switch (c) {
@@ -108,7 +108,7 @@ public class SAMStreamSend {
                 break;
 
             case 'o':
-                opts = opts + ' ' + g.getOptarg();
+                optsBuf.append(' ').append(g.getOptarg());
                 break;
 
             case 'p':
@@ -153,7 +153,7 @@ public class SAMStreamSend {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         SAMStreamSend sender = new SAMStreamSend(ctx, host, port,
                                                       args[startArgs], args[startArgs + 1]);
-        sender.startup(version, isSSL, mode, user, password, opts);
+        sender.startup(version, isSSL, mode, user, password, optsBuf.toString());
     }
 
     public SAMStreamSend(I2PAppContext ctx, String samHost, String samPort, String destFile, String dataFile) {

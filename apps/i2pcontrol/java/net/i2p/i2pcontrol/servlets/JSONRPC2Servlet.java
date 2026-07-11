@@ -259,11 +259,12 @@ public class JSONRPC2Servlet extends HttpServlet {
     private String getRequest(ServletInputStream sis) throws IOException {
         Writer writer = new StringWriter();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(sis, StandardCharsets.UTF_8));
-        char[] readBuffer = new char[BUFFER_LENGTH];
-        int n;
-        while ((n = reader.read(readBuffer)) != -1) {
-            writer.write(readBuffer, 0, n);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(sis, StandardCharsets.UTF_8))) {
+            char[] readBuffer = new char[BUFFER_LENGTH];
+            int n;
+            while ((n = reader.read(readBuffer)) != -1) {
+                writer.write(readBuffer, 0, n);
+            }
         }
         return writer.toString();
     }

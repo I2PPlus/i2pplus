@@ -35,11 +35,10 @@ public class Base64 extends Encoding {
 	 */
 	public String encode( byte[] in ) throws EncodingException
 	{
-		try {
-			Writer strBuf = new StringBuilderWriter();
+		try (Writer strBuf = new StringBuilderWriter()) {
 			encode(new ByteArrayInputStream(in), strBuf);
 			return strBuf.toString();
-		}catch (IOException e) {
+		} catch (IOException e) {
 			throw new EncodingException("encode error",  e);
 		}
 	}
