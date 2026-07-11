@@ -7458,13 +7458,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 Double.isNaN(memUsedPct) ? Double.NaN : memUsedPct / 100.0
             });
 
-            // Tunnel: build success + build storms
-            double buildSuccess = scoreBuildSuccess();
-            double buildStorm = scoreBuildStorms();
+            // Tunnel: build success rate only
             scores.put(SUB_TUNNEL, new double[] {
-                Math.min(buildSuccess, buildStorm),
-                buildSuccess,
-                buildStorm
+                scoreBuildSuccess()
             });
 
             // Transport: latency + send failure rate
