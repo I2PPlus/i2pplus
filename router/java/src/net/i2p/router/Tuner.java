@@ -2611,7 +2611,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("PASSIVE_FLUSH_DELAY", "Nagle flush delay (ms)",
                   SUB_STREAMING,
 
-                  10, 300, 10, "stream.con.sendMessageSize", _context);
+                  10, 200, 10, "stream.con.sendMessageSize", _context);
         }
 
         protected void applyValue(int value) {
@@ -2679,7 +2679,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxSlowStartWindow", "Streaming slow start cap",
                   SUB_STREAMING,
 
-                  4, 256, 4, "stream.con.initialRTT.out", _context);
+                  8, 256, 4, "stream.con.initialRTT.out", _context);
         }
 
         protected void applyValue(int value) {
@@ -4707,7 +4707,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxRtt", "Streaming RTT cap (ms)",
                   SUB_STREAMING,
 
-                  1000, 120000, 5000, "stream.con.initialRTT.out", _context);
+                  500, 30000, 1000, "stream.con.initialRTT.out", _context);
         }
 
         protected void applyValue(int value) {
@@ -5608,7 +5608,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("tunnel.build.maxConcurrent", "Tunnel max concurrent builds",
                   SUB_TUNNEL,
 
-                  8, 256, 4, "tunnel.buildSuccessRate", _context);
+                  4, 64, 2, "tunnel.buildSuccessRate", _context);
         }
 
         protected void applyValue(int value) {
@@ -5638,6 +5638,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double backlog = getAdditionalStat(_context, "tunnel.dropLoadBacklog");
             double testTime = getAdditionalStat(_context, "tunnel.testSuccessTime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double sendWindow = getAdditionalStat(_context, "udp.avgSendWindow");
+            boolean cwinCollapsed = !Double.isNaN(sendWindow) && sendWindow < 20000;
 
             boolean successHigh = !Double.isNaN(observed) && observed > 0.9;
             boolean successLow = !Double.isNaN(observed) && observed < 0.7;
@@ -5647,16 +5649,20 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean usingCapacity = !Double.isNaN(concurrentBuilds) && concurrentBuilds > current * 0.7;
 
+            // Transport congested: builds compete with data for bandwidth — back off hard
+            if (cwinCollapsed && !cpuPressure)
+                return Math.max(_min, current - _step * 2);
+
             // Startup / high demand: builds backed up + success ok = increase
-            if (buildsBackedUp && successHigh && !cpuPressure)
+            if (buildsBackedUp && successHigh && !cpuPressure && !cwinCollapsed)
                 return Math.min(_max, current + _step * 2);
 
             // Builds expiring + success ok = increase (peers can handle more)
-            if (buildsExpiring && successHigh && !cpuPressure)
+            if (buildsExpiring && successHigh && !cpuPressure && !cwinCollapsed)
                 return Math.min(_max, current + _step);
 
             // Using most capacity + no issues = increase cautiously
-            if (usingCapacity && successHigh && !buildsExpiring && !cpuPressure)
+            if (usingCapacity && successHigh && !buildsExpiring && !cpuPressure && !cwinCollapsed)
                 return Math.min(_max, current + _step);
 
             // Success dropping + builds slow = decrease (too much network noise)
@@ -5669,7 +5675,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // Using less than 30% capacity + high success + no backlog = decrease (steady state)
             if (!Double.isNaN(concurrentBuilds) && concurrentBuilds < current * 0.3
-                && successHigh && !buildsBackedUp && !buildsExpiring)
+                && successHigh && !buildsBackedUp && !buildsExpiring && !cwinCollapsed)
                 return Math.max(_min, current - _step);
 
             return current;
@@ -6287,7 +6293,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("udp.peer.minRTO", "Min UDP RTO (ms)",
                   SUB_TRANSPORT,
 
-                  250, 2000, 50, "udp.sendConfirmTime", _context);
+                  250, 1000, 50, "udp.sendConfirmTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -6309,13 +6315,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // Use event-count stat: getAverageValue() is 1.0 when events exist, NaN when none
             double retransmits = getAdditionalStat(_context, "udp.retransmitEvents");
             boolean hasRetransmits = !Double.isNaN(retransmits) && retransmits > 0;
+            double sendWindow = getAdditionalStat(_context, "udp.avgSendWindow");
+            boolean cwinCollapsed = !Double.isNaN(sendWindow) && sendWindow < 20000;
 
-            // If retransmits occurring, increase min RTO to reduce retransmit storms
+            // CWIN collapse + retransmits = lower minRTO for faster loss detection.
+            // This breaks the death spiral: congestion → retransmits → higher RTO → more delay.
+            if (hasRetransmits && cwinCollapsed) {
+                return Math.max(_min, current - _step);
+            }
+            // Normal retransmits without CWIN collapse = raise to avoid retransmit storms
             if (hasRetransmits) { return Math.min(_max, current + _step); }
-            // If no retransmits and RTT is low, can safely lower
+            // No retransmits + low RTT = can safely lower
             if (!Double.isNaN(observed) && observed < 300 && !hasRetransmits) {
                 return Math.max(_min, current - _step);
             }
@@ -6336,7 +6348,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("udp.peer.maxRTO", "Max UDP RTO (ms)",
                   SUB_TRANSPORT,
 
-                  10000, 120000, 1000, "udp.sendConfirmTime", _context);
+                  10000, 60000, 1000, "udp.sendConfirmTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -6360,11 +6372,21 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             double failures = getAdditionalStat(_context, "udp.sendFailed");
             boolean hasFailures = !Double.isNaN(failures) && failures > 0;
+            double sendWindow = getAdditionalStat(_context, "udp.avgSendWindow");
+            boolean cwinCollapsed = !Double.isNaN(sendWindow) && sendWindow < 20000;
 
-            // If peers are timing out frequently, raise max RTO to give them more time
-            if (hasFailures) { return Math.min(_max, current + _step * 2); }
-            // If RTT is consistently low, can lower max RTO to fail faster
-            if (!Double.isNaN(observed) && observed < 1000 && !hasFailures) {
+            // CWIN collapse = congestion is active, tighten maxRTO for fast failover
+            if (cwinCollapsed) { return Math.max(_min, current - _step * 2); }
+            // Failures + low RTT = fail peers faster, don't let maxRTO balloon
+            if (hasFailures && !Double.isNaN(observed) && observed < 3000) {
+                return Math.max(_min, current - _step);
+            }
+            // Failures + high RTT = raise cautiously (slow network, not dead peer)
+            if (hasFailures && !Double.isNaN(observed) && observed > 5000) {
+                return Math.min(_max, current + _step);
+            }
+            // No failures + low RTT = lower to fail faster
+            if (!hasFailures && !Double.isNaN(observed) && observed < 1000) {
                 return Math.max(_min, current - _step);
             }
             return current;
@@ -6384,7 +6406,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("udp.peer.maxSendWindow", "Max UDP send window (bytes)",
                   SUB_TRANSPORT,
 
-                  32768, 1048576, 8192, "udp.avgSendWindow", _context);
+                  65536, 1048576, 8192, "udp.avgSendWindow", _context);
         }
 
         protected void applyValue(int value) {
@@ -6411,14 +6433,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean cpuFree = jobLag < 10 || Double.isNaN(jobLag);
             boolean memOk = memPressure < 0.75;
             boolean highUsage = !Double.isNaN(observed) && observed > current * 0.7;
-            boolean lowUsage = !Double.isNaN(observed) && observed < current * 0.3;
+            double retransmits = getAdditionalStat(_context, "udp.retransmitEvents");
+            boolean congested = !Double.isNaN(retransmits) && retransmits > 0;
 
             // Memory critical: shrink fast
             if (memPressure > 0.85) { return Math.max(_min, current - _step * 4); }
+            // CWIN collapse during congestion: grow aggressively to provide headroom
+            // (the old "low usage" logic incorrectly shrunk during collapse)
+            if (congested && cpuFree && memOk) { return Math.min(_max, current + _step * 4); }
             // High usage + CPU free + memory OK = grow
             if (highUsage && cpuFree && memOk) { return Math.min(_max, current + _step * 2); }
-            // Low usage = shrink to reduce buffering
-            if (lowUsage && current > _min) { return Math.max(_min, current - _step); }
+            // Low usage + no congestion + healthy = shrink to reduce buffering
+            boolean lowUsage = !Double.isNaN(observed) && observed < current * 0.3;
+            if (lowUsage && !congested && current > _min) { return Math.max(_min, current - _step); }
             return current;
         }
     }
