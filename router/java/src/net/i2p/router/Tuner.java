@@ -7453,46 +7453,41 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * NetDB lookup success: matched/handled ratio.
-         * <50% = 0.0, >90% = 1.0
-         * Returns NaN when insufficient lookup activity in the period.
-         * Cross-refs: netDb.failedRetries (search retries), netDb.replyTimeout (peer timeouts).
+         * NetDB health: known peer count.
+         * 500+ peers = healthy, below that linearly degraded to 0 at 0 peers.
+         * Penalized by netDb.replyTimeout (peers not responding to our sends).
+         * Falls back to netDb.lookupWithTimeoutSuccess ratio if available.
          */
         private double scoreNetDbLookup() {
-            double clientTime = getStatValue("client.leaseSetFoundRemoteTime");
-            if (!Double.isNaN(clientTime))
-                return clamp(1.0 - (clientTime / 10000.0));
-            double successTime = getStatValue("netDb.successTime");
-            if (!Double.isNaN(successTime))
-                return clamp(1.0 - (successTime / 10000.0));
-            double handled = getEventCount("netDb.lookupsHandled");
-            if (handled < 10) return Double.NaN;
-            double matched = getEventCount("netDb.lookupsMatched");
-            double ratio = matched / handled;
-            double score = clamp((ratio - 0.5) / 0.4);
-            // Failed retries indicate search inefficiency — penalize
-            double retries = getLifetimeEventCount("netDb.failedRetries");
-            double successes = getLifetimeEventCount("netDb.successRetries");
-            if (successes > 0 && retries / successes > 2.0) {
-                score *= 0.7;
+            double known = getStatValue("router.knownPeers");
+            if (!Double.isNaN(known) && known >= 0) {
+                double score = clamp(known / 500.0);
+                // Reply timeouts indicate peer unresponsiveness — penalize
+                double timeouts = getLifetimeEventCount("netDb.replyTimeout");
+                if (timeouts > 50) {
+                    score *= 0.8;
+                }
+                return score;
             }
-            // Reply timeouts indicate peer unresponsiveness — penalize
-            double timeouts = getLifetimeEventCount("netDb.replyTimeout");
-            if (timeouts > 50) {
-                score *= 0.8;
+            // Fallback: blocking lookup success rate
+            double successEvents = getEventCount("netDb.lookupWithTimeoutSuccess");
+            double failEvents = getEventCount("netDb.lookupWithTimeoutFail");
+            double total = successEvents + failEvents;
+            if (total >= 3) {
+                return clamp(successEvents / total);
             }
-            return score;
+            return Double.NaN;
         }
 
         /**
          * I2CP internal queue utilization.
          * Empty queue = 1.0, >80% capacity = 0.0
-         * Returns NaN when no I2CP traffic in the period.
+         * No I2CP traffic in the period is healthy (idle).
          * Cross-refs: i2ptunnel.serverHandler.queueDepth (server-side backlog).
          */
         private double scoreI2cpQueue() {
             double used = getStatValue("i2cp.internalQueueSize");
-            if (Double.isNaN(used)) return Double.NaN;
+            if (Double.isNaN(used)) return 1.0;
             if (used <= 0) return 1.0;
             // used is the average queue size; capacity is ~65536 (internal default)
             double ratio = used / 65536.0;
@@ -7506,16 +7501,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * Peer health: active profiles count.
-         * <100 = degraded, >500 = healthy
+         * Peer health: fast and high-capacity peer counts relative to their minimums.
+         * Takes the minimum of both ratios so the ring shows the more-starved tier.
          * Returns NaN when peer profiling data unavailable.
          */
         private double scorePeerHealth() {
-            double active = getStatValue("peer.activeProfileCount");
-            if (Double.isNaN(active)) return Double.NaN;
-            if (active <= 0) return 0.0;
-            // Normalize: 0 peers → 0.0, 500+ peers → 1.0
-            return clamp(active / 500.0);
+            double fast = getStatValue("peer.fastPeerCount");
+            double highCap = getStatValue("peer.highCapPeerCount");
+            if (Double.isNaN(fast) || Double.isNaN(highCap)) return Double.NaN;
+            int minFast = ProfileOrganizer.getDefaultMinFastPeers();
+            int minHighCap = ProfileOrganizer.getMinHighCapacityPeers();
+            double fastScore = minFast > 0 ? clamp(fast / minFast) : 1.0;
+            double highCapScore = minHighCap > 0 ? clamp(highCap / minHighCap) : 1.0;
+            return Math.min(fastScore, highCapScore);
         }
 
         /**

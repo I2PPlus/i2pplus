@@ -178,6 +178,7 @@ public class ProfileOrganizer {
         _context.statManager().createRequiredRateStat("peer.profileCount", "Number of peer profiles in memory", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.activeProfileCount", "Number of active peer profiles", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.fastPeerCount", "Number of fast-tier peers", "Peers", RATES);
+        _context.statManager().createRequiredRateStat("peer.highCapPeerCount", "Number of high-capacity peers", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.qualityPeerCount", "Peers with good acceptance + recent activity", "Peers", RATES);
     }
 
@@ -907,6 +908,7 @@ public class ProfileOrganizer {
             _context.statManager().addRateData("peer.profileReorgTime", total, profileCount);
             _context.statManager().addRateData("peer.activeProfileCount", profileCount, 0);
             _context.statManager().addRateData("peer.fastPeerCount", _fastPeers.size(), 0);
+            _context.statManager().addRateData("peer.highCapPeerCount", _highCapacityPeers.size(), 0);
             _context.statManager().addRateData("peer.qualityPeerCount", qualityCount, 0);
             _context.statManager().addRateData("peer.expiredProfileCount", expiredCount, 0);
 
