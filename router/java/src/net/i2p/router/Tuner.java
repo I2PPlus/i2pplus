@@ -7178,6 +7178,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
+         * Return lifetime event count for a stat.
+         * Use for low-frequency stats where 60s window is too narrow.
+         */
+        private double getLifetimeEventCount(String statName) {
+            RateStat rs = _ctx.statManager().getRate(statName);
+            if (rs == null) return 0;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null) return 0;
+            return rate.getLifetimeEventCount();
+        }
+
+        /**
          * Build storms: 0 concurrent = 1.0, >10 = degraded, >30 = 0.0
          */
         private double scoreBuildStorms() {
@@ -7227,8 +7239,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Uses stream.resetReceived / stream.connectionReceived ratio.
          */
         private double scoreStreaming() {
-            double resets = getEventCount("stream.resetReceived");
-            double conns = getEventCount("stream.connectionReceived");
+            double resets = getLifetimeEventCount("stream.resetReceived");
+            double conns = getLifetimeEventCount("stream.connectionReceived");
             if (conns < 10) return Double.NaN;
             double resetRatio = resets / conns;
             // 0% resets→1.0, 10%→0.0
