@@ -1857,7 +1857,6 @@
     <parallel>
       <delete includeEmptyDirs="true" quiet="true">
         <fileset dir="./dist" includes="**/*" excludes="README.md"/>
-        <fileset dir="./build" includes="**/*" excludes="README.md"/>
       </delete>
       <delete dir="./reports" quiet="true"/>
       <delete file="installer/lib/izpack/4/patches.jar" failonerror="false" quiet="true"/>
@@ -1953,7 +1952,7 @@
       <delete dir=".gradle" quiet="true"/>
       <delete dir="tools/gradle/wrapper/.gradle" quiet="true"/>
       <delete includeEmptyDirs="true" quiet="true">
-        <fileset dir="." includes="**/build" excludes="build/README.md"/>
+        <fileset dir="." includes="**/build"/>
         <fileset dir="apps" includes="**/build"/>
         <fileset dir="core" includes="**/build"/>
         <fileset dir="router" includes="**/build"/>
@@ -3143,7 +3142,7 @@
   <target name="prepjupdate" depends="prepupdate, buildWEB">
     <parallel>
       <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib">
-        <fileset dir="build" includes="commons*.jar jasper*.jar javax*.jar jetty*.jar jsp*.jar org.mortbay.*.jar"/>
+        <fileset dir="${build.root}build" includes="commons*.jar jasper*.jar javax*.jar jetty*.jar jsp*.jar org.mortbay.*.jar"/>
       </copy>
       <!--  We have to package the new eepsite files for MigrateJetty.java, but we can't overwrite an existing eepsite dir in a non-split configuration. -->
       <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/eepsite-jetty9">

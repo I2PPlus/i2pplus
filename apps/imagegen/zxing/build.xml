@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="zxing">
   <available file="git" property="git.available"/>
-  <property name="build.dir" value="${java.io.tmpdir}/build-i2p/apps/imagegen/zxing/build"/>
+  <property name="build.root" value="${java.io.tmpdir}/build-i2p/"/>
+  <property name="build.dir" value="${build.root}apps/imagegen/zxing/build"/>
 
-  <property name="...build.dir" value="../../../build"/>
+  <property name="...build.dir" value="${build.root}build"/>
 
   <property name="...build.dir" value="${...build.dir}"/>
   <target name="all" depends="clean, build"/>

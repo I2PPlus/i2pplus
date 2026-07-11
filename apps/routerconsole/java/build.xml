@@ -7,10 +7,11 @@
       <pathelement location="../../../tools/ant-contrib.jar"/>
     </classpath>
   </taskdef>
-  <property name="build.dir" value="${java.io.tmpdir}/build-i2p/apps/routerconsole/java/build"/>
-  <property name="jsp.build.dir" value="${java.io.tmpdir}/build-i2p/apps/routerconsole/jsp"/>
+  <property name="build.root" value="${java.io.tmpdir}/build-i2p/"/>
+  <property name="build.dir" value="${build.root}apps/routerconsole/java/build"/>
+  <property name="jsp.build.dir" value="${build.root}apps/routerconsole/jsp"/>
 
-  <property name="...build.dir" value="../../../build"/>
+  <property name="...build.dir" value="${build.root}build"/>
   <property name="core.java.build.dir" value="../../../core/java/build"/>
   <property name="desktopgui.build.dir" value="../../desktopgui/build"/>
   <property name="desktopgui.dist.dir" value="../../desktopgui/dist"/>
