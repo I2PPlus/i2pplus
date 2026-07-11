@@ -39,7 +39,6 @@ import java.util.Map;
  *    Menezes, A., van Oorschot, P. and S. Vanstone.</li>
  * </ol>
  *
- * @version $Revision: 1.1 $
  */
 public interface IRandomStandalone extends Cloneable {
 

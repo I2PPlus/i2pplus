@@ -7,7 +7,6 @@ import java.util.Map;
  * <p>An abstract class to facilitate implementing PRNG algorithms.</p>
  *
  * Modified slightly by jrandom for I2P (removing unneeded exceptions)
- * @version $Revision: 1.1 $
  */
 public abstract class BasePRNGStandalone implements IRandomStandalone, Serializable {
 

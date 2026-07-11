@@ -1,7 +1,6 @@
 /*
  * This file is part of SusiMail project for I2P
  * Created on Nov 12, 2004
- * $Revision: 1.3 $
  * Copyright (C) 2004-2005 <susi23@mail.i2p>
  * License: GPL2 or later
  */

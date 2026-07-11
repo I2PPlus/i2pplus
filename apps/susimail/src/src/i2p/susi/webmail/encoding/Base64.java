@@ -7,7 +7,6 @@
  *
  * Licensed under the GPLv2 or later.
  *  
- * $Revision: 1.6 $
  */
 package i2p.susi.webmail.encoding;
 
