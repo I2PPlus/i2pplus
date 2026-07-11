@@ -599,7 +599,7 @@ public class GeoIP {
     private static final Map<String, String> ASN_DB_OVERRIDES;
     static {
         ASN_DB_OVERRIDES = new HashMap<>();
-        ASN_DB_OVERRIDES.put("setarimE moceleT puorG oC talasitepuorG CSJP", "Emirates Telecom");
+        ASN_DB_OVERRIDES.put("CSJP )puorG talasite( oC puorG moceleT setarimE", "Emirates Telecom Group Co (etisalat Group) PJSC");
         ASN_DB_OVERRIDES.put("eteicoS esiacnarF uD enohpeletoidaR", "Societe France Du RadioTelephone");
         ASN_DB_OVERRIDES.put("etavirP namssenisuB vonayruB nitnatsnoK", "Private Business von Knutsen");
         ASN_DB_OVERRIDES.put("oixenI eigolonhcetsnoitamrofnI dnU", "Und Informationstechnologie Inexio");
@@ -870,12 +870,12 @@ public class GeoIP {
         String wordResult = tryWordReversal(words);
 
         // Pick the result with more known-word matches.
-        // On tie, prefer word-reversal (preserves original word order).
-        // Full-string reversal only wins if it scores strictly better.
+        // On tie, prefer full-string reversal (more robust for whole-string reversals).
+        // Word-reversal only wins if it scores strictly better.
         int fullScore = countKnownWordMatches(fullResult);
         int wordScore = countKnownWordMatches(wordResult);
-        if (wordScore >= 1 && wordScore >= fullScore) {return wordResult;}
-        if (fullScore > wordScore) {return fullResult;}
+        if (fullScore > 0 && fullScore >= wordScore) {return fullResult;}
+        if (wordScore > fullScore) {return wordResult;}
         return name;
     }
 
