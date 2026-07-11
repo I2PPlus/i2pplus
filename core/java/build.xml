@@ -488,9 +488,10 @@
     <property name="hamcrest.home" value="../../tools/test/hamcrest"/>
     <property name="junit.home" value="../../tools/test/junit"/>
     <property name="mockito.home" value="../../tools/test/mockito"/>
-    <mkdir dir="../../reports/core/junit/"/>
+    <property name="junit.reports.dir" value="../../reports"/>
+    <mkdir dir="${junit.reports.dir}/core/junit/"/>
     <delete>
-      <fileset dir="../../reports/core/junit">
+      <fileset dir="${junit.reports.dir}/core/junit">
         <include name="TEST-*.xml"/>
       </fileset>
     </delete>
@@ -516,7 +517,7 @@
         <pathelement location="${with.clover}"/>
         <pathelement location="${with.cobertura}"/>
       </classpath>
-      <batchtest todir="../../reports/core/junit/">
+      <batchtest todir="${junit.reports.dir}/core/junit/">
         <fileset dir="./test/junit/">
           <include name="**/*Test.java"/>
           <include name="**/*IT.java" if="runIntegrationTests"/>
@@ -536,7 +537,7 @@
     <replaceregexp byline="true"
       match="(hostname=)&quot;[^&quot;]+&quot;"
       replace="\1&quot;${host.fakename}&quot;">
-      <fileset dir="../../reports/core/junit/"/>
+      <fileset dir="${junit.reports.dir}/core/junit/"/>
     </replaceregexp>
     <delete dir="${build.dir}/testobj"/>
   </target>

@@ -451,9 +451,10 @@
     </replaceregexp>
   </target>
   <target name="junit.test" depends="junit.compileTest, prepareTest">
-    <mkdir dir="../../reports/router/junit/"/>
+    <property name="junit.reports.dir" value="../../reports"/>
+    <mkdir dir="${junit.reports.dir}/router/junit/"/>
     <delete>
-      <fileset dir="../../reports/router/junit">
+      <fileset dir="${junit.reports.dir}/router/junit">
         <include name="TEST-*.xml"/>
       </fileset>
     </delete>
@@ -474,7 +475,7 @@
         <pathelement location="${with.clover}"/>
         <pathelement location="${with.cobertura}"/>
       </classpath>
-      <batchtest todir="../../reports/router/junit/">
+      <batchtest todir="${junit.reports.dir}/router/junit/">
         <fileset dir="./test/junit">
           <include name="**/*Test.java"/>
           <include name="**/*IT.java" if="runIntegrationTests"/>
@@ -488,7 +489,7 @@
     <replaceregexp byline="true"
       match="(hostname=)&quot;[^&quot;]+&quot;"
       replace="\1&quot;${host.fakename}&quot;">
-      <fileset dir="../../reports/router/junit/"/>
+      <fileset dir="${junit.reports.dir}/router/junit/"/>
     </replaceregexp>
   </target>
 

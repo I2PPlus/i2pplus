@@ -23,15 +23,13 @@ if [ ! -f "${HAMCREST}/hamcrest-core.jar" ] || [ ! -f "${JUNIT}/junit4.jar" ]; t
   "${SCRIPT_DIR}/ensure-testdeps.sh" --quiet
 fi
 
-ANT_PROPS="-Dhamcrest.home=${HAMCREST} -Djunit.home=${JUNIT} -Dmockito.home=${MOCKITO} -Dscalatest.libs=${SCALA}"
+RESULTS_DIR="/tmp/test-i2p"
+ANT_PROPS="-Dhamcrest.home=${HAMCREST} -Djunit.home=${JUNIT} -Dmockito.home=${MOCKITO} -Dscalatest.libs=${SCALA} -Djunit.reports.dir=${RESULTS_DIR}"
 
 BOLD='\033[1m'
 RESET='\033[0m'
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-
-# XML results go here, separate from build-i2p/ and from repo tree
-RESULTS_DIR="/tmp/test-i2p"
 
 total_tests=0
 total_failures=0
@@ -177,12 +175,9 @@ read_result() {
 
 # --- Main ---
 
-# Symlink REPO_ROOT/reports → RESULTS_DIR so ant writes XML directly to /tmp
-# and nothing is left in the workspace.
+# Ant writes JUnit XML directly to RESULTS_DIR via junit.reports.dir property.
 rm -rf "${RESULTS_DIR}"
 mkdir -p "${RESULTS_DIR}"
-rm -rf "${REPO_ROOT}/reports"
-ln -s "${RESULTS_DIR}" "${REPO_ROOT}/reports"
 
 case "${1:-all}" in
   core)
@@ -220,7 +215,7 @@ case "${1:-all}" in
     mini_r=$(mktemp)
     stream_r=$(mktemp)
     router_r=$(mktemp)
-    trap 'rm -f "$core_r" "$mini_r" "$stream_r" "$router_r"' EXIT
+    trap 'rm -f "$core_r" "$mini_r" "$stream_r" "$router_r"; rm -rf "${REPO_ROOT}/reports"' EXIT
 
     run_test_bg core/java "$core_r"
     run_test_bg apps/ministreaming/java "$mini_r"
@@ -254,3 +249,6 @@ esac
 if [ "${1:-all}" = "all" ] && [ -d "${RESULTS_DIR}" ]; then
   python3 "${REPO_ROOT}/tools/test/unit-tests-to-html.py" "${RESULTS_DIR}" "${REPO_ROOT}/dist/test-report.html"
 fi
+
+# Tidy up any leftover workspace artifacts
+rm -rf "${REPO_ROOT}/reports"

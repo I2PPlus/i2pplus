@@ -320,9 +320,10 @@
   <target name="prepareTest" depends="prepareClover, prepareCobertura"/>
 
   <target name="junit.test" depends="junit.compileTest, prepareTest">
-    <mkdir dir="../../../reports/ministreaming/junit/"/>
+    <property name="junit.reports.dir" value="../../../reports"/>
+    <mkdir dir="${junit.reports.dir}/ministreaming/junit/"/>
     <delete>
-      <fileset dir="../../../reports/ministreaming/junit">
+      <fileset dir="${junit.reports.dir}/ministreaming/junit">
         <include name="TEST-*.xml"/>
       </fileset>
     </delete>
@@ -351,7 +352,7 @@
         <pathelement location="${with.clover}"/>
         <pathelement location="${with.cobertura}"/>
       </classpath>
-      <batchtest todir="../../../reports/ministreaming/junit/">
+      <batchtest todir="${junit.reports.dir}/ministreaming/junit/">
         <fileset dir="./test/junit">
           <include name="**/*Test.java"/>
         </fileset>
@@ -364,7 +365,7 @@
     <replaceregexp byline="true"
       match="(hostname=)&quot;[^&quot;]+&quot;"
       replace="\1&quot;${host.fakename}&quot;">
-      <fileset dir="../../../reports/ministreaming/junit/"/>
+      <fileset dir="${junit.reports.dir}/ministreaming/junit/"/>
     </replaceregexp>
   </target>
   <target name="test" depends="junit.test"/>

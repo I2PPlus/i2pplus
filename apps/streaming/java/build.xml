@@ -122,9 +122,10 @@
   <target name="prepareTest" depends="prepareClover, prepareCobertura"/>
 
   <target name="junit.test" depends="junit.compileTest, prepareTest">
-    <mkdir dir="../../../reports/streaming/junit/"/>
+    <property name="junit.reports.dir" value="../../../reports"/>
+    <mkdir dir="${junit.reports.dir}/streaming/junit/"/>
     <delete>
-      <fileset dir="../../../reports/streaming/junit">
+      <fileset dir="${junit.reports.dir}/streaming/junit">
         <include name="TEST-*.xml"/>
       </fileset>
     </delete>
@@ -154,7 +155,7 @@
         <pathelement location="${with.clover}"/>
         <pathelement location="${with.cobertura}"/>
       </classpath>
-      <batchtest todir="../../../reports/streaming/junit/">
+      <batchtest todir="${junit.reports.dir}/streaming/junit/">
         <fileset dir="./test/junit">
           <include name="**/*Test.java"/>
           <include name="**/*IT.java" if="runIntegrationTests"/>
@@ -168,7 +169,7 @@
     <replaceregexp byline="true"
       match="(hostname=)&quot;[^&quot;]+&quot;"
       replace="\1&quot;${host.fakename}&quot;">
-      <fileset dir="../../../reports/streaming/junit/"/>
+      <fileset dir="${junit.reports.dir}/streaming/junit/"/>
     </replaceregexp>
   </target>
   <target name="test" depends="junit.test"/>
