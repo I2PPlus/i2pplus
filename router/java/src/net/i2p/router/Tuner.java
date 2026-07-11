@@ -7234,17 +7234,29 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * Streaming health: connection resets indicate failures.
-         * Low reset rate = healthy, high = degraded.
-         * Uses stream.resetReceived / stream.connectionReceived ratio.
+         * Streaming health: RTT at connection close is the primary signal.
+         * High RTT = congestion or poor path quality.
+         * Uses stream.con.lifetimeRTT (fires on every connection close).
+         * Falls back to sends-before-ack ratio if RTT unavailable.
          */
         private double scoreStreaming() {
-            double resets = getLifetimeEventCount("stream.resetReceived");
-            double conns = getLifetimeEventCount("stream.connectionReceived");
-            if (conns < 10) return Double.NaN;
-            double resetRatio = resets / conns;
-            // 0% resets→1.0, 10%→0.0
-            return clamp(1.0 - (resetRatio / 0.1));
+            // Primary: RTT from closed connections
+            double rtt = getStatValue("stream.con.lifetimeRTT");
+            if (!Double.isNaN(rtt)) {
+                double conns = getLifetimeEventCount("stream.con.lifetimeMessagesSent");
+                if (conns < 3) return Double.NaN;
+                // <1000ms→1.0, 3000ms→0.5, >5000ms→0.0
+                return clamp(1.0 - ((rtt - 1000) / 4000.0));
+            }
+            // Fallback: sends-before-ack (high = delayed acks)
+            double sendsBeforeAck = getStatValue("stream.sendsBeforeAck");
+            if (!Double.isNaN(sendsBeforeAck)) {
+                double msgs = getLifetimeEventCount("stream.con.lifetimeMessagesSent");
+                if (msgs < 3) return Double.NaN;
+                // <2→1.0, >10→0.0
+                return clamp(1.0 - ((sendsBeforeAck - 2) / 8.0));
+            }
+            return Double.NaN;
         }
 
         private static double clamp(double v) {
@@ -7262,9 +7274,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             Map<String, double[]> scores = new LinkedHashMap<String, double[]>();
 
             // Router: job lag + memory
+            double memUsedPct = getStatValue("jobQueue.memoryUsedPercent");
             scores.put(SUB_ROUTER, new double[] {
                 scoreJobLag(),
-                getStatValue("jobQueue.memoryUsedPercent") / 100.0
+                Double.isNaN(memUsedPct) ? Double.NaN : memUsedPct / 100.0
             });
 
             // Tunnel: build success + build storms
@@ -7290,7 +7303,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 scoreNetDbLookup()
             });
 
-            // Streaming: reset rate as health signal (resets = connection failures)
+            // Streaming: RTT + send-before-ack as health signals
             double streamScore = scoreStreaming();
             scores.put(SUB_STREAMING, new double[] { streamScore });
 
@@ -7320,6 +7333,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * NetDB lookup success: matched/handled ratio.
          * <50% = 0.0, >90% = 1.0
+         * Returns NaN when insufficient lookup activity in the period.
          */
         private double scoreNetDbLookup() {
             double clientTime = getStatValue("client.leaseSetFoundRemoteTime");
@@ -7329,18 +7343,22 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (!Double.isNaN(successTime))
                 return clamp(1.0 - (successTime / 10000.0));
             double handled = getEventCount("netDb.lookupsHandled");
+            if (handled < 10) return Double.NaN;
             double matched = getEventCount("netDb.lookupsMatched");
-            if (handled > 10 && matched <= 0) return 0.0;
-            return 1.0;
+            double ratio = matched / handled;
+            // <50% = 0.0, >90% = 1.0
+            return clamp((ratio - 0.5) / 0.4);
         }
 
         /**
          * I2CP internal queue utilization.
-         * 0% = 1.0, >80% = 0.0
+         * Empty queue = 1.0, >80% capacity = 0.0
+         * Returns NaN when no I2CP traffic in the period.
          */
         private double scoreI2cpQueue() {
             double used = getStatValue("i2cp.internalQueueSize");
-            if (Double.isNaN(used) || used <= 0) return 1.0;
+            if (Double.isNaN(used)) return Double.NaN;
+            if (used <= 0) return 1.0;
             // used is the average queue size; capacity is ~65536 (internal default)
             double ratio = used / 65536.0;
             return clamp(1.0 - (ratio / 0.8));
@@ -7349,22 +7367,25 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Peer health: active profiles count.
          * <100 = degraded, >500 = healthy
+         * Returns NaN when peer profiling data unavailable.
          */
         private double scorePeerHealth() {
             double active = getStatValue("peer.activeProfileCount");
-            if (Double.isNaN(active) || active <= 0) return 1.0;
+            if (Double.isNaN(active)) return Double.NaN;
+            if (active <= 0) return 0.0;
             // Normalize: 0 peers → 0.0, 500+ peers → 1.0
             return clamp(active / 500.0);
         }
 
         /**
-         * Congestion: congestion event frequency.
+         * Congestion: congestion event frequency vs total sends.
          * Low congestion ratio = 1.0, high = 0.0
+         * Requires at least100 sends in the period for a stable ratio.
          */
         private double scoreCongestion() {
             double congEvents = getEventCount("udp.congestionOccurred");
-            double totalSends = getEventCount("udp.allowConcurrentActive");
-            if (totalSends <= 0) return 1.0;
+            double totalSends = getEventCount("udp.sendPacketSize");
+            if (totalSends < 100) return Double.NaN;
             double congRatio = congEvents / totalSends;
             // 0% congestion → 1.0, 5% → 0.0
             return clamp(1.0 - (congRatio / 0.05));
@@ -7372,21 +7393,27 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Crypto: DH queue empty events vs used events.
-         * Frequent empty queue = key generation bottleneck
+         * Frequent empty queue = key generation bottleneck.
+         * Only evaluates pools with actual activity; returns NaN when no crypto ops.
          */
         private double scoreCryptoPressure() {
-            // Score all 3 key pools independently, take the worst
-            double edhEmpty = getEventCount("crypto.EDHEmpty");
-            double edhUsed = getEventCount("crypto.EDHUsed");
-            double xdhEmpty = getEventCount("crypto.XDHEmpty");
-            double xdhUsed = getEventCount("crypto.XDHUsed");
-            double mlkemEmpty = getEventCount("crypto.MLKEMEmpty");
-            double mlkemUsed = getEventCount("crypto.MLKEMUsed");
-            double scoreEdh = (edhUsed > 0) ? clamp(1.0 - ((edhEmpty / edhUsed) / 0.3)) : 1.0;
-            double scoreXdh = (xdhUsed > 0) ? clamp(1.0 - ((xdhEmpty / xdhUsed) / 0.3)) : 1.0;
-            double scoreMlkem = (mlkemUsed > 0) ? clamp(1.0 - ((mlkemEmpty / mlkemUsed) / 0.3)) : 1.0;
-            // 0% empty → 1.0, >30% empty → 0.0
-            return Math.min(Math.min(scoreEdh, scoreXdh), scoreMlkem);
+            double bestScore = Double.NaN;
+            // Score each pool independently, take the worst of active pools only
+            double[][] pools = new double[][] {
+                {getEventCount("crypto.EDHEmpty"), getEventCount("crypto.EDHUsed")},
+                {getEventCount("crypto.XDHEmpty"), getEventCount("crypto.XDHUsed")},
+                {getEventCount("crypto.MLKEMEmpty"), getEventCount("crypto.MLKEMUsed")}
+            };
+            for (double[] pool : pools) {
+                double empty = pool[0];
+                double used = pool[1];
+                if (used <= 0) continue;
+                double poolScore = clamp(1.0 - ((empty / used) / 0.3));
+                if (Double.isNaN(bestScore) || poolScore < bestScore) {
+                    bestScore = poolScore;
+                }
+            }
+            return bestScore;
         }
 
         /**
