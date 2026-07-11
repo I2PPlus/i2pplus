@@ -235,7 +235,8 @@ class ConnectionHandler {
                             // any data the client may have already sent using the old
                             // stream IDs.
                             if (_log.shouldWarn() && syn != null) {
-                                _log.warn("Received retransmitted SYN for existing connection, re-sending SYN-ACK: " + oldcon + "\n* SYN: " + syn);
+                                _log.warn("Received retransmitted SYN for existing connection, re-sending SYN-ACK: " +
+                                          oldcon + (syn != null && !syn.toString().isEmpty() ? "\n* SYN: " + syn : ""));
                             }
                             resendSynAck(oldcon, syn);
                             continue;
