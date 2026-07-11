@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project basedir="." default="all" name="i2p" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
-    <property name="build.dir" value="${build.root}build"/>
     <property name="build.root" value="${java.io.tmpdir}/build-i2p/"/>
+    <property name="build.dir" value="${build.root}build"/>
     <property name="pkg.temp.dir" value="${build.root}pkg-temp"/>
     <property name="apps.addressbook.dist" value="${build.root}apps/addressbook/dist"/>
     <property name="apps.i2pcontrol.build.dir" value="${build.root}apps/i2pcontrol/build"/>
