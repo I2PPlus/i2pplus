@@ -1813,14 +1813,21 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.expiredOnQueueLifetime (ms, avg lifetime of expired messages)
-            // Cross-refs: transport.bidFailAllTransports (messages with no transport)
+            // Cross-refs: transport.bidFailAllTransports (messages with no transport),
+            //             udp.outboundQueueDepth (total outbound pressure)
             // Note: bidFailAllTransports records msg.getLifetime() — getAverageValue()
             //       returns avg lifetime, not count. Use getAdditionalEventCount() for
             //       the raw event count (number of bid failures).
             double bidFails = getAdditionalEventCount(_context, "transport.bidFailAllTransports");
+            double queueDepth = getAdditionalStat(_context, "udp.outboundQueueDepth");
 
             boolean lotsOfExpirations = observed > 5000;
             boolean lotsOfBidFails = !Double.isNaN(bidFails) && bidFails > 10;
+            boolean deepQueue = !Double.isNaN(queueDepth) && queueDepth > 2000;
+
+            // Deep queue + lots of expirations = drop stale messages faster (free queue slots)
+            if (deepQueue && lotsOfExpirations)
+                return Math.max(_min, current - _step * 2);
 
             // Many expirations = lower age limit (stop hoarding dead messages)
             if (lotsOfExpirations)
@@ -1878,16 +1885,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, dispatch latency)
-            // Cross-refs: ntcp.readQueueSize, ntcp.sendFinisher.queueSize, jobQueue.jobLag
+            // Cross-refs: ntcp.readQueueSize, ntcp.sendFinisher.queueSize, jobQueue.jobLag,
+            //             udp.outboundQueueDepth (outbound pressure)
             double readQueue = getAdditionalStat(_context, "ntcp.readQueueSize");
             double finisherQueue = getAdditionalStat(_context, "ntcp.sendFinisher.queueSize");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double queueDepth = getAdditionalStat(_context, "udp.outboundQueueDepth");
 
             boolean highLatency = observed > 200;
             boolean moderateLatency = observed > 100;
             boolean queuesBackedUp = (!Double.isNaN(readQueue) && readQueue > 5) ||
                                      (!Double.isNaN(finisherQueue) && finisherQueue > 5);
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 50;
+            boolean deepQueue = !Double.isNaN(queueDepth) && queueDepth > 2000;
+
+            // Deep outbound queue + moderate latency = boost priority to drain faster
+            if (deepQueue && moderateLatency)
+                return Math.min(_max, current + 2);
 
             // High latency + backed up queues = boost priority hard
             if (highLatency && queuesBackedUp)
@@ -3589,11 +3603,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = udp.pushTime (avg time to push packet to handler, ms)
-            // Cross-refs: transit InBps, jobLag (CPU), memory, msgRx.queueSize (downstream)
+            // Cross-refs: transit InBps, jobLag (CPU), memory, msgRx.queueSize (downstream),
+            //             udp.outboundQueueDepth (outbound pressure)
             double transitBps = getAdditionalStat(_context, "tunnel.participating InBps");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double hourlyBps = getAdditionalStatHourly(_context, "tunnel.participating InBps");
             double msgRxQueue = getAdditionalStat(_context, "udp.msgRx.queueSize");
+            double queueDepth = getAdditionalStat(_context, "udp.outboundQueueDepth");
             int sysLoad = SystemVersion.getSystemLoad();
             boolean highLoad = sysLoad > 80;
             double memPressure = getMemoryPressure();
@@ -3602,6 +3618,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
             boolean sustainedHeavyTransit = !Double.isNaN(hourlyBps) && hourlyBps > getSustainedHeavyTransitThreshold(_context);
             boolean downstreamBackedUp = !Double.isNaN(msgRxQueue) && msgRxQueue > 50;
+            boolean deepQueue = !Double.isNaN(queueDepth) && queueDepth > 2000;
 
             // Utilization: ratio of handlers actively processing vs max
             double utilization = getPacketHandlerUtilization(_context);
@@ -3613,6 +3630,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (observed < 1 && !downstreamBackedUp
                 && lowUtilization && current > _min)
                 return Math.max(_min, current - 1);
+
+            // Deep outbound queue = add threads (process acks faster to drain)
+            if (deepQueue && !systemBusy && !highLoad && memPressure < 0.7)
+                return Math.min(_max, current + 1);
 
             // Any push time pressure + no CPU = add threads (max throughput)
             if (observed > 10 && !systemBusy && !highLoad)
@@ -3673,12 +3694,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = codel.UDP-Receiver.delay (upstream queue sojourn time, ms)
             // Cross-refs: udp.inboundExpired, udp.msgRx.queueSize, codel.UDP-MessageReceiver.delay,
-            //             jobLag (CPU), udp.pushTime (downstream handler pressure)
+            //             jobLag (CPU), udp.pushTime (downstream handler pressure),
+            //             udp.outboundQueueDepth (outbound pressure — process acks faster)
             double expired = getAdditionalStat(_context, "udp.inboundExpired");
             double queueSize = getAdditionalStat(_context, "udp.msgRx.queueSize");
             double sojournTime = getAdditionalStat(_context, "codel.UDP-MessageReceiver.delay");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double pushTime = getAdditionalStat(_context, "udp.pushTime");
+            double queueDepth = getAdditionalStat(_context, "udp.outboundQueueDepth");
             int sysLoad = SystemVersion.getSystemLoad();
             boolean highLoad = sysLoad > 80;
             double memPressure = getMemoryPressure();
@@ -3689,11 +3712,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean messagesExpiring = !Double.isNaN(expired) && expired > 0;
             boolean longSojourn = !Double.isNaN(sojournTime) && sojournTime > 2;
             boolean downstreamSlow = !Double.isNaN(pushTime) && pushTime > 10;
+            boolean deepQueue = !Double.isNaN(queueDepth) && queueDepth > 2000;
 
             // Utilization: ratio of runners actively processing vs total
             double utilization = getMessageReceiverUtilization(_context);
             boolean highUtilization = !Double.isNaN(utilization) && utilization > 0.8;
             boolean lowUtilization = !Double.isNaN(utilization) && utilization < 0.2;
+
+            // Deep outbound queue = process acks faster to free outbound messages
+            if (deepQueue && !cpuPressure && !highLoad && memPressure < 0.7)
+                return Math.min(_max, current + 1);
 
             // Any upstream pressure + no CPU = add threads (max throughput)
             if (upstreamBackpressure && !cpuPressure && !highLoad)
@@ -3757,10 +3785,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = peer.activeProfileCount (active profiles in RAM)
-            // Cross-refs: udp.rejectConcurrentActive (rejections), jobLag, memory
+            // Cross-refs: udp.rejectConcurrentActive (rejections), jobLag, memory,
+            //             udp.outboundQueueDepth (outbound pressure)
             double rejections = getAdditionalStat(_context, "udp.rejectConcurrentActive");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double hourlyRejections = getAdditionalStatHourly(_context, "udp.rejectConcurrentActive");
+            double queueDepth = getAdditionalStat(_context, "udp.outboundQueueDepth");
             int sysLoad = SystemVersion.getSystemLoad();
             boolean highLoad = sysLoad > 80;
             double memPressure = getMemoryPressure();
@@ -3769,6 +3799,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean hasRejections = !Double.isNaN(rejections) && rejections > 0;
             boolean sustainedRejections = !Double.isNaN(hourlyRejections) && hourlyRejections > 5;
             boolean manyPeers = observed > 500;
+            boolean deepQueue = !Double.isNaN(queueDepth) && queueDepth > 2000;
+
+            // Deep queue + headroom = increase cap to avoid throttling
+            if (deepQueue && !systemBusy && !highLoad && memPressure < 0.5)
+                return Math.min(_max, current + _step);
 
             // Rejections + headroom = increase queue
             if ((hasRejections || sustainedRejections) && !systemBusy && !highLoad)
@@ -6117,12 +6152,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = udp.allowConcurrentActive (avg concurrent messages per peer)
             // Cross-refs: udp.sendConfirmTime (RTT), tunnel.participating InBps (transit load),
-            //             udp.rejectConcurrentActive (rejection events), jobQueue.jobLag (CPU)
+            //             udp.rejectConcurrentActive (rejection events), jobQueue.jobLag (CPU),
+            //             udp.outboundQueueDepth (total outbound pressure)
             double rtt = getAdditionalStat(_context, "udp.sendConfirmTime");
             double transitBps = getAdditionalStat(_context, "tunnel.participating InBps");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double rejections = getAdditionalStat(_context, "udp.rejectConcurrentActive");
             double sendPoolUtil = getAdditionalStat(_context, "ntcp.sendPool utilization");
+            double queueDepth = getAdditionalStat(_context, "udp.outboundQueueDepth");
             double memPressure = getMemoryPressure();
             boolean cpuFree = jobLag < 5 || Double.isNaN(jobLag);
             boolean lowRTT = !Double.isNaN(rtt) && rtt < 200;
@@ -6132,12 +6169,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean heavyTransit = !Double.isNaN(transitBps) && transitBps > getHeavyTransitThreshold(_context);
             boolean hasRejections = !Double.isNaN(rejections) && rejections > 0;
             boolean poolFree = !Double.isNaN(sendPoolUtil) && sendPoolUtil < 30;
+            boolean deepQueue = !Double.isNaN(queueDepth) && queueDepth > 2000;
             boolean memOk = memPressure < 0.75;
             boolean memCritical = memPressure > 0.85;
 
             // Memory critical: shrink immediately regardless of other signals
             if (memCritical && current > _min)
                 return Math.max(_min, current - _step * 4);
+
+            // Deep queue + acceptable RTT + CPU free = grow aggressively to drain
+            if (deepQueue && moderateRTT && cpuFree && memOk)
+                return Math.min(_max, current + _step * 4);
 
             // Near capacity + low RTT + CPU free + memory OK = grow aggressively (4× step)
             if (nearCapacity && lowRTT && cpuFree && memOk)
