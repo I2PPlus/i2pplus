@@ -7245,18 +7245,32 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
     }
 
+    /**
+     * Minimum uptime (ms) before system health scoring begins.
+     * During this window, getScore() returns NaN (UI shows "not yet available")
+     * and subsystem rings show gray "collecting" per their own min-event checks.
+     */
+    private static final long STARTUP_GRACE_MS = 5 * 60 * 1000L;
+
     static class SystemHealth {
         private final RouterContext _ctx;
-        private double _score = 1.0;
+        private double _score = Double.NaN;
+        private final long _uptime;
 
         SystemHealth(RouterContext ctx) {
             _ctx = ctx;
+            _uptime = ctx.router().getUptime();
             compute();
         }
 
         double getScore() { return _score; }
 
         private void compute() {
+            // Defer assessment during startup — too few events = unreliable
+            if (_uptime < STARTUP_GRACE_MS) {
+                _score = Double.NaN;
+                return;
+            }
             double jobLagScore = scoreJobLag();
             double buildScore = scoreBuildSuccess();
             double sendFailScore = scoreSendFailure();
