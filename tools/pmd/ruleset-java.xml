@@ -86,6 +86,13 @@
         <exclude name="AvoidUnnecessaryStringBuilderCreation"/>
         <exclude name="AvoidConcatInAppend"/>
         <exclude name="ImproperVariableName"/>
+        <!-- CompareObjectsWithEquals: ~95% FP on enum/constant comparison patterns -->
+        <exclude name="CompareObjectsWithEquals"/>
+        <!-- CloseResource: ~95% false positives in this networking codebase
+             (socket streams, I2P streaming connections, NIO channels,
+              thread pool property reads, lifecycle-managed accept() handlers).
+             Keep the 10 genuine TWR fixes; suppress the noise. -->
+        <exclude name="CloseResource"/>
     </rule>
 
     <!-- Multithreading: only genuine bug risks, not style -->
@@ -121,6 +128,9 @@
         <exclude name="AvoidMultipleConcatStatements"/>
         <exclude name="AvoidLoadingAllFromFile"/>
         <exclude name="MissingFieldInEquals"/>
+        <!-- Equals/hashCode rules: excluded by user request (high noise, low signal) -->
+        <exclude name="ImplementEqualsHashCodeOnValueObjects"/>
+        <exclude name="FieldOfHashCodeMissingInEquals"/>
     </rule>
 
 </ruleset>

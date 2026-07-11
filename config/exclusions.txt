@@ -1,0 +1,77 @@
+# Report exclusions reference
+# ===========================
+# This file documents exclusions applied across all scanning platforms.
+# The actual exclusions are enforced in two places:
+#   1. tools/template/common.py  — EXCLUDED_RULES (CodeQL, SpotBugs) + EXCLUDE_PATTERNS (file paths)
+#   2. tools/pmd/ruleset-java.xml — PMD rule exclusions
+#
+# NOTE: This file is NOT read by any pipeline script. Update common.py and ruleset-java.xml instead.
+#
+# ── PMD (via tools/pmd/ruleset-java.xml) ─────────────────────────────────────
+# Security:                                        enabled (no exclusions)
+# Error Prone (excluded): EmptyCatchBlock, AvoidDuplicateLiterals,
+#   AvoidLiteralsInIfCondition, AssignmentInOperand, AvoidCatchingGenericException,
+#   NullAssignment, OneDeclarationPerLine, UnusedFormalParameter, UnusedAssignment,
+#   UnusedPrivateField, UnusedPrivateMethod, ForLoopVariableCount,
+#   AvoidReassigningLoopVariables, DoNotTerminateVM, DoNotCallGarbageCollectionExplicitly,
+#   MissingSerialVersionUID, AvoidFieldNameMatchingMethodName,
+#   ReturnEmptyCollectionRatherThanNull, ReplaceJavaUtilDate,
+#   AvoidImplicitlyRecompilingRegex, ConstructorCallsOverridableMethod,
+#   UseLocaleWithCaseConversions, AvoidUnnecessaryStringBuilderCreation,
+#   AvoidConcatInAppend, ImproperVariableName,
+#   CompareObjectsWithEquals,                     # enum/constant comparison FP
+#   CloseResource                                  # ~95% FP in networking code
+# Multithreading (excluded): AvoidSynchronizedStatement, AvoidSynchronizedAtMethodLevel,
+#   AvoidUsingVolatile, DoNotUseThreads, UseConcurrentHashMap, DontCallThreadRun
+# jPinpoint (excluded): AvoidTimeUnitConfusion, UsingSuppressWarnings,
+#   AvoidUnguardedAssignmentToNonFinalFields..., AvoidUnguardedMutableFields...,
+#   AvoidMutableStaticFields, AvoidConstantsInInterface, SynchronizingForLocalVars,
+#   UnresolvedType, AvoidIncrementOrDecrementForVolatileField, AvoidMutableLists,
+#   AvoidHardcodedConnectionConfig, AvoidDecimalAndChoiceFormatAsField,
+#   LetFieldsMeetSerializable, NonComparableMapKeys, NonComparableSetElements,
+#   AvoidFieldNameMatchingMethodName, MissingFieldInHashCode, LimitWildcardStaticImports,
+#   AvoidMultipleConcatStatements, AvoidLoadingAllFromFile, MissingFieldInEquals,
+#   ImplementEqualsHashCodeOnValueObjects,         # excluded by user request
+#   FieldOfHashCodeMissingInEquals                 # excluded by user request
+#
+# ── CodeQL (via tools/template/common.py EXCLUDED_RULES) ─────────────────────
+# java/missing-override-annotation
+# java/useless-null-check
+# java/unused-parameter
+# java/local-variable-is-never-read
+# java/deprecated-call
+# java/ignored-error-status-of-call
+# java/constant-comparison
+# java/unknown-javadoc-parameter
+# java/call-to-object-tostring
+# java/non-sync-override
+# java/misleading-indentation
+# java/missing-case-in-switch
+# java/sleep-with-lock-held
+# java/inconsistent-javadoc-throws                 # documentation only
+# java/confusing-method-signature                  # stylistic
+# java/confusing-method-name                       # stylistic
+# java/output-resource-leak                        # ~95% FP (overlaps PMD CloseResource)
+# java/input-resource-leak                         # ~95% FP (overlaps PMD CloseResource)
+# java/missing-space-in-concatenation              # cosmetic
+# java/chained-type-tests                           # style
+# java/class-name-matches-super-class              # style
+#
+# ── SpotBugs (via tools/template/common.py EXCLUDED_RULES) ───────────────────
+# DE_MIGHT_IGNORE
+# RV_RETURN_VALUE_IGNORED_BAD_PRACTICE
+# IS2_INCONSISTENT_SYNC
+# REC_CATCH_EXCEPTION
+# VA_FORMAT_STRING_USES_NEWLINE
+# SWL_SLEEP_WITH_LOCK_HELD
+#
+# ── File path exclusions (via tools/template/common.py EXCLUDE_PATTERNS) ──────
+# Third-party packages: org/cybergarage/, org/apache/, com/mpatric/,
+#   org/rrd4j/, org/bouncycastle/, io/pack200/, com/maxmind/, org/minidns/,
+#   com/southernstorm/, org/json/simple/, net/metanotion/,
+#   apps/imagegen/identicon/, apps/imagegen/zxing/,
+#   apps/i2psnark/java/src/com/mpatric/,
+#   apps/pack200/java/src/io/pack200/, apps/jrobin/java/src/org/rrd4j/,
+#   org/freenetproject/, freenet/, com/tomgibara/, com/google/zxing/,
+#   com/docuverse/, com/thetransactioncompany/, edu/internet2/, com/vuze/
+# Test/demo/temp files: /test/, /demo/, /tmp/, _jsp.java

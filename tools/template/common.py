@@ -60,6 +60,18 @@ EXCLUDED_RULES = [
     "java/misleading-indentation",
     "java/missing-case-in-switch",
     "java/sleep-with-lock-held",
+    # CodeQL: Documentation noise
+    "java/inconsistent-javadoc-throws",
+    "java/unknown-javadoc-parameter",
+    "java/confusing-method-signature",
+    "java/confusing-method-name",
+    # CodeQL: Resource leak - ~95% FP in networking code (overlaps PMD CloseResource)
+    "java/output-resource-leak",
+    "java/input-resource-leak",
+    # CodeQL: Cosmetic style issues
+    "java/missing-space-in-concatenation",
+    "java/chained-type-tests",
+    "java/class-name-matches-super-class",
     # SpotBugs: High noise, intentional patterns
     "DE_MIGHT_IGNORE",
     "RV_RETURN_VALUE_IGNORED_BAD_PRACTICE",
