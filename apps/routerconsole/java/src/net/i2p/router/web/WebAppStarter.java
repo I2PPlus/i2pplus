@@ -118,7 +118,6 @@ public class WebAppStarter {
                                    String appName, String warPath, String pluginName) throws Exception {
          File tmpdir = new SecureDirectory(ctx.getTempDir(), "jetty-work-" + appName + ctx.random().nextInt());
          WebAppContext wac = addWebApp(ctx, server, appName, warPath, tmpdir);
-         //_log.debug("Loading war from: " + warPath);
          LocaleWebAppHandler.setInitParams(wac, INIT_PARAMS);
          // save plugin name so WebAppConfiguration can find it
          if (pluginName != null)
@@ -180,7 +179,6 @@ public class WebAppStarter {
         // See AnnotationParser.isValidClassFileName()
         // Server must be at DEBUG level to see what's happening
         boolean scanAnnotations = HAS_ANNOTATION_CLASSES && !BUILTINS.contains(appName);
-        //System.out.println("Scanning " + appName + " for annotations? " + scanAnnotations);
         wac.setExtractWAR(scanAnnotations);
 
         // this does the passwords...

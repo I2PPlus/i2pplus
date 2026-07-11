@@ -194,7 +194,6 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
      */
     void receivePacket(RemoteHostId from, UDPPacket packet) {
         if (!from.equals(_remoteHostId) && _log.shouldWarn())
-            //_log.warn("Inbound packet from [" + from + "] from " + this);
             _log.warn("Dropping irregular packet from " + from + " -> Host/packet ID mimsmatch");
         DatagramPacket dpacket = packet.getPacket();
         byte[] data = dpacket.getData();
@@ -233,9 +232,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
             // We do not call get() or do a dup check at all, because
             // spec says a packet with termination may be retransmitted as-is
             // and we need to respond to it
-            //if (_receivedMessages.get(n)) {
             //    return;
-            //}
 
             int payloadLen = len - (SHORT_HEADER_SIZE + MAC_LEN);
             if (_log.shouldDebug())
@@ -418,8 +415,6 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         }
 
         public void timeReached() {
-            //if (_log.shouldDebug())
-            //    _log.debug("Done listening for " + PeerStateDestroyed.this);
             _ackTimer.cancel();
             _transport.removeRecentlyClosed(PeerStateDestroyed.this);
             _sendCha.destroy();

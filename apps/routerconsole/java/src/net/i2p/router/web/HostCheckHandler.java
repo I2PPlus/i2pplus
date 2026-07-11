@@ -159,7 +159,6 @@ public class HostCheckHandler extends GzipHandler
         // allow all IP addresses
         if (Addresses.isIPAddress(host))
             return true;
-        //System.out.println(host + " not found in " + s);
         return false;
     }
 

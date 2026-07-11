@@ -226,7 +226,6 @@ public class PeerHelper extends HelperBase {
                         totalBw[i] += bps;
                     }
                     buf.append("><span class=cnt>").append(cnt).append("</span>");
-                    //if (bps > 1024) {buf.append(bwCounter);}
                 }
 
                 int limit = TransportImpl.getTransportMaxConnections(_context, style);
@@ -257,7 +256,6 @@ public class PeerHelper extends HelperBase {
                 buf.append("</td><td");
                 if (cnt <= 0 && ((i & 0x01) == 0 || warnInbound)) {buf.append(" class=warn");}
                 buf.append("><span class=cnt>").append(cnt).append("</span>");
-                //if (bps > 1024) {buf.append(bwCounter);}
             }
 
             int totalConnections = 0;

@@ -172,8 +172,6 @@ class OutboundTunnelEndpoint {
                 }
             }
             // this overstates the stat somewhat, but ok for now
-            //for (int i = 0; i < kb; i++)
-            //    _config.incrementSentMessages();
             _outDistributor.distribute(msg, toRouter, toTunnel);
         }
     }

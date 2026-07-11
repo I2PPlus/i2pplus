@@ -321,7 +321,6 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         }
     }
 
-
 /*****
     public static I2NPMessage fromRawByteArray(I2PAppContext ctx, byte[] buffer, int offset, int len) throws I2NPMessageException {
         return fromRawByteArray(ctx, buffer, offset, len, new I2NPMessageHandler(ctx));
@@ -405,7 +404,6 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
                 return new DeliveryStatusMessage(context);
             // unused since forever (0.5?)
             //case DateMessage.MESSAGE_TYPE:
-            //    return new DateMessage(context);
             case GarlicMessage.MESSAGE_TYPE:
                 return new GarlicMessage(context);
             case TunnelDataMessage.MESSAGE_TYPE:

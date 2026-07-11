@@ -213,8 +213,6 @@ abstract class TunnelGateway {
             //long beforeLock = _context.clock().now();
             //long afterChecked = -1;
             long delayAmount = -1;
-            //if (_queue.size() > 10000) // stay out of the synchronized block
-            //    System.out.println("foo!");
             synchronized (_queue) {
                 if (!_queue.isEmpty()) {
                     wantRequeue = _preprocessor.preprocessQueue(_queue, _sender, _receiver);
@@ -230,7 +228,6 @@ abstract class TunnelGateway {
                 schedule(delayAmount);
             else
                 _lastFlush = _context.clock().now();
-
 
         }
     }

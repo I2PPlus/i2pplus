@@ -312,8 +312,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         }
         if (sess.getCurrentKey().equals(key)) {
             // logged in OutboundSession
-            //if (nxt != null && _log.shouldDebug())
-            //    _log.debug("OB Tag consumed: " + nxt + " with: " + key);
             return sess.consumeNext();
         }
         if (_log.shouldWarn())
@@ -492,7 +490,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                                    _rcvTagSetID.incrementAndGet());
         if (_log.shouldDebug()) {
             _log.debug("Received " + tagSet);
-            //_log.debug("Tags: " + DataHelper.toString(sessionTags));
         }
         TagSet old = null;
         SessionTag dupTag = null;
@@ -1121,12 +1118,10 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             _date = date;
             _id = id;
             _origSize = tags.size();
-            //if (true) {
             //    long now = I2PAppContext.getGlobalContext().clock().now();
             //    _createdBy = new Exception("Created by: key=" + _key.toBase64() + " on "
             //                               + new Date(now) + "/" + now
             //                               + " via " + Thread.currentThread().getName());
-            //}
         }
 
         /**
@@ -1143,7 +1138,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
         //void setDate(long when) {
         //    _date = when;
-        //}
 
         /** tags still available */
         public Set<SessionTag> getTags() {

@@ -125,7 +125,6 @@ public class TransportManager implements TransportEventListener {
     private static final String PROP_JAVA_PROXY3 = "http.proxyHost";
     private static final String PROP_JAVA_PROXY4 = "https.proxyHost";
 
-
     /** not forever, since they may update */
     private static final long SIGTYPE_BANLIST_DURATION = 36*60*60*1000L;
     private static final long UPNP_REFRESH_TIME = UPnP.LEASE_TIME_SECONDS * 1000L / 3;
@@ -566,7 +565,6 @@ public class TransportManager implements TransportEventListener {
         _transports.clear();
     }
 
-
     /**
      *  Cannot be restarted.
      *  @since 0.9
@@ -690,8 +688,6 @@ public class TransportManager implements TransportEventListener {
             if ((tempSkews == null) || (tempSkews.isEmpty())) continue;
             skews.addAll(tempSkews);
         }
-        //if (_log.shouldDebug())
-        //    _log.debug("Transport manager returning " + skews.size() + " peer clock skews.");
         return skews;
     }
 

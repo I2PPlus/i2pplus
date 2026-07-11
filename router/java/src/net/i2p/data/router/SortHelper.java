@@ -43,14 +43,6 @@ class SortHelper {
         // Note that the Base64 sort order is NOT the same as the raw byte sort order,
         // despite what you may read elsewhere.
 
-        //ArrayList<DataStructure> rv = new ArrayList(dataStructures.size());
-        //TreeMap<String, DataStructure> tm = new TreeMap();
-        //for (DataStructure struct : dataStructures) {
-        //    tm.put(struct.calculateHash().toString(), struct);
-        //}
-        //for (DataStructure struct : tm.values()) {
-        //    rv.add(struct);
-        //}
         ArrayList<T> rv = new ArrayList<>(dataStructures);
         sortStructureList(rv);
         return rv;

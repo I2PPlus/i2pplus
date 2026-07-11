@@ -127,7 +127,6 @@ public class GeoIPv6 {
         return rv;
     }
 
-
    /**
     * Read in and parse multiple IPv6 geoip CSV files,
     * merge them, and write out a gzipped binary IPv6 geoip file.
@@ -200,7 +199,6 @@ public class GeoIPv6 {
                 }
             } catch (IOException ioe) {
                 ioe.printStackTrace();
-                //    _log.error("Error reading the geoFile", ioe);
                 return false;
             }
         }
@@ -258,8 +256,6 @@ public class GeoIPv6 {
             System.err.println("Wrote " + entries.size() + " entries to " + outFile); // NOSONAR S106 CLI tool
         } catch (IOException ioe) {
             ioe.printStackTrace();
-            //if (_log.shouldError())
-            //    _log.error("Error reading the geoFile", ioe);
             return false;
         }
         return true;

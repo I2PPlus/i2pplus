@@ -116,8 +116,6 @@ public class SendGarlicJob extends JobImpl {
         msg.setOnReplyJob(_onReply);
         msg.setOnSendJob(_onSend);
         msg.setReplySelector(_replySelector);
-        // _log.info("Sending garlic message to [" + _config.getRecipient() + "] encrypted with " + _config.getRecipientPublicKey() + " or " + _config.getRecipient().getIdentity().getPublicKey());
-        // _log.debug("Garlic config data:\n" + _config);
         // msg.setTarget(_target);
         getContext().outNetMessagePool().add(msg);
         _log.debug("Garlic message added to outbound network message pool");

@@ -7,8 +7,6 @@
  * Licensed under the GPLv2 or later.
  */
 
-
-
 package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
 /**
@@ -33,7 +31,6 @@ JOptionPane
 		Object	wha,
 		String	str )
 	{
-		//System.out.println( "dialog: " + str );
 	}
 
 	public static void
@@ -43,7 +40,6 @@ JOptionPane
 		String	str2,
 		int		a )
 	{
-		//System.out.println( "dialog: " + str1 + "/" + str2 );
 	}
 
 }

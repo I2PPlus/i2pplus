@@ -103,7 +103,6 @@ public class ConfigLoggingHelper extends HelperBase {
             buf.append('>').append(_c(l)).append("</option>\n");
         }
 
-        //if (showRemove)
         //    buf.append("<option value=\"remove\">").append(_t("Remove")).append("</option>");
         buf.append("</select>\n");
     }

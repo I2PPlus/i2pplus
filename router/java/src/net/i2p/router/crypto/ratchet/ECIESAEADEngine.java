@@ -549,7 +549,6 @@ public final class ECIESAEADEngine {
         try {
             pattern = getNoisePattern(type);
             // Bob does not need a key factory
-            //state = new HandshakeState(pattern, HandshakeState.RESPONDER, _edhThread, getHybridKeyFactory(type));
             state = new HandshakeState(pattern, HandshakeState.RESPONDER, _edhThread);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn()) {
@@ -764,7 +763,6 @@ public final class ECIESAEADEngine {
 
         if (_log.shouldDebug()) {
             _log.debug("N decrypt success");
-            //_log.debug("State after decrypting NewSession: " + state);
         }
         state.destroy();
 
@@ -1099,7 +1097,6 @@ public final class ECIESAEADEngine {
             if (_log.shouldDebug())
                 _log.debug("Encrypting as Null \n* Target: " + target);
             // N-in-IK, unused
-            //return encryptNewSession(cloves, target, null, null, null, null);
             return encryptNewSession(cloves, target);
         }
         RatchetEntry re = keyManager.consumeNextAvailableTag(target);

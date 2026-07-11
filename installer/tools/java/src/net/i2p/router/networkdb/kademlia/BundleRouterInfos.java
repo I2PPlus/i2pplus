@@ -110,9 +110,7 @@ public class BundleRouterInfos {
             ri.readBytes(fis, true);  // true = verify sig on read
             me = ri.getIdentity().getHash();
         } catch (IOException e) {
-            //System.out.println("Can't determine our identity");
         } catch (DataFormatException e) {
-            //System.out.println("Can't determine our identity");
         } finally {
             if (fis != null) try { fis.close(); } catch (IOException ioe) {}
         }

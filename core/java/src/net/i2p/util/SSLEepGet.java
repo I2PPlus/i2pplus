@@ -1015,10 +1015,7 @@ public class SSLEepGet extends EepGet {
                 .append("\r\n");
         // TODO if we need extra headers to the proxy, add a new method and list.
         // Standard extra headers go the server, not the proxy
-        // if (_extraPHeaders != null) {
-        //    for (String hdr : _extraPHeaders) {
         //        buf.append(hdr).append("\r\n");
-        // }
         if (_authState != null && _authState.authMode != AUTH_MODE.NONE) {
             // TODO untested, is this right?
             buf.append("Proxy-Authorization: ");

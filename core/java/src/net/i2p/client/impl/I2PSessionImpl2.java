@@ -133,7 +133,6 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         }
     }
 
-
     protected long getTimeout() {return SEND_TIMEOUT;}
 
     @Override
@@ -260,7 +259,6 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size) throws I2PSessionException {
         // we don't do end-to-end crypto any more
-        //return sendMessage(dest, payload, offset, size, new SessionKey(), new HashSet(64), 0);
         return sendMessage(dest, payload, offset, size, null, null, 0);
     }
 

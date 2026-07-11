@@ -71,7 +71,6 @@ public class BandwidthLimiterIT {
             for (int i = 0; i < numBytes; i += numBytesPerWrite) {
                 int num = numBytesPerWrite;
                 if (numBytesPerWrite + i >= numBytes) num = numBytes - i;
-                // _log.info("** Writing " + num + " bytes starting at " + i);
                 out.write(source, 0, num);
             }
         } catch (IOException ioe) {
@@ -94,7 +93,6 @@ public class BandwidthLimiterIT {
             byte[] buf = new byte[numBytesPerRead];
             int read = 0;
             while ((read = in.read(buf)) != -1) {
-                // _log.info("** Read " + read + " bytes");
                 // gobble the data.  who cares
             }
         } catch (IOException ioe) {

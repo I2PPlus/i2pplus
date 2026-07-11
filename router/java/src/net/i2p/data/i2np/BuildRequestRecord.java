@@ -899,7 +899,6 @@ public class BuildRequestRecord {
             }
         }
         // to chase i2pd bug
-        //buf.append('\n').append(net.i2p.util.HexDump.dump(readReplyKey().getData()));
         return buf.toString();
     }
 

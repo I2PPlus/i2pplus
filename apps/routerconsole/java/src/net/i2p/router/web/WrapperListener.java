@@ -107,7 +107,6 @@ class WrapperListener {
                     log.log(Log.CRIT, "Hard shutdown initiated by SIGHUP");
                     // JVM will call ShutdownHook if we don't do it ourselves
                     //registerWrapperNotifier(_ctxt, Router.EXIT_HARD, false);
-                    //_ctxt.router().shutdown(Router.EXIT_HARD);
                 }
                 break;
             }

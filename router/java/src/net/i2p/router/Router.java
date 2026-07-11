@@ -353,7 +353,6 @@ public class Router implements RouterClock.ClockShiftListener {
                     System.err.println("       Make sure old instances are shut down before starting up a new one."); // NOSONAR
                     System.err.println("       If no other instance is running, delete: " + getPingFile().getAbsolutePath()); // NOSONAR
                     //System.exit(-1);
-                    // throw exception instead, for embedded
                     throw new IllegalStateException(
                                        "ERROR: There appears to be another router already running!" +
                                        " Make sure old instances are shut down before starting up a new one." +
@@ -1527,7 +1526,6 @@ public class Router implements RouterClock.ClockShiftListener {
         LinkedList<Thread> tasks = new LinkedList<>();
         StringBuilder sb = new StringBuilder();
         for (Runnable task : _context.getShutdownTasks()) {
-            //System.err.println("Running shutdown task " + task.getClass());
             if (_log.shouldWarn()) {_log.warn(sb.append("Running Shutdown Task ").append(task.getClass()).toString()); sb.setLength(0);}
             try {
                 Thread t = new I2PAppThread(task, sb.append("ShutdownTask ").append(task.getClass().getName()).toString());
@@ -1706,12 +1704,10 @@ public class Router implements RouterClock.ClockShiftListener {
         // Only do this on Android. On desktop, rogue threads
         // may create a new I2PAppContext before the JVM stops
         // if we delete this one.
-        //if (RouterContext.getContexts().isEmpty())
         if (SystemVersion.isAndroid()) {RouterContext.killGlobalContext();}
 
         // Since 0.8.8, for Android and the wrapper
         for (Runnable task : _context.getFinalShutdownTasks()) {
-            //System.err.println("Running final shutdown task " + task.getClass());
             try {task.run();}
             catch (Throwable t) {_log.warn(new StringBuilder(48).append("Running final shutdown task ").append(t).toString());}
         }

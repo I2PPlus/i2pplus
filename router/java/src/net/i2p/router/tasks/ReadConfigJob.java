@@ -90,7 +90,6 @@ public class ReadConfigJob extends JobImpl {
 
     private boolean shouldReread(File configFile) {
         // lastModified() returns 0 if not found
-        //if (!configFile.exists()) return false;
         return configFile.lastModified() > _lastRead;
     }
 }

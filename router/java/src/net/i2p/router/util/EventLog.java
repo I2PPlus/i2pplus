@@ -98,8 +98,6 @@ public class EventLog {
      *  @param file should be absolute
      */
     public EventLog(I2PAppContext ctx, File file) {
-        //if (!file.isAbsolute())
-        //    throw new IllegalArgumentException();
         _context = ctx;
         _file = file;
         _cache = new HashMap<>(4);

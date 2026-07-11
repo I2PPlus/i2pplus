@@ -71,7 +71,6 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
             ThreadInfo[] infos;
             try {
                 // java 10
-                //infos = mxb.getThreadInfo(ids, true, true, Integer.MAX_VALUE);
                 // java 6
                 infos = mxb.getThreadInfo(ids, true, true);
             } catch (UnsupportedOperationException e) {

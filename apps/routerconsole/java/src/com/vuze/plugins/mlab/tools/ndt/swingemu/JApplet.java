@@ -7,8 +7,6 @@
  * Licensed under the GPLv2 or later.
  */
 
-
-
 package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
 import java.net.URL;
@@ -49,7 +47,6 @@ public class JApplet extends JFrame{
 	showStatus(
 		String		str )
 	{
-		//System.out.println( "status: " + str );
 	}
 
 	public void

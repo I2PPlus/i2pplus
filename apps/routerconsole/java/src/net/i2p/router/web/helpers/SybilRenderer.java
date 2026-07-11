@@ -900,10 +900,8 @@ public class SybilRenderer {
                    .append(":</b> &nbsp;<wbr><a href=\"/netdb?fam=").append(ss).append("&amp;sybil\">").append(ss).append("</a></p>\n");
                 found = true;
             }
-            //for (RouterInfo info : ris) {
                 // limit display
                 //renderRouterInfo(buf, info, null, false, false);
-            //}
         }
         if (!found)
             buf.append("<p class=notfound>").append(_t("None")).append("</p>\n");

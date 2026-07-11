@@ -243,7 +243,6 @@ public class FragmentTest {
             if (ok) {
                 _received++;
             }
-            // _log.info("** equal? " + ok);
         }
 
         public boolean receivedOk() {

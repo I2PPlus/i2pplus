@@ -207,7 +207,6 @@ class FragmentHandler {
             // still trying to find root cause
             // let's limit the damage here and skip the:
             // .transport.udp.MessageReceiver: Error processing UDP message
-            //throw e;
             return false;
         } finally {
             // each of the FragmentedMessages populated make a copy out of the
@@ -477,7 +476,6 @@ class FragmentHandler {
         offset += size;
         return offset;
     }
-
 
     private void receiveComplete(FragmentedMessage msg) {
         if (msg == null)

@@ -1,14 +1,4 @@
-/*
- * Created on Nov 16, 2004
- * 
- *  This file is part of susimail project, see http://susi.i2p/
- *  
- *  Copyright (C) 2004-2005  <susi23@mail.i2p>
- *
- * Licensed under the GPLv2 or later.
- *  
- * $Revision: 1.3 $
- */
+// License: GPLv2+. See docs/LICENSES.md
 package i2p.susi.webmail.encoding;
 
 import i2p.susi.util.Buffer;

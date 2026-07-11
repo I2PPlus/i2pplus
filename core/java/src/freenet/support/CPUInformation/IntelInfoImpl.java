@@ -259,18 +259,6 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
                     // KVM bug?
                     // # cat /usr/share/kvm/cpus-x86_64.conf | grep 'name = "Nehalem"' -B 1 -A 12
                     // [cpudef]
-                    //    name = "Nehalem"
-                    //    level = "2"
-                    //    vendor = "GenuineIntel"
-                    //    family = "6"
-                    //    model = "2"
-                    //    stepping = "3"
-                    //    feature_edx = "sse2 sse fxsr mmx clflush pse36 pat cmov mca pge mtrr sep apic cx8 mce pae msr tsc pse de fpu"
-                    //    feature_ecx = "popcnt sse4.2 sse4.1 cx16 ssse3 sse3"
-                    //    extfeature_edx = "i64 syscall xd"
-                    //    extfeature_ecx = "lahf_lm"
-                    //    xlevel = "0x8000000A"
-                    //    model_id = "Intel Core i7 9xx (Nehalem Class Core i7)"
                     //case 2:
                         // ...
                     case 3:

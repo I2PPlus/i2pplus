@@ -251,13 +251,10 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, int proto, int fromPort, int toPort, SendMessageOptions options) throws I2PSessionException {
         payload = prepPayload(payload, offset, size, proto, fromPort, toPort, options.getGzip());
-        // if (_noEffort) {
         sendNoEffort(dest, payload, options);
         return true;
         // } else {
         // unimplemented
-        // return sendBestEffort(dest, payload, options);
-        // }
     }
 
     /**

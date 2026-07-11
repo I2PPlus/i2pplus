@@ -178,7 +178,6 @@ class PeerTestManager {
     // Preliminary
     private static final boolean ENABLE_SSU2_SYMNAT_TEST = true;
 
-
     /**
      *  Have seen peer tests (as Alice) get stuck (_currentTest != null)
      *  so I've thrown some synchronizization on the methods;
@@ -333,7 +332,6 @@ class PeerTestManager {
                         // received from Charlie, but no reply from Bob.  Send it to
                         // Bob again so he retransmits his reply.
                         // Bob handles dups / retx as of 0.9.57
-                        //if (state.getBob().getVersion() == 1)
                             sendTestToBob();
                         // TODO if version 1 and long enough, send msg 6 anyway
                         // For version 2, we can't send msg 6 without knowing charlie's intro key
@@ -548,10 +546,8 @@ class PeerTestManager {
 
         // Don't do this or we won't call honorStatus()
         // to set the status to UNKNOWN or REJECT_UNSOLICITED
-        // if (expired()) {
         //     _currentTest = null;
         //    return;
-        // }
 
         boolean isIPv6 = test.isIPv6();
         Status status;

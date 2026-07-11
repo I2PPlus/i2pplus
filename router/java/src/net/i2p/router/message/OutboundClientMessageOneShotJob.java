@@ -494,7 +494,6 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     Lease lease = _leaseSet.getLease(i);
                     // Don't use Lease.equals(), as that compares expiration time too,
                     // and that time may change in subsequent publication
-                    //if (_lease.equals(lease)) {
                     if (_lease.getTunnelId().equals(lease.getTunnelId()) &&
                         _lease.getGateway().equals(lease.getGateway())) {
                         if (_log.shouldInfo()) {_log.info("Lease for " + _toString + " found in cache");}
@@ -759,7 +758,6 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
 
         DispatchJob dispatchJob = new DispatchJob(msg, selector, onReply, onFail);
-        //if (false) // dispatch may take 100+ms, so toss it in its own job
         //    getContext().jobQueue().addJob(dispatchJob);
         //else
         dispatchJob.runJob();
@@ -945,7 +943,6 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     private TunnelInfo selectOutboundTunnel() {
         // hurts reliability? let's try picking at random again
         //Hash gw = _lease.getGateway();
-        //return getContext().tunnelManager().selectOutboundTunnel(_from.calculateHash(), gw);
         return getContext().tunnelManager().selectOutboundTunnel(_from.calculateHash());
     }
 

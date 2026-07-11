@@ -244,7 +244,6 @@ public abstract class TransportUtil {
             if (a0 == 0) return false;
             if (a0 == 10) return false;
             // 5/8 allocated to RIPE (30 November 2010)
-            //if ((addr[0]&0xFF) == 5) return false;  // Hamachi
             // Hamachi moved to 25/8 Nov. 2012
             // Assigned to UK Ministry of Defence
             // http://blog.logmein.com/products/changes-to-hamachi-on-november-19th

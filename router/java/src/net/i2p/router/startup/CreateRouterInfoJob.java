@@ -229,7 +229,6 @@ public class CreateRouterInfoJob extends JobImpl {
      *
      */
     static long getCurrentPublishDate(RouterContext context) {
-        //_log.info("Setting published date to /now/");
         return context.clock().now();
     }
 

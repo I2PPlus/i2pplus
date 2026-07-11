@@ -33,6 +33,9 @@ Public domain except as listed below:
 - **ElGamal and DSA code** — BSD-style. Copyright (c) 2003 TheCrypto.
 - **SNTP code** — BSD-style. Copyright (c) 2004 Adam Buckley.
 - **SSLEepGet (InstallCert)** — BSD-style. Copyright 2006 Sun Microsystems.
+- **Android array utilities (ratchet)** — Apache License 2.0. Copyright (C) 2006 The Android Open Source Project.
+- **CachedIteratorCollection** — GPLv2 with Classpath exception. Copyright (c) 1997, 2013, Oracle and/or its affiliates.
+- **Noise protocol (ML-KEM)** — MIT License. Copyright (C) 2016 Southern Storm Software, Pty Ltd.
 
 ## JAVA SERVICE WRAPPER
 
@@ -59,10 +62,13 @@ GPLv2. Copyright (C) 2009 Mathias De Maré.
 Apache v2.0. Copyright (c) 2011 hottuna (dev@robertfoss.se).
 
 **I2PTunnel**
-GPLv2+. Copyright (c) 2003-2004 mihi. With special exception for proprietary Java linking.
+GPLv2+. Copyright (c) 2003-2004 mihi, 2004 human (SOCKS). With special exception for proprietary Java linking.
 
 **Imagegen - Identicon**
 MIT License. Copyright (c) 2007-2014 Don Park. Contributor 2014 Paulo Miguel Almeida Rodenas.
+
+**SusiMail / SusiDNS**
+GPLv2+. Copyright (C) 2004-2005 susi23@mail.i2p.
 
 **Ministreaming Lib**
 The i2p/apps/ministreaming module is the root of the ministreaming library, and everything within it is released according to the terms of the I2P license policy. That means everything contained within the i2p/apps/ministreaming module is released under a BSD license unless otherwise marked. Alternate licenses that may be used include Cryptix, MIT, as well as code granted into the public domain.
@@ -97,6 +103,8 @@ The following components are in the public domain:
 This product includes software developed by the Eclipse Foundation (Jetty) under the Apache License 2.0 and Eclipse Public License 1.0.
 
 Eclipse Public License 1.0: Copyright (c) Eclipse Contributors. All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v. 2.0 which accompanies this distribution. A copy of the EPL 1.0 is available at https://www.eclipse.org/legal/epl-v20.html.
+
+Jetty is derived from code by Mort Bay Consulting Pty. Ltd. Copyright (c) 1995-2017 Mort Bay Consulting Pty. Ltd.
 
 ## APACHE TOMCAT
 

@@ -417,7 +417,6 @@ class RatchetTagSet implements TagSetHandle {
         } else if (tagnum > _lastKey) {
             // if there's any gaps, catch up and store
             for (int i = _lastKey + 1; i < tagnum; i++) {
-                //System.out.println("Fill in key gap at " + i);
                 _sessionKeys.append(i, consumeNextKey().getData());
             }
             SessionKeyAndNonce rv = consumeNextKey();
@@ -455,7 +454,6 @@ class RatchetTagSet implements TagSetHandle {
         int remaining = _lastTag - usedTagNumber;
         int toAdd = lookAhead - remaining;
         if (toAdd > 0) {
-            //System.out.println("Extending tags by " + toAdd);
             for (int i = 0; i < toAdd; i++) {
                 storeNextTag();
             }
@@ -698,7 +696,6 @@ class RatchetTagSet implements TagSetHandle {
             SessionKey key = rts.consume(tag);
             if (key != null) {
                 System.out.println(idx + "\t" + Base64.encode(tag.getData()) + '\t' + Base64.encode(key.getData()));
-                //System.out.println("Remaining tags: " + rts.getTags());
             } else {
                 System.out.println(idx + "\t" + Base64.encode(tag.getData()) + "\t NOT FOUND");
             }

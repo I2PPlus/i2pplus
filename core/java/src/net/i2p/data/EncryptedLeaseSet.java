@@ -135,7 +135,6 @@ public class EncryptedLeaseSet extends LeaseSet2 {
 
     @Override
     public int getType() {
-        // return type 3 before signing so inner signing works
         return (_signature != null) ? KEY_TYPE_ENCRYPTED_LS2 : KEY_TYPE_LS2;
     }
 

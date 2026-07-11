@@ -140,7 +140,6 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     @Override
     public boolean remove(T peer) {
         boolean rv = _entries.remove(peer);
-        // if (rv)
         //    setLastChanged();
         return rv;
     }

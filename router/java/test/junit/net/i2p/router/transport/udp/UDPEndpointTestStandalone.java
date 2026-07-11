@@ -139,7 +139,6 @@ public class UDPEndpointTestStandalone {
                                 try { Thread.sleep(3); } catch (InterruptedException ie) {}
                             }
                             //if (_log.shouldDebug())
-                            //    _log.debug("Sent to " + _endpoints[curPeer].getListenPort() + " from " + _endpoint.getListenPort());
                         }
                         _log.debug("Done sending packets");
                         for (int i = 0; i < 20; i++) {

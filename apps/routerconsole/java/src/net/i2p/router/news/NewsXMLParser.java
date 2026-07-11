@@ -518,8 +518,6 @@ public class NewsXMLParser {
      */
     private boolean validate(Node node) throws I2PParserException {
         String name = node.getName();
-        //if (_log.shouldDebug())
-        //    _log.debug("Validating element: " + name);
         if (!xhtmlWhitelist.contains(name.toLowerCase(Locale.US))) {
             switch (_mode) {
               case ABORT:

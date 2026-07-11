@@ -256,7 +256,6 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
             else if (startSize > (_minSize * 3 / 2) && _checkDelay < 60*1000L) {_checkDelay += 1000;}
             if (startSize < _minSize) {
                 // fill all the way up, do the check here so we don't
-                // throw away one when full in addValues()
                 while (getSize() < _maxSize && _isRunning) {
                     long curStart = System.currentTimeMillis();
                     if (!addKeys(precalc())) {break;}

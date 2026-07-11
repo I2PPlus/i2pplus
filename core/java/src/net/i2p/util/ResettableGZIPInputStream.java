@@ -108,7 +108,6 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
             // 1) Just because the lookahead stream has hit EOF doesn't mean
             //    that the inflater has given us all the data yet,
             //    this would cause data loss at the end
-            // if (_lookaheadStream.getEOFReached()) {
             if (inf.finished()) {
                 verifyFooter();
                 inf.reset(); // so it doesn't complain about missing data...
@@ -381,85 +380,4 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
         }
     }
 
-    /******
-     * public static void main(String[] args) {
-     *
-     * java.util.Random r = new java.util.Random();
-     * for (int i = 129; i < 64*1024; i+= 17) {
-     * byte[] b = new byte[i];
-     * r.nextBytes(b);
-     * if (!test(b)) return;
-     * }
-     *
-     * try {
-     * ResettableGZIPInputStream i = new ResettableGZIPInputStream();
-     * for (int k = 1; k < 1599; k++) {
-     * byte[] orig = new byte[k];
-     * r.nextBytes(orig);
-     * java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(k+100);
-     * java.util.zip.GZIPOutputStream o = new java.util.zip.GZIPOutputStream(baos);
-     * o.write(orig);
-     * o.finish();
-     * o.flush();
-     * o.close();
-     * byte[] compressed = baos.toByteArray();
-     *
-     * i.initialize(new java.io.ByteArrayInputStream(compressed));
-     * byte[] readBuf = new byte[k];
-     * int read = DataHelper.read(i, readBuf);
-     * if (read != orig.length)
-     * throw new RuntimeException("read=" + read + " expected " + orig.length);
-     * for (int j = 0; j < read; j++) {
-     * if (readBuf[j] != orig[j])
-     * throw new RuntimeException("j=" + j + " readBuf=" + readBuf[j] + " orig=" + orig[j]);
-     * }
-     * boolean ok = (-1 == i.read());
-     * if (!ok) throw new RuntimeException("not EOF after the data?");
-     * //System.out.println("Match ok");
-     * // try both closing and not
-     * if ((k % 2) != 0)
-     * i.close();
-     * }
-     * System.out.println("Match ok");
-     * } catch (Exception e) {
-     * e.printStackTrace();
-     * }
-     * }
-     *
-     * private static boolean test(byte[] b) {
-     * int size = b.length;
-     * try {
-     * java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(size);
-     * java.util.zip.GZIPOutputStream o = new java.util.zip.GZIPOutputStream(baos);
-     * o.write(b);
-     * o.finish();
-     * o.flush();
-     * byte[] compressed = baos.toByteArray();
-     *
-     * ResettableGZIPInputStream in = new ResettableGZIPInputStream(new java.io.ByteArrayInputStream(compressed));
-     * java.io.ByteArrayOutputStream baos2 = new java.io.ByteArrayOutputStream(size);
-     * byte[] rbuf = new byte[512];
-     * while (true) {
-     * int read = in.read(rbuf);
-     * if (read == -1)
-     * break;
-     * baos2.write(rbuf, 0, read);
-     * }
-     * byte[] rv = baos2.toByteArray();
-     * if (rv.length != b.length)
-     * throw new RuntimeException("read length: " + rv.length + " expected: " + b.length);
-     *
-     * if (!net.i2p.data.DataHelper.eq(rv, 0, b, 0, b.length)) {
-     * throw new RuntimeException("foo, read=" + rv.length);
-     * } else {
-     * //System.out.println("match, w00t @ " + size);
-     * return true;
-     * }
-     * } catch (Exception e) {
-     * System.out.println("Error dealing with size=" + size + ": " + e.getMessage());
-     * e.printStackTrace();
-     * return false;
-     * }
-     * }
-     ******/
 }

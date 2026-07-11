@@ -354,8 +354,6 @@ public class MessageHistory {
             buf.append("UNKNOWN");
         buf.append(": ").append(info);
         addEntry(buf.toString());
-        //if (_log.shouldError())
-        //    _log.error(buf.toString(), new Exception("source"));
     }
 
     /**
@@ -533,7 +531,6 @@ public class MessageHistory {
     }
     public void fragmentMessage(long messageId, int numFragments, int totalLength, List<Long> messageIds, String msg) {
         if (!_doLog) return;
-        //if (messageId == -1) throw new IllegalArgumentException("why are you -1?");
         StringBuilder buf = new StringBuilder(48);
         buf.append(getPrefix());
         buf.append("Break message ").append(messageId).append(" into fragments: ").append(numFragments);
@@ -545,7 +542,6 @@ public class MessageHistory {
     }
     public void fragmentMessage(long messageId, int numFragments, int totalLength, List<Long> messageIds, Object tunnel, String msg) {
         if (!_doLog) return;
-        //if (messageId == -1) throw new IllegalArgumentException("why are you -1?");
         StringBuilder buf = new StringBuilder(48);
         buf.append(getPrefix());
         buf.append("Break message ").append(messageId).append(" into fragments: ").append(numFragments);

@@ -275,44 +275,4 @@ public class ConsolePasswordManager extends RouterPasswordManager {
         return sb.toString();
     }
 
-/****
-    public static void main(String[] args) {
-        RouterContext ctx = (new Router()).getContext();
-        ConsolePasswordManager pm = new ConsolePasswordManager(ctx);
-        if (!pm.migrate())
-            System.out.println("Fail 1");
-        if (!pm.migrateConsole())
-            System.out.println("Fail 1a");
-
-        System.out.println("Test plain");
-        if (!pm.savePlain("type1", "user1", "pw1"))
-            System.out.println("Fail 2");
-        if (!pm.checkPlain("type1", "user1", "pw1"))
-            System.out.println("Fail 3");
-
-        System.out.println("Test B64");
-        if (!pm.saveB64("type2", "user2", "pw2"))
-            System.out.println("Fail 4");
-        if (!pm.checkB64("type2", "user2", "pw2"))
-            System.out.println("Fail 5");
-
-        System.out.println("Test MD5");
-        if (!pm.saveMD5("type3", "realm", "user3", "pw3"))
-            System.out.println("Fail 6");
-        if (!pm.checkMD5("type3", "realm", "user3", "pw3"))
-            System.out.println("Fail 7");
-
-        //System.out.println("Test crypt");
-        //if (!pm.saveCrypt("type4", "user4", "pw4"))
-        //    System.out.println("Fail 8");
-        //if (!pm.checkCrypt("type4", "user4", "pw4"))
-        //    System.out.println("Fail 9");
-
-        System.out.println("Test hash");
-        if (!pm.saveHash("type5", "user5", "pw5"))
-            System.out.println("Fail 10");
-        if (!pm.checkHash("type5", "user5", "pw5"))
-            System.out.println("Fail 11");
-    }
-****/
 }

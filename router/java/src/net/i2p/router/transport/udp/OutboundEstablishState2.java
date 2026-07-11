@@ -120,7 +120,6 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         INTRO_STATE_SUCCESS
     }
 
-
     /**
      *  Prepare to start a new handshake with the given peer.
      *
@@ -661,13 +660,9 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             throw new GeneralSecurityException("Connection ID mismatch -> 1: " + _sendConnID + " 2: " + sid);
 
         _handshakeState.mixHash(data, off, LONG_HEADER_SIZE);
-        //if (_log.shouldDebug())
-        //    _log.debug("[SSU] State after mixHash 2: " + _handshakeState);
 
         // decrypt in-place
         _handshakeState.readMessage(data, off + LONG_HEADER_SIZE, len - LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE);
-        //if (_log.shouldDebug())
-        //    _log.debug("[SSU] State after SessionCreate: " + _handshakeState);
         _timeReceived = 0;
         int overhead = LONG_HEADER_SIZE + KEY_LEN + MAC_LEN;
         switch (_version) {

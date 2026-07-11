@@ -727,8 +727,6 @@ public class NTCPConnection implements Closeable {
         }
 
         public void init() {
-            //unencryptedLength = 0;
-            //encrypted = null;
         }
     }
 

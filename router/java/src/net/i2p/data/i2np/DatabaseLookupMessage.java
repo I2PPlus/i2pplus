@@ -353,7 +353,6 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         //System.arraycopy(data, curIndex, keyData, 0, Hash.HASH_LENGTH);
         _key = Hash.create(data, curIndex);
         curIndex += Hash.HASH_LENGTH;
-        //_key = new Hash(keyData);
 
         //byte[] fromData = new byte[Hash.HASH_LENGTH];
         //System.arraycopy(data, curIndex, fromData, 0, Hash.HASH_LENGTH);

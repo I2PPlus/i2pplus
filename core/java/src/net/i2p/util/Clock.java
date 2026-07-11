@@ -210,7 +210,6 @@ public class Clock implements Timestamper.UpdateListener {
         long newTime = _offset + System.currentTimeMillis();
         if (newTime == _savedTime.getAndSet(newTime)) _frequency.incrementAndGet();
         else _frequency.decrementAndGet();
-        // _frequency.set(_frequency.Get() / 2); // alternate version
         // saves > 94% system calls at 200 calls / sec
         // negative clock shift avg < 0.06 ms at 200 calls / sec
         return newTime;

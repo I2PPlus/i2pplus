@@ -165,7 +165,6 @@ public final class Blinding {
         Hash salt = ctx.sha().calculateHash(in);
         hkdf.calculate(salt.getData(), data, INFO, out, out, 32);
         byte[] b = EdDSABlinding.reduce(out);
-        // log.debug("alpha (seed mod l):\n" + net.i2p.util.HexDump.dump(b));
         return new SigningPrivateKey(TYPER, b);
     }
 
@@ -303,47 +302,4 @@ public final class Blinding {
         System.out.println(decode(I2PAppContext.getGlobalContext(), args[0]).toString());
     }
 
-    /******
-     * public static void main(String[] args) throws Exception {
-     * net.i2p.data.SimpleDataStructure[] keys = KeyGenerator.getInstance().generateSigningKeys(TYPE);
-     * SigningPublicKey pub = (SigningPublicKey) keys[0];
-     * SigningPrivateKey priv = (SigningPrivateKey) keys[1];
-     * I2PAppContext ctx = I2PAppContext.getGlobalContext();
-     * //String b32 = encode(pub, null);
-     * String b32 = encode(pub, true, false);
-     * System.out.println("pub b32 is " + b32);
-     * BlindData bd = decode(ctx, b32);
-     * if (bd.getBlindedPubKey().equals(pub))
-     * System.out.println("B32 test failed");
-     * else
-     * System.out.println("B32 test passed");
-     * byte[] b = new byte[64];
-     * ctx.random().nextBytes(b);
-     * b = EdDSABlinding.reduce(b);
-     * SigningPrivateKey alpha = new SigningPrivateKey(TYPER, b);
-     * SigningPublicKey bpub = null;
-     * try {
-     * bpub = blind(pub, alpha);
-     * } catch (Exception e) {
-     * System.out.println("Blinding pubkey test failed");
-     * e.printStackTrace();
-     * }
-     * SigningPrivateKey bpriv = null;
-     * try {
-     * bpriv = blind(priv, alpha);
-     * } catch (Exception e) {
-     * System.out.println("Blinding privkey test failed");
-     * e.printStackTrace();
-     * }
-     * if (bpub != null && bpriv != null) {
-     * SigningPublicKey bpub2 = bpriv.toPublic();
-     * boolean ok = bpub2.equals(bpub);
-     * System.out.println("Blinding test passed?   " + ok);
-     * // unimplemented
-     * //SigningPrivateKey priv2 = unblind(bpriv, alpha);
-     * //ok = priv2.equals(priv);
-     * //System.out.println("Unblinding test passed? " + ok);
-     * }
-     * }
-     ******/
 }

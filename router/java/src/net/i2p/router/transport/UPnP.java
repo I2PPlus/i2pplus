@@ -565,7 +565,6 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			_otherUDNs.remove(udn);
 			if (_router == null) return;
 			// I2P this wasn't working
-			//if(_router.equals(dev)) {
 			String type = dev.getDeviceType();
 		        if ((ROUTER_DEVICE.equals(type) || ROUTER_DEVICE_2.equals(type)) &&
 			   dev.isRootDevice() &&
@@ -1349,7 +1348,6 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		    return false;
 		}
 
-
 		add.setArgumentValue("NewRemoteHost", "");
 		add.setArgumentValue("NewExternalPort", port);
 		// bugfix, see below for details
@@ -1741,9 +1739,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 				for(ForwardPort port: ports) {
                                         // Always add, since we now have a 3 hour lease duration,
                                         // so we have to keep refreshing the lease.
-					//if(portsToForward.contains(port)) {
 					// If not in portsForwarded, it wasn't successful, try again
-					//if(portsForwarded.contains(port)) {
 						// We have forwarded it, and it should be forwarded, cool.
 						// Big problem here, if firewall resets, we don't know it.
 						// Do we need to re-forward anyway? or poll the router?

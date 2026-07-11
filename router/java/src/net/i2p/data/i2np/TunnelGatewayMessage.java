@@ -135,9 +135,6 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
 
         // OLD WAY full message parsing and instantiation
         //handler.readMessage(data, curIndex);
-        //_msg = handler.lastRead();
-        //if (_msg == null)
-        //    throw new I2NPMessageException("impossible? message read has no payload?!");
 
         // NEW WAY save lots of effort at the IBGW by reading as an UnknownI2NPMessage instead
         // This will save a lot of object churn and processing,

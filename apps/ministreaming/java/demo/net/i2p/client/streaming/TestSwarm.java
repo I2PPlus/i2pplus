@@ -178,7 +178,6 @@ public class TestSwarm {
                         _context.statManager().addRateData("swarm." + _connectionId + ".totalSent", _totalSent, 0);
                         //try { Thread.sleep(100); } catch (InterruptedException ie) {}
                         long now = _context.clock().now();
-                        //_log.debug("Sending " + _connectionId + " after " + (now-lastSend));
                         lastSend = now;
                         //try { Thread.sleep(20); } catch (InterruptedException ie) {}
                     } else {
@@ -202,7 +201,6 @@ public class TestSwarm {
                         now = System.currentTimeMillis();
                         _totalReceived += read;
                         _context.statManager().addRateData("swarm." + getConnectionId() + ".totalReceived", _totalReceived, 0);
-                        //_log.debug("Receiving " + _connectionId + " with " + read + " after " + (now-lastRead));
                         lastRead = now;
                     }
                 } catch (Exception e) {

@@ -48,7 +48,6 @@ public class WebAppConfiguration implements Configuration {
      */
     private void configureClassPath(WebAppContext wac) throws Exception {
         String ctxPath = wac.getContextPath();
-        //System.err.println("Configure Class Path " + ctxPath);
         if (ctxPath.equals("/"))
             return;
         String appName = ctxPath.substring(1);
@@ -57,9 +56,6 @@ public class WebAppConfiguration implements Configuration {
         if (ctxPath.equals("/susimail")) {
             // allow certain Jetty classes, restricted as of Jetty 7
             // See http://wiki.eclipse.org/Jetty/Reference/Jetty_Classloading
-            //System.err.println("Allowing Jetty utils in classpath for " + appName);
-            //System.err.println("System classes before: " + Arrays.toString(wac.getSystemClasses()));
-            //System.err.println("Server classes before: " + Arrays.toString(wac.getServerClasses()));
             wac.addSystemClass("org.eclipse.jetty.http.");
             wac.addSystemClass("org.eclipse.jetty.io.");
             wac.addSystemClass("org.eclipse.jetty.util.");
@@ -75,8 +71,6 @@ public class WebAppConfiguration implements Configuration {
             classes.add("-org.eclipse.jetty.util.");
             classes.add("org.eclipse.jetty.");
             wac.setServerClasses(classes.toArray(new String[classes.size()]));
-            //System.err.println("System classes after:  " + Arrays.toString(wac.getSystemClasses()));
-            //System.err.println("Server classes after:  " + Arrays.toString(wac.getServerClasses()));
         }
 ****/
 
@@ -136,12 +130,10 @@ public class WebAppConfiguration implements Configuration {
             File jdir = jfile.getParentFile();
             if (systemCP.contains(jfile.toURI()) ||
                 (jdir != null && systemCP.contains(jdir.toURI()))) {
-                //System.err.println("Not adding " + path + " to classpath for " + appName + ", already in system classpath");
                 // Ticket #957... don't know why...
                 if (!ctxPath.equals("/susimail"))
                     continue;
             }
-            //System.err.println("Adding " + path + " to classpath for " + appName);
             buf.append(path);
         }
         if (buf.length() <= 0)

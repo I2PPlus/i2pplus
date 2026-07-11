@@ -124,7 +124,6 @@ public class EchoIT extends StreamingITBase {
                             buf = null;
                             break;
                         } else {
-                            // _log.debug("client read: " + ((char)c));
                             buf[j] = (byte) (c & 0xFF);
                         }
                     }

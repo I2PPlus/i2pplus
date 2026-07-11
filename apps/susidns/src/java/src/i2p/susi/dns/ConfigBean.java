@@ -1,11 +1,4 @@
-/*
- * This file is part of SusDNS project for I2P
- * Created on Sep 02, 2005
- * $Revision: 1.3 $
- * Copyright (C) 2005 <susi23@mail.i2p>
- * License: GPL2 or later
- */
-
+// License: GPLv2+. See docs/LICENSES.md
 package i2p.susi.dns;
 
 import java.io.ByteArrayInputStream;

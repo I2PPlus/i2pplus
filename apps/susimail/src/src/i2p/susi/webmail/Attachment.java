@@ -1,10 +1,4 @@
-/*
- * This file is part of SusiMail project for I2P
- * Created on 01.12.2004
- * $Revision: 1.4 $
- * Copyright (C) 2004-2005 <susi23@mail.i2p>
- * License: GPL2 or later
- */
+// License: GPLv2+. See docs/LICENSES.md
 package i2p.susi.webmail;
 
 import java.io.File;

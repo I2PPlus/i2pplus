@@ -493,7 +493,6 @@ public class EepGet {
         return name;
     }
 
-
 /* Blacklist borrowed from snark */
 
     private static final Pattern MULTI_SLASHES = Pattern.compile("/+");
@@ -507,7 +506,6 @@ public class EepGet {
    * Removes 'suspicious' characters from the given file name.
    * http://msdn.microsoft.com/en-us/library/aa365247%28VS.85%29.aspx
    */
-
 
     private static String sanitize(String name) {
         if (name.equals(".") || name.equals(" "))
@@ -1226,7 +1224,6 @@ public class EepGet {
         if (_log.shouldDebug())
             _log.debug("Done transferring " + _bytesTransferred + " (ok? " + !_transferFailed + ")");
 
-
         if (_transferFailed) {
             // 404, etc - transferFailed is called after all attempts fail, by fetch() above
             if (!_listeners.isEmpty()) {
@@ -1519,8 +1516,6 @@ public class EepGet {
         String len = buf.toString().trim();
         try {
             long bytes = Long.parseLong(len, 16);
-            //if (_log.shouldDebug())
-            //    _log.debug("Chunked length: " + bytes);
             return bytes;
         } catch (NumberFormatException nfe) {
             throw new IOException("Invalid chunk length [" + len + "]");
@@ -1627,7 +1622,6 @@ public class EepGet {
             // ignore the rest
         }
     }
-
 
     private static void increment(byte[] lookahead, int cur) {
         lookahead[0] = lookahead[1];
@@ -2297,7 +2291,6 @@ public class EepGet {
             rv.put(key, buf.toString().trim());
         return rv;
     }
-
 
     /**
      *  Authentication mode enumeration.

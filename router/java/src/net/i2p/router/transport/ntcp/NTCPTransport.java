@@ -158,7 +158,6 @@ public class NTCPTransport extends TransportImpl {
         "RouterInfo store fail"
     )));
 
-
     /**
      *  RI sigtypes supported in 0.9.16
      */
@@ -646,12 +645,8 @@ public class NTCPTransport extends TransportImpl {
         }
 
         if (!allowConnection()) {
-            //if (_log.shouldWarn())
-            //    _log.warn("no bid when trying to send to " + peer + ", max connection limit reached");
             return _transientFail;
         }
-
-        //if (_myAddress != null && _myAddress.equals(addr))
 
         if (haveCapacity()) {
             if (addr.getCost() > DEFAULT_COST)
@@ -684,7 +679,6 @@ public class NTCPTransport extends TransportImpl {
                 //_context.statManager().addRateData("ntcp.connectFailedInvalidPort", 1);
                 //_context.banlist().banlistRouter(toAddress.getIdentity().calculateHash(), "Invalid NTCP address", STYLE);
                 //if (_log.shouldDebug())
-                //    _log.debug("no bid when trying to send to " + peer + " as they don't have a valid ntcp address");
                 continue;
             }
             if (!isValid(ip)) {
@@ -1832,8 +1826,6 @@ public class NTCPTransport extends TransportImpl {
         }
         // would be nice to do this here but we can't easily get to the UDP transport.getRequested_Port()
         // from here, so we do it in TransportManager.
-        // if (Boolean.valueOf(_context.getProperty(CommSystemFacadeImpl.PROP_I2NP_NTCP_AUTO_PORT)).booleanValue())
-        //    return foo;
         return _context.getProperty(PROP_I2NP_NTCP_PORT, -1);
     }
 
@@ -1935,8 +1927,6 @@ public class NTCPTransport extends TransportImpl {
             return showFirewalled ? Status.IPV4_FIREWALLED_IPV6_OK : Status.IPV4_UNKNOWN_IPV6_OK;
         if (v4Disabled)
             return Status.IPV4_DISABLED_IPV6_UNKNOWN;
-        //if (v6Disabled)
-        //    return Status.UNKNOWN;
         return showFirewalled ? Status.REJECT_UNSOLICITED : Status.UNKNOWN;
     }
 

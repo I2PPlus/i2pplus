@@ -424,7 +424,6 @@ public class ConfigNetHandler extends FormHandler {
             } else if (fullRestartRequired) {
                 addFormNotice(_t("Restart required to take effect"), true);
             } else if (restartRequired) {
-              //if (_context.hasWrapper()) {
                 // Wow this dumps all conns immediately and really isn't nice
                 addFormNotice(_t("Performing a soft restart") + "...", true);
                 _context.router().restart();
@@ -444,7 +443,6 @@ public class ConfigNetHandler extends FormHandler {
                 // But it would be hard to get right, so just do a restart.
                 //addFormError(_t("Gracefully restarting I2P to change published router address"));
                 //_context.router().shutdownGracefully(Router.EXIT_GRACEFUL_RESTART);
-              //}
             }
         }
     }

@@ -75,7 +75,6 @@ public class LocaleWebAppHandler extends HandlerWrapper
             pathInContext += ".jsp";
         }
 
-        //System.err.println("Path: " + pathInContext);
         String newPath = pathInContext;
         // We only ended up doing this for help.jsp, so save some effort
         // unless we translate more pages like this
@@ -95,7 +94,6 @@ public class LocaleWebAppHandler extends HandlerWrapper
                         String servletPath = (String) servlet.getKey();
                         if (servletPath != null && !servletPath.startsWith("*")) {
                             // success!!
-                            //System.err.println("Servlet is: " + servletPath);
                             newPath = testPath;
                         }
                     }
@@ -108,9 +106,7 @@ public class LocaleWebAppHandler extends HandlerWrapper
             // war internal
             httpResponse.setCharacterEncoding("UTF-8");
         }
-        //System.err.println("New path: " + newPath);
         super.handle(newPath, baseRequest, httpRequest, httpResponse);
-        //System.err.println("Was handled? " + httpRequest.isHandled());
     }
 
     /**

@@ -54,7 +54,6 @@ class Zones {
      */
     public Zones(I2PAppContext ctx) {
         _context = ctx;
-        //_log = ctx.logManager().getLog(Zones.class);
         _countryToZone = new HashMap<>(256);
         _continentToZone = new HashMap<>(8);
         for (int i = 0; i < ZONES.length; i += 2) {
@@ -94,8 +93,6 @@ class Zones {
             geoFile = new File(_context.getBaseDir(), geoDir);
         geoFile = new File(geoFile, CONTINENT_FILE_DEFAULT);
         if (!geoFile.exists()) {
-            //if (_log.shouldWarn())
-            //    _log.warn("Continent file not found: " + geoFile.getAbsolutePath());
             return;
         }
         try (BufferedReader br = new BufferedReader(new InputStreamReader(
@@ -112,8 +109,6 @@ class Zones {
                         continue;
                     String lcCountry = s[0].toLowerCase(Locale.US).trim();
                     _countryToZone.put(lcCountry, zone);
-                    //if (_log.shouldDebug())
-                    //   _log.debug("Country " + lcCountry + " is in " + zone);
                 } catch (IndexOutOfBoundsException ioobe) { /* ignored */ }
             }
         } catch (IOException ioe) {

@@ -161,7 +161,6 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
                 _checkDelay += 1000;
             if (startSize < _minSize) {
                 // fill all the way up, do the check here so we don't
-                // throw away one when full in addValues()
                 while (getSize() < _maxSize && _isRunning) {
                     long curStart = System.currentTimeMillis();
                     if (!addKeys(precalc()))

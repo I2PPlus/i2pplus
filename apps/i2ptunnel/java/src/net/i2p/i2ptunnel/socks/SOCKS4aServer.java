@@ -1,8 +1,4 @@
-/* I2PSOCKSTunnel is released under the terms of the GNU GPL, with an additional exception.
- * For further details, see the licensing terms in I2PTunnel.java.
- *
- * Copyright (c) 2004 by human
- */
+// License: GPLv2+ with I2PTunnel exception. See I2PTunnel.java and docs/LICENSES.md
 package net.i2p.i2ptunnel.socks;
 
 import static net.i2p.socks.SOCKS4Constants.*;

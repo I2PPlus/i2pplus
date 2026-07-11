@@ -493,7 +493,6 @@ public class DecayingBloomFilter {
                 } while (!longs.add(Long.valueOf(rand)));
                 if (filter.add(rand)) {
                     falsePositives++;
-                    //System.out.println("False positive " + falsePositives + " (testByLong j=" + j + " i=" + i + ")");
                 }
             }
             totalTime += System.currentTimeMillis() - start;
@@ -524,7 +523,6 @@ public class DecayingBloomFilter {
             for (int i = 0; i < iv.length; i++) {
                 if (filter.add(iv[i])) {
                     falsePositives++;
-                    //System.out.println("False positive " + falsePositives + " (testByBytes j=" + j + " i=" + i + ")");
                 }
             }
             totalTime += System.currentTimeMillis() - start;
@@ -537,7 +535,6 @@ public class DecayingBloomFilter {
                            + DataHelper.formatDuration(totalTime/numRuns) + " per run, there were "
                            + falsePositives + " false positives (" +
                            (((double) falsePositives) / iv.length) + ')');
-        //System.out.println("inserted: " + bloom.size() + " with " + bloom.capacity()
         //                   + " (" + bloom.falsePositives()*100.0d + "% false positive)");
     }
 *****/

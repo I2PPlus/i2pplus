@@ -72,7 +72,6 @@ class LocalClientManager extends ClientManager {
                 int delay = latency;
                 if (jitter > 0) delay += (int) (jitter * _ctx.random().nextGaussian());
                 if (delay > 0) {
-                    // System.out.println("Message " + msgId + " DELAYED " + delay + " ms");
                     DelayedSend ds = new DelayedSend(_ctx, sender, runner, fromDest, toDest, payload, msgId, messageNonce);
                     ds.schedule(delay);
                     return;

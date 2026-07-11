@@ -1,5 +1,4 @@
 package net.i2p.util;
-// import com.github.emboss.siphash.*;
 
 import net.i2p.crypto.SipHashInline;
 

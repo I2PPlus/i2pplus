@@ -412,8 +412,6 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     public RatchetEntry consumeNextAvailableTag(PublicKey target) {
         OutboundSession sess = getSession(target);
         if (sess == null) {
-            //if (_log.shouldDebug())
-            //    _log.debug("No Outbound session to " + toString(target));
             return null;
         }
         RatchetEntry rv = sess.consumeNext();
@@ -570,8 +568,6 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         RatchetTagSet tagSet;
         tagSet = _inboundTagSets.remove(tag);
         if (tagSet == null) {
-            //if (_log.shouldDebug())
-            //    _log.debug("Inbound tag not found: " + tag.toBase64());
             return null;
         }
         boolean firstInbound;
@@ -1454,8 +1450,6 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                         // cancel all ratchet-layer acks
                         _ackTimer.cancel();
                         _ackTimer = null;
-                        //if (_log.shouldDebug())
-                        //    _log.debug("Cancelled the ack timer");
                     }
                     synchronized(_tagSet) {
                         // use even if expired, this will reset the expiration

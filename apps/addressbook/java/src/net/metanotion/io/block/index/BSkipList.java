@@ -116,7 +116,6 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 		int levelCount = bf.file.readInt();
                 // two byte spansize as of version 1.2, ignore for now
                 // int ss = bf.file.readUnsignedShort(); if (ss > 0) ...
-		//System.out.println(size + " " + spans); 
 
 		this.fileOnly = fileOnly;
 		if (fileOnly)

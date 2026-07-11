@@ -128,7 +128,6 @@ public class EchoLargeIT extends StreamingITBase {
                             buf = null;
                             break;
                         } else {
-                            // _log.debug("client read: " + ((char)c));
                             if (c < 0) c += 256;
                             rbuf[j] = (byte) (c & 0xFF);
                         }

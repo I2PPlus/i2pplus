@@ -293,9 +293,7 @@ class TunnelRenderer {
                     long recv = cfg.getReceiveTunnelId();
                     if (isAdvanced) {
                         //sb.append("<td class=\"cells limit\" data-sort=").append(cfg.getAllocatedBW()).append(">");
-                        //if (cfg.getAllocatedBW() > 0) {
                         //    sb.append("<span>").append(DataHelper.formatSize2Decimal(cfg.getAllocatedBW())).append("B/s").append("</span>");
-                        //}
                         //sb.append("</td>");
                         if (recv != 0) {
                             sb.append("<td title=\"").append(_t("Tunnel identity")).append("\"><span class=tunnel_id>")
@@ -869,7 +867,6 @@ class TunnelRenderer {
         return ins.getDestination().toBase32();
     }
 
-
     private void renderPool(Writer out, TunnelPool in, TunnelPool outPool) throws IOException {
         Comparator<TunnelInfo> comp = new TunnelInfoComparator();
         List<TunnelInfo> tunnels;
@@ -1158,7 +1155,6 @@ class TunnelRenderer {
 
         private CommSystemFacade comm;
     }
-
 
     /** @return cap char or '?' */
     private char getCapacity(Hash peer) {

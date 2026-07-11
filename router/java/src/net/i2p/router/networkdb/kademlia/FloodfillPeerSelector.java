@@ -581,14 +581,12 @@ class FloodfillPeerSelector extends PeerSelector {
     List<Hash> selectNearest(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets) {
         Hash rkey = _context.routingKeyGenerator().getRoutingKey(key);
         if (peersToIgnore != null && peersToIgnore.contains(Hash.FAKE_HASH)) {
-            // return non-ff
             peersToIgnore.addAll(selectFloodfillParticipants(peersToIgnore, kbuckets));
             // TODO this is very slow
             FloodfillSelectionCollector matches = new FloodfillSelectionCollector(rkey, peersToIgnore, maxNumRouters);
             kbuckets.getAll(matches);
             return matches.get(maxNumRouters);
         } else {
-            // return ff
             return selectFloodfillParticipantsIncludingUs(rkey, maxNumRouters, peersToIgnore, kbuckets);
         }
     }

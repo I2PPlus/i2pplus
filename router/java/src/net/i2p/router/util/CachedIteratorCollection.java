@@ -202,13 +202,11 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
                         // There are no more items, clear() the collection
                         nextCalled = false;
                         clear();
-                        //log.debug("CachedIteratorAbstractCollection: Element Removed");
                         return;
                     }
                 }
                 size--;
                 nextCalled = false;
-                //log.debug("CachedIteratorAbstractCollection: Element Removed");
             } else {
                 throw new IllegalStateException();
             }

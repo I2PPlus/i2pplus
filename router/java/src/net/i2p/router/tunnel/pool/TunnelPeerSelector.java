@@ -281,7 +281,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     protected boolean shouldSelectExplicit(TunnelPoolSettings settings) {
         if (settings.isExploratory()) return false;
         // To test IB or OB only
-        //if (!settings.isInbound()) return false;
         Properties opts = settings.getUnknownOptions();
         String peers = opts.getProperty("explicitPeers");
         if (peers == null)

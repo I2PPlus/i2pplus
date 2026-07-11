@@ -231,8 +231,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         super(localPort, ownDest, l, notifyThis, "HTTP Proxy on " + tunnel.listenHost + ':' + localPort, tunnel);
         _proxyNonce = Long.toString(_context.random().nextLong());
 
-        //proxyList = new ArrayList(); // We won't use outside of i2p
-
         if (wwwProxy != null) {
             StringTokenizer tok = new StringTokenizer(wwwProxy, ", ");
             while(tok.hasMoreTokens()) {

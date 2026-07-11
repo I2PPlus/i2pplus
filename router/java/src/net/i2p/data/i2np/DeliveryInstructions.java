@@ -319,14 +319,12 @@ public class DeliveryInstructions extends DataStructureImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
-        //buf.append("\n* Delivery Instructions: ");
         buf.append("\n* Delivery mode: ");
         switch (getDeliveryMode()) {
             case DELIVERY_MODE_LOCAL:
                 buf.append("Local");
                 break;
             case DELIVERY_MODE_DESTINATION:
-                //buf.append("Destination");
                 break;
             case DELIVERY_MODE_ROUTER:
                 buf.append("Router");

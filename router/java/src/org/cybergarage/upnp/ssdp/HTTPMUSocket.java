@@ -15,7 +15,6 @@ import java.nio.charset.StandardCharsets;
 import org.cybergarage.http.HTTPRequest;
 import org.cybergarage.upnp.UPnP;
 import org.cybergarage.util.Debug;
-// import org.cybergarage.android.MulticastSocket;
 
 /**
  * Multicast UDP socket implementation for SSDP communication.

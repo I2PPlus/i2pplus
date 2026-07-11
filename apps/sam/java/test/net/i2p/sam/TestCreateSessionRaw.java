@@ -62,14 +62,12 @@ public class TestCreateSessionRaw {
     }
 
     private static void testDest(String host, int port, String conOptions, String destName) {
-        // _log.info("\n\nTesting creating a new destination (should come back with 'SESSION STATUS RESULT=OK DESTINATION=someName)\n\n\n");
         try {
             Socket s = new Socket(host, port);
             OutputStream out = s.getOutputStream();
             out.write(DataHelper.getASCII("HELLO VERSION MIN=1.0 MAX=1.0\n"));
             BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream()));
             String line = reader.readLine();
-            // _log.debug("line read for valid version: " + line);
             String req = "SESSION CREATE STYLE=RAW DESTINATION=" + destName + " " + conOptions + "\n";
             out.write(DataHelper.getASCII(req));
             line = reader.readLine();

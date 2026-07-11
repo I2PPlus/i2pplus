@@ -434,7 +434,6 @@ public final class KeyStoreUtil {
                             byte[] h = md.digest(enc);
                             //    if (i < hex.length() - 2)
                             //        buf.append(':');
-                            // }
                             // info("hex is: " + buf);
                             if (_blacklist.contains(new SHA1Hash(h))) {
                                 toRemove.add(alias);
@@ -1320,8 +1319,6 @@ public final class KeyStoreUtil {
     private static void error(String msg, Throwable t) {
         log(I2PAppContext.getGlobalContext(), Log.ERROR, msg, t);
     }
-
-
 
     private static void log(I2PAppContext ctx, int level, String msg, Throwable t) {
         if (level >= Log.WARN && !ctx.isRouterContext()) {

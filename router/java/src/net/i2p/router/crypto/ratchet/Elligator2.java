@@ -302,7 +302,6 @@ class Elligator2 {
             a = new NativeBigInteger(a);
         BigInteger mp = a.modPow(divide_minus_p_1_2, p);
         // mp is either 1 or (p - 1) (0x7ffff...fffec)
-        //System.out.println("Legendre value: " + mp.toString(16));
         int cmp = mp.compareTo(BigInteger.ONE);
         if (cmp == 0)
             return 1;

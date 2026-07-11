@@ -169,7 +169,6 @@ public class RouterAppManager extends ClientAppManagerImpl {
             // Allow registration even if we didn't start it,
             // useful for plugins
             _log.info("Registering untracked client " + app.getName());
-            //return false;
         }
         if (_log.shouldInfo())
             _log.info("Client " + app.getDisplayName() + " REGISTERED AS " + app.getName());

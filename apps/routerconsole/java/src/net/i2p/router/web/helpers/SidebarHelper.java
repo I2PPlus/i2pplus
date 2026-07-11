@@ -262,7 +262,6 @@ public class SidebarHelper extends HelperBase {
 */
         // Warn based on actual skew from peers, not update status, so if we successfully offset
         // the clock, we don't complain.
-        //if (!_context.clock().getUpdatedSuccessfully())
         long skew = _context.commSystem().getFramedAveragePeerClockSkew(10);
         // Display the actual skew, not the offset
         if (Math.abs(skew) > 30*1000) {
@@ -295,7 +294,6 @@ public class SidebarHelper extends HelperBase {
                 if (ip == null) {
                     // Usually a transient issue during state transitions, possibly with hidden mod, don't show this
                     // NTCP2 addresses may not have an IP
-                    //return new NetworkStateMessage(NetworkState.ERROR, _t("Unresolved TCP Address"));
                     return new NetworkStateMessage(NetworkState.RUNNING, txstatus);
                 }
                 if (TransportUtil.isPubliclyRoutable(ip, true)) { // TODO set IPv6 arg based on configuration?
@@ -321,8 +319,6 @@ public class SidebarHelper extends HelperBase {
                 if ((_context.netDb()).floodfillEnabled()) {
                     return new NetworkStateMessage(NetworkState.WARN, _t("Firewalled &amp; Floodfill"));
                 }
-                //if (_context.router().getRouterInfo().getCapabilities().indexOf('O') >= 0)
-                //    return new NetworkStateMessage(NetworkState.WARN, _t("WARN-Firewalled and Fast"));
                 return new NetworkStateMessage(state, txstatus);
 
             case DISCONNECTED:

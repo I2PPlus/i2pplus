@@ -230,7 +230,6 @@ public class PluginStarter implements Runnable {
             if (log.shouldWarn())
                 log.warn("Updating plugin: " + appName);
             // non-blocking
-            // mgr.update(PLUGIN, appName, 30*60*1000); // 30 minutes sidebar notification persistence
             mgr.update(PLUGIN, appName, 3*(long) 60*1000); // 3 minutes sidebar notification persistence
             int loop = 0;
             do {
@@ -464,7 +463,6 @@ public class PluginStarter implements Runnable {
                     try {
                         String warName = files[i].getName();
                         warName = warName.substring(0, warName.lastIndexOf(".war"));
-                        //log.error("Found webapp: " + warName);
                         // check for duplicates in $I2P
                         if (Arrays.asList(STANDARD_WEBAPPS).contains(warName)) {
                             log.error("Skipping duplicate webapp " + warName + " in plugin " + appName);
@@ -597,7 +595,6 @@ public class PluginStarter implements Runnable {
 
         // stop console webapps in console/webapps
         //ContextHandlerCollection server = WebAppStarter.getConsoleServer();
-        //if (server != null) {
         /*
             File consoleDir = new File(pluginDir, "console");
             Properties props = RouterConsoleRunner.webAppProperties(consoleDir.getAbsolutePath());
@@ -1068,9 +1065,6 @@ public class PluginStarter implements Runnable {
             log.debug("[" + pluginName + "] - Threads running? " + isClientThreadRunning + "; WebApp running? " + isWarRunning + "; Jobs running? " + isJobRunning + "; process running? " + isProcessRunning);
         return isClientThreadRunning || isWarRunning || isJobRunning || isProcessRunning;
         //
-        //if (log.shouldDebug())
-        //    log.debug("plugin name = <" + pluginName + ">; threads running? " + isClientThreadRunning(pluginName) + "; webapp running? " + WebAppStarter.isWebAppRunning(pluginName) + "; jobs running? " + isJobRunning);
-        //return isClientThreadRunning(pluginName) || WebAppStarter.isWebAppRunning(pluginName) || isJobRunning;
         //
     }
 

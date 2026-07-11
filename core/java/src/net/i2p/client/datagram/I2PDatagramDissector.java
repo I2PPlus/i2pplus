@@ -98,13 +98,10 @@ public final class I2PDatagramDissector {
         } catch (IOException e) {
             // let the application do the logging
             // Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PDatagramDissector.class);
-            // log.error("Error loading datagram", e);
             throw new DataFormatException("Error loading datagram", e);
             //    Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PDatagramDissector.class);
-            //    log.error("Assertion failed!", e);
         }
 
-        // _log.debug("Datagram payload size: " + rxPayloadLen + "; content:\n"
         //           + HexDump.dump(rxPayload, 0, rxPayloadLen));
     }
 

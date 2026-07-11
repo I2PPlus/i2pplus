@@ -1082,7 +1082,6 @@ public class RouterConsoleRunner implements RouterApp {
         try {
             DataHelper.loadProps(rv, cfgFile);
         } catch (IOException ioe) {
-            // _log.warn("Error loading the client app properties from " + cfgFile.getName(), ioe);
         }
 
         return rv;
@@ -1096,7 +1095,6 @@ public class RouterConsoleRunner implements RouterApp {
         try {
             DataHelper.storeProps(props, cfgFile);
         } catch (IOException ioe) {
-            // _log.warn("Error loading the client app properties from " + cfgFile.getName(), ioe);
         }
     }
 
