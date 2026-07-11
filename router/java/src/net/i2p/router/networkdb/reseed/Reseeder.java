@@ -871,7 +871,7 @@ public class Reseeder {
                 if (type != SU3File.CONTENT_RESEED) {throw new IOException("Bad content type (" + type + ")");}
                 String version = su3.getVersionString();
                 try {
-                    Long ver = Long.parseLong(version.trim());
+                    long ver = Long.parseLong(version.trim());
                     if (ver >= 1400000000L) {
                         // Preliminary code was using "3"
                         // New format is date +%s

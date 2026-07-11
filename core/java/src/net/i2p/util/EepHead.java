@@ -149,7 +149,7 @@ public class EepHead extends EepGet {
             String cl = String.valueOf(get.getContentLength());
             String xf = get.getXframeOptions();
             String cto = get.getXContentTypeOptions();
-            String st = get.getStatus().toString();
+            String st = get.getStatus();
             if (x != null) {
                 System.out.println(" • Server: " + x);
             } else if (cc != null

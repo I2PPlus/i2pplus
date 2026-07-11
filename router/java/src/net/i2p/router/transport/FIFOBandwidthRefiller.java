@@ -186,14 +186,14 @@ public class FIFOBandwidthRefiller implements Runnable {
         if (numMs >= _replenishFrequency * 50 || numMs <= 0)
             numMs = _replenishFrequency;
         if (numMs >= _replenishFrequency) {
-            long inboundToAdd = (1024*_inboundKBytesPerSecond * numMs)/1000;
-            long outboundToAdd = (1024*_outboundKBytesPerSecond * numMs)/1000;
+            long inboundToAdd = ((long) 1024 * _inboundKBytesPerSecond * numMs)/1000;
+            long outboundToAdd = ((long) 1024 * _outboundKBytesPerSecond * numMs)/1000;
 
             if (inboundToAdd < 0) inboundToAdd = 0;
             if (outboundToAdd < 0) outboundToAdd = 0;
 
-            long maxBurstIn = ((_inboundBurstKBytesPerSecond-_inboundKBytesPerSecond)*1024*numMs)/1000;
-            long maxBurstOut = ((_outboundBurstKBytesPerSecond-_outboundKBytesPerSecond)*1024*numMs)/1000;
+            long maxBurstIn = ((long) (_inboundBurstKBytesPerSecond-_inboundKBytesPerSecond) * 1024 * numMs)/1000;
+            long maxBurstOut = ((long) (_outboundBurstKBytesPerSecond-_outboundKBytesPerSecond) * 1024 * numMs)/1000;
             _limiter.refillBandwidthQueues(buffer, inboundToAdd, outboundToAdd, maxBurstIn, maxBurstOut);
 
             return true;

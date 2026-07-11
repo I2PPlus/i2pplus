@@ -140,8 +140,8 @@ class FloodfillMonitorJob extends JobImpl {
         }
 
         // need both transports
-        Boolean ntcpEnabled = TransportManager.isNTCPEnabled(getContext());
-        Boolean udpEnabled = getContext().getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP);
+        boolean ntcpEnabled = TransportManager.isNTCPEnabled(getContext());
+        boolean udpEnabled = getContext().getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP);
         if (!ntcpEnabled || !udpEnabled) {
             if (autoff && _log.shouldInfo()) {
                 _log.info("Either NTCP or SSU transports are disabled - not automatically enrolling as floodfill");

@@ -40,7 +40,7 @@ public class Restarter implements Runnable {
      */
     @Override
     public void run() {
-        Long start = System.currentTimeMillis();
+        long start = System.currentTimeMillis();
         _context.router().eventLog().addEvent(EventLog.SOFT_RESTART);
         Log log = _context.logManager().getLog(Router.class);
         log.warn("Performing a soft restart...");

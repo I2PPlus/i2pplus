@@ -725,7 +725,7 @@ public class TunnelDispatcher implements Service {
     public void dispatch(TunnelDataMessage msg, Hash recvFrom) {
         byte[] data = msg.getData();
         if (data != null && shouldDropParticipatingInboundMessage(Location.PARTICIPANT, TunnelDataMessage.MESSAGE_TYPE, data.length, null)) {
-            _context.statManager().addRateData("tunnel.participatingInBps", data.length * 1024 / 1, 0);
+            _context.statManager().addRateData("tunnel.participatingInBps", (long) data.length * 1024 / 1, 0);
             return;
         }
         TunnelParticipant participant = _participants.get(msg.getTunnelIdObj());

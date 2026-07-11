@@ -46,12 +46,12 @@ class AccessCounter {
         if (accesses.size() < threshold.getConnections())
             return false;
 
-        long ignoreOlder = now - threshold.getSeconds() * 1000;
+        long ignoreOlder = now - (long) threshold.getSeconds() * 1000;
         for (int i = 0; i <= accesses.size() - threshold.getConnections(); i++) {
             long start = accesses.get(i);
             if (start < ignoreOlder)
                 continue;
-            long end = start + threshold.getSeconds() * 1000;
+            long end = start + (long) threshold.getSeconds() * 1000;
             if (accesses.get(i + threshold.getConnections() -1) <= end)
                 return true;
         }

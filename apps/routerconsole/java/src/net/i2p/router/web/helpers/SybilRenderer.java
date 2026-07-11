@@ -364,7 +364,7 @@ public class SybilRenderer {
            .append(":</b>\n").append("<select name=runFrequency>\n");
         for (int i = 0; i < HOURS.length; i++) {
             buf.append("<option value=\"").append(HOURS[i]).append('"');
-            long time = HOURS[i] * 60*60*1000L;
+            long time = (long) HOURS[i] * 60*60*1000L;
             if (time == freq)
                 buf.append(HelperBase.SELECTED);
             buf.append('>');

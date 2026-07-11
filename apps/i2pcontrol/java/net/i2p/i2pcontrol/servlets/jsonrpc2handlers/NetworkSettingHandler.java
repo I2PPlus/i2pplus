@@ -242,7 +242,7 @@ public class NetworkSettingHandler implements RequestHandler {
             String oldShare = _context.router().getConfigSetting(Router.PROP_BANDWIDTH_SHARE_PERCENTAGE);
             if ((inParam = (String) inParams.get("i2p.router.net.bw.share")) != null) {
                 if (oldShare == null || !oldShare.equals(inParam.trim())) {
-                    Integer percent;
+                    int percent;
                     try {
                         percent = Integer.parseInt(inParam);
                         if (percent < 0 || percent > 100 || inParam.isEmpty()) {
@@ -265,7 +265,7 @@ public class NetworkSettingHandler implements RequestHandler {
         if (inParams.containsKey("i2p.router.net.bw.in")) {
             String oldBWIn = _context.getProperty(FIFOBandwidthRefiller.PROP_INBOUND_BANDWIDTH);
             if ((inParam = (String) inParams.get("i2p.router.net.bw.in")) != null) {
-                Integer rate;
+                int rate;
                 try {
                     rate = Integer.parseInt(inParam);
                     if (rate < 0 || inParam.isEmpty()) {
@@ -277,13 +277,13 @@ public class NetworkSettingHandler implements RequestHandler {
                                                  "\"i2p.router.net.bw.in\" A positive integer must supplied, " + inParam + " isn't valid"),
                                req.getID());
                 }
-                Integer burstRate = (rate * BW_BURST_PCT) / 100;
-                Integer burstSize = (burstRate * BW_BURST_TIME);
-                if (oldBWIn == null || !oldBWIn.equals(rate.toString())) {
+                int burstRate = (rate * BW_BURST_PCT) / 100;
+                int burstSize = (burstRate * BW_BURST_TIME);
+                if (oldBWIn == null || !oldBWIn.equals(Integer.toString(rate))) {
                     Map<String, String> config = new HashMap<>();
-                    config.put(FIFOBandwidthRefiller.PROP_INBOUND_BANDWIDTH, rate.toString());
-                    config.put(FIFOBandwidthRefiller.PROP_INBOUND_BURST_BANDWIDTH, burstRate.toString());
-                    config.put(FIFOBandwidthRefiller.PROP_INBOUND_BANDWIDTH_PEAK, burstSize.toString());
+                    config.put(FIFOBandwidthRefiller.PROP_INBOUND_BANDWIDTH, Integer.toString(rate));
+                    config.put(FIFOBandwidthRefiller.PROP_INBOUND_BURST_BANDWIDTH, Integer.toString(burstRate));
+                    config.put(FIFOBandwidthRefiller.PROP_INBOUND_BANDWIDTH_PEAK, Integer.toString(burstSize));
                     _context.router().saveConfig(config, null);
                     _context.bandwidthLimiter().reinitialize();
                 }
@@ -295,7 +295,7 @@ public class NetworkSettingHandler implements RequestHandler {
         if (inParams.containsKey("i2p.router.net.bw.out")) {
             String oldBWOut = _context.getProperty(FIFOBandwidthRefiller.PROP_OUTBOUND_BANDWIDTH);
             if ((inParam = (String) inParams.get("i2p.router.net.bw.out")) != null) {
-                Integer rate;
+                int rate;
                 try {
                     rate = Integer.parseInt(inParam);
                     if (rate < 0 || inParam.isEmpty())
@@ -306,13 +306,13 @@ public class NetworkSettingHandler implements RequestHandler {
                                                  "\"i2p.router.net.bw.out\" A positive integer must supplied, " + inParam + " isn't valid"),
                                req.getID());
                 }
-                Integer burstRate = (rate * BW_BURST_PCT) / 100;
-                Integer burstSize = (burstRate * BW_BURST_TIME);
-                if (oldBWOut == null || !oldBWOut.equals(rate.toString())) {
+                int burstRate = (rate * BW_BURST_PCT) / 100;
+                int burstSize = (burstRate * BW_BURST_TIME);
+                if (oldBWOut == null || !oldBWOut.equals(Integer.toString(rate))) {
                     Map<String, String> config = new HashMap<>();
-                    config.put(FIFOBandwidthRefiller.PROP_OUTBOUND_BANDWIDTH, rate.toString());
-                    config.put(FIFOBandwidthRefiller.PROP_OUTBOUND_BURST_BANDWIDTH, burstRate.toString());
-                    config.put(FIFOBandwidthRefiller.PROP_OUTBOUND_BANDWIDTH_PEAK, burstSize.toString());
+                    config.put(FIFOBandwidthRefiller.PROP_OUTBOUND_BANDWIDTH, Integer.toString(rate));
+                    config.put(FIFOBandwidthRefiller.PROP_OUTBOUND_BURST_BANDWIDTH, Integer.toString(burstRate));
+                    config.put(FIFOBandwidthRefiller.PROP_OUTBOUND_BANDWIDTH_PEAK, Integer.toString(burstSize));
                     _context.router().saveConfig(config, null);
                     _context.bandwidthLimiter().reinitialize();
                 }

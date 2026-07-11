@@ -167,8 +167,8 @@ public class InfoHelper extends HelperBase {
         String slash = System.getProperty("file.separator");
         String appDir = _context.getProperty("i2p.dir.base") + slash;
         String configDir = _context.getProperty("i2p.dir.config") + slash;
-        Boolean isAdvanced = _context.getBooleanProperty("routerconsole.advanced");
-        Boolean rdnsEnabled = _context.getBooleanProperty("routerconsole.enableReverseLookups");
+        boolean isAdvanced = _context.getBooleanProperty("routerconsole.advanced");
+        boolean rdnsEnabled = _context.getBooleanProperty("routerconsole.enableReverseLookups");
         String congestionCap = ri.getCongestionCap();
 
         // basic router information
@@ -226,7 +226,7 @@ public class InfoHelper extends HelperBase {
         if (firstInstalled() != null && firstVersion() != null && lastUpdated() != null) {
             buf.append("<tr><td><b>").append(_t("Installed")).append(":</b></td><td>").append(installDate).append(" (")
                .append(firstVersion()).append(")").append(" &ensp;<span class=nowrap><b>").append(_t("Location")).append(":</b> ")
-               .append(appDir.toString()).append("</span>").append(" &ensp;<span class=nowrap><b>").append(_t("Config Dir"))
+               .append(appDir).append("</span>").append(" &ensp;<span class=nowrap><b>").append(_t("Config Dir"))
                .append(":</b> ").append(configDir).append("</span></td></tr>\n")
                .append("<tr><td><b>").append(_t("Updated")).append(":</b></td><td>").append(lastUpdate);
             if (updatePolicy() != null) {

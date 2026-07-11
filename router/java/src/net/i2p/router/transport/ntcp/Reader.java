@@ -120,7 +120,7 @@ public class Reader {
                 already = true;
             } else {
                 _pendingConnections.add(con);
-                _pendingConnections.notify();
+                _pendingConnections.notifyAll();
             }
         }
         if (_log.shouldDebug())

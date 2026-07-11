@@ -228,8 +228,8 @@ public class BuildExecutor implements Runnable {
         if (total > 0) {
             int rate = (success * 100) / total;
             sm.addRateData("tunnel.buildSuccessRate", rate, 0);
-            sm.addRateData("tunnel.buildFailureRate", (failure * 100) / total, 0);
-            sm.addRateData("tunnel.buildTimeoutRate", (timeout * 100) / total, 0);
+            sm.addRateData("tunnel.buildFailureRate", ((long) failure * 100) / total, 0);
+            sm.addRateData("tunnel.buildTimeoutRate", ((long) timeout * 100) / total, 0);
         }
         // Every 50 builds, recalculate adaptive timeout
         if (total >= 50) {
@@ -333,7 +333,7 @@ public class BuildExecutor implements Runnable {
         // Adjust timeout based on tunnel length
         int length = cfg.getLength();
         if (length > 3) {
-            baseTimeout += (length - 3) * 5*1000L;
+            baseTimeout += (long) (length - 3) * 5*1000L;
         }
 
         // Adjust based on system load

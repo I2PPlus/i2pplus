@@ -1286,7 +1286,7 @@ public class TestJob extends JobImpl {
             }
         } else {
             // Normal retest: ensure tunnel will live long enough for the test
-            if (_cfg.getExpiration() > ctx.clock().now() + delay + (3 * getTestPeriod())) {
+            if (_cfg.getExpiration() > ctx.clock().now() + delay + ((long) 3 * getTestPeriod())) {
                 getTiming().setStartAfter(ctx.clock().now() + delay);
                 ctx.jobQueue().addJob(this);
                 return true;

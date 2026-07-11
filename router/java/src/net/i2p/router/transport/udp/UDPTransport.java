@@ -3497,7 +3497,7 @@ public class UDPTransport extends TransportImpl {
                                   _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
                                   _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
                                   _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
-        if (weAreFirewalled) {maxConn *= 2.5;} // Increase from 1.5x to 2.5x for firewalled routers
+        if (weAreFirewalled) {maxConn = (int) (maxConn * 2.5);} // Increase from 1.5x to 2.5x for firewalled routers
         return _peersByIdent.size() < maxConn;
     }
 

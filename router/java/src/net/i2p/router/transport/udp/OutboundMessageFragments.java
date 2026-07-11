@@ -285,7 +285,7 @@ class OutboundMessageFragments {
      */
     void nudge() {
         synchronized (_waitLock) {
-            _waitLock.notify();
+            _waitLock.notifyAll();
         }
     }
 

@@ -99,7 +99,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         _executor = new BuildExecutor(ctx, this, _ghostPeerManager);
         _handler = new BuildHandler(ctx, this, _executor);
         _handlerThreads = new CopyOnWriteArrayList<>();
-        Boolean isSlow = SystemVersion.isSlow();
+        boolean isSlow = SystemVersion.isSlow();
         int numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", isSlow ? 2 : 4);
         setBuildHandlerThreads(numHandlerThreads);
 

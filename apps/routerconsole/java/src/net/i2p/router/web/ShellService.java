@@ -211,7 +211,7 @@ public class ShellService implements ClientApp {
         }
         if (_p.isAlive())
             changeState(ClientAppState.RUNNING, "ShellService: " + getName() + " started");
-        Boolean reg = _cmgr.register(this);
+        boolean reg = _cmgr.register(this);
         if (reg) {
             if (_log.shouldDebug())
                 _log.debug("ShellService: " + getName() + " registered with the router");

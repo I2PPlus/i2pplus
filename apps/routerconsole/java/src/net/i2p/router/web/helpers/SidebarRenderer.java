@@ -1305,7 +1305,7 @@ class SidebarRenderer {
             }
 
             if ((maxTunnels == null || Integer.parseInt(maxTunnels) > 0) && !_context.router().isHidden() && ri != null &&
-                 !ri.getBandwidthTier().equals("K") && !_helper.getShareRatio().toString().equals("0")) {
+                 !ri.getBandwidthTier().equals("K") && !"0".equals(_helper.getShareRatio())) {
                 buf.append("<tr title=\"")
                    .append(_t("The ratio of tunnel hops we provide to tunnel hops we use - a value greater than 1.00 indicates a positive contribution to the network"))
                    .append("\"><td><b>")

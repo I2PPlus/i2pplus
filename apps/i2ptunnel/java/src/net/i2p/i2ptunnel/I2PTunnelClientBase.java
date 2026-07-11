@@ -571,7 +571,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
 
         synchronized (startLock) {
             startRunning = true;
-            startLock.notify();
+            startLock.notifyAll();
         }
     }
 
@@ -764,7 +764,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             synchronized (sockLock) {mySockets.clear();}
             if (open) {
                 String address = addr.toString().replace("/", "");
-                String msg = ex.getMessage().toString().replace("java.net.BindException: ", "");
+                String msg = ex.getMessage().replace("java.net.BindException: ", "");
                 msg = msg.replace("Address already used", "Address in use -> Ensure you only have one instance of I2P running");
                 _log.error("Error listening for connections on " + address + ":" + localPort + " -> " + ex.getMessage());
                 boolean wasStopped = close(true);

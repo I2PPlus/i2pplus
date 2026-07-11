@@ -747,7 +747,7 @@ public class BuildHandler implements Runnable {
     private void drainPendingLookups() {
         int numTunnels = _context.tunnelManager().getParticipatingCount();
         int limit = Math.max(getMinLookupLimit(_context), Math.min(getMaxLookupLimit(_context), numTunnels * getPercentLookupLimit(_context) / 100));
-        long maxAge = getNextHopLookupTimeout(_context) * 2;
+        long maxAge = (long) getNextHopLookupTimeout(_context) * 2;
 
         PendingLookup pending;
         while ((pending = _pendingLookups.poll()) != null) {

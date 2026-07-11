@@ -115,7 +115,7 @@ public class Writer {
                 already = true;
             } else {
                 pending = _pendingConnections.add(con);
-                _pendingConnections.notify();
+                _pendingConnections.notifyAll();
             }
         }
         if (_log.shouldDebug())
@@ -127,7 +127,7 @@ public class Writer {
             _writeAfterLive.remove(con);
             _pendingConnections.remove(con);
             // necessary?
-            _pendingConnections.notify();
+            _pendingConnections.notifyAll();
         }
     }
 

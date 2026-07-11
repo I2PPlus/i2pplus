@@ -1374,7 +1374,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                         continue;
                     }
                     long now = getContext().clock().now();
-                    job.getTiming().setStartAfter(now + (count * 100));
+                    job.getTiming().setStartAfter(now + ((long) count * 100));
                     getContext().jobQueue().addJob(job);
                     count++;
                 }
@@ -1926,7 +1926,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         boolean shouldBoost = _context.router().isHidden() ||
                               _context.router().getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
         if (expireRI != null) {
-            try {return Integer.parseInt(expireRI)*60*60*1000L;}
+            try {return (long) Integer.parseInt(expireRI) * 60 * 60 * 1000L;}
             catch (NumberFormatException ignored) { /* ignored */ }
         }
         long calculatedExpiry;

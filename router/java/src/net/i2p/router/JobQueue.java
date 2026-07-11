@@ -245,7 +245,7 @@ public class JobQueue {
 
         // Wake up runners in case they're waiting
         synchronized (_runnerLock) {
-            _runnerLock.notify();
+            _runnerLock.notifyAll();
         }
     }
 

@@ -632,7 +632,7 @@ public class EepGet {
                         if (timeToSend > 0) {
                             StringBuilder buf = new StringBuilder(50);
                             Formatter fmt = new Formatter(buf);
-                            Float received = Float.valueOf(_written) / 1024;
+                            float received = (float) _written / 1024;
                             if (received > 1024) {
                                 received = received / 1024;
                                 fmt.format("%3.2f", received);

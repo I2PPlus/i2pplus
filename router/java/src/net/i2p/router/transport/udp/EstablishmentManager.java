@@ -845,7 +845,7 @@ public class EstablishmentManager {
             if (count > MAX_TERMINATIONS*2) {
                 try {
                     String toIP = InetAddress.getByAddress(to.getIP()).getHostAddress();
-                    String targetIP = toIP.toString().replace("/", "");
+                    String targetIP = toIP.replace("/", "");
                     byte[] ip = Addresses.getIP(targetIP);
                     if (ip != null && !_context.blocklist().isBlocklisted(ip)) {
                         _context.blocklist().add(ip, "Ignores termination packets");

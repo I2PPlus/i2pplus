@@ -386,7 +386,7 @@ class SAMv2StreamSession extends SAMStreamSession {
             synchronized (runningLock) {
                 this.limit = limit;
                 this.nolimit = nolimit;
-                runningLock.notify();
+                runningLock.notifyAll();
             }
             if (_log.shouldDebug())
                 _log.debug("new limit set for socket reader " + id + " : " + (nolimit ? "NOLIMIT" : limit + " bytes"));

@@ -1252,7 +1252,8 @@ class NetDbRenderer {
                     if (!isExpired) {
                         buf.append(' ').append(bullet).append("<b>").append(_t("Expires{0}", ":</b> ")).append(DataHelper.formatDuration2(exp));
                     } else {
-                        buf.append(' ').append(bullet).append("<b>").append(_t("Expired{0} ago", ":</b> " + DataHelper.formatDuration2(0-exp)));
+                        String expiredAgo = ":</b> " + DataHelper.formatDuration2(0 - exp);
+                        buf.append(' ').append(bullet).append("<b>").append(_t("Expired{0} ago", expiredAgo));
                     }
                     buf.append("</span> <span class=nowrap>").append(bullet).append("<b>").append(_t("Type")).append(":</b> ")
                        .append(ls2.getTransientSigningKey().getType()).append("</span>");

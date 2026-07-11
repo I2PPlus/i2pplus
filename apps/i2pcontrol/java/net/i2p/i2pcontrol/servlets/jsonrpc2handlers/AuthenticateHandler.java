@@ -88,7 +88,7 @@ public class AuthenticateHandler implements RequestHandler {
      */
     private static JSONRPC2Error validateAPIVersion(Object api) {
 
-        Integer apiVersion;
+        int apiVersion;
         try {
             apiVersion = ((Number) api).intValue();
         } catch (ClassCastException e) {

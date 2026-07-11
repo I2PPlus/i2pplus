@@ -239,7 +239,7 @@ public class Blocklist {
     private int expireInterval() {
         String expireIntervalValue = _context.getProperty(PROP_BLOCKLIST_EXPIRE_INTERVAL, "0");
         try {
-            Integer expireIntervalInt = 0;
+            int expireIntervalInt = 0;
             if (expireIntervalValue.endsWith("s")) {
                 expireIntervalValue = expireIntervalValue.substring(0, expireIntervalValue.length() - 1);
                 expireIntervalInt = Integer.parseInt(expireIntervalValue) * 1000;
@@ -1342,7 +1342,7 @@ public class Blocklist {
                         if (_log.shouldWarn()) {
                             _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for duration of session -> Blocklist entry");
                         }
-                        banlistRouter(peer, reason, buf.toString(), expireInterval());
+                        banlistRouter(peer, reason, buf, expireInterval());
                         return;
                     }
                 }

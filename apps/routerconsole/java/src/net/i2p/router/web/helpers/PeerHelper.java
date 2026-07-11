@@ -966,7 +966,7 @@ public class PeerHelper extends HelperBase {
                .append("</b></td>");
             if (debugmode) {
                 buf.append("<td class=cwnd><b>")
-                   .append(cwinTotal/(numPeers*1024))
+                   .append(cwinTotal/((long) numPeers * 1024))
                    .append("K</b></td><td class=sst>&nbsp;</td><td class=rtt><b>");
                 if (numRTTPeers > 0) {
                     buf.append(DataHelper.formatDuration2(rttTotal/numRTTPeers));

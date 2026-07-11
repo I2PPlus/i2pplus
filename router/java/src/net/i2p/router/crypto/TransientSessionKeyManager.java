@@ -668,7 +668,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                        // remove all tagsets larger than 8 tags that haven't been used and
                         // are old. The more the tagsets, the more aggressively we expire.
                         // From 9 minutes at 10 down to one minute at 50
-                        long age = Math.min(5*60*1000L, Math.max(60*1000L, 9*60*1000L - ((count - 10) * 8*60*1000L/40)));
+                        long age = Math.min(5*60*1000L, Math.max(60*1000L, 9*60*1000L - ((long) (count - 10) * 8*60*1000L/40)));
                         for (TagSet ts : sets) {
                             Set<SessionTag> tags = ts.getTags();
                             int curSize = tags.size();

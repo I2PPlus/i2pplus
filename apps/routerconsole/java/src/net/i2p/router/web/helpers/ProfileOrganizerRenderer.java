@@ -162,7 +162,7 @@ class ProfileOrganizerRenderer {
                     rl = _context.commSystem().getLocalHostName(ip);
                 }
                 if (rl != null && rl.equals("unknown")) {rl = ip;}
-                if (rl != null && !rl.equals("null") && !rl.isEmpty() && !ip.toString().equals(rl)) {
+                if (rl != null && !rl.equals("null") && !rl.isEmpty() && !ip.equals(rl)) {
                     String whois = CommSystemFacadeImpl.getDomain(rl);
                     String whoisShort = WHOIS_PAREN.matcher(whois).replaceAll("").toLowerCase().trim();
                     whoisShort = whoisShort.replace("latin american and caribbean ip address regional registry", "lacnic")

@@ -169,7 +169,7 @@ public class SimpleBandwidthEstimator implements BandwidthEstimator {
             for (int i = 0; i < numrtts; i++) {
                 decay();
             }
-            deltaT -= numrtts * rtt;
+            deltaT -= (long) numrtts * rtt;
             if (_log.shouldDebug()) {
                 String rate = formatRate(_bK_ns_est * 1000);
                 _log.debug(String.format("No ACKs → Decayed %dx → %s/s", numrtts, rate));
