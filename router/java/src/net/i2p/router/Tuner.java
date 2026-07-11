@@ -746,8 +746,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             } else {
                 _defaultValue = Integer.parseInt(existingDefault);
             }
-            // Read persisted tuned value, or use factory default
-            _initialValue = _autotune.getInt(valueKey, _defaultValue);
+            // Read persisted tuned value (clamped to current range) — catches stale
+            // autotune.config values from before code changes (e.g., max lowered 512→20)
+            int raw = _autotune.getInt(valueKey, _defaultValue);
+            _initialValue = Math.max(_min, Math.min(_max, raw));
             _override = -1;
             _autoTuning = true;
             _valueHistory = new int[MAX_HISTORY];
@@ -7111,13 +7113,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double transitScore = scoreTransitLoad();
             double latencyScore = scoreLatency();
 
-            // Weighted geometric mean — low scores in any factor drag the whole score down
-            _score = Math.pow(jobLagScore, 0.20)
-                   * Math.pow(buildScore, 0.15)
-                   * Math.pow(failureScore, 0.15)
-                   * Math.pow(buildStormScore, 0.10)
-                   * Math.pow(transitScore, 0.10)
-                   * Math.pow(latencyScore, 0.30);
+            // Weighted geometric mean — skip NaN factors (insufficient data).
+            // Renormalize weights so the total is 1.0 across available factors.
+            double total = 1.0;
+            double weightSum = 0;
+            if (!Double.isNaN(jobLagScore))     { total *= Math.pow(jobLagScore, 0.20);     weightSum += 0.20; }
+            if (!Double.isNaN(buildScore))      { total *= Math.pow(buildScore, 0.15);      weightSum += 0.15; }
+            if (!Double.isNaN(failureScore))    { total *= Math.pow(failureScore, 0.15);    weightSum += 0.15; }
+            if (!Double.isNaN(buildStormScore)) { total *= Math.pow(buildStormScore, 0.10); weightSum += 0.10; }
+            if (!Double.isNaN(transitScore))    { total *= Math.pow(transitScore, 0.10);    weightSum += 0.10; }
+            if (!Double.isNaN(latencyScore))    { total *= Math.pow(latencyScore, 0.30);    weightSum += 0.30; }
+            _score = (weightSum > 0) ? Math.pow(total, 1.0 / weightSum) : 1.0;
         }
 
         /**
@@ -7125,9 +7131,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          */
         private double scoreJobLag() {
             RateStat rs = _ctx.statManager().getRate("jobQueue.jobLag");
-            if (rs == null) return 1.0;
+            if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return 1.0;
+            if (rate == null || rate.getLastEventCount() < 3) return Double.NaN;
             double avg = rate.getAverageValue();
             if (avg <= 0) return 1.0;
             // 0ms→1.0, 50ms→0.75, 200ms→0.0
@@ -7136,13 +7142,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Build success rate: read the stat VALUE (0-100) directly.
+         * Requires at least 20 builds in the period for a stable rate.
          * When firewalled, lower thresholds since inbound builds are rejected.
          */
         private double scoreBuildSuccess() {
             RateStat rs = _ctx.statManager().getRate("tunnel.buildSuccessRate");
-            if (rs == null) return 1.0;
+            if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return 1.0;
+            if (rate == null || rate.getLastEventCount() < 20) return Double.NaN;
             double pct = rate.getAverageValue();
             if (isFirewalled()) {
                 // firewalled: 10%→0.0, 50%→1.0
@@ -7168,7 +7175,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         private double scoreMessageFailures() {
             double failures = getEventCount("transport.sendMessageFailureLifetime");
             double sends = getEventCount("transport.sendMessageSize");
-            if (sends <= 0) return 1.0;
+            if (sends < 10) return Double.NaN;
             double failRate = failures / sends;
             // 0%→1.0, 1%→1.0, 10%→0.0
             return clamp(1.0 - ((failRate - 0.01) / 0.09));
@@ -7190,9 +7197,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          */
         private double scoreBuildStorms() {
             RateStat rs = _ctx.statManager().getRate("tunnel.concurrentBuilds");
-            if (rs == null) return 1.0;
+            if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return 1.0;
+            if (rate == null || rate.getLastEventCount() < 5) return Double.NaN;
             double avg = rate.getAverageValue();
             if (avg <= 0) return 1.0;
             // 0→1.0, 10→0.7, 30→0.0
@@ -7205,9 +7212,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          */
         private double scoreTransitLoad() {
             RateStat rs = _ctx.statManager().getRate("tunnel.participating InBps");
-            if (rs == null) return 1.0;
+            if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return 1.0;
+            if (rate == null || rate.getLastEventCount() < 3) return Double.NaN;
             double bps = rate.getAverageValue();
             long shareBps = TunnelDispatcher.getShareBandwidth(_ctx) * 1024L;
             if (shareBps <= 0) return 1.0;
@@ -7222,9 +7229,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          */
         private double scoreLatency() {
             RateStat rs = _ctx.statManager().getRate("transport.sendProcessingTime");
-            if (rs == null) return 1.0;
+            if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return 1.0;
+            if (rate == null || rate.getLastEventCount() < 3) return Double.NaN;
             double avg = rate.getAverageValue();
             if (avg <= 100) return 1.0;
             // 100ms→1.0, 500ms→0.75, 5000ms→0.0
@@ -7310,11 +7317,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * <50% = 0.0, >90% = 1.0
          */
         private double scoreNetDbLookup() {
+            double clientTime = getStatValue("client.leaseSetFoundRemoteTime");
+            if (!Double.isNaN(clientTime))
+                return clamp(1.0 - (clientTime / 10000.0));
+            double successTime = getStatValue("netDb.successTime");
+            if (!Double.isNaN(successTime))
+                return clamp(1.0 - (successTime / 10000.0));
             double handled = getEventCount("netDb.lookupsHandled");
             double matched = getEventCount("netDb.lookupsMatched");
-            if (handled <= 0) return 1.0;
-            double ratio = matched / handled;
-            return clamp((ratio - 0.5) / 0.4);
+            if (handled > 10 && matched <= 0) return 0.0;
+            return 1.0;
         }
 
         /**
@@ -7612,7 +7624,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestThrottleBurstParam extends BaseParam {
         RequestThrottleBurstParam() {
             super("i2p.tunnel.requestThrottle.burst1sThreshold", "Build request burst threshold",
-                  SUB_TUNNEL, 5, 100, 1, "tunnel.throttleParticipatingReject", _context);
+                  SUB_TUNNEL, 5, 20, 1, "tunnel.throttleParticipatingReject", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setRequestBurst1sThreshold(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestBurst1sThreshold(); }

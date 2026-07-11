@@ -310,7 +310,7 @@ public class TuningHelper extends HelperBase {
         // System health + purpose paragraph
         buf.append("<p class=infohelp>")
            .append(_t("Auto-Tuning continuously monitors router performance and adjusts parameters to optimize throughput, reduce latency, and maintain stability."))
-           .append(' ').append(_t("Uncheck the Auto box on any row to pin that parameter and prevent further adjustments."));
+           .append(' ').append(_t("Uncheck the Auto box on any row to pin that parameter and prevent further adjustments.")).append(" <span id=health>");
         if (!Double.isNaN(healthScore)) {
             String healthLabel;
             if (healthScore >= 0.8) {
@@ -321,12 +321,12 @@ public class TuningHelper extends HelperBase {
                 healthLabel = _t("Degraded");
             }
             int pct = (int)(healthScore * 100);
-            buf.append(' ' ).append(_t("Current system health:")).append(" <strong id=health>")
-               .append(healthLabel).append(" (").append(pct).append("%)</strong>.");
+            buf.append(_t("Current system health:")).append(" <b>")
+               .append(healthLabel).append(" (").append(pct).append("%)</b>.");
         } else {
             buf.append(_t("System health data is not yet available."));
         }
-        buf.append("</p>");
+        buf.append("</span></p>");
 
         // Subsystem ring chart dashboard
         buf.append(renderSubsystemRings(tuner));
