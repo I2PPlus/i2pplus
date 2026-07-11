@@ -6,6 +6,8 @@ import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.List;
+
 /**
  * Comprehensive tests for the Tuner auto-tuning framework.
  * Tests static utilities, SystemHealth scoring, BaseParam lifecycle,

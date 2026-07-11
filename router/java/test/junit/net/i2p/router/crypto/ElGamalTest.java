@@ -85,12 +85,7 @@ public class ElGamalTest extends TestCase {
         Set<SessionTag> foundTags = new HashSet<SessionTag>();
         SessionKey foundKey = new SessionKey();
         byte[] decrypted = null;
-        try {
-            decrypted = e.decryptAESBlock(encrypted, 0, encrypted.length, sessionKey, iv, null, foundTags, foundKey);
-        } catch (DataFormatException dfe) {
-            dfe.printStackTrace();
-            fail();
-        }
+        decrypted = e.decryptAESBlock(encrypted, 0, encrypted.length, sessionKey, iv, null, foundTags, foundKey);
         assertNotNull(decrypted);
         String read = new String(decrypted, StandardCharsets.UTF_8);
         assertEquals(msg, read);
