@@ -49,6 +49,12 @@ See also: [Project README](../README.md)
 - [DIRECTORIES.md](DIRECTORIES.md) - Source tree layout
 - [i2p-sessionban-nftables.md](i2p-sessionban-nftables.md) - Managing I2P session bans with nftables
 
+### Module READMEs
+
+- [../core/README.md](../core/README.md) - Core library (crypto, data structures, utilities)
+- [../router/README.md](../router/README.md) - Router engine (tunnels, transport, peer management)
+- [../apps/README.md](../apps/README.md) - Bundled applications and services
+
 ### External READMEs
 
 - [../docker/README.md](../docker/README.md) - Running I2P+ in Docker
