@@ -1366,7 +1366,7 @@ public class TunnelControllerGroup implements ClientApp {
                     new LinkedBlockingQueue<>(1024),
                     r -> {
                         Thread t = new Thread(r);
-                        t.setName("I2PTunnel Server " + _serverExecutorThreadCount.incrementAndGet());
+                        t.setName("TunnelServer." + _serverExecutorThreadCount.incrementAndGet());
                         t.setDaemon(true);
                         return t;
                     },
@@ -1477,7 +1477,7 @@ public class TunnelControllerGroup implements ClientApp {
     private static class CustomThreadFactory implements ThreadFactory {
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
-            rv.setName("I2PTunnel Client Runner " + _executorThreadCount.incrementAndGet());
+            rv.setName("TunnelClientRunner." + _executorThreadCount.incrementAndGet());
             rv.setDaemon(true);
             return rv;
         }

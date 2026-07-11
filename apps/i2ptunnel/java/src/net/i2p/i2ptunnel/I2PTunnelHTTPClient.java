@@ -1491,6 +1491,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                                         keepaliveI2P, keepalive, isHead);
                 t = hrunner;
             }
+            t.setExecutor(_executor);
             if (usingWWWProxy) {
                 t.setSuccessCallback(new OnProxySuccess(currentProxy, hostLowerCase, isConnect));
             }

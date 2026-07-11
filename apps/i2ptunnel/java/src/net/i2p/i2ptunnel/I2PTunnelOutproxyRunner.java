@@ -71,8 +71,6 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
     private final AtomicLong totalSent = new AtomicLong(0);
     private final AtomicLong totalReceived = new AtomicLong(0);
 
-    private static final AtomicLong __forwarderId = new AtomicLong();
-
     /**
      * Constructs the OutproxyRunner
      *
@@ -99,7 +97,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
             _log.info("OutproxyRunner started");
         }
         _runnerId = __runnerId.incrementAndGet();
-        setName("OutproxyRunner " + _runnerId);
+        setName("OutproxyRunner." + _runnerId);
     }
 
     /**
@@ -233,7 +231,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
             this._toI2P = toI2P;
             this.direction = toI2P ? "[To outproxy]" : "[From outproxy]";
             this._cache = ByteCache.getInstance(32, NETWORK_BUFFER_SIZE);
-            setName("OutproxyForwarder " + _runnerId + '.' + __forwarderId.incrementAndGet());
+            setName((_toI2P ? "OutproxyFwdTo." : "OutproxyFwdFrom.") + _runnerId);
         }
 
         @Override

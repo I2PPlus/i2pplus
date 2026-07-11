@@ -76,7 +76,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     private volatile Thread _tunnelBuilder;
     private String privKeyFile;
     private boolean chained; // true if we are chained from a server.
-    private volatile ThreadPoolExecutor _executor;
+    protected volatile ThreadPoolExecutor _executor;
     /** this is ONLY for shared clients */
     private static I2PSocketManager socketManager;
 

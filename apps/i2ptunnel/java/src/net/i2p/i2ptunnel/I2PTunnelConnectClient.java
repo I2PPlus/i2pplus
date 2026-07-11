@@ -357,6 +357,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
             OnTimeout onTimeout = new OnTimeout(s, s.getOutputStream(), targetRequest, usingWWWProxy,
                                                 currentProxy, requestId, targetRequest, false);
             I2PTunnelRunner t = new I2PTunnelRunner(s, i2ps, sockLock, data, response, mySockets, onTimeout);
+            t.setExecutor(_executor);
             if (usingWWWProxy) {
                 // isSSL must be false for ConnectClient
                 t.setSuccessCallback(new OnProxySuccess(currentProxy, host, false));

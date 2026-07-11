@@ -29,15 +29,16 @@ import net.i2p.util.Log;
  * Thread that forwards traffic between an I2PSocket and a TCP Socket.
  * <p>
  * I2PTunnelRunner implements the core bidirectional data forwarding between
- * I2P and TCP network connections. It spawns two StreamForwarder threads:
- * one for each direction of communication (I2P to TCP and TCP to I2P).
+ * I2P and TCP network connections. Operates two StreamForwarders: the
+ * I2P to TCP direction runs inline and the TCP to I2P direction runs
+ * concurrently via a shared executor pool.
  * </p>
  * <p>
  * <b>Connection Flow:</b>
  * <ol>
  *   <li>Runner is created with connected I2PSocket and TCP Socket</li>
  *   <li>Initial data may be sent immediately via initialI2PData/initialSocketData</li>
- *   <li>Two StreamForwarder threads are spawned for bidirectional streaming</li>
+ *   <li>Two StreamForwarders run for bidirectional streaming; TCP to I2P via executor pool</li>
  *   <li>Runner monitors both connections for errors or disconnection</li>
  *   <li>On completion or failure, callbacks may be invoked and sockets are closed</li>
  * </ol>
@@ -435,7 +436,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 if (exec != null) {
                     exec.execute(toI2P);
                 } else {
-                    Thread t = new Thread(toI2P, "StreamForwarder " + _runnerId + ".toI2P");
+                    Thread t = new Thread(toI2P, "TunnelFwd.toI2P." + _runnerId);
                     t.setDaemon(true);
                     t.start();
                 }

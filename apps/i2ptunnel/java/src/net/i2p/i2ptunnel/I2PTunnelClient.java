@@ -169,6 +169,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
             i2ps.setReadTimeout(readTimeout);
             I2PTunnelRunner t = new I2PTunnelRunner(s, i2ps, sockLock, null, null, mySockets,
                                 (I2PTunnelRunner.FailCallback) null);
+            t.setExecutor(_executor);
             // Execute task (inline when called from unlimited thread pool)
             executeTask(t);
         } catch (IOException ex) {

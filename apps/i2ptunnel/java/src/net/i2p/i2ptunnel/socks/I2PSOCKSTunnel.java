@@ -81,8 +81,9 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
                 s.setSoTimeout(0);
             } catch (SocketException ioe) { /* ignored */ }
             destSock = serv.getDestinationI2PSocket(this);
-            Thread t = new I2PTunnelRunner(clientSock, destSock, sockLock, null, null, mySockets,
+            I2PTunnelRunner t = new I2PTunnelRunner(clientSock, destSock, sockLock, null, null, mySockets,
                                            (I2PTunnelRunner.FailCallback) null);
+            t.setExecutor(_executor);
             t.run();
         } catch (SOCKSException e) {
             if (_log.shouldWarn())
