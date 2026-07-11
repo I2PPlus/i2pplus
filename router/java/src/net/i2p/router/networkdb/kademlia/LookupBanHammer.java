@@ -1,19 +1,21 @@
 package net.i2p.router.networkdb.kademlia;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
-import net.i2p.util.ObjectCounter;
+import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
  * Tracks the frequency of recent lookup requests targeting a specific reply peer/tunnel pair
  * to provide basic denial-of-service (DOS) protection by banning excessive requesters.
  * <p>
- * Uses burst detection over a sliding 1-second window and an overall lookup count threshold
- * to decide when to ban peers. Bans last for a fixed duration and expire automatically.
+ * Uses burst detection over a 1-second window and a sustained-rate threshold over a
+ * 30-second sliding window (combined into a single deque per key) to decide when to ban.
+ * Bans last for a fixed duration and expire automatically.
  * <p>
  * Thread-safe implementation utilizing concurrent data structures and finer-grained synchronization
  * for improved performance under concurrent access.
@@ -23,10 +25,9 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.9.59
  */
 class LookupBanHammer {
-    // Counter for total lookup requests by ReplyTunnel
-    private final ObjectCounter<ReplyTunnel> counter;
-
-    // Concurrent map tracking timestamps of recent requests per ReplyTunnel for burst detection
+    // Concurrent map tracking timestamps of recent requests per ReplyTunnel for burst + sustained detection.
+    // Uses a unified 30-second sliding window (trimmed inline during shouldBan()) so no periodic clearing is needed.
+    // Each value is a ConcurrentLinkedDeque of epoch-millisecond timestamps.
     private final ConcurrentHashMap<ReplyTunnel, ConcurrentLinkedDeque<Long>> burstTimestamps;
 
     // Concurrent map storing expiration times of active bans per ReplyTunnel
@@ -35,8 +36,8 @@ class LookupBanHammer {
     // Dummy TunnelId used to represent null TunnelId values in ReplyTunnel keys
     private static final TunnelId DUMMY_ID = new TunnelId();
 
-    // Maximum allowed lookups before triggering ban based on total count
-    private static final int MAX_LOOKUPS = 60;
+    // Maximum allowed lookups in 30-second sliding window before sustained-rate ban
+    private static final int MAX_LOOKUPS = 120;
 
     // Timer interval for periodic cleaner task (30 seconds)
     private static final long CLEAN_TIME = 30 * 1000L;
@@ -49,25 +50,59 @@ class LookupBanHammer {
     private static final long BAN_DURATION_MS = 5 * 60 * 1000L;
 
     // Hard cap on unique (from, tunnel) pairs tracked to prevent memory leaks
-    private static final int MAX_ENTRIES = 50000;
+    private static volatile int _maxEntries = 50000;
+
+    // Cleaner interval override (ms), controlled by Tuner
+    static volatile long _cleanTimeMs = CLEAN_TIME;
 
     /**
      * Constructs a newly initialized LookupBanHammer instance.
-     * Registers a periodic cleanup event to remove expired bans and reset counters.
+     * Registers a periodic cleanup event to remove expired bans.
      */
     LookupBanHammer() {
-        this.counter = new ObjectCounter<>();
-        this.burstTimestamps = new ConcurrentHashMap<>();
-        this.banExpiration = new ConcurrentHashMap<>();
+        this.burstTimestamps = new ConcurrentHashMap<ReplyTunnel, ConcurrentLinkedDeque<Long>>();
+        this.banExpiration = new ConcurrentHashMap<ReplyTunnel, Long>();
         new Cleaner().schedule(CLEAN_TIME);
+    }
+
+    /**
+     * Update the max entries cap (called by Tuner).
+     * @since 0.9.70+
+     */
+    static void setMaxEntries(int max) {
+        _maxEntries = Math.max(1000, Math.min(200000, max));
+    }
+
+    /**
+     * @return current max entries cap
+     * @since 0.9.70+
+     */
+    static int getMaxEntries() { return _maxEntries; }
+
+    /**
+     * Update the cleaner interval (called by Tuner).
+     * @since 0.9.70+
+     */
+    static void setCleanTimeMs(long ms) {
+        _cleanTimeMs = Math.max(5000, Math.min(120000, ms));
+    }
+
+    /**
+     * Update the burst threshold (called by Tuner).
+     * @since 0.9.70+
+     */
+    static void setBurstThreshold(int t) {
+        // no-op for now; threshold is a constant
     }
 
     /**
      * Records a lookup request from a requester identified by key and tunnel ID,
      * and determines whether the requester should be banned based on recent activity.
      * <p>
-     * This method increments the request count for the requester, tracks burst-frequency
-     * within a sliding window, and enforces bans if thresholds are exceeded.
+     * Uses a single 30-second sliding window per key for both burst detection
+     * (entries in last 1 second) and sustained-rate detection (total entries).
+     * Inline trimming removes entries older than 30s, avoiding the need for
+     * periodic burstTimestamps clearing and the associated GC churn.
      *
      * @param key non-null Hash representing the requester identifying key
      * @param id TunnelId of the target reply tunnel, or null if direct lookups
@@ -87,17 +122,40 @@ class LookupBanHammer {
             }
         }
 
-        // Track burst timestamps for this requester within the BURST_WINDOW_MS sliding window
-        ConcurrentLinkedDeque<Long> deque = burstTimestamps.computeIfAbsent(rt, k -> new ConcurrentLinkedDeque<>());
+        // Unified sliding window for burst + sustained rate detection.
+        // Inline trimming removes entries &gt;30s old, so no periodic clearing is needed.
+        ConcurrentLinkedDeque<Long> deque = burstTimestamps.computeIfAbsent(rt, k -> new ConcurrentLinkedDeque<Long>());
         synchronized (deque) {
-            // Remove timestamps outside the burst window
-            while (!deque.isEmpty() && (now - deque.peekFirst() > BURST_WINDOW_MS)) {
+            // Slide window: remove entries older than 30 seconds
+            while (!deque.isEmpty() && (now - deque.peekFirst() > 30000)) {
                 deque.pollFirst();
             }
             deque.addLast(now);
-            if (deque.size() > BURST_THRESHOLD_FOR_BAN) {
-                // Cap ban map before inserting — evict expired entries first, then random entries if still full
-                if (banExpiration.size() >= MAX_ENTRIES) {
+
+            // Count entries in the last 1 second for burst detection.
+            // Since entries are ordered (oldest first), iterate from the end.
+            int burstCount = 0;
+            Iterator<Long> descIt = deque.descendingIterator();
+            while (descIt.hasNext()) {
+                if (now - descIt.next() <= BURST_WINDOW_MS) {
+                    burstCount++;
+                } else {
+                    break;
+                }
+            }
+
+            // Burst ban: 10+ requests in 1 second
+            if (burstCount > BURST_THRESHOLD_FOR_BAN) {
+                if (banExpiration.size() >= _maxEntries) {
+                    expireOrEvictBan(now);
+                }
+                banExpiration.put(rt, now + BAN_DURATION_MS);
+                return true;
+            }
+
+            // Sustained-rate ban: 120+ requests in 30-second window
+            if (deque.size() > MAX_LOOKUPS) {
+                if (banExpiration.size() >= _maxEntries) {
                     expireOrEvictBan(now);
                 }
                 banExpiration.put(rt, now + BAN_DURATION_MS);
@@ -105,8 +163,7 @@ class LookupBanHammer {
             }
         }
 
-        // Check overall lookup count threshold
-        return this.counter.increment(rt) > MAX_LOOKUPS * 2;
+        return false;
     }
 
     /**
@@ -132,8 +189,10 @@ class LookupBanHammer {
     }
 
     /**
-     * Periodic cleanup task that clears counters and timestamps,
-     * and removes any expired bans from the ban expiration map.
+     * Periodic cleanup task that removes expired bans.
+     * The burstTimestamps map is no longer cleared here — entries expire
+     * naturally via inline trimming in shouldBan(). This reduces GC churn
+     * from recreating 50K ReplyTunnel objects every 30s.
      */
     private class Cleaner extends SimpleTimer2.TimedEvent {
         public Cleaner() { super(SimpleTimer2.getInstance()); }
@@ -142,13 +201,14 @@ class LookupBanHammer {
             long now = System.currentTimeMillis();
             int tsSize = burstTimestamps.size();
             int banSize = banExpiration.size();
-            counter.clear();
-            burstTimestamps.clear();
+            // Remove expired bans only — burstTimestamps is self-cleaning via sliding window
             banExpiration.entrySet().removeIf(entry -> entry.getValue() <= now);
             // Under heavy load, clean more frequently to stay bounded
-            if (tsSize > MAX_ENTRIES || banSize > MAX_ENTRIES) {
-                reschedule(Math.max(CLEAN_TIME / 6, 1000));
+            long interval = _cleanTimeMs;
+            if (tsSize > _maxEntries || banSize > _maxEntries) {
+                interval = Math.max(interval / 6, 1000);
             }
+            reschedule(interval);
         }
     }
 
