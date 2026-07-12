@@ -5,6 +5,7 @@ import java.net.URLDecoder;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.regex.Pattern;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -39,6 +40,8 @@ public class LoginServlet extends HttpServlet {
     private static final String REALM = "i2prouter";
     private static final String DEFAULT_THEME = "dark";
     private static final String PROP_PERSISTED_SESSIONS = "routerconsole.persistedSessions";
+    private static final Pattern COLON_SPLIT = Pattern.compile(":");
+    private static final Pattern PIPE_SPLIT = Pattern.compile("\\|");
     private static final SecureRandom CSRF_RANDOM = new SecureRandom();
 
     @Override
@@ -391,7 +394,7 @@ public class LoginServlet extends HttpServlet {
         if (pbkdf2Hash != null && !pbkdf2Hash.isEmpty()) {
             _log.info("Checking PBKDF2 for user: " + username);
             try {
-                String[] parts = pbkdf2Hash.split(":");
+                String[] parts = COLON_SPLIT.split(pbkdf2Hash);
                 if (parts.length >= 3) {
                     int iterations = Integer.parseInt(parts[0]);
                     byte[] salt = net.i2p.data.Base64.decode(parts[1]);
@@ -462,7 +465,7 @@ public class LoginServlet extends HttpServlet {
 
         long now = System.currentTimeMillis();
         SessionManager sm = SessionManager.getInstance();
-        for (String entry : persisted.split("\\|")) {
+        for (String entry : PIPE_SPLIT.split(persisted)) {
             int eq = entry.indexOf('=');
             if (eq <= 0) continue;
             String data = entry.substring(eq + 1);

@@ -33,6 +33,8 @@ public class LogsHelper extends HelperBase {
     private static final Pattern AMP_DARR_PATTERN = Pattern.compile("&amp;(darr|uarr|#10140|hellip;)");
     private static final Pattern BRACKET_CLEANUP_PATTERN = Pattern.compile("\\[\\[(&#10004;|&#10008;)\\]\\]");
     private static final Pattern NEWLINE_STAR_PATTERN = Pattern.compile("\n(\\t)?\\* ");
+    private static final Pattern NEWLINE_SPLIT = Pattern.compile("\n");
+    private static final Pattern SPACE_SPLIT = Pattern.compile(" ");
     private static final Pattern LOG_HUTD = Pattern.compile("\\|.*\\[.*hutd.*\\].*?:");
     private static final Pattern LOG_DATE = Pattern.compile("\\|.*\\[.*date.*\\].*?:");
     private static final Pattern LOG_CONNECTION = Pattern.compile("\\|.*\\[.*-Connection].*?:");
@@ -283,11 +285,11 @@ public class LogsHelper extends HelperBase {
                 }
 
                 // Sort lines first by timestamp and then by content
-                String[] lines = filtered.toString().split("\n");
+                String[] lines = NEWLINE_SPLIT.split(filtered.toString());
                 final int len = lines.length;
                 Arrays.sort(lines, (a, b) -> {
-                    String[] aParts = a.split(" ");
-                    String[] bParts = b.split(" ");
+                    String[] aParts = SPACE_SPLIT.split(a);
+                    String[] bParts = SPACE_SPLIT.split(b);
                     int result = aParts[0].compareTo(bParts[0]); // Sort by timestamp
                     if (result == 0) {result = a.compareTo(b);} // If timestamps are equal, sort by content
                     return result;

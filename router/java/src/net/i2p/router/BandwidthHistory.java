@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
@@ -38,6 +39,7 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
     private static final long FLUSH_INTERVAL = 60 * 1000;
     /** Discard file data older than 30 min */
     private static final long MAX_FILE_AGE = 30L * 60 * 1000;
+    private static final Pattern COMMA_SPLIT = Pattern.compile(",");
     private static final String FILE_NAME = "i2p-bandwidth.dat";
 
     private static BandwidthHistory _instance;
@@ -178,7 +180,7 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
             while ((line = br.readLine()) != null) {
                 line = line.trim();
                 if (line.isEmpty()) {continue;}
-                String[] parts = line.split(",");
+                String[] parts = COMMA_SPLIT.split(line);
                 if (parts.length != 3) {continue;}
                 try {
                     long ts = Long.parseLong(parts[0]);

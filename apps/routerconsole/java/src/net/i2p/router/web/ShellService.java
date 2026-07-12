@@ -12,6 +12,7 @@ package net.i2p.router.web;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppManager;
@@ -53,6 +54,7 @@ public class ShellService implements ClientApp {
     private static final String NAME_OPTION = "-shellservice.name";
     private static final String DISPLAY_NAME_OPTION = "-shellservice.displayname";
     private static final String PLUGIN_DIR = "plugins";
+    private static final Pattern EQUALS_SPLIT = Pattern.compile("=");
 
     private final Log _log;
     private final ProcessBuilder _pb;
@@ -141,14 +143,14 @@ public class ShellService implements ClientApp {
         for (int i = 0; i < args.length; i++) {
             if (args[i].startsWith(NAME_OPTION)) {
                 if (args[i].contains("=")) {
-                    name = args[i].split("=")[1];
+                    name = EQUALS_SPLIT.split(args[i])[1];
                 } else {
                     name = args[i + 1];
                     i++;
                 }
             } else if (args[i].startsWith(DISPLAY_NAME_OPTION)) {
                 if (args[i].contains("=")) {
-                    displayName = args[i].split("=")[1];
+                    displayName = EQUALS_SPLIT.split(args[i])[1];
                 } else {
                     displayName = args[i + 1];
                     i++;

@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerArray;
+import java.util.regex.Pattern;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
@@ -151,6 +152,7 @@ public class RequestThrottler {
     private static final String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
     private static final String PROP_BLOCK_COUNTRIES = "router.blockCountries";
     private static final String DEFAULT_BLOCK_COUNTRIES = "";
+    private static final Pattern COMMA_SPLIT = Pattern.compile(",");
 
      RequestThrottler(RouterContext ctx) {
         this.context = ctx;

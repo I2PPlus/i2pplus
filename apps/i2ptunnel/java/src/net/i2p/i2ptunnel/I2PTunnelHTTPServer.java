@@ -118,6 +118,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     // https://httpoxy.org
     private static final String PROXY_HEADER = "proxy";
     private static final Pattern NEWLINE_SPLIT = Pattern.compile("\r\n");
+    private static final Pattern SPACE_SPLIT = Pattern.compile(" ");
+    private static final Pattern SLASH_SPLIT = Pattern.compile("/");
 
     static {
         CLIENT_SKIPHEADERS.add(HASH_HEADER.toLowerCase(Locale.US));
@@ -1294,7 +1296,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             if (requestLines.length == 0)
                 return "Unknown request";
             String requestLine = requestLines[0];
-            String[] requestParts = requestLine.split(" ");
+            String[] requestParts = SPACE_SPLIT.split(requestLine);
             String url = requestParts.length > 1 ? requestParts[1] : null;
             if (url == null)
                 return "Unknown request";
@@ -1302,7 +1304,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 url = url.replace("http://", "");
             if (url.length() > 100)
                 url = url.substring(0, 48) + "..." + url.substring(url.length() - 48);
-            String[] urlParts = url.split("/");
+            String[] urlParts = SLASH_SPLIT.split(url);
             StringBuilder hostBuilder = new StringBuilder();
             if (urlParts.length > 0) {
                 hostBuilder.append(urlParts[0]);

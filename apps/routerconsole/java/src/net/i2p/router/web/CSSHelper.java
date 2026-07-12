@@ -22,6 +22,7 @@ import net.i2p.util.SystemVersion;
 public class CSSHelper extends HelperBase {
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(CSSHelper.class);
     private static final Pattern LANG_PATTERN = Pattern.compile("[a-zA-Z_]");
+    private static final Pattern SPACE_SPLIT = Pattern.compile("\\s+");
 
     private static final Map<String, Boolean> _UACache = new ConcurrentHashMap<>();
     public static final String PROP_UNIVERSAL_THEMING = "routerconsole.universal.theme";
@@ -423,7 +424,7 @@ public class CSSHelper extends HelperBase {
             if (str == null || str.isEmpty()) return str;
             String trimmed = str.trim();
             if (trimmed.isEmpty()) return trimmed;
-            String[] words = trimmed.split("\\s+");
+            String[] words = SPACE_SPLIT.split(trimmed);
             StringBuilder capitalizeWord = new StringBuilder("");
             for (String w:words) {
                 String first = w.substring(0,1);

@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
+import java.util.regex.Pattern;
 import net.i2p.router.CommSystemFacade;
 import net.i2p.router.Tuner;
 import net.i2p.router.Tuner.ParamSnapshot;
@@ -25,6 +26,7 @@ public class TuningHelper extends HelperBase {
 
     private static final int SPARK_W = 140;
     private static final int SPARK_H = 36;
+    private static final Pattern UNDERSCORE_SPLIT = Pattern.compile("_");
     private String _nonce;
 
     public void setNonce(String nonce) { _nonce = nonce; }
@@ -424,7 +426,7 @@ public class TuningHelper extends HelperBase {
         if (lastDot >= 0 && lastDot < name.length() - 1)
             bare = name.substring(lastDot + 1);
 
-        String[] parts = bare.split("_");
+        String[] parts = UNDERSCORE_SPLIT.split(bare);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < parts.length; i++) {
             String p = parts[i].toLowerCase();

@@ -803,7 +803,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             String newURI = requestURI.getRawPath();
                             if (query != null) {newURI = newURI.concat("?").concat(query);}
                             // strip :80 from request if we are http://
-                            if (newURI.contains(":80/")) {newURI = newURI.replaceAll(":80/", "/");}
+                            if (newURI.contains(":80/")) {newURI = newURI.replace(":80/", "/");}
                             try {requestURI = new URI(newURI);}
                             catch (URISyntaxException use) { // shouldnt happen
                                 _log.warn(request, use);

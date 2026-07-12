@@ -835,6 +835,10 @@ public class GeoIP {
     private static final Pattern TRAILING_JUNK = Pattern.compile("[-\u2013\u2014\\s\"']+$");
     private static final Pattern DOUBLE_COMMA = Pattern.compile(",\\s*,");
     private static final Pattern DOUBLE_SPACE = Pattern.compile("  +");
+    /** Whitespace split */
+    private static final Pattern SPACE_SPLIT = Pattern.compile("\\s+");
+    /** Leading/trailing punctuation trim */
+    private static final Pattern LEADING_TRAILING_JUNK = Pattern.compile("^[ ,.]+|[ ,.]+$");
 
     /** Verbose prefixes to strip */
     private static final Pattern[] STRIP_PREFIXES = {
@@ -871,7 +875,7 @@ public class GeoIP {
      * Picks whichever pass matches more known words.
      */
     private static String fixReversedWords(String name) {
-        String[] words = name.split("\\s+");
+        String[] words = SPACE_SPLIT.split(name);
         if (words.length < 1) {return name;}
 
         // Pass 1: full-string reversal (handles compound words and whole-string reversals)
@@ -946,7 +950,7 @@ public class GeoIP {
         String reversed = reverseWord(name);
         // Only use if the reversed form looks like normal text
         // (contains at least one word starting with uppercase)
-        String[] revWords = reversed.split("\\s+");
+        String[] revWords = SPACE_SPLIT.split(reversed);
         for (String w : revWords) {
             if (w.length() > 1 && Character.isUpperCase(w.charAt(0))) {return reversed;}
         }
@@ -957,7 +961,7 @@ public class GeoIP {
     private static int countKnownWordMatches(String text) {
         if (text.isEmpty()) {return 0;}
         int count = 0;
-        for (String w : text.split("\\s+")) {
+        for (String w : SPACE_SPLIT.split(text)) {
             if (KNOWN_WORDS.contains(w.toLowerCase(Locale.US))) {count++;}
         }
         return count;
@@ -1041,17 +1045,17 @@ public class GeoIP {
         name = name.replace("''", "'");
         name = DOUBLE_COMMA.matcher(name).replaceAll(",");
         name = DOUBLE_SPACE.matcher(name).replaceAll(" ");
-        name = name.replaceAll("^[ ,.]+|[ ,.]+$", "");
+        name = LEADING_TRAILING_JUNK.matcher(name).replaceAll("");
 
         // Title case with acronym preservation
         name = titleCasePreserve(name);
 
         // Final trim
-        name = name.replaceAll("^[ ,.]+|[ ,.]+$", "");
+        name = LEADING_TRAILING_JUNK.matcher(name).replaceAll("");
 
         // If still too long, trim trailing filler words
         if (name.length() > 40) {
-            String[] words = name.split("\\s+");
+            String[] words = SPACE_SPLIT.split(name);
             StringBuilder trimmed = new StringBuilder();
             for (int i = words.length - 1; i >= 0; i--) {
                 if (trimmed.length() > 0 && trimmed.length() + words[i].length() + 1 > 40
@@ -1081,7 +1085,7 @@ public class GeoIP {
      * Title-case a name while preserving acronyms and brand names.
      */
     private static String titleCasePreserve(String name) {
-        String[] words = name.split("\\s+");
+        String[] words = SPACE_SPLIT.split(name);
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < words.length; i++) {
             String w = words[i];

@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -29,6 +30,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     private static final String CONSOLE_USER = "admin";
     private static final String PROP_PBKDF2 = ".pbkdf2";
     private static final int PBKDF2_ITERATIONS = 1000000;
+    private static final Pattern COLON_SPLIT = Pattern.compile(":");
 
     public ConsolePasswordManager(RouterContext ctx) {
         super(ctx);
@@ -95,7 +97,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
         if (stored == null)
             return false;
         try {
-            String[] parts = stored.split(":");
+            String[] parts = COLON_SPLIT.split(stored);
             if (parts.length != 3)
                 return false;
             int iterations = Integer.parseInt(parts[0]);

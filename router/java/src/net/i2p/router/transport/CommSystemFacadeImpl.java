@@ -1336,7 +1336,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         hostname = hostname.toLowerCase();
         if (hostname.startsWith(".")) hostname = hostname.substring(1);
 
-        String[] parts = hostname.split("\\.");
+        String[] parts = DOT_SPLIT.split(hostname);
         int len = parts.length;
 
         if (len < 2 || parts[0].isEmpty()) return hostname;
@@ -1349,7 +1349,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 tldBuilder.append(parts[j]);
             }
             if (MULTI_PART_TLDS.contains(tldBuilder.toString())) {
-                int domainIndex = len - tldBuilder.toString().split("\\.").length - 1;
+                int domainIndex = len - DOT_SPLIT.split(tldBuilder.toString()).length - 1;
                 StringBuilder domain = new StringBuilder();
                 for (int k = domainIndex; k < len; k++) {
                     if (k > domainIndex) domain.append(".");
@@ -1362,6 +1362,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         // Default to 2-part domain
         return parts[len - 2] + "." + parts[len - 1];
     }
+
+    /** Pre-compiled dot split for domain parsing */
+    private static final Pattern DOT_SPLIT = Pattern.compile("\\.");
 
     /** Multi-part TLD list for domain extraction */
     private static final Set<String> MULTI_PART_TLDS;

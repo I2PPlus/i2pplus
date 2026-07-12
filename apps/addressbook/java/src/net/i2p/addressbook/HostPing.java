@@ -33,6 +33,7 @@ public class HostPing {
     private static final Pattern DEST_PATTERN = Pattern.compile("^[A-Za-z0-9~\\-]+$");
     private static final Pattern B32_PATTERN = Pattern.compile("^[a-z2-7]+$");
     private static final Pattern HOSTNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9\\-]+$");
+    private static final Pattern EQUALS_SPLIT = Pattern.compile("=");
 
     private int _count = DEFAULT_COUNT;
     private int _timeout = DEFAULT_TIMEOUT;
@@ -289,7 +290,7 @@ public class HostPing {
 
                     if (line.contains("=")) {
                         // Format: hostname.i2p=b64 - extract hostname
-                        String[] parts = line.split("=", 2);
+                        String[] parts = EQUALS_SPLIT.split(line, 2);
                         if (parts.length >= 1) {
                             destination = parts[0].trim();
                         }

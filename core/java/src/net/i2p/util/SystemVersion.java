@@ -18,6 +18,7 @@ import java.lang.management.ThreadMXBean;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.util.TimeZone;
+import java.util.regex.Pattern;
 import java.util.TreeSet;
 
 import java.nio.charset.StandardCharsets;
@@ -81,6 +82,7 @@ public abstract class SystemVersion {
     public static final String PROP_OVERRIDE_IS_SLOW = "router.overrideIsSlow";
 
     public static final boolean DEFAULT_OVERRIDE_IS_SLOW = false;
+    private static final Pattern COMMA_SPLIT = Pattern.compile(",");
     private static final I2PAppContext _ctx = I2PAppContext.getGlobalContext();
 
     static {
@@ -598,7 +600,7 @@ public abstract class SystemVersion {
             }
             String content = new String(Files.readAllBytes(f.toPath()), StandardCharsets.UTF_8).trim();
             int count = 0;
-            for (String part : content.split(",")) {
+            for (String part : COMMA_SPLIT.split(content)) {
                 part = part.trim();
                 int dash = part.indexOf('-');
                 if (dash > 0) {

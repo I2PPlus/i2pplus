@@ -29,6 +29,7 @@ public class BlacklistBean {
         "^[a-zA-Z2-7]{52,53}\\.b32\\.i2p$|" +          // b32 addresses (52-53 chars)
         "^[a-zA-Z0-9+/]{387}={0,2}\\.b64\\.i2p$"       // b64 addresses (387+ chars)
     );
+    private static final Pattern NEWLINE_SPLIT = Pattern.compile("\\n");
 
     /**
      * Get the blacklist file, searching common I2P directory locations.
@@ -120,7 +121,7 @@ public class BlacklistBean {
             return false;
         }
         address = address.trim().toLowerCase();
-        String[] lines = content.split("\\n");
+        String[] lines = NEWLINE_SPLIT.split(content);
         for (String line : lines) {
             if (line.trim().equalsIgnoreCase(address)) {
                 return true;

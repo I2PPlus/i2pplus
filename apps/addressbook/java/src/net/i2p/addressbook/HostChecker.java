@@ -36,6 +36,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.client.naming.NamingService;
@@ -188,6 +189,7 @@ public class HostChecker {
     // Category retry settings
     private static final long CATEGORY_RETRY_INTERVAL = 10 * 60 * 1000L; // 10 minutes
     private static final int MAX_CATEGORY_RETRIES = -1; // -1 for infinite retries
+    private static final Pattern COMMA_SPLIT = Pattern.compile(",");
 
     private long _pingInterval = DEFAULT_PING_INTERVAL;
     private long _pingTimeout = DEFAULT_PING_TIMEOUT;
@@ -1033,7 +1035,7 @@ public class HostChecker {
                     continue;
                 }
 
-                String[] parts = line.split(",", 6);
+                String[] parts = COMMA_SPLIT.split(line, 6);
                 boolean isValid = false;
 
                 if (parts.length >= 3 && parts[0] != null && !parts[0].isEmpty()) {
@@ -1464,7 +1466,7 @@ public class HostChecker {
                 }
 
                 // Format: hostname,category
-                String[] parts = trimmedLine.split(",", 2);
+                String[] parts = COMMA_SPLIT.split(trimmedLine, 2);
                 if (parts.length == 2) {
                     String hostname = parts[0].trim();
                     String category = parts[1].trim().toLowerCase(Locale.US);

@@ -760,13 +760,13 @@ public class Node {
      */
     public String toXMLString(boolean hasChildNode) {
         String xmlStr = toString();
-        xmlStr = xmlStr.replaceAll("<", "&lt;");
-        xmlStr = xmlStr.replaceAll(">", "&gt;");
+        xmlStr = xmlStr.replace("<", "&lt;");
+        xmlStr = xmlStr.replace(">", "&gt;");
         // Thanks for Theo Beisch (11/09/04)
-        xmlStr = xmlStr.replaceAll("&", "&amp;");
-        xmlStr = xmlStr.replaceAll("\"", "&quot;");
+        xmlStr = xmlStr.replace("&", "&amp;");
+        xmlStr = xmlStr.replace("\"", "&quot;");
         // Thanks for Brian Owens (12/02/04)
-        xmlStr = xmlStr.replaceAll("'", "&apos;");
+        xmlStr = xmlStr.replace("'", "&apos;");
         return xmlStr;
     }
 
