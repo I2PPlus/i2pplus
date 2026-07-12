@@ -2,6 +2,7 @@ package org.rrd4j.core;
 
 import java.io.IOException;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * Factory class which creates actual {@link org.rrd4j.core.RrdNioBackend} objects. This is the
@@ -33,6 +34,8 @@ public class RrdNioBackendFactory extends RrdFileBackendFactory {
     public static final int DEFAULT_SYNC_CORE_POOL_SIZE = 6;
 
     private static int defaultSyncPoolSize = DEFAULT_SYNC_CORE_POOL_SIZE;
+
+    private static volatile ThreadFactory _threadFactory;
 
     /**
      * Returns time between two consecutive background synchronizations. If not changed via {@link
@@ -187,9 +190,20 @@ public class RrdNioBackendFactory extends RrdFileBackendFactory {
      * {@link org.rrd4j.core.RrdBackendFactory#getDefaultFactory()}, but not if clients provide
      * their own backend instance when creating {@code RrdDb} instances or syncing was not disabled.
      */
+    /**
+     * Set a custom thread factory for the default sync pool.  Must be called before the
+     * first use of the factory, otherwise the default thread naming is used.
+     *
+     * @param factory may be null to reset to default
+     */
+    public static void setThreadFactory(ThreadFactory factory) {
+        _threadFactory = factory;
+    }
+
     private static class DefaultSyncThreadPool {
         /** The default thread pool used to periodically sync the mapped file to disk with. */
-        static final RrdSyncThreadPool INSTANCE = new RrdSyncThreadPool(defaultSyncPoolSize);
+        static final RrdSyncThreadPool INSTANCE =
+            new RrdSyncThreadPool(defaultSyncPoolSize, _threadFactory);
 
         private DefaultSyncThreadPool() {}
     }

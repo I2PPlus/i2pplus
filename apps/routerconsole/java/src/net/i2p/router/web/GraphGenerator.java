@@ -114,6 +114,11 @@ public class GraphGenerator implements Runnable, ClientApp {
             deleteOldRRDs();
         }
         RrdNioBackendFactory.setSyncPoolSize(syncThreads);
+        RrdNioBackendFactory.setThreadFactory(r -> {
+            Thread t = new Thread(r, "RRD4JSync");
+            t.setDaemon(true);
+            return t;
+        });
         _context.clientAppManager().register(this);
         _scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
             Thread t = new Thread(r, "StatWriter");
