@@ -1814,7 +1814,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.router.maxDispatchAge", "Max message queue age (ms)",
                   SUB_TRANSPORT,
 
-                  500, 30000, 500, "transport.expiredOnQueueLifetime", _context);
+                  2000, 30000, 1000, "transport.expiredOnQueueLifetime", _context);
         }
 
         protected void applyValue(int value) {
@@ -1842,32 +1842,60 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = transport.expiredOnQueueLifetime (ms, avg lifetime of expired messages)
             // Cross-refs: transport.bidFailAllTransports (messages with no transport),
-            //             udp.outboundQueueDepth (total outbound pressure)
-            // Note: bidFailAllTransports records msg.getLifetime() — getAverageValue()
-            //       returns avg lifetime, not count. Use getAdditionalEventCount() for
-            //       the raw event count (number of bid failures).
+            //             udp.outboundQueueDepth (total outbound pressure),
+            //             transport.expiredOnQueueCount (expired per min),
+            //             transport.messagesDelivered (delivered per min)
             double bidFails = getAdditionalEventCount(_context, "transport.bidFailAllTransports");
             double queueDepth = getAdditionalStat(_context, "udp.outboundQueueDepth");
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double peerCount = getAdditionalStat(_context, "udp.peerCount");
+            double expiredCount = getAdditionalStat(_context, "udp.peerExpired");
+            double delivered = getAdditionalEventCount(_context, "transport.messagesDelivered");
+            double expiredQ = getAdditionalEventCount(_context, "transport.expiredOnQueueCount");
 
             boolean lotsOfExpirations = observed > 5000;
             boolean lotsOfBidFails = !Double.isNaN(bidFails) && bidFails > 10;
             boolean deepQueue = !Double.isNaN(queueDepth) && queueDepth > 2000;
+            boolean cpuFree = Double.isNaN(jobLag) || jobLag < 20;
+            boolean peersFalling = !Double.isNaN(peerCount) && peerCount < 1000;
+            boolean drainActive = !Double.isNaN(expiredCount) && expiredCount > 50;
+            boolean atFloor = current <= _min;
+            double totalCompleted = !Double.isNaN(delivered) && !Double.isNaN(expiredQ) ? delivered + expiredQ : Double.NaN;
+            double deliveryRatio = !Double.isNaN(totalCompleted) && totalCompleted > 0 ? delivered / totalCompleted : Double.NaN;
+            boolean deathSpiral = !Double.isNaN(deliveryRatio) && deliveryRatio < 0.3 && atFloor && deepQueue;
+            boolean healthyDelivery = !Double.isNaN(deliveryRatio) && deliveryRatio > 0.8;
+            boolean lowThroughput = !Double.isNaN(delivered) && delivered < 10 && !Double.isNaN(expiredQ) && expiredQ > 50;
 
-            // Deep queue + lots of expirations = drop stale messages faster (free queue slots)
-            if (deepQueue && lotsOfExpirations)
+            // Death spiral: at floor + deep queue + <30% delivery ratio.
+            // Messages expire before they can be dispatched. Raise age so they
+            // survive long enough for a transport slot to open up.
+            if (deathSpiral)
+                return Math.min(3000, current + _step * 2);
+
+            // Near death spiral: low throughput even without deep queue
+            if (lowThroughput && atFloor && !healthyDelivery)
+                return Math.min(3000, current + _step);
+
+            // Deep queue + lots of expirations with healthy delivery = queue is filling
+            // faster than it drains. Drop stale messages faster to free slots.
+            if (deepQueue && lotsOfExpirations && !atFloor)
                 return Math.max(_min, current - _step * 2);
 
             // Many expirations = lower age limit (stop hoarding dead messages)
-            if (lotsOfExpirations)
+            if (lotsOfExpirations && !atFloor)
                 return Math.max(_min, current - _step);
 
-            // Bid fails + expirations = lower age (can't route, stop trying)
-            if (lotsOfBidFails && lotsOfExpirations)
+            // Bid fails + expirations + no delivery = can't route, stop trying
+            if (lotsOfBidFails && lotsOfExpirations && !atFloor && !healthyDelivery)
                 return Math.max(_min, current - _step * 2);
 
-            // Few expirations + few bid fails = raise age limit (messages are being delivered)
-            if (observed < 1000 && !lotsOfBidFails)
-                return Math.min(_max, current + _step);
+            // Recovery: healthy delivery + queue clearing + CPU free = raise toward default
+            if (healthyDelivery && !deepQueue && cpuFree && current < 3000)
+                return Math.min(3000, current + _step * 2);
+
+            // Clear: few expirations + few bid fails + no delivery pressure = raise
+            if (observed < 1000 && !lotsOfBidFails && !deepQueue && healthyDelivery)
+                return Math.min(3000, current + _step);
 
             return current;
         }

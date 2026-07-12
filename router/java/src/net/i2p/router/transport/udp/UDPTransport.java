@@ -2563,6 +2563,7 @@ public class UDPTransport extends TransportImpl {
             return;
         }
 
+        msg.setTransportQueued(_context.clock().now());
         msg.timestamp("Sending on UDP transport");
         Hash to = tori.getIdentity().calculateHash();
         PeerState peer = getPeerState(to);

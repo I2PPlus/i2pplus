@@ -43,6 +43,7 @@ public class OutNetMessage implements CDPQEntry {
     private long _sendBegin;
     private long _created;
     private long _enqueueTime;
+    private long _transportQueued;
     private long _seqNum;
     private final boolean _shouldTimestamp;
     /** for debugging, contains a mapping of even name to Long (e.g. "begin sending", "handleOutbound", etc) */
@@ -325,6 +326,13 @@ public class OutNetMessage implements CDPQEntry {
      *  @since 0.9.3
      */
     public long getEnqueueTime() {return _enqueueTime;}
+
+    /**
+     *  When the message entered the transport queue (set by transport send()).
+     */
+    public void setTransportQueued(long now) {_transportQueued = now;}
+
+    public long getTransportQueued() {return _transportQueued;}
 
     /**
      *  For CDQ

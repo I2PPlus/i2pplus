@@ -158,6 +158,8 @@ public abstract class TransportImpl implements Transport {
         _log = _context.logManager().getLog(getClass());
 
         _context.statManager().createRequiredRateStat("transport.expiredOnQueueLifetime", "Time to process message expired in outbound queue (ms)", "Transport", RATES );
+        _context.statManager().createRequiredRateStat("transport.expiredOnQueueCount", "Count of messages expired while queued", "Transport", RATES );
+        _context.statManager().createRequiredRateStat("transport.messagesDelivered", "Count of messages successfully delivered", "Transport", RATES );
         _context.statManager().createRequiredRateStat("transport.sendMessageFailureLifetime", "Lifetime of failed sent messages", "Transport", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("transport.receiveMessageSize", "Size of received messages (bytes)", "Transport", RATES);
         _context.statManager().createRequiredRateStat("transport.sendMessageSize", "Size of sent messages (bytes)", "Transport", RATES);
@@ -425,6 +427,7 @@ public abstract class TransportImpl implements Transport {
         }
 
         long lifetime = msg.getLifetime();
+        long queueTime = msg.getTransportQueued() > 0 ? now - msg.getTransportQueued() : lifetime;
         if (lifetime > 3000) {
             if (_log.shouldLog(Log.DEBUG)) {
                 _log.log(Log.DEBUG, String.format("[%s] afterSend slow: %s(Lifetime: %dms / Time taken: %dms)%n* %d byte %s [MsgID %d] from [%s] to [%s]: %s",
@@ -439,6 +442,7 @@ public abstract class TransportImpl implements Transport {
         }
 
         if (sendSuccessful) {
+            _context.statManager().addRateData("transport.messagesDelivered", 1);
             if (debug) {
                 _log.debug(String.format("[%s] Sent %s successfully to [%s]", style, msg.getMessageType(), peerHash));
             }
@@ -449,7 +453,8 @@ public abstract class TransportImpl implements Transport {
                 _log.debug(String.format("[%s] Failed to send %s to [%s] %s", style, msg.getMessageType(), peerHash, msg));
             }
             if (msg.getExpiration() < now) {
-                _context.statManager().addRateData("transport.expiredOnQueueLifetime", lifetime);
+                _context.statManager().addRateData("transport.expiredOnQueueLifetime", queueTime);
+                _context.statManager().addRateData("transport.expiredOnQueueCount", 1);
             }
             if (allowRequeue && ((msg.getExpiration() <= 0) || (msg.getExpiration() > now)) && (msg.getMessage() != null)) {
                 msg.resetCreatedTime();
@@ -522,6 +527,7 @@ public abstract class TransportImpl implements Transport {
             }
             return;
         }
+        msg.setTransportQueued(_context.clock().now());
         try {
             if (!_sendPool.offer(msg, 200, TimeUnit.MILLISECONDS)) {
                 _context.statManager().addRateData("transport.sendPool.full", 1);
