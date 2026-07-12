@@ -874,4 +874,16 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @since 0.9.70+
      */
     public static void setDefaultPassiveFlushDelay(int val) { MessageOutputStream.setDefaultPassiveFlushDelay(val); }
+
+    /**
+     * @return the default inactivity timeout
+     * @since 0.9.70+
+     */
+    public static int getDefaultInactivityTimeout() { return ConnectionOptions.getDefaultInactivityTimeout(); }
+
+    /**
+     * @param val the new default inactivity timeout
+     * @since 0.9.70+
+     */
+    public static void setDefaultInactivityTimeout(int val) { ConnectionOptions.setDefaultInactivityTimeout(val); }
 }

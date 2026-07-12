@@ -181,7 +181,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static int getInitialWindowSize() { return _initialWindowSize; }
 
     /** @since 0.9.70+ */
-    static void setInitialWindowSize(int val) { _initialWindowSize = Math.max(1, Math.min(128, val)); }
+    static void setInitialWindowSize(int val) { _initialWindowSize = Math.max(1, Math.min(256, val)); }
     /**
      *  Initial RTT estimate for new connections before first measurement.
      *  I2P typically has 2-10 second RTT, so 3 seconds provides a conservative
@@ -209,9 +209,16 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /** @since 0.9.70+ */
     public static void setDefaultInitialAckDelay(int val) { _defaultInitialAckDelay = Math.max(1, Math.min(200, val)); }
+
+    /** @since 0.9.70+ */
+    public static int getDefaultInactivityTimeout() { return _defaultInactivityTimeout; }
+
+    /** @since 0.9.70+ */
+    public static void setDefaultInactivityTimeout(int val) { _defaultInactivityTimeout = Math.max(60000, Math.min(600000, val)); }
     static final int MIN_WINDOW_SIZE = 1;
     private static final boolean DEFAULT_ANSWER_PINGS = true;
-    private static final int DEFAULT_INACTIVITY_TIMEOUT = 180*1000;
+    /** @since 0.9.70+ mutable for adaptive tuning */
+    static volatile int _defaultInactivityTimeout = 300000;
     private static final int DEFAULT_INACTIVITY_ACTION = INACTIVITY_ACTION_SEND;
     private static final int DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR = 1;
     private static final int DEFAULT_SLOW_START_GROWTH_RATE_FACTOR = 1;
@@ -485,7 +492,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         setSendAckDelay(getInt(opts, PROP_INITIAL_ACK_DELAY, _defaultInitialAckDelay));
         setWindowSize(getInt(opts, PROP_INITIAL_WINDOW_SIZE, _initialWindowSize));
         setMaxResends(getInt(opts, PROP_MAX_RESENDS, DEFAULT_MAX_SENDS));
-        setInactivityTimeout(getInt(opts, PROP_INACTIVITY_TIMEOUT, DEFAULT_INACTIVITY_TIMEOUT));
+        setInactivityTimeout(getInt(opts, PROP_INACTIVITY_TIMEOUT, _defaultInactivityTimeout));
         setInactivityAction(getInt(opts, PROP_INACTIVITY_ACTION, DEFAULT_INACTIVITY_ACTION));
 
         // Calculate and set minimum required inbound buffer size
@@ -553,7 +560,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
             setMaxResends(getInt(opts, PROP_MAX_RESENDS, DEFAULT_MAX_SENDS));
         }
         if (opts.getProperty(PROP_INACTIVITY_TIMEOUT) != null) {
-            setInactivityTimeout(getInt(opts, PROP_INACTIVITY_TIMEOUT, DEFAULT_INACTIVITY_TIMEOUT));
+            setInactivityTimeout(getInt(opts, PROP_INACTIVITY_TIMEOUT, _defaultInactivityTimeout));
         }
         if (opts.getProperty(PROP_INACTIVITY_ACTION) != null) {
             setInactivityAction(getInt(opts, PROP_INACTIVITY_ACTION, DEFAULT_INACTIVITY_ACTION));

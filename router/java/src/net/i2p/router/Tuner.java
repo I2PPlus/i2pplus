@@ -380,6 +380,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new MinResendDelayParam());
         _params.add(new PassiveFlushDelayParam());
         _params.add(new SlowStartGrowthParam());
+        _params.add(new InactivityTimeoutParam());
 
         // I2CP
         _params.add(new InternalQueueSizeParam());
@@ -2485,7 +2486,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("INITIAL_WINDOW_SIZE", "Initial congestion window",
                   SUB_STREAMING,
 
-                  1, 128, 4, "stream.con.initialRTT.in", _context);
+                  1, 256, 4, "stream.con.initialRTT.in", _context);
         }
 
         protected void applyValue(int value) {
@@ -2573,7 +2574,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("INITIAL_RTO", "First retransmit timeout (ms)",
                   SUB_STREAMING,
 
-                  1000, 10000, 500, "stream.con.initialRTT.out", _context);
+                  1000, 30000, 1000, "stream.con.initialRTT.out", _context);
         }
 
         protected void applyValue(int value) {
@@ -2605,7 +2606,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 20000;
 
             // Target: 2x RTT as baseline (standard TCP-like behavior)
-            int target = Math.max(2000, Math.min(10000, (int) (observed * 2)));
+            int target = Math.max(2000, Math.min(_max, (int) (observed * 2)));
 
             // FAST PATH: latency target violated — raise RTO (faster loss detection helps latency)
             if (highRTT && target < current)
@@ -4550,7 +4551,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxResendDelay", "Streaming max resend delay (ms)",
                   SUB_STREAMING,
 
-                  1000, 20000, 1000, "stream.con.initialRTT.out", _context);
+                  1000, 30000, 1000, "stream.con.initialRTT.out", _context);
         }
 
         protected void applyValue(int value) {
@@ -5047,6 +5048,59 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Congestion = raise delay (don't add ACK-only packets to congested pipe)
             if (congested)
                 return Math.min(_max, current + _step);
+
+            return current;
+        }
+    }
+
+    /**
+     * Inactivity timeout for streaming connections.
+     * Higher values keep slow transfers alive; lower values free resources faster.
+     * Primary signal: udp.sendConfirmTime (transport RTT).
+     * Cross-refs: stream.con.lifetimeRTT (completed stream RTT),
+     *             stream.con.sendDuplicateSize (retransmit pressure).
+     */
+    private class InactivityTimeoutParam extends BaseParam {
+
+        InactivityTimeoutParam() {
+            super("i2p.streaming.inactivityTimeout", "Streaming inactivity timeout (ms)",
+                  SUB_STREAMING,
+
+                  120000, 600000, 30000, "udp.sendConfirmTime", _context);
+        }
+
+        protected void applyValue(int value) {
+            _context.router().saveConfig("i2p.streaming.inactivityTimeout", Integer.toString(value));
+            StreamingReflector.invokeSetInt("setDefaultInactivityTimeout", value);
+        }
+
+        protected int getRuntimeValue() {
+            return _context.getProperty("i2p.streaming.inactivityTimeout", 300000);
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            return getObservedRTT(_context, _statName);
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = udp.sendConfirmTime (ms, actual network RTT)
+            // Cross-refs: stream.con.lifetimeRTT (slow pipe indicator),
+            //             stream.con.sendDuplicateSize (retransmit pressure)
+            double lifetimeRTT = getAdditionalStat(_context, "stream.con.lifetimeRTT");
+            double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+
+            boolean highRTT = !Double.isNaN(observed) && observed > 20000;
+            boolean streamsSlow = !Double.isNaN(lifetimeRTT) && lifetimeRTT > 8000;
+            boolean congested = !Double.isNaN(dupSize) && dupSize > 1000;
+
+            // High RTT or slow streams = raise timeout (avoid killing slow transfers)
+            if (highRTT || (streamsSlow && !congested))
+                return Math.min(_max, current + _step);
+
+            // Low RTT + no congestion = tighten timeout (faster resource reclamation)
+            if (observed < 5000 && !congested)
+                return Math.max(_min, current - _step);
 
             return current;
         }

@@ -114,6 +114,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("i2p.streaming.maxRtt", "RTT Cap");
         DISPLAY_NAMES.put("i2p.streaming.initialResendDelay", "Initial Resend Delay");
         DISPLAY_NAMES.put("i2p.streaming.immediateAckDelay", "Dup ACK Delay");
+        DISPLAY_NAMES.put("i2p.streaming.inactivityTimeout", "Inactivity Timeout");
         DISPLAY_NAMES.put("i2p.router.maxDispatchAge", "Max Message Queue Age");
         DISPLAY_NAMES.put("i2p.router.handlerThreadPriority", "I/O Thread Priority");
         DISPLAY_NAMES.put("tunnel.pumper.queueCapacity", "Pumper Queue Capacity");
@@ -159,6 +160,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxRTO", "Max retransmission timeout (ms).");
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxResendDelay", "Max time between retransmissions (ms).");
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxRetransmissions", "Retransmissions before dropping the stream.");
+        PARAM_DESCRIPTIONS.put("i2p.streaming.inactivityTimeout", "Max idle time before dropping a stream (ms).");
         PARAM_DESCRIPTIONS.put("CLIENT_WRITER_QUEUE_SIZE", "I2CP write queue depth.");
         PARAM_DESCRIPTIONS.put("CODEL_TARGET", "CoDel drop target delay (ms).");
         PARAM_DESCRIPTIONS.put("CODEL_INTERVAL", "CoDel measurement window (ms).");
