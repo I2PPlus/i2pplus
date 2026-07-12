@@ -59,6 +59,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         _log = ctx.logManager().getLog(X25519KeyFactory.class);
         ctx.statManager().createRequiredRateStat("crypto.XDHUsed", "Need a DH from the queue", "Encryption", new long[] { RateConstants.ONE_MINUTE });
         ctx.statManager().createRequiredRateStat("crypto.XDHEmpty", "DH queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        ctx.statManager().createRequiredRateStat("crypto.XDHDrain", "Idle keys drained from pool", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
 
         // Initial dynamic sizing
         computeTargetSizes();
@@ -82,12 +83,11 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
      *   <li>Free memory headroom — more free memory = larger pool budget</li>
      *   <li>Memory pressure — high usage = shrink aggressively</li>
      *   <li>CPU load (job lag) — busy CPU = limit generation rate</li>
-     *   <li>Empty queue events — direct demand signal</li>
+     *   <li>Empty queue events — zero empties = low demand shrinks pool</li>
      *   <li>Active peers — more connections = more key demand</li>
      * </ul>
      *
-     * <p>Memory budget: up to 2% of free heap for XDH keys (64 bytes each).
-     * On a 4GB heap with 50% free: 2% × 2GB = 40MB ÷ 64 = 655K keys (capped at HARD_MAX).</p>
+     * <p>Memory budget: up to 2% of free heap when active, 0.5% when idle.</p>
      *
      * @since 0.9.70+
      */
@@ -108,24 +108,25 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
                 jobLag = rate.getAverageValue();
             }
         }
-        boolean cpuFree = jobLag < 10 || Double.isNaN(jobLag);
         boolean cpuBusy = jobLag > 50;
 
         // Demand signal: empties per minute (atomic read-and-reset)
         int recentEmpties = _emptyCount.getAndSet(0);
         boolean highDemand = recentEmpties > 10;
+        boolean lowDemand = recentEmpties == 0;
 
         // === MINIMUM SIZE ===
         // Base: 256 × cores, scaled by demand
         int min = Math.max(HARD_MIN, 256 * cores);
         if (highDemand) { min *= 2; }
+        if (lowDemand) { min = Math.max(HARD_MIN, min / 2); }
         if (cpuBusy) { min = Math.max(HARD_MIN, min / 2); }
         if (memPressure > 0.85) { min = Math.max(HARD_MIN, min / 2); }
         if (SystemVersion.isSlow()) { min = Math.max(HARD_MIN, min / 2); }
 
         // === MAXIMUM SIZE ===
-        // Memory budget: 2% of free heap, scaled by CPU headroom
-        long memBudgetBytes = (long)(freeMem * 0.02);
+        // Memory budget: up to 2% of free heap when active, scaled by demand
+        long memBudgetBytes = (long)(freeMem * (lowDemand ? 0.005 : 0.02));
         int maxFromMemory = (int) Math.min(HARD_MAX, memBudgetBytes / KEY_SIZE_BYTES);
 
         // CPU scaling: more cores = can generate faster = sustain larger pool
@@ -164,7 +165,8 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     }
 
     /**
-     * Called by the Tuner every 30 seconds. Applies computed target sizes.
+     * Called by the Tuner every 30 seconds. Applies computed target sizes
+     * and drains excess keys when the pool shrinks below the current queue.
      * The precalc thread uses _minSize/_maxSize to decide generation targets.
      *
      * @since 0.9.70+
@@ -179,6 +181,24 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
             if (_log.shouldDebug()) {
                 _log.debug("XDH Precalc resized min: " + oldMin + " → " + _minSize
                            + " max: " + oldMax + " → " + _maxSize);
+            }
+        }
+        // Drain excess keys when cap is reduced below current queue
+        int current = _keys.size();
+        int target = _minSize + 256;
+        if (current > target) {
+            int drained = 0;
+            while (_keys.size() > target) {
+                KeyPair kp = _keys.poll();
+                if (kp == null)
+                    break;
+                drained++;
+            }
+            if (drained > 0) {
+                _context.statManager().addRateData("crypto.XDHDrain", drained);
+                if (_log.shouldWarn()) {
+                    _log.warn("XDH Precalc drained " + drained + " idle keys (" + current + " -> " + _keys.size() + ")");
+                }
             }
         }
     }

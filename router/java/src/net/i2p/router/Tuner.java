@@ -473,6 +473,26 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                     _log.warn("Tuner: error refreshing XDH pool", e);
             }
         }
+        // Refresh EDH pool sizes based on current system conditions
+        net.i2p.router.crypto.ratchet.Elg2KeyFactory edh =
+            net.i2p.router.crypto.ratchet.Elg2KeyFactory.getInstance();
+        if (edh != null) {
+            try { edh.refreshPoolSize(); }
+            catch (Exception e) {
+                if (_log.shouldWarn())
+                    _log.warn("Tuner: error refreshing EDH pool", e);
+            }
+        }
+        // Refresh MLKEM pool sizes based on current system conditions
+        net.i2p.router.crypto.pqc.MLKEMKeyFactory mlkem =
+            net.i2p.router.crypto.pqc.MLKEMKeyFactory.getInstance();
+        if (mlkem != null) {
+            try { mlkem.refreshPoolSize(); }
+            catch (Exception e) {
+                if (_log.shouldWarn())
+                    _log.warn("Tuner: error refreshing MLKEM pool", e);
+            }
+        }
         // Flush dirty state to disk (at most once per 5min, per AutotuneConfig throttle)
         _autotune.save();
     }

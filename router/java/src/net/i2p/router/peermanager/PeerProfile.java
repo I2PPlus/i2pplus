@@ -617,10 +617,10 @@ public class PeerProfile {
      *  Shrink the profile by dropping the RateStat objects.
      *  They will be re-created lazily by expandProfile()
      *  when the profile is used again.
-     *  TunnelHistory and DBHistory keep their RateStats (final fields).
      */
     public synchronized void shrinkProfile() {
         _tunnelCreateResponseTime = null;
+        _tunnelHistory = null;
         _expanded = false;
     }
 
@@ -630,6 +630,7 @@ public class PeerProfile {
     public synchronized void shrinkDBProfile() {
         _dbResponseTime = null;
         _dbIntroduction = null;
+        _dbHistory = null;
         _expandedDB = false;
     }
 
@@ -694,7 +695,7 @@ public class PeerProfile {
         _coalescing = true;
         if (_tunnelCreateResponseTime != null) {_tunnelCreateResponseTime.coalesceStats();}
 
-        _tunnelHistory.coalesceStats();
+        if (_tunnelHistory != null) {_tunnelHistory.coalesceStats();}
 
         if (_expandedDB) {
             if (_dbIntroduction != null) {_dbIntroduction.coalesceStats();}

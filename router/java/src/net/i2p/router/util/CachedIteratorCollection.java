@@ -27,6 +27,7 @@
 package net.i2p.router.util;
 
 import java.util.AbstractCollection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -54,7 +55,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     // Thread-local iterators to avoid concurrent modification when multiple threads iterate.
     // Each thread's iterator holds an explicit reference back to this collection, so
     // clear() sets _cleared to prevent stale iterators from holding PeerStates alive.
-    private final ThreadLocal<CachedIterator<E>> _iterator = ThreadLocal.withInitial(() -> new CachedIterator<>(this));
+    private volatile ThreadLocal<CachedIterator<E>> _iterator = ThreadLocal.withInitial(() -> new CachedIterator<>(this));
 
     // Set to true in clear() to signal all iterator instances the collection is gone.
     // ThreadLocalMap entries for other threads will be cleaned lazily via WeakRef key.
@@ -122,6 +123,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
         this.size = 0;
         this._cleared = true;
         _iterator.remove();
+        _iterator = null;
     }
 
     /**
@@ -171,7 +173,10 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
      *  @since 0.9.70+
      */
     public void releaseCurrentThreadIterator() {
-        CachedIterator<E> it = _iterator.get();
+        ThreadLocal<CachedIterator<E>> tl = _iterator;
+        if (tl == null)
+            return;
+        CachedIterator<E> it = tl.get();
         it.itrIndexNode = null;
     }
 
@@ -186,7 +191,10 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
      */
     @Override
     public synchronized Iterator<E> iterator() {
-        CachedIterator<E> it = _iterator.get();
+        ThreadLocal<CachedIterator<E>> tl = _iterator;
+        if (tl == null)
+            return Collections.emptyIterator();
+        CachedIterator<E> it = tl.get();
         if (it.inUse()) {
             CachedIterator<E> nested = new CachedIterator<>(this);
             nested.reset();

@@ -1,6 +1,7 @@
 package net.i2p.router.crypto.ratchet;
 
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyFactory;
 import net.i2p.crypto.KeyPair;
@@ -30,6 +31,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
     private final LinkedBlockingQueue<Elg2KeyPair> _keys;
     private volatile boolean _isRunning;
     private long _checkDelay = 10 * 1000L;
+    private final AtomicInteger _emptyCount = new AtomicInteger();
 
     private static final String PROP_DH_PRECALC_MIN = "crypto.edh.precalc.min";
     private static final String PROP_DH_PRECALC_MAX = "crypto.edh.precalc.max";
@@ -46,6 +48,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         _elg2 = new Elligator2(ctx);
         ctx.statManager().createRequiredRateStat("crypto.EDHUsed", "Need a DH from the queue", "Encryption", new long[] { RateConstants.ONE_MINUTE });
         ctx.statManager().createRequiredRateStat("crypto.EDHEmpty", "DH queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        ctx.statManager().createRequiredRateStat("crypto.EDHDrain", "Idle EDH keys drained from pool", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
 
         // Scale precomputation with available memory and cores.
         long maxMemory = SystemVersion.getMaxMemory();
@@ -113,6 +116,47 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
     public int getSize() { return _keys.size(); }
 
     /**
+     * Called by the Tuner every 30 seconds. Adjusts max pool size
+     * based on demand and drains excess keys.
+     *
+     * @since 0.9.70+
+     */
+    public void refreshPoolSize() {
+        int recentEmpties = _emptyCount.getAndSet(0);
+        boolean lowDemand = recentEmpties == 0;
+
+        long freeMem = Runtime.getRuntime().freeMemory();
+        long totalMem = Runtime.getRuntime().totalMemory();
+        double memPressure = 1.0 - ((double) freeMem / Math.max(totalMem, 1));
+
+        // Shrink max when idle, especially under memory pressure
+        if (lowDemand && memPressure > 0.85) {
+            _maxSize = Math.max(_minSize + 64, _maxSize / 2);
+        } else if (lowDemand && memPressure > 0.7) {
+            _maxSize = Math.max(_minSize + 128, _maxSize * 3 / 4);
+        }
+
+        // Drain excess keys when pool shrinks below current queue
+        int current = _keys.size();
+        int target = _minSize + 256;
+        if (current > target) {
+            int drained = 0;
+            while (_keys.size() > target) {
+                Elg2KeyPair kp = _keys.poll();
+                if (kp == null)
+                    break;
+                drained++;
+            }
+            if (drained > 0) {
+                _context.statManager().addRateData("crypto.EDHDrain", drained);
+                if (_log.shouldWarn()) {
+                    _log.warn("EDH Precalc drained " + drained + " idle keys (" + current + " -> " + _keys.size() + ")");
+                }
+            }
+        }
+    }
+
+    /**
      *  Note that this stops the singleton precalc thread.
      *  You don't want to do this if there are multiple routers in the JVM.
      *  Fix this if you care. See Router.shutdown().
@@ -171,6 +215,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         _context.statManager().addRateData("crypto.EDHUsed", 1);
         Elg2KeyPair rv = _keys.poll();
         if (rv == null) {
+            _emptyCount.incrementAndGet();
             _context.statManager().addRateData("crypto.EDHEmpty", 1);
             rv = precalc();
             this.interrupt(); // stop sleeping, wake up, make some more
