@@ -1,6 +1,5 @@
 package net.i2p.router.tunnel.pool;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -746,7 +745,7 @@ public class BuildExecutor implements Runnable {
      *
      *  WARNING - this sort may be unstable, as a pool's tunnel count may change during the sort.
      */
-    private static class TunnelPoolComparator implements Comparator<TunnelPool>, Serializable {
+    private static class TunnelPoolComparator implements Comparator<TunnelPool> {
 
         private final boolean _preferEmpty;
 

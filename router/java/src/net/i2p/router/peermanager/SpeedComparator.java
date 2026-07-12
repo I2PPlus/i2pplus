@@ -1,6 +1,5 @@
 package net.i2p.router.peermanager;
 
-import java.io.Serializable;
 import java.util.Comparator;
 import net.i2p.data.DataHelper;
 
@@ -9,7 +8,7 @@ import net.i2p.data.DataHelper;
  *
  * @since 0.7.10
  */
-class SpeedComparator implements Comparator<PeerProfile>, Serializable {
+class SpeedComparator implements Comparator<PeerProfile> {
 
     @Override
     public int compare(PeerProfile left, PeerProfile right) {

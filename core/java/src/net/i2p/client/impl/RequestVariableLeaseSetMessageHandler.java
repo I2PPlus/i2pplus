@@ -84,7 +84,7 @@ class RequestVariableLeaseSetMessageHandler extends RequestLeaseSetMessageHandle
                     props = new OrderedProperties();
                 }
                 props.setProperty(vs[0], vs[1]);
-                k = new StringBuilder("i2cp.leaseSetOption.").append(i + 1).toString();
+                k = "i2cp.leaseSetOption." + (i + 1);
             }
             if (props != null) {
                 ls2.setOptions(props);

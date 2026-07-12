@@ -80,11 +80,9 @@ public class OutboundTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(64);
-        buf.append("[OutboundTunnelBuildReplyMessage: " +
-                   "\n\tID: ").append(getUniqueId())
-           .append("\n\tRecords: ").append(getRecordCount())
-           .append(']');
-        return buf.toString();
+        return "[OutboundTunnelBuildReplyMessage: " +
+               "\n\tID: " + getUniqueId() +
+               "\n\tRecords: " + getRecordCount() +
+               ']';
     }
 }

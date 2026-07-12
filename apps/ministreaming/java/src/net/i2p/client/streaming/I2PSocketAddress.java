@@ -124,6 +124,7 @@ public class I2PSocketAddress extends SocketAddress {
     }
 
     @Override
+    @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public String toString() {
         StringBuilder buf = new StringBuilder();
         if (_dest != null)

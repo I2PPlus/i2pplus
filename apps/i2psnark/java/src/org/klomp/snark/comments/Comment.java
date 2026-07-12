@@ -181,6 +181,7 @@ public class Comment implements Comparable<Comment> {
      *
      * @return comma-separated string of time,rating,mine,hidden,name,text
      */
+    @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public String toPersistentString() {
         StringBuilder buf = new StringBuilder();
         buf.append(getTime());

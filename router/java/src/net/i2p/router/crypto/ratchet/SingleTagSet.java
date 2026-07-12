@@ -41,11 +41,6 @@ class SingleTagSet extends RatchetTagSet {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(64);
-        buf.append("[SingleTagSet: 0 ");
-        buf.append(_tag.toBase64());
-        buf.append(' ').append(_key.toBase64());
-        buf.append(']');
-        return buf.toString();
+        return "[SingleTagSet: 0 " + _tag.toBase64() + ' ' + _key.toBase64() + ']';
     }
 }

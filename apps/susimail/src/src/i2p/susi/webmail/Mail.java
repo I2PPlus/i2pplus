@@ -380,11 +380,11 @@ class Mail {
                             int lt = shortSender.indexOf('<');
                             if (lt > 0) {shortSender = shortSender.substring(0, lt).trim();}
                             // add missing <> (but thunderbird doesn't...)
-                            else if (lt < 0 && shortSender.contains("@")) {shortSender = new StringBuilder(shortSender.length() + 2).append('<').append(shortSender).append('>').toString();}
+                            else if (lt < 0 && shortSender.contains("@")) {shortSender = '<' + shortSender + '>';}
                             boolean trim = shortSender.length() > 45;
                             if (trim) {shortSender = ServletUtil.truncate(shortSender, 42).trim();}
                             shortSender = html.encode(shortSender);
-                            if (trim) {shortSender = new StringBuilder(shortSender).append("&hellip;").toString();}  // must be after html encode
+                            if (trim) {shortSender = shortSender + "&hellip;";}  // must be after html encode
                         }
                         else if (hlc.startsWith("date:")) {
                             dateString = line.substring(5).trim();
@@ -397,7 +397,7 @@ class Mail {
                             boolean trim = subject.length() > 75;
                             if (trim) {shortSubject = ServletUtil.truncate(subject, 72).trim();}
                             shortSubject = html.encode(shortSubject);
-                            if (trim) {shortSubject = new StringBuilder(shortSubject).append("&hellip;").toString();}  // must be after html encode
+                            if (trim) {shortSubject = shortSubject + "&hellip;";}  // must be after html encode
                         }
                         else if (hlc.startsWith("reply-to:")) {reply = getAddress(line.substring(9).trim());}
                         else if (hlc.startsWith("to:")) {

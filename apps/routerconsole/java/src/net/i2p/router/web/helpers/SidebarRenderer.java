@@ -411,13 +411,11 @@ class SidebarRenderer {
     }
 
     public String renderClockHTML() {
-        StringBuilder buf = new StringBuilder(128);
         String FORMAT = "HH:mm:ss";
         DateFormat dfmt = new SimpleDateFormat(FORMAT, Locale.UK);
         TimeZone utc = TimeZone.getTimeZone("GMT");
         dfmt.setTimeZone(utc);
-        buf.append("<div id=clock class=volatile>").append(dfmt.format(new Date())).append("</div>");
-        return buf.toString();
+        return "<div id=clock class=volatile>" + dfmt.format(new Date()) + "</div>";
     }
 
     public String renderI2PInternalsHTML() {
@@ -669,56 +667,51 @@ class SidebarRenderer {
 
     public String renderRouterInfoHTML() {
         if (_helper == null) {return "";}
-        StringBuilder buf = new StringBuilder(512);
         toggleId = "toggle_sb_general";
 
-        buf.append("<h3><a href=/info target=_top title=\"")
-           .append(_t("Your Local Identity [{0}] is your unique I2P router identity, similar to an IP address but tailored to I2P. ", _helper.getIdent()))
-           .append(_t("Never disclose this to anyone, as it can reveal your real world IP."))
-           .append("\">")
-           .append(_t("Router Info"))
-           .append(" <span class=\"badge volatile\" hidden title=\"")
-           .append(_t("How long we've been running for this session"))
-           .append("\">")
-           .append(_t("Up"))
-           .append(' ')
-           .append(_helper.getUptime())
-           .append("</span></a>")
-           .append(getToggle())
-           .append("</h3>\n<hr class=b>\n<table id=sb_general><tr title=\"")
-           .append(_t("The version of the I2P software we are running"))
-           .append("\"><td><a href=/configupdate><b>")
-           .append(_t("Version"))
-           .append("</b></a></td><td class=digits><span>")
-           .append(_helper.getVersion())
-           .append("</span></td></tr>\n<tr title=\"")
-           .append(_t("How long we've been running for this session"))
-           .append("\"><td><b>")
-           .append(_t("Uptime"))
-           .append("</b></td><td class=digits><span class=volatile>")
-           .append(_helper.getUptime())
-           .append("</span></td></tr>\n</table>\n");
-        return buf.toString();
+        return "<h3><a href=/info target=_top title=\""
+            + _t("Your Local Identity [{0}] is your unique I2P router identity, similar to an IP address but tailored to I2P. ", _helper.getIdent())
+            + _t("Never disclose this to anyone, as it can reveal your real world IP.")
+            + "\">"
+            + _t("Router Info")
+            + " <span class=\"badge volatile\" hidden title=\""
+            + _t("How long we've been running for this session")
+            + "\">"
+            + _t("Up")
+            + " "
+            + _helper.getUptime()
+            + "</span></a>"
+            + getToggle()
+            + "</h3>\n<hr class=b>\n<table id=sb_general><tr title=\""
+            + _t("The version of the I2P software we are running")
+            + "\"><td><a href=/configupdate><b>"
+            + _t("Version")
+            + "</b></a></td><td class=digits><span>"
+            + _helper.getVersion()
+            + "</span></td></tr>\n<tr title=\""
+            + _t("How long we've been running for this session")
+            + "\"><td><b>"
+            + _t("Uptime")
+            + "</b></td><td class=digits><span class=volatile>"
+            + _helper.getUptime()
+            + "</span></td></tr>\n</table>\n";
     }
 
     public String renderShortRouterInfoHTML() {
         if (_helper == null) {return "";}
-        StringBuilder buf = new StringBuilder(512);
-
-        buf.append("<table id=sb_shortgeneral>\n<tr title=\"")
-           .append(_t("The version of the I2P software we are running"))
-           .append("\"><td><a href=\"/configupdate\"><b>")
-           .append(_t("Version"))
-           .append("</b></a></td><td class=digits><span>")
-           .append(_helper.getVersion())
-           .append("</span></td></tr>\n<tr title=\"")
-           .append(_t("How long we've been running for this session"))
-           .append("\"><td><b>")
-           .append(_t("Uptime"))
-           .append("</b></td><td class=digits><span class=volatile>")
-           .append(_helper.getUptime())
-           .append("</span></td></tr>\n</table>\n");
-        return buf.toString();
+        return "<table id=sb_shortgeneral>\n<tr title=\""
+            + _t("The version of the I2P software we are running")
+            + "\"><td><a href=\"/configupdate\"><b>"
+            + _t("Version")
+            + "</b></a></td><td class=digits><span>"
+            + _helper.getVersion()
+            + "</span></td></tr>\n<tr title=\""
+            + _t("How long we've been running for this session")
+            + "\"><td><b>"
+            + _t("Uptime")
+            + "</b></td><td class=digits><span class=volatile>"
+            + _helper.getUptime()
+            + "</span></td></tr>\n</table>\n";
     }
 
     /** @since 0.9.32 */
@@ -1118,21 +1111,19 @@ class SidebarRenderer {
         if (!useLegacy) {
             dataAttrs = getDataAttributes();
         }
-        StringBuilder buf = new StringBuilder(512);
-        buf.append("<div id=sb_graphcontainer class=\"collapse")
-           .append(useLegacy ? " legacy" : "")
-           .append("\" title=\"")
-           .append(_t("Our inbound &amp; outbound traffic for the last 20 minutes"))
-           .append("\">\n<span id=sb_graphstats class=volatile>")
-           .append(_helper.getSecondKBps())
-           .append("Bps</span>\n<a href=/graphs>\n<canvas id=minigraph width=245 height=50")
-           .append(dataAttrs)
-           .append(">\n<div id=minigraphcontainer ")
-           .append(g)
-           .append("></div></canvas>\n<noscript><div id=minigraphcontainer_noscript ")
-           .append(g)
-           .append("></div></noscript></a>\n</div>\n");
-        return buf.toString();
+        return "<div id=sb_graphcontainer class=\"collapse"
+            + (useLegacy ? " legacy" : "")
+            + "\" title=\""
+            + _t("Our inbound &amp; outbound traffic for the last 20 minutes")
+            + "\">\n<span id=sb_graphstats class=volatile>"
+            + _helper.getSecondKBps()
+            + "Bps</span>\n<a href=/graphs>\n<canvas id=minigraph width=245 height=50"
+            + dataAttrs
+            + ">\n<div id=minigraphcontainer "
+            + g
+            + "></div></canvas>\n<noscript><div id=minigraphcontainer_noscript "
+            + g
+            + "></div></noscript></a>\n</div>\n";
     }
 
     /**
@@ -1439,6 +1430,7 @@ class SidebarRenderer {
         return buf.toString();
     }
 
+    @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public String renderTunnelStatusHTML() {
         if (_helper == null) {return "";}
         int partTunnels = _helper.getParticipatingTunnels();

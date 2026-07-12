@@ -40,9 +40,7 @@ public class PayloadGarlicConfig extends GarlicConfig {
 
     @Override
     protected String getSubData() {
-	StringBuilder buf = new StringBuilder();
-	buf.append("<payloadMessage>").append(_payload).append("</payloadMessage>");
-	return buf.toString();
+	return "<payloadMessage>" + _payload + "</payloadMessage>";
     }
 
     /**

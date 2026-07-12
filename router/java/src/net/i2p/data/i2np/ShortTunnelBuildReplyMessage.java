@@ -54,11 +54,9 @@ public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(64);
-        buf.append("[ShortTunnelBuildReplyMessage: " +
-                   "\n\tID: ").append(getUniqueId())
-           .append("\n\tRecords: ").append(getRecordCount())
-           .append(']');
-        return buf.toString();
+        return "[ShortTunnelBuildReplyMessage: " +
+               "\n\tID: " + getUniqueId() +
+               "\n\tRecords: " + getRecordCount() +
+               ']';
     }
 }

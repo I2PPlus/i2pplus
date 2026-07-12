@@ -143,6 +143,15 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
     }
 
     @Override
+    public Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError(e);
+        }
+    }
+
+    @Override
     public void addRandomByte(byte b) {
         if (pools == null) {return;}
         pools[pool].update(b);
@@ -195,6 +204,15 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
             int keysize = 32;
             key = new byte[keysize];
             cryptixKeyBuf = CryptixAESKeyCache.createNew();
+        }
+
+        @Override
+        public Object clone() {
+            try {
+                return super.clone();
+            } catch (CloneNotSupportedException e) {
+                throw new InternalError(e);
+            }
         }
 
         @Override

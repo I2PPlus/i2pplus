@@ -567,7 +567,7 @@ class ProfilePersistenceHelper {
                     continue;
                 }
             } catch (IOException e) {
-                if (_log.shouldDebug()) _log.debug(new StringBuilder(48).append("Failed to read profile ").append(f).toString(), e);
+                if (_log.shouldDebug()) _log.debug("Failed to read profile " + f, e);
             }
 
             FileMetadata fm = new FileMetadata(f, f.lastModified(), tier);

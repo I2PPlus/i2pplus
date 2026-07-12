@@ -212,7 +212,7 @@ public class Rate {
     public synchronized void addData(long value, long eventDuration) {
         _currentTotalValue += value;
         _currentEventCount++;
-        _currentTotalEventTime += eventDuration;
+        _currentTotalEventTime = (int)(_currentTotalEventTime + eventDuration);
 
         _lifetimeTotalValue += value;
         _lifetimeEventCount++;

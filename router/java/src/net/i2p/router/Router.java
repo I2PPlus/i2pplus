@@ -1371,7 +1371,7 @@ public class Router implements RouterClock.ClockShiftListener {
         }
         killKeys();
         for (Runnable task : _context.getShutdownTasks()) {
-            if (_log.shouldWarn()) {_log.warn(new StringBuilder(48).append("Running shutdown task ").append(task.getClass()).toString());}
+            if (_log.shouldWarn()) {_log.warn("Running shutdown task " + task.getClass());}
             try {task.run();}
             catch (Throwable t) {_log.log(Log.CRIT, "Error running Shutdown Task", t);} // NOSONAR shutdown path
         }
@@ -1709,7 +1709,7 @@ public class Router implements RouterClock.ClockShiftListener {
         // Since 0.8.8, for Android and the wrapper
         for (Runnable task : _context.getFinalShutdownTasks()) {
             try {task.run();}
-            catch (Throwable t) {_log.warn(new StringBuilder(48).append("Running final shutdown task ").append(t).toString());}
+            catch (Throwable t) {_log.warn("Running final shutdown task " + t);}
         }
         _context.getFinalShutdownTasks().clear();
 

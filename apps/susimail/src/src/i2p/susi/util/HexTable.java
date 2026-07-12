@@ -65,7 +65,7 @@ public class HexTable {
             while(b > 0) {
                 byte c = (byte)(b % 16);
                 if (c < 10) {c += '0';}
-                else {c += 'A' - 10;}
+                else {c = (byte)(c + 'A' - 10);}
                 buf.insert(0, (char) c);
                 b = (byte) (b / 16);
             }

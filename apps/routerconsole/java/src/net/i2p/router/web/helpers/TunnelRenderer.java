@@ -65,6 +65,11 @@ class TunnelRenderer {
             return size() > _maxSize;
         }
 
+        @Override
+        public Object clone() {
+            return super.clone();
+        }
+
         public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
             V value = get(key);
             if (value == null) {

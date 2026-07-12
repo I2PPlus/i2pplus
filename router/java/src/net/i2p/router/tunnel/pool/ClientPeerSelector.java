@@ -571,7 +571,6 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     // to avoid exhausting the pool entirely.
                     if (matches.size() < 3)
                         tier = 2;
-                    Set<Hash> localExclude = new HashSet<>();
                     while (qualityAttempts < 8 && !matches.isEmpty()) {
                         qualityAttempts++;
                         if (!inStartup) {
@@ -590,7 +589,6 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                 log.info("First hop " + firstHop.toBase64().substring(0,6) +
                                          " previously failed as first hop, retrying...");
                             }
-                            localExclude.add(firstHop);
                             matches.remove(firstHop);
                             continue;
                         }
@@ -599,13 +597,11 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                 log.info("First hop " + firstHop.toBase64().substring(0,6) +
                                          " is stale (no contact >4hrs), retrying selection...");
                             }
-                            localExclude.add(firstHop);
                             matches.remove(firstHop);
                             continue;
                         }
                         if (tier <= 1 && !ctx.commSystem().isEstablished(firstHop) &&
                             !ctx.commSystem().isConnecting(firstHop)) {
-                            localExclude.add(firstHop);
                             matches.remove(firstHop);
                             continue;
                         }

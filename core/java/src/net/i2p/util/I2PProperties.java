@@ -21,6 +21,11 @@ public class I2PProperties extends Properties {
      */
     private final List<I2PPropertyCallback> _callbacks = new CopyOnWriteArrayList<>();
 
+    @Override
+    public Object clone() {
+        return super.clone();
+    }
+
     public I2PProperties() {
         super();
     }

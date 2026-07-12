@@ -391,7 +391,7 @@ public class ClientAppConfig {
         Properties props = new OrderedProperties();
         for(int i = 0; i < apps.size(); i++) {
             ClientAppConfig app = apps.get(i);
-            String pfx = new StringBuilder(PREFIX).append(i).toString();
+            String pfx = PREFIX + i;
             props.setProperty(pfx + ".main", app.className);
             props.setProperty(pfx + ".name", app.clientName);
             if (app.args != null)

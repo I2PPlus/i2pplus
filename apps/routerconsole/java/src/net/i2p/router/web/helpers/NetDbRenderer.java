@@ -1142,9 +1142,6 @@ class NetDbRenderer {
             NetworkDatabaseFacade netdb;
             netdb = _context.netDb();
             LeaseSet ls = netdb.lookupLeaseSetLocally(hash);
-            Set<LeaseSet> leases;
-            leases = new TreeSet<>(new LeaseSetComparator());
-            leases.addAll(netdb.getLeases());
             if (ls == null) {
                 LookupWaiter lw = new LookupWaiter();
                 synchronized(lw) {
@@ -1689,26 +1686,6 @@ class NetDbRenderer {
              coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
          }
          public int compare(String l, String r) {
-             return coll.compare(getTranslatedCountry(l), getTranslatedCountry(r));
-        }
-    }
-
-    /**
-     *  Comparator for countries by count (desc) then name (asc).
-     *  @since 0.9.57
-     */
-    private class CountryCountComparator implements Comparator<String> {
-         private static final long serialVersionUID = 1L;
-         private final ObjectCounterUnsafe<String> counts;
-         private final Collator coll;
-         public CountryCountComparator(ObjectCounterUnsafe<String> counts) {
-             super();
-             this.counts = counts;
-             coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
-         }
-         public int compare(String l, String r) {
-             int rv = counts.count(r) - counts.count(l);
-             if (rv != 0) {return rv;}
              return coll.compare(getTranslatedCountry(l), getTranslatedCountry(r));
         }
     }

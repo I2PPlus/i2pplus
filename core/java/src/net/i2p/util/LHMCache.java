@@ -22,6 +22,11 @@ public class LHMCache<K, V> extends LinkedHashMap<K, V> {
     }
 
     @Override
+    public Object clone() {
+        return super.clone();
+    }
+
+    @Override
     protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
         return size() > _max;
     }

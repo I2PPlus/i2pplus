@@ -155,28 +155,6 @@ public class SocketController implements RouterApp {
         return server;
     }
 
-    private class Server implements Runnable {
-        public void run() {
-            try {
-                while (true) {
-                    Socket s = _server.accept();
-                    synchronized (SocketController.this) {
-                        _listeners.add(s);
-                    }
-                    new Handler(s);
-                }
-            } catch (IOException ioe) {
-                _log.error("i2pcontrol server", ioe);
-            } finally {
-                synchronized (SocketController.this) {
-                    if (_server != null) {
-                        try { _server.close(); } catch (IOException ioe) { /* ignored */ }
-                    }
-                }
-            }
-        }
-    }
-
     private class Handler implements Runnable {
         private final Socket s;
 

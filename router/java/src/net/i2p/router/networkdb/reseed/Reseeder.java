@@ -531,7 +531,7 @@ public class Reseeder {
 
                 for (String u : URL_SPLIT_PATTERN.split(urls)) {
                     u = u.trim();
-                    if (!u.endsWith("/")) u = new StringBuilder(u).append('/').toString();
+                    if (!u.endsWith("/")) u = u + '/';
                     URI uri = safeUri(u);
                     if (uri == null) continue;
                     if (u.startsWith("https")) sslList.add(uri);
@@ -564,7 +564,7 @@ public class Reseeder {
             List<URI> list = new ArrayList<>();
             for (String u : URL_SPLIT_PATTERN.split(urls)) {
                 u = u.trim();
-                if (!u.endsWith("/")) u = new StringBuilder(u).append('/').toString();
+                if (!u.endsWith("/")) u = u + '/';
                 URI uri = safeUri(u);
                 if (uri != null) list.add(uri);
             }

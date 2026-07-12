@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -433,8 +432,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
         }
         if (!toRemove.isEmpty()) {
-            Map<String, String> removeMap = new HashMap<String, String>();
-            for (String k : toRemove) { removeMap.put(k, null); }
             ctx.router().saveConfig(null, toRemove);
             if (_log.shouldInfo())
                 _log.info("Purged " + toRemove.size() + " stale tuner.* keys from router.config");

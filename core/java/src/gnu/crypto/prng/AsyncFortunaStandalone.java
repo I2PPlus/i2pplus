@@ -50,6 +50,11 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
         _log = context.logManager().getLog(AsyncFortunaStandalone.class);
     }
 
+    @Override
+    public Object clone() {
+        return super.clone();
+    }
+
     public void startup() {
         for (int i = 0; i < _bufferCount; i++) {_emptyBuffers.offer(new AsyncBuffer(_bufferSize));}
         _isRunning = true;

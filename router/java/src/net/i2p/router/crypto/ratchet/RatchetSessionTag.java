@@ -78,10 +78,7 @@ public class RatchetSessionTag {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(33);
-        buf.append("RatchetSessionTag: ");
-        buf.append(toBase64());
-        return buf.toString();
+        return "RatchetSessionTag: " + toBase64();
     }
 
 /****

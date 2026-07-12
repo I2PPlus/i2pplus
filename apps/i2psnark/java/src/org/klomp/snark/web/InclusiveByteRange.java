@@ -189,14 +189,7 @@ public class InclusiveByteRange {
      * @return the Content-Range header value
      */
     public String toHeaderRangeString(long size) {
-        StringBuilder sb = new StringBuilder(40);
-        sb.append("bytes ")
-                .append(getFirst(size))
-                .append('-')
-                .append(getLast(size))
-                .append("/")
-                .append(size);
-        return sb.toString();
+        return "bytes " + getFirst(size) + '-' + getLast(size) + '/' + size;
     }
 
     /**
@@ -207,9 +200,7 @@ public class InclusiveByteRange {
      * @return the Content-Range header value for a 416 response
      */
     public static String to416HeaderRangeString(long size) {
-        StringBuilder sb = new StringBuilder(40);
-        sb.append("bytes */").append(size);
-        return sb.toString();
+        return "bytes */" + size;
     }
 
     /**
@@ -219,8 +210,6 @@ public class InclusiveByteRange {
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(60);
-        sb.append(Long.toString(first)).append(":").append(Long.toString(last));
-        return sb.toString();
+        return Long.toString(first) + ":" + Long.toString(last);
     }
 }

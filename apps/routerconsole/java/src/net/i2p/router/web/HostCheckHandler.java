@@ -333,6 +333,7 @@ public class HostCheckHandler extends GzipHandler
      *
      *  @since 0.9.34
      */
+    @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     private static void sendRedirect(int httpsPort, HttpServletRequest httpRequest,
                                      HttpServletResponse httpResponse) throws IOException {
         StringBuilder buf = new StringBuilder(64);

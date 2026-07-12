@@ -1720,6 +1720,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param badgeText optional badge content to display inside the link
      * @return          the constructed HTML string of the filter link
      */
+    @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     private String buildFilterLink(String baseUrl, String filterId, boolean visible, String title, String badgeText) {
         StringBuilder sb = new StringBuilder();
         sb.append("<a class=filter id=").append(filterId).append(" href=\"").append(baseUrl).append(filterId).append("\"");
@@ -1743,9 +1744,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @return         the constructed HTML string of the filter link
      */
     private String buildSimpleFilterLink(String baseUrl, String filterId, String title, String badge) {
-        return new StringBuilder()
-          .append("<a class=filter id=").append(filterId).append(" href=\"").append(baseUrl).append(filterId).append("\"><span>")
-          .append(title).append(badge).append("</span></a>").toString();
+        return "<a class=filter id=" + filterId + " href=\"" + baseUrl + filterId + "\"><span>" + title + badge + "</span></a>";
     }
 
     /**
@@ -3290,13 +3289,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean isActivelySeeding = isComplete && isRunning && hasPeers && isUploading;
 
         // Cache repeated peer count HTML once
-        final String peerCountHtml = new StringBuilder()
-            .append("</td><td class=peerCount><b><span class=right>")
-            .append(curPeers)
-            .append("</span>")
-            .append(thinsp(noThinsp))
-            .append("<span class=left>").append(knownPeers).append("</span>")
-            .toString();
+        final String peerCountHtml = "</td><td class=peerCount><b><span class=right>" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
 
         if (isChecking) {
             appendIcon(iconBuf, "processing", "", _t("Checking"), false, true);
@@ -4597,7 +4590,6 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9
      */
     private static String urlify(String s, int max) {
-        StringBuilder buf = new StringBuilder(256);
         // browsers seem to work without doing this but let's be strict
         String link = urlEncode(s);
         String display;
@@ -4605,8 +4597,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (link.startsWith("https")) {display = DataHelper.escapeHTML(link);}
             else {display = DataHelper.escapeHTML(link.replace("http://", ""));}
         } else {display = DataHelper.escapeHTML(s.substring(0, max)) + "&hellip;";}
-        buf.append("<a href=\"").append(link).append("\" target=_blank>").append(display).append("</a>");
-        return buf.toString();
+        return "<a href=\"" + link + "\" target=_blank>" + display + "</a>";
     }
 
     /**

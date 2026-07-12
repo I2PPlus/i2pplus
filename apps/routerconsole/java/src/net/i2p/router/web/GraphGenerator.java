@@ -234,8 +234,7 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     private String adjustDatabases(String oldSpecs) {
         String spec = _context.getProperty("stat.summaries", DEFAULT_DATABASES);
-        if (((spec == null) && (oldSpecs == null)) ||
-            ((spec != null) && (oldSpecs != null) && spec.equals(oldSpecs))) {
+        if (spec == null ? oldSpecs == null : spec.equals(oldSpecs)) {
             return oldSpecs;
         }
 

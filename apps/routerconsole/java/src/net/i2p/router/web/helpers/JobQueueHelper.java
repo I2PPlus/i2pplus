@@ -406,7 +406,7 @@ public class JobQueueHelper extends HelperBase {
             displayedLiCount++;
             displayedJobCount += jobsAtTime.size();
 
-            String timeStr = new StringBuilder(64).append("<i>").append(DataHelper.formatDuration2(earliestDelay)).append("</i>").toString();
+            String timeStr = "<i>" + DataHelper.formatDuration2(earliestDelay) + "</i>";
             StringBuilder jobDisplayBuf = new StringBuilder(128);
             jobDisplayBuf.append("<b title=\"").append(firstJob.toString()).append("\">").append(jobName).append("</b>");
             if (jobsAtTime.size() > 1) {

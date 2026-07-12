@@ -462,28 +462,26 @@ public class RouterContext extends I2PAppContext {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(512);
-        buf.append("RouterContext: ").append(super.toString()).append('\n');
-        buf.append(_router).append('\n');
-        buf.append(_clientManagerFacade).append('\n');
-        buf.append(_clientMessagePool).append('\n');
-        buf.append(_jobQueue).append('\n');
-        buf.append(_inNetMessagePool).append('\n');
-        buf.append(_outNetMessagePool).append('\n');
-        buf.append(_messageHistory).append('\n');
-        buf.append(_messageRegistry).append('\n');
-        buf.append(_netDb).append('\n');
-        buf.append(_keyManager).append('\n');
-        buf.append(_commSystem).append('\n');
-        buf.append(_profileOrganizer).append('\n');
-        buf.append(_peerManagerFacade).append('\n');
-        buf.append(_profileManager).append('\n');
-        buf.append(_bandwidthLimiter).append('\n');
-        buf.append(_tunnelManager).append('\n');
-        buf.append(_statPublisher).append('\n');
-        buf.append(_banlist).append('\n');
-        buf.append(_messageValidator).append('\n');
-        return buf.toString();
+        return "RouterContext: " + super.toString() + '\n' +
+               _router + '\n' +
+               _clientManagerFacade + '\n' +
+               _clientMessagePool + '\n' +
+               _jobQueue + '\n' +
+               _inNetMessagePool + '\n' +
+               _outNetMessagePool + '\n' +
+               _messageHistory + '\n' +
+               _messageRegistry + '\n' +
+               _netDb + '\n' +
+               _keyManager + '\n' +
+               _commSystem + '\n' +
+               _profileOrganizer + '\n' +
+               _peerManagerFacade + '\n' +
+               _profileManager + '\n' +
+               _bandwidthLimiter + '\n' +
+               _tunnelManager + '\n' +
+               _statPublisher + '\n' +
+               _banlist + '\n' +
+               _messageValidator + '\n';
     }
 
     /**

@@ -647,6 +647,7 @@ public class BCrypt {
 	 * using BCrypt.gensalt)
 	 * @return	the hashed password
 	 */
+	@SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
 	public static String hashpw(String password, String salt) {
 		BCrypt B;
 		String real_salt;
@@ -710,6 +711,7 @@ public class BCrypt {
 	 * @param random		an instance of SecureRandom to use
 	 * @return	an encoded salt value
 	 */
+	@SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
 	public static String gensalt(int log_rounds, SecureRandom random) {
 		StringBuffer rs = new StringBuffer();
 		byte rnd[] = new byte[BCRYPT_SALT_LEN];

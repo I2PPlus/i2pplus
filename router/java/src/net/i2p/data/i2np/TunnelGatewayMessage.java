@@ -172,12 +172,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
-        buf.append("\n* TunnelGatewayMessage:");
-        buf.append(" MessageID: ").append(getUniqueId());
-        buf.append("; TunnelID: ").append(getTunnelId());
-        buf.append("\n* Message: ").append(_msg);
-        return buf.toString();
+        return "\n* TunnelGatewayMessage: MessageID: " + getUniqueId() + "; TunnelID: " + getTunnelId() + "\n* Message: " + _msg;
     }
 
 }

@@ -602,9 +602,9 @@ public class HashPatternDetector implements Serializable {
                     int port = addr.getPort();
                     if (port > 0) {
                         if (ipAddr.contains(":") && !ipAddr.startsWith("[")) {
-                            return new StringBuilder(32).append('[').append(ipAddr).append("]:").append(port).toString();
+                            return '[' + ipAddr + "]:" + port;
                         } else {
-                            return new StringBuilder(32).append(ipAddr).append(':').append(port).toString();
+                            return ipAddr + ':' + port;
                         }
                     } else {
                         return ipAddr;

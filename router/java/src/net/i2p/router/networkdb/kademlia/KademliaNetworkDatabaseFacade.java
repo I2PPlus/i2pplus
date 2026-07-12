@@ -160,14 +160,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * is currently operating.  Subsequent requests for that same key are simply
      * added on to the list of jobs fired on success/failure
      */
-    private final Set<Hash> _activeRequests = new ConcurrentHashSet<>(64);
-
     /**
      * The search for the given key is no longer active
      */
     void searchComplete(Hash key) {
         if (_log.shouldDebug()) {_log.debug("Search for key [" + key.toBase64().substring(0,6) + "] finished");}
-        _activeRequests.remove(key);
     }
 
     /**

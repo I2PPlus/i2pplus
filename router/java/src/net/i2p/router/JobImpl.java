@@ -52,10 +52,7 @@ public abstract class JobImpl implements Job {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(128);
-        buf.append("[Job ").append(_id).append("] ")
-           .append(getClass().getSimpleName());
-        return buf.toString();
+        return "[Job " + _id + "] " + getClass().getSimpleName();
     }
 
     /**

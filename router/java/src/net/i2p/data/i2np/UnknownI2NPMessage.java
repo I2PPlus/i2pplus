@@ -119,11 +119,7 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
-        buf.append("Unknown I2NP Message: ");
-        buf.append("Type: ").append(_type);
-        buf.append("; Length: ").append(calculateWrittenLength());
-        return buf.toString();
+        return "Unknown I2NP Message: Type: " + _type + "; Length: " + calculateWrittenLength();
     }
 
 }

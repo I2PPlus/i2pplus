@@ -1187,13 +1187,11 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
         @Override
         public String toString() {
-            StringBuilder buf = new StringBuilder(256);
-            buf.append("TagSet [").append(_id).append("]");
-            buf.append(" Size: ").append(_sessionTags.size()).append('/').append(_origSize);
-            buf.append(" ACKed? ").append(_acked);
-            buf.append("\n* Created: ").append(new Date(_date));
-            buf.append("\n* Session key: ").append(_key);
-            return buf.toString();
+            return "TagSet [" + _id + "]" +
+                   " Size: " + _sessionTags.size() + '/' + _origSize +
+                   " ACKed? " + _acked +
+                   "\n* Created: " + new Date(_date) +
+                   "\n* Session key: " + _key;
         }
     }
 }

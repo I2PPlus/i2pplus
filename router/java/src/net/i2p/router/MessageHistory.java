@@ -140,45 +140,7 @@ public class MessageHistory {
      * @param replyTunnel the tunnel sourceRoutePeer should forward the source routed message to
      * @param replyThrough the gateway of the tunnel that the sourceRoutePeer will be sending to
      */
-/********
-    public void requestTunnelCreate(TunnelId createTunnel, TunnelId outTunnel, Hash peerRequested, Hash nextPeer, TunnelId replyTunnel, Hash replyThrough) {
-        if (!_doLog) return;
-        StringBuilder buf = new StringBuilder(128);
-        buf.append(getPrefix());
-        buf.append("request [").append(getName(peerRequested)).append("] to create tunnel [");
-        buf.append(createTunnel.getTunnelId()).append("] ");
-        if (nextPeer != null)
-            buf.append("(next [").append(getName(nextPeer)).append("]) ");
-        if (outTunnel != null)
-            buf.append("via [").append(outTunnel.getTunnelId()).append("] ");
-        if ( (replyTunnel != null) && (replyThrough != null) )
-            buf.append("who forwards it through [").append(replyTunnel.getTunnelId()).append("] on [").append(getName(replyThrough)).append("]");
-        addEntry(buf.toString());
-    }
-*********/
 
-    /**
-     * The local router has received a request to join the createTunnel with the next hop being nextPeer,
-     * and we should send our decision to join it through sourceRoutePeer
-     *
-     * @param createTunnel tunnel being joined
-     * @param nextPeer next hop in the tunnel (or null if this is the endpoint)
-     * @param expire when this tunnel expires
-     * @param ok whether we will join the tunnel
-     * @param sourceRoutePeer peer through whom we should send our garlic routed ok through
-     */
-/*********
-    public void receiveTunnelCreate(TunnelId createTunnel, Hash nextPeer, Date expire, boolean ok, Hash sourceRoutePeer) {
-        if (!_doLog) return;
-        StringBuilder buf = new StringBuilder(128);
-        buf.append(getPrefix());
-        buf.append("receive tunnel create [").append(createTunnel.getTunnelId()).append("] ");
-        if (nextPeer != null)
-            buf.append("(next [").append(getName(nextPeer)).append("]) ");
-        buf.append("ok? ").append(ok).append(" expiring on [").append(getTime(expire.getTime())).append("]");
-        addEntry(buf.toString());
-    }
-*********/
 
     /**
      * The local router has joined the given tunnel operating in the given state.
@@ -189,11 +151,7 @@ public class MessageHistory {
     public void tunnelJoined(String state, TunnelInfo tunnel) {
         if (!_doLog) return;
         if (tunnel == null) return;
-        StringBuilder buf = new StringBuilder(128);
-        buf.append(getPrefix());
-        buf.append("joining as [").append(state);
-        buf.append("] to tunnel: ").append(tunnel.toString());
-        addEntry(buf.toString());
+        addEntry(getPrefix() + "joining as [" + state + "] to tunnel: " + tunnel.toString());
     }
 
     /**
@@ -205,11 +163,7 @@ public class MessageHistory {
     public void tunnelJoined(String state, HopConfig tunnel) {
         if (!_doLog) return;
         if (tunnel == null) return;
-        StringBuilder buf = new StringBuilder(128);
-        buf.append(getPrefix());
-        buf.append("joining as [").append(state);
-        buf.append("] to tunnel: ").append(tunnel.toString());
-        addEntry(buf.toString());
+        addEntry(getPrefix() + "joining as [" + state + "] to tunnel: " + tunnel.toString());
     }
 
     public void tunnelDispatched(String info) {
@@ -244,10 +198,7 @@ public class MessageHistory {
     public void tunnelFailed(TunnelId tunnel) {
         if (!_doLog) return;
         if (tunnel == null) return;
-        StringBuilder buf = new StringBuilder(128);
-        buf.append(getPrefix());
-        buf.append("failing tunnel [").append(tunnel.getTunnelId()).append("]");
-        addEntry(buf.toString());
+        addEntry(getPrefix() + "failing tunnel [" + tunnel.getTunnelId() + "]");
     }
 
     /**
@@ -260,16 +211,14 @@ public class MessageHistory {
     public void tunnelValid(TunnelInfo tunnel, long timeToTest) {
         if (!_doLog) return;
         if (tunnel == null) return;
-        StringBuilder buf = new StringBuilder(128);
-        buf.append(getPrefix());
-        buf.append("tunnel ").append(tunnel).append(" tested ok after ").append(timeToTest).append("ms");
-        addEntry(buf.toString());
+        addEntry(getPrefix() + "tunnel " + tunnel + " tested ok after " + timeToTest + "ms");
     }
 
     /**
      * The peer did not accept the tunnel join for the given reason
      *
      */
+    @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public void tunnelRejected(Hash peer, TunnelId tunnel, Hash replyThrough, String reason) {
         if (!_doLog) return;
         if ( (tunnel == null) || (peer == null) ) return;
@@ -285,11 +234,7 @@ public class MessageHistory {
     public void tunnelParticipantRejected(Hash peer, String msg) {
         if (!_doLog) return;
         if (peer == null) return;
-        StringBuilder buf = new StringBuilder(128);
-        buf.append(getPrefix());
-        buf.append("tunnel participation rejected by [");
-        buf.append(getName(peer)).append("]: ").append(msg);
-        addEntry(buf.toString());
+        addEntry(getPrefix() + "tunnel participation rejected by [" + getName(peer) + "]: " + msg);
     }
 
     /**
@@ -300,11 +245,7 @@ public class MessageHistory {
     public void tunnelRequestTimedOut(Hash peer, TunnelId tunnel) {
         if (!_doLog) return;
         if ( (tunnel == null) || (peer == null) ) return;
-        StringBuilder buf = new StringBuilder(128);
-        buf.append(getPrefix());
-        buf.append("tunnel [").append(tunnel.getTunnelId()).append("] timed out on [");
-        buf.append(getName(peer)).append("]");
-        addEntry(buf.toString());
+        addEntry(getPrefix() + "tunnel [" + tunnel.getTunnelId() + "] timed out on [" + getName(peer) + "]");
     }
 
     /**
@@ -316,17 +257,13 @@ public class MessageHistory {
      */
     public void droppedTunnelMessage(TunnelId id, long msgId, Date expiration, Hash from) {
         if (!_doLog) return;
-        StringBuilder buf = new StringBuilder(128);
-        buf.append(getPrefix());
-        buf.append("dropped message ").append(msgId).append(" for UNKNOWN tunnel [").append(id.getTunnelId());
-        buf.append("] from [").append(getName(from)).append("]").append(" expiring on ");
-        buf.append(getTime(expiration.getTime()));
-        addEntry(buf.toString());
+        addEntry(getPrefix() + "dropped message " + msgId + " for UNKNOWN tunnel [" + id.getTunnelId() + "] from [" + getName(from) + "]" + " expiring on " + getTime(expiration.getTime()));
     }
 
     /**
      * We received another message we weren't waiting for and don't know how to handle
      */
+    @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public void droppedOtherMessage(I2NPMessage message, Hash from) {
         if (!_doLog) return;
         if (message == null) return;
@@ -342,6 +279,7 @@ public class MessageHistory {
         addEntry(buf.toString());
     }
 
+    @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public void droppedInboundMessage(long messageId, Hash from, String info) {
         if (!_doLog) return;
         StringBuilder buf = new StringBuilder(512);
@@ -364,13 +302,7 @@ public class MessageHistory {
     public void replyTimedOut(OutNetMessage sentMessage) {
         if (!_doLog) return;
         if (sentMessage == null) return;
-        StringBuilder buf = new StringBuilder(512);
-        buf.append(getPrefix());
-        buf.append("timed out waiting for a reply to [").append(sentMessage.getMessageType());
-        buf.append("] [").append(sentMessage.getMessageId()).append("] expiring on [");
-        buf.append(getTime(sentMessage.getReplySelector().getExpiration()));
-        buf.append("] ").append(sentMessage.getReplySelector().toString());
-        addEntry(buf.toString());
+        addEntry(getPrefix() + "timed out waiting for a reply to [" + sentMessage.getMessageType() + "] [" + sentMessage.getMessageId() + "] expiring on [" + getTime(sentMessage.getReplySelector().getExpiration()) + "] " + sentMessage.getReplySelector().toString());
     }
 
     /**
@@ -382,10 +314,7 @@ public class MessageHistory {
      */
     public void messageProcessingError(long messageId, String messageType, String error) {
         if (!_doLog) return;
-        StringBuilder buf = new StringBuilder(128);
-        buf.append(getPrefix());
-        buf.append("Error processing [").append(messageType).append("] [").append(messageId).append("] failed with [").append(error).append("]");
-        addEntry(buf.toString());
+        addEntry(getPrefix() + "Error processing [" + messageType + "] [" + messageId + "] failed with [" + error + "]");
     }
 
     /**
@@ -417,6 +346,7 @@ public class MessageHistory {
      * @param peer router that the message was sent to
      * @param sentOk whether the message was sent successfully
      */
+    @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public void sendMessage(String messageType, long messageId, long expiration, Hash peer, boolean sentOk, String info) {
         if (!_doLog) return;
         StringBuilder buf = new StringBuilder(256);
@@ -445,6 +375,7 @@ public class MessageHistory {
      * @param isValid whether the message is valid (non duplicates, etc)
      *
      */
+    @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public void receiveMessage(String messageType, long messageId, long expiration, Hash from, boolean isValid) {
         if (!_doLog) return;
         StringBuilder buf = new StringBuilder(256);
@@ -469,11 +400,7 @@ public class MessageHistory {
      */
     public void wrap(String bodyMessageType, long bodyMessageId, String containerMessageType, long containerMessageId) {
         if (!_doLog) return;
-        StringBuilder buf = new StringBuilder(128);
-        buf.append(getPrefix());
-        buf.append("Wrap message [").append(bodyMessageType).append("] id [").append(bodyMessageId).append("] ");
-        buf.append("in [").append(containerMessageType).append("] id [").append(containerMessageId).append("]");
-        addEntry(buf.toString());
+        addEntry(getPrefix() + "Wrap message [" + bodyMessageType + "] id [" + bodyMessageId + "] " + "in [" + containerMessageType + "] id [" + containerMessageId + "]");
     }
 
     /**
@@ -482,10 +409,7 @@ public class MessageHistory {
      */
     public void receivePayloadMessage(long messageId) {
         if (!_doLog) return;
-        StringBuilder buf = new StringBuilder(64);
-        buf.append(getPrefix());
-        buf.append("Received payload message [").append(messageId).append("]");
-        addEntry(buf.toString());
+        addEntry(getPrefix() + "Received payload message [" + messageId + "]");
     }
 
     /**
@@ -497,38 +421,25 @@ public class MessageHistory {
      */
     public void sendPayloadMessage(long messageId, boolean successfullySent, long timeToSend) {
         if (!_doLog) return;
-        StringBuilder buf = new StringBuilder(128);
-        buf.append(getPrefix());
-        buf.append("Sent payload message in [").append(messageId).append("] in [").append(timeToSend).append("] successfully? ").append(successfullySent);
-        addEntry(buf.toString());
+        addEntry(getPrefix() + "Sent payload message in [" + messageId + "] in [" + timeToSend + "] successfully? " + successfullySent);
     }
 
     public void receiveTunnelFragment(long messageId, int fragmentId, Object status) {
         if (!_doLog) return;
         if (messageId == -1) throw new IllegalArgumentException("why are you -1?");
-        StringBuilder buf = new StringBuilder(48);
-        buf.append(getPrefix());
-        buf.append("Received fragment ").append(fragmentId).append(" in ").append(messageId);
-        buf.append(" Status: ").append(status.toString());
-        addEntry(buf.toString());
+        addEntry(getPrefix() + "Received fragment " + fragmentId + " in " + messageId + " Status: " + status.toString());
     }
     public void receiveTunnelFragmentComplete(long messageId) {
         if (!_doLog) return;
         if (messageId == -1) throw new IllegalArgumentException("why are you -1?");
-        StringBuilder buf = new StringBuilder(48);
-        buf.append(getPrefix());
-        buf.append("Received fragmented message completely: ").append(messageId);
-        addEntry(buf.toString());
+        addEntry(getPrefix() + "Received fragmented message completely: " + messageId);
     }
     public void droppedFragmentedMessage(long messageId, String status) {
         if (!_doLog) return;
         if (messageId == -1) throw new IllegalArgumentException("why are you -1?");
-        StringBuilder buf = new StringBuilder(48);
-        buf.append(getPrefix());
-        buf.append("Fragmented message dropped: ").append(messageId);
-        buf.append(" ").append(status);
-        addEntry(buf.toString());
+        addEntry(getPrefix() + "Fragmented message dropped: " + messageId + " " + status);
     }
+    @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public void fragmentMessage(long messageId, int numFragments, int totalLength, List<Long> messageIds, String msg) {
         if (!_doLog) return;
         StringBuilder buf = new StringBuilder(48);
@@ -540,6 +451,7 @@ public class MessageHistory {
             buf.append(": ").append(msg);
         addEntry(buf.toString());
     }
+    @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public void fragmentMessage(long messageId, int numFragments, int totalLength, List<Long> messageIds, Object tunnel, String msg) {
         if (!_doLog) return;
         StringBuilder buf = new StringBuilder(48);
@@ -556,18 +468,12 @@ public class MessageHistory {
     public void droppedTunnelDataMessageUnknown(long msgId, long tunnelId) {
         if (!_doLog) return;
         if (msgId == -1) throw new IllegalArgumentException("why are you -1?");
-        StringBuilder buf = new StringBuilder(48);
-        buf.append(getPrefix());
-        buf.append("Dropping data message ").append(msgId).append(" for UNKNOWN tunnel ").append(tunnelId);
-        addEntry(buf.toString());
+        addEntry(getPrefix() + "Dropping data message " + msgId + " for UNKNOWN tunnel " + tunnelId);
     }
     public void droppedTunnelGatewayMessageUnknown(long msgId, long tunnelId) {
         if (!_doLog) return;
         if (msgId == -1) throw new IllegalArgumentException("why are you -1?");
-        StringBuilder buf = new StringBuilder(48);
-        buf.append(getPrefix());
-        buf.append("Dropping gateway message ").append(msgId).append(" for UNKNOWN tunnel ").append(tunnelId);
-        addEntry(buf.toString());
+        addEntry(getPrefix() + "Dropping gateway message " + msgId + " for UNKNOWN tunnel " + tunnelId);
     }
 
     /**
@@ -582,10 +488,7 @@ public class MessageHistory {
     }
 
     private final String getPrefix() {
-        StringBuilder buf = new StringBuilder(48);
-        buf.append(getTime(_context.clock().now()));
-        buf.append(' ').append(_localIdent).append(": ");
-        return buf.toString();
+        return getTime(_context.clock().now()) + ' ' + _localIdent + ": ";
     }
 
     private final String getTime(long when) {

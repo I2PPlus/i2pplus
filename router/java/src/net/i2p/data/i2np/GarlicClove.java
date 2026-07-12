@@ -185,12 +185,9 @@ public class GarlicClove extends DataStructureImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(128);
-        buf.append(_instructions);
-        buf.append("\n* Expires: ").append(DataHelper.formatTime(_expiration));
-        buf.append("\n\tCertificate: ").append(_certificate);
-        buf.append("\n* Clove ID: ").append(_cloveId);
-        buf.append("\n\tData: ").append(_msg);
-        return buf.toString();
+        return _instructions + "\n* Expires: " + DataHelper.formatTime(_expiration) +
+               "\n\tCertificate: " + _certificate +
+               "\n* Clove ID: " + _cloveId +
+               "\n\tData: " + _msg;
     }
 }

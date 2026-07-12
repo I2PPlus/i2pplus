@@ -262,6 +262,7 @@ class NodeInfo extends SimpleDataStructure {
      * To persistent storage string. Format: NID:Hash:Destination:port First 3 in base 64;
      * Destination may be empty string
      */
+    @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public String toPersistentString() {
         StringBuilder buf = new StringBuilder(650);
         buf.append(nID.toBase64()).append(':');

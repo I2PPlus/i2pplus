@@ -13,7 +13,7 @@ package org.klomp.snark;
  * @deprecated unused, for command line client only, commented out in Snark.java
  */
 @Deprecated
-class PeerMonitorTask implements Runnable {
+class PeerMonitorTask {
     static final long MONITOR_PERIOD = (long) 10 * 1000; // Ten seconds.
 
 

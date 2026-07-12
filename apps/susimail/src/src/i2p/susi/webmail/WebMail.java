@@ -2511,6 +2511,7 @@ public class WebMail extends HttpServlet {
      *  @param q starting with '?' or null
      *  @since 0.9.33 adapted from I2PSnarkServlet
      */
+    @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     private void sendRedirect(HttpServletRequest req, HttpServletResponse resp, String q) throws IOException {
         String url = req.getRequestURL().toString();
         StringBuilder buf = new StringBuilder(128);
@@ -3623,18 +3624,15 @@ public class WebMail extends HttpServlet {
                              .replace(" AM", "&#8239;<span class=listClock>AM</span>")
                              .replace(" PM", "&#8239;<span class=listClock>PM</span>");
 
-        StringBuilder cell = new StringBuilder(320);
-        cell.append("<td class=\"mailListDate ")
-            .append(jslink)
-            .append(" title=\"")
-            .append(dateOnly)
-            .append("\"><span class=listDate title=\"")
-            .append(mail.dateOnly)
-            .append("\"><span>")
-            .append(formatted)
-            .append("</span></td>");
-
-        return cell.toString();
+        return "<td class=\"mailListDate "
+            + jslink
+            + " title=\""
+            + dateOnly
+            + "\"><span class=listDate title=\""
+            + mail.dateOnly
+            + "\"><span>"
+            + formatted
+            + "</span></td>";
     }
 
     /**

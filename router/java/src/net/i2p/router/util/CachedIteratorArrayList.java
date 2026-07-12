@@ -39,6 +39,11 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
         super(c);
     }
 
+    @Override
+    public Object clone() {
+        return super.clone();
+    }
+
     public CachedIteratorArrayList(int initialCapacity) {
         super(initialCapacity);
     }

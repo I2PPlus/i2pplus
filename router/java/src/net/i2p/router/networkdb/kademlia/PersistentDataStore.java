@@ -996,13 +996,13 @@ public class PersistentDataStore extends TransientDataStore {
 
                 if (isSlow) {
                     if (_log.shouldInfo()) {
-                        _log.info(new StringBuilder(64).append("Deleting slow (").append(bw).append(") RouterInfo: ").append(key.toBase64().substring(0, 6)).append("...").toString());
+                        _log.info("Deleting slow (" + bw + ") RouterInfo: " + key.toBase64().substring(0, 6) + "...");
                     }
                     file.delete();
                     deletedCount++;
                 } else if (isDegraded) {
                     if (_log.shouldInfo()) {
-                        _log.info(new StringBuilder(64).append("Deleting degraded (").append(bw).append(") RouterInfo: ").append(key.toBase64().substring(0, 6)).append("...").toString());
+                        _log.info("Deleting degraded (" + bw + ") RouterInfo: " + key.toBase64().substring(0, 6) + "...");
                     }
                     file.delete();
                     deletedCount++;
@@ -1010,13 +1010,13 @@ public class PersistentDataStore extends TransientDataStore {
 
             } catch (Exception e) {
                 if (_log.shouldWarn()) {
-                    _log.warn(new StringBuilder(48).append("Error reading RouterInfo from file: ").append(file.getName()).toString(), e);
+                    _log.warn("Error reading RouterInfo from file: " + file.getName(), e);
                 }
             }
         }
 
         if (_log.shouldInfo()) {
-            _log.info(new StringBuilder(64).append("Deleted ").append(deletedCount).append(" slow/degraded RouterInfo files").toString());
+            _log.info("Deleted " + deletedCount + " slow/degraded RouterInfo files");
         }
     }
 

@@ -519,33 +519,22 @@ public class TuningHelper extends HelperBase {
 
         String cls = collecting ? "gray" : score >= 0.8 ? "green" : score >= 0.5 ? "yellow" : "red";
 
-        StringBuilder sb = new StringBuilder(256);
-        sb.append("<svg class=ring viewBox=\"0 0 ").append(RING_SIZE).append(' ').append(RING_SIZE).append("\">");
-
-        // background ring
-        sb.append("<circle class=\"ring-bg\" cx=\"").append(RING_SIZE / 2).append("\" cy=\"").append(RING_SIZE / 2)
-          .append("\" r=\"").append(RING_RADIUS).append("\"/>");
-
-        // foreground arc (rotated from 12 o'clock)
-        sb.append("<circle class=\"ring-arc ").append(cls).append("\" cx=\"").append(RING_SIZE / 2)
-          .append("\" cy=\"").append(RING_SIZE / 2).append("\" r=\"").append(RING_RADIUS)
-          .append("\" stroke-dasharray=\"").append(RING_CIRCUM).append(' ').append(RING_CIRCUM)
-          .append("\" stroke-dashoffset=\"").append(offset)
-          .append("\" transform=\"rotate(-90 ").append(RING_SIZE / 2).append(' ').append(RING_SIZE / 2)
-          .append(")\"/>");
-
-        // center percentage text
-        sb.append("<text class=\"ring-pct ").append(cls).append("\" x=\"").append(RING_SIZE / 2)
-          .append("\" y=\"").append(RING_SIZE / 2 - 2).append("\">")
-          .append(esc(pct)).append("</text>");
-
-        // label below percentage
-        sb.append("<text class=ring-label x=\"").append(RING_SIZE / 2)
-          .append("\" y=\"").append(RING_SIZE / 2 + 12).append("\">")
-          .append(esc(label)).append("</text>");
-
-        sb.append("</svg>");
-        return sb.toString();
+        return "<svg class=ring viewBox=\"0 0 " + RING_SIZE + " " + RING_SIZE + "\">"
+            + "<circle class=\"ring-bg\" cx=\"" + (RING_SIZE / 2) + "\" cy=\"" + (RING_SIZE / 2)
+            + "\" r=\"" + RING_RADIUS + "\"/>"
+            + "<circle class=\"ring-arc " + cls + "\" cx=\"" + (RING_SIZE / 2)
+            + "\" cy=\"" + (RING_SIZE / 2) + "\" r=\"" + RING_RADIUS
+            + "\" stroke-dasharray=\"" + RING_CIRCUM + " " + RING_CIRCUM
+            + "\" stroke-dashoffset=\"" + offset
+            + "\" transform=\"rotate(-90 " + (RING_SIZE / 2) + " " + (RING_SIZE / 2)
+            + ")\"/>"
+            + "<text class=\"ring-pct " + cls + "\" x=\"" + (RING_SIZE / 2)
+            + "\" y=\"" + (RING_SIZE / 2 - 2) + "\">"
+            + esc(pct) + "</text>"
+            + "<text class=ring-label x=\"" + (RING_SIZE / 2)
+            + "\" y=\"" + (RING_SIZE / 2 + 12) + "\">"
+            + esc(label) + "</text>"
+            + "</svg>";
     }
 
     /**

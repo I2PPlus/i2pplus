@@ -420,9 +420,9 @@ public class BanLogger {
                         // Check if it's IPv6 address
                         if (ip.contains(":") && !ip.startsWith("[")) {
                             // IPv6 address needs brackets
-                            return new StringBuilder(32).append('[').append(ip).append("]:").append(port).toString();
+                            return '[' + ip + "]:" + port;
                         } else {
-                            return new StringBuilder(32).append(ip).append(':').append(port).toString();
+                            return ip + ':' + port;
                         }
                     } else {
                         return ip;

@@ -1045,7 +1045,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             File cacheFile = new File(RDNS_CACHE_FILE);
             try (BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(cacheFile))) {
                 for (CacheEntry cacheEntry : liveCacheSnapshot.values()) {
-                    String line = new StringBuilder(rdnsEntryToString(cacheEntry)).append('\n').toString();
+                    String line = rdnsEntryToString(cacheEntry) + '\n';
                     byte[] bytes = line.getBytes(ENCODING);
                     fos.write(bytes);
                 }
