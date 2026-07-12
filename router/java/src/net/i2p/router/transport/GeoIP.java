@@ -601,6 +601,7 @@ public class GeoIP {
         ASN_DB_OVERRIDES = new HashMap<>();
         // Word-by-word character-reversed names from MaxMind ASN DB
         ASN_DB_OVERRIDES.put("setarimE moceleT puorG oC talasitepuorG CSJP", "Emirates Telecom Group Co PJSC");
+        ASN_DB_OVERRIDES.put("ciT san. ireltemziH misiliB moceleT sitnaltA", "Atlantis Telecom Bilisim Hizmetleri Tic. San.");
         ASN_DB_OVERRIDES.put("CSJP )puorG talasite( oC puorG moceleT setarimE", "Emirates Telecom Group Co (etisalat Group) PJSC");
         ASN_DB_OVERRIDES.put("eteicoS esiacnarF uD enohpeletoidaR", "Societe France Du RadioTelephone");
         ASN_DB_OVERRIDES.put("etavirP namssenisuB vonayruB nitnatsnoK", "Private Business von Knutsen");
