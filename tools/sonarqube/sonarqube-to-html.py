@@ -187,8 +187,13 @@ def fetch_issues(base_url, token, project_key):
     return deduped
 
 
-def rule_url(rule_key, sonar_url="https://cloud-ci.sgs.com/sonar"):
-    """Convert SonarQube rule key (e.g. java:S116) to coding_rules page URL."""
+def rule_url(rule_key, sonar_url="https://cloud-ci.sgs.com/sonar", rules_base_url=None):
+    """Convert SonarQube rule key (e.g. java:S116) to a URL.
+
+    When rules_base_url is set, generates a relative path to a local rule doc
+    (e.g. ``sonar-rules/rules/S116.html``). Otherwise generates a link to the
+    SonarQube coding_rules page.
+    """
     import urllib.parse
     import re
 
@@ -197,14 +202,20 @@ def rule_url(rule_key, sonar_url="https://cloud-ci.sgs.com/sonar"):
     m = re.match(r"^(\w+):(S\d+)$", rule_key)
     if not m:
         return None
+    rule_id = m.group(2)
+
+    if rules_base_url:
+        base = rules_base_url.rstrip("/")
+        return f"{base}/{rule_id}.html"
+
     base = sonar_url.rstrip("/")
     lang = m.group(1)
-    rule_id = m.group(2)
     return f"{base}/coding_rules?languages={lang}&q={rule_id}&open={urllib.parse.quote(rule_key)}"
 
 
 def build_html(
-    issues, local=False, exclude_rules=None, sonar_url="https://cloud-ci.sgs.com/sonar"
+    issues, local=False, exclude_rules=None, sonar_url="https://cloud-ci.sgs.com/sonar",
+    rules_base_url=None,
 ):
     """Generate HTML report from SonarQube issues."""
     original_total = len(issues)
@@ -260,7 +271,7 @@ def build_html(
             "sev": sev,
             "msg": msg,
             "rule": issue.get("rule", ""),
-            "ruleUrl": rule_url(issue.get("rule", ""), sonar_url),
+            "ruleUrl": rule_url(issue.get("rule", ""), sonar_url, rules_base_url),
             "subsystem": issue["_subsystem"],
             "snippet": snippet,
         }
@@ -423,7 +434,7 @@ def build_html(
                     html += f'<a href="{link}">{escape(short_path)}</a>'
                 else:
                     html += escape(short_path)
-                url = rule_url(issue.get("rule", ""), sonar_url)
+                url = rule_url(issue.get("rule", ""), sonar_url, rules_base_url)
                 if url:
                     html += f'<td class="rule-doc"><a href="{url}" target="_blank" class="rule-doc-link"><span class="rule-doc-icon" title="Rule documentation: {escape(issue.get("rule", ""))}"></span></a></td>\n'
                 else:
@@ -595,7 +606,13 @@ def main():
     parser.add_argument(
         "--sonar-url",
         default="https://cloud-ci.sgs.com/sonar",
-        help="SonarQube server URL for rule documentation links",
+        help="SonarQube server URL for rule documentation links (used when --rules-base-url is not set)",
+    )
+    parser.add_argument(
+        "--rules-base-url",
+        default=None,
+        help="Base URL/path for local rule doc pages (e.g. sonar-rules/rules). "
+             "When set, generates relative links instead of SonarQube coding_rules URLs.",
     )
     args = parser.parse_args()
 
@@ -641,7 +658,8 @@ def main():
 
     def gen_and_write(output, local):
         html = build_html(
-            issues, local=local, exclude_rules=exclude_rules, sonar_url=args.sonar_url
+            issues, local=local, exclude_rules=exclude_rules, sonar_url=args.sonar_url,
+            rules_base_url=args.rules_base_url,
         )
         output_path = os.path.join(PROJECT_ROOT, output)
         os.makedirs(os.path.dirname(output_path), exist_ok=True)

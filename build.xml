@@ -198,7 +198,9 @@
     <echo message="  pmd-js                                       Run PMD static analysis on JavaScript sources &#10140; dist/pmd-js.html + dist/pmd-js-local.html"/>
     <echo message="  pmd-fix-errors                               Run fix-java-issues.py (dry run) &#10140; all fix types"/>
     <echo message="  pmd-fix-errors-apply                         Apply fix-java-issues.py --fix all fix types"/>
-	<echo message="  sonarqube-report                             Run SonarQube analysis (auto-downloads server + scanner, runs scan, generates reports) &#10140; dist/sonarqube.html + dist/sonarqube-local.html"/>
+    <echo message="  sonarqube-report                             Run SonarQube analysis (auto-downloads server + scanner, runs scan, generates reports) &#10140; dist/sonarqube.html + dist/sonarqube-local.html"/>
+    <echo message="  sonarqube-report-full                        Full analysis + local rule docs &#10140; dist/sonarqube/report.html + rules/"/>
+    <echo message="  sonarqube-report-zip                         Package full report with rules as zip &#10140; dist/sonarqube-report.zip"/>
     <echo message="  spotbugs                                     Run SpotBugs static analysis on Java sources &#10140; dist/spotbugs.html + dist/spotbugs-local.html"/>
     <echo message="  report-all-java                              Run all Java analysis tools and combine into single report &#10140; dist/report-all-java.html + dist/report-all-java-local.html"/>
     <echo message="  report-all-java-quick                        Compile combined report from existing results (no re-analysis) &#10140; dist/report-all-java.html + dist/report-all-java-local.html"/>
@@ -4246,6 +4248,32 @@
     <exec executable="bash" dir="${basedir}" failonerror="false">
       <arg value="tools/sonarqube/run-sonar.sh"/>
     </exec>
+  </target>
+
+  <target name="sonarqube-rules" description="Fetch Java rules from SonarQube API (requires running server) and generate self-contained static docs">
+    <echo message="* Fetching SonarQube Java rules..."/>
+    <exec executable="python3" dir="${basedir}" failonerror="false">
+      <arg value="-B"/>
+      <arg value="tools/sonarqube/fetch-rules.py"/>
+      <arg value="--skip-if-exists"/>
+      <arg value="--minify"/>
+    </exec>
+    <echo message="* SonarQube rule docs written to tools/sonarqube/rules/index.html"/>
+  </target>
+
+  <target name="sonarqube-report-full" depends="jar, build2, buildUtilityJar" description="Generate full SonarQube report with local rule documentation links">
+    <echo message="* Running SonarQube analysis with local rule docs..."/>
+    <exec executable="bash" dir="${basedir}" failonerror="false">
+      <arg value="tools/sonarqube/run-sonar.sh"/>
+      <arg value="--local-rules"/>
+    </exec>
+    <echo message="* Reports: dist/sonarqube/report.html + dist/sonarqube/report-local.html (rule links point to rules/ subdirectory)"/>
+    <echo message="* Rule docs: dist/sonarqube/rules/ (cached at tools/sonarqube/rules/)"/>
+  </target>
+
+  <target name="sonarqube-report-zip" depends="sonarqube-report-full" description="Package SonarQube report with rules into a single zip">
+    <zip destfile="dist/sonarqube-report.zip" basedir="dist/sonarqube/"/>
+    <echo message="* Report zip: dist/sonarqube-report.zip"/>
   </target>
 
   <target name="report-all-java" depends="jar, build2, buildUtilityJar, pmd-setup, checkstyle-setup, checkstyle-download">

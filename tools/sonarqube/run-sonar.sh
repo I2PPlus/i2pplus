@@ -12,15 +12,18 @@ PROJECT_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 PROPERTIES_FILE="${SCRIPT_DIR}/sonar-project.properties"
 NO_STOP=false
 LOCAL=false
+LOCAL_RULES=false
 SCAN_EXIT=0
 # --no-stop: leave server running after scan
 # --local: generate report with file:// links for editor integration
+# --local-rules: generate rule doc links pointing to local sonar-rules/rules/ pages
 parse_args() {
     local args=("$@")
     PROPERTIES_FILE="${SCRIPT_DIR}/sonar-project.properties"
     for arg in "${args[@]}"; do
         case "$arg" in
             --no-stop) NO_STOP=true ;;
+            --local-rules) LOCAL_RULES=true ;;
             --local) LOCAL=true ;;
             *) PROPERTIES_FILE="$arg" ;;
         esac
@@ -364,7 +367,37 @@ except Exception:
     done
 fi
 
-# ---- Generate HTML report ----
+# ---- Fetch or copy local rule documentation (while server is running) ----
+if [ -n "$CE_TASK_ID" ] && [ "${LOCAL_RULES:-}" = "true" ]; then
+    CACHED_RULES="${PROJECT_DIR}/tools/sonarqube/rules"
+    RULES_DEST="${PROJECT_DIR}/dist/sonarqube/rules"
+    if [ -f "${CACHED_RULES}/index.html" ] && [ -f "${CACHED_RULES}/assets/style.css" ]; then
+        echo "Using cached rule docs from ${CACHED_RULES}..."
+    else
+        echo "Fetching rule documentation..."
+        python3 -B "${SCRIPT_DIR}/fetch-rules.py" \
+            --url "${SONAR_HOST}" \
+            --token "${SONAR_TOKEN_VALUE}" \
+            --minify
+    fi
+    rm -rf "${RULES_DEST}"
+    mkdir -p "${RULES_DEST}"
+    cp -r "${CACHED_RULES}/." "${RULES_DEST}/"
+    if [ -d "${RULES_DEST}/rules" ]; then
+        mv "${RULES_DEST}/rules/"* "${RULES_DEST}/" && rmdir "${RULES_DEST}/rules"
+    fi
+    # Sync source assets so edits to tools/sonarqube/assets/ take effect
+    if [ -f "${SCRIPT_DIR}/assets/style.css" ]; then
+        mkdir -p "${RULES_DEST}/assets"
+        cp "${SCRIPT_DIR}/assets/style.css" "${RULES_DEST}/assets/style.css"
+    fi
+    if [ -f "${SCRIPT_DIR}/assets/filter.js" ]; then
+        cp "${SCRIPT_DIR}/assets/filter.js" "${RULES_DEST}/assets/filter.js"
+    fi
+    echo "Rule docs ready at ${RULES_DEST}/"
+fi
+
+# ---- Generate HTML report (uses cache, server not needed) ----
 if [ -n "$CE_TASK_ID" ]; then
     CACHE_ARG=""
     if [ -f "$SONAR_ISSUES_CACHE" ]; then
@@ -389,7 +422,10 @@ if [ -n "$CE_TASK_ID" ]; then
             fi
         done
     }
-    if [ "$LOCAL" = "true" ]; then
+    if [ "${LOCAL_RULES:-}" = "true" ]; then
+        echo "Generating report with local rule links..."
+        run_python --output "dist/sonarqube/report.html" --output "dist/sonarqube/report-local.html" --rules-base-url "rules"
+    elif [ "$LOCAL" = "true" ]; then
         run_python --output "dist/sonarqube-local.html"
     else
         run_python --output "dist/sonarqube.html" --output "dist/sonarqube-local.html"
