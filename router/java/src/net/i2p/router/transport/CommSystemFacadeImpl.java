@@ -961,6 +961,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     private static final ConcurrentHashMap<String, CacheEntry> rdnsCache = new ConcurrentHashMap<>(MAX_RDNS_CACHE_SIZE);
 
+    /** Set after the first normalize sweep to avoid re-processing every 15 min */
+    private static volatile boolean _normalizeSweepDone;
+
     public static String rdnsCacheSize() {
         File cache = new File(RDNS_CACHE_FILE);
         return String.valueOf(cache.length() / 1024) + "KB";
@@ -1066,19 +1069,24 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         int removed = 0;
         int normalized = 0;
         long unknownExpireTimeMillis = 15 * 60 * 1000L; // 15 minutes
+        // When cache is >50% full, halve the TTL to accelerate eviction
+        long expireTime = EVICT_THRESHOLD;
+        if (rdnsCache.size() > (MAX_RDNS_CACHE_SIZE * 90 / 100)) {
+            expireTime /= 2;
+        }
         Iterator<Map.Entry<String, CacheEntry>> it = rdnsCache.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<String, CacheEntry> entry = it.next();
             CacheEntry ce = entry.getValue();
             long age = now - ce.getTimestamp();
-            long expireTime = EVICT_THRESHOLD;
+            long entryExpireTime = expireTime;
 
             // "unknown" entries expire quickly — no point keeping dead lookups
             String cacheEntryStr = rdnsEntryToString(ce);
             if (cacheEntryStr.contains("unknown")) {
-                expireTime = unknownExpireTimeMillis;
+                entryExpireTime = unknownExpireTimeMillis;
             }
-            if (age > expireTime) {
+            if (age > entryExpireTime) {
                 it.remove();
                 removed++;
             }
@@ -1105,14 +1113,19 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             }
         }
         // Sweep: normalize any reversed ASN org names cached from MaxMind
-        for (Map.Entry<String, CacheEntry> entry : rdnsCache.entrySet()) {
-            CacheEntry ce = entry.getValue();
-            String hostname = ce.getHostname();
-            String fixed = GeoIP.normalizeOrgName(hostname);
-            if (!fixed.equals(hostname)) {
-                rdnsCache.put(entry.getKey(), new CacheEntry(ce.getIpAddress(), fixed, ce.getTimestamp()));
-                normalized++;
+        // Only needed on first run (entries from disk cache are pre-normalization;
+        // new entries are normalized at insertion time in rdnsCachePut())
+        if (!_normalizeSweepDone) {
+            for (Map.Entry<String, CacheEntry> entry : rdnsCache.entrySet()) {
+                CacheEntry ce = entry.getValue();
+                String hostname = ce.getHostname();
+                String fixed = GeoIP.normalizeOrgName(hostname);
+                if (!fixed.equals(hostname)) {
+                    rdnsCache.put(entry.getKey(), new CacheEntry(ce.getIpAddress(), fixed, ce.getTimestamp()));
+                    normalized++;
+                }
             }
+            _normalizeSweepDone = true;
         }
         if (removed > 0 && _slog.shouldInfo()) {
             _slog.info("[RDNSCache] Removed " + removed + " stale entries from the cache");
@@ -1127,6 +1140,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * Evicts expired entries first, then oldest entries if still over budget.
      */
     private static void rdnsCachePut(String ipAddress, CacheEntry entry) {
+        String hostname = entry.getHostname();
+        String fixed = GeoIP.normalizeOrgName(hostname);
+        if (!fixed.equals(hostname)) {
+            entry = new CacheEntry(entry.getIpAddress(), fixed, entry.getTimestamp());
+        }
         if (rdnsCache.size() >= MAX_RDNS_CACHE_SIZE) {
             cleanupRDNSCache();
         }
