@@ -893,6 +893,9 @@ public class GeoIP {
         if (fullScore > 0 && fullScore >= wordScore && fullScore >= caseScore) {return fullResult;}
         if (wordScore > fullScore && wordScore >= caseScore) {return wordResult;}
         if (caseScore > fullScore && caseScore > wordScore) {return caseResult;}
+        // Fallback: if we detected reversed words but no known-word matches
+        // (e.g. non-English org names), accept the word-reversal result
+        if (!wordResult.isEmpty()) {return wordResult;}
         return name;
     }
 
