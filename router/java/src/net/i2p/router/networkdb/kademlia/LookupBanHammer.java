@@ -150,6 +150,10 @@ class LookupBanHammer {
                     expireOrEvictBan(now);
                 }
                 banExpiration.put(rt, now + BAN_DURATION_MS);
+                // Once banned, the burstTimestamps entry is dead — every future
+                // request hits banExpiration.get() first and returns true immediately.
+                // Remove it to free the ReplyTunnel key.
+                burstTimestamps.remove(rt);
                 return true;
             }
 
@@ -159,6 +163,8 @@ class LookupBanHammer {
                     expireOrEvictBan(now);
                 }
                 banExpiration.put(rt, now + BAN_DURATION_MS);
+                // Same rationale as above — no need to keep tracking rate for a banned source.
+                burstTimestamps.remove(rt);
                 return true;
             }
         }
@@ -189,23 +195,32 @@ class LookupBanHammer {
     }
 
     /**
-     * Periodic cleanup task that removes expired bans.
-     * The burstTimestamps map is no longer cleared here — entries expire
-     * naturally via inline trimming in shouldBan(). This reduces GC churn
-     * from recreating 50K ReplyTunnel objects every 30s.
+     * Periodic cleanup task that removes expired bans and prunes stale
+     * burstTimestamps entries. The burstTimestamps map entries accumulate
+     * indefinitely unless we age them out here — "self-cleaning via sliding
+     * window" in shouldBan() only trims deque contents, not map entries.
+     * Without this, every unique (Hash, TunnelId) pair that ever sends a
+     * lookup creates a permanent ReplyTunnel entry, leaking ~24 bytes each.
      */
     private class Cleaner extends SimpleTimer2.TimedEvent {
         public Cleaner() { super(SimpleTimer2.getInstance()); }
         @Override
         public void timeReached() {
             long now = System.currentTimeMillis();
-            int tsSize = burstTimestamps.size();
             int banSize = banExpiration.size();
-            // Remove expired bans only — burstTimestamps is self-cleaning via sliding window
+            // Remove expired bans
             banExpiration.entrySet().removeIf(entry -> entry.getValue() <= now);
+            // Remove stale burstTimestamps entries: empty deque or all entries > 30s old
+            if (!burstTimestamps.isEmpty()) {
+                long cutoff = now - 30000;
+                burstTimestamps.entrySet().removeIf(entry -> {
+                    Long last = entry.getValue().peekLast();
+                    return last == null || last < cutoff;
+                });
+            }
             // Under heavy load, clean more frequently to stay bounded
             long interval = _cleanTimeMs;
-            if (tsSize > _maxEntries || banSize > _maxEntries) {
+            if (burstTimestamps.size() + banExpiration.size() > _maxEntries * 2) {
                 interval = Math.max(interval / 6, 1000);
             }
             reschedule(interval);
