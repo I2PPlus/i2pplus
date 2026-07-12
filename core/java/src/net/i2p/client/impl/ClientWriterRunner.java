@@ -43,7 +43,7 @@ class ClientWriterRunner implements Runnable {
      *  @since 0.9.11
      */
     public void startWriting() {
-        Thread t = new I2PAppThread(this, "I2CP Client Writer " + __Id.incrementAndGet(), true);
+        Thread t = new I2PAppThread(this, "I2CPClientWriter." + __Id.incrementAndGet(), true);
         t.start();
     }
 

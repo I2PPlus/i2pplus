@@ -35,6 +35,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.client.naming.NamingService;
 import net.i2p.client.streaming.I2PSocketManager;
@@ -290,10 +291,11 @@ public class HostChecker {
 
         // Initialize scheduler and semaphore AFTER loading config to use configured values
         ThreadFactory threadFactory = new ThreadFactory() {
+            private final AtomicInteger _count = new AtomicInteger();
             @Override
             public Thread newThread(Runnable r) {
                 Thread thread = new Thread(r);
-                thread.setName("HostChecker");
+                thread.setName("HostChecker." + _count.incrementAndGet());
                 thread.setDaemon(true);
                 return thread;
             }

@@ -1930,7 +1930,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 return;
             }
             if (_knownNodes.size() > 0) {
-                (new I2PAppThread(new ExplorerThread(), "DHT Explore", true)).start();
+                (new I2PAppThread(new ExplorerThread(), "DHTExplore", true)).start();
             } else {
                 schedule((long) 60 * 1000);
             }

@@ -140,7 +140,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
             i2ps.setReadTimeout(readTimeout);
             StringBuffer expectedPong = new StringBuffer();
             DCCHelper dcc = _dccEnabled ? new DCC(s.getLocalAddress().getAddress()) : null;
-            Thread in = new I2PAppThread(new IrcInboundFilter(s,i2ps, expectedPong, _log, dcc), "IRC Client " + _clientId + " in", true);
+            Thread in = new I2PAppThread(new IrcInboundFilter(s,i2ps, expectedPong, _log, dcc), "IRCClient." + _clientId + ".in", true);
             in.start();
             Runnable out = new IrcOutboundFilter(s,i2ps, expectedPong, _log, dcc);
             // we are called from an unlimited thread pool, so run inline

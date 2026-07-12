@@ -197,7 +197,7 @@ class NTCPSendFinisher {
     private static class CustomThreadFactory implements ThreadFactory {
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
-            rv.setName("NTCPTXFinis " + _count.incrementAndGet() + '/' + _maxThreads);
+            rv.setName("NTCPTXFinis." + _count.incrementAndGet());
             rv.setDaemon(true);
             return rv;
         }

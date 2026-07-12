@@ -464,8 +464,8 @@ public class POP3MailBox implements NewMailListener {
     public boolean connectToServer(NewMailListener nml) {
         Thread t;
         synchronized(synchronizer) {
-            if (isConnected()) {t = new I2PAppThread(new RecheckRunner(nml), "POP3 Checker");}
-            else {t = new I2PAppThread(new ConnectRunner(nml), "POP3 Connector");}
+            if (isConnected()) {t = new I2PAppThread(new RecheckRunner(nml), "POP3Checker");}
+            else {t = new I2PAppThread(new ConnectRunner(nml), "POP3Connector");}
         }
         try {t.start();}
         catch (Throwable e) {return false;}

@@ -173,7 +173,7 @@ class SAMv3Handler extends SAMv1Handler
         boolean canContinue = false;
         Properties props;
 
-        this.thread.setName("SAMv3Handler " + _id);
+        this.thread.setName("SAMv3Handler." + _id);
         if (_log.shouldDebug())
             _log.debug("SAMv3Handler started");
 

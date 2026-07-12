@@ -41,7 +41,7 @@ public class I2CPMessageReader {
         _reader = new I2CPMessageReaderRunner();
         _readerThread = new I2PThread(_reader);
         _readerThread.setDaemon(true);
-        _readerThread.setName("I2CP Reader " + __readerId.incrementAndGet());
+        _readerThread.setName("I2CPReader." + __readerId.incrementAndGet());
     }
 
     /**

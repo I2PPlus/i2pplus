@@ -786,7 +786,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             _dTime = System.currentTimeMillis();
             pub_time = _dTime;
 
-            new I2PAppThread("NDT Sleeper") {
+            new I2PAppThread("NDTSleeper") {
 
                 public void run() {
                     try {Thread.sleep(10000);} // sleep for 10s

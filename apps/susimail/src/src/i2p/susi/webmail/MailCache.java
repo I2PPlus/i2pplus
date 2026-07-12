@@ -226,7 +226,7 @@ class MailCache {
 		if (_isLoaded || _loadInProgress != null)
 			return false;
 		if (_log.shouldDebug()) _log.debug("[SusiMail] Loading folder: " + folderName);
-		Thread t = new I2PAppThread(new LoadMailRunner(nml), "Email loader");
+		Thread t = new I2PAppThread(new LoadMailRunner(nml), "EmailLoader");
 		_loadInProgress = nml;
 		try {
 			t.start();

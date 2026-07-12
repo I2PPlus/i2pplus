@@ -122,7 +122,7 @@ public class SimpleTimer2 {
         @Override
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
-            rv.setName(_name + ' ' + _count.incrementAndGet() + '/' + THREADS);
+            rv.setName(_name + '.' + _count.incrementAndGet());
             rv.setDaemon(true);
             rv.setPriority(Thread.MAX_PRIORITY - 1);
             return rv;

@@ -537,7 +537,7 @@ public class SAMBridge implements Runnable, ClientApp {
      * @since 0.9.6
      */
     private void startThread() {
-        I2PAppThread t = new I2PAppThread(this, "SAMListener " + _listenPort);
+        I2PAppThread t = new I2PAppThread(this, "SAMListener." + _listenPort);
         if (Boolean.parseBoolean(System.getProperty("sam.shutdownOnOOM"))) {
             t.addOOMEventThreadListener(new I2PAppThread.OOMEventListener() {
                 public void outOfMemory(OutOfMemoryError err) {
@@ -812,7 +812,7 @@ public class SAMBridge implements Runnable, ClientApp {
                         try { s.close(); } catch (IOException ioe) { /* ignored */ }
                     }
                 }
-                new I2PAppThread(new HelloHandler(s,this), "SAM HelloHandler").start();
+                new I2PAppThread(new HelloHandler(s,this), "SAMHelloHandler").start();
             }
             changeState(STOPPING);
         } catch (Exception e) {

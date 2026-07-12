@@ -589,7 +589,7 @@ public class JobQueue {
             for (int i = _queueRunners.size(); i < numThreads; i++) {
                 JobQueueRunner runner = new JobQueueRunner(_context, i);
                 _queueRunners.put(Integer.valueOf(i), runner);
-                runner.setName("JobQueue " + _runnerId.incrementAndGet() + '/' + numThreads);
+                runner.setName("JobQueue." + _runnerId.incrementAndGet());
                 runner.setPriority(Thread.MAX_PRIORITY);
                 runner.start();
             }
@@ -666,7 +666,7 @@ public class JobQueue {
             int key = startKey + i;
             JobQueueRunner runner = new JobQueueRunner(_context, key);
             _queueRunners.put(Integer.valueOf(key), runner);
-            runner.setName("JobQueue " + _runnerId.incrementAndGet() + '/' + (startKey + count) + " (scaled)");
+            runner.setName("JobQueue." + _runnerId.incrementAndGet() + ".scaled");
             if (_log.shouldDebug())
                 _log.debug("Starting runner " + key + " total now " + _queueRunners.size());
             runner.start();

@@ -166,7 +166,7 @@ public class TrackerClient implements Runnable {
         runStarted = false;
         _fastUnannounce = false;
         snark.setTrackerProblems(null);
-        _thread = new I2PAppThread(this, _threadName + " #" + (++_runCount), true);
+        _thread = new I2PAppThread(this, _threadName + "." + (++_runCount), true);
         _thread.start();
         started = true;
     }
@@ -239,7 +239,7 @@ public class TrackerClient implements Runnable {
         public void timeReached() {
             _event = null;
             _thread =
-                    new I2PAppThread(TrackerClient.this, _threadName + " #" + (++_runCount), true);
+                    new I2PAppThread(TrackerClient.this, _threadName + "." + (++_runCount), true);
             _thread.start();
         }
     }
@@ -938,7 +938,7 @@ public class TrackerClient implements Runnable {
         for (TCTracker tr : trackers) {
             if (_util.connected() && tr.started && (!tr.stop) && tr.trackerProblems == null) {
                 try {
-                    (new I2PAppThread(new Unannouncer(tr), _threadName + " U" + (++i), true))
+                    (new I2PAppThread(new Unannouncer(tr), _threadName + ".U." + (++i), true))
                             .start();
                 } catch (OutOfMemoryError oom) {
                     tr.reset();

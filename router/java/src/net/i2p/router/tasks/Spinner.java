@@ -34,7 +34,7 @@ public class Spinner extends Thread {
      */
     public Spinner() {
         super();
-        setName("Shutdown Spinner");
+        setName("ShutdownSpinner");
         setDaemon(false);
     }
 

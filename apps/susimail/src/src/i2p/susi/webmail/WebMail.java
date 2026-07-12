@@ -2916,7 +2916,7 @@ public class WebMail extends HttpServlet {
 
             if (ok) {
                 Runnable es = new EmailSender(sessionObject, draft, sender, recipients, body, attachments, boundary);
-                Thread t = new I2PAppThread(es, "Email sender");
+                Thread t = new I2PAppThread(es, "EmailSender");
                 sessionObject.info += _t("Sending mail.") + '\n';
                 t.start();
             }

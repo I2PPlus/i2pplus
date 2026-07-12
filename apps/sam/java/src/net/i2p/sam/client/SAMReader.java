@@ -34,7 +34,7 @@ public class SAMReader {
         if (_live)
             throw new IllegalStateException();
         _live = true;
-        I2PAppThread t = new I2PAppThread(new Runner(), "SAM reader " + _count.incrementAndGet());
+        I2PAppThread t = new I2PAppThread(new Runner(), "SAMReader." + _count.incrementAndGet());
         t.start();
         _thread = t;
     }

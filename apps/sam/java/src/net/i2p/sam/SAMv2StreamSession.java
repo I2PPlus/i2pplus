@@ -105,7 +105,7 @@ class SAMv2StreamSession extends SAMStreamSession {
 
         // non-blocking connection (SAMv2)
         StreamConnector connector = new StreamConnector(id, d, opts);
-        I2PAppThread connectThread = new I2PAppThread(connector, "StreamConnector" + id);
+        I2PAppThread connectThread = new I2PAppThread(connector, "StreamConnector." + id);
         connectThread.start();
         return true;
     }

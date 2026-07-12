@@ -68,7 +68,7 @@ public class ShutdownHook extends Thread {
      */
     @Override
     public void run() {
-        setName("Router " + _id + " shutdown");
+        setName("Router." + _id + ".shutdown");
         Log l = _context.logManager().getLog(Router.class);
         l.log(Log.CRIT, "Shutting down the router...");
         // Needed to make the wrapper happy, otherwise it gets confused

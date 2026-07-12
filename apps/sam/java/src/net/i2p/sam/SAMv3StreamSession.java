@@ -194,9 +194,9 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         WritableByteChannel toI2P = Channels.newChannel(i2ps.getOutputStream());
 
         SAMBridge bridge = handler.getBridge();
-        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromClient, toI2P, bridge), "ConnectV3 SAMPipeClientToI2P"))
+        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromClient, toI2P, bridge), "SAMConPipe-C2I"))
                 .start();
-        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromI2P, toClient, bridge), "ConnectV3 SAMPipeI2PToClient"))
+        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromI2P, toClient, bridge), "SAMConPipe-I2C"))
                 .start();
     }
 
@@ -250,9 +250,9 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         WritableByteChannel toI2P = Channels.newChannel(i2ps.getOutputStream());
 
         SAMBridge bridge = handler.getBridge();
-        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromClient, toI2P, bridge), "AcceptV3 SAMPipeClientToI2P"))
+        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromClient, toI2P, bridge), "SAMAccPipe-C2I"))
                 .start();
-        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromI2P, toClient, bridge), "AcceptV3 SAMPipeI2PToClient"))
+        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromI2P, toClient, bridge), "SAMAccPipe-I2C"))
                 .start();
     }
 
@@ -390,8 +390,8 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
                     ReadableByteChannel fromI2P = Channels.newChannel(i2ps.getInputStream());
                     WritableByteChannel toClient = clientServerSock;
                     WritableByteChannel toI2P = Channels.newChannel(i2ps.getOutputStream());
-                    (new I2PAppThread(new Pipe(fromClient, toI2P, null), "ForwardV3 SAMPipeClientToI2P")).start();
-                    (new I2PAppThread(new Pipe(fromI2P, toClient, null), "ForwardV3 SAMPipeI2PToClient")).start();
+                    (new I2PAppThread(new Pipe(fromClient, toI2P, null), "SAMFwdPipe-C2I")).start();
+                    (new I2PAppThread(new Pipe(fromI2P, toClient, null), "SAMFwdPipe-I2C")).start();
 
                 } catch (IOException e) {
                     try {

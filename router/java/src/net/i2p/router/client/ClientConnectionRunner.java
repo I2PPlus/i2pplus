@@ -188,7 +188,7 @@ class ClientConnectionRunner {
                                             createListener());
             _writer = new ClientWriterRunner(_context, this);
             I2PThread t = new I2PThread(_writer);
-            t.setName("I2CP Writer " + __id.incrementAndGet());
+            t.setName("I2CPWriter." + __id.incrementAndGet());
             t.setDaemon(true);
             t.start();
             _out = new BufferedOutputStream(_socket.getOutputStream());

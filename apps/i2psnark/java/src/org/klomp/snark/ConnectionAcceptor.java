@@ -74,7 +74,7 @@ class ConnectionAcceptor implements Runnable {
                             + (thread == null));
         }
         if (thread == null) {
-            thread = new I2PAppThread(this, "I2PSnark acceptor");
+            thread = new I2PAppThread(this, "SnarkAcceptor");
             thread.setDaemon(true);
             thread.start();
             _cleaner.reschedule(BAD_CLEAN_INTERVAL, false);
@@ -85,7 +85,7 @@ class ConnectionAcceptor implements Runnable {
     public ConnectionAcceptor(I2PSnarkUtil util, PeerAcceptor peeracceptor) {
         this.peeracceptor = peeracceptor;
         _util = util;
-        thread = new I2PAppThread(this, "I2PSnark acceptor");
+        thread = new I2PAppThread(this, "SnarkAcceptor");
         thread.setDaemon(true);
         thread.start();
         _cleaner = new Cleaner();
@@ -211,7 +211,7 @@ class ConnectionAcceptor implements Runnable {
                         continue;
                     }
                     Thread t =
-                            new I2PAppThread(new Handler(socket), "I2PSnark incoming connection");
+                            new I2PAppThread(new Handler(socket), "SnarkIncoming");
                     t.start();
                 }
             } catch (RouterRestartException rre) {

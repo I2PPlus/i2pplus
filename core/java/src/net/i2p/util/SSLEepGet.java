@@ -686,7 +686,7 @@ public class SSLEepGet extends EepGet {
         if (_isGzippedResponse) {
             PipedInputStream pi = new PipedInputStream(64 * 1024);
             PipedOutputStream po = new PipedOutputStream(pi);
-            pusher = new I2PAppThread(new Gunzipper(pi, _out), "EepGet Decompressor");
+            pusher = new I2PAppThread(new Gunzipper(pi, _out), "EepGetDecompress");
             _out = po;
             pusher.start();
         }

@@ -915,7 +915,7 @@ public class LogManager implements Flushable {
     private class ShutdownHook extends I2PAppThread {
         @Override
         public void run() {
-            setName("Log shutdown");
+            setName("LogShutdown");
             shutdown();
         }
     }

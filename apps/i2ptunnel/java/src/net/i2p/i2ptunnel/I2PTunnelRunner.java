@@ -274,7 +274,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         if (_log.shouldLog(Log.INFO)) {_log.info("I2PTunnelRunner started");}
         _runnerId = __runnerId.incrementAndGet();
         if (shouldStart) {
-            setName("I2PTunnelRunner " + _runnerId);
+            setName("TunnelRunner." + _runnerId);
             start();
         }
     }

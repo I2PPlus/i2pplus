@@ -439,7 +439,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         StatefulConnectionFilter filter = _filter;
         if (filter != null) {filter.start();}
         boolean isDaemon = getTunnel().getContext().isRouterContext(); // prevent JVM exit when running outside the router
-        Thread t = new I2PAppThread(this, "Server " + remoteHost + ':' + remotePort, isDaemon);
+        Thread t = new I2PAppThread(this, "Server." + remoteHost + '.' + remotePort, isDaemon);
         t.start();
     }
 

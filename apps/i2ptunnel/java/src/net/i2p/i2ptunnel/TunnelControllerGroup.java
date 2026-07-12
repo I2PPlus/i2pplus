@@ -746,7 +746,7 @@ public class TunnelControllerGroup implements ClientApp {
      */
     private synchronized void startControllers() {
         changeState(STARTING);
-        I2PAppThread startupThread = new I2PAppThread(new StartControllers(), "Startup tunnels");
+        I2PAppThread startupThread = new I2PAppThread(new StartControllers(), "StartupTunnels");
         startupThread.start();
         changeState(RUNNING);
     }

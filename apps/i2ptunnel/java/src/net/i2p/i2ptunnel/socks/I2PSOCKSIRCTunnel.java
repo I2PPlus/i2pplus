@@ -60,7 +60,7 @@ public class I2PSOCKSIRCTunnel extends I2PSOCKSTunnel {
             StringBuffer expectedPong = new StringBuffer();
             int id = __clientId.incrementAndGet();
             Thread in = new I2PAppThread(new IrcInboundFilter(clientSock, destSock, expectedPong, _log),
-                                         "SOCKS IRC Client " + id + " in", true);
+                                         "SOCKSIRCClient." + id + ".in", true);
             in.start();
             Runnable out = new IrcOutboundFilter(clientSock, destSock, expectedPong, _log);
             out.run();

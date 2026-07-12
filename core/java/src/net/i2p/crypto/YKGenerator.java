@@ -81,7 +81,7 @@ final class YKGenerator {
         if (_isRunning) {
             return;
         }
-        _precalcThread = new I2PThread(new YKPrecalcRunner(MIN_NUM_BUILDERS, MAX_NUM_BUILDERS), "YK Precalc", true);
+        _precalcThread = new I2PThread(new YKPrecalcRunner(MIN_NUM_BUILDERS, MAX_NUM_BUILDERS), "YKPrecalc", true);
         _precalcThread.setPriority(Thread.NORM_PRIORITY - 2);
         _isRunning = true;
         _precalcThread.start();

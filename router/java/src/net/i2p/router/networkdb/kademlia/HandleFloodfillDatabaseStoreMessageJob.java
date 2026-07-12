@@ -522,7 +522,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     long floodEnd = System.currentTimeMillis();
                     getContext().statManager().addRateData("netDb.storeFloodNew", floodEnd-floodBegin, 60L * 1000);
                 };
-                new I2PThread(floodTask, "Flood Worker", true).start();
+                new I2PThread(floodTask, "FloodWorker", true).start();
             } else {
                 // don't flood it *again*
                 getContext().statManager().addRateData("netDb.storeFloodOld", 1);

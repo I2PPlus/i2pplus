@@ -1860,7 +1860,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 				_log.info("Starting thread to renew subscriptions");
 		}
 		Thread t = new I2PThread(new RegisterPortsThread(portsToForwardNow));
-		t.setName("UPnP Port Opener " + __id.incrementAndGet());
+		t.setName("UPnPPortOpener." + __id.incrementAndGet());
 		t.setDaemon(true);
 		t.start();
 	}
@@ -1919,7 +1919,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 		if (_log.shouldInfo())
 			_log.info("Starting thread to un-forward " + portsToForwardNow.size() + " ports");
 	        Thread t = new I2PThread(new UnregisterPortsThread(portsToForwardNow));
-		t.setName("UPnP Port Closer " + __id.incrementAndGet());
+		t.setName("UPnPPortCloser." + __id.incrementAndGet());
 		t.setDaemon(true);
 		t.start();
 	}
