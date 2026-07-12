@@ -24,6 +24,7 @@ import net.i2p.router.tunnel.pool.BuildRequestor;
 import net.i2p.router.tunnel.pool.ParticipatingThrottler;
 import net.i2p.router.tunnel.pool.RequestThrottler;
 import net.i2p.router.tunnel.pool.TestJob;
+import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.router.tunnel.pool.TunnelPoolManager;
 import net.i2p.router.transport.FIFOBandwidthRefiller;
 import net.i2p.router.transport.ntcp.NTCPTransport;
@@ -360,6 +361,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         // Pool backoff
         _params.add(new PoolFailureThresholdParam());
         _params.add(new PoolBackoffMsParam());
+        _params.add(new TunnelTargetBufferParam());
 
         // Streaming
         _params.add(new CongestionAvoidanceGrowthParam());
@@ -535,7 +537,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         };
         String[][] metrics = {
             { "jobQueue.jobLag" },
-            { "tunnel.buildSuccessRate" },
+            { "tunnel.buildSuccessRate + pool alive/deficit" },
             { "transport.sendProcessingTime", "transport.sendMessageFailureLifetime / sendMessageSize" },
             { "client.leaseSetFoundRemoteTime / netDb.successTime" },
             { "stream.resetReceived / stream.connectionReceived" },
@@ -7303,6 +7305,48 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
+         * Fraction of registered tunnel pools that are alive.
+         * 1.0 = all alive, 0.0 = half or more dead.
+         */
+        private double scorePoolAlive() {
+            TunnelManagerFacade mgr = _ctx.tunnelManager();
+            List<TunnelPool> pools = new ArrayList<>();
+            mgr.listPools(pools);
+            if (pools.isEmpty()) return Double.NaN;
+            int alive = 0;
+            for (TunnelPool p : pools) {
+                if (p.isAlive()) alive++;
+            }
+            // 0 alive → 0.0, 50% alive → 0.0, 100% alive → 1.0
+            // Mapping: alive/total → (2*alive/total - 1)
+            double pct = (double) alive / pools.size();
+            return clamp(2.0 * pct - 1.0);
+        }
+
+        /**
+         * Fraction of alive pools meeting their target tunnel count.
+         * 1.0 = all pools meet target, 0.0 = half or more fall short.
+         */
+        private double scorePoolDeficit() {
+            TunnelManagerFacade mgr = _ctx.tunnelManager();
+            List<TunnelPool> pools = new ArrayList<>();
+            mgr.listPools(pools);
+            if (pools.isEmpty()) return Double.NaN;
+            int alive = 0;
+            int met = 0;
+            for (TunnelPool p : pools) {
+                if (!p.isAlive()) continue;
+                alive++;
+                int target = p.getSettings().getTotalQuantity();
+                // within 1 of target is acceptable (build in flight)
+                if (p.getActiveTunnelCount() >= target - 1) met++;
+            }
+            if (alive == 0) return 0.0;
+            double pct = (double) met / alive;
+            return clamp(2.0 * pct - 1.0);
+        }
+
+        /**
          * @return true if any transport reports firewalled status
          */
         private boolean isFirewalled() {
@@ -7425,9 +7469,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 Double.isNaN(memUsedPct) ? Double.NaN : memUsedPct / 100.0
             });
 
-            // Tunnel: build success rate only
+            // Tunnel: build success + pool health + deficit
             scores.put(SUB_TUNNEL, new double[] {
-                scoreBuildSuccess()
+                Math.min(Math.min(scoreBuildSuccess(), scorePoolAlive()), scorePoolDeficit())
             });
 
             // Transport: latency + send failure rate
@@ -8089,6 +8133,63 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean failing = !Double.isNaN(observed) && observed < 70;
             if (healthy) return Math.max(_min, current - 2000);
             if (failing) return Math.min(_max, current + 2000);
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the spare tunnel buffer above target for each pool.
+     * Increases when build success is low or pools have deficit
+     * (builds extra spares to prevent collapse). Decreases toward
+     * zero when pools are healthy and at target (saves bandwidth).
+     */
+    private class TunnelTargetBufferParam extends BaseParam {
+        TunnelTargetBufferParam() {
+            super("i2p.tunnel.targetBuffer", "Pool spare tunnel buffer",
+                  SUB_TUNNEL, 0, 8, 1, "tunnel.buildSuccessRate", _context);
+        }
+        protected void applyValue(int value) {
+            _context.router().saveConfig("i2p.tunnel.targetBuffer", Integer.toString(value));
+        }
+        protected int getRuntimeValue() {
+            return _context.getProperty("i2p.tunnel.targetBuffer", 0);
+        }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean healthy = !Double.isNaN(observed) && observed > 80 && !cpuPressure;
+            boolean failing = !Double.isNaN(observed) && observed < 60;
+
+            // Check pool deficits
+            TunnelManagerFacade mgr = _context.tunnelManager();
+            boolean anyDeficit = false;
+            List<TunnelPool> pools = new ArrayList<>();
+            mgr.listPools(pools);
+            for (TunnelPool p : pools) {
+                if (!p.isAlive()) continue;
+                int target = p.getSettings().getTotalQuantity();
+                if (p.getActiveTunnelCount() < target) {
+                    anyDeficit = true;
+                    break;
+                }
+            }
+
+            // Failing or deficit = increase buffer (more spares prevent collapse)
+            if (failing || anyDeficit)
+                return Math.min(_max, current + 1);
+
+            // Healthy and no deficit = decrease buffer toward 0
+            if (healthy && !anyDeficit)
+                return Math.max(_min, current - 1);
+
             return current;
         }
     }
