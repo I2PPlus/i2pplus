@@ -102,6 +102,8 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("udp.peer.maxSendWindow", "Max UDP Send Window");
         DISPLAY_NAMES.put("ntcp.sendPool.capacity", "NTCP Send Pool Capacity");
         DISPLAY_NAMES.put("i2cp.internalQueueSize", "Internal Queue Size");
+        DISPLAY_NAMES.put("udp.peer.sentMessagesCleanTime", "Sent Messages Clean Time");
+        DISPLAY_NAMES.put("udp.peer.outboundMsgExpiration", "Outbound Message Expiration");
         DISPLAY_NAMES.put("udp.establish.maxQueuedOutbound", "Max Pending Handshakes");
         DISPLAY_NAMES.put("ntcp.maxWriteBufs", "NTCP Max Write Buffers Per Connection");
         DISPLAY_NAMES.put("i2p.streaming.minResendDelay", "Min Resend Delay");
@@ -207,6 +209,8 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("udp.peer.maxSendWindow", "Max unacknowledged messages per peer.");
         PARAM_DESCRIPTIONS.put("ntcp.sendPool.capacity", "NTCP send pool queue size.");
         PARAM_DESCRIPTIONS.put("i2cp.internalQueueSize", "I2CP session buffer size.");
+        PARAM_DESCRIPTIONS.put("udp.peer.sentMessagesCleanTime", "Interval between sweeps of ACKed sent-messages.");
+        PARAM_DESCRIPTIONS.put("udp.peer.outboundMsgExpiration", "Max age for undelivered outbound messages.");
         PARAM_DESCRIPTIONS.put("udp.establish.maxQueuedOutbound", "Pending outbound handshake queue.");
         PARAM_DESCRIPTIONS.put("ntcp.maxWriteBufs", "Write buffer per NTCP connection.");
         PARAM_DESCRIPTIONS.put("i2p.streaming.minResendDelay", "Min time between retransmissions (ms).");
@@ -328,8 +332,14 @@ public class TuningHelper extends HelperBase {
         }
         buf.append("</span></p>");
 
+        // Defer health rings for 5 min after restart so all have consistent data
+        boolean deferRings = _context.router().getUptime() < 5 * 60 * 1000;
+        if (deferRings) {
+            healthScore = Double.NaN;
+        }
+
         // Subsystem ring chart dashboard
-        buf.append(renderSubsystemRings(tuner));
+        buf.append(renderSubsystemRings(tuner, deferRings));
 
         buf.append("<form id=tuningform method=POST target=processForm>")
            .append("<input type=hidden name=nonce value=\"").append(_nonce != null ? _nonce : "").append("\">")
@@ -544,9 +554,13 @@ public class TuningHelper extends HelperBase {
      *
      * @since 0.9.70+
      */
-    private String renderSubsystemRings(Tuner tuner) {
+    private String renderSubsystemRings(Tuner tuner, boolean defer) {
         List<Tuner.SubsystemScore> scores = tuner.getSubsystemScores();
         if (scores.isEmpty()) return "";
+        if (defer) {
+            for (Tuner.SubsystemScore ss : scores)
+                ss.score = Double.NaN;
+        }
 
         StringBuilder buf = new StringBuilder(2048);
         buf.append("<div id=tuningstats>");

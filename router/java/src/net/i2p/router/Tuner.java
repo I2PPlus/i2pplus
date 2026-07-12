@@ -509,7 +509,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     public static class SubsystemScore {
         public final String name;
         public final String label;
-        public final double score;
+        public double score;
         public final String[] details;
 
         SubsystemScore(String name, String label, double score, String[] details) {
