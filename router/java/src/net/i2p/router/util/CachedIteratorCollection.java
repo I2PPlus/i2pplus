@@ -125,6 +125,57 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     }
 
     /**
+     *  Remove the first element matching by identity (==).
+     *  Used by PeerState.acked() to avoid iterating with early-exit break.
+     *
+     *  @return true if removed
+     *  @since 0.9.70+
+     */
+    public synchronized boolean remove(Object o) {
+        for (Node<E> x = first; x != null; x = x.next) {
+            if (x.item == o) {
+                unlink(x);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     *  Unlink a node from the doubly-linked list.
+     */
+    private void unlink(Node<E> x) {
+        Node<E> prev = x.prev;
+        Node<E> next = x.next;
+        if (prev == null) {
+            first = next;
+        } else {
+            prev.next = next;
+            x.prev = null;
+        }
+        if (next == null) {
+            last = prev;
+        } else {
+            next.prev = prev;
+            x.next = null;
+        }
+        x.item = null;
+        size--;
+    }
+
+    /**
+     *  Reset the current thread's cached iterator so it is no longer
+     *  considered "in use".  Call this before any early return from an
+     *  iteration loop that may not exhaust the iterator.
+     *
+     *  @since 0.9.70+
+     */
+    public void releaseCurrentThreadIterator() {
+        CachedIterator<E> it = _iterator.get();
+        it.itrIndexNode = null;
+    }
+
+    /**
      * Returns a cached iterator over the elements in this collection.
      *
      * Each thread gets its own iterator instance that is reused and reset on each call.

@@ -1502,6 +1502,7 @@ public class PeerState {
 
                     // Retransmit up to half of the packets in flight (RFC 6298 section 5.4 and RFC 5681 section 4.3)
                     if (rv.size() >= _outboundMessages.size() / 2 && !_fastRetransmit.get()) {
+                        _outboundMessages.releaseCurrentThreadIterator();
                         return rv;
                     }
                 }
@@ -1531,6 +1532,7 @@ public class PeerState {
                                 _log.debug(_remotePeer + " ran out of BW, but managed to send " + rv.size());
                             }
                         }
+                        _outboundMessages.releaseCurrentThreadIterator();
                         return rv;
                     }
                 }
@@ -1691,22 +1693,7 @@ public class PeerState {
         boolean anyPending;
         synchronized (_outboundLock) {
             if (isComplete) {
-                long sn = state.getSeqNum();
-                boolean found = false;
-                // We don't do _outboundMessages.remove() so we can use the cached iterator and break out early
-                for (Iterator<OutboundMessageState> iter = _outboundMessages.iterator(); iter.hasNext(); ) {
-                    OutboundMessageState state2 = iter.next();
-                    if (state == state2) {
-                        iter.remove();
-                        found = true;
-                        break;
-                    } else if (state2.getSeqNum() > sn) {
-                        // _outboundMessages is ordered, so once we get to a msg
-                        // with a higher sequence number, we can stop
-                        break;
-                    }
-                }
-                if (!found) {
+                if (!_outboundMessages.remove(state)) {
                     // shouldn't happen except on race
                     if (_log.shouldWarn()) {_log.warn("ACKed but not found in Outbound messages..." + state);}
                     return false;
@@ -1778,7 +1765,10 @@ public class PeerState {
             for (Iterator<OutboundMessageState> iter = _outboundMessages.iterator(); iter.hasNext(); ) {
                 OutboundMessageState state = iter.next();
                 long sn = state.getSeqNum();
-                if (sn >= highest) {break;}
+                if (sn >= highest) {
+                    _outboundMessages.releaseCurrentThreadIterator();
+                    break;
+                }
                 if (sn < highest) {
                     // This will also increment NACKs for a state that was just partially acked... ok?
                     int nacks = state.incrementNACKs();
