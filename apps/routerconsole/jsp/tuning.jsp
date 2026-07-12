@@ -1,10 +1,10 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="64kb"%>
 <!DOCTYPE HTML>
 <%@include file="head.jsi"%>
-<%=intl.title("router auto-tuning")%>
+<%=intl.title("tuning")%>
 </head>
 <body id=autotuning>
-<%@include file="sidebar.jsi"%><h1 class=sched><%=intl._t("Auto-Tuning")%></h1>
+<%@include file="sidebar.jsi"%><h1 class=sched><%=intl._t("Router Auto-Tuning")%></h1>
 <jsp:useBean class="net.i2p.router.web.TuningFormHandler" id="formhandler" scope="request"/>
 <%@include file="formhandler.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.TuningHelper" id="tuninghelper" scope="request"/>
