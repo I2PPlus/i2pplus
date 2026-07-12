@@ -585,8 +585,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         for (TunableParam param : _params) {
             if (param instanceof BaseParam) {
                 BaseParam bp = (BaseParam) param;
-                bp._defaultValue = bp.getRuntimeValue();
-                bp._autotune.setProperty(bp._name + ".default", String.valueOf(bp._defaultValue));
                 bp._autotune.setProperty(bp._name + ".value", String.valueOf(bp._defaultValue));
                 bp.applyValue(bp._defaultValue);
                 bp._autoTuning = true;
@@ -739,20 +737,42 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             String defaultKey = name + ".default";
             String valueKey = name + ".value";
             String existingDefault = _autotune.getProperty(defaultKey);
+            boolean changed = false;
             if (existingDefault == null) {
                 _defaultValue = runtimeDefault;
                 _autotune.setProperty(defaultKey, String.valueOf(runtimeDefault));
                 _autotune.setProperty(valueKey, String.valueOf(runtimeDefault));
+                changed = true;
             } else {
                 _defaultValue = Integer.parseInt(existingDefault);
-                // Heal stale -1 captured when a dependent lib wasn't loaded
-                // (e.g. streaming jar before Tuner first tick)
-                if (_defaultValue <= 0) {
-                    _defaultValue = runtimeDefault > 0 ? runtimeDefault : _min;
+                // 1. Clamp to [min, max] — catches out-of-range (e.g. -1)
+                if (_defaultValue < _min || _defaultValue > _max) {
+                    int prev = _defaultValue;
+                    _defaultValue = Math.max(_min, Math.min(_max, _defaultValue));
+                    if (_log.shouldWarn())
+                        _log.warn(_name + " default clamped: " + prev + " -> " + _defaultValue +
+                                  " (range " + _min + "-" + _max + ")");
+                }
+                // 2. Heal when persisted value matches factory default but default doesn't
+                //    Catches in-range corruptions (e.g. 2600 for MinResendDelay).
+                if (runtimeDefault > 0 && _defaultValue != runtimeDefault) {
+                    int persistedValue = _autotune.getInt(valueKey, -1);
+                    if (persistedValue == runtimeDefault) {
+                        int prev = _defaultValue;
+                        _defaultValue = runtimeDefault;
+                        if (_log.shouldWarn())
+                            _log.warn(_name + " default healed: " + prev + " -> " + _defaultValue +
+                                      " (factory default: " + runtimeDefault +
+                                      ", persisted value: " + persistedValue + ")");
+                    }
+                }
+                if (_defaultValue != Integer.parseInt(existingDefault)) {
                     _autotune.setProperty(defaultKey, String.valueOf(_defaultValue));
-                    _autotune.forceSave();
+                    changed = true;
                 }
             }
+            if (changed)
+                _autotune.forceSave();
             // Read persisted tuned value (clamped to current range) — catches stale
             // autotune.config values from before code changes (e.g., max lowered 512→20)
             int raw = _autotune.getInt(valueKey, _defaultValue);
