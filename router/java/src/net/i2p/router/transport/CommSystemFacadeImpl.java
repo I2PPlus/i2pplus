@@ -1247,13 +1247,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * Fast hostname lookup that never blocks on network DNS.
-     * Returns cached result if available and useful, otherwise does a local
-     * ASN org name lookup (fast, local MMDB file) and caches it.
-     * Queues background async RDNS if enabled; when RDNS resolves to a
-     * real hostname (not "unknown" or raw IP), it overwrites the ASN result.
+     * Fast hostname lookup that never blocks on I/O (MMDB or network).
+     * Returns cached result if available and useful.
+     * On cache miss, queues a background job that does ASN org name lookup
+     * (MMDB file read + regex normalization) and optional RDNS, then
+     * returns null immediately — page rendering is never blocked.
      *
-     * @return hostname from cache, ASN org name, or null if unresolvable
+     * @return cached hostname/ASN org name, or null if not yet resolved
      * @since 0.9.70+
      */
     @Override
@@ -1272,30 +1272,28 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             }
         }
 
-        // 2. Fast local ASN lookup
-        String hostName = null;
-        String orgName = _geoIP.getOrgName(ipAddress);
-        if (orgName != null && !orgName.isEmpty()) {
-            hostName = orgName;
-            rdnsCachePut(ipAddress, new CacheEntry(ipAddress, orgName, now));
-        }
-
-        // 3. Queue async RDNS in background — updates cache if better
-        if (enableReverseLookups() && pendingLookups.add(ipAddress)) {
+        // 2. Queue background resolution (ASN + RDNS), return null immediately.
+        //    Never blocks page rendering on MMDB file reads or regex normalization.
+        if (pendingLookups.add(ipAddress)) {
             getReverseDnsExecutor().submit(() -> {
                 try {
-                    String rdnsResult = ipAddress;
-                    try {
-                        rdnsResult = InetAddress.getByName(ipAddress).getCanonicalHostName();
-                    } catch (UnknownHostException e) {
-                        // RDNS failed, keep ASN result
+                    // Try ASN org name first (local MMDB, fast enough for background)
+                    String hostName = _geoIP.getOrgName(ipAddress);
+                    if (hostName != null && !hostName.isEmpty()) {
+                        rdnsCachePut(ipAddress, new CacheEntry(ipAddress, hostName,
+                                System.currentTimeMillis()));
                         return;
                     }
-                    // Only update cache if RDNS returned something better than ASN
-                    if (rdnsResult != null && !rdnsResult.equals(ipAddress)
-                            && !_t("unknown").equals(rdnsResult)) {
-                        rdnsCachePut(ipAddress, new CacheEntry(ipAddress, rdnsResult,
-                                System.currentTimeMillis()));
+                    // Fallback to RDNS
+                    if (enableReverseLookups()) {
+                        try {
+                            String rdnsResult = InetAddress.getByName(ipAddress).getCanonicalHostName();
+                            if (rdnsResult != null && !rdnsResult.equals(ipAddress)
+                                    && !_t("unknown").equals(rdnsResult)) {
+                                rdnsCachePut(ipAddress, new CacheEntry(ipAddress, rdnsResult,
+                                        System.currentTimeMillis()));
+                            }
+                        } catch (UnknownHostException e) { /* unresolvable */ }
                     }
                 } finally {
                     pendingLookups.remove(ipAddress);
@@ -1304,7 +1302,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             _context.statManager().addRateData("rdns.executor.queueSize", getRdnsQueueSize());
         }
 
-        return hostName;
+        // 3. No synchronous fallback — let page render with placeholder "?"
+        return null;
     }
 
     /**

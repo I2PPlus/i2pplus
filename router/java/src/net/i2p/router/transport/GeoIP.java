@@ -36,6 +36,7 @@ import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientAppManager;
@@ -687,59 +688,35 @@ public class GeoIP {
         return new StringBuilder(word).reverse().toString();
     }
 
-    /** Suffixes to strip from org names (longer patterns first) */
-    private static final String[] SUFFIX_PATTERNS = {
-        ",?\\s+Pty\\.?\\s+Ltd\\.?$",
-        ",?\\s+PTY\\s+LTD\\.?$",
-        ",?\\s+Limited\\s+Liability\\s+Partnership\\.?$",
-        ",?\\s+Limited\\.?$",
-        ",?\\s+LIMITED\\.?$",
-        ",?\\s+Ltd\\.?\\s+Co\\.?$",
-        ",?\\s+LTD\\.?\\s+CO\\.?$",
-        ",?\\s+Ltd\\.?$",
-        ",?\\s+LTD\\.?$",
-        ",?\\s+Inc\\.?$",
-        ",?\\s+INC\\.?$",
-        ",?\\s+Incorporated\\.?$",
-        ",?\\s+LLC\\.?$",
-        ",?\\s+LLP\\.?$",
-        ",?\\s+Corporation\\.?$",
-        ",?\\s+CORPORATION\\.?$",
-        ",?\\s+Corp\\.?\\s+Co\\.?$",
-        ",?\\s+Corp\\.?$",
-        ",?\\s+CORP\\.?$",
-        ",?\\s+Company\\.?$",
-        ",?\\s+COMPANY\\.?$",
-        ",?\\s+Co\\.?\\s+Ltd\\.?$",
-        ",?\\s+CO\\.?\\s+LTD\\.?$",
-        ",?\\s+Co\\.?$",
-        ",?\\s+CO\\.?$",
-        ",?\\s+S\\.?\\s+A\\.?\\s+R\\.?\\s+L\\.?$",
-        ",?\\s+S\\.?\\s+r\\.?\\s+l\\.?$",
-        ",?\\s+S\\.?\\s+A\\.?$",
-        ",?\\s+SA\\.?$",
-        ",?\\s+GmbH\\s*&\\s+Co\\.?\\s+KG\\.?$",
-        ",?\\s+GmbH\\s*&\\s+Co\\.?$",
-        ",?\\s+GmbH\\.?$",
-        ",?\\s+B\\.?\\s+V\\.?$",
-        ",?\\s+BV\\.?$",
-        ",?\\s+N\\.?\\s+V\\.?$",
-        ",?\\s+NV\\.?$",
-        ",?\\s+PLC\\.?$",
-        ",?\\s+Group\\.?$",
-        ",?\\s+GROUP\\.?$",
-        ",?\\s+SpA\\.?$",
-        ",?\\s+Sp\\.?\\s+Z\\s+o\\.?\\s+o\\.?\\s+L\\.?$",
-        ",?\\s+Pvt\\.?\\s*(Ltd\\.?)?$",
-        ",?\\s+PVT\\.?\\s*(LTD\\.?)?$",
-    };
-    private static final Pattern[] SUFFIX_COMPILED;
-    static {
-        SUFFIX_COMPILED = new Pattern[SUFFIX_PATTERNS.length];
-        for (int i = 0; i < SUFFIX_PATTERNS.length; i++) {
-            SUFFIX_COMPILED[i] = Pattern.compile(SUFFIX_PATTERNS[i], Pattern.CASE_INSENSITIVE);
-        }
-    }
+    /** Suffixes to strip from org names — single combined alternation (44→1) */
+    private static final Pattern SUFFIX_ALL = Pattern.compile(
+        "(?:,?\\s+Pty\\.?\\s+Ltd\\.?|,?\\s+PTY\\s+LTD\\.?|" +
+        ",?\\s+Limited\\s+Liability\\s+Partnership\\.?|" +
+        ",?\\s+Limited\\.?|,?\\s+LIMITED\\.?|" +
+        ",?\\s+Ltd\\.?\\s+Co\\.?|,?\\s+LTD\\.?\\s+CO\\.?|" +
+        ",?\\s+Ltd\\.?|,?\\s+LTD\\.?|" +
+        ",?\\s+Inc\\.?|,?\\s+INC\\.?|,?\\s+Incorporated\\.?|" +
+        ",?\\s+LLC\\.?|,?\\s+LLP\\.?|" +
+        ",?\\s+Corporation\\.?|,?\\s+CORPORATION\\.?|" +
+        ",?\\s+Corp\\.?\\s+Co\\.?|,?\\s+Corp\\.?|,?\\s+CORP\\.?|" +
+        ",?\\s+Company\\.?|,?\\s+COMPANY\\.?|" +
+        ",?\\s+Co\\.?\\s+Ltd\\.?|,?\\s+CO\\.?\\s+LTD\\.?|" +
+        ",?\\s+Co\\.?|,?\\s+CO\\.?|" +
+        ",?\\s+S\\.?\\s+A\\.?\\s+R\\.?\\s+L\\.?|" +
+        ",?\\s+S\\.?\\s+r\\.?\\s+l\\.?|" +
+        ",?\\s+S\\.?\\s+A\\.?|,?\\s+SA\\.?|" +
+        ",?\\s+GmbH\\s*&\\s+Co\\.?\\s+KG\\.?|" +
+        ",?\\s+GmbH\\s*&\\s+Co\\.?|,?\\s+GmbH\\.?|" +
+        ",?\\s+B\\.?\\s+V\\.?|,?\\s+BV\\.?|" +
+        ",?\\s+N\\.?\\s+V\\.?|,?\\s+NV\\.?|" +
+        ",?\\s+PLC\\.?|" +
+        ",?\\s+Group\\.?|,?\\s+GROUP\\.?|" +
+        ",?\\s+SpA\\.?|" +
+        ",?\\s+Sp\\.?\\s+Z\\s+o\\.?\\s+o\\.?\\s+L\\.?|" +
+        ",?\\s+Pvt\\.?\\s*(?:Ltd\\.?)?|" +
+        ",?\\s+PVT\\.?\\s*(?:LTD\\.?)?)$",
+        Pattern.CASE_INSENSITIVE
+    );
 
     /** Words to keep uppercase */
     private static final Set<String> KEEP_UPPER = new HashSet<>(Arrays.asList(
@@ -769,44 +746,65 @@ public class GeoIP {
     }
 
     /** Abbreviation map for verbose Spanish/Portuguese/etc words */
-    private static final String[][] ABBREV_ENTRIES = {
-        {"Telecomunicaciones", "Telecom"}, {"Telecomunicacoes", "Telecom"},
-        {"Telecomunicacoes", "Telecom"}, {"Companhia", "Co"}, {"Compania", "Co"},
-        {"Servicios", "Svc"}, {"Servicio", "Svc"}, {"Servicos", "Svc"},
-        {"Redes", "Net"}, {"Cooperativa", "Coop"}, {"Sociedad", "SA"},
-        {"Comunicacao", "Comms"}, {"Informatica", "IT"}, {"Tecnologia", "Tech"},
-        {"Multimidia", "Multi"}, {"Equipamentos", "Equip"},
-        {"Provedores", "Prov"}, {"Provedor", "Prov"},
-        {"Solucoes", "Sols"}, {"Associacao", "Assoc"}, {"Comercio", "Comm"},
-        {"Desenvolvimento", "Dev"}, {"Economico", "Econ"},
-        {"Nacional", "Natl"}, {"Internacional", "Intl"},
-        {"University", "Univ"}, {"Company", "Co"},
-        {"Telekomunikasyon", "Telecom"}, {"Komunikasi", "Comms"},
-        {"Informatika", "IT"}, {"Sirketi", "Co"}, {"Ticaret", "Trade"},
-        {"Limited", "Ltd"}, {"Mbh", "GmbH"}, {"Information", "Info"},
-        {"Centre", "Center"}, {"Department", "Dept"}, {"Agricultural", "Agri"},
-        {"Technical", "Tech"}, {"Metropolitan", "Metro"}, {"Headquarters", "HQ"},
-        {"Corporation", "Corp"}, {"Organization", "Org"}, {"Institution", "Inst"},
-        {"Administration", "Admin"}, {"Commission", "Comm"}, {"Authority", "Auth"},
-        {"Institute", "Inst"}, {"Foundation", "Fdn"}, {"Association", "Assoc"},
-        {"Committee", "Comm"}, {"Division", "Div"}, {"Directorate", "Dir"},
-        {"Ministry", "Min"}, {"National", "Natl"}, {"Federal", "Fed"},
-        {"Telecommunications", "Telecom"}, {"Infrastructure", "Infra"},
-        {"Industries", "Ind"}, {"Industrial", "Ind"},
-        {"Multimedia", "Multi"}, {"Negocios", "Biz"},
-        {"Ingenieria", "Eng"}, {"Ingenieur", "Eng"},
-        {"Kommunale", "Muni"}, {"Regionalis", "Regional"},
-        {"Autonomous", "Auto"}, {"Non-profit", "Nonprofit"},
-    };
-    private static final Pattern[][] ABBREV_COMPILED;
+    private static final Map<String, String> ABBREV_MAP;
+    /** Single combined abbreviation pattern (29 word-boundary patterns → 1) */
+    private static final Pattern ABBREV_ALL;
     static {
-        ABBREV_COMPILED = new Pattern[ABBREV_ENTRIES.length][];
-        for (int i = 0; i < ABBREV_ENTRIES.length; i++) {
-            ABBREV_COMPILED[i] = new Pattern[]{
-                Pattern.compile("\\b" + Pattern.quote(ABBREV_ENTRIES[i][0]) + "\\b", Pattern.CASE_INSENSITIVE),
-                null
-            };
+        Map<String, String> map = new HashMap<>();
+        String[][] entries = {
+            {"Telecomunicaciones", "Telecom"}, {"Telecomunicacoes", "Telecom"},
+            {"Companhia", "Co"}, {"Compania", "Co"},
+            {"Servicios", "Svc"}, {"Servicio", "Svc"}, {"Servicos", "Svc"},
+            {"Redes", "Net"}, {"Cooperativa", "Coop"}, {"Sociedad", "SA"},
+            {"Comunicacao", "Comms"}, {"Informatica", "IT"}, {"Tecnologia", "Tech"},
+            {"Multimidia", "Multi"}, {"Equipamentos", "Equip"},
+            {"Provedores", "Prov"}, {"Provedor", "Prov"},
+            {"Solucoes", "Sols"}, {"Associacao", "Assoc"}, {"Comercio", "Comm"},
+            {"Desenvolvimento", "Dev"}, {"Economico", "Econ"},
+            {"Nacional", "Natl"}, {"Internacional", "Intl"},
+            {"University", "Univ"}, {"Company", "Co"},
+            {"Telekomunikasyon", "Telecom"}, {"Komunikasi", "Comms"},
+            {"Informatika", "IT"}, {"Sirketi", "Co"}, {"Ticaret", "Trade"},
+            {"Limited", "Ltd"}, {"Mbh", "GmbH"}, {"Information", "Info"},
+            {"Centre", "Center"}, {"Department", "Dept"}, {"Agricultural", "Agri"},
+            {"Technical", "Tech"}, {"Metropolitan", "Metro"}, {"Headquarters", "HQ"},
+            {"Corporation", "Corp"}, {"Organization", "Org"}, {"Institution", "Inst"},
+            {"Administration", "Admin"}, {"Commission", "Comm"}, {"Authority", "Auth"},
+            {"Institute", "Inst"}, {"Foundation", "Fdn"}, {"Association", "Assoc"},
+            {"Committee", "Comm"}, {"Division", "Div"}, {"Directorate", "Dir"},
+            {"Ministry", "Min"}, {"National", "Natl"}, {"Federal", "Fed"},
+            {"Telecommunications", "Telecom"}, {"Infrastructure", "Infra"},
+            {"Industries", "Ind"}, {"Industrial", "Ind"},
+            {"Multimedia", "Multi"}, {"Negocios", "Biz"},
+            {"Ingenieria", "Eng"}, {"Ingenieur", "Eng"},
+            {"Kommunale", "Muni"}, {"Regionalis", "Regional"},
+            {"Autonomous", "Auto"}, {"Non-profit", "Nonprofit"},
+        };
+        for (String[] e : entries) { map.put(e[0].toLowerCase(Locale.ROOT), e[1]); }
+        ABBREV_MAP = Collections.unmodifiableMap(map);
+        // Build alternation: longest-first for word-boundary matching
+        List<String> keys = new ArrayList<>(map.keySet());
+        keys.sort((a, b) -> b.length() - a.length());
+        StringBuilder sb = new StringBuilder();
+        sb.append("\\b(");
+        for (int i = 0; i < keys.size(); i++) {
+            if (i > 0) sb.append("|");
+            sb.append(Pattern.quote(keys.get(i)));
         }
+        sb.append(")\\b");
+        ABBREV_ALL = Pattern.compile(sb.toString(), Pattern.CASE_INSENSITIVE);
+    }
+
+    /** Single-pass abbreviation replacement (was 29× replaceAll) */
+    private static String applyAbbreviation(String name) {
+        StringBuffer sb = new StringBuffer(name.length() + 16);
+        Matcher m = ABBREV_ALL.matcher(name);
+        while (m.find()) {
+            m.appendReplacement(sb, Matcher.quoteReplacement(
+                ABBREV_MAP.get(m.group(1).toLowerCase(Locale.ROOT))));
+        }
+        m.appendTail(sb);
+        return sb.toString();
     }
 
     /** Filler prepositions/articles to drop */
@@ -840,12 +838,13 @@ public class GeoIP {
     /** Leading/trailing punctuation trim */
     private static final Pattern LEADING_TRAILING_JUNK = Pattern.compile("^[ ,.]+|[ ,.]+$");
 
-    /** Verbose prefixes to strip */
-    private static final Pattern[] STRIP_PREFIXES = {
-        Pattern.compile("^(Internet Domain Name System)\\s+", Pattern.CASE_INSENSITIVE),
-        Pattern.compile("^(Internet (?:Backbone|Network|Service|Provider|Telecom|Communications))\\s+", Pattern.CASE_INSENSITIVE),
-        Pattern.compile("^(Autonomous System(?:\\s+Number)?)\\s+(?:of|for)\\s+", Pattern.CASE_INSENSITIVE),
-    };
+    /** Verbose prefixes to strip — single combined alternation (3→1) */
+    private static final Pattern STRIP_PREFIX_ALL = Pattern.compile(
+        "^(?:Internet Domain Name System|" +
+        "Internet (?:Backbone|Network|Service|Provider|Telecom|Communications)|" +
+        "Autonomous System(?:\\s+Number)?\\s+(?:of|for))\\s+",
+        Pattern.CASE_INSENSITIVE
+    );
 
     /** Filler words that can be trimmed from long names */
     private static final Pattern FILLER_WORDS = Pattern.compile(
@@ -858,12 +857,11 @@ public class GeoIP {
     /** Precompiled pattern for short all-caps acronym detection */
     private static final Pattern ACRONYM_PATTERN = Pattern.compile("[A-Z]+");
 
-    /** Names that should be returned as-is */
-    private static final Pattern[] SKIP_PATTERNS = {
-        Pattern.compile("^Reserved\\s+AS", Pattern.CASE_INSENSITIVE),
-        Pattern.compile("^Autonomous\\s+System\\s+number", Pattern.CASE_INSENSITIVE),
-        Pattern.compile("^N/?A$", Pattern.CASE_INSENSITIVE),
-    };
+    /** Names that should be returned as-is — single combined pattern vs array */
+    private static final Pattern SKIP_ALL = Pattern.compile(
+        "^(?:Reserved\\s+AS|Autonomous\\s+System\\s+number|N/?A)$",
+        Pattern.CASE_INSENSITIVE
+    );
 
     /**
      * Detect and fix character-reversed words from MaxMind ASN DB.
@@ -993,9 +991,7 @@ public class GeoIP {
         String name = raw.trim();
 
         // Skip reserved / non-org names
-        for (Pattern pat : SKIP_PATTERNS) {
-            if (pat.matcher(name).find()) {return name;}
-        }
+        if (SKIP_ALL.matcher(name).find()) {return name;}
 
         // Known broken org names in the MaxMind ASN DB (reversed strings, etc.)
         String fixed = ASN_DB_OVERRIDES.get(name);
@@ -1010,24 +1006,18 @@ public class GeoIP {
         name = name.trim();
 
         // Strip verbose prefixes
-        for (Pattern pat : STRIP_PREFIXES) {
-            name = pat.matcher(name).replaceAll("");
-        }
+        name = STRIP_PREFIX_ALL.matcher(name).replaceAll("");
 
         // Abbreviate verbose words
-        for (int i = 0; i < ABBREV_ENTRIES.length; i++) {
-            name = ABBREV_COMPILED[i][0].matcher(name).replaceAll(ABBREV_ENTRIES[i][1]);
-        }
+        name = applyAbbreviation(name);
 
         // Drop filler prepositions/articles
         name = FILLER_DROP.matcher(name).replaceAll(" ");
         name = DOUBLE_SPACE.matcher(name).replaceAll(" ");
         name = name.trim();
 
-        // Strip corporate suffixes (longer patterns first via sorted array)
-        for (Pattern pat : SUFFIX_COMPILED) {
-            name = pat.matcher(name).replaceAll("");
-        }
+        // Strip corporate suffixes
+        name = SUFFIX_ALL.matcher(name).replaceAll("");
         name = name.trim();
 
         // Strip trailing parentheticals
@@ -1041,7 +1031,6 @@ public class GeoIP {
         name = TRAILING_JUNK.matcher(name).replaceAll("");
         name = name.replace("\"", "");
         name = PAIRED_SINGLE_QUOTES.matcher(name).replaceAll("$1");
-        // Collapse consecutive apostrophes (e.g. Fruit'' -> Fruit)
         name = name.replace("''", "'");
         name = DOUBLE_COMMA.matcher(name).replaceAll(",");
         name = DOUBLE_SPACE.matcher(name).replaceAll(" ");
