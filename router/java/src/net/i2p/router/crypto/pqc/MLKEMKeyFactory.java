@@ -36,6 +36,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     private volatile boolean _isRunning;
     private long _checkDelay = 10 * 1000L;
     private final AtomicInteger _emptyCount = new AtomicInteger();
+    private final AtomicInteger _usedCount = new AtomicInteger();
 
     private static final String PROP_MLKEM_PRECALC_MIN = "crypto.mlkem.precalc.min";
     private static final String PROP_MLKEM_PRECALC_MAX = "crypto.mlkem.precalc.max";
@@ -56,9 +57,8 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
         _context = ctx;
         _type = type;
         _log = ctx.logManager().getLog(MLKEMKeyFactory.class);
-        ctx.statManager().createRequiredRateStat("crypto.MLKEMUsed", "Take keys from the queue", "Encryption", new long[] { 60*60*1000L });
+        ctx.statManager().createRequiredRateStat("crypto.MLKEMUsed", "MLKEM keys consumed from precalc pool", "Encryption", new long[] { 60*1000L, 60*60*1000L });
         ctx.statManager().createRequiredRateStat("crypto.MLKEMEmpty", "Queue empty", "Encryption", new long[] { 60*1000L, 10*60*1000L, 60*60*1000L });
-        ctx.statManager().createRequiredRateStat("crypto.MLKEMDrain", "Idle MLKEM keys drained from pool", "Encryption", new long[] { 60*1000L, 10*60*1000L });
 
         // Scale precomputation with available memory and cores.
         // MLKEM-768 keypair is ~3.5KB so even 1000 keys is <4MB.
@@ -131,17 +131,23 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
 
     /**
      * Called by the Tuner every 30 seconds. Adjusts max pool size
-     * based on demand and drains excess keys.
+     * based on demand.
      *
      * @since 0.9.70+
      */
     public void refreshPoolSize() {
         int recentEmpties = _emptyCount.getAndSet(0);
         boolean lowDemand = recentEmpties == 0;
+        int recentUsage = _usedCount.getAndSet(0);
+        int fillCeiling = Math.max(1, Math.min(_maxSize,
+            _minSize + Math.max(256, recentUsage + recentUsage / 10)));
 
         long freeMem = Runtime.getRuntime().freeMemory();
         long totalMem = Runtime.getRuntime().totalMemory();
         double memPressure = 1.0 - ((double) freeMem / Math.max(totalMem, 1));
+
+        // Cap max at demand-based fill ceiling
+        _maxSize = Math.min(_maxSize, fillCeiling);
 
         // Shrink max when idle, especially under memory pressure
         if (lowDemand && memPressure > 0.85) {
@@ -150,24 +156,6 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
             _maxSize = Math.max(_minSize + 128, _maxSize * 3 / 4);
         }
 
-        // Drain excess keys when pool shrinks below current queue
-        int current = _keys.size();
-        int target = _minSize + 256;
-        if (current > target) {
-            int drained = 0;
-            while (_keys.size() > target) {
-                KeyPair kp = _keys.poll();
-                if (kp == null)
-                    break;
-                drained++;
-            }
-            if (drained > 0) {
-                _context.statManager().addRateData("crypto.MLKEMDrain", drained);
-                if (_log.shouldWarn()) {
-                    _log.warn("MLKEM Precalc drained " + drained + " idle keys (" + current + " -> " + _keys.size() + ")");
-                }
-            }
-        }
     }
 
     /**
@@ -239,6 +227,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     @Override
     public KeyPair getKeys() {
         _context.statManager().addRateData("crypto.MLKEMUsed", 1);
+        _usedCount.incrementAndGet();
         KeyPair rv = _keys.poll();
         if (rv == null) {
             _emptyCount.incrementAndGet();

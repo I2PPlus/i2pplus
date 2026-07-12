@@ -40,6 +40,8 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     private long _checkDelay = 10 * 1000L;
     /** Empties observed since last refresh — drives pool growth */
     private final AtomicInteger _emptyCount = new AtomicInteger();
+    /** Key consumption count since last refresh — drives fill ceiling */
+    private final AtomicInteger _usedCount = new AtomicInteger();
     private static final String PROP_DH_PRECALC_MIN = "crypto.xdh.precalc.min";
     private static final String PROP_DH_PRECALC_MAX = "crypto.xdh.precalc.max";
     private static final String PROP_DH_PRECALC_DELAY = "crypto.xdh.precalc.delay";
@@ -57,9 +59,8 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         super("XDHPrecalc");
         _context = ctx;
         _log = ctx.logManager().getLog(X25519KeyFactory.class);
-        ctx.statManager().createRequiredRateStat("crypto.XDHUsed", "Need a DH from the queue", "Encryption", new long[] { RateConstants.ONE_MINUTE });
+        ctx.statManager().createRequiredRateStat("crypto.XDHUsed", "XDH keys consumed from precalc pool", "Encryption", new long[] { RateConstants.ONE_MINUTE });
         ctx.statManager().createRequiredRateStat("crypto.XDHEmpty", "DH queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
-        ctx.statManager().createRequiredRateStat("crypto.XDHDrain", "Idle keys drained from pool", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
 
         // Initial dynamic sizing
         computeTargetSizes();
@@ -140,6 +141,12 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         if (memPressure > 0.90) { max = Math.min(HARD_MAX, max / 2); }
         if (SystemVersion.isSlow()) { max = Math.min(HARD_MAX, max / 2); }
 
+        // Fill ceiling: recent usage + 10% buffer
+        int recentUsage = _usedCount.getAndSet(0);
+        int fillCeiling = Math.max(HARD_MIN, Math.min(HARD_MAX,
+            _minSize + Math.max(256, recentUsage + recentUsage / 10)));
+        max = Math.min(max, fillCeiling);
+
         // Ensure min ≤ max
         min = Math.min(min, max);
         min = Math.max(HARD_MIN, min);
@@ -165,8 +172,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     }
 
     /**
-     * Called by the Tuner every 30 seconds. Applies computed target sizes
-     * and drains excess keys when the pool shrinks below the current queue.
+     * Called by the Tuner every 30 seconds. Applies computed target sizes.
      * The precalc thread uses _minSize/_maxSize to decide generation targets.
      *
      * @since 0.9.70+
@@ -181,24 +187,6 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
             if (_log.shouldDebug()) {
                 _log.debug("XDH Precalc resized min: " + oldMin + " → " + _minSize
                            + " max: " + oldMax + " → " + _maxSize);
-            }
-        }
-        // Drain excess keys when cap is reduced below current queue
-        int current = _keys.size();
-        int target = _minSize + 256;
-        if (current > target) {
-            int drained = 0;
-            while (_keys.size() > target) {
-                KeyPair kp = _keys.poll();
-                if (kp == null)
-                    break;
-                drained++;
-            }
-            if (drained > 0) {
-                _context.statManager().addRateData("crypto.XDHDrain", drained);
-                if (_log.shouldWarn()) {
-                    _log.warn("XDH Precalc drained " + drained + " idle keys (" + current + " -> " + _keys.size() + ")");
-                }
             }
         }
     }
@@ -304,6 +292,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
      */
     public KeyPair getKeys() {
         _context.statManager().addRateData("crypto.XDHUsed", 1);
+        _usedCount.incrementAndGet();
         KeyPair rv = _keys.poll();
         if (rv == null) {
             _context.statManager().addRateData("crypto.XDHEmpty", 1);
