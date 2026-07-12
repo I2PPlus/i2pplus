@@ -1346,11 +1346,15 @@ public class PeerState {
                     continue;
                 }
 
-                boolean isFailed = state.isExpired(now) || state.getMaxSends() > OutboundMessageFragments.MAX_VOLLEYS;
+                boolean isExpired = state.isExpired(now);
+                boolean isFailed = isExpired || state.getMaxSends() > OutboundMessageFragments.MAX_VOLLEYS;
                 if (isFailed) {
                     iter.remove();
-                    String statKey = state.isExpired(now) ? "udp.sendFailed" : "udp.sendAggressiveFailed";
-                    _context.statManager().addRateData(statKey, state.getPushCount());
+                    if (isExpired) {
+                        _context.statManager().addRateData("udp.sendExpired", state.getPushCount());
+                    } else {
+                        _context.statManager().addRateData("udp.sendAggressiveFailed", state.getPushCount());
+                    }
                     failed.add(state);
 
                     failedSize += state.getUnackedSize();

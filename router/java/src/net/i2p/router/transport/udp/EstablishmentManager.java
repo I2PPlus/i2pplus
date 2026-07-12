@@ -190,7 +190,7 @@ public class EstablishmentManager {
     public static final long OB_MESSAGE_TIMEOUT = 2500L;
 
     /** for the DSM and or netdb store */
-    static final AtomicLong DATA_MESSAGE_TIMEOUT = new AtomicLong(12*1000L);
+    static final AtomicLong DATA_MESSAGE_TIMEOUT = new AtomicLong(20*1000L);
 
     private static final long IB_BAN_TIME = 30*60L*1000L;
 

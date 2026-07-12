@@ -61,6 +61,7 @@ class OutboundMessageFragments {
         _context.statManager().createRateStat("udp.sendConfirmFragments", "Fragments included in a fully ACKed message", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRequiredRateStat("udp.sendConfirmTime", "Time (ms) to send a message and get the ACK", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("udp.sendConfirmVolley", "Number of times fragments need to be sent before ACK", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        _context.statManager().createRequiredRateStat("udp.sendExpired", "Number of SSU messages expired before ACK", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("udp.sendFailed", "Number of times a failed message was pushed", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("udp.sendFragmentsPerPacket", "Fragments sent in a data packet", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendRejected", "What volley we were on when peer was throttled", "Transport [UDP]", UDPTransport.RATES);

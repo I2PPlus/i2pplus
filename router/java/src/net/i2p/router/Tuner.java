@@ -1496,14 +1496,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = udp.sendConfirmTime (actual network RTT, ms)
             // Cross-refs: sendMessageFailureLifetime (congestion), jobLag (CPU),
-            //             udp.sendFailed (loss)
+            //             udp.sendExpired (message timeouts)
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            double sendFailed = getAdditionalStat(_context, "udp.sendFailed");
+            double sendExpired = getAdditionalStat(_context, "udp.sendExpired");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean hasLoss = !Double.isNaN(sendFailed) && sendFailed > 0;
+            boolean hasLoss = !Double.isNaN(sendExpired) && sendExpired > 0;
 
             // Dead zone: RTT is in healthy range
             if (observed >= LOW_THRESHOLD && observed <= HIGH_THRESHOLD && !hasLoss)
@@ -1525,13 +1525,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Tunes DATA_MESSAGE_TIMEOUT based on observed send confirm time.
-     * Target: timeout = 3x observed p95 send confirm time, bounded min-max.
+     * Target: timeout = 3x observed send confirm time, bounded min-max.
      */
     private class DataMessageTimeoutParam extends BaseParam {
 
         DataMessageTimeoutParam() {
             super("DATA_MESSAGE_TIMEOUT", "Streaming data timeout (ms)",
-                  SUB_TRANSPORT, 5000, 20000, 1000, "transport.sendProcessingTime", _context);
+                  SUB_TRANSPORT, 5000, 60000, 1000, "udp.sendConfirmTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -1554,38 +1554,37 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = transport.sendProcessingTime (ms, how long a send+confirm takes)
-            // Cross-refs: sendFailed (establish failures), sendMessageFailureLifetime (congestion),
+            // observed = udp.sendConfirmTime (ms, actual SSU send+confirm RTT)
+            // Cross-refs: udp.sendExpired (SSU message timeouts), sendMessageFailureLifetime (congestion),
             //             jobLag (CPU), participating InBps (transit load),
             //             initialRTT (streaming connection establishment latency)
-            double sendFailed = getAdditionalStat(_context, "udp.sendFailed");
+            double sendExpired = getAdditionalStat(_context, "udp.sendExpired");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double transitBps = getAdditionalStat(_context, "tunnel.participating InBps");
             double initialRTT = getAdditionalStat(_context, "stream.con.initialRTT.out");
 
-            boolean hasSendFailures = !Double.isNaN(sendFailed) && sendFailed > 0;
+            boolean hasTimeouts = !Double.isNaN(sendExpired) && sendExpired > 0;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean heavyTransit = !Double.isNaN(transitBps) && transitBps > getHeavyTransitThreshold(_context);
-            boolean slowStreaming = !Double.isNaN(initialRTT) && initialRTT > 15000;
+            boolean slowStreaming = !Double.isNaN(initialRTT) && initialRTT > 10000;
 
             // Target: timeout = 3x observed confirm time, with minimum floor
             int target = Math.max(5000, (int) (observed * 3));
 
             // Dead zone: if current is already within 50% of target, hold steady
-            if (current >= target * 0.5 && current <= target * 1.5 && !hasSendFailures && !congested)
+            if (current >= target * 0.5 && current <= target * 1.5 && !hasTimeouts && !congested)
                 return current;
 
-            // Never decrease when there are failures, congestion, heavy transit, or slow streaming
-            if (target < current && (hasSendFailures || congested || heavyTransit || slowStreaming))
+            // Never decrease when there are timeouts, congestion, heavy transit, or slow streaming
+            if (target < current && (hasTimeouts || congested || heavyTransit || slowStreaming))
                 return current;
 
-            // Force increase when streaming connections are very slow (>25s initialRTT)
-            if (!Double.isNaN(initialRTT) && initialRTT > 25000 && current < _max) {
-                target = Math.max(target, (int) Math.min(_max, initialRTT));
+            // Force increase when send confirm time is very high (>15s)
+            if (!Double.isNaN(observed) && observed > 15000 && current < _max) {
+                target = Math.max(target, (int) Math.min(_max, observed * 4));
             }
 
-            // Never decrease below 5000ms (5s floor for I2P multi-hop)
             target = Math.max(5000, target);
             return clamp(current, target, _step);
         }
@@ -1624,11 +1623,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            double sendFailed = getAdditionalStat(_context, "udp.sendFailed");
+            double sendExpired = getAdditionalStat(_context, "udp.sendExpired");
             double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
 
-            boolean hasEstablishFailures = !Double.isNaN(sendFailed) && sendFailed > 0;
+            boolean hasEstablishFailures = !Double.isNaN(sendExpired) && sendExpired > 0;
             boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 5000;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 5000;
 
@@ -1677,11 +1676,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            double sendFailed = getAdditionalStat(_context, "udp.sendFailed");
+            double sendExpired = getAdditionalStat(_context, "udp.sendExpired");
             double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
 
-            boolean hasEstablishFailures = !Double.isNaN(sendFailed) && sendFailed > 0;
+            boolean hasEstablishFailures = !Double.isNaN(sendExpired) && sendExpired > 0;
             boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 5000;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 5000;
 
@@ -6589,7 +6588,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Maximum RTO — ceiling for retransmission timeout.
      * Lower = fail peers faster, higher = tolerates longer outages.
-     * Primary signal: udp.sendConfirmTime (RTT) and udp.sendFailed (timeout failures).
+     * Primary signal: udp.sendConfirmTime (RTT) and udp.sendExpired (timeout failures).
      * Cross-refs: udp.avgSendWindow (CWIN), udp.congestionOccurred (congestion events),
      *             udp.congestedRTO (RTO inflation during congestion).
      *
@@ -6623,7 +6622,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            double failures = getAdditionalStat(_context, "udp.sendFailed");
+            double failures = getAdditionalStat(_context, "udp.sendExpired");
             boolean hasFailures = !Double.isNaN(failures) && failures > 0;
             double sendWindow = getAdditionalStat(_context, "udp.avgSendWindow");
             boolean cwinCollapsed = !Double.isNaN(sendWindow) && sendWindow < 20000;
