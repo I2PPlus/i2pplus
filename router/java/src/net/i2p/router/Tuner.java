@@ -2226,9 +2226,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         SelectorLoopDelayParam() {
             super("SELECTOR_LOOP_DELAY", "NTCP selector sleep (ms)",
-                  SUB_TUNNEL,
-
-                  1, 100, 1, "ntcp.pumperLoopsPerSecond", _context);
+                  SUB_TRANSPORT,
+                  1, 100, 10, "ntcp.pumperLoopsPerSecond", _context);
         }
 
         protected void applyValue(int value) {
@@ -4287,20 +4286,20 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean heavyLoad = !Double.isNaN(transitBps) && transitBps > 80000;
             boolean perTunnelHigh = !Double.isNaN(msgsPerTunnel) && msgsPerTunnel > 200;
 
-            // Build storm + low success = actively decrease throttle (rebuild faster to fix pools)
+            // Build storm + low success = increase throttle (back off, let congestion clear)
             if (buildStorm && observed < 0.7)
-                return Math.max(_min, current - _step);
+                return Math.min(_max, current + _step);
 
             // Build storm but good success = hold (throttle is working)
             if (buildStorm) return current;
 
-            // Low success + light load = decrease throttle (rebuild faster to fix pools)
+            // Low success + light load = increase throttle (conservative, avoid transport burn)
             if (observed < 0.7 && !heavyLoad && !perTunnelHigh)
-                return Math.max(_min, current - _step);
-
-            // High success + low load = increase throttle (no need to rebuild often)
-            if (observed > 0.95 && !heavyLoad && !perTunnelHigh)
                 return Math.min(_max, current + _step);
+
+            // High success + low load = decrease throttle (builds are cheap, replenish quickly)
+            if (observed > 0.95 && !heavyLoad && !perTunnelHigh)
+                return Math.max(_min, current - _step);
 
             return current;
         }
@@ -8165,7 +8164,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class TunnelTargetBufferParam extends BaseParam {
         TunnelTargetBufferParam() {
             super("i2p.tunnel.targetBuffer", "Pool spare tunnel buffer",
-                  SUB_TUNNEL, 0, 8, 1, "tunnel.buildSuccessRate", _context);
+                  SUB_TUNNEL, 0, 2, 1, "tunnel.buildSuccessRate", _context);
         }
         protected void applyValue(int value) {
             _context.router().saveConfig("i2p.tunnel.targetBuffer", Integer.toString(value));

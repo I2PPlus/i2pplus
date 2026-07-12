@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Method;
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -52,9 +53,11 @@ import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.util.EepGet;
 import net.i2p.util.EepHead;
 import net.i2p.util.Log;
+import net.i2p.util.PortMapper;
 
 /**
  * Ping tester for address book entries.
@@ -844,7 +847,7 @@ public class HostChecker {
      * Marks site as up if any response is received
      */
     private PingResult fallbackToEepHead(String hostname, long startTime) {
-        return fallbackToEepHead(hostname, startTime, null);
+        return fallbackToEepHead(hostname, startTime, null, true);
     }
 
     /**
@@ -870,42 +873,58 @@ public class HostChecker {
             }
 
             int eepHeadTimeout = 30000;
-            long tunnelReadyTimeout = System.currentTimeMillis() + 30000;
-            boolean httpProxyReady = false;
-            while (System.currentTimeMillis() < tunnelReadyTimeout && !httpProxyReady) {
+            // Wait up to 2 minutes for the HTTP proxy to register and get at least one
+            // outbound tunnel before sending EepHead requests.
+            long poolReadyTimeout = System.currentTimeMillis() + 120000;
+            boolean poolsReady = false;
+            int sleepMs = 2000;
+            while (System.currentTimeMillis() < poolReadyTimeout && !poolsReady) {
+                if (!_running.get()) {break;}
                 if (_useLeaseSetCheck && _context instanceof RouterContext) {
                     try {
                         RouterContext routerContext = (RouterContext) _context;
-                        net.i2p.router.ClientManagerFacade cm = routerContext.clientManager();
-                        for (net.i2p.data.Destination clientDest : cm.listClients()) {
-                            net.i2p.data.Hash clientHash = clientDest.calculateHash();
-                            net.i2p.data.LeaseSet ls = routerContext.clientNetDb(clientHash).lookupLeaseSetLocally(clientHash);
-                            if (ls != null && routerContext.tunnelManager().getOutboundClientTunnelCount(clientHash) > 0) {
-                                long timeToExpire = ls.getEarliestLeaseDate() - _context.clock().now();
-                                if ((timeToExpire >= 0) && ls.isCurrent(0)) {
-                                    httpProxyReady = true;
-                                    break;
+                        // Check the HTTP proxy port is registered (confirms proxy process is running)
+                        if (routerContext.portMapper().isRegistered(PortMapper.SVC_HTTP_PROXY)) {
+                            // Then check any outbound client pool has both inbound and
+                            // outbound tunnels, otherwise the pool isn't functional.
+                            Map<Hash, TunnelPool> outPools = routerContext.tunnelManager().getOutboundClientPools();
+                            if (outPools != null) {
+                                for (Hash dest : outPools.keySet()) {
+                                    if (routerContext.tunnelManager().getOutboundClientTunnelCount(dest) > 0 &&
+                                        routerContext.tunnelManager().getInboundClientTunnelCount(dest) > 0) {
+                                        poolsReady = true;
+                                        break;
+                                    }
                                 }
                             }
                         }
                     } catch (Exception e) { /* ignored */ }
                 } else {
+                    poolsReady = true;
+                }
+                if (!poolsReady) {
                     try {
-                        Thread.sleep(2000);
-                        httpProxyReady = true;
+                        Thread.sleep(sleepMs);
+                        if (sleepMs < 15000) {sleepMs = Math.min(sleepMs * 2, 15000);}
                     } catch (InterruptedException ie) {
                         Thread.currentThread().interrupt();
                         break;
                     }
                 }
-                if (!httpProxyReady) {
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException ie) {
-                        Thread.currentThread().interrupt();
-                        break;
+            }
+
+            if (!poolsReady) {
+                PingResult result = createPingResult(false, startTime, -1, hostname, leaseSetTypes);
+                if (saveResult) {
+                    synchronized (_pingResults) {
+                        _pingResults.put(hostname, result);
                     }
+                    if (_log.shouldWarn()) {
+                        _log.warn("HostChecker head [DEFERRED] -> Proxy or pool not ready for " + hostname + ", will retry at next cycle");
+                    }
+                    savePingResults();
                 }
+                return result;
             }
 
             long eepHeadStart = System.currentTimeMillis();

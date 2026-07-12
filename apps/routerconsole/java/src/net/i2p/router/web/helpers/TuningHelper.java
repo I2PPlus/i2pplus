@@ -233,8 +233,8 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.highLoadCpuPct", "System load percent triggering high-load request gating.");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.moderateLoadLagMs", "Job queue lag triggering moderate-load peer disconnect (ms).");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.moderateLoadCpuPct", "System load percent triggering moderate-load disconnect.");
-        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.sustainedHighLoadMs", "Duration high load must persist before gating requests (ms).");
-        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.sustainedModerateLoadMs", "Duration moderate load must persist before disconnecting peers (ms).");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.sustainedHighLoadMs", "Duration of high load before gating requests (ms).");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.sustainedModerateLoadMs", "Duration of moderate load before declining requests (ms).");
         PARAM_DESCRIPTIONS.put("tunnel.pool.failureThreshold", "Consecutive failures before pool backoff.");
         PARAM_DESCRIPTIONS.put("tunnel.pool.backoffMs", "Cooldown duration after pool failure threshold, in ms.");
     }

@@ -1046,13 +1046,31 @@ public class TunnelPool {
             int currentSize = _tunnels.size();
             boolean isServerPool = _settings.isInbound() && !_settings.isExploratory();
 
-            // Unified pruning for all pool types: prune excess tunnels down to target.
+            // Relax pruning threshold when build success is poor.
+            // At 80%+ success, prune at target (normal).
+            // At 60% or below, allow up to 1.5x target — killing spare tunnels
+            // that you can't rebuild just makes pool collapse more likely.
+            // Between 60-80%, linear interpolation of the multiplier.
+            int pruneThreshold = target;
+            if (!isServerPool) {
+                double bsr = getBuildSuccessRate();
+                if (!Double.isNaN(bsr)) {
+                    if (bsr <= 0.6) {
+                        pruneThreshold = Math.max(target + 4, (int)(target * 1.5));
+                    } else if (bsr < 0.8) {
+                        double factor = 1.5 - 0.5 * (bsr - 0.6) / 0.2;
+                        pruneThreshold = Math.max(target + 2, (int)(target * factor));
+                    }
+                }
+            }
+
+            // Unified pruning for all pool types: prune excess tunnels down to threshold.
             // For server pools, NEVER prune GOOD tunnels — they're published in the
             // LeaseSet and removing them breaks client connections.
             // Priority order: FAILED > FAILING/TOO_SLOW/OVER_BUDGET > UNTESTED > TESTING > GOOD
             // Within same status, prune soonest-expiring first.
-            if (currentSize > target) {
-                int toPrune = currentSize - target;
+            if (currentSize > pruneThreshold) {
+                int toPrune = currentSize - pruneThreshold;
                 int goodKept = 0;
                 int goodTarget = _settings.getQuantity(); // how many GOOD we want to keep
                 List<TunnelInfo> sortedTunnels = new ArrayList<>(_tunnels);
@@ -1180,6 +1198,24 @@ public class TunnelPool {
         }
 
         return toRemove.size();
+    }
+
+    /**
+     *  Get the global tunnel build success rate as a fraction (0.0-1.0).
+     *  Reads the same StatManager rate the Tuner uses.
+     *  Returns NaN if no data yet (early startup).
+     */
+    private double getBuildSuccessRate() {
+        RateStat rs = _context.statManager().getRate("tunnel.buildSuccessRate");
+        if (rs == null)
+            return Double.NaN;
+        Rate rate = rs.getRate(60000L);
+        if (rate == null)
+            return Double.NaN;
+        double avg = rate.getAverageValue();
+        if (Double.isNaN(avg))
+            return Double.NaN;
+        return avg / 100.0;
     }
 
     /**
