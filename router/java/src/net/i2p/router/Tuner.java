@@ -7262,47 +7262,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * Build success rate computed from raw event counts, matching the sidebar
-         * display (SidebarHelper.getTunnelBuildSuccess()).
-         * Uses 1m averages of exploratory + client success / (success + reject + expire).
+         * Build success rate from SystemVersion.getTunnelBuildSuccess()
+         * (returns 0–100 from 10-minute build stats).
          * When firewalled, lower thresholds since inbound builds are rejected.
          */
         private double scoreBuildSuccess() {
-            double pct = getBuildSuccessPct(STAT_PERIOD);
-            if (Double.isNaN(pct)) return Double.NaN;
+            double pct = SystemVersion.getTunnelBuildSuccess();
+            if (pct <= 0) {return Double.NaN;}
             if (isFirewalled()) {
                 // firewalled: 10%→0.0, 50%→1.0
                 return clamp((pct - 10.0) / 40.0);
             }
             // normal: 30%→0.0, 80%→1.0
             return clamp((pct - 30.0) / 50.0);
-        }
-
-        /**
-         * Compute build success percentage over a given period from raw
-         * exploratory + client success/reject/expire event counts, matching
-         * SidebarHelper.getTunnelBuildSuccess().
-         * @return 0.0–100.0 or NaN if no events in the period
-         */
-        private double getBuildSuccessPct(long period) {
-            int success = 0, reject = 0, expire = 0;
-            RateStat rs;
-            Rate r;
-            rs = _ctx.statManager().getRate("tunnel.buildExploratorySuccess");
-            if (rs != null) { r = rs.getRate(period); if (r != null) success += (int) r.getLastEventCount(); }
-            rs = _ctx.statManager().getRate("tunnel.buildClientSuccess");
-            if (rs != null) { r = rs.getRate(period); if (r != null) success += (int) r.getLastEventCount(); }
-            rs = _ctx.statManager().getRate("tunnel.buildExploratoryReject");
-            if (rs != null) { r = rs.getRate(period); if (r != null) reject += (int) r.getLastEventCount(); }
-            rs = _ctx.statManager().getRate("tunnel.buildClientReject");
-            if (rs != null) { r = rs.getRate(period); if (r != null) reject += (int) r.getLastEventCount(); }
-            rs = _ctx.statManager().getRate("tunnel.buildExploratoryExpire");
-            if (rs != null) { r = rs.getRate(period); if (r != null) expire += (int) r.getLastEventCount(); }
-            rs = _ctx.statManager().getRate("tunnel.buildClientExpire");
-            if (rs != null) { r = rs.getRate(period); if (r != null) expire += (int) r.getLastEventCount(); }
-            int total = success + reject + expire;
-            if (total <= 0) return Double.NaN;
-            return (100.0 * success) / total;
         }
 
         /**
