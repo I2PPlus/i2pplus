@@ -745,6 +745,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 _autotune.setProperty(valueKey, String.valueOf(runtimeDefault));
             } else {
                 _defaultValue = Integer.parseInt(existingDefault);
+                // Heal stale -1 captured when a dependent lib wasn't loaded
+                // (e.g. streaming jar before Tuner first tick)
+                if (_defaultValue <= 0) {
+                    _defaultValue = runtimeDefault > 0 ? runtimeDefault : _min;
+                    _autotune.setProperty(defaultKey, String.valueOf(_defaultValue));
+                    _autotune.forceSave();
+                }
             }
             // Read persisted tuned value (clamped to current range) — catches stale
             // autotune.config values from before code changes (e.g., max lowered 512→20)
@@ -4462,7 +4469,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected int getRuntimeValue() {
-            return StreamingConnectionReflector.invokeConnectionOptionsInt("getMinResendDelayStatic");
+            int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMinResendDelayStatic");
+            return v > 0 ? v : 100;
         }
 
         protected double getObservedStat(RouterContext ctx) {
