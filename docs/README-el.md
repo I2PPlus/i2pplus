@@ -161,6 +161,7 @@ API: https://i2pplus.github.io/javadoc/
 ## Στοιχεία επικοινωνίας
 ## Άδειες
 ## Τεκμηρίωση
+- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
 - [docs/LICENSES.md](docs/LICENSES.md) - Άδειες τρίτων μερών
 
 ## Στοιχεία επικοινωνίας

@@ -184,6 +184,7 @@ I2P+ ได้รับสิทธิ์อนุญาตภายใต้ AG
 ## ข้อมูลติดต่อ
 ## สิทธิ์อนุญาต
 ## ดูเพิ่มเติม
+- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
 - [docs/LICENSES.md](docs/LICENSES.md) - สิทธิ์อนุญาตของบุคคลที่สาม
 
 ## ข้อมูลติดต่อ

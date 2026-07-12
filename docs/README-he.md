@@ -185,6 +185,7 @@ I2P+ מורשית תחת AGPL v.3.
 ## פרטי קשר
 ## רישיונות
 ## ראה גם
+- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
 - [docs/LICENSES.md](docs/LICENSES.md) - רישיונות צד שלישי
 
 ## פרטי קשר

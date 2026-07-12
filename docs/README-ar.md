@@ -186,6 +186,7 @@ ant buildAppImage
 ## معلومات الاتصال
 ## التراخيص
 ## انظر أيضًا
+- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
 - [docs/LICENSES.md](docs/LICENSES.md) - تراخيص الأطراف الثالثة
 
 ## معلومات الاتصال

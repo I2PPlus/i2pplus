@@ -89,7 +89,8 @@ See also: [Project README](../README.md)
 
 ## Other
 
-| Document                     | Description            |
-| ---------------------------- | ---------------------- |
-| [history.txt](history.txt)   | Full changelog         |
-| [licenses/](licenses/)       | Third-party licenses   |
+| Document                     | Description                       |
+| ---------------------------- | --------------------------------- |
+| [THEMING.md](THEMING.md)     | Console and webapp theming system |
+| [history.txt](history.txt)   | Full changelog                    |
+| [licenses/](licenses/)       | Third-party licenses              |

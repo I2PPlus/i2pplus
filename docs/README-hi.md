@@ -36,6 +36,7 @@ API: [https://i2pplus.github.io/javadoc/](https://i2pplus.github.io/javadoc/) �
 
 
 - [docs/DEBUGGING.md](docs/DEBUGGING.md) - JDWP और अन्य उपकरणों के साथ रनटाइम डिबगिंग
+- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
 ## स्रोत से पैकेज बनाना
 
 स्रोत नियंत्रण से विकास शाखा प्राप्त करने के लिए: [https://github.com/I2PPlus/i2pplus/](https://github.com/I2PPlus/i2pplus/)

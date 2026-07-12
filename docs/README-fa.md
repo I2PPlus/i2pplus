@@ -37,6 +37,7 @@ API: https://i2pplus.github.io/javadoc/
 
 
 - [docs/DEBUGGING.md](docs/DEBUGGING.md) - اشکال‌زدایی در زمان اجرا با JDWP و سایر ابزارها
+- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
 ## ساخت بسته‌ها از منبع
 
 برای گرفتن شاخه توسعه از کنترل منبع: https://github.com/I2PPlus/i2pplus/

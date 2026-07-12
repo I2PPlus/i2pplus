@@ -113,6 +113,7 @@ I2P+ лицензирована по AGPL v.3.
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Структура исходного кода
 - [docs/DEBUGGING.md](docs/DEBUGGING.md) - Отладка в среде выполнения с помощью JDWP и других инструментов
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Управление bans сессий I2P через nftables
+- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
 - [docs/LICENSES.md](docs/LICENSES.md) - Лицензии третьих сторон
 - [docs/history.txt](docs/history.txt) - Полный список изменений
 

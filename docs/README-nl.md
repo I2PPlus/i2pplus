@@ -126,6 +126,7 @@ Voor de verschillende sub-component licenties, zie: [README.md](docs/LICENSES.md
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Bronboom-layout en waar dingen te vinden
 - [docs/DEBUGGING.md](docs/DEBUGGING.md) - Runtime-debugging met JDWP en andere tools
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - I2P-sessieverboden beheren met nftables
+- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
 - [docs/LICENSES.md](docs/LICENSES.md) - Licenties van derden
 - [docs/history.txt](docs/history.txt) - Volledige wijzigingslog
 

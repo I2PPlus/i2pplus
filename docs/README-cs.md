@@ -126,6 +126,7 @@ Pro licence různých subkomponent viz: [README.md](docs/LICENSES.md)
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Rozložení zdrojového stromu
 - [docs/DEBUGGING.md](docs/DEBUGGING.md) - Ladicí runtime prostředí pomocí JDWP a dalších nástrojů
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Správa zákazů relací I2P pomocí nftables
+- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
 - [docs/LICENSES.md](docs/LICENSES.md) - Licence třetích stran
 - [docs/history.txt](docs/history.txt) - Úplný seznam změn
 

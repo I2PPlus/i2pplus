@@ -129,6 +129,7 @@ I2P+, AGPL v.3 altında lisanslanmıştır.
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Kaynak ağacı düzeni
 - [docs/DEBUGGING.md](docs/DEBUGGING.md) - JDWP ve diğer araçlarla çalışma zamanı hata ayıklama
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - nftables ile I2P oturum yasaklarını yönetme
+- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
 - [docs/LICENSES.md](docs/LICENSES.md) - Üçüncü taraf lisansları
 - [docs/history.txt](docs/history.txt) - Tam değişiklik günlüğü
 

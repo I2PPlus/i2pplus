@@ -126,6 +126,7 @@ Untuk lisensi sub-komponen lainnya, lihat: [README.md](docs/LICENSES.md)
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Tata letak pohon sumber
 - [docs/DEBUGGING.md](docs/DEBUGGING.md) - Debugging runtime dengan JDWP dan alat lainnya
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Mengelola pelarangan sesi I2P dengan nftables
+- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
 - [docs/LICENSES.md](docs/LICENSES.md) - Lisensi pihak ketiga
 - [docs/history.txt](docs/history.txt) - Log perubahan lengkap
 

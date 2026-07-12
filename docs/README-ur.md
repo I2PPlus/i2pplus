@@ -149,6 +149,7 @@ variousسابقہ اجزا کے لائسنسز کے لیے دیکھیں: [README
 - [core/c/jcpuid/README.md](core/c/jcpuid/README.md) - سی پی یو ڈیٹیکشن نیٹیو لائبریری
 - [core/README.md](core/README.md) - کور لائبریری دستاویزات
 - [docker/README.md](docker/README.md) - ڈاکر میں I2P+ چلانا
+- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
 - [docs/LICENSES.md](docs/LICENSES.md) - تھرڈ پارٹ�� لائسنسز
 - [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - کرپٹوگرافی (GMP) کے لیے نیٹیو جے این آئی لائبریری
 - [installer/resources/README.md](installer/resources/README.md) - بنڈلڈ انسٹالر ریسورسز

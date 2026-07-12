@@ -176,6 +176,7 @@ I2P+ ліцензується за AGPL v.3.
 ## Див. також
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Структура дерева вихідного коду та де шукати
 - [docs/DEBUGGING.md](docs/DEBUGGING.md) - Налагодження в середовищі виконання за допомогою JDWP та інших інструментів
+- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
 
 ## Контактна інформація
 ## Ліцензії

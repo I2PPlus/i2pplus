@@ -125,6 +125,7 @@ Para las licencias de los subcomponentes, ver: [README.md](docs/LICENSES.md)
 - [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Diseño del árbol de código fuente
 - [docs/DEBUGGING.md](docs/DEBUGGING.md) - Depuración en tiempo de ejecución con JDWP y otras herramientas
 - [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Gestión de prohibiciones de sesión I2P con nftables
+- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
 - [docs/LICENSES.md](docs/LICENSES.md) - Licencias de terceros
 - [docs/history.txt](docs/history.txt) - Registro de cambios completo
 
