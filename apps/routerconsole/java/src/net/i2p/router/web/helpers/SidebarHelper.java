@@ -452,9 +452,10 @@ public class SidebarHelper extends HelperBase {
      * @since 0.9.58+
      */
     public String getCPUBar() {
+        int cpu = getCPULoad();
         String bar = "<div class=\"percentBarOuter volatile\" id=sb_CPUBar><div class=percentBarText>CPU: " +
-                      getCPULoadAvg() + "%" + (getSystemLoad() > 0 ? " | Sys Load Avg: " + getSystemLoad() + "%" : "") +
-                      "</div><div class=percentBarInner style=width:" + getCPULoadAvg() + "%></div></div>";
+                      cpu + "%" + (getSystemLoad() > 0 ? " | Sys Load Avg: " + getSystemLoad() + "%" : "") +
+                      "</div><div class=percentBarInner style=width:" + cpu + "%></div></div>";
         return bar;
     }
 

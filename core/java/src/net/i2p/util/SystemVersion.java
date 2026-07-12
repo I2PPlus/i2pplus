@@ -714,7 +714,9 @@ public abstract class SystemVersion {
      */
     public static int getCPULoad() {
         OperatingSystemMXBean osmxb = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-        int cpuLoad = (int) (osmxb.getProcessCpuLoad() * 100);
+        double raw = osmxb.getProcessCpuLoad();
+        if (raw < 0) {return 0;}
+        int cpuLoad = (int) (raw * 100);
         return Math.min(cpuLoad, 100);
     }
 
@@ -732,7 +734,7 @@ public abstract class SystemVersion {
             long loadAvg;
             long count = (1 + (3 * stat.getCurrentEventCount() + stat.getLastEventCount()));
             if (count > 1) {
-                loadAvg = (long) (getCPULoad() + ((3 * stat.getCurrentTotalValue()) + stat.getLastTotalValue()) / count);
+                loadAvg = (long) ((getCPULoad() + (3 * stat.getCurrentTotalValue()) + stat.getLastTotalValue()) / count);
             } else {
                 loadAvg = getCPULoad();
             }
