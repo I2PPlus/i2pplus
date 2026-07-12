@@ -122,8 +122,10 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
         this.last = null;
         this.size = 0;
         this._cleared = true;
-        if (_iterator != null)
+        if (_iterator != null) {
             _iterator.remove();
+            _iterator = null;
+        }
     }
 
     /**
