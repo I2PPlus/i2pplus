@@ -205,6 +205,7 @@ function applySidebarUpdates() {
       countNewsItems();
       newHosts();
       sectionToggler();
+      updatePersistentBars(responseDoc);
     });
   }
 
@@ -213,6 +214,27 @@ function applySidebarUpdates() {
 
   isRefreshing = false;
   noResponse = 0;
+}
+
+/**
+ * Updates non-volatile memory and CPU bars from the response document.
+ * The bars persist in the DOM (no volatile class), so style.width changes
+ * trigger CSS transition for smooth animation.
+ * @function updatePersistentBars
+ * @param {Document} responseDoc - The parsed XHR response document
+ * @returns {void}
+ */
+function updatePersistentBars(responseDoc) {
+  ["sb_memoryBar", "sb_CPUBar"].forEach(function(id) {
+    var r = responseDoc.querySelector("#" + id + " .percentBarInner");
+    var d = document.querySelector("#" + id + " .percentBarInner");
+    if (r && d && r.style.width !== d.style.width)
+      d.style.width = r.style.width;
+    var rt = responseDoc.querySelector("#" + id + " .percentBarText");
+    var dt = document.querySelector("#" + id + " .percentBarText");
+    if (rt && dt && rt.textContent !== dt.textContent)
+      dt.textContent = rt.textContent;
+  });
 }
 
 /**

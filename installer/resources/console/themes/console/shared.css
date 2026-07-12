@@ -129,3 +129,5 @@ html:not([".advmode"]) #tuning input[type=number]{min-width:0!important;text-ali
   #banconfig label::before{margin:0 0 0 -4px;height:32px}
   #banconfig .nowrap{min-width:0;margin-left:8px}
 }
+
+#sidebar .percentBarInner{transition:width .5s ease}

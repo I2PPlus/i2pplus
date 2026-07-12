@@ -414,7 +414,7 @@ public class SidebarHelper extends HelperBase {
         if (usedPc > 100) {usedPc = 100;}
         long total = tot / (1024*1024);
         if (used > total) {used = total;}
-        String bar = "<div class=\"percentBarOuter volatile\" id=sb_memoryBar><div class=percentBarText>RAM: " +
+        String bar = "<div class=\"percentBarOuter\" id=sb_memoryBar><div class=percentBarText>RAM: " +
                       INTEGER_FORMAT.format(used) + " / " + total + " M</div><div class=percentBarInner style=width:" +
                       INTEGER_FORMAT.format(usedPc) + "%></div></div>";
         return bar;
@@ -453,7 +453,7 @@ public class SidebarHelper extends HelperBase {
      */
     public String getCPUBar() {
         int cpu = getCPULoad();
-        String bar = "<div class=\"percentBarOuter volatile\" id=sb_CPUBar><div class=percentBarText>CPU: " +
+        String bar = "<div class=\"percentBarOuter\" id=sb_CPUBar><div class=percentBarText>CPU: " +
                       cpu + "%" + (getSystemLoad() > 0 ? " | Sys Load Avg: " + getSystemLoad() + "%" : "") +
                       "</div><div class=percentBarInner style=width:" + cpu + "%></div></div>";
         return bar;
