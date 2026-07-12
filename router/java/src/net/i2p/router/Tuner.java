@@ -1987,18 +1987,24 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = participating InBps (transit inbound bandwidth)
-            // Cross-refs: gateway overflow drops, queue sizes, job lag
+            // Cross-refs: gateway overflow drops, queue sizes, NTCP pumper loop rate
             double obDrops = getAdditionalEventCount(_context, "tunnel.dropGatewayOverflowOB");
             double ibDrops = getAdditionalEventCount(_context, "tunnel.dropGatewayOverflowIB");
             double obQueue = getAdditionalStat(_context, "tunnel.obgw.queueSize");
             double ibQueue = getAdditionalStat(_context, "tunnel.ibgw.queueSize");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double pumperLoops = getAdditionalStat(_context, "ntcp.pumperLoopsPerSecond");
 
             boolean hasDrops = (!Double.isNaN(obDrops) && obDrops > 0) ||
                                (!Double.isNaN(ibDrops) && ibDrops > 0);
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
             boolean queuesBackedUp = (!Double.isNaN(obQueue) && obQueue > 200) ||
                                      (!Double.isNaN(ibQueue) && ibQueue > 200);
+            boolean pumperSpinning = !Double.isNaN(pumperLoops) && pumperLoops > 10000;
+
+            // NTCP pumper spinning at extreme rate — increase requeue to reduce total loop pressure
+            if (pumperSpinning && !queuesBackedUp)
+                return Math.min(_max, current + _step);
 
             // Low transit + spare capacity + queues empty = decrease requeue (faster retry, lower latency)
             if (observed < 10000 && !hasDrops && !systemBusy && !queuesBackedUp)
@@ -2254,6 +2260,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 50;
             boolean ntcpPressure = !Double.isNaN(writeQueueFull) && writeQueueFull > 0;
+
+            // Extremely high loop rate (>50K/s) = aggressive delay increase
+            // prevents busy-spinning even when CPU load appears moderate
+            if (observed > 50000)
+                return Math.min(_max, current + _step * 5);
+
+            // Very high loop rate (>10K/s) = moderate delay increase
+            if (observed > 10000)
+                return Math.min(_max, current + _step * 2);
+
+            // High loop rate (>2000/s) = gradual delay increase
+            if (observed > 2000 && current < _max)
+                return Math.min(_max, current + _step);
 
             // Low loop rate + spare capacity = decrease delay (faster pumper, burst handling)
             if (observed < 200 && !systemBusy && !ntcpPressure && !highLoad)
