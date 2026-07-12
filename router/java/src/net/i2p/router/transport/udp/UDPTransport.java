@@ -285,9 +285,9 @@ public class UDPTransport extends TransportImpl {
 
     /** Get the data message timeout in ms */
     public static long getDataMessageTimeout() { return EstablishmentManager.DATA_MESSAGE_TIMEOUT.get(); }
-    /** Set the data message timeout, bounded 5000-60000ms */
+    /** Set the data message timeout, bounded 15000-120000ms */
     public static void setDataMessageTimeout(long ms) {
-        EstablishmentManager.DATA_MESSAGE_TIMEOUT.set(Math.max(5000, Math.min(60000, ms)));
+        EstablishmentManager.DATA_MESSAGE_TIMEOUT.set(Math.max(15000, Math.min(120000, ms)));
     }
 
     public static final int DEFAULT_COST = 5;

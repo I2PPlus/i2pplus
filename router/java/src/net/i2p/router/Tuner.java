@@ -1545,14 +1545,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Tunes DATA_MESSAGE_TIMEOUT based on observed send confirm time.
-     * Target: timeout = 3x observed send confirm time, bounded min-max.
+     * Tunes DATA_MESSAGE_TIMEOUT based on observed send confirm time
+     * and LeaseSet lookup performance. Data messages must survive long
+     * enough for the router to find the destination's LeaseSet before
+     * the transport even begins sending; LeaseSet lookups can take
+     * 15-20s when the network is congested.
      */
     private class DataMessageTimeoutParam extends BaseParam {
 
         DataMessageTimeoutParam() {
             super("DATA_MESSAGE_TIMEOUT", "Streaming data timeout (ms)",
-                  SUB_TRANSPORT, 5000, 60000, 1000, "udp.sendConfirmTime", _context);
+                  SUB_TRANSPORT, 15000, 120000, 2000, "udp.sendConfirmTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -1578,27 +1581,46 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // observed = udp.sendConfirmTime (ms, actual SSU send+confirm RTT)
             // Cross-refs: udp.sendExpired (SSU message timeouts), sendMessageFailureLifetime (congestion),
             //             jobLag (CPU), participating InBps (transit load),
-            //             initialRTT (streaming connection establishment latency)
+            //             initialRTT (streaming connection establishment latency),
+            //             leaseSetFailed/Found (NetDB lookup time)
             double sendExpired = getAdditionalStat(_context, "udp.sendExpired");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double transitBps = getAdditionalStat(_context, "tunnel.participating InBps");
             double initialRTT = getAdditionalStat(_context, "stream.con.initialRTT.out");
+            double leaseFailedTime = getAdditionalStat(_context, "client.leaseSetFailedRemoteTime");
+            double leaseFoundTime = getAdditionalStat(_context, "client.leaseSetFoundRemoteTime");
+            double leaseFailedTimeHourly = getAdditionalStatHourly(_context, "client.leaseSetFailedRemoteTime");
 
             boolean hasTimeouts = !Double.isNaN(sendExpired) && sendExpired > 0;
-            boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
+            boolean congested = !Double.isNaN(failLifetime) && failLifetime > 5000;
             boolean heavyTransit = !Double.isNaN(transitBps) && transitBps > getHeavyTransitThreshold(_context);
             boolean slowStreaming = !Double.isNaN(initialRTT) && initialRTT > 10000;
+            boolean leaseFailed = (!Double.isNaN(leaseFailedTime) && leaseFailedTime > 0) ||
+                                  (!Double.isNaN(leaseFailedTimeHourly) && leaseFailedTimeHourly > 5000);
+            boolean lookupsSlow = !Double.isNaN(leaseFoundTime) && leaseFoundTime > 5000;
 
-            // Target: timeout = 3x observed confirm time, with minimum floor
-            int target = Math.max(5000, (int) (observed * 3));
+            // Base target: 3x observed send confirm time, with higher floor
+            int target = Math.max(15000, (int) (observed * 3));
 
-            // Dead zone: if current is already within 50% of target, hold steady
-            if (current >= target * 0.5 && current <= target * 1.5 && !hasTimeouts && !congested)
+            // LeaseSet lookups are failing — ensure timeout covers lookup + delivery
+            if (leaseFailed) {
+                double lookupCost = !Double.isNaN(leaseFailedTime) ? leaseFailedTime : leaseFailedTimeHourly;
+                target = Math.max(target, (int) (lookupCost + observed));
+            }
+
+            // LeaseSet lookups are succeeding but slow — add headroom
+            if (lookupsSlow) {
+                target = Math.max(target, (int) (leaseFoundTime * 3));
+            }
+
+            // Dead zone: if current is already within 30% of target, hold steady
+            if (current >= target * 0.7 && current <= target * 1.3 && !hasTimeouts && !congested && !leaseFailed)
                 return current;
 
-            // Never decrease when there are timeouts, congestion, heavy transit, or slow streaming
-            if (target < current && (hasTimeouts || congested || heavyTransit || slowStreaming))
+            // Never decrease when there are timeouts, congestion, heavy transit,
+            // slow streaming, or failing LeaseSet lookups
+            if (target < current && (hasTimeouts || congested || heavyTransit || slowStreaming || leaseFailed))
                 return current;
 
             // Force increase when send confirm time is very high (>15s)
@@ -1606,7 +1628,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 target = Math.max(target, (int) Math.min(_max, observed * 4));
             }
 
-            target = Math.max(5000, target);
+            target = Math.max(15000, target);
             return clamp(current, target, _step);
         }
     }
