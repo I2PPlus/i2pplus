@@ -23,7 +23,7 @@ class InternalSocketRunner extends I2PAppThread {
      * Does not start the runner, caller must call start()
      */
     InternalSocketRunner(I2PTunnelClientBase client) {
-        super("Internal socket port " + client.getLocalPort());
+        super("Internal:" + client.getLocalPort());
         setDaemon(true);
         this.client = client;
         this.port = client.getLocalPort();

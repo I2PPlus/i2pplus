@@ -45,7 +45,11 @@ class AccessFilter implements StatefulConnectionFilter {
      * All disk i/o from all instances of this filter
      * happen on this thread (apart from initial load)
      */
-    private static final ExecutorService DISK_WRITER = Executors.newSingleThreadExecutor();
+    private static final ExecutorService DISK_WRITER = Executors.newSingleThreadExecutor(r -> {
+        Thread t = new Thread(r, "AccessLogWriter");
+        t.setDaemon(true);
+        return t;
+    });
 
     static {
         Runtime.getRuntime().addShutdownHook(new Thread() {

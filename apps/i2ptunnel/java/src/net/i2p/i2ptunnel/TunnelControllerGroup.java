@@ -516,7 +516,11 @@ public class TunnelControllerGroup implements ClientApp {
         _delayedShutdownStartTime = System.currentTimeMillis();
         _cancelDelayedShutdown = false;
         List<TunnelController> stoppedServers = Collections.synchronizedList(new ArrayList<>());
-        _delayedShutdownExecutor = Executors.newCachedThreadPool();
+        _delayedShutdownExecutor = Executors.newCachedThreadPool(r -> {
+            Thread t = new Thread(r, "TunnelShutdown");
+            t.setDaemon(true);
+            return t;
+        });
 
         for (TunnelController controller : delayedServers) {
             int delayMin = controller.getShutdownDelayMin();

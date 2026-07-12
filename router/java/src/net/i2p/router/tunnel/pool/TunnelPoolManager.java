@@ -51,6 +51,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private final GhostPeerManager _ghostPeerManager;
     private volatile boolean _isShutdown;
     private static volatile int _numHandlerThreads = 4;
+    private static final AtomicInteger _handlerThreadId = new AtomicInteger(1);
     private final CopyOnWriteArrayList<I2PThread> _handlerThreads;
     private final int DEFAULT_MAX_PCT_TUNNELS;
     private final int STARTUP_MAX_PCT_TUNNELS;
@@ -799,7 +800,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             t.start();
             _handler.init();
             for (int i = 1; i <= _numHandlerThreads; i++) {
-                I2PThread hThread = new I2PThread(_handler, "BuildHandler", true);
+                I2PThread hThread = new I2PThread(_handler, "BuildHandler." + _handlerThreadId.getAndIncrement(), true);
                 hThread.start();
                 _handlerThreads.add(hThread);
             }
@@ -851,7 +852,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (target > current) {
             for (int i = current; i < target; i++) {
                 I2PThread hThread = new I2PThread(_handler,
-                    "BuildHandler", true);
+                    "BuildHandler." + _handlerThreadId.getAndIncrement(), true);
                 hThread.start();
                 _handlerThreads.add(hThread);
             }

@@ -54,7 +54,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     private static final int KEY_SIZE_BYTES = 64;
 
     public X25519KeyFactory(I2PAppContext ctx) {
-        super("XDH Precalc");
+        super("XDHPrecalc");
         _context = ctx;
         _log = ctx.logManager().getLog(X25519KeyFactory.class);
         ctx.statManager().createRequiredRateStat("crypto.XDHUsed", "Need a DH from the queue", "Encryption", new long[] { RateConstants.ONE_MINUTE });

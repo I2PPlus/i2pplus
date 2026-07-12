@@ -136,7 +136,7 @@ public class TrackerClient implements Runnable {
         super();
         // Set unique name.
         byte[] hash = snark.getInfoHash();
-        _threadName = "TrackerClient " + I2PSnarkUtil.toHex(hash);
+        _threadName = "TrackerClient-" + I2PSnarkUtil.toHex(hash).substring(0, 6);
         _util = util;
         _log = util.getContext().logManager().getLog(TrackerClient.class);
         this.meta = meta;
@@ -166,7 +166,8 @@ public class TrackerClient implements Runnable {
         runStarted = false;
         _fastUnannounce = false;
         snark.setTrackerProblems(null);
-        _thread = new I2PAppThread(this, _threadName + "." + (++_runCount), true);
+        _thread = new I2PAppThread(this, _threadName, true);
+        ++_runCount;
         _thread.start();
         started = true;
     }
@@ -239,7 +240,8 @@ public class TrackerClient implements Runnable {
         public void timeReached() {
             _event = null;
             _thread =
-                    new I2PAppThread(TrackerClient.this, _threadName + "." + (++_runCount), true);
+                    new I2PAppThread(TrackerClient.this, _threadName, true);
+                    ++_runCount;
             _thread.start();
         }
     }

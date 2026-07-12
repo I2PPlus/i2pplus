@@ -46,7 +46,7 @@ public class SimpleTimer2 {
      *  @param context the I2P application context
      */
     public SimpleTimer2(I2PAppContext context) {
-        this(context, "SimpleTimer2");
+        this(context, "SimpleTimer");
     }
 
     /**

@@ -50,7 +50,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
      *  @param type must be one of the internal types MLKEM*_INT
      */
     public MLKEMKeyFactory(I2PAppContext ctx, EncType type) {
-        super("MLKEM Precalc");
+        super("MLKEMPrecalc");
         _context = ctx;
         _type = type;
         _log = ctx.logManager().getLog(MLKEMKeyFactory.class);

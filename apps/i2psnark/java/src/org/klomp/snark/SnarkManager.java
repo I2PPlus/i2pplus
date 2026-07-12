@@ -424,7 +424,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 }
             }
         }
-        _monitor = new I2PAppThread(new DirMonitor(), "SnarkDirMonitor", true);
+        _monitor = new I2PAppThread(new DirMonitor(), "SnarkDirMon", true);
         _monitor.start();
         if (_context.isRouterContext()
                 && "i2psnark".equals(_contextName)) { // only if default instance

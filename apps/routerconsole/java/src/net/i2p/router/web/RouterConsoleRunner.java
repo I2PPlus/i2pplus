@@ -73,6 +73,7 @@ import org.eclipse.jetty.util.thread.ScheduledExecutorScheduler;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.tanukisoftware.wrapper.WrapperManager;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.nio.charset.StandardCharsets;
 /**
  *  Start the router console.
@@ -133,7 +134,7 @@ public class RouterConsoleRunner implements RouterApp {
     private static final int MAX_THREADS = 48;
 
     private static final int MAX_IDLE_TIME = 30*1000;
-    private static final String THREAD_NAME = "I2P+ [Jetty]";
+    private static final String THREAD_NAME = "Console";
     public static final String PROP_DTG_ENABLED = "desktopgui.enabled";
     static final String PROP_ALLOWED_HOSTS = "routerconsole.allowedHosts";
     /** @since 0.9.34 */
@@ -449,7 +450,17 @@ public class RouterConsoleRunner implements RouterApp {
         System.setProperty("jetty.class.path", (new File(_context.getLibDir(), "routerconsole.jar")).getPath());
         LinkedBlockingQueue<Runnable> lbq = new LinkedBlockingQueue<>(4*MAX_THREADS);
         // min and max threads will be reset below
-        QueuedThreadPool qtp = new QueuedThreadPool(MAX_THREADS, MIN_THREADS, MAX_IDLE_TIME, lbq);
+        QueuedThreadPool qtp = new QueuedThreadPool(MAX_THREADS, MIN_THREADS, MAX_IDLE_TIME, lbq) {
+            private final AtomicInteger _counter = new AtomicInteger(1);
+            @Override
+            protected Thread newThread(Runnable r) {
+                Thread t = new Thread(r);
+                t.setDaemon(isDaemon());
+                t.setPriority(getThreadsPriority());
+                t.setName("Console." + _counter.getAndIncrement());
+                return t;
+            }
+        };
         qtp.setName(THREAD_NAME);
         qtp.setDaemon(true);
         _server = new Server(qtp);
@@ -539,12 +550,16 @@ public class RouterConsoleRunner implements RouterApp {
                         HttpConfiguration httpConfig = new HttpConfiguration();
                         // number of acceptors, (default) number of selectors
                         ServerConnector lsnr = new ServerConnector(_server, 1, 0,
-                                                                   new HttpConnectionFactory(httpConfig));
+                                                                   new HttpConnectionFactory(httpConfig)) {
+                            @Override
+                            public String toString() {
+                                return ":" + getPort();
+                            }
+                        };
                         //lsnr.setUseDirectBuffers(false);  // default true seems to be leaky
                         lsnr.setHost(host);
                         lsnr.setPort(lport);
                         lsnr.setIdleTimeout((long) 90*1000);  // default 10 sec
-                        lsnr.setName("ConsoleSocket");   // all with same name will use the same thread pool
                         //_server.addConnector(lsnr);
                         connectors.add(lsnr);
                         boundAddresses++;
@@ -630,12 +645,16 @@ public class RouterConsoleRunner implements RouterApp {
                             // number of acceptors, (default) number of selectors
                             ServerConnector ssll = new ServerConnector(_server, 1, 0,
                                                                        new SslConnectionFactory(sslFactory, "http/1.1"),
-                                                                       new HttpConnectionFactory(httpConfig));
+                                                                       new HttpConnectionFactory(httpConfig)) {
+                                @Override
+                                public String toString() {
+                                    return ":" + getPort();
+                                }
+                            };
                             //sssll.setUseDirectBuffers(false);  // default true seems to be leaky
                             ssll.setHost(host);
                             ssll.setPort(sslPort);
                             ssll.setIdleTimeout((long) 90*1000);  // default 10 sec
-                            ssll.setName("ConsoleSocket");   // all with same name will use the same thread pool
                             //_server.addConnector(ssll);
                             connectors.add(ssll);
                             boundAddresses++;

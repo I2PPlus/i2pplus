@@ -182,6 +182,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     _rdnsCorePoolSize, _rdnsMaxPoolSize,
                     60L, TimeUnit.SECONDS,
                     new LinkedBlockingQueue<>(500),
+                    r -> {
+                        Thread t = new Thread(r, "RDNS");
+                        t.setDaemon(true);
+                        return t;
+                    },
                     new ThreadPoolExecutor.CallerRunsPolicy()
                 );
             }

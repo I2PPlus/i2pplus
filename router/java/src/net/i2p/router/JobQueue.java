@@ -666,7 +666,7 @@ public class JobQueue {
             int key = startKey + i;
             JobQueueRunner runner = new JobQueueRunner(_context, key);
             _queueRunners.put(Integer.valueOf(key), runner);
-            runner.setName("JobQueue." + _runnerId.incrementAndGet() + ".scaled");
+            runner.setName("JobQueue." + _runnerId.incrementAndGet());
             if (_log.shouldDebug())
                 _log.debug("Starting runner " + key + " total now " + _queueRunners.size());
             runner.start();
