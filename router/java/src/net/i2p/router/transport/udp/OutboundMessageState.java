@@ -44,7 +44,23 @@ class OutboundMessageState implements CDPQEntry {
     private int _allowedSendBytes;
     private final AtomicInteger _nacks = new AtomicInteger();
     public static final int MAX_MSG_SIZE = 32 * 1024;
-    private static final long EXPIRATION = 60*1000L;
+    /** Configurable message expiration. Default 60s, adjusted by Tuner under load. */
+    private static volatile long _messageExpiration = 60*1000L;
+
+    /**
+     * @return current outbound message expiration in ms
+     * @since 0.9.70+
+     */
+    public static long getMessageExpiration() { return _messageExpiration; }
+
+    /**
+     * Set outbound message expiration. Called by Tuner.
+     * @param ms expiration in ms, clamped to [5000, 300000]
+     * @since 0.9.70+
+     */
+    public static void setMessageExpiration(long ms) {
+        _messageExpiration = Math.max(5000L, Math.min(300000L, ms));
+    }
 
     /**
      *  "injected" message from the establisher.
@@ -80,7 +96,7 @@ class OutboundMessageState implements CDPQEntry {
         _i2npMessage = msg;
         _peer = peer;
         _startedOn = _context.clock().now();
-        _expiration = _startedOn + EXPIRATION;
+        _expiration = _startedOn + _messageExpiration;
 
         // now "fragment" it
         int totalSize = _i2npMessage.getMessageSize() - 7;  // NTCP2 style, 9 byte header

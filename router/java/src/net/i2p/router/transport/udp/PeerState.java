@@ -190,6 +190,30 @@ public class PeerState {
     }
 
     /**
+     * Bridge to PeerState2.sentMessagesCleanTime for Tuner (different package).
+     * @since 0.9.70+
+     */
+    public static long getSentMessagesCleanTime() { return PeerState2.getSentMessagesCleanTime(); }
+
+    /**
+     * Bridge to PeerState2.setSentMessagesCleanTime for Tuner (different package).
+     * @since 0.9.70+
+     */
+    public static void setSentMessagesCleanTime(long ms) { PeerState2.setSentMessagesCleanTime(ms); }
+
+    /**
+     * Bridge to OutboundMessageState.getMessageExpiration for Tuner (different package).
+     * @since 0.9.70+
+     */
+    public static long getOutboundMsgExpiration() { return OutboundMessageState.getMessageExpiration(); }
+
+    /**
+     * Bridge to OutboundMessageState.setMessageExpiration for Tuner (different package).
+     * @since 0.9.70+
+     */
+    public static void setOutboundMsgExpiration(long ms) { OutboundMessageState.setMessageExpiration(ms); }
+
+    /**
      * Load configurable UDP transport parameters from router.config.
      * Called once during UDPTransport initialization.
      *

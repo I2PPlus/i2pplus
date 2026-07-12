@@ -104,8 +104,24 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     private static final int BITFIELD_SIZE = 512;
     private static final int MAX_SESS_CONF_RETX = 5;
-    private static final long SENT_MESSAGES_CLEAN_TIME = 60*1000L;
+    /** Configurable sent-messages sweep interval. Default 60s, shortened under load. */
+    private static volatile long _sentMessagesCleanTime = 60*1000L;
     private final boolean shouldLogDebug = _log.shouldDebug();
+
+    /**
+     * @return current sent-messages cleanup interval in ms
+     * @since 0.9.70+
+     */
+    public static long getSentMessagesCleanTime() { return _sentMessagesCleanTime; }
+
+    /**
+     * Set sent-messages cleanup interval. Called by Tuner.
+     * @param ms cleanup interval in ms, clamped to [2000, 300000]
+     * @since 0.9.70+
+     */
+    public static void setSentMessagesCleanTime(long ms) {
+        _sentMessagesCleanTime = Math.max(2000L, Math.min(300000L, ms));
+    }
 
     /**
      *  If inbound, caller MUST immediately call setWeRelayToThemAs() (if nonzero) and sendAck0().
@@ -226,7 +242,14 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      */
     @Override
     int finishMessages(long now) {
-        if (now >= _sentMessagesLastExpired + SENT_MESSAGES_CLEAN_TIME) {
+        // Dynamic: clean more frequently when the map is large
+        long cleanTime = _sentMessagesCleanTime;
+        int sentSize = _sentMessages.size();
+        if (sentSize > 100)
+            cleanTime = Math.max(2000L, cleanTime / 4);
+        else if (sentSize > 50)
+            cleanTime = Math.max(3000L, cleanTime / 2);
+        if (now >= _sentMessagesLastExpired + cleanTime) {
             _sentMessagesLastExpired = now;
             if (!_sentMessages.isEmpty()) {
                 // TODO is this the right place for this check?
@@ -1157,6 +1180,23 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * @since 0.9.57
      */
     boolean isDead() {return _dead;}
+
+    /**
+     * @return number of pending sent-but-unacked packet entries
+     * @since 0.9.70+
+     */
+    public int sentMessagesSize() { return _sentMessages.size(); }
+
+    /**
+     * Overridden to also clear sent-but-unacked fragments and cancel ACKTimer.
+     * Prevents lingering references from keeping orphaned PeerState2 alive.
+     */
+    @Override
+    void dropOutbound() {
+        super.dropOutbound();
+        _sentMessages.clear();
+        _ackTimer.cancel();
+    }
 
     /**
      *  A timer to send an ack-only packet.

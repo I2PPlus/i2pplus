@@ -3605,6 +3605,26 @@ public class UDPTransport extends TransportImpl {
         }
 
         public void timeReached() {
+            int totalPeers = _peersByIdent.size();
+            int maxConn = getMaxConnections();
+            // Stats: peer counts and sent-messages backlog
+            _context.statManager().addRateData("udp.peerCount", totalPeers);
+            _context.statManager().addRateData("udp.peerCount.max", maxConn);
+            if (!_peersByIdent.isEmpty()) {
+                // Sample sent-messages backlog across peers (every 4th peer for perf)
+                int sentTotal = 0;
+                int sampled = 0;
+                int idx = 0;
+                for (PeerState ps : _peersByIdent.values()) {
+                    if ((idx++ & 3) == 0 && ps.getVersion() > 1) {
+                        sentTotal += ((PeerState2) ps).sentMessagesSize();
+                        sampled++;
+                    }
+                }
+                if (sampled > 0)
+                    _context.statManager().addRateData("udp.sentMessagesDepth", sentTotal / sampled);
+            }
+
             boolean weAreFirewalled = _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
                                       _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
                                       _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
@@ -3633,6 +3653,9 @@ public class UDPTransport extends TransportImpl {
             }
 
             long now = _context.clock().now();
+            boolean overCapacity = totalPeers > maxConn;
+            // Hard cap: when over max connections, use aggressive 30s idle cutoff
+            long overCapCutoff = overCapacity ? now - 30*1000L : Long.MIN_VALUE;
             long shortInactivityCutoff;
             long longInactivityCutoff;
 
@@ -3658,6 +3681,13 @@ public class UDPTransport extends TransportImpl {
             _runCount++;
 
                 for (PeerState peer : _peersByIdent.values()) {
+                    // Hard cap enforcement: drop peers idle >30s when over capacity
+                    if (overCapacity &&
+                        peer.getLastReceiveTime() < overCapCutoff &&
+                        peer.getLastSendTime() < overCapCutoff) {
+                        _expireBuffer.add(peer);
+                        continue;
+                    }
                     long inactivityCutoff;
                     // if we offered to introduce them, or we used them as introducer in last 2 hours
                     if (peer.getWeRelayToThemAs() > 0 || peer.getIntroducerTime() > pingCutoff) {
@@ -3708,6 +3738,7 @@ public class UDPTransport extends TransportImpl {
             if (!_expireBuffer.isEmpty()) {
                 if (_log.shouldDebug())
                     _log.debug("Expiring " + _expireBuffer.size() + " peers");
+                _context.statManager().addRateData("udp.peerExpired", _expireBuffer.size());
                 for (PeerState peer : _expireBuffer) {
                     sendDestroy(peer, SSU2Util.REASON_TIMEOUT);
                     dropPeer(peer, false, "idle too long");

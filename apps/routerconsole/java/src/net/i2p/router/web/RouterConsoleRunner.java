@@ -73,7 +73,6 @@ import org.eclipse.jetty.util.thread.ScheduledExecutorScheduler;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.tanukisoftware.wrapper.WrapperManager;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import java.nio.charset.StandardCharsets;
 /**
  *  Start the router console.
@@ -129,7 +128,7 @@ public class RouterConsoleRunner implements RouterApp {
                                         "Usage: [[port host[,host]] [-s sslPort [host[,host]]] [webAppsDir]]";
 
     /** this is for the handlers only. We will adjust for the connectors and acceptors below. */
-    private static final int MIN_THREADS = 4;
+    private static final int MIN_THREADS = 0;
     /** this is for the handlers only. We will adjust for the connectors and acceptors below. */
     private static final int MAX_THREADS = 48;
 
@@ -450,17 +449,7 @@ public class RouterConsoleRunner implements RouterApp {
         System.setProperty("jetty.class.path", (new File(_context.getLibDir(), "routerconsole.jar")).getPath());
         LinkedBlockingQueue<Runnable> lbq = new LinkedBlockingQueue<>(4*MAX_THREADS);
         // min and max threads will be reset below
-        QueuedThreadPool qtp = new QueuedThreadPool(MAX_THREADS, MIN_THREADS, MAX_IDLE_TIME, lbq) {
-            private final AtomicInteger _counter = new AtomicInteger(1);
-            @Override
-            protected Thread newThread(Runnable r) {
-                Thread t = new Thread(r);
-                t.setDaemon(isDaemon());
-                t.setPriority(getThreadsPriority());
-                t.setName("Console." + _counter.getAndIncrement());
-                return t;
-            }
-        };
+        QueuedThreadPool qtp = new QueuedThreadPool(MAX_THREADS, MIN_THREADS, MAX_IDLE_TIME, lbq);
         qtp.setName(THREAD_NAME);
         qtp.setDaemon(true);
         _server = new Server(qtp);
@@ -684,9 +673,8 @@ public class RouterConsoleRunner implements RouterApp {
                 System.err.println("Unable to bind the Router Console to any address on port " + _listenPort + (sslPort > 0 ? (" or SSL port " + sslPort) : ""));
                 return;
             }
-            // Each address spawns a Connector and an Acceptor thread
-            // If the min is less than this, we have no thread for the handlers or the expiration thread.
-            qtp.setMinThreads(MIN_THREADS + (2 * boundAddresses));
+            // Threads created on demand up to max. No baseline pre-allocation.
+            qtp.setMinThreads(MIN_THREADS);
             qtp.setMaxThreads(MAX_THREADS + (2 * boundAddresses));
 
             File tmpdir = new SecureDirectory(workDir, ROUTERCONSOLE + "-" +
@@ -1041,7 +1029,7 @@ public class RouterConsoleRunner implements RouterApp {
         // see HashSessionManager javadoc
         synchronized(RouterConsoleRunner.class) {
             if (_jettyTimer == null) {
-                _jettyTimer = new ScheduledExecutorScheduler("Console HashSessionScavenger", true);
+                _jettyTimer = new ScheduledExecutorScheduler("ConsoleSessionClean", true);
                 try {
                     _jettyTimer.start();
                 } catch (Exception e) {

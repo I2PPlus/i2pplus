@@ -319,6 +319,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new SendPoolCapacityParam());
         _params.add(new UDPHandlerThreadsParam());
         _params.add(new UDPMessageReceiverThreadsParam());
+        _params.add(new SentMessagesCleanTimeParam());
+        _params.add(new OutboundMsgExpirationParam());
 
         // Tunnel
         _params.add(new BuildFirstHopTimeoutParam());
@@ -3722,6 +3724,139 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (!upstreamBackpressure && !queueBackedUp && !messagesExpiring
                 && !longSojourn && !downstreamSlow && observed < 1 && lowUtilization && current > _min)
                 return Math.max(_min, current - 1);
+
+            return current;
+        }
+    }
+
+    /**
+     * SSU2 sent-messages cleanup interval. Lower = more aggressive cleanup
+     * of unacked packet tracking, preventing _sentMessages backlog.
+     */
+    private class SentMessagesCleanTimeParam extends BaseParam {
+
+        SentMessagesCleanTimeParam() {
+            super("udp.peer.sentMessagesCleanTime", "SSU2 sent-messages ACK sweep interval",
+                  SUB_TRANSPORT,
+
+                  2000, 300000, 5000, "udp.sentMessagesDepth", _context);
+        }
+
+        protected void applyValue(int value) {
+            PeerState.setSentMessagesCleanTime(value);
+        }
+
+        protected int getRuntimeValue() {
+            return (int) PeerState.getSentMessagesCleanTime();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = udp.sentMessagesDepth (avg pending-ACK entries across peers)
+            // Cross-refs: udp.peerCount (total connections), udp.peerExpired (expiration rate),
+            //             jobLag (CPU), tunnel.buildSuccessRate (network health)
+            double peerCount = getAdditionalStat(_context, "udp.peerCount");
+            double expired = getAdditionalStat(_context, "udp.peerExpired");
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double memPressure = getMemoryPressure();
+            boolean manyPeers = !Double.isNaN(peerCount) && peerCount > 500;
+            boolean deepBacklog = !Double.isNaN(observed) && observed > 50;
+            boolean lowExpiry = !Double.isNaN(expired) && expired < 10;
+            boolean cpuFree = Double.isNaN(jobLag) || jobLag < 20;
+            boolean memOk = memPressure < 0.75;
+            boolean memCritical = memPressure > 0.85;
+
+            // Memory critical: aggressive cleanup regardless
+            if (memCritical)
+                return Math.max(_min, current - _step * 2);
+
+            // Deep backlog + low expiry = cleanup isn't keeping up, accelerate
+            if (deepBacklog && lowExpiry && cpuFree && memOk)
+                return Math.max(_min, current - _step);
+
+            // Many peers + backlog = accelerate cleanup
+            if (manyPeers && deepBacklog && cpuFree)
+                return Math.max(_min, current - _step);
+
+            // Clean backlog resolved, ease up to save CPU
+            if (!deepBacklog && !manyPeers && current < _defaultValue)
+                return Math.min(_defaultValue, current + _step);
+
+            // Deep backlog but CPU pressure — can't clean faster without harming sends
+            if (deepBacklog && !cpuFree)
+                return current;
+
+            return current;
+        }
+    }
+
+    /**
+     * Outbound message expiration timeout. Shorter = messages fail faster,
+     * preventing OutboundMessageState + OutNetMessage pileup behind stuck peers.
+     */
+    private class OutboundMsgExpirationParam extends BaseParam {
+
+        OutboundMsgExpirationParam() {
+            super("udp.peer.outboundMsgExpiration", "Outbound message expiration timeout",
+                  SUB_TRANSPORT,
+
+                  5000, 300000, 5000, "udp.peerCount", _context);
+        }
+
+        protected void applyValue(int value) {
+            PeerState.setOutboundMsgExpiration(value);
+        }
+
+        protected int getRuntimeValue() {
+            return (int) PeerState.getOutboundMsgExpiration();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = udp.peerCount (total SSU connections)
+            // Cross-refs: udp.sentMessagesDepth, udp.peerExpired, memPressure, jobLag
+            double sentDepth = getAdditionalStat(_context, "udp.sentMessagesDepth");
+            double expired = getAdditionalStat(_context, "udp.peerExpired");
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double memPressure = getMemoryPressure();
+            boolean manyPeers = !Double.isNaN(observed) && observed > 500;
+            boolean deepSent = !Double.isNaN(sentDepth) && sentDepth > 50;
+            boolean highExpiry = !Double.isNaN(expired) && expired > 50;
+            boolean cpuFree = Double.isNaN(jobLag) || jobLag < 20;
+            boolean memOk = memPressure < 0.75;
+            boolean memCritical = memPressure > 0.85;
+
+            // Memory critical: shortest expiration to drain queues fast
+            if (memCritical)
+                return Math.max(_min, current - _step * 2);
+
+            // Many peers + deep sent-messages = expire messages faster to shed load
+            if (manyPeers && deepSent && cpuFree && memOk)
+                return Math.max(_min, current - _step);
+
+            // High expiry rate means messages are timing out anyway — accelerate
+            if (highExpiry && cpuFree)
+                return Math.max(_min, current - _step);
+
+            // Back to normal: restore default
+            if (!manyPeers && !deepSent && current < _defaultValue)
+                return Math.min(_defaultValue, current + _step);
 
             return current;
         }
