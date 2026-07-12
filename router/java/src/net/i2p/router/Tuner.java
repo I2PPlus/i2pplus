@@ -1531,7 +1531,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         DataMessageTimeoutParam() {
             super("DATA_MESSAGE_TIMEOUT", "Streaming data timeout (ms)",
-                  SUB_TRANSPORT, 1000, 10000, 500, "transport.sendProcessingTime", _context);
+                  SUB_TRANSPORT, 5000, 20000, 1000, "transport.sendProcessingTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -1556,15 +1556,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = transport.sendProcessingTime (ms, how long a send+confirm takes)
             // Cross-refs: sendFailed (establish failures), sendMessageFailureLifetime (congestion),
-            //             jobLag (CPU), participating InBps (transit load)
+            //             jobLag (CPU), participating InBps (transit load),
+            //             initialRTT (streaming connection establishment latency)
             double sendFailed = getAdditionalStat(_context, "udp.sendFailed");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double transitBps = getAdditionalStat(_context, "tunnel.participating InBps");
+            double initialRTT = getAdditionalStat(_context, "stream.con.initialRTT.out");
 
             boolean hasSendFailures = !Double.isNaN(sendFailed) && sendFailed > 0;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean heavyTransit = !Double.isNaN(transitBps) && transitBps > getHeavyTransitThreshold(_context);
+            boolean slowStreaming = !Double.isNaN(initialRTT) && initialRTT > 15000;
 
             // Target: timeout = 3x observed confirm time, with minimum floor
             int target = Math.max(5000, (int) (observed * 3));
@@ -1573,9 +1576,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (current >= target * 0.5 && current <= target * 1.5 && !hasSendFailures && !congested)
                 return current;
 
-            // Never decrease when there are failures, congestion, or heavy transit
-            if (target < current && (hasSendFailures || congested || heavyTransit))
+            // Never decrease when there are failures, congestion, heavy transit, or slow streaming
+            if (target < current && (hasSendFailures || congested || heavyTransit || slowStreaming))
                 return current;
+
+            // Force increase when streaming connections are very slow (>25s initialRTT)
+            if (!Double.isNaN(initialRTT) && initialRTT > 25000 && current < _max) {
+                target = Math.max(target, (int) Math.min(_max, initialRTT));
+            }
 
             // Never decrease below 5000ms (5s floor for I2P multi-hop)
             target = Math.max(5000, target);
