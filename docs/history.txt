@@ -1,18 +1,23 @@
-2026-07-09 dr|z3d
-  * Router:
-    - Fix BandwidthHistory startup crash from sub-5s periodic timer
-    - Fix auto-tuning stat thresholds — event-count stats returned
-      1.0 making most thresholds dead code; normalize buildSuccessRate
-      0-100 to 0-1; fix CoDel drop stat name for per-priority queues
-    - Add missing stat emissions (ntcp.writeQueueFull, ntcp.sendQueueSize,
-      tunnel.pendingLookupQueue) for Tuner cross-references
-  * NetDb:
-    - Fix 92% lookup drop rate from isSelfLookup gate
-    - Bound LookupThrottler and LookupBanHammer maps at 10K/5K
+2026-07-12 dr|z3d
   * Console:
-    - Fix session persistence, login/logout loop, and expiry auto-redirect
-    - SVG graph glow effects, UTC toggle option
-  * i18n: Add Bengali (bn) translation for all modules
+    - Sidebar CPU load indicator — more responsive; memory/CPU bar
+      CSS width transitions
+    - Defer health ring scores until 5 min uptime on /tuning
+
+2026-07-11 dr|z3d
+  * Console:
+    - Add 1s update option to sidebar bandwidth graph
+    - Smooth ring chart animation, presentational tweaks
+  * I2PTunnel: Reduce client pool idle keepalive 120s→30s
+  * GeoIP: Improve reversed ASN name overrides for more accurate
+    hostname display in tables
+
+2026-07-10 dr|z3d
+  * Console: Add subsystem ring chart dashboard to /tuning with health
+    scoring; fix Router group sorting for non-English locales
+  * GeoIP: Auto-detect reversed MaxMind org names, full-string reversal
+    for compound words, double-apostrophe cleanup
+  * i18n: Add 24 new locale translations for ndt module
 
 2026-07-08 dr|z3d
   * Console:
