@@ -375,6 +375,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new MaxRetransmissionsParam());
         _params.add(new MaxResendDelayParam());
         _params.add(new MaxRTOParam());
+        _params.add(new RTOMultiplierParam());
         _params.add(new MaxRttParam());
         _params.add(new MaxSlowStartWindowParam());
         _params.add(new MinResendDelayParam());
@@ -4596,6 +4597,69 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (observed < 5000 && !congested && !highDups)
                 return Math.max(_min, current - _step);
 
+            return current;
+        }
+    }
+
+    /**
+     * RTO backoff multiplier percentage (100 = 1.0x, 150 = 1.5x).
+     * Controls how aggressively RTO grows on each retransmission timeout.
+     * Lower = gentler backoff, more retries before hitting maxRTO.
+     * Higher = faster to maxRTO, fewer retries.
+     *
+     * @since 2.12.0+
+     */
+    private class RTOMultiplierParam extends BaseParam {
+
+        RTOMultiplierParam() {
+            super("i2p.streaming.rtoMultiplier", "RTO backoff multiplier (%)",
+                  SUB_STREAMING,
+                  100, 500, 10, "stream.con.sendDuplicateSize", _context);
+        }
+
+        protected void applyValue(int value) {
+            StreamingReflector.invokeSetInt("setRTOMultiplier", value);
+        }
+
+        protected int getRuntimeValue() {
+            int v = StreamingReflector.invokeGetInt("getRTOMultiplier");
+            return v > 0 ? v : 150;
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = stream.con.sendDuplicateSize (avg duplicate ACK size)
+            // Cross-refs: udp.sendConfirmTime (actual RTT)
+            double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
+            double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
+            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 20000;
+            boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
+            boolean highDups = !Double.isNaN(observed) && observed > 1000;
+
+            // Heavy duplicate pressure + congestion = increase multiplier (faster to max)
+            if (highDups && congested)
+                return Math.min(_max, current + _step);
+
+            // High RTT with no congestion = lower multiplier (gentler backoff)
+            if (highRTT && !congested && !highDups)
+                return Math.max(_min, current - _step);
+
+            // Healthy: converge toward default (1.5x)
+            int defaultVal = 150;
+            if (!highDups && !congested && !highRTT) {
+                if (current > defaultVal)
+                    return Math.max(defaultVal, current - _step);
+                if (current < defaultVal)
+                    return Math.min(defaultVal, current + _step);
+            }
             return current;
         }
     }

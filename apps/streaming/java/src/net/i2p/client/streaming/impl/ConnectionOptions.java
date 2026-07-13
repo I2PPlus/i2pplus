@@ -87,7 +87,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private static final String PROP_INITIAL_RTO = "i2p.streaming.initialRTO";
     static final String PROP_MAX_RTO = "i2p.streaming.maxRTO";
     /** @since 0.9.70+ mutable for adaptive tuning */
-    private static volatile int _initialRTO = 6000;
+    private static volatile int _initialRTO = 2000;
 
     /** @since 0.9.70+ */
     static int getInitialRTO() { return _initialRTO; }
@@ -101,6 +101,14 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static int getMaxRTOStatic() { return _maxRTO; }
     /** @since 0.9.70+ */
     public static void setMaxRTO(int val) { _maxRTO = Math.max(1000, Math.min(60000, val)); }
+
+    static final String PROP_RTO_MULTIPLIER = "i2p.streaming.rtoMultiplier";
+    /** @since 2.12.0+ mutable for adaptive tuning */
+    private static volatile int _rtoMultiplier = 150;
+    /** @since 2.12.0+ */
+    static int getRTOMultiplier() { return _rtoMultiplier; }
+    /** @since 2.12.0+ */
+    static void setRTOMultiplier(int val) { _rtoMultiplier = Math.max(100, Math.min(500, val)); }
 
     /** @since 0.9.70+ */
     private static volatile int _minResendDelay = 100;
@@ -803,7 +811,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     synchronized int doubleRTO() {
         // we don't need to switch on _initState, _rto is set in constructor
-        _rto *= 2;
+        _rto = _rto * _rtoMultiplier / 100;
         int mrto = getMaxRTO();
         if (_rto > mrto) {_rto = mrto;}
         return _rto;
