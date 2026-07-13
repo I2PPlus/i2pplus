@@ -257,8 +257,6 @@ class OutboundMessageFragments {
                             _context.statManager().addRateData("udp.avgRTO", agg[1]);
                             _context.statManager().addRateData("udp.avgConcurrentMsgs", agg[2]);
                         }
-                        _context.statManager().addRateData("udp.outboundQueueDepth",
-                                                          _transport.getTotalOutboundQueueDepth());
                     }
                 }
             }
