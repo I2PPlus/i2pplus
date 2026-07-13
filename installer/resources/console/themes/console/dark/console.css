@@ -2383,18 +2383,6 @@ html.hasCollapsedElement #plugmanage{display:none}
 #bandwidthconfig tr:nth-last-child(n+3) td{background-color:#000800}
 #config_bandwidth tr:nth-last-child(2) .infohelp b{margin-right:-1px;font-size:120%}
 
-/* streams */
-.streamsContainer{margin: 14px auto 12px; width: calc(100% - 4px);box-shadow:var(--border_table)}
-.streams th:nth-child(n+2),.streamsContainer td:nth-child(n+2){text-align:center}
-.streams th{font-size:90%}
-.streams th:first-child{text-align:left}
-.streams td{padding:6px 8px}
-.streams td:nth-child(2),.streams td:nth-child(3){width:1%}
-.streamsContainer img {display:none}
-.streams+.infohelp{margin:0}
-.streams .inbound,.streams .outbound{margin:-1px 0 0;display:inline-block;vertical-align:middle}
-.streams .client,.streams .server{display:inline-block;width:18px;height:18px;vertical-align:middle;font-size:0;background:var(--client)}
-
 /* update */
 #checkforupdates{text-align:center}
 #updateHelper .optionlist,#updateProxyHostPort .optionlist{column-gap:1px;columns:400px 3;margin:-1px 0}
@@ -2902,12 +2890,23 @@ h2#jsonrpc{padding-left:38px;background:url(../images/i2cp.svg) no-repeat 10px c
 .ring .ring-bg{stroke:#111}
 svg.spark{position:relative;border:var(--border);background:linear-gradient(180deg,#001800,#010,#001800)}
 .spark.init{font-size:90%}
-#streamstats,#tuningstats{margin:13px auto;box-shadow:var(--border_table);background:var(--msg);background-size:0}
-#streamstats{margin-top:12px}
+#streamstats,#tuningstats{margin:13px auto;padding:16px 4px;box-shadow:var(--border_table),0 0 0 2px #141 inset,0 0 0 3px #000 inset;background:var(--msg);background-size:0}
+#tuningstats{width:calc(100% - 10px)}
 #tuning .infohelp{margin-top:10px;box-shadow:var(--border_table)}
 #tuning .section tr{background:var(--th)}
 #tuning .section td{border:var(--border_soft);border-width:2px;border-left:0;border-right:0}
 #tuning .section td:first-child{padding-left:10px}
+
+/* streams */
+.streamsContainer{margin: 14px auto 12px; width: calc(100% - 4px);box-shadow:var(--border_table)}
+.streams th{font-size:90%}
+.streams td{padding:6px 8px}
+.streamsContainer img {display:none}
+.streams+.infohelp{margin:0}
+.streams .inbound,.streams .outbound{margin:-1px 0 0;display:inline-block;vertical-align:middle}
+.streams .client,.streams .server{display:inline-block;width:18px;height:18px;vertical-align:middle;font-size:0;background:var(--client)}
+#activeStreams .totalBandwidth{margin:2px 8px 0}
+#streamstats{margin-top:12px;width:calc(100% - 12px);background:var(--badge)}
 
 /* iframes */
 #dns{padding:0;min-width:650px}

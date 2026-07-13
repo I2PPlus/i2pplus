@@ -13,6 +13,7 @@ let refreshIntervalId = null;
 let isRefreshing = false;
 let currentTargetSelector = null;
 let currentUrl = null;
+let visibilityHandler = null;
 
 const fetchWorker = new SharedWorker("/js/fetchWorker.js");
 fetchWorker.port.start();
@@ -108,6 +109,9 @@ export function refreshElements(targetSelectors, url, delay) {
     }
   }
 
-  document.removeEventListener("visibilitychange", handleVisibilityChange);
-  document.addEventListener("visibilitychange", handleVisibilityChange);
+  if (visibilityHandler) {
+    document.removeEventListener("visibilitychange", visibilityHandler);
+  }
+  visibilityHandler = handleVisibilityChange;
+  document.addEventListener("visibilitychange", visibilityHandler);
 }

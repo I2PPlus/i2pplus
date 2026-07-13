@@ -6,51 +6,52 @@
  *
  * Initially refreshes #streamsWrap so the "not available" placeholder is
  * replaced by the live table(s) once the router finishes starting. After
- * tables appear, switches to refreshing just table.streams tbody to preserve
- * the Tablesort instances.
+ * tables appear, switches to refreshing table.streams tbody and #streamstats
+ * separately so morphdom diffs rows without destroying Tablesort instances
+ * while keeping the ring stats live.
  * @author dr|z3d
  * @license AGPL3 or later
  */
 
-import { refreshElements } from '/js/refreshElements.js';
+import { refreshElements } from "/js/refreshElements.js";
 
-let tablesortInitialized = false;
-let currentRefreshTarget = "#streamsWrap";
+let sorters = [];
+let currentRefreshTarget = "#streamsWrap, #streamstats";
 const baseUrl = "/streams" + (window.location.search || "");
 
 /**
- * Attach Tablesort to each .streams table if not yet initialized.
- * Returns true if at least one table was found.
+ * Attach Tablesort to each .streams table. Safe to call repeatedly —
+ * returns false if no tables found yet.
  */
 function initTablesort() {
-  if (tablesortInitialized) return true;
   const tables = document.querySelectorAll("table.streams");
   if (tables.length > 0) {
+    sorters = [];
     tables.forEach(table => {
-      new Tablesort(table);
+      const sorter = new Tablesort(table);
+      sorters.push(sorter);
       table.addEventListener("beforeSort", () => progressx?.show?.(theme));
       table.addEventListener("afterSort", () => progressx?.hide?.());
     });
-    tablesortInitialized = true;
     return true;
   }
   return false;
 }
 
 /**
- * Switch refresh target to the table tbodies so morphdom diffs rows
- * without destroying Tablesort instances.
+ * Switch refresh target to tbody + streamstats so morphdom preserves
+ * the thead (and hence Tablesort instances) while ring stats stay live.
  */
 function switchToBodyRefresh() {
-  if (currentRefreshTarget === "table.streams tbody") return;
-  currentRefreshTarget = "table.streams tbody";
+  if (currentRefreshTarget === "table.streams tbody, #streamstats") return;
+  currentRefreshTarget = "table.streams tbody, #streamstats";
   refreshElements(currentRefreshTarget, baseUrl, 10000);
 }
 
 /**
  * DOMContentLoaded handler — starts by refreshing the full wrapper
  * (handles the transition from "not available" to live table(s)),
- * then switches to tbody-only refresh once tables are present.
+ * then switches to targeted refresh once tables are present.
  */
 document.addEventListener("DOMContentLoaded", function() {
   initTablesort();
@@ -60,5 +61,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (initTablesort()) {
       switchToBodyRefresh();
     }
+    // Re-apply current sort so it survives the morph
+    sorters.forEach(s => s.refresh());
   });
 });

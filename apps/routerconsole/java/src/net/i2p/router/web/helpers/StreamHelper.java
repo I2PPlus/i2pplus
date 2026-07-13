@@ -186,8 +186,9 @@ public class StreamHelper extends HelperBase {
                                      int outCount, long outSent, long outRecv) throws IOException {
         out.write("<div class=streamsContainer>\n");
         out.write("<table class=streams>\n");
-
         renderTableSection(out, controllers, true, "Peer", inCount, inSent, inRecv);
+        out.write("</table>\n");
+        out.write("<table class=streams>\n");
         renderTableSection(out, controllers, false, "Target", outCount, outSent, outRecv);
         out.write("</table>\n");
         out.write("</div>\n");
@@ -201,13 +202,13 @@ public class StreamHelper extends HelperBase {
                                     long totalSent, long totalReceived) throws IOException {
         String label = inbound ? "Inbound" : "Outbound";
         String totals = "<span class=streams_out>" + formatSize(totalSent) + " " + esc(_t("sent"))
-                      + "</span> <span class=streams_in>" + formatSize(totalReceived) + " " + esc(_t("received")) + "</span>";
+                      + "</span> <span class=streams_in>" + formatSize(totalReceived) + " / " + esc(_t("received")) + "</span>";
         out.write("<thead>\n");
         out.write("<tr><th class=sectionhead colspan=6>" + label + " (" + count + ")" +
                   "<span class=totalBandwidth>" + totals + "</span></th></tr>\n");
         out.write("<tr class=tunnelhead>" +
-                  "<th>Tunnel</th>" +
                   "<th>Type</th>" +
+                  "<th>Tunnel</th>" +
                   "<th>" + peerHeader + "</th>" +
                   "<th>Port</th>" +
                   "<th title=\"Bytes Sent\">&uarr;</th>" +
@@ -235,10 +236,10 @@ public class StreamHelper extends HelperBase {
                     if (sock == null || sock.isClosed()) continue;
                     out.write(ROW_OPEN);
                     out.write(TD_OPEN);
-                    out.write(esc(tunnelName));
+                    out.write("<span class=" + taskType.toLowerCase() + ">" + taskType + "</span>");
                     out.write(TD_CLOSE);
                     out.write(TD_OPEN);
-                    out.write("<span class=" + taskType.toLowerCase() + ">" + taskType + "</span>");
+                    out.write(esc(tunnelName));
                     out.write(TD_CLOSE);
                     out.write(TD_OPEN);
                     Destination peer = sock.getPeerDestination();
@@ -285,14 +286,14 @@ public class StreamHelper extends HelperBase {
                       + "</span> <span class=streams_in>" + formatSize(totalReceived) + " " + esc(_t("received")) + "</span>";
         out.write("<table class=streams><thead>\n" +
                   "<tr><th class=sectionhead colspan=6>" + label + " (" + count + ")" + "<span class=totalBandwidth>" + totals + "</span></th></tr>\n" +
-                  "<tr class=tunnelhead>\n" +
-                  "<th>Tunnel</th>\n" +
-                  "<th>Type</th>\n" +
-                  "<th>" + peerHeader + "</th>\n" +
-                  "<th>Port</th>\n" +
-                  "<th title=\"Bytes Sent\">&uarr;</th>\n" +
-                  "<th title=\"Bytes Received\">&darr;</th>\n" +
-                  "</tr>\n</thead>\n<tbody>\n");
+                   "<tr class=tunnelhead>\n" +
+                   "<th>Type</th>\n" +
+                   "<th>Tunnel</th>\n" +
+                   "<th>" + peerHeader + "</th>\n" +
+                   "<th>Port</th>\n" +
+                   "<th title=\"Bytes Sent\">&uarr;</th>\n" +
+                   "<th title=\"Bytes Received\">&darr;</th>\n" +
+                   "</tr>\n</thead>\n<tbody>\n");
 
         for (TunnelController controller : controllers) {
             I2PTunnel tunnel = controller.getTunnel();
@@ -314,10 +315,10 @@ public class StreamHelper extends HelperBase {
                     if (sock == null || sock.isClosed()) continue;
                     out.write(ROW_OPEN);
                     out.write(TD_OPEN);
-                    out.write(esc(tunnelName));
+                    out.write("<span class=" + taskType.toLowerCase() + ">" + taskType + "</span>");
                     out.write(TD_CLOSE);
                     out.write(TD_OPEN);
-                    out.write("<span class=" + taskType.toLowerCase() + ">" + taskType + "</span>");
+                    out.write(esc(tunnelName));
                     out.write(TD_CLOSE);
                     out.write(TD_OPEN);
                     Destination peer = sock.getPeerDestination();
