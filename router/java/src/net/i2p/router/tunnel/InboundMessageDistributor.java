@@ -187,7 +187,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                     _receiver.receive((GarlicMessage)msg);
             } else {
                 if (_log.shouldLog(Log.INFO)) {
-                    _log.info("Distributing InboundTunnelMessage into our InboundNetMessagePool\n* Message: " + msg);
+                    _log.info("Distributing InboundTunnelMessage into our InboundNetMessagePool " + msg);
                 }
                 _context.inNetMessagePool().add(msg, null, null);
             }
@@ -198,7 +198,8 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
             TunnelInfo out = _context.tunnelManager().selectOutboundTunnel(_client, target);
             if (out == null) {
                 if (_log.shouldWarn()) {
-                    _log.warn("No Outbound tunnel to send the client message for [" + (_client != null ? _client.toBase64().substring(0,6) : "null") + "] \n* Message: " + msg);
+                    _log.warn("No Outbound tunnel to send the client message for [" +
+                              (_client != null ? _client.toBase64().substring(0,6) : "null") + "] " + msg);
                 }
                 return;
             }
