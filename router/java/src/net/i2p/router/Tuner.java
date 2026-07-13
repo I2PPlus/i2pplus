@@ -2654,12 +2654,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Target: 2x RTT as baseline (standard TCP-like behavior)
             int target = Math.max(2000, Math.min(_max, (int) (observed * 2)));
 
-            // FAST PATH: latency target violated — raise RTO (faster loss detection helps latency)
-            if (highRTT && target < current)
+            // FAST PATH: latency target violated — raise RTO toward target
+            if (highRTT && target > current)
                 return Math.min(_max, current + _step);
 
             // Spurious retransmits = raise RTO (stop wasting bandwidth)
-            if (spuriousRetransmits && target < current)
+            if (spuriousRetransmits && target > current)
                 return Math.min(_max, current + _step);
 
             // Congested or network unhealthy = don't lower RTO
