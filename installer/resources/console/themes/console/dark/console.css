@@ -8,23 +8,24 @@
 @import url(../images/itooplus.css);
 
 :root{
+--graphbar:#f60;
 --tier:linear-gradient(180deg,#397,#021);
---isFF:linear-gradient(135deg,#0000 82%,rgba(192,80,0,.8) 82%);
---isU:linear-gradient(45deg,#0000 82%,rgba(192,0,0,.8) 82%);
 --isD:linear-gradient(135deg,#993 18%,#0000 18%);
 --isE:linear-gradient(135deg,#717 18%,#0000 18%);
+--isFF:linear-gradient(135deg,#0000 82%,rgba(192,80,0,.8) 82%);
 --isG:linear-gradient(135deg,#711 18%,#0000 18%);
---graphbar:#f60;
---minigraph_in:#099b;
---minigraph_out:#5a5b;
---minigraph_in_fill:linear-gradient(#0993,#0997);
---minigraph_out_fill:linear-gradient(#5a53,#5a57);
---minigraph_grid:#252;
---minigraph_glow_width:3;
+--isU:linear-gradient(45deg,#0000 82%,rgba(192,0,0,.8) 82%);
 --minigraph_glow_alpha:.1;
 --minigraph_glow_blur:6;
+--minigraph_glow_width:3;
+--minigraph_grid:#252;
+--minigraph_in:#099b;
+--minigraph_in_fill:linear-gradient(#0993,#0997);
 --minigraph_line_width:2;
+--minigraph_out:#5a5b;
+--minigraph_out_fill:linear-gradient(#5a53,#5a57);
 --minigraph_overlay_blend:screen;
+--minigraph_tension:.5;
 }
 
 /* global */
@@ -2898,15 +2899,20 @@ svg.spark{position:relative;border:var(--border);background:linear-gradient(180d
 #tuning .section td:first-child{padding-left:10px}
 
 /* streams */
-.streamsContainer{margin: 14px auto 12px; width: calc(100% - 4px);box-shadow:var(--border_table)}
+.streamsContainer{margin:14px auto 12px;width:calc(100% - 4px);box-shadow:var(--border_table)}
+.streams+.streams{margin-bottom:-1px;border-top-width:5px}
+.streams th,.streams td{padding:8px 10px}
 .streams th{font-size:90%}
+.streams .tunnelhead th:last-child{font-size:0;background:url(/themes/console/images/inbound.svg) no-repeat center center/18px,var(--th)}
+.streams .tunnelhead th:nth-last-child(2){font-size:0;background:url(/themes/console/images/outbound.svg) no-repeat center center/18px,var(--th)}
 .streams td{padding:6px 8px}
 .streamsContainer img {display:none}
 .streams+.infohelp{margin:0}
 .streams .inbound,.streams .outbound{margin:-1px 0 0;display:inline-block;vertical-align:middle}
 .streams .client,.streams .server{display:inline-block;width:18px;height:18px;vertical-align:middle;font-size:0;background:var(--client)}
-#activeStreams .totalBandwidth{margin:2px 8px 0}
+#activeStreams .totalBandwidth{margin:2px 0 0}
 #streamstats{margin-top:12px;width:calc(100% - 12px);background:var(--badge)}
+#streamsWrap{margin-top:13px}
 
 /* iframes */
 #dns{padding:0;min-width:650px}

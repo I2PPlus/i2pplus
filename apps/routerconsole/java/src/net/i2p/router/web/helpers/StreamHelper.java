@@ -201,8 +201,9 @@ public class StreamHelper extends HelperBase {
                                     boolean inbound, String peerHeader, int count,
                                     long totalSent, long totalReceived) throws IOException {
         String label = inbound ? "Inbound" : "Outbound";
-        String totals = "<span class=streams_out>" + formatSize(totalSent) + " " + esc(_t("sent"))
-                      + "</span> <span class=streams_in>" + formatSize(totalReceived) + " / " + esc(_t("received")) + "</span>";
+        String totals = "<span class=streams_out>" + formatSize(totalSent) + " " + esc(_t("sent")) +
+                        "</span> / <span class=streams_in>" + formatSize(totalReceived) +
+                        " " + esc(_t("received")) + "</span>";
         out.write("<thead>\n");
         out.write("<tr><th class=sectionhead colspan=6>" + label + " (" + count + ")" +
                   "<span class=totalBandwidth>" + totals + "</span></th></tr>\n");
@@ -211,8 +212,8 @@ public class StreamHelper extends HelperBase {
                   "<th>Tunnel</th>" +
                   "<th>" + peerHeader + "</th>" +
                   "<th>Port</th>" +
-                  "<th title=\"Bytes Sent\">&uarr;</th>" +
-                  "<th title=\"Bytes Received\">&darr;</th>" +
+                  "<th class=tx title=\"Bytes Sent\">&uarr;</th>" +
+                  "<th class=rx title=\"Bytes Received\">&darr;</th>" +
                   "</tr>\n");
         out.write("</thead>\n<tbody>\n");
 
