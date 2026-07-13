@@ -109,7 +109,7 @@ function startAutoRefresh() {
   if (autoRefreshInterval) return;
 
   autoRefreshInterval = setInterval(() => {
-    if (!document.hidden && navigator.onLine && refreshActive && !isRefreshing) {
+    if (!document.hidden && navigator.onLine && !isDown && refreshActive && !isRefreshing) {
       refreshSidebar();
     }
   }, getRefreshInterval());
@@ -135,7 +135,7 @@ function stopAutoRefresh() {
  * @returns {Promise<void>}
  */
 export async function refreshSidebar(force = false) {
-  if (!refreshActive || document.hidden || !navigator.onLine) return;
+  if (!refreshActive || document.hidden || !navigator.onLine || isDown) return;
   try {
     worker.port.postMessage({ url: `/xhr1.jsp?requestURI=${uri}`, force });
   } catch (e) {
@@ -275,9 +275,6 @@ function refreshAll() {
   sectionToggler();
   newHosts();
   countNewsItems();
-  isDown = false;
-  noResponse = 0;
-  document.body.classList.remove("isDown");
   isRefreshing = false;
   // Trigger immediate minigraph re-render after full sidebar replacement
   document.dispatchEvent(new Event("sidebarRefreshed"));
@@ -310,12 +307,15 @@ async function updateConnectionStatus() {
       document.body.classList.add("isDown");
       refreshAll();
     } else if (!currentlyDown && isDown) {
-      isDown = false;
-      noResponse = 0;
-      lastRefreshTime = 0;
-      document.body.classList.remove("isDown");
       isRefreshing = true;
-      refreshSidebar(true).finally(() => { isRefreshing = false; });
+      refreshSidebar(true).then(() => {
+        if (responseDoc && responseDoc.getElementById("sb")) {
+          isDown = false;
+          noResponse = 0;
+          lastRefreshTime = 0;
+          document.body.classList.remove("isDown");
+        }
+      }).finally(() => { isRefreshing = false; });
     }
   }, 500);
 }
