@@ -74,7 +74,6 @@ class EventPumper implements Runnable {
     private final Queue<NTCPConnection> _wantsConRegister = new ConcurrentLinkedQueue<>();
     private final NTCPTransport _transport;
     private final ObjectCounter<String> _blockedIPs;
-    private final ObjectCounter<String> _failedInboundHandshake;
     private final ObjectCounter<String> _failedInboundEncryption;
     private long _expireIdleWriteTime;
     /** Tracks consecutive select() calls that returned immediately (tight loop guard) */
@@ -165,7 +164,6 @@ class EventPumper implements Runnable {
         _expireIdleWriteTime = MAX_EXPIRE_IDLE_TIME;
         _nodelay = ctx.getBooleanPropertyDefaultTrue(PROP_NODELAY);
         _blockedIPs = new ObjectCounter<>();
-        _failedInboundHandshake = new ObjectCounter<>();
         _failedInboundEncryption = new ObjectCounter<>();
         _context.statManager().createRequiredRateStat("ntcp.pumperKeySetSize", "Number of NTCP Pumper KeySetSize events", "Transport [NTCP]", RATES);
         _context.statManager().createRequiredRateStat("ntcp.pumperLoopsPerSecond", "Number of NTCP Pumper loops/s", "Transport [NTCP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
@@ -1081,22 +1079,16 @@ class EventPumper implements Runnable {
     }
 
     /**
-     * Track failed inbound handshake and ban if too many failures.
-     * Ban reason: "Handshake timeout"
+     * Track failed inbound handshake for diagnostic stats.
+     * Handshake timeouts on the open internet are network noise, not hostile,
+     * so we do not ban for them.
+     *
+     * @param ip source IP address (tracked for stats only)
      * @param hash optional router hash if available
      */
     public void trackFailedInboundHandshake(byte[] ip, Hash hash) {
         if (ip == null) return;
         _context.statManager().addRateData("ntcp.inboundEstablishFailed", 1);
-        String ba = Addresses.toString(ip);
-        int count = _failedInboundHandshake.increment(ba);
-        if (count >= 5) {
-            _failedInboundHandshake.clear(ba);
-            BanLogger bl = BanLogger.getInstance();
-            if (bl != null) {
-                bl.logBan(hash, ba, "Handshake timeout", 15 * 60 * 1000L);
-            }
-        }
     }
 
     /**
