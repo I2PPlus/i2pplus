@@ -873,7 +873,7 @@ public class Banlist {
      *  @return true if the router is banlisted on the specified transport
      */
     public boolean isBanlisted(Hash peer, String transport) {
-        if (peer == null || transport == null) {return false;}
+        if (peer == null) {return false;}
 
         boolean rv = false;
         boolean unbanlist = false;
@@ -885,6 +885,7 @@ public class Banlist {
             unbanlist = true;
             rv = false;
         } else if (entry.transports == null) {rv = true;}
+        else if (transport == null) {rv = true;}
         else {rv = entry.transports.contains(transport);}
 
         if (unbanlist) {
