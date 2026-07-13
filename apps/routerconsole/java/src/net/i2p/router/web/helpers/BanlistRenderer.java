@@ -268,11 +268,13 @@ class BanlistRenderer {
             return;
         }
 
-        // Column order: Country Flag, Router Hash, Version, IP Address, Port, Hostname, Reason, Expiry
+        // Column order: Country, Router, Caps, Version, IP, Port, Host, Reason, Expiry
         buf.append("<div class=tablewrap id=sessionBanned>\n<table id=sbans>\n<thead><tr><th class=country>")
            .append(_t("Country"))
            .append("</th><th class=hash data-sort-use-group=true>")
            .append(_t("Router"))
+           .append("</th><th class=caps>")
+           .append(_t("Caps"))
            .append("</th><th class=routerversion>")
            .append(_t("Version"))
            .append("</th><th class=ip>")
@@ -393,14 +395,16 @@ class BanlistRenderer {
             }
 
             String countryName =  _context.commSystem().getCountryName(countryCode);
-            // Get router version from NetDB or reason, then clean reason
+            // Get router version and caps from NetDB or reason, then clean reason
             String routerVersion = getRouterVersion(key, reason);
+            String caps = getRouterCaps(key);
             String cleanedReason = cleanReason(reason, routerVersion);
             buf.append("<td class=country data-sort=").append(countryCode).append(">")
                .append("<img width=28 height=21 title=\"").append(countryName)
                .append("\" src=\"/flags.jsp?c=").append(countryCode).append("\">")
                .append("</td><td class=hash>")
                .append("<span class=b64>").append(key.toBase64()).append("</span>")
+               .append("</td><td class=caps>").append(caps != null ? caps : "")
                .append("</td><td class=routerversion>").append(routerVersion != null ? routerVersion : "")
                .append("</td><td class=ip>")
                .append(ip != null ? ip : "")
@@ -450,9 +454,10 @@ class BanlistRenderer {
                .append("<td class=country data-sort=").append(countryCode).append(">")
                .append("<img width=28 height=21 title=\"").append(countryName)
                .append("\" src=\"/flags.jsp?c=").append(countryCode).append("\">")
-               .append("</td>").append("<td class=hash></td>")
-               .append("<td class=routerversion></td>")
-               .append("<td class=ip>")
+                .append("</td>").append("<td class=hash></td>")
+                .append("<td class=caps></td>")
+                .append("<td class=routerversion></td>")
+                .append("<td class=ip>")
                .append(ip != null ? ip : "")
                .append("</td><td class=port data-sort=").append(port != null ? port : "0").append(">")
                .append(port != null ? port : "")
@@ -523,6 +528,25 @@ class BanlistRenderer {
             }
         }
         return null;
+    }
+
+    /**
+     * Get router capabilities string from NetDB.
+     * @return caps string or empty string
+     */
+    private String getRouterCaps(Hash hash) {
+        if (hash == null) return "";
+        try {
+            NetworkDatabaseFacade netDb = _context.netDb();
+            if (netDb != null) {
+                RouterInfo ri = netDb.lookupRouterInfoLocally(hash);
+                if (ri != null) {
+                    String caps = ri.getCapabilities();
+                    return caps != null ? caps : "";
+                }
+            }
+        } catch (Exception e) { /* ignore */ }
+        return "";
     }
 
     private String cleanReason(String reason, String routerVersion) {

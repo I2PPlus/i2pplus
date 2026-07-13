@@ -281,12 +281,13 @@ public class BanLogger {
         _writer.println("############################################################");
         _writer.println();
         _writer.println("# Ban event log");
-        _writer.println("# Format: TIMESTAMP | HASH | IP:PORT | REASON | DURATION");
+        _writer.println("# Format: TIMESTAMP | HASH | IP:PORT | REASON | DURATION | CAPS");
         _writer.println("# TIMESTAMP: ISO 8601 UTC");
         _writer.println("# HASH: Router hash (base64) or UNKNOWN");
         _writer.println("# IP:PORT: IP address and port or UNKNOWN");
         _writer.println("# REASON: Reason for ban");
         _writer.println("# DURATION: Duration (e.g., 8h, 24h, FOREVER)");
+        _writer.println("# CAPS: Router capabilities (optional, may be empty)");
         _writer.println();
     }
 
@@ -315,7 +316,8 @@ public class BanLogger {
     public void logBan(Hash hash, String ip, String reason, long durationMs) {
         String hashStr = hash != null ? hash.toBase64() : "UNKNOWN";
         String durationStr = formatDuration(durationMs);
-        writeLog(hashStr, ip, reason, durationStr);
+        String caps = hash != null ? getCaps(hash) : "";
+        writeLog(hashStr, ip, reason, durationStr, caps);
     }
 
 /**
@@ -339,7 +341,7 @@ public class BanLogger {
      */
     public void logBanIPOnly(String ip, String reason, long durationMs) {
         String durationStr = formatDuration(durationMs);
-        writeLog("UNKNOWN", ip, reason, durationStr);
+        writeLog("UNKNOWN", ip, reason, durationStr, "");
     }
 
     /**
@@ -351,7 +353,8 @@ public class BanLogger {
      */
     public void logBanForever(Hash hash, String ip, String reason) {
         String hashStr = hash != null ? hash.toBase64() : "UNKNOWN";
-        writeLog(hashStr, ip, reason, "FOREVER");
+        String caps = hash != null ? getCaps(hash) : "";
+        writeLog(hashStr, ip, reason, "FOREVER", caps);
     }
 
     /**
@@ -384,6 +387,22 @@ public class BanLogger {
     public void logBanForever(Hash hash, RouterContext context, String reason) {
         String ip = getIPFromContext(hash, context);
         logBanForever(hash, ip, reason);
+    }
+
+    /**
+     * Get capabilities string from RouterInfo for the given hash.
+     * @return caps string or empty string
+     */
+    private String getCaps(Hash hash) {
+        if (hash == null || _context == null) return "";
+        try {
+            RouterInfo ri = _context.netDb().lookupRouterInfoLocally(hash);
+            if (ri != null) {
+                String caps = ri.getCapabilities();
+                return caps != null ? caps : "";
+            }
+        } catch (Exception e) { /* ignore */ }
+        return "";
     }
 
     /**
@@ -452,7 +471,7 @@ public class BanLogger {
             // Log the predictive ban
             String prefix = _patternDetector.getHashPrefix(hash);
             String reason = "Predictive ban: Algorithmic identity pattern match (" + prefix + ")";
-            writeLog(hash.toBase64(), "UNKNOWN", reason, "24h");
+            writeLog(hash.toBase64(), "UNKNOWN", reason, "24h", "");
         }
         return banned;
     }
@@ -462,7 +481,7 @@ public class BanLogger {
      * Skips logging if this IP already has an active ban in sessionbans.txt,
      * or if this hash is already banlisted.
      */
-    private void writeLog(String hashStr, String ip, String reason, String durationStr) {
+    private void writeLog(String hashStr, String ip, String reason, String durationStr, String caps) {
         // Strip HTML formatting from reason for plain text log file
         if (reason != null) {
             reason = reason.replace("<b>➜</b>", "").replace("  ", " ").trim();
@@ -495,8 +514,9 @@ public class BanLogger {
         }
 
         String timestamp = _dateFormat.format(new Date());
-        String entry = String.format("%s | %s | %s | %s | %s",
-                                     timestamp, hashStr, ip, reason, durationStr);
+        String capsStr = (caps != null && !caps.isEmpty()) ? caps : "";
+        String entry = String.format("%s | %s | %s | %s | %s | %s",
+                                     timestamp, hashStr, ip, reason, durationStr, capsStr);
 
         synchronized (_writeLock) {
             if (_writer != null) {
