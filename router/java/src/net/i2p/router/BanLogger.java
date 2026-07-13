@@ -320,6 +320,31 @@ public class BanLogger {
         writeLog(hashStr, ip, reason, durationStr, caps);
     }
 
+    /**
+     * Log a ban with RouterInfo for direct caps extraction.
+     * Prefer this when the RouterInfo is available at the callsite,
+     * to avoid a NetDB lookup that may fail if the RI was never stored.
+     *
+     * @param hash Router hash (may be null)
+     * @param ip IP address with port (format: "1.2.3.4:5678" or "ipv6:port")
+     * @param reason Reason for the ban
+     * @param durationMs Ban duration in milliseconds, or 0 for permanent
+     * @param ri RouterInfo to extract capabilities from (may be null)
+     * @since 0.9.70+
+     */
+    public void logBan(Hash hash, String ip, String reason, long durationMs, RouterInfo ri) {
+        String hashStr = hash != null ? hash.toBase64() : "UNKNOWN";
+        String durationStr = formatDuration(durationMs);
+        String caps = "";
+        if (ri != null) {
+            caps = ri.getCapabilities();
+            if (caps == null) caps = "";
+        } else if (hash != null) {
+            caps = getCaps(hash);
+        }
+        writeLog(hashStr, ip, reason, durationStr, caps);
+    }
+
 /**
      * Log a ban by IP only (ignores hash).
      *
@@ -354,6 +379,27 @@ public class BanLogger {
     public void logBanForever(Hash hash, String ip, String reason) {
         String hashStr = hash != null ? hash.toBase64() : "UNKNOWN";
         String caps = hash != null ? getCaps(hash) : "";
+        writeLog(hashStr, ip, reason, "FOREVER", caps);
+    }
+
+    /**
+     * Log a permanent ban with RouterInfo for direct caps extraction.
+     *
+     * @param hash Router hash (may be null)
+     * @param ip IP address with port (format: "1.2.3.4:5678" or "ipv6:port")
+     * @param reason Reason for the ban
+     * @param ri RouterInfo to extract capabilities from (may be null)
+     * @since 0.9.70+
+     */
+    public void logBanForever(Hash hash, String ip, String reason, RouterInfo ri) {
+        String hashStr = hash != null ? hash.toBase64() : "UNKNOWN";
+        String caps = "";
+        if (ri != null) {
+            caps = ri.getCapabilities();
+            if (caps == null) caps = "";
+        } else if (hash != null) {
+            caps = getCaps(hash);
+        }
         writeLog(hashStr, ip, reason, "FOREVER", caps);
     }
 

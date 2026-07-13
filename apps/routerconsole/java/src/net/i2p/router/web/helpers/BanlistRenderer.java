@@ -301,8 +301,10 @@ class BanlistRenderer {
                  !entry.cause.toLowerCase().contains("hashpatterndetector"))) {
                 continue;
             }
+            String caps = getRouterCaps(key);
             buf.append("<tr");
-            if (entry.cause.toLowerCase().contains("floodfill")) {
+            if (entry.cause.toLowerCase().contains("floodfill") ||
+                (caps != null && caps.indexOf('f') >= 0)) {
                 buf.append(" class=\"banFF\"");
             }
             buf.append(">");
@@ -395,9 +397,8 @@ class BanlistRenderer {
             }
 
             String countryName =  _context.commSystem().getCountryName(countryCode);
-            // Get router version and caps from NetDB or reason, then clean reason
+            // Get router version from NetDB or reason, then clean reason
             String routerVersion = getRouterVersion(key, reason);
-            String caps = getRouterCaps(key);
             String cleanedReason = cleanReason(reason, routerVersion);
             buf.append("<td class=country data-sort=").append(countryCode).append(">")
                .append("<img width=28 height=21 title=\"").append(countryName)

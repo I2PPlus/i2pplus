@@ -411,7 +411,7 @@ public class PersistentDataStore extends TransientDataStore {
                 if (_log.shouldWarn()) {
                     _log.warn("Banning and disconnecting from [" + key.toBase64().substring(0,6) + "] for 72h -> Router is spoofing our IP address!");
                 }
-                _banLogger.logBan(key, f.ip, "Spoofed IP address (ours)", 72L*60*60*1000);
+                _banLogger.logBan(key, f.ip, "Spoofed IP address (ours)", 72L*60*60*1000, ri);
                 _context.banlist().banlistRouter(key, "Spoofed IP address (ours)", null, null, _context.clock().now() + 72L*60*60*1000);
                 _context.simpleTimer2().addEvent(new Disconnector(key, "Spoofed IP address"), 3L*1000);
                 shouldDelete = true;
@@ -425,7 +425,7 @@ public class PersistentDataStore extends TransientDataStore {
             if (_log.shouldWarn()) {
                 _log.warn("Banning for 24h and disconnecting from Router [" + key.toBase64().substring(0,6) + "]" +
                           " -> Invalid version " + f.version + " / " + f.bw + (f.unreachable ? "U" : ""));
-                _banLogger.logBan(key, f.ip != null ? f.ip : "UNKNOWN", "Invalid Router version (" + f.version + " / " + f.bw + ")", 24L*60*60*1000);
+                _banLogger.logBan(key, f.ip != null ? f.ip : "UNKNOWN", "Invalid Router version (" + f.version + " / " + f.bw + ")", 24L*60*60*1000, ri);
                 String flag = f.unreachable ? "U" : f.reachable ? "R" : "";
                 _context.banlist().banlistRouter(key, "Invalid Router version (" + f.version + " / " + f.bw +
                                                  flag + ")", null, null, _context.clock().now() + 24L*60*60*1000);
@@ -439,7 +439,7 @@ public class PersistentDataStore extends TransientDataStore {
             if (_context.banlist().isLuBanEnabled()) {
                 if (_log.shouldInfo()) {
                     _log.info("Banning [" + key.toBase64().substring(0,6) + "] for 1h -> LU Router");
-                    _banLogger.logBan(key, f.ip != null ? f.ip : "UNKNOWN", "LU Router", 60L*60*1000);
+                    _banLogger.logBan(key, f.ip != null ? f.ip : "UNKNOWN", "LU Router", 60L*60*1000, ri);
                     _context.banlist().banlistRouter(key, "LU Router", null, null, _context.clock().now() + 60L*60*1000);
                 }
             }
