@@ -56,6 +56,8 @@ public abstract class SystemVersion {
     private static final boolean _isWindowsService = _isWin && _hasWrapper && Boolean.parseBoolean(System.getProperty("wrapper.service"));
     private static final boolean _isService;
     private static final boolean _isSlow;
+    /** Cached CPU core count, computed lazily on first getCores() call. */
+    private static volatile int _cores;
 
     private static final boolean _oneDotSix;
     private static final boolean _oneDotSeven;
@@ -589,13 +591,17 @@ public abstract class SystemVersion {
      *  @since 0.9.34
      */
     public static int getCores() {
+        int rv = _cores;
+        if (rv > 0) { return rv; }
         int fallback = Runtime.getRuntime().availableProcessors();
         if (_isWin || _isMac) {
+            _cores = fallback;
             return fallback;
         }
         try {
             File f = new File("/sys/devices/system/cpu/present");
             if (!f.exists()) {
+                _cores = fallback;
                 return fallback;
             }
             String content = new String(Files.readAllBytes(f.toPath()), StandardCharsets.UTF_8).trim();
@@ -611,8 +617,11 @@ public abstract class SystemVersion {
                     count++;
                 }
             }
-            return Math.max(count, 1);
+            rv = Math.max(count, 1);
+            _cores = rv;
+            return rv;
         } catch (Exception e) {
+            _cores = fallback;
             return fallback;
         }
     }
