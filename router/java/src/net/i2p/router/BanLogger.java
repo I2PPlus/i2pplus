@@ -45,7 +45,6 @@ public class BanLogger {
     private AtomicInteger _banCount;
     private long _startTime;
     private final Object _writeLock = new Object();
-    private static HashPatternDetector _patternDetector;
     private static BanLogger _self;
 
     private static final String LOG_DIR = "sessionbans";
@@ -501,28 +500,6 @@ public class BanLogger {
     }
 
     /**
-     * Check if a router hash matches known attack patterns and should be predictively banned.
-     * Call this BEFORE processing messages from a peer to proactively ban algorithmic identities.
-     *
-     * @param hash Router hash to check
-     * @param context RouterContext for banlist operations
-     * @return true if predictively banned, false otherwise
-     */
-    public boolean checkPatternAndPredict(Hash hash, RouterContext context) {
-        if (hash == null || _patternDetector == null) {
-            return false;
-        }
-        boolean banned = _patternDetector.analyzeAndPredict(hash, context);
-        if (banned) {
-            // Log the predictive ban
-            String prefix = _patternDetector.getHashPrefix(hash);
-            String reason = "Predictive ban: Algorithmic identity pattern match (" + prefix + ")";
-            writeLog(hash.toBase64(), "UNKNOWN", reason, "24h", "");
-        }
-        return banned;
-    }
-
-    /**
      * Internal method to write the log entry.
      * Skips logging if this IP already has an active ban in sessionbans.txt,
      * or if this hash is already banlisted.
@@ -569,17 +546,6 @@ public class BanLogger {
                 _writer.println(entry);
                 _writer.flush();
                 _banCount.incrementAndGet();
-            }
-        }
-
-        // Record pattern for predictive analysis
-        if (_patternDetector != null && !"UNKNOWN".equals(hashStr)) {
-            try {
-                Hash hash = new Hash();
-                hash.fromBase64(hashStr);
-                _patternDetector.recordBan(hash, reason);
-            } catch (Exception e) {
-                // Ignore pattern recording errors
             }
         }
 

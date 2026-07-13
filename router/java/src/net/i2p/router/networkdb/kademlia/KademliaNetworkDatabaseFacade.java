@@ -270,7 +270,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _elj = new ExpireLeasesJob(_context, this);
         _banLogger = new BanLogger();
         _banLogger.initialize(context);
-        // HashPatternDetector scanner is controlled by router.hashScan.frequency property (default: 0 = disabled)
         if (_log.shouldLog(Log.DEBUG)) {_log.debug("Created KademliaNetworkDatabaseFacade for DbId: " + _dbid);}
 
         /* stats */

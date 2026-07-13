@@ -207,7 +207,6 @@ public class RequestThrottler {
         _sustainedHighLoadMs = ctx.getProperty("i2p.tunnel.requestThrottle.sustainedHighLoadMs", 30_000L);
         _sustainedModerateLoadMs = ctx.getProperty("i2p.tunnel.requestThrottle.sustainedModerateLoadMs", 60_000L);
         ctx.statManager().createRequiredRateStat("tunnel.throttleRequestReject", "Request throttle reject count", "Tunnels [Participating]", RATES);
-        // HashPatternDetector scanner is controlled by router.hashScan.frequency property (default: 0 = disabled)
         new Cleaner().schedule(CLEAN_TIME);
     }
 
