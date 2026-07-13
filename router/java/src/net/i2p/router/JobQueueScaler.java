@@ -498,6 +498,11 @@ class JobQueueScaler implements Runnable {
         if (shouldScaleUp) {
             // Calculate how many runners to add based on lag severity
             int scaleUpStep = Math.max(DEFAULT_SCALE_UP_STEP, 2); // Minimum 2 runners
+            if (maxLag > 1000) {
+                scaleUpStep = Math.max(scaleUpStep, 4); // Over 1s: +4 per cycle
+            } else if (maxLag > 500) {
+                scaleUpStep = Math.max(scaleUpStep, 3); // Over 500ms: +3 per cycle
+            }
             int lagThreshold = getScaleUpLagThreshold();
             if (maxLag > lagThreshold * 5) {
                 // High lag: add more runners at once (up to 6)
