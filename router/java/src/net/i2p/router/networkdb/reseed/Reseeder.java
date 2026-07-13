@@ -666,7 +666,7 @@ public class Reseeder {
 
             try {
                 final long timeLimit = System.currentTimeMillis() + MAX_TIME_PER_HOST;
-                _checker.setStatus(_t("Contacting reseed host") + ":<br>" + trimmed);
+                _checker.setStatus(_t("Contacting reseed host") + ":<br>" + DataHelper.escapeHTML(trimmed));
                 _log.info("Reseeding from " + display);
 
                 byte[] contentRaw = readURL(seedURL);
@@ -817,7 +817,7 @@ public class Reseeder {
             String trimmed = s.replace("http://","").replace("https://","").replace("netDb/","").replace("/i2pseeds.su3","")
                               .replace("from ","").replace("netid=2", "").replaceAll(PAREN_PATTERN.pattern(), "").replace("?", "");
             try {
-                _checker.setStatus(_t("Contacting reseed host") + ":<br>" + trimmed);
+                _checker.setStatus(_t("Contacting reseed host") + ":<br>" + DataHelper.escapeHTML(trimmed));
                 _log.info("Reseeding " + s);
                 // don't use context time, as we may be step-changing it
                 // from the server header
