@@ -166,6 +166,19 @@ public class Banlist {
     private static final long BANLIST_CLEANER_START_DELAY = BANLIST_DURATION_PARTIAL;
 
     /**
+     *  Ban count baseline for proportional duration reduction.
+     *  At this count or below, no reduction is applied.
+     *  Above this, remaining durations are scaled by baseline / count,
+     *  minimum scale floor MIN_BAN_SCALE.
+     */
+    private static final int BAN_COUNT_BASELINE = 3000;
+    private static final double MIN_BAN_SCALE = 0.25;
+    /** Eligible ban durations for reduction: > 4 hours */
+    private static final long BAN_REDUCTION_MIN = 4 * 60 * 60 * 1000L;
+    /** Eligible ban durations for reduction: < 1 week */
+    private static final long BAN_REDUCTION_MAX = 7 * 24 * 60 * 60 * 1000L;
+
+    /**
      *  A ban that expires after this will return true in isBanlistedForever().
      *  In the transports, "forever" is treated as a hard ban, and both
      *  inbound and outbound connections will be rejected.
@@ -421,7 +434,38 @@ public class Banlist {
                 }
             } catch (IllegalStateException ise) { /* ignored */ } // next time...
 
+            // Proportionally reduce durations of longer bans when count is high
+            reduceDurations(now);
+
             requeue(5L*60*1000);
+        }
+    }
+
+    /**
+     *  When the ban count exceeds BAN_COUNT_BASELINE, proportionally reduce
+     *  remaining durations of eligible entries (between BAN_REDUCTION_MIN
+     *  and BAN_REDUCTION_MAX) to keep the list manageable under memory pressure.
+     *  Scaling: remaining *= max(MIN_BAN_SCALE, (double) BAN_COUNT_BASELINE / count)
+     */
+    private void reduceDurations(long now) {
+        int count = _entries.size();
+        if (count <= BAN_COUNT_BASELINE)
+            return;
+        double scale = (double) BAN_COUNT_BASELINE / count;
+        if (scale < MIN_BAN_SCALE)
+            scale = MIN_BAN_SCALE;
+        long minRemaining = BAN_REDUCTION_MIN / 2;
+        for (Entry e : _entries.values()) {
+            long remaining = e.expireOn - now;
+            if (remaining >= BAN_REDUCTION_MIN && remaining < BAN_REDUCTION_MAX) {
+                long newRemaining = (long) (remaining * scale);
+                if (newRemaining < minRemaining)
+                    newRemaining = minRemaining;
+                e.expireOn = now + newRemaining;
+            }
+        }
+        if (_log.shouldDebug()) {
+            _log.debug("Reduced ban durations: count=" + count + " scale=" + scale);
         }
     }
 
