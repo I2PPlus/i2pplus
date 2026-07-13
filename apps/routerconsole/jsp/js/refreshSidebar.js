@@ -15,16 +15,13 @@ import { miniGraph } from "/js/miniGraph.js"; // NOSONAR S1128
 
 let alwaysUpdate = new Set();
 let autoRefreshInterval = null;
-let autoRefreshScheduled = false;
 let connectionStatusTimeout;
 let debounceTimeoutId = null;
 let isDown = false;
-let isPaused = false;
 let isRefreshing = false;
 let lastRefreshTime = 0;
 let noResponse = 0;
 let refreshActive = true;
-let refreshTimeout = null;
 let responseDoc = null;
 let xhrContainer = document.getElementById("xhr");
 
@@ -33,7 +30,7 @@ const sb = document.querySelector("#sidebar");
 const uri = location.pathname;
 const worker = new SharedWorker("/js/fetchWorker.js");
 const elements = { badges: [], volatileElements: [] };
-const alwaysUpdateIds = ["lsCount", "sb_updateform", "sb_shutdownStatus"];
+const alwaysUpdateIds = ["lsCount"];
 
 /**
  * Caches references to sidebar badge and volatile elements for efficient updates.
@@ -140,6 +137,7 @@ export async function refreshSidebar(force = false) {
     worker.port.postMessage({ url: `/xhr1.jsp?requestURI=${uri}`, force });
   } catch (e) {
     noResponse = Math.min(noResponse + 1, 10);
+    console.warn("refreshSidebar: postMessage failed", e);
   } finally {
     checkConnectionStatus();
     isRefreshing = false;
@@ -170,6 +168,7 @@ function applySidebarUpdates() {
   }
 
   const updates = [];
+  let needsFullRefresh = false;
   elements.volatileElements.forEach((elem, i) => {
     const respElem = responseElements.volatileElements[i];
     if (!respElem) {
@@ -177,16 +176,23 @@ function applySidebarUpdates() {
       return;
     }
     if (elem.classList.contains("statusDown") && elem.outerHTML !== respElem.outerHTML) {
-      updates.push(() => {
-        elem.outerHTML = respElem.outerHTML;
-        refreshAll();
-      });
+      needsFullRefresh = true;
     } else if (elem.innerHTML !== respElem.innerHTML) {
       updates.push(() => {
         elem.innerHTML = respElem.innerHTML;
       });
     }
   });
+
+  if (needsFullRefresh) {
+    requestAnimationFrame(() => {
+      refreshAll();
+      syncGraphDataAttributes();
+    });
+    isRefreshing = false;
+    noResponse = 0;
+    return;
+  }
 
   elements.badges.forEach((elem, i) => {
     const respElem = responseElements.badges[i];
@@ -282,11 +288,10 @@ function refreshAll() {
 
 /**
  * Checks if the browser reports an online connection.
- * @async
  * @function isOnline
- * @returns {Promise<boolean>} True if online
+ * @returns {boolean} True if online
  */
-async function isOnline() {
+function isOnline() {
   return navigator.onLine;
 }
 
@@ -300,7 +305,7 @@ async function isOnline() {
 async function updateConnectionStatus() {
   clearTimeout(connectionStatusTimeout);
   connectionStatusTimeout = setTimeout(async() => {
-    const online = await isOnline();
+    const online = isOnline();
     const currentlyDown = noResponse > 3 || !online;
     if (currentlyDown && !isDown) {
       isDown = true;
@@ -354,7 +359,8 @@ function isSidebarVisible() {
   if (!target) return;
 
   observer = new MutationObserver(() => {
-    if (document.hidden || isRefreshing) {
+    if (document.hidden) return;
+    if (isRefreshing) {
       observer.disconnect();
       return;
     }
