@@ -387,7 +387,7 @@ public class ProfileOrganizer {
         finally {releaseReadLock();}
         if (matches.size() < howMany) {
             if (_log.shouldDebug()) {
-                _log.debug("Need " + howMany + " Fast peers for tunnel build -> " + matches.size() +
+                _log.debug("Need " + howMany + " Fast peers in tier -> " + matches.size() +
                            " found, selecting remainder from High Capacity tier...");
             }
             selectHighCapacityPeers(howMany, exclude, matches, mask, ipSet);
@@ -410,7 +410,7 @@ public class ProfileOrganizer {
         } finally {releaseReadLock();}
         if (matches.size() < howMany) {
             if (_log.shouldDebug())
-                _log.debug("Need " + howMany + " Fast peers for tunnel build -> " + matches.size() +
+                _log.debug("Need " + howMany + " Fast peers in tier -> " + matches.size() +
                            " found, selecting remainder from High Capacity tier...");
             selectHighCapacityPeers(howMany, exclude, matches, mask, ipSet);
         }
@@ -459,7 +459,7 @@ public class ProfileOrganizer {
         if (matches.size() < howMany) {
             if (_log.shouldDebug()) {
                 _log.debug("Need " + (howMany > 1 ? "High Capacity peers" : "High Capacity peer") +
-                           " for tunnel build -> " + matches.size() + " found, selecting from non-failing peers...");
+                           " in tier -> " + matches.size() + " found, selecting from non-failing peers...");
             }
             selectNotFailingPeers(howMany, exclude, matches, mask, ipSet);
         }
@@ -749,7 +749,10 @@ public class ProfileOrganizer {
             double newCapacityThreshold = calculateCapacityThresholdFromSet(newStrictCapacityOrder, numNotFailing);
             double newSpeedThreshold = calculateSpeedThreshold(newStrictCapacityOrder, now, newCapacityThreshold);
 
-            // Step 3: Clear and rebuild all tier maps
+            // Step 3: Preserve existing maps as fallback, then clear and rebuild
+            Map<Hash, PeerProfile> oldFastPeers = new HashMap<>(_fastPeers);
+            Map<Hash, PeerProfile> oldHighCapPeers = new HashMap<>(_highCapacityPeers);
+            Map<Hash, PeerProfile> oldWellIntegratedPeers = new HashMap<>(_wellIntegratedPeers);
             _fastPeers.clear();
             _highCapacityPeers.clear();
             _wellIntegratedPeers.clear();
@@ -875,7 +878,49 @@ public class ProfileOrganizer {
                 }
             }
 
-            // Step 6b: Count quality peers (fast/high-cap with good acceptance + recent activity)
+            // Step 6c: Fallback to preserved pre-reorganize peers if rebuild shrunk tiers too much.
+            // Prevents starvation when thresholds shift unfavorably — old entries that remain
+            // selectable (no recent failures, no ban, no stale RI) are re-added.
+            int oldFastSize = oldFastPeers.size();
+            if (_fastPeers.size() < oldFastSize / 2 && oldFastSize > 100) {
+                int restored = 0;
+                for (Map.Entry<Hash, PeerProfile> entry : oldFastPeers.entrySet()) {
+                    if (_fastPeers.size() >= oldFastSize) break;
+                    Hash peer = entry.getKey();
+                    if (_fastPeers.containsKey(peer)) continue;
+                    if (!isSelectable(peer)) continue;
+                    PeerProfile profile = entry.getValue();
+                    if (hasRecentTunnelFailures(profile)) continue;
+                    if (isLowTunnelAcceptance(profile)) continue;
+                    _fastPeers.put(peer, profile);
+                    restored++;
+                }
+                if (_log.shouldInfo()) {
+                    _log.info("Tier fallback: restored " + restored + " peers to fast tier (was " +
+                              (_fastPeers.size() - restored) + ", old " + oldFastSize + ")");
+                }
+            }
+            int oldHighCapSize = oldHighCapPeers.size();
+            if (_highCapacityPeers.size() < oldHighCapSize / 2 && oldHighCapSize > 100) {
+                int restored = 0;
+                for (Map.Entry<Hash, PeerProfile> entry : oldHighCapPeers.entrySet()) {
+                    if (_highCapacityPeers.size() >= oldHighCapSize) break;
+                    Hash peer = entry.getKey();
+                    if (_highCapacityPeers.containsKey(peer)) continue;
+                    if (!isSelectable(peer)) continue;
+                    PeerProfile profile = entry.getValue();
+                    if (hasRecentTunnelFailures(profile)) continue;
+                    if (isLowTunnelAcceptance(profile)) continue;
+                    _highCapacityPeers.put(peer, profile);
+                    restored++;
+                }
+                if (_log.shouldInfo()) {
+                    _log.info("Tier fallback: restored " + restored + " peers to high-cap tier (was " +
+                              (_highCapacityPeers.size() - restored) + ", old " + oldHighCapSize + ")");
+                }
+            }
+
+            // Step 6d: Count quality peers (fast/high-cap with good acceptance + recent activity)
             // Used by tuner to adjust tier limits based on viable tunnel candidates
             int qualityCount = 0;
             long recentCutoff = now - 24 * 60 * 60 * 1000L; // 24 hours
