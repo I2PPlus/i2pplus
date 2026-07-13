@@ -31,7 +31,7 @@
 <span class=tab><a href=/streams?direction=outbound><%=intl._t("Outbound")%></a></span>
 <% } %>
 </div>
-<div id=streamsContainer>
+<div id=streamsWrap>
 <% streamHelper.storeWriter(out);%>
 <jsp:getProperty name="streamHelper" property="streamSummary"/>
 </div>

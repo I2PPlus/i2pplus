@@ -511,49 +511,6 @@ public class TuningHelper extends HelperBase {
     }
 
     /**
-     * Ring chart dimensions — small enough for a 3×3 grid, large enough to read.
-     */
-    private static final int RING_SIZE = 90;
-    private static final int RING_STROKE = 8;
-    private static final int RING_RADIUS = (RING_SIZE - RING_STROKE) / 2;
-    private static final double RING_CIRCUM = 2 * Math.PI * RING_RADIUS;
-
-    /**
-     * Render a single SVG donut/ring chart.
-     *
-     * @param score   0.0–1.0 fill level
-     * @param label   subsystem name (center text)
-     * @param pct     percentage string for the center (e.g. "93%")
-     * @return inline SVG markup
-     */
-    private static String renderRingChart(double score, String label, String pct) {
-        boolean collecting = score < 0;
-        // clamp
-        if (score < 0) score = 0;
-        if (score > 1) score = 1;
-        double offset = RING_CIRCUM * (1.0 - score);
-
-        String cls = collecting ? "gray" : score >= 0.8 ? "green" : score >= 0.5 ? "yellow" : "red";
-
-        return "<svg class=ring viewBox=\"0 0 " + RING_SIZE + " " + RING_SIZE + "\">"
-            + "<circle class=\"ring-bg\" cx=\"" + (RING_SIZE / 2) + "\" cy=\"" + (RING_SIZE / 2)
-            + "\" r=\"" + RING_RADIUS + "\"/>"
-            + "<circle class=\"ring-arc " + cls + "\" cx=\"" + (RING_SIZE / 2)
-            + "\" cy=\"" + (RING_SIZE / 2) + "\" r=\"" + RING_RADIUS
-            + "\" stroke-dasharray=\"" + RING_CIRCUM + " " + RING_CIRCUM
-            + "\" stroke-dashoffset=\"" + offset
-            + "\" transform=\"rotate(-90 " + (RING_SIZE / 2) + " " + (RING_SIZE / 2)
-            + ")\"/>"
-            + "<text class=\"ring-pct " + cls + "\" x=\"" + (RING_SIZE / 2)
-            + "\" y=\"" + (RING_SIZE / 2 - 2) + "\">"
-            + esc(pct) + "</text>"
-            + "<text class=ring-label x=\"" + (RING_SIZE / 2)
-            + "\" y=\"" + (RING_SIZE / 2 + 12) + "\">"
-            + esc(label) + "</text>"
-            + "</svg>";
-    }
-
-    /**
      * Render the subsystem ring chart dashboard.
      * Returns an HTML div with a grid of SVG ring charts, one per subsystem.
      * NaN-scored subsystems show a gray "collecting..." ring.
@@ -572,22 +529,13 @@ public class TuningHelper extends HelperBase {
         buf.append("<div id=tuningstats>");
 
         for (Tuner.SubsystemScore ss : scores) {
-            buf.append("<div class=ring-cell>");
             if (Double.isNaN(ss.score)) {
-                buf.append(renderRingChart(-1, ss.label, "\u2014"));
+                buf.append(RingRenderer.renderRingCell(-1, ss.label, "\u2014", ss.details));
             } else {
                 int pct = (int) (ss.score * 100);
                 String pctStr = pct + "%";
-                buf.append(renderRingChart(ss.score, ss.label, pctStr));
+                buf.append(RingRenderer.renderRingCell(ss.score, ss.label, pctStr, ss.details));
             }
-            // CSS tooltip
-            buf.append("<div class=ring-tip>");
-            for (int i = 0; i < ss.details.length; i++) {
-                if (i > 0) buf.append("<br>");
-                buf.append(esc(ss.details[i]));
-            }
-            buf.append("</div>");
-            buf.append("</div>");
         }
 
         buf.append("</div>");

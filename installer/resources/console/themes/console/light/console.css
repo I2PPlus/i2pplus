@@ -1873,16 +1873,16 @@ a[href^="configpeer?peer"]:hover::after{background:var(--edit_hover) no-repeat c
 .confignav+#statsWrap{margin-top:12px}
 
 /* streams */
-#streamsContainer{margin: 16px auto 8px; width: calc(100% - 4px);box-shadow:var(--border_table)}
-#streams th:nth-child(n+2),#streamsContainer td:nth-child(n+2){text-align:center}
-#streams th{font-size:90%}
-#streams th:first-child{text-align:left}
-#streams td{padding:6px 8px}
-#streams td:nth-child(2),#streams td:nth-child(3){width:1%}
-#streamsContainer img {display:none}
-#streams+.infohelp{margin:0}
-#streams .inbound,#streams .outbound{margin:-1px 0 0;display:inline-block;vertical-align:middle}
-#streams .client,#streams .server{display:inline-block;width:18px;height:18px;vertical-align:middle;font-size:0;background:var(--client)}
+.streamsContainer{margin: 16px auto 8px; width: calc(100% - 4px);box-shadow:var(--border_table)}
+.streams th:nth-child(n+2),.streamsContainer td:nth-child(n+2){text-align:center}
+.streams th{font-size:90%}
+.streams th:first-child{text-align:left}
+.streams td{padding:6px 8px}
+.streams td:nth-child(2),.streams td:nth-child(3){width:1%}
+.streamsContainer img {display:none}
+.streams+.infohelp{margin:0}
+.streams .inbound,.streams .outbound{margin:-1px 0 0;display:inline-block;vertical-align:middle}
+.streams .client,.streams .server{display:inline-block;width:18px;height:18px;vertical-align:middle;font-size:0;background:var(--client)}
 
 /* debug */
 .debug_container,#debug td{line-height:1.4}

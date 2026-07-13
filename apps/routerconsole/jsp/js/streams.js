@@ -1,13 +1,13 @@
 /**
  * @module streams
- * @description Initializes the streaming connections table with sortable columns
+ * @description Initializes streaming connection tables with sortable columns
  * and periodic auto-refresh. Respects the current direction query parameter
  * (?direction=inbound|outbound) so filtered views stay in sync.
  *
- * Initially refreshes the full #streamsContainer so the "not available"
- * placeholder is replaced by the live table once the router finishes starting.
- * After the table appears, switches to refreshing just #streams tbody to
- * preserve the Tablesort instance.
+ * Initially refreshes #streamsWrap so the "not available" placeholder is
+ * replaced by the live table(s) once the router finishes starting. After
+ * tables appear, switches to refreshing just table.streams tbody to preserve
+ * the Tablesort instances.
  * @author dr|z3d
  * @license AGPL3 or later
  */
@@ -15,20 +15,22 @@
 import { refreshElements } from '/js/refreshElements.js';
 
 let tablesortInitialized = false;
-let currentRefreshTarget = "#streamsContainer";
+let currentRefreshTarget = "#streamsWrap";
 const baseUrl = "/streams" + (window.location.search || "");
 
 /**
- * Attach Tablesort to the streams table if present and not yet initialized.
- * Returns true if the table exists.
+ * Attach Tablesort to each .streams table if not yet initialized.
+ * Returns true if at least one table was found.
  */
 function initTablesort() {
   if (tablesortInitialized) return true;
-  const table = document.querySelector("table#streams");
-  if (table) {
-    new Tablesort(table);
-    table.addEventListener("beforeSort", () => progressx?.show?.(theme));
-    table.addEventListener("afterSort", () => progressx?.hide?.());
+  const tables = document.querySelectorAll("table.streams");
+  if (tables.length > 0) {
+    tables.forEach(table => {
+      new Tablesort(table);
+      table.addEventListener("beforeSort", () => progressx?.show?.(theme));
+      table.addEventListener("afterSort", () => progressx?.hide?.());
+    });
     tablesortInitialized = true;
     return true;
   }
@@ -36,19 +38,19 @@ function initTablesort() {
 }
 
 /**
- * Switch refresh target from the full container to just the tbody,
- * so morphdom diffs rows without destroying the Tablesort instance.
+ * Switch refresh target to the table tbodies so morphdom diffs rows
+ * without destroying Tablesort instances.
  */
 function switchToBodyRefresh() {
-  if (currentRefreshTarget === "#streams tbody") return;
-  currentRefreshTarget = "#streams tbody";
+  if (currentRefreshTarget === "table.streams tbody") return;
+  currentRefreshTarget = "table.streams tbody";
   refreshElements(currentRefreshTarget, baseUrl, 10000);
 }
 
 /**
- * DOMContentLoaded handler — starts by refreshing the full container
- * (handles the transition from "not available" to the live table),
- * then switches to tbody-only refresh once the table is present.
+ * DOMContentLoaded handler — starts by refreshing the full wrapper
+ * (handles the transition from "not available" to live table(s)),
+ * then switches to tbody-only refresh once tables are present.
  */
 document.addEventListener("DOMContentLoaded", function() {
   initTablesort();
