@@ -611,7 +611,7 @@ public class PluginStarter implements Runnable {
             }
         */
             if (s != null) {
-                Collection<String> wars = pluginWars.get(appName);
+                Collection<String> wars = pluginWars.remove(appName);
                 if (wars != null) {
                     for (String warName : wars) {
                         if (log.shouldInfo())
@@ -645,12 +645,15 @@ public class PluginStarter implements Runnable {
             pending.clear();
         }
 
-        ClassLoader cl = _clCache.remove(appName);
-        if (cl != null) {
-            // Null out the ClassLoader reference to help with GC
-            // This is especially important in plugin reload scenarios
-            if (log.shouldDebug())
-                log.debug("Removed ClassLoader for plugin: " + appName);
+        // _clCache keys use "pluginName+className+args" format, not just appName,
+        // so iterate to find and remove all entries for this plugin
+        for (java.util.Iterator<Map.Entry<String, ClassLoader>> iter = _clCache.entrySet().iterator(); iter.hasNext(); ) {
+            Map.Entry<String, ClassLoader> entry = iter.next();
+            if (entry.getKey().startsWith(appName)) {
+                if (log.shouldDebug())
+                    log.debug("Removed ClassLoader for " + entry.getKey());
+                iter.remove();
+            }
         }
 
         return true;

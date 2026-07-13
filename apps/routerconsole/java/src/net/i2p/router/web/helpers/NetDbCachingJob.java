@@ -110,43 +110,41 @@ public class NetDbCachingJob extends JobImpl {
         schedule(ctx);
     }
 
-    /**
-     * Schedule this job to run periodically.
-     * Ensures only one instance is ever scheduled.
-     */
-    public static void schedule(RouterContext ctx) {
-        if (SCHEDULED.get()) return;
+        /**
+         * Schedule this job to run periodically.
+         * Ensures only one instance is ever scheduled.
+         */
+        public static void schedule(RouterContext ctx) {
+            if (SCHEDULED.get()) return;
 
-        if (SCHEDULED.compareAndSet(false, true)) {
-            SimpleTimer2 timer = ctx.simpleTimer2();
-            new NetDbCachingTimer(ctx, timer, SCHEDULE_DELAY);
-        }
-    }
-
-    /**
-     * TimedEvent-based driver that triggers the NetDbCachingJob.
-     */
-    private static class NetDbCachingTimer extends TimedEvent {
-        private final RouterContext _ctx;
-        private final SimpleTimer2 _timer;
-
-        NetDbCachingTimer(RouterContext ctx, SimpleTimer2 timer, long delay) {
-            super(timer, delay);
-            _ctx = ctx;
-            _timer = timer;
+            if (SCHEDULED.compareAndSet(false, true)) {
+                SimpleTimer2 timer = ctx.simpleTimer2();
+                new NetDbCachingTimer(ctx, timer, SCHEDULE_DELAY);
+            }
         }
 
-        @Override
-        public void timeReached() {
-            boolean reverseDnsEnabled = _ctx.getBooleanProperty("routerconsole.enableReverseLookups");
-            boolean introducerEnabled = _ctx.getBooleanProperty("routerconsole.enableIntroducerPrecaching");
+        /**
+         * TimedEvent-based driver that triggers the NetDbCachingJob.
+         * Does NOT schedule the next run — re-scheduling is handled by
+         * runJob() calling schedule() at the end of each execution.
+         */
+        private static class NetDbCachingTimer extends TimedEvent {
+            private final RouterContext _ctx;
 
-            NetDbCachingJob job = new NetDbCachingJob(_ctx, reverseDnsEnabled, introducerEnabled);
-            _ctx.jobQueue().addJob(job);
+            NetDbCachingTimer(RouterContext ctx, SimpleTimer2 timer, long delay) {
+                super(timer, delay);
+                _ctx = ctx;
+            }
 
-            // Schedule the next run using the same timer
-            new NetDbCachingTimer(_ctx, _timer, INTERVAL);
-            SCHEDULED.set(false);
+            @Override
+            public void timeReached() {
+                boolean reverseDnsEnabled = _ctx.getBooleanProperty("routerconsole.enableReverseLookups");
+                boolean introducerEnabled = _ctx.getBooleanProperty("routerconsole.enableIntroducerPrecaching");
+
+                NetDbCachingJob job = new NetDbCachingJob(_ctx, reverseDnsEnabled, introducerEnabled);
+                _ctx.jobQueue().addJob(job);
+
+                SCHEDULED.set(false);
+            }
         }
-    }
 }

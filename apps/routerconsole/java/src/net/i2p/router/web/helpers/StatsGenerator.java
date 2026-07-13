@@ -204,11 +204,11 @@ public class StatsGenerator {
         buf.append("<b>").append(DataHelper.formatDuration2(period)).append(" ").append(name).append(":</b> ");
     }
 
-    private final static DecimalFormat _fmt = new DecimalFormat("###,##0.0##");
-    private final static String num(double num) { synchronized (_fmt) { return _fmt.format(num); } }
+    private static final ThreadLocal<DecimalFormat> _fmt = ThreadLocal.withInitial(() -> new DecimalFormat("###,##0.0##"));
+    private static final String num(double num) { return _fmt.get().format(num); }
 
-    private final static DecimalFormat _pct = new DecimalFormat("#0.00%");
-    private final static String pct(double num) { synchronized (_pct) { return _pct.format(num); } }
+    private static final ThreadLocal<DecimalFormat> _pct = ThreadLocal.withInitial(() -> new DecimalFormat("#0.00%"));
+    private static final String pct(double num) { return _pct.get().format(num); }
 
     /**
      *  Translated sort

@@ -59,10 +59,11 @@ public class HelpSectionHelper extends HelperBase {
      *  @param graphical false for text-mode browsers
      */
     public void renderNavBar(String requestURI, boolean graphical) throws IOException {
+        if (_context == null) { return; }
         StringBuilder buf = new StringBuilder(1024);
-        List<Tab> tabs = new ArrayList<>(pages.length);
-        boolean hidePlugins = !PluginStarter.pluginsEnabled(_context);
-        for (int i = 0; i < pages.length; i++) {tabs.add(new Tab(pages[i], _t(titles[i])));}
+        int numTabs = Math.min(pages.length, titles.length);
+        List<Tab> tabs = new ArrayList<>(numTabs);
+        for (int i = 0; i < numTabs; i++) {tabs.add(new Tab(pages[i], _t(titles[i])));}
         Collections.sort(tabs, new TabComparator());
         for (int i = 0; i < tabs.size(); i++) {
             String page = "help-" + tabs.get(i).page;
