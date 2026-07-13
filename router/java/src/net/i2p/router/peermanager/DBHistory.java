@@ -35,6 +35,7 @@ public class DBHistory {
     private volatile long _lastStoreFailed;
     private final AtomicLong _unpromptedDbStoreNew = new AtomicLong();
     private final AtomicLong _unpromptedDbStoreOld = new AtomicLong();
+    private volatile long _lastCoalesce = System.currentTimeMillis();
 
     public DBHistory(RouterContext context, String statGroup) {
         _context = context;
@@ -155,10 +156,39 @@ public class DBHistory {
     public void setUnpromptedDbStoreNew(long num) {_unpromptedDbStoreNew.set(num);}
     public void setUnpromptedDbStoreOld(long num) {_unpromptedDbStoreOld.set(num);}
 
+    private static final long DECAY_INTERVAL_MS = 15 * 60 * 1000L;
+    private static final long DECAY_NUMERATOR = 3;
+    private static final long DECAY_DENOMINATOR = 4;
+
     public void coalesceStats() {
         if (_log.shouldDebug()) {_log.debug("Coalescing Profile Manager stats");}
         _failedLookupRate.coalesceStats();
         _invalidReplyRate.coalesceStats();
+
+        long now = System.currentTimeMillis();
+        long elapsed = now - _lastCoalesce;
+        if (elapsed >= DECAY_INTERVAL_MS) {
+            decayCounter(_failedLookups, "failedLookups");
+            decayCounter(_successfulLookups, "successfulLookups");
+            decayCounter(_unpromptedDbStoreNew, "unpromptedDbStoreNew");
+            decayCounter(_unpromptedDbStoreOld, "unpromptedDbStoreOld");
+            _lastCoalesce = now;
+        }
+    }
+
+    /** Apply decay to a counter. Keeps the same rate as divide-by-3 hourly
+     *  but spreads it over 15-minute intervals for smoother response. */
+    private void decayCounter(AtomicLong counter, String name) {
+        long val = counter.get();
+        if (val > 0) {
+            long newVal = Math.max(0, val * DECAY_NUMERATOR / DECAY_DENOMINATOR);
+            if (newVal != val) {
+                counter.set(newVal);
+                if (_log.shouldDebug()) {
+                    _log.debug("Decayed " + name + ": " + val + " -> " + newVal);
+                }
+            }
+        }
     }
 
     private static final String NL = System.getProperty("line.separator");

@@ -135,6 +135,10 @@ public class TunnelHistory {
     public RateStat getRejectionRate() {return _rejectRate;}
     public RateStat getFailedRate() {return _failRate;}
 
+    private static final long DECAY_INTERVAL_MS = 15 * 60 * 1000L;
+    private static final long DECAY_NUMERATOR = 3;
+    private static final long DECAY_DENOMINATOR = 4;
+
     public void coalesceStats() {
         if (_log.shouldDebug()) {_log.debug("Coalescing Profile Manager stats...");}
         _rejectRate.coalesceStats();
@@ -142,18 +146,26 @@ public class TunnelHistory {
 
         long now = System.currentTimeMillis();
         long elapsed = now - _lastCoalesce;
-        if (elapsed >= 60 * 60 * 1000) {
-            long rejected = _lifetimeRejected.get();
-            if (rejected > 0) {
-                long newRejected = Math.max(0, rejected / 3);
-                if (newRejected != rejected) {
-                    _lifetimeRejected.set(newRejected);
-                    if (_log.shouldDebug()) {
-                        _log.debug("Decayed lifetime rejected: " + rejected + " -> " + newRejected);
-                    }
+        if (elapsed >= DECAY_INTERVAL_MS) {
+            decayCounter(_lifetimeRejected, "rejected");
+            decayCounter(_lifetimeFailed, "failed");
+            decayCounter(_lifetimeAgreedTo, "agreedTo");
+            _lastCoalesce = now;
+        }
+    }
+
+    /** Apply decay to a counter. Keeps the same rate as divide-by-3 hourly
+     *  but spreads it over 15-minute intervals for smoother response. */
+    private void decayCounter(AtomicLong counter, String name) {
+        long val = counter.get();
+        if (val > 0) {
+            long newVal = Math.max(0, val * DECAY_NUMERATOR / DECAY_DENOMINATOR);
+            if (newVal != val) {
+                counter.set(newVal);
+                if (_log.shouldDebug()) {
+                    _log.debug("Decayed lifetime " + name + ": " + val + " -> " + newVal);
                 }
             }
-            _lastCoalesce = now;
         }
     }
 
