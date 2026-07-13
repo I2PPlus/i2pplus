@@ -138,6 +138,12 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("tunnel.pool.failureThreshold", "Pool Build Failure Threshold");
         DISPLAY_NAMES.put("tunnel.pool.backoffMs", "Pool Build Backoff");
         DISPLAY_NAMES.put("i2p.tunnel.targetBuffer", "Pool Spare Tunnel Buffer");
+        DISPLAY_NAMES.put("i2p.tunnel.participatingThrottle.rejectThreshold", "Transit Reject Threshold");
+        DISPLAY_NAMES.put("i2p.tunnel.participatingThrottle.rejectSteepness", "Transit Reject Steepness");
+        DISPLAY_NAMES.put("i2p.tunnel.participatingThrottle.loadWeight", "Transit Load Weight");
+        DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.rejectThreshold", "Request Reject Threshold");
+        DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.rejectSteepness", "Request Reject Steepness");
+        DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.loadWeight", "Request Load Weight");
     }
 
     // brief purpose descriptions (<=120 chars)
@@ -247,6 +253,12 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("tunnel.pool.failureThreshold", "Consecutive failures before pool backoff.");
         PARAM_DESCRIPTIONS.put("tunnel.pool.backoffMs", "Cooldown duration after pool failure threshold, in ms.");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.targetBuffer", "Target spare tunnel count per pool.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.participatingThrottle.rejectThreshold", "Load threshold where probabilistic transit rejection starts (%).");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.participatingThrottle.rejectSteepness", "Steepness of the transit rejection probability curve.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.participatingThrottle.loadWeight", "Load score multiplier for transit rejection (% of computed load).");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.rejectThreshold", "Load threshold where probabilistic request throttling starts (%).");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.rejectSteepness", "Steepness of the request throttling probability curve.");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.loadWeight", "Load score multiplier for request throttling (% of computed load).");
     }
 
     // display order for subsystems (alphabetical)
