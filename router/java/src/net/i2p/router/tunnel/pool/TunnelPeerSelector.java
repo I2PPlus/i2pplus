@@ -144,6 +144,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             long cutoff = now - KEEPALIVE_INTERVAL_MS * 4;
             _lastKeepAlive.entrySet().removeIf(e -> e.getValue() < cutoff);
         }
+        if (_firstHopFails.size() > 128) {
+            long cutoff = now - FIRST_HOP_FAIL_COOLDOWN_MS;
+            _firstHopFails.entrySet().removeIf(e -> e.getValue() < cutoff);
+        }
     }
 
     /**

@@ -43,6 +43,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
     private final long _msgIDBloomXor = RandomSource.getInstance().nextLong(I2NPMessage.MAX_ID_VALUE);
     private static final long[] RATES = RateConstants.BASIC_RATES;
     private final Set<Hash> _loggedBans = ConcurrentHashMap.newKeySet();
+    private static final int MAX_LOGGED_BANS = 4096;
 
     /**
      * Constructs a new handler for floodfill DatabaseLookupMessages.
@@ -130,6 +131,8 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             }
 
             if (_log.shouldWarn() && dlm.getFrom() != null && _loggedBans.add(dlm.getFrom())) {
+                if (_loggedBans.size() > MAX_LOGGED_BANS)
+                    _loggedBans.clear();
                 StringBuilder message = new StringBuilder(128);
                 message.append("Dropping ").append(isDirect ? "direct " : "").append(searchType).append(" lookup from ")
                        .append(isFF ? "floodfill " : "").append("[").append(fromBase64.substring(0,6)).append("]");

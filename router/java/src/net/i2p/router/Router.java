@@ -104,6 +104,7 @@ public class Router implements RouterClock.ClockShiftListener {
     private Object _gracefulShutdownLock;
     private RouterWatchdog _watchdog;
     private Thread _watchdogThread;
+    private MarkLiveliness _markLiveliness;
     private final EventLog _eventLog;
     private final Object _stateLock = new Object();
     private State _state = State.UNINITIALIZED;
@@ -1694,6 +1695,10 @@ public class Router implements RouterClock.ClockShiftListener {
 */
         try {_context.logManager().shutdown();} catch (Throwable t) { /* ignored */ }
         try {BanLogger.shutdown();} catch (Throwable t) { /* ignored */ }
+        if (_markLiveliness != null) {
+            _markLiveliness.cancel();
+            _markLiveliness = null;
+        }
         if (ALLOW_DYNAMIC_KEYS && _context.getBooleanProperty(PROP_DYNAMIC_KEYS)) {killKeys();}
 
         if (!SystemVersion.isAndroid()) {
@@ -2012,7 +2017,8 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     private void beginMarkingLiveliness() {
         File f = getPingFile();
-        new MarkLiveliness(this, f, LIVELINESS_DELAY - (5*1000)).schedule(LIVELINESS_DELAY - (5*1000));
+        _markLiveliness = new MarkLiveliness(this, f, LIVELINESS_DELAY - (5*1000));
+        _markLiveliness.schedule(LIVELINESS_DELAY - (5*1000));
     }
 
     /**

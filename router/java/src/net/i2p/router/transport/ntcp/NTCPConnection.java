@@ -59,7 +59,7 @@ import net.i2p.util.SystemVersion;
 public class NTCPConnection implements Closeable {
     private final RouterContext _context;
     private final Log _log;
-    private final BanLogger _banLogger;
+    private static BanLogger _banLogger;
     private volatile SocketChannel _chan;
     private volatile SelectionKey _conKey;
     private final FIFOBandwidthLimiter.CompleteListener _inboundListener;
@@ -262,8 +262,10 @@ public class NTCPConnection implements Closeable {
     private NTCPConnection(RouterContext ctx, NTCPTransport transport, RouterAddress remAddr, boolean isIn) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
-        _banLogger = new BanLogger();
-        _banLogger.initialize(ctx);
+        if (_banLogger == null) {
+            _banLogger = new BanLogger();
+            _banLogger.initialize(ctx);
+        }
         _created = ctx.clock().now();
         _transport = transport;
         _remAddr = remAddr;

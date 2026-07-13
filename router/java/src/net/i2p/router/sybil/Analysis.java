@@ -330,6 +330,10 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         if (_state == STOPPED)
             return;
         changeState(STOPPING);
+        if (_banLogger != null) {
+            _banLogger.close();
+            _banLogger = null;
+        }
         changeState(STOPPED);
     }
 
