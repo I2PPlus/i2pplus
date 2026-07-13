@@ -21,7 +21,6 @@ import java.util.regex.Pattern;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterInfo;
 import net.i2p.time.BuildTime;
 
 import net.i2p.util.ConcurrentHashSet;
@@ -37,13 +36,6 @@ public class Banlist {
     private final Log _log;
     private final RouterContext _context;
     private final Map<Hash, Entry> _entries;
-
-    // Key: router hash (Hash), Value: {timestamp, count}
-    private final ConcurrentHashMap<Hash, long[]> _unsolicitedDBSearch;
-    // Threshold for unsolicited DbSearchReply messages
-    private static final int MAX_UNSOLICITED_DBSEARCH = 3;
-    // Time window for unsolicited replies (ms): 15 minutes
-    private static final long UNSOLICITED_DBSEARCH_WINDOW = 15*60*1000L;
 
     // IP-based bad packet offender tracking
     // Key: IP address (String), Value: {timestamp, count}
@@ -78,9 +70,6 @@ public class Banlist {
     private static final String PROP_ENABLE_PORT_HOPPING_BAN = "router.banlist.enablePortHoppingBan";
     private static final boolean ENABLE_PORT_HOPPING_BAN_DEFAULT = true;
     private boolean _enablePortHoppingBan;
-    private static final String PROP_ENABLE_DBSEARCH_BAN = "router.banlist.enableDbSearchBan";
-    private static final boolean ENABLE_DBSEARCH_BAN_DEFAULT = true;
-    private boolean _enableDbSearchBan;
     // Blocklist enable (maps to router.blocklist.enable)
     private static final String PROP_ENABLE_BLOCKLIST = "router.blocklist.enable";
     private static final boolean ENABLE_BLOCKLIST_DEFAULT = true;
@@ -200,7 +189,6 @@ public class Banlist {
         _badPacketIPs = new ConcurrentHashMap<>(64);
         _corruptConnectionIPs = new ConcurrentHashMap<>(64);
         _portHoppingIPs = new ConcurrentHashMap<>(64);
-        _unsolicitedDBSearch = new ConcurrentHashMap<>(64);
         _context.jobQueue().addJob(new Cleanup(_context));
         banlistRouterForever(Hash.FAKE_HASH, "" + "Invalid Hash"); // i2pd bug?
         banlistRouterForever(HASH_ZERORI, "" + "Invalid Hash (All zeros)");
@@ -219,7 +207,6 @@ public class Banlist {
         _enableBadPacketBan = "true".equals(_context.getProperty(PROP_ENABLE_BAD_PACKET_BAN, String.valueOf(ENABLE_BAD_PACKET_BAN_DEFAULT)));
         _enableCorruptConnectionBan = "true".equals(_context.getProperty(PROP_ENABLE_CORRUPT_CONNECTION_BAN, String.valueOf(ENABLE_CORRUPT_CONNECTION_BAN_DEFAULT)));
         _enablePortHoppingBan = "true".equals(_context.getProperty(PROP_ENABLE_PORT_HOPPING_BAN, String.valueOf(ENABLE_PORT_HOPPING_BAN_DEFAULT)));
-        _enableDbSearchBan = "true".equals(_context.getProperty(PROP_ENABLE_DBSEARCH_BAN, String.valueOf(ENABLE_DBSEARCH_BAN_DEFAULT)));
         _enableBlocklist = "true".equals(_context.getProperty(PROP_ENABLE_BLOCKLIST, String.valueOf(ENABLE_BLOCKLIST_DEFAULT)));
         _enableTorBlocklist = "true".equals(_context.getProperty(PROP_ENABLE_TOR_BLOCKLIST, String.valueOf(ENABLE_TOR_BLOCKLIST_DEFAULT)));
         _enableCountryBan = "true".equals(_context.getProperty(PROP_ENABLE_COUNTRY_BAN, String.valueOf(ENABLE_COUNTRY_BAN_DEFAULT)));
@@ -245,7 +232,6 @@ public class Banlist {
      */
     public void clearSessionBans() {
         _entries.clear();
-        _unsolicitedDBSearch.clear();
         _badPacketIPs.clear();
         _corruptConnectionIPs.clear();
         _portHoppingIPs.clear();
@@ -299,13 +285,6 @@ public class Banlist {
      *  @since 0.9.70
      */
     public boolean isPortHoppingBanEnabled() { return _enablePortHoppingBan; }
-
-    /**
-     *  Check if unsolicited DB search reply auto-ban is enabled.
-     *
-     *  @since 0.9.70
-     */
-    public boolean isDbSearchBanEnabled() { return _enableDbSearchBan; }
 
     /**
      *  Check if IP blocklist is enabled.
@@ -424,16 +403,6 @@ public class Banlist {
                     _log.info("Removing expired ban from [" + peer.toBase64().substring(0,6) + "]");
                 }
             }
-
-            // Clean up expired unsolicited DBSearch tracking entries
-            try {
-                for (Iterator<Map.Entry<Hash, long[]>> iter = _unsolicitedDBSearch.entrySet().iterator(); iter.hasNext(); ) {
-                    Map.Entry<Hash, long[]> e = iter.next();
-                    if (now - e.getValue()[0] > UNSOLICITED_DBSEARCH_WINDOW) {
-                        iter.remove();
-                    }
-                }
-            } catch (IllegalStateException ise) { /* ignored */ } // next time...
 
             // Proportionally reduce durations of longer bans when count is high
             reduceDurations(now);
@@ -610,52 +579,6 @@ public class Banlist {
             _context.blocklist().add(ip, reason);
 
             _portHoppingIPs.remove(ip);
-        }
-    }
-
-    /**
-     * Track an unsolicited DbSearchReply from a router.
-     * If threshold exceeded in window, ban the router hash.
-     *
-     * @param routerHash Hash of the router sending unsolicited reply
-     * @param version router version (may be null)
-     */
-    public void unsolicitedDBSearchReply(Hash routerHash, String version, RouterInfo ri) {
-        if (routerHash == null) return;
-        if (!_enableDbSearchBan) return;
-        if (_context.router().getUptime() < _startupGrace) return;
-        long now = _context.clock().now();
-
-        long[] data = _unsolicitedDBSearch.get(routerHash);
-        if (data == null) {
-            data = new long[] {now, 1};
-            _unsolicitedDBSearch.put(routerHash, data);
-            return;
-        }
-
-        if (now - data[0] > UNSOLICITED_DBSEARCH_WINDOW) {
-            data[0] = now;
-            data[1] = 1;
-        } else {
-            data[1]++;
-        }
-
-        if (data[1] >= MAX_UNSOLICITED_DBSEARCH) {
-            String reason = "Fake/Slow Search Replies";
-            if (version != null) {
-                reason += " (" + version + ")";
-            }
-
-            if (_log.shouldWarn()) {
-                String hashStr = routerHash.toBase64().substring(0, 6);
-                _log.warn("Unsolicited DbSearchReply limit exceeded for [" + hashStr + "]: banning for " + _badPacketDuration/60000 + " min");
-            }
-
-            BanLogger banLogger = new BanLogger();
-            banLogger.initialize(_context);
-            banLogger.logBan(routerHash, (String) null, reason, _badPacketDuration, ri);
-            banlistRouter(routerHash, reason, null, null, _context.clock().now() + _badPacketDuration);
-            _unsolicitedDBSearch.remove(routerHash);
         }
     }
 

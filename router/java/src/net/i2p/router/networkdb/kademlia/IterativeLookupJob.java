@@ -46,18 +46,12 @@ class IterativeLookupJob extends JobImpl {
         long now = ctx.clock().now();
         Log log = _log;
         if (!_search.wasQueried(from) && !IterativeSearchJob.wasRecentlyQueried(from)) {
-            String version = null;
-            RouterInfo fromRI = ctx.netDb().lookupRouterInfoLocally(from);
-            if (fromRI != null) {
-                version = fromRI.getVersion();
-            }
             if (log.shouldWarn()) {
                 boolean isBanlisted = ctx.banlist().isBanlisted(from);
                 String msg = "Received unsolicited DbSearchReply message from [" + from.toBase64().substring(0, 6) + "]";
                 if (isBanlisted) {msg += " (Router is banlisted)";}
                 log.warn(msg);
             }
-            ctx.banlist().unsolicitedDBSearchReply(from, version, fromRI);
             return;
         }
 

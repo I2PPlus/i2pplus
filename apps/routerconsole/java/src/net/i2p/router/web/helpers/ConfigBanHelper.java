@@ -16,7 +16,6 @@ public class ConfigBanHelper extends HelperBase {
     private static final String PROP_ENABLE_BAD_PACKET_BAN = "router.banlist.enableBadPacketBan";
     private static final String PROP_ENABLE_CORRUPT_CONNECTION_BAN = "router.banlist.enableCorruptConnectionBan";
     private static final String PROP_ENABLE_PORT_HOPPING_BAN = "router.banlist.enablePortHoppingBan";
-    private static final String PROP_ENABLE_DBSEARCH_BAN = "router.banlist.enableDbSearchBan";
     private static final String PROP_ENABLE_BLOCKLIST = "router.blocklist.enable";
     private static final String PROP_ENABLE_TOR_BLOCKLIST = "router.blocklistTor.enable";
     private static final String PROP_ENABLE_COUNTRY_BAN = "router.blocklistCountries.enable";
@@ -57,11 +56,6 @@ public class ConfigBanHelper extends HelperBase {
 
     public String getPortHoppingBanChecked() {
         boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_PORT_HOPPING_BAN, "true"));
-        return enabled ? "checked" : "";
-    }
-
-    public String getDbSearchBanChecked() {
-        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_DBSEARCH_BAN, "true"));
         return enabled ? "checked" : "";
     }
 

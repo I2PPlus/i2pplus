@@ -34,8 +34,7 @@
 <div class=optionlist>
 <label title="<%=intl._t("Ban peers that send malformed packets")%>"><input type=checkbox class="optbox slider" name=enableBadPacketBan value=true <jsp:getProperty name="banhelper" property="badPacketBanChecked"/>><%=intl._t("Ban peers sending malformed packets")%></label><br>
 <label title="<%=intl._t("Ban peers with corrupt connections during handshake")%>"><input type=checkbox class="optbox slider" name=enableCorruptConnectionBan value=true <jsp:getProperty name="banhelper" property="corruptConnectionBanChecked"/>><%=intl._t("Ban peers with corrupt connections")%></label><br>
-<label title="<%=intl._t("Ban peers that rapidly change their ports")%>"><input type=checkbox class="optbox slider" name=enablePortHoppingBan value=true <jsp:getProperty name="banhelper" property="portHoppingBanChecked"/>><%=intl._t("Ban peers attempting port hopping")%></label><br>
-<label title="<%=intl._t("Ban peers sending excessive unsolicited search replies")%>"><input type=checkbox class="optbox slider" name=enableDbSearchBan value=true <jsp:getProperty name="banhelper" property="dbSearchBanChecked"/>><%=intl._t("Ban peers sending fake/slow search replies")%></label>
+<label title="<%=intl._t("Ban peers that rapidly change their ports")%>"><input type=checkbox class="optbox slider" name=enablePortHoppingBan value=true <jsp:getProperty name="banhelper" property="portHoppingBanChecked"/>><%=intl._t("Ban peers attempting port hopping")%></label>
 </div>
 <b class=suboption><%=intl._t("Abuse Thresholds")%></b><br>
 <div class=optionlist>

@@ -18,7 +18,6 @@ public class ConfigBanHandler extends FormHandler {
     private boolean _enableBadPacketBan;
     private boolean _enableCorruptConnectionBan;
     private boolean _enablePortHoppingBan;
-    private boolean _enableDbSearchBan;
     private boolean _enableBlocklist;
     private boolean _enableTorBlocklist;
     private boolean _enableCountryBan;
@@ -35,7 +34,6 @@ public class ConfigBanHandler extends FormHandler {
     private static final String PROP_ENABLE_BAD_PACKET_BAN = "router.banlist.enableBadPacketBan";
     private static final String PROP_ENABLE_CORRUPT_CONNECTION_BAN = "router.banlist.enableCorruptConnectionBan";
     private static final String PROP_ENABLE_PORT_HOPPING_BAN = "router.banlist.enablePortHoppingBan";
-    private static final String PROP_ENABLE_DBSEARCH_BAN = "router.banlist.enableDbSearchBan";
     private static final Pattern COMMA_SPLIT = Pattern.compile("[,\\s]+");
     private static final Pattern COUNTRY_CODE = Pattern.compile("[a-z][a-z]");
     private static final String PROP_ENABLE_BLOCKLIST = "router.blocklist.enable";
@@ -73,7 +71,6 @@ public class ConfigBanHandler extends FormHandler {
         defaults.put(PROP_ENABLE_BAD_PACKET_BAN, "true");
         defaults.put(PROP_ENABLE_CORRUPT_CONNECTION_BAN, "true");
         defaults.put(PROP_ENABLE_PORT_HOPPING_BAN, "true");
-        defaults.put(PROP_ENABLE_DBSEARCH_BAN, "true");
         defaults.put(PROP_ENABLE_BLOCKLIST, "true");
         defaults.put(PROP_ENABLE_TOR_BLOCKLIST, "true");
         defaults.put(PROP_ENABLE_COUNTRY_BAN, "false");
@@ -95,7 +92,6 @@ public class ConfigBanHandler extends FormHandler {
     public void setEnableBadPacketBan(String val) { _enableBadPacketBan = true; }
     public void setEnableCorruptConnectionBan(String val) { _enableCorruptConnectionBan = true; }
     public void setEnablePortHoppingBan(String val) { _enablePortHoppingBan = true; }
-    public void setEnableDbSearchBan(String val) { _enableDbSearchBan = true; }
     public void setEnableBlocklist(String val) { _enableBlocklist = true; }
     public void setEnableTorBlocklist(String val) { _enableTorBlocklist = true; }
     public void setEnableCountryBan(String val) { _enableCountryBan = true; }
@@ -150,7 +146,6 @@ public class ConfigBanHandler extends FormHandler {
         changes.put(PROP_ENABLE_BAD_PACKET_BAN, Boolean.toString(_enableBadPacketBan));
         changes.put(PROP_ENABLE_CORRUPT_CONNECTION_BAN, Boolean.toString(_enableCorruptConnectionBan));
         changes.put(PROP_ENABLE_PORT_HOPPING_BAN, Boolean.toString(_enablePortHoppingBan));
-        changes.put(PROP_ENABLE_DBSEARCH_BAN, Boolean.toString(_enableDbSearchBan));
 
         boolean blocklistWasEnabled = "true".equals(_context.getProperty(PROP_ENABLE_BLOCKLIST, "true"));
         boolean torBlocklistWasEnabled = "true".equals(_context.getProperty(PROP_ENABLE_TOR_BLOCKLIST, "true"));
