@@ -932,6 +932,7 @@ public class UDPTransport extends TransportImpl {
             if (fwOld != fwNew)
                 _context.router().saveConfig(PROP_IPV6_FIREWALLED, Boolean.toString(fwNew));
         }
+        stopCleanupJob();
         destroyAll();
         for (UDPEndpoint endpoint : _endpoints) {
             endpoint.shutdown();

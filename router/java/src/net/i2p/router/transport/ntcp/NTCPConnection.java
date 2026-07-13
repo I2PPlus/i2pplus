@@ -356,7 +356,7 @@ public class NTCPConnection implements Closeable {
     /** Get the connection uptime in milliseconds */
     public long getUptime() {
         long establishedOn;
-        synchronized(this) {
+        synchronized(_statLock) {
             if (!isEstablished())
                 return getTimeSinceCreated();
             establishedOn = _establishedOn;
@@ -370,7 +370,7 @@ public class NTCPConnection implements Closeable {
      * @since 0.9.55
      */
     public long getEstablishedOn() {
-        synchronized(this) {
+        synchronized(_statLock) {
             if (!isEstablished())
                 return 0;
             return _establishedOn;
@@ -743,63 +743,62 @@ public class NTCPConnection implements Closeable {
         int size = OutboundNTCP2State.MAC_SIZE;
         List<Block> blocks = new ArrayList<>(4);
         long now = _context.clock().now();
-        /* synchronized (_currentOutbound) */  {
-            if (!_currentOutbound.isEmpty()) {
-                if (_log.shouldInfo())
-                    _log.info("Attempting to send multiple outbound messages with " + _currentOutbound.size() +
-                              " already waiting and " + _outbound.size() + " queued");
+        assert Thread.holdsLock(_writeLock);
+        if (!_currentOutbound.isEmpty()) {
+            if (_log.shouldInfo())
+                _log.info("Attempting to send multiple outbound messages with " + _currentOutbound.size() +
+                          " already waiting and " + _outbound.size() + " queued");
+            return;
+        }
+        OutNetMessage msg;
+        while (true) {
+            msg = _outbound.poll();
+            if (msg == null)
                 return;
-            }
-            OutNetMessage msg;
+            if (msg.getExpiration() >= now)
+                break;
+            if (_log.shouldWarn())
+                _log.warn("Message expired while waiting in send queue, dropping..." + msg + " on " + this);
+            _transport.afterSend(msg, false, false, msg.getLifetime());
+        }
+        _currentOutbound.add(msg);
+        I2NPMessage m = msg.getMessage();
+        Block block = new NTCP2Payload.I2NPBlock(m);
+        blocks.add(block);
+        size += block.getTotalLength();
+        // now add more (maybe)
+        if (size < NTCP2_PREFERRED_PAYLOAD_MAX) {
+            // keep adding as long as we will be under 5 KB
             while (true) {
-                msg = _outbound.poll();
+                msg = _outbound.peek();
                 if (msg == null)
-                    return;
-                if (msg.getExpiration() >= now)
                     break;
-                if (_log.shouldWarn())
-                    _log.warn("Message expired while waiting in send queue, dropping..." + msg + " on " + this);
-                _transport.afterSend(msg, false, false, msg.getLifetime());
-            }
-            _currentOutbound.add(msg);
-            I2NPMessage m = msg.getMessage();
-            Block block = new NTCP2Payload.I2NPBlock(m);
-            blocks.add(block);
-            size += block.getTotalLength();
-            // now add more (maybe)
-            if (size < NTCP2_PREFERRED_PAYLOAD_MAX) {
-                // keep adding as long as we will be under 5 KB
-                while (true) {
-                    msg = _outbound.peek();
-                    if (msg == null)
-                        break;
-                    m = msg.getMessage();
-                    int msz = m.getMessageSize() - 7;
-                    if (size + msz > NTCP2_PREFERRED_PAYLOAD_MAX)
-                        break;
-                    OutNetMessage msg2 = _outbound.poll();
-                    if (msg2 == null)
-                        break;
-                    if (msg2 != msg) {
-                        // if it wasn't the one we sized, put it back
-                        _outbound.offer(msg2);
-                        break;
-                    }
-                    if (msg.getExpiration() >= now) {
-                        _currentOutbound.add(msg);
-                        block = new NTCP2Payload.I2NPBlock(m);
-                        blocks.add(block);
-                        size += NTCP2Payload.BLOCK_HEADER_SIZE + msz;
-                    } else {
-                        if (_log.shouldWarn())
-                            _log.warn("Message expired while waiting in send queue, dropping..." + msg + " on " + this);
-                        _transport.afterSend(msg, false, false, msg.getLifetime());
-                    }
+                m = msg.getMessage();
+                int msz = m.getMessageSize() - 7;
+                if (size + msz > NTCP2_PREFERRED_PAYLOAD_MAX)
+                    break;
+                OutNetMessage msg2 = _outbound.poll();
+                if (msg2 == null)
+                    break;
+                if (msg2 != msg) {
+                    // if it wasn't the one we sized, put it back
+                    _outbound.offer(msg2);
+                    break;
+                }
+                if (msg.getExpiration() >= now) {
+                    _currentOutbound.add(msg);
+                    block = new NTCP2Payload.I2NPBlock(m);
+                    blocks.add(block);
+                    size += NTCP2Payload.BLOCK_HEADER_SIZE + msz;
+                } else {
+                    if (_log.shouldWarn())
+                        _log.warn("Message expired while waiting in send queue, dropping..." + msg + " on " + this);
+                    _transport.afterSend(msg, false, false, msg.getLifetime());
                 }
             }
         }
         if (_nextMetaTime <= now && size + (NTCP2Payload.BLOCK_HEADER_SIZE + 4) <= BUFFER_SIZE) {
-            Block block = new NTCP2Payload.DateTimeBlock(_context);
+            block = new NTCP2Payload.DateTimeBlock(_context);
             blocks.add(block);
             size += block.getTotalLength();
             _nextMetaTime = now + (META_FREQUENCY / 2) + _context.random().nextInt(META_FREQUENCY / 2);
@@ -809,7 +808,7 @@ public class NTCPConnection implements Closeable {
         // 1024 is an estimate, do final check below
         if (_nextInfoTime <= now && size + 1024 <= BUFFER_SIZE) {
             RouterInfo ri = _context.router().getRouterInfo();
-            Block block = new NTCP2Payload.RIBlock(ri, false);
+            block = new NTCP2Payload.RIBlock(ri, false);
             int sz = block.getTotalLength();
             if (size + sz <= BUFFER_SIZE) {
                 blocks.add(block);
@@ -823,8 +822,8 @@ public class NTCPConnection implements Closeable {
         if (availForPad > 0) {
             int padlen = getPaddingSize(size, availForPad);
             // all zeros is fine here
-            //Block block = new NTCP2Payload.PaddingBlock(_context, padlen);
-            Block block = new NTCP2Payload.PaddingBlock(padlen);
+            //block = new NTCP2Payload.PaddingBlock(_context, padlen);
+            block = new NTCP2Payload.PaddingBlock(padlen);
             blocks.add(block);
             size += block.getTotalLength();
         }

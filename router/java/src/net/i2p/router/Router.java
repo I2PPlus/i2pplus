@@ -1693,6 +1693,7 @@ public class Router implements RouterClock.ClockShiftListener {
             _log.log(Log.CRIT, "Completed forced restart, now restarting...");
 */
         try {_context.logManager().shutdown();} catch (Throwable t) { /* ignored */ }
+        try {BanLogger.shutdown();} catch (Throwable t) { /* ignored */ }
         if (ALLOW_DYNAMIC_KEYS && _context.getBooleanProperty(PROP_DYNAMIC_KEYS)) {killKeys();}
 
         if (!SystemVersion.isAndroid()) {

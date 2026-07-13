@@ -504,6 +504,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /** Flush on shutdown — unconditional write if dirty */
     public void shutdown() {
         _autotune.forceSave();
+        cancel();
     }
 
     public List<ParamSnapshot> getSnapshots() {

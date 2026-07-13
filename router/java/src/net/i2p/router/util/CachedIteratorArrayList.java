@@ -29,7 +29,7 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
 
     private static final long serialVersionUID = 4863212596318574111L;
 
-    private final ThreadLocal<CachedIterator> iterator = ThreadLocal.withInitial(() -> new CachedIterator());
+    private final ThreadLocal<CachedIterator<E>> iterator = ThreadLocal.withInitial(() -> new CachedIterator<>());
 
     public CachedIteratorArrayList() {
         super();
@@ -50,12 +50,12 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
 
     @Override
     public Iterator<E> iterator() {
-        CachedIterator it = iterator.get();
-        it.reset();
+        CachedIterator<E> it = iterator.get();
+        it.reset(this);
         return it;
     }
 
-    private class CachedIterator implements Iterator<E>, Serializable {
+    private static class CachedIterator<E> implements Iterator<E>, Serializable {
         /**
          * Index of element to be returned by subsequent call to next.
          */
@@ -73,24 +73,28 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
          * List should have.  If this expectation is violated, the iterator
          * has detected concurrent modification.
          */
-        int expectedModCount = modCount;
+        int expectedModCount;
 
-        void reset() {
+        /** Reference to the owning list, set on each call to iterator() */
+        private transient CachedIteratorArrayList<E> list;
+
+        void reset(CachedIteratorArrayList<E> list) {
+            this.list = list;
             cursor = 0;
             lastRet = -1;
-            expectedModCount = modCount;
+            expectedModCount = list.modCount;
         }
 
         public boolean hasNext() {
-            return cursor != size();
+            return cursor != list.size();
         }
 
         public E next() {
             checkForComodification();
             int i = cursor;
-            if (i >= size())
+            if (i >= list.size())
                 throw new NoSuchElementException();
-            E next = get(i);
+            E next = list.get(i);
             lastRet = i;
             cursor = i + 1;
             return next;
@@ -102,18 +106,18 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
             checkForComodification();
 
             try {
-                CachedIteratorArrayList.this.remove(lastRet);
+                list.remove(lastRet);
                 if (lastRet < cursor)
                     cursor--;
                 lastRet = -1;
-                expectedModCount = modCount;
+                expectedModCount = list.modCount;
             } catch (IndexOutOfBoundsException e) {
                 throw new ConcurrentModificationException();
             }
         }
 
         final void checkForComodification() {
-            if (modCount != expectedModCount)
+            if (list.modCount != expectedModCount)
                 throw new ConcurrentModificationException();
         }
 

@@ -578,6 +578,26 @@ public class BanLogger {
     }
 
     /**
+     * Shutdown the ban logger — close the writer and release resources.
+     * Safe to call multiple times.
+     * @since 0.9.70+
+     */
+    public static void shutdown() {
+        if (_writer == null && !_initialized)
+            return;
+        PrintWriter writer;
+        synchronized (_self != null ? _self._writeLock : new Object()) {
+            writer = _writer;
+            _writer = null;
+        }
+        if (writer != null) {
+            writer.close();
+        }
+        _initialized = false;
+        _self = null;
+    }
+
+    /**
      * Flush the log writer.
      */
     public void flush() {

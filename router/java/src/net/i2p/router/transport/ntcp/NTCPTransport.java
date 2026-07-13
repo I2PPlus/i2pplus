@@ -1936,6 +1936,7 @@ public class NTCPTransport extends TransportImpl {
      */
     public synchronized void stopListening() {
         if (_log.shouldWarn()) _log.warn("Stopping NTCP transport...");
+        stopCleanupJob();
         _pumper.stopPumping();
         _writer.stopWriting();
         _reader.stopReading();

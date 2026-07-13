@@ -100,6 +100,7 @@ public abstract class TransportImpl implements Transport {
 
     private final long UNREACHABLE_PERIOD;
     private final long WAS_UNREACHABLE_PERIOD;
+    private volatile CleanupUnreachable _cleanupJob;
 
     /** @since 0.9.50 */
     public static final String CAP_IPV4 = "4";
@@ -165,7 +166,6 @@ public abstract class TransportImpl implements Transport {
         _context.statManager().createRequiredRateStat("transport.sendMessageSize", "Size of sent messages (bytes)", "Transport", RATES);
         _context.statManager().createRequiredRateStat("transport.sendProcessingTime", "Time to process and send a message (ms)", "Transport", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("ntcp.sendPool utilization", "Send pool size as fraction of capacity (pct)", "Transport", RATES);
-        
 
         _currentAddresses = new ArrayList<>(3);
         if (getStyle().equals("NTCP")) {_sendPool = new ArrayBlockingQueue<>(SEND_POOL_CAPACITY);}
@@ -182,7 +182,8 @@ public abstract class TransportImpl implements Transport {
             UNREACHABLE_PERIOD = 5*60*1000L;
             WAS_UNREACHABLE_PERIOD = 5*60*1000L;
         }
-        new CleanupUnreachable().schedule(2 * UNREACHABLE_PERIOD);
+        _cleanupJob = new CleanupUnreachable();
+        _cleanupJob.schedule(2 * UNREACHABLE_PERIOD);
     }
 
     /**
@@ -974,6 +975,8 @@ public abstract class TransportImpl implements Transport {
     private class CleanupUnreachable extends SimpleTimer2.TimedEvent {
         public CleanupUnreachable() { super(_context.simpleTimer2()); }
         public void timeReached() {
+            if (_cleanupJob == null)
+                return;
             long now = _context.clock().now();
             long limit = now - UNREACHABLE_PERIOD;
             for (Iterator<Long> iter = _unreachableEntries.values().iterator(); iter.hasNext(); ) {
@@ -988,6 +991,14 @@ public abstract class TransportImpl implements Transport {
                     iter.remove();
             }
             schedule(UNREACHABLE_PERIOD / 2);
+        }
+    }
+
+    /** @since 0.9.70+ */
+    public void stopCleanupJob() {
+        if (_cleanupJob != null) {
+            _cleanupJob.cancel();
+            _cleanupJob = null;
         }
     }
 

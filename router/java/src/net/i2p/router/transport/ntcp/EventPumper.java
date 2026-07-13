@@ -299,7 +299,7 @@ class EventPumper implements Runnable {
 
                 runDelayedEvents();
 
-                long now = System.currentTimeMillis();
+                long now = _context.clock().now();
 
                 // Update loop rate stat 60 seconds
                 if (now - lastLoopRateUpdate >= 60_000) {
