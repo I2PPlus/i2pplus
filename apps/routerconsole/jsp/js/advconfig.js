@@ -16,15 +16,6 @@
 const advConfigInit = () => {
   const d = document;
 
-  /**
-   * Extends the Element prototype with shorthand query methods.
-   * @param {string} selector - CSS selector string
-   * @returns {Element|NodeList} Selected element(s)
-   */
-  Element.prototype.query = function(selector) { return this.querySelector(selector); };
-  Element.prototype.queryAll = function(selector) { return this.querySelectorAll(selector); };
-  Element.prototype.hasClass = function(className) { return this.classList.contains(className); };
-
   const query = selector => d.querySelector(selector);
   const queryAll = selector => d.querySelectorAll(selector);
 
@@ -93,7 +84,7 @@ const advConfigInit = () => {
   let lastConfigRow = null;
   configItems.forEach(([key, value]) => {
     const row = createRow(key, value);
-    lastConfigRow = table.query("#advconf tbody tr:last-child");
+    lastConfigRow = table.querySelector("#advconf tbody tr:last-child");
     lastConfigRow.insertAdjacentElement("afterend", row);
     lastConfigRow = row;
   });
@@ -113,7 +104,7 @@ const advConfigInit = () => {
   newValueCell.className = "newValue";
   newDelCell.className = "delete";
 
-  const firstConfigRow = table.query(".configline");
+  const firstConfigRow = table.querySelector(".configline");
   if (firstConfigRow) { firstConfigRow.insertAdjacentElement("beforebegin", addNewRow); }
 
   const observer = new MutationObserver(mutationsList => {
@@ -133,10 +124,10 @@ const advConfigInit = () => {
    */
   const updateTextarea = () => {
     const updatedItems = [];
-    const rows = table.queryAll(".configline");
+    const rows = table.querySelectorAll(".configline");
     rows.forEach(row => {
-      const key = row.query(".key").textContent.trim();
-      const value = row.query(".value").textContent.trim();
+      const key = row.querySelector(".key").textContent.trim();
+      const value = row.querySelector(".value").textContent.trim();
       if (key) { updatedItems.push(`${key}=${value}`); }
     });
     textarea.value = updatedItems.join("\n");
@@ -144,13 +135,13 @@ const advConfigInit = () => {
 
   table.addEventListener("click", event => {
     const target = event.target;
-    if (target.hasClass("delete")) {
+    if (target.classList.contains("delete")) {
       const row = target.closest("tr");
       if (row.id !== "addNew") {
-        const removedKey = row.query("td:first-child").textContent;
+        const removedKey = row.querySelector("td:first-child").textContent;
         row.remove();
         updateTextarea();
-        table.query("thead").removeAttribute("hidden");
+        table.querySelector("thead").removeAttribute("hidden");
         infohelp.id = "removeKey";
         infohelp.innerHTML = msgKeyRemove.replace("{0}", removedKey);
         infohelp.scrollIntoView();
@@ -196,10 +187,10 @@ const advConfigInit = () => {
 
     filterInput.addEventListener("input", event => {
       filterValue = event.target.value.toLowerCase();
-      const rows = table.queryAll(".configline");
+      const rows = table.querySelectorAll(".configline");
       rows.forEach(row => {
-        const key = row.query(".key").textContent.toLowerCase();
-        const value = row.query(".value").textContent.toLowerCase();
+        const key = row.querySelector(".key").textContent.toLowerCase();
+        const value = row.querySelector(".value").textContent.toLowerCase();
         row.style.display = (key.includes(filterValue) || value.includes(filterValue)) ? "table-row" : "none";
       });
     });

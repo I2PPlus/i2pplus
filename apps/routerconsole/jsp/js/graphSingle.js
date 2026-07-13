@@ -161,8 +161,8 @@ function initButtons() {
  */
 function initCss() {
   let graphcss;
-  if (timer) {clearInterval(timer);}
-  if (!graphcss || !graphImage) {var timer = setInterval(() => injectCss(), 500);}
+  if (window._graphCssTimer) {clearInterval(window._graphCssTimer);}
+  if (!graphcss || !graphImage) {window._graphCssTimer = setInterval(() => injectCss(), 500);}
   else {injectCss();}
 }
 
@@ -207,7 +207,7 @@ function refreshGraph() {
 
     if (graph && document.visibilityState == "visible") {
       setInterval(function() {
-        progressx.show("<%=theme%>");
+        progressx.show(window.theme);
         updateGraphURL();
         progressx.hide();
       }, graphRefreshInterval);

@@ -209,7 +209,7 @@ import { onVisible, onHidden } from "/js/onVisible.js";
   async function updateGraphs(input, debouncedFunc) {
     if (typeof graphRefreshInterval === "undefined" || graphRefreshInterval <= 0) return;
     progressx.show(theme);
-    clearInterval(graphsTimerId);
+    clearTimeout(graphsTimerId);
     graphsTimerId = setInterval(() => updateGraphs(input, debouncedFunc), graphRefreshInterval);
     const images = Array.from(d.querySelectorAll(".statimage"));
     images.forEach((img) => img.classList.add("lazy"));
@@ -219,7 +219,7 @@ import { onVisible, onHidden } from "/js/onVisible.js";
     lastRefreshTime = now;
     if (timeSinceLast < longestLoadTime || !allLoaded) {
       const nextInterval = Math.max(longestLoadTime + 1000 - timeSinceLast, graphRefreshInterval);
-      clearTimeout(graphsTimerId);
+      clearInterval(graphsTimerId);
       graphsTimerId = setTimeout(() => updateGraphs(input, debouncedFunc), nextInterval);
     }
     const visibleImgs = images.filter((img) => !img.classList.contains("lazyhide")),
@@ -261,6 +261,7 @@ import { onVisible, onHidden } from "/js/onVisible.js";
   if (typeof graphRefreshInterval !== "undefined" && graphRefreshInterval > 0) {
     updateGraphs();
   }
+
 
   /**
    * Toggles the visibility of the graph configuration panel.

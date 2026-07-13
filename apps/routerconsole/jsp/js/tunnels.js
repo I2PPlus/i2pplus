@@ -122,8 +122,12 @@ document.addEventListener("DOMContentLoaded", function() {
   persistTunnelIdVisibility();
   bodyTag.classList.add("js");
 
+  let tunnelRefreshPending = false;
+
   document.addEventListener("elementsRefreshed", function(event) {
+    if (tunnelRefreshPending) return;
     if (event.detail.selectors.includes("#tunnelsContainer")) {
+      tunnelRefreshPending = true;
       const currentTables = container.querySelectorAll("table").length;
       fetch("/tunnels")
         .then(response => response.text())
@@ -140,7 +144,8 @@ document.addEventListener("DOMContentLoaded", function() {
           }
           updateTunnelCounts();
         })
-        .catch(error => {});
+        .catch(error => {})
+        .finally(() => { tunnelRefreshPending = false; });
     }
   });
 

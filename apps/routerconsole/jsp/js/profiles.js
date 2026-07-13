@@ -201,12 +201,23 @@ import { refreshElements } from "./refreshElements.js";
     filterBanTable();
   });
 
+  let banObserver;
+
   document.addEventListener("DOMContentLoaded", () => {
     initRefresh();
     if (banBody) {
       updateBanSummary(banBody);
-      new MutationObserver(() => updateBanSummary(banBody))
-        .observe(banBody, {childList: true});
+      banObserver = new MutationObserver(() => updateBanSummary(banBody));
+      banObserver.observe(banBody, {childList: true});
     }
- });
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && banObserver) {
+      banObserver.disconnect();
+    } else if (!document.hidden && banBody && !banObserver) {
+      banObserver = new MutationObserver(() => updateBanSummary(banBody));
+      banObserver.observe(banBody, {childList: true});
+    }
+  });
 })();

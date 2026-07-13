@@ -143,6 +143,7 @@ function initProgressX(window, document) {
     }
 
     if (!canvas) { createCanvas(); }
+    window.addEventListener("resize", onResized, { passive: true });
     canvas.style.opacity = "1";
     canvas.style.display = "block";
     currentProgress = 0;
@@ -165,7 +166,6 @@ function initProgressX(window, document) {
         if (opacity <= 0.2) {
           canvas.style.display = "none";
           fadeTimer = null;
-          window.removeEventListener("resize", onResized);
           animationLocked = false;
           return;
         }

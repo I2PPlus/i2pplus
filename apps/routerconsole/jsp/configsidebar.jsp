@@ -35,7 +35,7 @@
 <label id=stickySidebar><b><%=intl._t("Sticky sidebar")%>:</b>
 <input type=checkbox class="optbox slider" name=stickySidebar value=true <%=(intl.useStickySidebar() ? "checked" : "")%>>
 <%=intl._t("Enable conditional fixed sidebar")%></label>
-<input type=hidden name=unifiedSidebar value=false>
+<input type=hidden name=stickySidebar value=false>
 </td>
 <td class=right><input type=submit name=action class=accept value="<%=intl._t("Save")%>"></td>
 </tr>

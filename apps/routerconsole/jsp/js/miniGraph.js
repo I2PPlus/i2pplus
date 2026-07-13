@@ -571,6 +571,10 @@ function initNewGraph() {
             pollIntervalId = setInterval(pollGraph, mode ? 1000 : POLL_INTERVAL);
         }
     });
+
+    window.addEventListener("beforeunload", () => {
+        clearInterval(pollIntervalId);
+    });
 }
 
 // ═════════════════════════════════════════════════════════════════════

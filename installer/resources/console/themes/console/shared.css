@@ -67,7 +67,7 @@
 #pluginTotals span{margin:0 6px;display:inline-block;padding:0 0 0 16px}
 #pluginTotals #started{background:var(--start) no-repeat left center/10px}
 #pluginTotals #stopped{margin-left:0;background:var(--stop) no-repeat left center/10px}
-#pconfig:hover #pluginTotals{color:var(--ink)}#.tIn{background:url(/themes/console/images/inbound.svg) no-repeat 6px center/16px,var(--badge)}
+#pconfig:hover #pluginTotals{color:var(--ink)}
 #routerjobqueue #jobs h3 span:not(.dropdown){margin-right:22px;text-transform:none;letter-spacing:0;transform:scale(0.85);transform-origin:right center}#tunnelconfig .tunnelName::before{margin:-4px 6px -4px 0;width:20px;height:20px;display:inline-block;vertical-align:middle;background:url(/themes/console/images/hardhat.svg) no-repeat center center/20px;content:""}
 #sessionBanned th,#sessionBanned td{padding:4px 6px}
 #sessionBanned thead th{font-size:85%;text-align:left}
@@ -85,7 +85,7 @@
 svg.spark{padding:6px 4px;width:100%;max-width:140px;vertical-align:middle;border-radius:4px;box-shadow:var(--bevel);transform:scaleY(0.8)}
 #tuning input{margin:0}
 #tuning input[type=number]{margin:5px 0;text-align:right}
-html:not([".advmode"]) #tuning input[type=number]{min-width:0!important;text-align:center;font-weight:400;border:0;box-shadow:none;background:none;pointer-events:none}
+html:not(.advmode) #tuning input[type=number]{min-width:0!important;text-align:center;font-weight:400;border:0;box-shadow:none;background:none;pointer-events:none}
 #nav_tuning{display:none!important}
 #tuning table{margin:10px auto}
 #tuning th{font-size:80%}

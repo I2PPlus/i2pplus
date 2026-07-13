@@ -379,8 +379,7 @@ function isSidebarVisible() {
   if (!target) return;
 
   observer = new MutationObserver(() => {
-    if (document.hidden) return;
-    if (isRefreshing) {
+    if (document.hidden || isRefreshing) {
       observer.disconnect();
       return;
     }
@@ -397,14 +396,27 @@ function isSidebarVisible() {
   observer.observe(target, { childList: true, subtree: true });
 }
 
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    observer?.disconnect();
+  } else {
+    isSidebarVisible();
+  }
+});
+
 /**
  * Handles online/offline/visibility events by triggering a forced sidebar refresh.
  * @function handleStatus
  * @returns {void}
  */
 function handleStatus() {
-  if (document.hidden || isRefreshing) return;
+  if (document.hidden) {
+    stopAutoRefresh();
+    return;
+  }
+  if (isRefreshing) return;
   isRefreshing = true;
+  startAutoRefresh();
   refreshSidebar(true).finally(() => {
     isRefreshing = false;
   });

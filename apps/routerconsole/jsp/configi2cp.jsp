@@ -73,7 +73,7 @@
 <tr>
 <td>
 <b class=suboption>
-<label><input type=checkbox class=class="optbox slider" name="auth" value=true <jsp:getProperty name="clientshelper" property="auth"/>>
+<label><input type=checkbox class="optbox slider" name="auth" value=true <jsp:getProperty name="clientshelper" property="auth"/>>
 <%=intl._t("Require username and password")%></label>
 </b><br>
 <div class=optionlist id=i2cp_userpass>

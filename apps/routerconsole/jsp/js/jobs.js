@@ -202,7 +202,7 @@
       const cols = isAdvanced ? "11" : "7";
       if (isRecentMode && newTbody.rows.length === 0 && !hasPlaceholder) {
         oldTbody.innerHTML = "<tr id=init><td colspan=" + cols + ">...</td></tr>";
-        requestAnimationFrame(fetchJobs); // Force refresh
+        setTimeout(fetchJobs, REFRESH_INTERVAL);
         return;
       }
 

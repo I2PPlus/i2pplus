@@ -9,6 +9,8 @@
 let animationId = null;
 let ctx = null;
 
+let resizeHandler = null;
+
 function initSnowflakes() {
   if (document.getElementById('snowflakeCanvas')) {return;}
 
@@ -25,7 +27,9 @@ function initSnowflakes() {
     canvas.height = window.innerHeight;
   };
   resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
+  if (resizeHandler) {window.removeEventListener('resize', resizeHandler);}
+  resizeHandler = resizeCanvas;
+  window.addEventListener('resize', resizeHandler);
 
   const urlParams = new URLSearchParams(window.location.search);
   const baseColor = ({ light: '#78c3f2', dark: '#5a9d68', classic: '#b0e0e6', midnight: '#9662ca' })[theme] || '#87ceeb';

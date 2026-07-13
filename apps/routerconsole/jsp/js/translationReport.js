@@ -69,14 +69,18 @@ toggleButtonFiles.addEventListener("click", function() {
   }
 });
 
-tx_summary.addEventListener("classlistchange", function(event) {
-  if (event.target.classList.contains("showAll_compiled")) {
-    toggleButtonCompiled.textContent = event.target.classList.contains("showAll_compiled") ? "Hide complete translations" : "Show complete translations";
+new MutationObserver(function() {
+  if (tx_summary.classList.contains("showAll_compiled")) {
+    toggleButtonCompiled.textContent = "Hide complete translations";
+  } else {
+    toggleButtonCompiled.textContent = "Show complete translations";
   }
-  if (event.target.classList.contains("showAll_files")) {
-    toggleButtonFiles.textContent = event.target.classList.contains("showAll_files") ? "Hide complete translations" : "Show complete translations";
+  if (tx_summary.classList.contains("showAll_files")) {
+    toggleButtonFiles.textContent = "Hide complete translations";
+  } else {
+    toggleButtonFiles.textContent = "Show complete translations";
   }
-});
+}).observe(tx_summary, {attributes: true, attributeFilter: ["class"]});
 
 document.addEventListener("DOMContentLoaded", function() {
   const txTablesCompiled = tx_summary.querySelectorAll(".tx_compiled");

@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const toggle =  document.querySelector(".toggle");
     const headerLink =  document.querySelector(".toggle a");
     headerLink.addEventListener("mouseenter", function(event) {
-      headerlink.style.zIndex = "99999";
+      headerLink.style.zIndex = "99999";
     });
   }
   showHideTunnelCounts();
