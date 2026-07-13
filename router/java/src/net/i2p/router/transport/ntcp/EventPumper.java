@@ -174,6 +174,7 @@ class EventPumper implements Runnable {
         _context.statManager().createRateStat("ntcp.zeroReadDrop", "Number of NTCP zero length read events dropped", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.dropInboundNoMessage", "Number of NTCP Inbound empty message drop events", "Transport [NTCP]", RATES);
         _context.statManager().createRequiredRateStat("ntcp.inboundConn", "Inbound NTCP Connection", "Transport [NTCP]", RATES);
+        _context.statManager().createRequiredRateStat("ntcp.inboundEstablishFailed", "Inbound NTCP handshake failures", "Transport [NTCP]", RATES);
     }
 
     public synchronized void startPumping() {
@@ -1086,6 +1087,7 @@ class EventPumper implements Runnable {
      */
     public void trackFailedInboundHandshake(byte[] ip, Hash hash) {
         if (ip == null) return;
+        _context.statManager().addRateData("ntcp.inboundEstablishFailed", 1);
         String ba = Addresses.toString(ip);
         int count = _failedInboundHandshake.increment(ba);
         if (count >= 5) {

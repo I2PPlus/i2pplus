@@ -1788,7 +1788,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double ibTime = getAdditionalStat(_context, "ntcp.inboundEstablishTime");
             double sendFailed = getAdditionalStat(_context, "ntcp.outboundEstablishFailed");
 
-            boolean hasFailures = !Double.isNaN(sendFailed) && sendFailed > 0;
+            double inboundFailed = getAdditionalStat(_context, "ntcp.inboundEstablishFailed");
+            boolean hasFailures = (!Double.isNaN(sendFailed) && sendFailed > 0) ||
+                                  (!Double.isNaN(inboundFailed) && inboundFailed > 0);
             double worstObserved = observed;
             if (!Double.isNaN(ibTime) && ibTime > worstObserved)
                 worstObserved = ibTime;
