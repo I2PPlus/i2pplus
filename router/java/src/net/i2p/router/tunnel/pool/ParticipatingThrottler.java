@@ -51,6 +51,12 @@ public class ParticipatingThrottler {
     public static volatile int _maxLimit = SystemVersion.isSlow() ? 150 : 300;
     /** @since 0.9.70+ */
     public static volatile int _percentLimit = 10;
+    /** Rejection threshold: start rejecting at count/limit ratio this high (30-100, default 70%). @since 0.9.70+ */
+    public static volatile int _rejectThreshold = 70;
+    /** Rejection steepness: 100=linear ramp, 200=quadratic, higher=faster escalation. @since 0.9.70+ */
+    public static volatile int _rejectSteepness = 200;
+    /** Load weight: how much load inflates effective ratio (0-300%, default 100%). @since 0.9.70+ */
+    public static volatile int _loadWeight = 100;
 
     /** @since 0.9.70+ */
     public static int getParticipatingMinLimit() { return _minLimit; }
@@ -64,6 +70,18 @@ public class ParticipatingThrottler {
     public static int getParticipatingPctLimit() { return _percentLimit; }
     /** @since 0.9.70+ */
     public static void setParticipatingPctLimit(int val) { _percentLimit = Math.max(5, Math.min(100, val)); }
+    /** @since 0.9.70+ */
+    public static int getRejectThreshold() { return _rejectThreshold; }
+    /** @since 0.9.70+ */
+    public static void setRejectThreshold(int val) { _rejectThreshold = Math.max(30, Math.min(100, val)); }
+    /** @since 0.9.70+ */
+    public static int getRejectSteepness() { return _rejectSteepness; }
+    /** @since 0.9.70+ */
+    public static void setRejectSteepness(int val) { _rejectSteepness = Math.max(100, Math.min(500, val)); }
+    /** @since 0.9.70+ */
+    public static int getLoadWeight() { return _loadWeight; }
+    /** @since 0.9.70+ */
+    public static void setLoadWeight(int val) { _loadWeight = Math.max(0, Math.min(300, val)); }
     // Cleanup interval in ms - 90 seconds
     private static final long CLEAN_TIME = 90 * 1000L;
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
@@ -153,6 +171,13 @@ public class ParticipatingThrottler {
         _minLimit = Math.max(20, _minLimit);
         _maxLimit = Math.max(50, _maxLimit);
         _percentLimit = Math.max(5, _percentLimit);
+        // Probabilistic rejection params, Tuner will override at runtime
+        _rejectThreshold = ctx.getProperty("i2p.tunnel.participatingThrottle.rejectThreshold", 70);
+        _rejectSteepness = ctx.getProperty("i2p.tunnel.participatingThrottle.rejectSteepness", 200);
+        _loadWeight = ctx.getProperty("i2p.tunnel.participatingThrottle.loadWeight", 100);
+        _rejectThreshold = Math.max(30, Math.min(100, _rejectThreshold));
+        _rejectSteepness = Math.max(100, Math.min(500, _rejectSteepness));
+        _loadWeight = Math.max(0, Math.min(300, _loadWeight));
         ctx.statManager().createRequiredRateStat("tunnel.throttleParticipatingAccept", "Participating throttle accepts", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.throttleParticipatingReject", "Participating throttle rejects", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.throttleParticipatingDrop", "Participating throttle drops", "Tunnels [Participating]", RATES);
@@ -393,8 +418,11 @@ public class ParticipatingThrottler {
     }
 
     /**
-     * Evaluates whether to accept, reject, or drop tunnel requests based on the
-     * current count relative to the limit and router capabilities.
+     * Evaluates whether to accept, reject, or drop tunnel requests based on
+     * probabilistic rejection curve modulated by system load.
+     * Replaces the old deterministic count > limit cutoff with a smooth
+     * probability function that ramps from 0 at the reject threshold to
+     * near-1 under load or high ratio.
      *
      * @param count current participation count for the router
      * @param limit maximum allowed participation
@@ -410,26 +438,65 @@ public class ParticipatingThrottler {
      */
     private Result evaluateThrottleConditions(int count, int limit, boolean shouldThrottle, boolean isFast, boolean isLowShare,
                                               boolean isUnreachable, Hash h, String caps, boolean isBanned, int bantime, RouterInfo ri) {
-        if (count > limit && shouldThrottle) {
-            if (isFast && !isUnreachable && count > limit * 3) {
-                handleExcessiveRequests(h, caps, count, limit, bantime, ri);
-                return Result.DROP;
-            } else if (!isLowShare && !isUnreachable && count > limit * 2) {
-                handleExcessiveRequests(h, caps, count, limit, bantime, ri);
-                return Result.DROP;
-            } else if (isUnreachable && count > limit + 30) {
-                handleExcessiveRequests(h, caps, count, limit, bantime, ri);
-                return Result.DROP;
-            } else if (isLowShare && count > limit + 20) {
-                handleExcessiveRequests(h, caps, count, limit, bantime, ri);
-                return Result.DROP;
-            } else {
+        if (!shouldThrottle || limit <= 0)
+            return Result.ACCEPT;
+
+        float ratio = (float) count / limit;
+        float load = calculateLoadScore();
+        float threshold = _rejectThreshold / 100.0f;
+        float steepness = _rejectSteepness / 100.0f;
+
+        // Inflate effective ratio by load: at full load (1.0) with _loadWeight=100,
+        // effective ratio = 2x actual. At zero load, no inflation.
+        float effectiveRatio = ratio * (1.0f + load * _loadWeight / 100.0f);
+
+        if (effectiveRatio >= threshold) {
+            float range = 1.0f - threshold;
+            float normalized = range > 0 ? Math.min(1.0f, (effectiveRatio - threshold) / range) : 1.0f;
+            // steepness=100 → linear, steepness=200 → quadratic (faster ramp at high ratios)
+            float prob = (float) Math.pow(normalized, 100.0f / steepness);
+            prob = Math.min(1.0f, Math.max(0.0f, prob));
+
+            if (context.random().nextFloat() < prob) {
+                if (ratio >= 2.0f || (isUnreachable && count > limit + 30) ||
+                    (isLowShare && count > limit + 20)) {
+                    handleExcessiveRequests(h, caps, count, limit, bantime, ri);
+                    return Result.DROP;
+                }
                 _logHighRequestCount(h, caps, count, limit);
                 return Result.REJECT;
             }
         }
         _logAcceptRequest(caps, count);
         return Result.ACCEPT;
+    }
+
+    /**
+     * Computes a 0.0–1.0 load score from job queue lag, CPU load, system load,
+     * and bandwidth queue pressure. Used to shift the rejection probability curve
+     * left when the router is under load.
+     */
+    private float calculateLoadScore() {
+        float score = 0.0f;
+        // Job lag: 0ms → 0, 1000ms+ → 1.0 (40% weight)
+        long lag = context.jobQueue().getMaxLag();
+        score += Math.min(1.0f, lag / 1000.0f) * 0.4f;
+        // CPU load: 0% → 0, 100% → 1.0 (25% weight)
+        int cpuLoad = SystemVersion.getCPULoadAvg();
+        if (cpuLoad > 0)
+            score += Math.min(1.0f, cpuLoad / 100.0f) * 0.25f;
+        // System load: 0 → 0, 100 → 1.0 (20% weight)
+        int sysLoad = SystemVersion.getSystemLoad();
+        score += Math.min(1.0f, sysLoad / 100.0f) * 0.2f;
+        // Bandwidth queue: 0 → 0, 100KB+ → 1.0 (15% weight)
+        RateStat bwRs = context.statManager().getRate("bwLimiter.participatingBandwidthQueue");
+        if (bwRs != null) {
+            net.i2p.stat.Rate rate = bwRs.getRate(60000);
+            if (rate != null && rate.getLastEventCount() > 0) {
+                score += Math.min(1.0f, (float)(rate.getAverageValue() / 100000.0)) * 0.15f;
+            }
+        }
+        return Math.min(1.0f, score);
     }
 
     /**

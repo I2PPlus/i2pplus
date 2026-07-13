@@ -349,10 +349,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new ParticipatingThrottleMinParam());
         _params.add(new ParticipatingThrottleMaxParam());
         _params.add(new ParticipatingThrottlePctParam());
+        _params.add(new TransitRejectThresholdParam());
+        _params.add(new TransitRejectSteepnessParam());
+        _params.add(new TransitLoadWeightParam());
         _params.add(new RequestThrottleMinParam());
         _params.add(new RequestThrottleMaxParam());
         _params.add(new RequestThrottlePctParam());
         _params.add(new RequestThrottleBurstParam());
+        _params.add(new RequestRejectThresholdParam());
+        _params.add(new RequestRejectSteepnessParam());
+        _params.add(new RequestLoadWeightParam());
         // Sustained load thresholds
         _params.add(new RequestHighLoadLagParam());
         _params.add(new RequestHighLoadCpuParam());
@@ -8125,6 +8131,51 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
+     * Tunes the transit rejection threshold (%) — start rejecting at count/limit ratio this high.
+     * Lower = more aggressive (reject earlier). Modulated by load score at runtime.
+     */
+    private class TransitRejectThresholdParam extends BaseParam {
+        TransitRejectThresholdParam() {
+            super("i2p.tunnel.participatingThrottle.rejectThreshold", "Transit reject threshold (%)",
+                  SUB_TUNNEL, 30, 100, 2, "tunnel.throttleParticipatingReject", _context);
+        }
+        protected void applyValue(int value) { ParticipatingThrottler.setRejectThreshold(value); }
+        protected int getRuntimeValue() { return ParticipatingThrottler.getRejectThreshold(); }
+        protected double getObservedStat(RouterContext ctx) { return Double.NaN; }
+        protected int computeTarget(double observed) { return getRuntimeValue(); }
+    }
+
+    /**
+     * Tunes the transit rejection steepness — 100=linear, 200=quadratic (faster ramp at high ratios).
+     * Higher values escalate rejection probability more quickly past the threshold.
+     */
+    private class TransitRejectSteepnessParam extends BaseParam {
+        TransitRejectSteepnessParam() {
+            super("i2p.tunnel.participatingThrottle.rejectSteepness", "Transit reject steepness",
+                  SUB_TUNNEL, 100, 500, 10, "tunnel.throttleParticipatingReject", _context);
+        }
+        protected void applyValue(int value) { ParticipatingThrottler.setRejectSteepness(value); }
+        protected int getRuntimeValue() { return ParticipatingThrottler.getRejectSteepness(); }
+        protected double getObservedStat(RouterContext ctx) { return Double.NaN; }
+        protected int computeTarget(double observed) { return getRuntimeValue(); }
+    }
+
+    /**
+     * Tunes how much system load inflates the effective count/limit ratio.
+     * 0 = no load sensitivity, 100 = 2x at full load, 300 = 4x at full load.
+     */
+    private class TransitLoadWeightParam extends BaseParam {
+        TransitLoadWeightParam() {
+            super("i2p.tunnel.participatingThrottle.loadWeight", "Transit load weight (%)",
+                  SUB_TUNNEL, 0, 300, 10, "tunnel.throttleParticipatingReject", _context);
+        }
+        protected void applyValue(int value) { ParticipatingThrottler.setLoadWeight(value); }
+        protected int getRuntimeValue() { return ParticipatingThrottler.getLoadWeight(); }
+        protected double getObservedStat(RouterContext ctx) { return Double.NaN; }
+        protected int computeTarget(double observed) { return getRuntimeValue(); }
+    }
+
+    /**
      * Tunes the minimum per-peer request throttle limit.
      */
     private class RequestThrottleMinParam extends BaseParam {
@@ -8259,6 +8310,51 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (rejecting || cpuPressure) return Math.max(_min, current - _step);
             return current;
         }
+    }
+
+    /**
+     * Tunes the request rejection threshold (%) — start rejecting requests at count/limit ratio
+     * this high. Lower = more aggressive. Modulated by load score at runtime.
+     */
+    private class RequestRejectThresholdParam extends BaseParam {
+        RequestRejectThresholdParam() {
+            super("i2p.tunnel.requestThrottle.rejectThreshold", "Request reject threshold (%)",
+                  SUB_TUNNEL, 30, 100, 2, "tunnel.throttleRequestReject", _context);
+        }
+        protected void applyValue(int value) { RequestThrottler.setRequestRejectThreshold(value); }
+        protected int getRuntimeValue() { return RequestThrottler.getRequestRejectThreshold(); }
+        protected double getObservedStat(RouterContext ctx) { return Double.NaN; }
+        protected int computeTarget(double observed) { return getRuntimeValue(); }
+    }
+
+    /**
+     * Tunes the request rejection steepness — 100=linear, 200=quadratic.
+     * Higher values escalate rejection probability more quickly past the threshold.
+     */
+    private class RequestRejectSteepnessParam extends BaseParam {
+        RequestRejectSteepnessParam() {
+            super("i2p.tunnel.requestThrottle.rejectSteepness", "Request reject steepness",
+                  SUB_TUNNEL, 100, 500, 10, "tunnel.throttleRequestReject", _context);
+        }
+        protected void applyValue(int value) { RequestThrottler.setRequestRejectSteepness(value); }
+        protected int getRuntimeValue() { return RequestThrottler.getRequestRejectSteepness(); }
+        protected double getObservedStat(RouterContext ctx) { return Double.NaN; }
+        protected int computeTarget(double observed) { return getRuntimeValue(); }
+    }
+
+    /**
+     * Tunes how much system load inflates the effective request count/limit ratio.
+     * 0 = no load sensitivity, 100 = 2x at full load, 300 = 4x at full load.
+     */
+    private class RequestLoadWeightParam extends BaseParam {
+        RequestLoadWeightParam() {
+            super("i2p.tunnel.requestThrottle.loadWeight", "Request load weight (%)",
+                  SUB_TUNNEL, 0, 300, 10, "tunnel.throttleRequestReject", _context);
+        }
+        protected void applyValue(int value) { RequestThrottler.setRequestLoadWeight(value); }
+        protected int getRuntimeValue() { return RequestThrottler.getRequestLoadWeight(); }
+        protected double getObservedStat(RouterContext ctx) { return Double.NaN; }
+        protected int computeTarget(double observed) { return getRuntimeValue(); }
     }
 
     /**

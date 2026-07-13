@@ -58,6 +58,12 @@ public class RequestThrottler {
     public static volatile int _reqPercentLimit = 20;
     /** @since 0.9.70+ */
     public static volatile int _reqBurst1sThreshold = 10;
+    /** Rejection threshold: start rejecting at count/limit ratio this high (30-100, default 70%). @since 0.9.70+ */
+    public static volatile int _reqRejectThreshold = 70;
+    /** Rejection steepness: 100=linear ramp, 200=quadratic. @since 0.9.70+ */
+    public static volatile int _reqRejectSteepness = 200;
+    /** Load weight: how much load inflates effective ratio (0-300%, default 100%). @since 0.9.70+ */
+    public static volatile int _reqLoadWeight = 100;
 
     // Sustained load thresholds — require load to persist before gating
     /** High-load job lag threshold (ms) @since 0.9.70+ */
@@ -93,6 +99,18 @@ public class RequestThrottler {
     public static int getRequestBurst1sThreshold() { return _reqBurst1sThreshold; }
     /** @since 0.9.70+ */
     public static void setRequestBurst1sThreshold(int val) { _reqBurst1sThreshold = Math.max(1, Math.min(100, val)); }
+    /** @since 0.9.70+ */
+    public static int getRequestRejectThreshold() { return _reqRejectThreshold; }
+    /** @since 0.9.70+ */
+    public static void setRequestRejectThreshold(int val) { _reqRejectThreshold = Math.max(30, Math.min(100, val)); }
+    /** @since 0.9.70+ */
+    public static int getRequestRejectSteepness() { return _reqRejectSteepness; }
+    /** @since 0.9.70+ */
+    public static void setRequestRejectSteepness(int val) { _reqRejectSteepness = Math.max(100, Math.min(500, val)); }
+    /** @since 0.9.70+ */
+    public static int getRequestLoadWeight() { return _reqLoadWeight; }
+    /** @since 0.9.70+ */
+    public static void setRequestLoadWeight(int val) { _reqLoadWeight = Math.max(0, Math.min(300, val)); }
     /** @since 0.9.70+ */
     public static int getHighLoadLagMs() { return _highLoadLagMs; }
     /** @since 0.9.70+ */
@@ -174,6 +192,12 @@ public class RequestThrottler {
         _reqMaxLimit = ctx.getProperty("i2p.tunnel.requestThrottle.maxLimit", 300);
         _reqPercentLimit = ctx.getProperty("i2p.tunnel.requestThrottle.percentLimit", 20);
         _reqBurst1sThreshold = ctx.getProperty("i2p.tunnel.requestThrottle.burst1sThreshold", 10);
+        _reqRejectThreshold = ctx.getProperty("i2p.tunnel.requestThrottle.rejectThreshold", 70);
+        _reqRejectSteepness = ctx.getProperty("i2p.tunnel.requestThrottle.rejectSteepness", 200);
+        _reqLoadWeight = ctx.getProperty("i2p.tunnel.requestThrottle.loadWeight", 100);
+        _reqRejectThreshold = Math.max(30, Math.min(100, _reqRejectThreshold));
+        _reqRejectSteepness = Math.max(100, Math.min(500, _reqRejectSteepness));
+        _reqLoadWeight = Math.max(0, Math.min(300, _reqLoadWeight));
         _highLoadLagMs = ctx.getProperty("i2p.tunnel.requestThrottle.highLoadLagMs", 1000);
         _highLoadCpuPct = ctx.getProperty("i2p.tunnel.requestThrottle.highLoadCpuPct", 95);
         _highLoadSysLoadPct = ctx.getProperty("i2p.tunnel.requestThrottle.highLoadSysLoadPct", 90);
@@ -299,36 +323,32 @@ public class RequestThrottler {
         }
 
         String v = "unknown";
-        long lag = context.jobQueue().getMaxLag();
-        int cpuLoad = SystemVersion.getCPULoadAvg();
-        int sysLoad = SystemVersion.getSystemLoad();
         if (ri != null) {
             v = ri.getVersion();
         }
 
-        // Sustained high load: require all three signals above threshold for the duration
-        boolean highLoadNow = lag > _highLoadLagMs && cpuLoad > _highLoadCpuPct && sysLoad > _highLoadSysLoadPct;
-        if (highLoadNow) {
-            if (_highLoadStart == 0) {
-                _highLoadStart = context.clock().now();
-            }
-        } else {
-            _highLoadStart = 0;
-        }
-        boolean highload = _highLoadStart > 0 &&
-            (context.clock().now() - _highLoadStart) > _sustainedHighLoadMs;
+        // Probabilistic rejection: effective ratio = per-peer ratio inflated by load score
+        float load = calculateLoadScore();
+        float threshold2 = _reqRejectThreshold / 100.0f;
+        float steepness2 = _reqRejectSteepness / 100.0f;
+        float ratio = limit > 0 ? (float) count / limit : 0;
+        float effectiveRatio = ratio * (1.0f + load * _reqLoadWeight / 100.0f);
+        boolean shouldReject = false;
 
-        // Early return: High system load
-        if (highload) {
-            if (_log.shouldWarn())
-                _log.warn("Rejecting Tunnel Request from Router [" + routerId + "] -> " +
-                          "System under sustained high load (lag=" + lag + " cpu=" + cpuLoad + " sys=" + sysLoad + ")");
-            return rv;
+        if (enableThrottle && limit > 0 && effectiveRatio >= threshold2) {
+            float range = 1.0f - threshold2;
+            float normalized = range > 0 ? Math.min(1.0f, (effectiveRatio - threshold2) / range) : 1.0f;
+            float prob = (float) Math.pow(normalized, 100.0f / steepness2);
+            prob = Math.min(1.0f, Math.max(0.0f, prob));
+            shouldReject = context.random().nextFloat() < prob;
         }
 
-        // Moderate load gate: only block low-share peers when under sustained load pressure
+        // Moderate load gate: disconnect low-share peers under sustained load (preserved)
         if (isLowShare && shouldBlockOldRouters) {
-            boolean moderateLoadNow = lag > _moderateLoadLagMs || cpuLoad > _moderateLoadCpuPct || sysLoad > _moderateLoadSysLoadPct;
+            long lag = context.jobQueue().getMaxLag();
+            int cpuLoad2 = SystemVersion.getCPULoadAvg();
+            int sysLoad2 = SystemVersion.getSystemLoad();
+            boolean moderateLoadNow = lag > _moderateLoadLagMs || cpuLoad2 > _moderateLoadCpuPct || sysLoad2 > _moderateLoadSysLoadPct;
             if (moderateLoadNow) {
                 if (_moderateLoadStart == 0) {
                     _moderateLoadStart = context.clock().now();
@@ -341,52 +361,45 @@ public class RequestThrottler {
             if (underLoad) {
                 if (_log.shouldInfo()) {
                     _log.info("Dropping all connections from [" + routerId + "] -> Low share / " + v +
-                              " (sustained load: lag=" + lag + " cpu=" + cpuLoad + " sys=" + sysLoad + ")");
+                              " (load=" + load + ")");
                 }
                 new Disconnector(h, v).schedule(11*60*1000L);
                 return true;
             }
         }
 
-        // Handle excessive tunnel requests
-        if (rv && enableThrottle) {
-            int bantime = (isLowShare || isUnreachable) ? 60*60*1000 : 30*60*1000;
-            int period = bantime / 60 / 1000;
-            if (count == limit + 1) {
+        // Graduated response for rejected requests
+        if (shouldReject) {
+            if (ratio >= 3.0f) {
                 String ipPort = getRouterIPPort(ri);
                 String banReason = "Excessive tunnel requests";
-                _banLogger.logBan(h, ipPort, banReason, bantime);
-                context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + bantime);
+                _banLogger.logBan(h, ipPort, banReason, 30*60*1000L);
+                context.banlist().banlistRouter(h, banReason, null, null, context.clock().now() + 30*60*1000L);
+                new Disconnector(h, v).schedule(11*60*1000L);
+                if (_log.shouldWarn())
+                    _log.warn("Banning Router [" + routerId + "] for 30m -> " +
+                              "Excessive tunnel requests (Requested: " + count + " / Limit: " + limit + " ratio=" + ratio + ")");
+            } else if (ratio >= 1.5f) {
+                int bantime2 = (isLowShare || isUnreachable) ? 60*60*1000 : 30*60*1000;
+                String ipPort = getRouterIPPort(ri);
+                String banReason = "Excessive tunnel requests";
+                _banLogger.logBan(h, ipPort, banReason, bantime2);
+                context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + bantime2);
                 new Disconnector(h, v).schedule(11*60*1000L);
                 if (_log.shouldWarn()) {
-                    _log.warn("Banning " + (isLowShare || isUnreachable ? "slow or unreachable" : "") +
-                              " Router [" + routerId + "] for " + period + "m" +
-                              "\n* Excessive tunnel requests (Requested: " + count + " / Hard limit " + limit +
-                              " in 165s)");
+                    _log.warn("Banning Router [" + routerId + "] for " + (bantime2/60000) + "m" +
+                              " -> Excessive tunnel requests (Requested: " + count + " / Limit: " + limit + " ratio=" + ratio + ")");
                 }
             } else {
                 if (_log.shouldInfo())
-                    _log.info("Rejecting Tunnel Requests from temp banned Router [" + routerId + "] -> " +
-                              "(Requested: " + count + " / Hard limit: " + limit + " in 165s)");
-                context.commSystem().forceDisconnect(h, "Excessive tunnel requests");
+                    _log.info("Probabilistic reject Router [" + routerId + "] -> " +
+                              "(Requested: " + count + " / Limit: " + limit + " ratio=" + ratio + " load=" + load + ")");
+                context.commSystem().forceDisconnect(h, "Transit request throttle");
             }
         }
 
-        // Final check for extremely excessive requests
-        if (rv && count >= 3 * limit && enableThrottle) {
-            String ipPort = getRouterIPPort(ri);
-            String banReason = "Excessive tunnel requests";
-            _banLogger.logBan(h, ipPort, banReason, 30*60*1000L);
-            context.banlist().banlistRouter(h, banReason, null, null, context.clock().now() + 30*60*1000L);
-            // drop after any accepted tunnels have expired
-            new Disconnector(h, v).schedule(11*60*1000L);
-            if (_log.shouldWarn())
-                _log.warn("Banning Router [" + routerId + "] for 30m -> " +
-                          "Excessive tunnel requests (Requested: " + count + " / Hard limit: " + limit + ")");
-        }
-
-        if (rv) {context.statManager().addRateData("tunnel.throttleRequestReject", 1);}
-        return rv;
+        if (shouldReject) {context.statManager().addRateData("tunnel.throttleRequestReject", 1);}
+        return shouldReject;
     }
 
     /**
@@ -413,6 +426,29 @@ public class RequestThrottler {
         }
 
         return cachedBlockedCountries;
+    }
+
+    /**
+     * Computes a 0.0–1.0 load score from job queue lag, CPU load, system load,
+     * and bandwidth queue pressure. Shared curve shape with ParticipatingThrottler.
+     */
+    private float calculateLoadScore() {
+        float score = 0.0f;
+        long lag = context.jobQueue().getMaxLag();
+        score += Math.min(1.0f, lag / 1000.0f) * 0.4f;
+        int cpuLoad = SystemVersion.getCPULoadAvg();
+        if (cpuLoad > 0)
+            score += Math.min(1.0f, cpuLoad / 100.0f) * 0.25f;
+        int sysLoad = SystemVersion.getSystemLoad();
+        score += Math.min(1.0f, sysLoad / 100.0f) * 0.2f;
+        net.i2p.stat.RateStat bwRs = context.statManager().getRate("bwLimiter.participatingBandwidthQueue");
+        if (bwRs != null) {
+            net.i2p.stat.Rate rate = bwRs.getRate(60000);
+            if (rate != null && rate.getLastEventCount() > 0) {
+                score += Math.min(1.0f, (float)(rate.getAverageValue() / 100000.0)) * 0.15f;
+            }
+        }
+        return Math.min(1.0f, score);
     }
 
     /**
