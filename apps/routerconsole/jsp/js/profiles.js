@@ -24,7 +24,44 @@ import { refreshElements } from "./refreshElements.js";
   let sorterFF = null;
   let sorterP = null;
   let sorterBans = null;
+  /** Reasons hidden from the ban table (auto-disabled or toggled off). */
   const disabledReasons = new Set();
+  /** Reasons the user explicitly enabled despite any auto-disable threshold. */
+  const userForcedActive = new Set();
+  const LS_KEY = "profiles_banFilter_" + location.search;
+
+  /**
+   * Persist filter state to localStorage so it survives page refresh.
+   * Saves both disabled-reason and forced-active sets separately.
+   * @function saveFilterState
+   * @returns {void}
+   */
+  function saveFilterState() {
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify([...disabledReasons]));
+      localStorage.setItem(LS_KEY + "_forced", JSON.stringify([...userForcedActive]));
+    } catch (e) {}
+  }
+
+  /**
+   * Restore filter state from localStorage on page load.
+   * Populates both disabled-reason and forced-active sets.
+   * Called once from DOMContentLoaded, before the ban summary is rendered.
+   * @function loadFilterState
+   * @returns {void}
+   */
+  function loadFilterState() {
+    try {
+      const saved = localStorage.getItem(LS_KEY);
+      if (saved) {
+        JSON.parse(saved).forEach(r => disabledReasons.add(r));
+      }
+      const forced = localStorage.getItem(LS_KEY + "_forced");
+      if (forced) {
+        JSON.parse(forced).forEach(r => userForcedActive.add(r));
+      }
+    } catch (e) {}
+  }
 
   /**
    * Initializes sort listeners and refresh schedules for profile pages.
@@ -162,9 +199,10 @@ import { refreshElements } from "./refreshElements.js";
       return a[0].localeCompare(b[0]);
     });
 
-    // Auto-disable categories with >= 1000 entries for performance
+    // Auto-disable categories with >= 1000 entries for performance,
+    // but respect user's explicit enable override
     sorted.forEach(([reason, count]) => {
-      if (count >= 1000) { disabledReasons.add(reason); }
+      if (count >= 1000 && !userForcedActive.has(reason)) { disabledReasons.add(reason); }
     });
 
     let summaryDiv = document.getElementById("banSummary");
@@ -195,15 +233,19 @@ import { refreshElements } from "./refreshElements.js";
     const reason = li.textContent.replace(/^\d+\s*/, "").trim();
     if (li.classList.contains("active")) {
       disabledReasons.delete(reason);
+      userForcedActive.add(reason);
     } else {
       disabledReasons.add(reason);
+      userForcedActive.delete(reason);
     }
+    saveFilterState();
     filterBanTable();
   });
 
   let banObserver;
 
   document.addEventListener("DOMContentLoaded", () => {
+    loadFilterState();
     initRefresh();
     if (banBody) {
       updateBanSummary(banBody);
