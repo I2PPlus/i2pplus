@@ -1,6 +1,7 @@
 package net.i2p.router.web;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -46,8 +47,8 @@ public class NewsFeedHelper extends HelperBase {
                 if (init != null &&
                     // crude check to see if it's already in there
                     (entries.size() != 1 || !DataHelper.eq(entries.get(0).title, init.title))) {
-                    if (entries.isEmpty()) {entries = Collections.singletonList(init);} // in case of empty list
-                    else {entries.add(init);}
+                    entries = new ArrayList<>(entries);
+                    entries.add(init);
                 }
             }
         }
@@ -57,7 +58,7 @@ public class NewsFeedHelper extends HelperBase {
             fmt.setTimeZone(SystemVersion.getSystemTimeZone(ctx));
             int i = 0;
             for (NewsEntry entry : entries) {
-                if (i < start) {continue;}
+                if (i < start) {i++; continue;}
                 if (i > start && entry.updated > 0 && ageLimit > 0 && entry.updated < ctx.clock().now() - ageLimit) {break;}
                 buf.append("<div class=\"newsentry lazy\">\n<h3>");
                 if (entry.updated > 0) {

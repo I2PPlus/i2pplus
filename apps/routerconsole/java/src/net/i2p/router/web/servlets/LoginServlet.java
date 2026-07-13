@@ -374,25 +374,25 @@ public class LoginServlet extends HttpServlet {
             _log.error("Router is not alive or running");
             return false;
         }
-        _log.info("Router context obtained, config file: " + router.getConfigFilename());
+        if (_log.shouldDebug()) {_log.debug("Router context obtained, config file: " + router.getConfigFilename());}
 
         ConsolePasswordManager mgr = new ConsolePasswordManager(ctx);
-        _log.info("verifyPassword for user: " + username);
+        if (_log.shouldDebug()) {_log.debug("verifyPassword for user: " + username);}
 
         boolean result = mgr.checkMD5(RouterConsoleRunner.PROP_CONSOLE_PW, REALM, username, password);
-        _log.info("checkMD5 result: " + result + " for user: " + username);
+        if (_log.shouldDebug()) {_log.debug("checkMD5 result: " + result + " for user: " + username);}
 
         if (result) {
-            _log.info("SUCCESS - user authenticated via MD5");
+            if (_log.shouldDebug()) {_log.debug("SUCCESS - user authenticated via MD5");}
             return true;
         }
 
         String pbkdf2Prop = RouterConsoleRunner.PROP_CONSOLE_PW + "." + username + ".pbkdf2";
-        _log.info("Looking for PBKDF2 at: " + pbkdf2Prop);
+        if (_log.shouldDebug()) {_log.debug("Looking for PBKDF2 at: " + pbkdf2Prop);}
         String pbkdf2Hash = ctx.router().getConfigMap().get(pbkdf2Prop);
-        _log.info("PBKDF2 property " + pbkdf2Prop + " = " + (pbkdf2Hash != null ? "present" : "null"));
+        if (_log.shouldDebug()) {_log.debug("PBKDF2 property " + pbkdf2Prop + " = " + (pbkdf2Hash != null ? "present" : "null"));}
         if (pbkdf2Hash != null && !pbkdf2Hash.isEmpty()) {
-            _log.info("Checking PBKDF2 for user: " + username);
+            if (_log.shouldDebug()) {_log.debug("Checking PBKDF2 for user: " + username);}
             try {
                 String[] parts = COLON_SPLIT.split(pbkdf2Hash);
                 if (parts.length >= 3) {
@@ -404,7 +404,7 @@ public class LoginServlet extends HttpServlet {
                     javax.crypto.SecretKeyFactory skf = javax.crypto.SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
                     byte[] computedHash = skf.generateSecret(spec).getEncoded();
                     result = net.i2p.data.DataHelper.eq(storedHash, computedHash);
-                    _log.info("PBKDF2 verification result: " + result);
+                    if (_log.shouldDebug()) {_log.debug("PBKDF2 verification result: " + result);}
                 }
             } catch (Exception e) {
                 _log.error("PBKDF2 verification error", e);
@@ -417,9 +417,9 @@ public class LoginServlet extends HttpServlet {
 
         if (!result && DataHelper.eqCT("admin", username) && DataHelper.eqCT("password", password)) {
             boolean hasAnyPassword = hasAnyPassword(ctx);
-            _log.info("admin/password failed but hasAnyPassword: " + hasAnyPassword);
+            if (_log.shouldDebug()) {_log.debug("admin/password failed but hasAnyPassword: " + hasAnyPassword);}
             if (!hasAnyPassword) {
-                _log.info("No passwords configured, allowing default");
+                if (_log.shouldDebug()) {_log.debug("No passwords configured, allowing default");}
                 return true;
             }
         }
@@ -478,9 +478,9 @@ public class LoginServlet extends HttpServlet {
                 if (expiresAt > 0 && expiresAt <= now) continue;
                 String token = entry.substring(0, eq);
                 sm.restoreSession(token, username, expiresAt);
-                _log.info("Loaded persisted session for user: " + username);
+                if (_log.shouldDebug()) {_log.debug("Loaded persisted session for user: " + username);}
             } catch (NumberFormatException e) {
-                _log.warn("Invalid persisted session data: " + data);
+                _log.warn("Invalid persisted session data (length: " + data.length() + ")");
             }
         }
     }
@@ -497,6 +497,6 @@ public class LoginServlet extends HttpServlet {
         net.i2p.router.RouterContext rctx = (net.i2p.router.RouterContext) ctx;
         Router router = rctx.router();
         router.saveConfig(key, value);
-        _log.info("Preference updated: " + key + "=" + value);
+        if (_log.shouldDebug()) {_log.debug("Preference updated: " + key + "=" + value);}
     }
 }

@@ -795,12 +795,16 @@ public class TuningFormHandler extends FormHandler {
         }
 
         if (!changes.isEmpty()) {
-            Tuner.AutotuneConfig autotune = tuner.getAutotune();
-            for (Map.Entry<String, String> entry : changes.entrySet()) {
-                autotune.setProperty(entry.getKey(), entry.getValue());
+            if (tuner != null) {
+                Tuner.AutotuneConfig autotune = tuner.getAutotune();
+                for (Map.Entry<String, String> entry : changes.entrySet()) {
+                    autotune.setProperty(entry.getKey(), entry.getValue());
+                }
+                autotune.forceSave();
+                addFormNotice(_t("Tuning ranges saved — changes take effect immediately"));
+            } else {
+                addFormNotice(_t("No changes to save"));
             }
-            autotune.forceSave();
-            addFormNotice(_t("Tuning ranges saved — changes take effect immediately"));
         } else if (tuner != null) {
             addFormNotice(_t("Tuning overrides applied"));
         } else {

@@ -85,6 +85,7 @@ class TunnelRenderer {
     private int DISPLAY_LIMIT = 100;
     private int displayed;
     private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
+    private static String fmt(double val) { synchronized (TWO_DECIMALS) { return TWO_DECIMALS.format(val); } }
 
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     public boolean enableReverseLookups() {
@@ -293,7 +294,7 @@ class TunnelRenderer {
                     float bps = 1024f * count / lifetime;
                     float kbps = bps / 1024;
                     sb.append("<td class=\"cells bps\" data-sort=").append(bps).append("><span class=right>")
-                      .append(TWO_DECIMALS.format(kbps)).append("&#8239;</span><span class=left>KB/s</span></td>");
+                      .append(fmt(kbps)).append("&#8239;</span><span class=left>KB/s</span></td>");
 
                     long recv = cfg.getReceiveTunnelId();
                     if (isAdvanced) {
@@ -482,7 +483,7 @@ class TunnelRenderer {
                 long bw = bws.count(h);
                 sb.append("<td data-sort=").append(bw).append(">");
                 if (bw > 0) {
-                    sb.append("<span class=data>").append(TWO_DECIMALS.format(bw).replace(".00", "")).append("KB</span>");
+                    sb.append("<span class=data>").append(fmt(bw).replace(".00", "")).append("KB</span>");
                 } else {sb.append("<span class=data hidden>0KB</span>");}
                 sb.append("</td>");
 
@@ -636,7 +637,7 @@ class TunnelRenderer {
                                       );
                         chunkSb.append(String.format(
                                        "<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\"><span class=percentBarText>%d%%</span></span></span>",
-                                       TWO_DECIMALS.format(localTunnelCount * 100.0 / tunnelCount).replace(".00", ""),
+                                       fmt(localTunnelCount * 100.0 / tunnelCount).replace(".00", ""),
                                        localTunnelCount * 100 / tunnelCount));
                     } else {
                         chunkSb.append("<td class=tcount colspan=2 data-sort=0></td>");
@@ -648,7 +649,7 @@ class TunnelRenderer {
                                 "<td class=tcount data-sort-column-key=transitCount data-sort=%d>%d</td><td class=bar data-sort-column-key=transitCount>",
                                 transitTunnelCount, transitTunnelCount))
                                    .append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\"><span class=percentBarText>%d%%</span></span></span>",
-                                           TWO_DECIMALS.format(transitTunnelCount * 100.0 / partCount).replace(".00", ""),
+                                            fmt(transitTunnelCount * 100.0 / partCount).replace(".00", ""),
                                            transitTunnelCount * 100 / partCount))
                                    .append("</td>");
                         } else {

@@ -166,7 +166,7 @@ public class CSSHelper extends HelperBase {
      *  Keeps 2 previous nonces for backward compatibility (multi-tab, slow clients).
      *  @since 0.9.4
      */
-    public static String getNonce() {
+    public static synchronized String getNonce() {
         if (_currentNonce == null) {
             _currentNonce = Long.toString(RandomSource.getInstance().nextLong());
             _lastRotation = System.currentTimeMillis();
@@ -226,7 +226,7 @@ public class CSSHelper extends HelperBase {
      */
     public void setSoraDisplayFont() {
         // Protected with nonce in css.jsi
-        if (PROP_ENABLE_SORA_FONT != null && "true".equalsIgnoreCase(PROP_ENABLE_SORA_FONT))
+        if (_context.getBooleanProperty(PROP_ENABLE_SORA_FONT))
             _context.router().saveConfig(PROP_ENABLE_SORA_FONT, "true");
     }
 

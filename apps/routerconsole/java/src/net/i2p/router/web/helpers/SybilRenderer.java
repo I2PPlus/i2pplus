@@ -56,6 +56,7 @@ public class SybilRenderer {
     private final RouterContext _context;
     private final Log _log;
     private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
+    private static String fmt(double val) { synchronized (TWO_DECIMALS) { return TWO_DECIMALS.format(val); } }
 
     private static final int PAIRMAX = Analysis.PAIRMAX;
     private static final int MAX = Analysis.MAX;
@@ -422,7 +423,7 @@ public class SybilRenderer {
         renderRouterInfo(buf, _context.router().getRouterInfo(), null, true, false);
         buf.append("<h3 id=known class=sybils>").append(_t("Known Floodfills")).append(": ").append(ris.size()).append("</h3>\n")
            .append("<div id=sybils_summary>\n")
-           .append("<b>").append(_t("Average closest floodfill distance")).append(":</b> ").append(TWO_DECIMALS.format(avgMinDist)).append("<br>\n")
+           .append("<b>").append(_t("Average closest floodfill distance")).append(":</b> ").append(fmt(avgMinDist)).append("<br>\n")
            .append("<b>").append(_t("Routing Data")).append(":</b> ").append(DataHelper.formatTime(_context.routerKeyGenerator().getLastChanged())).append("<br>\n")
            .append("<b>").append(_t("Rotates in")).append(":</b> ").append(DataHelper.formatDuration(_context.routerKeyGenerator().getTimeTillMidnight())).append("\n")
            .append("</div>\n");
@@ -606,7 +607,7 @@ public class SybilRenderer {
                     buf.append("<p class=\"threatpoints hot\"><b>");
                 else
                     buf.append("<p class=threatpoints><b>");
-                buf.append(_t("Threat Points")).append(": " + TWO_DECIMALS.format(p).replace(".00", "") + "</b></p>\n<ul>\n");
+                buf.append(_t("Threat Points")).append(": " + fmt(p).replace(".00", "") + "</b></p>\n<ul>\n");
                 List<String> reasons = pp.getReasons();
                 if (reasons.size() > 1)
                     Collections.sort(reasons, rcomp);
@@ -638,7 +639,7 @@ public class SybilRenderer {
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private synchronized void renderPairDistance(Writer out, StringBuilder buf, List<Pair> pairs, double avg) throws IOException {
-        buf.append("<h3 class=sybils>").append(_t("Average Floodfill Distance is")).append(" ").append(TWO_DECIMALS.format(avg)).append("</h3>\n" +
+        buf.append("<h3 class=sybils>").append(_t("Average Floodfill Distance is")).append(" ").append(fmt(avg)).append("</h3>\n" +
                    "<h3 id=pairs class=sybils>").append(_t("Closest Floodfill Pairs by Hash")).append("</h3>\n");
 
         for (Pair p : pairs) {
@@ -647,7 +648,7 @@ public class SybilRenderer {
             // limit display
             if (point < 2)
                 break;  // sorted;
-            buf.append("<p class=hashdist><b>").append(_t("Hash Distance")).append(": ").append(TWO_DECIMALS.format(distance)).append(": </b>" +
+            buf.append("<p class=hashdist><b>").append(_t("Hash Distance")).append(": ").append(fmt(distance)).append(": </b>" +
                        "</p>\n");
             renderRouterInfo(buf, p.r1, null, false, false);
             renderRouterInfo(buf, p.r2, null, false, false);
@@ -931,16 +932,16 @@ public class SybilRenderer {
                 break;
             if (dist < avgMinDist) {
                 if (i == 0) {
-                    //buf.append("<p><b>Not to worry, but above router is closer than average minimum distance " + TWO_DECIMALS.format(avgMinDist) + "</b></p>\n");
+                    //buf.append("<p><b>Not to worry, but above router is closer than average minimum distance " + fmt(avgMinDist) + "</b></p>\n");
                 } else if (i == 1) {
                     buf.append("<p class=sybil_info><b>" + _t("Not to worry, but above routers are closer than average minimum distance") +
-                               " " + TWO_DECIMALS.format(avgMinDist) + "</b></p>\n");
+                               " " + fmt(avgMinDist) + "</b></p>\n");
                 } else if (i == 2) {
                     buf.append("<p class=sybil_info><b>" + _t("Possible Sybil Warning - above routers are closer than average minimum distance") +
-                               " " + TWO_DECIMALS.format(avgMinDist) + "</b></p>\n");
+                               " " + fmt(avgMinDist) + "</b></p>\n");
                 } else {
                     buf.append("<p class=sybil_info><b>" + _t("Major Sybil Warning - above router is closer than average minimum distance") +
-                               " " + TWO_DECIMALS.format(avgMinDist) + "</b></p>\n");
+                               " " + fmt(avgMinDist) + "</b></p>\n");
                 }
             }
             // this is dumb because they are already sorted
@@ -956,10 +957,10 @@ public class SybilRenderer {
         }
         double avg = tot / count;
         buf.append("<p id=sybil_totals><b>" + _t("Totals for") + " " + count + " " + _t("floodfills") +
-                   ": &nbsp;</b><span class=netdb_name>" + _t("MIN") + ":</span > " + TWO_DECIMALS.format(min) +
-                   "&nbsp; <span class=netdb_name>" + _t("AVG") + ":</span> " + TWO_DECIMALS.format(avg) +
-                   "&nbsp; <span class=netdb_name>" + _t("MEDIAN") + ":</span> " + TWO_DECIMALS.format(median) +
-                   "&nbsp; <span class=netdb_name>" + _t("MAX") + ":</span> " + TWO_DECIMALS.format(max) + "</p>\n");
+                   ": &nbsp;</b><span class=netdb_name>" + _t("MIN") + ":</span > " + fmt(min) +
+                   "&nbsp; <span class=netdb_name>" + _t("AVG") + ":</span> " + fmt(avg) +
+                   "&nbsp; <span class=netdb_name>" + _t("MEDIAN") + ":</span> " + fmt(median) +
+                   "&nbsp; <span class=netdb_name>" + _t("MAX") + ":</span> " + fmt(max) + "</p>\n");
         writeBuf(out, buf);
     }
 
@@ -1083,7 +1084,7 @@ public class SybilRenderer {
         if (us != null) {
            BigInteger dist = HashDistance.getDistance(us, info.getHash());
            distance = biLog2(dist);
-           buf.append("<p><b>").append(_t("Hash Distance")).append(":</b> ").append(TWO_DECIMALS.format(distance)).append("</p>\n");
+           buf.append("<p><b>").append(_t("Hash Distance")).append(":</b> ").append(fmt(distance)).append("</p>\n");
         }
         String kr = info.getOption("netdb.knownRouters");
         if (kr != null) {
@@ -1201,7 +1202,7 @@ public class SybilRenderer {
             out.write("<tr><td><a href=\"#" + hh.substring(0, 6) + "\"><code>" + hh + "</code></a><td>");
             if (prev != null) {
                 BigInteger dist = HashDistance.getDistance(prev, h);
-                writeDistance(out, TWO_DECIMALS, dist);
+                writeDistance(out, dist);
             }
             prev = h;
             out.write("</tr>\n");
@@ -1223,9 +1224,9 @@ public class SybilRenderer {
         out.write("<h3>" + _x("Distance to ") + "<span style=text-transform:none!important>" + from.toBase64() + "</span></h3>\n");
         prev = null;
         final int limit = Math.min(10, sybils.size());
-        DateFormat utcTWO_DECIMALS = DateFormat.getDateInstance(DateFormat.MEDIUM);
+        DateFormat utcFmt = DateFormat.getDateInstance(DateFormat.MEDIUM);
         for (int i = start; i <= days; i++) {
-            out.write("<h3 class=tabletitle>" + _x("Distance for") + ' ' + utcTWO_DECIMALS.format(new Date(now)) +
+            out.write("<h3 class=tabletitle>" + _x("Distance for") + ' ' + utcFmt.format(new Date(now)) +
                       "</h3><table class=sybil_distance><tr><th>Hash<th>Distance<th>Distance from previous</tr>\n");
             Hash rkey = rkgen.getRoutingKey(from, now);
             xor = new XORComparator<>(rkey);
@@ -1235,11 +1236,11 @@ public class SybilRenderer {
                 String hh = h.toBase64();
                 out.write("<tr><td><a href=\"#" + hh.substring(0, 6) + "\"><code>" + hh + "</code></a><td>");
                 BigInteger dist = HashDistance.getDistance(rkey, h);
-                writeDistance(out, TWO_DECIMALS, dist);
+                writeDistance(out, dist);
                 out.write("<td>");
                 if (prev != null) {
                     dist = HashDistance.getDistance(prev, h);
-                    writeDistance(out, TWO_DECIMALS, dist);
+                    writeDistance(out, dist);
                 }
                 prev = h;
                 out.write("</tr>\n");
@@ -1252,10 +1253,10 @@ public class SybilRenderer {
     }
 
     /** @since 0.9.28 */
-    private static void writeDistance(Writer out, DecimalFormat TWO_DECIMALS, BigInteger dist) throws IOException {
+    private static void writeDistance(Writer out, BigInteger dist) throws IOException {
         double distance = biLog2(dist);
         if (distance < MIN_CLOSE) {out.write("<span style=font-weight:600;color:red>");}
-        out.write(TWO_DECIMALS.format(distance));
+        out.write(fmt(distance));
         if (distance < MIN_CLOSE) {out.write("</span>");}
     }
 

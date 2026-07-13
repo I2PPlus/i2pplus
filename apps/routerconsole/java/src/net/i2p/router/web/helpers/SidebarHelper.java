@@ -63,6 +63,7 @@ public class SidebarHelper extends HelperBase {
     static final String THINSP = " / ";
     private static final char S = ',';
     private static final DecimalFormat INTEGER_FORMAT = new DecimalFormat("###,###,##0");
+    private static String fmtInt(long val) { synchronized (INTEGER_FORMAT) { return INTEGER_FORMAT.format(val); } }
     private static final DecimalFormat ONE_DECIMAL = new DecimalFormat("#0.0");
     private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
     private static final DecimalFormat ZERO_DECIMAL = new DecimalFormat("##0");
@@ -374,7 +375,7 @@ public class SidebarHelper extends HelperBase {
         used /= 1024*1024;
         long total = tot / (1024*1024);
         if (used > total) {used = total;}
-        return INTEGER_FORMAT.format(used) + " / " + total + " M";
+        return fmtInt(used) + " / " + total + " M";
     }
 
     /** @since 0.9.32 */
@@ -415,8 +416,8 @@ public class SidebarHelper extends HelperBase {
         long total = tot / (1024*1024);
         if (used > total) {used = total;}
         String bar = "<div class=\"percentBarOuter\" id=sb_memoryBar><div class=percentBarText>RAM: " +
-                      INTEGER_FORMAT.format(used) + " / " + total + " M</div><div class=percentBarInner style=width:" +
-                      INTEGER_FORMAT.format(usedPc) + "%></div></div>";
+                      fmtInt(used) + " / " + total + " M</div><div class=percentBarInner style=width:" +
+                      fmtInt(usedPc) + "%></div></div>";
         return bar;
     }
 

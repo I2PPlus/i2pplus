@@ -87,6 +87,7 @@ import net.i2p.util.VersionComparator;
 class NetDbRenderer {
     private final RouterContext _context;
     private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
+    private static String fmt(double val) { synchronized (TWO_DECIMALS) { return TWO_DECIMALS.format(val); } }
     public NetDbRenderer (RouterContext ctx) {
         _context = ctx;
         _organizer = ctx.profileOrganizer();
@@ -1153,7 +1154,7 @@ class NetDbRenderer {
             }
             if (ls != null) {
                 BigInteger dist = HashDistance.getDistance(_context.routerHash(), ls.getRoutingKey());
-                String distance = TWO_DECIMALS.format(biLog2(dist));
+                String distance = fmt(biLog2(dist));
                 now = _context.clock().now();
                 buf.append("<span id=singleLS></span>");
                 renderLeaseSet(buf, ls, true, now, false, distance);
