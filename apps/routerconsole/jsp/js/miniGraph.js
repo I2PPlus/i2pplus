@@ -411,7 +411,7 @@ function renderNewGraph() {
     const continuous = graphCanvas.dataset.continuous === "1";
     const rxStr = graphCanvas.dataset.rx;
     const txStr = graphCanvas.dataset.tx;
-    const minutes = parseInt(getCSSVar("--minigraph_minutes"), 10) || parseInt(graphCanvas.dataset.minutes, 10) || 20;
+    const minutes = parseInt(graphCanvas.dataset.minutes, 10) || 20;
 
     // Parse server data, extract live value (last element), update shift buffer
     if (rxStr && txStr) {
@@ -562,12 +562,10 @@ function initNewGraph() {
         if (document.hidden) {
             clearInterval(pollIntervalId);
         } else {
-            // After a visibility gap the buffer is behind real time.
-            // Null it to force a clean re-init from the next sidebar
-            // refresh data, avoiding the long flat line from missed
-            // intermediate values.
-            rxBuffer = null;
-            txBuffer = null;
+            // Reset lastShiftTime so the shift logic catches up
+            // naturally without nulling the buffer — avoids the
+            // visual "replay" of re-initializing from server data.
+            lastShiftTime = Date.now();
             const el = document.getElementById("minigraph");
             const mode = el && el.dataset.continuous === "1";
             pollIntervalId = setInterval(pollGraph, mode ? 1000 : POLL_INTERVAL);
