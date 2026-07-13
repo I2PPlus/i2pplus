@@ -494,6 +494,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                     _log.warn("Tuner: error refreshing MLKEM pool", e);
             }
         }
+        // Expunge stale CoDel queue weak references (queues from cycled tunnels)
+        CoDelBlockingQueue.expungeStaleInstances();
+        CoDelPriorityBlockingQueue.expungeStaleInstances();
         // Flush dirty state to disk (at most once per 5min, per AutotuneConfig throttle)
         _autotune.save();
     }
@@ -8449,7 +8452,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class PoolFailureThresholdParam extends BaseParam {
         PoolFailureThresholdParam() {
             super("tunnel.pool.failureThreshold", "Pool failure threshold (count)",
-                  SUB_TUNNEL, 1, 20, 1, "tunnel.buildSuccessRate", _context);
+                  SUB_TUNNEL, 3, 20, 1, "tunnel.buildSuccessRate", _context);
         }
         protected void applyValue(int value) { BuildExecutor.setPoolFailureThreshold(value); }
         protected int getRuntimeValue() { return BuildExecutor.getPoolFailureThreshold(); }
@@ -8479,7 +8482,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class PoolBackoffMsParam extends BaseParam {
         PoolBackoffMsParam() {
             super("tunnel.pool.backoffMs", "Pool rebuild backoff (ms)",
-                  SUB_TUNNEL, 1000, 60000, 2000, "tunnel.buildSuccessRate", _context);
+                  SUB_TUNNEL, 1000, 30000, 2000, "tunnel.buildSuccessRate", _context);
         }
         protected void applyValue(int value) { BuildExecutor.setPoolBackoffMs(value); }
         protected int getRuntimeValue() { return (int) BuildExecutor.getPoolBackoffMs(); }
