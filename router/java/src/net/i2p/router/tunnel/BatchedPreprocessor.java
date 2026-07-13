@@ -42,9 +42,13 @@ import net.i2p.util.SystemVersion;
  */
 class BatchedPreprocessor extends TrivialPreprocessor {
     private long _pendingSince;
+    private long _pendingDelay;
     private final String _name;
 
     private static final boolean DEBUG = false;
+
+    /** Minimum delay even under full pressure (ms) — avoids busy-wait retry storms */
+    private static final long MIN_FLUSH_DELAY = 5L;
 
     public BatchedPreprocessor(RouterContext ctx, String name) {
         super(ctx);
@@ -89,15 +93,42 @@ class BatchedPreprocessor extends TrivialPreprocessor {
     @Override
     public long getDelayAmount() { return getDelayAmount(true); }
     private long getDelayAmount(boolean shouldStat) {
-        long rv = -1;
-        long defaultAmount = getSendDelay();
-        if (_pendingSince > 0)
-            rv = _pendingSince + defaultAmount - _context.clock().now();
-        if (rv > defaultAmount)
-            rv = defaultAmount;
+        long rv;
+        if (_pendingSince > 0 && _pendingDelay > 0) {
+            rv = _pendingSince + _pendingDelay - _context.clock().now();
+            if (rv > _pendingDelay)
+                rv = _pendingDelay;
+        } else {
+            rv = getSendDelay();
+        }
         if (shouldStat)
-            _context.statManager().addRateData("tunnel.batchDelayAmount", rv);
+            _context.statManager().addRateData("tunnel.batchDelayAmount", Math.max(0, rv));
         return rv;
+    }
+
+    /**
+     * Scale the flush delay inversely with buffer pressure so that
+     * near-full buffers flush almost immediately (low latency) while
+     * near-empty buffers wait longer (better aggregation).
+     *
+     * Pressure is the max of buffer fullness (allocated/FULL_SIZE)
+     * and queue pressure (pending.size/FORCE_BATCH_FLUSH), bounded [0,1].
+     *
+     * delay = MIN_FLUSH_DELAY + (getSendDelay() - MIN_FLUSH_DELAY) * (1 - pressure)
+     */
+    private long computePendingDelay(long allocated, int pendingSize) {
+        int fullnessPct = (int) (allocated * 100L / FULL_SIZE);
+        int queuePct = pendingSize * 100 / FORCE_BATCH_FLUSH;
+        int pressure = Math.min(100, Math.max(fullnessPct, queuePct));
+        _context.statManager().addRateData("tunnel.batchPressure", pressure);
+        long maxDelay = getSendDelay();
+        long delay = MIN_FLUSH_DELAY + (maxDelay - MIN_FLUSH_DELAY) * (100L - pressure) / 100;
+        if (delay < MIN_FLUSH_DELAY)
+            delay = MIN_FLUSH_DELAY;
+        if (delay > maxDelay)
+            delay = maxDelay;
+        _context.statManager().addRateData("tunnel.batchPendingDelay", delay);
+        return delay;
     }
 
     /* See TunnelGateway.QueuePreprocessor for Javadoc */
@@ -259,8 +290,10 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                     }
 
                     if (!pending.isEmpty()) {
-                        // rare
+                        // rare — compute delay from buffer state before the flush
+                        // as a proxy for current traffic pressure
                         _pendingSince = _context.clock().now();
+                        _pendingDelay = computePendingDelay(allocated, pending.size());
                         _context.statManager().addRateData("tunnel.batchFlushRemaining", pending.size(), beforeSize);
                         if (_log.shouldInfo())
                             display(allocated, pending, "\n* Flushed pending messages in buffer, some remain...");
@@ -292,11 +325,13 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                         return false;
                     }
                     // won't get here, we returned
-                } else {
+                 } else {
                      // We didn't flush. Note that the messages remain on the pending list.
                     _context.statManager().addRateData("tunnel.batchDelay", pending.size());
-                    if (_pendingSince <= 0)
+                    if (_pendingSince <= 0) {
                         _pendingSince = _context.clock().now();
+                        _pendingDelay = computePendingDelay(allocated, pending.size());
+                    }
                     if (batchCount > 1)
                         _context.statManager().addRateData("tunnel.batchCount", batchCount);
                     // not yet time to send the delayed flush
