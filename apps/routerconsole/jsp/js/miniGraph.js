@@ -484,6 +484,7 @@ function renderNewGraph() {
 
     const rxMax = Math.max(...rxValues, 1);
     const txMax = Math.max(...txValues, 1);
+    const globalMax = Math.max(rxMax, txMax);
 
     // Read theme colors from CSS variables
     const rxColor = getCSSVar("--minigraph_in") || "#0cc";
@@ -506,14 +507,14 @@ function renderNewGraph() {
     drawGrid(offscreenCtx, minutes, split);
     if (split) {
         // Split: single-pass, no blend needed
-        drawHalf(offscreenCtx, txValues, txMax, txColor, txFill, valueToYIn, false, rtl, glowWidth, glowAlpha, glowBlur, lineWidth, tension, CENTER_Y, null, null);
-        drawHalf(offscreenCtx, rxValues, rxMax, rxColor, rxFill, valueToYOut, true, rtl, glowWidth, glowAlpha, glowBlur, lineWidth, tension, CENTER_Y, null, null);
+        drawHalf(offscreenCtx, txValues, globalMax, txColor, txFill, valueToYIn, false, rtl, glowWidth, glowAlpha, glowBlur, lineWidth, tension, CENTER_Y, null, null);
+        drawHalf(offscreenCtx, rxValues, globalMax, rxColor, rxFill, valueToYOut, true, rtl, glowWidth, glowAlpha, glowBlur, lineWidth, tension, CENTER_Y, null, null);
     } else {
         // Overlay: two-pass — fills blended first, then strokes on top
-        drawHalf(offscreenCtx, txValues, txMax, txColor, txFill, valueToYOverlay, false, rtl, glowWidth, glowAlpha, glowBlur, lineWidth, tension, HEIGHT, blendMode, "fill");
-        drawHalf(offscreenCtx, rxValues, rxMax, rxColor, rxFill, valueToYOverlay, false, rtl, glowWidth, glowAlpha, glowBlur, lineWidth, tension, HEIGHT, blendMode, "fill");
-        drawHalf(offscreenCtx, txValues, txMax, txColor, txFill, valueToYOverlay, false, rtl, glowWidth, glowAlpha, glowBlur, lineWidth, tension, HEIGHT, null, "stroke");
-        drawHalf(offscreenCtx, rxValues, rxMax, rxColor, rxFill, valueToYOverlay, false, rtl, glowWidth, glowAlpha, glowBlur, lineWidth, tension, HEIGHT, null, "stroke");
+        drawHalf(offscreenCtx, txValues, globalMax, txColor, txFill, valueToYOverlay, false, rtl, glowWidth, glowAlpha, glowBlur, lineWidth, tension, HEIGHT, blendMode, "fill");
+        drawHalf(offscreenCtx, rxValues, globalMax, rxColor, rxFill, valueToYOverlay, false, rtl, glowWidth, glowAlpha, glowBlur, lineWidth, tension, HEIGHT, blendMode, "fill");
+        drawHalf(offscreenCtx, txValues, globalMax, txColor, txFill, valueToYOverlay, false, rtl, glowWidth, glowAlpha, glowBlur, lineWidth, tension, HEIGHT, null, "stroke");
+        drawHalf(offscreenCtx, rxValues, globalMax, rxColor, rxFill, valueToYOverlay, false, rtl, glowWidth, glowAlpha, glowBlur, lineWidth, tension, HEIGHT, null, "stroke");
     }
 
     // Copy to visible canvas in one operation
