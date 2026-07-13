@@ -19,6 +19,7 @@ let connectionStatusTimeout;
 let debounceTimeoutId = null;
 let isDown = false;
 let isRefreshing = false;
+let recoveryPending = false;
 let lastRefreshTime = 0;
 let noResponse = 0;
 let refreshActive = true;
@@ -68,6 +69,7 @@ worker.port.addEventListener("message", ({ data }) => {
       noResponse = 0;
       if (responseText.includes("<body id=sb>")) {
         responseDoc = parser.parseFromString(responseText, "text/html");
+        document.body.classList.remove("isDown");
         requestAnimationFrame(applySidebarUpdates);
       }
     } else {
@@ -132,7 +134,8 @@ function stopAutoRefresh() {
  * @returns {Promise<void>}
  */
 export async function refreshSidebar(force = false) {
-  if (!refreshActive || document.hidden || !navigator.onLine || isDown) return;
+  if (!refreshActive || document.hidden || !navigator.onLine) return;
+  if (!force && isDown) return;
   try {
     worker.port.postMessage({ url: `/xhr1.jsp?requestURI=${uri}`, force });
   } catch (e) {
@@ -220,6 +223,13 @@ function applySidebarUpdates() {
 
   isRefreshing = false;
   noResponse = 0;
+
+  if (recoveryPending) {
+    recoveryPending = false;
+    isDown = false;
+    lastRefreshTime = 0;
+    document.body.classList.remove("isDown");
+  }
 }
 
 /**
@@ -284,6 +294,13 @@ function refreshAll() {
   isRefreshing = false;
   // Trigger immediate minigraph re-render after full sidebar replacement
   document.dispatchEvent(new Event("sidebarRefreshed"));
+
+  if (recoveryPending) {
+    recoveryPending = false;
+    isDown = false;
+    lastRefreshTime = 0;
+    document.body.classList.remove("isDown");
+  }
 }
 
 /**
@@ -311,16 +328,19 @@ async function updateConnectionStatus() {
       isDown = true;
       document.body.classList.add("isDown");
       refreshAll();
-    } else if (!currentlyDown && isDown) {
+    }
+    if (isDown) {
+      refreshSidebar(true);
+    }
+    if (!currentlyDown && isDown && !recoveryPending) {
+      recoveryPending = true;
       isRefreshing = true;
-      refreshSidebar(true).then(() => {
-        if (responseDoc && responseDoc.getElementById("sb")) {
-          isDown = false;
-          noResponse = 0;
-          lastRefreshTime = 0;
-          document.body.classList.remove("isDown");
+      setTimeout(() => {
+        if (recoveryPending) {
+          recoveryPending = false;
+          isRefreshing = false;
         }
-      }).finally(() => { isRefreshing = false; });
+      }, 30000);
     }
   }, 500);
 }
