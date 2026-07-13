@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.time.BuildTime;
 
 import net.i2p.util.ConcurrentHashSet;
@@ -619,7 +620,7 @@ public class Banlist {
      * @param routerHash Hash of the router sending unsolicited reply
      * @param version router version (may be null)
      */
-    public void unsolicitedDBSearchReply(Hash routerHash, String version) {
+    public void unsolicitedDBSearchReply(Hash routerHash, String version, RouterInfo ri) {
         if (routerHash == null) return;
         if (!_enableDbSearchBan) return;
         if (_context.router().getUptime() < _startupGrace) return;
@@ -652,7 +653,7 @@ public class Banlist {
 
             BanLogger banLogger = new BanLogger();
             banLogger.initialize(_context);
-            banLogger.logBan(routerHash, _context, reason, _badPacketDuration);
+            banLogger.logBan(routerHash, (String) null, reason, _badPacketDuration, ri);
             banlistRouter(routerHash, reason, null, null, _context.clock().now() + _badPacketDuration);
             _unsolicitedDBSearch.remove(routerHash);
         }

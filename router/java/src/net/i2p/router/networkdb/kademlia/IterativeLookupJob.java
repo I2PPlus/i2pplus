@@ -57,7 +57,7 @@ class IterativeLookupJob extends JobImpl {
                 if (isBanlisted) {msg += " (Router is banlisted)";}
                 log.warn(msg);
             }
-            ctx.banlist().unsolicitedDBSearchReply(from, version);
+            ctx.banlist().unsolicitedDBSearchReply(from, version, fromRI);
             return;
         }
 

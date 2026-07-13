@@ -328,7 +328,7 @@ public class ParticipatingThrottler {
         }
         String ipPort = getRouterIPPort(ri);
         String banReason = "No version in RouterInfo";
-        _banLogger.logBan(h, ipPort, banReason, bantime);
+        _banLogger.logBan(h, ipPort, banReason, bantime, ri);
         context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + bantime);
     }
 
@@ -351,7 +351,7 @@ public class ParticipatingThrottler {
             }
             String ipPort = getRouterIPPort(ri);
             String banReason = "Compressible RouterInfo & older than 0.9.57";
-            _banLogger.logBan(h, ipPort, banReason, 24*60*60*1000L);
+            _banLogger.logBan(h, ipPort, banReason, 24*60*60*1000L, ri);
             context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + 24*60*60*1000);
             return true;
         }
@@ -384,7 +384,7 @@ public class ParticipatingThrottler {
             if (context.banlist().isLuBanEnabled()) {
                 String ipPort = getRouterIPPort(ri);
                 String banReason = "Old and slow (" + version + ")";
-                _banLogger.logBan(h, ipPort, banReason, bantime);
+                _banLogger.logBan(h, ipPort, banReason, bantime, ri);
                 context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + bantime);
             }
             return true;
@@ -512,7 +512,7 @@ public class ParticipatingThrottler {
     private void handleExcessiveRequests(Hash h, String caps, int count, int limit, int bantime, RouterInfo ri) {
         String ipPort = getRouterIPPort(ri);
         String banReason = "Excessive tunnel requests";
-        _banLogger.logBan(h, ipPort, banReason, bantime);
+        _banLogger.logBan(h, ipPort, banReason, bantime, ri);
         context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + bantime);
         context.simpleTimer2().addEvent(new Disconnector(h, banReason), 11 * 60 * 1000L);
         if (_log.shouldWarn()) {
