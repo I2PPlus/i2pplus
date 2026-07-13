@@ -40,7 +40,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class SyntheticREDQueue implements BandwidthEstimator {
 
-    private static volatile float _maxDropProbability = 0.00005f;
+    private static volatile float _maxDropProbability = 0.005f;
     private static final int DECAY_FACTOR = 8;
     private static final int WESTWOOD_RTT_MIN = 50; // ms
 

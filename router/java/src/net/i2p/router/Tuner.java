@@ -3171,7 +3171,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         @Override
         protected int getDefaultMax(RouterContext ctx) {
-            return getShareBps(ctx);
+            return Math.min(getShareBps(ctx), 262144);
         }
 
         @Override
@@ -3244,7 +3244,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         @Override
         protected int getDefaultMax(RouterContext ctx) {
-            return getShareBps(ctx) * 2;
+            return Math.min(getShareBps(ctx) * 2, 524288);
         }
 
         @Override
@@ -3308,10 +3308,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         REDMaxDropProbParam() {
             // Convert float probability to integer micro-units for BaseParam (long integer type)
-            // 0.00005f = 50 micro-units, min 10 (0.0001%), max 1000 (0.1%), step 10
+            // 0.005f = 5000 micro-units, min 100 (0.01%), max 50000 (5%), step 1000
             super("RED_MAX_DROP_PROB",
                   "RED max drop probability",
-                   SUB_CONGESTION, 10, 1000, 10,
+                   SUB_CONGESTION, 100, 50000, 1000,
                    "tunnel.participatingMessageDropped", _context);
         }
 
@@ -3340,7 +3340,24 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (!Double.isNaN(observed) && observed > 20 && !Double.isNaN(codelDelay) && codelDelay > 3)
                 return Math.min(_max, current + _step);
 
-            // No drops, queue healthy: decrease probability (buffer more gently)
+            // Some drops with moderate delay: mild increase (early congestion signal)
+            if (!Double.isNaN(observed) && observed > 5 && !Double.isNaN(codelDelay) && codelDelay > 1)
+                return Math.min(_max, current + _step);
+
+            // Active traffic with measurable CoDel queuing: converge toward _max / 10
+            // This prevents the always-decrease drift when traffic is flowing
+            // but RED drops haven't happened yet (drop prob too low to cause them)
+            int convergeTarget = _max / 10;
+            if (!Double.isNaN(codelDelay) && codelDelay > 0.2 &&
+                (Double.isNaN(observed) || observed < 5)) {
+                if (current > convergeTarget)
+                    return Math.max(convergeTarget, current - _step);
+                if (current < convergeTarget)
+                    return Math.min(convergeTarget, current + _step);
+                return current;
+            }
+
+            // No drops, very low delay: decrease probability (buffer more gently)
             if ((Double.isNaN(observed) || observed == 0) && !systemBusy)
                 return Math.max(_min, current - _step);
 
