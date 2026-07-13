@@ -170,7 +170,7 @@ class TransientDataStore implements DataStore {
                     _context.banlist().banlistRouter(key, "LU Router", null, null,
                                                      _context.clock().now() + 60 * 60 * 1000);
                     String ipPort = getRouterIPPort(ri);
-                    _banLogger.logBan(key, ipPort, "LU Router", 60 * 60 * 1000L);
+                    _banLogger.logBan(key, ipPort, "LU Router", 60 * 60 * 1000L, ri);
                 }
                 rv = false;
             }
@@ -184,7 +184,7 @@ class TransientDataStore implements DataStore {
                     _context.banlist().banlistRouter(key, "XG Router", null, null,
                                                      _context.clock().now() + 60 * 60 * 1000);
                     String ipPort = getRouterIPPort(ri);
-                    _banLogger.logBan(key, ipPort, "XG Router", 60 * 60 * 1000L);
+                    _banLogger.logBan(key, ipPort, "XG Router", 60 * 60 * 1000L, ri);
                 }
                 rv = false;
             }

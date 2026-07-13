@@ -264,7 +264,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                         }
                         String reason = version != null ? "Sybil Analysis (" + version + ")" : "Sybil Analysis";
                         ban.banlistRouter(h, reason, when, null, until);
-                        _banLogger.logBan(h, ipPort, reason, until);
+                        _banLogger.logBan(h, ipPort, reason, until, ri);
                     }
                 }
             }
@@ -599,7 +599,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                 reasonBuf.append(" (").append(fmt.format(p).replace(".00", "")).append(" points)");
                 String reason = reasonBuf.toString();
                 _context.banlist().banlistRouter(h, reason, null, null, blockUntil);
-                _banLogger.logBan(h, ipPort, reason, blockUntil);
+                _banLogger.logBan(h, ipPort, reason, blockUntil, ri);
 
                 if (_log.shouldWarn()) {
                     _log.warn("Banning " + h.toBase64() + "-> Sybil Scan (" + fmt.format(p).replace(".00", "") + " points)");

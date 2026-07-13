@@ -970,8 +970,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             byte[] ip = _con.getRemoteIP();
             int port = _con.getRemotePort();
             String ipPort = ip != null ? formatIPPort(ip, port) : "UNKNOWN";
-            _banLogger.logBan(h, ipPort, "Invalid NTCP address", 4*60*60*1000L);
-            _context.banlist().banlistRouter(h, "Invalid NTCP address",
+            _banLogger.logBan(h, ipPort, "Invalid NTCP address", 4*60*60*1000L, ri);            _context.banlist().banlistRouter(h, "Invalid NTCP address",
                                              null, null, _context.clock().now() + 4*60*60*1000L);
             _context.commSystem().forceDisconnect(h, "Invalid NTCP address");
             if (_log.shouldWarn() && !isBanned) {
@@ -1006,7 +1005,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             }
             reason = "Invalid Router version (" + version + " / " + bw +
                       flag + ")";
-            _banLogger.logBan(h, ipPort, reason, now + 24*60*60*1000L);
+            _banLogger.logBan(h, ipPort, reason, now + 24*60*60*1000L, ri);
             _context.banlist().banlistRouter(h, reason, null, null, now + 24*60*60*1000L);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             if (_log.shouldWarn() && !isBanned)
@@ -1018,7 +1017,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
         if (!reachable && isSlow && isOld) {
             reason = "Old and slow (" + version + " / " + bw + "U)";
-            _banLogger.logBan(h, ipPort, reason, now + 60*60*1000L);
+            _banLogger.logBan(h, ipPort, reason, now + 60*60*1000L, ri);
             _context.banlist().banlistRouter(h, reason, null, null, now + 60*60*1000L);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             if (_log.shouldInfo() && !isBanned)
@@ -1030,7 +1029,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
         if (reachable && unreachable) {
             reason = "Invalid published capabilities (RU)";
-            _banLogger.logBan(h, ipPort, reason, now + 24*60*60*1000L);
+            _banLogger.logBan(h, ipPort, reason, now + 24*60*60*1000L, ri);
             _context.banlist().banlistRouter(h, reason, null, null, now + 24*60*60*1000L);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             if (_log.shouldWarn() && !isBanned) {

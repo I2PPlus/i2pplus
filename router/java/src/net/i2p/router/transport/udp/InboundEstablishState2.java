@@ -454,7 +454,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             long banDuration = _context.netDb().floodfillEnabled() ? 36*60*60*1000L : 4*24*60*60*1000L;
             _context.banlist().banlistRouter(h, "Invalid publication date",
                                              null, null, _context.clock().now() + banDuration);
-            _banLogger.logBan(h, ipPort, "Invalid publication date", banDuration);
+            _banLogger.logBan(h, ipPort, "Invalid publication date", banDuration, ri);
             if (_log.shouldWarn() && !isBanned) {
                 _log.warn("Banning for 1h and disconnecting from Router [" +
                           h.toBase64().substring(0,6) + "] -> Invalid publication date");
@@ -465,7 +465,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (mismatchMessage != null) {
             _context.banlist().banlistRouter(h, "Invalid SSU address",
                                              null, null, _context.clock().now() + 4 * 60 * 60 * 1000L);
-            _banLogger.logBan(h, ipPort, "Invalid SSU address", 4 * 60 * 60 * 1000L);
+            _banLogger.logBan(h, ipPort, "Invalid SSU address", 4 * 60 * 60 * 1000L, ri);
             _context.commSystem().forceDisconnect(h, "Invalid SSU address");
             if (_log.shouldWarn() && !isBanned) {
                 _log.warn("Banning for 4h and disconnecting from Router [" +
@@ -492,7 +492,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (!reachable && isSlow && isOld) {
             _context.banlist().banlistRouter(h, "Old and slow (" + version + " / " + bw + "U)",
                                              null, null, _context.clock().now() + 60 * 60 * 1000L);
-            _banLogger.logBan(h, ipPort, "Old and slow (" + version + " / " + bw + "U)", 60 * 60 * 1000L);
+            _banLogger.logBan(h, ipPort, "Old and slow (" + version + " / " + bw + "U)", 60 * 60 * 1000L, ri);
             if (ri.verifySignature()) {
                 _context.blocklist().add(_aliceIP);
             }
