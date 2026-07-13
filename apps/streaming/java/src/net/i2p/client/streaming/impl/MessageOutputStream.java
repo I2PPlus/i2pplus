@@ -87,7 +87,7 @@ class MessageOutputStream extends OutputStream {
      * Default passive flush delay optimized for lower latency while maintaining stability.
      * @since 0.9.70+ mutable for adaptive tuning
      */
-    private static volatile int _defaultPassiveFlushDelay = SystemVersion.isSlow() ? 200 : 100;
+    private static volatile int _defaultPassiveFlushDelay = SystemVersion.isSlow() ? 100 : 50;
     private static final String PROP_PASSIVE_FLUSH_DELAY = "router.passiveFlushDelay";
 
     /** @since 0.9.70+ */

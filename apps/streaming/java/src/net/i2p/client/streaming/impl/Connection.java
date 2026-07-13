@@ -1718,7 +1718,12 @@ class Connection {
                     }
                     _ssthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2 );
                     _ssthresh = Math.min(ConnectionPacketHandler.getMaxSlowStartWindow(_context), _ssthresh);
-                    _options.setWindowSize(1);
+                    // Partial window collapse (matching fast retransmit behavior):
+                    // halve the window instead of collapsing to 1, so connections
+                    // with transient loss don't stall at single-packet throughput.
+                    int wsize = _options.getWindowSize();
+                    _options.setWindowSize(Math.min(_ssthresh, Math.max(1, wsize / 2)));
+                    updatePacingRate();
                 } else if (_log.shouldDebug()) {
                     _log.debug(Connection.this + " not cutting SlowStartThreshold and Window");
                 }
@@ -1747,18 +1752,20 @@ class Connection {
                     return;
                 } else if (packet.getNumSends() >= 3 &&
                            packet.isFlagSet(Packet.FLAG_CLOSE) &&
-                           packet.getPayloadSize() <= 0 &&
-                           getCloseReceivedOn() > 0) {
-                    // Bug workaround to prevent 5 minutes of retransmission
-                    // Routers before 0.9.9 have bugs, they won't ack anything after
-                    // they sent a close. Only send 3 CLOSE packets total, then
-                    // shut down normally.
-                    if (_log.shouldDebug()) {
-                        _log.debug(Connection.this + " too many close resends, closing...");
+                           packet.getPayloadSize() <= 0) {
+                    // Bug workaround to prevent 5 minutes of CLOSE retransmission.
+                    // If the remote has also closed, 3 sends is enough.
+                    // If they haven't, cap at 8 sends (~90s with backoff) instead of
+                    // the full maxResends (~12 min).
+                    int maxClose = getCloseReceivedOn() > 0 ? 3 : 8;
+                    if (packet.getNumSends() >= maxClose) {
+                        if (_log.shouldDebug()) {
+                            _log.debug(Connection.this + " too many close resends, closing...");
+                        }
+                        packet.cancelled();
+                        disconnect(false);
+                        return;
                     }
-                    packet.cancelled();
-                    disconnect(false);
-                    return;
                 } else {
 
                     if (_isChoking) {
