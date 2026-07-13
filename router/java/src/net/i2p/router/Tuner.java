@@ -1797,13 +1797,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             int target = Math.max(1500, (int) (worstObserved * 4));
 
-            if (current >= target * 0.5 && current <= target * 1.5 && !hasFailures)
-                return current;
+            if (!hasFailures) {
+                if (current >= target * 0.5 && current <= target * 1.5)
+                    return current;
+                return clamp(current, target, _step);
+            }
 
-            if (target < current && hasFailures)
+            // Failures present: raise timeout toward failTarget.
+            // target is based on successful connections only; failures signal
+            // we need more headroom, so converge toward 1.5x target.
+            int failTarget = (int) (target * 1.5);
+            if (failTarget <= current)
                 return current;
-
-            return clamp(current, target, _step);
+            return clamp(current, failTarget, _step);
         }
     }
 
