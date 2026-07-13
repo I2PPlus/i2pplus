@@ -85,12 +85,13 @@ class BanlistRenderer {
     private Object[] readSessionBans() {
         Map<String, String> ipMap = new HashMap<>();
         Map<String, String> hostnameMap = new HashMap<>();
+        Map<String, String> capsMap = new HashMap<>();
         List<IPBanEntry> ipBans = new ArrayList<>();
         Set<String> seenIPs = new HashSet<>();
         File logDir = new File(_context.getRouterDir(), "sessionbans");
         File logFile = new File(logDir, "sessionbans.txt");
         if (!logFile.exists()) {
-            return new Object[] { ipMap, hostnameMap, ipBans };
+            return new Object[] { ipMap, hostnameMap, capsMap, ipBans };
         }
         long now = _context.clock().now();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), StandardCharsets.UTF_8))) {
@@ -116,6 +117,13 @@ class BanlistRenderer {
                     if (hostname != null && !hostname.isEmpty() && hostnameMap.get(hash) == null) {
                         hostnameMap.put(hash, hostname);
                     }
+                    // Read caps from 6th field (available in new entries only)
+                    if (parts.length >= 6 && capsMap.get(hash) == null) {
+                        String caps = parts[5].trim();
+                        if (!caps.isEmpty()) {
+                            capsMap.put(hash, caps);
+                        }
+                    }
                 }
                 // Build ipOnlyBans for entries with no hash
                 if (parts.length >= 4 && (hash.isEmpty() || hash.equals("UNKNOWN")) && !ipPort.isEmpty()) {
@@ -132,7 +140,7 @@ class BanlistRenderer {
                 }
             }
         } catch (IOException e) { /* ignored */ }
-        return new Object[] { ipMap, hostnameMap, ipBans };
+        return new Object[] { ipMap, hostnameMap, capsMap, ipBans };
     }
 
     /**
@@ -259,7 +267,9 @@ class BanlistRenderer {
         @SuppressWarnings("unchecked")
         Map<String, String> hostnameMap = (Map<String, String>) sessionBans[1];
         @SuppressWarnings("unchecked")
-        List<IPBanEntry> ipOnlyBans = (List<IPBanEntry>) sessionBans[2];
+        List<IPBanEntry> ipOnlyBans = (List<IPBanEntry>) sessionBans[3];
+        @SuppressWarnings("unchecked")
+        Map<String, String> capsMap = sessionBans.length > 3 ? (Map<String, String>) sessionBans[2] : new HashMap<String, String>();
 
         entries.putAll(_context.banlist().getEntries());
         if (entries.isEmpty() && ipOnlyBans.isEmpty()) {
@@ -301,7 +311,10 @@ class BanlistRenderer {
                  !entry.cause.toLowerCase().contains("hashpatterndetector"))) {
                 continue;
             }
-            String caps = getRouterCaps(key);
+            String caps = capsMap.get(key.toBase64());
+            if (caps == null) {
+                caps = getRouterCaps(key);
+            }
             buf.append("<tr");
             if (entry.cause.toLowerCase().contains("floodfill") ||
                 (caps != null && caps.indexOf('f') >= 0)) {
