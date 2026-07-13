@@ -75,6 +75,7 @@ class EventPumper implements Runnable {
     private final NTCPTransport _transport;
     private final ObjectCounter<String> _blockedIPs;
     private final ObjectCounter<String> _failedInboundHandshake;
+    private final ObjectCounter<String> _failedInboundEncryption;
     private long _expireIdleWriteTime;
     /** Tracks consecutive select() calls that returned immediately (tight loop guard) */
     private int _consecutiveFastSelects;
@@ -165,6 +166,7 @@ class EventPumper implements Runnable {
         _nodelay = ctx.getBooleanPropertyDefaultTrue(PROP_NODELAY);
         _blockedIPs = new ObjectCounter<>();
         _failedInboundHandshake = new ObjectCounter<>();
+        _failedInboundEncryption = new ObjectCounter<>();
         _context.statManager().createRequiredRateStat("ntcp.pumperKeySetSize", "Number of NTCP Pumper KeySetSize events", "Transport [NTCP]", RATES);
         _context.statManager().createRequiredRateStat("ntcp.pumperLoopsPerSecond", "Number of NTCP Pumper loops/s", "Transport [NTCP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("ntcp.failsafeIterationTime", "NTCP failsafe iteration time in ms", "Transport [NTCP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
@@ -1086,16 +1088,17 @@ class EventPumper implements Runnable {
         if (ip == null) return;
         String ba = Addresses.toString(ip);
         int count = _failedInboundHandshake.increment(ba);
-        if (count == 4) {
+        if (count >= 5) {
+            _failedInboundHandshake.clear(ba);
             BanLogger bl = BanLogger.getInstance();
             if (bl != null) {
-                bl.logBan(hash, ba, "Handshake timeout", 60 * 60 * 1000L);
+                bl.logBan(hash, ba, "Handshake timeout", 15 * 60 * 1000L);
             }
         }
     }
 
     /**
-     * Track failed inbound handshake with "Invalid encryption" and ban if too many failures.
+     * Track failed inbound handshake with invalid encryption and ban if too many failures.
      * Ban reason: "Invalid encryption"
      * @param ip byte array IP address
      * @param hash optional router hash if available
@@ -1103,8 +1106,9 @@ class EventPumper implements Runnable {
     public void trackInvalidEncryption(byte[] ip, Hash hash) {
         if (ip == null) return;
         String ba = Addresses.toString(ip);
-        int count = _failedInboundHandshake.increment(ba);
-        if (count == 4) {
+        int count = _failedInboundEncryption.increment(ba);
+        if (count >= 5) {
+            _failedInboundEncryption.clear(ba);
             BanLogger bl = BanLogger.getInstance();
             if (bl != null) {
                 bl.logBan(hash, ba, "Invalid encryption", 60 * 60 * 1000L);
