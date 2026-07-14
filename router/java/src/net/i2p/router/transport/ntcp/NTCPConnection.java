@@ -167,6 +167,12 @@ public class NTCPConnection implements Closeable {
     private static final int MAX_DATA_READ_BUFS = SystemVersion.isSlow() ? 4 : 16;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
     private static final AtomicLong __connID = new AtomicLong();
+    private static final ThreadLocal<List<Block>> _blockList = new ThreadLocal<List<Block>>() {
+        @Override
+        protected List<Block> initialValue() {
+            return new ArrayList<>(4);
+        }
+    };
     private final long _connID = __connID.incrementAndGet();
     //// NTCP2 things
 
@@ -743,7 +749,8 @@ public class NTCPConnection implements Closeable {
      */
     private void prepareNextWriteNTCP2(PrepBuffer buf) {
         int size = OutboundNTCP2State.MAC_SIZE;
-        List<Block> blocks = new ArrayList<>(4);
+        List<Block> blocks = _blockList.get();
+        blocks.clear();
         long now = _context.clock().now();
         assert Thread.holdsLock(_writeLock);
         if (!_currentOutbound.isEmpty()) {
