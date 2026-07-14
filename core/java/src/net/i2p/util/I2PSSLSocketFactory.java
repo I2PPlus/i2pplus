@@ -102,7 +102,7 @@ public class I2PSSLSocketFactory {
     private static final String GEOIP_FILE_DEFAULT = "geoip.txt";
     private static final String COUNTRY_FILE_DEFAULT = "countries.txt";
     private static final String PUBLIC_SUFFIX_LIST = "public-suffix-list.txt";
-    private static PublicSuffixMatcher DEFAULT_MATCHER;
+    private static volatile PublicSuffixMatcher DEFAULT_MATCHER;
     private static boolean _matcherLoaded;
     // not in countries.txt, but only the public ones, not the private ones
     private static final String[] DEFAULT_TLDS = {
@@ -344,52 +344,54 @@ public class I2PSSLSocketFactory {
      *  @since 0.9.20
      */
     private static PublicSuffixMatcher getDefaultMatcher(I2PAppContext ctx) {
+        if (_matcherLoaded)
+            return DEFAULT_MATCHER;
         synchronized (I2PSSLSocketFactory.class) {
-            if (!_matcherLoaded) {
-                String geoDir = ctx.getProperty(PROP_GEOIP_DIR, GEOIP_DIR_DEFAULT);
-                File geoFile = new File(geoDir);
-                if (!geoFile.isAbsolute()) geoFile = new File(ctx.getBaseDir(), geoDir);
-                geoFile = new File(geoFile, PUBLIC_SUFFIX_LIST);
-                Log log = ctx.logManager().getLog(I2PSSLSocketFactory.class);
-                if (geoFile.exists()) {
+            if (_matcherLoaded)
+                return DEFAULT_MATCHER;
+            String geoDir = ctx.getProperty(PROP_GEOIP_DIR, GEOIP_DIR_DEFAULT);
+            File geoFile = new File(geoDir);
+            if (!geoFile.isAbsolute()) geoFile = new File(ctx.getBaseDir(), geoDir);
+            geoFile = new File(geoFile, PUBLIC_SUFFIX_LIST);
+            Log log = ctx.logManager().getLog(I2PSSLSocketFactory.class);
+            if (geoFile.exists()) {
+                try {
+                    // we can't use PublicSuffixMatcherLoader.load() here because we
+                    // want to add some of our own and a PublicSuffixMatcher's
+                    // underlying PublicSuffixList is immutable and inaccessible
+                    long begin = System.currentTimeMillis();
+                    InputStream in = null;
+                    PublicSuffixList list =
+                            new PublicSuffixList(Arrays.asList(ADDITIONAL_TLDS), Collections.<String>emptyList());
                     try {
-                        // we can't use PublicSuffixMatcherLoader.load() here because we
-                        // want to add some of our own and a PublicSuffixMatcher's
-                        // underlying PublicSuffixList is immutable and inaccessible
-                        long begin = System.currentTimeMillis();
-                        InputStream in = null;
-                        PublicSuffixList list =
-                                new PublicSuffixList(Arrays.asList(ADDITIONAL_TLDS), Collections.<String>emptyList());
+                        in = new FileInputStream(geoFile);
+                        PublicSuffixList list2 =
+                                new PublicSuffixListParser().parse(new InputStreamReader(in, StandardCharsets.UTF_8));
+                        list = merge(list, list2);
+                    } finally {
                         try {
-                            in = new FileInputStream(geoFile);
-                            PublicSuffixList list2 =
-                                    new PublicSuffixListParser().parse(new InputStreamReader(in, StandardCharsets.UTF_8));
-                            list = merge(list, list2);
-                        } finally {
-                            try {
-                                if (in != null) in.close();
-                            } catch (IOException ioe) { /* ignored */ }
-                        }
-                        DEFAULT_MATCHER = new PublicSuffixMatcher(list.getRules(), list.getExceptions());
-                        if (log.shouldWarn())
-                            log.warn("Loaded " + geoFile + " in " + (System.currentTimeMillis() - begin)
-                                    + " ms and created list with "
-                                    + list.getRules().size() + " entries and "
-                                    + list.getExceptions().size() + " exceptions");
-                    } catch (IOException ex) {
-                        log.error("Failure loading public suffix list from " + geoFile, ex);
-                        // DEFAULT_MATCHER remains null
+                            if (in != null) in.close();
+                        } catch (IOException ioe) { /* ignored */ }
                     }
-                } else {
-                    List<String> list = new ArrayList<>(320);
-                    addCountries(ctx, list);
-                    list.addAll(Arrays.asList(DEFAULT_TLDS));
-                    list.addAll(Arrays.asList(ADDITIONAL_TLDS));
-                    DEFAULT_MATCHER = new PublicSuffixMatcher(list, null);
+                    DEFAULT_MATCHER = new PublicSuffixMatcher(list.getRules(), list.getExceptions());
                     if (log.shouldWarn())
-                        log.warn("No public suffix list found at " + geoFile + " - created default with " + list.size()
-                                + " entries");
+                        log.warn("Loaded " + geoFile + " in " + (System.currentTimeMillis() - begin)
+                                + " ms and created list with "
+                                + list.getRules().size() + " entries and "
+                                + list.getExceptions().size() + " exceptions");
+                } catch (IOException ex) {
+                    log.error("Failure loading public suffix list from " + geoFile, ex);
+                    // DEFAULT_MATCHER remains null
                 }
+            } else {
+                List<String> list = new ArrayList<>(320);
+                addCountries(ctx, list);
+                list.addAll(Arrays.asList(DEFAULT_TLDS));
+                list.addAll(Arrays.asList(ADDITIONAL_TLDS));
+                DEFAULT_MATCHER = new PublicSuffixMatcher(list, null);
+                if (log.shouldWarn())
+                    log.warn("No public suffix list found at " + geoFile + " - created default with " + list.size()
+                            + " entries");
             }
             _matcherLoaded = true;
         }
