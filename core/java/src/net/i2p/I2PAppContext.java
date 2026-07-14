@@ -66,6 +66,7 @@ public class I2PAppContext {
     protected static volatile I2PAppContext _globalAppContext;
 
     protected final I2PProperties _overrideProps;
+    private volatile Properties _mergedProps;
 
     private StatManager _statManager;
     protected SessionKeyManager _sessionKeyManager;
@@ -650,11 +651,7 @@ public class I2PAppContext {
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public Set<String> getPropertyNames() {
-        // clone to avoid ConcurrentModificationException
-        Set<String> names = new HashSet<>( (Set) ((Properties) System.getProperties().clone()).keySet()); // TODO-Java6: s/keySet()/stringPropertyNames()/
-        if (_overrideProps != null)
-            names.addAll( (Set) _overrideProps.keySet()); // TODO-Java6: s/keySet()/stringPropertyNames()/
-        return names;
+        return new HashSet<>(getProperties().stringPropertyNames());
     }
 
     /**
@@ -666,10 +663,16 @@ public class I2PAppContext {
      * @since 0.8.4
      */
     public Properties getProperties() {
-        // clone to avoid ConcurrentModificationException
-        Properties rv = (Properties) System.getProperties().clone();
-        rv.putAll(_overrideProps);
-        return rv;
+        if (_mergedProps == null) {
+            synchronized (this) {
+                if (_mergedProps == null) {
+                    _mergedProps = new Properties();
+                    _mergedProps.putAll(System.getProperties());
+                    _mergedProps.putAll(_overrideProps);
+                }
+            }
+        }
+        return new Properties(_mergedProps);
     }
 
     /**
