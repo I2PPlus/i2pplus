@@ -705,3 +705,30 @@ int n = snprintf(buf, sizeof(buf),
     dest_base64, payload);
 sendto(fd, buf, n, 0, &sam, sizeof(sam));
 ```
+
+---
+
+## Testing
+
+Build and run standalone SAM:
+
+```bash
+ant buildSAM
+java -cp build/i2p.jar:build/mstreaming.jar:build/streaming.jar:build/sam.jar \
+    -Djava.library.path=. net.i2p.sam.SAMBridge
+```
+
+Build Java test clients:
+
+```bash
+cd apps/sam/java
+ant clientjar
+
+# Run sink (receiver) client:
+java -cp build/i2p.jar:apps/sam/java/build/samclient.jar \
+    net.i2p.sam.client.SAMStreamSink samdest.txt samsinkdir -v 3.2
+
+# Run send client:
+java -cp build/i2p.jar:apps/sam/java/build/samclient.jar \
+    net.i2p.sam.client.SAMStreamSend samdest.txt samtestdata -v 3.2
+```

@@ -1,3 +1,0 @@
-See:
-http://i2p-projekt.i2p/en/docs/api/samv3
-https://geti2p.net/en/docs/api/samv3
