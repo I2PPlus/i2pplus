@@ -204,7 +204,7 @@ public class NTCPTransport extends TransportImpl {
         _context.statManager().createRateStat("ntcp.connectFailedIOE", "Failed connection attempts to NTCP peer (IO error)", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.connectFailedTimeout", "Failed connection attempts to NTCP peer", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.connectFailedTimeoutIOE", "Failed connection attempts to NTCP peer (IO error)", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.connectSuccessful", "Successful connection attempts to NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRequiredRateStat("ntcp.connectSuccessful", "Successful connection attempts to NTCP peer", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.corruptI2NPIME", "Corrupt NTCP messages decrypted (IME)", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.corruptSkew", "Corrupt clock skews received from NTCP peer", "Transport [NTCP]", RATES);
         _context.statManager().createRequiredRateStat("ntcp.failsafeCloses", "Idle connection to peer closed (failsafe)", "Transport [NTCP]", RATES);
@@ -214,7 +214,7 @@ public class NTCPTransport extends TransportImpl {
         _context.statManager().createRequiredRateStat("ntcp.writeBufs.size", "Write buffer queue size per connection", "Transport [NTCP]", RATES);
         _context.statManager().createRequiredRateStat("ntcp.readQueueSize", "Pending connections awaiting reader threads", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.inboundEstablishedDuplicate", "Duplicate established Inbound NTCP connections", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.inboundEstablished", "Established Inbound NTCP connections", "Transport [NTCP]", RATES);
+        _context.statManager().createRequiredRateStat("ntcp.inboundEstablished", "Established Inbound NTCP connections", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.inboundIPv4Conn", "Inbound IPv4 NTCP connections", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.inboundIPv6Conn", "Inbound IPv6 NTCP connections", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.invalidInboundSignature", "Invalid Inbound signatures received from NTCP peer", "Transport [NTCP]", RATES);

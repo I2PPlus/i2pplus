@@ -2,12 +2,12 @@
 <!DOCTYPE HTML>
 <%@include file="head.jsi"%>
 <%=intl.title("health")%>
-</head>
-<body id=routerhealth>
-<%@include file="sidebar.jsi"%>
-<h1 class=netwrk><%=intl._t("Router Health")%></h1>
 <jsp:useBean class="net.i2p.router.web.helpers.HealthHelper" id="healthHelper" scope="request"/>
 <jsp:setProperty name="healthHelper" property="contextId" value="<%=i2pcontextId%>"/>
+</head>
+<body id=routerhealth<%=healthHelper.isFloodfill() ? " class=floodfill" : ""%>>
+<%@include file="sidebar.jsi"%>
+<h1 class=netwrk><%=intl._t("Router Health")%></h1>
 <div class=main id=healthPage>
 <div id=healthWrap>
 <% healthHelper.storeWriter(out);%>
