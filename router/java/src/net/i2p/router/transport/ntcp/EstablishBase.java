@@ -237,7 +237,7 @@ abstract class EstablishBase implements EstablishState {
                 return;
             changeState(State.CORRUPT);
         }
-        if (_log.shouldWarn()) {_log.warn(prefix() + reason);}
+        if (_log.shouldWarn()) {_log.warn(reason);}
         if (!bySkew)
             _context.statManager().addRateData("ntcp.receiveCorruptEstablishment", 1);
         releaseBufs(false);
