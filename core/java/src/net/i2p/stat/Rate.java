@@ -511,14 +511,25 @@ public class Rate {
         PersistenceHelper.addTime(buf, addComments, prefix, ".lastTotalEventTime", "Total time used by events in most recent period (coalesced):", _lastTotalEventTime);
         PersistenceHelper.addTime(buf, addComments, prefix, ".extremeTotalEventTime", "Total time used by events in most extreme period:", _extremeTotalEventTime);
         PersistenceHelper.addTime(buf, addComments, prefix, ".lifetimeTotalEventTime", "Total time used by events since this stat was created:", _lifetimeTotalEventTime);
-        PersistenceHelper.add(buf, addComments, prefix, ".currentEventCount", "Total events in current period (uncoalesced): " + _currentEventCount, _currentEventCount);
-        PersistenceHelper.add(buf, addComments, prefix, ".lastEventCount", "Total events in most recent period (coalesced): " + _lastEventCount, _lastEventCount);
-        PersistenceHelper.add(buf, addComments, prefix, ".extremeEventCount", "Total events in most extreme period: " + _extremeEventCount, _extremeEventCount);
-        PersistenceHelper.add(buf, addComments, prefix, ".lifetimeEventCount", "Total events since this stat was created: " + _lifetimeEventCount, _lifetimeEventCount);
-        PersistenceHelper.add(buf, addComments, prefix, ".currentTotalValue", "Total value of data points in current period (uncoalesced): " + _currentTotalValue, _currentTotalValue);
-        PersistenceHelper.add(buf, addComments, prefix, ".lastTotalValue", "Total value of data points in most recent period (coalesced): " + _lastTotalValue, _lastTotalValue);
-        PersistenceHelper.add(buf, addComments, prefix, ".extremeTotalValue", "Total value of data points in most extreme period: " + _extremeTotalValue, _extremeTotalValue);
-        PersistenceHelper.add(buf, addComments, prefix, ".lifetimeTotalValue", "Total value of data points since this stat was created: " + _lifetimeTotalValue, _lifetimeTotalValue);
+        if (addComments) {
+            PersistenceHelper.add(buf, true, prefix, ".currentEventCount", "Total events in current period (uncoalesced): " + _currentEventCount, _currentEventCount);
+            PersistenceHelper.add(buf, true, prefix, ".lastEventCount", "Total events in most recent period (coalesced): " + _lastEventCount, _lastEventCount);
+            PersistenceHelper.add(buf, true, prefix, ".extremeEventCount", "Total events in most extreme period: " + _extremeEventCount, _extremeEventCount);
+            PersistenceHelper.add(buf, true, prefix, ".lifetimeEventCount", "Total events since this stat was created: " + _lifetimeEventCount, _lifetimeEventCount);
+            PersistenceHelper.add(buf, true, prefix, ".currentTotalValue", "Total value of data points in current period (uncoalesced): " + _currentTotalValue, _currentTotalValue);
+            PersistenceHelper.add(buf, true, prefix, ".lastTotalValue", "Total value of data points in most recent period (coalesced): " + _lastTotalValue, _lastTotalValue);
+            PersistenceHelper.add(buf, true, prefix, ".extremeTotalValue", "Total value of data points in most extreme period: " + _extremeTotalValue, _extremeTotalValue);
+            PersistenceHelper.add(buf, true, prefix, ".lifetimeTotalValue", "Total value of data points since this stat was created: " + _lifetimeTotalValue, _lifetimeTotalValue);
+        } else {
+            PersistenceHelper.add(buf, false, prefix, ".currentEventCount", null, _currentEventCount);
+            PersistenceHelper.add(buf, false, prefix, ".lastEventCount", null, _lastEventCount);
+            PersistenceHelper.add(buf, false, prefix, ".extremeEventCount", null, _extremeEventCount);
+            PersistenceHelper.add(buf, false, prefix, ".lifetimeEventCount", null, _lifetimeEventCount);
+            PersistenceHelper.add(buf, false, prefix, ".currentTotalValue", null, _currentTotalValue);
+            PersistenceHelper.add(buf, false, prefix, ".lastTotalValue", null, _lastTotalValue);
+            PersistenceHelper.add(buf, false, prefix, ".extremeTotalValue", null, _extremeTotalValue);
+            PersistenceHelper.add(buf, false, prefix, ".lifetimeTotalValue", null, _lifetimeTotalValue);
+        }
     }
 
     /**
