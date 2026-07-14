@@ -103,20 +103,17 @@ public class Certificate extends DataStructureImpl {
      * @since 0.8.3
      */
     public static Certificate create(byte[] data, int off) throws DataFormatException {
-        int type;
-        byte[] payload;
-        int length;
-        try {
-            type = data[off] & 0xff;
-            length = (int) DataHelper.fromLong(data, off + 1, 2);
-            if (type == 0 && length == 0) return NULL_CERT;
-            // from here down roughly the same as readBytes() below
-            if (length == 0) return new Certificate(type, null);
-            payload = new byte[length];
-            System.arraycopy(data, off + 3, payload, 0, length);
-        } catch (ArrayIndexOutOfBoundsException aioobe) {
-            throw new DataFormatException("not enough bytes", aioobe);
-        }
+        if (off < 0 || off + 3 > data.length)
+            throw new DataFormatException("not enough bytes");
+        int type = data[off] & 0xff;
+        int length = (int) DataHelper.fromLong(data, off + 1, 2);
+        if (type == 0 && length == 0) return NULL_CERT;
+        // from here down roughly the same as readBytes() below
+        if (length == 0) return new Certificate(type, null);
+        if (off + 3 + length > data.length)
+            throw new DataFormatException("not enough bytes");
+        byte[] payload = new byte[length];
+        System.arraycopy(data, off + 3, payload, 0, length);
         if (type == CERTIFICATE_TYPE_KEY) {
             if (length == 4) {
                 if (Arrays.equals(payload, KeyCertificate.Ed25519_PAYLOAD)) return KeyCertificate.ELG_Ed25519_CERT;
