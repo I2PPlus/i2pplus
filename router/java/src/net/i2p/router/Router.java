@@ -1251,7 +1251,9 @@ public class Router implements RouterClock.ClockShiftListener {
                     Rate r = rs.getRate(RateConstants.TEN_MINUTES);
                             if (r != null) {
                                 RateAverages ra = RateAverages.getTemp();
+                                try {
                                 messagesPerTunnel = r.computeAverages(ra, true).getAverage();
+                                } finally { RateAverages.release(); }
                             }
                         }
                         if (messagesPerTunnel < RouterThrottleImpl.DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE) {

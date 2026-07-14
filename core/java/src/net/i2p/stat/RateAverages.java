@@ -27,6 +27,10 @@ public class RateAverages {
         return TEMP.get();
     }
 
+    public static void release() {
+        TEMP.remove();
+    }
+
     private double average;
     private double current;
     private double last;
