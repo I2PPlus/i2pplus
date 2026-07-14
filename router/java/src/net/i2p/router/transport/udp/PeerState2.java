@@ -234,15 +234,17 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * Overridden to expire unacked packets in _sentMessages.
-     * These will remain unacked if lost; fragments will be retransmitted
-     * in a new packet.
+     *  Single-pass combined cleanup + send allocation, overriding the base class
+     *  to incorporate SSU2-specific _sentMessages cleanup and SessionConfirmed
+     *  retransmit logic.
      *
-     * @return number of active outbound messages remaining
+     *  @param now current time
+     *  @return messages to send, or null if none ready
+     *  @since 0.9.70+
      */
     @Override
-    int finishMessages(long now) {
-        // Dynamic: clean more frequently when the map is large
+    List<OutboundMessageState> finishAndAllocate(long now) {
+        // Clean _sentMessages (from finishMessages override)
         long cleanTime = _sentMessagesCleanTime;
         int sentSize = _sentMessages.size();
         if (sentSize > 100)
@@ -252,16 +254,15 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         if (now >= _sentMessagesLastExpired + cleanTime) {
             _sentMessagesLastExpired = now;
             if (!_sentMessages.isEmpty()) {
-                // TODO is this the right place for this check?
-                long ahead =  _packetNumber.get() - _ackedMessages.getHighestSet();
+                long ahead = _packetNumber.get() - _ackedMessages.getHighestSet();
                 if (ahead > BITFIELD_SIZE) {
-                    if (_log.shouldWarn()) {_log.warn("[SSU] Fail after " + ahead + "unACKed packets" + this);}
+                    if (_log.shouldWarn())
+                        _log.warn("[SSU] Fail after " + ahead + " unACKed packets" + this);
                     _transport.sendDestroy(this, REASON_FRAME_TIMEOUT);
                     _transport.dropPeer(this, true, "Too many unACKed packets");
                 }
-                if (shouldLogDebug) {
-                    _log.debug("[SSU] finishMessages() over " + _sentMessages.size() + " pending ACKs");
-                }
+                if (shouldLogDebug)
+                    _log.debug("[SSU] finishAndAllocate() over " + _sentMessages.size() + " pending ACKs");
                 loop:
                 for (Iterator<List<PacketBuilder.Fragment>> iter = _sentMessages.values().iterator(); iter.hasNext(); ) {
                     List<PacketBuilder.Fragment> frags = iter.next();
@@ -270,20 +271,20 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                         if (!state.isComplete() && !state.isExpired(now)) {continue loop;}
                     }
                     iter.remove();
-                    if (shouldLogDebug) {_log.debug("[SSU] Cleaned from sentMessages: " + frags);}
+                    if (shouldLogDebug)
+                        _log.debug("[SSU] Cleaned from sentMessages: " + frags);
                 }
             }
         }
-        return super.finishMessages(now);
-    }
 
-    /**
-     *  Overridden to retransmit SessionConfirmed also
-     */
-    @Override
-    List<OutboundMessageState> allocateSend(long now) {
-        if (!_isInbound && _ackedMessages.getOffset() == 0 && !_ackedMessages.get(0) && !checkRetransmitSessionConfirmed(_context.clock().now(), false)) {return null;}
-        return super.allocateSend(now);
+        List<OutboundMessageState> rv = super.finishAndAllocate(now);
+
+        // SessionConfirmed retransmit check (from allocateSend override).
+        // Run after super so cleanup still happens; discard send list if not ACKed.
+        if (!_isInbound && _ackedMessages.getOffset() == 0 && !_ackedMessages.get(0) && !checkRetransmitSessionConfirmed(now, false)) {
+            return null;
+        }
+        return rv;
     }
 
     /**

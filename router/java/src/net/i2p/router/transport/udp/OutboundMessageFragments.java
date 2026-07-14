@@ -204,9 +204,9 @@ class OutboundMessageFragments {
             }
             peersProcessed++;
 
-            // Clean up completed messages
-            int remaining = p.finishMessages(now);
-            if (remaining <= 0) {
+            // Clean up completed messages and allocate sends in one pass
+            states = p.finishAndAllocate(now);
+            if (!p.hasOutbound()) {
                 if (!_peersToRemove.contains(p))
                     _peersToRemove.add(p);
                 // Eager cleanup to prevent accumulation of dead PeerState references.
@@ -218,9 +218,6 @@ class OutboundMessageFragments {
                 }
                 continue;
             }
-
-            // Try to allocate fragments to send
-            states = p.allocateSend(now);
             if (states != null) {
                 peer = p;
                 break;

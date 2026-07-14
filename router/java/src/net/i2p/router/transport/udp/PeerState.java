@@ -490,18 +490,240 @@ public class PeerState {
     };
     private final Object _inboundLock = new Object();
 
-    /** Reusable lists for finishMessages() — avoids per-volley allocation churn */
+    /** Reusable lists for finishAndAllocate() — avoids per-volley allocation churn */
     private final List<OutboundMessageState> _succeededBuffer = new ArrayList<>(4);
     private final List<OutboundMessageState> _failedBuffer = new ArrayList<>(4);
 
     /**
-     * Cached oldest message lifetime from the most recent finishMessages() pass.
-     * Updated during the finishMessages() iteration to eliminate the separate
-     * getOldestMessageLifetime() scan (3rd iteration per peer per volley).
+     *  Cached count from the most recent finishAndAllocate() pass.
+     *  Used by getNextVolley() to determine if a peer has messages.
+     */
+    private volatile int _cachedOutboundCount;
+
+    /**
+     *  Cached oldest message lifetime from the most recent finishAndAllocate() pass.
+     *  Updated during the finishAndAllocate() iteration, eliminating a separate
+     *  scan of _outboundMessages + _outboundQueue.
      *
-     * @since 0.9.70+
+     *  @since 0.9.70+
      */
     private volatile long _cachedOldestLifetime;
+
+    /**
+     * Replaces the two-pass pattern of finishMessages() + allocateSend() with a single pass
+     * through _outboundMessages. Cleans up completed/expired messages and selects messages
+     * to send in one iteration.
+     *
+     * Sets _cachedOutboundCount for hasOutbound() and _cachedOldestLifetime for getNextDelay().
+     *
+     * @param now current time
+     * @return messages to send, or null if none ready
+     * @since 0.9.70+
+     */
+    List<OutboundMessageState> finishAndAllocate(long now) {
+        if (_dead) {
+            dropOutbound();
+            _cachedOutboundCount = 0;
+            return null;
+        }
+
+        _succeededBuffer.clear();
+        _failedBuffer.clear();
+        List<OutboundMessageState> succeeded = _succeededBuffer;
+        List<OutboundMessageState> failed = _failedBuffer;
+
+        boolean shouldLogInfo = _log.shouldInfo();
+        boolean shouldLogWarn = _log.shouldWarn();
+
+        int failedSize = 0;
+        int failedCount = 0;
+        boolean totalFail = false;
+
+        long oldestLifetime = 0;
+        List<OutboundMessageState> rv = null;
+
+        long retransmitTimer = _retransmitTimer.get();
+        boolean canSendOld = retransmitTimer > 0 && now >= retransmitTimer;
+
+        synchronized (_outboundLock) {
+            if (_outboundMessages.isEmpty() && _outboundQueue.isEmpty()) {
+                _cachedOutboundCount = 0;
+                return null;
+            }
+
+            int sizeBefore = _outboundMessages.size();
+
+            Iterator<OutboundMessageState> iter = _outboundMessages.iterator();
+            while (iter.hasNext()) {
+                OutboundMessageState state = iter.next();
+
+                // Track oldest lifetime
+                long lifetime = state.getLifetime();
+                if (lifetime > oldestLifetime) oldestLifetime = lifetime;
+
+                // Remove completed
+                if (state.isComplete()) {
+                    iter.remove();
+                    succeeded.add(state);
+                    continue;
+                }
+
+                // Remove expired / over-sent
+                boolean isExpired = state.isExpired(now);
+                boolean isFailed = isExpired || state.getMaxSends() > OutboundMessageFragments.MAX_VOLLEYS;
+                if (isFailed) {
+                    iter.remove();
+                    if (isExpired) {
+                        _context.statManager().addRateData("udp.sendExpired", state.getPushCount());
+                    } else {
+                        _context.statManager().addRateData("udp.sendAggressiveFailed", state.getPushCount());
+                    }
+                    failed.add(state);
+                    failedSize += state.getUnackedSize();
+                    failedCount += state.getUnackedFragments();
+                    OutNetMessage msg = state.getMessage();
+                    if (msg != null && !_isInbound && state.getSeqNum() == 0) {
+                        totalFail = true;
+                    }
+                    continue;
+                }
+
+                // Not removed — eligible for sending
+                if (canSendOld) {
+                    // Retransmit: bypass bandwidth check, send all eligible
+                    if (_fastRetransmit.get() && state.getNACKs() < FAST_RTX_ACKS)
+                        continue;
+                    if (rv == null) {
+                        rv = new ArrayList<>(Math.max(4, (1 + sizeBefore) / 2));
+                        _lastSendTime = now;
+                    }
+                    rv.add(state);
+                    // Cap at half the pre-cleanup size (RFC 6298, RFC 5681)
+                    if (rv.size() >= sizeBefore / 2 && !_fastRetransmit.get()) {
+                        _outboundMessages.releaseCurrentThreadIterator();
+                        break;
+                    }
+                } else if (state.hasUnsentFragments()) {
+                    // New message: one at a time, subject to bandwidth
+                    if (locked_shouldSend(state, now)) {
+                        if (rv == null) {
+                            rv = new ArrayList<>(_concurrentMessagesAllowed);
+                            _lastSendTime = now;
+                        }
+                        rv.add(state);
+                    } else {
+                        // Bandwidth exhausted — stop examining
+                        _outboundMessages.releaseCurrentThreadIterator();
+                        break;
+                    }
+                }
+            }
+
+            // Process queue: move eligible messages to active + send list
+            if (!canSendOld) {
+                while (true) {
+                    OutboundMessageState state = _outboundQueue.peek();
+                    if (state == null || !locked_shouldSend(state, now)) break;
+                    state = _outboundQueue.poll();
+                    if (state == null) break;
+                    _outboundMessages.add(state);
+                    if (rv == null) {
+                        rv = new ArrayList<>(_concurrentMessagesAllowed);
+                        _lastSendTime = now;
+                    }
+                    rv.add(state);
+                    if (rv.size() >= _concurrentMessagesAllowed) break;
+                }
+            }
+
+            // Track oldest lifetime from queue
+            for (OutboundMessageState state : _outboundQueue) {
+                long lt = state.getLifetime();
+                if (lt > oldestLifetime) oldestLifetime = lt;
+            }
+
+            _cachedOutboundCount = _outboundMessages.size() + _outboundQueue.size();
+        }
+
+        _cachedOldestLifetime = oldestLifetime;
+
+        // Process succeeded — callbacks outside lock
+        for (OutboundMessageState state : succeeded) {
+            _transport.succeeded(state);
+            OutNetMessage msg = state.getMessage();
+            if (msg != null) msg.timestamp("sending complete");
+        }
+
+        // Process failed — callbacks outside lock
+        if (!failed.isEmpty()) {
+            Hash hash = getRemoteHostId() != null ? getRemoteHostId().getPeerHash() : null;
+            boolean isBanned = hash != null && _context.banlist().isBanlisted(hash);
+            if (isBanned) {
+                shouldLogInfo = false;
+                shouldLogWarn = false;
+            }
+            for (OutboundMessageState state : failed) {
+                OutNetMessage msg = state.getMessage();
+                if (msg != null) {
+                    msg.timestamp("Expired in the active pool");
+                    _transport.failed(state);
+                    if (shouldLogInfo)
+                        _log.info("[SSU] Message expired " + state + " -> " + this);
+                } else if (shouldLogInfo) {
+                    _log.warn("[SSU] Unable to send direct message " + state + " -> " + this);
+                }
+            }
+
+            if (failedSize > 0) {
+                if (totalFail) {
+                    if (shouldLogWarn)
+                        _log.warn("[SSU] First Outbound message failed (Timeout after 60s) -> " + this);
+                    _transport.sendDestroy(this, SSU2Util.REASON_FRAME_TIMEOUT);
+                    _transport.dropPeer(this, true, "OB First Message Fail");
+                    _cachedOutboundCount = 0;
+                    return null;
+                }
+                synchronized (_sendWindowBytesRemainingLock) {
+                    _sendWindowBytesRemaining += failedSize;
+                    _sendWindowBytesRemaining += failedCount * fragmentOverhead();
+                    if (_sendWindowBytesRemaining > _sendWindowBytes.get())
+                        _sendWindowBytesRemaining = _sendWindowBytes.get();
+                }
+            }
+
+            if (_cachedOutboundCount <= 0) {
+                synchronized (this) {
+                    _retransmitTimer.set(0);
+                    exitFastRetransmit();
+                }
+            }
+        }
+
+        // Adjust retransmit timer (moved from allocateSend)
+        if (rv != null && !rv.isEmpty()) {
+            synchronized (this) {
+                if (_retransmitTimer.get() == 0)
+                    _retransmitTimer.set(now + getRTO());
+                else if (_fastRetransmit.get())
+                    _retransmitTimer.set(now + getRTO());
+            }
+        } else if (canSendOld && _cachedOutboundCount > 0) {
+            // failsafe: timer says retransmit but nothing was eligible — push timer
+            synchronized (this) {
+                _retransmitTimer.set(now + 250);
+            }
+        }
+
+        return rv;
+    }
+
+    /**
+     * After a finishAndAllocate() pass, reports whether any outbound messages remain.
+     *
+     * @return true if there are pending outbound messages
+     * @since 0.9.70+
+     */
+    boolean hasOutbound() { return _cachedOutboundCount > 0; }
 
     /**
      *  For SSU2
@@ -1301,285 +1523,13 @@ public class PeerState {
     public boolean getMayDisconnect() {return _mayDisconnect;}
 
     /**
-     * Processes outbound messages by expiring overdue messages and completing messages marked as done,
-     * updating stats and triggering callbacks. Returns the total count of active plus queued messages.
+     *  Uses cached oldest lifetime from the most recent finishAndAllocate() pass,
+     *  eliminating a separate scan of _outboundMessages + _outboundQueue.
      *
-     * @param now current time in milliseconds for expiration checks
-     * @return total count of active outbound messages plus those queued for sending
-     */
-    int finishMessages(long now) {
-        if (_outboundMessages.isEmpty()) {return _outboundQueue.size();}
-        if (_dead) {
-            dropOutbound();
-            return 0;
-        }
-
-        // Reuse pre-allocated lists to avoid per-volley allocation churn
-        _succeededBuffer.clear();
-        _failedBuffer.clear();
-        List<OutboundMessageState> succeeded = _succeededBuffer;
-        List<OutboundMessageState> failed = _failedBuffer;
-
-        boolean shouldLogInfo = _log.shouldInfo();
-        boolean shouldLogWarn = _log.shouldWarn();
-
-        int failedSize = 0;
-        int failedCount = 0;
-        boolean totalFail = false;
-
-        int rv;
-        long oldestLifetime = 0;
-        synchronized (_outboundLock) {
-            Iterator<OutboundMessageState> iter = _outboundMessages.iterator();
-            while (iter.hasNext()) {
-                OutboundMessageState state = iter.next();
-
-                // Track oldest lifetime during this pass to eliminate separate getOldestMessageLifetime() scan
-                long lifetime = state.getLifetime();
-                if (lifetime > oldestLifetime) {
-                    oldestLifetime = lifetime;
-                }
-
-                if (state.isComplete()) {
-                    iter.remove();
-                    succeeded.add(state);
-                    continue;
-                }
-
-                boolean isExpired = state.isExpired(now);
-                boolean isFailed = isExpired || state.getMaxSends() > OutboundMessageFragments.MAX_VOLLEYS;
-                if (isFailed) {
-                    iter.remove();
-                    if (isExpired) {
-                        _context.statManager().addRateData("udp.sendExpired", state.getPushCount());
-                    } else {
-                        _context.statManager().addRateData("udp.sendAggressiveFailed", state.getPushCount());
-                    }
-                    failed.add(state);
-
-                    failedSize += state.getUnackedSize();
-                    failedCount += state.getUnackedFragments();
-
-                    OutNetMessage msg = state.getMessage();
-                    if (msg != null && !_isInbound && state.getSeqNum() == 0) {
-                        totalFail = true;
-                    }
-                }
-            }
-            // Also scan outbound queue for oldest lifetime (same lock, no extra iteration)
-            for (OutboundMessageState state : _outboundQueue) {
-                long lifetime = state.getLifetime();
-                if (lifetime > oldestLifetime) {
-                    oldestLifetime = lifetime;
-                }
-            }
-            rv = _outboundMessages.size();
-        }
-        _cachedOldestLifetime = oldestLifetime;
-
-        for (OutboundMessageState state : succeeded) {
-            _transport.succeeded(state);
-            OutNetMessage msg = state.getMessage();
-            if (msg != null) {
-                msg.timestamp("sending complete");
-            }
-        }
-
-        if (!failed.isEmpty()) {
-            Hash hash = getRemoteHostId() != null ? getRemoteHostId().getPeerHash() : null;
-            boolean isBanned = hash != null && _context.banlist().isBanlisted(hash);
-            if (isBanned) {
-                // don't bother logging if the router is banned
-                shouldLogInfo = false;
-                shouldLogWarn = false;
-            }
-
-            for (OutboundMessageState state : failed) {
-                OutNetMessage msg = state.getMessage();
-                if (msg != null) {
-                    msg.timestamp("Expired in the active pool");
-                    _transport.failed(state);
-                    if (shouldLogInfo) {
-                        _log.info("[SSU] Message expired " + state + " -> " + this);
-                    }
-                } else {
-                    if (shouldLogInfo) {
-                        _log.warn("[SSU] Unable to send direct message " + state + " -> " + this);
-                    }
-                }
-            }
-
-            if (failedSize > 0) {
-                if (totalFail) {
-                    if (shouldLogWarn) {
-                        _log.warn("[SSU] First Outbound message failed (Timeout after 60s) -> " + this);
-                    }
-                    _transport.sendDestroy(this, SSU2Util.REASON_FRAME_TIMEOUT);
-                    _transport.dropPeer(this, true, "OB First Message Fail");
-                    return 0;
-                }
-
-                synchronized (_sendWindowBytesRemainingLock) {
-                    _sendWindowBytesRemaining += failedSize;
-                    _sendWindowBytesRemaining += failedCount * fragmentOverhead();
-                    if (_sendWindowBytesRemaining > _sendWindowBytes.get()) {
-                        _sendWindowBytesRemaining = _sendWindowBytes.get();
-                    }
-                }
-            }
-
-            if (rv <= 0) {
-                synchronized (this) {
-                    _retransmitTimer.set(0);
-                    exitFastRetransmit();
-                }
-            }
-        }
-
-        return rv + _outboundQueue.size();
-    }
-
-    /**
-     * Pick one or more messages we want to send and allocate them out of our window
-     * Adjusts the retransmit timer if necessary.
-     * High usage -
-     * OutboundMessageFragments.getNextVolley() calls this 2nd, if finishMessages() returned &gt; 0.
-     * TODO combine finishMessages() and allocateSend() so we don't iterate 2 times.
-     *
-     * @return allocated messages to send (never empty), or null if no messages or no resources
-     */
-    List<OutboundMessageState> allocateSend(long now) {
-        long retransmitTimer;
-        synchronized(this) {retransmitTimer = _retransmitTimer.get();}
-        boolean canSendOld = retransmitTimer > 0 && now >= retransmitTimer;
-        List<OutboundMessageState> rv = allocateSend2(canSendOld, now);
-        if (rv != null && !rv.isEmpty()) {
-            synchronized(this) {
-                if (_retransmitTimer.get() == 0) {_retransmitTimer.set(now + getRTO());}
-                else if (_fastRetransmit.get()) {_retransmitTimer.set(now + getRTO());} // right?
-            }
-        } else if (canSendOld) {
-            // failsafe - push out or cancel timer to prevent looping
-            boolean isEmpty;
-            synchronized (_outboundLock) {isEmpty = _outboundMessages.isEmpty();}
-            synchronized(this) {
-                if (isEmpty) {
-                    _retransmitTimer.set(0);
-                    exitFastRetransmit();
-                } else {_retransmitTimer.set(now + 250);}
-            }
-        }
-        return rv;
-    }
-
-    /**
-     * Pick one or more messages to send.  This will alloace either old or new messages, but not both.
-     * @param canSendOld if any already sent messages can be sent.  If false, only new messages will be considered
-     * @param now what time is it now
-     * @since 0.9.48
-     */
-    private List<OutboundMessageState> allocateSend2(boolean canSendOld, long now) {
-        if (_dead) return null;
-
-        List<OutboundMessageState> rv = null;
-
-        synchronized (_outboundLock) {
-            if (canSendOld) {
-                for (OutboundMessageState state : _outboundMessages) {
-                    if (_fastRetransmit.get()) {
-                        // If fast retx flag set, just add those
-                        if (state.getNACKs() < FAST_RTX_ACKS) continue;
-                        if (_log.shouldDebug()) {
-                            _log.debug("Allocate sending (FAST) to [" + _remotePeer.toBase64().substring(0,6) + "] -> " + state);
-                        }
-                    } else {
-                        if (_log.shouldDebug()) {
-                            _log.debug("Allocate sending (OLD) to [" + _remotePeer.toBase64().substring(0,6) + "] -> " + state.getMessageId());
-                        }
-                    }
-
-                    if (rv == null) {
-                        rv = new ArrayList<>(Math.max(4, (1 + _outboundMessages.size()) / 2));
-                        _lastSendTime = now;
-                    }
-                    rv.add(state);
-
-                    // Retransmit up to half of the packets in flight (RFC 6298 section 5.4 and RFC 5681 section 4.3)
-                    if (rv.size() >= _outboundMessages.size() / 2 && !_fastRetransmit.get()) {
-                        _outboundMessages.releaseCurrentThreadIterator();
-                        return rv;
-                    }
-                }
-                return rv;
-            }
-
-            if (!_outboundMessages.isEmpty()) {
-                for (OutboundMessageState state : _outboundMessages) {
-                    if (!state.hasUnsentFragments()) continue;
-
-                    boolean should = locked_shouldSend(state, now);
-                    if (should) {
-                        if (_log.shouldDebug()) {
-                            _log.debug("Allocate sending more fragments to [" + _remotePeer.toBase64().substring(0,6) + "] -> " + state.getMessageId());
-                        }
-
-                        if (rv == null) {
-                            rv = new ArrayList<>(_concurrentMessagesAllowed);
-                        }
-                        rv.add(state);
-                    } else {
-                        if (_log.shouldDebug()) {
-                            if (rv == null) {
-                                _log.debug("Nothing to send (BW) to [" + _remotePeer.toBase64().substring(0,6) + "], with " +
-                                           _outboundMessages.size() + " / " + _outboundQueue.size() + " remaining");
-                            } else {
-                                _log.debug(_remotePeer + " ran out of BW, but managed to send " + rv.size());
-                            }
-                        }
-                        _outboundMessages.releaseCurrentThreadIterator();
-                        return rv;
-                    }
-                }
-            }
-
-            // Peek at head of _outboundQueue and see if we can send it
-            while (true) {
-                OutboundMessageState state = _outboundQueue.peek();
-                if (state == null || !locked_shouldSend(state, now)) break;
-
-                OutboundMessageState dequeuedState = _outboundQueue.poll();
-                if (dequeuedState == null) break;
-
-                _outboundMessages.add(dequeuedState);
-
-                if (_log.shouldDebug()) {
-                    _log.debug("Allocating send of NEW message [" + dequeuedState.getMessageId() + "] to [" +
-                               _remotePeer.toBase64().substring(0,6) + "]");
-                }
-
-                if (rv == null) {
-                    rv = new ArrayList<>(_concurrentMessagesAllowed);
-                }
-                rv.add(dequeuedState);
-
-                if (rv.size() >= _concurrentMessagesAllowed) {
-                    return rv;
-                }
-            }
-
-            return rv;
-        }
-    }
-
-    /**
-     * High usage - OutboundMessageFragments.getNextVolley() calls this 3rd, if allocateSend() returned null.
-     * Uses cached oldest lifetime from the most recent finishMessages() pass,
-     * eliminating a separate scan of _outboundMessages + _outboundQueue.
-     *
-     * @param now what time it is now
-     * @return how long to wait before sending, or Integer.MAX_VALUE if we have nothing to send.
-     *         If ready now, will return 0.
-     * @since 0.9.48
+     *  @param now what time it is now
+     *  @return how long to wait before sending, or Integer.MAX_VALUE if we have nothing to send.
+     *          If ready now, will return 0.
+     *  @since 0.9.48
      */
     int getNextDelay(long now) {
         synchronized (_sendWindowBytesRemainingLock) {
@@ -1597,27 +1547,6 @@ public class PeerState {
             }
             return Integer.MAX_VALUE;
         }
-    }
-
-    /**
-     * Get the lifetime of the oldest message in the outbound queue or active messages.
-     * @return lifetime in ms, or 0 if no messages
-     */
-    private long getOldestMessageLifetime(long now) {
-        long oldest = 0;
-        for (OutboundMessageState state : _outboundQueue) {
-            long lifetime = state.getLifetime();
-            if (lifetime > oldest) {
-                oldest = lifetime;
-            }
-        }
-        for (OutboundMessageState state : _outboundMessages) {
-            long lifetime = state.getLifetime();
-            if (lifetime > oldest) {
-                oldest = lifetime;
-            }
-        }
-        return oldest;
     }
 
     /**
