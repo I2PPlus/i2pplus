@@ -415,7 +415,8 @@ public class KBucketSet<T extends SimpleDataStructure> {
         }
         Comparator<T> comp = new XORComparator<>(_us);
         Collections.sort(rv, comp);
-        rv.subList(max, rv.size()).clear();
+        if (rv.size() > max)
+            rv.subList(max, rv.size()).clear();
         return rv;
     }
 
@@ -467,7 +468,8 @@ public class KBucketSet<T extends SimpleDataStructure> {
         }
         Comparator<T> comp = new XORComparator<>(key);
         Collections.sort(rv, comp);
-        rv.subList(max, rv.size()).clear();
+        if (rv.size() > max)
+            rv.subList(max, rv.size()).clear();
         return rv;
     }
 
