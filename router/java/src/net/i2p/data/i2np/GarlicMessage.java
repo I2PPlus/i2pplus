@@ -40,16 +40,12 @@ public class GarlicMessage extends FastI2NPMessageImpl {
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
-        if (dataSize < 4)
-            throw new I2NPMessageException("Data too short for GarlicMessage");
-        int endIndex = offset + dataSize;
-
-        long len = DataHelper.fromLong(data, curIndex, 4);
+        
+        int len = (int) DataHelper.fromLong(data, curIndex, 4);
         curIndex += 4;
-        if ( (len <= 0) || (len > MAX_SIZE) || curIndex + len > endIndex)
-            throw new I2NPMessageException("size="+len);
-        _data = new byte[(int)len];
-        System.arraycopy(data, curIndex, _data, 0, (int)len);
+        if (len <= 0 || len > MAX_SIZE || len + 4 != dataSize) throw new I2NPMessageException("size="+len);
+        _data = new byte[len];
+        System.arraycopy(data, curIndex, _data, 0, len);
     }
 
     /** calculate the message body's length (not including the header and footer */

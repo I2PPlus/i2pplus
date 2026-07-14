@@ -145,7 +145,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
             else if (dbType == DatabaseEntry.KEY_TYPE_LS2) {_dbEntry = new LeaseSet2();}
             else if (dbType == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {_dbEntry = new EncryptedLeaseSet();}
             else {_dbEntry = new MetaLeaseSet();}
-            try {_dbEntry.readBytes(new ByteArrayInputStream(data, curIndex, data.length-curIndex));}
+            try {_dbEntry.readBytes(new ByteArrayInputStream(data, curIndex, dataSize - (curIndex - offset)));}
             catch (DataFormatException dfe) {throw new I2NPMessageException("Error reading the LeaseSet", dfe);}
             catch (IOException ioe) {throw new I2NPMessageException("Error reading the LeaseSet", ioe);}
         } else if ((dbType & 0x01) == DatabaseEntry.KEY_TYPE_ROUTERINFO) {

@@ -431,15 +431,19 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
                     byte[] rt = new byte[SessionTag.BYTE_LENGTH];
                     System.arraycopy(data, curIndex, rt, 0, SessionTag.BYTE_LENGTH);
                     _replyTag = new SessionTag(rt);
+                    curIndex += SessionTag.BYTE_LENGTH;
                 } else {
                     if (curIndex + RatchetSessionTag.LENGTH > endIndex)
                         throw new I2NPMessageException("Data too short for ratchet tag");
                     byte[] rt = new byte[RatchetSessionTag.LENGTH];
                     System.arraycopy(data, curIndex, rt, 0, RatchetSessionTag.LENGTH);
                     _ratchetReplyTag = new RatchetSessionTag(rt);
+                    curIndex += RatchetSessionTag.LENGTH;
                 }
             }
         }
+        if (curIndex - offset > dataSize)
+            throw new I2NPMessageException("buffer overrun");
     }
 
     protected int calculateWrittenLength() {

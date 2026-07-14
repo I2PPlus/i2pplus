@@ -78,9 +78,11 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
 
         //byte[] from = new byte[Hash.HASH_LENGTH];
         //System.arraycopy(data, curIndex, from, 0, Hash.HASH_LENGTH);
-        _from = Hash.create(data, curIndex);
+                _from = Hash.create(data, curIndex);
         curIndex += Hash.HASH_LENGTH;
 
+        if (curIndex - offset > dataSize)
+            throw new I2NPMessageException("buffer overrun");
     }
 
     /** calculate the message body's length (not including the header and footer */

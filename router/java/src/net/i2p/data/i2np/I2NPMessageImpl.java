@@ -147,7 +147,11 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
             }
             _log.debug("Reading bytes: [Type " + type + "] [ID " + uniqueId + "]\n* Expires: " + new Date(_expiration));
         }
-        readMessage(data, cur, sz, type);
+        try {
+            readMessage(data, cur, sz, type);
+        } catch (IndexOutOfBoundsException ioobe) {
+            throw new I2NPMessageException("buffer overrun", ioobe);
+        }
         cur += sz;
 
         return cur - offset;
@@ -316,6 +320,8 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         // ignore the handler (overridden in subclasses if necessary
         try {
             readMessage(data, offset, dataSize, type);
+        } catch (IndexOutOfBoundsException ioobe) {
+            throw new I2NPMessageException("buffer overrun", ioobe);
         } catch (IllegalArgumentException iae) {
             throw new I2NPMessageException("Error reading the message", iae);
         }
