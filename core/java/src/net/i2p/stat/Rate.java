@@ -228,7 +228,6 @@ public class Rate {
      */
     public synchronized void coalesce() {
         long now = now();
-        double correctedTotalValue; // for GraphListener which divides by rounded EventCount
         long measuredPeriod = now - _lastCoalesceDate;
         if (measuredPeriod < _period - SLACK) {
             return;
@@ -238,12 +237,13 @@ public class Rate {
 
         // how much were we off by? (so that we can sample down the measured values)
         float periodFactor = measuredPeriod / (float) _period;
-        _lastTotalValue = _currentTotalValue / periodFactor;
-        _lastEventCount = (int) (0.499999 + (_currentEventCount / periodFactor));
+        // no, we can't scale totalValue/eventCount by periodFactor,
+        // because eventCount is an int so only totalValue scales accurately,
+        // resulting in scaling errors in getAverageValue()
+        _lastTotalValue = _currentTotalValue;
+        _lastEventCount = _currentEventCount;
         _lastTotalEventTime = (int) (_currentTotalEventTime / periodFactor);
         _lastCoalesceDate = now;
-        if (_currentEventCount == 0) correctedTotalValue = 0;
-        else correctedTotalValue = _currentTotalValue * (_lastEventCount / (double) _currentEventCount);
 
         if (_lastTotalValue >= _extremeTotalValue) { // get the most recent if identical
             _extremeTotalValue = _lastTotalValue;
@@ -254,7 +254,8 @@ public class Rate {
         _currentTotalValue = 0.0f;
         _currentEventCount = 0;
         _currentTotalEventTime = 0;
-        if (_graphListener != null) _graphListener.add(correctedTotalValue, _lastEventCount, _lastTotalEventTime, _period);
+        RateSummaryListener rsl = _graphListener;
+        if (rsl != null) rsl.add(_lastTotalValue, _lastEventCount, _lastTotalEventTime, _period);
     }
 
     /**
