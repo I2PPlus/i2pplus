@@ -129,6 +129,14 @@ public class TunnelControllerGroup implements ClientApp {
         _clientRunnerMax = Math.max(4, Math.min(8192, val));
     }
 
+    /** Tuned by Tuner — milliseconds, min 5000 */
+    private static volatile int _socketConnectTimeout = 10000;
+
+    public static int getSocketConnectTimeout() { return _socketConnectTimeout; }
+    public static void setSocketConnectTimeout(int val) {
+        _socketConnectTimeout = Math.max(5000, Math.min(120000, val));
+    }
+
     static final long[] RATES = {60*1000L, 10*60*1000L, 60*60*1000L};
 
 

@@ -884,41 +884,57 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  @param forceNonSSL override config
      *  @since 0.9.50
      */
+    private static final String PROP_SOCKET_CONNECT_TIMEOUT = "i2p.tunnel.socketConnectTimeout";
+
     private Socket getSocket(Hash from, InetAddress remoteHost, int remotePort, boolean forceNonSSL) throws IOException {
-        String opt = getTunnel().getClientOptions().getProperty(PROP_USE_SSL);
-        if (!forceNonSSL && Boolean.parseBoolean(opt)) {
-            synchronized(sslLock) {
-                if (_sslFactory == null) {
-                    try {
-                        _sslFactory = new I2PSSLSocketFactory(getTunnel().getContext(),
-                                                               true, "certificates/i2ptunnel");
-                    } catch (GeneralSecurityException gse) {
-                        IOException ioe = new IOException("SSL Fail");
-                        ioe.initCause(gse);
-                        throw ioe;
+        int timeout = TunnelControllerGroup.getSocketConnectTimeout();
+        long start = getTunnel().getContext().clock().now();
+        try {
+            String opt = getTunnel().getClientOptions().getProperty(PROP_USE_SSL);
+            if (!forceNonSSL && Boolean.parseBoolean(opt)) {
+                synchronized(sslLock) {
+                    if (_sslFactory == null) {
+                        try {
+                            _sslFactory = new I2PSSLSocketFactory(getTunnel().getContext(),
+                                                                   true, "certificates/i2ptunnel");
+                        } catch (GeneralSecurityException gse) {
+                            IOException ioe = new IOException("SSL Fail");
+                            ioe.initCause(gse);
+                            throw ioe;
+                        }
                     }
                 }
-            }
-            return _sslFactory.createSocket(remoteHost, remotePort);
-        } else {
-            // as suggested in https://lists.torproject.org/pipermail/tor-dev/2014-March/00657
-            boolean unique = Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_UNIQUE_LOCAL));
-            if (unique && remoteHost.isLoopbackAddress()) {
-                byte[] addr;
-                if (remoteHost instanceof Inet4Address) {
-                    addr = new byte[4];
-                    addr[0] = 127;
-                    System.arraycopy(from.getData(), 0, addr, 1, 3);
+                Socket s = new Socket();
+                s.connect(new InetSocketAddress(remoteHost, remotePort), timeout);
+                return s;
+            } else {
+                // as suggested in https://lists.torproject.org/pipermail/tor-dev/2014-March/00657
+                boolean unique = Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_UNIQUE_LOCAL));
+                if (unique && remoteHost.isLoopbackAddress()) {
+                    byte[] addr;
+                    if (remoteHost instanceof Inet4Address) {
+                        addr = new byte[4];
+                        addr[0] = 127;
+                        System.arraycopy(from.getData(), 0, addr, 1, 3);
+                    } else {
+                        addr = new byte[16];
+                        addr[0] = (byte) 0xfd;
+                        System.arraycopy(from.getData(), 0, addr, 1, 15);
+                    }
+                    InetAddress local = InetAddress.getByAddress(addr);
+                    Socket s = new Socket();
+                    s.bind(new InetSocketAddress(local, 0));
+                    s.connect(new InetSocketAddress(remoteHost, remotePort), timeout);
+                    return s;
                 } else {
-                    addr = new byte[16];
-                    addr[0] = (byte) 0xfd;
-                    System.arraycopy(from.getData(), 0, addr, 1, 15);
+                    Socket s = new Socket();
+                    s.connect(new InetSocketAddress(remoteHost, remotePort), timeout);
+                    return s;
                 }
-                InetAddress local = InetAddress.getByAddress(addr);
-                // Javadocs say local port of 0 allowed in Java 7.
-                // Not clear if supported in Java 6 or not.
-                return new Socket(remoteHost, remotePort, local, 0);
-            } else {return new Socket(remoteHost, remotePort);}
+            }
+        } finally {
+            getTunnel().getContext().statManager().addRateData("i2ptunnel.serverHandler.socketConnectTime",
+                               getTunnel().getContext().clock().now() - start);
         }
     }
 

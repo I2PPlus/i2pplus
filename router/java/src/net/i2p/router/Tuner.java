@@ -344,6 +344,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new TunnelGrowthFactorParam());
         _params.add(new I2PTunnelServerHandlerThreadsParam());
         _params.add(new I2PTunnelClientRunnerMaxParam());
+        _params.add(new SocketConnectTimeoutParam());
         _params.add(new BuildHandlerThreadsParam());
 
         // Throttling
@@ -743,6 +744,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected final RouterContext _ctx;
         protected final AutotuneConfig _autotune;
 
+        /**
+         * @param name internal property key (e.g. "i2p.tunnel.socketConnectTimeout")
+         * @param description human-readable label shown in Tuner UI (e.g. "Socket connect timeout (ms)")
+         *                    — keep short, include unit in parens; same convention for all new params
+         */
         protected BaseParam(String name, String description, String subsystem,
                             int defaultMin, int defaultMax,
                             int defaultStep, String statName, RouterContext ctx) {
@@ -7516,6 +7522,67 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // If active threads are well below max, lower the ceiling
             if (observed < current * 0.25 && current > _min)
                 return Math.max(_min, current - Math.max(current / 4, 16));
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the TCP connect timeout for I2PTunnel server socket connections.
+     * When socket connect times are high (target server unreachable), this keeps
+     * handler threads from blocking for OS-default timeouts (75s+). Lower timeout
+     * means faster failover; higher allows slow-but-reachable servers.
+     * Target: match the observed connect time plus a modest headroom.
+     */
+    private class SocketConnectTimeoutParam extends BaseParam {
+
+        SocketConnectTimeoutParam() {
+            super("i2p.tunnel.socketConnectTimeout", "Server socket connect timeout (ms)",
+                  SUB_TUNNEL,
+                  5000, 120000, 5000, "i2ptunnel.serverHandler.socketConnectTime", _context);
+        }
+
+        protected void applyValue(int value) {
+            I2PTunnelReflector.invokeSetInt("setSocketConnectTimeout", value);
+        }
+
+        protected int getRuntimeValue() {
+            return I2PTunnelReflector.invokeGetInt("getSocketConnectTimeout");
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = i2ptunnel.serverHandler.socketConnectTime (60s rolling avg, ms)
+            // Cross-refs: i2ptunnel.serverHandler.blockingHandleTime (handler pool pressure)
+            double blockingTime = getAdditionalStat(_context, "i2ptunnel.serverHandler.blockingHandleTime");
+            double queueDepth = getAdditionalStat(_context, "i2ptunnel.serverHandler.queueDepth");
+
+            boolean poolPressure = !Double.isNaN(queueDepth) && queueDepth > 10;
+            boolean handlerStarvation = !Double.isNaN(blockingTime) && blockingTime > 30000;
+
+            // Handler pool is starving — tighten timeout to free threads
+            if (poolPressure || handlerStarvation) {
+                int tighter = Math.max(5000, (int) observed * 2);
+                return Math.min(current, Math.max(_min, tighter));
+            }
+
+            // Dead zone: observed is comfortably below timeout, hold
+            if (!Double.isNaN(observed) && observed > 0 && observed < current * 0.5)
+                return current;
+
+            // Match timeout to observed + 100% headroom
+            if (!Double.isNaN(observed) && observed > 0) {
+                int target = Math.max(_min, Math.min(_max, (int) observed * 2));
+                return clamp(current, target, _step);
+            }
+
             return current;
         }
     }
