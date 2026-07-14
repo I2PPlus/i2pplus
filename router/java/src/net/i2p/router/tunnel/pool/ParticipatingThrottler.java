@@ -320,16 +320,20 @@ public class ParticipatingThrottler {
      * @param isBanned true if already banned
      * @param caps router capabilities string
      * @param bantime duration of the ban in milliseconds
+     * @param ri RouterInfo for IP extraction and logging
+     * @param version router version string, used if disconnect is scheduled
      */
     private void handleNoVersion(boolean shouldDisconnect, Hash h, boolean isBanned, String caps, int bantime, RouterInfo ri, String version) {
         if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h, version), 11*60*1000L);}
-        if (!isBanned && _log.shouldWarn()) {
-            _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " + (bantime / 60000) + "m -> No router version in RouterInfo");
+        if (!isBanned && "true".equals(context.getProperty("router.banlist.enableNoVersionBan", "true"))) {
+            String ipPort = getRouterIPPort(ri);
+            String banReason = "No version in RouterInfo";
+            _banLogger.logBan(h, ipPort, banReason, bantime, ri);
+            context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + bantime);
+            if (_log.shouldWarn()) {
+                _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " + (bantime / 60000) + "m -> No router version in RouterInfo");
+            }
         }
-        String ipPort = getRouterIPPort(ri);
-        String banReason = "No version in RouterInfo";
-        _banLogger.logBan(h, ipPort, banReason, bantime, ri);
-        context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + bantime);
     }
 
     /**
@@ -510,15 +514,17 @@ public class ParticipatingThrottler {
      * @param ri the router info for IP extraction and logging
      */
     private void handleExcessiveRequests(Hash h, String caps, int count, int limit, int bantime, RouterInfo ri) {
-        String ipPort = getRouterIPPort(ri);
-        String banReason = "Excessive tunnel requests";
-        _banLogger.logBan(h, ipPort, banReason, bantime, ri);
-        context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + bantime);
-        context.simpleTimer2().addEvent(new Disconnector(h, banReason), 11 * 60 * 1000L);
-        if (_log.shouldWarn()) {
-            _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " + (bantime / 60000) +
-                      "m -> Excessive tunnel requests -> Count / Limit: " +
-                      count + " / " + limit + " in 90s");
+        if ("true".equals(context.getProperty("router.banlist.enableExcessiveTunnelRequestsBan", "true"))) {
+            String ipPort = getRouterIPPort(ri);
+            String banReason = "Excessive tunnel requests";
+            _banLogger.logBan(h, ipPort, banReason, bantime, ri);
+            context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + bantime);
+            context.simpleTimer2().addEvent(new Disconnector(h, banReason), 11 * 60 * 1000L);
+            if (_log.shouldWarn()) {
+                _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " + (bantime / 60000) +
+                          "m -> Excessive tunnel requests -> Count / Limit: " +
+                          count + " / " + limit + " in 90s");
+            }
         }
     }
 

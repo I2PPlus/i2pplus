@@ -24,6 +24,9 @@ public class ConfigBanHelper extends HelperBase {
     private static final String PROP_ENABLE_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
     private static final String PROP_CUSTOM_CAPABILITY_BANS = "router.banlistCapabilities";
     private static final String PROP_COUNTRY_CODES = "router.blockCountries";
+    private static final String PROP_ENABLE_UNRESPONSIVE_FLOODFILL_BAN = "router.banlist.enableUnresponsiveFloodfillBan";
+    private static final String PROP_ENABLE_NO_VERSION_BAN = "router.banlist.enableNoVersionBan";
+    private static final String PROP_ENABLE_EXCESSIVE_TUNNEL_REQUESTS_BAN = "router.banlist.enableExcessiveTunnelRequestsBan";
 
     public String getMaxOffenses() {
         return String.valueOf(_context.getProperty(PROP_MAX_OFFENSES, 3));
@@ -96,6 +99,20 @@ public class ConfigBanHelper extends HelperBase {
     public String getCustomCountryCodes() {
         return _context.getProperty(PROP_COUNTRY_CODES, "");
     }
-}
 
+    public String getUnresponsiveFloodfillBanChecked() {
+        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_UNRESPONSIVE_FLOODFILL_BAN, "true"));
+        return enabled ? "checked" : "";
+    }
+
+    public String getNoVersionBanChecked() {
+        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_NO_VERSION_BAN, "true"));
+        return enabled ? "checked" : "";
+    }
+
+    public String getExcessiveTunnelRequestsBanChecked() {
+        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_EXCESSIVE_TUNNEL_REQUESTS_BAN, "true"));
+        return enabled ? "checked" : "";
+    }
+}
 

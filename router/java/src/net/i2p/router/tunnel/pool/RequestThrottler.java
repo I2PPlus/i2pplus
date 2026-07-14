@@ -369,25 +369,30 @@ public class RequestThrottler {
 
         // Graduated response for rejected requests
         if (shouldReject) {
+            boolean banEnabled = "true".equals(context.getProperty("router.banlist.enableExcessiveTunnelRequestsBan", "true"));
             if (ratio >= 3.0f) {
-                String ipPort = getRouterIPPort(ri);
-                String banReason = "Excessive tunnel requests";
-                _banLogger.logBan(h, ipPort, banReason, 30*60*1000L);
-                context.banlist().banlistRouter(h, banReason, null, null, context.clock().now() + 30*60*1000L);
-                new Disconnector(h, v).schedule(11*60*1000L);
-                if (_log.shouldWarn())
-                    _log.warn("Banning Router [" + routerId + "] for 30m -> " +
-                              "Excessive tunnel requests (Requested: " + count + " / Limit: " + limit + " ratio=" + ratio + ")");
+                if (banEnabled) {
+                    String ipPort = getRouterIPPort(ri);
+                    String banReason = "Excessive tunnel requests";
+                    _banLogger.logBan(h, ipPort, banReason, 30*60*1000L);
+                    context.banlist().banlistRouter(h, banReason, null, null, context.clock().now() + 30*60*1000L);
+                    new Disconnector(h, v).schedule(11*60*1000L);
+                    if (_log.shouldWarn())
+                        _log.warn("Banning Router [" + routerId + "] for 30m -> " +
+                                  "Excessive tunnel requests (Requested: " + count + " / Limit: " + limit + " ratio=" + ratio + ")");
+                }
             } else if (ratio >= 1.5f) {
-                int bantime2 = (isLowShare || isUnreachable) ? 60*60*1000 : 30*60*1000;
-                String ipPort = getRouterIPPort(ri);
-                String banReason = "Excessive tunnel requests";
-                _banLogger.logBan(h, ipPort, banReason, bantime2);
-                context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + bantime2);
-                new Disconnector(h, v).schedule(11*60*1000L);
-                if (_log.shouldWarn()) {
-                    _log.warn("Banning Router [" + routerId + "] for " + (bantime2/60000) + "m" +
-                              " -> Excessive tunnel requests (Requested: " + count + " / Limit: " + limit + " ratio=" + ratio + ")");
+                if (banEnabled) {
+                    int bantime2 = (isLowShare || isUnreachable) ? 60*60*1000 : 30*60*1000;
+                    String ipPort = getRouterIPPort(ri);
+                    String banReason = "Excessive tunnel requests";
+                    _banLogger.logBan(h, ipPort, banReason, bantime2);
+                    context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + bantime2);
+                    new Disconnector(h, v).schedule(11*60*1000L);
+                    if (_log.shouldWarn()) {
+                        _log.warn("Banning Router [" + routerId + "] for " + (bantime2/60000) + "m" +
+                                  " -> Excessive tunnel requests (Requested: " + count + " / Limit: " + limit + " ratio=" + ratio + ")");
+                    }
                 }
             } else {
                 if (_log.shouldInfo())

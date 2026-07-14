@@ -356,11 +356,12 @@ class FloodfillPeerSelector extends PeerSelector {
             if (info.getBandwidthTier().equals("L")) {
                 if (_context.banlist().isLuBanEnabled()) {
                     String ipPort = getIPFromRouterInfo(info);
-                    _context.banlist().banlistRouter(entry, "L tier Floodfill", null, null, now + 4*60*60*1000L);
-                    _banLogger.logBan(entry, ipPort != null ? ipPort : "UNKNOWN", "L tier Floodfill", 4*60*60*1000L);
+                    String verCaps = "(" + info.getVersion() + " / " + caps + ")";
+                    _context.banlist().banlistRouter(entry, "L tier Floodfill " + verCaps, null, null, now + 4*60*60*1000L);
+                    _banLogger.logBan(entry, ipPort != null ? ipPort : "UNKNOWN", "L tier Floodfill " + verCaps, 4*60*60*1000L, info);
                     _context.commSystem().forceDisconnect(entry, "L tier Floodfill");
                     if (_log.shouldWarn()) {
-                        _log.warn("Banning for 4h and disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] -> L tier");
+                        _log.warn("Banning for 4h and disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] -> L tier " + verCaps);
                     }
                 }
             }
@@ -412,15 +413,19 @@ class FloodfillPeerSelector extends PeerSelector {
             failRate.getAverageValue() > 0.95d &&
             now - Math.max(prof.getDBHistory().getLastLookupSuccessful(), prof.getDBHistory().getLastStoreSuccessful()) > 15*60*1000L &&
             Math.max(prof.getDBHistory().getLastLookupFailed(), prof.getDBHistory().getLastStoreFailed()) > now - 15*60*1000L) {
-            String ipPort = getIPFromRouterInfo(info);
-            _context.banlist().banlistRouter(entry, "Unresponsive Floodfill", null, null, now + 60*60*1000L);
-            _banLogger.logBan(entry, ipPort != null ? ipPort : "UNKNOWN", "Unresponsive Floodfill", 60*60*1000L);
-            _context.commSystem().forceDisconnect(entry, "Unresponsive Floodfill");
-            if (_log.shouldWarn()) {
-                _log.warn("Banning for 1h and disconnecting from unresponsive Floodfill [" + entry.toBase64().substring(0,6) + "] -> " +
-                          "Fail rate: " + String.format("%.2f", failRate.getAverageValue()) +
-                          ", Failures: " + failRate.getLifetimeEventCount() +
-                          ", IP: " + (ipPort != null ? ipPort : "UNKNOWN"));
+            if ("true".equals(_context.getProperty("router.banlist.enableUnresponsiveFloodfillBan", "true"))) {
+                String ipPort = getIPFromRouterInfo(info);
+                String verCaps = "(" + info.getVersion() + " / " + caps + ")";
+                _context.banlist().banlistRouter(entry, "Unresponsive Floodfill " + verCaps, null, null, now + 60*60*1000L);
+                _banLogger.logBan(entry, ipPort != null ? ipPort : "UNKNOWN", "Unresponsive Floodfill " + verCaps, 60*60*1000L, info);
+                _context.commSystem().forceDisconnect(entry, "Unresponsive Floodfill");
+                if (_log.shouldWarn()) {
+                    _log.warn("Banning for 1h and disconnecting from unresponsive Floodfill [" + entry.toBase64().substring(0,6) + "] -> " +
+                              "Fail rate: " + String.format("%.2f", failRate.getAverageValue()) +
+                              ", Failures: " + failRate.getLifetimeEventCount() +
+                              ", IP: " + (ipPort != null ? ipPort : "UNKNOWN") +
+                              ", " + verCaps);
+                }
             }
             return PeerClass.BAD;
         }

@@ -51,6 +51,13 @@
 <label><span class=nowrap><%=intl._t("Additional Router Caps")%>:</span> <input title="<%=intl._t("Add caps groups, separated by spaces or commas e.g. LUf,PUG")%>" name=customCapabilityBans type=text size=30 value="<jsp:getProperty name="banhelper" property="customCapabilityBans"/>"></label>
 </div>
 </td></tr>
+<tr><td><b class=suboption><%=intl._t("Misc Reasons")%></b><br>
+<div class=optionlist>
+<label title="<%=intl._t("Ban floodfill peers that fail to respond to queries (failure rate >95%)")%>"><input type=checkbox class="optbox slider" name=enableUnresponsiveFloodfillBan value=true <jsp:getProperty name="banhelper" property="unresponsiveFloodfillBanChecked"/>><%=intl._t("Ban unresponsive floodfills")%></label><br>
+<label title="<%=intl._t("Ban routers whose RouterInfo has no version field")%>"><input type=checkbox class="optbox slider" name=enableNoVersionBan value=true <jsp:getProperty name="banhelper" property="noVersionBanChecked"/>><%=intl._t("Ban routers with no version")%></label><br>
+<label title="<%=intl._t("Ban routers that send excessive tunnel participation requests")%>"><input type=checkbox class="optbox slider" name=enableExcessiveTunnelRequestsBan value=true <jsp:getProperty name="banhelper" property="excessiveTunnelRequestsBanChecked"/>><%=intl._t("Ban excessive tunnel requests")%></label>
+</div>
+</td></tr>
 <tr><td class=optionsave>
 <input style=float:left type=submit class=cancel name=action value="<%=intl._t("Clear all bans")%>">
 <input type=submit class=cancel name=action value="<%=intl._t("Reset to defaults")%>">

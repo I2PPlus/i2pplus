@@ -24,6 +24,9 @@ public class ConfigBanHandler extends FormHandler {
     private boolean _enableXgBan;
     private boolean _enableLuBan;
     private boolean _enableBlockMyCountry;
+    private boolean _enableUnresponsiveFloodfillBan;
+    private boolean _enableNoVersionBan;
+    private boolean _enableExcessiveTunnelRequestsBan;
     private String _customCapabilityBans;
     private String _customCountryCodes;
 
@@ -44,6 +47,9 @@ public class ConfigBanHandler extends FormHandler {
     private static final String PROP_ENABLE_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
     private static final String PROP_CUSTOM_CAPABILITY_BANS = "router.banlistCapabilities";
     private static final String PROP_COUNTRY_CODES = "router.blockCountries";
+    private static final String PROP_ENABLE_UNRESPONSIVE_FLOODFILL_BAN = "router.banlist.enableUnresponsiveFloodfillBan";
+    private static final String PROP_ENABLE_NO_VERSION_BAN = "router.banlist.enableNoVersionBan";
+    private static final String PROP_ENABLE_EXCESSIVE_TUNNEL_REQUESTS_BAN = "router.banlist.enableExcessiveTunnelRequestsBan";
 
     @Override
     protected void processForm() {
@@ -77,6 +83,9 @@ public class ConfigBanHandler extends FormHandler {
         defaults.put(PROP_ENABLE_XG_BAN, "false");
         defaults.put(PROP_ENABLE_LU_BAN, "true");
         defaults.put(PROP_ENABLE_BLOCK_MY_COUNTRY, "false");
+        defaults.put(PROP_ENABLE_UNRESPONSIVE_FLOODFILL_BAN, "true");
+        defaults.put(PROP_ENABLE_NO_VERSION_BAN, "true");
+        defaults.put(PROP_ENABLE_EXCESSIVE_TUNNEL_REQUESTS_BAN, "true");
         defaults.put(PROP_CUSTOM_CAPABILITY_BANS, "");
         defaults.put(PROP_COUNTRY_CODES, "");
         _context.router().saveConfig(defaults, null);
@@ -98,6 +107,9 @@ public class ConfigBanHandler extends FormHandler {
     public void setEnableXgBan(String val) { _enableXgBan = true; }
     public void setEnableLuBan(String val) { _enableLuBan = true; }
     public void setEnableBlockMyCountry(String val) { _enableBlockMyCountry = true; }
+    public void setEnableUnresponsiveFloodfillBan(String val) { _enableUnresponsiveFloodfillBan = true; }
+    public void setEnableNoVersionBan(String val) { _enableNoVersionBan = true; }
+    public void setEnableExcessiveTunnelRequestsBan(String val) { _enableExcessiveTunnelRequestsBan = true; }
     public void setCustomCapabilityBans(String val) { _customCapabilityBans = val != null ? val.trim() : ""; }
     public void setCustomCountryCodes(String val) { _customCountryCodes = val != null ? val.trim().toLowerCase() : ""; }
 
@@ -155,6 +167,9 @@ public class ConfigBanHandler extends FormHandler {
         changes.put(PROP_ENABLE_XG_BAN, Boolean.toString(_enableXgBan));
         changes.put(PROP_ENABLE_LU_BAN, Boolean.toString(_enableLuBan));
         changes.put(PROP_ENABLE_BLOCK_MY_COUNTRY, Boolean.toString(_enableBlockMyCountry));
+        changes.put(PROP_ENABLE_UNRESPONSIVE_FLOODFILL_BAN, Boolean.toString(_enableUnresponsiveFloodfillBan));
+        changes.put(PROP_ENABLE_NO_VERSION_BAN, Boolean.toString(_enableNoVersionBan));
+        changes.put(PROP_ENABLE_EXCESSIVE_TUNNEL_REQUESTS_BAN, Boolean.toString(_enableExcessiveTunnelRequestsBan));
 
         if ((blocklistWasEnabled && !_enableBlocklist) || (torBlocklistWasEnabled && !_enableTorBlocklist)) {
             _context.blocklist().clearAll();
