@@ -238,32 +238,26 @@ public final class SigUtil {
      *  @return JAVA key!
      */
     public static ECPublicKey toJavaECKey(SigningPublicKey pk) throws GeneralSecurityException {
-        ECPublicKey rv;
         synchronized (_ECPubkeyCache) {
-            rv = _ECPubkeyCache.get(pk);
-        }
-        if (rv != null) return rv;
-        rv = cvtToJavaECKey(pk);
-        synchronized (_ECPubkeyCache) {
+            ECPublicKey rv = _ECPubkeyCache.get(pk);
+            if (rv != null) return rv;
+            rv = cvtToJavaECKey(pk);
             _ECPubkeyCache.put(pk, rv);
+            return rv;
         }
-        return rv;
     }
 
     /**
      *  @return JAVA key!
      */
     public static ECPrivateKey toJavaECKey(SigningPrivateKey pk) throws GeneralSecurityException {
-        ECPrivateKey rv;
         synchronized (_ECPrivkeyCache) {
-            rv = _ECPrivkeyCache.get(pk);
-        }
-        if (rv != null) return rv;
-        rv = cvtToJavaECKey(pk);
-        synchronized (_ECPrivkeyCache) {
+            ECPrivateKey rv = _ECPrivkeyCache.get(pk);
+            if (rv != null) return rv;
+            rv = cvtToJavaECKey(pk);
             _ECPrivkeyCache.put(pk, rv);
+            return rv;
         }
-        return rv;
     }
 
     private static ECPublicKey cvtToJavaECKey(SigningPublicKey pk) throws GeneralSecurityException {
@@ -307,16 +301,13 @@ public final class SigUtil {
      *  @since 0.9.15
      */
     public static EdDSAPublicKey toJavaEdDSAKey(SigningPublicKey pk) throws GeneralSecurityException {
-        EdDSAPublicKey rv;
         synchronized (_EdPubkeyCache) {
-            rv = _EdPubkeyCache.get(pk);
-        }
-        if (rv != null) return rv;
-        rv = cvtToJavaEdDSAKey(pk);
-        synchronized (_EdPubkeyCache) {
+            EdDSAPublicKey rv = _EdPubkeyCache.get(pk);
+            if (rv != null) return rv;
+            rv = cvtToJavaEdDSAKey(pk);
             _EdPubkeyCache.put(pk, rv);
+            return rv;
         }
-        return rv;
     }
 
     /**
@@ -324,16 +315,13 @@ public final class SigUtil {
      *  @since 0.9.15
      */
     public static EdDSAPrivateKey toJavaEdDSAKey(SigningPrivateKey pk) throws GeneralSecurityException {
-        EdDSAPrivateKey rv;
         synchronized (_EdPrivkeyCache) {
-            rv = _EdPrivkeyCache.get(pk);
-        }
-        if (rv != null) return rv;
-        rv = cvtToJavaEdDSAKey(pk);
-        synchronized (_EdPrivkeyCache) {
+            EdDSAPrivateKey rv = _EdPrivkeyCache.get(pk);
+            if (rv != null) return rv;
+            rv = cvtToJavaEdDSAKey(pk);
             _EdPrivkeyCache.put(pk, rv);
+            return rv;
         }
-        return rv;
     }
 
     /**
