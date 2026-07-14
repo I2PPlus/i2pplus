@@ -240,7 +240,7 @@ class MessageInputStream extends InputStream {
             _log.warn("Dropping message " + messageId + ", buffer size exceeded: available=" + available);
         }
         synchronized (_dataLock) {
-            _dataLock.notifyAll();
+            _dataLock.notify();
         }
     }
 
@@ -249,7 +249,7 @@ class MessageInputStream extends InputStream {
             _log.warn("Dropping message " + messageId + ", exceeds allowed buffer blocks window");
         }
         synchronized (_dataLock) {
-            _dataLock.notifyAll();
+            _dataLock.notify();
         }
     }
 
@@ -258,7 +258,7 @@ class MessageInputStream extends InputStream {
             _log.warn("Dropping message " + messageId + ", too many ready blocks");
         }
         synchronized (_dataLock) {
-            _dataLock.notifyAll();
+            _dataLock.notify();
         }
     }
 
@@ -318,7 +318,7 @@ class MessageInputStream extends InputStream {
                         + ", highest ready block=" + _highestReadyBlockId);
             }
             _closeReceived = true;
-            _dataLock.notifyAll();
+            _dataLock.notify();
         }
     }
 
@@ -327,7 +327,7 @@ class MessageInputStream extends InputStream {
      */
     public void notifyActivity() {
         synchronized (_dataLock) {
-            _dataLock.notifyAll();
+            _dataLock.notify();
         }
     }
 
@@ -379,7 +379,7 @@ class MessageInputStream extends InputStream {
                     cur++;
                     _highestReadyBlockId++;
                 }
-                _dataLock.notifyAll();
+                _dataLock.notify();
             } else {
                 if (_locallyClosed.get()) {
                     if (_log.shouldInfo()) {
@@ -577,7 +577,7 @@ class MessageInputStream extends InputStream {
             _readyDataSize = 0;
             _notYetReadyBlocks.clear();
             _locallyClosed.set(true);
-            _dataLock.notifyAll();
+            _dataLock.notify();
         }
     }
 
@@ -593,7 +593,7 @@ class MessageInputStream extends InputStream {
                 _streamError = ioe;
             }
             _locallyClosed.set(true);
-            _dataLock.notifyAll();
+            _dataLock.notify();
         }
     }
 
