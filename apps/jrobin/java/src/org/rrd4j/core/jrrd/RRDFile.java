@@ -3,6 +3,8 @@ package org.rrd4j.core.jrrd;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
@@ -38,6 +40,46 @@ class RRDFile implements Constants {
     private static final byte[] FLOAT_COOKIE_LITTLE_ENDIAN = {
         0x2F, 0x25, (byte) 0xC0, (byte) 0xC7, 0x43, 0x2B, 0x1F, 0x5B
     };
+
+    // Reflective unmap support (mirrors RrdNioBackend pattern)
+    private static final Method CLEANER_METHOD;
+    private static final Method CLEAN_METHOD;
+    private static final Method INVOKE_CLEANER;
+    private static final Object UNSAFE;
+
+    static {
+        Method cm = null;
+        Method clm = null;
+        Method ic = null;
+        Object us = null;
+        try {
+            Class<?> dbc = RRDFile.class.getClassLoader().loadClass("sun.nio.ch.DirectBuffer");
+            cm = dbc.getMethod("cleaner");
+            cm.setAccessible(true);
+            try {
+                Class<?> cc = RRDFile.class.getClassLoader().loadClass("sun.misc.Cleaner");
+                clm = cc.getMethod("clean");
+                clm.setAccessible(true);
+            } catch (Exception e) {
+                // Java 9+: resolved lazily
+            }
+        } catch (Exception e) {
+            // sun.nio.ch not accessible
+        }
+        try {
+            Field f = RRDFile.class.getClassLoader()
+                    .loadClass("sun.misc.Unsafe").getDeclaredField("theUnsafe");
+            f.setAccessible(true);
+            us = f.get(null);
+            ic = us.getClass().getMethod("invokeCleaner", ByteBuffer.class);
+        } catch (Exception e) {
+            // Unsafe not accessible
+        }
+        CLEANER_METHOD = cm;
+        CLEAN_METHOD = clm;
+        INVOKE_CLEANER = ic;
+        UNSAFE = us;
+    }
 
     private int alignment;
     private int longSize = 4;
@@ -115,7 +157,6 @@ class RRDFile implements Constants {
             if (int1 == 0 || int2 == 0) {
                 longSize = 8;
             }
-        } else { // Default to data formats for this hardware architecture
         }
         // Reset file pointer to start of file
         mappedByteBuffer.rewind();
@@ -184,7 +225,31 @@ class RRDFile implements Constants {
         return mappedByteBuffer.position();
     }
 
+    private void unmapFile() {
+        if (mappedByteBuffer != null && mappedByteBuffer.isDirect()) {
+            try {
+                if (CLEANER_METHOD != null) {
+                    Object cleaner = CLEANER_METHOD.invoke(mappedByteBuffer);
+                    if (cleaner != null) {
+                        Method clean = CLEAN_METHOD;
+                        if (clean == null) {
+                            clean = cleaner.getClass().getMethod("clean");
+                            clean.setAccessible(true);
+                        }
+                        clean.invoke(cleaner);
+                        return;
+                    }
+                }
+                if (INVOKE_CLEANER != null)
+                    INVOKE_CLEANER.invoke(UNSAFE, mappedByteBuffer);
+            } catch (Exception e) {
+                // Fallback: GC will clean up eventually
+            }
+        }
+    }
+
     void close() throws IOException {
+        unmapFile();
         if (underlying != null) {
             underlying.close();
         }
