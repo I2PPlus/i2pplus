@@ -107,7 +107,7 @@ html:not(.advmode) #tuning input[type=number]{min-width:0!important;text-align:c
 #tuning .section.toggle:hover td:last-child::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
 #tuning .section.toggle.expanded td:last-child::after{background:var(--dropdown);content:"";transform:none}
 #tuning .section.toggle.expanded:hover td:last-child::after{background:var(--dropdown_hover);content:"";transform:none}
-#tuningstats{margin:12px 0;padding:16px 8px;width:calc(100% - 18px);display:grid;grid-template-columns:repeat(9,1fr);gap:8px;border:var(--border);text-align:center}
+#tuningstats{margin:12px 0;padding:16px 8px;width:calc(100% - 18px);display:grid;grid-template-columns:repeat(10,1fr);gap:8px;border:var(--border);text-align:center}
 .streams th:nth-child(1),.streams td:nth-child(1){width:1%}
 .streams th:nth-child(2),.streams td:nth-child(2){text-align:left;width:19%}
 .streams th:nth-child(3),.streams td:nth-child(3){width:65%;text-align:left}
