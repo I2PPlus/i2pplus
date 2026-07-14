@@ -1263,9 +1263,9 @@ public class NTCPTransport extends TransportImpl {
     /** Get the NTCP establish timeout in ms. @since 0.9.70+ */
     public static int getEstablishTimeout() { return ESTABLISH_TIMEOUT; }
 
-    /** Set the NTCP establish timeout, bounded 1500-5000ms. @since 0.9.70+ */
+    /** Set the NTCP establish timeout, bounded 1500-10000ms. @since 0.9.70+ */
     public static void setEstablishTimeout(int ms) {
-        ESTABLISH_TIMEOUT = Math.max(1500, Math.min(5000, ms));
+        ESTABLISH_TIMEOUT = Math.max(1500, Math.min(10000, ms));
     }
 
     /** add us to the establishment timeout process */
@@ -1284,7 +1284,7 @@ public class NTCPTransport extends TransportImpl {
                 if (con.isClosed() || con.isEstablished()) {iter.remove();}
                 else if (con.getTimeSinceCreated(now) > ESTABLISH_TIMEOUT) {
                     iter.remove();
-                    con.closeOnTimeout("\n* Reason: Establishment timeout (>" + ESTABLISH_TIMEOUT/1000 + "s)", null);
+                    con.closeOnTimeout("Timed out (" + (ESTABLISH_TIMEOUT/1000) + "s)", null);
                     expired++;
                 }
             }

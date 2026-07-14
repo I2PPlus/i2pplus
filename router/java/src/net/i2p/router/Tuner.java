@@ -1754,6 +1754,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Tunes NTCP ESTABLISH_TIMEOUT based on outbound establish time stat.
      * Single shared timeout for both inbound and outbound NTCP2 handshakes.
      * Primary signal: {@code ntcp.outboundEstablishTime}.
+     * When establish failures are present and no success data is available,
+     * pushes toward the maximum to provide more headroom for slow or
+     * firewalled connections.
      *
      * @since 0.9.70+
      */
@@ -1762,7 +1765,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         NtcpEstablishTimeParam() {
             super("NTCP_ESTABLISH_TIMEOUT", "NTCP establish timeout (ms)",
                   SUB_TRANSPORT,
-                  1500, 5000, 250, "ntcp.outboundEstablishTime", _context);
+                  1500, 10000, 250, "ntcp.outboundEstablishTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -1791,6 +1794,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double inboundFailed = getAdditionalStat(_context, "ntcp.inboundEstablishFailed");
             boolean hasFailures = (!Double.isNaN(sendFailed) && sendFailed > 0) ||
                                   (!Double.isNaN(inboundFailed) && inboundFailed > 0);
+
+            // When we have no successful establish time data but are seeing
+            // failures, push toward max — we don't know what the establish
+            // time would be but failures signal we need more headroom.
+            if (hasFailures && Double.isNaN(observed)) {
+                if (current >= _max)
+                    return current;
+                return clamp(current, _max, _step);
+            }
+
             double worstObserved = observed;
             if (!Double.isNaN(ibTime) && ibTime > worstObserved)
                 worstObserved = ibTime;

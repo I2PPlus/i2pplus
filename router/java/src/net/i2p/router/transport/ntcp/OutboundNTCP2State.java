@@ -567,7 +567,10 @@ class OutboundNTCP2State implements EstablishState {
             _log.warn("[NTCP] Outbound Handshake failure " + _handshakeState.toString());
             _log.warn(this + "\n* Failed to establish connection: " + reason, e);
         } else if (_log.shouldWarn()) {
-            _log.warn(this + reason);
+            _log.warn("OutboundEstablishState -> Outbound: " +
+                      _con.getRemoteAddress().getHost() + ':' + _con.getRemotePort() + ' ' +
+                      (_con.getRemotePeer() != null ? _con.getRemotePeer().calculateHash().toBase64().substring(0,6) : "Unknown") +
+                      " -> " + reason);
         }
         _handshakeState.destroy();
         if (!bySkew) {
@@ -597,7 +600,8 @@ class OutboundNTCP2State implements EstablishState {
         StringBuilder buf = new StringBuilder(64);
         buf.append("OutboundEstablishState ");
         buf.append(_con.toString());
-        buf.append(" (").append(_state).append(")");
+        if (_state != State.CORRUPT)
+            buf.append(" (").append(_state).append(")");
         if (_con.isEstablished()) buf.append(" established");
         return buf.toString();
     }
