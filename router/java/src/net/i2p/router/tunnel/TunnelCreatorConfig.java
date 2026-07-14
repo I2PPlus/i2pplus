@@ -393,7 +393,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * @param ms latency in milliseconds
      * @since 0.9.69+
      */
-    public void addLatencySample(int ms) {
+    public synchronized void addLatencySample(int ms) {
         _latencyHistory[_latencyIdx] = ms;
         _latencyIdx = (_latencyIdx + 1) % LATENCY_SAMPLE_SIZE;
         if (_latencyCount < LATENCY_SAMPLE_SIZE) _latencyCount++;
@@ -406,10 +406,12 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * @since 0.9.69+
      */
     public int getAverageLatency() {
-        if (_latencyCount == 0) return -1;
+        int count = _latencyCount;
+        if (count == 0) return -1;
+        int samples = Math.min(count, LATENCY_SAMPLE_SIZE);
         int sum = 0;
-        for (int i = 0; i < _latencyCount; i++) sum += _latencyHistory[i];
-        return sum / _latencyCount;
+        for (int i = 0; i < samples; i++) sum += _latencyHistory[i];
+        return sum / samples;
     }
 
     /**
