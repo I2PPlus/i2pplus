@@ -369,21 +369,26 @@ public class GarlicMessageBuilder {
                 baos.write((byte) 1);
                 baos.write(clove);
             } else {
-                byte[][] cloves = new byte[config.getCloveCount()][];
+                // Estimate total size from payload sizes so ByteArrayStream is sized correctly.
+                // This avoids holding all serialized clove byte[]s in memory at once (original code
+                // used byte[][] cloves array, keeping every clove live until the write loop finished).
+                int estimate = 1 + 3 + 4 + 8; // count byte + cert overhead + id + expiration
                 for (int i = 0; i < config.getCloveCount(); i++) {
                     GarlicConfig c = config.getClove(i);
                     if (!(c instanceof PayloadGarlicConfig))
                         throw new IllegalArgumentException("Subclove not a PayloadGarlicConfig");
-                    cloves[i] = buildClove(ctx, (PayloadGarlicConfig)c);
+                    // Per clove: GarlicClove serialization adds instructions + certificate + I2NP message
+                    // header (uniqueId + expiration + content type + cert) around the payload.
+                    // 64 is a generous upper bound on that overhead; ByteArrayStream grows if exceeded.
+                    estimate += ((PayloadGarlicConfig) c).getPayload().getMessageSize() + 64;
                 }
-
-                int len = 1;
-                for (int i = 0; i < cloves.length; i++)
-                    len += cloves[i].length;
-                baos = new ByteArrayStream(1 + len + 3 + 4 + 8);
-                baos.write((byte) cloves.length);
-                for (int i = 0; i < cloves.length; i++)
-                    baos.write(cloves[i]);
+                baos = new ByteArrayStream(estimate);
+                baos.write((byte) config.getCloveCount());
+                for (int i = 0; i < config.getCloveCount(); i++) {
+                    GarlicConfig c = config.getClove(i);
+                    byte[] cloveData = buildClove(ctx, (PayloadGarlicConfig)c);
+                    baos.write(cloveData);
+                }
             }
             config.getCertificate().writeBytes(baos);
             DataHelper.writeLong(baos, 4, config.getId());
