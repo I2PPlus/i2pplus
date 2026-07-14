@@ -11,6 +11,7 @@ package net.i2p.client.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
@@ -55,6 +56,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     protected boolean _noEffort;
     private static final long REMOVE_EXPIRED_TIME = (long) 63*1000;
     private static final long[] RATES = { 60*1000, 10*60*1000L, 30*60*1000L, 60*60*1000L };
+    private static Method _tunnelManagerMethod;
 
     /**
      * for extension by SimpleSession (no dest)
@@ -491,6 +493,27 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
+     * Cached reflection access to RouterContext.tunnelManager().
+     * Method is looked up once and reused to avoid repeated getMethod() overhead.
+     */
+    private Object getTunnelManager() {
+        Method m = _tunnelManagerMethod;
+        if (m == null) {
+            try {
+                m = _context.getClass().getMethod("tunnelManager");
+                _tunnelManagerMethod = m;
+            } catch (NoSuchMethodException e) {
+                return null;
+            }
+        }
+        try {
+            return m.invoke(_context);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -498,13 +521,13 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         _tunnelStatusListeners.add(lsnr);
         // If in router context, also register with TunnelPoolManager for direct notifications
         if (_context.isRouterContext()) {
-            try {
-                Object tm = _context.getClass().getMethod("tunnelManager").invoke(_context);
-                if (tm != null) {
+            Object tm = getTunnelManager();
+            if (tm != null) {
+                try {
                     tm.getClass().getMethod("addTunnelStatusListener", TunnelStatusListener.class).invoke(tm, lsnr);
+                } catch (Exception e) {
+                    // Ignore - not router context or method doesn't exist
                 }
-            } catch (Exception e) {
-                // Ignore - not router context or method doesn't exist
             }
         }
     }
@@ -514,13 +537,13 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         _tunnelStatusListeners.remove(lsnr);
         // Also remove from TunnelPoolManager if in router context
         if (_context.isRouterContext()) {
-            try {
-                Object tm = _context.getClass().getMethod("tunnelManager").invoke(_context);
-                if (tm != null) {
+            Object tm = getTunnelManager();
+            if (tm != null) {
+                try {
                     tm.getClass().getMethod("removeTunnelStatusListener", TunnelStatusListener.class).invoke(tm, lsnr);
+                } catch (Exception e) {
+                    // Ignore
                 }
-            } catch (Exception e) {
-                // Ignore
             }
         }
     }
@@ -546,9 +569,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         }
         // Fallback to reflection-based lookup (less accurate)
         if (_context.isRouterContext()) {
-            try {
-                Object tm = _context.getClass().getMethod("tunnelManager").invoke(_context);
-                if (tm != null) {
+            Object tm = getTunnelManager();
+            if (tm != null) {
+                try {
                     net.i2p.data.Hash destHash = getMyDestination().calculateHash();
                     Object result = tm.getClass().getMethod("getTunnelPair", net.i2p.data.Hash.class).invoke(tm, destHash);
                     if (result != null) {
@@ -557,9 +580,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
                             return new TunnelPair(pair[0], pair[1]);
                         }
                     }
+                } catch (Exception e) {
+                    // Ignore - not router context or method doesn't exist
                 }
-            } catch (Exception e) {
-                // Ignore - not router context or method doesn't exist
             }
         }
         return null;
@@ -569,13 +592,13 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     public void rebuildTunnels() {
         // Trigger the tunnel pool to build new tunnels
         if (_context.isRouterContext()) {
-            try {
-                Object tm = _context.getClass().getMethod("tunnelManager").invoke(_context);
-                if (tm != null) {
+            Object tm = getTunnelManager();
+            if (tm != null) {
+                try {
                     tm.getClass().getMethod("tunnelFailed").invoke(tm);
+                } catch (Exception e) {
+                    // Ignore - not router context or method doesn't exist
                 }
-            } catch (Exception e) {
-                // Ignore - not router context or method doesn't exist
             }
         }
     }
