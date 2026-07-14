@@ -19,6 +19,9 @@ fi
 export HOME=/i2p
 export I2P=${HOME}
 
+# Ensure config directory exists (may not on first run with empty volume)
+mkdir -p "$HOME/.i2p"
+
 # Build classpath dynamically
 cd $HOME
 export CLASSPATH=.
@@ -51,7 +54,7 @@ if [ -f /.dockerenv ] || [ -f /run/.containerenv ]; then
 
     # Rewrite clients.config to bind console to the configured IP (both non-SSL and SSL)
     if [ -f "clients.config" ]; then
-        sed -i "/^clientApp\.0\.args=/s/127\.0\.0\.1/$IP_ADDR/g" clients.config
+        sed -i "/^clientApp\.[0-9]\+\.args=/s/127\.0\.0\.1/$IP_ADDR/g" clients.config
     fi
 
     # Override external port if EXTERNAL_PORT env var is set (runtime override)
