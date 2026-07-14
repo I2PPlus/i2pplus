@@ -34,6 +34,7 @@ import net.i2p.util.I2PSSLSocketFactory;
 import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
 import net.i2p.util.PortMapper;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 
 /**
@@ -549,6 +550,19 @@ public class SAMBridge implements Runnable, ClientApp {
         }
         t.start();
         _runner = t;
+        // Schedule periodic sweeps for zombie SAM sessions (every 5 minutes)
+        I2PAppContext.getGlobalContext().simpleTimer2().addEvent(
+            new SimpleTimer2.TimedEvent(I2PAppContext.getGlobalContext().simpleTimer2()) {
+                @Override
+                public void timeReached() {
+                    int removed = SAMv3Handler.sSessionsHash.removeStale(10 * 60 * 1000);
+                    if (removed > 0) {
+                        if (_log.shouldWarn())
+                            _log.warn("Removed " + removed + " stale SAM session(s)");
+                    }
+                    schedule(5 * 60 * 1000);
+                }
+            }, 5 * 60 * 1000);
     }
 
     /**

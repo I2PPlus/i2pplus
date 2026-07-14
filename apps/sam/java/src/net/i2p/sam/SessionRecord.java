@@ -21,6 +21,7 @@ class SessionRecord {
 	private final Properties m_props;
 	private ThreadGroup m_threadgroup;
 	private final SAMv3Handler m_handler;
+	private volatile long _lastAccessed;
 
 	/**
 	 * Create a new session record.
@@ -35,6 +36,22 @@ class SessionRecord {
 		m_props = new Properties();
 		m_props.putAll(props);
 		m_handler = handler;
+		_lastAccessed = System.currentTimeMillis();
+	}
+
+	/**
+	 *  Update the last-accessed timestamp.
+	 *  Called by SessionsDB.get().
+	 */
+	void touch() {
+		_lastAccessed = System.currentTimeMillis();
+	}
+
+	/**
+	 *  @return timestamp of last access via get(), or construction time
+	 */
+	long getLastAccessed() {
+		return _lastAccessed;
 	}
 
 	/**
@@ -48,6 +65,7 @@ class SessionRecord {
 		m_props = in.getProps();
 		m_threadgroup = in.getThreadGroup();
 		m_handler = in.getHandler();
+		_lastAccessed = in._lastAccessed;
 	}
 
 	/**
