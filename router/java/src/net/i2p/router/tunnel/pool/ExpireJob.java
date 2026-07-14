@@ -121,6 +121,8 @@ class ExpireJob extends JobImpl {
 
     /**
      *  Get the unique key for this tunnel config.
+     *  Uses tunnel IDs when available; falls back to identity hash for
+     *  partially cleaned-up or zero-ID configs.
      *  @return key or null
      *  @since 0.9.69+
      */
@@ -129,26 +131,19 @@ class ExpireJob extends JobImpl {
         try {
             net.i2p.data.TunnelId recvIdObj = cfg.getReceiveTunnelId(0);
             net.i2p.data.TunnelId sendIdObj = cfg.getSendTunnelId(0);
-            if (recvIdObj == null || sendIdObj == null) {
-                // Tunnel partially cleaned up — use identity hash fallback
-                TunnelPool pool = cfg.getTunnelPool();
-                int poolHash = (pool != null) ? System.identityHashCode(pool) : 0;
-                return Long.valueOf(((long)poolHash << 32) | (System.identityHashCode(cfg) & 0xFFFFFFFFL));
+            if (recvIdObj != null && sendIdObj != null) {
+                long recvId = recvIdObj.getTunnelId();
+                long sendId = sendIdObj.getTunnelId();
+                if (recvId != 0 && sendId != 0) {
+                    return Long.valueOf((recvId << 32) | (sendId & 0xFFFFFFFFL));
+                }
             }
-            long recvId = recvIdObj.getTunnelId();
-            long sendId = sendIdObj.getTunnelId();
-            if (recvId != 0 && sendId != 0) {
-                return Long.valueOf((recvId << 32) | (sendId & 0xFFFFFFFFL));
-            }
-            // Fallback: include pool identity to avoid collisions across pools
-            TunnelPool pool = cfg.getTunnelPool();
-            int poolHash = (pool != null) ? System.identityHashCode(pool) : 0;
-            return Long.valueOf(((long)poolHash << 32) | (System.identityHashCode(cfg) & 0xFFFFFFFFL));
         } catch (Exception e) {
-            TunnelPool pool = cfg.getTunnelPool();
-            int poolHash = (pool != null) ? System.identityHashCode(pool) : 0;
-            return Long.valueOf(((long)poolHash << 32) | (System.identityHashCode(cfg) & 0xFFFFFFFFL));
+            // fall through to identity fallback
         }
+        TunnelPool pool = cfg.getTunnelPool();
+        int poolHash = (pool != null) ? System.identityHashCode(pool) : 0;
+        return Long.valueOf(((long)poolHash << 32) | (System.identityHashCode(cfg) & 0xFFFFFFFFL));
     }
 
     /**
