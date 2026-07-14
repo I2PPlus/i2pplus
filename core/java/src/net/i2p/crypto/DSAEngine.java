@@ -279,6 +279,7 @@ public final class DSAEngine {
      *  @return null on error
      */
     public Signature sign(SHA1Hash hash, SigningPrivateKey signingKey) {
+        if ((signingKey == null) || (hash == null)) return null;
         return signIt(hash, signingKey);
     }
 
@@ -290,6 +291,7 @@ public final class DSAEngine {
      *  @since 0.8.3 (restored, was removed in 0.8.1 and 0.8.2)
      */
     public Signature sign(Hash hash, SigningPrivateKey signingKey) {
+        if ((signingKey == null) || (hash == null)) return null;
         return signIt(hash, signingKey);
     }
 
@@ -348,7 +350,6 @@ public final class DSAEngine {
      *  @since 0.8.3
      */
     private Signature signIt(SimpleDataStructure hash, SigningPrivateKey signingKey) {
-        if ((signingKey == null) || (hash == null)) return null;
         if (signingKey.getType() != SigType.DSA_SHA1) throw new IllegalArgumentException("Bad key type " + signingKey.getType());
         long start = _context.clock().now();
 
