@@ -60,6 +60,7 @@ import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.router.networkdb.reseed.ReseedChecker;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.transport.CommSystemFacadeImpl;
+import net.i2p.router.transport.TransportImpl;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
@@ -2764,6 +2765,10 @@ return false;
     public String getRouterIPPort(RouterInfo router) {
         if (router == null) { return "UNKNOWN"; }
         try {
+            // Prefer direct connection IP from transport layer
+            byte[] direct = TransportImpl.getIP(router.getHash());
+            if (direct != null)
+                return formatIPPort(direct, 0);
             // Try getCompatibleIP first - returns IP for our supported protocols
             byte[] ip = CommSystemFacadeImpl.getCompatibleIP(router);
             if (ip != null) {

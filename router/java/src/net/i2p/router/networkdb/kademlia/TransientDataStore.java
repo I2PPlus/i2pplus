@@ -27,6 +27,7 @@ import net.i2p.router.BanLogger;
 import net.i2p.router.RouterContext;
 
 import net.i2p.router.transport.CommSystemFacadeImpl;
+import net.i2p.router.transport.TransportImpl;
 import net.i2p.util.Log;
 
 /**
@@ -169,7 +170,7 @@ class TransientDataStore implements DataStore {
                     }
                     _context.banlist().banlistRouter(key, "LU Router", null, null,
                                                      _context.clock().now() + 60 * 60 * 1000);
-                    String ipPort = getRouterIPPort(ri);
+                    String ipPort = getBestRouterIPPort(key, ri);
                     _banLogger.logBan(key, ipPort, "LU Router", 60 * 60 * 1000L, ri);
                 }
                 rv = false;
@@ -183,7 +184,7 @@ class TransientDataStore implements DataStore {
                     }
                     _context.banlist().banlistRouter(key, "XG Router", null, null,
                                                      _context.clock().now() + 60 * 60 * 1000);
-                    String ipPort = getRouterIPPort(ri);
+                    String ipPort = getBestRouterIPPort(key, ri);
                     _banLogger.logBan(key, ipPort, "XG Router", 60 * 60 * 1000L, ri);
                 }
                 rv = false;
@@ -338,6 +339,19 @@ class TransientDataStore implements DataStore {
     private String formatIPPort(byte[] ip, int port) {
         String ipStr = ip[0] + "." + ip[1] + "." + ip[2] + "." + ip[3];
         return ipStr + ":" + port;
+    }
+
+    /**
+     * Get the best IP:port for ban logging, preferring the direct connection IP
+     * from the transport layer over the RouterInfo's self-published address.
+     * For U-capability (unreachable) routers, the transport IP shows where
+     * the RouterInfo was actually received from, not the intermediate's address.
+     */
+    private String getBestRouterIPPort(Hash key, RouterInfo ri) {
+        byte[] direct = TransportImpl.getIP(key);
+        if (direct != null)
+            return formatIPPort(direct, 0);
+        return getRouterIPPort(ri);
     }
 
     private boolean containsCapability(RouterInfo ri, char capability) {
