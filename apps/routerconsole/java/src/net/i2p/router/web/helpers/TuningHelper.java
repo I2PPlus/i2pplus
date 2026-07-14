@@ -144,6 +144,8 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.rejectThreshold", "Request Reject Threshold");
         DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.rejectSteepness", "Request Reject Steepness");
         DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.loadWeight", "Request Load Weight");
+        DISPLAY_NAMES.put("i2p.streaming.rtoMultiplier", "RTO Backoff Multiplier");
+        DISPLAY_NAMES.put("i2p.tunnel.socketConnectTimeout", "Socket Connect Timeout");
     }
 
     // brief purpose descriptions (<=120 chars)
@@ -259,6 +261,8 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.rejectThreshold", "Load threshold where probabilistic request throttling starts (%).");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.rejectSteepness", "Steepness of the request throttling probability curve.");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.loadWeight", "Load score multiplier for request throttling (% of computed load).");
+        PARAM_DESCRIPTIONS.put("i2p.streaming.rtoMultiplier", "RTO growth multiplier per retransmission timeout (%, 100 = flat).");
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.socketConnectTimeout", "TCP socket connect timeout for tunnel server handler threads (ms).");
     }
 
     // display order for subsystems (alphabetical)
