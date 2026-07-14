@@ -1227,20 +1227,38 @@ class PacketBuilder2 {
         byte[] data = pkt.getData();
         int off = pkt.getOffset();
         int len = pkt.getLength();
-        synchronized(chacha) {
-            chacha.setNonce(n);
-            try {
-                chacha.encryptWithAd(data, off, SHORT_HEADER_SIZE,
-                                     data, off + SHORT_HEADER_SIZE, data, off + SHORT_HEADER_SIZE, len - SHORT_HEADER_SIZE);
-            } catch (GeneralSecurityException e) {
-                throw new IllegalArgumentException("Bad data msg", e);
-            }
+        // Clone to avoid synchronizing on the shared per-peer cipher;
+        // clone() is O(1) — just copies the key/nonce state arrays.
+        // Falls back to synchronized clone if CloneNotSupported (defensive).
+        CipherState localCha;
+        boolean needSync = false;
+        try {
+            localCha = chacha.clone();
+        } catch (CloneNotSupportedException e) {
+            localCha = chacha;
+            needSync = true;
         }
+        if (needSync) synchronized(localCha) { doEncrypt(localCha, n, data, off, len); }
+        else doEncrypt(localCha, n, data, off, len);
         len += MAC_LEN;
         pkt.setLength(len);
         if (len < MIN_DATA_LEN)
             _log.error("Packet too short " + len, new Exception());
         SSU2Header.encryptShortHeader(packet, hdrKey1, hdrKey2);
+    }
+
+    /**
+     *  Single-shot ChaCha20-Poly1305 encrypt with nonce set.
+     *  Extracted from encryptDataPacket() for use with cloned cipher state.
+     */
+    private static void doEncrypt(CipherState chacha, long n, byte[] data, int off, int len) {
+        chacha.setNonce(n);
+        try {
+            chacha.encryptWithAd(data, off, SHORT_HEADER_SIZE,
+                                 data, off + SHORT_HEADER_SIZE, data, off + SHORT_HEADER_SIZE, len - SHORT_HEADER_SIZE);
+        } catch (GeneralSecurityException e) {
+            throw new IllegalArgumentException("Bad data msg", e);
+        }
     }
 
     /**
