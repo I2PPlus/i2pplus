@@ -289,11 +289,8 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
      *                    The actual parameter type is opaque, changed in 0.9.31, and is subject to change again.
      */
     public static final void blockDecrypt(byte[] in, byte[] result, int inOffset, int outOffset, Object sessionKey) {
-        if (result.length - outOffset <= 15)
-            throw new IllegalArgumentException("result too small:"
-                                               + " result.len=" + result.length + " result.offset=" + outOffset);
-        if (in.length - inOffset <= 15)
-            throw new IllegalArgumentException("data too small: " + in.length + " inOffset: " + inOffset);
+        assert result.length - outOffset > 15 : "result too small: result.len=" + result.length + " result.offset=" + outOffset;
+        assert in.length - inOffset > 15 : "data too small: " + in.length + " inOffset: " + inOffset;
         int[][] Kd = ((CryptixAESKeyCache.KeyCacheEntry) sessionKey).Kd; // extract decryption round keys
         int ROUNDS = Kd.length - 1;
         int[] Kdr = Kd[0];
