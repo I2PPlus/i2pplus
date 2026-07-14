@@ -2,7 +2,7 @@ package net.i2p.router.transport.udp;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.BitSet;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import net.i2p.data.DataHelper;
@@ -320,19 +320,20 @@ class OutboundMessageFragments {
             return null;
         }
 
-        int fragmentsToSend = toSend.size();
         List<UDPPacket> rv = new ArrayList<>(toSend.size());
 
-        // Greedy fragment grouping logic
-        List<Fragment> remaining = new ArrayList<>(toSend);
+        // Greedy fragment grouping logic — index-based to avoid List copy + shift per removal
+        BitSet consumed = new BitSet(toSend.size());
+        int remaining = toSend.size();
         int maxPacketSize = PacketBuilder2.getMaxDataSize(peer);
 
-        while (!remaining.isEmpty()) {
+        while (remaining > 0) {
             List<Fragment> sendNext = new ArrayList<>();
             int curTotalDataSize = 0;
 
-            for (Iterator<Fragment> it = remaining.iterator(); it.hasNext();) {
-                Fragment next = it.next();
+            for (int i = 0; i < toSend.size(); i++) {
+                if (consumed.get(i)) continue;
+                Fragment next = toSend.get(i);
                 OutboundMessageState state = next.state;
                 int nextDataSize = state.fragmentSize(next.num);
                 if (next.num > 0) {
@@ -346,7 +347,8 @@ class OutboundMessageFragments {
                 if (curTotalDataSize + nextDataSize <= maxPacketSize || sendNext.isEmpty()) {
                     sendNext.add(next);
                     curTotalDataSize += nextDataSize;
-                    it.remove();
+                    consumed.set(i);
+                    remaining--;
                 }
             }
 
@@ -393,7 +395,7 @@ class OutboundMessageFragments {
         peer.packetsTransmitted(sent);
         peer.clearWantedACKSendSince();
         if (_log.shouldDebug()) {
-            _log.debug("Sent " + fragmentsToSend + " fragments of " + states.size() +
+            _log.debug("Sent " + toSend.size() + " fragments of " + states.size() +
                        " messages in " + sent + " packets\n* Target: " + peer);
         }
 
