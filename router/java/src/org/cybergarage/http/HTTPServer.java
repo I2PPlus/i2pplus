@@ -287,6 +287,7 @@ public class HTTPServer implements Runnable {
         StringBuffer name = new StringBuffer("Cyber.HTTPServer/");
         // I2P hide address from thread dumps
         httpServerThread = new Thread(this, name.toString());
+        httpServerThread.setDaemon(true);
         httpServerThread.start();
         return true;
     }

@@ -113,6 +113,7 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable {
             name.append(this.getMulticastPort());
         }
         deviceNotifyThread = new Thread(this, name.toString());
+        deviceNotifyThread.setDaemon(true);
         deviceNotifyThread.start();
     }
 

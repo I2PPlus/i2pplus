@@ -91,6 +91,7 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable {
         //	name.append(s.getLocalPort());
         // }
         deviceSearchResponseThread = new Thread(this, name.toString());
+        deviceSearchResponseThread.setDaemon(true);
         deviceSearchResponseThread.start();
     }
 
