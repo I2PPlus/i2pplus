@@ -438,17 +438,6 @@ public abstract class BuildRequestor {
     }
 
     /**
-     * Checks if a router supports ShortTunnelBuildMessage (ECIES + version >= 0.9.51).
-     */
-    private static boolean supportsShortTBM(RouterContext ctx, Hash routerHash) {
-        final RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(routerHash);
-        if (ri == null) return false;
-        if (ri.getIdentity().getPublicKey().getType() != EncType.ECIES_X25519) return false;
-        String v = ri.getVersion();
-        return VersionComparator.comp(v, MIN_NEWTBM_VERSION) >= 0;
-    }
-
-    /**
      * Creates a tunnel build message using the most efficient format supported
      * by all hops and the local router.
      *
@@ -473,12 +462,20 @@ public abstract class BuildRequestor {
             }
         }
 
+        // Pre-fetch RouterInfos once for all hops, reused by ShortTBM check and record population
+        RouterInfo[] hopRIs = new RouterInfo[cfg.getLength()];
+        for (int i = 0; i < cfg.getLength(); i++) {
+            hopRIs[i] = ctx.netDb().lookupRouterInfoLocally(cfg.getPeer(i));
+        }
+
         // Validate all hops support ShortTBM if we plan to use it
         if (useShortTBM) {
             int start = isInbound ? 0 : 1;
             int end = cfg.getLength();
             for (int i = start; i < end; i++) {
-                if (!supportsShortTBM(ctx, cfg.getPeer(i))) {
+                RouterInfo ri = hopRIs[i];
+                if (ri == null || ri.getIdentity().getPublicKey().getType() != EncType.ECIES_X25519 ||
+                    VersionComparator.comp(ri.getVersion(), MIN_NEWTBM_VERSION) < 0) {
                     useShortTBM = false;
                     break;
                 }
@@ -552,10 +549,9 @@ public abstract class BuildRequestor {
             PublicKey key = null;
 
             if (!BuildMessageGenerator.isBlank(cfg, hopIndex)) {
-                Hash peer = cfg.getPeer(hopIndex);
-                RouterInfo peerInfo = ctx.netDb().lookupRouterInfoLocally(peer);
+                RouterInfo peerInfo = hopRIs[hopIndex];
                 if (peerInfo == null) {
-                    log.warn("Peer not found for hop " + hopIndex + ": " + peer + " in " + cfg);
+                    log.warn("Peer not found for hop " + hopIndex + ": " + cfg.getPeer(hopIndex) + " in " + cfg);
                     return null;
                 }
                 key = peerInfo.getIdentity().getPublicKey();
