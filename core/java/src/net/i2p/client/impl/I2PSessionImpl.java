@@ -66,6 +66,8 @@ import net.i2p.data.i2cp.HostReplyMessage;
 import net.i2p.data.i2cp.I2CPMessage;
 import net.i2p.data.i2cp.I2CPMessageReader;
 import net.i2p.data.i2cp.MessagePayloadMessage;
+import net.i2p.data.i2cp.RequestLeaseSetMessage;
+import net.i2p.data.i2cp.RequestVariableLeaseSetMessage;
 import net.i2p.data.i2cp.SessionId;
 import net.i2p.data.i2cp.SessionStatusMessage;
 import net.i2p.internal.I2CPMessageQueue;
@@ -1281,6 +1283,14 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         if (_log.shouldInfo()) {_log.info(getPrefix() + " -> Destroying the session...");}
         clearPendingLookups();
         clearCache();
+        if (_myDestination != null) {
+            I2CPMessageHandler h = _handlerMap.getHandler(RequestLeaseSetMessage.MESSAGE_TYPE);
+            if (h instanceof RequestLeaseSetMessageHandler)
+                ((RequestLeaseSetMessageHandler) h).removeLeaseSet(_myDestination);
+            h = _handlerMap.getHandler(RequestVariableLeaseSetMessage.MESSAGE_TYPE);
+            if (h instanceof RequestLeaseSetMessageHandler)
+                ((RequestLeaseSetMessageHandler) h).removeLeaseSet(_myDestination);
+        }
         if (sendDisconnect) {
             if (_producer != null) { // only null if overridden by I2PSimpleSession
                 try {_producer.disconnect(this);}

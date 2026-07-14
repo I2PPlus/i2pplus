@@ -504,6 +504,17 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     }
 
     /**
+     *  Remove the cached lease info for the given destination.
+     *  Called on session destroy to prevent unbounded map growth
+     *  and timely release of private key material.
+     *
+     *  @since 0.9.70+
+     */
+    public void removeLeaseSet(Destination dest) {
+        _existingLeaseSets.remove(dest);
+    }
+
+    /**
      *  @param spk non-null [type:]b64[,[type:]b64]...
      *  @param privKeys out parameter
      *  @since 0.9.39
