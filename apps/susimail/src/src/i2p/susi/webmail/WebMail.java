@@ -77,7 +77,6 @@ import java.nio.charset.StandardCharsets;
 public class WebMail extends HttpServlet {
     private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(WebMail.class);
     private static final long serialVersionUID = 1L;
-    private static final String LOGIN_NONCE = Long.toString(I2PAppContext.getGlobalContext().random().nextLong());
     private static final String DEFAULT_HOST = "127.0.0.1";
     private static final int DEFAULT_POP3PORT = 7660;
     private static final int DEFAULT_SMTPPORT = 7659;
@@ -354,7 +353,6 @@ public class WebMail extends HttpServlet {
 
         /** @since 0.9.27 */
         public boolean isValidNonce(String nonce) {
-            if (mailbox == null && DataHelper.eqCT(LOGIN_NONCE, nonce)) {return true;}
             synchronized(nonces) {return nonces.contains(nonce);}
         }
 
@@ -2018,7 +2016,21 @@ public class WebMail extends HttpServlet {
                 // This must be called to add the attachment before processStateChangeButtons() sends the message
                 state = processComposeButtons(sessionObject, request);
             }
+            // This calls processLogout() which processes the logout button and invalidates sessionobject
+            State oldstate = state;
             state = processStateChangeButtons(sessionObject, request, isPOST, state);
+            if (oldstate != State.AUTH && state == State.AUTH) {
+                if (_log.shouldDebug())
+                     _log.debug("OLD state is " + oldstate + " NEW state is AUTH, session invalidated");
+                httpSession = request.getSession( true );
+                // get new sessionObject so we can put the nonce in it below, otherwise
+                // user will get nonce error on login
+                sessionObject = getSessionObject( httpSession );
+                sessionObject.themePath = "themes/" + theme + '/';
+                sessionObject.imgPath = sessionObject.themePath + "images/";
+                sessionObject.isMobile = isMobile;
+                // and now we're synched inside the old sessionObject, not the new one, oh well
+            }
             state = processConfigButtons(sessionObject, request, isPOST, state);
             if (_log.shouldDebug()) _log.debug("Prelim. state is " + state);
             if (state == State.CONFIG && isPOST) {
@@ -2308,7 +2320,7 @@ public class WebMail extends HttpServlet {
 
             if (state == State.LIST) {buf.append("<body id=main>\n");}
             else {buf.append("<body>\n");}
-            String nonce = state == State.AUTH ? LOGIN_NONCE : Long.toString(ctx.random().nextLong());
+            String nonce = Long.toString(ctx.random().nextLong());
             sessionObject.addNonce(nonce);
             // TODO we don't need the form below
             buf.append("<div id=page>\n<span class=header></span>\n")
