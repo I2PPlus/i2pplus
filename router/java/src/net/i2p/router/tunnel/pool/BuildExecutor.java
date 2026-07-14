@@ -208,6 +208,24 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
+     *  Get or create failure tracking state for a pool.
+     *  Uses get()+putIfAbsent() instead of computeIfAbsent() to avoid
+     *  per-call allocation of the fallback array and reduce lock contention.
+     *  @return existing or newly-created long[2]
+     *  @since 0.9.70+
+     */
+    private long[] getOrCreatePoolState(TunnelPool pool) {
+        long[] state = _poolFailureState.get(pool);
+        if (state == null) {
+            state = new long[]{0, 0};
+            long[] existing = _poolFailureState.putIfAbsent(pool, state);
+            if (existing != null)
+                state = existing;
+        }
+        return state;
+    }
+
+    /**
      * Update success/failure/timeout counters and calculate adaptive timeout
      */
     private void updateBuildStats(Result result) {
@@ -497,7 +515,7 @@ public class BuildExecutor implements Runnable {
                 // consecutive timeouts (same as BuildExecutor.buildComplete()
                 // does for BAD_RESPONSE/OTHER_FAILURE).
                 if (pool != null) {
-                    long[] state = _poolFailureState.computeIfAbsent(pool, k -> new long[]{0, 0});
+                    long[] state = getOrCreatePoolState(pool);
                     synchronized (state) {
                         if (state[0] < CONSECUTIVE_FAILURE_THRESHOLD) {
                             state[0]++;
@@ -918,7 +936,7 @@ public class BuildExecutor implements Runnable {
         if (result == Result.SUCCESS) {
             _poolFailureState.remove(pool);
         } else if (result != Result.DUP_ID && result != Result.REJECT) {
-            long[] state = _poolFailureState.computeIfAbsent(pool, k -> new long[]{0, 0});
+            long[] state = getOrCreatePoolState(pool);
             synchronized (state) {
                 if (state[0] < CONSECUTIVE_FAILURE_THRESHOLD) {
                     state[0]++;
