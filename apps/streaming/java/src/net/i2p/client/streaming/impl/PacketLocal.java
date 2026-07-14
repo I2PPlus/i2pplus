@@ -7,11 +7,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
 import net.i2p.client.streaming.I2PSocketException;
+import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;
 import net.i2p.data.SigningPrivateKey;
+import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 
 /**
@@ -158,6 +160,30 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
             notifyAll();
         }
     }
+
+    /**
+     * Return the payload to the shared pool instead of letting it GC.
+     * Only returns buffers that came from the MAX_PAYLOAD_SIZE pool;
+     * zero-length or other-size payloads fall through to default no-op.
+     */
+    @Override
+    public void releasePayload() {
+        ByteArray payload = getPayload();
+        if (payload != null && payload.getData().length == Packet.MAX_PAYLOAD_SIZE) {
+            setPayload(null);
+            getPayloadCache().release(payload);
+        }
+    }
+
+    /**
+     * Shared outbound payload cache (MAX_PAYLOAD_SIZE buffers).
+     * Must match the cache in ConnectionDataReceiver._payloadCache.
+     */
+    static ByteCache getPayloadCache() {
+        return _payloadCache;
+    }
+
+    private static final ByteCache _payloadCache = ByteCache.getInstance(128, Packet.MAX_PAYLOAD_SIZE);
 
     /**
      * Record that this packet was cancelled

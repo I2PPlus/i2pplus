@@ -4,6 +4,7 @@ import java.io.IOException;
 import net.i2p.I2PAppContext;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
+import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 
 /**
@@ -24,6 +25,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
     private final Log _log;
     private final Connection _connection;
     private static final MessageOutputStream.WriteStatus _dummyStatus = new DummyStatus();
+    private static final ByteCache _payloadCache = ByteCache.getInstance(128, Packet.MAX_PAYLOAD_SIZE);
 
     /**
      *  @param con non-null
@@ -194,8 +196,13 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         boolean isFirst = (_connection.getAckedPackets() <= 0) && (_connection.getUnackedPacketsSent() <= 0);
 
         PacketLocal packet = new PacketLocal(_context, _connection.getRemotePeer(), _connection);
-        ByteArray data = new ByteArray(new byte[size]);
-        if (size > 0) {System.arraycopy(buf, off, data.getData(), 0, size);}
+        ByteArray data;
+        if (size > 0) {
+            data = _payloadCache.acquire();
+            System.arraycopy(buf, off, data.getData(), 0, size);
+        } else {
+            data = new ByteArray(new byte[0]);
+        }
         data.setValid(size);
         data.setOffset(0);
         packet.setPayload(data);
