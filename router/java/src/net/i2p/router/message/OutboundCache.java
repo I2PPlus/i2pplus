@@ -149,6 +149,7 @@ public class OutboundCache {
         backloggedTunnelCache.clear();
         tunnelCache.clear();
         lastReplyRequestCache.clear();
+        multihomedCache.clear();
     }
 
     /**
@@ -217,6 +218,22 @@ public class OutboundCache {
     }
 
     /**
+     * Removes expired LeaseSets from the multihomed cache.
+     *
+     * @param ctx the router context for current time.
+     * @param mc  the multihomed cache to clean.
+     */
+    private static void cleanMultihomedCache(final RouterContext ctx, final Map<Hash, LeaseSet> mc) {
+        final long now = ctx.clock().now();
+        for (Iterator<LeaseSet> iter = mc.values().iterator(); iter.hasNext(); ) {
+            final LeaseSet l = iter.next();
+            if (l.getEarliestLeaseDate() < now) {
+                iter.remove();
+            }
+        }
+    }
+
+    /**
      * Internal timer event that periodically cleans all caches.
      */
     private class OCMOSJCacheCleaner extends SimpleTimer2.TimedEvent {
@@ -228,6 +245,7 @@ public class OutboundCache {
             cleanTunnelCache(_context, tunnelCache);
             cleanTunnelCache(_context, backloggedTunnelCache);
             cleanReplyCache(_context, lastReplyRequestCache);
+            cleanMultihomedCache(_context, multihomedCache);
             schedule(CLEAN_INTERVAL);
         }
     }

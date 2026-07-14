@@ -29,6 +29,7 @@ import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.FileSuffixFilter;
 import net.i2p.util.Log;
 import net.i2p.util.SecureDirectory;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Utilities for creating, storing, retrieving the signing keys for
@@ -103,6 +104,14 @@ public class FamilyKeyCrypto {
         _ourFamily = (_privkey != null) ? new ConcurrentHashSet<>(4) : Collections.<Hash>emptySet();
         _knownKeys = new HashMap<>(8);
         loadCerts();
+        // Schedule periodic negative cache cleanup (every hour) to prevent unbounded growth
+        _context.simpleTimer2().addEvent(new SimpleTimer2.TimedEvent(_context.simpleTimer2()) {
+            @Override
+            public void timeReached() {
+                cleanup();
+                schedule(60 * 60 * 1000);
+            }
+        }, 60 * 60 * 1000);
     }
 
     /**
@@ -121,6 +130,18 @@ public class FamilyKeyCrypto {
     public void shutdown() {
         _verified.clear();
         _negativeCache.clear();
+    }
+
+    /**
+     * Periodic cleanup to prevent unbounded growth of the negative cache.
+     * Clears old entries so they can be re-checked on next access.
+     * Runs every hour via SimpleTimer2.
+     */
+    private void cleanup() {
+        int sz = _negativeCache.size();
+        _negativeCache.clear();
+        if (sz > 0 && _log.shouldInfo())
+            _log.info("Family negative cache cleared: " + sz + " entries");
     }
 
     /**
