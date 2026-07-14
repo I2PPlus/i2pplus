@@ -113,23 +113,45 @@ html:not(.advmode) #tuning input[type=number]{min-width:0!important;text-align:c
 .streams th:nth-child(3),.streams td:nth-child(3){width:65%;text-align:left}
 .streams td:nth-child(3) span{font-family:var(--monospaced);font-size:90%}
 .streams th:nth-child(n+4),.streamsContainer td:nth-child(n+4){width:5%;text-align:center}
-#streamstats{margin:8px auto;padding:8px 4px;width:100%;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;text-align:center}
-#activeStreams .totalBandwidth{float:right;text-transform:none;letter-spacing:0;word-spacing:0;font-size:80%}
-#activeStreams th.sectionhead{font-size:120%;font-weight:700;text-align:left;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);border-bottom:1px solid var(--border)}
 .ring{max-height:110px;max-width:110px;display:block}
 .ring-cell{display:flex;justify-content:center;align-items:center;position:relative}
 .ring-tip{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:6px;padding:6px 10px;background:#222;color:#ccc;font-size:11px;line-height:1.4;white-space:nowrap;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.5);z-index:10;text-align:left;pointer-events:none}
 .ring-cell:hover .ring-tip{display:block}
 .ring .ring-arc{fill:none;stroke-width:2;transition:stroke-dashoffset .6s ease}
+.ring .ring-arc.blue{stroke:#3498db;fill:#3498db22}
+.ring .ring-arc.cyan{stroke:#1abc9c;fill:#1abc9c22}
+.ring .ring-arc.gray{stroke:#5555;fill:#5552}
 .ring .ring-arc.green{stroke:#2ecc71;fill:#2ecc7122}
 .ring .ring-arc.red{stroke:#e74c3c;fill:#e74c3c22}
 .ring .ring-arc.yellow{stroke:#f39c12;fill:#f39c1222}
 .ring .ring-bg{fill:none;stroke:#777;stroke-width:4;filter:blur(4px)}
 .ring .ring-label{font-size:75%;font-weight:600;fill:#999;text-anchor:middle;dominant-baseline:central}
 .ring .ring-pct{font-size:14px;font-weight:bold;text-anchor:middle;dominant-baseline:central;fill:#888}
+.ring .ring-pct.blue{fill:#3498db}
+.ring .ring-pct.cyan{fill:#1abc9c}
 .ring .ring-pct.green{fill:#2ecc71}
 .ring .ring-pct.red{fill:#e74c3c}
 .ring .ring-pct.yellow{fill:#f39c12}
+.spark-bar{opacity:.35}
+.spark-bar.green{fill:#2ecc71}
+.spark-bar.yellow{fill:#f39c12}
+.spark-bar.red{fill:#e74c3c}
+.spark-bar.blue{fill:#3498db}
+.spark-bar.cyan{fill:#1abc9c}
+.spark-bar.gray{fill:#777}
+.spark-line polyline{fill:none;stroke:currentColor;stroke-width:3;opacity:.1}
+.spark-area{fill:currentColor;opacity:.15}
+.spark-line.green{color:#2ecc71}
+.spark-line.yellow{color:#f39c12}
+.spark-line.red{color:#e74c3c}
+.spark-line.blue{color:#3498db}
+.spark-line.cyan{color:#1abc9c}
+.spark-line.gray{color:#888}
+#streamstats{margin:8px auto;padding:8px 4px;width:100%;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;text-align:center}
+#activeStreams .totalBandwidth{float:right;text-transform:none;letter-spacing:0;word-spacing:0;font-size:80%}
+#activeStreams th.sectionhead{font-size:120%;font-weight:700;text-align:left;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);border-bottom:1px solid var(--border)}
+#healthstats{margin:8px auto;padding:8px 4px;width:100%;display:grid;grid-template-columns:repeat(6,1fr);gap:4px;text-align:center}
+#healthstats .ring{margin:8px}
 
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1.1)}50%{opacity:.7;transform:scale(.9)}}
 

@@ -2914,6 +2914,11 @@ svg.spark{position:relative;border:var(--border);background:linear-gradient(180d
 #streamstats{margin-top:12px;width:calc(100% - 12px);background:var(--badge)}
 #streamsWrap{margin-top:13px}
 
+/* health */
+#healthstats{margin:12px auto;width:calc(100% - 14px);padding:16px 4px;box-shadow:var(--border_table),0 0 0 2px #141 inset,0 0 0 3px #000 inset;background:var(--badge)}
+#healthstats .ring{margin:16px;max-height:180px;max-width:180px}
+#healthstats .ring .ring-label{font-size:50%}
+
 /* iframes */
 #dns{padding:0;min-width:650px}
 #i2psnarkframe{margin-bottom:-2px}

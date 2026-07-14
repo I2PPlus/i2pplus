@@ -90,8 +90,8 @@ class FloodfillVerifyStoreJob extends JobImpl {
         } else {_ipSet = new MaskedIPSet(16);}
         // wait some time before trying to verify the store
         getTiming().setStartAfter(ctx.clock().now() + START_DELAY);
-        getContext().statManager().createRateStat("netDb.floodfillVerifyOK", "Time for successful Floodfill verify (ms)", "NetworkDatabase", RATES);
-        getContext().statManager().createRateStat("netDb.floodfillVerifyFail", "Time for failed Floodfill verify (ms)", "NetworkDatabase", RATES);
+        getContext().statManager().createRequiredRateStat("netDb.floodfillVerifyOK", "Time for successful Floodfill verify (ms)", "NetworkDatabase", RATES);
+        getContext().statManager().createRequiredRateStat("netDb.floodfillVerifyFail", "Time for failed Floodfill verify (ms)", "NetworkDatabase", RATES);
         getContext().statManager().createRateStat("netDb.floodfillVerifyTimeout", "Floodfill verify timeout (ms)", "NetworkDatabase", RATES);
     }
 

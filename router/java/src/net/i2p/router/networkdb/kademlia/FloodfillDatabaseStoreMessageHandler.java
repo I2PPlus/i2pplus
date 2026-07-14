@@ -39,10 +39,10 @@ public class FloodfillDatabaseStoreMessageHandler implements HandlerJobBuilder {
         _context = context;
         _facade = facade;
         // following are for HFDSMJ
-        context.statManager().createRateStat("netDb.storeHandled", "Number of DbStore messages we have handled", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
-        context.statManager().createRateStat("netDb.storeLeaseSetHandled", "Number of LeaseSet store messages we have handled", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
-        context.statManager().createRateStat("netDb.storeRouterInfoHandled", "Number of RouterInfo store messages we have handled", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
-        context.statManager().createRateStat("netDb.storeRecvTime", "Time to handle the local store part of a DbStore", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
+        context.statManager().createRequiredRateStat("netDb.storeHandled", "Number of DbStore messages we have handled", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
+        context.statManager().createRequiredRateStat("netDb.storeLeaseSetHandled", "Number of LeaseSet store messages we have handled", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
+        context.statManager().createRequiredRateStat("netDb.storeRouterInfoHandled", "Number of RouterInfo store messages we have handled", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
+        context.statManager().createRequiredRateStat("netDb.storeRecvTime", "Time to handle the local store part of a DbStore", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
         context.statManager().createRateStat("netDb.storeLocalLeaseSetAttempt", "Number of attempted local LeaseSet store messages", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
     }
 

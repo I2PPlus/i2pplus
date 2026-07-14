@@ -676,7 +676,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             _floodThrottler = new FloodThrottler();
             _context.statManager().createRateStat("netDb.floodThrottled", "How often we decline to flood the NetDb", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
             // following are for HFDSMJ
-            _context.statManager().createRateStat("netDb.storeFloodNew", "Time to flood out a newly received NetDb entry", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
+            _context.statManager().createRequiredRateStat("netDb.storeFloodNew", "Time to flood out a newly received NetDb entry", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
             _context.statManager().createRateStat("netDb.storeFloodOld", "How often we receive a stale NetDb entry", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
         }
     }

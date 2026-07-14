@@ -276,6 +276,23 @@ public class Rate {
     }
 
     /**
+     *  Get the last N data points from the underlying storage (RRD).
+     *  Delegates to the summary listener if it supports historical data.
+     *  Returns NaN-padded array if the listener is null or data is unavailable.
+     *
+     * @param count number of data points
+     * @return array of length count
+     * @since 0.9.70+
+     */
+    public double[] getLastValues(int count) {
+        if (_graphListener != null)
+            return _graphListener.getLastValues(count);
+        double[] result = new double[count];
+        java.util.Arrays.fill(result, Double.NaN);
+        return result;
+    }
+
+    /**
      * What was the average value across the events in the last period?
      */
     public synchronized double getAverageValue() {

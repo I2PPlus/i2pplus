@@ -538,6 +538,17 @@ class SidebarRenderer {
             .append("\" hidden><span><img src=/themes/console/images/peers.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
 
+        tx = _t("Health");
+        rbuf.setLength(0);
+        rbuf.append("<a href=/health target=_top title=\"")
+            .append(_t("Router health overview"))
+            .append("\">")
+            .append(nbsp(tx))
+            .append("</a>\n<a class=sb_icon target=_top href=/health title=\"")
+            .append(tx)
+            .append("\" hidden><span><img src=/themes/console/images/health.svg></span></a>\n");
+        svcs.put(tx, rbuf.toString());
+
         tx = _t("Profiles");
         rbuf.setLength(0);
         rbuf.append("<a href=\"/profiles?f=1\" target=_top title=\"")
