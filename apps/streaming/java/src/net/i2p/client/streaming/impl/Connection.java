@@ -1728,14 +1728,11 @@ class Connection {
                     _log.debug(Connection.this + " not cutting SlowStartThreshold and Window");
                 }
 
+                // _outboundPackets is a TreeMap, so values() already returns
+                // packets in ascending sequence number order (lower = higher priority).
+                // Round down (RFC 5681 section 4.3 "MUST be no more than half")
+                // https://datatracker.ietf.org/doc/html/rfc5681#section-4.3
                 toResend = new ArrayList<>(_outboundPackets.values());
-                /*
-                 * Round down (RFC 5681 section 4.3 "MUST be no more than half")
-                 * https://datatracker.ietf.org/doc/html/rfc5681#section-4.3
-                 * Priority retransmission: Sort by sequence number (lower = higher priority)
-                 * to give preference to SYN packets and head-of-window data.
-                 */
-                toResend.sort((p1, p2) -> Long.compareUnsigned(p1.getSequenceNum(), p2.getSequenceNum()));
                 toResend = toResend.subList(0, Math.max(1, Math.min(getMaxRtx(), toResend.size() / 2)));
             }
 
