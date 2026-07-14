@@ -59,19 +59,19 @@ public class BlindData {
     private final I2PAppContext _context;
     private final SigningPublicKey _clearSPK;
     private final String _secret;
-    private SigningPublicKey _blindSPK;
+    private volatile SigningPublicKey _blindSPK;
     private final SigType _blindType;
     private final int _authType;
     private final PrivateKey _authKey;
-    private Hash _blindHash;
-    private SigningPrivateKey _alpha;
-    private Destination _dest;
-    private long _routingKeyGenMod;
-    private boolean _secretRequired;
-    private boolean _authRequired;
-    private long _date;
-    private long _expiration;
-    private String _b32;
+    private volatile Hash _blindHash;
+    private volatile SigningPrivateKey _alpha;
+    private volatile Destination _dest;
+    private volatile long _routingKeyGenMod;
+    private volatile boolean _secretRequired;
+    private volatile boolean _authRequired;
+    private volatile long _date;
+    private volatile long _expiration;
+    private volatile String _b32;
 
     /**
      * bits 3-0 including per-client bit
@@ -189,7 +189,7 @@ public class BlindData {
      *
      *  @return The blinded key for the current day, non-null
      */
-    public synchronized SigningPublicKey getBlindedPubKey() {
+    public SigningPublicKey getBlindedPubKey() {
         calculate();
         return _blindSPK;
     }
@@ -199,8 +199,9 @@ public class BlindData {
      *
      *  @return The hash of the destination if known, or null
      */
-    public synchronized Hash getDestHash() {
-        return _dest != null ? _dest.getHash() : null;
+    public Hash getDestHash() {
+        Destination d = _dest;
+        return d != null ? d.getHash() : null;
     }
 
     /**
@@ -208,7 +209,7 @@ public class BlindData {
      *
      *  @return The hash of the blinded key for the current day
      */
-    public synchronized Hash getBlindedHash() {
+    public Hash getBlindedHash() {
         calculate();
         return _blindHash;
     }
@@ -218,7 +219,7 @@ public class BlindData {
      *
      *  @return Alpha for the current day
      */
-    public synchronized SigningPrivateKey getAlpha() {
+    public SigningPrivateKey getAlpha() {
         calculate();
         return _alpha;
     }
@@ -228,7 +229,7 @@ public class BlindData {
      *
      *  @return null if unknown
      */
-    public synchronized Destination getDestination() {
+    public Destination getDestination() {
         return _dest;
     }
 
@@ -238,7 +239,7 @@ public class BlindData {
      * @param d the destination to set
      * @throws IllegalArgumentException on SigningPublicKey mismatch
      */
-    public synchronized void setDestination(Destination d) {
+    public void setDestination(Destination d) {
         if (_dest != null) {
             if (!_dest.equals(d)) throw new IllegalArgumentException("Dest mismatch");
             return;
@@ -304,9 +305,13 @@ public class BlindData {
      * @return the b33 encoded string
      * @since 0.9.41
      */
-    public synchronized String toBase32() {
-        if (_b32 == null) _b32 = Blinding.encode(_clearSPK, _secretRequired, _authRequired);
-        return _b32;
+    public String toBase32() {
+        String s = _b32;
+        if (s == null) {
+            _b32 = Blinding.encode(_clearSPK, _secretRequired, _authRequired);
+            s = _b32;
+        }
+        return s;
     }
 
     /**
@@ -314,7 +319,7 @@ public class BlindData {
      *
      * @since 0.9.41
      */
-    public synchronized void setSecretRequired() {
+    public void setSecretRequired() {
         _secretRequired = true;
         _b32 = null;
     }
@@ -334,7 +339,7 @@ public class BlindData {
      *
      * @since 0.9.41
      */
-    public synchronized void setAuthRequired() {
+    public void setAuthRequired() {
         _authRequired = true;
         _b32 = null;
     }
@@ -392,7 +397,7 @@ public class BlindData {
     }
 
     @Override
-    public synchronized String toString() {
+    public String toString() {
         calculate();
         StringBuilder buf = new StringBuilder(1024); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("[BlindData: ");
