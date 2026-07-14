@@ -676,11 +676,10 @@ class MessageOutputStream extends OutputStream {
          * Avoids scheduling duplicate flush events.
          */
         public void enqueue() {
-            int pfd = _context.getProperty(PROP_PASSIVE_FLUSH_DELAY, _defaultPassiveFlushDelay);
             if (!_enqueued) {
-                forceReschedule(pfd);
+                forceReschedule(_passiveFlushDelay);
                 if (_log.shouldDebug()) {
-                    _log.debug("Rescheduled the flusher to run in " + pfd + "ms");
+                    _log.debug("Rescheduled the flusher to run in " + _passiveFlushDelay + "ms");
                 }
                 _enqueued = true;
             } else if (_log.shouldDebug()) {
