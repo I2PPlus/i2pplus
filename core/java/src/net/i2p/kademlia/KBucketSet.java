@@ -401,11 +401,9 @@ public class KBucketSet<T extends SimpleDataStructure> {
         getReadLock();
         try {
             // start at first (closest) bucket
-            for (int i = 0; i < _buckets.size() && count < max; i++) {
-                Set<T> entries = _buckets.get(i).getEntries();
-                // add the whole bucket except for ignores,
-                // extras will be trimmed after sorting
-                for (T e : entries) {
+            for (KBucket<T> bucket : _buckets) {
+                if (count >= max) break;
+                for (T e : bucket.getEntries()) {
                     if (!toIgnore.contains(e)) {
                         rv.add(e);
                         count++;
@@ -417,10 +415,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
         }
         Comparator<T> comp = new XORComparator<>(_us);
         Collections.sort(rv, comp);
-        int sz = rv.size();
-        for (int i = sz - 1; i >= max; i--) {
-            rv.remove(i);
-        }
+        rv.subList(max, rv.size()).clear();
         return rv;
     }
 
@@ -444,13 +439,14 @@ public class KBucketSet<T extends SimpleDataStructure> {
         if (key.equals(_us)) return getClosest(max, toIgnore);
         List<T> rv = new ArrayList<>(max);
         int count = 0;
+        List<KBucket<T>> buckets = _buckets;
+        int numBuckets = buckets.size();
         getReadLock();
         try {
             int start = pickBucket(key);
             // start at closest bucket, then to the smaller (closer to us) buckets
             for (int i = start; i >= 0 && count < max; i--) {
-                Set<T> entries = _buckets.get(i).getEntries();
-                for (T e : entries) {
+                for (T e : buckets.get(i).getEntries()) {
                     if (!toIgnore.contains(e)) {
                         rv.add(e);
                         count++;
@@ -458,9 +454,8 @@ public class KBucketSet<T extends SimpleDataStructure> {
                 }
             }
             // then the farther from us buckets if necessary
-            for (int i = start + 1; i < _buckets.size() && count < max; i++) {
-                Set<T> entries = _buckets.get(i).getEntries();
-                for (T e : entries) {
+            for (int i = start + 1; i < numBuckets && count < max; i++) {
+                for (T e : buckets.get(i).getEntries()) {
                     if (!toIgnore.contains(e)) {
                         rv.add(e);
                         count++;
@@ -472,10 +467,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
         }
         Comparator<T> comp = new XORComparator<>(key);
         Collections.sort(rv, comp);
-        int sz = rv.size();
-        for (int i = sz - 1; i >= max; i--) {
-            rv.remove(i);
-        }
+        rv.subList(max, rv.size()).clear();
         return rv;
     }
 
