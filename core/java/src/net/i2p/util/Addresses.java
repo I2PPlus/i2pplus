@@ -628,22 +628,20 @@ public abstract class Addresses {
         }
         if (rv == null) {
             if (isIPAddress(host)) {
-                try {
-                    if (host.indexOf('.') > 0) {
-                        rv = getIPv4(host);
-                        if (rv == null)
-                            return null;
-                    } else if (host.indexOf(':') >= 0 && !host.contains("::")) {
-                        rv = getIPv6(host);
-                        if (rv == null)
-                            return null;
-                    } else {
-                        rv = InetAddress.getByName(host).getAddress();
-                    }
-                    synchronized (_IPAddress) {
-                        _IPAddress.put(host, rv);
-                    }
-                } catch (UnknownHostException uhe) { /* ignored */ }
+                if (host.indexOf('.') > 0) {
+                    rv = getIPv4(host);
+                    if (rv == null)
+                        return null;
+                } else if (host.indexOf(':') >= 0 && !host.contains("::")) {
+                    rv = getIPv6(host);
+                    if (rv == null)
+                        return null;
+                } else {
+                    return null;
+                }
+                synchronized (_IPAddress) {
+                    _IPAddress.put(host, rv);
+                }
             }
         }
         return rv;

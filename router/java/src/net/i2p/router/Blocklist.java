@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -710,13 +709,11 @@ public class Blocklist {
             String sip = buf.substring(start1, end1);
             sip = sip.replace(';', ':'); // IPv6
             // IP or hostname - DNS lookup may leak IP for hostnames. User's choice.
-            InetAddress pi = InetAddress.getByName(sip);
-            ip1 = pi.getAddress();
+            ip1 = Addresses.getIPOnly(sip);
+            if (ip1 == null) return null;
             if (start2 >= 0) {
-                String sip2 = buf.substring(start2);
-                pi = InetAddress.getByName(sip2);
-                if (pi == null) {return null;}
-                ip2 = pi.getAddress();
+                ip2 = Addresses.getIPOnly(buf.substring(start2));
+                if (ip2 == null) return null;
                 if (ip2.length != 4) {throw new UnknownHostException();}
                 if ((ip1[0] & 0xff) < 0x80 && (ip2[0] & 0xff) >= 0x80) {
                     if (_wrapSave == null) {
