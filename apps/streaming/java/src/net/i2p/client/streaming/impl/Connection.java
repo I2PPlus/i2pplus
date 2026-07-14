@@ -92,6 +92,9 @@ class Connection {
      *  sendPacket() are serialized by _dataLock in MessageOutputStream. */
     private final PacedPacketEvent _pacedEvent;
     private final AckDupEvent _ackDupEvent;
+    /** Reusable list for ackPackets() — avoids per-call allocation.
+     *  Only accessed from the receive thread, serialized by _dataLock. */
+    private final List<PacketLocal> _ackedList;
     private final int _randomWait;
     private final int _localPort;
     private final int _remotePort;
@@ -211,6 +214,7 @@ class Connection {
         _retransmitEvent = new RetransmitEvent();
         _pacedEvent = new PacedPacketEvent();
         _ackDupEvent = new AckDupEvent();
+        _ackedList = new ArrayList<>(8);
 
         // Initialize random wait for activity timer randomization and bandwidth estimator
         _randomWait = _context.random().nextInt(3*1000); // 0-3 seconds randomization
@@ -521,7 +525,7 @@ class Connection {
 
     /**
      *  Process the acks and nacks received in a packet
-     *  @return List of packets acked for the first time, or null if none
+     *  @return List of packets acked for the first time (empty if none)
      */
     public List<PacketLocal> ackPackets(long ackThrough, long[] nacks) {
         if (nacks == null || nacks.length == 0) {
@@ -535,7 +539,7 @@ class Connection {
             _highestAckedThrough.updateAndGet(cur -> Math.max(cur, newVal));
         }
 
-        List<PacketLocal> acked = null;
+        _ackedList.clear();
         boolean anyLeft = false;
         boolean doPushBack = false;
         boolean doCancel = false;
@@ -560,10 +564,9 @@ class Connection {
                             }
                         }
                         if (!nacked) { // aka ACKed
-                            if (acked == null) {acked = new ArrayList<>(8);}
                             PacketLocal ackedPacket = e.getValue();
                             ackedPacket.ackReceived();
-                            acked.add(ackedPacket);
+                            _ackedList.add(ackedPacket);
                             iter.remove();
                         }
                     } else {
@@ -578,10 +581,10 @@ class Connection {
                     }
                 } // for
             } // !isEmpty()
-            if (acked != null) {
-                _ackedPackets.addAndGet(acked.size());
-                for (int i = 0; i < acked.size(); i++) {
-                    PacketLocal p = acked.get(i);
+            if (!_ackedList.isEmpty()) {
+                _ackedPackets.addAndGet(_ackedList.size());
+                for (int i = 0; i < _ackedList.size(); i++) {
+                    PacketLocal p = _ackedList.get(i);
                     // removed from _outboundPackets above in iterator
                     if (p.getNumSends() > 1) {
                         _activeResends.decrementAndGet();
@@ -601,9 +604,9 @@ class Connection {
             anyLeft = !_outboundPackets.isEmpty();
             _outboundPackets.notifyAll();
 
-            if ((acked != null) && (!acked.isEmpty())) {
+            if (!_ackedList.isEmpty()) {
                 _ackSinceCongestion.set(true);
-                _bwEstimator.addSample(acked.size());
+                _bwEstimator.addSample(_ackedList.size());
                 if (anyLeft) {
                     // RFC 6298 section 5.3
                     pushBackRTO = _options.getRTO();
@@ -627,7 +630,7 @@ class Connection {
                 _log.debug("[" + Connection.this + "] All outstanding packets ACKed, cancelling timer");
             }
         }
-        return acked;
+        return _ackedList;
     }
 
     /**
