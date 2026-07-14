@@ -1283,6 +1283,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         if (_log.shouldInfo()) {_log.info(getPrefix() + " -> Destroying the session...");}
         clearPendingLookups();
         clearCache();
+        if (_availableMessages != null)
+            _availableMessages.clear();
         if (_myDestination != null) {
             I2CPMessageHandler h = _handlerMap.getHandler(RequestLeaseSetMessage.MESSAGE_TYPE);
             if (h instanceof RequestLeaseSetMessageHandler)
