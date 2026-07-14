@@ -43,15 +43,20 @@ public class HealthHelper extends HelperBase {
         }
     }
 
-    /** Get a rate stat's average value over 1 minute, returning 0 if unavailable */
+    /** Get a rate stat's average value, trying wider windows (1m, 10m, 1h) until data is found. Returns 0 if unavailable */
     private double getStatAvg(String name) {
         RateStat rs = _context.statManager().getRate(name);
         if (rs == null) return 0;
-        Rate r = rs.getRate(RateConstants.ONE_MINUTE);
-        return r != null ? r.getAverageValue() : 0;
+        long[] windows = {RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR};
+        for (long window : windows) {
+            Rate r = rs.getRate(window);
+            if (r != null && r.getLastEventCount() > 0)
+                return r.getAverageValue();
+        }
+        return 0;
     }
 
-    /** Get a rate stat's last-event-count (events/min), returning 0 if unavailable */
+    /** Get a rate stat's event count (narrowest 1-minute window only, for throughput calc), returning 0 if unavailable */
     private long getStatCount(String name) {
         RateStat rs = _context.statManager().getRate(name);
         if (rs == null) return 0;
@@ -59,16 +64,18 @@ public class HealthHelper extends HelperBase {
         return r != null ? r.getLastEventCount() : 0;
     }
 
-    /** Get last 5 history data points from RRD for a stat, or null if unavailable */
+    /** Get last 5 history data points from RRD for a stat, trying wider windows if needed, or null if unavailable */
     private double[] getStatHistory(String name) {
         RateStat rs = _context.statManager().getRate(name);
         if (rs == null) return null;
-        Rate r = rs.getRate(RateConstants.ONE_MINUTE);
-        if (r == null) return null;
-        double[] vals = r.getLastValues(5);
-        // check if all NaN
-        for (double v : vals) {
-            if (!Double.isNaN(v)) return vals;
+        long[] windows = {RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR};
+        for (long window : windows) {
+            Rate r = rs.getRate(window);
+            if (r == null) return null;
+            double[] vals = r.getLastValues(5);
+            for (double v : vals) {
+                if (!Double.isNaN(v)) return vals;
+            }
         }
         return null;
     }
