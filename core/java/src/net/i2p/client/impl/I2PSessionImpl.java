@@ -155,6 +155,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     protected final Object _bwReceivedLock = new Object();
     protected volatile int[] _bwLimits;
     private volatile String _routerVersion;
+    private volatile String _shortHash;
 
     protected final I2PClientMessageHandlerMap _handlerMap;
 
@@ -2051,9 +2052,11 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(32);
+        StringBuilder buf = new StringBuilder(64);
         if (_myDestination != null) {
-            buf.append("[").append(_myDestination.calculateHash().toBase32().substring(0,8)).append("]");
+            if (_shortHash == null)
+                _shortHash = _myDestination.calculateHash().toBase32().substring(0,8);
+            buf.append("[").append(_shortHash).append("]");
         } else {buf.append("[null dest] ");}
         buf.append(getPrefix());
         return buf.toString();
