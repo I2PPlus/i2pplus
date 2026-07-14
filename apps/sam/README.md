@@ -708,7 +708,29 @@ sendto(fd, buf, n, 0, &sam, sizeof(sam));
 
 ---
 
+## Demo Scripts
+
+Python example scripts for all session types are in `demos/`:
+
+```
+demos/
+├── streamTests/     # STREAM send, receive, forward, server
+├── datagramTests/   # DATAGRAM send, receive, forward
+└── rawTests/        # RAW send, receive, forward
+```
+
+Each directory has `samIn.py` (receiver), `samOut.py` (sender),
+`samForward.py` (forwarder), and a `README.txt` with usage examples.
+
+---
+
 ## Testing
+
+Smoke test (requires SAM on 127.0.0.1:7656):
+
+```bash
+ant testSAM
+```
 
 Build and run standalone SAM:
 
