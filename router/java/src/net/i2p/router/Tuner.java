@@ -149,6 +149,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     public static final String SUB_ROUTER = "Router";
     public static final String SUB_NETDB = "NetDB";
     public static final String SUB_PEER = "Peers";
+    public static final String SUB_TRANSIT = "Transit";
 
     // System capability factors for scaling defaults
     private static final long MAX_MEMORY = SystemVersion.getMaxMemory();
@@ -562,16 +563,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         Map<String, double[]> scores = _lastSubsystemScores;
         List<SubsystemScore> result = new ArrayList<SubsystemScore>();
         String[] order = {
-            SUB_ROUTER, SUB_TUNNEL, SUB_TRANSPORT, SUB_NETDB,
+            SUB_ROUTER, SUB_TUNNEL, SUB_TRANSIT, SUB_TRANSPORT, SUB_NETDB,
             SUB_STREAMING, SUB_I2CP, SUB_PEER, SUB_CONGESTION, SUB_CRYPTO
         };
         String[] labels = {
-            "Router", "Tunnel", "Transport", "NetDB",
+            "Router", "Tunnel", "Transit", "Transport", "NetDB",
             "Streaming", "I2CP", "Peers", "Congestion", "Crypto"
         };
         String[][] metrics = {
             { "jobQueue.jobLag" },
             { "tunnel.buildSuccessRate + pool alive/deficit" },
+            { "participatingThrottle reject ratio" },
             { "transport.sendProcessingTime", "transport.sendMessageFailureLifetime / sendMessageSize" },
             { "client.leaseSetFoundRemoteTime / netDb.successTime" },
             { "stream.resetReceived / stream.connectionReceived" },
@@ -4231,7 +4233,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         PerTunnelBweDivisorParam() {
             super("router.tunnel.perTunnelBweDivisor", "Per-tunnel bandwidth divisor",
-                  SUB_TUNNEL,
+                  SUB_TRANSIT,
 
                   2, 1000, 10, "tunnel.participating InBps", _context);
         }
@@ -4307,7 +4309,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         TunnelGrowthFactorParam() {
             super("router.tunnelGrowthFactor", "Tunnel growth tolerance",
-                  SUB_TUNNEL,
+                  SUB_TRANSIT,
 
                   10, 100, 5, "tunnel.participating InBps", _context);
         }
@@ -8034,7 +8036,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class ParticipatingThrottleMinParam extends BaseParam {
         ParticipatingThrottleMinParam() {
             super("i2p.tunnel.participatingThrottle.minLimit", "Transit throttle min (tunnels)",
-                  SUB_TUNNEL, 20, 500, 4, "tunnel.buildSuccessRate", _context);
+                  SUB_TRANSIT, 20, 500, 4, "tunnel.buildSuccessRate", _context);
         }
         protected void applyValue(int value) { ParticipatingThrottler.setParticipatingMinLimit(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getParticipatingMinLimit(); }
@@ -8077,7 +8079,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class ParticipatingThrottleMaxParam extends BaseParam {
         ParticipatingThrottleMaxParam() {
             super("i2p.tunnel.participatingThrottle.maxLimit", "Transit throttle max (tunnels)",
-                  SUB_TUNNEL, 50, 1000, 8, "tunnel.buildSuccessRate", _context);
+                  SUB_TRANSIT, 50, 1000, 8, "tunnel.buildSuccessRate", _context);
         }
         protected void applyValue(int value) { ParticipatingThrottler.setParticipatingMaxLimit(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getParticipatingMaxLimit(); }
@@ -8117,7 +8119,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class ParticipatingThrottlePctParam extends BaseParam {
         ParticipatingThrottlePctParam() {
             super("i2p.tunnel.participatingThrottle.percentLimit", "Transit throttle target (%)",
-                  SUB_TUNNEL, 5, 100, 1, "tunnel.buildSuccessRate", _context);
+                  SUB_TRANSIT, 5, 100, 1, "tunnel.buildSuccessRate", _context);
         }
         protected void applyValue(int value) { ParticipatingThrottler.setParticipatingPctLimit(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getParticipatingPctLimit(); }
@@ -8158,7 +8160,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class TransitRejectThresholdParam extends BaseParam {
         TransitRejectThresholdParam() {
             super("i2p.tunnel.participatingThrottle.rejectThreshold", "Transit reject threshold (%)",
-                  SUB_TUNNEL, 30, 100, 2, "tunnel.throttleParticipatingReject", _context);
+                  SUB_TRANSIT, 30, 100, 2, "tunnel.throttleParticipatingReject", _context);
         }
         protected void applyValue(int value) { ParticipatingThrottler.setRejectThreshold(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getRejectThreshold(); }
@@ -8173,7 +8175,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class TransitRejectSteepnessParam extends BaseParam {
         TransitRejectSteepnessParam() {
             super("i2p.tunnel.participatingThrottle.rejectSteepness", "Transit reject steepness",
-                  SUB_TUNNEL, 100, 500, 10, "tunnel.throttleParticipatingReject", _context);
+                  SUB_TRANSIT, 100, 500, 10, "tunnel.throttleParticipatingReject", _context);
         }
         protected void applyValue(int value) { ParticipatingThrottler.setRejectSteepness(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getRejectSteepness(); }
@@ -8188,7 +8190,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class TransitLoadWeightParam extends BaseParam {
         TransitLoadWeightParam() {
             super("i2p.tunnel.participatingThrottle.loadWeight", "Transit load weight (%)",
-                  SUB_TUNNEL, 0, 300, 10, "tunnel.throttleParticipatingReject", _context);
+                  SUB_TRANSIT, 0, 300, 10, "tunnel.throttleParticipatingReject", _context);
         }
         protected void applyValue(int value) { ParticipatingThrottler.setLoadWeight(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getLoadWeight(); }
@@ -8202,7 +8204,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestThrottleMinParam extends BaseParam {
         RequestThrottleMinParam() {
             super("i2p.tunnel.requestThrottle.minLimit", "Build request throttle min (ms)",
-                  SUB_TUNNEL, 1, 100, 2, "tunnel.throttleParticipatingReject", _context);
+                  SUB_TRANSIT, 1, 100, 2, "tunnel.throttleParticipatingReject", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setRequestMinLimit(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestMinLimit(); }
@@ -8235,7 +8237,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestThrottleMaxParam extends BaseParam {
         RequestThrottleMaxParam() {
             super("i2p.tunnel.requestThrottle.maxLimit", "Build request throttle max (ms)",
-                  SUB_TUNNEL, 10, 1000, 8, "tunnel.throttleParticipatingReject", _context);
+                  SUB_TRANSIT, 10, 1000, 8, "tunnel.throttleParticipatingReject", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setRequestMaxLimit(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestMaxLimit(); }
@@ -8271,7 +8273,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestThrottlePctParam extends BaseParam {
         RequestThrottlePctParam() {
             super("i2p.tunnel.requestThrottle.percentLimit", "Build request throttle target (%)",
-                  SUB_TUNNEL, 1, 100, 1, "tunnel.throttleParticipatingReject", _context);
+                  SUB_TRANSIT, 1, 100, 1, "tunnel.throttleParticipatingReject", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setRequestPctLimit(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestPctLimit(); }
@@ -8306,7 +8308,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestThrottleBurstParam extends BaseParam {
         RequestThrottleBurstParam() {
             super("i2p.tunnel.requestThrottle.burst1sThreshold", "Build request burst threshold",
-                  SUB_TUNNEL, 5, 20, 1, "tunnel.throttleParticipatingReject", _context);
+                  SUB_TRANSIT, 5, 20, 1, "tunnel.throttleParticipatingReject", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setRequestBurst1sThreshold(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestBurst1sThreshold(); }
@@ -8340,7 +8342,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestRejectThresholdParam extends BaseParam {
         RequestRejectThresholdParam() {
             super("i2p.tunnel.requestThrottle.rejectThreshold", "Request reject threshold (%)",
-                  SUB_TUNNEL, 30, 100, 2, "tunnel.throttleRequestReject", _context);
+                  SUB_TRANSIT, 30, 100, 2, "tunnel.throttleRequestReject", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setRequestRejectThreshold(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestRejectThreshold(); }
@@ -8355,7 +8357,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestRejectSteepnessParam extends BaseParam {
         RequestRejectSteepnessParam() {
             super("i2p.tunnel.requestThrottle.rejectSteepness", "Request reject steepness",
-                  SUB_TUNNEL, 100, 500, 10, "tunnel.throttleRequestReject", _context);
+                  SUB_TRANSIT, 100, 500, 10, "tunnel.throttleRequestReject", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setRequestRejectSteepness(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestRejectSteepness(); }
@@ -8370,7 +8372,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestLoadWeightParam extends BaseParam {
         RequestLoadWeightParam() {
             super("i2p.tunnel.requestThrottle.loadWeight", "Request load weight (%)",
-                  SUB_TUNNEL, 0, 300, 10, "tunnel.throttleRequestReject", _context);
+                  SUB_TRANSIT, 0, 300, 10, "tunnel.throttleRequestReject", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setRequestLoadWeight(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestLoadWeight(); }
@@ -8389,7 +8391,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestHighLoadLagParam extends BaseParam {
         RequestHighLoadLagParam() {
             super("i2p.tunnel.requestThrottle.highLoadLagMs", "High-load lag threshold (ms)",
-                  SUB_TUNNEL, 200, 5000, 100, "jobQueue.jobLag", _context);
+                  SUB_TRANSIT, 200, 5000, 100, "jobQueue.jobLag", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setHighLoadLagMs(value); }
         protected int getRuntimeValue() { return RequestThrottler.getHighLoadLagMs(); }
@@ -8421,7 +8423,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestHighLoadCpuParam extends BaseParam {
         RequestHighLoadCpuParam() {
             super("i2p.tunnel.requestThrottle.highLoadCpuPct", "High-load CPU threshold (%)",
-                  SUB_TUNNEL, 50, 100, 1, "jobQueue.jobLag", _context);
+                  SUB_TRANSIT, 50, 100, 1, "jobQueue.jobLag", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setHighLoadCpuPct(value); }
         protected int getRuntimeValue() { return RequestThrottler.getHighLoadCpuPct(); }
@@ -8448,7 +8450,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestModerateLoadLagParam extends BaseParam {
         RequestModerateLoadLagParam() {
             super("i2p.tunnel.requestThrottle.moderateLoadLagMs", "Moderate-load lag threshold (ms)",
-                  SUB_TUNNEL, 100, 3000, 50, "jobQueue.jobLag", _context);
+                  SUB_TRANSIT, 100, 3000, 50, "jobQueue.jobLag", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setModerateLoadLagMs(value); }
         protected int getRuntimeValue() { return RequestThrottler.getModerateLoadLagMs(); }
@@ -8478,7 +8480,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestModerateLoadCpuParam extends BaseParam {
         RequestModerateLoadCpuParam() {
             super("i2p.tunnel.requestThrottle.moderateLoadCpuPct", "Moderate-load CPU threshold (%)",
-                  SUB_TUNNEL, 40, 100, 1, "jobQueue.jobLag", _context);
+                  SUB_TRANSIT, 40, 100, 1, "jobQueue.jobLag", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setModerateLoadCpuPct(value); }
         protected int getRuntimeValue() { return RequestThrottler.getModerateLoadCpuPct(); }
@@ -8505,7 +8507,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestSustainedHighLoadParam extends BaseParam {
         RequestSustainedHighLoadParam() {
             super("i2p.tunnel.requestThrottle.sustainedHighLoadMs", "Sustained high-load window (ms)",
-                  SUB_TUNNEL, 5000, 120_000, 5000, "jobQueue.jobLag", _context);
+                  SUB_TRANSIT, 5000, 120_000, 5000, "jobQueue.jobLag", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setSustainedHighLoadMs(value); }
         protected int getRuntimeValue() { return (int) RequestThrottler.getSustainedHighLoadMs(); }
@@ -8537,7 +8539,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestSustainedModerateLoadParam extends BaseParam {
         RequestSustainedModerateLoadParam() {
             super("i2p.tunnel.requestThrottle.sustainedModerateLoadMs", "Sustained moderate-load window (ms)",
-                  SUB_TUNNEL, 10_000, 300_000, 5000, "jobQueue.jobLag", _context);
+                  SUB_TRANSIT, 10_000, 300_000, 5000, "jobQueue.jobLag", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setSustainedModerateLoadMs(value); }
         protected int getRuntimeValue() { return (int) RequestThrottler.getSustainedModerateLoadMs(); }

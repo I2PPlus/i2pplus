@@ -270,6 +270,7 @@ public class TuningHelper extends HelperBase {
         Tuner.SUB_PEER,
         Tuner.SUB_ROUTER,
         Tuner.SUB_STREAMING,
+        Tuner.SUB_TRANSIT,
         Tuner.SUB_TUNNEL,
         Tuner.SUB_TRANSPORT
     };
@@ -278,6 +279,7 @@ public class TuningHelper extends HelperBase {
     private static final Map<String, String> SECTION_LABELS = new LinkedHashMap<>();
     static {
         SECTION_LABELS.put(Tuner.SUB_TRANSPORT, "Transport");
+        SECTION_LABELS.put(Tuner.SUB_TRANSIT, "Transit");
         SECTION_LABELS.put(Tuner.SUB_TUNNEL, "Tunnel");
         SECTION_LABELS.put(Tuner.SUB_STREAMING, "Streaming");
         SECTION_LABELS.put(Tuner.SUB_I2CP, "I2CP");
