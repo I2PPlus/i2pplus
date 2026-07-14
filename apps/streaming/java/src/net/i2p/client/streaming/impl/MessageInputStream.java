@@ -264,28 +264,27 @@ class MessageInputStream extends InputStream {
 
     /**
      * Gets an array of missing block IDs between the highest ready block and highest received block.
+     * Two-pass to avoid ArrayList allocation inside the lock.
      *
      * @return array of missing block IDs, empty if none
      */
     public long[] getNacks() {
         synchronized (_dataLock) {
-            List<Long> missingIds = null;
+            // First pass: count missing blocks.
+            int count = 0;
             for (long i = _highestReadyBlockId + 1; i < _highestBlockId; i++) {
-                if (!_notYetReadyBlocks.containsKey(i)) {
-                    if (missingIds == null) {
-                        missingIds = new ArrayList<>(4);
-                    }
-                    missingIds.add(i);
-                }
+                if (!_notYetReadyBlocks.containsKey(i))
+                    count++;
             }
-            if (missingIds != null) {
-                long[] array = new long[missingIds.size()];
-                for (int i = 0; i < array.length; i++) {
-                    array[i] = missingIds.get(i);
-                }
-                return array;
+            if (count == 0)
+                return new long[0];
+            long[] array = new long[count];
+            int idx = 0;
+            for (long i = _highestReadyBlockId + 1; i < _highestBlockId; i++) {
+                if (!_notYetReadyBlocks.containsKey(i))
+                    array[idx++] = i;
             }
-            return new long[0];
+            return array;
         }
     }
 
