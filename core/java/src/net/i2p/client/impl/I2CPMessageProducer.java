@@ -9,6 +9,7 @@ package net.i2p.client.impl;
  *
  */
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -129,23 +130,22 @@ class I2CPMessageProducer {
      */
     private Properties getRouterOptions(I2PSessionImpl session) {
         Properties props = new Properties();
-        props.putAll(session.getOptions());
-        for (int i = 0; i < CLIENT_SIDE_OPTIONS.length; i++) {
-            props.remove(CLIENT_SIDE_OPTIONS[i]);
-        }
-        for (Iterator<Map.Entry<Object, Object>> iter = props.entrySet().iterator(); iter.hasNext(); ) {
+        List<String> clientOpts = Arrays.asList(CLIENT_SIDE_OPTIONS);
+        for (Map.Entry<Object, Object> e : session.getOptions().entrySet()) {
+            String key = (String) e.getKey();
+            if (clientOpts.contains(key))
+                continue;
+            String val = (String) e.getValue();
             // Long strings MUST be removed, even in router context,
             // as the session config properties must be serialized to be signed.
             // fixme, bytes could still be over 255 (unlikely)
-            Map.Entry<Object, Object> e = iter.next();
-            String key = (String) e.getKey();
-            String val = (String) e.getValue();
             if (key.length() > 255 || val.length() > 255) {
                 if (_log.shouldWarn())
                     _log.warn("Not passing on property [" + key
                             + "] in the session config, key or value is too long (max = 255) \n* Value: " + val);
-                iter.remove();
+                continue;
             }
+            props.setProperty(key, val);
         }
         return props;
     }
