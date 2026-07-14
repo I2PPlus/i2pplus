@@ -8227,12 +8227,24 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class TransitRejectThresholdParam extends BaseParam {
         TransitRejectThresholdParam() {
             super("i2p.tunnel.participatingThrottle.rejectThreshold", "Transit reject threshold (%)",
-                  SUB_TRANSIT, 30, 100, 2, "tunnel.throttleParticipatingReject", _context);
+                  SUB_TRANSIT, 30, 100, 2, "jobQueue.loadRecoveryTime", _context);
         }
         protected void applyValue(int value) { ParticipatingThrottler.setRejectThreshold(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getRejectThreshold(); }
-        protected double getObservedStat(RouterContext ctx) { return Double.NaN; }
-        protected int computeTarget(double observed) { return getRuntimeValue(); }
+        protected double getObservedStat(RouterContext ctx) {
+            return getAdditionalStatHourly(_context, "jobQueue.loadRecoveryTime");
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            if (Double.isNaN(observed)) return current;
+            // Fast recovery (< 15s): loosen threshold, accept more transit
+            if (observed < 15_000 && current < _max)
+                return Math.min(_max, current + _step * 2);
+            // Slow recovery (> 60s): tighten threshold, reject earlier
+            if (observed > 60_000 && current > _min)
+                return Math.max(_min, current - _step);
+            return current;
+        }
     }
 
     /**
@@ -8257,12 +8269,24 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class TransitLoadWeightParam extends BaseParam {
         TransitLoadWeightParam() {
             super("i2p.tunnel.participatingThrottle.loadWeight", "Transit load weight (%)",
-                  SUB_TRANSIT, 0, 300, 10, "tunnel.throttleParticipatingReject", _context);
+                  SUB_TRANSIT, 0, 300, 10, "jobQueue.loadRecoveryTime", _context);
         }
         protected void applyValue(int value) { ParticipatingThrottler.setLoadWeight(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getLoadWeight(); }
-        protected double getObservedStat(RouterContext ctx) { return Double.NaN; }
-        protected int computeTarget(double observed) { return getRuntimeValue(); }
+        protected double getObservedStat(RouterContext ctx) {
+            return getAdditionalStatHourly(_context, "jobQueue.loadRecoveryTime");
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            if (Double.isNaN(observed)) return current;
+            // Fast recovery (< 15s): reduce load sensitivity
+            if (observed < 15_000 && current > _min)
+                return Math.max(_min, current - _step);
+            // Slow recovery (> 60s): increase load sensitivity
+            if (observed > 60_000 && current < _max)
+                return Math.min(_max, current + _step * 2);
+            return current;
+        }
     }
 
     /**
@@ -8409,12 +8433,24 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestRejectThresholdParam extends BaseParam {
         RequestRejectThresholdParam() {
             super("i2p.tunnel.requestThrottle.rejectThreshold", "Request reject threshold (%)",
-                  SUB_TRANSIT, 30, 100, 2, "tunnel.throttleRequestReject", _context);
+                  SUB_TRANSIT, 30, 100, 2, "jobQueue.loadRecoveryTime", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setRequestRejectThreshold(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestRejectThreshold(); }
-        protected double getObservedStat(RouterContext ctx) { return Double.NaN; }
-        protected int computeTarget(double observed) { return getRuntimeValue(); }
+        protected double getObservedStat(RouterContext ctx) {
+            return getAdditionalStatHourly(_context, "jobQueue.loadRecoveryTime");
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            if (Double.isNaN(observed)) return current;
+            // Fast recovery (< 15s): loosen threshold, send more build requests
+            if (observed < 15_000 && current < _max)
+                return Math.min(_max, current + _step * 2);
+            // Slow recovery (> 60s): tighten threshold, throttle build requests sooner
+            if (observed > 60_000 && current > _min)
+                return Math.max(_min, current - _step);
+            return current;
+        }
     }
 
     /**

@@ -1,7 +1,9 @@
 package net.i2p.router;
 
 import java.util.Arrays;
+import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
+import net.i2p.stat.RateStat;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
@@ -62,6 +64,10 @@ class JobQueueScaler implements Runnable {
     private long[] _messageDelayHistory;
     private int _msgDelayHistoryIndex;
     private int _msgDelayHistoryCount;
+
+    // Recovery time tracking
+    private long _loadEpisodeStart;
+    private long _lastRecoveryTime;
 
     // Feedback configuration
     private static final int FEEDBACK_CHECKS_AFTER_SCALE = 2; // Check 2 times after scaling (faster response)
@@ -180,6 +186,9 @@ class JobQueueScaler implements Runnable {
         context.statManager().createRequiredRateStat("jobQueue.memoryUsedPercent",
             "Percentage of max memory used", "JobQueue",
             new long[] { RateConstants.ONE_MINUTE });
+        context.statManager().createRateStat("jobQueue.loadRecoveryTime",
+            "Duration of load episodes (ms)", "JobQueue",
+            new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
     }
 
     /**
@@ -476,6 +485,43 @@ class JobQueueScaler implements Runnable {
         // Record current runner count for monitoring
         _context.statManager().addRateData("jobQueue.runnerCount", activeRunners);
 
+        // === Dropped jobs signal ===
+        boolean jobsBeingDropped = false;
+        RateStat droppedRs = _context.statManager().getRate("jobQueue.droppedJobs");
+        if (droppedRs != null) {
+            Rate droppedRate = droppedRs.getRate(RateConstants.ONE_MINUTE);
+            jobsBeingDropped = droppedRate != null && droppedRate.getLastEventCount() > 0;
+        }
+
+        // === Load recovery tracking ===
+        // Episode starts when either metric exceeds its adaptive threshold:
+        //   maxLag > 2×  avgLag (1-min average of jobQueue.jobLag)
+        //   messageDelay > 1.25× baselineMsgDelay (12s median of transport.sendProcessingTime)
+        // Thresholds adapt to each router's normal operating level automatically.
+        long maxLagThreshold = 2 * Math.max(avgLag, 1);
+        long msgDelayThresholdRec = (long)(1.25 * Math.max(baselineMsgDelay, 1));
+        boolean loaded = maxLag > maxLagThreshold || messageDelay > msgDelayThresholdRec;
+        if (loaded) {
+            if (_loadEpisodeStart == 0) {
+                _loadEpisodeStart = now;
+                if (_log.shouldDebug()) {
+                    _log.debug("Load episode started: maxLag=" + maxLag + "ms (>" + maxLagThreshold +
+                               "), messageDelay=" + messageDelay + "ms (>" + msgDelayThresholdRec + ")");
+                }
+            }
+        } else if (_loadEpisodeStart > 0) {
+            long recoveryTime = now - _loadEpisodeStart;
+            if (recoveryTime > 0) {
+                _context.statManager().addRateData("jobQueue.loadRecoveryTime", recoveryTime);
+                _lastRecoveryTime = recoveryTime;
+                if (_log.shouldInfo()) {
+                    _log.info("Load episode recovered in " + recoveryTime + "ms (maxLag=" + maxLag +
+                              "ms, msgDelay=" + messageDelay + "ms)");
+                }
+            }
+            _loadEpisodeStart = 0;
+        }
+
         // Check cooldown
         long timeSinceLastScale = now - _lastScaleTime;
         boolean inCooldown = timeSinceLastScale < getCooldownPeriod();
@@ -495,7 +541,8 @@ class JobQueueScaler implements Runnable {
                       "activeJobMaxDuration=" + activeJobMaxDuration + "ms, " +
                       "inCooldown=" + inCooldown + ", timeSinceLastScale=" + timeSinceLastScale + "ms, " +
                       "scalingDisabled=" + _scalingUpDisabled + ", extendedCooldown=" + _isInExtendedCooldown +
-                      ", preScaleSnapshot=" + (_preScaleSnapshot != null));
+                      ", preScaleSnapshot=" + (_preScaleSnapshot != null) +
+                      ", droppedJobs=" + jobsBeingDropped);
         }
 
         // Check if we need to evaluate feedback from last scale-up
@@ -542,17 +589,18 @@ class JobQueueScaler implements Runnable {
             boolean criticalSlowJobs = activeJobMaxDuration > lagThreshold * 100; // 1s+ = wedged
 
             // Trend-based triggers allow faster scale-up (predictive, not reactive)
-            boolean hasTrendSignal = rapidQueueGrowth || messageDelaySpike || delayAccelerating;
+            // Jobs being dropped is a strong overload signal — scale immediately
+            boolean hasTrendSignal = rapidQueueGrowth || messageDelaySpike || delayAccelerating || jobsBeingDropped;
             boolean hasCongestionSignal = networkCongested;
             // Under trend/congestion signals, skip the sustained-checks delay
             int effectiveSustainedRequired = (hasTrendSignal || hasCongestionSignal) ? 1 : SUSTAINED_CHECKS_REQUIRED;
 
             if (highBacklog || highLag || highMessageDelay || highAvgLag || slowActiveJobs ||
-                rapidQueueGrowth || messageDelaySpike || delayAccelerating) {
+                rapidQueueGrowth || messageDelaySpike || delayAccelerating || jobsBeingDropped) {
                 _consecutiveScaleUpChecks++;
                 if (_consecutiveScaleUpChecks >= effectiveSustainedRequired || criticalLag || criticalSlowJobs) {
                     shouldScaleUp = true;
-                    if ((criticalLag || criticalSlowJobs || hasTrendSignal) && _log.shouldInfo()) {
+                    if ((criticalLag || criticalSlowJobs || hasTrendSignal || jobsBeingDropped) && _log.shouldInfo()) {
                         StringBuilder info = new StringBuilder(128);
                         if (criticalLag)
                             info.append("Critical delay=").append(effectiveDelay);
@@ -561,6 +609,8 @@ class JobQueueScaler implements Runnable {
                         if (hasTrendSignal)
                             info.append("Trend signal: queueGrowth=").append(queueGrowth)
                                 .append(", delayDelta=").append(delayDelta);
+                        if (jobsBeingDropped)
+                            info.append(" Jobs being dropped");
                         info.append(" > threshold=").append(lagThreshold).append("ms. Scaling immediately. Runners: ")
                             .append(activeRunners).append("/").append(maxRunners)
                             .append(", Ready jobs: ").append(readyJobs);
@@ -591,6 +641,10 @@ class JobQueueScaler implements Runnable {
             // Network congestion: add an extra runner to help drain backlog
             if (networkCongested) {
                 scaleUpStep = Math.min(8, scaleUpStep + 1);
+            }
+            // Jobs being dropped: urgent overload signal, add 2 runners
+            if (jobsBeingDropped) {
+                scaleUpStep = Math.min(8, scaleUpStep + 2);
             }
 
             int targetRunners = Math.min(activeRunners + scaleUpStep, maxRunners);
