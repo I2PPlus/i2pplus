@@ -42,6 +42,8 @@ class ConnectionManager {
     private final IncomingConnectionFilter _connectionFilter;
     /** Inbound stream ID (Long) to Connection map */
     private final ConcurrentHashMap<Long, Connection> _connectionByInboundId;
+    /** Outbound stream ID (Long) to Connection map — reverse index for O(1) lookup */
+    private final ConcurrentHashMap<Long, Connection> _connectionByOutboundId;
     /** Ping ID (Long) to PingRequest */
     private final ConcurrentHashMap<Long, PingRequest> _pendingPings;
     private volatile boolean _throttlersInitialized;
@@ -136,6 +138,7 @@ class ConnectionManager {
         _connectionFilter = connectionFilter;
         _log = _context.logManager().getLog(ConnectionManager.class);
         _connectionByInboundId = new ConcurrentHashMap<>(32);
+        _connectionByOutboundId = new ConcurrentHashMap<>(32);
         _pendingPings = new ConcurrentHashMap<>(4);
         _messageHandler = new MessageHandler(_context, this);
         _packetHandler = new PacketHandler(_context, this);
@@ -196,11 +199,7 @@ class ConnectionManager {
      * @return the connection, or null if not found
      */
     Connection getConnectionByOutboundId(long id) {
-            for (Connection con : _connectionByInboundId.values()) {
-                if (con.getSendStreamId() == id)
-                    return con;
-            }
-        return null;
+        return _connectionByOutboundId.get(id);
     }
 
     /**
@@ -921,7 +920,17 @@ class ConnectionManager {
     }
 
     /**
-     * Drop the (already closed) connection on the floor.
+     * Register a connection's outbound stream ID for O(1) lookup.
+     * Called from Connection.setSendStreamId() when the outbound ID is first assigned.
+     */
+    void registerOutboundId(Connection con) {
+        long sendId = con.getSendStreamId();
+        if (sendId > 0)
+            _connectionByOutboundId.put(sendId, con);
+    }
+
+    /**
+     * Remove a connection from the manager.
      *
      * @param con Connection to drop.
      */
@@ -933,6 +942,9 @@ class ConnectionManager {
         }
 
             Object o = _connectionByInboundId.remove(Long.valueOf(con.getReceiveStreamId()));
+            long sendId = con.getSendStreamId();
+            if (sendId > 0)
+                _connectionByOutboundId.remove(sendId);
             boolean removed = (o == con);
             if (_log.shouldDebug())
                 _log.debug("Connection removed? " + removed + " Remaining: "

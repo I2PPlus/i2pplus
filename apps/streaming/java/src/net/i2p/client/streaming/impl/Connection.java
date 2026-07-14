@@ -893,7 +893,7 @@ class Connection {
      */
     private boolean scheduleDisconnectEvent() {
         if (!_disconnectScheduledOn.compareAndSet(0, _context.clock().now())) {return false;}
-        schedule(new DisconnectEvent(), getDisconnectTimeout());
+        _timer.addEvent(new DisconnectEvent(), getDisconnectTimeout());
         return true;
     }
 
@@ -913,7 +913,7 @@ class Connection {
      *  @since 0.9.23 moved here so we can use our timer
      */
     public void scheduleConnectionEvent(long msToWait) {
-        schedule(_connectionEvent, msToWait);
+        _timer.addEvent(_connectionEvent, msToWait);
     }
 
     /**
@@ -992,6 +992,7 @@ class Connection {
         if (!_sendStreamId.compareAndSet(0, id)) {
             throw new IllegalStateException("Send Stream ID already set [" + _sendStreamId + ", " + id + "]");
         }
+        _connectionManager.registerOutboundId(this);
     }
 
     /**
