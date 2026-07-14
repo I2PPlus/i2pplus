@@ -235,7 +235,12 @@ public class Log {
             builder.append(" ");
             builder.append(String.valueOf(o));
         }
-        Exception e = new Exception("check stack trace");
+        Exception e = new Exception("check stack trace") {
+            @Override
+            public Throwable fillInStackTrace() {
+                return this;
+            }
+        };
         log(level, builder.toString(), e);
     }
 
