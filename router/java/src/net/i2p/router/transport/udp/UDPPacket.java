@@ -160,14 +160,13 @@ class UDPPacket implements CDPQEntry {
 
     /**
      * Initializes or resets the packet state for reuse.
-     * Clears data buffer, resets metadata and timestamps.
+     * Resets metadata and timestamps. Data buffer is not zeroed — callers
+     * fully overwrite before send and the DatagramPacket length limits reads.
      *
      * @param ctx RouterContext used for timing and logging
      */
     private void init(RouterContext ctx) {
         _context = ctx;
-        int len = _packet.getLength() > 0 ? _packet.getLength() : MAX_PACKET_SIZE;
-        Arrays.fill(_data, 0, len, (byte) 0);
         _packet.setData(_data);
         _initializeTime = _context.clock().now();
         _markedType = -1;
