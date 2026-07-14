@@ -301,30 +301,6 @@ public class Base64 {
         System.exit(1);
     }
 
-/*******
-    private static void test() {
-        String orig = "you smell";
-        String encoded = Base64.encode(orig.getBytes());
-        System.out.println("Encoded: [" + encoded + "]");
-        byte[] decoded = Base64.decode(encoded);
-        String transformed = new String(decoded);
-        if (orig.equals(transformed))
-            System.out.println("D(E('you smell')) == 'you smell'");
-        else
-            throw new RuntimeException("D(E('you smell')) != 'you smell'!!! transformed = [" + transformed + "]");
-        byte[] all = new byte[256];
-        for (int i = 0; i < all.length; i++)
-            all[i] = (byte) (0xFF & i);
-        encoded = Base64.encode(all);
-        System.out.println("Encoded: [" + encoded + "]");
-        decoded = Base64.decode(encoded);
-        if (DataHelper.eq(decoded, all))
-            System.out.println("D(E([all bytes])) == [all bytes]");
-        else
-            throw new RuntimeException("D(E([all bytes])) != [all bytes]!!!");
-    }
-*******/
-
     /* ********  E N C O D I N G   M E T H O D S  ******** */
 
     /**
@@ -335,33 +311,6 @@ public class Base64 {
      * @return four byte array in Base64 notation.
      * @since 1.3
      */
-/***** unused (standard alphabet)
-    private static byte[] encode3to4(byte[] threeBytes) {
-        return encode3to4(threeBytes, 3);
-    } // end encodeToBytes
-******/
-
-    /**
-     * Encodes up to the first three bytes of array <var>threeBytes</var>
-     * and returns a four-byte array in Base64 notation.
-     * The actual number of significant bytes in your array is
-     * given by <var>numSigBytes</var>.
-     * The array <var>threeBytes</var> needs only be as big as
-     * <var>numSigBytes</var>.
-     *
-     * @param threeBytes the array to convert
-     * @param numSigBytes the number of significant bytes in your array
-     * @return four byte array in Base64 notation.
-     * @since 1.3
-     */
-/***** unused (standard alphabet)
-    private static byte[] encode3to4(byte[] threeBytes, int numSigBytes) {
-        byte[] dest = new byte[4];
-        encode3to4(threeBytes, 0, numSigBytes, dest, 0);
-        return dest;
-    }
-******/
-
     /**
      * Encodes up to three bytes of the array <var>source</var>
      * and writes the resulting four Base64 bytes to <var>destination</var>.
@@ -503,14 +452,18 @@ public class Base64 {
      */
     private static byte[] safeDecode(String source, boolean useStandardAlphabet) {
         if (source == null) return null;
-        String toDecode;
-        if (useStandardAlphabet) {
-            toDecode = source.replace('/', '~');
-            toDecode = toDecode.replace('+', '-');
-        } else {
-            toDecode = source;
+        if (!useStandardAlphabet)
+            return standardDecode(source);
+        // single-pass char replacement
+        char[] chars = source.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            char c = chars[i];
+            if (c == '/')
+                chars[i] = '~';
+            else if (c == '+')
+                chars[i] = '-';
         }
-        return standardDecode(toDecode);
+        return standardDecode(new String(chars));
     }
 
     /**
@@ -536,18 +489,6 @@ public class Base64 {
      * @param len Length of data to convert
      * @since 1.4
      */
-/***** unused
-    private static String encodeBytes(byte[] source, int off, int len) {
-        return encodeBytes(source, off, len, true);
-    } // end encodeBytes
-
-    private static String encodeBytes(byte[] source, int off, int len, boolean breakLines) {
-        StringBuilder buf = new StringBuilder( (len*4)/3 );
-        encodeBytes(source, off, len, breakLines, buf, ALPHABET);
-        return buf.toString();
-    }
-******/
-
     /**
      * Encodes a byte array into Base64 notation.
      *
@@ -577,46 +518,9 @@ public class Base64 {
 
     } // end encodeBytes
 
-    /**
-     * Encodes a string in Base64 notation with line breaks
-     * after every 75 Base64 characters.
-     *
-     * @param s the string to encode
-     * @return the encoded string
-     * @since 1.3
-     */
-/***** unused
-    private static String encodeString(String s) {
-        return encodeString(s, true);
-    } // end encodeString
-******/
-
-
     /* ********  D E C O D I N G   M E T H O D S  ******** */
 
-    /**
-     * Decodes the first four bytes of array <var>fourBytes</var>
-     * and returns an array up to three bytes long with the
-     * decoded values.
-     *
-     * @param fourBytes the array with Base64 content
-     * @return array with decoded values
-     * @since 1.3
-     */
-/***** unused
-    private static byte[] decode4to3(byte[] fourBytes) {
-        byte[] outBuff1 = new byte[3];
-        int count = decode4to3(fourBytes, 0, outBuff1, 0);
-        byte[] outBuff2 = new byte[count];
-
-        for (int i = 0; i < count; i++)
-            outBuff2[i] = outBuff1[i];
-
-        return outBuff2;
-    }
-******/
-
-    /**
+        /**
      * Decodes four bytes from array <var>source</var>
      * and writes the resulting bytes (up to three of them)
      * to <var>destination</var>.

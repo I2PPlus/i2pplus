@@ -14,26 +14,24 @@ import java.util.TimeZone;
  */
 public abstract class RFC822Date {
 
-    // SimpleDateFormat is not thread-safe, methods must be synchronized
-
     private static final ThreadLocal<SimpleDateFormat> OUTPUT_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US));
 
-    /**
-     * http://jimyjoshi.com/blog/2007/08/rfc822dateparsinginjava.html
-     * Apparently public domain
-     * Probably don't need all of these...
-     */
-    private static final SimpleDateFormat[] rfc822DateFormats = new SimpleDateFormat[] {new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US), new SimpleDateFormat("d MMM yy HH:mm:ss z", Locale.US), new SimpleDateFormat("EEE, d MMM yy HH:mm z", Locale.US), new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US), new SimpleDateFormat("EEE, d MMM yyyy HH:mm z", Locale.US), new SimpleDateFormat("d MMM yy HH:mm z", Locale.US), new SimpleDateFormat("d MMM yy HH:mm:ss z", Locale.US), new SimpleDateFormat("d MMM yyyy HH:mm z", Locale.US)};
-
-    //
-    // The router JVM is forced to UTC but do this just in case
-    //
-    static {
+    private static final ThreadLocal<SimpleDateFormat[]> RFC822_DATE_FORMATS = ThreadLocal.withInitial(() -> {
+        SimpleDateFormat[] fmts = new SimpleDateFormat[] {
+            new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US),
+            new SimpleDateFormat("d MMM yy HH:mm:ss z", Locale.US),
+            new SimpleDateFormat("EEE, d MMM yy HH:mm z", Locale.US),
+            new SimpleDateFormat("EEE, d MMM yyyy HH:mm z", Locale.US),
+            new SimpleDateFormat("d MMM yy HH:mm z", Locale.US),
+            new SimpleDateFormat("d MMM yy HH:mm:ss z", Locale.US),
+            new SimpleDateFormat("d MMM yyyy HH:mm z", Locale.US)
+        };
         TimeZone utc = TimeZone.getTimeZone("GMT");
-        for (int i = 0; i < rfc822DateFormats.length; i++) {
-            rfc822DateFormats[i].setTimeZone(utc);
+        for (int i = 0; i < fmts.length; i++) {
+            fmts[i].setTimeZone(utc);
         }
-    }
+        return fmts;
+    });
 
     /**
      * new Date(String foo) is deprecated, so let's do this the hard way
@@ -41,10 +39,11 @@ public abstract class RFC822Date {
      * @param s non-null
      * @return -1 on failure
      */
-    public static synchronized long parse822Date(String s) {
-        for (int i = 0; i < rfc822DateFormats.length; i++) {
+    public static long parse822Date(String s) {
+        SimpleDateFormat[] fmts = RFC822_DATE_FORMATS.get();
+        for (int i = 0; i < fmts.length; i++) {
             try {
-                Date date = rfc822DateFormats[i].parse(s);
+                Date date = fmts[i].parse(s);
                 if (date != null) return date.getTime();
             } catch (ParseException pe) { /* ignored */ }
         }
@@ -56,7 +55,7 @@ public abstract class RFC822Date {
      *
      * @since 0.8.2
      */
-    public static synchronized String to822Date(long t) {
+    public static String to822Date(long t) {
         return OUTPUT_FORMAT.get().format(Date.from(Instant.ofEpochMilli(t)));
     }
 

@@ -69,12 +69,6 @@ public class SOCKS5Client {
             try {
                 sock.close();
             } catch (IOException ioe) { /* ignored */ }
-            if (in != null) try {
-                    in.close();
-                } catch (IOException ioe) { /* ignored */ }
-            if (out != null) try {
-                    out.close();
-                } catch (IOException ioe) { /* ignored */ }
             throw e;
         }
     }
