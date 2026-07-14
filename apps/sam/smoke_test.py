@@ -146,15 +146,24 @@ def main():
 
     # ── Session management ───────────────────────────────────────────────────
     section("Session management (TRANSIENT)")
+    sessions = []
 
     for style in ("STREAM", "DATAGRAM", "RAW"):
-        sock, dest = make_session(host, port, style, style[0].lower() + tag)
+        nick = style[0].lower() + tag
+        sock, dest = make_session(host, port, style, nick)
         n_bytes = len(dest) if dest else 0
         check("SESSION CREATE  {}  {} byte dest".format(style, n_bytes),
               sock is not None,
               "FAILED" if sock is None else "")
         if sock:
-            sock.close()
+            sessions.append((sock, nick))
+
+    # ── Teardown ─────────────────────────────────────────────────────────────
+    section("Teardown")
+
+    for my_sock, nick in sessions:
+        my_sock.close()
+        check("CLOSE  {}".format(nick), True, "")
 
     # ── Summary ──────────────────────────────────────────────────────────────
     print()

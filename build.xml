@@ -78,7 +78,6 @@
     <echo message="  buildRouter                                  Build Router .jar component &#10140; ./build/router.jar"/>
     <echo message="  buildRouterConsole                           Build required .jar components for RouterConsole &#10140; ./build/"/>
     <echo message="  buildSAM                                     Build SAM .jar component &#10140; ./build/sam.jar"/>
-    <echo message="  testSAM                                      Run SAM bridge smoke test against running instance (needs SAM on 127.0.0.1:7656)"/>
     <echo message="  buildStreaming                               Build Streaming .jar component &#10140; ./build/streaming.jar"/>
     <echo message="  buildSusiDNS                                 Build SusiDNS .war component &#10140; ./build/susidns.war"/>
     <echo message="  buildSusiMail                                Build SusiMail .war component &#10140; ./build/susimail.war"/>
@@ -210,6 +209,7 @@
     <echo message="  bench                                        Build benchmarks"/>
     <echo message="  test                                         Run JUnit tests (Core, MiniStreaming, Streaming) via tools/scripts/run-tests.sh"/>
     <echo message="  testJbigi                                    Benchmark jbigi: native vs pure Java modPow/modPowCT/modInverse"/>
+    <echo message="  testSAM                                     Run SAM bridge smoke test against running instance (needs SAM on 127.0.0.1:7656)"/>
     <echo message="  testscripts                                  Run various scripts to check certificate validity, file integrity etc"/>
     <echo message=""/>
     <!-- <echo message=" translationReport                            Generate in-console translation status report"/> -->
