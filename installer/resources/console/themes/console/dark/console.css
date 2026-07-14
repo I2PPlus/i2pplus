@@ -2917,6 +2917,7 @@ svg.spark{position:relative;border:var(--border);background:linear-gradient(180d
 /* health */
 #healthstats{margin:12px auto;width:calc(100% - 14px);padding:16px 4px;box-shadow:var(--border_table),0 0 0 2px #141 inset,0 0 0 3px #000 inset;background:var(--badge)}
 #healthstats .ring{margin:16px;max-height:180px;max-width:180px}
+.floodfill #healthstats .ring{margin:16px;max-height:140px;max-width:140px}
 #healthstats .ring .ring-label{font-size:50%}
 
 /* iframes */

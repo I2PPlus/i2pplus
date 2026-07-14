@@ -1,3 +1,34 @@
+2026-07-14 dr|z3d
+  * Upstream security: I2NP length checks, susimail AUTH session fix,
+    blocklist IP conversion
+  * Console: Fix classloader for plugin install/start
+  * I2PSnark: Reannounce early after magnet→metainfo transition
+  * Datagram2: Fix validation with offline keys
+  * Performance: Streaming ByteCache pool for outbound payloads;
+    NTCP2 ThreadLocal block list; Tunnel duplicate NetDB lookup
+    elimination; SSU ChaCha sync removal, fragment list copy,
+    buffer zero-fill removal; garlic one-pass serialization
+  * Stats: Fix Rate.coalesce getAverage() ~20% high
+
+2026-07-13 dr|z3d
+  * Console: Add /health dashboard with ring sparklines; sidebar
+    overlay/disconnect fixes; news feed pagination fix; 17 web audit
+    fixes (timer leaks, prototype pollution, race conditions); expose
+    throttler tuning params in Advanced config
+  * Reseed: Escape untrusted URL strings in status messages
+  * Streaming: Partial window collapse on RTO; lower initial RTO to 2s
+    with 1.5x backoff; lower passive flush delay
+  * Transport: BanLogger caps in sessionbans.txt; ban duration scaling
+    at high ban count; NTCP handshake ban reduction (15m, noise filters);
+    netdb prefer direct transport IP for ban logging
+  * Router: Remove unsolicited DbSearchReply and HashPatternDetector
+    bans (false-positive risk); lock/timer/leak audit fixes
+  * Throttlers: Probabilistic load-modulated transit rejection
+  * I2CP: Replace per-session reader threads with shared dispatcher
+  * Tuner: Expand NTCP establish timeout to 10s with failure-adaptive
+    push; fix initialRTO diverge; add Transit subsection
+  * Core: Cache SystemVersion.getCores()
+
 2026-07-12 dr|z3d
   * Console:
     - Sidebar CPU load indicator — more responsive; memory/CPU bar
