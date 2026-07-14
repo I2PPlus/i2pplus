@@ -14,57 +14,57 @@ import java.util.Properties;
  * If value is always a constant, you should be using Frequency instead.
  */
 public class Rate {
-    private float _currentTotalValue;
-    private int _currentEventCount;
-    private int _currentTotalEventTime;
-    private float _lastTotalValue;
-    private int _lastEventCount;
-    private int _lastTotalEventTime;
-    private float _extremeTotalValue;
-    private int _extremeEventCount;
-    private int _extremeTotalEventTime;
-    private float _lifetimeTotalValue;
-    private long _lifetimeEventCount;
-    private long _lifetimeTotalEventTime;
+    private volatile float _currentTotalValue;
+    private volatile int _currentEventCount;
+    private volatile int _currentTotalEventTime;
+    private volatile float _lastTotalValue;
+    private volatile int _lastEventCount;
+    private volatile int _lastTotalEventTime;
+    private volatile float _extremeTotalValue;
+    private volatile int _extremeEventCount;
+    private volatile int _extremeTotalEventTime;
+    private volatile float _lifetimeTotalValue;
+    private volatile long _lifetimeEventCount;
+    private volatile long _lifetimeTotalEventTime;
     private RateSummaryListener _graphListener;
     private RateStat _stat;
 
-    private long _lastCoalesceDate;
-    private long _creationDate;
-    private int _period;
+    private volatile long _lastCoalesceDate;
+    private volatile long _creationDate;
+    private volatile int _period;
 
     /** in current (partial) period, what is the total value acrued through all events? */
-    public synchronized double getCurrentTotalValue() {
+    public double getCurrentTotalValue() {
         return _currentTotalValue;
     }
 
     /** in current (partial) period, how many events have occurred? */
-    public synchronized long getCurrentEventCount() {
+    public long getCurrentEventCount() {
         return _currentEventCount;
     }
 
     /** in current (partial) period, how much of the time has been spent doing the events? */
-    public synchronized long getCurrentTotalEventTime() {
+    public long getCurrentTotalEventTime() {
         return _currentTotalEventTime;
     }
 
     /** in the last full period, what was the total value acrued through all events? */
-    public synchronized double getLastTotalValue() {
+    public double getLastTotalValue() {
         return _lastTotalValue;
     }
 
     /** in the last full period, how many events occurred? */
-    public synchronized long getLastEventCount() {
+    public long getLastEventCount() {
         return _lastEventCount;
     }
 
     /** in the last full period, how much of the time was spent doing the events? */
-    public synchronized long getLastTotalEventTime() {
+    public long getLastTotalEventTime() {
         return _lastTotalEventTime;
     }
 
     /** what was the max total value acrued in any period?  */
-    public synchronized double getExtremeTotalValue() {
+    public double getExtremeTotalValue() {
         return _extremeTotalValue;
     }
 
@@ -72,42 +72,42 @@ public class Rate {
      * when the max(totalValue) was achieved, how many events occurred in that period?
      * Note that this is not necesarily the highest event count; that isn't tracked.
      */
-    public synchronized long getExtremeEventCount() {
+    public long getExtremeEventCount() {
         return _extremeEventCount;
     }
 
     /** when the max(totalValue) was achieved, how much of the time was spent doing the events? */
-    public synchronized long getExtremeTotalEventTime() {
+    public long getExtremeTotalEventTime() {
         return _extremeTotalEventTime;
     }
 
     /** since rate creation, what was the total value acrued through all events?  */
-    public synchronized double getLifetimeTotalValue() {
+    public double getLifetimeTotalValue() {
         return _lifetimeTotalValue;
     }
 
     /** since rate creation, how many events have occurred? */
-    public synchronized long getLifetimeEventCount() {
+    public long getLifetimeEventCount() {
         return _lifetimeEventCount;
     }
 
     /** since rate creation, how much of the time was spent doing the events? */
-    public synchronized long getLifetimeTotalEventTime() {
+    public long getLifetimeTotalEventTime() {
         return _lifetimeTotalEventTime;
     }
 
     /** when was the rate last coalesced? */
-    public synchronized long getLastCoalesceDate() {
+    public long getLastCoalesceDate() {
         return _lastCoalesceDate;
     }
 
     /** when was this rate created? */
-    public synchronized long getCreationDate() {
+    public long getCreationDate() {
         return _creationDate;
     }
 
     /** how large should this rate's cycle be? */
-    public synchronized long getPeriod() {
+    public long getPeriod() {
         return _period;
     }
 
