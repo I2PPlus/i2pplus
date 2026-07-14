@@ -791,7 +791,7 @@ public class PrivateKeyFile {
         try {
             // call this to force initialization
             getDestination();
-        } catch (Exception e) {
+        } catch (I2PSessionException | IOException | DataFormatException e) {
             return null;
         }
         return this.privKey;
@@ -804,7 +804,7 @@ public class PrivateKeyFile {
         try {
             // call this to force initialization
             getDestination();
-        } catch (Exception e) {
+        } catch (I2PSessionException | IOException | DataFormatException e) {
             return null;
         }
         return this.signingPrivKey;
@@ -821,7 +821,7 @@ public class PrivateKeyFile {
         try {
             // call this to force initialization
             getDestination();
-        } catch (Exception e) {
+        } catch (I2PSessionException | IOException | DataFormatException e) {
             return false;
         }
         return _offlineSignature != null;
@@ -868,7 +868,7 @@ public class PrivateKeyFile {
         try {
             // call this to force initialization
             getDestination();
-        } catch (Exception e) {
+        } catch (I2PSessionException | IOException | DataFormatException e) {
             return null;
         }
         return _transientSigningPubKey;
@@ -882,7 +882,7 @@ public class PrivateKeyFile {
         try {
             // call this to force initialization
             getDestination();
-        } catch (Exception e) {
+        } catch (I2PSessionException | IOException | DataFormatException e) {
             return null;
         }
         return _transientSigningPrivKey;
