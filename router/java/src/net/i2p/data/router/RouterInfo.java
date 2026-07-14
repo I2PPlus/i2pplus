@@ -361,7 +361,7 @@ public class RouterInfo extends DatabaseEntry {
                     peerHash.writeBytes(out);
                 }
             }
-            DataHelper.writeProperties(out, _options);
+            DataHelper.writeProperties(out, _options, true, true);
     }
 
     /**
