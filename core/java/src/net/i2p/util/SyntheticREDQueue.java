@@ -163,16 +163,16 @@ public class SyntheticREDQueue implements BandwidthEstimator {
     private final Log _log;
     private final Random _random;
 
-    private long _lastAckTime;
-    private float _bKFiltered;
+    private volatile long _lastAckTime;
+    private volatile float _bKFiltered;
     private float _bKNonSmoothed;
-    private int _bytesAcked;
+    private volatile int _bytesAcked;
 
     private int _dropCount = -1;
-    private float _avgQueueSize;
+    private volatile float _avgQueueSize;
     private float _queueSizeEstimate;
     private int _newDataSize;
-    private long _lastQueueUpdateTime;
+    private volatile long _lastQueueUpdateTime;
 
     private int _minThresholdBytes;
     private int _maxThresholdBytes;
@@ -387,14 +387,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      */
     @Override
     public float getBandwidthEstimate() {
-        long now = _context.clock().now();
-        synchronized (this) {
-            long deltaT = now - _lastAckTime;
-            if (deltaT >= WESTWOOD_RTT_MIN) {
-                return computeBandwidthEstimate(now, (int) deltaT);
-            }
-            return _bKFiltered;
-        }
+        return _bKFiltered;
     }
 
     /**
@@ -404,14 +397,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * @return queue size estimate in bytes
      */
     public float getQueueSizeEstimate() {
-        long now = _context.clock().now();
-        synchronized (this) {
-            long deltaT = now - _lastQueueUpdateTime;
-            if (deltaT >= WESTWOOD_RTT_MIN) {
-                updateQueueSize(now, deltaT);
-            }
-            return _avgQueueSize;
-        }
+        return _avgQueueSize;
     }
 
     /**
@@ -422,7 +408,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * @param rtt round-trip time in milliseconds (used as filter parameter)
      * @return the updated bandwidth estimate in bytes/ms
      */
-    private synchronized float computeBandwidthEstimate(long now, int rtt) {
+    private float computeBandwidthEstimate(long now, int rtt) {
         if (_bytesAcked < 0) {
             return 0.0f;
         }
@@ -546,7 +532,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * @return formatted status string including bandwidth and average queue size
      */
     @Override
-    public synchronized String toString() {
+    public String toString() {
         return "\n* " + (_bKFiltered > 0 ? "Bandwidth: " + DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false) + "Bytes/s " : "") + (_avgQueueSize > 0 ? "Average Queue Size / " : "") + (_avgQueueSize > 0 ? DataHelper.formatSize2((long) _avgQueueSize, false) + "B / " : "") + "Limit: " + DataHelper.formatSize2Decimal( _bandwidthBps, false) + "Bytes/s";
     }
 }
