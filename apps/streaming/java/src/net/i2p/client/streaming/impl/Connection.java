@@ -91,6 +91,7 @@ class Connection {
     /** Reusable paced-packet event — reused single event; all calls to
      *  sendPacket() are serialized by _dataLock in MessageOutputStream. */
     private final PacedPacketEvent _pacedEvent;
+    private final AckDupEvent _ackDupEvent;
     private final int _randomWait;
     private final int _localPort;
     private final int _remotePort;
@@ -209,6 +210,7 @@ class Connection {
         _connectionEvent = new ConEvent();
         _retransmitEvent = new RetransmitEvent();
         _pacedEvent = new PacedPacketEvent();
+        _ackDupEvent = new AckDupEvent();
 
         // Initialize random wait for activity timer randomization and bandwidth estimator
         _randomWait = _context.random().nextInt(3*1000); // 0-3 seconds randomization
@@ -920,9 +922,8 @@ class Connection {
      *
      *  @since 0.9.23
      */
-    public void schedule(SimpleTimer2.TimedEvent event, long msToWait) {
-        _timer.addEvent(event, msToWait);
-    }
+    /** Reusable AckDupEvent for duplicate ACK scheduling. */
+    AckDupEvent getAckDupEvent() { return _ackDupEvent; }
 
     /** who are we talking with
      * @return peer Destination or null if unset
@@ -1847,6 +1848,40 @@ class Connection {
                     _log.debug("[" + Connection.this + "] Resend in " + _packet.getTimeout() + "ms for paced " + _packet);
                 }
             }
+        }
+    }
+
+    /** Reusable event to send an ACK for a duplicate packet after a short delay. */
+    class AckDupEvent extends SimpleTimer2.TimedEvent {
+        private long _created;
+
+        AckDupEvent() {
+            super(_timer);
+        }
+
+        /** Call before each forceReschedule() to record the creation time. */
+        void mark() {
+            _created = _context.clock().now();
+        }
+
+        public void timeReached() {
+            boolean sent = false;
+            if (getLastSendTime() <= _created) {
+                if (getResetReceived() || getResetSent()) {
+                    if (_log.shouldDebug())
+                        _log.debug("ACK DUP on " + Connection.this + ", but we have been reset");
+                    return;
+                }
+
+                if (_log.shouldDebug())
+                    _log.debug("Last sent was a while ago, and we want to ACK a DUP on " + Connection.this);
+                ackImmediately();
+                sent = true;
+            } else {
+                if (_log.shouldDebug())
+                    _log.debug("ACK DUP on " + Connection.this + ", but we have sent (" + (getLastSendTime()-_created) + ")");
+            }
+            _context.statManager().addRateData("stream.ack.dup.sent", sent ? 1 : 0);
         }
     }
 

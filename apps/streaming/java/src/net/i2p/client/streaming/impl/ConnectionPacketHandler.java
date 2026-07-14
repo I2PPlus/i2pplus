@@ -10,7 +10,6 @@ import net.i2p.data.Destination;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 
 /**
@@ -261,7 +260,9 @@ class ConnectionPacketHandler {
                     final long delay = nextSendTime - now;
                     if (_log.shouldInfo())
                         _log.info("Scheduling ACK in " + delay);
-                    con.schedule(new AckDup(con), delay);
+                    Connection.AckDupEvent ackDup = con.getAckDupEvent();
+                    ackDup.mark();
+                    ackDup.forceReschedule(delay);
                 }
 
                 if (isSYN) {
@@ -643,37 +644,4 @@ class ConnectionPacketHandler {
         }
     }
 
-    /**
-     * Timer event to send an ACK for a duplicate packet after a short delay.
-     */
-    private class AckDup extends SimpleTimer2.TimedEvent {
-        private final long _created;
-        private final Connection _con;
-
-        AckDup(Connection con) {
-            super();
-            _created = _context.clock().now();
-            _con = con;
-        }
-
-        public void timeReached() {
-            boolean sent = false;
-            if (_con.getLastSendTime() <= _created) {
-                if (_con.getResetReceived() || _con.getResetSent()) {
-                    if (_log.shouldDebug())
-                        _log.debug("ACK DUP on " + _con + ", but we have been reset");
-                    return;
-                }
-
-                if (_log.shouldDebug())
-                    _log.debug("Last sent was a while ago, and we want to ACK a DUP on " + _con);
-                _con.ackImmediately();
-                sent = true;
-            } else {
-                if (_log.shouldDebug())
-                    _log.debug("ACK DUP on " + _con + ", but we have sent (" + (_con.getLastSendTime()-_created) + ")");
-            }
-            _context.statManager().addRateData("stream.ack.dup.sent", sent ? 1 : 0);
-        }
-    }
 }
