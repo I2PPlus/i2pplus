@@ -88,6 +88,9 @@ class Connection {
     private final AtomicInteger _activeResends = new AtomicInteger();
     private final ConEvent _connectionEvent;
     private final RetransmitEvent _retransmitEvent;
+    /** Reusable paced-packet event — reused single event; all calls to
+     *  sendPacket() are serialized by _dataLock in MessageOutputStream. */
+    private final PacedPacketEvent _pacedEvent;
     private final int _randomWait;
     private final int _localPort;
     private final int _remotePort;
@@ -202,9 +205,10 @@ class Connection {
         _pacingRate = calculatePacingRate();
         _lastPacketSendTime = 0;
 
-        // Initialize connection event and retransmit event
+        // Initialize connection event, retransmit event, and paced packet event
         _connectionEvent = new ConEvent();
         _retransmitEvent = new RetransmitEvent();
+        _pacedEvent = new PacedPacketEvent();
 
         // Initialize random wait for activity timer randomization and bandwidth estimator
         _randomWait = _context.random().nextInt(3*1000); // 0-3 seconds randomization
@@ -488,8 +492,8 @@ class Connection {
             // Apply pacing to smooth transmission
             long pacingDelay = calculatePacingDelay(packet.getPayloadSize());
             if (pacingDelay > 0) {
-                PacedPacketEvent pacedEvent = new PacedPacketEvent(packet);
-                pacedEvent.schedule(pacingDelay);
+                _pacedEvent.setPacket(packet);
+                _pacedEvent.forceReschedule(pacingDelay);
                 packet.markEnqueued();
             } else {
                 if (_outboundQueue.enqueue(packet)) {
@@ -1816,10 +1820,13 @@ class Connection {
      * Uses weak reference to prevent memory leaks if connection closes before event fires.
      */
     private class PacedPacketEvent extends SimpleTimer2.TimedEvent {
-        private final PacketLocal _packet;
+        private PacketLocal _packet;
 
-        public PacedPacketEvent(PacketLocal packet) {
+        PacedPacketEvent() {
             super(_timer);
+        }
+
+        void setPacket(PacketLocal packet) {
             _packet = packet;
         }
 
