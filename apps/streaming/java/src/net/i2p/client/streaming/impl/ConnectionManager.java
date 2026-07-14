@@ -691,10 +691,18 @@ class ConnectionManager {
                              "] succeeded in " + connectElapsed + "ms");
                }
            }
-           // Record failure for cooldown, clear on success
-           if (con.getConnectionError() != null) {
-              _destFailures.put(destHash, _context.clock().now());
-          } else {
+            // Record failure for cooldown, clear on success
+            if (con.getConnectionError() != null) {
+               _destFailures.put(destHash, _context.clock().now());
+               // Opportunistic trim: prevent unbounded growth from abandoned destinations
+               if (_destFailures.size() > 256) {
+                   long cutoff = _context.clock().now() - getDestCooldownMs();
+                   for (Map.Entry<Hash, Long> e : _destFailures.entrySet()) {
+                       if (e.getValue() < cutoff)
+                           _destFailures.remove(e.getKey(), e.getValue());
+                   }
+               }
+           } else {
               _destFailures.remove(destHash);
           }
           // safe decrement
