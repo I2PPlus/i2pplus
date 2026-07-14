@@ -54,6 +54,9 @@ public final class SelfSignedGenerator {
 
     private static final boolean DEBUG = false;
 
+    private static final SimpleDateFormat _DATE_FMT = new SimpleDateFormat("yyMMddHHmmss", Locale.US);
+    static { _DATE_FMT.setTimeZone(TimeZone.getTimeZone("GMT")); }
+
     // Policy Qualifier CPS URI
     private static final String OID_QT_CPSURI = "1.3.6.1.5.5.7.2.1";
     // Policy Qualifier User Notice
@@ -621,9 +624,7 @@ public final class SelfSignedGenerator {
      */
     private static byte[] getDate(long now) {
         // UTCDate format (HH 0-23)
-        SimpleDateFormat fmt = new SimpleDateFormat("yyMMddHHmmss", Locale.US);
-        fmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-        byte[] nowbytes = DataHelper.getASCII(fmt.format(Date.from(Instant.ofEpochMilli(now))));
+        byte[] nowbytes = DataHelper.getASCII(_DATE_FMT.format(Date.from(Instant.ofEpochMilli(now))));
         if (nowbytes.length != 12) throw new IllegalArgumentException();
         byte[] rv = new byte[15];
         rv[0] = 0x17;

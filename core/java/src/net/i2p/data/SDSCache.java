@@ -80,16 +80,18 @@ public class SDSCache<V extends SimpleDataStructure> {
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("SDSCache init error", e);
         }
-        I2PAppContext.getGlobalContext().addShutdownTask(new Shutdown());
+        I2PAppContext.getGlobalContext().addShutdownTask(new Shutdown(this));
     }
 
     /**
      * @since 0.8.8
      */
-    private class Shutdown implements Runnable {
+    private static class Shutdown implements Runnable {
+        private final SDSCache _cache;
+        Shutdown(SDSCache cache) { _cache = cache; }
         @Override
         public void run() {
-            clear();
+            _cache.clear();
         }
     }
 

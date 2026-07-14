@@ -61,6 +61,8 @@ public class EdDSAEngine extends Signature {
      */
     public static final AlgorithmParameterSpec ONE_SHOT_MODE = new OneShotSpec();
 
+    private static final BigIntegerLittleEndianEncoding _ble = new BigIntegerLittleEndianEncoding();
+
     private static class OneShotSpec implements AlgorithmParameterSpec {}
 
     /**
@@ -272,7 +274,7 @@ public class EdDSAEngine extends Signature {
 
         byte[] Sbyte = Arrays.copyOfRange(sigBytes, b / 8, b / 4);
         // RFC 8032
-        BigInteger Sbigint = (new BigIntegerLittleEndianEncoding()).toBigInteger(Sbyte);
+        BigInteger Sbigint = _ble.toBigInteger(Sbyte);
         if (Sbigint.compareTo(EdDSABlinding.ORDER) >= 0) return false;
 
         // R = SB - H(Rbar,Abar,M)A

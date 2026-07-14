@@ -1280,6 +1280,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         }
         if (_log.shouldInfo()) {_log.info(getPrefix() + " -> Destroying the session...");}
         clearPendingLookups();
+        clearCache();
         if (sendDisconnect) {
             if (_producer != null) { // only null if overridden by I2PSimpleSession
                 try {_producer.disconnect(this);}

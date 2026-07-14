@@ -360,8 +360,14 @@ public class SU3File {
 
     /** skip but update digest */
     private static void skip(InputStream in, int cnt) throws IOException {
-        for (int i = 0; i < cnt; i++) {
-            if (in.read() < 0) throw new EOFException();
+        while (cnt > 0) {
+            long skipped = in.skip(cnt);
+            if (skipped <= 0) {
+                if (in.read() < 0) throw new EOFException();
+                cnt--;
+            } else {
+                cnt -= (int) skipped;
+            }
         }
     }
 
