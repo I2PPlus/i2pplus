@@ -90,12 +90,11 @@ class SAMHandlerPool {
             throw new RuntimeException("Cannot open selector", ioe);
         }
         _workers = new ThreadPoolExecutor(
-            2, 8,
+            0, 8,
             60, TimeUnit.SECONDS,
             new ArrayBlockingQueue<Runnable>(8),
             new NamedThreadFactory(),
             new ThreadPoolExecutor.CallerRunsPolicy());
-        _workers.prestartCoreThread();
         _contexts = new HashMap<SocketChannel, ConnContext>();
     }
 
