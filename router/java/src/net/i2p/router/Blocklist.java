@@ -78,6 +78,8 @@ public class Blocklist {
     private volatile int _blocklistSize;
     private long[] _countryBlocklist;
     private int _countryBlocklistSize;
+    private long[] _torBlocklist;
+    private volatile int _torBlocklistSize;
     private final Object _lock = new Object();
     private Entry _wrapSave;
     private final Set<Hash> _inProcess = new HashSet<>(4);
@@ -426,13 +428,29 @@ public class Blocklist {
 
         private int process() {
             int count = 0;
+            int torCount = 0;
+            long[] torArr = null;
                 try {
-                    for (BLFile blf : _files) {count = readBlocklistFile(blf, _blocklist, count);}
+                    for (BLFile blf : _files) {
+                        if (blf.id == ID_TOR) {
+                            if (torArr == null) {
+                                torArr = allocate(Collections.singletonList(blf));
+                                if (torArr == null) {return 0;}
+                            }
+                            torCount = readBlocklistFile(blf, torArr, torCount);
+                        } else {
+                            count = readBlocklistFile(blf, _blocklist, count);
+                        }
+                    }
                 } catch (OutOfMemoryError oom) {
                     _log.log(Log.CRIT, "OOM processing the blocklist");
                     disable();
                     return 0;
                 }
+            if (torCount > 0) {
+                _torBlocklistSize = merge(torArr, torCount);
+                _torBlocklist = torArr;
+            }
             for (Hash peer : _peerBlocklist.keySet()) {
                 String reason;
                 String comment = _peerBlocklist.get(peer);
@@ -447,13 +465,38 @@ public class Blocklist {
     }
 
     private void banlistRouter(Hash peer, String reason, String comment) {
-        if (expireInterval() > 0) {
-            if (_banLogger != null) _banLogger.logBan(peer, _context, reason, expireInterval());
-            _context.banlist().banlistRouter(peer, reason, comment, null, expireInterval());
+        banlistRouter(peer, reason, comment, expireInterval());
+    }
+
+    private void banlistRouterWithRI(Hash peer, String reason, String comment, RouterInfo ri, String ip) {
+        long duration = expireInterval();
+        if (duration > 0) {
+            if (_banLogger != null) {
+                if (ri != null && ip != null)
+                    _banLogger.logBan(peer, ip, reason, duration, ri);
+                else
+                    _banLogger.logBan(peer, _context, reason, duration);
+            }
+            _context.banlist().banlistRouter(peer, reason, comment, null, duration);
         } else {
-            if (_banLogger != null) _banLogger.logBanForever(peer, _context, reason);
+            if (_banLogger != null) {
+                if (ri != null && ip != null)
+                    _banLogger.logBanForever(peer, ip, reason, ri);
+                else
+                    _banLogger.logBanForever(peer, _context, reason);
+            }
             _context.banlist().banlistRouterForever(peer, reason, comment);
         }
+    }
+
+    private void banlistRouter(Hash peer, String reason, String comment, RouterInfo ri) {
+        String ip = null;
+        if (ri != null) {
+            List<byte[]> addrs = getAddresses(ri);
+            if (!addrs.isEmpty())
+                ip = Addresses.toString(addrs.get(0));
+        }
+        banlistRouterWithRI(peer, reason, comment, ri, ip);
     }
 
     /**
@@ -1068,7 +1111,8 @@ public class Blocklist {
     private synchronized boolean isBlocklisted(int ip) {
         if (isOnSingleList(ip)) {return true;}
         if (_countryBlocklist != null && isPermanentlyBlocklisted(ip, _countryBlocklist, _countryBlocklistSize)) {return true;}
-        return isPermanentlyBlocklisted(ip);
+        if (isPermanentlyBlocklisted(ip)) {return true;}
+        return _torBlocklist != null && isPermanentlyBlocklisted(ip, _torBlocklist, _torBlocklistSize);
     }
 
     /**
@@ -1245,7 +1289,11 @@ public class Blocklist {
     private void banlist(Hash peer, byte[] ip) {
         if (!_haveIPv6 && ip.length == 16) {return;} // Don't bother unless we have IPv6
         String sip = Addresses.toString(ip); // Temporary reason, until the job finishes
-        String reason = "" + _x("Blocklist") + ": " + sip;
+        String reason;
+        if (ip.length == 4 && _torBlocklist != null && isPermanentlyBlocklisted(toInt(ip), _torBlocklist, _torBlocklistSize))
+            {reason = "" + _x("Tor Exit");}
+        else
+            {reason = "" + _x("Blocklist") + ": " + sip;}
         if (sip != null && (sip.startsWith("127.") || "0:0:0:0:0:0:0:1".equals(sip) ||
             sip.startsWith("192.168.") || sip.startsWith("10.") ||
             (ip != null && ip.length == 4 && (ip[0] * 0xff) == 172 && ip[1] >= 16 && ip[1] <= 31))) {
