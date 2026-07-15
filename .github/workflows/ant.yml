@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+    tags:
+      - 'v*'
 
 jobs:
   build:
@@ -33,7 +35,7 @@ jobs:
         run: cp tools/ant/.antrc ~/.antrc
 
       - name: Build all artifacts
-        run: ant updaterWithGeoIP installer i2psnark buildDeb
+        run: ant updaterWithGeoIP installer i2psnark buildDeb javadoc-zip-nostylesheet
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -42,6 +44,21 @@ jobs:
           path: |
             dist/i2pupdate.zip
             dist/install.jar
+            dist/i2pinstall.exe
             dist/i2psnark-standalone.zip
+            dist/javadoc.zip
             dist/*.deb
           retention-days: 7
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/i2pupdate.zip
+            dist/install.jar
+            dist/i2pinstall.exe
+            dist/i2psnark-standalone.zip
+            dist/javadoc.zip
+            dist/*.deb
+          generate_release_notes: true
