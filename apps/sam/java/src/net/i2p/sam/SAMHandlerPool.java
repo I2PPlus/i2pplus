@@ -59,7 +59,7 @@ class SAMHandlerPool {
     private static class NamedThreadFactory implements java.util.concurrent.ThreadFactory {
         private final AtomicInteger _count = new AtomicInteger();
         public Thread newThread(Runnable r) {
-            Thread t = new Thread(r, "SAM-PoolWkr-" + _count.incrementAndGet());
+            Thread t = new Thread(r, "SAM-PoolWkr." + _count.incrementAndGet());
             t.setDaemon(true);
             return t;
         }
