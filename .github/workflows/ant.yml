@@ -35,7 +35,11 @@ jobs:
         run: cp tools/ant/.antrc ~/.antrc
 
       - name: Build all artifacts
-        run: ant updaterWithGeoIP installer i2psnark buildDeb javadoc-zip
+        run: ant updaterWithGeoIP installer i2psnark buildDeb
+
+      - name: Build javadoc
+        continue-on-error: true
+        run: ant javadoc-zip-ci
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4

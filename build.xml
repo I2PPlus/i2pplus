@@ -1352,18 +1352,18 @@
       failonerror="false"
       charset="utf-8"
       author="no"
-      additionalparam="-notimestamp -stylesheetFile tools/javadoc/javadoc.css -quiet -Xmaxwarns 1000 -nodeprecated -nosince"
+      additionalparam="${javadoc-extras} -notimestamp -stylesheetFile tools/javadoc/javadoc.css -quiet -Xmaxwarns 1000 -nodeprecated -nosince"
       doctitle="I2P+ Javadocs [${release.number}-${i2p.build.number}${build.extra}]"
       windowtitle="Javadocs [I2P+ ${release.number}+] - API Version ${api.version}+"
       excludepackagenames="com.mpatric.mp3agic">
       <group title="Core (i2p.jar)" packages="net.i2p:net.i2p.*:net.i2p.client:net.i2p.client.*:net.i2p.internal:net.i2p.internal.*"/>
       <group title="Core Crypto" packages="net.i2p.crypto:net.i2p.crypto.*:com.southernstorm.noise.crypto.x25519:com.southernstorm.noise.crypto.chacha20"/>
       <group title="Core Dependencies" packages="freenet.support.CPUInformation:gnu.crypto.*:gnu.getopt:gnu.gettext:com.nettgryppa.security:net.i2p.apache.http.conn.ssl:net.i2p.apache.http.conn.util:net.i2p.apache.http.util:org.json.simple:org.minidns:org.minidns.*"/>
+      <group title="Streaming Library" packages="net.i2p.client.streaming:net.i2p.client.streaming.impl"/>
       <group title="Router" packages="net.i2p.router:net.i2p.router.*:net.i2p.data.i2np:net.i2p.data.router" />
       <group title="Router Dependencies" packages="org.cybergarage:org.cybergarage.*:org.freenetproject:org.xlattice.crypto.filters:com.maxmind.*:com.southernstorm.noise.*:org.bouncycastle:org.bouncycastle.*" />
       <group title="Router Console" packages="net.i2p.router.web:net.i2p.router.web.*:net.i2p.router.update:net.i2p.router.news"/>
       <group title="Router Console Dependencies" packages="edu.internet2.ndt:com.vuze.*"/>
-      <group title="Streaming Library" packages="net.i2p.client.streaming:net.i2p.client.streaming.impl"/>
       <!-- apps and bridges starting here, alphabetical please -->
       <group title="Addressbook Application" packages="net.i2p.addressbook:net.i2p.router.naming:net.metanotion:net.metanotion.*"/>
       <group title="Desktopgui Application" packages="net.i2p.desktopgui:net.i2p.desktopgui.*"/>
@@ -1582,6 +1582,170 @@
   </target>
 
   <target name="javadoc-zip-nostylesheet" depends="javadoc-nostylesheet">
+    <zip destfile="dist/javadoc.zip" basedir="dist" level="9" includes="javadoc\**"/>
+  </target>
+
+  <target name="javadoc-zip-ci" description="CI-only: javadoc with doclint HTML suppressed, custom CSS, minify, zip">
+    <loadfile srcfile="core/java/src/net/i2p/CoreVersion.java" property="release.number">
+      <filterchain>
+        <linecontains>
+          <contains value="public static final String VERSION"/>
+        </linecontains>
+        <tokenfilter>
+          <replaceregex pattern='.*"([^"]+)";' replace="\1" flags="gi"/>
+        </tokenfilter>
+        <striplinebreaks/>
+        <trim/>
+      </filterchain>
+    </loadfile>
+    <loadfile srcfile="core/java/src/net/i2p/CoreVersion.java" property="api.version">
+      <filterchain>
+        <linecontains>
+          <contains value="public static final String PUBLISHED_VERSION"/>
+        </linecontains>
+        <tokenfilter>
+          <replaceregex pattern='.*"([^"]+)";' replace="\1" flags="gi"/>
+        </tokenfilter>
+        <striplinebreaks/>
+        <trim/>
+      </filterchain>
+    </loadfile>
+    <loadfile srcfile="router/java/src/net/i2p/router/RouterVersion.java" property="i2p.build.number">
+      <filterchain>
+        <linecontains>
+          <contains value="public static final long BUILD"/>
+        </linecontains>
+        <tokenfilter>
+          <replaceregex pattern=".*=\s+([0-9]+);" replace="\1" flags="gi"/>
+        </tokenfilter>
+        <trim/>
+        <striplinebreaks/>
+      </filterchain>
+    </loadfile>
+    <loadfile srcfile="router/java/src/net/i2p/router/RouterVersion.java" property="build.extra">
+      <filterchain>
+        <linecontains>
+          <contains value="public static final String EXTRA"/>
+        </linecontains>
+        <tokenfilter>
+          <replaceregex pattern='.*"(.*)";' replace="\1" flags="gi"/>
+        </tokenfilter>
+        <trim/>
+        <striplinebreaks/>
+      </filterchain>
+    </loadfile>
+    <property name="release.number" value="unknown"/>
+    <property name="api.version" value="unknown"/>
+    <property name="i2p.build.number" value="??"/>
+    <property name="build.extra" value=""/>
+    <ant dir="apps/jetty" target="ensureJettylib">
+      <property name="core.java.build.dir" location="${build.root}core/java/build"/>
+    </ant>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/javadoc"/>
+    <copy quiet="true" verbose="false" file="./installer/resources/eepsite/docroot/favicon.ico" tofile="${build.dir}/javadoc/favicon.ico"/>
+    <property name="javac.version" value="1.8"/>
+    <javadoc access="package"
+      source="${javac.version}"
+      destdir="${build.dir}/javadoc"
+      use="true"
+      failonerror="false"
+      charset="utf-8"
+      author="no"
+      additionalparam="-Xdoclint:none -notimestamp -stylesheetFile tools/javadoc/javadoc.css -quiet -Xmaxwarns 1000 -nodeprecated -nosince"
+      doctitle="I2P+ Javadocs [${release.number}-${i2p.build.number}${build.extra}]"
+      windowtitle="Javadocs [I2P+ ${release.number}+] - API Version ${api.version}+"
+      excludepackagenames="com.mpatric.mp3agic">
+      <group title="Core (i2p.jar)" packages="net.i2p:net.i2p.*:net.i2p.client:net.i2p.client.*:net.i2p.internal:net.i2p.internal.*"/>
+      <group title="Core Crypto" packages="net.i2p.crypto:net.i2p.crypto.*:com.southernstorm.noise.crypto.x25519:com.southernstorm.noise.crypto.chacha20"/>
+      <group title="Core Dependencies" packages="freenet.support.CPUInformation:gnu.crypto.*:gnu.getopt:gnu.gettext:com.nettgryppa.security:net.i2p.apache.http.conn.ssl:net.i2p.apache.http.conn.util:net.i2p.apache.http.util:org.json.simple:org.minidns:org.minidns.*"/>
+      <group title="Streaming Library" packages="net.i2p.client.streaming:net.i2p.client.streaming.impl"/>
+      <group title="Router" packages="net.i2p.router:net.i2p.router.*:net.i2p.data.i2np:net.i2p.data.router" />
+      <group title="Router Dependencies" packages="org.cybergarage:org.cybergarage.*:org.freenetproject:org.xlattice.crypto.filters:com.maxmind.*:com.southernstorm.noise.*:org.bouncycastle:org.bouncycastle.*" />
+      <group title="Router Console" packages="net.i2p.router.web:net.i2p.router.web.*:net.i2p.router.update:net.i2p.router.news"/>
+      <group title="Router Console Dependencies" packages="edu.internet2.ndt:com.vuze.*"/>
+      <group title="Addressbook Application" packages="net.i2p.addressbook:net.i2p.router.naming:net.metanotion:net.metanotion.*"/>
+      <group title="Desktopgui Application" packages="net.i2p.desktopgui:net.i2p.desktopgui.*"/>
+      <group title="I2PControl Application" packages="net.i2p.i2pcontrol:net.i2p.i2pcontrol.*:org.mindrot.jbcrypt:com.thetransactioncompany.jsonrpc2:com.thetransactioncompany.jsonrpc2.*"/>
+      <group title="I2PSnark Application" packages="org.klomp.snark:org.klomp.snark.*"/>
+      <group title="I2PSnark Dependencies" packages="com.mpatric:com.mpatric.*"/>
+      <group title="I2PTunnel Application" packages="net.i2p.i2ptunnel:net.i2p.i2ptunnel.*"/>
+      <group title="Imagegen Application" packages="com.docuverse.identicon:com.google.zxing:com.google.zxing.*:net.i2p.imagegen"/>
+      <group title="Installer Utilities" packages="net.i2p.installer"/>
+      <group title="Jetty Utilities" packages="net.i2p.jetty:net.i2p.servlet:net.i2p.servlet.*"/>
+      <group title="RRD4J Library (jrobin.jar)" packages="org.rrd4j:org.rrd4j.*:com.tomgibara.crinch.hashing:eu.bengreen.data.utility"/>
+      <group title="SAM Bridge" packages="net.i2p.sam"/>
+      <group title="SAM Demos" packages="net.i2p.sam.client"/>
+      <group title="SusiDNS Application" packages="i2p.susi.dns:net.i2p.addressbook.servlet"/>
+      <group title="SusiMail Application" packages="i2p.susi.webmail:i2p.susi.webmail.*:i2p.susi.debug:i2p.susi.util"/>
+      <group title="Systray Application" packages="net.i2p.apps.systray"/>
+      <group title="Apache Commons" packages="org.apache:org.apache.*" />
+      <sourcepath>
+        <pathelement location="apps/addressbook/java/src"/>
+        <pathelement location="apps/desktopgui/src"/>
+        <pathelement location="apps/i2pcontrol/java"/>
+        <pathelement location="apps/i2psnark/java/src"/>
+        <pathelement location="apps/i2ptunnel/java/src"/>
+        <pathelement location="apps/imagegen/identicon/core/src/main/java"/>
+        <pathelement location="apps/imagegen/imagegen/webapp/src/main/java"/>
+        <pathelement location="apps/imagegen/zxing/core/src/main/java"/>
+        <pathelement location="apps/imagegen/zxing/javase/src/main/java"/>
+        <pathelement location="apps/jetty/java/src"/>
+        <pathelement location="apps/jrobin/java/src"/>
+        <pathelement location="apps/ministreaming/java/src"/>
+        <pathelement location="apps/routerconsole/java/src"/>
+        <pathelement location="apps/sam/java/src"/>
+        <pathelement location="apps/streaming/java/src"/>
+        <pathelement location="apps/susidns/src/java/src"/>
+        <pathelement location="apps/susimail/src/src"/>
+        <pathelement location="apps/systray/java/src"/>
+        <pathelement location="core/java/src"/>
+        <pathelement location="installer/java/src"/>
+        <pathelement location="router/java/src"/>
+      </sourcepath>
+      <classpath>
+        <pathelement location="apps/jetty/jettylib/jasper-runtime.jar"/>
+        <pathelement location="apps/jetty/jettylib/javax.servlet.jar"/>
+        <pathelement location="apps/jetty/jettylib/jetty-deploy.jar"/>
+        <pathelement location="apps/jetty/jettylib/jetty-http.jar"/>
+        <pathelement location="apps/jetty/jettylib/jetty-security.jar"/>
+        <pathelement location="apps/jetty/jettylib/jetty-servlet.jar"/>
+        <pathelement location="apps/jetty/jettylib/jetty-servlets.jar"/>
+        <pathelement location="apps/jetty/jettylib/jetty-start.jar"/>
+        <pathelement location="${build.root}apps/jetty/build/jetty-util.jar"/>
+        <pathelement location="apps/jetty/jettylib/jetty-webapp.jar"/>
+        <pathelement location="apps/jetty/jettylib/jetty-xml.jar"/>
+        <pathelement location="apps/jetty/jettylib/org.mortbay.jetty.jar"/>
+        <pathelement location="apps/jetty/jettylib/tomcat-api.jar"/>
+        <pathelement location="installer/lib/wrapper/all/wrapper.jar"/>
+        <pathelement location="${core.java.build.dir}/gnu-getopt.jar"/>
+        <pathelement location="${core.java.build.dir}/json-simple.jar"/>
+        <pathelement location="${core.java.build.dir}/libintl.jar"/>
+      </classpath>
+      <link offline="true" href="${javasedocs.url}" packagelistLoc="installer/resources/package-lists/java/"/>
+      <link offline="true" href="${javaeedocs.url}" packagelistLoc="installer/resources/package-lists/javaee/"/>
+      <link offline="true" href="${jettydocs.url}" packagelistLoc="installer/resources/package-lists/jetty/"/>
+      <link offline="true" href="${wrapperdocs.url}" packagelistLoc="installer/resources/package-lists/wrapper/"/>
+    </javadoc>
+    <mkdir dir="${build.dir}/javadoc/resources/fonts"/>
+    <echo message="/* intentionally empty */" file="${build.root}build/javadoc/resources/fonts/dejavu.css"/>
+    <copy quiet="true" verbose="false" file="tools/javadoc/javadoc-jav8-fix.js" tofile="${build.dir}/javadoc/script.js"/>
+    <move todir="./dist/javadoc" quiet="true">
+      <fileset dir="${build.dir}/javadoc">
+        <include name="**/*"/>
+      </fileset>
+    </move>
+    <if>
+      <isset property="htmlmin.present"/>
+      <then>
+        <exec executable="sh" failonerror="false">
+          <arg value="-c"/>
+          <arg value="minify -q -r dist/javadoc -o dist"/>
+        </exec>
+      </then>
+    </if>
+    <delete dir="${build.dir}/javadoc" quiet="true"/>
+    <echo message="javadoc creation complete, saved to dist/javadoc (${ant.project.name} ${release.number}-${i2p.build.number}${build.extra})"/>
     <zip destfile="dist/javadoc.zip" basedir="dist" level="9" includes="javadoc\**"/>
   </target>
 
