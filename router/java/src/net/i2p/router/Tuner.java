@@ -5054,6 +5054,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Caps the RTT estimate to prevent pathological values from breaking RTO.
      * I2P typically has 2-10s RTT. Lower cap = tighter RTO bounds.
+     * Min of 3000 matches DEFAULT_INITIAL_RTT — prevents clamping of normal RTT.
      */
     private class MaxRttParam extends BaseParam {
 
@@ -5061,7 +5062,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxRtt", "Streaming RTT cap (ms)",
                   SUB_STREAMING,
 
-                  500, 15000, 1000, "stream.con.initialRTT.out", _context);
+                  3000, 15000, 1000, "stream.con.initialRTT.out", _context);
         }
 
         protected void applyValue(int value) {
