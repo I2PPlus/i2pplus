@@ -129,6 +129,7 @@ import { refreshElements } from "./refreshElements.js";
       if (sorterP) {sorterP.refresh();}
       if (sorterFF) {sorterFF.refresh();}
       if (sorterBans) {sorterBans.refresh();}
+      if (banBody) {updateBanSummary(banBody);}
     });
 
   }
@@ -254,12 +255,21 @@ import { refreshElements } from "./refreshElements.js";
     }
   });
 
+  function reattachBanObserver() {
+    if (banBody && !banObserver) {
+      banObserver = new MutationObserver(() => updateBanSummary(banBody));
+      banObserver.observe(banBody, {childList: true});
+    } else if (banBody && banObserver) {
+      banObserver.observe(banBody, {childList: true});
+    }
+  }
+
   document.addEventListener("visibilitychange", () => {
     if (document.hidden && banObserver) {
       banObserver.disconnect();
-    } else if (!document.hidden && banBody && !banObserver) {
-      banObserver = new MutationObserver(() => updateBanSummary(banBody));
-      banObserver.observe(banBody, {childList: true});
+    } else if (!document.hidden) {
+      reattachBanObserver();
+      updateBanSummary(banBody);
     }
   });
 })();
