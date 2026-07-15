@@ -206,8 +206,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             if (reverseDnsExecutor instanceof ThreadPoolExecutor) {
                 ThreadPoolExecutor exec = (ThreadPoolExecutor) reverseDnsExecutor;
                 if (!exec.isShutdown()) {
-                    exec.setCorePoolSize(coreSize);
-                    exec.setMaximumPoolSize(Math.max(coreSize, _rdnsMaxPoolSize));
+                    if (coreSize > exec.getMaximumPoolSize()) {
+                        exec.setMaximumPoolSize(Math.max(coreSize, _rdnsMaxPoolSize));
+                        exec.setCorePoolSize(coreSize);
+                    } else {
+                        exec.setCorePoolSize(coreSize);
+                        exec.setMaximumPoolSize(Math.max(coreSize, _rdnsMaxPoolSize));
+                    }
                     _context.statManager().addRateData("rdns.executor.threads", coreSize);
                 }
             }

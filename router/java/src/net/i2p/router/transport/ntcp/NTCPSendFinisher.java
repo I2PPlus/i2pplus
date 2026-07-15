@@ -106,8 +106,13 @@ class NTCPSendFinisher {
     public synchronized void adjustThreads(int newMax) {
         ThreadPoolExecutor executor = _executor;
         if (executor != null && !executor.isShutdown() && !executor.isTerminated()) {
-            executor.setCorePoolSize(newMax);
-            executor.setMaximumPoolSize(newMax);
+            if (newMax > executor.getMaximumPoolSize()) {
+                executor.setMaximumPoolSize(newMax);
+                executor.setCorePoolSize(newMax);
+            } else {
+                executor.setCorePoolSize(newMax);
+                executor.setMaximumPoolSize(newMax);
+            }
             _context.statManager().addRateData("ntcp.sendFinisher.threads", newMax);
         }
     }

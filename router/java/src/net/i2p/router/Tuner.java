@@ -616,15 +616,21 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             p.setOverride(value);
     }
 
-    /** Restore all params to their factory defaults and clear persisted values */
+    /** Restore all params to factory defaults (code-level, not persisted) */
     public void restoreDefaults() {
         for (TunableParam param : _params) {
             if (param instanceof BaseParam) {
                 BaseParam bp = (BaseParam) param;
-                bp._autotune.setProperty(bp._name + ".value", String.valueOf(bp._defaultValue));
-                bp.applyValue(bp._defaultValue);
+                int factory = bp._factoryDefault;
+                int prev = bp.getRuntimeValue();
+                bp._autotune.setProperty(bp._name + ".value", String.valueOf(factory));
+                bp._autotune.setProperty(bp._name + ".default", String.valueOf(factory));
+                bp.applyValue(factory);
+                bp._defaultValue = factory;
                 bp._autoTuning = true;
                 bp._override = -1;
+                if (_log.shouldInfo())
+                    _log.info(bp._name + " restored from " + prev + " to " + factory);
             }
         }
         _autotune.forceSave();
@@ -730,6 +736,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected final String _statName;
         /** Factory default: value before any tuning. Persisted on first run for auto-revert. */
         protected int _defaultValue;
+        /** Code-level default captured at construction time. Used by restoreDefaults(). */
+        private final int _factoryDefault;
         /** Last known value (from persistence or runtime default). Used as tuning baseline. */
         protected final int _initialValue;
         /** True until first update() call — applies persisted value from autotune.config. */
@@ -775,6 +783,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             _autotune = (autotune != null) ? autotune : _sharedAutotune;
             // Capture factory default on first run, persist to autotune.config
             int runtimeDefault = getRuntimeValue();
+            _factoryDefault = runtimeDefault;
             String defaultKey = name + ".default";
             String valueKey = name + ".value";
             String existingDefault = _autotune.getProperty(defaultKey);
@@ -794,30 +803,36 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                         _log.warn(_name + " default clamped: " + prev + " -> " + _defaultValue +
                                   " (range " + _min + "-" + _max + ")");
                 }
-                // 2. Heal when persisted value matches factory default but default doesn't
-                //    Catches in-range corruptions (e.g. 2600 for MinResendDelay).
+                // 2. Heal persisted default to code factory default when stale
+                //    Catches in-range corruptions (e.g. 2600 for MinResendDelay)
+                //    and stale values from before code changes (e.g. INITIAL_ACK_DELAY=10
+                //    when the module's getDefaultInitialAckDelay() now returns 500).
                 if (runtimeDefault > 0 && _defaultValue != runtimeDefault) {
-                    int persistedValue = _autotune.getInt(valueKey, -1);
-                    if (persistedValue == runtimeDefault) {
-                        int prev = _defaultValue;
-                        _defaultValue = runtimeDefault;
-                        if (_log.shouldWarn())
-                            _log.warn(_name + " default healed: " + prev + " -> " + _defaultValue +
-                                      " (factory default: " + runtimeDefault +
-                                      ", persisted value: " + persistedValue + ")");
-                    }
+                    int prev = _defaultValue;
+                    _defaultValue = runtimeDefault;
+                    if (_log.shouldWarn())
+                        _log.warn(_name + " default healed: " + prev + " -> " + _defaultValue);
                 }
                 if (_defaultValue != Integer.parseInt(existingDefault)) {
                     _autotune.setProperty(defaultKey, String.valueOf(_defaultValue));
                     changed = true;
                 }
             }
-            if (changed)
-                _autotune.forceSave();
             // Read persisted tuned value (clamped to current range) — catches stale
             // autotune.config values from before code changes (e.g., max lowered 512→20)
             int raw = _autotune.getInt(valueKey, _defaultValue);
             _initialValue = Math.max(_min, Math.min(_max, raw));
+            // Persist clamped value so autotune.config reflects reality
+            // (prevents stale out-of-range values lingering in the file)
+            if (raw != _initialValue) {
+                if (_log.shouldWarn())
+                    _log.warn(_name + " persisted value " + raw + " clamped to " + _initialValue +
+                              " (range " + _min + "-" + _max + ")");
+                _autotune.setProperty(valueKey, String.valueOf(_initialValue));
+                changed = true;
+            }
+            if (changed)
+                _autotune.forceSave();
             _override = -1;
             _autoTuning = true;
             _valueHistory = new int[MAX_HISTORY];
@@ -1298,7 +1313,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Hard clamp to [min, max] BEFORE comparison — prevents stale persisted values
             // from exceeding caps after code changes, even when computeTarget() returns
             // unclamped current or dampening pushes target outside range
+            int unclamped = target;
             target = Math.max(_min, Math.min(_max, target));
+            if (target != unclamped && _log.shouldWarn())
+                _log.warn(_name + " target " + unclamped + " clamped to " + target +
+                          " (range " + _min + "-" + _max + ")");
             // Fast rollback: when current has diverged from _defaultValue and the stat
             // has moved against the divergence, snap back faster (2x step)
             int current = getRuntimeValue();
@@ -4608,7 +4627,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMaxRTOStatic");
-            return v > 0 ? v : 30000;
+            return v > 0 ? v : 15000;
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -4724,7 +4743,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMaxResendDelayStatic");
-            return v > 0 ? v : 30000;
+            return v > 0 ? v : 15000;
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -4781,7 +4800,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionInt("getMaxRetransmissionsStatic");
-            return v > 0 ? v : 64;
+            return v > 0 ? v : 16;
         }
 
         protected double getObservedStat(RouterContext ctx) {

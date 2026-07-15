@@ -1404,8 +1404,13 @@ public class TunnelControllerGroup implements ClientApp {
     void resizeServerExecutor(int newThreads) {
         synchronized (_serverExecutorLock) {
             if (_serverExecutor != null && !_serverExecutor.isShutdown()) {
-                _serverExecutor.setCorePoolSize(newThreads);
-                _serverExecutor.setMaximumPoolSize(newThreads);
+                if (newThreads > _serverExecutor.getMaximumPoolSize()) {
+                    _serverExecutor.setMaximumPoolSize(newThreads);
+                    _serverExecutor.setCorePoolSize(newThreads);
+                } else {
+                    _serverExecutor.setCorePoolSize(newThreads);
+                    _serverExecutor.setMaximumPoolSize(newThreads);
+                }
                 I2PAppContext ctx = _context;
                 if (ctx != null)
                     ctx.statManager().addRateData("i2ptunnel.serverHandler.threads", newThreads);
