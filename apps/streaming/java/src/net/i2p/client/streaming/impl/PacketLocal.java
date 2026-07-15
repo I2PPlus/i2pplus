@@ -1,8 +1,6 @@
 package net.i2p.client.streaming.impl;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
@@ -10,8 +8,6 @@ import net.i2p.client.streaming.I2PSocketException;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
-import net.i2p.data.SessionKey;
-import net.i2p.data.SessionTag;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
@@ -27,7 +23,6 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     private final Log _log;
     private final Connection _connection;
     private final Destination _to;
-    private SessionKey _keyUsed;
     private final long _createdOn;
     private final AtomicInteger _numSends = new AtomicInteger();
     private volatile long _lastSend;
@@ -88,37 +83,6 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * @return the destination this packet is being sent to
      */
     public Destination getTo() { return _to; }
-
-    /**
-     * @deprecated should always return null
-     */
-    @Deprecated
-    public SessionKey getKeyUsed() { return _keyUsed; }
-
-    /**
-     * @deprecated I2PSession throws out the tags
-     */
-    @Deprecated
-    public void setKeyUsed(SessionKey key) {
-        if (key != null)
-            _log.error("Who is sending tags through the streaming lib?");
-        _keyUsed = key;
-    }
-
-    /**
-     * @deprecated should always return null or an empty set
-     */
-    @Deprecated
-    public Set<SessionTag> getTagsSent() { return Collections.emptySet(); }
-
-    /**
-     * @deprecated I2PSession throws out the tags
-     */
-    @Deprecated
-    public void setTagsSent(Set<SessionTag> tags) {
-        if (tags != null && !tags.isEmpty())
-            _log.error("Who is sending tags through the streaming lib? " + tags.size());
-    }
 
     /**
      * @return true if this packet should be signed

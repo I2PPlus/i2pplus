@@ -118,13 +118,6 @@ class Connection {
     public static int getDisconnectTimeout() {
         return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.disconnectTimeout", 5*60*1000);
     }
-    /** backward compat, @deprecated use getMaxResendDelay() */
-    public static final int MAX_RESEND_DELAY = 30*1000;
-    /** backward compat, @deprecated use getMinResendDelay() */
-    public static final int MIN_RESEND_DELAY = 100;
-    /** backward compat, @deprecated use getDisconnectTimeout() */
-    public static final int DISCONNECT_TIMEOUT = 5*60*1000;
-
     public static final int DEFAULT_CONNECT_TIMEOUT = 60*1000;
     /** @since I2P+ */
     static long getMaxConnectTimeout() {

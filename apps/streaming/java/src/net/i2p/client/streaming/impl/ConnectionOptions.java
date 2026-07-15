@@ -729,12 +729,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         _windowSize = numMsgs;
     }
 
-    /** after how many consecutive messages should we ack?
-     * @deprecated This doesn't appear to be used.
-     * @return receive window size.
-     */
-    @Deprecated
-    public int getReceiveWindow() {return _receiveWindow;}
     public void setReceiveWindow(int numMsgs) {_receiveWindow = numMsgs;}
 
     /**
@@ -761,7 +755,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     }
 
     /**
-     *  @return Connection.MIN_RESEND_DELAY to Connection.MAX_RESEND_DELAY
+     *  @return Connection.getMinResendDelay() to Connection.getMaxResendDelay()
      */
     public synchronized int getRTO() {return _rto;}
 
