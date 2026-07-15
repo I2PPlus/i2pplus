@@ -822,8 +822,8 @@ public class GeoIP {
     /** Paired single quotes around text (e.g. 'TIMEWEB') — keeps internal apostrophes like O'Brien */
     private static final Pattern PAIRED_SINGLE_QUOTES = Pattern.compile("'([^']{2,})'");
 
-    /** Trailing parentheticals to strip */
-    private static final Pattern PAREN_TRAILING = Pattern.compile("\\s*\\([^)]{0,50}\\)\\s*$");
+    /** Parentheticals to strip (anywhere, not just trailing) */
+    private static final Pattern PAREN_ALL = Pattern.compile("\\s*\\([^)]{0,50}\\)\\s*");
 
     /** Normalize mangled dash separators: "hosted- -vdsina" → "hosted - vdsina" */
     private static final Pattern DASH_SPACE_DASH = Pattern.compile("(\\w)-\\s+-(\\w)");
@@ -871,6 +871,8 @@ public class GeoIP {
      * 1. Word-by-word: words starting lowercase and ending uppercase are likely reversed.
      * 2. Full-string: try reversing the entire name for compound words without spaces.
      * Picks whichever pass matches more known words.
+     *
+     * AS numbers must be stripped before calling this (see normalizeOrgName).
      */
     private static String fixReversedWords(String name) {
         String[] words = SPACE_SPLIT.split(name);
@@ -879,7 +881,7 @@ public class GeoIP {
         // Pass 1: full-string reversal (handles compound words and whole-string reversals)
         String fullResult = tryFullStringReversal(name);
 
-        // Pass 2: word-by-word reversal using case-pattern detection
+        // Pass 2: word-by-word reversal using case-pattern + known-word detection
         String wordResult = tryWordReversal(words);
 
         // Pass 3: first/last char case-swap (handles "techteL" → "Techtel" corruption)
@@ -969,15 +971,36 @@ public class GeoIP {
     }
 
     /**
-     * A word looks reversed if it starts with a lowercase letter and ends with
-     * an uppercase letter — normal English/org words don't do this.
-     * Excludes single-character tokens and all-uppercase tokens.
+     * A word looks reversed if:
+     * 1. Its first letter is lowercase and last letter is uppercase
+     *    (e.g. "puorG" → "Group"), OR
+     * 2. Reversing its letters yields a known word (e.g. "CSJP" → "PJSC").
+     *
+     * Leading/trailing non-letter characters are ignored for the letter check
+     * so that ")puorG" and "talasite(" are correctly detected.
      */
     private static boolean looksReversed(String word) {
         if (word.length() < 2) {return false;}
-        char first = word.charAt(0);
-        char last = word.charAt(word.length() - 1);
-        return Character.isLowerCase(first) && Character.isUpperCase(last);
+        // Find first and last letter characters, skipping punctuation
+        int firstIdx = 0;
+        while (firstIdx < word.length() && !Character.isLetter(word.charAt(firstIdx))) {
+            firstIdx++;
+        }
+        int lastIdx = word.length() - 1;
+        while (lastIdx > firstIdx && !Character.isLetter(word.charAt(lastIdx))) {
+            lastIdx--;
+        }
+        if (lastIdx - firstIdx + 1 < 2) {return false;}
+        char first = word.charAt(firstIdx);
+        char last = word.charAt(lastIdx);
+        // Case-pattern: lowercase start + uppercase end
+        if (Character.isLowerCase(first) && Character.isUpperCase(last)) {return true;}
+        // Known-word check: strip non-letters, reverse, see if result is a known word
+        // e.g. "CSJP" → strip → "CSJP" → reverse → "PJSC" → "pjsc" ∈ KNOWN_WORDS
+        // e.g. "talasite(" → strip → "talasite" → reverse → "etisalat" → "etisalat" ∈ KNOWN_WORDS
+        String stripped = word.substring(firstIdx, lastIdx + 1);
+        String rev = new StringBuilder(stripped).reverse().toString();
+        return KNOWN_WORDS.contains(rev.toLowerCase(Locale.US));
     }
 
     /**
@@ -996,17 +1019,17 @@ public class GeoIP {
         // Skip reserved / non-org names
         if (SKIP_ALL.matcher(name).find()) {return name;}
 
+        // Strip embedded AS numbers before override check and reversal detection
+        name = ASN_EMBEDDED.matcher(name).replaceAll("");
+        name = ASN_TRAILING.matcher(name).replaceAll("");
+        name = name.trim();
+
         // Known broken org names in the MaxMind ASN DB (reversed strings, etc.)
         String fixed = ASN_DB_OVERRIDES.get(name);
         if (fixed != null) return fixed;
 
         // Auto-detect reversed words: if multiple words look character-reversed, fix them
         name = fixReversedWords(name);
-
-        // Strip embedded ASN numbers
-        name = ASN_EMBEDDED.matcher(name).replaceAll("");
-        name = ASN_TRAILING.matcher(name).replaceAll("");
-        name = name.trim();
 
         // Strip verbose prefixes
         name = STRIP_PREFIX_ALL.matcher(name).replaceAll("");
@@ -1023,8 +1046,8 @@ public class GeoIP {
         name = SUFFIX_ALL.matcher(name).replaceAll("");
         name = name.trim();
 
-        // Strip trailing parentheticals
-        name = PAREN_TRAILING.matcher(name).replaceAll("");
+        // Strip parentheticals
+        name = PAREN_ALL.matcher(name).replaceAll("");
 
         // Fix mangled dash separators: "hosted- -vdsina" → "hosted - vdsina"
         name = DASH_SPACE_DASH.matcher(name).replaceAll("$1 - $2");
