@@ -113,9 +113,10 @@ html:not(.advmode) #tuning input[type=number]{min-width:0!important;text-align:c
 .streams th:nth-child(3),.streams td:nth-child(3){width:65%;text-align:left}
 .streams td:nth-child(3) span{font-family:var(--monospaced);font-size:90%}
 .streams th:nth-child(n+4),.streamsContainer td:nth-child(n+4){width:5%;text-align:center}
+.ring-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;text-align:center}
 .ring{max-height:110px;max-width:110px;display:block}
 .ring-cell{display:flex;justify-content:center;align-items:center;position:relative}
-.ring-tip{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:6px;padding:6px 10px;background:#222;color:#ccc;font-size:11px;line-height:1.4;white-space:nowrap;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.5);z-index:10;text-align:left;pointer-events:none}
+.ring-tip{display:none;position:absolute;top:-10%;left:50%;transform:translateX(-50%);margin-top:6px;padding:6px 10px;background:#222;color:#ccc;font-size:11px;line-height:1.4;white-space:nowrap;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.5);z-index:10;text-align:left;pointer-events:none}
 .ring-cell:hover .ring-tip{display:block}
 .ring .ring-arc{fill:none;stroke-width:2;transition:stroke-dashoffset .6s ease}
 .ring .ring-arc.blue{stroke:#3498db;fill:#3498db22}
@@ -132,6 +133,8 @@ html:not(.advmode) #tuning input[type=number]{min-width:0!important;text-align:c
 .ring .ring-pct.green{fill:#2ecc71}
 .ring .ring-pct.red{fill:#e74c3c}
 .ring .ring-pct.yellow{fill:#f39c12}
+.ring-grid{margin:-15px auto -2px;padding:8px 4px;width:calc(100% - 8px);display:grid;grid-template-columns:repeat(8,1fr)!important;gap:4px;text-align:center;border-radius:0 0 4px 4px;box-shadow:var(--bevel);background:var(--th)}
+.ring-grid .ring{margin:8px}
 .spark-bar{opacity:.35}
 .spark-bar.green{fill:#2ecc71}
 .spark-bar.yellow{fill:#f39c12}
@@ -147,11 +150,13 @@ html:not(.advmode) #tuning input[type=number]{min-width:0!important;text-align:c
 .spark-line.blue{color:#3498db}
 .spark-line.cyan{color:#1abc9c}
 .spark-line.gray{color:#888}
-#streamstats{margin:8px auto;padding:8px 4px;width:100%;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;text-align:center}
+#health{padding-bottom:14px}
+#routerhealth h2{margin:12px auto;padding:6px 8px;text-align:left;font-size:12pt;border:0;background:var(--th);cursor:pointer}
+#routerhealth h2:hover{color:var(--hover)}
+#hsNetwork+h2:not(.expanded){margin-bottom:-2px}
 #activeStreams .totalBandwidth{float:right;text-transform:none;letter-spacing:0;word-spacing:0;font-size:80%}
 #activeStreams th.sectionhead{font-size:120%;font-weight:700;text-align:left;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);border-bottom:1px solid var(--border)}
-#healthstats{margin:8px auto;padding:8px 4px;width:100%;display:grid;grid-template-columns:repeat(6,1fr);gap:4px;text-align:center}
-#healthstats .ring{margin:8px}
+#streamstats{margin:8px auto;padding:8px 4px;width:100%;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;text-align:center}
 
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1.1)}50%{opacity:.7;transform:scale(.9)}}
 

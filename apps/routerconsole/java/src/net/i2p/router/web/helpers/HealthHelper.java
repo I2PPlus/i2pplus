@@ -214,21 +214,21 @@ public class HealthHelper extends HelperBase {
         double[] bwDelayHist = getStatHistory("bwLimiter.outboundDelayedTime");
 
         out.write(RingRenderer.renderRingCell(bwScore, _t("Bandwidth"), bwPct,
-                  new String[]{_t("Throughput: ") + bwDetail}, RingRenderer.MODE_ACTIVITY, bwHist));
+                  new String[]{bwDetail}, RingRenderer.MODE_ACTIVITY, bwHist));
         out.write(RingRenderer.renderRingCell(cpuScore, _t("CPU"), cpuStr,
-                  new String[]{_t("JVM CPU load average")}, RingRenderer.MODE_HEALTH, cpuHist));
+                  new String[]{_t("CPU load average")}, RingRenderer.MODE_HEALTH, cpuHist));
         out.write(RingRenderer.renderRingCell(memScore, _t("Memory"), memStr,
-                  new String[]{_t("JVM memory usage")}, RingRenderer.MODE_HEALTH, memHist));
-        out.write(RingRenderer.renderRingCell(lagScore, _t("Job Lag"), lagStr,
-                  new String[]{_t("Job queue delay (1 min avg)")}, RingRenderer.MODE_LATENCY, lagHist));
-        out.write(RingRenderer.renderRingCell(delayScore, _t("Msg Lag"), delayStr,
-                  new String[]{_t("Message send processing time (1 min avg)")}, RingRenderer.MODE_LATENCY, delayHist));
+                  new String[]{_t("Memory usage")}, RingRenderer.MODE_HEALTH, memHist));
+        out.write(RingRenderer.renderRingCell(lagScore, _t("Job Lag"), withUnit(lagStr, _t("ms")),
+                  new String[]{_t("Job queue delay")}, RingRenderer.MODE_LATENCY, lagHist));
+        out.write(RingRenderer.renderRingCell(delayScore, _t("Msg Lag"), withUnit(delayStr, _t("ms")),
+                  new String[]{_t("Message send processing time")}, RingRenderer.MODE_LATENCY, delayHist));
         out.write(RingRenderer.renderRingCell(threadScore, _t("Threads"), threadStr,
                   new String[]{_t("Active JVM threads")}, RingRenderer.MODE_HEALTH, threadHist));
         out.write(RingRenderer.renderRingCell(readyScore, _t("Job Queue"), readyStr,
                   new String[]{_t("Ready jobs waiting in queue")}, RingRenderer.MODE_LATENCY, readyHist));
-        out.write(RingRenderer.renderRingCell(bwDelayScore, _t("BW Delay"), bwDelayStr,
-                  new String[]{_t("Bandwidth request delay (1 min avg)")}, RingRenderer.MODE_LATENCY, bwDelayHist));
+        out.write(RingRenderer.renderRingCell(bwDelayScore, _t("BW Delay"), withUnit(bwDelayStr, _t("ms")),
+                  new String[]{_t("Bandwidth request delay")}, RingRenderer.MODE_LATENCY, bwDelayHist));
     }
 
     /**
@@ -284,22 +284,22 @@ public class HealthHelper extends HelperBase {
         double timeoutScore = buildTimeout > 0 ? Math.max(0, 1.0 - buildTimeout / 30.0) : -1;
         double[] timeoutHist = getStatHistory("tunnel.buildTimeoutRate");
 
-        out.write(RingRenderer.renderRingCell(ntcpScore, _t("NTCP"), ntcpStr,
-                  new String[]{_t("NTCP outbound establish time (1 min avg)")}, RingRenderer.MODE_LATENCY, ntcpHist));
-        out.write(RingRenderer.renderRingCell(rtoScore, _t("SSU RTO"), rtoStr,
-                  new String[]{_t("SSU retransmission timeout (1 min avg)")}, RingRenderer.MODE_HEALTH, rtoHist));
+        out.write(RingRenderer.renderRingCell(ntcpScore, _t("NTCP Estab"), withUnit(ntcpStr, _t("ms")),
+                  new String[]{_t("NTCP outbound establish time")}, RingRenderer.MODE_LATENCY, ntcpHist));
+        out.write(RingRenderer.renderRingCell(rtoScore, _t("SSU RTO"), withUnit(rtoStr, _t("ms")),
+                  new String[]{_t("SSU retransmission timeout")}, RingRenderer.MODE_HEALTH, rtoHist));
         out.write(RingRenderer.renderRingCell(connScore, _t("Conns/s"), connStr,
                   new String[]{_t("NTCP connections established per second")}, RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(msgScore, _t("Msgs/s"), msgStr,
                   new String[]{_t("Messages delivered per second")}, RingRenderer.MODE_ACTIVITY, null));
-        out.write(RingRenderer.renderRingCell(rttScore, _t("RTT"), rttStr,
-                  new String[]{_t("End-to-end message round trip time (1 min avg)")}, RingRenderer.MODE_LATENCY, rttHist));
-        out.write(RingRenderer.renderRingCell(buildTimeScore, _t("Tunnel Build"), buildTimeStr,
-                  new String[]{_t("Client tunnel build latency (1 min avg)")}, RingRenderer.MODE_LATENCY, buildTimeHist));
-        out.write(RingRenderer.renderRingCell(ssuScore, _t("SSU Estab"), ssuStr,
-                  new String[]{_t("SSU outbound establish time (1 min avg)")}, RingRenderer.MODE_LATENCY, ssuHist));
-        out.write(RingRenderer.renderRingCell(timeoutScore, _t("Timeout%"), timeoutStr,
-                  new String[]{_t("Tunnel build timeout rate (1 min avg)")}, RingRenderer.MODE_HEALTH, timeoutHist));
+        out.write(RingRenderer.renderRingCell(rttScore, _t("RTT"), withUnit(rttStr, _t("ms")),
+                  new String[]{_t("End-to-end message round trip time")}, RingRenderer.MODE_LATENCY, rttHist));
+        out.write(RingRenderer.renderRingCell(buildTimeScore, _t("Tunnel Build"), withUnit(buildTimeStr, _t("ms")),
+                  new String[]{_t("Client tunnel build latency")}, RingRenderer.MODE_LATENCY, buildTimeHist));
+        out.write(RingRenderer.renderRingCell(ssuScore, _t("SSU Estab"), withUnit(ssuStr, _t("ms")),
+                  new String[]{_t("SSU outbound establish time")}, RingRenderer.MODE_LATENCY, ssuHist));
+        out.write(RingRenderer.renderRingCell(timeoutScore, _t("Timeout"), timeoutStr,
+                  new String[]{_t("Tunnel build timeout rate")}, RingRenderer.MODE_HEALTH, timeoutHist));
     }
 
     /**
@@ -311,9 +311,7 @@ public class HealthHelper extends HelperBase {
         int knownPeers = _context.netDb().getKnownRouters();
         int storedRouters = 0;
         KademliaNetworkDatabaseFacade kf = (KademliaNetworkDatabaseFacade) _context.netDb();
-        if (kf != null)
-            storedRouters = kf.getStoredRouterInfoCount();
-        String knownStr = knownPeers + " / " + storedRouters;
+        String knownStr = String.valueOf(knownPeers);
         double knownScore = knownPeers > 0 ? Math.min(knownPeers / 5000.0, 1.0) : 0;
 
         // Active Peers
@@ -354,7 +352,7 @@ public class HealthHelper extends HelperBase {
         String bannedStr = banned > 0 ? String.valueOf((int) banned) : "0";
         double bannedScore = banned > 0 ? Math.max(0, 1.0 - banned / 100.0) : 1.0;
 
-        out.write(RingRenderer.renderRingCell(knownScore, _t("Known"), knownStr,
+        out.write(RingRenderer.renderRingCell(knownScore, _t("Known Peers"), knownStr,
                   new String[]{_t("Known routers in network database")}, RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(peerScore, _t("Active Peers"), peerStr,
                   new String[]{_t("Active peers (last 60s)")}, RingRenderer.MODE_ACTIVITY, peerHist));
@@ -365,9 +363,9 @@ public class HealthHelper extends HelperBase {
         out.write(RingRenderer.renderRingCell(uptimeScore, _t("Uptime"), uptimeStr,
                   new String[]{_t("Router uptime")}, RingRenderer.MODE_HEALTH, null));
         out.write(RingRenderer.renderRingCell(netdbScore, _t("NetDB"), netdbStr,
-                  new String[]{_t("NetDB lookup time (1 min avg)")}, RingRenderer.MODE_LATENCY, netdbHist));
+                  new String[]{_t("NetDB lookup time")}, RingRenderer.MODE_LATENCY, netdbHist));
         out.write(RingRenderer.renderRingCell(buildScore, _t("Build Success"), buildStr,
-                  new String[]{_t("Tunnel build success rate (1 min avg)")}, RingRenderer.MODE_HEALTH, buildHist));
+                  new String[]{_t("Tunnel build success rate")}, RingRenderer.MODE_HEALTH, buildHist));
         out.write(RingRenderer.renderRingCell(bannedScore, _t("Banned"), bannedStr,
                   new String[]{_t("Total banned peers")}, RingRenderer.MODE_HEALTH, null));
     }
@@ -428,14 +426,14 @@ public class HealthHelper extends HelperBase {
         double storeScore = stores > 0 ? Math.min(stores / 5.0, 1.0) : -1;
         double[] storeHist = getStatHistory("netDb.storeHandled");
 
-        out.write(RingRenderer.renderRingCell(ackScore, _t("NetDB ACK"), ackStr,
-                  new String[]{_t("NetDB peer acknowledge time (1 min avg)")}, RingRenderer.MODE_LATENCY, ackHist));
-        out.write(RingRenderer.renderRingCell(lsScore, _t("LS Timeout"), lsStr,
+        out.write(RingRenderer.renderRingCell(ackScore, _t("NetDB ACK"), withUnit(ackStr, _t("ms")),
+                  new String[]{_t("NetDB peer acknowledge time")}, RingRenderer.MODE_LATENCY, ackHist));
+        out.write(RingRenderer.renderRingCell(lsScore, _t("LS Timeout"), withUnit(lsStr, _t("ms")),
                   new String[]{_t("LeaseSet request timeouts (last minute)")}, RingRenderer.MODE_HEALTH, null));
         out.write(RingRenderer.renderRingCell(storedScore, _t("DB Size"), storedStr,
                   new String[]{_t("Stored router infos in floodfill")}, RingRenderer.MODE_HEALTH, null));
         out.write(RingRenderer.renderRingCell(ffScore, _t("Flood Verify"), ffStr,
-                  new String[]{_t("Floodfill verify time (1 min avg)")}, RingRenderer.MODE_LATENCY, ffHist));
+                  new String[]{_t("Floodfill verify time")}, RingRenderer.MODE_LATENCY, ffHist));
         out.write(RingRenderer.renderRingCell(hitScore, _t("Cache Hit"), hitStr,
                   new String[]{_t("NetDB lookup success rate")}, RingRenderer.MODE_HEALTH, hitHist));
         out.write(RingRenderer.renderRingCell(lookupScore, _t("Lookups/s"), lookupStr,
@@ -444,6 +442,13 @@ public class HealthHelper extends HelperBase {
                   new String[]{_t("Combined store + lookup operations per second")}, RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(storeScore, _t("Stores/s"), storeStr,
                   new String[]{_t("NetDB store messages handled per second")}, RingRenderer.MODE_ACTIVITY, storeHist));
+    }
+
+    /** Append unit only when value is present (not em-dash) */
+    private static String withUnit(String val, String unit) {
+        if ("\u2014".equals(val))
+            return val;
+        return val + unit;
     }
 
     /** Compact duration: 230s, 24m, 3h, 2d, 1mo (plain text, no HTML) */
