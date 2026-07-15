@@ -1066,7 +1066,7 @@ public class Blocklist {
         for (byte[] ip : ips) {
             if (isBlocklisted(ip)) {
                 Hash peer = pinfo.getHash();
-                if (!_context.banlist().isBanlisted(peer)) {banlist(peer, ip);} // nice knowing you...
+                if (!_context.banlist().isBanlisted(peer)) {banlist(peer, ip, pinfo);} // nice knowing you...
                 return true;
             }
         }
@@ -1287,6 +1287,10 @@ public class Blocklist {
      *
      */
     private void banlist(Hash peer, byte[] ip) {
+        banlist(peer, ip, null);
+    }
+
+    private void banlist(Hash peer, byte[] ip, RouterInfo ri) {
         if (!_haveIPv6 && ip.length == 16) {return;} // Don't bother unless we have IPv6
         String sip = Addresses.toString(ip); // Temporary reason, until the job finishes
         String reason;
@@ -1298,11 +1302,19 @@ public class Blocklist {
             sip.startsWith("192.168.") || sip.startsWith("10.") ||
             (ip != null && ip.length == 4 && (ip[0] * 0xff) == 172 && ip[1] >= 16 && ip[1] <= 31))) {
             // i2pd bug, possibly at startup, don't ban forever
-            if (_banLogger != null) _banLogger.logBan(peer, _context, reason, Banlist.BANLIST_DURATION_PRIVATE);
+            if (_banLogger != null) {
+                if (ri != null)
+                    _banLogger.logBan(peer, sip, reason, Banlist.BANLIST_DURATION_PRIVATE, ri);
+                else
+                    _banLogger.logBan(peer, _context, reason, Banlist.BANLIST_DURATION_PRIVATE);
+            }
             _context.banlist().banlistRouter(peer, reason, sip, null, _context.clock().now() + Banlist.BANLIST_DURATION_PRIVATE);
             return;
         }
-        banlistRouter(peer, reason, sip);
+        if (ri != null)
+            {banlistRouter(peer, reason, sip, ri);}
+        else
+            {banlistRouter(peer, reason, sip);}
         if (!_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_DETAIL)) {return;}
         boolean shouldRunJob;
         int number;
