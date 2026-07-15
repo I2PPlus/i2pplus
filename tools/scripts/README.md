@@ -63,6 +63,14 @@ Utility scripts for I2P+ development and administration.
 - **`translation_status.sh`** — Show translation status for a locale directory.
   `translation_status.sh <folder_path>`
 
+## Diagnostics
+
+- **`heap-report.sh`** — Generate heap/thread dumps for memory leak analysis.
+  `heap-report.sh [pid|path.hprof]`
+
+  Collects thread dump, class histogram, heap dump, GC info, and optionally runs
+  dominator tree analysis (via jhat). Output written to `/tmp/dump-i2p/<timestamp>/`.
+
 ## Administration
 
 - **`i2p-sessionban-nftables.py`** — Sync I2P+ session bans to nftables sets. Uses nftables named sets with `interval` flag for O(log n) lookups. Persists bans across reboots by saving the ruleset and adding an `include` to `/etc/nftables.conf`. Requires `nft`.

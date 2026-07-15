@@ -243,6 +243,40 @@ jcmd <pid> VM.native_memory summary
 
 ---
 
+## heap-report.sh
+
+Bundled diagnostic script that wraps jcmd/jstack/jmap/jhat into a single command. Collects thread dump, live class histogram (top 60 by count, plus CSV), heap dump, GC info, and optionally the dominator tree (via jhat).
+
+```bash
+# Auto-detect and dump
+tools/scripts/heap-report.sh
+
+# Target a specific PID
+tools/scripts/heap-report.sh <pid>
+
+# Analyze an existing heap dump
+tools/scripts/heap-report.sh <file.hprof>
+
+# Full help
+tools/scripts/heap-report.sh --help
+```
+
+Output goes to `/tmp/dump-i2p/<timestamp>/`. Run as the same user as the router or root.
+
+The script produces:
+| File                 | Contents                                                                              |
+| -------------------- | ------------------------------------------------------------------------------------- |
+| `report.txt`         | Summary: system info, thread dump header, top-60 histogram, GC info, suspicious types |
+| `threads.txt`        | Full thread dump                                                                      |
+| `histogram.txt`      | Full class histogram                                                                  |
+| `histogram.csv`      | Class histogram as CSV (for diffing across runs)                                      |
+| `top-objects.csv`    | Types with >1000 instances, sorted by count                                           |
+| `heap.hprof`         | Full heap dump (for MAT/jhat analysis)                                                |
+| `dominator-tree.csv` | Dominator tree (if jhat available)                                                    |
+| `itr-refs.txt`       | Reference chains for iterator suspects (if jhat available)                            |
+
+---
+
 ## Async Profiler
 
 **Source:** https://github.com/async-profiler/async-profiler (Apache-2.0)
@@ -460,7 +494,7 @@ Then connect with VisualVM, jconsole, or any JMX client.
 | Symptom         | Tool                | Command                                                           |
 | --------------- | ------------------- | ----------------------------------------------------------------- |
 | High CPU        | Async Profiler      | `profiler.sh -d 60 <pid>`                                         |
-| Memory leak     | jmap + MAT          | `jmap -dump:live,format=b,file=dump.hprof <pid>`                  |
+| Memory leak     | heap-report.sh      | `tools/scripts/heap-report.sh <pid>`                              |
 | Thread stuck    | jstack ×3           | `for i in 1 2 3; do jstack <pid> > /tmp/jstack.$i; sleep 5; done` |
 | GC pressure     | GC logs             | grep `Full GC` in gc.log                                          |
 | Hot methods     | VisualVM sampler    | Sampler tab, filter: `net.i2p`                                    |
