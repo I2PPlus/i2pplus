@@ -20,10 +20,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
@@ -48,10 +48,22 @@ class SAMHandlerPool {
 
     private final Log _log;
     private final Selector _selector;
-    private final ExecutorService _workers;
+    private final ThreadPoolExecutor _workers;
     private final Map<SocketChannel, ConnContext> _contexts;
     private volatile boolean _running;
     private I2PAppThread _selectThread;
+
+    /**
+     * Thread factory for worker threads with sequential numbering.
+     */
+    private static class NamedThreadFactory implements java.util.concurrent.ThreadFactory {
+        private final AtomicInteger _count = new AtomicInteger();
+        public Thread newThread(Runnable r) {
+            Thread t = new Thread(r, "SAM-PoolWkr-" + _count.incrementAndGet());
+            t.setDaemon(true);
+            return t;
+        }
+    }
 
     /**
      * Per-connection context tracked by the pool.
@@ -77,13 +89,13 @@ class SAMHandlerPool {
         } catch (IOException ioe) {
             throw new RuntimeException("Cannot open selector", ioe);
         }
-        _workers = Executors.newCachedThreadPool(new ThreadFactory() {
-            public Thread newThread(Runnable r) {
-                Thread t = new Thread(r, "SAM-PoolWkr");
-                t.setDaemon(true);
-                return t;
-            }
-        });
+        _workers = new ThreadPoolExecutor(
+            2, 4,
+            60, TimeUnit.SECONDS,
+            new ArrayBlockingQueue<Runnable>(8),
+            new NamedThreadFactory(),
+            new ThreadPoolExecutor.CallerRunsPolicy());
+        _workers.prestartCoreThread();
         _contexts = new HashMap<SocketChannel, ConnContext>();
     }
 
