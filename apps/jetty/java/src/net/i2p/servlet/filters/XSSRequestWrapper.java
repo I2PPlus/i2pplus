@@ -53,7 +53,10 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
                 encodedValues[good++] = v2;
             } else if (value != null) {
                 Log log = I2PAppContext.getGlobalContext().logManager().getLog(XSSRequestWrapper.class);
-                log.logAlways(Log.WARN, "URL \"" + getServletPath() + "\" Stripped param \"" + parameter + "\" : \"" + value + '"');
+                if (log.shouldWarn()) {
+                    log.warn("URL \"" + getServletPath() + "\" Stripped param \"" +
+                             parameter + "\" : \"" + value + '"');
+                }
             }
         }
         if (good <= 0)
@@ -78,7 +81,10 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
         String rv = stripXSS(value, parameterValuePattern);
         if (value != null && rv == null) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(XSSRequestWrapper.class);
-            log.logAlways(Log.WARN, "URL \"" + getServletPath() + "\" Stripped param \"" + parameter + "\" : \"" + value + '"');
+            if (log.shouldWarn()) {
+                log.warn("URL \"" + getServletPath() + "\" Stripped param \"" +
+                         parameter + "\" : \"" + value + '"');
+            }
         }
         return rv;
     }
