@@ -26,6 +26,7 @@
 
 package net.i2p.router.util;
 
+import java.lang.ref.WeakReference;
 import java.util.AbstractCollection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -53,8 +54,8 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     //Log log = I2PAppContext.getGlobalContext().logManager().getLog(CachedIteratorCollection.class);
 
     // Thread-local iterators to avoid concurrent modification when multiple threads iterate.
-    // Each thread's iterator holds an explicit reference back to this collection, so
-    // clear() sets _cleared to prevent stale iterators from holding PeerStates alive.
+    // Uses WeakReference to prevent stale ThreadLocal entries from retaining the collection
+    // (and its owning PeerState) after clear().
     private volatile ThreadLocal<CachedIterator<E>> _iterator = ThreadLocal.withInitial(() -> new CachedIterator<>(this));
 
     // Set to true in clear() to signal all iterator instances the collection is gone.
@@ -217,21 +218,22 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     @SuppressWarnings("ReferenceEquality")
     public static class CachedIterator<E> implements Iterator<E> {
 
-        private final CachedIteratorCollection<E> coll;
+        private final WeakReference<CachedIteratorCollection<E>> collRef;
         private boolean nextCalled;
 
         // Iteration Index
         private Node<E> itrIndexNode;
 
         CachedIterator(CachedIteratorCollection<E> coll) {
-            this.coll = coll;
+            this.collRef = new WeakReference<>(coll);
         }
 
         /**
          * Reset iteration
          */
         private void reset() {
-            itrIndexNode = coll.first;
+            CachedIteratorCollection<E> c = collRef.get();
+            itrIndexNode = (c != null) ? c.first : null;
             nextCalled = false;
         }
 
@@ -249,7 +251,8 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
          */
         @Override
         public void remove() {
-            if (coll._cleared)
+            CachedIteratorCollection<E> c = collRef.get();
+            if (c == null || c._cleared)
                 throw new IllegalStateException();
             if (nextCalled) {
                 // Are we at the end of the collection? If so itrIndexNode will
@@ -257,7 +260,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
                 if (itrIndexNode != null) {
                     // The Node we are trying to remove is itrIndexNode.prev
                     // Is there a Node before itrIndexNode.prev?
-                    if (itrIndexNode != coll.first.next) {
+                    if (itrIndexNode != c.first.next) {
                         // Set current itrIndexNode's prev to Node N-2
                         itrIndexNode.prev = itrIndexNode.prev.prev;
                         // Then set Node N-2's next to current itrIndexNode,
@@ -267,22 +270,22 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
                         // There is no N-2 Node, we are removing the first Node
                         // in the collection
                         itrIndexNode.prev = null;
-                        coll.first = itrIndexNode;
+                        c.first = itrIndexNode;
                     }
                 } else {
                     // itrIndexNode is null, we are at the end of the collection
                     // Are there any items before the Node that is being removed?
-                    if (coll.last.prev != null) {
-                        coll.last.prev.next = null;
-                        coll.last = coll.last.prev;
+                    if (c.last.prev != null) {
+                        c.last.prev.next = null;
+                        c.last = c.last.prev;
                     } else {
                         // There are no more items, clear() the collection
                         nextCalled = false;
-                        coll.clear();
+                        c.clear();
                         return;
                     }
                 }
-                coll.size--;
+                c.size--;
                 nextCalled = false;
             } else {
                 throw new IllegalStateException();
@@ -296,7 +299,8 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
          */
         @Override
         public boolean hasNext() {
-            if (coll._cleared)
+            CachedIteratorCollection<E> c = collRef.get();
+            if (c == null || c._cleared)
                 return false;
             return itrIndexNode != null;
         }
@@ -307,7 +311,8 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
          */
         @Override
         public E next() {
-            if (coll._cleared)
+            CachedIteratorCollection<E> c = collRef.get();
+            if (c == null || c._cleared)
                 throw new NoSuchElementException();
             if (this.hasNext()) {
                 Node<E> node = itrIndexNode;
