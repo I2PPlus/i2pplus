@@ -91,7 +91,7 @@ class SAMHandlerPool {
         }
         _workers = new ThreadPoolExecutor(
             0, 8,
-            60, TimeUnit.SECONDS,
+            15, TimeUnit.SECONDS,
             new ArrayBlockingQueue<Runnable>(8),
             new NamedThreadFactory(),
             new ThreadPoolExecutor.CallerRunsPolicy());
