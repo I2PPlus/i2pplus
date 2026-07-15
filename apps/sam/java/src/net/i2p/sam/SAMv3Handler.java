@@ -11,13 +11,10 @@ package net.i2p.sam;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.net.ConnectException;
 import java.net.NoRouteToHostException;
-import java.net.Socket;
 import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.nio.channels.SocketChannel;
 import java.util.Properties;
 import net.i2p.I2PAppContext;
@@ -29,7 +26,6 @@ import net.i2p.crypto.SigType;
 import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Destination;
-import net.i2p.util.I2PAppThread;
 import net.i2p.util.PasswordManager;
 
 /**
@@ -46,11 +42,8 @@ class SAMv3Handler extends SAMv1Handler
     public static final SessionsDB sSessionsHash = new SessionsDB();
     private volatile boolean stolenSocket;
     private volatile boolean streamForwardingSocket;
-    private final boolean sendPorts;
-    private final Object socketRLock = new Object();
-    private long _lastPing;
-    private static final int FIRST_READ_TIMEOUT = 60*1000;
-    private static final int READ_TIMEOUT = 3*60*1000;
+    /** package-visible for {@link SAMHandlerPool} */
+    final boolean sendPorts;
     private static final String AUTH_ERROR = "AUTH STATUS RESULT=I2P_ERROR";
 
     /**
@@ -118,6 +111,9 @@ class SAMv3Handler extends SAMv1Handler
             } catch (SocketException se) { /* ignored */ }
         }
         this.stopHandling();
+        try {
+            socket.configureBlocking(true);
+        } catch (IOException ioe) { /* ignored */ }
     }
 
     /**
@@ -162,219 +158,134 @@ class SAMv3Handler extends SAMv1Handler
     }
 
     /**
-     * Handle a SAM v3 client connection by reading and dispatching commands
-     * in a loop until the connection is closed or an error occurs.
+     * Process a single complete command line dispatched by the pool
+     * or the legacy handle() loop. Returns false to signal the caller
+     * that the handler should stop.
+     *
+     * @param line the complete command line (without trailing newline)
+     * @return true if the handler should continue processing commands
      */
-    @Override
-    public void handle() {
-        String msg = null;
-        String domain = null;
-        String opcode = null;
-        boolean canContinue = false;
+    boolean processLine(String line) {
+        if (_log.shouldInfo())
+            _log.info("New message received: [" + line + ']');
         Properties props;
-
-        this.thread.setName("SAMv3Handler." + _id);
-        if (_log.shouldDebug())
-            _log.debug("SAMv3Handler started");
-
         try {
-            Socket socket = getClientSocket().socket();
-            StringBuilder buf = new StringBuilder(1024);
-            boolean gotFirstLine = false;
-            while (true) {
-                if (shouldStop()) {
-                    if (_log.shouldDebug())
-                        _log.debug("Stop request received for SAMv3Handler");
-                    break;
-                }
-                String line;
-                if (sendPorts) {
-                    // client supports PING
-                    try {
-                        ReadLine.readLine(socket, buf, READ_TIMEOUT);
-                        line = buf.toString();
-                        buf.setLength(0);
-                    } catch (SocketTimeoutException ste) {
-                        long now = System.currentTimeMillis();
-                        if (buf.length() <= 0) {
-                            if (_lastPing > 0) {
-                                if (now - _lastPing >= READ_TIMEOUT) {
-                                    if (_log.shouldWarn())
-                                        _log.warn("Failed to respond to PING");
-                                    writeString(SESSION_ERROR, "PONG timeout");
-                                    break;
-                                }
-                            } else {
-                                if (_log.shouldDebug())
-                                    _log.debug("Sending PING " + now);
-                                _lastPing = now;
-                                if (!writeString("PING " + now + '\n'))
-                                    break;
-                            }
-                        } else {
-                            if (_lastPing > 0) {
-                                if (now - _lastPing >= 2*READ_TIMEOUT) {
-                                    if (_log.shouldWarn())
-                                        _log.warn("Failed to respond to PING");
-                                     writeString(SESSION_ERROR, "PONG timeout");
-                                     break;
-                                }
-                            } else if (_lastPing < 0) {
-                                if (_log.shouldWarn())
-                                    _log.warn("2nd timeout");
-                                writeString(SESSION_ERROR, "command timeout, bye");
-                                break;
-                            } else {
-                                // don't clear buffer, don't send ping,
-                                // go around again
-                                _lastPing = -1;
-                                if (_log.shouldWarn())
-                                    _log.warn("Timeout after partial: " + buf);
-                            }
-                        }
-                        if (_log.shouldDebug())
-                            _log.debug("Loop after timeout");
-                        continue;
-                    }
-                } else {
-                    buf.setLength(0);
-                    // first time, set a timeout
-                    try {
-                        synchronized(socketRLock) {
-                            ReadLine.readLine(socket, buf, gotFirstLine ? 0 : FIRST_READ_TIMEOUT);
-                            socket.setSoTimeout(0);
-                        }
-                    } catch (SocketTimeoutException ste) {
-                        writeString(SESSION_ERROR, "command timeout, bye");
-                        break;
-                    }
-                    line = buf.toString();
-                }
-
-                if (_log.shouldInfo())
-                    _log.info("New message received: [" + line + ']');
-                props = SAMUtils.parseParams(line);
-                domain = (String) props.remove(SAMUtils.COMMAND);
-                if (domain == null) {
-                    if (_log.shouldDebug())
-                        _log.debug("Ignoring newline in SAMv3 command");
-                    continue;
-                }
-                gotFirstLine = true;
-                opcode = (String) props.remove(SAMUtils.OPCODE);
-                if (_log.shouldDebug()) {
-                    _log.debug("SAMv3Handler parsing [" + domain + " -> " + opcode + "]");
-                }
-
-                // these may not have a second token
-                if (domain.equals("PING")) {
-                    execPingMessage(opcode);
-                    continue;
-                } else if (domain.equals("PONG")) {
-                    execPongMessage(opcode);
-                    continue;
-                } else if (domain.equals("HELP")) {
-                    writeString("HELP STATUS RESULT=OK MESSAGE=https://geti2p.net/en/docs/api/samv3\n");
-                    continue;
-                } else if (domain.equals("QUIT") || domain.equals("STOP") ||
-                           domain.equals("EXIT")) {
-                    writeString(domain + " STATUS RESULT=OK MESSAGE=bye\n");
-                    break;
-                }
-
-                if (opcode == null) {
-                    // This is not a correct message, for sure
-                    if (writeString(domain + " STATUS RESULT=I2P_ERROR", "missing subcommand, enter HELP for help"))
-                        continue;
-                    else
-                        break;
-                }
-
-                if (domain.equals("STREAM")) {
-                    canContinue = execStreamMessage(opcode, props);
-                } else if (domain.equals("SESSION")) {
-                    if (i2cpProps != null)
-                        props.putAll(i2cpProps); // make sure we've got the i2cp settings
-                    canContinue = execSessionMessage(opcode, props);
-                } else if (domain.equals("DEST")) {
-                    canContinue = execDestMessage(opcode, props);
-                } else if (domain.equals("NAMING")) {
-                    canContinue = execNamingMessage(opcode, props);
-                } else if (domain.equals("DATAGRAM")) {
-                    // TODO not yet overridden, ID is ignored, most recent DATAGRAM session is used
-                    canContinue = execDatagramMessage(opcode, props);
-                } else if (domain.equals("RAW")) {
-                    // TODO not yet overridden, ID is ignored, most recent RAW session is used
-                    canContinue = execRawMessage(opcode, props);
-                } else if (domain.equals("AUTH")) {
-                    canContinue = execAuthMessage(opcode, props);
-                } else {
-                    canContinue = writeString(domain + " STATUS RESULT=I2P_ERROR", "unsupported command, enter HELP for help");
-                }
-
-                if (!canContinue) {
-                    break;
-                }
-            } // while
-        } catch (IOException e) {
-            if (_log.shouldDebug())
-                _log.debug("Caught IOException in handler" + "\n* Error: " + e.getMessage());
-            writeString(SESSION_ERROR, e.getMessage());
+            props = SAMUtils.parseParams(line);
         } catch (SAMException e) {
-            _log.error("Unexpected exception for message [" + msg + ']' + "\n* Error: " + e.getMessage());
-             writeString(SESSION_ERROR, e.getMessage());
-        } catch (RuntimeException e) {
-            _log.error("Unexpected exception for message [" + msg + ']' + "\n* Error: " + e.getMessage());
-            writeString(SESSION_ERROR, e.getMessage());
-        } finally {
             if (_log.shouldDebug())
-                _log.debug("Stopping SAMv3Handler");
-
-            if (!this.stolenSocket) {
-                try {
-                    closeClientSocket();
-                } catch (IOException e) {
-                    if (_log.shouldWarn())
-                        _log.warn("Error closing socket" + "\n* Error: " + e.getMessage());
-                }
-            }
-            if (streamForwardingSocket && this.getStreamSession() != null) {
-                try {
-                    ((SAMv3StreamSession)streamSession).stopForwardingIncoming();
-                } catch (SAMException e) {
-                    if (_log.shouldWarn())
-                        _log.warn("Error while stopping forwarding connections" + "\n* Error: " + e.getMessage());
-                } catch (InterruptedIOException e) {
-                    if (_log.shouldWarn())
-                        _log.warn("Interrupted while stopping forwarding connections" + "\n* Error: " + e.getMessage());
-                }
-            }
-            die();
+                _log.debug("Error parsing line: " + line, e);
+            writeString("SESSION STATUS RESULT=I2P_ERROR", "invalid command format");
+            return true;
         }
+        String domain = (String) props.remove(SAMUtils.COMMAND);
+        if (domain == null) {
+            if (_log.shouldDebug())
+                _log.debug("Ignoring newline in SAMv3 command");
+            return true;
+        }
+        String opcode = (String) props.remove(SAMUtils.OPCODE);
+        if (_log.shouldDebug()) {
+            _log.debug("SAMv3Handler parsing [" + domain + " -> " + opcode + "]");
+        }
+
+        if (domain.equals("HELP")) {
+            writeString("HELP STATUS RESULT=OK MESSAGE=https://geti2p.net/en/docs/api/samv3\n");
+            return true;
+        } else if (domain.equals("QUIT") || domain.equals("STOP") || domain.equals("EXIT")) {
+            writeString(domain + " STATUS RESULT=OK MESSAGE=bye\n");
+            stopHandling();
+            return false;
+        }
+
+        if (opcode == null) {
+            if (!writeString(domain + " STATUS RESULT=I2P_ERROR", "missing subcommand, enter HELP for help")) {
+                stopHandling();
+                return false;
+            }
+            return true;
+        }
+
+        boolean canContinue;
+        if (domain.equals("STREAM")) {
+            canContinue = execStreamMessage(opcode, props);
+        } else if (domain.equals("SESSION")) {
+            if (i2cpProps != null)
+                props.putAll(i2cpProps);
+            canContinue = execSessionMessage(opcode, props);
+        } else if (domain.equals("DEST")) {
+            canContinue = execDestMessage(opcode, props);
+        } else if (domain.equals("NAMING")) {
+            canContinue = execNamingMessage(opcode, props);
+        } else if (domain.equals("DATAGRAM")) {
+            canContinue = execDatagramMessage(opcode, props);
+        } else if (domain.equals("RAW")) {
+            canContinue = execRawMessage(opcode, props);
+        } else if (domain.equals("AUTH")) {
+            canContinue = execAuthMessage(opcode, props);
+        } else {
+            canContinue = writeString(domain + " STATUS RESULT=I2P_ERROR", "unsupported command, enter HELP for help");
+        }
+
+        if (!canContinue) {
+            stopHandling();
+            return false;
+        }
+        return true;
     }
 
     /**
-     * Stop the SAM handler, close the socket,
-     * unregister with the bridge.
-     *
-     * Overridden to not close the client socket if stolen.
+     * Legacy handle() method. Not used when the handler is managed by
+     * {@link SAMHandlerPool}, which dispatches via processLine().
+     * Retained to fulfill the abstract contract in SAMHandler.
+     */
+    @Override
+    public void handle() {
+        if (_log.shouldDebug())
+            _log.debug("SAMv3Handler.handle() called (pool mode)");
+        // In pool mode, handle() is not called — the pool
+        // reads commands and dispatches via processLine().
+        // If this does get invoked (standalone mode), treat
+        // it as a no-op; stopHandling cleanly shuts down.
+        stopHandling();
+    }
+
+    /**
+     * Stop the SAM handler, close the socket (unless stolen),
+     * unregister from the bridge and the handler pool.
      *
      * @since 0.9.20
      */
     @Override
     public void stopHandling() {
-        if (_log.shouldInfo())          _log.info("Stopping " + this + " -> Stolen? " + stolenSocket);
-          synchronized (stopLock) {
-              stopHandler = true;
-          }
-          if (!stolenSocket) {
-              try {
-                  closeClientSocket();
-              }
-              catch (IOException e) { /* ignored */ }
-          }
-          bridge.unregister(this);
-      }
+        boolean alreadyStopping;
+        synchronized (stopLock) {
+            alreadyStopping = stopHandler;
+            stopHandler = true;
+        }
+        if (alreadyStopping)
+            return;
+        if (_log.shouldInfo())
+            _log.info("Stopping " + this + " -> Stolen? " + stolenSocket);
+        if (!stolenSocket) {
+            try {
+                closeClientSocket();
+            } catch (IOException e) { /* ignored */ }
+        }
+        if (streamForwardingSocket && this.getStreamSession() != null) {
+            try {
+                ((SAMv3StreamSession)streamSession).stopForwardingIncoming();
+            } catch (SAMException e) {
+                if (_log.shouldWarn())
+                    _log.warn("Error while stopping forwarding connections" + "\n* Error: " + e.getMessage());
+            } catch (InterruptedIOException e) {
+                if (_log.shouldWarn())
+                    _log.warn("Interrupted while stopping forwarding connections" + "\n* Error: " + e.getMessage());
+            }
+        }
+        die();
+        bridge.unregisterHandlerFromPool(this);
+        bridge.unregister(this);
+    }
 
     private void die() {
         SessionRecord rec = null;
@@ -415,7 +326,6 @@ class SAMv3Handler extends SAMv1Handler
         if (style == null && !opcode.equals("REMOVE"))
             return writeString(SESSION_ERROR, "No SESSION STYLE specified");
 
-        SocketCloseDetector detector = null;
         try {
             if (opcode.equals("CREATE")) {
                 if ((this.getRawSession()!= null) || (this.getDatagramSession() != null) ||
@@ -493,32 +403,26 @@ class SAMv3Handler extends SAMv1Handler
 
                 // Create the session
                 // We block in the session constructors while tunnels are built.
-                // If the client times out and closes the socket, we won't know it
-                // without a separate socket monitor.
-                detector = new SocketCloseDetector();
-
+                // The pool detects socket close via its NIO selector and
+                // will call stopHandling() if the client disconnects.
                 if (style.equals("RAW")) {
-                    detector.start();
                     SAMv3DatagramServer dgs = bridge.getV3DatagramServer(props);
                     SAMv3RawSession v3 = new SAMv3RawSession(nick, dgs);
                     rawSession = v3;
                     this.session = v3;
                     v3.start();
                 } else if (style.equals("DATAGRAM")) {
-                    detector.start();
                     SAMv3DatagramServer dgs = bridge.getV3DatagramServer(props);
                     SAMv3DatagramSession v3 = new SAMv3DatagramSession(nick, dgs);
                     datagramSession = v3;
                     this.session = v3;
                     v3.start();
                 } else if (style.equals("STREAM")) {
-                    detector.start();
                     SAMv3StreamSession v3 = newSAMStreamSession(nick);
                     streamSession = v3;
                     this.session = v3;
                     v3.start();
                 } else if (style.equals("MASTER") || style.equals("PRIMARY")) {
-                    detector.start();
                     SAMv3DatagramServer dgs = bridge.getV3DatagramServer(props);
                     MasterSession v3 = new MasterSession(nick, dgs, this, allProps);
                     streamSession = v3;
@@ -531,18 +435,8 @@ class SAMv3Handler extends SAMv1Handler
                         _log.debug("Unsupported SESSION STYLE: \"" + style +"\"");
                     return writeString(SESSION_ERROR, "Unrecognized SESSION STYLE");
                 }
-                // kill the detector
-                detector.done = true;
-                synchronized(socketRLock) {
-                    detector.interrupt();
-                }
-                String ignoredCommand = detector.ignoredCommand;
-                detector = null;
                 ok = true;
-                boolean rv = writeString("SESSION STATUS RESULT=OK DESTINATION=" + dest + '\n');
-                if (rv && ignoredCommand != null)
-                    rv = writeString(ignoredCommand + " STATUS RESULT=I2P_ERROR", "invalid state");
-                return rv;
+                return writeString("SESSION STATUS RESULT=OK DESTINATION=" + dest + '\n');
             } else if (opcode.equals("ADD") || opcode.equals("REMOVE")) {
                 // prevent trouble in finally block
                 ok = true;
@@ -577,101 +471,10 @@ class SAMv3Handler extends SAMv1Handler
             _log.error("Failed to start SAM session" + "\n* Error: " + e.getMessage());
             return writeString(SESSION_ERROR, e.getMessage());
         } finally {
-            if (detector != null) {
-                // kill the detector
-                detector.done = true;
-                synchronized(socketRLock) {
-                    detector.interrupt();
-                }
-                String ignoredCommand = detector.ignoredCommand;
-                if (ignoredCommand != null)
-                    writeString(ignoredCommand + " STATUS RESULT=I2P_ERROR", "invalid state");
-            }
             // unregister the session if it has not been created
             if ( !ok && nick!=null ) {
                 sSessionsHash.del(nick);
                 session = null;
-            }
-        }
-    }
-
-    /**
-     *  Check for socket close while tunnels are being built,
-     *  by doing what is hopefully a dummy read for the next command.
-     *  Interrupt the handler if it happens.
-     *  After tunnel build success or failure, the handler will interrupt us.
-     *
-     *  If the command is QUIT or equivalent, do that.
-     *  If it's anything else, set ignoredCommand, and execSessionMessage() will deal with it.
-     *
-     *  @since 0.9.58
-     */
-    private class SocketCloseDetector extends I2PAppThread {
-        private final Thread _handler = Thread.currentThread();
-        public volatile String ignoredCommand;
-        public volatile boolean done;
-
-        public SocketCloseDetector() {
-            super("SAM control socket close detector");
-        }
-
-        @Override
-        public void run() {
-            StringBuilder buf = new StringBuilder();
-            try {
-                Socket s = socket.socket();
-                InputStream in = s.getInputStream();
-                do {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException ie) {
-                        break;
-                    }
-                    // Only read under lock
-                    // And execSessionMessage() must lock before interrupting us
-                    // Because interrupting a SocketChannel read will close the socket
-                    synchronized(socketRLock) {
-                        s.setSoTimeout(20);
-                        try {
-                            // we could use ReadLine here, but let's keep it simple
-                            while (true) {
-                                int c = in.read();
-                                if (c < 0)
-                                    throw new IOException("Socket closed");
-                                if (c == '\n') {
-                                    String line = buf.toString();
-                                    buf.setLength(0);
-                                    try {
-                                        Properties props = SAMUtils.parseParams(line);
-                                        String domain = props.getProperty(SAMUtils.COMMAND);
-                                        if (domain == null)
-                                            continue;  // empty line
-                                        if (domain.equals("QUIT") || domain.equals("STOP") || domain.equals("EXIT")) {
-                                            _log.error("SAM socket closed while waiting for tunnels to build");
-                                            writeString(SESSION_ERROR, "Tunnel build interrupted");
-                                            writeString(domain + " STATUS RESULT=OK", "bye");
-                                            try { closeClientSocket(); } catch (IOException ioe) { /* ignored */ }
-                                            _handler.interrupt();
-                                            return;
-                                        }
-                                        ignoredCommand = domain;
-                                    } catch (SAMException e) {
-                                        ignoredCommand = "SESSION";
-                                    }
-                                    if (_log.shouldWarn())
-                                        _log.warn("Ignoring SAM command during tunnel build: " + line);
-                                }
-                                buf.append((char) c);
-                            }
-                        } catch (SocketTimeoutException ste) { /* ignored */ }
-                        s.setSoTimeout(0);
-                    }
-                } while (!done);
-                if (_log.shouldWarn())
-                    _log.warn("Detector exited after tunnel build");
-            } catch (IOException ioe) {
-                _log.error("SAM socket closed while waiting for tunnels to build", ioe);
-                _handler.interrupt();
             }
         }
     }
@@ -989,46 +792,4 @@ class SAMv3Handler extends SAMv1Handler
         }
     }
 
-    /**
-     * Handle a PING.
-     * Send a PONG.
-     *
-     * @param msg to append, may be null
-     * @since 0.9.24
-     */
-    private void execPingMessage(String msg) {
-        StringBuilder buf = new StringBuilder();
-        buf.append("PONG");
-        if (msg != null) {
-            buf.append(' ').append(msg);
-        }
-        buf.append('\n');
-        writeString(buf.toString());
-    }
-
-    /**
-     * Handle a PONG.
-     *
-     * @param s received, may be null
-     * @since 0.9.24
-     */
-    private void execPongMessage(String s) {
-        if (s == null) {
-            s = "";
-        }
-        if (_lastPing > 0) {
-            String expected = Long.toString(_lastPing);
-            if (expected.equals(s)) {
-                _lastPing = 0;
-            if (_log.shouldInfo())
-                _log.warn("Received expected pong: " + s);
-            } else {
-                if (_log.shouldInfo())
-                    _log.warn("Received unexpected pong: " + s);
-            }
-        } else {
-            if (_log.shouldWarn())
-                _log.warn("Pong received without a ping: " + s);
-        }
-    }
 }

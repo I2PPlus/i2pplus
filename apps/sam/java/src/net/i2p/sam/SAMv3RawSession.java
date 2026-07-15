@@ -145,7 +145,7 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
                 msgBuf = ByteBuffer.allocate(data.length);
             }
             msgBuf.put(data);
-            ( msgBuf).flip();
+            msgBuf.flip();
             this.server.send(this.clientAddress, msgBuf);
         }
     }

@@ -100,7 +100,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
      * @since 0.9.25
      */
     public void start() {
-        Thread t = new I2PAppThread(handler, "SAMMessageSessionHandler");
+        Thread t = new I2PAppThread(handler, "SAM-MsgSess");
         t.start();
     }
 

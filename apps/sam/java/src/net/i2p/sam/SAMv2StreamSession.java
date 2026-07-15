@@ -105,7 +105,7 @@ class SAMv2StreamSession extends SAMStreamSession {
 
         // non-blocking connection (SAMv2)
         StreamConnector connector = new StreamConnector(id, d, opts);
-        I2PAppThread connectThread = new I2PAppThread(connector, "StreamConnector." + id);
+        I2PAppThread connectThread = new I2PAppThread(connector, "SAM-StreamConn." + id);
         connectThread.start();
         return true;
     }
@@ -412,8 +412,7 @@ class SAMv2StreamSession extends SAMStreamSession {
                         if (!stillRunning) break;
                     }
 
-                    // not ByteBuffer to avoid Java 8/9 issues
-                    ( data).clear();
+                    data.clear();
                     read = Channels.newChannel(in).read(data);
 
                     if (read == -1) {
@@ -422,8 +421,7 @@ class SAMv2StreamSession extends SAMStreamSession {
                     }
 
                     totalReceived += read;
-                    // not ByteBuffer to avoid Java 8/9 issues with flip()
-                    ( data).flip();
+                    data.flip();
                     recv.receiveStreamBytes(id, data);
                 }
             } catch (IOException e) {

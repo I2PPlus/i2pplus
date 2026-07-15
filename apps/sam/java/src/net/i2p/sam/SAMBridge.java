@@ -35,7 +35,7 @@ import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SimpleTimer2;
-import net.i2p.util.SystemVersion;
+
 
 /**
  * SAM bridge implementation.
@@ -73,6 +73,7 @@ public class SAMBridge implements Runnable, ClientApp {
      */
     private final Map<String, String> nameToPrivKeys;
     private final Set<Handler> _handlers;
+    private volatile SAMHandlerPool _handlerPool;
 
     private volatile boolean acceptConnections = true;
 
@@ -117,8 +118,6 @@ public class SAMBridge implements Runnable, ClientApp {
         _listenHost = options.host;
         _listenPort = options.port;
         _useSSL = options.isSSL;
-        if (_useSSL && !SystemVersion.isJava7())
-            throw new IllegalArgumentException("SSL requires Java 7 or higher");
         persistFilename = options.keyFile;
         _configFile = options.configFile;
         nameToPrivKeys = new HashMap<>(8);
@@ -180,8 +179,6 @@ public class SAMBridge implements Runnable, ClientApp {
         _useSSL = isSSL;
         _secureSession = secureSession;
 
-        if (_useSSL && !SystemVersion.isJava7())
-            throw new IllegalArgumentException("SSL requires Java 7 or higher");
         this.i2cpProps = i2cpProps;
         persistFilename = persistFile;
         _configFile = configFile;
@@ -238,14 +235,6 @@ public class SAMBridge implements Runnable, ClientApp {
             }
         }
     }
-
-    /**
-     * Retrieve the destination associated with the given name
-     *
-     * @param name name of the destination
-     * @return null if the name does not exist, or if it is improperly formatted
-     */
-
 
     /**
      * Retrieve the I2P private keystream for the given name, formatted
@@ -355,6 +344,29 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
+     * Access the shared handler pool for v3 connections.
+     *
+     * @return the handler pool, or null if not started
+     * @since 0.9.62
+     */
+    SAMHandlerPool getHandlerPool() {
+        return _handlerPool;
+    }
+
+    /**
+     * Remove a v3 handler from the shared handler pool.
+     * Called by SAMv3Handler.stopHandling().
+     *
+     * @param handler non-null
+     * @since 0.9.62
+     */
+    void unregisterHandlerFromPool(SAMv3Handler handler) {
+        SAMHandlerPool pool = _handlerPool;
+        if (pool != null)
+            pool.unregister(handler);
+    }
+
+    /**
      * Stop all the handlers.
      *
      * @since 0.9.20
@@ -432,7 +444,9 @@ public class SAMBridge implements Runnable, ClientApp {
             changeState(START_FAILED, e);
             throw e;
         }
+        _handlerPool = new SAMHandlerPool();
         startThread();
+        _handlerPool.start();
     }
 
     /**
@@ -445,6 +459,8 @@ public class SAMBridge implements Runnable, ClientApp {
             return;
         changeState(STOPPING);
         acceptConnections = false;
+        if (_handlerPool != null)
+            _handlerPool.stop();
         stopHandlers();
         if (_runner != null)
             _runner.interrupt();
@@ -538,7 +554,7 @@ public class SAMBridge implements Runnable, ClientApp {
      * @since 0.9.6
      */
     private void startThread() {
-        I2PAppThread t = new I2PAppThread(this, "SAMListener." + _listenPort);
+        I2PAppThread t = new I2PAppThread(this, "SAM-Listen:" + _listenPort);
         if (Boolean.parseBoolean(System.getProperty("sam.shutdownOnOOM"))) {
             t.addOOMEventThreadListener(new I2PAppThread.OOMEventListener() {
                 public void outOfMemory(OutOfMemoryError err) {
@@ -790,11 +806,7 @@ public class SAMBridge implements Runnable, ClientApp {
                         this.parent = parent;
                     }
 
-    /**
-     * Main listener loop. Accepts incoming SAM connections and delegates
-     * to handler threads.
-     */
-    public void run() {
+                    public void run() {
                         parent.register(this);
                         try {
                             SAMHandler handler = SAMHandlerFactory.createSAMHandler(s, i2cpProps, parent);
@@ -806,7 +818,20 @@ public class SAMBridge implements Runnable, ClientApp {
                                 } catch (IOException e) { /* ignored */ }
                                 return;
                             }
-                            handler.startHandling();
+                            if (handler instanceof SAMv3Handler) {
+                                // v3 handlers use the shared NIO pool
+                                SAMHandlerPool pool = parent.getHandlerPool();
+                                if (pool != null) {
+                                    pool.register((SAMv3Handler) handler);
+                                } else {
+                                    if (_log.shouldError())
+                                        _log.error("Handler pool not available for SAMv3Handler");
+                                    try { s.close(); } catch (IOException ioe) { /* ignored */ }
+                                }
+                            } else {
+                                // v1/v2 handlers get their own thread
+                                handler.startHandling();
+                            }
                         } catch (SAMException e) {
                             if (_log.shouldError())
                                 _log.error("SAM error: " + e.getMessage(), e);
@@ -826,7 +851,7 @@ public class SAMBridge implements Runnable, ClientApp {
                         try { s.close(); } catch (IOException ioe) { /* ignored */ }
                     }
                 }
-                new I2PAppThread(new HelloHandler(s,this), "SAMHelloHandler").start();
+                new I2PAppThread(new HelloHandler(s,this), "SAM-Hello").start();
             }
             changeState(STOPPING);
         } catch (Exception e) {

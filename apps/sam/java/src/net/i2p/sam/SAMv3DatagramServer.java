@@ -50,7 +50,7 @@ class SAMv3DatagramServer implements Handler {
 		_server = DatagramChannel.open();
 
 		_server.socket().bind(new InetSocketAddress(host, port));
-		_listener = new I2PAppThread(new Listener(_server), "SAMDatagramListener." + port);
+		_listener = new I2PAppThread(new Listener(_server), "SAM-DGList:" + port);
 		_host = host;
 		_port = port;
 	}

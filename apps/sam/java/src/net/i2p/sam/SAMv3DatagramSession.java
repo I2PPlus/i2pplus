@@ -116,8 +116,7 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
             ByteBuffer msgBuf = ByteBuffer.allocate(msg.length() + data.length);
             msgBuf.put(DataHelper.getASCII(msg));
             msgBuf.put(data);
-            // not ByteBuffer to avoid Java 8/9 issues with flip()
-            ( msgBuf).flip();
+            msgBuf.flip();
             this.server.send(this.clientAddress, msgBuf);
         }
     }

@@ -71,7 +71,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
      */
     @Override
     public void start() {
-        Thread t = new I2PAppThread(streamAcceptor, "SAMMasterAcceptor");
+        Thread t = new I2PAppThread(streamAcceptor, "SAM-MstrAcc");
         t.start();
     }
 

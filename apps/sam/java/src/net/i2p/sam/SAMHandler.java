@@ -64,10 +64,11 @@ abstract class SAMHandler implements Runnable, Handler {
     }
 
     /**
-     * Start handling the SAM connection, detaching an handling thread.
-     *
+     * Start handling the SAM connection, detaching a handling thread.
+     * Subclasses (e.g. SAMv3Handler) may override to use a shared
+     * thread pool instead of a dedicated thread.
      */
-    public final void startHandling() {
+    public void startHandling() {
         thread = new I2PAppThread(this, getClass().getSimpleName());
         thread.start();
     }

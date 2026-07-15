@@ -115,7 +115,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         Properties props;
         final StringBuilder buf = new StringBuilder(128);
 
-        this.thread.setName("SAMv1Handler." + _id);
+        this.thread.setName("SAM-v1." + _id);
         if (_log.shouldDebug())
             _log.debug("SAMv1Handler started");
 

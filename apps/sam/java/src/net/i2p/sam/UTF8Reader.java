@@ -32,7 +32,6 @@ public class UTF8Reader extends Reader {
     private CharBuffer _cb;
     private CharsetDecoder _dc;
 
-    // Charset.forName("UTF-8").newDecoder().replacement().charAt(0) & 0xffff
     private static final int REPLACEMENT = 0xfffd;
 
     /**

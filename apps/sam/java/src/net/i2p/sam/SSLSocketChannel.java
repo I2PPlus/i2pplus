@@ -3,7 +3,6 @@ package net.i2p.sam;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketAddress;
-/* requires Java 7 */
 import java.net.SocketOption;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;

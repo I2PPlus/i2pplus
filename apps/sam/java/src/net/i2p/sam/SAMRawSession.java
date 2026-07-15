@@ -24,7 +24,7 @@ class SAMRawSession extends SAMMessageSession {
 
     public static final int RAW_SIZE_MAX = 32*1024;
 
-    // FIXME make final after fixing SAMv3DatagramSession override
+    // FIXME make final after fixing SAMv3RawSession override
     protected SAMRawReceiver recv;
 
     /**

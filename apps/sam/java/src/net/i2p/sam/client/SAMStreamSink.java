@@ -246,7 +246,7 @@ public class SAMStreamSink {
         private final int _mode;
 
         public DGRcvr(int mode) {
-            super("SAM DG Rcvr");
+            super("SAM-DGRX");
             _mode = mode;
         }
 
@@ -304,7 +304,7 @@ public class SAMStreamSink {
         private final Properties _opts;
 
         public FwdRcvr(boolean isSSL, Properties opts) {
-            super("SAM Fwd Rcvr");
+            super("SAM-FwdRX");
             _isSSL = isSSL;
             _opts = opts;
         }
@@ -373,7 +373,7 @@ public class SAMStreamSink {
         private final OutputStream _out;
 
         public Pinger(OutputStream out) {
-            super("SAM Sink Pinger");
+            super("SAM-SinkPing");
             setDaemon(true);
             _out = out;
         }
