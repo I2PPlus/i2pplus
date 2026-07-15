@@ -972,11 +972,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             _override = value;
             _autoTuning = (value < 0);
             if (value >= 0) {
+                int clamped = Math.max(_min, Math.min(_max, value));
                 int prev = getRuntimeValue();
                 if (_log.shouldInfo())
-                    _log.info(_name + " override set from " + prev + " to " + value + " (default: " + _defaultValue + ")");
-                applyValue(value);
-                persistValue(_ctx, value);
+                    _log.info(_name + " override set from " + prev + " to " + clamped +
+                              " (value: " + value + ", range " + _min + "-" + _max + ")");
+                applyValue(clamped);
+                persistValue(_ctx, clamped);
             }
         }
 

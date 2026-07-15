@@ -93,14 +93,14 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static int getInitialRTO() { return _initialRTO; }
 
     /** @since 0.9.70+ */
-    static void setInitialRTO(int val) { _initialRTO = Math.max(500, Math.min(30000, val)); }
+    static void setInitialRTO(int val) { _initialRTO = Math.max(500, Math.min(10000, val)); }
 
     /** @since 0.9.70+ */
     private static volatile int _maxRTO = 15000;
     /** @since 0.9.70+ */
     public static int getMaxRTOStatic() { return _maxRTO; }
     /** @since 0.9.70+ */
-    public static void setMaxRTO(int val) { _maxRTO = Math.max(1000, Math.min(30000, val)); }
+    public static void setMaxRTO(int val) { _maxRTO = Math.max(1000, Math.min(15000, val)); }
 
     static final String PROP_RTO_MULTIPLIER = "i2p.streaming.rtoMultiplier";
     /** @since 2.12.0+ mutable for adaptive tuning */
@@ -115,14 +115,14 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** @since 0.9.70+ */
     public static int getMinResendDelayStatic() { return _minResendDelay; }
     /** @since 0.9.70+ */
-    public static void setMinResendDelay(int val) { _minResendDelay = Math.max(50, Math.min(5000, val)); }
+    public static void setMinResendDelay(int val) { _minResendDelay = Math.max(100, Math.min(2000, val)); }
 
     /** @since 0.9.70+ */
     private static volatile int _maxResendDelay = 15000;
     /** @since 0.9.70+ */
     public static int getMaxResendDelayStatic() { return _maxResendDelay; }
     /** @since 0.9.70+ */
-    public static void setMaxResendDelay(int val) { _maxResendDelay = Math.max(1000, Math.min(30000, val)); }
+    public static void setMaxResendDelay(int val) { _maxResendDelay = Math.max(1000, Math.min(15000, val)); }
 
     /** @since I2P+ */
     private int getMaxRTO() {

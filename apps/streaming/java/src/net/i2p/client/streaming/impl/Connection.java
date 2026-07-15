@@ -142,7 +142,7 @@ class Connection {
     /** @since 0.9.70+ */
     public static int getMaxRetransmissionsStatic() { return _maxRetransmissions; }
     /** @since 0.9.70+ */
-    public static void setMaxRetransmissions(int val) { _maxRetransmissions = Math.max(8, Math.min(64, val)); }
+    public static void setMaxRetransmissions(int val) { _maxRetransmissions = Math.max(8, Math.min(16, val)); }
 
     /**
      * Maximum number of retransmissions before giving up.
