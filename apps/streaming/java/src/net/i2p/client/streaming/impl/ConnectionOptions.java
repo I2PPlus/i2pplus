@@ -96,11 +96,11 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static void setInitialRTO(int val) { _initialRTO = Math.max(500, Math.min(30000, val)); }
 
     /** @since 0.9.70+ */
-    private static volatile int _maxRTO = 30000;
+    private static volatile int _maxRTO = 15000;
     /** @since 0.9.70+ */
     public static int getMaxRTOStatic() { return _maxRTO; }
     /** @since 0.9.70+ */
-    public static void setMaxRTO(int val) { _maxRTO = Math.max(1000, Math.min(60000, val)); }
+    public static void setMaxRTO(int val) { _maxRTO = Math.max(1000, Math.min(30000, val)); }
 
     static final String PROP_RTO_MULTIPLIER = "i2p.streaming.rtoMultiplier";
     /** @since 2.12.0+ mutable for adaptive tuning */
@@ -118,11 +118,11 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static void setMinResendDelay(int val) { _minResendDelay = Math.max(50, Math.min(5000, val)); }
 
     /** @since 0.9.70+ */
-    private static volatile int _maxResendDelay = 30000;
+    private static volatile int _maxResendDelay = 15000;
     /** @since 0.9.70+ */
     public static int getMaxResendDelayStatic() { return _maxResendDelay; }
     /** @since 0.9.70+ */
-    public static void setMaxResendDelay(int val) { _maxResendDelay = Math.max(1000, Math.min(60000, val)); }
+    public static void setMaxResendDelay(int val) { _maxResendDelay = Math.max(1000, Math.min(30000, val)); }
 
     /** @since I2P+ */
     private int getMaxRTO() {
@@ -189,7 +189,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static int getInitialWindowSize() { return _initialWindowSize; }
 
     /** @since 0.9.70+ */
-    static void setInitialWindowSize(int val) { _initialWindowSize = Math.max(1, Math.min(256, val)); }
+    static void setInitialWindowSize(int val) { _initialWindowSize = Math.max(4, Math.min(256, val)); }
     /**
      *  Initial RTT estimate for new connections before first measurement.
      *  I2P typically has 2-10 second RTT, so 3 seconds provides a conservative
@@ -199,10 +199,10 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /**
      *  Maximum RTT to prevent pathological cases from breaking RTO calculations.
      *  I2P typically has 2-10 second RTT.
-     *  Tunable via i2p.streaming.maxRtt (default: 60000).
+     *  Tunable via i2p.streaming.maxRtt (default: 10000).
      */
     private int getMaxRtt() {
-        return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.maxRtt", 60*1000);
+        return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.maxRtt", 10*1000);
     }
     /**
      * Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706

@@ -138,15 +138,15 @@ class Connection {
      * Increased from 16 to 32 for faster loss recovery.
      */
     /** @since 0.9.70+ */
-    private static volatile int _maxRetransmissions = 64;
+    private static volatile int _maxRetransmissions = 16;
     /** @since 0.9.70+ */
     public static int getMaxRetransmissionsStatic() { return _maxRetransmissions; }
     /** @since 0.9.70+ */
-    public static void setMaxRetransmissions(int val) { _maxRetransmissions = Math.max(8, Math.min(256, val)); }
+    public static void setMaxRetransmissions(int val) { _maxRetransmissions = Math.max(8, Math.min(64, val)); }
 
     /**
      * Maximum number of retransmissions before giving up.
-     * Tunable via i2p.streaming.maxRetransmissions (default: 64).
+     * Tunable via i2p.streaming.maxRetransmissions (default: 16).
      */
     private int getMaxRtx() {
         return _maxRetransmissions;
