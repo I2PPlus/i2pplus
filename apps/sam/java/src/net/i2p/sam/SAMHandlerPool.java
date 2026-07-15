@@ -20,6 +20,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
@@ -44,9 +49,22 @@ class SAMHandlerPool {
 
     private final Log _log;
     private final Selector _selector;
+    private final ThreadPoolExecutor _workers;
     private final Map<SocketChannel, ConnContext> _contexts;
     private volatile boolean _running;
     private I2PAppThread _selectThread;
+
+    /**
+     * Thread factory for worker threads with sequential numbering.
+     */
+    private static class NamedThreadFactory implements java.util.concurrent.ThreadFactory {
+        private final AtomicInteger _count = new AtomicInteger();
+        public Thread newThread(Runnable r) {
+            Thread t = new Thread(r, "SAM-PoolWkr." + _count.incrementAndGet());
+            t.setDaemon(true);
+            return t;
+        }
+    }
 
     /**
      * Per-connection context tracked by the pool.
@@ -72,6 +90,12 @@ class SAMHandlerPool {
         } catch (IOException ioe) {
             throw new RuntimeException("Cannot open selector", ioe);
         }
+        _workers = new ThreadPoolExecutor(
+            4, 64,
+            5, TimeUnit.SECONDS,
+            new SynchronousQueue<Runnable>(),
+            new NamedThreadFactory(),
+            new ThreadPoolExecutor.AbortPolicy());
         _contexts = new HashMap<SocketChannel, ConnContext>();
     }
 
@@ -126,12 +150,18 @@ class SAMHandlerPool {
     }
 
     /**
-     * Stop the pool, interrupt selector.
+     * Stop the pool, interrupt selector, wait for workers.
      */
     void stop() {
         _running = false;
         if (_selectThread != null)
             _selectThread.interrupt();
+        _workers.shutdown();
+        try {
+            _workers.awaitTermination(5, TimeUnit.SECONDS);
+        } catch (InterruptedException ie) {
+            _workers.shutdownNow();
+        }
         try {
             _selector.close();
         } catch (IOException ioe) {
@@ -239,8 +269,10 @@ class SAMHandlerPool {
         }
 
         /**
-         * Dispatch a complete command line inline on the selector thread.
-         * PING/PONG are also handled here.
+         * Dispatch a complete command line to a worker thread.
+         * All commands from the same handler are synchronized on the handler
+         * instance to ensure serial per-connection execution. Commands from
+         * different connections run in parallel.
          */
         private void dispatchLine(final ConnContext ctx, final String line) {
             if (line.equals("PING") || line.startsWith("PING ") ||
@@ -249,10 +281,23 @@ class SAMHandlerPool {
                 return;
             }
             try {
-                ctx.handler.processLine(line);
-            } catch (RuntimeException e) {
-                _log.error("Error processing SAM command: " + line, e);
-                ctx.handler.writeString("SESSION STATUS RESULT=I2P_ERROR", "internal error");
+                _workers.execute(new Runnable() {
+                    public void run() {
+                        synchronized (ctx.handler) {
+                            try {
+                                ctx.handler.processLine(line);
+                            } catch (RuntimeException e) {
+                                _log.error("Error processing SAM command: " + line, e);
+                                ctx.handler.writeString("SESSION STATUS RESULT=I2P_ERROR", "internal error");
+                                ctx.handler.stopHandling();
+                            }
+                        }
+                    }
+                });
+            } catch (RejectedExecutionException e) {
+                if (_log.shouldWarn())
+                    _log.warn("Pool overloaded, disconnecting client");
+                ctx.handler.writeString("SESSION STATUS RESULT=I2P_ERROR MESSAGE=\"server busy\"\n");
                 ctx.handler.stopHandling();
             }
         }

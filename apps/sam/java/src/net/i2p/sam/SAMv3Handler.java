@@ -110,7 +110,7 @@ class SAMv3Handler extends SAMv1Handler
                 socket.socket().setSoTimeout(0);
             } catch (SocketException se) { /* ignored */ }
         }
-        this.stopHandling();
+        bridge.unregisterHandlerFromPool(this);
         try {
             socket.configureBlocking(true);
         } catch (IOException ioe) { /* ignored */ }
