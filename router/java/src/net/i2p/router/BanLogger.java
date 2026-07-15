@@ -280,13 +280,14 @@ public class BanLogger {
         _writer.println("############################################################");
         _writer.println();
         _writer.println("# Ban event log");
-        _writer.println("# Format: TIMESTAMP | HASH | IP:PORT | REASON | DURATION | CAPS");
+        _writer.println("# Format: TIMESTAMP | HASH | IP:PORT | REASON | DURATION | CAPS | VERSION");
         _writer.println("# TIMESTAMP: ISO 8601 UTC");
         _writer.println("# HASH: Router hash (base64) or UNKNOWN");
         _writer.println("# IP:PORT: IP address and port or UNKNOWN");
         _writer.println("# REASON: Reason for ban");
         _writer.println("# DURATION: Duration (e.g., 8h, 24h, FOREVER)");
         _writer.println("# CAPS: Router capabilities (optional, may be empty)");
+        _writer.println("# VERSION: Router version string (optional, may be empty)");
         _writer.println();
     }
 
@@ -316,7 +317,8 @@ public class BanLogger {
         String hashStr = hash != null ? hash.toBase64() : "UNKNOWN";
         String durationStr = formatDuration(durationMs);
         String caps = hash != null ? getCaps(hash) : "";
-        writeLog(hashStr, ip, reason, durationStr, caps);
+        String version = hash != null ? getVersion(hash) : "";
+        writeLog(hashStr, ip, reason, durationStr, caps, version);
     }
 
     /**
@@ -335,13 +337,17 @@ public class BanLogger {
         String hashStr = hash != null ? hash.toBase64() : "UNKNOWN";
         String durationStr = formatDuration(durationMs);
         String caps = "";
+        String version = "";
         if (ri != null) {
             caps = ri.getCapabilities();
             if (caps == null) caps = "";
+            version = ri.getVersion();
+            if (version == null) version = "";
         } else if (hash != null) {
             caps = getCaps(hash);
+            version = getVersion(hash);
         }
-        writeLog(hashStr, ip, reason, durationStr, caps);
+        writeLog(hashStr, ip, reason, durationStr, caps, version);
     }
 
 /**
@@ -365,7 +371,7 @@ public class BanLogger {
      */
     public void logBanIPOnly(String ip, String reason, long durationMs) {
         String durationStr = formatDuration(durationMs);
-        writeLog("UNKNOWN", ip, reason, durationStr, "");
+        writeLog("UNKNOWN", ip, reason, durationStr, "", "");
     }
 
     /**
@@ -378,7 +384,8 @@ public class BanLogger {
     public void logBanForever(Hash hash, String ip, String reason) {
         String hashStr = hash != null ? hash.toBase64() : "UNKNOWN";
         String caps = hash != null ? getCaps(hash) : "";
-        writeLog(hashStr, ip, reason, "FOREVER", caps);
+        String version = hash != null ? getVersion(hash) : "";
+        writeLog(hashStr, ip, reason, "FOREVER", caps, version);
     }
 
     /**
@@ -393,13 +400,17 @@ public class BanLogger {
     public void logBanForever(Hash hash, String ip, String reason, RouterInfo ri) {
         String hashStr = hash != null ? hash.toBase64() : "UNKNOWN";
         String caps = "";
+        String version = "";
         if (ri != null) {
             caps = ri.getCapabilities();
             if (caps == null) caps = "";
+            version = ri.getVersion();
+            if (version == null) version = "";
         } else if (hash != null) {
             caps = getCaps(hash);
+            version = getVersion(hash);
         }
-        writeLog(hashStr, ip, reason, "FOREVER", caps);
+        writeLog(hashStr, ip, reason, "FOREVER", caps, version);
     }
 
     /**
@@ -445,6 +456,22 @@ public class BanLogger {
             if (ri != null) {
                 String caps = ri.getCapabilities();
                 return caps != null ? caps : "";
+            }
+        } catch (Exception e) { /* ignore */ }
+        return "";
+    }
+
+    /**
+     * Get version string from RouterInfo for the given hash.
+     * @return version string or empty string
+     */
+    private String getVersion(Hash hash) {
+        if (hash == null || _context == null) return "";
+        try {
+            RouterInfo ri = _context.netDb().lookupRouterInfoLocally(hash);
+            if (ri != null) {
+                String version = ri.getVersion();
+                return version != null ? version : "";
             }
         } catch (Exception e) { /* ignore */ }
         return "";
@@ -504,7 +531,7 @@ public class BanLogger {
      * Skips logging if this IP already has an active ban in sessionbans.txt,
      * or if this hash is already banlisted.
      */
-    private void writeLog(String hashStr, String ip, String reason, String durationStr, String caps) {
+    private void writeLog(String hashStr, String ip, String reason, String durationStr, String caps, String version) {
         // Strip HTML formatting from reason for plain text log file
         if (reason != null) {
             reason = reason.replace("<b>➜</b>", "").replace("  ", " ").trim();
@@ -538,8 +565,9 @@ public class BanLogger {
 
         String timestamp = _dateFormat.format(new Date());
         String capsStr = (caps != null && !caps.isEmpty()) ? caps : "";
-        String entry = String.format("%s | %s | %s | %s | %s | %s",
-                                     timestamp, hashStr, ip, reason, durationStr, capsStr);
+        String verStr = (version != null && !version.isEmpty()) ? version : "";
+        String entry = String.format("%s | %s | %s | %s | %s | %s | %s",
+                                     timestamp, hashStr, ip, reason, durationStr, capsStr, verStr);
 
         synchronized (_writeLock) {
             if (_writer != null) {

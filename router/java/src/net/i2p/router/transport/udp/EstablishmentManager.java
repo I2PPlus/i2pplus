@@ -1681,7 +1681,7 @@ public class EstablishmentManager {
                 istate = INTRO_STATE_FAILED;
                 charlie2.setIntroState(bobHash, istate);
                 _context.statManager().addRateData("udp.relayBadIP", 1);
-                _banLogger.logBan(charlieHash, Addresses.toString(ip, port), "Bad Introduction data", 60*60*1000L);
+                _banLogger.logBan(charlieHash, Addresses.toString(ip, port), "Bad Introduction data", 60*60*1000L, charlieRI);
                 _context.banlist().banlistRouter(charlieHash, "Bad Introduction data", null, null, _context.clock().now() + 60*60*1000L);
                 charlie.fail();
                 return;
