@@ -45,7 +45,7 @@
      -->
   <property name="jetty.ver" value="9.3.30.v20211001"/>
   <property name="tomcat.ver" value="9.0.107"/>
- 
+
 
   <!-- You probably don't want to change anything from here down -->
   <target name="help" depends="all"/>
@@ -166,11 +166,12 @@
     <echo message="  bumpBuildTime                                Update core/java/src/net/i2p/time/BuildTime.java with today's date"/>
     <echo message="  bump                                         Increment build (minor version) by 1"/>
     <echo message="  createThemesZip                              Create zip with all console and webapp themes and resources &#10140; ./dist/themes.zip"/>
-    <echo message="  debian                                       Generate Debian packages in ../ then run &apos;debian-clean&apos;"/>
     <echo message="  debian-clean                                 Rollback Debian specific patches then run &apos;distclean&apos;"/>
+    <echo message="  debian                                       Generate Debian packages in ../ then run &apos;debian-clean&apos;"/>
     <echo message="  debianhowto                                  Instructions on building Debian packages"/>
-    <echo message="  pkg                                          Run &apos;distclean&apos; then package everything up (updater, installer)"/>
+    <echo message="  git-tag                                      Create annotated Git tag for release (e.g. v2.12.0-16+)"/>
     <echo message="  pkg-portable-win32                           Build a minimal, portable install for Win32 &#10140; ./portable-win32.zip"/>
+    <echo message="  pkg                                          Run &apos;distclean&apos; then package everything up (updater, installer)"/>
     <echo message="  slackpkg                                     Build Slackware package in ./distro/Slackware/i2p"/>
     <echo message="  tarball                                      Create tar archive for clean install &#10140; ./dist/i2p.tar.bz2"/>
     <echo message=""/>
@@ -5588,6 +5589,18 @@
     <copy todir="${basedir}/build" verbose="true" failonerror="false">
       <fileset dir="${build.root}" includes="**/*.jar,**/*.war"/>
     </copy>
+  </target>
+
+  <target name="git-tag" depends="getReleaseNumber, getBuildNumber" description="Tag current commit as release (e.g. 2.12.0-16+)">
+    <property name="tag.name" value="v${release.number}-${i2p.build.number}${build.extra}"/>
+    <echo message="Creating tag: ${tag.name}"/>
+    <exec executable="git" failonerror="true">
+      <arg value="tag"/>
+      <arg value="-a"/>
+      <arg value="${tag.name}"/>
+      <arg value="-m"/>
+      <arg value="Release ${tag.name}"/>
+    </exec>
   </target>
 
 </project>
