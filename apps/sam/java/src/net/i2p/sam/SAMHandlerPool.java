@@ -90,7 +90,7 @@ class SAMHandlerPool {
             throw new RuntimeException("Cannot open selector", ioe);
         }
         _workers = new ThreadPoolExecutor(
-            1, 8,
+            1, 3,
             15, TimeUnit.SECONDS,
             new ArrayBlockingQueue<Runnable>(8),
             new NamedThreadFactory(),
