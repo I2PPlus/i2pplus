@@ -20,10 +20,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
@@ -33,9 +29,9 @@ import net.i2p.util.Log;
  *
  * Replaces the thread-per-connection model for SAM v3 handlers with a single
  * selector thread reading all handler sockets and dispatching complete command
- * lines to a small worker thread pool. PING/PONG keepalive and idle timeout
- * are handled at the pool level so individual handlers do not consume threads
- * while waiting for input.
+ * lines inline. Commands are processed serially per-connection in the order
+ * they arrive. PING/PONG keepalive and idle timeout are handled at the pool
+ * level so individual handlers do not consume threads while waiting for input.
  *
  * @since 0.9.62
  */
@@ -48,22 +44,9 @@ class SAMHandlerPool {
 
     private final Log _log;
     private final Selector _selector;
-    private final ThreadPoolExecutor _workers;
     private final Map<SocketChannel, ConnContext> _contexts;
     private volatile boolean _running;
     private I2PAppThread _selectThread;
-
-    /**
-     * Thread factory for worker threads with sequential numbering.
-     */
-    private static class NamedThreadFactory implements java.util.concurrent.ThreadFactory {
-        private final AtomicInteger _count = new AtomicInteger();
-        public Thread newThread(Runnable r) {
-            Thread t = new Thread(r, "SAM-PoolWkr." + _count.incrementAndGet());
-            t.setDaemon(true);
-            return t;
-        }
-    }
 
     /**
      * Per-connection context tracked by the pool.
@@ -89,12 +72,6 @@ class SAMHandlerPool {
         } catch (IOException ioe) {
             throw new RuntimeException("Cannot open selector", ioe);
         }
-        _workers = new ThreadPoolExecutor(
-            1, 3,
-            15, TimeUnit.SECONDS,
-            new ArrayBlockingQueue<Runnable>(8),
-            new NamedThreadFactory(),
-            new ThreadPoolExecutor.CallerRunsPolicy());
         _contexts = new HashMap<SocketChannel, ConnContext>();
     }
 
@@ -149,18 +126,12 @@ class SAMHandlerPool {
     }
 
     /**
-     * Stop the pool, interrupt selector, wait for workers.
+     * Stop the pool, interrupt selector.
      */
     void stop() {
         _running = false;
         if (_selectThread != null)
             _selectThread.interrupt();
-        _workers.shutdown();
-        try {
-            _workers.awaitTermination(5, TimeUnit.SECONDS);
-        } catch (InterruptedException ie) {
-            _workers.shutdownNow();
-        }
         try {
             _selector.close();
         } catch (IOException ioe) {
@@ -268,9 +239,8 @@ class SAMHandlerPool {
         }
 
         /**
-         * Dispatch a complete command line. PING/PONG are handled inline
-         * to avoid worker queuing latency; all other commands go to the
-         * worker pool.
+         * Dispatch a complete command line inline on the selector thread.
+         * PING/PONG are also handled here.
          */
         private void dispatchLine(final ConnContext ctx, final String line) {
             if (line.equals("PING") || line.startsWith("PING ") ||
@@ -278,17 +248,13 @@ class SAMHandlerPool {
                 handlePing(ctx, line);
                 return;
             }
-            _workers.execute(new Runnable() {
-                public void run() {
-                    try {
-                        ctx.handler.processLine(line);
-                    } catch (RuntimeException e) {
-                        _log.error("Error processing SAM command: " + line, e);
-                        ctx.handler.writeString("SESSION STATUS RESULT=I2P_ERROR", "internal error");
-                        ctx.handler.stopHandling();
-                    }
-                }
-            });
+            try {
+                ctx.handler.processLine(line);
+            } catch (RuntimeException e) {
+                _log.error("Error processing SAM command: " + line, e);
+                ctx.handler.writeString("SESSION STATUS RESULT=I2P_ERROR", "internal error");
+                ctx.handler.stopHandling();
+            }
         }
 
         /**
