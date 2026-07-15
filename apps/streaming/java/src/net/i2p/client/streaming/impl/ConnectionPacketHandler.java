@@ -10,7 +10,6 @@ import net.i2p.data.Destination;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
-import net.i2p.util.SystemVersion;
 
 /**
  * Receive a packet for a particular connection - placing the data onto the
@@ -28,15 +27,14 @@ class ConnectionPacketHandler {
     private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
 
     /**
-     * Get the maximum slow start window size from config or default (64).
-     * Tunable via i2p.streaming.maxSlowStartWindow (default: 64).
+     * Get the maximum slow start window size.
+     * Tunable via i2p.streaming.maxSlowStartWindow (default: 32).
      */
     public static int getMaxSlowStartWindow(I2PAppContext ctx) {
-        return ctx.getProperty("i2p.streaming.maxSlowStartWindow", 32);
+        return ConnectionOptions.getMaxSlowStartWindowStatic();
     }
 
     // see tickets 1939 and 2584
-    private static final int IMMEDIATE_ACK_DELAY = SystemVersion.isSlow() ? 100 : 80;
     static final String PROP_IMMEDIATE_ACK_DELAY = "i2p.streaming.immediateAckDelay";
 
     private static final long[] RATES = new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
@@ -221,7 +219,7 @@ class ConnectionPacketHandler {
                 // can go, however if it goes too fast then we start choking which causes
                 // frequent stalls anyway.
                 // see tickets 1939 and 2584
-                con.setNextSendTime(_context.clock().now() + Math.min(_context.getProperty(PROP_IMMEDIATE_ACK_DELAY, IMMEDIATE_ACK_DELAY), con.getOptions().getRTT() / 8));
+                con.setNextSendTime(_context.clock().now() + Math.min(ConnectionOptions.getImmediateAckDelayStatic(), con.getOptions().getRTT() / 8));
             } else {
                 int delay;
                 if (delayReq) // delayed ACK requested

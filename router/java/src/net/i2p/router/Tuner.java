@@ -2882,11 +2882,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.streaming.maxSlowStartWindow", Integer.toString(value));
+            StreamingConnectionReflector.invokeConnectionOptionsSet("setMaxSlowStartWindow", value);
         }
 
         protected int getRuntimeValue() {
-            return _context.getProperty("i2p.streaming.maxSlowStartWindow", 32);
+            int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMaxSlowStartWindowStatic");
+            return v > 0 ? v : 32;
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -4915,12 +4916,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected void applyValue(int value) {
             // Invert: Tuner treats higher=more aggressive, but code treats higher=slower
-            _context.router().saveConfig("i2p.streaming.congestionAvoidanceGrowthRateFactor",
-                                         Integer.toString(_min + _max - value));
+            StreamingConnectionReflector.invokeConnectionOptionsSet("setDefaultCongestionAvoidanceGrowthRateFactor",
+                                                                     _min + _max - value);
         }
 
         protected int getRuntimeValue() {
-            int codeVal = _context.getProperty("i2p.streaming.congestionAvoidanceGrowthRateFactor", 1);
+            int codeVal = StreamingConnectionReflector.invokeConnectionOptionsInt("getDefaultCongestionAvoidanceGrowthRateFactorStatic");
+            if (codeVal <= 0) codeVal = 1;
             return Math.max(_min, Math.min(_max, _min + _max - codeVal));
         }
 
@@ -4999,12 +5001,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected void applyValue(int value) {
             // Invert: Tuner treats higher=more aggressive, but code treats higher=slower
-            _context.router().saveConfig("i2p.streaming.slowStartGrowthRateFactor",
-                                         Integer.toString(_min + _max - value));
+            StreamingConnectionReflector.invokeConnectionOptionsSet("setDefaultSlowStartGrowthRateFactor",
+                                                                     _min + _max - value);
         }
 
         protected int getRuntimeValue() {
-            int codeVal = _context.getProperty("i2p.streaming.slowStartGrowthRateFactor", 1);
+            int codeVal = StreamingConnectionReflector.invokeConnectionOptionsInt("getDefaultSlowStartGrowthRateFactorStatic");
+            if (codeVal <= 0) codeVal = 1;
             return Math.max(_min, Math.min(_max, _min + _max - codeVal));
         }
 
@@ -5083,15 +5086,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxRtt", "Streaming RTT cap (ms)",
                   SUB_STREAMING,
 
-                  3000, 15000, 1000, "stream.con.initialRTT.out", _context);
+                  5000, 15000, 1000, "stream.con.initialRTT.out", _context);
         }
 
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.streaming.maxRtt", Integer.toString(value));
+            StreamingConnectionReflector.invokeConnectionOptionsSet("setMaxRtt", value);
         }
 
         protected int getRuntimeValue() {
-            return _context.getProperty("i2p.streaming.maxRtt", 6000);
+            int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMaxRttStatic");
+            return v > 0 ? v : 10000;
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -5140,11 +5144,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.streaming.initialResendDelay", Integer.toString(value));
+            StreamingConnectionReflector.invokeConnectionOptionsSet("setDefaultResendDelay", value);
         }
 
         protected int getRuntimeValue() {
-            return _context.getProperty("i2p.streaming.initialResendDelay", 1000);
+            int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getDefaultResendDelayStatic");
+            return v > 0 ? v : 1000;
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -5193,12 +5198,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.streaming.immediateAckDelay", Integer.toString(value));
+            StreamingConnectionReflector.invokeConnectionOptionsSet("setImmediateAckDelay", value);
         }
 
         protected int getRuntimeValue() {
-            return _context.getProperty("i2p.streaming.immediateAckDelay",
-                                        SystemVersion.isSlow() ? 100 : 80);
+            int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getImmediateAckDelayStatic");
+            return v > 0 ? v : 80;
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -5254,12 +5259,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected void applyValue(int value) {
-            _context.router().saveConfig("i2p.streaming.inactivityTimeout", Integer.toString(value));
             StreamingReflector.invokeSetInt("setDefaultInactivityTimeout", value);
         }
 
         protected int getRuntimeValue() {
-            return _context.getProperty("i2p.streaming.inactivityTimeout", 300000);
+            int v = StreamingReflector.invokeGetInt("getDefaultInactivityTimeout");
+            return v > 0 ? v : 300000;
         }
 
         protected double getObservedStat(RouterContext ctx) {

@@ -10,6 +10,7 @@ import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.data.Hash;
 import net.i2p.util.ConvertToHash;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
 /**
  * Define the current options for the con (and allow custom tweaking midstream).
@@ -201,9 +202,10 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *  I2P typically has 2-10 second RTT.
      *  Tunable via i2p.streaming.maxRtt (default: 10000).
      */
-    private int getMaxRtt() {
-        return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.maxRtt", 10*1000);
-    }
+    private static volatile int _maxRtt = 10*1000;
+    private int getMaxRtt() { return _maxRtt; }
+    public static void setMaxRtt(int val) { _maxRtt = Math.max(1000, Math.min(60000, val)); }
+    public static int getMaxRttStatic() { return _maxRtt; }
     /**
      * Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706
      * 500ms provides a reasonable delayed-ACK window for I2P's high-latency environment,
@@ -228,8 +230,36 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** @since 0.9.70+ mutable for adaptive tuning */
     static volatile int _defaultInactivityTimeout = 300000;
     private static final int DEFAULT_INACTIVITY_ACTION = INACTIVITY_ACTION_SEND;
-    private static final int DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR = 1;
-    private static final int DEFAULT_SLOW_START_GROWTH_RATE_FACTOR = 1;
+    /** @since I2P+ mutable for adaptive tuning */
+    static volatile int _maxSlowStartWindow = 32;
+    /** @since I2P+ */
+    static int getMaxSlowStartWindowStatic() { return _maxSlowStartWindow; }
+    /** @since I2P+ */
+    static void setMaxSlowStartWindow(int val) { _maxSlowStartWindow = Math.max(8, Math.min(256, val)); }
+    /** @since I2P+ */
+    private static volatile int _immediateAckDelay = SystemVersion.isSlow() ? 100 : 80;
+    /** @since I2P+ */
+    static int getImmediateAckDelayStatic() { return _immediateAckDelay; }
+    /** @since I2P+ */
+    static void setImmediateAckDelay(int val) { _immediateAckDelay = Math.max(1, Math.min(1000, val)); }
+    /** @since I2P+ */
+    private static volatile int _defaultResendDelay = 1000;
+    /** @since I2P+ */
+    public static int getDefaultResendDelayStatic() { return _defaultResendDelay; }
+    /** @since I2P+ */
+    public static void setDefaultResendDelay(int val) { _defaultResendDelay = Math.max(100, Math.min(3000, val)); }
+    /** @since I2P+ */
+    private static volatile int _defaultCongestionAvoidanceGrowthRateFactor = 1;
+    /** @since I2P+ */
+    public static int getDefaultCongestionAvoidanceGrowthRateFactorStatic() { return _defaultCongestionAvoidanceGrowthRateFactor; }
+    /** @since I2P+ */
+    public static void setDefaultCongestionAvoidanceGrowthRateFactor(int val) { _defaultCongestionAvoidanceGrowthRateFactor = Math.max(1, Math.min(16, val)); }
+    /** @since I2P+ */
+    private static volatile int _defaultSlowStartGrowthRateFactor = 1;
+    /** @since I2P+ */
+    public static int getDefaultSlowStartGrowthRateFactorStatic() { return _defaultSlowStartGrowthRateFactor; }
+    /** @since I2P+ */
+    public static void setDefaultSlowStartGrowthRateFactor(int val) { _defaultSlowStartGrowthRateFactor = Math.max(1, Math.min(16, val)); }
     /** @since 0.9.34 */
     private static final String DEFAULT_LIMIT_ACTION = "reset";
     /** @since 0.9.34 */
@@ -496,7 +526,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         setProfile(getInt(opts, PROP_PROFILE, PROFILE_BULK));
         setMaxMessageSize(getInt(opts, PROP_MAX_MESSAGE_SIZE, DEFAULT_MAX_MESSAGE_SIZE));
         setReceiveWindow(getInt(opts, PROP_INITIAL_RECEIVE_WINDOW, 1));
-        setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 1000));
+        setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, _defaultResendDelay));
         setSendAckDelay(getInt(opts, PROP_INITIAL_ACK_DELAY, _defaultInitialAckDelay));
         setWindowSize(getInt(opts, PROP_INITIAL_WINDOW_SIZE, _initialWindowSize));
         setMaxResends(getInt(opts, PROP_MAX_RESENDS, DEFAULT_MAX_SENDS));
@@ -507,9 +537,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         initializeInboundBufferSize();
 
         setCongestionAvoidanceGrowthRateFactor(getInt(opts, PROP_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR,
-                                                      DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR));
+                                                      _defaultCongestionAvoidanceGrowthRateFactor));
         setSlowStartGrowthRateFactor(getInt(opts, PROP_SLOW_START_GROWTH_RATE_FACTOR,
-                                            DEFAULT_SLOW_START_GROWTH_RATE_FACTOR));
+                                            _defaultSlowStartGrowthRateFactor));
         setAnswerPings(getBool(opts, PROP_ANSWER_PINGS, DEFAULT_ANSWER_PINGS));
         setEnforceProtocol(getBool(opts, PROP_ENFORCE_PROTO, DEFAULT_ENFORCE_PROTO));
         setDisableRejectLogging(getBool(opts, PROP_DISABLE_REJ_LOG, false));
@@ -556,7 +586,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
             setReceiveWindow(getInt(opts, PROP_INITIAL_RECEIVE_WINDOW, 1));
         }
         if (opts.getProperty(PROP_INITIAL_RESEND_DELAY) != null) {
-            setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
+            setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, _defaultResendDelay));
         }
         if (opts.getProperty(PROP_INITIAL_ACK_DELAY) != null) {
             setSendAckDelay(getInt(opts, PROP_INITIAL_ACK_DELAY, _defaultInitialAckDelay));
@@ -579,11 +609,11 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
         if (opts.getProperty(PROP_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR) != null) {
             setCongestionAvoidanceGrowthRateFactor(getInt(opts, PROP_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR,
-                                                          DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR));
+                                                           _defaultCongestionAvoidanceGrowthRateFactor));
         }
         if (opts.getProperty(PROP_SLOW_START_GROWTH_RATE_FACTOR) != null) {
             setSlowStartGrowthRateFactor(getInt(opts, PROP_SLOW_START_GROWTH_RATE_FACTOR,
-                                                DEFAULT_SLOW_START_GROWTH_RATE_FACTOR));
+                                                _defaultSlowStartGrowthRateFactor));
         }
         if (opts.getProperty(PROP_CONNECT_TIMEOUT) != null) {
             // overrides default in super()
