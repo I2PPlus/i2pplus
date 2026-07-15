@@ -1458,7 +1458,7 @@
   </target>
 
   <!-- Will use the native stylesheet - use this if the javadoc target looks broken, Java 11 or later? -->
-  <target name="javadoc-nostylesheet" depends="getReleaseNumber, getBuildNumber, distclean">
+  <target name="javadoc-nostylesheet" depends="getReleaseNumber, getBuildNumber">
     <ant dir="apps/jetty" target="ensureJettylib">
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       </ant>

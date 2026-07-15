@@ -35,7 +35,7 @@ jobs:
         run: cp tools/ant/.antrc ~/.antrc
 
       - name: Build all artifacts
-        run: ant updaterWithGeoIP installer i2psnark buildDeb javadoc-zip-nostylesheet
+        run: ant updaterWithGeoIP installer i2psnark buildDeb javadoc-zip
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
