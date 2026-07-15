@@ -3,6 +3,7 @@ package net.i2p.client.streaming.impl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -88,9 +89,8 @@ class Connection {
     private final AtomicInteger _activeResends = new AtomicInteger();
     private final ConEvent _connectionEvent;
     private final RetransmitEvent _retransmitEvent;
-    /** Reusable paced-packet event — reused single event; all calls to
-     *  sendPacket() are serialized by _dataLock in MessageOutputStream. */
     private final PacedPacketEvent _pacedEvent;
+    private final LinkedList<PacketLocal> _pacedQueue;
     private final AckDupEvent _ackDupEvent;
     /** Reusable list for ackPackets() — avoids per-call allocation.
      *  Only accessed from the receive thread, serialized by _dataLock. */
@@ -213,6 +213,7 @@ class Connection {
         _connectionEvent = new ConEvent();
         _retransmitEvent = new RetransmitEvent();
         _pacedEvent = new PacedPacketEvent();
+        _pacedQueue = new LinkedList<PacketLocal>();
         _ackDupEvent = new AckDupEvent();
         _ackedList = new ArrayList<>(8);
 
@@ -498,14 +499,22 @@ class Connection {
             // Apply pacing to smooth transmission
             long pacingDelay = calculatePacingDelay(packet.getPayloadSize());
             if (pacingDelay > 0) {
-                _pacedEvent.setPacket(packet);
-                _pacedEvent.forceReschedule(pacingDelay);
+                synchronized (_pacedQueue) {
+                    boolean first = _pacedQueue.isEmpty();
+                    _pacedQueue.add(packet);
+                    if (first) {
+                        _pacedEvent.forceReschedule(pacingDelay);
+                    }
+                }
                 packet.markEnqueued();
             } else {
                 if (_outboundQueue.enqueue(packet)) {
                     packet.markEnqueued();
                     _unackedPacketsReceived.set(0);
                     _lastSendTime = _context.clock().now();
+                    synchronized (_pacingLock) {
+                        _lastPacketSendTime = _context.clock().now();
+                    }
                     resetActivityTimer();
                 }
                 // Schedule retransmit timer outside the _outboundPackets lock
@@ -1822,35 +1831,49 @@ class Connection {
 
     /**
      * Inner class for paced packet transmission.
-     * Uses weak reference to prevent memory leaks if connection closes before event fires.
+     * Drains from _pacedQueue, one packet per firing.
+     * If more packets remain, reschedules itself with the next packet's delay.
      */
     private class PacedPacketEvent extends SimpleTimer2.TimedEvent {
-        private PacketLocal _packet;
 
         PacedPacketEvent() {
             super(_timer);
         }
 
-        void setPacket(PacketLocal packet) {
-            _packet = packet;
-        }
-
         public void timeReached() {
-            if (!_connected.get() || _packet.getAckTime() > 0 || _packet.getNumSends() > 0) {
+            PacketLocal packet;
+            long nextDelay;
+            synchronized (_pacedQueue) {
+                packet = _pacedQueue.poll();
+                if (packet == null) {
+                    return;
+                }
+                nextDelay = !_pacedQueue.isEmpty() ? calculatePacingDelay(_pacedQueue.peek().getPayloadSize()) : -1;
+            }
+            if (!_connected.get() || packet.getAckTime() > 0 || packet.getNumSends() > 0) {
+                if (nextDelay >= 0) {
+                    synchronized (_pacedQueue) {
+                        if (!_pacedQueue.isEmpty()) {
+                            forceReschedule(calculatePacingDelay(_pacedQueue.peek().getPayloadSize()));
+                        }
+                    }
+                }
                 return;
             }
-            if (_outboundQueue.enqueue(_packet)) {
-                _packet.markEnqueued();
+            if (_outboundQueue.enqueue(packet)) {
+                packet.markEnqueued();
                 _unackedPacketsReceived.set(0);
                 _lastSendTime = _context.clock().now();
                 synchronized (_pacingLock) {
                     _lastPacketSendTime = _context.clock().now();
                 }
                 resetActivityTimer();
-                // Schedule RTO now that the packet is actually in flight
-                if (_retransmitEvent.scheduleIfNotRunning(_packet.getTimeout()) && _log.shouldDebug()) {
-                    _log.debug("[" + Connection.this + "] Resend in " + _packet.getTimeout() + "ms for paced " + _packet);
+                if (_retransmitEvent.scheduleIfNotRunning(packet.getTimeout()) && _log.shouldDebug()) {
+                    _log.debug("[" + Connection.this + "] Resend in " + packet.getTimeout() + "ms for paced " + packet);
                 }
+            }
+            if (nextDelay >= 0) {
+                forceReschedule(nextDelay);
             }
         }
     }
