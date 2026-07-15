@@ -87,7 +87,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private static final String PROP_INITIAL_RTO = "i2p.streaming.initialRTO";
     static final String PROP_MAX_RTO = "i2p.streaming.maxRTO";
     /** @since 0.9.70+ mutable for adaptive tuning */
-    private static volatile int _initialRTO = 2000;
+    private static volatile int _initialRTO = 5000;
 
     /** @since 0.9.70+ */
     static int getInitialRTO() { return _initialRTO; }
@@ -195,7 +195,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *  I2P typically has 2-10 second RTT, so 3 seconds provides a conservative
      *  starting point that adapts quickly via updateRTT().
      */
-    public static final int DEFAULT_INITIAL_RTT = 3*1000;
+    public static final int DEFAULT_INITIAL_RTT = 5*1000;
     /**
      *  Maximum RTT to prevent pathological cases from breaking RTO calculations.
      *  I2P typically has 2-10 second RTT.
@@ -210,13 +210,13 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * allowing data piggybacking and reducing ACK-only packet floods.
      * @since 0.9.70+ mutable for adaptive tuning
      */
-    private static volatile int _defaultInitialAckDelay = 20;
+    private static volatile int _defaultInitialAckDelay = 500;
 
     /** @since 0.9.70+ */
     public static int getDefaultInitialAckDelay() { return _defaultInitialAckDelay; }
 
     /** @since 0.9.70+ */
-    public static void setDefaultInitialAckDelay(int val) { _defaultInitialAckDelay = Math.max(1, Math.min(200, val)); }
+    public static void setDefaultInitialAckDelay(int val) { _defaultInitialAckDelay = Math.max(10, Math.min(500, val)); }
 
     /** @since 0.9.70+ */
     public static int getDefaultInactivityTimeout() { return _defaultInactivityTimeout; }

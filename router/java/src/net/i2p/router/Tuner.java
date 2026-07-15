@@ -2723,7 +2723,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("INITIAL_ACK_DELAY", "Piggyback ACK wait (ms)",
                   SUB_STREAMING,
 
-                  10, 100, 5, "stream.sendsBeforeAck", _context);
+                  10, 500, 5, "stream.sendsBeforeAck", _context);
         }
 
         protected void applyValue(int value) {
@@ -2732,7 +2732,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getDefaultInitialAckDelay");
-            return v >= 0 ? v : 20;
+            return v >= 0 ? v : 500;
         }
 
         protected double getObservedStat(RouterContext ctx) {
