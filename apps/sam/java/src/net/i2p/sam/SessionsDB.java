@@ -138,6 +138,9 @@ class SessionsDB {
 		while (iter.hasNext()) {
 			SessionRecord rec = iter.next();
 			if (rec.getLastAccessed() < cutoff) {
+				SAMv3Handler h = rec.getHandler();
+				if (h != null && h.hasActiveStream())
+					continue;
 				iter.remove();
 				removed++;
 			}

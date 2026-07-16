@@ -101,6 +101,13 @@ class SAMv3Handler extends SAMv1Handler
     }
 
     /**
+     *  @return true if the handler has an active data stream (stolen or forwarding)
+     */
+    boolean hasActiveStream() {
+        return stolenSocket || streamForwardingSocket;
+    }
+
+    /**
      *  For SAMv3StreamSession connect and accept
      */
     public void stealSocket() {
@@ -291,17 +298,22 @@ class SAMv3Handler extends SAMv1Handler
         SessionRecord rec = null;
 
         if (session!=null) {
-            session.close();
-            rec = sSessionsHash.get(session.getNick());
+            String nick = session.getNick();
+            rec = nick != null ? sSessionsHash.get(nick) : null;
         }
         if (rec!=null) {
-            rec.getThreadGroup().interrupt();
-            while (rec.getThreadGroup().activeCount()>0)
-            try {
-                Thread.sleep(1000);
-            } catch ( InterruptedException e) { /* ignored */ }
-            rec.getThreadGroup().destroy();
+            if (!stolenSocket && !streamForwardingSocket) {
+                session.close();
+                rec.getThreadGroup().interrupt();
+                while (rec.getThreadGroup().activeCount()>0)
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) { /* ignored */ }
+                rec.getThreadGroup().destroy();
+            }
             sSessionsHash.del(session.getNick());
+        } else if (session != null && !stolenSocket && !streamForwardingSocket) {
+            session.close();
         }
     }
 

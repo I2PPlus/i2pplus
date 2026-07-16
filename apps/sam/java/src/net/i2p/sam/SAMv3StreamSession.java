@@ -194,9 +194,9 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         WritableByteChannel toI2P = Channels.newChannel(i2ps.getOutputStream());
 
         SAMBridge bridge = handler.getBridge();
-        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromClient, toI2P, bridge), "SAM-PipeCon-C2I"))
+        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromClient, toI2P, bridge, nick), "SAM-PipeCon-C2I"))
                 .start();
-        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromI2P, toClient, bridge), "SAM-PipeCon-I2C"))
+        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromI2P, toClient, bridge, nick), "SAM-PipeCon-I2C"))
                 .start();
     }
 
@@ -250,9 +250,9 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         WritableByteChannel toI2P = Channels.newChannel(i2ps.getOutputStream());
 
         SAMBridge bridge = handler.getBridge();
-        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromClient, toI2P, bridge), "SAM-PipeAcc-C2I"))
+        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromClient, toI2P, bridge, nick), "SAM-PipeAcc-C2I"))
                 .start();
-        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromI2P, toClient, bridge), "SAM-PipeAcc-I2C"))
+        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromI2P, toClient, bridge, nick), "SAM-PipeAcc-I2C"))
                 .start();
     }
 
@@ -390,8 +390,8 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
                     ReadableByteChannel fromI2P = Channels.newChannel(i2ps.getInputStream());
                     WritableByteChannel toClient = clientServerSock;
                     WritableByteChannel toI2P = Channels.newChannel(i2ps.getOutputStream());
-                    (new I2PAppThread(new Pipe(fromClient, toI2P, null), "SAM-PipeFwd-C2I")).start();
-                    (new I2PAppThread(new Pipe(fromI2P, toClient, null), "SAM-PipeFwd-I2C")).start();
+                    (new I2PAppThread(new Pipe(fromClient, toI2P, null, nick), "SAM-PipeFwd-C2I")).start();
+                    (new I2PAppThread(new Pipe(fromI2P, toClient, null, nick), "SAM-PipeFwd-I2C")).start();
 
                 } catch (IOException e) {
                     try {
@@ -411,15 +411,27 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         private final WritableByteChannel out;
         private final ByteBuffer buf;
         private final SAMBridge bridge;
+        private final String nick;
+        private long lastTouch;
 
         /**
          *  @param bridge may be null
          */
         public Pipe(ReadableByteChannel in, WritableByteChannel out, SAMBridge bridge) {
+            this(in, out, bridge, null);
+        }
+
+        /**
+         *  @param bridge may be null
+         *  @param nick session nickname, may be null; if set, touches SessionsDB periodically
+         */
+        public Pipe(ReadableByteChannel in, WritableByteChannel out, SAMBridge bridge, String nick) {
             this.in = in;
             this.out = out;
             this.buf = ByteBuffer.allocate(BUFFER_SIZE);
             this.bridge = bridge;
+            this.nick = nick;
+            this.lastTouch = System.currentTimeMillis();
         }
 
         public void run() {
@@ -429,6 +441,13 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
                     buf.flip();
                     out.write(buf);
                     buf.compact();
+                    if (nick != null) {
+                        long now = System.currentTimeMillis();
+                        if (now - lastTouch > 120_000L) {
+                            SAMv3Handler.sSessionsHash.get(nick);
+                            lastTouch = now;
+                        }
+                    }
                 }
             } catch (IOException ioe) {
                 // ignore
