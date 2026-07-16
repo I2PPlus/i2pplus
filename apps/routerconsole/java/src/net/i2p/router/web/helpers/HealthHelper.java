@@ -275,13 +275,13 @@ public class HealthHelper extends HelperBase {
         // Connections/s
         double connTotal = getStatCount("ntcp.connectSuccessful") + getStatCount("ntcp.inboundEstablished");
         double connPerSec = connTotal > 0 ? connTotal / 60.0 : 0;
-        String connStr = connPerSec > 0 ? String.format("%.1f", connPerSec) : "\u2014";
+        String connStr = connPerSec > 0 ? String.format("%.0f", connPerSec) : "\u2014";
         double connScore = connPerSec > 0 ? Math.min(connPerSec / 2.0, 1.0) : -1;
 
         // Messages/s
         double msgCount = getStatCount("transport.messagesDelivered");
         double msgPerSec = msgCount > 0 ? msgCount / 60.0 : 0;
-        String msgStr = msgPerSec > 0 ? String.format("%.1f", msgPerSec) : "\u2014";
+        String msgStr = msgPerSec > 0 ? String.format("%.0f", msgPerSec) : "\u2014";
         double msgScore = msgPerSec > 0 ? Math.min(msgPerSec / 30.0, 1.0) : -1;
 
         // RTT
@@ -436,18 +436,18 @@ public class HealthHelper extends HelperBase {
 
         // Lookups/s
         double lookups = getStatCount("netDb.lookupsHandled") / 60.0;
-        String lookupStr = lookups > 0 ? String.format("%.1f", lookups) : "\u2014";
+        String lookupStr = lookups > 0 ? String.format("%.0f", lookups) : "\u2014";
         double lookupScore = lookups > 0 ? Math.min(lookups / 10.0, 1.0) : -1;
         double[] lookupHist = getStatHistory("netDb.lookupsHandled");
 
         // Op Rate
         double stores = getStatCount("netDb.storeHandled") / 60.0;
         double opRate = stores + lookups;
-        String opStr = opRate > 0 ? String.format("%.1f", opRate) : "\u2014";
+        String opStr = opRate > 0 ? String.format("%.0f", opRate) : "\u2014";
         double opScore = opRate > 0 ? Math.min(opRate / 15.0, 1.0) : -1;
 
         // Stores/s
-        String storeStr = stores > 0 ? String.format("%.1f", stores) : "\u2014";
+        String storeStr = stores > 0 ? String.format("%.0f", stores) : "\u2014";
         double storeScore = stores > 0 ? Math.min(stores / 5.0, 1.0) : -1;
         double[] storeHist = getStatHistory("netDb.storeHandled");
 
@@ -521,7 +521,9 @@ public class HealthHelper extends HelperBase {
     /** Format bytes as B/s, KB/s or MB/s */
     private static String formatBW(double bytes) {
         if (bytes >= 1000000)
-            return String.format("%.1f MB/s", bytes / 1000000);
+            return String.format("%.0f MB/s", bytes / 1000000);
+        else if (bytes >= 10000)
+            return String.format("%.0f KB/s", bytes / 1000);
         else if (bytes >= 1000)
             return String.format("%.1f KB/s", bytes / 1000);
         else
