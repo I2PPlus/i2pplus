@@ -280,7 +280,7 @@ public class BanLogger {
         _writer.println("############################################################");
         _writer.println();
         _writer.println("# Ban event log");
-        _writer.println("# Format: TIMESTAMP | HASH | IP:PORT | REASON | DURATION | CAPS | VERSION");
+        _writer.println("# Format: TIMESTAMP | HASH | IP:PORT | REASON | DURATION | CAPS | VERSION | COUNTRY | HOST");
         _writer.println("# TIMESTAMP: ISO 8601 UTC");
         _writer.println("# HASH: Router hash (base64) or UNKNOWN");
         _writer.println("# IP:PORT: IP address and port or UNKNOWN");
@@ -288,6 +288,8 @@ public class BanLogger {
         _writer.println("# DURATION: Duration (e.g., 8h, 24h, FOREVER)");
         _writer.println("# CAPS: Router capabilities (optional, may be empty)");
         _writer.println("# VERSION: Router version string (optional, may be empty)");
+        _writer.println("# COUNTRY: GeoIP country code (optional, may be empty)");
+        _writer.println("# HOST: Hostname or ASN org name (optional, may be empty)");
         _writer.println();
     }
 
@@ -318,7 +320,7 @@ public class BanLogger {
         String durationStr = formatDuration(durationMs);
         String caps = hash != null ? getCaps(hash) : "";
         String version = hash != null ? getVersion(hash) : "";
-        writeLog(hashStr, ip, reason, durationStr, caps, version);
+        writeLog(hashStr, ip, reason, durationStr, caps, version, getCountry(ip), getHost(ip));
     }
 
     /**
@@ -347,7 +349,7 @@ public class BanLogger {
             caps = getCaps(hash);
             version = getVersion(hash);
         }
-        writeLog(hashStr, ip, reason, durationStr, caps, version);
+        writeLog(hashStr, ip, reason, durationStr, caps, version, getCountry(ip), getHost(ip));
     }
 
 /**
@@ -371,7 +373,7 @@ public class BanLogger {
      */
     public void logBanIPOnly(String ip, String reason, long durationMs) {
         String durationStr = formatDuration(durationMs);
-        writeLog("UNKNOWN", ip, reason, durationStr, "", "");
+        writeLog("UNKNOWN", ip, reason, durationStr, "", "", getCountry(ip), getHost(ip));
     }
 
     /**
@@ -385,7 +387,7 @@ public class BanLogger {
         String hashStr = hash != null ? hash.toBase64() : "UNKNOWN";
         String caps = hash != null ? getCaps(hash) : "";
         String version = hash != null ? getVersion(hash) : "";
-        writeLog(hashStr, ip, reason, "FOREVER", caps, version);
+        writeLog(hashStr, ip, reason, "FOREVER", caps, version, getCountry(ip), getHost(ip));
     }
 
     /**
@@ -410,7 +412,7 @@ public class BanLogger {
             caps = getCaps(hash);
             version = getVersion(hash);
         }
-        writeLog(hashStr, ip, reason, "FOREVER", caps, version);
+        writeLog(hashStr, ip, reason, "FOREVER", caps, version, getCountry(ip), getHost(ip));
     }
 
     /**
@@ -478,6 +480,61 @@ public class BanLogger {
     }
 
     /**
+     * Extract the bare IP (strip port) from an "ip:port" or "[ipv6]:port" string.
+     */
+    private static String stripPort(String ipPort) {
+        if (ipPort == null || ipPort.isEmpty() || "UNKNOWN".equals(ipPort))
+            return null;
+        if (ipPort.startsWith("[")) {
+            int end = ipPort.indexOf(']');
+            if (end > 0)
+                return ipPort.substring(1, end);
+        } else {
+            int colon = ipPort.lastIndexOf(':');
+            if (colon > 0)
+                return ipPort.substring(0, colon);
+        }
+        return ipPort;
+    }
+
+    /**
+     * Get country code from IP using GeoIP.
+     * @return country code or empty string
+     */
+    private String getCountry(String ipPort) {
+        if (_context == null)
+            return "";
+        String ip = stripPort(ipPort);
+        if (ip == null)
+            return "";
+        try {
+            String c = _context.commSystem().getCountry(ip);
+            return c != null ? c : "";
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    /**
+     * Get hostname or ASN org name from IP using the local ASN database.
+     * Non-blocking — uses cached results or fast local MMDB lookup.
+     * @return hostname/ASN or empty string
+     */
+    private String getHost(String ipPort) {
+        if (_context == null)
+            return "";
+        String ip = stripPort(ipPort);
+        if (ip == null)
+            return "";
+        try {
+            String h = _context.commSystem().getLocalHostName(ip);
+            return (h != null && !h.equals(ip)) ? h : "";
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    /**
      * Get IP address from banlist for the given hash.
      */
     private String getIPFromContext(Hash hash, RouterContext context) {
@@ -531,7 +588,8 @@ public class BanLogger {
      * Skips logging if this IP already has an active ban in sessionbans.txt,
      * or if this hash is already banlisted.
      */
-    private void writeLog(String hashStr, String ip, String reason, String durationStr, String caps, String version) {
+    private void writeLog(String hashStr, String ip, String reason, String durationStr,
+                          String caps, String version, String country, String host) {
         // Strip HTML formatting from reason for plain text log file
         if (reason != null) {
             reason = reason.replace("<b>➜</b>", "").replace("  ", " ").trim();
@@ -566,8 +624,11 @@ public class BanLogger {
         String timestamp = _dateFormat.format(new Date());
         String capsStr = (caps != null && !caps.isEmpty()) ? caps : "";
         String verStr = (version != null && !version.isEmpty()) ? version : "";
-        String entry = String.format("%s | %s | %s | %s | %s | %s | %s",
-                                     timestamp, hashStr, ip, reason, durationStr, capsStr, verStr);
+        String countryStr = (country != null && !country.isEmpty()) ? country : "";
+        String hostStr = (host != null && !host.isEmpty()) ? host : "";
+        String entry = String.format("%s | %s | %s | %s | %s | %s | %s | %s | %s",
+                                     timestamp, hashStr, ip, reason, durationStr,
+                                     capsStr, verStr, countryStr, hostStr);
 
         synchronized (_writeLock) {
             if (_writer != null) {

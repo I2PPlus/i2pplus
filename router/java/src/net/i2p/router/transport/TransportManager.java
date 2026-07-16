@@ -987,7 +987,19 @@ public class TransportManager implements TransportEventListener {
 
     TransportBid getNextBid(OutNetMessage msg) {
         int unreachableTransports = 0;
-        Hash peer = msg.getTarget().getIdentity().calculateHash();
+        RouterInfo targetRI = msg.getTarget();
+        Hash peer = targetRI.getIdentity().calculateHash();
+        // Extract IP for ban logging
+        String _peerIP = "";
+        for (RouterAddress ra : targetRI.getAddresses()) {
+            if (ra != null && ra.getHost() != null && ra.getPort() > 0) {
+                String host = ra.getHost();
+                _peerIP = host.contains(":") && !host.startsWith("[")
+                    ? "[" + host + "]:" + ra.getPort()
+                    : host + ":" + ra.getPort();
+                break;
+            }
+        }
         List<String> failedTransports = msg.getFailedTransports();
         TransportBid rv = null;
         for (Transport t : _transports.values()) {
@@ -1027,7 +1039,7 @@ public class TransportManager implements TransportEventListener {
             if (msg.getTarget().getIdentity().getSigningPublicKey().getType() == null) {
                 // we don't support his crypto
                 _context.statManager().addRateData("transport.banlistOnUnsupportedSigType", 1);
-                _banLogger.logBanForever(peer, _context, "Unsupported signature type");
+                _banLogger.logBanForever(peer, _peerIP, "Unsupported signature type", targetRI);
                 _context.banlist().banlistRouterForever(peer, "" + _x("Unsupported signature type"));
             } else if (unreachableTransports >= _transports.size() && countActivePeers() > 0) {
                 // Don't banlist if we aren't talking to anybody, as we may have a network connection issue
@@ -1046,12 +1058,12 @@ public class TransportManager implements TransportEventListener {
                 if (incompat) {
                     // they don't support our crypto
                     _context.statManager().addRateData("transport.banlistOnUnsupportedSigType", 1);
-                    _banLogger.logBan(peer, _context, "No support for our signature type", SIGTYPE_BANLIST_DURATION);
+                    _banLogger.logBan(peer, _peerIP, "No support for our signature type", SIGTYPE_BANLIST_DURATION, targetRI);
                     _context.banlist().banlistRouter(peer, "" + _x("No support for our signature type"), null, null,
                                                      _context.clock().now() + SIGTYPE_BANLIST_DURATION);
                 } else {
                     _context.statManager().addRateData("transport.banlistOnUnreachable", msg.getLifetime(), msg.getLifetime());
-                    _banLogger.logBan(peer, _context, "Unreachable on any transport", 0);
+                    _banLogger.logBan(peer, _peerIP, "Unreachable on any transport", 0, targetRI);
                     _context.banlist().banlistRouter(peer, "" + _x("Unreachable on any transport"));
                 }
             }
