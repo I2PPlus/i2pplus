@@ -196,7 +196,11 @@ public class ErrorServlet extends HttpServlet {
         out.print("<h3>" + _t("Error Details") + "</h3>\n");
         out.print("<div id=stacktrace>\n");
         out.print("<p>" + _t("Error {0}", errorCode) + ": " + errorURI + "&nbsp;" + errorMsg + "</p>\n");
-        if (errorCause != null) {out.print("<p>" + getSanitizedStackTrace(errorCause) + "</p>\n");}
+        if (errorCause != null && _context.getBooleanProperty("routerconsole.showErrorStack")) {
+            out.print("<p>" + getSanitizedStackTrace(errorCause) + "</p>\n");
+        } else if (errorCause != null && errorMsg.isEmpty()) {
+            out.print("<p>" + errorCause.getMessage() + "</p>\n");
+        }
         out.print("</div>\n");
         out.print("<h3>" + _t("I2P Version and Running Environment").replace("I2P", "I2P+") + "</h3>\n");
         printSystemInfo(out);

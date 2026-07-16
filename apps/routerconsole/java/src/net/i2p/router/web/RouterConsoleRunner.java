@@ -1028,7 +1028,10 @@ public class RouterConsoleRunner implements RouterApp {
         // But we can force all webapps to use a single Timer thread
         // see HashSessionManager javadoc
         synchronized(RouterConsoleRunner.class) {
-            if (_jettyTimer == null) {
+            if (_jettyTimer == null || !_jettyTimer.isRunning()) {
+                if (_jettyTimer != null) {
+                    try { _jettyTimer.stop(); } catch (Exception e) { /* ignore */ }
+                }
                 _jettyTimer = new ScheduledExecutorScheduler("ConsoleSessionClean", true);
                 try {
                     _jettyTimer.start();
@@ -1038,6 +1041,11 @@ public class RouterConsoleRunner implements RouterApp {
             }
             context.getServletContext().setAttribute("org.eclipse.jetty.server.session.timer", _jettyTimer);
         }
+        // Session cookie hardening
+        context.getServletContext().getSessionCookieConfig().setHttpOnly(true);
+        // Support large forms for multi-tunnel admin
+        context.getServletContext().setAttribute("org.eclipse.jetty.server.Request.maxFormContentSize", 1000000);
+        context.getServletContext().setAttribute("org.eclipse.jetty.server.Request.maxFormKeys", 10000);
     }
 
     /**
@@ -1058,7 +1066,7 @@ public class RouterConsoleRunner implements RouterApp {
         public UserIdentity login(String username, Object credentials, ServletRequest request) {
             UserIdentity rv = super.login(username, credentials, request);
             if (rv == null) {
-                _log.logAlways(net.i2p.util.Log.WARN, "Router Console authentication failed for user: " + username + " on " + request.getRemoteAddr());
+                _log.logAlways(net.i2p.util.Log.WARN, "Router Console authentication failed from " + request.getRemoteAddr());
             }
             return rv;
         }

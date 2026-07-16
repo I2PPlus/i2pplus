@@ -46,7 +46,7 @@ public class HostCheckHandler extends GzipHandler
         // include js so we hit the lightbox snark script -> 26/6K
         setMinGzipSize(512);
         if (_context.getBooleanPropertyDefaultTrue(PROP_GZIP)) {
-            setCompressionLevel(9);
+            setCompressionLevel(6);
             addIncludedMimeTypes(
                                  "application/javascript", "application/x-javascript", "text/javascript",
                                  "application/xhtml+xml", "application/xml", "application/pdf", "text/xml",
@@ -126,6 +126,10 @@ public class HostCheckHandler extends GzipHandler
                     return;
                 }
             }
+        }
+
+        if (httpRequest.isSecure()) {
+            httpResponse.setHeader("Strict-Transport-Security", "max-age=31536000");
         }
 
         super.handle(pathInContext, baseRequest, httpRequest, httpResponse);
@@ -217,8 +221,8 @@ public class HostCheckHandler extends GzipHandler
                 originHost = extractHost(rest);
                 originPort = extractPort(rest, 443);
             } else {
-                // Unknown format, allow for now
-                return true;
+                // Unknown scheme, reject
+                return false;
             }
         } catch (Exception e) {
             // Parse error, allow
