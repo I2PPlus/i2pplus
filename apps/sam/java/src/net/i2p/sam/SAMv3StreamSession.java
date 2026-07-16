@@ -176,6 +176,10 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
 
         if (_log.shouldDebug()) _log.debug("Connecting new I2PSocket...");
 
+        // Unregister from pool before blocking connect so pool's PING
+        // mechanism does not target a socket that can't respond
+        handler.getBridge().unregisterHandlerFromPool(handler);
+
         // blocking connection (SAMv3)
 
         I2PSocket i2ps = socketMgr.connect(d, opts);
@@ -226,6 +230,10 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
                 throw new SAMException("a forwarding server is already defined for this destination");
             }
         }
+
+        // Unregister from pool before blocking accept so pool's PING
+        // mechanism does not target a socket that can't respond
+        handler.getBridge().unregisterHandlerFromPool(handler);
 
         I2PSocket i2ps = null;
         _acceptors.incrementAndGet();
