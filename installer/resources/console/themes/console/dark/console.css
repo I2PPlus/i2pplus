@@ -2915,12 +2915,19 @@ svg.spark{position:relative;border:var(--border);background:linear-gradient(180d
 #streamsWrap{margin-top:13px}
 
 /* health */
-#healthstats{margin:12px auto;width:calc(100% - 14px);padding:16px 4px;box-shadow:var(--border_table),0 0 0 2px #141 inset,0 0 0 3px #000 inset;background:var(--badge)}
-#healthstats .ring{margin:16px;max-height:180px;max-width:180px}
-.floodfill #healthstats .ring{margin:16px;max-height:140px;max-width:140px}
-#healthstats .ring .ring-label{font-size:50%}
-#health .wrap{margin-bottom:16px;box-shadow:var(--border_table)}
+.ring-grid{border-radius:0}
+#health .ring{margin:8px;max-height:180px;max-width:180px;text-shadow:1px 1px 1px #0009}
+.floodfill #health .ring{max-height:130px;max-width:130px}
+#health h2{position:relative;border-radius:0}
+#health h2::after{width:12px;height:12px;display:inline-block;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown) no-repeat center center / 12px;transform:rotate(-90deg);content:""}
+#health h2:hover::after{background-image:var(--dropdown_hover)}
+#health h2.expanded::after{transform:none}
+#health .ring .ring-label{font-size:60%}
+#health .wrap{margin-bottom:15px;box-shadow:var(--border_table)}
+#health .wrap:first-child{margin-top:-2px}
 #health .wrap:last-child{margin-bottom:0}
+#health .wrap h2:not(.expanded){margin-bottom:-2px}
+#health .wrap:last-child h2:not(.expanded){margin-bottom:-3px}
 
 /* iframes */
 #dns{padding:0;min-width:650px}
