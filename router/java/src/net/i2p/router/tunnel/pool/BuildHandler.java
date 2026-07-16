@@ -336,7 +336,7 @@ public class BuildHandler implements Runnable {
      */
     private void handleReply(TunnelBuildReplyMessage msg, PooledTunnelCreatorConfig cfg, long delay) {
         long requestedOn = cfg.getExpiration() - 10*60*1000L;
-        long rtt = _context.clock().now() - requestedOn;
+        long rtt = System.currentTimeMillis() - requestedOn;
         if (rtt < 0) {rtt = 0;}
         if (_log.shouldInfo()) {
             _log.info("Handled reply [MsgID " + msg.getUniqueId() + "] in " + rtt + "ms -> " +
