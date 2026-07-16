@@ -442,7 +442,7 @@ public class HealthHelper extends HelperBase {
                   new String[]{_t("Stored LeaseSets in floodfill")}, RingRenderer.MODE_HEALTH, null));
         out.write(RingRenderer.renderRingCell(hitScore, _t("Cache Hit"), hitStr,
                   new String[]{_t("NetDB lookup success rate")}, RingRenderer.MODE_HEALTH, hitHist));
-        out.write(RingRenderer.renderRingCell(ffScore, _t("Flood Verify"), ffStr,
+        out.write(RingRenderer.renderRingCell(ffScore, _t("Flood Verify"), withUnit(ffStr, _t("ms")),
                   new String[]{_t("Floodfill verify time")}, RingRenderer.MODE_LATENCY, ffHist));
         out.write(RingRenderer.renderRingCell(ackScore, _t("NetDB ACK"), withUnit(ackStr, _t("ms")),
                   new String[]{_t("NetDB peer acknowledge time")}, RingRenderer.MODE_LATENCY, ackHist));
