@@ -20,8 +20,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -91,9 +91,9 @@ class SAMHandlerPool {
             throw new RuntimeException("Cannot open selector", ioe);
         }
         _workers = new ThreadPoolExecutor(
-            4, 64,
-            5, TimeUnit.SECONDS,
-            new SynchronousQueue<Runnable>(),
+            2, 4,
+            15, TimeUnit.SECONDS,
+            new LinkedBlockingQueue<Runnable>(256),
             new NamedThreadFactory(),
             new ThreadPoolExecutor.AbortPolicy());
         _contexts = new HashMap<SocketChannel, ConnContext>();
