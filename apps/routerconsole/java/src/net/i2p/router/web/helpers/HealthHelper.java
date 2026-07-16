@@ -4,6 +4,16 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import java.util.List;
+import java.util.Set;
+
+import net.i2p.client.streaming.I2PSocket;
+import net.i2p.client.streaming.I2PSocketManager;
+import net.i2p.i2ptunnel.I2PTunnel;
+import net.i2p.i2ptunnel.I2PTunnelServer;
+import net.i2p.i2ptunnel.I2PTunnelTask;
+import net.i2p.i2ptunnel.TunnelController;
+import net.i2p.i2ptunnel.TunnelControllerGroup;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
 import net.i2p.router.web.HelperBase;
@@ -207,11 +217,13 @@ public class HealthHelper extends HelperBase {
         double readyScore = readyJobs > 0 ? Math.max(0, 1.0 - readyJobs / 500.0) : -1;
         double[] readyHist = getStatHistory("jobQueue.readyJobs");
 
-        // BW Limiter Outbound Delay (new)
-        double bwDelay = getStatAvg("bwLimiter.outboundDelayedTime");
-        String bwDelayStr = bwDelay > 0 ? (bwDelay >= 1000 ? String.format("%.1f", bwDelay / 1000) : String.valueOf((int) bwDelay)) : "\u2014";
-        double bwDelayScore = bwDelay > 0 ? Math.max(0, 1.0 - bwDelay / 1000.0) : -1;
-        double[] bwDelayHist = getStatHistory("bwLimiter.outboundDelayedTime");
+        // Active Streams (replaces BW Delay)
+        int[] streamCounts = countActiveStreams();
+        int totalStreams = streamCounts[0] + streamCounts[1];
+        String streamStr = totalStreams > 0 ? String.valueOf(totalStreams) : "\u2014";
+        String streamDetail = "In: " + streamCounts[0] + " / Out: " + streamCounts[1];
+        double streamScore = totalStreams > 0 ? Math.min(totalStreams / 200.0, 1.0) : -1;
+        double[] streamHist = getStatHistory("stream.connectionCreated");
 
         out.write(RingRenderer.renderRingCell(bwScore, _t("Bandwidth"), bwPct,
                   new String[]{bwDetail}, RingRenderer.MODE_ACTIVITY, bwHist));
@@ -219,8 +231,8 @@ public class HealthHelper extends HelperBase {
                   new String[]{_t("CPU load average")}, RingRenderer.MODE_HEALTH, cpuHist));
         out.write(RingRenderer.renderRingCell(memScore, _t("Memory"), memStr,
                   new String[]{_t("Memory usage")}, RingRenderer.MODE_HEALTH, memHist));
-        out.write(RingRenderer.renderRingCell(bwDelayScore, _t("BW Delay"), withUnit(bwDelayStr, _t("ms")),
-                  new String[]{_t("Bandwidth request delay")}, RingRenderer.MODE_LATENCY, bwDelayHist));
+        out.write(RingRenderer.renderRingCell(streamScore, _t("Active Streams"), streamStr,
+                  new String[]{streamDetail}, RingRenderer.MODE_ACTIVITY, streamHist));
         out.write(RingRenderer.renderRingCell(lagScore, _t("Job Lag"), withUnit(lagStr, _t("ms")),
                   new String[]{_t("Job queue delay")}, RingRenderer.MODE_LATENCY, lagHist));
         out.write(RingRenderer.renderRingCell(delayScore, _t("Msg Lag"), withUnit(delayStr, _t("ms")),
@@ -362,7 +374,7 @@ public class HealthHelper extends HelperBase {
                   new String[]{_t("Transit tunnels hosted")}, RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(buildScore, _t("Build Success"), buildStr,
                   new String[]{_t("Tunnel build success rate")}, RingRenderer.MODE_HEALTH, buildHist));
-        out.write(RingRenderer.renderRingCell(netdbScore, _t("NetDB"), netdbStr,
+        out.write(RingRenderer.renderRingCell(netdbScore, _t("NetDB"), withUnit(netdbStr, _t("ms")),
                   new String[]{_t("NetDB lookup time")}, RingRenderer.MODE_LATENCY, netdbHist));
         out.write(RingRenderer.renderRingCell(uptimeScore, _t("Uptime"), uptimeStr,
                   new String[]{_t("Router uptime")}, RingRenderer.MODE_HEALTH, null));
@@ -442,6 +454,35 @@ public class HealthHelper extends HelperBase {
                   new String[]{_t("NetDB store messages handled per second")}, RingRenderer.MODE_ACTIVITY, storeHist));
         out.write(RingRenderer.renderRingCell(lsScore, _t("LS Timeout"), withUnit(lsStr, _t("ms")),
                   new String[]{_t("LeaseSet request timeouts (last minute)")}, RingRenderer.MODE_HEALTH, null));
+    }
+
+    /** Count active I2P streaming connections across all tunnel controllers. Returns [inCount, outCount] */
+    private int[] countActiveStreams() {
+        TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
+        if (tcg == null) return new int[2];
+        List<TunnelController> controllers = tcg.getControllers();
+        if (controllers == null) return new int[2];
+        int inCount = 0, outCount = 0;
+        for (TunnelController controller : controllers) {
+            I2PTunnel tunnel = controller.getTunnel();
+            if (tunnel == null) continue;
+            List<I2PTunnelTask> tasks = tunnel.getTasks();
+            if (tasks == null) continue;
+            for (I2PTunnelTask task : tasks) {
+                if (task == null || !task.isOpen()) continue;
+                I2PSocketManager mgr = task.getSocketManager();
+                if (mgr == null) continue;
+                Set<I2PSocket> sockets = mgr.listSockets();
+                if (sockets == null || sockets.isEmpty()) continue;
+                boolean inbound = (task instanceof I2PTunnelServer);
+                for (I2PSocket sock : sockets) {
+                    if (sock == null || sock.isClosed()) continue;
+                    if (inbound) inCount++;
+                    else outCount++;
+                }
+            }
+        }
+        return new int[]{inCount, outCount};
     }
 
     /** Append unit only when value is present (not em-dash) */
