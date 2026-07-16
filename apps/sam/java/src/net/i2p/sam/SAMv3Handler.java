@@ -304,21 +304,14 @@ class SAMv3Handler extends SAMv1Handler
             rec = nick != null ? sSessionsHash.get(nick) : null;
         }
         if (rec!=null && !stolenSocket && !streamForwardingSocket) {
-            int active = rec.getThreadGroup().activeCount();
-            if (active > 1) {
-                // Active Pipe threads are using this session; don't destroy it.
-                // Just delist from hash so a new session can reuse the nick.
-                sSessionsHash.del(session.getNick());
-            } else {
-                session.close();
-                rec.getThreadGroup().interrupt();
-                while (rec.getThreadGroup().activeCount() > 0)
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) { /* ignored */ }
-                rec.getThreadGroup().destroy();
-                sSessionsHash.del(session.getNick());
-            }
+            session.close();
+            rec.getThreadGroup().interrupt();
+            while (rec.getThreadGroup().activeCount()>0)
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) { /* ignored */ }
+            rec.getThreadGroup().destroy();
+            sSessionsHash.del(session.getNick());
             session = null;
             streamSession = null;
         } else if (session != null && !stolenSocket && !streamForwardingSocket) {

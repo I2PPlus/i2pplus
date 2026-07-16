@@ -206,20 +206,25 @@ class SAMHandlerPool {
                         for (Map.Entry<SocketChannel, ConnContext> entry : _contexts.entrySet()) {
                             ConnContext ctx = entry.getValue();
                             if (ctx.handler.sendPorts) {
-                                if (ctx.lastDataTime == 0) {
-                                    // no data ever received, check absolute timeout
-                                    if (now - ctx.created >= PONG_TIMEOUT) {
-                                        sendPing(ctx, now);
-                                    }
-                                } else if (ctx.lastPingTime == 0) {
-                                    // data was received but no PING sent yet
-                                    if (now - ctx.lastDataTime >= PONG_TIMEOUT) {
-                                        sendPing(ctx, now);
-                                    }
-                                } else if (ctx.lastDataTime < ctx.lastPingTime) {
-                                    // PING sent, waiting for PONG
-                                    if (now - ctx.lastPingTime >= PONG_TIMEOUT) {
-                                        toDisconnect.add(ctx);
+                                // Only PING stream handlers (no session).
+                                // Control handlers (session owners) may have
+                                // clients that don't respond to PING.
+                                if (ctx.handler.getSession() == null) {
+                                    if (ctx.lastDataTime == 0) {
+                                        // no data ever received, check absolute timeout
+                                        if (now - ctx.created >= PONG_TIMEOUT) {
+                                            sendPing(ctx, now);
+                                        }
+                                    } else if (ctx.lastPingTime == 0) {
+                                        // data was received but no PING sent yet
+                                        if (now - ctx.lastDataTime >= PONG_TIMEOUT) {
+                                            sendPing(ctx, now);
+                                        }
+                                    } else if (ctx.lastDataTime < ctx.lastPingTime) {
+                                        // PING sent, waiting for PONG
+                                        if (now - ctx.lastPingTime >= PONG_TIMEOUT) {
+                                            toDisconnect.add(ctx);
+                                        }
                                     }
                                 }
                             } else if (!ctx.gotFirstLine && now - ctx.created >= FIRST_READ_TIMEOUT) {
