@@ -334,9 +334,14 @@ public class RequestThrottler {
         float effectiveRatio = ratio * (1.0f + load * _reqLoadWeight / 100.0f);
         boolean shouldReject = false;
 
+        // When threshold < 1.0, range spans from threshold to 1.0 (full saturation).
+        // When threshold >= 1.0 (tuned higher by the auto-tuner), use threshold
+        // itself as the range so the curve spans from threshold to 2*threshold.
+        // Without this, range goes negative at threshold >= 1.0 and normalization
+        // collapses to 1.0, causing instant 100% rejection.
         if (enableThrottle && limit > 0 && effectiveRatio >= threshold2) {
-            float range = 1.0f - threshold2;
-            float normalized = range > 0 ? Math.min(1.0f, (effectiveRatio - threshold2) / range) : 1.0f;
+            float range = threshold2 < 1.0f ? (1.0f - threshold2) : threshold2;
+            float normalized = Math.min(1.0f, (effectiveRatio - threshold2) / range);
             float prob = (float) Math.pow(normalized, 100.0f / steepness2);
             prob = Math.min(1.0f, Math.max(0.0f, prob));
             shouldReject = context.random().nextFloat() < prob;

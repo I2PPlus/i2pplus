@@ -1030,9 +1030,13 @@ public class TunnelDispatcher implements Service {
     /**
      * Get the max bandwidth per transit tunnel.
      * Scales with allocation: higher share = higher per-tunnel cap.
+     * Uses outbound bandwidth only — on floodfill routers inbound is far
+     * smaller than outbound and would create an artificial bottleneck.
      */
     int getMaxPerTunnelBandwidth(Location loc) {
-        int max = _context.bandwidthLimiter().getMaxShareBandwidth();
+        int outKBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond();
+        double share = _context.router().getSharePercentage();
+        int max = (int)(outKBps * share * 1024L);
             // Dynamic divisor: configurable via router.tunnel.perTunnelBweDivisor
             // Falls back to min(maxTunnels, 100) if not set
             int divisor = _context.getProperty("router.tunnel.perTunnelBweDivisor", 0);

@@ -4260,10 +4260,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class PerTunnelBweDivisorParam extends BaseParam {
 
         PerTunnelBweDivisorParam() {
+            // Cap at 40 so even on high-bandwidth routers each tunnel gets ≥2.5% of share.
+            // Higher values starve individual tunnels — the per-tunnel floor does not compensate.
             super("router.tunnel.perTunnelBweDivisor", "Per-tunnel bandwidth divisor",
                   SUB_TRANSIT,
 
-                  2, 1000, 10, "tunnel.participating InBps", _context);
+                  2, 40, 2, "tunnel.participating InBps", _context);
         }
 
         protected void applyValue(int value) {

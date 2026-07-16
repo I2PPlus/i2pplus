@@ -377,10 +377,12 @@ public class RouterThrottleImpl implements RouterThrottle {
                                + " est = " + bytesAllocated);
                 }
             } else {
-                // Configurable steepness of rejection curve (default: 10, was: 16)
+                // Configurable steepness of rejection curve (default: 10)
                 // Lower value = smoother transition to full capacity
-                // 10: 90% full -> 35% rejection (vs. 44% with 16)
-                int exponent = _context.getProperty("router.throttleRejectExponent", 10);
+                // Clamped [3,20] — below 3 the curve is nearly linear (too aggressive
+                // at moderate load), above 20 it creates a cliff (near-zero rejection
+                // until saturation, then instant 100%).
+                int exponent = Math.max(3, Math.min(20, _context.getProperty("router.throttleRejectExponent", 10)));
                 probReject = Math.pow(pctFull, exponent);
                 double rand = _context.random().nextFloat();
                 reject = rand <= probReject;

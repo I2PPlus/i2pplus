@@ -455,8 +455,11 @@ public class ParticipatingThrottler {
         float effectiveRatio = ratio * (1.0f + load * _loadWeight / 100.0f);
 
         if (effectiveRatio >= threshold) {
-            float range = 1.0f - threshold;
-            float normalized = range > 0 ? Math.min(1.0f, (effectiveRatio - threshold) / range) : 1.0f;
+            // When threshold < 1.0, range spans from threshold to 1.0 (full saturation).
+            // When threshold >= 1.0 (tuned higher by the auto-tuner), use threshold
+            // itself as the range so the curve spans from threshold to 2*threshold.
+            float range = threshold < 1.0f ? (1.0f - threshold) : threshold;
+            float normalized = Math.min(1.0f, (effectiveRatio - threshold) / range);
             // steepness=100 → linear, steepness=200 → quadratic (faster ramp at high ratios)
             float prob = (float) Math.pow(normalized, 100.0f / steepness);
             prob = Math.min(1.0f, Math.max(0.0f, prob));
