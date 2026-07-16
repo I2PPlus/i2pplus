@@ -240,7 +240,18 @@ public class StreamHelper extends HelperBase {
                     out.write("<span class=" + taskType.toLowerCase() + ">" + taskType + "</span>");
                     out.write(TD_CLOSE);
                     out.write(TD_OPEN);
-                    out.write(esc(tunnelName));
+                    String namePrefix = "";
+                    if (!isInbound && mgr != null) {
+                        try {
+                            Destination localDest = mgr.getSession().getMyDestination();
+                            if (localDest != null) {
+                                String b32 = localDest.toBase32();
+                                if (b32 != null && b32.length() >= 8)
+                                    namePrefix = "<span class=b32>" + b32.substring(0, 8) + "</span> ";
+                            }
+                        } catch (Exception e) { /* ignore */ }
+                    }
+                    out.write(esc(namePrefix + tunnelName));
                     out.write(TD_CLOSE);
                     out.write(TD_OPEN);
                     Destination peer = sock.getPeerDestination();
@@ -353,7 +364,7 @@ public class StreamHelper extends HelperBase {
         }
 
         if (count == 0) {
-            out.write("<tr><td colspan=\"6\" style=\"padding:12px;text-align:center;color:var(--text_soft)\">" + esc(_t("No active streaming connections.")) + "</td></tr>\n");
+            out.write("<tr><td class=empty colspan=6>" + esc(_t("No active streaming connections.")) + "</td></tr>\n");
         }
         out.write("</tbody>\n</table>\n");
         out.write("</div>\n");
