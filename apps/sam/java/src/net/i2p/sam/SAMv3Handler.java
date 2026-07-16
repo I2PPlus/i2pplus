@@ -42,6 +42,8 @@ class SAMv3Handler extends SAMv1Handler
     public static final SessionsDB sSessionsHash = new SessionsDB();
     private volatile boolean stolenSocket;
     private volatile boolean streamForwardingSocket;
+    /** true once the SESSION CREATE has fully initialized; guards against race in execStreamMessage */
+    private volatile boolean sessionReady;
     /** package-visible for {@link SAMHandlerPool} */
     final boolean sendPorts;
     private static final String AUTH_ERROR = "AUTH STATUS RESULT=I2P_ERROR";
@@ -301,19 +303,21 @@ class SAMv3Handler extends SAMv1Handler
             String nick = session.getNick();
             rec = nick != null ? sSessionsHash.get(nick) : null;
         }
-        if (rec!=null) {
-            if (!stolenSocket && !streamForwardingSocket) {
-                session.close();
-                rec.getThreadGroup().interrupt();
-                while (rec.getThreadGroup().activeCount()>0)
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) { /* ignored */ }
-                rec.getThreadGroup().destroy();
-            }
+        if (rec!=null && !stolenSocket && !streamForwardingSocket) {
+            session.close();
+            rec.getThreadGroup().interrupt();
+            while (rec.getThreadGroup().activeCount()>0)
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) { /* ignored */ }
+            rec.getThreadGroup().destroy();
             sSessionsHash.del(session.getNick());
+            session = null;
+            streamSession = null;
         } else if (session != null && !stolenSocket && !streamForwardingSocket) {
             session.close();
+            session = null;
+            streamSession = null;
         }
     }
 
@@ -447,6 +451,7 @@ class SAMv3Handler extends SAMv1Handler
                         _log.debug("Unsupported SESSION STYLE: \"" + style +"\"");
                     return writeString(SESSION_ERROR, "Unrecognized SESSION STYLE");
                 }
+                sessionReady = true;
                 ok = true;
                 return writeString("SESSION STATUS RESULT=OK DESTINATION=" + dest + '\n');
             } else if (opcode.equals("ADD") || opcode.equals("REMOVE")) {
@@ -541,7 +546,7 @@ class SAMv3Handler extends SAMv1Handler
 
         SAMv3Handler ctl = rec.getHandler();
         streamSession = ctl.streamSession;
-        if (streamSession==null) {
+        if (streamSession==null || !ctl.sessionReady) {
             if (_log.shouldDebug())
                 _log.debug("specified ID is not a stream session");
             try {
@@ -552,11 +557,11 @@ class SAMv3Handler extends SAMv1Handler
         if (streamSession.isDestroyed()) {
             if (_log.shouldDebug())
                 _log.debug("Session manager is destroyed");
+            // Remove from hash so no further handlers try to use it
+            sSessionsHash.del(nick);
             try {
                 notifyStreamResult(true, "I2P_ERROR",  "Session is closed");
             } catch (IOException e) { /* ignored */ }
-            ctl.writeString(SESSION_ERROR, "Session is closed");
-            ctl.stopHandling();
             return false;
         }
 
