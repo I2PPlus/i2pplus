@@ -2915,7 +2915,7 @@ svg.spark{position:relative;border:var(--border);background:linear-gradient(180d
 #streamsWrap{margin-top:13px}
 
 /* health */
-.ring-grid{border-radius:0}
+.ring-grid{border-top:4px solid #252;border-radius:0}
 #health .ring{margin:8px;max-height:180px;max-width:180px;text-shadow:1px 1px 1px #0009}
 .floodfill #health .ring{max-height:130px;max-width:130px}
 #health h2{position:relative;border-radius:0}

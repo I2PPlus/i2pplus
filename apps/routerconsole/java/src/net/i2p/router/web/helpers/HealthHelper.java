@@ -106,12 +106,21 @@ public class HealthHelper extends HelperBase {
     private double getStatAvg(String name) {
         RateStat rs = _context.statManager().getRate(name);
         if (rs == null) return 0;
+        // Prefer current-interval data (1m, 10m, 1h windows).
+        // getLastEventCount() only reflects completed intervals, so
+        // use getAverageValue() directly — it checks the live interval.
         long[] windows = {RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR};
         for (long window : windows) {
             Rate r = rs.getRate(window);
-            if (r != null && r.getLastEventCount() > 0)
-                return r.getAverageValue();
+            if (r == null) continue;
+            double avg = r.getAverageValue();
+            if (avg > 0 && !Double.isNaN(avg) && !Double.isInfinite(avg))
+                return avg;
         }
+        // Fall back to session lifetime average for early uptime
+        double lft = rs.getLifetimeAverageValue();
+        if (lft > 0 && !Double.isNaN(lft) && !Double.isInfinite(lft))
+            return lft;
         return 0;
     }
 
@@ -160,7 +169,9 @@ public class HealthHelper extends HelperBase {
     private void renderPerfSection(Writer out) throws IOException {
         // Bandwidth utilization
         double sendBps = getStatAvg("bw.sendBps");
+        if (Double.isNaN(sendBps) || Double.isInfinite(sendBps)) sendBps = 0;
         double recvBps = getStatAvg("bw.receiveBps");
+        if (Double.isNaN(recvBps) || Double.isInfinite(recvBps)) recvBps = 0;
         int outLimit = _context.bandwidthLimiter().getOutboundKBytesPerSecond() * 1024;
         int inLimit = _context.bandwidthLimiter().getInboundKBytesPerSecond() * 1024;
         double maxBw = Math.max(inLimit, outLimit);
@@ -181,6 +192,7 @@ public class HealthHelper extends HelperBase {
 
         // CPU
         double cpu = getStatAvg("router.cpuLoad");
+        if (Double.isNaN(cpu) || Double.isInfinite(cpu)) cpu = 0;
         String cpuStr = cpu > 0 ? (int) cpu + "%" : "\u2014";
         double cpuScore = cpu > 0 ? Math.max(0, 1.0 - cpu / 90.0) : -1;
         double[] cpuHist = getStatHistory("router.cpuLoad");
@@ -222,7 +234,7 @@ public class HealthHelper extends HelperBase {
         int totalStreams = streamCounts[0] + streamCounts[1];
         String streamStr = totalStreams > 0 ? String.valueOf(totalStreams) : "\u2014";
         String streamDetail = "In: " + streamCounts[0] + " / Out: " + streamCounts[1];
-        double streamScore = totalStreams > 0 ? Math.min(totalStreams / 200.0, 1.0) : -1;
+        double streamScore = totalStreams > 0 ? Math.min(totalStreams / 50.0, 1.0) : -1;
         double[] streamHist = getStatHistory("stream.connectionCreated");
 
         out.write(RingRenderer.renderRingCell(bwScore, _t("Bandwidth"), bwPct,
@@ -264,13 +276,13 @@ public class HealthHelper extends HelperBase {
         double connTotal = getStatCount("ntcp.connectSuccessful") + getStatCount("ntcp.inboundEstablished");
         double connPerSec = connTotal > 0 ? connTotal / 60.0 : 0;
         String connStr = connPerSec > 0 ? String.format("%.1f", connPerSec) : "\u2014";
-        double connScore = connPerSec > 0 ? Math.min(connPerSec / 5.0, 1.0) : -1;
+        double connScore = connPerSec > 0 ? Math.min(connPerSec / 2.0, 1.0) : -1;
 
         // Messages/s
         double msgCount = getStatCount("transport.messagesDelivered");
         double msgPerSec = msgCount > 0 ? msgCount / 60.0 : 0;
         String msgStr = msgPerSec > 0 ? String.format("%.1f", msgPerSec) : "\u2014";
-        double msgScore = msgPerSec > 0 ? Math.min(msgPerSec / 100.0, 1.0) : -1;
+        double msgScore = msgPerSec > 0 ? Math.min(msgPerSec / 30.0, 1.0) : -1;
 
         // RTT
         double rtt = getStatAvg("client.sendAckTime");
@@ -345,7 +357,7 @@ public class HealthHelper extends HelperBase {
         // Uptime
         long uptimeMs = _context.router().getUptime();
         String uptimeStr = uptimeMs > 0 ? formatCompactDuration(uptimeMs) : "\u2014";
-        double uptimeScore = uptimeMs > 0 ? Math.min(uptimeMs / (30L * 24 * 3600 * 1000), 1.0) : -1;
+        double uptimeScore = uptimeMs > 0 ? Math.min(uptimeMs / (24L * 3600 * 1000), 1.0) : -1;
 
         // NetDB lookup time
         double netdb = getStatAvg("netDb.successTime");
@@ -377,9 +389,9 @@ public class HealthHelper extends HelperBase {
         out.write(RingRenderer.renderRingCell(netdbScore, _t("NetDB"), withUnit(netdbStr, _t("ms")),
                   new String[]{_t("NetDB lookup time")}, RingRenderer.MODE_LATENCY, netdbHist));
         out.write(RingRenderer.renderRingCell(uptimeScore, _t("Uptime"), uptimeStr,
-                  new String[]{_t("Router uptime")}, RingRenderer.MODE_HEALTH, null));
+                  new String[]{_t("Router uptime")}, RingRenderer.MODE_NEUTRAL, null));
         out.write(RingRenderer.renderRingCell(bannedScore, _t("Banned"), bannedStr,
-                  new String[]{_t("Total banned peers")}, RingRenderer.MODE_HEALTH, null));
+                  new String[]{_t("Total banned peers")}, RingRenderer.MODE_NEUTRAL, null));
     }
 
     /**
@@ -405,10 +417,11 @@ public class HealthHelper extends HelperBase {
         if (ff != null)
             lsStored = ff.getKnownLeaseSets();
         String leaseSetStr = lsStored > 0 ? String.valueOf(lsStored) : "\u2014";
-        double leaseSetScore = lsStored > 0 ? Math.min(lsStored / 50000.0, 1.0) : -1;
+        double leaseSetScore = lsStored > 0 ? Math.min(lsStored / 300.0, 1.0) : -1;
 
         // Flood Verify
         double ffVerify = getStatAvg("netDb.floodfillVerifyOK");
+        if (Double.isNaN(ffVerify) || Double.isInfinite(ffVerify)) ffVerify = 0;
         String ffStr = ffVerify > 0 ? (ffVerify >= 1000 ? String.format("%.1f", ffVerify / 1000) : String.valueOf((int) ffVerify)) : "\u2014";
         double ffScore = ffVerify > 0 ? Math.max(0, 1.0 - ffVerify / 5000.0) : -1;
         double[] ffHist = getStatHistory("netDb.floodfillVerifyOK");
@@ -439,7 +452,7 @@ public class HealthHelper extends HelperBase {
         double[] storeHist = getStatHistory("netDb.storeHandled");
 
         out.write(RingRenderer.renderRingCell(leaseSetScore, _t("LeaseSets"), leaseSetStr,
-                  new String[]{_t("Stored LeaseSets in floodfill")}, RingRenderer.MODE_HEALTH, null));
+                  new String[]{_t("Stored LeaseSets in floodfill")}, RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(hitScore, _t("Cache Hit"), hitStr,
                   new String[]{_t("NetDB lookup success rate")}, RingRenderer.MODE_HEALTH, hitHist));
         out.write(RingRenderer.renderRingCell(ffScore, _t("Flood Verify"), withUnit(ffStr, _t("ms")),

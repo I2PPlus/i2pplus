@@ -21,6 +21,8 @@ public class RingRenderer {
     public static final String MODE_LATENCY = "latency";
     /** Mode: dual-arc ratio (green + red arcs showing a proportion) */
     public static final String MODE_RATIO = "ratio";
+    /** Mode: neutral (green/yellow/gray, never red — for uptime, metrics that aren't inherently bad) */
+    public static final String MODE_NEUTRAL = "neutral";
 
     /** Plot type: mini bars at the bottom of the ring */
     public static final String PLOT_BARS = "bars";
@@ -393,6 +395,9 @@ public class RingRenderer {
         if (collecting) return "gray";
         if (MODE_ACTIVITY.equals(mode)) {
             return score >= 0.8 ? "blue" : score >= 0.5 ? "cyan" : "gray";
+        }
+        if (MODE_NEUTRAL.equals(mode)) {
+            return score >= 0.8 ? "green" : score >= 0.5 ? "yellow" : "cyan";
         }
         // MODE_HEALTH and MODE_LATENCY share same thresholds
         return score >= 0.8 ? "green" : score >= 0.5 ? "yellow" : "red";
