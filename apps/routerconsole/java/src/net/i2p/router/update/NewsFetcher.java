@@ -535,7 +535,9 @@ class NewsFetcher extends UpdateRunner {
         // real xml
         File to2 = new File(_context.getTempDir(), "tmp2-" + _context.random().nextInt() + ".xml");
         try {
-            su3.verifyAndMigrate(to1);
+            if (!su3.verifyAndMigrate(to1)) {
+                throw new IOException("News SU3 file failed verification (bad signature or corrupt)");
+            }
             int type = su3.getFileType();
             if (su3.getContentType() != SU3File.CONTENT_NEWS) {
                 throw new IOException("Bad content type: " + su3.getContentType());
