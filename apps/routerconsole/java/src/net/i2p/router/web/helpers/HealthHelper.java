@@ -145,7 +145,7 @@ public class HealthHelper extends HelperBase {
 
     /**
      * Section 1 – Performance &amp; Load (8 rings)
-     * Bandwidth, CPU, Memory, Job Lag, Msg Lag, Threads, Job Queue, BW Delay
+     * Resource: Bandwidth, CPU, Memory | Latency: BW Delay, Job Lag, Msg Lag | Job: Job Queue, Threads
      */
     private void renderPerfSection(Writer out) throws IOException {
         // Bandwidth utilization
@@ -219,21 +219,21 @@ public class HealthHelper extends HelperBase {
                   new String[]{_t("CPU load average")}, RingRenderer.MODE_HEALTH, cpuHist));
         out.write(RingRenderer.renderRingCell(memScore, _t("Memory"), memStr,
                   new String[]{_t("Memory usage")}, RingRenderer.MODE_HEALTH, memHist));
+        out.write(RingRenderer.renderRingCell(bwDelayScore, _t("BW Delay"), withUnit(bwDelayStr, _t("ms")),
+                  new String[]{_t("Bandwidth request delay")}, RingRenderer.MODE_LATENCY, bwDelayHist));
         out.write(RingRenderer.renderRingCell(lagScore, _t("Job Lag"), withUnit(lagStr, _t("ms")),
                   new String[]{_t("Job queue delay")}, RingRenderer.MODE_LATENCY, lagHist));
         out.write(RingRenderer.renderRingCell(delayScore, _t("Msg Lag"), withUnit(delayStr, _t("ms")),
                   new String[]{_t("Message send processing time")}, RingRenderer.MODE_LATENCY, delayHist));
-        out.write(RingRenderer.renderRingCell(threadScore, _t("Threads"), threadStr,
-                  new String[]{_t("Active JVM threads")}, RingRenderer.MODE_HEALTH, threadHist));
         out.write(RingRenderer.renderRingCell(readyScore, _t("Job Queue"), readyStr,
                   new String[]{_t("Ready jobs waiting in queue")}, RingRenderer.MODE_LATENCY, readyHist));
-        out.write(RingRenderer.renderRingCell(bwDelayScore, _t("BW Delay"), withUnit(bwDelayStr, _t("ms")),
-                  new String[]{_t("Bandwidth request delay")}, RingRenderer.MODE_LATENCY, bwDelayHist));
+        out.write(RingRenderer.renderRingCell(threadScore, _t("Threads"), threadStr,
+                  new String[]{_t("Active JVM threads")}, RingRenderer.MODE_HEALTH, threadHist));
     }
 
     /**
      * Section 2 – Transport &amp; Connectivity (8 rings)
-     * NTCP, SSU RTO, Conns/s, Msgs/s, RTT, Tunnel Build, SSU Estab, Timeout%
+     * NTCP: NTCP Estab | SSU: SSU Estab, SSU RTO | Throughput: Conns/s, Msgs/s | Quality: RTT, Timeout%, Tunnel Build
      */
     private void renderTransportSection(Writer out) throws IOException {
         // NTCP Establish Time
@@ -286,6 +286,8 @@ public class HealthHelper extends HelperBase {
 
         out.write(RingRenderer.renderRingCell(ntcpScore, _t("NTCP Estab"), withUnit(ntcpStr, _t("ms")),
                   new String[]{_t("NTCP outbound establish time")}, RingRenderer.MODE_LATENCY, ntcpHist));
+        out.write(RingRenderer.renderRingCell(ssuScore, _t("SSU Estab"), withUnit(ssuStr, _t("ms")),
+                  new String[]{_t("SSU outbound establish time")}, RingRenderer.MODE_LATENCY, ssuHist));
         out.write(RingRenderer.renderRingCell(rtoScore, _t("SSU RTO"), withUnit(rtoStr, _t("ms")),
                   new String[]{_t("SSU retransmission timeout")}, RingRenderer.MODE_HEALTH, rtoHist));
         out.write(RingRenderer.renderRingCell(connScore, _t("Conns/s"), connStr,
@@ -294,17 +296,15 @@ public class HealthHelper extends HelperBase {
                   new String[]{_t("Messages delivered per second")}, RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(rttScore, _t("RTT"), withUnit(rttStr, _t("ms")),
                   new String[]{_t("End-to-end message round trip time")}, RingRenderer.MODE_LATENCY, rttHist));
-        out.write(RingRenderer.renderRingCell(buildTimeScore, _t("Tunnel Build"), withUnit(buildTimeStr, _t("ms")),
-                  new String[]{_t("Client tunnel build latency")}, RingRenderer.MODE_LATENCY, buildTimeHist));
-        out.write(RingRenderer.renderRingCell(ssuScore, _t("SSU Estab"), withUnit(ssuStr, _t("ms")),
-                  new String[]{_t("SSU outbound establish time")}, RingRenderer.MODE_LATENCY, ssuHist));
         out.write(RingRenderer.renderRingCell(timeoutScore, _t("Timeout"), timeoutStr,
                   new String[]{_t("Tunnel build timeout rate")}, RingRenderer.MODE_HEALTH, timeoutHist));
+        out.write(RingRenderer.renderRingCell(buildTimeScore, _t("Tunnel Build"), withUnit(buildTimeStr, _t("ms")),
+                  new String[]{_t("Client tunnel build latency")}, RingRenderer.MODE_LATENCY, buildTimeHist));
     }
 
     /**
      * Section 3 – Network &amp; Participation (8 rings)
-     * Known, Active Peers, Transit, Clients, Uptime, NetDB, Build Success, Banned
+     * Peers: Active Peers, Known Peers | Role: Clients, Transit | Health: Build Success, NetDB, Uptime | Security: Banned
      */
     private void renderNetworkSection(Writer out) throws IOException {
         // Known Peers (in-memory / on-disk)
@@ -352,27 +352,27 @@ public class HealthHelper extends HelperBase {
         String bannedStr = banned > 0 ? String.valueOf((int) banned) : "0";
         double bannedScore = banned > 0 ? Math.max(0, 1.0 - banned / 100.0) : 1.0;
 
-        out.write(RingRenderer.renderRingCell(knownScore, _t("Known Peers"), knownStr,
-                  new String[]{_t("Known routers in network database")}, RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(peerScore, _t("Active Peers"), peerStr,
                   new String[]{_t("Active peers (last 60s)")}, RingRenderer.MODE_ACTIVITY, peerHist));
-        out.write(RingRenderer.renderRingCell(tunnelScore, _t("Transit"), tunnelStr,
-                  new String[]{_t("Transit tunnels hosted")}, RingRenderer.MODE_ACTIVITY, null));
+        out.write(RingRenderer.renderRingCell(knownScore, _t("Known Peers"), knownStr,
+                  new String[]{_t("Known routers in network database")}, RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(clientScore, _t("Clients"), clientStr,
                   new String[]{_t("Active I2CP clients")}, RingRenderer.MODE_ACTIVITY, null));
-        out.write(RingRenderer.renderRingCell(uptimeScore, _t("Uptime"), uptimeStr,
-                  new String[]{_t("Router uptime")}, RingRenderer.MODE_HEALTH, null));
-        out.write(RingRenderer.renderRingCell(netdbScore, _t("NetDB"), netdbStr,
-                  new String[]{_t("NetDB lookup time")}, RingRenderer.MODE_LATENCY, netdbHist));
+        out.write(RingRenderer.renderRingCell(tunnelScore, _t("Transit"), tunnelStr,
+                  new String[]{_t("Transit tunnels hosted")}, RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(buildScore, _t("Build Success"), buildStr,
                   new String[]{_t("Tunnel build success rate")}, RingRenderer.MODE_HEALTH, buildHist));
+        out.write(RingRenderer.renderRingCell(netdbScore, _t("NetDB"), netdbStr,
+                  new String[]{_t("NetDB lookup time")}, RingRenderer.MODE_LATENCY, netdbHist));
+        out.write(RingRenderer.renderRingCell(uptimeScore, _t("Uptime"), uptimeStr,
+                  new String[]{_t("Router uptime")}, RingRenderer.MODE_HEALTH, null));
         out.write(RingRenderer.renderRingCell(bannedScore, _t("Banned"), bannedStr,
                   new String[]{_t("Total banned peers")}, RingRenderer.MODE_HEALTH, null));
     }
 
     /**
      * Section 4 – Floodfill / NetDB (8 rings, shown when floodfill enabled)
-     * NetDB ACK, LS Timeout, DB Size, Flood Verify, Cache Hit, Lookups/s, Requests/s, Stores/s
+     * Capacity: LeaseSets | Perf: Cache Hit, Flood Verify, NetDB ACK | Throughput: Lookups/s, Requests/s, Stores/s | Errors: LS Timeout
      */
     private void renderFFSection(Writer out) throws IOException {
         // NetDB ACK Time (new)
@@ -388,12 +388,12 @@ public class HealthHelper extends HelperBase {
 
         FloodfillNetworkDatabaseFacade ff = (FloodfillNetworkDatabaseFacade) _context.netDb();
 
-        // DB Size
-        int storedRI = 0;
+        // Stored LeaseSets (seperate from router infos)
+        int lsStored = 0;
         if (ff != null)
-            storedRI = ff.getStoredRouterInfoCount();
-        String storedStr = storedRI > 0 ? String.valueOf(storedRI) : "\u2014";
-        double storedScore = storedRI > 0 ? Math.min(storedRI / 100000.0, 1.0) : -1;
+            lsStored = ff.getKnownLeaseSets();
+        String leaseSetStr = lsStored > 0 ? String.valueOf(lsStored) : "\u2014";
+        double leaseSetScore = lsStored > 0 ? Math.min(lsStored / 50000.0, 1.0) : -1;
 
         // Flood Verify
         double ffVerify = getStatAvg("netDb.floodfillVerifyOK");
@@ -426,22 +426,22 @@ public class HealthHelper extends HelperBase {
         double storeScore = stores > 0 ? Math.min(stores / 5.0, 1.0) : -1;
         double[] storeHist = getStatHistory("netDb.storeHandled");
 
-        out.write(RingRenderer.renderRingCell(ackScore, _t("NetDB ACK"), withUnit(ackStr, _t("ms")),
-                  new String[]{_t("NetDB peer acknowledge time")}, RingRenderer.MODE_LATENCY, ackHist));
-        out.write(RingRenderer.renderRingCell(lsScore, _t("LS Timeout"), withUnit(lsStr, _t("ms")),
-                  new String[]{_t("LeaseSet request timeouts (last minute)")}, RingRenderer.MODE_HEALTH, null));
-        out.write(RingRenderer.renderRingCell(storedScore, _t("DB Size"), storedStr,
-                  new String[]{_t("Stored router infos in floodfill")}, RingRenderer.MODE_HEALTH, null));
-        out.write(RingRenderer.renderRingCell(ffScore, _t("Flood Verify"), ffStr,
-                  new String[]{_t("Floodfill verify time")}, RingRenderer.MODE_LATENCY, ffHist));
+        out.write(RingRenderer.renderRingCell(leaseSetScore, _t("LeaseSets"), leaseSetStr,
+                  new String[]{_t("Stored LeaseSets in floodfill")}, RingRenderer.MODE_HEALTH, null));
         out.write(RingRenderer.renderRingCell(hitScore, _t("Cache Hit"), hitStr,
                   new String[]{_t("NetDB lookup success rate")}, RingRenderer.MODE_HEALTH, hitHist));
+        out.write(RingRenderer.renderRingCell(ffScore, _t("Flood Verify"), ffStr,
+                  new String[]{_t("Floodfill verify time")}, RingRenderer.MODE_LATENCY, ffHist));
+        out.write(RingRenderer.renderRingCell(ackScore, _t("NetDB ACK"), withUnit(ackStr, _t("ms")),
+                  new String[]{_t("NetDB peer acknowledge time")}, RingRenderer.MODE_LATENCY, ackHist));
         out.write(RingRenderer.renderRingCell(lookupScore, _t("Lookups/s"), lookupStr,
                   new String[]{_t("NetDB lookups handled per second")}, RingRenderer.MODE_ACTIVITY, lookupHist));
         out.write(RingRenderer.renderRingCell(opScore, _t("Requests/s"), opStr,
                   new String[]{_t("Combined store + lookup operations per second")}, RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(storeScore, _t("Stores/s"), storeStr,
                   new String[]{_t("NetDB store messages handled per second")}, RingRenderer.MODE_ACTIVITY, storeHist));
+        out.write(RingRenderer.renderRingCell(lsScore, _t("LS Timeout"), withUnit(lsStr, _t("ms")),
+                  new String[]{_t("LeaseSet request timeouts (last minute)")}, RingRenderer.MODE_HEALTH, null));
     }
 
     /** Append unit only when value is present (not em-dash) */
