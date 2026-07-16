@@ -1091,7 +1091,6 @@ public class NTCPConnection implements Closeable {
             removeOBRequest(req);
             ByteBuffer buf = (ByteBuffer)req.attachment();
             if (_closed.get()) {
-                EventPumper.releaseBuf(buf);
                 return;
             }
             _context.statManager().addRateData("ntcp.throttledWriteComplete", (_context.clock().now()-req.getRequestTime()));
