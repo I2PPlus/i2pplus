@@ -247,11 +247,14 @@ public class StreamHelper extends HelperBase {
                             if (localDest != null) {
                                 String b32 = localDest.toBase32();
                                 if (b32 != null && b32.length() >= 8)
-                                    namePrefix = "<span class=b32>" + b32.substring(0, 8) + "</span> ";
+                                    namePrefix = b32.substring(0,8);
                             }
                         } catch (Exception e) { /* ignore */ }
                     }
-                    out.write(esc(namePrefix + tunnelName));
+                    out.write("<span class=b32>");
+                    out.write(esc(namePrefix));
+                    out.write("</span> ");
+                    out.write(tunnelName);
                     out.write(TD_CLOSE);
                     out.write(TD_OPEN);
                     Destination peer = sock.getPeerDestination();
@@ -259,8 +262,8 @@ public class StreamHelper extends HelperBase {
                         String b32 = peer.toBase32();
                         if (b32 != null) {
                             String hostname = _context.namingService().reverseLookup(peer);
-                            String display = (hostname != null) ? hostname : b32.substring(0, Math.min(52, b32.length())) + "...";
-                            out.write("<span title=\"" + esc(b32) + "\">" + esc(display) + "</span>");
+                            String display = (hostname != null) ? hostname : b32.substring(0, Math.min(52, b32.length())) + ".b32.i2p";
+                            out.write("<span class=fullb32>" + esc(display) + "</span>");
                         } else {
                             out.write("<span title=unknown>unknown</span>");
                         }

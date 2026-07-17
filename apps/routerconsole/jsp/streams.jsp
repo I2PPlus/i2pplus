@@ -23,12 +23,12 @@
 <% if ("inbound".equals(direction)) { %>
 <span class=tab2 title="<%=intl._t("Inbound streaming connections")%>"><%=intl._t("Inbound")%></span>
 <% } else { %>
-<span class=tab><a href=/streams?direction=inbound><%=intl._t("Inbound")%></a></span>
+<span class=tab><a href="/streams?direction=inbound"><%=intl._t("Inbound")%></a></span>
 <% } %>
 <% if ("outbound".equals(direction)) { %>
 <span class=tab2 title="<%=intl._t("Outbound streaming connections")%>"><%=intl._t("Outbound")%></span>
 <% } else { %>
-<span class=tab><a href=/streams?direction=outbound><%=intl._t("Outbound")%></a></span>
+<span class=tab><a href="/streams?direction=outbound"><%=intl._t("Outbound")%></a></span>
 <% } %>
 </div>
 <div id=streamsWrap>

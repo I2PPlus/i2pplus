@@ -824,7 +824,16 @@ class TunnelRenderer {
     /** @since 0.9.35 */
     private static class TunnelComparatorBySpeed implements Comparator<HopConfig>, Serializable {
          public int compare(HopConfig l, HopConfig r) {
-             return (r.getProcessedMessagesCount() - l.getProcessedMessagesCount());
+             long now = System.currentTimeMillis();
+             int countL = l.getProcessedMessagesCount();
+             int countR = r.getProcessedMessagesCount();
+             int lifeL = (int) Math.min((now - l.getCreation()) / 1000, 600);
+             int lifeR = (int) Math.min((now - r.getCreation()) / 1000, 600);
+             if (lifeL <= 0) lifeL = 1;
+             if (lifeR <= 0) lifeR = 1;
+             float bpsL = 1024f * countL / lifeL;
+             float bpsR = 1024f * countR / lifeR;
+             return Float.compare(bpsR, bpsL);
         }
     }
 
