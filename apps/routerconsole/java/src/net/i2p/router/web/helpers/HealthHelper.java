@@ -512,10 +512,10 @@ public class HealthHelper extends HelperBase {
         long min = sec / 60;
         if (min < 60) return min + "m";
         long hr = min / 60;
-        if (hr < 24) return hr + "h";
+        if (hr < 24) return hr + "h " + (min % 60) + "m";
         long day = hr / 24;
-        if (day < 30) return day + "d";
-        return (day / 30) + "mo";
+        if (day < 30) return day + "d " + (hr % 24) + "h";
+        return (day / 30) + "mo " + (day % 30) + "d";
     }
 
     /** Format bytes as B/s, KB/s or MB/s */
