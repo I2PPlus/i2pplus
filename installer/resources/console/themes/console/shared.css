@@ -156,7 +156,7 @@ html:not(.advmode) #tuning input[type=number]{min-width:0!important;text-align:c
 #hsNetwork+h2:not(.expanded){margin-bottom:-2px}
 #activeStreams .totalBandwidth{float:right;text-transform:none;letter-spacing:0;word-spacing:0;font-size:80%}
 #activeStreams th.sectionhead{font-size:120%;font-weight:700;text-align:left;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);border-bottom:1px solid var(--border)}
-#streamstats{margin:8px auto;padding:8px 4px;width:100%;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;text-align:center}
+#streamstats,#samstats{margin:8px auto;padding:16px 4px;width:100%;;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;text-align:center}
 
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1.1)}50%{opacity:.7;transform:scale(.9)}}
 

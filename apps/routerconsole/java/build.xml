@@ -19,6 +19,7 @@
   <property name="jrobin.java.build.dir" value="../../jrobin/java/build"/>
   <property name="ministreaming.java.build.dir" value="../../ministreaming/java/build"/>
   <property name="router.java.build.dir" value="../../../router/java/build"/>
+  <property name="sam.java.build.dir" value="../../sam/java/build"/>
   <property name="streaming.java.build.dir" value="../../streaming/java/build"/>
   <property name="systray.java.build.dir" value="../../systray/java/build"/>
   <property name="jetty.pkg.dir" value="../../jetty/jettylib"/>
@@ -30,6 +31,7 @@
   <property name="i2ptunnel.java.build.dir" value="${i2ptunnel.java.build.dir}"/>
   <property name="jrobin.java.build.dir" value="${jrobin.java.build.dir}"/>
   <property name="router.java.build.dir" value="${router.java.build.dir}"/>
+  <property name="sam.java.build.dir" value="${sam.java.build.dir}"/>
   <property name="systray.java.build.dir" value="${systray.java.build.dir}"/>
 
   <target name="all" depends="clean, build"/>
@@ -67,6 +69,7 @@
         <pathelement location="${router.java.build.dir}/obj"/>
         <pathelement location="${i2ptunnel.java.build.dir}/i2ptunnel.jar"/>
         <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
+        <pathelement location="${sam.java.build.dir}/sam.jar"/>
         <pathelement location="${streaming.java.build.dir}/streaming.jar"/>
         <pathelement location="${systray.java.build.dir}/obj"/>
       </classpath>
@@ -128,6 +131,7 @@
         <pathelement location="${router.java.build.dir}/router.jar"/>
         <pathelement location="${i2ptunnel.java.build.dir}/i2ptunnel.jar"/>
         <pathelement location="${ministreaming.java.build.dir}/mstreaming.jar"/>
+        <pathelement location="${sam.java.build.dir}/sam.jar"/>
         <pathelement location="${streaming.java.build.dir}/streaming.jar"/>
         <pathelement location="${systray.java.build.dir}/systray.jar"/>
 
@@ -690,6 +694,7 @@
         <pathelement location="${desktopgui.dist.dir}/desktopgui.jar"/>
         <pathelement location="../../../installer/lib/wrapper/all/wrapper.jar"/>
         <pathelement location="${build.dir}/obj/"/>
+        <pathelement location="${sam.java.build.dir}/sam.jar"/>
         <pathelement location="${router.java.build.dir}/router.jar"/>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
       </classpath>
@@ -730,6 +735,7 @@
         <pathelement location="${desktopgui.dist.dir}/desktopgui.jar"/>
         <pathelement location="../../../installer/lib/wrapper/all/wrapper.jar"/>
         <pathelement location="${build.dir}/obj/"/>
+        <pathelement location="${sam.java.build.dir}/sam.jar"/>
         <pathelement location="${router.java.build.dir}/router.jar"/>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
       </classpath>

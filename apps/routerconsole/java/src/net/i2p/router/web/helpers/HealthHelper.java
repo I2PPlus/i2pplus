@@ -229,13 +229,10 @@ public class HealthHelper extends HelperBase {
         double readyScore = readyJobs > 0 ? Math.max(0, 1.0 - readyJobs / 500.0) : -1;
         double[] readyHist = getStatHistory("jobQueue.readyJobs");
 
-        // Active Streams (replaces BW Delay)
-        int[] streamCounts = countActiveStreams();
-        int totalStreams = streamCounts[0] + streamCounts[1];
-        String streamStr = totalStreams > 0 ? String.valueOf(totalStreams) : "\u2014";
-        String streamDetail = "In: " + streamCounts[0] + " / Out: " + streamCounts[1];
-        double streamScore = totalStreams > 0 ? Math.min(totalStreams / 50.0, 1.0) : -1;
-        double[] streamHist = getStatHistory("stream.connectionCreated");
+        // Uptime
+        long uptimeMs = _context.router().getUptime();
+        String uptimeStr = uptimeMs > 0 ? formatCompactDuration(uptimeMs) : "\u2014";
+        double uptimeScore = uptimeMs > 0 ? Math.min(uptimeMs / (24L * 3600 * 1000), 1.0) : -1;
 
         out.write(RingRenderer.renderRingCell(bwScore, _t("Bandwidth"), bwPct,
                   new String[]{bwDetail}, RingRenderer.MODE_ACTIVITY, bwHist));
@@ -243,8 +240,8 @@ public class HealthHelper extends HelperBase {
                   new String[]{_t("CPU load average")}, RingRenderer.MODE_HEALTH, cpuHist));
         out.write(RingRenderer.renderRingCell(memScore, _t("Memory"), memStr,
                   new String[]{_t("Memory usage")}, RingRenderer.MODE_HEALTH, memHist));
-        out.write(RingRenderer.renderRingCell(streamScore, _t("Active Streams"), streamStr,
-                  new String[]{streamDetail}, RingRenderer.MODE_ACTIVITY, streamHist));
+        out.write(RingRenderer.renderRingCell(uptimeScore, _t("Uptime"), uptimeStr,
+                  new String[]{_t("Router uptime")}, RingRenderer.MODE_NEUTRAL, null));
         out.write(RingRenderer.renderRingCell(lagScore, _t("Job Lag"), withUnit(lagStr, _t("ms")),
                   new String[]{_t("Job queue delay")}, RingRenderer.MODE_LATENCY, lagHist));
         out.write(RingRenderer.renderRingCell(delayScore, _t("Msg Lag"), withUnit(delayStr, _t("ms")),
@@ -287,7 +284,7 @@ public class HealthHelper extends HelperBase {
         // RTT
         double rtt = getStatAvg("client.sendAckTime");
         String rttStr = rtt > 0 ? (rtt >= 1000 ? String.format("%.1f", rtt / 1000) : String.valueOf((int) rtt)) : "\u2014";
-        double rttScore = rtt > 0 ? Math.max(0, 1.0 - rtt / 5000.0) : -1;
+        double rttScore = rtt > 0 ? Math.max(0, 1.0 - rtt / 7500.0) : -1;
         double[] rttHist = getStatHistory("client.sendAckTime");
 
         // Build Time
@@ -354,10 +351,13 @@ public class HealthHelper extends HelperBase {
         String clientStr = clients > 0 ? String.valueOf(clients) : "0";
         double clientScore = clients > 0 ? Math.min(clients / 20.0, 1.0) : 0;
 
-        // Uptime
-        long uptimeMs = _context.router().getUptime();
-        String uptimeStr = uptimeMs > 0 ? formatCompactDuration(uptimeMs) : "\u2014";
-        double uptimeScore = uptimeMs > 0 ? Math.min(uptimeMs / (24L * 3600 * 1000), 1.0) : -1;
+        // Active Streams
+        int[] streamCounts = countActiveStreams();
+        int totalStreams = streamCounts[0] + streamCounts[1];
+        String streamStr = totalStreams > 0 ? String.valueOf(totalStreams) : "\u2014";
+        String streamDetail = "In: " + streamCounts[0] + " / Out: " + streamCounts[1];
+        double streamScore = totalStreams > 0 ? Math.min(totalStreams / 50.0, 1.0) : -1;
+        double[] streamHist = getStatHistory("stream.connectionCreated");
 
         // NetDB lookup time
         double netdb = getStatAvg("netDb.successTime");
@@ -381,15 +381,15 @@ public class HealthHelper extends HelperBase {
         out.write(RingRenderer.renderRingCell(knownScore, _t("Known Peers"), knownStr,
                   new String[]{_t("Known routers in network database")}, RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(clientScore, _t("Clients"), clientStr,
-                  new String[]{_t("Active I2CP clients")}, RingRenderer.MODE_ACTIVITY, null));
+                  new String[]{_t("Active I2CP clients")}, RingRenderer.MODE_NEUTRAL, null));
         out.write(RingRenderer.renderRingCell(tunnelScore, _t("Transit"), tunnelStr,
                   new String[]{_t("Transit tunnels hosted")}, RingRenderer.MODE_ACTIVITY, null));
+        out.write(RingRenderer.renderRingCell(streamScore, _t("Active Streams"), streamStr,
+                  new String[]{streamDetail}, RingRenderer.MODE_NEUTRAL, streamHist));
         out.write(RingRenderer.renderRingCell(buildScore, _t("Build Success"), buildStr,
                   new String[]{_t("Tunnel build success rate")}, RingRenderer.MODE_HEALTH, buildHist));
         out.write(RingRenderer.renderRingCell(netdbScore, _t("NetDB"), withUnit(netdbStr, _t("ms")),
                   new String[]{_t("NetDB lookup time")}, RingRenderer.MODE_LATENCY, netdbHist));
-        out.write(RingRenderer.renderRingCell(uptimeScore, _t("Uptime"), uptimeStr,
-                  new String[]{_t("Router uptime")}, RingRenderer.MODE_NEUTRAL, null));
         out.write(RingRenderer.renderRingCell(bannedScore, _t("Banned"), bannedStr,
                   new String[]{_t("Total banned peers")}, RingRenderer.MODE_NEUTRAL, null));
     }
@@ -402,7 +402,7 @@ public class HealthHelper extends HelperBase {
         // NetDB ACK Time (new)
         double ackTime = getStatAvg("netDb.ackTime");
         String ackStr = ackTime > 0 ? (ackTime >= 1000 ? String.format("%.1f", ackTime / 1000) : String.valueOf((int) ackTime)) : "\u2014";
-        double ackScore = ackTime > 0 ? Math.max(0, 1.0 - ackTime / 2000.0) : -1;
+        double ackScore = ackTime > 0 ? Math.max(0, 1.0 - ackTime / 5000.0) : -1;
         double[] ackHist = getStatHistory("netDb.ackTime");
 
         // LS Timeout Rate (new)
@@ -452,7 +452,7 @@ public class HealthHelper extends HelperBase {
         double[] storeHist = getStatHistory("netDb.storeHandled");
 
         out.write(RingRenderer.renderRingCell(leaseSetScore, _t("LeaseSets"), leaseSetStr,
-                  new String[]{_t("Stored LeaseSets in floodfill")}, RingRenderer.MODE_ACTIVITY, null));
+                  new String[]{_t("Stored LeaseSets in floodfill")}, RingRenderer.MODE_NEUTRAL, null));
         out.write(RingRenderer.renderRingCell(hitScore, _t("Cache Hit"), hitStr,
                   new String[]{_t("NetDB lookup success rate")}, RingRenderer.MODE_HEALTH, hitHist));
         out.write(RingRenderer.renderRingCell(ffScore, _t("Flood Verify"), withUnit(ffStr, _t("ms")),

@@ -19,7 +19,8 @@
         {"Router Session Key Manager", "/debug?d=3"},
         {"Client Session Key Managers", "/debug?d=4"},
         {"Router DHT", "/debug?d=5"},
-        {"Translation Status", "/debug?d=6"}
+        {"Translation Status", "/debug?d=6"},
+        {"SAM", "/debug?d=7"}
     };
     String currentD = request.getParameter("d");
     currentD = (currentD == null) ? "0" : currentD;
@@ -100,6 +101,19 @@
             } catch (java.io.IOException ignored) {}
             out.println("<script src=/js/translationReport.js></script>");
             out.println("<noscript><style>.complete{display:table-row!important}.script{display:none!important}</style></noscript>");
+        }
+    } else if ("7".equals(dd)) {
+        net.i2p.app.ClientAppManager cmgr = _ctx.clientAppManager();
+        if (cmgr != null) {
+            net.i2p.app.ClientApp sam = cmgr.getRegisteredApp("SAM");
+            if (sam instanceof net.i2p.sam.SAMBridge) {
+                net.i2p.router.web.helpers.SAMDebugHelper samHelper = new net.i2p.router.web.helpers.SAMDebugHelper();
+                samHelper.setContextId(i2pcontextId);
+                samHelper.storeWriter(out);
+                out.write(samHelper.getSAMDHelper());
+            } else {
+                out.print("<p class=infohelp>SAM bridge is not running.</p>\n");
+            }
         }
     }
 %>

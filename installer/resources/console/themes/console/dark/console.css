@@ -2494,6 +2494,10 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #debug #tx_summary .infohelp{margin:15px auto 5px}
 #portmapper th:last-child,#portmapper td:last-child,#sockets td:last-child{text-align:left}
 #portmapper td:first-child,#sockets td:first-child{font-weight:700}
+#samstats{margin:14px 0 26px!important;width:calc(100% - 8px);margin-top:12px;width:calc(100% - 12px);box-shadow:var(--border_table),0 0 0 2px #141 inset,0 0 0 3px #000 inset;background:var(--badge)}
+#samessions,#samstats{width:calc(100% - 8px)}
+#samdebug{margin-bottom:-1px;box-shadow:var(--border_table)}
+#samdebug th{font-size:90%}
 
 /* jardump */
 .revision,.sha256,.unsignedmod{display:inline-block;user-select:all}

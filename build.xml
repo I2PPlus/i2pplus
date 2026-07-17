@@ -470,7 +470,7 @@
   <target name="buildSmall" depends="builddepSmall, jarSmall, buildWEB"/>
   <target name="buildclean" depends="distclean, build"/>
   <target name="builddep" depends="builddepSmall, buildSAM, buildSusiMail, buildSusiDNS, buildI2PSnark, buildI2PControl"/>
-  <target name="builddepSmall" depends="buildrouter, buildSystray, buildDesktopGui, buildRouterConsole, buildStreaming, buildI2PTunnel, buildAddressbook, buildPack200"/>
+  <target name="builddepSmall" depends="buildrouter, buildSystray, buildDesktopGui, buildSAM, buildRouterConsole, buildStreaming, buildI2PTunnel, buildAddressbook, buildPack200"/>
 
   <!--
          start of buildX, one for each sub-build.xml.
@@ -630,7 +630,7 @@
     <copy quiet="true" verbose="false" file="${build.root}apps/desktopgui/dist/desktopgui.jar" todir="${build.root}build/"/>
   </target>
 
-  <target name="buildRouterConsole" depends="buildrouter, buildSystray, buildDesktopGui, buildJetty, buildJrobin, buildStreaming, buildI2PTunnel">
+  <target name="buildRouterConsole" depends="buildrouter, buildSystray, buildDesktopGui, buildJetty, buildJrobin, buildStreaming, buildI2PTunnel, buildSAM">
     <ant dir="apps/routerconsole/java/" target="jar">
       <property name="build.dir" location="${build.root}apps/routerconsole/java/build"/>
       <property name="jetty.pkg.dir" location="${build.root}apps/jetty/build"/>
@@ -642,6 +642,7 @@
       <property name="jrobin.java.build.dir" location="${build.root}apps/jrobin/java/build"/>
       <property name="ministreaming.java.build.dir" location="${build.root}apps/ministreaming/java/build"/>
       <property name="router.java.build.dir" location="${build.root}router/java/build"/>
+      <property name="sam.java.build.dir" location="${build.root}apps/sam/java/build"/>
       <property name="streaming.java.build.dir" location="${build.root}apps/streaming/java/build"/>
       <property name="systray.java.build.dir" location="${build.root}apps/systray/java/build"/>
       <property name="jsp.build.dir" location="${build.root}apps/routerconsole/jsp"/>
