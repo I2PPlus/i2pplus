@@ -354,6 +354,73 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
+     * @return number of registered streams from SessionsDB, or 0 if null
+     * @since 0.9.70+
+     */
+    public int getSessionCount() {
+        return SAMv3Handler.sSessionsHash.size();
+    }
+
+    /**
+     * @return number of connected handlers
+     * @since 0.9.70+
+     */
+    public int getHandlerCount() {
+        synchronized (_handlers) { return _handlers.size(); }
+    }
+
+    /**
+     * @return active pool worker threads, or 0 if pool not started
+     * @since 0.9.70+
+     */
+    public int getPoolActiveCount() {
+        SAMHandlerPool p = _handlerPool;
+        return p != null ? p.getActiveCount() : 0;
+    }
+
+    /**
+     * @return total pool worker threads, or 0 if pool not started
+     * @since 0.9.70+
+     */
+    public int getPoolSize() {
+        SAMHandlerPool p = _handlerPool;
+        return p != null ? p.getPoolSize() : 0;
+    }
+
+    /**
+     * @return commands queued in the pool, or 0 if pool not started
+     * @since 0.9.70+
+     */
+    public int getQueueSize() {
+        SAMHandlerPool p = _handlerPool;
+        return p != null ? p.getQueueSize() : 0;
+    }
+
+    /**
+     * @return handlers registered in the pool, or 0 if pool not started
+     * @since 0.9.70+
+     */
+    public int getPoolRegisteredCount() {
+        SAMHandlerPool p = _handlerPool;
+        return p != null ? p.getRegisteredCount() : 0;
+    }
+
+    /**
+     * Count handlers whose socket has been stolen for data streaming.
+     * @since 0.9.70+
+     */
+    public int getStolenSocketCount() {
+        synchronized (_handlers) {
+            int count = 0;
+            for (Handler h : _handlers) {
+                if (h instanceof SAMv3Handler && ((SAMv3Handler)h).stolenSocket)
+                    count++;
+            }
+            return count;
+        }
+    }
+
+    /**
      * Remove a v3 handler from the shared handler pool.
      * Called by SAMv3Handler.stopHandling().
      *
@@ -881,6 +948,77 @@ public class SAMBridge implements Runnable, ClientApp {
      */
     public void saveConfig() throws IOException {
         DataHelper.storeProps(i2cpProps, _configFile);
+    }
+
+    /**
+     * Render the session table and handler summary as HTML.
+     * Called by the router console debug page.
+     *
+     * @param out non-null
+     * @throws IOException if the writer fails
+     * @since 0.9.70+
+     */
+    public void renderSessionTableHTML(java.io.Writer out) throws IOException {
+        Map<String, SessionRecord> sessions = SAMv3Handler.sSessionsHash.getAllEntries();
+        if (sessions.isEmpty()) {
+            out.write("<p><i>No SAM sessions</i></p>\n");
+            return;
+        }
+        out.write("<table id=samsessions>\n<thead><tr><th>Nickname</th>" +
+                  "<th>Style</th><th>Destination</th><th>Handler IP</th>" +
+                  "<th>State</th><th>Last Accessed</th></tr></thead>\n<tbody>\n");
+        for (Map.Entry<String, SessionRecord> entry : sessions.entrySet()) {
+            String nick = entry.getKey();
+            SessionRecord rec = entry.getValue();
+            SAMv3Handler handler = rec.getHandler();
+            String dest = rec.getDest();
+            String destShort = dest.length() > 12 ? dest.substring(0, 12) + "..." : dest;
+            String ip = handler != null ? handler.getClientIP() : "?";
+            String style;
+            if (handler != null) {
+                Session sess = handler.getSession();
+                if (sess instanceof MasterSession)
+                    style = "MASTER";
+                else if (sess instanceof SAMv3StreamSession)
+                    style = "STREAM";
+                else if (sess instanceof SAMv3RawSession)
+                    style = "RAW";
+                else if (sess instanceof SAMv3DatagramSession)
+                    style = "DGRAM";
+                else
+                    style = "?";
+            } else {
+                style = "?";
+            }
+            String state;
+            if (handler == null) {
+                state = "orphan";
+            } else if (handler.streamForwardingSocket) {
+                state = "forwarding";
+            } else if (handler.stolenSocket) {
+                state = "stolen";
+            } else if (handler.getSession() != null) {
+                state = "control";
+            } else {
+                state = "idle";
+            }
+            long lastAccess = rec.getLastAccessed();
+            String lastAccessStr = DataHelper.formatTime(lastAccess);
+            out.write("<tr><td>");
+            out.write(DataHelper.escapeHTML(nick));
+            out.write("</td><td>");
+            out.write(style);
+            out.write("</td><td>");
+            out.write(DataHelper.escapeHTML(destShort));
+            out.write("</td><td>");
+            out.write(DataHelper.escapeHTML(ip));
+            out.write("</td><td>");
+            out.write(state);
+            out.write("</td><td>");
+            out.write(DataHelper.escapeHTML(lastAccessStr));
+            out.write("</td></tr>\n");
+        }
+        out.write("</tbody>\n</table>\n");
     }
 
     /**

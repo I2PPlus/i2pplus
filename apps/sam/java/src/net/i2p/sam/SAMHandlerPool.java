@@ -50,6 +50,7 @@ class SAMHandlerPool {
     private final Log _log;
     private final Selector _selector;
     private final ThreadPoolExecutor _workers;
+    private final ThreadPoolExecutor _connectors;
     private final Map<SocketChannel, ConnContext> _contexts;
     private volatile boolean _running;
     private I2PAppThread _selectThread;
@@ -83,6 +84,13 @@ class SAMHandlerPool {
         }
     }
 
+    /** @since 0.9.63 */
+    private static final String PING_PREFIX = "PING ";
+    /** @since 0.9.63 */
+    private static final String PONG_PREFIX = "PONG ";
+    /** @since 0.9.63 */
+    private static final String CRLF = "\n";
+
     SAMHandlerPool() {
         _log = I2PAppContext.getGlobalContext().logManager().getLog(SAMHandlerPool.class);
         try {
@@ -96,6 +104,18 @@ class SAMHandlerPool {
             new LinkedBlockingQueue<Runnable>(256),
             new NamedThreadFactory(),
             new ThreadPoolExecutor.AbortPolicy());
+        _connectors = new ThreadPoolExecutor(
+            4, 4,
+            60, TimeUnit.SECONDS,
+            new LinkedBlockingQueue<Runnable>(),
+            new java.util.concurrent.ThreadFactory() {
+                private final AtomicInteger _count = new AtomicInteger();
+                public Thread newThread(Runnable r) {
+                    Thread t = new Thread(r, "SAM-Conn." + _count.incrementAndGet());
+                    t.setDaemon(true);
+                    return t;
+                }
+            });
         _contexts = new HashMap<SocketChannel, ConnContext>();
     }
 
@@ -157,10 +177,16 @@ class SAMHandlerPool {
         if (_selectThread != null)
             _selectThread.interrupt();
         _workers.shutdown();
+        _connectors.shutdown();
         try {
             _workers.awaitTermination(5, TimeUnit.SECONDS);
         } catch (InterruptedException ie) {
             _workers.shutdownNow();
+        }
+        try {
+            _connectors.awaitTermination(5, TimeUnit.SECONDS);
+        } catch (InterruptedException ie) {
+            _connectors.shutdownNow();
         }
         try {
             _selector.close();
@@ -169,6 +195,42 @@ class SAMHandlerPool {
         }
         _contexts.clear();
     }
+
+    /**
+     * Number of handlers currently registered (connected).
+     * @since 0.9.70+
+     */
+    int getRegisteredCount() {
+        synchronized (_contexts) { return _contexts.size(); }
+    }
+
+    /**
+     * Number of worker threads actively processing a command.
+     * @since 0.9.70+
+     */
+    int getActiveCount() { return _workers.getActiveCount(); }
+
+    /**
+     * Current worker pool size (may include idle threads).
+     * @since 0.9.70+
+     */
+    int getPoolSize() { return _workers.getPoolSize(); }
+
+    /**
+     * Number of commands waiting in the worker queue.
+     * @since 0.9.70+
+     */
+    int getQueueSize() { return _workers.getQueue().size(); }
+
+    /**
+     * Thread pool for blocking STREAM CONNECT operations.
+     * Fixed pool of 4 daemon threads with an unbounded work queue.
+     * Limits concurrent connects to prevent overwhelming the streaming layer
+     * while keeping pool workers unblocked. Excess CONNECTs queue up and are
+     * dispatched as connector threads become available.
+     * @since 0.9.70+
+     */
+    ThreadPoolExecutor getConnectors() { return _connectors; }
 
     /**
      * NIO selector loop. Reads available data from all registered handler
@@ -206,25 +268,23 @@ class SAMHandlerPool {
                         for (Map.Entry<SocketChannel, ConnContext> entry : _contexts.entrySet()) {
                             ConnContext ctx = entry.getValue();
                             if (ctx.handler.sendPorts) {
-                                // Only PING stream handlers (no session).
-                                // Control handlers (session owners) may have
-                                // clients that don't respond to PING.
-                                if (ctx.handler.getSession() == null) {
-                                    if (ctx.lastDataTime == 0) {
-                                        // no data ever received, check absolute timeout
-                                        if (now - ctx.created >= PONG_TIMEOUT) {
+                                // Only PING handlers that own neither a full
+                                // session (session owners) nor a streaming
+                                // session (STREAM CONNECT/ACCEPT/FORWARD).
+                                // Control and stream handlers may have clients
+                                // that don't respond to PING.
+                                if (ctx.handler.getSession() == null &&
+                                    ctx.handler.getStreamSession() == null) {
+                                    if (ctx.lastPingTime == 0) {
+                                        // No PING sent yet — send one after idle interval
+                                        long idle = ctx.lastDataTime == 0 ?
+                                                    now - ctx.created : now - ctx.lastDataTime;
+                                        if (idle >= PONG_TIMEOUT) {
                                             sendPing(ctx, now);
                                         }
-                                    } else if (ctx.lastPingTime == 0) {
-                                        // data was received but no PING sent yet
-                                        if (now - ctx.lastDataTime >= PONG_TIMEOUT) {
-                                            sendPing(ctx, now);
-                                        }
-                                    } else if (ctx.lastDataTime < ctx.lastPingTime) {
-                                        // PING sent, waiting for PONG
-                                        if (now - ctx.lastPingTime >= PONG_TIMEOUT) {
-                                            toDisconnect.add(ctx);
-                                        }
+                                    } else if (now - ctx.lastPingTime >= PONG_TIMEOUT) {
+                                        // PING sent, no PONG within timeout
+                                        toDisconnect.add(ctx);
                                     }
                                 }
                             } else if (!ctx.gotFirstLine && now - ctx.created >= FIRST_READ_TIMEOUT) {
@@ -280,8 +340,8 @@ class SAMHandlerPool {
          * different connections run in parallel.
          */
         private void dispatchLine(final ConnContext ctx, final String line) {
-            if (line.equals("PING") || line.startsWith("PING ") ||
-                line.equals("PONG") || line.startsWith("PONG ")) {
+            if (line.equals("PING") || line.startsWith(PING_PREFIX) ||
+                line.equals("PONG") || line.startsWith(PONG_PREFIX)) {
                 handlePing(ctx, line);
                 return;
             }
@@ -312,12 +372,10 @@ class SAMHandlerPool {
          */
         private void handlePing(ConnContext ctx, String line) {
             if (line.startsWith("PING")) {
-                // client sent PING, respond with PONG
                 String msg = line.length() > 5 ? line.substring(5) : "";
-                SAMHandler.writeString("PONG" + (msg.isEmpty() ? "" : " " + msg) + '\n',
+                SAMHandler.writeString("PONG" + (msg.isEmpty() ? "" : " " + msg) + CRLF,
                                        ctx.handler.getClientSocket());
             } else {
-                // client sent PONG, clear pending ping flag
                 ctx.lastPingTime = 0;
             }
         }
@@ -326,13 +384,11 @@ class SAMHandlerPool {
          * Send a PING to the client and record the timestamp.
          */
         private void sendPing(ConnContext ctx, long now) {
-            if (!SAMHandler.writeString("PING " + now + '\n', ctx.handler.getClientSocket())) {
+            if (!SAMHandler.writeString(PING_PREFIX + now + '\n', ctx.handler.getClientSocket())) {
                 disconnect(ctx, "PING write failed");
                 return;
             }
             ctx.lastPingTime = now;
-            if (ctx.lastDataTime == 0)
-                ctx.lastDataTime = now;
         }
 
         /**

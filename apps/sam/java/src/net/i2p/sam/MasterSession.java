@@ -225,10 +225,10 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
 
     /////// stream session overrides
 
-    /** @throws I2PException always */
+    /** @throws DataFormatException always */
     @Override
-    public void connect(SAMv3Handler handler, String dest, Properties props) throws I2PException {
-        throw new I2PException("master session");
+    public void connectAsync(SAMv3Handler handler, String dest, Properties props) throws DataFormatException {
+        throw new DataFormatException("master session");
     }
 
     /** @throws SAMException always */

@@ -10,6 +10,7 @@ package net.i2p.sam;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  *  A database of SAM sessions, mapping nicknames to {@link SessionRecord}s.
@@ -121,6 +122,23 @@ class SessionsDB {
 	synchronized public boolean containsKey( String nick )
 	{
 		return map.containsKey(nick);
+	}
+
+	/**
+	 * Get the number of registered sessions.
+	 * @since 0.9.70+
+	 */
+	public synchronized int size()
+	{
+		return map.size();
+	}
+
+	/**
+	 * Return a snapshot of all entries (nick -> SessionRecord).
+	 * @since 0.9.70+
+	 */
+	synchronized public Map<String, SessionRecord> getAllEntries() {
+		return new HashMap<>(map);
 	}
 
 	/**

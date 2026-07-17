@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.net.ssl.SSLSocket;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
+import net.i2p.client.I2PSession;
 import net.i2p.client.streaming.I2PServerSocket;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketManager;
@@ -134,35 +135,32 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     }
 
     /**
-     * Connect the SAM STREAM session to the specified Destination
-     * for a single connection, using the socket stolen from the handler.
+     * Initiate an async STREAM CONNECT.  Validates parameters synchronously,
+     * unregisters from the pool, then hands the blocking connect to a shared
+     * connector thread pool.  Returns immediately — the caller's worker is
+     * never blocked by an I2P connection attempt.
      *
-     * @param handler The handler that communicates with the requesting client
-     * @param dest Base64-encoded Destination to connect to
-     * @param props Options to be used for connection
+     * The ConnectTask handles all error reporting and pipe setup so the
+     * calling worker is free to process other commands immediately.
      *
-     * @throws DataFormatException if the destination is not valid
-     * @throws ConnectException if the destination refuses connections
-     * @throws NoRouteToHostException if the destination can't be reached
-     * @throws InterruptedIOException if the connection timeouts
-     * @throws I2PException if there's another I2P-related error
-     * @throws IOException
+     * @param handler handler whose socket becomes the I2P data pipe
+     * @param dest Base64-encoded Destination
+     * @param props connection options
+     * @throws DataFormatException if dest is invalid
      */
-    public void connect(SAMv3Handler handler, String dest, Properties props)
-            throws I2PException,
-                    IOException {
-
-        boolean verbose = !Boolean.parseBoolean(props.getProperty("SILENT"));
+    public void connectAsync(SAMv3Handler handler, String dest, Properties props)
+            throws DataFormatException {
         Destination d = SAMUtils.getDest(dest);
 
         I2PSocketOptions opts = socketMgr.buildOptions(props);
-        if (props.getProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT) == null) opts.setConnectTimeout((long) 60 * 1000);
+        if (props.getProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT) == null)
+            opts.setConnectTimeout(15 * 1000);
         String fromPort = props.getProperty("FROM_PORT");
         if (fromPort != null) {
             try {
                 opts.setLocalPort(Integer.parseInt(fromPort));
             } catch (NumberFormatException nfe) {
-                throw new I2PException("Bad port " + fromPort);
+                throw new DataFormatException("Bad port " + fromPort);
             }
         }
         String toPort = props.getProperty("TO_PORT");
@@ -170,98 +168,204 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
             try {
                 opts.setPort(Integer.parseInt(toPort));
             } catch (NumberFormatException nfe) {
-                throw new I2PException("Bad port " + toPort);
+                throw new DataFormatException("Bad port " + toPort);
             }
         }
+        final boolean verbose = !Boolean.parseBoolean(props.getProperty("SILENT"));
 
-        if (_log.shouldDebug()) _log.debug("Connecting new I2PSocket...");
+        if (_log.shouldDebug()) _log.debug("Dispatching async STREAM CONNECT...");
 
-        // Unregister from pool before blocking connect so pool's PING
-        // mechanism does not target a socket that can't respond
+        // Unregister from pool before handing off so the selector stops
+        // reading from this handler's socket immediately.
         handler.getBridge().unregisterHandlerFromPool(handler);
 
-        // blocking connection (SAMv3)
-
-        I2PSocket i2ps = socketMgr.connect(d, opts);
-
-        SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
-
-        if (rec == null) throw new InterruptedIOException();
-
-        handler.notifyStreamResult(verbose, "OK", null);
-
-        handler.stealSocket();
-
-        ReadableByteChannel fromClient = handler.getClientSocket();
-        ReadableByteChannel fromI2P = Channels.newChannel(i2ps.getInputStream());
-        WritableByteChannel toClient = handler.getClientSocket();
-        WritableByteChannel toI2P = Channels.newChannel(i2ps.getOutputStream());
-
-        SAMBridge bridge = handler.getBridge();
-        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromClient, toI2P, bridge, nick), "SAM-PipeCon-C2I"))
-                .start();
-        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromI2P, toClient, bridge, nick), "SAM-PipeCon-I2C"))
-                .start();
+        handler.getBridge().getHandlerPool().getConnectors().execute(
+            new ConnectTask(handler, d, opts, verbose, nick));
     }
 
     /**
-     * Accept a single incoming STREAM on the socket stolen from the handler.
-     * As of version 3.2 (0.9.24), multiple simultaneous accepts are allowed.
+     * Runnable that performs the blocking I2P socket connect in a connector
+     * pool thread, then sets up pipes on success or reports the error to the
+     * SAM client.
+     */
+    private class ConnectTask implements Runnable {
+        private final SAMv3Handler handler;
+        private final Destination dest;
+        private final I2PSocketOptions opts;
+        private final boolean verbose;
+        private final String nick;
+
+        ConnectTask(SAMv3Handler handler, Destination dest, I2PSocketOptions opts,
+                    boolean verbose, String nick) {
+            this.handler = handler;
+            this.dest = dest;
+            this.opts = opts;
+            this.verbose = verbose;
+            this.nick = nick;
+        }
+
+        public void run() {
+            SAMBridge bridge = handler.getBridge();
+            String hashPrefix = dest.calculateHash().toBase64().substring(0,6);
+            if (_log.shouldInfo())
+                _log.info("STREAM CONNECT: starting on " + Thread.currentThread().getName() +
+                          " to [" + hashPrefix + "], timeout=" + opts.getConnectTimeout() + "ms");
+
+            try {
+                // Wait up to the connect timeout for the I2P session to be alive
+                I2PSession session = socketMgr.getSession();
+                if (session == null || session.isClosed()) {
+                    if (_log.shouldWarn())
+                        _log.warn("STREAM CONNECT: session not available for [" + hashPrefix + "]");
+                    handler.notifyStreamResult(verbose, "I2P_ERROR", "Session not available");
+                    handler.stopHandling();
+                    return;
+                }
+                I2PSocket i2ps = socketMgr.connect(dest, opts);
+                if (_log.shouldInfo())
+                    _log.info("STREAM CONNECT: succeeded to [" + hashPrefix + "]");
+
+                SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
+                if (rec == null) {
+                    if (_log.shouldWarn())
+                        _log.warn("Session gone after connect for " + nick);
+                    i2ps.reset();
+                    return;
+                }
+
+                handler.notifyStreamResult(verbose, "OK", null);
+                handler.stealSocket();
+
+                ReadableByteChannel fromClient = handler.getClientSocket();
+                ReadableByteChannel fromI2P = Channels.newChannel(i2ps.getInputStream());
+                WritableByteChannel toClient = handler.getClientSocket();
+                WritableByteChannel toI2P = Channels.newChannel(i2ps.getOutputStream());
+
+                new I2PAppThread(rec.getThreadGroup(),
+                    new Pipe(fromClient, toI2P, bridge, nick), "SAM-Pipe-C2I").start();
+                new I2PAppThread(rec.getThreadGroup(),
+                    new Pipe(fromI2P, toClient, bridge, nick), "SAM-Pipe-I2C").start();
+            } catch (NoRouteToHostException e) {
+                _log.log(Log.INFO, "STREAM CONNECT: NoRouteToHostException to [" + hashPrefix + "]: " + e.getMessage());
+                reportError("CANT_REACH_PEER", e);
+            } catch (ConnectException e) {
+                _log.log(Log.INFO, "STREAM CONNECT: ConnectException to [" + hashPrefix + "]: " + e.getMessage());
+                reportError("CONNECTION_REFUSED", e);
+            } catch (InterruptedIOException e) {
+                _log.log(Log.INFO, "STREAM CONNECT: InterruptedIOException to [" + hashPrefix + "]: " + e.getMessage());
+                reportError("TIMEOUT", e);
+            } catch (I2PException e) {
+                _log.log(Log.WARN, "STREAM CONNECT: " + e.getClass().getName() + " to [" + hashPrefix + "]: " + e.getMessage());
+                reportError("I2P_ERROR", e);
+            } catch (IOException e) {
+                _log.log(Log.WARN, "STREAM CONNECT: " + e.getClass().getName() + " to [" + hashPrefix + "]: " + e.getMessage());
+                reportError("I2P_ERROR", e);
+            } catch (RuntimeException e) {
+                _log.log(Log.CRIT, "STREAM CONNECT: RuntimeException to [" + hashPrefix + "]", e);
+                try {
+                    handler.notifyStreamResult(verbose, "I2P_ERROR", "internal error");
+                } catch (IOException ioe) { /* client gone */ }
+                handler.stopHandling();
+            }
+        }
+
+        private void reportError(String status, Exception e) {
+            if (_log.shouldWarn())
+                _log.warn("STREAM CONNECT failed: " + status + " - " + e.getClass().getName() + ": " + e.getMessage());
+            try {
+                handler.notifyStreamResult(verbose, status, e.getMessage());
+            } catch (IOException ioe) { /* client gone */ }
+            handler.stopHandling();
+        }
+    }
+
+    /** @return first 4 chars of the session nickname for thread names */
+    private static String truncNick(String n) { return n.length() > 4 ? n.substring(0, 4) : n; }
+
+    /**
+     * Accept a single incoming I2P stream and pipe data through the handler's
+     * socket. Validation is synchronous; the blocking accept runs in a
+     * dedicated thread so pool workers are never blocked waiting for an
+     * incoming I2P connection.
+     *
+     * Multiple simultaneous accepts are allowed (v3.2+).
      * Accepts and forwarding may not be done at the same time.
      *
-     * @param handler The handler that communicates with the requesting client
-     * @param verbose If true, SAM will send the Base64-encoded peer Destination of an
-     *                incoming socket as the first line of data sent to its client
-     *                on the handler socket
-     *
-     * @throws DataFormatException if the destination is not valid
-     * @throws ConnectException if the destination refuses connections
-     * @throws NoRouteToHostException if the destination can't be reached
-     * @throws InterruptedIOException if the connection timeouts
-     * @throws I2PException if there's another I2P-related error
-     * @throws IOException
+     * @param handler handler whose socket becomes the I2P data pipe
+     * @param verbose if true, send peer Destination as first line
+     * @throws SAMException if a forwarding server is already active
+     * @throws InterruptedIOException if session is gone
      */
     public void accept(SAMv3Handler handler, boolean verbose)
-            throws I2PException, IOException, SAMException {
+            throws SAMException, InterruptedIOException {
 
-        synchronized (this.socketServerLock) {
-            if (this.socketServer != null) {
-                if (_log.shouldWarn()) _log.warn("a forwarding server is already defined for this destination");
+        synchronized (socketServerLock) {
+            if (socketServer != null) {
+                if (_log.shouldWarn())
+                    _log.warn("a forwarding server is already defined for this destination");
                 throw new SAMException("a forwarding server is already defined for this destination");
             }
         }
 
-        // Unregister from pool before blocking accept so pool's PING
-        // mechanism does not target a socket that can't respond
-        handler.getBridge().unregisterHandlerFromPool(handler);
+        SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
+        if (rec == null) throw new InterruptedIOException();
 
-        I2PSocket i2ps = null;
         _acceptors.incrementAndGet();
+        final SAMv3Handler fHandler = handler;
+        final boolean fVerbose = verbose;
+        new I2PAppThread(rec.getThreadGroup(), new Runnable() {
+            public void run() {
+                try {
+                    doAccept(fHandler, fVerbose);
+                } finally {
+                    _acceptors.decrementAndGet();
+                }
+            }
+        }, "SAM-Acc-" + truncNick(nick)).start();
+    }
+
+    /**
+     * Blocking accept executed in a dedicated thread so pool workers
+     * are never blocked waiting for incoming I2P connections.
+     */
+    private void doAccept(SAMv3Handler handler, boolean verbose) {
+        I2PSocket i2ps = null;
         try {
+            handler.getBridge().unregisterHandlerFromPool(handler);
+
             if (_acceptQueue != null) i2ps = acceptSocket();
             else i2ps = socketMgr.getServerSocket().accept();
-        } finally {
-            _acceptors.decrementAndGet();
+
+            SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
+            if (rec == null || i2ps == null) {
+                handler.stopHandling();
+                return;
+            }
+
+            if (verbose)
+                handler.notifyStreamIncomingConnection(i2ps.getPeerDestination(), i2ps.getPort(), i2ps.getLocalPort());
+            handler.stealSocket();
+
+            ReadableByteChannel fromClient = handler.getClientSocket();
+            ReadableByteChannel fromI2P = Channels.newChannel(i2ps.getInputStream());
+            WritableByteChannel toClient = handler.getClientSocket();
+            WritableByteChannel toI2P = Channels.newChannel(i2ps.getOutputStream());
+
+            SAMBridge bridge = handler.getBridge();
+            new I2PAppThread(rec.getThreadGroup(),
+                new Pipe(fromClient, toI2P, bridge, nick), "SAM-Pipe-C2I").start();
+            new I2PAppThread(rec.getThreadGroup(),
+                new Pipe(fromI2P, toClient, bridge, nick), "SAM-Pipe-I2C").start();
+        } catch (ConnectException e) {
+            if (_log.shouldWarn()) _log.warn("Accept error", e);
+            try { Thread.sleep(50); } catch (InterruptedException ie) {}
+            handler.stopHandling();
+        } catch (I2PException e) {
+            if (_log.shouldWarn()) _log.warn("Accept error", e);
+            handler.stopHandling();
+        } catch (IOException e) {
+            handler.stopHandling();
         }
-
-        SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
-
-        if (rec == null || i2ps == null) throw new InterruptedIOException();
-
-        if (verbose) {
-            handler.notifyStreamIncomingConnection(i2ps.getPeerDestination(), i2ps.getPort(), i2ps.getLocalPort());
-        }
-        handler.stealSocket();
-        ReadableByteChannel fromClient = handler.getClientSocket();
-        ReadableByteChannel fromI2P = Channels.newChannel(i2ps.getInputStream());
-        WritableByteChannel toClient = handler.getClientSocket();
-        WritableByteChannel toI2P = Channels.newChannel(i2ps.getOutputStream());
-
-        SAMBridge bridge = handler.getBridge();
-        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromClient, toI2P, bridge, nick), "SAM-PipeAcc-C2I"))
-                .start();
-        (new I2PAppThread(rec.getThreadGroup(), new Pipe(fromI2P, toClient, bridge, nick), "SAM-PipeAcc-I2C"))
-                .start();
     }
 
     /**

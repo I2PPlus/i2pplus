@@ -12,8 +12,6 @@ package net.i2p.sam;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InterruptedIOException;
-import java.net.ConnectException;
-import java.net.NoRouteToHostException;
 import java.net.SocketException;
 import java.nio.channels.SocketChannel;
 import java.util.Properties;
@@ -21,7 +19,6 @@ import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PClient;
 import net.i2p.client.I2PSessionException;
-import net.i2p.client.streaming.RouterRestartException;
 import net.i2p.crypto.SigType;
 import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
@@ -40,8 +37,8 @@ class SAMv3Handler extends SAMv1Handler
     private Session session;
     // TODO remove singleton, hang off SAMBridge like dgserver
     public static final SessionsDB sSessionsHash = new SessionsDB();
-    private volatile boolean stolenSocket;
-    private volatile boolean streamForwardingSocket;
+    volatile boolean stolenSocket;
+    volatile boolean streamForwardingSocket;
     /** true once the SESSION CREATE has fully initialized; guards against race in execStreamMessage */
     private volatile boolean sessionReady;
     /** package-visible for {@link SAMHandlerPool} */
@@ -123,6 +120,7 @@ class SAMv3Handler extends SAMv1Handler
         try {
             socket.configureBlocking(true);
         } catch (IOException ioe) { /* ignored */ }
+        stopHandling();
     }
 
     /**
@@ -303,19 +301,45 @@ class SAMv3Handler extends SAMv1Handler
             String nick = session.getNick();
             rec = nick != null ? sSessionsHash.get(nick) : null;
         }
-        if (rec!=null && !stolenSocket && !streamForwardingSocket) {
+
+        // Close the server socket (if any) so the SocketForwarder thread
+        // can exit. Only the session-owning control handler or the FORWARD
+        // handler should stop forwarding. Stolen-socket handlers
+        // (CONNECT/ACCEPT) must NOT touch forwarding, and pool handlers
+        // that reference streamSession but don't own it must not either.
+        if (streamSession != null && (session != null || streamForwardingSocket)) {
+            try {
+                ((SAMv3StreamSession)streamSession).stopForwardingIncoming();
+            } catch (SAMException e) { /* no server socket, fine */ }
+              catch (InterruptedIOException e) { /* session gone, fine */ }
+        }
+
+        if (rec == null)
+            return;
+
+        // Only the session-owning control handler performs full cleanup.
+        // Stolen-socket and FORWARD handlers share the session with the
+        // control handler and must not close it.
+        if (!stolenSocket && !streamForwardingSocket) {
+            // Free the nick immediately so it can be reused by another handler
+            sSessionsHash.del(session.getNick());
+
+            // Close the I2P session and its resources
             session.close();
+
+            // Interrupt and wait for thread group threads, with timeout
+            // to avoid blocking the selector thread indefinitely
             rec.getThreadGroup().interrupt();
-            while (rec.getThreadGroup().activeCount()>0)
+            long deadline = System.currentTimeMillis() + 10000;
+            while (rec.getThreadGroup().activeCount() > 0 && System.currentTimeMillis() < deadline) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) { /* ignored */ }
-            rec.getThreadGroup().destroy();
-            sSessionsHash.del(session.getNick());
-            session = null;
-            streamSession = null;
-        } else if (session != null && !stolenSocket && !streamForwardingSocket) {
-            session.close();
+            }
+            try {
+                rec.getThreadGroup().destroy();
+            } catch (IllegalThreadStateException e) { /* threads still running, ignore */ }
+
             session = null;
             streamSession = null;
         }
@@ -330,153 +354,96 @@ class SAMv3Handler extends SAMv1Handler
      */
     @Override
     protected boolean execSessionMessage(String opcode, Properties props) {
-
-        String dest = "BUG!";
-        boolean ok = false;
-
         String nick = (String) props.remove("ID");
         if (nick == null)
             return writeString(SESSION_ERROR, "ID not specified");
 
-        String style = (String) props.remove("STYLE");
-        if (style == null && !opcode.equals("REMOVE"))
-            return writeString(SESSION_ERROR, "No SESSION STYLE specified");
+        if (opcode.equals("CREATE"))
+            return execSessionCreate(nick, props);
 
+        if (opcode.equals("ADD") || opcode.equals("REMOVE"))
+            return execSessionAddRemove(opcode, nick, props);
+
+        if (_log.shouldDebug())
+            _log.debug("Unrecognized SESSION message opcode: \"" + opcode + "\"");
+        return writeString(SESSION_ERROR, "Unrecognized opcode");
+    }
+
+    /**
+     * Execute SESSION CREATE — generates or validates a destination,
+     * registers the nick, builds tunnels, and creates the session object.
+     *
+     * @param nick validated session ID
+     * @param props parsed message properties
+     * @return true if the handler should continue processing
+     */
+    private boolean execSessionCreate(String nick, Properties props) {
+        boolean ok = false;
         try {
-            if (opcode.equals("CREATE")) {
-                if ((this.getRawSession()!= null) || (this.getDatagramSession() != null) ||
-                    (this.getStreamSession() != null)) {
-                    if (_log.shouldDebug())
-                        _log.debug("Trying to create a session, but one still exists");
-                    return writeString(SESSION_ERROR, "Session already exists");
-                }
-                if (props.isEmpty()) {
-                    if (_log.shouldDebug())
-                        _log.debug("No parameters specified in SESSION CREATE message");
-                    return writeString(SESSION_ERROR, "No parameters for SESSION CREATE");
-                }
+            String style = (String) props.remove("STYLE");
+            if (style == null)
+                return writeString(SESSION_ERROR, "No SESSION STYLE specified");
 
-                dest = (String) props.remove("DESTINATION");
-                if (dest == null) {
-                    if (_log.shouldDebug())
-                        _log.debug("SESSION DESTINATION parameter not specified");
-                    return writeString(SESSION_ERROR, "DESTINATION not specified");
-                }
-
-                if (dest.equals("TRANSIENT")) {
-                    if (_log.shouldDebug())
-                        _log.debug("TRANSIENT destination requested");
-                    String sigTypeStr = (String) props.remove("SIGNATURE_TYPE");
-                    SigType sigType;
-                    if (sigTypeStr != null) {
-                        sigType = SigType.parseSigType(sigTypeStr);
-                        if (sigType == null) {
-                            return writeString(SESSION_ERROR, "SIGNATURE_TYPE " + sigTypeStr + " unsupported");
-                        }
-                    } else {
-                        sigType = SigType.DSA_SHA1;
-                    }
-                    ByteArrayOutputStream priv = new ByteArrayOutputStream(663);
-                    SAMUtils.genRandomKey(priv, null, sigType);
-
-                    dest = Base64.encode(priv.toByteArray());
-                } else {
-                    if (_log.shouldDebug())
-                        _log.debug("Custom destination specified [" + dest + "]");
-                    if (!SAMUtils.checkPrivateDestination(dest))
-                        return writeString("SESSION STATUS RESULT=INVALID_KEY\n");
-                }
-
-                // Unconditionally override what the client may have set
-                // (iMule sets BestEffort) as None is more efficient
-                // and the client has no way to access delivery notifications
-                i2cpProps.setProperty(I2PClient.PROP_RELIABILITY, I2PClient.PROP_RELIABILITY_NONE);
-                i2cpProps.setProperty("i2cp.fastReceive", "true");
-
-                // Record the session in the database sSessionsHash
-                Properties allProps = new Properties();
-                allProps.putAll(i2cpProps);
-                allProps.putAll(props);
-
-                if (style.equals("MASTER") || style.equals("PRIMARY")) {
-                    // We must put these here, as SessionRecord.getProps() makes a copy,
-                    // and the socket manager is instantiated in the
-                    // SAMStreamSession constructor.
-                    allProps.setProperty("i2p.streaming.enforceProtocol", "true");
-                    allProps.setProperty("i2cp.dontPublishLeaseSet", "false");
-                }
-
-                try {
-                    sSessionsHash.put( nick, new SessionRecord(dest, allProps, this) );
-                } catch (SessionsDB.ExistingIdException e) {
-                    if (_log.shouldDebug())
-                        _log.debug("SESSION ID parameter already in use");
-                    return writeString("SESSION STATUS RESULT=DUPLICATED_ID\n");
-                } catch (SessionsDB.ExistingDestException e) {
-                return writeString("SESSION STATUS RESULT=DUPLICATED_DEST\n");
-                }
-
-
-                // Create the session
-                // We block in the session constructors while tunnels are built.
-                // The pool detects socket close via its NIO selector and
-                // will call stopHandling() if the client disconnects.
-                if (style.equals("RAW")) {
-                    SAMv3DatagramServer dgs = bridge.getV3DatagramServer(props);
-                    SAMv3RawSession v3 = new SAMv3RawSession(nick, dgs);
-                    rawSession = v3;
-                    this.session = v3;
-                    v3.start();
-                } else if (style.equals("DATAGRAM")) {
-                    SAMv3DatagramServer dgs = bridge.getV3DatagramServer(props);
-                    SAMv3DatagramSession v3 = new SAMv3DatagramSession(nick, dgs);
-                    datagramSession = v3;
-                    this.session = v3;
-                    v3.start();
-                } else if (style.equals("STREAM")) {
-                    SAMv3StreamSession v3 = newSAMStreamSession(nick);
-                    streamSession = v3;
-                    this.session = v3;
-                    v3.start();
-                } else if (style.equals("MASTER") || style.equals("PRIMARY")) {
-                    SAMv3DatagramServer dgs = bridge.getV3DatagramServer(props);
-                    MasterSession v3 = new MasterSession(nick, dgs, this, allProps);
-                    streamSession = v3;
-                    datagramSession = v3;
-                    rawSession = v3;
-                    this.session = v3;
-                    v3.start();
-                } else {
-                    if (_log.shouldDebug())
-                        _log.debug("Unsupported SESSION STYLE: \"" + style +"\"");
-                    return writeString(SESSION_ERROR, "Unrecognized SESSION STYLE");
-                }
-                sessionReady = true;
-                ok = true;
-                return writeString("SESSION STATUS RESULT=OK DESTINATION=" + dest + '\n');
-            } else if (opcode.equals("ADD") || opcode.equals("REMOVE")) {
-                // prevent trouble in finally block
-                ok = true;
-                if (streamSession == null || datagramSession == null || rawSession == null)
-                    return writeString(SESSION_ERROR, "Not a MASTER session");
-                MasterSession msess = (MasterSession) session;
-                String msg;
-                if (opcode.equals("ADD")) {
-                    msg = msess.add(nick, style, props);
-                } else {
-                    msg = msess.remove(nick, props);
-                }
-                if (msg == null)
-                    return writeString("SESSION STATUS RESULT=OK ID=\"" + nick + '"', opcode + ' ' + nick);
-                else
-                    return writeString(SESSION_ERROR + " ID=\"" + nick + '"', msg);
-            } else {
+            if (getRawSession() != null || getDatagramSession() != null ||
+                getStreamSession() != null) {
                 if (_log.shouldDebug())
-                    _log.debug("Unrecognized SESSION message opcode: \"" + opcode + "\"");
-                return writeString(SESSION_ERROR, "Unrecognized opcode");
+                    _log.debug("Trying to create a session, but one still exists");
+                return writeString(SESSION_ERROR, "Session already exists");
             }
+            if (props.isEmpty()) {
+                if (_log.shouldDebug())
+                    _log.debug("No parameters specified in SESSION CREATE message");
+                return writeString(SESSION_ERROR, "No parameters for SESSION CREATE");
+            }
+
+            String dest = (String) props.remove("DESTINATION");
+            if (dest == null) {
+                if (_log.shouldDebug())
+                    _log.debug("SESSION DESTINATION parameter not specified");
+                return writeString(SESSION_ERROR, "DESTINATION not specified");
+            }
+
+            dest = initDestination(dest, props);
+
+            i2cpProps.setProperty(I2PClient.PROP_RELIABILITY, I2PClient.PROP_RELIABILITY_NONE);
+            i2cpProps.setProperty("i2cp.fastReceive", "true");
+
+            Properties allProps = new Properties();
+            allProps.putAll(i2cpProps);
+            allProps.putAll(props);
+            // Shorten per-destination cooldown so CONNECT retries are not penalized
+            if (!allProps.containsKey("i2p.streaming.destinationCooldownMs"))
+                allProps.setProperty("i2p.streaming.destinationCooldownMs", "15000");
+
+            if (style.equals("MASTER") || style.equals("PRIMARY")) {
+                allProps.setProperty("i2p.streaming.enforceProtocol", "true");
+                allProps.setProperty("i2cp.dontPublishLeaseSet", "false");
+            }
+
+            try {
+                sSessionsHash.put(nick, new SessionRecord(dest, allProps, this));
+            } catch (SessionsDB.ExistingIdException e) {
+                if (_log.shouldDebug())
+                    _log.debug("SESSION ID parameter already in use");
+                return writeString("SESSION STATUS RESULT=DUPLICATED_ID\n");
+            } catch (SessionsDB.ExistingDestException e) {
+                return writeString("SESSION STATUS RESULT=DUPLICATED_DEST\n");
+            }
+
+            instantiateSession(style, nick, allProps, props);
+
+            if (stopHandler) {
+                session.close();
+                sSessionsHash.del(nick);
+                session = null;
+                streamSession = null;
+                return false;
+            }
+            sessionReady = true;
+            ok = true;
+            return writeString("SESSION STATUS RESULT=OK DESTINATION=" + dest + '\n');
         } catch (DataFormatException e) {
-            _log.error("Invalid SAM destination specified" + "\n* Error: " + e.getMessage());
+            _log.error("Invalid SAM destination" + "\n* Error: " + e.getMessage());
             return writeString("SESSION STATUS RESULT=INVALID_KEY", e.getMessage());
         } catch (I2PSessionException e) {
             _log.error("Failed to start SAM session" + "\n* Error: " + e.getMessage());
@@ -488,12 +455,83 @@ class SAMv3Handler extends SAMv1Handler
             _log.error("Failed to start SAM session" + "\n* Error: " + e.getMessage());
             return writeString(SESSION_ERROR, e.getMessage());
         } finally {
-            // unregister the session if it has not been created
-            if ( !ok && nick!=null ) {
+            if (!ok && nick != null) {
                 sSessionsHash.del(nick);
                 session = null;
             }
         }
+    }
+
+    /**
+     * Resolve TRANSIENT or validate a user-supplied private key.
+     *
+     * @param dest DESTINATION value, may be "TRANSIENT"
+     * @param props properties (SIGNATURE_TYPE consumed if TRANSIENT)
+     * @return Base64-encoded private key
+     */
+    private static String initDestination(String dest, Properties props) throws DataFormatException {
+        if (dest.equals("TRANSIENT")) {
+            String sigTypeStr = (String) props.remove("SIGNATURE_TYPE");
+            SigType sigType;
+            if (sigTypeStr != null) {
+                sigType = SigType.parseSigType(sigTypeStr);
+                if (sigType == null)
+                    throw new DataFormatException("unsupported SIGNATURE_TYPE " + sigTypeStr);
+            } else {
+                sigType = SigType.DSA_SHA1;
+            }
+            ByteArrayOutputStream priv = new ByteArrayOutputStream(663);
+            SAMUtils.genRandomKey(priv, null, sigType);
+            return Base64.encode(priv.toByteArray());
+        }
+        if (!SAMUtils.checkPrivateDestination(dest))
+            throw new DataFormatException("invalid private key");
+        return dest;
+    }
+
+    /**
+     * Create and start the session object for the given style.
+     * Blocks in the session constructors while tunnels are built.
+     */
+    private void instantiateSession(String style, String nick,
+                                     Properties allProps, Properties props)
+            throws DataFormatException, I2PSessionException, IOException, SAMException {
+        SAMv3DatagramServer dgs = style.equals("RAW") || style.equals("DATAGRAM") ||
+                                   style.equals("MASTER") || style.equals("PRIMARY") ?
+                                   bridge.getV3DatagramServer(props) : null;
+        if (style.equals("RAW")) {
+            SAMv3RawSession v3 = new SAMv3RawSession(nick, dgs);
+            rawSession = v3; session = v3;
+            v3.start();
+        } else if (style.equals("DATAGRAM")) {
+            SAMv3DatagramSession v3 = new SAMv3DatagramSession(nick, dgs);
+            datagramSession = v3; session = v3;
+            v3.start();
+        } else if (style.equals("STREAM")) {
+            SAMv3StreamSession v3 = newSAMStreamSession(nick);
+            streamSession = v3; session = v3;
+            v3.start();
+        } else if (style.equals("MASTER") || style.equals("PRIMARY")) {
+            MasterSession v3 = new MasterSession(nick, dgs, this, allProps);
+            streamSession = v3; datagramSession = v3; rawSession = v3; session = v3;
+            v3.start();
+        } else {
+            throw new SAMException("Unrecognized SESSION STYLE");
+        }
+    }
+
+    /**
+     * Execute SESSION ADD or REMOVE for MASTER sessions.
+     */
+    private boolean execSessionAddRemove(String opcode, String nick, Properties props) {
+        if (streamSession == null || datagramSession == null || rawSession == null)
+            return writeString(SESSION_ERROR, "Not a MASTER session");
+        String style = (String) props.remove("STYLE");
+        MasterSession msess = (MasterSession) session;
+        String msg = opcode.equals("ADD") ? msess.add(nick, style, props) : msess.remove(nick, props);
+        if (msg == null)
+            return writeString("SESSION STATUS RESULT=OK ID=\"" + nick + '"', opcode + ' ' + nick);
+        return writeString(SESSION_ERROR + " ID=\"" + nick + '"', msg);
     }
 
     /**
@@ -568,17 +606,7 @@ class SAMv3Handler extends SAMv1Handler
         if ( opcode.equals ( "CONNECT" ) ) {
             return execStreamConnect ( props );
         } else if ( opcode.equals ( "ACCEPT" ) ) {
-            try {
-                return execStreamAccept(props);
-            } catch (I2PSessionException ise) {
-                ctl.writeString(SESSION_ERROR, ise.getMessage());
-                ctl.stopHandling();
-                return false;
-            } catch (RouterRestartException rre) {
-                ctl.writeString(SESSION_ERROR, "Router restart");
-                ctl.stopHandling();
-                return false;
-            }
+            return execStreamAccept(props);
         } else if ( opcode.equals ( "FORWARD") ) {
             return execStreamForwardIncoming( props );
         } else {
@@ -593,58 +621,49 @@ class SAMv3Handler extends SAMv1Handler
 
     /**
      * Parse and execute a STREAM CONNECT message.
+     * Dispatches the blocking I2P socket connect to a shared connector pool
+     * so the caller's worker thread is never blocked. Error responses
+     * (CONNECTION_REFUSED, CANT_REACH_PEER, TIMEOUT, etc.) are sent
+     * asynchronously by the ConnectTask.
+     *
      * Supports SILENT mode to suppress status messages.
      *
      * @param props the parsed message properties
      * @return true if the handler should continue processing commands
      */
     @Override
-    protected boolean execStreamConnect( Properties props) {
-        // Messages are NOT sent if SILENT=true,
-        // The specs said that they were.
+    protected boolean execStreamConnect(Properties props) {
         boolean verbose = !Boolean.parseBoolean(props.getProperty("SILENT"));
         try {
             if (props.isEmpty()) {
-                notifyStreamResult(verbose, "I2P_ERROR","No parameters specified in STREAM CONNECT message");
                 if (_log.shouldDebug())
                     _log.debug("No parameters specified in STREAM CONNECT message");
+                notifyStreamResult(verbose, "I2P_ERROR", "No parameters specified in STREAM CONNECT message");
                 return false;
             }
 
             String dest = (String) props.remove("DESTINATION");
             if (dest == null) {
-                notifyStreamResult(verbose, "I2P_ERROR", "Destination not specified in STREAM CONNECT message");
                 if (_log.shouldDebug())
                     _log.debug("Destination not specified in STREAM CONNECT message");
+                notifyStreamResult(verbose, "I2P_ERROR", "Destination not specified in STREAM CONNECT message");
                 return false;
             }
 
+            ((SAMv3StreamSession) streamSession).connectAsync(this, dest, props);
+            return true;
+        } catch (DataFormatException e) {
+            if (_log.shouldDebug())
+                _log.debug("Invalid destination in STREAM CONNECT message");
             try {
-                ((SAMv3StreamSession)streamSession).connect( this, dest, props );
-                return true;
-            } catch (DataFormatException e) {
-                if (_log.shouldDebug())
-                    _log.debug("Invalid destination in STREAM CONNECT message");
-                notifyStreamResult ( verbose, "INVALID_KEY", e.getMessage());
-            } catch (ConnectException e) {
-                if (_log.shouldDebug())
-                    _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
-                notifyStreamResult ( verbose, "CONNECTION_REFUSED", e.getMessage());
-            } catch (NoRouteToHostException e) {
-            if (_log.shouldDebug())
-                _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
-            notifyStreamResult ( verbose, "CANT_REACH_PEER", e.getMessage());
-            } catch (InterruptedIOException e) {
-            if (_log.shouldDebug())
-                _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
-            notifyStreamResult ( verbose, "TIMEOUT", e.getMessage());
-            } catch (I2PException e) {
-                if (_log.shouldDebug())
-                    _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
-                notifyStreamResult ( verbose, "I2P_ERROR", e.getMessage() );
-            }
-        } catch (IOException e) { /* ignored */ }
-        return false;
+                notifyStreamResult(verbose, "INVALID_KEY", e.getMessage());
+            } catch (IOException ioe) { /* client gone */ }
+            return false;
+        } catch (IOException e) {
+            if (_log.shouldWarn())
+                _log.warn("STREAM CONNECT error", e);
+            return false;
+        }
     }
 
     private boolean execStreamForwardIncoming( Properties props ) {
@@ -667,47 +686,30 @@ class SAMv3Handler extends SAMv1Handler
     }
 
     /**
-     * @return success
-     * @throws I2PSessionException if socket manager is destroyed while waiting
+     * Execute STREAM ACCEPT.  Sends "OK" synchronously and starts the
+     * blocking accept in a background thread.  Result (TIMEOUT, I2P_ERROR,
+     * or the actual streaming data) arrives asynchronously.
+     *
+     * @return true if accept was launched, false on immediate error
      */
-    private boolean execStreamAccept(Properties props) throws I2PSessionException, RouterRestartException {
-        // Messages are NOT sent if SILENT=true,
-        // The specs said that they were.
+    private boolean execStreamAccept(Properties props) {
         boolean verbose = !Boolean.parseBoolean(props.getProperty("SILENT"));
         try {
+            notifyStreamResult(verbose, "OK", null);
+            ((SAMv3StreamSession) streamSession).accept(this, verbose);
+            return true;
+        } catch (InterruptedIOException e) {
+            if (_log.shouldDebug())
+                _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
             try {
-                // execStreamSession() above checks if session is destroyed first
-                notifyStreamResult(verbose, "OK", null);
-                ((SAMv3StreamSession)streamSession).accept(this, verbose);
-                return true;
-            } catch (InterruptedIOException e) {
-                if (_log.shouldDebug())
-                    _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
-                    notifyStreamResult( verbose, "TIMEOUT", e.getMessage() );
-            } catch (I2PSessionException e) {
-                // As of 0.9.61, this is thrown for a destroyed session.
-                // Kill the SAM session.
-                if (_log.shouldDebug())
-                    _log.debug("STREAM ACCEPT failed", e);
-                notifyStreamResult (verbose, "I2P_ERROR", e.getMessage());
-                // throw so caller can close control socket
-                throw e;
-            } catch (RouterRestartException e) {
-                // Kill the SAM session.
-                if (_log.shouldDebug())
-                    _log.debug("STREAM ACCEPT failed", e);
-                notifyStreamResult (verbose, "I2P_ERROR", "Router restart");
-                // throw so caller can close control socket
-                throw e;
-            } catch (I2PException e) {
-                if (_log.shouldDebug())
-                    _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
-                    notifyStreamResult ( verbose, "I2P_ERROR", e.getMessage() );
-            } catch (SAMException e) {
-                if (_log.shouldDebug())
-                    _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
-                notifyStreamResult ( verbose, "ALREADY_ACCEPTING", e.getMessage());
-            }
+                notifyStreamResult(verbose, "TIMEOUT", e.getMessage());
+            } catch (IOException ioe) { /* client gone */ }
+        } catch (SAMException e) {
+            if (_log.shouldDebug())
+                _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
+            try {
+                notifyStreamResult(verbose, "ALREADY_ACCEPTING", e.getMessage());
+            } catch (IOException ioe) { /* client gone */ }
         } catch (IOException e) { /* ignored */ }
         return false;
     }
