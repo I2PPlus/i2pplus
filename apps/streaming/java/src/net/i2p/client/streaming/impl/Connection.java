@@ -94,6 +94,7 @@ class Connection {
     private final RetransmitEvent _retransmitEvent;
     private final PacedPacketEvent _pacedEvent;
     private final LinkedList<PacketLocal> _pacedQueue;
+    private final TLProbeEvent _tlpEvent;
     private final AckDupEvent _ackDupEvent;
     /** Reusable list for ackPackets() — avoids per-call allocation.
      *  Only accessed from the receive thread, serialized by _dataLock. */
@@ -217,6 +218,7 @@ class Connection {
         _retransmitEvent = new RetransmitEvent();
         _pacedEvent = new PacedPacketEvent();
         _pacedQueue = new LinkedList<PacketLocal>();
+        _tlpEvent = new TLProbeEvent();
         _ackDupEvent = new AckDupEvent();
         _ackedList = new ArrayList<>(8);
 
@@ -361,6 +363,19 @@ class Connection {
         int rtt = Math.max(_options.getRTT(), 500);       // ms
         int bdp = Math.max(MAX_WINDOW_SIZE, (int)(bwe * rtt));
         return Math.min(ABSOLUTE_MAX_WINDOW, bdp);
+    }
+
+    /**
+     *  Tail Loss Probe timeout (PTO).
+     *  Time after which we send a probe if no ACK has been received for the
+     *  oldest unacked packet. Fires at ~2*RTT to detect loss before RTO.
+     *
+     *  @return probe timeout in ms, in [200, 2000]
+     */
+    private int getPTO() {
+        int rtt = _options.getRTT();
+        if (rtt <= 0) return Math.min(3000, _options.getRTO() / 2);
+        return Math.max(200, Math.min(2000, rtt * 2));
     }
 
     /**
@@ -544,6 +559,10 @@ class Connection {
                    if (_log.shouldDebug()) {
                        _log.debug("[" + Connection.this + "] Resend in " + timeout + "ms for " + packet);
                    }
+                   // Schedule Tail Loss Probe — fires at ~2*RTT to detect loss
+                   // before the RTO timer (5-15s). Only scheduled when the RTO
+                   // transitions from idle to running (first unacked packet).
+                   _tlpEvent.scheduleProbe(getPTO());
                 } else {
                     if (_log.shouldDebug()) {
                         _log.debug("[" + Connection.this + "] Timer was already running!");
@@ -614,6 +633,7 @@ class Connection {
                 if (nacks == null || nacks.length == 0) {
                     if (ackThrough > oldHighest) {
                         _dupAckCount = 0;
+                        _tlpEvent.cancel();
                     } else {
                         if (ackThrough == _lastDupAck) {
                             _dupAckCount++;
@@ -919,6 +939,7 @@ class Connection {
         _receiver.destroy();
         _activityTimer.cancel();
         _retransmitEvent.cancel();
+        _tlpEvent.cancel();
         _inputStream.streamErrorOccurred(new IOException("Socket closed"));
 
         if (_log.shouldInfo()) {_log.info("Connection disconnect complete\n" + toString());}
@@ -1685,6 +1706,62 @@ class Connection {
                 buf.append("\n* Close received: ").append(DataHelper.formatDuration(now - getCloseReceivedOn())).append(" ago");
         }
         return buf.toString();
+    }
+
+    /**
+     *  Tail Loss Probe: fire at ~2*RTT to detect loss before the RTO timer.
+     *  Re-sends the oldest unacked packet as a probe. If the original was lost,
+     *  the probe fills the gap and the peer's ACK triggers fast recovery.
+     *  If the original was delivered, the duplicate triggers ackImmediately().
+     *
+     *  Only one TLP per flight — subsequent loss falls back to RTO.
+     *  Does NOT trigger congestion control (probe may not actually be lost).
+     */
+    private class TLProbeEvent extends SimpleTimer2.TimedEvent {
+        private volatile boolean _pending;
+
+        TLProbeEvent() { super(_timer); }
+
+        synchronized void scheduleProbe(int delayMs) {
+            if (!_pending) {
+                _pending = true;
+                schedule(delayMs);
+            }
+        }
+
+        @Override
+        public synchronized boolean cancel() {
+            _pending = false;
+            return super.cancel();
+        }
+
+        @Override
+        public void timeReached() {
+            _pending = false;
+            sendTLProbe();
+        }
+    }
+
+    /**
+     *  Send a tail loss probe: re-enqueue the oldest unacked packet.
+     *  No congestion control — TLP is a probe, not a confirmed loss.
+     */
+    private void sendTLProbe() {
+        PacketLocal oldest;
+        synchronized (_outboundPackets) {
+            Map.Entry<Long, PacketLocal> e = _outboundPackets.firstEntry();
+            if (e == null) return;
+            oldest = e.getValue();
+        }
+        if (oldest.getAckTime() > 0) return;
+        if (_outboundQueue.enqueue(oldest)) {
+            _unackedPacketsReceived.set(0);
+            _lastSendTime = _context.clock().now();
+            resetActivityTimer();
+            if (_log.shouldInfo()) {
+                _log.info("TLP sent for seq " + oldest.getSequenceNum() + " on " + Connection.this);
+            }
+        }
     }
 
     /**
