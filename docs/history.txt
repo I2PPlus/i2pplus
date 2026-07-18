@@ -1,3 +1,53 @@
+2026-07-18 dr|z3d
+  * Streaming: Dynamic BDP-based window cap (replaces hard MAX_WINDOW_SIZE);
+    Tail Loss Probe and duplicate-ACK fast retransmit for faster loss
+    recovery; retransmit burst pacing; higher slow-start window (256) and
+    SYN queue (256) for high-bandwidth paths; interruptible connect cooldown;
+    live pacing-rate recompute; raise max retransmissions default to 32;
+    lower disconnect timeout 5min→2min; cap unacked SYN resends at 5;
+    raise delayed-connect timeout 20s→45s
+  * Tuner: Streaming window/RTO tuning from congestion, connect failures,
+    retransmit ratio, and peer RESETs; lower streaming RTT threshold
+    20s→7s; adaptive tunnel peer-activity window driven by build success
+  * Console: /health page refinements (uptime hours:minutes, throughput
+    rounding, stream-table b32 truncation); SAM debug page; dark theme
+    cosmetics
+  * SAM: Async STREAM CONNECT dispatch with 15s timeout and destination
+    cooldown, tunnel-readiness check
+  * Tunnel: Fix TestJob NPE/race when a tunnel is replaced mid-test;
+    widen peer-selection activity window under degraded build success to
+    break the pruning loop; register idle-transit-tunnel drop stat
+  * NetDB: Adaptive LeaseSet lookup timeout
+  * i18n: Translate missing strings across all languages, fix format
+    mismatches
+  * I2PTunnel: Simplify HTTP server keepalive dispatch
+
+2026-07-17 dr|z3d
+  * Console: /health uptime shown as hours:minutes; fix transit fastest
+    sort by throughput and b32 display cleanup on /streams; add SAM debug
+    page and reorder health rings
+  * SAM: Async STREAM CONNECT with 15s timeout, 15s destination cooldown,
+    and tunnel-readiness check
+
+2026-07-16 dr|z3d
+  * Console: /health subsystem-group ring ordering, replace DB Size with
+    LeaseSets for floodfills and dead BW Delay ring with Active Streams;
+    prepend truncated b32 to outbound tunnel names on /streams; fix
+    NaN/color thresholds and add neutral ring mode; dark theme improvements
+  * Console: Security hardening — HSTS, X-Frame-Options, TLS 1.0/1.1 off,
+    tighter CSRF Origin check, HttpOnly cookies
+  * Console: Fix NewsFetcher crash when news SU3 signature is invalid
+  * SAM: Fix session destroy mid-stream and PING-timeout cascade killing
+    active streams; bound handler pool and queue commands
+  * BanLogger: Add country/host columns
+  * Tunnel: Fix bandwidth divisor cap, throttle normalization at high
+    thresholds, and reject-exponent clamp
+
+2026-07-15 dr|z3d
+  * Console: Downgrade servlet XSS filter log entry to warning
+  * GeoIP: Fix ASN reverse-name detection (punctuation, all-uppercase
+    words, ASN order, parentheticals)
+
 2026-07-14 dr|z3d
   * Upstream security: I2NP length checks, susimail AUTH session fix,
     blocklist IP conversion
