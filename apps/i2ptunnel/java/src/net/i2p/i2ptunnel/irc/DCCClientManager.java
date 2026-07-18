@@ -271,7 +271,15 @@ public class DCCClientManager extends EventReceiver {
                 c.stop();
             }
         }
-        // shouldn't need to expire active
+        // expire active tunnels in case a stop event was missed, else _active
+        // fills up and blocks all new incoming DCC (see MAX_INCOMING checks above)
+        for (Iterator<I2PTunnelDCCClient> iter = _active.values().iterator(); iter.hasNext(); ) {
+            I2PTunnelDCCClient c = iter.next();
+            if (c.getExpires() < _tunnel.getContext().clock().now()) {
+                iter.remove();
+                c.stop();
+            }
+        }
         for (Iterator<I2PTunnelDCCClient> iter = _complete.values().iterator(); iter.hasNext(); ) {
             I2PTunnelDCCClient c = iter.next();
             if (c.getExpires() < _tunnel.getContext().clock().now()) {
