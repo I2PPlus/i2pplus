@@ -195,16 +195,19 @@ public class BuildExecutor implements Runnable {
     public synchronized void shutdown() {
         _isRunning = false;
         _poolFailureState.clear();
+        _lastRebuildTime.clear();
         restart();
     }
 
     /**
      *  Remove failure state for a pool that is being removed.
-     *  Prevents unbounded growth of _poolFailureState across pool lifecycles.
+     *  Prevents unbounded growth of _poolFailureState and _lastRebuildTime
+     *  across pool lifecycles.
      *  @since 0.9.70
      */
     void removePoolState(TunnelPool pool) {
         _poolFailureState.remove(pool);
+        _lastRebuildTime.remove(pool);
     }
 
     /**
