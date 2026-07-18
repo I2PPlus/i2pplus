@@ -80,6 +80,10 @@ public class UDPSource implements Source, Runnable {
                 // receive...
                 this.sock.receive(pack);
 
+                Sink s = this.sink;
+                if (s == null)
+                    break;
+
                 // create new data array
                 byte[] nbuf = new byte[pack.getLength()];
 
@@ -87,7 +91,7 @@ public class UDPSource implements Source, Runnable {
                 System.arraycopy(pack.getData(), 0, nbuf, 0, nbuf.length);
 
                 // transfer to sink
-                this.sink.send(null, port, 0, nbuf);
+                s.send(null, port, 0, nbuf);
             } catch(Exception e) {
                 Log log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
                 if (log.shouldWarn())

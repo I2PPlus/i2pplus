@@ -57,10 +57,13 @@ public class Pinger implements Source, Runnable {
             this.waitlock.notifyAll();
         }
         // send unsubscribe-message
+        Sink s = this.sink;
+        if (s == null)
+            return;
         byte[] data = new byte[1];
         data[0] = 1;
         try {
-            this.sink.send(null, fromPort, 0, data);
+            s.send(null, fromPort, 0, data);
             if (log.shouldDebug())
                 log.debug("Sent unsubscribe from port " + fromPort);
         } catch (RuntimeException re) { /* ignored */ }
