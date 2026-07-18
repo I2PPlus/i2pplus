@@ -147,7 +147,7 @@ class ConnectionManager {
         _packetHandler = new PacketHandler(_context, this);
         _schedulerChooser = new SchedulerChooser(_context);
         _conPacketHandler = new ConnectionPacketHandler(_context);
-        _timer = new RetransmissionTimer(_context, "Streaming Timer " +
+        _timer = new RetransmissionTimer(_context, "StreamTimer:" +
                                          session.getMyDestination().calculateHash().toBase64().substring(0, 4));
         _connectionHandler = new ConnectionHandler(_context, this, _timer.getSharedTimer());
         _tcbShare = new TCBShare(_context, _timer.getSharedTimer());

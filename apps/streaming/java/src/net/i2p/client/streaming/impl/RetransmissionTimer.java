@@ -20,7 +20,7 @@ public class RetransmissionTimer {
      * @since 0.9
      */
     RetransmissionTimer(I2PAppContext ctx, String name) {
-        _dedicated = new SimpleTimer2(ctx);
+        _dedicated = new SimpleTimer2(ctx, name);
     }
 
     /**

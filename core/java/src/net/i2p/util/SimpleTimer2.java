@@ -51,12 +51,14 @@ public class SimpleTimer2 {
 
     /**
      *  To be instantiated by the context.
-     *  Others should use context.simpleTimer2() instead
+     *  Others should use context.simpleTimer2() instead, except for
+     *  dedicated timers that need a distinct thread name.
      *
      *  @param context the I2P application context
-     *  @param name the timer name
+     *  @param name the timer name, used for the timer thread name
+     *  @since 0.9.70+ public
      */
-    protected SimpleTimer2(I2PAppContext context, String name) {
+    public SimpleTimer2(I2PAppContext context, String name) {
         this(context, name, true);
     }
 
