@@ -31,6 +31,8 @@ class UDPReceiver {
     private final SocketListener _endpoint;
 
     private static final boolean IS_ANDROID = SystemVersion.isAndroid();
+    /** How long to sleep between throttle checks while inbound is throttled */
+    private static final int THROTTLE_WAIT_MS = 10;
 
     public UDPReceiver(RouterContext ctx, UDPTransport transport, DatagramSocket socket, String name,
                        SocketListener lsnr) {
@@ -109,20 +111,23 @@ class UDPReceiver {
         @Override
         public void run() {
             while (_keepRunning) {
-                UDPPacket packet = UDPPacket.acquire(_context, true);
-                DatagramPacket dpacket = packet.getPacket();
-
-                // Android ICS bug - http://code.google.com/p/android/issues/detail?id=24748
-                if (IS_ANDROID) {dpacket.setLength(UDPPacket.MAX_PACKET_SIZE);}
-
-                while (!_context.throttle().acceptNetworkMessage()) {
-                    try {Thread.sleep(Math.min(100, 10));}
+                // Wait out any inbound throttle before acquiring a pooled packet, so a
+                // stall doesn't pin a pool entry doing nothing.
+                while (_keepRunning && !_context.throttle().acceptNetworkMessage()) {
+                    try {Thread.sleep(THROTTLE_WAIT_MS);}
                     catch (InterruptedException ie) {
                         Thread.currentThread().interrupt();
                         _keepRunning = false;
                         break;
                     }
                 }
+                if (!_keepRunning) {break;}
+
+                UDPPacket packet = UDPPacket.acquire(_context, true);
+                DatagramPacket dpacket = packet.getPacket();
+
+                // Android ICS bug - http://code.google.com/p/android/issues/detail?id=24748
+                if (IS_ANDROID) {dpacket.setLength(UDPPacket.MAX_PACKET_SIZE);}
 
                 try {
                     _socket.receive(dpacket);
