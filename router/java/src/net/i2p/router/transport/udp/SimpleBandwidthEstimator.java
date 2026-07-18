@@ -35,6 +35,11 @@ public class SimpleBandwidthEstimator implements BandwidthEstimator {
     private static volatile int _decayFactor = DEFAULT_DECAY_FACTOR;
     private static final int WESTWOOD_RTT_MIN = 500;
 
+    // Snapshot of the global decay factor taken at construction, so runtime
+    // tuning applies only to new estimators and never perturbs a live stream's
+    // EWMA state mid-flight.
+    private final int _localDecayFactor;
+
     /**
      * Returns the current EWMA decay factor.
      * @since 0.9.70+
@@ -61,6 +66,7 @@ public class SimpleBandwidthEstimator implements BandwidthEstimator {
         _log = ctx.logManager().getLog(SimpleBandwidthEstimator.class);
         _context = ctx;
         _state = state;
+        _localDecayFactor = _decayFactor;
         _tAck = ctx.clock().now();
         _acked = -1;
     }
@@ -148,7 +154,7 @@ public class SimpleBandwidthEstimator implements BandwidthEstimator {
      * Applies exponential decay to the bandwidth estimate when no new data is received.
      */
     private void decay() {
-        _bK_ns_est *= (_decayFactor - 1) / (float) _decayFactor;
+        _bK_ns_est *= (_localDecayFactor - 1) / (float) _localDecayFactor;
         _bKFiltered = westwood_do_filter(_bKFiltered, _bK_ns_est);
     }
 
@@ -165,7 +171,7 @@ public class SimpleBandwidthEstimator implements BandwidthEstimator {
         if (rtt < WESTWOOD_RTT_MIN)
             rtt = WESTWOOD_RTT_MIN;
         if (deltaT > 2 * rtt) {
-            int numrtts = Math.min((int) ((deltaT / rtt) - 1), 2 * _decayFactor);
+            int numrtts = Math.min((int) ((deltaT / rtt) - 1), 2 * _localDecayFactor);
             for (int i = 0; i < numrtts; i++) {
                 decay();
             }
@@ -202,8 +208,8 @@ public class SimpleBandwidthEstimator implements BandwidthEstimator {
      * @param b new measurement
      * @return filtered estimate
      */
-    private static float westwood_do_filter(float a, float b) {
-        return (((_decayFactor - 1) * a) + b) / _decayFactor;
+    private float westwood_do_filter(float a, float b) {
+        return (((_localDecayFactor - 1) * a) + b) / _localDecayFactor;
     }
 
     /**
