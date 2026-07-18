@@ -27,7 +27,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private int _receiveWindow;
     private int _profile;
     private int _rtt;
-    private int _minRtt = Integer.MAX_VALUE;
+    private int _minRtt = DEFAULT_INITIAL_RTT;
     private int _rttDev;
     private int _rto = _initialRTO;
     private int _resendDelay;
