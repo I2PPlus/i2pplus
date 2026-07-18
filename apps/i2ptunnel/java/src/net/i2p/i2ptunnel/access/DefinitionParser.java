@@ -136,6 +136,8 @@ class DefinitionParser {
 
         for (String line : definition) {
             String [] split = DataHelper.split(line,"[ \t]");
+            if (split.length < 2)
+                throw new InvalidDefinitionException("invalid definition " + line);
             split[0] = split[0].toLowerCase();
 
             Threshold threshold = parseThreshold(split[0]);
@@ -147,6 +149,8 @@ class DefinitionParser {
                 builder.setDefaultThreshold(threshold);
                 break;
             case EXPLICIT:
+                if (split.length < 3)
+                    throw new InvalidDefinitionException("invalid definition " + line);
                 builder.addElement(new ExplicitFilterDefinitionElement(split[2], threshold));
                 break;
             case FILE:
