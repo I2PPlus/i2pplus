@@ -220,12 +220,15 @@ public class I2PSocketManagerFull implements I2PSocketManager {
             StringBuilder buf = new StringBuilder(256);
             buf.append("Socket manager created.\n* Default Options:")
                .append(_defaultOptions.toString().replace(" ", "\n\t").replace("=", " = "))
-               .append("\n* Original Properties:\n\t");
-            if (!(opts.toString().equals("4,0") && opts.toString().equals("5,4") &&
-                opts.toString().equals("6,4") && opts.toString().equals("7,4"))) {
-                buf.append(opts.toString().replace(",", "\n\t").replace("{", "").replace("}", "").replace("=", " = "));
-            } else {
-                buf.append(opts.toString().replace("{", "").replace("}", "").replace("=", " = "));
+               .append("\n* Original Properties:");
+            if (opts != null) {
+                buf.append('\n');
+                if (!(opts.toString().equals("4,0") && opts.toString().equals("5,4") &&
+                    opts.toString().equals("6,4") && opts.toString().equals("7,4"))) {
+                    buf.append(opts.toString().replace(",", "\n\t").replace("{", "").replace("}", "").replace("=", " = "));
+                } else {
+                    buf.append(opts.toString().replace("{", "").replace("}", "").replace("=", " = "));
+                }
             }
             _log.info(buf.toString());
         }

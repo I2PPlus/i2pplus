@@ -24,7 +24,8 @@ class PacketHandler {
     private final Log log;
     private final ByteCache cache = ByteCache.getInstance(128, 32 * 1024);
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss.SSS", Locale.US);
+    private static final ThreadLocal<SimpleDateFormat> DATE_FORMAT = ThreadLocal.withInitial(
+        () -> new SimpleDateFormat("HH:mm:ss.SSS", Locale.US));
 
     public PacketHandler(I2PAppContext ctx, ConnectionManager mgr) {
         this.manager = mgr;
@@ -71,9 +72,7 @@ class PacketHandler {
      */
     void displayPacket(Packet packet, String prefix, String suffix) {
         StringBuilder buf = new StringBuilder(256);
-        synchronized (DATE_FORMAT) {
-            buf.append(DATE_FORMAT.format(new Date()));
-        }
+        buf.append(DATE_FORMAT.get().format(new Date()));
         buf.append(": ").append(prefix).append(" ").append(packet.toString());
         if (suffix != null) {
             buf.append(" ").append(suffix);

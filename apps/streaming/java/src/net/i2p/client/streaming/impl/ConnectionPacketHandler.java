@@ -329,6 +329,7 @@ class ConnectionPacketHandler {
      */
     private boolean ack(Connection con, long ackThrough, long[] nacks, Packet packet, boolean isNew, boolean choke) {
         if (ackThrough < 0) return false;
+        if (con == null) return false;
 
         boolean firstAck = isNew && con.getHighestAckedThrough() < 0;
         int numResends = 0;

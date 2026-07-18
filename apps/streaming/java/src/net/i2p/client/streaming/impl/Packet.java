@@ -528,7 +528,7 @@ class Packet {
                 cur += len;
             }
         if (isFlagSet(FLAG_SIGNATURE_INCLUDED)) {
-            if (fakeSigLen == 0) {
+            if (fakeSigLen == 0 && _optionSignature != null) {
                 // we're signing (or validating)
                 System.arraycopy(_optionSignature.getData(), 0, buffer, cur, _optionSignature.length());
                 cur += _optionSignature.length();
