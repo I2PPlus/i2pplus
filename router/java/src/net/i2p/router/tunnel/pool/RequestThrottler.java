@@ -462,11 +462,17 @@ public class RequestThrottler {
 
     /**
      * Periodic timer event that clears the request counts to reset throttling.
+     * Reschedules itself each run so the counter is cleared every CLEAN_TIME; without
+     * the reschedule the counter would clear only once then grow unbounded, leaking
+     * memory and eventually rejecting requests on stale accumulated counts.
      */
     private class Cleaner extends SimpleTimer2.TimedEvent {
         public Cleaner() { super(context.simpleTimer2()); }
         @Override
-        public void timeReached() {RequestThrottler.this.counter.clear();}
+        public void timeReached() {
+            RequestThrottler.this.counter.clear();
+            schedule(CLEAN_TIME);
+        }
     }
 
     /**

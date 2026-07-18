@@ -550,11 +550,17 @@ public class ParticipatingThrottler {
 
     /**
      * Periodic timer event that clears the participation counts to reset throttling.
+     * Reschedules itself each run so the counter is cleared every CLEAN_TIME; without
+     * the reschedule the counter would clear only once then grow unbounded, leaking
+     * memory and eventually banning peers on stale accumulated counts.
      */
     private class Cleaner extends SimpleTimer2.TimedEvent {
         public Cleaner() { super(context.simpleTimer2()); }
         @Override
-        public void timeReached() {counter.clear();}
+        public void timeReached() {
+            counter.clear();
+            schedule(CLEAN_TIME);
+        }
     }
 
     /**
