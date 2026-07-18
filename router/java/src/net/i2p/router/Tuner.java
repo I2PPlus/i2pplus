@@ -307,6 +307,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new MinRTOParam());
         _params.add(new UdpMaxRtoParam());
         _params.add(new MaxSendWindowParam());
+        _params.add(new PostRTOWindowParam());
         _params.add(new MaxDispatchAgeParam());
         _params.add(new MaxQueuedOutboundParam());
         _params.add(new MaxWriteBufsParam());
@@ -7153,6 +7154,72 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Low usage + no congestion + healthy = shrink to reduce buffering
             boolean lowUsage = !Double.isNaN(observed) && observed < current * 0.3;
             if (lowUsage && !congested && !congestionActive && current > _min) {
+                return Math.max(_min, current - _step);
+            }
+            return current;
+        }
+    }
+
+    /**
+     * Post-RTO window restart size, in MTUs.
+     * After an RTO-timeout collapse the send window restarts at this many MTUs
+     * (1 = RFC 5681 loss window). Raising it speeds slow-start recovery for bulk
+     * peers; the trade-off is more in-flight bytes immediately after loss, which
+     * can increase drops. Kept conservative (default 1) and only widened when the
+     * window is collapsing under congestion while sends are NOT expiring.
+     * Primary signal: udp.avgSendWindow (CWIN across peers).
+     * Cross-refs: udp.congestionOccurred, udp.retransmitEvents, udp.sendExpired.
+     *
+     * @since 0.9.70+
+     */
+    private class PostRTOWindowParam extends BaseParam {
+
+        PostRTOWindowParam() {
+            super("udp.peer.postRTOWindowMTUs", "Post-RTO window restart (MTUs)",
+                  SUB_CONGESTION,
+
+                  1, 4, 1, "udp.avgSendWindow", _context);
+        }
+
+        protected void applyValue(int value) {
+            _context.router().saveConfig("i2p.transport.udp.postRTOWindowMTUs", Integer.toString(value));
+            PeerState.setPostRTOWindowMTUs(value);
+        }
+
+        protected int getRuntimeValue() {
+            return PeerState.getPostRTOWindowMTUs();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) { return Double.NaN; }
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) { return Double.NaN; }
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double congCWIN = getAdditionalStat(_context, "udp.congestionOccurred");
+            boolean congestionActive = !Double.isNaN(congCWIN) && congCWIN > 0;
+            double retransmits = getAdditionalEventCount(_context, "udp.retransmitEvents");
+            boolean hasRetransmits = !Double.isNaN(retransmits) && retransmits > 0;
+            double expired = getAdditionalEventCount(_context, "udp.sendExpired");
+            boolean dropsRising = !Double.isNaN(expired) && expired > 0;
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            boolean cpuFree = jobLag < 10 || Double.isNaN(jobLag);
+            boolean cwinCollapsed = !Double.isNaN(observed) && observed < 20000;
+
+            // Sends expiring = too much in flight after loss; pull back toward the
+            // conservative RFC loss window to minimise drops.
+            if (dropsRising) { return Math.max(_min, current - _step); }
+            // Windows collapsing under repeated congestion while CPU is free and
+            // nothing is expiring: widen the restart to speed bulk recovery.
+            if (congestionActive && hasRetransmits && cwinCollapsed && cpuFree) {
+                return Math.min(_max, current + _step);
+            }
+            // No congestion pressure: relax back toward the conservative default.
+            if (!congestionActive && !hasRetransmits && current > _min) {
                 return Math.max(_min, current - _step);
             }
             return current;

@@ -383,6 +383,13 @@ public class PeerState {
     private static final int INIT_RTT = 0;
     /** Maximum retransmission timeout — configurable via i2p.transport.udp.maxRTO */
     private static volatile int MAX_RTO = 60*1000;
+    /**
+     * Number of MTUs to restart the send window at after an RTO-timeout collapse.
+     * 1 = RFC 5681 loss window (one packet, the conservative default). Higher
+     * values speed slow-start recovery for bulk peers at the cost of more
+     * in-flight bytes immediately after loss. Tuned via Tuner.
+     */
+    private static volatile int POST_RTO_WINDOW_MTUS = 1;
     /** How frequently do we want to send ACKs to a peer? (dynamically tuned) */
     private static final AtomicInteger ACK_FREQUENCY = new AtomicInteger(300);
     /**
@@ -425,6 +432,19 @@ public class PeerState {
      * @since 0.9.70+
      */
     public static void setMaxSendWindow(int bytes) { MAX_SEND_WINDOW_BYTES = Math.max(32*1024, Math.min(1024*1024, bytes)); }
+
+    /**
+     * @return the post-RTO-collapse window restart size, in MTUs
+     * @since 0.9.70+
+     */
+    public static int getPostRTOWindowMTUs() { return POST_RTO_WINDOW_MTUS; }
+
+    /**
+     * Set the send-window restart size after an RTO-timeout collapse (called by Tuner).
+     * @param mtus number of MTUs, clamped 1-4 (1 = RFC 5681 loss window)
+     * @since 0.9.70+
+     */
+    public static void setPostRTOWindowMTUs(int mtus) { POST_RTO_WINDOW_MTUS = Math.max(1, Math.min(4, mtus)); }
 
     /**
      * Set the initial concurrent messages per peer (called by Tuner).
@@ -1136,12 +1156,13 @@ public class PeerState {
         if (_fastRetransmit.get()) {bwe = -1;} // for log below
         else {
             synchronized(_sendWindowBytesRemainingLock) {
+                int mtus = POST_RTO_WINDOW_MTUS;
                 if (getVersion() >= 2 && getVersion() <= 4) {
-                    _sendWindowBytes.set(PeerState2.MAX_MTU);
+                    _sendWindowBytes.set(PeerState2.MAX_MTU * mtus);
                 } else if (isIPv6()) {
-                    _sendWindowBytes.set(MAX_IPV6_MTU);
+                    _sendWindowBytes.set(MAX_IPV6_MTU * mtus);
                 } else {
-                    _sendWindowBytes.set(LARGE_MTU);
+                    _sendWindowBytes.set(LARGE_MTU * mtus);
                 }
                 bwe = _bwEstimator.getBandwidthEstimate(now);
                 _slowStartThreshold = Math.max( (int)(bwe * _rtt), 2 * _mtu);
@@ -1426,8 +1447,10 @@ public class PeerState {
     }
 
     /**
-     *  We received a backoff request, so cut our send window.
-     *  NOTE: ECN sending is unimplemented, this is never called.
+     *  Cut our send window as a congestion/backoff response.
+     *  Called during SSU2 connection migration ({@code limitSending}) to throttle
+     *  the peer while the path is unverified. Despite the name, explicit ECN
+     *  signalling is not implemented; this is the backoff hook.
      */
     void ECNReceived() {
         synchronized(_outboundLock) {congestionOccurred();}

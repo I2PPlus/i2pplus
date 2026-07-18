@@ -103,6 +103,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("udp.peer.minRTO", "Min UDP RTO");
         DISPLAY_NAMES.put("udp.peer.maxRTO", "Max UDP RTO");
         DISPLAY_NAMES.put("udp.peer.maxSendWindow", "Max UDP Send Window");
+        DISPLAY_NAMES.put("udp.peer.postRTOWindowMTUs", "Post-RTO Window Restart");
         DISPLAY_NAMES.put("ntcp.sendPool.capacity", "NTCP Send Pool Capacity");
         DISPLAY_NAMES.put("i2cp.internalQueueSize", "Internal Queue Size");
         DISPLAY_NAMES.put("udp.peer.sentMessagesCleanTime", "Sent Messages Clean Time");
@@ -223,6 +224,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("udp.peer.minRTO", "Min retransmission timeout (ms).");
         PARAM_DESCRIPTIONS.put("udp.peer.maxRTO", "Max retransmission timeout (ms).");
         PARAM_DESCRIPTIONS.put("udp.peer.maxSendWindow", "Max unacknowledged messages per peer.");
+        PARAM_DESCRIPTIONS.put("udp.peer.postRTOWindowMTUs", "Window restart size (MTUs) after RTO collapse.");
         PARAM_DESCRIPTIONS.put("ntcp.sendPool.capacity", "NTCP send pool queue size.");
         PARAM_DESCRIPTIONS.put("i2cp.internalQueueSize", "I2CP session buffer size.");
         PARAM_DESCRIPTIONS.put("udp.peer.sentMessagesCleanTime", "Interval between sweeps of ACKed sent-messages.");
