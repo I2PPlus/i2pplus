@@ -128,11 +128,17 @@ class Connection {
     }
 
     /**
-     *  This is the default maximum. See ConnectionOptions.setMaxWindowSize()
-     *  where the configured maximum is enforced.
-     *  Increased for better throughput on high-bandwidth I2P connections.
+     *  Legacy hard cap used as a safe floor for the BDP-based dynamic cap.
+     *  The actual per-connection in-flight limit is computed by getBDPBasedInFlightCap().
      */
     public static final int MAX_WINDOW_SIZE = SystemVersion.isSlow() ? 192 : 256;
+
+    /**
+     *  Absolute ceiling on in-flight packets regardless of BDP estimate.
+     *  Prevents runaway window growth from estimator noise or bugs.
+     *  Set to accommodate high-BDP paths (e.g. 50Mbps @ 1s RTT ~ 6250 packets @ 1KB).
+     */
+    public static final int ABSOLUTE_MAX_WINDOW = 4096;
 
     private static final int UNCHOKES_TO_SEND = 8;
 
@@ -342,9 +348,28 @@ class Connection {
         return true;
     }
 
+    /**
+     *  BDP-based upper bound on in-flight packets.
+     *  Uses the Westwood+ bandwidth estimator to compute how many packets
+     *  the pipe can hold, floored at MAX_WINDOW_SIZE (256/192) to preserve
+     *  the legacy baseline on low-BDP or uncalibrated paths.
+     *
+     *  @return max allowed in-flight packets, in [MAX_WINDOW_SIZE, ABSOLUTE_MAX_WINDOW]
+     */
+    private int getBDPBasedInFlightCap() {
+        float bwe = _bwEstimator.getBandwidthEstimate(); // packets/ms
+        int rtt = Math.max(_options.getRTT(), 500);       // ms
+        int bdp = Math.max(MAX_WINDOW_SIZE, (int)(bwe * rtt));
+        return Math.min(ABSOLUTE_MAX_WINDOW, bdp);
+    }
+
+    /**
+     *  @return true if the sender should block (window full or choked)
+     */
     private boolean shouldWait(int unacked, int wsz) {
+        int maxInFlight = Math.min(getBDPBasedInFlightCap(), 2 * wsz);
         return _isChoked || unacked >= wsz ||
-               _lastSendId.get() - _highestAckedThrough.get() >= Math.min(MAX_WINDOW_SIZE, 2 * wsz);
+               _lastSendId.get() - _highestAckedThrough.get() >= maxInFlight;
     }
 
     /**

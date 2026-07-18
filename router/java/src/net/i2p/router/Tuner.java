@@ -2878,7 +2878,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxSlowStartWindow", "Streaming slow start cap",
                   SUB_STREAMING,
 
-                  8, 256, 4, "stream.con.initialRTT.out", _context);
+                  8, 2048, 8, "stream.con.initialRTT.out", _context);
         }
 
         protected void applyValue(int value) {

@@ -235,7 +235,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** @since I2P+ */
     static int getMaxSlowStartWindowStatic() { return _maxSlowStartWindow; }
     /** @since I2P+ */
-    static void setMaxSlowStartWindow(int val) { _maxSlowStartWindow = Math.max(8, Math.min(256, val)); }
+    static void setMaxSlowStartWindow(int val) { _maxSlowStartWindow = Math.max(8, Math.min(Connection.ABSOLUTE_MAX_WINDOW, val)); }
     /** @since I2P+ */
     private static volatile int _immediateAckDelay = SystemVersion.isSlow() ? 100 : 80;
     /** @since I2P+ */
@@ -965,11 +965,11 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /**
      * Set the maximum window size.
      *
-     * @param msgs the maximum window size, clamped to [2, 2*MAX_WINDOW_SIZE]
+     * @param msgs the maximum window size, clamped to [2, ABSOLUTE_MAX_WINDOW]
      */
     public void setMaxWindowSize(int msgs) {
         _maxWindowSize = 1;
-        if (msgs > 2 * Connection.MAX_WINDOW_SIZE) {_maxWindowSize = 2 * Connection.MAX_WINDOW_SIZE;}
+        if (msgs > Connection.ABSOLUTE_MAX_WINDOW) {_maxWindowSize = Connection.ABSOLUTE_MAX_WINDOW;}
         else if (msgs < 2) {_maxWindowSize = 2;}
         else {_maxWindowSize = msgs;}
     }
