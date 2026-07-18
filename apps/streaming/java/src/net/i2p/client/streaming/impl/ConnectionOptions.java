@@ -231,7 +231,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static volatile int _defaultInactivityTimeout = 300000;
     private static final int DEFAULT_INACTIVITY_ACTION = INACTIVITY_ACTION_SEND;
     /** @since I2P+ mutable for adaptive tuning */
-    static volatile int _maxSlowStartWindow = 32;
+    static volatile int _maxSlowStartWindow = SystemVersion.isSlow() ? 32 : 256;
     /** @since I2P+ */
     static int getMaxSlowStartWindowStatic() { return _maxSlowStartWindow; }
     /** @since I2P+ */

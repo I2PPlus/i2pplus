@@ -2887,7 +2887,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMaxSlowStartWindowStatic");
-            return v > 0 ? v : 32;
+            return v > 0 ? v : 256;
         }
 
         protected double getObservedStat(RouterContext ctx) {
