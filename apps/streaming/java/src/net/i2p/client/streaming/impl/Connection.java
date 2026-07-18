@@ -146,6 +146,13 @@ class Connection {
     private static final int UNCHOKES_TO_SEND = 8;
 
     /**
+     *  Give up resending an unacked SYN after this many sends (~75s with initial
+     *  RTO 5s and doubling backoff), roughly matching the connect() budget rather
+     *  than running to the full maxResends (~12 min).
+     */
+    private static final int MAX_SYN_RESENDS = 5;
+
+    /**
      * Maximum number of packets to retransmit when the timer hits.
      * Default 32 allows faster loss recovery on wide windows (256-packet window
      * backlog clears in 4 rounds instead of 8).
@@ -1935,6 +1942,18 @@ class Connection {
                         disconnect(false);
                         return;
                     }
+                } else if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE) &&
+                           packet.getNumSends() >= MAX_SYN_RESENDS) {
+                    // If the SYN handshake is never ACKed the connect() caller has
+                    // already given up (connectDelay + 45s in ConnectionManager), so
+                    // stop resending instead of running to maxResends (~12 min). At
+                    // initial RTO 5s with doubling backoff, 5 sends is ~75s.
+                    if (_log.shouldDebug()) {
+                        _log.debug(Connection.this + " too many SYN resends, closing...");
+                    }
+                    packet.cancelled();
+                    disconnect(false);
+                    return;
                 } else {
 
                     if (_isChoking) {
