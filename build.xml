@@ -1241,8 +1241,17 @@
     <property name="lg2" value="en"/>
   </target>
 
+  <!-- Validate .po files before updating (polib if available, else msgfmt) -->
+  <target name="validate-po" unless="no.validate">
+    <exec executable="sh" dir="${basedir}" osfamily="unix"
+          failifexecutionfails="false" failonerror="false">
+      <arg value="-c"/>
+      <arg value="if python3 -c 'import polib' 2>/dev/null; then python3 tools/scripts/validate-po.py; else tools/scripts/validate-po.sh; fi"/>
+    </exec>
+  </target>
+
   <!-- the apps need to compile the jsps to poupdate -->
-  <target name="poupdate" depends="buildRouter, buildStreaming, buildSystray, buildJetty, buildDesktopGui, buildJrobin, buildAddressbook">
+  <target name="poupdate" depends="buildRouter, buildStreaming, buildSystray, buildJetty, buildDesktopGui, buildJrobin, buildAddressbook, validate-po">
     <echo message="Setting environment variable LG2 to a language code (e.g. de)"/>
     <echo message="will restrict language update to the language you specified, leaving other languages unchanged."/>
     <!-- Set if unset -->
