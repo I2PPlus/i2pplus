@@ -74,7 +74,7 @@ class Connection {
     private volatile long _lastCongestionHighestUnacked;
 
     // Pacing fields for smooth transmission
-    private volatile long _pacingRate; // bytes per second
+    private volatile long _pacingRate; // bytes per second; last computed rate (recomputed live in calculatePacingDelay)
     private volatile long _lastPacketSendTime;
     private final Object _pacingLock = new Object();
 
@@ -249,7 +249,9 @@ class Connection {
     }
 
     /**
-     * Update pacing rate when congestion window changes.
+     * Refresh the cached pacing rate when the congestion window changes.
+     * Note that {@link #calculatePacingDelay(int)} also recomputes the rate
+     * live, so this is now only an eager cache update for observability.
      */
     private void updatePacingRate() {
         synchronized (_pacingLock) {
@@ -259,16 +261,23 @@ class Connection {
 
     /**
      * Calculate delay needed for pacing based on packet size and current rate.
+     *
+     * The pacing rate is recomputed live here (rather than read from the cached
+     * {@link #_pacingRate}) because RTT is updated on every ACK, while the cache
+     * is only refreshed on window-size changes via {@link #updatePacingRate()}.
+     * Reading it live avoids stale-RTT pacing that would otherwise throttle or
+     * burst throughput on paths with a stable window but varying RTT.
      */
     private long calculatePacingDelay(int packetSize) {
+        long rate = calculatePacingRate();
+        if (rate == Long.MAX_VALUE) {
+            return 0; // No pacing
+        }
         synchronized (_pacingLock) {
-            if (_pacingRate == Long.MAX_VALUE) {
-                return 0; // No pacing
-            }
-
+            _pacingRate = rate;
             long now = _context.clock().now();
             long timeSinceLastPacket = now - _lastPacketSendTime;
-            long expectedInterval = (long) packetSize * 1000 / _pacingRate;
+            long expectedInterval = (long) packetSize * 1000 / rate;
 
             if (timeSinceLastPacket >= expectedInterval) {
                 return 0; // Can send immediately
