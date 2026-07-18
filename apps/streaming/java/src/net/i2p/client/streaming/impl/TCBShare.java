@@ -134,13 +134,11 @@ class TCBShare {
      * @param con the connection whose parameters to cache
      */
     public void updateShareOpts(Connection con) {
+        ConnectionOptions opts = con.getOptions();
         Destination dest = con.getRemotePeer();
-        if (dest == null)
+        if (dest == null || opts == null)
             return;
         if (con.getAckedPackets() <= 0)
-            return;
-        ConnectionOptions opts = con.getOptions();
-        if (opts == null)
             return;
         int old = -1;
         int oldw = -1;

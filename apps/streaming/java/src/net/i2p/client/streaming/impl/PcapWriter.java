@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
+import net.i2p.data.Destination;
 
 /**
  *  Write a standard pcap file with a "TCP" packet that can be analyzed with
@@ -212,11 +213,12 @@ public class PcapWriter implements Closeable, Flushable {
                 dstAddr[0] = 127;
                 dstAddr[1] = 0;
                 System.arraycopy(con.getSession().getMyDestination().calculateHash().getData(), 0, dstAddr, 2, 2);
-            } else
+            } else {
                 dstAddr = MY_UNK_IP;
-
-            if (con != null && con.getRemotePeer() != null)
-                srcAddr = con.getRemotePeer().calculateHash().getData();
+            }
+            Destination peer = con != null ? con.getRemotePeer() : null;
+            if (peer != null)
+                srcAddr = peer.calculateHash().getData();
             else if (pkt.getOptionalFrom() != null)
                 srcAddr = pkt.getOptionalFrom().calculateHash().getData();
             else
@@ -227,11 +229,12 @@ public class PcapWriter implements Closeable, Flushable {
                 srcAddr[0] = 127;
                 srcAddr[1] = 0;
                 System.arraycopy(con.getSession().getMyDestination().calculateHash().getData(), 0, srcAddr, 2, 2);
-            } else
+            } else {
                 srcAddr = MY_UNK_IP;
-
-            if (con != null && con.getRemotePeer() != null)
-                dstAddr = con.getRemotePeer().calculateHash().getData();
+            }
+            Destination peer = con != null ? con.getRemotePeer() : null;
+            if (peer != null)
+                dstAddr = peer.calculateHash().getData();
             else
                 dstAddr = UNK_IP;
         }
