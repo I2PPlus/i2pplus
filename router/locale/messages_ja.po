@@ -136,3 +136,12 @@ msgstr "トンネル要求をドロップ: 高い負荷"
 
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "トンネル要求をドロップ: キュー時間"
+
+msgid "Transit throttle drop"
+msgstr "Transit スロットルドロップ"
+
+msgid "Transit throttle reject"
+msgstr "Transit スロットル拒否"
+
+msgid "Transit request throttle"
+msgstr "Transit リクエストスロットル"

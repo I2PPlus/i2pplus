@@ -2,143 +2,234 @@
 # Copyright (C) 2012 The I2P Project
 msgid ""
 msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-18 12:36+0000\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: ../platform-specific/unix/i2prouter:217
 msgid "Failed to load the wrapper"
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1001
+#: ../platform-specific/unix/i2prouter:1029
+#: ../platform-specific/unix/i2prouter:1103
+#: ../platform-specific/unix/i2prouter:1131
+#: ../platform-specific/unix/i2prouter:1152
 #, sh-format
 msgid "$APP_LONG_NAME is already running."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1012
 #, sh-format
 msgid "Running $APP_LONG_NAME"
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1036
 #, sh-format
 msgid "Waiting for $APP_LONG_NAME"
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1083
 #, sh-format
 msgid "WARNING: $APP_LONG_NAME may have failed to start."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1097
+#: ../platform-specific/unix/i2prouter:1125
+#: ../platform-specific/unix/i2prouter:1331
+#: ../platform-specific/unix/i2prouter:1620
 msgid "Must be root to perform this action."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1141
 #, sh-format
 msgid "Starting $APP_LONG_NAME"
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1163
 #, sh-format
 msgid "Stopping $APP_LONG_NAME"
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1167
+#: ../platform-specific/unix/i2prouter:1235
+#: ../platform-specific/unix/i2prouter:1788
 #, sh-format
 msgid "$APP_LONG_NAME was not running."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1180
+#: ../platform-specific/unix/i2prouter:1188
+#: ../platform-specific/unix/i2prouter:1250
+#: ../platform-specific/unix/i2prouter:1258
 #, sh-format
 msgid "Unable to stop $APP_LONG_NAME."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1206
 #, sh-format
 msgid "Waiting for $APP_LONG_NAME to exit"
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1220
 #, sh-format
 msgid "Failed to stop $APP_LONG_NAME."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1223
 #, sh-format
 msgid "Stopped $APP_LONG_NAME."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1231
 #, sh-format
 msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1277
 #, sh-format
 msgid "$APP_LONG_NAME is not running."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1282
 #, sh-format
 msgid "$APP_LONG_NAME is running: PID:$pid"
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1285
 #, sh-format
 msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1338
+#: ../platform-specific/unix/i2prouter:1350
+#: ../platform-specific/unix/i2prouter:1369
+#: ../platform-specific/unix/i2prouter:1386
+#: ../platform-specific/unix/i2prouter:1453
+#: ../platform-specific/unix/i2prouter:1473
+#: ../platform-specific/unix/i2prouter:1487
+#: ../platform-specific/unix/i2prouter:1501
+#: ../platform-specific/unix/i2prouter:1529
+#: ../platform-specific/unix/i2prouter:1567
+#: ../platform-specific/unix/i2prouter:1602
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1341
+#: ../platform-specific/unix/i2prouter:1356
+#: ../platform-specific/unix/i2prouter:1458
+#: ../platform-specific/unix/i2prouter:1490
+#: ../platform-specific/unix/i2prouter:1504
+#: ../platform-specific/unix/i2prouter:1518
+#: ../platform-specific/unix/i2prouter:1532
+#: ../platform-specific/unix/i2prouter:1570
+#: ../platform-specific/unix/i2prouter:1605
 #, sh-format
 msgid "Installing the $APP_LONG_NAME daemon"
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1612
 #, sh-format
 msgid "Install not currently supported for $DIST_OS"
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1628
+#: ../platform-specific/unix/i2prouter:1641
+#: ../platform-specific/unix/i2prouter:1655
+#: ../platform-specific/unix/i2prouter:1664
+#: ../platform-specific/unix/i2prouter:1674
+#: ../platform-specific/unix/i2prouter:1698
+#: ../platform-specific/unix/i2prouter:1711
+#: ../platform-specific/unix/i2prouter:1723
+#: ../platform-specific/unix/i2prouter:1741
+#: ../platform-specific/unix/i2prouter:1754
+#: ../platform-specific/unix/i2prouter:1768
 #, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1634
+#: ../platform-specific/unix/i2prouter:1649
+#: ../platform-specific/unix/i2prouter:1658
+#: ../platform-specific/unix/i2prouter:1668
+#: ../platform-specific/unix/i2prouter:1679
+#: ../platform-specific/unix/i2prouter:1692
+#: ../platform-specific/unix/i2prouter:1704
+#: ../platform-specific/unix/i2prouter:1717
+#: ../platform-specific/unix/i2prouter:1735
+#: ../platform-specific/unix/i2prouter:1748
+#: ../platform-specific/unix/i2prouter:1762
+#: ../platform-specific/unix/i2prouter:1773
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1777
 #, sh-format
 msgid "Remove not currently supported for $DIST_OS"
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1864
 msgid "Commands:"
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1865
 msgid "Launch in the current console."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1866
 msgid "Start in the background as a daemon process."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1867
 msgid "Stop if running as a daemon or in another console."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1868
 msgid "Stop gracefully, may take up to 11 minutes or more."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1869
 msgid "Restart gracefully, may take up to 11 minutes or more."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1870
 msgid "Stop if running and then start."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1871
 msgid "Restart only if already running."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1872
 msgid "Query the current status."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1873
 msgid "Install to start automatically when system boots."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1874
 msgid "Uninstall."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1875
 msgid "Request a Java thread dump if running."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1888
 msgid "Please edit i2prouter and set the variable RUN_AS_USER"
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1893
 msgid "Running I2P as the root user is *not* recommended."
 msgstr ""
 
+#: ../platform-specific/unix/i2prouter:1896
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr ""

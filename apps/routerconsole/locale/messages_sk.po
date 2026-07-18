@@ -2,7 +2,7 @@
 # Copyright (C) 2009 The I2P Project
 msgid ""
 msgstr ""
-"Language: hu\n"
+"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1638,8 +1638,8 @@ msgstr "Hiba a beállítások mentése közben (alkalmazva, de nincs mentve) - k
 #, java-format
 msgid "{0} hop"
 msgid_plural "{0} hops"
-msgstr[0] "{0} ugrás"
-msgstr[1] "{0} ugrás"
+msgstr[0] "{0} skok"
+msgstr[1] "{0} skokov"
 
 #, java-format
 msgid "{0} tunnel"
@@ -8677,38 +8677,38 @@ msgstr "Befejeződött"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:1298
 msgid "Tor Exit"
-msgstr "Tor kijárat"
+msgstr "Tor východ"
 
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:493
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:432
 msgid "Restore Defaults"
-msgstr "Alapértelmezések visszaállítása"
+msgstr "Obnoviť predvolené"
 
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:497
 msgid "All parameters restored to factory defaults"
-msgstr "Az összes paraméter visszaállítva a gyári alapértelmezésre"
+msgstr "Všetky parametre boli obnovené na továrenské predvolené"
 
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:499
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:303
 msgid "Auto-Tuning is not available"
-msgstr "Az Auto-Tuning nem érhető el"
+msgstr "Auto-Tuning nie je k dispozícii"
 
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:804
 msgid "Tuning ranges saved — changes take effect immediately"
-msgstr "A hangolási tartományok elmentve – a változások azonnal életbe lépnek"
+msgstr "Rozsahy ladenia uložené — zmeny sa prejavia okamžite"
 
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:806
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:811
 msgid "No changes to save"
-msgstr "Nincs menteni való változás"
+msgstr "Žiadne zmeny na uloženie"
 
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:809
 msgid "Tuning overrides applied"
-msgstr "Hangolási felülírások alkalmazva"
+msgstr "Prepísania ladenia použité"
 
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:827
 msgid "Invalid value"
-msgstr "Érvénytelen érték"
+msgstr "Neplatná hodnota"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:34
 msgid "Auto-Tuning"
@@ -8716,23 +8716,23 @@ msgstr "Auto-Tuning"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSidebarHandler.java:107
 msgid "Graph preferences updated"
-msgstr "Grafikon beállítások frissítve"
+msgstr "Nastavenia grafov aktualizované"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:483
 msgid "UTC time"
-msgstr "UTC idő"
+msgstr "Čas UTC"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:489
 msgid "Display time in UTC on graph axes"
-msgstr "Idő megjelenítése UTC-ben a grafikon tengelyein"
+msgstr "Zobraziť čas v UTC na osiach grafov"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:491
 msgid "Glow effect"
-msgstr "Ragyogás effektus"
+msgstr "Efekt žiarenia"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:497
 msgid "Add a glow effect to graph lines"
-msgstr "Ragyogás effektus hozzáadása a grafikon vonalaihoz"
+msgstr "Pridať efekt žiarenia na čiary grafov"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:239
 msgid "CPU"
@@ -8740,11 +8740,11 @@ msgstr "CPU"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:240
 msgid "CPU load average"
-msgstr "CPU terhelés átlag"
+msgstr "Priemerné zaťaženie CPU"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:244
 msgid "Router uptime"
-msgstr "Router üzemideje"
+msgstr "Doba behu routera"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:245
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:247
@@ -8762,43 +8762,43 @@ msgstr "ms"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:246
 msgid "Job queue delay"
-msgstr "Feladat sor késleltetés"
+msgstr "Oneskorenie frontu úloh"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:247
 msgid "Msg Lag"
-msgstr "Üzenet késleltetés"
+msgstr "Oneskorenie správ"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:248
 msgid "Message send processing time"
-msgstr "Üzenet küldés feldolgozási ideje"
+msgstr "Čas spracovania odosielania správ"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:250
 msgid "Ready jobs waiting in queue"
-msgstr "Kész feladatok várakoznak a sorban"
+msgstr "Pripravené úlohy čakajúce vo fronte"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:251
 msgid "Threads"
-msgstr "Szálak"
+msgstr "Vlákna"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:252
 msgid "Active JVM threads"
-msgstr "Aktív JVM szálak"
+msgstr "Aktívne vlákna JVM"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:308
 msgid "NTCP Estab"
-msgstr "NTCP kapcsolat"
+msgstr "NTCP naviazanie"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:309
 msgid "NTCP outbound establish time"
-msgstr "Kimenő NTCP kapcsolat létrehozási ideje"
+msgstr "Čas naviazania odchádzajúceho NTCP"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:310
 msgid "SSU Estab"
-msgstr "SSU kapcsolat"
+msgstr "SSU naviazanie"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:311
 msgid "SSU outbound establish time"
-msgstr "Kimenő SSU kapcsolat létrehozási ideje"
+msgstr "Čas naviazania odchádzajúceho SSU"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:312
 msgid "SSU RTO"
@@ -8806,23 +8806,23 @@ msgstr "SSU RTO"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:313
 msgid "SSU retransmission timeout"
-msgstr "SSU újraküldési időkorlát"
+msgstr "Časový limit retransmisie SSU"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:314
 msgid "Conns/s"
-msgstr "Kapcs/s"
+msgstr "Spojení/s"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:315
 msgid "NTCP connections established per second"
-msgstr "Másodpercenként létrehozott NTCP kapcsolatok"
+msgstr "Počet naviazaných NTCP spojení za sekundu"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:316
 msgid "Msgs/s"
-msgstr "Üzenetek/s"
+msgstr "Správ/s"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:317
 msgid "Messages delivered per second"
-msgstr "Másodpercenként kézbesített üzenetek"
+msgstr "Doručené správy za sekundu"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:318
 msgid "RTT"
@@ -8830,51 +8830,51 @@ msgstr "RTT"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:319
 msgid "End-to-end message round trip time"
-msgstr "Végpontok közötti üzenet körmenet ideje"
+msgstr "Čas obojsmerného prenosu end-to-end správ"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:320
 msgid "Timeout"
-msgstr "Időkorlát"
+msgstr "Časový limit"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:321
 msgid "Tunnel build timeout rate"
-msgstr "Alagútépítési időkorlát aránya"
+msgstr "Miera časových limitov budovania tunelov"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:322
 msgid "Tunnel Build"
-msgstr "Alagút építés"
+msgstr "Budovanie tunela"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:323
 msgid "Client tunnel build latency"
-msgstr "Kliens alagútépítési késleltetés"
+msgstr "Latencia budovania klientského tunela"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:379
 msgid "Active Peers"
-msgstr "Aktív társak"
+msgstr "Aktívne peers"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:380
 msgid "Active peers (last 60s)"
-msgstr "Aktív társak (utolsó 60 mp)"
+msgstr "Aktívne peers (posledných 60s)"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:381
 msgid "Known Peers"
-msgstr "Ismert társak"
+msgstr "Známe peers"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:382
 msgid "Known routers in network database"
-msgstr "Ismert útválasztók a hálózati adatbázisban"
+msgstr "Známe routery v sieťovej databáze"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:384
 msgid "Active I2CP clients"
-msgstr "Aktív I2CP kliensek"
+msgstr "Aktívni I2CP klienti"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:386
 msgid "Transit tunnels hosted"
-msgstr "Üzemeltetett tranzit alagutak"
+msgstr "Umiestnené tranzitné tunely"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:390
 msgid "Tunnel build success rate"
-msgstr "Alagútépítés sikerességi aránya"
+msgstr "Miera úspešnosti budovania tunelov"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:391
 msgid "NetDB"
@@ -8882,170 +8882,169 @@ msgstr "NetDB"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:392
 msgid "NetDB lookup time"
-msgstr "NetDB keresési idő"
+msgstr "Čas vyhľadávania NetDB"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:394
 msgid "Total banned peers"
-msgstr "Összes letiltott társ"
+msgstr "Celkový počet banovaných peerov"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:455
 msgid "Stored LeaseSets in floodfill"
-msgstr "Tárolt LeaseSet-ok a floodfill-ben"
+msgstr "Uložené LeaseSet-y vo floodfilli"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:456
 msgid "Cache Hit"
-msgstr "Gyorsítótár találat"
+msgstr "Zásah do vyrovnávacej pamäte"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:457
 msgid "NetDB lookup success rate"
-msgstr "NetDB keresés sikerességi aránya"
+msgstr "Miera úspešnosti vyhľadávania NetDB"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:458
 msgid "Flood Verify"
-msgstr "Flood ellenőrzés"
+msgstr "Overenie floodu"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:459
 msgid "Floodfill verify time"
-msgstr "Floodfill ellenőrzési idő"
+msgstr "Čas overovania floodfillu"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:460
 msgid "NetDB ACK"
-msgstr "NetDB visszaigazolás"
+msgstr "NetDB potvrdenie"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:461
 msgid "NetDB peer acknowledge time"
-msgstr "NetDB társvisszaigazolási idő"
+msgstr "Čas potvrdenia peeru v NetDB"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:462
 msgid "Lookups/s"
-msgstr "Keresések/s"
+msgstr "Vyhľadávaní/s"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:463
 msgid "NetDB lookups handled per second"
-msgstr "Másodpercenként kezelt NetDB keresések"
+msgstr "Spracované vyhľadávania NetDB za sekundu"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:464
 msgid "Requests/s"
-msgstr "Kérések/s"
+msgstr "Požiadaviek/s"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:465
 msgid "Combined store + lookup operations per second"
-msgstr "Összesített tárolás + keresési műveletek másodpercenként"
+msgstr "Kombinované operácie uloženia + vyhľadávania za sekundu"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:466
 msgid "Stores/s"
-msgstr "Tárolások/s"
+msgstr "Uložení/s"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:467
 msgid "NetDB store messages handled per second"
-msgstr "Másodpercenként kezelt NetDB tárolási üzenetek"
+msgstr "Spracované správy uloženia NetDB za sekundu"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:468
 msgid "LS Timeout"
-msgstr "LS időkorlát"
+msgstr "Časový limit LS"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:469
 msgid "LeaseSet request timeouts (last minute)"
-msgstr "LeaseSet kérés időkorlátok (utolsó perc)"
+msgstr "Časové limity požiadaviek LeaseSet (posledná minúta)"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:214
 msgid "ASN Db"
-msgstr "ASN adatbázis"
+msgstr "ASN Db"
 
 #: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:46
 msgid "SAM bridge is not running."
-msgstr "SAM híd nem fut."
+msgstr "SAM bridge nie je spustený."
 
 #: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:70
 msgid "Active sessions in SessionsDB"
-msgstr "Aktív munkamenetek a SessionsDB-ben"
+msgstr "Aktívne relácie v SessionsDB"
 
 #: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:72
 msgid "Active / pool worker threads"
-msgstr "Aktív / pool munkás szálak"
+msgstr "Aktívne / pool worker vlákna"
 
 #: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:74
 msgid "Pending commands in pool"
-msgstr "Függőben lévő parancsok a pool-ban"
+msgstr "Čakajúce príkazy v pooli"
 
 #: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:76
 msgid "Connected pool handlers"
-msgstr "Csatlakozott pool kezelők"
+msgstr "Pripojené pool handlery"
 
 #: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:78
 msgid "Sockets stolen for data streaming"
-msgstr "Adat streaminghez ellopott socketek"
+msgstr "Sockety ukradnuté pre dátový streaming"
 
 #: ../java/src/net/i2p/router/web/helpers/SidebarRenderer.java:541
 msgid "Health"
-msgstr "Állapot"
+msgstr "Stav"
 
 #: ../java/src/net/i2p/router/web/helpers/SidebarRenderer.java:544
 msgid "Router health overview"
-msgstr "Router állapot áttekintés"
+msgstr "Prehľad stavu routera"
 
 #: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:204
 #: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:302
 msgid "sent"
-msgstr " elküldve"
+msgstr "odoslané"
 
 #: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:206
 #: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:303
 msgid "received"
-msgstr " fogadva"
+msgstr "prijaté"
 
 #: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:372
 msgid "No active streaming connections."
-msgstr "Nincs aktív streaming kapcsolat."
+msgstr "Žiadne aktívne streamingové spojenia."
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:340
 msgid "Auto-Tuning continuously monitors router performance and adjusts parameters to optimize throughput, reduce latency, and maintain stability."
-msgstr "Az Auto-Tuning folyamatosan figyeli a router teljesítményét, és módosítja a paramétereket a teljesítmény optimalizálása, a késleltetés csökkentése és a stabilitás fenntartása érdekében."
-"Az Auto-Tuning folyamatosan figyeli a router teljesítményét, és "
-"beállításokat végez a sávszélesség optimalizálása, a késleltetés "
-"csökkentése és a stabilitás fenntartása érdekében."
+msgstr "Auto-Tuning nepretržite monitoruje výkonnosť smerovača a upravuje parametre na optimalizáciu priepustnosti, zníženie latencie a zachovanie stability."
+"Auto-Tuning nepretržite monitoruje výkon routera a upravuje parametre na "
+"optimalizáciu priepustnosti, zníženie latencie a udržanie stability."
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:341
 msgid "Uncheck the Auto box on any row to pin that parameter and prevent further adjustments."
-msgstr "Törölje a jelet az Auto jelölőnégyzetből bármely sorban a paraméter rögzítéséhez és a további módosítások megakadályozásához."
-"Válassza ki a sor bármely Auto jelölőnégyzetét a paraméter rögzítéséhez és "
-"a további módosítások megakadályozásához."
+msgstr "Odznačte pole Auto v ľubovoľnom riadku a zafixujte tak daný parametr a zabráňte ďalším úpravám."
+"Odškrtnutím políčka Auto v ľubovoľnom riadku zamknete daný parameter a "
+"zabránite ďalším úpravám."
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:345
 msgid "Healthy"
-msgstr "Egészséges"
+msgstr "Zdravý"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:347
 msgid "Fair"
-msgstr "Megfelelő"
+msgstr "Vyhovujúci"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:349
 msgid "Degraded"
-msgstr "Csökkent"
+msgstr "Degradovaný"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:352
 msgid "Current system health:"
-msgstr "Jelenlegi rendszerállapot:"
+msgstr "Aktuálny stav systému:"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:355
 msgid "System health assessment is not yet available."
-msgstr "A rendszerállapot értékelés még nem érhető el."
+msgstr "Hodnotenie stavu systému zatiaľ nie je k dispozícii."
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:372
 msgid "Parameter"
-msgstr "Paraméter"
+msgstr "Parameter"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:374
 msgid "Default"
-msgstr "Alapértelmezés"
+msgstr "Predvolené"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:377
 msgid "Step"
-msgstr "Lépés"
+msgstr "Krok"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:378
 msgid "History"
-msgstr "Előzmények"
+msgstr "História"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:379
 msgid "Auto"
@@ -9053,91 +9052,91 @@ msgstr "Auto"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:580
 msgid "Misc Reasons"
-msgstr "Egyéb okok"
+msgstr "Rôzne dôvody"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:582
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
-msgstr "Nem válaszoló floodfill társak letiltása (hibaráta >95%)"
+msgstr "Banovať floodfill peerov, ktorí neodpovedajú na dotazy (miera zlyhaní >95%)"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:586
 msgid "Ban unresponsive floodfills"
-msgstr "Nem válaszoló floodfill-ek letiltása"
+msgstr "Banovať nereagujúce floodfilly"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:588
 msgid "Ban routers whose RouterInfo has no version field"
-msgstr "Verzió mező nélküli RouterInfo-val rendelkező útválasztók letiltása"
+msgstr "Banovať routery, ktorých RouterInfo nemá pole verzie"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:592
 msgid "Ban routers with no version"
-msgstr "Verzió nélküli útválasztók letiltása"
+msgstr "Banovať routery bez verzie"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:594
 msgid "Ban routers that send excessive tunnel participation requests"
-msgstr "Túlzott alagút-részvételi kéréseket küldő útválasztók letiltása"
+msgstr "Banovať routery, ktoré posielajú nadmerné požiadavky na účasť v tuneloch"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:598
 msgid "Ban excessive tunnel requests"
-msgstr "Túlzott alagútkérések letiltása"
+msgstr "Banovať nadmerné požiadavky na tunely"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:512
 msgid "Graph Options"
-msgstr "Grafikon beállítások"
+msgstr "Možnosti grafov"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:516
 msgid "Legacy renderer"
-msgstr "Örökölt megjelenítő"
+msgstr "Starší renderer"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:521
 msgid "Use RRD4J renderer"
-msgstr "RRD4J megjelenítő használata"
+msgstr "Použiť RRD4J renderer"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:529
 msgid "minutes (2–30)"
-msgstr "perc (2–30)"
+msgstr "minúty (2–30)"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:531
 msgid "Split display"
-msgstr "Felosztott megjelenítés"
+msgstr "Rozdelené zobrazenie"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:536
 msgid "Separate Inbound and Outbound"
-msgstr "Bejövő és kimenő szétválasztása"
+msgstr "Oddeliť prichádzajúce a odchádzajúce"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:538
 msgid "Graph direction"
-msgstr "Grafikon iránya"
+msgstr "Smer grafov"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:543
 msgid "Left-to-right"
-msgstr "Balról jobbra"
+msgstr "Zľava doprava"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:545
 msgid "Refresh Interval"
-msgstr "Frissítési intervallum"
+msgstr "Interval obnovenia"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:550
 msgid "Update graph every second"
-msgstr "Grafikon frissítése másodpercenként"
+msgstr "Aktualizovať graf každú sekundu"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:309
 msgid "health"
-msgstr "állapot"
+msgstr "stav"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:410
 msgid "Router Health"
-msgstr "Router állapota"
+msgstr "Stav routera"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:412
 msgid "Performance & Load"
-msgstr "Teljesítmény és terhelés"
+msgstr "Výkon a zaťaženie"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:416
 msgid "Transport & Connectivity"
-msgstr "Szállítás és csatlakozás"
+msgstr "Transport a pripojiteľnosť"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:420
 msgid "Network & Participation"
-msgstr "Hálózat és részvétel"
+msgstr "Sieť a účasť"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:426
 msgid "Floodfill / NetDB"
@@ -9145,79 +9144,78 @@ msgstr "Floodfill / NetDB"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:501
 msgid "When set to true, the sidebar bandwidth graph uses the legacy RRD4J SVG renderer. When set to false, the new dual-baseline canvas renderer is used, with gradient fills, glow effects, and a split inbound/outbound display. [Default is false]"
-msgstr "Ha true-ra van állítva, az oldalsáv sávszélesség-grafikonja az örökölt RRD4J SVG megjelenítőt használja. Ha false-ra van állítva, az új kettős alapvonalú vászon megjelenítőt használják, gradiens kitöltésekkel, derengés hatásokkal és felosztott bejövő/kimenő megjelenítéssel. [Alapértelmezett: false]"
-"Ha true-ra van állítva, az oldalsáv sávszélesség-grafikonja a régi RRD4J "
-"SVG megjelenítőt használja. Ha false-ra van állítva, az új dupla "
-"alapvonalas canvas megjelenítő használatos, gradiens kitöltéssel, ragyogás "
-"effektussal és osztott bejövő/kimenő megjelenítéssel. [Alapértelmezett: "
+msgstr "Keď je nastavené na true, graf šírky pásma v bočnom paneli používa starší vykresľovač RRD4J SVG. Keď je nastavené na false, používa sa nový vykresľovač s dvomi základnými čiarami na plátne, s prelivovými výplňami, efektmi žiarenia a rozdeleným zobrazením prichádzajúcich/odchádzajúcich dát. [Predvolené je false]"
+"Keď je nastavené na true, graf šírky pásma v bočnom paneli používa starší "
+"RRD4J SVG renderer. Keď je nastavené na false, používa sa nový renderer s "
+"dvoma základnými čiarami, s prechodovými výplňami, efektmi žiarenia a "
+"rozdeleným zobrazením prichádzajúcich/odchádzajúcich dát. [Predvolené je "
 "false]"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:503
 msgid "The time period, in minutes, displayed in the sidebar bandwidth graph. Values outside the valid range (2–30) are clamped. [Default is 20]"
-msgstr "Az időszak percben, amely az oldalsáv sávszélesség-grafikonjában jelenik meg. A érvényes tartományon (2–30) kívüli értékek korlátozódnak. [Alapértelmezett: 20]"
-"Az időszak percben, amely megjelenik az oldalsáv "
-"sávszélesség-grafikonjában. Az érvényes tartományon (2–30) kívüli értékek "
-"korlátozásra kerülnek. [Alapértelmezett: 20]"
+msgstr "Časové obdobie v minútach zobrazené v grafe šírky pásma v bočnom paneli. Hodnoty mimo platného rozsahu (2–30) sa obmedzia. [Predvolené je 20]"
+"Časové obdobie v minútach zobrazené v grafe šírky pásma v bočnom paneli. "
+"Hodnoty mimo platného rozsahu (2–30) sú obmedzené. [Predvolené je 20]"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:505
 msgid "When set to true (the default), inbound and outbound traffic are displayed in a split view with a center baseline, with outbound spikes upward and inbound spikes downward. When set to false, both lines are displayed in overlay mode from the top of the graph with a configurable composite blend. [Default is true]"
-msgstr "Ha true-ra van állítva (alapértelmezett), a bejövő és kimenő forgalom felosztott nézetben jelenik meg középső alapvonallal, ahol a kimenő kiugrások felfelé, a bejövő kiugrások lefelé mutatnak. Ha false-ra van állítva, mindkét vonal átfedéses módban jelenik meg a grafikon tetejéről konfigurálható összetett keveréssel. [Alapértelmezett: true]"
-"Ha true (alapértelmezett), a bejövő és kimenő forgalom osztott nézetben "
-"jelenik meg középső alapvonallal, a kimenő felfelé, a bejövő lefelé mutat. "
-"Ha false, mindkét vonal átfedéses módban jelenik meg a grafikon tetejéről, "
-"konfigurálható kompozit keveréssel. [Alapértelmezett: true]"
+msgstr "Keď je nastavené na true (predvolené), prichádzajúci a odchádzajúci prenos sa zobrazí v rozdelenom zobrazení so stredovou základnou čiarou, pričom odchádzajúce dáta smerujú nahor a prichádzajúce nadol. Keď je nastavené na false, obe čiary sa zobrazia v režime prekrytia z vrchu grafu s konfigurovateľným zloženým miešaním. [Predvolené je true]"
+"Keď je nastavené na true (predvolené), prichádzajúce a odchádzajúce dáta "
+"sa zobrazujú v rozdelenom zobrazení so stredovou základnou čiarou, pričom "
+"odchádzajúce dáta smerujú nahor a prichádzajúce nadol. Keď je nastavené na "
+"false, obe čiary sa zobrazujú v režime prekrytia z vrchu grafu s "
+"konfigurovateľným zloženým miešaním. [Predvolené je true]"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:507
 msgid "Sets the render direction for the sidebar bandwidth graph. When set to rtl (the default), the graph renders right-to-left with newest data on the right. When set to ltr, the graph renders left-to-right with newest data on the left. [Default is rtl]"
-msgstr "Beállítja a megjelenítési irányt az oldalsáv sávszélesség-grafikonjához. Ha rtl-re van állítva (alapértelmezett), a grafikon jobbról balra jelenik meg, a legújabb adatok jobbra. Ha ltr-re van állítva, a grafikon balról jobbra jelenik meg, a legújabb adatok balra. [Alapértelmezett: rtl]"
-"Beállítja az oldalsáv sávszélesség-grafikonjának megjelenítési irányát. Ha "
-"rtl (alapértelmezett), a grafikon jobbról balra jelenik meg, a legújabb "
-"adatok jobbra. Ha ltr, balról jobbra jelenik meg, a legújabb adatok balra. "
-"[Alapértelmezett: rtl]"
+msgstr "Nastavuje smer vykresľovania grafu šírky pásma v bočnom paneli. Keď je nastavené na rtl (predvolené), graf sa vykresľuje zprava doľava s najnovšími dátami vpravo. Keď je nastavené na ltr, graf sa vykresľuje zľava doprava s najnovšími dátami vľavo. [Predvolené je rtl]"
+"Nastavuje smer vykresľovania grafu šírky pásma v bočnom paneli. Keď je "
+"nastavené na rtl (predvolené), graf sa vykresľuje sprava doľava s "
+"najnovšími údajmi vpravo. Keď je nastavené na ltr, graf sa vykresľuje "
+"zľava doprava s najnovšími údajmi vľavo. [Predvolené je rtl]"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:474
 msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr "Az I2P+ támogatja az egyéni téma felülbírálásokat a konzol, az alagútkezelő, az I2PSnark, a SusiDNS és a Susimail számára, lehetővé téve a témák megváltoztatását, amelyek frissítések után is fennmaradnak. A felülbírálás aktiválásához hozzon létre egy <code>override.css</code> nevű css fájlt a téma módosításaival, és helyezze el a megfelelő téma könyvtárban, vagy nevezze át az egyik példa fájlt, majd végezzen kemény frissítést a böngészőben. Ne feledje, hogy az alagútkezelő és a konzol ugyanazt az override.css-t osztják meg. A felülbírálás deaktiválásához törölje vagy nevezze át az <code>override.css</code> fájlt, majd keményen frissítse a böngészőt (általában Control + Shift + R)."
-"Az I2P+ egyéni téma felülírásokat támogat a konzol, az alagútkezelő, az "
-"I2PSnark, a SusiDNS és a Susimail számára, lehetővé téve a témák "
-"megváltoztatását, amelyek a frissítések után is megmaradnak. Az felülírás "
-"aktiválásához hozzon létre egy <code>override.css</code> nevű css fájlt a "
-"téma módosításaival, és helyezze el a megfelelő téma könyvtárban, vagy "
-"nevezze át az egyik példa fájlt, majd végezzen kemény frissítést a "
-"böngészőben. Vegye figyelembe, hogy az alagútkezelő és a konzol ugyanazt "
-"az override.css-t használják. Az felülírás deaktiválásához törölje vagy "
-"nevezze át az <code>override.css</code> fájlt, majd végezzen kemény "
-"frissítést a böngészőben (rendszerint Control + Shift + R)."
+msgstr "I2P+ podporuje vlastné prepísania tém pre konzol, správcu tunelov, I2PSnark, SusiDNS a Susimail, čo umožňuje zmeny tém, ktoré pretrvávajú po aktualizáciách. Na aktiváciu prepísania vytvorte súbor css s názvom <code>override.css</code> s vašimi úpravami témy a umiestnite ho do príslušného adresára témy, ktorú chcete zmeniť, alebo premenujte jeden z príkladových súborov a potom tvrdo obnovte prehliadač. Upozorňujeme, že správca tunelov a konzola zdieľajú rovnaký override.css. Na deaktiváciu prepísania vymažte alebo premenujte súbor <code>override.css</code> a potom tvrdo obnovte prehliadač (zvyčajne Control + Shift + R)."
+"I2P+ podporuje vlastné prepísania tém pre konzolu, správcu tunelov, "
+"I2PSnark, SusiDNS a Susimail, čo umožňuje zmeny tém, ktoré pretrvávajú po "
+"aktualizáciách. Na aktiváciu prepísania vytvorte súbor css s názvom "
+"<code>override.css</code> s vašimi úpravami témy a umiestnite ho do "
+"príslušného adresára témy, ktorú chcete zmeniť, alebo premenujte jeden z "
+"príkladových súborov a potom tvrdo obnovte prehliadač. Upozorňujeme, že "
+"správca tunelov a konzola zdieľajú rovnaký override.css. Na deaktiváciu "
+"prepísania vymažte alebo premenujte súbor <code>override.css</code> a "
+"potom tvrdo obnovte prehliadač (zvyčajne Control + Shift + R)."
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/samdebug_jsp.java:309
 msgid "SAM Debug"
-msgstr "SAM hibakeresés"
+msgstr "SAM ladenie"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/samdebug_jsp.java:399
 msgid "SAM Bridge Debug"
-msgstr "SAM Bridge hibakeresés"
+msgstr "SAM Bridge ladenie"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:415
 msgid "All streaming connections"
-msgstr "Összes streaming kapcsolat"
+msgstr "Všetky streamingové spojenia"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:418
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:422
 msgid "All Streams"
-msgstr "Összes adatfolyam"
+msgstr "Všetky streamy"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:427
 msgid "Inbound streaming connections"
-msgstr "Bejövő streaming kapcsolatok"
+msgstr "Prichádzajúce streamingové spojenia"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:439
 msgid "Outbound streaming connections"
-msgstr "Kimenő streaming kapcsolatok"
+msgstr "Odchádzajúce streamingové spojenia"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tuning_jsp.java:310
 msgid "tuning"
-msgstr "hangolás"
+msgstr "ladenie"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tuning_jsp.java:400
 msgid "Router Auto-Tuning"
-msgstr "Router Auto-Tuning"
+msgstr "Auto-Tuning routera"

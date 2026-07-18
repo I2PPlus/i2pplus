@@ -136,3 +136,12 @@ msgstr "터널 요청 차단: 높은 부하"
 
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "터널 요청 차단: 대기 시간"
+
+msgid "Transit throttle drop"
+msgstr "Transit 스로틀 드롭"
+
+msgid "Transit throttle reject"
+msgstr "Transit 스로틀 거부"
+
+msgid "Transit request throttle"
+msgstr "Transit 요청 스로틀"

@@ -142,3 +142,17 @@ msgstr "Odstranění požadavků na tunel: Vysoká zátěž"
 
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Odstranění požadavků na tunel: Doba fronty"
+
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:973
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:997
+msgid "Transit throttle drop"
+msgstr "Tranzitní omezení: zamítnuto"
+
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:984
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1007
+msgid "Transit throttle reject"
+msgstr "Tranzitní omezení: odmítnuto"
+
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1239
+msgid "Transit request throttle"
+msgstr "Omezení tranzitních požadavků"

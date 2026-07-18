@@ -1,7 +1,13 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 msgid ""
-msgstr "Language: ar\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+msgstr ""
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
 #, java-format
 msgid "{0,number,####} ms"
 msgid_plural "{0,number,####} ms"
@@ -103,9 +109,9 @@ msgstr "تحذير"
 #, java-format
 msgid "{0} similar message omitted"
 msgid_plural "{0} similar messages omitted"
-msgstr[0] "تم تجاهل رسالة مشابهة واحدة"
-msgstr[1] "تم تجاهل رسالة مشابهة واحدة"
-msgstr[2] "تم تجاهل رسالتين مشابهتين"
+msgstr[0] "تم تجاهل {0} رسالة مشابهة"
+msgstr[1] "تم تجاهل {0} رسالة مشابهة"
+msgstr[2] "تم تجاهل {0} رسائل مشابهة"
 msgstr[3] "تم تجاهل {0} رسائل مشابهة"
 msgstr[4] "تم تجاهل {0} رسائل مشابهة"
 msgstr[5] "تم تجاهل {0} رسائل مشابهة"

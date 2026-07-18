@@ -2,1610 +2,2938 @@
 # Copyright (C) 2009 The I2P Project
 msgid ""
 msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-18 12:36+0000\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:568
+#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:576
 msgid "internal"
 msgstr "εσωτερικό"
 
+#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:605
+#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:626
 #, java-format
 msgid "{0} inbound, {0} outbound tunnel"
 msgid_plural "{0} inbound, {0} outbound tunnels"
 msgstr[0] "{0} εισερχόμενος, {0} εξερχόμενος διάδρομος"
 msgstr[1] "{0} εισερχόμενοι, {0} εξερχόμενοι διαδρόμοι"
 
+#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:624
 #, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
 msgstr[0] "{0} εισερχόμενος διάδρομος"
 msgstr[1] "{0} εισερχόμενοι διαδρόμοι"
 
+#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:625
 #, java-format
 msgid "{0} outbound tunnel"
 msgid_plural "{0} outbound tunnels"
 msgstr[0] "{0} εξερχόμενος διάδρομος"
 msgstr[1] "{0} εξερχόμενοι διαδρόμοι"
 
+#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:629
 msgid "lower bandwidth and reliability"
 msgstr "μικρότερη ρυθμικότητα και αξιοπιστία"
 
+#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:630
 msgid "standard bandwidth and reliability"
 msgstr "τυποποιημένη ρυθμικότητα και αξιοπιστία"
 
+#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:631
 msgid "higher bandwidth and reliability"
 msgstr "μεγαλύτερη ρυθμικότητα και αξιοπιστία"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:257
 msgid "Error - tunnels are not initialized yet"
 msgstr "Σφάλμα - οι διάδρομοι δεν έχουν αρχικοποιηθεί ακόμα"
 
-msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Μη έγκυρη υποβολή φόρμας, πιθανώς λόγω της χρήσης του κουμπιού 'πίσω' ή 'ανανέωση' στο πρόγραμμα περιήγησης σας. Παρακαλώ, υποβάλτε ξανά."
+#. Enforce POST for P-R-G pattern, with backward compatibility fallback
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:260
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:337
+msgid ""
+"Invalid form submission, probably because you used the 'back' or 'reload' "
+"button on your browser. Please resubmit."
+msgstr ""
+"Μη έγκυρη υποβολή φόρμας, πιθανώς λόγω της χρήσης του κουμπιού 'πίσω' ή "
+"'ανανέωση' στο πρόγραμμα περιήγησης σας. Παρακαλώ, υποβάλτε ξανά."
 
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Εάν το πρόβλημα παραμένει, ελέγξτε αν έχετε ενεργοποιημένα τα cookies στο πρόγραμμα περιήγησης σας."
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:261
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:339
+msgid ""
+"If the problem persists, verify that you have cookies enabled in your "
+"browser."
+msgstr ""
+"Εάν το πρόβλημα παραμένει, ελέγξτε αν έχετε ενεργοποιημένα τα cookies στο "
+"πρόγραμμα περιήγησης σας."
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:310
 msgid "No services configured, cannot restart!"
 msgstr "Δεν έχουν ρυθμιστεί υπηρεσίες, δεν είναι δυνατή η επανεκκίνηση!"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:317
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:354
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:397
 msgid "Stopping tunnel"
 msgstr "Σταμάτημα διαδρόμου"
 
+#. short delay to ensure clean stop
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:323
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:361
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:404
 msgid "Starting tunnel"
 msgstr "Έναρξη διαδρόμου"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:328
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:367
 msgid "Error restarting tunnel"
 msgstr "Σφάλμα κατά την επανεκκίνηση διαδρόμου"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:335
 msgid "Restarted all running tunnels"
 msgstr "Επανεκκινήθηκαν όλοι οι ενεργοί διάδρομοι"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:347
 msgid "No clients configured, cannot restart!"
 msgstr "Δεν έχουν ρυθμιστεί πελάτες, δεν είναι δυνατή η επανεκκίνηση!"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:374
 msgid "Restarted all running client tunnels"
 msgstr "Επανεκκινήθηκαν όλοι οι ενεργοί διάδρομοι πελάτη"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:432
 msgid "Configuration reloaded for all tunnels"
 msgstr "Η διαμόρφωση μεταφόρτωση για όλους τους διαδρόμους"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:436
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:448
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:460
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:462
 msgid "Error: Invalid tunnel"
 msgstr "Σφάλμα: Μη έγκυρος διάδρομος"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:442
 msgid "Started tunnel"
 msgstr "Ξεκίνησε ο διάδρομος"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:454
 msgid "Stopped tunnel"
 msgstr "Σταμάτησε ο διάδρομος"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:465
 msgid "Restarting tunnel"
 msgstr "Επανεκκίνηση διαδρόμου"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:488
 msgid "Please confirm removal"
 msgstr "Παρακαλώ επιβεβαιώστε την αφαίρεση"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:679
 msgid "New Tunnel"
 msgstr "Νέος Διάδρομος"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:698
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:724
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:813
 msgid "Port not set"
 msgstr "Λιμάνι δεν έχει οριστεί"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:700
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:814
 msgid "Invalid port"
 msgstr "Μη έγκυρο λιμάνι"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:702
 msgid "Warning - ports less than 1024 are not recommended"
 msgstr "Προειδοποίηση - τα λιμάνια λιγότερα από 1024 δεν συνιστάται"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:718
 msgid "Warning - duplicate port"
 msgstr "Προειδοποίηση - διπλό λιμάνι"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:734
 msgid "Standard client"
 msgstr "Τυποποιημένος πελάτης"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:735
 msgid "HTTP/HTTPS client"
 msgstr "Πελάτης HTTP/HTTPS"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:736
 msgid "IRC client"
 msgstr "Πελάτης IRC"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:737
 msgid "Standard server"
 msgstr "Τυποποιημένος διακομιστής"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:738
 msgid "HTTP server"
 msgstr "Διακομιστής HTTP"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:739
 msgid "SOCKS 4/4a/5 proxy"
 msgstr "Proxy SOCKS 4/4a/5"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:740
 msgid "SOCKS IRC proxy"
 msgstr "Proxy IRC SOCKS"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:741
 msgid "CONNECT/SSL/HTTPS proxy"
 msgstr "Proxy CONNECT/SSL/HTTPS"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:742
 msgid "IRC server"
 msgstr "Διακομιστής IRC"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:743
 msgid "Streamr client"
 msgstr "Πελάτης Streamr"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:744
 msgid "Streamr server"
 msgstr "Διακομιστής Streamr"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:745
 msgid "HTTP bidir"
 msgstr "HTTP bidir"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:810
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:787
 msgid "Host not set"
 msgstr "Ο διακομιστής δεν έχει οριστεί"
 
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:811
 msgid "Invalid address"
 msgstr "Μη έγκυρη διεύθυνση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:173
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:191
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:186
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:179
 msgid "Tunnel Manager"
 msgstr "Διαχειριστής Διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:177
 msgid "Edit Client Tunnel"
 msgstr "Επεξεργασία Διαδρόμου Πελάτη"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:177
 msgid "Edit Server Tunnel"
 msgstr "Επεξεργασία Διαδρόμου Διακομιστή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:221
 msgid "Are you sure you want to delete?"
 msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε?"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:233
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:397
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:415
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1095
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1309
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1351
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1371
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1117
 msgid "required"
 msgstr "χρειάζεται"
 
-msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
-msgstr "Ο διάδρομος και όλοι οι άλλοι κοινοί διαδρόμοι πελάτη πρέπει να σταματήσουν για να αλλάξετε αυτή τη διαμόρφωση"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:236
+msgid ""
+"Tunnel and all other shared client tunnels must be stopped to change this "
+"configuration"
+msgstr ""
+"Ο διάδρομος και όλοι οι άλλοι κοινοί διαδρόμοι πελάτη πρέπει να σταματήσουν "
+"για να αλλάξετε αυτή τη διαμόρφωση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:237
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1138
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1654
 msgid "Tunnel must be stopped to change this configuration"
 msgstr "Ο διάδρομος πρέπει να σταματήσει για να αλλάξετε αυτή τη διαμόρφωση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:257
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1106
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:864
 msgid "Configuration"
 msgstr "Διαμόρφωση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:266
 msgid "New Client Configuration"
 msgstr "Νέα Διαμόρφωση Πελάτη"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:321
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1188
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:294
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:739
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:397
 msgid "Name"
 msgstr "Όνομα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:323
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1192
 msgid "Auto Start Tunnel"
 msgstr "Αυτόματη Έναρξη Διαδρόμου"
 
-msgid "Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar"
-msgstr "Όνομα του διαδρόμου που θα εμφανιστεί στην αρχική σελίδα του Διαχειριστή Διαδρόμου και της πλευρικής στήλης της συνολικής επιφάνειας εργασίας του διαχειριστή"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:325
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1194
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:399
+msgid ""
+"Name of tunnel to be displayed on Tunnel Manager home page and the router "
+"console sidebar"
+msgstr ""
+"Όνομα του διαδρόμου που θα εμφανιστεί στην αρχική σελίδα του Διαχειριστή "
+"Διαδρόμου και της πλευρικής στήλης της συνολικής επιφάνειας εργασίας του "
+"διαχειριστή"
 
-msgid "Enable this option to ensure this service is available when the router starts"
-msgstr "Ενεργοποιήστε αυτή την επιλογή για να εξασφαλίσετε ότι η υπηρεσία αυτή είναι διαθέσιμη όταν ξεκινάει ο διαχειριστής"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:329
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1198
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:604
+msgid ""
+"Enable this option to ensure this service is available when the router starts"
+msgstr ""
+"Ενεργοποιήστε αυτή την επιλογή για να εξασφαλίσετε ότι η υπηρεσία αυτή είναι "
+"διαθέσιμη όταν ξεκινάει ο διαχειριστής"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:333
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1202
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:608
 msgid "Automatically start tunnel when router starts"
 msgstr "Αυτόματη έναρξη διαδρόμου όταν ξεκινάει ο διαχειριστής"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:335
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1254
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:403
 msgid "Description"
 msgstr "Περιγραφή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:338
 msgid "Shared Client"
 msgstr "Κοινός Πελάτης"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:341
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1263
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:405
 msgid "Description of tunnel to be displayed on Tunnel Manager home page"
-msgstr "Περιγραφή του διαδρόμου που θα εμφανιστεί στην αρχική σελίδα του Διαχειριστή Διαδρόμου"
+msgstr ""
+"Περιγραφή του διαδρόμου που θα εμφανιστεί στην αρχική σελίδα του Διαχειριστή "
+"Διαδρόμου"
 
-msgid "Traffic from all clients with this feature enabled will be routed over the same set of tunnels. This will make profiling the tunnels by an adversary more difficult, but will link the clients together."
-msgstr "Ο ροές δεδομένων από όλους τους πελάτες με αυτή τη δυνατότητα ενεργοποιημένη θα διαδρομολογηθούν μέσω του ίδιου σύνολου διαδρόμων. Αυτό θα καταστήσει δυσκολότερη την προσωποποίηση των διαδρόμων από εχθρό, αλλά θα συνδέσει τους πελάτες μεταξύ τους."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:348
+msgid ""
+"Traffic from all clients with this feature enabled will be routed over the "
+"same set of tunnels. This will make profiling the tunnels by an adversary "
+"more difficult, but will link the clients together."
+msgstr ""
+"Ο ροές δεδομένων από όλους τους πελάτες με αυτή τη δυνατότητα ενεργοποιημένη "
+"θα διαδρομολογηθούν μέσω του ίδιου σύνολου διαδρόμων. Αυτό θα καταστήσει "
+"δυσκολότερη την προσωποποίηση των διαδρόμων από εχθρό, αλλά θα συνδέσει τους "
+"πελάτες μεταξύ τους."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:363
 msgid "Share tunnels with other configured clients"
 msgstr "Κοινοποιήστε τους διαδρόμους με άλλους ρυθμισμένους πελάτες"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:375
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1279
 msgid "Target"
 msgstr "Στόχος"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:377
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1276
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1339
 msgid "Access Point"
 msgstr "Σημείο Πρόσβασης"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:382
 msgid "Use Outproxy Plugin"
 msgstr "Χρησιμοποιήστε το Plugin Outproxy"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:384
 msgid "Enable DCC"
 msgstr "Ενεργοποιήστε DCC"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:387
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:623
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1299
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1341
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2039
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:745
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:507
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:531
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:716
 msgid "Port"
 msgstr "Λιμάνι"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:393
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:533
 msgid "Specify the local port this service should be accessible from"
-msgstr "Διαθέστε το τοπικό λιμάνι από το οποίο θα πρέπει να είναι προσβάσιμη η υπηρεσία αυτή"
+msgstr ""
+"Διαθέστε το τοπικό λιμάνι από το οποίο θα πρέπει να είναι προσβάσιμη η "
+"υπηρεσία αυτή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:405
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:617
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1289
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2033
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:483
 msgid "Host"
 msgstr "Διακομιστής"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:411
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1291
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:485
 msgid "Hostname or IP address of the target server"
 msgstr "Όνομα διευθύνσης ή IP διεύθυνση του στόχου διακομιστή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:423
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1315
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:560
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:724
 msgid "Reachable by"
 msgstr "Προσβάσιμο από"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:425
 msgid "Local interface (ip address) the client tunnel will be reachable from"
-msgstr "Τοπική επιφάνεια (διεύθυνση ip) από την οποία θα είναι προσβάσιμος ο διάδρομος πελάτη"
+msgstr ""
+"Τοπική επιφάνεια (διεύθυνση ip) από την οποία θα είναι προσβάσιμος ο "
+"διάδρομος πελάτη"
 
-msgid "If an outproxy plugin is installed (e.g. Orchid), use this instead of any configured outproxies to access websites outside of I2P"
-msgstr "Αν είναι εγκατεστημένο plugin outproxy (π.χ. Orchid), χρησιμοποιήστε αυτό αντί για οποιαδήποτε ρυθμισμένους outproxies για την πρόσβαση σε ιστοσελίδες έξω από το I2P"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:438
+msgid ""
+"If an outproxy plugin is installed (e.g. Orchid), use this instead of any "
+"configured outproxies to access websites outside of I2P"
+msgstr ""
+"Αν είναι εγκατεστημένο plugin outproxy (π.χ. Orchid), χρησιμοποιήστε αυτό "
+"αντί για οποιαδήποτε ρυθμισμένους outproxies για την πρόσβαση σε ιστοσελίδες "
+"έξω από το I2P"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:442
 msgid "Use plugin instead of proxies listed below if available"
-msgstr "Χρησιμοποιήστε το plugin αντί για τους proxy που αναφέρονται παρακάτω, αν είναι διαθέσιμο"
+msgstr ""
+"Χρησιμοποιήστε το plugin αντί για τους proxy που αναφέρονται παρακάτω, αν "
+"είναι διαθέσιμο"
 
-msgid "Enables direct chat and file transfers, bypassing I2P. Note that this will compromise your anonymity and is not recommended."
-msgstr "Ενεργοποιεί άμεση συζήτηση και μεταφορά αρχείων, παρακάμνοντας το I2P. Σημειώστε ότι αυτό θα παραβιάσει την ανώνυμη σας ιδιότητα και δεν συνιστάται."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:446
+msgid ""
+"Enables direct chat and file transfers, bypassing I2P. Note that this will "
+"compromise your anonymity and is not recommended."
+msgstr ""
+"Ενεργοποιεί άμεση συζήτηση και μεταφορά αρχείων, παρακάμνοντας το I2P. "
+"Σημειώστε ότι αυτό θα παραβιάσει την ανώνυμη σας ιδιότητα και δεν συνιστάται."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:450
 msgid "Enable Direct Client-to-Client protocol"
 msgstr "Ενεργοποίηση του άμεσου πρωτοκόλλου πελάτη-προς-πελάτη"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:456
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:431
 msgid "Outproxies"
 msgstr "Υπερπροξίες"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:459
 msgid "SSL Outproxies"
 msgstr "SSL Outproxies"
 
-msgid "Specify the .i2p address or destination (b32 or b64) of the outproxy here."
-msgstr "Διαθέστε τη διεύθυνση .i2p ή τον προορισμό (b32 ή b64) του outproxy εδώ."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:462
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:470
+msgid ""
+"Specify the .i2p address or destination (b32 or b64) of the outproxy here."
+msgstr ""
+"Διαθέστε τη διεύθυνση .i2p ή τον προορισμό (b32 ή b64) του outproxy εδώ."
 
-msgid "For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p"
-msgstr "Για τυχαία επιλογή από μια λίστα, χωρίστε με κόμματα, για παράδειγμα, server1.i2p,server2.i2p"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:464
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:472
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:504
+msgid ""
+"For a random selection from a pool, separate with commas e.g. "
+"server1.i2p,server2.i2p"
+msgstr ""
+"Για τυχαία επιλογή από μια λίστα, χωρίστε με κόμματα, για παράδειγμα, "
+"server1.i2p,server2.i2p"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:482
 msgid "Outproxy Type"
 msgstr "Τύπος Outproxy"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:492
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:454
 msgid "Tunnel Destination"
 msgstr "Προορισμός Διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:495
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1281
 msgid "Use SSL"
 msgstr "Χρήση SSL"
 
-msgid "Specify the .i2p address or destination (b32 or b64) of the tunnel here."
-msgstr "Διαθέστε τη διεύθυνση .i2p ή τον προορισμό (b32 ή b64) του διαδρόμου εδώ."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:502
+msgid ""
+"Specify the .i2p address or destination (b32 or b64) of the tunnel here."
+msgstr ""
+"Διαθέστε τη διεύθυνση .i2p ή τον προορισμό (b32 ή b64) του διαδρόμου εδώ."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:508
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:460
 msgid "name, name:port, or destination"
 msgstr "όνομα, όνομα:λιμάνι, ή προορισμός"
 
-msgid "If you are accessing a service on a remote I2P router, you may wish to connect with SSL to avoid traffic interception. The client application should be also be configured to use SSL."
-msgstr "Εάν πρόκειται να προσχωρήσετε σε υπηρεσία σε απομακρυσμένο διαχειριστή I2P, ίσως θα θέλατε να συνδεθείτε με SSL για να αποφευχθεί η επικίνδυνη παρακολούθηση της ροής δεδομένων. Η εφαρμογή πελάτη θα πρέπει επίσης να ρυθμιστεί για να χρησιμοποιεί SSL."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:512
+msgid ""
+"If you are accessing a service on a remote I2P router, you may wish to "
+"connect with SSL to avoid traffic interception. The client application "
+"should be also be configured to use SSL."
+msgstr ""
+"Εάν πρόκειται να προσχωρήσετε σε υπηρεσία σε απομακρυσμένο διαχειριστή I2P, "
+"ίσως θα θέλατε να συνδεθείτε με SSL για να αποφευχθεί η επικίνδυνη "
+"παρακολούθηση της ροής δεδομένων. Η εφαρμογή πελάτη θα πρέπει επίσης να "
+"ρυθμιστεί για να χρησιμοποιεί SSL."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:516
 msgid "Clients use SSL to connect to tunnel"
 msgstr "Οι πελάτες χρησιμοποιούν SSL για να συνδεθούν με τον διάδρομο"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:520
 msgid "Please specify the full b64 destination."
 msgstr "Παρακαλώ διαθέστε τον πλήρη προορισμό b64."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:530
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1355
 msgid "Local destination"
 msgstr "Τοπικός προορισμός"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:532
 msgid "Local Base32"
 msgstr "Τοπικό Base32"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:534
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1359
 msgid "Read Only: Local Destination (if known)"
 msgstr "Μόνο Διαβασμό: Τοπικός Προορισμός (αν γνωστός)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:551
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1068
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:517
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:528
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:810
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:822
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:853
 msgid "Stop"
 msgstr "Σταμάτημα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:555
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1072
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:543
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:869
 msgid "Start this Tunnel"
 msgstr "Έναρξη αυτού του Διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:564
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1081
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:546
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:872
 msgid "Start"
 msgstr "Έναρξη"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:568
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1085
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1538
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2531
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:605
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:767
 msgid "Cancel"
 msgstr "Άκυρο"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:570
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1087
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1540
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2533
 msgid "Delete this tunnel (cannot be undone)"
 msgstr "Διαγραφή αυτού του διαδρόμου (δεν μπορεί να ανακουφιστεί)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:573
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1090
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1543
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2536
 msgid "Delete"
 msgstr "Διαγραφή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:575
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1092
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1545
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2344
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2538
 msgid "Save"
 msgstr "Αποθήκευση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:577
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1547
 msgid "Advanced networking options"
 msgstr "Προχωρημένες επιλογές δικτύου"
 
-msgid "Note: When this client is configured to share tunnels, these options apply to all clients configured to share tunnels."
-msgstr "Σημείωση: Όταν αυτός ο πελάτης είναι ρυθμισμένος για κοινή χρήση διαδρόμων, αυτές οι επιλογές ισχύουν για όλους τους πελάτες που είναι ρυθμισμένοι για κοινή χρήση διαδρόμων."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:581
+msgid ""
+"Note: When this client is configured to share tunnels, these options apply "
+"to all clients configured to share tunnels."
+msgstr ""
+"Σημείωση: Όταν αυτός ο πελάτης είναι ρυθμισμένος για κοινή χρήση διαδρόμων, "
+"αυτές οι επιλογές ισχύουν για όλους τους πελάτες που είναι ρυθμισμένοι για "
+"κοινή χρήση διαδρόμων."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:587
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1551
 msgid "Profile"
 msgstr "Προφίλ"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:589
 msgid "Delay Connect"
 msgstr "Καθυστέρηση Σύνδεσης"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:591
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1564
 msgid "Connection Profile"
 msgstr "Προφίλ Σύνδεσης"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:597
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1570
 msgid "interactive connection"
 msgstr "λειτουργική σύνδεση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:601
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1574
 msgid "bulk connection (downloads/websites/BT)"
 msgstr "συλλογική σύνδεση (λήψεις/ιστοσελίδες/BT)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:603
 msgid "Delay Connection"
 msgstr "Καθυστέρηση Σύνδεσης"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:607
 msgid "for request/response connections"
 msgstr "για συνδέσεις αιτήματος/απάντησης"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:615
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2031
 msgid "Router I2CP Address"
 msgstr "Διεύθυνση I2CP διαχειριστή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:619
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2035
 msgid "I2CP Hostname or IP"
 msgstr "Όνομα διακομιστή I2CP ή IP"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:625
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2041
 msgid "I2CP Port Number"
 msgstr "Αριθμός Λιμανιού I2CP"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:634
 msgid "Delay tunnel open until required"
 msgstr "Καθυστέρηση άνοιγμα διαδρόμου μέχρι να είναι απαραίτητο"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:636
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:646
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1562
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:579
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:584
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:589
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:594
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:603
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:924
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:929
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:934
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:939
 msgid "Signature type"
 msgstr "Τύπος υπογραφής"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:638
 msgid "Conserve resources by only creating tunnels when required"
 msgstr "Παρατήρηση πόρων δημιουργώντας διαδρόμους μόνο όταν είναι απαραίτητο"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:642
 msgid "Don't open tunnel until activity is detected on port"
 msgstr "Μην ανοίξετε τον διάδρομο μέχρι να ανιχνευτεί δραστηριότητα στο λιμάνι"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:665
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1632
 msgid "This is the default, recommended option"
 msgstr "Αυτή είναι η προεπιλεγμένη, συνιστώμενη επιλογή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:713
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1648
 msgid "Encryption types"
 msgstr "Τύποι κρυπτογράφησης"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:724
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1662
 msgid "Legacy options"
 msgstr "Παλιές επιλογές"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:726
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1664
 msgid "Post Quantum"
 msgstr "Post Quantum"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:734
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1674
 msgid "Both encryption types"
 msgstr "Και οι δύο τύποι κρυπτογράφησης"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:756
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1698
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1702
 msgid "Tunnel Options"
 msgstr "Επιλογές Διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:758
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1706
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1714
 msgid "Length"
 msgstr "Μήκος"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:760
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1710
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1718
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:471
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:717
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:839
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:1039
 msgid "Count"
 msgstr "Αριθμός"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:762
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1720
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1778
 msgid "Length of each Tunnel"
 msgstr "Μήκος κάθε Διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:768
 msgid "0 hop tunnel (no anonymity)"
 msgstr "0 κλίσμα διαδρόμου (χωρίς ανώνυμη ιδιότητα)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:772
 msgid "1 hop tunnel (low anonymity)"
 msgstr "1 κλίσμα διαδρόμου (μικρή ανώνυμη ιδιότητα)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:776
 msgid "2 hop tunnel (medium anonymity)"
 msgstr "2 κλίσματα διαδρόμου (μέτρια ανώνυμη ιδιότητα)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:780
 msgid "3 hop tunnel (high anonymity)"
 msgstr "3 κλίσματα διαδρόμου (ψηλή ανώνυμη ιδιότητα)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:786
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:790
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:794
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:798
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:804
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1728
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1734
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1740
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1746
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1752
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1756
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1760
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1764
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1770
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1784
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1788
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1792
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1796
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1800
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1804
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1808
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1812
 #, java-format
 msgid "{0} hop tunnel"
 msgid_plural "{0} hop tunnel"
 msgstr[0] "{0} κλίσματα διαδρόμου"
 msgstr[1] "{0} κλίσματα διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:808
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1774
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1814
 msgid "Number of Tunnels in Group"
 msgstr "Αριθμός Διαδρόμων στη Γραμμή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:809
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1815
 msgid "Disabled for 0 hop tunnels"
 msgstr "Απενεργοποιημένο για διαδρόμους 0 hop"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:818
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1827
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1835
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:483
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:624
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:844
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:960
 msgid "Variance"
 msgstr "Διακύμανση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:820
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1831
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1839
 msgid "Backup Count"
 msgstr "Αριθμός Επιπλέον"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:822
 msgid "Level of Randomization for Tunnel Length"
 msgstr "Επίπεδο Συντυχαιότητας για το Μήκος του Διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:828
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1851
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1950
 msgid "0 hop variance"
 msgstr "0 διακύμανση κλίσματος"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:829
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1847
 msgid "no randomization, consistent performance"
 msgstr "χωρίς συντυχαιότητα, συνεπής απόδοση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:833
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1857
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1954
 msgid "+ 0-1 hop variance"
 msgstr "+ 0-1 διακύμανση κλίσματος"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:834
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1853
 msgid "medium randomization, lower performance"
 msgstr "μεσαία συντυχαιότητα, χαμηλότερη απόδοση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:838
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1863
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1958
 msgid "+ 0-2 hop variance"
 msgstr "+ 0-2 διακύμανση κλίσματος"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:839
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1859
 msgid "high randomization, very low performance"
 msgstr "ψηλή συντυχαιότητα, πολύ χαμηλή απόδοση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:844
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1876
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1966
 msgid "+/- 0-1 hop variance"
 msgstr "+/- 0-1 διακύμανση κλίσματος"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:845
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1871
 msgid "standard randomization, standard performance"
 msgstr "τυποποιημένη συντυχαιότητα, τυποποιημένη απόδοση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:850
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1883
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1970
 msgid "+/- 0-2 hop variance"
 msgstr "+/- 0-2 διακύμανση κλίσματος"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:851
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1878
 msgid "not recommended"
 msgstr "δεν συνιστάται"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:861
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1900
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1984
 msgid "hop variance"
 msgstr "διακύμανση κλίσματος"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:865
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1904
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1988
 msgid "Number of Reserve Tunnels"
 msgstr "Αριθμός Επιπλέον Διαδρόμων"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:875
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:880
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:885
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:890
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:897
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1914
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1920
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1926
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1932
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1938
 #, java-format
 msgid "{0} backup tunnel"
 msgid_plural "{0} backup tunnels"
 msgstr[0] "{0} αντικαταστάτικος διάδρομος"
 msgstr[1] "{0} αντικαταστάτικοι διαδρόμοι"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:876
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1910
 msgid "no redundancy, no added resource usage"
 msgstr "χωρίς περιττότητα, χωρίς πρόσθετη χρήση πόρων"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:881
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1916
 msgid "low redundancy, low resource usage"
 msgstr "χαμηλή περιττότητα, χαμηλή χρήση πόρων"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:886
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1922
 msgid "medium redundancy, medium resource usage"
 msgstr "μεσαία περιττότητα, μεσαία χρήση πόρων"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:891
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1928
 msgid "high redundancy, high resource usage"
 msgstr "ψηλή περιττότητα, ψηλή χρήση πόρων"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:903
 msgid "Reduce tunnel quantity"
 msgstr "Κατάργηση του αριθμού διαδρόμων"
 
-msgid "Reduce tunnel count when idle to conserve resources but keep tunnel open (to ensure immediate availability)"
-msgstr "Κατάργηση του αριθμού διαδρόμων όταν είναι άραδνες για να αποφευχθεί η κατανάλωση πόρων, αλλά διατηρήστε τον διάδρομο ανοιχτό (για να διασφαλιστεί η άμεση διαθεσιμότητα)"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:905
+msgid ""
+"Reduce tunnel count when idle to conserve resources but keep tunnel open (to "
+"ensure immediate availability)"
+msgstr ""
+"Κατάργηση του αριθμού διαδρόμων όταν είναι άραδνες για να αποφευχθεί η "
+"κατανάλωση πόρων, αλλά διατηρήστε τον διάδρομο ανοιχτό (για να διασφαλιστεί "
+"η άμεση διαθεσιμότητα)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:909
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2047
 msgid "Reduce tunnel quantity when idle"
 msgstr "Κατάργηση του αριθμού διαδρόμων όταν είναι άραδνες"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:911
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:931
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2054
 msgid "Idle period"
 msgstr "Περίοδος άραδνης λειτουργίας"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:913
 msgid "Reduced Tunnel Idle Time"
 msgstr "Μειωμένη Άραδνη Χρονική Διάρκεια Διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:917
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2064
 msgid "Reduced count"
 msgstr "Μειωμένος αριθμός"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:919
 msgid "Reduced tunnel count"
 msgstr "Μειωμένος αριθμός διαδρόμων"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:923
 msgid "Close tunnels when idle"
 msgstr "Κλείστε τους διαδρόμους όταν είναι άραδνοι"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:925
 msgid "To conserve resources, close tunnels when not in use"
-msgstr "Για να αποφευχθεί η κατανάλωση πόρων, κλείστε τους διαδρόμους όταν δεν είναι σε χρήση"
+msgstr ""
+"Για να αποφευχθεί η κατανάλωση πόρων, κλείστε τους διαδρόμους όταν δεν είναι "
+"σε χρήση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:929
 msgid "Close client tunnels after specified idle period"
-msgstr "Κλείστε τους διαδρόμους πελάτη μετά από την καθορισμένη περίοδο άραδνης λειτουργίας"
+msgstr ""
+"Κλείστε τους διαδρόμους πελάτη μετά από την καθορισμένη περίοδο άραδνης "
+"λειτουργίας"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:933
 msgid "Close Tunnel Idle Time"
 msgstr "Κλείσιμο Άραδνης Χρονικής Διάρκειας Διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:937
 msgid "New Keys on Reopen"
 msgstr "Νέα Κλειδιά κατά την ξαναάνοιγμα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:939
 msgid "Change tunnel identity (destination) when tunnels reopen"
-msgstr "Αλλάξτε την ταυτότητα του διαδρόμου (προορισμός) όταν ξαναανοίγουν οι διαδρόμοι"
+msgstr ""
+"Αλλάξτε την ταυτότητα του διαδρόμου (προορισμός) όταν ξαναανοίγουν οι "
+"διαδρόμοι"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:943
 msgid "Enable"
 msgstr "Ενεργοποίηση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:945
 msgid "Retain tunnel identity (destination) when tunnels reopen"
-msgstr "Διατήρηση της ταυτότητας του διαδρόμου (προορισμός) όταν ξαναανοίγουν οι διαδρόμοι"
+msgstr ""
+"Διατήρηση της ταυτότητας του διαδρόμου (προορισμός) όταν ξαναανοίγουν οι "
+"διαδρόμοι"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:949
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2148
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2157
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2369
 msgid "Disable"
 msgstr "Απενεργοποίηση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:953
 msgid "Persistent private key"
 msgstr "Μόνιμη ιδιωτική κλειδιά"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:955
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1357
 msgid "Private key file"
 msgstr "Αρχείο ιδιωτικής κλειδιάς"
 
-msgid "Enabling this feature will ensure your tunnel identity (destination) remains static, for services offering features based on destination e.g. IRC user authentication"
-msgstr "Η ενεργοποίηση αυτής της λειτουργίας θα διασφαλίσει ότι η ταυτότητα του διαδρόμου σας (προορισμός) θα παραμείνει σταθερή, για υπηρεσίες που προσφέρουν λειτουργίες βασισμένες στον προορισμό, για παράδειγμα την εγκατάσταση ταυτότητας IRC"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:957
+msgid ""
+"Enabling this feature will ensure your tunnel identity (destination) remains "
+"static, for services offering features based on destination e.g. IRC user "
+"authentication"
+msgstr ""
+"Η ενεργοποίηση αυτής της λειτουργίας θα διασφαλίσει ότι η ταυτότητα του "
+"διαδρόμου σας (προορισμός) θα παραμείνει σταθερή, για υπηρεσίες που "
+"προσφέρουν λειτουργίες βασισμένες στον προορισμό, για παράδειγμα την "
+"εγκατάσταση ταυτότητας IRC"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:961
 msgid "Generate key to enable persistent client tunnel identity"
-msgstr "Δημιουργήστε κλειδί για να ενεργοποιήσετε την μόνιμη ταυτότητα του διαδρόμου πελάτη"
+msgstr ""
+"Δημιουργήστε κλειδί για να ενεργοποιήσετε την μόνιμη ταυτότητα του διαδρόμου "
+"πελάτη"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:963
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1367
 msgid "Path to Private Key File"
 msgstr "Διεύθυνση στο αρχείο ιδιωτικής κλειδιάς"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:971
 msgid "HTTP Filtering"
 msgstr "Φίλτρο HTTP"
 
-msgid "When enabled, the user agent of your web browser or http client will not be spoofed, potentially reducing your anonymity"
-msgstr "Όταν ενεργοποιηθεί, το user agent του περιηγητή σας ή του πελάτη http δεν θα παραμιμηθεί, με αποτέλεσμα η ανώνυμη ιδιότητά σας να μειωθεί"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:973
+msgid ""
+"When enabled, the user agent of your web browser or http client will not be "
+"spoofed, potentially reducing your anonymity"
+msgstr ""
+"Όταν ενεργοποιηθεί, το user agent του περιηγητή σας ή του πελάτη http δεν θα "
+"παραμιμηθεί, με αποτέλεσμα η ανώνυμη ιδιότητά σας να μειωθεί"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:977
 msgid "Do not spoof User-Agent header"
 msgstr "Μην παραμιμηθεί το User-Agent header"
 
-msgid "When enabled, the referer (originating page) of your web requests will not be filtered, potentially reducing your anonymity"
-msgstr "Όταν ενεργοποιηθεί, ο referer (της αρχικής σελίδας) των αιτημάτων web σας δεν θα φίλτραρε, με αποτέλεσμα η ανώνυμη ιδιότητά σας να μειωθεί"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:979
+msgid ""
+"When enabled, the referer (originating page) of your web requests will not "
+"be filtered, potentially reducing your anonymity"
+msgstr ""
+"Όταν ενεργοποιηθεί, ο referer (της αρχικής σελίδας) των αιτημάτων web σας "
+"δεν θα φίλτραρε, με αποτέλεσμα η ανώνυμη ιδιότητά σας να μειωθεί"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:983
 msgid "Do not block Referer header"
 msgstr "Μην φιλτράρετε το header Referer"
 
-msgid "When enabled, the accept headers (mime types support) broadcast by your web browser will not be filtered, potentially reducing your anonymity"
-msgstr "Όταν ενεργοποιηθεί, τα header accept (στήριξη mime types) που αποστέλλονται από τον περιηγητή σας δεν θα φίλτραραν, με αποτέλεσμα η ανώνυμη ιδιότητά σας να μειωθεί"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:985
+msgid ""
+"When enabled, the accept headers (mime types support) broadcast by your web "
+"browser will not be filtered, potentially reducing your anonymity"
+msgstr ""
+"Όταν ενεργοποιηθεί, τα header accept (στήριξη mime types) που αποστέλλονται "
+"από τον περιηγητή σας δεν θα φίλτραραν, με αποτέλεσμα η ανώνυμη ιδιότητά σας "
+"να μειωθεί"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:989
 msgid "Do not block Accept headers"
 msgstr "Μην φιλτράρετε τα header Accept"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:991
 msgid "Allow SSL to I2P addresses when enabled"
 msgstr "Επιτρέπετε SSL σε διευθύνσεις I2P όταν είναι ενεργοποιημένη"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:995
 msgid "Allow SSL to I2P addresses"
 msgstr "Επιτρέπετε SSL σε διευθύνσεις I2P"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1001
 msgid "Local Authorization"
 msgstr "Τοπική Αυθεντικοποίηση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1003
 msgid "Local Credentials"
 msgstr "Τοπικές Πιστοποιητικές"
 
-msgid "Enable to require a username and password to access this local service (for example if hosting on a LAN)"
-msgstr "Ενεργοποιήστε για να απαιτείται ονοματεπώνυμο και κωδικό πρόσβασης για την πρόσβαση σε αυτή την τοπική υπηρεσία (για παράδειγμα αν φιλοξενείτε σε LAN)"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1005
+msgid ""
+"Enable to require a username and password to access this local service (for "
+"example if hosting on a LAN)"
+msgstr ""
+"Ενεργοποιήστε για να απαιτείται ονοματεπώνυμο και κωδικό πρόσβασης για την "
+"πρόσβαση σε αυτή την τοπική υπηρεσία (για παράδειγμα αν φιλοξενείτε σε LAN)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1009
 msgid "Require local authorization for this service"
 msgstr "Απαιτείται τοπική άδεια για αυτή την υπηρεσία"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1011
 msgid "Set username required to access this service"
-msgstr "Ορίστε το όνομα χρήστη που απαιτείται για να προσχωρήσετε σε αυτή την υπηρεσία"
+msgstr ""
+"Ορίστε το όνομα χρήστη που απαιτείται για να προσχωρήσετε σε αυτή την "
+"υπηρεσία"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1013
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1033
 msgid "Username"
 msgstr "Όνομα χρήστη"
 
+#. && isAdvanced
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1015
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2235
 msgid "Set password required to access this service"
-msgstr "Ορίστε τον κωδικό που απαιτείται για να προσχωρήσετε σε αυτή την υπηρεσία"
+msgstr ""
+"Ορίστε τον κωδικό που απαιτείται για να προσχωρήσετε σε αυτή την υπηρεσία"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1017
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1039
 msgid "Password"
 msgstr "Κωδικός"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1019
 msgid "Outproxy Authorization"
 msgstr "Αυθεντικοποίηση Outproxy"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1021
 msgid "Remote Credentials"
 msgstr "Εξωτερικές Πιστοποιητικές"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1023
 msgid "Enable if the outproxy a username and password to access"
-msgstr "Ενεργοποιήστε αν το outproxy απαιτεί ονοματεπώνυμο και κωδικό πρόσβασης για πρόσβαση"
+msgstr ""
+"Ενεργοποιήστε αν το outproxy απαιτεί ονοματεπώνυμο και κωδικό πρόσβασης για "
+"πρόσβαση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1027
 msgid "Outproxy requires authorization"
 msgstr "Το Outproxy απαιτεί αυθεντικοποίηση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1029
 msgid "Enter username required by outproxy"
 msgstr "Εισάγετε το όνομα χρήστη που απαιτεί το outproxy"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1035
 msgid "Enter password required by outproxy"
 msgstr "Εισάγετε τον κωδικό πρόσβασης που απαιτεί το outproxy"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1045
 msgid "Jump URL List"
 msgstr "Λίστα URL Jump"
 
-msgid "List of helper URLs providing jump links when a host is not found in your addressbook"
-msgstr "Λίστα URLs βοηθητή που παρέχουν συνδέσμους jump όταν ένας διακομιστής δεν βρίσκεται στο βιβλίο διευθύνσεων σας"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1047
+msgid ""
+"List of helper URLs providing jump links when a host is not found in your "
+"addressbook"
+msgstr ""
+"Λίστα URLs βοηθητή που παρέχουν συνδέσμους jump όταν ένας διακομιστής δεν "
+"βρίσκεται στο βιβλίο διευθύνσεων σας"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1053
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2525
 msgid "Custom options"
 msgstr "Προσαρμοσμένες επιλογές"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1055
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2527
 msgid "Advanced tunnel, streaming, and I2CP options"
 msgstr "Προχωρημένες επιλογές διαδρόμου, streaming και I2CP"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1115
 msgid "New Server Configuration"
 msgstr "Νέα Διαμόρφωση Διακομιστή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1184
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:564
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:718
 msgid "Hostname"
 msgstr "Όνομα διακομιστή"
 
-msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
-msgstr "Τυχαία καθυστέρηση εκκίνησης (όταν είναι ενεργοποιημένη η αυτόματη εκκίνηση) για άμυνα έναντι επιθέσεων συσχέτισης"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1204
+msgid ""
+"Random startup delay (when auto-start is enabled) to defend against "
+"correlation attacks"
+msgstr ""
+"Τυχαία καθυστέρηση εκκίνησης (όταν είναι ενεργοποιημένη η αυτόματη εκκίνηση) "
+"για άμυνα έναντι επιθέσεων συσχέτισης"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1207
 msgid "Startup Delay"
 msgstr "Καθυστέρηση εκκίνησης"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1209
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1234
 msgid "Minimum"
 msgstr "Ελάχιστο"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1213
 msgid "Minimum startup delay"
 msgstr "Ελάχιστη καθυστέρηση εκκίνησης"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1217
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1227
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1242
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1252
 msgid "seconds"
 msgstr "δευτερόλεπτα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1219
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1244
 msgid "Maximum"
 msgstr "Μέγιστο"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1223
 msgid "Maximum startup delay"
 msgstr "Μέγιστη καθυστέρηση εκκίνησης"
 
-msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
-msgstr "Προσθήκη τυχαίας καθυστέρησης πριν τον τερματισμό σήραγγας και έναρξη ομαλής διαδικασίας τερματισμού/επανεκκίνησης δρομολογητή"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1229
+msgid ""
+"Add random delay before tunnel shutdown, then start graceful router "
+"shutdown / restart process"
+msgstr ""
+"Προσθήκη τυχαίας καθυστέρησης πριν τον τερματισμό σήραγγας και έναρξη ομαλής "
+"διαδικασίας τερματισμού/επανεκκίνησης δρομολογητή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1232
 msgid "Shutdown Delay"
 msgstr "Καθυστέρηση τερματισμού"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1238
 msgid "Minimum shutdown delay"
 msgstr "Ελάχιστη καθυστέρηση τερματισμού"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1248
 msgid "Maximum shutdown delay"
 msgstr "Μέγιστη καθυστέρηση τερματισμού"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1257
 msgid "Website Hostname"
 msgstr "Όνομα διακομιστή ιστοσελίδας"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1259
 msgid "(leave blank for outproxies)"
 msgstr "(αφήστε κενό για outproxies)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1269
 msgid "Website Hostname e.g. mysite.i2p"
 msgstr "Όνομα διακομιστή ιστοσελίδας για παράδειγμα mysite.i2p"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1305
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:509
 msgid "Specify the port the server is running on"
 msgstr "Ορίστε το λιμάνι στο οποίο τρέχει ο διακομιστής"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1317
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:562
 msgid "Listening interface (IP address) for client access (normally 127.0.0.1)"
-msgstr "Επιφάνεια ακόλουθης αναμονής (διεύθυνση IP) για πρόσβαση πελάτη (συνήθως 127.0.0.1)"
+msgstr ""
+"Επιφάνεια ακόλουθης αναμονής (διεύθυνση IP) για πρόσβαση πελάτη (συνήθως "
+"127.0.0.1)"
 
-msgid "To avoid traffic sniffing if connecting to a remote server, you can enable an SSL connection. Note that the target server must be configured to accept SSL connections."
-msgstr "Για να αποφευχθεί η ανακοπή της ροής δεδομένων όταν συνδέσεστε σε έναν απομακρυσμένο διακομιστή, μπορείτε να ενεργοποιήσετε μια σύνδεση SSL. Σημειώστε ότι ο στόχος διακομιστής πρέπει να είναι ρυθμισμένος για να αποδεχθεί SSL συνδέσεις."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1329
+msgid ""
+"To avoid traffic sniffing if connecting to a remote server, you can enable "
+"an SSL connection. Note that the target server must be configured to accept "
+"SSL connections."
+msgstr ""
+"Για να αποφευχθεί η ανακοπή της ροής δεδομένων όταν συνδέσεστε σε έναν "
+"απομακρυσμένο διακομιστή, μπορείτε να ενεργοποιήσετε μια σύνδεση SSL. "
+"Σημειώστε ότι ο στόχος διακομιστής πρέπει να είναι ρυθμισμένος για να "
+"αποδεχθεί SSL συνδέσεις."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1333
 msgid "Use SSL to connect to target"
 msgstr "Χρησιμοποιήστε SSL για να συνδεθείτε στον στόχο"
 
-msgid "Port required to access service (this can be a different port to the port the service is hosted on)"
-msgstr "Λιμάνι που απαιτείται για πρόσβαση στην υπηρεσία (αυτό μπορεί να είναι ένα διαφορετικό λιμάνι από αυτό που φιλοξενείται η υπηρεσία)"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1347
+msgid ""
+"Port required to access service (this can be a different port to the port "
+"the service is hosted on)"
+msgstr ""
+"Λιμάνι που απαιτείται για πρόσβαση στην υπηρεσία (αυτό μπορεί να είναι ένα "
+"διαφορετικό λιμάνι από αυτό που φιλοξενείται η υπηρεσία)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1394
 msgid "Generate a QR Code for this domain"
 msgstr "Δημιουργήστε έναν QR Code για αυτό τον τομέα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1402
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1510
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1518
 msgid "Generate QR Code"
 msgstr "Δημιουργήστε QR Code"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1409
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1524
 msgid "Add to Private addressbook"
 msgstr "Προσθήκη στο Ιδιωτικό βιβλίο διευθύνσεων"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1415
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1530
 msgid "Add to local addressbook"
 msgstr "Προσθήκη στο τοπικό βιβλίο διευθύνσεων"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1419
 msgid "Register, unregister or change details for hostname"
 msgstr "Εγγραφή, αποσύνδεση ή αλλαγή λεπτομοριών για το όνομα διακομιστή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1424
 msgid "Registration Authentication"
 msgstr "Αυθεντικοποίηση Εγγραφής"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1430
 msgid "HTTPS configuration"
 msgstr "Ρυθμίζεται HTTPS"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1435
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:701
 msgid "SSL Wizard"
 msgstr "Φοιτητής SSL"
 
-msgid "Note: In order to enable QR code generation or registration authentication, configure the Website Hostname field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
-msgstr "Σημείωση: Για να ενεργοποιήσετε τη δημιουργία κωδικού QR ή την αυθεντικότητα εγγραφής, ρυθμίστε το πεδίο Ονομασία Ιστοσελίδας (για ιστότοπους) ή το πεδίο Όνομα (για όλα τα υπόλοιπα) παραπάνω με έναν υποδομούμενο ονομαστικό τελείων .i2p, όπως mynewserver.i2p."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1443
+msgid ""
+"Note: In order to enable QR code generation or registration authentication, "
+"configure the Website Hostname field (for websites) or the Name field "
+"(everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
+msgstr ""
+"Σημείωση: Για να ενεργοποιήσετε τη δημιουργία κωδικού QR ή την αυθεντικότητα "
+"εγγραφής, ρυθμίστε το πεδίο Ονομασία Ιστοσελίδας (για ιστότοπους) ή το πεδίο "
+"Όνομα (για όλα τα υπόλοιπα) παραπάνω με έναν υποδομούμενο ονομαστικό "
+"τελείων .i2p, όπως mynewserver.i2p."
 
-msgid "Absolute path to Private Key File (will be created if it does not exist)"
-msgstr "Απόλυτη διεύθυνση στο αρχείο Ιδιωτικής Κλειδιάς (θα δημιουργηθεί αν δεν υπάρχει)"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1453
+msgid ""
+"Absolute path to Private Key File (will be created if it does not exist)"
+msgstr ""
+"Απόλυτη διεύθυνση στο αρχείο Ιδιωτικής Κλειδιάς (θα δημιουργηθεί αν δεν "
+"υπάρχει)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1459
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1465
 msgid "Alternate private key file"
 msgstr "Εναλλακτικό αρχείο ιδιωτικής κλειδιάς"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1463
 msgid "Alternate local destination"
 msgstr "Εναλλακτικό τοπικό προορισμός"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1475
 msgid "Absolute path for new key (will be created)"
 msgstr "Απόλυτη διεύθυνση για το νέο κλειδί (θα δημιουργηθεί)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1484
 msgid "Read Only: Alternate Local Destination"
 msgstr "Μόνο Διαβασμός: Εναλλακτικός Τοπικός Προορισμός"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1495
 msgid "Specify filename or full path for new key"
 msgstr "Ορίστε το όνομα αρχείου ή την πλήρη διεύθυνση για το νέο κλειδί"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1553
 msgid "Configuration cannot be changed after destination is created"
 msgstr "Η διαμόρφωση δεν μπορεί να αλλάξει μετά τη δημιουργία του προορισμού"
 
-msgid "Configuration of signature type is only possible when the tunnel is first created. To change, you must create a new tunnel."
-msgstr "Η διαμόρφωση τύπου υπογραφής είναι δυνατή μόνο όταν δημιουργείται για πρώτη φορά ο διάδρομος. Για να αλλάξετε, πρέπει να δημιουργήσετε έναν νέο διάδρομο."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1578
+msgid ""
+"Configuration of signature type is only possible when the tunnel is first "
+"created. To change, you must create a new tunnel."
+msgstr ""
+"Η διαμόρφωση τύπου υπογραφής είναι δυνατή μόνο όταν δημιουργείται για πρώτη "
+"φορά ο διάδρομος. Για να αλλάξετε, πρέπει να δημιουργήσετε έναν νέο διάδρομο."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1593
 msgid "Legacy option, with alternate key configured"
 msgstr "Παλιά επιλογή, με εναλλακτικό κλειδί ρυθμισμένο"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1600
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1608
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1616
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1624
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1666
 msgid "Legacy option (deprecated), provided for backward compatibility"
 msgstr "Παλιότερη επιλογή (εξαίρεση), παρέχεται για προς τα πίσω συμβατότητα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1640
 msgid "Recommended for blinded and encrypted destinations"
-msgstr "Συνιστάται για τους προορισμούς που τυπικά κρυπτογραφούνται και τυπικά παραλαμβάνονται"
+msgstr ""
+"Συνιστάται για τους προορισμούς που τυπικά κρυπτογραφούνται και τυπικά "
+"παραλαμβάνονται"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1696
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1704
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1708
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1825
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1829
 msgid "Inbound"
 msgstr "Εισερχόμενος"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1700
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1712
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1716
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1833
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1837
 msgid "Outbound"
 msgstr "Εξερχόμενος"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1724
 msgid "no anonymity"
 msgstr "χωρίς ανώνυμη ιδιότητα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1730
 msgid "low anonymity"
 msgstr "χαμηλή ανώνυμη ιδιότητα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1736
 msgid "medium anonymity"
 msgstr "μέτρια ανώνυμη ιδιότητα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1742
 msgid "high anonymity"
 msgstr "ψηλή ανώνυμη ιδιότητα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1841
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1942
 msgid "Level of Randomization for Tunnel Depth"
 msgstr "Επίπεδο Συντυχαιότητας για τη βάθος του διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1865
 msgid "very high randomization, very low performance"
 msgstr "πολύ υψηλή συντυχαιότητα, πολύ χαμηλή απόδοση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1869
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1962
 msgid "+ 0-3 hop variance"
 msgstr "+ 0-3 διακύμανση κλίσματος"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1885
 msgid "definitely not recommended"
 msgstr "σίγουρα δεν συνιστάται"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1890
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1974
 msgid "+/- 0-3 hop variance"
 msgstr "+/- 0-3 διακύμανση κλίσματος"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1998
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2004
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2010
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2016
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2023
 msgid "backup tunnels"
 msgstr "αντικαταστηματικοί διαδρόμοι"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2052
 msgid "Reduce tunnels to conserve resources"
 msgstr "Μειώστε τους διαδρόμους για να αποφευχθεί η κατανάλωση πόρων"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2056
 msgid "Period of inactivity before tunnel number is reduced"
-msgstr "Χρονική περίοδος άραδνης λειτουργίας πριν μειωθεί ο αριθμός των διαδρόμων"
+msgstr ""
+"Χρονική περίοδος άραδνης λειτουργίας πριν μειωθεί ο αριθμός των διαδρόμων"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2062
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2479
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2497
 msgid "minutes"
 msgstr "λεπτά"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2066
 msgid "Number of tunnels to keep open to maintain availability of service"
-msgstr "Αριθμός διαδρόμων που πρέπει να παραμείνουν ανοιχτοί για να διατηρηθεί η προσβασιμότητα της υπηρεσίας"
+msgstr ""
+"Αριθμός διαδρόμων που πρέπει να παραμείνουν ανοιχτοί για να διατηρηθεί η "
+"προσβασιμότητα της υπηρεσίας"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2070
 msgid "Server Access Options"
 msgstr "Επιλογές Πρόσβασης σε Διακομιστή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2074
 msgid "Prevent clients from accessing this service via an inproxy"
 msgstr "Αποφύγετε την πρόσβαση των πελατών σε αυτή την υπηρεσία μέσω inproxy"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2078
 msgid "Block Access via Inproxies"
 msgstr "Αποκλείστε την πρόσβαση μέσω Inproxies"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2082
 msgid "Block Accesses containing Referers"
 msgstr "Αποκλείστε τις προσπάθειες πρόσβασης που περιέχουν Referers"
 
-msgid "Use unique IP addresses for each connecting client (local non-SSL servers only)"
-msgstr "Χρησιμοποιήστε μοναδικές διευθύνσεις IP για κάθε πελάτη που συνδέεται (μόνο τοπικοί διακομιστές χωρίς SSL)"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2086
+msgid ""
+"Use unique IP addresses for each connecting client (local non-SSL servers "
+"only)"
+msgstr ""
+"Χρησιμοποιήστε μοναδικές διευθύνσεις IP για κάθε πελάτη που συνδέεται (μόνο "
+"τοπικοί διακομιστές χωρίς SSL)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2090
 msgid "Unique Local Address per Client"
 msgstr "Μοναδική Τοπική Διεύθυνση για κάθε πελάτη"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2092
 msgid "Only enable if you are hosting this service on multiple routers"
-msgstr "Ενεργοποιήστε μόνο αν φιλοξενείτε αυτή την υπηρεσία σε πολλαπλούς διαχειριστές"
+msgstr ""
+"Ενεργοποιήστε μόνο αν φιλοξενείτε αυτή την υπηρεσία σε πολλαπλούς "
+"διαχειριστές"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2098
 msgid "Optimize for Multihoming"
 msgstr "Αισθητικοποίηση για Multihoming"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2102
 msgid "Deny User-Agents matching these strings (probably from inproxies)"
-msgstr "Απορρίψτε τους User-Agents που ταιριάζουν σε αυτές τις σειρές (πιθανώς από inproxies)"
+msgstr ""
+"Απορρίψτε τους User-Agents που ταιριάζουν σε αυτές τις σειρές (πιθανώς από "
+"inproxies)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2106
 msgid "Block these User-Agents"
 msgstr "Αποκλείστε αυτούς τους User-Agents"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2108
 msgid "comma separated, e.g. Mozilla,Opera (case-sensitive)"
-msgstr "χωρισμένο με κόμμα, για παράδειγμα Mozilla,Opera (ευαίσθητο στις περιπτώσεις)"
+msgstr ""
+"χωρισμένο με κόμμα, για παράδειγμα Mozilla,Opera (ευαίσθητο στις περιπτώσεις)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2118
 msgid "Encrypt Leaseset"
 msgstr "Κρυπτογράφηση Leaseset"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2131
 msgid "Optional Lookup Password"
 msgstr "Επιλεκτικός κωδικός πρόσβασης Lookup"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2134
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2137
 msgid "Keyring Manager"
 msgstr "Διαχειριστής Keyring"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2143
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2152
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2365
 msgid "Allow all clients to connect to this service"
 msgstr "Επιτρέψτε σε όλους τους πελάτες να συνδεθούν σε αυτή την υπηρεσία"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2161
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2186
 msgid "Send key to all users."
 msgstr "Αποστολή κλειδιού σε όλους τους χρήστες."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2166
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2191
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:643
 msgid "Encrypted"
 msgstr "Κρυπτογραφημένο"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2170
 msgid "Prevents server discovery by floodfills"
 msgstr "Αποτρέπει την ανακάλυψη διακομιστή μέσω floodfills"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2175
 msgid "Blinded"
 msgstr "Τυφλωμένος"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2179
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2208
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2223
 msgid "Send password to all users."
 msgstr "Αποστολή κωδικού πρόσβασης σε όλους τους χρήστες."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2184
 msgid "Blinded with lookup password"
 msgstr "Blinded με κωδικό πρόσβασης Lookup"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2193
 msgid "Send key and password to all users."
 msgstr "Αποστολή κλειδιού και κωδικού πρόσβασης σε όλους τους χρήστες."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2198
 msgid "Encrypted with lookup password"
 msgstr "Κρυπτογραφημένο με κωδικό πρόσβασης Lookup"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2200
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2207
 msgid "Send individual key to each user."
 msgstr "Αποστολή μεμονωμένου κλειδιού σε κάθε χρήστη."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2205
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2220
 msgid "Encrypted with per-user key"
 msgstr "Κρυπτογραφημένο με κλειδί προς χρήστη"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2213
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2228
 msgid "Encrypted with lookup password and per-user key"
 msgstr "Κρυπτογραφημένο με κωδικό πρόσβασης Lookup και κλειδί προς χρήστη"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2215
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2222
 msgid "Enter key from each user."
 msgstr "Εισάγετε το κλειδί από κάθε χρήστη."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2255
 msgid "Encryption Key"
 msgstr "Κλειδί Κρυπτογράφησης"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2257
 msgid "Generate New Key"
 msgstr "Δημιουργία Νέου Κλειδιού"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2267
 msgid "Encryption key required to access this service"
-msgstr "Απαιτείται κλειδί κρυπτογράφησης για να προσχωρήσετε σε αυτή την υπηρεσία"
+msgstr ""
+"Απαιτείται κλειδί κρυπτογράφησης για να προσχωρήσετε σε αυτή την υπηρεσία"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2271
 msgid "Generate new encryption key"
 msgstr "Δημιουργία νέου κλειδιού κρυπτογράφησης"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2274
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:610
 msgid "Generate"
 msgstr "Δημιουργία"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2276
 msgid "Tunnel must be stopped first"
 msgstr "Ο διάδρομος πρέπει να σταματήσει πρώτα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2285
 msgid "Client Manager"
 msgstr "Διαχειριστής Πελάτη"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2292
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2326
 msgid "Client Name"
 msgstr "Όνομα Πελάτη"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2294
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2332
 msgid "Client Key"
 msgstr "Κλειδί Πελάτη"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2296
 msgid "Revoke"
 msgstr "Αποσύρετε"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2311
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2338
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:236
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:246
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:255
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:262
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:272
 msgid "Client"
 msgstr "Πελάτης"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2336
 msgid "Add"
 msgstr "Προσθήκη"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2351
 msgid "Restricted Access List"
 msgstr "Λίστα Ορισμένης Πρόσβασης"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2355
 msgid "Activate to enable editing"
 msgstr "Ενεργοποιήστε για επεξεργασία"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2359
 msgid "Tunnel Filter"
 msgstr "Φίλτρο Διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2361
 msgid "Help with defining tunnel filters"
 msgstr "Βοήθεια για την ορισμό των φίλτρων διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2371
 msgid "Prevent listed clients from connecting to this service"
 msgstr "Αποφύγετε την σύνδεση των καταχωρημένων πελατών σε αυτή την υπηρεσία"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2375
 msgid "Blacklist"
 msgstr "Μαύρη Λίστα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2377
 msgid "Only allow listed clients to connect to this service"
-msgstr "Αποκλείστε όλους εκτός από τους καταχωρημένους πελάτες από να συνδεθούν σε αυτή την υπηρεσία"
+msgstr ""
+"Αποκλείστε όλους εκτός από τους καταχωρημένους πελάτες από να συνδεθούν σε "
+"αυτή την υπηρεσία"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2381
 msgid "Whitelist"
 msgstr "Λευκή Λίστα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2383
 msgid "Absolute path to file containing filter definition"
 msgstr "Απόλυτη διεύθυνση του αρχείου που περιέχει την ορισμό φίλτρου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2387
 msgid "Absolute path to filter definition"
 msgstr "Απόλυτη διεύθυνση ορισμού φίλτρου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2391
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2393
 msgid "Specify client destinations, 1 per line"
 msgstr "Διαθέστε τους προορισμούς πελάτη, 1 ανά γραμμή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2399
 msgid "Server Throttling"
 msgstr "Οριοθέτηση Διακομιστή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2401
 msgid "Inbound connection limits"
 msgstr "Ορια εισερχόμενων συνδέσεων"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2403
 msgid "Per Minute"
 msgstr "Ανά Λεπτό"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2405
 msgid "Per Hour"
 msgstr "Ανά Ώρα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2407
 msgid "Per Day"
 msgstr "Ανά Ημέρα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2409
 msgid "Concurrent"
 msgstr "Εν ταυτόχρονο"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2411
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2467
 msgid "Per Client"
 msgstr "Ανά Πελάτη"
 
-msgid "Maximum number of web page requests per minute for a unique client before access to the server is blocked"
-msgstr "Μέγιστος αριθμός αιτημάτων web σελίδας ανά λεπτό για ένα μοναδικό πελάτη πριν τοτε αποκλείσει η πρόσβαση στον διακομιστή"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2413
+msgid ""
+"Maximum number of web page requests per minute for a unique client before "
+"access to the server is blocked"
+msgstr ""
+"Μέγιστος αριθμός αιτημάτων web σελίδας ανά λεπτό για ένα μοναδικό πελάτη "
+"πριν τοτε αποκλείσει η πρόσβαση στον διακομιστή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2415
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2421
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2427
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2435
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2441
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2447
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2453
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2471
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2489
 msgid "(0 = unlimited)"
 msgstr "(0 = απεριόριστο)"
 
-msgid "Maximum number of web page requests per hour for a unique client before access to the server is blocked"
-msgstr "Μέγιστος αριθμός αιτημάτων web σελίδας ανά ώρα για ένα μοναδικό πελάτη πριν τοτε αποκλείσει η πρόσβαση στον διακομιστή"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2419
+msgid ""
+"Maximum number of web page requests per hour for a unique client before "
+"access to the server is blocked"
+msgstr ""
+"Μέγιστος αριθμός αιτημάτων web σελίδας ανά ώρα για ένα μοναδικό πελάτη πριν "
+"τοτε αποκλείσει η πρόσβαση στον διακομιστή"
 
-msgid "Maximum number of web page requests per day for a unique client before access to the server is blocked"
-msgstr "Μέγιστος αριθμός αιτημάτων web σελίδας ανά ημέρα για ένα μοναδικό πελάτη πριν τοτε αποκλείσει η πρόσβαση στον διακομιστή"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2425
+msgid ""
+"Maximum number of web page requests per day for a unique client before "
+"access to the server is blocked"
+msgstr ""
+"Μέγιστος αριθμός αιτημάτων web σελίδας ανά ημέρα για ένα μοναδικό πελάτη "
+"πριν τοτε αποκλείσει η πρόσβαση στον διακομιστή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2431
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2485
 msgid "Total"
 msgstr "Σύνολο"
 
-msgid "Total number of web page requests per minute before access to the server is blocked"
-msgstr "Συνολικός αριθμός αιτημάτων web σελίδας ανά λεπτό πριν τοτε αποκλείσει η πρόσβαση στον διακομιστή"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2433
+msgid ""
+"Total number of web page requests per minute before access to the server is "
+"blocked"
+msgstr ""
+"Συνολικός αριθμός αιτημάτων web σελίδας ανά λεπτό πριν τοτε αποκλείσει η "
+"πρόσβαση στον διακομιστή"
 
-msgid "Total number of web page requests per hour before access to the server is blocked"
-msgstr "Συνολικός αριθμός αιτημάτων web σελίδας ανά ώρα πριν τοτε αποκλείσει η πρόσβαση στον διακομιστή"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2439
+msgid ""
+"Total number of web page requests per hour before access to the server is "
+"blocked"
+msgstr ""
+"Συνολικός αριθμός αιτημάτων web σελίδας ανά ώρα πριν τοτε αποκλείσει η "
+"πρόσβαση στον διακομιστή"
 
-msgid "Total number of web page requests per day before access to the server is blocked"
-msgstr "Συνολικός αριθμός αιτημάτων web σελίδας ανά ημέρα πριν τοτε αποκλείσει η πρόσβαση στον διακομιστή"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2445
+msgid ""
+"Total number of web page requests per day before access to the server is "
+"blocked"
+msgstr ""
+"Συνολικός αριθμός αιτημάτων web σελίδας ανά ημέρα πριν τοτε αποκλείσει η "
+"πρόσβαση στον διακομιστή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2451
 msgid "Maximum number of simultaneous client connections"
 msgstr "Μέγιστος αριθμός ταυτόχρονων συνδέσεων πελάτη"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2459
 msgid "POST limits"
 msgstr "Ορια POST"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2461
 msgid "Per Period"
 msgstr "Ανά Διάστημα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2463
 msgid "Ban Duration"
 msgstr "Διάρκεια Αποκλοτισμού"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2465
 msgid "POST limit period"
 msgstr "Περίοδος ορίων POST"
 
-msgid "Maximum number of post requests permitted for a unique client for the configured timespan"
-msgstr "Μέγιστος αριθμός αιτημάτων post που επιτρέπονται για ένα μοναδικό πελάτη για το ρυθμισμένο χρονικό διάστημα"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2469
+msgid ""
+"Maximum number of post requests permitted for a unique client for the "
+"configured timespan"
+msgstr ""
+"Μέγιστος αριθμός αιτημάτων post που επιτρέπονται για ένα μοναδικό πελάτη για "
+"το ρυθμισμένο χρονικό διάστημα"
 
-msgid "If a client exceeds the maximum number of post requests per allocated period, enforce a ban for this number of minutes"
-msgstr "Αν ένας πελάτης υπερβαίνει τον μέγιστο αριθμό αιτημάτων post ανά διαθέσιμη περίοδο, εφαρμόστε αποκλοτισμό για αυτό τον αριθμό λεπτών"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2475
+msgid ""
+"If a client exceeds the maximum number of post requests per allocated "
+"period, enforce a ban for this number of minutes"
+msgstr ""
+"Αν ένας πελάτης υπερβαίνει τον μέγιστο αριθμό αιτημάτων post ανά διαθέσιμη "
+"περίοδο, εφαρμόστε αποκλοτισμό για αυτό τον αριθμό λεπτών"
 
-msgid "Timespan for the maximum number of post requests to be reached before a ban is triggered"
-msgstr "Χρονικό διάστημα για τον μέγιστο αριθμό αιτημάτων post πριν ενεργοποιηθεί ένας αποκλοτισμός"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2481
+msgid ""
+"Timespan for the maximum number of post requests to be reached before a ban "
+"is triggered"
+msgstr ""
+"Χρονικό διάστημα για τον μέγιστο αριθμό αιτημάτων post πριν ενεργοποιηθεί "
+"ένας αποκλοτισμός"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2487
 msgid "Total number of post requests permitted for the configured timespan"
-msgstr "Συνολικός αριθμός αιτημάτων post που επιτρέπονται για το ρυθμισμένο χρονικό διάστημα"
+msgstr ""
+"Συνολικός αριθμός αιτημάτων post που επιτρέπονται για το ρυθμισμένο χρονικό "
+"διάστημα"
 
-msgid "If the maximum number of post requests per allocated period is exceeded, enforce a global access ban for this number of minutes"
-msgstr "Αν υπερβαίνεται ο μέγιστος αριθμός αιτημάτων post ανά διαθέσιμη περίοδο, εφαρμόστε μια παγκόσμια αποκλοτισμό πρόσβασης για αυτό τον αριθμό λεπτών"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2493
+msgid ""
+"If the maximum number of post requests per allocated period is exceeded, "
+"enforce a global access ban for this number of minutes"
+msgstr ""
+"Αν υπερβαίνεται ο μέγιστος αριθμός αιτημάτων post ανά διαθέσιμη περίοδο, "
+"εφαρμόστε μια παγκόσμια αποκλοτισμό πρόσβασης για αυτό τον αριθμό λεπτών"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2503
 msgid "Custom HTTP Headers"
 msgstr "Προσαρμοσμένα Headers HTTP"
 
-msgid "Note: These custom headers will only be enabled for served files that don't have the relevant header already set."
-msgstr "Σημείωση: Αυτά τα προσαρμοσμένα headers θα ενεργοποιηθούν μόνο για τα αρχεία που δεν έχουν ήδη το σχετικό header."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2505
+msgid ""
+"Note: These custom headers will only be enabled for served files that don't "
+"have the relevant header already set."
+msgstr ""
+"Σημείωση: Αυτά τα προσαρμοσμένα headers θα ενεργοποιηθούν μόνο για τα αρχεία "
+"που δεν έχουν ήδη το σχετικό header."
 
-msgid "Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text files"
-msgstr "Ρυθμίστε το header Allow σε 'GET, POST, HEAD' για τα αρχεία html, xml, json και text"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2507
+msgid ""
+"Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text files"
+msgstr ""
+"Ρυθμίστε το header Allow σε 'GET, POST, HEAD' για τα αρχεία html, xml, json "
+"και text"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2509
 msgid "Allow"
 msgstr "Επιτρέπεται"
 
-msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immutable for everything else)"
-msgstr "Ενεργοποιήστε τα headers Cache-Control (no-cache για html, xml, json και text, immutable για όλα τα άλλα)"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2511
+msgid ""
+"Enable Cache-Control headers (no-cache for html, xml, json and text, "
+"immutable for everything else)"
+msgstr ""
+"Ενεργοποιήστε τα headers Cache-Control (no-cache για html, xml, json και "
+"text, immutable για όλα τα άλλα)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2513
 msgid "Cache-Control"
 msgstr "Cache-Control"
 
-msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
-msgstr "Ρυθμίστε το header Referrer-Policy σε 'same-origin' για τα αρχεία html, xml, json και text"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2515
+msgid ""
+"Set the Referrer-Policy header to 'same-origin' for html, xml, json and text "
+"files"
+msgstr ""
+"Ρυθμίστε το header Referrer-Policy σε 'same-origin' για τα αρχεία html, xml, "
+"json και text"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2517
 msgid "Referrer-Policy"
 msgstr "Πολιτική Referrer"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2519
 msgid "Set the X-Content-Type-Options header to 'nosniff'"
 msgstr "Ρυθμίστε το header X-Content-Type-Options σε 'nosniff'"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2521
 msgid "X-Content-Type-Options"
 msgstr "Επιλογές X-Content-Type"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2544
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:1063
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:620
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1173
 #, java-format
 msgid "Initializing Tunnel Manager{0}"
 msgstr "Αρχικοποίηση Διαχειριστή Διαδρόμου{0}"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2546
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:1065
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:622
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1175
 msgid "Tunnels not initialized yet; please retry in a few moments."
-msgstr "Οι διαδρόμοι δεν έχουν αρχικοποιηθεί ακόμα; παρακαλώ δοκιμάστε ξανά μετά από λίγα λεπτά."
+msgstr ""
+"Οι διαδρόμοι δεν έχουν αρχικοποιηθεί ακόμα; παρακαλώ δοκιμάστε ξανά μετά από "
+"λίγα λεπτά."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:244
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:693
 msgid "Status Messages"
 msgstr "Μηνύματα Κατάστασης"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:247
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:257
 msgid "Clear"
 msgstr "Καθαρισμός"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:253
 msgid "Refresh"
 msgstr "Ανανέωση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:265
 msgid "Global Tunnel Control"
 msgstr "Παγκόσμιος Διαχειριστής Διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:269
 msgid "Tunnel Wizard"
 msgstr "Φοιτητής Διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:273
 msgid "Stop All"
 msgstr "Σταμάτηση Όλων"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:275
 msgid "Start All"
 msgstr "Έναρξη Όλων"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:277
 msgid "Restart all running tunnels"
 msgstr "Επανεκκίνηση όλων των ενεργών διαδρόμων"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:280
 msgid "Restart All"
 msgstr "Επανεκκίνηση Όλων"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:282
 msgid "Restart all running server tunnels"
 msgstr "Επανεκκίνηση όλων των ενεργών διαδρόμων διακομιστή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:285
 msgid "Restart All Servers"
 msgstr "Επανεκκίνηση όλων των διακομιστών"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:287
 msgid "Restart all running client tunnels"
 msgstr "Επανεκκίνηση όλων των ενεργών διαδρόμων πελάτη"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:290
 msgid "Restart All Clients"
 msgstr "Επανεκκίνηση όλων των πελατών"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:292
 msgid "I2P Server Tunnels"
 msgstr "Διαδρόμοι Διακομιστή I2P"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:296
 msgid "Helper"
 msgstr "Βοηθός"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:298
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:741
 msgid "Type"
 msgstr "Τύπος"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:300
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:771
 msgid "Points at"
 msgstr "Δείχνει σε"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:302
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:404
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:773
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:787
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:856
 msgid "Preview"
 msgstr "Προεπισκόπηση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:304
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:747
 msgid "Status"
 msgstr "Κατάσταση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:306
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:749
 msgid "Control"
 msgstr "Έλεγχος"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:326
 msgid "Edit Server Tunnel Settings for"
 msgstr "Επεξεργασία Ρυθμίσεων Διαδρόμου Διακομιστή για"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:365
 msgid "Test IRC server, bypassing I2P"
 msgstr "Δοκιμή διακομιστή IRC, παράκαμψη I2P"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:373
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "Δοκιμή HTTPS διακομιστή, παρακάμνοντας το I2P"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:381
 msgid "Test HTTP server, bypassing I2P"
 msgstr "Δοκιμή HTTP διακομιστή, παρακάμνοντας το I2P"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:400
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:781
 msgid "Test HTTP server through I2P"
 msgstr "Δοκιμή HTTP διακομιστή μέσω I2P"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:408
 msgid "Base32 Address"
 msgstr "Διεύθυνση Base32"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:415
 msgid "Offline"
 msgstr "Εκτός σύνδεσης"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:419
 msgid "No Preview"
 msgstr "Χωρίς Προεπισκόπηση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:425
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:443
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:447
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:449
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:801
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:803
 msgid "Starting..."
 msgstr "Εκκίνηση..."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:429
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:434
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:436
 msgid "Starting in"
 msgstr "Εκκίνηση σε"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:457
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:494
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:832
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:849
 msgid "Running"
 msgstr "Εκτελείται"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:459
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:610
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:834
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:946
 msgid "Hops"
 msgstr "Κλίσματα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:464
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:476
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:488
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:614
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:628
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:721
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:950
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:964
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:1043
 msgid "in"
 msgstr "εισ."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:469
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:481
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:492
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:620
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:634
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:727
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:956
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:970
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:1049
 msgid "out"
 msgstr "εξ."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:500
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:502
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:863
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:865
 msgid "Stopped"
 msgstr "Σταματημένος"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:514
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:525
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:807
 msgid "Stop this Tunnel"
 msgstr "Σταμάτημα Αυτού του Διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:532
 msgid "Restart this Tunnel"
 msgstr "Επανεκκίνηση αυτού του διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:535
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:826
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:857
 msgid "Restart"
 msgstr "Επανεκκίνηση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:557
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:649
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:891
 msgid "Destination"
 msgstr "Προορισμός"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:571
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:917
 msgid "Signature"
 msgstr "Υπογραφή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:605
 msgid "Alternate"
 msgstr "Εναλλακτικός"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:655
 msgid "Alt Destination"
 msgstr "Εναλλακτικός Προορισμός"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:663
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:984
 msgid "Encryption"
 msgstr "Κρυπτογράφηση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:673
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:678
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:683
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:688
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:693
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:698
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:703
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:708
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:713
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:995
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:1000
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:1005
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:1010
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:1015
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:1020
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:1025
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:1030
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:1035
 msgid "Supported encryption"
 msgstr "Υποστηριζόμενη κρυπτογράφηση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:731
 msgid "New server tunnel"
 msgstr "Νέος διάδρομος διακομιστή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:733
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:1055
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:322
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:347
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:368
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:374
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:655
 msgid "Standard"
 msgstr "Τυποποιημένος"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:735
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:1057
 msgid "Create"
 msgstr "Δημιουργία"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:737
 msgid "I2P Client Tunnels"
 msgstr "Διαδρόμοι Πελάτη I2P"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:743
 msgid "Interface"
 msgstr "Επιφάνεια"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:769
 msgid "Edit Tunnel Settings for"
 msgstr "Επεξεργασία Ρυθμίσεων Διαδρόμου για"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:816
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:818
 msgid "Standby"
 msgstr "Εν προετοιμασία"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:885
 msgid "Outproxy"
 msgstr "Outproxy"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:896
 msgid "internal plugin"
 msgstr "εσωτερικό plugin"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:911
 msgid "none"
 msgstr "κανένας"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:1053
 msgid "New client tunnel"
 msgstr "Νέος διάδρομος πελάτη"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:190
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:243
 msgid "Registration Helper"
 msgstr "Βοηθός Εγγραφής"
 
-msgid "This service uses encrypted leasesets. Registration is not recommended. Registration authentication is disabled."
-msgstr "Αυτή η υπηρεσία χρησιμοποιεί κρυπτογραφημένα leasesets. Η εγγραφή δεν συνιστάται. Η αυθεντικοποίηση εγγραφής είναι απενεργοποιημένη."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:273
+msgid ""
+"This service uses encrypted leasesets. Registration is not recommended. "
+"Registration authentication is disabled."
+msgstr ""
+"Αυτή η υπηρεσία χρησιμοποιεί κρυπτογραφημένα leasesets. Η εγγραφή δεν "
+"συνιστάται. Η αυθεντικοποίηση εγγραφής είναι απενεργοποιημένη."
 
-msgid "Please be sure to select, copy, and paste the entire contents of the appropriate authentication data into the form of your favorite registration site"
-msgstr "Παρακαλώ να είστε βέβαιοι ότι επιλέγετε, αντιγράφετε και επικολλήστε το σύνολο των προσαρμοσμένων δεδομένων αυθεντικοποίησης στη φόρμα της αγαπημένης σας ιστοσελίδας εγγραφής"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:279
+msgid ""
+"Please be sure to select, copy, and paste the entire contents of the "
+"appropriate authentication data into the form of your favorite registration "
+"site"
+msgstr ""
+"Παρακαλώ να είστε βέβαιοι ότι επιλέγετε, αντιγράφετε και επικολλήστε το "
+"σύνολο των προσαρμοσμένων δεδομένων αυθεντικοποίησης στη φόρμα της "
+"αγαπημένης σας ιστοσελίδας εγγραφής"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:281
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:672
 msgid "Tunnel name"
 msgstr "Όνομα Διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:289
 msgid "Website name"
 msgstr "Όνομα Ιστοσελίδας"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:297
 msgid "Local Destination"
 msgstr "Τοπικός Προορισμός"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:305
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:727
 msgid "Local destination is not available. Start the tunnel."
 msgstr "Το τοπικός προορισμός δεν είναι διαθέσιμος. Αρχίστε τον διάδρομο."
 
-msgid "To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'"
-msgstr "Για να ενεργοποιήσετε την επιβεβαίωση εγγραφής, επεξεργαστείτε τον διάδρομο και ρυθμίστε το όνομα (ή το όνομα ιστοσελίδας) σε ένα έγκυρο όνομα διακομιστή που τελειώνει με '.i2p'"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:312
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:734
+msgid ""
+"To enable registration verification, edit tunnel and set name (or website "
+"name) to a valid host name ending in '.i2p'"
+msgstr ""
+"Για να ενεργοποιήσετε την επιβεβαίωση εγγραφής, επεξεργαστείτε τον διάδρομο "
+"και ρυθμίστε το όνομα (ή το όνομα ιστοσελίδας) σε ένα έγκυρο όνομα "
+"διακομιστή που τελειώνει με '.i2p'"
 
-msgid "To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'"
-msgstr "Για να ενεργοποιήσετε την επαλήθευση εγγραφής, επεξεργαστείτε τον τούνελ και ορίστε το όνομα σε ένα έγκυρο ονομαστικό που τελειώνει με .i2p"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:318
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:740
+msgid ""
+"To enable registration verification, edit tunnel and set name to a valid "
+"host name ending in '.i2p'"
+msgstr ""
+"Για να ενεργοποιήσετε την επαλήθευση εγγραφής, επεξεργαστείτε τον τούνελ και "
+"ορίστε το όνομα σε ένα έγκυρο ονομαστικό που τελειώνει με .i2p"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:327
 msgid "Destination signing key is not available. Start the tunnel."
-msgstr "Ο κλειδίς υπογραφής προορισμού δεν είναι διαθέσιμος. Αρχίστε τον διάδρομο."
+msgstr ""
+"Ο κλειδίς υπογραφής προορισμού δεν είναι διαθέσιμος. Αρχίστε τον διάδρομο."
 
-msgid "Destination signing key is offline. Use CLI tools on the offline machine."
-msgstr "Ο κλειδίς υπογραφής προορισμού είναι offline. Χρησιμοποιήστε εργαλεία CLI στον offline υπολογιστή."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:333
+msgid ""
+"Destination signing key is offline. Use CLI tools on the offline machine."
+msgstr ""
+"Ο κλειδίς υπογραφής προορισμού είναι offline. Χρησιμοποιήστε εργαλεία CLI "
+"στον offline υπολογιστή."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:343
 #, java-format
 msgid "Authentication for adding host {0}"
 msgstr "Αυθεντικοποίηση για την προσθήκη διακομιστή {0}"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:345
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:360
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:398
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:427
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:458
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:489
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:523
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:556
 msgid "Copy and paste this to the registration site"
 msgstr "Αντιγράψτε και επικολλήστε αυτό στην ιστοσελίδα εγγραφής"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:350
 msgid "Advanced authentication strings"
 msgstr "Προχωρημένα στοιχεία αυθεντικοποίησης"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:358
 #, java-format
 msgid "Authentication for removing host {0}"
 msgstr "Αυθεντικοποίηση για την αφαίρεση διακομιστή {0}"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:389
 msgid "Authentication for changing name"
 msgstr "Αυθεντικοποίηση για την αλλαγή όνοματος"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:403
 #, java-format
 msgid "This will change the name from {0} to {1}, using the same destination"
-msgstr "Αυτό θα αλλάξει το όνομα από {0} σε {1}, χρησιμοποιώντας τον ίδιο προορισμό"
+msgstr ""
+"Αυτό θα αλλάξει το όνομα από {0} σε {1}, χρησιμοποιώντας τον ίδιο προορισμό"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:409
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:438
 msgid "This tunnel must be configured with the new host name."
-msgstr "Αυτός ο διάδρομος πρέπει να είναι ρυθμισμένος με το νέο όνομα διακομιστή."
+msgstr ""
+"Αυτός ο διάδρομος πρέπει να είναι ρυθμισμένος με το νέο όνομα διακομιστή."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:411
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:440
 msgid "Enter old hostname below."
 msgstr "Εισάγετε το παλιό όνομα διακομιστή παρακάτω."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:418
 msgid "Authentication for adding alias"
 msgstr "Αυθεντικοποίηση για την προσθήκη εναλλακτικού όνοματος"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:432
 #, java-format
 msgid "This will add an alias {0} for {1}, using the same destination"
-msgstr "Αυτό θα προσθέσει ένα εναλλακτικό όνομα {0} για {1}, χρησιμοποιώντας τον ίδιο προορισμό"
+msgstr ""
+"Αυτό θα προσθέσει ένα εναλλακτικό όνομα {0} για {1}, χρησιμοποιώντας τον "
+"ίδιο προορισμό"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:448
 msgid "Authentication for changing destination"
 msgstr "Αυθεντικοποίηση για την αλλαγή προορισμού"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:463
 #, java-format
 msgid "This will change the destination for {0}"
 msgstr "Αυτό θα αλλάξει τον προορισμό για {0}"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:469
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:534
 msgid "This tunnel must be configured with the new destination."
 msgstr "Αυτός ο διάδρομος πρέπει να είναι ρυθμισμένος με τον νέο προορισμό."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:471
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:536
 msgid "Enter old destination below."
 msgstr "Εισάγετε τον παλιό προορισμό παρακάτω."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:479
 msgid "Authentication for adding alternate destination"
 msgstr "Αυθεντικοποίηση για την προσθήκη εναλλακτικού προορισμού"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:494
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:528
 #, java-format
 msgid "This will add an alternate destination for {0}"
 msgstr "Αυτό θα προσθέσει έναν εναλλακτικό προορισμό για {0}"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:545
 msgid "Authentication for adding subdomain"
 msgstr "Αυθεντικοποίηση για την προσθήκη υποτομέα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:561
 #, java-format
 msgid "This will add a subdomain {0} of {1}, with a different destination"
 msgstr "Αυτό θα προσθέσει έναν υποτομέα {0} του {1}, με διαφορετικό προορισμό"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:567
 msgid "This tunnel must be configured with the new subdomain and destination."
-msgstr "Αυτός ο διάδρομος πρέπει να είναι ρυθμισμένος με τον νέο υποτομέα και προορισμό."
+msgstr ""
+"Αυτός ο διάδρομος πρέπει να είναι ρυθμισμένος με τον νέο υποτομέα και "
+"προορισμό."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:569
 msgid "Enter higher-level domain and destination below."
 msgstr "Εισάγετε τον υψηλότερο τομέα και προορισμό παρακάτω."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:581
 msgid "Return to Tunnel Configuration"
 msgstr "Επιστροφή στη Διαμόρφωση Διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:588
 msgid "Specify old name and destination"
 msgstr "Ορίστε παλιό όνομα και προορισμό"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:590
 msgid "This is only required for advanced authentication."
 msgstr "Αυτό απαιτείται μόνο για προχωρημένη αυθεντικοποίηση."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:592
 msgid "See above for required items."
 msgstr "Δείτε παραπάνω για τα απαιτούμενα στοιχεία."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:599
 msgid "Old / parent hostname "
 msgstr "Παλιό / όνομα διακομιστή γονέα "
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:603
 msgid "Private key file for old destination / sub-domain parent"
 msgstr "Αρχείο ιδιωτικής κλειδιάς για παλιό προορισμό / γονέα υποτομέα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:607
 msgid "Generate Authentication"
 msgstr "Δημιουργία Αυθεντικοποίησης"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:183
 msgid "SSL Helper"
 msgstr "Βοηθός SSL"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:712
 msgid "Experts only!"
 msgstr "Μόνο για ειδικούς!"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:748
 msgid "Base32"
 msgstr "Βάση 32"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:756
 msgid "Alt Base32"
 msgstr "Εναλλακτικό Base32"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:765
 msgid "Incoming I2P Port Routing"
 msgstr "Εισερχόμενη Ροδαφορία Λιμανιού I2P"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:767
 msgid "Virtual Host"
 msgstr "Εικονικός Διακομιστής"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:769
 msgid "Via SSL?"
 msgstr "Μέσω SSL?"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:844
 msgid "Test HTTPS server through I2P"
 msgstr "Δοκιμή HTTPS διακομιστή μέσω I2P"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:862
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:238
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:248
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:264
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:274
 msgid "Server"
 msgstr "Διακομιστής"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:866
 msgid "SSL Activation"
 msgstr "Ενεργοποίηση SSL"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:919
 msgid "I2P webserver (eepsite)"
 msgstr "Διακομιστής I2P web (eepsite)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1101
 msgid "Disable SSL"
 msgstr "Απενεργοποίηση SSL"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1107
 msgid "Enable SSL"
 msgstr "Ενεργοποίηση SSL"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1113
 msgid "New Certificate Password"
 msgstr "Νέος Κωδικός για Τιμητικό πιστοποιητικό"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1115
 msgid "Password (required to encrypt the certificate)"
 msgstr "Κωδικός (χρειάζεται για την κρυπτογράφηση του πιστοποιητικού)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1123
 msgid "Generate new SSL certificate"
 msgstr "Δημιουργία νέου πιστοποιητικού SSL"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1129
 msgid "Generate SSL certificate and enable"
 msgstr "Δημιουργία πιστοποιητικού SSL και ενεργοποίηση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1143
 #, java-format
-msgid "Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel"
-msgstr "Δεν μπορεί να ρυθμιστεί, δεν βρέθηκε διακομιστής Jetty στις {0}ρυθμίσεις πελάτη{1} που να ταιριάζει σε αυτόν τον διάδρομο"
+msgid ""
+"Cannot configure, no Jetty server found in {0}client configurations{1} that "
+"matches this tunnel"
+msgstr ""
+"Δεν μπορεί να ρυθμιστεί, δεν βρέθηκε διακομιστής Jetty στις {0}ρυθμίσεις "
+"πελάτη{1} που να ταιριάζει σε αυτόν τον διάδρομο"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1145
 msgid "Support for non-Jetty servers will be added in a future release"
-msgstr "Η υποστήριξη για διακομιστές μη Jetty θα προστεθεί σε μελλοντική έκδοση"
+msgstr ""
+"Η υποστήριξη για διακομιστές μη Jetty θα προστεθεί σε μελλοντική έκδοση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1152
 msgid "Return to Tunnel Manager Index"
 msgstr "Επιστροφή στον Ευρετήριο Διαχειριστή Διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1163
 msgid "Return to Tunnel Editor"
 msgstr "Επιστροφή στον Επεξεργαστή Διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:183
 msgid "I2P Tunnel Manager - Tunnel Creation Wizard"
 msgstr "Διαχειριστής Διαδρόμου I2P - Φοιτητής Δημιουργίας Διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:229
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:647
 msgid "Server or client tunnel?"
 msgstr "Διακομιστής ή διάδρομος πελάτη?"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:233
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:651
 msgid "Tunnel type"
 msgstr "Τύπος διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:243
 msgid "Tunnel name and description"
 msgstr "Όνομα και περιγραφή διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:253
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:683
 msgid "Tunnel destination"
 msgstr "Προορισμός διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:259
 msgid "Binding address and port"
 msgstr "Δεσμευμένη διεύθυνση και λιμάνι"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:269
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:732
 msgid "Tunnel auto-start"
 msgstr "Αυτόματη έναρξη διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:279
 msgid "Wizard completed"
 msgstr "Ο φοιτητής ολοκληρώθηκε"
 
-msgid "This wizard will take you through the various options available for creating tunnels in I2P."
-msgstr "Αυτός ο φοιτητής θα σας οδηγήσει μέσα από τις διάφορες επιλογές που διαθέτετε για τη δημιουργία διαδρόμων στο I2P."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:291
+msgid ""
+"This wizard will take you through the various options available for creating "
+"tunnels in I2P."
+msgstr ""
+"Αυτός ο φοιτητής θα σας οδηγήσει μέσα από τις διάφορες επιλογές που "
+"διαθέτετε για τη δημιουργία διαδρόμων στο I2P."
 
-msgid "The first thing to decide is whether you want to create a server or a client tunnel."
-msgstr "Το πρώτο πράγμα που πρέπει να αποφασίσετε είναι αν θέλετε να δημιουργήσετε έναν διακομιστή ή έναν διάδρομο πελάτη."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:293
+msgid ""
+"The first thing to decide is whether you want to create a server or a client "
+"tunnel."
+msgstr ""
+"Το πρώτο πράγμα που πρέπει να αποφασίσετε είναι αν θέλετε να δημιουργήσετε "
+"έναν διακομιστή ή έναν διάδρομο πελάτη."
 
-msgid "If you need to connect to a remote service, such as an IRC server inside I2P or a code repository, then you will require a CLIENT tunnel."
-msgstr "Αν χρειάζεστε να συνδεθείτε σε έναν απομακρυσμένο διακομιστή, όπως ένας IRC διακομιστής μέσα στο I2P ή ένα αποθετήριο κώδικα, τότε θα χρειαστείτε έναν ΔΙΑΔΡΟΜΟ ΠΕΛΑΤΗ."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:294
+msgid ""
+"If you need to connect to a remote service, such as an IRC server inside I2P "
+"or a code repository, then you will require a CLIENT tunnel."
+msgstr ""
+"Αν χρειάζεστε να συνδεθείτε σε έναν απομακρυσμένο διακομιστή, όπως ένας IRC "
+"διακομιστής μέσα στο I2P ή ένα αποθετήριο κώδικα, τότε θα χρειαστείτε έναν "
+"ΔΙΑΔΡΟΜΟ ΠΕΛΑΤΗ."
 
-msgid "On the other hand, if you wish to host a service for others to connect to you'll need to create a SERVER tunnel."
-msgstr "Από την άλλη πλευρά, αν θέλετε να φιλοξενήσετε μια υπηρεσία για να συνδεθούν άλλοι, θα πρέπει να δημιουργήσετε έναν ΔΙΑΚΟΜΙΣΤΗ ΔΙΑΔΡΟΜΟ."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:295
+msgid ""
+"On the other hand, if you wish to host a service for others to connect to "
+"you'll need to create a SERVER tunnel."
+msgstr ""
+"Από την άλλη πλευρά, αν θέλετε να φιλοξενήσετε μια υπηρεσία για να συνδεθούν "
+"άλλοι, θα πρέπει να δημιουργήσετε έναν ΔΙΑΚΟΜΙΣΤΗ ΔΙΑΔΡΟΜΟ."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:297
 msgid "Server Tunnel"
 msgstr "Διάδρομος Διακομιστή"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:299
 msgid "Client Tunnel"
 msgstr "Διάδρομος Πελάτη"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:316
 msgid "There are several types of tunnels to choose from:"
 msgstr "Υπάρχουν πολλοί τύποι διαδρόμων που μπορείτε να επιλέξετε:"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:324
 msgid "Basic tunnel for connecting to a single service inside I2P."
-msgstr "Βασικός διάδρομος για τη σύνδεση σε ένα μοναδικό υπηρεσία μέσα στο I2P."
+msgstr ""
+"Βασικός διάδρομος για τη σύνδεση σε ένα μοναδικό υπηρεσία μέσα στο I2P."
 
-msgid "Try this if none of the tunnel types below fit your requirements, or you don't know what type of tunnel you need."
-msgstr "Δοκιμάστε αυτό αν κανένας από τους τύπους διαδρόμου που παρατηρούνται παρακάτω δεν ταιριάζει στις απαιτήσεις σας, ή αν δεν ξέρετε τι είδους διάδρομο χρειάζεστε."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:325
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:350
+msgid ""
+"Try this if none of the tunnel types below fit your requirements, or you "
+"don't know what type of tunnel you need."
+msgstr ""
+"Δοκιμάστε αυτό αν κανένας από τους τύπους διαδρόμου που παρατηρούνται "
+"παρακάτω δεν ταιριάζει στις απαιτήσεις σας, ή αν δεν ξέρετε τι είδους "
+"διάδρομο χρειάζεστε."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:327
 msgid "Tunnel that acts as an HTTP proxy for reaching eepsites inside I2P."
-msgstr "Διάδρομος που λειτουργεί ως HTTP proxy για την πρόσβαση σε eepsites μέσα στο I2P."
+msgstr ""
+"Διάδρομος που λειτουργεί ως HTTP proxy για την πρόσβαση σε eepsites μέσα στο "
+"I2P."
 
-msgid "Set your browser to use this tunnel as an http proxy, or set your \"http_proxy\" environment variable for command-line applications in GNU/Linux."
-msgstr "Ρυθμίστε τον περιηγητή σας να χρησιμοποιεί αυτόν τον διάδρομο ως http proxy, ή ρυθμίστε τη μεταβλητή περιβάλλοντος \"http_proxy\" για εφαρμογές εντολών στο GNU/Linux."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:328
+msgid ""
+"Set your browser to use this tunnel as an http proxy, or set your "
+"\"http_proxy\" environment variable for command-line applications in GNU/"
+"Linux."
+msgstr ""
+"Ρυθμίστε τον περιηγητή σας να χρησιμοποιεί αυτόν τον διάδρομο ως http proxy, "
+"ή ρυθμίστε τη μεταβλητή περιβάλλοντος \"http_proxy\" για εφαρμογές εντολών "
+"στο GNU/Linux."
 
-msgid "Websites outside I2P can also be reached if an HTTP proxy within I2P is known."
-msgstr "Μπορείτε επίσης να προσχωρήσετε σε ιστοσελίδες εκτός I2P αν γνωρίζετε ένα HTTP proxy μέσα στο I2P."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:329
+msgid ""
+"Websites outside I2P can also be reached if an HTTP proxy within I2P is "
+"known."
+msgstr ""
+"Μπορείτε επίσης να προσχωρήσετε σε ιστοσελίδες εκτός I2P αν γνωρίζετε ένα "
+"HTTP proxy μέσα στο I2P."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:331
 msgid "Customised client tunnel specific for IRC connections."
-msgstr "Προσαρμοσμένος διάδρομος πελάτη που είναι συγκεκριμένος για συνδέσεις IRC."
+msgstr ""
+"Προσαρμοσμένος διάδρομος πελάτη που είναι συγκεκριμένος για συνδέσεις IRC."
 
-msgid "With this tunnel type, your IRC client will be able to connect to an IRC network inside I2P."
-msgstr "Με αυτό το είδος διαδρόμου, ο πελάτης IRC σας θα μπορεί να συνδεθεί σε ένα IRC δίκτυο μέσα στο I2P."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:332
+msgid ""
+"With this tunnel type, your IRC client will be able to connect to an IRC "
+"network inside I2P."
+msgstr ""
+"Με αυτό το είδος διαδρόμου, ο πελάτης IRC σας θα μπορεί να συνδεθεί σε ένα "
+"IRC δίκτυο μέσα στο I2P."
 
-msgid "Each IRC network in I2P that you wish to connect to will require its own tunnel. (See Also, SOCKS IRC)"
-msgstr "Κάθε IRC δίκτυο στο I2P που θέλετε να συνδεθείτε θα χρειαστεί το δικό του διάδρομο. (Δείτε επίσης, SOCKS IRC)"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:333
+msgid ""
+"Each IRC network in I2P that you wish to connect to will require its own "
+"tunnel. (See Also, SOCKS IRC)"
+msgstr ""
+"Κάθε IRC δίκτυο στο I2P που θέλετε να συνδεθείτε θα χρειαστεί το δικό του "
+"διάδρομο. (Δείτε επίσης, SOCKS IRC)"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:335
 msgid "A tunnel that implements the SOCKS protocol."
 msgstr "Διάδρομος που εφαρμόζει το πρωτόκολλο SOCKS."
 
-msgid "This enables both TCP and UDP connections to be made through a SOCKS outproxy within I2P."
-msgstr "Αυτό επιτρέπει τόσο συνδέσεις TCP όσο και UDP να διεξαγωγείται μέσω ενός SOCKS outproxy μέσα στο I2P."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:336
+msgid ""
+"This enables both TCP and UDP connections to be made through a SOCKS "
+"outproxy within I2P."
+msgstr ""
+"Αυτό επιτρέπει τόσο συνδέσεις TCP όσο και UDP να διεξαγωγείται μέσω ενός "
+"SOCKS outproxy μέσα στο I2P."
 
-msgid "A client tunnel implementing the SOCKS protocol, which is customised for connecting to IRC networks."
-msgstr "Ένας διάδρομος πελάτη που εφαρμόζει το πρωτόκολλο SOCKS, που προσαρμοσμένος για τη σύνδεση σε IRC δίκτυα."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:338
+msgid ""
+"A client tunnel implementing the SOCKS protocol, which is customised for "
+"connecting to IRC networks."
+msgstr ""
+"Ένας διάδρομος πελάτη που εφαρμόζει το πρωτόκολλο SOCKS, που προσαρμοσμένος "
+"για τη σύνδεση σε IRC δίκτυα."
 
-msgid "With this tunnel type, IRC networks in I2P can be reached by typing the I2P address into your IRC client, and configuring the IRC client to use this SOCKS tunnel."
-msgstr "Με αυτό το είδος διαδρόμου, τα IRC δίκτυα στο I2P μπορούν να προσχωρήσουν πληκτρολογώντας τη διεύθυνση I2P στον πελάτη IRC σας, και ρυθμίζοντας τον πελάτη IRC να χρησιμοποιεί αυτόν τον διάδρομο SOCKS."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:339
+msgid ""
+"With this tunnel type, IRC networks in I2P can be reached by typing the I2P "
+"address into your IRC client, and configuring the IRC client to use this "
+"SOCKS tunnel."
+msgstr ""
+"Με αυτό το είδος διαδρόμου, τα IRC δίκτυα στο I2P μπορούν να προσχωρήσουν "
+"πληκτρολογώντας τη διεύθυνση I2P στον πελάτη IRC σας, και ρυθμίζοντας τον "
+"πελάτη IRC να χρησιμοποιεί αυτόν τον διάδρομο SOCKS."
 
-msgid "This means that only one I2P tunnel is required rather than a separate tunnel per IRC network."
-msgstr "Αυτό σημαίνει ότι απαιτείται μόνο ένας διάδρομος I2P, αντί για έναν διάδρομο για κάθε IRC δίκτυο."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:340
+msgid ""
+"This means that only one I2P tunnel is required rather than a separate "
+"tunnel per IRC network."
+msgstr ""
+"Αυτό σημαίνει ότι απαιτείται μόνο ένας διάδρομος I2P, αντί για έναν διάδρομο "
+"για κάθε IRC δίκτυο."
 
-msgid "IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P is known, though it depends on whether or not the outproxy has been blocked by the IRC network."
-msgstr "Τα IRC δίκτυα εκτός I2P μπορούν επίσης να προσχωρήσουν αν γνωρίζετε ένα SOCKS outproxy μέσα στο I2P, αν και εξαρτάται από το εάν η outproxy έχει αποκλειστεί από το IRC δίκτυο ή όχι."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:341
+msgid ""
+"IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P "
+"is known, though it depends on whether or not the outproxy has been blocked "
+"by the IRC network."
+msgstr ""
+"Τα IRC δίκτυα εκτός I2P μπορούν επίσης να προσχωρήσουν αν γνωρίζετε ένα "
+"SOCKS outproxy μέσα στο I2P, αν και εξαρτάται από το εάν η outproxy έχει "
+"αποκλειστεί από το IRC δίκτυο ή όχι."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:349
 msgid "A basic server tunnel for hosting a generic service inside I2P."
-msgstr "Ένας βασικός διάδρομος διακομιστή για τη φιλοξενία ενός γενικού υπηρεσία μέσα στο I2P."
+msgstr ""
+"Ένας βασικός διάδρομος διακομιστή για τη φιλοξενία ενός γενικού υπηρεσία "
+"μέσα στο I2P."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:352
 msgid "A server tunnel that is customised for HTTP connections."
 msgstr "Ένας διάδρομος διακομιστή που είναι προσαρμοσμένος για HTTP συνδέσεις."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:353
 msgid "Use this tunnel type if you want to host an eepsite."
-msgstr "Χρησιμοποιήστε αυτό το είδος διαδρόμου αν θέλετε να φιλοξενήσετε ένα eepsite."
+msgstr ""
+"Χρησιμοποιήστε αυτό το είδος διαδρόμου αν θέλετε να φιλοξενήσετε ένα eepsite."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:355
 msgid "A customised server tunnel for hosting IRC networks inside I2P."
-msgstr "Ένας προσαρμοσμένος διάδρομος διακομιστή για τη φιλοξενία IRC δικτύων μέσα στο I2P."
+msgstr ""
+"Ένας προσαρμοσμένος διάδρομος διακομιστή για τη φιλοξενία IRC δικτύων μέσα "
+"στο I2P."
 
-msgid "Usually, a separate tunnel needs to be created for each IRC server that is to be accessible inside I2P."
-msgstr "Συνήθως, χρειάζεται να δημιουργηθεί ένας ξεχωριστός διάδρομος για κάθε IRC διακομιστή που θα πρέπει να είναι προσβάσιμος μέσα στο I2P."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:356
+msgid ""
+"Usually, a separate tunnel needs to be created for each IRC server that is "
+"to be accessible inside I2P."
+msgstr ""
+"Συνήθως, χρειάζεται να δημιουργηθεί ένας ξεχωριστός διάδρομος για κάθε IRC "
+"διακομιστή που θα πρέπει να είναι προσβάσιμος μέσα στο I2P."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:362
 msgid "Select tunnel type"
 msgstr "Επιλογή τύπου διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:394
 msgid "Choose a name and description for your tunnel."
 msgstr "Επιλέξτε ένα όνομα και μια περιγραφή για τον διάδρομο σας."
 
-msgid "These can be anything you want - they are just for ease of identifying the tunnel in the routerconsole."
-msgstr "Μπορούν να είναι οτιδήποτε επιθυμείτε - χρησιμεύουν απλώς για να διευκολύνουν την ταυτοποίηση του τούνελ στην κονσόλα του διασύνδεσης."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:395
+msgid ""
+"These can be anything you want - they are just for ease of identifying the "
+"tunnel in the routerconsole."
+msgstr ""
+"Μπορούν να είναι οτιδήποτε επιθυμείτε - χρησιμεύουν απλώς για να "
+"διευκολύνουν την ταυτοποίηση του τούνελ στην κονσόλα του διασύνδεσης."
 
-msgid "If you know of any outproxies for this type of tunnel (either HTTP or SOCKS), fill them in below."
-msgstr "Αν γνωρίζετε οποιαδήποτε outproxies για αυτό το είδος διαδρόμου (είτε HTTP είτε SOCKS), συμπληρώστε τα παρακάτω."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:428
+msgid ""
+"If you know of any outproxies for this type of tunnel (either HTTP or "
+"SOCKS), fill them in below."
+msgstr ""
+"Αν γνωρίζετε οποιαδήποτε outproxies για αυτό το είδος διαδρόμου (είτε HTTP "
+"είτε SOCKS), συμπληρώστε τα παρακάτω."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:429
 msgid "Separate multiple proxies with commas."
 msgstr "Χωρίστε πολλαπλά proxies με κόμματα."
 
-msgid "List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,proxy2.i2p)"
-msgstr "Λίστα προορισμών outproxy I2P, χωρισμένα με κόμματα (π.χ. proxy1.i2p,proxy2.i2p)"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:433
+msgid ""
+"List of I2P outproxy destinations, separated with commas (e.g. "
+"proxy1.i2p,proxy2.i2p)"
+msgstr ""
+"Λίστα προορισμών outproxy I2P, χωρισμένα με κόμματα (π.χ. "
+"proxy1.i2p,proxy2.i2p)"
 
-msgid "Type in the I2P destination of the service that this client tunnel should connect to."
-msgstr "Πληκτρολογήστε τον προορισμό I2P της υπηρεσίας στην οποία θα πρέπει να συνδεθεί αυτός ο διάδρομος πελάτη."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:451
+msgid ""
+"Type in the I2P destination of the service that this client tunnel should "
+"connect to."
+msgstr ""
+"Πληκτρολογήστε τον προορισμό I2P της υπηρεσίας στην οποία θα πρέπει να "
+"συνδεθεί αυτός ο διάδρομος πελάτη."
 
-msgid "This could be the full Base64 destination key, or an I2P URL from your address book."
-msgstr "Μπορεί να είναι η πλήρης Base64 προορισμός κλειδιού, ή ένα I2P URL από το βιβλίο διευθύνσεων σας."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:452
+msgid ""
+"This could be the full Base64 destination key, or an I2P URL from your "
+"address book."
+msgstr ""
+"Μπορεί να είναι η πλήρης Base64 προορισμός κλειδιού, ή ένα I2P URL από το "
+"βιβλίο διευθύνσεων σας."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:456
 msgid "Enter a b64 or .i2p address here"
 msgstr "Εισάγετε μια b64 ή .i2p διεύθυνση εδώ"
 
-msgid "This is the IP that your service is running on, this is usually on the same machine so 127.0.0.1 is autofilled."
-msgstr "Αυτή είναι η IP που τρέχει η υπηρεσία σας, αυτή είναι συνήθως στο ίδιο το μηχάνημα, οπότε το 127.0.0.1 αυτοματοποιημένα γεμίζεται."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:480
+msgid ""
+"This is the IP that your service is running on, this is usually on the same "
+"machine so 127.0.0.1 is autofilled."
+msgstr ""
+"Αυτή είναι η IP που τρέχει η υπηρεσία σας, αυτή είναι συνήθως στο ίδιο το "
+"μηχάνημα, οπότε το 127.0.0.1 αυτοματοποιημένα γεμίζεται."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:505
 msgid "This is the port that the service is accepting connections on."
 msgstr "Αυτό είναι το λιμάνι στο οποίο η υπηρεσία αποδέχεται συνδέσεις."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:529
 msgid "This is the port that the client tunnel will be accessed from locally."
-msgstr "Αυτό είναι το λιμάνι από το οποίο θα προσβάλλεται τον διάδρομο πελάτη τοπικά."
+msgstr ""
+"Αυτό είναι το λιμάνι από το οποίο θα προσβάλλεται τον διάδρομο πελάτη τοπικά."
 
-msgid "How do you want this tunnel to be accessed? By just this machine, your entire subnet, or external internet?"
-msgstr "Πώς θέλετε να προσβάλλεται αυτός ο διάδρομος; Μόνο από αυτό το μηχάνημα, όλη τη δικτυακή υποεπισύνδεση σας, ή εξωτερικό διαδίκτυο?"
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:553
+msgid ""
+"How do you want this tunnel to be accessed? By just this machine, your "
+"entire subnet, or external internet?"
+msgstr ""
+"Πώς θέλετε να προσβάλλεται αυτός ο διάδρομος; Μόνο από αυτό το μηχάνημα, όλη "
+"τη δικτυακή υποεπισύνδεση σας, ή εξωτερικό διαδίκτυο?"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:554
 msgid "You will most likely want to just allow 127.0.0.1"
 msgstr "Συνήθως, θα θέλατε απλά να επιτρέψετε το 127.0.0.1"
 
-msgid "The I2P router can automatically start this tunnel for you when the router is started."
-msgstr "Ο διαχειριστής I2P μπορεί να ξεκινά αυτόν τον διάδρομο αυτόματα για εσάς όταν ξεκινά ο διαχειριστής."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:601
+msgid ""
+"The I2P router can automatically start this tunnel for you when the router "
+"is started."
+msgstr ""
+"Ο διαχειριστής I2P μπορεί να ξεκινά αυτόν τον διάδρομο αυτόματα για εσάς "
+"όταν ξεκινά ο διαχειριστής."
 
-msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
-msgstr "Αυτό μπορεί να είναι χρήσιμο για διαδρόμους που χρησιμοποιούνται συχνά (ειδικά διαδρόμους διακομιστή), αλλά για διαδρόμους που χρησιμοποιούνται μόνο μερικές φορές θα σημαίνει ότι ο διαχειριστής I2P δημιουργεί και διατηρεί διαδρόμους που δεν χρειάζονται."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:602
+msgid ""
+"This can be useful for frequently-used tunnels (especially server tunnels), "
+"but for tunnels that are only used occasionally it would mean that the I2P "
+"router is creating and maintaining unnecessary tunnels."
+msgstr ""
+"Αυτό μπορεί να είναι χρήσιμο για διαδρόμους που χρησιμοποιούνται συχνά "
+"(ειδικά διαδρόμους διακομιστή), αλλά για διαδρόμους που χρησιμοποιούνται "
+"μόνο μερικές φορές θα σημαίνει ότι ο διαχειριστής I2P δημιουργεί και "
+"διατηρεί διαδρόμους που δεν χρειάζονται."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:629
 msgid "The wizard has now collected enough information to create your tunnel."
-msgstr "Ο φοιτητής έχει συλλέξει τώρα αρκετές πληροφορίες για να δημιουργήσει τον διάδρομο σας."
+msgstr ""
+"Ο φοιτητής έχει συλλέξει τώρα αρκετές πληροφορίες για να δημιουργήσει τον "
+"διάδρομο σας."
 
-msgid "Upon clicking the Save button below, the wizard will set up the tunnel, and take you back to the main I2PTunnel page."
-msgstr "Μετά την κάθε ώρα που πατήσετε το κουμπί Αποθήκευσης παρακάτω, ο φοιτητής θα δημιουργήσει τον διάδρομο και θα σας οδηγήσει πίσω στην κύρια σελίδα του I2PTunnel."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:630
+msgid ""
+"Upon clicking the Save button below, the wizard will set up the tunnel, and "
+"take you back to the main I2PTunnel page."
+msgstr ""
+"Μετά την κάθε ώρα που πατήσετε το κουμπί Αποθήκευσης παρακάτω, ο φοιτητής θα "
+"δημιουργήσει τον διάδρομο και θα σας οδηγήσει πίσω στην κύρια σελίδα του "
+"I2PTunnel."
 
-msgid "Because you chose to automatically start the tunnel when the router starts, you don't have to do anything further."
-msgstr "Επειδή επιλέξατε να ξεκινάτε αυτόματα τον διάδρομο όταν ξεκινά ο διαχειριστής, δεν χρειάζεται να κάνετε κάτι περισσότερο."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:634
+msgid ""
+"Because you chose to automatically start the tunnel when the router starts, "
+"you don't have to do anything further."
+msgstr ""
+"Επειδή επιλέξατε να ξεκινάτε αυτόματα τον διάδρομο όταν ξεκινά ο "
+"διαχειριστής, δεν χρειάζεται να κάνετε κάτι περισσότερο."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:635
 msgid "The router will start the tunnel once it has been set up."
 msgstr "Ο διαχειριστής θα ξεκινήσει τον διάδρομο μόλις οργανωθεί."
 
-msgid "Because you chose not to automatically start the tunnel, you will have to manually start it."
-msgstr "Επειδή επιλέξατε να μην ξεκινάτε αυτόματα τον διάδρομο, θα πρέπει να τον ξεκινήσετε εγχειρηματικά."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:639
+msgid ""
+"Because you chose not to automatically start the tunnel, you will have to "
+"manually start it."
+msgstr ""
+"Επειδή επιλέξατε να μην ξεκινάτε αυτόματα τον διάδρομο, θα πρέπει να τον "
+"ξεκινήσετε εγχειρηματικά."
 
-msgid "You can do this by clicking the Start button on the main page which corresponds to the new tunnel."
-msgstr "Μπορείτε να το κάνετε αυτό κάνοντας κλικ στο κουμπί Έναρξης της κύριας σελίδας που αντιστοιχεί στον νέο διάδρομο."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:640
+msgid ""
+"You can do this by clicking the Start button on the main page which "
+"corresponds to the new tunnel."
+msgstr ""
+"Μπορείτε να το κάνετε αυτό κάνοντας κλικ στο κουμπί Έναρξης της κύριας "
+"σελίδας που αντιστοιχεί στον νέο διάδρομο."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:645
 msgid "Below is a summary of the options you chose:"
 msgstr "Παρακάτω είναι ένα σύνοψη των επιλογών που έκανατε:"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:676
 msgid "Tunnel description"
 msgstr "Περιγραφή διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:700
 msgid "Binding address"
 msgstr "Δεσμευμένη διεύθυνση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:708
 msgid "Tunnel port"
 msgstr "Λιμάνι διαδρόμου"
 
-msgid "Alongside these basic settings, there are a number of advanced options for tunnel configuration."
-msgstr "Παράλληλα με αυτές τις βασικές ρυθμίσεις, υπάρχουν πολλές προχωρημένες επιλογές για τη διαμόρφωση διαδρόμου."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:746
+msgid ""
+"Alongside these basic settings, there are a number of advanced options for "
+"tunnel configuration."
+msgstr ""
+"Παράλληλα με αυτές τις βασικές ρυθμίσεις, υπάρχουν πολλές προχωρημένες "
+"επιλογές για τη διαμόρφωση διαδρόμου."
 
-msgid "The wizard will set reasonably sensible default values for these, but you can view and/or edit these by clicking on the tunnel's name in the main I2PTunnel page."
-msgstr "Ο φοιτητής θα ορίσει λογικές προεπιλεγμένες τιμές για αυτές, αλλά μπορείτε να τις δείτε και/ή να τις επεξεργαστείτε κάνοντας κλικ στο όνομα του διαδρόμου στην κύρια σελίδα του I2PTunnel."
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:747
+msgid ""
+"The wizard will set reasonably sensible default values for these, but you "
+"can view and/or edit these by clicking on the tunnel's name in the main "
+"I2PTunnel page."
+msgstr ""
+"Ο φοιτητής θα ορίσει λογικές προεπιλεγμένες τιμές για αυτές, αλλά μπορείτε "
+"να τις δείτε και/ή να τις επεξεργαστείτε κάνοντας κλικ στο όνομα του "
+"διαδρόμου στην κύρια σελίδα του I2PTunnel."
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:765
 msgid "Cancel the wizard and return to Tunnel Manager home page"
-msgstr "Ακυρώστε τον φοιτητή και επιστρέψτε στην αρχική σελίδα του Διαχειριστή Διαδρόμου"
+msgstr ""
+"Ακυρώστε τον φοιτητή και επιστρέψτε στην αρχική σελίδα του Διαχειριστή "
+"Διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:773
 msgid "Return to previous page"
 msgstr "Επιστροφή στην προηγούμενη σελίδα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:776
 msgid "Previous"
 msgstr "Προηγούμενο"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:785
 msgid "Save tunnel configuration"
 msgstr "Αποθήκευση διαμόρφωσης διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:788
 msgid "Save Tunnel"
 msgstr "Αποθήκευση Διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:794
 msgid "Finish Wizard and review tunnel settings"
 msgstr "Ολοκλήρωση του φοιτητή και αναθεώρηση των ρυθμίσεων διαδρόμου"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:797
 msgid "Finish"
 msgstr "Ολοκλήρωση"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:803
 msgid "Advance to next page"
 msgstr "Μετάβαση στην επόμενη σελίδα"
 
+#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:806
 msgid "Next"
 msgstr "Επόμενο"

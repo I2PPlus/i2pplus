@@ -136,3 +136,12 @@ msgstr "忽略共享隧道请求：高负载"
 
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "忽略共享隧道请求：队列积压"
+
+msgid "Transit throttle drop"
+msgstr "Transit throttle 丢弃"
+
+msgid "Transit throttle reject"
+msgstr "Transit throttle 拒绝"
+
+msgid "Transit request throttle"
+msgstr "Transit 请求 throttle"

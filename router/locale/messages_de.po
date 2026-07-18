@@ -136,3 +136,17 @@ msgstr "Ignoriere Tunnelanfragen: Hohe Last"
 
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Ignoriere Tunnelanfragen: zu lange Warteschlange"
+
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:973
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:997
+msgid "Transit throttle drop"
+msgstr "Transit-Drosselung verworfen"
+
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:984
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1007
+msgid "Transit throttle reject"
+msgstr "Transit-Drosselung abgelehnt"
+
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1239
+msgid "Transit request throttle"
+msgstr "Transit-Anfrage-Drosselung"

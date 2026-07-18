@@ -2,62 +2,84 @@
 # Copyright (C) 2014 The I2P Project
 msgid ""
 msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-18 12:36+0000\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:68
 msgid "Message timeout"
 msgstr ""
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:71
 msgid "Failed delivery to local destination"
 msgstr ""
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:74
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:107
 msgid "Local router failure"
 msgstr ""
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:77
 msgid "Local network failure"
 msgstr ""
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:80
 msgid "Session closed"
 msgstr ""
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:83
 msgid "Invalid message"
 msgstr ""
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:86
 msgid "Invalid message options"
 msgstr ""
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:89
 msgid "Buffer overflow"
 msgstr ""
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:92
 msgid "Message expired"
 msgstr ""
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:95
 msgid "Local lease set invalid"
 msgstr ""
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:98
 msgid "No local tunnels"
 msgstr ""
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:101
 msgid "Unsupported encryption options"
 msgstr ""
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:104
 msgid "Invalid destination"
 msgstr ""
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:110
 msgid "Destination lease set expired"
 msgstr ""
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:113
 msgid "Destination lease set not found"
 msgstr ""
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:123
 msgid "Local destination shutdown"
 msgstr ""
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:126
 msgid "Connection was reset"
 msgstr ""
 
+#. Translate this one here, can't do it later
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:133
 msgid "Failure code"
 msgstr ""

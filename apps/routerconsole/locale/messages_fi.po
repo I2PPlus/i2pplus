@@ -658,11 +658,11 @@ msgstr "Päivitetään luotetut avaimet."
 
 #, java-format
 msgid "Updating unsigned update URL to {0}"
-msgstr "Päivitetään allekirjoittamaton päivityksen URL-osoite osoitteeseen {0"
+msgstr "Päivitetään allekirjoittamaton päivityksen URL-osoite osoitteeseen {0}"
 
 #, java-format
 msgid "Updating signed development build URL to {0}"
-msgstr "Päivitetään allekirjoitetun kehitysversion URL-osoite osoitteeseen {0"
+msgstr "Päivitetään allekirjoitetun kehitysversion URL-osoite osoitteeseen {0}"
 
 msgid "Every"
 msgstr "Joka"
@@ -1616,7 +1616,7 @@ msgstr "Täysi tilastot pois käytöstä"
 
 #, java-format
 msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
-msgstr "Kaavioluettelo päivitetty, saattaa kestää jopa 60 sekuntia, ennen kuin se näkyy {0}Kaaviosivulla{1"
+msgstr "Kaavioluettelo päivitetty, saattaa kestää jopa 60 sekuntia, ennen kuin se näkyy {0}Kaaviosivulla{1}"
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
@@ -2436,7 +2436,7 @@ msgstr "HTTP-välityspalvelin ei ole päällä"
 
 #, java-format
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
-msgstr "Selaintasi ei ole määritetty oikein käyttämään HTTP-välityspalvelinta osoitteessa {0"
+msgstr "Selaintasi ei ole määritetty oikein käyttämään HTTP-välityspalvelinta osoitteessa {0}"
 
 msgid "Errors"
 msgstr "Virheet"
@@ -8674,3 +8674,553 @@ msgstr "Seuraava"
 
 msgid "Finished"
 msgstr "Valmistunut"
+
+#: ../../../router/java/src/net/i2p/router/Blocklist.java:1298
+msgid "Tor Exit"
+msgstr "Tor ulosmenotie"
+
+#: ../java/src/net/i2p/router/web/TuningFormHandler.java:493
+#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:432
+msgid "Restore Defaults"
+msgstr "Palauta oletukset"
+
+#: ../java/src/net/i2p/router/web/TuningFormHandler.java:497
+msgid "All parameters restored to factory defaults"
+msgstr "Kaikki parametrit palautettu tehdasasetuksiin"
+
+#: ../java/src/net/i2p/router/web/TuningFormHandler.java:499
+#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:303
+msgid "Auto-Tuning is not available"
+msgstr "Auto-Tuning ei ole käytettävissä"
+
+#: ../java/src/net/i2p/router/web/TuningFormHandler.java:804
+msgid "Tuning ranges saved — changes take effect immediately"
+msgstr "Säätöasteikot tallennettu – muutokset tulevat voimaan välittömästi"
+
+#: ../java/src/net/i2p/router/web/TuningFormHandler.java:806
+#: ../java/src/net/i2p/router/web/TuningFormHandler.java:811
+msgid "No changes to save"
+msgstr "Ei muutoksia tallennettavaksi"
+
+#: ../java/src/net/i2p/router/web/TuningFormHandler.java:809
+msgid "Tuning overrides applied"
+msgstr "Säätöohitukset otettu käyttöön"
+
+#: ../java/src/net/i2p/router/web/TuningFormHandler.java:827
+msgid "Invalid value"
+msgstr "Virheellinen arvo"
+
+#: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:34
+msgid "Auto-Tuning"
+msgstr "Auto-Tuning"
+
+#: ../java/src/net/i2p/router/web/helpers/ConfigSidebarHandler.java:107
+msgid "Graph preferences updated"
+msgstr "Graafin asetukset päivitetty"
+
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:483
+msgid "UTC time"
+msgstr "UTC-aika"
+
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:489
+msgid "Display time in UTC on graph axes"
+msgstr "Näytä aika UTC-aikana graafin akseleilla"
+
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:491
+msgid "Glow effect"
+msgstr "Kimalaisuustehoste"
+
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:497
+msgid "Add a glow effect to graph lines"
+msgstr "Lisää kimalaisuustehoste graafin viivoihin"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:239
+msgid "CPU"
+msgstr "CPU"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:240
+msgid "CPU load average"
+msgstr "CPU kuormituksen keskiarvo"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:244
+msgid "Router uptime"
+msgstr "Reititimen käyttöaika"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:245
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:247
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:308
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:310
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:312
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:318
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:322
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:391
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:458
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:460
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:468
+msgid "ms"
+msgstr "ms"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:246
+msgid "Job queue delay"
+msgstr "Tehtävajon viive"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:247
+msgid "Msg Lag"
+msgstr "Viestin viive"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:248
+msgid "Message send processing time"
+msgstr "Viestin lähettämisen käsittelyaika"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:250
+msgid "Ready jobs waiting in queue"
+msgstr "Valmiit tehtävät odottavat jonossa"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:251
+msgid "Threads"
+msgstr "Säikeet"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:252
+msgid "Active JVM threads"
+msgstr "Aktiiviset JVM-säikeet"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:308
+msgid "NTCP Estab"
+msgstr "NTCP muodostus"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:309
+msgid "NTCP outbound establish time"
+msgstr "Lähtevän NTCP-yhteyden muodostusaika"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:310
+msgid "SSU Estab"
+msgstr "SSU muodostus"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:311
+msgid "SSU outbound establish time"
+msgstr "Lähtevän SSU-yhteyden muodostusaika"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:312
+msgid "SSU RTO"
+msgstr "SSU RTO"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:313
+msgid "SSU retransmission timeout"
+msgstr "SSU uudelleenlähetyksen aikakatkaisu"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:314
+msgid "Conns/s"
+msgstr "Yhteyttä/s"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:315
+msgid "NTCP connections established per second"
+msgstr "Muodostetut NTCP-yhteydet sekunnissa"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:316
+msgid "Msgs/s"
+msgstr "Viestejä/s"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:317
+msgid "Messages delivered per second"
+msgstr "Toimitetut viestit sekunnissa"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:318
+msgid "RTT"
+msgstr "RTT"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:319
+msgid "End-to-end message round trip time"
+msgstr "Päätepisteiden välisen viestin kierroaika"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:320
+msgid "Timeout"
+msgstr "Aikakatkaisu"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:321
+msgid "Tunnel build timeout rate"
+msgstr "Tunnelin rakennuksen aikakatkaisunopeus"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:322
+msgid "Tunnel Build"
+msgstr "Tunnelin rakentaminen"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:323
+msgid "Client tunnel build latency"
+msgstr "Asiakastunnelin rakennusviive"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:379
+msgid "Active Peers"
+msgstr "Aktiiviset vertaiset"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:380
+msgid "Active peers (last 60s)"
+msgstr "Aktiiviset vertaiset (viimeinen 60 s)"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:381
+msgid "Known Peers"
+msgstr "Tunnetut vertaiset"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:382
+msgid "Known routers in network database"
+msgstr "Tunnetut reitittimet verkkotietokannassa"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:384
+msgid "Active I2CP clients"
+msgstr "Aktiiviset I2CP-asiakkaat"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:386
+msgid "Transit tunnels hosted"
+msgstr "Isännöidyt läpikulkutunnelit"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:390
+msgid "Tunnel build success rate"
+msgstr "Tunnelin rakennuksen onnistumisprosentti"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:391
+msgid "NetDB"
+msgstr "NetDB"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:392
+msgid "NetDB lookup time"
+msgstr "NetDB hakuaika"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:394
+msgid "Total banned peers"
+msgstr "Kiellossa olevat vertaiset yhteensä"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:455
+msgid "Stored LeaseSets in floodfill"
+msgstr "Tallennetut LeaseSet-tulvatäytteessä"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:456
+msgid "Cache Hit"
+msgstr "Välimuistiotus"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:457
+msgid "NetDB lookup success rate"
+msgstr "NetDB haun onnistumisprosentti"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:458
+msgid "Flood Verify"
+msgstr "Tulvan vahvistus"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:459
+msgid "Floodfill verify time"
+msgstr "Tulvatäytteen vahvistusaika"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:460
+msgid "NetDB ACK"
+msgstr "NetDB vahvistus"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:461
+msgid "NetDB peer acknowledge time"
+msgstr "NetDB vertaisvahvistusaika"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:462
+msgid "Lookups/s"
+msgstr "Hakuja/s"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:463
+msgid "NetDB lookups handled per second"
+msgstr "Käsitellyt NetDB-haun sekunnissa"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:464
+msgid "Requests/s"
+msgstr "Pyyntöjä/s"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:465
+msgid "Combined store + lookup operations per second"
+msgstr "Yhdistetyt tallennus + hakutoiminnot sekunnissa"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:466
+msgid "Stores/s"
+msgstr "Tallennuksia/s"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:467
+msgid "NetDB store messages handled per second"
+msgstr "Käsitellyt NetDB-tallennusviestit sekunnissa"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:468
+msgid "LS Timeout"
+msgstr "LS-aikakatkaisu"
+
+#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:469
+msgid "LeaseSet request timeouts (last minute)"
+msgstr "LeaseSet pyyntöjen aikakatkaisut (viime minuutti)"
+
+#: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:214
+msgid "ASN Db"
+msgstr "ASN-tietokanta"
+
+#: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:46
+msgid "SAM bridge is not running."
+msgstr "SAM-siltaa ei käynnissä."
+
+#: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:70
+msgid "Active sessions in SessionsDB"
+msgstr "Aktiiviset istunnot SessionsDB:ssä"
+
+#: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:72
+msgid "Active / pool worker threads"
+msgstr "Aktiiviset / poolin työsäikeet"
+
+#: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:74
+msgid "Pending commands in pool"
+msgstr "Odottavat komennot poolissa"
+
+#: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:76
+msgid "Connected pool handlers"
+msgstr "Yhdistetyt pool-käsittelijät"
+
+#: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:78
+msgid "Sockets stolen for data streaming"
+msgstr "Tietojen suoratoistoon varastetut socketit"
+
+#: ../java/src/net/i2p/router/web/helpers/SidebarRenderer.java:541
+msgid "Health"
+msgstr "Tila"
+
+#: ../java/src/net/i2p/router/web/helpers/SidebarRenderer.java:544
+msgid "Router health overview"
+msgstr "Reititimen tilan yleiskatsaus"
+
+#: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:204
+#: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:302
+msgid "sent"
+msgstr "lähetetty"
+
+#: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:206
+#: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:303
+msgid "received"
+msgstr "vastaanotettu"
+
+#: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:372
+msgid "No active streaming connections."
+msgstr "Ei aktiivisia suoratoistoyhteyksiä."
+
+#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:340
+msgid "Auto-Tuning continuously monitors router performance and adjusts parameters to optimize throughput, reduce latency, and maintain stability."
+msgstr "Auto-Tuning seuraa jatkuvasti reititintehokkuutta ja säätää parametreja suorituskyvyn optimoinnin, viiveiden vähentämisen ja vakauden ylläpitämiseksi."
+"Auto-Tuning seuraa jatkavasti reititimen suorituskykyä ja säätää "
+"parametreja läpivientien optimoinnin, viiveen vähentämisen ja vakauden "
+"ylläpitämiseksi."
+
+#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:341
+msgid "Uncheck the Auto box on any row to pin that parameter and prevent further adjustments."
+msgstr "Poista rastu Auto-ruudusta millä rivillä tahansa kiinnittääksesi parametrin ja estääksesi lisäsäädöt."
+"Poista valinta Auto-ruudusta millä tahansa rivillä kiinnittääksesi "
+"parametrin ja estääksesi lisäsäädöt."
+
+#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:345
+msgid "Healthy"
+msgstr "Terve"
+
+#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:347
+msgid "Fair"
+msgstr "Tyydyttävä"
+
+#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:349
+msgid "Degraded"
+msgstr "Heikentynyt"
+
+#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:352
+msgid "Current system health:"
+msgstr "Nykyinen järjestelmän tila:"
+
+#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:355
+msgid "System health assessment is not yet available."
+msgstr "Järjestelmän tilan arviointi ei ole vielä saatavilla."
+
+#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:372
+msgid "Parameter"
+msgstr "Parametri"
+
+#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:374
+msgid "Default"
+msgstr "Oletus"
+
+#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:377
+msgid "Step"
+msgstr "Askel"
+
+#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:378
+msgid "History"
+msgstr "Historia"
+
+#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:379
+msgid "Auto"
+msgstr "Auto"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:580
+msgid "Misc Reasons"
+msgstr "Muut syyt"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:582
+msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
+msgstr "Estä tulvatäytövertaiset, jotka eivät vastaa kyselyihin (epäonnistumisaste >95 %)"
+"Estä tulvatäyttövertaiset jotka eivät vastaa kyselyihin "
+"(epäonnistumisprosentti >95%)"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:586
+msgid "Ban unresponsive floodfills"
+msgstr "Estä vastaamattomat tulvatäytteet"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:588
+msgid "Ban routers whose RouterInfo has no version field"
+msgstr "Estä reitittimet joiden RouterInfo-versiota ei ole"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:592
+msgid "Ban routers with no version"
+msgstr "Estä versiottomat reitittimet"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:594
+msgid "Ban routers that send excessive tunnel participation requests"
+msgstr "Estä reitittimet jotka lähettävät liikaa tunneliosallistumispyyntöjä"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:598
+msgid "Ban excessive tunnel requests"
+msgstr "Estä liialliset tunnelipyynnöt"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:512
+msgid "Graph Options"
+msgstr "Graafin asetukset"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:516
+msgid "Legacy renderer"
+msgstr "Perinteinen rendereröijä"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:521
+msgid "Use RRD4J renderer"
+msgstr "Käytä RRD4J-rendereröijää"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:529
+msgid "minutes (2–30)"
+msgstr "minuuttia (2–30)"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:531
+msgid "Split display"
+msgstr "Jaettu näkymä"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:536
+msgid "Separate Inbound and Outbound"
+msgstr "Erottele sisääntulevat ja lähtevät"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:538
+msgid "Graph direction"
+msgstr "Graafin suunta"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:543
+msgid "Left-to-right"
+msgstr "Vasemmalta oikealle"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:545
+msgid "Refresh Interval"
+msgstr "Päivitysväli"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:550
+msgid "Update graph every second"
+msgstr "Päivitä graafi joka sekunti"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:309
+msgid "health"
+msgstr "tila"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:410
+msgid "Router Health"
+msgstr "Reititimen tila"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:412
+msgid "Performance & Load"
+msgstr "Suorituskyky ja kuorma"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:416
+msgid "Transport & Connectivity"
+msgstr "Siirto ja yhteyskyky"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:420
+msgid "Network & Participation"
+msgstr "Verkko ja osallistuminen"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:426
+msgid "Floodfill / NetDB"
+msgstr "Tulvatäyttö / NetDB"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:501
+msgid "When set to true, the sidebar bandwidth graph uses the legacy RRD4J SVG renderer. When set to false, the new dual-baseline canvas renderer is used, with gradient fills, glow effects, and a split inbound/outbound display. [Default is false]"
+msgstr "Kun asetetaan trueksi, sivupalkin kaistanleveyskaavio käyttää perintö-RRD4J SVG-piirtäjää. Kun asetetaan falseksi, käytetään uutta kaksipohjaista kangaspiirtäjää, liukuväritäytöillä, hehkutehosteilla ja jaetulla saapuva/lähtevä -näytöllä. [Oletus on false]"
+"Kun asetetaan true, sivupalkin kaistanleveysgraafi käyttää perinteistä "
+"RRD4J SVG -renderöijää. Kun asetetaan false, uutta kaksiperusviivaisa "
+"canvas-renderöijää käytetään, jossa on liukuväritäytteet, "
+"kimalaisuusteheet ja jaettu sisääntulevien/lähtevien näkymä. [Oletus: "
+"false]"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:503
+msgid "The time period, in minutes, displayed in the sidebar bandwidth graph. Values outside the valid range (2–30) are clamped. [Default is 20]"
+msgstr "Ajanjakso minuutteina, joka näytetään sivupalkin kaistanleveyskaaviossa. Kelvollisen alueen (2–30) ulkopuolella olevat arvot rajoitetaan. [Oletus on 20]"
+"Aikajakso minuuteissa, näytettävä sivupalkin kaistanleveysgraafissa. "
+"Kelvollisen välin (2–30) ulkopuolella olevat arvot rajoitetaan. [Oletus: "
+"20]"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:505
+msgid "When set to true (the default), inbound and outbound traffic are displayed in a split view with a center baseline, with outbound spikes upward and inbound spikes downward. When set to false, both lines are displayed in overlay mode from the top of the graph with a configurable composite blend. [Default is true]"
+msgstr "Kun asetetaan trueksi (oletus), saapuva ja lähtevä liikenne näytetään jaetussa näkymässä keskellä olevalla pohjaviivalla, lähtevät huiput ylös ja saapuvat huiput alas. Kun asetetaan falseksi, molemmat viivat näytetään päällekkäistilassa kaavion yläosasta muokattavalla yhdistelmäsekoituksella. [Oletus on true]"
+"Kun asetetaan true (oletus), sisääntuleva ja lähtevä liikenne näytetään "
+"jaetussa näkymässä keskiperusviivalla, lähtevät naulat ylös ja "
+"sisääntulevat alas. Kun asetetaan false, molemmat viivat näytetään "
+"päällekkäistilassa graafin yläosasta mukautettavalla "
+"yhdistelmäsekoituksella. [Oletus: true]"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:507
+msgid "Sets the render direction for the sidebar bandwidth graph. When set to rtl (the default), the graph renders right-to-left with newest data on the right. When set to ltr, the graph renders left-to-right with newest data on the left. [Default is rtl]"
+msgstr "Asettaa renderointisuunta sivupalkin kaistanleveyskaaviolle. Kun asetetaan rtl:ksi (oletus), kaavio renderoidaan oikealta vasemmalle, uusimmat tiedot oikealla. Kun asetetaan ltr:ksi, kaavio renderoidaan vasemmalta oikealle, uusimmat tiedot vasemmalla. [Oletus on rtl]"
+"Asettaa sivupalkin kaistanleveysgraafin renderöintisuunnan. Kun asetetaan "
+"rtl (oletus), graafi renderöidään oikealta vasemmalle uusimman tiedon "
+"ollessa oikealla. Kun asetetaan ltr, graafi renderöidään vasemmalta "
+"oikealle uusimman tiedon ollessa vasemmalla. [Oletus: rtl]"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:474
+msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
+msgstr "I2P+ tukee mukautettuja teemojen ohituksia konsolille, tunnelinhallinnalle, I2PSnarkille, SusiDNS:lle ja Susimailille, mikä sallii teemojen muutokset, jotka säilyvät päivitysten jälkeen. Aktivoidaksesi ohituksen, luo css-tiedosto nimeltä <code>override.css</code> teeman muutoksillasi ja sijoita se kyseisen teeman hakemistoon tai nimeä yksi esimerkkitalleista uudelleen ja tee sitten kova päivitys selaimessa. Huomaa, että tunnelinhallinta ja konsoli jakavat saman override.css:n. Poistaaksesi ohituksen, poista tai nimeä <code>override.css</code> -tiedosto uudelleen ja tee sitten kova päivitys selaimessa (yleensä Control + Shift + R)."
+"I2P+ tukee mukautettuja teemamuokkauksia konsolille, tunnelinhallinnalle, "
+"I2PSnarkille, SusiDNS:lle ja Susimailille, mikä sallii teemojen muutokset, "
+"jotka säilyvät päivitysten jälkeen. Muokkauksen aktivoinniseksi luo "
+"<code>override.css</code>-niminen css-tiedosto teeman muutoksillasi ja "
+"sijoita se kyseisen teeman hakemistoon tai nimeä yksi esimerkkitalleista "
+"uudelleen ja tee sitten kova päivitys selaimessa. Huomaa, että "
+"tunnelinhallinta ja konsoli jakavat saman override.css-tiedoston. "
+"Muokkauksen poistamiseksi poista tai nimeä "
+"<code>override.css</code>-tiedosto uudelleen ja tee sitten kova päivitys "
+"selaimessa (yleensä Control + Shift + R)."
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/samdebug_jsp.java:309
+msgid "SAM Debug"
+msgstr "SAM-virheenjäljitys"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/samdebug_jsp.java:399
+msgid "SAM Bridge Debug"
+msgstr "SAM-sillan virheenjäljitys"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:415
+msgid "All streaming connections"
+msgstr "Kaikki suoratoistoyhteydet"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:418
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:422
+msgid "All Streams"
+msgstr "Kaikki suoratoistot"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:427
+msgid "Inbound streaming connections"
+msgstr "Sisääntulevat suoratoistoyhteydet"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:439
+msgid "Outbound streaming connections"
+msgstr "Lähtevät suoratoistoyhteydet"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tuning_jsp.java:310
+msgid "tuning"
+msgstr "säätö"
+
+#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tuning_jsp.java:400
+msgid "Router Auto-Tuning"
+msgstr "Reititimen Auto-Tuning"

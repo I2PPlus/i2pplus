@@ -136,3 +136,12 @@ msgstr "تجاوز النفق: ازدحام كبير"
 
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "تجاوز النفق: وقت الانتظار"
+
+msgid "Transit throttle drop"
+msgstr "إسقاط throttle Transit"
+
+msgid "Transit throttle reject"
+msgstr "رفض throttle Transit"
+
+msgid "Transit request throttle"
+msgstr "throttle طلبات Transit"
