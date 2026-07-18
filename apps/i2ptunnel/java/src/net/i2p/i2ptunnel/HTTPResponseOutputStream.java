@@ -384,6 +384,13 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                       " KeepAliveIn? " + _keepAliveIn + " KeepAliveOut? " + _keepAliveOut);
         synchronized(this) {
             // synch with changing out field below
+            // release the header buffer if writeHeader() threw before releasing it
+            // (e.g. malformed response, oversized header) to avoid exhausting the pool
+            if (_headerBuffer != null) {
+                if (_headerBuffer.getData().length == CACHE_SIZE)
+                    _cache.release(_headerBuffer);
+                _headerBuffer = null;
+            }
             super.close();
         }
     }
