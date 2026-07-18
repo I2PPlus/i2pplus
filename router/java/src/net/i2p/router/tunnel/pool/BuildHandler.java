@@ -278,11 +278,7 @@ public class BuildHandler implements Runnable {
         long now = System.currentTimeMillis();
         long uptime = _context.router().getUptime();
         long dropBefore = now - (BuildRequestor.getRequestTimeout(_context) / 4);
-        String PROP_MAX_TUNNELS = _context.getProperty("router.maxParticipatingTunnels");
-        int DEFAULT_MAX_TUNNELS = IS_SLOW ? 4000 : 10000;
-        int maxTunnels;
-        if (PROP_MAX_TUNNELS != null) {maxTunnels = Integer.parseInt(PROP_MAX_TUNNELS);}
-        else {maxTunnels = DEFAULT_MAX_TUNNELS;}
+        int maxTunnels = _context.getProperty("router.maxParticipatingTunnels", IS_SLOW ? 4000 : 10000);
         long lag = _context.jobQueue().getMaxLag();
         boolean isLagged = lag > getJobLagLimitTunnel(_context) && maxTunnels > 0 && uptime > 5*60*1000L;
         boolean highLoad = SystemVersion.getCPULoadAvg() > 98 && isLagged;
