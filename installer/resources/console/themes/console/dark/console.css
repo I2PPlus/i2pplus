@@ -2907,6 +2907,7 @@ svg.spark{position:relative;border:var(--border);background:linear-gradient(180d
 .streams+.streams{margin-bottom:-1px;border-top-width:5px}
 .streams th,.streams td{padding:8px 10px}
 .streams th{font-size:90%}
+.streams td:first-child{text-align:center}
 .streams .tunnelhead th:last-child{font-size:0;background:url(/themes/console/images/inbound.svg) no-repeat center center/18px,var(--th)}
 .streams .tunnelhead th:nth-last-child(2){font-size:0;background:url(/themes/console/images/outbound.svg) no-repeat center center/18px,var(--th)}
 .streams td{padding:6px 8px}
@@ -2914,12 +2915,13 @@ svg.spark{position:relative;border:var(--border);background:linear-gradient(180d
 .streams+.infohelp{margin:0}
 .streams .inbound,.streams .outbound{margin:-1px 0 0;display:inline-block;vertical-align:middle}
 .streams .client,.streams .server{display:inline-block;width:18px;height:18px;vertical-align:middle;font-size:0;background:var(--client)}
+.truncB32{margin:0 4px 0 0;padding:1px 6px 2px;display:inline-block;line-height:1.5;font-family:var(--monospaced);font-weight:500;box-shadow:var(--bevel);background:var(--badge)}
 #activeStreams .totalBandwidth{margin:2px 0 0}
 #streamstats{margin-top:12px;width:calc(100% - 12px);background:var(--badge)}
 #streamsWrap{margin-top:13px}
 
 /* health */
-.ring-grid{border-top:4px solid #252;border-radius:0}
+.ring-grid{border-top:4px solid #252;border-radius:0;box-shadow:var(--bevel);background:var(--th)}
 #health .ring{margin:8px;max-height:180px;max-width:180px;text-shadow:1px 1px 1px #0009}
 .floodfill #health .ring{max-height:130px;max-width:130px}
 #health h2{position:relative;border-radius:0}
