@@ -135,6 +135,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.moderateLoadCpuPct", "Moderate-Load CPU Threshold");
         DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.sustainedHighLoadMs", "Sustained High-Load Window");
         DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.sustainedModerateLoadMs", "Sustained Moderate-Load Window");
+        DISPLAY_NAMES.put("tunnel.peerSelection.activityWindowMultiplier", "Peer Activity Window Multiplier");
         DISPLAY_NAMES.put("tunnel.pool.failureThreshold", "Pool Build Failure Threshold");
         DISPLAY_NAMES.put("tunnel.pool.backoffMs", "Pool Build Backoff");
         DISPLAY_NAMES.put("i2p.tunnel.targetBuffer", "Pool Spare Tunnel Buffer");
@@ -252,6 +253,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.moderateLoadCpuPct", "System load percent triggering moderate-load disconnect.");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.sustainedHighLoadMs", "Duration of high load before gating requests (ms).");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.requestThrottle.sustainedModerateLoadMs", "Duration of moderate load before declining requests (ms).");
+        PARAM_DESCRIPTIONS.put("tunnel.peerSelection.activityWindowMultiplier", "Widens peer recency window to re-admit peers when builds fail.");
         PARAM_DESCRIPTIONS.put("tunnel.pool.failureThreshold", "Consecutive failures before pool backoff.");
         PARAM_DESCRIPTIONS.put("tunnel.pool.backoffMs", "Cooldown duration after pool failure threshold, in ms.");
         PARAM_DESCRIPTIONS.put("i2p.tunnel.targetBuffer", "Target spare tunnel count per pool.");
