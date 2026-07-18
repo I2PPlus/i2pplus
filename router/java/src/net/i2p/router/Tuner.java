@@ -2707,19 +2707,28 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.out (outbound RTT in ms)
             // Cross-refs: sendMessageFailureLifetime (congestion), buildSuccessRate (network health),
-            //             udp.sendConfirmTime (actual RTT), sendDuplicateSize (drops!)
+            //             udp.sendConfirmTime (actual RTT), sendDuplicateSize (drops!),
+            //             connectFailed (SYN handshake never ACKed — initial RTO too low)
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double buildSuccess = getBuildSuccessRate(_context);
             double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
+            double connectFailed = getAdditionalEventCount(_context, "stream.connectFailed");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
             boolean spuriousRetransmits = !Double.isNaN(dupSize) && dupSize > 1000;
             boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 7000;
+            // Connects are failing (SYN never ACKed): the initial RTO gives up before
+            // the path's real RTT — raise it so the SYN retransmit waits long enough.
+            boolean connectsFailing = !Double.isNaN(connectFailed) && connectFailed > 2;
 
             // Target: 2x RTT as baseline (standard TCP-like behavior)
             int target = Math.max(2000, Math.min(_max, (int) (observed * 2)));
+
+            // Connect failures = raise initial RTO (handshake needs more patience)
+            if (connectsFailing && !congested)
+                return Math.min(_max, current + _step);
 
             // FAST PATH: latency target violated — raise RTO toward target
             if (highRTT && target > current)

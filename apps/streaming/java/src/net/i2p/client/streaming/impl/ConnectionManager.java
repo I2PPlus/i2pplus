@@ -176,6 +176,9 @@ class ConnectionManager {
         // Stats for Connection
         _context.statManager().createRequiredRateStat("stream.con.windowSizeAtCongestion", "Size of our send window when we send a dup", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("stream.connectionReceived", "Number of stream connections received", "Stream", RATES);
+        _context.statManager().createRequiredRateStat("stream.connectionCreated", "Number of outbound stream connections created", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        _context.statManager().createRequiredRateStat("stream.connectFailed", "Elapsed time (ms) of a failed outbound connect attempt", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        _context.statManager().createRequiredRateStat("stream.connectTime", "Elapsed time (ms) of a successful outbound connect", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("stream.chokeSizeBegin", "Number of outstanding messages when we started to choke", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.chokeSizeEnd", "Number of outstanding messages when we stopped being choked", "Stream", RATES);
         // Stats for PacketQueue
@@ -700,6 +703,7 @@ class ConnectionManager {
            }
             // Record failure for cooldown, clear on success
             if (con.getConnectionError() != null) {
+               _context.statManager().addRateData("stream.connectFailed", connectElapsed, connectElapsed);
                _destFailures.put(destHash, _context.clock().now());
                // Opportunistic trim: prevent unbounded growth from abandoned destinations
                if (_destFailures.size() > 256) {
@@ -710,6 +714,7 @@ class ConnectionManager {
                    }
                }
            } else {
+              _context.statManager().addRateData("stream.connectTime", connectElapsed, connectElapsed);
               _destFailures.remove(destHash);
           }
           // safe decrement
