@@ -1336,42 +1336,25 @@ public class TunnelPool {
                     }
                     return;
                 }
-                // For exploratory pools (no LeaseSet), cap total non-FAILED tunnels
-                // to prevent unbounded accumulation.  Without this, a pool with 100%
-                // build success can accumulate far more tunnels than needed since
-                // pruneExcessTunnels() skips recently-active tunnels (30s window).
-                // These pools don't need LeaseSet rotation overhead so any excess
-                // beyond 3x target is wasted.
-                if (_settings.isExploratory()) {
-                    int totalNonFailed = 0;
-                    for (TunnelInfo t : _tunnels) {
-                        if (!t.getTunnelFailed()) totalNonFailed++;
-                    }
-                    int maxTotal = Math.max(target * 3, 6);
-                    if (totalNonFailed >= maxTotal) {
-                        if (_log.shouldWarn()) {
-                            _log.warn(toString() + " -> Exploratory pool at capacity (" + totalNonFailed +
-                                      " >= max " + maxTotal + ", target=" + target +
-                                      ") — rejecting build \n* " + info);
-                        }
-                        return;
-                    }
-                }
-                // For client pools, cap total tunnels to prevent unbounded accumulation.
+                // Cap total non-FAILED tunnels to prevent unbounded accumulation.
                 // pruneExcessTunnels() skips recently-active (30s) and about-to-expire
-                // (120s) tunnels, so pools carrying traffic can accumulate indefinitely.
-                // Cap at 3x target to allow headroom for testing and LeaseSet rotation.
-                if (!_settings.isExploratory()) {
-                    int totalNow = _tunnels.size();
-                    int maxTotal = Math.max(target * 3, 6);
-                    if (totalNow >= maxTotal) {
-                        if (_log.shouldWarn()) {
-                            _log.warn(toString() + " -> Pool at capacity (" + totalNow +
-                                      " >= max " + maxTotal + ", target=" + target +
-                                      ") — rejecting build \n* " + info);
-                        }
-                        return;
+                // (120s) tunnels, so pools carrying traffic can accumulate indefinitely;
+                // exploratory pools don't need LeaseSet rotation so excess is pure waste.
+                // Count only non-FAILED tunnels and cap against effectiveTarget (not the
+                // static target) so lingering FAILED tunnels and the EMERGENCY boost never
+                // cause the cap to reject replacement/buffer builds during a failure burst.
+                int totalNonFailed = 0;
+                for (TunnelInfo t : _tunnels) {
+                    if (!t.getTunnelFailed()) totalNonFailed++;
+                }
+                int maxTotal = Math.max(effectiveTarget * 3, 6);
+                if (totalNonFailed >= maxTotal) {
+                    if (_log.shouldWarn()) {
+                        _log.warn(toString() + " -> Pool at capacity (" + totalNonFailed +
+                                  " >= max " + maxTotal + ", target=" + effectiveTarget +
+                                  ") — rejecting build \n* " + info);
                     }
+                    return;
                 }
                 _tunnels.add(info);
                 // Track this tunnel ID as recently added
