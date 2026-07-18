@@ -116,7 +116,7 @@ class Connection {
     }
     /** @since I2P+ */
     public static int getDisconnectTimeout() {
-        return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.disconnectTimeout", 5*60*1000);
+        return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.disconnectTimeout", 2*60*1000);
     }
     public static final int DEFAULT_CONNECT_TIMEOUT = 60*1000;
     /** @since I2P+ */
