@@ -217,7 +217,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         // Priority: HighCap > Fast > Active > NotFailing
                         ctx.profileOrganizer().selectHighCapacityPeers(1, exclude, matches);
                         if (matches.isEmpty()) {
-                            ctx.profileOrganizer().selectHighCapacityPeers(1, exclude, matches);
+                            ctx.profileOrganizer().selectFastPeers(1, exclude, matches);
                         }
                         if (matches.isEmpty()) {
                             ctx.profileOrganizer().selectActiveNotFailingPeers(1, exclude, matches);
