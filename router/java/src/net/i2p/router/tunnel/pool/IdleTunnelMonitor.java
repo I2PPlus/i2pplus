@@ -9,6 +9,7 @@ import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelDispatcher;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
@@ -57,6 +58,9 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
         this._context = ctx;
         this._dispatcher = ctx.tunnelDispatcher();
         this._log = ctx.logManager().getLog(IdleTunnelMonitor.class);
+        ctx.statManager().createRequiredRateStat("tunnel.idleTunnelDropped",
+                                                 "Idle transit tunnels dropped", "Tunnels [Participating]",
+                                                 new long[] {RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR});
 
         long interval = ctx.getProperty(PROP_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL);
         schedule(interval);
