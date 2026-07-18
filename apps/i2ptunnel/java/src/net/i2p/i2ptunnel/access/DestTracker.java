@@ -27,8 +27,12 @@ class DestTracker {
         return hash;
     }
 
-    AccessCounter getCounter() {
-        return counter;
+    /**
+     * @return true if the counter has breached the given threshold
+     * @since 0.9.70+
+     */
+    synchronized boolean isBreached(Threshold threshold, long now) {
+        return counter.isBreached(threshold, now);
     }
 
     /**

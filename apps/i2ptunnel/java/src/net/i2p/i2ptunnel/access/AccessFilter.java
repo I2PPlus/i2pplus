@@ -211,7 +211,7 @@ class AccessFilter implements StatefulConnectionFilter {
             boolean newBreaches = false;
             synchronized(unknownDests) {
                 for (DestTracker tracker : unknownDests.values()) {
-                    if (!tracker.getCounter().isBreached(threshold, now))
+                    if (!tracker.isBreached(threshold, now))
                         continue;
                     newBreaches |= breached.add(tracker.getHash().toBase32());
                 }
