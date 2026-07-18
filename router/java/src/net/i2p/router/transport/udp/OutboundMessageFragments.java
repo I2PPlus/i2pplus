@@ -245,15 +245,15 @@ class OutboundMessageFragments {
                 } else {
                     // Reset for next round
                     _peerIndex = 0;
-                    // Emit aggregate transport stats every full round-robin cycle
-                    if (++_statEmitCounter >= 10) {
-                        _statEmitCounter = 0;
-                        long[] agg = PeerState.getAggregateStats(_activePeers);
-                        if (agg != null) {
-                            _context.statManager().addRateData("udp.avgSendWindow", agg[0]);
-                            _context.statManager().addRateData("udp.avgRTO", agg[1]);
-                            _context.statManager().addRateData("udp.avgConcurrentMsgs", agg[2]);
-                        }
+                }
+                // Emit aggregate transport stats every full round-robin cycle
+                if (++_statEmitCounter >= 10) {
+                    _statEmitCounter = 0;
+                    long[] agg = PeerState.getAggregateStats(_activePeers);
+                    if (agg != null) {
+                        _context.statManager().addRateData("udp.avgSendWindow", agg[0]);
+                        _context.statManager().addRateData("udp.avgRTO", agg[1]);
+                        _context.statManager().addRateData("udp.avgConcurrentMsgs", agg[2]);
                     }
                 }
             }
