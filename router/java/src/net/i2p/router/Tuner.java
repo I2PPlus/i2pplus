@@ -8471,12 +8471,24 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class TransitRejectSteepnessParam extends BaseParam {
         TransitRejectSteepnessParam() {
             super("i2p.tunnel.participatingThrottle.rejectSteepness", "Transit reject steepness",
-                  SUB_TRANSIT, 100, 500, 10, "tunnel.throttleParticipatingReject", _context);
+                  SUB_TRANSIT, 100, 500, 10, "jobQueue.loadRecoveryTime", _context);
         }
         protected void applyValue(int value) { ParticipatingThrottler.setRejectSteepness(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getRejectSteepness(); }
-        protected double getObservedStat(RouterContext ctx) { return Double.NaN; }
-        protected int computeTarget(double observed) { return getRuntimeValue(); }
+        protected double getObservedStat(RouterContext ctx) {
+            return getAdditionalStatHourly(_context, "jobQueue.loadRecoveryTime");
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            if (Double.isNaN(observed)) return current;
+            // Slow recovery (> 60s): steepen so rejection ramps up faster and sheds load
+            if (observed > 60_000 && current < _max)
+                return Math.min(_max, current + _step * 2);
+            // Fast recovery (< 15s): soften toward linear, avoid over-rejecting
+            if (observed < 15_000 && current > _min)
+                return Math.max(_min, current - _step);
+            return current;
+        }
     }
 
     /**
@@ -8677,12 +8689,24 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestRejectSteepnessParam extends BaseParam {
         RequestRejectSteepnessParam() {
             super("i2p.tunnel.requestThrottle.rejectSteepness", "Request reject steepness",
-                  SUB_TRANSIT, 100, 500, 10, "tunnel.throttleRequestReject", _context);
+                  SUB_TRANSIT, 100, 500, 10, "jobQueue.loadRecoveryTime", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setRequestRejectSteepness(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestRejectSteepness(); }
-        protected double getObservedStat(RouterContext ctx) { return Double.NaN; }
-        protected int computeTarget(double observed) { return getRuntimeValue(); }
+        protected double getObservedStat(RouterContext ctx) {
+            return getAdditionalStatHourly(_context, "jobQueue.loadRecoveryTime");
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            if (Double.isNaN(observed)) return current;
+            // Slow recovery (> 60s): steepen so rejection ramps up faster and sheds load
+            if (observed > 60_000 && current < _max)
+                return Math.min(_max, current + _step * 2);
+            // Fast recovery (< 15s): soften toward linear, avoid over-rejecting
+            if (observed < 15_000 && current > _min)
+                return Math.max(_min, current - _step);
+            return current;
+        }
     }
 
     /**
@@ -8692,12 +8716,24 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class RequestLoadWeightParam extends BaseParam {
         RequestLoadWeightParam() {
             super("i2p.tunnel.requestThrottle.loadWeight", "Request load weight (%)",
-                  SUB_TRANSIT, 0, 300, 10, "tunnel.throttleRequestReject", _context);
+                  SUB_TRANSIT, 0, 300, 10, "jobQueue.loadRecoveryTime", _context);
         }
         protected void applyValue(int value) { RequestThrottler.setRequestLoadWeight(value); }
         protected int getRuntimeValue() { return RequestThrottler.getRequestLoadWeight(); }
-        protected double getObservedStat(RouterContext ctx) { return Double.NaN; }
-        protected int computeTarget(double observed) { return getRuntimeValue(); }
+        protected double getObservedStat(RouterContext ctx) {
+            return getAdditionalStatHourly(_context, "jobQueue.loadRecoveryTime");
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            if (Double.isNaN(observed)) return current;
+            // Fast recovery (< 15s): reduce load sensitivity
+            if (observed < 15_000 && current > _min)
+                return Math.max(_min, current - _step);
+            // Slow recovery (> 60s): increase load sensitivity
+            if (observed > 60_000 && current < _max)
+                return Math.min(_max, current + _step * 2);
+            return current;
+        }
     }
 
     /**
