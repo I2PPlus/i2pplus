@@ -772,7 +772,17 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             I2PTunnelRunner runner = new I2PTunnelRunner(s, socket, slock, null, null,
                                            null, (I2PTunnelRunner.FailCallback) null);
             runner.setExecutor(_clientExecutor);
-            _clientExecutor.execute(runner);
+            try {
+                _clientExecutor.execute(runner);
+            } catch (RejectedExecutionException ree) {
+                // pool saturated: close the local socket we just opened, the runner never ran
+                if (_log.shouldWarn()) {_log.warn("Client handler pool saturated -> closing connection to " + getSocketString(socket.getLocalPort()));}
+                try {s.close();}
+                catch (IOException ioe) { /* ignored */ }
+                try {socket.reset();}
+                catch (IOException ioe) { /* ignored */ }
+                return;
+            }
 
             long afterHandle = getTunnel().getContext().clock().now();
             long timeToHandle = afterHandle - afterAccept;
