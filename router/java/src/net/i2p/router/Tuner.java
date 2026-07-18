@@ -2612,7 +2612,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             //             sendDuplicateSize (drops!), lifetimeRTT (completed stream RTT),
             //             lifetimeSendWindowSize (final window size at stream close),
             //             chokeSizeBegin (choke pressure),
-            //             windowSizeAtCongestion (window size when a dup/congestion hit)
+            //             windowSizeAtCongestion (window size when a dup/congestion hit),
+            //             rtxRatio (resends per 1000 sends — size-independent loss signal)
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double buildSuccess = getBuildSuccessRate(_context);
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
@@ -2620,10 +2621,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double lifetimeWindowSize = getAdditionalStat(_context, "stream.con.lifetimeSendWindowSize");
             double chokeSize = getAdditionalStat(_context, "stream.chokeSizeBegin");
             double congestionWindow = getAdditionalStat(_context, "stream.con.windowSizeAtCongestion");
+            double rtxRatio = getAdditionalStat(_context, "stream.rtxRatio");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
-            boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
+            // >5% retransmissions indicates genuine path loss regardless of message size.
+            boolean highRtx = !Double.isNaN(rtxRatio) && rtxRatio > 50;
+            boolean dropping = highRtx || (!Double.isNaN(dupSize) && dupSize > 500);
             boolean streamsSlow = !Double.isNaN(lifetimeRTT) && lifetimeRTT > 5000;
             boolean windowsSmall = !Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize < 4;
             boolean choking = !Double.isNaN(chokeSize) && chokeSize > 5;
