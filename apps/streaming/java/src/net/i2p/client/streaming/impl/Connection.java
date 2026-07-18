@@ -158,7 +158,9 @@ class Connection {
     public static void setMaxRetransmissions(int val) { _maxRetransmissions = Math.max(8, Math.min(128, val)); }
 
     /**
-     * Maximum number of retransmissions before giving up.
+     * Maximum number of packets to retransmit in a single timer fire.
+     * This caps the resend batch size only; the give-up threshold is
+     * {@link ConnectionOptions#getMaxResends()}, checked separately.
      * Tunable via i2p.streaming.maxRetransmissions (default: 32).
      */
     private int getMaxRtx() {
