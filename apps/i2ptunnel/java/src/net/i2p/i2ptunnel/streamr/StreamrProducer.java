@@ -37,8 +37,8 @@ public class StreamrProducer extends I2PTunnelUDPServerBase {
         this.multi.setSink(this);
 
         // The listener
-        this.subscriber = new Subscriber(this.multi);
-        setSink(this.subscriber);
+        Sink subscriber = new Subscriber(this.multi);
+        setSink(subscriber);
 
         // now start udp-server
         this.server = new UDPSource(port);
@@ -71,5 +71,4 @@ public class StreamrProducer extends I2PTunnelUDPServerBase {
 
     private final MultiSource multi;
     private final UDPSource server;
-    private final Sink subscriber;
 }
