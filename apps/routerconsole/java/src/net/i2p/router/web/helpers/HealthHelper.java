@@ -384,7 +384,7 @@ public class HealthHelper extends HelperBase {
                   new String[]{_t("Active I2CP clients")}, RingRenderer.MODE_NEUTRAL, null));
         out.write(RingRenderer.renderRingCell(tunnelScore, _t("Transit"), tunnelStr,
                   new String[]{_t("Transit tunnels hosted")}, RingRenderer.MODE_ACTIVITY, null));
-        out.write(RingRenderer.renderRingCell(streamScore, _t("Active Streams"), streamStr,
+        out.write(RingRenderer.renderRingCell(streamScore, _t("Streams"), streamStr,
                   new String[]{streamDetail}, RingRenderer.MODE_NEUTRAL, streamHist));
         out.write(RingRenderer.renderRingCell(buildScore, _t("Build Success"), buildStr,
                   new String[]{_t("Tunnel build success rate")}, RingRenderer.MODE_HEALTH, buildHist));

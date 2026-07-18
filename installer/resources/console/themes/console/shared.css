@@ -125,7 +125,7 @@ html:not(.advmode) #tuning input[type=number]{min-width:0!important;text-align:c
 .ring .ring-arc.green{stroke:#2ecc71;fill:#2ecc7122}
 .ring .ring-arc.red{stroke:#e74c3c;fill:#e74c3c22}
 .ring .ring-arc.yellow{stroke:#f39c12;fill:#f39c1222}
-.ring .ring-bg{fill:none;stroke:#777;stroke-width:4;filter:blur(4px)}
+.ring .ring-bg{fill:none;stroke:#777;stroke-width:4}
 .ring .ring-label{font-size:75%;font-weight:600;fill:#999;text-anchor:middle;dominant-baseline:central}
 .ring .ring-pct{font-size:14px;font-weight:bold;text-anchor:middle;dominant-baseline:central;fill:#888}
 .ring .ring-pct.blue{fill:#3498db}
@@ -133,7 +133,7 @@ html:not(.advmode) #tuning input[type=number]{min-width:0!important;text-align:c
 .ring .ring-pct.green{fill:#2ecc71}
 .ring .ring-pct.red{fill:#e74c3c}
 .ring .ring-pct.yellow{fill:#f39c12}
-.ring-grid{margin:-15px auto -2px;padding:8px 4px;width:calc(100% - 8px);display:grid;grid-template-columns:repeat(8,1fr)!important;gap:4px;text-align:center;border-radius:0 0 4px 4px;box-shadow:var(--bevel);background:var(--th)}
+.ring-grid{margin:-15px auto -2px;padding:8px 4px;width:calc(100% - 8px);display:grid;grid-template-columns:repeat(8,1fr)!important;gap:4px;text-align:center;border-radius:0 0 4px 4px}
 .ring-grid .ring{margin:8px}
 .spark-bar{opacity:.35}
 .spark-bar.green{fill:#2ecc71}
@@ -142,7 +142,7 @@ html:not(.advmode) #tuning input[type=number]{min-width:0!important;text-align:c
 .spark-bar.blue{fill:#3498db}
 .spark-bar.cyan{fill:#1abc9c}
 .spark-bar.gray{fill:#777}
-.spark-line polyline{fill:none;stroke:currentColor;stroke-width:3;opacity:.1}
+.spark-line{fill:none;stroke:currentColor;stroke-width:1;opacity:0}
 .spark-area{fill:currentColor;opacity:.15}
 .spark-line.green{color:#2ecc71}
 .spark-line.yellow{color:#f39c12}
@@ -157,6 +157,7 @@ html:not(.advmode) #tuning input[type=number]{min-width:0!important;text-align:c
 #activeStreams .totalBandwidth{float:right;text-transform:none;letter-spacing:0;word-spacing:0;font-size:80%}
 #activeStreams th.sectionhead{font-size:120%;font-weight:700;text-align:left;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);border-bottom:1px solid var(--border)}
 #streamstats,#samstats{margin:8px auto;padding:16px 4px;width:100%;;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;text-align:center}
+#streamstats .truncB32{width:48px;float:none;font-weight:600}
 
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1.1)}50%{opacity:.7;transform:scale(.9)}}
 

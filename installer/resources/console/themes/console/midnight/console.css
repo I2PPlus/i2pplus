@@ -3096,3 +3096,9 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 }
 
 #sidebar #sb_tunnelBuildStatus,.mtu[hidden]{display:none!important}
+
+/* health */
+#health .wrap{margin-top:14px;border:var(--border);background:var(--th)}
+#health h2.toggle.expanded{margin:0 0 12px;border-bottom:var(--border)}
+#health h2.toggle:not(.expanded){margin:0}
+

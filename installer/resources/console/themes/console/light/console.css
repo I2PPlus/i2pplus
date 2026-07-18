@@ -3137,3 +3137,8 @@ svg.spark{border:var(--border_soft);box-shadow:var(--highlight),var(--bevel);bac
 #tuning .section,#tuning .section tr,#tuning .section td{border:var(--border_inner);border-width:2px;border-left:0}
 #tuning .section.toggle:last-of-type:not(.expanded){border-bottom-width:1px}
 
+/* health */
+#health .wrap{margin-top:14px;border:var(--border_inner);background:var(--th)}
+#health h2.toggle.expanded{margin:0 0 12px;border-bottom:var(--border_inner)}
+#health h2.toggle:not(.expanded){margin:0}
+

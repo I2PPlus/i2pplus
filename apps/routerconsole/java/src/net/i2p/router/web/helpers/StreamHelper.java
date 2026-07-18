@@ -251,9 +251,11 @@ public class StreamHelper extends HelperBase {
                             }
                         } catch (Exception e) { /* ignore */ }
                     }
-                    out.write("<span class=b32>");
-                    out.write(esc(namePrefix));
-                    out.write("</span> ");
+                    if (!isInbound && !namePrefix.isEmpty()) {
+                        out.write("<span class=truncB32>");
+                        out.write(esc(namePrefix));
+                        out.write("</span> ");
+                    }
                     out.write(tunnelName);
                     out.write(TD_CLOSE);
                     out.write(TD_OPEN);
