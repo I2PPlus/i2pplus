@@ -550,6 +550,8 @@ public class TunnelController implements Logging {
         if ((!isClient() || getPersistentClientKey()) && getIsOfflineKeysAnySession()) {
             File f = getPrivateKeyFile();
             File f2 = getAlternatePrivateKeyFile();
+            // cancel any existing checker (e.g. on restart) before scheduling a new one
+            if (_pkfc != null) {_pkfc.cancel();}
             _pkfc = new PKFChecker(f, f2);
             _pkfc.schedule(5*60*1000L);
         }
@@ -692,7 +694,8 @@ public class TunnelController implements Logging {
                     }
                 }
             }
-            // _sessions.clear() ????
+            // drop references to the now-released sessions; getAllSessions() tolerates null
+            _sessions = null;
         } else if (_log.shouldInfo()) {_log.info("No sessions to release for " + getName());}
     }
 
