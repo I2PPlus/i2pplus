@@ -5111,7 +5111,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Caps the RTT estimate to prevent pathological values from breaking RTO.
      * I2P typically has 2-10s RTT. Lower cap = tighter RTO bounds.
-     * Min of 3000 matches DEFAULT_INITIAL_RTT — prevents clamping of normal RTT.
+     * Min of 5000 keeps the cap at or above normal I2P RTT so genuine
+     * measurements are not clamped.
      */
     private class MaxRttParam extends BaseParam {
 
@@ -5137,7 +5138,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = udp.sendConfirmTime (ms, actual network RTT)
+            // observed = stream.con.initialRTT.out (ms), falling back to udp.sendConfirmTime
             // Cross-refs: stream.con.sendDuplicateSize (retransmit pressure),
             //             transport.sendMessageFailureLifetime (congestion)
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
