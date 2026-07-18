@@ -726,10 +726,17 @@ class ConnectionManager {
      }
 
     /**
-     *  Doesn't need to be locked any more
+     *  Doesn't need to be locked any more.
+     *  Cached for 1s to avoid O(n) scan on every SYN burst.
      *  @return too many
      */
+    private volatile long _lastTooManyCheck;
+    private volatile boolean _lastTooManyResult;
+
     private boolean locked_tooManyStreams() {
+        long now = _context.clock().now();
+        if (now - _lastTooManyCheck < 1000)
+            return _lastTooManyResult;
         int max = _defaultOptions.getMaxConns();
         if (max <= 0) return false;
         int size = _connectionByInboundId.size();
@@ -742,14 +749,21 @@ class ConnectionManager {
             // ticket #1039
             if (con.getIsConnected() &&
                 !(con.getCloseSentOn() > 0 && con.getCloseReceivedOn() > 0)) {
-                if (++active >= max)
+                if (++active >= max) {
+                    _lastTooManyCheck = now;
+                    _lastTooManyResult = true;
                     return true;
+                }
             } else {
-                if (++inactive > maxInactive)
+                if (++inactive > maxInactive) {
+                    _lastTooManyCheck = now;
+                    _lastTooManyResult = false;
                     return false;
+                }
             }
         }
-
+        _lastTooManyCheck = now;
+        _lastTooManyResult = false;
         return false;
     }
 
