@@ -1,7 +1,6 @@
 package net.i2p.router.tunnel.pool;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -18,6 +17,8 @@ import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelInfo;
+import net.i2p.router.TunnelTestStatus;
+import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.stat.StatManager;
@@ -754,44 +755,6 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
-     *  Comparator for prioritizing tunnel pools during build selection.
-     *  Priority order: Exploratory > Pools without tunnels > Everyone else.
-     *
-     *  Prioritize the pools for building
-     *  #1: Exploratory
-     *  #2: Pools without tunnels
-     *  #3: Everybody else
-     *
-     *  This prevents a large number of client pools from starving the exploratory pool.
-     *
-     *  WARNING - this sort may be unstable, as a pool's tunnel count may change during the sort.
-     */
-    private static class TunnelPoolComparator implements Comparator<TunnelPool> {
-
-        private final boolean _preferEmpty;
-
-        /** @param preferEmptyPools if true, prefer pools with no tunnels */
-        public TunnelPoolComparator(boolean preferEmptyPools) {_preferEmpty = preferEmptyPools;}
-
-        /**
-         * Compare two tunnel pools for build priority.
-         *
-         * @param tpl left tunnel pool
-         * @param tpr right tunnel pool
-         * @return -1 if tpl has higher priority, 1 if tpr has higher priority, 0 if equal
-         */
-        public int compare(TunnelPool tpl, TunnelPool tpr) {
-            if (tpl.getSettings().isExploratory() && !tpr.getSettings().isExploratory()) return -1;
-            if (tpr.getSettings().isExploratory() && !tpl.getSettings().isExploratory()) return 1;
-            if (_preferEmpty) {
-                if (tpl.getTunnelCount() <= 0 && tpr.getTunnelCount() > 0) return -1;
-                if (tpr.getTunnelCount() <= 0 && tpl.getTunnelCount() > 0) return 1;
-            }
-            return 0;
-        }
-    }
-
-    /**
      * Iterate over the 0hop tunnels, running them all inline regardless of how many are allowed
      *
      * @return number of tunnels allowed after processing these zero hop tunnels (almost always the same as before)
@@ -1015,7 +978,7 @@ public class BuildExecutor implements Runnable {
             for (int i = 0; i < cfg.getLength(); i++) {
                 Hash peer = cfg.getPeer(i);
                 if (peer != null && !peer.equals(selfHash)) {
-                    net.i2p.router.peermanager.PeerProfile prof = _context.profileOrganizer().getProfile(peer);
+                    PeerProfile prof = _context.profileOrganizer().getProfile(peer);
                     if (prof != null && prof.isLowLatency() != lowLat) {
                         prof.setLowLatency(lowLat);
                         _context.profileOrganizer().writeProfile(prof);
@@ -1201,7 +1164,7 @@ public class BuildExecutor implements Runnable {
                  * and must NOT fill the deficit or they'll block replacement builds.
                  */
                 if (info.getTunnelFailed() || info.getConsecutiveFailures() > 3) {continue;}
-                boolean isGood = info.getTestStatus() == net.i2p.router.TunnelTestStatus.GOOD &&
+                boolean isGood = info.getTestStatus() == TunnelTestStatus.GOOD &&
                                  info.getConsecutiveFailures() <= 1;
                 if (isGood) {
                     goodCount++;
@@ -1300,7 +1263,7 @@ public class BuildExecutor implements Runnable {
                      */
                     int untestedCount = 0;
                     for (TunnelInfo ti : tunnels) {
-                        if (ti.getTestStatus() == net.i2p.router.TunnelTestStatus.UNTESTED) {
+                        if (ti.getTestStatus() == TunnelTestStatus.UNTESTED) {
                             untestedCount++;
                         }
                     }
