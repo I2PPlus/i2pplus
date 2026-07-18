@@ -699,7 +699,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 AtomicInteger waiter = keepalive ? new AtomicInteger() : null;
                 Runnable t = new CompressedRequestor(s, socket, modifiedHeader, getTunnel().getContext(),
                                                      _log, compress, upgrade, _clientExecutor, keepalive, waiter);
-                if (keepalive || isGetOrHead) {t.run();} // run inline
+                // keepalive implies isGetOrHead (forced false above for non-GET/HEAD),
+                // so isGetOrHead alone covers every inline case.
+                if (isGetOrHead) {t.run();} // run inline
                 else {_clientExecutor.execute(t);} // run in the server pool
 
 
