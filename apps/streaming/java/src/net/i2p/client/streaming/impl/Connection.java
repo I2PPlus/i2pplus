@@ -1694,6 +1694,7 @@ class Connection {
 
         @Override
         public void timeReached() {
+            _scheduled = false;
 
            if (_resetSentOn.get() > 0 || _resetReceived.get() || _finalDisconnect.get()) {
                 if (_log.shouldDebug()) {
@@ -1748,7 +1749,9 @@ class Connection {
             }
 
             // 3. Retransmit up to half of the packets in flight (RFC 6298 section 5.4 and RFC 5681 section 4.3)
+            //    Send first 4 immediately, pace the rest to avoid I2CP burst.
             boolean sentAny = false;
+            int burstCount = 0;
             for (PacketLocal packet : toResend) {
                 final int nResends = packet.getNumSends();
                 if (packet.getNumSends() > _options.getMaxResends()) {
@@ -1802,14 +1805,39 @@ class Connection {
                     if (packet.getSendStreamId() <= 0) {packet.setSendStreamId(_sendStreamId.get());}
                     packet.setTimeout(_options.getRTO());
 
-                    if (_outboundQueue.enqueue(packet)) {
-                        if (_log.shouldInfo()) {
-                            _log.info(Connection.this + " resent packet " + packet);
+                    // First 4 retransmits go directly; remaining go through pacing to
+                    // avoid flooding the I2CP queue with a single-timer-fire burst.
+                    if (burstCount < 4) {
+                        if (_outboundQueue.enqueue(packet)) {
+                            burstCount++;
+                            if (_log.shouldInfo()) {
+                                _log.info(Connection.this + " resent packet " + packet);
+                            }
+                            if (nResends == 1) {_activeResends.incrementAndGet();}
+                            sentAny = true;
+                        } else if (_log.shouldDebug()) {
+                            _log.debug(Connection.this + " could not resend packet " + packet);
                         }
-                        if (nResends == 1) {_activeResends.incrementAndGet();}
-                        sentAny = true;
-                    } else if (_log.shouldDebug()) {
-                       _log.debug(Connection.this + " could not resend packet " + packet);
+                    } else {
+                        long pacingDelay = calculatePacingDelay(packet.getPayloadSize());
+                        if (pacingDelay > 0) {
+                            synchronized (_pacedQueue) {
+                                _pacedQueue.add(packet);
+                                if (_pacedQueue.size() == 1) {
+                                    _pacedEvent.forceReschedule(pacingDelay);
+                                }
+                            }
+                        } else {
+                            if (_outboundQueue.enqueue(packet)) {
+                                if (_log.shouldInfo()) {
+                                    _log.info(Connection.this + " resent packet " + packet);
+                                }
+                                if (nResends == 1) {_activeResends.incrementAndGet();}
+                                sentAny = true;
+                            } else if (_log.shouldDebug()) {
+                                _log.debug(Connection.this + " could not resend packet " + packet);
+                            }
+                        }
                     }
                 }
             }
@@ -1843,7 +1871,7 @@ class Connection {
                 }
                 nextDelay = !_pacedQueue.isEmpty() ? calculatePacingDelay(_pacedQueue.peek().getPayloadSize()) : -1;
             }
-            if (!_connected.get() || packet.getAckTime() > 0 || packet.getNumSends() > 0) {
+            if (!_connected.get() || packet.getAckTime() > 0) {
                 if (nextDelay >= 0) {
                     synchronized (_pacedQueue) {
                         if (!_pacedQueue.isEmpty()) {
