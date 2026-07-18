@@ -762,23 +762,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             return false;
         }
 
-        // Check build success rate for tiered quality filtering.
-        // Under normal conditions (high build success), apply strict pre-qualification
-        // to ensure first-hop peers have some evidence of connectivity.  Under stress
-        // (low build success), relax the filter but don't disable it entirely — peers
-        // with zero connectivity history still waste tunnel builds and test cycles.
-        double buildSuccess;
-        try {
-            buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-        } catch (Exception e) {
-            buildSuccess = 0;
-        }
-        // Exploratory pools always skip pre-qualification — they need to test
-        // unknown peers to build connectivity profiles.
-        // Client pools also skip during stress (< 40% build success) when few
-        // peers have recent connectivity, to avoid starving the candidate pool.
-
-        // Peer is acceptable
+        // Peer is acceptable — pre-qualification by build-success rate is no
+        // longer applied here; capability/version filtering above is sufficient.
         return false;
     }
 
