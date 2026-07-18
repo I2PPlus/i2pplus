@@ -77,6 +77,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     private String privKeyFile;
     private boolean chained; // true if we are chained from a server.
     protected volatile ThreadPoolExecutor _executor;
+    /** true if we created _executor ourselves (TCG was null) and must shut it down on close */
+    private volatile boolean _ownExecutor;
     /** this is ONLY for shared clients */
     private static I2PSocketManager socketManager;
 
@@ -759,9 +761,10 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             else {
                 /* Fallback in case TCG.getInstance() is null, never instantiated and we were not started by TCG.
                  * Maybe a plugin loaded before TCG? Should be rare.
-                 * Never shut down.
+                 * Locally owned, so we shut it down in close().
                  */
                 _executor = new TunnelControllerGroup.CustomThreadPoolExecutor();
+                _ownExecutor = true;
             }
             while (open) {
                 Socket s = ss.accept();
@@ -895,6 +898,11 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 if (_log.shouldDebug()) {_log.debug("Error closing tunnel " + nickname + " -> " + ex.getMessage());}
                 return false;
             }
+        }
+        // shut down the executor only if we own it (TCG-owned executor is shared and shut down by TCG)
+        if (_ownExecutor) {
+            ThreadPoolExecutor tpe = _executor;
+            if (tpe != null) {tpe.shutdownNow();}
         }
         return true;
     }
