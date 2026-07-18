@@ -4794,7 +4794,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxRetransmissions", "Streaming max retransmissions",
                   SUB_STREAMING,
 
-                  8, 16, 2, "stream.con.initialRTT.out", _context);
+                  8, 128, 8, "stream.con.initialRTT.out", _context);
         }
 
         protected void applyValue(int value) {
@@ -4803,7 +4803,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionInt("getMaxRetransmissionsStatic");
-            return v > 0 ? v : 16;
+            return v > 0 ? v : 32;
         }
 
         protected double getObservedStat(RouterContext ctx) {
