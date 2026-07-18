@@ -73,7 +73,8 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 exclude.add(entry.getKey());
                 cooldownExcluded++;
         }
-        log.info("EPS cooldown: peers=" + _peerCooldowns.size() + " excluded=" + cooldownExcluded + " from=" + Thread.currentThread().getName());
+        if (log.shouldInfo())
+            log.info("EPS cooldown: peers=" + _peerCooldowns.size() + " excluded=" + cooldownExcluded + " from=" + Thread.currentThread().getName());
 
         // Per-pool diversity: exclude peers already in an active tunnel of this pool.
         // No peer should appear in more than 1 tunnel of the same pool.
