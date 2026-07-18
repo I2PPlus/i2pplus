@@ -52,7 +52,7 @@ msgid "unknown"
 msgstr "sconosciuto"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr "Per proteggere la tua privacy, SusiMail sta bloccando JavaScript e qualsiasi contenuto remoto incluso in questo messaggio HTML."
+msgstr "Per proteggere la tua privacy, Posta web sta bloccando JavaScript e qualsiasi contenuto remoto incluso in questo messaggio HTML."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "Abilita JavaScript per una migliore presentazione e funzionalità aggiuntive."
@@ -309,7 +309,7 @@ msgid "Toggle password visibility"
 msgstr "Attiva/disattiva la visibilità della password"
 
 msgid "Host"
-msgstr "Host"
+msgstr "Ospite"
 
 msgid "POP3 Port"
 msgstr "Porta POP3"

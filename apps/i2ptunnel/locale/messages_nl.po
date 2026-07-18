@@ -114,16 +114,16 @@ msgid "Standard server"
 msgstr "Standaard server"
 
 msgid "HTTP server"
-msgstr "HTTP server"
+msgstr "HTTP-server"
 
 msgid "SOCKS 4/4a/5 proxy"
-msgstr "SOCKS 4/4a/5 proxy"
+msgstr "SOKKEN 4/4a/5 volmacht"
 
 msgid "SOCKS IRC proxy"
-msgstr "SOCKS IRC proxy"
+msgstr "SOCKS IRC-PROXY"
 
 msgid "CONNECT/SSL/HTTPS proxy"
-msgstr "CONNECT/SSL/HTTPS proxy"
+msgstr "CONNECT/SSL/HTTPS-proxy"
 
 msgid "IRC server"
 msgstr "IRC-server"
@@ -135,7 +135,7 @@ msgid "Streamr server"
 msgstr "Streamr-server"
 
 msgid "HTTP bidir"
-msgstr "HTTP bidir"
+msgstr "Http bidir"
 
 msgid "Host not set"
 msgstr "Host niet opgegeven"
@@ -219,7 +219,7 @@ msgid "Specify the local port this service should be accessible from"
 msgstr "Geef de lokale poort op vanaf waar deze service toegankelijk moet zijn"
 
 msgid "Host"
-msgstr "Host"
+msgstr "Gastheer"
 
 msgid "Hostname or IP address of the target server"
 msgstr "Hostnaam of IP-adres van de doelserver"
@@ -246,7 +246,7 @@ msgid "Outproxies"
 msgstr "Uitgaande proxies"
 
 msgid "SSL Outproxies"
-msgstr "SSL Outproxies"
+msgstr "SSL-outproxy's"
 
 msgid "Specify the .i2p address or destination (b32 or b64) of the outproxy here."
 msgstr "Specificeer hier het .i2p-adres of de bestemming (b32 of b64) van de outproxy."
@@ -294,7 +294,7 @@ msgid "Start this Tunnel"
 msgstr "Start deze tunnel"
 
 msgid "Start"
-msgstr "Start"
+msgstr "Begin"
 
 msgid "Cancel"
 msgstr "Annuleren"
@@ -327,7 +327,7 @@ msgid "interactive connection"
 msgstr "interactieve connectie"
 
 msgid "bulk connection (downloads/websites/BT)"
-msgstr "bulk connection (downloads/websites/BT)"
+msgstr "bulkverbinding (downloads/websites/BT)"
 
 msgid "Delay Connection"
 msgstr "Vertraag verbinding"
@@ -636,7 +636,7 @@ msgid "seconds"
 msgstr "seconden"
 
 msgid "Maximum"
-msgstr "Maximum"
+msgstr "Maximaal"
 
 msgid "Maximum startup delay"
 msgstr "Maximale opstartvertraging"
@@ -771,7 +771,7 @@ msgid "+/- 0-3 hop variance"
 msgstr "// 0-3 hopvariantie"
 
 msgid "backup tunnels"
-msgstr "backup tunnels"
+msgstr "back-uptunn"
 
 msgid "Reduce tunnels to conserve resources"
 msgstr "Verminder tunnels om grondstoffen te besparen"
@@ -840,13 +840,13 @@ msgid "Prevents server discovery by floodfills"
 msgstr "Voorkomt serverontdekking door opvullingen"
 
 msgid "Blinded"
-msgstr "Verblind"
+msgstr "Blind"
 
 msgid "Send password to all users."
 msgstr "Wachtwoord naar alle gebruikers verzenden."
 
 msgid "Blinded with lookup password"
-msgstr "Verblind met opzoekwachtwoord"
+msgstr "Blind met opzoekwachtwoord"
 
 msgid "Send key and password to all users."
 msgstr "Stuur sleutel en wachtwoord naar alle gebruikers."
@@ -1162,7 +1162,7 @@ msgid "Restart"
 msgstr "Opnieuw starten"
 
 msgid "Destination"
-msgstr "Destination"
+msgstr "Bestemming"
 
 msgid "Signature"
 msgstr "Handtekening"
@@ -1364,7 +1364,7 @@ msgid "SSL Activation"
 msgstr "SSL-activering"
 
 msgid "I2P webserver (eepsite)"
-msgstr "I2P webserver (eepsite)"
+msgstr "I2P-webserver (eepsite)"
 
 msgid "Disable SSL"
 msgstr "SSL uitschakelen"
@@ -1404,7 +1404,7 @@ msgid "Server or client tunnel?"
 msgstr "Server of cliënt-tunnel?"
 
 msgid "Tunnel type"
-msgstr "Tunnel type"
+msgstr "Tunneltype"
 
 msgid "Tunnel name and description"
 msgstr "Tunnel naam en beschijving"
@@ -1416,7 +1416,7 @@ msgid "Binding address and port"
 msgstr "Binden aan adres en poort"
 
 msgid "Tunnel auto-start"
-msgstr "Tunnel auto-start"
+msgstr "Automatische tunnelstart"
 
 msgid "Wizard completed"
 msgstr "Setup voltooid"

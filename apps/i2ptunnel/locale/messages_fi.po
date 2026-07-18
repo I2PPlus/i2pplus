@@ -135,7 +135,7 @@ msgid "Streamr server"
 msgstr "Streamr-palvelin"
 
 msgid "HTTP bidir"
-msgstr "HTTP bidir"
+msgstr "HTTP biir"
 
 msgid "Host not set"
 msgstr "Verkkotietokonetta ei ole asetettu"
@@ -243,7 +243,7 @@ msgid "Enable Direct Client-to-Client protocol"
 msgstr "Ota käyttöön Direct Client-to-Client -protokolla"
 
 msgid "Outproxies"
-msgstr "Outproxies"
+msgstr "Outproksit"
 
 msgid "SSL Outproxies"
 msgstr "SSL-välityspalvelimet"
@@ -398,8 +398,8 @@ msgstr "3 hyppytunneli (korkea anonymiteetti)"
 #, java-format
 msgid "{0} hop tunnel"
 msgid_plural "{0} hop tunnel"
-msgstr[0] "{0} humalatunneli"
-msgstr[1] "{0} humalatunneli"
+msgstr[0] "{0} hoppu-tunneli"
+msgstr[1] "{0} hoppu-tunnelia"
 
 msgid "Number of Tunnels in Group"
 msgstr "Tunnelien lukumäärä ryhmässä"
@@ -1026,7 +1026,7 @@ msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immu
 msgstr "Ota käyttöön Cache-Control-otsikot (ei välimuistia html-, xml-, json- ja tekstitiedostoille, muuttumaton kaikelle muulle)"
 
 msgid "Cache-Control"
-msgstr "Cache-Control"
+msgstr "Välimuistin hallinta"
 
 msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
 msgstr "Aseta Referrer-Policy-otsikon arvoksi \"same-origin\" html-, xml-, json- ja tekstitiedostoille"
@@ -1340,7 +1340,7 @@ msgid "Experts only!"
 msgstr "Vain asiantuntijoille!"
 
 msgid "Base32"
-msgstr "Base32"
+msgstr "Perus32"
 
 msgid "Alt Base32"
 msgstr "Alt Base32"

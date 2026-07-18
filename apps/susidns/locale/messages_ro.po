@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Importat din fișier"
 
 msgid "Manually added via SusiDNS"
-msgstr "Adăugate manual prin SusiDNS"
+msgstr "Adăugate manual prin DNS"
 
 msgid "Manually added"
 msgstr "Adăugat manual"
@@ -69,10 +69,10 @@ msgid "Type {0}"
 msgstr "De tip {0}"
 
 msgid "DSA 1024 bit"
-msgstr "DSA 1024 bit"
+msgstr "DSA 1024 biți"
 
 msgid "ElGamal 2048 bit"
-msgstr "ElGamal 2048 bit"
+msgstr "ElGamal 2048 biți"
 
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
@@ -234,7 +234,7 @@ msgid "Save Notes"
 msgstr "Salvați note"
 
 msgid "You must enter a file"
-msgstr "Trebuie să introduceți un fişier"
+msgstr "Trebuie să introduceți un fișier"
 
 msgid "No entries found in file"
 msgstr "Nu au fost găsite intrări în fișier"
@@ -357,7 +357,7 @@ msgid "Encryption"
 msgstr "Criptare"
 
 msgid "Link (b32)"
-msgstr "Link (b32)"
+msgstr "Legătură (b32)"
 
 msgid "Destination"
 msgstr "Destinație"
@@ -579,7 +579,7 @@ msgid "Then it merges your \"master\" address book into the router address book 
 msgstr "Apoi comasează agenda \"master\" în agenda ruter de asemenea."
 
 msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
-msgstr "Dacă este configurat, agenda router-ului este acum scrisa la  agenda \"publica\", care va fi disponibile publicului dacă este pornit un eepsite."
+msgstr "Dacă este configurat, agenda router-ului este acum scrisa la agenda \"publica\", care va fi disponibile publicului dacă este pornit un eepsite."
 
 msgid "The router also uses a private address book, which is not merged or published."
 msgstr "Routerul folosește, de asemenea, o carte de adrese private, care nu este contopită sau publicată."
@@ -615,13 +615,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Vezi FAQ pentru o listă de adrese URL abonament."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Dacă SusiDNS este configurat pentru a publica agenda dvs. de adrese de router, intrările vor apărea în agenda dvs. de adrese publicate și salvate într-un fișier hosts.txt pentru partajare."
+msgstr "Dacă DNS este configurat pentru a publica agenda dvs. de adrese de router, intrările vor apărea în agenda dvs. de adrese publicate și salvate într-un fișier hosts.txt pentru partajare."
 
 msgid "Published Addressbook"
 msgstr "Carnet de adrese publicat"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "Pentru a configura SusiDNS să împingă agenda de adrese a routerului în agenda de adrese publicată, setați „should_publish = true” pe pagina de configurare."
+msgstr "Pentru a configura DNS să împingă agenda de adrese a routerului în agenda de adrese publicată, setați „should_publish = true” pe pagina de configurare."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "Toate gazdele derivate din abonamente vor apărea în această agendă de adrese, în plus față de orice adăugați manual aici sau în agenda de adrese Master."
@@ -672,7 +672,7 @@ msgid "for websites"
 msgstr "pentru site-uri web"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Dacă configurați SusiDNS pentru a publica agenda dvs. de adrese, va exporta un fișier hosts.txt care conține toate gazdele (implicit la rădăcina eepsitului)."
+msgstr "Dacă configurați DNS pentru a publica agenda dvs. de adrese, va exporta un fișier hosts.txt care conține toate gazdele (implicit la rădăcina eepsitului)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "Adresele adăugate manual în agenda dvs. de adrese Master se vor contopi cu agenda de adrese a Routerului."

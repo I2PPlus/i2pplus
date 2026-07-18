@@ -14,17 +14,17 @@ msgstr "nội bộ"
 #, java-format
 msgid "{0} inbound, {0} outbound tunnel"
 msgid_plural "{0} inbound, {0} outbound tunnels"
-msgstr[0] "{0} Inbound, {0} đường hầm bên ngoài"
+msgstr[0] "{0} đường hầm đến, {0} đường hầm đi"
 
 #, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
-msgstr[0] "{0} đường hầm trong nước"
+msgstr[0] "{0} đường hầm đến"
 
 #, java-format
 msgid "{0} outbound tunnel"
 msgid_plural "{0} outbound tunnels"
-msgstr[0] "{0} đường hầm bên ngoài"
+msgstr[0] "{0} đường hầm đi"
 
 msgid "lower bandwidth and reliability"
 msgstr "băng thông và độ tin cậy thấp hơn"
@@ -39,7 +39,7 @@ msgid "Error - tunnels are not initialized yet"
 msgstr "Lỗi - các đường hầm chưa được khởi tạo"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "Gửi biểu mẫu không hợp lệ, có thể do bạn đã sử dụng nút 'quay lại' hoặc 'tải lại' trên trình duyệt của mình. Mẫu đơn đệ nạp không đúng, có lẻ vì bạn dùng nút 'back' hay 'reload\" của trình duyệt. Xin vui lòng đệ nạp lại."
+msgstr "Gửi biểu mẫu không hợp lệ, có thể do bạn đã sử dụng nút 'quay lại' hoặc 'tải lại' trên trình duyệt. Vui lòng gửi lại."
 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Nếu sự cố vẫn tiếp diễn, hãy xác minh rằng bạn đã bật cookie trong trình duyệt của mình."

@@ -30,7 +30,7 @@ msgid "Downloading"
 msgstr "Λήψη"
 
 msgid "Configuring I2PSnark with I2CP options"
-msgstr "Διαμόρφωση του I2PSnark με επιλογές I2CP"
+msgstr "Διαμόρφωση του Τορρέντ με επιλογές I2CP"
 
 msgid "No write permissions for data directory"
 msgstr "Δεν υπάρχουν δικαιώματα εγγραφής για τον κατάλογο δεδομένων"
@@ -63,7 +63,7 @@ msgid "Download speed limit is {0}KB/s"
 msgstr "Το όριο ταχύτητας λήψε είναι {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr "Σημείωση: Ίσως χρειαστεί να σταματήσετε και να επανεκκινήσετε τα torrents σας ή να επανεκκινήσετε το I2PSnark για να εφαρμοστεί αυτή η αλλαγή."
+msgstr "Σημείωση: Ίσως χρειαστεί να σταματήσετε και να επανεκκινήσετε τα torrents σας ή να επανεκκινήσετε το Τορρέντ για να εφαρμοστεί αυτή η αλλαγή."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Ενεργοποίηση της τυχαίας διάλεξης +0/1 στροφών στους εισερχόμενους τούνελ"
@@ -248,7 +248,7 @@ msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "ΣΦΑΛΜΑ - Δεν υπάρχει μνήμη, δεν είναι δυνατή η δημιουργία torrent από το {0}"
 
 msgid "Initializing I2PSnark and opening tunnels"
-msgstr "Αρχικοποίηση I2PSnark και άνοιγμα τούνελ"
+msgstr "Αρχικοποίηση Τορρέντ και άνοιγμα τούνελ"
 
 #, java-format
 msgid "Torrent added and started: {0}"
@@ -384,7 +384,7 @@ msgid "Download finished: {0}"
 msgstr "Η λήψη ολοκληρώθηκε: {0}"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Τορρέντ"
 
 #, java-format
 msgid "Starting torrent: {0}"
@@ -481,7 +481,7 @@ msgid "Torrent at {0} was not valid"
 msgstr "Το torrent στο {0} δεν ήταν έγκυρο"
 
 msgid "Torrents"
-msgstr "Torrents"
+msgstr "Τορρέντ"
 
 msgid "Refresh page"
 msgstr "Ανανέωση σελίδας"
@@ -1060,7 +1060,7 @@ msgid "Maximum number of torrents to display per page"
 msgstr "Μέγιστος αριθμός torrent για εμφάνιση ανά σελίδα"
 
 msgid "torrents"
-msgstr "torrents"
+msgstr "χείμαρροι"
 
 msgid "Language"
 msgstr "Γλώσσα"
@@ -1159,13 +1159,13 @@ msgid "Auto start torrents"
 msgstr "Αυτόματη εκκίνηση torrent"
 
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "Αυτόματη εκκίνηση torrent όταν προστίθεται και επανεκκίνηση torrent όταν ξεκινά το I2PSnark"
+msgstr "Αυτόματη εκκίνηση torrent όταν προστίθεται και επανεκκίνηση torrent όταν ξεκινά το Τορρέντ"
 
 msgid "Startup delay"
 msgstr "Καθυστέρηση εκκίνησης"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Πόσο καιρό πριν φορτωθούν τα torrent που ξεκινούν αυτόματα κατά την εκκίνηση του I2PSnark"
+msgstr "Πόσο καιρό πριν φορτωθούν τα torrent που ξεκινούν αυτόματα κατά την εκκίνηση του Τορρέντ"
 
 msgid "minutes"
 msgstr "λεπτά"
@@ -1261,7 +1261,7 @@ msgid "Add"
 msgstr "Προσθηκη"
 
 msgid "Select trackers for removal from I2PSnark's known list"
-msgstr "Επιλέξτε ιχνηλάτες για κατάργηση από τη γνωστή λίστα του I2PSnark"
+msgstr "Επιλέξτε ιχνηλάτες για κατάργηση από τη γνωστή λίστα του Τορρέντ"
 
 msgid "Website URL"
 msgstr "Διεύθυνση URL ιστότοπου"

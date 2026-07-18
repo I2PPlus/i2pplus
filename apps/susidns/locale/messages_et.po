@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Imporditud failist"
 
 msgid "Manually added via SusiDNS"
-msgstr "Manuaalselt lisatud läbi SusiDNS"
+msgstr "Manuaalselt lisatud läbi DNS"
 
 msgid "Manually added"
 msgstr "Manuaalselt lisatud"
@@ -607,13 +607,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Vaata FAQ-i tellimiste URL-de loetuks."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Kui SusiDNS on seadistatud rooteri aadressiraamatu avaldamiseks, siis sisendid ilmuvad sinu Avaldatud aadressiraamatus ning salvestatakse hosts.txt faili jagamiseks."
+msgstr "Kui DNS on seadistatud rooteri aadressiraamatu avaldamiseks, siis sisendid ilmuvad sinu Avaldatud aadressiraamatus ning salvestatakse hosts.txt faili jagamiseks."
 
 msgid "Published Addressbook"
 msgstr "Avaldatud Aadressiraamat"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "Et seadistada SusiDNS rooteri aadressiraamatu edastamiseks sinu Avaldatud aadressiraamatusse, määra 'should_publish=true' seadistuslehel."
+msgstr "Et seadistada DNS rooteri aadressiraamatu edastamiseks sinu Avaldatud aadressiraamatusse, määra 'should_publish=true' seadistuslehel."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "Kõik tellimuste põhjal leitud hostid ilmuvad selle aadressiraamatus, lisaks kõigile, mida lisad siia käsitsi või oma Põhi aadressiraamatusse."
@@ -664,7 +664,7 @@ msgid "for websites"
 msgstr "veebisaitide jaoks"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Kui seadistad SusiDNS rooteri aadressiraamatu avaldamiseks, siis see eksporteeri hosts.txt faili kõigi hostidega (vaikeväärtusel sinu eepsaidi juurkausta)."
+msgstr "Kui seadistad DNS rooteri aadressiraamatu avaldamiseks, siis see eksporteeri hosts.txt faili kõigi hostidega (vaikeväärtusel sinu eepsaidi juurkausta)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "Käsitselt põhi aadressiraamatusse lisatud aadressid ühendatakse sinu Rooteri aadressiraamatusse."

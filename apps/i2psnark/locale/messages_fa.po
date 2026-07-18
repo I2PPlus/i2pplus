@@ -30,7 +30,7 @@ msgid "Downloading"
 msgstr "در حال دانلود"
 
 msgid "Configuring I2PSnark with I2CP options"
-msgstr "پیکربندی I2PSnark با گزینه های I2CP"
+msgstr "پیکربندی تورنت‌ها با گزینه های I2CP"
 
 msgid "No write permissions for data directory"
 msgstr "بدون مجوز نوشتن برای فهرست داده ها"
@@ -63,7 +63,7 @@ msgid "Download speed limit is {0}KB/s"
 msgstr "محدودیت سرعت دانلود {0}KB/s است"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr "توجه: برای اعمال این تغییر، ممکن است نیاز به توقف و راه اندازی مجدد تورنت ها یا راه اندازی مجدد I2PSnark داشته باشید."
+msgstr "توجه: برای اعمال این تغییر، ممکن است نیاز به توقف و راه اندازی مجدد تورنت ها یا راه اندازی مجدد تورنت‌ها داشته باشید."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "رندومیزاسیون برد و برگشت +0/1 تونل روی تونل‌های ورودی فعال شد"
@@ -248,7 +248,7 @@ msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "ERROR - حافظه خالی است، نمی توان تورنت از {0} ایجاد کرد"
 
 msgid "Initializing I2PSnark and opening tunnels"
-msgstr "راه اندازی I2PSnark و باز کردن تونل ها"
+msgstr "راه اندازی تورنت‌ها و باز کردن تونل ها"
 
 #, java-format
 msgid "Torrent added and started: {0}"
@@ -276,7 +276,7 @@ msgstr "هشدار - ردیاب I2P در \"{0}\" وجود ندارد و ردیا
 
 #, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
-msgstr "ردیاب های باز غیرفعال هستند و ما همسالان DHT نداریم. واکشی از {0} ممکن است موفق نشود تا زمانی که تورنت دیگری را شروع نکنید ، ردیاب های باز را فعال کنید یا DHT را فعال کنید."
+msgstr "ردیاب‌های باز غیرفعال هستند و ما همتای DHT نداریم. واکشی از {0} ممکن است موفق نشود تا زمانی که تورنت دیگری را شروع نکنید، ردیاب‌های باز را فعال کنید یا DHT را فعال کنید."
 
 #, java-format
 msgid "Adding {0}"
@@ -384,7 +384,7 @@ msgid "Download finished: {0}"
 msgstr "دانلود پایان یافت: {0}"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "تورنت‌ها"
 
 #, java-format
 msgid "Starting torrent: {0}"
@@ -899,8 +899,8 @@ msgstr "راه اندازی"
 #, java-format
 msgid "Seeding to {0} peer"
 msgid_plural "Seeding to {0} peers"
-msgstr[0] "بذر به {0} همکار"
-msgstr[1] "بذر به {0} همسالان"
+msgstr[0] "بذر به {0} همتا"
+msgstr[1] "بذر به {0} همتا"
 
 #, java-format
 msgid "Connected to {0} of {1} peers in swarm"
@@ -918,8 +918,8 @@ msgstr[1] "بذر به {0} همتایان در گروه"
 #, java-format
 msgid "Downloading from {0} peer"
 msgid_plural "Downloading from {0} peers"
-msgstr[0] "بارگیری از {0} همکار"
-msgstr[1] "بارگیری از {0} همسالان"
+msgstr[0] "بارگیری از {0} همتا"
+msgstr[1] "بارگیری از {0} همتا"
 
 msgid "OK"
 msgstr "تایید"
@@ -1159,13 +1159,13 @@ msgid "Auto start torrents"
 msgstr "شروع خودکار تورنت ها"
 
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "هنگام اضافه شدن تورنت ها به طور خودکار شروع می شود و با شروع I2PSnark تورنت ها را مجدداً راه اندازی می کند"
+msgstr "هنگام اضافه شدن تورنت ها به طور خودکار شروع می شود و با شروع تورنت‌ها تورنت ها را مجدداً راه اندازی می کند"
 
 msgid "Startup delay"
 msgstr "تاخیر شروع"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "چه مدت قبل از راه اندازی I2PSnark، تورنت های شروع خودکار بارگیری می شوند"
+msgstr "چه مدت قبل از راه اندازی تورنت‌ها، تورنت های شروع خودکار بارگیری می شوند"
 
 msgid "minutes"
 msgstr "دقیقه"
@@ -1261,7 +1261,7 @@ msgid "Add"
 msgstr "اضافه کردن"
 
 msgid "Select trackers for removal from I2PSnark's known list"
-msgstr "ردیاب ها را برای حذف از لیست شناخته شده I2PSnark انتخاب کنید"
+msgstr "ردیاب ها را برای حذف از لیست شناخته شده تورنت‌ها انتخاب کنید"
 
 msgid "Website URL"
 msgstr "آدرس اینترنتی وبسایت"

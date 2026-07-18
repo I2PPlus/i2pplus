@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "مستورد من الملف"
 
 msgid "Manually added via SusiDNS"
-msgstr "محذوف يدويا عن طريق SusiDNS"
+msgstr "محذوف يدويا عن طريق DNS"
 
 msgid "Manually added"
 msgstr "أضيف يدويًا"
@@ -639,13 +639,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "أنظر الأسئلة الشائعة للخصول على قائمة بالعناوين"
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "إذا تم تكوين SusiDNS لنشر دفتر عناوين جهاز التوجيه الخاص بك، فستظهر الإدخالات في دفتر العناوين المنشور الخاص بك ويتم حفظها في ملف hosts.txt للمشاركة."
+msgstr "إذا تم تكوين DNS لنشر دفتر عناوين جهاز التوجيه الخاص بك، فستظهر الإدخالات في دفتر العناوين المنشور الخاص بك ويتم حفظها في ملف hosts.txt للمشاركة."
 
 msgid "Published Addressbook"
 msgstr "دفتر العناوين المنشور"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "لتكوين SusiDNS لدفع دفتر عناوين جهاز التوجيه الخاص بك إلى دفتر العناوين المنشور، قم بتعيين \"should_publish=true\" في صفحة التكوين."
+msgstr "لتكوين DNS لدفع دفتر عناوين جهاز التوجيه الخاص بك إلى دفتر العناوين المنشور، قم بتعيين \"should_publish=true\" في صفحة التكوين."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "ستظهر جميع المضيفات المشتقة من الاشتراكات في دفتر العناوين هذا، بالإضافة إلى أي مضيف تضيفه يدويًا هنا أو إلى دفتر العناوين الرئيسي الخاص بك."
@@ -696,7 +696,7 @@ msgid "for websites"
 msgstr "للمواقع الإلكترونية"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "إذا قمت بتكوين SusiDNS لنشر دفتر عناوين جهاز التوجيه الخاص بك، فسوف يقوم بتصدير ملف hosts.txt الذي يحتوي على جميع المضيفين (افتراضيًا إلى جذر eepsite الخاص بك)."
+msgstr "إذا قمت بتكوين DNS لنشر دفتر عناوين جهاز التوجيه الخاص بك، فسوف يقوم بتصدير ملف hosts.txt الذي يحتوي على جميع المضيفين (افتراضيًا إلى جذر eepsite الخاص بك)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "العناوين التي تمت إضافتها يدويًا إلى دفتر العناوين الرئيسي الخاص بك سيتم دمجها مع دفتر عناوين جهاز التوجيه الخاص بك."

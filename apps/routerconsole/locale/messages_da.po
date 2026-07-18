@@ -98,7 +98,7 @@ msgid "Peers sent to in the last minute"
 msgstr "Peers sendt til i sidste minut"
 
 msgid "Total peers in our banlist"
-msgstr "Samlet jævnaldrende i vores banliste"
+msgstr "Samlet antal peers på vores banliste"
 
 msgid "CPU load average of the JVM"
 msgstr "CPU-belastningsgennemsnit af JVM"
@@ -107,7 +107,7 @@ msgid "Known fast peers"
 msgstr "Kendte hurtige peers"
 
 msgid "Known high capacity peers"
-msgstr "Kendte kammerater med høj kapacitet"
+msgstr "Kendte peers med høj kapacitet"
 
 msgid "Known integrated (floodfill) peers"
 msgstr "Kendte integrerede (floodfill) peers"
@@ -164,10 +164,10 @@ msgid "Type"
 msgstr "Type"
 
 msgid "Upstream"
-msgstr "Upstream"
+msgstr "Opstrøms"
 
 msgid "Downstream"
-msgstr "Downstream"
+msgstr "Nedstrøms"
 
 msgid "WAN PPP Connection"
 msgstr "WAN PPP Forbindelse"
@@ -201,13 +201,13 @@ msgid "To disable this device, add {0} to advanced configuration and restart."
 msgstr "For at deaktivere denne enhed, tilføj {0} til avanceret konfiguration og genstart."
 
 msgid "UPnP Status"
-msgstr "UPnP Status"
+msgstr "UPnP-status"
 
 msgid "Disabled UPnP Devices"
 msgstr "Deaktiverede UPnP-enheder"
 
 msgid "UPnP has not found any UPnP-aware, compatible device on your LAN."
-msgstr "UPnP har ikke fundet nogen UPnP-bevidst kompitabel enhed på din LAN forbindelse."
+msgstr "UPnP har ikke fundet nogen UPnP-kompatible, kompatible enheder på dit LAN."
 
 #, java-format
 msgid "The current external IP address reported by UPnP is {0}"
@@ -263,7 +263,7 @@ msgstr "Installationen misslykkedes fra {0}"
 
 #, java-format
 msgid "Transfer failed:{0}"
-msgstr "Overfører fil fra {0}"
+msgstr "Overførsel fra {0} mislykkedes"
 
 msgid "Error"
 msgstr "Fejl"
@@ -275,7 +275,7 @@ msgid "Restarting"
 msgstr "Genstarter"
 
 msgid "Update verified"
-msgstr "Opdatering mislykkedes"
+msgstr "Opdatering verificeret"
 
 #, java-format
 msgid "from {0}"
@@ -711,10 +711,10 @@ msgid "Min"
 msgstr "Min"
 
 msgid "Max"
-msgstr "Max"
+msgstr "Maks"
 
 msgid "Avg"
-msgstr "Avg"
+msgstr "Gns"
 
 msgid "Now"
 msgstr "Nu"
@@ -815,7 +815,7 @@ msgid "Console"
 msgstr "Konsol"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
-msgstr "For at aktivere SSL -adgang til routerkonsollen, skal du se den kommenterede <code>clients.config</code> fil placeret i dit I2P -applikationsmappe for mere information. Du bliver nødt til at redigere routerconsolerunner -konfigurationsfilen, der er placeret i biblioteket: "
+msgstr "For at aktivere SSL -adgang til routerkonsollen, skal du se den kommenterede <code>clients.config</code> fil placeret i dit I2P -applikationsmappe for mere information. Du bliver nødt til at redigere routerconsolerunner -konfigurationsfilen, der er placeret i biblioteket:"
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Gem deaktiveret, rediger router.config-filen for at foretage ændringer"
@@ -1012,7 +1012,7 @@ msgid "Addressbook"
 msgstr "Adressebog"
 
 msgid "Email"
-msgstr "Email"
+msgstr "Mail til kontaktperson"
 
 msgid "Plugin"
 msgstr "Plugin"
@@ -1030,7 +1030,7 @@ msgid "License"
 msgstr "Licens"
 
 msgid "Start"
-msgstr "Start"
+msgstr "Starte"
 
 msgid "Stop"
 msgstr "Stop"
@@ -1175,7 +1175,7 @@ msgid "Name"
 msgstr "Navn"
 
 msgid "Destination"
-msgstr "Destination"
+msgstr "Bestemmelsessted"
 
 msgid "Encryption Key"
 msgstr "Krybterings nøgle"
@@ -1289,7 +1289,7 @@ msgid "Stats"
 msgstr "statistik"
 
 msgid "Plugins"
-msgstr "Plugins"
+msgstr "Plugin'er"
 
 msgid "Web Apps"
 msgstr "WebApps"
@@ -1514,8 +1514,8 @@ msgstr "Reseed fra fil mislykkedes"
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
 msgid_plural "Reseed successful, loaded {0} router infos from file."
-msgstr[0] "Genforsigtig vellykket, indlæst {0} routerinfo fra fil."
-msgstr[1] "Genforsigtig vellykket, indlæst {0} routerinfos fra fil."
+msgstr[0] "Reseed gennemført, indlæst {0} routerinfo fra fil."
+msgstr[1] "Reseed gennemført, indlæst {0} routerinfos fra fil."
 
 msgid "Reset URL list"
 msgstr "Nulstil URL-liste"
@@ -1639,7 +1639,7 @@ msgstr "Der opstod en fejl da konfigurationen skulle gemmes (indstillingerne bli
 msgid "{0} hop"
 msgid_plural "{0} hops"
 msgstr[0] "{0} hop"
-msgstr[1] "{0} humle"
+msgstr[1] "{0} hops"
 
 #, java-format
 msgid "{0} tunnel"
@@ -1651,7 +1651,7 @@ msgid "Exploratory tunnels"
 msgstr "Udforskende tunneler"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrents"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "ANONYMITETS ADVARSEL - Indstillinger indholder 0-hop tunneler."
@@ -1728,10 +1728,10 @@ msgstr "For at gendanne fra en glemt eller ikke-fungerende adgangskode, stop I2P
 
 #, java-format
 msgid "Removed user {0}"
-msgstr "Fjerned bruger  {0}"
+msgstr "Fjernet bruger {0}"
 
 msgid "Set theme universally across all apps"
-msgstr "Sæt tema universelt universelt på alle apps"
+msgstr "Sæt tema universelt på alle apps"
 
 msgid "Use alternative display font in console and webapps"
 msgstr "Brug alternativ skærmskrifttype i konsol og webapps"
@@ -1743,7 +1743,7 @@ msgid "Enabling the Universal Theming option is recommended when embedding these
 msgstr "Det anbefales at aktivere indstillingen Universal Theming, når du integrerer disse applikationer"
 
 msgid "Embed I2PSnark and I2PMail in the console"
-msgstr "Integrer I2PSnark og I2PMail i konsollen"
+msgstr "Integrer Torrents og I2PMail i konsollen"
 
 msgid "Add a user and password to enable."
 msgstr "Tilføj en bruger og adgangskode at aktivere."
@@ -1806,7 +1806,7 @@ msgid "New router identity"
 msgstr "Ny router identitet"
 
 msgid "Disabled floodfill"
-msgstr "Flodfill deaktiveret"
+msgstr "Floodfill deaktiveret"
 
 msgid "Out of memory error"
 msgstr "Fejl ud af hukommelse"
@@ -1815,7 +1815,7 @@ msgid "Reachability change"
 msgstr "Adgangs forandring"
 
 msgid "Reseeded router"
-msgstr "Reseeded router"
+msgstr "Reseed-router"
 
 msgid "Soft restart"
 msgstr "Blød genstart"
@@ -1961,7 +1961,7 @@ msgid "Averages"
 msgstr "Gennemsnit"
 
 msgid "Events"
-msgstr "Events"
+msgstr "Arrangementer"
 
 msgid "Hide legend"
 msgstr "Skjul legende"
@@ -2063,10 +2063,10 @@ msgid "Router Updates"
 msgstr "Routeropdateringer"
 
 msgid "Router Sitemap"
-msgstr "Router Sitemap"
+msgstr "Router sitemap"
 
 msgid "Sitemap"
-msgstr "Sitemap"
+msgstr "Oversigt over hjemmeside"
 
 msgid "Built-in anonymous BitTorrent Client"
 msgstr "Indbygget anonym BitTorrent klient"
@@ -2126,7 +2126,7 @@ msgid "Start or stop Router clients"
 msgstr "Start eller stop routerklienter"
 
 msgid "Bug tracker"
-msgstr "Bug tracker"
+msgstr "Fejlsporing"
 
 msgid "I2P+ Bug Reports"
 msgstr "I2P fejlrapporter"
@@ -2135,10 +2135,10 @@ msgid "Frequently Asked Questions"
 msgstr "Ofte Stillede Spørgsmål"
 
 msgid "I2P FAQ"
-msgstr "I2P FAQ"
+msgstr "Ofte stillede spørgsmål om I2P"
 
 msgid "I2P Plugins"
-msgstr "I2P Plugins"
+msgstr "I2P-plugins"
 
 msgid "zzz's plugin repository"
 msgstr "zzz's plugin-lager"
@@ -2192,7 +2192,7 @@ msgid "zzz Domain Registry"
 msgstr "zzz domænenavnsregistrering"
 
 msgid "I2P Forum"
-msgstr "I2P Forum"
+msgstr "I2P-forum"
 
 msgid "I2P-related community forums"
 msgstr "I2P-relaterede fællesskabsfora"
@@ -2213,7 +2213,7 @@ msgid "Encrypted I2P Pastebin"
 msgstr "Krypteret I2P Pastebin"
 
 msgid "Pastebin"
-msgstr "Pastebin"
+msgstr "PastebinComment"
 
 msgid "Landing page for various services"
 msgstr "Landingsside for forskellige tjenester"
@@ -2261,7 +2261,7 @@ msgid "Computing-related tutorials"
 msgstr "Computer-relaterede øvelser"
 
 msgid "SimplifiedGuide"
-msgstr "SimplifiedGuide"
+msgstr "Forenklet vejledning"
 
 msgid "Web technology reference and learning site"
 msgstr "Reference- og læringssted for webteknologi"
@@ -2282,7 +2282,7 @@ msgid "Information Security Research &amp; Education"
 msgstr "Informationssikkerhedsforskning og uddannelse"
 
 msgid "DigitalTrends"
-msgstr "DigitalTrends"
+msgstr "Digitaltrends"
 
 msgid "Tech News &amp; Reviews"
 msgstr "Tekniske nyheder og anmeldelser"
@@ -2303,7 +2303,7 @@ msgid "HackerNews"
 msgstr "HackerNews"
 
 msgid "HongKongFreePress"
-msgstr "HongKongFreePress"
+msgstr "HongKong FreePress"
 
 msgid "Independent &amp; impartial news for Hong Kong"
 msgstr "Uafhængige og upartiske nyheder for Hong Kong"
@@ -2327,13 +2327,13 @@ msgid "KrebsOnSecurity"
 msgstr "KrebsOnSecurity"
 
 msgid "Linux Kernel Mailing List"
-msgstr "Linux Kernel Mailing List"
+msgstr "Postliste for Linux-kerne"
 
 msgid "Smart &amp; fearless journalism"
 msgstr "Smart og frygtløs journalistik"
 
 msgid "NewStatesman"
-msgstr "NewStatesman"
+msgstr "Ny statsmand"
 
 msgid "Politics &amp; Current Affairs magazine"
 msgstr "Politik og aktuelle Affairs -magasin"
@@ -2342,7 +2342,7 @@ msgid "Independent International Media Platform"
 msgstr "Uafhængig international medieplatform"
 
 msgid "OpenDemocracy"
-msgstr "OpenDemocracy"
+msgstr "Åbent demokrati"
 
 msgid "Online privacy &amp; tech blog"
 msgstr "Online privatliv & tech-blog"
@@ -2429,7 +2429,7 @@ msgid "Advancing a balanced &amp; realistic understanding of American interests 
 msgstr "Fremme af en afbalanceret Andrealistisk forståelse af amerikanske interesser i Mellemøsten"
 
 msgid "WashingtonInstitute"
-msgstr "WashingtonInstitute"
+msgstr "Washington Institute"
 
 msgid "The HTTP proxy is not up"
 msgstr "HTTP proxyn er ikke oppe"
@@ -2627,7 +2627,7 @@ msgid "Runs"
 msgstr "Kører"
 
 msgid "Dropped"
-msgstr "Dropped"
+msgstr "Droppet"
 
 msgid "Pending"
 msgstr "Afventer"
@@ -2657,7 +2657,7 @@ msgid "All Routers"
 msgstr "Alle Routers"
 
 msgid "LeaseSets"
-msgstr "LeaseSets"
+msgstr "Leasingkontraktsæt"
 
 msgid "Advanced Lookup"
 msgstr "Avanceret opslag"
@@ -2720,7 +2720,7 @@ msgid "Router Version"
 msgstr "Routerversion"
 
 msgid "Transport"
-msgstr "Transport"
+msgstr "Transportere"
 
 msgid "Add Sybil analysis (must pick at least one above)"
 msgstr "Tilføj Sybil-analyse (skal vælge mindst en ovenfor)"
@@ -2915,7 +2915,7 @@ msgid "Floodfills"
 msgstr "Oversvømmelser"
 
 msgid "Total"
-msgstr "Total"
+msgstr "I alt"
 
 msgid "Initializing"
 msgstr "Initialisering"
@@ -2961,7 +2961,7 @@ msgid "Published"
 msgstr "Publiceret"
 
 msgid "Whois"
-msgstr "Whois"
+msgstr "Hvem er"
 
 msgid "direct"
 msgstr "direkte"
@@ -3048,7 +3048,7 @@ msgid "NTCP [IPv6] &amp; SSU"
 msgstr "NTCP [IPv6] &amp; SSU"
 
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
-msgstr "NTCP [IPv6] &amp; SSU with Introducers"
+msgstr "NTCP [IPv6] &amp; SSU med introducere"
 
 msgid "Local"
 msgstr "Lokal"
@@ -3069,7 +3069,7 @@ msgid "No peer connections available"
 msgstr "Ingen peer-forbindelser tilgængelige"
 
 msgid "Your transport connection limits are automatically set based on your configured bandwidth."
-msgstr "Din transport forbindelsesgrænse,er automatisk baseret på din konfigurerede båndbredde. "
+msgstr "Din transport forbindelsesgrænse,er automatisk baseret på din konfigurerede båndbredde."
 
 #, java-format
 msgid "To override these limits, add the settings {0} and {1}"
@@ -3107,13 +3107,13 @@ msgid "Peer capabilities"
 msgstr "Peer-kapaciteter"
 
 msgid "Caps"
-msgstr "Caps"
+msgstr "Kasketter"
 
 msgid "Direction/Introduction"
 msgstr "Retning / Indledning"
 
 msgid "Dir"
-msgstr "Dir"
+msgstr "Kat"
 
 msgid "Peer inactivity"
 msgstr "Peer inaktivitet"
@@ -3149,7 +3149,7 @@ msgid "Messages received"
 msgstr "Beskeder modtaget"
 
 msgid "RX"
-msgstr "RX"
+msgstr "IAMSE,bilag V"
 
 msgid "Queued messages to send to peer"
 msgstr "Beskeder i kø for at sende til peer"
@@ -3260,10 +3260,10 @@ msgstr[0] "{0} mislykkes"
 msgstr[1] "{0} mislykkes"
 
 msgid "Banned"
-msgstr "Banned"
+msgstr "Udelukket"
 
 msgid "backlogged"
-msgstr "backlogged"
+msgstr "efterslæbet"
 
 msgid "Definitions"
 msgstr "Definationer "
@@ -3440,7 +3440,7 @@ msgid "tunnels per hour"
 msgstr "tunneler i timen"
 
 msgid "Integration"
-msgstr "Integration"
+msgstr "lntegrationsministeriet"
 
 msgid "peer"
 msgstr "jævnaldrende"
@@ -3497,7 +3497,7 @@ msgid "Last Bad Store"
 msgstr "Seneste dårlige lagring"
 
 msgid "caps"
-msgstr "caps"
+msgstr "kasketter"
 
 msgid "Capabilities in the NetDb, not used to determine profiles"
 msgstr "Kapaciteter i NetDb, bruges ikke til at bestemme profiler"
@@ -3620,7 +3620,7 @@ msgid "i2pchat"
 msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr "I2PChat"
+msgstr "I2PCat"
 
 msgid "Server"
 msgstr "Server"
@@ -3696,13 +3696,13 @@ msgid "Attempt to download router reference files (if automatic reseed has faile
 msgstr "Forsøg på at downloade routerreferencefiler (hvis automatisk genindlæsning er mislykket)"
 
 msgid "Reseed"
-msgstr "Reseed"
+msgstr "Genindlæs"
 
 msgid "Order"
 msgstr "rækkefølge"
 
 msgid "Top"
-msgstr "Top"
+msgstr "Førende"
 
 msgid "Move to top"
 msgstr "Flyt til toppen"
@@ -3828,7 +3828,7 @@ msgid "I2PControl"
 msgstr "I2PKontrol"
 
 msgid "RPC Service"
-msgstr "RPC Service"
+msgstr "RPC-service"
 
 msgid "Manage I2P client and server tunnels to access or provide network services"
 msgstr "Administrer I2P-klient- og servertunneler for at få adgang til eller levere netværkstjenester"
@@ -3843,13 +3843,13 @@ msgid "Services"
 msgstr "Tjenester"
 
 msgid "I2P+ Router Sitemap"
-msgstr "I2P+ Router Sitemap"
+msgstr "Sitemap for I2P+-router"
 
 msgid "Internals"
 msgstr "Interne"
 
 msgid "Certs"
-msgstr "Certs"
+msgstr "Certifikater"
 
 msgid "Review active encryption certificates used in console"
 msgstr "Gennemgå aktive krypteringscertifikater, der bruges i konsollen"
@@ -3873,7 +3873,7 @@ msgid "Show the router's workload, and how it's performing"
 msgstr "Vis routerens arbejdsbyrde, og hvordan den fungerer"
 
 msgid "Logs"
-msgstr "Logs"
+msgstr "Logfiler"
 
 msgid "NetDb"
 msgstr "NetDb"
@@ -3891,7 +3891,7 @@ msgid "View existing tunnels and tunnel build status"
 msgstr "Se eksisterende tunneler og status på tunneler som bygges"
 
 msgid "Streams"
-msgstr "Streams"
+msgstr "Strømme"
 
 msgid "View active streaming connections"
 msgstr "Vis aktive streamingforbindelser"
@@ -4007,7 +4007,7 @@ msgid "High capacity"
 msgstr "Høj kapacitet"
 
 msgid "The number of peers available for network database inquiries"
-msgstr "Antallet af peers til rådighed for forespørgsler til netværksdatabasen "
+msgstr "Antallet af peers til rådighed for forespørgsler til netværksdatabasen"
 
 msgid "The number of peers without a published public IP address"
 msgstr "Antallet af peers uden en offentliggjort offentlig IP-adresse"
@@ -4040,7 +4040,7 @@ msgid "Lifetime"
 msgstr "Livstid"
 
 msgid "Used"
-msgstr "Used"
+msgstr "Brugt"
 
 msgid "Our inbound &amp; outbound traffic for the last 20 minutes"
 msgstr "Vores indgående og udgående trafik i de sidste 20 minutter"
@@ -4275,7 +4275,7 @@ msgid "Run analysis on all routers in NetDb"
 msgstr "Kør analyse på alle routere i NetDb"
 
 msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, "
-msgstr "Sybil-detektionsrutinen kan konfigureres til at scanne Netværksdatabasen med jævne mellemrum, "
+msgstr "Sybil-detektionsrutinen kan konfigureres til at scanne Netværksdatabasen med jævne mellemrum,"
 
 msgid "with the option to block peers meeting the configured threshold. "
 msgstr "med mulighed for at blokere peers der opfylder den konfigurerede grænseværdi."
@@ -4434,7 +4434,7 @@ msgid "MEDIAN"
 msgstr "MIDLER"
 
 msgid "MAX"
-msgstr "MAX"
+msgstr "MAKS"
 
 msgid "Show all routers for this family in NetDb"
 msgstr "Vis alle routere for denne familie i NetDb"
@@ -4574,7 +4574,7 @@ msgid "Tunnel test status"
 msgstr "Tunnelteststatus"
 
 msgid "Latency"
-msgstr "Latency"
+msgstr "Latenstid"
 
 msgid "Gateway"
 msgstr "Gateway"
@@ -4741,7 +4741,7 @@ msgid "Proxy to connect to I2P's anonymized IRC chat network"
 msgstr "Proxy for at oprette forbindelse til I2P's anonymiserede IRC-chatnetværk"
 
 msgid "I2P webserver"
-msgstr "I2P webserver"
+msgstr "I2P-webserver"
 
 msgid "I2P Webserver"
 msgstr "I2P webserver"
@@ -4753,7 +4753,7 @@ msgid "Personal I2P Webserver (eepsite)"
 msgstr "Personlig I2P-webserver (eepsite)"
 
 msgid "HTTP Proxy"
-msgstr "HTTP Proxy"
+msgstr "Proxyserver"
 
 msgid "iMule"
 msgstr "iMule"
@@ -4780,7 +4780,7 @@ msgid "Encryption"
 msgstr "Kryptering"
 
 msgid "Stream"
-msgstr "Stream"
+msgstr "Strøm"
 
 msgid "host"
 msgstr "vært"
@@ -4789,7 +4789,7 @@ msgid "key"
 msgstr "nøgle"
 
 msgid "port"
-msgstr "port"
+msgstr "havn"
 
 msgid "Certificates"
 msgstr "Certifikater"
@@ -4844,7 +4844,7 @@ msgid "I2P requires at least 12KBps to enable sharing. "
 msgstr "I2P kræver mindst 12 KB/s for at aktivere deling. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
-msgstr "Vær venlig at aktivere deling (deling under tunneler) ved at konfigurere mere båndbredde. "
+msgstr "Vær venlig at aktivere deling (deling under tunneler) ved at konfigurere mere båndbredde."
 
 msgid "It improves your anonymity by creating cover traffic, and helps the network. "
 msgstr "Det forbedrer din anonymitet ved at skabe dæktrafik og hjælper netværket."
@@ -5146,7 +5146,7 @@ msgid "I2CP Interface"
 msgstr "I2CP brugergrænseoverflade"
 
 msgid "I2CP Port"
-msgstr "I2CP Port"
+msgstr "I2CP-port"
 
 msgid "Require username and password"
 msgstr "Kræver brugernavn og adgangskode"
@@ -5161,7 +5161,7 @@ msgid "The router keyring is used to decrypt encrypted LeaseSets."
 msgstr "Routerens nøglering bruges til at dekryptere krypterede LeaseSets."
 
 msgid "The keyring may contain keys for local or remote encrypted destinations."
-msgstr "Nøgleringen kan indeholde nøgler for lokale eller fjern-krybterede destinationer. "
+msgstr "Nøgleringen kan indeholde nøgler for lokale eller fjern-krybterede destinationer."
 
 msgid "Manual Keyring Addition"
 msgstr "Manuel Nøglerings Tilføjelse"
@@ -5396,7 +5396,7 @@ msgid "Manual Peer Controls"
 msgstr "Manuelle Peer Styring"
 
 msgid "Router Hash"
-msgstr "Router Hash"
+msgstr "Router-hash"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "Manuelt Banning / Unbanning af Peer"
@@ -5447,7 +5447,7 @@ msgid "Please supply a valid plugin file"
 msgstr "Angiv venligst en gyldig plugin-fil"
 
 msgid "Plugin Manager"
-msgstr "Plugin Manager"
+msgstr "Plugin- håndtering"
 
 msgid "The plugins listed below are started by the webConsole client."
 msgstr "Plugins herunder er startet af webKonsol klienten."
@@ -5495,10 +5495,10 @@ msgid "HTTPS"
 msgstr "HTTPS"
 
 msgid "SOCKS 4/4a"
-msgstr "SOCKS 4/4a"
+msgstr "STRØMPER 4/4A"
 
 msgid "SOCKS 5"
-msgstr "SOCKS 5"
+msgstr "SOKKER 5"
 
 msgid "This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin if configured. Note: this option will not work when you have 0 known peers."
 msgstr "Denne indstilling vil bruge I2Ps HTTP -outproxy til at genindføre eller Orchid Plugin, hvis det er konfigureret. Bemærk: Denne indstilling fungerer ikke, når du har 0 kendte kammerater."
@@ -5676,13 +5676,13 @@ msgid "The default settings are optimized for general usage and normally don't n
 msgstr "Standardindstillingerne er optimeret til generel brug og skal normalt ikke ændres."
 
 msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
-msgstr "For at ændre klienttunnelindstillinger skal du bruge <a href=/i2ptunnelmgr>Tunnel Manager</a> eller <a href=/i2psnark/configure>konfigurationssiden</a> til I2PSnark."
+msgstr "For at ændre klienttunnelindstillinger skal du bruge <a href=/i2ptunnelmgr>Tunnel Manager</a> eller <a href=/i2psnark/configure>konfigurationssiden</a> til Torrents."
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "For at aktivere kun sessionsændringer til klienttunnelerne skal du aktivere konsollens <a href=/help/advancedsettings>Avanceret tilstand</a>."
 
 msgid "config UI"
-msgstr "config UI"
+msgstr "Brugergrænseflade for indstilling af Epos"
 
 msgid "User Interface Configuration"
 msgstr "Brugergrænsefladekonfiguration"
@@ -5712,7 +5712,7 @@ msgid "Please contribute to the router console translation project! Contact the 
 msgstr "Bidrag gerne til routerens oversættelse! Kontakte udviklerne på #i2p-dev i IRC hvis du vil hjælpe."
 
 msgid "config update"
-msgstr "config update"
+msgstr "konfigurationsopdatering"
 
 msgid "I2P &amp; News Updates"
 msgstr "I2P og Nyhedsopdateringer"
@@ -5745,7 +5745,7 @@ msgid "Advanced Options"
 msgstr "Avancerede indstillinger"
 
 msgid "In order to maintain anonymity, it is recommended to update using the I2P http proxy. If the news or I2P update is hosted on I2P, using the proxy will be necessary."
-msgstr "For at bevare anonymiteten anbefales det at opdatere ved hjælp af I2P http-proxy. "
+msgstr "For at bevare anonymiteten anbefales det at opdatere ved hjælp af I2P http-proxy."
 
 msgid "Fetch news using I2P http proxy"
 msgstr "Hent nyheder ved hjælp af I2P http-proxy"
@@ -5757,7 +5757,7 @@ msgid "I2P proxy host"
 msgstr "I2P proxy vært"
 
 msgid "I2P proxy port"
-msgstr "I2P proxy port"
+msgstr "I2P-proxyport"
 
 msgid "News URL"
 msgstr "Nyheds URL"
@@ -5815,7 +5815,7 @@ msgid "Page Not Found"
 msgstr "Siden blev ikke fundet"
 
 msgid "Sorry! You appear to be requesting a non-existent Router Console page or resource."
-msgstr "Undskyld! Det virker som om du efterspørger en ikke-eksisterende Router Konsol Side eller Dokumentation. "
+msgstr "Undskyld! Det virker som om du efterspørger en ikke-eksisterende Router Konsol Side eller Dokumentation."
 
 msgid "Error 404"
 msgstr "Fejl 404"
@@ -5824,7 +5824,7 @@ msgid "not found"
 msgstr "ikke fundet"
 
 msgid "router logs"
-msgstr "router logs"
+msgstr "routerlogfiler"
 
 msgid "Critical / Error Level Logs"
 msgstr "Kritiske / Fejl Logniveauer"
@@ -6409,7 +6409,7 @@ msgid "If set to true, this option will place an icon in the system tray / notif
 msgstr "Hvis dette er indstillet til sandt, vil denne indstilling placere et ikon i systembakken / meddelelsesområdet med grundlæggende kontrolindstillinger. [Deaktiveret som standard]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "Denne indstilling tillader konfiguration af det maksimale antal filer per torrent, som I2PSnark vil tillade ved download eller oprettelse af en torrent. Bemærk, at en væsentlig øgning af denne værdi fra standarden på 2000 filer kan kræve yderligere konfiguration på værtsystemet for at øge det maksimale antal åbne filer, som operativsystemet vil tillade (f.eks. <code>ulimit -n</code> på Linux). For at ændre dette, skal du tilføje det til I2PSnarks konfigurationsfil <code>i2psnark.config</code>. [Genstart af I2PSnark eller router krævet]"
+msgstr "Denne indstilling tillader konfiguration af det maksimale antal filer per torrent, som Torrents vil tillade ved download eller oprettelse af en torrent. Bemærk, at en væsentlig øgning af denne værdi fra standarden på 2000 filer kan kræve yderligere konfiguration på værtsystemet for at øge det maksimale antal åbne filer, som operativsystemet vil tillade (f.eks. <code>ulimit -n</code> på Linux). For at ændre dette, skal du tilføje det til Torrentss konfigurationsfil <code>i2psnark.config</code>. [Genstart af Torrents eller router krævet]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "Denne tunnelspecifikke indstilling giver dig mulighed for at aktivere eller deaktivere svar på pings, der sendes til servere hostet af routeren. For at deaktivere pinger, skal du tilføje linjen <code>i2p.streaming.answerPings=false</code> i afsnittet <i>Custom Options</i> for serverens konfiguration i tunneladministratoren."
@@ -6652,7 +6652,7 @@ msgid "Configuration files for the router, installed plugins, and router logs ar
 msgstr "Konfigurationsfiler for routeren, installerede plugins og router logs er gemt på følgende placering:"
 
 msgid "Windows"
-msgstr "Windows"
+msgstr "Vinduer"
 
 msgid "OS X"
 msgstr "OS X / macOS"
@@ -6832,10 +6832,10 @@ msgid "I2P Terminology"
 msgstr "I2P Terminologi"
 
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "En I2P webapplikation, der administrerer servicedestinationer for netværket, dermap B64 hash til menneskelæselige navne. Destinationer kan tilføjes manuelt eller via abonnementer på hosts.txt filer. Også kendt som SusiDNS. For mere information, se <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>den online dokumentation</a>."
+msgstr "En I2P webapplikation, der administrerer servicedestinationer for netværket, dermap B64 hash til menneskelæselige navne. Destinationer kan tilføjes manuelt eller via abonnementer på hosts.txt filer. Også kendt som DNS. For mere information, se <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>den online dokumentation</a>."
 
 msgid "Base32 (B32) / Base64 (B64)"
-msgstr "Base32 (B32) / Base64 (B64)"
+msgstr "Base32 (B32 )/Base64 (B64)"
 
 msgid "A <a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' target=_blank rel=noreferrer>Base32</a> link (which always ends with .b32.i2p) is a hash of a <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external' target=_blank rel=noreferrer>Base64</a> destination. For services on the network, the Base64 hash is often mapped to an .i2p domain in the addressbook."
 msgstr "Et <a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' target=_blank rel=noreferrer>Base32</a> link (som altid slutter med .b32.i2p) er en hash af en <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external' target=_blank rel=noreferrer>Base64</a> destination. For services på netværket, bliver Base64 hashen ofte mapped til et .i2p-domæne i adresserbogen."
@@ -6847,7 +6847,7 @@ msgid "An address containing an encrypted LeaseSet is informally referred to as 
 msgstr "En adresse, der indeholder en krypteret LeaseSet, henvises uformelt til som en b33 adresse, en udvidelse af en base32 adresse med værtens offentlige nøgle og signaturtype kodet ind i adressen i stedet for en opslagshash. Denne adressetype er påkrævet for slørede Leasesets. Mere information: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>B33 specifikation</a>"
 
 msgid "BOB"
-msgstr "BOB"
+msgstr "ASH"
 
 msgid "BOB (Basic Open Bridge) is a (now-deprecated) simple application-to-router protocol, superseded by <i>SAM</i>. For more information, see the <a href=https://geti2p.net/en/docs/api/bob class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
 msgstr "BOB (Basic Open Bridge) er en (nu forældet) simpel applikation-til-router protokol, der er erstattet af <i>SAM</i>. For mere information, se <a href=https://geti2p.net/en/docs/api/bob class='sitelink external' target=_blank rel=noreferrer>online dokumentationen</a>."
@@ -6868,7 +6868,7 @@ msgid "A command-line application supplied with I2P that is used to request URL 
 msgstr "En kommandolinje-applikation, som medfølger I2P, der bruges til at anmode om URL-ressourcer, lignende <a href=https://www.gnu.org/software/wget/ class='sitelink external' target=_blank rel=noreferrer>wget</a> eller <a href=https://curl.haxx.se/ class='sitelink external' target=_blank rel=noreferrer>curl</a>. Eepget bruges også internt af routeren, f.eks. til at omplante fra eksterne kilder. Som standard bruger eepget HTTP-proxyen på <code>127.0.0.1:4444</code>."
 
 msgid "Eephead"
-msgstr "Eephead"
+msgstr "Ørehoved"
 
 msgid "A command-line application supplied with I2P+ (Linux/MacOS) that is used to perform a <code>head</code> request on a specified http resource on the network, returning various response headers from the remote server. By default, eephead uses the HTTP proxy on <code>127.0.0.1:4444</code>."
 msgstr "En kommandolinje-applikation, der medfølger I2P+ (Linux/MacOS) og bruges til at udføre en <code>head</code>-forespørgsel på en specificeret http-ressource på netværket og returnere forskellige svarhoveder fra den fjerntliggende server. Som standard bruger eephead HTTP-proxyen på <code>127.0.0.1:4444</code>."
@@ -6889,7 +6889,7 @@ msgid "A router on the network tasked with providing and receiving information a
 msgstr "En router på netværket, der er ansvarlig for at levere og modtage oplysninger om andre routere og tjenester på netværket. Den aktuelle minimum fælles båndbredde for en router for at blive betragtet som i stand til at udføre floodfill-opgaver er 128 KBytes / sek, men det er muligt at overskrive denne krav og tvinge en router til at være en floodfill på <a href = /configadvanced>Avanceret konfigurationsside</a>. For mere information, se <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>den online dokumentation</a>."
 
 msgid "Garlic Routing"
-msgstr "Garlic Routing"
+msgstr "Hvidløgsdirigering"
 
 msgid "A variant of onion routing that encrypts multiple messages together to make it more difficult for attackers to perform traffic analysis and to increase the speed of data transfer. For more information, see the <a href=https://geti2p.net/en/docs/how/garlic-routing class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
 msgstr "En variant af løg-routing, der krypterer flere beskeder sammen for at gøre det sværere for angribere at udføre trafikanalyse og for at øge hastigheden på datatransmissionen. For mere information, se <a href=https://geti2p.net/en/docs/how/garlic-routing class='sitelink external' target=_blank rel=noreferrer>den online dokumentation</a>."
@@ -6931,7 +6931,7 @@ msgid "A fork of the <a href=http://www.klomp.org/snark/ class='sitelink externa
 msgstr "En forgænger af <a href=http://www.klomp.org/snark/ class='sitelink external' target=_blank rel=noreferrer>Snark BitTorrent-klienten</a> omskrevet til brug på I2P-netværket. Normalt leveres som en del af standardapplikationssuiten med Java I2P og kan også fås som en <a href=http://skank.i2p/#download class=sitelink target=_blank rel=noreferrer>standalone Java-applikation</a>."
 
 msgid "Introducer"
-msgstr "Introducer"
+msgstr "introduktor"
 
 msgid "A router that facilitates the connection to the network of another router that is behind a firewall."
 msgstr "En router, der let faciliterer forbindelsen til et andet routers netværk, der befinder sig bag en firewall."
@@ -6949,7 +6949,7 @@ msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatica
 msgstr "En <a href=/confignet#ipchange>valgfri konfiguration</a>, der automatisk ændrer din <a href=/netdb?r=.>routers identitet</a> og <a href=/confignet#udpconfig>ekstern port</a>, når den offentlige ip-adresse på dit system ændres. Dette kan forhindre en modstander i at korrelere din routers identitet og ip-adresse i situationer, hvor din ip-adresse kan ændre sig hyppigt, for eksempel når du kører I2P på en bærbar computer fra forskellige steder."
 
 msgid "Lease"
-msgstr "Lease"
+msgstr "Leje"
 
 msgid "The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>."
 msgstr "Oplysningerne, der definerer autorisationen for en bestemt tunnel til at modtage beskeder, der er rettet mod en <i>Destination</i>."
@@ -6958,7 +6958,7 @@ msgid "A group of tunnel entry points (leases) for a <i>destination</i>. Note: A
 msgstr "En gruppe tunnelindgangspunkter (leases) for en <i>destination</i>. Bemærk: En 0-hop server tunnel vil kun have en enkelt lease, uanset antallet af konfigurerede tunneler."
 
 msgid "Monotone / mtn"
-msgstr "Monotone / mtn"
+msgstr "Monoton/mtn"
 
 msgid "The distributed version control system (DVCS) previously used to maintain I2P's source code, now superseded by git."
 msgstr "Den distribuerede versionskontrol (DVCS), der tidligere blev brugt til at vedligeholde I2P's kildekode, er nu erstattet af git."
@@ -6973,7 +6973,7 @@ msgid "A distributed database containing router contact information (RouterInfos
 msgstr "En distribueret database, der indeholder routernes kontaktoplysninger (RouterInfos) og destinationskontaktoplysninger (LeaseSets). En enkelt router opretholder sin egen (delvise) database til kommunikation med andre routere i netværket; ingen enkelt router vil opretholde en liste over alle routere. RouterInfos gemmes på disken og læses ind i hukommelsen, når routeren starter, eller når der erhverves nye RouterInfos. Også kendt som <i>NetDb</i>. For mere information, se <a href=https://geti2p.net/en/docs/how/network-database class='sitelink external' target=_blank rel=noreferrer>online-dokumentationen</a>."
 
 msgid "NTCP / NTCP2"
-msgstr "NTCP / NTCP2"
+msgstr "NTCP/NTCP2"
 
 msgid "NTCP (NIO-based TCP) and NTCP2 are TCP-based network transports which use Java's NIO (New I/O) TCP implementation to deliver I2NP messages between routers on the network. NTCP2 improves the resistance of NTCP to various attacks and automated traffic identification methods. For more information, see the <a href=https://geti2p.net/en/docs/transport/ntcp class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
 msgstr "NTCP (NIO-baseret TCP) og NTCP2 er TCP-baserede netværkstransporter, der bruger Javas NIO (New I/O) TCP-implementering til at levere I2NP-meddelelser mellem routere på netværket. NTCP2 forbedrer modstanden af NTCP mod forskellige angreb og automatiske trafikidentifikationsmetoder. For mere information, se <a href=https://geti2p.net/en/docs/transport/ntcp class='sitelink external' target=_blank rel=noreferrer>onlinedokumentationen</a>."
@@ -7202,7 +7202,7 @@ msgid "Any combination of:"
 msgstr "Enhver kombination af:"
 
 msgid "Router version"
-msgstr "Router version"
+msgstr "Routerversion"
 
 msgid "Router uptime in milliseconds"
 msgstr "Router oppetid i millisekunder"
@@ -7283,7 +7283,7 @@ msgid "NTCP Transport Settings:"
 msgstr "NTCP Transportindstillinger:"
 
 msgid "NTCP port (1-65535)"
-msgstr "NTCP port (1-65535)"
+msgstr "NTCP-port (1-65535)"
 
 msgid "NTCP hostname"
 msgstr "NTCP værtsnavn"
@@ -7295,7 +7295,7 @@ msgid "SSU Transport Settings:"
 msgstr "SSU Transportindstillinger:"
 
 msgid "SSU port (1-65535)"
-msgstr "SSU port (1-65535)"
+msgstr "SSU-port (1-65535)"
 
 msgid "SSU hostname"
 msgstr "SSU værtsnavn"
@@ -7779,7 +7779,7 @@ msgid "A tunnel filter can provide protection against denial of service attacks,
 msgstr "En tunnel filtrering kan give beskyttelse mod denial of service-angreb, uden at afbryde servicen for legitime brugere, enten i sammenhæng med tunnels throttler eller som en alternativ strategi. Det kan også bruges til at logge adgang til en hosted service for at afgøre, om serveren er under angreb eller simpelthen at logge alle besøgende efter I2P destination. Derudover kan en filter fungere som en whitelist og blacklist samtidig og gøre det mere fleksibelt end Tunnel Managerens adgangskontrol. Bemærk, at flere servertunneler kan dele en enkelt filterfil, hvis du ønsker at implementere en global filtrering."
 
 msgid "A filter is a text file that can contain one or more declarations. Blank lines and lines beginning with <i class=example>#</i> are ignored."
-msgstr "Et filter er en tekstfil, der kan indeholde en eller flere deklarationer. "
+msgstr "Et filter er en tekstfil, der kan indeholde en eller flere deklarationer."
 
 msgid "A declaration will contain a directive (keyword) with parameters to define the scope of the declaration, and can represent one of the following:"
 msgstr "En erklæring vil indeholde et direktiv (søgeord) med parametre til at definere omfanget af erklæringen og kan repræsentere et af følgende:"
@@ -7892,11 +7892,11 @@ msgstr "Bemærk: Mange af etiketterne og indstillingerne i konsollen har værkt�
 msgid "Theme Overrides"
 msgstr "Overstyring af tema"
 
-msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr "I2P+ understøtter brugerdefinerede temaoversættelser til konsollen, tunnelhåndteringen, I2PSnark, SusiDNS og Susimail, hvilket tillader ændringer i temaer, der er vedvarende efter opgraderinger. For at aktivere en oversættelse, skal du oprette en CSS-fil, der hedder <code> override.css </code> med dine temamodifikationer og placere den i den relevante tema-mappe på det tema, du ønsker at ændre, eller omdøbe en af de eksempelfiler og derefter hardopdater browseren. Bemærk, at tunnelhåndteringen og konsollen deler samme override.css. For at deaktivere en oversættelse skal du slette eller omdøbe filen <code> override.css </code> og derefter hardopdater din browser (normalt Control + Shift + R)."
+msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Webmail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
+msgstr "I2P+ understøtter brugerdefinerede temaoversættelser til konsollen, tunnelhåndteringen, Torrents, DNS og Webmail, hvilket tillader ændringer i temaer, der er vedvarende efter opgraderinger. For at aktivere en oversættelse, skal du oprette en CSS-fil, der hedder <code> override.css </code> med dine temamodifikationer og placere den i den relevante tema-mappe på det tema, du ønsker at ændre, eller omdøbe en af de eksempelfiler og derefter hardopdater browseren. Bemærk, at tunnelhåndteringen og konsollen deler samme override.css. For at deaktivere en oversættelse skal du slette eller omdøbe filen <code> override.css </code> og derefter hardopdater din browser (normalt Control + Shift + R)."
 
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
-msgstr "Temandirectoryn er placeret i I2P-applikationsmappen under <code> docs / themes </code>. Der er eksempeloversættelsesfiler i konsol- og I2PSnark-temamapperne."
+msgstr "Temandirectoryn er placeret i I2P-applikationsmappen under <code> docs / themes </code>. Der er eksempeloversættelsesfiler i konsol- og Torrents-temamapperne."
 
 msgid "Sidebar Information"
 msgstr "Sidebjælkeinformation"
@@ -7917,7 +7917,7 @@ msgid "The skew (offset) of your computer's clock relative to the network-synced
 msgstr "Skævheden (forskydningen) af din computers ur i forhold til det netværkssynkroniserede tidspunkt (hvis kendt). I2P kræver, at din computers tid er nøjagtig. Hvis skævheden er mere end et par sekunder, skal du rette problemet ved at justere din computers tid. Hvis I2P ikke kan oprette forbindelse til internettet, kan der angives en læsning af 0ms. Bemærk: Dette vises kun i afsnittet <i>Routerinformation (avanceret)</i>. Du kan tilføje dette afsnit til din sidebjælke på siden <a href='/configsidebar'>Sidebar Configuration</a>."
 
 msgid "This indicates the amount of RAM I2P is using, and the total amount available, allocated by Java. If the usage is consistently high relative to the available RAM, this may indicate that you need to increase the ram allocated to the JVM. You can allocate more RAM by editing your <code>wrapper.config</code> file which is normally located in the I2P application directory. You will need to edit the <code>wrapper.java.maxmemory</code> parameter, which by default is set to 256(MB) for I2P, or 384 for I2P+. Note: if the memory bar is enabled, the memory entry in the router info section will be suppressed."
-msgstr "Dette angiver mængden af RAM, som I2P bruger, og den samlede tilgængelige mængde, som er tildelt af Java. Hvis brugen er konsekvent høj i forhold til den tilgængelige RAM, kan dette indikere, at du skal øge RAM'en, der er allokeret til JVM'en. Du kan tildele mere RAM ved at redigere filen <code>wrapper.config</code>, som normalt er placeret i I2P-applikationsmappen. Du skal redigere parameteren <code>wrapper.java.maxmemory</code>, som som standard er indstillet til 256 (MB) for I2P eller 384 for I2P+. Bemærk: Hvis hukommelsesbjælken er aktiveret, undertrykkes hukommelsesindgangen i routeroplysningerne. "
+msgstr "Dette angiver mængden af RAM, som I2P bruger, og den samlede tilgængelige mængde, som er tildelt af Java. Hvis brugen er konsekvent høj i forhold til den tilgængelige RAM, kan dette indikere, at du skal øge RAM'en, der er allokeret til JVM'en. Du kan tildele mere RAM ved at redigere filen <code>wrapper.config</code>, som normalt er placeret i I2P-applikationsmappen. Du skal redigere parameteren <code>wrapper.java.maxmemory</code>, som som standard er indstillet til 256 (MB) for I2P eller 384 for I2P+. Bemærk: Hvis hukommelsesbjælken er aktiveret, undertrykkes hukommelsesindgangen i routeroplysningerne."
 
 msgid "The first number is the number of peers your router has sent or received a message from in the last few minutes. This may range from 8-10 to several hundred, depending on your total bandwidth, shared bandwidth, and locally-generated traffic. The second number is the number of peers seen in the last hour or so. Do not be concerned if these numbers vary widely. <a href='/configstats#router.activePeers'>[Enable graphing]</a>."
 msgstr "Det første nummer er antallet af peers, som din router har sendt eller modtaget en besked fra i de sidste par minutter. Dette kan variere fra 8-10 til flere hundrede, afhængigt af din samlede båndbredde, delt båndbredde og lokalt genereret trafik. Det andet nummer er antallet af peers, der er set i den sidste time eller deromkring. Du behøver ikke bekymre dig, hvis disse tal varierer meget. <a href='/configstats#router.activePeers'>[Aktivér graf]</a>."
@@ -8295,7 +8295,7 @@ msgid "Router Summary"
 msgstr "Routeroversigt"
 
 msgid "Jar File Dump"
-msgstr "Jar File Dump"
+msgstr "Krukkefildump"
 
 msgid "job queue stats"
 msgstr "jobkøstatistik"
@@ -8319,7 +8319,7 @@ msgid "Job Queue Stats"
 msgstr "Jobkøstatistik"
 
 msgid "Login"
-msgstr "Login"
+msgstr "Log på"
 
 msgid "Setup"
 msgstr "Opsætning"
@@ -8488,7 +8488,7 @@ msgid "torrents"
 msgstr "torrents"
 
 msgid "Torrent Manager"
-msgstr "Torrent Manager"
+msgstr "Torrent manager"
 
 msgid "Most Recent Transit Tunnels"
 msgstr "Seneste transittunneler"
@@ -8646,7 +8646,7 @@ msgid "Browser Setup"
 msgstr "Browseropsætning"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr "For at få adgang til hjemmesider hostet på I2P-netværket og valgfrit bruge standard outproxy til at forbinde til websteder på clearnet, skal du konfigurere din browser til at bruge I2P+ <b>HTTP</b> proxy, der som standard kører på <code>127.0.0.1 port 4444</code>. "
+msgstr "For at få adgang til hjemmesider hostet på I2P-netværket og valgfrit bruge standard outproxy til at forbinde til websteder på clearnet, skal du konfigurere din browser til at bruge I2P+ <b>HTTP</b> proxy, der som standard kører på <code>127.0.0.1 port 4444</code>."
 
 msgid "Welcome to I2P+!"
 msgstr "Velkommen til I2P+!"

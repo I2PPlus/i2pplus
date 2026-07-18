@@ -52,7 +52,7 @@ msgid "unknown"
 msgstr "bilinmiyor"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr "Gizliliğinizi korumak amacıyla, SusiMail bu HTML mesajındaki JavaScript'i ve içerdiği tüm uzak içerikleri engelliyor."
+msgstr "Gizliliğinizi korumak amacıyla, Web posta bu HTML mesajındaki JavaScript'i ve içerdiği tüm uzak içerikleri engelliyor."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "Daha iyi sunum ve ek özellikler için JavaScript'i etkinleştirin."
@@ -220,7 +220,7 @@ msgstr "{0}, {1} tarafından sağlanan I2P'ye özel bir hizmettir."
 
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr "{0} webmail client &copy Susi 2004-2005."
+msgstr "{0} web posta istemcisi ve kopya Susi 2004-2005."
 
 msgid "Checking for new messages on server"
 msgstr "Sunucu üzerindeki yeni e-postalar denetleniyor"

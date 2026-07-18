@@ -26,7 +26,7 @@ msgstr "호스트 이름은 \"{0}\"을 포함할 수 없음"
 
 #, java-format
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
-msgstr "호스트 이름 \"{0}\"은(는) ASCII로 변환해야 하지만 이 JVM에서는 변환 라이브러리를 사용할 수 없습니다.호스트 이름 \"{0}\"은 ASCII 글자로 치환이 필요하지만 변환 라이브러리가 해당 JVM 에서 지원되지 않습니다"
+msgstr "호스트 이름 \"{0}\"은(는) ASCII로 변환해야 하지만 이 JVM에서는 변환 라이브러리를 사용할 수 없습니다."
 
 msgid "Source"
 msgstr "출저"
@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "파일에서 가져옴"
 
 msgid "Manually added via SusiDNS"
-msgstr "SusiDNS를 통해 수동으로 저장됨"
+msgstr "DNS를 통해 수동으로 저장됨"
 
 msgid "Manually added"
 msgstr "수동으로 추가됨"
@@ -69,10 +69,10 @@ msgid "Type {0}"
 msgstr "{0} 타입"
 
 msgid "DSA 1024 bit"
-msgstr "DSA 1024 bit"
+msgstr "DSA 1024비트"
 
 msgid "ElGamal 2048 bit"
-msgstr "ElGamal 2048 bit"
+msgstr "엘가말 2048비트"
 
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
@@ -105,7 +105,7 @@ msgstr "호스트 이름 {0}은 이미 주소록에 있습니다, 변경안됨."
 
 #, java-format
 msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
-msgstr "호스트 이름 {0}이(가) 이미 다른 대상의 주소록에 있습니다. 호스트 이름 {0}은 이미 다른 목적지를 가지고 주소록에 있습니다. 목적지를 변경하려면 \"교체\" 하세요."
+msgstr "호스트 이름 {0}이(가) 이미 다른 대상의 주소록에 있습니다. \"교체\"를 클릭하여 덮어쓰세요."
 
 msgid "Unable to resolve Base 32 address"
 msgstr "Base 32 주소를 확인할 수 없습니다."
@@ -260,7 +260,7 @@ msgid "Subscriptions reloaded."
 msgstr "구독 다시 불러옴."
 
 msgid "Import"
-msgstr "내보내기"
+msgstr "가져오기"
 
 msgid "address book"
 msgstr "주소록"
@@ -296,7 +296,7 @@ msgid "No entries"
 msgstr "항목이 없습니다."
 
 msgid "Add new destination"
-msgstr "새 목적지 축"
+msgstr "새 목적지 추가"
 
 msgid "Import from hosts.txt file"
 msgstr "hosts.txt 파일에서 가져오기"
@@ -479,7 +479,7 @@ msgid "addressbook"
 msgstr "주소록"
 
 msgid "Details"
-msgstr "디테일"
+msgstr "세부 사항"
 
 msgid "Address Helper"
 msgstr "주소록 도우미"
@@ -500,7 +500,7 @@ msgid "Public Key"
 msgstr "공개키"
 
 msgid "Signing Key"
-msgstr "키 사인"
+msgstr "서명 키"
 
 msgid "Certificate"
 msgstr "인증서"
@@ -599,13 +599,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "구독 URL 리스트들을 확인하려면 FAQ를 참조하세요."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "SusiDNS가 라우터 주소록을 게시하도록 구성된 경우 해당 항목은 게시된 주소록에 표시되고 공유를 위해 호스트.txt 파일에 저장됩니다."
+msgstr "DNS가 라우터 주소록을 게시하도록 구성된 경우 해당 항목은 게시된 주소록에 표시되고 공유를 위해 호스트.txt 파일에 저장됩니다."
 
 msgid "Published Addressbook"
 msgstr "게시된 주소록"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "라우터 주소록을 게시된 주소록에 푸시하도록 SusiDNS를 구성하려면 구성 페이지에서 'should_publish=true'를 설정하세요."
+msgstr "라우터 주소록을 게시된 주소록에 푸시하도록 DNS를 구성하려면 구성 페이지에서 'should_publish=true'를 설정하세요."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "여기 또는 마스터 주소록에 수동으로 추가한 호스트 외에 구독에서 파생된 모든 호스트가 이 주소록에 표시됩니다."
@@ -656,7 +656,7 @@ msgid "for websites"
 msgstr "웹사이트용"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "라우터 주소록을 게시하도록 SusiDNS를 구성하면 모든 호스트가 포함된 호스트.txt 파일을 내보냅니다(기본적으로 eepsite의 루트로)."
+msgstr "라우터 주소록을 게시하도록 DNS를 구성하면 모든 호스트가 포함된 호스트.txt 파일을 내보냅니다(기본적으로 eepsite의 루트로)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "마스터 주소록에 수동으로 추가된 주소는 라우터 주소록과 병합됩니다."

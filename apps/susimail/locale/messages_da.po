@@ -25,7 +25,7 @@ msgid "Re:"
 msgstr "Re:"
 
 msgid "Fwd:"
-msgstr "Fwd:"
+msgstr "Vidresend"
 
 msgid "Drafts"
 msgstr "Udkast"
@@ -52,7 +52,7 @@ msgid "unknown"
 msgstr "ukendt"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr "For at beskytte din privatliv, blokerer SusiMail JavaScript og ethvert fjernindhold indeholdt i denne HTML-besked."
+msgstr "For at beskytte din privatliv, blokerer Webmail JavaScript og ethvert fjernindhold indeholdt i denne HTML-besked."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "Aktivér JavaScript til forbedret visning og ekstra funktioner."
@@ -220,7 +220,7 @@ msgstr "{0} er en I2P-eksklusiv tjeneste leveret af {1}."
 
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr "{0} webmail client &copy Susi 2004-2005."
+msgstr "{0} webmail klient &kopi Susi 2004-2005."
 
 msgid "Checking for new messages on server"
 msgstr "Søger efter nye beskeder på serveren"
@@ -264,7 +264,7 @@ msgid "Save as Draft"
 msgstr "Gem som kladde"
 
 msgid "Send"
-msgstr "Send"
+msgstr "Sende"
 
 msgid "From"
 msgstr "Fra"
@@ -294,7 +294,7 @@ msgid "Delete selected attachments"
 msgstr "Slet valgte vedhæftede filer"
 
 msgid "I2PMail Login"
-msgstr "I2PMail Login"
+msgstr "I2PMail-login"
 
 msgid "User"
 msgstr "Bruger"

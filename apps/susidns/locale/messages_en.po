@@ -37,7 +37,7 @@ msgstr ""
 msgid "Imported from file"
 msgstr ""
 
-msgid "Manually added via SusiDNS"
+msgid "Manually added via DNS"
 msgstr ""
 
 msgid "Manually added"
@@ -606,13 +606,13 @@ msgstr ""
 msgid "See the FAQ for a list of subscription URLs."
 msgstr ""
 
-msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgid "If DNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
 msgstr ""
 
 msgid "Published Addressbook"
 msgstr ""
 
-msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgid "To configure DNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
 msgstr ""
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
@@ -663,7 +663,7 @@ msgstr ""
 msgid "for websites"
 msgstr ""
 
-msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgid "If you configure DNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
 msgstr ""
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."

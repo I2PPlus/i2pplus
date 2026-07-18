@@ -30,7 +30,7 @@ msgid "Downloading"
 msgstr "Stahování"
 
 msgid "Configuring I2PSnark with I2CP options"
-msgstr "Konfigurace I2PSnark s možnostmi I2CP"
+msgstr "Konfigurace Torrenty s možnostmi I2CP"
 
 msgid "No write permissions for data directory"
 msgstr "Žádná oprávnění k zápisu do datového adresáře"
@@ -63,7 +63,7 @@ msgid "Download speed limit is {0}KB/s"
 msgstr "Limit rychlosti stahování je {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr "Poznámka: Abyste provedli tuto změnu, možná budete muset zastavit a restartovat torrenty nebo restartovat I2PSnark."
+msgstr "Poznámka: Abyste provedli tuto změnu, možná budete muset zastavit a restartovat torrenty nebo restartovat Torrenty."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Povoleno náhodné přeskočení +0/1 na příchozích tunelích"
@@ -248,7 +248,7 @@ msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "CHYBA - nedostatek paměti, nemohu vytvořit torrent z {0}"
 
 msgid "Initializing I2PSnark and opening tunnels"
-msgstr "Inicializace I2PSnark a otevření tunelů"
+msgstr "Inicializace Torrenty a otevření tunelů"
 
 #, java-format
 msgid "Torrent added and started: {0}"
@@ -384,7 +384,7 @@ msgid "Download finished: {0}"
 msgstr "Stahování dokončeno: {0}"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrenty"
 
 #, java-format
 msgid "Starting torrent: {0}"
@@ -558,10 +558,10 @@ msgid "No DHT Peers"
 msgstr "Žádní DHT Peers"
 
 msgid "Status"
-msgstr "Status"
+msgstr "Postavení"
 
 msgid "Torrent"
-msgstr "Torrent"
+msgstr "Torrent se všemi díly: NyaaTorrents."
 
 msgid "File type"
 msgstr "Typ souboru"
@@ -570,16 +570,16 @@ msgid "Torrent name"
 msgstr "Název torrentu"
 
 msgid "ETA"
-msgstr "ETA"
+msgstr "Plán dokončení"
 
 msgid "RX"
-msgstr "RX"
+msgstr "Recept"
 
 msgid "RX Rate"
 msgstr "Míra stahování"
 
 msgid "TX"
-msgstr "TX"
+msgstr "Léčebný postup NOS"
 
 msgid "TX Rate"
 msgstr "Míra nahrávání"
@@ -942,7 +942,7 @@ msgid "seconds"
 msgstr "sekund"
 
 msgid "Seed"
-msgstr "Seed"
+msgstr "K setí"
 
 msgid "Uninteresting (The peer has no pieces we need)"
 msgstr "Nezajímavý (Ten kolega nemá žádné kousky, které potřebujeme)"
@@ -1164,13 +1164,13 @@ msgid "Auto start torrents"
 msgstr "Automatické spouštění torrentů"
 
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "Automaticky spouštět torrenty po přidání a restartovat torrenty, když se spustí I2PSnark"
+msgstr "Automaticky spouštět torrenty po přidání a restartovat torrenty, když se spustí Torrenty"
 
 msgid "Startup delay"
 msgstr "Zpoždění spouštění"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Za jak dlouho se načtou automaticky spouštěné torrenty při spuštění I2PSnark"
+msgstr "Za jak dlouho se načtou automaticky spouštěné torrenty při spuštění Torrenty"
 
 msgid "minutes"
 msgstr "minut"
@@ -1203,7 +1203,7 @@ msgid "Our destination (identity) for this session"
 msgstr "Náš cíl (identita) pro tuto relaci"
 
 msgid "Dest."
-msgstr "Dest."
+msgstr "Cíl"
 
 msgid "Inbound Settings"
 msgstr "Příchozí nastavení"
@@ -1266,7 +1266,7 @@ msgid "Add"
 msgstr "Přidat"
 
 msgid "Select trackers for removal from I2PSnark's known list"
-msgstr "Vyberte sledovače k ​​odstranění ze známého seznamu I2PSnarku"
+msgstr "Vyberte sledovače k ​​odstranění ze známého seznamu Torrentsu"
 
 msgid "Website URL"
 msgstr "URL webu"
@@ -1486,7 +1486,7 @@ msgid "Delete Selected"
 msgstr "Smazat vybrané"
 
 msgid "File downloading priorities updated for torrent "
-msgstr "Priority stahování souborů aktualizovány pro torrent "
+msgstr "Priorita stahování souborů aktualizována pro torrent "
 
 msgid "Edit Torrent"
 msgstr "Upravit Torrent"

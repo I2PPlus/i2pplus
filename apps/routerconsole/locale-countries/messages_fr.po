@@ -1,13 +1,7 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 msgid ""
-msgstr ""
-"Language: fr\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-
+msgstr "Language: fr\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n > 1);\n"
 msgid "Anonymous Proxy"
 msgstr "Mandataire anonyme"
 
@@ -93,7 +87,7 @@ msgid "Burundi"
 msgstr "Burundi"
 
 msgid "Benin"
-msgstr "Benin"
+msgstr "Bénin"
 
 msgid "Saint Barthélemy"
 msgstr "Saint-Barthélemy"
@@ -102,7 +96,7 @@ msgid "Bermuda"
 msgstr "Bermudes"
 
 msgid "Brunei Darussalam"
-msgstr "Brunei Darussalam"
+msgstr "Brunéi Darussalam"
 
 msgid "Bolivia"
 msgstr "Bolivie"
@@ -264,7 +258,7 @@ msgid "French Guiana"
 msgstr "Guyane française"
 
 msgid "Guernsey"
-msgstr "Guernsey"
+msgstr "Guernesey"
 
 msgid "Ghana"
 msgstr "Ghana"
@@ -342,7 +336,7 @@ msgid "Iraq"
 msgstr "Irak"
 
 msgid "Iran"
-msgstr "Iran"
+msgstr "L'Iran"
 
 msgid "Iceland"
 msgstr "Islande"
@@ -462,7 +456,7 @@ msgid "Mongolia"
 msgstr "Mongolie"
 
 msgid "Macau"
-msgstr "Macau"
+msgstr "Macao"
 
 msgid "Northern Mariana Islands"
 msgstr "Mariannes"
@@ -528,7 +522,7 @@ msgid "Nauru"
 msgstr "Nauru"
 
 msgid "Niue"
-msgstr "Niue"
+msgstr "Nioué"
 
 msgid "New Zealand"
 msgstr "Nouvelle-Zélande"
@@ -669,7 +663,7 @@ msgid "French Southern Territories"
 msgstr "Terres australes et antarctiques françaises"
 
 msgid "Togo"
-msgstr "Togo"
+msgstr "Aller"
 
 msgid "Thailand"
 msgstr "Thaïlande"
@@ -678,7 +672,7 @@ msgid "Tajikistan"
 msgstr "Tadjikistan"
 
 msgid "Tokelau"
-msgstr "Tokelau"
+msgstr "Tokélaou"
 
 msgid "Timor-Leste"
 msgstr "Timor oriental"
@@ -702,7 +696,7 @@ msgid "Tuvalu"
 msgstr "Tuvalu"
 
 msgid "Taiwan"
-msgstr "Taiwan"
+msgstr "Taïwan"
 
 msgid "Tanzania"
 msgstr "Tanzanie"
@@ -738,7 +732,7 @@ msgid "Virgin Islands"
 msgstr "Ïles Vierges"
 
 msgid "Vietnam"
-msgstr "Vietnam"
+msgstr "Viêt Nam"
 
 msgid "Vanuatu"
 msgstr "Vanuatu"

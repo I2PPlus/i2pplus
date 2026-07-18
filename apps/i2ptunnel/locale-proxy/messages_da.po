@@ -35,10 +35,10 @@ msgid "Host"
 msgstr "Vært"
 
 msgid "Base32"
-msgstr "Base32"
+msgstr "Base 32"
 
 msgid "Destination"
-msgstr "Destination"
+msgstr "Bestemmelsessted"
 
 #, java-format
 msgid "Continue to {0} without saving"
@@ -154,7 +154,7 @@ msgid "Go back and fix the error"
 msgstr "Gå tilbage og ret fejlen"
 
 msgid "router"
-msgstr "router"
+msgstr "ruter"
 
 msgid "master"
 msgstr "hoved"

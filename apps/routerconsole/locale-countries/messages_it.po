@@ -1,13 +1,7 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 msgid ""
-msgstr ""
-"Language: it\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
+msgstr "Language: it\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n != 1);\n"
 msgid "Anonymous Proxy"
 msgstr "Proxy anonimo"
 
@@ -39,7 +33,7 @@ msgid "Netherlands Antilles"
 msgstr "Antille olandesi"
 
 msgid "Angola"
-msgstr "Angola"
+msgstr "L'Angola"
 
 msgid "Asia/Pacific Region"
 msgstr "Asia/Pacifico"
@@ -351,7 +345,7 @@ msgid "Italy"
 msgstr "Italia"
 
 msgid "Jersey"
-msgstr "Jersey"
+msgstr "Maglia"
 
 msgid "Jamaica"
 msgstr "Giamaica"
@@ -363,7 +357,7 @@ msgid "Japan"
 msgstr "Giappone"
 
 msgid "Kenya"
-msgstr "Kenya"
+msgstr "Kenia"
 
 msgid "Kyrgyzstan"
 msgstr "Kirghizistan"
@@ -471,7 +465,7 @@ msgid "Martinique"
 msgstr "Martinica"
 
 msgid "Mauritania"
-msgstr "Mauritania"
+msgstr "La Mauritania"
 
 msgid "Montserrat"
 msgstr "Isola di Montserrat"
@@ -480,7 +474,7 @@ msgid "Malta"
 msgstr "Malta"
 
 msgid "Mauritius"
-msgstr "Mauritius"
+msgstr "Maurizio"
 
 msgid "Maldives"
 msgstr "Maldive"
@@ -564,7 +558,7 @@ msgid "Pitcairn Islands"
 msgstr "Isole Pitcairn"
 
 msgid "Puerto Rico"
-msgstr "Puerto Rico"
+msgstr "Porto Rico"
 
 msgid "Palestinian Territory"
 msgstr "Stato di Palestina"
@@ -582,7 +576,7 @@ msgid "Qatar"
 msgstr "Qatar"
 
 msgid "Réunion"
-msgstr "Réunion"
+msgstr "Riunione"
 
 msgid "Romania"
 msgstr "Romania"

@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Importowano z pliku"
 
 msgid "Manually added via SusiDNS"
-msgstr "Dodane ręcznie przez SusiDNS"
+msgstr "Dodane ręcznie przez DNS"
 
 msgid "Manually added"
 msgstr "Dodane ręcznie"
@@ -471,7 +471,7 @@ msgid "Whether to update the published addressbook"
 msgstr "Czy aktualizpwać opublikowaną książke adresową"
 
 msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
-msgstr "Plik zawierający nagłówek etagów z  pobranych subskrypcji URL (nie trzeba zmieniać)"
+msgstr "Plik zawierający nagłówek etagów z pobranych subskrypcji URL (nie trzeba zmieniać)"
 
 msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
 msgstr "Plik zawierający modifikacje znaczów czasu dla każdej pobranej subscrypcji URL (nie trzeba zmieniać)"
@@ -615,13 +615,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Więcej w FAQ dla listy subskrypcji adresów URL."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Jeżeli SusiDNS został skonfigurowany, aby publikować książkę adresową węzła, to wpisy pojawią się w publicznej książce adresowej i zostaną zapisane w pliku hosts.txt do udostępnienia."
+msgstr "Jeżeli DNS został skonfigurowany, aby publikować książkę adresową węzła, to wpisy pojawią się w publicznej książce adresowej i zostaną zapisane w pliku hosts.txt do udostępnienia."
 
 msgid "Published Addressbook"
 msgstr "Publiczna książka adresowa"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "Aby skonfigurować SusiDNS tak, aby wpisy książki adresowej węzła pojawiły się w publicznej książce adresowej, ustaw parametr „should_publish=true” na stronie konfiguracji."
+msgstr "Aby skonfigurować DNS tak, aby wpisy książki adresowej węzła pojawiły się w publicznej książce adresowej, ustaw parametr „should_publish=true” na stronie konfiguracji."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "Wszystkie adresy pobrane z subskrypcji pojawią się w tej książce adresowej, wraz z ręcznie dodanymi adresami do Twojej głównej książki adresowej."
@@ -672,7 +672,7 @@ msgid "for websites"
 msgstr "dla stron"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Jeżeli skonfigurujesz SusiDNS, aby publikować Twoją książkę adresową węzła, to zostanie wyeksportowany plik hosts.txt zawierający wszystkie domeny (domyślnie do katalogu głównego Twojego eepsite'a)."
+msgstr "Jeżeli skonfigurujesz DNS, aby publikować Twoją książkę adresową węzła, to zostanie wyeksportowany plik hosts.txt zawierający wszystkie domeny (domyślnie do katalogu głównego Twojego eepsite'a)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "Adresy ręcznie dodane do Twojej głównej książki adresowej zostaną scalone do książki adresowej węzła."

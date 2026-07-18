@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Εισήχθη από αρχείο"
 
 msgid "Manually added via SusiDNS"
-msgstr "Προστέθηκε μη αυτόματα μέσω SusiDNS"
+msgstr "Προστέθηκε μη αυτόματα μέσω DNS"
 
 msgid "Manually added"
 msgstr "Προστέθηκε χειροκίνητα"
@@ -274,7 +274,7 @@ msgid "address book"
 msgstr "βιβλίο διευθύνσεων"
 
 msgid "Router"
-msgstr "Router"
+msgstr "Δρομολογητής"
 
 msgid "Master"
 msgstr "Δάσκαλε"
@@ -607,13 +607,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Δείτε τις Συνήθεις Ερωτήσεις για μια λίστα με διευθύνσεις URL συνδρομής."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Εάν το SusiDNS έχει ρυθμιστεί να δημοσιεύει το βιβλίο διευθύνσεων του δρομολογητή σας, οι εγγραφές θα εμφανιστούν στο Δημοσιευμένο βιβλίο διευθύνσεων και θα αποθηκευτούν σε ένα αρχείο hosts.txt για κοινή χρήση."
+msgstr "Εάν το DNS έχει ρυθμιστεί να δημοσιεύει το βιβλίο διευθύνσεων του δρομολογητή σας, οι εγγραφές θα εμφανιστούν στο Δημοσιευμένο βιβλίο διευθύνσεων και θα αποθηκευτούν σε ένα αρχείο hosts.txt για κοινή χρήση."
 
 msgid "Published Addressbook"
 msgstr "Δημοσιευμένο Βιβλίο Διευθύνσεων"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "Για να διαμορφώσετε το SusiDNS ώστε να ωθεί το βιβλίο διευθύνσεων του δρομολογητή σας στο Δημοσιευμένο βιβλίο διευθύνσεων, ορίστε το 'should_publish=true' στη σελίδα διαμόρφωσης."
+msgstr "Για να διαμορφώσετε το DNS ώστε να ωθεί το βιβλίο διευθύνσεων του δρομολογητή σας στο Δημοσιευμένο βιβλίο διευθύνσεων, ορίστε το 'should_publish=true' στη σελίδα διαμόρφωσης."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "Όλοι οι κεντρικοί υπολογιστές που προέρχονται από συνδρομές θα εμφανίζονται σε αυτό το βιβλίο διευθύνσεων, εκτός από οποιονδήποτε προσθέτετε χειροκίνητα εδώ ή στο Βιβλίο διευθύνσεων Master."
@@ -664,7 +664,7 @@ msgid "for websites"
 msgstr "για ιστότοπους"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Εάν διαμορφώσετε το SusiDNS ώστε να δημοσιεύει το βιβλίο διευθύνσεων του δρομολογητή σας, θα εξαγάγει ένα αρχείο hosts.txt που περιέχει όλους τους κεντρικούς υπολογιστές (από προεπιλογή στη ρίζα του eepsite σας)."
+msgstr "Εάν διαμορφώσετε το DNS ώστε να δημοσιεύει το βιβλίο διευθύνσεων του δρομολογητή σας, θα εξαγάγει ένα αρχείο hosts.txt που περιέχει όλους τους κεντρικούς υπολογιστές (από προεπιλογή στη ρίζα του eepsite σας)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "Οι διευθύνσεις που προστέθηκαν χειροκίνητα στο Βιβλίο διευθύνσεων Master θα συγχωνευθούν με το βιβλίο διευθύνσεων του δρομολογητή."

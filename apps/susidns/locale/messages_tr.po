@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Dosyadan içeri aktarıldı"
 
 msgid "Manually added via SusiDNS"
-msgstr "SusiDNS üzerine el ile eklendi"
+msgstr "DNS üzerine el ile eklendi"
 
 msgid "Manually added"
 msgstr "El ile eklendi"
@@ -607,13 +607,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Abonelik URL'lerinin listesi için SSS'ye bakın.Abonelik İnternet adreslerinin listesi için SSS bölümüne bakabilirsiniz."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "SusiDNS, Yönlendirici adres defterinizi yayınlayacak şekilde yapılandırıldıysa, girişler Yayınlanan adres defterinizde görünecek ve paylaşım için bir hosts.txt dosyasına kaydedilecektir.SusiDNS Yönelticinizin adres defterini yayınlayacak şekilde yapılandırılmış ise, Kayıtlar yayınlanmış adres defterinizde görüntülenir ve paylaşılması için hosts.txt dosyasına kaydedilir."
+msgstr "DNS, Yönlendirici adres defterinizi yayınlayacak şekilde yapılandırıldıysa, girişler Yayınlanan adres defterinizde görünecek ve paylaşım için bir hosts.txt dosyasına kaydedilecektir.DNS Yönelticinizin adres defterini yayınlayacak şekilde yapılandırılmış ise, Kayıtlar yayınlanmış adres defterinizde görüntülenir ve paylaşılması için hosts.txt dosyasına kaydedilir."
 
 msgid "Published Addressbook"
 msgstr "Yayınlanmış Adres Defteri"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "SusiDNS'yi Yönlendirici adres defterinizi Yayınlanan adres defterinize gönderecek şekilde yapılandırmak için, yapılandırma sayfasında 'should_publish=true' değerini ayarlayın.SusiDNS tarafından Yöneltici adresinizin yayınlanmış adres defterine gönderilmesini sağlamak için, yapılandırma bölümünden 'should_publish=true' seçeneğini ayarlayın."
+msgstr "DNS'yi Yönlendirici adres defterinizi Yayınlanan adres defterinize gönderecek şekilde yapılandırmak için, yapılandırma sayfasında 'should_publish=true' değerini ayarlayın.DNS tarafından Yöneltici adresinizin yayınlanmış adres defterine gönderilmesini sağlamak için, yapılandırma bölümünden 'should_publish=true' seçeneğini ayarlayın."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "Aboneliklerden türetilen tüm ana bilgisayarlar, buraya veya Ana adres defterinize manuel olarak eklediğinizlere ek olarak bu adres defterinde görünecek.Aboneliklerden aktarılan tüm sunucular bu adres defterinde el ile ekledikleriniz ve Ana adres defterinden gelen kayıtlar ile birlikte görüntülenir."
@@ -664,7 +664,7 @@ msgid "for websites"
 msgstr "web siteleri için"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "SusiDNS'yi Yönlendirici adres defterinizi yayınlayacak şekilde yapılandırırsanız, tüm ana bilgisayarları içeren bir hosts.txt dosyasını (varsayılan olarak eepsitenizin köküne) aktaracaktır.Yönelticinizin adres defterini yayınlamak için SusiDNS kullanıyorsanız, tüm sunucu kayıtlarının bulunduğu bir hosts.txt dosyası dışa aktarılır (varsayılan olarak eepsitenizin kök klasörüne)."
+msgstr "DNS'yi Yönlendirici adres defterinizi yayınlayacak şekilde yapılandırırsanız, tüm ana bilgisayarları içeren bir hosts.txt dosyasını (varsayılan olarak eepsitenizin köküne) aktaracaktır.Yönelticinizin adres defterini yayınlamak için DNS kullanıyorsanız, tüm sunucu kayıtlarının bulunduğu bir hosts.txt dosyası dışa aktarılır (varsayılan olarak eepsitenizin kök klasörüne)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "Ana adres defterinize manuel olarak eklenen adresler, Yönlendirici adres defterinizle birleşecektir.Ana adres defterine el ile eklenmiş adresler Yöneltici adres defteriniz ile birleştirilir."

@@ -35,7 +35,7 @@ msgid "Host"
 msgstr "Tietokoneen nimi"
 
 msgid "Base32"
-msgstr "Base32"
+msgstr "Perus32"
 
 msgid "Destination"
 msgstr "Kohde"

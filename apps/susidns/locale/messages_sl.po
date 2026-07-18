@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Uvoženo iz datoteke"
 
 msgid "Manually added via SusiDNS"
-msgstr "Ročno dodano preko SusiDNS"
+msgstr "Ročno dodano preko DNS"
 
 msgid "Manually added"
 msgstr "Ročno dodano"
@@ -623,13 +623,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Oglejte FAQ za seznam URL-jev prijav."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Če je SusiDNS nastavljen na objavo vašega imenika naslovov maršrutnika, se vnos v vašem objavljenem imeniku naslovov pojavi in shrani v datoteko hosts.txt za deljenje."
+msgstr "Če je DNS nastavljen na objavo vašega imenika naslovov maršrutnika, se vnos v vašem objavljenem imeniku naslovov pojavi in shrani v datoteko hosts.txt za deljenje."
 
 msgid "Published Addressbook"
 msgstr "Objavljeni imenik naslovov"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "Da nastavite SusiDNS, da vaš imenik naslovov maršrutnika pošlje v vaš objavljeni imenik naslovov, nastavite 'should_publish=true' na strani konfiguracije."
+msgstr "Da nastavite DNS, da vaš imenik naslovov maršrutnika pošlje v vaš objavljeni imenik naslovov, nastavite 'should_publish=true' na strani konfiguracije."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "Vsi gostitelji, ki so izvedeni iz prijav, se bodo pojavili v tem imeniku naslovov, poleg tistih, ki jih ročno dodate tukaj ali v svoj glavni imenik naslovov."
@@ -680,7 +680,7 @@ msgid "for websites"
 msgstr "za spletna mesta"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Če nastavite SusiDNS, da objavi vaš imenik naslovov maršrutnika, bo izvozil datoteko hosts.txt, ki vsebuje vse gostitelje (privzeto v korena vašega eepsite)."
+msgstr "Če nastavite DNS, da objavi vaš imenik naslovov maršrutnika, bo izvozil datoteko hosts.txt, ki vsebuje vse gostitelje (privzeto v korena vašega eepsite)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "Naslovi, ki jih ročno dodate v svoj glavni imenik naslovov, se bodo združili z vašim imenikom naslovov maršrutnika."

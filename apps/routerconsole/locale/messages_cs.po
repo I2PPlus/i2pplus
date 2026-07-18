@@ -9,7 +9,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
 
 msgid "Hash"
-msgstr "Hash"
+msgstr "hash"
 
 msgid "Banned by Router Hash"
 msgstr "Zakázáno Routerem Hash"
@@ -160,16 +160,16 @@ msgid "WAN Common Interface Configuration"
 msgstr "WAN Obvyklé Nastavení Rozhraní"
 
 msgid "Status"
-msgstr "Status"
+msgstr "Postavení"
 
 msgid "Type"
 msgstr "Typ"
 
 msgid "Upstream"
-msgstr "Upstream"
+msgstr "Proti proudu"
 
 msgid "Downstream"
-msgstr "Downstream"
+msgstr "Po proudu"
 
 msgid "WAN PPP Connection"
 msgstr "WAN PPP Připojení"
@@ -770,7 +770,7 @@ msgid "IP Address"
 msgstr "IP adresa"
 
 msgid "Port"
-msgstr "Port"
+msgstr "Přístav"
 
 msgid "Hostname"
 msgstr "Název hostitele"
@@ -991,7 +991,7 @@ msgid "Run at Startup?"
 msgstr "Spustit při spuštění?"
 
 msgid "Control"
-msgstr "Control"
+msgstr "Řízení"
 
 msgid "Class and arguments"
 msgstr "Třída a argumenty"
@@ -1015,13 +1015,13 @@ msgid "Addressbook"
 msgstr "Adresář"
 
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
 
 msgid "Plugin"
 msgstr "Plugin"
 
 msgid "Author"
-msgstr "Author"
+msgstr "Autor"
 
 msgid "Signed by"
 msgstr "Podepsáno"
@@ -1537,7 +1537,7 @@ msgid "Restart immediately"
 msgstr "Okamžitě restartujte"
 
 msgid "Restart"
-msgstr "Restart"
+msgstr "Restartujte"
 
 msgid "Shutdown"
 msgstr "Vypnout"
@@ -1659,7 +1659,7 @@ msgid "Exploratory tunnels"
 msgstr "Průzkumné tunely"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrenty"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "ANONYMITY WARNING - Nastavení zahrnuje 0-hop tunely."
@@ -1722,7 +1722,7 @@ msgid "User name may not contain '='"
 msgstr "Uživatelské jméno nesmí obsahovat '='"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
-msgstr "Warning: Uživatelská jména mimo znakovou sadu ISO-8859-1 se nedoporučují. "
+msgstr "Varování: Uživatelská jména mimo znakovou sadu ISO-8859-1 se nedoporučují. "
 
 msgid "No password entered"
 msgstr "Nebylo zadáno žádné heslo"
@@ -1751,7 +1751,7 @@ msgid "Enabling the Universal Theming option is recommended when embedding these
 msgstr "Při vkládání těchto aplikací se doporučuje povolit možnost Universal Theming"
 
 msgid "Embed I2PSnark and I2PMail in the console"
-msgstr "Vložte I2PSnark a I2PMail do konzole"
+msgstr "Vložte Torrenty a I2PMail do konzole"
 
 msgid "Add a user and password to enable."
 msgstr "Chcete-li povolit, přidejte uživatele a heslo."
@@ -2149,7 +2149,7 @@ msgid "I2P Plugins"
 msgstr "I2P Pluginy"
 
 msgid "zzz's plugin repository"
-msgstr "zzz's plugin repository"
+msgstr "úložiště pluginů zzz"
 
 msgid "Historical infrastructure data from the I2P network"
 msgstr "Historická data infrastruktury z I2P sítě"
@@ -2224,7 +2224,7 @@ msgid "Pastebin"
 msgstr "Pastebin"
 
 msgid "Landing page for various services"
-msgstr "Landing page for various services"
+msgstr "Vstupní stránka pro různé služby"
 
 msgid "Streaming radio service"
 msgstr "Streamování rádiové služby"
@@ -2323,7 +2323,7 @@ msgid "Where news meets its scholarly match"
 msgstr "Tam, kde se zprávy setkávají s vědeckou shodou"
 
 msgid "Jurist"
-msgstr "Jurist"
+msgstr "Právník"
 
 msgid "Legal News &amp; Commentary"
 msgstr "Právní zprávy a komentáře"
@@ -3091,7 +3091,7 @@ msgid "to your router.config file."
 msgstr "do souboru router.config."
 
 msgid "Peer Connections"
-msgstr "Peer Connections"
+msgstr "Peer připojení"
 
 msgid "IPv4"
 msgstr "IPv4"
@@ -3139,7 +3139,7 @@ msgid "Duration of connection to peer"
 msgstr "Doba trvání připojení k peer"
 
 msgid "Up"
-msgstr "Up"
+msgstr "Nahoru"
 
 msgid "Peer's clockskew relative to our clock"
 msgstr "Vrstevníkův clockskeise vzhledem k našim hodinám"
@@ -3636,7 +3636,7 @@ msgid "i2pchat"
 msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr "I2PChat"
+msgstr "I2PCat"
 
 msgid "Server"
 msgstr "Server"
@@ -4732,7 +4732,7 @@ msgid "Browser launch at startup"
 msgstr "Spuštění prohlížeče při spuštění"
 
 msgid "I2P Router Console"
-msgstr "I2P Router Console"
+msgstr "Konzole I2P routeru"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Otevřete Router Console ve webovém prohlížeči při spuštění"
@@ -4741,16 +4741,16 @@ msgid "shared clients"
 msgstr "sdílení klienti"
 
 msgid "I2PMail SMTP Server"
-msgstr "I2PMail SMTP Server"
+msgstr "SMTP server I2PMail"
 
 msgid "I2PMail POP3 Server"
-msgstr "I2PMail POP3 Server"
+msgstr "I2PMail POP3 server"
 
 msgid "Postman's SMTP Mail Server (smtp.postman.i2p)"
-msgstr "Poštovní poštovní server SMTP (smtp.postman.i2p)"
+msgstr "Poštovní server SMTP (smtp.postman.i2p)"
 
 msgid "Postman's POP3 Mail Server (pop3.postman.i2p)"
-msgstr "Poštovní poštovní server POP3 (pop3.postman.i2p)"
+msgstr "Poštovní server POP3 (pop3.postman.i2p)"
 
 msgid "I2P IRC Network"
 msgstr "I2P IRC síť"
@@ -4771,7 +4771,7 @@ msgid "Personal I2P Webserver (eepsite)"
 msgstr "Osobní I2P webový server (eepsite)"
 
 msgid "HTTP Proxy"
-msgstr "HTTP Proxy"
+msgstr "HTTP proxy"
 
 msgid "iMule"
 msgstr "iMule"
@@ -5516,7 +5516,7 @@ msgid "SOCKS 4/4a"
 msgstr "PONOŽKY 4/4a"
 
 msgid "SOCKS 5"
-msgstr "SOCKS 5"
+msgstr "PONOŽKY 5"
 
 msgid "This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin if configured. Note: this option will not work when you have 0 known peers."
 msgstr "Tato možnost použije I2P HTTP OutProxy k reseed nebo plugin orchideje, pokud je nakonfigurován. Poznámka: Tato možnost nebude fungovat, když máte 0 známých vrstevníků."
@@ -5694,7 +5694,7 @@ msgid "The default settings are optimized for general usage and normally don't n
 msgstr "Výchozí nastavení jsou optimalizována pro obecné použití a za normálních okolností není nutné je měnit."
 
 msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
-msgstr "Chcete-li upravit nastavení klientského tunelu, použijte <a href=\"/i2ptunnelmgr\">Správce tunelů</a> nebo <a href=\"/i2psnark/configure\">stránku konfigurace</a> pro I2PSnark."
+msgstr "Chcete-li upravit nastavení klientského tunelu, použijte <a href=\"/i2ptunnelmgr\">Správce tunelů</a> nebo <a href=\"/i2psnark/configure\">stránku konfigurace</a> pro Torrenty."
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "Chcete-li povolit změny v klientských tunelech pouze pro relaci, aktivujte <a href=\"/help/advancedsettings\">Pokročilý režim</a> konzoly."
@@ -5754,7 +5754,7 @@ msgid "Update URL"
 msgstr "Aktualizujte URL"
 
 msgid "To update with unsigned I2P+ release builds: <code>http://skank.i2p/i2pupdate.zip</code> or for the latest unsigned development builds: <code>http://skank.i2p/dev/i2pupdate.zip</code>"
-msgstr "Pro aktualizaci pomocí nepodepsaných sestavení I2P vydání: <code>http://skank.i2p/i2pupdate.zip</code> nebo pro nejnovější nepodepsané vývojové sestavení: <code>http://skank.i2p/dev/i2pupdate</code>. zip. zip. zip"
+msgstr "Pro aktualizaci pomocí nepodepsaných sestavení I2P vydání: <code>http://skank.i2p/i2pupdate.zip</code> nebo pro nejnovější nepodepsané vývojové sestavení: <code>http://skank.i2p/dev/i2pupdate.zip</code>"
 
 msgid "Update with unsigned development builds"
 msgstr "Aktualizace s nepodepsanými vývojovými sestaveními"
@@ -5869,7 +5869,7 @@ msgid "Performance Graphs"
 msgstr "Grafy výkonu"
 
 msgid "Advanced Configuration Help - I2P+"
-msgstr "Advanced Configuration Help - I2P+"
+msgstr "Nápověda k pokročilé konfiguraci - I2P+"
 
 msgid "Advanced Configuration Help"
 msgstr "Nápověda pro pokročilou konfiguraci"
@@ -5881,7 +5881,7 @@ msgid "Tunnel Filtering"
 msgstr "Filtrování tunelů"
 
 msgid "Console API"
-msgstr "Console API"
+msgstr "Konzolové API"
 
 msgid "JSONRPC"
 msgstr "JSONRPC"
@@ -5998,7 +5998,7 @@ msgid "When set to false, the router will not throttle tunnel build requests fro
 msgstr "Pokud je nastaveno na Nepravda, router nebude omezovat žádosti o vytváření tunelů od ostatních routerů a má se používat s opatrností. [Výchozí hodnota je Pravda, vyžaduje se restart]"
 
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
-msgstr "Tento parametr určuje, které schopnosti kolegů se používat nebudou k vytváření tunelů vašeho routeru. Např. <code>router.excludePeerCaps=LMN</code>. excludePeerCaps=LMN. excludePeerCaps=LMN. vyloučitPeerCaps=LMN"
+msgstr "Tento parametr určuje, které schopnosti kolegů se používat nebudou k vytváření tunelů vašeho routeru. Např. <code>router.excludePeerCaps=LMN</code>"
 
 msgid "When set to false, unreachable peers may be selected as hops for inbound exploratory tunnels. [Default is true]"
 msgstr "Při nastavení na false mohou být nedosažitelné peer-y vybrány jako skoky pro příchozí průzkumné tunely. [Výchozí je true]"
@@ -6082,7 +6082,7 @@ msgid "Maximum number of pending tunnel build jobs in the BuildHandler queue. Wh
 msgstr "Maximální počet čekajících úloh stavby tunelu ve frontě BuildHandler. Když fronta překročí tento limit, nové požadavky na stavbu jsou odmítnuty. [Výchozí je 4096]"
 
 msgid "Multiplier applied to the base tunnel build concurrency. The effective concurrency is baseBuildRate * multiplier, clamped by maxConcurrentBuilds. Higher values accelerate pool recovery but increase network load. [Default is 1.0]"
-msgstr "Násobitel aplikovaný na základní souběžnost stavby tunelu. Efektivní souběžnost je baseBuildRate * násobitel, sevřená mezi 1 a maximem. [Výchozí je 8.0]. 0]. 0]. 0]"
+msgstr "Násobitel aplikovaný na základní souběžnost stavby tunelu. Efektivní souběžnost je baseBuildRate * násobitel, sevřená mezi 1 a maximem. [Výchozí je 1.0]"
 
 msgid "Determines the maximum number of participating tunnels the router can build. To disable participation completely, set to 0. [Default is 8000, or 2000 if running on Arm or Android]"
 msgstr "Určuje maximální počet tunelů, které může router vytvořit a udržovat. Pro úplné zakázání účasti nastavte hodnotu na 0. [Výchozí hodnota je 8000 nebo 2000, pokud běží na platformě Arm nebo Android]"
@@ -6181,7 +6181,7 @@ msgid "When set to true, the router uses the older peer selection algorithm when
 msgstr "Při nastavení na true router používá starší algoritmus výběru peerů při stavbě tunelů (upřednostňuje rychlé peer-y přímo, ignoruje hodnocení). [Výchozí je false]. [Výchozí je false This setting is dynamic and takes effect immediately]. [Výchozí je false This setting is dynamic and takes effect immediately]. [Výchozí hodnota je false Toto nastavení je dynamické a projeví se okamžitě ]"
 
 msgid "Growth factor used by the router's transit tunnel throttle. Higher values make the router accept tunnel build requests more aggressively relative to the 10-minute average. Lower values make it probabalistically reject sooner when tunnel counts are rising rapidly. [Default is 2.0]"
-msgstr "Růstový faktor používaný omezovačem tranzitních tunelů routeru. Vyšší hodnoty způsobí, že router přijímá požadavky na stavbu tunelu rychleji, když je kapacita k dispozici. [Výchozí je 1.5]. 0]. 0]. 0]"
+msgstr "Růstový faktor používaný omezovačem tranzitních tunelů routeru. Vyšší hodnoty způsobí, že router přijímá požadavky na stavbu tunelu rychleji, když je kapacita k dispozici. [Výchozí je 2.0]"
 
 msgid "Growth factor for tunnel test time acceptance rate limiting. If the 1-minute average test time exceeds the 1-hour average multiplied by this factor, the router begins probabalistically rejecting. [Default is 1.5]"
 msgstr "Růstový faktor pro omezení míry přijetí času testu tunelu. Pokud 1minutový průměrný testovací čas překročí 1hodinový průměr... [Výchozí je 1 5]. [Výchozí je 1 5]. [Výchozí je 1 5]"
@@ -6427,7 +6427,7 @@ msgid "If set to true, this option will place an icon in the system tray / notif
 msgstr "Pokud je nastaveno na true, tato možnost umístí ikonu do systémového panelu / oznámení s jednoduchými ovládacími prvky služby. [Výchozí hodnota je deaktivována]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "Toto nastavení umožňuje konfiguraci maximálního počtu souborů na torrent, který I2PSnark povolí při stahování nebo vytváření torrentu. Je třeba poznamenat, že výrazné zvýšení této hodnoty z výchozí hodnoty 2000 souborů může vyžadovat další konfiguraci v hostitelském systému, aby bylo možné zvýšit maximální počet otevřených souborů, který povoluje operační systém (např. <code>ulimit -n</code> na Linuxu). Abyste jej změnili, přidejte do konfiguračního souboru I2PSnarku <code>i2psnark.config</code>. [Je nutné restartovat I2PSnark nebo router]. [Je třeba restartovat I2PSnark or router]. [Je třeba restartovat I2PSnark or router]. [Je vyžadován restart I2PSnark nebo routeru]"
+msgstr "Toto nastavení umožňuje konfiguraci maximálního počtu souborů na torrent, který Torrenty povolí při stahování nebo vytváření torrentu. Je třeba poznamenat, že výrazné zvýšení této hodnoty z výchozí hodnoty 2000 souborů může vyžadovat další konfiguraci v hostitelském systému, aby bylo možné zvýšit maximální počet otevřených souborů, který povoluje operační systém (např. <code>ulimit -n</code> na Linuxu). Abyste jej změnili, přidejte do konfiguračního souboru Torrentsu <code>i2psnark.config</code>. [Je nutné restartovat Torrenty nebo router]. [Je třeba restartovat Torrenty or router]. [Je třeba restartovat Torrenty or router]. [Je vyžadován restart Torrenty nebo routeru]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "Toto specifické nastavení tunelu vám umožňuje povolit nebo zakázat odpovědi na odesílané pingy do serverů hostovaných směrovačem. Pokud chcete pingy zakázat, musíte do konfigurace serveru v Tunelovém správci přidat řádek <code>i2p.streaming.answerPings=false</code> do sekce <i>Vlastní možnosti</i>."
@@ -6775,7 +6775,7 @@ msgid "Binds to all interfaces. Can be changed with advanced config <code>i2np.u
 msgstr "Váže se na všechny rozhraní. Lze ji změnit pomocí pokročilé konfigurace <code>i2np.upnp.SSDPPort=nnnn</code>. Lze ji zakázat na <a href=/configclients> stránce konfigurace klienta </a>."
 
 msgid "I2P Client Protocol port"
-msgstr "I2P Client Protocol port"
+msgstr "Port protokolu klienta I2P"
 
 msgid "Used by client apps. Can be changed to a different port on the <a href=/configclients>Client Configuration page</a> but this is not recommended. Can be bound to a different interface or all interfaces, or disabled, on the <a href=/configclients>Client Configuration page</a>."
 msgstr "Používáno klientovskými aplikacemi. Může být změněno na jiný port na stránce <a href=/configclients>Konfigurace klienta</a>, ale není to doporučeno. Na stránce <a href=/configclients>Konfigurace klienta</a> může být přiřazeno k jinému rozhraní nebo ke všem rozhraním nebo zakázáno."
@@ -6850,7 +6850,7 @@ msgid "I2P Terminology"
 msgstr "Terminologie I2P"
 
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "Webová aplikace I2P, která spravuje adresy služeb sítě, mapuje B64 otisky na lidsky čitelná jména. Adresy služeb lze přidat ručně nebo pomocí odběru souborů hosts.txt. Také označováno jako SusiDNS. Další informace naleznete v <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online dokumentaci</a>."
+msgstr "Webová aplikace I2P, která spravuje adresy služeb sítě, mapuje B64 otisky na lidsky čitelná jména. Adresy služeb lze přidat ručně nebo pomocí odběru souborů hosts.txt. Také označováno jako DNS. Další informace naleznete v <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online dokumentaci</a>."
 
 msgid "Base32 (B32) / Base64 (B64)"
 msgstr "Base32 (B32) / Base64 (B64)"
@@ -7003,7 +7003,7 @@ msgid "NTCP (NIO-based TCP) and NTCP2 are TCP-based network transports which use
 msgstr "NTCP (TCP založený na NIO) a NTCP2 jsou transporty sítě založené na TCP, které používají implementaci TCP se Javaho NIO (New I/O) k doručování zpráv I2NP mezi směrovači v síti. NTCP2 zvyšuje odolnost NTCP vůči různým útokům a automatizovaným metodám identifikace provozu. Další informace naleznete v <a href=https://geti2p.net/en/docs/transport/ntcp class='sitelink external' target=_blank rel=noreferrer>online dokumentaci</a>."
 
 msgid "Orchid (plugin)"
-msgstr "Orchid (plugin)"
+msgstr "Orchidej (plugin)"
 
 msgid "A java implementation of a Tor client, available as an I2P plugin. Can be used as the default <i>outproxy</i> if configured in the relevant SOCKS or HTTP client tunnel in the <i>Tunnel Manager</i>. Available from <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Source code is available on <a href=https://github.com/i2p/i2p.plugins.orchid class='sitelink external' target=_blank rel=noreferrer>github</a>."
 msgstr "Java verze klienta Toru dostupná jako plugin pro I2P. Může být použita jako výchozí <i>outproxy</i> pokud je nakonfigurována ve správném SOCKS nebo HTTP klient tunelu v <i>Tunnel Manager</i>. Dostupné z <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Zdrojový kód je dostupný na <a href=https://github.com/i2p/i2p.plugins.orchid class='sitelink external' target=_blank rel=noreferrer>GitHub</a>."
@@ -7310,7 +7310,7 @@ msgid "NTCP port (1-65535)"
 msgstr "NTCP port (1-65535)"
 
 msgid "NTCP hostname"
-msgstr "NTCP hostname"
+msgstr "Název hostitele NTCP"
 
 msgid "Auto IP setting"
 msgstr "Automatické nastavení IP"
@@ -7319,10 +7319,10 @@ msgid "SSU Transport Settings:"
 msgstr "Nastavení SSU transportu:"
 
 msgid "SSU port (1-65535)"
-msgstr "SSU port (1-65535)"
+msgstr "Port SSU (1-65535)"
 
 msgid "SSU hostname"
-msgstr "SSU hostname"
+msgstr "Název hostitele SSU"
 
 msgid "IP source detection"
 msgstr "Detekce zdroje IP"
@@ -7916,11 +7916,11 @@ msgstr "Poznámka: Mnoho značek a možností v konzoli má nástrojové tipy, k
 msgid "Theme Overrides"
 msgstr "Téma přepisů"
 
-msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr "I2P+ umožňuje vlastní přepis motivů pro konzoli, správce tunelů, I2PSnark, SusiDNS a Susimail, což umožňuje změny témat, které jsou trvalé i po aktualizacích. Chcete-li přepsat motiv, vytvořte soubor css s názvem <code>override.css</code> s úpravami motivu a umístěte jej do příslušného adresáře motivu, který chcete změnit, nebo přejmenujte jeden z příkladových souborů a poté obnovte stránku. Všimněte si, že správce tunelů a konzola sdílejí stejný soubor override.css. Chcete-li vypnout přepis, smažte nebo přejmenujte soubor <code>override.css</code> a poté obnovte stránku (obvykle Control + Shift + R)."
+msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Webová pošta, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
+msgstr "I2P+ umožňuje vlastní přepis motivů pro konzoli, správce tunelů, Torrenty, DNS a Webová pošta, což umožňuje změny témat, které jsou trvalé i po aktualizacích. Chcete-li přepsat motiv, vytvořte soubor css s názvem <code>override.css</code> s úpravami motivu a umístěte jej do příslušného adresáře motivu, který chcete změnit, nebo přejmenujte jeden z příkladových souborů a poté obnovte stránku. Všimněte si, že správce tunelů a konzola sdílejí stejný soubor override.css. Chcete-li vypnout přepis, smažte nebo přejmenujte soubor <code>override.css</code> a poté obnovte stránku (obvykle Control + Shift + R)."
 
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
-msgstr "Adresář motivů se nachází v adresáři aplikace I2P v adresáři <code>docs/themes</code>. V adresářích motivu konzole a I2PSnark jsou příklady přepisovacích souborů."
+msgstr "Adresář motivů se nachází v adresáři aplikace I2P v adresáři <code>docs/themes</code>. V adresářích motivu konzole a Torrenty jsou příklady přepisovacích souborů."
 
 msgid "Sidebar Information"
 msgstr "Informace o postranním panelu"
@@ -7983,7 +7983,7 @@ msgid "Participating"
 msgstr "Účast"
 
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
-msgstr "Tunely vybudované jinými routery skrz váš router. To se může velmi lišit v závislosti na síťovém vytížení, sdílené šířce pásma a množství lokálně generovaného provozu. Doporučenou metodou pro omezení účastnících se tunelů je změnit procento sdílení na <a  href='/config'>konfigurační stránce šířky pásma</a>. Také můžete omezit celkový počet nastavením <code>router.maxParticipatingTunnels=nnn</code> na <a href='/configadvanced'>stránce pokročilé konfigurace</a>. <a href='/configstats#tunnel.participatingTunnels'>[Povolit grafy]</a>."
+msgstr "Tunely vybudované jinými routery skrz váš router. To se může velmi lišit v závislosti na síťovém vytížení, sdílené šířce pásma a množství lokálně generovaného provozu. Doporučenou metodou pro omezení účastnících se tunelů je změnit procento sdílení na <a href='/config'>konfigurační stránce šířky pásma</a>. Také můžete omezit celkový počet nastavením <code>router.maxParticipatingTunnels=nnn</code> na <a href='/configadvanced'>stránce pokročilé konfigurace</a>. <a href='/configstats#tunnel.participatingTunnels'>[Povolit grafy]</a>."
 
 msgid "Share Ratio"
 msgstr "Poměr sdílení"

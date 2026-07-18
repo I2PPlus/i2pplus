@@ -51,7 +51,7 @@ msgstr[1] "{0} ani"
 msgstr[2] "{0}  ani"
 
 msgid "n/a"
-msgstr "n/a"
+msgstr "Nu se aplică"
 
 #, java-format
 msgid "{0,number,####} ns"
@@ -80,7 +80,7 @@ msgid "INFO"
 msgstr "INFO"
 
 msgid "WARN"
-msgstr "WARN"
+msgstr "AVERTISMENT"
 
 #, java-format
 msgid "{0} similar message omitted"

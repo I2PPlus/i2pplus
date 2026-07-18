@@ -39,10 +39,10 @@ msgid "Error - tunnels are not initialized yet"
 msgstr "エラー - トンネルがまだ初期化されていません"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "フォームの送信が無効です。おそらくブラウザの「戻る」ボタンまたは「再読み込み」ボタンを使用したためです。無効な送信フォーム。おそらくブラウザで「戻る」か「再読込」を使用したためです。再送信してください。"
+msgstr "フォームの送信が無効です。おそらくブラウザの「戻る」か「再読込」を使用したためです。再送信してください。"
 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "問題が解決しない場合は、ブラウザで Cookie が有効になっていることを確認してください。問題が残る場合、ブラウザでクッキーが有効になっているかを確かめてください。"
+msgstr "問題が解決しない場合は、ブラウザで Cookie が有効になっていることを確認してください。"
 
 msgid "No services configured, cannot restart!"
 msgstr "設定されたサービスがないため、再起動できません！"
@@ -946,7 +946,7 @@ msgid "Per Day"
 msgstr "1日あたり"
 
 msgid "Concurrent"
-msgstr "兼務"
+msgstr "同時"
 
 msgid "Per Client"
 msgstr "クライアントごと"
@@ -1021,19 +1021,19 @@ msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immu
 msgstr "Cache-Control ヘッダーを有効にする (html、xml、json、テキストについてはキャッシュなし、その他すべてについては不変)"
 
 msgid "Cache-Control"
-msgstr "Cache-Control"
+msgstr "キャッシュ制御"
 
 msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
 msgstr "HTML、XML、JSON、テキスト ファイルの Referrer-Policy ヘッダーを「same-origin」に設定します"
 
 msgid "Referrer-Policy"
-msgstr "Referrer-Policy"
+msgstr "リファラーポリシー"
 
 msgid "Set the X-Content-Type-Options header to 'nosniff'"
 msgstr "X-Content-Type-Options ヘッダーを 'nosniff' に設定します"
 
 msgid "X-Content-Type-Options"
-msgstr "X-Content-Type-Options"
+msgstr "X-コンテンツタイプ-オプション"
 
 #, java-format
 msgid "Initializing Tunnel Manager{0}"
@@ -1223,7 +1223,7 @@ msgid "Website name"
 msgstr "ウェブサイトの名前"
 
 msgid "Local Destination"
-msgstr "地元の目的地"
+msgstr "ローカル宛先"
 
 msgid "Local destination is not available. Start the tunnel."
 msgstr "ローカル宛先が使用できません。"

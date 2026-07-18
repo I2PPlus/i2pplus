@@ -243,7 +243,7 @@ msgid "Enable Direct Client-to-Client protocol"
 msgstr "Ενεργοποίηση του άμεσου πρωτοκόλλου πελάτη-προς-πελάτη"
 
 msgid "Outproxies"
-msgstr "Outproxies"
+msgstr "Υπερπροξίες"
 
 msgid "SSL Outproxies"
 msgstr "SSL Outproxies"
@@ -840,7 +840,7 @@ msgid "Prevents server discovery by floodfills"
 msgstr "Αποτρέπει την ανακάλυψη διακομιστή μέσω floodfills"
 
 msgid "Blinded"
-msgstr "Blinded"
+msgstr "Τυφλωμένος"
 
 msgid "Send password to all users."
 msgstr "Αποστολή κωδικού πρόσβασης σε όλους τους χρήστες."
@@ -1340,7 +1340,7 @@ msgid "Experts only!"
 msgstr "Μόνο για ειδικούς!"
 
 msgid "Base32"
-msgstr "Base32"
+msgstr "Βάση 32"
 
 msgid "Alt Base32"
 msgstr "Εναλλακτικό Base32"

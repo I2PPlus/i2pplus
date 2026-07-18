@@ -154,7 +154,7 @@ msgid "Go back and fix the error"
 msgstr "Întoarceți-vă și remediați eroarea"
 
 msgid "router"
-msgstr "router"
+msgstr "industrial"
 
 msgid "master"
 msgstr "administrator"
@@ -276,7 +276,7 @@ msgid "The website was not reachable, because it uses encryption options that ar
 msgstr "Site-ul web nu a fost accesibil, deoarece folosește opțiuni de criptare care nu sunt acceptate de versiunea dvs. I2P sau Java.Site-ul nu a fost accesibil, deoarece utilizează opțiuni de criptare care nu sunt acceptate de versiunea dvs. I2P sau Java."
 
 msgid "Could not connect to the following destination:"
-msgstr "Could not connect to the following destination:"
+msgstr "Nu s-a putut realiza conectarea la următoarea destinație:"
 
 msgid "The website was not reachable, because its lease set was not found."
 msgstr "Site-ul web nu a fost accesibil, deoarece setul de închiriere nu a fost găsit.Site-ul nu a fost accesibil, deoarece setul său de închiriere nu a fost găsit."

@@ -198,7 +198,7 @@ msgstr "Alt aygıt"
 
 #, java-format
 msgid "To disable this device, add {0} to advanced configuration and restart."
-msgstr "To disable this device, add {0} to advanced configuration and restart."
+msgstr "Bu cihazı devre dışı bırakmak için gelişmiş yapılandırmaya {0} ekleyin ve yeniden başlatın."
 
 msgid "UPnP Status"
 msgstr "UPnP Durumu"
@@ -815,7 +815,7 @@ msgid "Console"
 msgstr "Konsol"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
-msgstr "Yönlendirici konsolu için SSL erişimini etkinleştirmek için, daha fazla bilgi için i2p uygulama dizininizde bulunan <code>clients.config</code> dosyasına bakın. Dizinde bulunan RouterConsolerunner Config dosyasını düzenlemeniz gerekir: "
+msgstr "Yönlendirici konsolu için SSL erişimini etkinleştirmek için, daha fazla bilgi için i2p uygulama dizininizde bulunan <code>clients.config</code> dosyasına bakın. Dizinde bulunan RouterConsolerunner Config dosyasını düzenlemeniz gerekir:"
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Kaydetme devre dışı, değişiklik yapmak için router.config dosyasını düzenleyin"
@@ -916,7 +916,7 @@ msgid "Plugin configuration saved."
 msgstr "Uygulama eki yapılandırması kaydedildi."
 
 msgid "WebApp"
-msgstr "WebApp"
+msgstr "Web Uygulaması"
 
 msgid "started"
 msgstr "başlatıldı"
@@ -1638,8 +1638,8 @@ msgstr "Yapılandırma kaydedilirken bir sorun çıktı (uygulandı ancak kayded
 #, java-format
 msgid "{0} hop"
 msgid_plural "{0} hops"
-msgstr[0] "{0} şerbetçiotu"
-msgstr[1] "{0} şerbetçiotu"
+msgstr[0] "{0} atlama"
+msgstr[1] "{0} atlama"
 
 #, java-format
 msgid "{0} tunnel"
@@ -1651,7 +1651,7 @@ msgid "Exploratory tunnels"
 msgstr "Keşif tünelleri"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrentler"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "İSİMSİZLİK UYARISI - Ayarlarda 0 sıçrama tüneli var."
@@ -1743,7 +1743,7 @@ msgid "Enabling the Universal Theming option is recommended when embedding these
 msgstr "Bu uygulamalar eklendiğinde Evrensel Tema seçeneğinin etkinleştirilmesi önerilir"
 
 msgid "Embed I2PSnark and I2PMail in the console"
-msgstr "I2PSnark ve I2PMail'i konsola yerleştirin"
+msgstr "Torrentler ve I2PMail'i konsola yerleştirin"
 
 msgid "Add a user and password to enable."
 msgstr "Etkinleştirmek için bir kullanıcı adı ve parola yazın."
@@ -1997,7 +1997,7 @@ msgid "FAQ"
 msgstr "SSS"
 
 msgid "JSON-RPC API"
-msgstr "JSON-RPC API"
+msgstr "JSON-RPC API'si"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "I2P hosts dosyasını buradan yönetin (I2P etki alanı çözümlemesi)"
@@ -2141,7 +2141,7 @@ msgid "I2P Plugins"
 msgstr "I2P Eklentileri"
 
 msgid "zzz's plugin repository"
-msgstr "zzz's plugin repository"
+msgstr "zzz'in eklenti deposu"
 
 msgid "Historical infrastructure data from the I2P network"
 msgstr "I2P ağından alınan geçmiş altyapı verileri"
@@ -2225,7 +2225,7 @@ msgid "Privacy-focused not-for-profit organization"
 msgstr "Gizlilik odaklı kar amacı gütmeyen kuruluş"
 
 msgid "Text translation engine"
-msgstr "Text translation engine"
+msgstr "Metin çeviri motoru"
 
 msgid "translate"
 msgstr "Çevirmek"
@@ -2282,7 +2282,7 @@ msgid "Information Security Research &amp; Education"
 msgstr "Bilgi Güvenliği Araştırma ve Eğitim"
 
 msgid "DigitalTrends"
-msgstr "DigitalTrends"
+msgstr "DijitalTrendler"
 
 msgid "Tech News &amp; Reviews"
 msgstr "Teknik haberler ve incelemeler"
@@ -2333,7 +2333,7 @@ msgid "Smart &amp; fearless journalism"
 msgstr "Akıllı ve Korkusuz Gazetecilik"
 
 msgid "NewStatesman"
-msgstr "NewStatesman"
+msgstr "YeniDevlet Adamı"
 
 msgid "Politics &amp; Current Affairs magazine"
 msgstr "Siyaset ve Güncel Olaylar Dergisi"
@@ -2342,7 +2342,7 @@ msgid "Independent International Media Platform"
 msgstr "Bağımsız Uluslararası Medya Platformu"
 
 msgid "OpenDemocracy"
-msgstr "OpenDemocracy"
+msgstr "Açık Demokrasi"
 
 msgid "Online privacy &amp; tech blog"
 msgstr "Çevrimiçi gizlilik ve teknoloji blogu"
@@ -3143,7 +3143,7 @@ msgid "Messages sent"
 msgstr "Gönderilen mesajlar"
 
 msgid "TX"
-msgstr "TX"
+msgstr "Teksas"
 
 msgid "Messages received"
 msgstr "Alınan mesajlar"
@@ -3203,7 +3203,7 @@ msgid "Retransmitted packets"
 msgstr "Yeniden iletilen paketler"
 
 msgid "Dup TX"
-msgstr "Dup TX"
+msgstr "Çift Teksas"
 
 msgid "Sort by packets retransmitted"
 msgstr "Yeniden aktarılan paketlere göre sırala"
@@ -3212,7 +3212,7 @@ msgid "Received duplicate packets"
 msgstr "Yinelenen paketler alındı"
 
 msgid "Dup RX"
-msgstr "Dup RX"
+msgstr "Çift RX"
 
 msgid "Sort by packets received more than once"
 msgstr "Bir kereden çok alınan paketlere göre sırala"
@@ -3614,7 +3614,7 @@ msgid "How many local service tunnels we're running"
 msgstr "Kaç tane yerel hizmet tüneli işletiyoruz"
 
 msgid "Messenger"
-msgstr "Messenger"
+msgstr "Haberci"
 
 msgid "i2pchat"
 msgstr "i2pchat"
@@ -3656,7 +3656,7 @@ msgid "Shared Clients"
 msgstr "Paylaşılan Müşteriler"
 
 msgid "Ping"
-msgstr "Ping"
+msgstr "ping"
 
 msgid "I2Ping"
 msgstr "I2Ping"
@@ -3825,7 +3825,7 @@ msgid "New hosts in last 24 hours"
 msgstr "Son 24 saatteki yeni ana bilgisayarlar"
 
 msgid "I2PControl"
-msgstr "I2PControl"
+msgstr "I2PKontrol"
 
 msgid "RPC Service"
 msgstr "RPC Hizmeti"
@@ -3900,7 +3900,7 @@ msgid "Advanced Configuration"
 msgstr "Gelişmiş Yapılandırma"
 
 msgid "API"
-msgstr "API"
+msgstr "API'si"
 
 msgid "Documentation for the I2P API"
 msgstr "I2P API için belgeler"
@@ -3912,7 +3912,7 @@ msgid "View router debug information"
 msgstr "Yöneltici hata ayıklama bilgilerini görüntüle"
 
 msgid "Jars"
-msgstr "Jars"
+msgstr "Kavanoz"
 
 msgid "Review extended info about installed .jar and .war files"
 msgstr "Kurulu .jar ve .war dosyalarının bilgilerini gözden geçir"
@@ -4275,7 +4275,7 @@ msgid "Run analysis on all routers in NetDb"
 msgstr "NetDb'deki tüm yönlendiricilerde analiz çalıştırın"
 
 msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, "
-msgstr "Sybil tespit rutini, Ağ Veritabanını düzenli aralıklarla tarayacak şekilde yapılandırılabilir, "
+msgstr "Sybil tespit rutini, Ağ Veritabanını düzenli aralıklarla tarayacak şekilde yapılandırılabilir,"
 
 msgid "with the option to block peers meeting the configured threshold. "
 msgstr "yapılandırılan eşiği karşılayan eşleri engelleme seçeneği ile. "
@@ -4687,7 +4687,7 @@ msgid "susimail"
 msgstr "susimail"
 
 msgid "susidns"
-msgstr "susidns"
+msgstr "sussids"
 
 msgid "routerconsole"
 msgstr "yonelticipanosu"
@@ -5495,10 +5495,10 @@ msgid "HTTPS"
 msgstr "HTTPS"
 
 msgid "SOCKS 4/4a"
-msgstr "SOCKS 4/4a"
+msgstr "ÇORAP 4/4a"
 
 msgid "SOCKS 5"
-msgstr "SOCKS 5"
+msgstr "ÇORAP 5"
 
 msgid "This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin if configured. Note: this option will not work when you have 0 known peers."
 msgstr "Bu seçenek, I2P'nin HTTP Outproxy'sini yeniden düzenlemek için veya yapılandırılmışsa Orkide eklentisini kullanacaktır. Not: Bilinen 0 akranınız olduğunda bu seçenek çalışmaz."
@@ -5742,7 +5742,7 @@ msgid "Update with unsigned development builds"
 msgstr "İmzasız geliştirme yapılarıyla güncelleme"
 
 msgid "Advanced Options"
-msgstr "Advanced Options"
+msgstr "Gelişmiş Seçenekler"
 
 msgid "In order to maintain anonymity, it is recommended to update using the I2P http proxy. If the news or I2P update is hosted on I2P, using the proxy will be necessary."
 msgstr "Anonimliği korumak için, I2P HTTP proxy'sini kullanarak güncellenmesi önerilir. Haberler veya i2p güncellemesi I2P'de barındırılırsa, proxy kullanma gerekli olacaktır."
@@ -6409,16 +6409,16 @@ msgid "If set to true, this option will place an icon in the system tray / notif
 msgstr "True olarak ayarlanırsa, bu seçenek temel hizmet kontrol seçenekleriyle birlikte sistem tepsisine / bildirim alanına bir simge yerleştirir. [Varsayılan olarak devre dışı]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "Bu ayar, bir torrent indirildiğinde veya oluşturulduğunda I2PSnark'ın izin vereceği maksimum dosya sayısının yapılandırılmasına izin verir. Bu değeri varsayılan 2000 dosyanın üzerine önemli ölçüde artırmak, işletim sisteminin izin vereceği maksimum açık dosya sayısını artırmak için ek yapılandırmaların gerekebileceği anlamına gelir (örneğin Linux'ta <code>ulimit -n</code>). Değiştirmek için, I2PSnark'ın yapılandırma dosyasına <code>i2psnark.config</code> ekleyin. [I2PSnark veya yönlendiricinin yeniden başlatılması gerekmektedir]"
+msgstr "Bu ayar, bir torrent indirildiğinde veya oluşturulduğunda Torrentler'ın izin vereceği maksimum dosya sayısının yapılandırılmasına izin verir. Bu değeri varsayılan 2000 dosyanın üzerine önemli ölçüde artırmak, işletim sisteminin izin vereceği maksimum açık dosya sayısını artırmak için ek yapılandırmaların gerekebileceği anlamına gelir (örneğin Linux'ta <code>ulimit -n</code>). Değiştirmek için, Torrentler'ın yapılandırma dosyasına <code>i2psnark.config</code> ekleyin. [Torrentler veya yönlendiricinin yeniden başlatılması gerekmektedir]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
+msgstr "Bu tünele özgü ayar, yönlendirici tarafından barındırılan sunuculara gönderilen ping yanıtlarını etkinleştirmenizi veya devre dışı bırakmanızı sağlar. Ping'leri devre dışı bırakmak için Tünel Yöneticisi'nde sunucunun yapılandırmasına ilişkin <i> Özel Seçenekler </i> bölümüne <code> i2p.streaming.answerPings=false </code> satırını eklemeniz gerekir."
 
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
+msgstr "Bu ayar, etkinleştirildiğinde, yönlendirici tarafından barındırılan tüm ping özellikli sunucular için 50 ms'ye kadar rastgele bir pong gecikmesi sağlar. Varsayılan devre dışıdır. [Yeniden başlatma gerekli]"
 
 msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
+msgstr "Bu ayar, etkinleştirildiğinde, <code> i2p.streaming.enablePongDelay </code> de etkinleştirilmişse, ping özellikli sunucular için getirilen maksimum ek rastgele pong gecikmesini değiştirir. Açıkça ayarlanmadığı sürece varsayılan değer olan 50 ms kullanılacaktır."
 
 msgid "The connect timeout in milliseconds for eepget HTTP requests (time to wait for initial response headers). Increase for high-latency remote access scenarios. [Default is 90000 (90s)]"
 msgstr "eepget HTTP istekleri için bağlantı zaman aşımı (milisaniye) (ilk yanıt başlıkları için bekleme süresi). Yüksek gecikmeli uzaktan erişim senaryoları için artırın. [Varsayılan 90000 (90sn)]"
@@ -6733,13 +6733,13 @@ msgid "A higher level socket API for clients. Can be enabled/disabled on the <a 
 msgstr "Müşteriler için daha yüksek seviyeli bir soket API'i. <a href=/configclients>Müşteri Yapılandırma sayfasından</a> etkinleştirilebilir/devre dışı bırakılabilir. <code>bob.config</code> dosyasında değiştirilebilir. [Varsayılan olarak devre dışı]"
 
 msgid "HTTP proxy"
-msgstr "HTTP proxy"
+msgstr "HTTP proxy'si"
 
 msgid "Can be disabled or changed in the <a href=/i2ptunnelmgr>Tunnel Manager</a>. Can also be configured to bind to a specific interface or all interfaces."
 msgstr "Durdurulabilir veya <a href=/i2ptunnelmgr>Tunnel Yöneticisi</a> üzerinden değiştirilebilir. Ayrıca belirli bir arayüze veya tüm arayüzlere bağlanacak şekilde yapılandırılabilir."
 
 msgid "HTTPS proxy"
-msgstr "HTTPS proxy"
+msgstr "HTTPS proxy'si"
 
 msgid "IRC proxy"
 msgstr "IRC vekil sunucusu"
@@ -6775,7 +6775,7 @@ msgid "A higher level socket API for clients. Can be enabled/disabled on the <a 
 msgstr "Mandant API için daha yüksek seviyeli bir soket API'si. <a href=/configclients>Mandant Yapılandırması sayfasında</a> etkinleştirilebilir/devre dışı bırakılabilir. <code>clients.config</code> dosyasında değiştirilebilir. [Varsayılan olarak devre dışı]"
 
 msgid "I2P Router Console (Web interface)"
-msgstr "I2P Router Console (Web interface)"
+msgstr "I2P Yönlendirici Konsolu (Web arayüzü)"
 
 msgid "Can be disabled in the <code>clients.config</code> file. Can also be configured to bind to a specific interface or all interfaces. If you make the Router Console available over the network, you might wish to <a href=/configui#passwordheading>enforce an access password</a> to prevent unauthorized access."
 msgstr "<code>clients.config</code> dosyasında etkinleştirilebilir. Ayrıca belirli bir arabirimle veya tüm arabirimlerle bağlantı kurmak için yapılandırılabilir. Hem http hem de https etkinse, otomatik yönlendirme varsayılan olarak etkinleştirilir. Yönlendirici Kontrol Panelini ağ üzerinden kullanılabilir hale getirirseniz, yetkisiz erişimi önlemek için <a href=/configui#passwordheading>erişim şifresi zorunlu tutabilirsiniz</a>."
@@ -6832,7 +6832,7 @@ msgid "I2P Terminology"
 msgstr "I2P Terimleri"
 
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "B64 karmaşalarını insan tarafından okunabilir adlara eşleyen ağ için hizmet hedeflerini yöneten bir I2P web uygulamasıdır. Hedefler manuel olarak veya hosts.txt dosyalarına abone olarak eklenir. Ayrıca SusiDNS olarak da adlandırılır. Daha fazla bilgi için <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>çevrimiçi belgelere</a> bakın."
+msgstr "B64 karmaşalarını insan tarafından okunabilir adlara eşleyen ağ için hizmet hedeflerini yöneten bir I2P web uygulamasıdır. Hedefler manuel olarak veya hosts.txt dosyalarına abone olarak eklenir. Ayrıca DNS olarak da adlandırılır. Daha fazla bilgi için <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>çevrimiçi belgelere</a> bakın."
 
 msgid "Base32 (B32) / Base64 (B64)"
 msgstr "Base32 (B32) / Base64 (B64)"
@@ -6874,7 +6874,7 @@ msgid "A command-line application supplied with I2P+ (Linux/MacOS) that is used 
 msgstr "I2P+ ile birlikte verilen komut satırı uygulamasıdır (Linux/MacOS) ve ağdaki belirtilen bir http kaynağı üzerinde bir <code>head</code> isteği yapmak ve uzak sunucudan çeşitli yanıt başlıkları döndürmek için kullanılır. Varsayılan olarak, eephead <code>127.0.0.1:4444</code> üzerindeki HTTP proxy'sini kullanır."
 
 msgid "Eepsite"
-msgstr "Eepsite"
+msgstr "Eepsit"
 
 msgid "A website hosted on the I2P network. By default, a <a href=https://www.eclipse.org/jetty/about.html class='sitelink external' target=_blank rel=noreferrer>Jetty webserver</a> is configured and running on <a href=http://127.0.0.1:7658/ target=_blank rel=noreferrer>http://127.0.0.1:7658/</a>."
 msgstr "I2P ağındaki bir web sitesidir. Varsayılan olarak, bir <a href=https://www.eclipse.org/jetty/about.html class='sitelink external' target=_blank rel=noreferrer>Jetty web sunucusu</a> yapılandırılmış ve <a href=http://127.0.0.1:7658/ target=_blank rel=noreferrer>http://127.0.0.1:7658/</a> üzerinde çalışıyor."
@@ -6958,7 +6958,7 @@ msgid "A group of tunnel entry points (leases) for a <i>destination</i>. Note: A
 msgstr "Bir <i>hedef</i> için tünel giriş noktalarından (kiralık) oluşan bir grup. Not: 0 atlayıcılı sunucu tüneli, yapılandırılan tünellerin sayısına bakılmaksızın yalnızca bir kira sahibi olacak."
 
 msgid "Monotone / mtn"
-msgstr "Monotone / mtn"
+msgstr "Monoton / mtn"
 
 msgid "The distributed version control system (DVCS) previously used to maintain I2P's source code, now superseded by git."
 msgstr "I2P'nin kaynak kodunu yönetmek için önceden kullanılan dağıtılmış sürüm kontrol sistemi (DVCS), şu anda git tarafından yerine geçmiştir."
@@ -6985,7 +6985,7 @@ msgid "A java implementation of a Tor client, available as an I2P plugin. Can be
 msgstr "Bir I2P eklentisi olarak mevcut olan Tor istemci birjava uygulamasıdır. İlgili SOCKS veya HTTP müşteri tüneli yoluyla yapılandırıldığında varsayılan <i>outproxy</i> olarak kullanılabilir. <i>Tunnel Manager</i>. <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>'dan indirilebilir. Kaynak kodu <a href=https://github.com/i2p/i2p.plugins.orchid class='sitelink external' target=_blank rel=noreferrer>github</a>'da mevcuttur."
 
 msgid "Outproxy"
-msgstr "Outproxy"
+msgstr "Dış vekil"
 
 msgid "A service on the network that provides a proxy connection to the <i>clearnet</i>. By default, I2P has an HTTP outproxy configured for web browsing on <code>127.0.0.1:4444</code>."
 msgstr "Ağda <i>clearnet</i> için bir proxy bağlantısı sağlayan bir hizmet. I2P'nin varsayılan olarak yapılandırılmış bir HTTP outproxy'si, web taraması için <code>127.0.0.1:4444</code> üzerinde bulunur."
@@ -7123,7 +7123,7 @@ msgid "An introduction to tunnel access lists"
 msgstr "Tünel erişim listelerine giriş"
 
 msgid "I2PControl API"
-msgstr "I2PControl API"
+msgstr "I2PKontrol API'si"
 
 msgid "JSON-RPC API for remote router control and monitoring"
 msgstr "Uzak yönlendirici denetimi ve izleme için JSON-RPC API"
@@ -7135,7 +7135,7 @@ msgid "Webhosting on I2P"
 msgstr "I2P'de Web barındırma"
 
 msgid "I2PControl JSON-RPC API"
-msgstr "I2PControl JSON-RPC API"
+msgstr "I2PControl JSON-RPC API'si"
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
 msgstr "I2PControl, I2P yönlendiricinizin uzaktan kontrolü ve izlenmesi için bir JSON-RPC 2.0 arayüzü sağlar. Bu, dış uygulamaların I2P ayarlarını programatik olarak yönetmesine, durum bilgilerini almasına ve standartlaştırılmış HTTP istekleri aracılığıyla yönlendirici işlemlerini kontrol etmesine olanak tanır."
@@ -7283,7 +7283,7 @@ msgid "NTCP Transport Settings:"
 msgstr "NTCP Aktarım Ayarları:"
 
 msgid "NTCP port (1-65535)"
-msgstr "NTCP port (1-65535)"
+msgstr "NTCP bağlantı noktası (1-65535)"
 
 msgid "NTCP hostname"
 msgstr "NTCP ana bilgisayar adı"
@@ -7295,7 +7295,7 @@ msgid "SSU Transport Settings:"
 msgstr "SSU Aktarım Ayarları:"
 
 msgid "SSU port (1-65535)"
-msgstr "SSU port (1-65535)"
+msgstr "SSU bağlantı noktası (1-65535)"
 
 msgid "SSU hostname"
 msgstr "SSU ana bilgisayar adı"
@@ -7892,11 +7892,11 @@ msgstr "Not: Konsoldaki birçok etiket ve seçeneğin amacını veya anlamını 
 msgid "Theme Overrides"
 msgstr "Tema Geçersiz Kılma"
 
-msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr "I2P+, konsol, tünel yöneticisi, I2PSnark, SusiDNS ve Susimail için özel tema geçersiz kılma desteği sağlar, böylece temaları yükseltmelerden sonra kalıcı olarak değiştirebilirsiniz. Bir geçersiz kılma etkinleştirmek için, temayı değiştirmek istediğiniz temanın ilgili temadizini içinde temanızı değiştirerek ve <code>override.css</code> adında bir css dosyası oluşturun veya örnek dosyalardan birini yeniden adlandırın ve ardından tarayıcıyı temizleyin. Tünel yöneticisi ve konsol aynı override.css'yi kullanır. Bir geçersiz kılmayı etkisiz hale getirmek için <code>override.css</code> dosyasını silin veya yeniden adlandırın ve ardından tarayıcıyı temizleyin (genellikle Control + Shift + R)."
+msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Web posta, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
+msgstr "I2P+, konsol, tünel yöneticisi, Torrentler, DNS ve Web posta için özel tema geçersiz kılma desteği sağlar, böylece temaları yükseltmelerden sonra kalıcı olarak değiştirebilirsiniz. Bir geçersiz kılma etkinleştirmek için, temayı değiştirmek istediğiniz temanın ilgili temadizini içinde temanızı değiştirerek ve <code>override.css</code> adında bir css dosyası oluşturun veya örnek dosyalardan birini yeniden adlandırın ve ardından tarayıcıyı temizleyin. Tünel yöneticisi ve konsol aynı override.css'yi kullanır. Bir geçersiz kılmayı etkisiz hale getirmek için <code>override.css</code> dosyasını silin veya yeniden adlandırın ve ardından tarayıcıyı temizleyin (genellikle Control + Shift + R)."
 
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
-msgstr "Temalar dizini, <code>docs/themes</code> altında I2P uygulama dizininde bulunur. Konsol ve I2PSnark tema alt dizinlerinde örnek geçersiz kılma dosyaları bulunmaktadır."
+msgstr "Temalar dizini, <code>docs/themes</code> altında I2P uygulama dizininde bulunur. Konsol ve Torrentler tema alt dizinlerinde örnek geçersiz kılma dosyaları bulunmaktadır."
 
 msgid "Sidebar Information"
 msgstr "Kenar Çubuğu Bilgisi"
@@ -7929,7 +7929,7 @@ msgid "This is the number of peers your router has available for building your e
 msgstr "Bu, ağ performansını belirlemek için kullanılan keşif tünellerinizi oluşturmak için yönlendiricinizin kullanılabilir eş sayısıdır. Genellikle 8-75 aralığındadır. Hızlı eşler yüksek kapasite seviyesine dahildir. Yüksek kapasiteli eşleriniz <a href='/profiles'>Profiller sayfasında</a> gösterilir. <a href='/configstats#router.highCapacityPeers'>[Grafiklemeyi etkinleştir]</a>"
 
 msgid "This is the number of peers your router will use for network database inquiries. These are usually the <i>floodfill</i> routers which are responsible for maintaining network integrity. Your well integrated peers are shown on the bottom of the <a href='/profiles'>Profiles page</a>."
-msgstr "Bu, yönlendiricinizin ağ veritabanı sorgularında kullanacağı eş sayısıdır. Bunlar genellikle ağ bütünlüğünü korumaktan sorumlu olan <i>floodfill</i> yönlendiricileridir. Uygun entegre edilmiş eşleriniz <a href='/profiles'>Profiller sayfasının</a> altında gösterilir. "
+msgstr "Bu, yönlendiricinizin ağ veritabanı sorgularında kullanacağı eş sayısıdır. Bunlar genellikle ağ bütünlüğünü korumaktan sorumlu olan <i>floodfill</i> yönlendiricileridir. Uygun entegre edilmiş eşleriniz <a href='/profiles'>Profiller sayfasının</a> altında gösterilir."
 
 msgid "This is the total number of peers that are known by your router. They are listed on the <a href='/netdb'>Network Database page</a>. This may range from under 100 to 1000 or more. This number is not the total size of the network; it may vary widely depending on your total bandwidth, shared bandwidth, and locally-generated traffic. I2P does not require a router to know every other router in the network."
 msgstr "Bu, yönlendiriciniz tarafından bilinen toplam düğüm sayısıdır. Onlar <a href='/netdb'>Ağ Veritabanı sayfasında</a> listelenmiştir. Bu sayı ağın toplam büyüklüğü değildir; tamamen bant genişliğinize, paylaşılan bant genişliğinize ve yerel olarak üretilen trafiğe bağlı olarak geniş bir yelpazede değişebilir. I2P, bir yönlendiricinin ağdaki her yönlendiriciyi bilmesini gerektirmez."
@@ -8646,7 +8646,7 @@ msgid "Browser Setup"
 msgstr "Tarayıcı Kurulumu"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr "I2P ağında barındırılan web sitelerine erişmek ve clearnet'teki sitelere bağlanmak için varsayılan outproxy'u kullanmak isterseniz, tarayıcınızı I2P+ <b>HTTP</b> proxy'yi kullanacak şekilde yapılandırmanız gerekir, bu proxy varsayılan olarak <code>127.0.1 port 4444</code>-de çalışır. "
+msgstr "I2P ağında barındırılan web sitelerine erişmek ve clearnet'teki sitelere bağlanmak için varsayılan outproxy'u kullanmak isterseniz, tarayıcınızı I2P+ <b>HTTP</b> proxy'yi kullanacak şekilde yapılandırmanız gerekir, bu proxy varsayılan olarak <code>127.0.1 port 4444</code>-de çalışır."
 
 msgid "Welcome to I2P+!"
 msgstr "I2P+ Yazılımına Hoş Geldiniz!"

@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "从文件导入"
 
 msgid "Manually added via SusiDNS"
-msgstr "通过 SusiDNS 手工添加。"
+msgstr "通过 DNS 手工添加。"
 
 msgid "Manually added"
 msgstr "手工添加"
@@ -599,13 +599,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "其他来源的订阅 URL 参见 I2P 站点的 <a href=\"http://www.i2p2.i2p/faq_zh.html\">FAQ</a>。"
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "如果SusiDNS被设置为发布您的地址簿，您的地址将会在已发布的地址簿中出现并保存到将要分享的hosts.txt中。"
+msgstr "如果DNS被设置为发布您的地址簿，您的地址将会在已发布的地址簿中出现并保存到将要分享的hosts.txt中。"
 
 msgid "Published Addressbook"
 msgstr "已发布的地址簿"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "要把SusiDNS设置为自动发布您的地址簿，请在配置页设置'should_publish=true'"
+msgstr "要把DNS设置为自动发布您的地址簿，请在配置页设置'should_publish=true'"
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "除了您在此处手动添加或添加到主通讯录中的任何主机之外，所有订阅的主机都将出现在此通讯录中。"
@@ -656,7 +656,7 @@ msgid "for websites"
 msgstr "给网站"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "如果将SusiDNS配置为发布路由器地址簿，它将导出包含所有主机的hosts.txt文件（默认为eepsite的根目录）。"
+msgstr "如果将DNS配置为发布路由器地址簿，它将导出包含所有主机的hosts.txt文件（默认为eepsite的根目录）。"
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "手动添加到您的主地址簿中的地址将与您的路由器地址簿合并。"

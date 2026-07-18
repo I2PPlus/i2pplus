@@ -30,7 +30,7 @@ msgid "Downloading"
 msgstr " डाउनलोड कर रहा है"
 
 msgid "Configuring I2PSnark with I2CP options"
-msgstr "I2CP विकल्पों के साथ I2PSnark की संरचना करना"
+msgstr "I2CP विकल्पों के साथ टॉरेंट की संरचना करना"
 
 msgid "No write permissions for data directory"
 msgstr "डेटा डायरेक्टरी के लिए लिखने की अनुमति नहीं है"
@@ -63,19 +63,19 @@ msgid "Download speed limit is {0}KB/s"
 msgstr "डाउनलोड गति सीमा {0}KB/s है"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr "नोट: इस परिवर्तन को लागू करने के लिए आपको अपने टॉरेंट को रोकना पड़ा हो सकता है या I2PSnark को पुनः आरंभ करना पड़ सकता है।"
+msgstr "नोट: इस परिवर्तन को लागू करने के लिए आपको अपने टॉरेंट को रोकना पड़ा हो सकता है या टॉरेंट को पुनः आरंभ करना पड़ सकता है।"
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "आगंतुक टनल में +0/1 टनल हॉप रैंडमाइज़ेशन सक्षम कर दिया गया है"
 
 msgid "Disabled tunnel hop randomization on Inbound tunnels"
-msgstr "आगंतुक टनल में टनल हॉप रैंडमाइज़ेशन विकलांग कर दिया गया है"
+msgstr "आगंतुक टनल में टनल हॉप रैंडमाइज़ेशन अक्षम कर दिया गया है"
 
 msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
 msgstr "निकासी टनल में +0/1 टनल हॉप रैंडमाइज़ेशन सक्षम कर दिया गया है"
 
 msgid "Disabled tunnel hop randomization on Outbound tunnels"
-msgstr "निकासी टनल में टनल हॉप रैंडमाइज़ेशन विकलांग कर दिया गया है"
+msgstr "निकासी टनल में टनल हॉप रैंडमाइज़ेशन अक्षम कर दिया गया है"
 
 #, java-format
 msgid "Startup delay changed to {0}"
@@ -248,7 +248,7 @@ msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "त्रुटि - मेमोरी की कमी, {0} से टॉरेंट बनाने में असमर्थ"
 
 msgid "Initializing I2PSnark and opening tunnels"
-msgstr "I2PSnark को निर्माण कर रहे हैं और ट्यूनल खोल रहे हैं"
+msgstr "टॉरेंट को निर्माण कर रहे हैं और ट्यूनल खोल रहे हैं"
 
 #, java-format
 msgid "Torrent added and started: {0}"
@@ -384,7 +384,7 @@ msgid "Download finished: {0}"
 msgstr "{0} का डाउनलोड पूरा हो गया है"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "टॉरेंट"
 
 #, java-format
 msgid "Starting torrent: {0}"
@@ -1159,13 +1159,13 @@ msgid "Auto start torrents"
 msgstr "ऑटो स्टार्ट टॉरेंट"
 
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "I2PSnark शुरू होने पर टॉरेंट जोड़ने पर स्वचालित रूप से टॉरेंट शुरू करें और पुनः शुरू करें"
+msgstr "टॉरेंट शुरू होने पर टॉरेंट जोड़ने पर स्वचालित रूप से टॉरेंट शुरू करें और पुनः शुरू करें"
 
 msgid "Startup delay"
 msgstr "शुरू करने की देरी"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "I2PSnark शुरू होने से पहले स्वचालित शुरू होने वाले टॉरेंट को लोड करने में कितना समय लगेगा"
+msgstr "टॉरेंट शुरू होने से पहले स्वचालित शुरू होने वाले टॉरेंट को लोड करने में कितना समय लगेगा"
 
 msgid "minutes"
 msgstr "मिनट"
@@ -1261,7 +1261,7 @@ msgid "Add"
 msgstr "जोड़ें"
 
 msgid "Select trackers for removal from I2PSnark's known list"
-msgstr "I2PSnark की जानकारी की सूची से ट्रैकर चुनें जिन्हें हटाना है"
+msgstr "टॉरेंट की जानकारी की सूची से ट्रैकर चुनें जिन्हें हटाना है"
 
 msgid "Website URL"
 msgstr "वेबसाइट यूआरएल"

@@ -9,7 +9,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 
 msgid "Hash"
-msgstr "Hash"
+msgstr "Fișier hash"
 
 msgid "Banned by Router Hash"
 msgstr "Banned de Router Hash"
@@ -130,7 +130,7 @@ msgid "unknown"
 msgstr "necunoscut"
 
 msgid "Floodfill"
-msgstr "Floodfill"
+msgstr "Umplere prin inundare"
 
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Afișați toate routerele cu această capacitate în NetDb"
@@ -181,7 +181,7 @@ msgid "External IP"
 msgstr "IP extern"
 
 msgid "Layer 3 Forwarding"
-msgstr "Layer 3 Redirecţionază"
+msgstr "Layer 3 Redirecționază"
 
 msgid "Default Connection Service"
 msgstr "Servici de conexiune implicit"
@@ -536,7 +536,7 @@ msgid "I2P+ Service now disabled on system start"
 msgstr "Serviciul I2P+ este acum dezactivat la pornirea sistemului"
 
 msgid "Dump threads"
-msgstr "Dump threads"
+msgstr "Elimină firele"
 
 #, java-format
 msgid "Threads dumped to {0}"
@@ -716,7 +716,7 @@ msgid "Max"
 msgstr "Max"
 
 msgid "Avg"
-msgstr "Avg"
+msgstr "Medie"
 
 msgid "Now"
 msgstr "Acum"
@@ -803,10 +803,10 @@ msgid "I2PTunnel"
 msgstr "Tunel I2P"
 
 msgid "SAM"
-msgstr "SAM"
+msgstr "MAS"
 
 msgid "Website"
-msgstr "Website"
+msgstr "Pagină web"
 
 msgid "Local Router Family Certificate"
 msgstr "Certificat al familiilor de rutere locale."
@@ -866,7 +866,7 @@ msgid "Install Plugin from File"
 msgstr "Instalează plugin din fișier"
 
 msgid "Update All Installed Plugins"
-msgstr "Actualizează  toate plugin-urile instalate"
+msgstr "Actualizează toate plugin-urile instalate"
 
 msgid "Delete client disabled"
 msgstr "Ștergere client dezactivat"
@@ -919,7 +919,7 @@ msgid "Plugin configuration saved."
 msgstr "Configurație plugin salvată."
 
 msgid "WebApp"
-msgstr "WebApp"
+msgstr "Aplicație web"
 
 msgid "started"
 msgstr "pornit"
@@ -934,10 +934,10 @@ msgid "No plugin URL specified."
 msgstr "Nici un URL pentru plugin specificat."
 
 msgid "You must enter a file"
-msgstr "Trebuie să introduceți un fişier"
+msgstr "Trebuie să introduceți un fișier"
 
 msgid "Install from file failed"
-msgstr "Instalarea din fișier a eşuat"
+msgstr "Instalarea din fișier a eșuat"
 
 #, java-format
 msgid "No update URL specified for {0}"
@@ -1033,10 +1033,10 @@ msgid "License"
 msgstr "Licență"
 
 msgid "Start"
-msgstr "Start"
+msgstr "Pornire"
 
 msgid "Stop"
-msgstr "Stop"
+msgstr "Oprire"
 
 msgid "Edit"
 msgstr "Editează"
@@ -1085,7 +1085,7 @@ msgid "Add item"
 msgstr "Adaugă un element"
 
 msgid "Restore defaults"
-msgstr "Restabileşte implicitele"
+msgstr "Restabilește implicitele"
 
 msgid "Bad group detected, please retry"
 msgstr "Grup greșit detectat, vă rugăm să reîncercați"
@@ -1271,7 +1271,7 @@ msgid "Sidebar"
 msgstr "Bara laterală"
 
 msgid "UI"
-msgstr "UI"
+msgstr "ObservaÅ£ie"
 
 msgid "Tunnels"
 msgstr "Tuneluri"
@@ -1295,7 +1295,7 @@ msgid "Plugins"
 msgstr "Plugin-uri"
 
 msgid "Web Apps"
-msgstr "Web Apps"
+msgstr "Aplicații web"
 
 msgid "Advanced"
 msgstr "Avansat"
@@ -1304,7 +1304,7 @@ msgid "Bans"
 msgstr "Interdicții"
 
 msgid "Reseeding"
-msgstr "Reseeding"
+msgstr "Reînsămânțare"
 
 msgid "Router Family"
 msgstr "Familie de rutere."
@@ -1424,7 +1424,7 @@ msgid "Manually banned via {0}"
 msgstr "Banat manual de {0}"
 
 msgid "Peer"
-msgstr "Peer"
+msgstr "Pereche"
 
 msgid "banned until restart"
 msgstr "Banat până reporniți"
@@ -1433,7 +1433,7 @@ msgid "Invalid peer"
 msgstr "Peer invalid"
 
 msgid "Unban peer"
-msgstr "Unban peer"
+msgstr "Deblocare peer"
 
 msgid "unbanned"
 msgstr "unbanat"
@@ -1506,13 +1506,13 @@ msgid "Reseed complete, check summary bar for status"
 msgstr "Reseed complet, verificați bara de rezumat pentru stare"
 
 msgid "Reseed from file"
-msgstr "Reseed de la fişier"
+msgstr "Reseed de la fișier"
 
 msgid "No file specified. Please select a valid .zip or .su3 file to reseed from."
 msgstr "Nu este specificat niciun fișier. Vă rugăm să selectați un fișier .zip sau .su3 valabil pentru a reveni."
 
 msgid "Reseed from file failed"
-msgstr "Reseed de la fișier eşuat"
+msgstr "Reseed de la fișier eșuat"
 
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
@@ -1585,7 +1585,7 @@ msgid "Restore full default"
 msgstr "Restabiliți la setările de bază"
 
 msgid "Restore minimal default"
-msgstr "Restabileşte implicitele minimale"
+msgstr "Restabilește implicitele minimale"
 
 msgid "Sidebar preferences updated"
 msgstr "Preferințele barei laterale actualizate"
@@ -1659,7 +1659,7 @@ msgid "Exploratory tunnels"
 msgstr "Tunele de exploatare"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrente"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "AVERTIZARE ANONIMITATE - Setările includ tunele 0-hop."
@@ -1751,7 +1751,7 @@ msgid "Enabling the Universal Theming option is recommended when embedding these
 msgstr "Activarea opțiunii Theming Universal este recomandată atunci când încorporați aceste aplicații"
 
 msgid "Embed I2PSnark and I2PMail in the console"
-msgstr "Încorporați I2PSnark și I2PMail în consolă"
+msgstr "Încorporați Torrente și I2PMail în consolă"
 
 msgid "Add a user and password to enable."
 msgstr "Adăugați un utilizator și o parolă pentru a activa."
@@ -1796,7 +1796,7 @@ msgid "Clock shifted"
 msgstr "Ora modificată"
 
 msgid "Crashed"
-msgstr "Prăbuşit"
+msgstr "Prăbușit"
 
 msgid "Critical error"
 msgstr "Eroare critică"
@@ -1805,10 +1805,10 @@ msgid "Installed new version"
 msgstr "Versiunea nouă instalată"
 
 msgid "Install failed"
-msgstr "Instalare eşuată"
+msgstr "Instalare eșuată"
 
 msgid "Network error"
-msgstr "Eroare reţea"
+msgstr "Eroare rețea"
 
 msgid "New router identity"
 msgstr "Nouă identitate router"
@@ -1868,7 +1868,7 @@ msgstr "Niciun eveniment \"{0}\" găsit"
 
 #, java-format
 msgid "No \"{0}\" events found in previous {1}"
-msgstr "Niciun  \"{0}\" eveniment/e găsit/e anterior {1}."
+msgstr "Niciun \"{0}\" eveniment/e găsit/e anterior {1}."
 
 msgid "Time"
 msgstr "Timp"
@@ -1891,7 +1891,7 @@ msgstr "Nimic de afișat - nicio statistică specificată!"
 
 #, java-format
 msgid "ending {0} ago"
-msgstr "s-a terminat {0} in urma "
+msgstr "s-a terminat {0} în urmă"
 
 msgid "Return to main graphs page"
 msgstr "Reveniți la pagina principală a graficelor"
@@ -1927,10 +1927,10 @@ msgid "Next interval"
 msgstr "Intervalul următor"
 
 msgid "Plot averages"
-msgstr "Plot averages"
+msgstr "Trasați mediile"
 
 msgid "plot events"
-msgstr "plot events"
+msgstr "evenimente de complot"
 
 msgid "Hide Legend"
 msgstr "Ascunde legendă"
@@ -1978,7 +1978,7 @@ msgid "Do not show legend on graphs"
 msgstr "Nu afișați legende pe grafice"
 
 msgid "Persistence"
-msgstr "Persistenţă"
+msgstr "Persistență"
 
 msgid "Store graph data on disk"
 msgstr "Stocați datele grafice pe disc"
@@ -2002,7 +2002,7 @@ msgid "Configuration"
 msgstr "Configurație"
 
 msgid "FAQ"
-msgstr "FAQ"
+msgstr "Întrebări frecvente"
 
 msgid "JSON-RPC API"
 msgstr "API JSON-RPC"
@@ -2092,7 +2092,7 @@ msgid "Local web server for hosting your own content on I2P"
 msgstr "Server web local pentru gazduirea propriului continut pe I2P"
 
 msgid "Web Server"
-msgstr "Web Server"
+msgstr "Server web"
 
 msgid "Configure Bandwidth"
 msgstr "Configurează lățimea de bandă"
@@ -2134,16 +2134,16 @@ msgid "Start or stop Router clients"
 msgstr "Porniți sau opriți clienții Router"
 
 msgid "Bug tracker"
-msgstr "Bug tracker"
+msgstr "Dispozitiv de urmărire a erorilor"
 
 msgid "I2P+ Bug Reports"
-msgstr "I2P+ Bug Reports"
+msgstr "I2P+ Rapoarte de erori"
 
 msgid "Frequently Asked Questions"
 msgstr "Întrebări frecvente"
 
 msgid "I2P FAQ"
-msgstr "I2P FAQ"
+msgstr "Întrebări frecvente I2P"
 
 msgid "I2P Plugins"
 msgstr "Pluginuri I2P"
@@ -2200,7 +2200,7 @@ msgid "zzz Domain Registry"
 msgstr "Înregistrare nume de domeniu I2P"
 
 msgid "I2P Forum"
-msgstr "I2P Forum"
+msgstr "Forumul I2P"
 
 msgid "I2P-related community forums"
 msgstr "Forumuri comunitare legate de I2P"
@@ -2221,7 +2221,7 @@ msgid "Encrypted I2P Pastebin"
 msgstr "Pastebin I2P criptat"
 
 msgid "Pastebin"
-msgstr "Pastebin"
+msgstr "Coș de lipireComment"
 
 msgid "Landing page for various services"
 msgstr "Pagina de destinație pentru diverse servicii"
@@ -2260,7 +2260,7 @@ msgid "Mozilla Developer Network"
 msgstr "Rețeaua de dezvoltatori Mozilla"
 
 msgid "Internet Encyclopedia of Philosophy"
-msgstr "Internet Encyclopedia of Philosophy"
+msgstr "Enciclopedia online a filosofiei"
 
 msgid "Standford Encyclopedia of Philosophy"
 msgstr "Enciclopedia de filozofie Standford"
@@ -2323,7 +2323,7 @@ msgid "Where news meets its scholarly match"
 msgstr "Unde știrile se întâlnesc cu potrivirea sa academică"
 
 msgid "Jurist"
-msgstr "Jurist"
+msgstr "jr."
 
 msgid "Legal News &amp; Commentary"
 msgstr "Știri legale și comentarii"
@@ -2413,7 +2413,7 @@ msgid "Global News"
 msgstr "Știri globale"
 
 msgid "TheGuardian"
-msgstr "TheGuardian"
+msgstr "Gardianul"
 
 msgid "TheMarkup"
 msgstr "TheMarkup"
@@ -2534,7 +2534,7 @@ msgid "Installed"
 msgstr "Instalat"
 
 msgid "Config Dir"
-msgstr "Config Dir"
+msgstr "Directoriu configurare"
 
 msgid "Updated"
 msgstr "Actualizat"
@@ -2659,7 +2659,7 @@ msgid "Local Router"
 msgstr "Router local "
 
 msgid "Router Lookup"
-msgstr "Router Lookup"
+msgstr "Căutare router"
 
 msgid "All Routers"
 msgstr "Toate routerele"
@@ -2969,10 +2969,10 @@ msgid "Published"
 msgstr "Publicat"
 
 msgid "Whois"
-msgstr "Whois"
+msgstr "WHOIS"
 
 msgid "direct"
-msgstr "direct"
+msgstr "directă"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Familie verificată (certificatul de semnare este instalat și valid)"
@@ -3023,7 +3023,7 @@ msgid "Hidden or starting up"
 msgstr "Ascuns sau pentru pornire"
 
 msgid "SSU"
-msgstr "SSU"
+msgstr "Ssu"
 
 msgid "SSU with Introducers"
 msgstr "SSU cu introducere"
@@ -3041,7 +3041,7 @@ msgid "SSU [IPv6 Only] with Introducers"
 msgstr "IPv6 doar SSU, introducere"
 
 msgid "SSU [IPv6]"
-msgstr "SSU [IPv6]"
+msgstr "Ssu [IPv6]"
 
 msgid "SSU [IPv6] with Introducers"
 msgstr "IPv6 SSU, introducere"
@@ -3053,7 +3053,7 @@ msgid "NTCP [IPv6]"
 msgstr "NTCP [IPv6]"
 
 msgid "NTCP [IPv6] &amp; SSU"
-msgstr "NTCP [IPv6] &amp; SSU"
+msgstr "NTCP [IPv6] &amp; Ssu"
 
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "IPv6 NTCP, SSU, introducere"
@@ -3121,7 +3121,7 @@ msgid "Direction/Introduction"
 msgstr "Direcție/Introducere"
 
 msgid "Dir"
-msgstr "Dir"
+msgstr "Director"
 
 msgid "Peer inactivity"
 msgstr "Inactivitate de la egal la egal"
@@ -3133,7 +3133,7 @@ msgid "Average inbound/outbound rate (KBps)"
 msgstr "Rata medie de intrare/ieșire (KBps)"
 
 msgid "In / Out"
-msgstr "In / Out"
+msgstr "Intrare/ieșire"
 
 msgid "Duration of connection to peer"
 msgstr "Durata conexiunii la peer"
@@ -3456,7 +3456,7 @@ msgid "Integration"
 msgstr "Integrare "
 
 msgid "peer"
-msgstr "peer"
+msgstr "egal"
 
 msgid "peers"
 msgstr "semeni"
@@ -3748,7 +3748,7 @@ msgid "Advanced Links"
 msgstr "Linkuri avansate"
 
 msgid "Bandwidth Graph"
-msgstr "Informaţii trafic"
+msgstr "Informații trafic"
 
 msgid "UTC Clock"
 msgstr "UTC Ceas"
@@ -3796,7 +3796,7 @@ msgid "Update Status"
 msgstr "Starea de actualizare"
 
 msgid "I2P Router Help &amp; FAQ"
-msgstr "I2P router-ajutor &amp;FAQ  "
+msgstr "I2P router-ajutor &amp;FAQ "
 
 msgid "Advanced Settings"
 msgstr "Setări avansate"
@@ -3865,7 +3865,7 @@ msgid "Internals"
 msgstr "Interne"
 
 msgid "Certs"
-msgstr "Certs"
+msgstr "Certificări"
 
 msgid "Review active encryption certificates used in console"
 msgstr "Examinați certificatele active de criptare utilizate în consola"
@@ -3904,7 +3904,7 @@ msgid "Show recent peer performance profiles"
 msgstr "Arată profilele de performanță ale partenerului recent"
 
 msgid "View existing tunnels and tunnel build status"
-msgstr "Vezi tuneluri existente și statutul construirii tunelului  "
+msgstr "Vezi tuneluri existente și statutul construirii tunelului "
 
 msgid "Streams"
 msgstr "Fluxuri"
@@ -3928,7 +3928,7 @@ msgid "View router debug information"
 msgstr "Vizualizați informațiile de depanare a routerului"
 
 msgid "Jars"
-msgstr "Jars"
+msgstr "Borcane"
 
 msgid "Review extended info about installed .jar and .war files"
 msgstr "Examinați informații extinse despre fișierele .jar și .war instalate"
@@ -4449,7 +4449,7 @@ msgid "AVG"
 msgstr "AVG"
 
 msgid "MEDIAN"
-msgstr "MEDIAN"
+msgstr "Mediană"
 
 msgid "MAX"
 msgstr "MAX"
@@ -4461,7 +4461,7 @@ msgid "Routers"
 msgstr "Routere"
 
 msgid "n/a"
-msgstr "n/a"
+msgstr "Nu se aplică"
 
 msgid "Last lookup successful"
 msgstr "Ultima căutare reușită"
@@ -4527,7 +4527,7 @@ msgid "Inbound Gateway"
 msgstr "Gateway intrare"
 
 msgid "Participant"
-msgstr "Participant"
+msgstr "Cursant"
 
 msgid "grace period"
 msgstr "perioada de grație"
@@ -4586,7 +4586,7 @@ msgid "Inbound or outbound?"
 msgstr "De intrare sau de iesire?"
 
 msgid "In/Out"
-msgstr "Intrare/Ieşire"
+msgstr "Intrare/Ieșire"
 
 msgid "Tunnel test status"
 msgstr "Stare test tunel"
@@ -4723,7 +4723,7 @@ msgid "My eepsite web server"
 msgstr "Serverul meu web eepsite"
 
 msgid "I2P webserver (eepsite)"
-msgstr "I2P webserver (eepsite)"
+msgstr "Server web I2P (eepsite)"
 
 msgid "I2P Web Server (eepsite)"
 msgstr "I2P Webserver (eepsite)"
@@ -4759,10 +4759,10 @@ msgid "Proxy to connect to I2P's anonymized IRC chat network"
 msgstr "Proxy pentru a vă conecta la rețeaua de chat IRC anonimizată a I2P"
 
 msgid "I2P webserver"
-msgstr "I2P webserver"
+msgstr "Webserver I2P"
 
 msgid "I2P Webserver"
-msgstr "I2P Webserver"
+msgstr "Server web I2P"
 
 msgid "I2P Web Server"
 msgstr "I2P Webserver"
@@ -4897,7 +4897,7 @@ msgid "Enrollment"
 msgstr "Inrolare"
 
 msgid "Automatic"
-msgstr "Automatic"
+msgstr "Automat"
 
 msgid "Force On"
 msgstr "Forțează pornirea"
@@ -5066,7 +5066,7 @@ msgid "config router family"
 msgstr "configurează familia de routere"
 
 msgid "Routers in the same family share a family key."
-msgstr "Routerele aparținând aceleiaşi familii partajează o parolă a familiei."
+msgstr "Routerele aparținând aceleiași familii partajează o parolă a familiei."
 
 msgid "To join an existing family, import the private key you exported from a router in the family."
 msgstr "Pentru a vă conecta la o familie existentă, importați cheia privată pe care ați exportat-o de la un router din familie."
@@ -5078,7 +5078,7 @@ msgid "Join Existing Router Family"
 msgstr "Alăturați-vă unei familii de routere."
 
 msgid "Import the secret family key that you exported from an existing router in the family."
-msgstr "Importă parola familiei pe care ați exportat-o  a fi de la alte routere din familie."
+msgstr "Importă parola familiei pe care ați exportat-o a fi de la alte routere din familie."
 
 msgid "Select secret key file"
 msgstr "Selectați fișierul cheie secret"
@@ -5330,7 +5330,7 @@ msgid "This is an experimental feature"
 msgstr "Aceasta este o caracteristică experimentală"
 
 msgid "Experimental"
-msgstr "Experimental"
+msgstr "Filme experimentale"
 
 msgid "IPv6 Configuration"
 msgstr "Configurație IPv6"
@@ -5408,13 +5408,13 @@ msgid "config peers"
 msgstr "configurare parteneri"
 
 msgid "Peer Manager"
-msgstr "Peer Manager"
+msgstr "Manager de la egal la egal"
 
 msgid "Manual Peer Controls"
 msgstr "Controlul Manual al Partenerilor"
 
 msgid "Router Hash"
-msgstr "Router Hash"
+msgstr "Hash router"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "Blocare / deblocare manuală a partenerilor"
@@ -5471,7 +5471,7 @@ msgid "The plugins listed below are started by the webConsole client."
 msgstr "Plugin-urile enumerate mai jos sunt pornite de către clientul webConsole."
 
 msgid "config reseeding"
-msgstr "config reseeding"
+msgstr "resetare configurație"
 
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
 msgstr "Restabilirea este procesul de bootstrapping folosit pentru a găsi alte routere atunci când instalați prima data I2P, sau atunci când router-ul are prea puține referințe router rămase."
@@ -5489,7 +5489,7 @@ msgid "Reseeding Help"
 msgstr "Ajutor pentru reînsămânțare"
 
 msgid "Reseed URLs"
-msgstr "Reseed URLs"
+msgstr "URL-uri resetate"
 
 msgid "Reseed URL Selection"
 msgstr "Selecție Reseed URL"
@@ -5513,10 +5513,10 @@ msgid "HTTPS"
 msgstr "HTTPS"
 
 msgid "SOCKS 4/4a"
-msgstr "SOCKS 4/4a"
+msgstr "ȘOSETE 4/4A"
 
 msgid "SOCKS 5"
-msgstr "SOCKS 5"
+msgstr "ȘOSETE 5"
 
 msgid "This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin if configured. Note: this option will not work when you have 0 known peers."
 msgstr "Această opțiune va folosi HTTP Outproxy de la I2P pentru Reseed sau pluginul Orchid dacă este configurat. Notă: Această opțiune nu va funcționa atunci când aveți 0 colegi cunoscuți."
@@ -5531,13 +5531,13 @@ msgid "Proxy requires authorization"
 msgstr "Proxy necesită autorizare"
 
 msgid "Manual Reseed"
-msgstr "Manual Reseed"
+msgstr "Resetare manuală"
 
 msgid "The su3 format is preferred, as it will be verified as signed by a trusted source."
-msgstr "Formatul su3 este preferat şi va fi verificat ca semnat de o sursă de încredere."
+msgstr "Formatul su3 este preferat și va fi verificat ca semnat de o sursă de încredere."
 
 msgid "The zip format is unsigned; use a zip file only from a source that you trust."
-msgstr "Formatul arhivat este nesemnat, utilizați un fişier arhivat dintr-o sursă de încredere."
+msgstr "Formatul arhivat este nesemnat, utilizați un fișier arhivat dintr-o sursă de încredere."
 
 msgid "Enter zip or su3 URL"
 msgstr "Introduceți zip sau URL su3"
@@ -5694,7 +5694,7 @@ msgid "The default settings are optimized for general usage and normally don't n
 msgstr "Setările implicite sunt optimizate pentru utilizare generală și, în mod normal, nu trebuie modificate."
 
 msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
-msgstr "Pentru a modifica setările tunelului client, utilizați <a href=/i2ptunnelmgr>Manager de tunel</a> sau <a href=/i2psnark/configure>pagina de configurare</a> pentru I2PSnark."
+msgstr "Pentru a modifica setările tunelului client, utilizați <a href=/i2ptunnelmgr>Manager de tunel</a> sau <a href=/i2psnark/configure>pagina de configurare</a> pentru Torrente."
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "Pentru a activa modificările numai pentru sesiune ale tunelurilor client, activați <a href=/help/advancedsettings>modul avansat</a> al consolei."
@@ -5890,7 +5890,7 @@ msgid "New User Guide"
 msgstr "Ghidul utilizatorului nou"
 
 msgid "Web Hosting"
-msgstr "Web Hosting"
+msgstr "Găzduire web"
 
 msgid "Hostname Registration"
 msgstr "Înregistrare nume de gazdă"
@@ -5899,7 +5899,7 @@ msgid "Glossary"
 msgstr "Glosar"
 
 msgid "Legal"
-msgstr "Legal"
+msgstr "Juridic"
 
 msgid "Change Log"
 msgstr "Modifică Jurnal"
@@ -6427,7 +6427,7 @@ msgid "If set to true, this option will place an icon in the system tray / notif
 msgstr "Dacă este setat la adevărat, această opțiune va plasa un icon în bara de sistem / zona de notificare, cu opțiuni de control ale serviciului de bază. [Dezactivat în mod implicit]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "Această setare permite configurarea numărului maxim de fișiere pe torrent pe care I2PSnark îl va permite, în momentul descărcării sau creării unui torrent. Rețineți că creșterea semnificativă a acestei valori față de valoarea implicită de 2000 de fișiere poate necesita o configurare suplimentară pe sistemul gazdă pentru a crește numărul maxim de fișiere deschise pe care sistemul de operare îl va permite (de exemplu, <code>ulimit -n</code> pe Linux). Pentru a efectua modificarea, adăugați în fișierul de configurare a I2PSnark <code>i2psnark.config</code>. [Este necesară repornirea I2PSnark sau a routerului] config [Este necesară repornirea I2PSnark sau a routerului]"
+msgstr "Această setare permite configurarea numărului maxim de fișiere pe torrent pe care Torrente îl va permite, în momentul descărcării sau creării unui torrent. Rețineți că creșterea semnificativă a acestei valori față de valoarea implicită de 2000 de fișiere poate necesita o configurare suplimentară pe sistemul gazdă pentru a crește numărul maxim de fișiere deschise pe care sistemul de operare îl va permite (de exemplu, <code>ulimit -n</code> pe Linux). Pentru a efectua modificarea, adăugați în fișierul de configurare a Torrente <code>i2psnark.config</code>. [Este necesară repornirea Torrente sau a routerului] config [Este necesară repornirea Torrente sau a routerului]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "Această setare specifică tunelului vă permite să activați sau dezactivați răspunsuri la ping-urile trimise la serverele găzduite de router. Pentru a dezactiva ping-urile, trebuie să adăugați linia <code>i2p.streaming.answerPings=false</code> în secțiunea <i>Opțiuni personalizate</i> pentru configurația serverului în Managerul de Tunel."
@@ -6502,7 +6502,7 @@ msgid "Certain firewalls such as symmetric NATs may not work well with I2P."
 msgstr "Unele firewall-uri, cum ar fi NAT simetrice poate să nu funcționeze bine cu I2P."
 
 msgid "UPnP is used to communicate with Internet Gateway Devices (IGDs) to detect the external IP address and forward ports."
-msgstr "UPnP este folosit pentru a comunica cu dispozitivele gateway Internet (Igds) pentru a detecta adresa IP externă și  porturile înaintate."
+msgstr "UPnP este folosit pentru a comunica cu dispozitivele gateway Internet (Igds) pentru a detecta adresa IP externă și porturile înaintate."
 
 msgid "UPnP support is beta, and may not work for any number of reasons"
 msgstr "Suportul UPnP este în stadiu beta și s-ar putea să nu funcționeze din mai multe motive."
@@ -6733,7 +6733,7 @@ msgid "These are the local I2P port mappings, listening only to local connection
 msgstr "Acestea sunt mapările locale ale porturilor I2P, care ascultă numai conexiunile locale în mod implicit, cu excepția cazului în care este specificat altfel. Cu excepția cazului în care aveți nevoie de acces de pe alte mașini, acestea ar trebui să fie accesibile numai de pe localhost."
 
 msgid "Function"
-msgstr "Funcţie"
+msgstr "Funcție"
 
 msgid "Notes"
 msgstr "Note"
@@ -6850,7 +6850,7 @@ msgid "I2P Terminology"
 msgstr "Terminologie I2P"
 
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "O aplicație web I2P care gestionează destinațiile serviciului pentru rețea, realizând mapări între hash-urile B64 și nume ușor de citit. Destinațiile pot fi adăugate manual sau prin abonare la fișierele hosts.txt. Este denumită și SusiDNS. Pentru mai multe informații, consultați <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>documentația online</a>."
+msgstr "O aplicație web I2P care gestionează destinațiile serviciului pentru rețea, realizând mapări între hash-urile B64 și nume ușor de citit. Destinațiile pot fi adăugate manual sau prin abonare la fișierele hosts.txt. Este denumită și DNS. Pentru mai multe informații, consultați <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>documentația online</a>."
 
 msgid "Base32 (B32) / Base64 (B64)"
 msgstr "Base32 (B32) / Base64 (B64)"
@@ -6859,13 +6859,13 @@ msgid "A <a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' 
 msgstr "Un link <a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' target=_blank rel=noreferrer>Base32</a> (care se termină întotdeauna cu .b32.i2p) reprezintă un hash al unei destinații <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external' target=_blank rel=noreferrer>Base64</a>. Pentru serviciile de pe rețea, hash-ul Base64 este adesea mapat pe un domeniu .i2p în agenda de adrese."
 
 msgid "B33"
-msgstr "B33"
+msgstr "b33"
 
 msgid "An address containing an encrypted LeaseSet is informally referred to as a b33 address, an extension of a base32 address with the host's public key and signature type encoded into the address instead of a lookup hash. This address type is required for blinded Leasesets. More information: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>B33 Specification</a>"
 msgstr "O adresă care conține un LeaseSet criptat este denumită informal o adresă b33, o extensie a unei adrese base32 cu cheia publică a gazdei și tipul semnăturii codate în adresa în loc de un hash de căutare. Acest tip de adresă este necesar pentru LeaseSet-urile orbite. Mai multe informații: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>Specificarea B33</a>"
 
 msgid "BOB"
-msgstr "BOB"
+msgstr "ASH"
 
 msgid "BOB (Basic Open Bridge) is a (now-deprecated) simple application-to-router protocol, superseded by <i>SAM</i>. For more information, see the <a href=https://geti2p.net/en/docs/api/bob class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
 msgstr "BOB (Basic Open Bridge) este un protocol aplicație-la-router simplu (în prezent depășit), înlocuit de <i>SAM</i>. Pentru mai multe informații, consultați <a href=https://geti2p.net/en/docs/api/bob class='sitelink external' target=_blank rel=noreferrer>documentația online</a>."
@@ -6967,7 +6967,7 @@ msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatica
 msgstr "O configurație <a href=/confignet#ipchange>opțională</a> care schimbă automat <a href=/netdb?r=.>identitatea routerului</a> și <a href=/confignet#udpconfig>portul extern</a> atunci când adresa IP publică a sistemului tău se modifică. Aceasta poate preveni o persoană sau o entitate ostilă să coreleze identitatea routerului tău și adresa IP în scenarii în care adresa IP se poate schimba frecvent, de exemplu, când rulezi I2P pe un laptop din diferite locații."
 
 msgid "Lease"
-msgstr "Lease"
+msgstr "Locațiunea"
 
 msgid "The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>."
 msgstr "Informația care definește autorizarea pentru un tunel specific de a primi mesaje către o <i>Destinație</i>."
@@ -6976,7 +6976,7 @@ msgid "A group of tunnel entry points (leases) for a <i>destination</i>. Note: A
 msgstr "Un grup de puncte de intrare în tunel (contracte de închiriere) pentru o <i>destinație</i>. Notă: Un tunel de server de 0 hop va avea doar un contract de închiriere, indiferent de numărul de tuneluri configurate."
 
 msgid "Monotone / mtn"
-msgstr "Monotone / mtn"
+msgstr "Monoton / mtn"
 
 msgid "The distributed version control system (DVCS) previously used to maintain I2P's source code, now superseded by git."
 msgstr "Sistemul de control al versiunii distribuit (DVCS) folosit anterior pentru a menține codul sursă I2P, acum înlocuit de git."
@@ -7193,7 +7193,7 @@ msgid "Returns:"
 msgstr "Returnează:"
 
 msgid "Token (string), API (integer)"
-msgstr "Token (string), API (integer)"
+msgstr "Token (șir), API (întreg)"
 
 msgid "Authentication:"
 msgstr "Autentificare:"
@@ -7205,7 +7205,7 @@ msgid "A simple test method that returns the provided string. Useful for testing
 msgstr "O metodă simplă de testare care returnează string-ul furnizat. Util pentru testarea conectivității API și a autentificării."
 
 msgid "Echo (string)"
-msgstr "Echo (string)"
+msgstr "Ecou (șir)"
 
 msgid "Result (string - echoed input)"
 msgstr "Rezultat (string - intrare ecou)"
@@ -7910,11 +7910,11 @@ msgstr "Notă: Multe dintre etichetele și opțiunile din consolă au descrieri 
 msgid "Theme Overrides"
 msgstr "Înlocuiri tematică"
 
-msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr "I2P+ suportă suprascrieri de teme personalizate pentru consolă, managerul de tunele, I2PSnark, SusiDNS și Susimail, permitând modificări persistente ale temelor după actualizări. Pentru a activa o suprascriere, creați un fișier css numit <code>override.css</code> cu modificările temei și plasați-l în directorul temei corespunzătoare temei pe care doriți să o schimbați, sau redenumiți unul dintre fișierele exemplu și apoi actualizați forțat browser-ul. Notați că managerul de tunele și consola partajează același override.css. Pentru a dezactiva o suprascriere, ștergeți sau redenumiți fișierul <code>override.css</code> și apoi actualizați forțat browser-ul (de obicei Control + Shift + R)."
+msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Poștă web, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
+msgstr "I2P+ suportă suprascrieri de teme personalizate pentru consolă, managerul de tunele, Torrente, DNS și Poștă web, permitând modificări persistente ale temelor după actualizări. Pentru a activa o suprascriere, creați un fișier css numit <code>override.css</code> cu modificările temei și plasați-l în directorul temei corespunzătoare temei pe care doriți să o schimbați, sau redenumiți unul dintre fișierele exemplu și apoi actualizați forțat browser-ul. Notați că managerul de tunele și consola partajează același override.css. Pentru a dezactiva o suprascriere, ștergeți sau redenumiți fișierul <code>override.css</code> și apoi actualizați forțat browser-ul (de obicei Control + Shift + R)."
 
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
-msgstr "Dosarul temelor este situat în dosarul aplicației I2P sub denumirea de <code>docs/themes</code>. Există fișiere exemple de înlocuiri în subdosarele consolei și tematicii I2PSnark."
+msgstr "Dosarul temelor este situat în dosarul aplicației I2P sub denumirea de <code>docs/themes</code>. Există fișiere exemple de înlocuiri în subdosarele consolei și tematicii Torrente."
 
 msgid "Sidebar Information"
 msgstr "Informații de pe bara laterală"
@@ -8022,19 +8022,19 @@ msgid "Reachability Help"
 msgstr "Ajutor accesibilitate"
 
 msgid "If you think you have opened up your firewall and I2P still thinks you are firewalled, remember that you may have multiple firewalls, for example both software packages and external hardware routers."
-msgstr "Dacă credeți că ați deschis firewall și I2P încă crede că sunteti in spatele unui firewall, amintiți-vă că este posibil să fiți in spatele mai multor firewall-uri, de exemplu, a unui software și sau a unui router extern."
+msgstr "Dacă credeți că ați deschis firewall și I2P încă crede că sunteți în spatele unui firewall, amintiți-vă că este posibil să fiți în spatele mai multor firewall-uri, de exemplu, a unui software și sau a unui router extern."
 
 msgid "If there is an error, the <a href=\"/logs\">logs</a> may also help diagnose the problem."
 msgstr "Dacă apare o eroare, <a href=/logs>registrele</a> pot ajuta și ele la diagnosticarea problemei."
 
 msgid "Your UDP port does not appear to be firewalled."
-msgstr "Portul tău UDP nu apare să fie in spatele unui firewall."
+msgstr "Portul tău UDP nu apare să fie în spatele unui firewall."
 
 msgid "Firewalled"
 msgstr "Firewall"
 
 msgid "Your UDP port appears to be firewalled."
-msgstr "Portul tău UDP apare să fie in spatele unui firewall."
+msgstr "Portul tău UDP apare să fie în spatele unui firewall."
 
 msgid "As the firewall detection methods are not 100% reliable, this may occasionally be displayed in error."
 msgstr "Deoarece metodele de detectare firewall nu sunt 100% sigure, acest lucru poate fi uneori afișat ca eroare."
@@ -8043,7 +8043,7 @@ msgid "However, if it appears consistently, you should check whether both your e
 msgstr "Cu toate acestea, în cazul în care acesta apare în mod constant, trebuie să verificați dacă atât firewal-ul extern cât și intern sunt deschise pentru acest port."
 
 msgid "I2P will work fine when firewalled, there is no reason for concern. When firewalled, the router uses \"introducers\" to relay inbound connections."
-msgstr "I2P va funcționa bine atunci când se afla în spatele unui firewall, nu există nici un motiv de îngrijorare. Când se afla in spatele unui firewall, router-ul folosește \"Introducers\" pentru conexiuni de intrare releu."
+msgstr "I2P va funcționa bine atunci când se afla în spatele unui firewall, nu există nici un motiv de îngrijorare. Când se afla în spatele unui firewall, router-ul folosește \"Introducers\" pentru conexiuni de intrare releu."
 
 msgid "However, you will get more participating traffic and help the network if you open your firewall."
 msgstr "Cu toate acestea, veți obține mai mult trafic participant și veți ajuta rețeaua dacă vă deschideți firewallul."
@@ -8067,7 +8067,7 @@ msgid "WARN - Firewalled and Fast"
 msgstr "AVERTIZARE - Firewalled și Rapid"
 
 msgid "You have configured I2P to share more than 128KBps of bandwidth, but you are firewalled."
-msgstr "Ați configurat I2P pentru a partaja mai mult de 128KBps de lățime de bandă, dar va aflați in spatele unui firewall."
+msgstr "Ați configurat I2P pentru a partaja mai mult de 128KBps de lățime de bandă, dar vă aflați în spatele unui firewall."
 
 msgid "While I2P will work fine in this configuration, if you really have over 128KBps of bandwidth to share, it will be much more helpful to the network if you open your firewall."
 msgstr "În timp ce I2P va funcționa bine în această configurație, dacă aveți într-adevăr peste 128KBps de lățime de bandă pentru partajare, acesta va fi mult mai util la rețeauă dacă deschideți firewall-ul."
@@ -8076,7 +8076,7 @@ msgid "WARN - Firewalled and Floodfill"
 msgstr "AVERTIZARE - Firewalled și Floodfill"
 
 msgid "You have configured I2P to be a floodfill router, but you are firewalled."
-msgstr "Ați configurat I2P să fie un router floodfill, dar va aflați în spatele unui firewall."
+msgstr "Ați configurat I2P să fie un router floodfill, dar vă aflați în spatele unui firewall."
 
 msgid "For best participation as a floodfill router, you should open your firewall."
 msgstr "Pentru cea mai bună participare ca un router floodfill, ar trebui să deschideți firewall-ul."
@@ -8085,10 +8085,10 @@ msgid "WARN - Firewalled with Inbound TCP Enabled"
 msgstr "AVERTIZARE - Firewall cu intrare TCP Activat"
 
 msgid "You have configured inbound TCP, however your UDP port is firewalled, and therefore it is likely that your TCP port is firewalled as well."
-msgstr "Ați configurat intrare TCP, însă portul UDP este blocat de firewall, și, prin urmare, este probabil ca portul TCP este in spatele unui firewall, de asemenea."
+msgstr "Ați configurat intrare TCP, însă portul UDP este blocat de firewall, și, prin urmare, este probabil ca portul TCP este în spatele unui firewall, de asemenea."
 
 msgid "If your TCP port is firewalled with inbound TCP enabled, routers will not be able to contact you via TCP, which will hurt the network."
-msgstr "Dacă portul TCP este in spatele unui firewall cu intrarea TCP-ului, routerele nu vor fi în măsură să vă contacteze prin intermediul TCP, care vor răni rețea."
+msgstr "Dacă portul TCP este în spatele unui firewall cu intrarea TCP-ului, routerele nu vor fi în măsură să vă contacteze prin intermediul TCP, care vor răni rețea."
 
 msgid "Please open your firewall or disable inbound TCP above."
 msgstr "Vă rugăm să deschideți firewall-ul sau să dezactivați intrarea TCP de mai sus."
@@ -8100,7 +8100,7 @@ msgid "You have configured inbound TCP, however you have disabled UDP."
 msgstr "Ați configurat intrarea TCP, cu toate acestea ați dezactivat UDP."
 
 msgid "You appear to be firewalled on TCP, therefore your router cannot accept inbound connections."
-msgstr "Pare să fiți in spatele unui firewall in TCP, prin urmare, router-ul nu poate accepta conexiuni de intrare."
+msgstr "Pare să fiți în spatele unui firewall în TCP, prin urmare, router-ul nu poate accepta conexiuni de intrare."
 
 msgid "Please open your firewall or enable UDP."
 msgstr "Vă rugăm să deschideți firewall sau să permiteți UDP."
@@ -8283,7 +8283,7 @@ msgid "How to Harden Your WordPress Site"
 msgstr "Cum să vă întăriți site-ul WordPress"
 
 msgid "<b>Note:</b> On some Apache installations, the <a href=https://httpd.apache.org/docs/2.4/mod/mod_status.html target=_blank class='sitelink external'>mod_status</a> and <a href=https://httpd.apache.org/docs/2.4/mod/mod_info.html target=_blank class='sitelink external'>mod_info</a> modules are enabled by default. It is important to disable these, or otherwise protect access to the urls, to avoid compromising the anonymity and security of your server."
-msgstr "<b>Notă:</b> La unele instalări Apache, modulele <a href=https://httpd.apache.org/docs/2.4/mod/mod_status.html target=_blank class='sitelink external'>mod_status</a> și  <a href=https://httpd.apache.org/docs/2.4/mod/mod_info.html target=_blank class='sitelink external'>mod_info</a> sunt activate în mod implicit. Este important să dezactivați aceste module sau să protejați accesul la URL-uri pentru a evita compromiterea anonimatului și securității serverului dvs."
+msgstr "<b>Notă:</b> La unele instalări Apache, modulele <a href=https://httpd.apache.org/docs/2.4/mod/mod_status.html target=_blank class='sitelink external'>mod_status</a> și <a href=https://httpd.apache.org/docs/2.4/mod/mod_info.html target=_blank class='sitelink external'>mod_info</a> sunt activate în mod implicit. Este important să dezactivați aceste module sau să protejați accesul la URL-uri pentru a evita compromiterea anonimatului și securității serverului dvs."
 
 msgid "home"
 msgstr "acasă"
@@ -8313,7 +8313,7 @@ msgid "Router Summary"
 msgstr "Rezumatul routerului"
 
 msgid "Jar File Dump"
-msgstr "Jar File Dump"
+msgstr "Descărcare fișier borcan"
 
 msgid "job queue stats"
 msgstr "statistici coadă de locuri de muncă"
@@ -8566,10 +8566,10 @@ msgid "Return to Top"
 msgstr "Înapoi la început"
 
 msgid "webmail"
-msgstr "webmail"
+msgstr "Poștă web"
 
 msgid "Webmail"
-msgstr "Webmail"
+msgstr "poștă Web"
 
 msgid "New Install Wizard"
 msgstr "Expertul de instalare nou"

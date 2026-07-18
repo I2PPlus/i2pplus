@@ -120,13 +120,13 @@ msgid "HTTP server"
 msgstr "HTTP server"
 
 msgid "SOCKS 4/4a/5 proxy"
-msgstr "SOCKS 4/4a/5 proxy"
+msgstr "PONOŽKY 4/4a/5 proxy"
 
 msgid "SOCKS IRC proxy"
-msgstr "SOCKS IRC proxy"
+msgstr "PONOŽKY IRC proxy"
 
 msgid "CONNECT/SSL/HTTPS proxy"
-msgstr "CONNECT/SSL/HTTPS proxy"
+msgstr "PŘIPOJIT/SSL/https proxy"
 
 msgid "IRC server"
 msgstr "IRC server"
@@ -135,10 +135,10 @@ msgid "Streamr client"
 msgstr "Streamr klient"
 
 msgid "Streamr server"
-msgstr "Streamr server"
+msgstr "Server Streamr"
 
 msgid "HTTP bidir"
-msgstr "HTTP bidir"
+msgstr "Http bidir"
 
 msgid "Host not set"
 msgstr "Host není nastaven"
@@ -216,13 +216,13 @@ msgid "Enable DCC"
 msgstr "Povolte DCC"
 
 msgid "Port"
-msgstr "Port"
+msgstr "Přístav"
 
 msgid "Specify the local port this service should be accessible from"
 msgstr "Uveďte místní port, ze kterého má být tato služba přístupná"
 
 msgid "Host"
-msgstr "Host"
+msgstr "Hostitel"
 
 msgid "Hostname or IP address of the target server"
 msgstr "Název hostitele nebo IP adresa cílového serveru"
@@ -632,7 +632,7 @@ msgid "Startup Delay"
 msgstr "Zpoždění spuštění"
 
 msgid "Minimum"
-msgstr "Minimum"
+msgstr "Minimálně"
 
 msgid "Minimum startup delay"
 msgstr "Minimální zpoždění spuštění"
@@ -641,7 +641,7 @@ msgid "seconds"
 msgstr "sekund"
 
 msgid "Maximum"
-msgstr "Maximum"
+msgstr "Maximálně"
 
 msgid "Maximum startup delay"
 msgstr "Maximální zpoždění spuštění"
@@ -1031,13 +1031,13 @@ msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immu
 msgstr "Povolit hlavičky Cache-Control (bez mezipaměti pro html, xml, json a text, neměnné pro vše ostatní)"
 
 msgid "Cache-Control"
-msgstr "Cache-Control"
+msgstr "Nastavení mezipaměti"
 
 msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
 msgstr "Nastavte záhlaví Referrer-Policy na 'same-origin' pro html, xml, json a textové soubory"
 
 msgid "Referrer-Policy"
-msgstr "Referrer-Policy"
+msgstr "Zásady doporučení"
 
 msgid "Set the X-Content-Type-Options header to 'nosniff'"
 msgstr "Nastav hlavičku X-Content-Type-Options na 'nosniff'"
@@ -1345,10 +1345,10 @@ msgid "Experts only!"
 msgstr "Pouze odborníci!"
 
 msgid "Base32"
-msgstr "Base32"
+msgstr "Základ 32"
 
 msgid "Alt Base32"
-msgstr "Alt Base32"
+msgstr "ALT Base32"
 
 msgid "Incoming I2P Port Routing"
 msgstr "Směrování příchozích I2P portů"

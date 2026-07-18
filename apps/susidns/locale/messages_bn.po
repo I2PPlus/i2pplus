@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "ফাইল থেকে আমদানি করা"
 
 msgid "Manually added via SusiDNS"
-msgstr "SusiDNS এর মাধ্যমে ম্যানুয়ালি যোগ করা"
+msgstr "DNS এর মাধ্যমে ম্যানুয়ালি যোগ করা"
 
 msgid "Manually added"
 msgstr "ম্যানুয়ালি যোগ করা"
@@ -418,7 +418,7 @@ msgid "Hints"
 msgstr "পরামর্শ"
 
 msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
-msgstr ""
+msgstr "এখানে ফাইল এবং ডিরেক্টরি পাথগুলি অ্যাড্রেসবুকের ওয়ার্কিং ডিরেক্টরির সাথে সম্পর্কিত, যা সাধারণত ~/.i2p/addressbook/ (লিনাক্স) বা %LOCALAPPDATA%\\I2P\\addressbook\\ (উইন্ডোজ)।"
 
 msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
 msgstr "আপনি যদি ম্যানুয়ালি ঠিকানা বইতে লাইন যোগ করতে চান, সেগুলি ব্যক্তিগত বা মাস্টার ঠিকানা বইতে যোগ করুন।"
@@ -607,13 +607,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "সাবস্ক্রিপশন URL-এর তালিকার জন্য FAQ দেখুন।"
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "যদি SusiDNS আপনার রাউটার ঠিকানা বই প্রকাশ করতে কনফিগার করা হয়, তবে এন্ট্রিগুলি আপনার প্রকাশিত ঠিকানা বইতে প্রদর্শিত হবে এবং শেয়ার করার জন্য hosts.txt ফাইলে সংরক্ষিত হবে।"
+msgstr "যদি DNS আপনার রাউটার ঠিকানা বই প্রকাশ করতে কনফিগার করা হয়, তবে এন্ট্রিগুলি আপনার প্রকাশিত ঠিকানা বইতে প্রদর্শিত হবে এবং শেয়ার করার জন্য hosts.txt ফাইলে সংরক্ষিত হবে।"
 
 msgid "Published Addressbook"
 msgstr "প্রকাশিত ঠিকানা বই"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "SusiDNS-কে আপনার রাউটার ঠিকানা বই আপনার প্রকাশিত ঠিকানা বইতে পাঠাতে কনফিগার করতে, কনফিগারেশন পৃষ্ঠায় 'should_publish=true' সেট করুন।"
+msgstr "DNS-কে আপনার রাউটার ঠিকানা বই আপনার প্রকাশিত ঠিকানা বইতে পাঠাতে কনফিগার করতে, কনফিগারেশন পৃষ্ঠায় 'should_publish=true' সেট করুন।"
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "সাবস্ক্রিপশন থেকে প্রাপ্ত সমস্ত হোস্ট এই ঠিকানা বইতে প্রদর্শিত হবে, আপনি এখানে বা আপনার মাস্টার ঠিকানা বইতে ম্যানুয়ালি যোগ করা যেকোনো হোস্ট ছাড়াও।"
@@ -664,7 +664,7 @@ msgid "for websites"
 msgstr "ওয়েবসাইটের জন্য"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "আপনি যদি SusiDNS-কে আপনার রাউটার ঠিকানা বই প্রকাশ করতে কনফিগার করেন, তবে এটি সমস্ত হোস্ট সম্বলিত একটি hosts.txt ফাইল রপ্তানি করবে (ডিফল্টরূপে আপনার eepসাইটের রুটে)।"
+msgstr "আপনি যদি DNS-কে আপনার রাউটার ঠিকানা বই প্রকাশ করতে কনফিগার করেন, তবে এটি সমস্ত হোস্ট সম্বলিত একটি hosts.txt ফাইল রপ্তানি করবে (ডিফল্টরূপে আপনার eepসাইটের রুটে)।"
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "আপনার মাস্টার ঠিকানা বইতে ম্যানুয়ালি যোগ করা ঠিকানাগুলি আপনার রাউটার ঠিকানা বইতে একীভূত হবে।"

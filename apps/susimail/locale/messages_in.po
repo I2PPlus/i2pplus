@@ -14,14 +14,14 @@ msgid_plural "{0} new messages"
 msgstr[0] "{0} pesan baru"
 
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
 
 #, java-format
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Tidak ada encoder yang ditemukan untuk mengencoding \\\"{0}\\\"."
 
 msgid "Re:"
-msgstr "Re:"
+msgstr "Ulang:"
 
 msgid "Fwd:"
 msgstr "Fwd:"
@@ -36,7 +36,7 @@ msgid "Trash"
 msgstr "Sampah"
 
 msgid "Bulk Mail"
-msgstr "Bulk Mail"
+msgstr "Surat Massal"
 
 msgid "Inbox"
 msgstr "Kotak masuk"
@@ -51,7 +51,7 @@ msgid "unknown"
 msgstr "tidak diketahui"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr "Untuk melindungi privasi Anda, SusiMail memblokir Javascript dan konten jarak jauh yang terkandung dalam pesan HTML ini."
+msgstr "Untuk melindungi privasi Anda, Webmail memblokir Javascript dan konten jarak jauh yang terkandung dalam pesan HTML ini."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "Aktifkan Javascript untuk tampilan yang lebih baik dan fitur tambahan."
@@ -217,7 +217,7 @@ msgstr "{0} adalah layanan eksklusif I2P yang disediakan oleh {1}."
 
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr "{0} webmail client &copy Susi 2004-2005."
+msgstr "Klien webmail {0} & salin Susi 2004-2005."
 
 msgid "Checking for new messages on server"
 msgstr "Memeriksa email baru di server"
@@ -270,10 +270,10 @@ msgid "To"
 msgstr "Ke"
 
 msgid "Cc"
-msgstr "Cc"
+msgstr "CC"
 
 msgid "Bcc"
-msgstr "Bcc"
+msgstr "SM"
 
 msgid "Subject"
 msgstr "Subyek"
@@ -306,7 +306,7 @@ msgid "Toggle password visibility"
 msgstr "Alihkan visibilitas kata sandi"
 
 msgid "Host"
-msgstr "Host"
+msgstr "Tuan rumah"
 
 msgid "POP3 Port"
 msgstr "Port POP3"

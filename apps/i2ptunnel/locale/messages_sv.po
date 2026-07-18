@@ -213,7 +213,7 @@ msgid "Enable DCC"
 msgstr "Aktivera DCC"
 
 msgid "Port"
-msgstr "Port"
+msgstr "Hamn"
 
 msgid "Specify the local port this service should be accessible from"
 msgstr "Ange den lokala port som tjänsten ska vara nåbar från"
@@ -636,7 +636,7 @@ msgid "seconds"
 msgstr "sekunder"
 
 msgid "Maximum"
-msgstr "Maximum"
+msgstr "Maximal"
 
 msgid "Maximum startup delay"
 msgstr "Största startfördröjning"
@@ -699,7 +699,7 @@ msgid "HTTPS configuration"
 msgstr "HTTPS-konfiguration"
 
 msgid "SSL Wizard"
-msgstr "SSL Wizard"
+msgstr "SSL-guiden"
 
 msgid "Note: In order to enable QR code generation or registration authentication, configure the Website Hostname field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
 msgstr "Obs: För att aktivera QR -kodgenerering eller registreringsautentisering konfigurerar du webbplatsen HostName (för webbplatser) eller namnfältet (allt annat) ovan med ett .i2p efterföljt värdnamn, t.ex. mynewserver.i2p"
@@ -1026,13 +1026,13 @@ msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immu
 msgstr "Aktivera Cache-Control-rubriker (ingen cache för html, xml, json och text, oföränderlig för allt annat)"
 
 msgid "Cache-Control"
-msgstr "Cache-Control"
+msgstr "Cache-kontroll"
 
 msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
 msgstr "Ställ in referenspolicyhuvudet till 'same-origin' för html, xml, json och textfiler"
 
 msgid "Referrer-Policy"
-msgstr "Referrer-Policy"
+msgstr "Hänvisningspolicy"
 
 msgid "Set the X-Content-Type-Options header to 'nosniff'"
 msgstr "Ställ in X-Content-Type-Options-rubriken till 'nosniff'"
@@ -1416,7 +1416,7 @@ msgid "Binding address and port"
 msgstr "Adress och port"
 
 msgid "Tunnel auto-start"
-msgstr "Tunnel auto-start"
+msgstr "Tunnel autostart"
 
 msgid "Wizard completed"
 msgstr "Guiden färdig"

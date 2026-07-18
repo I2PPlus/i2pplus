@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Importerad från fil"
 
 msgid "Manually added via SusiDNS"
-msgstr "Manuellt tillagda via SusiDNS"
+msgstr "Manuellt tillagda via DNS"
 
 msgid "Manually added"
 msgstr "Manuellt tillagd"
@@ -69,10 +69,10 @@ msgid "Type {0}"
 msgstr "Typ {0}"
 
 msgid "DSA 1024 bit"
-msgstr "DSA 1024 bit"
+msgstr "DSA 1024 bitar"
 
 msgid "ElGamal 2048 bit"
-msgstr "ElGamal 2048 bit"
+msgstr "ElGamal 2048 bitar"
 
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
@@ -607,13 +607,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Se Vanliga frågor för en lista över prenumerationswebbadresser."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Om SusiDNS är konfigurerat för att publicera din routeradressbok, kommer posterna att visas i din publicerade adressbok och sparas i en hosts.txt-fil för delning."
+msgstr "Om DNS är konfigurerat för att publicera din routeradressbok, kommer posterna att visas i din publicerade adressbok och sparas i en hosts.txt-fil för delning."
 
 msgid "Published Addressbook"
 msgstr "Publicerad adressbok"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "För att konfigurera SusiDNS att skicka din routeradressbok till din publicerade adressbok, ställ in 'should_publish=true' på konfigurationssidan."
+msgstr "För att konfigurera DNS att skicka din routeradressbok till din publicerade adressbok, ställ in 'should_publish=true' på konfigurationssidan."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "Alla värdar som härrör från prenumerationer kommer att visas i den här adressboken, förutom de du manuellt lägger till här eller i din huvudadressbok."
@@ -664,7 +664,7 @@ msgid "for websites"
 msgstr "för webbplatser"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Om du konfigurerar SusiDNS att publicera din routeradressbok kommer den att exportera en hosts.txt-fil som innehåller alla värdar (som standard till roten på din eepsite)."
+msgstr "Om du konfigurerar DNS att publicera din routeradressbok kommer den att exportera en hosts.txt-fil som innehåller alla värdar (som standard till roten på din eepsite)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "Adresser som läggs till manuellt i din masteradressbok kommer att slås samman med din routeradressbok."

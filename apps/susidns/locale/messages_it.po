@@ -26,7 +26,7 @@ msgstr "Il nome del nodo non può contenere il carattere \"{0}\""
 
 #, java-format
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
-msgstr "Il nome host \"{0}\" richiede la conversione in ASCII ma la libreria di conversione non è disponibile in questa JVMIl nome del nodo \"{0}\" deve essere convertito in formato ASCII ma la libreria di conversione non è disponibile in questa JVM"
+msgstr "Il nome host \"{0}\" richiede la conversione in ASCII ma la libreria di conversione non è disponibile in questa JVM"
 
 msgid "Source"
 msgstr "Sorgente"
@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Importato da file"
 
 msgid "Manually added via SusiDNS"
-msgstr "Aggiunto manualmente con SusiDNS"
+msgstr "Aggiunto manualmente con DNS"
 
 msgid "Manually added"
 msgstr "Aggiunto manualmente"
@@ -109,7 +109,7 @@ msgstr "Il nome del nodo {0} è già nella rubrica, nessuna modifica."
 
 #, java-format
 msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
-msgstr "Il nome host {0} è già nella rubrica con una destinazione diversa. Il nome del nodo {0} è già nella rubrica con una destinazione diversa. Fai click su \"Sostituisci\" per sovrascriverlo."
+msgstr "Il nome host {0} è già nella rubrica con una destinazione diversa. Fai click su \"Sostituisci\" per sovrascriverlo."
 
 msgid "Unable to resolve Base 32 address"
 msgstr "Impossibile risolvere l'indirizzo Base 32"
@@ -607,13 +607,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Vedi le FAQ per una lista di indirizzi URL di sottoscrizione."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Se SusiDNS è configurato per pubblicare la rubrica del router, le voci verranno visualizzate nella rubrica pubblicata e salvate in un file host.txt per la condivisione."
+msgstr "Se DNS è configurato per pubblicare la rubrica del router, le voci verranno visualizzate nella rubrica pubblicata e salvate in un file host.txt per la condivisione."
 
 msgid "Published Addressbook"
 msgstr "Rubrica pubblicata"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "Per configurare SusiDNS per inviare la rubrica del router alla rubrica pubblicata, impostare 'should_publish=true' nella pagina di configurazione."
+msgstr "Per configurare DNS per inviare la rubrica del router alla rubrica pubblicata, impostare 'should_publish=true' nella pagina di configurazione."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "Tutti gli host derivati ​​dagli abbonamenti appariranno in questa rubrica, oltre a quelli aggiunti manualmente qui o alla rubrica principale."
@@ -664,7 +664,7 @@ msgid "for websites"
 msgstr "per siti web"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Se configuri SusiDNS per pubblicare la rubrica del tuo router, esporterà un file host.txt contenente tutti gli host (per impostazione predefinita nella root del tuo eepsite)."
+msgstr "Se configuri DNS per pubblicare la rubrica del tuo router, esporterà un file host.txt contenente tutti gli host (per impostazione predefinita nella root del tuo eepsite)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "Gli indirizzi aggiunti manualmente alla rubrica principale verranno uniti alla rubrica del router."

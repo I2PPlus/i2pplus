@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Fájlból importálva"
 
 msgid "Manually added via SusiDNS"
-msgstr "A SusiDNS-en keresztül manuálisan hozzáadva"
+msgstr "A DNS-en keresztül manuálisan hozzáadva"
 
 msgid "Manually added"
 msgstr "Manuálisan hozzáadva"
@@ -289,7 +289,7 @@ msgid "Subscriptions"
 msgstr "Feliratkozások"
 
 msgid "Blacklist"
-msgstr "Blacklist"
+msgstr "Feketelista"
 
 msgid "Configuration"
 msgstr "Beállítás"
@@ -397,7 +397,7 @@ msgid "Select file"
 msgstr "Válassza ki a fájlt"
 
 msgid "blacklist"
-msgstr "blacklist"
+msgstr "feketelista"
 
 msgid "Blacklist Management"
 msgstr "Blacklist Kezelés"
@@ -607,13 +607,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Lásd a GYIK-et feliratkozási URL listáért."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Ha a SusiDNS úgy van konfigurálva, hogy közzétegye az útválasztó címjegyzékét, a bejegyzések megjelennek a Közzétett címjegyzékben, és egy hosts.txt fájlba kerülnek megosztás céljából."
+msgstr "Ha a DNS úgy van konfigurálva, hogy közzétegye az útválasztó címjegyzékét, a bejegyzések megjelennek a Közzétett címjegyzékben, és egy hosts.txt fájlba kerülnek megosztás céljából."
 
 msgid "Published Addressbook"
 msgstr "Kiadott címjegyzék"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "Ha be szeretné állítani a SusiDNS-t, hogy az útválasztó címjegyzékét a közzétett címjegyzékbe helyezze, állítsa be a 'should_publish=true' értéket a konfigurációs oldalon."
+msgstr "Ha be szeretné állítani a DNS-t, hogy az útválasztó címjegyzékét a közzétett címjegyzékbe helyezze, állítsa be a 'should_publish=true' értéket a konfigurációs oldalon."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "Az előfizetésekből származó összes gazdagép megjelenik ebben a címjegyzékben, azon kívül, amelyet kézzel hozzáadott ide vagy a fő címjegyzékhez."
@@ -664,7 +664,7 @@ msgid "for websites"
 msgstr "webhelyekhez"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Ha a SusiDNS-t úgy konfigurálja, hogy közzétegye az útválasztó címjegyzékét, akkor exportál egy hosts.txt fájlt, amely tartalmazza az összes gazdagépet (alapértelmezés szerint az eepsite gyökérkönyvtárába)."
+msgstr "Ha a DNS-t úgy konfigurálja, hogy közzétegye az útválasztó címjegyzékét, akkor exportál egy hosts.txt fájlt, amely tartalmazza az összes gazdagépet (alapértelmezés szerint az eepsite gyökérkönyvtárába)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "A fő címjegyzékbe kézzel hozzáadott címek egyesülnek az útválasztó címjegyzékével."

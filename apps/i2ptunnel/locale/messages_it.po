@@ -135,7 +135,7 @@ msgid "Streamr server"
 msgstr "Server streamr"
 
 msgid "HTTP bidir"
-msgstr "HTTP bidir"
+msgstr "Bidir HTTP"
 
 msgid "Host not set"
 msgstr "Host non impostato"
@@ -219,7 +219,7 @@ msgid "Specify the local port this service should be accessible from"
 msgstr "Specificare la porta locale da cui questo servizio dovrebbe essere accessibile"
 
 msgid "Host"
-msgstr "Host"
+msgstr "Ospite"
 
 msgid "Hostname or IP address of the target server"
 msgstr "Nome host o indirizzo IP del server di destinazione"
@@ -384,16 +384,16 @@ msgid "Length of each Tunnel"
 msgstr "Lunghezza di ogni tunnel"
 
 msgid "0 hop tunnel (no anonymity)"
-msgstr "0 tunnel  hop (nessun anonimato)"
+msgstr "0 tunnel hop (nessun anonimato)"
 
 msgid "1 hop tunnel (low anonymity)"
-msgstr "1 tunnel  hop (anonimato basso)"
+msgstr "1 tunnel hop (anonimato basso)"
 
 msgid "2 hop tunnel (medium anonymity)"
-msgstr "2 tunnel  hop (anonimato medio)"
+msgstr "2 tunnel hop (anonimato medio)"
 
 msgid "3 hop tunnel (high anonymity)"
-msgstr "3 tunnel  hop (anonimato alto)"
+msgstr "3 tunnel hop (anonimato alto)"
 
 #, java-format
 msgid "{0} hop tunnel"
@@ -897,7 +897,7 @@ msgid "Revoke"
 msgstr "Revoca"
 
 msgid "Client"
-msgstr "Client"
+msgstr "Cliente"
 
 msgid "Add"
 msgstr "Aggiungi"
@@ -1434,10 +1434,10 @@ msgid "On the other hand, if you wish to host a service for others to connect to
 msgstr "D'altra parte, se desideri ospitare un servizio a cui altri possono connettersi, dovrai creare un tunnel SERVER."
 
 msgid "Server Tunnel"
-msgstr "Server Tunnel"
+msgstr "Tunnel del server"
 
 msgid "Client Tunnel"
-msgstr "Client Tunnel"
+msgstr "Tunnel cliente"
 
 msgid "There are several types of tunnels to choose from:"
 msgstr "Sono presenti diversi tipi di tunnel da scegliere:"

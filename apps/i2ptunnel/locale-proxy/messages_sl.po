@@ -35,7 +35,7 @@ msgid "Host"
 msgstr "Gostitelj"
 
 msgid "Base32"
-msgstr "Base32"
+msgstr "Osnova32"
 
 msgid "Destination"
 msgstr "Destinacija"

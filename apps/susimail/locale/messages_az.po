@@ -15,7 +15,7 @@ msgstr[0] "{0} yeni mesaj"
 msgstr[1] "{0} yeni mesaj"
 
 msgid "Email"
-msgstr "Email"
+msgstr "E-poçt"
 
 #, java-format
 msgid "No encoder found for encoding \\''{0}\\''."
@@ -25,7 +25,7 @@ msgid "Re:"
 msgstr "Re:"
 
 msgid "Fwd:"
-msgstr "Fwd:"
+msgstr "İrəli:"
 
 msgid "Drafts"
 msgstr "Layihələr"
@@ -52,7 +52,7 @@ msgid "unknown"
 msgstr "Tanınmayan"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr "Gizliliyinizin qorunması üçün, SusiMail bu HTML mesajında olan Javascript və hər hansı bir uzak məzmunu bloklayır."
+msgstr "Gizliliyinizin qorunması üçün, Veb poçt bu HTML mesajında olan Javascript və hər hansı bir uzak məzmunu bloklayır."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "Göstərişin yaxşılaşdırılması və əlavə funksiyalar üçün Javascript-i aktivləşdirin."
@@ -220,7 +220,7 @@ msgstr "{0} {1} tərəfindən təmin edilən I2P-eksklüziv xidmətdir."
 
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr "{0} webmail client &copy Susi 2004-2005."
+msgstr "{0} veb poçt müştərisi və Susi 2004-2005-i kopyalayın."
 
 msgid "Checking for new messages on server"
 msgstr "Serverdə yeni mesajlar yoxlanılır"
@@ -309,13 +309,13 @@ msgid "Toggle password visibility"
 msgstr "Parolun görünməsini dəyişdirin"
 
 msgid "Host"
-msgstr "Host"
+msgstr "Ev sahibi"
 
 msgid "POP3 Port"
-msgstr "POP3 Port"
+msgstr "POP3 Portu"
 
 msgid "SMTP Port"
-msgstr "SMTP Port"
+msgstr "SMTP Portu"
 
 msgid "Read Mail Offline"
 msgstr "Məktubu oflayn oxu"
@@ -411,7 +411,7 @@ msgid "Reply All"
 msgstr "Hamısına cavab ver"
 
 msgid "Forward"
-msgstr "Forward"
+msgstr "İrəli"
 
 msgid "Save As"
 msgstr "kimi Yadda saxla"
@@ -447,7 +447,7 @@ msgid "Mail server login failed, wrong username or password."
 msgstr "Email serverinə giriş uğursuz oldu, istifadəçi adı və ya şifrə yanlışdır."
 
 msgid "Logout and then login again with the correct username and password."
-msgstr "Sistemdən çıxın və düzgün istifadəçi adı və şifrə ilə yenidən daxil olun. "
+msgstr "Sistemdən çıxın və düzgün istifadəçi adı və şifrə ilə yenidən daxil olun."
 
 msgid "Login failed"
 msgstr "Giriş alınmadı"

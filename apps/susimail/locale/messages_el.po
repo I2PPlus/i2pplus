@@ -15,14 +15,14 @@ msgstr[0] "{0} nέο μήνυμα"
 msgstr[1] "{0} νέα μηνύματα"
 
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
 
 #, java-format
 msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Δεν βρέθηκε κωδικοποιητής για την κωδικοποίηση \\''{0}\\''."
 
 msgid "Re:"
-msgstr "Re:"
+msgstr "Σχετικά με:"
 
 msgid "Fwd:"
 msgstr "Fwd:"
@@ -52,7 +52,7 @@ msgid "unknown"
 msgstr "άγνωστο"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr "Για να προστατέψουμε την ιδιωτική σας ζωή, το SusiMail αποκλείει το JavaScript και οποιοδήποτε απομακρυσμένο περιεχόμενο περιλαμβάνεται σε αυτήν την ένταξη HTML."
+msgstr "Για να προστατέψουμε την ιδιωτική σας ζωή, το Ιστομηλ αποκλείει το JavaScript και οποιοδήποτε απομακρυσμένο περιεχόμενο περιλαμβάνεται σε αυτήν την ένταξη HTML."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "Ενεργοποιήστε το JavaScript για βελτιωμένη παρουσίαση και επιπλέον λειτουργίες."
@@ -220,7 +220,7 @@ msgstr "Το {0} είναι μια αποκλειστική υπηρεσία I2P
 
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr "{0} webmail client &copy Susi 2004-2005."
+msgstr "{0} webmail client &αντιγράψτε το Susi 2004-2005."
 
 msgid "Checking for new messages on server"
 msgstr "Έλεγχος για νέα μηνύματα στο διακομιστή"

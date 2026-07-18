@@ -56,7 +56,7 @@ msgid "For assistance, see the {0}"
 msgstr "Pour obtenir de l'aide, consultez le {0}"
 
 msgid "reseed help"
-msgstr "réamorcer l'aide"
+msgstr "Aide au réensemencement"
 
 msgid "Contacting reseed host"
 msgstr "Contacter l'hôte de réamorçage"
@@ -252,7 +252,7 @@ msgstr "Échec de vérification de mise à jour du greffon {0}"
 
 #, java-format
 msgid "No new version is available for plugin {0}"
-msgstr "Aucune nouvelle version n'est pas proposée pour le greffon {0}"
+msgstr "Aucune nouvelle version n'est proposée pour le greffon {0}"
 
 msgid "HTTP client proxy tunnel must be running"
 msgstr "Le tunnel mandataire client HTTP doit être en fonction"
@@ -303,7 +303,7 @@ msgid "No write permission for I2P install directory."
 msgstr "Aucun droit d'écriture pour le répertoire d'installation d'I2P."
 
 msgid "No update certificates installed."
-msgstr "Aucun certificat de mise à jour n'est pas installé."
+msgstr "Aucun certificat de mise à jour n'est installé."
 
 #, java-format
 msgid "You must first update to version {0}"
@@ -559,7 +559,7 @@ msgid "Full garbage collection requested"
 msgstr "Un nettoyage complet de la mémoire a été demandé"
 
 msgid "Show systray icon"
-msgstr "Afficher l'icône de le zone de notification"
+msgstr "Afficher l'icône de la zone de notification"
 
 msgid "Hide systray icon"
 msgstr "Cacher l'icône de la zone de notification"
@@ -815,7 +815,7 @@ msgid "Console"
 msgstr "Console"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
-msgstr "Pour activer l'accès SSL pour la console du routeur, consultez le fichier commenté <code>clients.config</code> situé dans le répertoire de votre application I2P pour plus d'informations. Vous devrez éditer le fichier de configuration RouterConsoleRunner situé dans le répertoire: "
+msgstr "Pour activer l'accès SSL pour la console du routeur, consultez le fichier commenté <code>clients.config</code> situé dans le répertoire de votre application I2P pour plus d'informations. Vous devrez éditer le fichier de configuration RouterConsoleRunner situé dans le répertoire:"
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Enregistrement désactivé, modifiez le fichier router.config pour apporter des modifications"
@@ -895,7 +895,7 @@ msgid "New client added"
 msgstr "Le nouveau client a été ajouté"
 
 msgid "Bad client index."
-msgstr "Index des mauvais clients."
+msgstr "Index client invalide."
 
 #, java-format
 msgid "Client {0} stopped"
@@ -1073,7 +1073,7 @@ msgid "Load from file failed"
 msgstr "Échec de chargement à partir d'un fichier"
 
 msgid "Leave Family"
-msgstr "Quitter le famille"
+msgstr "Quitter la famille"
 
 msgid "Delete selected"
 msgstr "Supprimer les éléments sélectionnés"
@@ -1094,7 +1094,7 @@ msgid "No name entered"
 msgstr "Aucun nom n'a été saisi"
 
 msgid "No URL entered"
-msgstr "Aucune d'URL n'a été saisie"
+msgstr "Aucune URL n'a été saisie"
 
 msgid "Added"
 msgstr "Ajouté"
@@ -1274,7 +1274,7 @@ msgid "Tunnels"
 msgstr "Tunnels"
 
 msgid "Clients"
-msgstr "Clients"
+msgstr "Clientèle"
 
 msgid "Keyring"
 msgstr "Trousseau"
@@ -1451,7 +1451,7 @@ msgid "Bonuses adjusted for: "
 msgstr "Bonus ajustés pour : "
 
 msgid "No profile exists for: "
-msgstr "Aucun profil n'existe pas pour : "
+msgstr "Aucun profil n'existe pour : "
 
 msgid "Unsupported"
 msgstr "Non pris en charge"
@@ -1633,7 +1633,7 @@ msgid "Exploratory tunnel configuration saved successfully."
 msgstr "La configuration des tunnels exploratoires a été enregistrée avec succès."
 
 msgid "Error saving the configuration (applied but not saved) - please see the error logs."
-msgstr "Erreur d'enregistrement de la configuration (appliquée, mais par enregistrée). Veuillez consulter les journaux d'erreurs."
+msgstr "Erreur d'enregistrement de la configuration (appliquée, mais pas enregistrée). Veuillez consulter les journaux d'erreurs."
 
 #, java-format
 msgid "{0} hop"
@@ -1651,7 +1651,7 @@ msgid "Exploratory tunnels"
 msgstr "Tunnels exploratoires"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrents"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "AVERTISSEMENT d'ANONYMAT: Les paramètres incluent des tunnels à 0 saut."
@@ -1696,7 +1696,7 @@ msgid "Outbound options"
 msgstr "Options Sortants"
 
 msgid "Add user"
-msgstr "Ajout un utilisateur"
+msgstr "Ajouter un utilisateur"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
 msgstr "Impossible d'enregistrer le choix de thème, le nom du thème contient des caractères illégaux."
@@ -1743,7 +1743,7 @@ msgid "Enabling the Universal Theming option is recommended when embedding these
 msgstr "Il est recommandé d'activer l'option de thème universel lors de l'intégration de ces applications"
 
 msgid "Embed I2PSnark and I2PMail in the console"
-msgstr "Intégrer I2PSnark et I2PMail dans la console"
+msgstr "Intégrer Torrents et I2PMail dans la console"
 
 msgid "Add a user and password to enable."
 msgstr "Ajouter un utilisateur et un mot de passe pour l'activer."
@@ -2057,7 +2057,7 @@ msgid "Router Logs"
 msgstr "Journaux du Routeur"
 
 msgid "Configure update URLs and policy"
-msgstr "Configure update URLs and policy"
+msgstr "Configurer les URL de mise à jour et la stratégie"
 
 msgid "Router Updates"
 msgstr "Mises à jour du Routeur"
@@ -2417,7 +2417,7 @@ msgid "Independent Journalism from Russia"
 msgstr "Journalisme indépendant de Russie"
 
 msgid "TheMoscowTimes"
-msgstr "TheMoscowTimes"
+msgstr "LeMoscowTimes"
 
 msgid "TheNewRepublic"
 msgstr "La Nouvelle République"
@@ -2475,7 +2475,7 @@ msgid "Tier"
 msgstr "Niveau"
 
 msgid "Congestion Cap"
-msgstr "Capuchon d'embouteillage"
+msgstr "Limite de congestion"
 
 msgid "Moderate"
 msgstr "Modéré"
@@ -2961,7 +2961,7 @@ msgid "Published"
 msgstr "Publié"
 
 msgid "Whois"
-msgstr "Whois"
+msgstr "Qui est"
 
 msgid "direct"
 msgstr "direct"
@@ -2994,7 +2994,7 @@ msgid "Addresses"
 msgstr "Adresses"
 
 msgid "Introducers"
-msgstr "Introducers"
+msgstr "Introducteurs"
 
 msgid "Network Id"
 msgstr "ID réseau"
@@ -3009,7 +3009,7 @@ msgid "Last heard from"
 msgstr "Dernière nouvelle de"
 
 msgid "Info"
-msgstr "Info"
+msgstr "Informations"
 
 msgid "Hidden or starting up"
 msgstr "Caché ou en cours de démarrage"
@@ -3110,7 +3110,7 @@ msgid "Caps"
 msgstr "Caps"
 
 msgid "Direction/Introduction"
-msgstr "Direction/Présentatiom"
+msgstr "Direction/Introduction"
 
 msgid "Dir"
 msgstr "Dir."
@@ -3602,7 +3602,7 @@ msgid "UDP Disabled &amp; Inbound TCP host/port not set"
 msgstr "UDP Host / Port TCP désactivé et entrant non définie"
 
 msgid "Firewalled with UDP Disabled"
-msgstr "Firewald avec UDP handicapé"
+msgstr "Pare-feu avec UDP désactivé"
 
 msgid "Add/remove/edit &amp; control your client and server tunnels"
 msgstr "Ajoutez, modifiez, supprimez et contrôlez vos tunnels client et serveur"
@@ -3659,7 +3659,7 @@ msgid "Ping"
 msgstr "Ping"
 
 msgid "I2Ping"
-msgstr "I2Ping"
+msgstr "I2ping"
 
 msgid "Click Restart to install"
 msgstr "Cliquer sur Redémarrer pour installer"
@@ -3825,7 +3825,7 @@ msgid "New hosts in last 24 hours"
 msgstr "Nouveaux hôtes dans les dernières 24 heures"
 
 msgid "I2PControl"
-msgstr "I2PControl"
+msgstr "I2PContrôle"
 
 msgid "RPC Service"
 msgstr "Service RPC"
@@ -3928,7 +3928,7 @@ msgstr "Réviser les sybils possibles dans la base de données de réseau"
 
 #, java-format
 msgid "Your Local Identity [{0}] is your unique I2P router identity, similar to an IP address but tailored to I2P. "
-msgstr "Votre identité locale [{0}] est votre identité unique de routeur I2P, semblable à une adresse IP, mais adaptée à I2P. "
+msgstr "Votre identité locale [{0}] est votre identité unique de routeur I2P, semblable à une adresse IP, mais adaptée à I2P."
 
 msgid "Never disclose this to anyone, as it can reveal your real world IP."
 msgstr "Ne jamais la divulguer à qui que ce soit, car elle peut divulguer votre vraie IP."
@@ -4275,10 +4275,10 @@ msgid "Run analysis on all routers in NetDb"
 msgstr "Exécuter une analyse sur tous les routeurs dans NetDb"
 
 msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, "
-msgstr "La routine de détection sybil peut être configurée pour analyser la base de données réseau à intervalles réguliers, "
+msgstr "La routine de détection sybil peut être configurée pour analyser la base de données réseau à intervalles réguliers,"
 
 msgid "with the option to block peers meeting the configured threshold. "
-msgstr "avec la possibilité de bloquer les pairs atteignant le seuil configuré. "
+msgstr "avec la possibilité de bloquer les pairs atteignant le seuil configuré."
 
 msgid "Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."
 msgstr "Bloquer des pairs empêche votre routeur de construire des tunnels avec eux pendant la durée configurée, ou jusqu'au redémarrage du routeur."
@@ -4425,16 +4425,16 @@ msgid "floodfills"
 msgstr "inondations"
 
 msgid "MIN"
-msgstr "MIN"
+msgstr "MINIMUM"
 
 msgid "AVG"
-msgstr "AVG"
+msgstr "MOYENNE"
 
 msgid "MEDIAN"
 msgstr "MÉDIANE"
 
 msgid "MAX"
-msgstr "MAX"
+msgstr "MAXIMUM"
 
 msgid "Show all routers for this family in NetDb"
 msgstr "Afficher tous les routeurs de cette famille dans NetDb"
@@ -4546,7 +4546,7 @@ msgid "unique peers"
 msgstr "pairs uniques"
 
 msgid "local"
-msgstr "local"
+msgstr "locale"
 
 msgid "transit"
 msgstr "transport"
@@ -4844,7 +4844,7 @@ msgid "I2P requires at least 12KBps to enable sharing. "
 msgstr "I2P nécessite au moins 12 KB/s pour activer le partage. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
-msgstr "Veuillez activer le partage (la participation aux tunnels) en configurant plus de bande passante. "
+msgstr "Veuillez activer le partage (la participation aux tunnels) en configurant plus de bande passante."
 
 msgid "It improves your anonymity by creating cover traffic, and helps the network. "
 msgstr "Cela améliore votre anonymat en créant un trafic de couverture et aide le réseau."
@@ -5015,7 +5015,7 @@ msgid "Reset to defaults"
 msgstr "Réinitialiser aux valeurs par défaut"
 
 msgid "config clients"
-msgstr "config clients"
+msgstr "clients de configuration"
 
 #, java-format
 msgid "Are you sure you want to delete {0}?"
@@ -5495,10 +5495,10 @@ msgid "HTTPS"
 msgstr "HTTPS"
 
 msgid "SOCKS 4/4a"
-msgstr "SOCKS 4/4a"
+msgstr "CHAUSSETTES 4/4a"
 
 msgid "SOCKS 5"
-msgstr "SOCKS 5"
+msgstr "CHAUSSETTES 5"
 
 msgid "This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin if configured. Note: this option will not work when you have 0 known peers."
 msgstr "Cette option utilisera HTTP Outproxy d'I2P à réensemencer, ou le plugin Orchid s'il est configuré. Remarque: cette option ne fonctionnera pas lorsque vous aurez 0 pairs connus."
@@ -5543,7 +5543,7 @@ msgid "Create reseed file"
 msgstr "Créer un fichier de réensemencement"
 
 msgid "config service"
-msgstr "config service"
+msgstr "service de configuration"
 
 msgid "Router Service"
 msgstr "Service de routeur"
@@ -5646,7 +5646,7 @@ msgid "Select Stats for Graphing"
 msgstr "Sélectionnez des statistiques pour graphiquement"
 
 msgid "config tunnels"
-msgstr "config tunnels"
+msgstr "tunnel de configuration"
 
 msgid "Tunnel Options"
 msgstr "Options de Tunnel"
@@ -5676,7 +5676,7 @@ msgid "The default settings are optimized for general usage and normally don't n
 msgstr "Les paramètres par défaut sont optimisés pour une utilisation générale et n'ont normalement pas besoin d'être modifiés."
 
 msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
-msgstr "Pour modifier les paramètres du tunnel client, utilisez le <a href=/i2ptunnelmgr>Manager du Tunnel</a>, ou le <a href=/i2psnark/configure>page de configuration</a> pour I2PSnark."
+msgstr "Pour modifier les paramètres du tunnel client, utilisez le <a href=/i2ptunnelmgr>Manager du Tunnel</a>, ou le <a href=/i2psnark/configure>page de configuration</a> pour Torrents."
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "Pour activer les modifications de session uniquement aux tunnels clients, activez <a href=/help/advancedsettings>Mode Avancé</a>."
@@ -6409,13 +6409,13 @@ msgid "If set to true, this option will place an icon in the system tray / notif
 msgstr "S'il est défini sur true, cette option placera une icône dans la zone de notification, avec des options de contrôle de service de base. [Désactivé par défaut]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "Ce paramètre permet de configurer le nombre maximal de fichiers par torrent qu'I2PSnark autorisera, lors du téléchargement ou de la création d'un torrent. Notez qu'augmenter substantiellement cette valeur par rapport à la valeur par défaut de 2000 fichiers peut nécessiter une configuration supplémentaire sur le système hôte pour augmenter le nombre maximal de fichiers ouverts que le système d'exploitation autorisera (par ex. <code>ulimit -n</code> sur Linux). Pour modifier, ajouter au fichier de configuration d'I2PSnark <code>i2psnark.config</code>. [Redémarrage d'I2PSnark ou du routeur requis] [Restart of I2PSnark or router required] [Redémarrage d'I2PSnark ou du routeur requis] [Redémarrage d'I2PSnark ou du routeur requis] [Redémarrage d'I2PSnark ou du routeur requis]. [Redémarrage d'I2PSnark ou du routeur requis]"
+msgstr "Ce paramètre permet de configurer le nombre maximal de fichiers par torrent qu'Torrents autorisera, lors du téléchargement ou de la création d'un torrent. Notez qu'augmenter substantiellement cette valeur par rapport à la valeur par défaut de 2000 fichiers peut nécessiter une configuration supplémentaire sur le système hôte pour augmenter le nombre maximal de fichiers ouverts que le système d'exploitation autorisera (par ex. <code>ulimit -n</code> sur Linux). Pour modifier, ajouter au fichier de configuration d'Torrents <code>i2psnark.config</code>. [Redémarrage d'Torrents ou du routeur requis] [Restart of Torrents or router required] [Redémarrage d'Torrents ou du routeur requis] [Redémarrage d'Torrents ou du routeur requis] [Redémarrage d'Torrents ou du routeur requis]. [Redémarrage d'Torrents ou du routeur requis]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "Ce paramètre spécifique au tunnel vous permet d'activer ou de désactiver les réponses aux pings envoyés aux serveurs hébergés par le routeur. Pour désactiver les pings, vous devez ajouter la ligne <code>i2p.streaming.answerPings=false</code> dans la section <i>Options personnalisées</i> de la configuration du serveur dans le Gestionnaire de tunnels."
 
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
+msgstr "Ce paramètre, lorsqu'il est activé, introduit un délai pong aléatoire allant jusqu'à 50 ms pour tous les serveurs compatibles ping hébergés par le routeur. La valeur par défaut est désactivée. [Redémarrage requis]"
 
 msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
 msgstr "Ce paramètre, lorsqu'il est activé, modifie le délai aléatoire maximal de pong introduit pour les serveurs activés par ping, si <code>i2p.streaming.enablePongDelay</code> est également activé. Si aucune valeur n'est définie explicitement, la valeur par défaut de 50ms sera utilisée."
@@ -6562,7 +6562,7 @@ msgid "The Tunnel Manager"
 msgstr "Le Gestionnaire du Tunnel"
 
 msgid "The Tunnel Manager enables configuration of local services provided by your router."
-msgstr "The Tunnel Manager enables configuration of local services provided by your router."
+msgstr "Le Tunnel Manager permet la configuration des services locaux fournis par votre routeur."
 
 msgid "You can determine which services automatically start when the router starts, manage tunnel allocation to optimize for high usage services or to minimize the the cpu and memory overhead, add server and client tunnels to host or access services on the network, set rate limiting or tunnel filtering for your server tunnels and more."
 msgstr "Vous pouvez déterminer quels services démarrent automatiquement lors du lancement du routeur, gérer l'allocation des tunnels pour optimiser les services à forte utilisation ou minimiser les surcoûts CPU et mémoire, ajouter des tunnels serveur et client pour héberger ou accéder à des services sur le réseau, définir des limitations de débit ou des filtres de tunnel pour vos tunnels serveur et plus encore."
@@ -6652,7 +6652,7 @@ msgid "Configuration files for the router, installed plugins, and router logs ar
 msgstr "Les fichiers de configuration du routeur, les plug-ins installés et les journaux du routeur sont stockés à l'emplacement suivant:"
 
 msgid "Windows"
-msgstr "Windows"
+msgstr "Fenêtres"
 
 msgid "OS X"
 msgstr "OS X"
@@ -6718,7 +6718,7 @@ msgid "Function"
 msgstr "Fonction"
 
 msgid "Notes"
-msgstr "Notes"
+msgstr "Remarques"
 
 msgid "UPnP SSDP UDP multicast listener"
 msgstr "Écouteur UDP de multicast SSDP UPnP"
@@ -6832,7 +6832,7 @@ msgid "I2P Terminology"
 msgstr "Terminologie I2P"
 
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "Une application Web I2P qui gère les destinations de service pour le réseau, mappant les hachages B64 à des noms lisibles par l'homme. Les destinations peuvent être ajoutées manuellement ou via des abonnements à des fichiers hosts.txt. Également appelé SusiDNS. Pour plus d'informations, voir la <a href=https://geti2p.net/fr/docs/naming class='sitelink external' target=_blank rel=noreferrer>documentation en ligne</a>."
+msgstr "Une application Web I2P qui gère les destinations de service pour le réseau, mappant les hachages B64 à des noms lisibles par l'homme. Les destinations peuvent être ajoutées manuellement ou via des abonnements à des fichiers hosts.txt. Également appelé DNS. Pour plus d'informations, voir la <a href=https://geti2p.net/fr/docs/naming class='sitelink external' target=_blank rel=noreferrer>documentation en ligne</a>."
 
 msgid "Base32 (B32) / Base64 (B64)"
 msgstr "Base32 (B32) / Base64 (B64)"
@@ -6868,13 +6868,13 @@ msgid "A command-line application supplied with I2P that is used to request URL 
 msgstr "Une application en ligne de commande fournie avec I2P qui est utilisée pour demander des ressources URL, de façon similaire à <a href=https://www.gnu.org/software/wget/ class='sitelink external' target=_blank rel=noreferrer>wget</a> ou <a href=https://curl.haxx.se/ class='sitelink external' target=_blank rel=noreferrer>curl</a>. Eepget est également utilisé en interne par le routeur, par exemple pour effectuer une réensemence à partir d'hôtes distants. Par défaut, eepget utilise le proxy HTTP sur <code>127.0.0.1:4444</code>."
 
 msgid "Eephead"
-msgstr "Eephead"
+msgstr "Tête d'Eep"
 
 msgid "A command-line application supplied with I2P+ (Linux/MacOS) that is used to perform a <code>head</code> request on a specified http resource on the network, returning various response headers from the remote server. By default, eephead uses the HTTP proxy on <code>127.0.0.1:4444</code>."
 msgstr "Une application en ligne de commande fournie avec I2P+ (Linux/MacOS) qui est utilisée pour effectuer une requête <code>head</code> sur une ressource HTTP spécifiée sur le réseau, retournant diverses en-têtes de réponse du serveur distant. Par défaut, eephead utilise le proxy HTTP sur <code>127.0.0.1:4444</code>."
 
 msgid "Eepsite"
-msgstr "Eepsite"
+msgstr "Site souterrain"
 
 msgid "A website hosted on the I2P network. By default, a <a href=https://www.eclipse.org/jetty/about.html class='sitelink external' target=_blank rel=noreferrer>Jetty webserver</a> is configured and running on <a href=http://127.0.0.1:7658/ target=_blank rel=noreferrer>http://127.0.0.1:7658/</a>."
 msgstr "Un site Web hébergé sur le réseau I2P. Par défaut, un <a href=https://www.eclipse.org/jetty/about.html class='sitelink external' target=_blank rel=noreferrer>serveur web Jetty</a> est configuré et fonctionne sur <a href=http://127.0.0.1:7658/ target=_blank rel=noreferrer>http://127.0.0.1:7658/</a>."
@@ -6973,19 +6973,19 @@ msgid "A distributed database containing router contact information (RouterInfos
 msgstr "Une base de données distribuée contenant des informations de contact de routeur (RouterInfos) et de destination (LeaseSets). Un routeur unique maintient sa propre base de données partielle pour communiquer avec les autres routeurs du réseau ; aucun routeur unique ne maintiendra une liste de tous les routeurs. Les RouterInfos sont stockées sur disque et lues en mémoire lorsque le routeur démarre ou lorsque de nouveaux RouterInfos sont acquis. Également appelé <i>NetDb</i>. Pour plus d'informations, voir la <a href=https://geti2p.net/fr/docs/how/network-database class='sitelink external' target=_blank rel=noreferrer>documentation en ligne</a>."
 
 msgid "NTCP / NTCP2"
-msgstr "NTCP / NTCP2"
+msgstr "NTCP/NTCP2"
 
 msgid "NTCP (NIO-based TCP) and NTCP2 are TCP-based network transports which use Java's NIO (New I/O) TCP implementation to deliver I2NP messages between routers on the network. NTCP2 improves the resistance of NTCP to various attacks and automated traffic identification methods. For more information, see the <a href=https://geti2p.net/en/docs/transport/ntcp class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
 msgstr "NTCP (TCP basé sur NIO) et NTCP2 sont des protocoles de transport réseau TCP qui utilisent la mise en œuvre TCP NIO (New I/O) de Java pour acheminer les messages I2NP entre les routeurs du réseau. NTCP2 améliore la résistance de NTCP à diverses attaques et méthodes d'identification de trafic automatisé. Pour plus d'informations, voir la <a href=https://geti2p.net/fr/docs/transport/ntcp class='sitelink external' target=_blank rel=noreferrer>documentation en ligne</a>."
 
 msgid "Orchid (plugin)"
-msgstr "Orchid (plugin)"
+msgstr "Orchidée (plugin)"
 
 msgid "A java implementation of a Tor client, available as an I2P plugin. Can be used as the default <i>outproxy</i> if configured in the relevant SOCKS or HTTP client tunnel in the <i>Tunnel Manager</i>. Available from <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Source code is available on <a href=https://github.com/i2p/i2p.plugins.orchid class='sitelink external' target=_blank rel=noreferrer>github</a>."
 msgstr "Une implémentation Java d'un client Tor, disponible en tant que plugin I2P. Peut être utilisé comme <i>outproxy</i> par défaut s'il est configuré dans le tunnel SOCKS ou HTTP client approprié dans le <i>Gestionnaire de tunnels</i>. Disponible sur <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Le code source est disponible sur <a href=https://github.com/i2p/i2p.plugins.orchid class='sitelink external' target=_blank rel=noreferrer>github</a>."
 
 msgid "Outproxy"
-msgstr "Outproxy"
+msgstr "Proxy"
 
 msgid "A service on the network that provides a proxy connection to the <i>clearnet</i>. By default, I2P has an HTTP outproxy configured for web browsing on <code>127.0.0.1:4444</code>."
 msgstr "Un service sur le réseau qui fournit une connexion proxy vers le <i>clearnet</i>. Par défaut, I2P a un outproxy HTTP configuré pour la navigation Web sur <code>127.0.0.1:4444</code>."
@@ -7892,11 +7892,11 @@ msgstr "Remarque : De nombreuses étiquettes et options dans la console comporte
 msgid "Theme Overrides"
 msgstr "Remplacements de thème"
 
-msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr "I2P+ prend en charge les remplacements de thèmes personnalisés pour la console, le gestionnaire de tunnels, I2PSnark, SusiDNS et Susimail, autorisant des modifications dans les thèmes persistantes après les mises à niveau. Pour activer un remplacement, créez un fichier css nommé <code>override.css</code> contenant vos modifications de thème et placez-le dans le répertoire de thème correspondant du thème que vous souhaitez modifier, ou renommez l'un des fichiers d'exemple, puis effectuez un rechargement forcé du navigateur. Notez que le gestionnaire de tunnels et la console partagent le même override.css. Pour désactiver un remplacement, supprimez ou renommez le fichier <code>override.css</code> puis effectuez un rechargement forcé du navigateur (habituellement Control + Maj + R)."
+msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Webmail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
+msgstr "I2P+ prend en charge les remplacements de thèmes personnalisés pour la console, le gestionnaire de tunnels, Torrents, DNS et Webmail, autorisant des modifications dans les thèmes persistantes après les mises à niveau. Pour activer un remplacement, créez un fichier css nommé <code>override.css</code> contenant vos modifications de thème et placez-le dans le répertoire de thème correspondant du thème que vous souhaitez modifier, ou renommez l'un des fichiers d'exemple, puis effectuez un rechargement forcé du navigateur. Notez que le gestionnaire de tunnels et la console partagent le même override.css. Pour désactiver un remplacement, supprimez ou renommez le fichier <code>override.css</code> puis effectuez un rechargement forcé du navigateur (habituellement Control + Maj + R)."
 
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
-msgstr "Le répertoire des thèmes se trouve dans le répertoire d'application I2P sous <code>docs/themes</code>. Vous trouverez des fichiers d'exemple de remplacement dans les sous-répertoires de thème de la console et d'I2PSnark."
+msgstr "Le répertoire des thèmes se trouve dans le répertoire d'application I2P sous <code>docs/themes</code>. Vous trouverez des fichiers d'exemple de remplacement dans les sous-répertoires de thème de la console et d'Torrents."
 
 msgid "Sidebar Information"
 msgstr "Informations latérales"
@@ -8485,7 +8485,7 @@ msgid "Most Recent"
 msgstr "le plus récent"
 
 msgid "torrents"
-msgstr "torrents"
+msgstr "torrent"
 
 msgid "Torrent Manager"
 msgstr "Gestionnaire de torrents"
@@ -8646,7 +8646,7 @@ msgid "Browser Setup"
 msgstr "Configuration du navigateur"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr "Pour accéder aux sites web hébergés sur le réseau I2P et utiliser facultativement l'outproxy par défaut pour se connecter aux sites sur le clearnet, vous devrez configurer votre navigateur pour utiliser le proxy <b>HTTP</b> d'I2P+, qui fonctionne par défaut sur <code>127.0.0.1 port 4444</code>. "
+msgstr "Pour accéder aux sites web hébergés sur le réseau I2P et utiliser facultativement l'outproxy par défaut pour se connecter aux sites sur le clearnet, vous devrez configurer votre navigateur pour utiliser le proxy <b>HTTP</b> d'I2P+, qui fonctionne par défaut sur <code>127.0.0.1 port 4444</code>."
 
 msgid "Welcome to I2P+!"
 msgstr "Bienvenue à I2P+!"

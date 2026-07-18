@@ -1,24 +1,18 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 msgid ""
-msgstr ""
-"Language: ko\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-
+msgstr "Language: ko\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=1; plural=0;\n"
 msgid "OK"
 msgstr "OK"
 
 msgid "IPv4: OK; IPv6: Testing"
-msgstr "IPv4: OK; IPv6: Testing"
+msgstr "IPv4: 확인; IPv6: 테스트"
 
 msgid "IPv4: OK; IPv6: Firewalled"
 msgstr "IPv4: OK; IPv6: 방화벽있음"
 
 msgid "IPv4: Testing; IPv6: OK"
-msgstr "IPv4: Testing; IPv6: OK"
+msgstr "IPv4: 테스트; IPv6: 확인"
 
 msgid "IPv4: Firewalled; IPv6: OK"
 msgstr "IPv4: 방화벽있음; IPv6: OK"
@@ -33,22 +27,22 @@ msgid "Symmetric NAT"
 msgstr "대칭 NAT"
 
 msgid "IPv4: Symmetric NAT; IPv6: Testing"
-msgstr "IPv4: 대칭 NAT; IPv6: Testing"
+msgstr "IPv4: 대칭 NAT; IPv6: 테스트 중"
 
 msgid "IPv4: Firewalled; IPv6: Testing"
-msgstr "IPv4: 방화벽있음; IPv6: Testing"
+msgstr "IPv4: 방화벽 적용됨; IPv6: 테스트 중"
 
 msgid "Firewalled"
 msgstr "방화벽있음"
 
 msgid "IPv4: Testing; IPv6: Firewalled"
-msgstr "IPv4: Testing; IPv6: 방화벽있음"
+msgstr "IPv4: 테스트 중; IPv6: 방화벽 적용됨"
 
 msgid "IPv4: Disabled; IPv6: Testing"
-msgstr "IPv4: 비활성화; IPv6: Testing"
+msgstr "IPv4: 비활성화; IPv6: 테스트 중"
 
 msgid "IPv4: Disabled; IPv6: Firewalled"
-msgstr "IPv4: Disabled; IPv6: 방화벽있음"
+msgstr "IPv4: 비활성화; IPv6: 방화벽 적용됨"
 
 msgid "Disconnected"
 msgstr "연결 해제"
@@ -117,16 +111,16 @@ msgid "Declining Tunnel Requests"
 msgstr "터널 요청 거부"
 
 msgid "Dropping Tunnel Requests: Too slow"
-msgstr "터널 요청 버리는중: 너무 느림"
+msgstr "터널 요청 차단: 너무 느림"
 
 msgid "Dropping Tunnel Requests: High job lag"
-msgstr "터널 요청 버리는중: 높은 일감 랙"
+msgstr "터널 요청 차단: 높은 작업 지연"
 
 msgid "Dropping Tunnel Requests:<br>High CPU load"
 msgstr "터널 요청 삭제:<br>CPU 부하가 높음"
 
 msgid "Dropping Tunnel Requests: Overloaded"
-msgstr "터널 요청 버리는중: 오버로드됨"
+msgstr "터널 요청 차단: 과부하"
 
 msgid "Declining requests:"
 msgstr "요청 거부:"
@@ -138,7 +132,7 @@ msgid "Connection limit reached"
 msgstr "연결 제한에 도달했습니다"
 
 msgid "Dropping Tunnel Requests: High load"
-msgstr "\"터널 요청 버리는중: 높은 로드량"
+msgstr "터널 요청 차단: 높은 부하"
 
 msgid "Dropping Tunnel Requests: Queue time"
-msgstr "터널 요청 버리는중: 대기시간"
+msgstr "터널 요청 차단: 대기 시간"

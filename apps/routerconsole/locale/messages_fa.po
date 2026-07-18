@@ -92,7 +92,7 @@ msgid "Low-level send rate (B/s)"
 msgstr "نرخ ارسال سطح پایین (B/s)"
 
 msgid "Peers active in the last minute"
-msgstr "همسالان فعال در آخرین دقیقه"
+msgstr "همتایان فعال در آخرین دقیقه"
 
 msgid "Peers sent to in the last minute"
 msgstr "ارسال همتایان به در دقیقه آخر"
@@ -104,7 +104,7 @@ msgid "CPU load average of the JVM"
 msgstr "میانگین بار CPU JVM"
 
 msgid "Known fast peers"
-msgstr "همسالان سریع شناخته شده"
+msgstr "همتایان سریع شناخته شده"
 
 msgid "Known high capacity peers"
 msgstr "همتایان با ظرفیت بالا"
@@ -161,7 +161,7 @@ msgid "Status"
 msgstr "وضعیت"
 
 msgid "Type"
-msgstr "نوغ"
+msgstr "نوع"
 
 msgid "Upstream"
 msgstr "بالادست"
@@ -1651,7 +1651,7 @@ msgid "Exploratory tunnels"
 msgstr "تونل های اکتشافی"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "تورنت‌ها"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "هشدار ناشناس بودن - تنظیمات شامل تونل های 0 هاپ است."
@@ -1743,7 +1743,7 @@ msgid "Enabling the Universal Theming option is recommended when embedding these
 msgstr "فعال کردن گزینه Universal Theming هنگام جاسازی این برنامه ها توصیه می شود"
 
 msgid "Embed I2PSnark and I2PMail in the console"
-msgstr "I2PSnark و I2PMail را در کنسول جاسازی کنید"
+msgstr "تورنت‌ها و I2PMail را در کنسول جاسازی کنید"
 
 msgid "Add a user and password to enable."
 msgstr "برای فعال کردن یک کاربر و رمز عبور اضافه کنید."
@@ -2057,7 +2057,7 @@ msgid "Router Logs"
 msgstr "سیاهههای روتر"
 
 msgid "Configure update URLs and policy"
-msgstr "Configure update URLs and policy"
+msgstr "پیکربندی آدرس‌های به‌روزرسانی و سیاست"
 
 msgid "Router Updates"
 msgstr "به روز رسانی روتر"
@@ -3163,8 +3163,8 @@ msgstr "اتصال عقب افتاده است"
 #, java-format
 msgid "{0} peer"
 msgid_plural "{0} peers"
-msgstr[0] "{0} همسالان"
-msgstr[1] "{0} همکار"
+msgstr[0] "{0} همتا"
+msgstr[1] "{0} همتا"
 
 msgid "UDP connections"
 msgstr "اتصالات UDP"
@@ -3296,7 +3296,7 @@ msgid "How long ago connection was established"
 msgstr "چند وقت پیش ارتباط برقرار شد"
 
 msgid "Difference between the peer's clock and our own"
-msgstr "تفاوت بین ساعت همسالان و ساعت ما"
+msgstr "تفاوت بین ساعت همتا و ساعت ما"
 
 msgid "How many bytes can be sent without acknowledgement"
 msgstr "چند بایت را می توان بدون تایید ارسال کرد"
@@ -3451,20 +3451,20 @@ msgstr "همتایان"
 #, java-format
 msgid "{0} fast peer"
 msgid_plural "{0} fast peers"
-msgstr[0] "{0} همسالان سریع"
-msgstr[1] "{0} همسالان سریع"
+msgstr[0] "{0} همتای سریع"
+msgstr[1] "{0} همتای سریع"
 
 #, java-format
 msgid "{0} high capacity peer"
 msgid_plural "{0} high capacity peers"
-msgstr[0] "{0} همسالان با ظرفیت بالا"
-msgstr[1] "{0} همتا با ظرفیت بالا"
+msgstr[0] "{0} همتای با ظرفیت بالا"
+msgstr[1] "{0} همتای با ظرفیت بالا"
 
 #, java-format
 msgid "{0} integrated peer"
 msgid_plural "{0} integrated peers"
-msgstr[0] "{0} همسالان یکپارچه"
-msgstr[1] "{0} همکار یکپارچه"
+msgstr[0] "{0} همای یکپارچه"
+msgstr[1] "{0} همتای یکپارچه"
 
 msgid "1h Fail Rate"
 msgstr "1 ساعت میزان شکست"
@@ -3879,13 +3879,13 @@ msgid "NetDb"
 msgstr "پایگاه داده شبکه"
 
 msgid "Show all current peer connections"
-msgstr "تمام اتصالات همسالان فعلی را نشان دهید"
+msgstr "تمام اتصالات همتای فعلی را نشان دهید"
 
 msgid "Profiles"
 msgstr "پروفایل ها"
 
 msgid "Show recent peer performance profiles"
-msgstr "پروفایل عملکرد همسالان اخیر را نشان دهید"
+msgstr "پروفایل عملکرد همتایان اخیر را نشان دهید"
 
 msgid "View existing tunnels and tunnel build status"
 msgstr "تونل های موجود و وضعیت ساخت تونل را مشاهده کنید"
@@ -3992,7 +3992,7 @@ msgid "Total peers in NetDb"
 msgstr "مجموع همتایان در NetDb"
 
 msgid "Peers we've been talking to in the last minute / last hour"
-msgstr "همسالانی که در چند دقیقه گذشته/ساعت آخر با آنها صحبت کرده ایم"
+msgstr "همتایانی که در چند دقیقه گذشته/ساعت آخر با آنها صحبت کرده ایم"
 
 msgid "Peers we've been talking to in the last minute"
 msgstr "همتایانی که در دقیقه گذشته با آن‌ها صحبت کرده‌ایم"
@@ -5501,7 +5501,7 @@ msgid "SOCKS 5"
 msgstr "ساکس ۵"
 
 msgid "This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin if configured. Note: this option will not work when you have 0 known peers."
-msgstr "در این گزینه از HTTP از HTTP I2P برای RESEED استفاده می شود ، یا در صورت پیکربندی افزونه ارکید. توجه: وقتی 0 همسالان شناخته شده داشته باشید ، این گزینه کار نخواهد کرد."
+msgstr "در این گزینه از HTTP پروکسی خروجی I2P برای بازبذری استفاده می‌شود، یا در صورت پیکربندی افزونه ارکید. توجه: وقتی 0 همتای شناخته‌شده داشته باشید، این گزینه کار نخواهد کرد."
 
 msgid "I2P Outproxy"
 msgstr "I2P Outproxy"
@@ -5676,7 +5676,7 @@ msgid "The default settings are optimized for general usage and normally don't n
 msgstr "تنظیمات پیش فرض برای استفاده عمومی بهینه شده است و معمولاً نیازی به تغییر ندارد."
 
 msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
-msgstr "برای تغییر تنظیمات تونل مشتری، از <a href=\"/i2ptunnelmgr\">مدیر تونل</a> یا صفحه <a href=\"/i2psnark/configure\">پیکربندی</a> برای I2PSnark استفاده کنید."
+msgstr "برای تغییر تنظیمات تونل مشتری، از <a href=\"/i2ptunnelmgr\">مدیر تونل</a> یا صفحه <a href=\"/i2psnark/configure\">پیکربندی</a> برای تورنت‌ها استفاده کنید."
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "برای فعال کردن تغییرات فقط در جلسه در تونل های سرویس گیرنده، <a href=\"/help/advancedsettings\">حالت پیشرفته</a> کنسول را فعال کنید."
@@ -6409,7 +6409,7 @@ msgid "If set to true, this option will place an icon in the system tray / notif
 msgstr "اگر روی true تنظیم شود، این گزینه نمادی را در سینی سیستم / ناحیه اعلان با گزینه های اصلی کنترل سرویس قرار می دهد. "
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "این تنظیم به پیکربندی حداکثر تعداد فایل در هر تورنت اجازه می دهد که I2PSnark هنگام دانلود یا ایجاد تورنت اجازه دهد. "
+msgstr "این تنظیم به پیکربندی حداکثر تعداد فایل در هر تورنت اجازه می دهد که تورنت‌ها هنگام دانلود یا ایجاد تورنت اجازه دهد. "
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "این تنظیمات مخصوص تونل به شما امکان می دهد پاسخ به پینگ های ارسال شده به سرورهای میزبانی شده توسط روتر را فعال یا غیرفعال کنید. "
@@ -6832,7 +6832,7 @@ msgid "I2P Terminology"
 msgstr "اصطلاحات I2P"
 
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "یک برنامه وب I2P که مدیریت مقاصد سرویس‌ها برای شبکه را به عهده دارد و هش‌های B64 را به نام‌های قابل خواندن انسان می‌نگارد. مقاصد می‌توانند به صورت دستی یا از طریق دریافت فایل‌های hosts.txt افزوده شوند. همچنین به عنوان SusiDNS نیز شناخته می‌شود. برای اطلاعات بیشتر دستورالعمل‌های آنلاین را ببینید."
+msgstr "یک برنامه وب I2P که مدیریت مقاصد سرویس‌ها برای شبکه را به عهده دارد و هش‌های B64 را به نام‌های قابل خواندن انسان می‌نگارد. مقاصد می‌توانند به صورت دستی یا از طریق دریافت فایل‌های hosts.txt افزوده شوند. همچنین به عنوان DNS نیز شناخته می‌شود. برای اطلاعات بیشتر دستورالعمل‌های آنلاین را ببینید."
 
 msgid "Base32 (B32) / Base64 (B64)"
 msgstr "بیس 32 (بی 32) / بیس 64 (بی 64)"
@@ -7892,11 +7892,11 @@ msgstr "توجه: بسیاری از برچسب‌ها و گزینه‌ها در 
 msgid "Theme Overrides"
 msgstr "تغییرات تم"
 
-msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr "I2P+ امکان تغییرات شخصی تم را برای کنسول، مدیر تونل، I2PSnark، SusiDNS و Susimail فراهم می‌کند که این تغییرات پس از بروزرسانی‌ها هم باقی می‌مانند. برای فعال کردن تغییرات تم، یک فایل CSS با نام <code>override.css</code> با تنظیمات جدید تمتان درست کنید و در دایرکتوری مربوط به تم مورد نظر قرار دهید یا یکی از فایل‌ نمونه را تغییر نام دهید و سپس بروزرسانی سخت مرورگر انجام دهید. توجه داشته باشید که مدیر تونل و کنسول از همان فایل override.css استفاده می‌کنند. برای غیرفعال کردن تغییرات تم، فایل <code>override.css</code> را پاک یا تغییر نام دهید و سپس بروزرسانی سخت مرورگر انجام دهید."
+msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and پست وب, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
+msgstr "I2P+ امکان تغییرات شخصی تم را برای کنسول، مدیر تونل، تورنت‌ها، DNS و پست وب فراهم می‌کند که این تغییرات پس از بروزرسانی‌ها هم باقی می‌مانند. برای فعال کردن تغییرات تم، یک فایل CSS با نام <code>override.css</code> با تنظیمات جدید تمتان درست کنید و در دایرکتوری مربوط به تم مورد نظر قرار دهید یا یکی از فایل‌ نمونه را تغییر نام دهید و سپس بروزرسانی سخت مرورگر انجام دهید. توجه داشته باشید که مدیر تونل و کنسول از همان فایل override.css استفاده می‌کنند. برای غیرفعال کردن تغییرات تم، فایل <code>override.css</code> را پاک یا تغییر نام دهید و سپس بروزرسانی سخت مرورگر انجام دهید."
 
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
-msgstr "دایرکتوری تم‌ها در دایرکتوری اصلی برنامه I2P زیر <code>docs/themes</code> قرار دارد. فایل‌های نمونه برای تغییرات تم در زیردایرکتوری‌های تم کنسول و I2PSnark وجود دارند."
+msgstr "دایرکتوری تم‌ها در دایرکتوری اصلی برنامه I2P زیر <code>docs/themes</code> قرار دارد. فایل‌های نمونه برای تغییرات تم در زیردایرکتوری‌های تم کنسول و تورنت‌ها وجود دارند."
 
 msgid "Sidebar Information"
 msgstr "اطلاعات منوی کناری"

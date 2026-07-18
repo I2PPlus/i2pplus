@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Importado desde archivo"
 
 msgid "Manually added via SusiDNS"
-msgstr "Agregado manualmente vía SusiDNS"
+msgstr "Agregado manualmente vía DNS"
 
 msgid "Manually added"
 msgstr "Agregado manualmente"
@@ -517,7 +517,7 @@ msgid "Validated"
 msgstr "Validado"
 
 msgid "no"
-msgstr "no"
+msgstr "No"
 
 msgid "yes"
 msgstr "sí"
@@ -607,13 +607,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Ver las preguntas frecuentes para obtener una lista de direcciones URL de suscripciónes."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Si SusiDNS está configurado para publicar su libreta de direcciones Router, las entradas aparecerán en su libreta de direcciones Publicada y se guardarán en un fichero hosts.txt para compartir."
+msgstr "Si DNS está configurado para publicar su libreta de direcciones Router, las entradas aparecerán en su libreta de direcciones Publicada y se guardarán en un fichero hosts.txt para compartir."
 
 msgid "Published Addressbook"
 msgstr "Libreta de direcciones Publicada"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "Para configurar SusiDNS para que impulse su libreta de direcciones Router a su libreta de direcciones Publicada, establezca 'should_publish=true' en la página de configuración."
+msgstr "Para configurar DNS para que impulse su libreta de direcciones Router a su libreta de direcciones Publicada, establezca 'should_publish=true' en la página de configuración."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "Todos los servidores (hosts) derivados de suscripciones aparecerán en esta libreta de direcciones, agregados a cualquiera que añada manualmente aquí o en su libreta de direcciones Maestra."
@@ -664,7 +664,7 @@ msgid "for websites"
 msgstr "para sitios web"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Si configura SusiDNS para que publique su libreta de direcciones Router, exportará un fichero hosts.txt que contenga todos los equipos (a la raíz de su eepsite, por defecto)."
+msgstr "Si configura DNS para que publique su libreta de direcciones Router, exportará un fichero hosts.txt que contenga todos los equipos (a la raíz de su eepsite, por defecto)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "Las direcciones añadidas manualmente a su libreta de direcciones Master (maestra) se incorporarán a su libreta de direcciones Router."

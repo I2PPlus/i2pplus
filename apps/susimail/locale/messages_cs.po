@@ -53,7 +53,7 @@ msgid "unknown"
 msgstr "neznámý"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr "Pro ochranu vaší soukromí blokuje SusiMail JavaScript a jakýkoli vzdálený obsah obsažený v této HTML zprávě."
+msgstr "Pro ochranu vaší soukromí blokuje Webová pošta JavaScript a jakýkoli vzdálený obsah obsažený v této HTML zprávě."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "Povolte JavaScript pro lepší prezentaci a další funkce."
@@ -187,7 +187,7 @@ msgid "Invalid pagesize number, resetting to default value."
 msgstr "Neplatné hodnota velikosti stránky, použiji výchozí hodnotu."
 
 msgid "Login"
-msgstr "Login"
+msgstr "Přihlášení"
 
 msgid "Loading messages, please wait..."
 msgstr "Načítání zpráv, čekejte prosím..."
@@ -223,7 +223,7 @@ msgstr "{0} je exkluzivní služba I2P poskytovaná společností {1}."
 
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr "{0} webmail client &copy Susi 2004-2005."
+msgstr "Webmailový klient {0} &copy; Susi 2004-2005."
 
 msgid "Checking for new messages on server"
 msgstr "Kontrola nových zpráv na serveru"
@@ -276,7 +276,7 @@ msgid "To"
 msgstr "Do"
 
 msgid "Cc"
-msgstr "Cc"
+msgstr "Kopie"
 
 msgid "Bcc"
 msgstr "Bcc"
@@ -297,7 +297,7 @@ msgid "Delete selected attachments"
 msgstr "Smazat vybrané přílohy"
 
 msgid "I2PMail Login"
-msgstr "I2PMail Login"
+msgstr "Přihlášení I2PMail"
 
 msgid "User"
 msgstr "Uživatel"
@@ -312,13 +312,13 @@ msgid "Toggle password visibility"
 msgstr "Přepněte viditelnost hesla"
 
 msgid "Host"
-msgstr "Host"
+msgstr "Hostitel"
 
 msgid "POP3 Port"
-msgstr "POP3 Port"
+msgstr "Port POP3"
 
 msgid "SMTP Port"
-msgstr "SMTP Port"
+msgstr "Port SMTP"
 
 msgid "Read Mail Offline"
 msgstr "Číst emaily offline"

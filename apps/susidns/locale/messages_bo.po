@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "ཡིག་ཆ་ནས་བཞེད་པ་བཞག"
 
 msgid "Manually added via SusiDNS"
-msgstr "SusiDNSགྱི་རྒྱུ་མཐུད་སྣོན་པ།"
+msgstr "DNSགྱི་རྒྱུ་མཐུད་སྣོན་པ།"
 
 msgid "Manually added"
 msgstr "མཐུད་རིམ་སྣོན་པ།"
@@ -607,13 +607,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "འབྲེལ་ཡོད་པའི་རིགས་ཀྱི་རྒྱུ་མཐུད་གཞི་གྲངས་ལ་བལྟ་བར་FAQབལྟ་རོགས།"
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "SusiDNSགི་སྒྲིག་འཇུག་བྱས་ན་གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་ནི་བཀོད་པའི་ཡིག་ཆ་བང་ནས་བཞེད་པ་བཞག དེ་ནི་hosts.txtཡིག་ཆ་ནས་བཞེད་པ་བཞག"
+msgstr "DNSགི་སྒྲིག་འཇུག་བྱས་ན་གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་ནི་བཀོད་པའི་ཡིག་ཆ་བང་ནས་བཞེད་པ་བཞག དེ་ནི་hosts.txtཡིག་ཆ་ནས་བཞེད་པ་བཞག"
 
 msgid "Published Addressbook"
 msgstr "བཀོད་པའི་ཡིག་ཆ་བང"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "SusiDNSགི་སྒྲིག་འཇུག་བྱས་ན་གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་ནི་བཀོད་པའི་ཡིག་ཆ་བང་ནས་བཞེད་པ་བཞག 'should_publish=true'སྒྲིག་འཇུག་པར་བྱ་དགོས།"
+msgstr "DNSགི་སྒྲིག་འཇུག་བྱས་ན་གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་ནི་བཀོད་པའི་ཡིག་ཆ་བང་ནས་བཞེད་པ་བཞག 'should_publish=true'སྒྲིག་འཇུག་པར་བྱ་དགོས།"
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "འབྲེལ་ཡོད་པའི་རིགས་ནས་བཞེད་པའི་གཟིགས་མིང་ཐམས་ཅད་ཡིག་ཆ་བང་འདིར་བཞག དེ་དང་མཐུད་རིམ་སྣོན་པའི་གཟིགས་མིང་དང་གཙོ་བོའི་ཡིག་ཆ་བང་ནས་སྣོན་པའི་གཟིགས་མིང་བཞག"
@@ -664,7 +664,7 @@ msgid "for websites"
 msgstr "དྲ་གྲོའི་གཟིགས་མིང་གི་རིགས"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "ཁྱོད་ཀྱི་SusiDNSགི་སྒྲིག་འཇུག་བྱས་ན་གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་ནི་hosts.txtཡིག་ཆ་ནས་བཞེད་པ་བཞག (གཞི་གྲངས་ན་དྲ་གྲོའི་གཟིགས་མིང་གི་མཐའ་ནས་བཞེད་པ་བཞག)"
+msgstr "ཁྱོད་ཀྱི་DNSགི་སྒྲིག་འཇུག་བྱས་ན་གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་ནི་hosts.txtཡིག་ཆ་ནས་བཞེད་པ་བཞག (གཞི་གྲངས་ན་དྲ་གྲོའི་གཟིགས་མིང་གི་མཐའ་ནས་བཞེད་པ་བཞག)"
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "གཙོ་བོའི་ཡིག་ཆ་བང་ནས་མཐུད་རིམ་སྣོན་པའི་གཟིགས་མིང་གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་ནས་བཞེད་པ་བཞག"

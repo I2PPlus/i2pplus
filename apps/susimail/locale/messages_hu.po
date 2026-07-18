@@ -52,7 +52,7 @@ msgid "unknown"
 msgstr "ismeretlen"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr "A magánszféra védelme érdekében a SusiMail blokkolja a JavaScriptet és az ehhez az HTML üzenethez tartozó minden távoli tartalmat."
+msgstr "A magánszféra védelme érdekében a Webmail blokkolja a JavaScriptet és az ehhez az HTML üzenethez tartozó minden távoli tartalmat."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "JavaScript engedélyezése a jobb megjelenésért és további funkciókért."
@@ -220,7 +220,7 @@ msgstr "{0} egy kizárólagos I2P szolgáltatás, amelyet a(z) {1} biztosít."
 
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr "{0} webmail client &copy Susi 2004-2005."
+msgstr "{0} webmail kliens & Copy Susi 2004-2005."
 
 msgid "Checking for new messages on server"
 msgstr "Új üzenetek keresése a szerveren"
@@ -276,7 +276,7 @@ msgid "Cc"
 msgstr "Cc"
 
 msgid "Bcc"
-msgstr "Bcc"
+msgstr "Titkos másolat"
 
 msgid "Subject"
 msgstr "Tárgy"
@@ -312,10 +312,10 @@ msgid "Host"
 msgstr "Hoszt"
 
 msgid "POP3 Port"
-msgstr "POP3 Port"
+msgstr "POP3 port"
 
 msgid "SMTP Port"
-msgstr "SMTP Port"
+msgstr "SMTP port"
 
 msgid "Read Mail Offline"
 msgstr "Olvassa el az offline levelezést"

@@ -30,7 +30,7 @@ msgid "Downloading"
 msgstr "正在下载"
 
 msgid "Configuring I2PSnark with I2CP options"
-msgstr "用I2CP选项配置I2PSnark"
+msgstr "用I2CP选项配置种子"
 
 msgid "No write permissions for data directory"
 msgstr "对目录没有写的权限"
@@ -63,7 +63,7 @@ msgid "Download speed limit is {0}KB/s"
 msgstr "下载速度限制为 {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr "注意：您可能需要停止并重新启动您的种子或重新启动I2PSnark才能使此更改生效。"
+msgstr "注意：您可能需要停止并重新启动您的种子或重新启动种子才能使此更改生效。"
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "已在入站隧道上启用了+0/1隧道跳随机化"
@@ -79,7 +79,7 @@ msgstr "已在出站隧道上禁用了隧道跳随机化"
 
 #, java-format
 msgid "Startup delay changed to {0}"
-msgstr "下载前的延迟已更新为{0}"
+msgstr "启动延迟已更新为{0}"
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -248,7 +248,7 @@ msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "错误: 内存不足，无法为 {0} 创建种子。"
 
 msgid "Initializing I2PSnark and opening tunnels"
-msgstr "初始化I2PSnark并打开隧道"
+msgstr "初始化种子并打开隧道"
 
 #, java-format
 msgid "Torrent added and started: {0}"
@@ -384,7 +384,7 @@ msgid "Download finished: {0}"
 msgstr "下载已完成: {0}"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "种子"
 
 #, java-format
 msgid "Starting torrent: {0}"
@@ -1154,13 +1154,13 @@ msgid "Auto start torrents"
 msgstr "自动开始种子"
 
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "当种子添加后自动启动种子且当I2PSnark启动时自动启动种子"
+msgstr "当种子添加后自动启动种子且当种子启动时自动启动种子"
 
 msgid "Startup delay"
 msgstr "启动延迟"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "I2PSnark启动后要多少分钟启动种子"
+msgstr "种子启动后要多少分钟启动种子"
 
 msgid "minutes"
 msgstr "分"
@@ -1256,7 +1256,7 @@ msgid "Add"
 msgstr "添加"
 
 msgid "Select trackers for removal from I2PSnark's known list"
-msgstr "选择你要从I2PSnark的已知名单中移除的Tracker"
+msgstr "选择你要从种子的已知名单中移除的Tracker"
 
 msgid "Website URL"
 msgstr "网站 URL"

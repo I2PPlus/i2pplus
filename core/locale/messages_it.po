@@ -45,7 +45,7 @@ msgstr[0] "{0} anno"
 msgstr[1] "{0} anni"
 
 msgid "n/a"
-msgstr "n/a"
+msgstr "n / a"
 
 #, java-format
 msgid "{0,number,####} ns"

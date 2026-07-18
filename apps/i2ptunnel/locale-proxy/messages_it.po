@@ -32,7 +32,7 @@ msgid "Destination LeaseSet not found"
 msgstr "LeaseSet di destinazione non trovato"
 
 msgid "Host"
-msgstr "Host"
+msgstr "Ospite"
 
 msgid "Base32"
 msgstr "Base 32"
@@ -157,7 +157,7 @@ msgid "router"
 msgstr "router"
 
 msgid "master"
-msgstr "master"
+msgstr "maestro"
 
 msgid "private"
 msgstr "privato"

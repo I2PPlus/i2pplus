@@ -1,13 +1,7 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 msgid ""
-msgstr ""
-"Language: nl\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
+msgstr "Language: nl\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n != 1);\n"
 msgid "OK"
 msgstr "OK"
 
@@ -15,13 +9,13 @@ msgid "IPv4: OK; IPv6: Testing"
 msgstr "IPv4: OK; IPv6: Testen"
 
 msgid "IPv4: OK; IPv6: Firewalled"
-msgstr "IPv4: OK; IPv6: Firewalled"
+msgstr "IPv4: oké; IPv6: Firewall"
 
 msgid "IPv4: Testing; IPv6: OK"
 msgstr "IPv4: Testen; IPv6: OK"
 
 msgid "IPv4: Firewalled; IPv6: OK"
-msgstr "IPv4: Firewalled; IPv6: OK"
+msgstr "IPv4: Firewall; IPv6: oké"
 
 msgid "IPv4: Disabled; IPv6: OK"
 msgstr "IPv4: Uitgeschakeld; IPv6: OK"
@@ -39,7 +33,7 @@ msgid "IPv4: Firewalled; IPv6: Testing"
 msgstr "IPv4: Firewalled; IPv6: Testen"
 
 msgid "Firewalled"
-msgstr "Firewalled"
+msgstr "Firewall"
 
 msgid "IPv4: Testing; IPv6: Firewalled"
 msgstr "IPv4: Testen; IPv6: Firewalled"

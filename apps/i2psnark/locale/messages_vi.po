@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=1; plural=0;\\\n"
 
 msgid "No more torrents running."
 msgstr "Không còn torrent nào chạy nữa."
@@ -15,7 +15,7 @@ msgid "I2P tunnel closed."
 msgstr "Đường hầm I2P đóng lại."
 
 msgid "Magnet"
-msgstr "Nam châm"
+msgstr "Magnet"
 
 msgid "Unable to connect to I2P"
 msgstr "Không thể kết nối với I2P"
@@ -30,7 +30,7 @@ msgid "Downloading"
 msgstr "Đang tải xuống"
 
 msgid "Configuring I2PSnark with I2CP options"
-msgstr "Định cấu hình I2PSnark với các tùy chọn I2CP"
+msgstr "Định cấu hình Tệp tin torrent với các tùy chọn I2CP"
 
 msgid "No write permissions for data directory"
 msgstr "Không có quyền ghi vào thư mục dữ liệu"
@@ -63,7 +63,7 @@ msgid "Download speed limit is {0}KB/s"
 msgstr "Giới hạn tốc độ tải xuống là {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr "Lưu ý: Bạn có thể cần dừng và khởi động lại torrent hoặc khởi động lại I2PSnark để thay đổi có hiệu lực."
+msgstr "Lưu ý: Bạn có thể cần dừng và khởi động lại torrent hoặc khởi động lại Tệp tin torrent để thay đổi có hiệu lực."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Ngẫu nhiên hóa nhảy đường hầm +0/1 đã được kích hoạt trên các đường hầm đến"
@@ -248,7 +248,7 @@ msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "ERROR - Hết bộ nhớ, không thể tạo torrent từ {0}"
 
 msgid "Initializing I2PSnark and opening tunnels"
-msgstr "Khởi tạo I2PSnark và mở đường hầm"
+msgstr "Khởi tạo Tệp tin torrent và mở đường hầm"
 
 #, java-format
 msgid "Torrent added and started: {0}"
@@ -384,7 +384,7 @@ msgid "Download finished: {0}"
 msgstr "Tải xuống hoàn tất: {0}"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrent"
 
 #, java-format
 msgid "Starting torrent: {0}"
@@ -736,7 +736,7 @@ msgstr "URL không hợp lệ: Phải bắt đầu bằng \"{0}\" hoặc \"{1}\"
 
 #, java-format
 msgid "Magnet deleted: {0}"
-msgstr "Đã xóa nam châm: {0}"
+msgstr "Đã xóa Magnet: {0}"
 
 #, java-format
 msgid "Torrent file could not be deleted: {0}"
@@ -1004,7 +1004,7 @@ msgid "Alternates"
 msgstr "Thay thế"
 
 msgid "Primary"
-msgstr "Tiểu học"
+msgstr "Chính"
 
 msgid "Tracker Type"
 msgstr "Loại máy theo dõi"
@@ -1154,13 +1154,13 @@ msgid "Auto start torrents"
 msgstr "Tự động bắt đầu torrent"
 
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "Tự động khởi động torrent khi được thêm vào và khởi động lại torrent khi I2PSnark khởi động"
+msgstr "Tự động khởi động torrent khi được thêm vào và khởi động lại torrent khi Tệp tin torrent khởi động"
 
 msgid "Startup delay"
 msgstr "Trì hoãn khởi động"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Mất bao lâu trước khi tải torrent tự động khởi động khi I2PSnark khởi động"
+msgstr "Mất bao lâu trước khi tải torrent tự động khởi động khi Tệp tin torrent khởi động"
 
 msgid "minutes"
 msgstr "phút"
@@ -1256,7 +1256,7 @@ msgid "Add"
 msgstr "Thêm vào"
 
 msgid "Select trackers for removal from I2PSnark's known list"
-msgstr "Chọn trình theo dõi để xóa khỏi danh sách đã biết của I2PSnark"
+msgstr "Chọn trình theo dõi để xóa khỏi danh sách đã biết của Tệp tin torrent"
 
 msgid "Website URL"
 msgstr "URL trang web"
@@ -1268,7 +1268,7 @@ msgid "Mark tracker for deletion"
 msgstr "Đánh dấu theo dõi để xóa"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
-msgstr "Không thể thêm magnet: Liên kết磁 v2 không được hỗ trợ"
+msgstr "Không thể thêm Magnet: Liên kết Magnet v2 không được hỗ trợ"
 
 #, java-format
 msgid "Invalid magnet URL {0}"
@@ -1277,7 +1277,7 @@ msgstr "URL nam châm không hợp lệ {0}"
 #, java-format
 msgid "1 hop"
 msgid_plural "{0} hops"
-msgstr[0] "{0} hoa bia"
+msgstr[0] "{0} hop"
 
 #, java-format
 msgid "1 tunnel"

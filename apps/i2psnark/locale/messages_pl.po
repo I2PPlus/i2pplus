@@ -15,7 +15,7 @@ msgid "I2P tunnel closed."
 msgstr "Zamknięto tunel I2P."
 
 msgid "Magnet"
-msgstr "Magnet"
+msgstr "Magnes"
 
 msgid "Unable to connect to I2P"
 msgstr "Nie można połączyć się z I2P"
@@ -30,7 +30,7 @@ msgid "Downloading"
 msgstr "Pobieranie"
 
 msgid "Configuring I2PSnark with I2CP options"
-msgstr "Konfigurowanie I2PSnark z opcjami I2CP"
+msgstr "Konfigurowanie Torrenty z opcjami I2CP"
 
 msgid "No write permissions for data directory"
 msgstr "Brak praw zapisu w katalogu danych"
@@ -63,7 +63,7 @@ msgid "Download speed limit is {0}KB/s"
 msgstr "Limit prędkości pobierania wynosi {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr "Uwaga: Może być konieczne zatrzymanie i ponowne uruchomienie torrentów lub ponowne uruchomienie I2PSnark, aby zmiany weszły w życie."
+msgstr "Uwaga: Może być konieczne zatrzymanie i ponowne uruchomienie torrentów lub ponowne uruchomienie Torrenty, aby zmiany weszły w życie."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "+0/1 tunnelhop randomisatie ingeschakeld op inbound tunnels"
@@ -248,7 +248,7 @@ msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "BŁĄD – Brak pamięci, nie można utworzyć pliku torrent z {0}"
 
 msgid "Initializing I2PSnark and opening tunnels"
-msgstr "Inicjowanie I2PSnark i otwieranie tuneli"
+msgstr "Inicjowanie Torrenty i otwieranie tuneli"
 
 #, java-format
 msgid "Torrent added and started: {0}"
@@ -384,7 +384,7 @@ msgid "Download finished: {0}"
 msgstr "Pobieranie ukończone: {0}"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrenty"
 
 #, java-format
 msgid "Starting torrent: {0}"
@@ -561,7 +561,7 @@ msgid "Status"
 msgstr "Stan"
 
 msgid "Torrent"
-msgstr "Torrent"
+msgstr "Potok"
 
 msgid "File type"
 msgstr "Rodzaj pliku"
@@ -579,7 +579,7 @@ msgid "RX Rate"
 msgstr "↓"
 
 msgid "TX"
-msgstr "TX"
+msgstr "Teksas"
 
 msgid "TX Rate"
 msgstr "↑"
@@ -942,7 +942,7 @@ msgid "seconds"
 msgstr "sekundy"
 
 msgid "Seed"
-msgstr "Seed"
+msgstr "Nasienie"
 
 msgid "Uninteresting (The peer has no pieces we need)"
 msgstr "Uninteresting (peer nie ma piece'ów, które potrzebujemy)"
@@ -964,7 +964,7 @@ msgid "Details at {0} tracker"
 msgstr "Szczegóły na trackerze {0}"
 
 msgid "Info"
-msgstr "Info"
+msgstr "Informacje"
 
 msgid "Add Torrent"
 msgstr "Dodaj torrent"
@@ -1164,13 +1164,13 @@ msgid "Auto start torrents"
 msgstr "Uruchamiaj automatycznie torrenty"
 
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "Automatycznie startuj torrenty po dodaniu i po uruchomieniu I2PSnarka"
+msgstr "Automatycznie startuj torrenty po dodaniu i po uruchomieniu Torrentsa"
 
 msgid "Startup delay"
 msgstr "Opóźnienie uruchomienia"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Po jakim czasie automatycznie uruchamiać torrenty przy starcie I2PSnarka"
+msgstr "Po jakim czasie automatycznie uruchamiać torrenty przy starcie Torrentsa"
 
 msgid "minutes"
 msgstr "minuty"
@@ -1203,7 +1203,7 @@ msgid "Our destination (identity) for this session"
 msgstr "Nasz adres docelowy (identyfikacja) dla tej sesji"
 
 msgid "Dest."
-msgstr "Dest."
+msgstr "Miejsce docelowe"
 
 msgid "Inbound Settings"
 msgstr "Tunele wejściowe"
@@ -1371,7 +1371,7 @@ msgid "Resource Not found"
 msgstr "Nie znaleziono zasobu"
 
 msgid "Info hash"
-msgstr "Info hash"
+msgstr "Hash informacyjny"
 
 msgid "Created"
 msgstr "Utworzony"

@@ -363,7 +363,7 @@ msgid "Legacy options"
 msgstr "Opsi lama"
 
 msgid "Post Quantum"
-msgstr "Post Quantum"
+msgstr "Pasca Kuantum"
 
 msgid "Both encryption types"
 msgstr "Kedua jenis enkripsi"
@@ -1353,7 +1353,7 @@ msgid "Test HTTPS server through I2P"
 msgstr "Uji server HTTPS melalui I2P"
 
 msgid "Server"
-msgstr "Server"
+msgstr "pelayan"
 
 msgid "SSL Activation"
 msgstr "Aktivasi SSL"

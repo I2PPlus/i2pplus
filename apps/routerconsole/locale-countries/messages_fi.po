@@ -1,13 +1,7 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 msgid ""
-msgstr ""
-"Language: fi\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
+msgstr "Language: fi\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n != 1);\n"
 msgid "Anonymous Proxy"
 msgstr "Anonyymi välityspalvelin"
 
@@ -264,7 +258,7 @@ msgid "French Guiana"
 msgstr "Ranskan Guayana"
 
 msgid "Guernsey"
-msgstr "Guernsey"
+msgstr "Guernseyssä"
 
 msgid "Ghana"
 msgstr "Ghana"
@@ -615,7 +609,7 @@ msgid "Singapore"
 msgstr "Singapore"
 
 msgid "Saint Helena"
-msgstr "Saint Helena"
+msgstr "Pyhä Helena"
 
 msgid "Slovenia"
 msgstr "Slovenia"

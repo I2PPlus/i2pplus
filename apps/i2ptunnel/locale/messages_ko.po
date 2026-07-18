@@ -90,7 +90,7 @@ msgid "Port not set"
 msgstr "포트 설정 안됨"
 
 msgid "Invalid port"
-msgstr "올바르지 않은 터널"
+msgstr "올바르지 않은 포트"
 
 msgid "Warning - ports less than 1024 are not recommended"
 msgstr "경고 - 1024 이상으로 포트값을 설정하십시오"
@@ -132,7 +132,7 @@ msgid "Streamr server"
 msgstr "Streamr 서버"
 
 msgid "HTTP bidir"
-msgstr "HTTP bidir"
+msgstr "HTTP 양방향"
 
 msgid "Host not set"
 msgstr "호스트 설정 안됨"
@@ -811,7 +811,7 @@ msgid "Block these User-Agents"
 msgstr "이러한 사용자 에이전트 차단"
 
 msgid "comma separated, e.g. Mozilla,Opera (case-sensitive)"
-msgstr "カンマ区切り、例えばMozilla、Opera（大文字と小文字は区別されます）"
+msgstr "쉼표로 구분, 예: Mozilla,Opera (대소문자 구분)"
 
 msgid "Encrypt Leaseset"
 msgstr "Leaseset 암호화"
@@ -1033,7 +1033,7 @@ msgid "Set the X-Content-Type-Options header to 'nosniff'"
 msgstr "X-Content-Type-Options 헤더를 'nosniff'로 설정합니다"
 
 msgid "X-Content-Type-Options"
-msgstr "X-Content-Type-Options"
+msgstr "X-콘텐츠 유형-옵션"
 
 #, java-format
 msgid "Initializing Tunnel Manager{0}"

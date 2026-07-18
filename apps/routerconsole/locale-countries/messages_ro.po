@@ -1,13 +1,7 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 msgid ""
-msgstr ""
-"Language: ro\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
-
+msgstr "Language: ro\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 msgid "Anonymous Proxy"
 msgstr "Proxy Anonim"
 
@@ -66,7 +60,7 @@ msgid "Åland Islands"
 msgstr "Insulele Åland"
 
 msgid "Azerbaijan"
-msgstr "Azerbaijan"
+msgstr "Azerbaidjan"
 
 msgid "Bosnia and Herzegovina"
 msgstr "Bosnia și Herzegovina"
@@ -147,7 +141,7 @@ msgid "Switzerland"
 msgstr "Elveția"
 
 msgid "Cote D'Ivoire"
-msgstr "Cote D'Ivoire"
+msgstr "Coasta de Fildeș"
 
 msgid "Cook Islands"
 msgstr "Insulele Cook"
@@ -240,7 +234,7 @@ msgid "Falkland Islands (Malvinas)"
 msgstr "Insulele Falkland (Malvine)"
 
 msgid "Micronesia"
-msgstr "Micronesia"
+msgstr "Micronezia"
 
 msgid "Faroe Islands"
 msgstr "Insulele Feroe"
@@ -267,7 +261,7 @@ msgid "Guernsey"
 msgstr "Guernsey"
 
 msgid "Ghana"
-msgstr "Ghana"
+msgstr "Gana"
 
 msgid "Gibraltar"
 msgstr "Gibraltar"
@@ -294,7 +288,7 @@ msgid "South Georgia and the South Sandwich Islands"
 msgstr "Georgia de Sud și Insulele Sandwich de Sud"
 
 msgid "Guatemala"
-msgstr "Guatemala"
+msgstr "Guatelmala"
 
 msgid "Guam"
 msgstr "Guam"
@@ -435,7 +429,7 @@ msgid "Monaco"
 msgstr "Monaco"
 
 msgid "Moldova"
-msgstr "Moldova"
+msgstr "Republica Moldova"
 
 msgid "Montenegro"
 msgstr "Muntenegru"
@@ -462,7 +456,7 @@ msgid "Mongolia"
 msgstr "Mongolia"
 
 msgid "Macau"
-msgstr "Macau"
+msgstr "Macao"
 
 msgid "Northern Mariana Islands"
 msgstr "Insulele Mariane de Nord"
@@ -522,7 +516,7 @@ msgid "Norway"
 msgstr "Norvegia"
 
 msgid "Nepal"
-msgstr "Nepal"
+msgstr "Napal"
 
 msgid "Nauru"
 msgstr "Nauru"
@@ -582,7 +576,7 @@ msgid "Qatar"
 msgstr "Qatar"
 
 msgid "Réunion"
-msgstr "Réunion"
+msgstr "Insulele Reunion"
 
 msgid "Romania"
 msgstr "România"
@@ -639,7 +633,7 @@ msgid "Somalia"
 msgstr "Somalia"
 
 msgid "Suriname"
-msgstr "Suriname"
+msgstr "Surinam"
 
 msgid "South Sudan"
 msgstr "Sudanul de Sud"
@@ -675,7 +669,7 @@ msgid "Thailand"
 msgstr "Tailanda"
 
 msgid "Tajikistan"
-msgstr "Tajikistan"
+msgstr "Tadjikistan"
 
 msgid "Tokelau"
 msgstr "Tokelau"

@@ -135,7 +135,7 @@ msgid "Streamr server"
 msgstr "Servidor Streamr"
 
 msgid "HTTP bidir"
-msgstr "HTTP bidir"
+msgstr "Bidir HTTP"
 
 msgid "Host not set"
 msgstr "Anfitrión no establecido"
@@ -1343,7 +1343,7 @@ msgid "Base32"
 msgstr "Base32"
 
 msgid "Alt Base32"
-msgstr "Alt Base32"
+msgstr "Base alternativa32"
 
 msgid "Incoming I2P Port Routing"
 msgstr "Enrutamiento del puerto I2P entrante"

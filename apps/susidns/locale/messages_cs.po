@@ -14,7 +14,7 @@ msgstr "Jméno hostitele \"{0}\" obsahuje zakázané znaky {1}"
 
 #, java-format
 msgid "Host name cannot start with \"{0}\""
-msgstr "Jméno hostitele nemůže začínat na  \"{0}\""
+msgstr "Jméno hostitele nemůže začínat na \"{0}\""
 
 #, java-format
 msgid "Host name cannot end with \"{0}\""
@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Importováno ze souboru"
 
 msgid "Manually added via SusiDNS"
-msgstr "Ručně přidáno přes SusiDNS"
+msgstr "Ručně přidáno přes DNS"
 
 msgid "Manually added"
 msgstr "Ručně přidáno"
@@ -276,13 +276,13 @@ msgid "Subscriptions reloaded."
 msgstr "Předplatné znovu načteno."
 
 msgid "Import"
-msgstr "Import"
+msgstr "Importovat"
 
 msgid "address book"
 msgstr "adresář"
 
 msgid "Router"
-msgstr "Router"
+msgstr "Směrovač"
 
 msgid "Master"
 msgstr "Mistr"
@@ -615,13 +615,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Viz FAQ pro seznam adres URL předplatného."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Pokud je SusiDNS nakonfigurováno pro publikování vašeho adresáře směrovače, položky se objeví ve vašem Publikovaném adresáři a uloží se do souboru hosts.txt pro sdílení."
+msgstr "Pokud je DNS nakonfigurováno pro publikování vašeho adresáře směrovače, položky se objeví ve vašem Publikovaném adresáři a uloží se do souboru hosts.txt pro sdílení."
 
 msgid "Published Addressbook"
 msgstr "Publikovaný adresář"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "Chcete-li nakonfigurovat SusiDNS tak, aby vložil váš adresář routeru do vašeho publikovaného adresáře, nastavte na konfigurační stránce 'should_publish=true'."
+msgstr "Chcete-li nakonfigurovat DNS tak, aby vložil váš adresář routeru do vašeho publikovaného adresáře, nastavte na konfigurační stránce 'should_publish=true'."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "V tomto adresáři se objeví všichni hostitelé odvození z předplatných, kromě těch, které ručně přidáte sem nebo do hlavního adresáře."
@@ -672,7 +672,7 @@ msgid "for websites"
 msgstr "pro webové stránky"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Pokud nakonfigurujete SusiDNS pro publikování vašeho adresáře směrovače, exportuje soubor hosts.txt obsahující všechny hostitele (ve výchozím nastavení do kořenového adresáře vašeho eepsite)."
+msgstr "Pokud nakonfigurujete DNS pro publikování vašeho adresáře směrovače, exportuje soubor hosts.txt obsahující všechny hostitele (ve výchozím nastavení do kořenového adresáře vašeho eepsite)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "Adresy ručně přidané do hlavního adresáře se sloučí s adresářem směrovače."

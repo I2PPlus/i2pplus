@@ -135,7 +135,7 @@ msgid "Streamr server"
 msgstr "Streamr Sunucusu"
 
 msgid "HTTP bidir"
-msgstr "HTTP bidir"
+msgstr "HTTP çiftdir"
 
 msgid "Host not set"
 msgstr "Sunucu ayarlanmamış"
@@ -366,7 +366,7 @@ msgid "Legacy options"
 msgstr "Eski seçenekler"
 
 msgid "Post Quantum"
-msgstr "Post Quantum"
+msgstr "Kuantum Sonrası"
 
 msgid "Both encryption types"
 msgstr "İki şifreleme türü de"
@@ -627,7 +627,7 @@ msgid "Startup Delay"
 msgstr "Başlangıç Gecikmesi"
 
 msgid "Minimum"
-msgstr "Minimum"
+msgstr "Asgari"
 
 msgid "Minimum startup delay"
 msgstr "Minimum başlangıç gecikmesi"
@@ -1020,25 +1020,25 @@ msgid "Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text fi
 msgstr "HTML, XML, JSON ve Metin Dosyaları için 'Get, Post, Head' adlı başlayıcıyı ayarlayın"
 
 msgid "Allow"
-msgstr "Allow"
+msgstr "İzin vermek"
 
 msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immutable for everything else)"
 msgstr "Önbellek kontrol başlıklarını etkinleştirin (HTML, XML, JSON ve metin için önbelleksiz, diğer her şey için değişmez)"
 
 msgid "Cache-Control"
-msgstr "Cache-Control"
+msgstr "Önbellek Kontrolü"
 
 msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
 msgstr "HTML, XML, JSON ve Metin Dosyaları için Yönlendirici Politika Başlığını 'same-origin' olarak ayarlayın"
 
 msgid "Referrer-Policy"
-msgstr "Referrer-Policy"
+msgstr "Yönlendiren Politikası"
 
 msgid "Set the X-Content-Type-Options header to 'nosniff'"
 msgstr "X-Content-Type-Options üstbilgisini 'nosniff' olarak ayarlayın"
 
 msgid "X-Content-Type-Options"
-msgstr "X-Content-Type-Options"
+msgstr "X-İçerik-Türü-Seçenekleri"
 
 #, java-format
 msgid "Initializing Tunnel Manager{0}"
@@ -1343,7 +1343,7 @@ msgid "Base32"
 msgstr "Base32"
 
 msgid "Alt Base32"
-msgstr "Alt Base32"
+msgstr "Alternatif Taban32"
 
 msgid "Incoming I2P Port Routing"
 msgstr "Gelen I2P Kapı Numarası Yöneltmesi"

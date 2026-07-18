@@ -1,13 +1,7 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 msgid ""
-msgstr ""
-"Language: da\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
+msgstr "Language: da\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n != 1);\n"
 msgid "Anonymous Proxy"
 msgstr "Anonym Proxy"
 
@@ -96,7 +90,7 @@ msgid "Benin"
 msgstr "Benin"
 
 msgid "Saint Barthélemy"
-msgstr "Saint Barthélemy"
+msgstr "Saint-Barthélemy"
 
 msgid "Bermuda"
 msgstr "Bermuda"
@@ -120,7 +114,7 @@ msgid "Bhutan"
 msgstr "Bhutan"
 
 msgid "Bouvet Island"
-msgstr "Bouvet Island"
+msgstr "Bouvetøen"
 
 msgid "Botswana"
 msgstr "Botswana"
@@ -177,7 +171,7 @@ msgid "Cape Verde"
 msgstr "Kap Verde"
 
 msgid "Curaçao"
-msgstr "Curaçao"
+msgstr "Curacao"
 
 msgid "Christmas Island"
 msgstr "Juleøen"
@@ -342,7 +336,7 @@ msgid "Iraq"
 msgstr "Irak"
 
 msgid "Iran"
-msgstr "Iran"
+msgstr "Iran "
 
 msgid "Iceland"
 msgstr "Island"
@@ -402,7 +396,7 @@ msgid "Lebanon"
 msgstr "Libanon"
 
 msgid "Saint Lucia"
-msgstr "Saint Lucia"
+msgstr "Sankt Lucia"
 
 msgid "Liechtenstein"
 msgstr "Liechtenstein"
@@ -441,7 +435,7 @@ msgid "Montenegro"
 msgstr "Montenegro"
 
 msgid "Saint Martin"
-msgstr "Saint Martin"
+msgstr "Sankt Martin"
 
 msgid "Madagascar"
 msgstr "Madagaskar"
@@ -462,7 +456,7 @@ msgid "Mongolia"
 msgstr "Mongoliet"
 
 msgid "Macau"
-msgstr "Macau"
+msgstr "Macao"
 
 msgid "Northern Mariana Islands"
 msgstr "Nordmarianerne"
@@ -507,7 +501,7 @@ msgid "Niger"
 msgstr "Niger"
 
 msgid "Norfolk Island"
-msgstr "Norfolk Island"
+msgstr "Norfolkøen"
 
 msgid "Nigeria"
 msgstr "Nigeria"
@@ -582,7 +576,7 @@ msgid "Qatar"
 msgstr "Qatar"
 
 msgid "Réunion"
-msgstr "Réunion"
+msgstr "Genforening"
 
 msgid "Romania"
 msgstr "Rumænien"
@@ -615,7 +609,7 @@ msgid "Singapore"
 msgstr "Singapore"
 
 msgid "Saint Helena"
-msgstr "Saint Helena"
+msgstr "Sankt Helena"
 
 msgid "Slovenia"
 msgstr "Slovenien"
@@ -681,7 +675,7 @@ msgid "Tokelau"
 msgstr "Tokelau"
 
 msgid "Timor-Leste"
-msgstr "Timor-Leste"
+msgstr "Timor-Leste (Østtimor)"
 
 msgid "Turkmenistan"
 msgstr "Turkmenistan"

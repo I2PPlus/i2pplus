@@ -30,7 +30,7 @@ msgid "Downloading"
 msgstr "Descarga"
 
 msgid "Configuring I2PSnark with I2CP options"
-msgstr "Configurar I2PSnark con opciones de I2CP"
+msgstr "Configurar Torrentes con opciones de I2CP"
 
 msgid "No write permissions for data directory"
 msgstr "No hay permisos de escritura para el directorio de datos"
@@ -63,7 +63,7 @@ msgid "Download speed limit is {0}KB/s"
 msgstr "El límite de velocidad de descarga es {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr "Nota: Es posible que necesite detener y reiniciar sus torrents o reiniciar I2PSnark para que este cambio surta efecto."
+msgstr "Nota: Es posible que necesite detener y reiniciar sus torrents o reiniciar Torrentes para que este cambio surta efecto."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Se ha habilitado la aleatorización de +0/1 salto de túnel en los túneles entrantes"
@@ -83,7 +83,7 @@ msgstr "El retardo en el arranque se ha cambiado a {0}"
 
 #, java-format
 msgid "Refresh time changed to {0}"
-msgstr "Hora de actualización cambiado a {0}"
+msgstr "Hora de actualización cambiada a {0}"
 
 msgid "Refresh disabled"
 msgstr "Actualización deshabilitada"
@@ -248,7 +248,7 @@ msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "ERROR - Sin memoria disponible, no se pudo crear un torrent a partir de {0}"
 
 msgid "Initializing I2PSnark and opening tunnels"
-msgstr "Inicializando I2PSnark y abriendo túneles"
+msgstr "Inicializando Torrentes y abriendo túneles"
 
 #, java-format
 msgid "Torrent added and started: {0}"
@@ -384,7 +384,7 @@ msgid "Download finished: {0}"
 msgstr "Descarga finalizada: \"{0}\""
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrentes"
 
 #, java-format
 msgid "Starting torrent: {0}"
@@ -481,7 +481,7 @@ msgid "Torrent at {0} was not valid"
 msgstr "El torrent en {0} no era válido"
 
 msgid "Torrents"
-msgstr "Torrents"
+msgstr "Torrentes"
 
 msgid "Refresh page"
 msgstr "Actualizar página"
@@ -561,7 +561,7 @@ msgid "Status"
 msgstr "Estado"
 
 msgid "Torrent"
-msgstr "Torrent"
+msgstr "Torrente"
 
 msgid "File type"
 msgstr "Tipo de fichero"
@@ -1003,7 +1003,7 @@ msgid "Content Filters"
 msgstr "Filtros de contenido"
 
 msgid "Trackers"
-msgstr "Trackers"
+msgstr "Rastreadores"
 
 msgid "Alternates"
 msgstr "Alternativos"
@@ -1060,7 +1060,7 @@ msgid "Maximum number of torrents to display per page"
 msgstr "Número máximo de torrents a mostrar por página"
 
 msgid "torrents"
-msgstr "torrents"
+msgstr "torrentes"
 
 msgid "Language"
 msgstr "Idioma"
@@ -1159,13 +1159,13 @@ msgid "Auto start torrents"
 msgstr "Auto iniciar torrents"
 
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "Inicializar torrents automáticamente al añadirlos y reinicializarlos cuando se inice I2PSnark"
+msgstr "Inicializar torrents automáticamente al añadirlos y reinicializarlos cuando se inice Torrentes"
 
 msgid "Startup delay"
 msgstr "Retardo al arrancar"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Cuánto transcurre hasta que se cargan los torrent auto-inicializados al iniciar I2PSnark"
+msgstr "Cuánto transcurre hasta que se cargan los torrent auto-inicializados al iniciar Torrentes"
 
 msgid "minutes"
 msgstr "minutos"
@@ -1261,7 +1261,7 @@ msgid "Add"
 msgstr "Añadir"
 
 msgid "Select trackers for removal from I2PSnark's known list"
-msgstr "Seleccionar trackers para eliminación de la lista de conocidos de I2PSnark"
+msgstr "Seleccionar trackers para eliminación de la lista de conocidos de Torrentes"
 
 msgid "Website URL"
 msgstr "URL del sitio web"

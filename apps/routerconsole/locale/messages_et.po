@@ -721,7 +721,7 @@ msgid "Now"
 msgstr "Nüüd"
 
 msgid "Router restarted"
-msgstr "Routter taaskäivitati"
+msgstr "Ruuter taaskäivitati"
 
 #, java-format
 msgid "News last updated {0} ago."
@@ -816,7 +816,7 @@ msgid "Console"
 msgstr "konsool"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
-msgstr "Ruuteri konsooli SSL -i juurdepääsu lubamiseks vaadake lisateabe saamiseks faili <code> clients.config </code> fail, mis asub teie I2P rakenduste kataloogis. Peate redigeerima kaustas asuvat RouterConsolerunneri konfiguratsioonifaili: "
+msgstr "Ruuteri konsooli SSL -i juurdepääsu lubamiseks vaadake lisateabe saamiseks faili <code> clients.config </code> fail, mis asub teie I2P rakenduste kataloogis. Peate redigeerima kaustas asuvat RouterConsolerunneri konfiguratsioonifaili:"
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Salvestamine keelatud, muutmiseks redigeerige faili router.config"
@@ -1016,7 +1016,7 @@ msgid "Email"
 msgstr "E-post"
 
 msgid "Plugin"
-msgstr "Plugin"
+msgstr "Laiend"
 
 msgid "Author"
 msgstr "Autor"
@@ -1652,7 +1652,7 @@ msgid "Exploratory tunnels"
 msgstr "Võrgu avastamise tunnelid"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrentid"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "ANONÜÜMSUSE HOIATUS - Häälestus lubab 0-sammuseid tunneleid."
@@ -1744,7 +1744,7 @@ msgid "Enabling the Universal Theming option is recommended when embedding these
 msgstr "Nende rakenduste manustamisel on soovitatav lubada universaalne teemastamine"
 
 msgid "Embed I2PSnark and I2PMail in the console"
-msgstr "Manustage konsooli I2PSnark ja I2PMail"
+msgstr "Manustage konsooli Torrentid ja I2PMail"
 
 msgid "Add a user and password to enable."
 msgstr "Lubamiseks lisage kasutaja ja parool."
@@ -1877,7 +1877,7 @@ msgstr "Kombineeritud ribalaiuse graafik"
 
 #, java-format
 msgid "{0} for {1}"
-msgstr "{0} for {1}"
+msgstr "{0} {1} jaoks"
 
 msgid "Nothing to display - no stat specified!"
 msgstr "Midagi ei kuvata - statistikat ei määratleta!"
@@ -2019,7 +2019,7 @@ msgid "Anonymous webmail client"
 msgstr "Anonüümne veebimeili klient"
 
 msgid "I2PMail"
-msgstr "I2PMail"
+msgstr "I2PMmail"
 
 msgid "Install and configure I2P plugins"
 msgstr "installige ja konfigureerige I2P-pluginad"
@@ -2136,7 +2136,7 @@ msgid "Frequently Asked Questions"
 msgstr "korduma kippuvad küsimused"
 
 msgid "I2P FAQ"
-msgstr "I2P FAQ"
+msgstr "I2P KKK"
 
 msgid "I2P Plugins"
 msgstr "pistikprogrammid"
@@ -2301,7 +2301,7 @@ msgid "Computer related news aggregation"
 msgstr "arvutiga seotud uudiste koondamine"
 
 msgid "HackerNews"
-msgstr "HackerNews"
+msgstr "HäckerNews"
 
 msgid "HongKongFreePress"
 msgstr "HongKongFreePress"
@@ -2400,7 +2400,7 @@ msgid "Academic commentary and essays"
 msgstr "Akadeemilised kommentaarid ja esseed"
 
 msgid "TheConversation"
-msgstr "TheConversation"
+msgstr "The Conversation"
 
 msgid "Global News"
 msgstr "ülemaailmsed uudised"
@@ -2409,7 +2409,7 @@ msgid "TheGuardian"
 msgstr "TheGuardian"
 
 msgid "TheMarkup"
-msgstr "TheMarkup"
+msgstr "Markup"
 
 msgid "Watching Big Tech..."
 msgstr "Big Techi vaatamine..."
@@ -2676,7 +2676,7 @@ msgid "Bad value supplied, please check and try again."
 msgstr "Vale väärtus esitatud, palun kontrollige ja proovige uuesti."
 
 msgid "Router Map"
-msgstr "Routteri kaart"
+msgstr "Ruuterikaart"
 
 msgid "Network Database Search"
 msgstr "Võrguandmebaasi otsing"
@@ -3615,7 +3615,7 @@ msgid "How many local service tunnels we're running"
 msgstr "kui palju kohalikke teenindustunneleid me kasutame"
 
 msgid "Messenger"
-msgstr "Messenger"
+msgstr "Sõnumitooja"
 
 msgid "i2pchat"
 msgstr "i2pchat"
@@ -3922,7 +3922,7 @@ msgid "Textual router performance statistics"
 msgstr "Ruuteri jõudlusinfo teksti kujul"
 
 msgid "Sybils"
-msgstr "Sybils"
+msgstr "Sübiilid"
 
 msgid "Review possible sybils in network database"
 msgstr "vaadake üle võrgu andmebaasis olevad võimalikud sümbolid"
@@ -3965,10 +3965,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "ruuteri või võrgu jõudlus takistab osalevate tunnelite ehitamist"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr "Routter pakub hetkel konfigureeritud maksimaalse hulga ülekanne-tunneleid"
+msgstr "Ruuter pakub hetkel konfigureeritud maksimaalse hulga läbivool-tünneleid"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr "Routter kasutab hetkel konfigureeritud maksimaalset jagamisvõimsust"
+msgstr "Ruuter kasutab hetkel konfigureeritud maksimaalset jagamisvõimsust"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "ruuter on valmis ehitama osalevaid tunneleid"
@@ -4276,10 +4276,10 @@ msgid "Run analysis on all routers in NetDb"
 msgstr "Käivitage analüüs kõigis NetDb ruuterites"
 
 msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, "
-msgstr "Sybil-tuvastusrutiini saab seadistada skannima võrguandmebaasi regulaarsete intervallide järel, "
+msgstr "Sybil-tuvastusrutiini saab seadistada skannima võrguandmebaasi regulaarsete intervallide järel,"
 
 msgid "with the option to block peers meeting the configured threshold. "
-msgstr "võimalusega blokeerida kaaslasi, kes vastavad seadistatud läviväärtusele. "
+msgstr "võimalusega blokeerida kaaslasi, kes vastavad seadistatud läviväärtusele."
 
 msgid "Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."
 msgstr "Kaaslaste blokeerimine takistab teie ruuteril tunnelite ehitamist nendega seadistatud kestuse jooksul või kuni ruuteri taaskäivitamiseni."
@@ -4676,7 +4676,7 @@ msgid "{0}Bytes per month maximum"
 msgstr "{0}maksimaalselt baite kuus"
 
 msgid "addressbook"
-msgstr "addressbook"
+msgstr "aadressiraamat"
 
 msgid "i2psnark"
 msgstr "i2psnark"
@@ -4691,7 +4691,7 @@ msgid "susidns"
 msgstr "susidns"
 
 msgid "routerconsole"
-msgstr "routerconsole"
+msgstr "ruuterkonsool"
 
 msgid "Web console"
 msgstr "Veebikonsool"
@@ -4784,13 +4784,13 @@ msgid "Stream"
 msgstr "voog"
 
 msgid "host"
-msgstr "host"
+msgstr "peremees"
 
 msgid "key"
-msgstr "key"
+msgstr "võti"
 
 msgid "port"
-msgstr "port"
+msgstr "sadamasse"
 
 msgid "Certificates"
 msgstr "Sertifikaadid"
@@ -4845,7 +4845,7 @@ msgid "I2P requires at least 12KBps to enable sharing. "
 msgstr "I2P jagab vähemalt 12 KB/s jagamise lubatamise lubamiseks. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
-msgstr "Palun võimaldage tunnelites osalemise jaoks rohkem jagatud ribalaiust. "
+msgstr "Palun võimaldage tunnelites osalemise jaoks rohkem jagatud ribalaiust."
 
 msgid "It improves your anonymity by creating cover traffic, and helps the network. "
 msgstr "See parandab teie anonüümsust, luues katteliikluse ja aitab võrku."
@@ -5496,10 +5496,10 @@ msgid "HTTPS"
 msgstr "HTTPS"
 
 msgid "SOCKS 4/4a"
-msgstr "SOCKS 4/4a"
+msgstr "SOKID 4/4a"
 
 msgid "SOCKS 5"
-msgstr "SOCKS 5"
+msgstr "SOKID 5"
 
 msgid "This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin if configured. Note: this option will not work when you have 0 known peers."
 msgstr "Sellel suvandil kasutatakse I2P HTTP Outproxy reseprodutseerimiseks või konfigureerituna orhidee pistikprogrammi. Märkus. See suvand ei tööta, kui teil on 0 teadaolevat eakaaslast."
@@ -5677,7 +5677,7 @@ msgid "The default settings are optimized for general usage and normally don't n
 msgstr "Vaikesätted on optimeeritud üldiseks kasutamiseks ja tavaliselt ei pea neid muutma."
 
 msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
-msgstr "Klienttunneli seadete muutmiseks kasutage <a href=\"/i2ptunnelmgr\">Tunnelihaldurit</a> või <a href=\"/i2psnark/configure\">konfigureerimislehte</a> I2PSnarki jaoks."
+msgstr "Klienttunneli seadete muutmiseks kasutage <a href=\"/i2ptunnelmgr\">Tunnelihaldurit</a> või <a href=\"/i2psnark/configure\">konfigureerimislehte</a> Torrentsi jaoks."
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "Klienttunnelite seansiosa muudatuste lubamiseks aktiveerige konsooli <a href=\"/help/advancedsettings\">Täiustatud režiim</a>."
@@ -5701,7 +5701,7 @@ msgid "A very old version has been detected. It's not recommended to use I2P wit
 msgstr "Tuvi on tuvastatud väga vana versioon. Pole soovitatav kasutada I2P-d hooldamata brauseritega."
 
 msgid "If you're not using IE, it's likely that your browser is pretending to be IE; please configure your browser (or proxy) to use a different User Agent string if you'd like to access the console themes."
-msgstr "Kui sa ei kasuta hetkel IE-d, siis sinu brauser ilmselt teeskleb IE-d; et konsooli teemasid muuta, hääleta palun oma brauser (või proxy) kasutama teist User-Agent teksti "
+msgstr "Kui sa ei kasuta hetkel IE-d, siis sinu brauser ilmselt teeskleb IE-d; et konsooli teemasid muuta, hääleta palun oma brauser (või proxy) kasutama teist User-Agent teksti"
 
 msgid "Router Console Password"
 msgstr "ruuteri konsooli parool"
@@ -6380,7 +6380,7 @@ msgid "The interval in milliseconds between scans for idle transit tunnels. [Def
 msgstr "Intervall millisekundites järelevalveta transiittunnelite skannimiste vahel. [Vaikeväärtus 180000]"
 
 msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr "Kui soovite paigaldada allkirjastamata (.zip) I2P värskendusi, tuleks see lisada oma <code>router.config</code> faili, kui te pole veel konfigureerinud <code>routerconsole.advanced=true</code>, milles see võimalus juba on. Märkus: I2P+ 0.9.48+ puhul on vaikimisi lubatud allkirjastamata värskenduste paigaldamine. "
+msgstr "Kui soovite paigaldada allkirjastamata (.zip) I2P värskendusi, tuleks see lisada oma <code>router.config</code> faili, kui te pole veel konfigureerinud <code>routerconsole.advanced=true</code>, milles see võimalus juba on. Märkus: I2P+ 0.9.48+ puhul on vaikimisi lubatud allkirjastamata värskenduste paigaldamine."
 
 msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
 msgstr "Selle seadistuse abil saate konfigureerida allkirjastamata värskenduste URLi, kui see on lubatud funktsioon. URL peaks lõppema <code>/i2pupdate.zip</code>-ga. Märkus: ärge installige allkirjastamata värskendusi, kui te ei usalda värskenduse allikat!"
@@ -6410,7 +6410,7 @@ msgid "If set to true, this option will place an icon in the system tray / notif
 msgstr "Kui see on määratud väärtuseks tõene, siis see seadistus lisab põhi teenuse juhtimise valikud süsteemi salve/teavitusalasse. [Vaikimisi on keelatud]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "Selle seadistuse abil saab konfigureerida suurimat lubatud failide arvu torrenti kohta, mida I2PSnark võimaldab, kui torrenti alla laaditakse või luuakse. Pange tähele, et selle väärtuse oluline suurendamine vaikimisi 2000 failist võib nõuda täiendavat konfiguratsiooni hostisüsteemis, et suurendada tööülesannete maksimaalset arvu, mida operatsioonisüsteem lubab (nt Linuxi puhul <code>ulimit -n</code>). Muutmiseks lisage see I2PSnarki konfiguratsioonifaili <code>i2psnark.config</code>. [I2PSnarki või marsruuteri taaskäivitamine on vajalik]"
+msgstr "Selle seadistuse abil saab konfigureerida suurimat lubatud failide arvu torrenti kohta, mida Torrentid võimaldab, kui torrenti alla laaditakse või luuakse. Pange tähele, et selle väärtuse oluline suurendamine vaikimisi 2000 failist võib nõuda täiendavat konfiguratsiooni hostisüsteemis, et suurendada tööülesannete maksimaalset arvu, mida operatsioonisüsteem lubab (nt Linuxi puhul <code>ulimit -n</code>). Muutmiseks lisage see Torrentsi konfiguratsioonifaili <code>i2psnark.config</code>. [Torrentsi või marsruuteri taaskäivitamine on vajalik]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "See tunnelispetsiifiline seade võimaldab teil lubada või keelata marsuuteri majutatud serveritele saadetud pingidele vastamist. Et pingeid keelata, peate lisama rea <code>i2p.streaming.answerPings=false</code> serveri konfiguratsiooni <i>Custom Options</i> sektsiooni Tunnelihalduris."
@@ -6620,7 +6620,7 @@ msgid "Can I download torrents from non-I2P trackers?"
 msgstr "Kas saan alla laadida torrente mitte-I2P jälgijatelt?"
 
 msgid "Until the advent of I2P integration in <a href=http://www.vuze.com/ target=_blank rel=noreferrer class='sitelink external'>Vuze</a>, it wasn't possible to download torrents that weren't hosted on the I2P network. However, now that Vuze (and latterly <a href=https://www.biglybt.com/ target=_blank rel=noreferrer class='sitelink external'>Bigly</a>) allow users to share non-I2P torrents on I2P, non-I2P torrents can be downloaded over I2P if Vuze/Bigly users have chosen to make content available to the I2P network. Popular torrents with a large number of peers are more likely to be accessible via I2P; to determine if the content is available, add the torrent link, magnet or infohash to your I2P-enabled BitTorrent client."
-msgstr "Enne I2P integreerimist <a href=http://www.vuze.com/ target=_blank rel=noreferrer class='sitelink external'>Vuzes</a> ei olnud võimalik allalaadida torrenteid, mis polnud majutatud I2P võrgus. Kuid nüüdsest saab Vuze (ja hiljem ka <a href=https://www.biglybt.com/ target=_blank rel=noreferrer class='sitelink external'>Bigly</a>) lubada kasutajatel jagada mitte-I2P torrenteid I2P-s ning selliseid mitte-I2P torrenteid saaks I2P kaudu alla laadida, kui Vuze/Bigly kasutajad on otsustanud sisu I2P võrgule kättesaadavaks teha. Populaarsed torrentid suure hulga võrdsetega on suurema tõenäosusega I2P kaudu kättesaadavad; kui soovite teada saada, kas sisu on saadaval, lisage torrenti link, magnet või infohash oma I2P-võimendiga BitTorrenti klienti. "
+msgstr "Enne I2P integreerimist <a href=http://www.vuze.com/ target=_blank rel=noreferrer class='sitelink external'>Vuzes</a> ei olnud võimalik allalaadida torrenteid, mis polnud majutatud I2P võrgus. Kuid nüüdsest saab Vuze (ja hiljem ka <a href=https://www.biglybt.com/ target=_blank rel=noreferrer class='sitelink external'>Bigly</a>) lubada kasutajatel jagada mitte-I2P torrenteid I2P-s ning selliseid mitte-I2P torrenteid saaks I2P kaudu alla laadida, kui Vuze/Bigly kasutajad on otsustanud sisu I2P võrgule kättesaadavaks teha. Populaarsed torrentid suure hulga võrdsetega on suurema tõenäosusega I2P kaudu kättesaadavad; kui soovite teada saada, kas sisu on saadaval, lisage torrenti link, magnet või infohash oma I2P-võimendiga BitTorrenti klienti."
 
 msgid "How do I configure I2P to open at startup in a specific web browser?"
 msgstr "Kuidas konfigureerin I2P-i käivitamiseks alustamisel spetsiifilises veebibrauseris?"
@@ -6743,7 +6743,7 @@ msgid "HTTPS proxy"
 msgstr "HTTPS puhverserver"
 
 msgid "IRC proxy"
-msgstr "IRC proxy"
+msgstr "IRC puhverserver"
 
 msgid "UPnP HTTP TCP event listener"
 msgstr "UPnP HTTP TCP kuulaja"
@@ -6833,7 +6833,7 @@ msgid "I2P Terminology"
 msgstr "I2P terminoloogia"
 
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "I2P võrgu teenuste sihtkohtade haldamiseks mõeldud veebirakendus, mis seob B64 räsiväärtused inimloetavate nimedega. Sihtkohti võib lisada käsitsi või tellimuste abil inimeste.txt failid. Samuti tuntud kui SusiDNS. Lisateabe saamiseks vaadake <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>võrgudokumentatsiooni</a>."
+msgstr "I2P võrgu teenuste sihtkohtade haldamiseks mõeldud veebirakendus, mis seob B64 räsiväärtused inimloetavate nimedega. Sihtkohti võib lisada käsitsi või tellimuste abil inimeste.txt failid. Samuti tuntud kui DNS. Lisateabe saamiseks vaadake <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>võrgudokumentatsiooni</a>."
 
 msgid "Base32 (B32) / Base64 (B64)"
 msgstr "Base32 (B32) / Base64 (B64)"
@@ -6848,7 +6848,7 @@ msgid "An address containing an encrypted LeaseSet is informally referred to as 
 msgstr "Aadress, mis sisaldab krüpteeritud LeaseSeti, tuntakse mitteametlikult b33 aadressina, millel on laiendus baas32 aadressile, millel on hosti avalik võti ja allkirja tüüp kodeeritud aadressi asemel otsingu hashi. Sellist tüüpi aadress on vajalik pimedate LeaseSetide jaoks. Lisateave: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>B33 spetsifikatsioon</a>"
 
 msgid "BOB"
-msgstr "BOB"
+msgstr "TP"
 
 msgid "BOB (Basic Open Bridge) is a (now-deprecated) simple application-to-router protocol, superseded by <i>SAM</i>. For more information, see the <a href=https://geti2p.net/en/docs/api/bob class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
 msgstr "BOB (Basic Open Bridge) on (nüüd aegunud) lihtne rakendusest ruuteri protokoll, mida asendab <i>SAM</i>. Lisateabe saamiseks vaadake <a href=https://geti2p.net/en/docs/api/bob class='sitelink external' target=_blank rel=noreferrer>vebipõhist dokumentatsiooni</a>."
@@ -6932,7 +6932,7 @@ msgid "A fork of the <a href=http://www.klomp.org/snark/ class='sitelink externa
 msgstr "I2P võrgus kasutamiseks refaktoriseeritud <a href=http://www.klomp.org/snark/ class='sitelink external' target=_blank rel=noreferrer>Snark BitTorrent-i klient</a> haru. Tavaliselt on see osa Java I2P vaikekomplektist ja seda saab ka eraldiseisva Java rakendusena <a href=http://skank.i2p/#download class=sitelink target=_blank rel=noreferrer>allalaadida</a>."
 
 msgid "Introducer"
-msgstr "Introducer"
+msgstr "Tutvuja"
 
 msgid "A router that facilitates the connection to the network of another router that is behind a firewall."
 msgstr "Ruuter, mis võimaldab ühendust teise ruuteri võrguga, mis asub tulemüüri taga."
@@ -6959,7 +6959,7 @@ msgid "A group of tunnel entry points (leases) for a <i>destination</i>. Note: A
 msgstr "Tunnelipunktide (leas'ide) rühm <i>sihtkoha</i> jaoks. Märkus: 0-kohalise serveritunneli korral on vaid üks leas olenemata konfigureeritud tunnelite arvust."
 
 msgid "Monotone / mtn"
-msgstr "Monotone / mtn"
+msgstr "Monotoonne / mtn"
 
 msgid "The distributed version control system (DVCS) previously used to maintain I2P's source code, now superseded by git."
 msgstr "Varasemalt kasutatud hajus versioonikontrollisüsteem (DVCS) I2P lähtekoodi hoidmiseks, praeguseks asendatud git'iga."
@@ -6980,7 +6980,7 @@ msgid "NTCP (NIO-based TCP) and NTCP2 are TCP-based network transports which use
 msgstr "NTCP (NIO-põhine TCP) ja NTCP2 on TCP põhised võrgusisesed transpordid, mis kasutavad Java NIO (uue I/O) TCP rakendust I2NP sõnumite edastamiseks võrkude vahel. NTCP2 parandab NTCP vastupanuvõimet erinevatele rünnakutele ja automaatsetele liikluse tuvastamise meetoditele. Täiendava teabe saamiseks vaadake <a href= https://geti2p.net/en/docs/transport/ntcp class='sitelink external' target=_blank rel=noreferrer>online dokumentatsiooni</a>."
 
 msgid "Orchid (plugin)"
-msgstr "Orchid (plugin)"
+msgstr "Orhidee (plugin)"
 
 msgid "A java implementation of a Tor client, available as an I2P plugin. Can be used as the default <i>outproxy</i> if configured in the relevant SOCKS or HTTP client tunnel in the <i>Tunnel Manager</i>. Available from <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Source code is available on <a href=https://github.com/i2p/i2p.plugins.orchid class='sitelink external' target=_blank rel=noreferrer>github</a>."
 msgstr "Tor klienti rakendav Java rakendus, saadaval I2P pluginana. Saab kasutada vaikeväärtusena <i>outproxy</i> kui on konfigureeritud vastav SOCKS või HTTP kliendi tunnel <i>Tunneli halduris</i>. Saadaval aadressil <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Lähtekood on saadaval aadressil <a href=https://github.com/i2p/i2p.plugins.orchid class='sitelink external' target=_blank rel=noreferrer>github</a>."
@@ -7124,7 +7124,7 @@ msgid "An introduction to tunnel access lists"
 msgstr "Sissejuhatus tunneli ligipääsu loenditesse"
 
 msgid "I2PControl API"
-msgstr "I2PControl API"
+msgstr "I2PControli API"
 
 msgid "JSON-RPC API for remote router control and monitoring"
 msgstr "JSON-RPC API kaugruuteri juhtimiseks ja jälgimiseks"
@@ -7136,7 +7136,7 @@ msgid "Webhosting on I2P"
 msgstr "Veebi majutus I2P-s"
 
 msgid "I2PControl JSON-RPC API"
-msgstr "I2PControl JSON-RPC API"
+msgstr "I2PControli JSON-RPC API"
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
 msgstr "I2PControl pakub JSON-RPC 2.0 liidest kaugjuhtimiseks ja jälgimiseks teie I2P ruuterit. See võimaldab välistel rakendustel programmiliselt hallata I2P seadeid, hankida olekuteavet ja juhtida ruuteri toiminguid standardiseeritud HTTP päringute kaudu."
@@ -7284,7 +7284,7 @@ msgid "NTCP Transport Settings:"
 msgstr "NTCP transpordiseaded:"
 
 msgid "NTCP port (1-65535)"
-msgstr "NTCP port (1-65535)"
+msgstr "NTCP-port (1-65535)"
 
 msgid "NTCP hostname"
 msgstr "NTCP hostinimi"
@@ -7893,11 +7893,11 @@ msgstr "Märkus: Paljudel konsoolil olevatel siltidel ja valikutel on vihjed, mi
 msgid "Theme Overrides"
 msgstr "Teemade ülekirjutused"
 
-msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr "I2P+ toetab konsooli, tunneli halduri, I2PSnark, SusiDNSi ja Susimaili jaoks kohandatud teemade ülekirjutusi, mis võimaldavad teemade muutmist pärast uuendusi jäävaks. Selleks et ülekirjutust aktiveerida, looge oma teemamuudatustega css-fail nimega <code>override.css</code> ja asetage see teema kausta, mida soovite muuta, või nimetage ümber üks näidisfailidest ja seejärel värskendage lehekülge. Tehelite haldur ja konsool jagavad sama override.css-faili. Ülekirjutuse deaktiveerimiseks kustutage või nimetage ümber <code>override.css</code> fail ja seejärel värskendage lehekülge (tavaliselt kas kontroll + shift + R)."
+msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Veebipost, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
+msgstr "I2P+ toetab konsooli, tunneli halduri, Torrentid, DNSi ja Veebiposti jaoks kohandatud teemade ülekirjutusi, mis võimaldavad teemade muutmist pärast uuendusi jäävaks. Selleks et ülekirjutust aktiveerida, looge oma teemamuudatustega css-fail nimega <code>override.css</code> ja asetage see teema kausta, mida soovite muuta, või nimetage ümber üks näidisfailidest ja seejärel värskendage lehekülge. Tehelite haldur ja konsool jagavad sama override.css-faili. Ülekirjutuse deaktiveerimiseks kustutage või nimetage ümber <code>override.css</code> fail ja seejärel värskendage lehekülge (tavaliselt kas kontroll + shift + R)."
 
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
-msgstr "Teemakaust asub I2P rakenduse kataloogis <code>docs/themes</code>. Konsooli ja I2PSnarki teemaalamkaustades on näidiste ülekirjutamise failid."
+msgstr "Teemakaust asub I2P rakenduse kataloogis <code>docs/themes</code>. Konsooli ja Torrentsi teemaalamkaustades on näidiste ülekirjutamise failid."
 
 msgid "Sidebar Information"
 msgstr "Küljeriba teave"
@@ -8634,7 +8634,7 @@ msgid "You have configured I2P+ to share only {0} KBps."
 msgstr "Olete seadistanud I2P jagama üksnes {0} KB/s."
 
 msgid "I2P+ requires at least 12KBps to enable sharing. "
-msgstr "Et jagamine üldse toimuks, vajab I2P vähemalt 12 KB/s jagatud ribalaiust. "
+msgstr "Et jagamine üldse toimuks, vajab I2P vähemalt 12 KB/s jagatud ribalaiust."
 
 #, java-format
 msgid "You have configured I2P+ to share {0} KBps."
@@ -8647,7 +8647,7 @@ msgid "Browser Setup"
 msgstr "Brauseri häälestus"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr "I2P võrgustikus hostitudud veebisaitide juuripääsemiseks ja valikult välisproxy kasutamiseks clearneti saitidele ühendamiseks peab se oma brauseri konfigurima nii, et see kasutaks I2P+ <b>HTTP</b> proxy, mis vaikimisi töötab <code>127.0.0.1 port 4444</code>-s. "
+msgstr "I2P võrgustikus hostitudud veebisaitide juuripääsemiseks ja valikult välisproxy kasutamiseks clearneti saitidele ühendamiseks peab se oma brauseri konfigurima nii, et see kasutaks I2P+ <b>HTTP</b> proxy, mis vaikimisi töötab <code>127.0.0.1 port 4444</code>-s."
 
 msgid "Welcome to I2P+!"
 msgstr "Tere tulemast I2P-sse!"

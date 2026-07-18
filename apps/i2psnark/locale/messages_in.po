@@ -15,7 +15,7 @@ msgid "I2P tunnel closed."
 msgstr "Tunnel I2P ditutup."
 
 msgid "Magnet"
-msgstr "Magnet"
+msgstr "magnet"
 
 msgid "Unable to connect to I2P"
 msgstr "Tidak dapat terhubung ke I2P"
@@ -30,7 +30,7 @@ msgid "Downloading"
 msgstr "Mengunduh"
 
 msgid "Configuring I2PSnark with I2CP options"
-msgstr "Mengonfigurasi I2PSnark dengan opsi I2CP"
+msgstr "Mengonfigurasi Torrent dengan opsi I2CP"
 
 msgid "No write permissions for data directory"
 msgstr "Tidak ada hak akses tulis untuk direktori data"
@@ -63,7 +63,7 @@ msgid "Download speed limit is {0}KB/s"
 msgstr "Batas kecepatan unduhan adalah {0} KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr "Catatan: Anda mungkin perlu menghentikan dan memulai ulang torrent Anda atau memulai ulang I2PSnark agar perubahan ini berlaku."
+msgstr "Catatan: Anda mungkin perlu menghentikan dan memulai ulang torrent Anda atau memulai ulang Torrent agar perubahan ini berlaku."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Randomisasi lompatan terowongan +0/1 diaktifkan pada terowongan masuk"
@@ -248,7 +248,7 @@ msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "KESALAHAN - kehabisan memory - tidak bisa membuat torrent dari {0}"
 
 msgid "Initializing I2PSnark and opening tunnels"
-msgstr "Menginisialisasi I2PSnark dan membuka terowongan"
+msgstr "Menginisialisasi Torrent dan membuka terowongan"
 
 #, java-format
 msgid "Torrent added and started: {0}"
@@ -323,7 +323,7 @@ msgstr "Torrent \"{0}\" tidak punya data!"
 
 #, java-format
 msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
-msgstr "Torrents lebih besar dari {0}B belum didukukung \"{1}\"!"
+msgstr "Torrent lebih besar dari {0}B belum didukukung \"{1}\"!"
 
 #, java-format
 msgid "Error: Could not remove the torrent {0}"
@@ -384,7 +384,7 @@ msgid "Download finished: {0}"
 msgstr "Download selesai: {0}"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrent"
 
 #, java-format
 msgid "Starting torrent: {0}"
@@ -505,7 +505,7 @@ msgid "Click \"Add torrent\" button to fetch torrent"
 msgstr "Klik tombol \"Add Torrent\" untuk mengambil torrent"
 
 msgid "Anonymous BitTorrent Client"
-msgstr "Anonymous BitTorrent Client"
+msgstr "Klien BitTorrent Anonim"
 
 msgid "Configuration"
 msgstr "Konfigurasi"
@@ -561,7 +561,7 @@ msgid "Status"
 msgstr "Status"
 
 msgid "Torrent"
-msgstr "Torrent"
+msgstr "torrent"
 
 msgid "File type"
 msgstr "Tipe file"
@@ -579,7 +579,7 @@ msgid "RX Rate"
 msgstr "Tingkat RX"
 
 msgid "TX"
-msgstr "TX"
+msgstr "terima kasih"
 
 msgid "TX Rate"
 msgstr "Tingkat TX"
@@ -677,7 +677,7 @@ msgid "Connected"
 msgstr "Terhubung"
 
 msgid "Seeding"
-msgstr "Seeding"
+msgstr "Penyemaian"
 
 msgid "Complete"
 msgstr "Selesai"
@@ -904,7 +904,7 @@ msgid "Connected to {0} of {1} peers in swarm"
 msgstr "Terhubung ke {0} dari peer {1} di dalam swarm"
 
 msgid "Stalled"
-msgstr "Stalled"
+msgstr "Terhenti"
 
 #, java-format
 msgid "Seeding to {0} peer in swarm"
@@ -932,7 +932,7 @@ msgid "seconds"
 msgstr "detik"
 
 msgid "Seed"
-msgstr "Seed"
+msgstr "Benih"
 
 msgid "Uninteresting (The peer has no pieces we need)"
 msgstr "Uninteresting (peer memiliki potongan-potongan yang tidak kita perlu)"
@@ -954,7 +954,7 @@ msgid "Details at {0} tracker"
 msgstr "Rincian di {0} tracker"
 
 msgid "Info"
-msgstr "Info"
+msgstr "Informasi"
 
 msgid "Add Torrent"
 msgstr "Tambahkan Torrent"
@@ -998,7 +998,7 @@ msgid "Content Filters"
 msgstr "Filter Konten"
 
 msgid "Trackers"
-msgstr "Trackers"
+msgstr "Pelacak"
 
 msgid "Alternates"
 msgstr "Aternatif"
@@ -1031,7 +1031,7 @@ msgid "Switch to Fullscreen Mode"
 msgstr "Beralih ke Mode Layar Penuh"
 
 msgid "Theme"
-msgstr "Theme"
+msgstr "Tema"
 
 msgid "To change themes manually, disable universal theming"
 msgstr "Untuk mengubah theme secara manual, nonaktifkan universal theming"
@@ -1061,7 +1061,7 @@ msgid "Language"
 msgstr "Bahasa"
 
 msgid "Collapsible panels"
-msgstr "Collapsible panels"
+msgstr "Panel yang bisa dilipat"
 
 msgid "Your browser does not support this feature."
 msgstr "Browser anda tidak mendukung fitur ini."
@@ -1154,13 +1154,13 @@ msgid "Auto start torrents"
 msgstr "Mulai otomatis torrents"
 
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "Secara otomatis memulai torrent ketika ditambahkan dan memulai ulang torrent ketika I2PSnark dimulai"
+msgstr "Secara otomatis memulai torrent ketika ditambahkan dan memulai ulang torrent ketika Torrent dimulai"
 
 msgid "Startup delay"
 msgstr "Penundaan startup"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Berapa lama sebelum torrent yang dimulai secara otomatis dimuat ketika I2PSnark dimulai"
+msgstr "Berapa lama sebelum torrent yang dimulai secara otomatis dimuat ketika Torrent dimulai"
 
 msgid "minutes"
 msgstr "menit"
@@ -1256,7 +1256,7 @@ msgid "Add"
 msgstr "Tambahkan"
 
 msgid "Select trackers for removal from I2PSnark's known list"
-msgstr "Pilih tracker untuk penghapusan dari I2PSnark's known list"
+msgstr "Pilih tracker untuk penghapusan dari Torrent's known list"
 
 msgid "Website URL"
 msgstr "URL situs"
@@ -1306,7 +1306,7 @@ msgid "Resource"
 msgstr "Sumber daya"
 
 msgid "Base"
-msgstr "Base"
+msgstr "Basis"
 
 msgid "Files"
 msgstr "FIle"
@@ -1345,7 +1345,7 @@ msgid "Unrecognized"
 msgstr "Tidak dikenali"
 
 msgid "Preview"
-msgstr "Preview"
+msgstr "Pratinjau"
 
 msgid "Save priorities"
 msgstr "Simpan prioritas"
@@ -1357,7 +1357,7 @@ msgid "Resource Not found"
 msgstr "Sumber daya yang tidak ditemukan"
 
 msgid "Info hash"
-msgstr "Info hash"
+msgstr "Informasi hash"
 
 msgid "Created"
 msgstr "Dibuat"

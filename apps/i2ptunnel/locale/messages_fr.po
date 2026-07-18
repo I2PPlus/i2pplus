@@ -33,10 +33,10 @@ msgid "lower bandwidth and reliability"
 msgstr "bande passante et fiabilité plus basses"
 
 msgid "standard bandwidth and reliability"
-msgstr "basse passante et fiabilité normales"
+msgstr "bande passante et fiabilité normales"
 
 msgid "higher bandwidth and reliability"
-msgstr "basse passante et fiabilité plus élevées"
+msgstr "bande passante et fiabilité plus élevées"
 
 msgid "Error - tunnels are not initialized yet"
 msgstr "Erreur - les tunnels ne sont pas encore initialisés"
@@ -135,7 +135,7 @@ msgid "Streamr server"
 msgstr "Serveur Streamr"
 
 msgid "HTTP bidir"
-msgstr "HTTP bidir"
+msgstr "Bidir HTTP"
 
 msgid "Host not set"
 msgstr "L’hôte n’est pas défini"
@@ -1343,7 +1343,7 @@ msgid "Base32"
 msgstr "Base32"
 
 msgid "Alt Base32"
-msgstr "Alt Base32"
+msgstr "AltBase32"
 
 msgid "Incoming I2P Port Routing"
 msgstr "Routage de ports I2P entrants"

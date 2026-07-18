@@ -27,7 +27,7 @@ msgid "Disable system tray"
 msgstr "Zakázat zásobník systému"
 
 msgid "Restart I2P"
-msgstr "Restart I2P"
+msgstr "Restartovat I2P"
 
 msgid "Stop I2P"
 msgstr "Zastavit I2P"

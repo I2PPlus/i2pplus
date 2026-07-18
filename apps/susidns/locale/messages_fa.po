@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "از فایل وارد شده است"
 
 msgid "Manually added via SusiDNS"
-msgstr "به صورت دستی از طریق SusiDNS اضافه شده است"
+msgstr "به صورت دستی از طریق DNS اضافه شده است"
 
 msgid "Manually added"
 msgstr "به صورت دستی اضافه شده"
@@ -607,13 +607,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "برای لیستی از URL های اشتراک به پرسش های متداول مراجعه کنید."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "اگر SusiDNS برای انتشار دفترچه آدرس روتر شما پیکربندی شده باشد، ورودی‌ها در دفترچه آدرس منتشر شده شما ظاهر می‌شوند و برای اشتراک‌گذاری در فایل hosts.txt ذخیره می‌شوند."
+msgstr "اگر DNS برای انتشار دفترچه آدرس روتر شما پیکربندی شده باشد، ورودی‌ها در دفترچه آدرس منتشر شده شما ظاهر می‌شوند و برای اشتراک‌گذاری در فایل hosts.txt ذخیره می‌شوند."
 
 msgid "Published Addressbook"
 msgstr "دفترچه آدرس منتشر شده"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "برای پیکربندی SusiDNS تا دفترچه آدرس روتر شما را به دفترچه آدرس منتشر شده شما منتقل کند، 'should_publish=true' را در صفحه پیکربندی تنظیم کنید."
+msgstr "برای پیکربندی DNS تا دفترچه آدرس روتر شما را به دفترچه آدرس منتشر شده شما منتقل کند، 'should_publish=true' را در صفحه پیکربندی تنظیم کنید."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "همه هاست های مشتق شده از اشتراک ها در این دفترچه آدرس ظاهر می شوند، علاوه بر هر میزبانی که به صورت دستی در اینجا یا به دفترچه آدرس Master خود اضافه می کنید."
@@ -664,7 +664,7 @@ msgid "for websites"
 msgstr "برای سایت ها"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "اگر SusiDNS را برای انتشار دفترچه آدرس روتر خود پیکربندی کنید، یک فایل hosts.txt حاوی همه میزبان ها (به طور پیش فرض به ریشه eepsite شما) صادر می کند."
+msgstr "اگر DNS را برای انتشار دفترچه آدرس روتر خود پیکربندی کنید، یک فایل hosts.txt حاوی همه میزبان ها (به طور پیش فرض به ریشه eepsite شما) صادر می کند."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "آدرس هایی که به صورت دستی به دفترچه آدرس Master شما اضافه می شوند با دفترچه آدرس روتر شما ادغام می شوند."

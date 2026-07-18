@@ -30,7 +30,7 @@ msgid "Downloading"
 msgstr "Downloaden"
 
 msgid "Configuring I2PSnark with I2CP options"
-msgstr "I2PSnark configureren met I2CP-opties"
+msgstr "Torrents configureren met I2CP-opties"
 
 msgid "No write permissions for data directory"
 msgstr "Geen schrijfrechten voor de gegevensmap"
@@ -63,7 +63,7 @@ msgid "Download speed limit is {0}KB/s"
 msgstr "Downloadsnelheidslimiet is {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr "Let op: Mogelijk moet u uw torrents stoppen en opnieuw starten of I2PSnark opnieuw starten om deze wijziging door te voeren."
+msgstr "Let op: Mogelijk moet u uw torrents stoppen en opnieuw starten of Torrents opnieuw starten om deze wijziging door te voeren."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "+0/1 tunnelhop randomisatie ingeschakeld op inbound tunnels"
@@ -248,7 +248,7 @@ msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "ERROR - Geen geheugen meer, kan geen torrent maken van {0}"
 
 msgid "Initializing I2PSnark and opening tunnels"
-msgstr "I2PSnark initialiseren en tunnels openen"
+msgstr "Torrents initialiseren en tunnels openen"
 
 #, java-format
 msgid "Torrent added and started: {0}"
@@ -384,7 +384,7 @@ msgid "Download finished: {0}"
 msgstr "Download gereed: {0}"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrents"
 
 #, java-format
 msgid "Starting torrent: {0}"
@@ -570,7 +570,7 @@ msgid "Torrent name"
 msgstr "Torrentnaam"
 
 msgid "ETA"
-msgstr "ETA"
+msgstr "verwachte aankomsttijd"
 
 msgid "RX"
 msgstr "RX"
@@ -843,7 +843,7 @@ msgid "Restored default torrent create filters"
 msgstr "Standaardfilters voor het maken van torrents hersteld"
 
 msgid "Torrent details"
-msgstr "Torrent details"
+msgstr "Torrentgegevens"
 
 msgid "Torrent has comments"
 msgstr "Torrent heeft commentaar"
@@ -870,7 +870,7 @@ msgid "Stop torrent"
 msgstr "Stop de torrent"
 
 msgid "Start"
-msgstr "Start"
+msgstr "Begin"
 
 msgid "Start torrent"
 msgstr "Start de torrent"
@@ -937,7 +937,7 @@ msgid "seconds"
 msgstr "seconden"
 
 msgid "Seed"
-msgstr "Seed"
+msgstr "zaaigoed"
 
 msgid "Uninteresting (The peer has no pieces we need)"
 msgstr "Niet interessant (De peer heeft geen stukken die we nodig hebben)"
@@ -1003,7 +1003,7 @@ msgid "Content Filters"
 msgstr "Inhoudsfilters"
 
 msgid "Trackers"
-msgstr "Trackers"
+msgstr "Volgers"
 
 msgid "Alternates"
 msgstr "Alternatieven"
@@ -1141,7 +1141,7 @@ msgid "Maximum number of peers to upload to"
 msgstr "Maximaal aantal peers om naar te uploaden"
 
 msgid "peers"
-msgstr "peers"
+msgstr "leeftijdsgenoten"
 
 msgid "Use open trackers also"
 msgstr "Gebruik ook open trackers"
@@ -1159,13 +1159,13 @@ msgid "Auto start torrents"
 msgstr "Torrents automatisch starten"
 
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "Start torrents automatisch wanneer ze worden toegevoegd en start torrents opnieuw wanneer I2PSnark start"
+msgstr "Start torrents automatisch wanneer ze worden toegevoegd en start torrents opnieuw wanneer Torrents start"
 
 msgid "Startup delay"
 msgstr "Startup vertraging"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Hoe lang duurt het voordat automatisch gestarte torrents worden geladen wanneer I2PSnark wordt gestart"
+msgstr "Hoe lang duurt het voordat automatisch gestarte torrents worden geladen wanneer Torrents wordt gestart"
 
 msgid "minutes"
 msgstr "minuten"
@@ -1174,7 +1174,7 @@ msgid "Data Storage"
 msgstr "Gegevensopslag"
 
 msgid "Data directory"
-msgstr "Data directory"
+msgstr "gegevens directory"
 
 msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "Directory waar torrents en gedownloade/gedeelde bestanden worden opgeslagen"
@@ -1222,7 +1222,7 @@ msgid "Outbound"
 msgstr "Uitgaand"
 
 msgid "I2CP host"
-msgstr "I2CP host"
+msgstr "I2CP-host"
 
 msgid "I2CP port"
 msgstr "I2CP poort"
@@ -1261,7 +1261,7 @@ msgid "Add"
 msgstr "Toevoegen"
 
 msgid "Select trackers for removal from I2PSnark's known list"
-msgstr "Selecteer trackers voor verwijdering uit de bekende lijst van I2PSnark"
+msgstr "Selecteer trackers voor verwijdering uit de bekende lijst van Torrents"
 
 msgid "Website URL"
 msgstr "Website-URL"
@@ -1319,7 +1319,7 @@ msgid "Files"
 msgstr "Bestanden"
 
 msgid "Directory"
-msgstr "Directory"
+msgstr "Telefoonnummers"
 
 msgid "Size"
 msgstr "Grootte"

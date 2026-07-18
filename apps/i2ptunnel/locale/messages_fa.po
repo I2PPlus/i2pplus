@@ -1093,7 +1093,7 @@ msgid "Helper"
 msgstr "کمک‌کننده"
 
 msgid "Type"
-msgstr "نوغ"
+msgstr "نوع"
 
 msgid "Points at"
 msgstr "امتیاز در"

@@ -63,7 +63,7 @@ msgid "Download speed limit is {0}KB/s"
 msgstr "Лимит скорости загрузки составляет {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr "Примечание: Вам может потребоваться остановить и перезапустить ваши торренты или перезапустить I2PSnark, чтобы это изменение вступило в силу."
+msgstr "Примечание: Вам может потребоваться остановить и перезапустить ваши торренты или перезапустить Торренты, чтобы это изменение вступило в силу."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Включена рандомизация перепрыгивания туннелей +0/1 на входящих туннелях"
@@ -144,7 +144,7 @@ msgid "Disabled autostart"
 msgstr "Автостарт выключен"
 
 msgid "Enabled open trackers - torrent restart required to take effect."
-msgstr "Открытые трекеры включены - требуется перезапуск торрента для вступления изменений в силу.Включено использование открытых трекеров. Требуется перезапуск торрента, чтобы изменения вступили в силу."
+msgstr "Открытые трекеры включены - требуется перезапуск торрента для вступления изменений в силу."
 
 msgid "Disabled open trackers - torrent restart required to take effect."
 msgstr "Открытые трекеры отключены - требуется перезапуск торрента для вступления изменений в силу."
@@ -248,7 +248,7 @@ msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "ОШИБКА - нехватка памяти, невозможно создать торрент из {0}"
 
 msgid "Initializing I2PSnark and opening tunnels"
-msgstr "Инициализация I2PSnark и открытия туннелей"
+msgstr "Инициализация Торренты и открытия туннелей"
 
 #, java-format
 msgid "Torrent added and started: {0}"
@@ -384,7 +384,7 @@ msgid "Download finished: {0}"
 msgstr "Загрузка завершена: {0}"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Торренты"
 
 #, java-format
 msgid "Starting torrent: {0}"
@@ -1169,13 +1169,13 @@ msgid "Auto start torrents"
 msgstr "Автоматически стартовать торренты"
 
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "Автоматически стартовать торренты при добавлении и перезапускать их, когда стартует I2PSnark"
+msgstr "Автоматически стартовать торренты при добавлении и перезапускать их, когда стартует Торренты"
 
 msgid "Startup delay"
 msgstr "Задержка запуска"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "При старте I2PSnark как долго ждать перед автостартом торрентов"
+msgstr "При старте Торренты как долго ждать перед автостартом торрентов"
 
 msgid "minutes"
 msgstr "минут"
@@ -1271,7 +1271,7 @@ msgid "Add"
 msgstr "Добавить"
 
 msgid "Select trackers for removal from I2PSnark's known list"
-msgstr "Выбрать трекеры для удаления из листа I2PSnark"
+msgstr "Выбрать трекеры для удаления из листа Торренты"
 
 msgid "Website URL"
 msgstr "URL сайта"

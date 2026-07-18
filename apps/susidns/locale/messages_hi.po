@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "फ़ाइल से आयात किया"
 
 msgid "Manually added via SusiDNS"
-msgstr "SusiDNS के माध्यम से हस्ताक्षरित जोड़ा गया"
+msgstr "DNS के माध्यम से हस्ताक्षरित जोड़ा गया"
 
 msgid "Manually added"
 msgstr "हस्तक्षेप से जोड़ा गया"
@@ -607,13 +607,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "FAQ में एक सूची के लिए देखें जो सब्सक्रिप्शन URL की है।"
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "यदि SusiDNS को आपकी राउटर पत्रिका प्रकाशित करने के लिए सेट किया गया है, तो प्रविष्टियाँ आपकी प्रकाशित पत्रिका में दिखाई देंगी और साझा करने के लिए hosts.txt फ़ाइल में सहेजी जाएंगी।"
+msgstr "यदि DNS को आपकी राउटर पत्रिका प्रकाशित करने के लिए सेट किया गया है, तो प्रविष्टियाँ आपकी प्रकाशित पत्रिका में दिखाई देंगी और साझा करने के लिए hosts.txt फ़ाइल में सहेजी जाएंगी।"
 
 msgid "Published Addressbook"
 msgstr "प्रकाशित पत्रिका"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "SusiDNS को आपकी राउटर पत्रिका को आपकी प्रकाशित पत्रिका में डालने के लिए सेट करने के लिए, सेटिंग पृष्ठ पर 'should_publish=true' रखें।"
+msgstr "DNS को आपकी राउटर पत्रिका को आपकी प्रकाशित पत्रिका में डालने के लिए सेट करने के लिए, सेटिंग पृष्ठ पर 'should_publish=true' रखें।"
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "सब्सक्रिप्शन से प्राप्त सभी मेजबानों को इस पत्रिका में दिखाई देगा, इसके अलावा जो कोई भी आप मानवीय रूप से यहाँ या अपनी मास्टर पत्रिका में जोड़ते हैं।"
@@ -664,7 +664,7 @@ msgid "for websites"
 msgstr "वेबसाइटों के लिए"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "यदि आप SusiDNS को अपनी राउटर पत्रिका प्रकाशित करने के लिए सेट करते हैं, तो यह एक hosts.txt फ़ाइल निर्यात करेगा जो सभी मेजबानों को सामग्री करेगी (डिफ़ॉल्ट रूप से आपके eepsite के रूट में)।"
+msgstr "यदि आप DNS को अपनी राउटर पत्रिका प्रकाशित करने के लिए सेट करते हैं, तो यह एक hosts.txt फ़ाइल निर्यात करेगा जो सभी मेजबानों को सामग्री करेगी (डिफ़ॉल्ट रूप से आपके eepsite के रूट में)।"
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "मास्टर पत्रिका में मानवीय रूप से जोड़े गए पते आपकी राउटर पत्रिका में मिलेंगे।"

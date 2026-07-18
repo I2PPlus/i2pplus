@@ -30,7 +30,7 @@ msgid "Invalid message options"
 msgstr "Ogiltigt meddelandealternativ"
 
 msgid "Buffer overflow"
-msgstr "Buffer overflow"
+msgstr "Buffertspill"
 
 msgid "Message expired"
 msgstr "Meddelande utgånget"

@@ -220,7 +220,7 @@ msgstr "Aktualny zewnętrzny adres IP nie jest dostępny."
 
 #, java-format
 msgid "UPnP reports the maximum downstream bit rate is {0}bits/sec"
-msgstr "UPnP zgłasza, że maksymalna prędkość pobierania  wynosi {0}bitów/sek"
+msgstr "UPnP zgłasza, że maksymalna prędkość pobierania wynosi {0}bitów/sek"
 
 #, java-format
 msgid "UPnP reports the maximum upstream bit rate is {0}bits/sec"
@@ -444,7 +444,7 @@ msgstr "Wtyczka {0} zainstalowana, ale uruchomienie nie powiodło się"
 
 #, java-format
 msgid "Failed to download plugin from {0}"
-msgstr "Nie udało się pobrać  wtyczki z {0}"
+msgstr "Nie udało się pobrać wtyczki z {0}"
 
 msgid "Unable to connect to update server "
 msgstr "Nie można połączyć się z serwerem aktualizacji"
@@ -1033,7 +1033,7 @@ msgid "License"
 msgstr "Licencja"
 
 msgid "Start"
-msgstr "Start"
+msgstr "Uruchom"
 
 msgid "Stop"
 msgstr "Zatrzymaj"
@@ -1271,7 +1271,7 @@ msgid "Sidebar"
 msgstr "Pasek boczny"
 
 msgid "UI"
-msgstr "UI"
+msgstr "Interfejs"
 
 msgid "Tunnels"
 msgstr "Tunele"
@@ -1537,7 +1537,7 @@ msgid "Restart immediately"
 msgstr "Natychmiast uruchom ponownie"
 
 msgid "Restart"
-msgstr "Restart"
+msgstr "Uruchom ponownie"
 
 msgid "Shutdown"
 msgstr "Zamknij"
@@ -1659,7 +1659,7 @@ msgid "Exploratory tunnels"
 msgstr "Tunele rozpoznawcze"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrenty"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "OSTRZEŻENIE O ZAGROŻENIU ANONIMOWOŚCI – Ustawienia zawierają tunele o długości 0 skoków."
@@ -1751,7 +1751,7 @@ msgid "Enabling the Universal Theming option is recommended when embedding these
 msgstr "Włączenie „uniwersalnej skórki” jest zalecane w przypadku zagnieżdżania tych aplikacji"
 
 msgid "Embed I2PSnark and I2PMail in the console"
-msgstr "Osadź I2PSnark i I2PMail w konsoli"
+msgstr "Osadź Torrenty i I2PMail w konsoli"
 
 msgid "Add a user and password to enable."
 msgstr "Dodaj użytkownika i hasło, by odblokować."
@@ -3151,7 +3151,7 @@ msgid "Messages sent"
 msgstr "Wiadomości wysłane"
 
 msgid "TX"
-msgstr "TX"
+msgstr "Teksas"
 
 msgid "Messages received"
 msgstr "Wiadomości otrzymane"
@@ -3236,7 +3236,7 @@ msgid "Slow start threshold"
 msgstr "Próg wolnego startu"
 
 msgid "Sort by slow start threshold"
-msgstr "Sortuj według  progu powolnego startu"
+msgstr "Sortuj według progu powolnego startu"
 
 msgid "Round trip time"
 msgstr "Czas podróży w obie strony"
@@ -3426,7 +3426,7 @@ msgid "Most tests passing"
 msgstr "Większość testów pomyślnych"
 
 msgid "Fast, High Capacity"
-msgstr "Szybkie,  Wydajne"
+msgstr "Szybkie, Wydajne"
 
 msgid "High Capacity"
 msgstr "Wysoka Wydajność"
@@ -4485,7 +4485,7 @@ msgid "Exploratory"
 msgstr "Rozpoznawcze"
 
 msgid "Configure tunnels"
-msgstr "Konfiguracja  tuneli"
+msgstr "Konfiguracja tuneli"
 
 msgid "configure"
 msgstr "konfiguruj"
@@ -4862,7 +4862,7 @@ msgid "I2P requires at least 12KBps to enable sharing. "
 msgstr "I2P wymaga co najmniej 12 KB/s, aby włączyć udostępnianie. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
-msgstr "Włącz proszę udostępnianie (uczestnictwo  w tunelach) poprzez wybór większej przepustowości. "
+msgstr "Włącz proszę udostępnianie (uczestnictwo w tunelach) poprzez wybór większej przepustowości. "
 
 msgid "It improves your anonymity by creating cover traffic, and helps the network. "
 msgstr "Poprawia Twoją anonimowość, tworząc ruch ukryty i pomaga sieci."
@@ -5694,7 +5694,7 @@ msgid "The default settings are optimized for general usage and normally don't n
 msgstr "Domyślne ustawienia są zoptymalizowane do ogólnego użytkowania i zazwyczaj nie wymagają zmian."
 
 msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
-msgstr "Aby zmienić ustawienia tunelu klienta, użyj <a href=\"/i2ptunnelmgr\">Menedżera tuneli</a> lub <a href=\"/i2psnark/configure\">strony konfiguracji</a> dla I2PSnark."
+msgstr "Aby zmienić ustawienia tunelu klienta, użyj <a href=\"/i2ptunnelmgr\">Menedżera tuneli</a> lub <a href=\"/i2psnark/configure\">strony konfiguracji</a> dla Torrenty."
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "Aby włączyć zmiany dotyczące tylko sesji w tunelach klienta, aktywuj <a href=\"/help/advancedsettings\">Tryb zaawansowany</a> konsoli."
@@ -5824,7 +5824,7 @@ msgid "Error {0}"
 msgstr "Błąd {0}"
 
 msgid "I2P Version and Running Environment"
-msgstr "Wersja I2P oraz Uruchomione  Środowisko"
+msgstr "Wersja I2P oraz Uruchomione Środowisko"
 
 msgid "Note that system information, log timestamps, and log messages may provide clues to your location; please review everything you include in a bug report."
 msgstr "Zauważ, że informacje systemowe, znaczniki czasowe log'ów i wiadomości dziennika mogą dostarczać wskazówek dotyczących Twojego położenia; weryfikuj wszystko, co dołączasz do zgłoszeń o błędach."
@@ -6427,7 +6427,7 @@ msgid "If set to true, this option will place an icon in the system tray / notif
 msgstr "Jeśli ustawione na true, ta opcja umieści ikonę w pasku systemowym / obszarze powiadomień z podstawowymi opcjami kontroli usług. [Domyślnie wyłączone]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "To ustawienie umożliwia konfigurację maksymalnej liczby plików na torrent, które I2PSnark będzie akceptował podczas pobierania lub tworzenia torrenta. Należy zauważyć, że znaczne zwiększenie tej wartości z domyślnych 2000 plików może wymagać dodatkowej konfiguracji na systemie hosta w celu zwiększenia maksymalnej liczby otwartych plików, które pozwoli system operacyjny (np. <code>ulimit -n</code> w systemie Linux). Aby dokonać zmiany, dodaj do pliku konfiguracyjnego I2PSnark <code>i2psnark.config</code>. [Wymagane ponowne uruchomienie I2PSnark lub routera] [Wymagane ponowne uruchomienie I2PSnark lub routera]"
+msgstr "To ustawienie umożliwia konfigurację maksymalnej liczby plików na torrent, które Torrenty będzie akceptował podczas pobierania lub tworzenia torrenta. Należy zauważyć, że znaczne zwiększenie tej wartości z domyślnych 2000 plików może wymagać dodatkowej konfiguracji na systemie hosta w celu zwiększenia maksymalnej liczby otwartych plików, które pozwoli system operacyjny (np. <code>ulimit -n</code> w systemie Linux). Aby dokonać zmiany, dodaj do pliku konfiguracyjnego Torrenty <code>i2psnark.config</code>. [Wymagane ponowne uruchomienie Torrenty lub routera] [Wymagane ponowne uruchomienie Torrenty lub routera]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "To ustawienie specyficzne dla tunelu pozwala włączać lub wyłączać odpowiedzi na pingi wysyłane do serwerów hostowanych przez router. Aby wyłączyć pingi, musisz dodać linię <code>i2p.streaming.answerPings=false</code> do sekcji <i>Niestandardowe opcje</i> konfiguracji serwera w Menedżerze tuneli."
@@ -6850,7 +6850,7 @@ msgid "I2P Terminology"
 msgstr "Terminologia I2P"
 
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "Aplikacja internetowa I2P zarządzająca lokalizacjami usług w sieci, mapująca skrócone B64 zapisy na czytelne dla człowieka nazwy. Lokalizacje można dodawać ręcznie lub za pomocą subskrypcji plików hosts.txt. Jest również znana jako SusiDNS. Więcej informacji można znaleźć w <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>dokumentacji online</a>."
+msgstr "Aplikacja internetowa I2P zarządzająca lokalizacjami usług w sieci, mapująca skrócone B64 zapisy na czytelne dla człowieka nazwy. Lokalizacje można dodawać ręcznie lub za pomocą subskrypcji plików hosts.txt. Jest również znana jako DNS. Więcej informacji można znaleźć w <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>dokumentacji online</a>."
 
 msgid "Base32 (B32) / Base64 (B64)"
 msgstr "Base32 (B32) / Base64 (B64)"
@@ -7910,11 +7910,11 @@ msgstr "Uwaga: Wiele z etykiet i opcji w konsoli posiada podpowiedzi, które wsk
 msgid "Theme Overrides"
 msgstr "Zastępowanie Motywów"
 
-msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr "I2P+ obsługuje niestandardowe zmiany motywów dla konsoli, menedżera tuneli, I2PSnark, SusiDNS i Susimail, umożliwiając zmiany motywów, które są trwałe po aktualizacjach. Aby aktywować zmianę, utwórz plik CSS o nazwie <code>override.css</code> z modyfikacjami motywu i umieść go w odpowiednim katalogu motywu, które chcesz zmienić lub zmień nazwę jednego z plików przykładowych, a następnie wykonaj pełne odświeżenie przeglądarki. Należy pamiętać, że menedżer tuneli i konsola korzystają z tego samego pliku <code>override.css</code>. Aby dezaktywować zmianę, usuń lub zmień nazwę pliku <code>override.css</code>, a następnie wykonaj pełne odświeżenie przeglądarki (zwykle Control + Shift + R)."
+msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Poczta www, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
+msgstr "I2P+ obsługuje niestandardowe zmiany motywów dla konsoli, menedżera tuneli, Torrenty, DNS i Poczta www, umożliwiając zmiany motywów, które są trwałe po aktualizacjach. Aby aktywować zmianę, utwórz plik CSS o nazwie <code>override.css</code> z modyfikacjami motywu i umieść go w odpowiednim katalogu motywu, które chcesz zmienić lub zmień nazwę jednego z plików przykładowych, a następnie wykonaj pełne odświeżenie przeglądarki. Należy pamiętać, że menedżer tuneli i konsola korzystają z tego samego pliku <code>override.css</code>. Aby dezaktywować zmianę, usuń lub zmień nazwę pliku <code>override.css</code>, a następnie wykonaj pełne odświeżenie przeglądarki (zwykle Control + Shift + R)."
 
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
-msgstr "Katalog motywów znajduje się w katalogu aplikacji I2P pod ścieżką <code>docs/themes</code>. Istnieją tam przykładowe pliki zastępcze w podkatalogach motywów konsoli i I2PSnark."
+msgstr "Katalog motywów znajduje się w katalogu aplikacji I2P pod ścieżką <code>docs/themes</code>. Istnieją tam przykładowe pliki zastępcze w podkatalogach motywów konsoli i Torrenty."
 
 msgid "Sidebar Information"
 msgstr "Informacja boczna"
@@ -7977,7 +7977,7 @@ msgid "Participating"
 msgstr "Uczestniczące"
 
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
-msgstr "Tunele budowane przez inne routery przez Twój serwer. Może się to znacznie różnić w zależności od zapotrzebowania sieciowego, udostępnionego pasma i ilości ruchu wygenerowanego lokalnie. Zalecaną metodą ograniczenia liczby uczestniczących tuneli jest zmiana udziału pasma na stronie <a  href='/config'>Konfiguracja pasma</a>. Możesz również ograniczyć ich całkowitą liczbę, ustawiając wartość <code>router.maxParticipatingTunnels=nnn</code> na stronie <a href='/configadvanced'>Zaawansowana konfiguracja</a>. <a href='/configstats#tunnel.participatingTunnels'>[Włącz wykresy]</a>."
+msgstr "Tunele budowane przez inne routery przez Twój serwer. Może się to znacznie różnić w zależności od zapotrzebowania sieciowego, udostępnionego pasma i ilości ruchu wygenerowanego lokalnie. Zalecaną metodą ograniczenia liczby uczestniczących tuneli jest zmiana udziału pasma na stronie <a href='/config'>Konfiguracja pasma</a>. Możesz również ograniczyć ich całkowitą liczbę, ustawiając wartość <code>router.maxParticipatingTunnels=nnn</code> na stronie <a href='/configadvanced'>Zaawansowana konfiguracja</a>. <a href='/configstats#tunnel.participatingTunnels'>[Włącz wykresy]</a>."
 
 msgid "Share Ratio"
 msgstr "Współczynnik udziału"
@@ -8007,7 +8007,7 @@ msgid "Accepting/Rejecting"
 msgstr "Akceptacja/Odmowa"
 
 msgid "Your router's status on accepting or rejecting requests from other routers to build a participating tunnel through your router. Your router may accept all requests, accept or reject a percentage of requests, or reject all requests for a number of reasons, to control the bandwidth and CPU demands and maintain capacity for local clients. <b>Note"
-msgstr "Status Twojego routera dotyczący akceptowania lub odrzucania żądań od innych routerów w celu utworzenia uczestniczącego tunelu przez Twojego routera. Twój router może akceptować wszystkie żądania, akceptować lub odrzucać pewien procent żądań lub odrzucać wszystkie żądania z różnych powodów, aby kontrolować zapotrzebowanie na  pasmo i moc obliczeniową oraz  zapewnić pojemność dla klientów lokalnych. <b>Note"
+msgstr "Status Twojego routera dotyczący akceptowania lub odrzucania żądań od innych routerów w celu utworzenia uczestniczącego tunelu przez Twojego routera. Twój router może akceptować wszystkie żądania, akceptować lub odrzucać pewien procent żądań lub odrzucać wszystkie żądania z różnych powodów, aby kontrolować zapotrzebowanie na pasmo i moc obliczeniową oraz zapewnić pojemność dla klientów lokalnych. <b>Uwaga"
 
 msgid "It will take at least 10 minutes from your router starting for it to accept building participating tunnels in order to ensure your router is stable and successfully bootstrapped to the network."
 msgstr "Wymaganych jest przynajmniej 10 minut od uruchomienia routera, aby był gotowy do akceptacji tworzenia uczestniczących tuneli, co ma na celu zapewnienie, że Twój router jest stabilny i pomyślnie zainicjalizowany w sieci."

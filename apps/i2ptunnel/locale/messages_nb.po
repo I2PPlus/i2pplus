@@ -255,7 +255,7 @@ msgid "For a random selection from a pool, separate with commas e.g. server1.i2p
 msgstr "For et tilfeldig utvalg fra en pool, separer med komma f.eks. server1.i2p,server2.i2p"
 
 msgid "Outproxy Type"
-msgstr "Outproxy Type"
+msgstr "Outproxy-type"
 
 msgid "Tunnel Destination"
 msgstr "Tunnelmål"
@@ -969,7 +969,7 @@ msgid "Maximum number of web page requests per day for a unique client before ac
 msgstr "Maksimalt antall websideforespørsler per dag for en unik klient før tilgang til serveren blokkeres"
 
 msgid "Total"
-msgstr "Total"
+msgstr "Totalt"
 
 msgid "Total number of web page requests per minute before access to the server is blocked"
 msgstr "Totalt antall websideforespørsler per minutt før tilgang til serveren blokkeres"
@@ -1020,25 +1020,25 @@ msgid "Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text fi
 msgstr "Sett Tillat overskriften for å 'GET, POST, HEAD' for HTML, XML, JSON og tekstfiler"
 
 msgid "Allow"
-msgstr "Allow"
+msgstr "Tillat"
 
 msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immutable for everything else)"
 msgstr "Aktiver cache-Control Headers (no-Cache for HTML, XML, JSON og tekst, uforanderlig for alt annet)"
 
 msgid "Cache-Control"
-msgstr "Cache-Control"
+msgstr "Hurtigbufferkontroll"
 
 msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
 msgstr "Sett den henvisningspolitiske overskriften til 'same-origin' for HTML, XML, JSON og tekstfiler"
 
 msgid "Referrer-Policy"
-msgstr "Referrer-Policy"
+msgstr "Henvisningsretningslinjer"
 
 msgid "Set the X-Content-Type-Options header to 'nosniff'"
 msgstr "Sett X-Content-type-Options Header til 'Nosniff'"
 
 msgid "X-Content-Type-Options"
-msgstr "X-Content-Type-Options"
+msgstr "X-innholdstype-alternativer"
 
 #, java-format
 msgid "Initializing Tunnel Manager{0}"

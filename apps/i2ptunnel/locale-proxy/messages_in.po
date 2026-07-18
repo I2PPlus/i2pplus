@@ -32,10 +32,10 @@ msgid "Destination LeaseSet not found"
 msgstr "Leaseset tujuan tidak ditemukan"
 
 msgid "Host"
-msgstr "Host"
+msgstr "Tuan rumah"
 
 msgid "Base32"
-msgstr "Base32"
+msgstr "Basis32"
 
 msgid "Destination"
 msgstr "Tujuan"
@@ -55,7 +55,7 @@ msgid "Save {0} to router address book and continue to website"
 msgstr "Simpan {0} ke buku alamat router dan lanjutkan ke situs webSimpan {0} ke dalam buku alamat router lalu lanjut ke situs yang anda tuju"
 
 msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "Alamat ini akan disimpan ke buku alamat Router Anda tempat alamat berbasis langganan Anda disimpan."
 
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "Jika Anda ingin melacak situs yang telah Anda tambahkan secara manual, tambahkan ke buku alamat master atau pribadi Anda sebagai gantinya."
@@ -157,7 +157,7 @@ msgid "router"
 msgstr "router"
 
 msgid "master"
-msgstr "master"
+msgstr "menguasai"
 
 msgid "private"
 msgstr "pribadi"

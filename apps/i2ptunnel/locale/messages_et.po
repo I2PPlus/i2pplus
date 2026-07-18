@@ -111,10 +111,10 @@ msgid "IRC client"
 msgstr "IRC klient"
 
 msgid "Standard server"
-msgstr "Standard server"
+msgstr "Standardne server"
 
 msgid "HTTP server"
-msgstr "HTTP server"
+msgstr "HTTP-server"
 
 msgid "SOCKS 4/4a/5 proxy"
 msgstr "SOCKS 4/4a/5 proxi"

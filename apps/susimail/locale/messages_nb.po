@@ -22,7 +22,7 @@ msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Ingen koder funnet for koding av \\''{0}\\''."
 
 msgid "Re:"
-msgstr "Re:"
+msgstr "Sv: "
 
 msgid "Fwd:"
 msgstr "Fwd:"
@@ -52,7 +52,7 @@ msgid "unknown"
 msgstr "ukjent"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr "For å beskytte din personvern, blokkerer SusiMail JavaScript og alle fjerninnhold som er inkludert i dette HTML-meldingsmeldingen."
+msgstr "For å beskytte din personvern, blokkerer Nettbasert e-post JavaScript og alle fjerninnhold som er inkludert i dette HTML-meldingsmeldingen."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "Slå på JavaScript for bedre presentasjon og ekstra funksjoner."
@@ -220,7 +220,7 @@ msgstr "{0} er en I2P-eksklusiv tjeneste levert av {1}."
 
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr "{0} webmail client &copy Susi 2004-2005."
+msgstr "{0} webmail-klient ogkopi Susi 2004-2005."
 
 msgid "Checking for new messages on server"
 msgstr "Søker etter nye meldinger på server"
@@ -276,7 +276,7 @@ msgid "Cc"
 msgstr "Cc"
 
 msgid "Bcc"
-msgstr "Bcc"
+msgstr "Blindkopi"
 
 msgid "Subject"
 msgstr "Emnetittel"

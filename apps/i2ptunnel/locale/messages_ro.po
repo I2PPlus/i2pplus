@@ -120,7 +120,7 @@ msgid "HTTP server"
 msgstr "Server HTTP"
 
 msgid "SOCKS 4/4a/5 proxy"
-msgstr "SOCKS 4/4a/5 proxy"
+msgstr "ȘOSETE 4/4a/5 proxy"
 
 msgid "SOCKS IRC proxy"
 msgstr "SOCKS IRC proxy"
@@ -138,7 +138,7 @@ msgid "Streamr server"
 msgstr "Server streamr"
 
 msgid "HTTP bidir"
-msgstr "HTTP bidir"
+msgstr "Http bidir"
 
 msgid "Host not set"
 msgstr "Gazdă nu este setata"
@@ -497,7 +497,7 @@ msgid "Reduced tunnel count"
 msgstr "Scăderea numărului de tunelu"
 
 msgid "Close tunnels when idle"
-msgstr "Inchiderea tunelurilor când e  inactiv"
+msgstr "Inchiderea tunelurilor când e inactiv"
 
 msgid "To conserve resources, close tunnels when not in use"
 msgstr "Pentru a economisi resurse, închideți tunelurile atunci când nu folosiți"
@@ -959,7 +959,7 @@ msgid "Concurrent"
 msgstr "Concurente"
 
 msgid "Per Client"
-msgstr "Per Client"
+msgstr "Pe client"
 
 msgid "Maximum number of web page requests per minute for a unique client before access to the server is blocked"
 msgstr "Numărul maxim de solicitări de pagini web pe minut pentru un client unic înainte ca accesul la server să fie blocat"
@@ -1031,7 +1031,7 @@ msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immu
 msgstr "Activați anteturile Cache-Control (fără cache pentru html, xml, json și text, imuabil pentru orice altceva)"
 
 msgid "Cache-Control"
-msgstr "Cache-Control"
+msgstr "Control-Cache"
 
 msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
 msgstr "Setați antetul Referrer-Policy la „same-origin” pentru fișierele html, xml, json și text"
@@ -1043,7 +1043,7 @@ msgid "Set the X-Content-Type-Options header to 'nosniff'"
 msgstr "Setați antetul X-Content-Type-Options la „nosniff”"
 
 msgid "X-Content-Type-Options"
-msgstr "X-Content-Type-Options"
+msgstr "Opțiuni-tip-conținut-X"
 
 #, java-format
 msgid "Initializing Tunnel Manager{0}"
@@ -1143,7 +1143,7 @@ msgid "Starting in"
 msgstr "Pornește în"
 
 msgid "Running"
-msgstr "În execuţie"
+msgstr "În execuție"
 
 msgid "Hops"
 msgstr "Hamei"
@@ -1339,7 +1339,7 @@ msgid "Generate Authentication"
 msgstr "Generați autentificare"
 
 msgid "SSL Helper"
-msgstr "SSL Helper"
+msgstr "Ajutor SSL"
 
 msgid "Experts only!"
 msgstr "Numai experți!"
@@ -1369,7 +1369,7 @@ msgid "SSL Activation"
 msgstr "Activare SSL"
 
 msgid "I2P webserver (eepsite)"
-msgstr "I2P webserver (eepsite)"
+msgstr "Server web I2P (eepsite)"
 
 msgid "Disable SSL"
 msgstr "Dezactivează SSL"
@@ -1487,7 +1487,7 @@ msgid "This means that only one I2P tunnel is required rather than a separate tu
 msgstr "Aceasta înseamnă că este necesar doar un tunel I2P mai degrabă decât un tunel separat pentru fiecare rețea IRC."
 
 msgid "IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P is known, though it depends on whether or not the outproxy has been blocked by the IRC network."
-msgstr "Retele IRC din afara I2P pot fi ajunse, de asemenea, în cazul în care SOCKS outproxy în I2P este cunoscut, deși aceasta depinde dacă  outproxy a fost blocat sau nu de către rețeaua IRC."
+msgstr "Retele IRC din afara I2P pot fi ajunse, de asemenea, în cazul în care SOCKS outproxy în I2P este cunoscut, deși aceasta depinde dacă outproxy a fost blocat sau nu de către rețeaua IRC."
 
 msgid "A basic server tunnel for hosting a generic service inside I2P."
 msgstr "Un tunel de server de bază pentru găzduirea un serviciu generic în interiorul I2P."
@@ -1535,7 +1535,7 @@ msgid "This is the IP that your service is running on, this is usually on the sa
 msgstr "Acesta este IP la care serviciul se execută, aceasta este, de obicei pe aceeași mașină, astfel 127.0.0.1 este autofilled."
 
 msgid "This is the port that the service is accepting connections on."
-msgstr "Acesta este portul pe care serviciul  accepta conexiuni."
+msgstr "Acesta este portul pe care serviciul accepta conexiuni."
 
 msgid "This is the port that the client tunnel will be accessed from locally."
 msgstr "Acesta este portul la care tunelul client va fi accesat de la nivel local."
@@ -1550,7 +1550,7 @@ msgid "The I2P router can automatically start this tunnel for you when the route
 msgstr "Router-ul I2P poate porni automat acest tunel pentru tine atunci când este pornit router-ul."
 
 msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
-msgstr "Acest lucru poate fi util pentru tuneluri utilizate frecvent (mai ales tuneluri server), dar pentru tuneluri care sunt utilizate doar ocazional, aceasta ar însemna că router-ul I2P  creaza și menține tuneluri inutile."
+msgstr "Acest lucru poate fi util pentru tuneluri utilizate frecvent (mai ales tuneluri server), dar pentru tuneluri care sunt utilizate doar ocazional, aceasta ar însemna că router-ul I2P creaza și menține tuneluri inutile."
 
 msgid "The wizard has now collected enough information to create your tunnel."
 msgstr "Expertul a colectat acum suficiente informații pentru a crea tunel dumneavoastră."

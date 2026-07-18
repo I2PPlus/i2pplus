@@ -1350,7 +1350,7 @@ msgid "Experts only!"
 msgstr "Le za strokovnjake!"
 
 msgid "Base32"
-msgstr "Base32"
+msgstr "Osnova32"
 
 msgid "Alt Base32"
 msgstr "Namenjena Base32"

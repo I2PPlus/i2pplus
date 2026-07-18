@@ -52,7 +52,7 @@ msgid "unknown"
 msgstr "tundmatu"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr "Teie privaatsuse kaitseks blokeerib SusiMail JavaScripti ja kõik kaugasuvad sisu, mis on selle HTML-sõnumis."
+msgstr "Teie privaatsuse kaitseks blokeerib Veebipost JavaScripti ja kõik kaugasuvad sisu, mis on selle HTML-sõnumis."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "Luba JavaScript, et parem esitlus ja lisafunktsioonid."
@@ -209,7 +209,7 @@ msgid "Configuration"
 msgstr "Seaded"
 
 msgid "I2PMail"
-msgstr "I2PMail"
+msgstr "I2PMmail"
 
 msgid "No new messages"
 msgstr "Ühtegi uut sõnumit"

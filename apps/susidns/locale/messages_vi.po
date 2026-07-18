@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Đã nhập từ tệp"
 
 msgid "Manually added via SusiDNS"
-msgstr "Được thêm thủ công qua SusiDNS"
+msgstr "Được thêm thủ công qua DNS"
 
 msgid "Manually added"
 msgstr "Đã thêm thủ công"
@@ -56,7 +56,7 @@ msgid "None"
 msgstr "Không có"
 
 msgid "Hidden"
-msgstr "Dấu"
+msgstr "Ẩn"
 
 msgid "Signed"
 msgstr "Đã ký"
@@ -91,7 +91,7 @@ msgstr[0] "{0} Kết quả cho: <span class=active>"
 #, java-format
 msgid "Book contains 1 entry"
 msgid_plural "Book contains {0} entries"
-msgstr[0] "Sách chứa {0} mục"
+msgstr[0] "Sổ chứa {0} mục"
 
 msgid "Add"
 msgstr "Thêm"
@@ -269,7 +269,7 @@ msgid "Router"
 msgstr "Bộ định tuyến"
 
 msgid "Master"
-msgstr "Thầy"
+msgstr "Chính"
 
 msgid "Private"
 msgstr "Riêng tư"
@@ -290,7 +290,7 @@ msgid "Help"
 msgstr "Trợ giúp"
 
 msgid "Book"
-msgstr "Sách"
+msgstr "Sổ"
 
 msgid "No entries"
 msgstr "Không có mục nào"
@@ -599,13 +599,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Xem Câu hỏi thường gặp để biết danh sách URL đăng ký."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Nếu SusiDNS được định cấu hình để xuất bản sổ địa chỉ Bộ định tuyến của bạn, các mục nhập sẽ xuất hiện trong sổ địa chỉ Đã xuất bản của bạn và được lưu vào tệp Hosts.txt để chia sẻ."
+msgstr "Nếu DNS được định cấu hình để xuất bản sổ địa chỉ Bộ định tuyến của bạn, các mục nhập sẽ xuất hiện trong sổ địa chỉ Đã xuất bản của bạn và được lưu vào tệp Hosts.txt để chia sẻ."
 
 msgid "Published Addressbook"
 msgstr "Xuất bản sổ địa chỉ"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "Để định cấu hình SusiDNS nhằm đẩy sổ địa chỉ Bộ định tuyến của bạn vào sổ địa chỉ Đã xuất bản, hãy đặt ' Should_publish=true' trên trang cấu hình."
+msgstr "Để định cấu hình DNS nhằm đẩy sổ địa chỉ Bộ định tuyến của bạn vào sổ địa chỉ Đã xuất bản, hãy đặt ' Should_publish=true' trên trang cấu hình."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "Tất cả các máy chủ có nguồn gốc từ đăng ký sẽ xuất hiện trong sổ địa chỉ này, ngoài bất kỳ máy chủ nào bạn thêm thủ công vào đây hoặc vào sổ địa chỉ Chính của bạn."
@@ -656,7 +656,7 @@ msgid "for websites"
 msgstr "dành cho các trang web"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Nếu bạn định cấu hình SusiDNS để xuất bản sổ địa chỉ Bộ định tuyến của mình, nó sẽ xuất tệp Host.txt chứa tất cả các máy chủ (theo mặc định là thư mục gốc của eepsite của bạn)."
+msgstr "Nếu bạn định cấu hình DNS để xuất bản sổ địa chỉ Bộ định tuyến của mình, nó sẽ xuất tệp Host.txt chứa tất cả các máy chủ (theo mặc định là thư mục gốc của eepsite của bạn)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "Các địa chỉ được thêm thủ công vào sổ địa chỉ Chính của bạn sẽ hợp nhất với sổ địa chỉ Bộ định tuyến của bạn."

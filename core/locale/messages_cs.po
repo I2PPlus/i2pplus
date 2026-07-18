@@ -79,7 +79,7 @@ msgid "CRIT"
 msgstr "KRIT"
 
 msgid "DEBUG"
-msgstr "DEBUG"
+msgstr "LADIT"
 
 msgid "ERROR"
 msgstr "CHYBA"

@@ -30,7 +30,7 @@ msgid "Downloading"
 msgstr "Downloader"
 
 msgid "Configuring I2PSnark with I2CP options"
-msgstr "Konfiguration af I2PSnark med I2CP-indstillinger"
+msgstr "Konfiguration af Torrents med I2CP-indstillinger"
 
 msgid "No write permissions for data directory"
 msgstr "Ingen skrivetilladelser til datakatalog"
@@ -63,7 +63,7 @@ msgid "Download speed limit is {0}KB/s"
 msgstr "Downloadhastighedsgrænse er {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr "Bemærk: Du skal muligvis stoppe og genstarte dine torrents eller genstarte I2PSnark for at denne ændring træder i kraft."
+msgstr "Bemærk: Du skal muligvis stoppe og genstarte dine torrents eller genstarte Torrents for at denne ændring træder i kraft."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Aktiveret +0/1 tunnel hop randomisering på indkommende tunneller"
@@ -248,7 +248,7 @@ msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "FEJL - Mangler hukommelse, kan ikke oprette torrent fra {0}"
 
 msgid "Initializing I2PSnark and opening tunnels"
-msgstr "Initialisering af I2PSnark og åbning af tunneler"
+msgstr "Initialisering af Torrents og åbning af tunneler"
 
 #, java-format
 msgid "Torrent added and started: {0}"
@@ -384,7 +384,7 @@ msgid "Download finished: {0}"
 msgstr "Download afsluttet: {0}"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrents"
 
 #, java-format
 msgid "Starting torrent: {0}"
@@ -573,7 +573,7 @@ msgid "ETA"
 msgstr "ETA"
 
 msgid "RX"
-msgstr "RX"
+msgstr "IAMSE,bilag V"
 
 msgid "RX Rate"
 msgstr "Download sats"
@@ -600,10 +600,10 @@ msgid "Start all stopped torrents"
 msgstr "Start alle stoppede torrents"
 
 msgid "Hide Peers"
-msgstr "Skjul jævnaldrende"
+msgstr "Skjul peers"
 
 msgid "Show Peers"
-msgstr "Vis jævnaldrende"
+msgstr "Vis peers"
 
 #, java-format
 msgid "Sort by {0}"
@@ -870,10 +870,10 @@ msgid "Stop torrent"
 msgstr "Stop torrenten"
 
 msgid "Start"
-msgstr "Start"
+msgstr "Starte"
 
 msgid "Start torrent"
-msgstr "Start torrent"
+msgstr "Pladser per torrent:"
 
 msgid "Remove"
 msgstr "Fjern"
@@ -904,7 +904,7 @@ msgstr[1] "Podning til {0} peers"
 
 #, java-format
 msgid "Connected to {0} of {1} peers in swarm"
-msgstr "Forbundet til {0} af {1} jævnaldrende i sværm"
+msgstr "Forbundet til {0} af {1} peers i sværm"
 
 msgid "Stalled"
 msgstr "Går i stå"
@@ -925,7 +925,7 @@ msgid "OK"
 msgstr "OK"
 
 msgid "No Peers"
-msgstr "Ingen jævnaldrende"
+msgstr "Ingen peers"
 
 msgid "Peer attached to swarm"
 msgstr "Peer knyttet til sværm"
@@ -940,7 +940,7 @@ msgid "Seed"
 msgstr "Frø"
 
 msgid "Uninteresting (The peer has no pieces we need)"
-msgstr "Uinteressant (den jævnaldrende har ingen brikker, vi skal bruge)"
+msgstr "Uinteressant (den peers har ingen brikker, vi skal bruge)"
 
 msgid "Choked (The peer is not allowing us to request pieces)"
 msgstr "Choked (Personen tillader os ikke at anmode om stykker)"
@@ -949,10 +949,10 @@ msgid "Peer is interested but currently idle"
 msgstr "Peer er interesseret, men er i øjeblikket inaktiv"
 
 msgid "Uninterested (We have no pieces the peer needs)"
-msgstr "Uinteresseret (Vi har ingen brikker, som jævnaldrende har brug for)"
+msgstr "Uinteresseret (Vi har ingen brikker, som peers har brug for)"
 
 msgid "Choking (We are not allowing the peer to request pieces)"
-msgstr "Kvælning (Vi tillader ikke jævnaldrende at anmode om brikker)"
+msgstr "Kvælning (Vi tillader ikke peers at anmode om brikker)"
 
 #, java-format
 msgid "Details at {0} tracker"
@@ -1141,7 +1141,7 @@ msgid "Maximum number of peers to upload to"
 msgstr "Maksimalt antal peers at uploade til"
 
 msgid "peers"
-msgstr "peers"
+msgstr "Peers"
 
 msgid "Use open trackers also"
 msgstr "Brug også åbne trackere"
@@ -1153,19 +1153,19 @@ msgid "Enable DHT"
 msgstr "Aktiver DHT"
 
 msgid "Use DHT to find additional peers"
-msgstr "Brug DHT til at finde flere jævnaldrende"
+msgstr "Brug DHT til at finde flere peers"
 
 msgid "Auto start torrents"
 msgstr "Autostart torrents"
 
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "Start automatisk torrents, når de tilføjes, og genstart torrents, når I2PSnark starter"
+msgstr "Start automatisk torrents, når de tilføjes, og genstart torrents, når Torrents starter"
 
 msgid "Startup delay"
 msgstr "Opstartsforsinkelse"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Hvor lang tid før autostartede torrents indlæses, når I2PSnark starter"
+msgstr "Hvor lang tid før autostartede torrents indlæses, når Torrents starter"
 
 msgid "minutes"
 msgstr "minutter"
@@ -1198,7 +1198,7 @@ msgid "Our destination (identity) for this session"
 msgstr "Vores destination (identitet) for denne session"
 
 msgid "Dest."
-msgstr "Dest."
+msgstr "Best."
 
 msgid "Inbound Settings"
 msgstr "Indgående indstillinger"
@@ -1225,7 +1225,7 @@ msgid "I2CP host"
 msgstr "I2CP vært"
 
 msgid "I2CP port"
-msgstr "I2CP port"
+msgstr "I2CP-port"
 
 msgid "I2CP options"
 msgstr "I2CP muligheder"
@@ -1261,7 +1261,7 @@ msgid "Add"
 msgstr "Tilføje"
 
 msgid "Select trackers for removal from I2PSnark's known list"
-msgstr "Vælg trackere til fjernelse fra I2PSnarks kendte liste"
+msgstr "Vælg trackere til fjernelse fra Torrentss kendte liste"
 
 msgid "Website URL"
 msgstr "Webstedets URL"

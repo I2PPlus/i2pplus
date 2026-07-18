@@ -32,7 +32,7 @@ msgid "Destination LeaseSet not found"
 msgstr "Conjunto de arrendamiento de destino no encontrado"
 
 msgid "Host"
-msgstr "Host"
+msgstr "Anfitrión"
 
 msgid "Base32"
 msgstr "Base 32"
@@ -154,7 +154,7 @@ msgid "Go back and fix the error"
 msgstr "Regrese y corrija el error"
 
 msgid "router"
-msgstr "router"
+msgstr "enrutador"
 
 msgid "master"
 msgstr "maestro"

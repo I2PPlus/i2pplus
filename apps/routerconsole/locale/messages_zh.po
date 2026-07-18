@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=1; plural=0;\\\n"
 
 msgid "Hash"
 msgstr "哈希值"
@@ -1643,7 +1643,7 @@ msgid "Exploratory tunnels"
 msgstr "探测隧道"
 
 msgid "I2PSnark"
-msgstr "I2PSnark 种子客户端"
+msgstr "种子"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "匿名性警告 - 设置中包括 0 跳点 隧道。"
@@ -2151,7 +2151,7 @@ msgid "Javadocs"
 msgstr "I2P+ API文档"
 
 msgid "I2P Network Statistics"
-msgstr "I2P Network Statistics"
+msgstr "I2P 网络统计"
 
 msgid "Transient server-encrypted filesharing and pastebin"
 msgstr "临时服务器加密的文件共享和粘贴绑定"
@@ -2953,7 +2953,7 @@ msgid "Published"
 msgstr "发布"
 
 msgid "Whois"
-msgstr "Whois"
+msgstr "Whois 查询"
 
 msgid "direct"
 msgstr "直接"
@@ -3640,7 +3640,7 @@ msgid "Shared Clients"
 msgstr "共享隧道客户端"
 
 msgid "Ping"
-msgstr "Ping"
+msgstr "Ping 测试"
 
 msgid "I2Ping"
 msgstr "I2Ping"
@@ -3905,7 +3905,7 @@ msgid "Textual router performance statistics"
 msgstr "路由性能文字统计"
 
 msgid "Sybils"
-msgstr "Sybils"
+msgstr "Sybil 节点"
 
 msgid "Review possible sybils in network database"
 msgstr "查看网络数据库中可能存在的sybils节点"
@@ -5658,7 +5658,7 @@ msgid "The default settings are optimized for general usage and normally don't n
 msgstr "默认设置针对常规用法进行了优化，通常不需要更改。"
 
 msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
-msgstr "要修改客户端隧道设置，请使用<a href=\"/i2ptunnelmgr\">隧道管理器</a>，或<a href=“/i2psnark/configure”></a>I2PSnark的“配置”页面。"
+msgstr "要修改客户端隧道设置，请使用<a href=\"/i2ptunnelmgr\">隧道管理器</a>，或<a href=“/i2psnark/configure”></a>种子的“配置”页面。"
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "要启用对客户端隧道的仅会话更改，请激活控制台的<a href=\"/help/advancedsettings\">高级模式</a>。"
@@ -6391,7 +6391,7 @@ msgid "If set to true, this option will place an icon in the system tray / notif
 msgstr "此设置允许配置所需的备用 NTP 服务器，以确保您的路由器保持准确的时钟时间。[默认值为 0.pool.ntp.org，1.pool.ntp.org，2.pool.ntp.org]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "如果设置为 true，此选项将在系统托盘/通知区域中放置一个图标，其中包含基本服务控制选项。[默认禁用]. 请注意，将此值从默认的 2000 个文件大幅增加可能需要额外配置主机系统以增加操作系统允许的最大打开文件数（例如 Linux 上的 <code>ulimit -n</code>）。要更改，请添加到 I2PSnark 的配置文件 <code>i2psnark.config</code>。[需要重启 I2PSnark 或路由器]"
+msgstr "如果设置为 true，此选项将在系统托盘/通知区域中放置一个图标，其中包含基本服务控制选项。[默认禁用]. 请注意，将此值从默认的 2000 个文件大幅增加可能需要额外配置主机系统以增加操作系统允许的最大打开文件数（例如 Linux 上的 <code>ulimit -n</code>）。要更改，请添加到 种子 的配置文件 <code>i2psnark.config</code>。[需要重启 种子 或路由器]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "此特定于隧道的设置允许您启用或禁用对发送到路由器托管的服务器的 ping 的回复。要禁用 ping，必须将 <code>i2p.streaming.answerPings=false</code> 行添加到隧道管理器中服务器配置的<i>“自定义选项”</i>部分。"
@@ -6469,7 +6469,7 @@ msgid "UPnP is used to communicate with Internet Gateway Devices (IGDs) to detec
 msgstr "UPnP 与公网网关设备 (IGD) 通讯可以检测外部 IP 和映射端口。"
 
 msgid "UPnP support is beta, and may not work for any number of reasons"
-msgstr "此设置允许在下载或创建种子时配置每个种子I2PSnark允许的最大文件数。请注意，要将此值从默认值 2000 个文件大幅增加，可能需要在主机系统上进行其他配置，以增加操作系统允许的最大打开文件数（例如，Linux 上的 <code>ulimit -n</code>）。要进行更改，请添加到 I2PSnark 的配置文件 <code>i2psnark.config</code>。[需要重新启动I2PSnark或路由器]"
+msgstr "此设置允许在下载或创建种子时配置每个种子种子允许的最大文件数。请注意，要将此值从默认值 2000 个文件大幅增加，可能需要在主机系统上进行其他配置，以增加操作系统允许的最大打开文件数（例如，Linux 上的 <code>ulimit -n</code>）。要进行更改，请添加到 种子 的配置文件 <code>i2psnark.config</code>。[需要重新启动种子或路由器]"
 
 msgid "No UPnP-compatible device present"
 msgstr "未发现 UPnP 兼容设备"
@@ -6814,7 +6814,7 @@ msgid "I2P Terminology"
 msgstr "I2P术语表"
 
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "一个管理网络的服务目标的I2P网络应用程序，也被称为SusiDNS。用于将B64哈希值映射为人类可读的名称。目标可以手动添加，或通过订阅hosts.txt文件添加。欲了解更多信息，请参见 <a href=\"https://geti2p.net/en/docs/naming\" class=\"sitelink external\" target=\"_blank\">在线文档</a>。"
+msgstr "一个管理网络的服务目标的I2P网络应用程序，也被称为DNS。用于将B64哈希值映射为人类可读的名称。目标可以手动添加，或通过订阅hosts.txt文件添加。欲了解更多信息，请参见 <a href=\"https://geti2p.net/en/docs/naming\" class=\"sitelink external\" target=\"_blank\">在线文档</a>。"
 
 msgid "Base32 (B32) / Base64 (B64)"
 msgstr "Base32 (B32) / Base64 (B64)"
@@ -7874,11 +7874,11 @@ msgstr "注意：控制台中的许多标签和选项都有提示，表明目的
 msgid "Theme Overrides"
 msgstr "主题覆写"
 
-msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr "I2P+ 支持控制台、隧道管理器、I2PSnark、SusiDNS 和 Susimail 的自定义主题覆写，允许路由器升级后保持使用自定义主题。为了激活覆写，创建一个名为<code>override.css</code>的css文件，并把它放在你想改变的主题的相关目录中，或者重命名一个样例文件，然后刷新浏览器。注意，隧道管理器和控制台共享同一个override.css。要停用一个覆写文件，请删除或重命名<code>override.css</code>，然后硬刷新浏览器（通常是Control + Shift + R）。"
+msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and 网页邮件, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
+msgstr "I2P+ 支持控制台、隧道管理器、种子、DNS 和 网页邮件 的自定义主题覆写，允许路由器升级后保持使用自定义主题。为了激活覆写，创建一个名为<code>override.css</code>的css文件，并把它放在你想改变的主题的相关目录中，或者重命名一个样例文件，然后刷新浏览器。注意，隧道管理器和控制台共享同一个override.css。要停用一个覆写文件，请删除或重命名<code>override.css</code>，然后硬刷新浏览器（通常是Control + Shift + R）。"
 
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
-msgstr "主题目录位于I2P应用程序目录下<code>docs/themes</code>。在控制台和 I2PSnark 主题子目录中都有用于覆写的模板。"
+msgstr "主题目录位于I2P应用程序目录下<code>docs/themes</code>。在控制台和 种子 主题子目录中都有用于覆写的模板。"
 
 msgid "Sidebar Information"
 msgstr "侧栏信息"
@@ -8656,37 +8656,3 @@ msgstr "下一步"
 
 msgid "Finished"
 msgstr "完成"
-
-
-#, java-format
-
-#, java-format
-
-
-
-
-
-#, java-format
-
-
-
-
-
-
-#, java-format
-
-
-
-
-
-
-#, java-format
-
-#, java-format
-
-
-
-
-
-
-

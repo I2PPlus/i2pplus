@@ -52,7 +52,7 @@ msgid "unknown"
 msgstr "desconocido"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr "Para proteger tu privacidad, SusiMail está bloqueando JavaScript y cualquier contenido remoto contenido en este mensaje HTML."
+msgstr "Para proteger tu privacidad, Correo web está bloqueando JavaScript y cualquier contenido remoto contenido en este mensaje HTML."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "Activa JavaScript para una presentación mejorada y características adicionales."
@@ -220,7 +220,7 @@ msgstr "{0} es un servicio exclusivo de I2P proporcionado por {1}."
 
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr "{0} webmail client &copy Susi 2004-2005."
+msgstr "Cliente de correo web {0} y copia Susi 2004-2005."
 
 msgid "Checking for new messages on server"
 msgstr "Comprobando si hay correos electrónicos nuevos en el servidor"
@@ -273,7 +273,7 @@ msgid "To"
 msgstr "A"
 
 msgid "Cc"
-msgstr "Cc"
+msgstr "cc"
 
 msgid "Bcc"
 msgstr "Cco"
@@ -309,7 +309,7 @@ msgid "Toggle password visibility"
 msgstr "alternar visibilidad de contraseña"
 
 msgid "Host"
-msgstr "Host"
+msgstr "Anfitrión"
 
 msgid "POP3 Port"
 msgstr "Puerto POP3"

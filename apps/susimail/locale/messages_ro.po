@@ -53,7 +53,7 @@ msgid "unknown"
 msgstr "necunoscut"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr "Pentru a proteja confidențialitatea ta, SusiMail blochează JavaScript și orice conținut distant inclus în acest mesaj HTML."
+msgstr "Pentru a proteja confidențialitatea ta, Poștă web blochează JavaScript și orice conținut distant inclus în acest mesaj HTML."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "Activează JavaScript pentru o prezentare îmbunătățită și funcții suplimentare."
@@ -223,7 +223,7 @@ msgstr "{0} este un serviciu exclusiv I2P oferit de {1}."
 
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr "{0} webmail client &copy Susi 2004-2005."
+msgstr "{0} client webmail &copy; susi 2004-2005."
 
 msgid "Checking for new messages on server"
 msgstr "Verificarea pentru noi e-mailuri pe server"
@@ -264,7 +264,7 @@ msgid "Cancel"
 msgstr "Anulează"
 
 msgid "Save as Draft"
-msgstr "Salvează ca schiţa "
+msgstr "Salvează ca schița "
 
 msgid "Send"
 msgstr "Trimite"
@@ -315,10 +315,10 @@ msgid "Host"
 msgstr "Gazdă"
 
 msgid "POP3 Port"
-msgstr "POP3 Port"
+msgstr "Port POP3"
 
 msgid "SMTP Port"
-msgstr "SMTP Port"
+msgstr "Port SMTP"
 
 msgid "Read Mail Offline"
 msgstr "Citește Offline Mail"
@@ -376,7 +376,7 @@ msgid "Mark All"
 msgstr "Marchează toate"
 
 msgid "Clear All"
-msgstr "Şterge tot."
+msgstr "Șterge tot."
 
 msgid "Message contains HTML"
 msgstr "Mesajul conține HTML"
@@ -403,7 +403,7 @@ msgid "Last"
 msgstr "Ultimul"
 
 msgid "Really delete this message?"
-msgstr "într-adevăr  doriti sa stergeti acest mesaj?"
+msgstr "Sigur doriți să ștergeți acest mesaj?"
 
 msgid "Yes, really delete it!"
 msgstr "Da, într-adevăr se șterge!"

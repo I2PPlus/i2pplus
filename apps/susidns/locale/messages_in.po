@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Diimpor dari file"
 
 msgid "Manually added via SusiDNS"
-msgstr "Ditambahkan secara manual dengan SusiDNS"
+msgstr "Ditambahkan secara manual dengan DNS"
 
 msgid "Manually added"
 msgstr "Ditambahkan secara manual"
@@ -47,7 +47,7 @@ msgid "Added via address helper"
 msgstr "Ditambahkan via address helper"
 
 msgid "Via helper"
-msgstr "Via helper"
+msgstr "Melalui pembantu"
 
 msgid "Via helper from"
 msgstr "Via helper dari"
@@ -281,7 +281,7 @@ msgid "Subscriptions"
 msgstr "Subskripsi"
 
 msgid "Blacklist"
-msgstr "Blacklist"
+msgstr "Daftar Hitam"
 
 msgid "Configuration"
 msgstr "Konfigurasi"
@@ -389,7 +389,7 @@ msgid "Select file"
 msgstr "Pilih berkas"
 
 msgid "blacklist"
-msgstr "blacklist"
+msgstr "daftar hitam"
 
 msgid "Blacklist Management"
 msgstr "Manajemen Blacklist"
@@ -488,7 +488,7 @@ msgid "link"
 msgstr "Link"
 
 msgid "Encoded Name"
-msgstr "Encoded Name"
+msgstr "Nama yang Dikodekan"
 
 msgid "Base 32 Address"
 msgstr "Alamat base 32"
@@ -599,13 +599,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Lihat FAQ untuk daftar URL subskripsi."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Jika SusiDNS diatur untuk mempublikasikan buku alamat router Anda, daftarnya akan muncul di buku alamat yang dipublikasikan dan disimpan ke file hosts.txt supaya dapat disebarkan."
+msgstr "Jika DNS diatur untuk mempublikasikan buku alamat router Anda, daftarnya akan muncul di buku alamat yang dipublikasikan dan disimpan ke file hosts.txt supaya dapat disebarkan."
 
 msgid "Published Addressbook"
 msgstr "Addressbook Terpublikasi"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "Supaya SusiDNS mendorong addressbook router Anda ke addressbook terpublikasi, ubah menjadi 'should_publish=true' di halaman pengaturan atau configuration page."
+msgstr "Supaya DNS mendorong addressbook router Anda ke addressbook terpublikasi, ubah menjadi 'should_publish=true' di halaman pengaturan atau configuration page."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "Semua host yang diambil dari subscription atau langganan akan muncul di address book, termasuk yang Anda tambahkan secara manual atau dari address book master."
@@ -656,7 +656,7 @@ msgid "for websites"
 msgstr "untuk situs web"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Jika Anda mengatur SusiDNS untuk mempublikasikan addressbook router Anda, SusiDNS akan mengekspor file host.txt yang berisi semua host (secara default ke folder root di eepsite Anda)."
+msgstr "Jika Anda mengatur DNS untuk mempublikasikan addressbook router Anda, DNS akan mengekspor file host.txt yang berisi semua host (secara default ke folder root di eepsite Anda)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "Addressbook yang ditambahkan secara manual ke addressbook master akan bergabung ke dalam addressbook router."

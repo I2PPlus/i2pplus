@@ -137,7 +137,16 @@ msgstr ""
 msgid "Connection limit reached"
 msgstr ""
 
+msgid "Transit throttle drop"
+msgstr ""
+
+msgid "Transit throttle reject"
+msgstr ""
+
 msgid "Dropping Tunnel Requests: High load"
+msgstr ""
+
+msgid "Transit request throttle"
 msgstr ""
 
 msgid "Dropping Tunnel Requests: Queue time"

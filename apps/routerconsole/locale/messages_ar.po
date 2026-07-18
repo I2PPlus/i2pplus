@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\\\n"
 
 msgid "Hash"
 msgstr "التجزئة"
@@ -100,22 +100,22 @@ msgid "Low-level send rate (B/s)"
 msgstr "معدل الإرسال منخفض المستوى (B/s)"
 
 msgid "Peers active in the last minute"
-msgstr "أقرانهم نشطة في اللحظة الأخيرة"
+msgstr "الأقران النشطة في اللحظة الأخيرة"
 
 msgid "Peers sent to in the last minute"
-msgstr "أرسل أقرانهم إلى في اللحظة الأخيرة"
+msgstr "الأقران التي أُرسل إليها في اللحظة الأخيرة"
 
 msgid "Total peers in our banlist"
-msgstr "إجمالي أقرانهم في قائمة الحظر لدينا"
+msgstr "إجمالي الأقران في قائمة الحظر لدينا"
 
 msgid "CPU load average of the JVM"
 msgstr "متوسط حمل وحدة المعالجة المركزية لـ JVM"
 
 msgid "Known fast peers"
-msgstr "أقرانهم سريعون معروفون"
+msgstr "الأقران السريعون المعروفون"
 
 msgid "Known high capacity peers"
-msgstr "أقرانهم ذوي القدرات العالية المعروفة"
+msgstr "الأقران ذوي القدرات العالية المعروفون"
 
 msgid "Known integrated (floodfill) peers"
 msgstr "الأقران المتكاملة (الغمرية) المعروفة"
@@ -127,7 +127,7 @@ msgid "Total number of threads in use"
 msgstr "إجمالي عدد الخيوط المستخدمة"
 
 msgid "Peers without a published IP address"
-msgstr "أقرانهم بدون عنوان IP منشور"
+msgstr "الأقران بدون عنوان IP منشور"
 
 msgid "Average tunnel build success %"
 msgstr "متوسط نجاح بناء النفق %"
@@ -1683,7 +1683,7 @@ msgid "Exploratory tunnels"
 msgstr "استكشاف الأنفاق"
 
 msgid "I2PSnark"
-msgstr "I2PSnark برنامج تورنت"
+msgstr "السيول"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "تحذير حول درجة المجهولية: تتضمن إعدادات الأنفاق 0 - نظير."
@@ -1775,7 +1775,7 @@ msgid "Enabling the Universal Theming option is recommended when embedding these
 msgstr "يوصى بتمكين خيار التنسيق الموحد عند تضمين هذه التطبيقات"
 
 msgid "Embed I2PSnark and I2PMail in the console"
-msgstr "قم بتضمين I2PSnark وI2PMail في وحدة التحكم"
+msgstr "قم بتضمين السيول وI2PMail في وحدة التحكم"
 
 msgid "Add a user and password to enable."
 msgstr "أضف مستخدمًا وكلمة مرور للتمكين."
@@ -3498,7 +3498,7 @@ msgid "peer"
 msgstr "الأقران"
 
 msgid "peers"
-msgstr "أقرانهم"
+msgstr "الأقران"
 
 #, java-format
 msgid "{0} fast peer"
@@ -4615,7 +4615,7 @@ msgid "Primary IP address"
 msgstr "عنوان IP الأساسي"
 
 msgid "unique peers"
-msgstr "أقرانهم فريدة من نوعها"
+msgstr "الأقران الفريدة من نوعها"
 
 msgid "local"
 msgstr "المحلية"
@@ -5853,7 +5853,7 @@ msgid "config webapps"
 msgstr "تكوين تطبيقات الويب"
 
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
-msgstr "قد تكون تطبيقات كاملة (على سبيل المثال I2PSnark) ، أو الواجهة الأمامية لعميل أو تطبيق آخر يجب تمكينه بشكل منفصل (على سبيل المثال SusiDNS ، I2PTunnel) ، أو ليس لديهم واجهة ويب على الإطلاق (على سبيل المثال دفتر العناصر). وهي عادةً تطبيقات ويب يمكن الوصول إليها من خلال وحدة تحكم الراوتر They may be complete applications (e. g i2psnark), front-ends to another client or application which must be separately enabled (e. g susidns, i2ptunnel), or have no web interface at all (e. g addressbook). وهي عادةً تطبيقات ويب يمكن الوصول إليها من خلال وحدة تحكم الراوتر They may be complete applications (e. g i2psnark), front-ends to another client or application which must be separately enabled (e. g susidns, i2ptunnel), or have no web interface at all (e. g addressbook). وهي عادة ما تكون تطبيقات ويب يمكن الوصول إليها من خلال وحدة تحكم جهاز التوجيه قد تكون تطبيقات كاملة (e ز i2psnark)، الواجهات الأمامية لعميل أو تطبيق آخر يجب تمكينه بشكل منفصل (على سبيل المثال ز susidns، i2ptunnel)، أو ليس لديك واجهة ويب على الإطلاق (على سبيل المثال ز دفتر العناوين)"
+msgstr "قد تكون تطبيقات كاملة (على سبيل المثال السيول) ، أو الواجهة الأمامية لعميل أو تطبيق آخر يجب تمكينه بشكل منفصل (على سبيل المثال DNS ، I2PTunnel) ، أو ليس لديهم واجهة ويب على الإطلاق (على سبيل المثال دفتر العناصر). وهي عادةً تطبيقات ويب يمكن الوصول إليها من خلال وحدة تحكم الراوتر They may be complete applications (e. g i2psnark), front-ends to another client or application which must be separately enabled (e. g susidns, i2ptunnel), or have no web interface at all (e. g addressbook). وهي عادةً تطبيقات ويب يمكن الوصول إليها من خلال وحدة تحكم الراوتر They may be complete applications (e. g i2psnark), front-ends to another client or application which must be separately enabled (e. g susidns, i2ptunnel), or have no web interface at all (e. g addressbook). وهي عادة ما تكون تطبيقات ويب يمكن الوصول إليها من خلال وحدة تحكم جهاز التوجيه قد تكون تطبيقات كاملة (e ز i2psnark)، الواجهات الأمامية لعميل أو تطبيق آخر يجب تمكينه بشكل منفصل (على سبيل المثال ز susidns، i2ptunnel)، أو ليس لديك واجهة ويب على الإطلاق (على سبيل المثال ز دفتر العناوين)"
 
 msgid "Open in new tab"
 msgstr "فتح في صفحة جديدة"
@@ -6481,7 +6481,7 @@ msgid "If set to true, this option will place an icon in the system tray / notif
 msgstr "إذا تم تهيئتها على صحيح، ستضع هذه الخيارات أيقونة في منطقة إخطار النظام/صلصال النظام مع خيارات التحكّم الأساسية في الخدمة. [معطّلة افتراضيًا]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "يسمح هذا الإعداد بتكويف العدد الأقصى للملفات لكل تورنت يسمح به I2PSnark عند تنزيلها أو إنشائها. يجدر ملاحظة أن زيادة هذه القيمة بشكل ملحوظ عن 2000 ملف قد تتطلّب تكويفات إضافية على نظام الضيافة لزيادة العدد الأقصى للملفات المفتوحة التي سيسمح بها نظام التشغيل (مثل <code>ulimit -n</code> في لينكس). للتغيير، أضف إلى ملف التكويف <code>i2psnark.config</code> لـ I2PSnark. [إعادة تشغيل I2PSnark أو الراوتر ضروريّة]. config [Restart of I2PSnark or الراوتر required]. config [Restart of I2PSnark or الراوتر required]. التكوين [يلزم إعادة تشغيل I2PSnark أو جهاز التوجيه]"
+msgstr "يسمح هذا الإعداد بتكويف العدد الأقصى للملفات لكل تورنت يسمح به السيول عند تنزيلها أو إنشائها. يجدر ملاحظة أن زيادة هذه القيمة بشكل ملحوظ عن 2000 ملف قد تتطلّب تكويفات إضافية على نظام الضيافة لزيادة العدد الأقصى للملفات المفتوحة التي سيسمح بها نظام التشغيل (مثل <code>ulimit -n</code> في لينكس). للتغيير، أضف إلى ملف التكويف <code>i2psnark.config</code> لـ السيول. [إعادة تشغيل السيول أو الراوتر ضروريّة]. config [Restart of السيول or الراوتر required]. config [Restart of السيول or الراوتر required]. التكوين [يلزم إعادة تشغيل السيول أو جهاز التوجيه]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "هذا الإعداد الخاص بالنفق يسمح لك بتمكين أو تعطيل الردود على الاستفسارات المرسلة إلى الخوادم المضيفة بواسطة الراوتر. لتعطيل الاستفسارات، يجب إضافة السطر <code>i2p.streaming.answerPings=false</code> إلى قسم <i>الخيارات المخصصة</i> لتكويف الخادم في مدير الأنفاق."
@@ -6904,7 +6904,7 @@ msgid "I2P Terminology"
 msgstr "مصطلحات I2P"
 
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "تطبيق ويب I2P يدير وجهات الخدمات للشبكة، من خلال ربط هاشات B64 بأسماء قابلة للقراءة بشريًا. يمكن إضافة الوجهات يدويًا أو عبر الاشتراكات في ملفات hosts.txt. يُشار إليه أيضًا باسم SusiDNS. لمزيد من المعلومات، الرجاء زيارة الوثائق <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>على الإنترنت</a>."
+msgstr "تطبيق ويب I2P يدير وجهات الخدمات للشبكة، من خلال ربط هاشات B64 بأسماء قابلة للقراءة بشريًا. يمكن إضافة الوجهات يدويًا أو عبر الاشتراكات في ملفات hosts.txt. يُشار إليه أيضًا باسم DNS. لمزيد من المعلومات، الرجاء زيارة الوثائق <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>على الإنترنت</a>."
 
 msgid "Base32 (B32) / Base64 (B64)"
 msgstr "بيز32 (B32) / بيز 64 (B64)"
@@ -7964,11 +7964,11 @@ msgstr "ملاحظة: العديد من العلامات والخيارات في
 msgid "Theme Overrides"
 msgstr "تجاوزات السمة"
 
-msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr "يدعم I2P+ تجاوزات طحن مخصصة للكونسول، مدير الأنفاق، I2PSnark، SusiDNS و Susimail، مما يتيح إجراء تغييرات على الأطمات التي تستمر بعد التحديثات. من أجل تفعيل تجاوز، قم بإنشاء ملف css باسم <code>override.css</code> مع تعديلات طحنك ووضعه في دليل سمة ذات صلة بالطحن الذي ترغب في تغييره، أو إعادة تسمية أحد الملفات النموذجية، ثم أعد تحميل المتصفح بالقوة. ملاحظة أن مدير الأنفاق والكونسول يشتركان في نفس ملف override.css. لإلغاء تفعيل التجاوز، احذف أو أعد تسمية ملف <code>override.css</code> ثم أعد تحميل المتصفح بالقوة (عادة المفتاح التحكم + Shift + R)."
+msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and البريد الإلكتروني, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
+msgstr "يدعم I2P+ تجاوزات طحن مخصصة للكونسول، مدير الأنفاق، السيول، DNS و البريد الإلكتروني، مما يتيح إجراء تغييرات على الأطمات التي تستمر بعد التحديثات. من أجل تفعيل تجاوز، قم بإنشاء ملف css باسم <code>override.css</code> مع تعديلات طحنك ووضعه في دليل سمة ذات صلة بالطحن الذي ترغب في تغييره، أو إعادة تسمية أحد الملفات النموذجية، ثم أعد تحميل المتصفح بالقوة. ملاحظة أن مدير الأنفاق والكونسول يشتركان في نفس ملف override.css. لإلغاء تفعيل التجاوز، احذف أو أعد تسمية ملف <code>override.css</code> ثم أعد تحميل المتصفح بالقوة (عادة المفتاح التحكم + Shift + R)."
 
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
-msgstr "دليل السمات موجود في دليل تطبيق I2P تحت <code>docs/themes</code>. هناك ملفات تجاوز نموذجية في مجلدات سمة فرعية للكونسول و I2PSnark."
+msgstr "دليل السمات موجود في دليل تطبيق I2P تحت <code>docs/themes</code>. هناك ملفات تجاوز نموذجية في مجلدات سمة فرعية للكونسول و السيول."
 
 msgid "Sidebar Information"
 msgstr "معلومات الشريط الجانبي"
@@ -8506,7 +8506,7 @@ msgid "peer profiles"
 msgstr "بروفايل المستخدمين"
 
 msgid "Session Banned Peers"
-msgstr "جلسة المحظورة أقرانهم"
+msgstr "الأقران المحظورة في الجلسة"
 
 msgid "Banned Peers"
 msgstr "مستخدمون ممنوعون"

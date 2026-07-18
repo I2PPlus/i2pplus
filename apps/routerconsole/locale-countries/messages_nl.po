@@ -1,13 +1,7 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 msgid ""
-msgstr ""
-"Language: nl\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
+msgstr "Language: nl\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n != 1);\n"
 msgid "Anonymous Proxy"
 msgstr "Anonieme proxy"
 
@@ -177,7 +171,7 @@ msgid "Cape Verde"
 msgstr "Kaapverdië"
 
 msgid "Curaçao"
-msgstr "Curaçao"
+msgstr "Curacao"
 
 msgid "Christmas Island"
 msgstr "Christmaseiland"
@@ -306,7 +300,7 @@ msgid "Guyana"
 msgstr "Guyana"
 
 msgid "Hong Kong"
-msgstr "Hong Kong"
+msgstr "Hongkong"
 
 msgid "Honduras"
 msgstr "Honduras"
@@ -333,7 +327,7 @@ msgid "Isle of Man"
 msgstr "Man"
 
 msgid "India"
-msgstr "India"
+msgstr "Indië"
 
 msgid "British Indian Ocean Territory"
 msgstr "Brits Territorium in de Indische Oceaan"
@@ -342,7 +336,7 @@ msgid "Iraq"
 msgstr "Irak"
 
 msgid "Iran"
-msgstr "Iran"
+msgstr "Iran "
 
 msgid "Iceland"
 msgstr "IJsland"
@@ -402,7 +396,7 @@ msgid "Lebanon"
 msgstr "Libanon"
 
 msgid "Saint Lucia"
-msgstr "Saint Lucia"
+msgstr "Sint Lucia"
 
 msgid "Liechtenstein"
 msgstr "Liechtenstein"
@@ -456,7 +450,7 @@ msgid "Mali"
 msgstr "Mali"
 
 msgid "Myanmar"
-msgstr "Myanmar"
+msgstr "Myanmar (Birma)"
 
 msgid "Mongolia"
 msgstr "Mongolië"
@@ -579,10 +573,10 @@ msgid "Paraguay"
 msgstr "Paraguay"
 
 msgid "Qatar"
-msgstr "Qatar"
+msgstr "Katar"
 
 msgid "Réunion"
-msgstr "Réunion"
+msgstr "Bijeenkomst"
 
 msgid "Romania"
 msgstr "Roemenië"
@@ -678,7 +672,7 @@ msgid "Tajikistan"
 msgstr "Tadzjikistan"
 
 msgid "Tokelau"
-msgstr "Tokelau"
+msgstr "Tokelau-eilanden"
 
 msgid "Timor-Leste"
 msgstr "Oost-Timor"

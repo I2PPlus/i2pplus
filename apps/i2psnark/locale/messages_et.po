@@ -30,7 +30,7 @@ msgid "Downloading"
 msgstr "Allalaadimine"
 
 msgid "Configuring I2PSnark with I2CP options"
-msgstr "I2PSnarki seadistamine I2CP valikute abil"
+msgstr "Torrentsi seadistamine I2CP valikute abil"
 
 msgid "No write permissions for data directory"
 msgstr "Andmekausta kirjutamise õigused puuduvad"
@@ -63,7 +63,7 @@ msgid "Download speed limit is {0}KB/s"
 msgstr "Allalaadimiskiiruse piir on {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr "Märkus: Selle muudatuse jõustumiseks pead sa võib-olla peatama ja taaskäivitama oma torrentid või taaskäivitama I2PSnarki."
+msgstr "Märkus: Selle muudatuse jõustumiseks pead sa võib-olla peatama ja taaskäivitama oma torrentid või taaskäivitama Torrentsi."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "+0/1 tunnelihüppe juhuslik kättesaadavus sissetulevates tunnelites on lubatud"
@@ -248,7 +248,7 @@ msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "VIGA - Mälu puudus, torrenti ei saa luua {0} alusel"
 
 msgid "Initializing I2PSnark and opening tunnels"
-msgstr "I2PSnarki algseadistamine ja tünnelite avamine"
+msgstr "Torrentsi algseadistamine ja tünnelite avamine"
 
 #, java-format
 msgid "Torrent added and started: {0}"
@@ -384,7 +384,7 @@ msgid "Download finished: {0}"
 msgstr "Allalaadimine lõpetatud: {0}"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrentid"
 
 #, java-format
 msgid "Starting torrent: {0}"
@@ -1015,7 +1015,7 @@ msgid "Tracker Type"
 msgstr "Trackeri tüüp"
 
 msgid "Standard"
-msgstr "Standard"
+msgstr "Standardne"
 
 msgid "Open"
 msgstr "Avatud"
@@ -1159,13 +1159,13 @@ msgid "Auto start torrents"
 msgstr "Autostart torrentid"
 
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "Alusta torrente automaatselt neid lisades ning taaskäivita torrentid I2PSnarki käivitamisel"
+msgstr "Alusta torrente automaatselt neid lisades ning taaskäivita torrentid Torrentsi käivitamisel"
 
 msgid "Startup delay"
 msgstr "Käivituse viivitus"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Kui kaua enne kui autostartitud torrentid laaditakse I2PSnarki käivitamisel"
+msgstr "Kui kaua enne kui autostartitud torrentid laaditakse Torrentsi käivitamisel"
 
 msgid "minutes"
 msgstr "minutit"
@@ -1261,7 +1261,7 @@ msgid "Add"
 msgstr "Lisa"
 
 msgid "Select trackers for removal from I2PSnark's known list"
-msgstr "Vali trackerid eemaldamiseks I2PSnarki tuntavast nimekirjast"
+msgstr "Vali trackerid eemaldamiseks Torrentsi tuntavast nimekirjast"
 
 msgid "Website URL"
 msgstr "Veebisaidi URL"
@@ -1364,7 +1364,7 @@ msgid "Resource Not found"
 msgstr "Resurssit ei leitud"
 
 msgid "Info hash"
-msgstr "Info hash"
+msgstr "Info räsi"
 
 msgid "Created"
 msgstr "Loodud"
@@ -1391,7 +1391,7 @@ msgid "Only I2P trackers will be used; non-I2P trackers are displayed for inform
 msgstr "Vain I2P trackerid kasutatakse; mitte I2P trackerid näidatakse ainult informatsiooni edastamiseks"
 
 msgid "Tracker"
-msgstr "Tracker"
+msgstr "Jälgija"
 
 msgid "Web Seeds"
 msgstr "Veebiseemid"

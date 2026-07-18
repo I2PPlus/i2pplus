@@ -30,7 +30,7 @@ msgid "Downloading"
 msgstr "Descărcarea"
 
 msgid "Configuring I2PSnark with I2CP options"
-msgstr "Configurarea I2PSnark cu opțiunile I2CP"
+msgstr "Configurarea Torrente cu opțiunile I2CP"
 
 msgid "No write permissions for data directory"
 msgstr "Fără permisiuni de scriere pentru directorul de date"
@@ -63,7 +63,7 @@ msgid "Download speed limit is {0}KB/s"
 msgstr "Limita de viteză descărcare este {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr "Notă: S-ar putea fi necesar să opriți și să reporniți torrentelele sau să reporniți I2PSnark pentru ca această modificare să aibă efect."
+msgstr "Notă: S-ar putea fi necesar să opriți și să reporniți torrentelele sau să reporniți Torrente pentru ca această modificare să aibă efect."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Randomizarea sarelor de tunel +0/1 a fost activată pe tunelurile de intrare"
@@ -248,7 +248,7 @@ msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "EROARE - Memorie ram plină, nu se pot crea torrente de la {0}"
 
 msgid "Initializing I2PSnark and opening tunnels"
-msgstr "Inițializarea I2PSnark și deschiderea tunelurilor"
+msgstr "Inițializarea Torrente și deschiderea tunelurilor"
 
 #, java-format
 msgid "Torrent added and started: {0}"
@@ -272,7 +272,7 @@ msgstr "Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", iar d
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", iar DHT și trackerele deschise sunt dezactivate, ar trebui să activați trackerele deschise sau DHT înainte de a porni torrentul.Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", iar DHT și trackerele deschise sunt dezactivate, ar trebui să activați trackerele deschise sau DHT înainte de a porni torrentul.Avertisment - Nu sunt trackere I2P în \"{0}\", și DHT și trackerele deschise sunt dezactivate,  ar trebui să permiteți trackere deschise sau DHT înainte de a porni torrentul."
+msgstr "Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", iar DHT și trackerele deschise sunt dezactivate, ar trebui să activați trackerele deschise sau DHT înainte de a porni torrentul.Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", iar DHT și trackerele deschise sunt dezactivate, ar trebui să activați trackerele deschise sau DHT înainte de a porni torrentul.Avertisment - Nu sunt trackere I2P în \"{0}\", și DHT și trackerele deschise sunt dezactivate, ar trebui să permiteți trackere deschise sau DHT înainte de a porni torrentul."
 
 #, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
@@ -288,7 +288,7 @@ msgstr "Descărcarea rulează deja: {0}"
 
 #, java-format
 msgid "Failed to copy torrent file to {0}"
-msgstr "Copierea fișierului torrentului în  {0} a eșuat"
+msgstr "Copierea fișierului torrentului în {0} a eșuat"
 
 msgid " - torrent file already exists"
 msgstr " - fișierul torrent există deja"
@@ -384,7 +384,7 @@ msgid "Download finished: {0}"
 msgstr "Descărcare terminată: {0}"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrente"
 
 #, java-format
 msgid "Starting torrent: {0}"
@@ -582,7 +582,7 @@ msgid "TX"
 msgstr "TX"
 
 msgid "TX Rate"
-msgstr "TX Rate"
+msgstr "Rata TX"
 
 msgid "Start All"
 msgstr "Pornește toate"
@@ -699,7 +699,7 @@ msgid "First page"
 msgstr "Prima pagină"
 
 msgid "Prev"
-msgstr "Prev"
+msgstr "Înapoi"
 
 msgid "Previous page"
 msgstr "Pagină anterioară"
@@ -1164,13 +1164,13 @@ msgid "Auto start torrents"
 msgstr "Pornește automat torrentele"
 
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "Porniți automat torrentele când sunt adăugate și reporniți torrentele când pornește I2PSnarkPorniți automat torentele atunci când sunt adăugate și reporniți torrenturile atunci când începe I2PSnark"
+msgstr "Porniți automat torrentele când sunt adăugate și reporniți torrentele când pornește TorrentsPorniți automat torentele atunci când sunt adăugate și reporniți torrenturile atunci când începe Torrente"
 
 msgid "Startup delay"
 msgstr "Întârziere de pornire"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Cât timp înainte de a se încarca torrentele pornite automat când pornește I2PSnarkCu cât înainte să se încarce torentele pornite automat când începe I2PSnark"
+msgstr "Cât timp înainte de a se încarca torrentele pornite automat când pornește TorrentsCu cât înainte să se încarce torentele pornite automat când începe Torrente"
 
 msgid "minutes"
 msgstr "minute"
@@ -1203,7 +1203,7 @@ msgid "Our destination (identity) for this session"
 msgstr "Destinația (identitatea) noastră pentru această sesiune"
 
 msgid "Dest."
-msgstr "Dest."
+msgstr "Țara dest."
 
 msgid "Inbound Settings"
 msgstr "Setări de intrare"
@@ -1266,7 +1266,7 @@ msgid "Add"
 msgstr "Adaugă"
 
 msgid "Select trackers for removal from I2PSnark's known list"
-msgstr "Selectați trackerele pentru scoaterea din lista cunoscută a I2PSnark"
+msgstr "Selectați trackerele pentru scoaterea din lista cunoscută a Torrente"
 
 msgid "Website URL"
 msgstr "URL website"
@@ -1398,7 +1398,7 @@ msgid "Only I2P trackers will be used; non-I2P trackers are displayed for inform
 msgstr "Doar trackerele I2P vor fi utilizate - urmăritorii non-I2P sunt afișați numai în scop informativ"
 
 msgid "Tracker"
-msgstr "Tracker"
+msgstr "Dispozitiv de monitorizare"
 
 msgid "Web Seeds"
 msgstr "Semințe de web"

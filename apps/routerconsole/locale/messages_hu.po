@@ -39,7 +39,7 @@ msgstr "Reseed kezdeményezése"
 msgid "Acquired {0} router info from reseed hosts"
 msgid_plural "Acquired {0} router infos from reseed hosts"
 msgstr[0] "A Reseed gazdagépekből szerzett {0} útválasztó információ"
-msgstr[1] "Megvásárolt {0} router infos a reseed gazdagépektől"
+msgstr[1] "Beszerzett {0} útválasztó-információ a reseed gazdagépektől"
 
 #, java-format
 msgid "Acquired only 1 router info from reseed hosts"
@@ -110,7 +110,7 @@ msgid "Known high capacity peers"
 msgstr "Ismert nagy kapacitású társak"
 
 msgid "Known integrated (floodfill) peers"
-msgstr "Ismert integrált (flodfill) társak"
+msgstr "Ismert integrált (floodfill) társak"
 
 msgid "Total peers in our NetDb"
 msgstr "Összes társ a NetDb-nkban"
@@ -119,7 +119,7 @@ msgid "Total number of threads in use"
 msgstr "Használatban lévő szálak teljes száma"
 
 msgid "Peers without a published IP address"
-msgstr "közzétett IP-cím nélküli társak"
+msgstr "Közzétett IP-cím nélküli társak"
 
 msgid "Average tunnel build success %"
 msgstr "Átlagos alagútépítési siker %"
@@ -170,7 +170,7 @@ msgid "Downstream"
 msgstr "Lefelé jövő"
 
 msgid "WAN PPP Connection"
-msgstr "WAP PPP Kapcsolat"
+msgstr "WAN PPP Kapcsolat"
 
 msgid "Uptime"
 msgstr "Indítás óta eltelt idő"
@@ -392,11 +392,11 @@ msgstr "A letöltött kiegészítő verzió {0} nem újabb, mint a telepített k
 
 #, java-format
 msgid "Plugin update requires installed plugin version {0} or higher"
-msgstr "Kiegészítő frissítéshez a telepített kiegészítő következő, vagy annál magasabb verizója szükséges: {0} "
+msgstr "Kiegészítő frissítéshez a telepített kiegészítő következő, vagy annál magasabb verizója szükséges: {0}"
 
 #, java-format
 msgid "Plugin update requires installed plugin version {0} or lower"
-msgstr "Kiegészítő frissítéshez a telepített kiegészítő következő, vagy annál alacsonyabb verizója szükséges: {0} "
+msgstr "Kiegészítő frissítéshez a telepített kiegészítő következő, vagy annál alacsonyabb verizója szükséges: {0}"
 
 #, java-format
 msgid "Plugin requires Jetty version {0} or higher"
@@ -767,7 +767,7 @@ msgid "IP Address"
 msgstr "IP-cím"
 
 msgid "Port"
-msgstr "Port"
+msgstr "Kikötő"
 
 msgid "Hostname"
 msgstr "Hostnév"
@@ -815,7 +815,7 @@ msgid "Console"
 msgstr "Konzol"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
-msgstr "További információkért lásd a kommentált <code>clients.config</code> fájl az SSL -hozzáférés engedélyezéséhez az I2P Alkalmazáskönyvtárban található megjegyzéseket. Szerkesztenie kell a RouterConsolerunner konfigurációs fájlt, amely a könyvtárban található: "
+msgstr "További információkért lásd a kommentált <code>clients.config</code> fájl az SSL -hozzáférés engedélyezéséhez az I2P Alkalmazáskönyvtárban található megjegyzéseket. Szerkesztenie kell a RouterConsolerunner konfigurációs fájlt, amely a könyvtárban található:"
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Mentés letiltva, szerkessze meg a router.config fájlt a változtásokhoz."
@@ -1651,7 +1651,7 @@ msgid "Exploratory tunnels"
 msgstr "Felfedező alagút"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrentok"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "ANONIMITÁSI FIGYELMEZTETÉS - a beállítások 0-ugrású alagutat tartalmaznak."
@@ -1714,7 +1714,7 @@ msgid "User name may not contain '='"
 msgstr "A felhasználónév nem tartalmazhat '=' karaktert."
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
-msgstr "Figyelem: Az ISO-8859-1 karakterkészleten kívüli felhasználói nevek használata nem javasolt. "
+msgstr "Figyelem: Az ISO-8859-1 karakterkészleten kívüli felhasználói nevek használata nem javasolt."
 
 msgid "No password entered"
 msgstr "Nincs jelszó megadva"
@@ -1743,7 +1743,7 @@ msgid "Enabling the Universal Theming option is recommended when embedding these
 msgstr "Ezen alkalmazások beágyazásakor ajánlott az Univerzális témakör engedélyezése"
 
 msgid "Embed I2PSnark and I2PMail in the console"
-msgstr "Az I2PSnark és az I2PMail beágyazása a konzolba"
+msgstr "Az Torrentok és az I2PMail beágyazása a konzolba"
 
 msgid "Add a user and password to enable."
 msgstr "Adjon hozzá egy felhasználót és egy jelszót az engedélyezéshez."
@@ -2018,7 +2018,7 @@ msgid "Anonymous webmail client"
 msgstr "Anoním webes e-mail kliens"
 
 msgid "I2PMail"
-msgstr "I2PMail"
+msgstr "I2PMmail"
 
 msgid "Install and configure I2P plugins"
 msgstr "Telepítse és konfigurálja az I2P bővítményeket"
@@ -2315,7 +2315,7 @@ msgid "Where news meets its scholarly match"
 msgstr "Ahol a hír találkozik a tudományos párjával"
 
 msgid "Jurist"
-msgstr "Jurist"
+msgstr "Jogász"
 
 msgid "Legal News &amp; Commentary"
 msgstr "Jogi hírek és kommentárok"
@@ -2399,13 +2399,13 @@ msgid "Academic commentary and essays"
 msgstr "Tudományos kommentárok és esszék"
 
 msgid "TheConversation"
-msgstr "TheConversation"
+msgstr "The Conversation"
 
 msgid "Global News"
 msgstr "Globális hírek"
 
 msgid "TheGuardian"
-msgstr "TheGuardian"
+msgstr "The Guardian"
 
 msgid "TheMarkup"
 msgstr "TheMarkup"
@@ -2426,10 +2426,10 @@ msgid "Filesharing &amp; copyright news"
 msgstr "Fájlmegosztás és szerzői jogi hírek"
 
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
-msgstr "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
+msgstr "Az amerikai érdekek kiegyensúlyozott &amp; reális megértésének elősegítése a Közel-Keleten"
 
 msgid "WashingtonInstitute"
-msgstr "WashingtonInstitute"
+msgstr "Washington Institute"
 
 msgid "The HTTP proxy is not up"
 msgstr "A HTTP proxy nincs bekapcsolva"
@@ -2735,7 +2735,7 @@ msgid "or Sybil close to this router"
 msgstr "vagy Sybil közel ehhez a routerhez"
 
 msgid "Lookup"
-msgstr "Lookup"
+msgstr "Keresés"
 
 msgid "Select the field to search on"
 msgstr "Válassza ki a keresési mezőt"
@@ -3009,7 +3009,7 @@ msgid "Last heard from"
 msgstr "Utolsó hír"
 
 msgid "Info"
-msgstr "Info"
+msgstr "Információ"
 
 msgid "Hidden or starting up"
 msgstr "Rejtett vagy indul"
@@ -3825,7 +3825,7 @@ msgid "New hosts in last 24 hours"
 msgstr "Új hostok az elmúlt 24 órában"
 
 msgid "I2PControl"
-msgstr "I2PControl"
+msgstr "I2PCControl"
 
 msgid "RPC Service"
 msgstr "RPC szolgáltatás"
@@ -3906,7 +3906,7 @@ msgid "Documentation for the I2P API"
 msgstr "Az I2P API dokumentációja"
 
 msgid "Debug"
-msgstr "Debug"
+msgstr "Hibakeresés"
 
 msgid "View router debug information"
 msgstr "Útválasztó hibakeresési információinak megtekintése"
@@ -3928,7 +3928,7 @@ msgstr "Tekintse át a lehetséges sybileket a hálózati adatbázisban"
 
 #, java-format
 msgid "Your Local Identity [{0}] is your unique I2P router identity, similar to an IP address but tailored to I2P. "
-msgstr "Az Ön helyi identitása [{0}] az Ön egyedi I2P router identitása, amely hasonlít egy IP-címhez, de az I2P-re van szabva. "
+msgstr "Az Ön helyi identitása [{0}] az Ön egyedi I2P router identitása, amely hasonlít egy IP-címhez, de az I2P-re van szabva."
 
 msgid "Never disclose this to anyone, as it can reveal your real world IP."
 msgstr "Soha ne fedje fel ezt senkinek, mivel ez felfedheti valós szellemi tulajdonát."
@@ -4061,7 +4061,7 @@ msgid "Used for building and testing tunnels, and communicating with floodfill p
 msgstr "Alagutak építésére és tesztelésére, valamint az árvízvédelmi társakkal való kommunikációra szolgál"
 
 msgid "Utility"
-msgstr "Utility"
+msgstr "Hasznosság"
 
 msgid "Tunnels we are participating in, directly contributing bandwidth to the network"
 msgstr "Alagutak, amelyekben részt veszünk, közvetlenül hozzájárulva a hálózat sávszélességéhez"
@@ -4275,10 +4275,10 @@ msgid "Run analysis on all routers in NetDb"
 msgstr "Elemzés futtatása a NetDb összes routerén"
 
 msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, "
-msgstr "A szibilaészlelő rutin beállítható a Hálózati Adatbázis rendszeres időközönkénti vizsgálatára, "
+msgstr "A szibilaészlelő rutin beállítható a Hálózati Adatbázis rendszeres időközönkénti vizsgálatára,"
 
 msgid "with the option to block peers meeting the configured threshold. "
-msgstr "azzal a lehetőséggel, hogy blokkolja a beállított küszöbértéket elérő társakat. "
+msgstr "azzal a lehetőséggel, hogy blokkolja a beállított küszöbértéket elérő társakat."
 
 msgid "Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."
 msgstr "A társak blokkolása megakadályozza, hogy az útválasztó alagutakat építsen velük a beállított időtartamig, vagy az útválasztó újraindításáig."
@@ -4690,7 +4690,7 @@ msgid "susidns"
 msgstr "susidns"
 
 msgid "routerconsole"
-msgstr "routerconsole"
+msgstr "routerkonzol"
 
 msgid "Web console"
 msgstr "Web konzol"
@@ -4753,7 +4753,7 @@ msgid "Personal I2P Webserver (eepsite)"
 msgstr "I2P webszerver (eepsite)"
 
 msgid "HTTP Proxy"
-msgstr "HTTP Proxy"
+msgstr "HTTP proxy"
 
 msgid "iMule"
 msgstr "iMule"
@@ -4780,7 +4780,7 @@ msgid "Encryption"
 msgstr "Titkosítás"
 
 msgid "Stream"
-msgstr "Stream"
+msgstr "Folyam"
 
 msgid "host"
 msgstr "hoszt"
@@ -4789,7 +4789,7 @@ msgid "key"
 msgstr "kulcs"
 
 msgid "port"
-msgstr "port"
+msgstr "kikötő"
 
 msgid "Certificates"
 msgstr "Tanúsítványok"
@@ -4847,7 +4847,7 @@ msgid "Please enable sharing (participating in tunnels) by configuring more band
 msgstr "Kérlek, engedélyezd a megosztást (részvételt az alagutakban) több sávszélesség beállítása által."
 
 msgid "It improves your anonymity by creating cover traffic, and helps the network. "
-msgstr "Javítja az anonimitást azáltal, hogy fedőforgalmat hoz létre, és segíti a hálózatot. "
+msgstr "Javítja az anonimitást azáltal, hogy fedőforgalmat hoz létre, és segíti a hálózatot."
 
 #, java-format
 msgid "You have configured I2P to share {0} KBps {1}."
@@ -5146,7 +5146,7 @@ msgid "I2CP Interface"
 msgstr "I2CP Felület"
 
 msgid "I2CP Port"
-msgstr "I2CP Port"
+msgstr "I2CP port"
 
 msgid "Require username and password"
 msgstr "Felhasználónév és jelszó szükséges"
@@ -5303,7 +5303,7 @@ msgid "Enable UPnP to open firewall ports"
 msgstr "UPnP engedélyezése tűzfal portok nyitásához"
 
 msgid "This mode enhances anonymity by preventing correlation between public IP address changes and your router identity. Both your router identity and UDP port will be changed."
-msgstr "Ez a mód fokozza az anonimitást azáltal, hogy megakadályozza a korrelációt a nyilvános IP-cím módosítása és az útválasztó identitása között. "
+msgstr "Ez a mód fokozza az anonimitást azáltal, hogy megakadályozza a korrelációt a nyilvános IP-cím módosítása és az útválasztó identitása között."
 
 msgid "Laptop mode"
 msgstr "Laptop mód"
@@ -5381,7 +5381,7 @@ msgid "Completely disable UDP connections"
 msgstr "Teljesen tiltsa le az UDP kapcsolatokat"
 
 msgid "The router's external port allows communication with other routers. It is recommended to configure your firewall to allow inbound and outbound traffic on this port to optimize your router's performance on the network."
-msgstr "Az útválasztó külső portja lehetővé teszi a kommunikációt más útválasztókkal. "
+msgstr "Az útválasztó külső portja lehetővé teszi a kommunikációt más útválasztókkal."
 
 msgid "Do not reveal your port numbers to anyone, as they can be used to discover your IP address."
 msgstr "Ne fedje fel senkinek a portszámait, mivel ezek felhasználhatók az IP-címének felderítésére."
@@ -5390,7 +5390,7 @@ msgid "config peers"
 msgstr "társak beállításai"
 
 msgid "Peer Manager"
-msgstr "Peer Manager"
+msgstr "Társkezelő"
 
 msgid "Manual Peer Controls"
 msgstr "Társ Kézi Irányítás"
@@ -5447,7 +5447,7 @@ msgid "Please supply a valid plugin file"
 msgstr "Adjon meg egy érvényes plugin fájlt"
 
 msgid "Plugin Manager"
-msgstr "Plugin Manager"
+msgstr "Bővítménykezelő"
 
 msgid "The plugins listed below are started by the webConsole client."
 msgstr "Az alábbi kiegészítőket a webKonzol kliens indítja."
@@ -5495,10 +5495,10 @@ msgid "HTTPS"
 msgstr "HTTPS"
 
 msgid "SOCKS 4/4a"
-msgstr "SOCKS 4/4a"
+msgstr "ZOKNI 4/4a"
 
 msgid "SOCKS 5"
-msgstr "SOCKS 5"
+msgstr "ZOKNI 5"
 
 msgid "This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin if configured. Note: this option will not work when you have 0 known peers."
 msgstr "Ez az opció az I2P HTTP outproxyját fogja használni az újratöltéshez, vagy az Orchid beépülő modult, ha be van állítva. Megjegyzés: ez az opció nem működik, ha 0 ismert társad van."
@@ -5676,7 +5676,7 @@ msgid "The default settings are optimized for general usage and normally don't n
 msgstr "A beállítások alapértelmezett értékei az általános használatra vannak optimalizálva, és általában nem szükséges őket megváltoztatni."
 
 msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
-msgstr "Az ügyfél alagút beállításainak módosításához használja a <a href=\"/i2ptunnelmgr\">Alagútkezelőt</a>, vagy az I2PSnark <a href=\"/i2psnark/configure\">konfigurációs oldalát</a>."
+msgstr "Az ügyfél alagút beállításainak módosításához használja a <a href=\"/i2ptunnelmgr\">Alagútkezelőt</a>, vagy az Torrentok <a href=\"/i2psnark/configure\">konfigurációs oldalát</a>."
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "A kliens alagutakhoz csak a munkamenet során módosításokat tenni aktiválja a konzol <a href=\"/help/advancedsettings\">Speciális módját</a>."
@@ -5742,7 +5742,7 @@ msgid "Update with unsigned development builds"
 msgstr "Frissítés aláíratlan fejlesztési buildekkel"
 
 msgid "Advanced Options"
-msgstr "Advanced Options"
+msgstr "Speciális beállítások"
 
 msgid "In order to maintain anonymity, it is recommended to update using the I2P http proxy. If the news or I2P update is hosted on I2P, using the proxy will be necessary."
 msgstr "Az anonimitás megőrzése érdekében ajánlatos az I2P http proxy használatával frissíteni. Ha a hírt vagy az I2P-frissítést I2P-n tárolják, a proxy használatára lesz szükség."
@@ -6409,7 +6409,7 @@ msgid "If set to true, this option will place an icon in the system tray / notif
 msgstr "Ha igazra van állítva, ez az opció ikont helyez el a rendszer tálca / értesítési területén alapvető szolgáltatás-vezérlő lehetőségekkel. [Alapértelmezés szerint letiltva]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "Ez a beállítás lehetővé teszi a torrentek letöltése vagy létrehozása során az I2PSnark által engedélyezett fájlok maximális számának beállítását. Megjegyzés: Ezen érték jelentős növelése az alapértelmezett 2000 fájltól további beállításokat igényelhet a gépház rendszeren a fájlok maximális számának növeléséhez, amit az operációs rendszer engedélyez (pl. <code>ulimit -n</code> Linuxon). A módosításhoz adja hozzá az I2PSnark konfigurációs fájlhoz <code>i2psnark.config</code>. [Az I2PSnark vagy a router újraindítása szükséges]"
+msgstr "Ez a beállítás lehetővé teszi a torrentek letöltése vagy létrehozása során az Torrentok által engedélyezett fájlok maximális számának beállítását. Megjegyzés: Ezen érték jelentős növelése az alapértelmezett 2000 fájltól további beállításokat igényelhet a gépház rendszeren a fájlok maximális számának növeléséhez, amit az operációs rendszer engedélyez (pl. <code>ulimit -n</code> Linuxon). A módosításhoz adja hozzá az Torrentok konfigurációs fájlhoz <code>i2psnark.config</code>. [Az Torrentok vagy a router újraindítása szükséges]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "Ez a specifikus beállítás lehetővé teszi, hogy engedélyezze vagy letiltsa a a routernél hostolt szerverekre küldött ping válaszait. A pingek letiltásához hozzá kell adnia a <code>i2p.streaming.answerPings=false</code> sorat a szerver konfigurációja <i>Egyedi beállítások</i> szakaszához a Tunnel Managerben."
@@ -6832,7 +6832,7 @@ msgid "I2P Terminology"
 msgstr "I2P Terminológia"
 
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "Egy I2P webalkalmazás, amely a hálózathoz tartozó szolgáltatási célállomásokat kezeli, az ember által olvasható neveket B64-hasnikhoz (B64 hash) rendel. A célállomások kézzel is hozzáadhatók, vagy hozzárendelhetők hosts.txt fájlokra iratkozással. Ezt SusiDNS néven is emlegetik. További információért lásd az <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online dokumentációt</a>."
+msgstr "Egy I2P webalkalmazás, amely a hálózathoz tartozó szolgáltatási célállomásokat kezeli, az ember által olvasható neveket B64-hasnikhoz (B64 hash) rendel. A célállomások kézzel is hozzáadhatók, vagy hozzárendelhetők hosts.txt fájlokra iratkozással. Ezt DNS néven is emlegetik. További információért lásd az <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online dokumentációt</a>."
 
 msgid "Base32 (B32) / Base64 (B64)"
 msgstr "Base32 (B32) / Base64 (B64)"
@@ -6931,7 +6931,7 @@ msgid "A fork of the <a href=http://www.klomp.org/snark/ class='sitelink externa
 msgstr "Az I2P hálózaton történő használatra átalakított <a href=http://www.klomp.org/snark/ class='sitelink external' target=_blank rel=noreferrer>Snark BitTorrent kliens</a> forkja. Általában a Java I2P alapértelmezett alkalmazáscsomagjának részeként szállítják, valamint elérhető egy <a href=http://skank.i2p/#download class=sitelink target=_blank rel=noreferrer>önálló Java alkalmazásként</a>."
 
 msgid "Introducer"
-msgstr "Introducer"
+msgstr "Bevezető"
 
 msgid "A router that facilitates the connection to the network of another router that is behind a firewall."
 msgstr "Egy útválasztó, amely megkönnyíti a kapcsolatot egy másik útválasztó hálózatához, amely tűzfal mögött van."
@@ -6958,7 +6958,7 @@ msgid "A group of tunnel entry points (leases) for a <i>destination</i>. Note: A
 msgstr "Egy alagút belépési pontjainak (befogadói jogok) csoportja egy <i>célpontra</i>. Megjegyzés: Egy 0-kitételű szerveralagútnak csak egy bérlete lesz, függetlenül a beállított alagutak számától."
 
 msgid "Monotone / mtn"
-msgstr "Monotone / mtn"
+msgstr "Monoton / mtn"
 
 msgid "The distributed version control system (DVCS) previously used to maintain I2P's source code, now superseded by git."
 msgstr "Az elosztott verziókezelő rendszer (DVCS), amely korábban a I2P forráskódjának karbantartására szolgált, most már a git által felváltva."
@@ -7286,7 +7286,7 @@ msgid "NTCP port (1-65535)"
 msgstr "NTCP port (1-65535)"
 
 msgid "NTCP hostname"
-msgstr "NTCP hostname"
+msgstr "NTCP gazdagépnév"
 
 msgid "Auto IP setting"
 msgstr "Automatikus IP beállítás"
@@ -7295,10 +7295,10 @@ msgid "SSU Transport Settings:"
 msgstr "SSU Transport Beállítások:"
 
 msgid "SSU port (1-65535)"
-msgstr "SSU port (1-65535)"
+msgstr "SSU-port (1-65535)"
 
 msgid "SSU hostname"
-msgstr "SSU hostname"
+msgstr "SSU gazdagépnév"
 
 msgid "IP source detection"
 msgstr "IP forrás észlelés"
@@ -7328,7 +7328,7 @@ msgid "Outbound bandwidth limit (Bps)"
 msgstr "Kimenő sávszélesség korlát (Bps)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
-msgstr "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
+msgstr "Beállítások elmentve (logikai érték), RestartNeeded (logikai érték), plusz aktuális értékek a lekérdezett beállításokhoz"
 
 msgid "Manages I2PControl service settings including password, port, and restart configuration."
 msgstr "Kezeli az I2PControl szolgáltatás beállításait, beleértve a jelszót, a portot és az újraindítási konfigurációt."
@@ -7343,7 +7343,7 @@ msgid "Listen port (integer, 1-65535)"
 msgstr "Figyelési port (egész szám, 1-65535)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
-msgstr "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
+msgstr "Beállítások Mentett (logikai érték), RestartNeeded (logikai), aktuális értékek a kért beállításokhoz"
 
 msgid "Access and modify advanced I2P router configuration settings."
 msgstr "Hozzáférés és módosítás az I2P útválasztó speciális konfigurációs beállításaihoz."
@@ -7892,11 +7892,11 @@ msgstr "Megjegyzés: A konzolon sok címke és beállítás van, amelyeknek vann
 msgid "Theme Overrides"
 msgstr "Téma felülírások"
 
-msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr "Az I2P+ testreszabott téma felülírásokat támogat a konzolhoz, az alagútkezelőhöz, az I2PSnarkhoz, a SusiDNS-hez és a Susimailhez, lehetővé téve a témák módosítását, amelyek az frissítések után is megmaradnak. Ahhoz, hogy aktiválja a felülírást, hozzon létre egy css fájlt <code>override.css</code> névvel a téma módosításával, és helyezze el a megfelelő téma könyvtárában, amelyet meg szeretne változtatni, vagy nevezzen át egy példa fájlt, majd frissítse meg a böngészőt. Vegye figyelembe, hogy az alagútkezelő és a konzol ugyanazt a override.css-t használja. Az override visszavonásához törölje vagy nevezze át a <code>override.css</code> fájlt, majd frissítse meg a böngészőt (általában Control + Shift + R)."
+msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Webmail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
+msgstr "Az I2P+ testreszabott téma felülírásokat támogat a konzolhoz, az alagútkezelőhöz, az Torrentshoz, a DNS-hez és a Webmailhez, lehetővé téve a témák módosítását, amelyek az frissítések után is megmaradnak. Ahhoz, hogy aktiválja a felülírást, hozzon létre egy css fájlt <code>override.css</code> névvel a téma módosításával, és helyezze el a megfelelő téma könyvtárában, amelyet meg szeretne változtatni, vagy nevezzen át egy példa fájlt, majd frissítse meg a böngészőt. Vegye figyelembe, hogy az alagútkezelő és a konzol ugyanazt a override.css-t használja. Az override visszavonásához törölje vagy nevezze át a <code>override.css</code> fájlt, majd frissítse meg a böngészőt (általában Control + Shift + R)."
 
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
-msgstr "A témakönyvtár az I2P alkalmazás könyvtárában található a <code>docs/themes</code> alatt. Példa override fájlok találhatóak a konzol és az I2PSnark téma almappáiban."
+msgstr "A témakönyvtár az I2P alkalmazás könyvtárában található a <code>docs/themes</code> alatt. Példa override fájlok találhatóak a konzol és az Torrentok téma almappáiban."
 
 msgid "Sidebar Information"
 msgstr "Oldalsáv információ"
@@ -8548,7 +8548,7 @@ msgid "Return to Top"
 msgstr "Vissza a lap tetejére"
 
 msgid "webmail"
-msgstr "webmail"
+msgstr "levelezés"
 
 msgid "Webmail"
 msgstr "Webmail"
@@ -8646,7 +8646,7 @@ msgid "Browser Setup"
 msgstr "Böngésző beállítása"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr "Ahhoz, hogy elérje az I2P hálózaton tárolt weboldalakat, és opcionálisan használja az alapértelmezett outproxy-t a clearnet weboldalakhoz való csatlakozáshoz, be kell állítania a böngészőjét az I2P+ <b>HTTP</b> proxy használatára, amely alapértelmezés szerint a <code>127.0.0.1 port 4444</code>-on fut. "
+msgstr "Ahhoz, hogy elérje az I2P hálózaton tárolt weboldalakat, és opcionálisan használja az alapértelmezett outproxy-t a clearnet weboldalakhoz való csatlakozáshoz, be kell állítania a böngészőjét az I2P+ <b>HTTP</b> proxy használatára, amely alapértelmezés szerint a <code>127.0.0.1 port 4444</code>-on fut."
 
 msgid "Welcome to I2P+!"
 msgstr "Üdvözöl az I2P+!"

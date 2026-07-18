@@ -213,7 +213,7 @@ msgid "Enable DCC"
 msgstr "DCC Aktiv Edin"
 
 msgid "Port"
-msgstr "Port"
+msgstr "Liman"
 
 msgid "Specify the local port this service should be accessible from"
 msgstr "Bu xidmətin hansı yerli porta erişilə biləcəyini göstərin"
@@ -1102,7 +1102,7 @@ msgid "Preview"
 msgstr "Ön izləmə"
 
 msgid "Status"
-msgstr "Status"
+msgstr "Vəziyyət"
 
 msgid "Control"
 msgstr "İdarəetmə"

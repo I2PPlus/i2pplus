@@ -15,7 +15,7 @@ msgid "I2P tunnel closed."
 msgstr "Tunnel I2P chiuso."
 
 msgid "Magnet"
-msgstr "Magnet"
+msgstr "Magnete"
 
 msgid "Unable to connect to I2P"
 msgstr "Impossibile connettersi a I2P"
@@ -30,7 +30,7 @@ msgid "Downloading"
 msgstr "Download in corso"
 
 msgid "Configuring I2PSnark with I2CP options"
-msgstr "Configurazione di I2PSnark con le opzioni I2CP"
+msgstr "Configurazione di Torrent con le opzioni I2CP"
 
 msgid "No write permissions for data directory"
 msgstr "Nessun permesso di scrittura per la directory dei dati"
@@ -63,7 +63,7 @@ msgid "Download speed limit is {0}KB/s"
 msgstr "Il limite di velocità di download è {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr "Nota: Potrebbe essere necessario fermare e riavviare i tuoi torrent o riavviare I2PSnark per rendere effettiva questa modifica."
+msgstr "Nota: Potrebbe essere necessario fermare e riavviare i tuoi torrent o riavviare Torrent per rendere effettiva questa modifica."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Abilitato il +0/1 salto tunnel casualizzato sui tunnel in entrata"
@@ -248,7 +248,7 @@ msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "ERRORE - Memoria piena, impossibile creare torrent da {0}"
 
 msgid "Initializing I2PSnark and opening tunnels"
-msgstr "Inizializzazione I2PSnark e apertura tunnel"
+msgstr "Inizializzazione Torrent e apertura tunnel"
 
 #, java-format
 msgid "Torrent added and started: {0}"
@@ -384,7 +384,7 @@ msgid "Download finished: {0}"
 msgstr "Download completato: {0}"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrent"
 
 #, java-format
 msgid "Starting torrent: {0}"
@@ -493,7 +493,7 @@ msgid "Torrent &amp; filesharing forum"
 msgstr "Forum torrent e condivisione file"
 
 msgid "Forum"
-msgstr "Forum"
+msgstr "Foro"
 
 msgid "Search torrents"
 msgstr "Cerca torrent"
@@ -561,7 +561,7 @@ msgid "Status"
 msgstr "Stato"
 
 msgid "Torrent"
-msgstr "Torrent"
+msgstr "Torrente"
 
 msgid "File type"
 msgstr "Tipo di file"
@@ -579,7 +579,7 @@ msgid "RX Rate"
 msgstr "Velocità ricezione (RX)"
 
 msgid "TX"
-msgstr "TX"
+msgstr "Texas"
 
 msgid "TX Rate"
 msgstr "Velocità trasmissione (TX)"
@@ -679,7 +679,7 @@ msgid "Connected"
 msgstr "Connesso"
 
 msgid "Seeding"
-msgstr "Seeding"
+msgstr "Semina"
 
 msgid "Complete"
 msgstr "Completo"
@@ -937,7 +937,7 @@ msgid "seconds"
 msgstr "secondi"
 
 msgid "Seed"
-msgstr "Seed"
+msgstr "Seme"
 
 msgid "Uninteresting (The peer has no pieces we need)"
 msgstr "Non interessante (Il peer non ha pezzi di nostro interesse)"
@@ -959,7 +959,7 @@ msgid "Details at {0} tracker"
 msgstr "Dettagli al tracker {0}"
 
 msgid "Info"
-msgstr "Info"
+msgstr "Informazioni"
 
 msgid "Add Torrent"
 msgstr "Aggiungi Torrent"
@@ -1003,7 +1003,7 @@ msgid "Content Filters"
 msgstr "Filtri di Contenuto"
 
 msgid "Trackers"
-msgstr "Trackers"
+msgstr "Tracker"
 
 msgid "Alternates"
 msgstr "Alternativi"
@@ -1141,7 +1141,7 @@ msgid "Maximum number of peers to upload to"
 msgstr "Numero massimo di peer su cui caricare"
 
 msgid "peers"
-msgstr "peers"
+msgstr "colleghi"
 
 msgid "Use open trackers also"
 msgstr "Usa anche tracker aperti"
@@ -1159,13 +1159,13 @@ msgid "Auto start torrents"
 msgstr "Avvio automatico dei torrent"
 
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "Avvia automaticamente i torrent quando vengono aggiunti e riavvia i torrent all'avvio di I2PSnark"
+msgstr "Avvia automaticamente i torrent quando vengono aggiunti e riavvia i torrent all'avvio di Torrent"
 
 msgid "Startup delay"
 msgstr "Ritardo di avvio"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Quanto tempo occorre prima che i torrent avviati automaticamente vengano caricati all'avvio di I2PSnark"
+msgstr "Quanto tempo occorre prima che i torrent avviati automaticamente vengano caricati all'avvio di Torrent"
 
 msgid "minutes"
 msgstr "minuti"
@@ -1198,7 +1198,7 @@ msgid "Our destination (identity) for this session"
 msgstr "La nostra destinazione (identità) per questa sessione"
 
 msgid "Dest."
-msgstr "Dest."
+msgstr "Destin."
 
 msgid "Inbound Settings"
 msgstr "Impostazioni d'Entrata"
@@ -1261,7 +1261,7 @@ msgid "Add"
 msgstr "Aggiungi"
 
 msgid "Select trackers for removal from I2PSnark's known list"
-msgstr "Seleziona i tracker da rimuovere dall'elenco conosciuto di I2PSnark"
+msgstr "Seleziona i tracker da rimuovere dall'elenco conosciuto di Torrent"
 
 msgid "Website URL"
 msgstr "URL del sito"
@@ -1319,7 +1319,7 @@ msgid "Files"
 msgstr "File"
 
 msgid "Directory"
-msgstr "Directory"
+msgstr "Direttorio"
 
 msgid "Size"
 msgstr "Dimensione"

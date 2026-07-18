@@ -1,13 +1,7 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 msgid ""
-msgstr ""
-"Language: uk_UA\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-
+msgstr "Language: uk_UA\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 #, java-format
 msgid "{0,number,####} ms"
 msgid_plural "{0,number,####} ms"
@@ -68,19 +62,19 @@ msgstr[1] "{0,number,###} μс"
 msgstr[2] "{0,number,###} μс"
 
 msgid "CRIT"
-msgstr "CRIT"
+msgstr "КРИТ"
 
 msgid "DEBUG"
-msgstr "DEBUG"
+msgstr "НАЛАШТУВАННЯ"
 
 msgid "ERROR"
-msgstr "ERROR"
+msgstr "ПОМИЛКА"
 
 msgid "INFO"
-msgstr "INFO"
+msgstr "ІНФО"
 
 msgid "WARN"
-msgstr "WARN"
+msgstr "ПОПЕРЕДЖЕННЯ"
 
 #, java-format
 msgid "{0} similar message omitted"

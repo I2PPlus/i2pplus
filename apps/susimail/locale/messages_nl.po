@@ -22,13 +22,13 @@ msgid "No encoder found for encoding \\''{0}\\''."
 msgstr "Geen encoder gevonden voor codering \\''{0}\\''."
 
 msgid "Re:"
-msgstr "Re:"
+msgstr "Met betrekking tot:"
 
 msgid "Fwd:"
-msgstr "Fwd:"
+msgstr "Vooruit:"
 
 msgid "Drafts"
-msgstr "Drafts"
+msgstr "Concepten"
 
 msgid "Sent"
 msgstr "Verzonden"
@@ -52,7 +52,7 @@ msgid "unknown"
 msgstr "onbekend"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr "Om je privacy te beschermen, blokkeert SusiMail JavaScript en elk extern gecontroleerd content dat in deze HTML-boodschap zit."
+msgstr "Om je privacy te beschermen, blokkeert Webmail JavaScript en elk extern gecontroleerd content dat in deze HTML-boodschap zit."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "Schakel JavaScript in voor een verbeterde weergave en extra functies."
@@ -220,7 +220,7 @@ msgstr "{0} is een exclusieve I2P-service die wordt aangeboden door {1}."
 
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr "{0} webmail client &copy Susi 2004-2005."
+msgstr "{0} webmailclient &copy;; Susi 2004-2005."
 
 msgid "Checking for new messages on server"
 msgstr "Controleren op nieuwe berichten op de server"
@@ -273,7 +273,7 @@ msgid "To"
 msgstr "Aan"
 
 msgid "Cc"
-msgstr "Cc"
+msgstr "CC"
 
 msgid "Bcc"
 msgstr "Bcc"
@@ -309,7 +309,7 @@ msgid "Toggle password visibility"
 msgstr "Wachtwoordzichtbaarheid in-/uitschakelen"
 
 msgid "Host"
-msgstr "Host"
+msgstr "Gastheer"
 
 msgid "POP3 Port"
 msgstr "POP3-poort"

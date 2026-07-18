@@ -129,7 +129,7 @@ msgid "unknown"
 msgstr "sconosciuto"
 
 msgid "Floodfill"
-msgstr "Floodfill"
+msgstr "Riempimento"
 
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Mostra tutti i router con questa capacità nel NetDb"
@@ -709,10 +709,10 @@ msgid "Events per period"
 msgstr "Eventi per periodo"
 
 msgid "Min"
-msgstr "Min"
+msgstr "minimo"
 
 msgid "Max"
-msgstr "Max"
+msgstr "Massimo"
 
 msgid "Avg"
 msgstr "Media"
@@ -813,7 +813,7 @@ msgid "Family"
 msgstr "Famiglia"
 
 msgid "Console"
-msgstr "Console"
+msgstr "Consolle"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
 msgstr "Per abilitare l'accesso SSL per la console del router, guarda il file commentato <code>clients.config</code> situato nella tua directory I2P per più informazioni. Avrai bisogno di modificare il file di configurazione RouterConsoleRunner situato nella directory: "
@@ -983,7 +983,7 @@ msgid "Add Client"
 msgstr "Aggiugi client"
 
 msgid "Client"
-msgstr "Client"
+msgstr "Cliente"
 
 msgid "Run at Startup?"
 msgstr "Partenza all'avvio?"
@@ -1016,7 +1016,7 @@ msgid "Email"
 msgstr "E-mail"
 
 msgid "Plugin"
-msgstr "Plugin"
+msgstr "Collegare"
 
 msgid "Author"
 msgstr "Autore"
@@ -1278,7 +1278,7 @@ msgid "Clients"
 msgstr "Client"
 
 msgid "Keyring"
-msgstr "Keyring"
+msgstr "Portachiavi"
 
 msgid "Logging"
 msgstr "Registro"
@@ -1302,7 +1302,7 @@ msgid "Bans"
 msgstr "Ban"
 
 msgid "Reseeding"
-msgstr "Reseeding"
+msgstr "Riseminazione"
 
 msgid "Router Family"
 msgstr "Famiglia del router"
@@ -1422,7 +1422,7 @@ msgid "Manually banned via {0}"
 msgstr "Bannato manualmente via {0}"
 
 msgid "Peer"
-msgstr "Peer"
+msgstr "Pari"
 
 msgid "banned until restart"
 msgstr "bannato fino al riavvio"
@@ -1652,7 +1652,7 @@ msgid "Exploratory tunnels"
 msgstr "Tunnel d'esplorazione"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrent"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "AVVISO ANONIMATO - Le impostazioni includono tunnel 0-hop."
@@ -1744,7 +1744,7 @@ msgid "Enabling the Universal Theming option is recommended when embedding these
 msgstr "Abilitare l'opzione tema universale è consigliata quando si incorporano queste applicazioni"
 
 msgid "Embed I2PSnark and I2PMail in the console"
-msgstr "Incorpora I2PSnark e I2PMail nella console"
+msgstr "Incorpora Torrent e I2PMail nella console"
 
 msgid "Add a user and password to enable."
 msgstr "Aggiungi un utente e una password per abilitare."
@@ -1995,7 +1995,7 @@ msgid "Configuration"
 msgstr "Configurazione"
 
 msgid "FAQ"
-msgstr "FAQ"
+msgstr "Domande frequenti"
 
 msgid "JSON-RPC API"
 msgstr "API JSON-RPC"
@@ -2118,7 +2118,7 @@ msgid "Advanced router configuration"
 msgstr "Configurazione avanzata del router"
 
 msgid "Changelog"
-msgstr "Changelog"
+msgstr "Registro delle modifiche"
 
 msgid "Recent changes"
 msgstr "Cambiamenti recenti"
@@ -2283,7 +2283,7 @@ msgid "Information Security Research &amp; Education"
 msgstr "Ricerca e istruzione sulla sicurezza delle informazioni"
 
 msgid "DigitalTrends"
-msgstr "DigitalTrends"
+msgstr "Tendenze digitali"
 
 msgid "Tech News &amp; Reviews"
 msgstr "Notizie e recensioni tecnologiche"
@@ -2334,7 +2334,7 @@ msgid "Smart &amp; fearless journalism"
 msgstr "Giornalismo intelligente e impavido"
 
 msgid "NewStatesman"
-msgstr "NewStatesman"
+msgstr "NuovoStatista"
 
 msgid "Politics &amp; Current Affairs magazine"
 msgstr "Rivista politica e affari attuali"
@@ -2430,7 +2430,7 @@ msgid "Advancing a balanced &amp; realistic understanding of American interests 
 msgstr "Avanzando una comprensione equilibrata e realistica degli interessi americani in Medio Oriente"
 
 msgid "WashingtonInstitute"
-msgstr "WashingtonInstitute"
+msgstr "Washington Institute"
 
 msgid "The HTTP proxy is not up"
 msgstr "Il proxy HTTP non è avviato"
@@ -2503,7 +2503,7 @@ msgid "Yes"
 msgstr "Sì"
 
 msgid "No"
-msgstr "No"
+msgstr "NO"
 
 msgid "GeoIP Db"
 msgstr "Database GeoIP"
@@ -2622,7 +2622,7 @@ msgid "Last 10s"
 msgstr "Ultimi 10s"
 
 msgid "Job"
-msgstr "Job"
+msgstr "Lavoro"
 
 msgid "Runs"
 msgstr "In esecuzione"
@@ -2986,7 +2986,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "Mostra tutti i router con questa porta nel NetDb"
 
 msgid "Maximum Transmission Unit"
-msgstr "Maximum Transmission Unit"
+msgstr "Unità di trasmissione massima"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr "Mostra tutti i router con questo MTU nel NetDb"
@@ -3010,7 +3010,7 @@ msgid "Last heard from"
 msgstr "Ultima notizia"
 
 msgid "Info"
-msgstr "Info"
+msgstr "Informazioni"
 
 msgid "Hidden or starting up"
 msgstr "Nascosto o in avvio"
@@ -3144,7 +3144,7 @@ msgid "Messages sent"
 msgstr "Messaggi inviati"
 
 msgid "TX"
-msgstr "TX"
+msgstr "Texas"
 
 msgid "Messages received"
 msgstr "Messaggi ricevuti"
@@ -3204,7 +3204,7 @@ msgid "Retransmitted packets"
 msgstr "Pacchetti ritrasmessi"
 
 msgid "Dup TX"
-msgstr "Dup TX"
+msgstr "DupTX"
 
 msgid "Sort by packets retransmitted"
 msgstr "Ordina per pacchetti ritrasmessi"
@@ -3213,7 +3213,7 @@ msgid "Received duplicate packets"
 msgstr "Pacchetti duplicati ricevuti"
 
 msgid "Dup RX"
-msgstr "Dup RX"
+msgstr "DUP RX"
 
 msgid "Sort by packets received more than once"
 msgstr "Ordina per pacchetti ricevuti più di una volta"
@@ -3366,7 +3366,7 @@ msgid "Domain"
 msgstr "Dominio"
 
 msgid "Host"
-msgstr "Host"
+msgstr "Ospite"
 
 msgid "Groups"
 msgstr "Gruppi"
@@ -3697,7 +3697,7 @@ msgid "Attempt to download router reference files (if automatic reseed has faile
 msgstr "Prova a scaricare i file di riferimento del router (se il reseed automatico ha fallito)"
 
 msgid "Reseed"
-msgstr "Reseed"
+msgstr "Riseminare"
 
 msgid "Order"
 msgstr "Ordine"
@@ -3826,7 +3826,7 @@ msgid "New hosts in last 24 hours"
 msgstr "Nuovi host nelle ultime 24 ore"
 
 msgid "I2PControl"
-msgstr "I2PControl"
+msgstr "Controllo I2P"
 
 msgid "RPC Service"
 msgstr "Servizio RPC"
@@ -3877,7 +3877,7 @@ msgid "Logs"
 msgstr "Registri"
 
 msgid "NetDb"
-msgstr "NetDb"
+msgstr "NetDB"
 
 msgid "Show all current peer connections"
 msgstr "Mostra tutte le connessioni correnti dei peer"
@@ -3913,7 +3913,7 @@ msgid "View router debug information"
 msgstr "Guarda le informazioni di debug del router"
 
 msgid "Jars"
-msgstr "Jars"
+msgstr "Vasi"
 
 msgid "Review extended info about installed .jar and .war files"
 msgstr "Esamina informazioni estese riguardo i file .jar e .war installati"
@@ -3922,7 +3922,7 @@ msgid "Textual router performance statistics"
 msgstr "Statistiche testuali delle prestazioni del router"
 
 msgid "Sybils"
-msgstr "Sybils"
+msgstr "Sibille"
 
 msgid "Review possible sybils in network database"
 msgstr "Esamina possibili sybils nel NetDb"
@@ -4426,7 +4426,7 @@ msgid "floodfills"
 msgstr "router di riempimento alluvione"
 
 msgid "MIN"
-msgstr "MIN"
+msgstr "MINIMO"
 
 msgid "AVG"
 msgstr "AVG"
@@ -4435,7 +4435,7 @@ msgid "MEDIAN"
 msgstr "MEDIANO"
 
 msgid "MAX"
-msgstr "MAX"
+msgstr "MASSIMO"
 
 msgid "Show all routers for this family in NetDb"
 msgstr "Mostra tutti i router per questa famiglia nel NetDb"
@@ -4444,7 +4444,7 @@ msgid "Routers"
 msgstr "Router"
 
 msgid "n/a"
-msgstr "n/a"
+msgstr "n / a"
 
 msgid "Last lookup successful"
 msgstr "Ultimo lookup riuscito"
@@ -4578,7 +4578,7 @@ msgid "Latency"
 msgstr "Latenza"
 
 msgid "Gateway"
-msgstr "Gateway"
+msgstr "Porta"
 
 msgid "Participants"
 msgstr "Partecipanti"
@@ -4775,7 +4775,7 @@ msgid "vanilla"
 msgstr "base"
 
 msgid "classic"
-msgstr "classic"
+msgstr "classico"
 
 msgid "Encryption"
 msgstr "Cifratura"
@@ -4784,7 +4784,7 @@ msgid "Stream"
 msgstr "Flusso"
 
 msgid "host"
-msgstr "host"
+msgstr "ospite"
 
 msgid "key"
 msgstr "chiave"
@@ -5677,7 +5677,7 @@ msgid "The default settings are optimized for general usage and normally don't n
 msgstr "Le impostazioni di default sono ottimizzate per un utilizzo generale e normalmente non hanno bisogno di essere cambiate."
 
 msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
-msgstr "Per modificare i settaggi dei tunnel client, usa il <a href=\"/i2ptunnelmgr\"> Manager dei tunnel</a>, o la <a href=\"/i2psnark/configure\">Pagina di configurazione</a> per I2PSnark."
+msgstr "Per modificare i settaggi dei tunnel client, usa il <a href=\"/i2ptunnelmgr\"> Manager dei tunnel</a>, o la <a href=\"/i2psnark/configure\">Pagina di configurazione</a> per Torrent."
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "Per abilitare le modifiche di sola sessione ai tunnel client, attiva la <a href=\"/help/advancedsettings\">Modalità avanzata</a> della console."
@@ -5785,7 +5785,7 @@ msgid "The Java web applications listed below are started by the webConsole clie
 msgstr "Le applicazioni java elencate sotto sono avviate dal client webConsole e girano nella stessa JVM come il router. Sono spesso delle applicazioni web accessibili dalla console del router. Possono essere applicazioni complete (es. i2psnark), front-ends per altri client o applicazioni che devono essere abilitate separatamente (es. susidns, i2ptunnel), o avere persino nessuna interfaccia web (es. rubrica)."
 
 msgid "Open in new tab"
-msgstr "Apri un un nuovo tab"
+msgstr "Apri un nuovo tab"
 
 msgid "Your browser does not support iFrames."
 msgstr "Il tuo browser non supporta gli iFrame."
@@ -5921,7 +5921,7 @@ msgid "This setting, when set to true, will display a Peer Test Average readout 
 msgstr "Quando impostata su true, questa impostazione visualizza una lettura Media dei Test dei Peer nella sezione Congestione della barra laterale, calcolata aggiungendo la media dei test dei peer riusciti e il tempo medio di eccesso richiesto dai test falliti. Il valore medio può essere utilizzato come guida per determinare il valore ottimale di <code>router.peerTestTimeout</code>. [Il valore predefinito è false]"
 
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
-msgstr "Questa impostazione, quando impostata su true, visualizzerà i link <i>Siti di interesse</ i> sulla <a href=/sitemap> mappa del sito </a>. [Il valore predefinito è false]"
+msgstr "Questa impostazione, quando impostata su true, visualizzerà i link <i>Siti di interesse</i> sulla <a href=/sitemap> mappa del sito </a>. [Il valore predefinito è false]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
 msgstr "Questa impostazione, se impostata a true, presenterà la barra laterale standard nella homepage, abilitando la configurazione tramite <a href=/configsidebar>. [Predefinito è false]"
@@ -6410,7 +6410,7 @@ msgid "If set to true, this option will place an icon in the system tray / notif
 msgstr "Se impostato su true, questa opzione inserirà un'icona nella tray bar del sistema / area di notifica, con le opzioni di controllo di base del servizio. [Disabilitato per impostazione predefinita]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "Questa impostazione consente di configurare il numero massimo di file per torrent che I2PSnark permetterà, durante il download o la creazione di un torrent. Si noti che l'aumento sostanziale di questo valore dai 2000 file predefiniti può richiedere una configurazione aggiuntiva sul sistema host per aumentare il numero massimo di file aperti che il sistema operativo permetterà (ad es. <code>limita -n</code> su Linux). Per effettuare modifiche, aggiungi al file di configurazione di I2PSnark <code>i2psnark.config</code>. [Riavvio di I2PSnark o del router richiesto]"
+msgstr "Questa impostazione consente di configurare il numero massimo di file per torrent che Torrent permetterà, durante il download o la creazione di un torrent. Si noti che l'aumento sostanziale di questo valore dai 2000 file predefiniti può richiedere una configurazione aggiuntiva sul sistema host per aumentare il numero massimo di file aperti che il sistema operativo permetterà (ad es. <code>limita -n</code> su Linux). Per effettuare modifiche, aggiungi al file di configurazione di Torrent <code>i2psnark.config</code>. [Riavvio di Torrent o del router richiesto]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "Questa impostazione specifica per il tunnel consente di abilitare o disabilitare le risposte ai ping inviati ai server ospitati dal router. Per disabilitare i ping, è necessario aggiungere la riga <code>i2p.streaming.answerPings=false</code> alla sezione <i>Opzioni personalizzate</i> della configurazione del server nel Tunnel Manager."
@@ -6833,7 +6833,7 @@ msgid "I2P Terminology"
 msgstr "Terminologia di I2P"
 
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "Un'applicazione web I2P che gestisce le destinazioni del servizio per la rete, mappando gli hash B64 in nomi leggibili dall'uomo. Le destinazioni possono essere aggiunte manualmente o tramite sottoscrizioni a file hosts.txt. Conosciuta anche come SusiDNS. Per ulteriori informazioni, consultare la <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>documentazione online</a>."
+msgstr "Un'applicazione web I2P che gestisce le destinazioni del servizio per la rete, mappando gli hash B64 in nomi leggibili dall'uomo. Le destinazioni possono essere aggiunte manualmente o tramite sottoscrizioni a file hosts.txt. Conosciuta anche come DNS. Per ulteriori informazioni, consultare la <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>documentazione online</a>."
 
 msgid "Base32 (B32) / Base64 (B64)"
 msgstr "Base32 (B32) / Base64 (B64)"
@@ -7589,7 +7589,7 @@ msgstr "Pagina di configurazione di Reseed"
 
 #, java-format
 msgid "To use a proxy to reseed, configure the proxy type, hostname, and port on the {0}."
-msgstr "To use a proxy to reseed, configure the proxy type, hostname, and port on the {0}."
+msgstr "Per utilizzare un proxy per il reseed, configura il tipo di proxy, il nome host e la porta nella {0}."
 
 msgid "If you are running the Tor Browser, you may use its Tor instance by configuring I2P to use: <i>Proxy type:</i> <code>SOCKS 5</code> <i>Host:</i> <code>127.0.0.1</code> <i>Port:</i> <code>9150</code>."
 msgstr "Se stai utilizzando il Tor Browser, puoi usare la sua instanza di Tor configurando I2P per usare: <i>Tipo proxy:</i> <code>SOCKS 5</code> <i>Host:</i> <code>127.0.0.1</code> <i>Porta:</i> <code>9150</code>."
@@ -7605,11 +7605,11 @@ msgstr "Poi clicca il bottone <i>Save changes</i> per confermare la configurazio
 
 #, java-format
 msgid "If you know and trust somebody that runs I2P, ask them to send you a reseed file generated using this page in their router console. Then, select the <i>Reseed from file</i> option on the {0} using the file you received."
-msgstr "If you know and trust somebody that runs I2P, ask them to send you a reseed file generated using this page in their router console. Then, select the <i>Reseed from file</i> option on the {0} using the file you received."
+msgstr "Se conosci e ti fidi di qualcuno che esegue I2P, chiedigli di inviarti un file di reseed generato con questa pagina nella console del router. Poi, seleziona l'opzione <i>Reseed da file</i> nella {0} usando il file ricevuto."
 
 #, java-format
 msgid "If you know and trust somebody that publishes reseed files, ask them for the URL. Then, click the <i>Reseed from URL</i> button on the {0} to reseed using the URL you received."
-msgstr "If you know and trust somebody that publishes reseed files, ask them for the URL. Then, click the <i>Reseed from URL</i> button on the {0} to reseed using the URL you received."
+msgstr "Se conosci e ti fidi di qualcuno che pubblica file di reseed, chiedigli l'URL. Poi, clicca il pulsante <i>Reseed da URL</i> nella {0} per eseguire il reseed usando l'URL ricevuto."
 
 msgid "How do I reseed manually?"
 msgstr "Come eseguo il reseed manualmente?"
@@ -7777,7 +7777,7 @@ msgid "Server tunnels, configurable in the <a href=/i2ptunnelmgr>Tunnel Manager<
 msgstr "I tunnel del server, configurabili nel <a href=/i2ptunnelmgr>Gestore dei tunnel</a>, forniscono diverse modalità per limitare l'accesso al servizio ospitato. La lista bianca delle destinazioni, la lista nera, il controllo della connessione e il filtraggio del tunnel sono metodi predisposti per mitigare gli attacchi di denial of service, concedere accesso esclusivo alle destiazioni I2P conosciute e gestire il traffico verso il server."
 
 msgid "A tunnel filter can provide protection against denial of service attacks, without otherwise interrupting the service for genuine users, either in conjunction with the tunnel throttler or as an alternative strategy. It can also be used to log access to a hosted service to determine if the server is under attack, or simply to log all visitors by I2P destination. Additionally, a filter can function simultaneously as a whitelist and blacklist making it more flexible than the Tunnel Manager's access list controls. Note that multiple server tunnels can share a single filter file if you wish to implement a global filter."
-msgstr "Un filtro del tunnel può offrire protezione dagli attacchi di denial of service senza interrompere altrimenti il servizio per gli utenti legittimi, sia in combinazione con il throttler del tunnel o come strategia alternativa. Può anche essere utilizzato per registrare l'accesso a un servizio ospitato  per determinare se il server è sotto attacco, o semplicemente per registrare tutti i visitatori per destinazione I2P. Inoltre, un filtro può funzionare contemporaneamente come lista bianca e lista nera, rendendolo più flessibile rispetto ai controlli della lista di accesso del Gestore del tunnel. Nota che più tunnel del server possono condividere un singolo file di filtro se si desidera implementare un filtro globale."
+msgstr "Un filtro del tunnel può offrire protezione dagli attacchi di denial of service senza interrompere altrimenti il servizio per gli utenti legittimi, sia in combinazione con il throttler del tunnel o come strategia alternativa. Può anche essere utilizzato per registrare l'accesso a un servizio ospitato per determinare se il server è sotto attacco, o semplicemente per registrare tutti i visitatori per destinazione I2P. Inoltre, un filtro può funzionare contemporaneamente come lista bianca e lista nera, rendendolo più flessibile rispetto ai controlli della lista di accesso del Gestore del tunnel. Nota che più tunnel del server possono condividere un singolo file di filtro se si desidera implementare un filtro globale."
 
 msgid "A filter is a text file that can contain one or more declarations. Blank lines and lines beginning with <i class=example>#</i> are ignored."
 msgstr "Un filtro è un file di testo che può contenere una o più dichiarazioni. Le righe vuote e le righe che iniziano con <i class=example>#</i> vengono ignorate."
@@ -7810,13 +7810,13 @@ msgid "Numeric definition of the number of connection attempts in the period spe
 msgstr "Definizione numerica del numero di tentativi di connessione nel periodo specificato (in secondi) es. <i class=example>15/5</i>, <i class=example>60/60</i> ecc."
 
 msgid "Note that if the number of connections is 1 (e.g. <i class=example>1/60</i>), the first connection attempt will result in a breach."
-msgstr "Si noti che se il numero di connessioni è 1 (ad es. <i class=example>1/60</i>), il primo tentativo di connessione produrrà una violazione. 1/60), the first connection attempt will result in a breach"
+msgstr "Si noti che se il numero di connessioni è 1 (ad es. <i class=example>1/60</i>), il primo tentativo di connessione produrrà una violazione."
 
 msgid "The keyword <i class=example>allow</i>. This threshold is never breached, i.e. an infinite number of connection attempts is permitted."
-msgstr "La parola chiave <i class=example>allow</i>. Questa soglia non viene mai violata, cioè è consentito un numero infinito di tentativi di connessione. e an infinite number of connection attempts is permitted"
+msgstr "La parola chiave <i class=example>allow</i>. Questa soglia non viene mai violata, cioè è consentito un numero infinito di tentativi di connessione."
 
 msgid "The keyword <i class=example>deny</i>. This threshold is always breached, i.e. no connection attempts will be allowed."
-msgstr "La parola chiave <i class=example>deny</i>. Questa soglia viene sempre violata, cioè non saranno consentiti tentativi di connessione. e no connection attempts will be allowed"
+msgstr "La parola chiave <i class=example>deny</i>. Questa soglia viene sempre violata, cioè non saranno consentiti tentativi di connessione."
 
 msgid "Default Threshold"
 msgstr "Soglia predefinita"
@@ -7893,11 +7893,11 @@ msgstr "Nota: Molte delle etichette e delle opzioni nella console hanno suggerim
 msgid "Theme Overrides"
 msgstr "Sostituzioni del tema"
 
-msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr "I2P+ supporta sostituzioni personalizzate dei temi per la console, il tunnel manager, I2PSnark, SusiDNS e Susimail, consentendo modifiche ai temi che sono persistenti dopo gli aggiornamenti. Per attivare una sostituzione, crea un file css chiamato <code>override.css</code> con le tue modifiche del tema e posizionalo nella directory del tema rilevante che desideri cambiare, o rinomina uno dei file di esempio, quindi aggiorna il browser completamente. Nota che il tunnel manager e la console condividono lo stesso override.css. Per disattivare una sostituzione, elimina o rinomina il file <code>override.css</code> e quindi aggiorna completamente il browser (di solito Control + Shift + R)."
+msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Posta web, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
+msgstr "I2P+ supporta sostituzioni personalizzate dei temi per la console, il tunnel manager, Torrent, DNS e Posta web, consentendo modifiche ai temi che sono persistenti dopo gli aggiornamenti. Per attivare una sostituzione, crea un file css chiamato <code>override.css</code> con le tue modifiche del tema e posizionalo nella directory del tema rilevante che desideri cambiare, o rinomina uno dei file di esempio, quindi aggiorna il browser completamente. Nota che il tunnel manager e la console condividono lo stesso override.css. Per disattivare una sostituzione, elimina o rinomina il file <code>override.css</code> e quindi aggiorna completamente il browser (di solito Control + Shift + R)."
 
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
-msgstr "La directory dei temi si trova nella directory dell'applicazione I2P sotto <code>docs/themes</code>. Ci sono file di sostituzione di esempio nelle sotto-directory dei temi della console e di I2PSnark."
+msgstr "La directory dei temi si trova nella directory dell'applicazione I2P sotto <code>docs/themes</code>. Ci sono file di sostituzione di esempio nelle sotto-directory dei temi della console e di Torrent."
 
 msgid "Sidebar Information"
 msgstr "Informazioni sulla barra laterale"
@@ -7960,13 +7960,13 @@ msgid "Participating"
 msgstr "Partecipando"
 
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
-msgstr "I tunnel costruiti da altri router tramite il tuo. Questo può variare ampiamente a seconda della domanda di rete, della tua larghezza di banda condivisa e della quantità di traffico generato localmente. Il metodo consigliato per limitare la partecipazione ai tunnel è quello di modificare la tua percentuale di condivisione sulla pagina <a  href='/config'>Configurazione larghezza di banda</a>. Puoi anche limitare il numero totale impostando <code>router.maxParticipatingTunnels=nnn</code> sulla pagina <a href='/configadvanced'>Configurazione avanzata</a>. <a href='/configstats#tunnel.participatingTunnels'>[Abilita il grafico]</a>."
+msgstr "I tunnel costruiti da altri router tramite il tuo. Questo può variare ampiamente a seconda della domanda di rete, della tua larghezza di banda condivisa e della quantità di traffico generato localmente. Il metodo consigliato per limitare la partecipazione ai tunnel è quello di modificare la tua percentuale di condivisione sulla pagina <a href='/config'>Configurazione larghezza di banda</a>. Puoi anche limitare il numero totale impostando <code>router.maxParticipatingTunnels=nnn</code> sulla pagina <a href='/configadvanced'>Configurazione avanzata</a>. <a href='/configstats#tunnel.participatingTunnels'>[Abilita il grafico]</a>."
 
 msgid "Share Ratio"
 msgstr "Rapporto di condivisione"
 
 msgid "The number of participating tunnels you route for others, divided by the total number of hops in all your exploratory and client tunnels. A number greater than 1.00 means you are contributing more tunnels to the network than you are using."
-msgstr "Il numero di tunnel a cui partecipi per gli altri, diviso per il numero totale di hop in tutti i tuoi tunnel esplorativi e client. Un numero maggiore di 1,00 significa che stai contribuendo con più tunnel alla rete di quelli che stai usando. 00 means you are contributing more tunnels to the network than you are using"
+msgstr "Il numero di tunnel a cui partecipi per gli altri, diviso per il numero totale di hop in tutti i tuoi tunnel esplorativi e client. Un numero maggiore di 1,00 significa che stai contribuendo con più tunnel alla rete di quelli che stai usando."
 
 msgid "Some basic indications of router overload:"
 msgstr "Alcuni segnali base di sovraccarico del router:"
@@ -8296,7 +8296,7 @@ msgid "Router Summary"
 msgstr "Riepilogo del Router"
 
 msgid "Jar File Dump"
-msgstr "Jar File Dump"
+msgstr "Dump file JAR"
 
 msgid "job queue stats"
 msgstr "statistiche della coda dei lavori"
@@ -8552,7 +8552,7 @@ msgid "webmail"
 msgstr "webmail"
 
 msgid "Webmail"
-msgstr "Webmail"
+msgstr "Posta web"
 
 msgid "New Install Wizard"
 msgstr "Nuova Installazione Guidata"

@@ -30,7 +30,7 @@ msgid "Downloading"
 msgstr "Endirmə"
 
 msgid "Configuring I2PSnark with I2CP options"
-msgstr "I2CP seçimləri ilə I2PSnark tənzimləməsi"
+msgstr "I2CP seçimləri ilə Torrentlər tənzimləməsi"
 
 msgid "No write permissions for data directory"
 msgstr "Verilənlər kataloqu üçün yazma icazəsi yoxdur"
@@ -63,7 +63,7 @@ msgid "Download speed limit is {0}KB/s"
 msgstr "Endirmə sürətinin limiti {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr "Qeyd: Bu dəyişikliyin tətbiqi üçün torrentlərinizi dayandırıb yenidən başlatmalı və ya I2PSnark-ı yenidən başlatmalı ola bilərsiniz."
+msgstr "Qeyd: Bu dəyişikliyin tətbiqi üçün torrentlərinizi dayandırıb yenidən başlatmalı və ya Torrentlər-ı yenidən başlatmalı ola bilərsiniz."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Giriş kanallarında +0/1 tüneldə atış rəndomlaşdırması aktivləşdirildi"
@@ -248,7 +248,7 @@ msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "XƏTA - Yaddaş bitmişdir, {0}-dan torrent yarada bilmərik"
 
 msgid "Initializing I2PSnark and opening tunnels"
-msgstr "I2PSnark tənzimlənməsi və tünlərin açılması"
+msgstr "Torrentlər tənzimlənməsi və tünlərin açılması"
 
 #, java-format
 msgid "Torrent added and started: {0}"
@@ -384,7 +384,7 @@ msgid "Download finished: {0}"
 msgstr "Endirmə tamamlandı: {0}"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrentlər"
 
 #, java-format
 msgid "Starting torrent: {0}"
@@ -1159,13 +1159,13 @@ msgid "Auto start torrents"
 msgstr "Torrentləri avtomatik başlamaq"
 
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "Torrentləri əlavə etdikdə və I2PSnark başladığında avtomatik olaraq yenidən başlamaq"
+msgstr "Torrentləri əlavə etdikdə və Torrentlər başladığında avtomatik olaraq yenidən başlamaq"
 
 msgid "Startup delay"
 msgstr "Başlama gecikməsi"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "I2PSnark başlandığında avtomatik başlanan torrentlərin yüklənməsi qədər neçə vaxt keçir"
+msgstr "Torrentlər başlandığında avtomatik başlanan torrentlərin yüklənməsi qədər neçə vaxt keçir"
 
 msgid "minutes"
 msgstr "dakika"
@@ -1261,7 +1261,7 @@ msgid "Add"
 msgstr "Əlavə Et"
 
 msgid "Select trackers for removal from I2PSnark's known list"
-msgstr "Tanınmış I2PSnark siyahısından çıxarılması üçün trackerləri seçin"
+msgstr "Tanınmış Torrentlər siyahısından çıxarılması üçün trackerləri seçin"
 
 msgid "Website URL"
 msgstr "Veb-sayt URL"
@@ -1391,7 +1391,7 @@ msgid "Only I2P trackers will be used; non-I2P trackers are displayed for inform
 msgstr "Yalnız I2P trackerləri istifadə olunacaq; I2P olmayan trackerlər yalnız məlumat verilmək üçün göstərilir"
 
 msgid "Tracker"
-msgstr "Tracker"
+msgstr "İzləyici"
 
 msgid "Web Seeds"
 msgstr "Veb Tohumları"

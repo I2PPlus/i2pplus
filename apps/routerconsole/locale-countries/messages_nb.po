@@ -1,13 +1,7 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 msgid ""
-msgstr ""
-"Language: nb\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
+msgstr "Language: nb\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n != 1);\n"
 msgid "Anonymous Proxy"
 msgstr "Anonym mellomtjener"
 
@@ -18,7 +12,7 @@ msgid "Andorra"
 msgstr "Andorra"
 
 msgid "United Arab Emirates"
-msgstr "United Arab Emirates"
+msgstr "De forente arabiske emirater"
 
 msgid "Afghanistan"
 msgstr "Afghanistan"
@@ -36,7 +30,7 @@ msgid "Armenia"
 msgstr "Armenia"
 
 msgid "Netherlands Antilles"
-msgstr "Netherlands Antilles"
+msgstr "De nederlandske antiller"
 
 msgid "Angola"
 msgstr "Angola"
@@ -45,16 +39,16 @@ msgid "Asia/Pacific Region"
 msgstr "Asia/Stillehavsregionen"
 
 msgid "Antarctica"
-msgstr "Antarctica"
+msgstr "Antarktis"
 
 msgid "Argentina"
 msgstr "Argentina"
 
 msgid "American Samoa"
-msgstr "American Samoa"
+msgstr "Amerikansk Samoa"
 
 msgid "Austria"
-msgstr "Austria"
+msgstr "Østerrike"
 
 msgid "Australia"
 msgstr "Australia"
@@ -66,7 +60,7 @@ msgid "Åland Islands"
 msgstr "Åland"
 
 msgid "Azerbaijan"
-msgstr "Azerbaijan"
+msgstr "Aserbajdsjan"
 
 msgid "Bosnia and Herzegovina"
 msgstr "Bosnia og Herzegovina"
@@ -78,7 +72,7 @@ msgid "Bangladesh"
 msgstr "Bangladesh"
 
 msgid "Belgium"
-msgstr "Belgium"
+msgstr "Belgia"
 
 msgid "Burkina Faso"
 msgstr "Burkina Faso"
@@ -111,7 +105,7 @@ msgid "Bonaire"
 msgstr "Boneiru"
 
 msgid "Brazil"
-msgstr "Brazil"
+msgstr "Brasil "
 
 msgid "Bahamas"
 msgstr "Bahamas"
@@ -120,13 +114,13 @@ msgid "Bhutan"
 msgstr "Bhutan"
 
 msgid "Bouvet Island"
-msgstr "Bouvet Island"
+msgstr "Bouvetøya"
 
 msgid "Botswana"
 msgstr "Botswana"
 
 msgid "Belarus"
-msgstr "Belarus"
+msgstr "Hviterussland"
 
 msgid "Belize"
 msgstr "Belize"
@@ -138,28 +132,28 @@ msgid "Cocos (Keeling) Islands"
 msgstr "Kokos (Keeling) -øyene"
 
 msgid "Congo"
-msgstr "Congo"
+msgstr "Kongo"
 
 msgid "Central African Republic"
 msgstr "Den sentralafrikanske republikk"
 
 msgid "Switzerland"
-msgstr "Switzerland"
+msgstr "Sveits"
 
 msgid "Cote D'Ivoire"
-msgstr "Cote D'Ivoire"
+msgstr "Elfenbenskysten"
 
 msgid "Cook Islands"
-msgstr "Cook Islands"
+msgstr "Cookøyene"
 
 msgid "Chile"
 msgstr "Chile"
 
 msgid "Cameroon"
-msgstr "Cameroon"
+msgstr "Kamerun"
 
 msgid "China"
-msgstr "China"
+msgstr "Kina"
 
 msgid "Colombia"
 msgstr "Colombia"
@@ -174,7 +168,7 @@ msgid "Cuba"
 msgstr "Cuba"
 
 msgid "Cape Verde"
-msgstr "Cape Verde"
+msgstr "Kapp Verde"
 
 msgid "Curaçao"
 msgstr "Curaçao"
@@ -183,7 +177,7 @@ msgid "Christmas Island"
 msgstr "Christmasøya"
 
 msgid "Cyprus"
-msgstr "Cyprus"
+msgstr "Kypros"
 
 msgid "Czech Republic"
 msgstr "Tsjekkia"
@@ -204,13 +198,13 @@ msgid "Dominican Republic"
 msgstr "Den dominikanske republikk"
 
 msgid "Algeria"
-msgstr "Algeria"
+msgstr "Algerie"
 
 msgid "Ecuador"
 msgstr "Ecuador"
 
 msgid "Estonia"
-msgstr "Estonia"
+msgstr "Estland"
 
 msgid "Egypt"
 msgstr "Egypt"
@@ -225,7 +219,7 @@ msgid "Spain"
 msgstr "Spania"
 
 msgid "Ethiopia"
-msgstr "Ethiopia"
+msgstr "Etiopia"
 
 msgid "European Union"
 msgstr "Den europeiske union"
@@ -237,13 +231,13 @@ msgid "Fiji"
 msgstr "Fiji"
 
 msgid "Falkland Islands (Malvinas)"
-msgstr "Falkland Islands (Malvinas)"
+msgstr "Pund Falklandsøyene (Malvinas)"
 
 msgid "Micronesia"
 msgstr "Mikronesia"
 
 msgid "Faroe Islands"
-msgstr "Faroe Islands"
+msgstr "Færøyene"
 
 msgid "France"
 msgstr "Frankrike"
@@ -261,7 +255,7 @@ msgid "Georgia"
 msgstr "Georgia"
 
 msgid "French Guiana"
-msgstr "French Guiana"
+msgstr "Fransk Guiana"
 
 msgid "Guernsey"
 msgstr "Guernsey"
@@ -312,13 +306,13 @@ msgid "Honduras"
 msgstr "Honduras"
 
 msgid "Croatia"
-msgstr "Croatia"
+msgstr "Kroatia"
 
 msgid "Haiti"
 msgstr "Haiti"
 
 msgid "Hungary"
-msgstr "Hungary"
+msgstr "Ungarn"
 
 msgid "Indonesia"
 msgstr "Indonesia"
@@ -336,10 +330,10 @@ msgid "India"
 msgstr "India"
 
 msgid "British Indian Ocean Territory"
-msgstr "British Indian Ocean Territory"
+msgstr "Britiske territorier i Indiahavet"
 
 msgid "Iraq"
-msgstr "Iraq"
+msgstr "Irak"
 
 msgid "Iran"
 msgstr "Iran"
@@ -366,16 +360,16 @@ msgid "Kenya"
 msgstr "Kenya"
 
 msgid "Kyrgyzstan"
-msgstr "Kyrgyzstan"
+msgstr "Kirgisistan"
 
 msgid "Cambodia"
-msgstr "Cambodia"
+msgstr "Kambodsja"
 
 msgid "Kiribati"
 msgstr "Kiribati"
 
 msgid "Comoros"
-msgstr "Comoros"
+msgstr "Komorene"
 
 msgid "Saint Kitts and Nevis"
 msgstr "Saint Kitts og Nevis"
@@ -390,19 +384,19 @@ msgid "Kuwait"
 msgstr "Kuwait"
 
 msgid "Cayman Islands"
-msgstr "Cayman Islands"
+msgstr "Caymanøyene"
 
 msgid "Kazakhstan"
-msgstr "Kazakhstan"
+msgstr "Kasakhstan "
 
 msgid "Lao People's Democratic Republic"
-msgstr "Lao People's Democratic Republic"
+msgstr "Laos"
 
 msgid "Lebanon"
-msgstr "Lebanon"
+msgstr "Libanon"
 
 msgid "Saint Lucia"
-msgstr "Saint Lucia"
+msgstr "St. Lucia"
 
 msgid "Liechtenstein"
 msgstr "Liechtenstein"
@@ -417,7 +411,7 @@ msgid "Lesotho"
 msgstr "Lesotho"
 
 msgid "Lithuania"
-msgstr "Lithuania"
+msgstr "Litauen"
 
 msgid "Luxembourg"
 msgstr "Luxembourg"
@@ -429,7 +423,7 @@ msgid "Libya"
 msgstr "Libya"
 
 msgid "Morocco"
-msgstr "Morocco"
+msgstr "Marokko"
 
 msgid "Monaco"
 msgstr "Monaco"
@@ -444,10 +438,10 @@ msgid "Saint Martin"
 msgstr "Saint Martin"
 
 msgid "Madagascar"
-msgstr "Madagascar"
+msgstr "Madagaskar"
 
 msgid "Marshall Islands"
-msgstr "Marshall Islands"
+msgstr "Marshalløyene"
 
 msgid "Macedonia"
 msgstr "Makedonia"
@@ -456,7 +450,7 @@ msgid "Mali"
 msgstr "Mali"
 
 msgid "Myanmar"
-msgstr "Myanmar"
+msgstr "Burma"
 
 msgid "Mongolia"
 msgstr "Mongolia"
@@ -483,7 +477,7 @@ msgid "Mauritius"
 msgstr "Mauritius"
 
 msgid "Maldives"
-msgstr "Maldives"
+msgstr "Maldivene"
 
 msgid "Malawi"
 msgstr "Malawi"
@@ -492,22 +486,22 @@ msgid "Mexico"
 msgstr "Mexico"
 
 msgid "Malaysia"
-msgstr "Malaysia"
+msgstr "Malaysia "
 
 msgid "Mozambique"
-msgstr "Mozambique"
+msgstr "Mosambik "
 
 msgid "Namibia"
 msgstr "Namibia"
 
 msgid "New Caledonia"
-msgstr "New Caledonia"
+msgstr "Ny-Caledonia"
 
 msgid "Niger"
 msgstr "Niger"
 
 msgid "Norfolk Island"
-msgstr "Norfolk Island"
+msgstr "Norfolkøya"
 
 msgid "Nigeria"
 msgstr "Nigeria"
@@ -543,13 +537,13 @@ msgid "Peru"
 msgstr "Peru"
 
 msgid "French Polynesia"
-msgstr "French Polynesia"
+msgstr "Fransk Polynesia"
 
 msgid "Papua New Guinea"
-msgstr "Papua New Guinea"
+msgstr "Papua Ny-Guinea"
 
 msgid "Philippines"
-msgstr "Philippines"
+msgstr "Filippinene"
 
 msgid "Pakistan"
 msgstr "Pakistan"
@@ -567,7 +561,7 @@ msgid "Puerto Rico"
 msgstr "Puerto Rico"
 
 msgid "Palestinian Territory"
-msgstr "Palestinian Territory"
+msgstr "Det palestinske området"
 
 msgid "Portugal"
 msgstr "Portugal"
@@ -591,19 +585,19 @@ msgid "Serbia"
 msgstr "Serbia"
 
 msgid "Russian Federation"
-msgstr "Russian Federation"
+msgstr "Den russiske føderasjonen"
 
 msgid "Rwanda"
 msgstr "Rwanda"
 
 msgid "Saudi Arabia"
-msgstr "Saudi Arabia"
+msgstr "Saudi-Arabia "
 
 msgid "Solomon Islands"
-msgstr "Solomon Islands"
+msgstr "Salomonøyene"
 
 msgid "Seychelles"
-msgstr "Seychelles"
+msgstr "Seychellene"
 
 msgid "Sudan"
 msgstr "Sudan"
@@ -639,7 +633,7 @@ msgid "Somalia"
 msgstr "Somalia"
 
 msgid "Suriname"
-msgstr "Suriname"
+msgstr "Surinam"
 
 msgid "South Sudan"
 msgstr "Sør-Sudan"
@@ -660,13 +654,13 @@ msgid "Swaziland"
 msgstr "Swaziland"
 
 msgid "Turks and Caicos Islands"
-msgstr "Turks and Caicos Islands"
+msgstr "Turks- og Caicosøyene"
 
 msgid "Chad"
-msgstr "Chad"
+msgstr "Tsjad"
 
 msgid "French Southern Territories"
-msgstr "French Southern Territories"
+msgstr "De franske sørterritorier"
 
 msgid "Togo"
 msgstr "Togo"
@@ -675,13 +669,13 @@ msgid "Thailand"
 msgstr "Thailand"
 
 msgid "Tajikistan"
-msgstr "Tajikistan"
+msgstr "Tadsjikistan"
 
 msgid "Tokelau"
 msgstr "Tokelau"
 
 msgid "Timor-Leste"
-msgstr "Timor-Leste"
+msgstr "Øst-Timor"
 
 msgid "Turkmenistan"
 msgstr "Turkmenistan"
@@ -693,7 +687,7 @@ msgid "Tonga"
 msgstr "Tonga"
 
 msgid "Turkey"
-msgstr "Turkey"
+msgstr "Tyrkia"
 
 msgid "Trinidad and Tobago"
 msgstr "Trinidad og Tobago"
@@ -714,7 +708,7 @@ msgid "Uganda"
 msgstr "Uganda"
 
 msgid "United States Minor Outlying Islands"
-msgstr "United States Minor Outlying Islands"
+msgstr "USAs ytre småøyer"
 
 msgid "United States"
 msgstr "USA"
@@ -723,19 +717,19 @@ msgid "Uruguay"
 msgstr "Uruguay"
 
 msgid "Uzbekistan"
-msgstr "Uzbekistan"
+msgstr "Usbekistan"
 
 msgid "Vatican"
 msgstr "Vatikanstaten"
 
 msgid "Saint Vincent and the Grenadines"
-msgstr "Saint Vincent and the Grenadines"
+msgstr "St. Vincent og Grenadinene"
 
 msgid "Venezuela"
 msgstr "Venezuela"
 
 msgid "Virgin Islands"
-msgstr "Virgin Islands"
+msgstr "Jomfruøyene"
 
 msgid "Vietnam"
 msgstr "Vietnam"
@@ -744,7 +738,7 @@ msgid "Vanuatu"
 msgstr "Vanuatu"
 
 msgid "Wallis and Futuna"
-msgstr "Wallis and Futuna"
+msgstr "Wallis- og Futunaøyene"
 
 msgid "Samoa"
 msgstr "Samoa"
@@ -753,7 +747,7 @@ msgid "Kosovo"
 msgstr "Kosovo"
 
 msgid "Yemen"
-msgstr "Yemen"
+msgstr "Jemen"
 
 msgid "Mayotte"
 msgstr "Mayotte"

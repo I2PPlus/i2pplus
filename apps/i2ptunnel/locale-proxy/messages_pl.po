@@ -32,7 +32,7 @@ msgid "Destination LeaseSet not found"
 msgstr "Nie znaleziono docelowego zestawu dzierżawy"
 
 msgid "Host"
-msgstr "Host"
+msgstr "Gospodarz"
 
 msgid "Base32"
 msgstr "Podstawa 32"

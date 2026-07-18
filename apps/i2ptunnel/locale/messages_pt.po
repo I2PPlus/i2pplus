@@ -117,13 +117,13 @@ msgid "HTTP server"
 msgstr "Servidor HTTP"
 
 msgid "SOCKS 4/4a/5 proxy"
-msgstr "SOCKS 4/4a/5 proxy"
+msgstr "Proxy MEIAS 4/4a/5"
 
 msgid "SOCKS IRC proxy"
-msgstr "SOCKS IRC proxy"
+msgstr "Proxy IRC SOCKS"
 
 msgid "CONNECT/SSL/HTTPS proxy"
-msgstr "CONNECT/SSL/HTTPS proxy"
+msgstr "Proxy CONNECT/SSL/HTTPS"
 
 msgid "IRC server"
 msgstr "Servidor IRC"
@@ -135,7 +135,7 @@ msgid "Streamr server"
 msgstr "Servidor Streamr"
 
 msgid "HTTP bidir"
-msgstr "HTTP bidir"
+msgstr "Bidir HTTP"
 
 msgid "Host not set"
 msgstr "Anfitrião não definido"
@@ -1026,19 +1026,19 @@ msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immu
 msgstr "Ativar cabeçalhos de controle de cache (sem cache para html, xml, json e texto, imutável para todo o resto)"
 
 msgid "Cache-Control"
-msgstr "Cache-Control"
+msgstr "Controle de cache"
 
 msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
 msgstr "Defina o cabeçalho Referrer-Policy para 'same-origin' para arquivos html, xml, json e texto"
 
 msgid "Referrer-Policy"
-msgstr "Referrer-Policy"
+msgstr "Política de referência"
 
 msgid "Set the X-Content-Type-Options header to 'nosniff'"
 msgstr "Defina o cabeçalho X-Content-Type-Options para 'nosniff'"
 
 msgid "X-Content-Type-Options"
-msgstr "X-Content-Type-Options"
+msgstr "Opções de tipo de conteúdo X"
 
 #, java-format
 msgid "Initializing Tunnel Manager{0}"
@@ -1126,7 +1126,7 @@ msgid "Base32 Address"
 msgstr "Endereço Base32"
 
 msgid "Offline"
-msgstr "Offline"
+msgstr "Off-line"
 
 msgid "No Preview"
 msgstr "Sem visualização"
@@ -1352,7 +1352,7 @@ msgid "Virtual Host"
 msgstr "Anfitrião Virtual"
 
 msgid "Via SSL?"
-msgstr "Via SSL?"
+msgstr "Através de SSL?"
 
 msgid "Test HTTPS server through I2P"
 msgstr "Teste o servidor HTTPS através de I2P"

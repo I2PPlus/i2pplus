@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Geïmporteerd uit bestand"
 
 msgid "Manually added via SusiDNS"
-msgstr "Handmatig toegevoegd via SusiDNS"
+msgstr "Handmatig toegevoegd via DNS"
 
 msgid "Manually added"
 msgstr "Handmatig toegevoegd"
@@ -66,7 +66,7 @@ msgstr "Sleutel"
 
 #, java-format
 msgid "Type {0}"
-msgstr "Type {0}"
+msgstr "Typ {0}"
 
 msgid "DSA 1024 bit"
 msgstr "DSA 1024-bits"
@@ -277,7 +277,7 @@ msgid "Router"
 msgstr "Router"
 
 msgid "Master"
-msgstr "Master"
+msgstr "Meester"
 
 msgid "Private"
 msgstr "Privé"
@@ -289,7 +289,7 @@ msgid "Subscriptions"
 msgstr "Abonnementen"
 
 msgid "Blacklist"
-msgstr "Blacklist"
+msgstr "Zwarte lijst"
 
 msgid "Configuration"
 msgstr "Configuratie"
@@ -349,10 +349,10 @@ msgid "Encryption"
 msgstr "Versleuteling"
 
 msgid "Link (b32)"
-msgstr "Link (b32)"
+msgstr "Verbinding (b32)"
 
 msgid "Destination"
-msgstr "Destination"
+msgstr "Bestemming"
 
 msgid "Added"
 msgstr "Toegevoegd"
@@ -397,7 +397,7 @@ msgid "Select file"
 msgstr "Selecteer bestand"
 
 msgid "blacklist"
-msgstr "blacklist"
+msgstr "zwarte lijst"
 
 msgid "Blacklist Management"
 msgstr "Blacklist Beheer"
@@ -415,7 +415,7 @@ msgid "configuration"
 msgstr "configuratie"
 
 msgid "Hints"
-msgstr "Hints"
+msgstr "Tips"
 
 msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
 msgstr "Bestands- en mappaden zijn hier relatief ten opzichte van de werkmap van het adresboek, die normaal gesproken ~/.i2p/addressbook/ (Linux) of %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows) is."
@@ -592,7 +592,7 @@ msgid "Most recent (excluding bad domains)"
 msgstr "Meest recent (exclusief slechte domeinen)"
 
 msgid "subscriptions"
-msgstr "subscriptions"
+msgstr "abonnementen"
 
 msgid "The subscription file contains a list of i2p URLs."
 msgstr "Het subscription bestand bevat een lijst met i2p URLs."
@@ -607,13 +607,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Zie de FAQ voor een lijst met subscription URLs."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Als SusiDNS is geconfigureerd om het adresboek van uw router te publiceren, verschijnen de vermeldingen in uw gepubliceerde adresboek en worden ze opgeslagen in een hosts.txt-bestand om te delen."
+msgstr "Als DNS is geconfigureerd om het adresboek van uw router te publiceren, verschijnen de vermeldingen in uw gepubliceerde adresboek en worden ze opgeslagen in een hosts.txt-bestand om te delen."
 
 msgid "Published Addressbook"
 msgstr "Gepubliceerd adresboek"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "Om SusiDNS te configureren om het adresboek van uw router naar uw gepubliceerde adresboek te pushen, stelt u 'should_publish=true' in op de configuratiepagina."
+msgstr "Om DNS te configureren om het adresboek van uw router naar uw gepubliceerde adresboek te pushen, stelt u 'should_publish=true' in op de configuratiepagina."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "Alle hosts die zijn afgeleid van abonnementen verschijnen in dit adresboek, naast de hosts die u hier handmatig of aan uw hoofdadresboek toevoegt."
@@ -664,7 +664,7 @@ msgid "for websites"
 msgstr "voor websites"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Als u SusiDNS configureert om het adresboek van uw router te publiceren, zal het een hosts.txt-bestand exporteren dat alle hosts bevat (standaard naar de hoofdmap van uw eepsite)."
+msgstr "Als u DNS configureert om het adresboek van uw router te publiceren, zal het een hosts.txt-bestand exporteren dat alle hosts bevat (standaard naar de hoofdmap van uw eepsite)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "Adressen die handmatig aan uw masteradresboek zijn toegevoegd, worden samengevoegd met uw routeradresboek."

@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Importer d’un fichier"
 
 msgid "Manually added via SusiDNS"
-msgstr "Ajouté manuellement par SusiDNS"
+msgstr "Ajouté manuellement par DNS"
 
 msgid "Manually added"
 msgstr "Ajouté manuellement"
@@ -66,7 +66,7 @@ msgstr "Clé"
 
 #, java-format
 msgid "Type {0}"
-msgstr "Type {0}"
+msgstr "Tapez {0}"
 
 msgid "DSA 1024 bit"
 msgstr "DSA 1024 bits"
@@ -433,7 +433,7 @@ msgid "Use the private addressbook for private destinations, these are not publi
 msgstr "Utilisez le carnet d'adresses privé pour les destinations privées, celles-ci ne sont pas publiées.Utiliser le carnet d’adresses privé pour les destinations privées. Elles ne sont pas publiées."
 
 msgid "Options"
-msgstr "Options"
+msgstr "Possibilités"
 
 msgid "File containing the list of subscriptions URLs (no need to change)"
 msgstr "Fichier contenant la liste des URL des abonnements (pas besoin de changer)Fichier contenant la liste des URL d’abonnement (inutile de le modifier)"
@@ -529,7 +529,7 @@ msgid "Last Modified"
 msgstr "Dernière modification"
 
 msgid "Notes"
-msgstr "Notes"
+msgstr "Remarques"
 
 msgid "Add notes about domain"
 msgstr "Ajouter des notes sur le domaine"
@@ -568,7 +568,7 @@ msgid "The addressbook application regularly polls your subscriptions and merges
 msgstr "L'application de carnet d'adresses interroge régulièrement vos abonnements et fusionne leur contenu dans votre carnet d'adresses « routeur ».L’application carnet d’adresses interroge régulièrement vos abonnements et fusionne leur contenu dans le carnet d’adresses de votre routeur."
 
 msgid "Then it merges your \"master\" address book into the router address book as well."
-msgstr "Ensuite, il fusionne également votre carnet d'adresses « maître » dans le carnet d'adresses du routeur.Puis elle fusionne aussi votre carnet d’adresses « maître » dans le carnet d’adresses du routeur. "
+msgstr "Ensuite, il fusionne également votre carnet d'adresses « maître » dans le carnet d'adresses du routeur.Puis elle fusionne aussi votre carnet d’adresses « maître » dans le carnet d’adresses du routeur."
 
 msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
 msgstr "S'il est configuré, le carnet d'adresses du routeur est désormais écrit dans le carnet d'adresses \"publié\", qui sera accessible au public si vous utilisez un site eep.Si configuré ainsi, le carnet d’adresses du routeur est alors écrit vers le carnet d’adresses « publié » qui sera proposé publiquement si vous faites tourner un site eep."
@@ -607,13 +607,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Voir la FAQ pour une liste d’URL d’abonnement."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Si SusiDNS est configuré pour publier le carnet d'adresses de votre routeur, les entrées apparaîtront dans votre carnet d'adresses publié et enregistrées dans un fichier hosts.txt pour le partage.Si SusiDNS est configurée pour publier votre Carnet d'adresses du routeur, les entrées apparaîtront dans votre Carnet d'adresses publié et seront enregistrées dans un fichier hosts.txt pour le partage."
+msgstr "Si DNS est configuré pour publier le carnet d'adresses de votre routeur, les entrées apparaîtront dans votre carnet d'adresses publié et enregistrées dans un fichier hosts.txt pour le partage.Si DNS est configurée pour publier votre Carnet d'adresses du routeur, les entrées apparaîtront dans votre Carnet d'adresses publié et seront enregistrées dans un fichier hosts.txt pour le partage."
 
 msgid "Published Addressbook"
 msgstr "Carnet d'adresses publié"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "Pour configurer SusiDNS afin qu'il transmette le carnet d'adresses de votre routeur à votre carnet d'adresses publié, définissez « should_publish=true » sur la page de configuration.Pour configurer SusiDNS pour pousser votre Carnet d'adresses du routeur dans votre Carnet d'adresses publié, définir 'should_publish=true' sur la page de configuration."
+msgstr "Pour configurer DNS afin qu'il transmette le carnet d'adresses de votre routeur à votre carnet d'adresses publié, définissez « should_publish=true » sur la page de configuration.Pour configurer DNS pour pousser votre Carnet d'adresses du routeur dans votre Carnet d'adresses publié, définir 'should_publish=true' sur la page de configuration."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "Tous les hôtes dérivés des abonnements apparaîtront dans ce carnet d'adresses, en plus de ceux que vous ajoutez manuellement ici ou à votre carnet d'adresses principal.Tous les hôtes provenant d'abonnements apparaîtront dans ce carnet d'adresses, en plus de ceux que vous ajouterez manuel ici ou dans votre Carnet d'adresses maître."
@@ -664,7 +664,7 @@ msgid "for websites"
 msgstr "pour les sites Web"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Si vous configurez SusiDNS pour publier le carnet d'adresses de votre routeur, il exportera un fichier hosts.txt contenant tous les hôtes (par défaut à la racine de votre eepsite).Si vous configurez SusiDNS pour publier votre Carnet d'adresse du routeur, elle exportera un fichier hosts.txt contenant tous les hôtes (par défaut sur la racine de votre site eep)."
+msgstr "Si vous configurez DNS pour publier le carnet d'adresses de votre routeur, il exportera un fichier hosts.txt contenant tous les hôtes (par défaut à la racine de votre eepsite).Si vous configurez DNS pour publier votre Carnet d'adresse du routeur, elle exportera un fichier hosts.txt contenant tous les hôtes (par défaut sur la racine de votre site eep)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "les adresses ajoutées manuellement à votre carnet d'adresses principal fusionneront avec le carnet d'adresses de votre routeur.Les adresses ajoutées manuellement dans votre Carnet d'adresses maître seront fusionnées avec votre Carnet d'adresses du routeur."

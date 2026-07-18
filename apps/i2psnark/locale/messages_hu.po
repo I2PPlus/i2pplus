@@ -30,7 +30,7 @@ msgid "Downloading"
 msgstr "Letöltés"
 
 msgid "Configuring I2PSnark with I2CP options"
-msgstr "Az I2PSnark konfigurálása I2CP opciókkal"
+msgstr "Az Torrentok konfigurálása I2CP opciókkal"
 
 msgid "No write permissions for data directory"
 msgstr "Nincs írási jogosultság az adatkönyvtárra"
@@ -63,7 +63,7 @@ msgid "Download speed limit is {0}KB/s"
 msgstr "Letöltési sebesség korlátja {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr "Megjegyzés: Lehet, hogy leállítsa és újraindítja a torrenteket, vagy újraindítja az I2PSnarkot, hogy ez a változás érvénybe lépjen."
+msgstr "Megjegyzés: Lehet, hogy leállítsa és újraindítja a torrenteket, vagy újraindítja az Torrentsot, hogy ez a változás érvénybe lépjen."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Engedélyezve van a +0/1 tunnel ugrik véletlenszerűsítése a bejövő tunnelekön"
@@ -248,7 +248,7 @@ msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "HIBA – Elfogyott a memória, nem lehet torrentet létrehozni innen: {0}HIBA - nincs több memória, torrent létrehozása sikertelen a következőből: {0}"
 
 msgid "Initializing I2PSnark and opening tunnels"
-msgstr "Az I2PSnark inicializálása és alagutak megnyitása"
+msgstr "Az Torrentok inicializálása és alagutak megnyitása"
 
 #, java-format
 msgid "Torrent added and started: {0}"
@@ -384,7 +384,7 @@ msgid "Download finished: {0}"
 msgstr "A letöltés befejeződött: {0}"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrentok"
 
 #, java-format
 msgid "Starting torrent: {0}"
@@ -1159,13 +1159,13 @@ msgid "Auto start torrents"
 msgstr "Torrentek automatikus indítása"
 
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "A torrentek automatikus indítása hozzáadásakor és újraindítás az I2PSnark indításakor"
+msgstr "A torrentek automatikus indítása hozzáadásakor és újraindítás az Torrentok indításakor"
 
 msgid "Startup delay"
 msgstr "Indítási késleltetés"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Mennyi idő múlva töltődnek be az automatikusan induló torrentek, amikor az I2PSnark elindul"
+msgstr "Mennyi idő múlva töltődnek be az automatikusan induló torrentek, amikor az Torrentok elindul"
 
 msgid "minutes"
 msgstr "perc"
@@ -1261,7 +1261,7 @@ msgid "Add"
 msgstr "Hozzáadás"
 
 msgid "Select trackers for removal from I2PSnark's known list"
-msgstr "Válassza ki az eltávolítani kívánt nyomkövetőket az I2PSnark ismert listájáról"
+msgstr "Válassza ki az eltávolítani kívánt nyomkövetőket az Torrentok ismert listájáról"
 
 msgid "Website URL"
 msgstr "Weboldal URL"

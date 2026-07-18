@@ -51,7 +51,7 @@ msgid "unknown"
 msgstr "未知"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr "为了保护您的隐私，SusiMail正在阻止此HTML消息中的JavaScript和任何远程内容。"
+msgstr "为了保护您的隐私，网页邮件正在阻止此HTML消息中的JavaScript和任何远程内容。"
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "启用JavaScript以获得增强的展示效果和额外功能。"
@@ -186,7 +186,7 @@ msgid "Login"
 msgstr "登录"
 
 msgid "Loading messages, please wait..."
-msgstr "加载邮件中，请稍"
+msgstr "加载邮件中，请稍候..."
 
 #, java-format
 msgid "1 message"
@@ -380,7 +380,7 @@ msgid "Message is spam"
 msgstr "邮件是垃圾邮件"
 
 msgid "Message body not downloaded"
-msgstr "消息ID无效"
+msgstr "消息正文未下载"
 
 msgid "First"
 msgstr "第一页"

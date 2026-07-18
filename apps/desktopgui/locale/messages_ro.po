@@ -9,7 +9,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 
 msgid "Start I2P"
-msgstr "Start I2P"
+msgstr "Pornire I2P"
 
 msgid "I2P is starting!"
 msgstr "I2P se pornește!"
@@ -27,10 +27,10 @@ msgid "Disable system tray"
 msgstr "Dezactivați tava de sistem"
 
 msgid "Restart I2P"
-msgstr "Restart I2P"
+msgstr "Repornire I2P"
 
 msgid "Stop I2P"
-msgstr "Stop I2P"
+msgstr "Oprire I2P"
 
 msgid "Restart I2P Immediately"
 msgstr "Repornește I2P imediat"

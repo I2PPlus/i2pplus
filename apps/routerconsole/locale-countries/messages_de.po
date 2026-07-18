@@ -1,13 +1,7 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 msgid ""
-msgstr ""
-"Language: de\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
+msgstr "Language: de\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n != 1);\n"
 msgid "Anonymous Proxy"
 msgstr "Anonymer Proxy"
 
@@ -96,7 +90,7 @@ msgid "Benin"
 msgstr "Benin"
 
 msgid "Saint Barthélemy"
-msgstr "Saint Barthélemy"
+msgstr "St. Barthélemy"
 
 msgid "Bermuda"
 msgstr "Bermuda"
@@ -126,7 +120,7 @@ msgid "Botswana"
 msgstr "Botswana"
 
 msgid "Belarus"
-msgstr "Belarus"
+msgstr "Weißrussland"
 
 msgid "Belize"
 msgstr "Belize"
@@ -306,7 +300,7 @@ msgid "Guyana"
 msgstr "Guyana"
 
 msgid "Hong Kong"
-msgstr "Hong Kong"
+msgstr "Hongkong"
 
 msgid "Honduras"
 msgstr "Honduras"
@@ -330,7 +324,7 @@ msgid "Israel"
 msgstr "Israel"
 
 msgid "Isle of Man"
-msgstr "Isle of Man"
+msgstr "Insel Man"
 
 msgid "India"
 msgstr "Indien"
@@ -582,7 +576,7 @@ msgid "Qatar"
 msgstr "Katar"
 
 msgid "Réunion"
-msgstr "Réunion"
+msgstr "Wiedervereinigung"
 
 msgid "Romania"
 msgstr "Rumänien"

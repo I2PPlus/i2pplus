@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Importert fra fil"
 
 msgid "Manually added via SusiDNS"
-msgstr "Tilføjet manuelt via SusiDNS"
+msgstr "Tilføjet manuelt via DNS"
 
 msgid "Manually added"
 msgstr "Manuelt lagt til"
@@ -337,7 +337,7 @@ msgid "all"
 msgstr "fjern filter"
 
 msgid "Info"
-msgstr "Info"
+msgstr "Informasjon"
 
 msgid "Type"
 msgstr "Type"
@@ -607,13 +607,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Se FAQ-en for en liste over abonnement-URLs."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Hvis SusiDNS er konfigurert til å publisere din Ruter adressebok, vil inntrykkene dukke opp i din Publiserte adressebok og lagres til en hosts.txt-fil for deling."
+msgstr "Hvis DNS er konfigurert til å publisere din Ruter adressebok, vil inntrykkene dukke opp i din Publiserte adressebok og lagres til en hosts.txt-fil for deling."
 
 msgid "Published Addressbook"
 msgstr "Publisert Adressebok"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "For å konfigurere SusiDNS til å sende din Ruter adressebok til din Publiserte adressebok, sett 'should_publish=true' på konfigurasjons siden."
+msgstr "For å konfigurere DNS til å sende din Ruter adressebok til din Publiserte adressebok, sett 'should_publish=true' på konfigurasjons siden."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "Alle vertene som følger av abonnementer vil dukke opp i denne adresseboken, i tillegg til alle du legger til manuelt her eller i din Hoved adressebok."
@@ -664,7 +664,7 @@ msgid "for websites"
 msgstr "for nettsider"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Hvis du konfigurerer SusiDNS til å publisere din Ruter adressebok, vil den eksportere en hosts.txt-fil som inneholder alle vertene (som standard til roten av din eepside)."
+msgstr "Hvis du konfigurerer DNS til å publisere din Ruter adressebok, vil den eksportere en hosts.txt-fil som inneholder alle vertene (som standard til roten av din eepside)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "Adresser som legges til manuelt i din Hoved adressebok vil bli slått sammen med din Ruter adressebok."

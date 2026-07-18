@@ -123,10 +123,10 @@ msgid "SOCKS 4/4a/5 proxy"
 msgstr "SOCKS 4/4a/5 proxy"
 
 msgid "SOCKS IRC proxy"
-msgstr "SOCKS IRC proxy"
+msgstr "SOCKS proxy IRC"
 
 msgid "CONNECT/SSL/HTTPS proxy"
-msgstr "CONNECT/SSL/HTTPS proxy"
+msgstr "Serwer proxy CONNECT/SSL/HTTPS"
 
 msgid "IRC server"
 msgstr "Serwer IRC"
@@ -138,7 +138,7 @@ msgid "Streamr server"
 msgstr "Serwer Streamr"
 
 msgid "HTTP bidir"
-msgstr "HTTP bidir"
+msgstr "Bidir HTTP"
 
 msgid "Host not set"
 msgstr "Nie ustawiono hosta"
@@ -222,7 +222,7 @@ msgid "Specify the local port this service should be accessible from"
 msgstr "Określ port lokalny z którego usługa ma być dostępna"
 
 msgid "Host"
-msgstr "Host"
+msgstr "Gospodarz"
 
 msgid "Hostname or IP address of the target server"
 msgstr "Nazwa hosta i adres IP serwera docelowego"
@@ -1031,19 +1031,19 @@ msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immu
 msgstr "Włącz nagłówki kontroli pamięci podręcznej (brak ręki dla HTML, XML, JSON i tekst, niezmienne dla wszystkiego innego)"
 
 msgid "Cache-Control"
-msgstr "Cache-Control"
+msgstr "Kontrola pamięci podręcznej"
 
 msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
-msgstr "Ustaw nagłówek Policy Policy na „Same-origin” dla plików HTML, XML, JSON i"
+msgstr "Ustaw nagłówek Referrer-Policy na „Same-origin” dla plików HTML, XML, JSON i"
 
 msgid "Referrer-Policy"
-msgstr "Referrer-Policy"
+msgstr "Polityka dotycząca osób polecających"
 
 msgid "Set the X-Content-Type-Options header to 'nosniff'"
 msgstr "Ustaw nagłówek typu X-Content-Options na „Nosniff”"
 
 msgid "X-Content-Type-Options"
-msgstr "X-Content-Type-Options"
+msgstr "Opcje typu zawartości X"
 
 #, java-format
 msgid "Initializing Tunnel Manager{0}"
@@ -1131,7 +1131,7 @@ msgid "Base32 Address"
 msgstr "Adres Base32"
 
 msgid "Offline"
-msgstr "Offline"
+msgstr "Nieaktywny"
 
 msgid "No Preview"
 msgstr "Brak podglądu"
@@ -1345,7 +1345,7 @@ msgid "Experts only!"
 msgstr "Tylko dla zaawansowanych!"
 
 msgid "Base32"
-msgstr "Base32"
+msgstr "Baza32"
 
 msgid "Alt Base32"
 msgstr "Alternatywny Base32"

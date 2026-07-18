@@ -15,7 +15,7 @@ msgid "Banned by Router Hash"
 msgstr "Router Hash tərəfindən qadağan"
 
 msgid "Blocklist"
-msgstr "Blok siyahıu"
+msgstr "Blok siyahısı"
 
 #, java-format
 msgid "{0} ago"
@@ -26,11 +26,11 @@ msgstr "Fayldan yenidən istifadə etmək"
 
 #, java-format
 msgid "Imported {0} router infos."
-msgstr "Idxal {0} router infos."
+msgstr "{0} ruter məlumatı daxil edildi."
 
 #, java-format
 msgid "Imported {0} router infos ({1} errors)."
-msgstr "Idxal {0} router infos ({1} səhvlər)."
+msgstr "{0} ruter məlumatı daxil edildi ({1} səhv)."
 
 msgid "Initiating Reseed"
 msgstr "Reseed işə salınır"
@@ -45,11 +45,11 @@ msgstr[1] "Reseed Hostlarından {0} router Infos əldə edildi"
 msgid "Acquired only 1 router info from reseed hosts"
 msgid_plural "Acquired only {0} router infos from reseed hosts"
 msgstr[0] "Reseed Hostlarından yalnız 1 router məlumatı əldə etdi"
-msgstr[1] "Resed Hostlarından yalnız {0} Router Infos əldə edildi"
+msgstr[1] "Reseed Hostlarından yalnız {0} ruter məlumatı əldə edildi"
 
 #, java-format
 msgid "{0}Reseed{1} failed:"
-msgstr "{0}Yenidən baxılma{1} alınmadı:"
+msgstr "{0}Yenidən yükləmə{1} alınmadı:"
 
 #, java-format
 msgid "For assistance, see the {0}"
@@ -128,7 +128,7 @@ msgid "unknown"
 msgstr "tanınmayan"
 
 msgid "Floodfill"
-msgstr "Floodfill"
+msgstr "Daşqın"
 
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Bütün marşrutlaşdırıcıları netdbdə bu qabiliyyətə göstərin"
@@ -158,7 +158,7 @@ msgid "WAN Common Interface Configuration"
 msgstr "WAN Ümumi İnterfeys Konfiqurasiyası"
 
 msgid "Status"
-msgstr "Status"
+msgstr "Vəziyyət"
 
 msgid "Type"
 msgstr "Növ"
@@ -767,7 +767,7 @@ msgid "IP Address"
 msgstr "IP ünvanı"
 
 msgid "Port"
-msgstr "Port"
+msgstr "Liman"
 
 msgid "Hostname"
 msgstr "Host adı"
@@ -815,7 +815,7 @@ msgid "Console"
 msgstr "Konsol"
 
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
-msgstr "Router Konsolu üçün SSL-ə girişi aktivləşdirmək üçün ətraflı məlumat üçün <code></code> I2P tətbiq kataloqunuzda yerləşən şərh edilmiş clients.config faylına baxın. Kataloqda yerləşən RouterConsoleRunner konfiqurasiya faylını redaktə etməlisiniz: "
+msgstr "Router Konsolu üçün SSL-ə girişi aktivləşdirmək üçün ətraflı məlumat üçün <code></code> I2P tətbiq kataloqunuzda yerləşən şərh edilmiş clients.config faylına baxın. Kataloqda yerləşən RouterConsoleRunner konfiqurasiya faylını redaktə etməlisiniz:"
 
 msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Qeyd etmək deaktiv edilib, dəyişiklik etmək üçün router.config faylını redaktə edin"
@@ -1012,7 +1012,7 @@ msgid "Addressbook"
 msgstr "Ünvan kitabçası"
 
 msgid "Email"
-msgstr "Email"
+msgstr "E-poçt"
 
 msgid "Plugin"
 msgstr "Plugin"
@@ -1651,7 +1651,7 @@ msgid "Exploratory tunnels"
 msgstr "Kəşfiyyat tunelləri"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrentlər"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "ANONİMLİK XƏBƏRDARLIĞI - Parametrlərə 0-hop tunelləri daxildir."
@@ -1714,7 +1714,7 @@ msgid "User name may not contain '='"
 msgstr "İstifadəçi adı '=' ehtiva edə bilməz"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
-msgstr "Xəbərdarlıq: ISO-8859-1 simvol dəstindən kənar istifadəçi adları tövsiyə edilmir. "
+msgstr "Xəbərdarlıq: ISO-8859-1 simvol dəstindən kənar istifadəçi adları tövsiyə edilmir."
 
 msgid "No password entered"
 msgstr "Heç bir parol daxil edilmədi"
@@ -1743,7 +1743,7 @@ msgid "Enabling the Universal Theming option is recommended when embedding these
 msgstr "Bu proqramları daxil edərkən Universal Mövzu seçimini aktivləşdirmək tövsiyə olunur"
 
 msgid "Embed I2PSnark and I2PMail in the console"
-msgstr "I2PSnark və I2PMail-i konsola yerləşdirin"
+msgstr "Torrentlər və I2PMail-i konsola yerləşdirin"
 
 msgid "Add a user and password to enable."
 msgstr "Aktivləşdirmək üçün istifadəçi və parol əlavə edin."
@@ -1994,7 +1994,7 @@ msgid "Configuration"
 msgstr "Quraşdırma"
 
 msgid "FAQ"
-msgstr "FAQ"
+msgstr "Tez-tez verilən suallar"
 
 msgid "JSON-RPC API"
 msgstr "JSON-RPC API"
@@ -2018,7 +2018,7 @@ msgid "Anonymous webmail client"
 msgstr "Anonim veb poçt müştərisi"
 
 msgid "I2PMail"
-msgstr "I2PMail"
+msgstr "I2PMmail"
 
 msgid "Install and configure I2P plugins"
 msgstr "I2P plaginlərini quraşdırın və konfiqurasiya edin"
@@ -2159,7 +2159,7 @@ msgid "Javadocs"
 msgstr "Javadocs"
 
 msgid "I2P Network Statistics"
-msgstr "I2P Network Statistics"
+msgstr "I2P Şəbəkə Statistikası"
 
 msgid "Transient server-encrypted filesharing and pastebin"
 msgstr "Transient server-şifrlənmiş fayl paylaşımı və pastebin"
@@ -2216,7 +2216,7 @@ msgid "Pastebin"
 msgstr "Pastebin"
 
 msgid "Landing page for various services"
-msgstr "Landing page for various services"
+msgstr "Müxtəlif xidmətlər üçün açılış səhifəsi"
 
 msgid "Streaming radio service"
 msgstr "Axın radio xidməti"
@@ -2315,7 +2315,7 @@ msgid "Where news meets its scholarly match"
 msgstr "Xəbərin elmi uyğunluğu ilə qarşılaşdığı yer"
 
 msgid "Jurist"
-msgstr "Jurist"
+msgstr "Hüquqşünas"
 
 msgid "Legal News &amp; Commentary"
 msgstr "Hüquq Xəbərləri və şərh"
@@ -2342,10 +2342,10 @@ msgid "Independent International Media Platform"
 msgstr "Müstəqil Beynəlxalq Media Platforması"
 
 msgid "OpenDemocracy"
-msgstr "OpenDemocracy"
+msgstr "Açıq Demokratiya"
 
 msgid "Online privacy &amp; tech blog"
-msgstr "Online privacy &amp; tech blog"
+msgstr "Onlayn məxfilik &amp; texnologiya bloqu"
 
 msgid "RightToPrivacy"
 msgstr "RightToPrivacy"
@@ -2393,19 +2393,19 @@ msgid "News &amp; Reviews"
 msgstr "Xəbərlər və rəylər"
 
 msgid "TheAtlantic"
-msgstr "TheAtlantic"
+msgstr "Atlantik"
 
 msgid "Academic commentary and essays"
 msgstr "Akademik şərhlər və esselər"
 
 msgid "TheConversation"
-msgstr "TheConversation"
+msgstr "Söhbət"
 
 msgid "Global News"
 msgstr "Qlobal Xəbərlər"
 
 msgid "TheGuardian"
-msgstr "TheGuardian"
+msgstr "The Guardian"
 
 msgid "TheMarkup"
 msgstr "İşarələmə"
@@ -2420,7 +2420,7 @@ msgid "TheMoscowTimes"
 msgstr "TheMoscowTimes"
 
 msgid "TheNewRepublic"
-msgstr "TheNewRepublic"
+msgstr "Yeni Respublika"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "FileSharing və müəllif hüquqları xəbərləri"
@@ -2448,7 +2448,7 @@ msgid "Add"
 msgstr "Əlavə et"
 
 msgid "Error displaying the info page."
-msgstr "Error displaying the info page."
+msgstr "Məlumat səhifəsini göstərərkən xəta baş verdi."
 
 msgid "Identity"
 msgstr "Şəxsiyyət"
@@ -2657,7 +2657,7 @@ msgid "All Routers"
 msgstr "Bütün marşrutlaşdırıcılar"
 
 msgid "LeaseSets"
-msgstr "LeaseSets"
+msgstr "İcarəyə Dəstlər"
 
 msgid "Advanced Lookup"
 msgstr "Qabaqcıl Axtarış"
@@ -2672,7 +2672,7 @@ msgid "Sybil Analysis"
 msgstr "Sibil təhlili"
 
 msgid "Bad value supplied, please check and try again."
-msgstr "Bad value supplied, please check and try again."
+msgstr "Pis dəyər təmin edilib, yoxlayın və yenidən cəhd edin."
 
 msgid "Router Map"
 msgstr "Ruter Xəritəsi"
@@ -2684,7 +2684,7 @@ msgid "Capabilities"
 msgstr "Bacarıqlar"
 
 msgid "e.g. f or XOfR"
-msgstr "e.g. f or XOfR"
+msgstr "məs. f və ya XOfR"
 
 msgid "Cost"
 msgstr "Xərc"
@@ -2723,7 +2723,7 @@ msgid "Transport"
 msgstr "Nəqliyyat"
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr "Add Sybil analysis (must pick at least one above)"
+msgstr "Sybil analizi əlavə edin (yuxarıda ən azı birini seçməlisiniz)"
 
 msgid "Sybil close to"
 msgstr "Sibilə yaxın"
@@ -2786,10 +2786,10 @@ msgid "Debug Mode"
 msgstr "Sazlama Rejimi"
 
 msgid "Published (RAP) Leasesets"
-msgstr "Published (RAP) Leasesets"
+msgstr "Nəşr edilmiş (KTP) İcarəyə Verilənlər"
 
 msgid "Sorted by hash distance, closest first."
-msgstr "Sorted by hash distance, closest first."
+msgstr "Hash məsafəsinə görə çeşidləndi, ən yaxın birinci."
 
 msgid "Mod Data"
 msgstr "Mod Məlumatları"
@@ -2885,7 +2885,7 @@ msgid "Network Database Router Statistics"
 msgstr "Şəbəkə Verilənlər Bazasının Router Statistikası"
 
 msgid "Count"
-msgstr "Count"
+msgstr "saymaq"
 
 msgid "Under 12 KB/s"
 msgstr "12 KB/s-dən az"
@@ -2909,7 +2909,7 @@ msgid "Transports"
 msgstr "Nəqliyyatlar"
 
 msgid "X Tier"
-msgstr "X Tier"
+msgstr "X səviyyə"
 
 msgid "Floodfills"
 msgstr "Daşqınlar"
@@ -3015,7 +3015,7 @@ msgid "Hidden or starting up"
 msgstr "Gizli və ya işə başlamaq"
 
 msgid "SSU"
-msgstr "SSU"
+msgstr "SDU"
 
 msgid "SSU with Introducers"
 msgstr "Təqdimatçılarla SSU"
@@ -3203,7 +3203,7 @@ msgid "Retransmitted packets"
 msgstr "Yenidən ötürülən paketlər"
 
 msgid "Dup TX"
-msgstr "Dup TX"
+msgstr "Dublikat TX"
 
 msgid "Sort by packets retransmitted"
 msgstr "Yenidən ötürülən paketlərə görə çeşidləyin"
@@ -3212,7 +3212,7 @@ msgid "Received duplicate packets"
 msgstr "Dublikat paketlər alındı"
 
 msgid "Dup RX"
-msgstr "Dup RX"
+msgstr "Dublikat RX"
 
 msgid "Sort by packets received more than once"
 msgstr "Birdən çox qəbul edilən paketlərə görə çeşidləyin"
@@ -3696,7 +3696,7 @@ msgid "Attempt to download router reference files (if automatic reseed has faile
 msgstr "Ruter istinad fayllarını endirməyə cəhd edin (avtomatik rezidensiya uğursuz olubsa)"
 
 msgid "Reseed"
-msgstr "Reseed"
+msgstr "Yenidən toxum"
 
 msgid "Order"
 msgstr "Sifariş"
@@ -3928,7 +3928,7 @@ msgstr "Şəbəkə verilənlər bazasında mümkün sibilləri nəzərdən keçi
 
 #, java-format
 msgid "Your Local Identity [{0}] is your unique I2P router identity, similar to an IP address but tailored to I2P. "
-msgstr "Yerli Kimliyiniz [{0}] IP ünvanına bənzər, lakin I2P-ə uyğunlaşdırılmış unikal I2P marşrutlaşdırıcınızdır. "
+msgstr "Yerli Kimliyiniz [{0}] IP ünvanına bənzər, lakin I2P-ə uyğunlaşdırılmış unikal I2P marşrutlaşdırıcınızdır."
 
 msgid "Never disclose this to anyone, as it can reveal your real world IP."
 msgstr "Bunu heç vaxt heç kimə açıqlamayın, çünki bu sizin real dünya IP-nizi aşkar edə bilər."
@@ -4275,7 +4275,7 @@ msgid "Run analysis on all routers in NetDb"
 msgstr "NetDb-də bütün routerlərdə analiz icra edin"
 
 msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, "
-msgstr "Sybil aşkarlama rutini müntəzəm intervalda Şəbəkə Verilənlər Bazasını skan etmək üçün konfiqurasiya edilə bilər, "
+msgstr "Sybil aşkarlama rutini müntəzəm intervalda Şəbəkə Verilənlər Bazasını skan etmək üçün konfiqurasiya edilə bilər,"
 
 msgid "with the option to block peers meeting the configured threshold. "
 msgstr "konfiqurasiya edilmiş həddi qarşılayan həmyaşıdları bloklamaq seçimi ilə."
@@ -4443,7 +4443,7 @@ msgid "Routers"
 msgstr "Routerlər"
 
 msgid "n/a"
-msgstr "n/a"
+msgstr "yox"
 
 msgid "Last lookup successful"
 msgstr "Son axtarış uğurlu oldu"
@@ -4531,7 +4531,7 @@ msgstr "Hazırda aktiv tranzit tunel yoxdur."
 
 #, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr "Transit Tunnels by Peer (Top {0})"
+msgstr "Peer tərəfindən Tranzit Tunellər (Ən Yaxşı {0} )"
 
 msgid "Address"
 msgstr "Ünvan"
@@ -4844,10 +4844,10 @@ msgid "I2P requires at least 12KBps to enable sharing. "
 msgstr "I2P paylaşımı aktivləşdirmək üçün ən az 12 KB/s tələb edir. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
-msgstr "Lütfən, daha çox bant genişliyini konfiqurasiya etməklə paylaşmanı (tunellərdə iştirak) aktiv edin. "
+msgstr "Lütfən, daha çox bant genişliyini konfiqurasiya etməklə paylaşmanı (tunellərdə iştirak) aktiv edin."
 
 msgid "It improves your anonymity by creating cover traffic, and helps the network. "
-msgstr "Qapaqlı trafik yaratmaqla anonimliyinizi yaxşılaşdırır və şəbəkəyə kömək edir. "
+msgstr "Qapaqlı trafik yaratmaqla anonimliyinizi yaxşılaşdırır və şəbəkəyə kömək edir."
 
 #, java-format
 msgid "You have configured I2P to share {0} KBps {1}."
@@ -5498,7 +5498,7 @@ msgid "SOCKS 4/4a"
 msgstr "ÇORAPLAR 4/4a"
 
 msgid "SOCKS 5"
-msgstr "SOCKS 5"
+msgstr "CORABLAR 5"
 
 msgid "This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin if configured. Note: this option will not work when you have 0 known peers."
 msgstr "Bu seçim i2P-nin http outprexy-ni Reseed və ya konfiqurasiya olunarsa, orkide plaginindən istifadə edəcəkdir. Qeyd: 0 tanınmış həmyaşıdlarınız olduqda bu seçim işləməyəcəkdir."
@@ -5616,7 +5616,7 @@ msgid "Unified sidebar"
 msgstr "Birləşmiş yan panel"
 
 msgid "Use the same sidebar on all pages"
-msgstr "Use the same sidebar on all pages"
+msgstr "Bütün səhifələrdə eyni yan paneldən istifadə edin"
 
 msgid "Sticky sidebar"
 msgstr "Sabit yan panel"
@@ -5676,7 +5676,7 @@ msgid "The default settings are optimized for general usage and normally don't n
 msgstr "Defolt parametrlər ümumi istifadə üçün optimallaşdırılıb və adətən dəyişdirilməyə ehtiyac yoxdur."
 
 msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
-msgstr "Müştəri tunel parametrlərini dəyişdirmək üçün, <a href=/i2ptunnelmgr>Tunel Meneceri</a> və ya <a href=/i2psnark/configure>konfiqurasiya səhifəsi</a> I2PSnark üçün istifadə edin."
+msgstr "Müştəri tunel parametrlərini dəyişdirmək üçün, <a href=/i2ptunnelmgr>Tunel Meneceri</a> və ya <a href=/i2psnark/configure>konfiqurasiya səhifəsi</a> Torrentlər üçün istifadə edin."
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "Sessiya-yalnız müştəri tunellərində dəyişiklikləri aktivləşdirmək, konsolun <a href=/help/advancedsettings> Advanced rejimi</a> aktivləşdirin."
@@ -6154,7 +6154,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "Bu parametr maraqsız olaraq təsnif edilən marşrutlaşdırıcıların (K və ya L dərəcəli, 0.9.50 -dən yuxarı və ya daha yuxarı) yenilənmə marşrutlaşdırıcısı prosesində 1 saatlıq iş vaxtından sonra yoxlanılıb-tapılmadığını müəyyən edir. [Standart yanlışdır]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
+msgstr "Doğru olaraq ayarlandıqda, bu parametr marşrutlaşdırıcınızın sıxlıq hədlərini dərc etməsi üçün tələb olunan şərtləri yumşaldır, xüsusən də bant genişliyi istifadənizin yüksək olduğu müəyyən edildikdə. Yüksək iş gecikməsi və ya yavaş kimi təsnif edilən marşrutlaşdırıcı kimi digər şərtlər hələ də başlıqların dərc edilməsinə səbəb olacaq. [Defolt yanlışdır]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. This setting is dynamic and takes effect without restart."
 msgstr "Konfiqurasiya edildikdə, bu, routerin paralel qurmasına icazə verilən tunellərin sayı üçün sərt limit təyin edir. Standart olaraq, router dinamik paralellikdən istifadə edir. [Standart 0 (limitsiz)]"
@@ -6409,7 +6409,7 @@ msgid "If set to true, this option will place an icon in the system tray / notif
 msgstr "Əslinə qalsa, bu seçim sistem lövhəsində/ bildiriş sahəsində əsas xidmətə nəzarət seçimləri olan piktoqram yerləşdirəcək. [Standart olaraq deaktiv edilib]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "Bu ayar, bir torrent indirilirken veya bir torrent oluşturulurken I2PSnark'ın izin vereceği maksimum dosya sayısının yapılandırılmasına olanak sağlar. Bu değeri, varsayılan 2000 dosyadan önemli ölçüde artırmak, işletim sisteminde açık dosya sayısını artırmak için ana sistemde ek yapılandırma gerektirebilir (örneğin Linux'ta <code>ulimit -n</code>). Değiştirmek için, I2PSnark'ın yapılandırma dosyasına <code>i2psnark.config</code> ekleme yapın. [I2PSnark veya yönlendiriciyi yeniden başlatmak gerekiyor]. config [Restart of I2PSnark or router required]. config [Restart of I2PSnark or router required]. konfiqurasiya [I2PSnark və ya marşrutlaşdırıcının yenidən işə salınması tələb olunur]"
+msgstr "Bu ayar, bir torrent indirilirken veya bir torrent oluşturulurken Torrentlər'ın izin vereceği maksimum dosya sayısının yapılandırılmasına olanak sağlar. Bu değeri, varsayılan 2000 dosyadan önemli ölçüde artırmak, işletim sisteminde açık dosya sayısını artırmak için ana sistemde ek yapılandırma gerektirebilir (örneğin Linux'ta <code>ulimit -n</code>). Değiştirmek için, Torrentlər'ın yapılandırma dosyasına <code>i2psnark.config</code> ekleme yapın. [Torrentlər veya yönlendiriciyi yeniden başlatmak gerekiyor]. config [Restart of Torrentlər or router required]. config [Restart of Torrentlər or router required]. konfiqurasiya [Torrentlər və ya marşrutlaşdırıcının yenidən işə salınması tələb olunur]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "Bu tunelə xas parametr routerin ev sahibliyi etdiyi serverlərə göndərilən pinqlərə cavabları aktiv və ya deaktiv etməyə imkan verir. Pinqləri deaktiv etmək üçün Tunel Menecerində serverin konfiqurasiyası üçün <i>Xüsusi Seçimlər</i> bölməsinə i2p.streaming.answerPings <code>=false</code> sətrini əlavə etməlisiniz."
@@ -6565,7 +6565,7 @@ msgid "The Tunnel Manager enables configuration of local services provided by yo
 msgstr "Tunel Meneceri marşrutlaşdırıcınız tərəfindən təmin edilən yerli xidmətlərin konfiqurasiyasına imkan verir."
 
 msgid "You can determine which services automatically start when the router starts, manage tunnel allocation to optimize for high usage services or to minimize the the cpu and memory overhead, add server and client tunnels to host or access services on the network, set rate limiting or tunnel filtering for your server tunnels and more."
-msgstr "Siz marşrutlaşdırıcı işə salındıqda hansı xidmətlərin avtomatik işə düşəcəyini müəyyən edə, yüksək istifadə xidmətləri üçün optimallaşdırmaq və ya cpu və yaddaş yükünü minimuma endirmək üçün tunellərin ayrılmasını idarə edə, şəbəkədə xidmətlərə sahib olmaq və ya daxil olmaq üçün server və müştəri tunelləri əlavə edə, sürət məhdudiyyətini təyin edə bilərsiniz. "
+msgstr "Siz marşrutlaşdırıcı işə salındıqda hansı xidmətlərin avtomatik işə düşəcəyini müəyyən edə, yüksək istifadə xidmətləri üçün optimallaşdırmaq və ya cpu və yaddaş yükünü minimuma endirmək üçün tunellərin ayrılmasını idarə edə, şəbəkədə xidmətlərə sahib olmaq və ya daxil olmaq üçün server və müştəri tunelləri əlavə edə, sürət məhdudiyyətini təyin edə bilərsiniz."
 
 msgid "By default, most of your client services (mail, http proxy, IRC) will share the same set of tunnels (for performance reasons) and be listed as <i>Shared Clients</i> and <i>Shared Clients(DSA)</i> in the sidebar under Service Tunnels and on the <a href=/tunnels>Tunnels page</a>."
 msgstr "Əksər istemci xidmətləriniz (poçt, http proxy, IRC) əsasən eyni təkanlar dəsti ilə bölüşdür (performans səbəbindən dolayı) və <i>Shared Clients</i> / <i>Shared Clients(DSA)</i> olaraq siyahıya -bar cədvəldəni —ədəbilirsiniz, bunlar da Xidmət Təkanları altında və <a href=/tunnels>Təkan səhifə</a>sinə."
@@ -6766,7 +6766,7 @@ msgid "UDP for SAM bridge"
 msgstr "SAM köçəri üçün UDP"
 
 msgid "A higher level socket API for clients. Only opened when a SAM V3 client requests a UDP session. Can be enabled/disabled on the <a href=/configclients> Client Configuration page</a>. Can be changed in the <code>clients.config</code> file with the SAM command line option <code>sam.udp.port=nnnn</code>."
-msgstr "Müştəri üçün daha yüksək səviyyəli soket API. Yalnız SAM V3 müştəri UDP sessiyası tələb etdiyində yalnız açılır. <a href=/configclients>Müştəri Konfiqurasiya səhifəsindən</a> başlatmaq / söndürmək mümkündür. SAM komandası ilə <code>sam.udp.port=nnnn</code> SAM komanda sətiri seçimləri ilə <code>clients.config</code> faylda dəyişdirilə bilər. "
+msgstr "Müştəri üçün daha yüksək səviyyəli soket API. Yalnız SAM V3 müştəri UDP sessiyası tələb etdiyində yalnız açılır. <a href=/configclients>Müştəri Konfiqurasiya səhifəsindən</a> başlatmaq / söndürmək mümkündür. SAM komandası ilə <code>sam.udp.port=nnnn</code> SAM komanda sətiri seçimləri ilə <code>clients.config</code> faylda dəyişdirilə bilər."
 
 msgid "SAM bridge"
 msgstr "SAM köçürücü"
@@ -6832,10 +6832,10 @@ msgid "I2P Terminology"
 msgstr "I2P Terminologiyası"
 
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "Rəqəmsal ayırma sistemləri (B64) dagitma şəbəkəsi üçün xidmət destinasiyalarını idarə edən I2P web tətbiqidir. Destinasiyalar əl ilə əlavə oluna bilər və ya hosts.txt fayllarına abunə olaraq əlavə oluna bilər. Habelə, SusiDNS kimi də adlandırılır. Ətraflı məlumat üçün <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>onlayn sənədləndirməyə</a> müraciət edin."
+msgstr "Rəqəmsal ayırma sistemləri (B64) dagitma şəbəkəsi üçün xidmət destinasiyalarını idarə edən I2P web tətbiqidir. Destinasiyalar əl ilə əlavə oluna bilər və ya hosts.txt fayllarına abunə olaraq əlavə oluna bilər. Habelə, DNS kimi də adlandırılır. Ətraflı məlumat üçün <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>onlayn sənədləndirməyə</a> müraciət edin."
 
 msgid "Base32 (B32) / Base64 (B64)"
-msgstr "Base32 (B32) / Base64 (B64)"
+msgstr "Baza32 (B32) / Baza64 (B64)"
 
 msgid "A <a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' target=_blank rel=noreferrer>Base32</a> link (which always ends with .b32.i2p) is a hash of a <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external' target=_blank rel=noreferrer>Base64</a> destination. For services on the network, the Base64 hash is often mapped to an .i2p domain in the addressbook."
 msgstr "<a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' target=_blank rel=noreferrer>Base32</a> keçidi (həmişə .b32.i2p ilə bitir) bir <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external' target=_blank rel=noreferrer>Base64</a> destinasiya haşıdır. Şəbəkədəki xidmətlər üçün, Base64 haşı adres kitabçasında .i2p domeninə çoxalınır."
@@ -6958,7 +6958,7 @@ msgid "A group of tunnel entry points (leases) for a <i>destination</i>. Note: A
 msgstr "<i>Mənsibə</i> üçün bir qrup tunnel daxilolma nöqtəsidir (ərizə). Qeyd: Tunnelləri konfiqurasiya edilmiş tunellər sayının sayına baxmaz, 0-hop server tunnelinin yalnız bir ilani olar."
 
 msgid "Monotone / mtn"
-msgstr "Monotone / mtn"
+msgstr "Monoton / mt"
 
 msgid "The distributed version control system (DVCS) previously used to maintain I2P's source code, now superseded by git."
 msgstr "I2P'nin kaynak kodunu korumak için önceden kullanılan dağıtılmış sürüm kontrol sistemi (DVCS), artık git tarafından yerine geçti."
@@ -7075,7 +7075,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "Əgər çox sürətliysinizsə və bir neçə saat gözləmək istəmirsəniz, insanlara \"jump\" ünvan köməkçi yenidən yönləndirilmə xidmətindən istifadə etmələrini deyə bilərsiniz. Bu, host adınızı eyni saytda qeydiyyata almanızdan bir neçə dəqiqə sonra adətən işləyəcəkdir. Öncə onu bəyəninə daxil edərək özünüzə baxın. <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code>. İşləyəndə, başqalarına da istifadə etmələrini deyə bilərsiniz."
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
+msgstr "Alternativ olaraq, ünvan kitabçası siyahısı səhifəsində və ya domeninizin təfərrüatları səhifəsində göstərilən domeniniz üçün <i> ünvan köməkçi keçidini </i> kopyalaya bilərsiniz, məs. skank.i2p </a> üçün <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer> təfərrüatları və başqaları ilə paylaşmaq üçün lazım olan linki yapışdırın."
 
 msgid "Backup your private key!"
 msgstr "Şəxsi açarınızı yedəkləyin!"
@@ -7286,7 +7286,7 @@ msgid "NTCP port (1-65535)"
 msgstr "NTCP portu (1-65535)"
 
 msgid "NTCP hostname"
-msgstr "NTCP hostname"
+msgstr "NTCP host adı"
 
 msgid "Auto IP setting"
 msgstr "Avtomatik IP parametri"
@@ -7298,7 +7298,7 @@ msgid "SSU port (1-65535)"
 msgstr "SSU portu (1-65535)"
 
 msgid "SSU hostname"
-msgstr "SSU hostname"
+msgstr "SSU host adı"
 
 msgid "IP source detection"
 msgstr "IP mənbəyi aşkarlanması"
@@ -7743,7 +7743,7 @@ msgid "Getting Support Online"
 msgstr "Onlayn dəstək almaq"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
+msgstr "Siz həmçinin <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer> I2P </a> vebsaytındakı məlumatları nəzərdən keçirmək, <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer> I2P müzakirə forumuna </a> mesaj göndərmək və ya I2P-nin daxili IRC şəbəkəsində <a href=irc://127.0.0.1:6668/saltR class=chatlink> #saltR </a> və ya <a href=irc://127.0.0.1:6668/i2p class=chatlink> #i2p-dev </a> ilə hərəkət etmək istəyə bilərsiniz."
 
 msgid "Reporting Bugs"
 msgstr "Xətalardan bildirirsiniz"
@@ -7892,11 +7892,11 @@ msgstr "Qeyd: Konsolda çoxsaylı etiket və seçimlərin məqsədini göstərə
 msgid "Theme Overrides"
 msgstr "Mövzu üzərindən keçmək"
 
-msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr "I2P+, konsol üçün xüsusi mövzu üzərindən keçməyi, qalereya idarəçisi, I2PSnark, SusiDNS və Susimail daxil olmaqla bir sıra aparatlar üçün dəstəkləyir. Bu dəyişikliklərin yenilənmələrdən sonra dərinlikli olaraq saxlanıldığı mövzuə izin verir. Keçməyi etkinləşdirmək üçün <code>override.css</code> adında css faylı yaradın və mövzu dəyişikliklərinizi buraya yerləşdirin, və ya nümunə fayllardan birini yeniden adlandırın və sonra brauzeri sayıqlandırın. Qeyd edin ki, qalereya idarəçisi və konsol eyni üstələyici.css faylını bölüşür. Keçməni deaktiv etmək üçün <code>override.css</code> faylını silin və ya adını dəyişdirin və sonra brauzeri (adətən Control + Shift + R) yenileyin."
+msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Veb poçt, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
+msgstr "I2P+, konsol üçün xüsusi mövzu üzərindən keçməyi, qalereya idarəçisi, Torrentlər, DNS və Veb poçt daxil olmaqla bir sıra aparatlar üçün dəstəkləyir. Bu dəyişikliklərin yenilənmələrdən sonra dərinlikli olaraq saxlanıldığı mövzuə izin verir. Keçməyi etkinləşdirmək üçün <code>override.css</code> adında css faylı yaradın və mövzu dəyişikliklərinizi buraya yerləşdirin, və ya nümunə fayllardan birini yeniden adlandırın və sonra brauzeri sayıqlandırın. Qeyd edin ki, qalereya idarəçisi və konsol eyni üstələyici.css faylını bölüşür. Keçməni deaktiv etmək üçün <code>override.css</code> faylını silin və ya adını dəyişdirin və sonra brauzeri (adətən Control + Shift + R) yenileyin."
 
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
-msgstr "Mövzu qovluğu I2P tətbiq dircəsinin <code>docs/themes</code> altında yerləşir. Konsolda və I2PSnark mövzu alt-qovluqlarında nümunə keçmə faylları mövcuddur."
+msgstr "Mövzu qovluğu I2P tətbiq dircəsinin <code>docs/themes</code> altında yerləşir. Konsolda və Torrentlər mövzu alt-qovluqlarında nümunə keçmə faylları mövcuddur."
 
 msgid "Sidebar Information"
 msgstr "Yan panel məlumatı"
@@ -8646,7 +8646,7 @@ msgid "Browser Setup"
 msgstr "Brauzerin qurulması"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr "I2P şəbəsində ev olan veb-saytlərə çatmaq üçün və istiadadı çıxış proksi istifadə etmək istəyə bilərsiniz, brauzerinizI2P+ <b>HTTP</b> proksi proqramını istifadə etmək üçün konfiqurasiya etməlisiniz, normal olaraq <code>127.0.0.1 port 4444</code>-da çalışır. "
+msgstr "I2P şəbəsində ev olan veb-saytlərə çatmaq üçün və istiadadı çıxış proksi istifadə etmək istəyə bilərsiniz, brauzerinizI2P+ <b>HTTP</b> proksi proqramını istifadə etmək üçün konfiqurasiya etməlisiniz, normal olaraq <code>127.0.0.1 port 4444</code>-da çalışır."
 
 msgid "Welcome to I2P+!"
 msgstr "I2P-yə xoş gəlmisiz!"

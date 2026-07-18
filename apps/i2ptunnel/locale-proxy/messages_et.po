@@ -35,7 +35,7 @@ msgid "Host"
 msgstr "Meeskond"
 
 msgid "Base32"
-msgstr "Base32"
+msgstr "Alus32"
 
 msgid "Destination"
 msgstr "Sihtkoht"
@@ -154,10 +154,10 @@ msgid "Go back and fix the error"
 msgstr "Mine tagasi ja paranda viga"
 
 msgid "router"
-msgstr "router"
+msgstr "ruuter"
 
 msgid "master"
-msgstr "master"
+msgstr "meister"
 
 msgid "private"
 msgstr "privaatne"

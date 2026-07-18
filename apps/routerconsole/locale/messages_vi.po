@@ -1012,7 +1012,7 @@ msgid "Email"
 msgstr "Thư điện tử"
 
 msgid "Plugin"
-msgstr "Plugin"
+msgstr "Tiện ích"
 
 msgid "Author"
 msgstr "Tác giả"
@@ -1286,7 +1286,7 @@ msgid "Stats"
 msgstr "Thống kê"
 
 msgid "Plugins"
-msgstr "Plugins"
+msgstr "Các tiện ích"
 
 msgid "Web Apps"
 msgstr "Ứng dụng web"
@@ -1643,7 +1643,7 @@ msgid "Exploratory tunnels"
 msgstr "Đường hầm khám phá"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Torrent"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "CẢNH BÁO ẨN DANH - Cài đặt bao gồm đường hầm 0 bước."
@@ -1735,7 +1735,7 @@ msgid "Enabling the Universal Theming option is recommended when embedding these
 msgstr "Nên bật tùy chọn Universal Theming khi nhúng các ứng dụng này"
 
 msgid "Embed I2PSnark and I2PMail in the console"
-msgstr "Nhúng I2PSnark và I2PMail vào bảng điều khiển"
+msgstr "Nhúng Tệp tin torrent và I2PMail vào bảng điều khiển"
 
 msgid "Add a user and password to enable."
 msgstr "Thêm người dùng và mật khẩu để bật."
@@ -3504,7 +3504,7 @@ msgid "is the peer banned, or unreachable, or failing tunnel tests?"
 msgstr "đồng nghiệp bị cấm, hoặc không thể tiếp cận, hoặc không vượt qua các thử nghiệm đường hầm?"
 
 msgid "groups"
-msgstr "groups"
+msgstr "nhóm"
 
 msgid "Note: Peers are categorized by the profile organizer based on observable performance, not from capabilities they advertise in the NetDB."
 msgstr "Lưu ý: Các đồng nghiệp được phân loại theo người tổ chức hồ sơ dựa trên hiệu suất có thể quan sát được, không phải từ các khả năng mà họ quảng cáo trong NetDB."
@@ -4114,7 +4114,7 @@ msgid "Queued requests from other routers to participate in tunnels"
 msgstr "Yêu cầu xếp hàng từ các bộ định tuyến khác để tham gia vào các đường hầm"
 
 msgid "Backlog"
-msgstr "Backlog"
+msgstr "Hàng đợi"
 
 msgid "Statistics gathered during this router's uptime"
 msgstr "Số liệu thống kê được thu thập trong thời gian hoạt động của bộ định tuyến này"
@@ -5429,7 +5429,7 @@ msgid "Please supply a valid plugin file"
 msgstr "Vui lòng cung cấp tệp plugin hợp lệ"
 
 msgid "Plugin Manager"
-msgstr "Plugin Manager"
+msgstr "Quản lý Plugin"
 
 msgid "The plugins listed below are started by the webConsole client."
 msgstr "Các plugin được liệt kê bên dưới được khởi động bởi ứng dụng khách webConsole."
@@ -5658,7 +5658,7 @@ msgid "The default settings are optimized for general usage and normally don't n
 msgstr "Cài đặt mặc định được tối ưu hóa cho việc sử dụng chung và thường không cần phải thay đổi."
 
 msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
-msgstr "Để sửa đổi cài đặt đường hầm khách hàng, hãy sử dụng <a href=\"/i2ptunnelmgr\">Quản lý đường hầm</a> hoặc trang <a href=\"/i2psnark/configure\">Cấu hình</a> cho I2PSnark."
+msgstr "Để sửa đổi cài đặt đường hầm khách hàng, hãy sử dụng <a href=\"/i2ptunnelmgr\">Quản lý đường hầm</a> hoặc trang <a href=\"/i2psnark/configure\">Cấu hình</a> cho Tệp tin torrent."
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "Để kích hoạt những thay đổi chỉ trong phiên cho các đường hầm khách hàng, hãy kích hoạt chế độ <a href=\"/help/advancedsettings\">Nâng cao</a> của console."
@@ -6391,7 +6391,7 @@ msgid "If set to true, this option will place an icon in the system tray / notif
 msgstr "Nếu được đặt thành True, tùy chọn này sẽ đặt biểu tượng trên khay hệ thống/khu vực thông báo, với các tùy chọn điều khiển dịch vụ cơ bản. [Mặc định bị vô hiệu hóa]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "Cài đặt này cho phép cấu hình số tệp tối đa mỗi torrent mà I2PSnark sẽ cho phép khi tải xuống hoặc tạo torrent. Lưu ý rằng việc tăng đáng kể giá trị này so với mặc định là 2000 tệp có thể yêu cầu cấu hình bổ sung trên hệ thống máy chủ để tăng số tệp mở tối đa hệ điều hành cho phép (ví dụ <code>ulimit -n</code> trên Linux). Để thay đổi, hãy thêm vào tệp cấu hình <code>i2psnark.config</code> của I2PSnark. [Yêu cầu khởi động lại I2PSnark hoặc bộ định tuyến]"
+msgstr "Cài đặt này cho phép cấu hình số tệp tối đa mỗi torrent mà Tệp tin torrent sẽ cho phép khi tải xuống hoặc tạo torrent. Lưu ý rằng việc tăng đáng kể giá trị này so với mặc định là 2000 tệp có thể yêu cầu cấu hình bổ sung trên hệ thống máy chủ để tăng số tệp mở tối đa hệ điều hành cho phép (ví dụ <code>ulimit -n</code> trên Linux). Để thay đổi, hãy thêm vào tệp cấu hình <code>i2psnark.config</code> của Tệp tin torrent. [Yêu cầu khởi động lại Tệp tin torrent hoặc bộ định tuyến]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "Cài đặt này cho phép bạn bật hoặc tắt phản hồi đối với ping gửi đến các máy chủ do bộ định tuyến lưu trữ. Để vô hiệu hóa ping, bạn phải thêm dòng <code>i2p.streaming.answerPings=false</code> vào phần <i>Tuỳ chọn tùy biến</i> cho cấu hình máy chủ trong Trình quản lý đường ống."
@@ -6814,7 +6814,7 @@ msgid "I2P Terminology"
 msgstr "Thuật ngữ của I2P"
 
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "Một ứng dụng web I2P quản lý đích dịch vụ cho mạng, ánh xạ băm B64 thành các tên dễ đọc. Đích có thể được thêm thủ công hoặc qua đăng ký tệp hosts.txt. Cũng được gọi là SusiDNS. Để biết thêm thông tin, hãy xem <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>tài liệu trực tuyến</a>."
+msgstr "Một ứng dụng web I2P quản lý đích dịch vụ cho mạng, ánh xạ băm B64 thành các tên dễ đọc. Đích có thể được thêm thủ công hoặc qua đăng ký tệp hosts.txt. Cũng được gọi là DNS. Để biết thêm thông tin, hãy xem <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>tài liệu trực tuyến</a>."
 
 msgid "Base32 (B32) / Base64 (B64)"
 msgstr "Base32 (B32) / Base64 (B64)"
@@ -7042,7 +7042,7 @@ msgid "A Java I2P plugin implementation of a BitTorrent <a href=https://en.wikip
 msgstr "Việc triển khai plugin Java I2P của BitTorrent <a href=https://en.wikipedia.org/wiki/opentracker Class='Sitelink bên ngoài' Target=_Blank rel=noreFerrer> Trình theo dõi mở </a>. Có sẵn từ <a href=http://stats.i2p/i2p/plugins Class=Sitelink> http://stats.i2p/i2p/plugins </a>. Mã nguồn có sẵn trên <a href=https://github.com/i2p/i2p.plugins.zzzot class='Sitelink bên ngoài' Target=_Blank rel=noreferrer> GitHub </a>."
 
 msgid "Web Hosting - I2P+"
-msgstr "Web Hosting - I2P+"
+msgstr "Lưu trữ Web - I2P+"
 
 msgid "Registering an I2P Domain"
 msgstr "Đăng ký miền i2p"
@@ -7874,8 +7874,8 @@ msgstr "Lưu ý: Nhiều nhãn và tùy chọn trên bản điều khiển có c
 msgid "Theme Overrides"
 msgstr "Ghi đè Giao diện"
 
-msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr "I2P+ hỗ trợ ghi đ giao diện tùy chỉnh cho bản điều khiển, người quản lý đường hầm, I2PSnark, SusiDNS và Susimail, cho phép thay đổi các giao diện được duy trì sau các bản nâng cấp. Để kích hoạt ghi đè, tạo một tệp css có tên <code>override.css</code> với các sửa đổi giao diện của bạn và đặt tại thư viện giao diện của phong cách bạn muốn thay đổi, hoặc đổi tên một trong các mẫu tệp, và sau đó làm mới trình duyệt từ đầu. Lưu ý rằng người quản lý đường hầm và bản điều khiển chia sẻ cùng một tệp override.css. Để hủy kích hoạt ghi đè, xóa hoặc đổi tên tệp<code>override.css</code> và sau đó làm mới trình duyệt từ đầu (thường là phím tắt Control + Shift + R)."
+msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Thư web, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
+msgstr "I2P+ hỗ trợ ghi đ giao diện tùy chỉnh cho bản điều khiển, người quản lý đường hầm, Tệp tin torrent, DNS và Thư web, cho phép thay đổi các giao diện được duy trì sau các bản nâng cấp. Để kích hoạt ghi đè, tạo một tệp css có tên <code>override.css</code> với các sửa đổi giao diện của bạn và đặt tại thư viện giao diện của phong cách bạn muốn thay đổi, hoặc đổi tên một trong các mẫu tệp, và sau đó làm mới trình duyệt từ đầu. Lưu ý rằng người quản lý đường hầm và bản điều khiển chia sẻ cùng một tệp override.css. Để hủy kích hoạt ghi đè, xóa hoặc đổi tên tệp<code>override.css</code> và sau đó làm mới trình duyệt từ đầu (thường là phím tắt Control + Shift + R)."
 
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
 msgstr "Thư mục chủ đề nằm trong thư mục ứng dụng I2P trong <code>docs/themes</code>. Có ví dụ ghi đè các tệp trong bảng điều khiển và các hướng phụ chủ đề i2psnark."
@@ -8533,7 +8533,7 @@ msgid "webmail"
 msgstr "thư điện tử"
 
 msgid "Webmail"
-msgstr "Webmail"
+msgstr "Thư web"
 
 msgid "New Install Wizard"
 msgstr "Trình hướng dẫn cài đặt mới"
@@ -8656,37 +8656,3 @@ msgstr "Kế tiếp"
 
 msgid "Finished"
 msgstr "Đã kết thúc"
-
-
-#, java-format
-
-#, java-format
-
-
-
-
-
-#, java-format
-
-
-
-
-
-
-#, java-format
-
-
-
-
-
-
-#, java-format
-
-#, java-format
-
-
-
-
-
-
-

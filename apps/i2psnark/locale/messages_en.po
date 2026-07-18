@@ -29,7 +29,7 @@ msgstr ""
 msgid "Downloading"
 msgstr ""
 
-msgid "Configuring I2PSnark with I2CP options"
+msgid "Configuring Torrents with I2CP options"
 msgstr ""
 
 msgid "No write permissions for data directory"
@@ -62,7 +62,7 @@ msgstr ""
 msgid "Download speed limit is {0}KB/s"
 msgstr ""
 
-msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgid "Note: You may need to stop and restart your torrents or restart Torrents in order to effect this change."
 msgstr ""
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
@@ -247,7 +247,7 @@ msgstr ""
 msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr ""
 
-msgid "Initializing I2PSnark and opening tunnels"
+msgid "Initializing Torrents and opening tunnels"
 msgstr ""
 
 #, java-format
@@ -383,7 +383,7 @@ msgstr ""
 msgid "Download finished: {0}"
 msgstr ""
 
-msgid "I2PSnark"
+msgid "Torrents"
 msgstr ""
 
 #, java-format
@@ -1158,13 +1158,13 @@ msgstr ""
 msgid "Auto start torrents"
 msgstr ""
 
-msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
+msgid "Automatically start torrents when added and restart torrents when Torrents starts"
 msgstr ""
 
 msgid "Startup delay"
 msgstr ""
 
-msgid "How long before auto-started torrents are loaded when I2PSnark starts"
+msgid "How long before auto-started torrents are loaded when Torrents starts"
 msgstr ""
 
 msgid "minutes"
@@ -1260,7 +1260,7 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-msgid "Select trackers for removal from I2PSnark's known list"
+msgid "Select trackers for removal from Torrents's known list"
 msgstr ""
 
 msgid "Website URL"
@@ -1278,18 +1278,6 @@ msgstr ""
 #, java-format
 msgid "Invalid magnet URL {0}"
 msgstr ""
-
-#, java-format
-msgid "1 hop"
-msgid_plural "{0} hops"
-msgstr[0] ""
-msgstr[1] ""
-
-#, java-format
-msgid "1 tunnel"
-msgid_plural "{0} tunnels"
-msgstr[0] ""
-msgstr[1] ""
 
 msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
 msgstr ""

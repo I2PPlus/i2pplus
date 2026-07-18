@@ -52,7 +52,7 @@ msgid "unknown"
 msgstr "མི་ཤེས་པ།"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr "ཁྱོད་ཀྱི་གསང་ཚན་སྲུང་བར་དུ་SusiMail HTML གློག་ཐུང་གི་Javascript དང་། གཞན་གྱི་ནང་དོན་ཚུགས་པ་བརྒྱུད་སྐྱོང་བྱེད་ཡོད།"
+msgstr "ཁྱོད་ཀྱི་གསང་ཚན་སྲུང་བར་དུ་འཕྲིན་ཐུང་དྲ། HTML གློག་ཐུང་གི་Javascript དང་། གཞན་གྱི་ནང་དོན་ཚུགས་པ་བརྒྱུད་སྐྱོང་བྱེད་ཡོད།"
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "མཚོན་ཚུལ་དང་། ཐོན་མི་ཡོན་ཏན་ལ་Javascript གི་རྒྱབ་རྒུད་བྱེད་པར་བྱ་རྒྱུ།"

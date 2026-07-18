@@ -52,7 +52,7 @@ msgid "unknown"
 msgstr "ناشناخته"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr "برای حفاظت از حریم خصوصی شما، SusiMail جاوا اسکریپت و هر محتوای دوری که در این پیام HTML وجود دارد را блک می‌کند."
+msgstr "برای حفاظت از حریم خصوصی شما، پست وب جاوا اسکریپت و هر محتوای دوری که در این پیام HTML وجود دارد را блک می‌کند."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "برای افزایش کیفیت نمایش و اضافه کردن ویژگی‌های بیشتر، جاوا اسکریپت را فعال کنید."

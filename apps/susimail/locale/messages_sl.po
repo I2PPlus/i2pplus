@@ -54,7 +54,7 @@ msgid "unknown"
 msgstr "neznano"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr "Da bi zaščitili vaše zasebnost, blokira SusiMail Javascript in vse oddaljeno vsebino vključeno v to HTML sporočilo."
+msgstr "Da bi zaščitili vaše zasebnost, blokira Spletna pošta Javascript in vse oddaljeno vsebino vključeno v to HTML sporočilo."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "Omogočite Javascript za izboljšano predstavitev in dodatne funkcionalnosti."
@@ -279,10 +279,10 @@ msgid "To"
 msgstr "Za"
 
 msgid "Cc"
-msgstr "Cc"
+msgstr "Kp"
 
 msgid "Bcc"
-msgstr "Bcc"
+msgstr "Skp"
 
 msgid "Subject"
 msgstr "Naslov"

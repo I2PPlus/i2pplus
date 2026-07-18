@@ -1643,7 +1643,7 @@ msgid "Exploratory tunnels"
 msgstr "予備トンネル"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "トレント"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "匿名性警告 - 設定に0ホップのトンネルが含まれています。"
@@ -1735,7 +1735,7 @@ msgid "Enabling the Universal Theming option is recommended when embedding these
 msgstr "これらのアプリケーションを埋め込むときは、ユニバーサルテーマオプションを有効にすることをお勧めします"
 
 msgid "Embed I2PSnark and I2PMail in the console"
-msgstr "コンソールにI2PSnarkとI2PMailを埋め込みました"
+msgstr "コンソールにトレントとI2PMailを埋め込みました"
 
 msgid "Add a user and password to enable."
 msgstr "ユーザー名とパスワードを追加すると有効になります。"
@@ -6391,7 +6391,7 @@ msgid "If set to true, this option will place an icon in the system tray / notif
 msgstr "trueに設定すると、このオプションに基本的なサービス制御オプションを備えたアイコンがシステムトレイ/通知エリアに配置されます。[デフォルトでは無効]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr "この設定は、トレントをダウンロードまたは作成する際にI2PSnarkが許可する最大ファイル数の構成を可能にします。デフォルトの2000ファイルからこの値を大幅に増やす場合、ホストシステムの追加の設定が必要になる場合があります。オペレーティングシステムが許可するオープンファイルの最大数を増やすために、例えばLinuxの場合は<code>ulimit -n</code>を追加設定する必要があります。変更するには、I2PSnarkの設定ファイル<code>i2psnark.config</code>に追加します。[I2PSnarkまたはルーターの再起動が必要です]"
+msgstr "この設定は、トレントをダウンロードまたは作成する際にトレントが許可する最大ファイル数の構成を可能にします。デフォルトの2000ファイルからこの値を大幅に増やす場合、ホストシステムの追加の設定が必要になる場合があります。オペレーティングシステムが許可するオープンファイルの最大数を増やすために、例えばLinuxの場合は<code>ulimit -n</code>を追加設定する必要があります。変更するには、トレントの設定ファイル<code>i2psnark.config</code>に追加します。[トレントまたはルーターの再起動が必要です]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "このトンネル固有の設定では、ルーターにホストされるサーバーへのpingへの返信を有効化または無効化することができます。ピンの無効化には、Tunnel Managerのサーバーの設定の<i>Custom Options</i>セクションに<code>i2p.streaming.answerPings=false</code>の行を追加する必要があります。"
@@ -6814,7 +6814,7 @@ msgid "I2P Terminology"
 msgstr "I2P用語"
 
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "ネットワークのサービス宛先を管理するI2Pウェブアプリケーションで、B64ハッシュを人間が読める名前にマッピングします。宛先は手動で追加するか、hosts.txtファイルへのサブスクリプションで追加できます。SusiDNSとも呼ばれます。詳細については、<a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>オンラインドキュメンテーション</a>を参照してください。 txtファイル。SusiDNSとも呼ばれます。詳細については、オンラインドキュメントを参照してください。"
+msgstr "ネットワークのサービス宛先を管理するI2Pウェブアプリケーションで、B64ハッシュを人間が読める名前にマッピングします。宛先は手動で追加するか、hosts.txtファイルへのサブスクリプションで追加できます。DNSとも呼ばれます。詳細については、<a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>オンラインドキュメンテーション</a>を参照してください。 txtファイル。DNSとも呼ばれます。詳細については、オンラインドキュメントを参照してください。"
 
 msgid "Base32 (B32) / Base64 (B64)"
 msgstr "Base32 (B32) / Base64 (B64)"
@@ -7874,11 +7874,11 @@ msgstr "注意：コンソールのラベルやオプションの多くには、
 msgid "Theme Overrides"
 msgstr "テーマのオーバーライド"
 
-msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr "I2P+は、コンソール、トンネルマネージャー、I2PSnark、SusiDNS、SusiMailに対してカスタムテーマのオーバーライドをサポートしています。これにより、アップグレード後も永続的にテーマを変更できます。オーバーライドをアクティベートするには、テーマの変更を含む<code>override.css</code>という名前のcssファイルを作成し、変更したいテーマの該当するテーマディレクトリに配置するか、例のファイルの一つを名前を変更して、ブラウザを強制再読み込みします。トンネルマネージャーとコンソールは同じ<code>override.css</code>を共有していることに注意してください。オーバーライドを無効にするには、<code>override.css</code>ファイルを削除または名前を変更し、ブラウザを強制再読み込みします（通常はControl + Shift + Rを押します）。"
+msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and ウェブメール, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
+msgstr "I2P+は、コンソール、トンネルマネージャー、トレント、DNS、ウェブメールに対してカスタムテーマのオーバーライドをサポートしています。これにより、アップグレード後も永続的にテーマを変更できます。オーバーライドをアクティベートするには、テーマの変更を含む<code>override.css</code>という名前のcssファイルを作成し、変更したいテーマの該当するテーマディレクトリに配置するか、例のファイルの一つを名前を変更して、ブラウザを強制再読み込みします。トンネルマネージャーとコンソールは同じ<code>override.css</code>を共有していることに注意してください。オーバーライドを無効にするには、<code>override.css</code>ファイルを削除または名前を変更し、ブラウザを強制再読み込みします（通常はControl + Shift + Rを押します）。"
 
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
-msgstr "テーマディレクトリは、<code>docs/themes</code>の下にあるI2Pアプリケーションディレクトリにあります。コンソールとI2PSnarkテーマのサブディレクトリには、サンプルのオーバーライドファイルがあります。"
+msgstr "テーマディレクトリは、<code>docs/themes</code>の下にあるI2Pアプリケーションディレクトリにあります。コンソールとトレントテーマのサブディレクトリには、サンプルのオーバーライドファイルがあります。"
 
 msgid "Sidebar Information"
 msgstr "サイドバーの情報"

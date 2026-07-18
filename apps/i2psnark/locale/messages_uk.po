@@ -15,7 +15,7 @@ msgid "I2P tunnel closed."
 msgstr "I2P-тунель закритий."
 
 msgid "Magnet"
-msgstr "Magnet"
+msgstr "Магніт"
 
 msgid "Unable to connect to I2P"
 msgstr "Не вдається підключитися до I2P"
@@ -30,7 +30,7 @@ msgid "Downloading"
 msgstr "Завантаження"
 
 msgid "Configuring I2PSnark with I2CP options"
-msgstr "Налаштування I2PSnark з параметрами I2CP"
+msgstr "Налаштування Торренти з параметрами I2CP"
 
 msgid "No write permissions for data directory"
 msgstr "Немає прав на запис для каталогу даних"
@@ -63,7 +63,7 @@ msgid "Download speed limit is {0}KB/s"
 msgstr "Ліміт завантаження становить {0}КБ/с"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr "Примітка: Можливо, вам доведеться зупинити та перезапустити ваші торренти або перезапустити I2PSnark, щоб ця зміна набрала чинності."
+msgstr "Примітка: Можливо, вам доведеться зупинити та перезапустити ваші торренти або перезапустити Торренти, щоб ця зміна набрала чинності."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Увімкнена рандомізація +0/1 перехопу в тунелю для входжих тунелів"
@@ -248,7 +248,7 @@ msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "ПОМИЛКА – Брак пам’яті, неможливо створити торрент із {0}"
 
 msgid "Initializing I2PSnark and opening tunnels"
-msgstr "Ініціалізація I2PSnark і відкриття тунелів"
+msgstr "Ініціалізація Торренти і відкриття тунелів"
 
 #, java-format
 msgid "Torrent added and started: {0}"
@@ -384,7 +384,7 @@ msgid "Download finished: {0}"
 msgstr "Завантаження завершено: {0}"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "Торренти"
 
 #, java-format
 msgid "Starting torrent: {0}"
@@ -902,8 +902,8 @@ msgstr "Запуск"
 msgid "Seeding to {0} peer"
 msgid_plural "Seeding to {0} peers"
 msgstr[0] "Посів до {0}"
-msgstr[1] "Висів до {0} однолітків"
-msgstr[2] "Висів до {0} однолітків"
+msgstr[1] "Висів до {0} вузлів"
+msgstr[2] "Висів до {0} вузлів"
 
 #, java-format
 msgid "Connected to {0} of {1} peers in swarm"
@@ -922,9 +922,9 @@ msgstr[2] "Роздача {0} пірам у рої"
 #, java-format
 msgid "Downloading from {0} peer"
 msgid_plural "Downloading from {0} peers"
-msgstr[0] "Завантаження з {0} peer"
-msgstr[1] "Завантаження з {0} однолітків"
-msgstr[2] "Завантаження з {0} однолітків"
+msgstr[0] "Завантаження з {0} вузла"
+msgstr[1] "Завантаження з {0} вузлів"
+msgstr[2] "Завантаження з {0} вузлів"
 
 msgid "OK"
 msgstr "ОК"
@@ -1164,13 +1164,13 @@ msgid "Auto start torrents"
 msgstr "Автоматично запускати торренти"
 
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "Автоматично запускати торренти під час додавання та перезапускати торренти під час запуску I2PSnark"
+msgstr "Автоматично запускати торренти під час додавання та перезапускати торренти під час запуску Торренти"
 
 msgid "Startup delay"
 msgstr "Затримка перез автозапуском"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "Як довго до автоматичного запуску торрентів завантажуються під час запуску I2PSnark"
+msgstr "Як довго до автоматичного запуску торрентів завантажуються під час запуску Торренти"
 
 msgid "minutes"
 msgstr "хвилин"
@@ -1266,7 +1266,7 @@ msgid "Add"
 msgstr "Додати"
 
 msgid "Select trackers for removal from I2PSnark's known list"
-msgstr "Виберіть трекери для видалення зі списку відомих I2PSnark"
+msgstr "Виберіть трекери для видалення зі списку відомих Торренти"
 
 msgid "Website URL"
 msgstr "URL-адреса веб-сайту"

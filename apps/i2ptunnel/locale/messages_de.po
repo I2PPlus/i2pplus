@@ -213,13 +213,13 @@ msgid "Enable DCC"
 msgstr "DCC aktivieren"
 
 msgid "Port"
-msgstr "Port"
+msgstr "Hafen"
 
 msgid "Specify the local port this service should be accessible from"
 msgstr "Lokalen Port definieren, unter dem der Service erreichbar ist."
 
 msgid "Host"
-msgstr "Host"
+msgstr "Gastgeber"
 
 msgid "Hostname or IP address of the target server"
 msgstr "Hostname oder IP Adresse des Zielservers"
@@ -636,7 +636,7 @@ msgid "seconds"
 msgstr "Sekunden"
 
 msgid "Maximum"
-msgstr "Maximum"
+msgstr "Maximal"
 
 msgid "Maximum startup delay"
 msgstr "Maximale Startverzögerung"
@@ -699,7 +699,7 @@ msgid "HTTPS configuration"
 msgstr "HTTPS Konfiguration"
 
 msgid "SSL Wizard"
-msgstr "SSL Wizard"
+msgstr "SSL-Assistent"
 
 msgid "Note: In order to enable QR code generation or registration authentication, configure the Website Hostname field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
 msgstr "Hinweis: Um die QR-Code Erzeugung  oder Registreirungs-Authentifizierung zu aktivieren, trage oben im Webseiten Hostfeld (für Webseiten) oder im Namensfeld (alles andere) einen Hostnamen mit .i2p Endung ein, z.b. meinneuerserver.i2p"
@@ -738,10 +738,10 @@ msgid "Recommended for blinded and encrypted destinations"
 msgstr "Empfohlen für versteckte und verschlüsselte Zieladressen"
 
 msgid "Inbound"
-msgstr "Inbound"
+msgstr "Eingehend"
 
 msgid "Outbound"
-msgstr "Outbound"
+msgstr "Ausgehend"
 
 msgid "no anonymity"
 msgstr "keine Anonymität"
@@ -897,7 +897,7 @@ msgid "Revoke"
 msgstr "Gültigkeit widerrufen"
 
 msgid "Client"
-msgstr "Client"
+msgstr "Kunde"
 
 msgid "Add"
 msgstr "Hinzufügen"
@@ -1060,7 +1060,7 @@ msgid "Global Tunnel Control"
 msgstr "Globale Tunnel Einstellungen"
 
 msgid "Tunnel Wizard"
-msgstr "Tunnel Wizard"
+msgstr "Tunnel-Assistent"
 
 msgid "Stop All"
 msgstr "Alle stoppen"
@@ -1144,7 +1144,7 @@ msgid "Hops"
 msgstr "Hopfen"
 
 msgid "in"
-msgstr "in"
+msgstr "In"
 
 msgid "out"
 msgstr "aus"
@@ -1192,7 +1192,7 @@ msgid "I2P Client Tunnels"
 msgstr "I2P-Klienten-Tunnel"
 
 msgid "Interface"
-msgstr "Interface"
+msgstr "Schnittstelle"
 
 msgid "Edit Tunnel Settings for"
 msgstr "Tunnel Einstellungen ändern für"
@@ -1434,10 +1434,10 @@ msgid "On the other hand, if you wish to host a service for others to connect to
 msgstr "Wenn andere auf einen Service zugreifen sollen, muss einen Server Tunnel erstellen."
 
 msgid "Server Tunnel"
-msgstr "Server Tunnel"
+msgstr "Servertunnel"
 
 msgid "Client Tunnel"
-msgstr "Client Tunnel"
+msgstr "Client-Tunnel"
 
 msgid "There are several types of tunnels to choose from:"
 msgstr "Es gibt mehrere unterschiedliche Typen von Tunneln, aus denen gewählt werden kann:"

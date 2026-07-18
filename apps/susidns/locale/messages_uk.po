@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Імпортовано з файлу"
 
 msgid "Manually added via SusiDNS"
-msgstr "Додано вручну через SusiDNS"
+msgstr "Додано вручну через DNS"
 
 msgid "Manually added"
 msgstr "Додано вручну"
@@ -498,7 +498,7 @@ msgid "Details"
 msgstr "Подробиці"
 
 msgid "Address Helper"
-msgstr "Address Helper"
+msgstr "Помічник адреси"
 
 msgid "link"
 msgstr "посилання"
@@ -510,7 +510,7 @@ msgid "Base 32 Address"
 msgstr "Base 32 Адреса"
 
 msgid "Base 64 Hash"
-msgstr "Base 64 Hash"
+msgstr "База 64 Хеш"
 
 msgid "Public Key"
 msgstr "Публічний ключ"
@@ -615,13 +615,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "У FAQ ви знайдете список таких адрес URL."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Якщо SusiDNS налаштовано на публікацію вашої адресної книги маршрутизатора, записи з’являться у вашій опублікованій адресній книзі та збережуться у файлі hosts.txt для спільного використання."
+msgstr "Якщо DNS налаштовано на публікацію вашої адресної книги маршрутизатора, записи з’являться у вашій опублікованій адресній книзі та збережуться у файлі hosts.txt для спільного використання."
 
 msgid "Published Addressbook"
 msgstr "Опублікована адресна книга"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "Щоб налаштувати SusiDNS для надсилання адресної книги маршрутизатора до вашої опублікованої адресної книги, встановіть «should_publish=true» на сторінці конфігурації."
+msgstr "Щоб налаштувати DNS для надсилання адресної книги маршрутизатора до вашої опублікованої адресної книги, встановіть «should_publish=true» на сторінці конфігурації."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "Усі хости, отримані від підписок, відображатимуться в цій адресній книзі, на додаток до будь-яких, які ви додаєте сюди вручну або до головної адресної книги."
@@ -672,7 +672,7 @@ msgid "for websites"
 msgstr "для веб-сайтів"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Якщо ви налаштуєте SusiDNS на публікацію адресної книги маршрутизатора, він експортує файл hosts.txt, який містить усі хости (за замовчуванням у кореневу папку вашого eepsite)."
+msgstr "Якщо ви налаштуєте DNS на публікацію адресної книги маршрутизатора, він експортує файл hosts.txt, який містить усі хости (за замовчуванням у кореневу папку вашого eepsite)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "Адреси, додані вручну до головної адресної книги, будуть об’єднані з адресною книгою маршрутизатора."

@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Importado do arquivo"
 
 msgid "Manually added via SusiDNS"
-msgstr "Adicionado manualmente via SusiDNS"
+msgstr "Adicionado manualmente via DNS"
 
 msgid "Manually added"
 msgstr "Adicionado manualmente"
@@ -69,10 +69,10 @@ msgid "Type {0}"
 msgstr "Tipo {0}"
 
 msgid "DSA 1024 bit"
-msgstr "DSA 1024 bit"
+msgstr "DSA 1024 bits"
 
 msgid "ElGamal 2048 bit"
-msgstr "ElGamal 2048 bit"
+msgstr "ElGamal 2048 bits"
 
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
@@ -607,13 +607,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Veja o FAQ para obter uma lista de URLs para inscrições."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Se o SusiDNS estiver configurado para publicar o catálogo de endereços do seu roteador, as entradas aparecerão no seu catálogo de endereços publicado e serão salvas em um arquivo hosts.txt para compartilhamento."
+msgstr "Se o DNS estiver configurado para publicar o catálogo de endereços do seu roteador, as entradas aparecerão no seu catálogo de endereços publicado e serão salvas em um arquivo hosts.txt para compartilhamento."
 
 msgid "Published Addressbook"
 msgstr "Catálogo de endereços publicado"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "Para configurar o SusiDNS para enviar o catálogo de endereços do seu roteador para o catálogo de endereços publicado, defina 'should_publish=true' na página de configuração."
+msgstr "Para configurar o DNS para enviar o catálogo de endereços do seu roteador para o catálogo de endereços publicado, defina 'should_publish=true' na página de configuração."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "Todos os hosts derivados de assinaturas aparecerão neste catálogo de endereços, além de qualquer um que você adicionar manualmente aqui ou no seu catálogo de endereços mestre."
@@ -664,7 +664,7 @@ msgid "for websites"
 msgstr "para sites"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Se você configurar o SusiDNS para publicar o catálogo de endereços do seu roteador, ele exportará um arquivo hosts.txt contendo todos os hosts (por padrão, para a raiz do seu eepsite)."
+msgstr "Se você configurar o DNS para publicar o catálogo de endereços do seu roteador, ele exportará um arquivo hosts.txt contendo todos os hosts (por padrão, para a raiz do seu eepsite)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "Endereços adicionados manualmente ao catálogo de endereços mestre serão mesclados com o catálogo de endereços do roteador."

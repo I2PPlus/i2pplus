@@ -21,7 +21,7 @@ msgid "United Arab Emirates"
 msgstr "Araabia Ühendemiraadid"
 
 msgid "Afghanistan"
-msgstr "Afghanistan"
+msgstr "Afganistan"
 
 msgid "Antigua and Barbuda"
 msgstr "Antigua ja Barbuda"
@@ -87,7 +87,7 @@ msgid "Bulgaria"
 msgstr "Bulgaaria"
 
 msgid "Bahrain"
-msgstr "Bahrain"
+msgstr "Bahrein"
 
 msgid "Burundi"
 msgstr "Burundi"
@@ -96,7 +96,7 @@ msgid "Benin"
 msgstr "Benin"
 
 msgid "Saint Barthélemy"
-msgstr "Saint Barthélemy"
+msgstr "Püha Barthélemy"
 
 msgid "Bermuda"
 msgstr "Bermuuda"
@@ -174,7 +174,7 @@ msgid "Cuba"
 msgstr "Kuuba"
 
 msgid "Cape Verde"
-msgstr "Cape Verde"
+msgstr "Cabo Verde"
 
 msgid "Curaçao"
 msgstr "Curaçao"
@@ -303,10 +303,10 @@ msgid "Guinea-Bissau"
 msgstr "Guinea-Bissau"
 
 msgid "Guyana"
-msgstr "Guyana"
+msgstr "Guajaana"
 
 msgid "Hong Kong"
-msgstr "Hong Kong"
+msgstr "Hongkong"
 
 msgid "Honduras"
 msgstr "Honduras"
@@ -375,7 +375,7 @@ msgid "Kiribati"
 msgstr "Kiribati"
 
 msgid "Comoros"
-msgstr "Comoros"
+msgstr "Komoorid"
 
 msgid "Saint Kitts and Nevis"
 msgstr "Saint Kitts ja Nevis"
@@ -402,7 +402,7 @@ msgid "Lebanon"
 msgstr "Liibanon"
 
 msgid "Saint Lucia"
-msgstr "Saint Lucia"
+msgstr "Püha Lucia"
 
 msgid "Liechtenstein"
 msgstr "Liechtenstein"
@@ -441,7 +441,7 @@ msgid "Montenegro"
 msgstr "Montenegro"
 
 msgid "Saint Martin"
-msgstr "Saint Martin"
+msgstr "Püha Martin"
 
 msgid "Madagascar"
 msgstr "Madagaskar"
@@ -615,7 +615,7 @@ msgid "Singapore"
 msgstr "Singapur"
 
 msgid "Saint Helena"
-msgstr "Saint Helena"
+msgstr "Püha Helena"
 
 msgid "Slovenia"
 msgstr "Sloveenia"
@@ -681,7 +681,7 @@ msgid "Tokelau"
 msgstr "Tokelau"
 
 msgid "Timor-Leste"
-msgstr "Timor-Leste"
+msgstr "Ida-Timor"
 
 msgid "Turkmenistan"
 msgstr "Türkmenistan"
@@ -723,7 +723,7 @@ msgid "Uruguay"
 msgstr "Uruguai"
 
 msgid "Uzbekistan"
-msgstr "Uzbekistan"
+msgstr "Usbekistan"
 
 msgid "Vatican"
 msgstr "Vatikan"
@@ -765,7 +765,7 @@ msgid "South Africa"
 msgstr "Lõuna-Aafrika"
 
 msgid "Zambia"
-msgstr "Zambia"
+msgstr "Sambia"
 
 msgid "Zimbabwe"
 msgstr "Zimbabwe"

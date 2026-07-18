@@ -135,7 +135,7 @@ msgid "Streamr server"
 msgstr "Streamr szerver"
 
 msgid "HTTP bidir"
-msgstr "HTTP bidir"
+msgstr "HTTP biir"
 
 msgid "Host not set"
 msgstr "Hoszt nincs beállítva"
@@ -213,7 +213,7 @@ msgid "Enable DCC"
 msgstr "DCC Engedélyezése"
 
 msgid "Port"
-msgstr "Port"
+msgstr "Kikötő"
 
 msgid "Specify the local port this service should be accessible from"
 msgstr "Adja meg azt a helyi portot, amelyről a szolgáltatásnak elérhetőnek kell lennie"
@@ -627,7 +627,7 @@ msgid "Startup Delay"
 msgstr "Indítási késleltetés"
 
 msgid "Minimum"
-msgstr "Minimum"
+msgstr "Minimális"
 
 msgid "Minimum startup delay"
 msgstr "Minimális indítási késleltetés"
@@ -636,7 +636,7 @@ msgid "seconds"
 msgstr "másodperc"
 
 msgid "Maximum"
-msgstr "Maximum"
+msgstr "Maximális"
 
 msgid "Maximum startup delay"
 msgstr "Maximális indítási késleltetés"
@@ -1032,7 +1032,7 @@ msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and t
 msgstr "Állítsa be a Referrer-policy fejlécet az azonos származású 'HTML, XML, JSON és szöveges fájlokhoz"
 
 msgid "Referrer-Policy"
-msgstr "Referrer-Policy"
+msgstr "Hivatkozó-politika"
 
 msgid "Set the X-Content-Type-Options header to 'nosniff'"
 msgstr "Állítsa az X-Content-Type-Options fejlécet „Nosniff” -ra"

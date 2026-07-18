@@ -1025,7 +1025,7 @@ msgid "Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text fi
 msgstr "Встановіть заголовок дозволу на \"Отримати, розміщувати, відправити\" для HTML, XML, JSON та текстових файлів"
 
 msgid "Allow"
-msgstr "Allow"
+msgstr "Дозволити"
 
 msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immutable for everything else)"
 msgstr "Увімкнути заголовки контролю кешу (без кеш для HTML, XML, JSON та тексту, незмінний для всього іншого)"
@@ -1037,7 +1037,7 @@ msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and t
 msgstr "Встановіть заголовок-поліцейський референт на \"одноразовий походження\" для HTML, XML, JSON та текстових файлів"
 
 msgid "Referrer-Policy"
-msgstr "Referrer-Policy"
+msgstr "Політика реферера"
 
 msgid "Set the X-Content-Type-Options header to 'nosniff'"
 msgstr "Встановіть заголовок X-Content Type-Options на 'nosniff'"

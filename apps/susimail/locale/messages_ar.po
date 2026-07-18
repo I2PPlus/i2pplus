@@ -56,7 +56,7 @@ msgid "unknown"
 msgstr "غير معروف"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr "لحماية خصوصيتك، تقوم SusiMail بحظر Javascript وجميع المحتوى البعيد الموجود في هذه الرسالة HTML."
+msgstr "لحماية خصوصيتك، تقوم البريد الإلكتروني بحظر Javascript وجميع المحتوى البعيد الموجود في هذه الرسالة HTML."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "تفعيل Javascript للعرض المُحسَّن والمتطلبات الإضافية."

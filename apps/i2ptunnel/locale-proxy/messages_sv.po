@@ -157,7 +157,7 @@ msgid "router"
 msgstr "router"
 
 msgid "master"
-msgstr "master"
+msgstr "bemästra"
 
 msgid "private"
 msgstr "privat"

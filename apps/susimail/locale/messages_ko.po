@@ -14,7 +14,7 @@ msgid_plural "{0} new messages"
 msgstr[0] "{0}개의 새 메시지"
 
 msgid "Email"
-msgstr "Email"
+msgstr "이메일"
 
 #, java-format
 msgid "No encoder found for encoding \\''{0}\\''."
@@ -27,19 +27,19 @@ msgid "Fwd:"
 msgstr "전달:"
 
 msgid "Drafts"
-msgstr "Drafts"
+msgstr "임시 보관함"
 
 msgid "Sent"
 msgstr "보낸 이메일"
 
 msgid "Trash"
-msgstr "Trash"
+msgstr "쓰레기"
 
 msgid "Bulk Mail"
 msgstr "대량 메일"
 
 msgid "Inbox"
-msgstr "Inbox"
+msgstr "받은편지함"
 
 msgid "View message as HTML"
 msgstr "HTML로 메시지 보기"
@@ -51,7 +51,7 @@ msgid "unknown"
 msgstr "알수없는"
 
 msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
-msgstr "개인 정보 보호를 위해 SusiMail은 이 HTML 메시지에 포함된 JavaScript와 모든 원격 콘텐츠를 차단합니다."
+msgstr "개인 정보 보호를 위해 웹메일은 이 HTML 메시지에 포함된 JavaScript와 모든 원격 콘텐츠를 차단합니다."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "강화된 화면 표시 및 추가 기능을 위해 JavaScript를 활성화하세요."
@@ -217,7 +217,7 @@ msgstr "{0}은 {1}에서 제공하는 I2P 전용 서비스입니다."
 
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr "{0} webmail client &copy Susi 2004-2005."
+msgstr "{0} 웹메일 클라이언트 &Susi 2004-2005 복사."
 
 msgid "Checking for new messages on server"
 msgstr "서버에서 새 메시지를 확인하는 중"
@@ -270,10 +270,10 @@ msgid "To"
 msgstr "수취자:"
 
 msgid "Cc"
-msgstr "Cc"
+msgstr "참조"
 
 msgid "Bcc"
-msgstr "Bcc"
+msgstr "숨은참조"
 
 msgid "Subject"
 msgstr "제목"
@@ -327,7 +327,7 @@ msgid "Create Account"
 msgstr "계정 생성"
 
 msgid "New"
-msgstr "New"
+msgstr "새로운"
 
 msgid "Check Mail"
 msgstr "메일 확인"
@@ -350,7 +350,7 @@ msgid "Date"
 msgstr "날짜"
 
 msgid "Size"
-msgstr "큭"
+msgstr "크기"
 
 msgid "Mark for deletion"
 msgstr "삭제표시"
@@ -398,7 +398,7 @@ msgid "Really delete this message?"
 msgstr "이 메세지를 삭제합니까?"
 
 msgid "Yes, really delete it!"
-msgstr "응 정말 삭제해!"
+msgstr "네, 정말 삭제합니다!"
 
 msgid "Reply"
 msgstr "답장"
@@ -428,7 +428,7 @@ msgid "Folder Page Size"
 msgstr "폴더 페이지 크기"
 
 msgid "Set"
-msgstr "셋"
+msgstr "설정"
 
 msgid "Advanced Configuration"
 msgstr "고급 설정"

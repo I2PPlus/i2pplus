@@ -14,6 +14,9 @@ msgstr ""
 msgid "Banned by Router Hash"
 msgstr ""
 
+msgid "Tor Exit"
+msgstr ""
+
 msgid "Blocklist"
 msgstr ""
 
@@ -754,10 +757,34 @@ msgstr[1] ""
 msgid "Plugin check complete"
 msgstr ""
 
+msgid "Restore Defaults"
+msgstr ""
+
+msgid "All parameters restored to factory defaults"
+msgstr ""
+
+msgid "Auto-Tuning is not available"
+msgstr ""
+
+msgid "Tuning ranges saved — changes take effect immediately"
+msgstr ""
+
+msgid "No changes to save"
+msgstr ""
+
+msgid "Tuning overrides applied"
+msgstr ""
+
+msgid "Invalid value"
+msgstr ""
+
 msgid "No bans currently active"
 msgstr ""
 
 msgid "Country"
+msgstr ""
+
+msgid "Caps"
 msgstr ""
 
 msgid "Version"
@@ -769,7 +796,7 @@ msgstr ""
 msgid "Port"
 msgstr ""
 
-msgid "Hostname"
+msgid "Host"
 msgstr ""
 
 msgid "Reason"
@@ -1306,6 +1333,9 @@ msgstr ""
 msgid "Router Family"
 msgstr ""
 
+msgid "Auto-Tuning"
+msgstr ""
+
 msgid "Save changes"
 msgstr ""
 
@@ -1587,6 +1617,9 @@ msgstr ""
 msgid "Refresh interval must be a number"
 msgstr ""
 
+msgid "Graph preferences updated"
+msgstr ""
+
 msgid "Full sidebar defaults restored."
 msgstr ""
 
@@ -1650,7 +1683,7 @@ msgstr[1] ""
 msgid "Exploratory tunnels"
 msgstr ""
 
-msgid "I2PSnark"
+msgid "Torrents"
 msgstr ""
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
@@ -1742,7 +1775,7 @@ msgstr ""
 msgid "Enabling the Universal Theming option is recommended when embedding these applications"
 msgstr ""
 
-msgid "Embed I2PSnark and I2PMail in the console"
+msgid "Embed Torrents and I2PMail in the console"
 msgstr ""
 
 msgid "Add a user and password to enable."
@@ -1975,6 +2008,18 @@ msgstr ""
 msgid "Store graph data on disk"
 msgstr ""
 
+msgid "UTC time"
+msgstr ""
+
+msgid "Display time in UTC on graph axes"
+msgstr ""
+
+msgid "Glow effect"
+msgstr ""
+
+msgid "Add a glow effect to graph lines"
+msgstr ""
+
 msgid "Select Stats"
 msgstr ""
 
@@ -1985,6 +2030,186 @@ msgid "Graph settings saved"
 msgstr ""
 
 msgid "Graph settings unchanged"
+msgstr ""
+
+msgid "CPU"
+msgstr ""
+
+msgid "CPU load average"
+msgstr ""
+
+msgid "Memory"
+msgstr ""
+
+msgid "Memory usage"
+msgstr ""
+
+msgid "Router uptime"
+msgstr ""
+
+msgid "Job Lag"
+msgstr ""
+
+msgid "ms"
+msgstr ""
+
+msgid "Job queue delay"
+msgstr ""
+
+msgid "Msg Lag"
+msgstr ""
+
+msgid "Message send processing time"
+msgstr ""
+
+msgid "Job Queue"
+msgstr ""
+
+msgid "Ready jobs waiting in queue"
+msgstr ""
+
+msgid "Threads"
+msgstr ""
+
+msgid "Active JVM threads"
+msgstr ""
+
+msgid "NTCP Estab"
+msgstr ""
+
+msgid "NTCP outbound establish time"
+msgstr ""
+
+msgid "SSU Estab"
+msgstr ""
+
+msgid "SSU outbound establish time"
+msgstr ""
+
+msgid "SSU RTO"
+msgstr ""
+
+msgid "SSU retransmission timeout"
+msgstr ""
+
+msgid "Conns/s"
+msgstr ""
+
+msgid "NTCP connections established per second"
+msgstr ""
+
+msgid "Msgs/s"
+msgstr ""
+
+msgid "Messages delivered per second"
+msgstr ""
+
+msgid "RTT"
+msgstr ""
+
+msgid "End-to-end message round trip time"
+msgstr ""
+
+msgid "Timeout"
+msgstr ""
+
+msgid "Tunnel build timeout rate"
+msgstr ""
+
+msgid "Tunnel Build"
+msgstr ""
+
+msgid "Client tunnel build latency"
+msgstr ""
+
+msgid "Active Peers"
+msgstr ""
+
+msgid "Active peers (last 60s)"
+msgstr ""
+
+msgid "Known Peers"
+msgstr ""
+
+msgid "Known routers in network database"
+msgstr ""
+
+msgid "Active I2CP clients"
+msgstr ""
+
+msgid "Transit"
+msgstr ""
+
+msgid "Transit tunnels hosted"
+msgstr ""
+
+msgid "Streams"
+msgstr ""
+
+msgid "Build Success"
+msgstr ""
+
+msgid "Tunnel build success rate"
+msgstr ""
+
+msgid "NetDB"
+msgstr ""
+
+msgid "NetDB lookup time"
+msgstr ""
+
+msgid "Banned"
+msgstr ""
+
+msgid "Total banned peers"
+msgstr ""
+
+msgid "LeaseSets"
+msgstr ""
+
+msgid "Stored LeaseSets in floodfill"
+msgstr ""
+
+msgid "Cache Hit"
+msgstr ""
+
+msgid "NetDB lookup success rate"
+msgstr ""
+
+msgid "Flood Verify"
+msgstr ""
+
+msgid "Floodfill verify time"
+msgstr ""
+
+msgid "NetDB ACK"
+msgstr ""
+
+msgid "NetDB peer acknowledge time"
+msgstr ""
+
+msgid "Lookups/s"
+msgstr ""
+
+msgid "NetDB lookups handled per second"
+msgstr ""
+
+msgid "Requests/s"
+msgstr ""
+
+msgid "Combined store + lookup operations per second"
+msgstr ""
+
+msgid "Stores/s"
+msgstr ""
+
+msgid "NetDB store messages handled per second"
+msgstr ""
+
+msgid "LS Timeout"
+msgstr ""
+
+msgid "LeaseSet request timeouts (last minute)"
 msgstr ""
 
 msgid "Overview"
@@ -2507,6 +2732,9 @@ msgstr ""
 msgid "GeoIP Db"
 msgstr ""
 
+msgid "ASN Db"
+msgstr ""
+
 msgid "Target"
 msgstr ""
 
@@ -2654,9 +2882,6 @@ msgid "Router Lookup"
 msgstr ""
 
 msgid "All Routers"
-msgstr ""
-
-msgid "LeaseSets"
 msgstr ""
 
 msgid "Advanced Lookup"
@@ -2951,16 +3176,10 @@ msgstr ""
 msgid "Configure peer"
 msgstr ""
 
-msgid "Memory usage"
-msgstr ""
-
 msgid "Hidden"
 msgstr ""
 
 msgid "Published"
-msgstr ""
-
-msgid "Whois"
 msgstr ""
 
 msgid "direct"
@@ -3104,9 +3323,6 @@ msgid "NTCP connections"
 msgstr ""
 
 msgid "Peer capabilities"
-msgstr ""
-
-msgid "Caps"
 msgstr ""
 
 msgid "Direction/Introduction"
@@ -3259,9 +3475,6 @@ msgid_plural "{0} fails"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Banned"
-msgstr ""
-
 msgid "backlogged"
 msgstr ""
 
@@ -3362,9 +3575,6 @@ msgid "Note that the profiler relies on sustained client tunnel usage to accurat
 msgstr ""
 
 msgid "Domain"
-msgstr ""
-
-msgid "Host"
 msgstr ""
 
 msgid "Groups"
@@ -3565,6 +3775,24 @@ msgid "how many new peers have they told us about lately?"
 msgstr ""
 
 msgid "All"
+msgstr ""
+
+msgid "SAM bridge is not running."
+msgstr ""
+
+msgid "Active sessions in SessionsDB"
+msgstr ""
+
+msgid "Active / pool worker threads"
+msgstr ""
+
+msgid "Pending commands in pool"
+msgstr ""
+
+msgid "Connected pool handlers"
+msgstr ""
+
+msgid "Sockets stolen for data streaming"
 msgstr ""
 
 msgid "Select search engine"
@@ -3881,6 +4109,12 @@ msgstr ""
 msgid "Show all current peer connections"
 msgstr ""
 
+msgid "Health"
+msgstr ""
+
+msgid "Router health overview"
+msgstr ""
+
 msgid "Profiles"
 msgstr ""
 
@@ -3888,12 +4122,6 @@ msgid "Show recent peer performance profiles"
 msgstr ""
 
 msgid "View existing tunnels and tunnel build status"
-msgstr ""
-
-msgid "Streams"
-msgstr ""
-
-msgid "View active streaming connections"
 msgstr ""
 
 msgid "Advanced Configuration"
@@ -3943,9 +4171,6 @@ msgid "Difference between network-synced time and local time"
 msgstr ""
 
 msgid "How much RAM I2P is using / total RAM available to I2P (excludes RAM allocated to the JVM)"
-msgstr ""
-
-msgid "Memory"
 msgstr ""
 
 msgid "Floodfill enabled"
@@ -4069,9 +4294,6 @@ msgstr ""
 msgid "Current / Maximum"
 msgstr ""
 
-msgid "Transit"
-msgstr ""
-
 msgid "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
 msgstr ""
 
@@ -4079,9 +4301,6 @@ msgid "Concurrency"
 msgstr ""
 
 msgid "Combined utility and service tunnel build success (higher of 1m or 10m average)"
-msgstr ""
-
-msgid "Build Success"
 msgstr ""
 
 msgid "The ratio of tunnel hops we provide to tunnel hops we use - a value greater than 1.00 indicates a positive contribution to the network"
@@ -4210,6 +4429,15 @@ msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] ""
 msgstr[1] ""
+
+msgid "sent"
+msgstr ""
+
+msgid "received"
+msgstr ""
+
+msgid "No active streaming connections."
+msgstr ""
 
 msgid "No known routers"
 msgstr ""
@@ -4461,6 +4689,42 @@ msgid "Distance to "
 msgstr ""
 
 msgid "Distance for"
+msgstr ""
+
+msgid "Auto-Tuning continuously monitors router performance and adjusts parameters to optimize throughput, reduce latency, and maintain stability."
+msgstr ""
+
+msgid "Uncheck the Auto box on any row to pin that parameter and prevent further adjustments."
+msgstr ""
+
+msgid "Healthy"
+msgstr ""
+
+msgid "Fair"
+msgstr ""
+
+msgid "Degraded"
+msgstr ""
+
+msgid "Current system health:"
+msgstr ""
+
+msgid "System health assessment is not yet available."
+msgstr ""
+
+msgid "Parameter"
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "Step"
+msgstr ""
+
+msgid "History"
+msgstr ""
+
+msgid "Auto"
 msgstr ""
 
 msgid "Exploratory"
@@ -4963,12 +5227,6 @@ msgstr ""
 msgid "Ban peers attempting port hopping"
 msgstr ""
 
-msgid "Ban peers sending excessive unsolicited search replies"
-msgstr ""
-
-msgid "Ban peers sending fake/slow search replies"
-msgstr ""
-
 msgid "Abuse Thresholds"
 msgstr ""
 
@@ -5006,6 +5264,27 @@ msgid "Additional Router Caps"
 msgstr ""
 
 msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG"
+msgstr ""
+
+msgid "Misc Reasons"
+msgstr ""
+
+msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
+msgstr ""
+
+msgid "Ban unresponsive floodfills"
+msgstr ""
+
+msgid "Ban routers whose RouterInfo has no version field"
+msgstr ""
+
+msgid "Ban routers with no version"
+msgstr ""
+
+msgid "Ban routers that send excessive tunnel participation requests"
+msgstr ""
+
+msgid "Ban excessive tunnel requests"
 msgstr ""
 
 msgid "Clear all bans"
@@ -5624,6 +5903,36 @@ msgstr ""
 msgid "Enable conditional fixed sidebar"
 msgstr ""
 
+msgid "Graph Options"
+msgstr ""
+
+msgid "Legacy renderer"
+msgstr ""
+
+msgid "Use RRD4J renderer"
+msgstr ""
+
+msgid "minutes (2–30)"
+msgstr ""
+
+msgid "Split display"
+msgstr ""
+
+msgid "Separate Inbound and Outbound"
+msgstr ""
+
+msgid "Graph direction"
+msgstr ""
+
+msgid "Left-to-right"
+msgstr ""
+
+msgid "Refresh Interval"
+msgstr ""
+
+msgid "Update graph every second"
+msgstr ""
+
 msgid "config stats"
 msgstr ""
 
@@ -5675,7 +5984,7 @@ msgstr ""
 msgid "The default settings are optimized for general usage and normally don't need to be changed."
 msgstr ""
 
-msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
+msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for Torrents."
 msgstr ""
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
@@ -5850,6 +6159,24 @@ msgstr ""
 msgid "Performance Graphs"
 msgstr ""
 
+msgid "health"
+msgstr ""
+
+msgid "Router Health"
+msgstr ""
+
+msgid "Performance & Load"
+msgstr ""
+
+msgid "Transport & Connectivity"
+msgstr ""
+
+msgid "Network & Participation"
+msgstr ""
+
+msgid "Floodfill / NetDB"
+msgstr ""
+
 msgid "Advanced Configuration Help - I2P+"
 msgstr ""
 
@@ -5926,6 +6253,18 @@ msgid "This setting, when set to true, will present the standard sidebar on the 
 msgstr ""
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
+msgstr ""
+
+msgid "When set to true, the sidebar bandwidth graph uses the legacy RRD4J SVG renderer. When set to false, the new dual-baseline canvas renderer is used, with gradient fills, glow effects, and a split inbound/outbound display. [Default is false]"
+msgstr ""
+
+msgid "The time period, in minutes, displayed in the sidebar bandwidth graph. Values outside the valid range (2–30) are clamped. [Default is 20]"
+msgstr ""
+
+msgid "When set to true (the default), inbound and outbound traffic are displayed in a split view with a center baseline, with outbound spikes upward and inbound spikes downward. When set to false, both lines are displayed in overlay mode from the top of the graph with a configurable composite blend. [Default is true]"
+msgstr ""
+
+msgid "Sets the render direction for the sidebar bandwidth graph. When set to rtl (the default), the graph renders right-to-left with newest data on the right. When set to ltr, the graph renders left-to-right with newest data on the left. [Default is rtl]"
 msgstr ""
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
@@ -6408,7 +6747,7 @@ msgstr ""
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr ""
 
-msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
+msgid "This setting allows configuration of the maximum number of files per torrent Torrents will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to Torrents's configuration file <code>i2psnark.config</code>. [Restart of Torrents or router required]"
 msgstr ""
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
@@ -6831,7 +7170,7 @@ msgstr ""
 msgid "I2P Terminology"
 msgstr ""
 
-msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
+msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as DNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
 msgstr ""
 
 msgid "Base32 (B32) / Base64 (B64)"
@@ -7892,10 +8231,10 @@ msgstr ""
 msgid "Theme Overrides"
 msgstr ""
 
-msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
+msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, Torrents, DNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
 msgstr ""
 
-msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
+msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and Torrents theme sub-directories."
 msgstr ""
 
 msgid "Sidebar Information"
@@ -7968,9 +8307,6 @@ msgid "The number of participating tunnels you route for others, divided by the 
 msgstr ""
 
 msgid "Some basic indications of router overload:"
-msgstr ""
-
-msgid "Job Lag"
 msgstr ""
 
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
@@ -8300,9 +8636,6 @@ msgstr ""
 msgid "job queue stats"
 msgstr ""
 
-msgid "Job Queue"
-msgstr ""
-
 msgid "Job statistics for this session"
 msgstr ""
 
@@ -8451,6 +8784,12 @@ msgstr ""
 msgid "Filter Router log output"
 msgstr ""
 
+msgid "SAM Debug"
+msgstr ""
+
+msgid "SAM Bridge Debug"
+msgstr ""
+
 msgid "service logs"
 msgstr ""
 
@@ -8475,13 +8814,16 @@ msgstr ""
 msgid "Streaming Connections"
 msgstr ""
 
-msgid "Active I2P streaming connections"
+msgid "All streaming connections"
 msgstr ""
 
-msgid "Local Tunnels"
+msgid "All Streams"
 msgstr ""
 
-msgid "Most Recent"
+msgid "Inbound streaming connections"
+msgstr ""
+
+msgid "Outbound streaming connections"
 msgstr ""
 
 msgid "torrents"
@@ -8494,6 +8836,9 @@ msgid "Most Recent Transit Tunnels"
 msgstr ""
 
 msgid "Locally hosted tunnels (exploratory and client)"
+msgstr ""
+
+msgid "Most Recent"
 msgstr ""
 
 msgid "Fastest"
@@ -8511,10 +8856,19 @@ msgstr ""
 msgid "Transit Tunnels by Peer"
 msgstr ""
 
+msgid "tuning"
+msgstr ""
+
+msgid "Router Auto-Tuning"
+msgstr ""
+
 msgid "tunnel peer count"
 msgstr ""
 
 msgid "local tunnels"
+msgstr ""
+
+msgid "Local Tunnels"
 msgstr ""
 
 msgid "Toggle Tunnel Ids"

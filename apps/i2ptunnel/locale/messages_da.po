@@ -111,19 +111,19 @@ msgid "IRC client"
 msgstr "Klient for IRC"
 
 msgid "Standard server"
-msgstr "Standard server"
+msgstr "Standardserver"
 
 msgid "HTTP server"
-msgstr "HTTP server"
+msgstr "HTTP-server"
 
 msgid "SOCKS 4/4a/5 proxy"
-msgstr "SOCKS 4/4a/5 proxy"
+msgstr "STRØMPER 4/4a/5 proxy"
 
 msgid "SOCKS IRC proxy"
-msgstr "SOCKS IRC proxy"
+msgstr "SOKKER IRC-PROXY"
 
 msgid "CONNECT/SSL/HTTPS proxy"
-msgstr "CONNECT/SSL/HTTPS proxy"
+msgstr "Forbind/SSL/HTTPS-proxy"
 
 msgid "IRC server"
 msgstr "Server for IRC"
@@ -135,7 +135,7 @@ msgid "Streamr server"
 msgstr "Server for Streamr"
 
 msgid "HTTP bidir"
-msgstr "HTTP bidir"
+msgstr "HTTP-bidir"
 
 msgid "Host not set"
 msgstr "Vært er ikke indstillet"
@@ -174,7 +174,7 @@ msgid "Name"
 msgstr "Navn"
 
 msgid "Auto Start Tunnel"
-msgstr "Auto Start Tunnel"
+msgstr "Automatisk start tunnel"
 
 msgid "Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar"
 msgstr "Navn på tunnel, der skal vises på Tunnel Manager-hjemmesiden og routerkonsollens sidebjælke"
@@ -255,7 +255,7 @@ msgid "For a random selection from a pool, separate with commas e.g. server1.i2p
 msgstr "For et tilfældigt udvalg fra en pulje, adskilles med kommaer, f.eks."
 
 msgid "Outproxy Type"
-msgstr "Outproxy Type"
+msgstr "Outproxy-type"
 
 msgid "Tunnel Destination"
 msgstr "Tunneldestination"
@@ -294,7 +294,7 @@ msgid "Start this Tunnel"
 msgstr "Start denne tunnel"
 
 msgid "Start"
-msgstr "Start"
+msgstr "Starte"
 
 msgid "Cancel"
 msgstr "Annuller"
@@ -627,7 +627,7 @@ msgid "Startup Delay"
 msgstr "Startforsinkelse"
 
 msgid "Minimum"
-msgstr "Minimum"
+msgstr "Minimum "
 
 msgid "Minimum startup delay"
 msgstr "Minimum startforsinkelse"
@@ -699,7 +699,7 @@ msgid "HTTPS configuration"
 msgstr "HTTPS-konfiguration"
 
 msgid "SSL Wizard"
-msgstr "SSL Wizard"
+msgstr "SSL Guiden"
 
 msgid "Note: In order to enable QR code generation or registration authentication, configure the Website Hostname field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
 msgstr "Bemærk: For at aktivere QR-kodegenerering eller registreringsgodkendelse skal du konfigurere feltet Webstedsværtsnavn (til websteder) eller feltet Navn (alt andet) ovenfor med et .i2p-suffikset værtsnavn, f.eks."
@@ -969,7 +969,7 @@ msgid "Maximum number of web page requests per day for a unique client before ac
 msgstr "Maksimalt antal websideanmodninger pr. dag for en unik klient, før adgangen til serveren blokeres"
 
 msgid "Total"
-msgstr "Total"
+msgstr "I alt"
 
 msgid "Total number of web page requests per minute before access to the server is blocked"
 msgstr "Samlet antal websideanmodninger pr. minut, før adgangen til serveren blokeres"
@@ -1026,19 +1026,19 @@ msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immu
 msgstr "Aktiver Cache-Control headers (ingen cache til html, xml, json og tekst, uforanderlig for alt andet)"
 
 msgid "Cache-Control"
-msgstr "Cache-Control"
+msgstr "Cache kontrol"
 
 msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
 msgstr "Indstil Referrer-Policy-headeren til 'same-origin' for html-, xml-, json- og tekstfiler"
 
 msgid "Referrer-Policy"
-msgstr "Referrer-Policy"
+msgstr "Henvisnings-politik"
 
 msgid "Set the X-Content-Type-Options header to 'nosniff'"
 msgstr "Sæt X-Content-Type-Options overskriften til 'nosniff'"
 
 msgid "X-Content-Type-Options"
-msgstr "X-Content-Type-Options"
+msgstr "X indholdstypeindstillinger"
 
 #, java-format
 msgid "Initializing Tunnel Manager{0}"
@@ -1099,7 +1099,7 @@ msgid "Points at"
 msgstr "Peg på"
 
 msgid "Preview"
-msgstr "Preview"
+msgstr "Forhåndsvisning"
 
 msgid "Status"
 msgstr "Status"
@@ -1162,7 +1162,7 @@ msgid "Restart"
 msgstr "Genstart"
 
 msgid "Destination"
-msgstr "Destination"
+msgstr "Bestemmelsessted"
 
 msgid "Signature"
 msgstr "Signatur"
@@ -1340,7 +1340,7 @@ msgid "Experts only!"
 msgstr "Kun eksperter!"
 
 msgid "Base32"
-msgstr "Base32"
+msgstr "Base 32"
 
 msgid "Alt Base32"
 msgstr "Alt Base32"
@@ -1364,7 +1364,7 @@ msgid "SSL Activation"
 msgstr "SSL-aktivering"
 
 msgid "I2P webserver (eepsite)"
-msgstr "I2P webserver (eepsite)"
+msgstr "I2P-webserver (eepsite)"
 
 msgid "Disable SSL"
 msgstr "Deaktiver SSL"

@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Tuotu tiedostosta"
 
 msgid "Manually added via SusiDNS"
-msgstr "Lisätty manuaalisesti SusiDNS:n kautta"
+msgstr "Lisätty manuaalisesti DNS:n kautta"
 
 msgid "Manually added"
 msgstr "Lisätty manuaalisesti"
@@ -337,7 +337,7 @@ msgid "all"
 msgstr "kirkas suodatin"
 
 msgid "Info"
-msgstr "Info"
+msgstr "Tiedot"
 
 msgid "Type"
 msgstr "Tyyppi"
@@ -607,13 +607,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Katso UKK-kohdasta luettelo tilaus-URL-osoitteista."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Jos SusiDNS on määritetty julkaisemaan reitittimen osoitekirjasi, merkinnät näkyvät julkaistussa osoitekirjassasi ja tallennetaan hosts.txt-tiedostoon jakamista varten."
+msgstr "Jos DNS on määritetty julkaisemaan reitittimen osoitekirjasi, merkinnät näkyvät julkaistussa osoitekirjassasi ja tallennetaan hosts.txt-tiedostoon jakamista varten."
 
 msgid "Published Addressbook"
 msgstr "Julkaistu osoitekirja"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "Jos haluat määrittää SusiDNS:n työntämään reitittimen osoitekirjaasi julkaistuun osoitekirjaasi, määritä asetussivulla 'should_publish=true'."
+msgstr "Jos haluat määrittää DNS:n työntämään reitittimen osoitekirjaasi julkaistuun osoitekirjaasi, määritä asetussivulla 'should_publish=true'."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "Kaikki tilauksista johdetut isännät näkyvät tässä osoitekirjassa niiden lisäksi, jotka lisäät manuaalisesti tähän tai pääosoitekirjaasi."
@@ -664,7 +664,7 @@ msgid "for websites"
 msgstr "verkkosivustoille"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Jos määrität SusiDNS:n julkaisemaan reitittimen osoitekirjaasi, se vie kaikki isännät sisältävän hosts.txt-tiedoston (oletusarvoisesti eep-sivustosi juureen)."
+msgstr "Jos määrität DNS:n julkaisemaan reitittimen osoitekirjaasi, se vie kaikki isännät sisältävän hosts.txt-tiedoston (oletusarvoisesti eep-sivustosi juureen)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "Pääosoitekirjaasi manuaalisesti lisätyt osoitteet yhdistetään reitittimen osoitekirjaasi."

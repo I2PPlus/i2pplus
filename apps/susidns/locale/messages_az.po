@@ -38,7 +38,7 @@ msgid "Imported from file"
 msgstr "Fayldan girişi edildi"
 
 msgid "Manually added via SusiDNS"
-msgstr "İstifadəçi tərəfindən SusiDNS vasitəsilə əlavə edildi"
+msgstr "İstifadəçi tərəfindən DNS vasitəsilə əlavə edildi"
 
 msgid "Manually added"
 msgstr "İstifadəçi tərəfindən əlavə edildi"
@@ -502,7 +502,7 @@ msgid "Base 32 Address"
 msgstr "Base 32 Ünvanı"
 
 msgid "Base 64 Hash"
-msgstr "Base 64 Hash"
+msgstr "Baza 64 Hash"
 
 msgid "Public Key"
 msgstr "Açıq açar"
@@ -607,13 +607,13 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Abunə URL-si siyahısı üçün FAQ-a baxın."
 
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "SusiDNS tənzimlənmişdirsə ki, Ruternin adres kitabınızı nəşr edəsin, qeydlər Sizin Nəşr olunmuş adres kitabınıza çıxarılacaq və paylaşmaq üçün hosts.txt faylına saxlanılacaq."
+msgstr "DNS tənzimlənmişdirsə ki, Ruternin adres kitabınızı nəşr edəsin, qeydlər Sizin Nəşr olunmuş adres kitabınıza çıxarılacaq və paylaşmaq üçün hosts.txt faylına saxlanılacaq."
 
 msgid "Published Addressbook"
 msgstr "Nəşr olunmuş Adres Kitabı"
 
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "SusiDNS-i Ruternin adres kitabınızı Sizin Nəşr olunmuş adres kitabınıza çıxarmaq üçün tənzimləmək üçün, tənzimləmə səhifəsində 'should_publish=true' ayarlayın."
+msgstr "DNS-i Ruternin adres kitabınızı Sizin Nəşr olunmuş adres kitabınıza çıxarmaq üçün tənzimləmək üçün, tənzimləmə səhifəsində 'should_publish=true' ayarlayın."
 
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "Bütün abunələrdən əldə olunan mənzillər bu adres kitabında görünəcək, əlavə olaraq, sizin manuel olaraq əlavə etdiyiniz və ya Üst adres kitabınıza əlavə etdiyiniz."
@@ -664,7 +664,7 @@ msgid "for websites"
 msgstr "vebsaytlar üçün"
 
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "SusiDNS-i Ruternin adres kitabınızı nəşr etmək üçün tənzimləyirsinizsə, o bütün mənzilləri əhatə edən hosts.txt faylını nəşr edəcəkdir (standart olaraq sizin eepsitenizin köküne)."
+msgstr "DNS-i Ruternin adres kitabınızı nəşr etmək üçün tənzimləyirsinizsə, o bütün mənzilləri əhatə edən hosts.txt faylını nəşr edəcəkdir (standart olaraq sizin eepsitenizin köküne)."
 
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "Sizin Üst adres kitabınıza manuel olaraq əlavə etdiyiniz ünvandılar Ruternin adres kitabınıza birləşdiriləcəkdir."

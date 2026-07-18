@@ -35,7 +35,7 @@ msgid "Host"
 msgstr "Xost"
 
 msgid "Base32"
-msgstr "Base32"
+msgstr "Baza 32"
 
 msgid "Destination"
 msgstr "Nöqtə"
@@ -157,7 +157,7 @@ msgid "router"
 msgstr "ruter"
 
 msgid "master"
-msgstr "master"
+msgstr "ustad"
 
 msgid "private"
 msgstr "gizli"

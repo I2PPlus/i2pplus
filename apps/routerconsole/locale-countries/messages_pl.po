@@ -1,13 +1,7 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 msgid ""
-msgstr ""
-"Language: pl\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
-
+msgstr "Language: pl\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 msgid "Anonymous Proxy"
 msgstr "Anonimowe proxy"
 
@@ -96,7 +90,7 @@ msgid "Benin"
 msgstr "Benin"
 
 msgid "Saint Barthélemy"
-msgstr "Saint Barthélemy"
+msgstr "Święty Barthelemy"
 
 msgid "Bermuda"
 msgstr "Bermudy"
@@ -108,7 +102,7 @@ msgid "Bolivia"
 msgstr "Boliwia"
 
 msgid "Bonaire"
-msgstr "Bonaire"
+msgstr "Bonaire'a"
 
 msgid "Brazil"
 msgstr "Brazylia"
@@ -177,7 +171,7 @@ msgid "Cape Verde"
 msgstr "Republika Zielonego Przylądka"
 
 msgid "Curaçao"
-msgstr "Curaçao"
+msgstr "Curacao"
 
 msgid "Christmas Island"
 msgstr "Wyspa Bożego Narodzenia"
@@ -306,7 +300,7 @@ msgid "Guyana"
 msgstr "Gujana"
 
 msgid "Hong Kong"
-msgstr "Hong Kong"
+msgstr "Hongkong"
 
 msgid "Honduras"
 msgstr "Honduras"
@@ -351,7 +345,7 @@ msgid "Italy"
 msgstr "Włochy"
 
 msgid "Jersey"
-msgstr "Jersey"
+msgstr "Golf"
 
 msgid "Jamaica"
 msgstr "Jamajka"
@@ -402,7 +396,7 @@ msgid "Lebanon"
 msgstr "Liban"
 
 msgid "Saint Lucia"
-msgstr "Saint Lucia"
+msgstr "Święta Łucja"
 
 msgid "Liechtenstein"
 msgstr "Liechtenstein"
@@ -414,7 +408,7 @@ msgid "Liberia"
 msgstr "Liberia"
 
 msgid "Lesotho"
-msgstr "Lesotho"
+msgstr "Lesoto"
 
 msgid "Lithuania"
 msgstr "Litwa"
