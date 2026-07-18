@@ -9,6 +9,7 @@ import net.i2p.crypto.SessionKeyManager;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionTag;
+import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.DeliveryStatusMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.JobImpl;
@@ -1257,19 +1258,15 @@ public class TestJob extends JobImpl {
     private boolean scheduleRetest(boolean asap) {
         if (_pool == null || !_pool.isAlive()) return false;
 
-        // Skip retest if tunnel doesn't have valid IDs anymore (may have been rebuilt/replaced)
-        try {
-            long recvId = _cfg.getReceiveTunnelId(0).getTunnelId();
-            long sendId = _cfg.getSendTunnelId(0).getTunnelId();
-            if (recvId == 0 || sendId == 0) {
-                if (_log.shouldDebug()) {
-                    _log.debug("Skipping retest - tunnel IDs no longer valid: recv=" + recvId + ", send=" + sendId);
-                }
-                return false;
-            }
-        } catch (Exception e) {
+        // Skip retest if the tunnel doesn't have a valid gateway ID anymore
+        // (it may have been rebuilt/replaced mid-test).  Only hop 0's relevant
+        // ID is populated: inbound tunnels have a receive ID, outbound tunnels
+        // have a send ID.  Checking the wrong side yields null, so mirror the
+        // direction-aware check used in shouldSchedule().
+        TunnelId gwId = _cfg.isInbound() ? _cfg.getReceiveTunnelId(0) : _cfg.getSendTunnelId(0);
+        if (gwId == null || gwId.getTunnelId() == 0) {
             if (_log.shouldDebug()) {
-                _log.debug("Skipping retest - tunnel no longer accessible: " + _cfg, e);
+                _log.debug("Skipping retest - tunnel gateway ID no longer valid: " + _cfg);
             }
             return false;
         }
