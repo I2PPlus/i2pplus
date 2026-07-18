@@ -1127,6 +1127,8 @@ public class PeerState {
             Map.Entry<Long, InboundMessageState> entry = iter.next();
             InboundMessageState state = entry.getValue();
             if (state.isExpired() || state.isComplete() || _dead) {
+                // Return pooled fragment buffers to the ByteCache; releaseResources() is idempotent
+                state.releaseResources();
                 iter.remove();
             } else {
                 rv++;

@@ -209,6 +209,8 @@ class MessageReceiver {
                         }
                         if ((message != null) && (message.isExpired())) {
                             expiredLifetime += message.getLifetime();
+                            // Return pooled fragment buffers to the ByteCache before discarding
+                            message.releaseResources();
                             message = null;
                             expired++;
                         }
