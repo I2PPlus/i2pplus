@@ -53,6 +53,9 @@ class Connection {
     private final AtomicInteger _unackedPacketsReceived = new AtomicInteger();
     private long _congestionWindowEnd;
     private final AtomicLong _highestAckedThrough = new AtomicLong(-1);
+    /** Duplicate ACK tracking for fast retransmit (accessed inside _outboundPackets lock) */
+    private int _dupAckCount;
+    private long _lastDupAck;
     private volatile int _ssthresh;
     private final boolean _isInbound;
     private boolean _updatedShareOpts;
@@ -530,6 +533,7 @@ class Connection {
      *  @return List of packets acked for the first time (empty if none)
      */
     public List<PacketLocal> ackPackets(long ackThrough, long[] nacks) {
+        long oldHighest = _highestAckedThrough.get();
         if (nacks == null || nacks.length == 0) {
             _highestAckedThrough.updateAndGet(cur -> Math.max(cur, ackThrough));
         } else {
@@ -572,17 +576,38 @@ class Connection {
                             iter.remove();
                         }
                     } else {
-                        /*
-                         * We do not currently do an "implicit nack" of the packets higher
-                         * than ackThrough, so those will not be fast retransmitted.
-                         * This doesn't work because every packet has an ACK in it, so we hit the
-                         * FAST_TRANSMIT threshold in a heartbeat and retransmit everything,
-                         * even with the threshold at 3. (we never set the NO_ACK field in the header)
-                         */
+                        // Packets > ackThrough are implicitly NACKed; see below for
+                        // dup-ACK-based fast retransmit of the first missing packet
                         break; // _outboundPackets is ordered
                     }
                 } // for
             } // !isEmpty()
+            // Dup-ACK fast retransmit (implicit NACK of packets beyond ackThrough).
+            // Count consecutive duplicate ACKs; at threshold, retransmit the oldest
+            // unacked packet. Only fires when peer sends data (ACKs piggybacked).
+            if (!_outboundPackets.isEmpty()) {
+                if (nacks == null || nacks.length == 0) {
+                    if (ackThrough > oldHighest) {
+                        _dupAckCount = 0;
+                    } else {
+                        if (ackThrough == _lastDupAck) {
+                            _dupAckCount++;
+                            if (_dupAckCount >= FAST_RETRANSMIT_THRESHOLD) {
+                                Map.Entry<Long, PacketLocal> first = _outboundPackets.firstEntry();
+                                if (first != null && first.getValue().getNumSends() > 0) {
+                                    first.getValue().incrementNACKs();
+                                }
+                                _dupAckCount = 0;
+                            }
+                        } else {
+                            _lastDupAck = ackThrough;
+                            _dupAckCount = 1;
+                        }
+                    }
+                } else {
+                    _dupAckCount = 0;
+                }
+            }
             if (!_ackedList.isEmpty()) {
                 _ackedPackets.addAndGet(_ackedList.size());
                 for (int i = 0; i < _ackedList.size(); i++) {
