@@ -198,7 +198,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static void setInitialWindowSize(int val) { _initialWindowSize = Math.max(4, Math.min(256, val)); }
     /**
      *  Initial RTT estimate for new connections before first measurement.
-     *  I2P typically has 2-10 second RTT, so 3 seconds provides a conservative
+     *  I2P typically has 2-10 second RTT, so 5 seconds provides a conservative
      *  starting point that adapts quickly via updateRTT().
      */
     public static final int DEFAULT_INITIAL_RTT = 5*1000;
