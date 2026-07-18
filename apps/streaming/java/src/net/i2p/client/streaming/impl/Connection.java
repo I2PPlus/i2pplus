@@ -82,6 +82,8 @@ class Connection {
     private volatile boolean _isChoked;
     /** are we choking the other side? */
     private volatile boolean _isChoking;
+    /** when we last sent a choke ACK, for persist-timer rate-limiting of re-asserts */
+    private volatile long _lastChokeAckTime;
     private final AtomicInteger _unchokesToSend = new AtomicInteger();
     private final AtomicBoolean _ackSinceCongestion;
     /** Notify this on connection (or connection failure) */
@@ -1300,11 +1302,18 @@ class Connection {
             _isChoking = on;
             if (_log.shouldWarn()) {_log.warn("Choking changed to " + on + " on " + this);}
             if (!on) {_unchokesToSend.set(UNCHOKES_TO_SEND);}
+            _lastChokeAckTime = _context.clock().now();
             ackImmediately();
         } else if (on) {
             // Re-assert an active choke: re-notify the peer in case the prior choke
-            // ACK was lost, otherwise the peer may resume sending.
-            ackImmediately();
+            // ACK was lost, otherwise the peer may resume sending. Rate-limit this
+            // like a TCP persist timer so a persistently choked peer does not make
+            // us emit a stream of redundant signed ACKs (wasted CPU and session tags).
+            long now = _context.clock().now();
+            if (now - _lastChokeAckTime >= _options.getSendAckDelay()) {
+                _lastChokeAckTime = now;
+                ackImmediately();
+            }
         }
     }
 
