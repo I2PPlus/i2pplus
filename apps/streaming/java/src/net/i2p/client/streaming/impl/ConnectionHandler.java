@@ -43,7 +43,7 @@ class ConnectionHandler {
      *  Don't make this too big because the removal by all the TimeoutSyns is O(n**2) - sortof.
      */
     private int getMaxQueueSize() {
-        int def = SystemVersion.isSlow() ? 48 : 80;
+        int def = SystemVersion.isSlow() ? 128 : 256;
         return _context.getProperty("i2p.streaming.maxQueueSize", def);
     }
 
