@@ -39,13 +39,16 @@ public class TestJob extends JobImpl {
     private final Log _log;
     private final TunnelPool _pool;
     private final PooledTunnelCreatorConfig _cfg;
-    private boolean _found;
+    private final AtomicBoolean _found = new AtomicBoolean();
     private TunnelInfo _outTunnel;
     private TunnelInfo _replyTunnel;
     private SessionTag _encryptTag;
     private RatchetSessionTag _ratchetEncryptTag;
     private static final AtomicInteger __id = new AtomicInteger();
     private int _testId;
+    /** Test period for the current round, computed once at send time so the
+     *  reply is judged against the same window used to set the expiration. */
+    private int _testPeriod;
 
     /**
      * Maximum number of times a test can be deferred (no partner tunnel available)
@@ -467,10 +470,24 @@ public class TestJob extends JobImpl {
 
     /**
      * Atomically decrement total job counter.
-     * Must be called when a test job completes or is cancelled.
+     * Used only by constructor invalidation paths that run before the job is
+     * queued (and so can never race {@link #dropped()}).  Runtime completion
+     * paths must use {@link #decrementIfCounted()} for idempotency.
      */
     private static void decrementTotalJobs() {
         TOTAL_TEST_JOBS.decrementAndGet();
+    }
+
+    /**
+     * Idempotently decrement the total job counter for this instance.
+     * Once queued, a job may complete on one thread and be dropped on another;
+     * the {@code _counted} gate ensures the counter is only released once,
+     * preventing drift that would break the scheduling caps.
+     */
+    private void decrementIfCounted() {
+        if (_counted.compareAndSet(true, false)) {
+            TOTAL_TEST_JOBS.decrementAndGet();
+        }
     }
 
     /**
@@ -596,14 +613,14 @@ public class TestJob extends JobImpl {
         final RouterContext ctx = getContext();
         if (_pool == null || !_pool.isAlive()) {
             cleanupTunnelTracking();
-            decrementTotalJobs();
+            decrementIfCounted();
             return;
         }
 
         // Check for graceful shutdown
         if (ctx.router().gracefulShutdownInProgress()) {
             cleanupTunnelTracking();
-            decrementTotalJobs();
+            decrementIfCounted();
             return;
         }
 
@@ -620,7 +637,7 @@ public class TestJob extends JobImpl {
                 ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
                 if (!scheduleRetest(_cfg.needsExpeditedTest())) {
                     cleanupTunnelTracking();
-                    decrementTotalJobs();
+                    decrementIfCounted();
                 }
                 return;
             }
@@ -631,12 +648,13 @@ public class TestJob extends JobImpl {
             }
             scheduleRetest(_cfg.needsExpeditedTest());
             cleanupTunnelTracking();
-            decrementTotalJobs();
+            decrementIfCounted();
             return;
         }
 
-        // Begin tunnel test logic
-        _found = false;
+        // Begin tunnel test logic.  Reset the completion gate for this round —
+        // the same TestJob instance is reused across retests.
+        _found.set(false);
         long now = ctx.clock().now();
 
         // Set test status to TESTING
@@ -658,7 +676,7 @@ public class TestJob extends JobImpl {
                 }
                 if (!scheduleRetest(false)) {
                     cleanupTunnelTracking();
-                    decrementTotalJobs();
+                    decrementIfCounted();
                 }
                 return;
             }
@@ -706,7 +724,7 @@ public class TestJob extends JobImpl {
                         _cfg.incrementTestFailures();
                         _cfg.setTestFailed();
                         cleanupTunnelTracking();
-                        decrementTotalJobs();
+                        decrementIfCounted();
                         return;
                     }
                     if (_log.shouldWarn())
@@ -715,7 +733,7 @@ public class TestJob extends JobImpl {
                     ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
                     if (!scheduleRetest(false)) {
                         cleanupTunnelTracking();
-                        decrementTotalJobs();
+                        decrementIfCounted();
                     }
                     return;
                 }
@@ -733,7 +751,7 @@ public class TestJob extends JobImpl {
                 }
                 if (!scheduleRetest(false)) {
                     cleanupTunnelTracking();
-                    decrementTotalJobs();
+                    decrementIfCounted();
                 }
                 return;
             }
@@ -776,7 +794,7 @@ public class TestJob extends JobImpl {
                         _cfg.incrementTestFailures();
                         _cfg.setTestFailed();
                         cleanupTunnelTracking();
-                        decrementTotalJobs();
+                        decrementIfCounted();
                         return;
                     }
                     if (_log.shouldWarn()) {
@@ -786,7 +804,7 @@ public class TestJob extends JobImpl {
                     ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
                     if (!scheduleRetest(false)) {
                         cleanupTunnelTracking();
-                        decrementTotalJobs();
+                        decrementIfCounted();
                     }
                     return;
                 }
@@ -800,13 +818,15 @@ public class TestJob extends JobImpl {
             ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
             if (!scheduleRetest(false)) {
                 cleanupTunnelTracking();
-                decrementTotalJobs();
+                decrementIfCounted();
             }
             return;
         }
 
-        int testPeriod = getTestPeriod();
-        long testExpiration = now + testPeriod;
+        // Compute the test period once for this round and reuse it when judging
+        // the reply — recomputing from live stats could shift the window.
+        _testPeriod = getTestPeriod();
+        long testExpiration = now + _testPeriod;
 
         DeliveryStatusMessage m = new DeliveryStatusMessage(ctx);
         m.setArrival(now);
@@ -819,12 +839,12 @@ public class TestJob extends JobImpl {
         OutNetMessage msg = ctx.messageRegistry().registerPending(sel, onReply, onTimeout);
         onReply.setSentMessage(msg);
 
-        boolean sendSuccess = sendTest(m, testPeriod);
+        boolean sendSuccess = sendTest(m, _testPeriod);
         if (!sendSuccess) {
             // Try to reschedule - if it fails, clean up tunnel tracking and total counter
             if (!scheduleRetest(_cfg.needsExpeditedTest())) {
                 cleanupTunnelTracking();
-                decrementTotalJobs();
+                decrementIfCounted();
             }
         }
     }
@@ -899,7 +919,7 @@ public class TestJob extends JobImpl {
         final RouterContext ctx = getContext();
         if (_pool == null || !_pool.isAlive()) {
             cleanupTunnelTracking();
-            decrementTotalJobs();
+            decrementIfCounted();
             return;
         }
 
@@ -952,7 +972,7 @@ public class TestJob extends JobImpl {
         boolean needsExpedited = _cfg.needsExpeditedTest();
         if (!scheduleRetest(needsExpedited)) {
             cleanupTunnelTracking();
-            decrementTotalJobs(); // Clean up if couldn't reschedule
+            decrementIfCounted(); // Clean up if couldn't reschedule
         }
     }
 
@@ -1065,9 +1085,13 @@ public class TestJob extends JobImpl {
     private void testFailed(long timeToFail) {
         if (_pool == null || !_pool.isAlive()) {
             cleanupTunnelTracking();
-            decrementTotalJobs();
+            decrementIfCounted();
             return;
         }
+
+        // Record the failed round so getSuccessRate() reflects reality and
+        // getDelay() retests a failing tunnel sooner rather than slower.
+        updateSuccessHistory(false);
 
         boolean isExploratory = _pool.getSettings().isExploratory();
         getContext().statManager().addRateData(
@@ -1110,7 +1134,7 @@ public class TestJob extends JobImpl {
                     }
                     if (!scheduleRetest(false)) {
                         cleanupTunnelTracking();
-                        decrementTotalJobs();
+                        decrementIfCounted();
                     }
                     return;
                 }
@@ -1139,7 +1163,7 @@ public class TestJob extends JobImpl {
                 _cfg.tunnelFailedCompletely();
                 _pool.tunnelFailed(_cfg);
                 cleanupTunnelTracking();
-                decrementTotalJobs();
+                decrementIfCounted();
                 return;
             }
             if (_log.shouldWarn()) {
@@ -1151,7 +1175,7 @@ public class TestJob extends JobImpl {
             // Normal delay — don't monopolize the test slot with ASAP retries
             if (!scheduleRetest(false)) {
                 cleanupTunnelTracking();
-                decrementTotalJobs();
+                decrementIfCounted();
             }
             return;
         }
@@ -1226,14 +1250,14 @@ public class TestJob extends JobImpl {
                 _cfg.tunnelFailedCompletely();
                 _pool.tunnelFailed(_cfg);
                 cleanupTunnelTracking();
-                decrementTotalJobs();
+                decrementIfCounted();
                 return;
             }
         }
         // Schedule retest with failure-based delay
         if (!scheduleRetest(true)) {
             cleanupTunnelTracking();
-            decrementTotalJobs();
+            decrementIfCounted();
         }
     }
 
@@ -1302,7 +1326,7 @@ public class TestJob extends JobImpl {
         }
 
         @Override public boolean continueMatching() {
-            return !_found && getContext().clock().now() < _expiration;
+            return !_found.get() && getContext().clock().now() < _expiration;
         }
 
         @Override public long getExpiration() { return _expiration; }
@@ -1326,8 +1350,9 @@ public class TestJob extends JobImpl {
         public void runJob() {
             if (_sentMessage != null)
                 getContext().messageRegistry().unregisterPending(_sentMessage);
-            _found = true;
-            if (_successTime < getTestPeriod()) {
+            // Claim completion atomically — the timeout job may fire concurrently.
+            if (!_found.compareAndSet(false, true)) {return;}
+            if (_successTime < _testPeriod) {
                 testSuccessful((int) _successTime);
             } else {
                 testFailed(_successTime);
@@ -1353,9 +1378,8 @@ public class TestJob extends JobImpl {
         @Override
         public void runJob() {
             clearTestTags();
-
-            if (!_found) {
-                _found = true;
+            // Claim completion atomically — the reply job may fire concurrently.
+            if (_found.compareAndSet(false, true)) {
                 testFailed(getContext().clock().now() - _started);
             }
         }
@@ -1388,9 +1412,7 @@ public class TestJob extends JobImpl {
     @Override
     public void dropped() {
         cleanupTunnelTracking();
-        if (_counted.compareAndSet(true, false)) {
-            decrementTotalJobs();
-        }
+        decrementIfCounted();
     }
 
 }
