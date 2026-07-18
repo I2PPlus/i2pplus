@@ -2622,6 +2622,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double chokeSize = getAdditionalStat(_context, "stream.chokeSizeBegin");
             double congestionWindow = getAdditionalStat(_context, "stream.con.windowSizeAtCongestion");
             double rtxRatio = getAdditionalStat(_context, "stream.rtxRatio");
+            double resets = getAdditionalEventCount(_context, "stream.resetReceived");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
@@ -2631,6 +2632,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean streamsSlow = !Double.isNaN(lifetimeRTT) && lifetimeRTT > 5000;
             boolean windowsSmall = !Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize < 4;
             boolean choking = !Double.isNaN(chokeSize) && chokeSize > 5;
+            // Frequent peer RESETs suggest we may be too aggressive — hold off growing
+            // (a soft brake, not a forced shrink; normal teardowns also emit RESETs).
+            boolean frequentResets = !Double.isNaN(resets) && resets > 5;
             // Congestion repeatedly struck at or below the current window: don't grow past
             // a size the path has proven it can't sustain (restrains growth only).
             boolean atCongestionCeiling = !Double.isNaN(congestionWindow) && current >= congestionWindow;
@@ -2667,6 +2671,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // regardless of RTT (never grow into a window that keeps triggering dups).
             if (atCongestionCeiling)
                 return current > congestionWindow ? Math.max(_min, current - _step) : current;
+
+            // Frequent RESETs = hold current window (don't push a peer that keeps resetting)
+            if (frequentResets)
+                return current;
 
             // Low RTT (fast pipe) + no drops + no congestion = increase window
             if (observed < 10000 && !dropping && !congested)
