@@ -559,7 +559,9 @@ public class PeerState {
         int failedCount = 0;
         boolean totalFail = false;
 
-        long oldestLifetime = 0;
+        // Track the earliest creation time across active + queued messages; convert to
+        // a lifetime once at the end, avoiding a per-element clock read under the lock.
+        long oldestStartedOn = Long.MAX_VALUE;
         List<OutboundMessageState> rv = null;
 
         long retransmitTimer = _retransmitTimer.get();
@@ -577,9 +579,9 @@ public class PeerState {
             while (iter.hasNext()) {
                 OutboundMessageState state = iter.next();
 
-                // Track oldest lifetime
-                long lifetime = state.getLifetime();
-                if (lifetime > oldestLifetime) oldestLifetime = lifetime;
+                // Track oldest message
+                long startedOn = state.getStartedOn();
+                if (startedOn < oldestStartedOn) oldestStartedOn = startedOn;
 
                 // Remove completed
                 if (state.isComplete()) {
@@ -656,16 +658,16 @@ public class PeerState {
                 }
             }
 
-            // Track oldest lifetime from queue
+            // Track oldest message from queue (priority-ordered, so scan is required)
             for (OutboundMessageState state : _outboundQueue) {
-                long lt = state.getLifetime();
-                if (lt > oldestLifetime) oldestLifetime = lt;
+                long startedOn = state.getStartedOn();
+                if (startedOn < oldestStartedOn) oldestStartedOn = startedOn;
             }
 
             _cachedOutboundCount = _outboundMessages.size() + _outboundQueue.size();
         }
 
-        _cachedOldestLifetime = oldestLifetime;
+        _cachedOldestLifetime = oldestStartedOn == Long.MAX_VALUE ? 0 : now - oldestStartedOn;
 
         // Process succeeded — callbacks outside lock
         for (OutboundMessageState state : succeeded) {

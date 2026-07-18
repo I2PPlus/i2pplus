@@ -328,6 +328,15 @@ class OutboundMessageState implements CDPQEntry {
     public long getLifetime() { return _context.clock().now() - _startedOn; }
 
     /**
+     * When this message was created, for computing lifetime without a repeated
+     * clock read in hot loops.
+     *
+     * @return the creation time (ms since epoch)
+     * @since 0.9.70+
+     */
+    public long getStartedOn() { return _startedOn; }
+
+    /**
      * Network RTT: time since first fragment was sent (excludes queue time).
      * Falls back to total lifetime if message hasn't been sent yet.
      *
