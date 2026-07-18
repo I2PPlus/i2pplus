@@ -575,6 +575,14 @@ public class NTCPConnection implements Closeable {
     private synchronized NTCPConnection locked_close(boolean allowRequeue) {
         if (_chan != null) try { _chan.close(); } catch (IOException ioe) { /* ignored */ }
         if (_conKey != null) _conKey.cancel();
+        // Release any in-progress handshake buffers (SimpleByteCache / _dataReadBufs).
+        // Plain close() paths (read errors etc.) would otherwise leak these, as only
+        // closeOnTimeout() routed through EstablishState.close(). close()/fail() is
+        // idempotent, so this is safe even if already released.
+        EstablishState es = _establishState;
+        if (es != null && es != EstablishBase.FAILED) {
+            es.close("Connection closed", null);
+        }
         _establishState = EstablishBase.FAILED;
         NTCPConnection old = _transport.removeCon(this);
         _transport.getReader().connectionClosed(this);
