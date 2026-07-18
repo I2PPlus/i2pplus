@@ -298,6 +298,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     public void testSuccessful(int ms) {
         _failures.set(0);
+        _recentTestExemptions = 0;
         _testStatus = TunnelTestStatus.GOOD;
         addLatencySample(ms);
     }
