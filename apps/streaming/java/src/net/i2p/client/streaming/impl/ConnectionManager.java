@@ -66,6 +66,9 @@ class ConnectionManager {
      */
     private static final ConcurrentHashMap<Hash, Long> _destFailures = new ConcurrentHashMap<>();
 
+    /** Lock for interruptible cooldown wait in connect() — notified on shutdown. */
+    private static final Object _cooldownLock = new Object();
+
     /**
      * Cooldown between connection attempts to the same failed destination.
      * Tunable via i2p.streaming.destinationCooldownMs (default: 60000).
@@ -655,11 +658,15 @@ class ConnectionManager {
               if (elapsed < getDestCooldownMs() && elapsed >= 0) {
                   long delay = getDestCooldownMs() - elapsed;
                   if (_log.shouldWarn())
-                      _log.warn("Delaying connect to [" + destHash.toBase64().substring(0,6) +
-                                "] for " + delay + "ms (cooldown from previous failure)");
-                  try {
-                      Thread.sleep(delay);
-                  } catch (InterruptedException ie) { /* ignored */ }
+                        _log.warn("Delaying connect to [" + destHash.toBase64().substring(0,6) +
+                                  "] for " + delay + "ms (cooldown from previous failure)");
+                  synchronized (_cooldownLock) {
+                      try {
+                          _cooldownLock.wait(delay);
+                      } catch (InterruptedException ie) {
+                          Thread.currentThread().interrupt();
+                      }
+                  }
               } else {
                   _destFailures.remove(destHash, lastFailure);
               }
@@ -907,6 +914,9 @@ class ConnectionManager {
             _recentlyClosed.clear();
         }
         _pendingPings.clear();
+        synchronized (_cooldownLock) {
+            _cooldownLock.notifyAll();
+        }
         // Timer threads are shared via ctx.simpleTimer2() — no per-pool threads to stop.
     }
 
