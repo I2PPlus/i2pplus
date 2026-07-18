@@ -1221,6 +1221,13 @@ public class TestJob extends JobImpl {
                 }
                 _cfg.tunnelFailedCompletely();
                 _pool.tunnelFailed(_cfg);
+                // Dead at the hard ceiling — stop testing it.  Falling through to
+                // scheduleRetest() would keep re-queueing tests (and holding the
+                // test slot) for a tunnel we just gave up on, until it expires.
+                // pruneNonGoodTunnels() removes it from the pool at LS republish.
+                cleanupTunnelTracking();
+                decrementIfCounted();
+                return;
             } else if (failures > 1) {
                 // Route through fail() so zombie ceiling can trigger
                 _pool.tunnelFailed(_cfg);
