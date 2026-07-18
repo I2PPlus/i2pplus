@@ -2611,13 +2611,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Cross-refs: sendMessageFailureLifetime (congestion), buildSuccessRate (network health),
             //             sendDuplicateSize (drops!), lifetimeRTT (completed stream RTT),
             //             lifetimeSendWindowSize (final window size at stream close),
-            //             chokeSizeBegin (choke pressure)
+            //             chokeSizeBegin (choke pressure),
+            //             windowSizeAtCongestion (window size when a dup/congestion hit)
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double buildSuccess = getBuildSuccessRate(_context);
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
             double lifetimeRTT = getAdditionalStat(_context, "stream.con.lifetimeRTT");
             double lifetimeWindowSize = getAdditionalStat(_context, "stream.con.lifetimeSendWindowSize");
             double chokeSize = getAdditionalStat(_context, "stream.chokeSizeBegin");
+            double congestionWindow = getAdditionalStat(_context, "stream.con.windowSizeAtCongestion");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
@@ -2625,6 +2627,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean streamsSlow = !Double.isNaN(lifetimeRTT) && lifetimeRTT > 5000;
             boolean windowsSmall = !Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize < 4;
             boolean choking = !Double.isNaN(chokeSize) && chokeSize > 5;
+            // Congestion repeatedly struck at or below the current window: don't grow past
+            // a size the path has proven it can't sustain (restrains growth only).
+            boolean atCongestionCeiling = !Double.isNaN(congestionWindow) && current >= congestionWindow;
 
             // FAST PATH: latency + drops = congestion-driven shrink
             // High latency alone is not a reason to shrink streaming windows —
@@ -2653,6 +2658,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Choking = decrease (window too aggressive for path)
             if (choking)
                 return Math.max(_min, current - _step);
+
+            // At the congestion ceiling: hold or shrink toward the proven-safe size,
+            // regardless of RTT (never grow into a window that keeps triggering dups).
+            if (atCongestionCeiling)
+                return current > congestionWindow ? Math.max(_min, current - _step) : current;
 
             // Low RTT (fast pipe) + no drops + no congestion = increase window
             if (observed < 10000 && !dropping && !congested)
