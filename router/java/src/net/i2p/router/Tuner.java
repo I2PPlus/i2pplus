@@ -24,6 +24,7 @@ import net.i2p.router.tunnel.pool.BuildRequestor;
 import net.i2p.router.tunnel.pool.ParticipatingThrottler;
 import net.i2p.router.tunnel.pool.RequestThrottler;
 import net.i2p.router.tunnel.pool.TestJob;
+import net.i2p.router.tunnel.pool.TunnelPeerSelector;
 import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.router.tunnel.pool.TunnelPoolManager;
 import net.i2p.router.transport.FIFOBandwidthRefiller;
@@ -329,6 +330,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new BuildRequestTimeoutParam());
         _params.add(new IbMsgsPerPumpParam());
         _params.add(new MaxConcurrentBuildsParam());
+        _params.add(new ActivityWindowParam());
         _params.add(new LookupLimitParam());
         _params.add(new MaxParticipatingTunnelsParam());
         _params.add(new ObMsgsPerPumpParam());
@@ -6173,6 +6175,82 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (!Double.isNaN(concurrentBuilds) && concurrentBuilds < current * 0.3
                 && successHigh && !buildsBackedUp && !buildsExpiring && !cwinCollapsed && !congestionActive)
                 return Math.max(_min, current - _step);
+
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the peer-selection activity-window multiplier to break the tunnel
+     * build "purgatory band" feedback loop.
+     *
+     * <p>When build success sits in the 40-79% band, the client-tunnel recency
+     * gate ({@code TunnelPeerSelector} "no-signal" pre-qualification) prunes good
+     * peers whose last successful test has aged out faster than they can be
+     * re-tested, shrinking the eligible pool and pushing success lower still.
+     * This param widens the activity window as success degrades and tightens it
+     * back toward the default as success recovers, so the window self-corrects
+     * instead of resting on a static threshold.
+     *
+     * <p>Primary signal: {@code tunnel.buildSuccessRate} (0.0-1.0).
+     * Cross-refs: {@code tunnel.buildClientExpire} (timed-out client builds),
+     *             {@code tunnel.testFailedTime} (failed tunnel tests),
+     *             {@code router.activePeers} (visibility — base window already
+     *             scales with this in TunnelPeerSelector).
+     *
+     * <p>Value is a multiplier (1-8) applied to the base activity window.
+     *
+     * @since 0.9.70+
+     */
+    private class ActivityWindowParam extends BaseParam {
+
+        ActivityWindowParam() {
+            super("tunnel.peerSelection.activityWindowMultiplier",
+                  "Peer activity window multiplier",
+                  SUB_TUNNEL,
+                  1, 8, 1, "tunnel.buildSuccessRate", _context);
+        }
+
+        protected void applyValue(int value) {
+            TunnelPeerSelector.setWindowMultiplier(value);
+        }
+
+        protected int getRuntimeValue() {
+            return TunnelPeerSelector.getWindowMultiplier();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) {return Double.NaN;}
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) {return Double.NaN;}
+            // Stat emitted as 0-100; normalize to 0-1 for threshold comparisons
+            return rate.getAverageValue() / 100.0;
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = tunnel.buildSuccessRate (normalized 0.0-1.0)
+            // Cross-refs: buildClientExpire (client build timeouts),
+            //             testFailedTime (failed tunnel tests)
+            double buildExpires = getAdditionalEventCount(_context, "tunnel.buildClientExpire");
+            double testFailed = getAdditionalStat(_context, "tunnel.testFailedTime");
+
+            boolean healthy = !Double.isNaN(observed) && observed > 0.80;
+            boolean degraded = !Double.isNaN(observed) && observed < 0.65;
+            boolean buildsExpiring = !Double.isNaN(buildExpires) && buildExpires > 10;
+            boolean testsFailing = !Double.isNaN(testFailed) && testFailed > 0;
+
+            // Degraded builds with expiring builds or failing tests: widen the
+            // window so aged-out good peers become eligible again.
+            if (degraded && (buildsExpiring || testsFailing)) {
+                return Math.min(_max, current + _step);
+            }
+
+            // Healthy again: tighten back toward the default (more selective).
+            if (healthy && current > _min) {
+                return Math.max(_min, current - _step);
+            }
 
             return current;
         }
