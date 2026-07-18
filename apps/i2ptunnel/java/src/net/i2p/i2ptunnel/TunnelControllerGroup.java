@@ -464,8 +464,12 @@ public class TunnelControllerGroup implements ClientApp {
         if (!_delayedShutdownInProgress || _delayedShutdownStartTime <= 0) {
             return 0;
         }
+        TunnelControllerGroup tcg = getInstance();
+        if (tcg == null) {
+            return 0;
+        }
         long elapsed = (System.currentTimeMillis() - _delayedShutdownStartTime) / 1000;
-        int maxDelay = getInstance().getMaxShutdownDelay();
+        int maxDelay = tcg.getMaxShutdownDelay();
         int remaining = (int) (maxDelay - elapsed);
         return Math.max(0, remaining);
     }
@@ -1351,7 +1355,6 @@ public class TunnelControllerGroup implements ClientApp {
                 _executor = new CustomThreadPoolExecutor();
                 I2PAppContext ctx = _context;
                 if (ctx != null) {
-                    ctx.statManager().createRequiredRateStat("i2ptunnel.clientRunner.activeThreads", "Client runner active threads", "I2PTunnel", RATES);
                     ctx.statManager().createRequiredRateStat("i2ptunnel.clientRunner.poolSize", "Client runner pool size", "I2PTunnel", RATES);
                 }
             } else if (_executor.getMaximumPoolSize() != _clientRunnerMax) {
