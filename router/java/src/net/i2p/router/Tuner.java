@@ -4621,7 +4621,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxRTO", "Streaming max RTO (ms)",
                   SUB_STREAMING,
 
-                  1000, 15000, 1000, "udp.sendConfirmTime", _context);
+                  1000, 12000, 1000, "udp.sendConfirmTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -4630,7 +4630,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingConnectionReflector.invokeConnectionOptionsInt("getMaxRTOStatic");
-            return v > 0 ? v : 15000;
+            return v > 0 ? v : 10000;
         }
 
         protected double getObservedStat(RouterContext ctx) {
