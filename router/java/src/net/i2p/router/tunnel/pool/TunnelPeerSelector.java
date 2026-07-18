@@ -57,6 +57,28 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     protected static final double ATTACK_THRESHOLD = ProfileOrganizer.ATTACK_THRESHOLD;
     protected static final long STARTUP_WARNING_SUPPRESS_MS = 5 * 60 * 1000L;
 
+    /**
+     *  Build success at or below this widens the activity window to counter the
+     *  purgatory band (40-79% success) where the recency gate prunes good peers
+     *  faster than they can be re-tested, tightening the eligible pool in a
+     *  self-reinforcing loop. Higher than {@link #ATTACK_THRESHOLD} because
+     *  relaxing recency is far safer than relaxing capability exclusions.
+     */
+    protected static final double DEGRADED_BUILD_THRESHOLD = 0.65;
+
+    /** Multiplier applied to the base activity window by {@link #getActivityWindow}. */
+    private static final int MIN_WINDOW_MULTIPLIER = 1;
+    private static final int MAX_WINDOW_MULTIPLIER = 8;
+    private static final int DEFAULT_WINDOW_MULTIPLIER = 1;
+
+    /**
+     *  Tuner-controlled multiplier for the peer-selection activity window.
+     *  Widening it re-admits recently-good peers whose last successful test has
+     *  aged out during a build slump. Adjusted by the Tuner's ActivityWindowParam
+     *  from {@code tunnel.buildSuccessRate}; clamped to [1, 8].
+     */
+    private static volatile int _windowMultiplier = DEFAULT_WINDOW_MULTIPLIER;
+
     /** Peers selected within this window are excluded from further selection to ensure diversity */
     protected static final long PEER_SELECTION_COOLDOWN_MS = 60_000;
 
@@ -1295,15 +1317,54 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  When the router is fresh or the network is sparse, use a wider window to
      *  avoid starving peer pools.
      *
+     *  The base window (from active-peer count) is scaled by the Tuner-controlled
+     *  multiplier ({@link #setWindowMultiplier}) and floored to at least 4 hours
+     *  when build success is in the degraded/purgatory band, so good peers whose
+     *  last successful test has aged out are re-admitted instead of pruned in a
+     *  self-reinforcing loop.
+     *
      *  @return activity window in milliseconds
      *  @since 0.9.70+
      */
     public static long getActivityWindow(RouterContext ctx) {
         int active = ctx.commSystem().countActivePeers();
-        if (active >= 500) return 1 * 60 * 60 * 1000L;   // 1 hour
-        if (active >= 200) return 2 * 60 * 60 * 1000L;   // 2 hours
-        if (active >= 100) return 4 * 60 * 60 * 1000L;   // 4 hours
-        return 8 * 60 * 60 * 1000L;                       // 8 hours
+        long base;
+        if (active >= 500) {base = 1 * 60 * 60 * 1000L;}        // 1 hour
+        else if (active >= 200) {base = 2 * 60 * 60 * 1000L;}   // 2 hours
+        else if (active >= 100) {base = 4 * 60 * 60 * 1000L;}   // 4 hours
+        else {base = 8 * 60 * 60 * 1000L;}                      // 8 hours
+
+        long window = base * _windowMultiplier;
+
+        // Acute floor: when builds are degraded, never let the window fall below
+        // 4 hours regardless of active-peer count, to break the pruning loop fast
+        // (the Tuner multiplier reacts more slowly across cycles).
+        double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+        if (buildSuccess > 0 && buildSuccess < DEGRADED_BUILD_THRESHOLD) {
+            window = Math.max(window, 4 * 60 * 60 * 1000L);
+        }
+
+        return Math.min(window, 8 * 60 * 60 * 1000L);
+    }
+
+    /**
+     *  Set the Tuner-controlled activity-window multiplier. Clamped to [1, 8].
+     *
+     *  @param mult the multiplier applied to the base activity window
+     *  @since 0.9.70+
+     */
+    public static void setWindowMultiplier(int mult) {
+        _windowMultiplier = Math.max(MIN_WINDOW_MULTIPLIER, Math.min(MAX_WINDOW_MULTIPLIER, mult));
+    }
+
+    /**
+     *  Get the current Tuner-controlled activity-window multiplier.
+     *
+     *  @return the current multiplier, in [1, 8]
+     *  @since 0.9.70+
+     */
+    public static int getWindowMultiplier() {
+        return _windowMultiplier;
     }
 
     /**
