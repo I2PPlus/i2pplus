@@ -92,7 +92,7 @@ public class IndexBean {
     private static final int MAX_FORM_KEYS = 100;
     private static final Map<Integer, SessionKey> _formKeys = new HashMap<>();
     private static final UIMessages _messages = new UIMessages(100);
-    private static final List<TimestampedMessage> _timestampedMessages = new ArrayList<>(100);
+    private static final List<TimestampedMessage> _timestampedMessages = Collections.synchronizedList(new ArrayList<TimestampedMessage>(100));
     private static final int MAX_SEEN_MESSAGES = 500;
     private static final Set<String> _seenMessages = new LinkedHashSet<>(MAX_SEEN_MESSAGES);
     private static final String PROP_THEME_NAME = "routerconsole.theme";
@@ -536,7 +536,10 @@ public class IndexBean {
             for (String msg : groupMessages) {addUniqueMessage(msg);}
         }
 
-        List<TimestampedMessage> stored = new ArrayList<>(_timestampedMessages);
+        List<TimestampedMessage> stored;
+        synchronized (_timestampedMessages) {
+            stored = new ArrayList<>(_timestampedMessages);
+        }
         stored.sort((a, b) -> Long.compare(b.timestamp, a.timestamp));
 
         while (stored.size() > 100) {stored.remove(stored.size() - 1);}
@@ -556,8 +559,10 @@ public class IndexBean {
             }
         }
 
-        _timestampedMessages.clear();
-        _timestampedMessages.addAll(stored);
+        synchronized (_timestampedMessages) {
+            _timestampedMessages.clear();
+            _timestampedMessages.addAll(stored);
+        }
 
         return buf.toString();
     }
