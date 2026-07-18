@@ -8262,17 +8262,30 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * Congestion: congestion event frequency vs total sends.
-         * Low congestion ratio = 1.0, high = 0.0
-         * Requires at least100 sends in the period for a stable ratio.
+         * Congestion: fraction of message send outcomes that triggered a
+         * window-reduction (congestion) event.
+         *
+         * <p>The denominator is {@code udp.sendConfirmTime}, which fires once per
+         * ACKed message, so this is a true per-message congestion rate rather than
+         * a per-packet count. {@code udp.congestionOccurred} fires per RTO-timeout
+         * or fast-retransmit window reduction.
+         *
+         * <p>Thresholds are calibrated for UDP/SSU over a lossy anonymizing overlay,
+         * where normal AIMD keeps a busy router in the 5-15% band. A wired-TCP-style
+         * 5% cap would flag healthy routers as congested.
+         * &lt;=5% congestion &rarr; 1.0, 25% &rarr; 0.0.
+         *
+         * <p>Requires at least 100 confirmed sends in the period for a stable ratio.
          */
         private double scoreCongestion() {
             double congEvents = getEventCount("udp.congestionOccurred");
-            double totalSends = getEventCount("udp.sendPacketSize");
-            if (totalSends < 100) return Double.NaN;
-            double congRatio = congEvents / totalSends;
-            // 0% congestion → 1.0, 5% → 0.0
-            return clamp(1.0 - (congRatio / 0.05));
+            double confirmedSends = getEventCount("udp.sendConfirmTime");
+            if (confirmedSends < 100) return Double.NaN;
+            // Congestion events are counted against the sends that could have caused
+            // them, so cap the ratio at 1.0 for degenerate short-window bursts.
+            double congRatio = Math.min(1.0, congEvents / (confirmedSends + congEvents));
+            // 5% congestion → 1.0, 25% → 0.0
+            return clamp(1.0 - ((congRatio - 0.05) / 0.20));
         }
 
         /**
