@@ -79,6 +79,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("netdb.searchLimit", "Peers Per Search");
         DISPLAY_NAMES.put("netdb.maxConcurrent", "Max Concurrent Searches");
         DISPLAY_NAMES.put("netdb.singleSearchTime", "Search Timeout");
+        DISPLAY_NAMES.put("MAX_LS_LOOKUP_TIME", "LeaseSet Lookup Timeout");
         DISPLAY_NAMES.put("i2np.udp.maxConcurrentEstablish", "Max Concurrent Handshakes");
         DISPLAY_NAMES.put("profileOrganizer.maxProfiles", "Maximum Peer Profiles");
         DISPLAY_NAMES.put("profileOrganizer.minFastPeers", "Minimum Fast Peers");
@@ -198,6 +199,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("netdb.searchLimit", "Peers queried per iterative search.");
         PARAM_DESCRIPTIONS.put("netdb.maxConcurrent", "Max simultaneous NetDB lookups.");
         PARAM_DESCRIPTIONS.put("netdb.singleSearchTime", "Per-peer lookup timeout (ms).");
+        PARAM_DESCRIPTIONS.put("MAX_LS_LOOKUP_TIME", "Adaptive deadline cap for LeaseSet lookups (ms).");
         PARAM_DESCRIPTIONS.put("i2np.udp.maxConcurrentEstablish", "Max simultaneous SSU handshakes.");
         PARAM_DESCRIPTIONS.put("profileOrganizer.maxProfiles", "Memory cap for peer profiles.");
         PARAM_DESCRIPTIONS.put("profileOrganizer.minFastPeers", "Min fast peers in routing table.");

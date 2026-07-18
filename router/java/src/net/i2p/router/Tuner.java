@@ -420,6 +420,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new NetDBMaxConcurrentParam());
         _params.add(new NetDBSearchLimitParam());
         _params.add(new NetDBSingleSearchTimeParam());
+        _params.add(new LsLookupTimeoutParam());
 
         // Peers
         _params.add(new MaxFastPeersParam());
@@ -5515,6 +5516,81 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return Math.max(_min, current - _step);
 
             return current;
+        }
+    }
+
+    /**
+     * LeaseSet lookup deadline cap (ms).
+     * Adaptive: targets ~4x the observed client.leaseSetFoundRemoteTime so client
+     * connects don't stall behind a doomed LeaseSet search (streaming retransmits
+     * paper over the miss). RouterInfo lookups are unaffected.
+     * Grows toward the ceiling when failing lookups run up against the deadline
+     * (client.leaseSetFailedRemoteTime near the cap), and won't shrink while
+     * LeaseSet lookups are failing or the system is congested.
+     */
+    private class LsLookupTimeoutParam extends BaseParam {
+
+        LsLookupTimeoutParam() {
+            super("MAX_LS_LOOKUP_TIME", "LeaseSet lookup timeout (ms)",
+                  SUB_NETDB,
+
+                  3000, 15000, 500, "client.leaseSetFoundRemoteTime", _context);
+        }
+
+        protected void applyValue(int value) {
+            IterativeSearchJob.setMaxLeaseSetLookupTime(value);
+        }
+
+        protected int getRuntimeValue() {
+            return IterativeSearchJob.getMaxLeaseSetLookupTime();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = client.leaseSetFoundRemoteTime (ms): time for successful
+            // remote LeaseSet lookups, the exact operation this cap bounds.
+            // Base target ~4x avg success time, floored by _min.
+            // Cross-refs:
+            //   client.leaseSetFailedRemoteTime — how long failing LS lookups run;
+            //     if near the current cap, the cap is truncating searches.
+            //   netDb.lookupsFailedLeaseSet — failure event count (are we failing?).
+            //   jobQueue.jobLag — CPU pressure; don't chase timeouts while congested.
+            double failTime = getAdditionalStat(_context, "client.leaseSetFailedRemoteTime");
+            double lsFails = getAdditionalEventCount(_context, "netDb.lookupsFailedLeaseSet");
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+
+            boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean failsElevated = !Double.isNaN(lsFails) && lsFails > 0;
+            // Failures are running up against the deadline: searches are being
+            // truncated, so a longer cap would let more of them complete.
+            boolean capBinding = failsElevated && !Double.isNaN(failTime) &&
+                                 failTime >= current * 0.9;
+
+            int target = Math.max(_min, (int) (observed * 4));
+
+            // Grow toward the ceiling when the cap is truncating otherwise-viable
+            // searches — successTime alone can't see this (only fast wins count).
+            if (capBinding)
+                return Math.min(_max, current + _step);
+
+            // Don't shrink while LeaseSet lookups are failing or the system is
+            // congested — give in-flight searches room to complete.
+            if (target < current && (failsElevated || systemBusy))
+                return current;
+
+            // Hysteresis: leave alone when already close to target.
+            if (current >= target - _step && current <= target + _step)
+                return current;
+
+            return clamp(current, target, _step);
         }
     }
 

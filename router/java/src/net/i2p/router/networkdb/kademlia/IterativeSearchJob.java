@@ -158,6 +158,30 @@ public class IterativeSearchJob extends FloodSearchJob {
      */
     public static void setMaxConcurrentDefault(int val) { _maxConcurrentDefault = Math.max(1, Math.min(64, val)); }
 
+    /**
+     *  Adaptive deadline cap (ms) for LeaseSet lookups only.
+     *  RouterInfo lookups continue to use {@link #MAX_SEARCH_TIME}.
+     *  Tuned live by the Tuner toward ~4x the observed netDb.successTime,
+     *  floored so healthy-but-slow searches aren't abandoned. Defaults to
+     *  MAX_SEARCH_TIME so behavior is unchanged until the Tuner adjusts it.
+     *  @since 0.9.70+
+     */
+    private static volatile int _maxLeaseSetLookupTime = MAX_SEARCH_TIME;
+
+    /**
+     *  @return the current LeaseSet lookup deadline cap in ms
+     *  @since 0.9.70+
+     */
+    public static int getMaxLeaseSetLookupTime() { return _maxLeaseSetLookupTime; }
+
+    /**
+     *  @param val LeaseSet lookup deadline cap in ms, clamped to [3000, MAX_SEARCH_TIME]
+     *  @since 0.9.70+
+     */
+    public static void setMaxLeaseSetLookupTime(int val) {
+        _maxLeaseSetLookupTime = Math.max(3000, Math.min(MAX_SEARCH_TIME, val));
+    }
+
     public static final String PROP_ENCRYPT_RI = "router.encryptRouterLookups";
 
     /** only on fast boxes, for now */
@@ -185,6 +209,10 @@ public class IterativeSearchJob extends FloodSearchJob {
         int totalSearchLimit = (facade.floodfillEnabled() && ctx.router().getUptime() > 30*60*1000) ?
                                 TOTAL_SEARCH_LIMIT_WHEN_FF : TOTAL_SEARCH_LIMIT;
         _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
+        // LeaseSet lookups use an adaptive, shorter deadline cap so client
+        // connects don't stall behind a doomed search (streaming retransmits
+        // paper over the miss). RouterInfo lookups keep the full MAX_SEARCH_TIME.
+        if (isLease) {_timeoutMs = Math.min(_timeoutMs, _maxLeaseSetLookupTime);}
         _expiration = _timeoutMs + ctx.clock().now();
         _rkey = ctx.routingKeyGenerator().getRoutingKey(key);
         _toTry = new TreeSet<>(new XORComparator<>(_rkey));
