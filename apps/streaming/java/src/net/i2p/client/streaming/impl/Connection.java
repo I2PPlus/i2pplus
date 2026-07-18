@@ -341,7 +341,6 @@ class Connection {
 
     private boolean shouldWait(int unacked, int wsz) {
         return _isChoked || unacked >= wsz ||
-               _activeResends.get() >= (wsz + 1) / 2 ||
                _lastSendId.get() - _highestAckedThrough.get() >= Math.min(MAX_WINDOW_SIZE, 2 * wsz);
     }
 
