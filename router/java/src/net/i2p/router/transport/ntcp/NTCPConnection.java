@@ -1174,6 +1174,8 @@ public class NTCPConnection implements Closeable {
         if (isClosed()) {
             if (_log.shouldWarn())
                 _log.warn("recv() on closed con");
+            // We own the buffer; return it to the pool rather than leaking it.
+            EventPumper.releaseBuf(buf);
             return;
         }
         synchronized(_statLock) {

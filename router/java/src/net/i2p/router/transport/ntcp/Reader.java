@@ -232,6 +232,9 @@ public class Reader {
                         break;
                     }
                 }
+                // Not yet established; release the buffer before retrying so we
+                // don't orphan it back to nowhere on the next getNextReadBuf().
+                EventPumper.releaseBuf(buf);
                 continue;
             }
             try {
