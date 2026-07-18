@@ -791,7 +791,7 @@ class Packet {
         }
         int written = writePacket(buffer, 0, type.getSigLen());
         if (written != size) {
-            ctx.logManager().getLog(Packet.class).error("Written " + written + " size " + size + " for " + toString(), new Exception("moo"));
+            ctx.logManager().getLog(Packet.class).error("Written " + written + " size " + size + " for " + toString());
             return false;
         }
 

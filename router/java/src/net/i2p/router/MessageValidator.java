@@ -42,7 +42,7 @@ public class MessageValidator {
         boolean isDuplicate = noteReception(messageId, expiration);
         if (isDuplicate) {
             if (_log.shouldInfo())
-                _log.info("Rejecting message " + messageId + " duplicate", new Exception("Duplicate origin"));
+                _log.info("Rejecting message " + messageId + " duplicate");
             _context.statManager().addRateData("router.duplicateMessageId", 1);
             return "Duplicate message";
         } else {

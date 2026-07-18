@@ -86,7 +86,7 @@ class I2PSocketFull implements I2PSocket {
         Connection c = _connection;
         if (c == null) return;
         if (log.shouldInfo())
-            log.info("reset() called, connected? " + c.getIsConnected() + " : " + c, new Exception());
+            log.info("reset() called, connected? " + c.getIsConnected() + " : " + c);
         if (c.getIsConnected()) {
             c.disconnect(false);
             // this will cause any thread waiting in Connection.packetSendChoke()

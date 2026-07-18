@@ -1006,7 +1006,7 @@ public class NTCPConnection implements Closeable {
         synchronized(_writeLock) {
         if (_sender == null) {
             if (_log.shouldInfo())
-                _log.info("Sender has disappeared", new Exception());
+                _log.info("Sender has disappeared");
             return;
         }
         try {

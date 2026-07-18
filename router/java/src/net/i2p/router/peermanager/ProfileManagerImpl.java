@@ -71,7 +71,7 @@ public class ProfileManagerImpl implements ProfileManager {
     @Override
     public void commErrorOccurred(Hash peer) {
         if (_log.shouldInfo())
-            _log.info("Comm error occurred for peer " + peer.toBase64(), new Exception("Comm error"));
+            _log.info("Comm error occurred for peer " + peer.toBase64());
         PeerProfile data = getProfile(peer);
         if (data == null) return;
         data.setLastSendFailed(_context.clock().now());

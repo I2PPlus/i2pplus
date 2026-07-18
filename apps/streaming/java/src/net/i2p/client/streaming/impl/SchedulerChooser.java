@@ -60,8 +60,8 @@ class SchedulerChooser {
 
         @Override
         public void eventOccurred(Connection con) {
-            if (_log.shouldInfo())
-                _log.info("Yell at jrandom: Event occurred on " + con, new Exception("source"));
+            if (_log.shouldWarn())
+                _log.warn("No scheduler matched connection: " + con);
         }
         public boolean accept(Connection con) { return true; }
     }
