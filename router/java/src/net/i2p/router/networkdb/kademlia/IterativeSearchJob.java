@@ -835,6 +835,8 @@ public class IterativeSearchJob extends FloodSearchJob {
             // Don't bias the stats with immediate fails
             getContext().statManager().addRateData("netDb.failedTime", time);
             getContext().statManager().addRateData("netDb.failedRetries", (long) tries - 1);
+            getContext().statManager().addRateData(
+                _isLease ? "netDb.lookupsFailedLeaseSet" : "netDb.lookupsFailedRouterInfo", 1);
         }
         for (Job j : _onFailed) {getContext().jobQueue().addJob(j);}
         _onFailed.clear();

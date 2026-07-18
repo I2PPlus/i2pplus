@@ -136,7 +136,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
         long[] rate = new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
         _context.statManager().createRequiredRateStat("netDb.successTime", "Time for successful NetDb lookup", "NetworkDatabase", rate);
-        _context.statManager().createRateStat("netDb.failedTime", "Time a failed NetDb search takes", "NetworkDatabase", rate);
+        _context.statManager().createRequiredRateStat("netDb.failedTime", "Time a failed NetDb search takes", "NetworkDatabase", rate);
+        _context.statManager().createRequiredRateStat("netDb.lookupsFailedLeaseSet", "Failed Iterative LeaseSet lookups", "NetworkDatabase", rate);
+        _context.statManager().createRequiredRateStat("netDb.lookupsFailedRouterInfo", "Failed Iterative RouterInfo lookups", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.failedAttemptedPeers", "Number of peers we sent a search to that failed", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.successPeers", "Number of peers we sent a search to that succeeded", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.failedPeers", "Number of peers failing to respond to a NetDb lookup", "NetworkDatabase", rate);
