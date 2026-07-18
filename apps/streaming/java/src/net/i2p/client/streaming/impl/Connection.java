@@ -573,8 +573,16 @@ class Connection {
     }
 
     /**
-     *  Process the acks and nacks received in a packet
-     *  @return List of packets acked for the first time (empty if none)
+     *  Process the acks and nacks received in a packet.
+     *
+     *  <p>Note: the returned list is a reused, internally-owned buffer
+     *  ({@code _ackedList}) that is cleared at the start of the next
+     *  {@code ackPackets()} call. Callers MUST fully consume it before the
+     *  next ack is processed. This is safe because acks are serialized on the
+     *  receive thread; do not retain a reference across calls.
+     *
+     *  @return List of packets acked for the first time (empty if none);
+     *          a shared mutable buffer, not a fresh copy
      */
     public List<PacketLocal> ackPackets(long ackThrough, long[] nacks) {
         long oldHighest = _highestAckedThrough.get();
@@ -633,6 +641,10 @@ class Connection {
                 if (nacks == null || nacks.length == 0) {
                     if (ackThrough > oldHighest) {
                         _dupAckCount = 0;
+                        // Reset the last dup-ACK marker on forward progress so a stale
+                        // value can't spuriously match and trigger fast retransmit on
+                        // the first (rather than the third) duplicate ACK.
+                        _lastDupAck = -1;
                         _tlpEvent.cancel();
                     } else {
                         if (ackThrough == _lastDupAck) {
@@ -886,7 +898,7 @@ class Connection {
             if (_inputStream.getHighestBlockId() >= 0 && !getResetReceived()) {
                 // only send a RESET if we ever got something (and he didn't RESET us),
                 // otherwise don't waste the crypto and tags
-                if (_log.shouldInfo()) {
+                if (_log.shouldWarn()) {
                     _log.warn("Hard disconnecting " + (disconnectCount > 1 ? "(Count: " + disconnectCount + ") " : "") +
                               "and sending RESET to " + getRemotePeerString() + " -> " +
                               (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
@@ -1277,10 +1289,14 @@ class Connection {
     public void setChoking(boolean on) {
         if (on != _isChoking) {
             _isChoking = on;
-           if (_log.shouldWarn()) {_log.warn("Choking changed to " + on + " on " + this);}
-           if (!on) {_unchokesToSend.set(UNCHOKES_TO_SEND);}
-           ackImmediately();
-        } else if (on) {ackImmediately();}
+            if (_log.shouldWarn()) {_log.warn("Choking changed to " + on + " on " + this);}
+            if (!on) {_unchokesToSend.set(UNCHOKES_TO_SEND);}
+            ackImmediately();
+        } else if (on) {
+            // Re-assert an active choke: re-notify the peer in case the prior choke
+            // ACK was lost, otherwise the peer may resume sending.
+            ackImmediately();
+        }
     }
 
     /**

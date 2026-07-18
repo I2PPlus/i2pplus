@@ -50,6 +50,11 @@ class MessageOutputStream extends OutputStream {
 
     private final Object _dataLock = new Object();
 
+    // Reusable buffer for single-byte write(int) to avoid per-call allocation.
+    // Guarded by _oneByteLock (not _dataLock, which write(byte[],int,int) acquires).
+    private final byte[] _oneByte = new byte[1];
+    private final Object _oneByteLock = new Object();
+
     private final DataReceiver _dataReceiver;
 
     // Track any stream IOException to propagate on next I/O call
@@ -299,7 +304,10 @@ class MessageOutputStream extends OutputStream {
      */
     @Override
     public void write(int b) throws IOException {
-        write(new byte[] {(byte) b}, 0, 1);
+        synchronized (_oneByteLock) {
+            _oneByte[0] = (byte) b;
+            write(_oneByte, 0, 1);
+        }
         throwAnyError();
     }
 
@@ -374,10 +382,12 @@ class MessageOutputStream extends OutputStream {
 
         try {
             if (ws == null) {
+                // A null WriteStatus means the receiver never queued the data; this is a
+                // hard error and must be surfaced regardless of the current log level.
                 if (_log.shouldInfo()) {
                     _log.info("WriteStatus is null during flush");
-                    throw new IOException("DataReceiver returned null WriteStatus");
                 }
+                throw new IOException("DataReceiver returned null WriteStatus");
             } else if (_closed.get() && (_writeTimeout > Connection.getDisconnectTimeout() || _writeTimeout <= 0)) {
                 ws.waitForCompletion(Connection.getDisconnectTimeout());
             } else if (_writeTimeout <= 0 || _writeTimeout > Connection.getDisconnectTimeout()) {
