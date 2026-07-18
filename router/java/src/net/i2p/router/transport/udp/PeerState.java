@@ -508,7 +508,7 @@ public class PeerState {
     private final Object _outboundLock = new Object() {
         private static final long serialVersionUID = 1L;
     };
-    private final Object _inboundLock = new Object();
+    protected final Object _inboundLock = new Object();
 
     /** Reusable lists for finishAndAllocate() — avoids per-volley allocation churn */
     private final List<OutboundMessageState> _succeededBuffer = new ArrayList<>(4);
@@ -1125,15 +1125,17 @@ public class PeerState {
      */
     int expireInboundMessages() {
         int rv = 0;
-        for (Iterator<Map.Entry<Long, InboundMessageState>> iter = _inboundMessages.entrySet().iterator(); iter.hasNext(); ) {
-            Map.Entry<Long, InboundMessageState> entry = iter.next();
-            InboundMessageState state = entry.getValue();
-            if (state.isExpired() || state.isComplete() || _dead) {
-                // Return pooled fragment buffers to the ByteCache; releaseResources() is idempotent
-                state.releaseResources();
-                iter.remove();
-            } else {
-                rv++;
+        synchronized (_inboundLock) {
+            for (Iterator<Map.Entry<Long, InboundMessageState>> iter = _inboundMessages.entrySet().iterator(); iter.hasNext(); ) {
+                Map.Entry<Long, InboundMessageState> entry = iter.next();
+                InboundMessageState state = entry.getValue();
+                if (state.isExpired() || state.isComplete() || _dead) {
+                    // Return pooled fragment buffers to the ByteCache; releaseResources() is idempotent
+                    state.releaseResources();
+                    iter.remove();
+                } else {
+                    rv++;
+                }
             }
         }
         return rv;

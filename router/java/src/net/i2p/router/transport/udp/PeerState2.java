@@ -788,7 +788,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         boolean messageExpired = false;
         boolean messageDup;
 
-        synchronized (_inboundMessages) {
+        synchronized (_inboundLock) {
             state = _inboundMessages.get(messageId);
             if (state == null) {
                 // Use Bloom filter to avoid creating state unnecessarily
