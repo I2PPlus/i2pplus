@@ -1316,7 +1316,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                 privKeyFile = new File(_context.getConfigDir(), args[1]);
             if (!privKeyFile.canRead()) {
                 l.log("private key file does not exist");
-                _log.error(getPrefix() + "Private key file does not exist or is not readable: " + args[3]);
+                _log.error(getPrefix() + "Private key file does not exist or is not readable: " + args[1]);
                 notifyEvent("serverTaskId", Integer.valueOf(-1));
                 return;
             }
