@@ -302,12 +302,14 @@ class AccessFilter implements StatefulConnectionFilter {
                     try {
                         record();
                         reload();
+                    } catch (IOException bad) {
+                        Log log = context.logManager().getLog(AccessFilter.class);
+                        log.log(Log.CRIT, "Syncing access list for Tunnel Filter failed", bad);
+                    } finally {
+                        // always reschedule, even on I/O error, so reloads don't stop permanently
                         Syncer syncer = AccessFilter.this.syncer;
                         if (syncer != null)
                             syncer.schedule(SYNC_INTERVAL);
-                    } catch (IOException bad) {
-                        Log log = context.logManager().getLog(AccessFilter.class);
-                       log.log(Log.CRIT, "Syncing access list for Tunnel Filter failed", bad);
                     }
                 }
             });
