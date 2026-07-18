@@ -2659,7 +2659,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return Math.min(_max, current + _step);
 
             // High RTT (slow pipe) + no drops + healthy network = cautiously increase
-            if (observed > 20000 && !dropping && !congested && networkHealthy)
+            if (observed > 7000 && !dropping && !congested && networkHealthy)
                 return Math.min(_max, current + _step);
 
             return current;
@@ -2706,7 +2706,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
             boolean spuriousRetransmits = !Double.isNaN(dupSize) && dupSize > 1000;
-            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 20000;
+            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 7000;
 
             // Target: 2x RTT as baseline (standard TCP-like behavior)
             int target = Math.max(2000, Math.min(_max, (int) (observed * 2)));
@@ -2775,7 +2775,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             boolean largeMessages = !Double.isNaN(msgSize) && msgSize > 1000;
             boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
-            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 20000;
+            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 7000;
 
             // FAST PATH: latency + drops = sender needs fast feedback
             if (highRTT && dropping) {
@@ -2843,7 +2843,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             boolean manySends = !Double.isNaN(sendsBeforeAck) && sendsBeforeAck > 3;
             boolean dropping = !Double.isNaN(dupSize) && dupSize > 500;
-            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 20000;
+            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 7000;
 
             // FAST PATH: latency + drops = flush immediately (clear HOL blocking)
             if (highRTT && dropping) {
@@ -2926,7 +2926,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return Math.min(_max, current + _step);
 
             // Above default: decrease if RTT is high
-            if (current > _defaultValue && observed > 20000)
+            if (current > _defaultValue && observed > 7000)
                 return Math.max(recoveryFloor, current - _step);
 
             return current;
@@ -2980,8 +2980,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
             boolean hasOverflows = !Double.isNaN(overflows) && overflows > 0;
             boolean sustainedOverflows = !Double.isNaN(hourlyOverflows) && hourlyOverflows > 2;
-            boolean highRTT = !Double.isNaN(observed) && observed > 20000;
-            boolean moderateRTT = !Double.isNaN(observed) && observed > 10000;
+            boolean highRTT = !Double.isNaN(observed) && observed > 7000;
+            boolean moderateRTT = !Double.isNaN(observed) && observed > 4000;
             boolean lowLatency = !Double.isNaN(sendTime) && sendTime < 50;
             boolean dispatchSlow = !Double.isNaN(dispatchSend) && dispatchSend > 200;
 
@@ -4645,7 +4645,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            boolean highRTT = !Double.isNaN(observed) && observed > 20000;
+            boolean highRTT = !Double.isNaN(observed) && observed > 7000;
             boolean highDups = !Double.isNaN(dupSize) && dupSize > 1000;
 
             // High retransmit pressure + high RTT = raise RTO ceiling (allow more headroom)
@@ -4703,7 +4703,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Cross-refs: udp.sendConfirmTime (actual RTT)
             double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
-            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 20000;
+            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 7000;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean highDups = !Double.isNaN(observed) && observed > 1000;
 
@@ -4764,7 +4764,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            boolean highRTT = !Double.isNaN(observed) && observed > 20000;
+            boolean highRTT = !Double.isNaN(observed) && observed > 7000;
             boolean highDups = !Double.isNaN(dupSize) && dupSize > 500;
             boolean inefficientAck = !Double.isNaN(sendsBeforeAck) && sendsBeforeAck > 8;
 
@@ -4821,7 +4821,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            boolean highRTT = !Double.isNaN(observed) && observed > 20000;
+            boolean highRTT = !Double.isNaN(observed) && observed > 7000;
             boolean retransmitsWorking = !Double.isNaN(dupSize) && dupSize > 0;
             boolean healthyWindow = !Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize > 32;
 
@@ -4883,7 +4883,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean spuriousFlood = !Double.isNaN(dupSize) && dupSize > 2000;
-            boolean highRTT = !Double.isNaN(observed) && observed > 20000;
+            boolean highRTT = !Double.isNaN(observed) && observed > 7000;
             boolean inefficientAck = !Double.isNaN(sendsBeforeAck) && sendsBeforeAck > 8;
 
             // Spurious flood = raise min delay (stop hammering the pipe)
@@ -5113,7 +5113,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
 
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            boolean highRTT = !Double.isNaN(observed) && observed > 20000;
+            // Threshold must stay below the RTT cap (default 10000): observed RTT
+            // is clamped to the cap, so a threshold >= cap would never trigger.
+            boolean highRTT = !Double.isNaN(observed) && observed > 7000;
             boolean highDups = !Double.isNaN(dupSize) && dupSize > 1000;
 
             // Spurious retransmits + congestion = raise cap (RTT spikes are real)
@@ -5281,7 +5283,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double lifetimeRTT = getAdditionalStat(_context, "stream.con.lifetimeRTT");
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
 
-            boolean highRTT = !Double.isNaN(observed) && observed > 20000;
+            boolean highRTT = !Double.isNaN(observed) && observed > 7000;
             boolean streamsSlow = !Double.isNaN(lifetimeRTT) && lifetimeRTT > 8000;
             boolean congested = !Double.isNaN(dupSize) && dupSize > 1000;
 
