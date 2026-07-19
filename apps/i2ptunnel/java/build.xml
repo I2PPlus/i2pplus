@@ -516,6 +516,8 @@
       <arg value="${jsp.build.dir}/web-fragment.xml"/>
       <arg value="-webapp"/>
       <arg value="../jsp/"/>
+      <arg value="-threadCount"/>
+      <arg value="1"/>
       <arg value="-die"/>
     </java>
     <javac debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
