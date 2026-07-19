@@ -55,6 +55,8 @@ class LookupBanHammer {
     // Cleaner interval override (ms), controlled by Tuner
     static volatile long _cleanTimeMs = CLEAN_TIME;
 
+    private final Cleaner _cleaner;
+
     /**
      * Constructs a newly initialized LookupBanHammer instance.
      * Registers a periodic cleanup event to remove expired bans.
@@ -62,7 +64,13 @@ class LookupBanHammer {
     LookupBanHammer() {
         this.burstTimestamps = new ConcurrentHashMap<ReplyTunnel, ConcurrentLinkedDeque<Long>>();
         this.banExpiration = new ConcurrentHashMap<ReplyTunnel, Long>();
-        new Cleaner().schedule(CLEAN_TIME);
+        _cleaner = new Cleaner();
+        _cleaner.schedule(CLEAN_TIME);
+    }
+
+    /** Stop the periodic cleaner. Call on facade shutdown. @since 0.9.70+ */
+    void cancel() {
+        _cleaner.cancel();
     }
 
     /**

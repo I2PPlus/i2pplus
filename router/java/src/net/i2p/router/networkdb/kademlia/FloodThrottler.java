@@ -20,17 +20,24 @@ import net.i2p.util.SimpleTimer2;
  */
 class FloodThrottler {
     private final ObjectCounter<Hash> counter;
+    private final Cleaner _cleaner;
     private static final int MAX_FLOODS = 3;
     private static final long CLEAN_TIME = 45*1000L;
 
     FloodThrottler() {
         this.counter = new ObjectCounter<>();
-        new Cleaner().schedule(CLEAN_TIME);
+        _cleaner = new Cleaner();
+        _cleaner.schedule(CLEAN_TIME);
     }
 
     /** increments before checking */
     boolean shouldThrottle(Hash h) {
         return this.counter.increment(h) > MAX_FLOODS;
+    }
+
+    /** Stop the periodic cleaner. Call on facade shutdown. @since 0.9.70+ */
+    void cancel() {
+        _cleaner.cancel();
     }
 
     private class Cleaner extends SimpleTimer2.TimedEvent {

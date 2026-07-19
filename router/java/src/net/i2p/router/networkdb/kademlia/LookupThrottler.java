@@ -46,6 +46,7 @@ class LookupThrottler {
     private final long CLEAN_TIME;
     private final FloodfillNetworkDatabaseFacade _facade;
     private volatile int _max;
+    private final Cleaner _cleaner;
 
     LookupThrottler(FloodfillNetworkDatabaseFacade facade) {
         this(facade, DEFAULT_MAX_LOOKUPS, DEFAULT_MAX_NON_FF_LOOKUPS, DEFAULT_CLEAN_TIME);
@@ -72,8 +73,14 @@ class LookupThrottler {
                 return size() > MAX_ENTRIES;
             }
         };
-        new Cleaner().schedule(CLEAN_TIME);
+        _cleaner = new Cleaner();
+        _cleaner.schedule(CLEAN_TIME);
         _max = _facade.floodfillEnabled() ? MAX_LOOKUPS : MAX_NON_FF_LOOKUPS;
+    }
+
+    /** Stop the periodic cleaner. Call on facade shutdown. @since 0.9.70+ */
+    void cancel() {
+        _cleaner.cancel();
     }
 
     /**

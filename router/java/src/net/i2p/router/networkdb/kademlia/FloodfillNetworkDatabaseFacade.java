@@ -308,6 +308,10 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             }
         }
         if (_ffMonitor != null) {_context.jobQueue().removeJob(_ffMonitor);}
+        _timeoutProcessor.cancel();
+        if (_floodThrottler != null) {_floodThrottler.cancel();}
+        if (_lookupThrottler != null) {_lookupThrottler.cancel();}
+        if (_lookupBanner != null) {_lookupBanner.cancel();}
         super.shutdown();
     }
 
