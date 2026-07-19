@@ -630,6 +630,15 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     @Override
     public synchronized void fail() {
         _handshakeState.destroy();
+        // release any pooled data packets queued before the PeerState was created,
+        // otherwise they leak on a failed/out-of-order establish (case 1 in
+        // queuePossibleDataPacket). getPeerState() only releases them on success.
+        if (_queuedDataPackets != null) {
+            for (UDPPacket packet : _queuedDataPackets) {
+                packet.release();
+            }
+            _queuedDataPackets.clear();
+        }
         super.fail();
     }
 

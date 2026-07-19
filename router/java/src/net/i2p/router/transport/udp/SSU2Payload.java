@@ -566,7 +566,6 @@ class SSU2Payload {
         }
 
         public int writeData(byte[] tgt, int off) {
-            // fixme NTCP2 flavor
             return off + m.writeFragment(tgt, off, 0);
         }
     }
@@ -588,7 +587,6 @@ class SSU2Payload {
         }
 
         public int writeData(byte[] tgt, int off) {
-            // fixme NTCP2 flavor
             return off + m.writeFragment(tgt, off, 0);
         }
     }
