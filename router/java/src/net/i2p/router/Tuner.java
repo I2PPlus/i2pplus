@@ -158,6 +158,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private static final boolean IS_SLOW = SystemVersion.isSlow();
     private static final int MEM_FACTOR = Math.max(1, (int)(MAX_MEMORY / (256L * 1024 * 1024)));
     private static final int CORE_FACTOR = Math.max(1, CORES);
+
+    /**
+     * Memory-derived ceiling for per-peer initial concurrent messages:
+     * ~1 message per 8MB of max heap, clamped to a sane band. Mirrors the
+     * scaling used by {@link MaxConcurrentMessagesParam} so the initial value
+     * can never exceed what the JVM can reasonably hold.
+     */
+    private static int memoryDerivedInitMsgMax() {
+        return Math.max(64, Math.min(1024, (int) (SystemVersion.getMaxMemory() / (8 * 1024 * 1024))));
+    }
     /** ML-KEM precalc min/max — each pair ~3.5KB, scale with cores and memory */
     private static final int MLKEM_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
     private static final int MLKEM_PRECALC_MIN = Math.max(512, 8 * MLKEM_FACTOR);
@@ -1132,6 +1142,34 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double total = success + failure + timeout;
             if (Double.isNaN(total) || total <= 0) return Double.NaN;
             return success / 100.0;
+        }
+
+        /**
+         * Reclaim parked threads from a thread pool that is massively
+         * under-utilized. Returns the new (shrunk) thread count when the pool
+         * utilization is below {@code idleThreshold} and more than {@code min}
+         * threads are allocated, otherwise {@code -1} (no change).
+         *
+         * <p>Utilization is the ratio of threads actively doing work to the
+         * total pool size. When this sits near zero for an extended window the
+         * extra threads are just parked — there is no point keeping them around,
+         * so we shed one (or two, when extremely idle) to track demand.
+         *
+         * @param utilization   current pool utilization (0.0–1.0), or NaN
+         * @param current       current thread count
+         * @param min           minimum thread count (floor)
+         * @param idleThreshold utilization below which threads are reclaimed
+         * @return shrunk count, or -1 if no change
+         * @since 0.9.70+
+         */
+        protected static int reclaimIfIdle(double utilization, int current, int min, double idleThreshold) {
+            if (Double.isNaN(utilization)) return -1;
+            if (utilization >= idleThreshold) return -1;
+            if (current <= min) return -1;
+            // Massively idle (near zero) — shed two to converge faster;
+            // moderately idle — shed one.
+            int shrinkBy = utilization < idleThreshold * 0.25 ? 2 : 1;
+            return Math.max(min, current - shrinkBy);
         }
 
         /**
@@ -2273,6 +2311,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // observed = tunnel.pumperQueueDepth (avg items in pumper queue)
             // Cross-refs: tunnel.ibgw/obgw.queueSize, tunnel.pumperQueueFull,
             //             jobQueue.jobLag (CPU)
+            // Reclaim parked threads when the pool is massively under-utilized
+            int reclaimed = reclaimIfIdle(getPumperUtilization(_context), current, _min, 0.05);
+            if (reclaimed >= 0) return reclaimed;
             double ibgwQueue = getAdditionalStat(_context, "tunnel.ibgw.queueSize");
             double obgwQueue = getAdditionalStat(_context, "tunnel.obgw.queueSize");
             double drops = getAdditionalStat(_context, "tunnel.pumperQueueFull");
@@ -3774,6 +3815,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // observed = udp.pushTime (avg time to push packet to handler, ms)
             // Cross-refs: transit InBps, jobLag (CPU), memory, msgRx.queueSize (downstream),
             //             udp.outboundQueueDepth (outbound pressure)
+            // Reclaim parked threads when the pool is massively under-utilized
+            int reclaimed = reclaimIfIdle(getPacketHandlerUtilization(_context), current, _min, 0.05);
+            if (reclaimed >= 0) return reclaimed;
             double transitBps = getAdditionalStat(_context, "tunnel.participating InBps");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double hourlyBps = getAdditionalStatHourly(_context, "tunnel.participating InBps");
@@ -3796,8 +3840,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // Idle: shrink first — handlers keeping up fine means threads are wasted.
             // Transit volume is irrelevant for shrink; only handler load matters.
-            if (observed < 1 && !downstreamBackedUp
-                && lowUtilization && current > _min)
+            // Use utilization (not push-time) as the demand signal so parked
+            // threads are reclaimed whenever handler load is genuinely low, even
+            // if a small steady trickle keeps push-time above zero.
+            if (!downstreamBackedUp && lowUtilization && current > _min)
                 return Math.max(_min, current - 1);
 
             // Deep outbound queue = add threads (process acks faster to drain)
@@ -3861,6 +3907,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
+            // Reclaim parked threads when the pool is massively under-utilized
+            int reclaimed = reclaimIfIdle(getMessageReceiverUtilization(_context), current, _min, 0.05);
+            if (reclaimed >= 0) return reclaimed;
             // observed = codel.UDP-Receiver.delay (upstream queue sojourn time, ms)
             // Cross-refs: udp.inboundExpired, udp.msgRx.queueSize, codel.UDP-MessageReceiver.delay,
             //             jobLag (CPU), udp.pushTime (downstream handler pressure),
@@ -3912,9 +3961,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (longSojourn && !cpuPressure && !highLoad && memPressure < 0.7)
                 return Math.min(_max, current + 1);
 
+            // High utilization alone = runners saturated, add a thread to meet demand
+            if (highUtilization && !cpuPressure && !highLoad)
+                return Math.min(_max, current + 1);
+
             // Idle + no work = shrink (threads doing nothing useful)
+            // Drive shrink off utilization rather than a near-zero queue so a
+            // steady low trickle doesn't keep parked threads alive.
             if (!upstreamBackpressure && !queueBackedUp && !messagesExpiring
-                && !longSojourn && !downstreamSlow && observed < 1 && lowUtilization && current > _min)
+                && !longSojourn && !downstreamSlow && lowUtilization && current > _min)
                 return Math.max(_min, current - 1);
 
             return current;
@@ -6431,6 +6486,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
+            // Reclaim parked threads when the pool is massively under-utilized
+            int reclaimed = reclaimIfIdle(getReaderUtilization(_context), current, _min, 0.05);
+            if (reclaimed >= 0) return reclaimed;
             // observed = ntcp.readQueueSize (avg pending connections waiting for a reader)
             // With 300+ connections, queue averages ~1. Threads grab a connection,
             // decrypt + parse, return it. No I/O blocking — EventPumper fills buffers.
@@ -6457,6 +6515,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (highUtilization && queue > current && !cpuPressure)
                 return Math.min(_max, current + 1);
 
+            // High utilization alone (threads saturated, queue drained as fast as
+            // filled) = demand exceeds capacity, add a thread to keep up
+            if (highUtilization && !cpuPressure)
+                return Math.min(_max, current + 1);
+
             // Urgent: errors + queue backing up
             if (errorsHigh && queue > current && !cpuPressure)
                 return Math.min(_max, current + 1);
@@ -6467,6 +6530,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 int shrinkBy = (queue == 0 && lowUtilization) ? 2 : 1;
                 return Math.max(_min, current - shrinkBy);
             }
+
+            // Low utilization = threads parked even if a trickle keeps queue non-empty.
+            // Reclaim one to match demand.
+            if (lowUtilization && !errorsHigh && !cpuPressure && current > _min)
+                return Math.max(_min, current - 1);
 
             // Long-term idle: queue near zero, no errors, no CPU pressure
             if (queue == 0 && !errorsHigh && !cpuPressure && lowUtilization && current > _min)
@@ -6517,6 +6585,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
+            // Reclaim parked threads when the pool is massively under-utilized
+            int reclaimed = reclaimIfIdle(getWriterUtilization(_context), current, _min, 0.05);
+            if (reclaimed >= 0) return reclaimed;
             // observed = ntcp.sendTime (ms, avg message send latency)
             // Writers are pure CPU — encrypt + prepare buffer. EventPumper does NIO write.
             // Scale based on send latency and downstream pressure.
@@ -6559,6 +6630,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 int shrinkBy = (!sendSlow && !backlogged && !poolBusy && lowUtilization) ? 2 : 1;
                 return Math.max(_min, current - shrinkBy);
             }
+
+            // Low utilization with no pressure = reclaim parked threads
+            if (lowUtilization && pressure == 0 && current > _min)
+                return Math.max(_min, current - 1);
 
             return current;
         }
@@ -6670,6 +6745,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
+            // Reclaim parked threads when the pool is massively under-utilized
+            int reclaimed = reclaimIfIdle(getSendFinisherUtilization(_context), current, _min, 0.05);
+            if (reclaimed >= 0) return reclaimed;
             // observed = ntcp.sendPool utilization (0-100%)
             // Cross-refs: ntcp.sendFinisher.queueSize, ntcp.writeBufs.size
             double finisherQueue = getAdditionalStat(_context, "ntcp.sendFinisher.queueSize");
@@ -6812,11 +6890,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class InitConcurrentMsgsParam extends BaseParam {
 
+        /**
+         * Memory-derived ceiling: ~1 concurrent init message per 8MB of max
+         * heap, clamped to a sane band. Mirrors the scaling used by
+         * {@link MaxConcurrentMessagesParam} so the initial value can never
+         * exceed what the JVM can reasonably hold.
+         */
         InitConcurrentMsgsParam() {
             super("udp.peer.initConcurrentMsgs", "Initial UDP concurrent messages",
                   SUB_TRANSPORT,
 
-                  16, 256, 4, "udp.sendConfirmTime", _context);
+                  16, memoryDerivedInitMsgMax(), 4, "udp.sendConfirmTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -6836,6 +6920,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
+        /**
+         * Dynamic ceiling based on current free heap, so we never push the
+         * initial concurrency higher than the JVM can currently sustain even
+         * if the constructor ceiling was computed against a larger max heap.
+         */
+        private int memoryScaledMax() {
+            Runtime rt = Runtime.getRuntime();
+            long free = rt.maxMemory() - (rt.totalMemory() - rt.freeMemory());
+            int byFree = (int) (free / (8 * 1024 * 1024));
+            return Math.max(_min, Math.min(_max, byFree));
+        }
+
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
@@ -6844,9 +6940,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean lowRTT = !Double.isNaN(observed) && observed < 500;
             boolean highRTT = !Double.isNaN(observed) && observed > 2000;
             boolean memOk = memPressure < 0.75;
+            int memMax = memoryScaledMax();
 
+            // Memory critical: shrink immediately regardless of other signals
             if (memPressure > 0.85) { return Math.max(_min, current - _step * 2); }
-            if (lowRTT && cpuFree && memOk) { return Math.min(_max, current + _step); }
+            // Free heap too low to support another concurrent message: hold or shrink
+            if (current >= memMax) {
+                if (memPressure > 0.6 && current > _min)
+                    return Math.max(_min, current - _step);
+                return current;
+            }
+            if (lowRTT && cpuFree && memOk) { return Math.min(memMax, current + _step); }
             if (highRTT && current > _min) { return Math.max(_min, current - _step); }
             return current;
         }
@@ -7726,8 +7830,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @since 0.9.70+
      */
     private class I2PTunnelServerHandlerThreadsParam extends BaseParam {
-
         I2PTunnelServerHandlerThreadsParam() {
+
             super("i2ptunnel.serverHandler.threads", "I2PTunnel server threads",
                   SUB_TUNNEL,
                   2, 128, 1, "i2ptunnel.serverHandler.queueDepth", _context);
@@ -7926,6 +8030,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             double concurrentBuilds = getAdditionalStat(_context, "tunnel.concurrentBuilds");
+            // Reclaim parked threads when build demand is far below the pool size
+            // and the inbound queue is idle — extra handler threads are doing nothing.
+            boolean queueIdle = observed < 1;
+            boolean lowDemand = Double.isNaN(concurrentBuilds) || concurrentBuilds < current * 0.5;
+            if (queueIdle && lowDemand && current > _min)
+                return Math.max(_min, current - 1);
             double acceptLoad = getAdditionalStat(_context, "tunnel.acceptLoad");
             boolean dropping = getAdditionalStat(_context, "tunnel.dropLoadProactive") > 0 ||
                                getAdditionalStat(_context, "tunnel.rejectOverloaded") > 0;
@@ -7954,12 +8064,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (!Double.isNaN(concurrentBuilds) && concurrentBuilds > current * 2 && current < _max) {
                 int inc = Math.min(Math.max(1, (int) concurrentBuilds / 6), 2);
                 return Math.min(_max, current + inc);
-            }
-
-            // Shrink when queue idle AND service time is negligible (<10ms)
-            if (observed < 1 && current > 2) {
-                if (!Double.isNaN(acceptLoad) && acceptLoad < 10)
-                    return current - 1;
             }
 
             return current;
@@ -9052,9 +9156,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double memPressure = getMemoryPressure();
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean healthy = !Double.isNaN(observed) && observed > 90 && !cpuPressure;
             boolean failing = !Double.isNaN(observed) && observed < 70;
+            // Under memory pressure, recover faster (shorter cooldown) so pools
+            // stop holding rebuild resources they can't afford
+            if (memPressure > 0.85)
+                return Math.max(_min, current - 2000);
             if (healthy) return Math.max(_min, current - 2000);
             if (failing) return Math.min(_max, current + 2000);
             return current;
@@ -9070,7 +9179,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private class TunnelTargetBufferParam extends BaseParam {
         TunnelTargetBufferParam() {
             super("i2p.tunnel.targetBuffer", "Pool spare tunnel buffer",
-                  SUB_TUNNEL, 0, 2, 1, "tunnel.buildSuccessRate", _context);
+                  SUB_TUNNEL, 0, 8, 1, "tunnel.buildSuccessRate", _context);
         }
         protected void applyValue(int value) {
             _context.router().saveConfig("i2p.tunnel.targetBuffer", Integer.toString(value));
@@ -9088,9 +9197,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double memPressure = getMemoryPressure();
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean healthy = !Double.isNaN(observed) && observed > 80 && !cpuPressure;
             boolean failing = !Double.isNaN(observed) && observed < 60;
+            // Spare tunnels cost memory; don't build a buffer when the heap is tight
+            boolean memOk = memPressure < 0.75;
 
             // Check pool deficits
             TunnelManagerFacade mgr = _context.tunnelManager();
@@ -9106,9 +9218,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 }
             }
 
-            // Failing or deficit = increase buffer (more spares prevent collapse)
-            if (failing || anyDeficit)
+            // Failing or deficit = increase buffer (more spares prevent collapse),
+            // but only when memory allows it
+            if ((failing || anyDeficit) && memOk)
                 return Math.min(_max, current + 1);
+
+            // Memory critical = drop any buffer immediately
+            if (memPressure > 0.85)
+                return Math.max(_min, current - 1);
 
             // Healthy and no deficit = decrease buffer toward 0
             if (healthy && !anyDeficit)
