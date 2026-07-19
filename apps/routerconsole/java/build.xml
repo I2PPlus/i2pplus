@@ -120,6 +120,7 @@
         <pathelement location="../../jetty/jettylib/javax.servlet.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-http.jar"/>
         <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
+        <pathelement location="${build.root}apps/jetty/build/jetty-i2p.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-io.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-security.jar"/>
         <pathelement location="../../jetty/jettylib/jetty-servlet.jar"/>
@@ -689,11 +690,19 @@
         <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
         <pathelement location="${ant.home}/lib/ant.jar"/>
         <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
+        <!-- built jars land in the build root (not jettylib) under the
+             top-level build, so reference them by their absolute build-root path -->
+        <pathelement location="${build.root}apps/jetty/build/jetty-i2p.jar"/>
         <pathelement location="${jetty.pkg.dir}/jspc.jar"/>
+        <pathelement location="${build.root}apps/jetty/build/jspc.jar"/>
+        <!-- jspc.jar is built into the build root (not jettylib) under the
+             top-level build, so reference it by its absolute build-root path -->
+        <pathelement location="${build.root}apps/jetty/build/jspc.jar"/>
         <pathelement location="${systray.java.build.dir}/obj"/>
         <pathelement location="${desktopgui.dist.dir}/desktopgui.jar"/>
         <pathelement location="../../../installer/lib/wrapper/all/wrapper.jar"/>
         <pathelement location="${build.dir}/obj/"/>
+        <pathelement location="${build.dir}/routerconsole.jar"/>
         <pathelement location="${sam.java.build.dir}/sam.jar"/>
         <pathelement location="${router.java.build.dir}/router.jar"/>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
@@ -731,11 +740,16 @@
         <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar"/>
         <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
         <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
+        <!-- built jars land in the build root (not jettylib) under the
+             top-level build, so reference them by their absolute build-root path -->
+        <pathelement location="${build.root}apps/jetty/build/jetty-i2p.jar"/>
         <pathelement location="${systray.java.build.dir}/obj"/>
         <pathelement location="${desktopgui.dist.dir}/desktopgui.jar"/>
         <pathelement location="../../../installer/lib/wrapper/all/wrapper.jar"/>
         <pathelement location="${build.dir}/obj/"/>
+        <pathelement location="${build.dir}/routerconsole.jar"/>
         <pathelement location="${sam.java.build.dir}/sam.jar"/>
+        <pathelement location="${build.root}apps/sam/java/build/sam.jar"/>
         <pathelement location="${router.java.build.dir}/router.jar"/>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
       </classpath>

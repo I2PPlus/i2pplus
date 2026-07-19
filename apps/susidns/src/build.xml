@@ -46,8 +46,15 @@
     <pathelement location="lib/standard.jar"/>
     <pathelement location="${lib}/jasper-runtime.jar"/>
     <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
-    <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
-    <pathelement location="${jetty.pkg.dir}/jspc.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
+        <!-- built jars land in the build root (not jettylib) under the
+             top-level build, so reference them by their absolute build-root path -->
+        <pathelement location="${build.root}apps/jetty/build/jetty-i2p.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jspc.jar"/>
+        <pathelement location="${build.root}apps/jetty/build/jspc.jar"/>
+        <!-- jspc.jar is built into the build root (not jettylib) under the
+             top-level build, so reference it by its absolute build-root path -->
+        <pathelement location="${build.root}apps/jetty/build/jspc.jar"/>
     <pathelement location="${ant.home}/lib/ant.jar"/>
     <pathelement location="${core.java.build.dir}/i2p.jar"/>
     <pathelement location="${addressbook.dist.dir}/addressbook.jar"/>

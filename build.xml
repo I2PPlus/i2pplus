@@ -1316,20 +1316,37 @@
       </ant>
     </parallel>
 
-    <!-- Cleanup .po files after update: remove fuzzy markers, wrap, location, comments -->
-    <exec executable="sh" osfamily="unix" failifexecutionfails="false">
+    <!-- Cleanup .po files after update: remove fuzzy markers, wrap, location, comments.
+         Skippable with -Dno.po.cleanup=true if you want to inspect raw merged files. -->
+    <exec executable="sh" osfamily="unix" failifexecutionfails="false" unless="no.po.cleanup">
       <arg value="tools/scripts/cleanup_po.sh"/>
       <arg value="--no-wrap"/>
       <arg value="--no-location"/>
       <arg value="--no-comments"/>
     </exec>
-    <exec executable="sh" osfamily="mac" failifexecutionfails="false">
+    <exec executable="sh" osfamily="mac" failifexecutionfails="false" unless="no.po.cleanup">
       <arg value="tools/scripts/cleanup_po.sh"/>
       <arg value="--no-wrap"/>
       <arg value="--no-location"/>
       <arg value="--no-comments"/>
     </exec>
 
+    <!-- Report translation status (msgid counts vs messages_en.po) after cleanup -->
+    <antcall target="po-status"/>
+
+  </target>
+
+  <!-- Report per-locale translation status. Runs only on unix/mac where the
+       script and its python/polib/msgfmt dependencies are available. Non-fatal. -->
+  <target name="po-status" unless="no.po.status">
+    <exec executable="sh" osfamily="unix" failifexecutionfails="false" failonerror="false">
+      <arg value="tools/scripts/translation_status.sh"/>
+      <arg value="${basedir}"/>
+    </exec>
+    <exec executable="sh" osfamily="mac" failifexecutionfails="false" failonerror="false">
+      <arg value="tools/scripts/translation_status.sh"/>
+      <arg value="${basedir}"/>
+    </exec>
   </target>
 
   <condition property="no.bundle">

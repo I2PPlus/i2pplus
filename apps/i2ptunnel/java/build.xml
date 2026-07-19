@@ -498,7 +498,14 @@
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <!-- required for multipart form handling in register.jsp -->
         <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
+        <!-- built jars land in the build root (not jettylib) under the
+             top-level build, so reference them by their absolute build-root path -->
+        <pathelement location="${build.root}apps/jetty/build/jetty-i2p.jar"/>
         <pathelement location="${jetty.pkg.dir}/jspc.jar"/>
+        <pathelement location="${build.root}apps/jetty/build/jspc.jar"/>
+        <!-- jspc.jar is built into the build root (not jettylib) under the
+             top-level build, so reference it by its absolute build-root path -->
+        <pathelement location="${build.root}apps/jetty/build/jspc.jar"/>
       </classpath>
       <arg value="-d"/>
       <arg value="${jsp.build.dir}/WEB-INF/classes"/>
@@ -536,6 +543,9 @@
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <!-- required for multipart form handling in register.jsp -->
         <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
+        <!-- built jars land in the build root (not jettylib) under the
+             top-level build, so reference them by their absolute build-root path -->
+        <pathelement location="${build.root}apps/jetty/build/jetty-i2p.jar"/>
       </classpath>
     </javac>
     <copy file="../jsp/web.xml" tofile="${jsp.build.dir}/web-out.xml"/>
