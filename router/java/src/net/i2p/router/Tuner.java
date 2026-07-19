@@ -5659,21 +5659,26 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * RouterInfo lookup deadline cap (ms), used for transit next-hop lookups.
-     * Adaptive: targets ~4x the observed netDb.lookupWithTimeoutSuccess (average
-     * time for a successful blocking RouterInfo lookup) so transit messages don't
+     * Adaptive: targets ~6x the observed netDb.successTime (average time for a
+     * successful NetDb lookup, RouterInfo AND LeaseSet) so transit messages don't
      * stall behind a doomed search for a missing/unreachable peer. A shorter cap
      * lets the source reroute instead of holding the message for the full window.
-     * Grows toward the ceiling when failing lookups run up against the deadline
-     * (netDb.lookupWithTimeoutFail elevated), and won't shrink while lookups are
-     * failing or the system is congested.
+     * Grows toward the ceiling when failing RI lookups run up against the deadline
+     * (netDb.lookupsFailedRouterInfo elevated and netDb.failedTime near the cap),
+     * and won't shrink while lookups are failing or the system is congested.
      */
     private class RiLookupTimeoutParam extends BaseParam {
 
         RiLookupTimeoutParam() {
+            // Primary signal is netDb.successTime: "Time for successful NetDb lookup"
+            // (RouterInfo AND LeaseSet), which fires on every successful iterative
+            // lookup and is therefore always populated. It replaces the now-removed
+            // netDb.lookupWithTimeoutSuccess/Fail stats, which were recorded only by
+            // the blocking-with-timeout lookup path that is no longer used.
             super("MAX_RI_LOOKUP_TIME", "RouterInfo lookup timeout (ms)",
                   SUB_NETDB,
 
-                  3000, 10000, 500, "netDb.lookupWithTimeoutSuccess", _context);
+                  2000, 5000, 500, "netDb.successTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -5687,35 +5692,33 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
-            // Blocking RouterInfo lookups are rare (most are served from the local
-            // cache and never reach the network), so the 1-minute window is usually
-            // empty and would force a NaN -> the Tuner skips this param entirely.
-            // Read the 10-minute rate, which accumulates these sparse events, so the
-            // cap still tracks observed RI lookup latency.
+            // netDb.successTime is always populated, so the 10-minute window is
+            // reliable; fall back to the 1-hour window only if it is somehow empty.
             Rate rate = rs.getRate(RateConstants.TEN_MINUTES);
-            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            if (rate == null || rate.getLastEventCount() == 0) {
+                rate = rs.getRate(RateConstants.ONE_HOUR);
+                if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            }
             return rate.getAverageValue();
         }
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = netDb.lookupWithTimeoutSuccess (ms): avg successful RI lookup time.
-            // Base target ~4x avg success time, floored by _min.
+            // observed = netDb.successTime (ms): avg successful NetDb lookup (RI + LS).
+            // Scale ~6x the avg so the cap comfortably covers slow searches, floored by _min.
             double riFails = getAdditionalEventCount(_context, "netDb.lookupsFailedRouterInfo");
-            double riTimeoutFails = getAdditionalEventCount(_context, "netDb.lookupWithTimeoutFail");
             double failTime = getAdditionalStat(_context, "netDb.failedTime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean failsElevated = (!Double.isNaN(riFails) && riFails > 0)
-                                     || (!Double.isNaN(riTimeoutFails) && riTimeoutFails > 0);
+            boolean failsElevated = !Double.isNaN(riFails) && riFails > 0;
             // Failed RI lookups are running up against the deadline: the cap is
             // truncating otherwise-viable searches, so grow it (success-time alone
             // can't see this — only the fast wins are counted).
             boolean capBinding = failsElevated && !Double.isNaN(failTime)
                                  && failTime >= current * 0.9;
 
-            int target = Math.max(_min, (int) (observed * 4));
+            int target = Math.max(_min, (int) (observed * 6));
 
             // Grow toward the ceiling when the cap is truncating searches.
             if (capBinding)
@@ -8456,7 +8459,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * NetDB health: known peer count.
          * 500+ peers = healthy, below that linearly degraded to 0 at 0 peers.
          * Penalized by netDb.replyTimeout (peers not responding to our sends).
-         * Falls back to netDb.lookupWithTimeoutSuccess ratio if available.
          */
         private double scoreNetDbLookup() {
             double known = getStatValue("router.knownPeers");
@@ -8468,13 +8470,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                     score *= 0.8;
                 }
                 return score;
-            }
-            // Fallback: blocking lookup success rate
-            double successEvents = getEventCount("netDb.lookupWithTimeoutSuccess");
-            double failEvents = getEventCount("netDb.lookupWithTimeoutFail");
-            double total = successEvents + failEvents;
-            if (total >= 3) {
-                return clamp(successEvents / total);
             }
             return Double.NaN;
         }

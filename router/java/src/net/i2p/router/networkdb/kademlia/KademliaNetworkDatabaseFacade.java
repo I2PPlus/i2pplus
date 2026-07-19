@@ -237,7 +237,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     static final String PROP_KAD_B = "router.exploreKadB";
 
     private static final long[] RATES = {RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
-    private static final long[] LOOKUP_TIMEOUT_RATES = {RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES};
 
     /**
      * Initializes the Kademlia-based network database facade.
@@ -289,9 +288,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         context.statManager().createRateStat("netDb.storeLeaseSetSent", "Sent LeaseSet store messages", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.storePeers", "Peers each NetDb must be sent to before success", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.storeRouterInfoSent", "Sent RouterInfo store messages", "NetworkDatabase", RATES);
-
-        context.statManager().createRequiredRateStat("netDb.lookupWithTimeoutSuccess", "Successful blocking NetDb lookups with timeout", "NetworkDatabase", LOOKUP_TIMEOUT_RATES);
-        context.statManager().createRequiredRateStat("netDb.lookupWithTimeoutFail", "Failed blocking NetDb lookups (timeout)", "NetworkDatabase", LOOKUP_TIMEOUT_RATES);
     }
 
     /**
@@ -1114,92 +1110,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         catch (IllegalArgumentException iae) {valid = false;}
         if (!valid) {fail(key); return null;}
         return ri;
-    }
-
-    private static final long MIN_LOOKUP_TIMEOUT = 2000;
-    private static final long MAX_LOOKUP_TIMEOUT = 8000;
-    private static final int LOOKUP_SAMPLE_SIZE = 20;
-    private final MovingAverage _lookupTimeAvg = new MovingAverage(LOOKUP_SAMPLE_SIZE);
-
-    /** {@inheritDoc} */
-    @Override
-    public RouterInfo lookupRouterInfoWithTimeout(Hash key, long defaultTimeout) {
-        RouterInfo ri = lookupRouterInfoLocally(key);
-        if (ri != null) {return ri;}
-        if (!_initialized) {return null;}
-
-        long timeout = getDynamicTimeout(defaultTimeout);
-        final long startTime = System.currentTimeMillis();
-        final CountDownLatch latch = new CountDownLatch(1);
-        final RouterInfo[] result = new RouterInfo[1];
-
-        Job onFind = new JobImpl(_context) {
-            @Override
-            public String getName() { return "RouterInfo lookup found"; }
-            @Override
-            public void runJob() {
-                long elapsed = System.currentTimeMillis() - startTime;
-                _lookupTimeAvg.add(elapsed);
-                _context.statManager().addRateData("netDb.lookupWithTimeoutSuccess", elapsed, RateConstants.ONE_MINUTE);
-                result[0] = lookupRouterInfoLocally(key);
-                latch.countDown();
-            }
-        };
-
-        // Fire async lookup - will populate local cache on completion
-        search(key, onFind, null, timeout, false);
-
-        try {
-            latch.await(timeout, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException ie) {
-            Thread.currentThread().interrupt();
-        }
-
-        if (result[0] == null) {
-            _context.statManager().addRateData("netDb.lookupWithTimeoutFail", 1, RateConstants.ONE_MINUTE);
-        }
-
-        // Return result if found, otherwise null (async lookup still running in background)
-        return result[0];
-    }
-
-    private long getDynamicTimeout(long defaultTimeout) {
-        double avg = _lookupTimeAvg.getAverage();
-        if (avg <= 0) {
-            return defaultTimeout;
-        }
-        long scaled = (long) (avg * 2);
-        return Math.max(MIN_LOOKUP_TIMEOUT, Math.min(MAX_LOOKUP_TIMEOUT, scaled));
-    }
-
-    private static class MovingAverage {
-        private final int size;
-        private final long[] values;
-        private int idx = 0;
-        private int count = 0;
-        private long runningSum = 0;
-
-        MovingAverage(int size) {
-            this.size = size;
-            this.values = new long[size];
-        }
-
-        void add(long value) {
-            long oldValue = values[idx];
-            values[idx] = value;
-            idx = (idx + 1) % size;
-            if (count < size) {
-                runningSum += value;
-                count++;
-            } else {
-                runningSum = runningSum - oldValue + value;
-            }
-        }
-
-        double getAverage() {
-            if (count == 0) {return 0;}
-            return (double) runningSum / count;
-        }
     }
 
     private static final long PUBLISH_DELAY = 1000;

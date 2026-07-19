@@ -72,10 +72,6 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
     @Override
     public RouterInfo lookupRouterInfoLocally(Hash key) { return _routers.get(key); }
 
-    public RouterInfo lookupRouterInfoWithTimeout(Hash key, long timeoutMs) {
-        return lookupRouterInfoLocally(key);
-    }
-
     public void publish(LeaseSet localLeaseSet) { /* Intentionally empty - dummy implementation */ }
     public void publish(RouterInfo localRouterInfo) { /* Intentionally empty - dummy implementation */ }
 

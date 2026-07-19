@@ -177,7 +177,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      *  live by the Tuner toward ~4x the observed netDb.successTime.
      *  @since 0.9.70+
      */
-    private static volatile int _maxRouterInfoLookupTime = 10*1000;
+    private static volatile int _maxRouterInfoLookupTime = 2*1000;
 
     /**
      *  @return the current RouterInfo lookup deadline cap in ms
@@ -190,7 +190,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      *  @since 0.9.70+
      */
     public static void setMaxRouterInfoLookupTime(int val) {
-        _maxRouterInfoLookupTime = Math.max(3000, Math.min(MAX_SEARCH_TIME, val));
+        _maxRouterInfoLookupTime = Math.max(2000, Math.min(MAX_SEARCH_TIME, val));
     }
 
     /**
