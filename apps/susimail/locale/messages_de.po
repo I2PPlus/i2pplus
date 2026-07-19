@@ -51,17 +51,11 @@ msgstr "Nachricht als reinen Text anzeigen"
 msgid "unknown"
 msgstr "unbekannt"
 
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
-msgstr ""
-"Um Ihre Privatsphäre zu schützen, blockiert Webmail JavaScript und jeglichen"
-" entfernten Inhalt in dieser HTML-Nachricht."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
+msgstr "Um Ihre Privatsphäre zu schützen, blockiert Webmail JavaScript und jeglichen entfernten Inhalt in dieser HTML-Nachricht."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
-msgstr ""
-"JavaScript aktivieren, um eine verbesserte Darstellung und zusätzliche "
-"Funktionen zu nutzen."
+msgstr "JavaScript aktivieren, um eine verbesserte Darstellung und zusätzliche Funktionen zu nutzen."
 
 #, java-format
 msgid "Tracking images removed from message: {0}"
@@ -80,8 +74,7 @@ msgid "Part ({0}) not shown, because of {1}"
 msgstr "Teil ({0}) aufgrund von {1} nicht angezeigt"
 
 msgid "Reloading the page may fix the error."
-msgstr ""
-"Durch Neuladen der Seite kann der Fehler möglicherweise behoben werden."
+msgstr "Durch Neuladen der Seite kann der Fehler möglicherweise behoben werden."
 
 msgid "File"
 msgstr "Datei"
@@ -183,9 +176,7 @@ msgstr "Keine Nachrichten zum Löschen markiert"
 
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
-"Host unverändert. Ändern Sie die Konfigurationsdatei {0} um den Host zu "
-"ändern."
+msgstr "Host unverändert. Ändern Sie die Konfigurationsdatei {0} um den Host zu ändern."
 
 msgid "Configuration saved"
 msgstr "Einstellungen gespeichert"
@@ -456,8 +447,7 @@ msgid "Mail server login failed, wrong username or password."
 msgstr "Mail Sever Login fehlgeschlagen, falscher Benutzername oder Passwort"
 
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
-"Ausloggen und neu einloggen mit dem korrektem Benutzernamen und Passwort."
+msgstr "Ausloggen und neu einloggen mit dem korrektem Benutzernamen und Passwort."
 
 msgid "Login failed"
 msgstr "Anmeldung fehlgeschlagen"

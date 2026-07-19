@@ -51,12 +51,8 @@ msgstr "Bericht weergeven als platte tekst"
 msgid "unknown"
 msgstr "onbekend"
 
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
-msgstr ""
-"Om je privacy te beschermen, blokkeert Webmail JavaScript en elk extern "
-"gecontroleerd content dat in deze HTML-boodschap zit."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
+msgstr "Om je privacy te beschermen, blokkeert Webmail JavaScript en elk extern gecontroleerd content dat in deze HTML-boodschap zit."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
 msgstr "Schakel JavaScript in voor een verbeterde weergave en extra functies."
@@ -180,9 +176,7 @@ msgstr "Geen berichten gemarkeerd voor verwijdering."
 
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
-"Host onveranderd. Pas het configuratiebestand {0} aan om de host aan te "
-"passen."
+msgstr "Host onveranderd. Pas het configuratiebestand {0} aan om de host aan te passen."
 
 msgid "Configuration saved"
 msgstr "Configuratie opgeslagen"
@@ -450,8 +444,7 @@ msgid "No response from server"
 msgstr "Geen antwoord van server"
 
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
-"Inloggen op mailserver mislukt, verkeerde gebruikersnaam of wachtwoord."
+msgstr "Inloggen op mailserver mislukt, verkeerde gebruikersnaam of wachtwoord."
 
 msgid "Logout and then login again with the correct username and password."
 msgstr "Log uit en log opnieuw in met de juiste gebruikersnaam en wachtwoord."

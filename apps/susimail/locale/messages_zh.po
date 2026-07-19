@@ -50,9 +50,7 @@ msgstr "以纯文本格式查看消息"
 msgid "unknown"
 msgstr "未知"
 
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr "为了保护您的隐私，网页邮件正在阻止此HTML消息中的JavaScript和任何远程内容。"
 
 msgid "Enable Javascript for enhanced presentation and additional features."

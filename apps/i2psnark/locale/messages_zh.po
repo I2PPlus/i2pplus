@@ -62,9 +62,7 @@ msgstr "最大下载速度已更改为{0}KB/s"
 msgid "Download speed limit is {0}KB/s"
 msgstr "下载速度限制为 {0}KB/s"
 
-msgid ""
-"Note: You may need to stop and restart your torrents or restart I2PSnark in "
-"order to effect this change."
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
 msgstr "注意：您可能需要停止并重新启动您的种子或重新启动种子才能使此更改生效。"
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
@@ -126,8 +124,7 @@ msgstr "I2CP 选项改为 {0}"
 msgid "Disconnecting old I2CP destination"
 msgstr "正在断开旧的I2CP目标"
 
-msgid ""
-"Unable to connect with the new settings, reverting to the old I2CP settings"
+msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
 msgstr "无法通过新设置连接，恢复I2CP的旧设置"
 
 msgid "Unable to reconnect with the old settings!"
@@ -198,9 +195,7 @@ msgstr "禁用图片缩略图的灯箱。"
 msgid "Add and Create sections enabled on all torrent listing pages."
 msgstr "在所有洪流列表页上启用了添加和创建部分。"
 
-msgid ""
-"Add and Create sections to display only on first page of multipage torrent "
-"listing pages."
+msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
 msgstr "添加和创建部分，只在多页洪流列表页的第一页显示。"
 
 msgid "API key updated."
@@ -268,39 +263,20 @@ msgid "ERROR - No I2P trackers in private torrent \"{0}\""
 msgstr "错误 - 私有种子\"{0}\"中缺少 I2P Tracker"
 
 #, java-format
-msgid ""
-"Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and"
-" DHT only."
-msgstr ""
-"警告 - “{0}”中没有 I2P 跟踪器，将仅向 I2P 开放跟踪器和 DHT 通告。警告 - \"{0}\"中缺少 I2P "
-"Tracker，程序将仅通过 I2P 中的OpenTracker 和 DHT 下载。"
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "警告 - “{0}”中没有 I2P 跟踪器，将仅向 I2P 开放跟踪器和 DHT 通告。警告 - \"{0}\"中缺少 I2P Tracker，程序将仅通过 I2P 中的OpenTracker 和 DHT 下载。"
 
 #, java-format
-msgid ""
-"Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will "
-"announce to DHT only."
-msgstr ""
-"警告 - “{0}”中没有 I2P 跟踪器，并且开放跟踪器被禁用，将仅向 DHT 通告。警告 - \"{0}\"中缺少 I2P Tracker，已禁用 "
-"I2P  Open Tracker，程序将仅通过 DHT 下载。"
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "警告 - “{0}”中没有 I2P 跟踪器，并且开放跟踪器被禁用，将仅向 DHT 通告。警告 - \"{0}\"中缺少 I2P Tracker，已禁用 I2P  Open Tracker，程序将仅通过 DHT 下载。"
 
 #, java-format
-msgid ""
-"Warning - No I2P trackers in \"{0}\", and DHT and open trackers are "
-"disabled, you should enable open trackers or DHT before starting the "
-"torrent."
-msgstr ""
-"警告 - “{0}”中没有 I2P 跟踪器，并且 DHT 和开放式跟踪器被禁用，您应该在启动 torrent 之前启用开放式跟踪器或 DHT。警告 - "
-"\"{0}\"中缺少 I2P Tracker，已禁用 I2P  Open Tracker 和 DHT，下载先您需要先启用  OpenTracker 或 "
-"DHT 。"
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "警告 - “{0}”中没有 I2P 跟踪器，并且 DHT 和开放式跟踪器被禁用，您应该在启动 torrent 之前启用开放式跟踪器或 DHT。警告 - \"{0}\"中缺少 I2P Tracker，已禁用 I2P  Open Tracker 和 DHT，下载先您需要先启用  OpenTracker 或 DHT 。"
 
 #, java-format
-msgid ""
-"Open trackers are disabled and we have no DHT peers. Fetch of {0} may not "
-"succeed until you start another torrent, enable open trackers, or enable "
-"DHT."
-msgstr ""
-"开放跟踪器已禁用，我们没有 DHT "
-"对等点。OpenTracker被禁用，程序目前没有DHT节点。{0}的下载不会成功，直到您启动另一个种子的下载、重新启用OpenTracker或DHT。"
+msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
+msgstr "开放跟踪器已禁用，我们没有 DHT 对等点。OpenTracker被禁用，程序目前没有DHT节点。{0}的下载不会成功，直到您启动另一个种子的下载、重新启用OpenTracker或DHT。"
 
 #, java-format
 msgid "Adding {0}"
@@ -388,25 +364,19 @@ msgid "Starting up torrent {0}"
 msgstr "正在启动种子{0}"
 
 #, java-format
-msgid ""
-"Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
+msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "上传带宽限制为{0}KBps，最多{1}个对等节点。"
 
 #, java-format
-msgid ""
-"Storage: {0}GB currently available for downloads on configured data "
-"partition"
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
 msgstr "存储空间：当前配置的数据分区可用下载空间为 {0}GB"
 
 #, java-format
-msgid ""
-"Storage: {0}MB currently available for downloads on configured data "
-"partition"
+msgid "Storage: {0}MB currently available for downloads on configured data partition"
 msgstr "存储：当前配置的数据分区可下载的存储空间为 {0}MB"
 
 #, java-format
-msgid ""
-"Warning - Only {0}MB available for downloads on configured data partition"
+msgid "Warning - Only {0}MB available for downloads on configured data partition"
 msgstr "警告 - 配置的数据分区仅剩 {0}MB 可供下载"
 
 #, java-format
@@ -549,8 +519,7 @@ msgid "Deleting <b>{0}</b> and all associated data..."
 msgstr "正在删除<b>{0}</b>和所有相关数据..."
 
 #, java-format
-msgid ""
-"Are you sure you want to delete torrent file {0} and associated metadata?"
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "你确定你要删除文件 \\“{0} \\” (下载的数据不会被删除)？"
 
 msgid "Note: Downloaded data will not be deleted."
@@ -570,9 +539,7 @@ msgid "Shrink"
 msgstr "收缩"
 
 #, java-format
-msgid ""
-"Warning! Javascript is disabled in your browser. If {0} is enabled, you will"
-" lose any input in the add/create torrent sections when a refresh occurs."
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
 msgstr "警告！ 警告! 您的浏览器中禁用了Javascript。如果{0}被启用，当刷新时，您将失去在添加/创建种子部分的任何输入。"
 
 msgid "page refresh"
@@ -825,9 +792,7 @@ msgid " files or folders were excluded from \"{0}\" due to filter rules."
 msgstr " 由于过滤规则，从“{0}”中排除了 {0} 个文件或文件夹。"
 
 #, java-format
-msgid ""
-"The following files or folders were excluded from \"{0}\" due to filter "
-"rules: "
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
 msgstr "根据过滤规则，以下文件或文件夹被从“{0}”中排除："
 
 #, java-format
@@ -835,12 +800,8 @@ msgid "Torrent created for \"{0}\""
 msgstr "种子创建成功\"{0}\""
 
 #, java-format
-msgid ""
-"Many I2P trackers require you to register new torrents before seeding - "
-"please do so before starting \"{0}\""
-msgstr ""
-"许多 I2P 跟踪器要求您在播种前注册新的种子 - 请在开始“{0}”之前注册新的种子多数I2PTracker需要用户在做种前注册新种子 - 请在启动 "
-"\"{0}\"前到所使用的Tracker进行注册。"
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "许多 I2P 跟踪器要求您在播种前注册新的种子 - 请在开始“{0}”之前注册新的种子多数I2PTracker需要用户在做种前注册新种子 - 请在启动 \"{0}\"前到所使用的Tracker进行注册。"
 
 #, java-format
 msgid "Error creating a torrent for \"{0}\""
@@ -1001,11 +962,8 @@ msgstr "添加种子"
 msgid "From URL"
 msgstr "从URL"
 
-msgid ""
-"Enter the torrent file download URL (I2P only), magnet link, or info hash"
-msgstr ""
-"输入 torrent 文件下载 URL（仅限 I2P）、磁力链接或信息哈希输入种子文件的下载链接(仅支持I2P网络链接)，magnet, maggot "
-"链接或信息散列值"
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "输入 torrent 文件下载 URL（仅限 I2P）、磁力链接或信息哈希输入种子文件的下载链接(仅支持I2P网络链接)，magnet, maggot 链接或信息散列值"
 
 msgid "Add torrent"
 msgstr "添加种子"
@@ -1108,9 +1066,7 @@ msgstr "可折叠面板"
 msgid "Your browser does not support this feature."
 msgstr "您的浏览器不支持这个特性."
 
-msgid ""
-"Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and "
-"collapse by default in non-embedded mode"
+msgid "Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"
 msgstr "允许 \"添加种子 \"和 \"创建种子 \"面板折叠，并在非嵌入模式下默认折叠"
 
 msgid "Torrent filter bar"
@@ -1131,9 +1087,7 @@ msgstr "使用灯箱在点击缩略图时显示图片"
 msgid "Persist Add/Create"
 msgstr "坚持添加/创建"
 
-msgid ""
-"Display the 'Add' and 'Create' sections on all torrent listing pages when in"
-" multipage mode"
+msgid "Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"
 msgstr "在多页面模式下，在所有洪流列表页面上显示 \"添加 \"和 \"创建 \"部分"
 
 msgid "Comments &amp; Ratings"
@@ -1187,9 +1141,7 @@ msgstr "用户"
 msgid "Use open trackers also"
 msgstr "同时使用OpenTracker"
 
-msgid ""
-"Announce torrents to open trackers as well as trackers listed in the torrent"
-" file"
+msgid "Announce torrents to open trackers as well as trackers listed in the torrent file"
 msgstr "在向种子内的Tracker发布的同时向OpenTracker发布"
 
 msgid "Enable DHT"
@@ -1201,9 +1153,7 @@ msgstr "用DHT来寻找额外的用户"
 msgid "Auto start torrents"
 msgstr "自动开始种子"
 
-msgid ""
-"Automatically start torrents when added and restart torrents when I2PSnark "
-"starts"
+msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
 msgstr "当种子添加后自动启动种子且当种子启动时自动启动种子"
 
 msgid "Startup delay"
@@ -1227,22 +1177,14 @@ msgstr "数据与种子存储的目录"
 msgid "Files readable by all"
 msgstr "文件对所有人可读"
 
-msgid ""
-"Set file permissions to allow other local users to access the downloaded "
-"files"
+msgid "Set file permissions to allow other local users to access the downloaded files"
 msgstr "设置文件的权限以允许其他本地用户浏览下载"
 
 msgid "Max files per torrent"
 msgstr "每个洪流的最大文件数"
 
-msgid ""
-"Maximum number of files permitted per torrent - note that trackers may set "
-"their own limits, and your OS may limit the number of open files, preventing"
-" torrents with many files (and subsequent torrents) from loading"
-msgstr ""
-"每个 torrent 允许的最大文件数 - 请注意，跟踪器可能会设置自己的限制，并且您的操作系统可能会限制打开文件的数量，从而阻止加载包含许多文件的 "
-"torrent（以及后续 torrent）每个种子允许的最大文件数--"
-"注意tracker可能会有他们自己的限制，你的操作系统可能会限制打开的文件数，防止有许多文件的种子（以及后续的种子）被加载"
+msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
+msgstr "每个 torrent 允许的最大文件数 - 请注意，跟踪器可能会设置自己的限制，并且您的操作系统可能会限制打开文件的数量，从而阻止加载包含许多文件的 torrent（以及后续 torrent）每个种子允许的最大文件数--注意tracker可能会有他们自己的限制，你的操作系统可能会限制打开的文件数，防止有许多文件的种子（以及后续的种子）被加载"
 
 msgid "Tunnel Configuration"
 msgstr "隧道设置"
@@ -1332,17 +1274,11 @@ msgstr "无法添加磁链：不支持版本2的磁链链接"
 msgid "Invalid magnet URL {0}"
 msgstr "磁性链接 {0} 无效"
 
-msgid ""
-"This configures the maximum number of tunnels to open, determined by the "
-"number of connected peers (actual usage may be less)"
-msgstr ""
-"这配置了打开的最大隧道数量，由连接的对等点数量决定（实际使用量可能会更少）这配置了要打开的最大隧道数，由连接的对等体数量决定（实际使用可能更少）。"
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "这配置了打开的最大隧道数量，由连接的对等点数量决定（实际使用量可能会更少）这配置了要打开的最大隧道数，由连接的对等体数量决定（实际使用可能更少）。"
 
-msgid ""
-"Changing this setting to less than 3 hops may improve speed at the expense "
-"of anonymity and is not recommended"
-msgstr ""
-"将此设置更改为少于 3 跳可能会提高速度，但会牺牲匿名性，因此不建议将此设置改为小于3跳，可能会以牺牲匿名性为代价来提高速度，因此不建议这样做"
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "将此设置更改为少于 3 跳可能会提高速度，但会牺牲匿名性，因此不建议将此设置改为小于3跳，可能会以牺牲匿名性为代价来提高速度，因此不建议这样做"
 
 msgid "Sequential piece or file order not saved - feature currently broken."
 msgstr "顺序片段或文件顺序未保存 - 功能当前损坏。"
@@ -1434,9 +1370,7 @@ msgstr "完成"
 msgid "Skipped"
 msgstr "已跳过"
 
-msgid ""
-"Only I2P trackers will be used; non-I2P trackers are displayed for "
-"informational purposes only"
+msgid "Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"
 msgstr "只有I2P追踪器会被使用；非I2P追踪器的显示只是为了提供信息"
 
 msgid "Tracker"

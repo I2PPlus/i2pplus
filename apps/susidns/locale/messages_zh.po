@@ -25,9 +25,7 @@ msgid "Host name cannot contain \"{0}\""
 msgstr "主机名称不能包含“{0}”"
 
 #, java-format
-msgid ""
-"Host name \"{0}\" requires conversion to ASCII but the conversion library is"
-" unavailable in this JVM"
+msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "主机名称“{0}”需要转化为ASCIIb编码，但您的JavaJVM缺少转换需要的库。"
 
 msgid "Source"
@@ -106,9 +104,7 @@ msgid "Host name {0} is already in address book, unchanged."
 msgstr "主机名{0}已存在于地址簿中，操作取消。"
 
 #, java-format
-msgid ""
-"Host name {0} is already in address book with a different destination. Click"
-" \"Replace\" to overwrite."
+msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
 msgstr "主机名{0}已存在于地址簿中，但对应不同的目标密钥，点击“替换”覆盖此记录。"
 
 msgid "Unable to resolve Base 32 address"
@@ -165,14 +161,10 @@ msgstr "地址簿已保存。"
 msgid "ERROR: Could not write addressbook file."
 msgstr "错误:无法写入地址簿文件"
 
-msgid ""
-"Invalid form submission, probably because you used the \"back\" or "
-"\"reload\" button on your browser. Please resubmit."
+msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
 msgstr "提交数据无效，可能的原因是您使用了浏览器中的“前进”或“后退”按钮造成会话过期，请重新提交。"
 
-msgid ""
-"If the problem persists, verify that you have cookies enabled in your "
-"browser."
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "如果问题持续出现，请检查您的浏览器是否已启用cookie。"
 
 msgid "Save"
@@ -267,31 +259,22 @@ msgstr "无法更新订阅。HTTP代理没有运行!"
 msgid "Subscriptions reloaded."
 msgstr "订阅设置已重新载入。"
 
-msgid ""
-"If SusiDNS is configured to publish your Router address book, the entries "
-"will appear in your Published address book and saved to a hosts.txt file for"
-" sharing."
+msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
 msgstr "如果DNS被设置为发布您的地址簿，您的地址将会在已发布的地址簿中出现并保存到将要分享的hosts.txt中。"
 
 msgid "Published Addressbook"
 msgstr "已发布的地址簿"
 
-msgid ""
-"To configure SusiDNS to push your Router address book to your Published "
-"address book, set 'should_publish=true' on the configuration page."
+msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
 msgstr "要把DNS设置为自动发布您的地址簿，请在配置页设置'should_publish=true'"
 
-msgid ""
-"All hosts derived from subscriptions will appear in this address book, in "
-"addition to any you manually add here or to your Master address book."
+msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "除了您在此处手动添加或添加到主通讯录中的任何主机之外，所有订阅的主机都将出现在此通讯录中。"
 
 msgid "Router Addressbook"
 msgstr "路由器地址簿"
 
-msgid ""
-"Hosts you manually add here will never be published. You can also add "
-"aliases to hosts in other address books here."
+msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
 msgstr "您在此处手动添加的主机将永远不会发布。 您还可以在此处向其他通讯簿中的主机添加别名。"
 
 msgid "Private Addressbook"
@@ -300,30 +283,22 @@ msgstr "私有地址簿"
 msgid "Local Records"
 msgstr "本地记录"
 
-msgid ""
-"I2P applications (including the HTTP proxy) use the hosts in your local "
-"address books to resolve .i2p hostnames."
+msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
 msgstr "I2P应用程序（包括HTTP代理）使用本地地址簿中的主机来解析.i2p主机名。"
 
-msgid ""
-"Additional subscriptions can be found in the FAQ section of the Router help "
-"page."
+msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
 msgstr "可以在路由器帮助页面的“常见问题”部分中找到其他订阅。"
 
 msgid "Subscriptions"
 msgstr "订阅"
 
-msgid ""
-"Hosts sourced from your subscriptions are added to your Router address book,"
-" and are automatically synced (by default every 12 hours)."
+msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
 msgstr "来自您的订阅的主机将添加到路由器通讯簿中，并自动进行同步（默认情况下每12小时同步一次）。"
 
 msgid "Configure Subscriptions"
 msgstr "配置订阅"
 
-msgid ""
-"If you manually add hosts here, they will be included your Published address"
-" book (if configured)."
+msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
 msgstr "如果您在此处手动添加主机，则它们将包含在已发布的通讯簿中（如果已配置）。"
 
 msgid "Master Addressbook"
@@ -335,9 +310,7 @@ msgstr "可搜索的"
 msgid "I2P applications"
 msgstr "I2P应用程序"
 
-msgid ""
-"The Master, Router and Private address books collectively serve as the DNS "
-"authority for I2P applications."
+msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
 msgstr "主、路由器和私有地址簿共同担任I2P应用程序的DNS解析。"
 
 msgid "Optional,"
@@ -346,18 +319,11 @@ msgstr "可选的"
 msgid "for websites"
 msgstr "给网站"
 
-msgid ""
-"If you configure SusiDNS to publish your Router address book, it will export"
-" a hosts.txt file containing all the hosts (by default to the root of your "
-"eepsite)."
+msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
 msgstr "如果将DNS配置为发布路由器地址簿，它将导出包含所有主机的hosts.txt文件（默认为eepsite的根目录）。"
 
-msgid ""
-"Addresses manually added to your Master address book will merge with your "
-"Router address book."
+msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "手动添加到您的主地址簿中的地址将与您的路由器地址簿合并。"
 
-msgid ""
-"Hosts you receive from your subscriptions will merge with your Router "
-"address book."
+msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "您从订阅中取得的主机将与路由器地址簿合并。"

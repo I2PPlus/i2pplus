@@ -5039,6 +5039,9 @@ msgstr ""
 msgid "Socket Connect Timeout"
 msgstr ""
 
+msgid "Message Processing Throttle"
+msgstr ""
+
 msgid "Data packets between each ACK."
 msgstr ""
 
@@ -5382,6 +5385,9 @@ msgid "RTO growth multiplier per retransmission timeout (%, 100 = flat)."
 msgstr ""
 
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
+msgstr ""
+
+msgid "Max average message delay before rejecting transit (ms)."
 msgstr ""
 
 msgid "Tunnel"

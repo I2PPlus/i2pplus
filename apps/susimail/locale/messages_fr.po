@@ -51,17 +51,11 @@ msgstr "Afficher le message sous forme de texte brut"
 msgid "unknown"
 msgstr "inconnu"
 
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
-msgstr ""
-"Afin de protéger votre vie privée, Webmail bloque le JavaScript et tout "
-"contenu distant contenu dans ce message HTML."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
+msgstr "Afin de protéger votre vie privée, Webmail bloque le JavaScript et tout contenu distant contenu dans ce message HTML."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
-msgstr ""
-"Activez JavaScript pour une meilleure présentation et des fonctionnalités "
-"supplémentaires."
+msgstr "Activez JavaScript pour une meilleure présentation et des fonctionnalités supplémentaires."
 
 #, java-format
 msgid "Tracking images removed from message: {0}"
@@ -182,16 +176,13 @@ msgstr "Aucun message n’est marqué pour suppression."
 
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
-"L’hôte est inchangé. Modifier le fichier de configuration {0} pour changer "
-"l’hôte."
+msgstr "L’hôte est inchangé. Modifier le fichier de configuration {0} pour changer l’hôte."
 
 msgid "Configuration saved"
 msgstr "La configuration a été enregistrée"
 
 msgid "Invalid pagesize number, resetting to default value."
-msgstr ""
-"La taille de page est invalide, réinitialisation à la valeur par défaut."
+msgstr "La taille de page est invalide, réinitialisation à la valeur par défaut."
 
 msgid "Login"
 msgstr "Connexion"
@@ -453,14 +444,10 @@ msgid "No response from server"
 msgstr "Aucune réponse du serveur"
 
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
-"Échec de connexion au serveur de courriel, nom d'utilisateur ou mot de passe"
-" erroné."
+msgstr "Échec de connexion au serveur de courriel, nom d'utilisateur ou mot de passe erroné."
 
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
-"Déconnectez-vous puis reconnectez-vous avec le bon nom d'utilisateur et le "
-"bon mot de passe."
+msgstr "Déconnectez-vous puis reconnectez-vous avec le bon nom d'utilisateur et le bon mot de passe."
 
 msgid "Login failed"
 msgstr "Échec de connexion"

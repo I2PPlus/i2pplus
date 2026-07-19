@@ -51,16 +51,11 @@ msgstr "Visa meddelande som ren text"
 msgid "unknown"
 msgstr "okänd"
 
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
-msgstr ""
-"För att skydda din integritet blockerar Webbpost JavaScript och all "
-"fjärrinnehåll som finns i detta HTML-meddelande."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
+msgstr "För att skydda din integritet blockerar Webbpost JavaScript och all fjärrinnehåll som finns i detta HTML-meddelande."
 
 msgid "Enable Javascript for enhanced presentation and additional features."
-msgstr ""
-"Aktivera JavaScript för förbättrad presentation och ytterligare funktioner."
+msgstr "Aktivera JavaScript för förbättrad presentation och ytterligare funktioner."
 
 #, java-format
 msgid "Tracking images removed from message: {0}"
@@ -449,8 +444,7 @@ msgid "No response from server"
 msgstr "Inget svar från servern"
 
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
-"E-postserverinloggningen misslyckades, fel användarnamn eller lösenord."
+msgstr "E-postserverinloggningen misslyckades, fel användarnamn eller lösenord."
 
 msgid "Logout and then login again with the correct username and password."
 msgstr "Logga ut och sedan logga in igen med rätt användarnamn och lösenord."
