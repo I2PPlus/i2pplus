@@ -2413,7 +2413,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         SelectorLoopDelayParam() {
             super("SELECTOR_LOOP_DELAY", "NTCP selector sleep (ms)",
                   SUB_TRANSPORT,
-                  1, 100, 10, "ntcp.pumperLoopsPerSecond", _context);
+                  1, 200, 10, "ntcp.pumperLoopsPerSecond", _context);
         }
 
         protected void applyValue(int value) {
@@ -2437,7 +2437,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             // observed = ntcp.pumperLoopsPerSecond (NTCP event loop rate)
-            // Cross-refs: jobLag (CPU), ntcp.writeQueueFull (NTCP pressure)
+            // Scale on the IDLE ratio (idle loops / total loops), not raw volume:
+            // a high loop rate doing real I/O is healthy and must stay responsive,
+            // while a high loop rate that is idle busy-spin (select() returning
+            // nothing) is pure wasted CPU and should be throttled hard.
+            double idleLoops = getAdditionalStat(_context, "ntcp.pumperIdleLoops");
+            double idleRatio = (observed > 0 && !Double.isNaN(idleLoops)) ? idleLoops / (idleLoops + observed) : 0d;
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double writeQueueFull = getAdditionalStat(_context, "ntcp.writeQueueFull");
             int sysLoad = SystemVersion.getSystemLoad();
@@ -2446,24 +2451,25 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 50;
             boolean ntcpPressure = !Double.isNaN(writeQueueFull) && writeQueueFull > 0;
 
-            // Extremely high loop rate (>50K/s) = aggressive delay increase
-            // prevents busy-spinning even when CPU load appears moderate
-            if (observed > 50000)
+            // Idle busy-spin dominates (>90% of loops do no work) = crush it.
+            // Even at a moderate loop rate this is wasted CPU, so raise delay hard.
+            if (idleRatio > 0.9 && current < _max)
                 return Math.min(_max, current + _step * 5);
 
-            // Very high loop rate (>10K/s) = moderate delay increase
-            if (observed > 10000)
+            // Mostly idle spin (>50%) = steady delay increase
+            if (idleRatio > 0.5 && current < _max)
                 return Math.min(_max, current + _step * 2);
 
-            // High loop rate (>2000/s) = gradual delay increase
-            if (observed > 2000 && current < _max)
+            // Idle spin present but mixed (>10%) = small increase to nudge it down
+            if (idleRatio > 0.1 && current < _max)
                 return Math.min(_max, current + _step);
 
-            // Low loop rate + spare capacity = decrease delay (faster pumper, burst handling)
-            if (observed < 200 && !systemBusy && !ntcpPressure && !highLoad)
+            // Low idle ratio (pumper doing useful work) + spare capacity =
+            // decrease delay for responsiveness / burst handling
+            if (idleRatio < 0.1 && observed < 5000 && !systemBusy && !ntcpPressure && !highLoad)
                 return Math.max(_min, current - _step);
 
-            // NTCP pressure = decrease delay immediately
+            // NTCP pressure = decrease delay immediately (responsiveness wins)
             if (ntcpPressure && !systemBusy && current > _min)
                 return Math.max(_min, current - _step);
 

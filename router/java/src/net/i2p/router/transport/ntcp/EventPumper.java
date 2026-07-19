@@ -128,7 +128,7 @@ class EventPumper implements Runnable {
     private static final int FAILSAFE_LOOP_COUNT = IS_SLOW ? 512 : 2048;
     private static volatile long _selectorLoopDelay = IS_SLOW ? 100 : 5;
     private static final long SELECTOR_MAX_DELAY = 200;  // Max delay when under load
-    private long _currentDelay = _selectorLoopDelay;
+    private static long _currentDelay = _selectorLoopDelay;
     private static final long BLOCKED_IP_FREQ = 43 * 60 * 1000L;
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
     private static final long MIN_EXPIRE_IDLE_TIME = 120 * 1000L;
@@ -167,6 +167,7 @@ class EventPumper implements Runnable {
         _failedInboundEncryption = new ObjectCounter<>();
         _context.statManager().createRequiredRateStat("ntcp.pumperKeySetSize", "Number of NTCP Pumper KeySetSize events", "Transport [NTCP]", RATES);
         _context.statManager().createRequiredRateStat("ntcp.pumperLoopsPerSecond", "Number of NTCP Pumper loops/s", "Transport [NTCP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        _context.statManager().createRateStat("ntcp.pumperIdleLoops", "Number of NTCP Pumper idle loops (select returned no ready keys)", "Transport [NTCP]", RATES);
         _context.statManager().createRequiredRateStat("ntcp.failsafeIterationTime", "NTCP failsafe iteration time in ms", "Transport [NTCP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("ntcp.zeroRead", "Number of NTCP zero length read events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.zeroReadDrop", "Number of NTCP zero length read events dropped", "Transport [NTCP]", RATES);
@@ -261,6 +262,7 @@ class EventPumper implements Runnable {
     public void run() {
         int loopCount = 0;
         int loopCountSinceLastRate = 0;
+        int idleLoopCountSinceLastRate = 0;
         long lastFailsafeIteration = System.currentTimeMillis();
         long lastLoopRateUpdate = System.currentTimeMillis();
         long lastKeySetUpdate = lastLoopRateUpdate;
@@ -296,6 +298,7 @@ class EventPumper implements Runnable {
                     }
                 } else {
                     _consecutiveFastSelects = 0;
+                    idleLoopCountSinceLastRate++;
                 }
 
                 runDelayedEvents();
@@ -309,13 +312,22 @@ class EventPumper implements Runnable {
                     if (elapsedSeconds <= 0) elapsedSeconds = 1;
                     int loopsPerSecond = loopCountSinceLastRate / elapsedSeconds;
                     _context.statManager().addRateData("ntcp.pumperLoopsPerSecond", loopsPerSecond);
-                    // Scale delay based on loop rate - increase delay if >1K/s to reduce CPU
+                    // Idle loops (select() returned with no ready keys) — the signal
+                    // that distinguishes useful I/O from busy-spinning. Recorded as a
+                    // count over the window so the Tuner can compute an idle ratio.
+                    _context.statManager().addRateData("ntcp.pumperIdleLoops", idleLoopCountSinceLastRate);
+                    // Scale delay based on loop rate to curb idle busy-spinning.
+                    // Raise the delay proportionally to how far over the spin threshold
+                    // we are, so an extreme rate (e.g. 80K/s) is corrected within a
+                    // window or two rather than creeping up at +5ms/60s.
                     if (loopsPerSecond > 1000 && _currentDelay < SELECTOR_MAX_DELAY) {
-                        _currentDelay = Math.min(_currentDelay + 5, SELECTOR_MAX_DELAY);
+                        long step = Math.min(50, (loopsPerSecond - 1000) / 2000 + 5);
+                        _currentDelay = Math.min(_currentDelay + step, SELECTOR_MAX_DELAY);
                     } else if (loopsPerSecond < 500 && _currentDelay > _selectorLoopDelay) {
                         _currentDelay = Math.max(_currentDelay - 5, _selectorLoopDelay);
                     }
                     loopCountSinceLastRate = 0;
+                    idleLoopCountSinceLastRate = 0;
                     lastLoopRateUpdate = now;
                 }
 
@@ -1129,8 +1141,16 @@ class EventPumper implements Runnable {
     /** Get the selector loop delay in milliseconds */
     public static long getSelectorLoopDelay() { return _selectorLoopDelay; }
 
-    /** Set the selector loop delay, bounded 1-100ms */
-    public static void setSelectorLoopDelay(long ms) { _selectorLoopDelay = Math.max(1, Math.min(100, ms)); }
+    /** Set the selector loop delay, bounded 1-SELECTOR_MAX_DELAY ms.
+     *  Updates the base delay the pumper relaxes toward and raises the live
+     *  delay immediately so Tuner-driven increases take effect without waiting
+     *  for the pumper's own 60s ramp. */
+    public static void setSelectorLoopDelay(long ms) {
+        long v = Math.max(1, Math.min(SELECTOR_MAX_DELAY, ms));
+        _selectorLoopDelay = v;
+        if (_currentDelay < v)
+            _currentDelay = v;
+    }
 
     /** Get the failsafe iteration frequency in milliseconds */
     public static long getFailsafeIterationFreq() { return _failsafeIterationFreq; }
