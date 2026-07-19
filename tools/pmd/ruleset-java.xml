@@ -135,6 +135,8 @@
         <exclude name="AvoidMultipleConcatStatements"/>
         <exclude name="AvoidLoadingAllFromFile"/>
         <exclude name="MissingFieldInEquals"/>
+        <!-- AvoidUnnecessaryStringBuilderCreation: fires on idiomatic toString() builders; concatenation is not clearer -->
+        <exclude name="AvoidUnnecessaryStringBuilderCreation"/>
         <!-- Equals/hashCode rules: excluded by user request (high noise, low signal) -->
         <exclude name="ImplementEqualsHashCodeOnValueObjects"/>
         <exclude name="FieldOfHashCodeMissingInEquals"/>
