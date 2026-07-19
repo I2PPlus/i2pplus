@@ -1105,12 +1105,21 @@ public class TestJob extends JobImpl {
         // are usually due to reply-path issues (the remote peer used for the
         // return path) or temporary network congestion, not the tunnel itself.
         //
-        // However, this trust is NOT unlimited.  A tunnel that keeps failing
-        // tests despite recent traffic has a broken test reply path or is
-        // genuinely degraded.  We allow a few exemptions before counting
-        // failures normally, preventing immortal tunnels that block pool
-        // recovery.
-        if (_cfg.getVerifiedBytesTransferred() > 0) {
+        // However, this trust must be INBOUND-ONLY.  For an inbound tunnel,
+        // verified bytes are data that actually reached us, proving the tunnel
+        // works in the inbound direction; a test failure is then a reply-path
+        // (outbound) false negative and shielding it is correct.  For an OUTBOUND
+        // (or exploratory) tunnel, verified bytes are data we sent out — that
+        // proves nothing about the reply path returning.  A failing test means
+        // the round trip did not complete, so the outbound tunnel may be dead;
+        // shielding it would let a dead tunnel persist and block replacement
+        // with a working one.  So only inbound tunnels get the traffic exemption.
+        //
+        // This trust is NOT unlimited.  A tunnel that keeps failing tests despite
+        // recent traffic has a broken test reply path or is genuinely degraded.
+        // We allow a few exemptions before counting failures normally, preventing
+        // immortal tunnels that block pool recovery.
+        if (_cfg.getVerifiedBytesTransferred() > 0 && _cfg.isInbound()) {
             getContext().statManager().addRateData(
                 "tunnel.testFailedDataTrust", _cfg.getVerifiedBytesTransferred());
             long lastTransfer = _cfg.getLastTransferred();
