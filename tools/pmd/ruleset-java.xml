@@ -95,6 +95,11 @@
         <exclude name="ImproperVariableName"/>
         <!-- CompareObjectsWithEquals: ~95% FP on enum/constant comparison patterns -->
         <exclude name="CompareObjectsWithEquals"/>
+        <!-- AvoidBranchingStatementAsLastInLoop: false positives on intentional
+             break/continue/return as the terminal loop statement (e.g. break inner,
+             continue to skip invalid entries, return after flag set). Restructuring
+             risks behavior changes across crypto/transport hot paths for no gain. -->
+        <exclude name="AvoidBranchingStatementAsLastInLoop"/>
         <!-- CloseResource: ~95% false positives in this networking codebase
              (socket streams, I2P streaming connections, NIO channels,
               thread pool property reads, lifecycle-managed accept() handlers).
