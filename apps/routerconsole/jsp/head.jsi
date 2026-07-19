@@ -12,8 +12,19 @@ boolean isHelpPage = uri.contains("/help/") && !uri.endsWith("/");
 boolean isWizardPage = uri.endsWith("wizard") || uri.endsWith("wizard.jsp");
 boolean viewProfile = uri.contains("viewprofile");
 String csrfMetaToken = net.i2p.router.web.CSSHelper.getNonce();
+
+// Auth state for CSS hooks: a console password is configured (noauth when not),
+// and the session is authenticated (loggedIn when AuthFilter set the user attr).
+net.i2p.router.RouterContext _rctx = (net.i2p.router.RouterContext) ctx;
+net.i2p.router.web.ConsolePasswordManager _cpm = new net.i2p.router.web.ConsolePasswordManager(_rctx);
+boolean _hasConsolePW = !_cpm.getMD5(net.i2p.router.web.RouterConsoleRunner.PROP_CONSOLE_PW).isEmpty()
+    || _rctx.router().getConfigMap().keySet().stream().anyMatch(k -> k != null
+        && k.startsWith(net.i2p.router.web.RouterConsoleRunner.PROP_CONSOLE_PW + ".")
+        && k.endsWith(".pbkdf2"));
+boolean loggedIn = request.getAttribute("user") != null;
+boolean noAuth = !_hasConsolePW;
 %>
-<html lang="<%=lang%>" class="<%=isAdvancedMode ? "advmode " : ""%><%=useUnifiedSidebar ? "unified " : ""%><%=useSoraFont ? "sora" : "opensans"%>" <%=theme.equals("dark") || theme.equals("midnight") ? "style=\"background:var(--bodybg,#000)\"" : ""%>>
+<html lang="<%=lang%>" class="<%=isAdvancedMode ? "advmode " : ""%><%=useUnifiedSidebar ? "unified " : ""%><%=useSoraFont ? "sora" : "opensans"%><%=loggedIn ? " logged-in" : ""%><%=noAuth ? " noauth" : ""%>" <%=theme.equals("dark") || theme.equals("midnight") ? "style=\"background:var(--bodybg,#000)\"" : ""%>>
 <head>
 <script src=/js/progressx.js></script>
 <meta charset=utf-8>
