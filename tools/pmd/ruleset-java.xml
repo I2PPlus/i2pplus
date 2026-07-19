@@ -137,6 +137,8 @@
         <exclude name="MissingFieldInEquals"/>
         <!-- AvoidUnnecessaryStringBuilderCreation: fires on idiomatic toString() builders; concatenation is not clearer -->
         <exclude name="AvoidUnnecessaryStringBuilderCreation"/>
+        <!-- UnconditionalIfStatement: false positives on dynamic conditions in WorkingDir/I2PTunnelServer -->
+        <exclude name="UnconditionalIfStatement"/>
         <!-- Equals/hashCode rules: excluded by user request (high noise, low signal) -->
         <exclude name="ImplementEqualsHashCodeOnValueObjects"/>
         <exclude name="FieldOfHashCodeMissingInEquals"/>
