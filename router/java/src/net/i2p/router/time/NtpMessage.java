@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 import net.i2p.util.RandomSource;
 
 /**
@@ -451,7 +452,7 @@ class NtpMessage {
         long ms = (long) (utc * 1000.0);
 
         // date/time
-        String date = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").format(new Date(ms));
+        String date = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.US).format(new Date(ms));
 
         // fraction
         double fraction = timestamp - ((long) timestamp);

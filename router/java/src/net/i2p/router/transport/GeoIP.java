@@ -1157,7 +1157,7 @@ public class GeoIP {
         try (DatabaseReader reader = openGeoIP2(geoFile)) {
             long buildTime = reader.getMetadata().getBuildDate().getTime();
             Date buildDate = new Date(buildTime);
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.US);
             return "<b>Built:</b> " + sdf.format(buildDate) + "&ensp;<b>Size:</b> " + formattedFileSize + "MB&ensp;<b>Location:</b> " + filePath;
         } catch (Exception e) {return "Unknown GeoIP Db version";}
     }
@@ -1180,7 +1180,7 @@ public class GeoIP {
             if (reader == null) {return "ASN Db not found";}
             long buildTime = reader.getMetadata().getBuildDate().getTime();
             Date buildDate = new Date(buildTime);
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.US);
             return "<b>Built:</b> " + sdf.format(buildDate) + "&ensp;<b>Size:</b> " + formattedFileSize + "MB&ensp;<b>Location:</b> " + filePath;
         } catch (Exception e) {return "Unknown ASN Db version";}
     }
