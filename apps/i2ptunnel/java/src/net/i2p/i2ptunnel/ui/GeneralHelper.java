@@ -403,8 +403,10 @@ public class GeneralHelper {
         // Don't default to a file that already exists,
         // which could happen after other tunnels are deleted.
         int i = 0;
+        StringBuilder buf = new StringBuilder(32);
         while ((new File(_context.getConfigDir(), rv)).exists()) {
-            rv = "i2ptunnel" + tunnel + "." + (++i) + "-privKeys.dat";
+            buf.setLength(0);
+            rv = buf.append("i2ptunnel").append(tunnel).append('.').append(++i).append("-privKeys.dat").toString();
         }
         return rv;
     }
