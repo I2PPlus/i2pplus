@@ -431,8 +431,44 @@ public class BuildExecutor implements Runnable {
             baseTimeout += 5 * 1000L;
         }
 
+        // Feedforward from measured network RTT: when the baseline round-trip
+        // time (udp.sendConfirmTime) is high, builds that would otherwise succeed
+        // are timed out prematurely.  Ensure the timeout covers the recent RTT
+        // plus a margin so a latency spike does not cause spurious build timeouts
+        // (which starves tunnel building and collapses the participating count).
+        long rttFloor = getRttTimeoutFloor();
+        if (rttFloor > baseTimeout) {
+            baseTimeout = rttFloor;
+        }
+
         // Cap at 45s safety ceiling
         return Math.min(baseTimeout, 45*1000L);
+    }
+
+    /**
+     *  Feedforward timeout floor derived from the network's recent baseline RTT
+     *  (udp.sendConfirmTime, the time to send a message and receive its ACK).
+     *  Returns a timeout floor of recent RTT plus a fixed margin, so build
+     *  timeouts track actual network conditions instead of a fixed ceiling.
+     *
+     *  @return timeout floor in ms
+     *  @since 0.9.70+
+     */
+    private long getRttTimeoutFloor() {
+        long margin = 10 * 1000L;
+        RateStat rtt = _context.statManager().getRate("udp.sendConfirmTime");
+        if (rtt != null) {
+            Rate r = rtt.getRate(60*1000L);
+            if (r != null && r.getLastEventCount() > 0) {
+                // Use the average RTT as a conservative baseline (the p95 is not
+                // directly exposed; the average already captures sustained spikes).
+                long baseline = (long) r.getAverageValue();
+                if (baseline > 0) {
+                    return baseline + margin;
+                }
+            }
+        }
+        return 0;
     }
 
     /**
