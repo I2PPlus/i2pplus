@@ -42,6 +42,20 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     private static final String PROP_MIN_THROTTLE_TUNNELS = "router.minThrottleTunnels";
 
+    /**
+     * How long the 1-minute message-processing average must stay above the
+     * throttle threshold before we actually reject tunnel requests. Brief lag
+     * spikes (GC pauses, netdb churn, rebuild storms) that recover within this
+     * window must not trip throttling. 3 minutes &gt; one 1-minute coalesce
+     * period, so the condition is confirmed across multiple samples.
+     *
+     * @since 0.9.70+
+     */
+    private static final long MSG_DELAY_SUSTAIN_MS = 3*60*1000L;
+
+    /** Timestamp (ms) the message-delay average first crossed the threshold, or -1. */
+    private volatile long _msgDelayOverSince = -1;
+
     /* TO BE FIXED - SEE COMMENTS BELOW */
     private static final int DEFAULT_MAX_PROCESSINGTIME = SystemVersion.isSlow() ? 3000 : 2000;
 
@@ -137,26 +151,42 @@ public class RouterThrottleImpl implements RouterThrottle {
         Rate r = null;
         if (rs != null) {r = rs.getRate(RateConstants.ONE_MINUTE);}
 
-        //Reject tunnels if the time to process messages and send them is too large. Too much time implies congestion.
+            //Reject tunnels if the time to process messages and send them is too large. Too much time implies congestion.
         if (r != null) {
             r.computeAverages(ra,false);
 
             int maxProcessingTime = _context.getProperty(PROP_MAX_PROCESSINGTIME, DEFAULT_MAX_PROCESSINGTIME);
 
-            //Set throttling if necessary
-            if ((ra.getAverage() > maxProcessingTime * 0.9 || ra.getCurrent() > maxProcessingTime ||
-                 ra.getLast() > maxProcessingTime) && maxTunnels > 0) {
-                if (_log.shouldInfo()) {
-                    _log.warn("Refusing Tunnel Request -> Message processing congestion" +
-                              "\n* Current: " + ((int)ra.getCurrent()) + "ms" +
-                              "\n* Last: " + ((int)ra.getLast()) + "ms" +
-                              "\n* Average: " + ((int)ra.getAverage()) + "ms" +
-                              "\n* Max time to process: " + maxProcessingTime + "ms");
-                } else if (_log.shouldWarn()) {
-                    _log.warn("Refusing Tunnel Request -> Message processing congestion");
+            // Gate on the smoothed 1-minute average only. The instantaneous values
+            // (getCurrent()/getLast()) spike on single slow messages (GC pauses, netdb
+            // churn, rebuild storms) but recover within seconds; rejecting every tunnel
+            // request on a transient blip sheds load blindly and, worse, signals bandwidth
+            // saturation to peers (see below). A brief spike that the router quickly
+            // recovers from must NOT trigger throttling.
+            boolean over = ra.getAverage() > maxProcessingTime * 0.9;
+            if (over) {
+                // Require the average to stay elevated for a short sustain window before
+                // we actually reject, so quick-recovering lag spikes pass through.
+                if (_msgDelayOverSince < 0) {
+                    _msgDelayOverSince = System.currentTimeMillis();
+                } else if (System.currentTimeMillis() - _msgDelayOverSince >= MSG_DELAY_SUSTAIN_MS) {
+                    if (_log.shouldInfo()) {
+                        _log.warn("Refusing Tunnel Request -> Message processing congestion" +
+                                  "\n* Average: " + ((int)ra.getAverage()) + "ms" +
+                                  "\n* Max time to process: " + maxProcessingTime + "ms" +
+                                  "\n* Sustained for: " + (System.currentTimeMillis() - _msgDelayOverSince) + "ms");
+                    } else if (_log.shouldWarn()) {
+                        _log.warn("Refusing Tunnel Request -> Message processing congestion");
+                    }
+                    setTunnelStatus("[rejecting/overload]" + _x("Declining Tunnel Requests" + ":<br>" + _x("High message delay")));
+                    // Use TRANSIENT_OVERLOAD (not BANDWIDTH) so peers retry shortly rather
+                    // than deprioritizing us permanently — a lag spike is not a bandwidth
+                    // saturation, and the bandwidth path (allowTunnel) already handles real
+                    // saturation with graduated probabilistic rejection.
+                    return TunnelHistory.TUNNEL_REJECT_TRANSIENT_OVERLOAD;
                 }
-                setTunnelStatus("[rejecting/overload]" + _x("Declining Tunnel Requests" + ":<br>" + _x("High message delay")));
-                return TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
+            } else {
+                _msgDelayOverSince = -1;
             }
         }
 

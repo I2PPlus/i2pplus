@@ -426,6 +426,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new PeerOutboundQueueParam());
         _params.add(new ThrottleRejectExponentParam());
         _params.add(new TransitThrottleFactorParam());
+        _params.add(new MessageProcessingThrottleParam());
 
         // NetDB
         _params.add(new NetDBMaxConcurrentParam());
@@ -4276,6 +4277,58 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // Congested but low usage = don't change (something else is wrong)
             return current;
+        }
+    }
+
+    /**
+     * Threshold for the message-processing-latency transit throttle
+     * (router.defaultProcessingTimeThrottle, read by RouterThrottleImpl). When
+     * the 1-minute sendProcessingTime average stays above this for the sustain
+     * window, tunnel requests are rejected as transient overload.
+     *
+     * The target tracks the router's *stable* processing baseline (10-minute
+     * average), not the live spiking value, so a router that routinely runs at
+     * higher latency raises its own threshold instead of throttling on its
+     * normal (recoverable) load — while a router under genuine, sustained
+     * congestion still trips the throttle. Floor/ceiling keep protection on.
+     */
+    private class MessageProcessingThrottleParam extends BaseParam {
+
+        MessageProcessingThrottleParam() {
+            super("router.defaultProcessingTimeThrottle", "Message processing throttle (ms)",
+                  SUB_ROUTER,
+
+                  2000, 8000, 500, "transport.sendProcessingTime", _context);
+        }
+
+        protected void applyValue(int value) {
+            _context.router().saveConfig("router.defaultProcessingTimeThrottle", Integer.toString(value));
+        }
+
+        protected int getRuntimeValue() {
+            return _context.getProperty("router.defaultProcessingTimeThrottle",
+                                         SystemVersion.isSlow() ? 3000 : 2000);
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            // Stable baseline: 10-minute average of sendProcessingTime. Avoids
+            // ratcheting the threshold up to match a transient spike.
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(RateConstants.TEN_MINUTES);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // Target ~4x the stable baseline, so the throttle only fires on
+            // latency well above normal operation.
+            int target = (int) (observed * 4);
+            // Hysteresis: leave alone when already close to target.
+            if (current >= target - _step && current <= target + _step)
+                return current;
+            return clamp(current, target, _step);
         }
     }
 
