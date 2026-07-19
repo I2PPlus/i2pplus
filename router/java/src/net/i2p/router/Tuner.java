@@ -5687,7 +5687,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
+            // Blocking RouterInfo lookups are rare (most are served from the local
+            // cache and never reach the network), so the 1-minute window is usually
+            // empty and would force a NaN -> the Tuner skips this param entirely.
+            // Read the 10-minute rate, which accumulates these sparse events, so the
+            // cap still tracks observed RI lookup latency.
+            Rate rate = rs.getRate(RateConstants.TEN_MINUTES);
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
@@ -5696,13 +5701,25 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = netDb.lookupWithTimeoutSuccess (ms): avg successful RI lookup time.
             // Base target ~4x avg success time, floored by _min.
-            double riFails = getAdditionalEventCount(_context, "netDb.lookupWithTimeoutFail");
+            double riFails = getAdditionalEventCount(_context, "netDb.lookupsFailedRouterInfo");
+            double riTimeoutFails = getAdditionalEventCount(_context, "netDb.lookupWithTimeoutFail");
+            double failTime = getAdditionalStat(_context, "netDb.failedTime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean failsElevated = !Double.isNaN(riFails) && riFails > 0;
+            boolean failsElevated = (!Double.isNaN(riFails) && riFails > 0)
+                                     || (!Double.isNaN(riTimeoutFails) && riTimeoutFails > 0);
+            // Failed RI lookups are running up against the deadline: the cap is
+            // truncating otherwise-viable searches, so grow it (success-time alone
+            // can't see this — only the fast wins are counted).
+            boolean capBinding = failsElevated && !Double.isNaN(failTime)
+                                 && failTime >= current * 0.9;
 
             int target = Math.max(_min, (int) (observed * 4));
+
+            // Grow toward the ceiling when the cap is truncating searches.
+            if (capBinding)
+                return Math.min(_max, current + _step);
 
             // Don't shrink while RouterInfo lookups are failing or the system is
             // congested — give in-flight searches room to complete.
