@@ -232,7 +232,7 @@ public class HealthHelper extends HelperBase {
         // Uptime
         long uptimeMs = _context.router().getUptime();
         String uptimeStr = uptimeMs > 0 ? formatCompactDuration(uptimeMs) : "\u2014";
-        double uptimeScore = uptimeMs > 0 ? Math.min(uptimeMs / (24L * 3600 * 1000), 1.0) : -1;
+        double uptimeScore = uptimeMs > 0 ? Math.min((double) uptimeMs / (24L * 3600 * 1000), 1.0) : -1;
 
         out.write(RingRenderer.renderRingCell(bwScore, _t("Bandwidth"), bwPct,
                   new String[]{bwDetail}, RingRenderer.MODE_ACTIVITY, bwHist));

@@ -432,7 +432,7 @@ public class Blocklist {
             long[] torArr = null;
                 try {
                     for (BLFile blf : _files) {
-                        if (blf.id == ID_TOR) {
+                        if (blf.id.equals(ID_TOR)) {
                             if (torArr == null) {
                                 torArr = allocate(Collections.singletonList(blf));
                                 if (torArr == null) {return 0;}

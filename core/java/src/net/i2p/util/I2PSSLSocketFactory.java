@@ -103,7 +103,7 @@ public class I2PSSLSocketFactory {
     private static final String COUNTRY_FILE_DEFAULT = "countries.txt";
     private static final String PUBLIC_SUFFIX_LIST = "public-suffix-list.txt";
     private static volatile PublicSuffixMatcher DEFAULT_MATCHER;
-    private static boolean _matcherLoaded;
+    private static volatile boolean _matcherLoaded;
     // not in countries.txt, but only the public ones, not the private ones
     private static final String[] DEFAULT_TLDS = {
         "arpa", "asia", "biz", "cat", "com", "coop",
