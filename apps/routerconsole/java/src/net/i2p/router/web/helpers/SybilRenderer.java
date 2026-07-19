@@ -607,7 +607,7 @@ public class SybilRenderer {
                     buf.append("<p class=\"threatpoints hot\"><b>");
                 else
                     buf.append("<p class=threatpoints><b>");
-                buf.append(_t("Threat Points")).append(": " + fmt(p).replace(".00", "") + "</b></p>\n<ul>\n");
+                buf.append(_t("Threat Points")).append(": ").append(fmt(p).replace(".00", "")).append("</b></p>\n<ul>\n");
                 List<String> reasons = pp.getReasons();
                 if (reasons.size() > 1)
                     Collections.sort(reasons, rcomp);
