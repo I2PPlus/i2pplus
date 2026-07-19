@@ -1205,32 +1205,75 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
 
         if (pendingLookups.add(ipAddress)) {
-            getReverseDnsExecutor().submit(() -> {
-                try {
-                    String hostName = ipAddress;
-                    if (enableReverseLookups()) {
-                        try {
-                            hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
-                            rdnsCachePut(ipAddress, new CacheEntry(ipAddress, hostName, System.currentTimeMillis()));
-                        } catch (UnknownHostException e) {
-                            // RDNS failed, will fall through to ASN lookup
-                        }
-                    }
-                    // Fall back to local ASN database if RDNS returned the IP or failed
-                    if (hostName.equals(ipAddress) || _t("unknown").equals(hostName)) {
-                        String orgName = _geoIP.getOrgName(ipAddress);
-                        if (orgName != null && !orgName.isEmpty()) {
-                            rdnsCachePut(ipAddress, new CacheEntry(ipAddress, orgName, System.currentTimeMillis()));
-                        }
-                    }
-                } finally {
-                    pendingLookups.remove(ipAddress);
-                }
-            });
+            getReverseDnsExecutor().submit(() -> lookupHostNameAsync(ipAddress));
             _context.statManager().addRateData("rdns.executor.queueSize", getRdnsQueueSize());
         }
 
         return ipAddress;
+    }
+
+    /**
+     *  Background RDNS/ASN resolution task submitted to the reverse-DNS executor.
+     *  Performs a reverse lookup, falling back to the local ASN database when the
+     *  result is the IP itself or unknown. Always clears the in-flight marker.
+     *
+     *  @param ipAddress non-null IP to resolve
+     *  @since 0.9.70+
+     */
+    private void lookupHostNameAsync(String ipAddress) {
+        try {
+            String hostName = ipAddress;
+            if (enableReverseLookups()) {
+                try {
+                    hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
+                    rdnsCachePut(ipAddress, new CacheEntry(ipAddress, hostName, System.currentTimeMillis()));
+                } catch (UnknownHostException e) {
+                    // RDNS failed, will fall through to ASN lookup
+                }
+            }
+            // Fall back to local ASN database if RDNS returned the IP or failed
+            if (hostName.equals(ipAddress) || _t("unknown").equals(hostName)) {
+                String orgName = _geoIP.getOrgName(ipAddress);
+                if (orgName != null && !orgName.isEmpty()) {
+                    rdnsCachePut(ipAddress, new CacheEntry(ipAddress, orgName, System.currentTimeMillis()));
+                }
+            }
+        } finally {
+            pendingLookups.remove(ipAddress);
+        }
+    }
+
+    /**
+     *  Background ASN-first resolution task submitted to the reverse-DNS executor.
+     *  Prefers the local ASN organization database, falling back to reverse DNS.
+     *  Always clears the in-flight marker.
+     *
+     *  @param ipAddress non-null IP to resolve
+     *  @since 0.9.70+
+     */
+    private void lookupOrgNameAsync(String ipAddress) {
+        try {
+            // Try ASN org name first (local MMDB, fast enough for background)
+            String hostName = _geoIP.getOrgName(ipAddress);
+            if (hostName != null && !hostName.isEmpty()) {
+                rdnsCachePut(ipAddress, new CacheEntry(ipAddress, hostName,
+                        System.currentTimeMillis()));
+                return;
+            }
+            // Fallback to RDNS
+            if (enableReverseLookups()) {
+                try {
+                    String rdnsResult = InetAddress.getByName(ipAddress).getCanonicalHostName();
+                    if (rdnsResult != null && !rdnsResult.equals(ipAddress)
+                            && !_t("unknown").equals(rdnsResult)) {
+                        rdnsCachePut(ipAddress, new CacheEntry(ipAddress, rdnsResult,
+                                System.currentTimeMillis()));
+                    }
+                } catch (UnknownHostException e) { /* unresolvable */ }
+            }
+        } finally {
+            pendingLookups.remove(ipAddress);
+        }
     }
 
     @Override
@@ -1298,30 +1341,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         // 2. Queue background resolution (ASN + RDNS), return null immediately.
         //    Never blocks page rendering on MMDB file reads or regex normalization.
         if (pendingLookups.add(ipAddress)) {
-            getReverseDnsExecutor().submit(() -> {
-                try {
-                    // Try ASN org name first (local MMDB, fast enough for background)
-                    String hostName = _geoIP.getOrgName(ipAddress);
-                    if (hostName != null && !hostName.isEmpty()) {
-                        rdnsCachePut(ipAddress, new CacheEntry(ipAddress, hostName,
-                                System.currentTimeMillis()));
-                        return;
-                    }
-                    // Fallback to RDNS
-                    if (enableReverseLookups()) {
-                        try {
-                            String rdnsResult = InetAddress.getByName(ipAddress).getCanonicalHostName();
-                            if (rdnsResult != null && !rdnsResult.equals(ipAddress)
-                                    && !_t("unknown").equals(rdnsResult)) {
-                                rdnsCachePut(ipAddress, new CacheEntry(ipAddress, rdnsResult,
-                                        System.currentTimeMillis()));
-                            }
-                        } catch (UnknownHostException e) { /* unresolvable */ }
-                    }
-                } finally {
-                    pendingLookups.remove(ipAddress);
-                }
-            });
+            getReverseDnsExecutor().submit(() -> lookupOrgNameAsync(ipAddress));
             _context.statManager().addRateData("rdns.executor.queueSize", getRdnsQueueSize());
         }
 

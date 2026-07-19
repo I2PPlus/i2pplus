@@ -78,21 +78,28 @@ public abstract class FormHandler {
 
     /** Clean up old entries periodically */
     static {
-        Thread cleanupThread = new Thread(() -> {
-            while (true) {
-                try { Thread.sleep(120000); } catch (InterruptedException ie) { break; }
-                long now = System.currentTimeMillis();
-                Iterator<Map.Entry<String, RateLimitEntry>> it = RATE_LIMIT_MAP.entrySet().iterator();
-                while (it.hasNext()) {
-                    Map.Entry<String, RateLimitEntry> e = it.next();
-                    if (now - e.getValue().windowStart > RATE_LIMIT_WINDOW_MS * 2) {
-                        it.remove();
-                    }
-                }
-            }
-        }, "FormHandler-rate-limit-cleanup");
+        Thread cleanupThread = new Thread(FormHandler::cleanupRateLimits, "FormHandler-rate-limit-cleanup");
         cleanupThread.setDaemon(true);
         cleanupThread.start();
+    }
+
+    /**
+     *  Periodic removal of stale rate-limit entries.
+     *  Runs until interrupted.
+     *  @since 0.9.70+
+     */
+    private static void cleanupRateLimits() {
+        while (true) {
+            try { Thread.sleep(120000); } catch (InterruptedException ie) { break; }
+            long now = System.currentTimeMillis();
+            Iterator<Map.Entry<String, RateLimitEntry>> it = RATE_LIMIT_MAP.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<String, RateLimitEntry> e = it.next();
+                if (now - e.getValue().windowStart > RATE_LIMIT_WINDOW_MS * 2) {
+                    it.remove();
+                }
+            }
+        }
     }
 
     public FormHandler() {

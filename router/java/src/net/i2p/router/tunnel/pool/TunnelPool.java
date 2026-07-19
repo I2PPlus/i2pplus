@@ -43,6 +43,15 @@ import net.i2p.util.SystemVersion;
 public class TunnelPool {
     private static final Comparator<TunnelInfo> EXPIRATION_COMPARATOR =
             Comparator.comparingLong(TunnelInfo::getExpiration);
+    private static final Comparator<TunnelInfo> LATENCY_COMPARATOR =
+            (a, b) -> {
+                int la = getTunnelAvgLatency(a);
+                int lb = getTunnelAvgLatency(b);
+                if (la < 0 && lb < 0) return 0;
+                if (la < 0) return 1;
+                if (lb < 0) return -1;
+                return Integer.compare(la, lb);
+            };
     private final List<PooledTunnelCreatorConfig> _inProgress = new ArrayList<>();
     protected final RouterContext _context;
     protected final Log _log;
@@ -2140,14 +2149,7 @@ public class TunnelPool {
 
         // Sort by latency ascending — prefer fast tunnels for the LeaseSet.
         // Tunnels with no latency data sort after tested ones.
-        Collections.sort(goodTunnels, (a, b) -> {
-            int la = getTunnelAvgLatency(a);
-            int lb = getTunnelAvgLatency(b);
-            if (la < 0 && lb < 0) return 0;
-            if (la < 0) return 1;
-            if (lb < 0) return -1;
-            return Integer.compare(la, lb);
-        });
+        Collections.sort(goodTunnels, LATENCY_COMPARATOR);
 
         // Take only the best latency tunnels up to wanted count
         int wantedLeases = wanted - (zeroHopTunnel != null ? 1 : 0);

@@ -287,13 +287,7 @@ public class LogsHelper extends HelperBase {
                 // Sort lines first by timestamp and then by content
                 String[] lines = NEWLINE_SPLIT.split(filtered.toString());
                 final int len = lines.length;
-                Arrays.sort(lines, (a, b) -> {
-                    String[] aParts = SPACE_SPLIT.split(a);
-                    String[] bParts = SPACE_SPLIT.split(b);
-                    int result = aParts[0].compareTo(bParts[0]); // Sort by timestamp
-                    if (result == 0) {result = a.compareTo(b);} // If timestamps are equal, sort by content
-                    return result;
-                });
+                Arrays.sort(lines, LogsHelper::compareLogLines);
 
                 // Reuse filtered StringBuilder and append in reverse order
                 filtered.setLength(0);
@@ -513,5 +507,17 @@ public class LogsHelper extends HelperBase {
 
     public boolean isAdvanced() {
         return _context.getBooleanProperty(PROP_ADVANCED);
+    }
+
+    /**
+     *  Compare two log lines by timestamp (first space-delimited token) then content.
+     *  @since 0.9.70+
+     */
+    private static int compareLogLines(String a, String b) {
+        String[] aParts = SPACE_SPLIT.split(a);
+        String[] bParts = SPACE_SPLIT.split(b);
+        int result = aParts[0].compareTo(bParts[0]); // Sort by timestamp
+        if (result == 0) {result = a.compareTo(b);} // If timestamps are equal, sort by content
+        return result;
     }
 }

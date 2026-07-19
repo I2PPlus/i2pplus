@@ -61,6 +61,15 @@ public class ProfileOrganizer {
     public static final double ATTACK_THRESHOLD = 0.40;
     private static final Comparator<PeerProfile> CAPACITY_COMPARATOR =
             Comparator.comparingDouble(PeerProfile::getCapacityValue);
+    private static final Comparator<Map.Entry<Hash, PeerProfile>> PEER_TEST_LATENCY_COMPARATOR =
+            (a, b) -> {
+                float latA = a.getValue().getPeerTestTimeAverage();
+                float latB = b.getValue().getPeerTestTimeAverage();
+                // No test data: treat as high latency (5000ms)
+                if (latA <= 0) latA = 5000f;
+                if (latB <= 0) latB = 5000f;
+                return Float.compare(latA, latB);
+            };
 
     private final Log _log;
     private final RouterContext _context;
@@ -1198,14 +1207,7 @@ public class ProfileOrganizer {
 
         // Sort by peer test response time (lower latency preferred)
         // Peers with no test data get a high default to deprioritize them
-        candidates.sort((a, b) -> {
-            float latA = a.getValue().getPeerTestTimeAverage();
-            float latB = b.getValue().getPeerTestTimeAverage();
-            // No test data: treat as high latency (5000ms)
-            if (latA <= 0) latA = 5000f;
-            if (latB <= 0) latB = 5000f;
-            return Float.compare(latA, latB);
-        });
+        candidates.sort(PEER_TEST_LATENCY_COMPARATOR);
 
         // Select the lowest-latency candidates
         for (int i = 0; i < candidates.size() && matches.size() < howMany; i++) {
@@ -1242,13 +1244,7 @@ public class ProfileOrganizer {
         }
 
         // Sort by peer test response time (lower latency preferred)
-        candidates.sort((a, b) -> {
-            float latA = a.getValue().getPeerTestTimeAverage();
-            float latB = b.getValue().getPeerTestTimeAverage();
-            if (latA <= 0) latA = 5000f;
-            if (latB <= 0) latB = 5000f;
-            return Float.compare(latA, latB);
-        });
+        candidates.sort(PEER_TEST_LATENCY_COMPARATOR);
 
         for (int i = 0; i < candidates.size() && matches.size() < howMany; i++) {
             matches.add(candidates.get(i).getKey());

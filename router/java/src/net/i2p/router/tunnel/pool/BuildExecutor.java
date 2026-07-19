@@ -1,6 +1,7 @@
 package net.i2p.router.tunnel.pool;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -40,6 +41,62 @@ public class BuildExecutor implements Runnable {
     private static int getTunnelTargetMin(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.build.targetMin", 2);
     }
+
+    /**
+     *  Orders paired destinations by how far behind their target each direction is,
+     *  prioritizing the direction with fewer active tunnels and the larger deficit.
+     *  @since 0.9.70+
+     */
+    private static final Comparator<TunnelPool> POOLED_DESTINATION_COMPARATOR =
+            (a, b) -> {
+                int aActive = a.getActiveTunnelCount();
+                int bActive = b.getActiveTunnelCount();
+                if (aActive == 0 && bActive > 0) return -1;
+                if (bActive == 0 && aActive > 0) return 1;
+                boolean aNear = aActive > 0 && aActive <= 2;
+                boolean bNear = bActive > 0 && bActive <= 2;
+                if (aNear && !bNear) return -1;
+                if (bNear && !aNear) return 1;
+                int aTarget = Math.max(2, a.getSettings().getTotalQuantity());
+                int bTarget = Math.max(2, b.getSettings().getTotalQuantity());
+                int aDeficit = aTarget - aActive;
+                int bDeficit = bTarget - bActive;
+                if (aDeficit != bDeficit) return Integer.compare(bDeficit, aDeficit);
+                // IB/OB balance: prioritize direction further behind its paired pool
+                TunnelPool aPaired = a.getPairedPool();
+                TunnelPool bPaired = b.getPairedPool();
+                if (aPaired != null && bPaired != null && aPaired == bPaired) {
+                    int aDiff = aPaired.getActiveTunnelCount() - aActive;
+                    int bDiff = bPaired.getActiveTunnelCount() - bActive;
+                    if (aDiff != bDiff) return Integer.compare(bDiff, aDiff);
+                }
+                return 0;
+            };
+
+    /**
+     *  Orders pools by collapse severity: collapsed (0 usable) first, then
+     *  near-collapse (1-2 usable), then by largest deficit first.
+     *  @since 0.9.70+
+     */
+    private static final Comparator<TunnelPool> POOL_COLLAPSE_COMPARATOR =
+            (a, b) -> {
+                int aUsable = a.getUsableTunnelCount();
+                int bUsable = b.getUsableTunnelCount();
+                // Collapsed pools (0 usable) always first
+                if (aUsable == 0 && bUsable > 0) return -1;
+                if (bUsable == 0 && aUsable > 0) return 1;
+                // Near-collapse (1-2 usable) next
+                boolean aNear = aUsable <= 2;
+                boolean bNear = bUsable <= 2;
+                if (aNear && !bNear) return -1;
+                if (bNear && !aNear) return 1;
+                // Then by deficit (largest first)
+                int aTarget = Math.max(2, a.getSettings().getTotalQuantity());
+                int bTarget = Math.max(2, b.getSettings().getTotalQuantity());
+                int aDeficit = aTarget - aUsable;
+                int bDeficit = bTarget - bUsable;
+                return Integer.compare(bDeficit, aDeficit);
+            };
     private final Set<Long> _recentBuildIds = ConcurrentHashMap.newKeySet();
     private final RouterContext _context;
     private final Log _log;
@@ -658,30 +715,7 @@ public class BuildExecutor implements Runnable {
                         // Sort by build priority: collapsed pools first, then near-collapse,
                         // then by deficit (largest first).
                         // For paired destinations, prioritize the direction further behind its pair
-                        wanted.sort((a, b) -> {
-                            int aActive = a.getActiveTunnelCount();
-                            int bActive = b.getActiveTunnelCount();
-                            if (aActive == 0 && bActive > 0) return -1;
-                            if (bActive == 0 && aActive > 0) return 1;
-                            boolean aNear = aActive > 0 && aActive <= 2;
-                            boolean bNear = bActive > 0 && bActive <= 2;
-                            if (aNear && !bNear) return -1;
-                            if (bNear && !aNear) return 1;
-                            int aTarget = Math.max(2, a.getSettings().getTotalQuantity());
-                            int bTarget = Math.max(2, b.getSettings().getTotalQuantity());
-                            int aDeficit = aTarget - aActive;
-                            int bDeficit = bTarget - bActive;
-                            if (aDeficit != bDeficit) return Integer.compare(bDeficit, aDeficit);
-                            // IB/OB balance: prioritize direction further behind its paired pool
-                            TunnelPool aPaired = getPairedPool(a);
-                            TunnelPool bPaired = getPairedPool(b);
-                            if (aPaired != null && bPaired != null && aPaired == bPaired) {
-                                int aDiff = aPaired.getActiveTunnelCount() - aActive;
-                                int bDiff = bPaired.getActiveTunnelCount() - bActive;
-                                if (aDiff != bDiff) return Integer.compare(bDiff, aDiff);
-                            }
-                            return 0;
-                        });
+                        wanted.sort(POOLED_DESTINATION_COMPARATOR);
 
                         for (int i = 0; i < allowed && !wanted.isEmpty(); i++) {
                             TunnelPool pool = wanted.remove(0);
@@ -1105,24 +1139,7 @@ public class BuildExecutor implements Runnable {
         // list consumes build slots (or triggers the proportional cap) before a
         // collapsed pool later in the list gets any.
         List<TunnelPool> sorted = new ArrayList<>(pools);
-        sorted.sort((a, b) -> {
-            int aUsable = a.getUsableTunnelCount();
-            int bUsable = b.getUsableTunnelCount();
-            // Collapsed pools (0 usable) always first
-            if (aUsable == 0 && bUsable > 0) return -1;
-            if (bUsable == 0 && aUsable > 0) return 1;
-            // Near-collapse (1-2 usable) next
-            boolean aNear = aUsable <= 2;
-            boolean bNear = bUsable <= 2;
-            if (aNear && !bNear) return -1;
-            if (bNear && !aNear) return 1;
-            // Then by deficit (largest first)
-            int aTarget = Math.max(2, a.getSettings().getTotalQuantity());
-            int bTarget = Math.max(2, b.getSettings().getTotalQuantity());
-            int aDeficit = aTarget - aUsable;
-            int bDeficit = bTarget - bUsable;
-            return Integer.compare(bDeficit, aDeficit);
-        });
+        sorted.sort(POOL_COLLAPSE_COMPARATOR);
 
         for (TunnelPool pool : sorted) {
             if (!pool.isAlive()) {continue;}

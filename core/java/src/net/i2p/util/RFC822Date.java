@@ -16,7 +16,13 @@ public abstract class RFC822Date {
 
     private static final ThreadLocal<SimpleDateFormat> OUTPUT_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US));
 
-    private static final ThreadLocal<SimpleDateFormat[]> RFC822_DATE_FORMATS = ThreadLocal.withInitial(() -> {
+    private static final ThreadLocal<SimpleDateFormat[]> RFC822_DATE_FORMATS = ThreadLocal.withInitial(RFC822Date::createDateFormats);
+
+    /**
+     *  Build the set of RFC822 date formats used for parsing, all in GMT.
+     *  @since 0.9.70+
+     */
+    private static SimpleDateFormat[] createDateFormats() {
         SimpleDateFormat[] fmts = new SimpleDateFormat[] {
             new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US),
             new SimpleDateFormat("d MMM yy HH:mm:ss z", Locale.US),
@@ -31,7 +37,7 @@ public abstract class RFC822Date {
             fmts[i].setTimeZone(utc);
         }
         return fmts;
-    });
+    }
 
     /**
      * new Date(String foo) is deprecated, so let's do this the hard way

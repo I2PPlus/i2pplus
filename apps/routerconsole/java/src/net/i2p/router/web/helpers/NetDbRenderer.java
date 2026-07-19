@@ -178,6 +178,18 @@ class NetDbRenderer {
      *  @param introducerCount unused
      *  @throws IOException if writing fails
      */
+    private boolean matchesCapabilities(RouterInfo ri, String capabilities) {
+        String caps = ri.getCapabilities();
+        // Include router only if it contains ALL characters in the filter string
+        // e.g., filter="f" matches routers with caps="f", "fR", "Mf" etc.
+        for (int i = 0; i < capabilities.length(); i++) {
+            if (caps.indexOf(capabilities.charAt(i)) < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void renderRouterInfoHTML(Writer out, int pageSize, int page, String routerPrefix, String version,
                                      String country, String family, String capabilities, String ipAddress, String sybil,
                                      int port, int highPort, SigType signatureType, EncType encryptionType, String mtu,
@@ -234,17 +246,7 @@ class NetDbRenderer {
             });
         }
         if (capabilities != null && !capabilities.isEmpty()) {
-            routerStream = routerStream.filter(ri -> {
-                String caps = ri.getCapabilities();
-                // Include router only if it contains ALL characters in the filter string
-                // e.g., filter="f" matches routers with caps="f", "fR", "Mf" etc.
-                for (int i = 0; i < capabilities.length(); i++) {
-                    if (caps.indexOf(capabilities.charAt(i)) < 0) {
-                        return false;
-                    }
-                }
-                return true;
-            });
+            routerStream = routerStream.filter(ri -> matchesCapabilities(ri, capabilities));
         }
         if (signatureType != null) {
             routerStream = routerStream.filter(ri -> ri.getIdentity().getSigType() == signatureType);
@@ -876,34 +878,41 @@ class NetDbRenderer {
         if (!_rdnsWorkerRunning.compareAndSet(false, true)) {
             return; // already running
         }
-        Thread worker = new Thread(() -> {
-            int count = 0;
-            try {
-                while (true) {
-                    String ip = _rdnsQueue.poll();
-                    if (ip == null) break;
-                    try {
-                        String result = _context.commSystem().getCanonicalHostName(ip);
-                        if (!result.equals(ip)) {
-                            putCachedReverseDNS(ip, result);
-                        }
-                    } catch (Exception e) { /* ignore individual lookup failures */ }
-                    _rdnsQueued.remove(ip);
-                    count++;
-                    if (count % LOOKUPS_BEFORE_PAUSE == 0) {
-                        Thread.sleep(PAUSE_AFTER_BATCH_MS);
-                    } else {
-                        Thread.sleep(LOOKUP_INTERVAL_MS);
-                    }
-                }
-            } catch (InterruptedException ie) {
-                Thread.currentThread().interrupt();
-            } finally {
-                _rdnsWorkerRunning.set(false);
-            }
-        }, "Rdns-Staggered");
+        Thread worker = new Thread(this::runRdnsWorker, "Rdns-Staggered");
         worker.setDaemon(true);
         worker.start();
+    }
+
+    /**
+     *  Staggered reverse-DNS worker: drains the RDNS queue in batches, pausing
+     *  between lookups and after each batch. Runs on a daemon thread.
+     *  @since 0.9.70+
+     */
+    private void runRdnsWorker() {
+        int count = 0;
+        try {
+            while (true) {
+                String ip = _rdnsQueue.poll();
+                if (ip == null) break;
+                try {
+                    String result = _context.commSystem().getCanonicalHostName(ip);
+                    if (!result.equals(ip)) {
+                        putCachedReverseDNS(ip, result);
+                    }
+                } catch (Exception e) { /* ignore individual lookup failures */ }
+                _rdnsQueued.remove(ip);
+                count++;
+                if (count % LOOKUPS_BEFORE_PAUSE == 0) {
+                    Thread.sleep(PAUSE_AFTER_BATCH_MS);
+                } else {
+                    Thread.sleep(LOOKUP_INTERVAL_MS);
+                }
+            }
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        } finally {
+            _rdnsWorkerRunning.set(false);
+        }
     }
 
     /**

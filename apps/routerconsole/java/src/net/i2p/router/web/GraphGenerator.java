@@ -129,17 +129,25 @@ public class GraphGenerator implements Runnable, ClientApp {
 
         final String[] specsHolder = {""};
         try {
-            _scheduler.scheduleAtFixedRate(() -> {
-                try {
-                    if (!_isRunning || !_context.router().isAlive()) {
-                        stop();
-                        return;
-                    }
-                    specsHolder[0] = adjustDatabases(specsHolder[0]);
-                } catch (Exception e) {
-                    _log.error("Failed to sync RRD4J stats to disk", e);
-                }
-            }, 0, 90, TimeUnit.SECONDS);
+            _scheduler.scheduleAtFixedRate(() -> syncSpecsHolder(specsHolder), 0, 90, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            _log.error("Failed to sync RRD4J stats to disk", e);
+        }
+    }
+
+    /**
+     *  Sync RRD4J stats to disk on a fixed schedule.
+     *  Stops the generator if the router is no longer alive.
+     *  @param specsHolder single-element holder for the active specs string
+     *  @since 0.9.70+
+     */
+    private void syncSpecsHolder(String[] specsHolder) {
+        try {
+            if (!_isRunning || !_context.router().isAlive()) {
+                stop();
+                return;
+            }
+            specsHolder[0] = adjustDatabases(specsHolder[0]);
         } catch (Exception e) {
             _log.error("Failed to sync RRD4J stats to disk", e);
         }

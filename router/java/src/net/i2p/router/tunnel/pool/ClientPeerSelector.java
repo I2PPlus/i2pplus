@@ -3,6 +3,7 @@ package net.i2p.router.tunnel.pool;
 import static net.i2p.router.peermanager.ProfileOrganizer.Slice.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -1063,7 +1064,20 @@ class ClientPeerSelector extends TunnelPeerSelector {
         }
         long now = ctx.clock().now();
         long thirtyMinutes = 30 * 60 * 1000L;
-        peers.sort((p1, p2) -> {
+        peers.sort(peerQualityComparator(exclude, now, thirtyMinutes));
+    }
+
+    /**
+     *  Build a comparator that orders peers by tunnel-building quality: excluded
+     *  peers last, then by acceptance ratio, activity recency, and tunnel-test latency.
+     *
+     *  @param exclude peers to deprioritize, or null
+     *  @param now current time from the router clock
+     *  @param thirtyMinutes activity window in ms
+     *  @since 0.9.70+
+     */
+    private Comparator<Hash> peerQualityComparator(Set<Hash> exclude, long now, long thirtyMinutes) {
+        return (p1, p2) -> {
             if (exclude != null && exclude.contains(p1)) {
                 if (exclude.contains(p2)) return 0;
                 return 1;
@@ -1114,7 +1128,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             }
 
             return 0;
-        });
+        };
     }
 
     /**
