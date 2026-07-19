@@ -25,8 +25,12 @@ msgid "Host name cannot contain \"{0}\""
 msgstr "Värdnamn kan inte innehålla \"{0}\""
 
 #, java-format
-msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
-msgstr "Värdnamnet  \"{0}\" kräver konvertering till ASCII men konverterings biblioteket är inte tillgängligt i denna JVM"
+msgid ""
+"Host name \"{0}\" requires conversion to ASCII but the conversion library is"
+" unavailable in this JVM"
+msgstr ""
+"Värdnamnet  \"{0}\" kräver konvertering till ASCII men konverterings "
+"biblioteket är inte tillgängligt i denna JVM"
 
 msgid "Source"
 msgstr "Källa"
@@ -108,8 +112,12 @@ msgid "Host name {0} is already in address book, unchanged."
 msgstr "Värdnamnet {0} finns redan i adressboken, oförändrat."
 
 #, java-format
-msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
-msgstr "Värdnamnet {0} finns redan i adressboken med en annan destination. Klicka på \"Ersätt\"för att skriva över."
+msgid ""
+"Host name {0} is already in address book with a different destination. Click"
+" \"Replace\" to overwrite."
+msgstr ""
+"Värdnamnet {0} finns redan i adressboken med en annan destination. Klicka på"
+" \"Ersätt\"för att skriva över."
 
 msgid "Unable to resolve Base 32 address"
 msgstr "Kan inte lösa Base 32-adressen"
@@ -166,11 +174,18 @@ msgstr "Adressbok sparad."
 msgid "ERROR: Could not write addressbook file."
 msgstr "FEL: Kunde inte skriva till adressboks filen."
 
-msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
-msgstr "Felaktigt formulär skickat, förmodligen för att du använde \"Bakåt \" eller \"Ladda om\" knappen i din webbläsare. Försök skicka igen."
+msgid ""
+"Invalid form submission, probably because you used the \"back\" or "
+"\"reload\" button on your browser. Please resubmit."
+msgstr ""
+"Felaktigt formulär skickat, förmodligen för att du använde \"Bakåt \" eller "
+"\"Ladda om\" knappen i din webbläsare. Försök skicka igen."
 
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Om problemet kvarstår, bekräfta att du har cookies påslaget i din browser."
+msgid ""
+"If the problem persists, verify that you have cookies enabled in your "
+"browser."
+msgstr ""
+"Om problemet kvarstår, bekräfta att du har cookies påslaget i din browser."
 
 msgid "Save"
 msgstr "Spara"
@@ -267,362 +282,42 @@ msgstr "Kan inte uppdatera prenumerationer: HTTP-proxy körs inte!"
 msgid "Subscriptions reloaded."
 msgstr "Prenumerationer laddade igen."
 
-msgid "Import"
-msgstr "Importera"
-
-msgid "address book"
-msgstr "adressbok"
-
-msgid "Router"
-msgstr "Router"
-
-msgid "Master"
-msgstr "Mästare"
-
-msgid "Private"
-msgstr "Privat"
-
-msgid "Published"
-msgstr "Publicerad"
-
-msgid "Subscriptions"
-msgstr "Prenumerationer"
-
-msgid "Blacklist"
-msgstr "Svartlista"
-
-msgid "Configuration"
-msgstr "Konfiguration"
-
-msgid "Help"
-msgstr "Hjälp"
-
-msgid "Book"
-msgstr "Bok"
-
-msgid "No entries"
-msgstr "Inga anmälningar"
-
-msgid "Add new destination"
-msgstr "Lägg till nytt mål"
-
-msgid "Import from hosts.txt file"
-msgstr "Importera från hosts.txt-fil"
-
-msgid "other"
-msgstr "andra"
-
-msgid "Export in hosts.txt format"
-msgstr "Exportera till hosts.txt format"
-
-msgid "Export results in hosts.txt format"
-msgstr "Exportera resultat i formatet hosts.txt"
-
-msgid "Export book in hosts.txt format"
-msgstr "Exportera bok i formatet hosts.txt"
-
-msgid "Search"
-msgstr "Sök"
-
-msgid "latest"
-msgstr "senaste"
-
-msgid "Alive"
-msgstr "Levande"
-
-msgid "Dead"
-msgstr "Död"
-
-msgid "all"
-msgstr "rensa filter"
-
-msgid "Info"
-msgstr "Information"
-
-msgid "Type"
-msgstr "Typ"
-
-msgid "Hostname"
-msgstr "Värdnamn"
-
-msgid "Encryption"
-msgstr "Kryptering"
-
-msgid "Link (b32)"
-msgstr "Länk (b32)"
-
-msgid "Destination"
-msgstr "Mål"
-
-msgid "Added"
-msgstr "Tillagd"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Select hosts for deletion from addressbook"
-msgstr "Välj värdar för radering från adressboken"
-
-msgid "More information on this entry"
-msgstr "Mer information om den här posten"
-
-msgid "unknown"
-msgstr "okänd"
-
-msgid "Base 32 address"
-msgstr "Base32 adress"
-
-msgid "Helper link to share host address with option to add to addressbook"
-msgstr "Hjälplänk för att dela värdadress med möjlighet att lägga till i adressboken"
-
-msgid "Mark for deletion"
-msgstr "Markera för borttagning"
-
-msgid "Cancel"
-msgstr "Avbryt"
-
-msgid "This book currently contains no entries."
-msgstr "Den här boken innehåller för närvarande inga poster."
-
-msgid "e.g. newdomain.i2p"
-msgstr "t.ex. newdomain.i2p"
-
-msgid "B64 or B32"
-msgstr "B64 eller B32"
-
-msgid "Full destination or b32 address"
-msgstr "Fullständig destination eller b32-adress"
-
-msgid "Select file"
-msgstr "Välj fil"
-
-msgid "blacklist"
-msgstr "svartlista"
-
-msgid "Blacklist Management"
-msgstr "Svartlistahantering"
-
-msgid "File location"
-msgstr "Filposition"
-
-msgid "Enter I2P addresses to blacklist (one per line)"
-msgstr "Ange I2P-adresser att svartlista (en per rad)"
-
-msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
-msgstr "Svartlistefilen innehåller en lista med I2P-värdnamn som ska blockeras från åtkomst via HTTP-proxyn och exkluderas från adressboksvisningen."
-
-msgid "configuration"
-msgstr "inställningar"
-
-msgid "Hints"
-msgstr "Tips"
-
-msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
-msgstr "Fil- och katalogsökvägar här är relativa till adressbokens arbetskatalog, som normalt är ~/.i2p/addressbook/ (Linux) eller %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
-
-msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
-msgstr "Om du manuellt vill lägga till rader i en adressboken, lägg till dem i den privata eller master adressboken."
-
-msgid "The router addressbook and the published addressbook are updated by the addressbook application."
-msgstr "Routerns adressbok och den publicerade adressboken uppdateras av adressboksprogrammet."
-
-msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
-msgstr "När du publicerar din adressbok, kommer samtliga destinationer från master och routerns adressböcker visas där."
-
-msgid "Use the private addressbook for private destinations, these are not published."
-msgstr "Använd den privata adressboken för privata mål, dessa publiceras inte."
-
-msgid "Options"
-msgstr "Alternativ"
-
-msgid "File containing the list of subscriptions URLs (no need to change)"
-msgstr "Fil som innehåller en lista över prenumerations URLer (ingen anledning att ändra)"
-
-msgid "Update interval in hours"
-msgstr "Uppdaterings intervall i timmar"
-
-msgid "Your public hosts.txt file (choose a path within your webserver document root)"
-msgstr "Din offentliga hosts.txt fil (välj en sökväg till din webbservers dokumentrot)"
-
-msgid "Your hosts.txt (don't change)"
-msgstr "Din hosts.txt (ändra inte)"
-
-msgid "Your personal addressbook, these hosts will be published"
-msgstr "Din personliga adressbok, dessa värdar kommer att publiceras"
-
-msgid "Your private addressbook, it is never published"
-msgstr "Din privata adressbok, den publiceras aldrig"
-
-msgid "Port for your eepProxy (no need to change)"
-msgstr "Port för din eepProxy (den behöver inte ändras)"
-
-msgid "Hostname for your eepProxy (no need to change)"
-msgstr "Värdnamn för din eepProxy (den behöver inte ändras)"
-
-msgid "Whether to update the published addressbook"
-msgstr "Huruvida du vill uppdatera den publicerade adressboken"
-
-msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
-msgstr "Fil som innehåller etags header från hämtade prenumeration URL:er (den behöver inte ändras)"
-
-msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
-msgstr "Fil som innehåller en ändring-tidsstämpeln för varje hämtad prenumerations URL (den behöver inte ändras)"
-
-msgid "File to log activity to (change to /dev/null if you like)"
-msgstr "Fil där loggaktivitet sparas till (ändra till / dev / null om du vill)"
-
-msgid "Name of override theme to use (defaults to console-selected theme)"
-msgstr "Namn på åsidosättningstema som ska användas (standard för konsolvalt tema)"
-
-msgid "Interval (in hours) for running host checker (default is 8 hours)"
-msgstr "Intervall (i timmar) för körning av värdkontroll (standard är 8 timmar)"
-
-msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
-msgstr "Maximalt antal samtidiga pings vid körning av värdkontroll (Standard är 12, max är 100)"
-
-msgid "delete hosts"
-msgstr "ta bort värdar"
-
-msgid "addressbook"
-msgstr "adressbok"
-
-msgid "Details"
-msgstr "Detaljer"
-
-msgid "Address Helper"
-msgstr "Adresshjälpare"
-
-msgid "link"
-msgstr "länk"
-
-msgid "Encoded Name"
-msgstr "Kodat Namn"
-
-msgid "Base 32 Address"
-msgstr "Base32 Adress"
-
-msgid "Base 64 Hash"
-msgstr "Base64 Hash"
-
-msgid "Public Key"
-msgstr "Offentlig nyckel"
-
-msgid "Signing Key"
-msgstr "Signeringsnyckel"
-
-msgid "Certificate"
-msgstr "Certifikat"
-
-msgid "Validated"
-msgstr "Verifierad"
-
-msgid "no"
-msgstr "nej"
-
-msgid "yes"
-msgstr "ja"
-
-msgid "Added Date"
-msgstr "Datum för tillägning"
-
-msgid "Last Modified"
-msgstr "Senast Ändrad"
-
-msgid "Notes"
-msgstr "Anteckningar"
-
-msgid "Add notes about domain"
-msgstr "Lägg till anteckningar om domän"
-
-msgid "Visual Identification for"
-msgstr "Visuell identifiering för"
-
-msgid "Create your own identification images"
-msgstr "Skapa dina egna identifieringsbilder"
-
-msgid "Launch Image Generator"
-msgstr "Starta Image Generator"
-
-msgid "Introduction"
-msgstr "Introduktion"
-
-msgid "What is the addressbook?"
-msgstr "Vad är adressboken?"
-
-msgid "The addressbook application is part of your I2P installation."
-msgstr "Adressboksprogrammet en del av din I2P-installation."
-
-msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
-msgstr "Den uppdaterar din hosts.txt fil från distribuerade källor eller \"prenumerationer\"."
-
-msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
-msgstr "Att prenumerera på ytterligare siter är enkelt, lägg bara till dem i din <a href=\"subscriptions\">subscriptions</a> fil."
-
-msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
-msgstr "För mer information om namngivning i I2P, se <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>översikten</a>."
-
-msgid "How does the addressbook application work?"
-msgstr "Hur fungerar adressboksprogrammet?"
-
-msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
-msgstr "Adressboksprogrammet kontaktar med jämna mellanrum dina prenumerationer och sammanfogar deras innehåll med din \"router\" adressbok."
-
-msgid "Then it merges your \"master\" address book into the router address book as well."
-msgstr "Då sammanfogas \"master\" adressboken med routeradressboken också."
-
-msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
-msgstr "Om konfigurerad så skrivs router adressboken till \"published\" adressboken, som är tillgänglig om du kör en eepsida."
-
-msgid "The router also uses a private address book, which is not merged or published."
-msgstr "Routern använder också en privat adressbok, som inte slås samman eller publiceras."
-
-msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
-msgstr "Värdar i den privata adressboken kan nås av dig, men adresserna delas aldrig ut till andra."
-
-msgid "The private address book can also be used for aliases of hosts in your other address books."
-msgstr "Den privata adressboken kan också användas för alias för värdar i andra adressböcker."
-
-msgid "subscription log"
-msgstr "prenumerationslogg"
-
-msgid "Subscription Log"
-msgstr "Prenumerationslogg"
-
-msgid "Most recent (excluding bad domains)"
-msgstr "Senaste (exklusive dåliga domäner)"
-
-msgid "subscriptions"
-msgstr "prenumerationer"
-
-msgid "The subscription file contains a list of i2p URLs."
-msgstr "Prenumerations-filen innehåller en lista av I2P URL:er."
-
-msgid "The addressbook application regularly checks this list for new eepsites."
-msgstr "Adressboks programet kontrollerar regelbundet listan för nya eepsidor."
-
-msgid "Those URLs refer to published hosts.txt files."
-msgstr "Dessa URLer hänvisar till publicerade hosts.txt filer."
-
-msgid "See the FAQ for a list of subscription URLs."
-msgstr "Se Vanliga frågor för en lista över prenumerationswebbadresser."
-
-msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Om DNS är konfigurerat för att publicera din routeradressbok, kommer posterna att visas i din publicerade adressbok och sparas i en hosts.txt-fil för delning."
+msgid ""
+"If SusiDNS is configured to publish your Router address book, the entries "
+"will appear in your Published address book and saved to a hosts.txt file for"
+" sharing."
+msgstr ""
+"Om DNS är konfigurerat för att publicera din routeradressbok, kommer "
+"posterna att visas i din publicerade adressbok och sparas i en hosts.txt-fil"
+" för delning."
 
 msgid "Published Addressbook"
 msgstr "Publicerad adressbok"
 
-msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "För att konfigurera DNS att skicka din routeradressbok till din publicerade adressbok, ställ in 'should_publish=true' på konfigurationssidan."
+msgid ""
+"To configure SusiDNS to push your Router address book to your Published "
+"address book, set 'should_publish=true' on the configuration page."
+msgstr ""
+"För att konfigurera DNS att skicka din routeradressbok till din publicerade "
+"adressbok, ställ in 'should_publish=true' på konfigurationssidan."
 
-msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
-msgstr "Alla värdar som härrör från prenumerationer kommer att visas i den här adressboken, förutom de du manuellt lägger till här eller i din huvudadressbok."
+msgid ""
+"All hosts derived from subscriptions will appear in this address book, in "
+"addition to any you manually add here or to your Master address book."
+msgstr ""
+"Alla värdar som härrör från prenumerationer kommer att visas i den här "
+"adressboken, förutom de du manuellt lägger till här eller i din "
+"huvudadressbok."
 
 msgid "Router Addressbook"
 msgstr "Router adressbok"
 
-msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
-msgstr "Värdar som du manuellt lägger till här kommer aldrig att publiceras. Du kan också lägga till alias till värdar i andra adressböcker här."
+msgid ""
+"Hosts you manually add here will never be published. You can also add "
+"aliases to hosts in other address books here."
+msgstr ""
+"Värdar som du manuellt lägger till här kommer aldrig att publiceras. Du kan "
+"också lägga till alias till värdar i andra adressböcker här."
 
 msgid "Private Addressbook"
 msgstr "Privat adressbok"
@@ -630,20 +325,38 @@ msgstr "Privat adressbok"
 msgid "Local Records"
 msgstr "Lokala rekord"
 
-msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
-msgstr "I2P-applikationer (inklusive HTTP-proxyn) använder värdarna i dina lokala adressböcker för att lösa .i2p-värdnamn."
+msgid ""
+"I2P applications (including the HTTP proxy) use the hosts in your local "
+"address books to resolve .i2p hostnames."
+msgstr ""
+"I2P-applikationer (inklusive HTTP-proxyn) använder värdarna i dina lokala "
+"adressböcker för att lösa .i2p-värdnamn."
 
-msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
-msgstr "Ytterligare prenumerationer finns i FAQ-sektionen på routerns hjälpsida."
+msgid ""
+"Additional subscriptions can be found in the FAQ section of the Router help "
+"page."
+msgstr ""
+"Ytterligare prenumerationer finns i FAQ-sektionen på routerns hjälpsida."
 
-msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
-msgstr "Värdar som kommer från dina prenumerationer läggs till i din routeradressbok och synkroniseras automatiskt (som standard var 12:e timme)."
+msgid "Subscriptions"
+msgstr "Prenumerationer"
+
+msgid ""
+"Hosts sourced from your subscriptions are added to your Router address book,"
+" and are automatically synced (by default every 12 hours)."
+msgstr ""
+"Värdar som kommer från dina prenumerationer läggs till i din routeradressbok"
+" och synkroniseras automatiskt (som standard var 12:e timme)."
 
 msgid "Configure Subscriptions"
 msgstr "Konfigurera prenumerationer"
 
-msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
-msgstr "Om du manuellt lägger till värdar här, kommer de att inkluderas i din publicerade adressbok (om konfigurerad)."
+msgid ""
+"If you manually add hosts here, they will be included your Published address"
+" book (if configured)."
+msgstr ""
+"Om du manuellt lägger till värdar här, kommer de att inkluderas i din "
+"publicerade adressbok (om konfigurerad)."
 
 msgid "Master Addressbook"
 msgstr "Master adressbok"
@@ -654,8 +367,12 @@ msgstr "Sökbar av"
 msgid "I2P applications"
 msgstr "I2P-applikationer"
 
-msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
-msgstr "Master-, router- och privata adressböcker fungerar tillsammans som DNS-auktoritet för I2P-applikationer."
+msgid ""
+"The Master, Router and Private address books collectively serve as the DNS "
+"authority for I2P applications."
+msgstr ""
+"Master-, router- och privata adressböcker fungerar tillsammans som DNS-"
+"auktoritet för I2P-applikationer."
 
 msgid "Optional,"
 msgstr "Valfritt,"
@@ -663,11 +380,25 @@ msgstr "Valfritt,"
 msgid "for websites"
 msgstr "för webbplatser"
 
-msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Om du konfigurerar DNS att publicera din routeradressbok kommer den att exportera en hosts.txt-fil som innehåller alla värdar (som standard till roten på din eepsite)."
+msgid ""
+"If you configure SusiDNS to publish your Router address book, it will export"
+" a hosts.txt file containing all the hosts (by default to the root of your "
+"eepsite)."
+msgstr ""
+"Om du konfigurerar DNS att publicera din routeradressbok kommer den att "
+"exportera en hosts.txt-fil som innehåller alla värdar (som standard till "
+"roten på din eepsite)."
 
-msgid "Addresses manually added to your Master address book will merge with your Router address book."
-msgstr "Adresser som läggs till manuellt i din masteradressbok kommer att slås samman med din routeradressbok."
+msgid ""
+"Addresses manually added to your Master address book will merge with your "
+"Router address book."
+msgstr ""
+"Adresser som läggs till manuellt i din masteradressbok kommer att slås "
+"samman med din routeradressbok."
 
-msgid "Hosts you receive from your subscriptions will merge with your Router address book."
-msgstr "Värdar du får från dina prenumerationer kommer att slås samman med din routeradressbok."
+msgid ""
+"Hosts you receive from your subscriptions will merge with your Router "
+"address book."
+msgstr ""
+"Värdar du får från dina prenumerationer kommer att slås samman med din "
+"routeradressbok."

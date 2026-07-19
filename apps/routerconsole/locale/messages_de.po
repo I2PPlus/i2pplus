@@ -813,9 +813,6 @@ msgstr "IP-Adresse"
 msgid "Port"
 msgstr "Port"
 
-msgid "Hostname"
-msgstr "Host"
-
 msgid "Reason"
 msgstr "Grund"
 
@@ -3097,9 +3094,6 @@ msgstr "Versteckt"
 msgid "Published"
 msgstr "Veröffentlicht"
 
-msgid "Whois"
-msgstr "Whois"
-
 msgid "direct"
 msgstr "direkt"
 
@@ -4091,9 +4085,6 @@ msgstr "Betrachte die existierenden Tunnel und den Status des Tunnelaufbaus"
 
 msgid "Streams"
 msgstr "Datenströme"
-
-msgid "View active streaming connections"
-msgstr "Aktive Streaming-Verbindungen anzeigen"
 
 msgid "Advanced Configuration"
 msgstr "Erweiterte Einstellungen"
@@ -5304,12 +5295,6 @@ msgstr "Peers sperren, die häufig ihre Ports wechseln"
 
 msgid "Ban peers attempting port hopping"
 msgstr "Peers sperren, die Port-Hopping versuchen"
-
-msgid "Ban peers sending excessive unsolicited search replies"
-msgstr "Peers sperren, die übermäßig viele unerwünschte Suchantworten senden"
-
-msgid "Ban peers sending fake/slow search replies"
-msgstr "Peers sperren, die gefälschte/langsame Suchantworten senden"
 
 msgid "Abuse Thresholds"
 msgstr "Missbrauchsschwellenwerte"
@@ -11614,30 +11599,6 @@ msgid "Theme Overrides"
 msgstr "Themenüberschreibungen"
 
 msgid ""
-"I2P+ supports custom theme overrides for the console, the tunnel manager, "
-"I2PSnark, SusiDNS and Webmail, permitting changes to the themes which are "
-"persistent after upgrades. In order to activate an override, create a css "
-"file named <code>override.css</code> with your theme modifications and place"
-" it in the relevant theme directory of the theme you wish to change, or "
-"rename one of the example files, and then hard refresh the browser. Note "
-"that the tunnel manager and the console share the same override.css. To "
-"deactivate an override, delete or rename the <code>override.css</code> file "
-"and then hard refresh the browser (usually Control + Shift + R)."
-msgstr ""
-"I2P+ unterstützt benutzerdefinierte Themenüberschreibungen für die Konsole, "
-"den Tunnel-Manager, Torrents, DNS und Webmail, die Änderungen an den Themen "
-"ermöglichen, die nach Upgrades bestehen bleiben. Um eine Überschreibung zu "
-"aktivieren, erstellen Sie eine CSS-Datei mit dem Namen "
-"<code>override.css</code> mit Ihren Themenänderungen und platzieren Sie sie "
-"im relevanten Themenverzeichnis des Themas, das Sie ändern möchten, oder "
-"benennen Sie eine der Beispieldateien um und aktualisieren Sie dann den "
-"Browser neu. Beachten Sie, dass der Tunnel-Manager und die Konsole die "
-"gleiche override.css-Datei verwenden. Um eine Überschreibung zu "
-"deaktivieren, löschen oder benennen Sie die Datei <code>override.css</code> "
-"um und aktualisieren Sie dann den Browser neu (normalerweise Strg + Umschalt"
-" + R)."
-
-msgid ""
 "The themes directory is located in the I2P application directory under "
 "<code>docs/themes</code>. There are example override files in the console "
 "and I2PSnark theme sub-directories."
@@ -12948,9 +12909,6 @@ msgstr "Streaming-Verbindungen"
 msgid "Streaming Connections"
 msgstr "Streaming-Verbindungen"
 
-msgid "Active I2P streaming connections"
-msgstr "Aktive I2P-Streaming-Verbindungen"
-
 msgid "Local Tunnels"
 msgstr "Lokale Tunnel"
 
@@ -13572,12 +13530,6 @@ msgstr "Auto"
 msgid "Misc Reasons"
 msgstr "Sonstige Gründe"
 
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:582
-msgid ""
-"Ban floodfill peers that fail to respond to queries (failure rate >95%) "
-msgstr ""
-"Floodfill-Peers sperren, die nicht auf Abfragen antworten (Fehlerrate >95%) "
-
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:586
 msgid "Ban unresponsive floodfills"
 msgstr "Nicht antwortende Floodfills sperren"
@@ -13694,3 +13646,798 @@ msgstr "Abstimmung"
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tuning_jsp.java:400
 msgid "Router Auto-Tuning"
 msgstr "Router-Auto-Tuning"
+
+msgid "CoDel drop target delay (ms)."
+msgstr "CoDel-Verwerf-Zielverzögerung (ms)."
+
+msgid "Initial RTO"
+msgstr "Anfängliches RTO"
+
+msgid "Rebuild Throttle Interval"
+msgstr "Wiederaufbau-Drosselungsintervall"
+
+msgid "Max fast peers in routing table."
+msgstr "Max. schnelle Peers in Routing-Tabelle."
+
+msgid "Minimum Fast Peers"
+msgstr "Mindestanzahl schnelle Peers"
+
+msgid "Threads encrypting NTCP messages."
+msgstr "Threads, die NTCP-Meldungen verschlüsseln."
+
+msgid "X25519 Precalculate Minimum"
+msgstr "X25519-Vorberechnung Minimum"
+
+msgid "Starting congestion window (packets)."
+msgstr "Anfängliches Stau-Fenster (Pakete)."
+
+msgid "Steepness of the request throttling probability curve."
+msgstr "Steilheit der Anfrage-Drosselungs-Wahrscheinlichkeitskurve."
+
+msgid "NTCP selector sleep between loops (ms)."
+msgstr "NTCP-Selektor-Schlaf zwischen Schleifen (ms)."
+
+msgid "Starting retransmission timeout (ms)."
+msgstr "Anfängliches Retransmission-Timeout (ms)."
+
+msgid "I2CP write queue depth."
+msgstr "I2CP-Schreib-Warteschlangentiefe."
+
+msgid "Handler threads for incoming I2PTunnel connections."
+msgstr "Handler-Threads für eingehende I2PTunnel-Verbindungen."
+
+msgid "Write buffer per NTCP connection."
+msgstr "Schreibpuffer pro NTCP-Verbindung."
+
+msgid "Moderate-Load Lag Threshold"
+msgstr "Mäßiglast-Verzögerungsschwelle"
+
+msgid "Job queue lag triggering moderate-load peer disconnect (ms)."
+msgstr ""
+"Job-Warteschlangen-Verzögerung, die Mäßiglast-Peer-Trennung auslöst (ms)."
+
+msgid "Transit Reject Steepness"
+msgstr "Transit-Ablehnungs-Steilheit"
+
+msgid "Transit Throttle Factor"
+msgstr "Transit-Drosselungsfaktor"
+
+msgid "Maximum High Capacity Peers"
+msgstr "Maximale Peers mit hoher Kapazität"
+
+msgid "RTT Cap"
+msgstr "RTT-Limit"
+
+msgid "Request Throttle Min"
+msgstr "Anfrage-Drosselung Minimum"
+
+msgid "Max concurrent tunnel test jobs."
+msgstr "Max. gleichzeitige Tunnel-Test-Jobs."
+
+msgid "Ceiling for client proxy thread pool."
+msgstr "Obergrenze für Client-Proxy-Thread-Pool."
+
+msgid "NTCP send pool queue size."
+msgstr "NTCP-Sendepool-Warteschlangengröße."
+
+msgid "Min Delay Between Tests"
+msgstr "Min. Verzögerung zwischen Tests"
+
+msgid "Load threshold where probabilistic transit rejection starts (%)."
+msgstr "Last-Schwelle, ab der probabilistische Transit-Ablehnung beginnt (%)."
+
+msgid "Load threshold where probabilistic request throttling starts (%)."
+msgstr ""
+"Last-Schwelle, ab der probabilistische Anfrage-Drosselung beginnt (%)."
+
+msgid "Acknowledgement Frequency"
+msgstr "Bestätigungsfrequenz"
+
+msgid "Participating Throttle Max"
+msgstr "Teilnahme-Drosselung Maximum"
+
+msgid "Request Load Weight"
+msgstr "Anfrage-Last-Gewicht"
+
+msgid "Min UDP Concurrent Messages"
+msgstr "Min. gleichzeitige UDP-Meldungen"
+
+msgid "NTCP2 handshake timeout (ms)."
+msgstr "NTCP2-Handshake-Timeout (ms)."
+
+msgid "Initial UDP RTO"
+msgstr "Anfängliches UDP-RTO"
+
+msgid "Peer Activity Window Multiplier"
+msgstr "Peer-Aktivitäts-Fenster-Multiplikator"
+
+msgid "NTCP Pumper Failsafe Interval"
+msgstr "NTCP-Pumper-Failsafe-Intervall"
+
+msgid "Pool Build Backoff"
+msgstr "Pool-Build-Backoff"
+
+msgid "Transit rejection aggressiveness (50-100%)."
+msgstr "Transit-Ablehnungs-Aggressivität (50–100 %)."
+
+msgid "Request Throttle Max"
+msgstr "Anfrage-Drosselung Maximum"
+
+msgid "Max concurrent tunnel builds."
+msgstr "Max. gleichzeitige Tunnel-Builds."
+
+msgid "Initial UDP Concurrent Messages"
+msgstr "Anfängliche gleichzeitige UDP-Meldungen"
+
+msgid "Max interval between tunnel tests (ms)."
+msgstr "Max. Intervall zwischen Tunnel-Tests (ms)."
+
+msgid "Max simultaneous SSU handshakes."
+msgstr "Max. gleichzeitige SSU-Handshakes."
+
+msgid "Delay before first retransmit (ms)."
+msgstr "Verzögerung vor erster Retransmission (ms)."
+
+msgid "Inbound Establish Timeout"
+msgstr "Inbound-Establish-Timeout"
+
+msgid "rDNS Executor Threads"
+msgstr "rDNS-Executor-Threads"
+
+msgid "Max share of transit tunnels for a single peer."
+msgstr "Max. Anteil an Transit-Tunnels für einen einzelnen Peer."
+
+msgid "Client Runner Max Threads"
+msgstr "Client-Runner-Max-Threads"
+
+msgid "Socket Connect Timeout"
+msgstr "Socket-Verbindungs-Timeout"
+
+msgid "Request Reject Steepness"
+msgstr "Anfrage-Ablehnungs-Steilheit"
+
+msgid "Throttle Reject Exponent"
+msgstr "Drosselungs-Ablehnungs-Exponent"
+
+msgid "System load percent triggering moderate-load disconnect."
+msgstr "Systemlast-Prozent, das Mäßiglast-Trennung auslöst."
+
+msgid "Thread pool cap for UDP packet dispatch."
+msgstr "Thread-Pool-Limit für UDP-Paket-Versand."
+
+msgid "NTCP Writer Threads"
+msgstr "NTCP-Schreiber-Threads"
+
+msgid "Streaming"
+msgstr "Streaming"
+
+msgid "Min transit tunnels any peer can hold."
+msgstr "Min. Transit-Tunnels, die ein Peer halten kann."
+
+msgid ""
+"The time period, in minutes, displayed in the sidebar bandwidth graph. "
+"Values outside the valid range (2–30) are clamped. [Default is 20]"
+msgstr ""
+"Der im Bandbreiten-Diagramm der Seitenleiste angezeigte Zeitraum in Minuten."
+" Werte außerhalb des gültigen Bereichs (2–30) werden begrenzt. [Standard ist"
+" 20]"
+
+msgid "Max unacknowledged messages per peer."
+msgstr "Max. unbestätigte Meldungen pro Peer."
+
+msgid "Min fast peers in routing table."
+msgstr "Min. schnelle Peers in Routing-Tabelle."
+
+msgid "Threads decrypting inbound NTCP data."
+msgstr "Threads, die eingehende NTCP-Daten entschlüsseln."
+
+msgid "Max RED queue size for full drops (bytes)."
+msgstr "Max. RED-Warteschlangengröße für vollständiges Verwerfen (Bytes)."
+
+msgid "Writer Queue Size"
+msgstr "Schreiber-Warteschlangengröße"
+
+msgid "Westwood EWMA smoothing factor."
+msgstr "Westwood-EWMA-Glättungsfaktor."
+
+msgid "Initial Resend Delay"
+msgstr "Anfängliche Resend-Verzögerung"
+
+msgid "Max idle time before dropping a stream (ms)."
+msgstr "Max. Leerlaufzeit vor Verwerfen eines Streams (ms)."
+
+msgid "Tunnel Replenish Frequency"
+msgstr "Tunnel-Auffüllfrequenz"
+
+msgid "Congestion Avoidance Growth Rate"
+msgstr "Stau-Vermeidungs-Wachstumsrate"
+
+msgid "Max simultaneous NetDB lookups."
+msgstr "Max. gleichzeitige NetDB-Suchen."
+
+msgid "NTCP Reader Threads"
+msgstr "NTCP-Leser-Threads"
+
+msgid "Peers queried per iterative search."
+msgstr "Pro iterative Suche abgefragte Peers."
+
+msgid "Min UDP RTO"
+msgstr "Min. UDP-RTO"
+
+msgid "Load score multiplier for request throttling (% of computed load)."
+msgstr ""
+"Last-Score-Multiplikator für Anfrage-Drosselung (% der berechneten Last)."
+
+msgid "Max Pending Handshakes"
+msgstr "Max. anstehende Handshakes"
+
+msgid "NTCP Send Pool Capacity"
+msgstr "NTCP-Sendepool-Kapazität"
+
+msgid "Min high-capacity peers in routing table."
+msgstr "Min. Peers mit hoher Kapazität in Routing-Tabelle."
+
+msgid "First-hop build forward timeout (ms)."
+msgstr "First-Hop-Build-Forward-Timeout (ms)."
+
+msgid "Initial retransmission timeout (ms)."
+msgstr "Anfängliches Retransmission-Timeout (ms)."
+
+msgid "Maximum Peer Profiles"
+msgstr "Maximale Peer-Profile"
+
+msgid "Tunnel Build Request Timeout"
+msgstr "Tunnel-Build-Anfrage-Timeout"
+
+msgid "Dynamic priority for I/O handler threads."
+msgstr "Dynamische Priorität für I/O-Handler-Threads."
+
+msgid "Max Concurrent Searches"
+msgstr "Max. gleichzeitige Suchen"
+
+msgid ""
+"When set to true (the default), inbound and outbound traffic are displayed "
+"in a split view with a center baseline, with outbound spikes upward and "
+"inbound spikes downward. When set to false, both lines are displayed in "
+"overlay mode from the top of the graph with a configurable composite blend. "
+"[Default is true]"
+msgstr ""
+"Wenn auf true gesetzt (der Standard), werden eingehender und ausgehender "
+"Datenverkehr in einer geteilten Ansicht mit zentraler Baseline angezeigt, "
+"mit ausgehenden Ausschlägen nach oben und eingehenden nach unten. Wenn auf "
+"false gesetzt, werden beide Linien im Überlagerungsmodus von oben im "
+"Diagramm mit konfigurierbarem Komposit-Blend angezeigt. [Standard ist true]"
+
+msgid "Max Retransmissions"
+msgstr "Max. Retransmissionen"
+
+msgid "Min interval between tunnel tests (ms)."
+msgstr "Min. Intervall zwischen Tunnel-Tests (ms)."
+
+msgid "Peers Per Search"
+msgstr "Peers pro Suche"
+
+msgid "Consecutive failures before pool backoff."
+msgstr "Aufeinanderfolgende Fehler vor Pool-Backoff."
+
+msgid "Outbound messages batched per gateway pump."
+msgstr "Outbound-Meldungen pro Gateway-Pumpvorgang gebündelt."
+
+msgid "NTCP Send Finisher Threads"
+msgstr "NTCP-Sende-Abschluss-Threads"
+
+msgid "Request Throttle Burst Threshold"
+msgstr "Anfrage-Drosselung-Burst-Schwelle"
+
+msgid "Outbound SSU handshake timeout (ms)."
+msgstr "Outbound-SSU-Handshake-Timeout (ms)."
+
+msgid "Bandwidth token refill interval (ms)."
+msgstr "Bandbreiten-Token-Auffüllintervall (ms)."
+
+msgid "Max share of tunnel requests from a single peer."
+msgstr "Max. Anteil an Tunnel-Anfragen von einem einzelnen Peer."
+
+msgid "RouterInfo Lookup Timeout"
+msgstr "RouterInfo-Such-Timeout"
+
+msgid "Max time between retransmissions (ms)."
+msgstr "Max. Zeit zwischen Retransmissionen (ms)."
+
+msgid "Min retransmission timeout (ms)."
+msgstr "Min. Retransmission-Timeout (ms)."
+
+msgid ""
+"When set to true, the sidebar bandwidth graph uses the legacy RRD4J SVG "
+"renderer. When set to false, the new dual-baseline canvas renderer is used, "
+"with gradient fills, glow effects, and a split inbound/outbound display. "
+"[Default is false]"
+msgstr ""
+"Wenn auf true gesetzt, verwendet das Bandbreiten-Diagramm in der "
+"Seitenleiste den veralteten RRD4J-SVG-Renderer. Wenn auf false gesetzt, wird"
+" der neue Dual-Baseline-Canvas-Renderer mit Verlaufsfüllungen, Glüh-Effekten"
+" und einer geteilten Inbound/Outbound-Anzeige verwendet. [Standard ist "
+"false]"
+
+msgid "Data Message Timeout"
+msgstr "Datenmeldungs-Timeout"
+
+msgid "Max Concurrent Peer Messages"
+msgstr "Max. gleichzeitige Peer-Meldungen"
+
+msgid "Request Throttle Percent"
+msgstr "Anfrage-Drosselung Prozent"
+
+msgid "Min inbound requests accepted from any peer."
+msgstr "Min. eingehende Anfragen, die von einem Peer akzeptiert werden."
+
+msgid "Max queued build requests."
+msgstr "Max. wartende Build-Anfragen."
+
+msgid "Steepness of the transit rejection curve."
+msgstr "Steilheit der Transit-Ablehnungskurve."
+
+msgid "CoDel measurement window (ms)."
+msgstr "CoDel-Messfenster (ms)."
+
+msgid "In-flight message limit per UDP peer."
+msgstr "In-Flight-Meldungs-Limit pro UDP-Peer."
+
+msgid "Transit Load Weight"
+msgstr "Transit-Last-Gewicht"
+
+msgid "Maximum Fast Peers"
+msgstr "Maximale schnelle Peers"
+
+msgid "Request Reject Threshold"
+msgstr "Anfrage-Ablehnungs-Schwelle"
+
+msgid "Transit tunnel capacity."
+msgstr "Transit-Tunnel-Kapazität."
+
+msgid "Load score multiplier for transit rejection (% of computed load)."
+msgstr ""
+"Last-Score-Multiplikator für Transit-Ablehnung (% der berechneten Last)."
+
+msgid "RED Minimum Queue Threshold"
+msgstr "RED-Mindest-Warteschlangenschwelle"
+
+msgid "Search Timeout"
+msgstr "Such-Timeout"
+
+msgid "Internal Queue Size"
+msgstr "Interne Warteschlangengröße"
+
+msgid "Divides bandwidth among transit tunnels."
+msgstr "Teilt Bandbreite unter Transit-Tunnels auf."
+
+msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
+msgstr ""
+"TCP-Socket-Verbindungs-Timeout für Tunnel-Server-Handler-Threads (ms)."
+
+msgid "Steepness of the transit rejection probability curve."
+msgstr "Steilheit der Transit-Ablehnungs-Wahrscheinlichkeitskurve."
+
+msgid "Outbound Establish Timeout"
+msgstr "Outbound-Establish-Timeout"
+
+msgid "Participating Throttle Min"
+msgstr "Teilnahme-Drosselung Minimum"
+
+msgid "Upper bound on RTT estimate (ms)."
+msgstr "Obergrenze für RTT-Schätzung (ms)."
+
+msgid "Max Concurrent Test Jobs"
+msgstr "Max. gleichzeitige Test-Jobs"
+
+msgid "Max retransmission timeout (ms)."
+msgstr "Max. Retransmission-Timeout (ms)."
+
+msgid "Precomputed X25519 key pool minimum."
+msgstr "Vorberechneter X25519-Schlüsselpool Mindestgröße."
+
+msgid "System load percent triggering high-load request gating."
+msgstr "Systemlast-Prozent, das Hochlast-Anfrage-Gating auslöst."
+
+msgid "Max inbound requests accepted from any peer."
+msgstr "Max. eingehende Anfragen, die von einem Peer akzeptiert werden."
+
+msgid "UDP Maximum Handler Threads"
+msgstr "UDP maximale Handler-Threads"
+
+msgid "Precomputed ML-KEM key pool minimum."
+msgstr "Vorberechneter ML-KEM-Schlüsselpool Mindestgröße."
+
+msgid "Pumper Threads"
+msgstr "Pumper-Threads"
+
+msgid "Outbound Messages Per Pump"
+msgstr "Outbound-Meldungen pro Pumpvorgang"
+
+msgid "Max Concurrent Tunnel Builds"
+msgstr "Max. gleichzeitige Tunnel-Builds"
+
+msgid "Pool Build Failure Threshold"
+msgstr "Pool-Build-Fehler-Schwelle"
+
+msgid "Inbound SSU handshake timeout (ms)."
+msgstr "Inbound-SSU-Handshake-Timeout (ms)."
+
+msgid "Time before a message is declared lost (ms)."
+msgstr "Zeit, bevor eine Meldung als verloren gilt (ms)."
+
+msgid "Active threads completing NTCP sends."
+msgstr "Aktive Threads, die NTCP-Sendevorgänge abschließen."
+
+msgid ""
+"Uncheck the Auto box on any row to pin that parameter and prevent further "
+"adjustments."
+msgstr ""
+"Deaktivieren Sie das Auto-Kontrollkästchen in einer Zeile, um diesen "
+"Parameter festzulegen und weitere Anpassungen zu verhindern."
+
+msgid "Outbound Message Expiration"
+msgstr "Outbound-Meldungs-Ablauf"
+
+msgid "Participating Throttle Percent"
+msgstr "Teilnahme-Drosselung Prozent"
+
+msgid "Min RED queue size before probabilistic drops (bytes)."
+msgstr "Min. RED-Warteschlangengröße vor probabilistischem Verwerfen (Bytes)."
+
+msgid "Max transit tunnels a single peer can hold."
+msgstr "Max. Transit-Tunnels, die ein einzelner Peer halten kann."
+
+msgid ""
+"Ban floodfill peers that fail to respond to queries (failure rate >95%)"
+msgstr ""
+"Sperre Floodfill-Peers, die auf Abfragen nicht antworten (Fehlerrate >95%)"
+
+msgid "Build reply timeout (ms)."
+msgstr "Build-Antwort-Timeout (ms)."
+
+msgid "RED Maximum Queue Threshold"
+msgstr "RED-Maximal-Warteschlangenschwelle"
+
+msgid "Widens peer recency window to re-admit peers when builds fail."
+msgstr ""
+"Erweitert das Peer-Aktualitätsfenster, um Peers bei Build-Fehlern wieder "
+"zuzulassen."
+
+msgid "Per-Tunnel Bandwidth Divisor"
+msgstr "Bandbreiten-Divisor pro Tunnel"
+
+msgid "Max UDP RTO"
+msgstr "Max. UDP-RTO"
+
+msgid "Job queue lag triggering high-load request gating (ms)."
+msgstr ""
+"Job-Warteschlangen-Verzögerung, die Hochlast-Anfrage-Gating auslöst (ms)."
+
+msgid "EDH Precalculate Minimum"
+msgstr "EDH-Vorberechnung Minimum"
+
+msgid "Pending outbound handshake queue."
+msgstr "Warteschlange für anstehende Outbound-Handshakes."
+
+msgid "Build Handler Threads"
+msgstr "Build-Handler-Threads"
+
+msgid "Max message age in queue before drop (ms)."
+msgstr "Max. Meldungsalter in Warteschlange vor Verwerfen (ms)."
+
+msgid "Gateway pumper queue size."
+msgstr "Gateway-Pumper-Warteschlangengröße."
+
+msgid "Initial Congestion Window"
+msgstr "Anfängliches Stau-Fenster"
+
+msgid "Gateway pumper thread count."
+msgstr "Gateway-Pumper-Thread-Anzahl."
+
+msgid "Nagle Flush Delay"
+msgstr "Nagle-Flush-Verzögerung"
+
+msgid "CoDel Target Delay"
+msgstr "CoDel-Zielverzögerung"
+
+msgid "Max Delay Between Tests"
+msgstr "Max. Verzögerung zwischen Tests"
+
+msgid "Nagle flush delay (ms)."
+msgstr "Nagle-Flush-Verzögerung (ms)."
+
+msgid "Moderate-Load CPU Threshold"
+msgstr "Mäßiglast-CPU-Schwelle"
+
+msgid "Server Handler Threads"
+msgstr "Server-Handler-Threads"
+
+msgid "Duration of moderate load before declining requests (ms)."
+msgstr "Dauer der mäßigen Last vor dem Ablehnen von Anfragen (ms)."
+
+msgid "Target spare tunnel count per pool."
+msgstr "Ziel-Reserve-Tunnelanzahl pro Pool."
+
+msgid "Tunnel Build First Hop Timeout"
+msgstr "Tunnel-Build-First-Hop-Timeout"
+
+msgid "ACK delay for piggybacking (ms)."
+msgstr "ACK-Verzögerung für Piggybacking (ms)."
+
+msgid "Slow Start Window Cap"
+msgstr "Slow-Start-Fenster-Limit"
+
+msgid "NTCP Maximum Send Threads"
+msgstr "NTCP maximale Sende-Threads"
+
+msgid "Threads reassembling UDP messages from fragments."
+msgstr "Threads, die UDP-Meldungen aus Fragmenten zusammensetzen."
+
+msgid "ACK Delay"
+msgstr "ACK-Verzögerung"
+
+msgid "Build Handler Maximum Queue"
+msgstr "Build-Handler-Maximalwarteschlange"
+
+msgid "Pumper Queue Capacity"
+msgstr "Pumper-Warteschlangenkapazität"
+
+msgid "Max Resend Delay"
+msgstr "Max. Resend-Verzögerung"
+
+msgid "Thread pool cap for NTCP send completion."
+msgstr "Thread-Pool-Limit für NTCP-Sendeabschluss."
+
+msgid "Slow Start Growth Rate"
+msgstr "Slow-Start-Wachstumsrate"
+
+msgid "Crypto"
+msgstr "Krypto"
+
+msgid "NTCP Establish Timeout"
+msgstr "NTCP-Establish-Timeout"
+
+msgid "Transit Reject Threshold"
+msgstr "Transit-Ablehnungs-Schwelle"
+
+msgid "Memory cap for peer profiles."
+msgstr "Speicher-Limit für Peer-Profile."
+
+msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
+msgstr "Adaptive Deadline-Obergrenze für LeaseSet-Suchen (ms)."
+
+msgid "Inbound Messages Per Pump"
+msgstr "Inbound-Meldungen pro Pumpvorgang"
+
+msgid "Data packets between each ACK."
+msgstr "Datenpakete zwischen jeder ACK."
+
+msgid ""
+"Sets the render direction for the sidebar bandwidth graph. When set to rtl "
+"(the default), the graph renders right-to-left with newest data on the "
+"right. When set to ltr, the graph renders left-to-right with newest data on "
+"the left. [Default is rtl]"
+msgstr ""
+"Legt die Render-Richtung für das Bandbreiten-Diagramm der Seitenleiste fest."
+" Wenn auf rtl gesetzt (der Standard), rendert das Diagramm von rechts nach "
+"links mit den neuesten Daten rechts. Wenn auf ltr gesetzt, rendert es von "
+"links nach rechts mit den neuesten Daten links. [Standard ist rtl]"
+
+msgid "Tunnel Selector Loop Delay"
+msgstr "Tunnel-Selektor-Schleifenverzögerung"
+
+msgid "Max Concurrent RI Lookups"
+msgstr "Max. gleichzeitige RI-Suchen"
+
+msgid "Max UDP Send Window"
+msgstr "Max. UDP-Sende-Fenster"
+
+msgid "Sent Messages Clean Time"
+msgstr "Aufräumzeit für gesendete Meldungen"
+
+msgid "Tunnel Requeue Delay"
+msgstr "Tunnel-Requeue-Verzögerung"
+
+msgid "Tunnel Growth Tolerance"
+msgstr "Tunnel-Wachstumstoleranz"
+
+msgid "Post-RTO Window Restart"
+msgstr "Post-RTO-Fenster-Neustart"
+
+msgid "RTO Backoff Multiplier"
+msgstr "RTO-Backoff-Multiplikator"
+
+msgid "Window restart size (MTUs) after RTO collapse."
+msgstr "Fenster-Neustartgröße (MTUs) nach RTO-Kollaps."
+
+msgid "RTO growth multiplier per retransmission timeout (%, 100 = flat)."
+msgstr ""
+"RTO-Wachstums-Multiplikator pro Retransmission-Timeout (%, 100 = flach)."
+
+msgid "Max congestion window during slow start."
+msgstr "Max. Stau-Fenster während Slow Start."
+
+msgid "Adaptive deadline cap for RouterInfo lookups (ms)."
+msgstr "Adaptive Deadline-Obergrenze für RouterInfo-Suchen (ms)."
+
+msgid "Duration of high load before gating requests (ms)."
+msgstr "Dauer der hohen Last vor dem Gating von Anfragen (ms)."
+
+msgid "Window multiplier per RTT during slow start."
+msgstr "Fenster-Multiplikator pro RTT während Slow Start."
+
+msgid "Per-peer outbound queue size."
+msgstr "Outbound-Warteschlangengröße pro Peer."
+
+msgid "Min time between retransmissions (ms)."
+msgstr "Min. Zeit zwischen Retransmissionen (ms)."
+
+msgid ""
+"I2P+ supports custom theme overrides for the console, the tunnel manager, "
+"I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are "
+"persistent after upgrades. In order to activate an override, create a css "
+"file named <code>override.css</code> with your theme modifications and place"
+" it in the relevant theme directory of the theme you wish to change, or "
+"rename one of the example files, and then hard refresh the browser. Note "
+"that the tunnel manager and the console share the same override.css. To "
+"deactivate an override, delete or rename the <code>override.css</code> file "
+"and then hard refresh the browser (usually Control + Shift + R)."
+msgstr ""
+"I2P+ unterstützt benutzerdefinierte Theme-Überschreibungen für die Konsole, "
+"den Tunnel-Manager, I2PSnark, SusiDNS und Susimail, die Änderungen an den "
+"Themes erlauben, die nach Upgrades erhalten bleiben. Um eine Überschreibung "
+"zu aktivieren, erstellen Sie eine CSS-Datei namens <code>override.css</code>"
+" mit Ihren Theme-Änderungen und legen Sie diese im entsprechenden Theme-"
+"Verzeichnis des zu ändernden Themes ab, oder benennen Sie eine der "
+"Beispieldateien um, und führen Sie dann einen harten Browser-Refresh durch. "
+"Beachten Sie, dass der Tunnel-Manager und die Konsole dieselbe override.css "
+"verwenden. Um eine Überschreibung zu deaktivieren, löschen oder benennen Sie"
+" die Datei <code>override.css</code> um und führen dann einen harten "
+"Browser-Refresh durch (meist Control + Shift + R)."
+
+msgid "Sustained Moderate-Load Window"
+msgstr "Anhaltendes Mäßiglast-Fenster"
+
+msgid "ML-KEM Precalculate Minimum"
+msgstr "ML-KEM-Vorberechnung Minimum"
+
+msgid "RED Maximum Drop Probability"
+msgstr "RED-Maximale-Verwerf-Wahrscheinlichkeit"
+
+msgid "Max age for undelivered outbound messages."
+msgstr "Max. Alter für unzugestellte Outbound-Meldungen."
+
+msgid "High-Load CPU Threshold"
+msgstr "Hochlast-CPU-Schwelle"
+
+msgid "Per-peer lookup timeout (ms)."
+msgstr "Such-Timeout pro Peer (ms)."
+
+msgid "Inbound messages batched per gateway pump."
+msgstr "Inbound-Meldungen pro Gateway-Pumpvorgang gebündelt."
+
+msgid "NTCP Max Write Buffers Per Connection"
+msgstr "NTCP max. Schreibpuffer pro Verbindung"
+
+msgid "Max Message Queue Age"
+msgstr "Max. Meldungs-Warteschlangenalter"
+
+msgid "Min Resend Delay"
+msgstr "Min. Resend-Verzögerung"
+
+msgid "Dup ACK Delay"
+msgstr "Dup-ACK-Verzögerung"
+
+msgid "Max RED drop probability when queue is full (ppm)."
+msgstr "Max. RED-Verwerf-Wahrscheinlichkeit bei voller Warteschlange (ppm)."
+
+msgid "Initial concurrent messages per peer."
+msgstr "Anfängliche gleichzeitige Meldungen pro Peer."
+
+msgid "Max high-capacity peers in routing table."
+msgstr "Max. Peers mit hoher Kapazität in Routing-Tabelle."
+
+msgid "Max RTO"
+msgstr "Max. RTO"
+
+msgid "Threads performing reverse DNS lookups."
+msgstr "Threads, die Reverse-DNS-Abfragen ausführen."
+
+msgid "Cooldown duration after pool failure threshold, in ms."
+msgstr "Abkühlungsdauer nach Pool-Fehlerschwelle, in ms."
+
+msgid "Delay between rebuild rounds when pools are healthy (ms)."
+msgstr "Verzögerung zwischen Wiederaufbau-Runden bei gesunden Pools (ms)."
+
+msgid "Maximum Participating Tunnels"
+msgstr "Maximale teilnehmende Tunnel"
+
+msgid "UDP Message Receiver Threads"
+msgstr "UDP-Meldungs-Empfangs-Threads"
+
+msgid "Retransmissions before dropping the stream."
+msgstr "Retransmissionen vor Verwerfen des Streams."
+
+msgid "Interval between sweeps of ACKed sent-messages."
+msgstr "Intervall zwischen Säuberungen bestätigter gesendeter Meldungen."
+
+msgid "Thread pool for inbound build request processing."
+msgstr "Thread-Pool für eingehende Build-Anfrage-Verarbeitung."
+
+msgid "Burst threshold: requests per second before a ban."
+msgstr "Burst-Schwelle: Anfragen pro Sekunde vor einem Bann."
+
+msgid "Min concurrent messages per peer."
+msgstr "Min. gleichzeitige Meldungen pro Peer."
+
+msgid "How aggressively new tunnels are accepted before throttling."
+msgstr "Wie aggressiv neue Tunnel vor der Drosselung akzeptiert werden."
+
+msgid "Congestion avoidance growth rate."
+msgstr "Stau-Vermeidungs-Wachstumsrate."
+
+msgid "LeaseSet Lookup Timeout"
+msgstr "LeaseSet-Such-Timeout"
+
+msgid "Sustained High-Load Window"
+msgstr "Anhaltendes Hochlast-Fenster"
+
+msgid "Inactivity Timeout"
+msgstr "Inaktivitäts-Timeout"
+
+msgid "Pool Spare Tunnel Buffer"
+msgstr "Pool-Reserve-Tunnel-Puffer"
+
+msgid "NTCP send finalizer queue size."
+msgstr "NTCP-Sende-Finalizer-Warteschlangengröße."
+
+msgid ""
+"Auto-Tuning continuously monitors router performance and adjusts parameters "
+"to optimize throughput, reduce latency, and maintain stability."
+msgstr ""
+"Auto-Tuning überwacht kontinuierlich die Router-Leistung und passt Parameter"
+" an, um Durchsatz zu optimieren, Latenz zu reduzieren und Stabilität zu "
+"erhalten."
+
+msgid "Max Concurrent Handshakes"
+msgstr "Max. gleichzeitige Handshakes"
+
+msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
+msgstr "Failsafe-Scan-Intervall für hängende NTCP-Pumps (ms)."
+
+msgid "I2CP session buffer size."
+msgstr "I2CP-Sitzungspuffergröße."
+
+msgid "Peer Outbound Queue Size"
+msgstr "Peer-Outbound-Warteschlangengröße"
+
+msgid "Max concurrent RI lookups during builds."
+msgstr "Max. gleichzeitige RI-Suchen während Builds."
+
+msgid "High-Load Lag Threshold"
+msgstr "Hochlast-Verzögerungsschwelle"
+
+msgid "NTCP Send Queue Capacity"
+msgstr "NTCP-Sende-Warteschlangenkapazität"
+
+msgid "Pumper idle wait before re-checking work (ms)."
+msgstr "Pumper-Leerlaufwartezeit vor erneuter Arbeitsprüfung (ms)."
+
+msgid "I/O Thread Priority"
+msgstr "I/O-Thread-Priorität"
+
+msgid "Delay for dup or OOO packet ACKs (ms)."
+msgstr "Verzögerung für Dup- oder OOO-Paket-ACKs (ms)."
+
+msgid "Westwood Decay Factor"
+msgstr "Westwood-Abklingfaktor"
+
+msgid "Precomputed EDH key pool minimum."
+msgstr "Vorberechneter EDH-Schlüsselpool Mindestgröße."
+
+msgid "CoDel Interval"
+msgstr "CoDel-Intervall"
+
+msgid "Minimum High Capacity Peers"
+msgstr "Mindestanzahl Peers mit hoher Kapazität"

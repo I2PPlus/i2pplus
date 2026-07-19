@@ -14,6 +14,10 @@ msgstr "Hash"
 msgid "Banned by Router Hash"
 msgstr "Forbudt af Router Hash"
 
+# /../../router/java/src/net/i2p/router/Blocklist.java:1298
+msgid "Tor Exit"
+msgstr "Tor-udgang"
+
 msgid "Blocklist"
 msgstr "Blokeringsliste"
 
@@ -38,14 +42,14 @@ msgstr "Start af reseed"
 #, java-format
 msgid "Acquired {0} router info from reseed hosts"
 msgid_plural "Acquired {0} router infos from reseed hosts"
-msgstr[0] "Erhvervet {0} routerinfo fra reseed værter"
-msgstr[1] "Erhvervet {0} routerinfos fra reseed værter"
+msgstr[0] "Hentede {0} routerinformation fra reseed-værter"
+msgstr[1] "Hentede {0} routerinformationer fra reseed-værter"
 
 #, java-format
 msgid "Acquired only 1 router info from reseed hosts"
 msgid_plural "Acquired only {0} router infos from reseed hosts"
-msgstr[0] "Erhvervet kun 1 routerinfo fra reseed værter"
-msgstr[1] "Erhvervet kun {0} routerinfos fra reseed værter"
+msgstr[0] "Hentede kun 1 routerinformation fra reseed-værter"
+msgstr[1] "Hentede kun {0} routerinformationer fra reseed-værter"
 
 #, java-format
 msgid "{0}Reseed{1} failed:"
@@ -719,8 +723,8 @@ msgid ""
 "Invalid form submission, probably because you used the 'back' or 'reload' "
 "button on your browser. Please resubmit."
 msgstr ""
-"Ugyldig formularafsendelse, sandsynligvis fordi du brugte 'tilbage' eller "
-"'reload' knappen på din browser. Prøv venligst at sende formularen igen."
+"Ugyldig formularafsendelse, sandsynligvis fordi du brugte ''tilbage'' eller "
+"''reload'' knappen på din browser. Prøv venligst at sende formularen igen."
 
 msgid ""
 "If the problem persists, verify that you have cookies enabled in your "
@@ -786,11 +790,42 @@ msgstr[1] "{0} plugins opdateret"
 msgid "Plugin check complete"
 msgstr "Plugin-tjek fuldført"
 
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:432
+msgid "Restore Defaults"
+msgstr "Gendan standarder"
+
+# /java/src/net/i2p/router/web/TuningFormHandler.java:497
+msgid "All parameters restored to factory defaults"
+msgstr "Alle parametre gendannet til fabriksindstillinger"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:303
+msgid "Auto-Tuning is not available"
+msgstr "Auto-Tuning er ikke tilgængelig"
+
+# /java/src/net/i2p/router/web/TuningFormHandler.java:804
+msgid "Tuning ranges saved — changes take effect immediately"
+msgstr "Indstillingsområder gemt — ændringer træder i kraft med det samme"
+
+# /java/src/net/i2p/router/web/TuningFormHandler.java:811
+msgid "No changes to save"
+msgstr "Ingen ændringer at gemme"
+
+# /java/src/net/i2p/router/web/TuningFormHandler.java:809
+msgid "Tuning overrides applied"
+msgstr "Tilpasninger anvendt"
+
+# /java/src/net/i2p/router/web/TuningFormHandler.java:827
+msgid "Invalid value"
+msgstr "Ugyldig værdi"
+
 msgid "No bans currently active"
 msgstr "Ingen forbud er aktive i øjeblikket"
 
 msgid "Country"
 msgstr "Land"
+
+msgid "Caps"
+msgstr "Kasketter"
 
 msgid "Version"
 msgstr "Version"
@@ -801,8 +836,8 @@ msgstr "IP-adresse"
 msgid "Port"
 msgstr "Port"
 
-msgid "Hostname"
-msgstr "Værtsnavn"
+msgid "Host"
+msgstr "Vært"
 
 msgid "Reason"
 msgstr "Årsag"
@@ -1349,7 +1384,7 @@ msgid "Stats"
 msgstr "statistik"
 
 msgid "Plugins"
-msgstr "Plugin'er"
+msgstr "Plugin''er"
 
 msgid "Web Apps"
 msgstr "WebApps"
@@ -1365,6 +1400,10 @@ msgstr "Reseeder"
 
 msgid "Router Family"
 msgstr "Routerfamilie"
+
+# /java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:34
+msgid "Auto-Tuning"
+msgstr "Auto-Tuning"
 
 msgid "Save changes"
 msgstr "Gem ændringer"
@@ -1517,7 +1556,7 @@ msgid "Unsupported"
 msgstr "Ikke understøttet"
 
 msgid "IPs Permanently Banned"
-msgstr "IP'er Permanent Forbudt"
+msgstr "IP''er Permanent Forbudt"
 
 msgid "From"
 msgstr "Fra"
@@ -1530,7 +1569,7 @@ msgid "First {0} displayed, see the {1} file for the full list"
 msgstr "Første {0} vist, se {1}-filen for den fulde liste"
 
 msgid "IPs Banned Until Restart"
-msgstr "IP'er Forbudt Indtil Genstart"
+msgstr "IP''er Forbudt Indtil Genstart"
 
 msgid "IPv4 Addresses"
 msgstr "IPv4-adresser"
@@ -1575,8 +1614,8 @@ msgstr "Reseed fra fil mislykkedes"
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
 msgid_plural "Reseed successful, loaded {0} router infos from file."
-msgstr[0] "Reseed gennemført, indlæst {0} routerinfo fra fil."
-msgstr[1] "Reseed gennemført, indlæst {0} routerinfos fra fil."
+msgstr[0] "Reseed lykkedes, indlæste {0} routerinformation fra fil."
+msgstr[1] "Reseed lykkedes, indlæste {0} routerinformationer fra fil."
 
 msgid "Reset URL list"
 msgstr "Nulstil URL-liste"
@@ -1620,14 +1659,15 @@ msgstr "Lukker ned om {0}"
 #, java-format
 msgid "{0} transit tunnel still active"
 msgid_plural "{0} transit tunnels still active"
-msgstr[0] "{0} transittunnel stadig aktiv"
-msgstr[1] "{0} transittunneler stadig aktive"
+msgstr[0] "{0} transit-tunnel stadig aktiv"
+msgstr[1] "{0} transit-tunneller stadig aktive"
 
 #, java-format
 msgid "Please wait for routing commitment to expire for {0} tunnel"
 msgid_plural "Please wait for routing commitments to expire for {0} tunnels"
-msgstr[0] "Vent til at routing forpligtelser udløber of {0} tunnel"
-msgstr[1] "Vent til at routing forpligtelser udløber of {0} tunneler"
+msgstr[0] "Vent venligst på at routing-forpligtelsen udløber for {0} tunnel"
+msgstr[1] ""
+"Vent venligst på at routing-forpligtelserne udløber for {0} tunneller"
 
 #, java-format
 msgid "Restart in {0}"
@@ -1647,6 +1687,10 @@ msgstr "Sidebjælkepræferencer opdateret"
 
 msgid "Refresh interval must be a number"
 msgstr "Opdateringsinterval skal være et tal"
+
+# /java/src/net/i2p/router/web/helpers/ConfigSidebarHandler.java:107
+msgid "Graph preferences updated"
+msgstr "Grafindstillinger opdateret"
 
 msgid "Full sidebar defaults restored."
 msgstr "Fuld sidebjælkestandard gendannet."
@@ -1708,13 +1752,13 @@ msgstr ""
 msgid "{0} hop"
 msgid_plural "{0} hops"
 msgstr[0] "{0} hop"
-msgstr[1] "{0} hops"
+msgstr[1] "{0} hop"
 
 #, java-format
 msgid "{0} tunnel"
 msgid_plural "{0} tunnels"
 msgstr[0] "{0} tunnel"
-msgstr[1] "{0} tunneler"
+msgstr[1] "{0} tunneller"
 
 msgid "Exploratory tunnels"
 msgstr "Udforskende tunneler"
@@ -1781,7 +1825,7 @@ msgid "No user name entered"
 msgstr "Ingen brugernavn indtastet"
 
 msgid "User name may not contain '='"
-msgstr "Brugernavn må ikke indeholde '='"
+msgstr "Brugernavn må ikke indeholde ''=''"
 
 msgid ""
 "Warning: User names outside the ISO-8859-1 character set are not "
@@ -2064,6 +2108,22 @@ msgstr "Vedholdenhed"
 msgid "Store graph data on disk"
 msgstr "Gem grafdata på disk"
 
+# /java/src/net/i2p/router/web/helpers/GraphHelper.java:483
+msgid "UTC time"
+msgstr "UTC-tid"
+
+# /java/src/net/i2p/router/web/helpers/GraphHelper.java:489
+msgid "Display time in UTC on graph axes"
+msgstr "Vis tid i UTC på grafakser"
+
+# /java/src/net/i2p/router/web/helpers/GraphHelper.java:491
+msgid "Glow effect"
+msgstr "Gloweffekt"
+
+# /java/src/net/i2p/router/web/helpers/GraphHelper.java:497
+msgid "Add a glow effect to graph lines"
+msgstr "Tilføj en gloweffekt til graflinjer"
+
 msgid "Select Stats"
 msgstr "Vælg Statistikker"
 
@@ -2075,6 +2135,237 @@ msgstr "Graf indstillinger blev gemt"
 
 msgid "Graph settings unchanged"
 msgstr "Grafindstillinger uændrede"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:239
+msgid "CPU"
+msgstr "CPU"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:240
+msgid "CPU load average"
+msgstr "CPU-belastningsgennemsnit"
+
+msgid "Memory"
+msgstr "Hukommelse"
+
+msgid "Memory usage"
+msgstr "Hukommelsesbrug"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:244
+msgid "Router uptime"
+msgstr "Ruterens oppetid"
+
+msgid "Job Lag"
+msgstr "Job forsinkelse"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:468
+msgid "ms"
+msgstr "ms"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:246
+msgid "Job queue delay"
+msgstr "Jobkø-forsinkelse"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:247
+msgid "Msg Lag"
+msgstr "Beskedforsinkelse"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:248
+msgid "Message send processing time"
+msgstr "Tid til beskedafsendelsesbehandling"
+
+msgid "Job Queue"
+msgstr "Jobkø"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:250
+msgid "Ready jobs waiting in queue"
+msgstr "Klare job venter i køen"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:251
+msgid "Threads"
+msgstr "Tråde"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:252
+msgid "Active JVM threads"
+msgstr "Aktive JVM-tråde"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:308
+msgid "NTCP Estab"
+msgstr "NTCP Etab."
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:309
+msgid "NTCP outbound establish time"
+msgstr "NTCP udgående etableringstid"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:310
+msgid "SSU Estab"
+msgstr "SSU Etab."
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:311
+msgid "SSU outbound establish time"
+msgstr "SSU udgående etableringstid"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:312
+msgid "SSU RTO"
+msgstr "SSU RTO"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:313
+msgid "SSU retransmission timeout"
+msgstr "SSU genoverførselstidsudløb"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:314
+msgid "Conns/s"
+msgstr "Forb/s"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:315
+msgid "NTCP connections established per second"
+msgstr "NTCP-forbindelser etableret pr. sekund"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:316
+msgid "Msgs/s"
+msgstr "Besk/s"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:317
+msgid "Messages delivered per second"
+msgstr "Beskeder levereret pr. sekund"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:318
+msgid "RTT"
+msgstr "RTT"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:319
+msgid "End-to-end message round trip time"
+msgstr "Besked roundtrip-tid fra ende til ende"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:320
+msgid "Timeout"
+msgstr "Timeout"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:321
+msgid "Tunnel build timeout rate"
+msgstr "Tunnelbygningstidsudløbsrate"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:322
+msgid "Tunnel Build"
+msgstr "Tunnelbygning"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:323
+msgid "Client tunnel build latency"
+msgstr "Klient tunnelbygningsforsinkelse"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:379
+msgid "Active Peers"
+msgstr "Aktive peers"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:380
+msgid "Active peers (last 60s)"
+msgstr "Aktive peers (sidste 60s)"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:381
+msgid "Known Peers"
+msgstr "Kendte peers"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:382
+msgid "Known routers in network database"
+msgstr "Kendte routere i netværksdatabasen"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:384
+msgid "Active I2CP clients"
+msgstr "Aktive I2CP-klienter"
+
+msgid "Transit"
+msgstr "Transit"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:386
+msgid "Transit tunnels hosted"
+msgstr "Transittunneler hosted"
+
+msgid "Streams"
+msgstr "Strømme"
+
+msgid "Build Success"
+msgstr "Opbyg succes"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:390
+msgid "Tunnel build success rate"
+msgstr "Tunnelbygningssuccesrate"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:391
+msgid "NetDB"
+msgstr "NetDB"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:392
+msgid "NetDB lookup time"
+msgstr "NetDB-opslagstid"
+
+msgid "Banned"
+msgstr "Udelukket"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:394
+msgid "Total banned peers"
+msgstr "Samlet antal blokerede peers"
+
+msgid "LeaseSets"
+msgstr "Leasingkontraktsæt"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:455
+msgid "Stored LeaseSets in floodfill"
+msgstr "Lagrede LeaseSets i floodfill"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:456
+msgid "Cache Hit"
+msgstr "Cache-træf"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:457
+msgid "NetDB lookup success rate"
+msgstr "NetDB-opslagssuccesrate"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:458
+msgid "Flood Verify"
+msgstr "Floodverifikation"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:459
+msgid "Floodfill verify time"
+msgstr "Floodfill-verifikationstid"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:460
+msgid "NetDB ACK"
+msgstr "NetDB-ACK"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:461
+msgid "NetDB peer acknowledge time"
+msgstr "NetDB peer-bekræftelsestid"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:462
+msgid "Lookups/s"
+msgstr "Opslag/s"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:463
+msgid "NetDB lookups handled per second"
+msgstr "NetDB-opslag behandlet pr. sekund"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:464
+msgid "Requests/s"
+msgstr "Anmodn/s"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:465
+msgid "Combined store + lookup operations per second"
+msgstr "Kombinerede lagrings- og opslagsoperationer pr. sekund"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:466
+msgid "Stores/s"
+msgstr "Lagring/s"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:467
+msgid "NetDB store messages handled per second"
+msgstr "NetDB-lagringsbeskeder behandlet pr. sekund"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:468
+msgid "LS Timeout"
+msgstr "LS-tidsudløb"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:469
+msgid "LeaseSet request timeouts (last minute)"
+msgstr "LeaseSet-anmodningstidsudløb (sidste minut)"
 
 msgid "Overview"
 msgstr "Oversigt"
@@ -2232,7 +2523,7 @@ msgid "I2P Plugins"
 msgstr "I2P-plugins"
 
 msgid "zzz's plugin repository"
-msgstr "zzz's plugin-lager"
+msgstr "zzz''s plugin-lager"
 
 msgid "Historical infrastructure data from the I2P network"
 msgstr "Historiske infrastrukturdata fra I2P-netværket"
@@ -2604,6 +2895,10 @@ msgstr "Nej"
 msgid "GeoIP Db"
 msgstr "GeoIP-database"
 
+# /java/src/net/i2p/router/web/helpers/InfoHelper.java:214
+msgid "ASN Db"
+msgstr "ASN-db"
+
 msgid "Target"
 msgstr "Mål"
 
@@ -2752,9 +3047,6 @@ msgstr "Router Opslag"
 
 msgid "All Routers"
 msgstr "Alle Routers"
-
-msgid "LeaseSets"
-msgstr "Leasingkontraktsæt"
 
 msgid "Advanced Lookup"
 msgstr "Avanceret opslag"
@@ -3050,17 +3342,11 @@ msgstr "Se profil"
 msgid "Configure peer"
 msgstr "Konfigurer peer"
 
-msgid "Memory usage"
-msgstr "Hukommelsesbrug"
-
 msgid "Hidden"
 msgstr "Gemt"
 
 msgid "Published"
 msgstr "Publiceret"
-
-msgid "Whois"
-msgstr "Hvem er"
 
 msgid "direct"
 msgstr "direkte"
@@ -3210,9 +3496,6 @@ msgstr "NTCP fobindelser "
 msgid "Peer capabilities"
 msgstr "Peer-kapaciteter"
 
-msgid "Caps"
-msgstr "Kasketter"
-
 msgid "Direction/Introduction"
 msgstr "Retning / Indledning"
 
@@ -3360,11 +3643,8 @@ msgstr "De tilbød at idtoducere os"
 #, java-format
 msgid "{0} fail"
 msgid_plural "{0} fails"
-msgstr[0] "{0} mislykkes"
-msgstr[1] "{0} mislykkes"
-
-msgid "Banned"
-msgstr "Udelukket"
+msgstr[0] "{0} fejl"
+msgstr[1] "{0} fejl"
 
 msgid "backlogged"
 msgstr "efterslæbet"
@@ -3476,9 +3756,6 @@ msgstr ""
 msgid "Domain"
 msgstr "Domæne"
 
-msgid "Host"
-msgstr "Vært"
-
 msgid "Groups"
 msgstr "Grupper"
 
@@ -3570,7 +3847,7 @@ msgstr[1] "{0} hurtige peers"
 msgid "{0} high capacity peer"
 msgid_plural "{0} high capacity peers"
 msgstr[0] "{0} peer med høj kapacitet"
-msgstr[1] "{0} Peers med høj kapacitet"
+msgstr[1] "{0} peers med høj kapacitet"
 
 #, java-format
 msgid "{0} integrated peer"
@@ -3703,6 +3980,30 @@ msgstr "hvor mange nye peers har de fortalt os om på det seneste?"
 
 msgid "All"
 msgstr "Alle"
+
+# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:46
+msgid "SAM bridge is not running."
+msgstr "SAM-broen kører ikke."
+
+# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:70
+msgid "Active sessions in SessionsDB"
+msgstr "Aktive sessioner i SessionsDB"
+
+# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:72
+msgid "Active / pool worker threads"
+msgstr "Aktive / pool-arbejdstråde"
+
+# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:74
+msgid "Pending commands in pool"
+msgstr "Ventende kommandoer i pool"
+
+# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:76
+msgid "Connected pool handlers"
+msgstr "Tilsluttede pool-håndteringer"
+
+# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:78
+msgid "Sockets stolen for data streaming"
+msgstr "Sokler stjålet til datastreaming"
 
 msgid "Select search engine"
 msgstr "Vælge søgemaskine"
@@ -4028,6 +4329,14 @@ msgstr "NetDb"
 msgid "Show all current peer connections"
 msgstr "Vis alle de nuværende klient forbindelser"
 
+# /java/src/net/i2p/router/web/helpers/SidebarRenderer.java:541
+msgid "Health"
+msgstr "Tilstand"
+
+# /java/src/net/i2p/router/web/helpers/SidebarRenderer.java:544
+msgid "Router health overview"
+msgstr "Ruterens tilstandsoversigt"
+
 msgid "Profiles"
 msgstr "Profiler"
 
@@ -4036,12 +4345,6 @@ msgstr "Vis seneste klient ydelsesprofiler"
 
 msgid "View existing tunnels and tunnel build status"
 msgstr "Se eksisterende tunneler og status på tunneler som bygges"
-
-msgid "Streams"
-msgstr "Strømme"
-
-msgid "View active streaming connections"
-msgstr "Vis aktive streamingforbindelser"
 
 msgid "Advanced Configuration"
 msgstr "Avanceret konfiguration"
@@ -4100,9 +4403,6 @@ msgid ""
 msgstr ""
 "Hvor meget RAM I2P bruger / samlet RAM tilgængelig for I2P (ekskluderer RAM "
 "allokeret til JVM)"
-
-msgid "Memory"
-msgstr "Hukommelse"
 
 msgid "Floodfill enabled"
 msgstr "Floodfill aktiveret"
@@ -4244,9 +4544,6 @@ msgstr ""
 msgid "Current / Maximum"
 msgstr "Nuværende / Maksimum"
 
-msgid "Transit"
-msgstr "Transit"
-
 msgid ""
 "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
 msgstr ""
@@ -4261,9 +4558,6 @@ msgid ""
 msgstr ""
 "Kombineret nytte- og servicetunnelbygningssucces (højeste af 1min eller "
 "10min gennemsnit)"
-
-msgid "Build Success"
-msgstr "Opbyg succes"
 
 msgid ""
 "The ratio of tunnel hops we provide to tunnel hops we use - a value greater "
@@ -4354,8 +4648,8 @@ msgstr "Levetid gennemsnitsfrekvens"
 #, java-format
 msgid "{0} event"
 msgid_plural "{0} events"
-msgstr[0] "{0} begivenhed"
-msgstr[1] "{0} begivenheder"
+msgstr[0] "{0} hændelse"
+msgstr[1] "{0} hændelser"
 
 msgid "rate"
 msgstr "Hastighed"
@@ -4401,7 +4695,19 @@ msgstr "Livstids gennemsnitsværdi"
 msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "1 hændelse"
-msgstr[1] "{0} hændelser."
+msgstr[1] "{0} hændelser"
+
+# /java/src/net/i2p/router/web/helpers/StreamHelper.java:302
+msgid "sent"
+msgstr "sendt"
+
+# /java/src/net/i2p/router/web/helpers/StreamHelper.java:303
+msgid "received"
+msgstr "modtaget"
+
+# /java/src/net/i2p/router/web/helpers/StreamHelper.java:372
+msgid "No active streaming connections."
+msgstr "Ingen aktive streamingforbindelser."
 
 msgid "No known routers"
 msgstr "Ingen kendte routere"
@@ -4690,6 +4996,773 @@ msgstr "Afstand til"
 msgid "Distance for"
 msgstr "Afstand for"
 
+msgid "Acknowledgement Frequency"
+msgstr "Kvitteringsfrekvens"
+
+msgid "Data Message Timeout"
+msgstr "Data-besked timeout"
+
+msgid "Outbound Establish Timeout"
+msgstr "Outbound etablerings-timeout"
+
+msgid "Inbound Establish Timeout"
+msgstr "Inbound etablerings-timeout"
+
+msgid "NTCP Establish Timeout"
+msgstr "NTCP-etablerings-timeout"
+
+msgid "Tunnel Requeue Delay"
+msgstr "Tunnel-genkørselsforsinkelse"
+
+msgid "Tunnel Replenish Frequency"
+msgstr "Tunnel-genopfyldningsfrekvens"
+
+msgid "Tunnel Selector Loop Delay"
+msgstr "Tunnel-vælger-løkkeforsinkelse"
+
+msgid "Outbound Messages Per Pump"
+msgstr "Outbound-beskeder pr. pumpe"
+
+msgid "Inbound Messages Per Pump"
+msgstr "Inbound-beskeder pr. pumpe"
+
+msgid "Initial Congestion Window"
+msgstr "Start-tiltagningsvindue"
+
+msgid "Initial RTO"
+msgstr "Start-RTO"
+
+msgid "ACK Delay"
+msgstr "ACK-forsinkelse"
+
+msgid "Nagle Flush Delay"
+msgstr "Nagle-flush-forsinkelse"
+
+msgid "Slow Start Window Cap"
+msgstr "Langsom-start vinduesgrænse"
+
+msgid "Max RTO"
+msgstr "Max RTO"
+
+msgid "Max Resend Delay"
+msgstr "Max genforsendelses-forsinkelse"
+
+msgid "Max Retransmissions"
+msgstr "Max genoverførsler"
+
+msgid "Writer Queue Size"
+msgstr "Skrivekøstørrelse"
+
+msgid "CoDel Target Delay"
+msgstr "CoDel-målforsinkelse"
+
+msgid "CoDel Interval"
+msgstr "CoDel-interval"
+
+msgid "Westwood Decay Factor"
+msgstr "Westwood-nedbrydningsfaktor"
+
+msgid "RED Minimum Queue Threshold"
+msgstr "RED minimum kø-grænseværdi"
+
+msgid "RED Maximum Queue Threshold"
+msgstr "RED maksimum kø-grænseværdi"
+
+msgid "RED Maximum Drop Probability"
+msgstr "RED maksimum drop-sandsynlighed"
+
+msgid "X25519 Precalculate Minimum"
+msgstr "X25519 forudsberegning minimum"
+
+msgid "EDH Precalculate Minimum"
+msgstr "EDH forudsberegning minimum"
+
+msgid "ML-KEM Precalculate Minimum"
+msgstr "ML-KEM forudsberegning minimum"
+
+msgid "NTCP Maximum Send Threads"
+msgstr "NTCP maksimum sendetråde"
+
+msgid "NTCP Send Finisher Threads"
+msgstr "NTCP send-afslutningstråde"
+
+msgid "NTCP Send Queue Capacity"
+msgstr "NTCP sendekø-kapacitet"
+
+msgid "UDP Message Receiver Threads"
+msgstr "UDP besked-modtagertråde"
+
+msgid "UDP Maximum Handler Threads"
+msgstr "UDP maksimum håndteringstråde"
+
+msgid "rDNS Executor Threads"
+msgstr "rDNS-udførertråde"
+
+msgid "Peer Outbound Queue Size"
+msgstr "Peer outbound-køstørrelse"
+
+msgid "Transit Throttle Factor"
+msgstr "Transit-knuserfaktor"
+
+msgid "Throttle Reject Exponent"
+msgstr "Knuser-afvisningseksponent"
+
+msgid "Maximum Participating Tunnels"
+msgstr "Maksimum deltagende tunneller"
+
+msgid "Build Handler Maximum Queue"
+msgstr "Byggehåndtering maksimum kø"
+
+msgid "Rebuild Throttle Interval"
+msgstr "Genopbygnings-kuser-interval"
+
+msgid "Per-Tunnel Bandwidth Divisor"
+msgstr "Pr. tunnel båndbredde-divisor"
+
+msgid "Tunnel Growth Tolerance"
+msgstr "Tunnel-væksttolerance"
+
+msgid "Peers Per Search"
+msgstr "Peers pr. søgning"
+
+msgid "Max Concurrent Searches"
+msgstr "Max samtidige søgninger"
+
+msgid "Search Timeout"
+msgstr "Søgnings-timeout"
+
+msgid "LeaseSet Lookup Timeout"
+msgstr "LeaseSet-opslag-timeout"
+
+msgid "RouterInfo Lookup Timeout"
+msgstr "RouterInfo-opslag-timeout"
+
+msgid "Max Concurrent Handshakes"
+msgstr "Max samtidige håndtryk"
+
+msgid "Maximum Peer Profiles"
+msgstr "Maksimum peer-profiler"
+
+msgid "Minimum Fast Peers"
+msgstr "Minimum hurtige peers"
+
+msgid "Maximum Fast Peers"
+msgstr "Maksimum hurtige peers"
+
+msgid "Minimum High Capacity Peers"
+msgstr "Minimum peers med høj kapacitet"
+
+msgid "Maximum High Capacity Peers"
+msgstr "Maksimum peers med høj kapacitet"
+
+msgid "Tunnel Build Request Timeout"
+msgstr "Tunnel-bygningsrequest-timeout"
+
+msgid "Tunnel Build First Hop Timeout"
+msgstr "Tunnel-bygning første-hop-timeout"
+
+msgid "Max Concurrent Tunnel Builds"
+msgstr "Max samtidige tunnel-bygninger"
+
+msgid "Max Concurrent RI Lookups"
+msgstr "Max samtidige RI-opslag"
+
+msgid "Max Concurrent Test Jobs"
+msgstr "Max samtidige test-jobs"
+
+msgid "Min Delay Between Tests"
+msgstr "Min forsinkelse mellem tests"
+
+msgid "Max Delay Between Tests"
+msgstr "Max forsinkelse mellem tests"
+
+msgid "NTCP Reader Threads"
+msgstr "NTCP læsertråde"
+
+msgid "NTCP Writer Threads"
+msgstr "NTCP skrivertråde"
+
+msgid "NTCP Pumper Failsafe Interval"
+msgstr "NTCP-pumper failsafe-interval"
+
+msgid "Max Concurrent Peer Messages"
+msgstr "Max samtidige peer-beskeder"
+
+msgid "Initial UDP Concurrent Messages"
+msgstr "Start UDP samtidige beskeder"
+
+msgid "Min UDP Concurrent Messages"
+msgstr "Min UDP samtidige beskeder"
+
+msgid "Initial UDP RTO"
+msgstr "Start UDP-RTO"
+
+msgid "Min UDP RTO"
+msgstr "Min UDP-RTO"
+
+msgid "Max UDP RTO"
+msgstr "Max UDP-RTO"
+
+msgid "Max UDP Send Window"
+msgstr "Max UDP sendevindue"
+
+msgid "Post-RTO Window Restart"
+msgstr "Post-RTO vindues-genstart"
+
+msgid "NTCP Send Pool Capacity"
+msgstr "NTCP sendepulje-kapacitet"
+
+msgid "Internal Queue Size"
+msgstr "Intern køstørrelse"
+
+msgid "Sent Messages Clean Time"
+msgstr "Sendte beskeder oprydningstid"
+
+msgid "Outbound Message Expiration"
+msgstr "Outbound besked-udløb"
+
+msgid "Max Pending Handshakes"
+msgstr "Max ventende håndtryk"
+
+msgid "NTCP Max Write Buffers Per Connection"
+msgstr "NTCP max skrivebuffere pr. forbindelse"
+
+msgid "Min Resend Delay"
+msgstr "Min genforsendelses-forsinkelse"
+
+msgid "Congestion Avoidance Growth Rate"
+msgstr "Tiltagningsundgåelses-vækstrate"
+
+msgid "Slow Start Growth Rate"
+msgstr "Langsom-start vækstrate"
+
+msgid "RTT Cap"
+msgstr "RTT-loft"
+
+msgid "Initial Resend Delay"
+msgstr "Start genforsendelses-forsinkelse"
+
+msgid "Dup ACK Delay"
+msgstr "Dup ACK-forsinkelse"
+
+msgid "Inactivity Timeout"
+msgstr "Inaktivitets-timeout"
+
+msgid "Max Message Queue Age"
+msgstr "Max beskedkø-alder"
+
+msgid "I/O Thread Priority"
+msgstr "I/O-trådprioritet"
+
+msgid "Pumper Queue Capacity"
+msgstr "Pumper-køkapacitet"
+
+msgid "Pumper Threads"
+msgstr "Pumper-tråde"
+
+msgid "Server Handler Threads"
+msgstr "Serverhåndteringstråde"
+
+msgid "Build Handler Threads"
+msgstr "Byggehåndteringstråde"
+
+msgid "Client Runner Max Threads"
+msgstr "Klient-kører maksimum tråde"
+
+msgid "Participating Throttle Min"
+msgstr "Deltagende knuser min"
+
+msgid "Participating Throttle Max"
+msgstr "Deltagende knuser max"
+
+msgid "Participating Throttle Percent"
+msgstr "Deltagende knuser procent"
+
+msgid "Request Throttle Min"
+msgstr "Request-knuser min"
+
+msgid "Request Throttle Max"
+msgstr "Request-knuser max"
+
+msgid "Request Throttle Percent"
+msgstr "Request-knuser procent"
+
+msgid "Request Throttle Burst Threshold"
+msgstr "Request-knuser burst-grænseværdi"
+
+msgid "High-Load Lag Threshold"
+msgstr "Høj-belastnings lag-grænseværdi"
+
+msgid "High-Load CPU Threshold"
+msgstr "Høj-belastnings CPU-grænseværdi"
+
+msgid "Moderate-Load Lag Threshold"
+msgstr "Moderat-belastnings lag-grænseværdi"
+
+msgid "Moderate-Load CPU Threshold"
+msgstr "Moderat-belastnings CPU-grænseværdi"
+
+msgid "Sustained High-Load Window"
+msgstr "Vedvarende høj-belastnings vindue"
+
+msgid "Sustained Moderate-Load Window"
+msgstr "Vedvarende moderat-belastnings vindue"
+
+msgid "Peer Activity Window Multiplier"
+msgstr "Peer-aktivitetsvindue-multiplikator"
+
+msgid "Pool Build Failure Threshold"
+msgstr "Pulje-bygningsfejl-grænseværdi"
+
+msgid "Pool Build Backoff"
+msgstr "Pulje-bygnings-tilbagetrækning"
+
+msgid "Pool Spare Tunnel Buffer"
+msgstr "Pulje-reservetunnel-buffer"
+
+msgid "Transit Reject Threshold"
+msgstr "Transit-afvisnings-grænseværdi"
+
+msgid "Transit Reject Steepness"
+msgstr "Transit-afvisnings-stejlhed"
+
+msgid "Transit Load Weight"
+msgstr "Transit-belastningsvægt"
+
+msgid "Request Reject Threshold"
+msgstr "Request-afvisnings-grænseværdi"
+
+msgid "Request Reject Steepness"
+msgstr "Request-afvisnings-stejlhed"
+
+msgid "Request Load Weight"
+msgstr "Request-belastningsvægt"
+
+msgid "RTO Backoff Multiplier"
+msgstr "RTO-tilbagetræknings-multiplikator"
+
+msgid "Socket Connect Timeout"
+msgstr "Socket-forbindelses-timeout"
+
+msgid "Data packets between each ACK."
+msgstr "Datapakker mellem hver ACK."
+
+msgid "Time before a message is declared lost (ms)."
+msgstr "Tid før en besked erklæres tabt (ms)."
+
+msgid "Outbound SSU handshake timeout (ms)."
+msgstr "Outbound SSU-håndtryk-timeout (ms)."
+
+msgid "Inbound SSU handshake timeout (ms)."
+msgstr "Inbound SSU-håndtryk-timeout (ms)."
+
+msgid "NTCP2 handshake timeout (ms)."
+msgstr "NTCP2-håndtryk-timeout (ms)."
+
+msgid "Pumper idle wait before re-checking work (ms)."
+msgstr "Pumper inaktiv ventetid før genkontrol af arbejde (ms)."
+
+msgid "Bandwidth token refill interval (ms)."
+msgstr "Båndbredde-token-genopfyldningsinterval (ms)."
+
+msgid "NTCP selector sleep between loops (ms)."
+msgstr "NTCP-vælger søvn mellem løkker (ms)."
+
+msgid "Outbound messages batched per gateway pump."
+msgstr "Outbound-beskeder samlet pr. gateway-pumpe."
+
+msgid "Inbound messages batched per gateway pump."
+msgstr "Inbound-beskeder samlet pr. gateway-pumpe."
+
+msgid "Starting congestion window (packets)."
+msgstr "Start-tiltagningsvindue (pakker)."
+
+msgid "Starting retransmission timeout (ms)."
+msgstr "Start-genoverførsels-timeout (ms)."
+
+msgid "ACK delay for piggybacking (ms)."
+msgstr "ACK-forsinkelse til piggybacking (ms)."
+
+msgid "Nagle flush delay (ms)."
+msgstr "Nagle-flush-forsinkelse (ms)."
+
+msgid "Max congestion window during slow start."
+msgstr "Maksimalt tiltagningsvindue under langsom start."
+
+msgid "Max retransmission timeout (ms)."
+msgstr "Maksimal genoverførsels-timeout (ms)."
+
+msgid "Max time between retransmissions (ms)."
+msgstr "Maksimal tid mellem genoverførsler (ms)."
+
+msgid "Retransmissions before dropping the stream."
+msgstr "Genoverførsler før strømmen droppes."
+
+msgid "Max idle time before dropping a stream (ms)."
+msgstr "Maksimal inaktiv tid før en strøm droppes (ms)."
+
+msgid "I2CP write queue depth."
+msgstr "I2CP-skrivekø-dybde."
+
+msgid "CoDel drop target delay (ms)."
+msgstr "CoDel drop-målforsinkelse (ms)."
+
+msgid "CoDel measurement window (ms)."
+msgstr "CoDel-målevindue (ms)."
+
+msgid "Westwood EWMA smoothing factor."
+msgstr "Westwood EWMA-glattende faktor."
+
+msgid "Min RED queue size before probabilistic drops (bytes)."
+msgstr "Min RED-køstørrelse før sandsynlighedsdropp (bytes)."
+
+msgid "Max RED queue size for full drops (bytes)."
+msgstr "Maksimal RED-køstørrelse for fulde dropp (bytes)."
+
+msgid "Max RED drop probability when queue is full (ppm)."
+msgstr "Maksimal RED-drop-sandsynlighed når køen er fuld (ppm)."
+
+msgid "Precomputed X25519 key pool minimum."
+msgstr "Forudsberegnet X25519 nøglepulje minimum."
+
+msgid "Precomputed EDH key pool minimum."
+msgstr "Forudsberegnet EDH nøglepulje minimum."
+
+msgid "Precomputed ML-KEM key pool minimum."
+msgstr "Forudsberegnet ML-KEM nøglepulje minimum."
+
+msgid "Thread pool cap for NTCP send completion."
+msgstr "Trådpulje-loft for NTCP-sendefuldbyrdelse."
+
+msgid "Active threads completing NTCP sends."
+msgstr "Aktive tråde der fuldfører NTCP-send."
+
+msgid "NTCP send finalizer queue size."
+msgstr "NTCP-send-afslutter-køstørrelse."
+
+msgid "Thread pool cap for UDP packet dispatch."
+msgstr "Trådpulje-loft for UDP-pakke-dispatch."
+
+msgid "Threads reassembling UDP messages from fragments."
+msgstr "Tråde der samler UDP-beskeder fra fragmenter."
+
+msgid "Threads performing reverse DNS lookups."
+msgstr "Tråde der udfører reverse DNS-opslag."
+
+msgid "Per-peer outbound queue size."
+msgstr "Pr. peer outbound-køstørrelse."
+
+msgid "Transit rejection aggressiveness (50-100%)."
+msgstr "Transit-afvisnings-aggressivitet (50-100%)."
+
+msgid "Steepness of the transit rejection curve."
+msgstr "Stejlhed af transit-afvisningskurven."
+
+msgid "Transit tunnel capacity."
+msgstr "Transit-tunnel-kapacitet."
+
+msgid "Max queued build requests."
+msgstr "Maksimalt køede bygningsrequests."
+
+msgid "Delay between rebuild rounds when pools are healthy (ms)."
+msgstr "Forsinkelse mellem genopbygningsrunder når puljer er sunde (ms)."
+
+msgid "Divides bandwidth among transit tunnels."
+msgstr "Fordeler båndbredde mellem transit-tunneller."
+
+msgid "How aggressively new tunnels are accepted before throttling."
+msgstr "Hvor aggressivt nye tunneller accepteres før knusning."
+
+msgid "Peers queried per iterative search."
+msgstr "Peers forespurgt pr. iterativ søgning."
+
+msgid "Max simultaneous NetDB lookups."
+msgstr "Maksimalt samtidige NetDB-opslag."
+
+msgid "Per-peer lookup timeout (ms)."
+msgstr "Pr. peer opslag-timeout (ms)."
+
+msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
+msgstr "Adaptiv deadline-loft for LeaseSet-opslag (ms)."
+
+msgid "Adaptive deadline cap for RouterInfo lookups (ms)."
+msgstr "Adaptiv deadline-loft for RouterInfo-opslag (ms)."
+
+msgid "Max simultaneous SSU handshakes."
+msgstr "Maksimalt samtidige SSU-håndtryk."
+
+msgid "Memory cap for peer profiles."
+msgstr "Hukommelses-loft for peer-profiler."
+
+msgid "Min fast peers in routing table."
+msgstr "Min hurtige peers i routing-tabel."
+
+msgid "Max fast peers in routing table."
+msgstr "Maks hurtige peers i routing-tabel."
+
+msgid "Min high-capacity peers in routing table."
+msgstr "Min peers med høj kapacitet i routing-tabel."
+
+msgid "Max high-capacity peers in routing table."
+msgstr "Maks peers med høj kapacitet i routing-tabel."
+
+msgid "Build reply timeout (ms)."
+msgstr "Bygge-svar-timeout (ms)."
+
+msgid "First-hop build forward timeout (ms)."
+msgstr "Første-hop bygnings-videresendelses-timeout (ms)."
+
+msgid "Max concurrent tunnel builds."
+msgstr "Maks samtidige tunnel-bygninger."
+
+msgid "Max concurrent RI lookups during builds."
+msgstr "Maks samtidige RI-opslag under bygninger."
+
+msgid "Max concurrent tunnel test jobs."
+msgstr "Maks samtidige tunnel-test-jobs."
+
+msgid "Min interval between tunnel tests (ms)."
+msgstr "Min interval mellem tunnel-tests (ms)."
+
+msgid "Max interval between tunnel tests (ms)."
+msgstr "Maks interval mellem tunnel-tests (ms)."
+
+msgid "Threads decrypting inbound NTCP data."
+msgstr "Tråde der dekrypterer inbound NTCP-data."
+
+msgid "Threads encrypting NTCP messages."
+msgstr "Tråde der krypterer NTCP-beskeder."
+
+msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
+msgstr "Failsafe-scan-interval for fastlåste NTCP-pumper (ms)."
+
+msgid "In-flight message limit per UDP peer."
+msgstr "Grænse for flyvende beskeder pr. UDP-peer."
+
+msgid "Initial concurrent messages per peer."
+msgstr "Start samtidige beskeder pr. peer."
+
+msgid "Min concurrent messages per peer."
+msgstr "Min samtidige beskeder pr. peer."
+
+msgid "Initial retransmission timeout (ms)."
+msgstr "Start-genoverførsels-timeout (ms)."
+
+msgid "Min retransmission timeout (ms)."
+msgstr "Min genoverførsels-timeout (ms)."
+
+msgid "Max unacknowledged messages per peer."
+msgstr "Maks ikke-kvitterede beskeder pr. peer."
+
+msgid "Window restart size (MTUs) after RTO collapse."
+msgstr "Vindues-genstart-størrelse (MTUer) efter RTO-sammenbrud."
+
+msgid "NTCP send pool queue size."
+msgstr "NTCP-sendepulje-køstørrelse."
+
+msgid "I2CP session buffer size."
+msgstr "I2CP-sessionsbuffer-størrelse."
+
+msgid "Interval between sweeps of ACKed sent-messages."
+msgstr "Interval mellem gennemskanning af ACKede sendte beskeder."
+
+msgid "Max age for undelivered outbound messages."
+msgstr "Maks alder for ikke-leverede outbound-beskeder."
+
+msgid "Pending outbound handshake queue."
+msgstr "Ventende outbound-håndtryk-kø."
+
+msgid "Write buffer per NTCP connection."
+msgstr "Skrivebuffer pr. NTCP-forbindelse."
+
+msgid "Min time between retransmissions (ms)."
+msgstr "Min tid mellem genoverførsler (ms)."
+
+msgid "Congestion avoidance growth rate."
+msgstr "Tiltagningsundgåelses-vækstrate."
+
+msgid "Window multiplier per RTT during slow start."
+msgstr "Vindues-multiplikator pr. RTT under langsom start."
+
+msgid "Upper bound on RTT estimate (ms)."
+msgstr "Øvre grænse for RTT-estimat (ms)."
+
+msgid "Delay before first retransmit (ms)."
+msgstr "Forsinkelse før første genoverførsel (ms)."
+
+msgid "Delay for dup or OOO packet ACKs (ms)."
+msgstr "Forsinkelse for dup- eller OOO-pakke-ACKs (ms)."
+
+msgid "Max message age in queue before drop (ms)."
+msgstr "Maks beskedalder i kø før drop (ms)."
+
+msgid "Dynamic priority for I/O handler threads."
+msgstr "Dynamisk prioritet for I/O-håndteringstråde."
+
+msgid "Gateway pumper queue size."
+msgstr "Gateway-pumper-køstørrelse."
+
+msgid "Gateway pumper thread count."
+msgstr "Gateway-pumper-trådantal."
+
+msgid "Handler threads for incoming I2PTunnel connections."
+msgstr "Håndteringstråde for indgående I2PTunnel-forbindelser."
+
+msgid "Thread pool for inbound build request processing."
+msgstr "Trådpulje til inbound bygningsrequest-behandling."
+
+msgid "Ceiling for client proxy thread pool."
+msgstr "Loft for klient-proxy-trådpulje."
+
+msgid "Min transit tunnels any peer can hold."
+msgstr "Min transit-tunneller enhver peer kan holde."
+
+msgid "Max transit tunnels a single peer can hold."
+msgstr "Maks transit-tunneller en enkelt peer kan holde."
+
+msgid "Max share of transit tunnels for a single peer."
+msgstr "Maks andel af transit-tunneller for en enkelt peer."
+
+msgid "Min inbound requests accepted from any peer."
+msgstr "Min inbound-requests accepteret fra enhver peer."
+
+msgid "Max inbound requests accepted from any peer."
+msgstr "Maks inbound-requests accepteret fra enhver peer."
+
+msgid "Max share of tunnel requests from a single peer."
+msgstr "Maks andel af tunnel-requests fra en enkelt peer."
+
+msgid "Burst threshold: requests per second before a ban."
+msgstr "Burst-grænseværdi: requests pr. sekund før et ban."
+
+msgid "Job queue lag triggering high-load request gating (ms)."
+msgstr "Jobkø-forsinkelse der udløser høj-belastnings request-gating (ms)."
+
+msgid "System load percent triggering high-load request gating."
+msgstr "Systembelastningsprocent der udløser høj-belastnings request-gating."
+
+msgid "Job queue lag triggering moderate-load peer disconnect (ms)."
+msgstr ""
+"Jobkø-forsinkelse der udløser moderat-belastnings peer-frakobling (ms)."
+
+msgid "System load percent triggering moderate-load disconnect."
+msgstr "Systembelastningsprocent der udløser moderat-belastnings frakobling."
+
+msgid "Duration of high load before gating requests (ms)."
+msgstr "Varighed af høj belastning før gating af requests (ms)."
+
+msgid "Duration of moderate load before declining requests (ms)."
+msgstr "Varighed af moderat belastning før afvisning af requests (ms)."
+
+msgid "Widens peer recency window to re-admit peers when builds fail."
+msgstr ""
+"Udvider peer-nylighedsvindue for at genoptage peers når bygninger fejler."
+
+msgid "Consecutive failures before pool backoff."
+msgstr "Efterfølgende fejl før pulje-tilbagetrækning."
+
+msgid "Cooldown duration after pool failure threshold, in ms."
+msgstr "Nedkølingsvarighed efter pulje-fejl-grænseværdi, i ms."
+
+msgid "Target spare tunnel count per pool."
+msgstr "Mål-reservetunnel-antal pr. pulje."
+
+msgid "Load threshold where probabilistic transit rejection starts (%)."
+msgstr ""
+"Belastnings-grænseværdi hvor sandsynligheds-transit-afvisning starter (%)."
+
+msgid "Steepness of the transit rejection probability curve."
+msgstr "Stejlhed af transit-afvisnings-sandsynlighedskurven."
+
+msgid "Load score multiplier for transit rejection (% of computed load)."
+msgstr ""
+"Belastnings-score-multiplikator for transit-afvisning (% af beregnet "
+"belastning)."
+
+msgid "Load threshold where probabilistic request throttling starts (%)."
+msgstr ""
+"Belastnings-grænseværdi hvor sandsynligheds-request-knusning starter (%)."
+
+msgid "Steepness of the request throttling probability curve."
+msgstr "Stejlhed af request-knusnings-sandsynlighedskurven."
+
+msgid "Load score multiplier for request throttling (% of computed load)."
+msgstr ""
+"Belastnings-score-multiplikator for request-knusning (% af beregnet "
+"belastning)."
+
+msgid "RTO growth multiplier per retransmission timeout (%, 100 = flat)."
+msgstr "RTO-vækst-multiplikator pr. genoverførsels-timeout (%, 100 = flad)."
+
+msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
+msgstr ""
+"TCP-socket-forbindelses-timeout for tunnel-server-håndteringstråde (ms)."
+
+msgid "Tunnel"
+msgstr "Tunnel"
+
+msgid "Streaming"
+msgstr "Streaming"
+
+msgid "Crypto"
+msgstr "Krypto"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:340
+msgid ""
+"Auto-Tuning continuously monitors router performance and adjusts parameters "
+"to optimize throughput, reduce latency, and maintain stability."
+msgstr ""
+"Auto-Tuning overvåger konsekvent routerens ydeevne og justerer parametre for"
+" at optimere gennemstrømning, reducere ventetid og opretholde stabilitet."
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:341
+msgid ""
+"Uncheck the Auto box on any row to pin that parameter and prevent further "
+"adjustments."
+msgstr ""
+"Fjern markeringen af Auto-boksen i enhver række for at fastgøre parameteren "
+"og forhindre yderligere justeringer."
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:345
+msgid "Healthy"
+msgstr "Sund"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:347
+msgid "Fair"
+msgstr "Acceptabel"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:349
+msgid "Degraded"
+msgstr "Forringet"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:352
+msgid "Current system health:"
+msgstr "Nuværende systemtilstand:"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:355
+msgid "System health assessment is not yet available."
+msgstr "Systemtilstandsvurderingen er endnu ikke tilgængelig."
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:372
+msgid "Parameter"
+msgstr "Parameter"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:374
+msgid "Default"
+msgstr "Standard"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:377
+msgid "Step"
+msgstr "Trin"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:378
+msgid "History"
+msgstr "Historik"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:379
+msgid "Auto"
+msgstr "Auto"
+
 msgid "Exploratory"
 msgstr "Udforskende"
 
@@ -4970,7 +6043,7 @@ msgstr "I2P IRC-netværk"
 
 msgid "Proxy to connect to I2P's anonymized IRC chat network"
 msgstr ""
-"Proxy for at oprette forbindelse til I2P's anonymiserede IRC-chatnetværk"
+"Proxy for at oprette forbindelse til I2P''s anonymiserede IRC-chatnetværk"
 
 msgid "I2P webserver"
 msgstr "I2P-webserver"
@@ -5176,7 +6249,7 @@ msgid ""
 "Ban IP addresses from blocklist.txt. Disabling will purge all blocked IPs."
 msgstr ""
 "Bloker IP-adresser fra blocklist.txt. Deaktivering vil fjerne alle blokerede"
-" IP'er."
+" IP''er."
 
 msgid "Enable IP blocklist"
 msgstr "Aktivér IP-blokeringsliste"
@@ -5185,8 +6258,8 @@ msgid ""
 "Ban Tor exit node IPs from blocklist_tor.txt. Disabling will purge all "
 "blocked IPs."
 msgstr ""
-"Bloker Tor-udgangsnoders IP'er fra blocklist_tor.txt. Deaktivering vil "
-"fjerne alle blokerede IP'er."
+"Bloker Tor-udgangsnoders IP''er fra blocklist_tor.txt. Deaktivering vil "
+"fjerne alle blokerede IP''er."
 
 msgid "Enable Tor exit node blocklist"
 msgstr "Aktivér Tor-udgangsnodes blokeringsliste"
@@ -5233,12 +6306,6 @@ msgstr "Bloker peers der hurtigt ændrer deres porte"
 msgid "Ban peers attempting port hopping"
 msgstr "Bloker peers der forsøger port-hopping"
 
-msgid "Ban peers sending excessive unsolicited search replies"
-msgstr "Bloker peers der sender overdrevne uopfordrede søgesvar"
-
-msgid "Ban peers sending fake/slow search replies"
-msgstr "Bloker peers der sender falske/langsomme søgesvar"
-
 msgid "Abuse Thresholds"
 msgstr "Misbrugstærskler"
 
@@ -5284,6 +6351,29 @@ msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG"
 msgstr ""
 "Tilføj kapacitetsgrupper adskilt af mellemrum eller kommaer, f.eks. LUf,PUG"
 
+msgid "Misc Reasons"
+msgstr "Diverse årsager"
+
+msgid ""
+"Ban floodfill peers that fail to respond to queries (failure rate >95%)"
+msgstr ""
+"Bloker floodfill-peers, der ikke svarer på forespørgsler (fejlrate >95%)"
+
+msgid "Ban unresponsive floodfills"
+msgstr "Bloker uresponsible floodfills"
+
+msgid "Ban routers whose RouterInfo has no version field"
+msgstr "Bloker routere hvis RouterInfo ikke har et versionsfelt"
+
+msgid "Ban routers with no version"
+msgstr "Bloker routere uden version"
+
+msgid "Ban routers that send excessive tunnel participation requests"
+msgstr "Bloker routere, der sender overdrevne tunnel-deltagelsesforespørgsler"
+
+msgid "Ban excessive tunnel requests"
+msgstr "Bloker overdrevne tunnelforespørgsler"
+
 msgid "Clear all bans"
 msgstr "Ryd alle forbud"
 
@@ -5322,9 +6412,9 @@ msgid ""
 " tunnels' are required for most uses of I2P. Only advanced users should "
 "change these."
 msgstr ""
-"Vær forsigtig til at ændre indstillingerne her. 'Router konsol' og "
-"'applikationstunneler' er nødvendige for de fleste anvendelser af i2P . Kun "
-"avancerede brugere bør gøre sådanne ændringer."
+"Vær forsigtig til at ændre indstillingerne her. ''Router konsol'' og "
+"''applikationstunneler'' er nødvendige for de fleste anvendelser af i2P . "
+"Kun avancerede brugere bør gøre sådanne ændringer."
 
 msgid "config router family"
 msgstr "config routerfamilie"
@@ -5535,7 +6625,7 @@ msgid "Edit {0} to change"
 msgstr "Rediger {0} for at ændre"
 
 msgid "(the symbol '@' will be replaced during log rotation)"
-msgstr "(symbolet '@' vil blive skiftet ud under log rotation)"
+msgstr "(symbolet ''@'' vil blive skiftet ud under log rotation)"
 
 msgid "Log record format"
 msgstr "Log post format"
@@ -5543,7 +6633,7 @@ msgstr "Log post format"
 msgid ""
 "(use 'd' = date, 'c' = class, 't' = thread, 'p' = priority, 'm' = message)"
 msgstr ""
-"(brug 'd' = dato, 'c' = class, 't' = tråd, 'p' = prioritet, 'm' = "
+"(brug ''d'' = dato, ''c'' = class, ''t'' = tråd, ''p'' = prioritet, ''m'' = "
 "meddelelse)"
 
 msgid "Log date format"
@@ -5553,8 +6643,8 @@ msgid ""
 "('MM' = month, 'dd' = day, 'HH' = hour, 'mm' = minute, 'ss' = second, 'SSS' "
 "= millisecond)"
 msgstr ""
-"('MM' = måned, 'dd' = dag, 'HH' = time, 'mm' = minut, 'ss' = sekund, 'SSS' ="
-" milisekund)"
+"(''MM'' = måned, ''dd'' = dag, ''HH'' = time, ''mm'' = minut, ''ss'' = "
+"sekund, ''SSS'' = milisekund)"
 
 msgid "Max log file size"
 msgstr "Maksimal log fil størrelse"
@@ -5769,7 +6859,7 @@ msgid ""
 " and High Capacity tiers. Fast peers are used for client tunnels, and High "
 "Capacity peers are used for some exploratory tunnels."
 msgstr ""
-"Bonusser kan være positive eller negative og påvirke peer's optagelse i "
+"Bonusser kan være positive eller negative og påvirke peer''s optagelse i "
 "hurtige og høje kapacitetsniveauer. Hurtige kammerater bruges til "
 "klienttunneler, og kammerater med høj kapacitet bruges til nogle "
 "efterforskende tunneler."
@@ -5822,7 +6912,7 @@ msgid ""
 "To enable the configuration of reseed urls, activate the console's <a "
 "href=/help/advancedsettings>Advanced mode</a>."
 msgstr ""
-"For at aktivere konfigurationen af reseed URL'er, aktivér <a "
+"For at aktivere konfigurationen af reseed URL''er, aktivér <a "
 "href=/help/advancedsettings>Avanceret tilstand</a> i konsollen."
 
 msgid "Reseeding Configuration"
@@ -6025,6 +7115,36 @@ msgstr "Fast sidebar"
 
 msgid "Enable conditional fixed sidebar"
 msgstr "Aktivér betinget fast sidebar"
+
+msgid "Graph Options"
+msgstr "Grafindstillinger"
+
+msgid "Legacy renderer"
+msgstr "Ældre gengiver"
+
+msgid "Use RRD4J renderer"
+msgstr "Brug RRD4J-gengiver"
+
+msgid "minutes (2–30)"
+msgstr "minutter (2–30)"
+
+msgid "Split display"
+msgstr "Delt visning"
+
+msgid "Separate Inbound and Outbound"
+msgstr "Adskil indgående og udgående"
+
+msgid "Graph direction"
+msgstr "Grafretning"
+
+msgid "Left-to-right"
+msgstr "Venstre til højre"
+
+msgid "Refresh Interval"
+msgstr "Opdateringsinterval"
+
+msgid "Update graph every second"
+msgstr "Opdater graf hvert sekund"
 
 msgid "config stats"
 msgstr "konfigurations statistikker"
@@ -6340,6 +7460,24 @@ msgstr "grafer"
 msgid "Performance Graphs"
 msgstr "Præstationsgrafer"
 
+msgid "health"
+msgstr "tilstand"
+
+msgid "Router Health"
+msgstr "Ruterens tilstand"
+
+msgid "Performance & Load"
+msgstr "Ydeevne & Belastning"
+
+msgid "Transport & Connectivity"
+msgstr "Transport & Forbindelse"
+
+msgid "Network & Participation"
+msgstr "Netværk & Deltagelse"
+
+msgid "Floodfill / NetDB"
+msgstr "Floodfill / NetDB"
+
 msgid "Advanced Configuration Help - I2P+"
 msgstr "Avanceret konfigurationshjælp - I2P"
 
@@ -6417,7 +7555,7 @@ msgstr ""
 "tilgængelige i Netværksdatabasen-sektionen, herunder Sybil-analyseværktøjet,"
 " og der er yderligere konfigurationsmuligheder på "
 "klientskonfigurationssiden. Dette vil også give mulighed for installation af"
-" ikke-signerede opdateringer, manuel konfiguration af nyheds-URL'en og "
+" ikke-signerede opdateringer, manuel konfiguration af nyheds-URL''en og "
 "yderligere sektioner på sidepanelet."
 
 msgid ""
@@ -6545,6 +7683,51 @@ msgstr ""
 "sat til falsk, er konsollen tilgængelig uden login hvis ingen adgangskoder "
 "er konfigureret. [Standard er falsk, vil blive aktiveret som standard i en "
 "fremtidig udgivelse til CSRF-forsvar]"
+
+# help/advancedsettings_jsp.java:501
+msgid ""
+"When set to true, the sidebar bandwidth graph uses the legacy RRD4J SVG "
+"renderer. When set to false, the new dual-baseline canvas renderer is used, "
+"with gradient fills, glow effects, and a split inbound/outbound display. "
+"[Default is false]"
+msgstr ""
+"Når sat til true, bruger sidepanelets båndbreddegraf den ældre RRD4J SVG-"
+"gengiver. Når sat til false, bruges den nye dual-baseline canvas-gengiver "
+"med gradientfyld, glødeeffekter og en delt indgående/udgående visning. "
+"[Standard er false]"
+
+# help/advancedsettings_jsp.java:503
+msgid ""
+"The time period, in minutes, displayed in the sidebar bandwidth graph. "
+"Values outside the valid range (2–30) are clamped. [Default is 20]"
+msgstr ""
+"Tidsrummet i minutter, der vises i sidepanelets båndbreddegraf. Værdier uden"
+" for det gyldige område (2–30) begrænses. [Standard er 20]"
+
+# help/advancedsettings_jsp.java:505
+msgid ""
+"When set to true (the default), inbound and outbound traffic are displayed "
+"in a split view with a center baseline, with outbound spikes upward and "
+"inbound spikes downward. When set to false, both lines are displayed in "
+"overlay mode from the top of the graph with a configurable composite blend. "
+"[Default is true]"
+msgstr ""
+"Når sat til true (standarden), vises indgående og udgående trafik i en delt "
+"visning med en midterbaseline, med udgående toppe opad og indgående toppe "
+"nedad. Når sat til false, vises begge linjer i overlægningstilstand fra "
+"toppen af grafen med en konfigurerbar sammensat blanding. [Standard er true]"
+
+# help/advancedsettings_jsp.java:507
+msgid ""
+"Sets the render direction for the sidebar bandwidth graph. When set to rtl "
+"(the default), the graph renders right-to-left with newest data on the "
+"right. When set to ltr, the graph renders left-to-right with newest data on "
+"the left. [Default is rtl]"
+msgstr ""
+"Sætter gengivelsesretningen for sidepanelets båndbreddegraf. Når sat til rtl"
+" (standarden), gengives grafen højre til venstre med nyeste data til højre. "
+"Når sat til ltr, gengives grafen venstre til højre med nyeste data til "
+"venstre. [Standard er rtl]"
 
 msgid ""
 "This setting determines whether or not the router should use the provided "
@@ -6809,8 +7992,8 @@ msgstr ""
 "Denne indstilling bestemmer antallet af NetDb DHT-bøtter, som Peer "
 "Exploration Job vil henvise til, når den kører. Som standard vil antallet af"
 " bøtter at udforske variere afhængigt af om routeren har kørt i over en "
-"time, om routeren er skjult eller i 'K' båndbredde lag og antallet af kendte"
-" routere."
+"time, om routeren er skjult eller i ''K'' båndbredde lag og antallet af "
+"kendte routere."
 
 msgid ""
 "This setting (in seconds) allows you to override the delay between runs of "
@@ -7018,7 +8201,7 @@ msgid ""
 msgstr ""
 "Denne indstilling giver dig mulighed for at udelukke ældre routere fra dit "
 "NetDb. Routere ældre end standardværdien eller værdien, du angiver, vil "
-"blive slettet fra NetDb'en og forbudt for varigheden af router-sessionen. "
+"blive slettet fra NetDb''en og forbudt for varigheden af router-sessionen. "
 "Som standard er routere ældre end 0.9.20 ekskluderet. Bemærk: Fra I2P+ "
 "version 0.9.46+ bruges kun routere, der kører meget nye versioner, til at "
 "opbygge lokale tunneler. [Genstart påkrævet]"
@@ -7308,8 +8491,8 @@ msgid ""
 "publishes a 'D' congestion cap (moderate congestion). Higher values reduce "
 "the peer's effective capacity more aggressively. [Default is 2.5]"
 msgstr ""
-"Strafmultiplikator anvendt på en peers kapacitetsværdi når peer'en "
-"publicerer et 'D' overbelastningsloft (moderat overbelastning)... Højere "
+"Strafmultiplikator anvendt på en peers kapacitetsværdi når peer''en "
+"publicerer et ''D'' overbelastningsloft (moderat overbelastning)... Højere "
 "værdier reducerer peerens effektive kapacitet mere aggressivt [Default is 2 "
 "5]. Højere værdier reducerer peerens effektive kapacitet mere aggressivt "
 "[Default is 2 5]. Højere værdier reducerer peers effektive kapacitet mere "
@@ -7319,9 +8502,9 @@ msgid ""
 "Penalty multiplier applied to a peer's capacity value when the peer "
 "publishes an 'E' congestion cap (severe congestion). [Default is 4.75]"
 msgstr ""
-"Strafmultiplikator anvendt på en peers kapacitetsværdi når peer'en "
-"publicerer et 'E' overbelastningsloft (svær overbelastning)... [Standard er "
-"4 75]. [Standard er 4 75]. [Standard er 4 75]"
+"Strafmultiplikator anvendt på en peers kapacitetsværdi når peer''en "
+"publicerer et ''E'' overbelastningsloft (svær overbelastning)... [Standard "
+"er 4 75]. [Standard er 4 75]. [Standard er 4 75]"
 
 msgid ""
 "Time in milliseconds before expiration when pruned tunnels are marked for "
@@ -7589,11 +8772,11 @@ msgid ""
 "or 'diversity' (lower cooldowns, explores broader peer set). Changes apply "
 "dynamically. [Default is 'default']"
 msgstr ""
-"Klientpeer-udvælgelsesstrategi: 'default' (afbalanceret, foretrukket), "
-"'reliability' (prioriter dokumenterede peers med høj tunnelsucces)... "
-"Ændringer anvendes dynamisk [Default is 'default']. Ændringer anvendes "
-"dynamisk [Default is 'default']. Ændringer gælder dynamisk [Standard er "
-"'standard']"
+"Klientpeer-udvælgelsesstrategi: ''default'' (afbalanceret, foretrukket), "
+"''reliability'' (prioriter dokumenterede peers med høj tunnelsucces)... "
+"Ændringer anvendes dynamisk [Default is ''default'']. Ændringer anvendes "
+"dynamisk [Default is ''default'']. Ændringer gælder dynamisk [Standard er "
+"''standard'']"
 
 msgid ""
 "Tunnel lifetime in milliseconds. Tunnels expire after this period and are "
@@ -7864,8 +9047,8 @@ msgid ""
 "server accept queue. Larger values buffer more incoming connections at the "
 "cost of memory. [Default is 80 (48 on slow systems)]"
 msgstr ""
-"Maksimum antal ventende forbindelser (SYN'er og delvise pakker) i serverens "
-"acceptkø. Større værdier buffer flere indgående forbindelser. [Standard er "
+"Maksimum antal ventende forbindelser (SYN''er og delvise pakker) i serverens"
+" acceptkø. Større værdier buffer flere indgående forbindelser. [Standard er "
 "200]"
 
 msgid ""
@@ -7929,8 +9112,8 @@ msgid ""
 "Note: do not install unsigned updates unless you trust the source of the "
 "update!"
 msgstr ""
-"Denne indstilling giver dig mulighed for at konfigurere opdaterings-URL'en "
-"til den ikke-signerede opdateringsfunktion, hvis den er aktiveret. URL'en "
+"Denne indstilling giver dig mulighed for at konfigurere opdaterings-URL''en "
+"til den ikke-signerede opdateringsfunktion, hvis den er aktiveret. URL''en "
 "skal slutte med <code>/i2pupdate.zip</code>. Bemærk: Installer ikke ikke "
 "signerede opdateringer, medmindre du har tillid til opdateringskilden!"
 
@@ -8369,7 +9552,7 @@ msgstr ""
 "Tryk på knappen <i>OK</i> og test om proxyen virker ved at besøge <a "
 "href=http://planeta.i2p/ target=_blank rel=noreferrer "
 "class=sitelink>planeta.i2p</a> og <a href=https://www.myip.com/ "
-"target=_blank rel=noreferrer class='sitelink external'>www.myip.com</a>."
+"target=_blank rel=noreferrer class=''sitelink external''>www.myip.com</a>."
 
 msgid ""
 "Note: To enhance your security when browsing .i2p sites, you may wish to "
@@ -8386,13 +9569,13 @@ msgstr ""
 "Bemærk: For at forbedre din sikkerhed, når du browser .i2p-websteder, kan du"
 " overveje at installere en tilføjelse, der forhindrer JavaScript i at køre i"
 " browseren, som f.eks. <a href=https://addons.mozilla.org/en-"
-"US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink "
-"external'>NoScript</a>, selvom det anbefales at tilføje adressen I2P+ kører "
-"på til hvidlisten for at aktivere forskellige router konsol-udvidelser. "
+"US/firefox/addon/noscript/ target=_blank rel=noreferrer class=''sitelink "
+"external''>NoScript</a>, selvom det anbefales at tilføje adressen I2P+ kører"
+" på til hvidlisten for at aktivere forskellige router konsol-udvidelser. "
 "Derudover anbefales det også at installere en tilføjelse, der forhindrer "
 "anmodninger til ressourcer fra andre websteder, f.eks. <a "
 "href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank "
-"rel=noreferrer class='sitelink external'>uMatrix</a>."
+"rel=noreferrer class=''sitelink external''>uMatrix</a>."
 
 msgid ""
 "For a more extensive guide to configuration for various browsers, see the <a"
@@ -8401,8 +9584,8 @@ msgid ""
 msgstr ""
 "For en mere omfattende vejledning til konfiguration af forskellige browsere,"
 " se <a href=https://geti2p.net/en/about/browser-config target=_blank "
-"rel=noreferrer class='sitelink "
-"external'>browserkonfigurationsvejledningen</a>."
+"rel=noreferrer class=''sitelink "
+"external''>browserkonfigurationsvejledningen</a>."
 
 msgid "The Tunnel Manager"
 msgstr "Tunneladministrator"
@@ -8480,7 +9663,7 @@ msgid ""
 msgstr ""
 "Dette er en forkortet version af den officielle FAQ. For den fulde version, "
 "besøg venligst <a href=https://geti2p.net/faq target=_blank rel=noreferrer "
-"class='sitelink external'>https://geti2p.net/faq</a> eller <a "
+"class=''sitelink external''>https://geti2p.net/faq</a> eller <a "
 "href=http://i2p-projekt.i2p/faq target=_blank rel=noreferrer "
 "class=sitelink>http://i2p-projekt.i2p/faq</a>."
 
@@ -8556,7 +9739,7 @@ msgid ""
 "configuration will take precedence over those placed further down."
 msgstr ""
 "Her er nogle andre offentlige adressebogsabonnementlinks. Du kan ønske at "
-"tilføje et eller to til din <a href='/dns?subscriptions' target=_blank "
+"tilføje et eller to til din <a href=''/dns?subscriptions'' target=_blank "
 "rel=noreferrer>susidns abonnementsliste</a>. Hvis adresser i abonnementerne "
 "er i konflikt, vil listerne placeret øverst i din susidns-konfiguration "
 "blive prioriteret over dem, der er placeret længere nede."
@@ -8593,7 +9776,7 @@ msgstr ""
 "kører i øjeblikket kun tre typer udproxies: HTTP, HTTPS og e-mail. Bemærk, "
 "at der i øjeblikket ikke findes en offentligt opført SOCKS-udproxy. Hvis "
 "denne type service er påkrævet, så prøv <a href=https://torproject.org/ "
-"target=_blank rel=noreferrer class='sitelink external'>Tor</a>."
+"target=_blank rel=noreferrer class=''sitelink external''>Tor</a>."
 
 msgid "Can I download torrents from non-I2P trackers?"
 msgstr "Kan jeg downloade torrents fra ikke-I2P trackere?"
@@ -8611,12 +9794,12 @@ msgid ""
 "torrent link, magnet or infohash to your I2P-enabled BitTorrent client."
 msgstr ""
 "Indtil introduktionen af I2P integrationen i <a href=http://www.vuze.com/ "
-"target=_blank rel=noreferrer class='sitelink external'>Vuze</a>, var det "
+"target=_blank rel=noreferrer class=''sitelink external''>Vuze</a>, var det "
 "ikke muligt at downloade torrents, der ikke var hostet på I2P-netværket. Men"
 " nu hvor Vuze (og senest <a href=https://www.biglybt.com/ target=_blank "
-"rel=noreferrer class='sitelink external'>Bigly</a>) tillader brugere at dele"
-" ikke-I2P torrents på I2P, kan ikke-I2P torrents downloades via I2P, hvis "
-"Vuze/Bigly brugere har valgt at gøre indholdet tilgængeligt for "
+"rel=noreferrer class=''sitelink external''>Bigly</a>) tillader brugere at "
+"dele ikke-I2P torrents på I2P, kan ikke-I2P torrents downloades via I2P, "
+"hvis Vuze/Bigly brugere har valgt at gøre indholdet tilgængeligt for "
 "I2P-netværket. Populære torrents med et stort antal brugere er mere "
 "tilgængelige via I2P; for at afgøre om indholdet er tilgængeligt, tilføj "
 "torrent-linket, magneten eller infohashen til din I2P-aktiverede BitTorrent-"
@@ -8667,7 +9850,7 @@ msgstr ""
 "Du skal konfigurere din browser til at bruge HTTP-proxyserveren (som "
 "standard på vært: <code>127.0.0.1</code> port: <code>4444</code>). Se <a "
 "href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer"
-" class='sitelink external'>Vejledning til browsers proxykonfiguration</a> "
+" class=''sitelink external''>Vejledning til browsers proxykonfiguration</a> "
 "for en mere detaljeret forklaring."
 
 msgid "What is an eepsite?"
@@ -8682,8 +9865,8 @@ msgid ""
 "configured to resolve DNS remotely when using the proxy to avoid DNS leaks."
 msgstr ""
 "En eepsite er en hjemmeside, der er vært anonymt på I2P-netværket - du kan "
-"få adgang til den ved at konfigurere din webbrowser til at bruge I2P's HTTP-"
-"proxy (se ovenfor) og browse til den <code>.i2p</code> suffikserede "
+"få adgang til den ved at konfigurere din webbrowser til at bruge I2P''s "
+"HTTP-proxy (se ovenfor) og browse til den <code>.i2p</code> suffikserede "
 "hjemmeside (f.eks. <a href=http://i2p-projekt.i2p/ target=_blank "
 "rel=noreferrer class=sitelink>http://i2p-projekt.i2p</a>). Sørg også for, at"
 " din browser er konfigureret til at løse DNS eksternt, når du bruger proxyen"
@@ -8782,7 +9965,7 @@ msgid ""
 " by</i> dropdown."
 msgstr ""
 "For de fleste klienttjenester, ændr lytteadressen for den relevante tjeneste"
-" i Tunnel Manager's konfigurationssektion ved hjælp af <i>reachable by</i> "
+" i Tunnel Manager''s konfigurationssektion ved hjælp af <i>reachable by</i> "
 "dropdown."
 
 msgid "How do I connect to IRC within I2P?"
@@ -9028,7 +10211,7 @@ msgstr ""
 "Udgående kun til 32000, lytter ikke på denne port. Starter ved 31000 og vil "
 "øge indtil 31999 på udkig efter en ledig port. For at ændre, se <a "
 "href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html "
-"target=_blank rel=noreferrer class='sitelink external'>wrapper-"
+"target=_blank rel=noreferrer class=''sitelink external''>wrapper-"
 "dokumentationen</a>."
 
 msgid "Local control channel for the service wrapper"
@@ -9042,7 +10225,7 @@ msgid ""
 msgstr ""
 "For at ændre, se <a "
 "href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html "
-"target=_blank rel=noreferrer class='sitelink external'>wrapper-"
+"target=_blank rel=noreferrer class=''sitelink external''>wrapper-"
 "dokumentationen</a>."
 
 msgid "INTERNET FACING PORTS"
@@ -9100,7 +10283,7 @@ msgid ""
 "<code>pool.ntp.org</code> or <a "
 "href=/help/advancedsettings#ntpserverconfig>another server you specify</a>)."
 msgstr ""
-"Udgående UDP på port 123, der tillader svar: dette er nødvendigt for I2P's "
+"Udgående UDP på port 123, der tillader svar: dette er nødvendigt for I2P''s "
 "interne tidsynkronisering (via SNTP - forespørgsel mod en tilfældig SNTP-"
 "vært i <code>pool.ntp.org</code> eller <a "
 "href=/help/advancedsettings#ntpserverconfig>en anden server du "
@@ -9121,7 +10304,7 @@ msgstr ""
 " dermap B64 hash til menneskelæselige navne. Destinationer kan tilføjes "
 "manuelt eller via abonnementer på hosts.txt filer. Også kendt som DNS. For "
 "mere information, se <a href=https://geti2p.net/en/docs/naming "
-"class='sitelink external' target=_blank rel=noreferrer>den online "
+"class=''sitelink external'' target=_blank rel=noreferrer>den online "
 "dokumentation</a>."
 
 msgid "Base32 (B32) / Base64 (B64)"
@@ -9135,10 +10318,10 @@ msgid ""
 "destination. For services on the network, the Base64 hash is often mapped to"
 " an .i2p domain in the addressbook."
 msgstr ""
-"Et <a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' "
+"Et <a href=https://en.wikipedia.org/wiki/Base32 class=''sitelink external'' "
 "target=_blank rel=noreferrer>Base32</a> link (som altid slutter med "
 ".b32.i2p) er en hash af en <a href=https://en.wikipedia.org/wiki/Base64 "
-"class='sitelink external' target=_blank rel=noreferrer>Base64</a> "
+"class=''sitelink external'' target=_blank rel=noreferrer>Base64</a> "
 "destination. For services på netværket, bliver Base64 hashen ofte mapped til"
 " et .i2p-domæne i adresserbogen."
 
@@ -9157,7 +10340,7 @@ msgstr ""
 "en b33 adresse, en udvidelse af en base32 adresse med værtens offentlige "
 "nøgle og signaturtype kodet ind i adressen i stedet for en opslagshash. "
 "Denne adressetype er påkrævet for slørede Leasesets. Mere information: <a "
-"href=https://geti2p.net/spec/b32encrypted class='sitelink external' "
+"href=https://geti2p.net/spec/b32encrypted class=''sitelink external'' "
 "target=_blank rel=noreferrer>B33 specifikation</a>"
 
 msgid "BOB"
@@ -9171,7 +10354,7 @@ msgid ""
 msgstr ""
 "BOB (Basic Open Bridge) er en (nu forældet) simpel applikation-til-router "
 "protokol, der er erstattet af <i>SAM</i>. For mere information, se <a "
-"href=https://geti2p.net/en/docs/api/bob class='sitelink external' "
+"href=https://geti2p.net/en/docs/api/bob class=''sitelink external'' "
 "target=_blank rel=noreferrer>online dokumentationen</a>."
 
 msgid "Clearnet"
@@ -9187,8 +10370,8 @@ msgstr ""
 "Normalt refererer Clearnet til den offentligt tilgængelige internet, det "
 "modsatte af darknet, som typisk beskriver de krypterede, anonyme tjenester, "
 "der er opbygget på I2P, Tor osv. For mere information, se <a "
-"href=https://en.wikipedia.org/wiki/Clearnet_(networking) class='sitelink "
-"external' target=_blank rel=noreferrer>Wikipedia-artiklen</a>."
+"href=https://en.wikipedia.org/wiki/Clearnet_(networking) class=''sitelink "
+"external'' target=_blank rel=noreferrer>Wikipedia-artiklen</a>."
 
 msgid ""
 "The unique cryptographic identity of the inbound endpoint of a tunnel "
@@ -9214,8 +10397,8 @@ msgid ""
 msgstr ""
 "En kommandolinje-applikation, som medfølger I2P, der bruges til at anmode om"
 " URL-ressourcer, lignende <a href=https://www.gnu.org/software/wget/ "
-"class='sitelink external' target=_blank rel=noreferrer>wget</a> eller <a "
-"href=https://curl.haxx.se/ class='sitelink external' target=_blank "
+"class=''sitelink external'' target=_blank rel=noreferrer>wget</a> eller <a "
+"href=https://curl.haxx.se/ class=''sitelink external'' target=_blank "
 "rel=noreferrer>curl</a>. Eepget bruges også internt af routeren, f.eks. til "
 "at omplante fra eksterne kilder. Som standard bruger eepget HTTP-proxyen på "
 "<code>127.0.0.1:4444</code>."
@@ -9246,7 +10429,7 @@ msgid ""
 "rel=noreferrer>http://127.0.0.1:7658/</a>."
 msgstr ""
 "En hjemmeside, der er hostet på I2P-netværket. Som standard er en <a "
-"href=https://www.eclipse.org/jetty/about.html class='sitelink external' "
+"href=https://www.eclipse.org/jetty/about.html class=''sitelink external'' "
 "target=_blank rel=noreferrer>Jetty-webserver</a> konfigureret og kører på <a"
 " href=http://127.0.0.1:7658/ target=_blank "
 "rel=noreferrer>http://127.0.0.1:7658/</a>."
@@ -9283,7 +10466,7 @@ msgstr ""
 "overskrive denne krav og tvinge en router til at være en floodfill på <a "
 "href = /configadvanced>Avanceret konfigurationsside</a>. For mere "
 "information, se <a href=https://geti2p.net/en/docs/how/network-"
-"database#floodfill class='sitelink external' target=_blank "
+"database#floodfill class=''sitelink external'' target=_blank "
 "rel=noreferrer>den online dokumentation</a>."
 
 msgid "Garlic Routing"
@@ -9299,8 +10482,8 @@ msgstr ""
 "En variant af løg-routing, der krypterer flere beskeder sammen for at gøre "
 "det sværere for angribere at udføre trafikanalyse og for at øge hastigheden "
 "på datatransmissionen. For mere information, se <a "
-"href=https://geti2p.net/en/docs/how/garlic-routing class='sitelink external'"
-" target=_blank rel=noreferrer>den online dokumentation</a>."
+"href=https://geti2p.net/en/docs/how/garlic-routing class=''sitelink "
+"external'' target=_blank rel=noreferrer>den online dokumentation</a>."
 
 msgid "Hidden Mode"
 msgstr "Skjult tilstand"
@@ -9326,7 +10509,7 @@ msgstr ""
 "I2P Client Protocol (I2CP) giver eksterne applikationer (klienter) mulighed "
 "for at kommunikere med I2P via en enkelt TCP-socket, som standard ved brug "
 "af port 7654. For mere information, se <a "
-"href=https://geti2p.net/en/docs/protocol/i2cp class='sitelink external' "
+"href=https://geti2p.net/en/docs/protocol/i2cp class=''sitelink external'' "
 "target=_blank rel=noreferrer>online dokumentationen</a>."
 
 msgid "I2NP"
@@ -9342,7 +10525,7 @@ msgstr ""
 "I2P Network Protocol (I2NP) administrerer routing og blanding af beskeder "
 "mellem routere samt valg af transport (hvor mere end én er understøttet), "
 "når der kommunikeres med en peer. For mere information, se <a "
-"href=https://geti2p.net/en/docs/protocol/i2np class='sitelink external' "
+"href=https://geti2p.net/en/docs/protocol/i2np class=''sitelink external'' "
 "target=_blank rel=noreferrer>online dokumentationen</a>."
 
 msgid "I2P+"
@@ -9360,7 +10543,7 @@ msgstr ""
 "giver en forbedret brugergrænseflade og forbedringer af netværksydeevnen. Se"
 " <a href=http://skank.i2p/ class=sitelink target=_blank "
 "rel=noreferrer>http://skank.i2p/</a> eller <a href=https://i2pplus.github.io"
-" class='sitelink external' target=_blank "
+" class=''sitelink external'' target=_blank "
 "rel=noreferrer>https://i2pplus.github.io</a> for mere information."
 
 msgid "I2PBote (plugin)"
@@ -9378,7 +10561,7 @@ msgstr ""
 " e-mail inden for I2P-netværket. For mere information, se <a "
 "href=http://bote.i2p/ class=sitelink target=_blank "
 "rel=noreferrer>http://bote.i2p/</a>. Kildekoden er tilgængelig på <a "
-"href=https://github.com/i2p/i2p.i2p-bote class='sitelink external' "
+"href=https://github.com/i2p/i2p.i2p-bote class=''sitelink external'' "
 "target=_blank rel=noreferrer>github</a>."
 
 msgid "i2pd"
@@ -9392,10 +10575,10 @@ msgid ""
 "external' target=_blank rel=noreferrer>github</a>."
 msgstr ""
 "En alternativ implementering af en I2P-router kodet i C++. For mere "
-"information, se <a href=https://i2pd.website/ class='sitelink external' "
+"information, se <a href=https://i2pd.website/ class=''sitelink external'' "
 "target=_blank rel=noreferrer>https://i2pd.website/</a>. Kildekoden er "
-"tilgængelig på <a href=https://github.com/PurpleI2P/i2pd class='sitelink "
-"external' target=_blank rel=noreferrer>github</a>."
+"tilgængelig på <a href=https://github.com/PurpleI2P/i2pd class=''sitelink "
+"external'' target=_blank rel=noreferrer>github</a>."
 
 msgid ""
 "A fork of the <a href=http://www.klomp.org/snark/ class='sitelink external' "
@@ -9405,8 +10588,8 @@ msgid ""
 "href=http://skank.i2p/#download class=sitelink target=_blank "
 "rel=noreferrer>standalone Java application</a>."
 msgstr ""
-"En forgænger af <a href=http://www.klomp.org/snark/ class='sitelink "
-"external' target=_blank rel=noreferrer>Snark BitTorrent-klienten</a> "
+"En forgænger af <a href=http://www.klomp.org/snark/ class=''sitelink "
+"external'' target=_blank rel=noreferrer>Snark BitTorrent-klienten</a> "
 "omskrevet til brug på I2P-netværket. Normalt leveres som en del af "
 "standardapplikationssuiten med Java I2P og kan også fås som en <a "
 "href=http://skank.i2p/#download class=sitelink target=_blank "
@@ -9437,7 +10620,7 @@ msgstr ""
 "returnerer en 301-omdirigering til den korrekte URL med en "
 "<code>?i2paddresshelper=key></code> streng vedhæftet. HTTP-proxyen vil tolke"
 " den vedhæftede streng og bruge nøglen som det faktiske bestemmelsessted. "
-"Desuden vil proxy'en cachelagre nøglen, så adressenhjælperen ikke er "
+"Desuden vil proxy''en cachelagre nøglen, så adressenhjælperen ikke er "
 "nødvendig, indtil den genstartes, og den vil tilbyde muligheden for at "
 "tilføje den løste adresse til adressebogen."
 
@@ -9488,7 +10671,7 @@ msgid ""
 "I2P's source code, now superseded by git."
 msgstr ""
 "Den distribuerede versionskontrol (DVCS), der tidligere blev brugt til at "
-"vedligeholde I2P's kildekode, er nu erstattet af git."
+"vedligeholde I2P''s kildekode, er nu erstattet af git."
 
 msgid "Multihoming"
 msgstr "Mangehomed"
@@ -9526,8 +10709,8 @@ msgstr ""
 "routere. RouterInfos gemmes på disken og læses ind i hukommelsen, når "
 "routeren starter, eller når der erhverves nye RouterInfos. Også kendt som "
 "<i>NetDb</i>. For mere information, se <a "
-"href=https://geti2p.net/en/docs/how/network-database class='sitelink "
-"external' target=_blank rel=noreferrer>online-dokumentationen</a>."
+"href=https://geti2p.net/en/docs/how/network-database class=''sitelink "
+"external'' target=_blank rel=noreferrer>online-dokumentationen</a>."
 
 msgid "NTCP / NTCP2"
 msgstr "NTCP/NTCP2"
@@ -9545,7 +10728,7 @@ msgstr ""
 " mellem routere på netværket. NTCP2 forbedrer modstanden af NTCP mod "
 "forskellige angreb og automatiske trafikidentifikationsmetoder. For mere "
 "information, se <a href=https://geti2p.net/en/docs/transport/ntcp "
-"class='sitelink external' target=_blank "
+"class=''sitelink external'' target=_blank "
 "rel=noreferrer>onlinedokumentationen</a>."
 
 msgid "Orchid (plugin)"
@@ -9565,8 +10748,8 @@ msgstr ""
 " SOCKS- eller HTTP-klienttunnel i <i>Tunnel Manager</i>. Tilgængelig fra <a "
 "href=http://stats.i2p/i2p/plugins "
 "class=sitelink>http://stats.i2p/i2p/plugins</a>. Kildekode er tilgængelig på"
-" <a href=https://github.com/i2p/i2p.plugins.orchid class='sitelink external'"
-" target=_blank rel=noreferrer>github</a>."
+" <a href=https://github.com/i2p/i2p.plugins.orchid class=''sitelink "
+"external'' target=_blank rel=noreferrer>github</a>."
 
 msgid "Outproxy"
 msgstr "Udproxy"
@@ -9650,7 +10833,7 @@ msgstr ""
 "klientapplikation, der er skrevet i et hvilket som helst "
 "programmeringssprog, mulighed for at kommunikere over I2P ved at bruge en "
 "socket-baseret grænseflade til I2P-routere. For mere information, se <a "
-"href=https://geti2p.net/en/docs/api/samv3 class='sitelink external' "
+"href=https://geti2p.net/en/docs/api/samv3 class=''sitelink external'' "
 "target=_blank rel=noreferrer>online-dokumentationen</a>."
 
 msgid "Shared Client"
@@ -9681,7 +10864,7 @@ msgstr ""
 "SSU (Secure Semi-reliable UDP) er en I2P-netværkstransport, der giver "
 "krypterede, forbindelsesorienterede, punkt-til-punkt-forbindelser samt IP-"
 "adresse-detektion og NAT-traversal-tjenester. For mere information, se <a "
-"href=https://geti2p.net/en/docs/transport/ssu class='sitelink external' "
+"href=https://geti2p.net/en/docs/transport/ssu class=''sitelink external'' "
 "target=_blank rel=noreferrer>online-dokumentationen</a>."
 
 msgid "Strict Countries"
@@ -9704,7 +10887,7 @@ msgid ""
 msgstr ""
 "En liste over lande afledt fra <a "
 "href=https://freedomhouse.org/report/countries-world-freedom-2019 "
-"class='sitelink external' target=_blank rel=noreferrer>World Freedom "
+"class=''sitelink external'' target=_blank rel=noreferrer>World Freedom "
 "Report</a> med et dårligt ry for borgerlige rettigheder. Denne liste bruges "
 "til at placere routere, der kører i de specifikke lande, i <i>Hidden "
 "Mode</i> for at give øget sikkerhed for brugerne. Følgende lande betegnes "
@@ -9716,19 +10899,16 @@ msgstr ""
 "Tajikistan, Thailand, Turkey, Turkmenistan, Venezuela, United Arab Emirates,"
 " Uzbekistan, Western Sahara, Yemen."
 
-msgid "Tunnel"
-msgstr "Tunnel"
-
 msgid ""
 "A <a href=https://geti2p.net/en/docs/tunnels/unidirectional class='sitelink "
 "external' target=_blank rel=noreferrer>unidirectional</a> encrypted "
 "communication pathway between a client or server on the I2P network. Similar"
 " to a circuit in Tor, except that Tor circuits are bidirectional."
 msgstr ""
-"En <a href=https://geti2p.net/en/docs/tunnels/unidirectional class='sitelink"
-" external' target=_blank rel=noreferrer>unidirektionel</a> krypteret "
-"kommunikationsvej mellem en klient eller server på I2P-netværket. Lignende "
-"en kreds i Tor, bortset fra at Tor-kredse er tovejs."
+"En <a href=https://geti2p.net/en/docs/tunnels/unidirectional "
+"class=''sitelink external'' target=_blank rel=noreferrer>unidirektionel</a> "
+"krypteret kommunikationsvej mellem en klient eller server på I2P-netværket. "
+"Lignende en kreds i Tor, bortset fra at Tor-kredse er tovejs."
 
 msgid "Tunnel Endpoint"
 msgstr "Tunnelefterapejdsested"
@@ -9740,7 +10920,7 @@ msgid ""
 "final router in the chain that connects to the destination server."
 msgstr ""
 "Den sidste router i en tunnel, som kan være <i>Outbound Endpoint</i>, hvor "
-"klientens tunneler mødes med destinationsserverens tunneler's <i>Inbound "
+"klientens tunneler mødes med destinationsserverens tunneler''s <i>Inbound "
 "Gateway</i>, eller <i>Inbound Endpoint</i> som er den endelige router i "
 "kæden, der forbinder til destinations serveren."
 
@@ -9785,12 +10965,12 @@ msgid ""
 "target=_blank rel=noreferrer>github</a>."
 msgstr ""
 "En Java I2P plugin implementering af en BitTorrent <a "
-"href=https://en.wikipedia.org/wiki/Opentracker class='sitelink external' "
+"href=https://en.wikipedia.org/wiki/Opentracker class=''sitelink external'' "
 "target=_blank rel=noreferrer>Open Tracker</a>. Tilgængelig fra <a "
 "href=http://stats.i2p/i2p/plugins "
 "class=sitelink>http://stats.i2p/i2p/plugins</a>. Kildekoden er tilgængelig "
-"på <a href=https://github.com/i2p/i2p.plugins.zzzot class='sitelink "
-"external' target=_blank rel=noreferrer>github</a>."
+"på <a href=https://github.com/i2p/i2p.plugins.zzzot class=''sitelink "
+"external'' target=_blank rel=noreferrer>github</a>."
 
 msgid "Web Hosting - I2P+"
 msgstr "Webhosting - I2P+"
@@ -9820,7 +11000,7 @@ msgstr ""
 "registreringssider vil kræve den <i>B64-destination-adresse</i> for "
 "tunnel/service, som du ønsker at forbinde med et værtsnavn, og som du skal "
 "kopiere fra afsnittet <i>Lokal destination</i> på <a "
-"href='http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3'>Tunnel Manager "
+"href=''http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3''>Tunnel Manager "
 "Configuration page</a>."
 
 msgid ""
@@ -9835,9 +11015,9 @@ msgid ""
 msgstr ""
 "Hvis en <i>Registreringsgodkendelse</i> forespørgsel anmodes, kan du finde "
 "den på <a "
-"href='http://127.0.0.1:7657/i2ptunnel/register?tunnel=3'>Registreringsgodkendelsessiden</a>"
+"href=''http://127.0.0.1:7657/i2ptunnel/register?tunnel=3''>Registreringsgodkendelsessiden</a>"
 " som er linket fra <a "
-"href='http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3'>Tunnel Manager "
+"href=''http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3''>Tunnel Manager "
 "Configuration page</a>. Registreringsgodkendelse sikrer, at kun ejeren kan "
 "registrere eller på anden måde administrere værtsnavnet, og dette er "
 "påkrævet på stats.i2p og reg.i2p."
@@ -9867,9 +11047,9 @@ msgid ""
 msgstr ""
 "Alternativt kan du kopiere <i>address helper link</i> for dit domæne, "
 "angivet enten på adressebogslistesiden, eller på detaljesiden for dit domæne"
-" f.eks. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank"
-" rel=noreferrer>detaljer for skank.i2p</a>, og indsætte linket hvor det er "
-"krævet for at dele det med andre."
+" f.eks. <a href=''/dns?details&amp;h=skank.i2p&amp;book=router'' "
+"target=_blank rel=noreferrer>detaljer for skank.i2p</a>, og indsætte linket "
+"hvor det er krævet for at dele det med andre."
 
 msgid "Backup your private key!"
 msgstr "Backup din private nøgle!"
@@ -9999,8 +11179,8 @@ msgid ""
 "The returned token must be included in either the 'Token' parameter or as an"
 " 'X-Auth-Token' HTTP header in all subsequent API calls."
 msgstr ""
-"Den returnerede token skal inkluderes enten i 'Token' parameteren eller som "
-"en 'X-Auth-Token' HTTP-header i alle efterfølgende API-kald."
+"Den returnerede token skal inkluderes enten i ''Token'' parameteren eller "
+"som en ''X-Auth-Token'' HTTP-header i alle efterfølgende API-kald."
 
 msgid ""
 "API Version: 1. Clients must specify API version 1 in authentication "
@@ -10356,13 +11536,13 @@ msgid ""
 "The version of the I2PControl API used wasn't specified, but is required to "
 "be specified"
 msgstr ""
-"Versionen af I2PControl API'en der blev brugt blev ikke angivet, men det er "
-"påkrævet at angive den"
+"Versionen af I2PControl API''en der blev brugt blev ikke angivet, men det er"
+" påkrævet at angive den"
 
 msgid ""
 "The version of the I2PControl API specified is not supported by I2PControl"
 msgstr ""
-"Versionen af I2PControl API'en der blev angivet er ikke understøttet af "
+"Versionen af I2PControl API''en der blev angivet er ikke understøttet af "
 "I2PControl"
 
 msgid "Rate Statistics"
@@ -10597,8 +11777,8 @@ msgid ""
 "using the URL you received."
 msgstr ""
 "Hvis du kender og stoler på nogen, der offentliggør genstod filer, skal du "
-"bede dem om URL'en. Klik derefter på <i>-knappen fra URL</i> på knappen {0} "
-"til genindlæg ved hjælp af den URL, du har modtaget."
+"bede dem om URL''en. Klik derefter på <i>-knappen fra URL</i> på knappen {0}"
+" til genindlæg ved hjælp af den URL, du har modtaget."
 
 msgid "How do I reseed manually?"
 msgstr "Hvordan genbesår jeg manuelt?"
@@ -10615,8 +11795,8 @@ msgstr ""
 "sig til netværket første gang. Hvis routeren imidlertid har kørt i længere "
 "tid uden netværksforbindelse, kan det også være nødvendigt at genbeså den. "
 "Genbesål involverer hentning af flere \"RouterInfo\"-filer (pakket ind i en "
-"signeret zip-fil) fra mindst to foruddefinerede server-URL'er, der er valgt "
-"fra en frivillig gruppe af clearnet HTTPS-servere."
+"signeret zip-fil) fra mindst to foruddefinerede server-URL''er, der er valgt"
+" fra en frivillig gruppe af clearnet HTTPS-servere."
 
 msgid ""
 "If the number of known peers drops below 50, I2P will attempt to reseed "
@@ -10824,7 +12004,7 @@ msgstr ""
 "href=http://i2p-projekt.i2p/udp.html target=_blank rel=noreferrer "
 "class=sitelink>SSU IP-adresse registrering</a> (<a "
 "href=https://wikipedia.org/wiki/Hole_punching target=_blank rel=noreferrer "
-"class='sitelink external'>firewall hole punching</a>) for at forbinde dig "
+"class=''sitelink external''>firewall hole punching</a>) for at forbinde dig "
 "til netværket, og din netværksstatus i sidepanelet vil angive \"Status: "
 "Firewalled\". For optimal ydeevne skal du sikre dig, at I2Ps <a "
 "href=/confignet#udpconfig>eksterne port</a> er synlig fra internettet (se "
@@ -10849,7 +12029,7 @@ msgstr ""
 "proxy er indstillet til at få adgang til http-trafik (<i>ikke</i> https, "
 "<i>ikke</i> socks) via <code>127.0.0.1 port 4444</code>. Hvis du har brug "
 "for hjælp, er der <a href=https://geti2p.net/en/about/browser-config "
-"target=_blank rel=noreferrer class='sitelink external'>en guide</a> til "
+"target=_blank rel=noreferrer class=''sitelink external''>en guide</a> til "
 "konfiguration af din browser til brug af I2P."
 
 msgid "Check Your Logs"
@@ -10865,8 +12045,9 @@ msgstr ""
 "<a href=/logs>Logs</a> kan hjælpe med at løse et problem. Du kan indsætte "
 "uddrag i et <a href=http://i2pforum.i2p/ target=_blank "
 "rel=noreferrer>forum</a> for hjælp, eller måske <a "
-"href=http://cake.i2p/pastebin/ target=_blank rel=noreferrer class='sitelink "
-"external'>indsætte</a> det i stedet og henvise til linket på IRC for hjælp."
+"href=http://cake.i2p/pastebin/ target=_blank rel=noreferrer class=''sitelink"
+" external''>indsætte</a> det i stedet og henvise til linket på IRC for "
+"hjælp."
 
 msgid "Verify Java is Up to Date"
 msgstr "Tjek om Java er opdateret"
@@ -10939,11 +12120,11 @@ msgid ""
 "an http or socks proxy [patches welcome!], though you can connect to proxies"
 " via I2P itself once connected to the network."
 msgstr ""
-"Åbn <a href=/confignet#udpconfig>I2P+'s port</a> på din modem, router "
+"Åbn <a href=/confignet#udpconfig>I2P+''s port</a> på din modem, router "
 "og/eller firewall(er) for en bedre forbindelse (ideelt set både UDP og TCP)."
 " Du kan finde flere oplysninger om, hvordan du gør portforwarding, på <a "
-"href=http://portforward.com/ target=_blank rel=noreferrer class='sitelink "
-"external'>portforward.com</a>, udover vores forum og IRC kanaler, der er "
+"href=http://portforward.com/ target=_blank rel=noreferrer class=''sitelink "
+"external''>portforward.com</a>, udover vores forum og IRC kanaler, der er "
 "angivet nedenfor. Bemærk, at I2P ikke understøtter forbindelse til "
 "internettet via en http eller socks proxy [patches velkomne!], men du kan "
 "oprette forbindelse til proxies via I2P selv, når du er tilsluttet "
@@ -10963,10 +12144,10 @@ msgid ""
 msgstr ""
 "Du kan også ønske at gennemgå informationen på <a "
 "href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, "
-"poste beskeder til <a href='http://i2pforum.i2p/viewforum.php?f=8' "
+"poste beskeder til <a href=''http://i2pforum.i2p/viewforum.php?f=8'' "
 "target=_blank rel=noreferrer>I2P diskussionsforum</a> eller kigge forbi <a "
 "href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> eller <a "
-"href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> på I2P's interne "
+"href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> på I2P''s interne "
 "IRC-netværk."
 
 msgid "Reporting Bugs"
@@ -10985,7 +12166,7 @@ msgstr ""
 "href=https://github.com/I2PPlus/i2pplus/issues target=_blank rel=noreferrer "
 "class=sitelink>github.com/I2PPlus/i2pplus/issues</a>. For udviklerrelaterede"
 " diskussioner, bedes du besøge <a href=http://zzz.i2p/ target=_blank "
-"rel=noreferrer class=sitelink>zzz's udviklerfora</a> eller kom forbi <a "
+"rel=noreferrer class=sitelink>zzz''s udviklerfora</a> eller kom forbi <a "
 "href=irc://127.0.0.1:6668/i2p-dev class=chatlink>udviklerkanalen</a> på I2Ps"
 " IRC-netværk."
 
@@ -11006,7 +12187,7 @@ msgid ""
 "rel=noreferrer>i2p-projekt.i2p</a> or <a href=https://geti2p.net/en/faq "
 "target=_blank rel=noreferrer>geti2p.net</a>"
 msgstr ""
-"FAQ'en på <a href=http://i2p-projekt.i2p/en/faq target=_blank "
+"FAQ''en på <a href=http://i2p-projekt.i2p/en/faq target=_blank "
 "rel=noreferrer>i2p-projekt.i2p</a> or <a href=https://geti2p.net/en/faq "
 "target=_blank rel=noreferrer>geti2p.net</a>"
 
@@ -11017,7 +12198,7 @@ msgid ""
 msgstr ""
 "Du kan også prøve <a href=irc://127.0.0.1:6668/saltR "
 "class=chatlink>#saltR</a> eller <a href=irc://127.0.0.1:6668/i2p-dev "
-"class=chatlink>#i2p</a> på I2P's IRC-netværk."
+"class=chatlink>#i2p</a> på I2P''s IRC-netværk."
 
 msgid "Introduction to Tunnel Filtering"
 msgstr "Introduktion til tunnel filtrering"
@@ -11337,9 +12518,10 @@ msgstr ""
 msgid "Theme Overrides"
 msgstr "Overstyring af tema"
 
+# help/ui_jsp.java:474
 msgid ""
 "I2P+ supports custom theme overrides for the console, the tunnel manager, "
-"I2PSnark, SusiDNS and Webmail, permitting changes to the themes which are "
+"I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are "
 "persistent after upgrades. In order to activate an override, create a css "
 "file named <code>override.css</code> with your theme modifications and place"
 " it in the relevant theme directory of the theme you wish to change, or "
@@ -11348,16 +12530,16 @@ msgid ""
 "deactivate an override, delete or rename the <code>override.css</code> file "
 "and then hard refresh the browser (usually Control + Shift + R)."
 msgstr ""
-"I2P+ understøtter brugerdefinerede temaoversættelser til konsollen, "
-"tunnelhåndteringen, Torrents, DNS og Webmail, hvilket tillader ændringer i "
-"temaer, der er vedvarende efter opgraderinger. For at aktivere en "
-"oversættelse, skal du oprette en CSS-fil, der hedder <code> override.css "
-"</code> med dine temamodifikationer og placere den i den relevante tema-"
-"mappe på det tema, du ønsker at ændre, eller omdøbe en af de eksempelfiler "
-"og derefter hardopdater browseren. Bemærk, at tunnelhåndteringen og "
-"konsollen deler samme override.css. For at deaktivere en oversættelse skal "
-"du slette eller omdøbe filen <code> override.css </code> og derefter "
-"hardopdater din browser (normalt Control + Shift + R)."
+"I2P+ understøtter brugerdefinerede tema-overrides for konsollen, "
+"tunnelmanageren, I2PSnark, SusiDNS og Susimail, hvilket tillader ændringer "
+"af temaerne som er persistent efter opgraderinger. For at aktivere en "
+"override, opret en css-fil ved navn <code>override.css</code> med dine "
+"temamodifikationer og placer den i den relevante temamappe for det tema du "
+"ønsker at ændre, eller omdøb en af eksempelfilerne, og gennemfør derefter en"
+" hard refresh af browseren. Bemærk at tunnelmanageren og konsollen deler den"
+" samme override.css. For at deaktivere en override, slet eller omdøb "
+"<code>override.css</code>-filen og gennemfør derefter en hard refresh af "
+"browseren (sædvanligvis Control + Shift + R)."
 
 msgid ""
 "The themes directory is located in the I2P application directory under "
@@ -11379,10 +12561,10 @@ msgid ""
 "Configuration page</a>."
 msgstr ""
 "Mange af statistikkerne på sidepanelet kan <a "
-"href='/configstats'>konfigureres</a> til at blive <a href='/graphs'>grafisk "
-"fremstillet</a> til yderligere analyse. Du kan også tilpasse sektionerne, "
-"der vises på sidepanelet, og deres placering på <a "
-"href='/configsidebar'>konfigurationssiden til sidepanelet</a>."
+"href=''/configstats''>konfigureres</a> til at blive <a "
+"href=''/graphs''>grafisk fremstillet</a> til yderligere analyse. Du kan også"
+" tilpasse sektionerne, der vises på sidepanelet, og deres placering på <a "
+"href=''/configsidebar''>konfigurationssiden til sidepanelet</a>."
 
 msgid "Local Identity"
 msgstr "Lokal identitet"
@@ -11398,8 +12580,8 @@ msgstr ""
 "Hvis du holder musemarkøren over overskriften <i>Router Info</i>, vises din "
 "afkortede routeridentitet (de første fire tegn (24 bits) i din 44-tegners "
 "(256 bit) Base64-router-hash). Den fulde hash vises på din <a "
-"href='netdb?r=.'>indførsel i netværksdatabasen</a>. Afslør aldrig dette for "
-"nogen, da din routeridentitet er unikt forbundet med din IP-adresse i "
+"href=''netdb?r=.''>indførsel i netværksdatabasen</a>. Afslør aldrig dette "
+"for nogen, da din routeridentitet er unikt forbundet med din IP-adresse i "
 "netværksdatabasen."
 
 msgid ""
@@ -11428,7 +12610,7 @@ msgstr ""
 "forbindelse til internettet, kan der angives en læsning af 0ms. Bemærk: "
 "Dette vises kun i afsnittet <i>Routerinformation (avanceret)</i>. Du kan "
 "tilføje dette afsnit til din sidebjælke på siden <a "
-"href='/configsidebar'>Sidebar Configuration</a>."
+"href=''/configsidebar''>Sidebar Configuration</a>."
 
 msgid ""
 "This indicates the amount of RAM I2P is using, and the total amount "
@@ -11443,8 +12625,8 @@ msgid ""
 msgstr ""
 "Dette angiver mængden af RAM, som I2P bruger, og den samlede tilgængelige "
 "mængde, som er tildelt af Java. Hvis brugen er konsekvent høj i forhold til "
-"den tilgængelige RAM, kan dette indikere, at du skal øge RAM'en, der er "
-"allokeret til JVM'en. Du kan tildele mere RAM ved at redigere filen "
+"den tilgængelige RAM, kan dette indikere, at du skal øge RAM''en, der er "
+"allokeret til JVM''en. Du kan tildele mere RAM ved at redigere filen "
 "<code>wrapper.config</code>, som normalt er placeret i "
 "I2P-applikationsmappen. Du skal redigere parameteren "
 "<code>wrapper.java.maxmemory</code>, som som standard er indstillet til 256 "
@@ -11464,7 +12646,7 @@ msgstr ""
 "til flere hundrede, afhængigt af din samlede båndbredde, delt båndbredde og "
 "lokalt genereret trafik. Det andet nummer er antallet af peers, der er set i"
 " den sidste time eller deromkring. Du behøver ikke bekymre dig, hvis disse "
-"tal varierer meget. <a href='/configstats#router.activePeers'>[Aktivér "
+"tal varierer meget. <a href=''/configstats#router.activePeers''>[Aktivér "
 "graf]</a>."
 
 msgid ""
@@ -11475,8 +12657,8 @@ msgid ""
 msgstr ""
 "Dette er antallet af naboer din router har tilgængelige til at opbygge "
 "klienttunneler. Det er normalt i området 8-30. Dine hurtige naboer vises på "
-"<a href='/profiles'>Profiler-siden</a>. <a "
-"href='/configstats#router.fastPeers'>[Aktivér graf]</a>"
+"<a href=''/profiles''>Profiler-siden</a>. <a "
+"href=''/configstats#router.fastPeers''>[Aktivér graf]</a>"
 
 msgid ""
 "This is the number of peers your router has available for building your "
@@ -11489,8 +12671,8 @@ msgstr ""
 "Dette er antallet af peers, din router har til rådighed til at opbygge dine "
 "udforskende tunneler, som bruges til at bestemme netværksydelsen. Det er "
 "generelt i området 8-75. De hurtige peers er inkluderet i høj kapacitet "
-"niveauet. Dine høj kapacitet peers vises på <a href='/profiles'>Profiler "
-"siden</a>. <a href='/configstats#router.highCapacityPeers'>[Aktiver "
+"niveauet. Dine høj kapacitet peers vises på <a href=''/profiles''>Profiler "
+"siden</a>. <a href=''/configstats#router.highCapacityPeers''>[Aktiver "
 "graf]</a>"
 
 msgid ""
@@ -11502,7 +12684,8 @@ msgstr ""
 "Dette er antallet af peers, din router vil bruge til "
 "netværksdatabaseforespørgsler. Disse er normalt <i>floodfill</i> routere, "
 "som er ansvarlige for at opretholde netværkets integritet. Dine godt "
-"integrerede peers vises i bunden af <a href='/profiles'>Profiler siden</a>."
+"integrerede peers vises i bunden af <a href=''/profiles''>Profiler "
+"siden</a>."
 
 msgid ""
 "This is the total number of peers that are known by your router. They are "
@@ -11513,8 +12696,8 @@ msgid ""
 "know every other router in the network."
 msgstr ""
 "Dette er det samlede antal peers, der er kendt af din router. De er opført "
-"på <a href='/netdb'>Netværksdatabasen siden</a>. Dette kan variere fra under"
-" 100 til 1000 eller mere. Dette tal er ikke den totale størrelse af "
+"på <a href=''/netdb''>Netværksdatabasen siden</a>. Dette kan variere fra "
+"under 100 til 1000 eller mere. Dette tal er ikke den totale størrelse af "
 "netværket; det kan variere meget afhængigt af din samlede båndbredde, delt "
 "båndbredde og lokalt genereret trafik. I2P kræver ikke, at en router kender "
 "alle andre routere i netværket."
@@ -11537,14 +12720,14 @@ msgstr ""
 "Denne sektion angiver dine gennemsnitlige båndbreddehastigheder og samlet "
 "forbrug for sessionen. Alle værdier angives i bytes pr. sekund. Du kan ændre"
 " dine båndbreddebegrænsninger på <a "
-"href='/config'>Båndbreddekonfigurationssiden</a>. Jo mere båndbredde du "
+"href=''/config''>Båndbreddekonfigurationssiden</a>. Jo mere båndbredde du "
 "stiller til rådighed, jo mere hjælper du netværket og forbedrer din egen "
 "anonymitet, så brug venligst tid på at gennemgå indstillingerne. Hvis du er "
 "usikker på dit netværks hastighed, kan du bruge en tjeneste som f.eks. <a "
-"href='http://speedtest.net/'>SpeedTest</a> eller lignende for at få en god "
-"indikation af din båndbreddekapacitet. Din upstream del (KBps Ud) vil "
+"href=''http://speedtest.net/''>SpeedTest</a> eller lignende for at få en god"
+" indikation af din båndbreddekapacitet. Din upstream del (KBps Ud) vil "
 "bestemme dit samlede bidrag til netværket. Båndbredde er som standard <a "
-"href='/graphs'>grafisk</a>."
+"href=''/graphs''>grafisk</a>."
 
 msgid "Local Destinations"
 msgstr "Lokale Destinationer"
@@ -11567,7 +12750,7 @@ msgid ""
 "page</a>."
 msgstr ""
 "Dette er de lokale tjenester, der leveres af din router. De kan være "
-"klienter, der startes gennem <a href='/i2ptunnelmgr'>Tunnel Manager</a> "
+"klienter, der startes gennem <a href=''/i2ptunnelmgr''>Tunnel Manager</a> "
 "eller eksterne programmer, der forbinder gennem SAM, BOB eller direkte til "
 "I2CP. Som standard vil de fleste af dine klienttjenester (mail, HTTP-proxy, "
 "IRC) dele den samme sæt tunneler og blive opført som <i>Delte klienter</i> "
@@ -11580,8 +12763,8 @@ msgstr ""
 "<i>Deler tunneler med andre klienter&hellip;</i>, der er angivet under "
 "<i>Delte klienter</i> på konfigurationssiden for den relevante "
 "klienttjeneste i Tunnel Manager, efter hvilken du bliver nødt til at "
-"genstarte klienttjenesten fra <a href='/i2ptunnelmgr'>hovedsiden for Tunnel "
-"Manager</a>."
+"genstarte klienttjenesten fra <a href=''/i2ptunnelmgr''>hovedsiden for "
+"Tunnel Manager</a>."
 
 msgid ""
 "The actual tunnels are shown on the <a href='/tunnels'>Tunnels page</a>."
@@ -11613,11 +12796,12 @@ msgstr ""
 "Tunneler oprettet af andre routere gennem din router. Dette kan variere "
 "meget afhængigt af netværkets behov, din delte båndbredde og mængden af "
 "lokalt genereret trafik. Den anbefalede metode til at begrænse deltagende "
-"tunneler er at ændre din delingsprocent på <a  href='/config'>Konfiguration "
-"af båndbredde-siden</a>. Du kan også begrænse det samlede antal ved at "
-"indstille <code>router.maxParticipatingTunnels=nnn</code> på <a "
-"href='/configadvanced'>Avanceret konfigurationsside</a>. <a "
-"href='/configstats#tunnel.participatingTunnels'>[Aktivér graf]</a>."
+"tunneler er at ændre din delingsprocent på <a  "
+"href=''/config''>Konfiguration af båndbredde-siden</a>. Du kan også begrænse"
+" det samlede antal ved at indstille "
+"<code>router.maxParticipatingTunnels=nnn</code> på <a "
+"href=''/configadvanced''>Avanceret konfigurationsside</a>. <a "
+"href=''/configstats#tunnel.participatingTunnels''>[Aktivér graf]</a>."
 
 msgid "Share Ratio"
 msgstr "Delingsforhold"
@@ -11636,9 +12820,6 @@ msgstr ""
 msgid "Some basic indications of router overload:"
 msgstr "Nogle grundlæggende indikationer på overbelastning af routeren:"
 
-msgid "Job Lag"
-msgstr "Job forsinkelse"
-
 msgid ""
 "How long jobs are waiting before execution. The job queue is listed on the "
 "<a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job "
@@ -11649,12 +12830,12 @@ msgid ""
 " href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr ""
 "Hvor længe job venter før udførelse. Job-køen er anført på <a "
-"href='/jobs'>Jobsiden</a>. Desværre er der flere andre jobkøer i routeren, "
-"der kan være overbelastet, og deres status er ikke tilgængelig i "
+"href=''/jobs''>Jobsiden</a>. Desværre er der flere andre jobkøer i routeren,"
+" der kan være overbelastet, og deres status er ikke tilgængelig i "
 "routerkonsollen. Jobforsinkelsen bør generelt være nul. Hvis den konsekvent "
 "er højere end 500 ms, er din computer meget langsom, dit netværk har "
 "forbindelsesproblemer, eller routeren har alvorlige problemer. <a "
-"href='/configstats#jobQueue.jobLag'>[Aktivér graf]</a>."
+"href=''/configstats#jobQueue.jobLag''>[Aktivér graf]</a>."
 
 msgid "Message Delay"
 msgstr "Beskedforsinkelse"
@@ -11673,7 +12854,7 @@ msgstr ""
 " ms, er din computer meget langsom, eller du skal justere dine "
 "båndbreddegrænser, eller dine (BitTorrent?) klienter sender måske for mange "
 "data, og deres overførselsbåndbreddegrænse bør reduceres. <a "
-"href='/configstats#transport.sendProcessingTime'>[Aktivér graf]</a> "
+"href=''/configstats#transport.sendProcessingTime''>[Aktivér graf]</a> "
 "(transport.sendProcessingTime)."
 
 msgid ""
@@ -11723,9 +12904,9 @@ msgid ""
 "Configuration page</a>."
 msgstr ""
 "Denne sektion er ikke aktiveret som standard, medmindre <a "
-"href='/help/configuration#advancedconsole'>Avanceret konsoltilstand</a> er "
-"aktiveret. Du kan aktivere det på siden <a "
-"href='/configsidebar'>Konfiguration i sidepanelet</a>."
+"href=''/help/configuration#advancedconsole''>Avanceret konsoltilstand</a> er"
+" aktiveret. Du kan aktivere det på siden <a "
+"href=''/configsidebar''>Konfiguration i sidepanelet</a>."
 
 msgid "Reachability Help"
 msgstr "Få hjælp til sikring af adgang"
@@ -12039,8 +13220,8 @@ msgstr ""
 "Som standard leveres I2P med en webserver til at hoste din egen "
 "anonymiserede hjemmeside (traditionelt kaldet en <i>eepsite</i>). Både "
 "hjemmesiden og I2P Router Console kører på en specialudgave af <a "
-"href='https://en.wikipedia.org/wiki/Jetty_(web_server)' target=_blank "
-"rel=noreferrer class='sitelink external'>Jetty</a>, tilpasset til I2P."
+"href=''https://en.wikipedia.org/wiki/Jetty_(web_server)'' target=_blank "
+"rel=noreferrer class=''sitelink external''>Jetty</a>, tilpasset til I2P."
 
 msgid ""
 "To serve your own static content, you only need to edit or replace the files"
@@ -12058,8 +13239,8 @@ msgstr ""
 "Yderligere kan cgi- og python-scripts køres fra mappen <code>cgi-bin</code> "
 "direkte over <code>docroot</code>, hvis du har <a "
 "href=https://www.perl.org/about.html target=_blank rel=noreferrer "
-"class='sitelink external'>perl</a> og <a href=https://www.python.org/ "
-"target=_blank rel=noreferrer class='sitelink external'>python</a> "
+"class=''sitelink external''>perl</a> og <a href=https://www.python.org/ "
+"target=_blank rel=noreferrer class=''sitelink external''>python</a> "
 "installeret."
 
 msgid ""
@@ -12076,8 +13257,8 @@ msgstr ""
 "uden at skulle have en side med links til filerne. Du kan også levere "
 "indhold, der eksisterer uden for <code>docroot</code>, ved at bruge et <a "
 "href=https://en.wikipedia.org/wiki/Symbolic_link target=_blank "
-"rel=noreferrer class='sitelink external'>symbolisk link</a> til den ønskede "
-"mappe."
+"rel=noreferrer class=''sitelink external''>symbolisk link</a> til den "
+"ønskede mappe."
 
 msgid ""
 "You can override the <a href=http://127.0.0.1:7658/help/images/>default "
@@ -12121,8 +13302,8 @@ msgstr ""
 "For at deaktivere mappelister skal du finde posten for "
 "<code>org.eclipse.jetty.servlet.Default.dirAllowed</code> i filen "
 "<code>base-context.xml</code>, der ligger i mappen "
-"<code>eepsite/contexts</code> (lige over docroot-mappen) og ændre 'true' til"
-" 'false' med det samme. For at anvende ændringen øjeblikkeligt skal du "
+"<code>eepsite/contexts</code> (lige over docroot-mappen) og ændre ''true'' "
+"til ''false'' med det samme. For at anvende ændringen øjeblikkeligt skal du "
 "stoppe og genstarte <i>I2P Webserver</i>-klienten på <a "
 "href=/configclients>Klientkonfigurationssiden</a>. Du kan også indsætte en "
 "tom <code>index.html</code> fil i en hvilken som helst eksponeret mappe for "
@@ -12151,12 +13332,12 @@ msgid ""
 msgstr ""
 "På I2P-netværket kan eksternt hostede tjenester tilgås ved hjælp af en <a "
 "href=https://en.wikipedia.org/wiki/Base32 target=_blank rel=noreferrer "
-"class='sitelink external'>Base32</a>-adresse, der ender med \".b32.i2p\", en"
-" <i>destination</i> repræsenteret som en lang <a "
-"href=https://en.wikipedia.org/wiki/Base64 class='sitelink "
-"external'>Base64</a>-streng, eller mere almindeligt ved at bruge et "
-".i2p-domæne. En destination er I2P's ækvivalent til en IP-adresse og vises "
-"på siden <a href='/i2ptunnel/edit?tunnel=3'>Tunnel Manager "
+"class=''sitelink external''>Base32</a>-adresse, der ender med \".b32.i2p\", "
+"en <i>destination</i> repræsenteret som en lang <a "
+"href=https://en.wikipedia.org/wiki/Base64 class=''sitelink "
+"external''>Base64</a>-streng, eller mere almindeligt ved at bruge et "
+".i2p-domæne. En destination er I2P''s ækvivalent til en IP-adresse og vises "
+"på siden <a href=''/i2ptunnel/edit?tunnel=3''>Tunnel Manager "
 "Configuration</a>. Du kan dele din b32.i2p-adresse for at tillade andre at "
 "få adgang til din hjemmeside, indtil du har registreret dit eget "
 ".i2p-domæne."
@@ -12199,11 +13380,11 @@ msgstr ""
 "href=http://notbob.i2p/ target=_blank>notbob.i2p</a> eller <a "
 "href=http://reg.i2p target=_blank>reg.i2p</a>, før du beslutter. Indtast det"
 " nye navn til dit websted på <a "
-"href='/i2ptunnel/edit?tunnel=3'>konfigurationssiden for tunnelsstyring</a>, "
-"hvor det står <i>Webstedets navn</i>, og erstatt standardværdien "
-"<i>mysite.i2p</i>. Hvis du ønsker at dit websted skal være tilgængeligt, når"
-" I2P starter, skal du aktivere <i>Auto Start</i> og derefter klikke på "
-"<i>Gem</i>."
+"href=''/i2ptunnel/edit?tunnel=3''>konfigurationssiden for "
+"tunnelsstyring</a>, hvor det står <i>Webstedets navn</i>, og erstatt "
+"standardværdien <i>mysite.i2p</i>. Hvis du ønsker at dit websted skal være "
+"tilgængeligt, når I2P starter, skal du aktivere <i>Auto Start</i> og "
+"derefter klikke på <i>Gem</i>."
 
 msgid ""
 "Click the <i>Start</i> button for your webserver tunnel on the <a "
@@ -12224,7 +13405,8 @@ msgid ""
 "href='/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a>."
 msgstr ""
 "Markér og kopier hele <i>Lokal destination</i> på siden <a "
-"href='/i2ptunnel/edit?tunnel=3'>Konfigurationssiden for Tunnel Manager</a>."
+"href=''/i2ptunnel/edit?tunnel=3''>Konfigurationssiden for Tunnel "
+"Manager</a>."
 
 msgid ""
 "Enter the name and paste the destination into your <a "
@@ -12232,7 +13414,7 @@ msgid ""
 "to save the new entry."
 msgstr ""
 "Indtast navnet og indsæt destinationen i din <a "
-"href='/dns?book=router&amp;filter=none'>adressebog</a>. Klik på "
+"href=''/dns?book=router&amp;filter=none''>adressebog</a>. Klik på "
 "<i>Tilføj</i> for at gemme den nye post."
 
 msgid ""
@@ -12291,16 +13473,16 @@ msgid ""
 msgstr ""
 "Hvis du ønsker, at dit websted skal føles responsivt, er komprimering af "
 "billeder afgørende, når du hoster store billeder. Brug af en service som <a "
-"href=https://tinypng.com/ target=_blank class='sitelink "
-"external'>tinypng.com</a> til at komprimere dine png- og jpeg-billeder vil "
+"href=https://tinypng.com/ target=_blank class=''sitelink "
+"external''>tinypng.com</a> til at komprimere dine png- og jpeg-billeder vil "
 "ofte resultere i meget mindre filer med minimal tab af kvalitet. I nogle "
 "situationer kan webp-formatet erstatte jpegs og generere mindre filer med "
 "cirka samme eller bedre visuel kvalitet og har bred browservisning. Overvej "
 "også at bruge svgs i stedet for bitmaps til ikoner og illustrationer - de er"
 " ofte mindre end den tilsvarende bitmap-fil (kør dem gennem en service som "
-"<a href=https://vecta.io/nano target=_blank class='sitelink external'>Nano "
-"SVG Optimizer</a> for at fjerne unødvendigt overflødigt materiale), skalerer"
-" uden tab af kvalitet og kan komprimeres af din webserver."
+"<a href=https://vecta.io/nano target=_blank class=''sitelink external''>Nano"
+" SVG Optimizer</a> for at fjerne unødvendigt overflødigt materiale), "
+"skalerer uden tab af kvalitet og kan komprimeres af din webserver."
 
 msgid "Use separate files for multi-use assets"
 msgstr "Brug separate filer til genanvendt indhold"
@@ -12340,11 +13522,11 @@ msgstr ""
 "brugere, kan indholdscaching ofte forbedre den tid det tager at levere "
 "sider. For indhold, der ændres hurtigt, kan en <a "
 "href=https://blog.stackpath.com/glossary-micro-caching/ target=_blank "
-"class='sitelink external'>micro-caching strategi</a> stadig medføre visse "
-"fordele. <a href=https://www.nginx.com/ target=_blank class='sitelink "
-"external'>Nginx webserveren</a> giver et kompetent caching delsystem, eller "
-"for en mere avanceret løsning, kan du se på <a href=https://varnish-"
-"cache.org/ target=_blank class='sitelink external'>Varnish</a>."
+"class=''sitelink external''>micro-caching strategi</a> stadig medføre visse "
+"fordele. <a href=https://www.nginx.com/ target=_blank class=''sitelink "
+"external''>Nginx webserveren</a> giver et kompetent caching delsystem, eller"
+" for en mere avanceret løsning, kan du se på <a href=https://varnish-"
+"cache.org/ target=_blank class=''sitelink external''>Varnish</a>."
 
 msgid "Using an alternative webserver"
 msgstr "Brug af en alternativ webserver"
@@ -12413,11 +13595,11 @@ msgid ""
 msgstr ""
 "<b>Bemærk:</b> På nogle Apache-installationer er <a "
 "href=https://httpd.apache.org/docs/2.4/mod/mod_status.html target=_blank "
-"class='sitelink external'>mod_status</a> og <a "
+"class=''sitelink external''>mod_status</a> og <a "
 "href=https://httpd.apache.org/docs/2.4/mod/mod_info.html target=_blank "
-"class='sitelink external'>mod_info</a>-modulerne aktiveret som standard. Det"
-" er vigtigt at deaktivere disse eller på anden måde beskytte adgangen til "
-"url'erne for at undgå at kompromittere anonymiteten og sikkerheden på din "
+"class=''sitelink external''>mod_info</a>-modulerne aktiveret som standard. "
+"Det er vigtigt at deaktivere disse eller på anden måde beskytte adgangen til"
+" url''erne for at undgå at kompromittere anonymiteten og sikkerheden på din "
 "server."
 
 msgid "home"
@@ -12452,9 +13634,6 @@ msgstr "Krukkefildump"
 
 msgid "job queue stats"
 msgstr "jobkøstatistik"
-
-msgid "Job Queue"
-msgstr "Jobkø"
 
 msgid "Job statistics for this session"
 msgstr "Jobstatistik for denne session"
@@ -12604,6 +13783,12 @@ msgstr "Vis hændelseslog"
 msgid "Filter Router log output"
 msgstr "Filtre routerens logudskrift"
 
+msgid "SAM Debug"
+msgstr "SAM-fejlsøgning"
+
+msgid "SAM Bridge Debug"
+msgstr "SAM-bro fejlsøgning"
+
 msgid "service logs"
 msgstr "tjeneste logs"
 
@@ -12628,14 +13813,17 @@ msgstr "streamingforbindelser"
 msgid "Streaming Connections"
 msgstr "Streamingforbindelser"
 
-msgid "Active I2P streaming connections"
-msgstr "Aktive I2P streamingforbindelser"
+msgid "All streaming connections"
+msgstr "Alle streamingforbindelser"
 
-msgid "Local Tunnels"
-msgstr "Lokale Tunneler"
+msgid "All Streams"
+msgstr "Alle streams"
 
-msgid "Most Recent"
-msgstr "Seneste"
+msgid "Inbound streaming connections"
+msgstr "Indgående streamingforbindelser"
+
+msgid "Outbound streaming connections"
+msgstr "Udgående streamingforbindelser"
 
 msgid "torrents"
 msgstr "torrents"
@@ -12648,6 +13836,9 @@ msgstr "Seneste transittunneler"
 
 msgid "Locally hosted tunnels (exploratory and client)"
 msgstr "Lokalt hostede tunneler (udforskende og klient)"
+
+msgid "Most Recent"
+msgstr "Seneste"
 
 msgid "Fastest"
 msgstr "Hurtigste"
@@ -12664,14 +13855,23 @@ msgstr "Hurtigste transittunneler"
 msgid "Transit Tunnels by Peer"
 msgstr "Transittunneler af Peer"
 
+msgid "tuning"
+msgstr "justering"
+
+msgid "Router Auto-Tuning"
+msgstr "Ruter Auto-Tuning"
+
 msgid "tunnel peer count"
 msgstr "antal tunnelpeers"
 
 msgid "local tunnels"
 msgstr "lokale tunneler"
 
+msgid "Local Tunnels"
+msgstr "Lokale Tunneler"
+
 msgid "Toggle Tunnel Ids"
-msgstr "Skift tunnel-ID'er"
+msgstr "Skift tunnel-ID''er"
 
 msgid "Toggle Tunnels"
 msgstr "Skift tunneller"
@@ -12881,531 +14081,3 @@ msgstr "Næste"
 
 msgid "Finished"
 msgstr "Færdig"
-
-# /../../router/java/src/net/i2p/router/Blocklist.java:1298
-msgid "Tor Exit"
-msgstr "Tor-udgang"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:432
-msgid "Restore Defaults"
-msgstr "Gendan standarder"
-
-# /java/src/net/i2p/router/web/TuningFormHandler.java:497
-msgid "All parameters restored to factory defaults"
-msgstr "Alle parametre gendannet til fabriksindstillinger"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:303
-msgid "Auto-Tuning is not available"
-msgstr "Auto-Tuning er ikke tilgængelig"
-
-# /java/src/net/i2p/router/web/TuningFormHandler.java:804
-msgid "Tuning ranges saved — changes take effect immediately"
-msgstr "Indstillingsområder gemt — ændringer træder i kraft med det samme"
-
-# /java/src/net/i2p/router/web/TuningFormHandler.java:811
-msgid "No changes to save"
-msgstr "Ingen ændringer at gemme"
-
-# /java/src/net/i2p/router/web/TuningFormHandler.java:809
-msgid "Tuning overrides applied"
-msgstr "Tilpasninger anvendt"
-
-# /java/src/net/i2p/router/web/TuningFormHandler.java:827
-msgid "Invalid value"
-msgstr "Ugyldig værdi"
-
-# /java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:34
-msgid "Auto-Tuning"
-msgstr "Auto-Tuning"
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:340
-msgid ""
-"Auto-Tuning continuously monitors router performance and adjusts parameters "
-"to optimize throughput, reduce latency, and maintain stability."
-msgstr ""
-"Auto-Tuning overvåger konsekvent routerens ydeevne og justerer parametre "
-"for at optimere gennemstrømning, reducere ventetid og opretholde "
-"stabilitet."
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:341
-msgid ""
-"Uncheck the Auto box on any row to pin that parameter and prevent further "
-"adjustments."
-msgstr ""
-"Fjern markeringen af Auto-boksen i enhver række for at fastgøre "
-"parameteren og forhindre yderligere justeringer."
-
-
-# /java/src/net/i2p/router/web/helpers/ConfigSidebarHandler.java:107
-msgid "Graph preferences updated"
-msgstr "Grafindstillinger opdateret"
-
-# /java/src/net/i2p/router/web/helpers/GraphHelper.java:483
-msgid "UTC time"
-msgstr "UTC-tid"
-
-# /java/src/net/i2p/router/web/helpers/GraphHelper.java:489
-msgid "Display time in UTC on graph axes"
-msgstr "Vis tid i UTC på grafakser"
-
-# /java/src/net/i2p/router/web/helpers/GraphHelper.java:491
-msgid "Glow effect"
-msgstr "Gloweffekt"
-
-# /java/src/net/i2p/router/web/helpers/GraphHelper.java:497
-msgid "Add a glow effect to graph lines"
-msgstr "Tilføj en gloweffekt til graflinjer"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:239
-msgid "CPU"
-msgstr "CPU"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:240
-msgid "CPU load average"
-msgstr "CPU-belastningsgennemsnit"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:244
-msgid "Router uptime"
-msgstr "Ruterens oppetid"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:468
-msgid "ms"
-msgstr "ms"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:246
-msgid "Job queue delay"
-msgstr "Jobkø-forsinkelse"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:247
-msgid "Msg Lag"
-msgstr "Beskedforsinkelse"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:248
-msgid "Message send processing time"
-msgstr "Tid til beskedafsendelsesbehandling"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:250
-msgid "Ready jobs waiting in queue"
-msgstr "Klare job venter i køen"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:251
-msgid "Threads"
-msgstr "Tråde"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:252
-msgid "Active JVM threads"
-msgstr "Aktive JVM-tråde"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:308
-msgid "NTCP Estab"
-msgstr "NTCP Etab."
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:309
-msgid "NTCP outbound establish time"
-msgstr "NTCP udgående etableringstid"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:310
-msgid "SSU Estab"
-msgstr "SSU Etab."
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:311
-msgid "SSU outbound establish time"
-msgstr "SSU udgående etableringstid"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:312
-msgid "SSU RTO"
-msgstr "SSU RTO"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:313
-msgid "SSU retransmission timeout"
-msgstr "SSU genoverførselstidsudløb"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:314
-msgid "Conns/s"
-msgstr "Forb/s"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:315
-msgid "NTCP connections established per second"
-msgstr "NTCP-forbindelser etableret pr. sekund"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:316
-msgid "Msgs/s"
-msgstr "Besk/s"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:317
-msgid "Messages delivered per second"
-msgstr "Beskeder levereret pr. sekund"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:318
-msgid "RTT"
-msgstr "RTT"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:319
-msgid "End-to-end message round trip time"
-msgstr "Besked roundtrip-tid fra ende til ende"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:320
-msgid "Timeout"
-msgstr "Timeout"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:321
-msgid "Tunnel build timeout rate"
-msgstr "Tunnelbygningstidsudløbsrate"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:322
-msgid "Tunnel Build"
-msgstr "Tunnelbygning"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:323
-msgid "Client tunnel build latency"
-msgstr "Klient tunnelbygningsforsinkelse"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:379
-msgid "Active Peers"
-msgstr "Aktive peers"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:380
-msgid "Active peers (last 60s)"
-msgstr "Aktive peers (sidste 60s)"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:381
-msgid "Known Peers"
-msgstr "Kendte peers"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:382
-msgid "Known routers in network database"
-msgstr "Kendte routere i netværksdatabasen"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:384
-msgid "Active I2CP clients"
-msgstr "Aktive I2CP-klienter"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:386
-msgid "Transit tunnels hosted"
-msgstr "Transittunneler hosted"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:390
-msgid "Tunnel build success rate"
-msgstr "Tunnelbygningssuccesrate"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:391
-msgid "NetDB"
-msgstr "NetDB"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:392
-msgid "NetDB lookup time"
-msgstr "NetDB-opslagstid"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:394
-msgid "Total banned peers"
-msgstr "Samlet antal blokerede peers"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:455
-msgid "Stored LeaseSets in floodfill"
-msgstr "Lagrede LeaseSets i floodfill"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:456
-msgid "Cache Hit"
-msgstr "Cache-træf"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:457
-msgid "NetDB lookup success rate"
-msgstr "NetDB-opslagssuccesrate"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:458
-msgid "Flood Verify"
-msgstr "Floodverifikation"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:459
-msgid "Floodfill verify time"
-msgstr "Floodfill-verifikationstid"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:460
-msgid "NetDB ACK"
-msgstr "NetDB-ACK"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:461
-msgid "NetDB peer acknowledge time"
-msgstr "NetDB peer-bekræftelsestid"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:462
-msgid "Lookups/s"
-msgstr "Opslag/s"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:463
-msgid "NetDB lookups handled per second"
-msgstr "NetDB-opslag behandlet pr. sekund"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:464
-msgid "Requests/s"
-msgstr "Anmodn/s"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:465
-msgid "Combined store + lookup operations per second"
-msgstr "Kombinerede lagrings- og opslagsoperationer pr. sekund"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:466
-msgid "Stores/s"
-msgstr "Lagring/s"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:467
-msgid "NetDB store messages handled per second"
-msgstr "NetDB-lagringsbeskeder behandlet pr. sekund"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:468
-msgid "LS Timeout"
-msgstr "LS-tidsudløb"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:469
-msgid "LeaseSet request timeouts (last minute)"
-msgstr "LeaseSet-anmodningstidsudløb (sidste minut)"
-
-# /java/src/net/i2p/router/web/helpers/InfoHelper.java:214
-msgid "ASN Db"
-msgstr "ASN-db"
-
-# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:46
-msgid "SAM bridge is not running."
-msgstr "SAM-broen kører ikke."
-
-# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:70
-msgid "Active sessions in SessionsDB"
-msgstr "Aktive sessioner i SessionsDB"
-
-# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:72
-msgid "Active / pool worker threads"
-msgstr "Aktive / pool-arbejdstråde"
-
-# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:74
-msgid "Pending commands in pool"
-msgstr "Ventende kommandoer i pool"
-
-# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:76
-msgid "Connected pool handlers"
-msgstr "Tilsluttede pool-håndteringer"
-
-# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:78
-msgid "Sockets stolen for data streaming"
-msgstr "Sokler stjålet til datastreaming"
-
-# /java/src/net/i2p/router/web/helpers/SidebarRenderer.java:541
-msgid "Health"
-msgstr "Tilstand"
-
-# /java/src/net/i2p/router/web/helpers/SidebarRenderer.java:544
-msgid "Router health overview"
-msgstr "Ruterens tilstandsoversigt"
-
-# /java/src/net/i2p/router/web/helpers/StreamHelper.java:302
-msgid "sent"
-msgstr "sendt"
-
-# /java/src/net/i2p/router/web/helpers/StreamHelper.java:303
-msgid "received"
-msgstr "modtaget"
-
-# /java/src/net/i2p/router/web/helpers/StreamHelper.java:372
-msgid "No active streaming connections."
-msgstr "Ingen aktive streamingforbindelser."
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:345
-msgid "Healthy"
-msgstr "Sund"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:347
-msgid "Fair"
-msgstr "Acceptabel"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:349
-msgid "Degraded"
-msgstr "Forringet"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:352
-msgid "Current system health:"
-msgstr "Nuværende systemtilstand:"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:355
-msgid "System health assessment is not yet available."
-msgstr "Systemtilstandsvurderingen er endnu ikke tilgængelig."
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:372
-msgid "Parameter"
-msgstr "Parameter"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:374
-msgid "Default"
-msgstr "Standard"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:377
-msgid "Step"
-msgstr "Trin"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:378
-msgid "History"
-msgstr "Historik"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:379
-msgid "Auto"
-msgstr "Auto"
-
-msgid "Misc Reasons"
-msgstr "Diverse årsager"
-
-msgid ""
-"Ban floodfill peers that fail to respond to queries (failure rate >95%)"
-msgstr ""
-"Bloker floodfill-peers, der ikke svarer på forespørgsler (fejlrate >95%)"
-
-msgid "Ban unresponsive floodfills"
-msgstr "Bloker uresponsible floodfills"
-
-msgid "Ban routers whose RouterInfo has no version field"
-msgstr "Bloker routere hvis RouterInfo ikke har et versionsfelt"
-
-msgid "Ban routers with no version"
-msgstr "Bloker routere uden version"
-
-msgid "Ban routers that send excessive tunnel participation requests"
-msgstr "Bloker routere, der sender overdrevne tunnel-deltagelsesforespørgsler"
-
-msgid "Ban excessive tunnel requests"
-msgstr "Bloker overdrevne tunnelforespørgsler"
-
-msgid "Graph Options"
-msgstr "Grafindstillinger"
-
-msgid "Legacy renderer"
-msgstr "Ældre gengiver"
-
-msgid "Use RRD4J renderer"
-msgstr "Brug RRD4J-gengiver"
-
-msgid "minutes (2–30)"
-msgstr "minutter (2–30)"
-# help/advancedsettings_jsp.java:501
-msgid ""
-"When set to true, the sidebar bandwidth graph uses the legacy RRD4J SVG "
-"renderer. When set to false, the new dual-baseline canvas renderer is used, "
-"with gradient fills, glow effects, and a split inbound/outbound display. "
-"[Default is false]"
-msgstr ""
-"Når sat til true, bruger sidepanelets båndbreddegraf den ældre RRD4J SVG-"
-"gengiver. Når sat til false, bruges den nye dual-baseline canvas-gengiver "
-"med gradientfyld, glødeeffekter og en delt indgående/udgående visning. "
-"[Standard er false]"
-
-# help/advancedsettings_jsp.java:503
-msgid ""
-"The time period, in minutes, displayed in the sidebar bandwidth graph. "
-"Values outside the valid range (2–30) are clamped. [Default is 20]"
-msgstr ""
-"Tidsrummet i minutter, der vises i sidepanelets båndbreddegraf. Værdier "
-"uden for det gyldige område (2–30) begrænses. [Standard er 20]"
-
-# help/advancedsettings_jsp.java:505
-msgid ""
-"When set to true (the default), inbound and outbound traffic are displayed "
-"in a split view with a center baseline, with outbound spikes upward and "
-"inbound spikes downward. When set to false, both lines are displayed in "
-"overlay mode from the top of the graph with a configurable composite blend. "
-"[Default is true]"
-msgstr ""
-"Når sat til true (standarden), vises indgående og udgående trafik i en delt "
-"visning med en midterbaseline, med udgående toppe opad og indgående toppe "
-"nedad. Når sat til false, vises begge linjer i overlægningstilstand fra "
-"toppen af grafen med en konfigurerbar sammensat blanding. [Standard er true]"
-
-# help/advancedsettings_jsp.java:507
-msgid ""
-"Sets the render direction for the sidebar bandwidth graph. When set to rtl "
-"(the default), the graph renders right-to-left with newest data on the "
-"right. When set to ltr, the graph renders left-to-right with newest data on "
-"the left. [Default is rtl]"
-msgstr ""
-"Sætter gengivelsesretningen for sidepanelets båndbreddegraf. Når sat til "
-"rtl (standarden), gengives grafen højre til venstre med nyeste data til "
-"højre. Når sat til ltr, gengives grafen venstre til højre med nyeste data "
-"til venstre. [Standard er rtl]"
-
-
-msgid "Split display"
-msgstr "Delt visning"
-
-msgid "Separate Inbound and Outbound"
-msgstr "Adskil indgående og udgående"
-
-msgid "Graph direction"
-msgstr "Grafretning"
-
-msgid "Left-to-right"
-msgstr "Venstre til højre"
-
-msgid "Refresh Interval"
-msgstr "Opdateringsinterval"
-
-msgid "Update graph every second"
-msgstr "Opdater graf hvert sekund"
-
-msgid "health"
-msgstr "tilstand"
-
-msgid "Router Health"
-msgstr "Ruterens tilstand"
-
-msgid "Performance & Load"
-msgstr "Ydeevne & Belastning"
-
-msgid "Transport & Connectivity"
-msgstr "Transport & Forbindelse"
-
-msgid "Network & Participation"
-msgstr "Netværk & Deltagelse"
-
-msgid "Floodfill / NetDB"
-msgstr "Floodfill / NetDB"
-
-msgid "SAM Debug"
-msgstr "SAM-fejlsøgning"
-# help/ui_jsp.java:474
-msgid ""
-"I2P+ supports custom theme overrides for the console, the tunnel manager, "
-"I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are "
-"persistent after upgrades. In order to activate an override, create a css "
-"file named <code>override.css</code> with your theme modifications and place "
-"it in the relevant theme directory of the theme you wish to change, or "
-"rename one of the example files, and then hard refresh the browser. Note "
-"that the tunnel manager and the console share the same override.css. To "
-"deactivate an override, delete or rename the <code>override.css</code> file "
-"and then hard refresh the browser (usually Control + Shift + R)."
-msgstr ""
-"I2P+ understøtter brugerdefinerede tema-overrides for konsollen, "
-"tunnelmanageren, I2PSnark, SusiDNS og Susimail, hvilket tillader ændringer "
-"af temaerne som er persistent efter opgraderinger. For at aktivere en "
-"override, opret en css-fil ved navn <code>override.css</code> med dine "
-"temamodifikationer og placer den i den relevante temamappe for det tema du "
-"ønsker at ændre, eller omdøb en af eksempelfilerne, og gennemfør derefter "
-"en hard refresh af browseren. Bemærk at tunnelmanageren og konsollen deler "
-"den samme override.css. For at deaktivere en override, slet eller omdøb "
-"<code>override.css</code>-filen og gennemfør derefter en hard refresh af "
-"browseren (sædvanligvis Control + Shift + R)."
-
-
-msgid "SAM Bridge Debug"
-msgstr "SAM-bro fejlsøgning"
-
-msgid "All streaming connections"
-msgstr "Alle streamingforbindelser"
-
-msgid "All Streams"
-msgstr "Alle streams"
-
-msgid "Inbound streaming connections"
-msgstr "Indgående streamingforbindelser"
-
-msgid "Outbound streaming connections"
-msgstr "Udgående streamingforbindelser"
-
-msgid "tuning"
-msgstr "justering"
-
-msgid "Router Auto-Tuning"
-msgstr "Ruter Auto-Tuning"

@@ -1,7 +1,13 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 msgid ""
-msgstr "Language: de\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n != 1);\n"
+msgstr ""
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 msgid "OK"
 msgstr "OK"
 
@@ -137,16 +143,11 @@ msgstr "Ignoriere Tunnelanfragen: Hohe Last"
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "Ignoriere Tunnelanfragen: zu lange Warteschlange"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:973
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:997
 msgid "Transit throttle drop"
 msgstr "Transit-Drosselung verworfen"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:984
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1007
 msgid "Transit throttle reject"
 msgstr "Transit-Drosselung abgelehnt"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1239
 msgid "Transit request throttle"
 msgstr "Transit-Anfrage-Drosselung"

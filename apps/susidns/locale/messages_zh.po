@@ -25,7 +25,9 @@ msgid "Host name cannot contain \"{0}\""
 msgstr "主机名称不能包含“{0}”"
 
 #, java-format
-msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgid ""
+"Host name \"{0}\" requires conversion to ASCII but the conversion library is"
+" unavailable in this JVM"
 msgstr "主机名称“{0}”需要转化为ASCIIb编码，但您的JavaJVM缺少转换需要的库。"
 
 msgid "Source"
@@ -104,7 +106,9 @@ msgid "Host name {0} is already in address book, unchanged."
 msgstr "主机名{0}已存在于地址簿中，操作取消。"
 
 #, java-format
-msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
+msgid ""
+"Host name {0} is already in address book with a different destination. Click"
+" \"Replace\" to overwrite."
 msgstr "主机名{0}已存在于地址簿中，但对应不同的目标密钥，点击“替换”覆盖此记录。"
 
 msgid "Unable to resolve Base 32 address"
@@ -161,10 +165,14 @@ msgstr "地址簿已保存。"
 msgid "ERROR: Could not write addressbook file."
 msgstr "错误:无法写入地址簿文件"
 
-msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
+msgid ""
+"Invalid form submission, probably because you used the \"back\" or "
+"\"reload\" button on your browser. Please resubmit."
 msgstr "提交数据无效，可能的原因是您使用了浏览器中的“前进”或“后退”按钮造成会话过期，请重新提交。"
 
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgid ""
+"If the problem persists, verify that you have cookies enabled in your "
+"browser."
 msgstr "如果问题持续出现，请检查您的浏览器是否已启用cookie。"
 
 msgid "Save"
@@ -259,361 +267,31 @@ msgstr "无法更新订阅。HTTP代理没有运行!"
 msgid "Subscriptions reloaded."
 msgstr "订阅设置已重新载入。"
 
-msgid "Import"
-msgstr "导入"
-
-msgid "address book"
-msgstr "地址簿"
-
-msgid "Router"
-msgstr "路由"
-
-msgid "Master"
-msgstr "主要"
-
-msgid "Private"
-msgstr "私有"
-
-msgid "Published"
-msgstr "发布"
-
-msgid "Subscriptions"
-msgstr "订阅"
-
-msgid "Blacklist"
-msgstr "黑名单"
-
-msgid "Configuration"
-msgstr "配置"
-
-msgid "Help"
-msgstr "帮助"
-
-msgid "Book"
-msgstr "书籍"
-
-msgid "No entries"
-msgstr "没有条目"
-
-msgid "Add new destination"
-msgstr "添加新目标"
-
-msgid "Import from hosts.txt file"
-msgstr "从 hosts.txt 文件导入"
-
-msgid "other"
-msgstr "其他"
-
-msgid "Export in hosts.txt format"
-msgstr "导出 hosts.txt 格式"
-
-msgid "Export results in hosts.txt format"
-msgstr "以hosts.txt格式导出结果"
-
-msgid "Export book in hosts.txt format"
-msgstr "以hosts.txt格式导出书籍"
-
-msgid "Search"
-msgstr "搜索"
-
-msgid "latest"
-msgstr "最新"
-
-msgid "Alive"
-msgstr "存活"
-
-msgid "Dead"
-msgstr "失效"
-
-msgid "all"
-msgstr "清除过滤器"
-
-msgid "Info"
-msgstr "信息"
-
-msgid "Type"
-msgstr "类型"
-
-msgid "Hostname"
-msgstr "主机名"
-
-msgid "Encryption"
-msgstr "加密方式"
-
-msgid "Link (b32)"
-msgstr "链接 (b32)"
-
-msgid "Destination"
-msgstr "目标"
-
-msgid "Added"
-msgstr "添加时间"
-
-msgid "Status"
-msgstr "状态"
-
-msgid "Select hosts for deletion from addressbook"
-msgstr "从地址簿中选择要删除的主机"
-
-msgid "More information on this entry"
-msgstr "此记录的更多信息"
-
-msgid "unknown"
-msgstr "未知"
-
-msgid "Base 32 address"
-msgstr "Base 32 地址"
-
-msgid "Helper link to share host address with option to add to addressbook"
-msgstr "Helper链接以共享主机地址，并带有添加到地址簿的选项"
-
-msgid "Mark for deletion"
-msgstr "标记为删除"
-
-msgid "Cancel"
-msgstr "取消"
-
-msgid "This book currently contains no entries."
-msgstr "此地址簿当前不包含任何条目。"
-
-msgid "e.g. newdomain.i2p"
-msgstr "例如"
-
-msgid "B64 or B32"
-msgstr "B64或B32"
-
-msgid "Full destination or b32 address"
-msgstr "完整目的地或 b32 地址"
-
-msgid "Select file"
-msgstr "选择文件"
-
-msgid "blacklist"
-msgstr "黑名单"
-
-msgid "Blacklist Management"
-msgstr "黑名单管理"
-
-msgid "File location"
-msgstr "文件位置"
-
-msgid "Enter I2P addresses to blacklist (one per line)"
-msgstr "输入要加入黑名单的 I2P 地址（每行一个）"
-
-msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
-msgstr "黑名单文件包含一个 I2P 主机名列表，这些主机名应通过 HTTP 代理阻止访问，并在地址簿显示中排除。"
-
-msgid "configuration"
-msgstr "配置"
-
-msgid "Hints"
-msgstr "提示"
-
-msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
-msgstr "这里的文件和目录路径是相对于地址簿的工作目录的，通常是 ~/.i2p/addressbook/ (Linux) 或 %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)。"
-
-msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
-msgstr "如果您希望想地址簿手动添加地址条目，请将其加入私有地址簿或主地址簿。"
-
-msgid "The router addressbook and the published addressbook are updated by the addressbook application."
-msgstr "路由地址簿与已发布地址簿会由地址簿程序负责更新。"
-
-msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
-msgstr "当您发布地址簿时，主地址簿与路由地址簿中的所有地址条目都会显示于已发布地址簿中。"
-
-msgid "Use the private addressbook for private destinations, these are not published."
-msgstr "私有地址簿用来记录需要保密的私人目标，其中的条目不会被发布。"
-
-msgid "Options"
-msgstr "选项"
-
-msgid "File containing the list of subscriptions URLs (no need to change)"
-msgstr "含有订阅URL列表的文件(无需修改)"
-
-msgid "Update interval in hours"
-msgstr "更新周期(小时)"
-
-msgid "Your public hosts.txt file (choose a path within your webserver document root)"
-msgstr "您公开发布的地址簿 hosts.txt 文件 (请在您的Web服务器目录中选择一个位置以便发布。)"
-
-msgid "Your hosts.txt (don't change)"
-msgstr "您的 hosts.txt (不要修改)"
-
-msgid "Your personal addressbook, these hosts will be published"
-msgstr "您的个人地址簿，其中的地址会参与发布。"
-
-msgid "Your private addressbook, it is never published"
-msgstr "您的私有地址簿，其中的地址不会被发布。"
-
-msgid "Port for your eepProxy (no need to change)"
-msgstr "您的 eep 代理端口(无需修改)"
-
-msgid "Hostname for your eepProxy (no need to change)"
-msgstr "您的 eep 代理主机名(无需修改)"
-
-msgid "Whether to update the published addressbook"
-msgstr "是否更新发布地址簿"
-
-msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
-msgstr "此文件含有订阅URL返回的etag头(无需修改)"
-
-msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
-msgstr "此文件含有每个地址簿订阅URL上次获取时的修改时间(无需修改)"
-
-msgid "File to log activity to (change to /dev/null if you like)"
-msgstr "活动日志文件(关闭可设为/dev/null [Linux])"
-
-msgid "Name of override theme to use (defaults to console-selected theme)"
-msgstr "要使用的覆盖主题的名称（默认为控制台选择的主题）"
-
-msgid "Interval (in hours) for running host checker (default is 8 hours)"
-msgstr "运行主机检查器的时间间隔（小时，默认值为 8 小时）"
-
-msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
-msgstr "运行主机检查器时的最大并发 ping 数（默认值为 12，最大值为 100）"
-
-msgid "delete hosts"
-msgstr "删除主机"
-
-msgid "addressbook"
-msgstr "地址簿"
-
-msgid "Details"
-msgstr "细节"
-
-msgid "Address Helper"
-msgstr "地址助手"
-
-msgid "link"
-msgstr "链接"
-
-msgid "Encoded Name"
-msgstr "编码后名称"
-
-msgid "Base 32 Address"
-msgstr "b32(Base32)地址"
-
-msgid "Base 64 Hash"
-msgstr "Base64 散列值"
-
-msgid "Public Key"
-msgstr "公钥"
-
-msgid "Signing Key"
-msgstr "签名密钥"
-
-msgid "Certificate"
-msgstr "证书"
-
-msgid "Validated"
-msgstr "已验证"
-
-msgid "no"
-msgstr "否"
-
-msgid "yes"
-msgstr "是"
-
-msgid "Added Date"
-msgstr "添加时间"
-
-msgid "Last Modified"
-msgstr "上次修改"
-
-msgid "Notes"
-msgstr "注释"
-
-msgid "Add notes about domain"
-msgstr "添加关于域名的注释"
-
-msgid "Visual Identification for"
-msgstr "可视化身份验证给"
-
-msgid "Create your own identification images"
-msgstr "创建自己的身份图像"
-
-msgid "Launch Image Generator"
-msgstr "查看图像生成器"
-
-msgid "Introduction"
-msgstr "介绍"
-
-msgid "What is the addressbook?"
-msgstr "什么是地址簿？"
-
-msgid "The addressbook application is part of your I2P installation."
-msgstr "地址簿应用是 I2P 安装的一部分。"
-
-msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
-msgstr "它定期从分布式来源或“订阅”更新您的 hosts.txt 文件。"
-
-msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
-msgstr "要订阅其他站点很容易，只需将它们加入您的<a href=\"subscriptions\">订阅</a>文件。"
-
-msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
-msgstr "有关 I2P 中命名的更多信息，请参阅<a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>概述</a>。"
-
-msgid "How does the addressbook application work?"
-msgstr "地址簿应用如何工作？"
-
-msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
-msgstr "地址簿应用会定期下载订阅的地址簿并将它们的内容合并至“路由器”地址簿。"
-
-msgid "Then it merges your \"master\" address book into the router address book as well."
-msgstr "然后您的“主”地址簿中的内容也会并入“路由器”地址簿中。"
-
-msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
-msgstr "如果配置中指定，“路由器”地址簿还会被写入“已发布”地址簿中，如果您运行有匿名网站，此地址簿可以被公开订阅。"
-
-msgid "The router also uses a private address book, which is not merged or published."
-msgstr "路由也使用私有地址簿，既不合并也不发布。"
-
-msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
-msgstr "您可以访问“私有”地址簿中的主机名，但它们的实际地址不会发布给其他人。"
-
-msgid "The private address book can also be used for aliases of hosts in your other address books."
-msgstr "“私有”地址簿也可以用于为其他地址簿中的主机名添加别名。"
-
-msgid "subscription log"
-msgstr "订阅日志"
-
-msgid "Subscription Log"
-msgstr "订阅日志"
-
-msgid "Most recent (excluding bad domains)"
-msgstr "最新（不包括坏域）"
-
-msgid "subscriptions"
-msgstr "订阅"
-
-msgid "The subscription file contains a list of i2p URLs."
-msgstr "订阅文件包含一个 I2P URL 列表。"
-
-msgid "The addressbook application regularly checks this list for new eepsites."
-msgstr "地址簿应用定期通过此列表检查是否有新的 I2P 匿名网站。"
-
-msgid "Those URLs refer to published hosts.txt files."
-msgstr "这些 URL 指向公开发布的 hosts.txt 文件。"
-
-msgid "See the FAQ for a list of subscription URLs."
-msgstr "其他来源的订阅 URL 参见 I2P 站点的 <a href=\"http://www.i2p2.i2p/faq_zh.html\">FAQ</a>。"
-
-msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgid ""
+"If SusiDNS is configured to publish your Router address book, the entries "
+"will appear in your Published address book and saved to a hosts.txt file for"
+" sharing."
 msgstr "如果DNS被设置为发布您的地址簿，您的地址将会在已发布的地址簿中出现并保存到将要分享的hosts.txt中。"
 
 msgid "Published Addressbook"
 msgstr "已发布的地址簿"
 
-msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgid ""
+"To configure SusiDNS to push your Router address book to your Published "
+"address book, set 'should_publish=true' on the configuration page."
 msgstr "要把DNS设置为自动发布您的地址簿，请在配置页设置'should_publish=true'"
 
-msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
+msgid ""
+"All hosts derived from subscriptions will appear in this address book, in "
+"addition to any you manually add here or to your Master address book."
 msgstr "除了您在此处手动添加或添加到主通讯录中的任何主机之外，所有订阅的主机都将出现在此通讯录中。"
 
 msgid "Router Addressbook"
 msgstr "路由器地址簿"
 
-msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
+msgid ""
+"Hosts you manually add here will never be published. You can also add "
+"aliases to hosts in other address books here."
 msgstr "您在此处手动添加的主机将永远不会发布。 您还可以在此处向其他通讯簿中的主机添加别名。"
 
 msgid "Private Addressbook"
@@ -622,19 +300,30 @@ msgstr "私有地址簿"
 msgid "Local Records"
 msgstr "本地记录"
 
-msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
+msgid ""
+"I2P applications (including the HTTP proxy) use the hosts in your local "
+"address books to resolve .i2p hostnames."
 msgstr "I2P应用程序（包括HTTP代理）使用本地地址簿中的主机来解析.i2p主机名。"
 
-msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
+msgid ""
+"Additional subscriptions can be found in the FAQ section of the Router help "
+"page."
 msgstr "可以在路由器帮助页面的“常见问题”部分中找到其他订阅。"
 
-msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
+msgid "Subscriptions"
+msgstr "订阅"
+
+msgid ""
+"Hosts sourced from your subscriptions are added to your Router address book,"
+" and are automatically synced (by default every 12 hours)."
 msgstr "来自您的订阅的主机将添加到路由器通讯簿中，并自动进行同步（默认情况下每12小时同步一次）。"
 
 msgid "Configure Subscriptions"
 msgstr "配置订阅"
 
-msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
+msgid ""
+"If you manually add hosts here, they will be included your Published address"
+" book (if configured)."
 msgstr "如果您在此处手动添加主机，则它们将包含在已发布的通讯簿中（如果已配置）。"
 
 msgid "Master Addressbook"
@@ -646,7 +335,9 @@ msgstr "可搜索的"
 msgid "I2P applications"
 msgstr "I2P应用程序"
 
-msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
+msgid ""
+"The Master, Router and Private address books collectively serve as the DNS "
+"authority for I2P applications."
 msgstr "主、路由器和私有地址簿共同担任I2P应用程序的DNS解析。"
 
 msgid "Optional,"
@@ -655,11 +346,18 @@ msgstr "可选的"
 msgid "for websites"
 msgstr "给网站"
 
-msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgid ""
+"If you configure SusiDNS to publish your Router address book, it will export"
+" a hosts.txt file containing all the hosts (by default to the root of your "
+"eepsite)."
 msgstr "如果将DNS配置为发布路由器地址簿，它将导出包含所有主机的hosts.txt文件（默认为eepsite的根目录）。"
 
-msgid "Addresses manually added to your Master address book will merge with your Router address book."
+msgid ""
+"Addresses manually added to your Master address book will merge with your "
+"Router address book."
 msgstr "手动添加到您的主地址簿中的地址将与您的路由器地址簿合并。"
 
-msgid "Hosts you receive from your subscriptions will merge with your Router address book."
+msgid ""
+"Hosts you receive from your subscriptions will merge with your Router "
+"address book."
 msgstr "您从订阅中取得的主机将与路由器地址簿合并。"

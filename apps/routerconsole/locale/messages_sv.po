@@ -14,6 +14,9 @@ msgstr "Hash"
 msgid "Banned by Router Hash"
 msgstr "Förbjuden av Router Hash"
 
+msgid "Tor Exit"
+msgstr "Tor-utgång"
+
 msgid "Blocklist"
 msgstr "Spärrlista"
 
@@ -786,11 +789,35 @@ msgstr[1] "{0} plugins har uppdaterats"
 msgid "Plugin check complete"
 msgstr "Kontroll av plugin är klar"
 
+msgid "Restore Defaults"
+msgstr "Återställ standardvärden"
+
+msgid "All parameters restored to factory defaults"
+msgstr "Alla parametrar återställda till fabriksinställningar"
+
+msgid "Auto-Tuning is not available"
+msgstr "Auto-Tuning är inte tillgängligt"
+
+msgid "Tuning ranges saved — changes take effect immediately"
+msgstr "Tuningintervaller sparade — ändringar träder i kraft omedelbart"
+
+msgid "No changes to save"
+msgstr "Inga ändringar att spara"
+
+msgid "Tuning overrides applied"
+msgstr "Tuningöverridningar tillämpade"
+
+msgid "Invalid value"
+msgstr "Ogiltigt värde"
+
 msgid "No bans currently active"
 msgstr "Inga förbud är aktiva för närvarande"
 
 msgid "Country"
 msgstr "Land"
+
+msgid "Caps"
+msgstr "Kap."
 
 msgid "Version"
 msgstr "Version"
@@ -801,8 +828,8 @@ msgstr "IP-adress"
 msgid "Port"
 msgstr "Port"
 
-msgid "Hostname"
-msgstr "Värdnamn"
+msgid "Host"
+msgstr "Värd"
 
 msgid "Reason"
 msgstr "Anledning"
@@ -1365,6 +1392,9 @@ msgstr "Återdistribuerar"
 msgid "Router Family"
 msgstr "Routerfamilj"
 
+msgid "Auto-Tuning"
+msgstr "Auto-Tuning"
+
 msgid "Save changes"
 msgstr "Spara ändringar"
 
@@ -1648,6 +1678,9 @@ msgstr "Sidofältets inställningar uppdaterade"
 
 msgid "Refresh interval must be a number"
 msgstr "Uppdateringsintervallet måste vara siffror"
+
+msgid "Graph preferences updated"
+msgstr "Diagraminställningar uppdaterade"
 
 msgid "Full sidebar defaults restored."
 msgstr "Fullständiga sidofältets standardvärden återställda."
@@ -2066,6 +2099,18 @@ msgstr "Uthållighet"
 msgid "Store graph data on disk"
 msgstr "Lagra grafdata på disk"
 
+msgid "UTC time"
+msgstr "UTC-tid"
+
+msgid "Display time in UTC on graph axes"
+msgstr "Visa tid i UTC på diagramaxlar"
+
+msgid "Glow effect"
+msgstr "Ljuseffekt"
+
+msgid "Add a glow effect to graph lines"
+msgstr "Lägg till ljuseffekt för diagramlinjer"
+
 msgid "Select Stats"
 msgstr "Vald statistik"
 
@@ -2077,6 +2122,186 @@ msgstr "Diagraminställningar sparade"
 
 msgid "Graph settings unchanged"
 msgstr "Grafinställningarna oförändrade"
+
+msgid "CPU"
+msgstr "CPU"
+
+msgid "CPU load average"
+msgstr "CPU-genomsnittlig belastning"
+
+msgid "Memory"
+msgstr "Minne"
+
+msgid "Memory usage"
+msgstr "Minnesanvändning"
+
+msgid "Router uptime"
+msgstr "Router-drifttid"
+
+msgid "Job Lag"
+msgstr "Jobbdröjsmål"
+
+msgid "ms"
+msgstr "ms"
+
+msgid "Job queue delay"
+msgstr "Jobbköfördröjning"
+
+msgid "Msg Lag"
+msgstr "Meddelandefördröjning"
+
+msgid "Message send processing time"
+msgstr "Meddelandesendningstid"
+
+msgid "Job Queue"
+msgstr "Jobbkö"
+
+msgid "Ready jobs waiting in queue"
+msgstr "Klara jobb väntande i kö"
+
+msgid "Threads"
+msgstr "Trådar"
+
+msgid "Active JVM threads"
+msgstr "Aktiva JVM-trådar"
+
+msgid "NTCP Estab"
+msgstr "NTCP-anslutning"
+
+msgid "NTCP outbound establish time"
+msgstr "NTCP-utgående anslutningstid"
+
+msgid "SSU Estab"
+msgstr "SSU-anslutning"
+
+msgid "SSU outbound establish time"
+msgstr "SSU-utgående anslutningstid"
+
+msgid "SSU RTO"
+msgstr "SSU-RTO"
+
+msgid "SSU retransmission timeout"
+msgstr "SSU-överföringstimeout"
+
+msgid "Conns/s"
+msgstr "Anslutningar/s"
+
+msgid "NTCP connections established per second"
+msgstr "NTCP-anslutningar etablerade per sekund"
+
+msgid "Msgs/s"
+msgstr "Medd./s"
+
+msgid "Messages delivered per second"
+msgstr "Meddelanden levererade per sekund"
+
+msgid "RTT"
+msgstr "RTT"
+
+msgid "End-to-end message round trip time"
+msgstr "Ände-till-ändemeddelande rundresö tid"
+
+msgid "Timeout"
+msgstr "Timeout"
+
+msgid "Tunnel build timeout rate"
+msgstr "Tunnelbyggnad timeoutfrekvens"
+
+msgid "Tunnel Build"
+msgstr "Tunnelbyggnad"
+
+msgid "Client tunnel build latency"
+msgstr "Klient-tunnelbyggnadslatens"
+
+msgid "Active Peers"
+msgstr "Aktiva peers"
+
+msgid "Active peers (last 60s)"
+msgstr "Aktiva peers (senaste 60s)"
+
+msgid "Known Peers"
+msgstr "Kända peers"
+
+msgid "Known routers in network database"
+msgstr "Kända routrar i nätverksdatabasen"
+
+msgid "Active I2CP clients"
+msgstr "Aktiva I2CP-klienter"
+
+msgid "Transit"
+msgstr "Transitera"
+
+msgid "Transit tunnels hosted"
+msgstr "Värdade transittunnlar"
+
+msgid "Streams"
+msgstr "Strömmar"
+
+msgid "Build Success"
+msgstr "Bygg framgång"
+
+msgid "Tunnel build success rate"
+msgstr "Tunnelbyggnad framgångsfrekvens"
+
+msgid "NetDB"
+msgstr "NetDB"
+
+msgid "NetDB lookup time"
+msgstr "NetDB-uppslagstid"
+
+msgid "Banned"
+msgstr "Förbjudna"
+
+msgid "Total banned peers"
+msgstr "Totalt blockerade peers"
+
+msgid "LeaseSets"
+msgstr "LeaseSet"
+
+msgid "Stored LeaseSets in floodfill"
+msgstr "Lagrade LeaseSets i floodfill"
+
+msgid "Cache Hit"
+msgstr "Cacheträff"
+
+msgid "NetDB lookup success rate"
+msgstr "NetDB-uppslag framgångsfrekvens"
+
+msgid "Flood Verify"
+msgstr "Floodfill-verifiering"
+
+msgid "Floodfill verify time"
+msgstr "Floodfill-verifieringstid"
+
+msgid "NetDB ACK"
+msgstr "NetDB-bekräftelse"
+
+msgid "NetDB peer acknowledge time"
+msgstr "NetDB-peer-bekräftelsetid"
+
+msgid "Lookups/s"
+msgstr "Slag/s"
+
+msgid "NetDB lookups handled per second"
+msgstr "NetDB-uppslag hanterade per sekund"
+
+msgid "Requests/s"
+msgstr "Förfrågningar/s"
+
+msgid "Combined store + lookup operations per second"
+msgstr "Kombinerade lagrings- och uppslagsoperationer per sekund"
+
+msgid "Stores/s"
+msgstr "Lagringar/s"
+
+msgid "NetDB store messages handled per second"
+msgstr "NetDB-lagringsmeddelanden hanterade per sekund"
+
+msgid "LS Timeout"
+msgstr "LS-timeout"
+
+msgid "LeaseSet request timeouts (last minute)"
+msgstr "LeaseSet-begäran-timeouts (senaste minuten)"
 
 msgid "Overview"
 msgstr "Översikt"
@@ -2605,6 +2830,9 @@ msgstr "Nej"
 msgid "GeoIP Db"
 msgstr "GeoIP-databas"
 
+msgid "ASN Db"
+msgstr "ASN-databas"
+
 msgid "Target"
 msgstr "Mål"
 
@@ -2753,9 +2981,6 @@ msgstr "Router uppslag"
 
 msgid "All Routers"
 msgstr "Alla routrar"
-
-msgid "LeaseSets"
-msgstr "LeaseSet"
 
 msgid "Advanced Lookup"
 msgstr "Avancerad sökning"
@@ -3051,17 +3276,11 @@ msgstr "Visa profil"
 msgid "Configure peer"
 msgstr "Konfigurera peer"
 
-msgid "Memory usage"
-msgstr "Minnesanvändning"
-
 msgid "Hidden"
 msgstr "Dold"
 
 msgid "Published"
 msgstr "Publicerad"
-
-msgid "Whois"
-msgstr "Whois"
 
 msgid "direct"
 msgstr "direkt"
@@ -3210,9 +3429,6 @@ msgstr "NTCP-anslutningar"
 
 msgid "Peer capabilities"
 msgstr "Peer-förmåga"
-
-msgid "Caps"
-msgstr "Kap."
 
 msgid "Direction/Introduction"
 msgstr "Riktning/Inledning"
@@ -3364,9 +3580,6 @@ msgid_plural "{0} fails"
 msgstr[0] "{0} misslyckades"
 msgstr[1] "{0} misslyckas"
 
-msgid "Banned"
-msgstr "Förbjudna"
-
 msgid "backlogged"
 msgstr "eftersatta"
 
@@ -3474,9 +3687,6 @@ msgstr ""
 
 msgid "Domain"
 msgstr "Domän"
-
-msgid "Host"
-msgstr "Värd"
 
 msgid "Groups"
 msgstr "Grupper"
@@ -3701,6 +3911,24 @@ msgstr "hur många nya noder har de berättat för oss om nyligen?"
 
 msgid "All"
 msgstr "Alla"
+
+msgid "SAM bridge is not running."
+msgstr "SAM-brygga körs inte."
+
+msgid "Active sessions in SessionsDB"
+msgstr "Aktiva sessioner i SessionsDB"
+
+msgid "Active / pool worker threads"
+msgstr "Aktiva pool-arbetstrådar"
+
+msgid "Pending commands in pool"
+msgstr "Väntande kommandon i pool"
+
+msgid "Connected pool handlers"
+msgstr "Anslutna poolhanterare"
+
+msgid "Sockets stolen for data streaming"
+msgstr "Uttag för dataströmning"
 
 msgid "Select search engine"
 msgstr "Välj sökmotor"
@@ -4026,6 +4254,12 @@ msgstr "NetDb"
 msgid "Show all current peer connections"
 msgstr "Visa alla aktuella nodanslutningar"
 
+msgid "Health"
+msgstr "Status"
+
+msgid "Router health overview"
+msgstr "Router-statusöversikt"
+
 msgid "Profiles"
 msgstr "Profiler"
 
@@ -4034,12 +4268,6 @@ msgstr "Visa senaste nod-prestandaprofiler"
 
 msgid "View existing tunnels and tunnel build status"
 msgstr "Visa existerande tunnlar och status för tunnlar som byggs"
-
-msgid "Streams"
-msgstr "Strömmar"
-
-msgid "View active streaming connections"
-msgstr "Visa aktiva strömningsanslutningar"
 
 msgid "Advanced Configuration"
 msgstr "Avancerad Konfiguration"
@@ -4099,9 +4327,6 @@ msgid ""
 msgstr ""
 "Hur mycket RAM I2P använder / totalt RAM tillgängligt för I2P (exkluderar "
 "RAM tilldelat till JVM"
-
-msgid "Memory"
-msgstr "Minne"
 
 msgid "Floodfill enabled"
 msgstr "Floodfill aktiverad"
@@ -4237,9 +4462,6 @@ msgstr "Tunnlar vi deltar i och direkt bidrar med bandbredd till nätverket"
 msgid "Current / Maximum"
 msgstr "Nuvarande / Maximum"
 
-msgid "Transit"
-msgstr "Transitera"
-
 msgid ""
 "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
 msgstr ""
@@ -4254,9 +4476,6 @@ msgid ""
 msgstr ""
 "Kombinerad nyttotunnel och servicetunnelframgång (högst av 1m eller 10m "
 "genomsnitt"
-
-msgid "Build Success"
-msgstr "Bygg framgång"
 
 msgid ""
 "The ratio of tunnel hops we provide to tunnel hops we use - a value greater "
@@ -4393,6 +4612,15 @@ msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "1 händelse"
 msgstr[1] "{0} händelser"
+
+msgid "sent"
+msgstr "skickat"
+
+msgid "received"
+msgstr "mottaget"
+
+msgid "No active streaming connections."
+msgstr "Inga aktiva streaminganslutningar."
 
 msgid "No known routers"
 msgstr "Inga kända routrar"
@@ -4680,6 +4908,769 @@ msgstr "Avstånd till "
 
 msgid "Distance for"
 msgstr "Avstånd för"
+
+msgid "Acknowledgement Frequency"
+msgstr "Bekräftelsefrekvens"
+
+msgid "Data Message Timeout"
+msgstr "Tidsgräns för datameddelande"
+
+msgid "Outbound Establish Timeout"
+msgstr "Tidsgräns för utgående uppkoppling"
+
+msgid "Inbound Establish Timeout"
+msgstr "Tidsgräns för inkommande uppkoppling"
+
+msgid "NTCP Establish Timeout"
+msgstr "Tidsgräns för NTCP-uppkoppling"
+
+msgid "Tunnel Requeue Delay"
+msgstr "Fördröjning för omköning av tunnel"
+
+msgid "Tunnel Replenish Frequency"
+msgstr "Frekvens för tunnelpåfyllning"
+
+msgid "Tunnel Selector Loop Delay"
+msgstr "Slingfördröjning för tunnelväljare"
+
+msgid "Outbound Messages Per Pump"
+msgstr "Utgående meddelanden per pump"
+
+msgid "Inbound Messages Per Pump"
+msgstr "Inkommande meddelanden per pump"
+
+msgid "Initial Congestion Window"
+msgstr "Inledande överbelastningsfönster"
+
+msgid "Initial RTO"
+msgstr "Inledande RTO"
+
+msgid "ACK Delay"
+msgstr "ACK-fördröjning"
+
+msgid "Nagle Flush Delay"
+msgstr "Nagle-tömningsfördröjning"
+
+msgid "Slow Start Window Cap"
+msgstr "Övre gräns för långsam start-fönster"
+
+msgid "Max RTO"
+msgstr "Max RTO"
+
+msgid "Max Resend Delay"
+msgstr "Max fördröjning för omsändning"
+
+msgid "Max Retransmissions"
+msgstr "Max antal omsändningar"
+
+msgid "Writer Queue Size"
+msgstr "Skrivarköns storlek"
+
+msgid "CoDel Target Delay"
+msgstr "CoDel-målfördröjning"
+
+msgid "CoDel Interval"
+msgstr "CoDel-intervall"
+
+msgid "Westwood Decay Factor"
+msgstr "Westwood-avklingningsfaktor"
+
+msgid "RED Minimum Queue Threshold"
+msgstr "RED minsta kötröskel"
+
+msgid "RED Maximum Queue Threshold"
+msgstr "RED största kötröskel"
+
+msgid "RED Maximum Drop Probability"
+msgstr "RED största släppsannolikhet"
+
+msgid "X25519 Precalculate Minimum"
+msgstr "X25519 minsta förberäkning"
+
+msgid "EDH Precalculate Minimum"
+msgstr "EDH minsta förberäkning"
+
+msgid "ML-KEM Precalculate Minimum"
+msgstr "ML-KEM minsta förberäkning"
+
+msgid "NTCP Maximum Send Threads"
+msgstr "NTCP högsta antal sändtrådar"
+
+msgid "NTCP Send Finisher Threads"
+msgstr "NTCP sändavslutstrådar"
+
+msgid "NTCP Send Queue Capacity"
+msgstr "NTCP sändköskapacitet"
+
+msgid "UDP Message Receiver Threads"
+msgstr "UDP meddelandemottagartrådar"
+
+msgid "UDP Maximum Handler Threads"
+msgstr "UDP högsta antal hanterartrådar"
+
+msgid "rDNS Executor Threads"
+msgstr "rDNS exekverartrådar"
+
+msgid "Peer Outbound Queue Size"
+msgstr "Nodens utgående köstorlek"
+
+msgid "Transit Throttle Factor"
+msgstr "Strypningsfaktor för transit"
+
+msgid "Throttle Reject Exponent"
+msgstr "Strypningsavvisningsexponent"
+
+msgid "Maximum Participating Tunnels"
+msgstr "Högsta antal deltagande tunnlar"
+
+msgid "Build Handler Maximum Queue"
+msgstr "Byggnadshanterarens högsta kö"
+
+msgid "Rebuild Throttle Interval"
+msgstr "Strypningsintervall för ombyggnad"
+
+msgid "Per-Tunnel Bandwidth Divisor"
+msgstr "Bandbreddsdivisor per tunnel"
+
+msgid "Tunnel Growth Tolerance"
+msgstr "Toleransfaktor för tunneltillväxt"
+
+msgid "Peers Per Search"
+msgstr "Noder per sökning"
+
+msgid "Max Concurrent Searches"
+msgstr "Max samtidiga sökningar"
+
+msgid "Search Timeout"
+msgstr "Tidsgräns för sökning"
+
+msgid "LeaseSet Lookup Timeout"
+msgstr "Tidsgräns för LeaseSet-uppslagning"
+
+msgid "RouterInfo Lookup Timeout"
+msgstr "Tidsgräns för RouterInfo-uppslagning"
+
+msgid "Max Concurrent Handshakes"
+msgstr "Max samtidiga handskakningar"
+
+msgid "Maximum Peer Profiles"
+msgstr "Högsta antal nodprofiler"
+
+msgid "Minimum Fast Peers"
+msgstr "Minsta antal snabba noder"
+
+msgid "Maximum Fast Peers"
+msgstr "Högsta antal snabba noder"
+
+msgid "Minimum High Capacity Peers"
+msgstr "Minsta antal noder med hög kapacitet"
+
+msgid "Maximum High Capacity Peers"
+msgstr "Högsta antal noder med hög kapacitet"
+
+msgid "Tunnel Build Request Timeout"
+msgstr "Tidsgräns för tunnelbyggnadsbegäran"
+
+msgid "Tunnel Build First Hop Timeout"
+msgstr "Tidsgräns för första hoppet vid tunnelbygge"
+
+msgid "Max Concurrent Tunnel Builds"
+msgstr "Max samtidiga tunnelbyggen"
+
+msgid "Max Concurrent RI Lookups"
+msgstr "Max samtidiga RI-uppslagningar"
+
+msgid "Max Concurrent Test Jobs"
+msgstr "Max samtidiga testjobb"
+
+msgid "Min Delay Between Tests"
+msgstr "Min fördröjning mellan tester"
+
+msgid "Max Delay Between Tests"
+msgstr "Max fördröjning mellan tester"
+
+msgid "NTCP Reader Threads"
+msgstr "NTCP läsartrådar"
+
+msgid "NTCP Writer Threads"
+msgstr "NTCP skrivartrådar"
+
+msgid "NTCP Pumper Failsafe Interval"
+msgstr "NTCP pumpar-felsäkerhetsintervall"
+
+msgid "Max Concurrent Peer Messages"
+msgstr "Max samtidiga nodmeddelanden"
+
+msgid "Initial UDP Concurrent Messages"
+msgstr "Inledande samtidiga UDP-meddelanden"
+
+msgid "Min UDP Concurrent Messages"
+msgstr "Min samtidiga UDP-meddelanden"
+
+msgid "Initial UDP RTO"
+msgstr "Inledande UDP-RTO"
+
+msgid "Min UDP RTO"
+msgstr "Min UDP-RTO"
+
+msgid "Max UDP RTO"
+msgstr "Max UDP-RTO"
+
+msgid "Max UDP Send Window"
+msgstr "Max UDP-sändfönster"
+
+msgid "Post-RTO Window Restart"
+msgstr "Fönsteromstart efter RTO"
+
+msgid "NTCP Send Pool Capacity"
+msgstr "NTCP sändpoolskapacitet"
+
+msgid "Internal Queue Size"
+msgstr "Intern köstorlek"
+
+msgid "Sent Messages Clean Time"
+msgstr "Rensningstid för skickade meddelanden"
+
+msgid "Outbound Message Expiration"
+msgstr "Utgångstid för utgående meddelanden"
+
+msgid "Max Pending Handshakes"
+msgstr "Max väntande handskakningar"
+
+msgid "NTCP Max Write Buffers Per Connection"
+msgstr "NTCP max skrivbuffertar per anslutning"
+
+msgid "Min Resend Delay"
+msgstr "Min fördröjning för omsändning"
+
+msgid "Congestion Avoidance Growth Rate"
+msgstr "Tillväxttakt för överbelastningsundvikande"
+
+msgid "Slow Start Growth Rate"
+msgstr "Tillväxttakt för långsam start"
+
+msgid "RTT Cap"
+msgstr "RTT-tak"
+
+msgid "Initial Resend Delay"
+msgstr "Inledande fördröjning för omsändning"
+
+msgid "Dup ACK Delay"
+msgstr "Fördröjning för duplicerad ACK"
+
+msgid "Inactivity Timeout"
+msgstr "Tidsgräns för inaktivitet"
+
+msgid "Max Message Queue Age"
+msgstr "Max ålder för meddelandekö"
+
+msgid "I/O Thread Priority"
+msgstr "Prioritet för I/O-tråd"
+
+msgid "Pumper Queue Capacity"
+msgstr "Pumparköns kapacitet"
+
+msgid "Pumper Threads"
+msgstr "Pumpartrådar"
+
+msgid "Server Handler Threads"
+msgstr "Serverhanterartrådar"
+
+msgid "Build Handler Threads"
+msgstr "Byggnadshanterartrådar"
+
+msgid "Client Runner Max Threads"
+msgstr "Max trådar för klientkörning"
+
+msgid "Participating Throttle Min"
+msgstr "Min strypning för deltagande"
+
+msgid "Participating Throttle Max"
+msgstr "Max strypning för deltagande"
+
+msgid "Participating Throttle Percent"
+msgstr "Strypningsprocent för deltagande"
+
+msgid "Request Throttle Min"
+msgstr "Min strypning för begäran"
+
+msgid "Request Throttle Max"
+msgstr "Max strypning för begäran"
+
+msgid "Request Throttle Percent"
+msgstr "Strypningsprocent för begäran"
+
+msgid "Request Throttle Burst Threshold"
+msgstr "Skurtröskel för strypning av begäran"
+
+msgid "High-Load Lag Threshold"
+msgstr "Eftersläpningströskel vid hög belastning"
+
+msgid "High-Load CPU Threshold"
+msgstr "CPU-tröskel vid hög belastning"
+
+msgid "Moderate-Load Lag Threshold"
+msgstr "Eftersläpningströskel vid måttlig belastning"
+
+msgid "Moderate-Load CPU Threshold"
+msgstr "CPU-tröskel vid måttlig belastning"
+
+msgid "Sustained High-Load Window"
+msgstr "Fönster för ihållande hög belastning"
+
+msgid "Sustained Moderate-Load Window"
+msgstr "Fönster för ihållande måttlig belastning"
+
+msgid "Peer Activity Window Multiplier"
+msgstr "Multiplikator för nodens aktivitetsfönster"
+
+msgid "Pool Build Failure Threshold"
+msgstr "Tröskel för byggfel i pool"
+
+msgid "Pool Build Backoff"
+msgstr "Återhållsamhet vid poolbygge"
+
+msgid "Pool Spare Tunnel Buffer"
+msgstr "Reservtunnelbuffert för pool"
+
+msgid "Transit Reject Threshold"
+msgstr "Avvisningströskel för transit"
+
+msgid "Transit Reject Steepness"
+msgstr "Brantnad för transitavvisning"
+
+msgid "Transit Load Weight"
+msgstr "Belastningsvikt för transit"
+
+msgid "Request Reject Threshold"
+msgstr "Avvisningströskel för begäran"
+
+msgid "Request Reject Steepness"
+msgstr "Brantnad för begäranavvisning"
+
+msgid "Request Load Weight"
+msgstr "Belastningsvikt för begäran"
+
+msgid "RTO Backoff Multiplier"
+msgstr "RTO-återhållsamhetsmultiplikator"
+
+msgid "Socket Connect Timeout"
+msgstr "Tidsgräns för socketanslutning"
+
+msgid "Data packets between each ACK."
+msgstr "Datapaket mellan varje ACK."
+
+msgid "Time before a message is declared lost (ms)."
+msgstr "Tid innan ett meddelande förklaras förlorat (ms)."
+
+msgid "Outbound SSU handshake timeout (ms)."
+msgstr "Tidsgräns för utgående SSU-handskakning (ms)."
+
+msgid "Inbound SSU handshake timeout (ms)."
+msgstr "Tidsgräns för inkommande SSU-handskakning (ms)."
+
+msgid "NTCP2 handshake timeout (ms)."
+msgstr "Tidsgräns för NTCP2-handskakning (ms)."
+
+msgid "Pumper idle wait before re-checking work (ms)."
+msgstr "Pumparens vänteperiod innan arbete kontrolleras igen (ms)."
+
+msgid "Bandwidth token refill interval (ms)."
+msgstr "Påfyllningsintervall för bandbreddspoletter (ms)."
+
+msgid "NTCP selector sleep between loops (ms)."
+msgstr "NTCP-väljarens vila mellan slingor (ms)."
+
+msgid "Outbound messages batched per gateway pump."
+msgstr "Utgående meddelanden buntade per gateway-pump."
+
+msgid "Inbound messages batched per gateway pump."
+msgstr "Inkommande meddelanden buntade per gateway-pump."
+
+msgid "Starting congestion window (packets)."
+msgstr "Inledande överbelastningsfönster (paket)."
+
+msgid "Starting retransmission timeout (ms)."
+msgstr "Inledande omsändningstidsgräns (ms)."
+
+msgid "ACK delay for piggybacking (ms)."
+msgstr "ACK-fördröjning för snålskjuts (ms)."
+
+msgid "Nagle flush delay (ms)."
+msgstr "Nagle-tömningsfördröjning (ms)."
+
+msgid "Max congestion window during slow start."
+msgstr "Max överbelastningsfönster under långsam start."
+
+msgid "Max retransmission timeout (ms)."
+msgstr "Max omsändningstidsgräns (ms)."
+
+msgid "Max time between retransmissions (ms)."
+msgstr "Max tid mellan omsändningar (ms)."
+
+msgid "Retransmissions before dropping the stream."
+msgstr "Omsändningar innan strömmen släpps."
+
+msgid "Max idle time before dropping a stream (ms)."
+msgstr "Max inaktiv tid innan en ström släpps (ms)."
+
+msgid "I2CP write queue depth."
+msgstr "Djup för I2CP-skrivkö."
+
+msgid "CoDel drop target delay (ms)."
+msgstr "CoDel-släppmålfördröjning (ms)."
+
+msgid "CoDel measurement window (ms)."
+msgstr "CoDel-mätfönster (ms)."
+
+msgid "Westwood EWMA smoothing factor."
+msgstr "Westwood EWMA-utjämningsfaktor."
+
+msgid "Min RED queue size before probabilistic drops (bytes)."
+msgstr "Minsta RED-köstorlek innan sannolikhetsbaserade släpp (byte)."
+
+msgid "Max RED queue size for full drops (bytes)."
+msgstr "Största RED-köstorlek för fullständiga släpp (byte)."
+
+msgid "Max RED drop probability when queue is full (ppm)."
+msgstr "Största RED-släppsannolikhet när kön är full (ppm)."
+
+msgid "Precomputed X25519 key pool minimum."
+msgstr "Minsta pool för förberäknade X25519-nycklar."
+
+msgid "Precomputed EDH key pool minimum."
+msgstr "Minsta pool för förberäknade EDH-nycklar."
+
+msgid "Precomputed ML-KEM key pool minimum."
+msgstr "Minsta pool för förberäknade ML-KEM-nycklar."
+
+msgid "Thread pool cap for NTCP send completion."
+msgstr "Trådpoolstak för slutförande av NTCP-sändning."
+
+msgid "Active threads completing NTCP sends."
+msgstr "Aktiva trådar som slutför NTCP-sändningar."
+
+msgid "NTCP send finalizer queue size."
+msgstr "Köstorlek för NTCP-sändningsavslutare."
+
+msgid "Thread pool cap for UDP packet dispatch."
+msgstr "Trådpoolstak för UDP-paketutskick."
+
+msgid "Threads reassembling UDP messages from fragments."
+msgstr "Trådar som återsätter samman UDP-meddelanden från fragment."
+
+msgid "Threads performing reverse DNS lookups."
+msgstr "Trådar som utför omvänd DNS-uppslagning."
+
+msgid "Per-peer outbound queue size."
+msgstr "Utgående köstorlek per nod."
+
+msgid "Transit rejection aggressiveness (50-100%)."
+msgstr "Aggressivitet för transitavvisning (50-100%)."
+
+msgid "Steepness of the transit rejection curve."
+msgstr "Brantnad på transitavvisningskurvan."
+
+msgid "Transit tunnel capacity."
+msgstr "Kapacitet för transittunnlar."
+
+msgid "Max queued build requests."
+msgstr "Max köade byggnadsbegäranden."
+
+msgid "Delay between rebuild rounds when pools are healthy (ms)."
+msgstr "Fördröjning mellan ombyggnadsrundor när poolerna är friska (ms)."
+
+msgid "Divides bandwidth among transit tunnels."
+msgstr "Delar bandbredden mellan transittunnlar."
+
+msgid "How aggressively new tunnels are accepted before throttling."
+msgstr "Hur aggressivt nya tunnlar accepteras innan strypning."
+
+msgid "Peers queried per iterative search."
+msgstr "Noder som förfrågas per iterativ sökning."
+
+msgid "Max simultaneous NetDB lookups."
+msgstr "Max samtidiga NetDB-uppslagningar."
+
+msgid "Per-peer lookup timeout (ms)."
+msgstr "Tidsgräns för uppslagning per nod (ms)."
+
+msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
+msgstr "Adaptivt tidsgränstak för LeaseSet-uppslagningar (ms)."
+
+msgid "Adaptive deadline cap for RouterInfo lookups (ms)."
+msgstr "Adaptivt tidsgränstak för RouterInfo-uppslagningar (ms)."
+
+msgid "Max simultaneous SSU handshakes."
+msgstr "Max samtidiga SSU-handskakningar."
+
+msgid "Memory cap for peer profiles."
+msgstr "Minnestak för nodprofiler."
+
+msgid "Min fast peers in routing table."
+msgstr "Min snabba noder i routningstabellen."
+
+msgid "Max fast peers in routing table."
+msgstr "Max snabba noder i routningstabellen."
+
+msgid "Min high-capacity peers in routing table."
+msgstr "Min noder med hög kapacitet i routningstabellen."
+
+msgid "Max high-capacity peers in routing table."
+msgstr "Max noder med hög kapacitet i routningstabellen."
+
+msgid "Build reply timeout (ms)."
+msgstr "Tidsgräns för byggsvar (ms)."
+
+msgid "First-hop build forward timeout (ms)."
+msgstr "Tidsgräns för vidarebefordran av bygge vid första hoppet (ms)."
+
+msgid "Max concurrent tunnel builds."
+msgstr "Max samtidiga tunnelbyggen."
+
+msgid "Max concurrent RI lookups during builds."
+msgstr "Max samtidiga RI-uppslagningar under byggen."
+
+msgid "Max concurrent tunnel test jobs."
+msgstr "Max samtidiga tunneltestjobb."
+
+msgid "Min interval between tunnel tests (ms)."
+msgstr "Min intervall mellan tunneltester (ms)."
+
+msgid "Max interval between tunnel tests (ms)."
+msgstr "Max intervall mellan tunneltester (ms)."
+
+msgid "Threads decrypting inbound NTCP data."
+msgstr "Trådar som dekrypterar inkommande NTCP-data."
+
+msgid "Threads encrypting NTCP messages."
+msgstr "Trådar som krypterar NTCP-meddelanden."
+
+msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
+msgstr "Felsäkert avsökningsintervall för fastnade NTCP-pumpar (ms)."
+
+msgid "In-flight message limit per UDP peer."
+msgstr "Gräns för meddelanden under transport per UDP-nod."
+
+msgid "Initial concurrent messages per peer."
+msgstr "Inledande samtidiga meddelanden per nod."
+
+msgid "Min concurrent messages per peer."
+msgstr "Min samtidiga meddelanden per nod."
+
+msgid "Initial retransmission timeout (ms)."
+msgstr "Inledande omsändningstidsgräns (ms)."
+
+msgid "Min retransmission timeout (ms)."
+msgstr "Min omsändningstidsgräns (ms)."
+
+msgid "Max unacknowledged messages per peer."
+msgstr "Max obekräftade meddelanden per nod."
+
+msgid "Window restart size (MTUs) after RTO collapse."
+msgstr "Fönsteromstartsstorlek (MTU:er) efter RTO-kollaps."
+
+msgid "NTCP send pool queue size."
+msgstr "Köstorlek för NTCP-sändpool."
+
+msgid "I2CP session buffer size."
+msgstr "Buffertstorlek för I2CP-session."
+
+msgid "Interval between sweeps of ACKed sent-messages."
+msgstr ""
+"Intervall mellan genomsökningar av ACK-bekräftade skickade meddelanden."
+
+msgid "Max age for undelivered outbound messages."
+msgstr "Max ålder för oleverade utgående meddelanden."
+
+msgid "Pending outbound handshake queue."
+msgstr "Kö för väntande utgående handskakningar."
+
+msgid "Write buffer per NTCP connection."
+msgstr "Skrivbuffert per NTCP-anslutning."
+
+msgid "Min time between retransmissions (ms)."
+msgstr "Min tid mellan omsändningar (ms)."
+
+msgid "Congestion avoidance growth rate."
+msgstr "Tillväxttakt för överbelastningsundvikande."
+
+msgid "Window multiplier per RTT during slow start."
+msgstr "Fönstermultiplikator per RTT under långsam start."
+
+msgid "Upper bound on RTT estimate (ms)."
+msgstr "Övre gräns för RTT-uppskattning (ms)."
+
+msgid "Delay before first retransmit (ms)."
+msgstr "Fördröjning innan första omsändningen (ms)."
+
+msgid "Delay for dup or OOO packet ACKs (ms)."
+msgstr "Fördröjning för ACK av duplicerade eller feländordnade paket (ms)."
+
+msgid "Max message age in queue before drop (ms)."
+msgstr "Max meddelandeålder i kön innan släpp (ms)."
+
+msgid "Dynamic priority for I/O handler threads."
+msgstr "Dynamisk prioritet för I/O-hanterartrådar."
+
+msgid "Gateway pumper queue size."
+msgstr "Köstorlek för gateway-pumpar."
+
+msgid "Gateway pumper thread count."
+msgstr "Antal gateway-pumpartrådar."
+
+msgid "Handler threads for incoming I2PTunnel connections."
+msgstr "Hanterartrådar för inkommande I2PTunnel-anslutningar."
+
+msgid "Thread pool for inbound build request processing."
+msgstr "Trådpool för behandling av inkommande byggnadsbegäranden."
+
+msgid "Ceiling for client proxy thread pool."
+msgstr "Övre gräns för klientproxyns trådpool."
+
+msgid "Min transit tunnels any peer can hold."
+msgstr "Min transittunnlar som en nod kan hålla."
+
+msgid "Max transit tunnels a single peer can hold."
+msgstr "Max transittunnlar en enskild nod kan hålla."
+
+msgid "Max share of transit tunnels for a single peer."
+msgstr "Max andel transittunnlar för en enskild nod."
+
+msgid "Min inbound requests accepted from any peer."
+msgstr "Min inkommande begäranden som accepteras från en nod."
+
+msgid "Max inbound requests accepted from any peer."
+msgstr "Max inkommande begäranden som accepteras från en nod."
+
+msgid "Max share of tunnel requests from a single peer."
+msgstr "Max andel tunnelbegäranden från en enskild nod."
+
+msgid "Burst threshold: requests per second before a ban."
+msgstr "Skurtröskel: begäranden per sekund innan avstängning."
+
+msgid "Job queue lag triggering high-load request gating (ms)."
+msgstr ""
+"Jobbköns eftersläpning som utlöser begäransgrindning vid hög belastning "
+"(ms)."
+
+msgid "System load percent triggering high-load request gating."
+msgstr ""
+"Systembelastningsprocent som utlöser begäransgrindning vid hög belastning."
+
+msgid "Job queue lag triggering moderate-load peer disconnect (ms)."
+msgstr ""
+"Jobbköns eftersläpning som utlöser nodfrånkoppling vid måttlig belastning "
+"(ms)."
+
+msgid "System load percent triggering moderate-load disconnect."
+msgstr ""
+"Systembelastningsprocent som utlöser frånkoppling vid måttlig belastning."
+
+msgid "Duration of high load before gating requests (ms)."
+msgstr "Varaktighet av hög belastning innan begäranden grindas (ms)."
+
+msgid "Duration of moderate load before declining requests (ms)."
+msgstr "Varaktighet av måttlig belastning innan begäranden avvisas (ms)."
+
+msgid "Widens peer recency window to re-admit peers when builds fail."
+msgstr ""
+"Vidgar nodens aktualitetsfönster för att åter släppa in noder när byggen "
+"misslyckas."
+
+msgid "Consecutive failures before pool backoff."
+msgstr "Antal misslyckanden i följd innan poolåterhållsamhet."
+
+msgid "Cooldown duration after pool failure threshold, in ms."
+msgstr "Nedkylningstid efter poolens feltröskel, i ms."
+
+msgid "Target spare tunnel count per pool."
+msgstr "Målantal reservtunnlar per pool."
+
+msgid "Load threshold where probabilistic transit rejection starts (%)."
+msgstr ""
+"Belastningströskel där sannolikhetsbaserad transitavvisning börjar (%)."
+
+msgid "Steepness of the transit rejection probability curve."
+msgstr "Brantnad på sannolikhetskurvan för transitavvisning."
+
+msgid "Load score multiplier for transit rejection (% of computed load)."
+msgstr ""
+"Belastningspoängsmultiplikator för transitavvisning (% av beräknad "
+"belastning)."
+
+msgid "Load threshold where probabilistic request throttling starts (%)."
+msgstr ""
+"Belastningströskel där sannolikhetsbaserad begäransstrypning börjar (%)."
+
+msgid "Steepness of the request throttling probability curve."
+msgstr "Brantnad på sannolikhetskurvan för begäransstrypning."
+
+msgid "Load score multiplier for request throttling (% of computed load)."
+msgstr ""
+"Belastningspoängsmultiplikator för begäransstrypning (% av beräknad "
+"belastning)."
+
+msgid "RTO growth multiplier per retransmission timeout (%, 100 = flat)."
+msgstr "RTO-tillväxtmultiplikator per omsändningstidsgräns (%, 100 = platt)."
+
+msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
+msgstr ""
+"Tidsgräns för TCP-socketanslutning för tunnelserverns hanterartrådar (ms)."
+
+msgid "Tunnel"
+msgstr "Tunnel"
+
+msgid "Streaming"
+msgstr "Strömning"
+
+msgid "Crypto"
+msgstr "Kryptering"
+
+msgid ""
+"Auto-Tuning continuously monitors router performance and adjusts parameters "
+"to optimize throughput, reduce latency, and maintain stability."
+msgstr ""
+"Autotrimning övervakar kontinuerligt routerns prestanda och justerar "
+"parametrar för att optimera genomströmning, minska latens och bibehålla "
+"stabilitet."
+
+msgid ""
+"Uncheck the Auto box on any row to pin that parameter and prevent further "
+"adjustments."
+msgstr ""
+"Avmarkera Auto-rutan på valfri rad för att låsa fast den parametern och "
+"förhindra vidare justeringar."
+
+msgid "Healthy"
+msgstr "Bra"
+
+msgid "Fair"
+msgstr "Tillfredsställande"
+
+msgid "Degraded"
+msgstr "Försämrad"
+
+msgid "Current system health:"
+msgstr "Aktuellt systemtillstånd:"
+
+msgid "System health assessment is not yet available."
+msgstr "Bedömning av systemtillståndet är ännu inte tillgängligt."
+
+msgid "Parameter"
+msgstr "Parameter"
+
+msgid "Default"
+msgstr "Standard"
+
+msgid "Step"
+msgstr "Steg"
+
+msgid "History"
+msgstr "Historik"
+
+msgid "Auto"
+msgstr "Auto"
 
 msgid "Exploratory"
 msgstr "Utforskande"
@@ -5225,12 +6216,6 @@ msgstr "Blockera noder som snabbt ändrar sina portar"
 msgid "Ban peers attempting port hopping"
 msgstr "Blockera noder som försöker med portväxling"
 
-msgid "Ban peers sending excessive unsolicited search replies"
-msgstr "Blockera noder som skickar överdrivna oönskade söksvar"
-
-msgid "Ban peers sending fake/slow search replies"
-msgstr "Blockera noder som skickar falska/långsamma söksvar"
-
 msgid "Abuse Thresholds"
 msgstr "Missbrukströsklar"
 
@@ -5276,6 +6261,30 @@ msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG"
 msgstr ""
 "Lägg till begränsningsgrupper, separerade med mellanslag eller kommatecken "
 "t.ex. LUf,PU"
+
+msgid "Misc Reasons"
+msgstr "Övriga anledningar"
+
+msgid ""
+"Ban floodfill peers that fail to respond to queries (failure rate >95%)"
+msgstr ""
+"Stäng av floodfill-noder som inte svarar på förfrågningar (felfrekvens >95%)"
+
+msgid "Ban unresponsive floodfills"
+msgstr "Blockera icke-svarande floodfills"
+
+msgid "Ban routers whose RouterInfo has no version field"
+msgstr "Blockera routrar vars RouterInfo saknar versionsfält"
+
+msgid "Ban routers with no version"
+msgstr "Blockera routrar utan version"
+
+msgid "Ban routers that send excessive tunnel participation requests"
+msgstr ""
+"Blockera routrar som skickar överdrivna tunnel-deltagandeförfrågningar "
+
+msgid "Ban excessive tunnel requests"
+msgstr "Blockera överdrivna tunnelförfrågningar"
 
 msgid "Clear all bans"
 msgstr "Rensa alla avstängningar"
@@ -6020,6 +7029,36 @@ msgstr "Fast sidebar"
 msgid "Enable conditional fixed sidebar"
 msgstr "Aktivera villkorlig fast sidebar"
 
+msgid "Graph Options"
+msgstr "Diagramalternativ"
+
+msgid "Legacy renderer"
+msgstr "Äldre återgivare"
+
+msgid "Use RRD4J renderer"
+msgstr "Använd RRD4J-återgivare"
+
+msgid "minutes (2–30)"
+msgstr "minuter (2–30)"
+
+msgid "Split display"
+msgstr "Delad visning"
+
+msgid "Separate Inbound and Outbound"
+msgstr "Separata inkommande och utgående"
+
+msgid "Graph direction"
+msgstr "Diagramriktning"
+
+msgid "Left-to-right"
+msgstr "Vänster till höger"
+
+msgid "Refresh Interval"
+msgstr "Uppdateringsintervall"
+
+msgid "Update graph every second"
+msgstr "Uppdatera diagram varje sekund"
+
 msgid "config stats"
 msgstr "konfigurera statistik"
 
@@ -6333,6 +7372,24 @@ msgstr "diagram"
 msgid "Performance Graphs"
 msgstr "Prestandagrafer"
 
+msgid "health"
+msgstr "status"
+
+msgid "Router Health"
+msgstr "Routerstatus"
+
+msgid "Performance & Load"
+msgstr "Prestanda & Belastning"
+
+msgid "Transport & Connectivity"
+msgstr "Transport & Anslutning"
+
+msgid "Network & Participation"
+msgstr "Nätverk & Deltagande"
+
+msgid "Floodfill / NetDB"
+msgstr "Floodfill / NetDB"
+
 msgid "Advanced Configuration Help - I2P+"
 msgstr "Avancerad konfigurationshjälp - I2P"
 
@@ -6536,6 +7593,48 @@ msgstr ""
 "satt till false är konsolen tillgänglig utan inloggning om inga lösenord är "
 "konfigurerade. [Standard är false, kommer att aktiveras som standard i en "
 "framtida utgåva för CSRF-skydd"
+
+msgid ""
+"When set to true, the sidebar bandwidth graph uses the legacy RRD4J SVG "
+"renderer. When set to false, the new dual-baseline canvas renderer is used, "
+"with gradient fills, glow effects, and a split inbound/outbound display. "
+"[Default is false]"
+msgstr ""
+"När den är inställd på true använder sidofältets bandbreddsgraf den äldre "
+"RRD4J SVG-renderaren. När den är inställd på false används den nya canvas-"
+"renderaren med dubbla baslinjer, med gradientfyllningar, glödeffekter och en"
+" delad visning för inkommande/utgående. [Standard är false]"
+
+msgid ""
+"The time period, in minutes, displayed in the sidebar bandwidth graph. "
+"Values outside the valid range (2–30) are clamped. [Default is 20]"
+msgstr ""
+"Tidsperioden, i minuter, som visas i sidofältets bandbreddsgraf. Värden "
+"utanför det giltiga intervallet (2–30) begränsas. [Standard är 20]"
+
+msgid ""
+"When set to true (the default), inbound and outbound traffic are displayed "
+"in a split view with a center baseline, with outbound spikes upward and "
+"inbound spikes downward. When set to false, both lines are displayed in "
+"overlay mode from the top of the graph with a configurable composite blend. "
+"[Default is true]"
+msgstr ""
+"När den är inställd på true (standard) visas inkommande och utgående trafik "
+"i en delad vy med en central baslinje, där utgående toppar går uppåt och "
+"inkommande toppar går nedåt. När den är inställd på false visas båda "
+"linjerna i överläggsläge från grafens överkant med en konfigurerbar "
+"sammansatt blandning. [Standard är true]"
+
+msgid ""
+"Sets the render direction for the sidebar bandwidth graph. When set to rtl "
+"(the default), the graph renders right-to-left with newest data on the "
+"right. When set to ltr, the graph renders left-to-right with newest data on "
+"the left. [Default is rtl]"
+msgstr ""
+"Ställer in renderingsriktningen för sidofältets bandbreddsgraf. När den är "
+"inställd på rtl (standard) renderas grafen från höger till vänster med "
+"nyaste data till höger. När den är inställd på ltr renderas grafen från "
+"vänster till höger med nyaste data till vänster. [Standard är rtl]"
 
 msgid ""
 "This setting determines whether or not the router should use the provided "
@@ -9707,9 +10806,6 @@ msgstr ""
 "(Swaziland), Syrien, Tadzjikistan, Thailand, Turkiet, Turkmenistan, "
 "Venezuela, Förenade Arabemiraten, Uzbekistan, Västsahara, Jemen"
 
-msgid "Tunnel"
-msgstr "Tunnel"
-
 msgid ""
 "A <a href=https://geti2p.net/en/docs/tunnels/unidirectional class='sitelink "
 "external' target=_blank rel=noreferrer>unidirectional</a> encrypted "
@@ -11328,7 +12424,7 @@ msgstr "Temanöversättningar"
 
 msgid ""
 "I2P+ supports custom theme overrides for the console, the tunnel manager, "
-"I2PSnark, SusiDNS and Webbpost, permitting changes to the themes which are "
+"I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are "
 "persistent after upgrades. In order to activate an override, create a css "
 "file named <code>override.css</code> with your theme modifications and place"
 " it in the relevant theme directory of the theme you wish to change, or "
@@ -11337,16 +12433,16 @@ msgid ""
 "deactivate an override, delete or rename the <code>override.css</code> file "
 "and then hard refresh the browser (usually Control + Shift + R)."
 msgstr ""
-"I2P+ stöder anpassade temaöverlagringar för konsolen, tunnelhanteraren, "
-"Torrenter, DNS och Webbpost, vilket gör det möjligt att ändra teman som är "
-"bestående efter uppgraderingar. För att aktivera en överlagring, skapa en "
-"css-fil som heter <code>override.css</code> med dina temamodifikationer och "
+"I2P+ stöder anpassade temaåsidosättningar för konsolen, tunnelhanteraren, "
+"I2PSnark, SusiDNS och Susimail, vilket tillåter ändringar av teman som "
+"består efter uppgraderingar. För att aktivera en åsidosättning, skapa en "
+"css-fil med namnet <code>override.css</code> med dina temaändringar och "
 "placera den i den relevanta temakatalogen för det tema du vill ändra, eller "
-"byt namn på en av exempelfilerna och uppdatera sedan sidan manuellt i "
-"webbläsaren. Observera att tunnelhanteraren och konsolen delar samma "
-"override.css. För att inaktivera en överlagring, radera eller byt namn på "
-"filen <code>override.css</code> och uppdatera sedan sidan manuellt i "
-"webbläsaren (vanligtvis Kontroll + Skift + R)"
+"byt namn på en av exempelfilerna, och uppdatera sedan webbläsaren helt. "
+"Observera att tunnelhanteraren och konsolen delar samma override.css. För "
+"att avaktivera en åsidosättning, ta bort eller byt namn på filen "
+"<code>override.css</code> och uppdatera sedan webbläsaren helt (vanligtvis "
+"Control + Shift + R)."
 
 msgid ""
 "The themes directory is located in the I2P application directory under "
@@ -11625,9 +12721,6 @@ msgstr ""
 
 msgid "Some basic indications of router overload:"
 msgstr "Några grundläggande indikationer på överbelastning av routern:"
-
-msgid "Job Lag"
-msgstr "Jobbdröjsmål"
 
 msgid ""
 "How long jobs are waiting before execution. The job queue is listed on the "
@@ -12437,9 +13530,6 @@ msgstr "Jar-fil dump"
 msgid "job queue stats"
 msgstr "jobbköstatistik"
 
-msgid "Job Queue"
-msgstr "Jobbkö"
-
 msgid "Job statistics for this session"
 msgstr "Jobbstatistik för denna session"
 
@@ -12588,6 +13678,12 @@ msgstr "Visa händelselogg"
 msgid "Filter Router log output"
 msgstr "Filtrera Routerns loggutdata"
 
+msgid "SAM Debug"
+msgstr "SAM-felsökning"
+
+msgid "SAM Bridge Debug"
+msgstr "SAM-bryggfelsökning"
+
 msgid "service logs"
 msgstr "tjänstloggar"
 
@@ -12612,14 +13708,17 @@ msgstr "strömningsanslutningar"
 msgid "Streaming Connections"
 msgstr "Strömningsanslutningar"
 
-msgid "Active I2P streaming connections"
-msgstr "Aktiva I2P-strömningsanslutningar"
+msgid "All streaming connections"
+msgstr "Alla streaminganslutningar"
 
-msgid "Local Tunnels"
-msgstr "Lokala tunnlar"
+msgid "All Streams"
+msgstr "Alla strömmar"
 
-msgid "Most Recent"
-msgstr "Senaste"
+msgid "Inbound streaming connections"
+msgstr "Inkommande streaminganslutningar"
+
+msgid "Outbound streaming connections"
+msgstr "Utgående streaminganslutningar"
 
 msgid "torrents"
 msgstr "torrenter"
@@ -12632,6 +13731,9 @@ msgstr "De senaste transittunnlarna"
 
 msgid "Locally hosted tunnels (exploratory and client)"
 msgstr "Tunnlar med lokalt värdskap (utforskande och klient)"
+
+msgid "Most Recent"
+msgstr "Senaste"
 
 msgid "Fastest"
 msgstr "Snabbast"
@@ -12648,11 +13750,20 @@ msgstr "Snabbaste transittunnlar"
 msgid "Transit Tunnels by Peer"
 msgstr "Transittunnlar av Peer"
 
+msgid "tuning"
+msgstr "justering"
+
+msgid "Router Auto-Tuning"
+msgstr "Router Auto-Tuning"
+
 msgid "tunnel peer count"
 msgstr "antalet kamrater i tunneln"
 
 msgid "local tunnels"
 msgstr "lokala tunnlar"
+
+msgid "Local Tunnels"
+msgstr "Lokala tunnlar"
 
 msgid "Toggle Tunnel Ids"
 msgstr "Växla Tunnel-ID:er"
@@ -12864,496 +13975,3 @@ msgstr "Nästa"
 
 msgid "Finished"
 msgstr "Avslutad"
-
-#: ../../../router/java/src/net/i2p/router/Blocklist.java:1298
-msgid "Tor Exit"
-msgstr "Tor-utgång"
-
-#. Restore Defaults: reset all params to factory defaults
-#: ../java/src/net/i2p/router/web/TuningFormHandler.java:493
-#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:432
-msgid "Restore Defaults"
-msgstr "Återställ standardvärden"
-
-#: ../java/src/net/i2p/router/web/TuningFormHandler.java:497
-msgid "All parameters restored to factory defaults"
-msgstr "Alla parametrar återställda till fabriksinställningar"
-
-#: ../java/src/net/i2p/router/web/TuningFormHandler.java:499
-#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:303
-msgid "Auto-Tuning is not available"
-msgstr "Auto-Tuning är inte tillgängligt"
-
-#: ../java/src/net/i2p/router/web/TuningFormHandler.java:804
-msgid "Tuning ranges saved — changes take effect immediately"
-msgstr "Tuningintervaller sparade — ändringar träder i kraft omedelbart"
-
-#: ../java/src/net/i2p/router/web/TuningFormHandler.java:806
-#: ../java/src/net/i2p/router/web/TuningFormHandler.java:811
-msgid "No changes to save"
-msgstr "Inga ändringar att spara"
-
-#: ../java/src/net/i2p/router/web/TuningFormHandler.java:809
-msgid "Tuning overrides applied"
-msgstr "Tuningöverridningar tillämpade"
-
-#: ../java/src/net/i2p/router/web/TuningFormHandler.java:827
-msgid "Invalid value"
-msgstr "Ogiltigt värde"
-
-#: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:34
-msgid "Auto-Tuning"
-msgstr "Auto-Tuning"
-
-#: ../java/src/net/i2p/router/web/helpers/ConfigSidebarHandler.java:107
-msgid "Graph preferences updated"
-msgstr "Diagraminställningar uppdaterade"
-
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:483
-msgid "UTC time"
-msgstr "UTC-tid"
-
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:489
-msgid "Display time in UTC on graph axes"
-msgstr "Visa tid i UTC på diagramaxlar"
-
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:491
-msgid "Glow effect"
-msgstr "Ljuseffekt"
-
-#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:497
-msgid "Add a glow effect to graph lines"
-msgstr "Lägg till ljuseffekt för diagramlinjer"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:239
-msgid "CPU"
-msgstr "CPU"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:240
-msgid "CPU load average"
-msgstr "CPU-genomsnittlig belastning"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:244
-msgid "Router uptime"
-msgstr "Router-drifttid"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:245
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:247
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:308
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:310
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:312
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:318
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:322
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:391
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:458
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:460
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:468
-msgid "ms"
-msgstr "ms"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:246
-msgid "Job queue delay"
-msgstr "Jobbköfördröjning"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:247
-msgid "Msg Lag"
-msgstr "Meddelandefördröjning"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:248
-msgid "Message send processing time"
-msgstr "Meddelandesendningstid"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:250
-msgid "Ready jobs waiting in queue"
-msgstr "Klara jobb väntande i kö"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:251
-msgid "Threads"
-msgstr "Trådar"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:252
-msgid "Active JVM threads"
-msgstr "Aktiva JVM-trådar"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:308
-msgid "NTCP Estab"
-msgstr "NTCP-anslutning"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:309
-msgid "NTCP outbound establish time"
-msgstr "NTCP-utgående anslutningstid"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:310
-msgid "SSU Estab"
-msgstr "SSU-anslutning"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:311
-msgid "SSU outbound establish time"
-msgstr "SSU-utgående anslutningstid"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:312
-msgid "SSU RTO"
-msgstr "SSU-RTO"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:313
-msgid "SSU retransmission timeout"
-msgstr "SSU-överföringstimeout"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:314
-msgid "Conns/s"
-msgstr "Anslutningar/s"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:315
-msgid "NTCP connections established per second"
-msgstr "NTCP-anslutningar etablerade per sekund"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:316
-msgid "Msgs/s"
-msgstr "Medd./s"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:317
-msgid "Messages delivered per second"
-msgstr "Meddelanden levererade per sekund"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:318
-msgid "RTT"
-msgstr "RTT"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:319
-msgid "End-to-end message round trip time"
-msgstr "Ände-till-ändemeddelande rundresö tid"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:320
-msgid "Timeout"
-msgstr "Timeout"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:321
-msgid "Tunnel build timeout rate"
-msgstr "Tunnelbyggnad timeoutfrekvens"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:322
-msgid "Tunnel Build"
-msgstr "Tunnelbyggnad"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:323
-msgid "Client tunnel build latency"
-msgstr "Klient-tunnelbyggnadslatens"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:379
-msgid "Active Peers"
-msgstr "Aktiva peers"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:380
-msgid "Active peers (last 60s)"
-msgstr "Aktiva peers (senaste 60s)"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:381
-msgid "Known Peers"
-msgstr "Kända peers"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:382
-msgid "Known routers in network database"
-msgstr "Kända routrar i nätverksdatabasen"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:384
-msgid "Active I2CP clients"
-msgstr "Aktiva I2CP-klienter"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:386
-msgid "Transit tunnels hosted"
-msgstr "Värdade transittunnlar"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:390
-msgid "Tunnel build success rate"
-msgstr "Tunnelbyggnad framgångsfrekvens"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:391
-msgid "NetDB"
-msgstr "NetDB"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:392
-msgid "NetDB lookup time"
-msgstr "NetDB-uppslagstid"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:394
-msgid "Total banned peers"
-msgstr "Totalt blockerade peers"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:455
-msgid "Stored LeaseSets in floodfill"
-msgstr "Lagrade LeaseSets i floodfill"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:456
-msgid "Cache Hit"
-msgstr "Cacheträff"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:457
-msgid "NetDB lookup success rate"
-msgstr "NetDB-uppslag framgångsfrekvens"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:458
-msgid "Flood Verify"
-msgstr "Floodfill-verifiering"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:459
-msgid "Floodfill verify time"
-msgstr "Floodfill-verifieringstid"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:460
-msgid "NetDB ACK"
-msgstr "NetDB-bekräftelse"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:461
-msgid "NetDB peer acknowledge time"
-msgstr "NetDB-peer-bekräftelsetid"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:462
-msgid "Lookups/s"
-msgstr "Slag/s"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:463
-msgid "NetDB lookups handled per second"
-msgstr "NetDB-uppslag hanterade per sekund"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:464
-msgid "Requests/s"
-msgstr "Förfrågningar/s"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:465
-msgid "Combined store + lookup operations per second"
-msgstr "Kombinerade lagrings- och uppslagsoperationer per sekund"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:466
-msgid "Stores/s"
-msgstr "Lagringar/s"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:467
-msgid "NetDB store messages handled per second"
-msgstr "NetDB-lagringsmeddelanden hanterade per sekund"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:468
-msgid "LS Timeout"
-msgstr "LS-timeout"
-
-#: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:469
-msgid "LeaseSet request timeouts (last minute)"
-msgstr "LeaseSet-begäran-timeouts (senaste minuten)"
-
-#: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:214
-msgid "ASN Db"
-msgstr "ASN-databas"
-
-#: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:46
-msgid "SAM bridge is not running."
-msgstr "SAM-brygga körs inte."
-
-#: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:70
-msgid "Active sessions in SessionsDB"
-msgstr "Aktiva sessioner i SessionsDB"
-
-#: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:72
-msgid "Active / pool worker threads"
-msgstr "Aktiva pool-arbetstrådar"
-
-#: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:74
-msgid "Pending commands in pool"
-msgstr "Väntande kommandon i pool"
-
-#: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:76
-msgid "Connected pool handlers"
-msgstr "Anslutna poolhanterare"
-
-#: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:78
-msgid "Sockets stolen for data streaming"
-msgstr "Uttag för dataströmning"
-
-#: ../java/src/net/i2p/router/web/helpers/SidebarRenderer.java:541
-msgid "Health"
-msgstr "Status"
-
-#: ../java/src/net/i2p/router/web/helpers/SidebarRenderer.java:544
-msgid "Router health overview"
-msgstr "Router-statusöversikt"
-
-#: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:204
-#: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:302
-msgid "sent"
-msgstr "skickat"
-
-#: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:206
-#: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:303
-msgid "received"
-msgstr "mottaget"
-
-#: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:372
-msgid "No active streaming connections."
-msgstr "Inga aktiva streaminganslutningar."
-
-#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:345
-msgid "Healthy"
-msgstr "Bra"
-
-#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:347
-msgid "Fair"
-msgstr "Tillfredsställande"
-
-#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:349
-msgid "Degraded"
-msgstr "Försämrad"
-
-#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:352
-msgid "Current system health:"
-msgstr "Aktuellt systemtillstånd:"
-
-#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:355
-msgid "System health assessment is not yet available."
-msgstr "Bedömning av systemtillståndet är ännu inte tillgängligt."
-
-#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:372
-msgid "Parameter"
-msgstr "Parameter"
-
-#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:374
-msgid "Default"
-msgstr "Standard"
-
-#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:377
-msgid "Step"
-msgstr "Steg"
-
-#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:378
-msgid "History"
-msgstr "Historik"
-
-#: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:379
-msgid "Auto"
-msgstr "Auto"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:580
-msgid "Misc Reasons"
-msgstr "Övriga anledningar"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:582
-msgid ""
-"Ban floodfill peers that fail to respond to queries (failure rate >95%) "
-msgstr ""
-"Blockera floodfill-peers som inte svarar på förfrågningar (felöverstigning "
-">95%) "
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:586
-msgid "Ban unresponsive floodfills"
-msgstr "Blockera icke-svarande floodfills"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:588
-msgid "Ban routers whose RouterInfo has no version field"
-msgstr "Blockera routrar vars RouterInfo saknar versionsfält"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:592
-msgid "Ban routers with no version"
-msgstr "Blockera routrar utan version"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:594
-msgid "Ban routers that send excessive tunnel participation requests"
-msgstr ""
-"Blockera routrar som skickar överdrivna tunnel-deltagandeförfrågningar "
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:598
-msgid "Ban excessive tunnel requests"
-msgstr "Blockera överdrivna tunnelförfrågningar"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:512
-msgid "Graph Options"
-msgstr "Diagramalternativ"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:516
-msgid "Legacy renderer"
-msgstr "Äldre återgivare"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:521
-msgid "Use RRD4J renderer"
-msgstr "Använd RRD4J-återgivare"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:529
-msgid "minutes (2–30)"
-msgstr "minuter (2–30)"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:531
-msgid "Split display"
-msgstr "Delad visning"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:536
-msgid "Separate Inbound and Outbound"
-msgstr "Separata inkommande och utgående"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:538
-msgid "Graph direction"
-msgstr "Diagramriktning"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:543
-msgid "Left-to-right"
-msgstr "Vänster till höger"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:545
-msgid "Refresh Interval"
-msgstr "Uppdateringsintervall"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:550
-msgid "Update graph every second"
-msgstr "Uppdatera diagram varje sekund"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:309
-msgid "health"
-msgstr "status"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:410
-msgid "Router Health"
-msgstr "Routerstatus"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:412
-msgid "Performance & Load"
-msgstr "Prestanda & Belastning"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:416
-msgid "Transport & Connectivity"
-msgstr "Transport & Anslutning"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:420
-msgid "Network & Participation"
-msgstr "Nätverk & Deltagande"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:426
-msgid "Floodfill / NetDB"
-msgstr "Floodfill / NetDB"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/samdebug_jsp.java:309
-msgid "SAM Debug"
-msgstr "SAM-felsökning"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/samdebug_jsp.java:399
-msgid "SAM Bridge Debug"
-msgstr "SAM-bryggfelsökning"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:415
-msgid "All streaming connections"
-msgstr "Alla streaminganslutningar"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:418
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:422
-msgid "All Streams"
-msgstr "Alla strömmar"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:427
-msgid "Inbound streaming connections"
-msgstr "Inkommande streaminganslutningar"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:439
-msgid "Outbound streaming connections"
-msgstr "Utgående streaminganslutningar"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tuning_jsp.java:310
-msgid "tuning"
-msgstr "justering"
-
-#: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tuning_jsp.java:400
-msgid "Router Auto-Tuning"
-msgstr "Router Auto-Tuning"

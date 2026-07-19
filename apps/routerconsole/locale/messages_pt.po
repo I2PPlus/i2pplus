@@ -14,6 +14,10 @@ msgstr "Hash"
 msgid "Banned by Router Hash"
 msgstr "Banido pelo hash do roteador"
 
+# /../../router/java/src/net/i2p/router/Blocklist.java:1298
+msgid "Tor Exit"
+msgstr "Saída Tor"
+
 msgid "Blocklist"
 msgstr "Lista de bloqueio"
 
@@ -793,11 +797,42 @@ msgstr[1] "{0} plugins atualizados"
 msgid "Plugin check complete"
 msgstr "Verificação do plugin concluída"
 
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:432
+msgid "Restore Defaults"
+msgstr "Restaurar padrões"
+
+# /java/src/net/i2p/router/web/TuningFormHandler.java:497
+msgid "All parameters restored to factory defaults"
+msgstr "Todos os parâmetros restaurados para os padrões de fábrica"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:303
+msgid "Auto-Tuning is not available"
+msgstr "Auto-Tuning não está disponível"
+
+# /java/src/net/i2p/router/web/TuningFormHandler.java:804
+msgid "Tuning ranges saved — changes take effect immediately"
+msgstr "Faixas de ajuste salvas — as alterações entram em vigor imediatamente"
+
+# /java/src/net/i2p/router/web/TuningFormHandler.java:811
+msgid "No changes to save"
+msgstr "Nenhuma alteração para salvar"
+
+# /java/src/net/i2p/router/web/TuningFormHandler.java:809
+msgid "Tuning overrides applied"
+msgstr "Substituições de ajuste aplicadas"
+
+# /java/src/net/i2p/router/web/TuningFormHandler.java:827
+msgid "Invalid value"
+msgstr "Valor inválido"
+
 msgid "No bans currently active"
 msgstr "Nenhum banimento atualmente ativo"
 
 msgid "Country"
 msgstr "País"
+
+msgid "Caps"
+msgstr "Bonés"
 
 msgid "Version"
 msgstr "Versão"
@@ -808,8 +843,8 @@ msgstr "Endereço IP"
 msgid "Port"
 msgstr "Porta"
 
-msgid "Hostname"
-msgstr "Nome do host"
+msgid "Host"
+msgstr "Anfitrião"
 
 msgid "Reason"
 msgstr "Razão"
@@ -1375,6 +1410,10 @@ msgstr "Propagação"
 msgid "Router Family"
 msgstr "Família do Roteador"
 
+# /java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:34
+msgid "Auto-Tuning"
+msgstr "Auto-Tuning"
+
 msgid "Save changes"
 msgstr "Salvar alterações"
 
@@ -1664,6 +1703,10 @@ msgstr "Preferências da barra lateral atualizadas"
 
 msgid "Refresh interval must be a number"
 msgstr "Intervalo de atualização tem que ser um número"
+
+# /java/src/net/i2p/router/web/helpers/ConfigSidebarHandler.java:107
+msgid "Graph preferences updated"
+msgstr "Preferências de gráfico atualizadas"
 
 msgid "Full sidebar defaults restored."
 msgstr "Padrões da barra lateral completa restaurados."
@@ -2086,6 +2129,22 @@ msgstr "Persistência"
 msgid "Store graph data on disk"
 msgstr "Armazene dados gráficos em disco"
 
+# /java/src/net/i2p/router/web/helpers/GraphHelper.java:483
+msgid "UTC time"
+msgstr "Hora UTC"
+
+# /java/src/net/i2p/router/web/helpers/GraphHelper.java:489
+msgid "Display time in UTC on graph axes"
+msgstr "Exibir hora em UTC nos eixos do gráfico"
+
+# /java/src/net/i2p/router/web/helpers/GraphHelper.java:491
+msgid "Glow effect"
+msgstr "Efeito de brilho"
+
+# /java/src/net/i2p/router/web/helpers/GraphHelper.java:497
+msgid "Add a glow effect to graph lines"
+msgstr "Adicionar efeito de brilho às linhas do gráfico"
+
 msgid "Select Stats"
 msgstr "Selecione estatísticas"
 
@@ -2097,6 +2156,237 @@ msgstr "Configurações de gráfico salvas"
 
 msgid "Graph settings unchanged"
 msgstr "Configurações do gráfico inalteradas"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:239
+msgid "CPU"
+msgstr "CPU"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:240
+msgid "CPU load average"
+msgstr "Média de carga da CPU"
+
+msgid "Memory"
+msgstr "Memória"
+
+msgid "Memory usage"
+msgstr "Uso de memória"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:244
+msgid "Router uptime"
+msgstr "Tempo de funcionamento do roteador"
+
+msgid "Job Lag"
+msgstr "Atraso de trabalho"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:468
+msgid "ms"
+msgstr "ms"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:246
+msgid "Job queue delay"
+msgstr "Atraso da fila de tarefas"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:247
+msgid "Msg Lag"
+msgstr "Atraso de mensagem"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:248
+msgid "Message send processing time"
+msgstr "Tempo de processamento de envio de mensagem"
+
+msgid "Job Queue"
+msgstr "Fila de Trabalho"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:250
+msgid "Ready jobs waiting in queue"
+msgstr "Tarefas prontas aguardando na fila"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:251
+msgid "Threads"
+msgstr "Threads"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:252
+msgid "Active JVM threads"
+msgstr "Threads JVM ativos"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:308
+msgid "NTCP Estab"
+msgstr "Estab. NTCP"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:309
+msgid "NTCP outbound establish time"
+msgstr "Tempo de estabelecimento NTCP de saída"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:310
+msgid "SSU Estab"
+msgstr "Estab. SSU"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:311
+msgid "SSU outbound establish time"
+msgstr "Tempo de estabelecimento SSU de saída"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:312
+msgid "SSU RTO"
+msgstr "RTO SSU"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:313
+msgid "SSU retransmission timeout"
+msgstr "Tempo limite de retransmissão SSU"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:314
+msgid "Conns/s"
+msgstr "Conns/s"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:315
+msgid "NTCP connections established per second"
+msgstr "Conexões NTCP estabelecidas por segundo"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:316
+msgid "Msgs/s"
+msgstr "Msgs/s"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:317
+msgid "Messages delivered per second"
+msgstr "Mensagens entregues por segundo"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:318
+msgid "RTT"
+msgstr "RTT"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:319
+msgid "End-to-end message round trip time"
+msgstr "Tempo de ida e volta de mensagem de ponta a ponta"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:320
+msgid "Timeout"
+msgstr "Tempo limite"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:321
+msgid "Tunnel build timeout rate"
+msgstr "Taxa de tempo limite de construção de túnel"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:322
+msgid "Tunnel Build"
+msgstr "Construção de túnel"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:323
+msgid "Client tunnel build latency"
+msgstr "Latência de construção de túnel do cliente"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:379
+msgid "Active Peers"
+msgstr "Peers ativos"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:380
+msgid "Active peers (last 60s)"
+msgstr "Peers ativos (últimos 60s)"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:381
+msgid "Known Peers"
+msgstr "Peers conhecidos"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:382
+msgid "Known routers in network database"
+msgstr "Roteadores conhecidos no banco de dados de rede"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:384
+msgid "Active I2CP clients"
+msgstr "Clientes I2CP ativos"
+
+msgid "Transit"
+msgstr "Trânsito"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:386
+msgid "Transit tunnels hosted"
+msgstr "Túneis de trânsito hospedados"
+
+msgid "Streams"
+msgstr "Fluxos"
+
+msgid "Build Success"
+msgstr "Construir Sucesso"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:390
+msgid "Tunnel build success rate"
+msgstr "Taxa de sucesso na construção de túnel"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:391
+msgid "NetDB"
+msgstr "NetDB"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:392
+msgid "NetDB lookup time"
+msgstr "Tempo de consulta ao NetDB"
+
+msgid "Banned"
+msgstr "Banido"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:394
+msgid "Total banned peers"
+msgstr "Total de peers banidos"
+
+msgid "LeaseSets"
+msgstr "Conjuntos de locação"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:455
+msgid "Stored LeaseSets in floodfill"
+msgstr "LeaseSets armazenados no floodfill"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:456
+msgid "Cache Hit"
+msgstr "Acerto de cache"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:457
+msgid "NetDB lookup success rate"
+msgstr "Taxa de sucesso de consulta ao NetDB"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:458
+msgid "Flood Verify"
+msgstr "Verificação de flood"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:459
+msgid "Floodfill verify time"
+msgstr "Tempo de verificação de floodfill"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:460
+msgid "NetDB ACK"
+msgstr "ACK do NetDB"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:461
+msgid "NetDB peer acknowledge time"
+msgstr "Tempo de confirmação do peer no NetDB"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:462
+msgid "Lookups/s"
+msgstr "Consultas/s"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:463
+msgid "NetDB lookups handled per second"
+msgstr "Consultas ao NetDB processadas por segundo"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:464
+msgid "Requests/s"
+msgstr "Pedidos/s"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:465
+msgid "Combined store + lookup operations per second"
+msgstr "Operações combinadas de armazenamento + consulta por segundo"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:466
+msgid "Stores/s"
+msgstr "Armaz./s"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:467
+msgid "NetDB store messages handled per second"
+msgstr "Mensagens de armazenamento do NetDB processadas por segundo"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:468
+msgid "LS Timeout"
+msgstr "Tempo limite LS"
+
+# /java/src/net/i2p/router/web/helpers/HealthHelper.java:469
+msgid "LeaseSet request timeouts (last minute)"
+msgstr "Tempo limite de solicitações de LeaseSet (último minuto)"
 
 msgid "Overview"
 msgstr "Visão Geral"
@@ -2630,6 +2920,10 @@ msgstr "Não"
 msgid "GeoIP Db"
 msgstr "Banco de dados GeoIP"
 
+# /java/src/net/i2p/router/web/helpers/InfoHelper.java:214
+msgid "ASN Db"
+msgstr "Banco ASN"
+
 msgid "Target"
 msgstr "Alvo"
 
@@ -2778,9 +3072,6 @@ msgstr "Pesquisa de Roteador"
 
 msgid "All Routers"
 msgstr "Todos os Roteadores"
-
-msgid "LeaseSets"
-msgstr "Conjuntos de locação"
 
 msgid "Advanced Lookup"
 msgstr "Pesquisa Avançada"
@@ -3076,17 +3367,11 @@ msgstr "Ver perfil"
 msgid "Configure peer"
 msgstr "Configurar ponto"
 
-msgid "Memory usage"
-msgstr "Uso de memória"
-
 msgid "Hidden"
 msgstr "Escondido"
 
 msgid "Published"
 msgstr "Publicado"
-
-msgid "Whois"
-msgstr "Quem é"
 
 msgid "direct"
 msgstr "direto"
@@ -3235,9 +3520,6 @@ msgstr "Conexões NTCP"
 
 msgid "Peer capabilities"
 msgstr "Capacidades de pares"
-
-msgid "Caps"
-msgstr "Bonés"
 
 msgid "Direction/Introduction"
 msgstr "Direcção/Introdução"
@@ -3389,9 +3671,6 @@ msgid_plural "{0} fails"
 msgstr[0] "{0} falha"
 msgstr[1] "{0} falhas"
 
-msgid "Banned"
-msgstr "Banido"
-
 msgid "backlogged"
 msgstr "atrasado"
 
@@ -3502,9 +3781,6 @@ msgstr ""
 
 msgid "Domain"
 msgstr "Domínio"
-
-msgid "Host"
-msgstr "Anfitrião"
 
 msgid "Groups"
 msgstr "Grupos"
@@ -3730,6 +4006,30 @@ msgstr "quantos novos pares nos foram apresentados recentemente?"
 
 msgid "All"
 msgstr "Todos"
+
+# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:46
+msgid "SAM bridge is not running."
+msgstr "A ponte SAM não está em execução."
+
+# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:70
+msgid "Active sessions in SessionsDB"
+msgstr "Sessões ativas no SessionsDB"
+
+# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:72
+msgid "Active / pool worker threads"
+msgstr "Threads ativos / workers do pool"
+
+# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:74
+msgid "Pending commands in pool"
+msgstr "Comandos pendentes no pool"
+
+# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:76
+msgid "Connected pool handlers"
+msgstr "Handlers de pool conectados"
+
+# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:78
+msgid "Sockets stolen for data streaming"
+msgstr "Sockets roubados para streaming de dados"
 
 msgid "Select search engine"
 msgstr "Escolha um mecanismo de busca"
@@ -4057,6 +4357,14 @@ msgstr "NetDB"
 msgid "Show all current peer connections"
 msgstr "Mostrar todas conexões atuais com os pares"
 
+# /java/src/net/i2p/router/web/helpers/SidebarRenderer.java:541
+msgid "Health"
+msgstr "Estado"
+
+# /java/src/net/i2p/router/web/helpers/SidebarRenderer.java:544
+msgid "Router health overview"
+msgstr "Visão geral do estado do roteador"
+
 msgid "Profiles"
 msgstr "Perfis"
 
@@ -4065,12 +4373,6 @@ msgstr "Mostrar perfis de performance recentes dos pares"
 
 msgid "View existing tunnels and tunnel build status"
 msgstr "Ver túneis estabelecidos e estado da construção de túneis"
-
-msgid "Streams"
-msgstr "Fluxos"
-
-msgid "View active streaming connections"
-msgstr "Ver conexões de streaming ativas"
 
 msgid "Advanced Configuration"
 msgstr "Configuração Avançada"
@@ -4129,9 +4431,6 @@ msgid ""
 msgstr ""
 "Quanto RAM I2P está usando/total de RAM disponível para I2P (exclui RAM "
 "alocada para a JVM)"
-
-msgid "Memory"
-msgstr "Memória"
 
 msgid "Floodfill enabled"
 msgstr "Floodfill ativado"
@@ -4275,9 +4574,6 @@ msgstr ""
 msgid "Current / Maximum"
 msgstr "Atual/Máximo"
 
-msgid "Transit"
-msgstr "Trânsito"
-
 msgid ""
 "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
 msgstr ""
@@ -4293,9 +4589,6 @@ msgid ""
 msgstr ""
 "Sucesso combinado de construção de túneis de utilidade e serviço (maior "
 "entre média de 1m ou 10m)"
-
-msgid "Build Success"
-msgstr "Construir Sucesso"
 
 msgid ""
 "The ratio of tunnel hops we provide to tunnel hops we use - a value greater "
@@ -4436,6 +4729,18 @@ msgid "1 event"
 msgid_plural "{0} events"
 msgstr[0] "1 evento"
 msgstr[1] "{0} eventos."
+
+# /java/src/net/i2p/router/web/helpers/StreamHelper.java:302
+msgid "sent"
+msgstr "enviado"
+
+# /java/src/net/i2p/router/web/helpers/StreamHelper.java:303
+msgid "received"
+msgstr "recebido"
+
+# /java/src/net/i2p/router/web/helpers/StreamHelper.java:372
+msgid "No active streaming connections."
+msgstr "Nenhuma conexão de streaming ativa."
 
 msgid "No known routers"
 msgstr "Nenhum roteador conhecido"
@@ -4724,6 +5029,789 @@ msgstr "Distância até"
 
 msgid "Distance for"
 msgstr "Distância para"
+
+msgid "Acknowledgement Frequency"
+msgstr "Frequência de Confirmação"
+
+msgid "Data Message Timeout"
+msgstr "Tempo Limite de Mensagem de Dados"
+
+msgid "Outbound Establish Timeout"
+msgstr "Tempo Limite de Estabelecimento de Saída"
+
+msgid "Inbound Establish Timeout"
+msgstr "Tempo Limite de Estabelecimento de Entrada"
+
+msgid "NTCP Establish Timeout"
+msgstr "Tempo Limite de Estabelecimento NTCP"
+
+msgid "Tunnel Requeue Delay"
+msgstr "Atraso de Reenfileiramento de Túnel"
+
+msgid "Tunnel Replenish Frequency"
+msgstr "Frequência de Reabastecimento de Túnel"
+
+msgid "Tunnel Selector Loop Delay"
+msgstr "Atraso do Ciclo do Seletor de Túnel"
+
+msgid "Outbound Messages Per Pump"
+msgstr "Mensagens de Saída Por Ciclo"
+
+msgid "Inbound Messages Per Pump"
+msgstr "Mensagens de Entrada Por Ciclo"
+
+msgid "Initial Congestion Window"
+msgstr "Janela de Congestionamento Inicial"
+
+msgid "Initial RTO"
+msgstr "RTO Inicial"
+
+msgid "ACK Delay"
+msgstr "Atraso de ACK"
+
+msgid "Nagle Flush Delay"
+msgstr "Atraso de Descarga Nagle"
+
+msgid "Slow Start Window Cap"
+msgstr "Limite da Janela de Início Lento"
+
+msgid "Max RTO"
+msgstr "RTO Máximo"
+
+msgid "Max Resend Delay"
+msgstr "Atraso Máximo de Reenvio"
+
+msgid "Max Retransmissions"
+msgstr "Retransmissões Máximas"
+
+msgid "Writer Queue Size"
+msgstr "Tamanho da Fila de Escrita"
+
+msgid "CoDel Target Delay"
+msgstr "Atraso Alvo CoDel"
+
+msgid "CoDel Interval"
+msgstr "Intervalo CoDel"
+
+msgid "Westwood Decay Factor"
+msgstr "Fator de Decaimento Westwood"
+
+msgid "RED Minimum Queue Threshold"
+msgstr "Limiar Mínimo de Fila RED"
+
+msgid "RED Maximum Queue Threshold"
+msgstr "Limiar Máximo de Fila RED"
+
+msgid "RED Maximum Drop Probability"
+msgstr "Probabilidade Máxima de Descarte RED"
+
+msgid "X25519 Precalculate Minimum"
+msgstr "Pré-cálculo Mínimo de X25519"
+
+msgid "EDH Precalculate Minimum"
+msgstr "Pré-cálculo Mínimo de EDH"
+
+msgid "ML-KEM Precalculate Minimum"
+msgstr "Pré-cálculo Mínimo de ML-KEM"
+
+msgid "NTCP Maximum Send Threads"
+msgstr "Threads Máximas de Envio NTCP"
+
+msgid "NTCP Send Finisher Threads"
+msgstr "Threads Finalizadoras de Envio NTCP"
+
+msgid "NTCP Send Queue Capacity"
+msgstr "Capacidade da Fila de Envio NTCP"
+
+msgid "UDP Message Receiver Threads"
+msgstr "Threads Receptoras de Mensagens UDP"
+
+msgid "UDP Maximum Handler Threads"
+msgstr "Threads Máximas de Manipulação UDP"
+
+msgid "rDNS Executor Threads"
+msgstr "Threads Executoras de rDNS"
+
+msgid "Peer Outbound Queue Size"
+msgstr "Tamanho da Fila de Saída do Par"
+
+msgid "Transit Throttle Factor"
+msgstr "Fator de Limitação de Trânsito"
+
+msgid "Throttle Reject Exponent"
+msgstr "Expoente de Rejeição de Limitação"
+
+msgid "Maximum Participating Tunnels"
+msgstr "Túneis Participantes Máximos"
+
+msgid "Build Handler Maximum Queue"
+msgstr "Fila Máxima do Manipulador de Construção"
+
+msgid "Rebuild Throttle Interval"
+msgstr "Intervalo de Limitação de Reconstrução"
+
+msgid "Per-Tunnel Bandwidth Divisor"
+msgstr "Divisor de Largura de Banda Por Túnel"
+
+msgid "Tunnel Growth Tolerance"
+msgstr "Tolerância de Crescimento de Túnel"
+
+msgid "Peers Per Search"
+msgstr "Pares Por Pesquisa"
+
+msgid "Max Concurrent Searches"
+msgstr "Máximo de Pesquisas Simultâneas"
+
+msgid "Search Timeout"
+msgstr "Tempo Limite de Pesquisa"
+
+msgid "LeaseSet Lookup Timeout"
+msgstr "Tempo Limite de Consulta de LeaseSet"
+
+msgid "RouterInfo Lookup Timeout"
+msgstr "Tempo Limite de Consulta de RouterInfo"
+
+msgid "Max Concurrent Handshakes"
+msgstr "Máximo de Handshakes Simultâneos"
+
+msgid "Maximum Peer Profiles"
+msgstr "Perfis de Pares Máximos"
+
+msgid "Minimum Fast Peers"
+msgstr "Pares Rápidos Mínimos"
+
+msgid "Maximum Fast Peers"
+msgstr "Pares Rápidos Máximos"
+
+msgid "Minimum High Capacity Peers"
+msgstr "Pares de Alta Capacidade Mínimos"
+
+msgid "Maximum High Capacity Peers"
+msgstr "Pares de Alta Capacidade Máximos"
+
+msgid "Tunnel Build Request Timeout"
+msgstr "Tempo Limite de Pedido de Construção de Túnel"
+
+msgid "Tunnel Build First Hop Timeout"
+msgstr "Tempo Limite do Primeiro Salto de Construção de Túnel"
+
+msgid "Max Concurrent Tunnel Builds"
+msgstr "Máximo de Construções de Túnel Simultâneas"
+
+msgid "Max Concurrent RI Lookups"
+msgstr "Máximo de Consultas RI Simultâneas"
+
+msgid "Max Concurrent Test Jobs"
+msgstr "Máximo de Tarefas de Teste Simultâneas"
+
+msgid "Min Delay Between Tests"
+msgstr "Atraso Mínimo Entre Testes"
+
+msgid "Max Delay Between Tests"
+msgstr "Atraso Máximo Entre Testes"
+
+msgid "NTCP Reader Threads"
+msgstr "Threads de Leitura NTCP"
+
+msgid "NTCP Writer Threads"
+msgstr "Threads de Escrita NTCP"
+
+msgid "NTCP Pumper Failsafe Interval"
+msgstr "Intervalo à Prova de Falhas do Bombeador NTCP"
+
+msgid "Max Concurrent Peer Messages"
+msgstr "Máximo de Mensagens de Par Simultâneas"
+
+msgid "Initial UDP Concurrent Messages"
+msgstr "Mensagens UDP Simultâneas Iniciais"
+
+msgid "Min UDP Concurrent Messages"
+msgstr "Mensagens UDP Simultâneas Mínimas"
+
+msgid "Initial UDP RTO"
+msgstr "RTO UDP Inicial"
+
+msgid "Min UDP RTO"
+msgstr "RTO UDP Mínimo"
+
+msgid "Max UDP RTO"
+msgstr "RTO UDP Máximo"
+
+msgid "Max UDP Send Window"
+msgstr "Janela de Envio UDP Máxima"
+
+msgid "Post-RTO Window Restart"
+msgstr "Reinício da Janela Pós-RTO"
+
+msgid "NTCP Send Pool Capacity"
+msgstr "Capacidade do Pool de Envio NTCP"
+
+msgid "Internal Queue Size"
+msgstr "Tamanho da Fila Interna"
+
+msgid "Sent Messages Clean Time"
+msgstr "Tempo de Limpeza de Mensagens Enviadas"
+
+msgid "Outbound Message Expiration"
+msgstr "Expiração de Mensagem de Saída"
+
+msgid "Max Pending Handshakes"
+msgstr "Máximo de Handshakes Pendentes"
+
+msgid "NTCP Max Write Buffers Per Connection"
+msgstr "Máximo de Buffers de Escrita NTCP Por Conexão"
+
+msgid "Min Resend Delay"
+msgstr "Atraso Mínimo de Reenvio"
+
+msgid "Congestion Avoidance Growth Rate"
+msgstr "Taxa de Crescimento de Prevenção de Congestionamento"
+
+msgid "Slow Start Growth Rate"
+msgstr "Taxa de Crescimento de Início Lento"
+
+msgid "RTT Cap"
+msgstr "Limite de RTT"
+
+msgid "Initial Resend Delay"
+msgstr "Atraso Inicial de Reenvio"
+
+msgid "Dup ACK Delay"
+msgstr "Atraso de ACK Duplicado"
+
+msgid "Inactivity Timeout"
+msgstr "Tempo Limite de Inatividade"
+
+msgid "Max Message Queue Age"
+msgstr "Idade Máxima da Fila de Mensagens"
+
+msgid "I/O Thread Priority"
+msgstr "Prioridade da Thread de E/S"
+
+msgid "Pumper Queue Capacity"
+msgstr "Capacidade da Fila do Bombeador"
+
+msgid "Pumper Threads"
+msgstr "Threads do Bombeador"
+
+msgid "Server Handler Threads"
+msgstr "Threads do Manipulador do Servidor"
+
+msgid "Build Handler Threads"
+msgstr "Threads do Manipulador de Construção"
+
+msgid "Client Runner Max Threads"
+msgstr "Máximo de Threads do Executor de Cliente"
+
+msgid "Participating Throttle Min"
+msgstr "Limitação Mínima de Participantes"
+
+msgid "Participating Throttle Max"
+msgstr "Limitação Máxima de Participantes"
+
+msgid "Participating Throttle Percent"
+msgstr "Percentagem de Limitação de Participantes"
+
+msgid "Request Throttle Min"
+msgstr "Limitação Mínima de Pedidos"
+
+msgid "Request Throttle Max"
+msgstr "Limitação Máxima de Pedidos"
+
+msgid "Request Throttle Percent"
+msgstr "Percentagem de Limitação de Pedidos"
+
+msgid "Request Throttle Burst Threshold"
+msgstr "Limiar de Rajada de Limitação de Pedidos"
+
+msgid "High-Load Lag Threshold"
+msgstr "Limiar de Atraso de Carga Alta"
+
+msgid "High-Load CPU Threshold"
+msgstr "Limiar de CPU de Carga Alta"
+
+msgid "Moderate-Load Lag Threshold"
+msgstr "Limiar de Atraso de Carga Moderada"
+
+msgid "Moderate-Load CPU Threshold"
+msgstr "Limiar de CPU de Carga Moderada"
+
+msgid "Sustained High-Load Window"
+msgstr "Janela de Carga Alta Sustentada"
+
+msgid "Sustained Moderate-Load Window"
+msgstr "Janela de Carga Moderada Sustentada"
+
+msgid "Peer Activity Window Multiplier"
+msgstr "Multiplicador da Janela de Atividade de Pares"
+
+msgid "Pool Build Failure Threshold"
+msgstr "Limiar de Falha de Construção do Pool"
+
+msgid "Pool Build Backoff"
+msgstr "Recuo de Construção do Pool"
+
+msgid "Pool Spare Tunnel Buffer"
+msgstr "Buffer de Túneis Reserva do Pool"
+
+msgid "Transit Reject Threshold"
+msgstr "Limiar de Rejeição de Trânsito"
+
+msgid "Transit Reject Steepness"
+msgstr "Inclinação de Rejeição de Trânsito"
+
+msgid "Transit Load Weight"
+msgstr "Peso de Carga de Trânsito"
+
+msgid "Request Reject Threshold"
+msgstr "Limiar de Rejeição de Pedidos"
+
+msgid "Request Reject Steepness"
+msgstr "Inclinação de Rejeição de Pedidos"
+
+msgid "Request Load Weight"
+msgstr "Peso de Carga de Pedidos"
+
+msgid "RTO Backoff Multiplier"
+msgstr "Multiplicador de Recuo de RTO"
+
+msgid "Socket Connect Timeout"
+msgstr "Tempo Limite de Conexão de Socket"
+
+msgid "Data packets between each ACK."
+msgstr "Pacotes de dados entre cada ACK."
+
+msgid "Time before a message is declared lost (ms)."
+msgstr "Tempo antes de uma mensagem ser declarada perdida (ms)."
+
+msgid "Outbound SSU handshake timeout (ms)."
+msgstr "Tempo limite de handshake SSU de saída (ms)."
+
+msgid "Inbound SSU handshake timeout (ms)."
+msgstr "Tempo limite de handshake SSU de entrada (ms)."
+
+msgid "NTCP2 handshake timeout (ms)."
+msgstr "Tempo limite de handshake NTCP2 (ms)."
+
+msgid "Pumper idle wait before re-checking work (ms)."
+msgstr "Espera ociosa do bombeador antes de reverificar o trabalho (ms)."
+
+msgid "Bandwidth token refill interval (ms)."
+msgstr "Intervalo de reabastecimento de tokens de largura de banda (ms)."
+
+msgid "NTCP selector sleep between loops (ms)."
+msgstr "Repouso do seletor NTCP entre ciclos (ms)."
+
+msgid "Outbound messages batched per gateway pump."
+msgstr "Mensagens de saída agrupadas por ciclo de gateway."
+
+msgid "Inbound messages batched per gateway pump."
+msgstr "Mensagens de entrada agrupadas por ciclo de gateway."
+
+msgid "Starting congestion window (packets)."
+msgstr "Janela de congestionamento inicial (pacotes)."
+
+msgid "Starting retransmission timeout (ms)."
+msgstr "Tempo limite de retransmissão inicial (ms)."
+
+msgid "ACK delay for piggybacking (ms)."
+msgstr "Atraso de ACK para piggybacking (ms)."
+
+msgid "Nagle flush delay (ms)."
+msgstr "Atraso de descarga Nagle (ms)."
+
+msgid "Max congestion window during slow start."
+msgstr "Janela de congestionamento máxima durante o início lento."
+
+msgid "Max retransmission timeout (ms)."
+msgstr "Tempo limite de retransmissão máximo (ms)."
+
+msgid "Max time between retransmissions (ms)."
+msgstr "Tempo máximo entre retransmissões (ms)."
+
+msgid "Retransmissions before dropping the stream."
+msgstr "Retransmissões antes de descartar o fluxo."
+
+msgid "Max idle time before dropping a stream (ms)."
+msgstr "Tempo ocioso máximo antes de descartar um fluxo (ms)."
+
+msgid "I2CP write queue depth."
+msgstr "Profundidade da fila de escrita I2CP."
+
+msgid "CoDel drop target delay (ms)."
+msgstr "Atraso alvo de descarte CoDel (ms)."
+
+msgid "CoDel measurement window (ms)."
+msgstr "Janela de medição CoDel (ms)."
+
+msgid "Westwood EWMA smoothing factor."
+msgstr "Fator de suavização EWMA Westwood."
+
+msgid "Min RED queue size before probabilistic drops (bytes)."
+msgstr ""
+"Tamanho mínimo da fila RED antes de descartes probabilísticos (bytes)."
+
+msgid "Max RED queue size for full drops (bytes)."
+msgstr "Tamanho máximo da fila RED para descartes totais (bytes)."
+
+msgid "Max RED drop probability when queue is full (ppm)."
+msgstr "Probabilidade máxima de descarte RED quando a fila está cheia (ppm)."
+
+msgid "Precomputed X25519 key pool minimum."
+msgstr "Mínimo do pool de chaves X25519 pré-computadas."
+
+msgid "Precomputed EDH key pool minimum."
+msgstr "Mínimo do pool de chaves EDH pré-computadas."
+
+msgid "Precomputed ML-KEM key pool minimum."
+msgstr "Mínimo do pool de chaves ML-KEM pré-computadas."
+
+msgid "Thread pool cap for NTCP send completion."
+msgstr "Limite do pool de threads para conclusão de envio NTCP."
+
+msgid "Active threads completing NTCP sends."
+msgstr "Threads ativas a completar envios NTCP."
+
+msgid "NTCP send finalizer queue size."
+msgstr "Tamanho da fila do finalizador de envio NTCP."
+
+msgid "Thread pool cap for UDP packet dispatch."
+msgstr "Limite do pool de threads para despacho de pacotes UDP."
+
+msgid "Threads reassembling UDP messages from fragments."
+msgstr "Threads a remontar mensagens UDP a partir de fragmentos."
+
+msgid "Threads performing reverse DNS lookups."
+msgstr "Threads a realizar consultas de DNS reverso."
+
+msgid "Per-peer outbound queue size."
+msgstr "Tamanho da fila de saída por par."
+
+msgid "Transit rejection aggressiveness (50-100%)."
+msgstr "Agressividade de rejeição de trânsito (50-100%)."
+
+msgid "Steepness of the transit rejection curve."
+msgstr "Inclinação da curva de rejeição de trânsito."
+
+msgid "Transit tunnel capacity."
+msgstr "Capacidade de túneis de trânsito."
+
+msgid "Max queued build requests."
+msgstr "Máximo de pedidos de construção em fila."
+
+msgid "Delay between rebuild rounds when pools are healthy (ms)."
+msgstr ""
+"Atraso entre rondas de reconstrução quando os pools estão saudáveis (ms)."
+
+msgid "Divides bandwidth among transit tunnels."
+msgstr "Divide a largura de banda entre túneis de trânsito."
+
+msgid "How aggressively new tunnels are accepted before throttling."
+msgstr "Quão agressivamente novos túneis são aceites antes de limitação."
+
+msgid "Peers queried per iterative search."
+msgstr "Pares consultados por pesquisa iterativa."
+
+msgid "Max simultaneous NetDB lookups."
+msgstr "Máximo de consultas NetDB simultâneas."
+
+msgid "Per-peer lookup timeout (ms)."
+msgstr "Tempo limite de consulta por par (ms)."
+
+msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
+msgstr "Limite de prazo adaptativo para consultas de LeaseSet (ms)."
+
+msgid "Adaptive deadline cap for RouterInfo lookups (ms)."
+msgstr "Limite de prazo adaptativo para consultas de RouterInfo (ms)."
+
+msgid "Max simultaneous SSU handshakes."
+msgstr "Máximo de handshakes SSU simultâneos."
+
+msgid "Memory cap for peer profiles."
+msgstr "Limite de memória para perfis de pares."
+
+msgid "Min fast peers in routing table."
+msgstr "Mínimo de pares rápidos na tabela de encaminhamento."
+
+msgid "Max fast peers in routing table."
+msgstr "Máximo de pares rápidos na tabela de encaminhamento."
+
+msgid "Min high-capacity peers in routing table."
+msgstr "Mínimo de pares de alta capacidade na tabela de encaminhamento."
+
+msgid "Max high-capacity peers in routing table."
+msgstr "Máximo de pares de alta capacidade na tabela de encaminhamento."
+
+msgid "Build reply timeout (ms)."
+msgstr "Tempo limite de resposta de construção (ms)."
+
+msgid "First-hop build forward timeout (ms)."
+msgstr "Tempo limite de encaminhamento de construção do primeiro salto (ms)."
+
+msgid "Max concurrent tunnel builds."
+msgstr "Máximo de construções de túnel simultâneas."
+
+msgid "Max concurrent RI lookups during builds."
+msgstr "Máximo de consultas RI simultâneas durante construções."
+
+msgid "Max concurrent tunnel test jobs."
+msgstr "Máximo de tarefas de teste de túnel simultâneas."
+
+msgid "Min interval between tunnel tests (ms)."
+msgstr "Intervalo mínimo entre testes de túnel (ms)."
+
+msgid "Max interval between tunnel tests (ms)."
+msgstr "Intervalo máximo entre testes de túnel (ms)."
+
+msgid "Threads decrypting inbound NTCP data."
+msgstr "Threads a descriptografar dados NTCP de entrada."
+
+msgid "Threads encrypting NTCP messages."
+msgstr "Threads a criptografar mensagens NTCP."
+
+msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
+msgstr ""
+"Intervalo de varredura à prova de falhas para bombeadores NTCP travados "
+"(ms)."
+
+msgid "In-flight message limit per UDP peer."
+msgstr "Limite de mensagens em trânsito por par UDP."
+
+msgid "Initial concurrent messages per peer."
+msgstr "Mensagens simultâneas iniciais por par."
+
+msgid "Min concurrent messages per peer."
+msgstr "Mínimo de mensagens simultâneas por par."
+
+msgid "Initial retransmission timeout (ms)."
+msgstr "Tempo limite de retransmissão inicial (ms)."
+
+msgid "Min retransmission timeout (ms)."
+msgstr "Tempo limite de retransmissão mínimo (ms)."
+
+msgid "Max unacknowledged messages per peer."
+msgstr "Máximo de mensagens não confirmadas por par."
+
+msgid "Window restart size (MTUs) after RTO collapse."
+msgstr "Tamanho de reinício da janela (MTUs) após colapso de RTO."
+
+msgid "NTCP send pool queue size."
+msgstr "Tamanho da fila do pool de envio NTCP."
+
+msgid "I2CP session buffer size."
+msgstr "Tamanho do buffer de sessão I2CP."
+
+msgid "Interval between sweeps of ACKed sent-messages."
+msgstr "Intervalo entre varreduras de mensagens enviadas confirmadas."
+
+msgid "Max age for undelivered outbound messages."
+msgstr "Idade máxima para mensagens de saída não entregues."
+
+msgid "Pending outbound handshake queue."
+msgstr "Fila de handshakes de saída pendentes."
+
+msgid "Write buffer per NTCP connection."
+msgstr "Buffer de escrita por conexão NTCP."
+
+msgid "Min time between retransmissions (ms)."
+msgstr "Tempo mínimo entre retransmissões (ms)."
+
+msgid "Congestion avoidance growth rate."
+msgstr "Taxa de crescimento de prevenção de congestionamento."
+
+msgid "Window multiplier per RTT during slow start."
+msgstr "Multiplicador da janela por RTT durante o início lento."
+
+msgid "Upper bound on RTT estimate (ms)."
+msgstr "Limite superior da estimativa de RTT (ms)."
+
+msgid "Delay before first retransmit (ms)."
+msgstr "Atraso antes da primeira retransmissão (ms)."
+
+msgid "Delay for dup or OOO packet ACKs (ms)."
+msgstr "Atraso para ACKs de pacotes duplicados ou fora de ordem (ms)."
+
+msgid "Max message age in queue before drop (ms)."
+msgstr "Idade máxima da mensagem na fila antes do descarte (ms)."
+
+msgid "Dynamic priority for I/O handler threads."
+msgstr "Prioridade dinâmica para threads do manipulador de E/S."
+
+msgid "Gateway pumper queue size."
+msgstr "Tamanho da fila do bombeador de gateway."
+
+msgid "Gateway pumper thread count."
+msgstr "Número de threads do bombeador de gateway."
+
+msgid "Handler threads for incoming I2PTunnel connections."
+msgstr "Threads do manipulador para conexões I2PTunnel de entrada."
+
+msgid "Thread pool for inbound build request processing."
+msgstr ""
+"Pool de threads para processamento de pedidos de construção de entrada."
+
+msgid "Ceiling for client proxy thread pool."
+msgstr "Limite máximo para o pool de threads do proxy de cliente."
+
+msgid "Min transit tunnels any peer can hold."
+msgstr "Mínimo de túneis de trânsito que qualquer par pode manter."
+
+msgid "Max transit tunnels a single peer can hold."
+msgstr "Máximo de túneis de trânsito que um único par pode manter."
+
+msgid "Max share of transit tunnels for a single peer."
+msgstr "Quota máxima de túneis de trânsito para um único par."
+
+msgid "Min inbound requests accepted from any peer."
+msgstr "Mínimo de pedidos de entrada aceites de qualquer par."
+
+msgid "Max inbound requests accepted from any peer."
+msgstr "Máximo de pedidos de entrada aceites de qualquer par."
+
+msgid "Max share of tunnel requests from a single peer."
+msgstr "Quota máxima de pedidos de túnel de um único par."
+
+msgid "Burst threshold: requests per second before a ban."
+msgstr "Limiar de rajada: pedidos por segundo antes de um banimento."
+
+msgid "Job queue lag triggering high-load request gating (ms)."
+msgstr ""
+"Atraso da fila de tarefas que aciona o bloqueio de pedidos de carga alta "
+"(ms)."
+
+msgid "System load percent triggering high-load request gating."
+msgstr ""
+"Percentagem de carga do sistema que aciona o bloqueio de pedidos de carga "
+"alta."
+
+msgid "Job queue lag triggering moderate-load peer disconnect (ms)."
+msgstr ""
+"Atraso da fila de tarefas que aciona a desconexão de pares de carga moderada"
+" (ms)."
+
+msgid "System load percent triggering moderate-load disconnect."
+msgstr ""
+"Percentagem de carga do sistema que aciona a desconexão de carga moderada."
+
+msgid "Duration of high load before gating requests (ms)."
+msgstr "Duração da carga alta antes de bloquear pedidos (ms)."
+
+msgid "Duration of moderate load before declining requests (ms)."
+msgstr "Duração da carga moderada antes de recusar pedidos (ms)."
+
+msgid "Widens peer recency window to re-admit peers when builds fail."
+msgstr ""
+"Alarga a janela de recência de pares para readmitir pares quando as "
+"construções falham."
+
+msgid "Consecutive failures before pool backoff."
+msgstr "Falhas consecutivas antes do recuo do pool."
+
+msgid "Cooldown duration after pool failure threshold, in ms."
+msgstr "Duração do arrefecimento após o limiar de falha do pool, em ms."
+
+msgid "Target spare tunnel count per pool."
+msgstr "Número alvo de túneis reserva por pool."
+
+msgid "Load threshold where probabilistic transit rejection starts (%)."
+msgstr ""
+"Limiar de carga onde a rejeição probabilística de trânsito começa (%)."
+
+msgid "Steepness of the transit rejection probability curve."
+msgstr "Inclinação da curva de probabilidade de rejeição de trânsito."
+
+msgid "Load score multiplier for transit rejection (% of computed load)."
+msgstr ""
+"Multiplicador da pontuação de carga para rejeição de trânsito (% da carga "
+"calculada)."
+
+msgid "Load threshold where probabilistic request throttling starts (%)."
+msgstr ""
+"Limiar de carga onde a limitação probabilística de pedidos começa (%)."
+
+msgid "Steepness of the request throttling probability curve."
+msgstr "Inclinação da curva de probabilidade de limitação de pedidos."
+
+msgid "Load score multiplier for request throttling (% of computed load)."
+msgstr ""
+"Multiplicador da pontuação de carga para limitação de pedidos (% da carga "
+"calculada)."
+
+msgid "RTO growth multiplier per retransmission timeout (%, 100 = flat)."
+msgstr ""
+"Multiplicador de crescimento de RTO por tempo limite de retransmissão (%, "
+"100 = constante)."
+
+msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
+msgstr ""
+"Tempo limite de conexão de socket TCP para threads do manipulador do "
+"servidor de túneis (ms)."
+
+msgid "Tunnel"
+msgstr "Túnel"
+
+msgid "Streaming"
+msgstr "Streaming"
+
+msgid "Crypto"
+msgstr "Criptografia"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:340
+msgid ""
+"Auto-Tuning continuously monitors router performance and adjusts parameters "
+"to optimize throughput, reduce latency, and maintain stability."
+msgstr ""
+"O Auto-Tuning monitora continuamente o desempenho do roteador e ajusta "
+"parâmetros para otimizar o throughput, reduzir a latência e manter a "
+"estabilidade."
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:341
+msgid ""
+"Uncheck the Auto box on any row to pin that parameter and prevent further "
+"adjustments."
+msgstr ""
+"Desmarque a caixa Auto em qualquer linha para fixar esse parâmetro e impedir"
+" mais ajustes."
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:345
+msgid "Healthy"
+msgstr "Saudável"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:347
+msgid "Fair"
+msgstr "Razoável"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:349
+msgid "Degraded"
+msgstr "Degradado"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:352
+msgid "Current system health:"
+msgstr "Estado atual do sistema:"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:355
+msgid "System health assessment is not yet available."
+msgstr "A avaliação do estado do sistema ainda não está disponível."
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:372
+msgid "Parameter"
+msgstr "Parâmetro"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:374
+msgid "Default"
+msgstr "Padrão"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:377
+msgid "Step"
+msgstr "Passo"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:378
+msgid "History"
+msgstr "Histórico"
+
+# /java/src/net/i2p/router/web/helpers/TuningHelper.java:379
+msgid "Auto"
+msgstr "Auto"
 
 msgid "Exploratory"
 msgstr "Exploradores"
@@ -5270,12 +6358,6 @@ msgstr "Proibir peers que mudam rapidamente suas portas"
 msgid "Ban peers attempting port hopping"
 msgstr "Proibir peers tentando troca de portas"
 
-msgid "Ban peers sending excessive unsolicited search replies"
-msgstr "Proibir peers enviando respostas de busca não solicitadas excessivas"
-
-msgid "Ban peers sending fake/slow search replies"
-msgstr "Proibir peers enviando respostas de busca falsas/lentas"
-
 msgid "Abuse Thresholds"
 msgstr "Limites de abuso"
 
@@ -5322,6 +6404,32 @@ msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG"
 msgstr ""
 "Adicione grupos de capacidades, separados por espaços ou vírgulas ex. "
 "LUf,PUG"
+
+msgid "Misc Reasons"
+msgstr "Diversos motivos"
+
+msgid ""
+"Ban floodfill peers that fail to respond to queries (failure rate >95%)"
+msgstr ""
+"Banir peers floodfill que não respondem às consultas (taxa de falha >95%)"
+
+msgid "Ban unresponsive floodfills"
+msgstr "Banir floodfills sem resposta"
+
+msgid "Ban routers whose RouterInfo has no version field"
+msgstr "Banir roteadores cujo RouterInfo não tem campo de versão"
+
+msgid "Ban routers with no version"
+msgstr "Banir roteadores sem versão"
+
+msgid "Ban routers that send excessive tunnel participation requests"
+msgstr ""
+"Banir roteadores que enviam solicitações excessivas de participação em "
+"túnelBanir roteadores que enviam solicitações excessivas de participação em "
+"túnel"
+
+msgid "Ban excessive tunnel requests"
+msgstr "Banir solicitações excessivas de túnel"
 
 msgid "Clear all bans"
 msgstr "Limpar todas as proibições"
@@ -6078,6 +7186,36 @@ msgstr "Barra lateral fixa"
 msgid "Enable conditional fixed sidebar"
 msgstr "Ativar barra lateral fixa condicional"
 
+msgid "Graph Options"
+msgstr "Opções de gráfico"
+
+msgid "Legacy renderer"
+msgstr "Renderizador legado"
+
+msgid "Use RRD4J renderer"
+msgstr "Usar renderizador RRD4J"
+
+msgid "minutes (2–30)"
+msgstr "minutos (2–30)"
+
+msgid "Split display"
+msgstr "Exibição dividida"
+
+msgid "Separate Inbound and Outbound"
+msgstr "Separar entrada e saída"
+
+msgid "Graph direction"
+msgstr "Direção do gráfico"
+
+msgid "Left-to-right"
+msgstr "Esquerda para direita"
+
+msgid "Refresh Interval"
+msgstr "Intervalo de atualização"
+
+msgid "Update graph every second"
+msgstr "Atualizar gráfico a cada segundo"
+
 msgid "config stats"
 msgstr "configurar estatísticas"
 
@@ -6393,6 +7531,24 @@ msgstr "gráficos"
 msgid "Performance Graphs"
 msgstr "Gráficos de desempenho"
 
+msgid "health"
+msgstr "estado"
+
+msgid "Router Health"
+msgstr "Estado do Roteador"
+
+msgid "Performance & Load"
+msgstr "Desempenho & Carga"
+
+msgid "Transport & Connectivity"
+msgstr "Transporte & Conectividade"
+
+msgid "Network & Participation"
+msgstr "Rede & Participação"
+
+msgid "Floodfill / NetDB"
+msgstr "Floodfill / NetDB"
+
 msgid "Advanced Configuration Help - I2P+"
 msgstr "Ajuda de configuração avançada - I2P"
 
@@ -6601,6 +7757,55 @@ msgstr ""
 "página de login. Quando definido como false, o console é acessível sem login"
 " se nenhuma senha estiver configurada. [Padrão é false, será ativado por "
 "padrão em uma versão futura para defesa contra CSRF]"
+
+# help/advancedsettings_jsp.java:501
+msgid ""
+"When set to true, the sidebar bandwidth graph uses the legacy RRD4J SVG "
+"renderer. When set to false, the new dual-baseline canvas renderer is used, "
+"with gradient fills, glow effects, and a split inbound/outbound display. "
+"[Default is false]"
+msgstr ""
+"Quando definido como true, o gráfico de largura de banda da barra lateral "
+"usa o renderizador SVG RRD4J legado. Quando definido como false, o novo "
+"renderizador de canvas com duplo padrão é usado, com preenchimentos de "
+"gradiente, efeitos de brilho e uma exibição dividida de entrada/saída. [O "
+"padrão é false]"
+
+# help/advancedsettings_jsp.java:503
+msgid ""
+"The time period, in minutes, displayed in the sidebar bandwidth graph. "
+"Values outside the valid range (2–30) are clamped. [Default is 20]"
+msgstr ""
+"O período de tempo, em minutos, exibido no gráfico de largura de banda da "
+"barra lateral. Valores fora do intervalo válido (2–30) são limitados. [O "
+"padrão é 20]"
+
+# help/advancedsettings_jsp.java:505
+msgid ""
+"When set to true (the default), inbound and outbound traffic are displayed "
+"in a split view with a center baseline, with outbound spikes upward and "
+"inbound spikes downward. When set to false, both lines are displayed in "
+"overlay mode from the top of the graph with a configurable composite blend. "
+"[Default is true]"
+msgstr ""
+"Quando definido como true (o padrão), o tráfego de entrada e saída é exibido"
+" em uma visualização dividida com um padrão central, com picos de saída para"
+" cima e picos de entrada para baixo. Quando definido como false, ambas as "
+"linhas são exibidas em modo de sobreposição a partir do topo do gráfico com "
+"uma mistura composicional configurável. [O padrão é true]"
+
+# help/advancedsettings_jsp.java:507
+msgid ""
+"Sets the render direction for the sidebar bandwidth graph. When set to rtl "
+"(the default), the graph renders right-to-left with newest data on the "
+"right. When set to ltr, the graph renders left-to-right with newest data on "
+"the left. [Default is rtl]"
+msgstr ""
+"Define a direção de renderização do gráfico de largura de banda da barra "
+"lateral. Quando definido como rtl (o padrão), o gráfico é renderizado da "
+"direita para a esquerda com os dados mais recentes à direita. Quando "
+"definido como ltr, o gráfico é renderizado da esquerda para a direita com os"
+" dados mais recentes à esquerda. [O padrão é rtl]"
 
 msgid ""
 "This setting determines whether or not the router should use the provided "
@@ -9844,9 +11049,6 @@ msgstr ""
 "Tailândia, Turquia, Turcomenistão, Venezuela, Emirados Árabes Unidos, "
 "Uzbequistão, Saara Ocidental, Iêmen."
 
-msgid "Tunnel"
-msgstr "Túnel"
-
 msgid ""
 "A <a href=https://geti2p.net/en/docs/tunnels/unidirectional class='sitelink "
 "external' target=_blank rel=noreferrer>unidirectional</a> encrypted "
@@ -11488,9 +12690,10 @@ msgstr ""
 msgid "Theme Overrides"
 msgstr "Substituições de Tema"
 
+# help/ui_jsp.java:474
 msgid ""
 "I2P+ supports custom theme overrides for the console, the tunnel manager, "
-"I2PSnark, SusiDNS and Webmail, permitting changes to the themes which are "
+"I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are "
 "persistent after upgrades. In order to activate an override, create a css "
 "file named <code>override.css</code> with your theme modifications and place"
 " it in the relevant theme directory of the theme you wish to change, or "
@@ -11499,16 +12702,17 @@ msgid ""
 "deactivate an override, delete or rename the <code>override.css</code> file "
 "and then hard refresh the browser (usually Control + Shift + R)."
 msgstr ""
-"I2P+ suporta substituições de tema personalizadas para o console, o "
-"gerenciador de túnel, Torrents, DNS e Webmail, permitindo alterações nos "
-"temas que são persistentes após as atualizações. Para ativar uma "
-"substituição, crie um arquivo css chamado <code>override.css</code> com as "
-"modificações do tema e coloque-o no diretório do tema relevante do tema que "
-"você deseja alterar, ou renomeie um dos arquivos de exemplo e, em seguida, "
-"atualize o navegador. Observe que o gerenciador de túnel e o console "
-"compartilham o mesmo override.css. Para desativar uma substituição, exclua "
-"ou renomeie o arquivo <code>override.css</code> e, em seguida, atualize o "
-"navegador (geralmente Control + Shift + R)."
+"O I2P+ suporta substituições de tema personalizadas para o console, o "
+"gerenciador de túneis, I2PSnark, SusiDNS e Susimail, permitindo alterações "
+"nos temas que são persistentes após atualizações. Para ativar uma "
+"substituição, crie um arquivo css chamado <code>override.css</code> com suas"
+" modificações de tema e coloque-o no diretório de temas relevante do tema "
+"que você deseja alterar, ou renomeie um dos arquivos de exemplo e, em "
+"seguida, faça um refresh forçado no navegador. Observe que o gerenciador de "
+"túneis e o console compartilham o mesmo override.css. Para desativar uma "
+"substituição, exclua ou renomeie o arquivo <code>override.css</code> e, em "
+"seguida, faça um refresh forçado no navegador (geralmente Control + Shift + "
+"R)."
 
 msgid ""
 "The themes directory is located in the I2P application directory under "
@@ -11793,9 +12997,6 @@ msgstr ""
 
 msgid "Some basic indications of router overload:"
 msgstr "Algumas indicações básicas de sobrecarga do roteador:"
-
-msgid "Job Lag"
-msgstr "Atraso de trabalho"
 
 msgid ""
 "How long jobs are waiting before execution. The job queue is listed on the "
@@ -12617,9 +13818,6 @@ msgstr "Dump arquivo Jar"
 msgid "job queue stats"
 msgstr "estatísticas da fila de trabalhos"
 
-msgid "Job Queue"
-msgstr "Fila de Trabalho"
-
 msgid "Job statistics for this session"
 msgstr "Estatísticas de trabalho para esta sessão"
 
@@ -12768,6 +13966,12 @@ msgstr "Ver registro de eventos"
 msgid "Filter Router log output"
 msgstr "Filtrar a saída do log do roteador"
 
+msgid "SAM Debug"
+msgstr "Depuração SAM"
+
+msgid "SAM Bridge Debug"
+msgstr "Depuração da Ponte SAM"
+
 msgid "service logs"
 msgstr "logs de serviço"
 
@@ -12792,14 +13996,17 @@ msgstr "conexões de streaming"
 msgid "Streaming Connections"
 msgstr "Conexões de streaming"
 
-msgid "Active I2P streaming connections"
-msgstr "Conexões de streaming I2P ativas"
+msgid "All streaming connections"
+msgstr "Todas as conexões de streaming"
 
-msgid "Local Tunnels"
-msgstr "Túneis Locais"
+msgid "All Streams"
+msgstr "Todos os streams"
 
-msgid "Most Recent"
-msgstr "Mais Recentes"
+msgid "Inbound streaming connections"
+msgstr "Conexões de streaming de entrada"
+
+msgid "Outbound streaming connections"
+msgstr "Conexões de streaming de saída"
 
 msgid "torrents"
 msgstr "torrentes"
@@ -12812,6 +14019,9 @@ msgstr "Túneis de trânsito mais recentes"
 
 msgid "Locally hosted tunnels (exploratory and client)"
 msgstr "Túneis hospedados localmente (exploratório e cliente)"
+
+msgid "Most Recent"
+msgstr "Mais Recentes"
 
 msgid "Fastest"
 msgstr "Mais rápido"
@@ -12828,11 +14038,20 @@ msgstr "Túneis de trânsito mais rápidos"
 msgid "Transit Tunnels by Peer"
 msgstr "Túneis de Trânsito por Ponto"
 
+msgid "tuning"
+msgstr "ajuste"
+
+msgid "Router Auto-Tuning"
+msgstr "Auto-Tuning do Roteador"
+
 msgid "tunnel peer count"
 msgstr "contagem de pares do túnel"
 
 msgid "local tunnels"
 msgstr "túneis locais"
+
+msgid "Local Tunnels"
+msgstr "Túneis Locais"
 
 msgid "Toggle Tunnel Ids"
 msgstr "Alternar IDs de túnel"
@@ -13049,536 +14268,3 @@ msgstr "Seguinte"
 
 msgid "Finished"
 msgstr "Terminada"
-
-# /../../router/java/src/net/i2p/router/Blocklist.java:1298
-msgid "Tor Exit"
-msgstr "Saída Tor"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:432
-msgid "Restore Defaults"
-msgstr "Restaurar padrões"
-
-# /java/src/net/i2p/router/web/TuningFormHandler.java:497
-msgid "All parameters restored to factory defaults"
-msgstr "Todos os parâmetros restaurados para os padrões de fábrica"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:303
-msgid "Auto-Tuning is not available"
-msgstr "Auto-Tuning não está disponível"
-
-# /java/src/net/i2p/router/web/TuningFormHandler.java:804
-msgid "Tuning ranges saved — changes take effect immediately"
-msgstr "Faixas de ajuste salvas — as alterações entram em vigor imediatamente"
-
-# /java/src/net/i2p/router/web/TuningFormHandler.java:811
-msgid "No changes to save"
-msgstr "Nenhuma alteração para salvar"
-
-# /java/src/net/i2p/router/web/TuningFormHandler.java:809
-msgid "Tuning overrides applied"
-msgstr "Substituições de ajuste aplicadas"
-
-# /java/src/net/i2p/router/web/TuningFormHandler.java:827
-msgid "Invalid value"
-msgstr "Valor inválido"
-
-# /java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:34
-msgid "Auto-Tuning"
-msgstr "Auto-Tuning"
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:340
-msgid ""
-"Auto-Tuning continuously monitors router performance and adjusts parameters "
-"to optimize throughput, reduce latency, and maintain stability."
-msgstr ""
-"O Auto-Tuning monitora continuamente o desempenho do roteador e ajusta "
-"parâmetros para otimizar o throughput, reduzir a latência e manter a "
-"estabilidade."
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:341
-msgid ""
-"Uncheck the Auto box on any row to pin that parameter and prevent further "
-"adjustments."
-msgstr ""
-"Desmarque a caixa Auto em qualquer linha para fixar esse parâmetro e "
-"impedir mais ajustes."
-
-
-# /java/src/net/i2p/router/web/helpers/ConfigSidebarHandler.java:107
-msgid "Graph preferences updated"
-msgstr "Preferências de gráfico atualizadas"
-
-# /java/src/net/i2p/router/web/helpers/GraphHelper.java:483
-msgid "UTC time"
-msgstr "Hora UTC"
-
-# /java/src/net/i2p/router/web/helpers/GraphHelper.java:489
-msgid "Display time in UTC on graph axes"
-msgstr "Exibir hora em UTC nos eixos do gráfico"
-
-# /java/src/net/i2p/router/web/helpers/GraphHelper.java:491
-msgid "Glow effect"
-msgstr "Efeito de brilho"
-
-# /java/src/net/i2p/router/web/helpers/GraphHelper.java:497
-msgid "Add a glow effect to graph lines"
-msgstr "Adicionar efeito de brilho às linhas do gráfico"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:239
-msgid "CPU"
-msgstr "CPU"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:240
-msgid "CPU load average"
-msgstr "Média de carga da CPU"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:244
-msgid "Router uptime"
-msgstr "Tempo de funcionamento do roteador"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:468
-msgid "ms"
-msgstr "ms"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:246
-msgid "Job queue delay"
-msgstr "Atraso da fila de tarefas"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:247
-msgid "Msg Lag"
-msgstr "Atraso de mensagem"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:248
-msgid "Message send processing time"
-msgstr "Tempo de processamento de envio de mensagem"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:250
-msgid "Ready jobs waiting in queue"
-msgstr "Tarefas prontas aguardando na fila"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:251
-msgid "Threads"
-msgstr "Threads"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:252
-msgid "Active JVM threads"
-msgstr "Threads JVM ativos"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:308
-msgid "NTCP Estab"
-msgstr "Estab. NTCP"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:309
-msgid "NTCP outbound establish time"
-msgstr "Tempo de estabelecimento NTCP de saída"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:310
-msgid "SSU Estab"
-msgstr "Estab. SSU"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:311
-msgid "SSU outbound establish time"
-msgstr "Tempo de estabelecimento SSU de saída"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:312
-msgid "SSU RTO"
-msgstr "RTO SSU"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:313
-msgid "SSU retransmission timeout"
-msgstr "Tempo limite de retransmissão SSU"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:314
-msgid "Conns/s"
-msgstr "Conns/s"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:315
-msgid "NTCP connections established per second"
-msgstr "Conexões NTCP estabelecidas por segundo"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:316
-msgid "Msgs/s"
-msgstr "Msgs/s"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:317
-msgid "Messages delivered per second"
-msgstr "Mensagens entregues por segundo"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:318
-msgid "RTT"
-msgstr "RTT"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:319
-msgid "End-to-end message round trip time"
-msgstr "Tempo de ida e volta de mensagem de ponta a ponta"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:320
-msgid "Timeout"
-msgstr "Tempo limite"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:321
-msgid "Tunnel build timeout rate"
-msgstr "Taxa de tempo limite de construção de túnel"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:322
-msgid "Tunnel Build"
-msgstr "Construção de túnel"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:323
-msgid "Client tunnel build latency"
-msgstr "Latência de construção de túnel do cliente"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:379
-msgid "Active Peers"
-msgstr "Peers ativos"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:380
-msgid "Active peers (last 60s)"
-msgstr "Peers ativos (últimos 60s)"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:381
-msgid "Known Peers"
-msgstr "Peers conhecidos"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:382
-msgid "Known routers in network database"
-msgstr "Roteadores conhecidos no banco de dados de rede"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:384
-msgid "Active I2CP clients"
-msgstr "Clientes I2CP ativos"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:386
-msgid "Transit tunnels hosted"
-msgstr "Túneis de trânsito hospedados"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:390
-msgid "Tunnel build success rate"
-msgstr "Taxa de sucesso na construção de túnel"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:391
-msgid "NetDB"
-msgstr "NetDB"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:392
-msgid "NetDB lookup time"
-msgstr "Tempo de consulta ao NetDB"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:394
-msgid "Total banned peers"
-msgstr "Total de peers banidos"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:455
-msgid "Stored LeaseSets in floodfill"
-msgstr "LeaseSets armazenados no floodfill"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:456
-msgid "Cache Hit"
-msgstr "Acerto de cache"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:457
-msgid "NetDB lookup success rate"
-msgstr "Taxa de sucesso de consulta ao NetDB"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:458
-msgid "Flood Verify"
-msgstr "Verificação de flood"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:459
-msgid "Floodfill verify time"
-msgstr "Tempo de verificação de floodfill"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:460
-msgid "NetDB ACK"
-msgstr "ACK do NetDB"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:461
-msgid "NetDB peer acknowledge time"
-msgstr "Tempo de confirmação do peer no NetDB"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:462
-msgid "Lookups/s"
-msgstr "Consultas/s"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:463
-msgid "NetDB lookups handled per second"
-msgstr "Consultas ao NetDB processadas por segundo"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:464
-msgid "Requests/s"
-msgstr "Pedidos/s"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:465
-msgid "Combined store + lookup operations per second"
-msgstr "Operações combinadas de armazenamento + consulta por segundo"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:466
-msgid "Stores/s"
-msgstr "Armaz./s"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:467
-msgid "NetDB store messages handled per second"
-msgstr "Mensagens de armazenamento do NetDB processadas por segundo"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:468
-msgid "LS Timeout"
-msgstr "Tempo limite LS"
-
-# /java/src/net/i2p/router/web/helpers/HealthHelper.java:469
-msgid "LeaseSet request timeouts (last minute)"
-msgstr "Tempo limite de solicitações de LeaseSet (último minuto)"
-
-# /java/src/net/i2p/router/web/helpers/InfoHelper.java:214
-msgid "ASN Db"
-msgstr "Banco ASN"
-
-# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:46
-msgid "SAM bridge is not running."
-msgstr "A ponte SAM não está em execução."
-
-# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:70
-msgid "Active sessions in SessionsDB"
-msgstr "Sessões ativas no SessionsDB"
-
-# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:72
-msgid "Active / pool worker threads"
-msgstr "Threads ativos / workers do pool"
-
-# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:74
-msgid "Pending commands in pool"
-msgstr "Comandos pendentes no pool"
-
-# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:76
-msgid "Connected pool handlers"
-msgstr "Handlers de pool conectados"
-
-# /java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:78
-msgid "Sockets stolen for data streaming"
-msgstr "Sockets roubados para streaming de dados"
-
-# /java/src/net/i2p/router/web/helpers/SidebarRenderer.java:541
-msgid "Health"
-msgstr "Estado"
-
-# /java/src/net/i2p/router/web/helpers/SidebarRenderer.java:544
-msgid "Router health overview"
-msgstr "Visão geral do estado do roteador"
-
-# /java/src/net/i2p/router/web/helpers/StreamHelper.java:302
-msgid "sent"
-msgstr "enviado"
-
-# /java/src/net/i2p/router/web/helpers/StreamHelper.java:303
-msgid "received"
-msgstr "recebido"
-
-# /java/src/net/i2p/router/web/helpers/StreamHelper.java:372
-msgid "No active streaming connections."
-msgstr "Nenhuma conexão de streaming ativa."
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:345
-msgid "Healthy"
-msgstr "Saudável"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:347
-msgid "Fair"
-msgstr "Razoável"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:349
-msgid "Degraded"
-msgstr "Degradado"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:352
-msgid "Current system health:"
-msgstr "Estado atual do sistema:"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:355
-msgid "System health assessment is not yet available."
-msgstr "A avaliação do estado do sistema ainda não está disponível."
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:372
-msgid "Parameter"
-msgstr "Parâmetro"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:374
-msgid "Default"
-msgstr "Padrão"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:377
-msgid "Step"
-msgstr "Passo"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:378
-msgid "History"
-msgstr "Histórico"
-
-# /java/src/net/i2p/router/web/helpers/TuningHelper.java:379
-msgid "Auto"
-msgstr "Auto"
-
-msgid "Misc Reasons"
-msgstr "Diversos motivos"
-
-msgid ""
-"Ban floodfill peers that fail to respond to queries (failure rate >95%)"
-msgstr ""
-"Banir peers floodfill que não respondem às consultas (taxa de falha >95%)"
-
-msgid "Ban unresponsive floodfills"
-msgstr "Banir floodfills sem resposta"
-
-msgid "Ban routers whose RouterInfo has no version field"
-msgstr "Banir roteadores cujo RouterInfo não tem campo de versão"
-
-msgid "Ban routers with no version"
-msgstr "Banir roteadores sem versão"
-
-msgid "Ban routers that send excessive tunnel participation requests"
-msgstr "Banir roteadores que enviam solicitações excessivas de participação em túnel"
-"Banir roteadores que enviam solicitações excessivas de participação em túnel"
-
-msgid "Ban excessive tunnel requests"
-msgstr "Banir solicitações excessivas de túnel"
-
-msgid "Graph Options"
-msgstr "Opções de gráfico"
-
-msgid "Legacy renderer"
-msgstr "Renderizador legado"
-
-msgid "Use RRD4J renderer"
-msgstr "Usar renderizador RRD4J"
-
-msgid "minutes (2–30)"
-msgstr "minutos (2–30)"
-# help/advancedsettings_jsp.java:501
-msgid ""
-"When set to true, the sidebar bandwidth graph uses the legacy RRD4J SVG "
-"renderer. When set to false, the new dual-baseline canvas renderer is used, "
-"with gradient fills, glow effects, and a split inbound/outbound display. "
-"[Default is false]"
-msgstr ""
-"Quando definido como true, o gráfico de largura de banda da barra lateral "
-"usa o renderizador SVG RRD4J legado. Quando definido como false, o novo "
-"renderizador de canvas com duplo padrão é usado, com preenchimentos de "
-"gradiente, efeitos de brilho e uma exibição dividida de entrada/saída. "
-"[O padrão é false]"
-
-# help/advancedsettings_jsp.java:503
-msgid ""
-"The time period, in minutes, displayed in the sidebar bandwidth graph. "
-"Values outside the valid range (2–30) are clamped. [Default is 20]"
-msgstr ""
-"O período de tempo, em minutos, exibido no gráfico de largura de banda da "
-"barra lateral. Valores fora do intervalo válido (2–30) são limitados. "
-"[O padrão é 20]"
-
-# help/advancedsettings_jsp.java:505
-msgid ""
-"When set to true (the default), inbound and outbound traffic are displayed "
-"in a split view with a center baseline, with outbound spikes upward and "
-"inbound spikes downward. When set to false, both lines are displayed in "
-"overlay mode from the top of the graph with a configurable composite blend. "
-"[Default is true]"
-msgstr ""
-"Quando definido como true (o padrão), o tráfego de entrada e saída é "
-"exibido em uma visualização dividida com um padrão central, com picos de "
-"saída para cima e picos de entrada para baixo. Quando definido como false, "
-"ambas as linhas são exibidas em modo de sobreposição a partir do topo do "
-"gráfico com uma mistura composicional configurável. [O padrão é true]"
-
-# help/advancedsettings_jsp.java:507
-msgid ""
-"Sets the render direction for the sidebar bandwidth graph. When set to rtl "
-"(the default), the graph renders right-to-left with newest data on the "
-"right. When set to ltr, the graph renders left-to-right with newest data on "
-"the left. [Default is rtl]"
-msgstr ""
-"Define a direção de renderização do gráfico de largura de banda da barra "
-"lateral. Quando definido como rtl (o padrão), o gráfico é renderizado da "
-"direita para a esquerda com os dados mais recentes à direita. Quando "
-"definido como ltr, o gráfico é renderizado da esquerda para a direita com "
-"os dados mais recentes à esquerda. [O padrão é rtl]"
-
-
-msgid "Split display"
-msgstr "Exibição dividida"
-
-msgid "Separate Inbound and Outbound"
-msgstr "Separar entrada e saída"
-
-msgid "Graph direction"
-msgstr "Direção do gráfico"
-
-msgid "Left-to-right"
-msgstr "Esquerda para direita"
-
-msgid "Refresh Interval"
-msgstr "Intervalo de atualização"
-
-msgid "Update graph every second"
-msgstr "Atualizar gráfico a cada segundo"
-
-msgid "health"
-msgstr "estado"
-
-msgid "Router Health"
-msgstr "Estado do Roteador"
-
-msgid "Performance & Load"
-msgstr "Desempenho & Carga"
-
-msgid "Transport & Connectivity"
-msgstr "Transporte & Conectividade"
-
-msgid "Network & Participation"
-msgstr "Rede & Participação"
-
-msgid "Floodfill / NetDB"
-msgstr "Floodfill / NetDB"
-
-msgid "SAM Debug"
-msgstr "Depuração SAM"
-# help/ui_jsp.java:474
-msgid ""
-"I2P+ supports custom theme overrides for the console, the tunnel manager, "
-"I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are "
-"persistent after upgrades. In order to activate an override, create a css "
-"file named <code>override.css</code> with your theme modifications and place "
-"it in the relevant theme directory of the theme you wish to change, or "
-"rename one of the example files, and then hard refresh the browser. Note "
-"that the tunnel manager and the console share the same override.css. To "
-"deactivate an override, delete or rename the <code>override.css</code> file "
-"and then hard refresh the browser (usually Control + Shift + R)."
-msgstr ""
-"O I2P+ suporta substituições de tema personalizadas para o console, o "
-"gerenciador de túneis, I2PSnark, SusiDNS e Susimail, permitindo alterações "
-"nos temas que são persistentes após atualizações. Para ativar uma "
-"substituição, crie um arquivo css chamado <code>override.css</code> com suas "
-"modificações de tema e coloque-o no diretório de temas relevante do tema "
-"que você deseja alterar, ou renomeie um dos arquivos de exemplo e, em "
-"seguida, faça um refresh forçado no navegador. Observe que o gerenciador de "
-"túneis e o console compartilham o mesmo override.css. Para desativar uma "
-"substituição, exclua ou renomeie o arquivo <code>override.css</code> e, em "
-"seguida, faça um refresh forçado no navegador (geralmente Control + Shift + R)."
-
-
-msgid "SAM Bridge Debug"
-msgstr "Depuração da Ponte SAM"
-
-msgid "All streaming connections"
-msgstr "Todas as conexões de streaming"
-
-msgid "All Streams"
-msgstr "Todos os streams"
-
-msgid "Inbound streaming connections"
-msgstr "Conexões de streaming de entrada"
-
-msgid "Outbound streaming connections"
-msgstr "Conexões de streaming de saída"
-
-msgid "tuning"
-msgstr "ajuste"
-
-msgid "Router Auto-Tuning"
-msgstr "Auto-Tuning do Roteador"

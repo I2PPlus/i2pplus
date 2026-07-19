@@ -1,7 +1,13 @@
 # I2P
 # Copyright (C) 2012 The I2P Project
 msgid ""
-msgstr "Language: et\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n != 1);\n"
+msgstr ""
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 msgid "Failed to load the wrapper"
 msgstr "Pakendi laadimine ebaõnnestus"
 
