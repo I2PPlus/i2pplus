@@ -854,7 +854,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public void lookupRouterInfo(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {
         if (!_initialized) return;
         RouterInfo ri = lookupRouterInfoLocally(key);
-        if (ri == null) {return;}
+        if (ri == null) {
+            // Not cached locally: fail fast rather than leaving the caller (e.g. a
+            // transit next-hop lookup) hanging with no scheduled job. This prevents
+            // a transit message from vanishing silently when its next hop is absent.
+            if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
+            return;
+        }
         if (onFindJob != null) {_context.jobQueue().addJob(onFindJob);}
         if (shouldBanlistBasedOnCountry(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
         else if (shouldBanlistXG(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
@@ -2727,6 +2733,18 @@ return false;
      *  @since 0.9.4 moved from FNDF to KNDF in 0.9.16
      */
     void lookupFailed(Hash key) {_negativeCache.lookupFailed(key);}
+
+    /**
+     *  Immediately negative-cache a key (set to its max fail count) so the next
+     *  lookup short-circuits via {@link #isNegativeCached} instead of running a
+     *  full search. Used for transit next-hop RouterInfo misses: a peer that is
+     *  gone or unreachable should fail fast for subsequent transit messages
+     *  rather than each one waiting out the full lookup timeout.
+     *
+     *  @param key RouterInfo or Destination hash
+     *  @since 0.9.70+
+     */
+    void negativeCacheNow(Hash key) {_negativeCache.cache(key);}
 
     /**
      *  Is the key in the negative lookup cache?
