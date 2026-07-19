@@ -432,6 +432,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new NetDBSearchLimitParam());
         _params.add(new NetDBSingleSearchTimeParam());
         _params.add(new LsLookupTimeoutParam());
+        _params.add(new RiLookupTimeoutParam());
 
         // Peers
         _params.add(new MaxFastPeersParam());
@@ -5644,6 +5645,66 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return Math.min(_max, current + _step);
 
             // Don't shrink while LeaseSet lookups are failing or the system is
+            // congested — give in-flight searches room to complete.
+            if (target < current && (failsElevated || systemBusy))
+                return current;
+
+            // Hysteresis: leave alone when already close to target.
+            if (current >= target - _step && current <= target + _step)
+                return current;
+
+            return clamp(current, target, _step);
+        }
+    }
+
+    /**
+     * RouterInfo lookup deadline cap (ms), used for transit next-hop lookups.
+     * Adaptive: targets ~4x the observed netDb.lookupWithTimeoutSuccess (average
+     * time for a successful blocking RouterInfo lookup) so transit messages don't
+     * stall behind a doomed search for a missing/unreachable peer. A shorter cap
+     * lets the source reroute instead of holding the message for the full window.
+     * Grows toward the ceiling when failing lookups run up against the deadline
+     * (netDb.lookupWithTimeoutFail elevated), and won't shrink while lookups are
+     * failing or the system is congested.
+     */
+    private class RiLookupTimeoutParam extends BaseParam {
+
+        RiLookupTimeoutParam() {
+            super("MAX_RI_LOOKUP_TIME", "RouterInfo lookup timeout (ms)",
+                  SUB_NETDB,
+
+                  3000, 15000, 500, "netDb.lookupWithTimeoutSuccess", _context);
+        }
+
+        protected void applyValue(int value) {
+            IterativeSearchJob.setMaxRouterInfoLookupTime(value);
+        }
+
+        protected int getRuntimeValue() {
+            return IterativeSearchJob.getMaxRouterInfoLookupTime();
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = netDb.lookupWithTimeoutSuccess (ms): avg successful RI lookup time.
+            // Base target ~4x avg success time, floored by _min.
+            double riFails = getAdditionalEventCount(_context, "netDb.lookupWithTimeoutFail");
+            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+
+            boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
+            boolean failsElevated = !Double.isNaN(riFails) && riFails > 0;
+
+            int target = Math.max(_min, (int) (observed * 4));
+
+            // Don't shrink while RouterInfo lookups are failing or the system is
             // congested — give in-flight searches room to complete.
             if (target < current && (failsElevated || systemBusy))
                 return current;

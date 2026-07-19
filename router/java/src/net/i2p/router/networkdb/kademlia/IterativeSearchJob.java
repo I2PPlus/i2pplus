@@ -169,6 +169,31 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static volatile int _maxLeaseSetLookupTime = MAX_SEARCH_TIME;
 
     /**
+     *  Adaptive deadline cap (ms) for RouterInfo lookups.
+     *  Used for transit next-hop lookups, where a message is held until the
+     *  lookup completes or times out; a long hold during a spike tanks transit
+     *  throughput. Defaults to a shorter cap than MAX_SEARCH_TIME so a missing
+     *  or unreachable RouterInfo fails fast and the source can reroute. Tuned
+     *  live by the Tuner toward ~4x the observed netDb.successTime.
+     *  @since 0.9.70+
+     */
+    private static volatile int _maxRouterInfoLookupTime = 10*1000;
+
+    /**
+     *  @return the current RouterInfo lookup deadline cap in ms
+     *  @since 0.9.70+
+     */
+    public static int getMaxRouterInfoLookupTime() { return _maxRouterInfoLookupTime; }
+
+    /**
+     *  @param val RouterInfo lookup deadline cap in ms, clamped to [3000, MAX_SEARCH_TIME]
+     *  @since 0.9.70+
+     */
+    public static void setMaxRouterInfoLookupTime(int val) {
+        _maxRouterInfoLookupTime = Math.max(3000, Math.min(MAX_SEARCH_TIME, val));
+    }
+
+    /**
      *  @return the current LeaseSet lookup deadline cap in ms
      *  @since 0.9.70+
      */
@@ -208,12 +233,15 @@ public class IterativeSearchJob extends FloodSearchJob {
         int known = ctx.netDb().getKnownRouters();
         int totalSearchLimit = (facade.floodfillEnabled() && ctx.router().getUptime() > 30*60*1000) ?
                                 TOTAL_SEARCH_LIMIT_WHEN_FF : TOTAL_SEARCH_LIMIT;
-        // RouterInfo lookups use the full message timeout, capped at MAX_SEARCH_TIME.
-        // LeaseSet lookups below use an adaptive, shorter cap instead.
-        _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME);
+        // RouterInfo lookups use the message timeout, capped at the adaptive
+        // RouterInfo deadline (shorter than MAX_SEARCH_TIME) so transit next-hop
+        // lookups for a missing/unreachable peer fail fast instead of holding the
+        // message for the full search window. LeaseSet lookups below use their own
+        // adaptive, shorter cap instead.
+        _timeoutMs = Math.min(timeoutMs, _maxRouterInfoLookupTime);
         // LeaseSet lookups use an adaptive, shorter deadline cap so client
         // connect don't stall behind a doomed search (streaming retransmits
-        // paper over the miss). RouterInfo lookups keep the full MAX_SEARCH_TIME.
+        // paper over the miss).
         if (isLease) {_timeoutMs = Math.min(Math.min(timeoutMs * 3, MAX_SEARCH_TIME), _maxLeaseSetLookupTime);}
         _expiration = _timeoutMs + ctx.clock().now();
         _rkey = ctx.routingKeyGenerator().getRoutingKey(key);
@@ -844,7 +872,14 @@ public class IterativeSearchJob extends FloodSearchJob {
             _dead = true;
         }
         _facade.complete(_key);
-        if (getContext().commSystem().getStatus() != Status.DISCONNECTED) {_facade.lookupFailed(_key);}
+        if (getContext().commSystem().getStatus() != Status.DISCONNECTED) {
+            _facade.lookupFailed(_key);
+            // For RouterInfo (transit next-hop) misses, immediately negative-cache
+            // the key so subsequent transit messages for this hop fail fast instead
+            // of each waiting out the full lookup timeout. LeaseSet misses are left
+            // to the normal repeat-fail counter to avoid caching transient blips.
+            if (!_isLease) {_facade.negativeCacheNow(_key);}
+        }
         getContext().messageRegistry().unregisterPending(_out);
         int tries;
         final List<Hash> unheard;
