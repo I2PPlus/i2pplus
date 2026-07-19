@@ -41,6 +41,8 @@ import net.i2p.util.SystemVersion;
  *  Public only for TunnelRenderer in router console.
  */
 public class TunnelPool {
+    private static final Comparator<TunnelInfo> EXPIRATION_COMPARATOR =
+            Comparator.comparingLong(TunnelInfo::getExpiration);
     private final List<PooledTunnelCreatorConfig> _inProgress = new ArrayList<>();
     protected final RouterContext _context;
     protected final Log _log;
@@ -1146,7 +1148,7 @@ public class TunnelPool {
                             goodTunnels.add(info);
                         }
                     }
-                    goodTunnels.sort(Comparator.comparingLong(TunnelInfo::getExpiration));
+                    goodTunnels.sort(EXPIRATION_COMPARATOR);
                     for (TunnelInfo info : goodTunnels) {
                         if (toPrune <= 0) break;
                         // Don't prune if tunnel is actively carrying traffic

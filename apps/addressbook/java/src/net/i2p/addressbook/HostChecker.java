@@ -68,6 +68,9 @@ import net.i2p.util.PortMapper;
  */
 public class HostChecker {
 
+    private static final Comparator<Map.Entry<String, PingResult>> PING_TIMESTAMP_COMPARATOR =
+            Comparator.comparingLong((Map.Entry<String, PingResult> e) -> e.getValue().timestamp);
+
     private final I2PAppContext _context;
     private final Log _log;
     private final NamingService _namingService;
@@ -1118,7 +1121,7 @@ public class HostChecker {
             content.append("# Generated: ").append(new Date()).append("\n\n");
 
             List<Map.Entry<String, PingResult>> sortedEntries = new ArrayList<>(_pingResults.entrySet());
-            sortedEntries.sort(Comparator.comparingLong(e -> e.getValue().timestamp));
+            sortedEntries.sort(PING_TIMESTAMP_COMPARATOR);
 
             for (Map.Entry<String, PingResult> entry : sortedEntries) {
                 String hostname = entry.getKey();

@@ -59,6 +59,8 @@
     <!-- IRC pong buffers are shared across threads and mutated; StringBuffer sync is required -->
     <exclude-pattern>.*/net/i2p/i2ptunnel/I2PTunnelIRCClient\.java</exclude-pattern>
     <exclude-pattern>.*/net/i2p/i2ptunnel/socks/I2PSOCKSIRCTunnel\.java</exclude-pattern>
+    <!-- NetDbHelper: comparator references a method-local class; cannot be hoisted to static field -->
+    <exclude-pattern>.*/net/i2p/router/web/helpers/NetDbHelper\.java</exclude-pattern>
 
     <!-- Security -->
     <rule ref="category/java/security.xml"/>

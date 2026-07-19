@@ -59,6 +59,8 @@ import net.i2p.util.SystemVersion;
 public class ProfileOrganizer {
     /** Threshold below which the network is considered under attack */
     public static final double ATTACK_THRESHOLD = 0.40;
+    private static final Comparator<PeerProfile> CAPACITY_COMPARATOR =
+            Comparator.comparingDouble(PeerProfile::getCapacityValue);
 
     private final Log _log;
     private final RouterContext _context;
@@ -1074,7 +1076,7 @@ public class ProfileOrganizer {
         }
 
         // Sort by capacity (lowest first) → evict low-capacity, inactive peers first
-        candidates.sort(Comparator.comparingDouble(PeerProfile::getCapacityValue));
+        candidates.sort(CAPACITY_COMPARATOR);
 
         int toEvict = _notFailingPeers.size() - maxProfiles;
         int evicted = 0;
