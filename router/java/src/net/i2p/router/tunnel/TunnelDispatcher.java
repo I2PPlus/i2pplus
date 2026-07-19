@@ -292,6 +292,10 @@ public class TunnelDispatcher implements Service {
         if (cleaned > 0 && _log.shouldInfo()) {
             _log.info("Periodic cleanup removed " + cleaned + " tunnels (recentlyExpired: " + cleanedRecently + ")");
         }
+        // Record net churn: +joined (recorded at join time) minus -expired here.
+        if (cleaned > 0) {
+            _context.statManager().addRateData("tunnel.participatingTunnelChurn", -cleaned);
+        }
         return cleaned;
     }
 
@@ -329,6 +333,11 @@ public class TunnelDispatcher implements Service {
      */
     private void initializeStats() {
         _context.statManager().createRequiredRateStat("tunnel.participatingTunnels", "Tunnels routed for others", "Tunnels [Participating]", RATES);
+        // Net churn of participating (transit) tunnels: +1 when a transit tunnel is
+        // joined, -1 when one expires/is removed. A sustained negative rate signals
+        // tunnels expiring faster than they are rebuilt (collapse), distinct from
+        // load-driven rejection.
+        _context.statManager().createRequiredRateStat("tunnel.participatingTunnelChurn", "Net churn of transit tunnels (join-expire)", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.dispatchOutboundPeer", "Outbound messages targeting a peer", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.dispatchOutboundTunnel", "Outbound messages targeting a tunnel", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.dispatchInbound", "Messages we sent through our Tunnel Gateway", "Tunnels [Participating]", RATES);
@@ -478,6 +487,7 @@ public class TunnelDispatcher implements Service {
 
         _context.messageHistory().tunnelJoined("participant", cfg);
         _context.statManager().addRateData("tunnel.joinParticipant", 1);
+        _context.statManager().addRateData("tunnel.participatingTunnelChurn", 1);
 
         if (cfg.getExpiration() > _lastParticipatingExpiration)
             _lastParticipatingExpiration = cfg.getExpiration();
