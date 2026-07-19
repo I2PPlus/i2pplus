@@ -64,8 +64,6 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
         _msgIDBloomXor = msgIDBloomXor;
     }
 
-    protected boolean answerAllQueries() {return false;}
-
     public void runJob() {
 
         Hash fromKey = _message.getFrom();
@@ -113,7 +111,6 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
             LeaseSet ls = (LeaseSet) dbe;
             /**
              *  Answer any request for a LeaseSet if it has been published to us.
-             *  answerAllQueries: We are floodfill
              *  getReceivedAsPublished:
              *    - false for received over a client tunnel(if associated with a client, goes to client subDB)
              *    - true for received in a DatabaseStoreMessage unsolicited(goes to main Db)

@@ -37,18 +37,6 @@ public class HandleFloodfillDatabaseLookupMessageJob extends HandleDatabaseLooku
     }
 
     /**
-     * @return are we floodfill
-     * We don't really answer all queries if this is true,
-     * since floodfills don't have the whole keyspace any more,
-     * see ../HTLMJ for discussion
-     */
-    @Override
-    protected boolean answerAllQueries() {
-        if (!getContext().netDb().floodfillEnabled()) return false;
-        return FloodfillNetworkDatabaseFacade.isFloodfill(getContext().router().getRouterInfo());
-    }
-
-    /**
      * We extend this here to send our routerInfo back as well, if we are not floodfill.
      * This gets the word out to routers that we are no longer floodfill, so they
      * will stop bugging us.

@@ -65,11 +65,11 @@ class LookupThrottler {
         this.burstTimestamps = new LinkedHashMap<ReplyTunnel, Deque<Long>>() {
             @Override
             protected boolean removeEldestEntry(Map.Entry<ReplyTunnel, Deque<Long>> eldest) {
-                if (size() > MAX_ENTRIES) {
-                    counter.clear();
-                    return true;
-                }
-                return false;
+                // Only evict the eldest burst-tracking entry to stay bounded.
+                // Do NOT clear the global counting throttle here - doing so would
+                // reset every peer's burst count and let an attacker bypass the
+                // counting throttle the moment the map fills (see ticket MEDIUM-2).
+                return size() > MAX_ENTRIES;
             }
         };
         new Cleaner().schedule(CLEAN_TIME);

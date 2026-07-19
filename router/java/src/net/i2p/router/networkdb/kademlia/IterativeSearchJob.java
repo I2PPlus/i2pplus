@@ -208,11 +208,13 @@ public class IterativeSearchJob extends FloodSearchJob {
         int known = ctx.netDb().getKnownRouters();
         int totalSearchLimit = (facade.floodfillEnabled() && ctx.router().getUptime() > 30*60*1000) ?
                                 TOTAL_SEARCH_LIMIT_WHEN_FF : TOTAL_SEARCH_LIMIT;
-        _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
+        // RouterInfo lookups use the full message timeout, capped at MAX_SEARCH_TIME.
+        // LeaseSet lookups below use an adaptive, shorter cap instead.
+        _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME);
         // LeaseSet lookups use an adaptive, shorter deadline cap so client
-        // connects don't stall behind a doomed search (streaming retransmits
+        // connect don't stall behind a doomed search (streaming retransmits
         // paper over the miss). RouterInfo lookups keep the full MAX_SEARCH_TIME.
-        if (isLease) {_timeoutMs = Math.min(_timeoutMs, _maxLeaseSetLookupTime);}
+        if (isLease) {_timeoutMs = Math.min(Math.min(timeoutMs * 3, MAX_SEARCH_TIME), _maxLeaseSetLookupTime);}
         _expiration = _timeoutMs + ctx.clock().now();
         _rkey = ctx.routingKeyGenerator().getRoutingKey(key);
         _toTry = new TreeSet<>(new XORComparator<>(_rkey));
@@ -224,7 +226,6 @@ public class IterativeSearchJob extends FloodSearchJob {
         _skippedPeers = new HashSet<>(4);
         _sentTime = new ConcurrentHashMap<>(_totalSearchLimit);
         _fromLocalDest = fromLocalDest;
-        _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME);
         _maxConcurrent = (ctx.router().getUptime() > 30*60*1000 || known > 1000) ? ctx.getProperty("netdb.maxConcurrent", _maxConcurrentDefault) :
                           ctx.getProperty("netdb.maxConcurrent", _maxConcurrentDefault + 1);
         if (fromLocalDest != null && !isLease && _log.shouldWarn()) {
