@@ -290,8 +290,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         context.statManager().createRateStat("netDb.storePeers", "Peers each NetDb must be sent to before success", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.storeRouterInfoSent", "Sent RouterInfo store messages", "NetworkDatabase", RATES);
 
-        context.statManager().createRateStat("netDb.lookupWithTimeoutSuccess", "Successful blocking NetDb lookups with timeout", "NetworkDatabase", LOOKUP_TIMEOUT_RATES);
-        context.statManager().createRateStat("netDb.lookupWithTimeoutFail", "Failed blocking NetDb lookups (timeout)", "NetworkDatabase", LOOKUP_TIMEOUT_RATES);
+        context.statManager().createRequiredRateStat("netDb.lookupWithTimeoutSuccess", "Successful blocking NetDb lookups with timeout", "NetworkDatabase", LOOKUP_TIMEOUT_RATES);
+        context.statManager().createRequiredRateStat("netDb.lookupWithTimeoutFail", "Failed blocking NetDb lookups (timeout)", "NetworkDatabase", LOOKUP_TIMEOUT_RATES);
     }
 
     /**

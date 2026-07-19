@@ -53,7 +53,7 @@ class ConnectionPacketHandler {
         _context.statManager().createRequiredRateStat("stream.con.initialRTT.out", "RTT for the first packet of an outbound connection", "Stream", RATES);
         _context.statManager().createRateStat("stream.con.receiveDuplicateSize", "Size of a duplicate message received on a connection", "Stream", RATES);
         _context.statManager().createRateStat("stream.con.receiveMessageSize", "Size of a message received on a connection", "Stream", RATES);
-        _context.statManager().createRateStat("stream.resetReceived", "Number of successful sent messages before receiving a RESET", "Stream", RATES);
+        _context.statManager().createRequiredRateStat("stream.resetReceived", "Number of successful sent messages before receiving a RESET", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.sendsBeforeAck", "Number of times a message was sent before it was ACKed", "Stream", RATES);
     }
 

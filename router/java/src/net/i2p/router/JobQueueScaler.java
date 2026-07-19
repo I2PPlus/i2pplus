@@ -186,7 +186,7 @@ class JobQueueScaler implements Runnable {
         context.statManager().createRequiredRateStat("jobQueue.memoryUsedPercent",
             "Percentage of max memory used", "JobQueue",
             new long[] { RateConstants.ONE_MINUTE });
-        context.statManager().createRateStat("jobQueue.loadRecoveryTime",
+        context.statManager().createRequiredRateStat("jobQueue.loadRecoveryTime",
             "Duration of load episodes (ms)", "JobQueue",
             new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
     }
