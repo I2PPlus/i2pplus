@@ -551,6 +551,7 @@ public abstract class CommSystemFacade implements Service {
                             return newStatus;
                     }
 
+                // fall through
                 case IPV4_UNKNOWN_IPV6_OK:
                     switch (oldStatus) {
                         // cases where we already knew both states
@@ -592,6 +593,7 @@ public abstract class CommSystemFacade implements Service {
                             return newStatus;
                     }
 
+                // fall through
                 case IPV4_FIREWALLED_IPV6_UNKNOWN:
                     switch (oldStatus) {
                         // cases where we already knew both states
@@ -627,6 +629,7 @@ public abstract class CommSystemFacade implements Service {
                             return newStatus;
                     }
 
+                // fall through
                 case IPV4_UNKNOWN_IPV6_FIREWALLED:
                     switch (oldStatus) {
                         // cases where we already knew both states
@@ -670,6 +673,7 @@ public abstract class CommSystemFacade implements Service {
                             return newStatus;
                     }
 
+                // fall through
                 case IPV4_DISABLED_IPV6_UNKNOWN:
                     switch (oldStatus) {
                         // cases where we already knew both states
@@ -705,6 +709,7 @@ public abstract class CommSystemFacade implements Service {
                             return newStatus;
                     }
 
+                // fall through
                 case IPV4_SNAT_IPV6_UNKNOWN:
                     switch (oldStatus) {
                         // cases where we already knew both states

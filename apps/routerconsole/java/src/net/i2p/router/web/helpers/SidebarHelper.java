@@ -308,6 +308,7 @@ public class SidebarHelper extends HelperBase {
 
             case REJECT_UNSOLICITED:
                 state = NetworkState.FIREWALLED;
+                // fall through
 
             case IPV4_DISABLED_IPV6_FIREWALLED:
                 if (routerInfo.getTargetAddress("NTCP") != null) {
