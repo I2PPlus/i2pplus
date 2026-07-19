@@ -5673,7 +5673,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("MAX_RI_LOOKUP_TIME", "RouterInfo lookup timeout (ms)",
                   SUB_NETDB,
 
-                  3000, 15000, 500, "netDb.lookupWithTimeoutSuccess", _context);
+                  3000, 10000, 500, "netDb.lookupWithTimeoutSuccess", _context);
         }
 
         protected void applyValue(int value) {
