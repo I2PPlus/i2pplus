@@ -20,7 +20,7 @@ msgstr "Prepovedano s pomočjo dijeja usmerjevalnika"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:1298
 msgid "Tor Exit"
-msgstr ""
+msgstr "Izhod Tor"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:1300
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:1398
@@ -1277,33 +1277,33 @@ msgstr "Preverjanje vstavka je končano"
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:493
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:432
 msgid "Restore Defaults"
-msgstr ""
+msgstr "Obnovi privzete vrednosti"
 
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:497
 msgid "All parameters restored to factory defaults"
-msgstr ""
+msgstr "Vsi parametri obnovljeni na tovarniške privzete vrednosti"
 
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:499
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:303
 msgid "Auto-Tuning is not available"
-msgstr ""
+msgstr "Samodejno uravnavanje ni na voljo"
 
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:804
 msgid "Tuning ranges saved — changes take effect immediately"
-msgstr ""
+msgstr "Obsegi uravnavanja shranjeni — spremembe začnejo veljati takoj"
 
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:806
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:811
 msgid "No changes to save"
-msgstr ""
+msgstr "Ni sprememb za shranjevanje"
 
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:809
 msgid "Tuning overrides applied"
-msgstr ""
+msgstr "Preglasitve uravnavanja uporabljene"
 
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:827
 msgid "Invalid value"
-msgstr ""
+msgstr "Neveljavna vrednost"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:276
 msgid "No bans currently active"
@@ -2505,7 +2505,7 @@ msgstr "Družina usmerjevalnikov"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:34
 msgid "Auto-Tuning"
-msgstr ""
+msgstr "Samodejno uravnavanje"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:61
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:103
@@ -2938,7 +2938,7 @@ msgstr "Interval osveževanja mora biti število"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSidebarHandler.java:107
 msgid "Graph preferences updated"
-msgstr ""
+msgstr "Nastavitve grafa posodobljene"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSidebarHandler.java:126
 msgid "Full sidebar defaults restored."
@@ -3546,19 +3546,19 @@ msgstr "Shrani podatke grafa na disk"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:483
 msgid "UTC time"
-msgstr ""
+msgstr "Čas UTC"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:489
 msgid "Display time in UTC on graph axes"
-msgstr ""
+msgstr "Prikaži čas v UTC na oseh grafa"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:491
 msgid "Glow effect"
-msgstr ""
+msgstr "Učinek žarenja"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:497
 msgid "Add a glow effect to graph lines"
-msgstr ""
+msgstr "Dodaj učinek žarenja k črtam grafa"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:499
 msgid "Select Stats"
@@ -3578,11 +3578,11 @@ msgstr "Nastavitve grafa niso spremenjene"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:239
 msgid "CPU"
-msgstr ""
+msgstr "CPU"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:240
 msgid "CPU load average"
-msgstr ""
+msgstr "Povprečna obremenitev CPU"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:241
 #: ../java/src/net/i2p/router/web/helpers/SidebarRenderer.java:788
@@ -3597,7 +3597,7 @@ msgstr "Uporaba pomnilnika"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:244
 msgid "Router uptime"
-msgstr ""
+msgstr "Čas delovanja usmerjevalnika"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:245
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:554
@@ -3616,19 +3616,19 @@ msgstr "Zamik naloga"
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:460
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:468
 msgid "ms"
-msgstr ""
+msgstr "ms"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:246
 msgid "Job queue delay"
-msgstr ""
+msgstr "Zakasnitev čakalne vrste opravil"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:247
 msgid "Msg Lag"
-msgstr ""
+msgstr "Zaostanek sporočil"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:248
 msgid "Message send processing time"
-msgstr ""
+msgstr "Čas obdelave pošiljanja sporočil"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:249
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:399
@@ -3639,99 +3639,99 @@ msgstr "Red nalog"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:250
 msgid "Ready jobs waiting in queue"
-msgstr ""
+msgstr "Pripravljena opravila čakajo v vrsti"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:251
 msgid "Threads"
-msgstr ""
+msgstr "Niti"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:252
 msgid "Active JVM threads"
-msgstr ""
+msgstr "Aktivne niti JVM"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:308
 msgid "NTCP Estab"
-msgstr ""
+msgstr "Vzpostavitev NTCP"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:309
 msgid "NTCP outbound establish time"
-msgstr ""
+msgstr "Čas vzpostavitve odhodne povezave NTCP"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:310
 msgid "SSU Estab"
-msgstr ""
+msgstr "Vzpostavitev SSU"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:311
 msgid "SSU outbound establish time"
-msgstr ""
+msgstr "Čas vzpostavitve odhodne povezave SSU"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:312
 msgid "SSU RTO"
-msgstr ""
+msgstr "SSU RTO"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:313
 msgid "SSU retransmission timeout"
-msgstr ""
+msgstr "Časovna omejitev ponovnega prenosa SSU"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:314
 msgid "Conns/s"
-msgstr ""
+msgstr "Povezave/s"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:315
 msgid "NTCP connections established per second"
-msgstr ""
+msgstr "Vzpostavljenih povezav NTCP na sekundo"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:316
 msgid "Msgs/s"
-msgstr ""
+msgstr "Sporočila/s"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:317
 msgid "Messages delivered per second"
-msgstr ""
+msgstr "Dostavljenih sporočil na sekundo"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:318
 msgid "RTT"
-msgstr ""
+msgstr "RTT"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:319
 msgid "End-to-end message round trip time"
-msgstr ""
+msgstr "Čas obhoda sporočila od konca do konca"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:320
 msgid "Timeout"
-msgstr ""
+msgstr "Časovna omejitev"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:321
 msgid "Tunnel build timeout rate"
-msgstr ""
+msgstr "Stopnja časovnih omejitev gradnje tunelov"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:322
 msgid "Tunnel Build"
-msgstr ""
+msgstr "Gradnja tunela"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:323
 msgid "Client tunnel build latency"
-msgstr ""
+msgstr "Zakasnitev gradnje odjemalskega tunela"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:379
 msgid "Active Peers"
-msgstr ""
+msgstr "Aktivni soležniki"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:380
 msgid "Active peers (last 60s)"
-msgstr ""
+msgstr "Aktivni soležniki (zadnjih 60s)"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:381
 msgid "Known Peers"
-msgstr ""
+msgstr "Znani soležniki"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:382
 msgid "Known routers in network database"
-msgstr ""
+msgstr "Znani usmerjevalniki v omrežni podatkovni bazi"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:384
 msgid "Active I2CP clients"
-msgstr ""
+msgstr "Aktivni odjemalci I2CP"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:385
 #: ../java/src/net/i2p/router/web/helpers/SidebarRenderer.java:1279
@@ -3752,7 +3752,7 @@ msgstr "Prehod"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:386
 msgid "Transit tunnels hosted"
-msgstr ""
+msgstr "Gostovani tranzitni tuneli"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:387
 msgid "Streams"
@@ -3765,15 +3765,15 @@ msgstr "Uspeh izgradnje"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:390
 msgid "Tunnel build success rate"
-msgstr ""
+msgstr "Stopnja uspešnosti gradnje tunelov"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:391
 msgid "NetDB"
-msgstr ""
+msgstr "NetDB"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:392
 msgid "NetDB lookup time"
-msgstr ""
+msgstr "Čas iskanja NetDB"
 
 #. 2
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:393
@@ -3790,7 +3790,7 @@ msgstr "Prepovedano"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:394
 msgid "Total banned peers"
-msgstr ""
+msgstr "Skupaj prepovedani soležniki"
 
 #. 4  - f=1 (debug)
 #. 5  - l=1
@@ -3806,63 +3806,63 @@ msgstr "Nizi zakupov"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:455
 msgid "Stored LeaseSets in floodfill"
-msgstr ""
+msgstr "Shranjeni LeaseSet-i v floodfill"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:456
 msgid "Cache Hit"
-msgstr ""
+msgstr "Zadetek predpomnilnika"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:457
 msgid "NetDB lookup success rate"
-msgstr ""
+msgstr "Stopnja uspešnosti iskanja NetDB"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:458
 msgid "Flood Verify"
-msgstr ""
+msgstr "Preverjanje floodfill"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:459
 msgid "Floodfill verify time"
-msgstr ""
+msgstr "Čas preverjanja floodfill"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:460
 msgid "NetDB ACK"
-msgstr ""
+msgstr "NetDB potrditev"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:461
 msgid "NetDB peer acknowledge time"
-msgstr ""
+msgstr "Čas potrditve soležnika NetDB"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:462
 msgid "Lookups/s"
-msgstr ""
+msgstr "Iskanja/s"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:463
 msgid "NetDB lookups handled per second"
-msgstr ""
+msgstr "Obdelanih iskanj NetDB na sekundo"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:464
 msgid "Requests/s"
-msgstr ""
+msgstr "Zahteve/s"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:465
 msgid "Combined store + lookup operations per second"
-msgstr ""
+msgstr "Skupno število operacij shranjevanja + iskanja na sekundo"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:466
 msgid "Stores/s"
-msgstr ""
+msgstr "Shranjevanja/s"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:467
 msgid "NetDB store messages handled per second"
-msgstr ""
+msgstr "Obdelanih sporočil shranjevanja NetDB na sekundo"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:468
 msgid "LS Timeout"
-msgstr ""
+msgstr "Časovna omejitev LS"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:469
 msgid "LeaseSet request timeouts (last minute)"
-msgstr ""
+msgstr "Časovne omejitve zahtev LeaseSet (zadnja minuta)"
 
 #: ../java/src/net/i2p/router/web/helpers/HelpSectionHelper.java:27
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:476
@@ -4785,7 +4785,7 @@ msgstr "GeoIP zbirka podatkov"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:214
 msgid "ASN Db"
-msgstr ""
+msgstr "Podatkovna baza ASN"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:216
 msgid "Target"
@@ -6404,27 +6404,27 @@ msgstr "Vse"
 
 #: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:46
 msgid "SAM bridge is not running."
-msgstr ""
+msgstr "Most SAM ne deluje."
 
 #: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:70
 msgid "Active sessions in SessionsDB"
-msgstr ""
+msgstr "Aktivne seje v SessionsDB"
 
 #: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:72
 msgid "Active / pool worker threads"
-msgstr ""
+msgstr "Aktivne / delovne niti bazena"
 
 #: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:74
 msgid "Pending commands in pool"
-msgstr ""
+msgstr "Čakajoči ukazi v bazenu"
 
 #: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:76
 msgid "Connected pool handlers"
-msgstr ""
+msgstr "Povezani obravnavalniki bazena"
 
 #: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:78
 msgid "Sockets stolen for data streaming"
-msgstr ""
+msgstr "Vtičnice prevzete za pretakanje podatkov"
 
 #: ../java/src/net/i2p/router/web/helpers/SearchHelper.java:74
 msgid "Select search engine"
@@ -6945,11 +6945,11 @@ msgstr "Prikaži vse trenutne povezave z partnerji"
 
 #: ../java/src/net/i2p/router/web/helpers/SidebarRenderer.java:541
 msgid "Health"
-msgstr ""
+msgstr "Zdravje"
 
 #: ../java/src/net/i2p/router/web/helpers/SidebarRenderer.java:544
 msgid "Router health overview"
-msgstr ""
+msgstr "Pregled zdravja usmerjevalnika"
 
 #: ../java/src/net/i2p/router/web/helpers/SidebarRenderer.java:552
 msgid "Profiles"
@@ -7460,16 +7460,16 @@ msgstr[3] "{0} dogodki"
 #: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:204
 #: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:302
 msgid "sent"
-msgstr ""
+msgstr "poslano"
 
 #: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:206
 #: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:303
 msgid "received"
-msgstr ""
+msgstr "prejeto"
 
 #: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:372
 msgid "No active streaming connections."
-msgstr ""
+msgstr "Ni aktivnih pretočnih povezav."
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:139
 msgid "No known routers"
@@ -7865,52 +7865,57 @@ msgid ""
 "Auto-Tuning continuously monitors router performance and adjusts parameters "
 "to optimize throughput, reduce latency, and maintain stability."
 msgstr ""
+"Samodejno uravnavanje neprekinjeno spremlja zmogljivost usmerjevalnika in "
+"prilagaja parametre za optimizacijo pretoka, zmanjšanje zakasnitve in "
+"ohranjanje stabilnosti."
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:341
 msgid ""
 "Uncheck the Auto box on any row to pin that parameter and prevent further "
 "adjustments."
 msgstr ""
+"Odznačite polje Samodejno v katerikoli vrstici, da pripnete ta parameter in "
+"preprečite nadaljnje prilagoditve."
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:345
 msgid "Healthy"
-msgstr ""
+msgstr "Zdravo"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:347
 msgid "Fair"
-msgstr ""
+msgstr "Zadovoljivo"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:349
 msgid "Degraded"
-msgstr ""
+msgstr "Poslabšano"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:352
 msgid "Current system health:"
-msgstr ""
+msgstr "Trenutno zdravje sistema:"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:355
 msgid "System health assessment is not yet available."
-msgstr ""
+msgstr "Ocena zdravja sistema še ni na voljo."
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:372
 msgid "Parameter"
-msgstr ""
+msgstr "Parameter"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:374
 msgid "Default"
-msgstr ""
+msgstr "Privzeto"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:377
 msgid "Step"
-msgstr ""
+msgstr "Korak"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:378
 msgid "History"
-msgstr ""
+msgstr "Zgodovina"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:379
 msgid "Auto"
-msgstr ""
+msgstr "Samodejno"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:109
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:534
@@ -8738,32 +8743,36 @@ msgstr ""
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:580
 msgid "Misc Reasons"
-msgstr ""
+msgstr "Razni razlogi"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:582
 msgid ""
 "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
 msgstr ""
+"Prepovej floodfill soležnike, ki se ne odzivajo na poizvedbe (stopnja "
+"neuspehov >95%)"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:586
 msgid "Ban unresponsive floodfills"
-msgstr ""
+msgstr "Prepovej neodzivne floodfill-e"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:588
 msgid "Ban routers whose RouterInfo has no version field"
-msgstr ""
+msgstr "Prepovej usmerjevalnike, katerih RouterInfo nima polja z različico"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:592
 msgid "Ban routers with no version"
-msgstr ""
+msgstr "Prepovej usmerjevalnike brez različice"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:594
 msgid "Ban routers that send excessive tunnel participation requests"
 msgstr ""
+"Prepovej usmerjevalnike, ki pošiljajo pretirane zahteve za sodelovanje v "
+"tunelih"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:598
 msgid "Ban excessive tunnel requests"
-msgstr ""
+msgstr "Prepovej pretirane zahteve za tunele"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:600
 msgid "Clear all bans"
@@ -9746,43 +9755,43 @@ msgstr "Omogoči pogojeno dno letnico orodno okno"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:512
 msgid "Graph Options"
-msgstr ""
+msgstr "Možnosti grafa"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:516
 msgid "Legacy renderer"
-msgstr ""
+msgstr "Starejši upodabljalnik"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:521
 msgid "Use RRD4J renderer"
-msgstr ""
+msgstr "Uporabi upodabljalnik RRD4J"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:529
 msgid "minutes (2–30)"
-msgstr ""
+msgstr "minute (2–30)"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:531
 msgid "Split display"
-msgstr ""
+msgstr "Deljen prikaz"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:536
 msgid "Separate Inbound and Outbound"
-msgstr ""
+msgstr "Ločeno dohodni in odhodni"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:538
 msgid "Graph direction"
-msgstr ""
+msgstr "Smer grafa"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:543
 msgid "Left-to-right"
-msgstr ""
+msgstr "Od leve proti desni"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:545
 msgid "Refresh Interval"
-msgstr ""
+msgstr "Interval osveževanja"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:550
 msgid "Update graph every second"
-msgstr ""
+msgstr "Posodobi graf vsako sekundo"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:311
 msgid "config stats"
@@ -10199,27 +10208,27 @@ msgstr "Grafi zmogljivosti"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:309
 msgid "health"
-msgstr ""
+msgstr "zdravje"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:410
 msgid "Router Health"
-msgstr ""
+msgstr "Zdravje usmerjevalnika"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:412
 msgid "Performance & Load"
-msgstr ""
+msgstr "Zmogljivost in obremenitev"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:416
 msgid "Transport & Connectivity"
-msgstr ""
+msgstr "Transport in povezljivost"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:420
 msgid "Network & Participation"
-msgstr ""
+msgstr "Omrežje in sodelovanje"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:426
 msgid "Floodfill / NetDB"
-msgstr ""
+msgstr "Floodfill / NetDB"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:314
 msgid "Advanced Configuration Help - I2P+"
@@ -10690,12 +10699,20 @@ msgid ""
 "with gradient fills, glow effects, and a split inbound/outbound display. "
 "[Default is false]"
 msgstr ""
+"Ko je nastavljeno na true, graf pasovne širine v stranski vrstici uporablja "
+"starejši upodabljalnik SVG RRD4J. Ko je nastavljeno na false, se uporablja "
+"nov upodabljalnik platna z dvojno osnovnico, z gradientnimi polnili, učinki "
+"žarenja in deljenim prikazom dohodnega/odhodnega prometa. [Privzeto je "
+"false]"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:503
 msgid ""
 "The time period, in minutes, displayed in the sidebar bandwidth graph. "
 "Values outside the valid range (2–30) are clamped. [Default is 20]"
 msgstr ""
+"Časovno obdobje v minutah, prikazano v grafu pasovne širine v stranski "
+"vrstici. Vrednosti izven veljavnega obsega (2–30) so omejene. [Privzeto je "
+"20]"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:505
 msgid ""
@@ -10705,6 +10722,11 @@ msgid ""
 "overlay mode from the top of the graph with a configurable composite blend. "
 "[Default is true]"
 msgstr ""
+"Ko je nastavljeno na true (privzeto), sta dohodni in odhodni promet "
+"prikazana v deljenem pogledu s središčno osnovnico, kjer odhodni skoki "
+"potekajo navzgor, dohodni pa navzdol. Ko je nastavljeno na false, sta obe "
+"črti prikazani v načinu prekrivanja z vrha grafa z nastavljivim sestavljenim"
+" zlivanjem. [Privzeto je true]"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:507
 msgid ""
@@ -10713,6 +10735,10 @@ msgid ""
 "right. When set to ltr, the graph renders left-to-right with newest data on "
 "the left. [Default is rtl]"
 msgstr ""
+"Nastavi smer upodabljanja za graf pasovne širine v stranski vrstici. Ko je "
+"nastavljeno na rtl (privzeto), se graf upodablja od desne proti levi z "
+"najnovejšimi podatki na desni. Ko je nastavljeno na ltr, se graf upodablja "
+"od leve proti desni z najnovejšimi podatki na levi. [Privzeto je rtl]"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:509
 msgid ""
@@ -16217,6 +16243,16 @@ msgid ""
 "deactivate an override, delete or rename the <code>override.css</code> file "
 "and then hard refresh the browser (usually Control + Shift + R)."
 msgstr ""
+"I2P+ podpira prilagojene preglasitve tem za konzolo, upravitelja tunelov, "
+"I2PSnark, SusiDNS in Susimail, kar omogoča spremembe tem, ki so obstojne po "
+"nadgradnjah. Za aktiviranje preglasitve ustvarite datoteko css z imenom "
+"<code>override.css</code> s svojimi spremembami teme in jo postavite v "
+"ustrezno mapo teme, ki jo želite spremeniti, ali preimenujte eno od "
+"primernih datotek, nato pa trdo osvežite brskalnik. Upoštevajte, da "
+"upravitelj tunelov in konzola uporabljata isto datoteko override.css. Za "
+"deaktiviranje preglasitve izbrišite ali preimenujte datoteko "
+"<code>override.css</code> in nato trdo osvežite brskalnik (običajno Control "
+"+ Shift + R)."
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:476
 msgid ""
@@ -17636,11 +17672,11 @@ msgstr "Filtriraj izhod dnevnika strežnika"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/samdebug_jsp.java:309
 msgid "SAM Debug"
-msgstr ""
+msgstr "Razhroščevanje SAM"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/samdebug_jsp.java:399
 msgid "SAM Bridge Debug"
-msgstr ""
+msgstr "Razhroščevanje mostu SAM"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/servicelogs_jsp.java:342
 msgid "service logs"
@@ -17677,20 +17713,20 @@ msgstr "Pretočne povezave"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:415
 msgid "All streaming connections"
-msgstr ""
+msgstr "Vse pretočne povezave"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:418
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:422
 msgid "All Streams"
-msgstr ""
+msgstr "Vsi tokovi"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:427
 msgid "Inbound streaming connections"
-msgstr ""
+msgstr "Dohodne pretočne povezave"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:439
 msgid "Outbound streaming connections"
-msgstr ""
+msgstr "Odhodne pretočne povezave"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrents_jsp.java:341
 msgid "torrents"
@@ -17757,11 +17793,11 @@ msgstr "Tranzitni tuneli po sosednjem strežniku"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tuning_jsp.java:310
 msgid "tuning"
-msgstr ""
+msgstr "uravnavanje"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tuning_jsp.java:400
 msgid "Router Auto-Tuning"
-msgstr ""
+msgstr "Samodejno uravnavanje usmerjevalnika"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:309
 msgid "tunnel peer count"

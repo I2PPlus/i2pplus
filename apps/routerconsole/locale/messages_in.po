@@ -20,7 +20,7 @@ msgstr "Dilarang oleh Hash Router"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:1298
 msgid "Tor Exit"
-msgstr ""
+msgstr "Keluar Tor"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:1300
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:1398
@@ -1262,33 +1262,33 @@ msgstr "Pemeriksaan plugin selesai"
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:493
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:432
 msgid "Restore Defaults"
-msgstr ""
+msgstr "Kembalikan Bawaan"
 
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:497
 msgid "All parameters restored to factory defaults"
-msgstr ""
+msgstr "Semua parameter dikembalikan ke setelan pabrik"
 
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:499
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:303
 msgid "Auto-Tuning is not available"
-msgstr ""
+msgstr "Penyetelan otomatis tidak tersedia"
 
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:804
 msgid "Tuning ranges saved — changes take effect immediately"
-msgstr ""
+msgstr "Rentang penyetelan disimpan — perubahan berlaku segera"
 
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:806
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:811
 msgid "No changes to save"
-msgstr ""
+msgstr "Tidak ada perubahan untuk disimpan"
 
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:809
 msgid "Tuning overrides applied"
-msgstr ""
+msgstr "Penimpaan penyetelan diterapkan"
 
 #: ../java/src/net/i2p/router/web/TuningFormHandler.java:827
 msgid "Invalid value"
-msgstr ""
+msgstr "Nilai tidak valid"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:276
 msgid "No bans currently active"
@@ -2488,7 +2488,7 @@ msgstr "Router Family "
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:34
 msgid "Auto-Tuning"
-msgstr ""
+msgstr "Penyetelan Otomatis"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:61
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:103
@@ -2909,7 +2909,7 @@ msgstr "Refresh interval harus berbentuk angka"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSidebarHandler.java:107
 msgid "Graph preferences updated"
-msgstr ""
+msgstr "Preferensi grafik diperbarui"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSidebarHandler.java:126
 msgid "Full sidebar defaults restored."
@@ -3515,19 +3515,19 @@ msgstr "Simpan data grafik ke dalam harddisk"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:483
 msgid "UTC time"
-msgstr ""
+msgstr "Waktu UTC"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:489
 msgid "Display time in UTC on graph axes"
-msgstr ""
+msgstr "Tampilkan waktu dalam UTC pada sumbu grafik"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:491
 msgid "Glow effect"
-msgstr ""
+msgstr "Efek cahaya"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:497
 msgid "Add a glow effect to graph lines"
-msgstr ""
+msgstr "Tambahkan efek cahaya pada garis grafik"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:499
 msgid "Select Stats"
@@ -3547,11 +3547,11 @@ msgstr "Pengaturan grafik tidak berubah"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:239
 msgid "CPU"
-msgstr ""
+msgstr "CPU"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:240
 msgid "CPU load average"
-msgstr ""
+msgstr "Rata-rata beban CPU"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:241
 #: ../java/src/net/i2p/router/web/helpers/SidebarRenderer.java:788
@@ -3566,7 +3566,7 @@ msgstr "Penggunaan memori"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:244
 msgid "Router uptime"
-msgstr ""
+msgstr "Waktu aktif router"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:245
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:554
@@ -3585,19 +3585,19 @@ msgstr "Keterlambatan Pekerjaan"
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:460
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:468
 msgid "ms"
-msgstr ""
+msgstr "md"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:246
 msgid "Job queue delay"
-msgstr ""
+msgstr "Tunda antrean tugas"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:247
 msgid "Msg Lag"
-msgstr ""
+msgstr "Jeda Pesan"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:248
 msgid "Message send processing time"
-msgstr ""
+msgstr "Waktu pemrosesan pengiriman pesan"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:249
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:399
@@ -3608,99 +3608,99 @@ msgstr "Antrean Pekerjaan"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:250
 msgid "Ready jobs waiting in queue"
-msgstr ""
+msgstr "Tugas siap menunggu dalam antrean"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:251
 msgid "Threads"
-msgstr ""
+msgstr "Thread"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:252
 msgid "Active JVM threads"
-msgstr ""
+msgstr "Thread JVM aktif"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:308
 msgid "NTCP Estab"
-msgstr ""
+msgstr "Pembentukan NTCP"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:309
 msgid "NTCP outbound establish time"
-msgstr ""
+msgstr "Waktu pembentukan keluar NTCP"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:310
 msgid "SSU Estab"
-msgstr ""
+msgstr "Pembentukan SSU"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:311
 msgid "SSU outbound establish time"
-msgstr ""
+msgstr "Waktu pembentukan keluar SSU"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:312
 msgid "SSU RTO"
-msgstr ""
+msgstr "SSU RTO"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:313
 msgid "SSU retransmission timeout"
-msgstr ""
+msgstr "Waktu habis retransmisi SSU"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:314
 msgid "Conns/s"
-msgstr ""
+msgstr "Koneksi/s"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:315
 msgid "NTCP connections established per second"
-msgstr ""
+msgstr "Koneksi NTCP dibentuk per detik"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:316
 msgid "Msgs/s"
-msgstr ""
+msgstr "Pesan/s"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:317
 msgid "Messages delivered per second"
-msgstr ""
+msgstr "Pesan terkirim per detik"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:318
 msgid "RTT"
-msgstr ""
+msgstr "RTT"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:319
 msgid "End-to-end message round trip time"
-msgstr ""
+msgstr "Waktu pulang-pergi pesan ujung-ke-ujung"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:320
 msgid "Timeout"
-msgstr ""
+msgstr "Waktu Habis"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:321
 msgid "Tunnel build timeout rate"
-msgstr ""
+msgstr "Tingkat waktu habis pembangunan tunnel"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:322
 msgid "Tunnel Build"
-msgstr ""
+msgstr "Pembangunan Tunnel"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:323
 msgid "Client tunnel build latency"
-msgstr ""
+msgstr "Latensi pembangunan tunnel klien"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:379
 msgid "Active Peers"
-msgstr ""
+msgstr "Peer Aktif"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:380
 msgid "Active peers (last 60s)"
-msgstr ""
+msgstr "Peer aktif (60 detik terakhir)"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:381
 msgid "Known Peers"
-msgstr ""
+msgstr "Peer Dikenal"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:382
 msgid "Known routers in network database"
-msgstr ""
+msgstr "Router dikenal dalam basis data jaringan"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:384
 msgid "Active I2CP clients"
-msgstr ""
+msgstr "Klien I2CP aktif"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:385
 #: ../java/src/net/i2p/router/web/helpers/SidebarRenderer.java:1279
@@ -3721,7 +3721,7 @@ msgstr "Transit"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:386
 msgid "Transit tunnels hosted"
-msgstr ""
+msgstr "Tunnel transit dihosting"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:387
 msgid "Streams"
@@ -3734,15 +3734,15 @@ msgstr "Bangun Kesuksesan"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:390
 msgid "Tunnel build success rate"
-msgstr ""
+msgstr "Tingkat keberhasilan pembangunan tunnel"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:391
 msgid "NetDB"
-msgstr ""
+msgstr "NetDB"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:392
 msgid "NetDB lookup time"
-msgstr ""
+msgstr "Waktu pencarian NetDB"
 
 #. 2
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:393
@@ -3759,7 +3759,7 @@ msgstr "Diblokir"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:394
 msgid "Total banned peers"
-msgstr ""
+msgstr "Total peer yang diblokir"
 
 #. 4  - f=1 (debug)
 #. 5  - l=1
@@ -3775,63 +3775,63 @@ msgstr "Set Sewa"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:455
 msgid "Stored LeaseSets in floodfill"
-msgstr ""
+msgstr "LeaseSet tersimpan dalam floodfill"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:456
 msgid "Cache Hit"
-msgstr ""
+msgstr "Cache Terkena"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:457
 msgid "NetDB lookup success rate"
-msgstr ""
+msgstr "Tingkat keberhasilan pencarian NetDB"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:458
 msgid "Flood Verify"
-msgstr ""
+msgstr "Verifikasi Flood"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:459
 msgid "Floodfill verify time"
-msgstr ""
+msgstr "Waktu verifikasi floodfill"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:460
 msgid "NetDB ACK"
-msgstr ""
+msgstr "NetDB ACK"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:461
 msgid "NetDB peer acknowledge time"
-msgstr ""
+msgstr "Waktu pengakuan peer NetDB"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:462
 msgid "Lookups/s"
-msgstr ""
+msgstr "Pencarian/s"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:463
 msgid "NetDB lookups handled per second"
-msgstr ""
+msgstr "Pencarian NetDB ditangani per detik"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:464
 msgid "Requests/s"
-msgstr ""
+msgstr "Permintaan/s"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:465
 msgid "Combined store + lookup operations per second"
-msgstr ""
+msgstr "Operasi penyimpanan + pencarian gabungan per detik"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:466
 msgid "Stores/s"
-msgstr ""
+msgstr "Simpan/s"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:467
 msgid "NetDB store messages handled per second"
-msgstr ""
+msgstr "Pesan penyimpanan NetDB ditangani per detik"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:468
 msgid "LS Timeout"
-msgstr ""
+msgstr "Waktu Habis LS"
 
 #: ../java/src/net/i2p/router/web/helpers/HealthHelper.java:469
 msgid "LeaseSet request timeouts (last minute)"
-msgstr ""
+msgstr "Waktu habis permintaan LeaseSet (menit terakhir)"
 
 #: ../java/src/net/i2p/router/web/helpers/HelpSectionHelper.java:27
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:476
@@ -4754,7 +4754,7 @@ msgstr "Db GeoIP"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:214
 msgid "ASN Db"
-msgstr ""
+msgstr "Basis Data ASN"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:216
 msgid "Target"
@@ -6351,27 +6351,27 @@ msgstr "Semuanya"
 
 #: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:46
 msgid "SAM bridge is not running."
-msgstr ""
+msgstr "Jembatan SAM tidak berjalan."
 
 #: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:70
 msgid "Active sessions in SessionsDB"
-msgstr ""
+msgstr "Sesi aktif dalam SessionsDB"
 
 #: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:72
 msgid "Active / pool worker threads"
-msgstr ""
+msgstr "Thread pekerja aktif / pool"
 
 #: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:74
 msgid "Pending commands in pool"
-msgstr ""
+msgstr "Perintah tertunda dalam pool"
 
 #: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:76
 msgid "Connected pool handlers"
-msgstr ""
+msgstr "Penangan pool terhubung"
 
 #: ../java/src/net/i2p/router/web/helpers/SAMDebugHelper.java:78
 msgid "Sockets stolen for data streaming"
-msgstr ""
+msgstr "Soket diambil alih untuk streaming data"
 
 #: ../java/src/net/i2p/router/web/helpers/SearchHelper.java:74
 msgid "Select search engine"
@@ -6891,11 +6891,11 @@ msgstr "Tampilkan semua koneksi peer saat ini"
 
 #: ../java/src/net/i2p/router/web/helpers/SidebarRenderer.java:541
 msgid "Health"
-msgstr ""
+msgstr "Kesehatan"
 
 #: ../java/src/net/i2p/router/web/helpers/SidebarRenderer.java:544
 msgid "Router health overview"
-msgstr ""
+msgstr "Ikhtisar kesehatan router"
 
 #: ../java/src/net/i2p/router/web/helpers/SidebarRenderer.java:552
 msgid "Profiles"
@@ -7410,16 +7410,16 @@ msgstr[0] "{0} event"
 #: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:204
 #: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:302
 msgid "sent"
-msgstr ""
+msgstr "dikirim"
 
 #: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:206
 #: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:303
 msgid "received"
-msgstr ""
+msgstr "diterima"
 
 #: ../java/src/net/i2p/router/web/helpers/StreamHelper.java:372
 msgid "No active streaming connections."
-msgstr ""
+msgstr "Tidak ada koneksi streaming aktif."
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:139
 msgid "No known routers"
@@ -7815,52 +7815,57 @@ msgid ""
 "Auto-Tuning continuously monitors router performance and adjusts parameters "
 "to optimize throughput, reduce latency, and maintain stability."
 msgstr ""
+"Penyetelan otomatis terus memantau kinerja router dan menyesuaikan parameter"
+" untuk mengoptimalkan throughput, mengurangi latensi, dan menjaga "
+"stabilitas."
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:341
 msgid ""
 "Uncheck the Auto box on any row to pin that parameter and prevent further "
 "adjustments."
 msgstr ""
+"Hilangkan centang pada kotak Otomatis di baris mana pun untuk mengunci "
+"parameter tersebut dan mencegah penyesuaian lebih lanjut."
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:345
 msgid "Healthy"
-msgstr ""
+msgstr "Sehat"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:347
 msgid "Fair"
-msgstr ""
+msgstr "Cukup"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:349
 msgid "Degraded"
-msgstr ""
+msgstr "Menurun"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:352
 msgid "Current system health:"
-msgstr ""
+msgstr "Kesehatan sistem saat ini:"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:355
 msgid "System health assessment is not yet available."
-msgstr ""
+msgstr "Penilaian kesehatan sistem belum tersedia."
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:372
 msgid "Parameter"
-msgstr ""
+msgstr "Parameter"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:374
 msgid "Default"
-msgstr ""
+msgstr "Bawaan"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:377
 msgid "Step"
-msgstr ""
+msgstr "Langkah"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:378
 msgid "History"
-msgstr ""
+msgstr "Riwayat"
 
 #: ../java/src/net/i2p/router/web/helpers/TuningHelper.java:379
 msgid "Auto"
-msgstr ""
+msgstr "Otomatis"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:109
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:534
@@ -8687,32 +8692,34 @@ msgstr "Tambahkan grup kemampuan, dipisah spasi atau koma mis. LUf,PUG"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:580
 msgid "Misc Reasons"
-msgstr ""
+msgstr "Alasan Lainnya"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:582
 msgid ""
 "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
 msgstr ""
+"Blokir peer floodfill yang gagal menanggapi kueri (tingkat kegagalan >95%)"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:586
 msgid "Ban unresponsive floodfills"
-msgstr ""
+msgstr "Blokir floodfill yang tidak responsif"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:588
 msgid "Ban routers whose RouterInfo has no version field"
-msgstr ""
+msgstr "Blokir router yang RouterInfo-nya tidak memiliki bidang versi"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:592
 msgid "Ban routers with no version"
-msgstr ""
+msgstr "Blokir router tanpa versi"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:594
 msgid "Ban routers that send excessive tunnel participation requests"
 msgstr ""
+"Blokir router yang mengirim terlalu banyak permintaan partisipasi tunnel"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:598
 msgid "Ban excessive tunnel requests"
-msgstr ""
+msgstr "Blokir permintaan tunnel berlebihan"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configban_jsp.java:600
 msgid "Clear all bans"
@@ -9686,43 +9693,43 @@ msgstr "Aktifkan sidebar tetap bersyarat"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:512
 msgid "Graph Options"
-msgstr ""
+msgstr "Opsi Grafik"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:516
 msgid "Legacy renderer"
-msgstr ""
+msgstr "Renderer lama"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:521
 msgid "Use RRD4J renderer"
-msgstr ""
+msgstr "Gunakan renderer RRD4J"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:529
 msgid "minutes (2–30)"
-msgstr ""
+msgstr "menit (2–30)"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:531
 msgid "Split display"
-msgstr ""
+msgstr "Tampilan terpisah"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:536
 msgid "Separate Inbound and Outbound"
-msgstr ""
+msgstr "Pisahkan Masuk dan Keluar"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:538
 msgid "Graph direction"
-msgstr ""
+msgstr "Arah grafik"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:543
 msgid "Left-to-right"
-msgstr ""
+msgstr "Kiri-ke-kanan"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:545
 msgid "Refresh Interval"
-msgstr ""
+msgstr "Interval Penyegaran"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:550
 msgid "Update graph every second"
-msgstr ""
+msgstr "Perbarui grafik setiap detik"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:311
 msgid "config stats"
@@ -10139,27 +10146,27 @@ msgstr "Grafik Kinerja"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:309
 msgid "health"
-msgstr ""
+msgstr "kesehatan"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:410
 msgid "Router Health"
-msgstr ""
+msgstr "Kesehatan Router"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:412
 msgid "Performance & Load"
-msgstr ""
+msgstr "Kinerja & Beban"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:416
 msgid "Transport & Connectivity"
-msgstr ""
+msgstr "Transport & Konektivitas"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:420
 msgid "Network & Participation"
-msgstr ""
+msgstr "Jaringan & Partisipasi"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/health_jsp.java:426
 msgid "Floodfill / NetDB"
-msgstr ""
+msgstr "Floodfill / NetDB"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:314
 msgid "Advanced Configuration Help - I2P+"
@@ -10630,12 +10637,18 @@ msgid ""
 "with gradient fills, glow effects, and a split inbound/outbound display. "
 "[Default is false]"
 msgstr ""
+"Bila diatur ke benar, grafik bandwidth bilah sisi menggunakan renderer SVG "
+"RRD4J lama. Bila diatur ke salah, renderer kanvas garis dasar ganda baru "
+"digunakan, dengan isian gradien, efek cahaya, dan tampilan masuk/keluar "
+"terpisah. [Bawaan adalah salah]"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:503
 msgid ""
 "The time period, in minutes, displayed in the sidebar bandwidth graph. "
 "Values outside the valid range (2–30) are clamped. [Default is 20]"
 msgstr ""
+"Periode waktu, dalam menit, yang ditampilkan pada grafik bandwidth bilah "
+"sisi. Nilai di luar rentang valid (2–30) dibatasi. [Bawaan adalah 20]"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:505
 msgid ""
@@ -10645,6 +10658,11 @@ msgid ""
 "overlay mode from the top of the graph with a configurable composite blend. "
 "[Default is true]"
 msgstr ""
+"Bila diatur ke benar (bawaan), lalu lintas masuk dan keluar ditampilkan "
+"dalam tampilan terpisah dengan garis dasar tengah, dengan lonjakan keluar ke"
+" atas dan lonjakan masuk ke bawah. Bila diatur ke salah, kedua garis "
+"ditampilkan dalam mode tumpang tindih dari atas grafik dengan campuran "
+"komposit yang dapat diatur. [Bawaan adalah benar]"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:507
 msgid ""
@@ -10653,6 +10671,10 @@ msgid ""
 "right. When set to ltr, the graph renders left-to-right with newest data on "
 "the left. [Default is rtl]"
 msgstr ""
+"Mengatur arah render untuk grafik bandwidth bilah sisi. Bila diatur ke rtl "
+"(bawaan), grafik dirender kanan-ke-kiri dengan data terbaru di kanan. Bila "
+"diatur ke ltr, grafik dirender kiri-ke-kanan dengan data terbaru di kiri. "
+"[Bawaan adalah rtl]"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:509
 msgid ""
@@ -16219,6 +16241,16 @@ msgid ""
 "deactivate an override, delete or rename the <code>override.css</code> file "
 "and then hard refresh the browser (usually Control + Shift + R)."
 msgstr ""
+"I2P+ mendukung penimpaan tema khusus untuk konsol, pengelola tunnel, "
+"I2PSnark, SusiDNS, dan Susimail, yang memungkinkan perubahan tema tetap "
+"tersimpan setelah pembaruan. Untuk mengaktifkan penimpaan, buat berkas css "
+"bernama <code>override.css</code> dengan modifikasi tema Anda dan letakkan "
+"di direktori tema terkait dari tema yang ingin diubah, atau ganti nama salah"
+" satu berkas contoh, lalu segarkan paksa peramban. Perhatikan bahwa "
+"pengelola tunnel dan konsol berbagi override.css yang sama. Untuk "
+"menonaktifkan penimpaan, hapus atau ganti nama berkas "
+"<code>override.css</code> lalu segarkan paksa peramban (biasanya Control + "
+"Shift + R)."
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:476
 msgid ""
@@ -17670,11 +17702,11 @@ msgstr "Filtrasi keluaran log router"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/samdebug_jsp.java:309
 msgid "SAM Debug"
-msgstr ""
+msgstr "Debug SAM"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/samdebug_jsp.java:399
 msgid "SAM Bridge Debug"
-msgstr ""
+msgstr "Debug Jembatan SAM"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/servicelogs_jsp.java:342
 msgid "service logs"
@@ -17711,20 +17743,20 @@ msgstr "Koneksi Streaming"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:415
 msgid "All streaming connections"
-msgstr ""
+msgstr "Semua koneksi streaming"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:418
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:422
 msgid "All Streams"
-msgstr ""
+msgstr "Semua Stream"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:427
 msgid "Inbound streaming connections"
-msgstr ""
+msgstr "Koneksi streaming masuk"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/streams_jsp.java:439
 msgid "Outbound streaming connections"
-msgstr ""
+msgstr "Koneksi streaming keluar"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrents_jsp.java:341
 msgid "torrents"
@@ -17791,11 +17823,11 @@ msgstr "Terowongan Transit oleh Rekan"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tuning_jsp.java:310
 msgid "tuning"
-msgstr ""
+msgstr "penyetelan"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tuning_jsp.java:400
 msgid "Router Auto-Tuning"
-msgstr ""
+msgstr "Penyetelan Otomatis Router"
 
 #: /tmp/build-i2p/apps/routerconsole/java/build/../../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:309
 msgid "tunnel peer count"
