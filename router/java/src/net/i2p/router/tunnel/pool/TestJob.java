@@ -934,17 +934,24 @@ public class TestJob extends JobImpl {
         noteSuccess(ms, _replyTunnel);
 
         // For 0-hop/1-hop tunnels, latency IS the direct RTT to the far-end peer.
-        // If it exceeds 3s, demote the peer from fast/high-cap tiers immediately
-        // so the peer selector avoids re-selecting this slow peer as a first hop.
+        // Demote the peer from fast/high-cap tiers when its test latency is well
+        // above the network's current baseline RTT, so the peer selector avoids
+        // re-selecting a genuinely slow peer as a first hop. The threshold tracks
+        // udp.sendConfirmTime (actual message RTT) rather than a fixed 3s, so a
+        // transient network-wide latency spike does not demote every peer at once
+        // and starve the fast-peer pool (which would collapse tunnel building).
         // Note: only demotes from tiers (not a full first-hop cooldown) so the peer
         // remains selectable if no fast-tier peers are available.
-        if (ms > 3000 && _cfg.getLength() <= 2) {
-            Hash peer = _cfg.getFarEnd();
-            if (peer != null) {
-                ctx.profileOrganizer().demoteIfHighLatency(peer);
-                if (_log.shouldInfo()) {
-                    _log.info("Demoting [" + peer.toBase64().substring(0,6) +
-                              "] due to high latency (" + ms + "ms) on " + _cfg);
+        if (_cfg.getLength() <= 2) {
+            long demoteThreshold = getLatencyDemotionThreshold(ctx);
+            if (ms > demoteThreshold) {
+                Hash peer = _cfg.getFarEnd();
+                if (peer != null) {
+                    ctx.profileOrganizer().demoteIfHighLatency(peer);
+                    if (_log.shouldInfo()) {
+                        _log.info("Demoting [" + peer.toBase64().substring(0,6) +
+                                  "] due to high latency (" + ms + "ms) on " + _cfg);
+                    }
                 }
             }
         }
@@ -1293,6 +1300,33 @@ public class TestJob extends JobImpl {
             }
         }
         return 15*1000;
+    }
+
+    /**
+     *  Adaptive latency threshold for demoting a peer as "high latency" after a
+     *  tunnel test. Uses the network's current baseline RTT (udp.sendConfirmTime,
+     *  the time to send a message and receive its ACK) so that a network-wide
+     *  latency spike does not demote every peer and starve the fast-peer pool.
+     *  Floored at a fixed minimum so a genuinely slow peer is still demoted on a
+     *  fast network.
+     *
+     *  @param ctx router context
+     *  @return demotion threshold in ms
+     *  @since 0.9.70+
+     */
+    private static long getLatencyDemotionThreshold(RouterContext ctx) {
+        // Floor: a peer slower than this is demoted even on a fast network.
+        long floor = 3000;
+        RateStat rtt = ctx.statManager().getRate("udp.sendConfirmTime");
+        if (rtt != null) {
+            Rate r = rtt.getRate(60*1000L);
+            if (r != null && r.getLastEventCount() > 0) {
+                // Demote only when a peer's test RTT is ~3x the network baseline.
+                long baseline = (long) (3 * r.getAverageValue());
+                if (baseline > floor) return baseline;
+            }
+        }
+        return floor;
     }
 
     private boolean scheduleRetest(boolean asap) {
