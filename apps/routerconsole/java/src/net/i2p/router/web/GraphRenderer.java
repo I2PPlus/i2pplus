@@ -470,6 +470,57 @@ class GraphRenderer {
                     && !showEvents) {
                 def.setBase(1024);
                 singleDecimalPlace = false;
+            } else if (!noDecimalPlace) {
+                // Non-count metrics (rates, times) scale the axis with K/M/G suffixes
+                // using the decimal base 1000; the legend %s picks up the same base.
+                def.setBase(1000);
+            }
+
+            // Percentages need no fractional precision — 75% conveys the same as
+            // 75.4%. Render them without decimals.
+            if (!noDecimalPlace) {
+                String lname = name.toLowerCase();
+                if (lname.indexOf("percent") >= 0 || lname.indexOf("%") >= 0) {
+                    noDecimalPlace = true;
+                }
+            }
+
+            // Integer/count metrics (event counts, thread counts, queue depths,
+            // peer/tunnel counts, loops/sec) have no fractional part — render
+            // without decimals. Skip byte/rate metrics, which can be
+            // legitimately fractional.
+            if (!noDecimalPlace) {
+                String lname = name.toLowerCase();
+                boolean isByteOrRate = lname.indexOf("b/s") >= 0 || lname.indexOf("bps") >= 0
+                        || lname.indexOf("bandwidth") >= 0 || lname.indexOf("byte") >= 0
+                        || lname.indexOf("memory") >= 0;
+                // Connection/key-set sizes are counts, not bytes — exclude from the
+                // byte filter by name.
+                boolean isCountSize = lname.indexOf("keyset") >= 0 || lname.indexOf("keysize") >= 0;
+                if (!isByteOrRate || isCountSize) {
+                    // Rate stats (e.g. buildSuccessRate) are fractional — keep decimals.
+                    if (lname.endsWith("rate")) {
+                        // not an integer metric
+                    } else if (lname.endsWith(".count") || lname.indexOf(".threads") >= 0
+                            || lname.indexOf("thread") >= 0 || lname.indexOf("queuedepth") >= 0
+                            || lname.indexOf("queuesize") >= 0 || lname.indexOf("peercount") >= 0
+                            || lname.indexOf("profilecount") >= 0 || lname.indexOf("tunnelcount") >= 0
+                            || lname.indexOf("activepeers") >= 0 || lname.indexOf("fastpeer") >= 0
+                            || lname.indexOf("highcap") >= 0 || lname.indexOf("qualitypeer") >= 0
+                            || lname.indexOf("tunnels") >= 0 || lname.indexOf("numtunnels") >= 0
+                            || lname.indexOf("concurrent") >= 0 || lname.indexOf("handshakes") >= 0
+                            || lname.indexOf("builds") >= 0 || lname.indexOf("reject") >= 0
+                            || lname.indexOf("refused") >= 0 || lname.indexOf("dropped") >= 0
+                            || lname.indexOf("expired") >= 0 || lname.indexOf("failed") >= 0
+                            || lname.indexOf("timeouts") >= 0 || lname.indexOf("messages") >= 0
+                            || lname.indexOf("loops") >= 0 || lname.indexOf("keyset") >= 0
+                            || lname.indexOf("inboundconn") >= 0 || lname.indexOf("outboundconn") >= 0
+                            || lname.indexOf("participating") >= 0 || lname.indexOf("clienttunnels") >= 0
+                            || lname.indexOf("servertunnels") >= 0 || lname.indexOf("exploratory") >= 0
+                            || lname.indexOf("peer") >= 0) {
+                        noDecimalPlace = true;
+                    }
+                }
             }
 
             if (titleOverride != null) {
@@ -535,7 +586,10 @@ class GraphRenderer {
                 }
             }
 
-            String numberFormat = noDecimalPlace ? "%.0f%s" : singleDecimalPlace ? "%.1f%s" : "%.2f%s";
+            // Integer/count metrics: drop the %s unit suffix in the legend so the raw
+            // value (e.g. 1375) is shown rather than the scaled axis label (1.3K).
+            // The Y-axis still scales via setAltYMrtg/setBase.
+            String numberFormat = noDecimalPlace ? "%.0f" : singleDecimalPlace ? "%.1f%s" : "%.2f%s";
 
             if (!hideLegend) {
                 Variable var = new Variable.MIN();
@@ -650,7 +704,9 @@ class GraphRenderer {
             def.setImageFormat("PNG");
             def.setLazy(true);
             def.setPoolUsed(true);
-            def.setAltYMrtg(true);
+            // Integer/count metrics (peer counts, thread counts, etc.) must not be
+            // scaled into K/M/G suffixes — render the raw value (e.g. 1375, not 1.3K).
+            def.setAltYMrtg(!noDecimalPlace);
             if (width < 400 || height < 200) {
                 def.setNoMinorGrid(true);
                 def.setAltYMrtg(false);
