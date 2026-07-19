@@ -54,6 +54,11 @@
     <exclude-pattern>.*/com/google/zxing/.*</exclude-pattern>
     <exclude-pattern>.*/com/docuverse/.*</exclude-pattern>
     <exclude-pattern>.*/org/freenetproject/.*</exclude-pattern>
+    <!-- net/i2p/util/Translate.java: StringBuffer required by MessageFormat.format(Object[], StringBuffer, FieldPosition) API -->
+    <exclude-pattern>.*/net/i2p/util/Translate\.java</exclude-pattern>
+    <!-- IRC pong buffers are shared across threads and mutated; StringBuffer sync is required -->
+    <exclude-pattern>.*/net/i2p/i2ptunnel/I2PTunnelIRCClient\.java</exclude-pattern>
+    <exclude-pattern>.*/net/i2p/i2ptunnel/socks/I2PSOCKSIRCTunnel\.java</exclude-pattern>
 
     <!-- Security -->
     <rule ref="category/java/security.xml"/>
