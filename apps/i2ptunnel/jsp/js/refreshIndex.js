@@ -42,6 +42,8 @@ try {
 } catch (e) {
   console.warn('[refreshIndex] Cannot access parent document:', e);
 }
+/** @type {Function|null} resize-event guard that re-pins the iframe to 100% while down */
+let _resizeGuard = null;
 /** @type {HTMLElement|null} */
 const isDownElement = document.getElementById("down");
 /** @type {HTMLElement|null} */
@@ -106,7 +108,15 @@ async function refreshTunnelStatus() {
       if (isDownClassAdded && doc.getElementById("globalTunnelControl")) { reloadPage(); }
       document.body.classList.remove("isDown");
       if (container) { container.style = ""; }
-      if (iframe) { iframe.style.padding = ""; }
+      if (iframe) {
+        iframe.style.padding = "";
+        iframe.style.height = "";
+        iframe.style.minHeight = "";
+        const parentBox = window.parent && window.parent.document
+          ? window.parent.document.querySelector(".main#tunnelmgr") : null;
+        if (parentBox) { parentBox.style.minHeight = ""; parentBox.style.height = ""; }
+      }
+      if (_resizeGuard) { window.removeEventListener("resize", _resizeGuard); _resizeGuard = null; }
 
       if (notReady || doc.getElementById("notReady")) {
         const notReadyResponse = doc.getElementById("notReady");
@@ -157,12 +167,43 @@ function handleDownState() {
       const styles =
         "body.isDown{display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}" +
         "body.isDown::after{position:fixed;top:0;right:0;bottom:0;left:0;z-index:998;background:" + bg + ";content:''}" +
-        "body.isDown #page{display:none}";
+        "body.isDown #page{display:none}" +
+        // Always center the overlay in the iframe and never crop it, regardless
+        // of theme box styling (which uses static margins). Pinned to the
+        // viewport so it stays centered even when the iframe is shorter than
+        // its content. overflow is visible so long messages are never clipped.
+        "body.isDown #down,#down{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);" +
+        "z-index:9999;max-width:90vw;width:auto;margin:0;padding:30px 40px;box-sizing:border-box;" +
+        "text-align:center;overflow:visible;min-height:0;max-height:none}";
       styleSheet.appendChild(document.createTextNode(styles));
       document.head.appendChild(styleSheet);
     }
     if (iframe) {
       iframe.style.padding = "0";
+      // Force the iframe to fill its parent container so the overlay covers
+      // the whole embedded view instead of collapsing with the (now empty)
+      // content. iframe-resizer sizes to content (taggedElement), so with the
+      // router down the page collapses and the iframe shrinks; pin it to 100%
+      // of the parent and stop it from re-shrinking until the router returns.
+      iframe.style.height = "100%";
+      iframe.style.minHeight = "100%";
+      const parentBox = window.parent && window.parent.document
+        ? window.parent.document.querySelector(".main#tunnelmgr") : null;
+      if (parentBox) {
+        parentBox.style.minHeight = "100vh";
+        parentBox.style.height = "100vh";
+      }
+      if (_resizeGuard) { window.removeEventListener("resize", _resizeGuard); }
+      _resizeGuard = () => {
+        iframe.style.height = "100%";
+        iframe.style.minHeight = "100%";
+        if (parentBox) {
+          parentBox.style.minHeight = "100vh";
+          parentBox.style.height = "100vh";
+        }
+        requestAnimationFrame(() => { resizeIframe(); });
+      };
+      window.addEventListener("resize", _resizeGuard);
       requestAnimationFrame(() => {resizeIframe();});
     }
   }
