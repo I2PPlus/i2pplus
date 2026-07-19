@@ -1650,7 +1650,7 @@ public class ProfileOrganizer {
      * Non-blocking - only acts if the peer is currently in those tiers.
      */
     void demoteIfHighRTT(Hash peer, long responseTimeMs) {
-        int timeout = _context.getProperty("peerTest.peerTestTimeout", 8000);
+        int timeout = _context.getProperty("router.peerTestTimeout", 750);
         if (responseTimeMs >= timeout * 2) {
             if (!getWriteLock()) return;
             try {

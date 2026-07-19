@@ -59,8 +59,9 @@ class CapacityCalculator {
         RouterContext context = profile.getContext();
         long now = context.clock().now();
         TunnelHistory history = profile.getTunnelHistory();
-        long down = context.router().getEstimatedDowntime();
-        long up = context.router().getUptime();
+        Router r = context.router();
+        long down = (r != null) ? r.getEstimatedDowntime() : 0;
+        long up = (r != null) ? r.getUptime() : 0;
         boolean enableAgeChecks = (down > 0 && down < 45*60*1000L) || up > 60*60*1000L;
         if (enableAgeChecks && tooOld(profile, now)) {
             capacity = 1;
