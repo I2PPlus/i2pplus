@@ -510,7 +510,7 @@
 <tr><td><%=intl._t("Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.maxQueueSize={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Maximum number of pending connections (SYNs and partial packets) in the server accept queue. Larger values buffer more incoming connections at the cost of memory. [Default is 80 (48 on slow systems)]")%></td></tr>
+<tr><td><%=intl._t("Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are dropped (the client retries) rather than reset, so a larger value better absorbs connection bursts at the cost of memory. [Default is 256 (128 on slow systems)]")%></td></tr>
 
 <tr class=config><th>i2p.netdb.republishInterval={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]")%></td></tr>

@@ -135,9 +135,11 @@ class ConnectionHandler {
         // also check if expiration of the head is long past for overload detection with peek() ?
         boolean success = _synQueue.offer(packet); // fail immediately if full
         if (success) {_timer.addEvent(new TimeoutSyn(packet), _acceptTimeout);}
-        else {
-            if (_log.shouldWarn()) {_log.warn("Dropping new SYN request because queue is full");}
-            if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {sendReset(packet);}
+        else if (_log.shouldWarn()) {
+            // Drop, don't RESET: a RESET makes the client abandon immediately,
+            // while dropping lets it retransmit on its own RTO, so a brief
+            // accept burst is absorbed rather than refused.
+            _log.warn("Dropping new SYN request because queue is full");
         }
     }
 
