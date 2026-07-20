@@ -647,9 +647,12 @@ class SAMStreamSession implements SAMMessageSess {
      * SAM STREAM socket reader, running in its own thread.  It forwards
      * forward data to/from an I2P socket.
      *
+     * Declared static: this base reader holds no reference to the enclosing
+     * SAMStreamSession instance, so it does not need an implicit outer handle.
+     *
      * @author human
      */
-    public class SAMStreamSessionSocketReader implements Runnable {
+    public static class SAMStreamSessionSocketReader implements Runnable {
 
         protected final I2PSocket i2pSocket;
 

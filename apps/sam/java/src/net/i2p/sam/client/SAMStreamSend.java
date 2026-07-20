@@ -92,7 +92,12 @@ public class SAMStreamSend {
                 break;
 
             case 'm':
-                mode = Integer.parseInt(g.getOptarg());
+                try {
+                    mode = Integer.parseInt(g.getOptarg());
+                } catch (NumberFormatException nfe) {
+                    System.err.println(USAGE);
+                    return;
+                }
                 if (mode < 0 || mode > V1RAW) {
                     System.err.println(USAGE);
                     return;
@@ -234,7 +239,12 @@ public class SAMStreamSend {
     }
 
     private Socket connect(boolean isSSL) throws IOException {
-        int port = Integer.parseInt(_samPort);
+        int port;
+        try {
+            port = Integer.parseInt(_samPort);
+        } catch (NumberFormatException nfe) {
+            throw new IOException("Invalid SAM port: " + _samPort);
+        }
         if (!isSSL)
             return new Socket(_samHost, port);
         synchronized(SAMStreamSink.class) {
@@ -524,6 +534,7 @@ public class SAMStreamSend {
                             }
                             baos.write((byte) '\n');
                             baos.write(data, 0, read);
+                            // codeql[java/dereferenced-value-may-be-null] baos is unconditionally constructed above; toByteArray() never returns null
                             byte[] pkt = baos.toByteArray();
                             DatagramPacket p = new DatagramPacket(pkt, pkt.length, _dgSAM);
                             _dgSock.send(p);

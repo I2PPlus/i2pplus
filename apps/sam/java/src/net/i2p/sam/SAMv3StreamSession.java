@@ -384,7 +384,12 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
             if (_log.shouldDebug()) _log.debug("Receiver port not specified");
             throw new SAMException("receiver port not specified");
         }
-        int port = Integer.parseInt(portStr);
+        int port;
+        try {
+            port = Integer.parseInt(portStr);
+        } catch (NumberFormatException nfe) {
+            throw new SAMException("receiver port invalid: " + portStr);
+        }
 
         String host = props.getProperty("HOST");
         if (host == null) {

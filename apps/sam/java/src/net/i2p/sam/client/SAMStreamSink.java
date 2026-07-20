@@ -102,7 +102,12 @@ public class SAMStreamSink {
                 break;
 
             case 'm':
-                mode = Integer.parseInt(g.getOptarg());
+                try {
+                    mode = Integer.parseInt(g.getOptarg());
+                } catch (NumberFormatException nfe) {
+                    System.err.println(USAGE);
+                    return;
+                }
                 if (mode < 0 || mode > FORWARDSSL) {
                     System.err.println(USAGE);
                     return;
@@ -565,7 +570,12 @@ public class SAMStreamSink {
     }
 
     private Socket connect(boolean isSSL) throws IOException {
-        int port = Integer.parseInt(_samPort);
+        int port;
+        try {
+            port = Integer.parseInt(_samPort);
+        } catch (NumberFormatException nfe) {
+            throw new IOException("Invalid SAM port: " + _samPort);
+        }
         if (!isSSL)
             return new Socket(_samHost, port);
         synchronized(SAMStreamSink.class) {

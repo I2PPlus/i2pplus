@@ -115,6 +115,7 @@
         <exclude name="DoNotUseThreads"/>
         <exclude name="UseConcurrentHashMap"/>
         <exclude name="DontCallThreadRun"/>
+        <exclude name="AvoidThreadGroup"/>
     </rule>
 
     <!-- jPinpoint: performance, threading, memory, sustainability -->
