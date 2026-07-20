@@ -1138,9 +1138,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @since 0.9.70+
          */
         protected double getBuildSuccessRate(RouterContext ctx) {
-            double success = getAdditionalStat(ctx, "tunnel.buildSuccessRate");
-            double failure = getAdditionalStat(ctx, "tunnel.buildFailureRate");
-            double timeout = getAdditionalStat(ctx, "tunnel.buildTimeoutRate");
+            // Use the hourly average, not the 60s one. A brief tunnel-build dip
+            // (e.g. the 1-2 min window after a LeaseSet republish drops a dead
+            // tunnel and rebuilds) must not read as sustained network failure
+            // and shrink streaming windows globally. This is the contract of
+            // getAdditionalStatHourly(), which exists precisely for this signal.
+            double success = getAdditionalStatHourly(ctx, "tunnel.buildSuccessRate");
+            double failure = getAdditionalStatHourly(ctx, "tunnel.buildFailureRate");
+            double timeout = getAdditionalStatHourly(ctx, "tunnel.buildTimeoutRate");
             double total = success + failure + timeout;
             if (Double.isNaN(total) || total <= 0) return Double.NaN;
             return success / 100.0;
