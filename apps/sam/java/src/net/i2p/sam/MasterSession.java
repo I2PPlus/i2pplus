@@ -86,6 +86,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
         if (rec != null || sessions.containsKey(nick))
             return "Duplicate ID " + nick;
         int listenPort = I2PSession.PORT_ANY;
+        // codeql[java/toctou-race-condition] props is a per-call argument; sSessionsHash access is synchronized in SessionsDB
         String slp = (String) props.remove("LISTEN_PORT");
                 if (slp == null)
                     slp = props.getProperty("FROM_PORT");
@@ -107,9 +108,11 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
             subhandler = new SAMv3Handler(handler.getClientSocket(), handler.verMajor,
                                           handler.verMinor, handler.getBridge());
             if (style.equals("RAW")) {
+                // codeql[java/toctou-race-condition] props is a per-call argument; no shared-state check-then-act
                 if (!props.containsKey("PORT"))
                     return "RAW subsession must specify PORT";
                 listenProtocol = I2PSession.PROTO_DATAGRAM_RAW;
+                // codeql[java/toctou-race-condition] props is a per-call argument; sSessionsHash access is synchronized in SessionsDB
                 String spr = (String) props.remove("LISTEN_PROTOCOL");
                             if (spr == null)
                                 spr = props.getProperty("PROTOCOL");
@@ -128,6 +131,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
                 subhandler.setSession(ssess);
                 sess = ssess;
             } else if (style.equals("DATAGRAM")) {
+                // codeql[java/toctou-race-condition] props is a per-call argument; no shared-state check-then-act
                 if (!props.containsKey("PORT"))
                     return "DATAGRAM subsession must specify PORT";
                 listenProtocol = I2PSession.PROTO_DATAGRAM;

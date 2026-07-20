@@ -396,6 +396,7 @@ class SAMv3Handler extends SAMv1Handler
                 return writeString(SESSION_ERROR, "No parameters for SESSION CREATE");
             }
 
+            // codeql[java/toctou-race-condition] props is a per-call argument; sSessionsHash.put/get are synchronized in SessionsDB
             String dest = (String) props.remove("DESTINATION");
             if (dest == null) {
                 if (_log.shouldDebug())
@@ -412,6 +413,7 @@ class SAMv3Handler extends SAMv1Handler
             allProps.putAll(i2cpProps);
             allProps.putAll(props);
             // Shorten per-destination cooldown so CONNECT retries are not penalized
+            // codeql[java/toctou-race-condition] allProps is a freshly-built local Properties; no shared-state check-then-act
             if (!allProps.containsKey("i2p.streaming.destinationCooldownMs"))
                 allProps.setProperty("i2p.streaming.destinationCooldownMs", "15000");
 
