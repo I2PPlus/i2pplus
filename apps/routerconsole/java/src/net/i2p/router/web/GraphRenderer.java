@@ -560,7 +560,6 @@ class GraphRenderer {
             def.setGridStroke(GRID_STROKE);
             def.setWidth(width);
             def.setHeight(height);
-            def.setImageFormat("PNG");
             def.setLazy(true);
             def.setPoolUsed(true);
             // Integer/count metrics (peer counts, thread counts, etc.) must not be
