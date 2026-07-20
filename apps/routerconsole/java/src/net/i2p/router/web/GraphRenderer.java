@@ -31,8 +31,6 @@ import org.rrd4j.data.Variable;
 import org.rrd4j.graph.ElementsNames;
 import org.rrd4j.graph.RrdGraph;
 import org.rrd4j.graph.RrdGraphDef;
-import org.rrd4j.graph.RrdGraphInfo;
-import org.rrd4j.graph.MetricsImageWorker;
 import org.rrd4j.graph.SVGImageWorker;
 
 /**
@@ -580,12 +578,9 @@ class GraphRenderer {
                 def.setColor(RrdGraphDef.COLOR_CANVAS, TRANSPARENT);
                 def.setColor(RrdGraphDef.COLOR_BACK, TRANSPARENT);
             }
-            RrdGraph graph = new RrdGraph(def, new MetricsImageWorker(0, 0));
-            RrdGraphInfo info = graph.getRrdGraphInfo();
-            int totalWidth = info.getWidth();
-            int totalHeight = info.getHeight();
+            RrdGraph graph;
             try {
-                graph = new RrdGraph(def, new SVGImageWorker(totalWidth + 8, totalHeight,
+                graph = new RrdGraph(def, new SVGImageWorker(0, 0,
                         _context.getBooleanPropertyDefaultTrue("routerconsole.graphGlow")));
             } // svg
             catch (NullPointerException npe) {
