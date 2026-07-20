@@ -139,6 +139,7 @@ tools/
 !tools/sonarqube/*.sh
 !tools/sonarqube/*.py
 !tools/sonarqube/*.properties
+!tools/sonarqube/*.xml
 !tools/sonarqube/README.md
 !tools/gradle/
 !tools/README.md
