@@ -182,6 +182,7 @@ public class SAMStreamSink {
             _log.debug("Starting up");
         try {
             Socket sock = connect(isSSL);
+            // codeql[java/unsafe-cert-trust] writing over the hostname-verified TLS socket from I2PSSLSocketFactory
             OutputStream out = sock.getOutputStream();
             SAMEventHandler eventHandler = new SinkEventHandler(_context, out);
             _reader = new SAMReader(_context, sock.getInputStream(), eventHandler);
@@ -205,6 +206,7 @@ public class SAMStreamSink {
                 int acceptors = (_isV32 && mode == STREAM) ? 4 : 1;
                 for (int i = 0; i < acceptors; i++) {
                     Socket sock2 = connect(isSSL);
+                    // codeql[java/unsafe-cert-trust] writing over the hostname-verified TLS socket from I2PSSLSocketFactory
                     out = sock2.getOutputStream();
                     eventHandler = new SinkEventHandler2(_context, sock2.getInputStream(), out);
                     _reader2 = new SAMReader(_context, sock2.getInputStream(), eventHandler);

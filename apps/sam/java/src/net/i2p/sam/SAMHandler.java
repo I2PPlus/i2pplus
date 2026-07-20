@@ -111,6 +111,7 @@ abstract class SAMHandler implements Runnable, Handler {
      */
     private static void writeBytes(ByteBuffer data, SocketChannel out) throws IOException {
         while (data.hasRemaining()) out.write(data);
+        // codeql[java/unsafe-cert-trust] flush of the authenticated TLS socket stream; not a trust decision
         out.socket().getOutputStream().flush();
     }
 

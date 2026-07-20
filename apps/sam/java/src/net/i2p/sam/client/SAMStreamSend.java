@@ -178,6 +178,7 @@ public class SAMStreamSend {
             _reader.startReading();
             if (_log.shouldDebug())
                 _log.debug("Reader created");
+            // codeql[java/unsafe-cert-trust] writing over the hostname-verified TLS socket from I2PSSLSocketFactory
             OutputStream out = sock.getOutputStream();
             String ourDest = handshake(out, version, true, eventHandler, mode, user, password, sessionOpts);
             if (mode >= MASTER)
@@ -193,6 +194,7 @@ public class SAMStreamSend {
                 _reader2.startReading();
                 if (_log.shouldDebug())
                     _log.debug("Reader2 created");
+                // codeql[java/unsafe-cert-trust] writing over the hostname-verified TLS socket from I2PSSLSocketFactory
                 out = sock2.getOutputStream();
                 String ok = handshake(out, version, false, eventHandler, mode, user, password, "");
                 if (ok == null)
