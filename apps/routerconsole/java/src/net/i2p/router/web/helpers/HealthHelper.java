@@ -132,6 +132,58 @@ public class HealthHelper extends HelperBase {
         return r != null ? r.getLastEventCount() : 0;
     }
 
+    /**
+     * Evaluate a stat against the router's own baseline (10m and 1h averages).
+     * A value near the router's normal range is green; progressively larger
+     * deviations go yellow then red. When no baseline can be formed yet the
+     * result is "gray" (collecting) with a null detail.
+     *
+     * @param name stat name (e.g. "udp.avgRTO")
+     * @return anomaly result with color class and a human-readable detail line
+     * @since 0.9.70+
+     */
+    private Anomaly getAnomaly(String name) {
+        RateStat rs = _context.statManager().getRate(name);
+        if (rs == null) return new Anomaly("gray", null);
+        Rate r1m = rs.getRate(RateConstants.ONE_MINUTE);
+        Rate r10m = rs.getRate(RateConstants.TEN_MINUTES);
+        Rate r1h = rs.getRate(RateConstants.ONE_HOUR);
+        if (r1m == null || r10m == null || r1h == null) return new Anomaly("gray", null);
+        double current = r1m.getAverageValue();
+        double b10 = r10m.getAverageValue();
+        double b1h = r1h.getAverageValue();
+        // Need a baseline: weight recent 10m more than 1h
+        double baseline = (b10 > 0 ? 2.0 * b10 : 0) + (b1h > 0 ? b1h : 0);
+        int n = (b10 > 0 ? 1 : 0) + (b1h > 0 ? 1 : 0);
+        if (n == 0 || baseline <= 0) return new Anomaly("gray", null);
+        baseline /= n;
+        if (current <= 0 || Double.isNaN(current) || Double.isInfinite(current)
+                || Double.isNaN(baseline) || Double.isInfinite(baseline)) {
+            return new Anomaly("gray", null);
+        }
+        double dev = Math.abs(current - baseline) / baseline;
+        String color;
+        if (dev <= RingRenderer.ANOMALY_GREEN_BAND) color = "green";
+        else if (dev <= RingRenderer.ANOMALY_YELLOW_BAND) color = "yellow";
+        else color = "red";
+        String detail = _t("vs baseline") + " " + (int) (dev * 100) + "%"
+                + (current >= baseline ? " \u2191" : " \u2193");
+        return new Anomaly(color, detail);
+    }
+
+    /** Baseline-vs-current evaluation result for a single stat. @since 0.9.70+ */
+    private static final class Anomaly {
+        /** "green", "yellow", "red", or "gray" */
+        final String color;
+        /** tooltip detail line (e.g. "vs baseline 12% ↑"), or null when collecting */
+        final String detail;
+
+        Anomaly(String color, String detail) {
+            this.color = color;
+            this.detail = detail;
+        }
+    }
+
     /** Get last 5 history data points from RRD for a stat, trying wider windows if needed, or null if unavailable */
     private double[] getStatHistory(String name) {
         RateStat rs = _context.statManager().getRate(name);
@@ -242,12 +294,15 @@ public class HealthHelper extends HelperBase {
                   new String[]{_t("Memory usage")}, RingRenderer.MODE_HEALTH, memHist));
         out.write(RingRenderer.renderRingCell(uptimeScore, _t("Uptime"), uptimeStr,
                   new String[]{_t("Router uptime")}, RingRenderer.MODE_NEUTRAL, null));
+        Anomaly lagAnom = getAnomaly("jobQueue.jobLag");
+        Anomaly delayAnom = getAnomaly("transport.sendProcessingTime");
+        Anomaly readyAnom = getAnomaly("jobQueue.readyJobs");
         out.write(RingRenderer.renderRingCell(lagScore, _t("Job Lag"), withUnit(lagStr, _t("ms")),
-                  new String[]{_t("Job queue delay")}, RingRenderer.MODE_LATENCY, lagHist));
+                  withDetail(_t("Job queue delay"), lagAnom.detail), RingRenderer.MODE_ANOMALY, lagHist, lagAnom.color));
         out.write(RingRenderer.renderRingCell(delayScore, _t("Msg Lag"), withUnit(delayStr, _t("ms")),
-                  new String[]{_t("Message send processing time")}, RingRenderer.MODE_LATENCY, delayHist));
+                  withDetail(_t("Message send processing time"), delayAnom.detail), RingRenderer.MODE_ANOMALY, delayHist, delayAnom.color));
         out.write(RingRenderer.renderRingCell(readyScore, _t("Job Queue"), readyStr,
-                  new String[]{_t("Ready jobs waiting in queue")}, RingRenderer.MODE_LATENCY, readyHist));
+                  withDetail(_t("Ready jobs waiting in queue"), readyAnom.detail), RingRenderer.MODE_ANOMALY, readyHist, readyAnom.color));
         out.write(RingRenderer.renderRingCell(threadScore, _t("Threads"), threadStr,
                   new String[]{_t("Active JVM threads")}, RingRenderer.MODE_HEALTH, threadHist));
     }
@@ -305,22 +360,28 @@ public class HealthHelper extends HelperBase {
         double timeoutScore = buildTimeout > 0 ? Math.max(0, 1.0 - buildTimeout / 30.0) : -1;
         double[] timeoutHist = getStatHistory("tunnel.buildTimeoutRate");
 
+        Anomaly ntcpAnom = getAnomaly("ntcp.outboundEstablishTime");
+        Anomaly ssuAnom = getAnomaly("udp.outboundEstablishTime");
+        Anomaly rtoAnom = getAnomaly("udp.avgRTO");
+        Anomaly rttAnom = getAnomaly("client.sendAckTime");
+        Anomaly timeoutAnom = getAnomaly("tunnel.buildTimeoutRate");
+        Anomaly buildTimeAnom = getAnomaly("tunnel.buildClientSuccess");
         out.write(RingRenderer.renderRingCell(ntcpScore, _t("NTCP Estab"), withUnit(ntcpStr, _t("ms")),
-                  new String[]{_t("NTCP outbound establish time")}, RingRenderer.MODE_LATENCY, ntcpHist));
+                  withDetail(_t("NTCP outbound establish time"), ntcpAnom.detail), RingRenderer.MODE_ANOMALY, ntcpHist, ntcpAnom.color));
         out.write(RingRenderer.renderRingCell(ssuScore, _t("SSU Estab"), withUnit(ssuStr, _t("ms")),
-                  new String[]{_t("SSU outbound establish time")}, RingRenderer.MODE_LATENCY, ssuHist));
+                  withDetail(_t("SSU outbound establish time"), ssuAnom.detail), RingRenderer.MODE_ANOMALY, ssuHist, ssuAnom.color));
         out.write(RingRenderer.renderRingCell(rtoScore, _t("SSU RTO"), withUnit(rtoStr, _t("ms")),
-                  new String[]{_t("SSU retransmission timeout")}, RingRenderer.MODE_HEALTH, rtoHist));
+                  withDetail(_t("SSU retransmission timeout"), rtoAnom.detail), RingRenderer.MODE_ANOMALY, rtoHist, rtoAnom.color));
         out.write(RingRenderer.renderRingCell(connScore, _t("Conns/s"), connStr,
                   new String[]{_t("NTCP connections established per second")}, RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(msgScore, _t("Msgs/s"), msgStr,
                   new String[]{_t("Messages delivered per second")}, RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(rttScore, _t("RTT"), withUnit(rttStr, _t("ms")),
-                  new String[]{_t("End-to-end message round trip time")}, RingRenderer.MODE_LATENCY, rttHist));
+                  withDetail(_t("End-to-end message round trip time"), rttAnom.detail), RingRenderer.MODE_ANOMALY, rttHist, rttAnom.color));
         out.write(RingRenderer.renderRingCell(timeoutScore, _t("Timeout"), timeoutStr,
-                  new String[]{_t("Tunnel build timeout rate")}, RingRenderer.MODE_HEALTH, timeoutHist));
+                  withDetail(_t("Tunnel build timeout rate"), timeoutAnom.detail), RingRenderer.MODE_ANOMALY, timeoutHist, timeoutAnom.color));
         out.write(RingRenderer.renderRingCell(buildTimeScore, _t("Tunnel Build"), withUnit(buildTimeStr, _t("ms")),
-                  new String[]{_t("Client tunnel build latency")}, RingRenderer.MODE_LATENCY, buildTimeHist));
+                  withDetail(_t("Client tunnel build latency"), buildTimeAnom.detail), RingRenderer.MODE_ANOMALY, buildTimeHist, buildTimeAnom.color));
     }
 
     /**
@@ -388,8 +449,9 @@ public class HealthHelper extends HelperBase {
                   new String[]{streamDetail}, RingRenderer.MODE_NEUTRAL, streamHist));
         out.write(RingRenderer.renderRingCell(buildScore, _t("Build Success"), buildStr,
                   new String[]{_t("Tunnel build success rate")}, RingRenderer.MODE_HEALTH, buildHist));
+        Anomaly netdbAnom = getAnomaly("netDb.successTime");
         out.write(RingRenderer.renderRingCell(netdbScore, _t("NetDB"), withUnit(netdbStr, _t("ms")),
-                  new String[]{_t("NetDB lookup time")}, RingRenderer.MODE_LATENCY, netdbHist));
+                  withDetail(_t("NetDB lookup time"), netdbAnom.detail), RingRenderer.MODE_ANOMALY, netdbHist, netdbAnom.color));
         out.write(RingRenderer.renderRingCell(bannedScore, _t("Banned"), bannedStr,
                   new String[]{_t("Total banned peers")}, RingRenderer.MODE_NEUTRAL, null));
     }
@@ -455,10 +517,12 @@ public class HealthHelper extends HelperBase {
                   new String[]{_t("Stored LeaseSets in floodfill")}, RingRenderer.MODE_NEUTRAL, null));
         out.write(RingRenderer.renderRingCell(hitScore, _t("Cache Hit"), hitStr,
                   new String[]{_t("NetDB lookup success rate")}, RingRenderer.MODE_HEALTH, hitHist));
+        Anomaly ffAnom = getAnomaly("netDb.floodfillVerifyOK");
+        Anomaly ackAnom = getAnomaly("netDb.ackTime");
         out.write(RingRenderer.renderRingCell(ffScore, _t("Flood Verify"), withUnit(ffStr, _t("ms")),
-                  new String[]{_t("Floodfill verify time")}, RingRenderer.MODE_LATENCY, ffHist));
+                  withDetail(_t("Floodfill verify time"), ffAnom.detail), RingRenderer.MODE_ANOMALY, ffHist, ffAnom.color));
         out.write(RingRenderer.renderRingCell(ackScore, _t("NetDB ACK"), withUnit(ackStr, _t("ms")),
-                  new String[]{_t("NetDB peer acknowledge time")}, RingRenderer.MODE_LATENCY, ackHist));
+                  withDetail(_t("NetDB peer acknowledge time"), ackAnom.detail), RingRenderer.MODE_ANOMALY, ackHist, ackAnom.color));
         out.write(RingRenderer.renderRingCell(lookupScore, _t("Lookups/s"), lookupStr,
                   new String[]{_t("NetDB lookups handled per second")}, RingRenderer.MODE_ACTIVITY, lookupHist));
         out.write(RingRenderer.renderRingCell(opScore, _t("Requests/s"), opStr,
@@ -503,6 +567,13 @@ public class HealthHelper extends HelperBase {
         if ("\u2014".equals(val))
             return val;
         return val + unit;
+    }
+
+    /** Build a details array from a base description plus an optional anomaly detail line */
+    private static String[] withDetail(String desc, String anomalyDetail) {
+        if (anomalyDetail != null)
+            return new String[]{desc, anomalyDetail};
+        return new String[]{desc};
     }
 
     /** Compact duration: 230s, 24m, 3h, 2d, 1mo (plain text, no HTML) */

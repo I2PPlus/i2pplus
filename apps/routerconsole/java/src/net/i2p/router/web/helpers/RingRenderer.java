@@ -23,6 +23,12 @@ public class RingRenderer {
     public static final String MODE_RATIO = "ratio";
     /** Mode: neutral (green/yellow/gray, never red — for uptime, metrics that aren't inherently bad) */
     public static final String MODE_NEUTRAL = "neutral";
+    /** Mode: anomaly — color by deviation from the router's own baseline, not an absolute cap */
+    public static final String MODE_ANOMALY = "anomaly";
+
+    /** Deviation bands for MODE_ANOMALY, as a fraction of baseline (|current - baseline| / baseline) */
+    static final double ANOMALY_GREEN_BAND = 0.25;
+    static final double ANOMALY_YELLOW_BAND = 0.75;
 
     /** Plot type: mini bars at the bottom of the ring */
     public static final String PLOT_BARS = "bars";
@@ -85,11 +91,25 @@ public class RingRenderer {
      * @since 0.9.70+
      */
     public static String renderRing(double score, String label, String value, String mode, double[] history, String plotType) {
+        return renderRing(score, label, value, mode, history, plotType, null);
+    }
+
+    /**
+     * Render a ring with an explicit color class override.
+     * When {@code forcedColor} is non-null it is used for the arc/text/plot color
+     * instead of the score-derived class (used by MODE_ANOMALY, where color reflects
+     * deviation from baseline rather than the raw fill level).
+     *
+     * @param forcedColor explicit CSS class ("green"/"yellow"/"red"/"gray"), or null
+     * @since 0.9.70+
+     */
+    public static String renderRing(double score, String label, String value, String mode, double[] history,
+                                    String plotType, String forcedColor) {
         boolean collecting = score < 0;
         if (score < 0) score = 0;
         if (score > 1) score = 1;
         double offset = RING_CIRCUM * (1.0 - score);
-        String cls = getColorClass(score, collecting, mode);
+        String cls = (forcedColor != null) ? forcedColor : getColorClass(score, collecting, mode);
         boolean hasHistory = (history != null && history.length > 1);
         if (plotType == null) plotType = PLOT_LINE;
         StringBuilder buf = new StringBuilder(320);
@@ -280,9 +300,22 @@ public class RingRenderer {
      * @since 0.9.70+
      */
     public static String renderRingCell(double score, String label, String value, String[] details, String mode, double[] history) {
+        return renderRingCell(score, label, value, details, mode, history, null);
+    }
+
+    /**
+     * Render a ring cell with an explicit color class override.
+     * When {@code forcedColor} is non-null it is used for the arc/text/plot color
+     * instead of the score-derived class (used by MODE_ANOMALY).
+     *
+     * @param forcedColor explicit CSS class ("green"/"yellow"/"red"/"gray"), or null
+     * @since 0.9.70+
+     */
+    public static String renderRingCell(double score, String label, String value, String[] details, String mode,
+                                        double[] history, String forcedColor) {
         StringBuilder buf = new StringBuilder(256);
         buf.append("<div class=ring-cell>");
-        buf.append(renderRing(score, label, value, mode, history));
+        buf.append(renderRing(score, label, value, mode, history, null, forcedColor));
         if (details != null && details.length > 0) {
             buf.append("<div class=ring-tip>");
             for (int i = 0; i < details.length; i++) {
@@ -398,6 +431,11 @@ public class RingRenderer {
         }
         if (MODE_NEUTRAL.equals(mode)) {
             return score >= 0.8 ? "green" : score >= 0.5 ? "yellow" : "cyan";
+        }
+        // MODE_ANOMALY color is supplied by the caller (forcedColor); fall back to
+        // health thresholds here so a missing override still renders sensibly
+        if (MODE_ANOMALY.equals(mode)) {
+            return score >= 0.8 ? "green" : score >= 0.5 ? "yellow" : "red";
         }
         // MODE_HEALTH and MODE_LATENCY share same thresholds
         return score >= 0.8 ? "green" : score >= 0.5 ? "yellow" : "red";
