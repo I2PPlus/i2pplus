@@ -187,7 +187,7 @@ class EventPumper implements Runnable {
             t.start();
         } catch (IOException ioe) {
             _log.log(Log.CRIT, "Error opening the NTCP selector", ioe);
-        } catch (java.lang.InternalError jlie) {
+        } catch (InternalError jlie) {
             // "unable to get address of epoll functions, pre-2.6 kernel?"
             _log.log(Log.CRIT, "Error opening the NTCP selector", jlie);
         }

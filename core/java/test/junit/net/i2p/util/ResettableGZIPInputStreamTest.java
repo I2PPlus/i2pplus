@@ -16,12 +16,13 @@ import net.i2p.data.DataHelper;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.zip.GZIPOutputStream;
+import java.util.Random;
 
 public class ResettableGZIPInputStreamTest extends TestCase {
     public void testResettableGZIPInputStream() throws Exception {
         for (int size = 129; size < 64 * 1024; size += 100) {
             byte[] b = new byte[size];
-            new java.util.Random().nextBytes(b);
+            new Random().nextBytes(b);
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream(size);
             GZIPOutputStream o = new GZIPOutputStream(baos);

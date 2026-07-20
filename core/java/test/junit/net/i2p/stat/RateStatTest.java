@@ -5,6 +5,8 @@ import junit.framework.TestCase;
 import org.junit.Test;
 
 import java.util.Properties;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 public class RateStatTest extends TestCase {
 
@@ -45,13 +47,13 @@ public class RateStatTest extends TestCase {
             currentTime += 20;
         }
         rs.coalesceStats();
-        java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(2048);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(2048);
 
         rs.store(baos, "rateStat.test");
         byte[] data = baos.toByteArray();
 
         Properties props = new Properties();
-        props.load(new java.io.ByteArrayInputStream(data));
+        props.load(new ByteArrayInputStream(data));
 
         RateStat loadedRs = new RateStat("moo", "moo moo moo", "cow trueisms", new long[] {60 * 1000, 60 * 60 * 1000, 24 * 60 * 60 * 1000});
         loadedRs.load(props, "rateStat.test", true);

@@ -824,7 +824,7 @@ class NetDbRenderer {
 
         Set<String> ipSet = new LinkedHashSet<>();
         for (RouterInfo ri : routers) {
-            String ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri));
+            String ip = Addresses.toString(CommSystemFacadeImpl.getValidIP(ri));
             if (ip != null && !ip.isEmpty()) {
                 ipSet.add(ip);
             }
@@ -1704,7 +1704,7 @@ class NetDbRenderer {
      *  Comparator for router addresses by transport then host.
      *  @since 0.9.38
      */
-    static class RAComparator implements Comparator<RouterAddress>, java.io.Serializable {
+    static class RAComparator implements Comparator<RouterAddress>, Serializable {
          private static final long serialVersionUID = 1L;
          public int compare(RouterAddress l, RouterAddress r) {
              int rv = l.getTransportStyle().compareTo(r.getTransportStyle());
@@ -1981,7 +1981,7 @@ class NetDbRenderer {
             buf.append("<td><b>").append(_t("Published")).append(":</b></td><td><span class=netdb_info>")
                .append(_t("{0} ago", DataHelper.formatDuration2(age)))
                .append("</span>&nbsp;&nbsp;");
-            String primaryAddress = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(routerInfo));
+            String primaryAddress = Addresses.toString(CommSystemFacadeImpl.getValidIP(routerInfo));
             String capsStr = processedCapsStr;
             boolean isUnreachableFlag = capsStr.contains("U") || capsStr.contains("H");
             if (_context.router().getUptime() > 30 * 1000 && !isUnreachableFlag && primaryAddress != null) {

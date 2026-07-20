@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 
 public abstract class GatewayITBase extends RouterITBase {
 
@@ -74,7 +75,7 @@ public abstract class GatewayITBase extends RouterITBase {
         for (int i = 0; i < runCount; i++) {
             DataMessage m = getTestMessage(64);
             Hash to = new Hash(new byte[Hash.HASH_LENGTH]);
-            java.util.Arrays.fill(to.getData(), (byte) 0xFF);
+            Arrays.fill(to.getData(), (byte) 0xFF);
             messages.add(m);
             _gw.add(m, to, null);
         }
@@ -97,7 +98,7 @@ public abstract class GatewayITBase extends RouterITBase {
         for (int i = 0; i < runCount; i++) {
             DataMessage m = getTestMessage(64);
             Hash to = new Hash(new byte[Hash.HASH_LENGTH]);
-            java.util.Arrays.fill(to.getData(), (byte) 0xFF);
+            Arrays.fill(to.getData(), (byte) 0xFF);
             TunnelId tunnel = new TunnelId(42);
             byte[] data = m.toByteArray();
             messages.add(m);
@@ -136,7 +137,7 @@ public abstract class GatewayITBase extends RouterITBase {
     private static DataMessage getTestMessage(int size) {
         DataMessage m = new DataMessage(_context);
         m.setData(new byte[size]);
-        java.util.Arrays.fill(m.getData(), (byte) 0xFF);
+        Arrays.fill(m.getData(), (byte) 0xFF);
         m.setMessageExpiration(_context.clock().now() + 60 * 1000);
         m.setUniqueId(_context.random().nextLong(I2NPMessage.MAX_ID_VALUE));
 

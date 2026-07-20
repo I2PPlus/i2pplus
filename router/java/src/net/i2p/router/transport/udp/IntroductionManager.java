@@ -30,6 +30,7 @@ import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.VersionComparator;
+import java.io.Serializable;
 
 /**
  *  Keep track of inbound and outbound introductions.
@@ -299,7 +300,7 @@ class IntroductionManager {
      *
      *  @since 0.9.55
      */
-    private static class PeerStateComparator implements Comparator<PeerState>, java.io.Serializable {
+    private static class PeerStateComparator implements Comparator<PeerState>, Serializable {
 
         public int compare(PeerState l, PeerState r) {
             long d = r.getKeyEstablishedTime() - l.getKeyEstablishedTime();

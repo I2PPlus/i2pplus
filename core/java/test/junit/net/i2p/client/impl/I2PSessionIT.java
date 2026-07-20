@@ -79,7 +79,7 @@ public class I2PSessionIT extends TestCase implements I2PSessionListener {
 
     public void disconnected(I2PSession session) {}
 
-    public void errorOccurred(I2PSession session, java.lang.String message, java.lang.Throwable error) {}
+    public void errorOccurred(I2PSession session, String message, Throwable error) {}
 
     public void messageAvailable(I2PSession session, int msgId, long size) {
         try {

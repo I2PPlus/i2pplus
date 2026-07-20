@@ -13,6 +13,7 @@ import java.util.TreeMap;
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import java.io.Serializable;
 
 /**
  * Get the MTU for the network interface of an address.
@@ -54,10 +55,10 @@ public class MTU {
             ifcs = NetworkInterface.getNetworkInterfaces();
         } catch (SocketException se) {
             return 0;
-        } catch (java.lang.Error e) {
+        } catch (Error e) {
             // Windows, possibly when IPv6 only...
             // https://bugs.openjdk.java.net/browse/JDK-8046500
-            // java.lang.Error: IP Helper Library GetIfTable function failed
+            // Error: IP Helper Library GetIfTable function failed
             //   at java.net.NetworkInterface.getAll(Native Method)
             //   at java.net.NetworkInterface.getNetworkInterfaces(Unknown Source)
             //   at net.i2p.util.Addresses.getAddresses ...
@@ -255,7 +256,7 @@ public class MTU {
     }
 
     /** Comparator for InetAddress by host address */
-    private static class IAComparator implements Comparator<InetAddress>, java.io.Serializable {
+    private static class IAComparator implements Comparator<InetAddress>, Serializable {
         @Override
         public int compare(InetAddress l, InetAddress r) {
              return (l.getHostAddress()).compareTo((r.getHostAddress()));

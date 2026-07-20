@@ -10,6 +10,8 @@ import net.i2p.router.web.ConsolePasswordManager;
 import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.servlet.filters.SessionManager;
 import net.i2p.util.Log;
+import java.util.Map.Entry;
+import javax.servlet.http.Cookie;
 
 /**
  * Lightweight session validation endpoint for AJAX polling.
@@ -53,7 +55,7 @@ public class SessionCheckServlet extends HttpServlet {
             return true;
         }
         String pfx = RouterConsoleRunner.PROP_CONSOLE_PW + ".";
-        for (java.util.Map.Entry<String, String> e : rctx.router().getConfigMap().entrySet()) {
+        for (Entry<String, String> e : rctx.router().getConfigMap().entrySet()) {
             String key = e.getKey();
             if (key != null && key.startsWith(pfx) && key.endsWith(".pbkdf2")) {
                 String val = e.getValue();
@@ -66,9 +68,9 @@ public class SessionCheckServlet extends HttpServlet {
     }
 
     private String getSessionCookie(HttpServletRequest req) {
-        javax.servlet.http.Cookie[] cookies = req.getCookies();
+        Cookie[] cookies = req.getCookies();
         if (cookies == null) return null;
-        for (javax.servlet.http.Cookie cookie : cookies) {
+        for (Cookie cookie : cookies) {
             if (SessionManager.SESSION_COOKIE_NAME.equals(cookie.getName())) {
                 return cookie.getValue();
             }

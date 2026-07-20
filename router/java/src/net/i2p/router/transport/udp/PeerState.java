@@ -22,6 +22,7 @@ import net.i2p.router.util.CachedIteratorCollection;
 import net.i2p.router.util.PriBlockingQueue;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import java.util.Collection;
 
 /**
  * Contain all of the state about a UDP connection to a peer.
@@ -259,7 +260,7 @@ public class PeerState {
      * @return array: [avgSendWindow, avgRTO, avgConcurrentMsgs] or null if no peers
      * @since 0.9.70+
      */
-    public static long[] getAggregateStats(java.util.Collection<PeerState> peers) {
+    public static long[] getAggregateStats(Collection<PeerState> peers) {
         if (peers == null || peers.isEmpty()) { return null; }
         long totalSendWindow = 0;
         long totalRTO = 0;

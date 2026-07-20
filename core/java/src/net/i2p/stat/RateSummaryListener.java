@@ -1,4 +1,5 @@
 package net.i2p.stat;
+import java.util.Arrays;
 
 /**
  * Receive the state of the rate when its coalesced
@@ -24,7 +25,7 @@ public interface RateSummaryListener {
      */
     default double[] getLastValues(int count) {
         double[] result = new double[count];
-        java.util.Arrays.fill(result, Double.NaN);
+        Arrays.fill(result, Double.NaN);
         return result;
     }
 }

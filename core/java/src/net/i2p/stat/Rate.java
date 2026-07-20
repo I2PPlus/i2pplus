@@ -5,6 +5,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
 
 import java.util.Properties;
+import java.util.Arrays;
 
 /**
  * Simple rate calculator for periodically sampled data points - determining an
@@ -289,7 +290,7 @@ public class Rate {
         if (_graphListener != null)
             return _graphListener.getLastValues(count);
         double[] result = new double[count];
-        java.util.Arrays.fill(result, Double.NaN);
+        Arrays.fill(result, Double.NaN);
         return result;
     }
 

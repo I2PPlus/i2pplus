@@ -22,6 +22,7 @@ import org.rrd4j.core.RrdMemoryBackendFactory;
 import org.rrd4j.core.Sample;
 import org.rrd4j.core.FetchRequest;
 import org.rrd4j.core.FetchData;
+import java.util.Arrays;
 
 /**
  *  Creates and updates the in-memory or on-disk RRD database,
@@ -274,7 +275,7 @@ public class GraphListener implements RateSummaryListener {
     public double[] getLastValues(int count) {
         double[] result = new double[count];
         if (_db == null) {
-            java.util.Arrays.fill(result, Double.NaN);
+            Arrays.fill(result, Double.NaN);
             return result;
         }
         try {
@@ -291,7 +292,7 @@ public class GraphListener implements RateSummaryListener {
             }
         } catch (Exception e) {
             if (_log.shouldWarn()) {_log.warn("Error fetching last " + count + " values", e);}
-            java.util.Arrays.fill(result, Double.NaN);
+            Arrays.fill(result, Double.NaN);
         }
         return result;
     }

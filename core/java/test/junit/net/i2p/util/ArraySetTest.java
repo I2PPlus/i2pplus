@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.util.Iterator;
+import java.util.ConcurrentModificationException;
 
 public class ArraySetTest {
 
@@ -115,7 +116,7 @@ public class ArraySetTest {
         assertEquals(3, count);
     }
 
-    @Test(expected = java.util.ConcurrentModificationException.class)
+    @Test(expected = ConcurrentModificationException.class)
     public void iteratorFailFast() {
         ArraySet<String> set = new ArraySet<>();
         set.add("a");

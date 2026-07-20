@@ -35,6 +35,7 @@ import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SimpleTimer2;
+import java.io.Writer;
 
 
 /**
@@ -958,7 +959,7 @@ public class SAMBridge implements Runnable, ClientApp {
      * @throws IOException if the writer fails
      * @since 0.9.70+
      */
-    public void renderSessionTableHTML(java.io.Writer out) throws IOException {
+    public void renderSessionTableHTML(Writer out) throws IOException {
         Map<String, SessionRecord> sessions = SAMv3Handler.sSessionsHash.getAllEntries();
         if (sessions.isEmpty()) {
             out.write("<p><i>No SAM sessions</i></p>\n");

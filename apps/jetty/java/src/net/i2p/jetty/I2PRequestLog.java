@@ -26,6 +26,7 @@ import org.eclipse.jetty.util.component.AbstractLifeCycle;
 import org.eclipse.jetty.util.log.Log;
 
 import java.nio.charset.StandardCharsets;
+import java.io.Writer;
 /**
  * This {@link RequestLog} implementation outputs logs in the pseudo-standard NCSA common log format.
  * Configuration options allow a choice between the standard Common Log Format (as used in the 3 log format)
@@ -68,7 +69,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     private transient OutputStream _fileOut;
     private transient DateCache _logDateCache;
     private transient PathMappings<String> _ignorePathMap;
-    private transient java.io.Writer _writer;
+    private transient Writer _writer;
     private transient ArrayList<Utf8StringBuilder> _buffers;
     private transient char[] _copy;
 
@@ -282,7 +283,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     }
 
     protected void logExtended(Request request,
-                               java.io.Writer writer) throws IOException {
+                               Writer writer) throws IOException {
         String referer = request.getHeader("Referer");
         if (referer == null) {writer.write("\"-\" ");}
         else {

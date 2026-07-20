@@ -60,6 +60,7 @@ import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
+import java.io.Serializable;
 
 /**
  * Coordinate the establishment of new sessions - both inbound and outbound.
@@ -2618,7 +2619,7 @@ public class EstablishmentManager {
      * Soonest expiration first
      * @since 0.9.57
      */
-    private static class TokenComparator implements Comparator<Map.Entry<RemoteHostId, Token>>, java.io.Serializable {
+    private static class TokenComparator implements Comparator<Map.Entry<RemoteHostId, Token>>, Serializable {
         @Override
         public int compare(Map.Entry<RemoteHostId, Token> l, Map.Entry<RemoteHostId, Token> r) {
              long le = l.getValue().expires;

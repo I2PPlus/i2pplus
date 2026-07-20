@@ -43,6 +43,9 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SystemVersion;
+import javax.servlet.http.HttpServletRequest;
+import net.i2p.CoreVersion;
+import net.i2p.I2PAppContext;
 
 /**
  * Simple helper to query the appropriate router for data necessary to render
@@ -69,14 +72,14 @@ public class SidebarHelper extends HelperBase {
     private static final DecimalFormat ZERO_DECIMAL = new DecimalFormat("##0");
     private static final DecimalFormat ZERO_ONE_DECIMAL = new DecimalFormat("##0.0");
     private static final DecimalFormat ZERO_TWO_DECIMALS = new DecimalFormat("##0.00");
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    I2PAppContext ctx = I2PAppContext.getGlobalContext();
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
     public boolean isAdvanced() {return ctx.getBooleanProperty(PROP_ADVANCED);}
     public boolean unifiedSidebar() {return _context.getBooleanProperty(PROP_UNIFIED_SIDEBAR);}
     static final String PROP_SUMMARYBAR = "routerconsole.summaryBar.";
     String firstVersion = ctx.getProperty("router.firstVersion");
-    String version = net.i2p.CoreVersion.VERSION;
+    String version = CoreVersion.VERSION;
 
     static final String DEFAULT_FULL_NEWUSER =
         "RouterInfo" + S +
@@ -1415,8 +1418,8 @@ public class SidebarHelper extends HelperBase {
     private String _requestURI;
     public void setRequestURI(String s) {_requestURI = s == null ? null : DataHelper.stripHTML(s);}
 
-    private javax.servlet.http.HttpServletRequest _request;
-    public void setRequest(javax.servlet.http.HttpServletRequest s) {_request = s;}
+    private HttpServletRequest _request;
+    public void setRequest(HttpServletRequest s) {_request = s;}
 
     /**
      * @return non-null; "/home" if (strangely) not set by jsp

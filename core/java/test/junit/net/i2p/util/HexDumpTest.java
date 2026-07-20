@@ -3,6 +3,7 @@ package net.i2p.util;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import java.io.ByteArrayOutputStream;
 
 public class HexDumpTest {
 
@@ -74,7 +75,7 @@ public class HexDumpTest {
     @Test
     public void testDumpToStream() throws Exception {
         byte[] data = {0x41, 0x42, 0x43};
-        java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         HexDump.dump(data, 0, data.length, baos);
         String result = baos.toString("UTF-8");
         assertTrue(result.contains("41 42 43"));

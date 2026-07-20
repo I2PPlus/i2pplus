@@ -25,6 +25,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import java.io.Serializable;
 
 /**
  * Periodically searches through all leases to find expired ones, failing those
@@ -124,7 +125,7 @@ class ExpireLeasesJob extends JobImpl {
      *  Oldest first
      *  @since 0.9.65
      */
-    private static class LeaseSetComparator implements Comparator<LeaseSet>, java.io.Serializable {
+    private static class LeaseSetComparator implements Comparator<LeaseSet>, Serializable {
          @Override
          public int compare(LeaseSet l, LeaseSet r) {
              long dl = l.getLatestLeaseDate();

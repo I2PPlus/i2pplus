@@ -16,6 +16,8 @@ import net.i2p.router.web.Messages;
 import net.i2p.router.web.NavHelper;
 import net.i2p.router.web.PluginStarter;
 import net.i2p.util.PortMapper;
+import net.i2p.CoreVersion;
+import net.i2p.I2PAppContext;
 
 /**
  * Helper for router console home page and configuration.
@@ -240,8 +242,8 @@ public class HomeHelper extends HelperBase {
 
     public String getServices() {
         List<App> plugins = NavHelper.getInstance(_context).getClientApps(_context);
-        net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-        String version = net.i2p.CoreVersion.VERSION;
+        I2PAppContext ctx = I2PAppContext.getGlobalContext();
+        String version = CoreVersion.VERSION;
         String firstVersion = ctx.getProperty("router.firstVersion");
         if (!isAdvanced() && version.equals(firstVersion)) {return homeTable(PROP_SERVICES, NEWINSTALL_SERVICES, plugins);}
         else if (!version.equals(firstVersion) && !isAdvanced()) {return homeTable(PROP_SERVICES, DEFAULT_SERVICES, plugins);}

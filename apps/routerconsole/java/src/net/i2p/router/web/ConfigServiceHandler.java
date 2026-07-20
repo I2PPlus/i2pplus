@@ -16,6 +16,8 @@ import net.i2p.router.startup.ClientAppConfig;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 import org.tanukisoftware.wrapper.WrapperManager;
+import net.i2p.desktopgui.Main;
+import net.i2p.i2ptunnel.TunnelControllerGroup;
 
 /**
  * Handler to deal with form submissions from the service config form and act
@@ -218,7 +220,7 @@ public class ConfigServiceHandler extends FormHandler {
         } else if (_t("Cancel graceful shutdown").equals(_action)) {
             _context.router().cancelGracefulShutdown();
             // Also cancel delayed tunnel shutdown if in progress
-            net.i2p.i2ptunnel.TunnelControllerGroup tcg = net.i2p.i2ptunnel.TunnelControllerGroup.getInstance();
+            TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
             if (tcg != null) {
                 tcg.cancelDelayedShutdown();
             }
@@ -391,7 +393,7 @@ public class ConfigServiceHandler extends FormHandler {
                     if (Boolean.parseBoolean(System.getProperty("java.awt.headless"))) {
                         addFormError(_t("Restart required to take effect"), true);
                     } else {
-                        dtg = new net.i2p.desktopgui.Main(_context, mgr);
+                        dtg = new Main(_context, mgr);
                         dtg.startup();
                         addFormNotice(_t("Enabled system tray"), true);
                     }

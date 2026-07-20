@@ -9,6 +9,7 @@ import java.util.TreeMap;
 import net.i2p.data.DataHelper;
 import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.FormHandler;
+import net.i2p.I2PAppContext;
 
 /**
  * Simple sidebar configuration handler.
@@ -31,7 +32,7 @@ public class ConfigSidebarHandler extends FormHandler {
         if (_action == null) {
             return;
         }
-        net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+        I2PAppContext ctx = I2PAppContext.getGlobalContext();
         String group = getJettyString("group");
 
         boolean adding = _action.equals(_t("Add item"));

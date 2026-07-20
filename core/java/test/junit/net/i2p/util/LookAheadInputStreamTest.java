@@ -12,6 +12,7 @@ package net.i2p.util;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
+import java.util.Random;
 
 public class LookAheadInputStreamTest extends TestCase {
     public void testLookAheadInputStream() throws Exception {
@@ -29,7 +30,7 @@ public class LookAheadInputStreamTest extends TestCase {
 
         for (int size = 9; size < 32 * 1024; size += 100) {
             buf = new byte[size];
-            new java.util.Random().nextBytes(buf);
+            new Random().nextBytes(buf);
             bais = new ByteArrayInputStream(buf);
 
             lis = new LookaheadInputStream(8);

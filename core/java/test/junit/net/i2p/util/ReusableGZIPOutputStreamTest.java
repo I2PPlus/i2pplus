@@ -16,6 +16,7 @@ import net.i2p.data.DataHelper;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.zip.GZIPInputStream;
+import java.util.Random;
 
 public class ReusableGZIPOutputStreamTest extends TestCase {
     public void testReusableGZIPOutputStream() throws Exception {
@@ -36,7 +37,7 @@ public class ReusableGZIPOutputStreamTest extends TestCase {
 
         for (int size = 500; size < 64 * 1024; size += 100) {
             byte[] b = new byte[size];
-            new java.util.Random().nextBytes(b);
+            new Random().nextBytes(b);
 
             ReusableGZIPOutputStream o = ReusableGZIPOutputStream.acquire();
             o.write(b);

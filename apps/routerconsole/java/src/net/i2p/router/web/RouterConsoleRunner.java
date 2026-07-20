@@ -74,6 +74,8 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.tanukisoftware.wrapper.WrapperManager;
 
 import java.nio.charset.StandardCharsets;
+import net.i2p.desktopgui.Main;
+import static net.i2p.util.Log.WARN;
 /**
  *  Start the router console.
  */
@@ -343,7 +345,7 @@ public class RouterConsoleRunner implements RouterApp {
         try {
             if (isSystrayEnabled(_context)) {
                 System.setProperty("java.awt.headless", "false");
-                net.i2p.desktopgui.Main dtg = new net.i2p.desktopgui.Main(_context, _mgr);
+                Main dtg = new Main(_context, _mgr);
                 dtg.startup();
             } else {
                 // required true for jrobin to work
@@ -369,11 +371,11 @@ public class RouterConsoleRunner implements RouterApp {
                        System.getProperty("os.arch") + ' ' +
                        System.getProperty("os.version");
             net.i2p.util.Log log = _context.logManager().getLog(RouterConsoleRunner.class);
-            log.logAlways(net.i2p.util.Log.WARN, s);
+            log.logAlways(WARN, s);
             System.out.println("Warning: " + s);
             if (noJava8) {
                 s = "Java 8 or higher is required, please upgrade Java";
-                log.logAlways(net.i2p.util.Log.WARN, s);
+                log.logAlways(WARN, s);
                 System.out.println("Warning: " + s);
             }
             if (noPack200) {
@@ -381,17 +383,17 @@ public class RouterConsoleRunner implements RouterApp {
                     s = "Pack200 is required for some plugins, please consider downgrading Java to 13 or lower";
                 else
                     s = "Pack200 is required for some plugins, please consider upgrading Java";
-                log.logAlways(net.i2p.util.Log.WARN, s);
+                log.logAlways(WARN, s);
                 System.out.println("Warning: " + s);
             }
             if (openARM) {
                 s = "OpenJDK 8 is not recommended for ARM. Use OpenJDK 9 (or higher) or Oracle Java 8 (or higher)";
-                log.logAlways(net.i2p.util.Log.WARN, s);
+                log.logAlways(WARN, s);
                 System.out.println("Warning: " + s);
             }
             if (isZero) {
                 s = "OpenJDK Zero is a very slow interpreter-only JVM. Not recommended for use with I2P. Please use a faster JVM if possible.";
-                log.logAlways(net.i2p.util.Log.WARN, s);
+                log.logAlways(WARN, s);
                 System.out.println("Warning: " + s);
             }
         }
@@ -1066,7 +1068,7 @@ public class RouterConsoleRunner implements RouterApp {
         public UserIdentity login(String username, Object credentials, ServletRequest request) {
             UserIdentity rv = super.login(username, credentials, request);
             if (rv == null) {
-                _log.logAlways(net.i2p.util.Log.WARN, "Router Console authentication failed from " + request.getRemoteAddr());
+                _log.logAlways(WARN, "Router Console authentication failed from " + request.getRemoteAddr());
             }
             return rv;
         }

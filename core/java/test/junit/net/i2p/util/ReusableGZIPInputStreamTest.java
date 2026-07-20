@@ -17,6 +17,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import java.util.Random;
 
 public class ReusableGZIPInputStreamTest extends TestCase {
     public void testReusableGZIPInputStream() throws Exception {
@@ -39,7 +40,7 @@ public class ReusableGZIPInputStreamTest extends TestCase {
 
         for (int size = 0; size < 64 * 1024; size += 100) {
             byte[] b = new byte[size];
-            new java.util.Random().nextBytes(b);
+            new Random().nextBytes(b);
 
             ReusableGZIPOutputStream o = ReusableGZIPOutputStream.acquire();
             o.write(b);

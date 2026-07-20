@@ -647,7 +647,7 @@ public class PluginStarter implements Runnable {
 
         // _clCache keys use "pluginName+className+args" format, not just appName,
         // so iterate to find and remove all entries for this plugin
-        for (java.util.Iterator<Map.Entry<String, ClassLoader>> iter = _clCache.entrySet().iterator(); iter.hasNext(); ) {
+        for (Iterator<Map.Entry<String, ClassLoader>> iter = _clCache.entrySet().iterator(); iter.hasNext(); ) {
             Map.Entry<String, ClassLoader> entry = iter.next();
             if (entry.getKey().startsWith(appName)) {
                 if (log.shouldDebug())
