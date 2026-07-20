@@ -526,7 +526,9 @@ class SAMStreamSession implements SAMMessageSess {
             for (Map.Entry<Integer, SAMStreamSessionSocketReader> e : handlersMap.entrySet()) {
                  Integer id = e.getKey();
                  e.getValue().stopRunning();
-                 sendersMap.get(id).shutDownGracefully();
+                 StreamSender s = sendersMap.get(id);
+                 if (s != null)
+                     s.shutDownGracefully();
             }
             handlersMap.clear();
             sendersMap.clear();

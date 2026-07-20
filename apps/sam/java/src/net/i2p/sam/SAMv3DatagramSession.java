@@ -46,8 +46,8 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
     public SAMv3DatagramSession(String nick, SAMv3DatagramServer dgServer)
             throws IOException, DataFormatException, I2PSessionException, SAMException {
         super(
-                SAMv3Handler.sSessionsHash.get(nick).getDest(),
-                SAMv3Handler.sSessionsHash.get(nick).getProps(),
+                getRec(nick).getDest(),
+                getRec(nick).getProps(),
                 null // to be replaced by this
                 );
         this.nick = nick;
@@ -55,12 +55,23 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
         this.server = dgServer;
 
         SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
-        if (rec == null) throw new SAMException("Record disappeared for nickname : \"" + nick + "\"");
-
         this.handler = rec.getHandler();
 
         Properties props = rec.getProps();
         clientAddress = SAMv3RawSession.getSocketAddress(props, handler);
+    }
+
+    /**
+     *  Look up the registered session record for the given nickname,
+     *  throwing if it has already disappeared.
+     *
+     *  @throws SAMException if the nickname is not registered
+     */
+    private static SessionRecord getRec(String nick) throws SAMException {
+        SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
+        if (rec == null)
+            throw new SAMException("Record disappeared for nickname : \"" + nick + "\"");
+        return rec;
     }
 
     /**

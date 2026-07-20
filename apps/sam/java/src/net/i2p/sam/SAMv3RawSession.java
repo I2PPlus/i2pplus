@@ -46,20 +46,32 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
     public SAMv3RawSession(String nick, SAMv3DatagramServer dgServer)
             throws IOException, DataFormatException, I2PSessionException {
         super(
-                SAMv3Handler.sSessionsHash.get(nick).getDest(),
-                SAMv3Handler.sSessionsHash.get(nick).getProps(),
+                getRec(nick).getDest(),
+                getRec(nick).getProps(),
                 null // to be replaced by this
                 );
         this.nick = nick;
         this.recv = this; // replacement
         this.server = dgServer;
         SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
-        if (rec == null) throw new InterruptedIOException();
         this.handler = rec.getHandler();
         Properties props = rec.getProps();
         clientAddress = getSocketAddress(props, handler);
         _sendHeader = ((handler.verMajor == 3 && handler.verMinor >= 2) || handler.verMajor > 3)
                 && Boolean.parseBoolean(props.getProperty("HEADER"));
+    }
+
+    /**
+     *  Look up the registered session record for the given nickname,
+     *  throwing if it has already disappeared.
+     *
+     *  @throws InterruptedIOException if the nickname is not registered
+     */
+    private static SessionRecord getRec(String nick) throws InterruptedIOException {
+        SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
+        if (rec == null)
+            throw new InterruptedIOException();
+        return rec;
     }
 
     /**

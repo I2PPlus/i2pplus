@@ -74,8 +74,11 @@ class SAMUtils {
                 d.writeBytes(pub);
                 pub.flush();
             }
-        } catch (I2PException e) {e.printStackTrace();}
-        catch (IOException e) {e.printStackTrace();}
+        } catch (I2PException e) {
+            _log.error("Error generating random keys", e);
+        } catch (IOException e) {
+            _log.error("Error generating random keys", e);
+        }
     }
 
     /**

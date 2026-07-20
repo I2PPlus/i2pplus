@@ -45,6 +45,7 @@ import java.io.Writer;
  * @author human
  */
 public class SAMBridge implements Runnable, ClientApp {
+    private static final Log _logStatic = new Log(SAMBridge.class);
     private final Log _log;
     private volatile ServerSocketChannel serverSocket; // NOSONAR volatile is correct: single-assignment visibility flag read by the accept loop
     private final String _listenHost;
@@ -608,11 +609,11 @@ public class SAMBridge implements Runnable, ClientApp {
                                              options.keyFile, options.configFile);
             bridge.startThread();
         } catch (RuntimeException e) {
-            e.printStackTrace();
+            _logStatic.error("Failed to start SAM Bridge", e);
             usage();
             throw e;
         } catch (Exception e) {
-            e.printStackTrace();
+            _logStatic.error("Failed to start SAM Bridge", e);
             usage();
             throw new RuntimeException(e);
         }
@@ -626,7 +627,7 @@ public class SAMBridge implements Runnable, ClientApp {
         if (Boolean.parseBoolean(System.getProperty("sam.shutdownOnOOM"))) {
             t.addOOMEventThreadListener(new I2PAppThread.OOMEventListener() {
                 public void outOfMemory(OutOfMemoryError err) {
-                    err.printStackTrace();
+                    _log.error("Out of memory in SAM Bridge listener, exiting", err);
                     System.err.println("OOMed, die die die");
                     System.exit(-1);
                 }
