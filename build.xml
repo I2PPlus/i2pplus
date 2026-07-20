@@ -2810,14 +2810,15 @@
   </target>
 
   <!-- text output -->
-  <target name="translationReport" depends="buildTools, builddep, jar, buildWEB" unless="no.bundle">
-    <java classname="net.i2p.util.TranslationStatus" fork="true" dir="${build.root}build/" failonerror="true">
-      <classpath>
-        <pathelement location="${build.root}build/i2p.jar"/>
-        <pathelement location="${build.root}build/tools.jar"/>
-      </classpath>
-    </java>
-  </target>
+   <target name="translationReport" depends="buildTools, builddep, jar, buildWEB" unless="no.bundle">
+     <java classname="net.i2p.util.TranslationStatus" fork="true" dir="${build.root}build/" failonerror="true">
+       <classpath>
+         <pathelement location="${build.root}build/i2p.jar"/>
+         <pathelement location="${build.root}build/tools.jar"/>
+       </classpath>
+       <sysproperty key="i2p.src.dir" value="${basedir}"/>
+     </java>
+   </target>
 
   <!-- stuff html output into routerconsole.war -->
   <target name="bundleTranslationReport" depends="buildTools, builddep, jar, buildWEB" unless="no.bundle">
@@ -2829,6 +2830,7 @@
         <pathelement location="${build.root}build/i2p.jar"/>
         <pathelement location="${build.root}build/tools.jar"/>
       </classpath>
+      <sysproperty key="i2p.src.dir" value="${basedir}"/>
       <arg value="-h"/>
     </java>
     <!-- Skip jar update when report content hasn't changed -->

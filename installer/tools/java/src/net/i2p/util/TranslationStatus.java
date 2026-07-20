@@ -460,8 +460,10 @@ public class TranslationStatus {
             String pfx = file.substring(slash + 1, dot);
             String sfx = file.substring(dot);
             String sdir = file.substring(0, slash);
-            // we assume we're in build/
-            File dir = new File("..", sdir);
+            // Resolve against the source root. When run from the build output
+            // (dir=build/), the source tree is not the parent, so prefer the
+            // i2p.src.dir system property set by the ant target; fall back to "..".
+            File dir = new File(getSourceRoot(), sdir);
             if (!dir.exists())
                 continue;
             rv++;
@@ -521,13 +523,28 @@ public class TranslationStatus {
     }
 
     /**
+     * Resolve the source tree root used to locate non-compiled translation
+     * files. Prefers the {@code i2p.src.dir} system property (set by the ant
+     * target, which runs from the build output directory); falls back to the
+     * parent of the current working directory for manual invocations.
+     *
+     * @return source root directory
+     */
+    private static File getSourceRoot() {
+        String src = System.getProperty("i2p.src.dir");
+        if (src != null && !src.isEmpty())
+            return new File(src);
+        // we assume we're run from the build/ directory, so ".." is the source root
+        return new File("..");
+    }
+
+    /**
      * Parse a locale code string (e.g. "ar" or "zh_TW") into a Locale.
      *
      * @param s locale code
      * @return Locale
      */
-    private static Locale localeFromString(String s) {
-        int c = s.indexOf('_');
+    private static Locale localeFromString(String s) {        int c = s.indexOf('_');
         if (c < 0)
             return new Locale(s);
         return new Locale(s.substring(0, c), s.substring(c + 1));
