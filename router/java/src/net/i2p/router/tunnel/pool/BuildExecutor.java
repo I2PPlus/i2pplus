@@ -49,29 +49,41 @@ public class BuildExecutor implements Runnable {
      */
     private static final Comparator<TunnelPool> POOLED_DESTINATION_COMPARATOR =
             (a, b) -> {
-                int aActive = a.getActiveTunnelCount();
-                int bActive = b.getActiveTunnelCount();
-                if (aActive == 0 && bActive > 0) return -1;
-                if (bActive == 0 && aActive > 0) return 1;
-                boolean aNear = aActive > 0 && aActive <= 2;
-                boolean bNear = bActive > 0 && bActive <= 2;
-                if (aNear && !bNear) return -1;
-                if (bNear && !aNear) return 1;
-                int aTarget = Math.max(2, a.getSettings().getTotalQuantity());
-                int bTarget = Math.max(2, b.getSettings().getTotalQuantity());
-                int aDeficit = aTarget - aActive;
-                int bDeficit = bTarget - bActive;
-                if (aDeficit != bDeficit) return Integer.compare(bDeficit, aDeficit);
-                // IB/OB balance: prioritize direction further behind its paired pool
-                TunnelPool aPaired = a.getPairedPool();
-                TunnelPool bPaired = b.getPairedPool();
-                if (aPaired != null && bPaired != null && aPaired == bPaired) {
-                    int aDiff = aPaired.getActiveTunnelCount() - aActive;
-                    int bDiff = bPaired.getActiveTunnelCount() - bActive;
-                    if (aDiff != bDiff) return Integer.compare(bDiff, aDiff);
-                }
-                return 0;
+                // Build a single comparable score per pool so the ordering is a strict
+                // total order (transitive + antisymmetric), avoiding the
+                // "Comparison method violates its general contract!" TimSort crash.
+                // Higher score = build sooner: collapsed pools first, then near-collapse,
+                // then by largest deficit, then by IB/OB pair balance.
+                int cmp = Integer.compare(score(b), score(a));
+                if (cmp != 0) {return cmp;}
+                // Stable tiebreaker for equal scores — never non-symmetric.
+                return Integer.compare(System.identityHashCode(a), System.identityHashCode(b));
             };
+
+    /**
+     *  Priority score for {@link #POOLED_DESTINATION_COMPARATOR}.
+     *  Higher = build sooner. Must be a pure function of pool state so the
+     *  comparator remains a consistent total order.
+     */
+    private static int score(TunnelPool p) {
+        int active = p.getActiveTunnelCount();
+        int target = Math.max(2, p.getSettings().getTotalQuantity());
+        int deficit = target - active;
+        // Tier 1: collapsed (0 active) outranks everything.
+        if (active == 0) {return 1 << 20;}
+        // Tier 2: near-collapse (1-2 active) gets a large boost.
+        int s = active <= 2 ? (1 << 16) : 0;
+        // Tier 3: larger deficit builds sooner.
+        s += Math.max(0, deficit) * 100;
+        // Tier 4: paired balance — if this pool's pair is ahead, boost it.
+        TunnelPool paired = p.getPairedPool();
+        if (paired != null) {
+            int pairActive = paired.getActiveTunnelCount();
+            int behind = pairActive - active;
+            if (behind > 0) {s += behind * 10;}
+        }
+        return s;
+    }
 
     /**
      *  Orders pools by collapse severity: collapsed (0 usable) first, then
