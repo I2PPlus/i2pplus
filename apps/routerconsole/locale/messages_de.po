@@ -697,7 +697,7 @@ msgstr "Ungültige Übertragung der eingegebenen Daten, möglicherweise da Sie d
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Sollte das Problem fortbestehen, stellen Sie sicher, dass in Ihrem Browser Cookies aktiviert sind."
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Bandbreitennutzung"
 
 #, java-format

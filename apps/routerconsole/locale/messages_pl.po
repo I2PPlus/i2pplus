@@ -702,7 +702,7 @@ msgstr "Błędna forma zgłoszenia, prawdopodobnie użyłeś przycisku 'wstecz' 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Jeśli problem się utrzymuje, sprawdź, czy masz włączoną obsługę ciasteczek w przeglądarce."
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Użytkowanie pasma"
 
 #, java-format

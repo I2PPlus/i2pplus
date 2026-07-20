@@ -700,7 +700,7 @@ msgstr "Form submission tidak valid , mungkin karena anda menggunakan tombol 'ba
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Jika masalah berlanjut, periksa jika anda telah mengaktifkan cookies di browser anda"
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Penggunaan bandwidth"
 
 #, java-format

@@ -700,7 +700,7 @@ msgstr "Form gönderimi geçersiz. Tarayıcınızın \"geri\" ya da \"yenile\" d
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Sorun sürerse, tarayıcınızda çerezlerin etkinleştirilmiş olduğuna emin olun."
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Bant genişliği kullanımı"
 
 #, java-format

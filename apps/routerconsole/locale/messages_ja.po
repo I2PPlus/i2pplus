@@ -698,7 +698,7 @@ msgstr "無効なフォームからの送信、おそらくブラウザで「戻
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "問題が続く場合、クッキーがブラウザで有効になっているか確認してください。"
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "帯域幅使用率"
 
 #, java-format

@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -34,7 +35,7 @@ import org.rrd4j.core.RrdNioBackendFactory;
  *  A thread started by RouterConsoleRunner that checks the configuration for
  *  stats to be tracked via jrobin, and adds or deletes RRDs as necessary.
  *
- *  This also contains methods to generate xml, png or svg image output.
+ *  This also contains methods to generate xml or graph image output.
  *  The rendering for graphs is in GraphRenderer.
  *
  *  To control memory, the number of simultaneous renderings is limited.
@@ -44,13 +45,13 @@ import org.rrd4j.core.RrdNioBackendFactory;
 public class GraphGenerator implements Runnable, ClientApp {
     private final RouterContext _context;
     private final Log _log;
-    /** list of GraphListener instances */
+    /** list of GraphListener instances, preserved for iteration by UI helpers */
     private final List<GraphListener> _listeners;
-    private static int cores = SystemVersion.getCores();
-    private static long maxMem = SystemVersion.getMaxMemory();
-    private static final int MAX_CONCURRENT_PNG = SystemVersion.isARM() ? Math.max(2, cores / 2) :
-                                                  maxMem < 256*1024*1024 ? Math.max(8, cores / 2) :
-                                                  Math.max(12, cores);
+    /** index of listener by rate for O(1) lookup during rendering */
+    private final Map<Rate, GraphListener> _listenerByRate = new java.util.concurrent.ConcurrentHashMap<>();
+    private static final int MAX_CONCURRENT_RENDER = SystemVersion.isARM() ? Math.max(2, SystemVersion.getCores() / 2) :
+                                                  SystemVersion.getMaxMemory() < 256*1024*1024 ? Math.max(8, SystemVersion.getCores() / 2) :
+                                                  Math.max(12, SystemVersion.getCores());
     private final Semaphore _sem;
     private volatile boolean _isRunning;
     private ScheduledExecutorService _scheduler;
@@ -60,7 +61,7 @@ public class GraphGenerator implements Runnable, ClientApp {
         _context = ctx;
         _log = _context.logManager().getLog(getClass());
         _listeners = new CopyOnWriteArrayList<>();
-        _sem = new Semaphore(MAX_CONCURRENT_PNG, true);
+        _sem = new Semaphore(MAX_CONCURRENT_RENDER, true);
         _context.addShutdownTask(new Shutdown());
     }
 
@@ -178,7 +179,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Disable graph generation until restart
-     * See GraphRenderer.render()
      * @since 0.9.6
      */
     static void setDisabled(I2PAppContext ctx) {
@@ -188,7 +188,6 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * Disable graph generation until restart
-     * See GraphRenderer.render()
      * @since 0.9.38
      */
     synchronized void setDisabled() {
@@ -271,42 +270,42 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     private void removeDb(Rate r) {
-        for (GraphListener lsnr : _listeners) {
-            if (lsnr.getRate().equals(r)) {
-                _listeners.remove(lsnr); // no iter.remove() in COWAL
-                lsnr.stopListening();
-                return;
-            }
+        GraphListener lsnr = _listenerByRate.remove(r);
+        if (lsnr != null) {
+            _listeners.remove(lsnr); // no iter.remove() in COWAL
+            lsnr.stopListening();
         }
     }
 
     private void addDb(Rate r) {
         GraphListener lsnr = new GraphListener(r);
         boolean success = lsnr.startListening();
-        if (success) {_listeners.add(lsnr);}
-        else {_log.error("Failed to add RRD for rate " + r.getRateStat().getName() + '.' + r.getPeriod());}
+        if (success) {
+            _listeners.add(lsnr);
+            _listenerByRate.put(r, lsnr);
+        } else {_log.error("Failed to add RRD for rate " + r.getRateStat().getName() + '.' + r.getPeriod());}
     }
 
-    public boolean renderPng(Rate rate, OutputStream out) throws IOException {
-        return renderPng(rate, out, DEFAULT_X, DEFAULT_Y, false, false, false, false, -1, 0, true);
+    public boolean renderGraph(Rate rate, OutputStream out) throws IOException {
+        return renderGraph(rate, out, DEFAULT_X, DEFAULT_Y, false, false, false, false, -1, 0, true);
     }
 
     /**
      *  This does the single data graphs.
-     *  For the two-data bandwidth graph see renderRatePng().
+     *  For the two-data bandwidth graph see renderCombinedGraph().
      *  Synchronized to conserve memory.
      *
      *  @param end number of periods before now
      *  @return success
      */
-    public boolean renderPng(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
+    public boolean renderGraph(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
                                         boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
                                         int end, boolean showCredit) throws IOException {
         try {
             try {_sem.acquire();}
             catch (InterruptedException ie) { /* ignored */ }
             try {
-                return locked_renderPng(rate, out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
+                return locked_renderGraph(rate, out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
                                         periodCount, end, showCredit);
             } catch (NoClassDefFoundError ncdfe) {
                 setDisabled();
@@ -322,7 +321,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     /**
      *  @param end number of periods before now
      */
-    private boolean locked_renderPng(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
+    private boolean locked_renderGraph(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
                                       boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
                                       int end, boolean showCredit) throws IOException {
         if (width > MAX_X) {width = MAX_X;}
@@ -330,20 +329,12 @@ public class GraphGenerator implements Runnable, ClientApp {
         if (height > MAX_Y) {height = MAX_Y;}
         else if (height <= 0) {height = DEFAULT_Y;}
         if (end < 0) {end = 0;}
-        for (GraphListener lsnr : _listeners) {
-            if (lsnr.getRate().equals(rate)) {
-                lsnr.renderPng(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);
-                return true;
-            }
+        GraphListener lsnr = _listenerByRate.get(rate);
+        if (lsnr != null) {
+            lsnr.renderGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);
+            return true;
         }
         return false;
-    }
-
-    /** @deprecated unused */
-    @Deprecated
-    public boolean renderPng(OutputStream out, String templateFilename) throws IOException {
-        GraphRenderer.render(_context, out, templateFilename);
-        return true;
     }
 
     public boolean getXML(Rate rate, OutputStream out) throws IOException {
@@ -355,32 +346,31 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     private boolean locked_getXML(Rate rate, OutputStream out) throws IOException {
-        for (GraphListener lsnr : _listeners) {
-            if (lsnr.getRate().equals(rate)) {
-                lsnr.getData().exportXml(out);
-                out.write(DataHelper.getUTF8("<!-- Rate: " + lsnr.getRate().getRateStat().getName() + " for period " + lsnr.getRate().getPeriod() + " -->\n"));
-                out.write(DataHelper.getUTF8("<!-- Average data source name: " + lsnr.getName() + " event count data source name: " + lsnr.getEventName() + " -->\n"));
-                return true;
-            }
+        GraphListener lsnr = _listenerByRate.get(rate);
+        if (lsnr != null) {
+            lsnr.getData().exportXml(out);
+            out.write(DataHelper.getUTF8("<!-- Rate: " + lsnr.getRate().getRateStat().getName() + " for period " + lsnr.getRate().getPeriod() + " -->\n"));
+            out.write(DataHelper.getUTF8("<!-- Average data source name: " + lsnr.getName() + " event count data source name: " + lsnr.getEventName() + " -->\n"));
+            return true;
         }
         return false;
     }
 
     /**
      *  This does the two-data bandwidth graph only.
-     *  For all other graphs see renderPng() above.
+     *  For all other graphs see renderGraph() above.
      *  Synchronized to conserve memory.
      *
      *  @param end number of periods before now
      *  @return success
      */
-    public boolean renderRatePng(OutputStream out, int width, int height, boolean hideLegend,
+    public boolean renderCombinedGraph(OutputStream out, int width, int height, boolean hideLegend,
                                  boolean hideGrid, boolean hideTitle, boolean showEvents,
                                  int periodCount, int end, boolean showCredit) throws IOException {
         try {
             try {_sem.acquire();}
             catch (InterruptedException ie) { /* ignored */ }
-            try {return locked_renderRatePng(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);}
+            try {return locked_renderCombinedGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);}
             catch (NoClassDefFoundError ncdfe) {
                 setDisabled();
                 String s = "Error rendering - disabling graph generation.";
@@ -392,7 +382,7 @@ public class GraphGenerator implements Runnable, ClientApp {
         } finally {_sem.release();}
     }
 
-    private boolean locked_renderRatePng(OutputStream out, int width, int height, boolean hideLegend,
+    private boolean locked_renderCombinedGraph(OutputStream out, int width, int height, boolean hideLegend,
                                          boolean hideGrid, boolean hideTitle, boolean showEvents,
                                          int periodCount, int end, boolean showCredit) throws IOException {
 
@@ -411,10 +401,10 @@ public class GraphGenerator implements Runnable, ClientApp {
         if (height > MAX_Y) {height = MAX_Y;}
         else if (height <= 0) {height = DEFAULT_Y;}
         if (hideTitle) {
-            txLsnr.renderPng(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
+            txLsnr.renderGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
                              end, showCredit, rxLsnr, null);
         } else {
-            txLsnr.renderPng(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
+            txLsnr.renderGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
                              end, showCredit, rxLsnr, "[" + _t("Router") + "] " + _t("Bandwidth usage").replace("usage", "Usage"));
         }
         return true;

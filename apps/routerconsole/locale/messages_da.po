@@ -701,7 +701,7 @@ msgstr "Ugyldig formularafsendelse, sandsynligvis fordi du brugte ''tilbage'' el
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Hvis problemet fortsætter, kontrollere, at du har slået cookies til i din browser."
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Båndbreddeforbrug"
 
 #, java-format

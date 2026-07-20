@@ -700,7 +700,7 @@ msgstr "Ongeldig formulier verzonden, mogelijk omdat je de 'terug' of 'vernieuw'
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Als het probleem zich blijft voordoen, zorg dat je cookies aan hebt staan in je browser."
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Bandbreedte gebruik"
 
 #, java-format

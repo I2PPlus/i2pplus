@@ -700,7 +700,7 @@ msgstr "잘못된 폼 서브미션. 뒤로가기나 새로고침을 누르셨을
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "문제가 지속되면 브라우저의 쿠키가 활성화되어 있는지 확인해주세요."
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "대역폭 사용"
 
 #, java-format

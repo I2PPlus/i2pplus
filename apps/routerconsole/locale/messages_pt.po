@@ -701,7 +701,7 @@ msgstr "Formulário inválido preenchido, provavelmente porque o botão  \"volta
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Se o problema continuar, verifique se teu navegador aceita cookies."
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Taxa de uso"
 
 #, java-format

@@ -702,7 +702,7 @@ msgstr "Неправильно передана форма, можливо ви 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Якщо проблема не усунута, переконайтеся, що cookies увімкнені у вашому браузері."
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Використання мережі"
 
 #, java-format

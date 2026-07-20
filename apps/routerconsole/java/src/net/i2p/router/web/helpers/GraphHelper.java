@@ -18,7 +18,11 @@ import net.i2p.router.web.HelperBase;
 import net.i2p.stat.Rate;
 
 /**
- *  /graphs.jsp, including form, and /graph.jsp
+ *  Renders the graphs list (/graphs.jsp) and the single-stat page (/graph.jsp),
+ *  plus the graph display configuration form.
+ *
+ *  Stateless across requests except for per-request form state set via the
+ *  {@code setXxx()} accessors; preferences are read from context properties.
  */
 public class GraphHelper extends FormHandler {
     private int _periodCount;
@@ -88,6 +92,7 @@ public class GraphHelper extends FormHandler {
         return "<noscript><meta http-equiv=refresh content=" + (_refreshDelaySeconds - 3) + "></noscript>";
     }
 
+    /** @return the configured graph refresh delay, in seconds */
     public int getRefreshValue() {
         return _refreshDelaySeconds;
     }
@@ -149,17 +154,14 @@ public class GraphHelper extends FormHandler {
     /** @since 0.9.70+ */
     public void setUseUtc(String foo) {_useUtc = !"false".equals(foo);}
 
-    /** @since 0.9.70+ */
-    
-
     /** @since 0.9.32 */
     public void setHideLegend(String foo) {
         if ("true".equalsIgnoreCase(foo)) {
             _graphHideLegend = true;
-            setSingleHideLegend(true);
+            _hideLegend = true;
         } else if ("false".equalsIgnoreCase(foo)) {
             _graphHideLegend = false;
-            setSingleHideLegend(false);
+            _hideLegend = false;
         }
     }
 
@@ -174,30 +176,28 @@ public class GraphHelper extends FormHandler {
         if (ss == null) {return "";}
 
         List<GraphListener> listeners = ss.getListeners();
-        // Cache hideLegend once before use
         boolean hideLegend = _context.getProperty(PROP_HIDE_LEGEND, DEFAULT_HIDE_LEGEND);
 
-        // Build and cache a sorted TreeSet once
+        // Sort listeners once for stable display order
         TreeSet<GraphListener> ordered = new TreeSet<>(new AlphaComparator());
         ordered.addAll(listeners);
 
-        // Cache current time once for all uses
+        // Capture current time once for all image URLs (cache-busting)
         long now = System.currentTimeMillis();
 
-        // Flags for combined bandwidth presence
+        // Detect combined bandwidth availability
         boolean hasTx = false;
         boolean hasRx = false;
-
         for (GraphListener lsnr : ordered) {
             String title = lsnr.getRate().getRateStat().getName();
-            if ("bw.sendRate".equals(title)) hasTx = true;
-            else if ("bw.recvRate".equals(title)) hasRx = true;
+            if ("bw.sendRate".equals(title)) {hasTx = true; break;}
+            else if ("bw.recvRate".equals(title)) {hasRx = true;}
         }
+        boolean combined = hasTx && hasRx && !_showEvents;
 
         StringBuilder buf = new StringBuilder(512 * listeners.size());
 
-        if (hasTx && hasRx && !_showEvents) {
-            // Instead of iterator.remove on TreeSet, use a filtered approach to avoid mutation overhead
+        if (combined) {
             buf.append("<span class=graphContainer><a href=\"/graph?stat=bw.combined")
                .append(AMP).append("c=").append(3 * _periodCount)
                .append(AMP).append("w=1000").append(AMP).append("h=280\">");
@@ -216,7 +216,7 @@ public class GraphHelper extends FormHandler {
         for (GraphListener lsnr : ordered) {
             Rate r = lsnr.getRate();
             String rName = r.getRateStat().getName();
-            if (hasTx && hasRx && !_showEvents &&
+            if (combined &&
                 ("bw.sendRate".equals(rName) || "bw.recvRate".equals(rName))) {
                 // Skip individual tx/rx graphs if combined is shown
                 continue;
@@ -255,6 +255,7 @@ public class GraphHelper extends FormHandler {
         return buf.toString();
     }
 
+    /** @return the number of configured graph listeners, or 0 if graphs are disabled */
     public int countGraphs() {
         GraphGenerator ss = GraphGenerator.instance(_context);
         if (ss == null) {return 0;}
@@ -272,7 +273,6 @@ public class GraphHelper extends FormHandler {
         if (ss == null) return "";
 
         StringBuilder buf = new StringBuilder(2 * 1024);
-                                    // but could cache from context here if desired
 
         if (_stat == null) {
             buf.append("<p class=infohelp>").append(_t("Nothing to display - no stat specified!")).append("</p>");
@@ -285,7 +285,7 @@ public class GraphHelper extends FormHandler {
         if ("bw.combined".equals(_stat)) {
             period = 60000;
             name = _stat;
-            displayName = "[" + _t("Router") + "] " + _t("Bandwidth usage").replace("usage", "Usage");
+            displayName = "[" + _t("Router") + "] " + _t("Bandwidth Usage");
         } else {
             Set<Rate> rates = ss.parseSpecs(_stat);
             if (rates.size() != 1) {
@@ -315,48 +315,45 @@ public class GraphHelper extends FormHandler {
            .append(AMP).append("end=").append(_end)
            .append(WIDTH_PARAM).append(_width)
            .append(HEIGHT_PARAM).append(_height)
-           .append(HIDE_LEGEND_PARAM).append(getSingleHideLegend())
-           .append(TIME_PARAM).append(now)
+            .append(HIDE_LEGEND_PARAM).append(_hideLegend)
+            .append(TIME_PARAM).append(now)
            .append("\"></a></span>\n</div>\n<p id=graphopts>\n");
 
-        // Cache getSingleHideLegend once here for multiple calls:
-        boolean singleHideLegend = getSingleHideLegend();
-
         if (_width < MAX_X && _height < MAX_Y) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height * 3 / 2, singleHideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height * 3 / 2, _hideLegend));
             buf.append(_t("Larger")).append("</a> - ");
         }
         if (_width > MIN_X && _height > MIN_Y) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 2 / 3, _height * 2 / 3, singleHideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 2 / 3, _height * 2 / 3, _hideLegend));
             buf.append(_t("Smaller")).append("</a> - ");
         }
         if (_height < MAX_Y) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height * 3 / 2, singleHideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height * 3 / 2, _hideLegend));
             buf.append(_t("Taller")).append("</a> - ");
         }
         if (_height > MIN_Y) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height * 2 / 3, singleHideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height * 2 / 3, _hideLegend));
             buf.append(_t("Shorter")).append("</a> - ");
         }
         if (_width < MAX_X) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height, singleHideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height, _hideLegend));
             buf.append(_t("Wider")).append("</a> - ");
         }
         if (_width > MIN_X) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 2 / 3, _height, singleHideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 2 / 3, _height, _hideLegend));
             buf.append(_t("Narrower")).append("</a>");
         }
         buf.append("<br>");
         if (_periodCount < MAX_C) {
-            buf.append(link(_stat, _showEvents, _periodCount * 2, _end, _width, _height, singleHideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount * 2, _end, _width, _height, _hideLegend));
             buf.append(_t("Larger interval")).append("</a> - ");
         }
         if (_periodCount > MIN_C) {
-            buf.append(link(_stat, _showEvents, _periodCount / 2, _end, _width, _height, singleHideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount / 2, _end, _width, _height, _hideLegend));
             buf.append(_t("Smaller interval")).append("</a> - ");
         }
         if (_periodCount < MAX_C) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end + _periodCount, _width, _height, singleHideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount, _end + _periodCount, _width, _height, _hideLegend));
             buf.append(_t("Previous interval")).append("</a>");
         }
         if (_end > 0) {
@@ -367,34 +364,26 @@ public class GraphHelper extends FormHandler {
             if (_periodCount < MAX_C) {
                 buf.append(" - ");
             }
-            buf.append(link(_stat, _showEvents, _periodCount, end, _width, _height, singleHideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount, end, _width, _height, _hideLegend));
             buf.append(_t("Next interval")).append("</a> ");
         }
         if (!"bw.combined".equals(_stat)) {
             buf.append(" - ");
-            buf.append(link(_stat, !_showEvents, _periodCount, _end, _width, _height, singleHideLegend));
+            buf.append(link(_stat, !_showEvents, _periodCount, _end, _width, _height, _hideLegend));
             buf.append(_showEvents ? _t("Plot averages") : _t("plot events"));
             buf.append("</a>");
         }
         buf.append(" - ");
-        buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height, singleHideLegend));
-        buf.append(singleHideLegend ? _t("Show Legend") : _t("Hide Legend"));
+        buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height, _hideLegend));
+        buf.append(_hideLegend ? _t("Show Legend") : _t("Hide Legend"));
         buf.append("</a>\n</p>\n");
         return buf.toString();
     }
 
-    private static boolean _singleHideLegend;
-
-    private static boolean getSingleHideLegend() {
-        return _singleHideLegend;
-    }
-
-    private static void setSingleHideLegend(boolean hideLegend) {
-        _singleHideLegend = hideLegend;
-    }
+    private boolean _hideLegend;
 
     /** @since 0.9 */
-    private static String link(String stat, boolean showEvents, int periodCount, int end, int width, int height, boolean singleHideLegend) {
+    private static String link(String stat, boolean showEvents, int periodCount, int end, int width, int height, boolean hideLegend) {
         return
                "<a href=\"/graph?stat="
                + stat.replace(" ", "%20")
@@ -403,7 +392,7 @@ public class GraphHelper extends FormHandler {
                + AMP + "h=" + height
                + (end > 0 ? AMP + "e=" + end : "")
                + (showEvents ? AMP + "showEvents=1" : "")
-               + (singleHideLegend ? AMP + "hideLegend=false" : AMP + "hideLegend=true")
+               + (hideLegend ? AMP + "hideLegend=false" : AMP + "hideLegend=true")
                + "\">";
     }
 
@@ -413,9 +402,9 @@ public class GraphHelper extends FormHandler {
         GraphGenerator ss = GraphGenerator.instance(_context);
         if (ss == null) return "";
 
-        // Cache properties once before use
-        boolean hideLegend = _context.getProperty(PROP_HIDE_LEGEND, DEFAULT_HIDE_LEGEND);
-        boolean persistent = _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT);
+        // Reuse cached preferences already loaded in setContextId()
+        boolean hideLegend = _graphHideLegend;
+        boolean persistent = _persistent;
 
         String nonce = _session != null ? CSSHelper.getNonce(_session) : CSSHelper.getNonce();
 
@@ -549,8 +538,7 @@ public class GraphHelper extends FormHandler {
             _graphHideLegend != _context.getProperty(PROP_HIDE_LEGEND, DEFAULT_HIDE_LEGEND) ||
             _persistent != _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT) ||
             _graphGlow != _context.getBooleanPropertyDefaultTrue(PROP_GLOW) ||
-            _useUtc != _context.getBooleanPropertyDefaultTrue(PROP_UTC) ||
-            false) {
+            _useUtc != _context.getBooleanPropertyDefaultTrue(PROP_UTC)) {
             Map<String, String> changes = new HashMap<>();
             changes.put(PROP_X, Integer.toString(_width));
             changes.put(PROP_Y, Integer.toString(_height));
@@ -572,6 +560,10 @@ public class GraphHelper extends FormHandler {
         }
     }
 
+    /**
+     *  Orders graphs for display: "Router" group first, then remaining groups
+     *  alphabetically, then by stat name and period.
+     */
     private static class AlphaComparator implements Comparator<GraphListener>, Serializable {
         @Override
         public int compare(GraphListener l, GraphListener r) {

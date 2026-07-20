@@ -700,7 +700,7 @@ msgstr "Ogiltigt formulärdata, förmodligen för att du använde \"back\" eller
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Om problemet kvarstår, bekräfta att cookies är påslaget i din browser"
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Bandbreddsanvändning"
 
 #, java-format

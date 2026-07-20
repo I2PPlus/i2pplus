@@ -700,7 +700,7 @@ msgstr "L''envoi du formulaire est invalide, car vous avez probablement utilisé
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Si le problème persiste, vérifiez que les témoins sont activés dans votre navigateur."
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Utilisation de la bande passante"
 
 #, java-format

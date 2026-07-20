@@ -698,7 +698,7 @@ msgstr "表单提交无效，可能的原因是您使用了“后退”或“刷
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "如果问题持续出现，请检查您的浏览器是否已启用 cookie。"
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "带宽占用"
 
 #, java-format

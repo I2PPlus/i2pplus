@@ -700,7 +700,7 @@ msgstr ""
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr ""
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr ""
 
 #, java-format

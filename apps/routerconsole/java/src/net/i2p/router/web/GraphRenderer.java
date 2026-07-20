@@ -18,7 +18,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
-import javax.imageio.stream.ImageOutputStream;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
@@ -81,9 +80,9 @@ class GraphRenderer {
     private static final Color RESTART_BAR_COLOR_DARK = new Color(220, 16, 48, 220);
 
     private static final boolean IS_WIN = SystemVersion.isWindows();
-    String DEFAULT_FONT_NAME = IS_WIN ? "Lucida Console" : "Monospaced";
-    String DEFAULT_TITLE_FONT_NAME = "Dialog";
-    String DEFAULT_LEGEND_FONT_NAME = "Dialog";
+    private static final String DEFAULT_FONT_NAME = IS_WIN ? "Lucida Console" : "Monospaced";
+    private static final String DEFAULT_TITLE_FONT_NAME = "Dialog";
+    private static final String DEFAULT_LEGEND_FONT_NAME = "Dialog";
     private static final String PROP_FONT_MONO = "routerconsole.graphFont.unit";
     private static final String PROP_FONT_LEGEND = "routerconsole.graphFont.legend";
     private static final String PROP_FONT_TITLE = "routerconsole.graphFont.title";
@@ -115,20 +114,6 @@ class GraphRenderer {
         _log = ctx.logManager().getLog(GraphRenderer.class);
         _listener = lsnr;
         _context = ctx;
-    }
-
-    /**
-     * Render the stats as determined by the specified JRobin xml config,
-     * but note that this doesn't work on stock jvms, as it requires
-     * DOM level 3 load and store support.  Perhaps we can bundle that, or
-     * specify who can get it from where, etc.
-     *
-     * @deprecated unused
-     * @throws UnsupportedOperationException always
-     */
-    @Deprecated
-    public static synchronized void render(I2PAppContext ctx, OutputStream out, String filename) throws IOException {
-        throw new UnsupportedOperationException();
     }
 
     public void render(OutputStream out) throws IOException {
@@ -199,7 +184,6 @@ class GraphRenderer {
             periodCount = _listener.getRows();
         }
         long start = end - (period * periodCount);
-        ImageOutputStream ios = null;
         String theme = _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME);
 
         try {
@@ -240,75 +224,10 @@ class GraphRenderer {
             }
 
             /* CJK support */
-            if ("zh".equals(lang)) {
-                if (FONTLIST.contains("Noto Sans SC")) {
-                    DEFAULT_TITLE_FONT_NAME = "Noto Sans SC";
-                } else if (FONTLIST.contains("Noto Sans CJK SC")) {
-                    DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK SC";
-                } else if (FONTLIST.contains("Source Han Sans SC")) {
-                    DEFAULT_TITLE_FONT_NAME = "Source Han Sans SC";
-                } else {
-                    DEFAULT_TITLE_FONT_NAME = "Dialog";
-                }
-                if (FONTLIST.contains("Noto Sans Mono SC")) {
-                    DEFAULT_FONT_NAME = "Noto Sans Mono SC";
-                    DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono SC";
-                } else if (FONTLIST.contains("Noto Sans Mono CJK SC")) {
-                    DEFAULT_FONT_NAME = "Noto Sans Mono CJK SC";
-                    DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono CJK SC";
-                } else {
-                    DEFAULT_FONT_NAME = "Monospaced";
-                    DEFAULT_LEGEND_FONT_NAME = "Monospaced";
-                }
-            } else if ("jp".equals(lang)) {
-                if (FONTLIST.contains("Noto Sans JP")) {
-                    DEFAULT_TITLE_FONT_NAME = "Noto Sans JP";
-                } else if (FONTLIST.contains("Noto Sans CJK JP")) {
-                    DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK JP";
-                } else if (FONTLIST.contains("Source Han Sans JP")) {
-                    DEFAULT_TITLE_FONT_NAME = "Source Han Sans JP";
-                } else {
-                    DEFAULT_TITLE_FONT_NAME = "Dialog";
-                }
-                if (FONTLIST.contains("Noto Sans Mono JP")) {
-                    DEFAULT_FONT_NAME = "Noto Sans Mono JP";
-                    DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono JP";
-                } else if (FONTLIST.contains("Noto Sans Mono CJK JP")) {
-                    DEFAULT_FONT_NAME = "Noto Sans Mono CJK JP";
-                    DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono CJK JP";
-                } else {
-                    DEFAULT_FONT_NAME = "Monospaced";
-                    DEFAULT_LEGEND_FONT_NAME = "Monospaced";
-                }
-            } else if ("ko".equals(lang)) {
-                if (FONTLIST.contains("Noto Sans KO")) {
-                    DEFAULT_TITLE_FONT_NAME = "Noto Sans KO";
-                } else if (FONTLIST.contains("Noto Sans CJK KO")) {
-                    DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK KO";
-                } else if (FONTLIST.contains("Source Han Sans KO")) {
-                    DEFAULT_TITLE_FONT_NAME = "Source Han Sans KO";
-                } else {
-                    DEFAULT_TITLE_FONT_NAME = "Dialog";
-                }
-                if (FONTLIST.contains("Noto Sans Mono KO")) {
-                    DEFAULT_FONT_NAME = "Noto Sans Mono KO";
-                    DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono KO";
-                } else if (FONTLIST.contains("Noto Sans Mono CJK KO")) {
-                    DEFAULT_FONT_NAME = "Noto Sans Mono CJK KO";
-                    DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono CJK KO";
-                } else {
-                    DEFAULT_FONT_NAME = "Monospaced";
-                    DEFAULT_LEGEND_FONT_NAME = "Monospaced";
-                }
-            } else {
-                // let's handle the fonts in the svg file
-                DEFAULT_FONT_NAME = "Monospaced";
-                DEFAULT_LEGEND_FONT_NAME = "Monospaced";
-                DEFAULT_TITLE_FONT_NAME = "SansSerif";
-            }
-            String ssmall = _context.getProperty(PROP_FONT_MONO, DEFAULT_FONT_NAME);
-            String slegend = _context.getProperty(PROP_FONT_TITLE, DEFAULT_TITLE_FONT_NAME);
-            String stitle = _context.getProperty(PROP_FONT_TITLE, DEFAULT_TITLE_FONT_NAME);
+            FontNames fonts = selectFontNames(lang);
+            String ssmall = _context.getProperty(PROP_FONT_MONO, fonts.mono);
+            String slegend = _context.getProperty(PROP_FONT_LEGEND, fonts.legend);
+            String stitle = _context.getProperty(PROP_FONT_TITLE, fonts.title);
             Font small = new Font(ssmall, Font.PLAIN, smallSize);
             Font legnd = new Font(slegend, Font.PLAIN, legendSize);
             Font large = new Font(stitle, Font.PLAIN, largeSize);
@@ -397,7 +316,7 @@ class GraphRenderer {
                 String p;
 
                 // we want the formatting and translation of formatDuration2(), except not zh, and not the &nbsp;
-                if (IS_WIN && "zh".equals(Messages.getLanguage(_context))) {
+                if (IS_WIN && "zh".equals(lang)) {
                     p = DataHelper.formatDuration(period);
                 } else {
                     p = DataHelper.formatDuration2(period).replace("&nbsp;", " ");
@@ -426,8 +345,8 @@ class GraphRenderer {
                 descr = _t("Events per period");
             } else {
                 plotName = dsNames[0]; // include the average value
-                // The descriptions are not tagged in the createRateStat calls (there are over 500 of them)
-                // but the descriptions for the default graphs are tagged in Strings.java
+                // Stat descriptions are tagged via _t() at the render site; the
+                // underlying English strings are registered in the createRateStat calls.
                 descr = _t(_listener.getRate().getRateStat().getDescription());
             }
             def.datasource(plotName, path, plotName, GraphListener.CF, _listener.getBackendFactory());
@@ -605,13 +524,6 @@ class GraphRenderer {
         } catch (OutOfMemoryError oom) {
             _log.error("Error rendering", oom);
             throw new IOException("Error plotting: " + oom.getLocalizedMessage());
-        } finally {
-            // this does not close the underlying stream
-            if (ios != null) {
-                try {
-                    ios.close();
-                } catch (IOException ioe) { /* ignored */ }
-            }
         }
     }
 
@@ -778,6 +690,92 @@ class GraphRenderer {
                 .replace(" Avg", " Average")
                 .replace("[Tunnel]Build", "[Tunnel] Build");
         return graphTitle;
+    }
+
+    /**
+     *  Per-language font family selection for graph rendering.
+     *  Pure function — no side effects — so it is safe to call from any thread.
+     *
+     *  @param lang the active UI language code (e.g. "en", "zh", "jp", "ko")
+     *  @return resolved mono / legend / title family names for the current platform
+     */
+    private static FontNames selectFontNames(String lang) {
+        String mono = DEFAULT_FONT_NAME;
+        String legend = DEFAULT_LEGEND_FONT_NAME;
+        String title = DEFAULT_TITLE_FONT_NAME;
+        if ("zh".equals(lang)) {
+            if (FONTLIST.contains("Noto Sans SC")) {
+                title = legend = "Noto Sans SC";
+            } else if (FONTLIST.contains("Noto Sans CJK SC")) {
+                title = legend = "Noto Sans CJK SC";
+            } else if (FONTLIST.contains("Source Han Sans SC")) {
+                title = legend = "Source Han Sans SC";
+            } else {
+                title = legend = "Dialog";
+            }
+            if (FONTLIST.contains("Noto Sans Mono SC")) {
+                mono = "Noto Sans Mono SC";
+            } else if (FONTLIST.contains("Noto Sans Mono CJK SC")) {
+                mono = "Noto Sans Mono CJK SC";
+            } else {
+                mono = "Monospaced";
+            }
+        } else if ("jp".equals(lang)) {
+            if (FONTLIST.contains("Noto Sans JP")) {
+                title = legend = "Noto Sans JP";
+            } else if (FONTLIST.contains("Noto Sans CJK JP")) {
+                title = legend = "Noto Sans CJK JP";
+            } else if (FONTLIST.contains("Source Han Sans JP")) {
+                title = legend = "Noto Sans CJK JP";
+            } else {
+                title = legend = "Dialog";
+            }
+            if (FONTLIST.contains("Noto Sans Mono JP")) {
+                mono = "Noto Sans Mono JP";
+            } else if (FONTLIST.contains("Noto Sans Mono CJK JP")) {
+                mono = "Noto Sans Mono CJK JP";
+            } else {
+                mono = "Monospaced";
+            }
+        } else if ("ko".equals(lang)) {
+            if (FONTLIST.contains("Noto Sans KO")) {
+                title = legend = "Noto Sans KO";
+            } else if (FONTLIST.contains("Noto Sans CJK KO")) {
+                title = legend = "Noto Sans CJK KO";
+            } else if (FONTLIST.contains("Source Han Sans KO")) {
+                title = legend = "Noto Sans CJK KO";
+            } else {
+                title = legend = "Dialog";
+            }
+            if (FONTLIST.contains("Noto Sans Mono KO")) {
+                mono = "Noto Sans Mono KO";
+            } else if (FONTLIST.contains("Noto Sans Mono CJK KO")) {
+                mono = "Noto Sans Mono CJK KO";
+            } else {
+                mono = "Monospaced";
+            }
+        } else {
+            // fall back to generic family names; the renderer selects the
+            // concrete face per output format. Legend uses a sans-serif face,
+            // while the unit/axis metric text stays monospaced for alignment.
+            mono = "Monospaced";
+            legend = "SansSerif";
+            title = "SansSerif";
+        }
+        return new FontNames(mono, legend, title);
+    }
+
+    /** Resolved font family names for a render pass. */
+    private static final class FontNames {
+        final String mono;
+        final String legend;
+        final String title;
+
+        FontNames(String mono, String legend, String title) {
+            this.mono = mono;
+            this.legend = legend;
+            this.title = title;
+        }
     }
 
     /** translate a string */

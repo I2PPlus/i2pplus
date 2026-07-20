@@ -700,7 +700,7 @@ msgstr "Mẫu đơn đệ nạp không đúng, có lẻ vì bạn dùng nút 'ba
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Nếu sự cố vẫn tiếp diễn, hãy xác minh rằng bạn đã bật cookie trong trình duyệt của mình."
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Sử dụng băng thông"
 
 #, java-format

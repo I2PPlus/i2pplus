@@ -700,7 +700,7 @@ msgstr "فرمِ اشتباهی ارسال شده است. احتمالا شما 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "اگر همچنان مشکل پابرجاست، مطمئن شوید که در مرورگر شما Cookie ها فعال هستند."
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "مصرف پهنای باند"
 
 #, java-format

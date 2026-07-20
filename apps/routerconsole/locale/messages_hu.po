@@ -700,7 +700,7 @@ msgstr "Úrlap küldése sikertelen, valószínűleg a \"vissza\" vagy az \"újr
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Ha a probléma fennáll, ellenőrizd, hogy a sütik engedélyezve vannak-e a böngésződben."
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Sávszélesség felhasználás"
 
 #, java-format

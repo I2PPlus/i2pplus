@@ -700,7 +700,7 @@ msgstr "Άκυρη φόρμα υποβολής, πιθανόν επειδή πα
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Αν το πρόβλημα επιμένει, βεβαιωθείτε ότι ο περιηγητής ιστού σας αποδέχεται τα cookies."
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Χρήση του εύρους ζώνης"
 
 #, java-format

@@ -704,7 +704,7 @@ msgstr "Neveljavno oddajo obrazca, verjetno zaradi uporabe gumbev 'nazaj' ali 'o
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Če težava obstaja, preverite, ali imate omogočene piškotke v brskalniku"
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Uporaba širine pasma"
 
 #, java-format

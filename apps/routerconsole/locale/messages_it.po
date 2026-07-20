@@ -701,7 +701,7 @@ msgstr "Sottomissione di form non valida, probabilmente hai usato il pulsante ''
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Se il problema persiste, verificare di avere i cookies abilitati nel tuo browser."
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Utilizzo di larghezza di banda"
 
 #, java-format

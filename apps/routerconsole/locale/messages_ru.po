@@ -702,7 +702,7 @@ msgstr "Неверные данные формы, скорее всего это
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Если проблема сохраняется, проверьте, что у Вас разрешены cookies в браузере."
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Загрузка канала"
 
 #, java-format

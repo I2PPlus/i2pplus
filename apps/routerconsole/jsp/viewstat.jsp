@@ -63,8 +63,8 @@
                     response.setHeader("Connection", "Close");
                     response.setHeader("X-Content-Type-Options", "nosniff");
                     rendered = fakeBw
-                        ? graphGen.renderRatePng(stream, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit)
-                        : graphGen.renderPng(rate, stream, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);
+                        ? graphGen.renderCombinedGraph(stream, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit)
+                        : graphGen.renderGraph(rate, stream, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);
                 }
             } finally {
                 if (rendered) stream.close();

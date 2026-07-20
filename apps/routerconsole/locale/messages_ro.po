@@ -702,7 +702,7 @@ msgstr "Transmitere formular invalid, probabil pentru că ați folosit butonul \
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Dacă problema persistă, verificați dacă aveți activate cookie-urile în browser-ul dumneavoastră."
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Utilizarea lățimii de bandă"
 
 #, java-format

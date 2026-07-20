@@ -700,7 +700,7 @@ msgstr "Yanlış formanın təqdim edilməsi, ehtimal ki, brauzerinizdə 'geri' 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Problem davam edərsə, brauzerinizdə kukilərin aktiv olduğunu yoxlayın."
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Bant genişliyi istifadəsi"
 
 #, java-format

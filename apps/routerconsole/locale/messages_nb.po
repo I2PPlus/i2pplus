@@ -701,7 +701,7 @@ msgstr "Ugyldig skjemainnsendelse, sannsynligvis fordi du brukte 'tilbake' eller
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Hvis problemet vedvarer, må du kontrollere at du har aktivert informasjonskapsler i nettleseren din"
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Båndbreddebruk"
 
 #, java-format

@@ -700,7 +700,7 @@ msgstr "Virheellinen lomakkeen lähetys, luultavasti siksi, että käytit selaim
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Jos pulma jatkuu, vahvista, että evästeet ovar käytössä selaimessasi."
 
-msgid "Bandwidth usage"
+msgid "Bandwidth Usage"
 msgstr "Kaistanleveyskäyttö"
 
 #, java-format
