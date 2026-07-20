@@ -9,6 +9,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
@@ -25,7 +26,8 @@ import net.i2p.I2PAppContext;
  * in html or text format.
  *
  * Bundles only, does not support external resources (html files, man pages,
- * Debian po files) or the gettext properties files.
+ * Debian po files) or the gettext properties files (with the exception of the
+ * ndt property files, which are scanned as Other Resources).
  *
  * This is run at build time, so output is not tagged or translated.
  *
@@ -46,34 +48,94 @@ public class TranslationStatus {
                                             "mstreaming.jar", "router.jar", "routerconsole.jar",
                                             "susidns.war", "susimail.war" };
 
-    // Java lang codes, see notes below
-    private static final String[] LANGS = { "ar", "az", "bo", "cs", "da", "de", "el", "es", "et", "fa", "fi", "fr",
-                                            "hi", "hu", "in", "it", "ja", "ko", "nb", "nl", "pl", "pt", "ro",
-                                            "ru", "sl", "sv", "tr", "uk", "vi", "zh" };
-/**
-    private static final String[] LANGS = { "ar", "az", "bg", "ca", "cs", "da", "de", "el", "es", "es_AR",
-                                            "et", "fa", "fi", "fr", "gl", "hi", "hr", "hu", "in", "it", "iw",
-                                            "ja", "ko", "ku", "mg", "nb", "nl", "nn", "pl", "pt", "pt_BR",
-                                            "ro", "ru", "sk", "sl", "sq", "sr", "sv", "tk", "tr", "uk", "vi",
-                                            "zh", "zh_TW" };
-**/
+    // Compiled Java property bundles are scanned directly from the jars/wars,
+    // so the language list is derived dynamically from the source PO dirs plus
+    // the ndt property files (see buildLangList()). The list below is only the
+    // fallback used when the build tree is not available.
+    private static final String[] BASE_LANGS = { "ar", "az", "bn", "bo", "cs", "da", "de", "el", "es", "et",
+                                                 "fa", "fi", "fr", "hi", "hu", "in", "it", "ja", "ko", "nb",
+                                                 "nl", "pl", "pt", "ro", "ru", "sk", "sl", "sv", "tr", "uk",
+                                                 "vi", "zh" };
 
+    // Non-Java / non-compiled resources. Property and po files are scanned for
+    // existence per language; the ndt property files are included here.
+    // debian/po is intentionally omitted: the directory is empty in this tree.
     private static final String[] FILES = { "core/java/src/gnu/getopt/MessagesBundle.properties",
                                             "installer/resources/readme/readme.html",               // no country variants supported
                                             "installer/resources/eepsite/docroot/help/index.html",
                                             "installer/resources/locale-man/man.po",                // non-Java
                                             "installer/resources/locale/po/messages.po",            // non-Java
-                                            "debian/po/.po" };                                      // non-Java
+                                            "apps/routerconsole/java/src/edu/internet2/ndt/locale/Tcpbw100_msgs.properties" }; // property, non-Java
+
+    // Source trees scanned to derive the language list (relative to the build dir,
+    // which is one level below the project root).
+    private static final String[] PO_DIRS = { "apps/routerconsole/locale", "apps/susidns/locale",
+                                              "apps/i2psnark/locale", "apps/i2ptunnel/locale",
+                                              "apps/susimail/locale", "core/locale", "router/locale",
+                                              "installer/resources/locale/po", "installer/resources/locale-man",
+                                              "apps/routerconsole/java/src/edu/internet2/ndt/locale" };
 
     public TranslationStatus(I2PAppContext ctx, boolean html) {
         _context = ctx;
         _html = html;
         buf = new StringBuilder(65536);
         buf2 = new StringBuilder(4096);
-        langs = Arrays.asList(LANGS);
+        langs = buildLangList();
         counts = new ObjectCounterUnsafe<>();
         bundles = new ObjectCounterUnsafe<>();
         foundLangs = new HashSet<>(64);
+    }
+
+    /**
+     * Build the language list. Scans the source PO dirs and the ndt property
+     * directory for the set of locale codes actually present, then sorts them
+     * alphabetically. Falls back to BASE_LANGS if the build tree is not found.
+     *
+     * @return immutable, alphabetically sorted list of language codes
+     */
+    private static List<String> buildLangList() {
+        Set<String> found = new TreeSet<>();
+        boolean any = false;
+        for (String dir : PO_DIRS) {
+            File d = new File("..", dir);
+            if (!d.isDirectory())
+                continue;
+            File[] files = d.listFiles();
+            if (files == null)
+                continue;
+            for (File f : files) {
+                String name = f.getName();
+                String code = localeFromFileName(name);
+                if (code != null) {
+                    found.add(code);
+                    any = true;
+                }
+            }
+        }
+        if (!any)
+            return Collections.unmodifiableList(Arrays.asList(BASE_LANGS));
+        return Collections.unmodifiableList(new ArrayList<>(found));
+    }
+
+    /**
+     * Extract the locale code from a translation file name, or null if it is
+     * not a translation file. Handles messages_xx.po, man_xx.po and
+     * Tcpbw100_msgs_xx.properties (and the en template, which is skipped).
+     *
+     * @param name file name
+     * @return locale code (e.g. "ar", "zh_TW") or null
+     */
+    private static String localeFromFileName(String name) {
+        String code = null;
+        if (name.startsWith("messages_") && name.endsWith(".po"))
+            code = name.substring(9, name.length() - 3);
+        else if (name.startsWith("man_") && name.endsWith(".po"))
+            code = name.substring(4, name.length() - 3);
+        else if (name.startsWith("Tcpbw100_msgs_") && name.endsWith(".properties"))
+            code = name.substring(14, name.length() - 11);
+        if (code == null || code.isEmpty() || code.equals("en"))
+            return null;
+        return code;
     }
 
 /*
@@ -147,6 +209,10 @@ public class TranslationStatus {
             String pclz = "";
             int max = 0;
             List<ResourceBundle> buns = new ArrayList<>(64);
+            // key count of the English (template) bundle for this resource,
+            // used as the reference for the % translated so fallback masking
+            // cannot report a locale as more complete than the source.
+            int enTot = -1;
             for (String name : classes) {
                 name = name.substring(0, name.length() - 6);  // .class
                 int c = name.indexOf('_');
@@ -156,45 +222,38 @@ public class TranslationStatus {
                     // output goes here, we have to make two passes to find the max
                     // number of entries to generate a true %
                     if (!buns.isEmpty()) {
-                        report(pclz, max, buns);
+                        report(pclz, max, enTot, buns);
                         resources++;
                     }
                     grandtot += max;
                     pclz = clz;
                     max = 0;
+                    enTot = -1;
                     buns.clear();
                 }
                 String s = name.substring(c + 1);
-                String lang;
-                String country;
-                Locale loc;
-                c = s.indexOf("_");
-                if (c < 0) {
-                    lang = s;
-                    country = null;
-                    loc = new Locale(lang);
-                } else {
-                    lang = s.substring(0, c);
-                    country = s.substring(c + 1);
-                    loc = new Locale(lang, country);
-                }
+                Locale loc = localeFromString(s);
                 foundLangs.add(loc);
                 ResourceBundle bun;
                 try {
                     bun = ResourceBundle.getBundle(clz, loc, cl);
                 } catch (Exception e) {
-                    System.err.println("FAILED loading class " + clz + " lang " + lang + " country " + country);
+                    System.err.println("FAILED loading class " + clz + " lang " + loc);
                     continue;
                 }
                 // in this pass we just calculate the max strings
                 buns.add(bun);
-                Set<String> keys = bun.keySet();
-                int tot = keys.size() - 1; // subtract empty header string
+                int tot = bun.keySet().size() - 1; // subtract empty header string
+                if (loc.getLanguage().isEmpty() || loc.getLanguage().equals("en")) {
+                    // English / default template bundle
+                    if (enTot < 0)
+                        enTot = tot;
+                }
                 if (tot > max)
                     max = tot;
             }
             if (!buns.isEmpty()) {
-                report(pclz, max, buns);
+                report(pclz, max, enTot, buns);
                 grandtot += max;
                 resources++;
             }
@@ -225,8 +284,7 @@ public class TranslationStatus {
             buf2.append("Code\t   %TX\tMissing\tLanguage\n");
             buf2.append("----\t------\t--------\t-------\n");
         }
-        List<Locale> sorted = counts.sortedObjects();
-        for (Locale loc : sorted) {
+        for (Locale loc : sortedLocales(counts.objects())) {
             String s = loc.getLanguage();
             String lang = loc.getDisplayLanguage();
             String country = loc.getCountry();
@@ -267,7 +325,7 @@ public class TranslationStatus {
         return rv;
     }
 
-    private void report(String clz, int max, List<ResourceBundle> buns) {
+    private void report(String clz, int max, int enTot, List<ResourceBundle> buns) {
         if (clz.endsWith(".messages")) {clz = clz.substring(0, clz.length() - 9);}
         String classTitle = "";
         String location = "";
@@ -325,9 +383,10 @@ public class TranslationStatus {
                .append("</thead>\n<tbody>\n");
         }
         Set<String> missing = new TreeSet<>(langs);
+        // reference total: the English template if found, otherwise the largest bundle
+        int ref = enTot >= 0 ? enTot : max;
         for (ResourceBundle bun : buns) {
-            Set<String> keys = bun.keySet();
-            int tot = keys.size() - 1; // subtract empty header string
+            int tot = bun.keySet().size() - 1; // subtract empty header string
             Locale loc = bun.getLocale();
             String lang = loc.getLanguage();
             String country = loc.getCountry();
@@ -342,15 +401,16 @@ public class TranslationStatus {
             missing.remove(lang);
             counts.add(loc, tot);
             bundles.increment(loc);
-            boolean incomplete = tot < max;
+            // incomplete if the bundle has fewer real entries than the reference (en) template
+            boolean incomplete = tot < ref;
             String row = incomplete ? "<tr class=incomplete>" : "<tr class=complete>";
             if (_html) {
                 buf.append(String.format(Locale.US, "%s<td>%s %s %s</td><td>%s</td><td>%4d</td>" +
                                                     "<td><span class=percentBarOuter title=\"%5.1f%%\">" +
                                                     "<span class=percentBarInner style=\"width:%5.1f%%\"></span></span></td></tr>%n",
-                                                     row, flag, dlang, country, lang, tot, 100f * tot / max, 100f * tot / max));
+                                                     row, flag, dlang, country, lang, tot, 100f * tot / ref, 100f * tot / ref));
             } else {
-                buf.append(String.format("%s\t%4d\t%5.1f%%\t%s %s%n", lang, tot, 100f * tot / max, dlang, country));
+                buf.append(String.format("%s\t%4d\t%5.1f%%\t%s %s%n", lang, tot, 100f * tot / ref, dlang, country));
             }
         }
         buf.append("</tbody>");
@@ -361,22 +421,11 @@ public class TranslationStatus {
             else
                 buf.append("Not translated:\n");
             for (String s : missing) {
-                int count = missing.size();
-                String lang;
-                String country;
-                Locale loc;
-                int c = s.indexOf("_");
-                if (c < 0) {
-                    lang = s;
-                    country = "";
-                    loc = new Locale(lang);
-                } else {
-                    lang = s.substring(0, c);
-                    country = s.substring(c + 1);
-                    loc = new Locale(lang, country);
-                    country = " (" + loc.getDisplayCountry() + ')';
-                }
+                Locale loc = localeFromString(s);
                 String dlang = loc.getDisplayLanguage();
+                String country = "";
+                if (s.indexOf('_') >= 0)
+                    country = " (" + loc.getDisplayCountry() + ')';
                 if (_html) {buf.append(" &bullet; ").append(dlang);}
                 else {buf.append(s).append("\t--\t--\t").append(dlang).append(country).append('\n');}
             }
@@ -398,8 +447,12 @@ public class TranslationStatus {
             buf.append("\nOther Resources\n\n");
         }
         for (String file : FILES) {
-            boolean nonJava = file.startsWith("debian/po/") ||
-                              file.startsWith("installer/resources/locale-man/") ||
+            boolean nonJava = file.startsWith("installer/resources/locale-man/") ||
+                              file.startsWith("installer/resources/locale/po/") ||
+                              file.contains("ndt/locale/");
+            // installer/man/po use the gettext "id" code for Indonesian, while the
+            // ndt property files use the Java "in" code; only remap for the former.
+            boolean remapIn = file.startsWith("installer/resources/locale-man/") ||
                               file.startsWith("installer/resources/locale/po/");
             boolean noCountries = file.startsWith("apps/routerconsole/resources/docs/");
             int dot = file.lastIndexOf(".");
@@ -421,10 +474,10 @@ public class TranslationStatus {
                    .append("Code\tTX\tLanguage\n")
                    .append("----\t--\t--------\n");
             }
-            for (String lg : LANGS) {
+            for (String lg : langs) {
                 String njlg = lg;
-                if (nonJava) {
-                    // non-java (debian, installer, man) undo conversion
+                if (remapIn) {
+                    // installer/man/po use gettext locale codes
                     if (lg.equals("in"))
                         njlg = "id";
                     if (lg.equals("iw"))
@@ -437,25 +490,15 @@ public class TranslationStatus {
                     sf = njlg + sfx;
                 File f = new File(dir, sf);
                 boolean ok = f.exists();
-                String lang;
-                String country;
-                Locale loc;
-                int c = lg.indexOf("_");
-                if (c < 0) {
-                    lang = lg;
-                    country = "";
-                    loc = new Locale(lang);
-                } else {
-                    lang = lg.substring(0, c);
-                    country = lg.substring(c + 1);
-                    loc = new Locale(lang, country);
-                    country = " (" + loc.getDisplayCountry() + ')';
-                }
+                Locale loc = localeFromString(lg);
+                String lang = loc.getLanguage();
+                String country = loc.getCountry();
                 String dlang = loc.getDisplayLanguage();
-                String sok = (noCountries && c >= 0) ? "n/a" : (ok ? "yes" : "no");
+                if (country.length() > 0)
+                    country = " (" + loc.getDisplayCountry() + ')';
+                String sok = (noCountries && lg.indexOf('_') >= 0) ? "n/a" : (ok ? "yes" : "no");
                 boolean complete = sok.equals("yes");
-                String row = "<tr class=incomplete>";
-                if (complete) {row = "<tr class=complete>";}
+                String row = complete ? "<tr class=complete>" : "<tr class=incomplete>";
                 String cc = getCountryCode(loc);
                 boolean isTibet = cc.equals("bo");
                 String flag = "<span class=langflag><img class=tx_flag src=\"/flags.jsp?c=" + (isTibet ? "xt" : cc) + "\" width=24></span>";
@@ -465,7 +508,7 @@ public class TranslationStatus {
                 } else {
                     buf.append(lg).append('\t').append(sok).append('\t').append(dlang).append(country).append("\n");
                 }
-                if (ok || (noCountries && c >= 0))
+                if (ok || (noCountries && lg.indexOf('_') >= 0))
                     bundles.increment(loc);
                 if (ok)
                     foundLangs.add(loc);
@@ -474,6 +517,39 @@ public class TranslationStatus {
                 buf.append("</table>\n<hr>\n");
         }
         if (_html) {buf.append("</span>\n");}  // close containing #tx_summary span
+        return rv;
+    }
+
+    /**
+     * Parse a locale code string (e.g. "ar" or "zh_TW") into a Locale.
+     *
+     * @param s locale code
+     * @return Locale
+     */
+    private static Locale localeFromString(String s) {
+        int c = s.indexOf('_');
+        if (c < 0)
+            return new Locale(s);
+        return new Locale(s.substring(0, c), s.substring(c + 1));
+    }
+
+    /**
+     * Return the locales sorted alphabetically by language code (then country),
+     * rather than by descending count. Used for the summary table.
+     *
+     * @param locales locales to sort
+     * @return alphabetically sorted list
+     */
+    private static List<Locale> sortedLocales(Set<Locale> locales) {
+        List<Locale> rv = new ArrayList<>(locales);
+        Collections.sort(rv, new Comparator<Locale>() {
+            @Override
+            public int compare(Locale l, Locale r) {
+                int rv = l.getLanguage().compareTo(r.getLanguage());
+                if (rv != 0) return rv;
+                return l.getCountry().compareTo(r.getCountry());
+            }
+        });
         return rv;
     }
 
