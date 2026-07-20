@@ -1,6 +1,9 @@
 package net.i2p.router.networkdb.kademlia;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -26,7 +29,8 @@ import net.i2p.util.SimpleTimer2;
  */
 class LookupBanHammer {
     // Concurrent map tracking timestamps of recent requests per ReplyTunnel for burst + sustained detection.
-    // Uses a unified 30-second sliding window (trimmed inline during shouldBan()) so no periodic clearing is needed.
+    // Uses a unified 30-second sliding window (trimmed inline during shouldBan()); the periodic Cleaner bounds
+    // this map by size so it cannot grow without limit as distinct active lookup sources accumulate.
     // Each value is a ConcurrentLinkedDeque of epoch-millisecond timestamps.
     private final ConcurrentHashMap<ReplyTunnel, ConcurrentLinkedDeque<Long>> burstTimestamps;
 
@@ -109,8 +113,8 @@ class LookupBanHammer {
      * <p>
      * Uses a single 30-second sliding window per key for both burst detection
      * (entries in last 1 second) and sustained-rate detection (total entries).
-     * Inline trimming removes entries older than 30s, avoiding the need for
-     * periodic burstTimestamps clearing and the associated GC churn.
+     * Inline trimming removes entries older than 30s; the periodic Cleaner additionally
+     * bounds the map by size so idle and least-active sources are eventually evicted.
      *
      * @param key non-null Hash representing the requester identifying key
      * @param id TunnelId of the target reply tunnel, or null if direct lookups
@@ -204,11 +208,10 @@ class LookupBanHammer {
 
     /**
      * Periodic cleanup task that removes expired bans and prunes stale
-     * burstTimestamps entries. The burstTimestamps map entries accumulate
-     * indefinitely unless we age them out here — "self-cleaning via sliding
-     * window" in shouldBan() only trims deque contents, not map entries.
-     * Without this, every unique (Hash, TunnelId) pair that ever sends a
-     * lookup creates a permanent ReplyTunnel entry, leaking ~24 bytes each.
+     * burstTimestamps entries. The sliding window in shouldBan() only trims
+     * deque contents, not map entries, and never evicts continuously-active
+     * sources — so once the tracked-source count exceeds the cap we evict the
+     * least-recently-active entries here to keep the map bounded.
      */
     private class Cleaner extends SimpleTimer2.TimedEvent {
         public Cleaner() { super(SimpleTimer2.getInstance()); }
@@ -225,6 +228,35 @@ class LookupBanHammer {
                     Long last = entry.getValue().peekLast();
                     return last == null || last < cutoff;
                 });
+            }
+            // Size-bound burstTimestamps. The map otherwise grows without limit, because every
+            // distinct (Hash, TunnelId) pair that performs lookups retains an entry for as long
+            // as it stays active (continuously-active sources are never caught by the 30s idle
+            // check above). When over the cap, evict the least-recently-active sources (oldest
+            // last-activity) so the most active requesters — the ones DoS protection cares about
+            // — stay tracked. The eviction cutoff is estimated from a fixed-size sample of
+            // last-activity timestamps (no full sort), then applied in a single pass.
+            if (burstTimestamps.size() > _maxEntries) {
+                int over = burstTimestamps.size() - _maxEntries;
+                List<Long> sample = new ArrayList<Long>();
+                int s = 0;
+                for (ConcurrentLinkedDeque<Long> d : burstTimestamps.values()) {
+                    if (s++ >= 8192)
+                        break;
+                    Long last = d.peekLast();
+                    sample.add(last == null ? Long.MIN_VALUE : last);
+                }
+                if (!sample.isEmpty()) {
+                    Collections.sort(sample);
+                    int idx = (over * sample.size()) / burstTimestamps.size();
+                    if (idx >= sample.size())
+                        idx = sample.size() - 1;
+                    final long cutoff = sample.get(idx);
+                    burstTimestamps.entrySet().removeIf(e -> {
+                        Long last = e.getValue().peekLast();
+                        return last != null && last <= cutoff;
+                    });
+                }
             }
             // Under heavy load, clean more frequently to stay bounded
             long interval = _cleanTimeMs;
