@@ -96,9 +96,21 @@ class GraphRenderer {
             new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[] {1, 1}, 0);
     private static final Pattern CAMEL_CASE_PATTERN = Pattern.compile("(?<=[a-z])([A-Z])");
 
-    GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    String[] sysfonts = e.getAvailableFontFamilyNames();
-    List<String> fontlist = Arrays.asList(sysfonts);
+    /**
+     *  SimpleDateFormats are expensive to construct and not thread-safe, so
+     *  cache one per thread for each timezone variant instead of allocating
+     *  new ones on every render() call.
+     */
+    private static final ThreadLocal<SimpleDateFormat> LOCAL_DATE_FMT =
+            ThreadLocal.withInitial(() -> new SimpleDateFormat("dd MMM HH:mm", Locale.US));
+    private static final ThreadLocal<SimpleDateFormat> UTC_DATE_FMT = ThreadLocal.withInitial(() -> {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM HH:mm", Locale.US);
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return sdf;
+    });
+
+    private static final GraphicsEnvironment GE = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    private static final List<String> FONTLIST = Arrays.asList(GE.getAvailableFontFamilyNames());
 
     public GraphRenderer(I2PAppContext ctx, GraphListener lsnr) {
         _log = ctx.logManager().getLog(GraphRenderer.class);
@@ -207,60 +219,7 @@ class GraphRenderer {
             if (useUtc) {
                 def.setTimeZone(TimeZone.getTimeZone("UTC"));
             }
-            // sidebar minigraph
-            if ((width == 250 && height == 50 && hideTitle && hideLegend && hideGrid)
-                    || (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid)) {
-                def.setColor(ElementsNames.xaxis, TRANSPARENT);
-                def.setColor(ElementsNames.yaxis, TRANSPARENT);
-                def.setColor(ElementsNames.frame, TRANSPARENT);
-                // Override defaults (dark themes)
-            } else if (theme.equals("midnight")) {
-                def.setColor(ElementsNames.font, FONT_COLOR_MIDNIGHT);
-                def.setColor(ElementsNames.xaxis, AXIS_COLOR_MIDNIGHT);
-                def.setColor(ElementsNames.yaxis, AXIS_COLOR_MIDNIGHT);
-            } else if (theme.equals("dark")) {
-                def.setColor(ElementsNames.font, FONT_COLOR_DARK);
-                def.setColor(ElementsNames.xaxis, AXIS_COLOR_DARK);
-                def.setColor(ElementsNames.yaxis, AXIS_COLOR_DARK);
-            }
-            if (theme.equals("midnight") || theme.equals("dark")) {
-                def.setColor(ElementsNames.back, BACK_COLOR_DARK);
-                def.setColor(ElementsNames.canvas, TRANSPARENT);
-            } else {
-                def.setColor(ElementsNames.back, BACK_COLOR);
-            }
-            if (theme.equals("midnight") || theme.equals("dark")) {
-                def.setColor(ElementsNames.shadea, TRANSPARENT);
-                def.setColor(ElementsNames.shadeb, TRANSPARENT);
-                if (theme.equals("dark")) {
-                    def.setColor(ElementsNames.grid, GRID_COLOR_DARK2);
-                    def.setColor(ElementsNames.mgrid, MGRID_COLOR_DARK);
-                } else if (theme.equals("midnight")) {
-                    def.setColor(ElementsNames.grid, GRID_COLOR_MIDNIGHT);
-                    def.setColor(ElementsNames.mgrid, MGRID_COLOR_MIDNIGHT);
-                }
-                def.setColor(ElementsNames.frame, FRAME_COLOR_DARK);
-                def.setColor(ElementsNames.arrow, ARROW_COLOR_DARK);
-            } else {
-                // Override defaults (light themes)
-                def.setColor(ElementsNames.shadea, SHADEA_COLOR);
-                def.setColor(ElementsNames.shadeb, SHADEB_COLOR);
-                def.setColor(ElementsNames.grid, GRID_COLOR);
-                def.setColor(ElementsNames.mgrid, MGRID_COLOR);
-                def.setColor(ElementsNames.font, FONT_COLOR);
-                def.setColor(ElementsNames.frame, FRAME_COLOR);
-            }
-
-            if (width < 400 || height < 200 || periodCount < 120) {
-                def.setColor(ElementsNames.grid, GRID_COLOR_HIDDEN);
-                if (theme.equals("midnight")) {
-                    def.setColor(ElementsNames.mgrid, GRID_COLOR_MIDNIGHT);
-                } else if (theme.equals("dark")) {
-                    def.setColor(ElementsNames.mgrid, GRID_COLOR_DARK);
-                } else {
-                    def.setColor(ElementsNames.mgrid, GRID_COLOR);
-                }
-            }
+            applyTheme(def, theme, width, height, hideTitle, hideLegend, hideGrid, periodCount);
 
             String lang = Messages.getLanguage(_context);
             if (lang == null) {
@@ -282,60 +241,60 @@ class GraphRenderer {
             }
 
             /* CJK support */
-            if ("zh".equals(Messages.getLanguage(_context))) {
-                if (fontlist.contains("Noto Sans SC")) {
+            if ("zh".equals(lang)) {
+                if (FONTLIST.contains("Noto Sans SC")) {
                     DEFAULT_TITLE_FONT_NAME = "Noto Sans SC";
-                } else if (fontlist.contains("Noto Sans CJK SC")) {
+                } else if (FONTLIST.contains("Noto Sans CJK SC")) {
                     DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK SC";
-                } else if (fontlist.contains("Source Han Sans SC")) {
+                } else if (FONTLIST.contains("Source Han Sans SC")) {
                     DEFAULT_TITLE_FONT_NAME = "Source Han Sans SC";
                 } else {
                     DEFAULT_TITLE_FONT_NAME = "Dialog";
                 }
-                if (fontlist.contains("Noto Sans Mono SC")) {
+                if (FONTLIST.contains("Noto Sans Mono SC")) {
                     DEFAULT_FONT_NAME = "Noto Sans Mono SC";
                     DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono SC";
-                } else if (fontlist.contains("Noto Sans Mono CJK SC")) {
+                } else if (FONTLIST.contains("Noto Sans Mono CJK SC")) {
                     DEFAULT_FONT_NAME = "Noto Sans Mono CJK SC";
                     DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono CJK SC";
                 } else {
                     DEFAULT_FONT_NAME = "Monospaced";
                     DEFAULT_LEGEND_FONT_NAME = "Monospaced";
                 }
-            } else if ("jp".equals(Messages.getLanguage(_context))) {
-                if (fontlist.contains("Noto Sans JP")) {
+            } else if ("jp".equals(lang)) {
+                if (FONTLIST.contains("Noto Sans JP")) {
                     DEFAULT_TITLE_FONT_NAME = "Noto Sans JP";
-                } else if (fontlist.contains("Noto Sans CJK JP")) {
+                } else if (FONTLIST.contains("Noto Sans CJK JP")) {
                     DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK JP";
-                } else if (fontlist.contains("Source Han Sans JP")) {
+                } else if (FONTLIST.contains("Source Han Sans JP")) {
                     DEFAULT_TITLE_FONT_NAME = "Source Han Sans JP";
                 } else {
                     DEFAULT_TITLE_FONT_NAME = "Dialog";
                 }
-                if (fontlist.contains("Noto Sans Mono JP")) {
+                if (FONTLIST.contains("Noto Sans Mono JP")) {
                     DEFAULT_FONT_NAME = "Noto Sans Mono JP";
                     DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono JP";
-                } else if (fontlist.contains("Noto Sans Mono CJK JP")) {
+                } else if (FONTLIST.contains("Noto Sans Mono CJK JP")) {
                     DEFAULT_FONT_NAME = "Noto Sans Mono CJK JP";
                     DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono CJK JP";
                 } else {
                     DEFAULT_FONT_NAME = "Monospaced";
                     DEFAULT_LEGEND_FONT_NAME = "Monospaced";
                 }
-            } else if ("ko".equals(Messages.getLanguage(_context))) {
-                if (fontlist.contains("Noto Sans KO")) {
+            } else if ("ko".equals(lang)) {
+                if (FONTLIST.contains("Noto Sans KO")) {
                     DEFAULT_TITLE_FONT_NAME = "Noto Sans KO";
-                } else if (fontlist.contains("Noto Sans CJK KO")) {
+                } else if (FONTLIST.contains("Noto Sans CJK KO")) {
                     DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK KO";
-                } else if (fontlist.contains("Source Han Sans KO")) {
+                } else if (FONTLIST.contains("Source Han Sans KO")) {
                     DEFAULT_TITLE_FONT_NAME = "Source Han Sans KO";
                 } else {
                     DEFAULT_TITLE_FONT_NAME = "Dialog";
                 }
-                if (fontlist.contains("Noto Sans Mono KO")) {
+                if (FONTLIST.contains("Noto Sans Mono KO")) {
                     DEFAULT_FONT_NAME = "Noto Sans Mono KO";
                     DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono KO";
-                } else if (fontlist.contains("Noto Sans Mono CJK KO")) {
+                } else if (FONTLIST.contains("Noto Sans Mono CJK KO")) {
                     DEFAULT_FONT_NAME = "Noto Sans Mono CJK KO";
                     DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono CJK KO";
                 } else {
@@ -363,102 +322,10 @@ class GraphRenderer {
             def.setMinValue(0d);
 
             String name = _listener.getRate().getRateStat().getName();
-            String graphTitle = name;
-            if (name.startsWith("tunnel.participatingTunnels")) {
-                graphTitle = graphTitle.replace("tunnel.participatingTunnels", "[Transit] Tunnel Count");
-            }
-            if (name.startsWith("tunnel.participatingMessage")) {
-                graphTitle = graphTitle.replace("tunnel.participatingMessage", "[Transit] Message");
-            } else if (name.startsWith("tunnel.participating")) {
-                graphTitle = graphTitle.replace("tunnel.participating", "[Transit]");
-            } else if (name.startsWith("Tunnel.participating")) {
-                graphTitle = graphTitle.replace("Tunnel.participating", "[Transit]");
-            }
-            if (name.startsWith("router.")) {
-                graphTitle = graphTitle.replace("router.", "[Router] ");
-            }
-            if (name.startsWith("bw.")) {
-                graphTitle = graphTitle.replace("bw.", "[Router] ");
-            }
-            if (name.startsWith("Bandwidth usage")) {
-                graphTitle = graphTitle.replace("Bandwidth usage", "[Router] Bandwidth Usage");
-            }
-            if (name.startsWith("tunnel.buildRatio.exploratory.")) {
-                graphTitle = graphTitle.replace("tunnel.buildRatio.exploratory.", "[Exploratory] Build Ratio");
-            }
-            if (name.startsWith("tunnel.buildExploratory")) {
-                graphTitle = graphTitle.replace("tunnel.buildExploratory", "[Exploratory] Build");
-            }
-            if (name.startsWith("tunnel.buildClient")) {
-                graphTitle = graphTitle.replace("tunnel.buildClient", "[Tunnel] BuildClient");
-            } else if (name.startsWith("tunnel.build")) {
-                graphTitle = graphTitle.replace("tunnel.build", "[Tunnel] Build");
-            } else if (name.startsWith("tunnel.")) {
-                graphTitle = graphTitle.replace("tunnel.", "[Tunnel] ");
-            }
-            if (name.contains("MessageCountAvg")) {
-                graphTitle = graphTitle.replace("MessageCountAvg", "Messsage Count Average");
-            }
-            if (name.startsWith("netDb.")) {
-                graphTitle = graphTitle.replace("netDb.", "[NetDb] ");
-            }
-            if (name.startsWith("jobQueue.")) {
-                graphTitle = graphTitle.replace("jobQueue.", "[JobQueue] ");
-            }
-            if (name.startsWith("udp.")) {
-                graphTitle = graphTitle.replace("udp.", "[UDP] ");
-            }
-            if (name.startsWith("ntcp.")) {
-                graphTitle = graphTitle.replace("ntcp.", "[NTCP] ");
-            }
-            if (name.startsWith("transport.")) {
-                graphTitle = graphTitle.replace("transport.", "[Transport] ");
-            }
-            if (name.startsWith("client.")) {
-                graphTitle = graphTitle.replace("client.", "[Client] ");
-            }
-            if (name.startsWith("peer.")) {
-                graphTitle = graphTitle.replace("peer.", "[Peer] ");
-            }
-            if (name.startsWith("prng.")) {
-                graphTitle = graphTitle.replace("prng.", "[Crypto] pnrg.");
-            }
-            if (name.startsWith("crypto.")) {
-                graphTitle = graphTitle.replace("crypto.", "[Crypto] ");
-            }
-            if (name.startsWith("bwLimiter.")) {
-                graphTitle = graphTitle.replace("bwLimiter.", "[BWLimiter] ");
-            }
-            if (name.startsWith("codel.")) {
-                graphTitle = graphTitle.replace("codel.", "[Router] CODEL.");
-            }
-            if (name.startsWith("stream.")) {
-                graphTitle = graphTitle.replace("stream.", "[Stream] ");
-            }
-            if (name.equals("clock.skew")) {
-                graphTitle = graphTitle.replace("clock.skew", "[Router] Clock Skew");
-            }
-            if (name.endsWith("InBps")) {
-                graphTitle = graphTitle.replace("InBps", "Inbound B/s");
-            }
-            if (name.endsWith("OutBps")) {
-                graphTitle = graphTitle.replace("OutBps", "Outbound B/s");
-            }
-            if (name.endsWith("Bps")) {
-                graphTitle = graphTitle.replace("Bps", "B/s");
-            }
+            String graphTitle = deriveTitle(name);
 
             boolean singleDecimalPlace = true;
             boolean noDecimalPlace = false;
-            graphTitle = CSSHelper.StringFormatter.capitalizeWord(graphTitle);
-            graphTitle = graphTitle
-                    .replace("[Tunnel] Tunnel", "[Tunnel]")
-                    .replace("Tunnel.participating", "[Transit]")
-                    .replace("[Tunnel] Participating Tunnels", "[Transit] Tunnel Count")
-                    .replace("Cpu", "CPU")
-                    .replace("CPULoad", "CPU Load")
-                    .replace(" Avg", " Average")
-                    .replace("[Tunnel]Build", "[Tunnel] Build");
 
             // heuristic to set K=1024
             if ((name.toLowerCase().indexOf("size") >= 0
@@ -644,16 +511,8 @@ class GraphRenderer {
                 }
             }
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM HH:mm", Locale.US);
-            if (useUtc) {
-                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-            }
             String timeLabel = useUtc ? " UTC" : "";
-            String legendFormat = "dd MMM HH:mm";
-            SimpleDateFormat legendSdf = new SimpleDateFormat(legendFormat, Locale.US);
-            if (useUtc) {
-                legendSdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-            }
+            SimpleDateFormat legendSdf = useUtc ? UTC_DATE_FMT.get() : LOCAL_DATE_FMT.get();
             int count = 0;
             Color RESTART_COLOR =
                     theme.equals("midnight") || theme.equals("dark") ? RESTART_BAR_COLOR_DARK : RESTART_BAR_COLOR;
@@ -759,6 +618,171 @@ class GraphRenderer {
                 } catch (IOException ioe) { /* ignored */ }
             }
         }
+    }
+
+    /**
+     *  Apply the theme-specific colors to the graph definition.
+     *  Extracted from render() to keep that method manageable.
+     */
+    private static void applyTheme(RrdGraphDef def, String theme, int width, int height,
+                                   boolean hideTitle, boolean hideLegend, boolean hideGrid,
+                                   int periodCount) {
+        // sidebar minigraph
+        if ((width == 250 && height == 50 && hideTitle && hideLegend && hideGrid)
+                || (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid)) {
+            def.setColor(ElementsNames.xaxis, TRANSPARENT);
+            def.setColor(ElementsNames.yaxis, TRANSPARENT);
+            def.setColor(ElementsNames.frame, TRANSPARENT);
+        // Override defaults (dark themes)
+        } else if (theme.equals("midnight")) {
+            def.setColor(ElementsNames.font, FONT_COLOR_MIDNIGHT);
+            def.setColor(ElementsNames.xaxis, AXIS_COLOR_MIDNIGHT);
+            def.setColor(ElementsNames.yaxis, AXIS_COLOR_MIDNIGHT);
+        } else if (theme.equals("dark")) {
+            def.setColor(ElementsNames.font, FONT_COLOR_DARK);
+            def.setColor(ElementsNames.xaxis, AXIS_COLOR_DARK);
+            def.setColor(ElementsNames.yaxis, AXIS_COLOR_DARK);
+        }
+        if (theme.equals("midnight") || theme.equals("dark")) {
+            def.setColor(ElementsNames.back, BACK_COLOR_DARK);
+            def.setColor(ElementsNames.canvas, TRANSPARENT);
+        } else {
+            def.setColor(ElementsNames.back, BACK_COLOR);
+        }
+        if (theme.equals("midnight") || theme.equals("dark")) {
+            def.setColor(ElementsNames.shadea, TRANSPARENT);
+            def.setColor(ElementsNames.shadeb, TRANSPARENT);
+            if (theme.equals("dark")) {
+                def.setColor(ElementsNames.grid, GRID_COLOR_DARK2);
+                def.setColor(ElementsNames.mgrid, MGRID_COLOR_DARK);
+            } else if (theme.equals("midnight")) {
+                def.setColor(ElementsNames.grid, GRID_COLOR_MIDNIGHT);
+                def.setColor(ElementsNames.mgrid, MGRID_COLOR_MIDNIGHT);
+            }
+            def.setColor(ElementsNames.frame, FRAME_COLOR_DARK);
+            def.setColor(ElementsNames.arrow, ARROW_COLOR_DARK);
+        } else {
+            // Override defaults (light themes)
+            def.setColor(ElementsNames.shadea, SHADEA_COLOR);
+            def.setColor(ElementsNames.shadeb, SHADEB_COLOR);
+            def.setColor(ElementsNames.grid, GRID_COLOR);
+            def.setColor(ElementsNames.mgrid, MGRID_COLOR);
+            def.setColor(ElementsNames.font, FONT_COLOR);
+            def.setColor(ElementsNames.frame, FRAME_COLOR);
+        }
+
+        if (width < 400 || height < 200 || periodCount < 120) {
+            def.setColor(ElementsNames.grid, GRID_COLOR_HIDDEN);
+            if (theme.equals("midnight")) {
+                def.setColor(ElementsNames.mgrid, GRID_COLOR_MIDNIGHT);
+            } else if (theme.equals("dark")) {
+                def.setColor(ElementsNames.mgrid, GRID_COLOR_DARK);
+            } else {
+                def.setColor(ElementsNames.mgrid, GRID_COLOR);
+            }
+        }
+    }
+
+    /**
+     *  Derive a human-readable graph title from the rate stat name.
+     *  Pure function — no side effects — extracted from render() so the
+     *  (large) prefix/substring rewriting is isolated and testable.
+     */
+    private static String deriveTitle(String name) {
+        String graphTitle = name;
+        if (name.startsWith("tunnel.participatingTunnels")) {
+            graphTitle = graphTitle.replace("tunnel.participatingTunnels", "[Transit] Tunnel Count");
+        }
+        if (name.startsWith("tunnel.participatingMessage")) {
+            graphTitle = graphTitle.replace("tunnel.participatingMessage", "[Transit] Message");
+        } else if (name.startsWith("tunnel.participating")) {
+            graphTitle = graphTitle.replace("tunnel.participating", "[Transit]");
+        } else if (name.startsWith("Tunnel.participating")) {
+            graphTitle = graphTitle.replace("Tunnel.participating", "[Transit]");
+        }
+        if (name.startsWith("router.")) {
+            graphTitle = graphTitle.replace("router.", "[Router] ");
+        }
+        if (name.startsWith("bw.")) {
+            graphTitle = graphTitle.replace("bw.", "[Router] ");
+        }
+        if (name.startsWith("Bandwidth usage")) {
+            graphTitle = graphTitle.replace("Bandwidth usage", "[Router] Bandwidth Usage");
+        }
+        if (name.startsWith("tunnel.buildRatio.exploratory.")) {
+            graphTitle = graphTitle.replace("tunnel.buildRatio.exploratory.", "[Exploratory] Build Ratio");
+        }
+        if (name.startsWith("tunnel.buildExploratory")) {
+            graphTitle = graphTitle.replace("tunnel.buildExploratory", "[Exploratory] Build");
+        }
+        if (name.startsWith("tunnel.buildClient")) {
+            graphTitle = graphTitle.replace("tunnel.buildClient", "[Tunnel] BuildClient");
+        } else if (name.startsWith("tunnel.build")) {
+            graphTitle = graphTitle.replace("tunnel.build", "[Tunnel] Build");
+        } else if (name.startsWith("tunnel.")) {
+            graphTitle = graphTitle.replace("tunnel.", "[Tunnel] ");
+        }
+        if (name.contains("MessageCountAvg")) {
+            graphTitle = graphTitle.replace("MessageCountAvg", "Messsage Count Average");
+        }
+        if (name.startsWith("netDb.")) {
+            graphTitle = graphTitle.replace("netDb.", "[NetDb] ");
+        }
+        if (name.startsWith("jobQueue.")) {
+            graphTitle = graphTitle.replace("jobQueue.", "[JobQueue] ");
+        }
+        if (name.startsWith("udp.")) {
+            graphTitle = graphTitle.replace("udp.", "[UDP] ");
+        }
+        if (name.startsWith("ntcp.")) {
+            graphTitle = graphTitle.replace("ntcp.", "[NTCP] ");
+        }
+        if (name.startsWith("transport.")) {
+            graphTitle = graphTitle.replace("transport.", "[Transport] ");
+        }
+        if (name.startsWith("client.")) {
+            graphTitle = graphTitle.replace("client.", "[Client] ");
+        }
+        if (name.startsWith("peer.")) {
+            graphTitle = graphTitle.replace("peer.", "[Peer] ");
+        }
+        if (name.startsWith("prng.")) {
+            graphTitle = graphTitle.replace("prng.", "[Crypto] pnrg.");
+        }
+        if (name.startsWith("crypto.")) {
+            graphTitle = graphTitle.replace("crypto.", "[Crypto] ");
+        }
+        if (name.startsWith("bwLimiter.")) {
+            graphTitle = graphTitle.replace("bwLimiter.", "[BWLimiter] ");
+        }
+        if (name.startsWith("codel.")) {
+            graphTitle = graphTitle.replace("codel.", "[Router] CODEL.");
+        }
+        if (name.startsWith("stream.")) {
+            graphTitle = graphTitle.replace("stream.", "[Stream] ");
+        }
+        if (name.equals("clock.skew")) {
+            graphTitle = graphTitle.replace("clock.skew", "[Router] Clock Skew");
+        }
+        if (name.endsWith("InBps")) {
+            graphTitle = graphTitle.replace("InBps", "Inbound B/s");
+        }
+        if (name.endsWith("OutBps")) {
+            graphTitle = graphTitle.replace("OutBps", "Outbound B/s");
+        }
+        if (name.endsWith("Bps")) {
+            graphTitle = graphTitle.replace("Bps", "B/s");
+        }
+        graphTitle = CSSHelper.StringFormatter.capitalizeWord(graphTitle);
+        graphTitle = graphTitle
+                .replace("[Tunnel] Tunnel", "[Tunnel]")
+                .replace("Tunnel.participating", "[Transit]")
+                .replace("[Tunnel] Participating Tunnels", "[Transit] Tunnel Count")
+                .replace("Cpu", "CPU")
+                .replace("CPULoad", "CPU Load")
+                .replace(" Avg", " Average")
+                .replace("[Tunnel]Build", "[Tunnel] Build");
+        return graphTitle;
     }
 
     /** translate a string */
