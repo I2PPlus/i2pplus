@@ -19,6 +19,7 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
+import net.i2p.data.DataHelper;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
@@ -239,7 +240,7 @@ class SAMv3DatagramServer implements Handler {
 					}
 					// TODO too many allocations and copies. One here and one in Listener above.
 					byte[] data = new byte[is.available()];
-					is.read(data);
+					DataHelper.read(is, data);
 					Session sess = rec.getHandler().getSession();
 					if (sess != null) {
 						if (sendTags > 0 || tagThreshold > 0 || expires > 0 || !sendLeaseSet) {

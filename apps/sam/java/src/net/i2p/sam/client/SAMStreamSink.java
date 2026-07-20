@@ -394,6 +394,7 @@ public class SAMStreamSink {
                         _out.flush();
                     }
                 } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
                     break;
                 } catch (IOException ioe) {
                     break;
@@ -600,7 +601,7 @@ public class SAMStreamSink {
     private String handshake(OutputStream samOut, String version, boolean isMaster,
                              SAMEventHandler eventHandler, int mode, String user, String password,
                              String sopts) {
-        synchronized (samOut) {
+        synchronized (this) {
             try {
                 if (user != null && password != null)
                     samOut.write(("HELLO VERSION MIN=1.0 MAX=" + version + " USER=" + user + " PASSWORD=" + password + '\n').getBytes(StandardCharsets.UTF_8));
@@ -654,13 +655,15 @@ public class SAMStreamSink {
                             dest = s;
                         } else {
                             dest = "TRANSIENT";
-                            (new File(_destFile)).delete();
+                            if (!new File(_destFile).delete() && _log.shouldWarn())
+                                _log.warn("Failed to delete destination file " + _destFile);
                             if (_log.shouldDebug())
                                 _log.debug("Requesting new transient destination");
                         }
                     } else {
                         dest = "TRANSIENT";
-                        (new File(_destFile)).delete();
+                        if (!new File(_destFile).delete() && _log.shouldWarn())
+                            _log.warn("Failed to delete destination file " + _destFile);
                         if (_log.shouldDebug())
                             _log.debug("Requesting new transient destination");
                     }

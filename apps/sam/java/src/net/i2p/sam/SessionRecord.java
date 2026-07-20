@@ -21,7 +21,7 @@ class SessionRecord {
 	private final Properties m_props;
 	private ThreadGroup m_threadgroup;
 	private final SAMv3Handler m_handler;
-	private volatile long _lastAccessed;
+	private volatile long _lastAccessed; // NOSONAR volatile is correct: assigned and read as a timestamp, not read-modify-written
 
 	/**
 	 * Create a new session record.

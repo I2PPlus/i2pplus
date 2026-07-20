@@ -46,13 +46,13 @@ import java.io.Writer;
  */
 public class SAMBridge implements Runnable, ClientApp {
     private final Log _log;
-    private volatile ServerSocketChannel serverSocket;
+    private volatile ServerSocketChannel serverSocket; // NOSONAR volatile is correct: single-assignment visibility flag read by the accept loop
     private final String _listenHost;
     private final int _listenPort;
     private final Properties i2cpProps;
     private final boolean _useSSL;
     private final File _configFile;
-    private volatile Thread _runner;
+    private volatile Thread _runner; // NOSONAR volatile is correct: single-assignment visibility flag
     private final Object _v3DGServerLock = new Object();
     private SAMv3DatagramServer _v3DGServer;
     /**
@@ -74,7 +74,7 @@ public class SAMBridge implements Runnable, ClientApp {
      */
     private final Map<String, String> nameToPrivKeys;
     private final Set<Handler> _handlers;
-    private volatile SAMHandlerPool _handlerPool;
+    private volatile SAMHandlerPool _handlerPool; // NOSONAR volatile is correct: single-assignment visibility flag read by shutdown
 
     private volatile boolean acceptConnections = true;
 
@@ -639,12 +639,12 @@ public class SAMBridge implements Runnable, ClientApp {
             new SimpleTimer2.TimedEvent(I2PAppContext.getGlobalContext().simpleTimer2()) {
                 @Override
                 public void timeReached() {
-                    int removed = SAMv3Handler.sSessionsHash.removeStale(10 * 60 * 1000);
+                    int removed = SAMv3Handler.sSessionsHash.removeStale((long) 10 * 60 * 1000);
                     if (removed > 0) {
                         if (_log.shouldWarn())
                             _log.warn("Removed " + removed + " stale SAM session(s)");
                     }
-                    schedule(5 * 60 * 1000);
+                    schedule((long) 5 * 60 * 1000);
                 }
             }, 5 * 60 * 1000);
     }

@@ -334,7 +334,9 @@ class SAMv3Handler extends SAMv1Handler
             while (rec.getThreadGroup().activeCount() > 0 && System.currentTimeMillis() < deadline) {
                 try {
                     Thread.sleep(1000);
-                } catch (InterruptedException e) { /* ignored */ }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
             try {
                 rec.getThreadGroup().destroy();

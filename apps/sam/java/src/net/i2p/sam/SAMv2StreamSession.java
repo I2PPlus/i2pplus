@@ -16,6 +16,7 @@ import java.net.ConnectException;
 import java.net.NoRouteToHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -329,7 +330,9 @@ class SAMv2StreamSession extends SAMStreamSession {
                             _cache.release(data, false);
                         }
                     }
-                } catch (InterruptedException ie) { /* ignored */ } catch (IOException e) { /* ignored */ }
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                } catch (IOException e) { /* ignored */ }
             }
 
             synchronized (_data) {
@@ -407,13 +410,17 @@ class SAMv2StreamSession extends SAMStreamSession {
                         while (stillRunning && (!nolimit && totalReceived >= limit)) {
                             try {
                                 runningLock.wait();
-                            } catch (InterruptedException ie) { /* ignored */ }
+                            } catch (InterruptedException ie) {
+                                Thread.currentThread().interrupt();
+                            }
                         }
                         if (!stillRunning) break;
                     }
 
                     data.clear();
-                    read = Channels.newChannel(in).read(data);
+                    try (ReadableByteChannel ch = Channels.newChannel(in)) {
+                        read = ch.read(data);
+                    }
 
                     if (read == -1) {
                         if (_log.shouldDebug()) _log.debug("Handler " + id + ": connection closed");

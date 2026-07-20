@@ -344,7 +344,9 @@ abstract class SAMMessageSession implements SAMMessageSess {
                 while (stillRunning) {
                     try {
                         runningLock.wait();
-                    } catch (InterruptedException ie) { /* ignored */ }
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
             }
 

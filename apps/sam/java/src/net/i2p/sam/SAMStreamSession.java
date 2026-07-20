@@ -17,6 +17,7 @@ import java.net.ConnectException;
 import java.net.NoRouteToHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -159,7 +160,7 @@ class SAMStreamSession implements SAMMessageSess {
             allprops.setProperty("i2cp.dontPublishLeaseSet", "true");
         String name = allprops.getProperty("inbound.nickname");
         if (name == null || name.trim().isEmpty()) {
-                name = getClass().getSimpleName().equals("MasterSession") ? "SAM Mux Client" : "SAM TCP Client";
+                name = this instanceof MasterSession ? "SAM Mux Client" : "SAM TCP Client";
             allprops.setProperty("inbound.nickname", name);
         }
         String name2 = allprops.getProperty("outbound.nickname");
@@ -735,7 +736,9 @@ class SAMStreamSession implements SAMMessageSess {
 
                 while (stillRunning) {
                     (data).clear();
-                    read = Channels.newChannel(in).read(data);
+                    try (ReadableByteChannel ch = Channels.newChannel(in)) {
+                        read = ch.read(data);
+                    }
                     if (read == -1) {
                         if (_log.shouldDebug())
                             _log.debug("Handler " + id + ": connection closed");
@@ -941,7 +944,9 @@ class SAMStreamSession implements SAMMessageSess {
                             _cache.release(data);
                         }
                     }
-                } catch (InterruptedException ie) { /* ignored */ }
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
             }
             synchronized (_data) {
                 _data.clear();

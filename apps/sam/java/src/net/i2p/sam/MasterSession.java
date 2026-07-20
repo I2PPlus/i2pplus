@@ -393,7 +393,11 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
                 } catch (ConnectException ce) {
                     if (_log.shouldWarn())
                         _log.warn("Error accepting", ce);
-                    try { Thread.sleep(50); } catch (InterruptedException ie) { /* ignored */ }
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
                     continue;
                 } catch (I2PException ipe) {
                     if (_log.shouldWarn())

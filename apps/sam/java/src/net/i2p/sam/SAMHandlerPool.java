@@ -182,11 +182,13 @@ class SAMHandlerPool {
             _workers.awaitTermination(5, TimeUnit.SECONDS);
         } catch (InterruptedException ie) {
             _workers.shutdownNow();
+            Thread.currentThread().interrupt();
         }
         try {
             _connectors.awaitTermination(5, TimeUnit.SECONDS);
         } catch (InterruptedException ie) {
             _connectors.shutdownNow();
+            Thread.currentThread().interrupt();
         }
         try {
             _selector.close();

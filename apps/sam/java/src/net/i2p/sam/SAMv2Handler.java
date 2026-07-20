@@ -70,7 +70,7 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 			return (verMajor == 2);
 		}
 
-		SAMStreamSession newSAMStreamSession(String destKeystream, String direction, Properties props )
+		SAMStreamSession newSAMv2StreamSession(String destKeystream, String direction, Properties props )
 				throws IOException, DataFormatException, SAMException
 		{
 			return new SAMv2StreamSession(destKeystream, direction, props, this);

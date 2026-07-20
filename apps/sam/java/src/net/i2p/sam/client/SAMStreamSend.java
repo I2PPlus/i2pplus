@@ -269,7 +269,7 @@ public class SAMStreamSend {
     private String handshake(OutputStream samOut, String version, boolean isMaster,
                              SAMEventHandler eventHandler, int mode, String user, String password,
                              String opts) {
-        synchronized (samOut) {
+        synchronized (this) {
             try {
                 if (user != null && password != null)
                     samOut.write(("HELLO VERSION MIN=1.0 MAX=" + version + " USER=\"" + user.replace("\"", "\\\"") +
@@ -538,7 +538,11 @@ public class SAMStreamSend {
                             byte[] pkt = baos.toByteArray();
                             DatagramPacket p = new DatagramPacket(pkt, pkt.length, _dgSAM);
                             _dgSock.send(p);
-                            try { Thread.sleep(25); } catch (InterruptedException ie) { /* ignored */ }
+                            try {
+                                Thread.sleep(25);
+                            } catch (InterruptedException ie) {
+                                Thread.currentThread().interrupt();
+                            }
                         }
 
                         _totalSent += read;
@@ -579,7 +583,9 @@ public class SAMStreamSend {
             // closing the master socket too fast will kill the data socket flushing through
             try {
                 Thread.sleep(10000);
-            } catch (InterruptedException ie) { /* ignored */ }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
             if (_log.shouldDebug())
                 _log.debug("Runner exiting");
             if (toSend != _totalSent)

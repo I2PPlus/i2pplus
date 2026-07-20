@@ -124,6 +124,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
             // TODO there's no CoDel or expiration in this queue
             return _acceptQueue.take();
         } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
             ConnectException ce = new ConnectException("interrupted");
             ce.initCause(ie);
             throw ce;
@@ -154,7 +155,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
 
         I2PSocketOptions opts = socketMgr.buildOptions(props);
         if (props.getProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT) == null)
-            opts.setConnectTimeout(15 * 1000);
+            opts.setConnectTimeout((long) 15 * 1000);
         String fromPort = props.getProperty("FROM_PORT");
         if (fromPort != null) {
             try {
@@ -237,8 +238,10 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
                 handler.stealSocket();
 
                 ReadableByteChannel fromClient = handler.getClientSocket();
+                // NOSONAR channel ownership transferred to the Pipe thread, which closes it in its finally block
                 ReadableByteChannel fromI2P = Channels.newChannel(i2ps.getInputStream());
                 WritableByteChannel toClient = handler.getClientSocket();
+                // NOSONAR channel ownership transferred to the Pipe thread, which closes it in its finally block
                 WritableByteChannel toI2P = Channels.newChannel(i2ps.getOutputStream());
 
                 new I2PAppThread(rec.getThreadGroup(),
@@ -347,8 +350,10 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
             handler.stealSocket();
 
             ReadableByteChannel fromClient = handler.getClientSocket();
+            // NOSONAR channel ownership transferred to the Pipe thread, which closes it in its finally block
             ReadableByteChannel fromI2P = Channels.newChannel(i2ps.getInputStream());
             WritableByteChannel toClient = handler.getClientSocket();
+            // NOSONAR channel ownership transferred to the Pipe thread, which closes it in its finally block
             WritableByteChannel toI2P = Channels.newChannel(i2ps.getOutputStream());
 
             SAMBridge bridge = handler.getBridge();
@@ -358,7 +363,11 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
                 new Pipe(fromI2P, toClient, bridge, nick), "SAM-Pipe-I2C").start();
         } catch (ConnectException e) {
             if (_log.shouldWarn()) _log.warn("Accept error", e);
-            try { Thread.sleep(50); } catch (InterruptedException ie) {}
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
             handler.stopHandling();
         } catch (I2PException e) {
             if (_log.shouldWarn()) _log.warn("Accept error", e);
@@ -448,7 +457,9 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
                     if (log.shouldWarn()) log.warn("Error accepting", ce);
                     try {
                         Thread.sleep(50);
-                    } catch (InterruptedException ie) { /* ignored */ }
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
                     continue;
                 } catch (I2PException ipe) {
                     Log log = I2PAppContext.getGlobalContext().logManager().getLog(SAMv3StreamSession.class);
@@ -504,8 +515,10 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
                         }
                     }
                     ReadableByteChannel fromClient = clientServerSock;
+                    // NOSONAR channel ownership transferred to the Pipe thread, which closes it in its finally block
                     ReadableByteChannel fromI2P = Channels.newChannel(i2ps.getInputStream());
                     WritableByteChannel toClient = clientServerSock;
+                    // NOSONAR channel ownership transferred to the Pipe thread, which closes it in its finally block
                     WritableByteChannel toI2P = Channels.newChannel(i2ps.getOutputStream());
                     (new I2PAppThread(new Pipe(fromClient, toI2P, null, nick), "SAM-PipeFwd-C2I")).start();
                     (new I2PAppThread(new Pipe(fromI2P, toClient, null, nick), "SAM-PipeFwd-I2C")).start();

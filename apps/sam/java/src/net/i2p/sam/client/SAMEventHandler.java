@@ -102,7 +102,10 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
                     else
                         return _helloOk.booleanValue() ? _version : null;
                 }
-            } catch (InterruptedException ie) { return null; }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                return null;
+            }
         }
     }
 
@@ -120,7 +123,10 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
                     else
                         return _sessionCreateOk.booleanValue();
                 }
-            } catch (InterruptedException ie) { return false; }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                return false;
+            }
         }
     }
 
@@ -139,7 +145,10 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
                     else
                         return _sessionAddOk.booleanValue();
                 }
-            } catch (InterruptedException ie) { return false; }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                return false;
+            }
         }
     }
 
@@ -157,7 +166,10 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
                     else
                         return _streamStatusOk.booleanValue();
                 }
-            } catch (InterruptedException ie) { return false; }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                return false;
+            }
         }
     }
 
@@ -184,7 +196,10 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
                             return val;
                     }
                 }
-            } catch (InterruptedException ie) { return null; }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                return null;
+            }
         }
     }
 }

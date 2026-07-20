@@ -45,7 +45,11 @@ public class SAMSecureSession implements SAMSecureSessionInterface {
         PasswordManager pm = new PasswordManager(I2PAppContext.getGlobalContext());
         if (!pm.checkHash(savedPW, pw)) {
             log.logAlways(Log.WARN, "SAM authentication failed, user: " + user);
-            try { Thread.sleep(5000); } catch (InterruptedException ie) { /* ignored */ }
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
             throw new SAMException("Authorization failed");
         }
         return true;
