@@ -16,7 +16,6 @@ import java.net.SocketException;
 import java.nio.channels.SocketChannel;
 import java.util.Properties;
 import net.i2p.I2PAppContext;
-import net.i2p.I2PException;
 import net.i2p.client.I2PClient;
 import net.i2p.client.I2PSessionException;
 import net.i2p.crypto.SigType;

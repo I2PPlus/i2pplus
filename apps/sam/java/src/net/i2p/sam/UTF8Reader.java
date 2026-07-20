@@ -5,9 +5,9 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
+import java.nio.charset.StandardCharsets;
 
 /**
  *  An unbuffered version of InputStreamReader.
@@ -56,7 +56,7 @@ public class UTF8Reader extends Reader {
         if (_bb == null) {
             _bb = ByteBuffer.allocate(6);
             _cb = CharBuffer.allocate(1);
-            _dc = Charset.forName("UTF-8").newDecoder();
+            _dc = StandardCharsets.UTF_8.newDecoder();
         } else {
             (_bb).clear();
             (_cb).clear();

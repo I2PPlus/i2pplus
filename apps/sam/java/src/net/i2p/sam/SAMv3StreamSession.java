@@ -317,6 +317,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         final SAMv3Handler fHandler = handler;
         final boolean fVerbose = verbose;
         new I2PAppThread(rec.getThreadGroup(), new Runnable() {
+            @Override
             public void run() {
                 try {
                     doAccept(fHandler, fVerbose);

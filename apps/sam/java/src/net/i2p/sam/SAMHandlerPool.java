@@ -42,7 +42,6 @@ import net.i2p.util.Log;
  */
 class SAMHandlerPool {
 
-    private static final int PING_INTERVAL = 3 * 60 * 1000;
     private static final int PONG_TIMEOUT = 3 * 60 * 1000;
     private static final int FIRST_READ_TIMEOUT = 60 * 1000;
     private static final int IDLE_CHECK_INTERVAL = 30 * 1000;
@@ -349,6 +348,7 @@ class SAMHandlerPool {
             }
             try {
                 _workers.execute(new Runnable() {
+                    @Override
                     public void run() {
                         synchronized (ctx.handler) {
                             try {

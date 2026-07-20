@@ -683,6 +683,7 @@ class SAMStreamSession implements SAMMessageSess {
         /**
          * Run the socket reader loop.
          */
+        @Override
         public void run() { /* no-op */ }
 
     }
