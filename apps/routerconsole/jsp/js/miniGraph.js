@@ -27,8 +27,22 @@ const DRAW_H = HEIGHT - PAD * 2;
 const CENTER_Y = PAD + DRAW_H / 2;
 /** @type {string} sessionStorage key for shift buffers */
 const BUFFER_KEY = "minigraph_buffers";
-/** @type {number} Target buffer length for smooth scrolling (~20 min at 3s resolution) */
+/** @type {number} Target buffer length for the interpolated RRD fallback (~20 min at 3s) */
 const TARGET_BUFFER = 400;
+/** @type {number} Max buffer length — matches server BandwidthHistory CAPACITY (1200 = 20 min @1s) */
+const MAX_BUFFER = 1200;
+/** @type {number} Real seconds represented by each buffer sample (BandwidthHistory samples @1s) */
+const SAMPLE_SECONDS = 1;
+/**
+ * Buffer length that represents the configured period. One sample per
+ * SAMPLE_SECONDS, capped at MAX_BUFFER (so periods beyond 20 min clamp to 20).
+ * @function periodLength
+ * @param {number} minutes - Configured graph period in minutes
+ * @returns {number} Number of samples the buffer should hold
+ */
+function periodLength(minutes) {
+    return Math.min(Math.round(minutes * 60 / SAMPLE_SECONDS), MAX_BUFFER);
+}
 
 // ─── Shared state ────────────────────────────────────────────────────
 
@@ -219,8 +233,9 @@ function interpolate(lowRes, pointsPerStep) {
 function restoreBuffers(minutes) {
     try {
         const saved = JSON.parse(sessionStorage.getItem(BUFFER_KEY));
+        const need = periodLength(minutes);
         if (saved && saved.minutes === minutes && saved.rx && saved.tx &&
-            saved.rx.length >= TARGET_BUFFER / 2 && saved.tx.length >= TARGET_BUFFER / 2) {
+            saved.rx.length >= need / 2 && saved.tx.length >= need / 2) {
             rxBuffer = saved.rx;
             txBuffer = saved.tx;
             return true;
@@ -231,14 +246,15 @@ function restoreBuffers(minutes) {
 
 /**
  * Persists shift buffers to sessionStorage.
- * Caps stored length at TARGET_BUFFER to avoid bloat.
+ * Caps stored length to the period length to avoid bloat.
  * @function saveBuffers
  * @param {number} minutes - Time period
  */
 function saveBuffers(minutes) {
     try {
-        const rxStore = rxBuffer.length > TARGET_BUFFER ? rxBuffer.slice(-TARGET_BUFFER) : rxBuffer;
-        const txStore = txBuffer.length > TARGET_BUFFER ? txBuffer.slice(-TARGET_BUFFER) : txBuffer;
+        const need = periodLength(minutes);
+        const rxStore = rxBuffer.length > need ? rxBuffer.slice(-need) : rxBuffer;
+        const txStore = txBuffer.length > need ? txBuffer.slice(-need) : txBuffer;
         sessionStorage.setItem(BUFFER_KEY, JSON.stringify({
             minutes,
             rx: rxStore,
@@ -420,42 +436,63 @@ function renderNewGraph() {
         const liveRx = rxAll.pop();
         const liveTx = txAll.pop();
         if (rxBuffer === null) {
+            const need = periodLength(minutes);
             if (continuous) {
-                // Scroll mode — fill buffer with last DRAW_W values from server data
-                const take = Math.min(rxAll.length, DRAW_W);
-                rxBuffer = rxAll.slice(rxAll.length - take);
-                txBuffer = txAll.slice(txAll.length - take);
-                while (rxBuffer.length < DRAW_W) {
-                    rxBuffer.unshift(rxBuffer[0] || 0);
-                    txBuffer.unshift(txBuffer[0] || 0);
-                }
+                // Scroll mode — seed buffer from the full server history
+                // (up to MAX_BUFFER samples from /tmp/i2p-bandwidth.dat),
+                // not just the last DRAW_W, so prior data survives page loads.
+                rxBuffer = rxAll.slice();
+                txBuffer = txAll.slice();
             } else if (!restoreBuffers(minutes)) {
-                const pointsPerStep = Math.max(Math.round(TARGET_BUFFER / rxAll.length), 1);
-                rxBuffer = interpolate(rxAll, pointsPerStep);
-                txBuffer = interpolate(txAll, pointsPerStep);
+                // When the server sends the full real 1s history (>= TARGET_BUFFER
+                // samples, matching BandwidthHistory CAPACITY), use it directly so
+                // the configured period is shown accurately. The interpolate() path
+                // is only for the sparse RRD fallback (~minutes points), upsampled
+                // to the period length for a smooth curve.
+                if (rxAll.length >= TARGET_BUFFER) {
+                    rxBuffer = rxAll.slice();
+                    txBuffer = txAll.slice();
+                } else {
+                    rxBuffer = interpolate(rxAll, Math.max(Math.round(need / rxAll.length), 1));
+                    txBuffer = interpolate(txAll, Math.max(Math.round(need / txAll.length), 1));
+                }
+            }
+            // Truncate the buffer to exactly the configured period so the X-axis
+            // always spans `minutes` and the window fully replaces in `minutes`.
+            if (rxBuffer.length > need) {
+                rxBuffer.splice(0, rxBuffer.length - need);
+                txBuffer.splice(0, txBuffer.length - need);
+            }
+            while (rxBuffer.length < DRAW_W) {
+                rxBuffer.unshift(rxBuffer[0] || 0);
+                txBuffer.unshift(txBuffer[0] || 0);
             }
             rxBuffer.push(liveRx);
             txBuffer.push(liveTx);
-            if (rxBuffer.length > DRAW_W) {
-                rxBuffer.splice(0, rxBuffer.length - DRAW_W);
-                txBuffer.splice(0, txBuffer.length - DRAW_W);
+            if (rxBuffer.length > need) {
+                rxBuffer.splice(0, rxBuffer.length - need);
+                txBuffer.splice(0, txBuffer.length - need);
             }
             lastShiftTime = Date.now();
             if (!continuous) {saveBuffers(minutes);}
         } else {
             const now = Date.now();
-            const shiftInterval = continuous ? 1000 : POLL_INTERVAL;
-            const timeSinceLast = now - lastShiftTime;
-            const shifts = Math.floor(timeSinceLast / shiftInterval);
+            // Each buffer sample represents SAMPLE_SECONDS of real time, so advance
+            // by elapsed wall-clock seconds — independent of poll cadence. This makes
+            // the window span exactly `minutes` and fully replace in `minutes` min.
+            const elapsedSec = (now - lastShiftTime) / 1000;
+            const shifts = Math.floor(elapsedSec / SAMPLE_SECONDS);
+            const need = periodLength(minutes);
             if (shifts > 0) {
                 // Catch up on missed shifts — push the latest value for each
-                for (let s = 0; s < Math.min(shifts, DRAW_W); s++) {
+                const maxShift = Math.min(shifts, need);
+                for (let s = 0; s < maxShift; s++) {
                     rxBuffer.shift();
                     txBuffer.shift();
                     rxBuffer.push(s === 0 && liveRx !== undefined ? liveRx : rxBuffer[rxBuffer.length - 1]);
                     txBuffer.push(s === 0 && liveTx !== undefined ? liveTx : txBuffer[txBuffer.length - 1]);
                 }
-                lastShiftTime += shifts * shiftInterval;
+                lastShiftTime += shifts * SAMPLE_SECONDS * 1000;
                 if (!continuous) {saveBuffers(minutes);}
             } else if (!continuous && liveRx !== undefined) {
                 rxBuffer[rxBuffer.length - 1] = liveRx;
