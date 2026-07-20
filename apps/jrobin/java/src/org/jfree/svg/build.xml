@@ -2,7 +2,7 @@
 <project basedir="." default="jar" name="jfreesvg">
   <property name="build.dir" value="${java.io.tmpdir}/build-i2p/apps/jrobin/java/src/org/jfree/svg/build"/>
 
-    <property name="src" value="src"/>
+    <property name="src" value="."/>
     <property name="build" value="${build.dir}"/>
     <property name="dist.dir" value="dist"/>
     <property name="dist" location="${dist.dir}"/>
@@ -46,7 +46,7 @@
             release="${javac.release}"
             includeAntRuntime="false"
             encoding="UTF-8"
-            srcdir="${src}" destdir="${build}">
+            srcdir="." destdir="${build}">
             <compilerarg line="${javac.compilerargs}"/>
         </javac>
     </target>
@@ -55,8 +55,8 @@
         <mkdir dir="${build.dir}"/>
         <mkdir dir="${build.dir}/javadoc"/>
         <javadoc
-            sourcepath="./src"
-            classpath="./src"
+            sourcepath="."
+            classpath="."
             destdir="${build.dir}/javadoc"
             packagenames="*"
             use="true"

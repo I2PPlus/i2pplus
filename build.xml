@@ -1391,7 +1391,7 @@
       failonerror="false"
       charset="utf-8"
       author="no"
-      additionalparam="${javadoc-extras} -notimestamp -stylesheetFile tools/javadoc/javadoc.css -quiet -Xmaxwarns 1000 -nodeprecated -nosince"
+      additionalparam="-notimestamp -stylesheetFile tools/javadoc/javadoc.css -quiet -Xmaxwarns 1000 -nodeprecated -nosince"
       doctitle="I2P+ Javadocs [${release.number}-${i2p.build.number}${build.extra}]"
       windowtitle="Javadocs [I2P+ ${release.number}+] - API Version ${api.version}+"
       excludepackagenames="com.mpatric.mp3agic">
