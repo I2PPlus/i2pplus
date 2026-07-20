@@ -468,6 +468,12 @@ public class UDPTransport extends TransportImpl {
         _context.statManager().createRequiredRateStat("udp.retransmitEvents", "Retransmission events (1 per retransmit)", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         // Outbound queue depth — total across all peers, for Tuner cross-references on outbound pressure
         _context.statManager().createRequiredRateStat("udp.outboundQueueDepth", "Total outbound messages queued across all UDP peers", "Transport [UDP]", RATES);
+        // Peer-count / expiry / send-depth signals: read by the Tuner both as cross-references
+        // and as the primary stat for the peer-count and sent-messages-depth params. They are
+        // emitted via addRateData but were never registered, so the Tuner silently saw NaN.
+        _context.statManager().createRequiredRateStat("udp.peerCount", "Total active UDP peers", "Transport [UDP]", RATES);
+        _context.statManager().createRequiredRateStat("udp.peerExpired", "Peers expired in the last expire run", "Transport [UDP]", RATES);
+        _context.statManager().createRequiredRateStat("udp.sentMessagesDepth", "Average outbound messages in flight per peer (depth)", "Transport [UDP]", RATES);
 
         new PingIntroducers().schedule(MIN_EXPIRE_TIMEOUT * 3 / 4);
 
