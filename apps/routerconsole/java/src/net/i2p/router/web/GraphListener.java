@@ -54,6 +54,14 @@ public class GraphListener implements RateSummaryListener {
     private int _rows;
 
     static final int PERIODS = 60 * 24;  // 1440
+    /**
+     *  Offset (seconds) subtracted from "now" when computing the fetch window end,
+     *  so a clock skewed slightly ahead of system time does not yield NaNs.
+     *  Shared with GraphRenderer, which applies the same window for plotting.
+     *
+     *  @since 0.9.70+
+     */
+    static final int GRAPH_END_OFFSET_SECONDS = 75;
     private static final int MIN_ROWS = PERIODS;
     /** @since public since 0.9.33, was package private */
     public static final int MAX_ROWS = 91 * MIN_ROWS;
@@ -94,17 +102,23 @@ public class GraphListener implements RateSummaryListener {
             } catch (IllegalArgumentException iae) {
                 String msg = iae.getMessage();
                 if (msg != null && msg.startsWith("Bad sample time:")) {
-                    if (_log.shouldWarn()) {_log.warn("RRD time skew", iae);}
+                    if (_log.shouldWarn()) {
+                        _log.warn("RRD time skew", iae);
+                    }
                 } else {
                     _log.error("RRD error", iae);
                     String path = _isPersistent ? _db.getPath() : null;
                     stopListening();
-                    if (path != null) {(new File(path)).delete();}
+                    if (path != null) {
+                        (new File(path)).delete();
+                    }
                 }
             } catch (RrdException re) {
                 // this can happen after the time slews backwards, so don't make it an error
                 // org.jrobin.core.RrdException: Bad sample timestamp 1264343107. Last update time was 1264343172, at least one second step is required
-                if (_log.shouldWarn()) {_log.warn("Error adding", re);}
+                if (_log.shouldWarn()) {
+                    _log.warn("Error adding", re);
+                }
             } catch (IOException ioe) {
                 _log.error("Error adding", ioe);
                 stopListening();
@@ -144,14 +158,20 @@ public class GraphListener implements RateSummaryListener {
                 if (rrdFile.exists()) {
                     _db = RrdDb.getBuilder().setPath(rrdDefName).setBackendFactory(factory).build();
                     Archive arch = _db.getArchive(CF, STEPS);
-                    if (arch == null) {throw new IOException("No average CF in " + rrdDefName);}
+                    if (arch == null) {
+                        throw new IOException("No average CF in " + rrdDefName);
+                    }
                     _rows = arch.getRows();
                     if (_log.shouldInfo()) {
                         _log.info("Existing RRD " + baseName + " (" + rrdDefName + ") with " + _rows +
                                   " rows consuming " + _db.getRrdBackend().getLength() + " bytes");
                     }
-                } else {rrdDir.mkdir();}
-            } else {rrdDefName = _name;}
+                } else {
+                    rrdDir.mkdir();
+                }
+            } else {
+                rrdDefName = _name;
+            }
             if (_db == null) {
                 // not persistent or not previously existing
                 RrdDef def = new RrdDef(rrdDefName, now()/1000, period/1000);
@@ -160,11 +180,16 @@ public class GraphListener implements RateSummaryListener {
                 long heartbeat = period*10/1000;
                 def.addDatasource(_name, DS, heartbeat, Double.NaN, Double.NaN);
                 def.addDatasource(_eventName, DS, heartbeat, 0, Double.NaN);
-                if (_isPersistent) {_rows = (int) Math.max(MIN_ROWS, Math.min(MAX_ROWS, THREE_MONTHS / period));}
-                else {_rows = MIN_ROWS;}
+                if (_isPersistent) {
+                    _rows = (int) Math.max(MIN_ROWS, Math.min(MAX_ROWS, THREE_MONTHS / period));
+                } else {
+                    _rows = MIN_ROWS;
+                }
                 def.addArchive(CF, XFF, STEPS, _rows);
                 _db = RrdDb.getBuilder().setRrdDef(def).setBackendFactory(factory).build();
-                if (_isPersistent) {SecureFileOutputStream.setPerms(new File(rrdDefName));}
+                if (_isPersistent) {
+                    SecureFileOutputStream.setPerms(new File(rrdDefName));
+                }
                 if (_log.shouldInfo()) {
                     _log.info("New RRD " + baseName + " (" + rrdDefName + ") with " + _rows +
                               " rows consuming " + _db.getRrdBackend().getLength() + " bytes");
@@ -174,13 +199,17 @@ public class GraphListener implements RateSummaryListener {
             _renderer = new GraphRenderer(_context, this);
             _rate.setSummaryListener(this);
             return true;
-        } catch (OutOfMemoryError oom) {_log.error("Error starting RRD for stat " + baseName, oom);}
-        catch (RrdException re) {
+        } catch (OutOfMemoryError oom) {
+            _log.error("Error starting RRD for stat " + baseName, oom);
+        } catch (RrdException re) {
             _log.error("Error starting RRD for stat " + baseName, re);
             // corrupt file?
-            if (_isPersistent && rrdFile != null) {rrdFile.delete();}
-        } catch (IOException ioe) {_log.error("Error starting RRD for stat " + baseName, ioe);}
-        catch (IllegalArgumentException iae) {
+            if (_isPersistent && rrdFile != null) {
+                rrdFile.delete();
+            }
+        } catch (IOException ioe) {
+            _log.error("Error starting RRD for stat " + baseName, ioe);
+        } catch (IllegalArgumentException iae) {
             // No backend from RrdBackendFactory
             _log.error("Error starting RRD for stat " + baseName, iae);
             _log.log(Log.CRIT, "RRD4J backend error, graphs disabled");
@@ -197,14 +226,21 @@ public class GraphListener implements RateSummaryListener {
             _log.log(Log.CRIT, s);
             System.out.println(s);
             GraphGenerator.setDisabled(_context);
-        } catch (Throwable t) {_log.error("Error starting RRD for stat " + baseName, t);}
+        } catch (Throwable t) {
+            _log.error("Error starting RRD for stat " + baseName, t);
+        }
         return false;
     }
 
     public void stopListening() {
-        if (_db == null) return;
-        try {_db.close();}
-        catch (IOException ioe) {_log.error("Error closing", ioe);}
+        if (_db == null) {
+            return;
+        }
+        try {
+            _db.close();
+        } catch (IOException ioe) {
+            _log.error("Error closing", ioe);
+        }
         _rate.setSummaryListener(null);
         if (!_isPersistent) {
             // close() does not release resources for memory backend
@@ -234,14 +270,18 @@ public class GraphListener implements RateSummaryListener {
      */
     public void renderGraph(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
                           boolean hideTitle, boolean showEvents, int periodCount,
-                          int end, boolean showCredit, GraphListener lsnr2, String titleOverride) throws IOException {
-        if (_renderer == null || _db == null) {throw new IOException("No RRD, check logs for previous errors");}
+                           int end, boolean showCredit, GraphListener lsnr2, String titleOverride) throws IOException {
+        if (_renderer == null || _db == null) {
+            throw new IOException("No RRD, check logs for previous errors");
+        }
         _renderer.render(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
                          end, showCredit, lsnr2, titleOverride);
     }
 
     public void renderGraph(OutputStream out) throws IOException {
-        if (_renderer == null || _db == null) {throw new IOException("No RRD, check logs for previous errors");}
+        if (_renderer == null || _db == null) {
+            throw new IOException("No RRD, check logs for previous errors");
+        }
         _renderer.render(out);
     }
 
@@ -256,20 +296,22 @@ public class GraphListener implements RateSummaryListener {
     /** @since 0.9.46 */
     @SuppressWarnings("deprecation")
     private static RrdBackendFactory getBackendFactory(boolean isPersistent) {
-        return isPersistent ? RrdBackendFactory.getDefaultFactory() // NIO
-                            : RrdBackendFactory.getFactory("MEMORY"); // MEMORY
+        // NIO-backed on-disk file for persistent RRDs, in-memory backend otherwise
+        return isPersistent ? RrdBackendFactory.getDefaultFactory()
+                            : RrdBackendFactory.getFactory("MEMORY");
     }
 
     /** @since 0.8.7 */
     int getRows() {return _rows;}
 
     /**
-     *  Fetch the last count data points from the RRD database for use by the
-     *  dual-baseline minigraph renderer (data-rx/data-tx attributes on canvas).
-     *  Returns NaN-padded array if fewer points are available.
+     *  Fetch the last {@code count} data points from the RRD database for use by the
+     *  dual-baseline minigraph renderer (data-rx/data-tx attributes on the canvas).
+     *  Points are right-aligned; the returned array is NaN-padded on the left when
+     *  fewer points are available.
      *
      *  @param count number of most recent data points to retrieve
-     *  @return array of average values (bytes/sec), length = count
+     *  @return array of average values (units depend on the stat), length = count
      *  @since 0.9.70+
      */
     public double[] getLastValues(int count) {
@@ -281,7 +323,7 @@ public class GraphListener implements RateSummaryListener {
         try {
             long period = _rate.getPeriod();
             long now = now() / 1000;
-            long end = now - 75;  // match GraphRenderer's 75s offset
+            long end = now - GRAPH_END_OFFSET_SECONDS;
             long start = end - (period / 1000 * count);
             FetchRequest req = _db.createFetchRequest(CF, start, end);
             FetchData data = req.fetchData();
@@ -291,7 +333,9 @@ public class GraphListener implements RateSummaryListener {
                 System.arraycopy(values, 0, result, count - copyLen, copyLen);
             }
         } catch (Exception e) {
-            if (_log.shouldWarn()) {_log.warn("Error fetching last " + count + " values", e);}
+            if (_log.shouldWarn()) {
+                _log.warn("Error fetching last " + count + " values", e);
+            }
             Arrays.fill(result, Double.NaN);
         }
         return result;

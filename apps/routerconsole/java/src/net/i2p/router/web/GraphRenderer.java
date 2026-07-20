@@ -175,7 +175,7 @@ class GraphRenderer {
             throws IOException {
         long begin = System.currentTimeMillis();
         // prevent NaNs if we are skewed ahead of system time
-        long end = Math.min(_listener.now(), begin - 75 * 1000);
+        long end = Math.min(_listener.now(), begin - GraphListener.GRAPH_END_OFFSET_SECONDS * 1000);
         long period = _listener.getRate().getPeriod();
         if (endp > 0) {
             end -= period * endp;
