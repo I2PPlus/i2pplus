@@ -507,7 +507,7 @@
 <tr><td><%=intl._t("Default maximum stream delay in milliseconds when no explicit connect timeout is set. [Default is 10000 (10 seconds)]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.acceptTimeout={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Maximum time in milliseconds between receiving a SYN and accepting it on a server socket. Controls how long incomplete connections are kept in the accept queue. [Default is 4000 (4 seconds)]")%></td></tr>
+<tr><td><%=intl._t("Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. [Default is 30000 (30 seconds)]")%></td></tr>
 
 <tr class=config><th>i2p.streaming.maxQueueSize={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Maximum number of pending connections (SYNs and partial packets) in the server accept queue. Larger values buffer more incoming connections at the cost of memory. [Default is 80 (48 on slow systems)]")%></td></tr>

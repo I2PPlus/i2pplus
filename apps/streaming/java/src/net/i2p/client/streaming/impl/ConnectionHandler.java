@@ -32,9 +32,15 @@ class ConnectionHandler {
     private int _acceptTimeout;
     private boolean _restartPending;
 
-    /** max time after receiveNewSyn() and before the matched accept() */
+    /**
+     * Max time a received SYN may sit in the accept queue before accept() is
+     * expected to pull it. If accept() is delayed (busy or slow hosted server),
+     * the queued SYN is reset after this window, so it must be long enough to
+     * absorb brief stalls without refusing inbound connections. Tunable via
+     * i2p.streaming.acceptTimeout (default: 30000 / 30 seconds).
+     */
     private int getAcceptTimeout() {
-        return _context.getProperty("i2p.streaming.acceptTimeout", 4*1000);
+        return _context.getProperty("i2p.streaming.acceptTimeout", 30*1000);
     }
 
     /**
