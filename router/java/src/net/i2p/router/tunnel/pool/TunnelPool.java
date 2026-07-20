@@ -158,21 +158,25 @@ public class TunnelPool {
     }
 
     /**
-     * Get the refresh throttle interval from config or default (5 minutes).
-     * Minimum interval between LeaseSet publishes.
-     * Tunable via i2p.tunnel.refreshThrottle (default: 300000).
+     * Get the refresh throttle interval from config or default (2 minutes).
+     * Minimum interval between LeaseSet publishes, so a failed inbound
+     * tunnel is dropped from the published LeaseSet promptly while staying
+     * under the floodfill republish budget (~6 per destination per 10 min).
+     * Tunable via i2p.tunnel.refreshThrottle (default: 120000).
      */
     static long getRefreshThrottle(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.refreshThrottle", 5L * 60 * 1000);
+        return ctx.getProperty("i2p.tunnel.refreshThrottle", 2L * 60 * 1000);
     }
 
     /**
-     * Get the LeaseSet build minimum interval from config or default (5 minutes).
-     * Minimum interval between LeaseSet builds to prevent churn.
-     * Tunable via i2p.tunnel.leasesetBuildMinInterval (default: 300000).
+     * Get the LeaseSet build minimum interval from config or default (2 minutes).
+     * Minimum interval between LeaseSet object rebuilds, kept at or below the
+     * refresh throttle so a republish always reflects the current tunnel set
+     * (including newly built tunnels and excluding failed ones).
+     * Tunable via i2p.tunnel.leasesetBuildMinInterval (default: 120000).
      */
     static long getLeaseSetBuildMinInterval(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.leasesetBuildMinInterval", 5L * 60 * 1000);
+        return ctx.getProperty("i2p.tunnel.leasesetBuildMinInterval", 2L * 60 * 1000);
     }
 
 

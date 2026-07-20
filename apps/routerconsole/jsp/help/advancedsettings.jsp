@@ -423,10 +423,10 @@
 <tr><td><%=intl._t("Startup suppression period in milliseconds. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions. [Default is 300000 (5 minutes)]")%></td></tr>
 
 <tr class=config><th>i2p.tunnel.refreshThrottle={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 300000 (5 minutes)]")%></td></tr>
+<tr><td><%=intl._t("Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]")%></td></tr>
 
 <tr class=config><th>i2p.tunnel.leasesetBuildMinInterval={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 300000 (5 minutes)]")%></td></tr>
+<tr><td><%=intl._t("Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]")%></td></tr>
 
 <tr class=config><th>i2p.tunnel.maxConcurrentBuildsPerDirection={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]")%></td></tr>
