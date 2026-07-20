@@ -2785,6 +2785,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double dupSize = getAdditionalStat(_context, "stream.con.sendDuplicateSize");
             double connectFailed = getAdditionalEventCount(_context, "stream.connectFailed");
 
+            // Retransmit ratio (per-mille) from closed streams: a lossy-path
+            // signal complementary to the absolute dup-size above.
+            double rtxRatio = getAdditionalStatHourly(_context, "stream.rtxRatioBytes");
+            if (Double.isNaN(rtxRatio))
+                rtxRatio = getAdditionalStatHourly(_context, "stream.rtxRatio");
+            boolean retransmitting = !Double.isNaN(rtxRatio) && rtxRatio > 200;
+
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
             boolean spuriousRetransmits = !Double.isNaN(dupSize) && dupSize > 1000;
@@ -2806,6 +2813,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // Spurious retransmits = raise RTO (stop wasting bandwidth)
             if (spuriousRetransmits && target > current)
+                return Math.min(_max, current + _step);
+
+            // High retransmit ratio = lossy path; raise initial RTO for patience
+            // so new connections don't give up (and don't hammer) too early.
+            if (retransmitting && target > current)
                 return Math.min(_max, current + _step);
 
             // Congested or network unhealthy = don't lower RTO
@@ -5101,6 +5113,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double congWindowSize = getAdditionalStat(_context, "stream.con.windowSizeAtCongestion");
             boolean windowsCongesting = !Double.isNaN(congWindowSize) && congWindowSize < 5;
 
+            // Retransmit ratio (per-mille) from closed streams. Prefer the
+            // byte-weighted stat (stream.rtxRatioBytes) for a bandwidth-overhead
+            // view; fall back to the message-count stat if no byte data yet.
+            double rtxRatio = getAdditionalStatHourly(_context, "stream.rtxRatioBytes");
+            if (Double.isNaN(rtxRatio))
+                rtxRatio = getAdditionalStatHourly(_context, "stream.rtxRatio");
+            boolean retransmitting = !Double.isNaN(rtxRatio) && rtxRatio > 200;
+            boolean retransmitLow = !Double.isNaN(rtxRatio) && rtxRatio < 50;
+
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
             boolean dropping = observed > 500;
@@ -5113,8 +5134,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (current < recoveryFloor && !congested)
                 return Math.min(_defaultValue, current + _step);
 
-            // Drops or congestion = slow growth (loss minimization)
-            if (dropping || congested || windowsCongesting)
+            // Drops, congestion, or high retransmit ratio = slow growth (loss minimization)
+            if (dropping || congested || windowsCongesting || retransmitting)
                 return Math.max(recoveryFloor, current - _step);
 
             // Network unhealthy = slow growth
@@ -5129,12 +5150,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (current >= recoveryFloor && current <= _defaultValue * 2 && !dropping && !congested && !windowsCongesting && networkHealthy)
                 return current;
 
-            // Completed streams slow + windows small = increase growth (need faster ramp)
-            if (streamsSlow && windowsSmall && !dropping && !congested && !windowsCongesting)
+            // Completed streams slow + windows small = increase growth (need faster ramp).
+            // Require a low retransmit ratio (hysteresis) so we don't grow into loss.
+            if (streamsSlow && windowsSmall && !dropping && !congested && !windowsCongesting && retransmitLow)
                 return Math.min(_max, current + _step);
 
-            // Large window at congestion + healthy network + no drops = increase growth
-            if (!Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize > 20 && networkHealthy && !dropping && !congested && !windowsCongesting)
+            // Large window at congestion + healthy network + no drops = increase growth.
+            // Require a low retransmit ratio (hysteresis) so we don't grow into loss.
+            if (!Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize > 20 && networkHealthy && !dropping && !congested && !windowsCongesting && retransmitLow)
                 return Math.min(_max, current + _step);
 
             return current;

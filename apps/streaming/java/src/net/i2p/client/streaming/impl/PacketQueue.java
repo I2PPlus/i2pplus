@@ -200,7 +200,10 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
 
             if (con != null) {
                 con.incrementBytesSent(size);
-                if (packet.getNumSends() > 1) {con.incrementDupMessagesSent(1);}
+                if (packet.getNumSends() > 1) {
+                    con.incrementDupMessagesSent(1);
+                    con.incrementDupBytesSent(packet.getPayloadSize());
+                }
             }
         } catch (I2PSessionException ise) {
             if (_log.shouldWarn()) {

@@ -171,6 +171,7 @@ class ConnectionManager {
         _context.statManager().createRateStat("stream.con.lifetimeDupMessagesSent", "Number of duplicate messages we send on a stream", "Stream", RATES);
         _context.statManager().createRateStat("stream.con.lifetimeDupMessagesReceived", "Number of duplicate messages we receive on a stream", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.rtxRatio", "Retransmissions per 1000 messages sent when a stream closes", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        _context.statManager().createRequiredRateStat("stream.rtxRatioBytes", "Retransmitted bytes per 1000 bytes sent when a stream closes (bandwidth-overhead view, less sensitive to small-message connections)", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("stream.con.lifetimeRTT", "Final RTT when a stream closes", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("stream.con.lifetimeSendWindowSize", "Final send window size when a stream closes", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("stream.receiveActive", "Number of active streams when a new one is received (period being not yet dropped)", "Stream", RATES);
@@ -1009,6 +1010,13 @@ class ConnectionManager {
             if (msgsSent > 0) {
                 long rtxPerMille = 1000L * con.getLifetimeDupMessagesSent() / msgsSent;
                 _context.statManager().addRateData("stream.rtxRatio", rtxPerMille, con.getLifetime());
+            }
+            // Byte-weighted retransmit ratio: actual bandwidth overhead from
+            // retransmission, complementary to the message-count ratio above.
+            long bytesSent = con.getLifetimeBytesSent();
+            if (bytesSent > 0) {
+                long rtxBytesPerMille = 1000L * con.getLifetimeDupBytesSent() / bytesSent;
+                _context.statManager().addRateData("stream.rtxRatioBytes", rtxBytesPerMille, con.getLifetime());
             }
             _context.statManager().addRateData("stream.con.lifetimeRTT", con.getOptions().getRTT(), con.getLifetime());
             _context.statManager().addRateData("stream.con.lifetimeSendWindowSize", con.getOptions().getWindowSize(), con.getLifetime());

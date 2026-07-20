@@ -111,6 +111,7 @@ class Connection {
     private final AtomicLong _lifetimeBytesReceived = new AtomicLong();
     private final AtomicLong _lifetimeDupMessageSent = new AtomicLong();
     private final AtomicLong _lifetimeDupMessageReceived = new AtomicLong();
+    private final AtomicLong _lifetimeDupBytesSent = new AtomicLong();
 
     /** @since I2P+ */
     public static int getMaxResendDelay() {
@@ -1236,6 +1237,13 @@ class Connection {
     public long getLifetimeDupMessagesSent() {return _lifetimeDupMessageSent.get();}
 
     /**
+     * Get total duplicate bytes sent on this connection.
+     *
+     * @return lifetime duplicate bytes sent
+     */
+    public long getLifetimeDupBytesSent() {return _lifetimeDupBytesSent.get();}
+
+    /**
      * Get total duplicate messages received on this connection.
      *
      * @return lifetime duplicate messages received
@@ -1255,6 +1263,13 @@ class Connection {
      * @param msgs number of duplicate messages to add
      */
     public void incrementDupMessagesSent(int msgs) {_lifetimeDupMessageSent.addAndGet(msgs);}
+
+    /**
+     * Increment the lifetime duplicate bytes sent counter.
+     *
+     * @param bytes number of duplicate bytes to add
+     */
+    public void incrementDupBytesSent(int bytes) {_lifetimeDupBytesSent.addAndGet(bytes);}
 
     /**
      * Increment the lifetime bytes received counter.
