@@ -501,7 +501,7 @@ class GraphRenderer {
                     // Rate stats (e.g. buildSuccessRate) are fractional — keep decimals.
                     if (lname.endsWith("rate")) {
                         // not an integer metric
-                    } else if (lname.endsWith(".count") || lname.indexOf(".threads") >= 0
+                    } else if (lname.endsWith("count") || lname.indexOf(".threads") >= 0
                             || lname.indexOf("thread") >= 0 || lname.indexOf("queuedepth") >= 0
                             || lname.indexOf("queuesize") >= 0 || lname.indexOf("peercount") >= 0
                             || lname.indexOf("profilecount") >= 0 || lname.indexOf("tunnelcount") >= 0
@@ -513,7 +513,8 @@ class GraphRenderer {
                             || lname.indexOf("refused") >= 0 || lname.indexOf("dropped") >= 0
                             || lname.indexOf("expired") >= 0 || lname.indexOf("failed") >= 0
                             || lname.indexOf("timeouts") >= 0 || lname.indexOf("messages") >= 0
-                            || lname.indexOf("loops") >= 0 || lname.indexOf("keyset") >= 0
+                            || lname.indexOf("jobs") >= 0 || lname.indexOf("loops") >= 0
+                            || lname.indexOf("keyset") >= 0
                             || lname.indexOf("inboundconn") >= 0 || lname.indexOf("outboundconn") >= 0
                             || lname.indexOf("participating") >= 0 || lname.indexOf("clienttunnels") >= 0
                             || lname.indexOf("servertunnels") >= 0 || lname.indexOf("exploratory") >= 0

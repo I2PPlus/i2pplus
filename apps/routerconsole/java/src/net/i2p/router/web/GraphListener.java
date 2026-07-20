@@ -72,7 +72,21 @@ public class GraphListener implements RateSummaryListener {
             // add one value to the db (the average value for the period)
             try {
                 _sample.setTime(when);
-                double val = eventCount > 0 ? (totalValue / eventCount) : 0d;
+                double val;
+                if (eventCount > 0) {
+                    // Event-counter stats (e.g. inNetPool.dropped, tunnel.rejectHopThrottle)
+                    // record a value of 1 per event, so totalValue / eventCount is always
+                    // 1.0 — a binary flat line when plotted. In that case store the event
+                    // count itself as the primary series, so the graph shows a true
+                    // count-per-period instead of a useless 0/1 trace.
+                    if (totalValue == (double) eventCount) {
+                        val = eventCount;
+                    } else {
+                        val = totalValue / eventCount;
+                    }
+                } else {
+                    val = 0d;
+                }
                 _sample.setValue(_name, val);
                 _sample.setValue(_eventName, eventCount);
                 _sample.update();
