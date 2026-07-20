@@ -501,7 +501,7 @@ class GraphRenderer {
                     // Rate stats (e.g. buildSuccessRate) are fractional — keep decimals.
                     if (lname.endsWith("rate")) {
                         // not an integer metric
-                    } else if (lname.endsWith("count") || lname.indexOf(".threads") >= 0
+                    } else if (lname.endsWith(".count") || lname.indexOf(".threads") >= 0
                             || lname.indexOf("thread") >= 0 || lname.indexOf("queuedepth") >= 0
                             || lname.indexOf("queuesize") >= 0 || lname.indexOf("peercount") >= 0
                             || lname.indexOf("profilecount") >= 0 || lname.indexOf("tunnelcount") >= 0
@@ -513,8 +513,7 @@ class GraphRenderer {
                             || lname.indexOf("refused") >= 0 || lname.indexOf("dropped") >= 0
                             || lname.indexOf("expired") >= 0 || lname.indexOf("failed") >= 0
                             || lname.indexOf("timeouts") >= 0 || lname.indexOf("messages") >= 0
-                            || lname.indexOf("jobs") >= 0 || lname.indexOf("loops") >= 0
-                            || lname.indexOf("keyset") >= 0
+                            || lname.indexOf("loops") >= 0 || lname.indexOf("keyset") >= 0
                             || lname.indexOf("inboundconn") >= 0 || lname.indexOf("outboundconn") >= 0
                             || lname.indexOf("participating") >= 0 || lname.indexOf("clienttunnels") >= 0
                             || lname.indexOf("servertunnels") >= 0 || lname.indexOf("exploratory") >= 0
@@ -557,13 +556,6 @@ class GraphRenderer {
             String descr;
             if (showEvents) {
                 plotName = dsNames[1]; // include the average event count on the plot
-                descr = _t("Events per period");
-            } else if (noDecimalPlace) {
-                // Count stats (e.g. inNetPool.dropped, jobQueue.testJobCount) record a
-                // value of 1 per event, so the "average value" series (dsNames[0]) is
-                // always 1.0 — useless. Plot the event-count series (dsNames[1]) instead
-                // so the default/averages view shows the real number of events per period.
-                plotName = dsNames[1];
                 descr = _t("Events per period");
             } else {
                 plotName = dsNames[0]; // include the average value
