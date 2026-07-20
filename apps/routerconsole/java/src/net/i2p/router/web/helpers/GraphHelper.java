@@ -32,6 +32,7 @@ public class GraphHelper extends FormHandler {
     private int _refreshDelaySeconds;
     private boolean _persistent;
     private boolean _graphHideLegend;
+    private boolean _graphHideRestarts;
     private boolean _graphGlow;
     private boolean _useUtc;
     private String _stat;
@@ -42,11 +43,13 @@ public class GraphHelper extends FormHandler {
     private static final String PROP_PERIODS = "routerconsole.graphPeriods";
     private static final String PROP_EVENTS = "routerconsole.graphEvents";
     private static final String PROP_HIDE_LEGEND = "routerconsole.graphHideLegend";
+    private static final String PROP_HIDE_RESTARTS = "routerconsole.graphHideRestarts";
     private static final String PROP_GLOW = "routerconsole.graphGlow";
     private static final String PROP_UTC = "routerconsole.graphUtc";
     private static final int DEFAULT_REFRESH = 1*60;
     private static final int DEFAULT_PERIODS = 60;
     private static final boolean DEFAULT_HIDE_LEGEND = false;
+    private static final boolean DEFAULT_HIDE_RESTARTS = false;
     private static final int MIN_X = 160;
     private static final int MIN_Y = 40;
     private static final int MIN_C = 5; // minimum period (minutes)
@@ -57,6 +60,7 @@ public class GraphHelper extends FormHandler {
     private static final String AMP = "&amp;";
     private static final String SHOW_EVENTS_PARAM = AMP + "showEvents=";
     private static final String HIDE_LEGEND_PARAM = AMP + "hideLegend=";
+    private static final String HIDE_RESTARTS_PARAM = AMP + "hideRestarts=";
     private static final String PERIOD_COUNT_PARAM = AMP + "periodCount=";
     private static final String WIDTH_PARAM = AMP + "width=";
     private static final String HEIGHT_PARAM = AMP + "height=";
@@ -74,6 +78,8 @@ public class GraphHelper extends FormHandler {
         _refreshDelaySeconds = _context.getProperty(PROP_REFRESH, DEFAULT_REFRESH);
         _showEvents = _context.getBooleanProperty(PROP_EVENTS);
         _graphHideLegend = _context.getProperty(PROP_HIDE_LEGEND, DEFAULT_HIDE_LEGEND);
+        _graphHideRestarts = Boolean.parseBoolean(_context.getProperty(PROP_HIDE_RESTARTS,
+                                                   Boolean.toString(DEFAULT_HIDE_RESTARTS)));
         _persistent = _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT);
         _graphGlow = _context.getBooleanPropertyDefaultTrue(PROP_GLOW);
         _useUtc = _context.getBooleanPropertyDefaultTrue(PROP_UTC);
@@ -165,6 +171,15 @@ public class GraphHelper extends FormHandler {
         }
     }
 
+    /** @since 0.9.70+ */
+    public void setHideRestarts(String foo) {
+        if ("true".equalsIgnoreCase(foo)) {
+            _graphHideRestarts = true;
+        } else if ("false".equalsIgnoreCase(foo)) {
+            _graphHideRestarts = false;
+        }
+    }
+
     /**
      *  For single stat page
      *  @since 0.9
@@ -177,6 +192,7 @@ public class GraphHelper extends FormHandler {
 
         List<GraphListener> listeners = ss.getListeners();
         boolean hideLegend = _context.getProperty(PROP_HIDE_LEGEND, DEFAULT_HIDE_LEGEND);
+        boolean hideRestarts = _graphHideRestarts;
 
         // Sort listeners once for stable display order
         TreeSet<GraphListener> ordered = new TreeSet<>(new AlphaComparator());
@@ -208,7 +224,9 @@ public class GraphHelper extends FormHandler {
             if (!hideLegend) {buf.append(HEIGHT_PARAM).append(_height - 26);}
             else {buf.append(HEIGHT_PARAM).append(_height);}
             title = title.replace("&nbsp;", "");
-            buf.append(HIDE_LEGEND_PARAM).append(hideLegend).append(TIME_PARAM).append(now)
+            buf.append(HIDE_LEGEND_PARAM).append(hideLegend)
+               .append(HIDE_RESTARTS_PARAM).append(hideRestarts)
+               .append(TIME_PARAM).append(now)
                .append("\" alt=\"").append(title).append("\" title=\"").append(title).append("\"></a></span>\n");
         }
 
@@ -243,9 +261,10 @@ public class GraphHelper extends FormHandler {
                .append(AMP).append("period=").append(r.getPeriod())
                .append(PERIOD_COUNT_PARAM).append(_periodCount)
                .append(WIDTH_PARAM).append(_width)
-               .append(HEIGHT_PARAM).append(_height)
-               .append(HIDE_LEGEND_PARAM).append(hideLegend)
-               .append(TIME_PARAM).append(now)
+                .append(HEIGHT_PARAM).append(_height)
+                .append(HIDE_LEGEND_PARAM).append(hideLegend)
+                .append(HIDE_RESTARTS_PARAM).append(hideRestarts)
+                .append(TIME_PARAM).append(now)
                .append("\" alt=\"")
                .append(title)
                .append("\" title=\"")
@@ -315,45 +334,46 @@ public class GraphHelper extends FormHandler {
            .append(AMP).append("end=").append(_end)
            .append(WIDTH_PARAM).append(_width)
            .append(HEIGHT_PARAM).append(_height)
-            .append(HIDE_LEGEND_PARAM).append(_hideLegend)
-            .append(TIME_PARAM).append(now)
+             .append(HIDE_LEGEND_PARAM).append(_hideLegend)
+             .append(HIDE_RESTARTS_PARAM).append(_graphHideRestarts)
+             .append(TIME_PARAM).append(now)
            .append("\"></a></span>\n</div>\n<p id=graphopts>\n");
 
         if (_width < MAX_X && _height < MAX_Y) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height * 3 / 2, _hideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height * 3 / 2, _hideLegend, _graphHideRestarts));
             buf.append(_t("Larger")).append("</a> - ");
         }
         if (_width > MIN_X && _height > MIN_Y) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 2 / 3, _height * 2 / 3, _hideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 2 / 3, _height * 2 / 3, _hideLegend, _graphHideRestarts));
             buf.append(_t("Smaller")).append("</a> - ");
         }
         if (_height < MAX_Y) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height * 3 / 2, _hideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height * 3 / 2, _hideLegend, _graphHideRestarts));
             buf.append(_t("Taller")).append("</a> - ");
         }
         if (_height > MIN_Y) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height * 2 / 3, _hideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height * 2 / 3, _hideLegend, _graphHideRestarts));
             buf.append(_t("Shorter")).append("</a> - ");
         }
         if (_width < MAX_X) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height, _hideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height, _hideLegend, _graphHideRestarts));
             buf.append(_t("Wider")).append("</a> - ");
         }
         if (_width > MIN_X) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 2 / 3, _height, _hideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 2 / 3, _height, _hideLegend, _graphHideRestarts));
             buf.append(_t("Narrower")).append("</a>");
         }
         buf.append("<br>");
         if (_periodCount < MAX_C) {
-            buf.append(link(_stat, _showEvents, _periodCount * 2, _end, _width, _height, _hideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount * 2, _end, _width, _height, _hideLegend, _graphHideRestarts));
             buf.append(_t("Larger interval")).append("</a> - ");
         }
         if (_periodCount > MIN_C) {
-            buf.append(link(_stat, _showEvents, _periodCount / 2, _end, _width, _height, _hideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount / 2, _end, _width, _height, _hideLegend, _graphHideRestarts));
             buf.append(_t("Smaller interval")).append("</a> - ");
         }
         if (_periodCount < MAX_C) {
-            buf.append(link(_stat, _showEvents, _periodCount, _end + _periodCount, _width, _height, _hideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount, _end + _periodCount, _width, _height, _hideLegend, _graphHideRestarts));
             buf.append(_t("Previous interval")).append("</a>");
         }
         if (_end > 0) {
@@ -364,17 +384,17 @@ public class GraphHelper extends FormHandler {
             if (_periodCount < MAX_C) {
                 buf.append(" - ");
             }
-            buf.append(link(_stat, _showEvents, _periodCount, end, _width, _height, _hideLegend));
+            buf.append(link(_stat, _showEvents, _periodCount, end, _width, _height, _hideLegend, _graphHideRestarts));
             buf.append(_t("Next interval")).append("</a> ");
         }
         if (!"bw.combined".equals(_stat)) {
             buf.append(" - ");
-            buf.append(link(_stat, !_showEvents, _periodCount, _end, _width, _height, _hideLegend));
+            buf.append(link(_stat, !_showEvents, _periodCount, _end, _width, _height, _hideLegend, _graphHideRestarts));
             buf.append(_showEvents ? _t("Plot averages") : _t("plot events"));
             buf.append("</a>");
         }
         buf.append(" - ");
-        buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height, _hideLegend));
+        buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height, _hideLegend, _graphHideRestarts));
         buf.append(_hideLegend ? _t("Show Legend") : _t("Hide Legend"));
         buf.append("</a>\n</p>\n");
         return buf.toString();
@@ -383,7 +403,8 @@ public class GraphHelper extends FormHandler {
     private boolean _hideLegend;
 
     /** @since 0.9 */
-    private static String link(String stat, boolean showEvents, int periodCount, int end, int width, int height, boolean hideLegend) {
+    private static String link(String stat, boolean showEvents, int periodCount, int end, int width, int height,
+                               boolean hideLegend, boolean hideRestarts) {
         return
                "<a href=\"/graph?stat="
                + stat.replace(" ", "%20")
@@ -393,6 +414,7 @@ public class GraphHelper extends FormHandler {
                + (end > 0 ? AMP + "e=" + end : "")
                + (showEvents ? AMP + "showEvents=1" : "")
                + (hideLegend ? AMP + "hideLegend=false" : AMP + "hideLegend=true")
+               + (hideRestarts ? AMP + "hideRestarts=true" : AMP + "hideRestarts=false")
                + "\">";
     }
 
@@ -459,8 +481,20 @@ public class GraphHelper extends FormHandler {
             buf.append(HelperBase.CHECKED);
         }
         buf.append(">")
-           .append(_t("Do not show legend on graphs"))
-           .append("</label><input type=hidden name=hideLegend value=false></span><br><span class=nowrap>\n<b>")
+            .append(_t("Do not show legend on graphs"))
+            .append("</label><input type=hidden name=hideLegend value=false></span><br><span class=\"nowrap")
+            .append(hideLegend ? " disabled\"" : "\"")
+            .append(" title=\"")
+            .append(_t("Disabled while legend is hidden"))
+            .append("\">\n<b>")
+            .append(_t("Hide restarts"))
+            .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=hideRestarts");
+        if (_graphHideRestarts) {
+            buf.append(HelperBase.CHECKED);
+        }
+        buf.append(">")
+           .append(_t("Suppress restart lines on graphs"))
+           .append("</label><input type=hidden name=hideRestarts value=false></span><br><span class=nowrap>\n<b>")
            .append(_t("Persistence"))
            .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=persistent");
         if (persistent) {
@@ -536,6 +570,8 @@ public class GraphHelper extends FormHandler {
             _refreshDelaySeconds != _context.getProperty(PROP_REFRESH, DEFAULT_REFRESH) ||
             _showEvents != _context.getBooleanProperty(PROP_EVENTS) ||
             _graphHideLegend != _context.getProperty(PROP_HIDE_LEGEND, DEFAULT_HIDE_LEGEND) ||
+            _graphHideRestarts != Boolean.parseBoolean(_context.getProperty(PROP_HIDE_RESTARTS,
+                                                   Boolean.toString(DEFAULT_HIDE_RESTARTS))) ||
             _persistent != _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT) ||
             _graphGlow != _context.getBooleanPropertyDefaultTrue(PROP_GLOW) ||
             _useUtc != _context.getBooleanPropertyDefaultTrue(PROP_UTC)) {
@@ -546,6 +582,8 @@ public class GraphHelper extends FormHandler {
             changes.put(PROP_REFRESH, Integer.toString(_refreshDelaySeconds));
             changes.put(PROP_EVENTS, Boolean.toString(_showEvents));
             changes.put(PROP_HIDE_LEGEND, Boolean.toString(_graphHideLegend));
+            // property is "hide" semantics
+            changes.put(PROP_HIDE_RESTARTS, Boolean.toString(_graphHideRestarts));
             changes.put(GraphListener.PROP_PERSISTENT, Boolean.toString(_persistent));
             changes.put(PROP_GLOW, Boolean.toString(_graphGlow));
             changes.put(PROP_UTC, Boolean.toString(_useUtc));

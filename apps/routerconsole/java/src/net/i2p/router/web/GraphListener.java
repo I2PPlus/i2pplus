@@ -255,10 +255,10 @@ public class GraphListener implements RateSummaryListener {
      *  @param end number of periods before now
      */
     public void renderGraph(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
-                          boolean hideTitle, boolean showEvents, int periodCount,
-                          int end, boolean showCredit) throws IOException {
+                           boolean hideTitle, boolean showEvents, int periodCount,
+                           int end, boolean showCredit) throws IOException {
         renderGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-                  end, showCredit, null, null);
+                   end, showCredit, null, null, true);
     }
 
     /**
@@ -266,16 +266,18 @@ public class GraphListener implements RateSummaryListener {
      *
      *  @param lsnr2 2nd data source to plot on same graph, or null. Not recommended for events.
      *  @param titleOverride If non-null, overrides the title
+     *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
      *  @since 0.9.6
      */
     public void renderGraph(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
-                          boolean hideTitle, boolean showEvents, int periodCount,
-                           int end, boolean showCredit, GraphListener lsnr2, String titleOverride) throws IOException {
+                           boolean hideTitle, boolean showEvents, int periodCount,
+                            int end, boolean showCredit, GraphListener lsnr2, String titleOverride,
+                            boolean showRestarts) throws IOException {
         if (_renderer == null || _db == null) {
             throw new IOException("No RRD, check logs for previous errors");
         }
         _renderer.render(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-                         end, showCredit, lsnr2, titleOverride);
+                         end, showCredit, lsnr2, titleOverride, showRestarts);
     }
 
     public void renderGraph(OutputStream out) throws IOException {

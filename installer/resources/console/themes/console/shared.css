@@ -150,6 +150,8 @@ html:not(.advmode) #tuning input[type=number]{min-width:0!important;text-align:c
 .spark-line.blue{color:#3498db}
 .spark-line.cyan{color:#1abc9c}
 .spark-line.gray{color:#888}
+#gform .nowrap.disabled{pointer-events:none}
+#gform .nowrap.disabled>*{opacity:.5}
 #health{padding-bottom:14px}
 #routerhealth h2{margin:12px auto;padding:6px 8px;text-align:left;font-size:12pt;border:0;background:var(--th);cursor:pointer}
 #routerhealth h2:hover{color:var(--hover)}

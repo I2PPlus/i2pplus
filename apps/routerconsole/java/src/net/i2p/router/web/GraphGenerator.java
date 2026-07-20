@@ -287,7 +287,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     public boolean renderGraph(Rate rate, OutputStream out) throws IOException {
-        return renderGraph(rate, out, DEFAULT_X, DEFAULT_Y, false, false, false, false, -1, 0, true);
+        return renderGraph(rate, out, DEFAULT_X, DEFAULT_Y, false, false, false, false, -1, 0, true, true);
     }
 
     /**
@@ -299,14 +299,25 @@ public class GraphGenerator implements Runnable, ClientApp {
      *  @return success
      */
     public boolean renderGraph(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
-                                        boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
-                                        int end, boolean showCredit) throws IOException {
+                                         boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
+                                         int end, boolean showCredit) throws IOException {
+        return renderGraph(rate, out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
+                           periodCount, end, showCredit, true);
+    }
+
+    /**
+     *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
+     *  @since 0.9.70+
+     */
+    public boolean renderGraph(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
+                                         boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
+                                         int end, boolean showCredit, boolean showRestarts) throws IOException {
         try {
             try {_sem.acquire();}
             catch (InterruptedException ie) { /* ignored */ }
             try {
                 return locked_renderGraph(rate, out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
-                                        periodCount, end, showCredit);
+                                         periodCount, end, showCredit, showRestarts);
             } catch (NoClassDefFoundError ncdfe) {
                 setDisabled();
                 String s = "Error rendering - disabling graph generation.";
@@ -322,8 +333,8 @@ public class GraphGenerator implements Runnable, ClientApp {
      *  @param end number of periods before now
      */
     private boolean locked_renderGraph(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
-                                      boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
-                                      int end, boolean showCredit) throws IOException {
+                                       boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
+                                       int end, boolean showCredit, boolean showRestarts) throws IOException {
         if (width > MAX_X) {width = MAX_X;}
         else if (width <= 0) {width = DEFAULT_X;}
         if (height > MAX_Y) {height = MAX_Y;}
@@ -331,7 +342,8 @@ public class GraphGenerator implements Runnable, ClientApp {
         if (end < 0) {end = 0;}
         GraphListener lsnr = _listenerByRate.get(rate);
         if (lsnr != null) {
-            lsnr.renderGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);
+            lsnr.renderGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
+                             end, showCredit, null, null, showRestarts);
             return true;
         }
         return false;
@@ -365,12 +377,23 @@ public class GraphGenerator implements Runnable, ClientApp {
      *  @return success
      */
     public boolean renderCombinedGraph(OutputStream out, int width, int height, boolean hideLegend,
-                                 boolean hideGrid, boolean hideTitle, boolean showEvents,
-                                 int periodCount, int end, boolean showCredit) throws IOException {
+                                  boolean hideGrid, boolean hideTitle, boolean showEvents,
+                                  int periodCount, int end, boolean showCredit) throws IOException {
+        return renderCombinedGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
+                                   periodCount, end, showCredit, true);
+    }
+
+    /**
+     *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
+     *  @since 0.9.70+
+     */
+    public boolean renderCombinedGraph(OutputStream out, int width, int height, boolean hideLegend,
+                                  boolean hideGrid, boolean hideTitle, boolean showEvents,
+                                  int periodCount, int end, boolean showCredit, boolean showRestarts) throws IOException {
         try {
             try {_sem.acquire();}
             catch (InterruptedException ie) { /* ignored */ }
-            try {return locked_renderCombinedGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);}
+            try {return locked_renderCombinedGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit, showRestarts);}
             catch (NoClassDefFoundError ncdfe) {
                 setDisabled();
                 String s = "Error rendering - disabling graph generation.";
@@ -383,8 +406,8 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     private boolean locked_renderCombinedGraph(OutputStream out, int width, int height, boolean hideLegend,
-                                         boolean hideGrid, boolean hideTitle, boolean showEvents,
-                                         int periodCount, int end, boolean showCredit) throws IOException {
+                                          boolean hideGrid, boolean hideTitle, boolean showEvents,
+                                          int periodCount, int end, boolean showCredit, boolean showRestarts) throws IOException {
 
         // go to some trouble to see if we have the data for the combined bw graph
         GraphListener txLsnr = null;
@@ -402,10 +425,10 @@ public class GraphGenerator implements Runnable, ClientApp {
         else if (height <= 0) {height = DEFAULT_Y;}
         if (hideTitle) {
             txLsnr.renderGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-                             end, showCredit, rxLsnr, null);
+                             end, showCredit, rxLsnr, null, showRestarts);
         } else {
             txLsnr.renderGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-                             end, showCredit, rxLsnr, "[" + _t("Router") + "] " + _t("Bandwidth usage").replace("usage", "Usage"));
+                             end, showCredit, rxLsnr, "[" + _t("Router") + "] " + _t("Bandwidth usage").replace("usage", "Usage"), showRestarts);
         }
         return true;
     }

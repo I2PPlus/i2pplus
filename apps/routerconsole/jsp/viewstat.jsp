@@ -36,6 +36,7 @@
     }
 
     boolean hideLegend = Boolean.parseBoolean(request.getParameter("hideLegend"));
+    boolean hideRestarts = Boolean.parseBoolean(request.getParameter("hideRestarts"));
     boolean hideGrid = Boolean.parseBoolean(request.getParameter("hideGrid"));
     boolean hideTitle = Boolean.parseBoolean(request.getParameter("hideTitle"));
     boolean showEvents = Boolean.parseBoolean(request.getParameter("showEvents"));
@@ -63,8 +64,8 @@
                     response.setHeader("Connection", "Close");
                     response.setHeader("X-Content-Type-Options", "nosniff");
                     rendered = fakeBw
-                        ? graphGen.renderCombinedGraph(stream, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit)
-                        : graphGen.renderGraph(rate, stream, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);
+                        ? graphGen.renderCombinedGraph(stream, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit, !hideRestarts)
+                        : graphGen.renderGraph(rate, stream, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit, !hideRestarts);
                 }
             } finally {
                 if (rendered) stream.close();

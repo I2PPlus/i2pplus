@@ -149,7 +149,8 @@ class GraphRenderer {
                 endp,
                 showCredit,
                 null,
-                null);
+                null,
+                true);
     }
 
     /**
@@ -157,6 +158,7 @@ class GraphRenderer {
      *
      *  @param lsnr2 2nd data source to plot on same graph, or null. Not recommended for events.
      *  @param titleOverride If non-null, overrides the title
+     *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
      *  @since 0.9.6 consolidated from GraphGenerator for bw.combined
      */
     public void render(
@@ -171,7 +173,8 @@ class GraphRenderer {
             int endp,
             boolean showCredit,
             GraphListener lsnr2,
-            String titleOverride)
+            String titleOverride,
+            boolean showRestarts)
             throws IOException {
         long begin = System.currentTimeMillis();
         // prevent NaNs if we are skewed ahead of system time
@@ -435,7 +438,7 @@ class GraphRenderer {
             Color RESTART_COLOR =
                     theme.equals("midnight") || theme.equals("dark") ? RESTART_BAR_COLOR_DARK : RESTART_BAR_COLOR;
 
-            if (!hideLegend) {
+            if (!hideLegend && showRestarts) {
                 // '07 Jul 21:09' with month name in the system locale
                 // TODO: Fix Arabic time display
                 Map<Long, String> events =
@@ -456,6 +459,9 @@ class GraphRenderer {
                     def.vrule(started / 1000, RESTART_COLOR, legend, 1.0f);
                     count++;
                 }
+            }
+            if (!hideLegend) {
+                // date-range comment is independent of restart suppression
                 def.comment(legendSdf.format(new Date(start)) + " — " + legendSdf.format(new Date(end)) + timeLabel + "\\r");
             }
             if (!showCredit) {
