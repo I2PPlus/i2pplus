@@ -813,6 +813,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /* We hope the routerinfos are read in and things have settled down by now, but it's not required to be so */
     private static final int START_DELAY = SystemVersion.isSlow() ? 60*1000 : 5*1000;
     private static final int LOOKUP_TIME = 75*1000;
+    // Re-queue the entire netDb for GeoIP lookup periodically so peers learned
+    // after startup are resolved even if their page is never explicitly viewed.
+    private static final int QUEUE_TIME = 10*60*1000;
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
     private static final Charset ENCODING = StandardCharsets.UTF_8;
@@ -829,6 +832,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  As of 0.9.32, works only for literal IPs, ignores host names.
      */
     private class QueueAll extends SimpleTimer2.TimedEvent {
+        private boolean _firstRun = true;
         public QueueAll() { super(_context.simpleTimer2()); }
         @Override
         public void timeReached() {
@@ -840,7 +844,15 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 if (ip == null) {continue;}
                 _geoIP.add(ip);
             }
-            new Lookup().schedule(5000);
+            // Only the first pass needs to start the recurring Lookup processor;
+            // subsequent passes just re-queue the whole netDb so newly-learned
+            // peers get a GeoIP lookup. _geoIP.add() dedupes against the cache,
+            // so re-queueing already-resolved IPs is a no-op.
+            if (_firstRun) {
+                _firstRun = false;
+                new Lookup().schedule(5000);
+            }
+            schedule(QUEUE_TIME);
         }
     }
 
@@ -1534,7 +1546,15 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
 
         String country = _geoIP.get(ip);
-        if (country == null) {return "xx";}
+        if (country == null) {
+            // Queue the IP so it gets resolved on the next lookup cycle; this
+            // guarantees eventual country resolution for any peer actually
+            // displayed, not just those present at startup or explicitly viewed.
+            // ip may be null when the peer has no resolvable address, so guard it.
+            if (ip != null)
+                queueLookup(ip);
+            return "xx";
+        }
         if (country.equals("xx")) {
             if (_log.shouldDebug()) {
                 try {

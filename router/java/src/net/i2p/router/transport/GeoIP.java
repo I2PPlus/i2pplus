@@ -1478,6 +1478,7 @@ public class GeoIP {
      * @param ip IPv4 or IPv6
      */
     public void add(byte[] ip) {
+        if (ip == null) {return;}
         // skip he.net tunnel 2001:470:: so we will get correct geoip from IPv4
         // ditto route48
         if (ip.length == 16 &&
