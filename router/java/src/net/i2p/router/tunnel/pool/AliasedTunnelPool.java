@@ -132,12 +132,18 @@ public class AliasedTunnelPool extends TunnelPool {
                 _log.warn("No primary LeaseSet " + primary + " to copy for " + getSettings().getDestination() + " in Db " + db);
             return null;
         }
-        // copy everything so it isn't corrupted
+        // copy and cap lease end dates
+        long maxLease = getLeaseMaxDuration(_context);
+        long maxEnd = _context.clock().now() + maxLease;
         LeaseSet rv = new LeaseSet();
         for (int i = 0; i < ls.getLeaseCount(); i++) {
             Lease old = ls.getLease(i);
             Lease lease = new Lease();
-            lease.setEndDate(old.getEndTime());
+            long end = old.getEndTime();
+            if (end > maxEnd) {end = maxEnd;}
+            long minEnd = _context.clock().now() + 60L * 1000;
+            if (end < minEnd) {end = minEnd;}
+            lease.setEndDate(end);
             lease.setTunnelId(old.getTunnelId());
             lease.setGateway(old.getGateway());
             rv.addLease(lease);
