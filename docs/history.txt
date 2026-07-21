@@ -1,3 +1,25 @@
+2026-07-21 dr|z3d
+  * Router: JobQueueScaler reactive to CPU/GC/bandwidth saturation;
+    fix frozen RAM-based max runners; widen feedback rollback criteria
+  * Console: Add tuning and health page links to /home and /sitemap
+
+2026-07-20 dr|z3d
+  * Graphs: Single SVG pass (drop PNG pre-render); static font/date
+    cache; "Hide restarts" option; true count-per-period for event
+    stats; optimize rendering, fix cross-request legend state bug
+  * Console: Minigraph preserves full history; color health rings by
+    baseline deviation instead of absolute thresholds
+  * Streaming: Tuner window/RTO from retransmit ratio; byte-weighted
+    rtxRatio stat; drop queued SYNs on full accept queue; raise accept-
+    queue timeout 4s→30s
+  * Tuner: Hourly build-success average for streaming windows;
+    register peerCount/peerExpired/sentMessagesDepth stats
+  * Tunnel: Fix BuildExecutor comparator crash; lower LeaseSet
+    republish/rebuild throttle 5m→2m
+  * Transport: Queue GeoIP lookups for all peers
+  * NetDB: Bound LookupBanHammer burstTimestamps to stop ReplyTunnel leak
+  * SAM: Fix NPE on unregistered nickname
+
 2026-07-18 dr|z3d
   * Streaming: Dynamic BDP-based window cap (replaces hard MAX_WINDOW_SIZE);
     Tail Loss Probe and duplicate-ACK fast retransmit for faster loss
@@ -30,13 +52,14 @@
     and tunnel-readiness check
 
 2026-07-16 dr|z3d
-  * Console: /health subsystem-group ring ordering, replace DB Size with
-    LeaseSets for floodfills and dead BW Delay ring with Active Streams;
-    prepend truncated b32 to outbound tunnel names on /streams; fix
-    NaN/color thresholds and add neutral ring mode; dark theme improvements
-  * Console: Security hardening — HSTS, X-Frame-Options, TLS 1.0/1.1 off,
-    tighter CSRF Origin check, HttpOnly cookies
-  * Console: Fix NewsFetcher crash when news SU3 signature is invalid
+  * Console:
+    - /health subsystem-group ring ordering, replace DB Size with
+      LeaseSets for floodfills and dead BW Delay ring with Active Streams;
+      prepend truncated b32 to outbound tunnel names on /streams; fix
+      NaN/color thresholds and add neutral ring mode; dark theme improvements
+    - Security hardening — HSTS, X-Frame-Options, TLS 1.0/1.1 off,
+      tighter CSRF Origin check, HttpOnly cookies
+    - Fix NewsFetcher crash when news SU3 signature is invalid
   * SAM: Fix session destroy mid-stream and PING-timeout cascade killing
     active streams; bound handler pool and queue commands
   * BanLogger: Add country/host columns
