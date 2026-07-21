@@ -179,6 +179,23 @@ public class TunnelPool {
         return ctx.getProperty("i2p.tunnel.leasesetBuildMinInterval", 2L * 60 * 1000);
     }
 
+    /**
+     * Get the maximum lease set lease duration from config or auto-computed default.
+     * Lease end dates in published LeaseSets are capped to this value from now,
+     * so peers re-fetch our LeaseSet sooner when this is set shorter than the
+     * tunnel lifetime. The tunnel itself continues to process messages; only the
+     * cached LeaseSet on the requesting side expires earlier, triggering a re-fetch.
+     *
+     * The default is auto-computed as (i2p.netdb.republishInterval + 60s) to ensure
+     * the lease outlives the RepublishLeaseSetJob backup cycle, preventing a gap
+     * where peers have no valid LS.  With the default republish interval of 5 min
+     * this gives a 6-minute lease &#x2014; plenty of margin over the pool&#x2019;s 2-minute
+     * refresh cycle.  Set &quot;i2p.tunnel.leaseMaxDuration&quot; explicitly to override.
+     */
+    static long getLeaseMaxDuration(RouterContext ctx) {
+        long autoDefault = ctx.getProperty("i2p.netdb.republishInterval", 5L * 60 * 1000) + 60L * 1000;
+        return ctx.getProperty("i2p.tunnel.leaseMaxDuration", autoDefault);
+    }
 
     TunnelPool(RouterContext ctx, TunnelPoolManager mgr, TunnelPoolSettings settings, TunnelPeerSelector sel) {
         _context = ctx;
@@ -1548,15 +1565,9 @@ public class TunnelPool {
             if ((inId == null) || (gw == null)) {
                 continue;
             }
-            Lease lease = new Lease();
-            long realExpiration = tunnel.getExpiration();
-            if (tunnel instanceof TunnelCreatorConfig) {
-                realExpiration = ((TunnelCreatorConfig) tunnel).getConfig(0).getExpiration();
-            }
-            lease.setEndDate(realExpiration);
-            lease.setTunnelId(inId);
-            lease.setGateway(gw);
-            leases.add(lease);
+            Lease lease = buildLeaseFromTunnel(tunnel);
+            if (lease != null)
+                leases.add(lease);
         }
 
         if (leases.isEmpty()) {
@@ -2463,6 +2474,13 @@ public class TunnelPool {
         if (cfg instanceof TunnelCreatorConfig) {
             expiration = ((TunnelCreatorConfig) cfg).getConfig(0).getExpiration();
         }
+        // Cap lease end so peers re-fetch sooner than the full tunnel lifetime.
+        // The gateway still processes messages for the full lifetime; only the
+        // cached LeaseSet on the requesting side expires earlier.
+        long maxLease = getLeaseMaxDuration(_context);
+        long maxEnd = _context.clock().now() + maxLease;
+        if (expiration > maxEnd)
+            expiration = maxEnd;
         long minExpiry = _context.clock().now() + 60L * 1000;
         if (expiration < minExpiry) {expiration = minExpiry;}
         lease.setEndDate(expiration);

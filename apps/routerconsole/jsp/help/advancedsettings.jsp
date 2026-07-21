@@ -428,6 +428,9 @@
 <tr class=config><th>i2p.tunnel.leasesetBuildMinInterval={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]")%></td></tr>
 
+<tr class=config><th>i2p.tunnel.leaseMaxDuration={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings).")%></td></tr>
+
 <tr class=config><th>i2p.tunnel.maxConcurrentBuildsPerDirection={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]")%></td></tr>
 
