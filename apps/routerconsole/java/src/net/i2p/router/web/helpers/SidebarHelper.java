@@ -870,11 +870,15 @@ public class SidebarHelper extends HelperBase {
                                lname.equalsIgnoreCase("I2PChat") || lname.equalsIgnoreCase(_t("I2PChat"));
             boolean rI2PChat = rname.equalsIgnoreCase("Messenger") || rname.equalsIgnoreCase(_t("Messenger")) ||
                                rname.equalsIgnoreCase("I2PChat") || rname.equalsIgnoreCase(_t("I2PChat"));
+            boolean lHostCheck = lname.equals("HostChecker");
+            boolean rHostCheck = rname.equals("HostChecker");
             boolean lPing = lname.startsWith("Ping") || lname.startsWith(_t("Ping")) ||
                             lname.equalsIgnoreCase("I2Ping") || lname.equalsIgnoreCase(_t("I2Ping"));
             boolean rPing = rname.startsWith("Ping") || rname.startsWith(_t("Ping")) ||
                             rname.equalsIgnoreCase("I2Ping") || rname.equalsIgnoreCase(_t("I2Ping"));
 
+            if (lHostCheck && !rHostCheck) return -1;
+            if (!lHostCheck && rHostCheck) return 1;
             if (lI2PChat && !rI2PChat) return -1;
             if (!lI2PChat && rI2PChat) return 1;
             if (lSnark && !rSnark) return -1;
