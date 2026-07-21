@@ -6623,11 +6623,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * {@code max(minLimit, min(maxLimit, numTunnels * percent / 100))}.
      *
      * <p>Primary signal: {@code tunnel.nextHopLookupSuccessTime} (ms).
-     * Cross-refs: {@code tunnel.pendingLookupQueue}, {@code tunnel.dropLookupThrottle}.
+     * Cross-refs: {@code tunnel.pendingLookupQueue}, {@code tunnel.dropLookupThrottle},
+     *             {@code tunnel.rejectTimeout}.
      *
      * <p>Increases when lookups are fast — the netdb is responsive, so
      * more peer vetting costs little. Decreases when lookups are slow or
-     * the lookup queue/drop pressure indicates overload.
+     * the lookup queue/drop/timeout pressure indicates overload.
      *
      * @since 0.9.70+
      */
@@ -6649,26 +6650,28 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected double getObservedStat(RouterContext ctx) {
-            return getAdditionalStat(ctx, "tunnel.nextHopLookupSuccessTime");
+            return getAdditionalStat(_context, "tunnel.nextHopLookupSuccessTime");
         }
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double pendingQueue = getAdditionalStat(_context, "tunnel.pendingLookupQueue");
             double dropThrottle = getAdditionalEventCount(_context, "tunnel.dropLookupThrottle");
+            double rejectTimeout = getAdditionalEventCount(_context, "tunnel.rejectTimeout");
 
             boolean hasData = !Double.isNaN(observed);
             boolean lookupsSlow = hasData && observed > 5000;
             boolean lookupsFast = hasData && observed < 2000;
             boolean queueBackedUp = !Double.isNaN(pendingQueue) && pendingQueue > 10;
             boolean dropsHappening = !Double.isNaN(dropThrottle) && dropThrottle > 5;
+            boolean timeoutsHappening = !Double.isNaN(rejectTimeout) && rejectTimeout > 5;
 
-            // Slow lookups or queue/drops pressure = ease off
-            if (lookupsSlow || queueBackedUp || dropsHappening)
+            // Slow lookups or queue/drops/timeout pressure = ease off
+            if (lookupsSlow || queueBackedUp || dropsHappening || timeoutsHappening)
                 return Math.max(_min, current - _step);
 
             // Fast lookups, no pressure = more vetting is cheap
-            if (lookupsFast && !queueBackedUp && !dropsHappening)
+            if (lookupsFast && !queueBackedUp && !dropsHappening && !timeoutsHappening)
                 return Math.min(_max, current + _step);
 
             return current;
