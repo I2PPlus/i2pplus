@@ -102,14 +102,24 @@ public class HealthHelper extends HelperBase {
         }
     }
 
-    /** Get a rate stat's average value, trying wider windows (1m, 10m, 1h) until data is found. Returns 0 if unavailable */
+    /** Get a rate stat's current value (current partial period average if available, else last full period). Returns 0 if unavailable */
     private double getStatAvg(String name) {
         RateStat rs = _context.statManager().getRate(name);
         if (rs == null) return 0;
-        // Prefer current-interval data (1m, 10m, 1h windows).
-        // getLastEventCount() only reflects completed intervals, so
-        // use getAverageValue() directly — it checks the live interval.
-        long[] windows = {RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR};
+        // Prefer current partial period (most recent data)
+        Rate r1m = rs.getRate(RateConstants.ONE_MINUTE);
+        if (r1m != null) {
+            if (r1m.getCurrentEventCount() > 0) {
+                double cur = r1m.getCurrentTotalValue() / r1m.getCurrentEventCount();
+                if (cur > 0 && !Double.isNaN(cur) && !Double.isInfinite(cur))
+                    return cur;
+            }
+            double avg = r1m.getAverageValue();
+            if (avg > 0 && !Double.isNaN(avg) && !Double.isInfinite(avg))
+                return avg;
+        }
+        // Wider fallback windows
+        long[] windows = {RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR};
         for (long window : windows) {
             Rate r = rs.getRate(window);
             if (r == null) continue;
@@ -259,7 +269,7 @@ public class HealthHelper extends HelperBase {
 
         // Job Lag
         double lag = getStatAvg("jobQueue.jobLag");
-        String lagStr = lag > 0 ? (lag >= 1000 ? String.format("%.1f", lag / 1000) : String.valueOf((int) lag)) : "\u2014";
+        String lagStr = lag > 0 ? (lag >= 1000 ? String.format("%.1fs", lag / 1000) : lag >= 1 ? (int) lag + "ms" : (int) Math.round(lag * 1000) + "µs") : "\u2014";
         double lagScore = lag > 0 ? Math.max(0, 1.0 - lag / 500.0) : -1;
         double[] lagHist = getStatHistory("jobQueue.jobLag");
 
@@ -297,14 +307,14 @@ public class HealthHelper extends HelperBase {
         Anomaly lagAnom = getAnomaly("jobQueue.jobLag");
         Anomaly delayAnom = getAnomaly("transport.sendProcessingTime");
         Anomaly readyAnom = getAnomaly("jobQueue.readyJobs");
-        out.write(RingRenderer.renderRingCell(lagScore, _t("Job Lag"), withUnit(lagStr, _t("ms")),
+        out.write(RingRenderer.renderRingCell(lagScore, _t("Job Lag"), lagStr,
                   withDetail(_t("Job queue delay"), lagAnom.detail), RingRenderer.MODE_ANOMALY, lagHist, lagAnom.color));
         out.write(RingRenderer.renderRingCell(delayScore, _t("Msg Lag"), withUnit(delayStr, _t("ms")),
                   withDetail(_t("Message send processing time"), delayAnom.detail), RingRenderer.MODE_ANOMALY, delayHist, delayAnom.color));
         out.write(RingRenderer.renderRingCell(readyScore, _t("Job Queue"), readyStr,
                   withDetail(_t("Ready jobs waiting in queue"), readyAnom.detail), RingRenderer.MODE_ANOMALY, readyHist, readyAnom.color));
         out.write(RingRenderer.renderRingCell(threadScore, _t("Threads"), threadStr,
-                  new String[]{_t("Active JVM threads")}, RingRenderer.MODE_HEALTH, threadHist));
+                  new String[]{_t("Active JVM threads")}, RingRenderer.MODE_NEUTRAL, threadHist));
     }
 
     /**
@@ -363,7 +373,6 @@ public class HealthHelper extends HelperBase {
         Anomaly ntcpAnom = getAnomaly("ntcp.outboundEstablishTime");
         Anomaly ssuAnom = getAnomaly("udp.outboundEstablishTime");
         Anomaly rtoAnom = getAnomaly("udp.avgRTO");
-        Anomaly rttAnom = getAnomaly("client.sendAckTime");
         Anomaly timeoutAnom = getAnomaly("tunnel.buildTimeoutRate");
         Anomaly buildTimeAnom = getAnomaly("tunnel.buildClientSuccess");
         out.write(RingRenderer.renderRingCell(ntcpScore, _t("NTCP Estab"), withUnit(ntcpStr, _t("ms")),
@@ -377,7 +386,7 @@ public class HealthHelper extends HelperBase {
         out.write(RingRenderer.renderRingCell(msgScore, _t("Msgs/s"), msgStr,
                   new String[]{_t("Messages delivered per second")}, RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(rttScore, _t("RTT"), withUnit(rttStr, _t("ms")),
-                  withDetail(_t("End-to-end message round trip time"), rttAnom.detail), RingRenderer.MODE_ANOMALY, rttHist, rttAnom.color));
+                  new String[]{_t("End-to-end message round trip time")}, RingRenderer.MODE_HEALTH, rttHist));
         out.write(RingRenderer.renderRingCell(timeoutScore, _t("Timeout"), timeoutStr,
                   withDetail(_t("Tunnel build timeout rate"), timeoutAnom.detail), RingRenderer.MODE_ANOMALY, timeoutHist, timeoutAnom.color));
         out.write(RingRenderer.renderRingCell(buildTimeScore, _t("Tunnel Build"), withUnit(buildTimeStr, _t("ms")),
@@ -517,10 +526,9 @@ public class HealthHelper extends HelperBase {
                   new String[]{_t("Stored LeaseSets in floodfill")}, RingRenderer.MODE_NEUTRAL, null));
         out.write(RingRenderer.renderRingCell(hitScore, _t("Cache Hit"), hitStr,
                   new String[]{_t("NetDB lookup success rate")}, RingRenderer.MODE_HEALTH, hitHist));
-        Anomaly ffAnom = getAnomaly("netDb.floodfillVerifyOK");
         Anomaly ackAnom = getAnomaly("netDb.ackTime");
         out.write(RingRenderer.renderRingCell(ffScore, _t("Flood Verify"), withUnit(ffStr, _t("ms")),
-                  withDetail(_t("Floodfill verify time"), ffAnom.detail), RingRenderer.MODE_ANOMALY, ffHist, ffAnom.color));
+                  new String[]{_t("Floodfill verify time")}, RingRenderer.MODE_HEALTH, ffHist));
         out.write(RingRenderer.renderRingCell(ackScore, _t("NetDB ACK"), withUnit(ackStr, _t("ms")),
                   withDetail(_t("NetDB peer acknowledge time"), ackAnom.detail), RingRenderer.MODE_ANOMALY, ackHist, ackAnom.color));
         out.write(RingRenderer.renderRingCell(lookupScore, _t("Lookups/s"), lookupStr,
@@ -529,7 +537,7 @@ public class HealthHelper extends HelperBase {
                   new String[]{_t("Combined store + lookup operations per second")}, RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(storeScore, _t("Stores/s"), storeStr,
                   new String[]{_t("NetDB store messages handled per second")}, RingRenderer.MODE_ACTIVITY, storeHist));
-        out.write(RingRenderer.renderRingCell(lsScore, _t("LS Timeout"), withUnit(lsStr, _t("ms")),
+        out.write(RingRenderer.renderRingCell(lsScore, _t("LS Timeout"), lsStr,
                   new String[]{_t("LeaseSet request timeouts (last minute)")}, RingRenderer.MODE_HEALTH, null));
     }
 
