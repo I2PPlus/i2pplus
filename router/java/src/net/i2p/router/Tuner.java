@@ -5754,17 +5754,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         RiLookupTimeoutParam() {
             // Primary signal is netDb.successTime: "Time for successful NetDb lookup"
             // (RouterInfo AND LeaseSet), which fires on every successful iterative
-            // lookup and is therefore always populated. It replaces the now-removed
-            // netDb.lookupWithTimeoutSuccess/Fail stats, which were recorded only by
-            // the blocking-with-timeout lookup path that is no longer used.
+            // lookup. Cross-refs from tunnel.buildLookupSuccess catch the all-fail
+            // case where netDb.successTime has no events.
             super("MAX_RI_LOOKUP_TIME", "RouterInfo lookup timeout (ms)",
                   SUB_NETDB,
 
-                  2000, 5000, 500, "netDb.successTime", _context);
+                  3000, 5000, 500, "netDb.successTime", _context);
         }
 
         protected void applyValue(int value) {
             IterativeSearchJob.setMaxRouterInfoLookupTime(value);
+            _context.router().saveConfig("i2p.tunnel.build.nextHopLookupTimeout", Integer.toString(value));
         }
 
         protected int getRuntimeValue() {
@@ -5774,8 +5774,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected double getObservedStat(RouterContext ctx) {
             RateStat rs = _context.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
-            // netDb.successTime is always populated, so the 10-minute window is
-            // reliable; fall back to the 1-hour window only if it is somehow empty.
             Rate rate = rs.getRate(RateConstants.TEN_MINUTES);
             if (rate == null || rate.getLastEventCount() == 0) {
                 rate = rs.getRate(RateConstants.ONE_HOUR);
@@ -5791,6 +5789,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double riFails = getAdditionalEventCount(_context, "netDb.lookupsFailedRouterInfo");
             double failTime = getAdditionalStat(_context, "netDb.failedTime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double buildLookupSuccess = getAdditionalStat(_context, "tunnel.buildLookupSuccess");
 
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
             boolean failsElevated = !Double.isNaN(riFails) && riFails > 0;
@@ -5799,12 +5798,26 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // can't see this — only the fast wins are counted).
             boolean capBinding = failsElevated && !Double.isNaN(failTime)
                                  && failTime >= current * 0.9;
+            // tunnel.buildLookupSuccess records 0 per failed deferred lookup, 1 per
+            // success. An avg < 0.5 means more failures than successes — all-fail
+            // is the most common scenario when the timeout is too short.
+            boolean lookupAllFailing = !Double.isNaN(buildLookupSuccess)
+                                       && buildLookupSuccess < 0.5;
 
             int target = Math.max(_min, (int) (observed * 6));
 
-            // Grow toward the ceiling when the cap is truncating searches.
+            // Grow toward the ceiling when the cap is truncating searches or
+            // when deferred lookups are failing en masse (timeout too short).
+            // If lookups still all fail after a few growth steps, stop growing —
+            // the problem isn't the timeout, so burning more time on doomed
+            // lookups just adds latency.
             if (capBinding)
                 return Math.min(_max, current + _step);
+            if (lookupAllFailing) {
+                if (current >= _min + _step * 2)
+                    return current;
+                return Math.min(_max, current + _step);
+            }
 
             // Don't shrink while RouterInfo lookups are failing or the system is
             // congested — give in-flight searches room to complete.
