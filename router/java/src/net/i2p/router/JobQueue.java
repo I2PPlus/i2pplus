@@ -640,6 +640,30 @@ public class JobQueue {
     }
 
     /**
+     * Request additional job runners for an anticipated burst.
+     * Delegates to JobQueueScaler for tracking and auto-decay.
+     *
+     * @param count  number of additional runners to reserve
+     * @param reason  label for logging and tracking
+     * @param autoReleaseMs  if &gt; 0, auto-decay after this many ms
+     * @since 0.9.70+
+     */
+    public void requestJobRunners(int count, String reason, long autoReleaseMs) {
+        _scaler.requestRunners(count, reason, autoReleaseMs);
+    }
+
+    /**
+     * Release previously requested job runners.
+     *
+     * @param count  number of runners to release
+     * @param reason  must match the reason used in requestJobRunners
+     * @since 0.9.70+
+     */
+    public void releaseJobRunners(int count, String reason) {
+        _scaler.releaseRunners(count, reason);
+    }
+
+    /**
      * Add additional job runners to the pool.
      * Package-private for use by JobQueueScaler.
      *

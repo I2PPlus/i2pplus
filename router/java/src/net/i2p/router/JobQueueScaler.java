@@ -1,11 +1,14 @@
 package net.i2p.router;
 
 import java.util.Arrays;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 
 /**
@@ -71,6 +74,10 @@ class JobQueueScaler implements Runnable {
     private long[] _messageDelayHistory;
     private int _msgDelayHistoryIndex;
     private int _msgDelayHistoryCount;
+
+    // External runner requests from subsystems (e.g., Tuner)
+    private final AtomicInteger _externalFloor = new AtomicInteger(0);
+    private final ConcurrentHashMap<String, int[]> _externalRequests = new ConcurrentHashMap<>(4);
 
     // Recovery time tracking
     private long _loadEpisodeStart;
@@ -631,6 +638,14 @@ class JobQueueScaler implements Runnable {
         // not thread count. Emergency signals override the suppression.
         boolean suppressNormal = cpuSaturated || gcStorm || networkCongested || bwSaturated;
 
+        // TestJobs run 10-30s per invocation, occupying a runner slot without
+        // contributing to "productive" job throughput. When queued TestJobs
+        // exceed a threshold relative to active runners, we need headroom
+        // so shorter tasks (searches, builds) aren't starved.
+        int testJobCount = _jobQueue.getTestJobCount();
+        boolean testJobsDominant = testJobCount > 2 && activeRunners > 2
+            && (double) testJobCount / activeRunners > 0.25;
+
         if (canScaleUp) {
             double jobsRatio = activeRunners > 0 ? (double) readyJobs / activeRunners : 0;
             int lagThreshold = getScaleUpLagThreshold();
@@ -647,7 +662,7 @@ class JobQueueScaler implements Runnable {
             boolean criticalSlowJobs = activeJobMaxDuration > lagThreshold * 100; // 1s+ = wedged
 
             boolean hasTrendSignal = rapidQueueGrowth || messageDelaySpike || delayAccelerating ||
-                                     jobsBeingDropped || jobsSlowing;
+                                     jobsBeingDropped || jobsSlowing || testJobsDominant;
 
             // Emergency signals bypass the suppression gate
             boolean emergencySignal = criticalLag || criticalSlowJobs || jobsBeingDropped;
@@ -658,7 +673,7 @@ class JobQueueScaler implements Runnable {
 
                 if (highBacklog || highLag || highMessageDelay || highAvgLag || slowActiveJobs ||
                     rapidQueueGrowth || messageDelaySpike || delayAccelerating || jobsBeingDropped ||
-                    jobsSlowing) {
+                    jobsSlowing || testJobsDominant) {
                     _consecutiveScaleUpChecks++;
                     if (_consecutiveScaleUpChecks >= effectiveSustainedRequired || criticalLag || criticalSlowJobs) {
                         shouldScaleUp = true;
@@ -673,6 +688,10 @@ class JobQueueScaler implements Runnable {
                                     .append(", delayDelta=").append(delayDelta);
                             if (jobsBeingDropped)
                                 info.append(" Jobs being dropped");
+                            if (testJobsDominant)
+                                info.append(" TestJobs=").append(testJobCount)
+                                    .append(" (").append(testJobCount * 100 / Math.max(activeRunners, 1))
+                                    .append("% of runners)");
                             if (suppressNormal && emergencySignal)
                                 info.append(" Emergency override (cpu=").append(cpuLoad)
                                     .append("%, gc=").append(gcPause).append("ms)");
@@ -695,29 +714,42 @@ class JobQueueScaler implements Runnable {
             }
         }
 
+        // External floor: scale up to meet subsystem-requested minimum,
+        // bypassing normal trigger conditions
+        int effectiveMin = getEffectiveMinRunners();
+        if (!shouldScaleUp && effectiveMin > activeRunners && canScaleUp) {
+            shouldScaleUp = true;
+        }
+
         // Execute scaling
         if (shouldScaleUp) {
-            int scaleUpStep = Math.max(DEFAULT_SCALE_UP_STEP, 2);
-            if (maxLag > 1000) {
-                scaleUpStep = Math.max(scaleUpStep, 4);
-            } else if (maxLag > 500) {
-                scaleUpStep = Math.max(scaleUpStep, 3);
-            }
-            int lagThreshold = getScaleUpLagThreshold();
-            if (maxLag > lagThreshold * 5) {
-                scaleUpStep = Math.min(6, (int) (maxLag / lagThreshold / 2));
-            }
-            // Queue growing fast: scale more aggressively to get ahead of the spike
-            if (rapidQueueGrowth) {
-                scaleUpStep = Math.min(8, scaleUpStep + queueGrowth / QUEUE_GROWTH_RATE_THRESHOLD);
-            }
-            // Network congestion: add an extra runner to help drain backlog
-            if (networkCongested) {
-                scaleUpStep = Math.min(8, scaleUpStep + 1);
-            }
-            // Jobs being dropped: urgent overload signal, add 2 runners
-            if (jobsBeingDropped) {
-                scaleUpStep = Math.min(8, scaleUpStep + 2);
+            int scaleUpStep;
+            if (effectiveMin > activeRunners) {
+                // External floor: just reach the requested level
+                scaleUpStep = Math.min(effectiveMin, maxRunners) - activeRunners;
+            } else {
+                scaleUpStep = Math.max(DEFAULT_SCALE_UP_STEP, 2);
+                if (maxLag > 1000) {
+                    scaleUpStep = Math.max(scaleUpStep, 4);
+                } else if (maxLag > 500) {
+                    scaleUpStep = Math.max(scaleUpStep, 3);
+                }
+                int lagThreshold = getScaleUpLagThreshold();
+                if (maxLag > lagThreshold * 5) {
+                    scaleUpStep = Math.min(6, (int) (maxLag / lagThreshold / 2));
+                }
+                if (rapidQueueGrowth) {
+                    scaleUpStep = Math.min(8, scaleUpStep + queueGrowth / QUEUE_GROWTH_RATE_THRESHOLD);
+                }
+                if (networkCongested) {
+                    scaleUpStep = Math.min(8, scaleUpStep + 1);
+                }
+                if (jobsBeingDropped) {
+                    scaleUpStep = Math.min(8, scaleUpStep + 2);
+                }
+                if (testJobsDominant) {
+                    scaleUpStep = Math.min(8, scaleUpStep + Math.max(1, testJobCount / 3));
+                }
             }
 
             int targetRunners = Math.min(activeRunners + scaleUpStep, maxRunners);
@@ -727,7 +759,7 @@ class JobQueueScaler implements Runnable {
                 scaleUp(runnersToAdd, readyJobs, maxLag, avgLag);
             }
         } else {
-            checkScaleDown(activeRunners, readyJobs, maxLag, avgLag, minRunners, inCooldown);
+            checkScaleDown(activeRunners, readyJobs, maxLag, avgLag, effectiveMin, inCooldown);
         }
     }
 
@@ -736,6 +768,19 @@ class JobQueueScaler implements Runnable {
      */
     private void checkScaleDown(int activeRunners, int readyJobs, long maxLag, long avgLag,
                                 int minRunners, boolean inCooldown) {
+        // Don't scale down when TestJobs dominate — they occupy runners for 10-30s,
+        // so a low lag snapshot doesn't mean we have excess capacity.
+        int testJobCount = _jobQueue.getTestJobCount();
+        boolean testJobsDominant = testJobCount > 2 && activeRunners > 2
+            && (double) testJobCount / activeRunners > 0.25;
+        if (testJobsDominant) {
+            if (_log.shouldDebug()) {
+                _log.debug("Scale-down blocked: testJobs=" + testJobCount +
+                          ", activeRunners=" + activeRunners);
+            }
+            return;
+        }
+
         if (!inCooldown && activeRunners > minRunners && _preScaleSnapshot == null) {
             int lagThreshold = getScaleDownLagThreshold();
 
@@ -890,6 +935,99 @@ class JobQueueScaler implements Runnable {
         int removed = _jobQueue.removeIdleRunners(count);
         if (removed > 0) {
             _context.statManager().addRateData("jobQueue.runnerScaleDown", removed);
+        }
+    }
+
+    /**
+     * Request additional runners for an anticipated burst.
+     * Called by subsystems (e.g., Tuner) that know demand is imminent.
+     * The floor prevents the scaler from reducing below active + requested
+     * until auto-decay or explicit release.
+     *
+     * @param count  number of additional runners to reserve
+     * @param reason  label for tracking and logging
+     * @param autoReleaseMs  if &gt; 0, auto-decay after this many ms
+     * @since 0.9.70+
+     */
+    public void requestRunners(int count, String reason, long autoReleaseMs) {
+        if (count <= 0) return;
+        _externalFloor.addAndGet(count);
+        _externalRequests.compute(reason, (k, v) -> {
+            int[] cur = v;
+            if (cur == null) {
+                cur = new int[]{0};
+            }
+            cur[0] += count;
+            return cur;
+        });
+        if (autoReleaseMs > 0) {
+            _context.simpleTimer2().addEvent(new AutoReleaseEvent(reason, count), autoReleaseMs);
+        }
+        if (_log.shouldInfo()) {
+            _log.info("requestRunners: +" + count + " (" + reason +
+                      "), floor=" + _externalFloor.get());
+        }
+    }
+
+    /**
+     * Release previously requested runners. Idempotent — releasing more
+     * than requested just floors the per-reason count at 0.
+     *
+     * @param count  number of runners to release
+     * @param reason  must match the reason used in requestRunners
+     * @since 0.9.70+
+     */
+    public void releaseRunners(int count, String reason) {
+        if (count <= 0) return;
+        _externalRequests.computeIfPresent(reason, (k, v) -> {
+            v[0] = Math.max(0, v[0] - count);
+            return v[0] <= 0 ? null : v;
+        });
+        recalcExternalFloor();
+        if (_log.shouldInfo()) {
+            _log.info("releaseRunners: -" + count + " (" + reason +
+                      "), floor=" + _externalFloor.get());
+        }
+    }
+
+    /**
+     * Recalculate the external floor from all outstanding requests.
+     */
+    private void recalcExternalFloor() {
+        int total = 0;
+        for (int[] v : _externalRequests.values()) {
+            total += v[0];
+        }
+        _externalFloor.set(total);
+    }
+
+    /**
+     * Effective minimum runners including external requests.
+     *
+     * @return base min runners + external floor
+     */
+    private int getEffectiveMinRunners() {
+        return getMinRunnersDynamic() + _externalFloor.get();
+    }
+
+    /**
+     * Auto-release timer event — safety net for stranded requests.
+     * Fires once after the auto-release delay if releaseRunners wasn't
+     * called explicitly.
+     */
+    private class AutoReleaseEvent extends SimpleTimer2.TimedEvent {
+        private final String _reason;
+        private final int _count;
+
+        AutoReleaseEvent(String reason, int count) {
+            super(_context.simpleTimer2());
+            _reason = reason;
+            _count = count;
+        }
+
+        @Override
+        public void timeReached() {
+            releaseRunners(_count, _reason + "-auto");
         }
     }
 
