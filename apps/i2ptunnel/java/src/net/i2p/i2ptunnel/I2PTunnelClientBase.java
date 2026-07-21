@@ -773,7 +773,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         } catch (IOException ex) {
             synchronized (sockLock) {mySockets.clear();}
             if (open) {
-                String address = addr.toString().replace("/", "");
+                String address = addr.getHostAddress();
                 String msg = ex.getMessage().replace("java.net.BindException: ", "");
                 msg = msg.replace("Address already used", "Address in use -> Ensure you only have one instance of I2P running");
                 _log.error("Error listening for connections on " + address + ":" + localPort + " -> " + ex.getMessage());

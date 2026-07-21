@@ -863,9 +863,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     protected String getSocketString(int incomingPort) {
         if (incomingPort != 0 && !_socketMap.isEmpty()) {
             InetSocketAddress isa = _socketMap.get(Integer.valueOf(incomingPort));
-            if (isa != null) {return isa.toString().replace("/", "");}
+            if (isa != null) {return isa.getHostString() + ":" + isa.getPort();}
         }
-        return remoteHost.toString().replace("/", "") + ':' + remotePort;
+        return remoteHost.getHostAddress() + ':' + remotePort;
     }
 
     /**

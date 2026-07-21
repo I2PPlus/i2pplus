@@ -863,7 +863,7 @@ public class SAMBridge implements Runnable, ClientApp {
                 SocketChannel s = serverSocket.accept();
                 if (_log.shouldDebug())
                     _log.debug("New connection from "
-                               + s.socket().getInetAddress().toString() + ":"
+                               + s.socket().getInetAddress().getHostAddress() + ":"
                                + s.socket().getPort());
 
                 class HelloHandler implements Runnable, Handler {

@@ -202,7 +202,7 @@ abstract class SAMHandler implements Runnable, Handler {
         return (this.getClass().getSimpleName()
                 + " [Version " + verMajor + "." + verMinor
                 + " - Client: "
-                + this.socket.socket().getInetAddress().toString() + ":"
+                + this.socket.socket().getInetAddress().getHostAddress() + ":"
                 + this.socket.socket().getPort() + "]");
     }
 
