@@ -147,12 +147,17 @@ public class HealthHelper extends HelperBase {
      * A value near the router's normal range is green; progressively larger
      * deviations go yellow then red. When no baseline can be formed yet the
      * result is "gray" (collecting) with a null detail.
+     * <p>
+     * When the current value is at or below {@code greenThreshold} the result
+     * is unconditionally green — the absolute value is so small it cannot
+     * reasonably be called a regression even if the baseline is even smaller.
      *
      * @param name stat name (e.g. "udp.avgRTO")
+     * @param greenThreshold absolute value below which the result is always green (0 to disable)
      * @return anomaly result with color class and a human-readable detail line
      * @since 0.9.70+
      */
-    private Anomaly getAnomaly(String name) {
+    private Anomaly getAnomaly(String name, double greenThreshold) {
         RateStat rs = _context.statManager().getRate(name);
         if (rs == null) return new Anomaly("gray", null);
         Rate r1m = rs.getRate(RateConstants.ONE_MINUTE);
@@ -160,6 +165,10 @@ public class HealthHelper extends HelperBase {
         Rate r1h = rs.getRate(RateConstants.ONE_HOUR);
         if (r1m == null || r10m == null || r1h == null) return new Anomaly("gray", null);
         double current = r1m.getAverageValue();
+        if (Double.isNaN(current) || Double.isInfinite(current))
+            return new Anomaly("gray", null);
+        if (current <= greenThreshold)
+            return new Anomaly("green", null);
         double b10 = r10m.getAverageValue();
         double b1h = r1h.getAverageValue();
         // Need a baseline: weight recent 10m more than 1h
@@ -167,10 +176,8 @@ public class HealthHelper extends HelperBase {
         int n = (b10 > 0 ? 1 : 0) + (b1h > 0 ? 1 : 0);
         if (n == 0 || baseline <= 0) return new Anomaly(null, null);
         baseline /= n;
-        if (Double.isNaN(current) || Double.isInfinite(current)
-                || Double.isNaN(baseline) || Double.isInfinite(baseline)) {
+        if (Double.isNaN(baseline) || Double.isInfinite(baseline))
             return new Anomaly("gray", null);
-        }
         if (current < baseline)
             return new Anomaly("green", _t("improved") + " " + (int) ((1.0 - current / baseline) * 100) + "% \u2193");
         double dev = (current - baseline) / baseline;
@@ -305,9 +312,9 @@ public class HealthHelper extends HelperBase {
                   new String[]{_t("Memory usage")}, RingRenderer.MODE_HEALTH, memHist));
         out.write(RingRenderer.renderRingCell(uptimeScore, _t("Uptime"), uptimeStr,
                   new String[]{_t("Router uptime")}, RingRenderer.MODE_NEUTRAL, null));
-        Anomaly lagAnom = getAnomaly("jobQueue.jobLag");
-        Anomaly delayAnom = getAnomaly("transport.sendProcessingTime");
-        Anomaly readyAnom = getAnomaly("jobQueue.readyJobs");
+        Anomaly lagAnom = getAnomaly("jobQueue.jobLag", 1.0);
+        Anomaly delayAnom = getAnomaly("transport.sendProcessingTime", 1.0);
+        Anomaly readyAnom = getAnomaly("jobQueue.readyJobs", 0);
         out.write(RingRenderer.renderRingCell(lagScore, _t("Job Lag"), lagStr,
                   withDetail(_t("Job queue delay"), lagAnom.detail), RingRenderer.MODE_ANOMALY, lagHist, lagAnom.color));
         out.write(RingRenderer.renderRingCell(delayScore, _t("Msg Lag"), delayStr,
@@ -371,11 +378,11 @@ public class HealthHelper extends HelperBase {
         double timeoutScore = buildTimeout > 0 ? Math.max(0, 1.0 - buildTimeout / 30.0) : -1;
         double[] timeoutHist = getStatHistory("tunnel.buildTimeoutRate");
 
-        Anomaly ntcpAnom = getAnomaly("ntcp.outboundEstablishTime");
-        Anomaly ssuAnom = getAnomaly("udp.outboundEstablishTime");
-        Anomaly rtoAnom = getAnomaly("udp.avgRTO");
-        Anomaly timeoutAnom = getAnomaly("tunnel.buildTimeoutRate");
-        Anomaly buildTimeAnom = getAnomaly("tunnel.buildClientSuccess");
+        Anomaly ntcpAnom = getAnomaly("ntcp.outboundEstablishTime", 1.0);
+        Anomaly ssuAnom = getAnomaly("udp.outboundEstablishTime", 1.0);
+        Anomaly rtoAnom = getAnomaly("udp.avgRTO", 1.0);
+        Anomaly timeoutAnom = getAnomaly("tunnel.buildTimeoutRate", 0);
+        Anomaly buildTimeAnom = getAnomaly("tunnel.buildClientSuccess", 1.0);
         out.write(RingRenderer.renderRingCell(ntcpScore, _t("NTCP Estab"), ntcpStr,
                   withDetail(_t("NTCP outbound establish time"), ntcpAnom.detail), RingRenderer.MODE_ANOMALY, ntcpHist, ntcpAnom.color));
         out.write(RingRenderer.renderRingCell(ssuScore, _t("SSU Estab"), ssuStr,
@@ -459,7 +466,7 @@ public class HealthHelper extends HelperBase {
                   new String[]{streamDetail}, RingRenderer.MODE_NEUTRAL, streamHist));
         out.write(RingRenderer.renderRingCell(buildScore, _t("Build Success"), buildStr,
                   new String[]{_t("Tunnel build success rate")}, RingRenderer.MODE_HEALTH, buildHist));
-        Anomaly netdbAnom = getAnomaly("netDb.successTime");
+        Anomaly netdbAnom = getAnomaly("netDb.successTime", 1.0);
         out.write(RingRenderer.renderRingCell(netdbScore, _t("NetDB"), netdbStr,
                   withDetail(_t("NetDB lookup time"), netdbAnom.detail), RingRenderer.MODE_ANOMALY, netdbHist, netdbAnom.color));
         out.write(RingRenderer.renderRingCell(bannedScore, _t("Banned"), bannedStr,
@@ -527,7 +534,7 @@ public class HealthHelper extends HelperBase {
                   new String[]{_t("Stored LeaseSets in floodfill")}, RingRenderer.MODE_NEUTRAL, null));
         out.write(RingRenderer.renderRingCell(hitScore, _t("Cache Hit"), hitStr,
                   new String[]{_t("NetDB lookup success rate")}, RingRenderer.MODE_HEALTH, hitHist));
-        Anomaly ackAnom = getAnomaly("netDb.ackTime");
+        Anomaly ackAnom = getAnomaly("netDb.ackTime", 1.0);
         out.write(RingRenderer.renderRingCell(ffScore, _t("Flood Verify"), ffStr,
                   new String[]{_t("Floodfill verify time")}, RingRenderer.MODE_HEALTH, ffHist));
         out.write(RingRenderer.renderRingCell(ackScore, _t("NetDB ACK"), ackStr,
