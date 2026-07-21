@@ -167,7 +167,7 @@ public class HealthHelper extends HelperBase {
         int n = (b10 > 0 ? 1 : 0) + (b1h > 0 ? 1 : 0);
         if (n == 0 || baseline <= 0) return new Anomaly(null, null);
         baseline /= n;
-        if (current <= 0 || Double.isNaN(current) || Double.isInfinite(current)
+        if (Double.isNaN(current) || Double.isInfinite(current)
                 || Double.isNaN(baseline) || Double.isInfinite(baseline)) {
             return new Anomaly("gray", null);
         }
