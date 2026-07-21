@@ -413,11 +413,6 @@ class SAMv3Handler extends SAMv1Handler
             Properties allProps = new Properties();
             allProps.putAll(i2cpProps);
             allProps.putAll(props);
-            // Shorten per-destination cooldown so CONNECT retries are not penalized
-            // codeql[java/toctou-race-condition] allProps is a freshly-built local Properties; no shared-state check-then-act
-            if (!allProps.containsKey("i2p.streaming.destinationCooldownMs"))
-                allProps.setProperty("i2p.streaming.destinationCooldownMs", "15000");
-
             if (style.equals("MASTER") || style.equals("PRIMARY")) {
                 allProps.setProperty("i2p.streaming.enforceProtocol", "true");
                 allProps.setProperty("i2cp.dontPublishLeaseSet", "false");

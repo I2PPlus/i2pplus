@@ -155,7 +155,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
 
         I2PSocketOptions opts = socketMgr.buildOptions(props);
         if (props.getProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT) == null)
-            opts.setConnectTimeout((long) 15 * 1000);
+            opts.setConnectTimeout((long) 60 * 1000);
         String fromPort = props.getProperty("FROM_PORT");
         if (fromPort != null) {
             try {

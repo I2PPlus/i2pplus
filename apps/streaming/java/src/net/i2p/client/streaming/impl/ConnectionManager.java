@@ -64,10 +64,10 @@ class ConnectionManager {
      * Key is destination Hash, value is timestamp of last failed connect.
      * @since 2.7.0
      */
-    private static final ConcurrentHashMap<Hash, Long> _destFailures = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Hash, Long> _destFailures = new ConcurrentHashMap<>(4);
 
     /** Lock for interruptible cooldown wait in connect() — notified on shutdown. */
-    private static final Object _cooldownLock = new Object();
+    private final Object _cooldownLock = new Object();
 
     /**
      * Cooldown between connection attempts to the same failed destination.
@@ -953,6 +953,7 @@ class ConnectionManager {
      */
     public void shutdown() {
         disconnectAllHard();
+        _destFailures.clear();
         _tcbShare.stop();
         _timer.stop();
         _outboundQueue.close();
