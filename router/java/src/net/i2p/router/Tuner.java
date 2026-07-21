@@ -343,6 +343,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new MaxConcurrentBuildsParam());
         _params.add(new ActivityWindowParam());
         _params.add(new LookupLimitParam());
+        _params.add(new PercentLookupLimitParam());
         _params.add(new MaxParticipatingTunnelsParam());
         _params.add(new ObMsgsPerPumpParam());
         _params.add(new PerTunnelBweDivisorParam());
@@ -6608,6 +6609,67 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 if (!Double.isNaN(concurrentBuilds) && concurrentBuilds < 5)
                     return Math.max(_min, current - _step);
             }
+
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the percentage of participating tunnels used to throttle
+     * concurrent next-hop RI lookups for incoming tunnel build requests.
+     *
+     * <p>Controls how aggressively concurrent lookups scale with tunnel count.
+     * The effective limit is:
+     * {@code max(minLimit, min(maxLimit, numTunnels * percent / 100))}.
+     *
+     * <p>Primary signal: {@code tunnel.nextHopLookupSuccessTime} (ms).
+     * Cross-refs: {@code tunnel.pendingLookupQueue}, {@code tunnel.dropLookupThrottle}.
+     *
+     * <p>Increases when lookups are fast — the netdb is responsive, so
+     * more peer vetting costs little. Decreases when lookups are slow or
+     * the lookup queue/drop pressure indicates overload.
+     *
+     * @since 0.9.70+
+     */
+    private class PercentLookupLimitParam extends BaseParam {
+
+        PercentLookupLimitParam() {
+            super("i2p.tunnel.build.percentLookupLimit", "Tunnel next-hop lookup %",
+                  SUB_TUNNEL,
+                  10, 80, 5, "tunnel.nextHopLookupSuccessTime", _context);
+        }
+
+        protected void applyValue(int value) {
+            _context.router().saveConfig("i2p.tunnel.build.percentLookupLimit", Integer.toString(value));
+        }
+
+        protected int getRuntimeValue() {
+            return _context.getProperty("i2p.tunnel.build.percentLookupLimit",
+                                        SystemVersion.isSlow() ? 15 : 40);
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            return getAdditionalStat(ctx, "tunnel.nextHopLookupSuccessTime");
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double pendingQueue = getAdditionalStat(_context, "tunnel.pendingLookupQueue");
+            double dropThrottle = getAdditionalEventCount(_context, "tunnel.dropLookupThrottle");
+
+            boolean hasData = !Double.isNaN(observed);
+            boolean lookupsSlow = hasData && observed > 5000;
+            boolean lookupsFast = hasData && observed < 2000;
+            boolean queueBackedUp = !Double.isNaN(pendingQueue) && pendingQueue > 10;
+            boolean dropsHappening = !Double.isNaN(dropThrottle) && dropThrottle > 5;
+
+            // Slow lookups or queue/drops pressure = ease off
+            if (lookupsSlow || queueBackedUp || dropsHappening)
+                return Math.max(_min, current - _step);
+
+            // Fast lookups, no pressure = more vetting is cheap
+            if (lookupsFast && !queueBackedUp && !dropsHappening)
+                return Math.min(_max, current + _step);
 
             return current;
         }

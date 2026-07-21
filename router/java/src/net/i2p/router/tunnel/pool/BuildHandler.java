@@ -180,6 +180,7 @@ public class BuildHandler implements Runnable {
         ctx.statManager().createRequiredRateStat("tunnel.pendingLookupQueue", "Pending lookup queue size", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.dropReqThrottle", "Dropped tunnel build (request limit)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.nextHopLookupSuccessTime", "Time taken for successful remote next hop lookup (ms)", "Tunnels", RATES);
+        ctx.statManager().createRequiredRateStat("tunnel.buildBanHit", "Build request next-hop is banned", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectHopThrottle", "Rejected tunnel build (per-hop limit)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectHostile", "Rejected malicious tunnel build", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectOverloaded", "Delay processing rejected request (ms)", "Tunnels [Participating]", RATES);
@@ -540,6 +541,7 @@ public class BuildHandler implements Runnable {
             if (_log.shouldWarn()) {
                 _log.warn("Dropping Tunnel Request -> Next peer [" + nextPeer.toBase64().substring(0,6) + "] is banned");
             }
+            _context.statManager().addRateData("tunnel.buildBanHit", 1);
             if (from != null) {_context.commSystem().mayDisconnect(from);}
             return -1;
         }

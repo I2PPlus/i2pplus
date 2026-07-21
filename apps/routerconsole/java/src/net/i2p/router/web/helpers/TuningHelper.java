@@ -91,6 +91,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("i2p.tunnel.build.firstHopTimeout", _x("Tunnel Build First Hop Timeout"));
         DISPLAY_NAMES.put("tunnel.build.maxConcurrent", _x("Max Concurrent Tunnel Builds"));
         DISPLAY_NAMES.put("i2p.tunnel.build.maxLookupLimit", _x("Max Concurrent RI Lookups"));
+        DISPLAY_NAMES.put("i2p.tunnel.build.percentLookupLimit", _x("Next-Hop Lookup %"));
         DISPLAY_NAMES.put("tunnel.testJob.maxQueued", _x("Max Concurrent Test Jobs"));
         DISPLAY_NAMES.put("tunnel.testJob.minTestDelay", _x("Min Delay Between Tests"));
         DISPLAY_NAMES.put("tunnel.testJob.maxTestDelay", _x("Max Delay Between Tests"));
@@ -214,6 +215,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("i2p.tunnel.build.firstHopTimeout", _x("First-hop build forward timeout (ms)."));
         PARAM_DESCRIPTIONS.put("tunnel.build.maxConcurrent", _x("Max concurrent tunnel builds."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.build.maxLookupLimit", _x("Max concurrent RI lookups during builds."));
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.build.percentLookupLimit", _x("Concurrent next-hop lookup limit as % of transit tunnels."));
         PARAM_DESCRIPTIONS.put("tunnel.testJob.maxQueued", _x("Max concurrent tunnel test jobs."));
         PARAM_DESCRIPTIONS.put("tunnel.testJob.minTestDelay", _x("Min interval between tunnel tests (ms)."));
         PARAM_DESCRIPTIONS.put("tunnel.testJob.maxTestDelay", _x("Max interval between tunnel tests (ms)."));
