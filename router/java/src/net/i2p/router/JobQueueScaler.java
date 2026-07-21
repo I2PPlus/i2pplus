@@ -642,7 +642,9 @@ class JobQueueScaler implements Runnable {
         // contributing to "productive" job throughput. When queued TestJobs
         // exceed a threshold relative to active runners, we need headroom
         // so shorter tasks (searches, builds) aren't starved.
-        int testJobCount = _jobQueue.getTestJobCount();
+        // Use getReadyTestJobCount() to exclude future-scheduled timed jobs,
+        // which don't consume runner resources.
+        int testJobCount = _jobQueue.getReadyTestJobCount();
         boolean testJobsDominant = testJobCount > 2 && activeRunners > 2
             && (double) testJobCount / activeRunners > 0.25;
 
@@ -770,7 +772,8 @@ class JobQueueScaler implements Runnable {
                                 int minRunners, boolean inCooldown) {
         // Don't scale down when TestJobs dominate — they occupy runners for 10-30s,
         // so a low lag snapshot doesn't mean we have excess capacity.
-        int testJobCount = _jobQueue.getTestJobCount();
+        // Exclude future-scheduled timed TestJobs, which don't consume runner resources.
+        int testJobCount = _jobQueue.getReadyTestJobCount();
         boolean testJobsDominant = testJobCount > 2 && activeRunners > 2
             && (double) testJobCount / activeRunners > 0.25;
         if (testJobsDominant) {
@@ -1027,7 +1030,7 @@ class JobQueueScaler implements Runnable {
 
         @Override
         public void timeReached() {
-            releaseRunners(_count, _reason + "-auto");
+            releaseRunners(_count, _reason);
         }
     }
 

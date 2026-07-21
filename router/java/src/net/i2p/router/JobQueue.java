@@ -980,4 +980,29 @@ public class JobQueue {
         return count;
     }
 
+    /**
+     * Count TestJob instances that are ready to run or currently running
+     * (excluding future-scheduled timed jobs). Used by the scaler to determine
+     * whether TestJobs are dominating runner resources right now.
+     *
+     * @return the number of ready/active TestJob instances
+     * @since 0.9.70+
+     */
+    public int getReadyTestJobCount() {
+        int count = 0;
+        synchronized (_jobLock) {
+            for (Job job : _readyJobs) {
+                if (job instanceof TestJob) {
+                    count++;
+                }
+            }
+            for (Job job : _highPriorityJobs) {
+                if (job instanceof TestJob) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
 }
