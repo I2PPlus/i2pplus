@@ -133,12 +133,13 @@ public class RepublishLeaseSetJob extends JobImpl {
                         // Renew early enough to never expire - at least EXPIRY_WINDOW before expiry
                         Long lastPubLog = _lastPublishLogTime.get(_dest);
                         if (timeUntilExpiry <= EXPIRY_WINDOW) {
-                            // Too close to expiry - renew immediately
+                            // Too close to expiry — trigger a fresh LS from the client NOW
                             if (_log.shouldInfo()) {
-                                _log.info("LeaseSet expiring soon - immediate renew for " + name + " [" + _dest.toBase32().substring(0,8) +
-                                          "] (expires in " + (timeUntilExpiry / 1000) + "s)");
+                                _log.info("LeaseSet expiring soon for " + name + " [" + _dest.toBase32().substring(0,8) +
+                                          "] (expires in " + (timeUntilExpiry / 1000) + "s) — requesting immediate renew");
                             }
-                            lastPubLog = null; // Force log
+                            getContext().clientManager().requestLeaseSet(_dest, ls);
+                            lastPubLog = null;
                         }
                         if (_log.shouldInfo() && (lastPubLog == null || (now - lastPubLog > 10L * 1000))) {
                             _log.info("Publishing LeaseSet" + name + " [" + _dest.toBase32().substring(0,8) +
@@ -154,8 +155,13 @@ public class RepublishLeaseSetJob extends JobImpl {
                         failCount.set(0);
                         _facade.sendStore(_dest, ls, null, new OnRepublishFailure(ls), getPublishTimeout(), null);
                         _lastPublished = now;
-                        // Schedule next republish for EXPIRY_WINDOW before expiry
-                        long nextRepublish = Math.max(getRepublishInterval(), timeUntilExpiry - EXPIRY_WINDOW);
+                        // Schedule next republish so it fires at least EXPIRY_WINDOW before expiry.
+                        // Math.min — when the LS is close to expiry we schedule SOONER, not later.
+                        // The old Math.max did the opposite, causing leases to expire between
+                        // republish cycles and taking services offline until the next cycle.
+                        long nextRepublish = Math.max(30L * 1000,
+                                                      Math.min(getRepublishInterval(),
+                                                               timeUntilExpiry - EXPIRY_WINDOW));
                         scheduleRepublish(nextRepublish);
                     }
                 } else {

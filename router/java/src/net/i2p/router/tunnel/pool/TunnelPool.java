@@ -2102,7 +2102,20 @@ public class TunnelPool {
         // still valid and prevents unnecessary churn in published leases.
         // Emergency callers (removeTunnelSynchronous) use buildNewLeaseSetFromCopy
         // and bypass this cache entirely.
-        if (_cachedLeaseSet != null && now - _lastLeaseSetBuildTime < getLeaseSetBuildMinInterval(_context)) {
+        // CHECK: if the cached LS is expiring within 3 min, bypass cache regardless
+        // of age — the caller needs fresh lease dates, not recycled ones.
+        boolean cacheValid = _cachedLeaseSet != null &&
+            now - _lastLeaseSetBuildTime < getLeaseSetBuildMinInterval(_context);
+        if (cacheValid) {
+            long earliestExpiry = _cachedLeaseSet.getEarliestLeaseDate();
+            long minExpiry = now + 3L * 60 * 1000;
+            if (earliestExpiry <= 0 || earliestExpiry < minExpiry) {
+                if (_log.shouldInfo())
+                    _log.info(toString() + "\n* Cached LeaseSet expiring soon — rebuilding");
+                cacheValid = false;
+            }
+        }
+        if (cacheValid) {
             return _cachedLeaseSet;
         }
 

@@ -986,6 +986,17 @@ class ClientConnectionRunner {
                     if (i == leases - 1) {
                         if (_log.shouldDebug())
                             _log.debug("Requested LeaseSet hasn't changed");
+                        // Force renew if current LS is expiring within 3 min —
+                        // same leases but about to expire, the client must
+                        // sign fresh ones to keep the destination reachable.
+                        long earliestExpiry = current.getEarliestLeaseDate();
+                        long now = _context.clock().now();
+                        if (earliestExpiry > now && earliestExpiry < now + 3L * 60 * 1000) {
+                            if (_log.shouldInfo())
+                                _log.info("Current LeaseSet expiring in " + ((earliestExpiry - now) / 1000) +
+                                          "s — forcing renew of [" + h.toBase32().substring(0,8) + "]");
+                            break; // fall through to I2CP request
+                        }
                         if (onCreateJob != null)
                             _context.jobQueue().addJob(onCreateJob);
                         return; // no change
