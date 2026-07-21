@@ -165,19 +165,20 @@ public class HealthHelper extends HelperBase {
         // Need a baseline: weight recent 10m more than 1h
         double baseline = (b10 > 0 ? 2.0 * b10 : 0) + (b1h > 0 ? b1h : 0);
         int n = (b10 > 0 ? 1 : 0) + (b1h > 0 ? 1 : 0);
-        if (n == 0 || baseline <= 0) return new Anomaly("gray", null);
+        if (n == 0 || baseline <= 0) return new Anomaly(null, null);
         baseline /= n;
         if (current <= 0 || Double.isNaN(current) || Double.isInfinite(current)
                 || Double.isNaN(baseline) || Double.isInfinite(baseline)) {
             return new Anomaly("gray", null);
         }
-        double dev = Math.abs(current - baseline) / baseline;
+        if (current < baseline)
+            return new Anomaly("green", _t("improved") + " " + (int) ((1.0 - current / baseline) * 100) + "% \u2193");
+        double dev = (current - baseline) / baseline;
         String color;
         if (dev <= RingRenderer.ANOMALY_GREEN_BAND) color = "green";
         else if (dev <= RingRenderer.ANOMALY_YELLOW_BAND) color = "yellow";
         else color = "red";
-        String detail = _t("vs baseline") + " " + (int) (dev * 100) + "%"
-                + (current >= baseline ? " \u2191" : " \u2193");
+        String detail = _t("vs baseline") + " " + (int) (dev * 100) + "% \u2191";
         return new Anomaly(color, detail);
     }
 
@@ -275,7 +276,7 @@ public class HealthHelper extends HelperBase {
 
         // Message Delay
         double msgDelay = getStatAvg("transport.sendProcessingTime");
-        String delayStr = msgDelay > 0 ? (msgDelay >= 1000 ? String.format("%.1f", msgDelay / 1000) : String.valueOf((int) msgDelay)) : "\u2014";
+        String delayStr = msgDelay > 0 ? (msgDelay >= 1000 ? String.format("%.1fs", msgDelay / 1000) : (int) msgDelay + "ms") : "\u2014";
         double delayScore = msgDelay > 0 ? Math.max(0, 1.0 - msgDelay / 1000.0) : -1;
         double[] delayHist = getStatHistory("transport.sendProcessingTime");
 
@@ -309,7 +310,7 @@ public class HealthHelper extends HelperBase {
         Anomaly readyAnom = getAnomaly("jobQueue.readyJobs");
         out.write(RingRenderer.renderRingCell(lagScore, _t("Job Lag"), lagStr,
                   withDetail(_t("Job queue delay"), lagAnom.detail), RingRenderer.MODE_ANOMALY, lagHist, lagAnom.color));
-        out.write(RingRenderer.renderRingCell(delayScore, _t("Msg Lag"), withUnit(delayStr, _t("ms")),
+        out.write(RingRenderer.renderRingCell(delayScore, _t("Msg Lag"), delayStr,
                   withDetail(_t("Message send processing time"), delayAnom.detail), RingRenderer.MODE_ANOMALY, delayHist, delayAnom.color));
         out.write(RingRenderer.renderRingCell(readyScore, _t("Job Queue"), readyStr,
                   withDetail(_t("Ready jobs waiting in queue"), readyAnom.detail), RingRenderer.MODE_ANOMALY, readyHist, readyAnom.color));
@@ -324,13 +325,13 @@ public class HealthHelper extends HelperBase {
     private void renderTransportSection(Writer out) throws IOException {
         // NTCP Establish Time
         double ntcpEstab = getStatAvg("ntcp.outboundEstablishTime");
-        String ntcpStr = ntcpEstab > 0 ? (ntcpEstab >= 1000 ? String.format("%.1f", ntcpEstab / 1000) : String.valueOf((int) ntcpEstab)) : "\u2014";
+        String ntcpStr = ntcpEstab > 0 ? (ntcpEstab >= 1000 ? String.format("%.1fs", ntcpEstab / 1000) : (int) ntcpEstab + "ms") : "\u2014";
         double ntcpScore = ntcpEstab > 0 ? Math.max(0, 1.0 - ntcpEstab / 2000.0) : -1;
         double[] ntcpHist = getStatHistory("ntcp.outboundEstablishTime");
 
         // RTO
         double rto = getStatAvg("udp.avgRTO");
-        String rtoStr = rto > 0 ? String.valueOf((int) rto) : "\u2014";
+        String rtoStr = rto > 0 ? (int) rto + "ms" : "\u2014";
         double rtoScore = rto > 0 ? Math.max(0, 1.0 - rto / 3000.0) : -1;
         double[] rtoHist = getStatHistory("udp.avgRTO");
 
@@ -348,19 +349,19 @@ public class HealthHelper extends HelperBase {
 
         // RTT
         double rtt = getStatAvg("client.sendAckTime");
-        String rttStr = rtt > 0 ? (rtt >= 1000 ? String.format("%.1f", rtt / 1000) : String.valueOf((int) rtt)) : "\u2014";
+        String rttStr = rtt > 0 ? (rtt >= 1000 ? String.format("%.1fs", rtt / 1000) : (int) rtt + "ms") : "\u2014";
         double rttScore = rtt > 0 ? Math.max(0, 1.0 - rtt / 7500.0) : -1;
         double[] rttHist = getStatHistory("client.sendAckTime");
 
         // Build Time
         double buildTime = getStatAvg("tunnel.buildClientSuccess");
-        String buildTimeStr = buildTime > 0 ? (buildTime >= 1000 ? String.format("%.1f", buildTime / 1000) : String.valueOf((int) buildTime)) : "\u2014";
+        String buildTimeStr = buildTime > 0 ? (buildTime >= 1000 ? String.format("%.1fs", buildTime / 1000) : (int) buildTime + "ms") : "\u2014";
         double buildTimeScore = buildTime > 0 ? Math.max(0, 1.0 - buildTime / 10000.0) : -1;
         double[] buildTimeHist = getStatHistory("tunnel.buildClientSuccess");
 
         // SSU Outbound Establish Time (new)
         double ssuEstab = getStatAvg("udp.outboundEstablishTime");
-        String ssuStr = ssuEstab > 0 ? (ssuEstab >= 1000 ? String.format("%.1f", ssuEstab / 1000) : String.valueOf((int) ssuEstab)) : "\u2014";
+        String ssuStr = ssuEstab > 0 ? (ssuEstab >= 1000 ? String.format("%.1fs", ssuEstab / 1000) : (int) ssuEstab + "ms") : "\u2014";
         double ssuScore = ssuEstab > 0 ? Math.max(0, 1.0 - ssuEstab / 5000.0) : -1;
         double[] ssuHist = getStatHistory("udp.outboundEstablishTime");
 
@@ -375,21 +376,21 @@ public class HealthHelper extends HelperBase {
         Anomaly rtoAnom = getAnomaly("udp.avgRTO");
         Anomaly timeoutAnom = getAnomaly("tunnel.buildTimeoutRate");
         Anomaly buildTimeAnom = getAnomaly("tunnel.buildClientSuccess");
-        out.write(RingRenderer.renderRingCell(ntcpScore, _t("NTCP Estab"), withUnit(ntcpStr, _t("ms")),
+        out.write(RingRenderer.renderRingCell(ntcpScore, _t("NTCP Estab"), ntcpStr,
                   withDetail(_t("NTCP outbound establish time"), ntcpAnom.detail), RingRenderer.MODE_ANOMALY, ntcpHist, ntcpAnom.color));
-        out.write(RingRenderer.renderRingCell(ssuScore, _t("SSU Estab"), withUnit(ssuStr, _t("ms")),
+        out.write(RingRenderer.renderRingCell(ssuScore, _t("SSU Estab"), ssuStr,
                   withDetail(_t("SSU outbound establish time"), ssuAnom.detail), RingRenderer.MODE_ANOMALY, ssuHist, ssuAnom.color));
-        out.write(RingRenderer.renderRingCell(rtoScore, _t("SSU RTO"), withUnit(rtoStr, _t("ms")),
+        out.write(RingRenderer.renderRingCell(rtoScore, _t("SSU RTO"), rtoStr,
                   withDetail(_t("SSU retransmission timeout"), rtoAnom.detail), RingRenderer.MODE_ANOMALY, rtoHist, rtoAnom.color));
         out.write(RingRenderer.renderRingCell(connScore, _t("Conns/s"), connStr,
                   new String[]{_t("NTCP connections established per second")}, RingRenderer.MODE_ACTIVITY, null));
         out.write(RingRenderer.renderRingCell(msgScore, _t("Msgs/s"), msgStr,
                   new String[]{_t("Messages delivered per second")}, RingRenderer.MODE_ACTIVITY, null));
-        out.write(RingRenderer.renderRingCell(rttScore, _t("RTT"), withUnit(rttStr, _t("ms")),
+        out.write(RingRenderer.renderRingCell(rttScore, _t("RTT"), rttStr,
                   new String[]{_t("End-to-end message round trip time")}, RingRenderer.MODE_HEALTH, rttHist));
         out.write(RingRenderer.renderRingCell(timeoutScore, _t("Timeout"), timeoutStr,
                   withDetail(_t("Tunnel build timeout rate"), timeoutAnom.detail), RingRenderer.MODE_ANOMALY, timeoutHist, timeoutAnom.color));
-        out.write(RingRenderer.renderRingCell(buildTimeScore, _t("Tunnel Build"), withUnit(buildTimeStr, _t("ms")),
+        out.write(RingRenderer.renderRingCell(buildTimeScore, _t("Tunnel Build"), buildTimeStr,
                   withDetail(_t("Client tunnel build latency"), buildTimeAnom.detail), RingRenderer.MODE_ANOMALY, buildTimeHist, buildTimeAnom.color));
     }
 
@@ -431,7 +432,7 @@ public class HealthHelper extends HelperBase {
 
         // NetDB lookup time
         double netdb = getStatAvg("netDb.successTime");
-        String netdbStr = netdb > 0 ? (netdb >= 1000 ? String.format("%.1f", netdb / 1000) : String.valueOf((int) netdb)) : "\u2014";
+        String netdbStr = netdb > 0 ? (netdb >= 1000 ? String.format("%.1fs", netdb / 1000) : (int) netdb + "ms") : "\u2014";
         double netdbScore = netdb > 0 ? Math.max(0, 1.0 - netdb / 3000.0) : -1;
         double[] netdbHist = getStatHistory("netDb.successTime");
 
@@ -459,7 +460,7 @@ public class HealthHelper extends HelperBase {
         out.write(RingRenderer.renderRingCell(buildScore, _t("Build Success"), buildStr,
                   new String[]{_t("Tunnel build success rate")}, RingRenderer.MODE_HEALTH, buildHist));
         Anomaly netdbAnom = getAnomaly("netDb.successTime");
-        out.write(RingRenderer.renderRingCell(netdbScore, _t("NetDB"), withUnit(netdbStr, _t("ms")),
+        out.write(RingRenderer.renderRingCell(netdbScore, _t("NetDB"), netdbStr,
                   withDetail(_t("NetDB lookup time"), netdbAnom.detail), RingRenderer.MODE_ANOMALY, netdbHist, netdbAnom.color));
         out.write(RingRenderer.renderRingCell(bannedScore, _t("Banned"), bannedStr,
                   new String[]{_t("Total banned peers")}, RingRenderer.MODE_NEUTRAL, null));
@@ -472,7 +473,7 @@ public class HealthHelper extends HelperBase {
     private void renderFFSection(Writer out) throws IOException {
         // NetDB ACK Time (new)
         double ackTime = getStatAvg("netDb.ackTime");
-        String ackStr = ackTime > 0 ? (ackTime >= 1000 ? String.format("%.1f", ackTime / 1000) : String.valueOf((int) ackTime)) : "\u2014";
+        String ackStr = ackTime > 0 ? (ackTime >= 1000 ? String.format("%.1fs", ackTime / 1000) : (int) ackTime + "ms") : "\u2014";
         double ackScore = ackTime > 0 ? Math.max(0, 1.0 - ackTime / 5000.0) : -1;
         double[] ackHist = getStatHistory("netDb.ackTime");
 
@@ -493,7 +494,7 @@ public class HealthHelper extends HelperBase {
         // Flood Verify
         double ffVerify = getStatAvg("netDb.floodfillVerifyOK");
         if (Double.isNaN(ffVerify) || Double.isInfinite(ffVerify)) ffVerify = 0;
-        String ffStr = ffVerify > 0 ? (ffVerify >= 1000 ? String.format("%.1f", ffVerify / 1000) : String.valueOf((int) ffVerify)) : "\u2014";
+        String ffStr = ffVerify > 0 ? (ffVerify >= 1000 ? String.format("%.1fs", ffVerify / 1000) : (int) ffVerify + "ms") : "\u2014";
         double ffScore = ffVerify > 0 ? Math.max(0, 1.0 - ffVerify / 5000.0) : -1;
         double[] ffHist = getStatHistory("netDb.floodfillVerifyOK");
 
@@ -527,9 +528,9 @@ public class HealthHelper extends HelperBase {
         out.write(RingRenderer.renderRingCell(hitScore, _t("Cache Hit"), hitStr,
                   new String[]{_t("NetDB lookup success rate")}, RingRenderer.MODE_HEALTH, hitHist));
         Anomaly ackAnom = getAnomaly("netDb.ackTime");
-        out.write(RingRenderer.renderRingCell(ffScore, _t("Flood Verify"), withUnit(ffStr, _t("ms")),
+        out.write(RingRenderer.renderRingCell(ffScore, _t("Flood Verify"), ffStr,
                   new String[]{_t("Floodfill verify time")}, RingRenderer.MODE_HEALTH, ffHist));
-        out.write(RingRenderer.renderRingCell(ackScore, _t("NetDB ACK"), withUnit(ackStr, _t("ms")),
+        out.write(RingRenderer.renderRingCell(ackScore, _t("NetDB ACK"), ackStr,
                   withDetail(_t("NetDB peer acknowledge time"), ackAnom.detail), RingRenderer.MODE_ANOMALY, ackHist, ackAnom.color));
         out.write(RingRenderer.renderRingCell(lookupScore, _t("Lookups/s"), lookupStr,
                   new String[]{_t("NetDB lookups handled per second")}, RingRenderer.MODE_ACTIVITY, lookupHist));
