@@ -1,6 +1,7 @@
 package net.i2p.router.tunnel.pool;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -760,10 +761,27 @@ public class BuildExecutor implements Runnable {
                     }
                 } else {
                     if (allowed > 0 && !wanted.isEmpty()) {
+                        // Snapshot scores before sorting to avoid TimSort crash from
+                        // concurrent tunnel state changes during comparison (activeTunnelCount
+                        // can change as TestJobs complete or tunnels expire mid-sort).
                         // Sort by build priority: collapsed pools first, then near-collapse,
                         // then by deficit (largest first).
                         // For paired destinations, prioritize the direction further behind its pair
-                        wanted.sort(POOLED_DESTINATION_COMPARATOR);
+                        int sz = wanted.size();
+                        Object[][] scored = new Object[sz][2];
+                        for (int si = 0; si < sz; si++) {
+                            TunnelPool p = wanted.get(si);
+                            scored[si][0] = score(p);
+                            scored[si][1] = p;
+                        }
+                        Arrays.sort(scored, (a, b) -> {
+                            int cmp = Integer.compare((int) b[0], (int) a[0]);
+                            if (cmp != 0) return cmp;
+                            return Integer.compare(System.identityHashCode(a[1]), System.identityHashCode(b[1]));
+                        });
+                        for (int si = 0; si < sz; si++) {
+                            wanted.set(si, (TunnelPool) scored[si][1]);
+                        }
 
                         for (int i = 0; i < allowed && !wanted.isEmpty(); i++) {
                             TunnelPool pool = wanted.remove(0);
