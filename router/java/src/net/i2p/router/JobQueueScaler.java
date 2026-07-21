@@ -17,23 +17,29 @@ import net.i2p.util.SystemVersion;
  * <strong>Scaling Algorithm:</strong>
  * <ul>
  *   <li>Scale UP when: readyJobs > activeRunners * scaleUpJobsRatio OR maxLag > scaleUpLagThreshold</li>
- *   <li>Scale DOWN when: readyJobs < activeRunners AND maxLag < scaleDownLagThreshold (sustained)</li>
+ *   <li>Scale DOWN when: readyJobs < activeRunners AND avgLag < scaleDownLagThreshold (sustained)</li>
  *   <li>Bounds: min runners = max(4, cores), max runners = min(2 * router.maxJobRunners, RAM-based limit)</li>
+ * </ul>
+ *
+ * <strong>Resource Saturation Gates:</strong>
+ * Scale-up is suppressed (not just limited) when the bottleneck is resource
+ * saturation rather than thread count. Emergency signals (critical lag,
+ * wedged jobs, dropped jobs) override the suppression.
+ * <ul>
+ *   <li>CPU saturation: router.cpuLoad > 85%</li>
+ *   <li>GC storm: router.gcPauseTime > 50 ms/min</li>
+ *   <li>Network congestion: tunnel.buildSuccessRate < 50%</li>
+ *   <li>Bandwidth saturation: bwLimiter.outboundDelayedTime > 500ms</li>
  * </ul>
  *
  * <strong>Feedback Mechanism:</strong>
  * <ul>
  *   <li>Captures pre-scale metrics before adding runners</li>
- *   <li>Compares post-scale metrics after 3 check intervals</li>
- *   <li>If lag INCREASED after scaling, automatically rolls back added runners</li>
- *   <li>After 2 failed scale attempts, stops scaling up until router restart</li>
+ *   <li>Compares post-scale metrics after 2 check intervals</li>
+ *   <li>If lag, maxLag, message delay, or ready jobs INCREASED after scaling, rolls back</li>
+ *   <li>After 5 failed scale attempts, circuit breaker opens — stops scaling up</li>
  *   <li>Tracks memory usage to prevent OOM conditions</li>
  * </ul>
- *
- * <strong>Sub-millisecond Lag Target:</strong>
- * With very low lag targets (sub-ms), even small degradations are significant.
- * The feedback system uses tight thresholds (20% increase = failure) to
- * ensure we don't add runners that worsen performance.
  *
  * @since 0.9.68+
  */
@@ -54,6 +60,7 @@ class JobQueueScaler implements Runnable {
     // Feedback mechanism for detecting ineffective scaling
     private PreScaleSnapshot _preScaleSnapshot;
     private int _checksSinceLastScale;
+    private int _periodicCheckCount; // monotonic counter for periodic tasks (not reset by scale events)
     private int _consecutiveFailedScaleUps;
     private boolean _isInExtendedCooldown;
     private boolean _scalingUpDisabled; // Circuit breaker after repeated failures
@@ -110,8 +117,13 @@ class JobQueueScaler implements Runnable {
     private static final String PROP_SCALE_JOBS_RATIO = "router.scaleUpJobsRatio";
     private static final String PROP_SCALE_CHECK_INTERVAL = "router.scaleCheckInterval";
     private static final String PROP_SCALE_COOLDOWN = "router.scaleCooldown";
+    private static final String PROP_SCALE_UP_MSG_DELAY = "router.scaleUpMessageDelayThreshold";
     private static final String PROP_MIN_RUNNERS = "router.minJobRunners";
     private static final String PROP_FEEDBACK_ENABLED = "router.scaleFeedbackEnabled";
+
+    // Suppression thresholds — these gate scale-up decisions
+    private static final int CPU_SATURATION_THRESHOLD = 85; // % — skip scale-up if CPU saturated
+    private static final long GC_STORM_THRESHOLD = 50; // ms/min — skip scale-up if GC pause time is high
 
     /**
      * Snapshot of metrics taken before scaling up.
@@ -210,7 +222,7 @@ class JobQueueScaler implements Runnable {
 
         // CPU-based cap: more than 2× cores causes context-switching death spirals
         int cores = SystemVersion.getCores();
-        int cpuBasedMax = Math.max(cores * 2, 16);
+        int cpuBasedMax = Math.max(cores * 2, 8);
 
         int effectiveMax = Math.min(ramBasedMax, freeMemoryBasedMax);
         int targetMax = configuredMax * 2;
@@ -372,7 +384,7 @@ class JobQueueScaler implements Runnable {
      * Get the message delay threshold for scaling up.
      */
     private int getScaleUpMessageDelayThreshold() {
-        return DEFAULT_SCALE_UP_MESSAGE_DELAY_THRESHOLD;
+        return _context.getProperty(PROP_SCALE_UP_MSG_DELAY, DEFAULT_SCALE_UP_MESSAGE_DELAY_THRESHOLD);
     }
 
     /**
@@ -420,7 +432,8 @@ class JobQueueScaler implements Runnable {
                 }
 
                 // Periodically recalculate max runners based on memory
-                if (_checksSinceLastScale % 10 == 0) {
+                // Uses a monotonic counter (not _checksSinceLastScale which resets on scale events)
+                if (_periodicCheckCount++ % 10 == 0) {
                     recalculateMaxRunners();
                 }
 
@@ -451,6 +464,34 @@ class JobQueueScaler implements Runnable {
         long avgLag = (long) _context.statManager().getRate("jobQueue.jobLag").getRate(RateConstants.ONE_MINUTE).getAverageValue();
         long now = _context.clock().now();
 
+        // === Resource saturation signals (gates) ===
+        // CPU saturation: don't scale up into contention — the bottleneck is CPU, not threads
+        long cpuLoad = 0;
+        RateStat cpuRs = _context.statManager().getRate("router.cpuLoad");
+        if (cpuRs != null) {
+            Rate cpuRate = cpuRs.getRate(RateConstants.ONE_MINUTE);
+            if (cpuRate != null) cpuLoad = (long) cpuRate.getAverageValue();
+        }
+        boolean cpuSaturated = cpuLoad > CPU_SATURATION_THRESHOLD;
+
+        // GC storm: long GC pauses masquerade as lag — adding threads won't help
+        long gcPause = 0;
+        RateStat gcRs = _context.statManager().getRate("router.gcPauseTime");
+        if (gcRs != null) {
+            Rate gcRate = gcRs.getRate(RateConstants.ONE_MINUTE);
+            if (gcRate != null) gcPause = (long) gcRate.getAverageValue();
+        }
+        boolean gcStorm = gcPause > GC_STORM_THRESHOLD;
+
+        // Bandwidth saturation: jobs blocked on bandwidth, not CPU — scaling won't help
+        long bwDelay = 0;
+        RateStat bwRs = _context.statManager().getRate("bwLimiter.outboundDelayedTime");
+        if (bwRs != null) {
+            Rate bwRate = bwRs.getRate(RateConstants.ONE_MINUTE);
+            if (bwRate != null) bwDelay = (long) bwRate.getAverageValue();
+        }
+        boolean bwSaturated = bwDelay > 500; // 500ms+ avg outbound delay = bandwidth-bound
+
         // Get message delay from throttle (how backed up we are processing messages)
         long messageDelay = _context.throttle().getMessageDelay();
 
@@ -478,6 +519,15 @@ class JobQueueScaler implements Runnable {
         boolean rapidQueueGrowth = queueGrowth > QUEUE_GROWTH_RATE_THRESHOLD;
         boolean messageDelaySpike = baselineMsgDelay > 5 && messageDelay > baselineMsgDelay * BASELINE_MULTIPLIER;
         boolean delayAccelerating = delayDelta > 5 && queueGrowth > 0;
+
+        // Mean job duration trend: systemic slowdown (not just one stuck job)
+        long avgJobDuration = 0;
+        RateStat jobRunRs = _context.statManager().getRate("jobQueue.jobRun");
+        if (jobRunRs != null) {
+            Rate jobRunRate = jobRunRs.getRate(RateConstants.ONE_MINUTE);
+            if (jobRunRate != null) avgJobDuration = (long) jobRunRate.getAverageValue();
+        }
+        boolean jobsSlowing = avgJobDuration > getScaleUpLagThreshold() * 5; // avg job > 50ms = systemic
 
         // Record memory usage stat
         _context.statManager().addRateData("jobQueue.memoryUsedPercent", (long) getMemoryUsagePercent());
@@ -533,12 +583,13 @@ class JobQueueScaler implements Runnable {
         long activeJobMaxDuration = _jobQueue.getMaxActiveJobDuration();
 
         // Debug logging every 10 seconds to trace scaler decisions
-        if (_log.shouldDebug() && (_checksSinceLastScale % 10 == 0)) {
+        if (_log.shouldDebug() && (_periodicCheckCount % 10 == 0)) {
             _log.debug("JobQueueScaler check: runners=" + activeRunners + "/" + maxRunners +
                       ", readyJobs=" + readyJobs + ", maxLag=" + maxLag + "ms, avgLag=" + avgLag + "ms, " +
                       "messageDelay=" + messageDelay + "ms, baselineDelay=" + baselineMsgDelay + "ms, " +
+                      "cpuLoad=" + cpuLoad + "%, gcPause=" + gcPause + "ms, bwDelay=" + bwDelay + "ms, " +
                       "queueGrowth=" + queueGrowth + ", delayDelta=" + delayDelta + ", " +
-                      "activeJobMaxDuration=" + activeJobMaxDuration + "ms, " +
+                      "activeJobMaxDuration=" + activeJobMaxDuration + "ms, avgJobDuration=" + avgJobDuration + "ms, " +
                       "inCooldown=" + inCooldown + ", timeSinceLastScale=" + timeSinceLastScale + "ms, " +
                       "scalingDisabled=" + _scalingUpDisabled + ", extendedCooldown=" + _isInExtendedCooldown +
                       ", preScaleSnapshot=" + (_preScaleSnapshot != null) +
@@ -550,7 +601,8 @@ class JobQueueScaler implements Runnable {
             _checksSinceLastScale++;
 
             if (_checksSinceLastScale >= FEEDBACK_CHECKS_AFTER_SCALE) {
-                evaluateScalingFeedback(activeRunners, readyJobs, maxLag, avgLag);
+                evaluateScalingFeedback(activeRunners, readyJobs, maxLag, avgLag,
+                                       messageDelay, jobsBeingDropped);
             }
             // Still in feedback period - skip scaling decisions
             return;
@@ -573,7 +625,13 @@ class JobQueueScaler implements Runnable {
 
         // Determine if we should scale up
         boolean shouldScaleUp = false;
-        if (!inCooldown && activeRunners < maxRunners && !_scalingUpDisabled) {
+        boolean canScaleUp = !inCooldown && activeRunners < maxRunners && !_scalingUpDisabled;
+
+        // Suppress normal scale-up when resource saturation is the bottleneck,
+        // not thread count. Emergency signals override the suppression.
+        boolean suppressNormal = cpuSaturated || gcStorm || networkCongested || bwSaturated;
+
+        if (canScaleUp) {
             double jobsRatio = activeRunners > 0 ? (double) readyJobs / activeRunners : 0;
             int lagThreshold = getScaleUpLagThreshold();
             double ratioThreshold = getScaleUpJobsRatio();
@@ -584,41 +642,56 @@ class JobQueueScaler implements Runnable {
             boolean highMessageDelay = messageDelay > msgDelayThreshold;
             boolean highAvgLag = avgLag >= lagThreshold;
             boolean highBacklog = readyJobs > 0 && jobsRatio > ratioThreshold;
-            boolean criticalLag = maxLag > lagThreshold * 10 || messageDelay > msgDelayThreshold * 10; // 100ms+
+            boolean criticalLag = maxLag > lagThreshold * 10 || messageDelay > msgDelayThreshold * 10;
             boolean slowActiveJobs = activeJobMaxDuration > lagThreshold * 50; // 500ms+ = stuck
             boolean criticalSlowJobs = activeJobMaxDuration > lagThreshold * 100; // 1s+ = wedged
 
-            // Trend-based triggers allow faster scale-up (predictive, not reactive)
-            // Jobs being dropped is a strong overload signal — scale immediately
-            boolean hasTrendSignal = rapidQueueGrowth || messageDelaySpike || delayAccelerating || jobsBeingDropped;
-            boolean hasCongestionSignal = networkCongested;
-            // Under trend/congestion signals, skip the sustained-checks delay
-            int effectiveSustainedRequired = (hasTrendSignal || hasCongestionSignal) ? 1 : SUSTAINED_CHECKS_REQUIRED;
+            boolean hasTrendSignal = rapidQueueGrowth || messageDelaySpike || delayAccelerating ||
+                                     jobsBeingDropped || jobsSlowing;
 
-            if (highBacklog || highLag || highMessageDelay || highAvgLag || slowActiveJobs ||
-                rapidQueueGrowth || messageDelaySpike || delayAccelerating || jobsBeingDropped) {
-                _consecutiveScaleUpChecks++;
-                if (_consecutiveScaleUpChecks >= effectiveSustainedRequired || criticalLag || criticalSlowJobs) {
-                    shouldScaleUp = true;
-                    if ((criticalLag || criticalSlowJobs || hasTrendSignal || jobsBeingDropped) && _log.shouldInfo()) {
-                        StringBuilder info = new StringBuilder(128);
-                        if (criticalLag)
-                            info.append("Critical delay=").append(effectiveDelay);
-                        if (criticalSlowJobs)
-                            info.append(" Active job duration=").append(activeJobMaxDuration).append("ms");
-                        if (hasTrendSignal)
-                            info.append("Trend signal: queueGrowth=").append(queueGrowth)
-                                .append(", delayDelta=").append(delayDelta);
-                        if (jobsBeingDropped)
-                            info.append(" Jobs being dropped");
-                        info.append(" > threshold=").append(lagThreshold).append("ms. Scaling immediately. Runners: ")
-                            .append(activeRunners).append("/").append(maxRunners)
-                            .append(", Ready jobs: ").append(readyJobs);
-                        _log.info(info.toString());
+            // Emergency signals bypass the suppression gate
+            boolean emergencySignal = criticalLag || criticalSlowJobs || jobsBeingDropped;
+
+            if (emergencySignal || !suppressNormal) {
+                // Under trend signals, skip the sustained-checks delay
+                int effectiveSustainedRequired = hasTrendSignal ? 1 : SUSTAINED_CHECKS_REQUIRED;
+
+                if (highBacklog || highLag || highMessageDelay || highAvgLag || slowActiveJobs ||
+                    rapidQueueGrowth || messageDelaySpike || delayAccelerating || jobsBeingDropped ||
+                    jobsSlowing) {
+                    _consecutiveScaleUpChecks++;
+                    if (_consecutiveScaleUpChecks >= effectiveSustainedRequired || criticalLag || criticalSlowJobs) {
+                        shouldScaleUp = true;
+                        if (_log.shouldInfo()) {
+                            StringBuilder info = new StringBuilder(128);
+                            if (criticalLag)
+                                info.append("Critical delay=").append(effectiveDelay);
+                            if (criticalSlowJobs)
+                                info.append(" Active job duration=").append(activeJobMaxDuration).append("ms");
+                            if (hasTrendSignal)
+                                info.append("Trend signal: queueGrowth=").append(queueGrowth)
+                                    .append(", delayDelta=").append(delayDelta);
+                            if (jobsBeingDropped)
+                                info.append(" Jobs being dropped");
+                            if (suppressNormal && emergencySignal)
+                                info.append(" Emergency override (cpu=").append(cpuLoad)
+                                    .append("%, gc=").append(gcPause).append("ms)");
+                            info.append(" > threshold=").append(lagThreshold).append("ms. Scaling immediately. Runners: ")
+                                .append(activeRunners).append("/").append(maxRunners)
+                                .append(", Ready jobs: ").append(readyJobs);
+                            _log.info(info.toString());
+                        }
                     }
+                } else {
+                    _consecutiveScaleUpChecks = 0;
                 }
             } else {
+                // Suppressed by resource saturation — don't accumulate scale-up checks
                 _consecutiveScaleUpChecks = 0;
+                if (_log.shouldDebug()) {
+                    _log.debug("Scale-up suppressed: cpuLoad=" + cpuLoad + "%, gcPause=" + gcPause +
+                              "ms, bwDelay=" + bwDelay + "ms, networkCongested=" + networkCongested);
+                }
             }
         }
 
@@ -690,10 +763,12 @@ class JobQueueScaler implements Runnable {
 
     /**
      * Evaluate whether the last scale-up actually helped.
-     * If lag increased or ready jobs increased (worse performance), roll back.
+     * Checks multiple signals: avg lag, max lag, ready jobs, message delay, and dropped jobs.
+     * If any signal worsened beyond threshold, rolls back.
      */
     private void evaluateScalingFeedback(int currentRunners, int currentReadyJobs,
-                                        long _currentMaxLag, long currentAvgLag) {
+                                        long currentMaxLag, long currentAvgLag,
+                                        long currentMessageDelay, boolean currentDroppedJobs) {
         if (_preScaleSnapshot == null) return;
 
         PreScaleSnapshot snapshot = _preScaleSnapshot;
@@ -706,16 +781,28 @@ class JobQueueScaler implements Runnable {
 
         boolean lagIncreased = lagRatio > LAG_INCREASE_THRESHOLD;
         boolean readyJobsIncreased = readyJobsRatio > READY_JOBS_INCREASE_THRESHOLD;
-        boolean memoryCritical = getMemoryUsagePercent() > 85; // Roll back if memory is critical
+        boolean memoryCritical = getMemoryUsagePercent() > 85;
 
-        if (lagIncreased || readyJobsIncreased || memoryCritical) {
+        // Widened criteria: max lag also worsened
+        boolean maxLagWorsened = snapshot.maxLag > 0 && currentMaxLag > snapshot.maxLag * LAG_INCREASE_THRESHOLD;
+
+        // Widened criteria: message delay worse than pre-scale
+        boolean messageDelayWorsened = snapshot.avgLag > 0 && currentMessageDelay > snapshot.avgLag * LAG_INCREASE_THRESHOLD;
+
+        if (lagIncreased || readyJobsIncreased || memoryCritical || maxLagWorsened || messageDelayWorsened || currentDroppedJobs) {
             // Scaling made things worse - rollback!
             _consecutiveFailedScaleUps++;
 
             if (_log.shouldInfo()) {
-                _log.info("SCALE-UP FAILED: Rolling back " + snapshot.runnersAdded + " runners. " +
-                          "Lag " + snapshot.avgLag + "ms->" + currentAvgLag + "ms, Ready " + snapshot.readyJobs + "->" + currentReadyJobs +
-                          " (" + _consecutiveFailedScaleUps + "/" + MAX_CONSECUTIVE_FAILED_SCALES + ")");
+                StringBuilder msg = new StringBuilder("SCALE-UP FAILED: Rolling back ")
+                    .append(snapshot.runnersAdded).append(" runners. ")
+                    .append("avgLag ").append(snapshot.avgLag).append("ms->").append(currentAvgLag).append("ms, ")
+                    .append("maxLag ").append(snapshot.maxLag).append("ms->").append(currentMaxLag).append("ms, ")
+                    .append("ready ").append(snapshot.readyJobs).append("->").append(currentReadyJobs).append(", ")
+                    .append("msgDelay ").append(currentMessageDelay).append("ms");
+                if (currentDroppedJobs) msg.append(", jobs being dropped");
+                msg.append(" (").append(_consecutiveFailedScaleUps).append("/").append(MAX_CONSECUTIVE_FAILED_SCALES).append(")");
+                _log.info(msg.toString());
             }
 
             // Rollback: remove the runners we just added

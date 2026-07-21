@@ -8,6 +8,9 @@ package net.i2p.router.tasks;
  *
  */
 
+import java.lang.management.GarbageCollectorMXBean;
+import java.lang.management.ManagementFactory;
+import java.util.List;
 import net.i2p.data.DataHelper;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
@@ -56,6 +59,10 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
     private final long _maxMemory;
     private static final long LOW_MEMORY_THRESHOLD = 5 * 1024 * 1024L;
 
+    // Cumulative GC pause time (ms) observed at the previous coalesce cycle,
+    // used to derive per-minute GC latency. -1 = uninitialized.
+    private long _lastGcPauseTime = -1;
+
     /**
      * Create a new stats coalescence event.
      * Initializes all required rate statistics for monitoring router performance.
@@ -85,6 +92,7 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
         sm.createRequiredRateStat("router.integratedPeers", _x("Known integrated (floodfill) peers"), "Router", new long[] { RateConstants.ONE_MINUTE });
         sm.createRequiredRateStat("router.knownPeers", _x("Total peers in our NetDb"), "Router", new long[] { RateConstants.ONE_MINUTE });
         sm.createRequiredRateStat("router.activeThreads", _x("Total number of threads in use"), "Router", new long[] { RateConstants.ONE_MINUTE });
+        sm.createRequiredRateStat("router.gcPauseTime", _x("Time spent paused in GC (ms)"), "Router", new long[] { RateConstants.ONE_MINUTE });
         sm.createRequiredRateStat("router.unreachablePeers", _x("Peers without a published IP address"), "Router", new long[] { RateConstants.ONE_MINUTE });
         sm.createRequiredRateStat("tunnel.tunnelBuildSuccessAvg", _x("Average tunnel build success %"), "Tunnels", RateConstants.TUNNEL_RATES);
         String legend = "";
@@ -147,6 +155,11 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
         sm.addRateData("tunnel.tunnelBuildSuccessAvg", SystemVersion.getTunnelBuildSuccess());
         sm.addRateData("router.activeThreads", SystemVersion.getActiveThreads());
 
+        long gcPause = getGcPauseTime();
+        if (gcPause >= 0) {
+            sm.addRateData("router.gcPauseTime", gcPause, 60L*1000);
+        }
+
         _ctx.tunnelDispatcher().updateParticipatingStats(Router.COALESCE_TIME);
 
         sm.coalesceStats();
@@ -182,5 +195,43 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
      */
     private static final String _x(String s) {
         return s;
+    }
+
+    /**
+     *  Cumulative GC pause time (ms) across all collectors since JVM start.
+     *  Returns -1 if GC beans are unavailable.
+     */
+    private static long getCumulativeGcPauseTime() {
+        List<GarbageCollectorMXBean> beans = ManagementFactory.getGarbageCollectorMXBeans();
+        if (beans == null || beans.isEmpty())
+            return -1;
+        long total = 0;
+        boolean any = false;
+        for (GarbageCollectorMXBean bean : beans) {
+            long t = bean.getCollectionTime();
+            if (t >= 0) {
+                total += t;
+                any = true;
+            }
+        }
+        return any ? total : -1;
+    }
+
+    /**
+     *  GC pause time (ms) elapsed since the previous coalesce cycle.
+     *  Returns -1 on the first call (no baseline) or if GC data is unavailable.
+     */
+    private long getGcPauseTime() {
+        long cumulative = getCumulativeGcPauseTime();
+        if (cumulative < 0)
+            return -1;
+        if (_lastGcPauseTime < 0) {
+            _lastGcPauseTime = cumulative;
+            return -1;
+        }
+        long delta = cumulative - _lastGcPauseTime;
+        _lastGcPauseTime = cumulative;
+        // Guard against clock anomalies / counter resets
+        return delta >= 0 ? delta : 0;
     }
 }
