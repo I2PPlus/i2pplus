@@ -65,6 +65,7 @@
     new LinkEntry("/debug", "View debugging information", "/themes/console/images/bug.svg", "Debugging", false),
     new LinkEntry("/events?from=604800", "View historical log of router events", "/themes/console/images/logs.svg", "Event Log", false),
     new LinkEntry("/graphs", "View router performance graphs", "/themes/console/images/graphs.svg", "Graphs", false),
+    new LinkEntry("/health", "Router performance overview", "/themes/console/images/health.svg", "Health", false),
     new LinkEntry("/help/", "Router help section", "/themes/console/images/help.svg", "Help Section", false),
     new LinkEntry("/home", "Router homepage", "/themes/console/images/home.svg", "Home", false),
     new LinkEntry("/news", "View news relating to I2P", "/themes/console/images/news.svg", "I2P News", false),
@@ -79,6 +80,7 @@
     new LinkEntry("/stats", "Textual router performance statistics", "/themes/console/images/textstats.svg", "Statistics", false),
     new LinkEntry("/netdb?f=3", "Review possible sybils in network database", "/themes/console/images/sybil.svg", "Sybil Analysis", false),
     new LinkEntry("/debug?d=6", "Current console and webapp translation report", "/themes/console/images/translation.svg", "Translation Status", false),
+    new LinkEntry("/tuning", "Router Auto-Tuning", "/themes/console/images/tuning.svg", "Tuning", false),
     new LinkEntry("/tunnels", "View active tunnels", "/themes/console/images/hardhat.svg", "Tunnels", false)
   };
   for (LinkEntry sitemapLink : infoLinks) {
