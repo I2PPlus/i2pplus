@@ -26,6 +26,9 @@ import net.i2p.router.transport.ntcp.NTCPTransport;
 import net.i2p.router.transport.udp.PeerState;
 import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.web.HelperBase;
+import net.i2p.stat.Rate;
+import net.i2p.stat.RateConstants;
+import net.i2p.stat.RateStat;
 import net.i2p.util.AddressType;
 import net.i2p.util.Addresses;
 
@@ -128,7 +131,7 @@ public class PeerHelper extends HelperBase {
             }
         } else if (_transport == null) {
             StringBuilder buf = new StringBuilder(1024);
-            buf.append("<p class=infohelp>")
+            buf.append("<div class=wrap><p class=infohelp>")
                .append(_t("Your transport connection limits are automatically set based on your configured bandwidth.")).append(" ")
                .append(_t("To override these limits, add the settings {0} and {1}",
                           "<code>i2np.ntcp.maxConnections=nnn</code>",
@@ -136,8 +139,9 @@ public class PeerHelper extends HelperBase {
             if (isAdvanced()) {
                 buf.append(_t("on the {0}Advanced Configuration page{1}.", "<a href=\"/configadvanced\">", "</a>"));
             } else {buf.append(_t("to your router.config file."));}
-            buf.append("</p>\n");
+            buf.append("</p></div>\n");
             out.append(buf);
+            renderPeerRings(out);
             renderSummary(out);
         }
         out.flush();
@@ -151,6 +155,105 @@ public class PeerHelper extends HelperBase {
         if ("ssu".equals(_transport)) {return 2;}
         if ("ssudebug".equals(_transport)) {return 3;}
         return 0;
+    }
+
+    /**
+     * Get the 1-minute average of a RateStat, or 0 if unavailable.
+     * @since 0.9.70+
+     */
+    private double getStatAvg(String name) {
+        RateStat rs = _context.statManager().getRate(name);
+        if (rs == null) return 0;
+        Rate r = rs.getRate(RateConstants.ONE_MINUTE);
+        if (r == null) return 0;
+        return r.getAverageValue();
+    }
+
+    /**
+     * Render peer-landscape ring dashboard above the transport summary table.
+     * Ten rings: Active, Fast, HighCap, Quality, Floodfill, Known,
+     * Active%, Unreachable, Banned, Test Fail.
+     * @since 0.9.70+
+     */
+    private void renderPeerRings(Writer out) throws IOException {
+        int active = (int) getStatAvg("router.activePeers");
+        int known = (int) getStatAvg("router.knownPeers");
+        int fast = (int) getStatAvg("router.fastPeers");
+        int highCap = (int) getStatAvg("router.highCapacityPeers");
+        int integrated = (int) getStatAvg("router.integratedPeers");
+        int unreachable = (int) getStatAvg("router.unreachablePeers");
+        int banned = (int) getStatAvg("router.bannedPeers");
+        int quality = (int) getStatAvg("peer.qualityPeerCount");
+        int profileCount = (int) getStatAvg("peer.profileCount");
+        int activeProfileCount = (int) getStatAvg("peer.activeProfileCount");
+        double testTimeout = getStatAvg("peer.testTimeout");
+
+        StringBuilder buf = new StringBuilder(4096);
+        buf.append("<div id=peerstats>");
+
+        // 1. Active
+        String activeStr = active > 0 ? String.valueOf(active) : "\u2014";
+        double activeScore = active > 0 ? Math.min(active / 200.0, 1.0) : -1;
+        buf.append(RingRenderer.renderRingCell(activeScore, _t("Active"), activeStr,
+                  new String[]{_t("Peers reached in the last 60s")}, RingRenderer.MODE_ACTIVITY));
+
+        // 2. Fast
+        String fastStr = fast > 0 ? String.valueOf(fast) : "\u2014";
+        double fastScore = fast > 0 && known > 0 ? Math.min((double) fast / known, 1.0) : -1;
+        buf.append(RingRenderer.renderRingCell(fastScore, _t("Fast"), fastStr,
+                  new String[]{_t("Low-latency peers for tunnel participation")}, RingRenderer.MODE_ACTIVITY));
+
+        // 3. HighCap
+        String hcStr = highCap > 0 ? String.valueOf(highCap) : "\u2014";
+        double hcScore = highCap > 0 && known > 0 ? Math.min((double) highCap / known, 1.0) : -1;
+        buf.append(RingRenderer.renderRingCell(hcScore, _t("HighCap"), hcStr,
+                  new String[]{_t("High-bandwidth peers for many tunnels")}, RingRenderer.MODE_ACTIVITY));
+
+        // 4. Reliable
+        String qStr = quality > 0 ? String.valueOf(quality) : "\u2014";
+        double qScore = quality > 0 && known > 0 ? Math.min((double) quality / known, 1.0) : -1;
+        buf.append(RingRenderer.renderRingCell(qScore, _t("Reliable"), qStr,
+                  new String[]{_t("High-capacity peers with good acceptance")}, RingRenderer.MODE_ACTIVITY));
+
+        // 5. Floodfill
+        String ffStr = integrated > 0 ? String.valueOf(integrated) : "\u2014";
+        double ffScore = integrated > 0 && known > 0 ? Math.min((double) integrated / known, 1.0) : -1;
+        buf.append(RingRenderer.renderRingCell(ffScore, _t("Floodfill"), ffStr,
+                  new String[]{_t("Peers that store and serve NetDb info")}, RingRenderer.MODE_ACTIVITY));
+
+        // 6. Known
+        String knownStr = known > 0 ? String.valueOf(known) : "\u2014";
+        buf.append(RingRenderer.renderRingCell(1.0, _t("Known"), knownStr,
+                  new String[]{_t("Total entries in network database")}, RingRenderer.MODE_NEUTRAL));
+
+        // 7. Active%
+        String apStr = (activeProfileCount > 0 && profileCount > 0) ?
+                       (activeProfileCount * 100 / profileCount) + "%" : "\u2014";
+        double apScore = (activeProfileCount > 0 && profileCount > 0) ?
+                         Math.min((double) activeProfileCount / profileCount, 1.0) : -1;
+        buf.append(RingRenderer.renderRingCell(apScore, _t("Active%"), apStr,
+                  new String[]{_t("Profiles with activity in the last 24h")}, RingRenderer.MODE_HEALTH));
+
+        // 8. Unreachable
+        String unStr = String.valueOf(unreachable);
+        double unScore = known > 0 ? Math.max(0, 1.0 - (double) unreachable / known) : 1.0;
+        buf.append(RingRenderer.renderRingCell(unScore, _t("Unreachable"), unStr,
+                  new String[]{_t("Peers without a reachable address")}, RingRenderer.MODE_HEALTH));
+
+        // 9. Banned
+        String banStr = String.valueOf(banned);
+        double banScore = banned > 0 ? Math.max(0, 1.0 - banned / 50.0) : 1.0;
+        buf.append(RingRenderer.renderRingCell(banScore, _t("Banned"), banStr,
+                  new String[]{_t("Peers excluded from all interactions")}, RingRenderer.MODE_HEALTH));
+
+        // 10. Test Fail
+        String tfStr = testTimeout > 0 ? String.format("%.1f", testTimeout) + _t("/min") : "\u2014";
+        double tfScore = testTimeout > 0 ? Math.max(0, 1.0 - testTimeout / 10.0) : 1.0;
+        buf.append(RingRenderer.renderRingCell(tfScore, _t("Test Fail"), tfStr,
+                  new String[]{_t("Connectivity test failures per minute")}, RingRenderer.MODE_HEALTH));
+
+        buf.append("</div>");
+        out.write(buf.toString());
     }
 
     /**
@@ -168,7 +271,7 @@ public class PeerHelper extends HelperBase {
                             ssuConfig != TransportUtil.IPv6Config.IPV6_DISABLED);
 
         StringBuilder buf = new StringBuilder(6*1024);
-        buf.append("<h3 id=transports>").append(_t("Peer Connections")).append("</h3>\n")
+        buf.append("<div class=wrap><h3 id=transports>").append(_t("Peer Connections")).append("</h3>\n")
            .append("<table id=transportSummary>\n<thead><tr>")
            .append("<th>").append(_t("Transport")).append("</th>");
 
@@ -264,7 +367,7 @@ public class PeerHelper extends HelperBase {
 
             buf.append("</td><td>").append(totalConnections).append(" / ").append(totalLimits).append("</td></tr></tfoot>\n");
         }
-        buf.append("</table>\n");
+        buf.append("</table></div>\n");
         out.append(buf);
     }
 

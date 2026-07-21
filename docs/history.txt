@@ -1,7 +1,27 @@
 2026-07-21 dr|z3d
   * Router: JobQueueScaler reactive to CPU/GC/bandwidth saturation;
-    fix frozen RAM-based max runners; widen feedback rollback criteria
-  * Console: Add tuning and health page links to /home and /sitemap
+    fix frozen RAM-based max runners; widen feedback rollback criteria;
+    fix scaler testJobsDominant filtering timed jobs; fix auto-release
+    safety net key; Tuner external runner floor API, RI/LS timeout
+    integration, TestJob saturation guard
+  * LeaseSet: Fix stale-refresh cascade that silently expires local
+    services (republish interval cap, I2CP same-lease skip at expiry,
+    build cache bypass when leased within 3min of expiry)
+  * Tunnel: leaseMaxDuration property to cap published lease end dates;
+    cap AliasedTunnelPool lease end dates; lower republish/rebuild
+    throttle 5m→2m; snapshot scores before peer sort to prevent TimSort
+    crash from concurrent tunnel state changes
+  * Console: Fix health-ring anomaly direction (improvement=green);
+    allow 0 as valid value in getAnomaly (fixes Job Queue, Tunnel Build
+    gray at 0); add absolute green threshold for sub-ms metrics; add
+    live stat values, neutral thread ring, µs job lag on /health; pin
+    HostChecker first in Service Tunnels sidebar; add tuning and health
+    page links to /home and /sitemap
+  * SAM/streaming: Fix CONNECT timeout dead-zone; remove dead cooldown
+    override; isolate failure map per-session
+  * Tuner: Expand RiLookupTimeoutParam to drive BuildHandler next-hop
+    timeout; fix PercentLookupLimitParam dead-zone and NPE; add
+    buildBanHit and rejectTimeout signals
 
 2026-07-20 dr|z3d
   * Graphs: Single SVG pass (drop PNG pre-render); static font/date

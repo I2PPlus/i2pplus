@@ -107,7 +107,7 @@ html:not(.advmode) #tuning input[type=number]{min-width:0!important;text-align:c
 #tuning .section.toggle:hover td:last-child::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
 #tuning .section.toggle.expanded td:last-child::after{background:var(--dropdown);content:"";transform:none}
 #tuning .section.toggle.expanded:hover td:last-child::after{background:var(--dropdown_hover);content:"";transform:none}
-#tuningstats{margin:12px 0;padding:16px 8px;width:calc(100% - 18px);display:grid;grid-template-columns:repeat(10,1fr);gap:8px;border:var(--border);text-align:center}
+#peerstats,#tuningstats{margin:12px 0;padding:16px 8px;width:calc(100% - 18px);display:grid;grid-template-columns:repeat(10,1fr);gap:8px;border:var(--border);text-align:center}
 .streams th:nth-child(1),.streams td:nth-child(1){width:1%}
 .streams th:nth-child(2),.streams td:nth-child(2){text-align:left;width:19%}
 .streams th:nth-child(3),.streams td:nth-child(3){width:65%;text-align:left}
@@ -158,14 +158,17 @@ html:not(.advmode) #tuning input[type=number]{min-width:0!important;text-align:c
 #hsNetwork+h2:not(.expanded){margin-bottom:-2px}
 #activeStreams .totalBandwidth{float:right;text-transform:none;letter-spacing:0;word-spacing:0;font-size:80%}
 #activeStreams th.sectionhead{font-size:120%;font-weight:700;text-align:left;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);border-bottom:1px solid var(--border)}
+#sidebar .percentBarInner{transition:width .5s ease}
 #streamstats,#samstats{margin:8px auto;padding:16px 4px;width:100%;;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;text-align:center}
 #streamstats .truncB32{width:48px;float:none;font-weight:600}
 
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1.1)}50%{opacity:.7;transform:scale(.9)}}
 
+@media (max-width:1499px){
+  #peerstats {grid-template-columns: repeat(5,1fr)}
+  #peerstats .ring-cell{margin:4px}
+}
 @media (max-width:1199px){
   #banconfig label::before{margin:0 0 0 -4px;height:32px}
   #banconfig .nowrap{min-width:0;margin-left:8px}
 }
-
-#sidebar .percentBarInner{transition:width .5s ease}
