@@ -6650,7 +6650,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected double getObservedStat(RouterContext ctx) {
-            return getAdditionalStat(_context, "tunnel.nextHopLookupSuccessTime");
+            double observed = getAdditionalStat(_context, "tunnel.nextHopLookupSuccessTime");
+            if (!Double.isNaN(observed))
+                return observed;
+            // No success data — fall back to rejectTimeout. If lookups are timing
+            // out, return a high value (>5000) to trigger decrease.
+            double rejectTimeout = getAdditionalEventCount(_context, "tunnel.rejectTimeout");
+            if (!Double.isNaN(rejectTimeout) && rejectTimeout > 5)
+                return 10000.0;
+            return Double.NaN;
         }
 
         protected int computeTarget(double observed) {
