@@ -288,7 +288,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         KademliaNetworkDatabaseFacade kndf = (KademliaNetworkDatabaseFacade) getContext().clientNetDb(_from.calculateHash());
         // set in constructor
         if (_leaseSet != null) {
-            if (!kndf.isClientDb() && !_leaseSet.getReceivedAsReply()) {
+            if (!kndf.isClientDb() && !_leaseSet.getReceivedAsReply() &&
+                !_leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR / 4)) {
                 boolean shouldFetch = true;
                 if (_leaseSet.getType() != DatabaseEntry.KEY_TYPE_LEASESET) {
                     LeaseSet2 ls2 = (LeaseSet2) _leaseSet;
@@ -296,7 +297,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 }
                 if (shouldFetch) {
                     if (_log.shouldInfo()) {
-                        _log.info("RAP LeaseSet, initiating search: " + _leaseSet.getHash().toBase32());
+                        _log.info("Stale published LeaseSet, initiating search: " + _leaseSet.getHash().toBase32());
                     }
                     LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
                     kndf.lookupLeaseSetRemotely(_leaseSet.getHash(), success, failed,
