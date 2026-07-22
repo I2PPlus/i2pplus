@@ -1,5 +1,7 @@
 package net.i2p.router.networkdb.kademlia;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -98,8 +100,32 @@ class RefreshRoutersJob extends JobImpl {
     }
 
     /**
-     * Initializes the router list with floodfill routers first,
-     * then all others appended.
+     * Score a peer for refresh priority.
+     * Higher score = refresh sooner (high-value peers first).
+     * @since 0.9.70
+     */
+    private int scorePeer(Hash peer) {
+        RouterContext ctx = getContext();
+        RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(peer);
+        if (ri == null) return 0;
+        int score = 0;
+        String cap = ri.getCapabilities();
+        if (cap != null) {
+            if (cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0) score += 10;
+            if (cap.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0) score += 5;
+        }
+        String bw = ri.getBandwidthTier();
+        if (bw != null) {
+            if (bw.equals("X")) score += 8;
+            else if (bw.equals("P")) score += 6;
+            else if (bw.equals("O")) score += 4;
+        }
+        return score;
+    }
+
+    /**
+     * Initializes the router list with floodfill routers sorted first,
+     * then all other routers sorted by performance score.
      */
     private void initializeRouterListIfNeeded() {
         if (_routers == null || _routers.isEmpty()) {
@@ -107,12 +133,19 @@ class RefreshRoutersJob extends JobImpl {
             List<Hash> floodfills = new ArrayList<>(_facade.getFloodfillPeers());
             Set<Hash> allRouters = new HashSet<>(_facade.getAllRouters());
             allRouters.removeAll(floodfills);
+            // Sort non-floodfill peers by score so high-value peers are refreshed first
+            List<Hash> nonFloodfills = new ArrayList<>(allRouters);
+            Collections.sort(nonFloodfills, new Comparator<Hash>() {
+                public int compare(Hash a, Hash b) {
+                    return scorePeer(b) - scorePeer(a);
+                }
+            });
             _routers = new ArrayList<>(floodfills);
-            _routers.addAll(allRouters);
+            _routers.addAll(nonFloodfills);
 
             if (_log.shouldInfo()) {
                 _log.info("To check: " + floodfills.size()
-                    + " Floodfills and " + allRouters.size() + " non-Floodfills");
+                    + " Floodfills and " + nonFloodfills.size() + " non-Floodfills");
             }
         }
     }
@@ -147,28 +180,31 @@ class RefreshRoutersJob extends JobImpl {
     }
 
     /**
-     * Processes the next router in the list to determine whether to refresh its info.
+     * Processes the next router(s) in the list to determine whether to refresh their info.
+     * Processes up to MAX_PER_CYCLE routers per invocation for faster coverage.
+     * @since 0.9.70
      */
     private void processNextRouterForRefresh() {
-        Hash routerHash;
-        synchronized (this) {
-            if (_routers == null || _routers.isEmpty()) return;
-            routerHash = _routers.remove(0);
-        }
-        
-        if (routerHash == null) return;
+        RouterContext ctx = getContext();
+        int processed = 0;
+        int maxPerCycle = ctx.getProperty("router.refreshBatchSize", 5);
+        while (processed < maxPerCycle) {
+            Hash routerHash;
+            synchronized (this) {
+                if (_routers == null || _routers.isEmpty()) return;
+                routerHash = _routers.remove(0);
+            }
 
-        if (routerHash.equals(getContext().routerHash())) {
-            return;
-        }
+            if (routerHash == null) continue;
+            if (routerHash.equals(ctx.routerHash())) continue;
 
-        RouterInfo ri = getContext().netDb().lookupRouterInfoLocally(routerHash);
-        if (ri == null) {
-            return;
-        }
+            RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(routerHash);
+            if (ri == null) continue;
 
-        if (shouldRefreshRouter(ri, routerHash)) {
-            performRouterRefresh(routerHash, ri);
+            if (shouldRefreshRouter(ri, routerHash)) {
+                performRouterRefresh(routerHash, ri);
+                processed++;
+            }
         }
     }
 

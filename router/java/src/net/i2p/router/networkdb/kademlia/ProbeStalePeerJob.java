@@ -37,9 +37,9 @@ class ProbeStalePeerJob extends JobImpl {
     private int _runCount;
 
     private static final long CYCLE_INTERVAL = 60L * 1000;
-    private static final int MAX_PROBES_PER_CYCLE = 20;
+    private static final int MAX_PROBES_PER_CYCLE = 50;
     /** More aggressive during startup to establish transport connections faster */
-    private static final int STARTUP_MAX_PROBES_PER_CYCLE = 50;
+    private static final int STARTUP_MAX_PROBES_PER_CYCLE = 100;
     private static final long PROBE_COOLDOWN = 10L * 60 * 1000;
     private static final long PROOF_OF_LIFE_WINDOW_MS = 60L * 60 * 1000;
     private static final long STARTUP_BURST_PERIOD = 5L * 60 * 1000;
@@ -89,22 +89,26 @@ class ProbeStalePeerJob extends JobImpl {
                 }
                 candidates.add(peer);
             } else {
-                // Normal operation: only probe peers with stale RouterInfo
+                // Normal operation: probe peers with stale RouterInfo
                 // and no recent proof of life.
-                if (ri.getPublished() > now - maxAge) continue;
                 PeerProfile prof = ctx.profileOrganizer().getProfile(peer);
-                if (prof != null) {
-                    boolean alive = prof.getLastSendSuccessful() > now - PROOF_OF_LIFE_WINDOW_MS ||
-                                    prof.getLastHeardFrom() > now - PROOF_OF_LIFE_WINDOW_MS ||
-                                    prof.getLastHeardAbout() > now - PROOF_OF_LIFE_WINDOW_MS;
-                    if (alive) continue;
-                }
+                boolean alive = prof != null &&
+                                (prof.getLastSendSuccessful() > now - PROOF_OF_LIFE_WINDOW_MS ||
+                                 prof.getLastHeardFrom() > now - PROOF_OF_LIFE_WINDOW_MS ||
+                                 prof.getLastHeardAbout() > now - PROOF_OF_LIFE_WINDOW_MS);
+                if (alive) continue;
+
+                // Use shorter maxAge (1/3 of default, minimum 1h) for high-value peers
+                // so their RIs are refreshed more aggressively for tunnel building.
+                int score = scorePeer(ctx, peer);
+                long tierMaxAge = (score >= 10) ? Math.max(maxAge / 3, 3600_000L) : maxAge;
+                if (ri.getPublished() > now - tierMaxAge) continue;
                 candidates.add(peer);
             }
         }
 
-        // During startup burst, prioritize high-bandwidth reachable peers first
-        if (isStartupBurst && candidates.size() > 1) {
+        // Prioritize high-bandwidth reachable peers first
+        if (candidates.size() > 1) {
             Collections.sort(candidates, (a, b) -> scorePeer(ctx, b) - scorePeer(ctx, a));
         }
 
