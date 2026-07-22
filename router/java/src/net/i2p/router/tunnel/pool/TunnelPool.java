@@ -1298,6 +1298,10 @@ public class TunnelPool {
     private boolean _hasGoodLeaseSet;
     /** True when last built LeaseSet had fewer leases than wanted — bypass cache */
     private boolean _hasIncompleteLeaseSet;
+    /** Earliest lease end time of the last published LeaseSet.
+     *  Used to detect same-lease-stall: if the new LS has the same earliest end time,
+     *  the oldest lease is rotated out so floodfill peers see wasNew=true. */
+    private long _lastPublishedEarliestLeaseEnd;
     /** Track if a deferred refresh is already scheduled */
     private final AtomicBoolean _pendingRefreshScheduled = new AtomicBoolean();
     private final Map<TunnelId, Long> _recentlyAddedTunnels = new ConcurrentHashMap<>();
@@ -2240,6 +2244,44 @@ public class TunnelPool {
                 }
             }
         }
+        // Rotate out the oldest lease if it matches the previous publish's
+        // earliest end time.  This gives each republished LeaseSet a different
+        // earliest lease end time, so floodfill peers see wasNew=true and
+        // propagate the LS onward.  Without this, a stable tunnel set produces
+        // the same earliest end time every build, and the floodfill never
+        // re-floods the LS — it slowly fades from the network.
+        if (_hasGoodLeaseSet && _lastPublishedEarliestLeaseEnd > 0 && leases.size() >= 2) {
+            long earliest = leases.first().getEndTime();
+            if (earliest > 0 && earliest <= _lastPublishedEarliestLeaseEnd) {
+                Lease rotated = leases.pollFirst();
+                if (_log.shouldInfo())
+                    _log.info(toString() + " -> Rotated out oldest lease (" +
+                              rotated.getGateway() + "/" + rotated.getTunnelId() +
+                              ") for floodfill propagation, earliest=" + earliest);
+                // Remove the rotated tunnel from the pool immediately — it's no
+                // longer in the LS, keeping it wastes a slot, and removal triggers
+                // ensureSufficientTunnels() to build a fresh replacement.
+                // Do NOT removeFromExpiration() here: the ExpireJob Phase 2
+                // (dispatcher cleanup) still needs to fire naturally to avoid
+                // orphaning the tunnel in the dispatcher routing table.
+                TunnelId rotatedTunnelId = rotated.getTunnelId();
+                Hash rotatedGateway = rotated.getGateway();
+                for (int i = 0; i < _tunnels.size(); i++) {
+                    TunnelInfo t = _tunnels.get(i);
+                    if (t.getTunnelFailed()) continue;
+                    TunnelId inId = t.getReceiveTunnelId(0);
+                    Hash gw = t.getPeer(0);
+                    if (inId != null && gw != null &&
+                        inId.equals(rotatedTunnelId) && gw.equals(rotatedGateway)) {
+                        _tunnels.remove(i);
+                        if (_log.shouldInfo())
+                            _log.info(toString() + " -> Removed rotated-out tunnel from pool");
+                        break;
+                    }
+                }
+            }
+        }
+
         if (leases.size() < wanted) {
             if (_log.shouldInfo()) {
                 _log.info(toString() + "\n* Not enough leases to build full LeaseSet (" + leases.size() + "/" + wanted + " available)");
@@ -2257,6 +2299,7 @@ public class TunnelPool {
         if (_log.shouldInfo()) {_log.info(toString() + " -> New LeaseSet built" + ls);}
         _cachedLeaseSet = ls;
         _lastLeaseSetBuildTime = now;
+        _lastPublishedEarliestLeaseEnd = leases.isEmpty() ? 0 : leases.first().getEndTime();
         return ls;
     }
 
@@ -2719,7 +2762,7 @@ public class TunnelPool {
         // to be tested.  Don't count them as deficit UNLESS the pool has
         // zero GOOD tunnels, in which case they're likely stuck failing
         // tests and blocking replacement builds.
-        if (safeActive < effectiveTarget && (nearExpiry > 0 || safeActive == 0)) {
+        if (safeActive < effectiveTarget && (nearExpiry > 0 || safeActive == 0 || _hasIncompleteLeaseSet)) {
             int deficit;
             // Failing tunnels will likely die soon — count them as deficit
             // so replacement builds are triggered proactively before the pool
