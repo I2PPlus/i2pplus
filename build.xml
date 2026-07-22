@@ -163,8 +163,9 @@
     <echo message=" === Distribution &amp; Packaging ==="/>
     <echo message="  buildAppImage                                Build AppImage for Linux &#10140; ./dist/I2P+_{version}.appimage"/>
     <echo message="  buildDeb                                     Build self-contained Debian package &#10140; ./dist/i2p*.deb"/>
-    <echo message="  bumpBuildTime                                Update core/java/src/net/i2p/time/BuildTime.java with today's date"/>
     <echo message="  bump                                         Increment build (minor version) by 1"/>
+    <echo message="  bumpBuildTime                                Update core/java/src/net/i2p/time/BuildTime.java with today's date"/>
+    <echo message="  bumpMajorVersion                             Increment release major version, reset patch and BUILD to 0"/>
     <echo message="  createThemesZip                              Create zip with all console and webapp themes and resources &#10140; ./dist/themes.zip"/>
     <echo message="  debian-clean                                 Rollback Debian specific patches then run &apos;distclean&apos;"/>
     <echo message="  debian                                       Generate Debian packages in ../ then run &apos;debian-clean&apos;"/>
@@ -968,6 +969,85 @@
       match='(^\s+private\s+static\s+final\s+String\s+EARLIEST\s+=\s+)"[0-9A-Z: -]+";' replace='\1"${new.today} 12:00:00 UTC";'/>
     <replaceregexp byline="true" file="core/java/src/net/i2p/time/BuildTime.java"
       match='(^\s+private\s+static\s+final\s+long\s+EARLIEST_LONG\s+=\s+)[0-9]+ \* 1000L;' replace='\1${new.today.secs} * 1000L;'/>
+  </target>
+
+  <target name="bumpMajorVersion" depends="getReleaseNumber" description="Increment release major version (VERSION minor +1, PUBLISHED_VERSION sub +1), reset patch and BUILD to 0">
+    <loadfile srcfile="core/java/src/net/i2p/CoreVersion.java" property="release.major">
+      <filterchain>
+        <linecontains>
+          <contains value="public static final String VERSION"/>
+        </linecontains>
+        <tokenfilter>
+          <replaceregex pattern='.*"([0-9]+)\.[0-9]+\.[0-9]+";' replace="\1" flags="gi"/>
+        </tokenfilter>
+        <striplinebreaks/>
+        <trim/>
+      </filterchain>
+    </loadfile>
+    <loadfile srcfile="core/java/src/net/i2p/CoreVersion.java" property="release.minor">
+      <filterchain>
+        <linecontains>
+          <contains value="public static final String VERSION"/>
+        </linecontains>
+        <tokenfilter>
+          <replaceregex pattern='.*"[0-9]+\.([0-9]+)\.[0-9]+";' replace="\1" flags="gi"/>
+        </tokenfilter>
+        <striplinebreaks/>
+        <trim/>
+      </filterchain>
+    </loadfile>
+    <loadfile srcfile="core/java/src/net/i2p/CoreVersion.java" property="api.sub">
+      <filterchain>
+        <linecontains>
+          <contains value="public static final String PUBLISHED_VERSION"/>
+        </linecontains>
+        <tokenfilter>
+          <replaceregex pattern='.*"0\.9\.([0-9]+)";' replace="\1" flags="gi"/>
+        </tokenfilter>
+        <striplinebreaks/>
+        <trim/>
+      </filterchain>
+    </loadfile>
+    <fail message="Could not parse VERSION (expected MAJOR.MINOR.PATCH)">
+      <condition>
+        <or>
+          <equals arg1="${release.major}" arg2=""/>
+          <equals arg1="${release.minor}" arg2=""/>
+        </or>
+      </condition>
+    </fail>
+    <fail message="Could not parse PUBLISHED_VERSION (expected 0.9.SUB)">
+      <condition>
+        <equals arg1="${api.sub}" arg2=""/>
+      </condition>
+    </fail>
+    <exec executable="dc" outputproperty="new.release.minor" errorproperty="dc.error" failifexecutionfails="true">
+      <arg value="-e"/>
+      <arg value="${release.minor} 1 + n"/>
+    </exec>
+    <exec executable="dc" outputproperty="new.api.sub" errorproperty="dc.error2" failifexecutionfails="true">
+      <arg value="-e"/>
+      <arg value="${api.sub} 1 + n"/>
+    </exec>
+    <echo message="Bumping VERSION: ${release.major}.${release.minor}.0 -&gt; ${release.major}.${new.release.minor}.0"/>
+    <echo message="Bumping PUBLISHED_VERSION: 0.9.${api.sub} -&gt; 0.9.${new.api.sub}"/>
+    <replaceregexp byline="true" file="core/java/src/net/i2p/CoreVersion.java"
+      match='(^\s+public\s+static\s+final\s+String\s+VERSION\s+=\s+")[0-9]+\.[0-9]+\.[0-9]+";'
+      replace='\1${release.major}.${new.release.minor}.0";'/>
+    <replaceregexp byline="true" file="core/java/src/net/i2p/CoreVersion.java"
+      match='(^\s+public\s+static\s+final\s+String\s+PUBLISHED_VERSION\s+=\s+"0\.9\.)[0-9]+(";)'
+      replace='\1${new.api.sub}\2'/>
+    <replaceregexp byline="true" file="installer/lib/izpack/5/install5.xml"
+      match='(&lt;appversion&gt;)[0-9]+\.[0-9]+\.[0-9]+\+'
+      replace='\1${release.major}.${new.release.minor}.0+'/>
+    <replaceregexp byline="true" file="installer/lib/izpack/4/install.xml"
+      match='(&lt;appversion&gt;)[0-9]+\.[0-9]+\.[0-9]+\+'
+      replace='\1${release.major}.${new.release.minor}.0+'/>
+    <replaceregexp byline="true" file="router/java/src/net/i2p/router/RouterVersion.java"
+      match='(^\s+public\s+static\s+final\s+long\s+BUILD\s+=\s+)[0-9]+;'
+      replace='\10;'/>
+    <echo message="BUILD reset to 0."/>
+    <echo message="Major version bump complete. Run 'ant distclean &amp;&amp; ant updaterCompact' to verify."/>
   </target>
 
   <target name="checkoutFromVCS" depends="failIfNoVCS, checkoutFromGit"/>
