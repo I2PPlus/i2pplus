@@ -102,11 +102,11 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * The clamp ceiling (12000) allows the tuner limited headroom above the default.
      * @since 0.9.70+
      */
-    private static volatile int _maxRTO = 10000;
+    private static volatile int _maxRTO = 15000;
     /** @since 0.9.70+ */
     public static int getMaxRTOStatic() { return _maxRTO; }
     /** @since 0.9.70+ */
-    public static void setMaxRTO(int val) { _maxRTO = Math.max(1000, Math.min(12000, val)); }
+    public static void setMaxRTO(int val) { _maxRTO = Math.max(1000, Math.min(20000, val)); }
 
     static final String PROP_RTO_MULTIPLIER = "i2p.streaming.rtoMultiplier";
     /** @since 2.12.0+ mutable for adaptive tuning */

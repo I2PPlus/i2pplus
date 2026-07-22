@@ -154,7 +154,7 @@ class Connection {
      *  the connect() timeout (~60s).
      *  @since 0.9.70+ mutable for adaptive tuning
      */
-    private static volatile int _maxSynResends = 5;
+    private static volatile int _maxSynResends = 8;
 
     /**
      * Maximum number of packets to retransmit when the timer hits.
@@ -170,7 +170,7 @@ class Connection {
     /** @since 0.9.70+ */
     public static int getMaxSynResendsStatic() { return _maxSynResends; }
     /** @since 0.9.70+ */
-    public static void setMaxSynResends(int val) { _maxSynResends = Math.max(2, Math.min(12, val)); }
+    public static void setMaxSynResends(int val) { _maxSynResends = Math.max(3, Math.min(16, val)); }
 
     /**
      * Maximum number of packets to retransmit in a single timer fire.
