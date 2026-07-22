@@ -5677,7 +5677,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("netdb.singleSearchTime", "NetDB search timeout (ms)",
                   SUB_NETDB,
 
-                  500, 10000, 250, "transport.sendProcessingTime", _context);
+                  500, 5000, 250, "transport.sendProcessingTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -5698,29 +5698,58 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = transport.sendProcessingTime (ms, network latency proxy)
-            double matchCount = getAdditionalEventCount(_context, "netDb.lookupsMatched");
-            double netdbTime = getAdditionalStat(_context, "netDb.successTime");
-            double leaseTime = getAdditionalStat(_context, "client.leaseSetFoundRemoteTime");
+            // observed = transport.sendProcessingTime (ms, per-peer network latency proxy)
+            // Per-peer timeout should track actual per-peer response times, not total
+            // multi-round search duration.  Using total search time (netDb.successTime,
+            // client.leaseSetFoundRemoteTime) inflates this timeout pointlessly when a
+            // search needs more rounds (which is the total cap's job, not per-peer).
+            double matchCount = getAdditionalEventCount(_context, "netDb.lookupsMatchedLeaseSet");
+            double failCount = getAdditionalEventCount(_context, "netDb.lookupsFailedLeaseSet");
+            double leaseFailTime = getAdditionalStat(_context, "client.leaseSetFailedRemoteTime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
 
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
             boolean hasMatches = !Double.isNaN(matchCount) && matchCount > 0;
+            boolean hasFails = !Double.isNaN(failCount) && failCount > 0;
 
-            boolean searchSlow = !Double.isNaN(netdbTime) && netdbTime > 300;
-            if (!searchSlow)
-                searchSlow = !Double.isNaN(leaseTime) && leaseTime > 300;
+            // Network latency is the primary per-peer signal
+            boolean networkFast = observed < 200;
+            boolean networkSlow = observed > 500;
 
-            // No matches = lookups failing, shorten timeout to fail fast
-            if (!hasMatches && !systemBusy)
+            // Failure ratio: are per-peer queries actually timing out?
+            double totalLookups = (hasMatches ? matchCount : 0) + (hasFails ? failCount : 0);
+            double failRatio = totalLookups > 3 ? failCount / totalLookups : 0;
+            boolean failingHard = failRatio > 0.5;
+
+            // Cap binding: failing lookups run up against the total LS deadline,
+            // meaning the total search cap is truncating multi-round convergence.
+            // More per-peer time just wastes the remaining budget — actively decrease.
+            double lsLookupCap = IterativeSearchJob.getMaxLeaseSetLookupTime();
+            boolean capBinding = hasFails && !Double.isNaN(leaseFailTime) &&
+                                 leaseFailTime >= lsLookupCap * 0.9;
+
+            if (systemBusy)
+                return current;
+
+            // Cap binding: total timeout is the bottleneck, not per-peer responsiveness.
+            // Shrink per-peer timeout to fit more rounds within the total cap.
+            if (capBinding)
                 return Math.max(_min, current - _step);
 
-            // Slow lookups + matches present = increase timeout slightly
-            if (searchSlow && hasMatches && !systemBusy)
+            // Network slow + per-peer queries failing: increase timeout
+            if (networkSlow && failingHard)
                 return Math.min(_max, current + _step);
 
-            // Fast lookups + matches present = decrease timeout (searches complete quickly)
-            if (!searchSlow && hasMatches)
+            // Network fast + lookups succeeding: decrease (peers respond quickly)
+            if (networkFast && hasMatches && !failingHard)
+                return Math.max(_min, current - _step);
+
+            // Matches present + network reasonably fast: gradual decrease
+            if (hasMatches && !networkSlow)
+                return Math.max(_min, current - _step);
+
+            // No matches at all: fail fast, decrease
+            if (!hasMatches)
                 return Math.max(_min, current - _step);
 
             return current;
@@ -5742,7 +5771,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("MAX_LS_LOOKUP_TIME", "LeaseSet lookup timeout (ms)",
                   SUB_NETDB,
 
-                  3000, 15000, 500, "client.leaseSetFoundRemoteTime", _context);
+                  3000, 30000, 1000, "client.leaseSetFoundRemoteTime", _context);
         }
 
         protected void applyValue(int value) {
