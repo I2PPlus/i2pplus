@@ -595,7 +595,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             { "participatingThrottle reject ratio" },
             { "transport.sendProcessingTime", "transport.sendMessageFailureLifetime / sendMessageSize" },
             { "client.leaseSetFoundRemoteTime / netDb.successTime" },
-            { "stream.resetReceived / stream.connectionReceived" },
+            { "connect success rate + RTT + rtx ratio + reset rate" },
             { "i2cp.internalQueueSize" },
             { "peer.activeProfileCount" },
             { "udp.congestionOccurred / udp.allowConcurrentActive" },
@@ -4790,7 +4790,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxRTO", "Streaming max RTO (ms)",
                   SUB_STREAMING,
 
-                  1000, 12000, 1000, "udp.sendConfirmTime", _context);
+                  1000, 20000, 1000, "udp.sendConfirmTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -6462,9 +6462,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * {@code tunnel.buildRequestTime}, {@code tunnel.buildHandler.queueSize},
      * {@code tunnel.nextHopLookupSuccessTime}, {@code router.tunnelBacklog}.
      *
-     * <p>Increases when builds succeed and capacity is available.
-     * Decreases when success drops, builds are slow/expiring, or backlog
-     * is high. Uses 2x step for aggressive decrease during build storms.
+     * <p>Increases when builds fail or hit banned/rejected peers (need more
+     * attempts to find cooperative peers). Decreases only under transport
+     * congestion, CPU pressure, or handler backup.  The old death-spiral
+     * path (decrease on low success + slow builds) is replaced with an
+     * increase — when success is low, we need more volume to find good peers.
+     * Uses 2x step for aggressive increase during ban-hit cascades.
      *
      * @since 0.9.70+
      */
@@ -6474,7 +6477,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("tunnel.build.maxConcurrent", "Tunnel max concurrent builds",
                   SUB_TUNNEL,
 
-                  4, 64, 2, "tunnel.buildSuccessRate", _context);
+                   Math.max(SystemVersion.getCores() * 2, 24), 128, 4, "tunnel.buildSuccessRate", _context);
         }
 
         protected void applyValue(int value) {
@@ -6518,50 +6521,64 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean lookupsSlow = !Double.isNaN(lookupTime) && lookupTime > 10000;
             double tunnelBacklog = getAdditionalStat(_context, "router.tunnelBacklog");
             boolean backlogHigh = !Double.isNaN(tunnelBacklog) && tunnelBacklog > 100;
+            double banHits = getAdditionalEventCount(_context, "tunnel.buildBanHit");
+            double testFails = getAdditionalStat(_context, "tunnel.testFailedTime");
+            double buildRejects = getAdditionalEventCount(_context, "tunnel.buildClientReject");
 
-            boolean successHigh = !Double.isNaN(observed) && observed > 0.9;
-            boolean successLow = !Double.isNaN(observed) && observed < 0.7;
+            boolean successHigh = !Double.isNaN(observed) && observed > 0.85;
+            boolean successLow = !Double.isNaN(observed) && observed < 0.65;
             boolean buildsExpiring = !Double.isNaN(buildExpires) && buildExpires > 10;
             boolean buildsBackedUp = !Double.isNaN(backlog) && backlog > 20;
             boolean buildsSlowLegacy = !Double.isNaN(testTime) && testTime > 10000;
             boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
             boolean usingCapacity = !Double.isNaN(concurrentBuilds) && concurrentBuilds > current * 0.7;
+            boolean banHitsHigh = !Double.isNaN(banHits) && banHits > 20;
+            boolean testsFailing = !Double.isNaN(testFails) && testFails > 0;
+            boolean rejectionsHigh = !Double.isNaN(buildRejects) && buildRejects > 10;
 
             // Transport congested: builds compete with data for bandwidth — back off hard
-            if ((cwinCollapsed || congestionActive) && !cpuPressure)
+            if (cwinCollapsed || congestionActive)
                 return Math.max(_min, current - _step * 2);
 
             // Build handler backed up + slow = decrease (processing bottleneck, not demand)
             if (handlerBackedUp && buildsSlow)
                 return Math.max(_min, current - _step);
 
-            // Next-hop lookups slow = network bottleneck, not build capacity issue
-            if (lookupsSlow && successLow)
-                return Math.max(_min, current - _step);
+            // Ban hits high + success low = increase (need more attempts to find eligible peers)
+            if (banHitsHigh && successLow)
+                return Math.min(_max, current + _step * 2);
 
-            // Tunnel backlog high = accept queue overflow, back off
-            if (backlogHigh && !successHigh)
-                return Math.max(_min, current - _step);
+            // Tests failing + success low + no congestion = increase (replace dead tunnels faster)
+            if (testsFailing && successLow && !cwinCollapsed && !congestionActive && !cpuPressure)
+                return Math.min(_max, current + _step);
+
+            // Builds being rejected + success low + no congestion = increase (find cooperative peers)
+            if (rejectionsHigh && successLow && !cwinCollapsed && !congestionActive && !cpuPressure)
+                return Math.min(_max, current + _step);
 
             // Startup / high demand: builds backed up + success ok = increase
-            if (buildsBackedUp && successHigh && !cpuPressure && !cwinCollapsed && !congestionActive)
+            if (buildsBackedUp && (successHigh || observed > 0.7) && !cpuPressure && !cwinCollapsed && !congestionActive)
                 return Math.min(_max, current + _step * 2);
 
             // Builds expiring + success ok = increase (peers can handle more)
-            if (buildsExpiring && successHigh && !cpuPressure && !cwinCollapsed && !congestionActive)
+            if (buildsExpiring && (successHigh || observed > 0.7) && !cpuPressure && !cwinCollapsed && !congestionActive)
                 return Math.min(_max, current + _step);
 
             // Using most capacity + no issues = increase cautiously
             if (usingCapacity && successHigh && !buildsExpiring && !cpuPressure && !cwinCollapsed && !congestionActive)
                 return Math.min(_max, current + _step);
 
-            // Success dropping + builds slow = decrease (too much network noise)
-            if (successLow && (buildsSlowLegacy || buildsSlow))
-                return Math.max(_min, current - _step * 2);
+            // Success dropping + builds slow + no congestion/pressure = increase (need volume for good peers)
+            if (successLow && (buildsSlowLegacy || buildsSlow) && !cpuPressure && !cwinCollapsed && !congestionActive)
+                return Math.min(_max, current + _step);
 
-            // Low success + CPU pressure = decrease
+            // Low success + CPU pressure = hold steady (system can't handle more)
             if (successLow && cpuPressure)
-                return Math.max(_min, current - _step);
+                return current;
+
+            // Low success + lookups slow + no congestion = hold (wait for looksups to recover)
+            if (successLow && lookupsSlow && !cwinCollapsed && !congestionActive)
+                return current;
 
             // Using less than 30% capacity + high success + no backlog = decrease (steady state)
             if (!Double.isNaN(concurrentBuilds) && concurrentBuilds < current * 0.3
@@ -6600,7 +6617,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("tunnel.peerSelection.activityWindowMultiplier",
                   "Peer activity window multiplier",
                   SUB_TUNNEL,
-                  1, 8, 1, "tunnel.buildSuccessRate", _context);
+                  1, 4, 1, "tunnel.buildSuccessRate", _context);
         }
 
         protected void applyValue(int value) {
@@ -8608,29 +8625,57 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * Streaming health: RTT at connection close is the primary signal.
-         * High RTT = congestion or poor path quality.
-         * Uses stream.con.lifetimeRTT (fires on every connection close).
-         * Falls back to sends-before-ack ratio if RTT unavailable.
+         * Streaming health: multi-signal score combining connection success rate,
+         * RTT at close, retransmission overhead, and inbound reset rate.
+         * Connection success rate dominates for client-heavy routers.
          */
         private double scoreStreaming() {
-            // Primary: RTT from closed connections
+            // 1. Connection success rate (40% weight) - outbound connect success vs failure
+            double successEvents = getEventCount("stream.connectTime");
+            double failEvents = getEventCount("stream.connectFailed");
+            double totalEvents = successEvents + failEvents;
+            double successRate = (totalEvents >= 3) ? successEvents / totalEvents : Double.NaN;
+
+            // 2. RTT at connection close (30% weight) - quality of established connections
+            double rttScore = Double.NaN;
             double rtt = getStatValue("stream.con.lifetimeRTT");
             if (!Double.isNaN(rtt)) {
                 double conns = getLifetimeEventCount("stream.con.lifetimeMessagesSent");
-                if (conns < 3) return Double.NaN;
-                // <1000ms→1.0, 3000ms→0.5, >5000ms→0.0
-                return clamp(1.0 - ((rtt - 1000) / 4000.0));
+                if (conns >= 3) {
+                    // <1000ms→1.0, 3000ms→0.5, >5000ms→0.0
+                    rttScore = clamp(1.0 - ((rtt - 1000) / 4000.0));
+                }
             }
-            // Fallback: sends-before-ack (high = delayed acks)
-            double sendsBeforeAck = getStatValue("stream.sendsBeforeAck");
-            if (!Double.isNaN(sendsBeforeAck)) {
-                double msgs = getLifetimeEventCount("stream.con.lifetimeMessagesSent");
-                if (msgs < 3) return Double.NaN;
-                // <2→1.0, >10→0.0
-                return clamp(1.0 - ((sendsBeforeAck - 2) / 8.0));
+
+            // 3. Retransmission ratio (20% weight) - overhead on closed connections
+            double rtxScore = Double.NaN;
+            double rtx = getStatValue("stream.rtxRatio");
+            if (!Double.isNaN(rtx)) {
+                // <500→1.0, 10000→0.0
+                rtxScore = clamp(1.0 - ((rtx - 500) / 9500.0));
             }
-            return Double.NaN;
+
+            // 4. Inbound reset rate (10% weight) - abnormal connection termination
+            double resetScore = Double.NaN;
+            double resets = getEventCount("stream.resetReceived");
+            double connsReceived = getEventCount("stream.connectionReceived");
+            if (connsReceived >= 3) {
+                double resetRate = resets / connsReceived;
+                // <5%→1.0, >50%→0.0
+                resetScore = clamp(1.0 - ((resetRate - 0.05) / 0.45));
+            }
+
+            // Combine with fixed weights
+            double weightedSum = 0;
+            double totalWeight = 0;
+
+            if (!Double.isNaN(successRate)) { weightedSum += successRate * 0.40; totalWeight += 0.40; }
+            if (!Double.isNaN(rttScore)) { weightedSum += rttScore * 0.30; totalWeight += 0.30; }
+            if (!Double.isNaN(rtxScore)) { weightedSum += rtxScore * 0.20; totalWeight += 0.20; }
+            if (!Double.isNaN(resetScore)) { weightedSum += resetScore * 0.10; totalWeight += 0.10; }
+
+            if (totalWeight <= 0) return Double.NaN;
+            return weightedSum / totalWeight;
         }
 
         private static double clamp(double v) {
@@ -8673,7 +8718,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 scoreNetDbLookup()
             });
 
-            // Streaming: RTT + send-before-ack as health signals
+            // Streaming: multi-signal score (success rate + RTT + rtx + reset)
             double streamScore = scoreStreaming();
             scores.put(SUB_STREAMING, new double[] { streamScore });
 

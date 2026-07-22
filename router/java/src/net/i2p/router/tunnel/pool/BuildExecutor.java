@@ -195,7 +195,7 @@ public class BuildExecutor implements Runnable {
     public static int getMaxConcurrentBuilds() { return _maxConcurrentBuilds; }
 
     /** @since 0.9.70+ */
-    public static void setMaxConcurrentBuilds(int val) { _maxConcurrentBuilds = Math.max(8, Math.min(256, val)); }
+    public static void setMaxConcurrentBuilds(int val) { _maxConcurrentBuilds = Math.max(Math.max(SystemVersion.getCores() * 2, 24), Math.min(256, val)); }
 
     private static final int LOOP_TIME = 1000; // calculate required tunnels to build every 1s
     private static final int TUNNEL_POOLS = 8;

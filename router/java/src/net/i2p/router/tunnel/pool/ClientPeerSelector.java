@@ -400,13 +400,17 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
                     }
                 } else {
-                    // For OBEP, prefer connected+not-failing peers over raw tier-based
-                    // selection.  A peer with an established transport session can receive
-                    // the build message immediately; a peer without one will trigger a
-                    // 10s first-hop timeout while the transport tries to connect.
-                    ctx.profileOrganizer().selectActiveNotFailingPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
-                    if (matches.isEmpty() && useHighCapPrimary) {
-                        ctx.profileOrganizer().selectHighCapacityPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
+                    // OBEP: prefer HighCapacity (includes floodfill/capable peers) for
+                    // reliable last-hop message delivery.  Floodfill peers have proven
+                    // NetDB lookup ability and high bandwidth, giving the best chance
+                    // that the tunnel's last hop can deliver the SYN to the destination's
+                    // inbound gateway.  HighCapacity already excludes slow L/M tiers
+                    // which is where BAD floodfills cluster, so we get GOOD/OK floodfills
+                    // without duplicating FloodfillPeerSelector's full classification.
+                    // Fall back to connected peers for fast build latency, then standard tiers.
+                    ctx.profileOrganizer().selectHighCapacityPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
+                    if (matches.isEmpty()) {
+                        ctx.profileOrganizer().selectActiveNotFailingPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
                     }
                     if (matches.isEmpty()) {
                         ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, randomKey,

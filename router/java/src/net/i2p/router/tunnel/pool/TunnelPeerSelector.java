@@ -68,7 +68,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /** Multiplier applied to the base activity window by {@link #getActivityWindow}. */
     private static final int MIN_WINDOW_MULTIPLIER = 1;
-    private static final int MAX_WINDOW_MULTIPLIER = 8;
+    private static final int MAX_WINDOW_MULTIPLIER = 4;
     private static final int DEFAULT_WINDOW_MULTIPLIER = 1;
 
     /**
