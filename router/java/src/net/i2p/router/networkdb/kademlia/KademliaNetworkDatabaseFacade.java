@@ -150,7 +150,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  HostChecker.  When HostChecker is done and calls removeFromCache(),
      *  only LeaseSets in this set are eligible for purge — pre-existing
      *  LeaseSets that were independently cached by other clients are preserved.
-     *  @since 2.12.0 */
+     *  @since 0.9.70+ */
     private final Set<Hash> _hostCheckerLeaseSets = ConcurrentHashMap.newKeySet(8);
 
     /** Cached set of blocked countries - lazily initialized */
@@ -2443,7 +2443,7 @@ return false;
      * (not in this set) are preserved.
      *
      * @param hash the destination hash being pinged by HostChecker
-     * @since 2.12.0
+     * @since 0.9.70+
      */
     public void markHostCheckerLeaseSet(Hash hash) {
         if (hash != null) {
