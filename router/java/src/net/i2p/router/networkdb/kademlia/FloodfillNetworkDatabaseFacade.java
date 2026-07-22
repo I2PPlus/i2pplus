@@ -5,8 +5,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Destination;
@@ -59,8 +61,18 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private LookupBanHammer _lookupBanner;
     private final Job _ffMonitor;
     private final ProbeStalePeerJob _probeStalePeerJob;
+    private final ContactDrivenRefreshJob _contactRefreshJob;
     private final ConcurrentHashMap<Long, List<TimeoutEntry>> _searchTimeouts;
     private final BatchedSearchTimeoutProcessor _timeoutProcessor;
+
+    /**
+     *  Tracks active outbound IterativeSearch queries per floodfill peer
+     *  so we don't saturate any single floodfill with concurrent lookups.
+     *  Incremented when sendQuery() is called, decremented when the search
+     *  completes or fails for that peer.
+     *  @since 0.9.70+
+     */
+    private static final ConcurrentHashMap<Hash, AtomicInteger> _activeFloodfillQueries = new ConcurrentHashMap<>();
 
     /**
      *  This is the flood redundancy. Entries are
@@ -75,7 +87,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     /**
      *  Tracks recently-queried floodfill peers across all concurrent searches
      *  to avoid hammering the same floodfill. Entries expire after 60s.
-     *  @since 2.12.0
+     *  @since 0.9.70+
      */
     static final ConcurrentHashMap<Hash, Long> _recentlyQueriedFloodfills = new ConcurrentHashMap<>(1024);
     static final long RECENTLY_QUERIED_COOLDOWN = 60*1000L;
@@ -83,7 +95,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     /**
      *  Check if a floodfill peer was queried recently (within cooldown period).
      *  @return true if the peer was queried within the last 60s
-     *  @since 2.12.0
+     *  @since 0.9.70+
      */
     static boolean isRecentlyQueried(Hash peer) {
         Long expiration = _recentlyQueriedFloodfills.get(peer);
@@ -98,11 +110,60 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     /**
      *  Mark a floodfill peer as recently queried. Other searches will avoid
      *  this peer for the cooldown period.
-     *  @since 2.12.0
+     *  @since 0.9.70+
      */
     static void markQueried(Hash peer) {
         _recentlyQueriedFloodfills.put(peer, System.currentTimeMillis() + RECENTLY_QUERIED_COOLDOWN);
     }
+
+    /**
+     *  Max concurrent outbound IterativeSearch queries per floodfill peer.
+     *  Above this we'll pick a different floodfill to distribute load.
+     */
+    private static final int MAX_CONCURRENT_PER_FLOODFILL = 5;
+
+    /**
+     *  Increment the active outbound query count for a floodfill peer.
+     *  Call when sendQuery() dispatches a DatabaseLookupMessage to this peer.
+     *  @return the new count
+     *  @since 0.9.70+
+     */
+    static int incrementActiveFloodfillQuery(Hash floodfill) {
+        return _activeFloodfillQueries.compute(floodfill, (k, v) -> {
+            int next = (v != null ? v.get() : 0) + 1;
+            return new AtomicInteger(next);
+        }).get();
+    }
+
+    /**
+     *  Decrement the active outbound query count for a floodfill peer.
+     *  Call when the search for this peer completes, fails, or times out.
+     *  @since 0.9.70+
+     */
+    static void decrementActiveFloodfillQuery(Hash floodfill) {
+        _activeFloodfillQueries.compute(floodfill, (k, v) -> {
+            if (v == null || v.get() <= 1) return null;
+            return new AtomicInteger(v.get() - 1);
+        });
+    }
+
+    /**
+     *  Check if a floodfill peer already has too many active outbound queries
+     *  from this router.  Spreads the load across available floodfills so no
+     *  single peer is saturated.
+     *  @return true if the peer should be skipped for now
+     *  @since 0.9.70+
+     */
+    static boolean isFloodfillOverloaded(Hash floodfill) {
+        AtomicInteger count = _activeFloodfillQueries.get(floodfill);
+        return count != null && count.get() >= MAX_CONCURRENT_PER_FLOODFILL;
+    }
+
+    /**
+     *  Max age (ms) for a RouterInfo stored in our NetDB before we consider
+     *  refreshing it.  RIs published within this window are treated as fresh.
+     */
+    static final long MAX_RI_AGE_BEFORE_REFRESH_MS = 60L * 60 * 1000;
     private static final int FLOOD_TIMEOUT = 10*1000;
     static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000L;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000L;
@@ -156,10 +217,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         _context.statManager().createRateStat("netDb.lateReplyCacheSize", "Size of late reply grace period cache", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.lateReplyTimedOut", "Timed out peers added to late reply cache", "NetworkDatabase", rate);
         // No need to start the FloodfillMonitorJob for client subDb.
-        if (isClientDb()) {_ffMonitor = null; _probeStalePeerJob = null;}
+        if (isClientDb()) {_ffMonitor = null; _probeStalePeerJob = null; _contactRefreshJob = null;}
         else {
             _ffMonitor = new FloodfillMonitorJob(_context, this);
             _probeStalePeerJob = new ProbeStalePeerJob(_context, this);
+            _contactRefreshJob = new ContactDrivenRefreshJob(_context, this);
         }
     }
 
@@ -169,6 +231,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         super.startup();
         if (_ffMonitor != null) {_context.jobQueue().addJob(_ffMonitor);}
         if (_probeStalePeerJob != null) {_context.jobQueue().addJob(_probeStalePeerJob);}
+        if (_contactRefreshJob != null) {_context.jobQueue().addJob(_contactRefreshJob);}
         if (isClientDb()) {isFF = false;}
         else {
             isFF = _context.getBooleanProperty(PROP_FLOODFILL_PARTICIPANT);
@@ -787,6 +850,20 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      */
     void complete(Hash key) {
         _activeFloodQueries.remove(key);
+    }
+
+    /**
+     *  Notify that we heard from or about a peer (e.g., received a DatabaseStoreMessage
+     *  from them).  The ContactDrivenRefreshJob will consider refreshing their RouterInfo
+     *  if it is stale.
+     *
+     *  @param peer the peer we heard from
+     *  @since 0.9.70+
+     */
+    public void contactHeardFrom(Hash peer) {
+        if (_contactRefreshJob != null) {
+            _contactRefreshJob.heardFrom(peer);
+        }
     }
 
     /**

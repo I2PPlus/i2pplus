@@ -82,6 +82,8 @@ public class IterativeSearchJob extends FloodSearchJob {
     private final int _totalSearchLimit;
     private final MaskedIPSet _ipSet;
     private final Set<Hash> _skippedPeers;
+    /** Floodfill peers we've sent queries to in this search — for active-query tracking */
+    private final Set<Hash> _queriedFloodfills;
 
     private static final int MAX_NON_FF = 5;
     /** Max number of peers to query */
@@ -252,6 +254,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         _unheardFrom = new HashSet<>(CONCURRENT_SEARCHES);
         _failedPeers = new HashSet<>(_totalSearchLimit);
         _skippedPeers = new HashSet<>(4);
+        _queriedFloodfills = new HashSet<>(4);
         _sentTime = new ConcurrentHashMap<>(_totalSearchLimit);
         _fromLocalDest = fromLocalDest;
         _maxConcurrent = (ctx.router().getUptime() > 30*60*1000 || known > 1000) ? ctx.getProperty("netdb.maxConcurrent", _maxConcurrentDefault) :
@@ -448,6 +451,11 @@ public class IterativeSearchJob extends FloodSearchJob {
                         iter.remove();
                         // Skip if recently queried by another concurrent search
                         if (FloodfillNetworkDatabaseFacade.isRecentlyQueried(h)) {
+                            _skippedPeers.add(h);
+                            continue;
+                        }
+                        // Skip if this floodfill already has too many active queries from us
+                        if (FloodfillNetworkDatabaseFacade.isFloodfillOverloaded(h)) {
                             _skippedPeers.add(h);
                             continue;
                         }
@@ -712,6 +720,20 @@ public class IterativeSearchJob extends FloodSearchJob {
         // Mark as recently queried so other concurrent searches avoid this peer
         _facade.markQueried(peer);
 
+        // Track active floodfill query count for load distribution.
+        // Check _dead under sync to avoid leaking counters when the search
+        // completes before we finish sending.
+        if (peer != null) {
+            boolean isDead;
+            synchronized(this) {
+                isDead = _dead;
+                if (!isDead) {_queriedFloodfills.add(peer);}
+            }
+            if (!isDead) {
+                FloodfillNetworkDatabaseFacade.incrementActiveFloodfillQuery(peer);
+            }
+        }
+
         // Set timeout based on resp. time from profile
         PeerProfile prof = getContext().profileOrganizer().getProfileNonblocking(peer);
         long exp = _singleSearchTime;
@@ -748,8 +770,10 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (_dead || getContext().banlist().isBanlisted(peer)) {return;}
         synchronized (this) {
             _unheardFrom.remove(peer);
+            _queriedFloodfills.remove(peer);
             isNewFail = _failedPeers.add(peer);
         }
+        FloodfillNetworkDatabaseFacade.decrementActiveFloodfillQuery(peer);
         if (isNewFail) {
             boolean isKnown = _facade.lookupLocallyWithoutValidation(peer) != null;
             if (timedOut) {
@@ -853,6 +877,25 @@ public class IterativeSearchJob extends FloodSearchJob {
             _dead = true;
         }
         _facade.complete(_key);
+        releaseFloodfillQueries();
+    }
+
+    /**
+     *  Decrement active floodfill query counters for all peers queried
+     *  by this search.  Called when the search completes, fails, or cancels.
+     *  @since 0.9.70+
+     */
+    private void releaseFloodfillQueries() {
+        Set<Hash> toRelease;
+        synchronized (this) {
+            if (_queriedFloodfills.isEmpty())
+                return;
+            toRelease = new HashSet<>(_queriedFloodfills);
+            _queriedFloodfills.clear();
+        }
+        for (Hash h : toRelease) {
+            FloodfillNetworkDatabaseFacade.decrementActiveFloodfillQuery(h);
+        }
     }
 
     /**
@@ -872,6 +915,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             _dead = true;
         }
         _facade.complete(_key);
+        releaseFloodfillQueries();
         if (getContext().commSystem().getStatus() != Status.DISCONNECTED) {
             _facade.lookupFailed(_key);
             // For RouterInfo (transit next-hop) misses, immediately negative-cache
@@ -935,6 +979,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         }
 
         _facade.complete(_key);
+        releaseFloodfillQueries();
         // Add timed-out peers to grace period cache to avoid false positive bans for late replies
         // Only track peers that didn't respond (timed out) - successful responses handled differently
         long graceUntil = getContext().clock().now() + getGracePeriod();

@@ -55,6 +55,8 @@ public class FloodfillDatabaseStoreMessageHandler implements HandlerJobBuilder {
             netdb = (FloodfillNetworkDatabaseFacade) _context.clientNetDb(by);
         else
             netdb = _facade;
+        // Notify contact-driven refresh: this peer is alive and actively storing
+        if (netdb != null) netdb.contactHeardFrom(fromHash);
         return new HandleFloodfillDatabaseStoreMessageJob(_context, dsm, from, fromHash, netdb, _msgIDBloomXor);
     }
 }
