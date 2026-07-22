@@ -404,6 +404,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new PassiveFlushDelayParam());
         _params.add(new SlowStartGrowthParam());
         _params.add(new InactivityTimeoutParam());
+        _params.add(new MaxSynResendsParam());
 
         // I2CP
         _params.add(new InternalQueueSizeParam());
@@ -5475,6 +5476,68 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (observed < 5000 && !congested)
                 return Math.max(_min, current - _step);
 
+            return current;
+        }
+    }
+
+    /**
+     * Maximum SYN sends before giving up on a handshake.
+     * SYN retransmission uses a fixed RTO interval (no exponential backoff
+     * — there's no congestion to manage before the connection establishes),
+     * so the total SYN budget equals maxSynResends * initialRTO and should
+     * roughly fill the connect() timeout (~60s).
+     * Raise when connects are failing on slow/lossy paths.
+     *
+     * @since 0.9.70+
+     */
+    private class MaxSynResendsParam extends BaseParam {
+
+        MaxSynResendsParam() {
+            super("i2p.streaming.maxSynResends", "Streaming max SYN sends",
+                  SUB_STREAMING,
+                  2, 12, 1, "stream.connectFailed", _context);
+        }
+
+        protected void applyValue(int value) {
+            StreamingConnectionReflector.invokeConnectionSet("setMaxSynResends", value);
+        }
+
+        protected int getRuntimeValue() {
+            int v = StreamingConnectionReflector.invokeConnectionInt("getMaxSynResendsStatic");
+            return v > 0 ? v : 5;
+        }
+
+        protected double getObservedStat(RouterContext ctx) {
+            return getAdditionalEventCount(_context, _statName);
+        }
+
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            // observed = stream.connectFailed event count in last 60s
+            // Cross-refs: udp.sendConfirmTime (RTT basis),
+            //             transport.sendMessageFailureLifetime (congestion)
+            double confirmTime = getAdditionalStat(_context, "udp.sendConfirmTime");
+            double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
+
+            boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
+            boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 7000;
+            boolean connectsFailing = !Double.isNaN(observed) && observed > 0;
+
+            // Connects failing + high RTT = increase SYN patience
+            if (connectsFailing && highRTT)
+                return Math.min(_max, current + _step);
+
+            // Connects failing + congestion = increase (network is overloaded)
+            if (connectsFailing && congested)
+                return Math.min(_max, current + _step);
+
+            // No failures + healthy = converge toward default
+            if (!connectsFailing && !highRTT) {
+                if (current > 5)
+                    return Math.max(5, current - _step);
+                if (current < 5)
+                    return Math.min(5, current + _step);
+            }
             return current;
         }
     }

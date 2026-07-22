@@ -147,11 +147,14 @@ class Connection {
     private static final int UNCHOKES_TO_SEND = 8;
 
     /**
-     *  Give up resending an unacked SYN after this many sends (~75s with initial
-     *  RTO 5s and doubling backoff), roughly matching the connect() budget rather
-     *  than running to the full maxResends (~12 min).
+     *  Give up resending an unacked SYN after this many sends.
+     *  SYN retransmission uses a fixed RTO interval (no backoff — there is no
+     *  congestion to manage before the connection is established), so the total
+     *  SYN budget equals maxSynResends * initialRTO and should roughly fill
+     *  the connect() timeout (~60s).
+     *  @since 0.9.70+ mutable for adaptive tuning
      */
-    private static final int MAX_SYN_RESENDS = 5;
+    private static volatile int _maxSynResends = 5;
 
     /**
      * Maximum number of packets to retransmit when the timer hits.
@@ -164,6 +167,10 @@ class Connection {
     public static int getMaxRetransmissionsStatic() { return _maxRetransmissions; }
     /** @since 0.9.70+ */
     public static void setMaxRetransmissions(int val) { _maxRetransmissions = Math.max(8, Math.min(128, val)); }
+    /** @since 0.9.70+ */
+    public static int getMaxSynResendsStatic() { return _maxSynResends; }
+    /** @since 0.9.70+ */
+    public static void setMaxSynResends(int val) { _maxSynResends = Math.max(2, Math.min(12, val)); }
 
     /**
      * Maximum number of packets to retransmit in a single timer fire.
@@ -1889,8 +1896,17 @@ class Connection {
 
             congestionOccurred();
 
-            // 1. Double RTO and backoff (RFC 6298 section 5.5 & 5.6)
-            pushBackRTO(_options.doubleRTO());
+            // 1. RTO backoff: for established connections, double RTO per RFC 6298
+            //    sec 5.5-5.6. For SYN-phase connections (stream IDs not yet assigned),
+            //    there's no congestion to manage — keep RTO fixed so each retry gets
+            //    the same window. SYN retries are bounded by maxSynResends, whose total
+            //    budget (maxSynResends * initialRTO) fills the connect() timeout with
+            //    gentle fixed-interval retransmits instead of exponential backoff.
+            if (_receiveStreamId.get() > 0) {
+                pushBackRTO(_options.doubleRTO());
+            } else {
+                pushBackRTO(_options.getRTO());
+            }
 
             // 2. cut ssthresh to bandwidth estimate, window to 1
             List<PacketLocal> toResend = null;
@@ -1958,11 +1974,12 @@ class Connection {
                         return;
                     }
                 } else if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE) &&
-                           packet.getNumSends() >= MAX_SYN_RESENDS) {
+                           packet.getNumSends() >= _maxSynResends) {
                     // If the SYN handshake is never ACKed the connect() caller has
-                    // already given up (connectDelay + 45s in ConnectionManager), so
-                    // stop resending instead of running to maxResends (~12 min). At
-                    // initial RTO 5s with doubling backoff, 5 sends is ~75s.
+                    // already given up (default 60s timeout), so stop resending
+                    // instead of running to maxResends (~12 min). SYN retransmits
+                    // use a fixed RTO interval (no backoff), so the total budget is
+                    // maxSynResends * initialRTO.
                     if (_log.shouldDebug()) {
                         _log.debug(Connection.this + " too many SYN resends, closing...");
                     }
