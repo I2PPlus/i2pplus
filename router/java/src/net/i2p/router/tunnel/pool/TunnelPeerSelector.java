@@ -1090,14 +1090,13 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 counts.put(r, c != null ? c + 1 : 1);
             }
             StringBuilder sb = new StringBuilder();
-            sb.append(s.size()).append(" excluded [");
+            sb.append(s.size()).append(" excluded \n* Reason: ");
             boolean first = true;
             for (Map.Entry<String, Integer> e : counts.entrySet()) {
                 if (!first) sb.append(", ");
                 sb.append(e.getValue()).append(" ").append(e.getKey());
                 first = false;
             }
-            sb.append("]");
             return sb.toString();
         }
     }
