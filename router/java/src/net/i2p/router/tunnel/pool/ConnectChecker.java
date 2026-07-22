@@ -91,10 +91,10 @@ public class ConnectChecker {
                 return true;
             }
         }
-        RouterInfo rt = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(to);
-        if (rt == null) {return true;}
-        RouterInfo rf = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(from);
-        if (rf == null) {return true;}
+        RouterInfo rt = (RouterInfo) ctx.netDb().lookupRouterInfoLocally(to);
+        if (rt == null) {return false;}
+        RouterInfo rf = (RouterInfo) ctx.netDb().lookupRouterInfoLocally(from);
+        if (rf == null) {return false;}
         int ct;
         if (ust) {ct = getInboundMask(rt);} // to us
         else {

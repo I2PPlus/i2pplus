@@ -1301,7 +1301,7 @@ public class ProfileOrganizer {
             if (lifetimeFailed > MAX_LIFETIME_TUNNEL_FAILURES) return false;
         }
 
-        RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+        RouterInfo info = (RouterInfo) _context.netDb().lookupRouterInfoLocally(peer);
         if (info != null) {
             if (info.isHidden()) return false;
             if (_context.router() != null && _context.router().getUptime() > STARTUP_GRACE_PERIOD_MS &&
