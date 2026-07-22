@@ -1,3 +1,17 @@
+2026-07-22 2.13+ (API 0.9.70) released
+
+2026-07-22 dr|z3d
+  * NetDB:
+    - Per-floodfill active-query tracking (MAX_CONCURRENT_PER_FLOODFILL=5)
+      and overload check at search time; ContactDrivenRefreshJob — proactively
+      refresh RouterInfo for peers we recently heard from; hook contactHeardFrom()
+      into DatabaseStore message handler
+    - Accelerate ProbeStalePeerJob — 50 probes/cycle (was 20), startup 100
+      (was 50), tiered RI maxAge for high-value peers, always sort by
+      bandwidth/reachability score
+    - RefreshRoutersJob — batch 5 per invocation (was 1), sort non-floodfills
+      by performance score
+
 2026-07-21 dr|z3d
   * Router: JobQueueScaler reactive to CPU/GC/bandwidth saturation;
     fix frozen RAM-based max runners; widen feedback rollback criteria;

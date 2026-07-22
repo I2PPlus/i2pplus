@@ -10,7 +10,7 @@
 input_file="/tmp/torbulkexitlist"
 second_list_input_file="/tmp/torlist_exit"
 output_file="blocklist_tor.txt"
-http_proxy=${http_proxy:-"http://127.0.0.1:4444"}
+http_proxy=${http_proxy:-"http://127.0.0.1:4001"}
 backup_http_proxy=${http_backup_proxy:-"http://127.0.0.1:4001"}
 UA="Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0"
 
