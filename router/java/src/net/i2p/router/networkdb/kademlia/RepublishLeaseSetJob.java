@@ -155,13 +155,28 @@ public class RepublishLeaseSetJob extends JobImpl {
                         failCount.set(0);
                         _facade.sendStore(_dest, ls, null, new OnRepublishFailure(ls), getPublishTimeout(), null);
                         _lastPublished = now;
-                        // Schedule next republish so it fires at least EXPIRY_WINDOW before expiry.
-                        // Math.min — when the LS is close to expiry we schedule SOONER, not later.
-                        // The old Math.max did the opposite, causing leases to expire between
-                        // republish cycles and taking services offline until the next cycle.
-                        long nextRepublish = Math.max(30L * 1000,
+                        long nextRepublish;
+                        // If fewer leases than target, schedule sooner so new
+                        // tunnels get published without waiting for the full
+                        // republish interval.
+                        int leaseCount = ls.getLeaseCount();
+                        TunnelPoolSettings settings = getContext().tunnelManager().getInboundSettings(_dest);
+                        int targetLeases = settings != null ? settings.getQuantity() : 1;
+                        if (leaseCount < targetLeases) {
+                            if (_log.shouldInfo()) {
+                                _log.info("LeaseSet has fewer leases (" + leaseCount +
+                                          "/" + targetLeases + ") — scheduling early republish");
+                            }
+                            nextRepublish = 30L * 1000;
+                        } else {
+                            // Schedule next republish so it fires at least EXPIRY_WINDOW before expiry.
+                            // Math.min — when the LS is close to expiry we schedule SOONER, not later.
+                            // The old Math.max did the opposite, causing leases to expire between
+                            // republish cycles and taking services offline until the next cycle.
+                            nextRepublish = Math.max(30L * 1000,
                                                       Math.min(getRepublishInterval(),
                                                                timeUntilExpiry - EXPIRY_WINDOW));
+                        }
                         scheduleRepublish(nextRepublish);
                     }
                 } else {
