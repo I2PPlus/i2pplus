@@ -810,6 +810,11 @@ public class BuildExecutor implements Runnable {
                          * Only count building (in-progress) tunnels, not testing tunnels —
                          * they're different pipeline stages. Testing tunnels are built and
                          * being evaluated; building tunnels are still in construction.
+                         * Uses the effective target (wantedCount + Tuner's targetBuffer)
+                         * so cancellation doesn't override quality-driven build demand.
+                         * When the Tuner raises targetBuffer to compensate for poor quality,
+                         * the cancellation threshold rises accordingly — matching what
+                         * calculatePairedBuilds() uses.
                          */
                         for (TunnelPool pool : pools) {
                             if (!pool.isAlive()) {
@@ -817,7 +822,8 @@ public class BuildExecutor implements Runnable {
                             }
                             int wantedCount = pool.getSettings().getTotalQuantity();
                             int buildingCount = pool.getInProgressCount();
-                            int maxBuilding = Math.max(4, wantedCount * 2);
+                            int target = Math.max(getTunnelTargetMin(_context), wantedCount + getTunnelTargetBuffer(_context));
+                            int maxBuilding = Math.max(4, target * 2);
                             if (buildingCount > maxBuilding) {
                                 for (PooledTunnelCreatorConfig cfg : pool.cancelExcessInProgress(maxBuilding)) {
                                     removeFromBuilding(cfg.getReplyMessageId());
