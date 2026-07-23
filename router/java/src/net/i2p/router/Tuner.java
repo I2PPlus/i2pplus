@@ -98,6 +98,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /** Priority for I/O handler threads — boosted under load, reduced when idle */
     private static volatile int _handlerThreadPriority = Thread.NORM_PRIORITY;
 
+    /** Per-pool test budget for client tunnels — high enough to never throttle.
+     *  Global caps (maxQueuedTests, hardLimit) protect the job queue instead. */
+    private static volatile int _testClientBudget = 256;
+
+    /** Retest delay backoff multiplier (percent, 100 = 1x).
+     *  Increases under job queue pressure to free test capacity for UNTESTED tunnels.
+     *  Range 100 (no backoff) to 800 (8x). */
+    private static volatile int _testRetestBackoff = 100;
+
+    /** Extra tunnels to build beyond target per pool when build failure rate is high.
+     *  Computed from build success rate. Range 0-10. */
+    private static volatile int _buildFailureBuffer = 0;
+
     /**
      * @return the target priority for I/O handler threads
      * @since 0.9.70+
@@ -131,6 +144,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @since 0.9.70+
      */
     public static int getInternalQueueSize() { return _internalQueueSize; }
+
+    public static int getTestClientBudget() { return _testClientBudget; }
+    public static int getTestRetestBackoff() { return _testRetestBackoff; }
+    public static int getBuildFailureBuffer() { return _buildFailureBuffer; }
 
     /**
      * Set the I2CP internal queue size (called by Tuner).
@@ -522,11 +539,114 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                     _log.warn("Tuner: error refreshing MLKEM pool", e);
             }
         }
+        // Compute derived test/build tuning values from subsystem scores
+        computeTuningValues();
         // Expunge stale CoDel queue weak references (queues from cycled tunnels)
         CoDelBlockingQueue.expungeStaleInstances();
         CoDelPriorityBlockingQueue.expungeStaleInstances();
         // Flush dirty state to disk (at most once per 5min, per AutotuneConfig throttle)
         _autotune.save();
+    }
+
+    /**
+     * Compute derived tuning values from subsystem scores and job queue stats.
+     * Updates static volatile fields read by TestJob and TunnelPool.
+     * Called once per tune cycle from {@link #timeReached()}.
+     */
+    private void computeTuningValues() {
+        // Build failure buffer: how many extra tunnels to build per pool
+        // when failure rate is high (maintain effective coverage despite losses).
+        // Uses hourly build success rate to avoid over-reacting to transient dips.
+        double successRate = getBuildSuccessRate();
+        if (Double.isNaN(successRate) || successRate >= 0.80) {
+            _buildFailureBuffer = 0;
+        } else if (successRate >= 0.60) {
+            _buildFailureBuffer = 1;
+        } else if (successRate >= 0.40) {
+            _buildFailureBuffer = 2;
+        } else {
+            _buildFailureBuffer = 3;
+        }
+
+        // Test retest backoff: multiplier (percent) on retest delay for reliable
+        // tunnels when the job queue is under pressure.  This slows retesting of
+        // GOOD tunnels to free test capacity for UNTESTED ones — no per-pool
+        // budgets ever deny a test outright.
+        double pressure = getJobQueuePressure();
+        _testRetestBackoff = 100 + (int)(pressure * 700); // 0.0→100(1x), 1.0→800(8x)
+
+        // _testClientBudget stays at 256 — we never throttle testing at the pool level.
+        // Global caps (maxQueuedTests, hardLimit) protect the job queue instead.
+    }
+
+    /**
+     * Build success rate from hourly stats (0.0-1.0).
+     * @return success rate or NaN if insufficient data
+     */
+    private double getBuildSuccessRate() {
+        double success = getHourlyAvgStat("tunnel.buildSuccessRate");
+        double failure = getHourlyAvgStat("tunnel.buildFailureRate");
+        double timeout = getHourlyAvgStat("tunnel.buildTimeoutRate");
+        double total = success + failure + timeout;
+        if (Double.isNaN(total) || total <= 0) return Double.NaN;
+        return success / 100.0;
+    }
+
+    /**
+     * Job queue pressure score (0.0 = idle, 1.0 = severe).
+     * Combines jobLag, readyJobs, and droppedJobs into a single metric.
+     */
+    private double getJobQueuePressure() {
+        double jobLag = getAvgStat("jobQueue.jobLag");
+        double readyJobs = getAvgStat("jobQueue.readyJobs");
+        double dropped = getEventCountStat("jobQueue.droppedJobs");
+
+        double pressure = 0.0;
+        if (!Double.isNaN(jobLag) && jobLag > 20) {
+            pressure = Math.min(1.0, (jobLag - 20) / 180.0);
+        }
+        if (!Double.isNaN(readyJobs) && readyJobs > 500) {
+            double rp = Math.min(1.0, (readyJobs - 500) / 1500.0);
+            if (rp > pressure) pressure = rp;
+        }
+        if (!Double.isNaN(dropped) && dropped > 0) {
+            if (0.7 > pressure) pressure = 0.7;
+            if (dropped > 10) pressure = 1.0;
+        }
+        return pressure;
+    }
+
+    /**
+     * @return 60s rolling average of a stat, or NaN if unavailable
+     */
+    private double getAvgStat(String name) {
+        RateStat rs = _context.statManager().getRate(name);
+        if (rs == null) return Double.NaN;
+        Rate rate = rs.getRate(STAT_PERIOD);
+        if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+        return rate.getAverageValue();
+    }
+
+    /**
+     * @return hourly rolling average of a stat, or NaN if unavailable
+     */
+    private double getHourlyAvgStat(String name) {
+        RateStat rs = _context.statManager().getRate(name);
+        if (rs == null) return Double.NaN;
+        Rate rate = rs.getRate(RateConstants.ONE_HOUR);
+        if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+        return rate.getAverageValue();
+    }
+
+    /**
+     * @return event count in the last 60s for a stat, or NaN if unavailable
+     */
+    private double getEventCountStat(String name) {
+        RateStat rs = _context.statManager().getRate(name);
+        if (rs == null) return Double.NaN;
+        Rate rate = rs.getRate(STAT_PERIOD);
+        if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+        return rate.getLastEventCount();
     }
 
     /** Flush on shutdown — unconditional write if dirty */

@@ -26,6 +26,7 @@ import net.i2p.data.TunnelId;
 import net.i2p.router.CommSystemFacade;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
+import net.i2p.router.Tuner;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.TunnelTestStatus;
 import net.i2p.router.peermanager.PeerTestJob;
@@ -2673,8 +2674,11 @@ public class TunnelPool {
         int target = _settings.getQuantity();
         // Dynamic scaling: boost target when pool keeps collapsing.
         // More tunnels = more resilience. LeaseSet picks the best.
-        int effectiveTarget = Math.min(target + _consecutiveEmergencies,
-                                       target + MAX_EMERGENCY_BOOST);
+        // Also add failure buffer from Tuner — extra tunnels to maintain
+        // effective coverage when build failure rate is high.
+        int failureBuffer = Tuner.getBuildFailureBuffer();
+        int effectiveTarget = Math.min(target + _consecutiveEmergencies + failureBuffer,
+                                       target + MAX_EMERGENCY_BOOST + failureBuffer);
         long now = _context.clock().now();
         long preBuildThreshold = now + 5L * 60 * 1000;
 
@@ -2779,23 +2783,21 @@ public class TunnelPool {
                 // builds when inProgress >= effectiveTarget creates a build storm:
                 // timeout → ensureSufficientTunnels → deficit=target → build
                 // more → timeout → repeat.  Only build the gap.
-                // Also count untestedCount — these tunnels are waiting to be
-                // tested, not stuck.  Excluding them causes a churn cycle:
-                // build → prune excess (120s) → nearExpiry → build more → repeat.
-                // With untestedCount included, once enough tunnels are queued,
-                // no more builds are triggered until they're tested.
-                deficit = Math.max(0, effectiveTarget - inProgress - untestedCount) + failingBoost;
+                // Don't subtract untestedCount — when safeActive == 0, untested
+                // tunnels are likely stuck (testing can't keep up with 100+
+                // pending).  Counting them against the deficit permanently blocks
+                // replacement builds, leaving the pool at 0 safe forever.
+                deficit = Math.max(0, effectiveTarget - inProgress) + failingBoost;
             } else if (safeActive == 0) {
-                // Pool has zero GOOD tunnels — count untested toward
-                // available capacity to prevent build storms.  Without
-                // this, ensureSufficientTunnels() queues builds that
-                // complete as UNTESTED, but the next 15s cycle queues
-                // MORE builds (ignoring the untested pileup), causing
-                // "Too many UNTESTED" warnings and wasted build slots.
-                // If untested tunnels are truly stuck (failing tests),
-                // they'll be marked FAILED and removed by pruneExcessTunnels(),
-                // at which point the deficit will correctly increase.
-                deficit = Math.max(0, effectiveTarget - inProgress - untestedCount) + failingBoost;
+                // Pool has zero GOOD tunnels — untested tunnels are likely
+                // stuck because TestJob can't keep up.  If we count them
+                // against the deficit, the pool can never build replacements
+                // and stays at 0 safe forever until pruneExcessTunnels()
+                // removes them after 120s.  By ignoring untested tunnels here,
+                // new builds start once inProgress drops below effectiveTarget.
+                // inProgress naturally declines as builds complete or timeout,
+                // preventing a build storm.
+                deficit = Math.max(0, effectiveTarget - inProgress) + failingBoost;
             } else {
                 deficit = effectiveTarget - safeActive - inProgress - untestedCount + failingBoost;
             }

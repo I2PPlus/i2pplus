@@ -17,6 +17,7 @@ import net.i2p.router.MessageSelector;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.ReplyJob;
 import net.i2p.router.RouterContext;
+import net.i2p.router.Tuner;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.crypto.ratchet.MuxedPQSKM;
 import net.i2p.router.crypto.ratchet.MuxedSKM;
@@ -325,12 +326,13 @@ public class TestJob extends JobImpl {
             // cap and saturate the queue.
             if (pool != null && !pool.getSettings().isExploratory()) {
                 String poolId = getPoolId(pool);
-                // Critical pools (0 active tunnels) bypass the per-pool budget
-                // to ensure UNTESTED tunnels get tested immediately.
+                // Per-pool budget is set very high — we never deny tests at the
+                // pool level.  Global caps (maxQueuedTests, hardLimit) protect
+                // the job queue.  Critical pools (0 active) always bypass.
                 int activeCount = pool.getActiveTunnelCount();
                 boolean poolCritical = activeCount == 0;
                 if (!poolCritical) {
-                    int poolTestBudget = 2;
+                    int poolTestBudget = Tuner.getTestClientBudget();
                     AtomicInteger poolCount = POOL_TEST_COUNTS.computeIfAbsent(poolId, k -> new AtomicInteger(0));
                     int prev = poolCount.getAndIncrement();
                     if (prev >= poolTestBudget) {
@@ -431,7 +433,7 @@ public class TestJob extends JobImpl {
                 if (pool.getSettings().isExploratory()) {
                     poolTestBudget = getMaxExploratoryPerPool(ctx);
                 } else {
-                    poolTestBudget = 2;
+                    poolTestBudget = Tuner.getTestClientBudget();
                 }
                 AtomicInteger poolCount = POOL_TEST_COUNTS.computeIfAbsent(poolId, k -> new AtomicInteger(0));
                 int prev = poolCount.getAndIncrement();
@@ -1025,6 +1027,13 @@ public class TestJob extends JobImpl {
         // rapid retesting just saturates the queue.
         if (isDegraded()) {
             scaled *= 2;
+        }
+        // Tuner retest backoff: when the job queue is under pressure, slow
+        // retesting of all tunnels to free test capacity for UNTESTED ones.
+        // Applied after degraded mode so the two stack predictably.
+        int tunerBackoff = Tuner.getTestRetestBackoff();
+        if (tunerBackoff > 100) {
+            scaled = scaled * tunerBackoff / 100;
         }
         scaled = Math.min(scaled, getMaxTestDelay(getContext()) * 2);
         // Add a small jitter to avoid thundering herd (ensure positive jitter)
