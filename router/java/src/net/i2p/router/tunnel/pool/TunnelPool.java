@@ -2749,16 +2749,17 @@ public class TunnelPool {
             _consecutiveEmergencies--;
         }
 
-        // Early exit: if untested + in-progress already covers the target,
+        // Early exit: if in-progress already covers the target,
         // don't queue more builds.  This prevents the race condition where
         // ensureSufficientTunnels() and calculatePairedBuilds() both see
         // inProgress=0 and double-queue builds that pile up as UNTESTED.
-        int untestedPlusIP = untestedCount + inProgress;
-        if (untestedPlusIP >= effectiveTarget) {
+        // untestedCount is NOT counted here — untested tunnels are waiting
+        // for test capacity, not providing usable coverage.  Counting them
+        // would block builds and leave the pool permanently at 0 safe tunnels.
+        if (inProgress >= effectiveTarget) {
             if (_log.shouldDebug()) {
-                _log.debug(toString() + " -> Skipping build: untested(" +
-                          untestedCount + ") + inProgress(" + inProgress +
-                          ") >= effectiveTarget(" + effectiveTarget + ")");
+                _log.debug(toString() + " -> Skipping build: inProgress(" +
+                          inProgress + ") >= effectiveTarget(" + effectiveTarget + ")");
             }
             return;
         }
