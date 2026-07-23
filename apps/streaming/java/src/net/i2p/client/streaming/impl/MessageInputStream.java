@@ -575,7 +575,9 @@ class MessageInputStream extends InputStream {
 
             _readyDataBlocks.clear();
             _readyDataSize = 0;
-            _notYetReadyBlocks.clear();
+            for (ByteArray ba : _notYetReadyBlocks.values()) {
+                ba.setData(null);
+            }
             _locallyClosed.set(true);
             _dataLock.notifyAll();
         }
