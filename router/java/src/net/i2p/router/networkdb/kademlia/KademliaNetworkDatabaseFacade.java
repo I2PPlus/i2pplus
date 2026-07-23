@@ -126,6 +126,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private final ConcurrentLinkedQueue<Hash> _batchRepublishQueue = new ConcurrentLinkedQueue<>();
 
     /**
+     * Pending set for batch deduplication — a hash is in this set iff it is in the
+     * batch queue or being processed. Prevents duplicate entries under rapid publish() calls.
+     */
+    private final Set<Hash> _batchRepublishPending = ConcurrentHashMap.newKeySet(16);
+
+    /**
      * Track last batch processing time to ensure 15-second window.
      */
     private volatile long _lastBatchProcessTime = 0;
@@ -135,6 +141,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     private static final long BATCH_WINDOW_MS = 15 * 1000L;
     private static final long BATCH_PROCESS_DELAY = 5 * 1000L;
+    private static final int MAX_BATCH_SIZE = 1024;
 
     private static final long LOCAL_LEASESET_REFRESH_INTERVAL = 150*1000L;  // 2.5 minutes
 
@@ -1186,54 +1193,52 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     * Queues the LeaseSet for future republishing using batching to reduce job queue pressure.
-     * Proactively starts republishing 3 minutes before lease expiration to ensure
-     * network propagation has ample time before the lease expires.
+     * Queues the LeaseSet for future republishing. First publications are queued
+     * immediately; subsequent republishes are batched within a 15-second window
+     * to reduce job queue pressure.
      *
-     * <p>Uses 15-second batching window to consolidate multiple republish jobs into fewer jobs.</p>
+     * <p>Proactively starts republishing 3 minutes before lease expiration to ensure
+     * network propagation has ample time before the lease expires.</p>
      */
     private void scheduleRepublish(Hash hash) {
         // Cancel any existing queued job so a fresh one picks up the latest LeaseSet.
         // Without this, publish() calls that arrive while a job is queued (e.g., from
         // new tunnel builds) are silently dropped, leaving the network with stale
         // lease info for up to 7 minutes.
-        cancelActiveRepublishJob(hash);
+        boolean hadExistingJob = cancelActiveRepublishJob(hash);
 
-        // Check if lease is expiring soon - if so, process immediately
-        LeaseSet ls = lookupLeaseSetLocally(hash);
         long now = _context.clock().now();
-        if (ls != null) {
-            long expiration = ls.getLatestLeaseDate();
-            if (expiration - now < getProactiveRepublishThreshold()) {
-                // Expiring soon - process immediately, don't batch
-                RepublishLeaseSetJob job = new RepublishLeaseSetJob(_context, this, hash);
-                if (!job.registerSelf()) {
-                    if (_log.shouldDebug()) {
-                        _log.debug("Skipping immediate republish for [" + hash.toBase32().substring(0, 8) +
-                                   "] -> Registration failed (job already active)");
-                    }
-                    return;
+        LeaseSet ls = lookupLeaseSetLocally(hash);
+
+        // First publication or lease expiring soon — queue immediately, don't batch
+        if (!hadExistingJob || (ls != null && ls.getLatestLeaseDate() - now < getProactiveRepublishThreshold())) {
+            RepublishLeaseSetJob job = new RepublishLeaseSetJob(_context, this, hash);
+            if (!job.registerSelf()) {
+                if (_log.shouldDebug()) {
+                    _log.debug("Skipping immediate republish for [" + hash.toBase32().substring(0, 8) +
+                               "] -> Registration failed (job already active)");
                 }
-                job.getTiming().setStartAfter(now + PUBLISH_DELAY);
-                job.madeReady(now);
-                _context.jobQueue().addJobToTop(job);
                 return;
             }
+            job.getTiming().setStartAfter(now + PUBLISH_DELAY);
+            job.madeReady(now);
+            _context.jobQueue().addJobToTop(job);
+            return;
         }
 
-        // Add to batch queue for non-urgent republishes
-        _batchRepublishQueue.offer(hash);
+        // Add to batch queue for non-urgent subsequent republishes
+        if (_batchRepublishPending.add(hash)) {
+            _batchRepublishQueue.offer(hash);
+        }
 
         // Check if we need to schedule batch processor
-        long timeSinceLastBatch = now - _lastBatchProcessTime;
-        if (timeSinceLastBatch >= BATCH_WINDOW_MS) {
-            // Schedule batch processor to run in 5 seconds
+        if (now - _lastBatchProcessTime >= BATCH_WINDOW_MS) {
             _lastBatchProcessTime = now;
             BatchRepublishJob batchJob = new BatchRepublishJob(_context);
             batchJob.getTiming().setStartAfter(now + BATCH_PROCESS_DELAY);
             _context.jobQueue().addJob(batchJob);
             if (_log.shouldDebug()) {
-                _log.debug("Scheduled batch republish job for " + _batchRepublishQueue.size() + " LeaseSets");
+                _log.debug("Scheduled batch republish job for " + _batchRepublishPending.size() + " LeaseSets");
             }
         }
     }
@@ -1242,11 +1247,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Cancel any queued RepublishLeaseSetJob for the given hash.
      * This ensures that the next fresh run picks up the latest LeaseSet
      * rather than using one that was stale when the job was queued.
+     *
+     * @return true if a job was cancelled, false if none existed
      */
-    private void cancelActiveRepublishJob(Hash hash) {
+    private boolean cancelActiveRepublishJob(Hash hash) {
         Set<RepublishLeaseSetJob> jobs = _publishingLeaseSets.get(hash);
-        if (jobs == null) {return;}
+        if (jobs == null) {return false;}
         synchronized (jobs) {
+            if (jobs.isEmpty()) {return false;}
             for (RepublishLeaseSetJob job : jobs) {
                 _context.jobQueue().removeJob(job);
                 if (_log.shouldDebug()) {
@@ -1256,6 +1264,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
             jobs.clear();
             _publishingLeaseSets.remove(hash);
+            return true;
         }
     }
 
@@ -1276,6 +1285,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             int count = 0;
             Hash hash;
             while ((hash = _batchRepublishQueue.poll()) != null) {
+                _batchRepublishPending.remove(hash);
+                if (count >= MAX_BATCH_SIZE) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Batch republish queue exceeded " + MAX_BATCH_SIZE +
+                                  " entries — dropping excess LeaseSet [" + hash.toBase32().substring(0, 8) + "]");
+                    }
+                    continue;
+                }
                 if (!hasActiveRepublishJob(hash)) {
                     RepublishLeaseSetJob job = new RepublishLeaseSetJob(getContext(),
                             KademliaNetworkDatabaseFacade.this, hash);
