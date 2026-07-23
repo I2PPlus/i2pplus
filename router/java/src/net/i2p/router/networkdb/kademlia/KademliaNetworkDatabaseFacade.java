@@ -772,9 +772,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     @Override
     public void accessLeaseSet(Hash key) {
         if (!isClientDb() || key == null) return;
-        // Only track if we have tunnels built to this destination
+        // Track even with 0 valid tunnels — without tracking the LeaseSet
+        // never gets refreshed, creating a circular dependency when tunnel
+        // building is already struggling (no LS → no build → no LS).
         TunnelPool pool = _context.tunnelManager().getOutboundPool(key);
-        if (pool == null || pool.getValidTunnelCount() == 0) return;
+        if (pool == null) return;
         // Only track if there's a hostname (excludes HostChecker lookups)
         NamingService ns = _context.namingService();
         if (ns == null) return;
@@ -2830,19 +2832,21 @@ return false;
      * Only applies to client NetDB (not main NetDB).
      * 1. Remove LeaseSets not accessed in 150s
      * 2. Re-fetch every tracked LeaseSet each cycle (unconditional)
-     * 3. If LeaseSet expires in < 60s, refresh proactively (early-out)
+     * 3. If LeaseSet expires in < 90s, refresh proactively (early-out)
      */
-    private static final long PROACTIVE_REFRESH_THRESHOLD = 60 * 1000L;  // Refresh if < 60s to expiry
+    private static final long PROACTIVE_REFRESH_THRESHOLD = 90 * 1000L;  // Refresh if < 90s to expiry
 
     private void refreshClientLeaseSets() {
         long now = _context.clock().now();
         long inactiveThreshold = now - LOCAL_LEASESET_REFRESH_INTERVAL;          // 150s
 
-        // If client doesn't have active tunnels, skip refresh entirely
+        // Refresh even with 0 active tunnels — tunnel bind reader may not yet
+        // have built one, and stale LeaseSets freeze the pool out (no LS → no
+        // build → no LS, circular).  A failed remote lookup costs nothing.
         TunnelPool clientPool = _context.tunnelManager().getOutboundPool(_dbid);
-        if (clientPool == null || clientPool.getValidTunnelCount() == 0) {
+        if (clientPool == null) {
             if (_log.shouldDebug()) {
-                _log.debug("Skipping LeaseSet refresh - no client tunnels");
+                _log.debug("Skipping LeaseSet refresh - no client pool");
             }
             return;
         }
@@ -2881,15 +2885,15 @@ return false;
                 continue;
             }
 
-            // First check: do we still have tunnels to this destination?
-            // If not, remove from tracking - no point refreshing what we're not using
-            // Must check for valid tunnels, not just pool existence
+            // Refresh even with 0 valid tunnels — stale LeaseSet causes
+            // circular dependency: no LS → no tunnel build → no LS refresh.
+            // Failed remote lookups are harmless.
             TunnelPool pool = _context.tunnelManager().getOutboundPool(key);
-            if (pool == null || pool.getValidTunnelCount() == 0) {
+            if (pool == null) {
                 iter.remove();
                 removed++;
                 if (_log.shouldDebug()) {
-                    _log.debug("Removing client LeaseSet - no valid tunnels: " +
+                    _log.debug("Removing client LeaseSet - no pool: " +
                               (ns != null ? ns.reverseLookup(key) : key.toBase32().substring(0, 6)));
                 }
                 continue;
