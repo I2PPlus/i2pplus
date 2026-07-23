@@ -152,6 +152,7 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("i2p.tunnel.requestThrottle.loadWeight", _x("Request Load Weight"));
         DISPLAY_NAMES.put("i2p.streaming.rtoMultiplier", _x("RTO Backoff Multiplier"));
         DISPLAY_NAMES.put("i2p.tunnel.socketConnectTimeout", _x("Socket Connect Timeout"));
+        DISPLAY_NAMES.put("i2p.tunnel.untestedMultiplier", _x("Untested Tunnel Cap Multiplier"));
         DISPLAY_NAMES.put("router.defaultProcessingTimeThrottle", _x("Message Processing Throttle"));
     }
 
@@ -268,6 +269,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("tunnel.pool.failureThreshold", _x("Consecutive failures before pool backoff."));
         PARAM_DESCRIPTIONS.put("tunnel.pool.backoffMs", _x("Cooldown duration after pool failure threshold, in ms."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.targetBuffer", _x("Target spare tunnel count per pool."));
+        PARAM_DESCRIPTIONS.put("i2p.tunnel.untestedMultiplier", _x("Widens untested tunnel cap when testing stalls."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.participatingThrottle.rejectThreshold", _x("Load threshold where probabilistic transit rejection starts (%)."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.participatingThrottle.rejectSteepness", _x("Steepness of the transit rejection probability curve."));
         PARAM_DESCRIPTIONS.put("i2p.tunnel.participatingThrottle.loadWeight", _x("Load score multiplier for transit rejection (% of computed load)."));

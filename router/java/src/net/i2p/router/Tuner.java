@@ -386,6 +386,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new PoolFailureThresholdParam());
         _params.add(new PoolBackoffMsParam());
         _params.add(new TunnelTargetBufferParam());
+        _params.add(new UntestedMultiplierParam());
 
         // Streaming
         _params.add(new CongestionAvoidanceGrowthParam());
@@ -9626,6 +9627,70 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return Math.max(_min, current - 1);
 
             // Healthy and no deficit = decrease buffer toward 0
+            if (healthy && !anyDeficit)
+                return Math.max(_min, current - 1);
+
+            return current;
+        }
+    }
+
+    /**
+     * Tunes the untested tunnel cap multiplier for each pool.
+     * Base cap is effectiveTarget * multiplier.
+     * Increases when build success is low or tests are failing
+     * (allows more untested accumulation during testing stalls).
+     * Decreases toward default when healthy (prevents wasteful backlog).
+     */
+    private class UntestedMultiplierParam extends BaseParam {
+        UntestedMultiplierParam() {
+            super("i2p.tunnel.untestedMultiplier", "Untested tunnel cap multiplier",
+                  SUB_TUNNEL, 1, 8, 1, "tunnel.buildSuccessRate", _context);
+        }
+        protected void applyValue(int value) {
+            _context.router().saveConfig("i2p.tunnel.untestedMultiplier", Integer.toString(value));
+        }
+        protected int getRuntimeValue() {
+            return _context.getProperty("i2p.tunnel.untestedMultiplier", 2);
+        }
+        protected double getObservedStat(RouterContext ctx) {
+            RateStat rs = _context.statManager().getRate(_statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+        protected int computeTarget(double observed) {
+            int current = getRuntimeValue();
+            double memPressure = getMemoryPressure();
+            double testFailed = getAdditionalStat(_context, "tunnel.testFailedTime");
+            boolean testsFailing = !Double.isNaN(testFailed) && testFailed > 0;
+            boolean healthy = !Double.isNaN(observed) && observed > 80 && !testsFailing;
+            boolean failing = (!Double.isNaN(observed) && observed < 60) || testsFailing;
+            boolean memOk = memPressure < 0.75;
+
+            // Check pool deficits
+            TunnelManagerFacade mgr = _context.tunnelManager();
+            boolean anyDeficit = false;
+            List<TunnelPool> pools = new ArrayList<>();
+            mgr.listPools(pools);
+            for (TunnelPool p : pools) {
+                if (!p.isAlive()) continue;
+                int target = p.getSettings().getTotalQuantity();
+                if (p.getActiveTunnelCount() < target) {
+                    anyDeficit = true;
+                    break;
+                }
+            }
+
+            // Failing or tests stuck or deficit = increase cap
+            if ((failing || anyDeficit) && memOk)
+                return Math.min(_max, current + 1);
+
+            // Memory critical = tighten immediately
+            if (memPressure > 0.85)
+                return Math.max(_min, current - 1);
+
+            // Healthy and no deficit = decrease toward default
             if (healthy && !anyDeficit)
                 return Math.max(_min, current - 1);
 

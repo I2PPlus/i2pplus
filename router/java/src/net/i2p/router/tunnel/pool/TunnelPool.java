@@ -1370,7 +1370,8 @@ public class TunnelPool {
                         untestedNow++;
                     }
                 }
-                int maxUntested = Math.max(effectiveTarget * 2, 2);
+                int multiplier = _context.getProperty("i2p.tunnel.untestedMultiplier", 2);
+                int maxUntested = Math.max(effectiveTarget * multiplier, 2);
                 if (untestedNow >= maxUntested) {
                     if (_log.shouldWarn()) {
                         _log.warn(toString() + " -> Too many UNTESTED tunnels (" + untestedNow +
