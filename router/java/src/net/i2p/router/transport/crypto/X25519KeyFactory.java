@@ -59,13 +59,13 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         super("XDHPrecalc");
         _context = ctx;
         _log = ctx.logManager().getLog(X25519KeyFactory.class);
-        ctx.statManager().createRequiredRateStat("crypto.XDHUsed", "XDH keys consumed from precalc pool", "Encryption", new long[] { RateConstants.ONE_MINUTE });
+        ctx.statManager().createRequiredRateStat("crypto.XDHUsed", "XDH keys consumed from precalc pool", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         ctx.statManager().createRequiredRateStat("crypto.XDHEmpty", "DH queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
 
-        // Initial dynamic sizing
+        // Initial dynamic sizing — start at midpoint for headroom
         computeTargetSizes();
         _minSize = _targetMin;
-        _maxSize = _targetMax;
+        _maxSize = Math.max(_minSize + 64, (_targetMin + _targetMax) / 2);
         _calcDelay = ctx.getProperty(PROP_DH_PRECALC_DELAY, DEFAULT_DH_PRECALC_DELAY);
 
         if (_log.shouldDebug()) {
@@ -185,7 +185,8 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         long totalMem = Runtime.getRuntime().totalMemory();
         double memPressure = 1.0 - ((double) freeMem / Math.max(totalMem, 1));
 
-        int demandMax = _minSize + recentUsage + recentEmpties + Math.max(256, recentUsage / 3);
+        // Target 4× recent usage so we have minutes of buffer, not seconds
+        int demandMax = _minSize + Math.max(512, recentUsage * 4) + recentEmpties;
         _maxSize = Math.min(HARD_MAX, Math.max(_minSize + 64, demandMax));
 
         if (memPressure > 0.85) {
@@ -274,8 +275,17 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
                     long curCalc = System.currentTimeMillis() - curStart;
                     // for some relief... on multi-core systems sleep less between keygens
                     if (!interrupted()) {
+                        int curSize = getSize();
                         int minSleep = Math.max(1, 10 / Math.max(1, SystemVersion.getCores() / 4));
-                        try {Thread.sleep(Math.min(200, Math.max(minSleep, _calcDelay + (curCalc * 3))));}
+                        long sleepMs;
+                        if (curSize < _minSize) {
+                            // Below min: fill fast — minimal yield, no calcDelay overhead
+                            sleepMs = Math.min(100, Math.max(minSleep, curCalc));
+                        } else {
+                            // Above min but filling to max: moderate pace
+                            sleepMs = Math.min(200, Math.max(minSleep, _calcDelay + curCalc));
+                        }
+                        try {Thread.sleep(sleepMs);}
                         catch (InterruptedException ie) {
                             Thread.currentThread().interrupt();
                         }

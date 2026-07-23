@@ -83,17 +83,17 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
         sm.createRequiredRateStat("bw.recvRate", _x("Low-level receive rate (B/s)"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.FIVE_MINUTES, RateConstants.ONE_HOUR });
         sm.createRequiredRateStat("bw.sendBps", _x("Message send rate (B/s)"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.FIVE_MINUTES, RateConstants.ONE_HOUR });
         sm.createRequiredRateStat("bw.sendRate", _x("Low-level send rate (B/s)"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.FIVE_MINUTES, RateConstants.ONE_HOUR });
-        sm.createRequiredRateStat("router.activePeers", _x("Peers active in the last minute"), "Router", new long[] { RateConstants.ONE_MINUTE });
-        sm.createRequiredRateStat("router.activeSendPeers", _x("Peers sent to in the last minute"), "Router", new long[] { RateConstants.ONE_MINUTE });
-        sm.createRequiredRateStat("router.bannedPeers", _x("Total peers in our banlist"), "Router", new long[] { RateConstants.ONE_MINUTE });
-        sm.createRequiredRateStat("router.cpuLoad", _x("CPU load average of the JVM"), "Router", new long[] { RateConstants.ONE_MINUTE });
-        sm.createRequiredRateStat("router.fastPeers", _x("Known fast peers"), "Router", new long[] { RateConstants.ONE_MINUTE });
-        sm.createRequiredRateStat("router.highCapacityPeers", _x("Known high capacity peers"), "Router", new long[] { RateConstants.ONE_MINUTE });
-        sm.createRequiredRateStat("router.integratedPeers", _x("Known integrated (floodfill) peers"), "Router", new long[] { RateConstants.ONE_MINUTE });
-        sm.createRequiredRateStat("router.knownPeers", _x("Total peers in our NetDb"), "Router", new long[] { RateConstants.ONE_MINUTE });
-        sm.createRequiredRateStat("router.activeThreads", _x("Total number of threads in use"), "Router", new long[] { RateConstants.ONE_MINUTE });
-        sm.createRequiredRateStat("router.gcPauseTime", _x("Time spent paused in GC (ms)"), "Router", new long[] { RateConstants.ONE_MINUTE });
-        sm.createRequiredRateStat("router.unreachablePeers", _x("Peers without a published IP address"), "Router", new long[] { RateConstants.ONE_MINUTE });
+        sm.createRequiredRateStat("router.activePeers", _x("Peers active in the last minute"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        sm.createRequiredRateStat("router.activeSendPeers", _x("Peers sent to in the last minute"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        sm.createRequiredRateStat("router.bannedPeers", _x("Total peers in our banlist"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        sm.createRequiredRateStat("router.cpuLoad", _x("CPU load average of the JVM"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        sm.createRequiredRateStat("router.fastPeers", _x("Known fast peers"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        sm.createRequiredRateStat("router.highCapacityPeers", _x("Known high capacity peers"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        sm.createRequiredRateStat("router.integratedPeers", _x("Known integrated (floodfill) peers"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        sm.createRequiredRateStat("router.knownPeers", _x("Total peers in our NetDb"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        sm.createRequiredRateStat("router.activeThreads", _x("Total number of threads in use"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        sm.createRequiredRateStat("router.gcPauseTime", _x("Time spent paused in GC (ms)"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        sm.createRequiredRateStat("router.unreachablePeers", _x("Peers without a published IP address"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         sm.createRequiredRateStat("tunnel.tunnelBuildSuccessAvg", _x("Average tunnel build success %"), "Tunnels", RateConstants.TUNNEL_RATES);
         String legend = "";
         if (_maxMemory < Long.MAX_VALUE) {legend += "Maximum allocated to the JVM is " + DataHelper.formatSize(_maxMemory) + 'B';}

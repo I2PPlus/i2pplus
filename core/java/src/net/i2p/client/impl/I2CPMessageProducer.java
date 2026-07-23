@@ -100,7 +100,7 @@ class I2CPMessageProducer {
                         "client.sendDropped",
                         "Length of message dropped while waiting for bandwidth",
                         "ClientMessages",
-                        new long[] {RateConstants.ONE_MINUTE});
+                        new long[] {RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR});
     }
 
     /**

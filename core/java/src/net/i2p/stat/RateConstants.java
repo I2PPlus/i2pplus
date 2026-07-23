@@ -68,22 +68,24 @@ public final class RateConstants {
     };
 
     /**
-     * Basic rate periods for simple statistics: 1 minute and 1 hour.
-     * Used where only basic rate tracking is needed.
+     * Basic rate periods for simple statistics: 1 minute, 10 minutes, and 1 hour.
+     * Used where basic rate tracking is needed.
      */
     public static final long[] BASIC_RATES = {
         60 * 1000L, // 1 minute
+        10 * 60 * 1000L, // 10 minutes
         60 * 60 * 1000L // 1 hour
     };
 
     /**
-     * Short-term rate periods for real-time metrics: 1 minute and 10 minutes.
+     * Short-term rate periods for real-time metrics: 1 minute, 10 minutes, and 1 hour.
      * Used for transport, queue, and real-time operational statistics
      * where long-term trends are not needed.
      */
     public static final long[] SHORT_TERM_RATES = {
         60 * 1000L, // 1 minute
-        10 * 60 * 1000L // 10 minutes
+        10 * 60 * 1000L, // 10 minutes
+        60 * 60 * 1000L // 1 hour
     };
 
     /**

@@ -49,7 +49,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         _context = ctx;
         _log = ctx.logManager().getLog(Elg2KeyFactory.class);
         _elg2 = new Elligator2(ctx);
-        ctx.statManager().createRequiredRateStat("crypto.EDHUsed", "EDH keys consumed from precalc pool", "Encryption", new long[] { RateConstants.ONE_MINUTE });
+        ctx.statManager().createRequiredRateStat("crypto.EDHUsed", "EDH keys consumed from precalc pool", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         ctx.statManager().createRequiredRateStat("crypto.EDHEmpty", "DH queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
 
         // Scale precomputation with available memory and cores.
@@ -64,7 +64,8 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         int defaultMin = DEFAULT_DH_PRECALC_MIN * factor;
         int defaultMax = DEFAULT_DH_PRECALC_MAX * factor;
         _minSize = ctx.getProperty(PROP_DH_PRECALC_MIN, defaultMin);
-        _maxSize = ctx.getProperty(PROP_DH_PRECALC_MAX, defaultMax);
+        int cfgMax = ctx.getProperty(PROP_DH_PRECALC_MAX, defaultMax);
+        _maxSize = Math.max(_minSize + 4, (_minSize + cfgMax) / 2);
         _calcDelay = ctx.getProperty(PROP_DH_PRECALC_DELAY, DEFAULT_DH_PRECALC_DELAY);
 
         if (_log.shouldDebug()) {
@@ -130,7 +131,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         long totalMem = Runtime.getRuntime().totalMemory();
         double memPressure = 1.0 - ((double) freeMem / Math.max(totalMem, 1));
 
-        int demandMax = _minSize + recentUsage + recentEmpties + Math.max(64, recentUsage / 3);
+        int demandMax = _minSize + Math.max(256, recentUsage * 4) + recentEmpties;
         _maxSize = Math.min(HARD_MAX, Math.max(_minSize + 4, demandMax));
 
         if (memPressure > 0.85) {
@@ -175,8 +176,17 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
                     long curCalc = System.currentTimeMillis() - curStart;
                     // for some relief... on multi-core systems sleep less between keygens
                     if (!interrupted()) {
+                        int curSize = getSize();
                         int minSleep = Math.max(1, 10 / Math.max(1, SystemVersion.getCores() / 4));
-                        try {Thread.sleep(Math.min(200, Math.max(minSleep, _calcDelay + (curCalc * 3))));}
+                        long sleepMs;
+                        if (curSize < _minSize) {
+                            // Below min: fill fast — minimal yield, no calcDelay overhead
+                            sleepMs = Math.min(100, Math.max(minSleep, curCalc));
+                        } else {
+                            // Above min but filling to max: moderate pace
+                            sleepMs = Math.min(200, Math.max(minSleep, _calcDelay + curCalc));
+                        }
+                        try {Thread.sleep(sleepMs);}
                         catch (InterruptedException ie) {
                             Thread.currentThread().interrupt();
                         }

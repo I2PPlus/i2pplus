@@ -84,7 +84,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private final List<TunableParam> _params;
     private final AutotuneConfig _autotune;
 
-    static final long STAT_PERIOD = 60 * 1000L;
+    static final long STAT_PERIOD = RateConstants.ONE_MINUTE;
+    static final long STAT_PERIOD_LONG = RateConstants.TEN_MINUTES;
     /** Max history samples for sparklines (30 samples @ 30s = 15min) */
     static final int MAX_HISTORY = 30;
 
@@ -8601,13 +8602,22 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * Build success rate from SystemVersion.getTunnelBuildSuccess()
-         * (returns 0–100 from 10-minute build stats).
+         * Build success rate from 60-second event counts.
+         * More responsive than SystemVersion's 10-minute window and
+         * avoids NaN when that window hasn't accumulated events yet.
+         * Requires 10+ total events (exploratory + client) for stability.
          * When firewalled, lower thresholds since inbound builds are rejected.
          */
         private double scoreBuildSuccess() {
-            double pct = SystemVersion.getTunnelBuildSuccess();
-            if (pct <= 0) {return Double.NaN;}
+            double explS = getEventCount("tunnel.buildExploratorySuccess");
+            double explR = getEventCount("tunnel.buildExploratoryReject");
+            double explE = getEventCount("tunnel.buildExploratoryExpire");
+            double clientS = getEventCount("tunnel.buildClientSuccess");
+            double clientR = getEventCount("tunnel.buildClientReject");
+            double clientE = getEventCount("tunnel.buildClientExpire");
+            double total = explS + explR + explE + clientS + clientR + clientE;
+            if (total < 10) {return Double.NaN;}
+            double pct = (explS + clientS) * 100.0 / total;
             if (isFirewalled()) {
                 // firewalled: 10%→0.0, 50%→1.0
                 return clamp((pct - 10.0) / 40.0);
@@ -8637,7 +8647,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Fraction of alive pools meeting their target tunnel count.
-         * 1.0 = all pools meet target, 0.0 = half or more fall short.
+         * 1.0 = all pools meet target, 0.0 = none do.
+         * Linear ramp: 0%→0.0, 70%→1.0. Pools still building at startup
+         * won't penalize until sufficient time has passed to meet targets.
          */
         private double scorePoolDeficit() {
             TunnelManagerFacade mgr = _ctx.tunnelManager();
@@ -8655,7 +8667,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
             if (alive == 0) return 0.0;
             double pct = (double) met / alive;
-            return clamp(2.0 * pct - 1.0);
+            // 0%→0.0, 70%→1.0
+            return clamp(pct / 0.7);
         }
 
         /**
@@ -8668,14 +8681,21 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
+         * Fetch the event count for a stat using the given period (ms).
+         */
+        private double getEventCount(String statName, long period) {
+            RateStat rs = _ctx.statManager().getRate(statName);
+            if (rs == null) return 0;
+            Rate rate = rs.getRate(period);
+            if (rate == null || rate.getLastEventCount() == 0) return 0;
+            return rate.getLastEventCount();
+        }
+
+        /**
          * Fetch the event count for a stat using the 60s period.
          */
         private double getEventCount(String statName) {
-            RateStat rs = _ctx.statManager().getRate(statName);
-            if (rs == null) return 0;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return 0;
-            return rate.getLastEventCount();
+            return getEventCount(statName, STAT_PERIOD);
         }
 
         /**
@@ -8691,7 +8711,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * Build storms: 0 concurrent = 1.0, >10 = degraded, >30 = 0.0
+         * Build storms: 0 concurrent = 1.0, linear decay to 0 at 100.
+         * Startup bursts (30-50 concurrent) are normal; only penalize
+         * sustained high concurrency.
          */
         private double scoreBuildStorms() {
             RateStat rs = _ctx.statManager().getRate("tunnel.concurrentBuilds");
@@ -8700,8 +8722,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (rate == null || rate.getLastEventCount() < 5) return Double.NaN;
             double avg = rate.getAverageValue();
             if (avg <= 0) return 1.0;
-            // 0→1.0, 10→0.7, 30→0.0
-            return clamp(1.0 - ((avg - 10) / 20.0));
+            // 0→1.0, 50→0.5, 100→0.0
+            return clamp(1.0 - (avg / 100.0));
         }
 
         /**
@@ -8911,22 +8933,25 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         private double scoreBanHit() {
-            double hits = getEventCount("tunnel.buildBanHit");
+            double hits = getEventCount("tunnel.buildBanHit", STAT_PERIOD_LONG);
             if (hits <= 0) return Double.NaN;
-            return clamp(1.0 - (hits / 20.0));
+            // Ban hits reflect active peer filtering (botnet defense), not failure.
+            // 0→1.0, 500→0.5, 1000→0.0
+            return clamp(1.0 - (hits / 1000.0));
         }
 
         private double scoreSendPool() {
             double util = getStatValue("ntcp.sendPool.utilization");
             if (Double.isNaN(util) || util <= 0) return Double.NaN;
-            return clamp(1.0 - (util / 0.8));
+            // 0%→1.0, 100%→0.33, 150%→0.0
+            return clamp(1.0 - (util / 1.5));
         }
 
         private double scoreAvgRTO() {
             double rto = getStatValue("udp.avgRTO");
             if (Double.isNaN(rto) || rto <= 0) return Double.NaN;
-            if (rto <= 500) return 1.0;
-            return clamp(1.0 - ((rto - 500) / 4500.0));
+            if (rto <= 1000) return 1.0;
+            return clamp(1.0 - ((rto - 1000) / 9000.0));
         }
 
         private double scoreNetDbHealth() {
@@ -8934,12 +8959,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double knownScore = !Double.isNaN(known) && known >= 0 ? clamp(known / 500.0) : Double.NaN;
 
             double drops = getEventCount("netDb.lookupsDropped");
-            double dropScore = drops > 0 ? clamp(1.0 - (drops / 100.0)) : Double.NaN;
+            double dropScore = drops > 0 ? clamp(1.0 - (drops / 2000.0)) : Double.NaN;
 
             double flood = getEventCount("netDb.floodThrottled");
-            double floodScore = flood > 0 ? clamp(1.0 - (flood / 30.0)) : Double.NaN;
+            double floodScore = flood > 0 ? clamp(1.0 - (flood / 500.0)) : Double.NaN;
 
-            double ack = getStatValue("netDb.ackTime");
+            double ack = getStatValue("netDb.ackTime", STAT_PERIOD_LONG);
             double ackScore = !Double.isNaN(ack) && ack > 0 ? clamp(1.0 - (ack / 10000.0)) : Double.NaN;
 
             double best = Double.NaN;
@@ -9043,11 +9068,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          */
         private double scoreCryptoPressure() {
             double bestScore = Double.NaN;
-            // Score each pool independently, take the worst of active pools only
+            // Score each pool independently using 10-minute window for stability.
+            // The longer period smooths bursty empty rates and reflects sustained
+            // pool health rather than momentary spikes.
+            long p = STAT_PERIOD_LONG;
             double[][] pools = new double[][] {
-                {getEventCount("crypto.EDHEmpty"), getEventCount("crypto.EDHUsed")},
-                {getEventCount("crypto.XDHEmpty"), getEventCount("crypto.XDHUsed")},
-                {getEventCount("crypto.MLKEMEmpty"), getEventCount("crypto.MLKEMUsed")}
+                {getEventCount("crypto.EDHEmpty", p), getEventCount("crypto.EDHUsed", p)},
+                {getEventCount("crypto.XDHEmpty", p), getEventCount("crypto.XDHUsed", p)},
+                {getEventCount("crypto.MLKEMEmpty", p), getEventCount("crypto.MLKEMUsed", p)}
             };
             for (double[] pool : pools) {
                 double empty = pool[0];
@@ -9062,15 +9090,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
+         * Read a stat's average value using the given period (ms).
+         * Returns NaN if stat unavailable.
+         */
+        private double getStatValue(String statName, long period) {
+            RateStat rs = _ctx.statManager().getRate(statName);
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(period);
+            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
+            return rate.getAverageValue();
+        }
+
+        /**
          * Read a stat's average value using the 60s period.
          * Returns NaN if stat unavailable.
          */
         private double getStatValue(String statName) {
-            RateStat rs = _ctx.statManager().getRate(statName);
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
+            return getStatValue(statName, STAT_PERIOD);
         }
     }
 

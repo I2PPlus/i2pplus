@@ -9,6 +9,7 @@ import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyFactory;
 import net.i2p.crypto.KeyPair;
 
+import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
@@ -59,8 +60,8 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
         _context = ctx;
         _type = type;
         _log = ctx.logManager().getLog(MLKEMKeyFactory.class);
-        ctx.statManager().createRequiredRateStat("crypto.MLKEMUsed", "MLKEM keys consumed from precalc pool", "Encryption", new long[] { 60*1000L, 60*60*1000L });
-        ctx.statManager().createRequiredRateStat("crypto.MLKEMEmpty", "Queue empty", "Encryption", new long[] { 60*1000L, 10*60*1000L, 60*60*1000L });
+        ctx.statManager().createRequiredRateStat("crypto.MLKEMUsed", "MLKEM keys consumed from precalc pool", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        ctx.statManager().createRequiredRateStat("crypto.MLKEMEmpty", "Queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
 
         // Scale precomputation with available memory and cores.
         // MLKEM-768 keypair is ~3.5KB so even 1000 keys is <4MB.
@@ -77,7 +78,8 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
         int defaultMin = DEFAULT_MLKEM_PRECALC_MIN * factor;
         int defaultMax = DEFAULT_MLKEM_PRECALC_MAX * factor;
         _minSize = ctx.getProperty(PROP_MLKEM_PRECALC_MIN, defaultMin);
-        _maxSize = ctx.getProperty(PROP_MLKEM_PRECALC_MAX, defaultMax);
+        int cfgMax = ctx.getProperty(PROP_MLKEM_PRECALC_MAX, defaultMax);
+        _maxSize = Math.max(_minSize + 4, (_minSize + cfgMax) / 2);
         _calcDelay = ctx.getProperty(PROP_MLKEM_PRECALC_DELAY, DEFAULT_MLKEM_PRECALC_DELAY);
 
         if (_log.shouldDebug())
@@ -144,7 +146,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
         long totalMem = Runtime.getRuntime().totalMemory();
         double memPressure = 1.0 - ((double) freeMem / Math.max(totalMem, 1));
 
-        int demandMax = _minSize + recentUsage + recentEmpties + Math.max(64, recentUsage / 3);
+        int demandMax = _minSize + Math.max(256, recentUsage * 4) + recentEmpties;
         _maxSize = Math.min(HARD_MAX, Math.max(_minSize + 4, demandMax));
 
         if (memPressure > 0.85) {
@@ -197,10 +199,18 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
                     // for some relief...
                     // On multi-core systems, spend less time sleeping between keygens
                     if (!interrupted()) {
-                        try {
-                            int minSleep = Math.max(1, 10 / Math.max(1, SystemVersion.getCores() / 4));
-                            Thread.sleep(Math.min(200, Math.max(minSleep, _calcDelay + (curCalc * 3))));
-                        } catch (InterruptedException ie) {
+                        int curSize = getSize();
+                        int minSleep = Math.max(1, 10 / Math.max(1, SystemVersion.getCores() / 4));
+                        long sleepMs;
+                        if (curSize < _minSize) {
+                            // Below min: fill fast — minimal yield, no calcDelay overhead
+                            sleepMs = Math.min(100, Math.max(minSleep, curCalc));
+                        } else {
+                            // Above min but filling to max: moderate pace
+                            sleepMs = Math.min(200, Math.max(minSleep, _calcDelay + curCalc));
+                        }
+                        try { Thread.sleep(sleepMs); }
+                        catch (InterruptedException ie) {
                             Thread.currentThread().interrupt();
                         }
                     }
