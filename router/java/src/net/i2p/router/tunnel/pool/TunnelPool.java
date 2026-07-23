@@ -1380,21 +1380,21 @@ public class TunnelPool {
                     }
                     return;
                 }
-                // Cap total non-FAILED tunnels to prevent unbounded accumulation.
-                // pruneExcessTunnels() skips recently-active (30s) and about-to-expire
-                // (120s) tunnels, so pools carrying traffic can accumulate indefinitely;
-                // exploratory pools don't need LeaseSet rotation so excess is pure waste.
-                // Count only non-FAILED tunnels and cap against effectiveTarget (not the
-                // static target) so lingering FAILED tunnels and the EMERGENCY boost never
-                // cause the cap to reject replacement/buffer builds during a failure burst.
-                int totalNonFailed = 0;
+                // Cap total non-UNTESTED tunnels to prevent unbounded accumulation
+                // of GOOD/expiring/FAILING tunnels.  UNTESTED tunnels are separately
+                // capped above by maxUntested, so they must not compete with tested
+                // tunnels for the total cap — otherwise expiring GOOD tunnels can fill
+                // all slots and block the replacement builds needed to keep the pool alive.
+                // Count only non-FAILED, non-UNTESTED tunnels and cap against the base
+                // target (not effectiveTarget) so the cap is stable and predictable.
+                int totalNonUntested = 0;
                 for (TunnelInfo t : _tunnels) {
-                    if (!t.getTunnelFailed()) totalNonFailed++;
+                    if (!t.getTunnelFailed() && t.getTestStatus() != TunnelTestStatus.UNTESTED) totalNonUntested++;
                 }
-                int maxTotal = Math.max(effectiveTarget * 3, 6);
-                if (totalNonFailed >= maxTotal) {
+                int maxTotal = Math.max(target + 3, 3);
+                if (totalNonUntested >= maxTotal) {
                     if (_log.shouldWarn()) {
-                        _log.warn(toString() + " -> Pool at capacity (" + totalNonFailed +
+                        _log.warn(toString() + " -> Pool at capacity (" + totalNonUntested +
                                   " >= max " + maxTotal + ", target=" + effectiveTarget +
                                   ") — rejecting build \n* " + info);
                     }
