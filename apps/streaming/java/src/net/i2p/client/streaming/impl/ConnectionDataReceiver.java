@@ -139,7 +139,6 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
 
         public boolean writeAccepted() { return false; }
         public boolean writeFailed() { return true; }
-        public boolean writeSuccessful() { return false; }
     }
 
     /**
@@ -259,7 +258,6 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         public final void waitForCompletion(int maxWaitMs) { /* no-op */ }
         public final boolean writeAccepted() { return true; }
         public final boolean writeFailed() { return false; }
-        public final boolean writeSuccessful() { return true; }
     }
 
     void destroy() { /* no-op */ }

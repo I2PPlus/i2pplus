@@ -836,7 +836,7 @@ class Packet {
             if ((_payload != null) && (_payload.getValid() > 0)) {
                 buf.append("\n* Data: ").append(_payload.getValid()).append(" bytes;");
             }
-        } else {buf.append("");}
+        }
         return buf;
     }
 
@@ -851,7 +851,7 @@ class Packet {
     private final void toFlagString(StringBuilder buf) {
         Log l = I2PAppContext.getCurrentContext().logManager().getLog(Packet.class);
         if (l.shouldInfo()) {
-        	   buf.append("\n*");
+            buf.append("\n*");
             if (isFlagSet(FLAG_SYNCHRONIZE)) {buf.append(" SYN");}
             if (isFlagSet(FLAG_CLOSE)) {buf.append(" CLOSE");}
             if (isFlagSet(FLAG_RESET)) {buf.append(" RESET");}

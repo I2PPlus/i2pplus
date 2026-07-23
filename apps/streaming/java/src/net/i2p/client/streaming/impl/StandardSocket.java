@@ -31,6 +31,10 @@ import net.i2p.client.streaming.I2PSocketOptions;
  */
 class StandardSocket extends Socket {
     private final I2PSocket _socket;
+    private volatile boolean _connected = true;
+    private volatile boolean _inputShutdown;
+    private volatile boolean _outputShutdown;
+    private volatile boolean _closed;
 
     StandardSocket(I2PSocket socket) {
         _socket = socket;
@@ -46,8 +50,7 @@ class StandardSocket extends Socket {
 
     @Override
     public void close() throws IOException {
-        if (_socket.isClosed())
-            throw new IOException("Already closed");
+        _closed = true;
         _socket.close();
     }
 
@@ -202,12 +205,7 @@ class StandardSocket extends Socket {
      * @return -1 always (not implemented)
      */
     @Override
-    public int getSoLinger() {
-        I2PSocketOptions opts = _socket.getOptions();
-        if (opts == null)
-            return -1;
-        return -1;  // fixme really?
-    }
+    public int getSoLinger() { return -1; }
 
     /**
      * @return the socket timeout in milliseconds
@@ -255,22 +253,22 @@ class StandardSocket extends Socket {
 
     @Override
     public boolean isClosed() {
-        return _socket.isClosed();
+        return _closed;
     }
 
     @Override
     public boolean isConnected() {
-        return !_socket.isClosed();
+        return _connected;
     }
 
     @Override
     public boolean isInputShutdown() {
-        return _socket.isClosed();
+        return _inputShutdown;
     }
 
     @Override
     public boolean isOutputShutdown() {
-        return _socket.isClosed();
+        return _outputShutdown;
     }
 
     /**
@@ -364,12 +362,14 @@ class StandardSocket extends Socket {
 
     @Override
     public void shutdownInput() throws IOException {
-        close();
+        _inputShutdown = true;
+        _socket.close();
     }
 
     @Override
     public void shutdownOutput() throws IOException {
-        close();
+        _outputShutdown = true;
+        _socket.close();
     }
 
     @Override

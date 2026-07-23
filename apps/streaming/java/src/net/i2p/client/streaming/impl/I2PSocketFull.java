@@ -215,16 +215,15 @@ class I2PSocketFull implements I2PSocket {
     }
 
     void destroy() {
-        destroy2();
+        _connection = null;
     }
 
     /**
      *  Call from Connection.disconnectComplete()
-     *  instead of destroy() so we don't loop
      *  @since 0.8.13
      */
     void destroy2() {
-        _connection = null;
+        destroy();
     }
 
     /**

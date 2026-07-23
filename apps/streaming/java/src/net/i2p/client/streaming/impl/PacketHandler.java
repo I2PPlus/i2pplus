@@ -282,6 +282,7 @@ class PacketHandler {
         if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
             manager.getConnectionHandler().receiveNewSyn(packet);
         } else if (queueIfNoConn) {
+            // route orphan (non-SYN) packets through the handler's queue too
             if (log.shouldWarn())
                 log.warn("Packet " + packet + " belongs to no connections, putting on SYN queue...");
             if (log.shouldDebug()) {

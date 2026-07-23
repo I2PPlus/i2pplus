@@ -9,7 +9,7 @@ import net.i2p.I2PAppContext;
  *
  * <h2>Entry conditions:</h2>
  * <ul>
- * <li>Both sides have closed.</li>
+ * <li>At least one side has initiated close.</li>
  * <li>At least one direction has not ACKed the close.</li>
  * </ul>
  *

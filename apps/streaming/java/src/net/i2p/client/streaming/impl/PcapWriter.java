@@ -11,6 +11,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
+import net.i2p.util.Log;
 
 /**
  *  Write a standard pcap file with a "TCP" packet that can be analyzed with
@@ -77,6 +78,7 @@ public class PcapWriter implements Closeable, Flushable {
 
     private final OutputStream _fos;
     private final I2PAppContext _context;
+    private final Log _log;
 
     /**
      * Creates a new PcapWriter that writes to the specified file in the log directory.
@@ -87,6 +89,7 @@ public class PcapWriter implements Closeable, Flushable {
      */
     public PcapWriter(I2PAppContext ctx, String file) throws IOException {
         _context = ctx;
+        _log = ctx.logManager().getLog(PcapWriter.class);
         File f = new File(ctx.getLogDir(), file);
         _fos = new BufferedOutputStream(new FileOutputStream(f), 64*1024);
         _fos.write(FILE_HEADER);
@@ -124,7 +127,7 @@ public class PcapWriter implements Closeable, Flushable {
         try {
             wrt(pkt, pkt.getConnection(), false);
         } catch (DataFormatException dfe) {
-            dfe.printStackTrace();
+            _log.error("PCAP write error", dfe);
             throw new IOException(dfe.toString());
         }
     }
@@ -140,7 +143,7 @@ public class PcapWriter implements Closeable, Flushable {
         try {
             wrt(pkt, con, true);
         } catch (DataFormatException dfe) {
-            dfe.printStackTrace();
+            _log.error("PCAP write error", dfe);
             throw new IOException(dfe.toString());
         }
     }
@@ -187,7 +190,7 @@ public class PcapWriter implements Closeable, Flushable {
         if (isInbound)
             now = _context.clock().now();
         else
-            now = ((PacketLocal)pkt).getLastSend();
+            now = pkt instanceof PacketLocal ? ((PacketLocal)pkt).getLastSend() : _context.clock().now();
         DataHelper.writeLong(_fos, 4, now / 1000);
         DataHelper.writeLong(_fos, 4, 1000 * (now % 1000));
         DataHelper.writeLong(_fos, 4, 54 + (long) optLen + includeLen);   // 14 MAC + 20 IP + 20 TCP

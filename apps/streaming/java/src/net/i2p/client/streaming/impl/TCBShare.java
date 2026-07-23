@@ -158,13 +158,19 @@ class TCBShare {
             }
         }
         if (_log.shouldDebug()) {
+            final int rtt, rttDev, wdw;
+            synchronized(e) {
+                rtt = e.getRTT();
+                rttDev = e.getRTTDev();
+                wdw = e.getWindowSize();
+            }
             _log.debug("To cache: " +
                        con.getSession().getMyDestination().calculateHash().toBase64().substring(0, 6) +
                        '-' +
                        dest.calculateHash().toBase64().substring(0, 6) +
-                       "\n* old: " + old + " con: " + opts.getRTT() + " new: " + e.getRTT() +
-                       " oldDev: " + oldDev + " conDev: " + opts.getRTTDev() + " newDev: " + e.getRTTDev() +
-                       " oldw: " + oldw + " conw: " + opts.getWindowSize() + " neww: " + e.getWindowSize());
+                       "\n* old: " + old + " con: " + opts.getRTT() + " new: " + rtt +
+                       " oldDev: " + oldDev + " conDev: " + opts.getRTTDev() + " newDev: " + rttDev +
+                       " oldw: " + oldw + " conw: " + opts.getWindowSize() + " neww: " + wdw);
         }
     }
 

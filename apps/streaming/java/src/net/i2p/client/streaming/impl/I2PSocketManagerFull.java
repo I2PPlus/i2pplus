@@ -59,7 +59,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     private final ConnectionOptions _defaultOptions;
     private long _acceptTimeout;
     private String _name;
-    private static final AtomicInteger __managerId = new AtomicInteger();
+    private static final AtomicInteger _managerId = new AtomicInteger();
     private final ConnectionManager _connectionManager;
     private final AtomicBoolean _isDestroyed = new AtomicBoolean();
 
@@ -189,7 +189,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         _subsessions = new ConcurrentHashSet<>(4);
         _log = _context.logManager().getLog(I2PSocketManagerFull.class);
 
-        _name = name + " " + (__managerId.incrementAndGet());
+        _name = name + " " + (_managerId.incrementAndGet());
         _acceptTimeout = ACCEPT_TIMEOUT_DEFAULT;
         _defaultOptions = new ConnectionOptions(opts);
         if (opts != null && opts.getProperty(ConnectionOptions.PROP_MAX_MESSAGE_SIZE) == null) {
@@ -223,8 +223,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
                .append("\n* Original Properties:");
             if (opts != null) {
                 buf.append('\n');
-                if (!(opts.toString().equals("4,0") && opts.toString().equals("5,4") &&
-                    opts.toString().equals("6,4") && opts.toString().equals("7,4"))) {
+                if (!(opts.toString().equals("4,0") || opts.toString().equals("5,4") ||
+                    opts.toString().equals("6,4") || opts.toString().equals("7,4"))) {
                     buf.append(opts.toString().replace(",", "\n\t").replace("{", "").replace("}", "").replace("=", " = "));
                 } else {
                     buf.append(opts.toString().replace("{", "").replace("}", "").replace("=", " = "));
@@ -470,7 +470,10 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *
      * @param ms milliseconds to wait, maximum
      */
-    public void setAcceptTimeout(long ms) { _acceptTimeout = ms; }
+    public void setAcceptTimeout(long ms) {
+        _acceptTimeout = ms;
+        _connectionManager.getConnectionHandler().setAcceptTimeout((int)ms);
+    }
 
     /**
      * @return the accept timeout in milliseconds

@@ -94,9 +94,9 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
              else {size = packet.writePacket(buf, 0);}
 
              // last chance to short circuit...
-             if (packet.getAckTime() > 0) {return false;}
+              if (packet.getAckTime() > 0) {_cache.release(ba); return false;}
 
-             // this should not block!
+              // this should not block!
              begin = _context.clock().now();
              long expires = 0;
              int pktTimeout = packet.getTimeout();

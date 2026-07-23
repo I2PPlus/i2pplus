@@ -42,27 +42,6 @@ public class RetransmissionTimer {
     }
 
     /**
-     * Schedule a periodic event via the dedicated timer.
-     * @param event the event to schedule
-     * @param timeoutMs period in ms
-     * @since 0.9.70+
-     */
-    public void addPeriodicEvent(final SimpleTimer2.TimedEvent event, final long timeoutMs) {
-        _dedicated.addPeriodicEvent(event, timeoutMs);
-    }
-
-    /**
-     * Schedule a periodic event via the dedicated timer.
-     * @param event the event to schedule
-     * @param delay first execution delay in ms
-     * @param timeoutMs period in ms
-     * @since 0.9.70+
-     */
-    public void addPeriodicEvent(final SimpleTimer2.TimedEvent event, final long delay, final long timeoutMs) {
-        _dedicated.addPeriodicEvent(event, delay, timeoutMs);
-    }
-
-    /**
      * Stop the dedicated timer.
      * @since 0.9
      */

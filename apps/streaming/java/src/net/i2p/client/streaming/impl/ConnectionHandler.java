@@ -39,6 +39,9 @@ class ConnectionHandler {
      * absorb brief stalls without refusing inbound connections. Tunable via
      * i2p.streaming.acceptTimeout (default: 30000 / 30 seconds).
      */
+    /** @since 0.9.70+ */
+    synchronized void setAcceptTimeout(int ms) { _acceptTimeout = ms; }
+
     private int getAcceptTimeout() {
         return _context.getProperty("i2p.streaming.acceptTimeout", 30*1000);
     }
@@ -118,6 +121,7 @@ class ConnectionHandler {
      *
      */
     public void receiveNewSyn(Packet packet) {
+        if (packet == null) return;
         if (!_active) {
             if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                 if (_log.shouldWarn()) {_log.warn("Dropping new SYN request because we're not listening");}

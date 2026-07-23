@@ -61,16 +61,6 @@ class ConnThrottler {
     }
 
     /**
-     *  Checks individual count only. Does not increment.
-     *  @since 0.9.3
-     */
-    boolean isThrottled(Hash h) {
-        if (_max > 0)
-            return this.counter.count(h) > _max;
-        return false;
-    }
-
-    /**
      *  Checks if individual count is over the limit by this much. Does not increment.
      *  @since 0.9.34
      */

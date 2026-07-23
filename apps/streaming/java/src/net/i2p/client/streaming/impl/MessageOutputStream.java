@@ -93,7 +93,6 @@ class MessageOutputStream extends OutputStream {
      * @since 0.9.70+ mutable for adaptive tuning
      */
     private static volatile int _defaultPassiveFlushDelay = SystemVersion.isSlow() ? 100 : 50;
-    private static final String PROP_PASSIVE_FLUSH_DELAY = "router.passiveFlushDelay";
 
     /** @since 0.9.70+ */
     public static int getDefaultPassiveFlushDelay() { return _defaultPassiveFlushDelay; }
@@ -472,23 +471,18 @@ class MessageOutputStream extends OutputStream {
         }
         _flusher.cancel();
         _streamError.compareAndSet(null, new IOException("Output stream closed"));
-        clearData(false);
+        clearData();
     }
 
     /**
-     * Clears any buffered data and optionally flushes them (non-blocking).
-     *
-     * @param shouldFlush true to flush buffered data before clearing
+     * Clears any buffered data.
      */
-    private void clearData(boolean shouldFlush) {
+    private void clearData() {
         ByteArray ba = null;
         if (_log.shouldDebug() && _valid > 0) {
             _log.debug("clearData() clearing " + _valid + " bytes");
         }
         synchronized (_dataLock) {
-            if (_valid > 0 && shouldFlush) {
-                _dataReceiver.writeData(_buf, 0, _valid);
-            }
             _written += _valid;
             _valid = 0;
 
@@ -534,7 +528,7 @@ class MessageOutputStream extends OutputStream {
      */
     void streamErrorOccurred(IOException ioe) {
         _streamError.compareAndSet(null, ioe);
-        clearData(false);
+        clearData();
     }
 
     /**
@@ -657,12 +651,6 @@ class MessageOutputStream extends OutputStream {
          */
         boolean writeFailed();
 
-        /**
-         * Returns true if the write operation succeeded.
-         *
-         * @return true if successful, false otherwise
-         */
-        boolean writeSuccessful();
     }
 
     /**

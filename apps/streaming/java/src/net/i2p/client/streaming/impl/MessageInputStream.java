@@ -323,15 +323,6 @@ class MessageInputStream extends InputStream {
     }
 
     /**
-     * Wakes up any threads waiting for data.
-     */
-    public void notifyActivity() {
-        synchronized (_dataLock) {
-            _dataLock.notifyAll();
-        }
-    }
-
-    /**
      * Accepts a newly received message block.
      *
      * If the message is next in sequence, it's added to the ready list and contiguous out-of-order
@@ -455,7 +446,7 @@ class MessageInputStream extends InputStream {
                         if (_locallyClosed.get()) {
                             throw new IOException("Input stream closed");
                         }
-                        if (_notYetReadyBlocks.isEmpty() && _closeReceived) {
+                        if (_closeReceived) {
                             if (_log.shouldInfo()) {
                                 _log.info("EOF reached after reading " + _readTotal + " bytes");
                             }

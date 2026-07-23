@@ -24,7 +24,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private boolean _answerPings;
     private boolean _enforceProto;
     private volatile int _windowSize;
-    private int _receiveWindow;
     private int _profile;
     private int _rtt;
     private int _minRtt = DEFAULT_INITIAL_RTT;
@@ -149,8 +148,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static final String PROP_INITIAL_RESEND_DELAY = "i2p.streaming.initialResendDelay";
     public static final String PROP_INITIAL_ACK_DELAY = "i2p.streaming.initialAckDelay";
     public static final String PROP_INITIAL_WINDOW_SIZE = "i2p.streaming.initialWindowSize";
-    /** unused */
-    public static final String PROP_INITIAL_RECEIVE_WINDOW = "i2p.streaming.initialReceiveWindow";
+
     public static final String PROP_INACTIVITY_TIMEOUT = "i2p.streaming.inactivityTimeout";
     public static final String PROP_INACTIVITY_ACTION = "i2p.streaming.inactivityAction";
     public static final String PROP_MAX_WINDOW_SIZE = "i2p.streaming.maxWindowSize";
@@ -530,7 +528,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         setConnectDelay(getInt(opts, PROP_CONNECT_DELAY, -1));
         setProfile(getInt(opts, PROP_PROFILE, PROFILE_BULK));
         setMaxMessageSize(getInt(opts, PROP_MAX_MESSAGE_SIZE, DEFAULT_MAX_MESSAGE_SIZE));
-        setReceiveWindow(getInt(opts, PROP_INITIAL_RECEIVE_WINDOW, 1));
         setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, _defaultResendDelay));
         setSendAckDelay(getInt(opts, PROP_INITIAL_ACK_DELAY, _defaultInitialAckDelay));
         setWindowSize(getInt(opts, PROP_INITIAL_WINDOW_SIZE, _initialWindowSize));
@@ -586,9 +583,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         }
         if (opts.getProperty(PROP_MAX_MESSAGE_SIZE) != null) {
             setMaxMessageSize(getInt(opts, PROP_MAX_MESSAGE_SIZE, Packet.MAX_PAYLOAD_SIZE));
-        }
-        if (opts.getProperty(PROP_INITIAL_RECEIVE_WINDOW) != null) {
-            setReceiveWindow(getInt(opts, PROP_INITIAL_RECEIVE_WINDOW, 1));
         }
         if (opts.getProperty(PROP_INITIAL_RESEND_DELAY) != null) {
             setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, _defaultResendDelay));
@@ -764,8 +758,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         _windowSize = numMsgs;
     }
 
-    public void setReceiveWindow(int numMsgs) {_receiveWindow = numMsgs;}
-
     /**
      * What to set the round trip time estimate to (in milliseconds)
      * @return round trip time estimate in ms
@@ -882,7 +874,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /**
      * if there are packets we haven't ACKed yet and we don't
-     * receive _receiveWindow messages before
+     * receive enough messages before
      * (_lastSendTime+_sendAckDelay), send an ACK of what
      * we have received so far.
      *
@@ -900,7 +892,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *  Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706
      *
      */
-    public void setSendAckDelay(int delayMs) {_sendAckDelay = Math.min(delayMs, 100);}
+    public void setSendAckDelay(int delayMs) {_sendAckDelay = Math.max(10, Math.min(delayMs, 500));}
 
     /** What is the largest message we want to send or receive?
      * @return Maximum message size (MTU/MRU)
@@ -1116,7 +1108,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         if (_connectDelay > 0) {buf.append(" conDelay=").append(_connectDelay);}
         buf.append(" maxSize=").append(_maxMessageSize);
         buf.append(" rtt=").append(_rtt);
-        buf.append(" rwin=").append(_receiveWindow);
         buf.append(" resendDelay=").append(_resendDelay);
         buf.append(" ackDelay=").append(_sendAckDelay);
         buf.append(" cwin=").append(_windowSize);

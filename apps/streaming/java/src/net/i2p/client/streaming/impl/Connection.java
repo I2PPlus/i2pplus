@@ -38,6 +38,7 @@ class Connection {
     private final AtomicLong _lastSendId;
     private final AtomicBoolean _resetReceived = new AtomicBoolean();
     private final AtomicLong _resetSentOn = new AtomicLong();
+    private final AtomicLong _resetReceivedOn = new AtomicLong();
     private final AtomicBoolean _connected = new AtomicBoolean(true);
     private final AtomicBoolean _finalDisconnect = new AtomicBoolean();
     private volatile boolean _hardDisconnected;
@@ -814,6 +815,7 @@ class Connection {
      */
     public void resetReceived() {
         if (!_resetReceived.compareAndSet(false, true)) {return;}
+        _resetReceivedOn.set(_context.clock().now());
         IOException ioe = new I2PSocketException(I2PSocketException.STATUS_CONNECTION_RESET);
         _outputStream.streamErrorOccurred(ioe);
         _inputStream.streamErrorOccurred(ioe);
@@ -829,6 +831,9 @@ class Connection {
      * @return true if a reset was received
      */
     public boolean getResetReceived() {return _resetReceived.get();}
+
+    /** @return 0 if not received */
+    public long getResetReceivedOn() {return _resetReceivedOn.get();}
 
     /**
      * Check if this is an inbound connection.
@@ -927,7 +932,7 @@ class Connection {
                 // only send a RESET if we ever got something (and he didn't RESET us),
                 // otherwise don't waste the crypto and tags
                 if (_log.shouldWarn()) {
-                    _log.warn("Hard disconnecting " + (disconnectCount > 1 ? "(Count: " + disconnectCount + ") " : "") +
+                    _log.warn("Hard disconnecting " + (disconnectCount == 1 ? "(Count: " + disconnectCount + ") " : "") +
                               "and sending RESET to " + getRemotePeerString() + " -> " +
                               (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
                 }
@@ -935,7 +940,7 @@ class Connection {
                 disconnectCount++;
             } else {
                 if (_log.shouldWarn()) {
-                    _log.warn("Hard disconnecting " + (disconnectCount > 1 ? "(Count: " + disconnectCount + ") " : "") +
+                    _log.warn("Hard disconnecting " + (disconnectCount == 1 ? "(Count: " + disconnectCount + ") " : "") +
                               "from " + getRemotePeerString() + " -> " +
                               (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
                 }
@@ -1140,8 +1145,6 @@ class Connection {
     /** Set the packet Id that was sent to a peer.
      * @param id The packet ID
      */
-    public void setLastSendId(long id) {_lastSendId.set(id);}
-
     /**
      * Retrieve the current ConnectionOptions.
      * @return the current ConnectionOptions, non-null
@@ -1760,7 +1763,7 @@ class Connection {
             if (getResetSent())
                 buf.append("\n* Reset sent: ").append(DataHelper.formatDuration(now - getResetSentOn())).append(" ago");
             if (getResetReceived())
-                buf.append("\n* Reset received: ").append(DataHelper.formatDuration(now - getDisconnectScheduledOn())).append(" ago");
+                buf.append("\n* Reset received: ").append(DataHelper.formatDuration(now - getResetReceivedOn())).append(" ago");
             if (getCloseSentOn() > 0) {
                 buf.append("\n* Close sent: ");
                 long timeSinceClose = now - getCloseSentOn();
@@ -1816,9 +1819,9 @@ class Connection {
         synchronized (_outboundPackets) {
             Map.Entry<Long, PacketLocal> e = _outboundPackets.firstEntry();
             if (e == null) return;
+            if (e.getValue().getAckTime() > 0) return;
             oldest = e.getValue();
         }
-        if (oldest.getAckTime() > 0) return;
         if (_outboundQueue.enqueue(oldest)) {
             _unackedPacketsReceived.set(0);
             _lastSendTime = _context.clock().now();

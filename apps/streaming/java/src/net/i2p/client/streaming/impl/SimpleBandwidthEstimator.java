@@ -119,7 +119,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
         return _bKFiltered;
     }
 
-    private synchronized float computeBWE(final long now) {
+    private float computeBWE(final long now) {
         if (_acked < 0)
             return 0.0f; // nothing ever sampled
         updateBK(now, _acked);

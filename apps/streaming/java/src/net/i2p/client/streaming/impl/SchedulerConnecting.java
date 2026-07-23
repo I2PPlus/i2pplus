@@ -79,6 +79,8 @@ class SchedulerConnecting extends SchedulerImpl {
                 reschedule(timeTillSend, con);
             } else if (con.getOptions().getConnectTimeout() > 0) {
                 reschedule(con.getOptions().getConnectTimeout(), con);
+            } else {
+                reschedule(con.getOptions().getConnectTimeout(), con);
             }
         }
     }

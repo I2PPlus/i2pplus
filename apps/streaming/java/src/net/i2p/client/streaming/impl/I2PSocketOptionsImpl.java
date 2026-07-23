@@ -109,7 +109,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     /**
      *  Not part of the API, not for external use.
      */
-    public static double getDouble(Properties opts, String name, double defaultVal) {
+    static double getDouble(Properties opts, String name, double defaultVal) {
         if (opts == null) return defaultVal;
         String val = opts.getProperty(name);
         if (val == null) {
