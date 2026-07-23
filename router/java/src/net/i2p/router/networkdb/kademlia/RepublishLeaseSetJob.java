@@ -17,27 +17,19 @@ import net.i2p.router.TunnelPoolSettings;
 import net.i2p.util.Log;
 
 /**
- * A job that periodically republishes a local LeaseSet to the network database.
+ * Periodically republishes a local LeaseSet to the network database.
  *
- * This job handles the lifecycle of lease set publication including:
+ * Handles the lifecycle of lease set publication including:
  * <ul>
- *   <li>Initial publication when the router has been running for sufficient uptime</li>
- *   <li>Periodic republishing before lease expiration (every 7 minutes)</li>
- *   <li>Retry logic with exponential backoff on publication failure</li>
- *   <li>Floodfill verification of published lease sets</li>
- *   <li>Cleanup of expired/stale lease sets when service stops</li>
+ *   <li>Initial publication after sufficient uptime</li>
+ *   <li>Periodic republishing before lease expiration (default 5 min)</li>
+ *   <li>On-success global fail count reset</li>
+ *   <li>Retry with exponential backoff (20-30s) on failure</li>
+ *   <li>Floodfill verification after repeated failures</li>
+ *   <li>Cleanup when the client is no longer local</li>
  * </ul>
  *
- * The job manages a retry mechanism that:
- * <ul>
- *   <li>Retries every 2 seconds on failure</li>
- *   <li>Elevates to high priority every 4th attempt</li>
- *   <li>Verifies publication via floodfill peers after 3 failures</li>
- *   <li>Stops publishing when the client is no longer local</li>
- * </ul>
- *
- * This class is thread-safe and uses concurrent maps for tracking retry state
- * and logging throttling across multiple instances.
+ * Thread-safe via concurrent maps across instances.
  */
 public class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
@@ -152,8 +144,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                         // for a full test cycle just delays the first usable
                         // LeaseSet by 30+ seconds.
                         getContext().statManager().addRateData("netDb.republishLeaseSetCount", 1);
-                        failCount.set(0);
-                        _facade.sendStore(_dest, ls, null, new OnRepublishFailure(ls), getPublishTimeout(), null);
+                        _facade.sendStore(_dest, ls, new OnRepublishSuccess(), new OnRepublishFailure(ls), getPublishTimeout(), null);
                         _lastPublished = now;
                         long nextRepublish;
                         // If fewer leases than target, schedule sooner so new
@@ -440,6 +431,35 @@ public class RepublishLeaseSetJob extends JobImpl {
             };
 
             _facade.lookupLeaseSetRemotely(_ls.getHash(), onFound, onFailed, 10L * 1000, null);
+        }
+    }
+
+    /**
+     * Fired when the store operation confirms success.
+     * Resets the persistent global fail counter for this destination
+     * so that the floodfill verification gate starts fresh.
+     */
+    private class OnRepublishSuccess extends JobImpl {
+        public OnRepublishSuccess() {
+            super(RepublishLeaseSetJob.this.getContext());
+        }
+
+        public String getName() {return "LeaseSet Publish Succeeded";}
+
+        public void runJob() {
+            cleanupStaleEntries();
+            AtomicInteger counter = _globalFailCount.get(_dest);
+            if (counter != null) {
+                counter.set(0);
+            }
+            if (_log.shouldInfo()) {
+                long now = getContext().clock().now();
+                Long lastLog = _lastPublishLogTime.get(_dest);
+                if (lastLog == null || now - lastLog > 10L * 1000) {
+                    _log.info("LeaseSet publication confirmed for [" + _dest.toBase32().substring(0,8) + "]");
+                    _lastPublishLogTime.put(_dest, now);
+                }
+            }
         }
     }
 
