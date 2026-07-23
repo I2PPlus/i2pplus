@@ -460,7 +460,12 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // If we are a part of the floodfill netDb, don't send out our own leaseSets as part
         // of the flooding - instead, send them to random floodfill peers so they can flood 'em out.
         Set<Hash> floodfillParticipants = selectFloodfillParticipants(toIgnore, getKBuckets(), concurrent);
-        if (floodfillParticipants == null) {return;} // No peers to send to, so return early
+        if (floodfillParticipants == null || floodfillParticipants.isEmpty()) {
+            if (onFailure != null) {
+                _context.jobQueue().addJob(onFailure);
+            }
+            return;
+        }
         if (floodfillEnabled() && (ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {flood(ds);}
         else {
             List<Hash> participantList = new ArrayList<>(floodfillParticipants);
@@ -469,34 +474,33 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
             int idx = 0;
             for (Hash peer : floodfillParticipants) {
-                if (onSuccess != null) {
-                    _context.jobQueue().addJob(onSuccess);
-                }
-                else {
-                    // Schedule with delay instead of blocking with Thread.sleep
-                    final int delay = (int) Math.min(idx * 1000L, 10_000);
-                    final int concurrentForLog = concurrent;
-                    new SimpleTimer2.TimedEvent(_context.simpleTimer2()) {
-                        @Override
-                        public void timeReached() {
-                            _context.jobQueue().addJob(new FloodfillStoreJob(
-                                _context, FloodfillNetworkDatabaseFacade.this,
-                                key, ds, onSuccess, onFailure, sendTimeout, toIgnore));
-                        }
-                    }.schedule(delay);
-                    if (idx > 9) {concurrent = 3;}
-                    else if (idx > 4) {concurrent = 2;}
-                    if (_log.shouldInfo()) {
-                        String name;
-                        if (ds instanceof LeaseSet) {
-                            String tunnelName = getTunnelName(((LeaseSet) ds).getDestination());
-                            name = tunnelName != null ? "LeaseSet for '" + tunnelName + "'" : "key for [" + key.toBase32().substring(0,8) + "]";
-                        } else {
-                            name = "key for [" + key.toBase32().substring(0,8) + "]";
-                        }
-                        _log.info("Flood of " + name + " to [" + peer.toBase64().substring(0,6) + "] failed -> " +
-                                  "Resending to " + (concurrentForLog > 1 ? concurrentForLog + " new floodfills" : "a different floodfill") + "...");
+                // Schedule FloodfillStoreJob for each peer, passing onSuccess/onFailure
+                // as callbacks. The store job fires onSuccess via StoreJob.succeed() only
+                // when the store actually completes — NOT immediately. The old code short-
+                // circuited with addJob(onSuccess) which skipped the store entirely and
+                // was incorrect for LeaseSet publication.
+                final int delay = (int) Math.min(idx * 1000L, 10_000);
+                final int concurrentForLog = concurrent;
+                new SimpleTimer2.TimedEvent(_context.simpleTimer2()) {
+                    @Override
+                    public void timeReached() {
+                        _context.jobQueue().addJob(new FloodfillStoreJob(
+                            _context, FloodfillNetworkDatabaseFacade.this,
+                            key, ds, onSuccess, onFailure, sendTimeout, toIgnore));
                     }
+                }.schedule(delay);
+                if (idx > 9) {concurrent = 3;}
+                else if (idx > 4) {concurrent = 2;}
+                if (_log.shouldInfo()) {
+                    String name;
+                    if (ds instanceof LeaseSet) {
+                        String tunnelName = getTunnelName(((LeaseSet) ds).getDestination());
+                        name = tunnelName != null ? "LeaseSet for '" + tunnelName + "'" : "key for [" + key.toBase32().substring(0,8) + "]";
+                    } else {
+                        name = "key for [" + key.toBase32().substring(0,8) + "]";
+                    }
+                    _log.info("Flood of " + name + " to [" + peer.toBase64().substring(0,6) + "] failed -> " +
+                              "Resending to " + (concurrentForLog > 1 ? concurrentForLog + " new floodfills" : "a different floodfill") + "...");
                 }
                 idx++;
             }
