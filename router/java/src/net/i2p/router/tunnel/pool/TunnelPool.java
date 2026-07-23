@@ -1359,44 +1359,22 @@ public class TunnelPool {
             }
 
             if (info.getExpiration() > now + 60L * 1000) {
-                // Cap UNTESTED tunnels only — limit in-flight builds that
-                // haven't been verified yet.  GOOD tunnels can accumulate
-                // freely so the pool never starves while tests run.
+                // Hard cap: never more than target + 2 usable tunnels per direction.
+                // FAILED/FAILING tunnels are dead or dying and don't count — they must
+                // not block replacement builds.
                 int target = _settings.getQuantity();
-                int effectiveTarget = Math.min(target + _consecutiveEmergencies,
-                                               target + MAX_EMERGENCY_BOOST);
-                int untestedNow = 0;
+                int usable = 0;
                 for (TunnelInfo t : _tunnels) {
-                    if (t.getTestStatus() == TunnelTestStatus.UNTESTED) {
-                        untestedNow++;
+                    TunnelTestStatus ts = t.getTestStatus();
+                    if (ts != TunnelTestStatus.FAILED && ts != TunnelTestStatus.FAILING) {
+                        usable++;
                     }
                 }
-                int multiplier = _context.getProperty("i2p.tunnel.untestedMultiplier", 2);
-                int maxUntested = Math.max(effectiveTarget * multiplier, 2);
-                if (untestedNow >= maxUntested) {
+                int maxUsable = Math.max(target + 2, 2);
+                if (usable >= maxUsable) {
                     if (_log.shouldWarn()) {
-                        _log.warn(toString() + " -> Too many UNTESTED tunnels (" + untestedNow +
-                                  " >= max " + maxUntested + ", target=" + effectiveTarget + ") \n* " + info);
-                    }
-                    return;
-                }
-                // Cap total non-UNTESTED tunnels to prevent unbounded accumulation
-                // of GOOD/expiring/FAILING tunnels.  UNTESTED tunnels are separately
-                // capped above by maxUntested, so they must not compete with tested
-                // tunnels for the total cap — otherwise expiring GOOD tunnels can fill
-                // all slots and block the replacement builds needed to keep the pool alive.
-                // Count only non-FAILED, non-UNTESTED tunnels and cap against the base
-                // target (not effectiveTarget) so the cap is stable and predictable.
-                int totalNonUntested = 0;
-                for (TunnelInfo t : _tunnels) {
-                    if (!t.getTunnelFailed() && t.getTestStatus() != TunnelTestStatus.UNTESTED) totalNonUntested++;
-                }
-                int maxTotal = Math.max(target + 3, 3);
-                if (totalNonUntested >= maxTotal) {
-                    if (_log.shouldWarn()) {
-                        _log.warn(toString() + " -> Pool at capacity (" + totalNonUntested +
-                                  " >= max " + maxTotal + ", target=" + effectiveTarget +
-                                  ") — rejecting build \n* " + info);
+                        _log.warn(toString() + " -> Pool at capacity (" + usable +
+                                  " >= max " + maxUsable + ", target=" + target + ") \n* " + info);
                     }
                     return;
                 }
@@ -2749,17 +2727,15 @@ public class TunnelPool {
             _consecutiveEmergencies--;
         }
 
-        // Early exit: if in-progress already covers the target,
-        // don't queue more builds.  This prevents the race condition where
-        // ensureSufficientTunnels() and calculatePairedBuilds() both see
-        // inProgress=0 and double-queue builds that pile up as UNTESTED.
-        // untestedCount is NOT counted here — untested tunnels are waiting
-        // for test capacity, not providing usable coverage.  Counting them
-        // would block builds and leave the pool permanently at 0 safe tunnels.
-        if (inProgress >= effectiveTarget) {
+        // Early exit: cap in-progress at target + 2 to prevent
+        // emergency-boosted effectiveTarget from inflating the tolerance.
+        // EMERGENCY has its own inProgress check (target-based) and is
+        // reached after this early exit when safeActive == 0.
+        if (inProgress >= Math.max(target + 2, 2)) {
             if (_log.shouldDebug()) {
                 _log.debug(toString() + " -> Skipping build: inProgress(" +
-                          inProgress + ") >= effectiveTarget(" + effectiveTarget + ")");
+                          inProgress + ") >= cap " + Math.max(target + 2, 2) +
+                          " (target=" + target + ")");
             }
             return;
         }
@@ -2784,21 +2760,15 @@ public class TunnelPool {
                 // builds when inProgress >= effectiveTarget creates a build storm:
                 // timeout → ensureSufficientTunnels → deficit=target → build
                 // more → timeout → repeat.  Only build the gap.
-                // Don't subtract untestedCount — when safeActive == 0, untested
-                // tunnels are likely stuck (testing can't keep up with 100+
-                // pending).  Counting them against the deficit permanently blocks
-                // replacement builds, leaving the pool at 0 safe forever.
-                deficit = Math.max(0, effectiveTarget - inProgress) + failingBoost;
+                // Count untested tunnels against the deficit — the hard cap at
+                // target + 2 bounds accumulation, preventing test queue flooding.
+                deficit = Math.max(0, effectiveTarget - inProgress - untestedCount) + failingBoost;
             } else if (safeActive == 0) {
-                // Pool has zero GOOD tunnels — untested tunnels are likely
-                // stuck because TestJob can't keep up.  If we count them
-                // against the deficit, the pool can never build replacements
-                // and stays at 0 safe forever until pruneExcessTunnels()
-                // removes them after 120s.  By ignoring untested tunnels here,
-                // new builds start once inProgress drops below effectiveTarget.
-                // inProgress naturally declines as builds complete or timeout,
-                // preventing a build storm.
-                deficit = Math.max(0, effectiveTarget - inProgress) + failingBoost;
+                // Pool has zero GOOD tunnels — count untested tunnels against
+                // the deficit so builds don't pile up faster than the test
+                // queue can process.  The hard cap at target + 2 bounds
+                // untested accumulation so it won't block replacement builds.
+                deficit = Math.max(0, effectiveTarget - inProgress - untestedCount) + failingBoost;
             } else {
                 deficit = effectiveTarget - safeActive - inProgress - untestedCount + failingBoost;
             }

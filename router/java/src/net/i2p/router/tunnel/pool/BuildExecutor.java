@@ -197,7 +197,7 @@ public class BuildExecutor implements Runnable {
     /** @since 0.9.70+ */
     public static void setMaxConcurrentBuilds(int val) { _maxConcurrentBuilds = Math.max(Math.max(SystemVersion.getCores() * 2, 24), Math.min(256, val)); }
 
-    private static final int LOOP_TIME = 1000; // calculate required tunnels to build every 1s
+    private static final int LOOP_TIME = 60000; // tunnel builds take 10-40s, no point polling faster
     private static final int TUNNEL_POOLS = 8;
     private static long getGracePeriod(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.build.gracePeriod", 60*1000);
@@ -1326,12 +1326,29 @@ public class BuildExecutor implements Runnable {
                     isCritical = false;
                 }
             }
+            // Count usable tunnels matching addTunnel() cap: exclude FAILED/FAILING
+            int usableCount = 0;
+            for (TunnelInfo ti : tunnels) {
+                TunnelTestStatus ts = ti.getTestStatus();
+                if (ts != TunnelTestStatus.FAILED && ts != TunnelTestStatus.FAILING && !ti.getTunnelFailed()) {
+                    usableCount++;
+                }
+            }
+
             if (remainingWanted > 0) {
-                /* Deficit — build just enough to fill the gap, no multiplier needed
-                 * since builds complete in ~1s and the 1s loop refills quickly
+                /* Deficit — build just enough to fill the gap; the
+                 * 60s loop catches subsequent needs and ensureSufficientTunnels
+                 * covers event-driven fills between loops.
                  */
                 builds = expire330s + expire270s + expire210s + expire150s + expire90s + expire30s + remainingWanted;
             } else {
+                /* At capacity — skip proactive building, addTunnel() would reject.
+                 * Only deficit builds (above) bypass this check since they fill
+                 * an actual shortage and the cap handles overflow.
+                 */
+                if (usableCount >= Math.max(target + 2, 2)) {
+                    continue;
+                }
                 /* Sufficient count — proactively replace GOOD tunnels approaching expiry.
                  * Start at 330s (5.5 min) so replacements have time to build before originals
                  * expire at 600s (10 min). FAILING tunnels are NOT proactively replaced —
@@ -1342,7 +1359,7 @@ public class BuildExecutor implements Runnable {
                  * Without this, when all tunnels are FAILING the pool has zero viable tunnels but
                  * doesn't trigger builds (numerical deficit is satisfied by FAILING tunnels).
                  */
-                builds = goodExpire330s + goodExpire270s + goodExpire210s;
+                builds = Math.min(goodExpire330s + goodExpire270s + goodExpire210s, target);
                 int goodDeficit = target - goodExpireLater;
                 if (goodDeficit > 0) {
                     /* Don't build when untested tunnels can cover the deficit.
