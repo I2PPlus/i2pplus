@@ -172,22 +172,26 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     }
 
     /**
-     * Called by the Tuner every 30 seconds. Applies computed target sizes.
-     * The precalc thread uses _minSize/_maxSize to decide generation targets.
+     * Called by the Tuner every 30 seconds. Manages fill ceiling (_maxSize)
+     * based on demand and memory pressure. Does NOT override the Tuner-set
+     * _minSize — the Tuner owns that value via setMinSize().
      *
      * @since 0.9.70+
      */
     public void refreshPoolSize() {
-        computeTargetSizes();
-        if (_targetMin != _minSize || _targetMax != _maxSize) {
-            int oldMin = _minSize;
-            int oldMax = _maxSize;
-            _minSize = _targetMin;
-            _maxSize = _targetMax;
-            if (_log.shouldDebug()) {
-                _log.debug("XDH Precalc resized min: " + oldMin + " → " + _minSize
-                           + " max: " + oldMax + " → " + _maxSize);
-            }
+        int recentEmpties = _emptyCount.getAndSet(0);
+        int recentUsage = _usedCount.getAndSet(0);
+        long freeMem = Runtime.getRuntime().freeMemory();
+        long totalMem = Runtime.getRuntime().totalMemory();
+        double memPressure = 1.0 - ((double) freeMem / Math.max(totalMem, 1));
+
+        int demandMax = _minSize + recentUsage + recentEmpties + Math.max(256, recentUsage / 3);
+        _maxSize = Math.min(HARD_MAX, Math.max(_minSize + 64, demandMax));
+
+        if (memPressure > 0.85) {
+            _maxSize = Math.max(_minSize + 64, _maxSize / 2);
+        } else if (memPressure > 0.7) {
+            _maxSize = Math.max(_minSize + 128, _maxSize * 3 / 4);
         }
     }
 

@@ -46,6 +46,8 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     private static final int DEFAULT_MLKEM_PRECALC_MIN = 64;
     private static final int DEFAULT_MLKEM_PRECALC_MAX = 256;
     private static final int DEFAULT_MLKEM_PRECALC_DELAY = 25;
+    private static final int HARD_MAX = 32768;
+    private static final int HARD_MIN = 4;
 
     /**
      *  Alice side only
@@ -81,7 +83,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
         if (_log.shouldDebug())
             _log.debug("MLKEM Precalc (minimum: " + _minSize + " max: " + _maxSize + ", delay: "
                        + _calcDelay + ")");
-        _keys = new LinkedBlockingQueue<>(_maxSize);
+        _keys = new LinkedBlockingQueue<>(HARD_MAX);
         if (!SystemVersion.isWindows())
             setPriority(Thread.NORM_PRIORITY - 1);
         _lastInstance = this;
@@ -137,25 +139,19 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
      */
     public void refreshPoolSize() {
         int recentEmpties = _emptyCount.getAndSet(0);
-        boolean lowDemand = recentEmpties == 0;
         int recentUsage = _usedCount.getAndSet(0);
-        int fillCeiling = Math.max(1, Math.min(_maxSize,
-            _minSize + Math.max(256, recentUsage + recentUsage / 10)));
-
         long freeMem = Runtime.getRuntime().freeMemory();
         long totalMem = Runtime.getRuntime().totalMemory();
         double memPressure = 1.0 - ((double) freeMem / Math.max(totalMem, 1));
 
-        // Cap max at demand-based fill ceiling
-        _maxSize = Math.min(_maxSize, fillCeiling);
+        int demandMax = _minSize + recentUsage + recentEmpties + Math.max(64, recentUsage / 3);
+        _maxSize = Math.min(HARD_MAX, Math.max(_minSize + 4, demandMax));
 
-        // Shrink max when idle, especially under memory pressure
-        if (lowDemand && memPressure > 0.85) {
-            _maxSize = Math.max(_minSize + 64, _maxSize / 2);
-        } else if (lowDemand && memPressure > 0.7) {
-            _maxSize = Math.max(_minSize + 128, _maxSize * 3 / 4);
+        if (memPressure > 0.85) {
+            _maxSize = Math.max(_minSize + 4, _maxSize / 2);
+        } else if (memPressure > 0.7) {
+            _maxSize = Math.max(_minSize + 8, _maxSize * 3 / 4);
         }
-
     }
 
     /**

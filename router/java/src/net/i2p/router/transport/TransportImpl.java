@@ -165,7 +165,7 @@ public abstract class TransportImpl implements Transport {
         _context.statManager().createRequiredRateStat("transport.receiveMessageSize", "Size of received messages (bytes)", "Transport", RATES);
         _context.statManager().createRequiredRateStat("transport.sendMessageSize", "Size of sent messages (bytes)", "Transport", RATES);
         _context.statManager().createRequiredRateStat("transport.sendProcessingTime", "Time to process and send a message (ms)", "Transport", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
-        _context.statManager().createRequiredRateStat("ntcp.sendPool utilization", "Send pool size as fraction of capacity (pct)", "Transport", RATES);
+        _context.statManager().createRequiredRateStat("ntcp.sendPool.utilization", "Send pool size as fraction of capacity (pct)", "Transport", RATES);
 
         _currentAddresses = new ArrayList<>(3);
         if (getStyle().equals("NTCP")) {_sendPool = new ArrayBlockingQueue<>(SEND_POOL_CAPACITY);}
@@ -538,7 +538,7 @@ public abstract class TransportImpl implements Transport {
             int cap = SEND_POOL_CAPACITY;
             if (cap > 0) {
                 int pct = (_sendPool.size() * 100) / cap;
-                _context.statManager().addRateData("ntcp.sendPool utilization", pct, _sendPool.size());
+                _context.statManager().addRateData("ntcp.sendPool.utilization", pct, _sendPool.size());
             }
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();

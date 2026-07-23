@@ -171,7 +171,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /** ML-KEM precalc min/max — each pair ~3.5KB, scale with cores and memory */
     private static final int MLKEM_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
     private static final int MLKEM_PRECALC_MIN = Math.max(512, 8 * MLKEM_FACTOR);
-    private static final int MLKEM_PRECALC_MAX = Math.max(4096, 64 * MLKEM_FACTOR);
+    private static final int MLKEM_PRECALC_MAX = Math.max(16384, 64 * MLKEM_FACTOR);
     /** X25519/EDH precalc — each pair ~64 bytes, scale with cores and memory */
     private static final int XDH_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
     private static final int XDH_PRECALC_MIN = Math.max(256, 128 * XDH_FACTOR);
@@ -591,16 +591,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             "Streaming", "I2CP", "Peers", "Congestion", "Crypto"
         };
         String[][] metrics = {
-            { "jobQueue.jobLag" },
-            { "tunnel.buildSuccessRate + pool alive/deficit" },
-            { "participatingThrottle reject ratio" },
-            { "transport.sendProcessingTime", "transport.sendMessageFailureLifetime / sendMessageSize" },
-            { "client.leaseSetFoundRemoteTime / netDb.successTime" },
-            { "connect success rate + RTT + rtx ratio + reset rate" },
-            { "i2cp.internalQueueSize" },
-            { "peer.activeProfileCount" },
-            { "udp.congestionOccurred / udp.allowConcurrentActive" },
-            { "crypto.EDHEmpty/Used, XDHEmpty/Used, MLKEMEmpty/Used" }
+            { "jobQueue.jobLag", "readyJobs", "droppedJobs", "jobWait" },
+            { "tunnel.buildSuccessRate", "pool alive/deficit", "buildHandler.queueSize", "buildBanHit" },
+            { "participatingThrottle", "bwLimiter.queue", "transit utilization" },
+            { "transport.sendProcessingTime", "sendMessageFailureLifetime", "sendMessageSize", "ntcp.sendPool.utilization", "udp.avgRTO" },
+            { "router.knownPeers", "netDb.lookupsDropped", "netDb.floodThrottled", "netDb.ackTime" },
+            { "connect success rate", "RTT", "rtx ratio", "reset rate" },
+            { "serverHandler.queueDepth", "client.sendDropped" },
+            { "peer.fastPeerCount", "peer.highCapPeerCount", "router.unreachablePeers", "router.activePeers" },
+            { "udp.congestionOccurred", "udp.retransmitEvents", "udp.sendExpired", "inNetPool.dropped" },
+            { "EDHEmpty/Used", "XDHEmpty/Used", "MLKEMEmpty/Used" }
         };
         for (int i = 0; i < order.length; i++) {
             double[] vals = scores.get(order[i]);
@@ -3581,7 +3581,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             X25519KeyFactory f = X25519KeyFactory.getInstance();
-            return f != null ? f.getMinSize() : 0;
+            return f != null ? f.getMinSize() : _min;
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -3645,7 +3645,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             net.i2p.router.crypto.ratchet.Elg2KeyFactory f = net.i2p.router.crypto.ratchet.Elg2KeyFactory.getInstance();
-            return f != null ? f.getMinSize() : 0;
+            return f != null ? f.getMinSize() : _min;
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -3703,7 +3703,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             net.i2p.router.crypto.pqc.MLKEMKeyFactory f = net.i2p.router.crypto.pqc.MLKEMKeyFactory.getInstance();
-            return f != null ? f.getMinSize() : 1;
+            return f != null ? f.getMinSize() : _min;
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -7006,7 +7006,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // observed = ntcp.sendTime (ms, avg message send latency)
             // Writers are pure CPU — encrypt + prepare buffer. EventPumper does NIO write.
             // Scale based on send latency and downstream pressure.
-            double sendPoolUtil = getAdditionalStat(_context, "ntcp.sendPool utilization");
+            double sendPoolUtil = getAdditionalStat(_context, "ntcp.sendPool.utilization");
             double writeBufs = getAdditionalStat(_context, "ntcp.writeBufs.size");
             double writeQueueFull = getAdditionalStat(_context, "ntcp.writeQueueFull");
             double backlogTime = getAdditionalStat(_context, "ntcp.sendBacklogTime");
@@ -7125,7 +7125,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Tunes NTCP send finisher thread count based on send pool utilization
      * and send finisher queue depth. More threads when the pool is saturated
      * or the finisher queue is backing up.
-     * Primary signal: ntcp.sendPool utilization.
+     * Primary signal: ntcp.sendPool.utilization.
      * Cross-refs: ntcp.sendFinisher.queueSize, ntcp.writeBufs.size.
      *
      * @since 0.9.70+
@@ -7136,7 +7136,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("ntcp.sendFinisher.threads", "NTCP send finisher threads",
                   SUB_TRANSPORT,
 
-                  2, 16, 1, "ntcp.sendPool utilization", _context);
+                  2, 16, 1, "ntcp.sendPool.utilization", _context);
         }
 
         protected void applyValue(int value) {
@@ -7163,7 +7163,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // Reclaim parked threads when the pool is massively under-utilized
             int reclaimed = reclaimIfIdle(getSendFinisherUtilization(_context), current, _min, 0.05);
             if (reclaimed >= 0) return reclaimed;
-            // observed = ntcp.sendPool utilization (0-100%)
+            // observed = ntcp.sendPool.utilization (0-100%)
             // Cross-refs: ntcp.sendFinisher.queueSize, ntcp.writeBufs.size
             double finisherQueue = getAdditionalStat(_context, "ntcp.sendFinisher.queueSize");
             double writeBufs = getAdditionalStat(_context, "ntcp.writeBufs.size");
@@ -7237,7 +7237,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double transitBps = getAdditionalStat(_context, "tunnel.participating InBps");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
             double rejections = getAdditionalStat(_context, "udp.rejectConcurrentActive");
-            double sendPoolUtil = getAdditionalStat(_context, "ntcp.sendPool utilization");
+            double sendPoolUtil = getAdditionalStat(_context, "ntcp.sendPool.utilization");
             double queueDepth = getAdditionalStat(_context, "udp.outboundQueueDepth");
             double memPressure = getMemoryPressure();
             boolean cpuFree = jobLag < 5 || Double.isNaN(jobLag);
@@ -7749,7 +7749,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Tunes NTCP send pool capacity (outbound message buffering).
      * Sweet spot: large enough to prevent send stalls, small enough to avoid buffering latency.
      * Queue-thread coupling: must scale with ntcp.writer.threads.
-     * Primary signal: ntcp.sendPool utilization (pct of capacity in use).
+     * Primary signal: ntcp.sendPool.utilization (pct of capacity in use).
      * Cross-refs: ntcp.writer.threads, transport.sendProcessingTime.
      *
      * @since 0.9.70+
@@ -7760,7 +7760,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("ntcp.sendPool.capacity", "NTCP send pool capacity",
                   SUB_TRANSPORT,
 
-                  64, 8192, 32, "ntcp.sendPool utilization", _context);
+                  64, 8192, 32, "ntcp.sendPool.utilization", _context);
         }
 
         @Override
@@ -7791,7 +7791,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = ntcp.sendPool utilization (pct 0-100)
+            // observed = ntcp.sendPool.utilization (pct 0-100)
             // Cross-refs: transport.sendProcessingTime (latency), jobLag (CPU),
             //             ntcp.sendFinisher.queueSize (backlog), udp.sendConfirmTime (RTT)
             double sendTime = getAdditionalStat(_context, "transport.sendProcessingTime");
@@ -8557,6 +8557,50 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
+         * Ready (queued) jobs as a fraction of pool capacity.
+         * >50% of pool capacity queued = overload indicator.
+         */
+        private double scoreReadyJobs() {
+            RateStat rs = _ctx.statManager().getRate("jobQueue.readyJobs");
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() < 3) return Double.NaN;
+            double avg = rate.getAverageValue();
+            if (avg <= 0) return 1.0;
+            // JobQueue pool capacity is JobQueue.POOL_SIZE = 4096
+            double ratio = avg / 4096.0;
+            // 0%→1.0, 25%→0.5, 50%→0.0
+            return clamp(1.0 - (ratio / 0.5));
+        }
+
+        /**
+         * Dropped jobs per interval — any dropped job is a severe overload signal.
+         */
+        private double scoreDroppedJobs() {
+            RateStat rs = _ctx.statManager().getRate("jobQueue.droppedJobs");
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() <= 0) return 1.0;
+            double count = rate.getLastEventCount();
+            // 0→1.0, 10→0.5, 50→0.0
+            return clamp(1.0 - (count / 50.0));
+        }
+
+        /**
+         * How long jobs wait in the queue before execution.
+         * 0ms→1.0, 500ms→0.5, 2000ms→0.0.
+         */
+        private double scoreJobWait() {
+            RateStat rs = _ctx.statManager().getRate("jobQueue.jobWait");
+            if (rs == null) return Double.NaN;
+            Rate rate = rs.getRate(STAT_PERIOD);
+            if (rate == null || rate.getLastEventCount() < 3) return Double.NaN;
+            double avg = rate.getAverageValue();
+            if (avg <= 0) return 1.0;
+            return clamp(1.0 - (avg / 2000.0));
+        }
+
+        /**
          * Build success rate from SystemVersion.getTunnelBuildSuccess()
          * (returns 0–100 from 10-minute build stats).
          * When firewalled, lower thresholds since inbound builds are rejected.
@@ -8686,8 +8730,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (rate == null || rate.getLastEventCount() < 3) return Double.NaN;
             double avg = rate.getAverageValue();
             if (avg <= 100) return 1.0;
-            // 100ms→1.0, 500ms→0.75, 5000ms→0.0
-            return clamp(1.0 - ((avg - 100) / 4900.0));
+            if (avg <= 1000) return 1.0 - 0.5 * (avg - 100) / 900;
+            return clamp(0.5 - 0.5 * (avg - 1000) / 4000);
         }
 
         /**
@@ -8758,42 +8802,64 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         Map<String, double[]> computeSubsystemScores() {
             Map<String, double[]> scores = new LinkedHashMap<String, double[]>();
 
-            // Router: job lag + memory
-            double memUsedPct = getStatValue("jobQueue.memoryUsedPercent");
+            // Router: job lag + ready jobs + dropped jobs + queue depth
+            double routerScore = Double.NaN;
+            double jl = scoreJobLag();
+            if (!Double.isNaN(jl)) routerScore = jl;
+            double rj = scoreReadyJobs();
+            if (!Double.isNaN(rj)) routerScore = Double.isNaN(routerScore) ? rj : Math.min(routerScore, rj);
+            double dj = scoreDroppedJobs();
+            if (!Double.isNaN(dj)) routerScore = Double.isNaN(routerScore) ? dj : Math.min(routerScore, dj);
+            double jw = scoreJobWait();
+            if (!Double.isNaN(jw)) routerScore = Double.isNaN(routerScore) ? jw : Math.min(routerScore, jw);
             scores.put(SUB_ROUTER, new double[] {
-                scoreJobLag(),
-                Double.isNaN(memUsedPct) ? Double.NaN : memUsedPct / 100.0
+                Double.isNaN(routerScore) ? 1.0 : routerScore
             });
 
-            // Tunnel: build success + pool health + deficit
+            // Tunnel: build success + pool health + deficit + build queue + ban hits
+            double tunnelScore = Math.min(Math.min(scoreBuildSuccess(), scorePoolAlive()), scorePoolDeficit());
+            double bq = scoreBuildQueue();
+            if (!Double.isNaN(bq)) tunnelScore = Math.min(tunnelScore, bq);
+            double bh = scoreBanHit();
+            if (!Double.isNaN(bh)) tunnelScore = Math.min(tunnelScore, bh);
             scores.put(SUB_TUNNEL, new double[] {
-                Math.min(Math.min(scoreBuildSuccess(), scorePoolAlive()), scorePoolDeficit())
+                tunnelScore
             });
 
-            // Transport: latency + send failure rate
+            // Transit: participating throttle reject ratio + utilization
+            scores.put(SUB_TRANSIT, new double[] {
+                scoreTransit()
+            });
+
+            // Transport: latency + send failure rate + send pool pressure + RTO
             double latency = scoreLatency();
             double sendFail = scoreSendFailure();
+            double transportScore = Math.min(latency, sendFail);
+            double sp = scoreSendPool();
+            if (!Double.isNaN(sp)) transportScore = Math.min(transportScore, sp);
+            double rto = scoreAvgRTO();
+            if (!Double.isNaN(rto)) transportScore = Math.min(transportScore, rto);
             scores.put(SUB_TRANSPORT, new double[] {
-                Math.min(latency, sendFail),
+                transportScore,
                 latency,
                 sendFail
             });
 
-            // NetDB: lookup success rate
+            // NetDB: lookup success rate + drops + flood throttle + ack time
             scores.put(SUB_NETDB, new double[] {
-                scoreNetDbLookup()
+                scoreNetDbHealth()
             });
 
             // Streaming: multi-signal score (success rate + RTT + rtx + reset)
             double streamScore = scoreStreaming();
             scores.put(SUB_STREAMING, new double[] { streamScore });
 
-            // I2CP: queue utilization
+            // I2CP: queue utilization + client drops
             scores.put(SUB_I2CP, new double[] {
-                scoreI2cpQueue()
+                scoreI2cpHealth()
             });
 
-            // Peers: active profiles vs capacity
+            // Peers: fast/highCap counts + unreachable ratio + active ratio
             scores.put(SUB_PEER, new double[] {
                 scorePeerHealth()
             });
@@ -8811,60 +8877,126 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return scores;
         }
 
-        /**
-         * NetDB health: known peer count.
-         * 500+ peers = healthy, below that linearly degraded to 0 at 0 peers.
-         * Penalized by netDb.replyTimeout (peers not responding to our sends).
-         */
-        private double scoreNetDbLookup() {
+        private double scoreTransit() {
+            double accepts = getEventCount("tunnel.throttleParticipatingAccept");
+            double rejects = getEventCount("tunnel.throttleParticipatingReject");
+            double total = accepts + rejects;
+            double rejectScore = 1.0;
+            if (total >= 10) {
+                double rejectRate = rejects / total;
+                rejectScore = clamp(1.0 - (rejectRate / 0.6));
+            }
+
+            double bwQueue = getStatValue("bwLimiter.participatingBandwidthQueue");
+            double bwScore = 1.0;
+            if (!Double.isNaN(bwQueue) && bwQueue > 0) {
+                bwScore = clamp(1.0 - (bwQueue / 200000.0));
+            }
+
+            double activePeers = getStatValue("router.activePeers");
+            double transitUsed = getStatValue("tunnel.dispatchParticipant");
+            double utilScore = 1.0;
+            if (!Double.isNaN(activePeers) && !Double.isNaN(transitUsed)) {
+                double ratio = transitUsed / Math.max(1, activePeers);
+                utilScore = clamp(1.0 - (ratio / 80.0));
+            }
+
+            return Math.min(Math.min(rejectScore, bwScore), utilScore);
+        }
+
+        private double scoreBuildQueue() {
+            double qs = getStatValue("tunnel.buildHandler.queueSize");
+            if (Double.isNaN(qs) || qs <= 0) return Double.NaN;
+            return clamp(1.0 - (qs / 200.0));
+        }
+
+        private double scoreBanHit() {
+            double hits = getEventCount("tunnel.buildBanHit");
+            if (hits <= 0) return Double.NaN;
+            return clamp(1.0 - (hits / 20.0));
+        }
+
+        private double scoreSendPool() {
+            double util = getStatValue("ntcp.sendPool.utilization");
+            if (Double.isNaN(util) || util <= 0) return Double.NaN;
+            return clamp(1.0 - (util / 0.8));
+        }
+
+        private double scoreAvgRTO() {
+            double rto = getStatValue("udp.avgRTO");
+            if (Double.isNaN(rto) || rto <= 0) return Double.NaN;
+            if (rto <= 500) return 1.0;
+            return clamp(1.0 - ((rto - 500) / 4500.0));
+        }
+
+        private double scoreNetDbHealth() {
             double known = getStatValue("router.knownPeers");
-            if (!Double.isNaN(known) && known >= 0) {
-                double score = clamp(known / 500.0);
-                // Reply timeouts indicate peer unresponsiveness — penalize
-                double timeouts = getLifetimeEventCount("netDb.replyTimeout");
-                if (timeouts > 50) {
-                    score *= 0.8;
-                }
-                return score;
+            double knownScore = !Double.isNaN(known) && known >= 0 ? clamp(known / 500.0) : Double.NaN;
+
+            double drops = getEventCount("netDb.lookupsDropped");
+            double dropScore = drops > 0 ? clamp(1.0 - (drops / 100.0)) : Double.NaN;
+
+            double flood = getEventCount("netDb.floodThrottled");
+            double floodScore = flood > 0 ? clamp(1.0 - (flood / 30.0)) : Double.NaN;
+
+            double ack = getStatValue("netDb.ackTime");
+            double ackScore = !Double.isNaN(ack) && ack > 0 ? clamp(1.0 - (ack / 10000.0)) : Double.NaN;
+
+            double best = Double.NaN;
+            for (double s : new double[]{knownScore, dropScore, floodScore, ackScore}) {
+                if (!Double.isNaN(s)) best = Double.isNaN(best) ? s : Math.min(best, s);
             }
-            return Double.NaN;
+            return best;
         }
 
-        /**
-         * I2CP internal queue utilization.
-         * Empty queue = 1.0, >80% capacity = 0.0
-         * No I2CP traffic in the period is healthy (idle).
-         * Cross-refs: i2ptunnel.serverHandler.queueDepth (server-side backlog).
-         */
-        private double scoreI2cpQueue() {
-            double used = getStatValue("i2cp.internalQueueSize");
-            if (Double.isNaN(used)) return 1.0;
-            if (used <= 0) return 1.0;
-            // used is the average queue size; capacity is ~65536 (internal default)
-            double ratio = used / 65536.0;
-            double score = clamp(1.0 - (ratio / 0.8));
-            // Server handler backlog indicates client-side bottleneck
+        private double scoreI2cpHealth() {
             double handlerDepth = getStatValue("i2ptunnel.serverHandler.queueDepth");
-            if (!Double.isNaN(handlerDepth) && handlerDepth > 50) {
-                score *= 0.7;
+            double handlerScore = Double.NaN;
+            if (!Double.isNaN(handlerDepth) && handlerDepth > 0) {
+                handlerScore = clamp(1.0 - (handlerDepth / 500.0));
             }
-            return score;
+
+            double dropped = getEventCount("client.sendDropped");
+            double dropScore = Double.NaN;
+            if (dropped > 0) {
+                dropScore = clamp(1.0 - (dropped / 20.0));
+            }
+
+            double best = Double.NaN;
+            for (double s : new double[]{handlerScore, dropScore}) {
+                if (!Double.isNaN(s)) best = Double.isNaN(best) ? s : Math.min(best, s);
+            }
+            return Double.isNaN(best) ? 1.0 : best;
         }
 
-        /**
-         * Peer health: fast and high-capacity peer counts relative to their minimums.
-         * Takes the minimum of both ratios so the ring shows the more-starved tier.
-         * Returns NaN when peer profiling data unavailable.
-         */
         private double scorePeerHealth() {
             double fast = getStatValue("peer.fastPeerCount");
             double highCap = getStatValue("peer.highCapPeerCount");
             if (Double.isNaN(fast) || Double.isNaN(highCap)) return Double.NaN;
             int minFast = ProfileOrganizer.getDefaultMinFastPeers();
             int minHighCap = ProfileOrganizer.getMinHighCapacityPeers();
-            double fastScore = minFast > 0 ? clamp(fast / minFast) : 1.0;
-            double highCapScore = minHighCap > 0 ? clamp(highCap / minHighCap) : 1.0;
-            return Math.min(fastScore, highCapScore);
+            double fastScore = minFast > 0 ? clamp(fast / (double) minFast) : 1.0;
+            double highCapScore = minHighCap > 0 ? clamp(highCap / (double) minHighCap) : 1.0;
+
+            double unReach = getStatValue("router.unreachablePeers");
+            double known = getStatValue("router.knownPeers");
+            double reachScore = Double.NaN;
+            if (!Double.isNaN(unReach) && !Double.isNaN(known) && known > 0) {
+                double reachableRatio = Math.max(0.0, 1.0 - (unReach / known));
+                reachScore = clamp(reachableRatio / 0.5);
+            }
+
+            double active = getStatValue("router.activePeers");
+            double activeScore = Double.NaN;
+            if (!Double.isNaN(active) && !Double.isNaN(known) && known > 0) {
+                double activeRatio = active / known;
+                activeScore = clamp(activeRatio / 0.3);
+            }
+
+            double best = Math.min(fastScore, highCapScore);
+            if (!Double.isNaN(reachScore)) best = Math.min(best, reachScore);
+            if (!Double.isNaN(activeScore)) best = Math.min(best, activeScore);
+            return best;
         }
 
         /**
@@ -8886,12 +9018,22 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         private double scoreCongestion() {
             double congEvents = getEventCount("udp.congestionOccurred");
             double confirmedSends = getEventCount("udp.sendConfirmTime");
-            if (confirmedSends < 100) return Double.NaN;
-            // Congestion events are counted against the sends that could have caused
-            // them, so cap the ratio at 1.0 for degenerate short-window bursts.
-            double congRatio = Math.min(1.0, congEvents / (confirmedSends + congEvents));
-            // 5% congestion → 1.0, 25% → 0.0
-            return clamp(1.0 - ((congRatio - 0.05) / 0.20));
+            double effectiveSends = Math.max(100, confirmedSends);
+            double congRatio = Math.min(1.0, congEvents / (effectiveSends + congEvents));
+            double congScore = clamp(1.0 - ((congRatio - 0.05) / 0.20));
+
+            double retransEvents = getEventCount("udp.retransmitEvents");
+            double retransRatio = Math.min(1.0, retransEvents / (effectiveSends + retransEvents));
+            double retransScore = clamp(1.0 - ((retransRatio - 0.03) / 0.15));
+
+            double expiredEvents = getEventCount("udp.sendExpired");
+            double expiredRatio = Math.min(1.0, expiredEvents / (effectiveSends + expiredEvents));
+            double expiredScore = clamp(1.0 - ((expiredRatio - 0.005) / 0.05));
+
+            double drops = getEventCount("inNetPool.dropped");
+            double dropsScore = clamp(1.0 - (drops / 50.0));
+
+            return Math.min(Math.min(congScore, retransScore), Math.min(expiredScore, dropsScore));
         }
 
         /**
