@@ -235,10 +235,9 @@ public class JobQueue {
         if (job == null || !_alive) return;
 
         synchronized (_jobLock) {
-            // Avoid duplicates
-            if (_highPriorityJobs.contains(job)) {
-                _highPriorityJobs.remove(job);
-            }
+            // remove() is O(n) on a LinkedBlockingQueue but the queue is always small (< 100).
+            // Calling it unconditionally avoids a second linear scan for contains().
+            _highPriorityJobs.remove(job);
             if (job instanceof JobImpl) {((JobImpl) job).madeReady(_context.clock().now());}
             _highPriorityJobs.offer(job);
         }
