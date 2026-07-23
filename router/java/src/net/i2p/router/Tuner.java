@@ -1692,8 +1692,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                                   (!Double.isNaN(leaseFailedTimeHourly) && leaseFailedTimeHourly > 5000);
             boolean lookupsSlow = !Double.isNaN(leaseFoundTime) && leaseFoundTime > 5000;
 
-            // Base target: 3x observed send confirm time, with higher floor
-            int target = Math.max(15000, (int) (observed * 3));
+            // Base target: 3x observed send confirm time, with higher floor.
+            // If no RTT data, hold at the floor — secondary signals below will
+            // raise it if lookups are failing.
+            int target;
+            if (Double.isNaN(observed)) {
+                target = 15000;
+            } else {
+                target = Math.max(15000, (int) (observed * 3));
+            }
 
             // LeaseSet lookups are failing — ensure timeout covers lookup + delivery
             if (leaseFailed) {
@@ -1766,7 +1773,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 5000;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 5000;
 
-            int target = Math.max(1500, (int) (observed * 4));
+            int target;
+            if (Double.isNaN(observed)) {
+                target = current;
+            } else {
+                target = Math.max(1500, (int) (observed * 4));
+            }
 
             if (current >= target * 0.5 && current <= target * 1.5 && !hasEstablishFailures)
                 return current;
@@ -1819,7 +1831,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean highRTT = !Double.isNaN(confirmTime) && confirmTime > 5000;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 5000;
 
-            int target = Math.max(1500, (int) (observed * 4));
+            int target;
+            if (Double.isNaN(observed)) {
+                target = current;
+            } else {
+                target = Math.max(1500, (int) (observed * 4));
+            }
 
             if (current >= target * 0.5 && current <= target * 1.5 && !hasEstablishFailures)
                 return current;
@@ -1883,6 +1900,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 if (current >= _max)
                     return current;
                 return clamp(current, _max, _step);
+            }
+
+            if (Double.isNaN(observed)) {
+                return current;
             }
 
             double worstObserved = observed;
@@ -2804,7 +2825,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean connectsFailing = !Double.isNaN(connectFailed) && connectFailed > 2;
 
             // Target: 2x RTT as baseline (standard TCP-like behavior)
-            int target = Math.max(2000, Math.min(_max, (int) (observed * 2)));
+            int target;
+            if (Double.isNaN(observed)) {
+                target = current;
+            } else {
+                target = Math.max(2000, Math.min(_max, (int) (observed * 2)));
+            }
 
             // Connect failures = raise initial RTO (handshake needs more patience)
             if (connectsFailing && !congested)
@@ -5557,7 +5583,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("netdb.searchLimit", "NetDB peers per search",
                   SUB_NETDB,
 
-                  8, 20, 1, "transport.sendProcessingTime", _context);
+                   8, 24, 1, "transport.sendProcessingTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -5678,7 +5704,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("netdb.singleSearchTime", "NetDB search timeout (ms)",
                   SUB_NETDB,
 
-                  500, 5000, 250, "transport.sendProcessingTime", _context);
+                  1000, 6000, 250, "transport.sendProcessingTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -5686,7 +5712,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected int getRuntimeValue() {
-            return _context.getProperty("netdb.singleSearchTime", 3000);
+            return _context.getProperty("netdb.singleSearchTime", 6000);
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -5772,7 +5798,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("MAX_LS_LOOKUP_TIME", "LeaseSet lookup timeout (ms)",
                   SUB_NETDB,
 
-                  3000, 30000, 1000, "client.leaseSetFoundRemoteTime", _context);
+                  3000, 15000, 1000, "client.leaseSetFoundRemoteTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -5820,7 +5846,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 _context.jobQueue().requestJobRunners(2, "ls-lookup", 30_000);
             }
 
-            int target = Math.max(_min, (int) (observed * 4));
+            int target;
+            if (Double.isNaN(observed)) {
+                target = current;
+            } else {
+                target = Math.max(_min, (int) (observed * 4));
+            }
 
             // Grow toward the ceiling when the cap is truncating otherwise-viable
             // searches — successTime alone can't see this (only fast wins count).
@@ -5912,7 +5943,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 _context.jobQueue().requestJobRunners(2, "ri-lookup", 30_000);
             }
 
-            int target = Math.max(_min, (int) (observed * 6));
+            int target;
+            if (Double.isNaN(observed)) {
+                target = current;
+            } else {
+                target = Math.max(_min, (int) (observed * 6));
+            }
 
             // Grow toward the ceiling when the cap is truncating searches or
             // when deferred lookups are failing en masse (timeout too short).

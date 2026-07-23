@@ -531,15 +531,22 @@ public class IterativeSearchJob extends FloodSearchJob {
                 // garlic encrypt to dest SKM
                 if (previouslyTried <= 0) {replyTunnel = tm.selectInboundTunnel(_fromLocalDest, peer);}
                 else {replyTunnel = tm.selectInboundTunnel(_fromLocalDest);}
-                isClientReplyTunnel = replyTunnel != null;
-                if (!isClientReplyTunnel) {
-                    // sending reply down expl. tunnel gets the LS stored in the
-                    // main netdb where the client can't find it
+                if (replyTunnel == null) {
+                    // Fallback to exploratory inbound tunnel when client has none.
+                    // The reply LS lands in the main netdb, but a stored copy is
+                    // better than failing — the client can re-fetch via exploratory.
+                    if (previouslyTried <= 0) {replyTunnel = tm.selectInboundExploratoryTunnel(peer);}
+                    else {replyTunnel = tm.selectInboundTunnel();}
+                    isClientReplyTunnel = false;
+                } else {
+                    isClientReplyTunnel = true;
+                }
+                if (replyTunnel == null) {
                    if (_log.shouldWarn())
                        _log.warn(getJobId() + ": ISJ from " + _facade + " for " +
                                  (_isLease ? "LS " : "RI ") +
                                   _key + " to " + peer +
-                                  " failed, no IB client tunnel to receive reply");
+                                  " failed, no IB tunnel (client or exploratory) to receive reply");
                     failed();
                     return;
                 }
