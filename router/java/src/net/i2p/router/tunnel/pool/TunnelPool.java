@@ -109,6 +109,15 @@ public class TunnelPool {
      */
     private final AtomicBoolean _ensuringTunnels = new AtomicBoolean(false);
 
+    /**
+     *  Last time ensureSufficientTunnels() started a batch of builds.
+     *  Prevents build storms when concurrent events (prune, expire, removal)
+     *  all trigger ensureSufficientTunnels() within milliseconds.  Builds take
+     *  10-40s; starting duplicate batches within 5s wastes capacity and fills
+     *  the pool with UNTESTED tunnels that block the addTunnel cap.
+     */
+    private volatile long _lastDeficitBuildTime;
+
     /** Default early expiration time for pruned tunnels (30 seconds) */
     static final long DEFAULT_PRUNE_EARLY_EXPIRY = 120L * 1000;
     private static final String PROP_PRUNE_EARLY_EXPIRY = "router.pruneEarlyExpiryDelay";
@@ -923,9 +932,11 @@ public class TunnelPool {
     }
 
     /**
-     *  @return the number of GOOD (tested+passed, non-failed, not expired)
-     *          tunnels in the pool.  Excludes untested, testing, failing, and
-     *          failed tunnels.  Suitable for LeaseSet publication and UI
+     *  @return the number of GOOD and TESTING (non-failed, not expired)
+     *          tunnels in the pool.  Excludes untested, failing, and
+     *          failed tunnels.  Includes TESTING tunnels so the pool
+     *          doesn't build unnecessarily while tunnels await test
+     *          results.  Suitable for LeaseSet publication and UI
      *          "ready" indicators.
      *  @since 0.9.69+
      */
@@ -941,7 +952,8 @@ public class TunnelPool {
             for (int i = 0; i < _tunnels.size(); i++) {
                 TunnelInfo info = _tunnels.get(i);
                 if (info.getTunnelFailed() ||
-                    (!isPingPool && info.getTestStatus() != TunnelTestStatus.GOOD) ||
+                    (!isPingPool && info.getTestStatus() != TunnelTestStatus.GOOD &&
+                     info.getTestStatus() != TunnelTestStatus.TESTING) ||
                     info.getConsecutiveFailures() > 1) {
                     continue;
                 }
@@ -1372,15 +1384,42 @@ public class TunnelPool {
                 }
                 int maxUsable = Math.max(target + 2, 2);
                 if (usable >= maxUsable) {
-                    if (_log.shouldWarn()) {
-                        _log.warn(toString() + " -> Pool at capacity (" + usable +
-                                  " >= max " + maxUsable + ", target=" + target + ") \n* " + info);
+                    // At capacity — try replacing a non-GOOD tunnel instead of
+                    // dropping a freshly-built tunnel.  UNKNOWN/TESTING/UNTESTED
+                    // tunnels block the cap but may never pass testing; replacing
+                    // one with a newly-built tunnel is always a net improvement.
+                    // For server pools, keep FAILING tunnels (published in LS).
+                    TunnelInfo replacee = null;
+                    boolean isServerPool = _settings.isInbound() && !_settings.isExploratory();
+                    for (TunnelInfo t : _tunnels) {
+                        TunnelTestStatus ts = t.getTestStatus();
+                        if (ts == TunnelTestStatus.GOOD) {continue;}
+                        if (isServerPool && ts == TunnelTestStatus.FAILING) {continue;}
+                        replacee = t;
+                        break;
                     }
-                    return;
+                    if (replacee != null) {
+                        _tunnels.remove(replacee);
+                        _tunnels.add(info);
+                        _recentlyAddedTunnels.put(gatewayId, now);
+                        if (_log.shouldWarn()) {
+                            _log.warn(toString() + " -> Replaced non-GOOD tunnel at cap (" +
+                                      usable + " >= max " + maxUsable + ", target=" + target +
+                                      ") \n* removed: " + replacee.getTestStatus() +
+                                      "\n* added: " + info);
+                        }
+                    } else {
+                        if (_log.shouldWarn()) {
+                            _log.warn(toString() + " -> Pool at capacity, all tunnels GOOD (" +
+                                      usable + " >= max " + maxUsable + ", target=" + target +
+                                      ") \n* " + info);
+                        }
+                        return;
+                    }
+                } else {
+                    _tunnels.add(info);
+                    _recentlyAddedTunnels.put(gatewayId, now);
                 }
-                _tunnels.add(info);
-                // Track this tunnel ID as recently added
-                _recentlyAddedTunnels.put(gatewayId, now);
                 if (_settings.isInbound() && !_settings.isExploratory()) {ls = locked_buildNewLeaseSet();}
             }
         } finally {_tunnelsLock.unlock();}
@@ -2340,12 +2379,21 @@ public class TunnelPool {
         // Use base target for reserve, NOT effectiveTarget — dynamic scaling
         // must not inflate the LS fallback reserve or pools full of broken
         // tunnels can never recover (reserve = effectiveTarget - 0 = huge).
-        int reserve = Math.max(target - goodCount, 0);
-        // When pool has zero good tunnels, cap reserve aggressively —
-        // keeping broken tunnels as LS fallback is counterproductive
-        // when there's nothing good to fall back to.
-        if (goodCount == 0) {
-            reserve = Math.min(reserve, 1);
+        int reserve;
+        // Non-publishing pools (client outbound) don't have a LeaseSet to
+        // maintain — keeping dead tunnels as LS fallback is pointless and
+        // just inflates the pool size, blocking the addTunnel cap and new
+        // tunnel replacements.  Prune all non-GOOD tunnels aggressively.
+        if (publishesLeaseSet()) {
+            reserve = Math.max(target - goodCount, 0);
+            // When pool has zero good tunnels, cap reserve aggressively —
+            // keeping broken tunnels as LS fallback is counterproductive
+            // when there's nothing good to fall back to.
+            if (goodCount == 0) {
+                reserve = Math.min(reserve, 1);
+            }
+        } else {
+            reserve = 0;
         }
         if (reserve > 0) {
             // Only count low-failure non-zombie tunnels toward the reserve.
@@ -2740,6 +2788,20 @@ public class TunnelPool {
             return;
         }
 
+        // Dedup guard: prevent build storms when concurrent events (prune,
+        // expire, removal) all trigger ensureSufficientTunnels within ms.
+        // Builds take 10-40s; starting duplicate batches within 5s wastes
+        // capacity and fills the pool with UNTESTED tunnels that block the
+        // addTunnel cap.  Bypass when safeActive is 0 (total collapse) —
+        // those emergency builds must proceed immediately.
+        if (inProgress > 0 && safeActive > 0 && now - _lastDeficitBuildTime < 5000) {
+            if (_log.shouldDebug()) {
+                _log.debug(toString() + " -> Skipping build: last deficit build " +
+                          (now - _lastDeficitBuildTime) + "ms ago, inProgress=" + inProgress);
+            }
+            return;
+        }
+
         // Count UNTESTED tunnels — they're in the pool and just need time
         // to be tested.  Don't count them as deficit UNLESS the pool has
         // zero GOOD tunnels, in which case they're likely stuck failing
@@ -2794,6 +2856,7 @@ public class TunnelPool {
                                   " failing, building " + needed +
                                   " replacements (deficit=" + deficit + ", ip=" + inProgress + ")" + boost);
                     }
+                    _lastDeficitBuildTime = now;
                     for (int i = 0; i < needed; i++) {
                         PooledTunnelCreatorConfig cfg = configureNewTunnel(false);
                         if (cfg != null) {
