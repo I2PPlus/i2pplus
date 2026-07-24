@@ -146,7 +146,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         // (SSU acks may be delayed so it is much more than just RTT... and the delay may
         // counterintuitively be more when there is low traffic)
         // Change the stat or pick a better stat.
-        int maxTunnels = _context.getProperty(PROP_MAX_TUNNELS, _defaultMaxTunnels);
+        int maxTunnels = getMaxTunnels();
         RateStat rs = _context.statManager().getRate("transport.sendProcessingTime");
         Rate r = null;
         if (rs != null) {r = rs.getRate(RateConstants.ONE_MINUTE);}
@@ -155,7 +155,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         if (r != null) {
             r.computeAverages(ra,false);
 
-            int maxProcessingTime = _context.getProperty(PROP_MAX_PROCESSINGTIME, DEFAULT_MAX_PROCESSINGTIME);
+            int maxProcessingTime = getMaxProcessingTime();
 
             // Gate on the smoothed 1-minute average only. The instantaneous values
             // (getCurrent()/getLast()) spike on single slow messages (GC pauses, netdb
@@ -439,13 +439,23 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     /** Don't ever probabalistically throttle tunnels if we have less than this many */
     private int getMinThrottleTunnels() {
-        int configured = _context.getProperty(PROP_MIN_THROTTLE_TUNNELS, -1);
-        if (configured > 0) {
-            return configured;
+        String p = _context.getProperty(PROP_MIN_THROTTLE_TUNNELS);
+        if (p != _cachedMinThrottleTunnelsProp) {
+            _cachedMinThrottleTunnelsProp = p;
+            if (p == null) {
+                _cachedMinThrottleTunnels = -1;
+            } else {
+                try {
+                    _cachedMinThrottleTunnels = Integer.parseInt(p);
+                } catch (NumberFormatException nfe) {
+                    _cachedMinThrottleTunnels = -1;
+                }
+            }
         }
-        // Calculate default on first access
-        int maxTunnels = _context.getProperty(PROP_MAX_TUNNELS, _defaultMaxTunnels);
-        return (maxTunnels / 3) * 2;
+        if (_cachedMinThrottleTunnels > 0) {
+            return _cachedMinThrottleTunnels;
+        }
+        return (getMaxTunnels() / 3) * 2;
     }
 
     private static final String PROP_TUNNEL_GROWTH_FACTOR = "router.tunnelGrowthFactor";
@@ -457,6 +467,48 @@ public class RouterThrottleImpl implements RouterThrottle {
     private double _cachedGrowthFactor = DEFAULT_TUNNEL_GROWTH_FACTOR;
     private String _cachedTestTimeGrowthFactorProp;
     private double _cachedTestTimeGrowthFactor = DEFAULT_TUNNEL_TEST_TIME_GROWTH_FACTOR;
+    private String _cachedMaxTunnelsProp;
+    private int _cachedMaxTunnels = _defaultMaxTunnels;
+    private String _cachedMaxProcessingTimeProp;
+    private int _cachedMaxProcessingTime = DEFAULT_MAX_PROCESSINGTIME;
+    private String _cachedMinThrottleTunnelsProp;
+    private int _cachedMinThrottleTunnels = -1;
+
+    private int getMaxTunnels() {
+        String p = _context.getProperty(PROP_MAX_TUNNELS);
+        if (p == _cachedMaxTunnelsProp) {
+            return _cachedMaxTunnels;
+        }
+        _cachedMaxTunnelsProp = p;
+        if (p == null) {
+            _cachedMaxTunnels = _defaultMaxTunnels;
+        } else {
+            try {
+                _cachedMaxTunnels = Integer.parseInt(p);
+            } catch (NumberFormatException nfe) {
+                _cachedMaxTunnels = _defaultMaxTunnels;
+            }
+        }
+        return _cachedMaxTunnels;
+    }
+
+    private int getMaxProcessingTime() {
+        String p = _context.getProperty(PROP_MAX_PROCESSINGTIME);
+        if (p == _cachedMaxProcessingTimeProp) {
+            return _cachedMaxProcessingTime;
+        }
+        _cachedMaxProcessingTimeProp = p;
+        if (p == null) {
+            _cachedMaxProcessingTime = DEFAULT_MAX_PROCESSINGTIME;
+        } else {
+            try {
+                _cachedMaxProcessingTime = Integer.parseInt(p);
+            } catch (NumberFormatException nfe) {
+                _cachedMaxProcessingTime = DEFAULT_MAX_PROCESSINGTIME;
+            }
+        }
+        return _cachedMaxProcessingTime;
+    }
 
     private double getTunnelGrowthFactor() {
         String p = _context.getProperty(PROP_TUNNEL_GROWTH_FACTOR);
@@ -538,7 +590,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     /** @since 0.8.12 */
     public void cancelShutdownStatus() {
         // try hard to guess the state, before we actually get a request
-        int maxTunnels = _context.getProperty(PROP_MAX_TUNNELS, _defaultMaxTunnels);
+        int maxTunnels = getMaxTunnels();
         RouterInfo ri = _context.router().getRouterInfo();
         if (maxTunnels > 0 && !_context.router().isHidden() && ri != null && !ri.getBandwidthTier().equals("K")) {
             setTunnelStatus("[accepting]" + _x("Accepting tunnel requests"));

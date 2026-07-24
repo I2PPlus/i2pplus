@@ -744,7 +744,6 @@ public class TunnelPool {
                Rate sr = s.getRate(RateConstants.TEN_MINUTES);
                if (er != null && rr != null && sr != null) {
                     RateAverages ra = RateAverages.getTemp();
-                    try {
                     long ec = er.computeAverages(ra, false).getTotalEventCount();
                     long rc = rr.computeAverages(ra, false).getTotalEventCount();
                     long sc = sr.computeAverages(ra, false).getTotalEventCount();
@@ -752,7 +751,6 @@ public class TunnelPool {
                     if (tot >= getBuildTriesQuantityOverride(_context)) {
                         if (1000 * sc / tot <= 1000 / getBuildTriesQuantityOverride(_context)) {rv--;}
                     }
-                    } finally { RateAverages.release(); }
                 }
             }
         }
@@ -803,7 +801,6 @@ public class TunnelPool {
                 Rate sr = s.getRate(RateConstants.TEN_MINUTES);
                 if (er != null && rr != null && sr != null) {
                     RateAverages ra = RateAverages.getTemp();
-                    try {
                     long ec = er.computeAverages(ra, false).getTotalEventCount();
                     long rc = rr.computeAverages(ra, false).getTotalEventCount();
                     long sc = sr.computeAverages(ra, false).getTotalEventCount();
@@ -820,7 +817,6 @@ public class TunnelPool {
                             return;
                         }
                     }
-                } finally { RateAverages.release(); }
                 }
             }
         }
