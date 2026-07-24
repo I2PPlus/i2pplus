@@ -32,7 +32,6 @@ import java.nio.charset.StandardCharsets;
  * Supports command pipelining, attachments, and size limits optimized for I2P.
  * Includes base64 size calculations and 8BITMIME support for efficient I2P mail delivery.
  *
- * @author susi
  */
 public class SMTPClient {
     /**
@@ -58,6 +57,7 @@ public class SMTPClient {
     private static final Encoding base64;
     static {base64 = EncodingFactory.getEncoding("base64");}
 
+    /** Default constructor */
     public SMTPClient() {
         error = "";
         lastResponse = "";

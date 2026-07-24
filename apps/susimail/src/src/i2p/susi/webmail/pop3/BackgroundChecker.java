@@ -77,10 +77,12 @@ class BackgroundChecker {
 
     private class Checker extends SimpleTimer2.TimedEvent {
 
+        /** Schedule first check */
         public Checker() {
             super(I2PAppContext.getGlobalContext().simpleTimer2(), getCheckTime());
         }
 
+        @Override
         public void timeReached() {
         if (isDead) {return;}
         if (!mailbox.isConnected() && !isChecking) {
@@ -102,7 +104,9 @@ class BackgroundChecker {
     }
 
     private class Getter extends I2PAppThread {
+        /** Thread that runs the mail check */
         public Getter() {super("Susimail-Getter");}
+            @Override
             public void run() {
             try {
                 if (mailbox.blockingConnectToServer()) {

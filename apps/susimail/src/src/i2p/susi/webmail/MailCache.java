@@ -30,7 +30,6 @@ import net.i2p.util.Log;
  * Caches email data for each folder with POP3 mailbox integration.
  * Only DIR_FOLDER has a non-null POP3MailBox.
  *
- * @author user
  */
 class MailCache {
 
@@ -241,10 +240,14 @@ class MailCache {
 	private class LoadMailRunner implements Runnable {
 		private final NewMailListener _nml;
 
+		/**
+		 *  @param nml listener to notify after load
+		 */
 		public LoadMailRunner(NewMailListener nml) {
 			_nml = nml;
 		}
 
+		@Override
 		public void run() {
 			boolean result = false;
 			try {
@@ -584,12 +587,18 @@ class MailCache {
 		private boolean success;
 		public final Buffer buf;
 
+		/**
+		 *  @param m the mail to fetch
+		 *  @param hOnly if true, fetch headers only
+		 *  @param buffer destination buffer
+		 */
 		public POP3Request(Mail m, boolean hOnly, Buffer buffer) {
 			mail = m;
 			headerOnly = hOnly;
 			buf = buffer;
 		}
 
+		/** @return the UIDL */
 		public String getUIDL() {
 			return mail.uidl;
 		}
@@ -599,7 +608,8 @@ class MailCache {
 			this.headerOnly = headerOnly;
 		}
 
-		public synchronized boolean getHeaderOnly() {
+		/** @return true if headers-only */
+	public synchronized boolean getHeaderOnly() {
 			return headerOnly;
 		}
 

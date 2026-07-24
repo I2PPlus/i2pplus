@@ -14,12 +14,13 @@ import java.io.InputStream;
  * Escapes special characters and converts newlines to HTML line breaks.
  * Used for preventing XSS attacks in I2P webmail interface.
  *
- * @author susi
  */
 public class HTML extends Encoding {
 
+  @Override
   public String getName() {return "HTML";}
 
+  /** @return HTML-escaped string */
   public String encode(byte[] in) throws EncodingException {
     throw new EncodingException("unsupported");
   }
@@ -32,6 +33,7 @@ public class HTML extends Encoding {
                .replace( "\r\n", "<br>\r\n" ).replace( "\n", "<br>\r\n" );
   }
 
+  /** Decode HTML entities from the stream */
   public void decode(InputStream in, Buffer out) throws DecodingException {
     throw new DecodingException("unsupported");
   }

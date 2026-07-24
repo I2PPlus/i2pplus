@@ -21,10 +21,10 @@ import java.io.Writer;
 
 /**
  * Base64 encoding implementation.
- * @author susi
  */
 public class Base64 extends Encoding {
 
+	@Override
 	public String getName() {
 		return "base64";
 	}

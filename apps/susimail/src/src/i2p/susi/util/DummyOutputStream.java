@@ -9,6 +9,7 @@ import java.io.OutputStream;
  */
 public class DummyOutputStream extends OutputStream {
 
+    /** Create a stream that discards all output */
     public DummyOutputStream() {
         super();
     }

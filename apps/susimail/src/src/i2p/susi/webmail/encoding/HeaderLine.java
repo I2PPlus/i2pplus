@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Locale;
 import net.i2p.data.DataHelper;
+import net.i2p.util.HexDump;
 
 import java.nio.charset.StandardCharsets;
 /**
@@ -20,11 +21,11 @@ import java.nio.charset.StandardCharsets;
  *  https://jeffreystedfast.blogspot.com/2013/09/time-for-rant-on-mime-parsers.html
  *  https://jeffreystedfast.blogspot.com/2013/08/why-decoding-rfc2047-encoded-headers-is.html
  *
- * @author susi
  */
 public class HeaderLine extends Encoding {
 	public static final String NAME = "HEADERLINE";
 
+	@Override
 	public String getName() {
 		return NAME;
 	}
@@ -286,7 +287,7 @@ public class HeaderLine extends Encoding {
 								// Keep going and output what we got, if any
 								if (_log.shouldDebug()) {
 									_log.debug("q-w " + enc, eof);
-									_log.debug(net.i2p.util.HexDump.dump(encodedWord));
+									_log.debug(HexDump.dump(encodedWord));
 								}
 							}
 							tmp.writeComplete(true);

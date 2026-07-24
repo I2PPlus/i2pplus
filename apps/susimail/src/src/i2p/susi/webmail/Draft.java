@@ -25,6 +25,9 @@ class Draft extends Mail {
 	private static final String HDR_ATTACH = "X-I2P-Attachment: ";
 	public static final String HDR_BCC = "Bcc: ";
 
+	/**
+	 *  @param uidl unique ID for this draft
+	 */
 	public Draft(String uidl) {
 		super(uidl);
 		attachments = new ArrayList<>(4);

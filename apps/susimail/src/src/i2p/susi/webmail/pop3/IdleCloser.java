@@ -57,10 +57,12 @@ class IdleCloser {
     }
 
     private class Checker extends SimpleTimer2.TimedEvent {
+        /** Schedule first idle-close check */
         public Checker() {
             super(I2PAppContext.getGlobalContext().simpleTimer2(), getMaxIdle() + 5*1000);
         }
 
+        @Override
         public void timeReached() {
         if (isDead) {return;}
             if (!mailbox.isConnected()) {return;} // unsynchronized here, sync in thread only
@@ -81,8 +83,10 @@ class IdleCloser {
     }
 
     private class Closer extends I2PAppThread {
+        /** Thread that closes the connection */
         public Closer() {super("Susimail-Closer");}
 
+        @Override
         public void run() {
             try {
                 synchronized (mailbox.getLock()) {

@@ -8,7 +8,6 @@ import java.io.InputStream;
 
 /**
  * Represents an email attachment with metadata and file data.
- * @author user
  * @since public since 0.9.33, was package private
  */
 public class Attachment {

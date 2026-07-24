@@ -31,8 +31,7 @@ import net.i2p.util.SystemVersion;
 /**
 * Data structure representing a single email message for folder display and sorting.
 *
-* @author susi
-*/
+ */
 class Mail {
 
     private static final String unknown = "unknown";
@@ -74,6 +73,9 @@ class Mail {
     public boolean markForDeletion;
     private final Log _log;
 
+    /**
+     *  @param uidl unique ID for this mail
+     */
     public Mail(String uidl) {
         this.uidl = uidl;
         subject = "";
@@ -93,6 +95,7 @@ class Mail {
     */
     public synchronized Buffer getHeader() {return header;}
 
+    /** @param rb buffer containing header data */
     public synchronized void setHeader(Buffer rb) {
         try {setHeader(rb, rb.getInputStream(), true);}
         catch (IOException ioe) { // TODO...
@@ -127,6 +130,7 @@ class Mail {
         */
     public synchronized Buffer getBody() {return body;}
 
+    /** @param rb buffer containing body data */
     public synchronized void setBody(Buffer rb) {
         if (rb == null) {return;}
         // In the common case where we have the body, we only parse the headers once.
@@ -156,10 +160,13 @@ class Mail {
         }
     }
 
+    /** @return true if body is loaded */
     public synchronized boolean hasBody() {return body != null;}
 
+    /** @return the parsed MailPart, or null */
     public synchronized MailPart getPart() {return part;}
 
+    /** @return true if the body has been parsed into a MailPart */
     public synchronized boolean hasPart() {return part != null;}
 
     /**
@@ -167,17 +174,22 @@ class Mail {
     */
     public synchronized long getSize() {return size;}
 
+    /** @param size the message size */
     public synchronized void setSize(long size) {
         if (body != null) {return;}
         this.size = size;
     }
 
+    /** @return true if identified as spam */
     public synchronized boolean isSpam() {return isSpam;}
 
+    /** @return true if mail is new (unread) */
     public synchronized boolean isNew() {return isNew;}
 
+    /** @param isNew the new/unread flag */
     public synchronized void setNew(boolean isNew) {this.isNew = isNew;}
 
+    /** @return true if the content type suggests an attachment */
     public synchronized boolean hasAttachment() {
         // this isn't right but good enough to start
         // if part != null query parts instead?

@@ -67,6 +67,7 @@ import net.i2p.servlet.util.WriterOutputStream;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.RFC822Date;
+import net.i2p.util.RandomSource;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.Translate;
 
@@ -89,7 +90,7 @@ public class WebMail extends HttpServlet {
     private static final String myself = "/susimail/";
 
     /** @since 0.9.62+ */
-    private static final String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
+    private static final String cspNonce = Integer.toHexString(RandomSource.getInstance().nextInt());
 
     /*
      * form keys on login page
@@ -182,7 +183,9 @@ public class WebMail extends HttpServlet {
                                       '-' + SORT_ID, '-' + SORT_SENDER, '-' + SORT_SUBJECT, '-' +
                                       SORT_DATE, '-' + SORT_SIZE});
     static final String DIR_FOLDER = "cur"; // MailDir-like
+    /** Translated "Drafts" folder name */
     public static final String DIR_DRAFTS = _x("Drafts"); // MailDir-like
+    /** Translated "Sent" folder name */
     public static final String DIR_SENT = _x("Sent"); // MailDir-like
     private static final String DIR_TRASH = _x("Trash"); // MailDir-like
     private static final String DIR_SPAM = _x("Bulk Mail"); // MailDir-like
@@ -334,6 +337,7 @@ public class WebMail extends HttpServlet {
          *
          *  @since 0.9.13
          */
+        @Override
         public void foundNewMail(boolean yes) {
             if (!yes) {return;}
             MailCache mc = caches.get(DIR_FOLDER);
@@ -887,8 +891,13 @@ public class WebMail extends HttpServlet {
         private final SessionObject _so;
         private final MailCache _mc;
 
+        /**
+         *  @param so session state
+         *  @param mc mail cache
+         */
         public LoadWaiter(SessionObject so, MailCache mc) {_so = so; _mc = mc;}
 
+        @Override
         public void foundNewMail(boolean yes) {
             synchronized(_so) {
                 // Get through cache so we have the disk-only ones too
@@ -909,11 +918,16 @@ public class WebMail extends HttpServlet {
         private final SessionObject _so;
         private final POP3MailBox _mb;
 
+        /**
+         *  @param so session state
+         */
         public ConnectWaiter(SessionObject so) {_so = so; _mb = _so.mailbox;}
 
+        @Override
         /** run this way if already connected */
         public void run() {foundNewMail(true);}
 
+        @Override
         /** @param connected are we? */
         public void foundNewMail(boolean connected) {
             MailCache mc = null;
@@ -2964,6 +2978,7 @@ public class WebMail extends HttpServlet {
             recipients = recip; body = bod; attachments = att;
         }
 
+        @Override
         public void run() {
             Log log = sessionObject.log;
             if (log.shouldDebug()) log.debug("Attempting to send email...");

@@ -9,6 +9,7 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
+import net.i2p.util.Log;
 
 /**
  * Buffering decoder that outputs to a Writer.
@@ -18,6 +19,7 @@ import java.nio.charset.CoderResult;
  */
 public class DecodingOutputStream extends OutputStream {
 
+    private static final Log _log = new Log(DecodingOutputStream.class);
     private final Writer _out;
     private final ByteBuffer _bb;
     private final CharBuffer _cb;
@@ -90,8 +92,7 @@ public class DecodingOutputStream extends OutputStream {
         try {
             result = _dc.decode(_bb, _cb, endOfInput);
         } catch (IllegalStateException ise) {
-            System.out.println("Decoder error with endOfInput=" + endOfInput);
-            ise.printStackTrace();
+            _log.error("Decoder error with endOfInput=" + endOfInput, ise);
             result = null;
         }
         _bb.compact();

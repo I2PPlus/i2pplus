@@ -15,7 +15,6 @@ import net.i2p.util.OrderedProperties;
  * Static configuration manager.
  * Warning: Not suitable for multiple applications or prefixes.
  *
- * @author susi
  */
 public class Config {
 

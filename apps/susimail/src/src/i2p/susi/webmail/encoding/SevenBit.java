@@ -9,10 +9,10 @@ import net.i2p.data.DataHelper;
 
 /**
  * Decode only.
- * @author susi
  */
 public class SevenBit extends Encoding {
 
+	@Override
 	public String getName() {
 		return "7bit";
 	}

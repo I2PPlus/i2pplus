@@ -10,7 +10,6 @@ import net.i2p.data.DataHelper;
  * Read-only Buffer for constant data initialized from a byte array.
  * See MemoryBuffer for read/write support.
  *
- * @author susi
  */
 public class ReadBuffer implements Buffer {
 

@@ -5,7 +5,6 @@ import java.io.IOException;
 
 /**
  * Converted from Exception to IOException in 0.9.33
- * @author susi
  */
 public class EncodingException extends IOException {
 	/**

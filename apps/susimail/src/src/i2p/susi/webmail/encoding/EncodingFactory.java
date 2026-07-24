@@ -10,7 +10,6 @@ import net.i2p.util.Log;
 
 /**
  * Manager class to handle content transfer encodings.
- * @author susi
  */
 public class EncodingFactory {
 

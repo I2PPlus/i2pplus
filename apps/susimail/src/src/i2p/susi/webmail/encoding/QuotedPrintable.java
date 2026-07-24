@@ -12,10 +12,10 @@ import java.io.Writer;
 
 /**
  * ref: https://en.wikipedia.org/wiki/Quoted-printable
- * @author susi
  */
 public class QuotedPrintable extends Encoding {
 
+	@Override
 	public String getName() {
 		return "quoted-printable";
 	}

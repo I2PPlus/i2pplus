@@ -3,7 +3,6 @@ package i2p.susi.util;
 
 /**
  * Hex table utilities for byte-to-string conversion.
- * @author susi
  */
 public class HexTable {
     /**

@@ -33,7 +33,6 @@ import net.i2p.util.Log;
  * Supports standard POP3 commands, background checking, and delayed deletion.
  * Optimized for high-latency I2P connections with pipelining and idle timeout management.
  *
- * @author susi
  */
 public class POP3MailBox implements NewMailListener {
     private final String host;
@@ -476,8 +475,12 @@ public class POP3MailBox implements NewMailListener {
     private class ConnectRunner implements Runnable {
         private final NewMailListener _nml;
 
+        /**
+         *  @param nml listener to notify on connect
+         */
         public ConnectRunner(NewMailListener nml) {_nml = nml;}
 
+        @Override
         public void run() {
             boolean result = false;
             try {result = blockingConnectToServer();}
@@ -489,8 +492,12 @@ public class POP3MailBox implements NewMailListener {
     private class RecheckRunner implements Runnable {
         private final NewMailListener _nml;
 
+        /**
+         *  @param nml listener to notify on recheck
+         */
         public RecheckRunner(NewMailListener nml) {_nml = nml;}
 
+        @Override
         public void run() {
             boolean result = false;
             try { synchronized(synchronizer) {result = check();} }
@@ -1077,6 +1084,7 @@ public class POP3MailBox implements NewMailListener {
      *
      *  @since 0.9.13
      */
+    @Override
     public void foundNewMail(boolean yes) {
         NewMailListener  nml = newMailListener;
         if (nml != null) {nml.foundNewMail(yes);}
@@ -1218,7 +1226,9 @@ public class POP3MailBox implements NewMailListener {
      * Request for fetching email data with UIDL and header options.
      */
     public interface FetchRequest {
+        /** @return the UIDL */
         public String getUIDL();
+        /** @return true if headers-only */
         public boolean getHeaderOnly();
         /** @since 0.9.34 */
         public Buffer getBuffer();

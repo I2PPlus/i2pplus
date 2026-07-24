@@ -9,10 +9,10 @@ import net.i2p.data.DataHelper;
 
 /**
  * Decode only. See encode().
- * @author susi
  */
 public class EightBit extends Encoding {
 
+	@Override
 	public String getName() {
 		return "8bit";
 	}

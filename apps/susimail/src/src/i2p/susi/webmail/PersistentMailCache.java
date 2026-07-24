@@ -156,11 +156,17 @@ class PersistentMailCache {
         private final Queue<Mail> _out;
         private final boolean _isD;
 
+        /**
+         *  @param in queue of files to load
+         *  @param out queue to put loaded mails into
+         *  @param isDrafts whether these are drafts
+         */
         public Loader(Queue<File> in, Queue<Mail> out, boolean isDrafts) {
             _in = in; _out = out;
             _isD = isDrafts;
         }
 
+        @Override
         public void run() {
             File f;
             while ((f = _in.poll()) != null) {
@@ -278,8 +284,10 @@ class PersistentMailCache {
         return base;
     }
 
+    /** @return the header-only file for this UIDL */
     public File getHeaderFile(String uidl) {return getFile(uidl, HDR_SUFFIX);}
 
+    /** @return the full message file for this UIDL */
     public File getFullFile(String uidl) {return getFile(uidl, FULL_SUFFIX);}
 
     /**

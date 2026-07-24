@@ -54,13 +54,12 @@ class Sorters {
 
     /**
      * Sorts Mail objects by sender field.
-     *
-     * @author susi
      */
     public static class SenderSorter extends SorterBase {
 
         private final Comparator<Object> collator = Collator.getInstance();
 
+        /** @param mailCache the mail cache */
         public SenderSorter(MailCache mailCache) {super(mailCache);}
 
         protected int compare(Mail a, Mail b) {
@@ -79,6 +78,7 @@ class Sorters {
 
         private final Comparator<Object> collator = Collator.getInstance();
 
+        /** @param mailCache the mail cache */
         public ToSorter(MailCache mailCache) {super(mailCache);}
 
         protected int compare(Mail a, Mail b) {
@@ -99,7 +99,6 @@ class Sorters {
 
     /**
      * Sorts Mail objects by subject field.
-     * @author susi
      */
     public static class SubjectSorter extends SorterBase {
         // tagged in WebMail
@@ -107,6 +106,7 @@ class Sorters {
         private static final String xfwd = Messages.getString("Fwd:").toLowerCase(Locale.US);
         private final Comparator<Object> collator = Collator.getInstance();
 
+        /** @param mailCache the mail cache */
         public SubjectSorter(MailCache mailCache) {super(mailCache);}
 
         protected int compare(Mail a, Mail b) {
@@ -136,10 +136,10 @@ class Sorters {
 
     /**
      * Sorts Mail objects by date field.
-     * @author susi
      */
     public static class DateSorter extends SorterBase {
 
+        /** @param mailCache the mail cache */
         public DateSorter(MailCache mailCache) {super(mailCache);}
 
         protected int compare(Mail a, Mail b) {return scompare(a, b);}
@@ -156,10 +156,10 @@ class Sorters {
 
     /**
      * Sorts Mail objects by message size.
-     * @author susi
      */
     public static class SizeSorter extends SorterBase {
 
+        /** @param mailCache the mail cache */
         public SizeSorter(MailCache mailCache) {super(mailCache);}
 
         protected int compare(Mail a, Mail b) {
