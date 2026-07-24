@@ -153,7 +153,7 @@ public class RequestThrottler {
     private static final int BURST_THRESHOLD_MIN = 50; // Minimum burst threshold
     private static final int BURST_THRESHOLD_MAX = 200; // Maximum burst threshold
     private static final double BURST_THRESHOLD_PERCENT = 0.50; // 50% of 90s limit scaled to 10s window
-    private static final long BURST_OFFENSE_RESET = 60 * 60 * 1000L; // Reset after 1 hour clean
+    private static final long BURST_OFFENSE_RESET = 15 * 60 * 1000L; // Reset after 15 minutes
 
     private final BurstWindowCounter _burstCounter;
     private final Map<Hash, BurstOffenseRecord> _burstOffenses = new ConcurrentHashMap<>();
