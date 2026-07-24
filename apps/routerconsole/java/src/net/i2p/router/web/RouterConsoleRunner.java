@@ -675,7 +675,7 @@ public class RouterConsoleRunner implements RouterApp {
                         listenHosts.addAll(hosts);
                     }
                 } else {
-                    _log.error("Unable to create or access keystore for SSL: " + keyStore.getAbsolutePath());
+                    _log.warn("Unable to create or access keystore for SSL: " + keyStore.getAbsolutePath() + " — falling back to HTTP");
                 }
             }
 
@@ -882,8 +882,8 @@ public class RouterConsoleRunner implements RouterApp {
             KeyStoreUtil.logCertExpiration(ks, ksPW, 180*24*60*60*1000L);
             boolean rv = _context.getProperty(PROP_KEY_PASSWORD) != null;
             if (!rv)
-                _log.error("Router Console SSL error, must set " + PROP_KEY_PASSWORD + " in " +
-                                   (new File(_context.getConfigDir(), "router.config")).getAbsolutePath());
+                _log.warn("Router Console SSL key password (" + PROP_KEY_PASSWORD +
+                           ") not set — SSL unavailable, falling back to HTTP");
             return rv;
         }
         return createKeyStore(ks, altNames);
