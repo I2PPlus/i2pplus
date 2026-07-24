@@ -1315,6 +1315,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         if (_availabilityNotifier != null) {_availabilityNotifier.stopNotifying();}
         closeSocket();
         _subsessionMap.clear();
+        _tunnelStatusListeners.clear();
         if (_sessionListener != null) {_sessionListener.disconnected(this);}
     }
 

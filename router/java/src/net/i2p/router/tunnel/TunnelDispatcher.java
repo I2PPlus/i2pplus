@@ -263,17 +263,25 @@ public class TunnelDispatcher implements Service {
         }
 
         // Clean up _participants - remove participants with expired tunnels.
-        // NOTE: IB endpoints (added by joinInbound()) are in _participants but
-        // NOT in _participatingConfig.  We must NOT remove them when hopCfg is
-        // null — they are valid tunnel endpoints, not orphans.  Only remove
-        // entries whose HopConfig exists AND has expired.
+        // Middle participants are in both _participants and _participatingConfig.
+        // IB endpoints (joinInbound) are only in _participants — check via
+        // TunnelParticipant.getExpiration() to avoid leaking them on expiry.
         Iterator<Map.Entry<TunnelId, TunnelParticipant>> partit = _participants.entrySet().iterator();
         while (partit.hasNext()) {
             Map.Entry<TunnelId, TunnelParticipant> entry = partit.next();
             HopConfig hopCfg = _participatingConfig.get(entry.getKey());
-            if (hopCfg != null && hopCfg.getExpiration() < cutoff) {
-                partit.remove();
-                cleaned++;
+            if (hopCfg != null) {
+                if (hopCfg.getExpiration() < cutoff) {
+                    partit.remove();
+                    cleaned++;
+                }
+            } else {
+                TunnelParticipant tp = entry.getValue();
+                long tpExp = tp.getExpiration();
+                if (tpExp >= 0 && tpExp + TUNNEL_EXPIRY_FUDGE < cutoff) {
+                    partit.remove();
+                    cleaned++;
+                }
             }
         }
 

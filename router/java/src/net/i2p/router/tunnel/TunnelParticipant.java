@@ -228,6 +228,19 @@ class TunnelParticipant {
     }
 
     /**
+     * @return tunnel expiration time, or -1 if unknown
+     */
+    public long getExpiration() {
+        if (_inboundEndpointProcessor != null) {
+            return _inboundEndpointProcessor.getConfig().getExpiration();
+        }
+        if (_config != null) {
+            return _config.getExpiration();
+        }
+        return -1;
+    }
+
+    /**
      * Callback for defragmented tunnel messages.
      */
     private class DefragmentedHandler implements FragmentHandler.DefragmentedReceiver {

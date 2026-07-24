@@ -131,5 +131,6 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
         for (Job j : _onFind) {
             getContext().jobQueue().addJob(j);
         }
+        _onFind.clear();
     }
 }

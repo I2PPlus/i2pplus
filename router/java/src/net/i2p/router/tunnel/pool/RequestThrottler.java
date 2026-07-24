@@ -471,6 +471,11 @@ public class RequestThrottler {
         @Override
         public void timeReached() {
             RequestThrottler.this.counter.clear();
+            // Clear burst offense records that have expired (no new offenses for one hour).
+            // Without this, every peer that ever triggers burst detection leaves a permanent
+            // entry in _burstOffenses, leaking memory over time.
+            long cutoff = System.currentTimeMillis() - BURST_OFFENSE_RESET;
+            _burstOffenses.values().removeIf(r -> r.lastOffenseTime < cutoff);
             schedule(CLEAN_TIME);
         }
     }

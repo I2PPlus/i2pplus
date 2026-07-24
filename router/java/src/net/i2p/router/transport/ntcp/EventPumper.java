@@ -369,6 +369,10 @@ class EventPumper implements Runnable {
                     synchronized (_blockedIPs) {
                         _blockedIPs.clear();
                     }
+                    // Also clear failed-inbound-encryption counters so entries that
+                    // never reach count 5 (and therefore never hit the individual clear
+                    // in trackInvalidEncryption) don't accumulate permanently.
+                    _failedInboundEncryption.clear();
                     lastBlockedIPClear = now;
                 }
 

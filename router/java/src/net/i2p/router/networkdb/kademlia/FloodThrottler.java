@@ -44,6 +44,7 @@ class FloodThrottler {
         public Cleaner() { super(SimpleTimer2.getInstance()); }
         public void timeReached() {
             FloodThrottler.this.counter.decay(2);
+            schedule(CLEAN_TIME);
         }
     }
 }

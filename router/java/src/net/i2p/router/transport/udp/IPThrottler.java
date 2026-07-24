@@ -13,9 +13,11 @@ import net.i2p.util.SimpleTimer2;
 class IPThrottler {
     private ObjectCounter<Integer> _counter;
     private final int _max;
+    private final long _cleanTime;
 
     public IPThrottler(int max, long time) {
         _max = max;
+        _cleanTime = time;
         _counter = new ObjectCounter<>();
         new Cleaner().schedule(time);
     }
@@ -54,6 +56,7 @@ class IPThrottler {
         public Cleaner() { super(SimpleTimer2.getInstance()); }
         public void timeReached() {
             _counter.clear();
+            schedule(_cleanTime);
         }
     }
 }

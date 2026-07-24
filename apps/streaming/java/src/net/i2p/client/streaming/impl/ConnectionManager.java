@@ -954,6 +954,8 @@ class ConnectionManager {
     public void shutdown() {
         disconnectAllHard();
         _destFailures.clear();
+        int protocol = _defaultOptions.getEnforceProtocol() ? I2PSession.PROTO_STREAMING : I2PSession.PROTO_ANY;
+        _session.removeListener(protocol, _defaultOptions.getLocalPort());
         _tcbShare.stop();
         _timer.stop();
         _outboundQueue.close();

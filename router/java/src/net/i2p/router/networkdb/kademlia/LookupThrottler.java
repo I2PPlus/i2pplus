@@ -4,9 +4,10 @@ import java.util.Deque;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
-import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer2;
 
 /**
@@ -22,9 +23,10 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.7.11
  */
 class LookupThrottler {
-    private final ObjectCounter<ReplyTunnel> counter;
-    // Map to track timestamps of recent requests per ReplyTunnel for burst detection
-    private final Map<ReplyTunnel, Deque<Long>> burstTimestamps;
+    private final ConcurrentHashMap<Hash, ConcurrentHashMap<TunnelId, AtomicInteger>> counter;
+    // Map to track timestamps of recent requests per (Hash, TunnelId) for burst detection.
+    // Outer key is Hash (peer), inner key is TunnelId (reply tunnel).
+    private final Map<Hash, ConcurrentHashMap<TunnelId, Deque<Long>>> burstTimestamps;
 
     /** the id of this is -1 */
     private static final TunnelId DUMMY_ID = new TunnelId();
@@ -62,11 +64,12 @@ class LookupThrottler {
         MAX_LOOKUPS = maxlookups;
         MAX_NON_FF_LOOKUPS = maxnonfflookups;
         CLEAN_TIME = cleanTime;
-        this.counter = new ObjectCounter<>();
-        this.burstTimestamps = new LinkedHashMap<ReplyTunnel, Deque<Long>>() {
+        this.counter = new ConcurrentHashMap<Hash, ConcurrentHashMap<TunnelId, AtomicInteger>>();
+        this.burstTimestamps = new LinkedHashMap<Hash, ConcurrentHashMap<TunnelId, Deque<Long>>>() {
             @Override
-            protected boolean removeEldestEntry(Map.Entry<ReplyTunnel, Deque<Long>> eldest) {
-                // Only evict the eldest burst-tracking entry to stay bounded.
+            protected boolean removeEldestEntry(Map.Entry<Hash, ConcurrentHashMap<TunnelId, Deque<Long>>> eldest) {
+                // Evict the eldest Hash entry to stay bounded.
+                // Cap is on unique Hash keys (not per-tunnel entries).
                 // Do NOT clear the global counting throttle here - doing so would
                 // reset every peer's burst count and let an attacker bypass the
                 // counting throttle the moment the map fills (see ticket MEDIUM-2).
@@ -90,15 +93,20 @@ class LookupThrottler {
      * @return true if throttled
      */
     boolean shouldThrottle(Hash key, TunnelId id) {
-        ReplyTunnel rt = new ReplyTunnel(key, id);
-
-        // Update burst timestamps
+        TunnelId lookupId = (id != null) ? id : DUMMY_ID;
         long now = System.currentTimeMillis();
+
+        // Burst detection
         synchronized (burstTimestamps) {
-            Deque<Long> deque = burstTimestamps.get(rt);
+            ConcurrentHashMap<TunnelId, Deque<Long>> innerBurst = burstTimestamps.get(key);
+            if (innerBurst == null) {
+                innerBurst = new ConcurrentHashMap<TunnelId, Deque<Long>>();
+                burstTimestamps.put(key, innerBurst);
+            }
+            Deque<Long> deque = innerBurst.get(lookupId);
             if (deque == null) {
-                deque = new LinkedList<>();
-                burstTimestamps.put(rt, deque);
+                deque = new LinkedList<Long>();
+                innerBurst.put(lookupId, deque);
             }
             // Remove timestamps older than BURST_WINDOW_MS
             while (!deque.isEmpty() && (now - deque.peekFirst() > BURST_WINDOW_MS)) {
@@ -110,8 +118,24 @@ class LookupThrottler {
             }
         }
 
-        // Existing counting throttle
-        return this.counter.increment(rt) > _max;
+        // Counting throttle
+        ConcurrentHashMap<TunnelId, AtomicInteger> innerCount = counter.get(key);
+        if (innerCount == null) {
+            innerCount = new ConcurrentHashMap<TunnelId, AtomicInteger>();
+            ConcurrentHashMap<TunnelId, AtomicInteger> existing = counter.putIfAbsent(key, innerCount);
+            if (existing != null) {
+                innerCount = existing;
+            }
+        }
+        AtomicInteger ai = innerCount.get(lookupId);
+        if (ai == null) {
+            ai = new AtomicInteger();
+            AtomicInteger existing = innerCount.putIfAbsent(lookupId, ai);
+            if (existing != null) {
+                ai = existing;
+            }
+        }
+        return ai.incrementAndGet() > _max;
     }
 
     private class Cleaner extends SimpleTimer2.TimedEvent {
@@ -121,11 +145,9 @@ class LookupThrottler {
             int size;
             synchronized (burstTimestamps) {
                 size = burstTimestamps.size();
-            }
-            LookupThrottler.this.counter.clear();
-            synchronized (burstTimestamps) {
                 burstTimestamps.clear();
             }
+            counter.clear();
             // Under heavy load, clean more frequently to stay bounded
             if (size > MAX_ENTRIES) {
                 reschedule(Math.max(CLEAN_TIME / 6, 1000));
@@ -134,32 +156,4 @@ class LookupThrottler {
         }
     }
 
-    /** yes, we could have a two-level lookup, or just do h.tostring() + id.tostring() */
-    private static class ReplyTunnel {
-        public final Hash h;
-        public final TunnelId id;
-
-        ReplyTunnel(Hash h, TunnelId id) {
-            this.h = h;
-            if (id != null) {
-                this.id = id;
-            } else {
-                this.id = DUMMY_ID;
-            }
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (!(obj instanceof ReplyTunnel)) {
-                return false;
-            }
-            ReplyTunnel other = (ReplyTunnel) obj;
-            return this.h.equals(other.h) && this.id.equals(other.id);
-        }
-
-        @Override
-        public int hashCode() {
-            return this.h.hashCode() ^ this.id.hashCode();
-        }
-    }
 }
