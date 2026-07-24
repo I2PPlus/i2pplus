@@ -47,6 +47,8 @@ class ProfileOrganizerRenderer {
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
 
     /**
+     *  Render the peer profile status table.
+     *
      *  @param mode 0 = high cap; 1 = all; 2 = floodfill; 3 = banned; 4 = ban summary by hash
      */
     public void renderStatusHTML(Writer out, int mode) throws IOException {
@@ -248,8 +250,8 @@ class ProfileOrganizerRenderer {
                 // Check for congestion caps (D/E) and demote immediately
                 if (info != null && prof != null) {
                     String caps = info.getCapabilities();
-                    if (caps != null && (caps.indexOf(net.i2p.router.Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
-                                         caps.indexOf(net.i2p.router.Router.CAPABILITY_CONGESTION_SEVERE) >= 0)) {
+                    if (caps != null && (caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
+                                         caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0)) {
                         prof.setCapacityBonus(-30);
                         _context.profileOrganizer().demoteIfCongested(peer);
                     }
@@ -549,6 +551,7 @@ class ProfileOrganizerRenderer {
     }
 
     private class ProfileComparator extends ProfComparator {
+        @Override
         public int compare(PeerProfile left, PeerProfile right) {
             if (_context.profileOrganizer().isFast(left.getPeer())) {
                 if (_context.profileOrganizer().isFast(right.getPeer())) {return super.compare(left, right);}
@@ -571,6 +574,7 @@ class ProfileOrganizerRenderer {
      *  @since 0.9.8
      */
     private static class ProfComparator implements Comparator<PeerProfile>, Serializable {
+        @Override
         public int compare(PeerProfile left, PeerProfile right) {
             return HashComparator.comp(left.getPeer(), right.getPeer());
         }

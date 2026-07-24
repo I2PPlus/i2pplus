@@ -342,6 +342,7 @@ public class TuningHelper extends HelperBase {
         // Sort each group by display name
         for (List<ParamSnapshot> list : groups.values()) {
             Collections.sort(list, new Comparator<ParamSnapshot>() {
+                @Override
                 public int compare(ParamSnapshot a, ParamSnapshot b) {
                     return dn.get(a.name).compareToIgnoreCase(dn.get(b.name));
                 }
@@ -577,6 +578,8 @@ public class TuningHelper extends HelperBase {
     }
 
     /**
+     *  Get the SSU transport tuner instance.
+     *
      * @return the UDPTransport's Tuner, or null
      */
     private Tuner getTuner() {

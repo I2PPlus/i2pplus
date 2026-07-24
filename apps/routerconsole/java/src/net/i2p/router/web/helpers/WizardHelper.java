@@ -45,6 +45,8 @@ public class WizardHelper extends HelperBase {
     public synchronized boolean isNDTSuccessful() {return isNDTComplete() && getUpBandwidth() > 0 && getDownBandwidth() > 0;}
 
     /**
+     *  Return the current NDT bandwidth test status.
+     *
      * @return HTML-escaped status string or ""
      */
     public synchronized String getTestStatus() {
@@ -79,6 +81,8 @@ public class WizardHelper extends HelperBase {
     }
 
     /**
+     *  Return the NDT test completion status.
+     *
      * @return HTML-escaped status string or ""
      */
     public synchronized String getCompletionStatus() {
@@ -91,6 +95,8 @@ public class WizardHelper extends HelperBase {
     }
 
     /**
+     *  Return detailed NDT test status information.
+     *
      * @return HTML-escaped status string or ""
      */
     public synchronized String getDetailStatus() {
@@ -103,16 +109,22 @@ public class WizardHelper extends HelperBase {
     }
 
     /**
+     *  Return the measured upload bandwidth.
+     *
      * @return bytes per second or 0
      */
     public long getUpBandwidth() {return getLongResult("up");}
 
     /**
+     *  Return the measured download bandwidth.
+     *
      * @return bytes per second or 0
      */
     public long getDownBandwidth() {return getLongResult("down");}
 
     /**
+     *  Return the NDT test server location.
+     *
      * @return HTML-escaped location or ""
      */
     public String getServerLocation() {

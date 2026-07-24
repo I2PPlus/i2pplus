@@ -16,6 +16,7 @@ import net.i2p.crypto.SigType;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.router.sybil.Analysis;
+import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.FormHandler;
 import net.i2p.router.web.Messages;
 import net.i2p.util.SystemVersion;
@@ -257,7 +258,7 @@ public class NetDbHelper extends FormHandler {
      *  @since 0.9.38
      */
     private String getNonce() {
-        return net.i2p.router.web.CSSHelper.getNonce(_session);
+        return CSSHelper.getNonce(_session);
     }
 
     /**
@@ -342,11 +343,13 @@ public class NetDbHelper extends FormHandler {
                 if (_full == 0 && _sort != null) {_full = 3;}
                 renderer.renderStatusHTML(_out, _limit, _page, _full);
             }
-        } catch (IOException ioe) {ioe.printStackTrace();}
+        } catch (IOException ioe) {_log.error("Error rendering netdb summary", ioe);}
         return "";
     }
 
     /**
+     *  Return the currently selected NetDb tab index.
+     *
      *  @since 0.9.1
      */
     private int getTab() {
@@ -371,6 +374,8 @@ public class NetDbHelper extends FormHandler {
     }
 
     /**
+     *  Render the NetDb navigation bar.
+     *
      *  @since 0.9.1
      */
     private String renderNavBar() {
@@ -407,6 +412,8 @@ public class NetDbHelper extends FormHandler {
     }
 
     /**
+     *  Render the NetDb search/lookup form.
+     *
      *  @since 0.9.28
      */
     private void renderLookupForm() throws IOException {

@@ -106,6 +106,8 @@ public class ConfigPeerHelper extends HelperBase {
     }
 
     /**
+     *  Determine whether the given peer hash is banned.
+     *
      *  @since 0.9.50
      */
     public boolean isBanned(Hash h) {return _context.banlist().isBanlisted(h);}

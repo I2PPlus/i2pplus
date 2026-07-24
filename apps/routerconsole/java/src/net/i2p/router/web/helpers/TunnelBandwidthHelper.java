@@ -3,14 +3,18 @@ package net.i2p.router.web.helpers;
 
 import java.io.IOException;
 import java.io.StringWriter;
+
 import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.router.web.HelperBase;
+import net.i2p.util.Log;
+import net.i2p.util.LogFactory;
 
 /**
  * Helper for tunnel bandwidth page rendering and form processing.
  * @since 0.9.33
  */
 public class TunnelBandwidthHelper extends HelperBase {
+    private static final Log _log = LogFactory.getLog(TunnelBandwidthHelper.class);
     public String getTunnelBandwidth() {
         TunnelRenderer renderer = new TunnelRenderer(_context);
         try {
@@ -20,7 +24,7 @@ public class TunnelBandwidthHelper extends HelperBase {
             renderer.renderLifetimeBandwidth(sw, in, out);
             return sw.toString();
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            _log.error("Error rendering tunnel bandwidth", ioe);
             return "";
         }
     }

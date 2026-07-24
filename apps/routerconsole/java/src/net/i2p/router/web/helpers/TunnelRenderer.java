@@ -810,7 +810,8 @@ class TunnelRenderer {
     }
 
     private static class TunnelComparator implements Comparator<HopConfig>, Serializable {
-         public int compare(HopConfig l, HopConfig r) {
+          @Override
+          public int compare(HopConfig l, HopConfig r) {
              long le = l.getExpiration();
              long re = r.getExpiration();
              if (le < 0) {le = 0;}
@@ -823,7 +824,8 @@ class TunnelRenderer {
 
     /** @since 0.9.35 */
     private static class TunnelComparatorBySpeed implements Comparator<HopConfig>, Serializable {
-         public int compare(HopConfig l, HopConfig r) {
+          @Override
+          public int compare(HopConfig l, HopConfig r) {
              long now = System.currentTimeMillis();
              int countL = l.getProcessedMessagesCount();
              int countR = r.getProcessedMessagesCount();
@@ -838,7 +840,8 @@ class TunnelRenderer {
     }
 
     private static class TunnelInfoComparator implements Comparator<TunnelInfo>, Serializable {
-         public int compare(TunnelInfo l, TunnelInfo r) {
+          @Override
+          public int compare(TunnelInfo l, TunnelInfo r) {
              long le = l.getExpiration();
              long re = r.getExpiration();
              if (le < re) {return 1;}
@@ -852,8 +855,9 @@ class TunnelRenderer {
      *  @since 0.9.57
      */
     private class TPComparator implements Comparator<TunnelPool> {
-         private final Collator _comp = Collator.getInstance();
-         public int compare(TunnelPool l, TunnelPool r) {
+          private final Collator _comp = Collator.getInstance();
+          @Override
+          public int compare(TunnelPool l, TunnelPool r) {
              int rv = _comp.compare(getTunnelName(l), getTunnelName(r));
              if (rv != 0) {return rv;}
              rv = l.getSettings().getDestination().toBase32().compareTo(r.getSettings().getDestination().toBase32());
@@ -1155,6 +1159,7 @@ class TunnelRenderer {
 
     private static class CountryComparator implements Comparator<Hash> {
         public CountryComparator(CommSystemFacade comm) {this.comm = comm;}
+        @Override
         public int compare(Hash l, Hash r) {
             // get both countries
             String lc = this.comm.getCountry(l);

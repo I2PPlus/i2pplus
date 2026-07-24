@@ -385,6 +385,8 @@ class SidebarRenderer {
     }
 
     /**
+     *  Get the local eepsite URL from the port mapper.
+     *
      *  @return null if none
      *  @since 0.9.43 split out from above, used by HomeHelper, fixed for IPv6
      */

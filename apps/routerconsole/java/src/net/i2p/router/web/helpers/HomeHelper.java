@@ -244,6 +244,7 @@ public class HomeHelper extends HelperBase {
 
     public boolean shouldShowSearch() {return _context.getBooleanProperty(PROP_SEARCH);}
 
+    @Override
     public boolean isAdvanced() {return _context.getBooleanProperty(PROP_ADVANCED);}
 
     public String getServices() {
@@ -432,6 +433,7 @@ public class HomeHelper extends HelperBase {
 
     /** ignore case, current locale */
     private static class AppComparator implements Comparator<App>, Serializable {
+        @Override
         public int compare(App l, App r) {return l.name.toLowerCase().compareTo(r.name.toLowerCase());}
     }
 

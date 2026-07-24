@@ -189,6 +189,8 @@ public class FileDumpHelper extends HelperBase {
     }
 
     /**
+     *  Read the manifest attributes from the given jar file.
+     *
      * @return null if not found
      * @since pkg private since 0.9.35 for LogsHelper
      */
@@ -208,6 +210,8 @@ public class FileDumpHelper extends HelperBase {
     }
 
     /**
+     *  Get a manifest attribute value with HTML stripped.
+     *
      * @param atts non-null
      * @return HTML stripped, or null if not found
      * @since pkg private since 0.9.35 for LogsHelper

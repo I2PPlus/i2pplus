@@ -119,6 +119,8 @@ public class ConfigReseedHelper extends HelperBase {
     }
 
     /**
+     *  Determine if both HTTP and HTTPS reseed URLs are available.
+     *
      *  @return true only if we have both http and https URLs
      *  @since 0.9.33
      */
@@ -140,6 +142,8 @@ public class ConfigReseedHelper extends HelperBase {
     }
 
     /**
+     *  Determine if any HTTP reseed URLs are configured.
+     *
      *  @return true only if we have a http URL
      *  @since 0.9.33
      */
@@ -152,6 +156,8 @@ public class ConfigReseedHelper extends HelperBase {
     }
 
     /**
+     *  Determine if any HTTPS reseed URLs are configured.
+     *
      *  @return true only if we have a https URL
      *  @since 0.9.33
      */

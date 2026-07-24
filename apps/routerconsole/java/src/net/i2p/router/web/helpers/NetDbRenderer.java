@@ -108,7 +108,8 @@ class NetDbRenderer {
      *  Prioritizes published, nicknamed, named, client, and meta leasesets.
      */
     private class LeaseSetComparator implements Comparator<LeaseSet> {
-         public int compare(LeaseSet l, LeaseSet r) {
+          @Override
+          public int compare(LeaseSet l, LeaseSet r) {
              Hash keyL = l.getHash();
              Hash keyR = r.getHash();
              TunnelPoolSettings inL = _context.tunnelManager().getInboundSettings(keyL);
@@ -143,9 +144,10 @@ class NetDbRenderer {
      *  @since 0.7.14
      */
     private static class LeaseSetRoutingKeyComparator implements Comparator<LeaseSet>, Serializable {
-         private final transient Hash _us;
-         public LeaseSetRoutingKeyComparator(Hash us) {_us = us;}
-         public int compare(LeaseSet l, LeaseSet r) {
+          private final transient Hash _us;
+          public LeaseSetRoutingKeyComparator(Hash us) {_us = us;}
+          @Override
+          public int compare(LeaseSet l, LeaseSet r) {
              return HashDistance.getDistance(_us, l.getRoutingKey()).compareTo(HashDistance.getDistance(_us, r.getRoutingKey()));
         }
     }
@@ -1695,8 +1697,9 @@ class NetDbRenderer {
              super();
              coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
          }
-         public int compare(String l, String r) {
-             return coll.compare(getTranslatedCountry(l), getTranslatedCountry(r));
+          @Override
+          public int compare(String l, String r) {
+              return coll.compare(getTranslatedCountry(l), getTranslatedCountry(r));
         }
     }
 
@@ -1706,7 +1709,8 @@ class NetDbRenderer {
      */
     static class RAComparator implements Comparator<RouterAddress>, Serializable {
          private static final long serialVersionUID = 1L;
-         public int compare(RouterAddress l, RouterAddress r) {
+          @Override
+          public int compare(RouterAddress l, RouterAddress r) {
              int rv = l.getTransportStyle().compareTo(r.getTransportStyle());
              if (rv != 0) {return rv;}
              String lh = l.getHost();

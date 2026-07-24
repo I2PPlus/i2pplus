@@ -73,14 +73,18 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
-     * @return non-null, "n/a" on failure
-     * @since 0.9.26
+     *  Return the JSTL taglib version string.
+     *
+     *  @return non-null, "n/a" on failure
+     *  @since 0.9.26
      */
     public String getJstlVersion() {return _jstlVersion;}
 
     /**
-     * @return non-null, "n/a" on failure
-     * @since 0.9.26
+     *  Look up the JSTL version via reflection.
+     *
+     *  @return non-null, "n/a" on failure
+     *  @since 0.9.26
      */
     private static String jstlVersion() {
         String rv = "n/a";
@@ -107,7 +111,7 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
-     *
+     *  Return HTML rendering of the most recent critical log messages.
      */
     public String getCriticalLogs() {
         return formatMessages(_context.logManager().getBuffer().getMostRecentCriticalMessages());
@@ -152,6 +156,8 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
+     *  Clear log messages up through the specified message IDs.
+     *
      *  @param n -1 for none
      *  @param crit -1 for none
      *  @param consoleNonce must match
@@ -318,6 +324,8 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
+     *  Return the Built-By attribute from the i2p.jar manifest.
+     *
      * @since 0.9.35
      */
     public String getBuiltBy() {
@@ -332,6 +340,8 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
+     *  Return the build revision and date from the routerconsole.war manifest.
+     *
      * @since 0.9.50+
      */
     public String getRevision() {

@@ -87,9 +87,10 @@ public class SybilRenderer {
          public PointsComparator(Map<Hash, Points> points) {
              _points = points;
          }
-         public int compare(Hash l, Hash r) {
-             // reverse
-             return _points.get(r).compareTo(_points.get(l));
+          @Override
+          public int compare(Hash l, Hash r) {
+              // reverse
+              return _points.get(r).compareTo(_points.get(l));
         }
     }
 
@@ -98,7 +99,8 @@ public class SybilRenderer {
      *  @since 0.9.38
      */
     private static class ReasonComparator implements Comparator<String>, Serializable {
-         public int compare(String l, String r) {
+          @Override
+          public int compare(String l, String r) {
              int lc = l.indexOf(':');
              int rc = r.indexOf(':');
              if (lc <= 0 || rc <= 0)
@@ -281,6 +283,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the sybil analysis overview section.
+     *
      *  @since 0.9.38
      */
     private void renderOverview(Writer out, StringBuilder buf, String nonce, Analysis analysis) throws IOException {
@@ -322,6 +326,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the form to start a new sybil analysis scan.
+     *
      *  @since 0.9.38
      */
     private static void renderRunForm(Writer out, StringBuilder buf, String nonce) throws IOException {
@@ -347,6 +353,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the configuration form for background sybil analysis.
+     *
      *  @since 0.9.38
      */
     private void renderBackgroundForm(Writer out, StringBuilder buf, String nonce) throws IOException {
@@ -416,6 +424,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the floodfill summary section.
+     *
      *  @since 0.9.38 split out from renderRouterInfoHTML()
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
@@ -431,6 +441,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the family group summary section.
+     *
      *  @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderFamilySummary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -439,6 +451,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the IP group summary for our own IP address.
+     *
      *  @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderIPUsSummary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -452,6 +466,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the /32 IP group summary.
+     *
      *  @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderIP32Summary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -460,6 +476,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the /24 IP group summary.
+     *
      *  @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderIP24Summary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -468,6 +486,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the /16 IP group summary.
+     *
      *  @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderIP16Summary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -476,6 +496,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the /64 IPv6 group summary.
+     *
      *  @since 0.9.57
      */
     private void renderIP64Summary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -484,6 +506,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the /48 IPv6 group summary.
+     *
      *  @since 0.9.57
      */
     private void renderIP48Summary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -492,6 +516,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the pairwise distance summary.
+     *
      *  @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderPairSummary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -502,6 +528,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the closest floodfills to our routing key.
+     *
      *  @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderCloseSummary(Writer out, StringBuilder buf, Analysis analysis, double avgMinDist, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -514,6 +542,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the closest floodfills to tomorrow's routing key.
+     *
      *  @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderCloseTmrwSummary(Writer out, StringBuilder buf, Analysis analysis, Hash us, double avgMinDist, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -527,6 +557,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the closest floodfills to our router hash.
+     *
      *  @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderDHTSummary(Writer out, StringBuilder buf, Analysis analysis, Hash us, double avgMinDist, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -536,6 +568,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the closest floodfills to our published destinations.
+     *
      *  @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderDestSummary(Writer out, StringBuilder buf, Analysis analysis, double avgMinDist, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
@@ -579,6 +613,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the threats analysis HTML section.
+     *
      *  @since 0.9.38 split out from renderRouterInfoHTML()
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
@@ -635,6 +671,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the floodfill pairwise distance table.
+     *
      *  @param pairs sorted
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
@@ -660,9 +698,10 @@ public class SybilRenderer {
          private final Map<K, List<RouterInfo>> _o;
          public FooComparator(Map<K, List<RouterInfo>> o) { _o = o;}
          @SuppressWarnings("unchecked")
-         public int compare(K l, K r) {
-             // reverse by count
-             int rv = _o.get(r).size() - _o.get(l).size();
+          @Override
+          public int compare(K l, K r) {
+              // reverse by count
+              int rv = _o.get(r).size() - _o.get(l).size();
              if (rv != 0)
                  return rv;
              // forward by IP
@@ -674,9 +713,10 @@ public class SybilRenderer {
          private final Map<String, List<RouterInfo>> _o;
          private final Collator _comp = Collator.getInstance();
          public FoofComparator(Map<String, List<RouterInfo>> o) { _o = o;}
-         public int compare(String l, String r) {
-             // reverse by count
-             int rv = _o.get(r).size() - _o.get(l).size();
+          @Override
+          public int compare(String l, String r) {
+              // reverse by count
+              int rv = _o.get(r).size() - _o.get(l).size();
              if (rv != 0)
                  return rv;
              // forward by name
@@ -685,7 +725,7 @@ public class SybilRenderer {
     }
 
     /**
-     *
+     *  Render the HTML for IP groups matching our own IP address.
      */
     private void renderIPGroupsUs(Writer out, StringBuilder buf, List<RouterInfo> ri32,
                                   List<RouterInfo> ri24, List<RouterInfo> ri16,
@@ -734,7 +774,7 @@ public class SybilRenderer {
     }
 
     /**
-     *
+     *  Render the HTML for /32 IP groups (same IPv4 address).
      */
     private void renderIPGroups32(Writer out, StringBuilder buf, Map<Integer, List<RouterInfo>> map) throws IOException {
         buf.append("<h3 id=sameIP class=sybils>").append(_t("Routers with the same IPv4")).append("</h3>\n");
@@ -764,7 +804,7 @@ public class SybilRenderer {
     }
 
     /**
-     *
+     *  Render the HTML for /24 IP groups.
      */
     private void renderIPGroups24(Writer out, StringBuilder buf, Map<Integer, List<RouterInfo>> map) throws IOException {
         buf.append("<h3 id=same24 class=sybils>").append(_t("Routers in the same IPv4 /24")).append("</h3>\n");
@@ -793,7 +833,7 @@ public class SybilRenderer {
     }
 
     /**
-     *
+     *  Render the HTML for /16 IP groups.
      */
     private void renderIPGroups16(Writer out, StringBuilder buf, Map<Integer, List<RouterInfo>> map) throws IOException {
         buf.append("<h3 id=same16 class=sybils>").append(_t("Routers in the same IPv4 /16 (4 minimum)")).append("</h3>\n");
@@ -821,6 +861,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the HTML for /64 IPv6 groups.
+     *
      * @since 0.9.57
      */
     private void renderIPGroups64(Writer out, StringBuilder buf, Map<Long, List<RouterInfo>> map) throws IOException {
@@ -852,6 +894,8 @@ public class SybilRenderer {
     }
 
     /**
+     *  Render the HTML for /48 IPv6 groups.
+     *
      * @since 0.9.57
      */
     private void renderIPGroups48(Writer out, StringBuilder buf, Map<Long, List<RouterInfo>> map) throws IOException {
@@ -882,7 +926,7 @@ public class SybilRenderer {
     }
 
     /**
-     *
+     *  Render the HTML for router family groups.
      */
     private void renderIPGroupsFamily(Writer out, StringBuilder buf, Map<String, List<RouterInfo>> map) throws IOException {
         buf.append("<h3 id=samefamily class=sybils>").append(_t("Routers in the same Family"))

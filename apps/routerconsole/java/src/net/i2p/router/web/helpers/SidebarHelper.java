@@ -75,6 +75,7 @@ public class SidebarHelper extends HelperBase {
     I2PAppContext ctx = I2PAppContext.getGlobalContext();
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
+    @Override
     public boolean isAdvanced() {return ctx.getBooleanProperty(PROP_ADVANCED);}
     public boolean unifiedSidebar() {return _context.getBooleanProperty(PROP_UNIFIED_SIDEBAR);}
     static final String PROP_SUMMARYBAR = "routerconsole.summaryBar.";
@@ -634,6 +635,8 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
+     *  Format the current bandwidth rates for display.
+     *
      *    @return "x.xx / y.yy {K|M}"
      */
     public String getSecondKBps() {
@@ -646,6 +649,8 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
+     *  Format the 5-minute average bandwidth rates for display.
+     *
      *    @return "x.xx / y.yy {K|M}"
      */
     public String getFiveMinuteKBps() {
@@ -670,6 +675,8 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
+     *  Format the lifetime average bandwidth rates for display.
+     *
      *    @return "x.xx / y.yy {K|M}"
      */
     public String getLifetimeKBps() {
@@ -856,6 +863,7 @@ public class SidebarHelper extends HelperBase {
         private final String xsc = _t("Shared Clients");
         private final String snark = _t("I2PSnark");
 
+        @Override
         public int compare(Destination lhs, Destination rhs) {
             String lname = getTunnelName(lhs);
             String rname = getTunnelName(rhs);
@@ -1426,6 +1434,8 @@ public class SidebarHelper extends HelperBase {
     public void setRequest(HttpServletRequest s) {_request = s;}
 
     /**
+     *  Return the request URI, or /home as default.
+     *
      * @return non-null; "/home" if (strangely) not set by jsp
      */
     public String getRequestURI() {return _requestURI != null ? _requestURI : "/home";}

@@ -2,12 +2,15 @@ package net.i2p.router.web.helpers;
 
 import java.io.IOException;
 import net.i2p.router.web.HelperBase;
+import net.i2p.util.Log;
+import net.i2p.util.LogFactory;
 
 /**
  * Helper for peer profiles page rendering and form processing.
  * @since 0.9.33
  */
 public class ProfilesHelper extends HelperBase {
+    private static final Log _log = LogFactory.getLog(ProfilesHelper.class);
     private int _full;
     private boolean _graphical;
 
@@ -41,6 +44,8 @@ public class ProfilesHelper extends HelperBase {
     public void allowGraphical() {_graphical = true;}
 
     /**
+     *  Render and return the profile summary page.
+     *
      *  @return empty string, writes directly to _out
      *  @since 0.9.1
      */
@@ -57,7 +62,7 @@ public class ProfilesHelper extends HelperBase {
         try {
             ProfileOrganizerRenderer rend = new ProfileOrganizerRenderer(_context.profileOrganizer(), _context);
             rend.renderStatusHTML(_out, _full);
-        } catch (IOException ioe) {ioe.printStackTrace();}
+        } catch (IOException ioe) {_log.error("Error rendering profile summary", ioe);}
         return "";
     }
 
@@ -66,11 +71,13 @@ public class ProfilesHelper extends HelperBase {
         try {
             BanlistRenderer rend = new BanlistRenderer(_context);
             rend.renderBanlistCompact(_out);
-        } catch (IOException ioe) {ioe.printStackTrace();}
+        } catch (IOException ioe) {_log.error("Error rendering banlist", ioe);}
         return "";
     }
 
     /**
+     *  Return the currently selected profiles tab index.
+     *
      *  @since 0.9.1
      */
     private int getTab() {
@@ -81,6 +88,8 @@ public class ProfilesHelper extends HelperBase {
     }
 
     /**
+     *  Render the profiles navigation bar.
+     *
      *  @since 0.9.1
      */
     private void renderNavBar() throws IOException {

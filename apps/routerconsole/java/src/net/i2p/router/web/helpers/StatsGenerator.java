@@ -216,6 +216,7 @@ public class StatsGenerator {
      *  @since 0.9.3
      */
     private class AlphaComparator implements Comparator<String> {
+        @Override
         public int compare(String lhs, String rhs) {
             // put the Router sections at the top of the page (compare raw keys, not translated)
             boolean lrouter = lhs.equals("Router");

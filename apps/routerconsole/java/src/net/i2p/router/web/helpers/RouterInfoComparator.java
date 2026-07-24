@@ -21,9 +21,12 @@ class RouterInfoComparator implements Comparator<RouterInfo>, Serializable {
      public static RouterInfoComparator getInstance() { return _instance; }
 
      /**
+      *  Compare two RouterInfos by their hash.
+      *
       * @param l non-null
       * @param r non-null
       */
+    @Override
     public int compare(RouterInfo l, RouterInfo r) {
         Hash lh = l.getIdentity().getHash();
         Hash rh = r.getIdentity().getHash();
@@ -31,6 +34,8 @@ class RouterInfoComparator implements Comparator<RouterInfo>, Serializable {
     }
 
      /**
+      *  Static comparison of two RouterInfos by their hash.
+      *
       * @param l non-null
       * @param r non-null
       */

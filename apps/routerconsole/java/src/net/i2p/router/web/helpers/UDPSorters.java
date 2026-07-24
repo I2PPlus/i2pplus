@@ -303,6 +303,7 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class PeerComparator implements Comparator<PeerState>, Serializable {
+        @Override
         public int compare(PeerState l, PeerState r) {
             return HashComparator.comp(l.getRemotePeer(), r.getRemotePeer());
         }

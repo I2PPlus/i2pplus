@@ -22,6 +22,8 @@ import net.i2p.router.web.HelperBase;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
+import net.i2p.util.Log;
+import net.i2p.util.LogFactory;
 import net.i2p.util.ObjectCounterUnsafe;
 import net.i2p.util.SystemVersion;
 
@@ -30,6 +32,8 @@ import net.i2p.util.SystemVersion;
  * @since 0.9.33
  */
 public class JobQueueHelper extends HelperBase {
+
+    private static final Log _log = LogFactory.getLog(JobQueueHelper.class);
 
     private static int CORES = SystemVersion.getCores();
     private static boolean isSlow = SystemVersion.isSlow();
@@ -59,7 +63,7 @@ public class JobQueueHelper extends HelperBase {
                 return sw.toString();
             }
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            _log.error("Error rendering job queue summary", ioe);
             return "";
         }
     }
@@ -75,7 +79,7 @@ public class JobQueueHelper extends HelperBase {
                 return sw.toString();
             }
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            _log.error("Error rendering job queue stats", ioe);
             return "";
         }
     }
@@ -677,6 +681,7 @@ public class JobQueueHelper extends HelperBase {
              _counter = counter;
         }
 
+        @Override
         public int compare(String l, String r) {
             // Sort alphabetically by job name
             return coll.compare(l, r);

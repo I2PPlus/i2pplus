@@ -82,6 +82,8 @@ public class SearchHelper extends HelperBase {
     }
 
     /**
+     *  Build and return the search URL for the current query.
+     *
      *  @return null on error
      */
     public String getURL() {

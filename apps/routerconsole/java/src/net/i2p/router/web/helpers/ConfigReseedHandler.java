@@ -108,6 +108,8 @@ public class ConfigReseedHandler extends FormHandler {
     }
 
     /**
+     *  Add checker error or status messages to the form.
+     *
      *  @return true if anything was output
      *  @since 0.9.33
      */

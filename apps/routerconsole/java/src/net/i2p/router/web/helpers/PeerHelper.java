@@ -31,12 +31,15 @@ import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.AddressType;
 import net.i2p.util.Addresses;
+import net.i2p.util.Log;
+import net.i2p.util.LogFactory;
 
 /**
  * Helper for peer connections page rendering and form processing.
  * @since 0.9.33
  */
 public class PeerHelper extends HelperBase {
+    private static final Log _log = LogFactory.getLog(PeerHelper.class);
     private int _sortFlags;
     private String _urlBase;
     private String _transport;
@@ -82,7 +85,7 @@ public class PeerHelper extends HelperBase {
 
     public String getPeerSummary() {
         try {renderStatusHTML(_out, _urlBase, _sortFlags);}
-        catch (IOException ioe) {ioe.printStackTrace();}
+        catch (IOException ioe) {_log.error("Error rendering peer summary", ioe);}
         return "";
     }
 
@@ -148,6 +151,8 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
+     *  Return the currently selected tab index.
+     *
      *  @since 0.9.38
      */
     private int getTab() {
@@ -257,6 +262,8 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
+     *  Render the peer connectivity summary section.
+     *
      *  @since 0.9.56
      */
     private void renderSummary(Writer out) throws IOException {
@@ -431,6 +438,8 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
+     *  Render the peer page navigation bar.
+     *
      *  @since 0.9.38
      */
     private void renderNavBar(Writer out) throws IOException {
@@ -458,6 +467,8 @@ public class PeerHelper extends HelperBase {
     /// begin NTCP
 
     /**
+     *  Render the NTCP transport peer listing.
+     *
      *  @since 0.9.31 moved from NTCPTransport
      */
     private void render(NTCPTransport nt, Writer out, String urlBase, int sortFlags) throws IOException {
@@ -702,6 +713,7 @@ public class PeerHelper extends HelperBase {
     }
 
     private static class PeerComparator implements Comparator<NTCPConnection>, Serializable {
+        @Override
         public int compare(NTCPConnection l, NTCPConnection r) {
             if (l == null || r == null) {throw new IllegalArgumentException();}
             return HashComparator.comp(l.getRemotePeer().calculateHash(), r.getRemotePeer().calculateHash());
@@ -712,6 +724,8 @@ public class PeerHelper extends HelperBase {
     /// begin SSU
 
     /**
+     *  Render the SSU/UDP transport peer listing.
+     *
      *  @since 0.9.31 moved from UDPTransport
      */
     private void render(UDPTransport ut, Writer out, String urlBase, int sortFlags, boolean debugmode) throws IOException {
@@ -1088,6 +1102,8 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
+     *  Return the transport legend/definitions HTML.
+     *
      *  @since 0.9.31 moved from TransportManager
      */
     private final String getTransportsLegend() {
