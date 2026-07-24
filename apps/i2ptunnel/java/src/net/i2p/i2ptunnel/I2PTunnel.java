@@ -139,7 +139,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         try {
             new I2PTunnel(args);
         } catch (IllegalArgumentException iae) {
-            System.err.println(iae.toString());
+            Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PTunnel.class);
+            log.error("invalid argument", iae);
             System.exit(1);
         }
     }
@@ -308,9 +309,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                     if (cmd == null) break;
                     if (cmd.length() <= 0) continue;
                     try {runCommand(cmd, this);}
-                    catch (Throwable t) {t.printStackTrace();}
+                    catch (Throwable t) {System.err.println("Error: " + t);}
                 }
-            } catch (IOException ex) {ex.printStackTrace();}
+            } catch (IOException ex) {System.err.println("Error: " + ex);}
         } else if (eargs == null && remaining == 0 && dontDie) {
             System.err.println(usage());
             System.err.println(" • Waiting for nothing! Specify cli, command, command file, or die");
@@ -1878,8 +1879,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             writeTo.flush();
             writeTo.close();
             writePubKey(d, pubDest, l);
-        } catch (I2PException ex) {ex.printStackTrace();}
-        catch (IOException ex) {ex.printStackTrace();}
+        } catch (I2PException ex) {l.log("Error: " + ex);}
+        catch (IOException ex) {l.log("Error: " + ex);}
     }
 
     /**
@@ -1897,8 +1898,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             l.log("Destination: " + d.toBase32());
             readFrom.close();
             writePubKey(d, pubDest, l);
-        } catch (I2PException ex) {ex.printStackTrace();}
-        catch (IOException ex) {ex.printStackTrace();}
+        } catch (I2PException ex) {l.log("Error: " + ex);}
+        catch (IOException ex) {l.log("Error: " + ex);}
     }
 
     /**

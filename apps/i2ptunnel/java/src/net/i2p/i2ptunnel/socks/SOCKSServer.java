@@ -28,8 +28,6 @@ import net.i2p.util.Log;
 
 /**
  * Abstract base class used by all SOCKS servers.
- *
- * @author human
  */
 abstract class SOCKSServer {
 

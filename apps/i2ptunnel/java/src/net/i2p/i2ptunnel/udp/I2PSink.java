@@ -11,8 +11,6 @@ import net.i2p.data.Destination;
  *
  * <p>Supports both repliable and raw datagram modes. When not in raw mode,
  * data is wrapped with {@link I2PDatagramMaker} before sending.</p>
- *
- * @author welterde
  */
 public class I2PSink implements Sink {
 

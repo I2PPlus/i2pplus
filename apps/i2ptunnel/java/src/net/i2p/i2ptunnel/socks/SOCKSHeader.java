@@ -24,8 +24,6 @@ import net.i2p.util.Addresses;
 /**
  * Save the SOCKS header from a datagram
  * Ref: RFC 1928
- *
- * @author zzz
  */
 public class SOCKSHeader {
     private byte[] header;

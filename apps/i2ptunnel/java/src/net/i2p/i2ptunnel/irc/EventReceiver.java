@@ -58,6 +58,7 @@ public abstract class EventReceiver implements EventDispatcher {
     /**
      *  @throws UnsupportedOperationException always
      */
+    @Override
     public Set<String> getEvents() {
         throw new UnsupportedOperationException();
     }
@@ -65,15 +66,18 @@ public abstract class EventReceiver implements EventDispatcher {
     /**
      *  @throws UnsupportedOperationException always
      */
+    @Override
     public void ignoreEvents() {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public void unIgnoreEvents() {}
 
     /**
      *  @throws UnsupportedOperationException always
      */
+    @Override
     public Object waitEventValue(String name) {
         throw new UnsupportedOperationException();
     }

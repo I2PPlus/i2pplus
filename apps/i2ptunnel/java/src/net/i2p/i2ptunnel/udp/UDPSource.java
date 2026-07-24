@@ -9,8 +9,6 @@ import net.i2p.util.Log;
 
 /**
  * UDP source implementation for streaming data.
- *
- * @author welterde
  */
 public class UDPSource implements Source, Runnable {
     protected final DatagramSocket sock;

@@ -34,8 +34,6 @@ import net.i2p.util.HexDump;
  * Handles CONNECT commands, rejects unsupported BIND commands, and provides
  * proper error responses. The server integrates with I2P naming service
  * for destination resolution and supports security restrictions on localhost access.
- *
- * @author zzz modded from SOCKS5Server
  */
 class SOCKS4aServer extends SOCKSServer {
 

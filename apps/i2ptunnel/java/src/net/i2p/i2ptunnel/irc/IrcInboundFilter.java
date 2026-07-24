@@ -51,6 +51,7 @@ public class IrcInboundFilter implements Runnable {
      * Run the inbound filter loop. Reads lines from the remote I2P socket,
      * applies inbound filtering, and writes allowed messages to the local socket.
      */
+    @Override
     public void run() {
         BufferedReader in;
         OutputStream output;

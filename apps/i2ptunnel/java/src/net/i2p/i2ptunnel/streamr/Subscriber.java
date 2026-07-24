@@ -11,8 +11,6 @@ import net.i2p.util.SimpleTimer2;
 
 /**
  * Server-mode subscriber that manages multiple data sources and handles incoming connections
- * @author welterde
- * @author zzz modded from Producer for I2PTunnel
  */
 public class Subscriber implements Sink {
 

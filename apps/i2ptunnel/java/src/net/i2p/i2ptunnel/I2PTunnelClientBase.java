@@ -822,6 +822,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     private class BlockingRunner implements Runnable {
         private final Socket _s;
         public BlockingRunner(Socket s) { _s = s; }
+        @Override
         public void run() {
             try {clientConnectionRun(_s);}
             catch (Throwable t) {

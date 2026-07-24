@@ -37,8 +37,6 @@ import net.i2p.i2ptunnel.udpTunnel.I2PTunnelUDPClientBase;
  * require a unique source port for each target.
  *
  * Preliminary, untested, possibly incomplete.
- *
- * @author zzz modded from streamr/StreamrConsumer
  */
 public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {
     private final Map<Integer, SOCKSUDPPort> ports;

@@ -320,6 +320,7 @@ public class TunnelControllerGroup implements ClientApp {
      *  ClientApp interface
      *  @since 0.9.4
      */
+    @Override
     public ClientAppState getState() {
         return _state;
     }
@@ -328,6 +329,7 @@ public class TunnelControllerGroup implements ClientApp {
      *  ClientApp interface
      *  @since 0.9.4
      */
+    @Override
     public String getName() {
         return REGISTERED_NAME;
     }
@@ -336,6 +338,7 @@ public class TunnelControllerGroup implements ClientApp {
      *  ClientApp interface
      *  @since 0.9.4
      */
+    @Override
     public String getDisplayName() {
         return REGISTERED_NAME;
     }
@@ -361,6 +364,7 @@ public class TunnelControllerGroup implements ClientApp {
      *  @since 0.8.8
      */
     private class Shutdown implements Runnable {
+        @Override
         public void run() {
             shutdown();
         }
@@ -768,6 +772,7 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     private class StartControllers implements Runnable {
+        @Override
         public void run() {
             synchronized(TunnelControllerGroup.this) {
                 _controllersLock.readLock().lock();
@@ -1495,6 +1500,7 @@ public class TunnelControllerGroup implements ClientApp {
      *  @since 0.9.18 Moved from I2PTunnelClientBase
      */
     private static class CustomThreadFactory implements ThreadFactory {
+        @Override
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
             rv.setName("TunnelClientRunner." + _executorThreadCount.incrementAndGet());

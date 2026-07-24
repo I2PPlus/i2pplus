@@ -11,8 +11,6 @@ import net.i2p.util.EventDispatcher;
  * Streamr producer that acts as an I2P server and UDP client,
  * receiving UDP data on a configured port and forwarding it through I2P
  *
- * @author welterde
- * @author zzz modded for I2PTunnel
  */
 public class StreamrProducer extends I2PTunnelUDPServerBase {
 

@@ -7,8 +7,6 @@ import net.i2p.util.Log;
 
 /**
  * Connectivity tester that pings I2P destinations at regular intervals to monitor network status
- *
- * @author welterde/zzz
  */
 public class Pinger implements Source, Runnable {
     protected Sink sink;

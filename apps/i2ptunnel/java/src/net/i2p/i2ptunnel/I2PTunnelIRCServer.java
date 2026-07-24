@@ -40,8 +40,6 @@ import java.nio.charset.StandardCharsets;
  * </pre>
  * Note: No quotes/spaces in passphrase for GUI compatibility.
  * No outbound filtering.
- *
- * @author zzz
  */
 public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
     private final byte[] cloakKey; // 32 bytes of stuff to scramble the dest with

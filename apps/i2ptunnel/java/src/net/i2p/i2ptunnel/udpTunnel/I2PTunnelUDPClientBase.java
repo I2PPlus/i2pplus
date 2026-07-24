@@ -39,9 +39,7 @@ import net.i2p.util.EventDispatcher;
      *
      * So the implementing class must create a UDPSource and/or UDPSink,
      * and must call setSink().
-     *
-     * @author zzz with portions from welterde's streamr
-     */
+ */
  public abstract class I2PTunnelUDPClientBase extends I2PTunnelTask implements Source, Sink {
 
     protected I2PAppContext _context;

@@ -21,8 +21,6 @@ import net.i2p.i2ptunnel.udp.*;
  *
  * The Unwrapper passes headers to the Wrapper through a cache.
  * MultiSink routes packets based on toPort.
- *
- * @author zzz
  */
 public class SOCKSUDPPort implements Source, Sink {
     private final UDPSink udpsink;

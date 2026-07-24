@@ -10,7 +10,6 @@ import net.i2p.util.Log;
 /**
  * Listens for in-JVM connections on internal socket.
  *
- * @author zzz
  * @since 0.7.9
  */
 class InternalSocketRunner extends I2PAppThread {

@@ -10,8 +10,6 @@ import net.i2p.util.Log;
 /**
  * Strip a SOCKS header off a datagram, convert it to a Destination and port
  * Ref: RFC 1928
- *
- * @author zzz
  */
 public class SOCKSUDPUnwrapper implements Source, Sink {
     private Sink sink;

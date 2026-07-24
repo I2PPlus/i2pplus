@@ -52,8 +52,6 @@ import net.i2p.util.SipHash;
  * hostname caching mechanisms.</p>
  *
  * Supports torsocks as of 0.9.57.
- *
- * @author human
  */
 class SOCKS5Server extends SOCKSServer {
 

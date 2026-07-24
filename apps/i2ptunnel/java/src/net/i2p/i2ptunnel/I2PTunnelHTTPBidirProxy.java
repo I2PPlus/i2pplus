@@ -12,8 +12,6 @@ import net.i2p.util.EventDispatcher;
 
 /**
  * HTTP proxy reusing server's I2PSocketManager without outproxy capability.
- *
- * @author sponge
  */
 public class I2PTunnelHTTPBidirProxy extends I2PTunnelHTTPClient implements Runnable {
 

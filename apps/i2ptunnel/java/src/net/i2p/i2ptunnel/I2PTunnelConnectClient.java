@@ -34,8 +34,6 @@ import java.nio.charset.StandardCharsets;
  * <p>
  * Reference: RFC draft-luotonen-ssl-tunneling-03.txt (1997)
  * "Tunneling SSL Through a WWW Proxy"
- *
- * @author zzz (stripped-down I2PTunnelHTTPClient)
  */
 public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements Runnable {
 

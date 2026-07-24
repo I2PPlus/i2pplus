@@ -241,6 +241,7 @@ class ConnThrottler {
         /**
          *  Called by the timer to clean up expired throttles.
          */
+        @Override
         public void timeReached() {
             synchronized(ConnThrottler.this) {
                 if (_totalMax > 0)

@@ -24,8 +24,6 @@ import net.i2p.util.Log;
 /**
  * Put a SOCKS header on a datagram
  * Ref: RFC 1928
- *
- * @author zzz
  */
 public class SOCKSUDPWrapper implements Source, Sink {
     private Sink sink;

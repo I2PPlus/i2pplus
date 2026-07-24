@@ -9,8 +9,6 @@ import net.i2p.util.Log;
 /**
  * I2P source implementation for streaming data.
  * Refactored in 0.9.53 to support I2CP protocols and ports
- *
- * @author welterde
  */
 public class I2PSource implements Source {
 

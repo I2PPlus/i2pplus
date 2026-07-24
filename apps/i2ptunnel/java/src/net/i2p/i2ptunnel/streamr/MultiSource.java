@@ -9,8 +9,6 @@ import net.i2p.util.Log;
 
 /**
  * Multi-source data distributor that forwards data to multiple sink destinations
- * @author welterde
- * @author zzz modded for I2PTunnel
  */
 public class MultiSource implements Source, Sink {
     private Sink sink;

@@ -18,6 +18,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.i2ptunnel.util.*;
 import net.i2p.i2ptunnel.util.LimitOutputStream.DoneCallback;
 import net.i2p.util.ByteCache;
+import net.i2p.util.HexDump;
 import net.i2p.util.Log;
 
 /**
@@ -210,7 +211,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                     if (responseLine.charAt(0) != 'H') {
                         // corrupt, no HTTP/x.x response
                         if (_log.shouldWarn())
-                            _log.warn("Bad HTTP Response:\n" + net.i2p.util.HexDump.dump(data, 0, valid));
+                            _log.warn("Bad HTTP Response:\n" + HexDump.dump(data, 0, valid));
                         _keepAliveIn = false;
                         _keepAliveOut = false;
                         throw new IOException("Bad HTTP Response: " + responseLine);

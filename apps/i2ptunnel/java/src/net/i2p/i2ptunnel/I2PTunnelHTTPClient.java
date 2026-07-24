@@ -41,6 +41,7 @@ import net.i2p.util.EventDispatcher;
 import net.i2p.util.I2PThread;
 import net.i2p.util.InternalSocket;
 import net.i2p.util.PortMapper;
+import net.i2p.util.HexDump;
 
 import java.nio.charset.StandardCharsets;
 /**
@@ -1410,7 +1411,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         if (_log.shouldWarn()) {
                             byte[] tmp = new byte[avail];
                             i2ps.getInputStream().read(tmp);
-                            _log.warn("Resetting old socket with unread data: " + avail + '\n' + net.i2p.util.HexDump.dump(tmp));
+                            _log.warn("Resetting old socket with unread data: " + avail + '\n' + HexDump.dump(tmp));
                         }
                         try { i2ps.reset(); } catch (IOException ioe) { /* ignored */ }
                     }
