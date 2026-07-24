@@ -321,19 +321,13 @@ public class TestJob extends JobImpl {
                     return false;
                 }
             }
-            // Per-pool cap applies to first tests too — without this,
-            // multiple UNTESTED tunnels in the same pool all bypass the
-            // cap and saturate the queue.
+            AtomicInteger poolCount = null;
             if (pool != null && !pool.getSettings().isExploratory()) {
                 String poolId = getPoolId(pool);
-                // Per-pool budget is set very high — we never deny tests at the
-                // pool level.  Global caps (maxQueuedTests, hardLimit) protect
-                // the job queue.  Critical pools (0 active) always bypass.
                 int activeCount = pool.getActiveTunnelCount();
-                boolean poolCritical = activeCount == 0;
-                if (!poolCritical) {
+                if (activeCount > 0) {
                     int poolTestBudget = Tuner.getTestClientBudget();
-                    AtomicInteger poolCount = POOL_TEST_COUNTS.computeIfAbsent(poolId, k -> new AtomicInteger(0));
+                    poolCount = POOL_TEST_COUNTS.computeIfAbsent(poolId, k -> new AtomicInteger(0));
                     int prev = poolCount.getAndIncrement();
                     if (prev >= poolTestBudget) {
                         poolCount.decrementAndGet();
@@ -342,11 +336,13 @@ public class TestJob extends JobImpl {
                 }
             }
             if (!TOTAL_TEST_JOBS.compareAndSet(current, current + 1)) {
+                if (poolCount != null) {poolCount.decrementAndGet();}
                 return false;
             }
             Long tunnelKey = getTunnelKey(cfg);
             if (tunnelKey != null && RUNNING_TESTS.containsKey(tunnelKey)) {
                 TOTAL_TEST_JOBS.decrementAndGet();
+                if (poolCount != null) {poolCount.decrementAndGet();}
                 return false;
             }
             return true;
@@ -413,6 +409,7 @@ public class TestJob extends JobImpl {
 
         Long tunnelKey = getTunnelKey(cfg);
         if (tunnelKey != null && RUNNING_TESTS.containsKey(tunnelKey)) {
+            TOTAL_TEST_JOBS.decrementAndGet();
             Log log = ctx.logManager().getLog(TestJob.class);
             if (log.shouldDebug()) {
                 log.debug("Test already running for tunnel key " + tunnelKey + " -> Skipping duplicate test for " + cfg);
@@ -439,6 +436,7 @@ public class TestJob extends JobImpl {
                 int prev = poolCount.getAndIncrement();
                 if (prev >= poolTestBudget) {
                     poolCount.decrementAndGet();
+                    TOTAL_TEST_JOBS.decrementAndGet();
                     Log log = ctx.logManager().getLog(TestJob.class);
                     if (log.shouldDebug()) {
                         log.debug("Pool " + poolId + " has " + prev +
