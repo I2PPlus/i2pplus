@@ -53,8 +53,6 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
  * Usage: I2PControlController -d $PLUGIN [start|stop]
  *
  * This class is NOT used for the webapp or the bare ServerSocket implementation.
- *
- * @author hottuna
  */
 public class I2PControlController implements RouterApp {
     // non-null
@@ -70,6 +68,7 @@ public class I2PControlController implements RouterApp {
     private final Server _server;
     private ClientAppState _state = UNINITIALIZED;
     // only for main()
+    private static final Log _staticLog = new Log(I2PControlController.class);
     private static I2PControlController _instance;
     static final String PROP_ALLOWED_HOSTS = "i2pcontrol.allowedhosts";
     private static final String SVC_HTTPS_I2PCONTROL = "https_i2pcontrol";
@@ -112,6 +111,8 @@ public class I2PControlController implements RouterApp {
 
     /////// ClientApp methods
 
+    /** Start the Jetty server */
+    @Override
     public synchronized void startup() {
         changeState(STARTING);
         try {
@@ -124,6 +125,8 @@ public class I2PControlController implements RouterApp {
         }
     }
 
+    /** Stop the Jetty server */
+    @Override
     public synchronized void shutdown(String[] args) {
         if (_state == STOPPED)
             return;
@@ -132,14 +135,20 @@ public class I2PControlController implements RouterApp {
         changeState(STOPPED);
     }
 
+    /** @return current state */
+    @Override
     public synchronized ClientAppState getState() {
         return _state;
     }
 
+    /** @return "I2PControl" */
+    @Override
     public String getName() {
         return "I2PControl";
     }
 
+    /** @return "I2PControl" */
+    @Override
     public String getDisplayName() {
         return "I2PControl";
     }
@@ -156,9 +165,9 @@ public class I2PControlController implements RouterApp {
             _mgr.notify(this, state, msg, e);
         if (_context == null) {
             if (msg != null)
-                System.out.println(state + ": " + msg);
+                _log.log(Log.WARN, state + ": " + msg);
             if (e != null)
-                e.printStackTrace();
+                _log.log(Log.WARN, "Error in state change", e);
         }
     }
 
@@ -182,7 +191,7 @@ public class I2PControlController implements RouterApp {
                     i2pcc.startup();
                     _instance = i2pcc;
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    _staticLog.log(Log.WARN, "Startup failed", e);
                 }
             }
         } else if ("stop".equals(args[2])) {
@@ -304,49 +313,6 @@ public class I2PControlController implements RouterApp {
 
 
     /**
-     * Add a listener to the server
-     * If a listener listening to the same port as the provided listener
-     * uses already exists within the server, replace the one already used by
-     * the server with the provided listener.
-     * @param listener
-     * @throws Exception
-     */
-/****
-    public synchronized void replaceListener(Connector listener) throws Exception {
-        if (_server != null) {
-            stopServer();
-        }
-        _server = buildServer(listener);
-    }
-****/
-
-    /**
-     * Get all listeners of the server.
-     * @return
-     */
-/****
-    public synchronized Connector[] getListeners() {
-        if (_server != null) {
-            return _server.getConnectors();
-        }
-        return new Connector[0];
-    }
-****/
-
-    /**
-     * Removes all listeners
-     */
-/****
-    public synchronized void clearListeners() {
-        if (_server != null) {
-            for (Connector listen : getListeners()) {
-                _server.removeConnector(listen);
-            }
-        }
-    }
-****/
-
-    /**
      * Stop it
      */
     private synchronized void stopServer()
@@ -369,29 +335,9 @@ public class I2PControlController implements RouterApp {
         _conf.writeConfFile();
         _secMan.stopTimedEvents();
         stopServer();
-
-/****
-        // Get and stop all running threads
-        ThreadGroup threadgroup = Thread.currentThread().getThreadGroup();
-        Thread[] threads = new Thread[threadgroup.activeCount() + 3];
-        threadgroup.enumerate(threads, true);
-        for (Thread thread : threads) {
-            if (thread != null) {//&& thread.isAlive()){
-                thread.interrupt();
-            }
-        }
-
-        for (Thread thread : threads) {
-            if (thread != null) {
-                System.out.println("Active thread: " + thread.getName());
-            }
-        }
-        threadgroup.interrupt();
-
-        //Thread.currentThread().getThreadGroup().destroy();
-****/
     }
 
+    /** @return plugin directory path */
     public String getPluginDir() {
         return _pluginDir;
     }

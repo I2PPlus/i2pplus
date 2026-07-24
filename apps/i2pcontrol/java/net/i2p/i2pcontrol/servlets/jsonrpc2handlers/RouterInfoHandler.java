@@ -34,12 +34,14 @@ public class RouterInfoHandler implements RequestHandler {
         _context = ctx;
     }
 
-    // Reports the method names of the handled requests
+    /** @return method names handled by this handler */
+    @Override
     public String[] handledRequests() {
         return new String[] { "RouterInfo" };
     }
 
-    // Processes the requests
+    /** Process a RouterInfo request */
+    @Override
     public JSONRPC2Response process(JSONRPC2Request req, MessageContext ctx) {
         if (req.getMethod().equals("RouterInfo")) {
             return process(req);

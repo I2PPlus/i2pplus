@@ -10,6 +10,7 @@ import java.util.Map;
 import net.i2p.i2pcontrol.I2PControlVersion;
 import net.i2p.i2pcontrol.security.AuthToken;
 import net.i2p.i2pcontrol.security.SecurityManager;
+import net.i2p.util.Log;
 
 /*
  *
@@ -35,6 +36,7 @@ import net.i2p.i2pcontrol.security.SecurityManager;
  */
 public class AuthenticateHandler implements RequestHandler {
 
+    private static final Log _log = new Log(AuthenticateHandler.class);
     private static final String[] requiredArgs = {"Password", "API"};
     private final JSONRPC2Helper _helper;
     private final SecurityManager _secMan;
@@ -44,12 +46,14 @@ public class AuthenticateHandler implements RequestHandler {
         _secMan = secMan;
     }
 
-    // Reports the method names of the handled requests
+    /** @return method names handled by this handler */
+    @Override
     public String[] handledRequests() {
         return new String[] {"Authenticate"};
     }
 
-    // Processes the requests
+    /** Process an Authenticate request */
+    @Override
     public JSONRPC2Response process(JSONRPC2Request req, MessageContext ctx) {
         if (req.getMethod().equals("Authenticate")) {
             JSONRPC2Error err = _helper.validateParams(requiredArgs, req, JSONRPC2Helper.USE_NO_AUTH);
@@ -92,7 +96,7 @@ public class AuthenticateHandler implements RequestHandler {
         try {
             apiVersion = ((Number) api).intValue();
         } catch (ClassCastException e) {
-            e.printStackTrace();
+            _log.log(Log.WARN, "Invalid API version type", e);
             return JSONRPC2ExtendedError.UNSPECIFIED_API_VERSION;
         }
 

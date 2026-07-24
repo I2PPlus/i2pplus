@@ -21,12 +21,14 @@ public class EchoHandler implements RequestHandler {
         _helper = helper;
     }
 
-    // Reports the method names of the handled requests
+    /** @return method names handled by this handler */
+    @Override
     public String[] handledRequests() {
         return new String[] {"Echo"};
     }
 
-    // Processes the requests
+    /** Process an Echo request */
+    @Override
     public JSONRPC2Response process(JSONRPC2Request req, MessageContext ctx) {
         if (req.getMethod().equals("Echo")) {
             JSONRPC2Error err = _helper.validateParams(requiredArgs, req);

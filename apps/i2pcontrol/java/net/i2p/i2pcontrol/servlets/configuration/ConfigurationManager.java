@@ -14,9 +14,6 @@ import net.i2p.util.OrderedProperties;
 
 /**
  * Manage the configuration of I2PControl.
- * @author mathias
- * modified: hottuna
- *
  */
 public class ConfigurationManager {
     private final String CONFIG_FILE = "I2PControl.conf";
@@ -47,22 +44,6 @@ public class ConfigurationManager {
     public File getConfFile() {
         return configLocation;
     }
-
-    /**
-     * Collects arguments of the form --word, --word=otherword and -blah
-     * to determine user parameters.
-     * @param settingNames Command line arguments to the application
-     */
-/****
-    public void loadArguments(String[] settingNames) {
-        for (int i = 0; i < settingNames.length; i++) {
-            String settingName = settingNames[i];
-            if (settingName.startsWith("--")) {
-                parseConfigStr(settingName.substring(2));
-            }
-        }
-    }
-****/
 
     /**
      * Reads configuration from file, every line is parsed as key=value.

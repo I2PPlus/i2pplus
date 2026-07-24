@@ -53,6 +53,7 @@ public class HostCheckHandler extends HandlerWrapper
     /**
      *  Block by Host header, pass everything else to the delegate.
      */
+    @Override
     public void handle(String pathInContext,
                        Request baseRequest,
                        HttpServletRequest httpRequest,

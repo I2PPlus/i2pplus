@@ -52,42 +52,13 @@ public class SecurityManager {
         timer = new Sweeper();
     }
 
+    /** Stop the periodic auth token cleanup timer and clear all tokens */
     public void stopTimedEvents() {
         timer.cancel();
         synchronized (authTokens) {
             authTokens.clear();
         }
     }
-
-    /**
-     * Return the X509Certificate of the server as a Base64 encoded string.
-     * @return base64 encode of X509Certificate
-     */
-/****  unused and incorrectly uses I2P Base64. Switch to CertUtil.exportCert() if needed.
-    public String getBase64Cert() {
-        X509Certificate caCert = KeyStoreProvider.readCert(_ks,
-                                 KeyStoreProvider.DEFAULT_CERTIFICATE_ALIAS,
-                                 KeyStoreProvider.DEFAULT_KEYSTORE_PASSWORD);
-        return getBase64FromCert(caCert);
-    }
-****/
-
-    /**
-     * Return the X509Certificate as a base64 encoded string.
-     * @param cert
-     * @return base64 encode of X509Certificate
-     */
-/****  unused and incorrectly uses I2P Base64. Switch to CertUtil.exportCert() if needed.
-    private static String getBase64FromCert(X509Certificate cert) {
-        try {
-            return Base64.encode(cert.getEncoded());
-        } catch (CertificateEncodingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-****/
-
 
     /**
      * Hash pwd with using BCrypt with the default salt.
@@ -216,8 +187,6 @@ public class SecurityManager {
 
     /**
      * Clean up old authorization tokens to keep the token store slim and fit.
-     * @author hottuna
-     *
      */
     private class Sweeper extends SimpleTimer2.TimedEvent {
         // Start running periodic task after 1 day, run periodically every 30 minutes.

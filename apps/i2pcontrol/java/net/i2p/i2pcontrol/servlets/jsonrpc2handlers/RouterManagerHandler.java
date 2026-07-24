@@ -14,6 +14,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.reseed.ReseedChecker;
 import net.i2p.update.UpdateManager;
 import net.i2p.update.UpdateType;
+import net.i2p.util.Log;
 import org.tanukisoftware.wrapper.WrapperManager;
 
 /*
@@ -38,6 +39,7 @@ import org.tanukisoftware.wrapper.WrapperManager;
  * Controls router operations including shutdown, restart, graceful shutdown, graceful restart, reseeding, and update management.
  */
 public class RouterManagerHandler implements RequestHandler {
+    private static final Log _log = new Log(RouterManagerHandler.class);
     private final JSONRPC2Helper _helper;
     private final RouterContext _context;
 
@@ -49,12 +51,14 @@ public class RouterManagerHandler implements RequestHandler {
         _context = ctx;
     }
 
-    // Reports the method names of the handled requests
+    /** @return method names handled by this handler */
+    @Override
     public String[] handledRequests() {
         return new String[] { "RouterManager" };
     }
 
-    // Processes the requests
+    /** Process a RouterManager request */
+    @Override
     public JSONRPC2Response process(JSONRPC2Request req, MessageContext ctx) {
         if (req.getMethod().equals("RouterManager")) {
             return process(req);
@@ -228,7 +232,7 @@ public class RouterManagerHandler implements RequestHandler {
             try {
                 WrapperManager.signalStopped(_exitCode);
             } catch (Throwable t) {
-                t.printStackTrace();
+                _log.log(Log.WARN, "Failed to signal stopped to wrapper", t);
             }
         }
     }

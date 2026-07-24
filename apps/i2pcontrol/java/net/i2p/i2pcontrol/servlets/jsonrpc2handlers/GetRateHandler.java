@@ -41,12 +41,14 @@ public class GetRateHandler implements RequestHandler {
         _helper = helper;
     }
 
-    // Reports the method names of the handled requests
+    /** @return method names handled by this handler */
+    @Override
     public String[] handledRequests() {
         return new String[] {"GetRate"};
     }
 
-    // Processes the requests
+    /** Process a GetRate request */
+    @Override
     public JSONRPC2Response process(JSONRPC2Request req, MessageContext ctx) {
         if (req.getMethod().equals("GetRate")) {
             JSONRPC2Error err = _helper.validateParams(requiredArgs, req);

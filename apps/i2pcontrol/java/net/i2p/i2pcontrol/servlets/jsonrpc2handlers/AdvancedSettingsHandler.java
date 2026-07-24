@@ -32,12 +32,14 @@ public class AdvancedSettingsHandler implements RequestHandler {
         _context = ctx;
     }
 
-    // Reports the method names of the handled requests
+    /** @return method names handled by this handler */
+    @Override
     public String[] handledRequests() {
         return new String[] {"AdvancedSettings"};
     }
 
-    // Processes the requests
+    /** Process an AdvancedSettings request */
+    @Override
     @SuppressWarnings("unchecked")
     public JSONRPC2Response process(JSONRPC2Request req, MessageContext ctx) {
         if (req.getMethod().equals("AdvancedSettings")) {

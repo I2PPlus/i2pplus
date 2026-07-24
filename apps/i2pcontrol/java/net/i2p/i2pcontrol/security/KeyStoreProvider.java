@@ -6,14 +6,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
+import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import net.i2p.util.Log;
 import net.i2p.crypto.KeyStoreUtil;
 
 /**
  * Provider for managing I2PControl keystore operations.
  * Handles loading and accessing SSL certificates for secure connections.
  */
-        // Generate a random secure password on class load
 public class KeyStoreProvider {
     public static final String DEFAULT_CERTIFICATE_ALGORITHM_STRING = "RSA";
     public static final int DEFAULT_CERTIFICATE_KEY_LENGTH = 4096;
@@ -22,12 +23,13 @@ public class KeyStoreProvider {
     public final static String DEFAULT_CERTIFICATE_ALIAS = "I2PControl CA";
     public static final String DEFAULT_KEYSTORE_NAME = "i2pcontrol.ks";
     public static final String DEFAULT_KEYSTORE_PASSWORD = KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD;
+    private static final Log _log = new Log(KeyStoreProvider.class);
     private static String DEFAULT_CERTIFICATE_PASSWORD;
 
     static {
         // Generate a random secure password on class load
         StringBuilder sb = new StringBuilder(16);
-        java.security.SecureRandom r = new java.security.SecureRandom();
+        SecureRandom r = new SecureRandom();
         String chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
         for (int i = 0; i < 16; i++)
             sb.append(chars.charAt(r.nextInt(chars.length())));
@@ -44,10 +46,12 @@ public class KeyStoreProvider {
     private final String _pluginDir;
     private KeyStore _keystore;
 
+    /** @param pluginDir path to the plugin directory for keystore storage */
     public KeyStoreProvider(String pluginDir) {
         _pluginDir = pluginDir;
     }
 
+    /** Create keystore if it does not exist */
     public void initialize() {
         KeyStoreUtil.createKeys(new File(getKeyStoreLocation()),
                                 DEFAULT_KEYSTORE_PASSWORD,
@@ -75,11 +79,10 @@ public class KeyStoreProvider {
                 cert.verify(cert.getPublicKey());
                 return cert;
             } catch (Exception e) {
-                System.err.println("Failed to verify caCert certificate against caCert");
-                e.printStackTrace();
+                _log.log(Log.WARN, "Failed to verify caCert certificate against caCert", e);
             }
         } catch (KeyStoreException e) {
-            e.printStackTrace();
+            _log.log(Log.WARN, "Failed to read cert from keystore", e);
         }
         return null;
     }
@@ -119,6 +122,7 @@ public class KeyStoreProvider {
         }
     }
 
+    /** @return full path to the keystore file */
     public String getKeyStoreLocation() {
         File keyStoreFile = new File(_pluginDir, DEFAULT_KEYSTORE_NAME);
         return keyStoreFile.getAbsolutePath();

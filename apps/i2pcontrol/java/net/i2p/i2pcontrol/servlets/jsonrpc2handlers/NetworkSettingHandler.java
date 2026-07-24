@@ -48,12 +48,14 @@ public class NetworkSettingHandler implements RequestHandler {
         _context = ctx;
     }
 
-    // Reports the method names of the handled requests
+    /** @return method names handled by this handler */
+    @Override
     public String[] handledRequests() {
         return new String[] {"NetworkSetting"};
     }
 
-    // Processes the requests
+    /** Process a NetworkSetting request */
+    @Override
     public JSONRPC2Response process(JSONRPC2Request req, MessageContext ctx) {
         if (req.getMethod().equals("NetworkSetting")) {
             return process(req);

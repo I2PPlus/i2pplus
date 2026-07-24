@@ -45,8 +45,6 @@ import java.nio.charset.StandardCharsets;
  * from a single static class so it can be called via clients.config.
  *
  * This class is NOT used for the webapp or the HTTP/HTTPS implementation.
- *
- * @author hottuna
  */
 public class SocketController implements RouterApp {
     // non-null
@@ -82,6 +80,8 @@ public class SocketController implements RouterApp {
 
     /////// ClientApp methods
 
+    /** Start the socket server */
+    @Override
     public synchronized void startup() {
         changeState(STARTING);
         try {
@@ -94,6 +94,8 @@ public class SocketController implements RouterApp {
         }
     }
 
+    /** Stop the socket server */
+    @Override
     public synchronized void shutdown(String[] args) {
         if (_state == STOPPED)
             return;
@@ -102,14 +104,20 @@ public class SocketController implements RouterApp {
         changeState(STOPPED);
     }
 
+    /** @return current state */
+    @Override
     public synchronized ClientAppState getState() {
         return _state;
     }
 
+    /** @return "I2PControl-Socket" */
+    @Override
     public String getName() {
         return "I2PControl-Socket";
     }
 
+    /** @return "I2PControl-Socket" */
+    @Override
     public String getDisplayName() {
         return "I2PControl-Socket";
     }
@@ -126,9 +134,9 @@ public class SocketController implements RouterApp {
             _mgr.notify(this, state, msg, e);
         if (_context == null) {
             if (msg != null)
-                System.out.println(state + ": " + msg);
+                _log.log(Log.WARN, state + ": " + msg);
             if (e != null)
-                e.printStackTrace();
+                _log.log(Log.WARN, "Error in state change", e);
         }
     }
 
@@ -160,13 +168,13 @@ public class SocketController implements RouterApp {
 
         public Handler(Socket skt) { s = skt; }
 
+        @Override
         public void run() {
             try {
                 final BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream(), StandardCharsets.UTF_8));
                 while (true) {
                     Object o = Jsoner.deserialize(reader);
-                    // TODO
-                    System.out.println("i2pcontrol got: " + o);
+                    _log.log(Log.WARN, "Unhandled JSON input: " + o);
                 }
             } catch (DeserializationException pe) {
                 _log.error("i2pcontrol handler", pe);
