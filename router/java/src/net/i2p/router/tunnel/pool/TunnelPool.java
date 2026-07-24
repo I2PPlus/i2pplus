@@ -1405,8 +1405,8 @@ public class TunnelPool {
                         if (_log.shouldWarn()) {
                             _log.warn(toString() + " -> Replaced non-GOOD tunnel at cap (" +
                                       usable + " >= max " + maxUsable + ", target=" + target +
-                                      ") \n* removed: " + replacee.getTestStatus() +
-                                      "\n* added: " + info);
+                                      ") \n* Removed: " + replacee.getTestStatus() +
+                                      "\n* Added: " + info);
                         }
                     } else {
                         if (_log.shouldWarn()) {
