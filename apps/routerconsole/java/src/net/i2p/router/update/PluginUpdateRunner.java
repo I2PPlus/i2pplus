@@ -329,6 +329,7 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
+     *  Process a SU3 plugin file
      *  @since 0.9.15
      */
     private void processSU3(File f, File appDir, String url) {

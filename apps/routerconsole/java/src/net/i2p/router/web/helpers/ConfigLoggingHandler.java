@@ -54,18 +54,27 @@ public class ConfigLoggingHandler extends FormHandler {
         _fileSize = (size != null ? size.trim() : null);
     }
 
-    /** @since 0.9.57 */
+    /**
+     *  Set whether to compress log files.
+     *  @since 0.9.57
+     */
     public void setLogcompress(String foo) {
         _logCompress = true;
     }
 
-    /** @since 0.8.1 */
+    /**
+     *  Set a new class name for log level override.
+     *  @since 0.8.1
+     */
     public void setNewlogclass(String s) {
         if (s != null && !s.isEmpty())
             _newLogClass = s;
     }
 
-    /** @since 0.8.1 */
+    /**
+     *  Set the log level for a new class override.
+     *  @since 0.8.1
+     */
     public void setNewloglevel(String s) {
         if (s != null)
             _newLogLevel = s;

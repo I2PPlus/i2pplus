@@ -14,7 +14,6 @@ import net.i2p.router.web.PluginStarter;
 /**
  * Render the configuration menu at the top of all the config pages.
  * refactored from confignav.jsp to reduce size and make translation easier
- * @author zzz
  */
 public class ConfigNavHelper extends HelperBase {
 
@@ -33,7 +32,10 @@ public class ConfigNavHelper extends HelperBase {
                                            _x("Reseeding"), _x("Advanced"), _x("Router Family"), _x("Bans"),
                                            _x("Auto-Tuning") };
 
-    /** @since 0.9.19 */
+    /**
+     *  A configuration tab entry with page name and display title.
+     *  @since 0.9.19
+     */
     private static class Tab {
         public final String page;
         public final String title;
@@ -42,7 +44,10 @@ public class ConfigNavHelper extends HelperBase {
         }
     }
 
-    /** @since 0.9.19 */
+    /**
+     *  Comparator for sorting tabs alphabetically by title.
+     *  @since 0.9.19
+     */
     private class TabComparator implements Comparator<Tab> {
          private static final long serialVersionUID = 1L;
          private final Collator coll;
@@ -52,6 +57,7 @@ public class ConfigNavHelper extends HelperBase {
              coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
          }
 
+         @Override
          public int compare(Tab l, Tab r) {
              return coll.compare(l.title, r.title);
         }

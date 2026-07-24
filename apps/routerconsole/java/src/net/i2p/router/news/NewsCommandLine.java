@@ -20,7 +20,7 @@ import net.i2p.router.RouterVersion;
  *
  * @since 0.9.28
  */
-public class NewsCommandLine extends net.i2p.router.RouterCommandLine {
+public class NewsCommandLine extends RouterCommandLine {
 
     protected static final List<String> NCLASSES = Arrays.asList(new String[] {
         "com.vuze.plugins.mlab.MLabRunner",

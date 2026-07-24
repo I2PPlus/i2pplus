@@ -92,10 +92,17 @@ public class ConfigAdvancedHelper extends HelperBase {
         return buf.toString();
     }
 
-    /** @since 0.9.14.1 */
+    /**
+     *  Get the path to the router config file.
+     *  @since 0.9.14.1
+     */
     public String getConfigFileName() {return _context.router().getConfigFilename();}
 
-    /** @since 0.9.20 */
+    /**
+     *  Get the checked attribute for floodfill radio buttons.
+     *  @param mode 0=disabled, 1=enabled, 2=auto
+     *  @since 0.9.20
+     */
     public String getFFChecked(int mode) {
         String ff = _context.getProperty(PROP_FLOODFILL_PARTICIPANT, "auto");
         if ((mode == 0 && ff.equals("false")) ||
@@ -105,6 +112,9 @@ public class ConfigAdvancedHelper extends HelperBase {
         return "";
     }
 
-    /** @since 0.9.21 */
+    /**
+     *  Whether the router is currently acting as a floodfill.
+     *  @since 0.9.21
+     */
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
 }

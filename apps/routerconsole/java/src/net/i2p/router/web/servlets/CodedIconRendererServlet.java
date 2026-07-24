@@ -15,7 +15,6 @@ import net.i2p.util.FileUtil;
 /**
  * Serve plugin icons, at /Plugins/pluginicon?plugin=foo
  *
- * @author cacapo
  * @since 0.9.25
  */
 public class CodedIconRendererServlet extends HttpServlet {
@@ -23,7 +22,7 @@ public class CodedIconRendererServlet extends HttpServlet {
     private static final long serialVersionUID = 16851750L;
     private static final String base = I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath();
     private static final String slash = String.valueOf(File.separatorChar);
-    private static final String file = "docs" + slash + "themes" + slash + "console" +  slash + "images" + slash + "plugin.png";
+    private static final String file = "docs" + slash + "themes" + slash + "console" + slash + "images" + slash + "plugin.png";
 
      @Override
      protected void doGet(HttpServletRequest srq, HttpServletResponse srs) throws ServletException, IOException {

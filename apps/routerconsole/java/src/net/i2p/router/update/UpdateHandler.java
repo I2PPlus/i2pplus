@@ -37,6 +37,7 @@ class UpdateHandler implements Updater {
      *  @param maxTime how long you have
      *  @return active task or null if unable to download
      */
+    @Override
     public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources,
                              String id, String newVersion, long maxTime) {
         boolean shouldProxy = _context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY);

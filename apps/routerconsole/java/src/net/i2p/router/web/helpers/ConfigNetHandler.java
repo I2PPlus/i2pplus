@@ -58,7 +58,7 @@ public class ConfigNetHandler extends FormHandler {
 
     @Override
     protected void processForm() {
-        if (_saveRequested || ( (_action != null) && (_t("Save changes").equals(_action)) )) {
+        if (_saveRequested || ((_action != null) && (_t("Save changes").equals(_action)))) {
             saveChanges();
         //} else if (_recheckReachabilityRequested) {
         //    recheckReachability();
@@ -86,10 +86,16 @@ public class ConfigNetHandler extends FormHandler {
     public void setUpnp(String moo) { _upnp = true; }
     public void setLaptop(String moo) { _laptop = true; }
 
-    /** @since 0.9.20 */
+    /**
+     *  Set whether IPv4 is firewalled.
+     *  @since 0.9.20
+     */
     public void setIPv4Firewalled(String moo) { _ipv4Firewalled = true; }
 
-    /** @since 0.9.28 */
+    /**
+     *  Set whether IPv6 is firewalled.
+     *  @since 0.9.28
+     */
     public void setIPv6Firewalled(String moo) { _ipv6Firewalled = true; }
 
     public void setHostname(String hostname) {
@@ -140,17 +146,26 @@ public class ConfigNetHandler extends FormHandler {
         _sharePct = (pct != null ? pct.trim() : null);
     }
 
-    /** @since 0.8.12 */
+    /**
+     *  Set rates-only mode (skip IP/transport changes).
+     *  @since 0.8.12
+     */
     public void setRatesOnly(String foo) {
         _ratesOnly = true;
     }
 
-    /** @since 0.8.13 */
+    /**
+     *  Set whether UDP transport is disabled.
+     *  @since 0.8.13
+     */
     public void setDisableUDP(String foo) {
         _udpDisabled = "disabled".equals(foo);
     }
 
-    /** @since IPv6 */
+    /**
+     *  Set the IPv6 mode configuration.
+     *  @since IPv6
+     */
     public void setIpv6(String mode) {
         _ipv6Mode = mode;
     }

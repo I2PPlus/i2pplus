@@ -42,7 +42,10 @@ public class ConfigLoggingHelper extends HelperBase {
         return DataHelper.formatSize2(bytes, false) + 'B';
     }
 
-    /** @since 0.9.57 */
+    /**
+     *  Whether log compression is enabled.
+     *  @since 0.9.57
+     */
     public String getLogCompress() {
         return _mgr.shouldGzip() ? CHECKED : "";
     }

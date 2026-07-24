@@ -307,6 +307,7 @@ public class ConfigClientsHandler extends FormHandler {
     }
 
     /**
+     *  Stop a running client by index.
      *  @since Implemented in 0.9.6 using ClientAppManager
      */
     private void stopClient(int i) {
@@ -427,6 +428,7 @@ public class ConfigClientsHandler extends FormHandler {
     }
 
     /**
+     *  Install a plugin from a local file upload.
      *  @since 0.9.19
      */
     private void installPluginFromFile() {
@@ -501,7 +503,10 @@ public class ConfigClientsHandler extends FormHandler {
         installPlugin(app, url);
     }
 
-    /** @since 0.8.13 */
+    /**
+     *  Update all installed plugins.
+     *  @since 0.8.13
+     */
     private void updateAllPlugins() {
         if (NewsHelper.isAnyUpdateInProgress()) {
             addFormError(_t("Plugin or update download already in progress."), true);

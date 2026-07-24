@@ -14,8 +14,12 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Cookie;
 import net.i2p.I2PAppContext;
+import net.i2p.router.RouterContext;
 import net.i2p.router.web.CSSHelper;
+import net.i2p.router.web.ConsolePasswordManager;
+import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.util.Log;
 
 /**
@@ -62,7 +66,7 @@ public class AuthFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
-        net.i2p.router.RouterContext ctx = (net.i2p.router.RouterContext) I2PAppContext.getGlobalContext();
+        RouterContext ctx = (RouterContext) I2PAppContext.getGlobalContext();
 
         String authType = ctx.getProperty(PROP_AUTH_TYPE, AUTH_TYPE_CUSTOM);
         boolean authEnabled = ctx.getBooleanPropertyDefaultTrue(PROP_PW_ENABLE);
@@ -138,8 +142,8 @@ if ("/prefs".equals(path)) {
 
     private String getActiveTheme() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        if (ctx instanceof net.i2p.router.RouterContext) {
-            String theme = ((net.i2p.router.RouterContext) ctx).getProperty(CSSHelper.PROP_THEME_NAME, CSSHelper.DEFAULT_THEME);
+        if (ctx instanceof RouterContext) {
+            String theme = ((RouterContext) ctx).getProperty(CSSHelper.PROP_THEME_NAME, CSSHelper.DEFAULT_THEME);
             if (theme != null && !theme.isEmpty()) {
                 return theme;
             }
@@ -147,13 +151,13 @@ if ("/prefs".equals(path)) {
         return DEFAULT_THEME;
     }
 
-    private boolean hasAnyPassword(net.i2p.router.RouterContext ctx) {
-        net.i2p.router.web.ConsolePasswordManager mgr = new net.i2p.router.web.ConsolePasswordManager(ctx);
-        boolean hasMD5 = !mgr.getMD5(net.i2p.router.web.RouterConsoleRunner.PROP_CONSOLE_PW).isEmpty();
+    private boolean hasAnyPassword(RouterContext ctx) {
+        ConsolePasswordManager mgr = new ConsolePasswordManager(ctx);
+        boolean hasMD5 = !mgr.getMD5(RouterConsoleRunner.PROP_CONSOLE_PW).isEmpty();
         if (hasMD5) {
             return true;
         }
-        String pfx = net.i2p.router.web.RouterConsoleRunner.PROP_CONSOLE_PW + ".";
+        String pfx = RouterConsoleRunner.PROP_CONSOLE_PW + ".";
         for (Map.Entry<String, String> e : ctx.router().getConfigMap().entrySet()) {
             String key = e.getKey();
             if (key != null && key.startsWith(pfx) && key.endsWith(".pbkdf2")) {
@@ -167,9 +171,9 @@ if ("/prefs".equals(path)) {
     }
 
     private String getSessionCookie(HttpServletRequest req) {
-        javax.servlet.http.Cookie[] cookies = req.getCookies();
+        Cookie[] cookies = req.getCookies();
         if (cookies == null) return null;
-        for (javax.servlet.http.Cookie cookie : cookies) {
+        for (Cookie cookie : cookies) {
             if (SessionManager.SESSION_COOKIE_NAME.equals(cookie.getName())) {
                 return cookie.getValue();
             }
@@ -177,7 +181,7 @@ if ("/prefs".equals(path)) {
         return null;
     }
 
-    private String authenticateBasicAuth(HttpServletRequest req, HttpServletResponse resp, net.i2p.router.RouterContext ctx) {
+    private String authenticateBasicAuth(HttpServletRequest req, HttpServletResponse resp, RouterContext ctx) {
         String authHeader = req.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Basic ")) {
             return null;
@@ -189,15 +193,15 @@ if ("/prefs".equals(path)) {
             if (colon <= 0) return null;
             String username = decoded.substring(0, colon);
             String password = decoded.substring(colon + 1);
-            net.i2p.router.web.ConsolePasswordManager mgr = new net.i2p.router.web.ConsolePasswordManager(ctx);
-            String pbkdf2Prop = net.i2p.router.web.RouterConsoleRunner.PROP_CONSOLE_PW + "." + username + ".pbkdf2";
+            ConsolePasswordManager mgr = new ConsolePasswordManager(ctx);
+            String pbkdf2Prop = RouterConsoleRunner.PROP_CONSOLE_PW + "." + username + ".pbkdf2";
             String pbkdf2Value = ctx.router().getConfigMap().get(pbkdf2Prop);
-            boolean noAuthConfigured = mgr.getMD5(net.i2p.router.web.RouterConsoleRunner.PROP_CONSOLE_PW).isEmpty()
+            boolean noAuthConfigured = mgr.getMD5(RouterConsoleRunner.PROP_CONSOLE_PW).isEmpty()
                     && pbkdf2Value == null;
             if (noAuthConfigured) {
                 return null;
             }
-            boolean verified = mgr.checkMD5(net.i2p.router.web.RouterConsoleRunner.PROP_CONSOLE_PW, "i2prouter", username, password);
+            boolean verified = mgr.checkMD5(RouterConsoleRunner.PROP_CONSOLE_PW, "i2prouter", username, password);
             if (verified) {
                 return createSessionAndSetCookie(req, resp, username);
             }
@@ -208,12 +212,12 @@ if ("/prefs".equals(path)) {
     }
 
     private String createSessionAndSetCookie(HttpServletRequest req, HttpServletResponse resp, String username) {
-        net.i2p.router.RouterContext ctx = (net.i2p.router.RouterContext) I2PAppContext.getGlobalContext();
+        RouterContext ctx = (RouterContext) I2PAppContext.getGlobalContext();
         boolean hasPasswords = hasAnyPassword(ctx);
         // No expiry when no password is configured — session persists until browser closes
         long expiryMs = hasPasswords ? 30 * 60 * 1000 : -1;
         String sessionToken = SessionManager.getInstance().createSession(username, expiryMs);
-        javax.servlet.http.Cookie cookie = new javax.servlet.http.Cookie(SessionManager.SESSION_COOKIE_NAME, sessionToken);
+        Cookie cookie = new Cookie(SessionManager.SESSION_COOKIE_NAME, sessionToken);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         cookie.setSecure(req.isSecure());

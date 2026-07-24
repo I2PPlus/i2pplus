@@ -104,12 +104,18 @@ public class ConfigNetHelper extends HelperBase {
         return getChecked(UDPTransport.PROP_LAPTOP_MODE);
     }
 
-    /** @since 0.9.20 */
+    /**
+     *  Get checked attribute for IPv4 firewalled setting.
+     *  @since 0.9.20
+     */
     public String getIPv4FirewalledChecked() {
         return getChecked(TransportUtil.PROP_IPV4_FIREWALLED);
     }
 
-    /** @since 0.9.28 */
+    /**
+     *  Get checked attribute for IPv6 firewalled setting.
+     *  @since 0.9.28
+     */
     public String getIPv6FirewalledChecked() {
         return getChecked(TransportUtil.PROP_IPV6_FIREWALLED);
     }

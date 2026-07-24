@@ -210,7 +210,10 @@ public class ConfigKeyringHandler extends FormHandler {
             _key = key.trim();
     }
 
-    /** @since 0.9.41 */
+    /**
+     *  Set the blinded lookup password from form.
+     *  @since 0.9.41
+     */
     public void setNofilter_blindedPassword(String pw) {
         if (pw != null) {
             pw = pw.trim();
@@ -219,14 +222,20 @@ public class ConfigKeyringHandler extends FormHandler {
         }
     }
 
-    /** @since 0.9.41 */
+    /**
+     *  Set the encryption type mode from form.
+     *  @since 0.9.41
+     */
     public void setEncryptMode(String m) {
         try {
             _mode = Integer.parseInt(m);
         } catch (NumberFormatException nfe) { /* ignored */ }
     }
 
-    /** @since 0.9.41 */
+    /**
+     *  Set the list of destinations to revoke from keyring.
+     *  @since 0.9.41
+     */
     public void setRevokeClient(String[] revokes) {
         _revokes = revokes;
     }

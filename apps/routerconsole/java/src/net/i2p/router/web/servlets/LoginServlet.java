@@ -10,17 +10,23 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpSession;
 import net.i2p.I2PAppContext;
 import net.i2p.router.Router;
+import net.i2p.router.RouterContext;
 import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.ConsolePasswordManager;
 import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.servlet.filters.SessionManager;
 import net.i2p.util.Log;
+import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 
 /**
@@ -49,8 +55,8 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         boolean routerReady = false;
-        if (ctx instanceof net.i2p.router.RouterContext) {
-            net.i2p.router.Router router = ((net.i2p.router.RouterContext) ctx).router();
+        if (ctx instanceof RouterContext) {
+            Router router = ((RouterContext) ctx).router();
             routerReady = router.isAlive() && router.isRunning();
         }
         if (!routerReady) {
@@ -68,7 +74,7 @@ public class LoginServlet extends HttpServlet {
         }
         String theme = getLoginTheme();
         boolean enforceLogin = false;
-        if (ctx instanceof net.i2p.router.RouterContext) {
+        if (ctx instanceof RouterContext) {
             enforceLogin = ( ctx).getBooleanPropertyDefaultTrue("routerconsole.enforceLogin");
         }
         boolean hasPasswords = isPasswordConfigured();
@@ -98,11 +104,11 @@ public class LoginServlet extends HttpServlet {
 
     private boolean isPasswordConfigured() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        if (!(ctx instanceof net.i2p.router.RouterContext)) return false;
-        return hasAnyPassword((net.i2p.router.RouterContext) ctx);
+        if (!(ctx instanceof RouterContext)) return false;
+        return hasAnyPassword((RouterContext) ctx);
     }
 
-    private boolean hasAnyPassword(net.i2p.router.RouterContext ctx) {
+    private boolean hasAnyPassword(RouterContext ctx) {
         ConsolePasswordManager mgr = new ConsolePasswordManager(ctx);
         boolean hasMD5 = !mgr.getMD5(RouterConsoleRunner.PROP_CONSOLE_PW).isEmpty();
         if (hasMD5) {
@@ -123,8 +129,8 @@ public class LoginServlet extends HttpServlet {
 
     private String getLoginTheme() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        if (ctx instanceof net.i2p.router.RouterContext) {
-            String theme = ((net.i2p.router.RouterContext) ctx).getProperty(CSSHelper.PROP_THEME_NAME, CSSHelper.DEFAULT_THEME);
+        if (ctx instanceof RouterContext) {
+            String theme = ((RouterContext) ctx).getProperty(CSSHelper.PROP_THEME_NAME, CSSHelper.DEFAULT_THEME);
             if (theme != null && !theme.isEmpty()) {
                 return theme;
             }
@@ -164,7 +170,7 @@ public class LoginServlet extends HttpServlet {
             updatePreference("routerconsole.theme", theme);
             resp.setContentType("application/json");
             resp.getWriter().write("{\"success\":true,\"theme\":\"" +
-                net.i2p.data.DataHelper.escapeHTML(theme) + "\"}");
+                DataHelper.escapeHTML(theme) + "\"}");
             return;
         }
         if (langRaw != null) {
@@ -172,7 +178,7 @@ public class LoginServlet extends HttpServlet {
             updatePreference("routerconsole.lang", lang);
             resp.setContentType("application/json");
             resp.getWriter().write("{\"success\":true,\"lang\":\"" +
-                net.i2p.data.DataHelper.escapeHTML(lang) + "\"}");
+                DataHelper.escapeHTML(lang) + "\"}");
             return;
         }
 
@@ -183,7 +189,7 @@ public class LoginServlet extends HttpServlet {
         String duration = req.getParameter("duration");
         String csrfToken = req.getParameter("I2P+CSRFTOKEN");
 
-        javax.servlet.http.HttpSession session = req.getSession(true);
+        HttpSession session = req.getSession(true);
         String sessionCSRF = (String) session.getAttribute("loginCSRF");
         if (sessionCSRF == null || csrfToken == null || !csrfToken.equals(sessionCSRF)) {
             _log.warn("CSRF validation failed or session expired — re-displaying form");
@@ -235,8 +241,8 @@ public class LoginServlet extends HttpServlet {
                 return;
             }
             I2PAppContext ctx = I2PAppContext.getGlobalContext();
-            if (ctx instanceof net.i2p.router.RouterContext) {
-                net.i2p.router.RouterContext rctx = (net.i2p.router.RouterContext) ctx;
+            if (ctx instanceof RouterContext) {
+                RouterContext rctx = (RouterContext) ctx;
                 ConsolePasswordManager mgr = new ConsolePasswordManager(rctx);
                 if (mgr.saveMD5(RouterConsoleRunner.PROP_CONSOLE_PW, REALM, username, password)) {
                     _log.info("Password set for user: " + username);
@@ -360,12 +366,12 @@ public class LoginServlet extends HttpServlet {
 
     private boolean verifyPassword(String username, String password) {
         I2PAppContext appCtx = I2PAppContext.getGlobalContext();
-        if (!(appCtx instanceof net.i2p.router.RouterContext)) {
+        if (!(appCtx instanceof RouterContext)) {
             _log.error("Global context is not a RouterContext: " + appCtx.getClass().getName());
             return false;
         }
-        net.i2p.router.RouterContext ctx = (net.i2p.router.RouterContext) appCtx;
-        net.i2p.router.Router router = ctx.router();
+        RouterContext ctx = (RouterContext) appCtx;
+        Router router = ctx.router();
         if (router == null) {
             _log.error("Router is null in RouterContext");
             return false;
@@ -397,13 +403,13 @@ public class LoginServlet extends HttpServlet {
                 String[] parts = COLON_SPLIT.split(pbkdf2Hash);
                 if (parts.length >= 3) {
                     int iterations = Integer.parseInt(parts[0]);
-                    byte[] salt = net.i2p.data.Base64.decode(parts[1]);
-                    byte[] storedHash = net.i2p.data.Base64.decode(parts[2]);
-                    javax.crypto.spec.PBEKeySpec spec = new javax.crypto.spec.PBEKeySpec(
+                    byte[] salt = Base64.decode(parts[1]);
+                    byte[] storedHash = Base64.decode(parts[2]);
+                    PBEKeySpec spec = new PBEKeySpec(
                         password.toCharArray(), salt, iterations, 256);
-                    javax.crypto.SecretKeyFactory skf = javax.crypto.SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+                    SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
                     byte[] computedHash = skf.generateSecret(spec).getEncoded();
-                    result = net.i2p.data.DataHelper.eq(storedHash, computedHash);
+                    result = DataHelper.eq(storedHash, computedHash);
                     if (_log.shouldDebug()) {_log.debug("PBKDF2 verification result: " + result);}
                 }
             } catch (Exception e) {
@@ -427,9 +433,9 @@ public class LoginServlet extends HttpServlet {
     }
 
     private String getSessionCookie(HttpServletRequest req) {
-        javax.servlet.http.Cookie[] cookies = req.getCookies();
+        Cookie[] cookies = req.getCookies();
         if (cookies == null) return null;
-        for (javax.servlet.http.Cookie cookie : cookies) {
+        for (Cookie cookie : cookies) {
             if (SessionManager.SESSION_COOKIE_NAME.equals(cookie.getName())) {
                 return cookie.getValue();
             }
@@ -439,8 +445,8 @@ public class LoginServlet extends HttpServlet {
 
     private void persistSession(String token, String username, long expiryMs) {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        if (!(ctx instanceof net.i2p.router.RouterContext)) return;
-        net.i2p.router.RouterContext rctx = (net.i2p.router.RouterContext) ctx;
+        if (!(ctx instanceof RouterContext)) return;
+        RouterContext rctx = (RouterContext) ctx;
         Router router = rctx.router();
 
         long expiresAt = expiryMs > 0 ? System.currentTimeMillis() + expiryMs : -1;
@@ -457,8 +463,8 @@ public class LoginServlet extends HttpServlet {
 
     private void loadPersistedSessions() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        if (!(ctx instanceof net.i2p.router.RouterContext)) return;
-        net.i2p.router.RouterContext rctx = (net.i2p.router.RouterContext) ctx;
+        if (!(ctx instanceof RouterContext)) return;
+        RouterContext rctx = (RouterContext) ctx;
 
         String persisted = rctx.getProperty(PROP_PERSISTED_SESSIONS);
         if (persisted == null || persisted.isEmpty()) return;
@@ -488,13 +494,13 @@ public class LoginServlet extends HttpServlet {
     private String generateCSRFToken() {
         byte[] randomBytes = new byte[24];
         CSRF_RANDOM.nextBytes(randomBytes);
-        return net.i2p.data.DataHelper.toHexString(randomBytes);
+        return DataHelper.toHexString(randomBytes);
     }
 
     private void updatePreference(String key, String value) {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        if (!(ctx instanceof net.i2p.router.RouterContext)) return;
-        net.i2p.router.RouterContext rctx = (net.i2p.router.RouterContext) ctx;
+        if (!(ctx instanceof RouterContext)) return;
+        RouterContext rctx = (RouterContext) ctx;
         Router router = rctx.router();
         router.saveConfig(key, value);
         if (_log.shouldDebug()) {_log.debug("Preference updated: " + key + "=" + value);}

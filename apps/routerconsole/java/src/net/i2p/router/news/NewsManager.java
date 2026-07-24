@@ -137,9 +137,13 @@ public class NewsManager implements ClientApp {
      *  ClientApp interface
      *  @param args ignored
      */
+    @Override
     public synchronized void shutdown(String[] args) {changeState(STOPPED);}
+    @Override
     public ClientAppState getState() {return _state;}
+    @Override
     public String getName() {return APP_NAME;}
+    @Override
     public String getDisplayName() {return "News Manager";}
 
     /////// end ClientApp methods

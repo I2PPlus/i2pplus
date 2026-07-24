@@ -7,6 +7,7 @@ import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.web.HelperBase;
 import net.i2p.util.FileSuffixFilter;
 import net.i2p.util.FileUtil;
+import net.i2p.util.Log;
 
 /**
  *  Dump out our local SSL certs, if any
@@ -22,8 +23,11 @@ public class CertHelper extends HelperBase {
     private static final String SAM_DIR = "sam";
     private static final String EEPSITE_DIR = "eepsite";
     private static final String slash = System.getProperty("file.separator");
+    private Log _log;
 
     public String getSummary() {
+        if (_log == null)
+            _log = _context.logManager().getLog(CertHelper.class);
         File dir = new File(_context.getConfigDir(), DIR);
         File configPath = _context.getConfigDir();
         try {
@@ -89,7 +93,10 @@ public class CertHelper extends HelperBase {
                        _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "family" + slash + "</span></span>", f);
             }
             // anything else? plugins?
-        } catch (IOException ioe) {ioe.printStackTrace();}
+        } catch (IOException ioe) {
+            if (_log.shouldWarn())
+                _log.warn("Error reading certificates", ioe);
+        }
         return "";
     }
 

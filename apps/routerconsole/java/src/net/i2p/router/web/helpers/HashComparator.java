@@ -19,6 +19,7 @@ class HashComparator implements Comparator<Hash>, Serializable {
      */
     public static HashComparator getInstance() { return _instance; }
 
+    @Override
     public int compare(Hash l, Hash r) {
         return DataHelper.compareTo(l.getData(), r.getData());
     }

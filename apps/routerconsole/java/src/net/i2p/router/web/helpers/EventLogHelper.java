@@ -14,6 +14,7 @@ import net.i2p.router.util.EventLog;
 import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.FormHandler;
 import net.i2p.router.web.HelperBase;
+import net.i2p.util.Log;
 
 /**
  * Helper for router event log display and filtering.
@@ -65,6 +66,7 @@ public class EventLogHelper extends FormHandler {
         _xevents = new HashMap<>(1 + (_events.length / 2));
     }
 
+    @Override
     protected void processForm() {
         // TODO
     }
@@ -122,7 +124,8 @@ public class EventLogHelper extends FormHandler {
             _out.write("</select>" +
                        "&nbsp;<input type=submit class=accept value=\"" + _t("Filter events") + "\"></form>\n");
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            if (_log.shouldWarn())
+                _log.log(Log.WARN, "Error writing events form", ioe);
         }
         return "";
     }

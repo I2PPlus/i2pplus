@@ -34,6 +34,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.transport.TransportImpl;
 import net.i2p.router.web.Messages;
 import net.i2p.util.Addresses;
+import net.i2p.util.Log;
 
 /**
  * Renders HTML display of banned routers for the router console.
@@ -257,7 +258,10 @@ class BanlistRenderer {
         }
     }
 
-    /* @since 0.9.59+ */
+    /**
+     *  Render the compact banlist HTML table.
+     *  @since 0.9.59+
+     */
     public void renderBanlistCompact(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
         Map<Hash, Banlist.Entry> entries = new TreeMap<>(new HashComparator());
@@ -353,7 +357,7 @@ class BanlistRenderer {
                 port = extractPort(ipPort);
              } else {
                  // Debug: Check if hash exists in banlist but not in sessionbans
-                 if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(net.i2p.util.Log.DEBUG)) {
+                 if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(Log.DEBUG)) {
                      _context.logManager().getLog(BanlistRenderer.class).debug(
                          "Hash not found in ipMap: " + key.toBase64().substring(0, 8));
                  }
@@ -385,7 +389,7 @@ class BanlistRenderer {
             if (("xx".equals(countryCode) || countryCode.isEmpty()) && ip != null && !ip.isEmpty()) {
                 // Check if ipPort was actually in the map (for debugging)
                 String ipPortDebug = ipMap.get(key.toBase64());
-                if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(net.i2p.util.Log.DEBUG)) {
+                if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(Log.DEBUG)) {
                     _context.logManager().getLog(BanlistRenderer.class).debug(
                         "GeoIP lookup for hash " + key.toBase64().substring(0, 8) +
                         ": ipPort=" + ipPortDebug + ", extractedIP=" + ip +
@@ -399,7 +403,7 @@ class BanlistRenderer {
                 String ipGeoCountry = _context.commSystem().getCountry(ip);
                 if (ipGeoCountry != null && !ipGeoCountry.isEmpty() && !"xx".equals(ipGeoCountry)) {
                     countryCode = ipGeoCountry.toLowerCase();
-                } else if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(net.i2p.util.Log.DEBUG)) {
+                } else if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(Log.DEBUG)) {
                     _context.logManager().getLog(BanlistRenderer.class).debug(
                         "GeoIP lookup failed for IP: " + ip + ", geoCountry=" + ipGeoCountry);
                 }

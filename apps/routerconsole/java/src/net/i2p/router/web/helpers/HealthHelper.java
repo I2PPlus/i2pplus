@@ -20,6 +20,7 @@ import net.i2p.router.web.HelperBase;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.stat.RateConstants;
+import net.i2p.util.Log;
 
 /**
  * Helper for the /health page - renders router health rings
@@ -28,6 +29,7 @@ import net.i2p.stat.RateConstants;
  * @since 0.9.70+
  */
 public class HealthHelper extends HelperBase {
+    private Log _log;
 
     public HealthHelper() {}
 
@@ -49,7 +51,10 @@ public class HealthHelper extends HelperBase {
                 return sw.toString();
             }
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            if (_log == null)
+                _log = _context.logManager().getLog(HealthHelper.class);
+            if (_log.shouldWarn())
+                _log.log(Log.WARN, "Error rendering health content", ioe);
             return "";
         }
     }
@@ -61,7 +66,10 @@ public class HealthHelper extends HelperBase {
             renderPerfSection(sw);
             return sw.toString();
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            if (_log == null)
+                _log = _context.logManager().getLog(HealthHelper.class);
+            if (_log.shouldWarn())
+                _log.log(Log.WARN, "Error rendering performance rings", ioe);
             return "";
         }
     }
@@ -73,7 +81,10 @@ public class HealthHelper extends HelperBase {
             renderTransportSection(sw);
             return sw.toString();
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            if (_log == null)
+                _log = _context.logManager().getLog(HealthHelper.class);
+            if (_log.shouldWarn())
+                _log.log(Log.WARN, "Error rendering transport rings", ioe);
             return "";
         }
     }
@@ -85,7 +96,10 @@ public class HealthHelper extends HelperBase {
             renderNetworkSection(sw);
             return sw.toString();
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            if (_log == null)
+                _log = _context.logManager().getLog(HealthHelper.class);
+            if (_log.shouldWarn())
+                _log.log(Log.WARN, "Error rendering network rings", ioe);
             return "";
         }
     }
@@ -97,7 +111,10 @@ public class HealthHelper extends HelperBase {
             renderFFSection(sw);
             return sw.toString();
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            if (_log == null)
+                _log = _context.logManager().getLog(HealthHelper.class);
+            if (_log.shouldWarn())
+                _log.log(Log.WARN, "Error rendering floodfill rings", ioe);
             return "";
         }
     }

@@ -54,29 +54,44 @@ public class ConfigClientsHelper extends HelperBase {
     public ConfigClientsHelper() {
         // TODO
     }
-    /** @since 0.9.14.1 */
+    /**
+     *  Whether client configuration changes are allowed.
+     *  @since 0.9.14.1
+     */
     public boolean isClientChangeEnabled() {
         return _context.getBooleanProperty(PROP_ENABLE_CLIENT_CHANGE) || isAdvanced();
     }
 
-    /** @since 0.9.14.1 */
+    /**
+     *  Whether plugin installation is enabled.
+     *  @since 0.9.14.1
+     */
     public boolean isPluginInstallEnabled() {
         return PluginStarter.pluginsEnabled(_context) &&
                (_context.getBooleanPropertyDefaultTrue(PROP_ENABLE_PLUGIN_INSTALL) || isAdvanced());
     }
 
-    /** @since 0.9.15 */
+    /**
+     *  Whether any plugins have updates available.
+     *  @since 0.9.15
+     */
     public boolean isPluginUpdateEnabled() {
         return !PluginStarter.getPlugins().isEmpty();
     }
 
-    /** @since 0.8.3 */
+    /**
+     *  Get the configured I2CP port.
+     *  @since 0.8.3
+     */
     public String getPort() {
         return _context.getProperty(ClientManagerFacadeImpl.PROP_CLIENT_PORT,
                                     Integer.toString(ClientManagerFacadeImpl.DEFAULT_PORT));
     }
 
-    /** @since 0.8.3 */
+    /**
+     *  Get checked attribute for I2CP mode radio buttons.
+     *  @since 0.8.3
+     */
     public String i2cpModeChecked(int mode) {
         boolean disabled =  _context.getBooleanProperty(PROP_DISABLE_EXTERNAL);
         boolean ssl =  _context.getBooleanProperty(PROP_ENABLE_SSL);
@@ -87,7 +102,10 @@ public class ConfigClientsHelper extends HelperBase {
         return "";
     }
 
-    /** @since 0.8.3 */
+    /**
+     *  Whether I2CP authentication is enabled.
+     *  @since 0.8.3
+     */
     public String getAuth() {
         boolean enabled =  _context.getBooleanProperty(PROP_AUTH);
         if (enabled)
@@ -95,14 +113,20 @@ public class ConfigClientsHelper extends HelperBase {
         return "";
     }
 
-    /** @since 0.8.3 */
+    /**
+     *  Get available network interface addresses.
+     *  @since 0.8.3
+     */
     public String[] intfcAddresses() {
         // Exclude IPv6 temporary
         ArrayList<String> al = new ArrayList<>(Addresses.getAddresses(true, true, true, false));
         return al.toArray(new String[al.size()]);
     }
 
-    /** @since 0.8.3 */
+    /**
+     *  Whether the given address is the selected I2CP interface.
+     *  @since 0.8.3
+     */
     public boolean isIFSelected(String addr) {
         boolean bindAll = _context.getBooleanProperty(BIND_ALL_INTERFACES);
         if (bindAll && addr.equals("0.0.0.0") || addr.equals("::"))
@@ -191,7 +215,10 @@ public class ConfigClientsHelper extends HelperBase {
         return buf.toString();
     }
 
-    /** @since 0.9.20 */
+    /**
+     *  A client app config entry with display index.
+     *  @since 0.9.20
+     */
     private static class CAC {
         public final int index;
         public final ClientAppConfig config;
@@ -202,7 +229,10 @@ public class ConfigClientsHelper extends HelperBase {
         }
     }
 
-    /** @since 0.9.20 */
+    /**
+     *  Comparator for sorting client app configs by name.
+     *  @since 0.9.20
+     */
     private class CACComparator implements Comparator<CAC> {
          private static final long serialVersionUID = 1L;
          private final Collator coll;
@@ -212,6 +242,7 @@ public class ConfigClientsHelper extends HelperBase {
              coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
          }
 
+         @Override
          public int compare(CAC l, CAC r) {
              return coll.compare(l.xname, r.xname);
         }

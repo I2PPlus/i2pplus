@@ -5,6 +5,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Cookie;
 import net.i2p.I2PAppContext;
 import net.i2p.servlet.filters.SessionManager;
 import net.i2p.util.Log;
@@ -35,7 +36,7 @@ public class LogoutServlet extends HttpServlet {
             _log.info("User logged out");
         }
 
-        javax.servlet.http.Cookie sessionCookie = new javax.servlet.http.Cookie(
+        Cookie sessionCookie = new Cookie(
             SessionManager.SESSION_COOKIE_NAME, "");
         sessionCookie.setPath("/");
         sessionCookie.setMaxAge(0);
@@ -51,9 +52,9 @@ public class LogoutServlet extends HttpServlet {
     }
 
     private String getSessionCookie(HttpServletRequest req) {
-        javax.servlet.http.Cookie[] cookies = req.getCookies();
+        Cookie[] cookies = req.getCookies();
         if (cookies == null) return null;
-        for (javax.servlet.http.Cookie cookie : cookies) {
+        for (Cookie cookie : cookies) {
             if (SessionManager.SESSION_COOKIE_NAME.equals(cookie.getName())) {
                 return cookie.getValue();
             }
@@ -61,5 +62,3 @@ public class LogoutServlet extends HttpServlet {
         return null;
     }
 }
-
-

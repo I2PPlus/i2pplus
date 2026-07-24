@@ -147,6 +147,7 @@ public class ConfigStatsHelper extends HelperBase {
      *  @since 0.9.4
      */
     private class AlphaComparator implements Comparator<String> {
+        @Override
         public int compare(String lhs, String rhs) {
             // compare raw keys, not translated
             boolean lrouter = lhs.startsWith("Router");

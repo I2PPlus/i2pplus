@@ -33,12 +33,18 @@ public class ConfigAdvancedHandler extends FormHandler {
 
     public void setShouldsave(String moo) { _shouldSave = true; }
 
-    /** @since 0.9.20 */
+    /**
+     *  Set the floodfill status from form submission.
+     *  @since 0.9.20
+     */
     public void setFf(String ff) {_ff = ff;}
 
     public void setNofilter_config(String val) {_config = val;}
 
-    /** @since 0.9.33 */
+    /**
+     *  Set the previous config text for diff comparison.
+     *  @since 0.9.33
+     */
     public void setNofilter_oldConfig(String val) {_oldConfig = val;}
 
     /**

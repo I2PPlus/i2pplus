@@ -33,10 +33,10 @@ public class SameSiteCookieFilter implements Filter {
             public void addHeader(String name, String value) {
                 if (name != null && name.equalsIgnoreCase("Set-Cookie")) {
                     String lower = value.toLowerCase();
-                    _log.debug("Set-Cookie header: " + value);
+                    if (_log.shouldDebug()) {_log.debug("Set-Cookie header: " + value);}
                     if (!lower.contains("samesite")) {
                         value = value + "; SameSite=Lax";
-                        _log.debug("Added SameSite to: " + value);
+                        if (_log.shouldDebug()) {_log.debug("Added SameSite to: " + value);}
                     }
                 }
                 super.addHeader(name, value);
@@ -46,10 +46,10 @@ public class SameSiteCookieFilter implements Filter {
             public void setHeader(String name, String value) {
                 if (name != null && name.equalsIgnoreCase("Set-Cookie")) {
                     String lower = value.toLowerCase();
-                    _log.debug("Set-Cookie header (set): " + value);
+                    if (_log.shouldDebug()) {_log.debug("Set-Cookie header (set): " + value);}
                     if (!lower.contains("samesite")) {
                         value = value + "; SameSite=Lax";
-                        _log.debug("Added SameSite to: " + value);
+                        if (_log.shouldDebug()) {_log.debug("Added SameSite to: " + value);}
                     }
                 }
                 super.setHeader(name, value);

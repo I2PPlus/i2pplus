@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 
 import javax.servlet.http.HttpSession;
 
+import net.i2p.app.ClientApp;
+import net.i2p.app.ClientAppManager;
 import net.i2p.data.DataHelper;
 import net.i2p.i2ptunnel.TunnelControllerGroup;
 import net.i2p.router.Router;
@@ -140,11 +142,11 @@ public class ConfigRestartBean {
      * @since 0.9.68+
      */
     private static boolean hasServerTunnelDelays(RouterContext ctx) {
-        net.i2p.app.ClientAppManager mgr = ctx.clientAppManager();
+        ClientAppManager mgr = ctx.clientAppManager();
         if (mgr == null) {
             return false;
         }
-        net.i2p.app.ClientApp i2pt = mgr.getRegisteredApp("i2ptunnel");
+        ClientApp i2pt = mgr.getRegisteredApp("i2ptunnel");
         if (i2pt == null) {
             return false;
         }

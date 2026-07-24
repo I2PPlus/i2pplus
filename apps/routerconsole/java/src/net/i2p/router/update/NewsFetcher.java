@@ -213,6 +213,7 @@ class NewsFetcher extends UpdateRunner {
     }
 
     /**
+     *  @return true if the language has changed
      *  @since 0.9.62
      */
     private boolean langChanged() {
@@ -246,9 +247,7 @@ class NewsFetcher extends UpdateRunner {
     private static final String PROP_ENABLE_VANILLA_UPDATES = "router.enableVanillaUpdates";
     private static final boolean DEFAULT_ENABLE_VANILLA_UPDATES = false;
 
-    /**
-     *  @since 0.9.52
-     */
+    /** SU3 key for I2P @since 0.9.52 */
     private static final String I2P_SU3_KEY = "su3i2p";
 
     /**

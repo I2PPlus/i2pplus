@@ -260,7 +260,7 @@ public class BlocklistEntries {
                 System.err.print("Enter password for key \"" + signerName + "\": ");
                 keypw = DataHelper.readLine(System.in);
                 if (keypw == null) {
-                    System.out.println("\nEOF reading password");
+                    System.err.println("\nEOF reading password");
                     System.exit(1);
                 }
                 keypw = keypw.trim();
@@ -270,16 +270,16 @@ public class BlocklistEntries {
             File pkfile = new File(privateKeyFile);
             PrivateKey pk = KeyStoreUtil.getPrivateKey(pkfile, kspass, signerName, keypw);
             if (pk == null) {
-                System.out.println("Private key for " + signerName + " not found in keystore " + privateKeyFile);
+                System.err.println("Private key for " + signerName + " not found in keystore " + privateKeyFile);
                 System.exit(1);
             }
             spk = SigUtil.fromJavaKey(pk);
         } catch (GeneralSecurityException gse) {
-            System.out.println("Error signing input file '" + inputFile + "'");
+            System.err.println("Error signing input file '" + inputFile + "'");
             gse.printStackTrace();
             System.exit(1);
         } catch (IOException ioe) {
-            System.out.println("Error signing input file '" + inputFile + "'");
+            System.err.println("Error signing input file '" + inputFile + "'");
             ioe.printStackTrace();
             System.exit(1);
         }

@@ -14,7 +14,7 @@ import net.i2p.router.web.PluginStarter;
 /**
  * Render the configuration menu at the top of all the config pages.
  * refactored from confignav.jsp to reduce size and make translation easier
- * @author zzz
+ 
  */
 public class HelpSectionHelper extends HelperBase {
 
@@ -50,6 +50,7 @@ public class HelpSectionHelper extends HelperBase {
              coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
          }
 
+         @Override
          public int compare(Tab l, Tab r) {
              return coll.compare(l.title, r.title);
         }

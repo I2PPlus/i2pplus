@@ -130,12 +130,14 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     /**
      *  UpdateManager interface
      */
+    @Override
     public void start() {startup();}
 
     /**
      *  ClientApp interface
      *  @since 0.9.12
      */
+    @Override
     public synchronized void startup() {
         changeState(STARTING);
         notifyInstalled(NEWS, "", Long.toString(NewsHelper.lastUpdated(_context)));
@@ -214,6 +216,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     /**
      *  UpdateManager interface
      */
+    @Override
     public void shutdown() {shutdown(null);}
 
     /**
@@ -221,6 +224,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @param args ignored
      *  @since 0.9.12
      */
+    @Override
     public synchronized void shutdown(String[] args) {
         if (_state == STOPPED) {return;}
         changeState(STOPPING);
@@ -234,13 +238,16 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         changeState(STOPPED);
     }
 
-    /** @since 0.9.12 */
+    /** @return the current state @since 0.9.12 */
+    @Override
     public ClientAppState getState() {return _state;}
 
-    /** @since 0.9.12 */
+    /** @return the app name @since 0.9.12 */
+    @Override
     public String getName() {return APP_NAME;}
 
-    /** @since 0.9.12 */
+    /** @return the display name @since 0.9.12 */
+    @Override
     public String getDisplayName() {return "Console Update Manager";}
 
     /////// end ClientApp methods
@@ -254,6 +261,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  The status on any update current or last finished.
      *  @return status or ""
      */
+    @Override
     public String getStatus() {return _status;}
 
     /**
@@ -264,6 +272,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @return new version or null if nothing newer is available
      *  @since 0.9.21
      */
+    @Override
     public String checkAvailable(UpdateType type) {return checkAvailable(type, "", DEFAULT_CHECK_TIME);}
 
     /**
@@ -274,6 +283,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @param maxWait max time to block
      *  @return new version or null if nothing newer is available
      */
+    @Override
     public String checkAvailable(UpdateType type, long maxWait) {return checkAvailable(type, "", maxWait);}
 
     /**
@@ -285,6 +295,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @param maxWait max time to block
      *  @return new version or null if nothing newer is available
      */
+    @Override
     public String checkAvailable(UpdateType type, String id, long maxWait) {
         if (isCheckInProgress(type, id) || isUpdateInProgress(type, id)) {
             if (_log.shouldWarn()) {
@@ -404,16 +415,19 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  Is any download in progress?
      *  Does not include checks.
      */
+    @Override
     public boolean isUpdateInProgress() {return !_downloaders.isEmpty();}
 
     /**
      *  Is a download in progress?
      */
+    @Override
     public boolean isUpdateInProgress(UpdateType type) {return isUpdateInProgress(type, "");}
 
     /**
      *  Is a download in progress?
      */
+    @Override
     public boolean isUpdateInProgress(UpdateType type, String id) {
         for (UpdateTask t : _downloaders.keySet()) {
             if (t.getType() == type && id.equals(t.getID())) {return true;}
@@ -534,6 +548,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  Max time 3 hours by default but not honored by all Updaters
      *  @return true if task started
      */
+    @Override
     public boolean update(UpdateType type) {return update(type, "", DEFAULT_MAX_TIME);}
 
     /**
@@ -542,6 +557,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  If returns true, then call isUpdateInProgress() in a loop
      *  @return true if task started
      */
+    @Override
     public boolean update(UpdateType type, String id) {return update(type, id, DEFAULT_MAX_TIME);}
 
     /**
@@ -550,6 +566,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @param maxTime not honored by all Updaters
      *  @return true if task started
      */
+    @Override
     public boolean update(UpdateType type, long maxTime) {return update(type, "", maxTime);}
 
     /**
@@ -559,6 +576,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @param maxTime not honored by all Updaters
      *  @return true if task started
      */
+    @Override
     public boolean update(UpdateType type, String id, long maxTime) {
         if (isCheckInProgress(type, id)) {
             if (_log.shouldWarn()) {_log.warn("Check already in progress for: " + type + ' ' + id);}
@@ -632,6 +650,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     /**
      *  Call once for each type/method pair.
      */
+    @Override
     public void register(Updater updater, UpdateType type, UpdateMethod method, int priority) {
         if ((type == ROUTER_SIGNED || type == ROUTER_UNSIGNED ||
              type == ROUTER_SIGNED_SU3 || type == ROUTER_DEV_SU3) &&
@@ -659,12 +678,14 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
     }
 
+    @Override
     public void unregister(Updater updater, UpdateType type, UpdateMethod method) {
         RegisteredUpdater ru = new RegisteredUpdater(updater, type, method, 0);
         if (_log.shouldInfo()) {_log.info("Unregistering " + ru);}
         _registeredUpdaters.remove(ru);
     }
 
+    @Override
     public void register(Checker updater, UpdateType type, UpdateMethod method, int priority) {
         RegisteredChecker rc = new RegisteredChecker(updater, type, method, priority);
         if (_log.shouldInfo()) {_log.info("Registering " + rc);}
@@ -673,6 +694,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
     }
 
+    @Override
     public void unregister(Checker updater, UpdateType type, UpdateMethod method) {
         RegisteredChecker rc = new RegisteredChecker(updater, type, method, 0);
         if (_log.shouldInfo()) {_log.info("Unregistering " + rc);}
@@ -686,6 +708,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @param fileType a SU3File TYPE_xxx constant, 1-255, TYPE_ZIP not supported.
      *  @since 0.9.51
      */
+    @Override
     public void register(UpdatePostProcessor upp, UpdateType type, int fileType) {
         Integer key = Integer.valueOf(type.toString().hashCode() ^ fileType);
         UpdatePostProcessor old = _registeredPostProcessors.put(key, upp);
@@ -703,10 +726,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @param minVersion The minimum installed version to be able to update to newVersion
      *  @return true if it's newer
      */
+    @Override
     public boolean notifyVersionAvailable(UpdateTask task, URI newsSource,
-                                          UpdateType type, String id,
-                                          UpdateMethod method, List<URI> updateSources,
-                                          String newVersion, String minVersion) {
+                                           UpdateType type, String id,
+                                           UpdateMethod method, List<URI> updateSources,
+                                           String newVersion, String minVersion) {
         return notifyVersionAvailable(task, newsSource, type, id,
                                       Collections.singletonMap(method, updateSources),
                                       newVersion, minVersion);
@@ -724,10 +748,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @return true if we didn't know already
      *  @since 0.9.6
      */
+    @Override
     public boolean notifyVersionAvailable(UpdateTask task, URI newsSource,
-                                          UpdateType type, String id,
-                                          Map<UpdateMethod, List<URI>> sourceMap,
-                                          String newVersion, String minVersion) {
+                                           UpdateType type, String id,
+                                           Map<UpdateMethod, List<URI>> sourceMap,
+                                           String newVersion, String minVersion) {
         if (type == NEWS || type == NEWS_SU3 || type == BLOCKLIST) {
             // shortcut
             notifyInstalled(type, "", newVersion);
@@ -863,6 +888,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @param message A translated message to be displayed to the user, non-null
      *  @since 0.9.9
      */
+    @Override
     public void notifyVersionConstraint(UpdateTask task, URI newsSource,
                                         UpdateType type, String id,
                                         String newVersion, String message) {
@@ -895,6 +921,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     /**
      *  Called by the Updater after check() was called and all notifyVersionAvailable() callbacks are finished
      */
+    @Override
     public void notifyCheckComplete(UpdateTask task, boolean newer, boolean success) {
         if (_log.shouldInfo()) {_log.info("Checker " + task + " for " + task.getType() + " complete");}
         synchronized(_activeCheckers) {_activeCheckers.remove(task);}
@@ -933,6 +960,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         synchronized(task) {task.notifyAll();}
     }
 
+    @Override
     public void notifyProgress(UpdateTask task, String status, long downloaded, long totalSize) {
         StringBuilder buf = new StringBuilder(64);
         buf.append("<div id=sb_updateprogress class=\"sb_updatestatus volatile\">").append(status).append("</div>");
@@ -948,6 +976,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     /**
      *  @param task may be null
      */
+    @Override
     public void notifyProgress(UpdateTask task, String status) {updateStatus(status);}
 
     /**
@@ -961,6 +990,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @param task checker or updater
      *  @param t may be null
      */
+    @Override
     public void notifyAttemptFailed(UpdateTask task, String reason, Throwable t) {
         if (_log.shouldWarn()) {
             _log.warn("[" + task.getType() + "] Update or check failed " + reason, t);
@@ -972,6 +1002,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @param task checker or updater
      *  @param t may be null
      */
+    @Override
     public void notifyTaskFailed(UpdateTask task, String reason, Throwable t) {
         int level = task.getType() == TYPE_DUMMY ? Log.WARN : Log.ERROR;
         if (_log.shouldLog(level)) {_log.log(level, "[" + task.getType() + "] Update or check failed " + reason, t);}
@@ -1022,6 +1053,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @param file a valid format for the task's UpdateType, or null if it did the installation itself
      *  @return true if valid, false if corrupt
      */
+    @Override
     public boolean notifyComplete(UpdateTask task, String actualVersion, File file) {
         if (_log.shouldInfo()) {_log.info("Updater " + task + " for " + task.getType() + " complete");}
         boolean rv = false;
@@ -1075,6 +1107,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @param version null to remove from installed
      *  @since public since 0.9.45
      */
+    @Override
     public void notifyInstalled(UpdateType type, String id, String version) {
         UpdateItem ui = new UpdateItem(type, id);
         if (version == null) {
@@ -1601,6 +1634,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /** debug */
+    @Override
     public void renderStatusHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<h2>Update Manager</h2>\n").append("<h3>Installed</h3>\n").append("<div class=debug_container>");
