@@ -67,8 +67,6 @@ import org.klomp.snark.URIUtil;
  *
  * </pre>
  *
- * @author Greg Wilkins (gregw)
- * @author Nigel Canonizado
  * @since Jetty 7
  */
 class BasicServlet extends HttpServlet {

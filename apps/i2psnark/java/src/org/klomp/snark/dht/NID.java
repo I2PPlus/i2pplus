@@ -30,7 +30,6 @@ import net.i2p.util.Clock;
  * unreachable nodes.
  *
  * @since 0.9.2
- * @author zzz
  */
 public class NID extends SHA1Hash {
 

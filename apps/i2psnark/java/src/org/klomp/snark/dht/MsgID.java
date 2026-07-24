@@ -11,7 +11,6 @@ import net.i2p.data.ByteArray;
  * Used for both incoming and outgoing message IDs
  *
  * @since 0.9.2
- * @author zzz
  */
 class MsgID extends ByteArray {
 

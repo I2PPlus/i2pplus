@@ -23,8 +23,6 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
  * Manages the state and protocol logic for a BitTorrent peer connection.<br>
  * This class tracks peer interest/choking status, piece availability, request queues, and handles
  * all BitTorrent protocol message processing.
- *
- * @author Mark J. Wielaard
  * @since 0.1
  */
 class PeerState implements DataLoader {
@@ -381,6 +379,7 @@ class PeerState implements DataLoader {
      * @throws RuntimeException on IOE getting the data
      * @since 0.8.2
      */
+    @Override
     public ByteArray loadData(int piece, int begin, int length) {
         ByteArray pieceBytes = listener.gotRequest(peer, piece, begin, length);
         if (pieceBytes == null) {
@@ -852,14 +851,6 @@ class PeerState implements DataLoader {
         // Request something else if necessary.
         addRequest();
 
-        /**** taken care of in addRequest()
-         * synchronized(this)
-         * {
-         * // Is the peer still interesting?
-         * if (lastRequest == null)
-         * setInteresting(false);
-         * }
-         ****/
     }
 
     /**

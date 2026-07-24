@@ -834,7 +834,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append(HEADER_A).append(_themePath).append(HEADER_I).append("\n");
 
         String slash = String.valueOf(File.separatorChar);
-        String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + slash +
+        String themeBase = I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + slash +
                            "docs" + slash + "themes" + slash + "snark" + slash + theme + slash;
         File override = new File(themeBase + "override.css");
         int rnd = _context.random().nextInt(3);
@@ -4732,7 +4732,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append(HEADER_A + _themePath + HEADER_I).append("\n"); // images.css
 
         String theme = _manager.getTheme();
-        String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + slash +
+        String themeBase = I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + slash +
                            "docs" + slash + "themes" + slash + "snark" + slash + theme + slash;
         File override = new File(themeBase + "override.css");
         String fontPath = isStandalone() ? "/i2psnark/.res/themes/fonts/" : "/themes/fonts/";

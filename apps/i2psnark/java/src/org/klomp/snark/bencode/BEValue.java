@@ -17,8 +17,6 @@ import java.nio.charset.StandardCharsets;
  * Holds different types that a bencoded byte array can represent. You need to call the correct get
  * method to get the correct java type object. If the BEValue wasn't actually of the requested type
  * you will get a InvalidBEncodingException.
- *
- * @author Mark Wielaard (mark@klomp.org)
  */
 public class BEValue {
     // This is either a byte[], Number, List or Map.

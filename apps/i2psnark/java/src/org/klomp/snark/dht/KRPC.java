@@ -90,7 +90,6 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
  * within the I2P network.
  *
  * @since 0.9.2
- * @author zzz
  */
 public class KRPC implements I2PSessionMuxedListener, DHT {
 
@@ -1780,6 +1779,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @param fromPort 1-65535 or 0 for unspecified
      * @param toPort 1-65535 or 0 for unspecified
      */
+    @Override
     public void messageAvailable(
             I2PSession session, int msgId, long size, int proto, int fromPort, int toPort) {
         // TODO throttle
@@ -1822,10 +1822,13 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /** for non-muxed */
+    @Override
     public void messageAvailable(I2PSession session, int msgId, long size) { /* no-op */ }
 
+    @Override
     public void reportAbuse(I2PSession session, int severity) { /* no-op */ }
 
+    @Override
     public void disconnected(I2PSession session) {
         if (_log.shouldWarn()) {
             _log.warn("KRPC disconnected");
@@ -1833,6 +1836,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         stop();
     }
 
+    @Override
     public void errorOccurred(I2PSession session, String message, Throwable error) {
         if (_log.shouldWarn()) {
             _log.warn("KRPC got error message: ", error);

@@ -14,7 +14,6 @@ import net.i2p.apps.systray.UrlLauncher;
 import net.i2p.data.DataHelper;
 import net.i2p.jetty.I2PLogger;
 import net.i2p.jetty.JettyStart;
-import org.eclipse.jetty.util.log.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -51,7 +50,7 @@ public class RunStandalone {
         // Do this after we have a context
         // To take effect, must be set before any Jetty classes are loaded
         try {
-            Log.setLog(new I2PLogger(_context));
+            org.eclipse.jetty.util.log.Log.setLog(new I2PLogger(_context));
         } catch (Throwable t) {
             System.err.println("INFO: I2P Jetty logging class not found, logging to stdout");
         }

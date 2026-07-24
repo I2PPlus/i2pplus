@@ -682,14 +682,18 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     }
 
     /** for non-muxed */
+    @Override
     public void messageAvailable(I2PSession session, int msgId, long size) { /* no-op */ }
 
+    @Override
     public void reportAbuse(I2PSession session, int severity) { /* no-op */ }
 
+    @Override
     public void disconnected(I2PSession session) {
         if (_log.shouldWarn()) _log.warn("UDPTC disconnected");
     }
 
+    @Override
     public void errorOccurred(I2PSession session, String message, Throwable error) {
         if (_log.shouldWarn()) _log.warn("UDPTC got error msg: ", error);
     }
@@ -698,8 +702,6 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
      * Represents a response from a UDP tracker.<br>
      * This class encapsulates the tracker's response including peer lists, interval information,
      * and any error messages.
-     *
-     * @author I2P
      * @since 0.9.20
      */
     public static class TrackerResponse {

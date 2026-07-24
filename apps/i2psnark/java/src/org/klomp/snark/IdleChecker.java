@@ -45,9 +45,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
         _pcs = pcs;
     }
 
-    /**
-     * Called periodically to check for idle conditions and adjust tunnel counts.
-     */
+    @Override
     public void timeReached() {
         synchronized (_lock) {
             locked_timeReached();

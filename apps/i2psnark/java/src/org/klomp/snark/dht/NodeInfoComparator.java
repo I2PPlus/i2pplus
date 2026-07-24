@@ -26,7 +26,6 @@ import net.i2p.data.DataHelper;
  * - Selecting the best nodes for DHT queries and responses
  *
  * @since 0.9.2
- * @author zzz
  */
 class NodeInfoComparator implements Comparator<NodeInfo>, Serializable {
     /** The target key (info hash or node ID) to measure distances against */

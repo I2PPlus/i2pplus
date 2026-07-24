@@ -34,6 +34,7 @@ class UpdateHandler implements Updater {
      * @param maxTime how long you have
      * @return active task or null if unable to download
      */
+    @Override
     public UpdateTask update(
             UpdateType type,
             UpdateMethod method,

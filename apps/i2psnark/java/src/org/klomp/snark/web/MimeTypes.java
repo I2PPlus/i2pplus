@@ -36,8 +36,6 @@ import java.nio.charset.StandardCharsets;
  *
  * <p>This is only for local mappings. Caller should use getServletContext().getMimeType() if this
  * returns null.
- *
- * @author Greg Wilkins
  * @since Jetty 7
  */
 class MimeTypes {

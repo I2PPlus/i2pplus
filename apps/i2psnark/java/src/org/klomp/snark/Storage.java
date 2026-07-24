@@ -72,7 +72,7 @@ public class Storage implements Closeable {
     private final File _base;
     private final StorageListener listener;
     private final I2PSnarkUtil _util;
-    private final Log _log;
+    private static final Log _log = new Log(Storage.class);
 
     private /* FIXME final FIXME */ BitField bitfield; // BitField to represent the pieces
     private int needed; // Number of pieces needed
@@ -143,7 +143,6 @@ public class Storage implements Closeable {
             StorageListener listener,
             boolean preserveFileNames) {
         _util = util;
-        _log = util.getContext().logManager().getLog(Storage.class);
         _base = baseFile;
         this.metainfo = metainfo;
         this.listener = listener;
@@ -220,7 +219,6 @@ public class Storage implements Closeable {
             throws IOException {
         _util = util;
         _base = baseFile;
-        _log = util.getContext().logManager().getLog(Storage.class);
         this.listener = listener;
         _preserveFileNames = true;
         // Create names, rafs and lengths arrays.
@@ -1193,7 +1191,7 @@ public class Storage implements Closeable {
                         rv = repl;
                     }
                 } catch (RuntimeException ex) {
-                    ex.printStackTrace();
+                    _log.log(Log.WARN, "Error encoding charset", ex);
                 }
             }
         }
@@ -1505,6 +1503,7 @@ public class Storage implements Closeable {
      * Closes the Storage and makes sure that all RandomAccessFiles are closed. The Storage is
      * unusable after this.
      */
+    @Override
     public void close() throws IOException {
         for (TorrentFile tf : _torrentFiles) {
             try {

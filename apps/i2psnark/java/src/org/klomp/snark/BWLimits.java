@@ -20,8 +20,6 @@ import net.i2p.client.I2PSimpleClient;
  *
  * <p>Uses a 5-second timeout internally but typically completes faster. Thread-safe via method
  * synchronization.
- *
- * @author zzz
  */
 public class BWLimits {
     private static int[] cachedResult = null;

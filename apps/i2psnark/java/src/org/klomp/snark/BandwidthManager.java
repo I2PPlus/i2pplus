@@ -88,26 +88,31 @@ public class BandwidthManager implements BandwidthListener {
     // begin BandwidthListener interface
 
     /** The average rate in Bps */
+    @Override
     public long getUploadRate() {
         return (long) (1000f * _up.getBandwidthEstimate());
     }
 
     /** The average rate in Bps */
+    @Override
     public long getDownloadRate() {
         return (long) (1000f * _down.getBandwidthEstimate());
     }
 
     /** We unconditionally sent this many bytes */
+    @Override
     public void uploaded(int size) {
         _up.addSample(size);
     }
 
     /** We received this many bytes */
+    @Override
     public void downloaded(int size) {
         _down.addSample(size);
     }
 
     /** Should we send this many bytes? Do NOT call uploaded() if this returns true. */
+    @Override
     public boolean shouldSend(int size) {
         boolean rv = _up.offer(size, 1.0f);
         if (!rv && _log.shouldWarn())
@@ -125,6 +130,7 @@ public class BandwidthManager implements BandwidthListener {
      *
      * @param peer ignored
      */
+    @Override
     public boolean shouldRequest(Peer peer, int size) {
         boolean rv = !overDownBWLimit() && _req.offer(size, 1.0f);
         if (!rv && _log.shouldWarn())
@@ -141,21 +147,25 @@ public class BandwidthManager implements BandwidthListener {
     }
 
     /** Current limit in BPS */
+    @Override
     public long getUpBWLimit() {
         return _up.getMaxBandwidth();
     }
 
     /** Current limit in BPS */
+    @Override
     public long getDownBWLimit() {
         return _down.getMaxBandwidth();
     }
 
     /** Are we currently over the limit? */
+    @Override
     public boolean overUpBWLimit() {
         return getUploadRate() > getUpBWLimit();
     }
 
     /** Are we currently over the limit? */
+    @Override
     public boolean overDownBWLimit() {
         return getDownloadRate() > getDownBWLimit();
     }

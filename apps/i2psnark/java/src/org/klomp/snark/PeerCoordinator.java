@@ -430,6 +430,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      *
      * @since 0.9.62 params changed
      */
+    @Override
     public void uploaded(int size) {
         uploaded.addAndGet(size);
         bwListener.uploaded(size);
@@ -440,6 +441,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      *
      * @since 0.9.62 params changed
      */
+    @Override
     public void downloaded(int size) {
         downloaded.addAndGet(size);
         bwListener.downloaded(size);
@@ -450,6 +452,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      *
      * @since 0.9.62
      */
+    @Override
     public boolean shouldSend(int size) {
         boolean rv = bwListener.shouldSend(size);
         if (rv) {
@@ -463,6 +466,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      *
      * @since 0.9.62
      */
+    @Override
     public boolean shouldRequest(Peer peer, int size) {
         boolean rv;
         synchronized (rerequestLock) {
@@ -531,6 +535,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /** Returns the average rate in Bps over last RATE_DEPTH * CHECK_PERIOD seconds */
+    @Override
     public long getDownloadRate() {
         if (halted) {
             return 0;
@@ -539,6 +544,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /** Returns the average rate in Bps over last RATE_DEPTH * CHECK_PERIOD seconds */
+    @Override
     public long getUploadRate() {
         if (halted) {
             return 0;
@@ -582,6 +588,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      *
      * @since 0.9.62
      */
+    @Override
     public long getUpBWLimit() {
         return bwListener.getUpBWLimit();
     }
@@ -591,6 +598,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      *
      * @return true if over limit
      */
+    @Override
     public boolean overUpBWLimit() {
         return bwListener.overUpBWLimit();
     }
@@ -611,6 +619,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      *
      * @since 0.9.62
      */
+    @Override
     public long getDownBWLimit() {
         return bwListener.getDownBWLimit();
     }
@@ -620,6 +629,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      *
      * @since 0.9.62
      */
+    @Override
     public boolean overDownBWLimit() {
         return bwListener.overDownBWLimit();
     }
@@ -761,6 +771,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      *
      * @param peer the newly connected peer
      */
+    @Override
     public void connected(Peer peer) {
         if (halted) {
             peer.disconnect(false);
@@ -995,6 +1006,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * @return true if we still want the given piece
      */
+    @Override
     public boolean gotHave(Peer peer, int piece) {
         synchronized (wantedPieces) {
             for (Piece pc : wantedPieces) {
@@ -1008,6 +1020,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /** Returns true if the given bitfield contains at least one piece we are interested in. */
+    @Override
     public boolean gotBitField(Peer peer, BitField bitfield) {
         boolean rv = false;
         synchronized (wantedPieces) {
@@ -1266,6 +1279,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @return bytes or null for errors such as not having the piece yet
      * @throws RuntimeException on IOE getting the data
      */
+    @Override
     public ByteArray gotRequest(Peer peer, int piece, int off, int len) {
         if (halted) {
             return null;
@@ -1300,6 +1314,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      *
      * @throws RuntimeException on IOE saving the piece
      */
+    @Override
     public boolean gotPiece(Peer peer, PartialPiece pp) {
         if (metainfo == null || storage == null || storage.isChecking() || halted) {
             pp.release();
@@ -1429,6 +1444,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @param peer the peer that sent the message
      * @param choke true for choke, false for unchoke
      */
+    @Override
     public void gotChoke(Peer peer, boolean choke) {
         if (_log.shouldInfo()) {
             _log.info("Received choke(" + choke + ") from [" + peer + "]");
@@ -1441,6 +1457,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @param peer the peer that sent the message
      * @param interest true for interested, false for uninterested
      */
+    @Override
     public void gotInterest(Peer peer, boolean interest) {
         if (interest) {
             if (storage == null || storage.getBitField().size() == 0) {
@@ -1462,6 +1479,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      *
      * @param peer the disconnected peer
      */
+    @Override
     public void disconnected(Peer peer) {
         if (_log.shouldInfo()) {
             _log.info("Disconnected peer [" + peer + "]");
@@ -1501,6 +1519,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      *     in Requests is ignored.
      * @since 0.8.2
      */
+    @Override
     public void savePartialPieces(Peer peer, List<Request> partials) {
         if (_log.shouldInfo()) {
             _log.info("Partials received from [" + peer + "] - " + partials);
@@ -1566,6 +1585,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @return PartialPiece or null
      * @since 0.8.2
      */
+    @Override
     public PartialPiece getPartialPiece(Peer peer, BitField havePieces) {
         if (metainfo == null || (storage != null && storage.isChecking())) {
             return null;
@@ -1668,6 +1688,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @return if we want any of what the peer has
      * @since 0.8.2
      */
+    @Override
     public boolean needPiece(Peer peer, BitField havePieces) {
         synchronized (wantedPieces) {
             for (PartialPiece pp : partialPieces) {
@@ -1722,6 +1743,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      *
      * @since 0.8.4
      */
+    @Override
     public void gotExtension(Peer peer, int id, byte[] bs) {
         if (_log.shouldDebug()) {
             _log.debug("Received extension message " + id + " from [" + peer + "]");
@@ -1885,6 +1907,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @param rport must be port + 1
      * @since 0.8.4
      */
+    @Override
     public void gotPort(Peer peer, int port, int rport) {
         DHT dht = _util.getDHT();
         if (dht != null && port > 0 && port < 65535 && rport == port + 1) {
@@ -1897,6 +1920,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      *
      * @since 0.8.4
      */
+    @Override
     public void gotPeers(Peer peer, List<PeerID> peers) {
         if (!needOutboundPeers()) {
             return;
@@ -1925,6 +1949,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      *
      * @since 0.9.31
      */
+    @Override
     public void gotCommentReq(Peer peer, int num) {
         /* TODO cache per-torrent setting, use it instead */
         if (!_util.utCommentsEnabled()) {
@@ -1952,6 +1977,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @param comments non-null
      * @since 0.9.31
      */
+    @Override
     public void gotComments(Peer peer, List<Comment> comments) {
         /* TODO cache per-torrent setting, use it instead */
         if (!_util.utCommentsEnabled()) {
@@ -2085,6 +2111,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      *
      * @since 0.9.2
      */
+    @Override
     public I2PSnarkUtil getUtil() {
         return _util;
     }

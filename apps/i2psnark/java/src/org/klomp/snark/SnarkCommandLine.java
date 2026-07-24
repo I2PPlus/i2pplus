@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import net.i2p.CoreVersion;
+import net.i2p.util.CommandLine;
 
 /**
  * Simple command line access to various utilities. Not a public API. Subject to change. Apps and
@@ -11,7 +12,7 @@ import net.i2p.CoreVersion;
  *
  * @since 0.9.26
  */
-public class SnarkCommandLine extends net.i2p.util.CommandLine {
+public class SnarkCommandLine extends CommandLine {
 
     protected static final List<String> SCLASSES =
             Arrays.asList(

@@ -23,7 +23,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * tracker.
  *
  * @since 0.9.2
- * @author zzz
  */
 class Torrents extends ConcurrentHashMap<InfoHash, Peers> {
 

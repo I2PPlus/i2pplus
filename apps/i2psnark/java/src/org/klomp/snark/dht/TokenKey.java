@@ -23,7 +23,6 @@ import net.i2p.data.DataHelper;
  * structures for efficient token storage and retrieval.
  *
  * @since 0.9.2
- * @author zzz
  */
 class TokenKey extends SHA1Hash {
 

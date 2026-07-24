@@ -53,33 +53,40 @@ class UpdateRunner implements UpdateTask, CompleteListener {
 
     //////// begin UpdateTask methods
 
+    @Override
     public boolean isRunning() {
         return _isRunning;
     }
 
+    @Override
     public void shutdown() {
         _isRunning = false;
         if (_snark != null) { /* ignored */ }
     }
 
+    @Override
     public UpdateType getType() {
         return _type;
     }
 
+    @Override
     public UpdateMethod getMethod() {
         return UpdateMethod.TORRENT;
     }
 
+    @Override
     public URI getURI() {
         return _currentURI;
     }
 
+    @Override
     public String getID() {
         return "";
     }
 
     //////// end UpdateTask methods
 
+    @Override
     public void start() {
         _isRunning = true;
         update();
@@ -239,17 +246,20 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     //////// begin CompleteListener methods
     //////// all pass through to SnarkManager
 
+    @Override
     public void torrentComplete(Snark snark) {
         processComplete(snark);
         _smgr.torrentComplete(snark);
     }
 
     /** This is called by stopTorrent() among others */
+    @Override
     public void updateStatus(Snark snark) {
         if (snark.isStopped() && !_isComplete) fatal("stopped by user");
         _smgr.updateStatus(snark);
     }
 
+    @Override
     public String gotMetaInfo(Snark snark) {
         MetaInfo info = snark.getMetaInfo();
         if (info.getFiles() != null) {
@@ -270,32 +280,39 @@ class UpdateRunner implements UpdateTask, CompleteListener {
         return _smgr.gotMetaInfo(snark);
     }
 
+    @Override
     public void fatal(Snark snark, String error) {
         fatal(error);
         _smgr.fatal(snark, error);
     }
 
+    @Override
     public void addMessage(Snark snark, String message) {
         _smgr.addMessage(snark, message);
     }
 
+    @Override
     public void gotPiece(Snark snark) {
         notifyProgress();
         _smgr.gotPiece(snark);
     }
 
+    @Override
     public long getSavedTorrentTime(Snark snark) {
         return _smgr.getSavedTorrentTime(snark);
     }
 
+    @Override
     public BitField getSavedTorrentBitField(Snark snark) {
         return _smgr.getSavedTorrentBitField(snark);
     }
 
+    @Override
     public boolean getSavedPreserveNamesSetting(Snark snark) {
         return _smgr.getSavedPreserveNamesSetting(snark);
     }
 
+    @Override
     public long getSavedUploaded(Snark snark) {
         return _smgr.getSavedUploaded(snark);
     }
@@ -303,6 +320,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     /**
      * @since 0.9.31
      */
+    @Override
     public CommentSet getSavedComments(Snark snark) {
         return _smgr.getSavedComments(snark);
     }
@@ -310,6 +328,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     /**
      * @since 0.9.31
      */
+    @Override
     public void locked_saveComments(Snark snark, CommentSet comments) {
         _smgr.locked_saveComments(snark, comments);
     }
@@ -317,6 +336,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     /**
      * @since 0.9.42
      */
+    @Override
     public boolean shouldAutoStart() {
         return _smgr.shouldAutoStart();
     }
@@ -324,6 +344,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     /**
      * @since 0.9.62
      */
+    @Override
     public BandwidthListener getBandwidthListener() {
         return _smgr.getBandwidthListener();
     }

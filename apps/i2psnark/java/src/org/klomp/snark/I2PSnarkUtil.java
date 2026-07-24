@@ -544,11 +544,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         return (_manager != null);
     }
 
-    /**
-     * DisconnectListener interface
-     *
-     * @since 0.9.53
-     */
+    @Override
     public void sessionDisconnected() {
         synchronized (this) {
             _manager = null;

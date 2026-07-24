@@ -54,8 +54,6 @@ import org.klomp.snark.dht.DHT;
  *
  * <p>The client can be restarted after halt() and handles various tracker responses including
  * registration failures and error conditions.
- *
- * @author Mark Wielaard (mark@klomp.org)
  * @since 0.1.0
  */
 public class TrackerClient implements Runnable {
@@ -259,10 +257,7 @@ public class TrackerClient implements Runnable {
         return !stop && _util.connected();
     }
 
-    /**
-     * Setup the first time only, then one pass (usually) through the trackers, PEX, and DHT. This
-     * will take several seconds to several minutes.
-     */
+    @Override
     public void run() {
         long begin = _util.getContext().clock().now();
         if (_log.shouldDebug()) _log.debug("Start " + Thread.currentThread().getName());

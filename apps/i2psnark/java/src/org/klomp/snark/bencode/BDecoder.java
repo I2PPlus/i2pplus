@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 /**
  * Decodes a bencoded stream to <code>BEValue</code>s.
  *
@@ -25,10 +24,9 @@ import java.util.Map;
  *
  * <p>It currently contains a hack to indicate a name of a dictionary of which a SHA-1 digest hash
  * should be calculated (the hash over the original bencoded bytes).
- *
- * @author Mark Wielaard (mark@klomp.org).
  */
 public class BDecoder {
+
     // The InputStream to BDecode.
     private final InputStream in;
 

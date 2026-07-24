@@ -488,6 +488,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *
      * @since 0.9.53
      */
+    @Override
     public void sessionDisconnected() {
         if (!_context.isRouterContext()) {
             _stopping = true;
@@ -539,6 +540,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *
      * @since 0.9.30
      */
+    @Override
     public void startup() { /* no-op */ }
 
     /**
@@ -546,6 +548,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *
      * @since 0.9.30
      */
+    @Override
     public void shutdown(String[] args) { /* no-op */ }
 
     /**
@@ -554,6 +557,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @return INITIALIZED always.
      * @since 0.9.30
      */
+    @Override
     public ClientAppState getState() {
         return ClientAppState.INITIALIZED;
     }
@@ -563,6 +567,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *
      * @since 0.9.30
      */
+    @Override
     public String getName() {
         return "i2psnark";
     }
@@ -572,20 +577,22 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *
      * @since 0.9.30
      */
+    @Override
     public String getDisplayName() {
         return "i2psnark: " + _contextPath;
     }
 
-    /** hook to I2PSnarkUtil for the servlet */
+    /**
+     * @return I2PSnarkUtil instance
+     */
     public I2PSnarkUtil util() {
         return _util;
     }
 
     /**
-     * The BandwidthManager.
-     *
-     * @since 0.9.62
+     * @return bandwidth listener
      */
+    @Override
     public BandwidthListener getBandwidthListener() {
         return _bwManager;
     }
@@ -631,6 +638,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
     }
 
+    /**
+     * @return current time or 0 if no util
+     */
     public String getTime() {
         SimpleDateFormat fmt = new SimpleDateFormat("dd/MM HH:mm:ss", Locale.US);
         long now = System.currentTimeMillis();
@@ -639,7 +649,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         return "<b class=date>" + date + "</b>";
     }
 
-    /** newest last */
+    /**
+     * @return list of recent messages
+     */
     public List<UIMessages.Message> getMessages() {
         return _messages.getMessages();
     }
@@ -680,6 +692,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * @return true if newly added torrents should be started automatically
      */
+    @Override
     public boolean shouldAutoStart() {
         return Boolean.parseBoolean(
                 _config.getProperty(PROP_AUTO_START, Boolean.toString(DEFAULT_AUTO_START)));
@@ -1023,6 +1036,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @return null if none
      * @since 0.9.31
      */
+    @Override
     public CommentSet getSavedComments(Snark snark) {
         File com = commentFile(_configDir, snark.getInfoHash());
         if (com.exists()) {
@@ -1043,6 +1057,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @param comments non-null
      * @since 0.9.31
      */
+    @Override
     public void locked_saveComments(Snark snark, CommentSet comments) {
         File com = commentFile(_configDir, snark.getInfoHash());
         try {
@@ -2882,6 +2897,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /** Get the timestamp for a torrent from the config file. A Snark.CompleteListener method. */
+    @Override
     public long getSavedTorrentTime(Snark snark) {
         Properties config = getConfig(snark);
         String time = config.getProperty(PROP_META_STAMP);
@@ -2898,6 +2914,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Get the saved bitfield for a torrent from the config file. Convert "." to a full bitfield. A
      * Snark.CompleteListener method.
      */
+    @Override
     public BitField getSavedTorrentBitField(Snark snark) {
         MetaInfo metainfo = snark.getMetaInfo();
         if (metainfo == null) {
@@ -2980,6 +2997,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @return setting, false if not found
      * @since 0.9.15
      */
+    @Override
     public boolean getSavedPreserveNamesSetting(Snark snark) {
         Properties config = getConfig(snark);
         return Boolean.parseBoolean(config.getProperty(PROP_META_PRESERVE_NAMES));
@@ -2991,6 +3009,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @return setting, 0 if not found
      * @since 0.9.15
      */
+    @Override
     public long getSavedUploaded(Snark snark) {
         Properties config = getConfig(snark);
         if (config != null) {
@@ -3790,6 +3809,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     // Begin Snark.CompleteListeners
 
     /** A Snark.CompleteListener method. */
+    @Override
     public void torrentComplete(Snark snark) {
         MetaInfo meta = snark.getMetaInfo();
         Storage storage = snark.getStorage();
@@ -3824,6 +3844,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /** A Snark.CompleteListener method. */
+    @Override
     public void updateStatus(Snark snark) {
         MetaInfo meta = snark.getMetaInfo();
         Storage storage = snark.getStorage();
@@ -3848,6 +3869,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @return the new name for the torrent or null on error
      * @since 0.8.4
      */
+    @Override
     public String gotMetaInfo(Snark snark) {
         MetaInfo meta = snark.getMetaInfo();
         Storage storage = snark.getStorage();
@@ -3903,6 +3925,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *
      * @since 0.9
      */
+    @Override
     public void fatal(Snark snark, String error) {
         addMessage(error);
     }
@@ -3912,6 +3935,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *
      * @since 0.9.2
      */
+    @Override
     public void addMessage(Snark snark, String message) {
         addMessage(message);
     }
@@ -3921,6 +3945,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *
      * @since 0.9.4
      */
+    @Override
     public void gotPiece(Snark snark) { /* no-op */ }
 
     // End Snark.CompleteListeners

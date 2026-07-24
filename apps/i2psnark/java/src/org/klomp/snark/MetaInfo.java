@@ -23,6 +23,7 @@ import java.util.Map;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.SHA1;
 import net.i2p.data.DataHelper;
+import net.i2p.util.FileUtil;
 import net.i2p.util.Log;
 import org.klomp.snark.bencode.BDecoder;
 import org.klomp.snark.bencode.BEValue;
@@ -909,7 +910,7 @@ public class MetaInfo {
                     MetaInfo meta2 = new MetaInfo(meta, an, meta.getAnnounceList(), cm, cb, urls);
                     File from = new File(args[i]);
                     File to = new File(args[i] + ".bak");
-                    if (net.i2p.util.FileUtil.copy(from, to, true, false)) {
+                    if (FileUtil.copy(from, to, true, false)) {
                         out = new FileOutputStream(from);
                         out.write(meta2.getTorrentData());
                         out.close();
@@ -927,7 +928,7 @@ public class MetaInfo {
                                         + "\nComment:      "
                                         + meta2.getComment());
                     } else {
-                        System.out.println("Failed backup of " + from + " to " + to);
+                        System.err.println("Failed backup of " + from + " to " + to);
                     }
                 }
             } catch (IOException ioe) {

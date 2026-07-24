@@ -15,8 +15,6 @@ import net.i2p.util.Log;
  * Handles incoming BitTorrent protocol messages from a peer.<br>
  * This class runs in a separate thread to continuously read and parse incoming messages, delegating
  * them to the appropriate PeerState handlers.
- *
- * @author Mark J. Wielaard
  * @since 0.1
  */
 class PeerConnectionIn implements Runnable {
@@ -59,6 +57,7 @@ class PeerConnectionIn implements Runnable {
         }
     }
 
+    @Override
     public void run() {
         thread = Thread.currentThread();
         try {

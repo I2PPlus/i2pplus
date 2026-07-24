@@ -10,8 +10,6 @@ import java.io.IOException;
 
 /**
  * Exception thrown when a bencoded stream is corrupted or malformed.
- *
- * @author Mark Wielaard (mark@klomp.org)
  */
 public class InvalidBEncodingException extends IOException {
     /**

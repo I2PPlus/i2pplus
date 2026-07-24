@@ -34,9 +34,6 @@ import net.i2p.util.RandomSource;
  * - Compact format enables efficient network transmission and storage<br>
  * - Immutable core data ensures consistency in routing operations<br>
  * - Optional destination allows progressive information discovery
- *
- * @since 0.9.2
- * @author zzz
  */
 class NodeInfo extends SimpleDataStructure {
 

@@ -22,8 +22,6 @@ import net.i2p.util.Log;
  * Manages outgoing BitTorrent protocol messages to a peer.<br>
  * This class maintains a queue of outgoing messages and handles bandwidth limiting, message
  * prioritization, and reliable delivery to the peer.
- *
- * @author Mark J. Wielaard
  * @since 0.1
  */
 class PeerConnectionOut implements Runnable {
@@ -62,10 +60,7 @@ class PeerConnectionOut implements Runnable {
         thread.start();
     }
 
-    /**
-     * Continuesly monitors for more outgoing messages that have to be send. Stops if quit is true
-     * or an IOException occurs.
-     */
+    @Override
     public void run() {
         try {
             boolean shouldThrottleRequests = false;

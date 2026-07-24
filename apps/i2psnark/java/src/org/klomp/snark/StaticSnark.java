@@ -9,10 +9,9 @@ package org.klomp.snark;
 /**
  * Main snark startup class for staticly linking with gcj. It references somee necessary classes
  * that are normally loaded through reflection.
- *
- * @author Mark Wielaard (mark@klomp.org)
  */
 public class StaticSnark {
+
     public static void main(String[] args) {
         System.err.println("unsupported");
     }

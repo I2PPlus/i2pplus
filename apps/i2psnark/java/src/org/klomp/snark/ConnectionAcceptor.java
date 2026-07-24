@@ -141,6 +141,7 @@ class ConnectionAcceptor implements Runnable {
         return TrackerClient.PORT;
     }
 
+    @Override
     public void run() {
         try {
             run2();
@@ -297,9 +298,7 @@ class ConnectionAcceptor implements Runnable {
             _socket = socket;
         }
 
-    /**
-     * Runs the accept loop, listening for incoming connections.
-     */
+    @Override
     public void run() {
             try {
                 InputStream in = _socket.getInputStream();

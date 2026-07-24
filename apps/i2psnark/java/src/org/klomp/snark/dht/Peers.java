@@ -22,7 +22,6 @@ import net.i2p.data.Hash;
  * can be used to prioritize responses and maintain accurate swarm statistics.
  *
  * @since 0.9.2
- * @author zzz
  */
 class Peers extends ConcurrentHashMap<Hash, Peer> {
 

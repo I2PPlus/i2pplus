@@ -27,7 +27,6 @@ import net.i2p.data.ByteArray;
  * - Lookup-only tokens don't store timestamps to save memory
  *
  * @since 0.9.2
- * @author zzz
  */
 class Token extends ByteArray {
 

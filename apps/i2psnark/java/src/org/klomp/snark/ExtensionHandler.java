@@ -19,7 +19,6 @@ import org.klomp.snark.comments.CommentSet;
  * REF: BEP 10 Extension Protocol
  *
  * @since 0.8.2
- * @author zzz
  */
 abstract class ExtensionHandler {
 
@@ -308,12 +307,6 @@ abstract class ExtensionHandler {
     private static void sendRequest(Peer peer, int piece) {
         sendMessage(peer, TYPE_REQUEST, piece);
     }
-
-    /****
-     * private static void sendReject(Peer peer, int piece) {
-     * sendMessage(peer, TYPE_REJECT, piece);
-     * }
-     ****/
 
     /** REQUEST and REJECT are the same except for message type */
     /**

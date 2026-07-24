@@ -23,8 +23,6 @@ import org.klomp.snark.comments.CommentSet;
 
 /**
  * Main Snark program startup class.
- *
- * @author Mark Wielaard (mark@klomp.org)
  */
 public class Snark implements StorageListener, CoordinatorListener, ShutdownListener {
 
@@ -211,8 +209,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             } catch (IOException ioe) {
                 try {
                     storage.close();
-                } catch (IOException ioee) {
-                    ioee.printStackTrace();
+                    } catch (IOException ioee) {
+                    _log.log(Log.WARN, "Error closing storage after failure", ioee);
                 }
                 fatal("Could not check or create files for " + getBaseInfo(), ioe);
             }
@@ -398,7 +396,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                     try {
                         storage.close();
                     } catch (IOException ioee) {
-                        ioee.printStackTrace();
+                        _log.log(Log.WARN, "Error closing storage after failure", ioee);
                     }
                     fatal("Could not open file for " + getBaseInfo(), ioe);
                 }
@@ -450,9 +448,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                 storage.close();
             } catch (IOException ioe) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Error closing " + torrent);
+                    _log.warn("Error closing " + torrent, ioe);
                 }
-                ioe.printStackTrace();
             }
             savedUploaded = nowUploaded;
             // SnarkManager.stopAllTorrents() will save comments at shutdown even if never
@@ -672,9 +669,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         return savedUploaded;
     }
 
-    /**
-     * @since 0.8.4
-     */
+    /** @return peer count */
     public int getPeerCount() {
         PeerCoordinator coord = coordinator;
         if (coord != null) {
@@ -683,9 +678,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         return 0;
     }
 
-    /**
-     * @since 0.8.4
-     */
+    /** @return peer list */
     public List<Peer> getPeerList() {
         PeerCoordinator coord = coordinator;
         if (coord != null) {
@@ -720,16 +713,12 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         return trackerSeenPeers;
     }
 
-    /**
-     * @since 0.8.4
-     */
+    /** @param p peer count from tracker */
     public void setTrackerSeenPeers(int p) {
         trackerSeenPeers = p;
     }
 
-    /**
-     * @since 0.8.4
-     */
+    /** Recalculate piece priorities */
     public void updatePiecePriorities() {
         PeerCoordinator coord = coordinator;
         if (coord != null) {
@@ -916,7 +905,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     private void fatalRouter(String s, Throwable t) throws RouterException {
         _log.error(s, t);
         if (!_util.getContext().isRouterContext()) {
-            System.out.println(s);
+            System.err.println(s);
         }
         stopTorrent(true);
         if (completeListener != null) {
@@ -941,6 +930,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /** CoordinatorListener - this does nothing */
+    @Override
     public void peerChange(PeerCoordinator coordinator, Peer peer) { /* no-op */ }
 
     /**
@@ -950,6 +940,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @throws RuntimeException via fatal()
      * @since 0.8.4
      */
+    @Override
     public void gotMetaInfo(PeerCoordinator coordinator, MetaInfo metainfo) {
         try {
             String base = Storage.filterName(metainfo.getName());
@@ -1009,11 +1000,13 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     ///////////// Begin StorageListener methods
 
     /** does nothing */
+    @Override
     public void storageCreateFile(Storage storage, String name, long length) { /* no-op */ }
 
     // How much storage space has been allocated
 
     /** does nothing */
+    @Override
     public void storageAllocated(Storage storage, long length) { /* no-op */ }
 
     private boolean allChecked;
@@ -1026,6 +1019,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @param num the piece number
      * @param checked true if the piece hash was correct
      */
+    @Override
     public void storageChecked(Storage storage, int num, boolean checked) {
         if (!allChecked && !checking) {
             checking = true;
@@ -1040,6 +1034,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      *
      * @param storage the storage that was checked
      */
+    @Override
     public void storageAllChecked(Storage storage) {
         allChecked = true;
         checking = false;
@@ -1062,6 +1057,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      *
      * @param storage the storage that completed
      */
+    @Override
     public void storageCompleted(Storage storage) {
         if (_log.shouldInfo()) {
             _log.info("Torrent " + torrent + " completed");
@@ -1086,6 +1082,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      *
      * @param storage the storage whose wanted pieces changed
      */
+    @Override
     public void setWantedPieces(Storage storage) {
         PeerCoordinator localCoordinator = this.coordinator;
         if (localCoordinator != null) {
@@ -1098,6 +1095,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     ///////////// End StorageListener methods
 
     /** SnarkShutdown callback unused */
+    @Override
     public void shutdown() { /* no-op */ }
 
     /**
@@ -1105,6 +1103,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      *
      * @since 0.9.2
      */
+    @Override
     public void addMessage(String message) {
         if (completeListener != null) {
             completeListener.addMessage(this, message);
@@ -1123,6 +1122,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @param uploaders the number of interested uploaders on this coordinator
      * @return true if the global upload limit is exceeded
      */
+    @Override
     public boolean overUploadLimit(int uploaders) {
         int maxUploaders = _util.getMaxUploaders();
         if (maxUploaders < MIN_TOTAL_UPLOADERS) {

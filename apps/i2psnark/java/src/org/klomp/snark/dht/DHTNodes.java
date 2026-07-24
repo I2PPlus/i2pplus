@@ -22,7 +22,6 @@ import net.i2p.util.SimpleTimer2;
  * <p>And a real Kademlia routing table, which stores node IDs only.
  *
  * @since 0.9.2
- * @author zzz
  */
 class DHTNodes {
 

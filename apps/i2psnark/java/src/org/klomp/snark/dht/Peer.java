@@ -18,7 +18,6 @@ import net.i2p.data.Hash;
  * torrent's swarm health.
  *
  * @since 0.9.2
- * @author zzz
  */
 class Peer extends Hash {
 

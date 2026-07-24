@@ -23,7 +23,6 @@ import org.klomp.snark.I2PSnarkUtil;
  * debugging and logging purposes.
  *
  * @since 0.9.2
- * @author zzz
  */
 class InfoHash extends SHA1Hash {
 
