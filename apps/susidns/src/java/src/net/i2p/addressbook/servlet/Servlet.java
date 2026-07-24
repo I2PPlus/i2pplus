@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
+import net.i2p.I2PAppContext;
 
 /**
  * A wrapper for addressbook to allow it to be started as a web application.
@@ -68,7 +69,7 @@ public class Servlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) {
         try {super.init(config);}
-        catch (ServletException exp) {System.err.println("Addressbook init exception: " + exp);}
+        catch (ServletException exp) {I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).error("Addressbook init exception", exp);}
         String[] args = new String[1];
         args[0] = config.getInitParameter("home");
         try {

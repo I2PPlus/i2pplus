@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import net.i2p.CoreVersion;
+import net.i2p.util.CommandLine;
 
 /**
  * Simple command line access to various utilities.
@@ -12,7 +13,7 @@ import net.i2p.CoreVersion;
  *
  * @since 0.9.55
  */
-public class AddressBookCommandLine extends net.i2p.util.CommandLine {
+public class AddressBookCommandLine extends CommandLine {
 
     /** List of address book specific classes */
     protected static final List<String> ACLASSES = Arrays.asList(new String[] {

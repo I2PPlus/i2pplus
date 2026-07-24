@@ -20,6 +20,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import net.i2p.data.DataHelper;
+import net.i2p.data.Destination;
+import net.i2p.data.Hash;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
 
@@ -221,7 +223,7 @@ public class BlacklistBean extends BaseBean {
 
         // Try to resolve b32 to hostname and check if that hostname is blacklisted
         try {
-            net.i2p.data.Destination dest = _context.namingService().lookup(b32);
+            Destination dest = _context.namingService().lookup(b32);
             List<String> names = dest != null ? _context.namingService().reverseLookupAll(dest.calculateHash()) : null;
             if (names != null) {
                 for (String name : names) {
@@ -254,8 +256,8 @@ public class BlacklistBean extends BaseBean {
 
         try {
             // Convert b64 to Destination and try reverse lookups
-            net.i2p.data.Destination dest = new net.i2p.data.Destination(b64);
-            net.i2p.data.Hash hash = dest.calculateHash();
+            Destination dest = new Destination(b64);
+            Hash hash = dest.calculateHash();
 
             // Try b32 lookup
             String b32 = hash.toBase32() + ".b32.i2p";
@@ -303,9 +305,9 @@ public class BlacklistBean extends BaseBean {
 
         // Try as hostname - check if any of its destinations are blacklisted
         try {
-            List<net.i2p.data.Destination> dests = _context.namingService().lookupAll(address);
+            List<Destination> dests = _context.namingService().lookupAll(address);
             if (dests != null) {
-                for (net.i2p.data.Destination dest : dests) {
+                for (Destination dest : dests) {
                     if (isB64Blacklisted(dest.toBase64())) {
                         return true;
                     }

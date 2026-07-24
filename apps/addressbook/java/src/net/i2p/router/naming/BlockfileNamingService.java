@@ -537,12 +537,6 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
-     *  Caller must synchronize
-     *  @param source may be null
-     *  @throws RuntimeException
-     */
-
-    /**
      *  Single dest version.
      *  Caller must synchronize
      *
@@ -1500,6 +1494,7 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
+     *  Look up a hostname from a Destination's hash. Returns the first name found, or null.
      * @param options ignored
      * @since 0.8.9
      */
@@ -1509,7 +1504,10 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
-     * @since 0.8.9
+     *  Look up a hostname from a hash. Returns the first name found, or null.
+     *  @param h the hash to look up
+     *  @return the first hostname, or null if none
+     *  @since 0.8.9
      */
     @Override
     public String reverseLookup(Hash h) {
@@ -1523,8 +1521,9 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
-     * @param options ignored
-     * @since 0.9.26
+     *  Return all hostnames registered for this Destination's hash.
+     *  @param options ignored
+     *  @since 0.9.26
      */
     @Override
     public List<String> reverseLookupAll(Destination d, Properties options) {
@@ -1532,7 +1531,10 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     /**
-     * @since 0.9.26
+     *  Return all hostnames registered for this hash.
+     *  @param h the hash to look up
+     *  @return the list of hostnames, or null if none
+     *  @since 0.9.26
      */
     @Override
     public List<String> reverseLookupAll(Hash h) {
@@ -1574,6 +1576,9 @@ public class BlockfileNamingService extends DummyNamingService {
         }
     }
 
+    /**
+     *  Shut down the naming service and close the backing store.
+     */
     public void shutdown() {
         close();
     }
@@ -1800,6 +1805,7 @@ public class BlockfileNamingService extends DummyNamingService {
     }
 
     private class Shutdown implements Runnable {
+        @Override
         public void run() {
             close();
         }
@@ -1886,6 +1892,7 @@ public class BlockfileNamingService extends DummyNamingService {
          *  A format error on the properties is non-fatal (only the properties are lost)
          *  A format error on the destination is fatal
          */
+        @Override
         public byte[] getBytes(DestEntry de) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
             try {
@@ -1906,6 +1913,7 @@ public class BlockfileNamingService extends DummyNamingService {
         }
 
         /** returns null on error */
+        @Override
         public DestEntry construct(byte[] b) {
             DestEntry rv = new DestEntry();
             ByteArrayInputStream bais = new ByteArrayInputStream(b);
@@ -1929,6 +1937,10 @@ public class BlockfileNamingService extends DummyNamingService {
      */
     private static class DestEntrySerializerV4 implements Serializer<DestEntry> {
 
+        /**
+         *  Serialize a DestEntry to bytes, including the destination list if present.
+         */
+        @Override
         public byte[] getBytes(DestEntry de) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
             int sz = de.destList != null ? de.destList.size() : 1;
@@ -2123,6 +2135,10 @@ public class BlockfileNamingService extends DummyNamingService {
         public final String key;
         public final String list;
 
+        /**
+         *  @param k the key (hostname)
+         *  @param l the list name
+         */
         public InvalidEntry(String k, String l) {
             key = k;
             list = l;

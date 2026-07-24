@@ -30,7 +30,6 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
     private final Map<String, HostTxtEntry> addresses;
     private final File subFile;
     private boolean modified;
-    private static final boolean DEBUG = false;
     private static final net.i2p.util.Log _log = new net.i2p.util.Log(AddressBook.class);
 
     private static final int MIN_DEST_LENGTH = 516;
@@ -100,18 +99,14 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
                 subscription.setLastModified(get.getLastModified());
                 subscription.setLastFetched(I2PAppContext.getGlobalContext().clock().now());
                 subf = tmp;
-                String lastMod = (get.getLastModified() != null ? get.getLastModified() : "n/a");
-                String eTag = get.getEtag();
-                boolean hasLastMod = get.getLastModified() != null;
-                boolean hasEtag = get.getEtag() != null;
                 if (_log.shouldInfo()) {
+                    String eTag = get.getEtag();
+                    String lastMod = get.getLastModified();
                     _log.info("Checking [" + loc.replace("http://", "") + "] -> " +
-                              (hasLastMod ? "Last modified: " + lastMod : hasEtag ? "ETag: " +
+                              (lastMod != null ? "Last modified: " + lastMod : eTag != null ? "ETag: " +
                               eTag : "No ETag or Last Modified headers"));
                 }
-                a = Collections.emptyMap(); // Addresses not loaded here, so keep empty map
             } else {
-                a = Collections.emptyMap();
                 tmp.delete();
             }
         } catch (IOException ioe) {
@@ -330,7 +325,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
 
             if (isValidKey(otherKey) && isValidDest(otherValue.getDest())) {
                 if (this.addresses.containsKey(otherKey) && !overwrite) {
-                    if (DEBUG && log != null && !this.addresses.get(otherKey).equals(otherValue.getDest())) {
+                    if (log != null && !this.addresses.get(otherKey).equals(otherValue.getDest())) {
                         log.append("Conflict for " + otherKey + " from " + other.location +
                                    ". Destination in remote address book is " + otherValue);
                     }

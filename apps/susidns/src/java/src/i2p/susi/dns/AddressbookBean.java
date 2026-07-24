@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import net.i2p.addressbook.HostChecker;
+import net.i2p.addressbook.HostCheckerBridge;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
@@ -286,8 +288,8 @@ public class AddressbookBean extends BaseBean {
                 if (category != null) {
                     String hostCategory = null;
                     try {
-                        net.i2p.addressbook.HostChecker hostChecker =
-                                net.i2p.addressbook.HostCheckerBridge.getInstance();
+                        HostChecker hostChecker =
+                                HostCheckerBridge.getInstance();
                         if (hostChecker != null) {
                             hostCategory = hostChecker.getCategory(name);
                         } else {
@@ -313,32 +315,30 @@ public class AddressbookBean extends BaseBean {
                         boolean isAlive = false;
                         boolean haveResult = false;
                         try {
-                            java.util.Map<String, net.i2p.addressbook.HostChecker.PingResult> allResults =
-                                    net.i2p.addressbook.HostCheckerBridge.getAllPingResults();
+                            Map<String, HostChecker.PingResult> allResults =
+                                    HostCheckerBridge.getAllPingResults();
                             if (allResults != null && !allResults.isEmpty()) {
                                 haveResult = true;
-                                net.i2p.addressbook.HostChecker.PingResult pingResult = allResults.get(name);
+                                HostChecker.PingResult pingResult = allResults.get(name);
                                 if (pingResult != null && pingResult.reachable) {
                                     isAlive = true;
                                 }
                             }
                         } catch (Exception e) {
-                            // If we can't get status, skip this host for alive filter
                             continue;
                         }
                         if (haveResult && !isAlive) {
                             continue;
                         }
                     } else if (filter.equals("dead")) {
-                        // Check if host is dead using cached ping results from HostCheckerBridge
                         boolean isDead = false;
                         boolean haveResult = false;
                         try {
-                            java.util.Map<String, net.i2p.addressbook.HostChecker.PingResult> allResults =
-                                    net.i2p.addressbook.HostCheckerBridge.getAllPingResults();
+                            Map<String, HostChecker.PingResult> allResults =
+                                    HostCheckerBridge.getAllPingResults();
                             if (allResults != null && !allResults.isEmpty()) {
                                 haveResult = true;
-                                net.i2p.addressbook.HostChecker.PingResult pingResult = allResults.get(name);
+                                HostChecker.PingResult pingResult = allResults.get(name);
                                 if (pingResult != null && !pingResult.reachable) {
                                     isDead = true;
                                 }
@@ -593,25 +593,9 @@ public class AddressbookBean extends BaseBean {
                         message = _t("Please enter a host name and destination");
                     }
                     search = null; // clear search when adding
-                } else if (action.equals(_t("Delete Selected")) || action.equals(_t("Delete Entry"))) {
-                    String name = null;
-                    int deleted = 0;
-
-                    if (changed) {
-                        if (deleted == 1) {
-                            message = _t("Destination {0} deleted.", name);
-                        } else {
-                            message = ngettext("1 destination deleted.", "{0} destinations deleted.", deleted);
-                        } // parameter will always be >= 2
-                    } else {
-                        message = _t("No valid entries selected to delete.");
-                    }
-                    if (action.equals(_t("Delete Entry"))) {
-                        search = null;
-                    }
                 } else if (action.equals(_t("Add Alternate"))) {
-                    message = "Unsupported";
-                } // button won't be in UI
+                    message = _t("Unsupported");
+                }
                 if (changed) {
                     try {
                         save();

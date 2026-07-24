@@ -39,6 +39,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
+import net.i2p.client.I2PSession;
 import net.i2p.client.naming.NamingService;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.I2PSocketManagerFactory;
@@ -557,8 +558,11 @@ public class HostChecker {
             Job onSuccess = new Job() {
                 @Override
                 public String getName() { return "LeaseSet lookup success"; }
+                @Override
                 public long getJobId() { return System.currentTimeMillis(); }
+                @Override
                 public JobTiming getTiming() { return new JobTiming(routerContext); }
+                @Override
                 public void runJob() {
                     lookupResult[0] = true;
                     lookupComplete[0] = true;
@@ -579,8 +583,11 @@ public class HostChecker {
             Job onFailure = new Job() {
                 @Override
                 public String getName() { return "LeaseSet lookup failure"; }
+                @Override
                 public long getJobId() { return System.currentTimeMillis(); }
+                @Override
                 public JobTiming getTiming() { return new JobTiming(routerContext); }
+                @Override
                 public void runJob() {
                     lookupResult[0] = false;
                     lookupComplete[0] = true;
@@ -588,6 +595,7 @@ public class HostChecker {
                         lookupComplete.notifyAll();
                     }
                 }
+                @Override
                 public void dropped() {
                     lookupResult[0] = false;
                     lookupComplete[0] = true;
@@ -757,12 +765,12 @@ public class HostChecker {
             while (System.currentTimeMillis() < tunnelReadyTimeout) {
                 if (pingSocketManager != null && !pingSocketManager.isDestroyed()) {
                     try {
-                        net.i2p.client.I2PSession session = pingSocketManager.getSession();
+                        I2PSession session = pingSocketManager.getSession();
                         if (session != null && !session.isClosed()) {
                             if (_useLeaseSetCheck && _context instanceof RouterContext) {
                                 RouterContext routerContext = (RouterContext) _context;
-                                net.i2p.data.Hash destHash = destination.calculateHash();
-                                net.i2p.data.LeaseSet ls = routerContext.clientNetDb(destHash).lookupLeaseSetLocally(destHash);
+                                Hash destHash = destination.calculateHash();
+                                LeaseSet ls = routerContext.clientNetDb(destHash).lookupLeaseSetLocally(destHash);
                                 if (ls != null && routerContext.tunnelManager().getOutboundClientTunnelCount(destHash) > 0) {
                                     long timeToExpire = ls.getEarliestLeaseDate() - _context.clock().now();
                                     if ((timeToExpire >= 0) && ls.isCurrent(0)) {
@@ -2160,7 +2168,7 @@ public class HostChecker {
     /**
      * Format LeaseSet encryption types as a string like "[0]" or "[4,0]"
      */
-    private static String formatLeaseSetTypes(net.i2p.data.LeaseSet leaseSet) {
+    private static String formatLeaseSetTypes(LeaseSet leaseSet) {
         if (leaseSet == null) {
             return "[]";
         }
@@ -2176,7 +2184,7 @@ public class HostChecker {
                 List<PublicKey> keys = (List<PublicKey>) getEncryptionKeys.invoke(leaseSet);
 
                 if (keys != null && !keys.isEmpty()) {
-                    for (net.i2p.data.PublicKey key : keys) {
+                    for (PublicKey key : keys) {
                         try {
                             Method getType = key.getClass().getMethod("getType");
                             EncType encType = (EncType) getType.invoke(key);
@@ -2195,7 +2203,7 @@ public class HostChecker {
             // LeaseSet type 1 - single encryption key
             try {
                 Method getEncryptionKey = leaseSet.getClass().getMethod("getEncryptionKey");
-                net.i2p.data.PublicKey key = (net.i2p.data.PublicKey) getEncryptionKey.invoke(leaseSet);
+                PublicKey key = (PublicKey) getEncryptionKey.invoke(leaseSet);
                 if (key != null) {
                     try {
                         Method getType = key.getClass().getMethod("getType");

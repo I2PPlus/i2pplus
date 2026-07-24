@@ -13,6 +13,8 @@ import java.util.NoSuchElementException;
 import net.i2p.client.naming.HostTxtEntry;
 
 import java.nio.charset.StandardCharsets;
+import net.i2p.util.Log;
+
 /**
  *  A class to iterate through a hosts.txt or config file without
  *  reading the whole thing into memory.
@@ -28,6 +30,7 @@ import java.nio.charset.StandardCharsets;
  */
 class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Closeable {
 
+    private static final Log _log = new Log(HostTxtIterator.class);
     private BufferedReader input;
     private MapEntry next;
 
@@ -64,12 +67,12 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
             }
         } catch (IOException ioe) {
             // Log the error but continue with cleanup
-            System.err.println("Error reading from host file: " + ioe.getMessage());
+            _log.error("Error reading from host file", ioe);
         }
         try {input.close();}
         catch (IOException ioe) {
             // Log warning but don't throw - we're cleaning up
-            System.err.println("Warning: Failed to close host file: " + ioe.getMessage());
+            _log.warn("Failed to close host file", ioe);
         }
         input = null;
         next = null;
@@ -114,21 +117,30 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
         private final String key;
         private final HostTxtEntry value;
 
+        /**
+         *  @param k the key
+         *  @param v the value
+         */
         public MapEntry(String k, HostTxtEntry v) {
             key = k;
             value = v;
         }
 
+        @Override
         public String getKey() {return key;}
 
+        @Override
         public HostTxtEntry getValue() {return value;}
 
+        @Override
         public HostTxtEntry setValue(HostTxtEntry v) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public int hashCode() {return key.hashCode() ^ value.hashCode();}
 
+        @Override
         public boolean equals(Object o) {
             if (!(o instanceof Map.Entry)) {return false;}
             @SuppressWarnings("unchecked")

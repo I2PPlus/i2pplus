@@ -41,13 +41,18 @@ public class HostPing {
     private boolean _consecutiveMode = false;
     private boolean _debug = false;
 
+    /**
+     *  Default constructor, uses global context.
+     */
     public HostPing() {
         _context = I2PAppContext.getGlobalContext();
         _namingService = _context.namingService();
     }
 
     /**
-     * Main ping method for a single destination
+     * Ping a single destination.
+     * @param destination the .i2p hostname, b32, or b64 address
+     * @return 0 if all pings succeeded, 1 otherwise
      */
     public int pingDestination(String destination) {
         System.out.println(" • Opening tunnel...");
@@ -233,7 +238,9 @@ public class HostPing {
     }
 
     /**
-     * Ping multiple destinations from file
+     * Ping all destinations listed in a file (one per line).
+     * @param filename path to the file
+     * @return 0 if at least one destination was reachable, 1 otherwise
      */
     public int pingFromFile(String filename) {
         List<String> destinations = readDestinationsFromFile(filename);

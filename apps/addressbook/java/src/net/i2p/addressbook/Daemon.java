@@ -29,7 +29,6 @@ import net.i2p.util.SystemVersion;
 public class Daemon {
     public static final String VERSION = "2.0.4";
     private volatile boolean _running;
-    private static final boolean DEBUG = false;
     private static HostChecker _hostChecker;
     private final Log _log = new Log(new File(I2PAppContext.getGlobalContext().getLogDir(), "addressbook.log"));
     // If you change this, change in SusiDNS SubscriptionBean also
@@ -43,7 +42,7 @@ public class Daemon {
      *  This is also chosen so that it can't be spoofed.
      */
     private static final String RCVD_PROP_PREFIX = "=";
-    private static final boolean MUST_VALIDATE = false;
+
 
     /**
      * Update the router and published address books using remote data from the
@@ -122,13 +121,7 @@ public class Daemon {
 
         Iterator<AddressBook> iter = subscriptions.iterator();
         while (iter.hasNext()) { // yes, the EepGet fetch() is done in next()
-            long start = System.currentTimeMillis();
             AddressBook addressbook = iter.next();
-            // SubscriptionIterator puts in a dummy AddressBook with no location if no fetch is done
-            if (DEBUG && log != null && addressbook.getLocation() != null) {
-                long end = System.currentTimeMillis();
-                log.append("Fetch of " + addressbook.getLocation() + " took " + (end - start));
-            }
             Iterator<Map.Entry<String, HostTxtEntry>> iter2 = addressbook.iterator();
             try {
                 update(router, knownNames, publishedNS, addressbook, iter2, log);
@@ -148,7 +141,6 @@ public class Daemon {
     private static void update(NamingService router, Set<String> knownNames,
                                NamingService publishedNS, AddressBook addressbook,
                                Iterator<Map.Entry<String, HostTxtEntry>> iter, Log log) {
-            long start = DEBUG ? System.currentTimeMillis() : 0;
             int old = 0;
             int nnew = 0;
             int invalid = 0;
@@ -169,7 +161,7 @@ public class Daemon {
                 try {
                     HostTxtEntry he = entry.getValue();
                     Properties hprops = he.getProps();
-                    boolean mustValidate = MUST_VALIDATE || hprops != null;
+                    boolean mustValidate = hprops != null;
                     String action = hprops != null ? hprops.getProperty(HostTxtEntry.PROP_ACTION) : null;
                     if (key == null && !he.hasValidRemoveSig()) {
                         if (log != null) {
@@ -613,16 +605,6 @@ public class Daemon {
                     invalid++;
                 }
             }  // entries
-            if (DEBUG && log != null && total > 0) {
-                log.append("Merge of " + addressbook.getLocation() + " into " + router +
-                           " took " + (System.currentTimeMillis() - start) + " ms with " +
-                           total + " total, " +
-                           nnew + " new, " +
-                           old + " old, " +
-                           deleted + " deleted, " +
-                           invalid + " invalid, " +
-                           conflict + " conflicts");
-            }
     }
 
     /** @since 0.9.26 */
@@ -757,7 +739,10 @@ public class Daemon {
         else {daemon.run(args);}
     }
 
-    /** @since 0.9.26 */
+    /**
+     *  Run a self-test: create a context, run one update cycle, and flush logs.
+     *  @since 0.9.26
+     */
     public static void test() {
         Properties ctxProps = new Properties();
         String PROP_FORCE = "i2p.naming.blockfile.writeInAppContext";
@@ -804,7 +789,7 @@ public class Daemon {
         if (!homeFile.exists()) {
             boolean created = homeFile.mkdirs();
             if (!created) {
-                System.out.println("ERROR: Addressbook directory " + homeFile.getAbsolutePath() + " could not be created");
+                _log.append("ERROR: Addressbook directory " + homeFile.getAbsolutePath() + " could not be created");
             }
         }
 
@@ -854,6 +839,9 @@ public class Daemon {
         synchronized (this) {notifyAll();}
     }
 
+    /**
+     *  Stop the daemon.
+     */
     public void stop() {
         synchronized (this) {
             _running = false;
@@ -874,14 +862,6 @@ public class Daemon {
      * @return HostChecker instance or null if not initialized
      */
     public static HostChecker getHostChecker() {
-        return _hostChecker;
-    }
-
-    /**
-     * Get HostChecker instance via reflection-safe method
-     * @return HostChecker instance or null if not initialized
-     */
-    public static Object getHostCheckerInstance() {
         return _hostChecker;
     }
 

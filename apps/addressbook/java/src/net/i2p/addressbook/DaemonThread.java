@@ -40,6 +40,9 @@ public class DaemonThread extends I2PAppThread implements NamingServiceUpdater {
         }
     }
 
+    /**
+     *  Halt the thread and stop the daemon.
+     */
     public void halt() {
         daemon.stop();
         interrupt();

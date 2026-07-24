@@ -24,6 +24,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.SortedMap;
+import net.i2p.addressbook.HostChecker;
+import net.i2p.addressbook.HostCheckerBridge;
 import net.i2p.client.naming.NamingService;
 import net.i2p.client.naming.SingleFileNamingService;
 import net.i2p.data.Base32;
@@ -249,7 +251,7 @@ public class NamingServiceBean extends AddressbookBean {
                 if (category != null) {
                     String hostCategory = null;
                     try {
-                        net.i2p.addressbook.HostChecker hostChecker = net.i2p.addressbook.HostCheckerBridge.getInstance();
+                        HostChecker hostChecker = HostCheckerBridge.getInstance();
                         if (hostChecker != null) {
                             hostCategory = hostChecker.getCategory(name);
                         } else {
@@ -274,29 +276,27 @@ public class NamingServiceBean extends AddressbookBean {
                         boolean isAlive = false;
                         boolean haveResult = false;
                         try {
-                            java.util.Map<String, net.i2p.addressbook.HostChecker.PingResult> allResults = net.i2p.addressbook.HostCheckerBridge.getAllPingResults();
+                            Map<String, HostChecker.PingResult> allResults = HostCheckerBridge.getAllPingResults();
                             if (allResults != null && !allResults.isEmpty()) {
                                 haveResult = true;
-                                net.i2p.addressbook.HostChecker.PingResult pingResult = allResults.get(name);
+                                HostChecker.PingResult pingResult = allResults.get(name);
                                 if (pingResult != null && pingResult.reachable) {
                                     isAlive = true;
                                 }
                             }
                         } catch (Exception e) {
-                            // If we can't get status, skip this host for alive filter
                             continue;
                         }
                         if (haveResult && !isAlive) {continue;}
                     }
                     else if (filter.equals("dead")) {
-                        // Check if host is dead using cached ping results from HostCheckerBridge
                         boolean isDead = false;
                         boolean haveResult = false;
                         try {
-                            java.util.Map<String, net.i2p.addressbook.HostChecker.PingResult> allResults = net.i2p.addressbook.HostCheckerBridge.getAllPingResults();
+                            Map<String, HostChecker.PingResult> allResults = HostCheckerBridge.getAllPingResults();
                             if (allResults != null && !allResults.isEmpty()) {
                                 haveResult = true;
-                                net.i2p.addressbook.HostChecker.PingResult pingResult = allResults.get(name);
+                                HostChecker.PingResult pingResult = allResults.get(name);
                                 if (pingResult != null && !pingResult.reachable) {
                                     isDead = true;
                                 }
@@ -439,7 +439,6 @@ public class NamingServiceBean extends AddressbookBean {
                                                 throw new DataFormatException(_t("Unable to resolve Base 32 address"));
                                             }
                                         } else {throw new DataFormatException("");}
-                                        fail =true;
                                     } else {throw new DataFormatException("");}
                                     if (oldDest != null) {
                                         nsOptions.putAll(outProperties);
@@ -726,11 +725,11 @@ public class NamingServiceBean extends AddressbookBean {
                         boolean isAlive = false;
                         boolean haveResult = false;
                         try {
-                            java.util.Map<String, net.i2p.addressbook.HostChecker.PingResult> allResults =
-                                net.i2p.addressbook.HostCheckerBridge.getAllPingResults();
+                            Map<String, HostChecker.PingResult> allResults =
+                                HostCheckerBridge.getAllPingResults();
                             if (allResults != null && !allResults.isEmpty()) {
                                 haveResult = true;
-                                net.i2p.addressbook.HostChecker.PingResult pingResult = allResults.get(name);
+                                HostChecker.PingResult pingResult = allResults.get(name);
                                 if (pingResult != null && pingResult.reachable) {
                                     isAlive = true;
                                 }
@@ -743,11 +742,11 @@ public class NamingServiceBean extends AddressbookBean {
                         boolean isDead = false;
                         boolean haveResult = false;
                         try {
-                            java.util.Map<String, net.i2p.addressbook.HostChecker.PingResult> allResults =
-                                net.i2p.addressbook.HostCheckerBridge.getAllPingResults();
+                            Map<String, HostChecker.PingResult> allResults =
+                                HostCheckerBridge.getAllPingResults();
                             if (allResults != null && !allResults.isEmpty()) {
                                 haveResult = true;
-                                net.i2p.addressbook.HostChecker.PingResult pingResult = allResults.get(name);
+                                HostChecker.PingResult pingResult = allResults.get(name);
                                 if (pingResult != null && !pingResult.reachable) {
                                     isDead = true;
                                 }
@@ -765,7 +764,7 @@ public class NamingServiceBean extends AddressbookBean {
                 if (category != null) {
                     String hostCategory = null;
                     try {
-                        net.i2p.addressbook.HostChecker hostChecker = net.i2p.addressbook.HostCheckerBridge.getInstance();
+                        HostChecker hostChecker = HostCheckerBridge.getInstance();
                         if (hostChecker != null) {
                             hostCategory = hostChecker.getCategory(name);
                         }

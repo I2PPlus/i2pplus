@@ -182,21 +182,20 @@ public class BaseBean {
     }
 
     /**
-     * Returns the action.
      * @return the action
      * @since 0.9.13 moved from subclasses
      */
     public String getAction() {return action;}
 
     /**
-     * Sets the action.
-     * @param action the action to set
+     * Sets the action. HTML is stripped from the value.
+     * @param action the action string
      * @since 0.9.13 moved from subclasses
      */
     public void setAction(String action) {this.action = DataHelper.stripHTML(action);}
 
     /**
-     * Returns a new serial number.
+     * Generate a new random serial for CSRF protection and clear the pending action.
      * @return a new serial number
      * @since 0.9.13 moved from subclasses
      */
@@ -207,15 +206,14 @@ public class BaseBean {
     }
 
     /**
-     * Sets the serial.
-     * @param serial the serial to set
+     * Sets the serial. HTML is stripped from the value.
+     * @param serial the serial number
      * @since 0.9.13 moved from subclasses
      */
     public void setSerial(String serial) {this.serial = DataHelper.stripHTML(serial);}
 
     /**
-     * Stores the HTTP method.
-     * @param method the HTTP method to store
+     * @param method the HTTP method
      * @since 0.9.65
      */
     public void storeMethod(String method) {this.method = method;}
