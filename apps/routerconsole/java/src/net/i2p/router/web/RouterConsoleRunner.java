@@ -589,6 +589,7 @@ public class RouterConsoleRunner implements RouterApp {
             }
             if (sslPort > 0) {
                 File keyStore = new File(_context.getConfigDir(), "keystore/console.ks");
+                keyStore.getParentFile().mkdirs();
                 // Put the list of hosts together early, so we can put it in the selfsigned cert.
                 StringTokenizer tok = new StringTokenizer(_sslListenHost, " ,");
                 Set<String> altNames = new HashSet<>(4);
