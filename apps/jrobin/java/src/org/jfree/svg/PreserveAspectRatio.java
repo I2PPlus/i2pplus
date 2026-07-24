@@ -61,6 +61,11 @@ public enum PreserveAspectRatio {
         this.label = label;
     }
 
+    /**
+     * Returns the SVG preserveAspectRatio attribute value as a string.
+     *
+     * @return The attribute value (e.g. "xMidYMid", "none").
+     */
     @Override
     public String toString() {
         return this.label;

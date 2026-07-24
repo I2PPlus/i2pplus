@@ -37,6 +37,11 @@ public enum MeetOrSlice {
         this.label = label;
     }
 
+    /**
+     * Returns the SVG meetOrSlice attribute value as a string.
+     *
+     * @return The attribute value ("meet" or "slice").
+     */
     @Override
     public String toString() {
         return this.label;

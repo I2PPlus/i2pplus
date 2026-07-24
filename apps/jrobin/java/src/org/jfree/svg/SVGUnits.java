@@ -55,6 +55,11 @@ public enum SVGUnits {
         this.label = label;
     }
 
+    /**
+     * Returns the SVG unit identifier as a string.
+     *
+     * @return The unit identifier (e.g. "px", "em", "pt").
+     */
     @Override
     public String toString() {
         return this.label;

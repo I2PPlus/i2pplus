@@ -1,0 +1,51 @@
+<html>
+<head>
+    <title>JFreeSVG - SVG Generation Library</title>
+</head>
+<body>
+<p>
+    Core classes for generating SVG (Scalable Vector Graphics) output from Java2D
+    graphics operations. The primary entry point is {@link org.jfree.svg.SVGGraphics2D},
+    a {@code Graphics2D} implementation that intercepts standard Java2D drawing calls
+    and produces corresponding SVG elements.
+</p>
+
+<p>
+    This is a fork of JFreeSVG 4.1 bundled with the I2P+ router for rendering
+    RRD graphs and other visualizations to SVG format. Key modifications include
+    glow path emission and custom rendering hint handling.
+</p>
+
+<h2>Key Components</h2>
+<ul>
+    <li>{@link org.jfree.svg.SVGGraphics2D} - Main Graphics2D implementation for SVG output</li>
+    <li>{@link org.jfree.svg.SVGHints} - Custom rendering hints for SVG export</li>
+    <li>{@link org.jfree.svg.SVGUtils} - Utility methods for writing SVG files</li>
+    <li>{@link org.jfree.svg.SVGGraphicsConfiguration} - Graphics configuration</li>
+    <li>{@link org.jfree.svg.SVGGraphicsDevice} - Graphics device abstraction</li>
+    <li>{@link org.jfree.svg.FontMapper} - Interface for font family mapping</li>
+    <li>{@link org.jfree.svg.StandardFontMapper} - Default font mapper implementation</li>
+    <li>{@link org.jfree.svg.ViewBox}, {@link org.jfree.svg.PreserveAspectRatio}, {@link org.jfree.svg.MeetOrSlice}, {@link org.jfree.svg.SVGUnits} - SVG attribute value types</li>
+    <li>{@link org.jfree.svg.ImageElement} - External image reference tracking</li>
+</ul>
+
+<h2>Usage</h2>
+<p>
+    Create an {@code SVGGraphics2D} instance with the desired dimensions, use standard
+    Java2D API calls to render content, then retrieve the SVG output:
+</p>
+<pre>
+    SVGGraphics2D g2 = new SVGGraphics2D(300, 200);
+    g2.setPaint(Color.RED);
+    g2.draw(new Rectangle(10, 10, 280, 180));
+    String svgElement = g2.getSVGElement();
+</pre>
+
+<h2>Related Packages</h2>
+<ul>
+    <li>{@link org.jfree.svg.util} - Utility classes for argument validation, shape copying, gradient paint keys, and fast double-to-string conversion</li>
+</ul>
+
+@since 4.1 (I2P+ fork)
+</body>
+</html>

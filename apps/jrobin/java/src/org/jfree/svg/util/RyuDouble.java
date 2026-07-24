@@ -78,6 +78,14 @@ public final class RyuDouble {
         }
     }
 
+    /**
+     * Converts a double value to its shortest decimal representation using the
+     * Ryu algorithm, rounded to the specified number of decimal places.
+     *
+     * @param value    the double value to convert.
+     * @param decimals the number of decimal places to round to.
+     * @return A string representation of the double value.
+     */
     public static String doubleToString(final double value, final int decimals) {
         // Step 1: Decode the floating point number, and unify normalized and subnormal cases.
         // First, handle all the trivial cases.
