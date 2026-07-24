@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - dev
     tags:
       - '*'
 
@@ -44,6 +45,10 @@ jobs:
         continue-on-error: true
         run: ant javadoc-zip-ci
 
+      - name: Build jsdoc
+        continue-on-error: true
+        run: ant jsdoc-zip
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -54,6 +59,7 @@ jobs:
             dist/i2pinstall.exe
             dist/i2psnark-standalone.zip
             dist/javadoc.zip
+            dist/jsdoc.zip
             dist/*.deb
           retention-days: 7
 
@@ -67,5 +73,33 @@ jobs:
             dist/i2pinstall.exe
             dist/i2psnark-standalone.zip
             dist/javadoc.zip
+            dist/jsdoc.zip
             dist/*.deb
           generate_release_notes: true
+
+  continuous:
+    if: github.ref_name == 'master' || github.ref_name == 'dev'
+    needs: [build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: i2p-build-artifacts
+          path: artifacts/
+
+      - name: Upload continuous release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: continuous
+          name: Continuous Build
+          body: "Automated build from ${{ github.sha }}"
+          commit: ${{ github.sha }}
+          artifacts: artifacts/*
+          allowUpdates: true
+          removeArtifacts: true
+          makeLatest: true
+          omitBodyDuringUpdate: true
+          skipIfReleaseExists: false
+          token: ${{ secrets.GITHUB_TOKEN }}
