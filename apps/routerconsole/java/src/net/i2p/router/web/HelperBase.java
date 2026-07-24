@@ -40,7 +40,7 @@ public abstract class HelperBase {
         try {
             _context = ContextHelper.getContext(contextId);
             _log = _context.logManager().getLog(getClass());
-        } catch (Throwable t) {_log.error("error in helper", t);}
+        } catch (Throwable t) {_log.error("Error in helper", t);}
     }
 
     /**

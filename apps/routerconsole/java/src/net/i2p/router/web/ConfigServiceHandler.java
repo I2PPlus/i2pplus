@@ -133,7 +133,7 @@ public class ConfigServiceHandler extends FormHandler {
 
         public void run() {
             try {WrapperManager.signalStopped(_exitCode);}
-            catch (Throwable t) {_log.error("error in final wrapper task", t);}
+            catch (Throwable t) {_log.error("Error in final wrapper task", t);}
         }
 
         /**

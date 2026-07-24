@@ -92,7 +92,7 @@ public class EchoIT extends StreamingITBase {
                     socket.close();
                 }
             } catch (Exception e) {
-                _log.error("error running", e);
+                _log.error("Error running", e);
             }
         }
     }

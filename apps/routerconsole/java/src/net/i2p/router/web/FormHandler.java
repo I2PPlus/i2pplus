@@ -124,7 +124,7 @@ public abstract class FormHandler {
         try {
             _context = ContextHelper.getContext(contextId);
             _log = _context.logManager().getLog(getClass());
-        } catch (Throwable t) {_log.error("error processing form", t);}
+        } catch (Throwable t) {_log.error("Error processing form", t);}
     }
 
     public void setNonce(String val) {_nonce = val == null ? null : DataHelper.stripHTML(val);}

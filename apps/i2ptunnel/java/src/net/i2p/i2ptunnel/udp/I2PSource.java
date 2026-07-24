@@ -120,7 +120,7 @@ public class I2PSource implements Source {
                 }
             } catch(Exception e) {
                 if (log.shouldWarn())
-                    log.warn("error receiving datagram", e);
+                    log.warn("Error receiving datagram", e);
             }
         }
 

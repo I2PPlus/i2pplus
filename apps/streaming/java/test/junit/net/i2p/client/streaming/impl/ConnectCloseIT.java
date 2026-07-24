@@ -74,7 +74,7 @@ public class ConnectCloseIT extends StreamingITBase {
                     _log.debug("* socket closed: " + socket);
                 }
             } catch (Exception e) {
-                _log.error("error running", e);
+                _log.error("Error running", e);
             }
         }
     }
@@ -100,7 +100,7 @@ public class ConnectCloseIT extends StreamingITBase {
                 mgr = null;
                 socket = null;
             } catch (Exception e) {
-                _log.error("error running", e);
+                _log.error("Error running", e);
             }
             try {
                 Thread.sleep(5 * 1000);

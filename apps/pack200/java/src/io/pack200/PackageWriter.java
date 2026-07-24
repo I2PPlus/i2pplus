@@ -99,7 +99,7 @@ class PackageWriter extends BandStructure {
             if (verbose > 0)  finalOut.close();
             if (ee instanceof IOException)  throw (IOException)ee;
             if (ee instanceof RuntimeException)  throw (RuntimeException)ee;
-            throw new Error("error packing", ee);
+            throw new Error("Error packing", ee);
         }
     }
 

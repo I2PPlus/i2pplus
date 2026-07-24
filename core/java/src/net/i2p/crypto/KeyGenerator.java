@@ -485,7 +485,7 @@ public final class KeyGenerator {
                     System.out.println("Testing " + type);
                     testSig(type, runs);
                 } catch (GeneralSecurityException e) {
-                    System.out.println("error testing " + type);
+                    System.out.println("Error testing " + type);
                     e.printStackTrace();
                 }
             }

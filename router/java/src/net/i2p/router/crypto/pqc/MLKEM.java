@@ -186,7 +186,7 @@ public final class MLKEM {
                     System.out.println("Testing " + type);
                     testEnc(type, runs);
                 } catch (GeneralSecurityException e) {
-                    System.out.println("error testing " + type);
+                    System.out.println("Error testing " + type);
                     e.printStackTrace();
                 }
             }

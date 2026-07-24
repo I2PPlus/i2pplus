@@ -95,7 +95,7 @@ public class UDPSource implements Source, Runnable {
             } catch(Exception e) {
                 Log log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
                 if (log.shouldWarn())
-                    log.warn("error sending", e);
+                    log.warn("Error sending", e);
                 break;
             }
         }

@@ -87,7 +87,7 @@ public class Pinger implements Source, Runnable {
                     log.debug("Sent subscribe from port " + fromPort);
             } catch (RuntimeException re) {
                 if (log.shouldWarn())
-                    log.warn("error sending", re);
+                    log.warn("Error sending", re);
                 break;
             }
             synchronized(this.waitlock) {

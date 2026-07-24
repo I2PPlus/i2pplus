@@ -188,7 +188,7 @@ class PackageReader extends BandStructure {
                                  " limit="+in.limit);
             if (ee instanceof IOException)  throw (IOException)ee;
             if (ee instanceof RuntimeException)  throw (RuntimeException)ee;
-            throw new Error("error unpacking", ee);
+            throw new Error("Error unpacking", ee);
         }
     }
 

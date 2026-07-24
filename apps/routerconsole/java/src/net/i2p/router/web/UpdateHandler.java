@@ -61,7 +61,7 @@ public class UpdateHandler {
         try {
             _context = ContextHelper.getContext(contextId);
             _log = _context.logManager().getLog(UpdateHandler.class);
-        } catch (Throwable t) {_log.error("error updating", t);}
+        } catch (Throwable t) {_log.error("Error updating", t);}
     }
 
     /** These two can be set in either order, so call checkUpdateAction() twice */
